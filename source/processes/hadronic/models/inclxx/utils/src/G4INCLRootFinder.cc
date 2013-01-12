@@ -51,11 +51,17 @@
 
 namespace G4INCL {
 
-  std::pair<G4double,G4double> RootFinder::solution;
+  RootFinder_solution_t RootFinder::solution;
 
   const G4double RootFinder::toleranceY = 1.e-4;
 
-  G4bool RootFinder::solve(RootFunctor const * const f, const G4double x0) {
+  std::pair<G4double,G4double> const &RootFinder::getSolution() 
+  { 
+    return solution; 
+  }
+
+  G4bool RootFinder::solve(RootFunctor const * const f, const G4double x0) 
+  {
     // If we already have the solution, do nothing
     const G4double y0 = (*f)(x0);
     if( std::abs(y0) < toleranceY ) {
@@ -131,7 +137,8 @@ namespace G4INCL {
     return true;
   }
 
-  std::pair<G4double,G4double> RootFinder::bracketRoot(RootFunctor const * const f, G4double x0) {
+  std::pair<G4double,G4double> RootFinder::bracketRoot(RootFunctor const * const f, G4double x0) 
+  {
     G4double y0 = (*f)(x0);
 
     const G4double scaleFactor = 1.5;

@@ -59,6 +59,21 @@
 #include "G4PDGCodeChecker.hh"
 #include "G4StateManager.hh"
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This static member is thread local. For each thread, it holds the array
+//size of ParticlePrivateSubclass instances.
+template <class ParticlePrivateSubclass> __thread int G4MTPrivateParticleCounter<ParticlePrivateSubclass>::slavetotalspace = 0;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This static member is thread local. For each thread, it points to the
+//array of ParticlePrivateSubclass instances.
+template <class ParticlePrivateSubclass> __thread ParticlePrivateSubclass* G4MTPrivateParticleCounter<ParticlePrivateSubclass>::offset = 0;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This new field helps to use the class G4ParticleDefinitionSubInstanceManager
+//introduced in the "G4ParticleDefinition.hh" file.
+G4ParticleDefinitionSubInstanceManager G4ParticleDefinition::g4particleDefinitionSubInstanceManager;
+
 G4ParticleDefinition::G4ParticleDefinition(
 		     const G4String&     aName,  
 		     G4double            mass,
@@ -106,13 +121,18 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   thePDGStable(stable), 
 		   thePDGLifeTime(lifetime), 
                    theDecayTable(decaytable),
-		   theProcessManager(0),
+		   theProcessManagerShadow(0),
                    theAtomicNumber(0),
                    theAtomicMass(0),
                    verboseLevel(1),
   		   fApplyCutsFlag(false)
 {
   static G4String nucleus("nucleus");
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  g4particleDefinitionInstanceID = g4particleDefinitionSubInstanceManager.CreateSubInstance();
+  theProcessManagerG4MTThreadPrivate = 0;
+
   theParticleTable = G4ParticleTable::GetParticleTable();
    
    //set verboseLevel equal to ParticleTable 

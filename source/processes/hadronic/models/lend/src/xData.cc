@@ -978,7 +978,7 @@ static int xData_smrUserInterface( void *userData, char **str ) {
 
     int size, fileNameSize = 0, elementSize = 0;
     xData_smr *smrUserInterface = (xData_smr *) userData;
-    static char lcl[] = "\nat line %d and column %d", el[] = "\nin element ", fl[] = "\nof file ";
+    static const char lcl[] = "\nat line %d and column %d", el[] = "\nin element ", fl[] = "\nof file ";
     char str_lcl[sizeof( lcl ) + 40];
     xData_rootElement *currentRoot = smrUserInterface->doc->currentRoot;
 

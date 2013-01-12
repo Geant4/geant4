@@ -34,7 +34,8 @@
 
 struct G4CascadeNNChannelData {
   typedef G4CascadeData<30,1,6,18,32,7,8,10,11> data_t;
-  static data_t data;
+  static data_t *data;
+  static data_t *initializer();
 };
 
 class G4CascadeNNChannel

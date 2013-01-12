@@ -56,8 +56,82 @@
 class G4LogicalVolume;
 class G4VPVParameterisation;
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//The class PhysicalVolumePrivateSubclass is introduced to
+//encapsulate the fields of the class G4VPhysicalVolume that may not
+//be read-only.          
+#ifndef PHYSICALVOLUMEPRIVATESUBCLASS_HH
+#define PHYSICALVOLUMEPRIVATESUBCLASS_HH
+
+class PhysicalVolumePrivateSubclass
+{
+public:
+  G4RotationMatrix *frot;
+  G4ThreeVector ftrans;
+  void initialize() {};
+};
+#endif
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
+//The class G4VPhysicalVolumeSubInstanceManager is introduced to
+//encapsulate the methods used by both the master thread and
+//worker threads to allocate memory space for the fields encapsulated
+//by the class PhysicalVolumePrivateSubclass. When each thread
+//initializes the value for these fields, it refers to them using a macro
+//definition defined below. For every G4VPhysicalVolume instance, there is
+//a corresponding PhysicalVolumePrivateSubclass instance. All
+//PhysicalVolumePrivateSubclass instances are organized by the
+//class G4VPhysicalVolumeSubInstanceManager as an array. The field "
+//int g4vphysicalVolumeInstanceID" is added to the class G4VPhysicalVolume.
+//The value of this field in each G4VPhysicalVolume instance is the subscript
+//of the corresponding PhysicalVolumePrivateSubclass instance. In order
+//to use the class G4VPhysicalVolumeSubInstanceManager, we add a static member in      
+//the class G4VPhysicalVolume as follows: "                                       
+//static G4VPhysicalVolumeSubInstanceManager g4vphysicalVolumeSubInstanceManager;".
+//For the master thread, the array for PhysicalVolumePrivateSubclass
+//instances grows dynamically along with G4VPhysicalVolume instances are
+//created. For each worker thread, it copies the array of
+//PhysicalVolumePrivateSubclass instances from the master thread.           
+//In addition, it invokes a method similiar to the constructor explicitly       
+//to achieve the partial effect for each instance in the array. 
+#ifndef G4VPHYSICALVOLUMESUBINSTANCEMANAGER_HH
+#define G4VPHYSICALVOLUMESUBINSTANCEMANAGER_HH
+
+#include "G4MTTransitory.hh"
+typedef G4MTPrivateSubInstanceManager<PhysicalVolumePrivateSubclass> G4VPhysicalVolumeSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//These macros changes the references to fields that are now encapsulated
+//in the class PhysicalVolumePrivateSubclass.
+#define frotG4MTThreadPrivate ((g4vphysicalVolumeSubInstanceManager.offset[g4vphysicalVolumeInstanceID]).frot)
+#define ftransG4MTThreadPrivate ((g4vphysicalVolumeSubInstanceManager.offset[g4vphysicalVolumeInstanceID]).ftrans)
+
+#endif
+
 class G4VPhysicalVolume
 {
+  public:
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field is used as instance ID.
+    int g4vphysicalVolumeInstanceID;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field helps to use the class G4VPhysicalVolumeSubInstanceManager
+    //introduced above.
+    static G4VPhysicalVolumeSubInstanceManager g4vphysicalVolumeSubInstanceManager;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This method is similar to the constructor. It is used by each worker
+    //thread to achieve the partial effect as that of the master thread.
+    void SlaveG4VPhysicalVolume(G4VPhysicalVolume *pMasterObject, G4RotationMatrix *pRot,
+				const G4ThreeVector &tlate);
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This method is similar to the destructor. It is used by each worker
+    //thread to achieve the partial effect as that of the master thread.
+    void DestroySlaveG4VPhysicalVolume(G4VPhysicalVolume *pMasterObject);
+
   public:  // with description
 
     G4VPhysicalVolume(G4RotationMatrix *pRot,
@@ -65,6 +139,8 @@ class G4VPhysicalVolume
                 const G4String &pName,
                       G4LogicalVolume *pLogical,
                       G4VPhysicalVolume *pMother);
+
+
       // Initialise volume, positioned in a frame which is rotated by *pRot, 
       // relative to the coordinate system of the mother volume pMother.
       // The center of the object is then placed at tlate in the new
@@ -187,8 +263,15 @@ class G4VPhysicalVolume
 
   protected:
 
-    G4RotationMatrix *frot;
-    G4ThreeVector ftrans;
+  // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  // This field is move from the original class definition to be
+  // encapsulated by the class PhysicalVolumePrivateSubclass.
+  //    G4RotationMatrix *frotG4MTThreadPrivate;
+
+  // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  // This field is move from the original class definition to be
+  // encapsulated by the class PhysicalVolumePrivateSubclass.
+  //    G4ThreeVector ftransG4MTThreadPrivate;
 
   private:
 

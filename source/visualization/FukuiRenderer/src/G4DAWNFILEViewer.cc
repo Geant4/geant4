@@ -101,7 +101,7 @@ G4DAWNFILEViewer::~G4DAWNFILEViewer ()
 void G4DAWNFILEViewer::SetView () 
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
     G4cout << "***** G4DAWNFILEViewer::SetView(): No effects" << G4endl;
 #endif 
 // Do nothing, since DAWN is running as a different process.
@@ -114,7 +114,7 @@ void
 G4DAWNFILEViewer::ClearView( void )
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4DAWNFILEViewer::ClearView (): No effects " << G4endl;
 #endif
 	if (fSceneHandler.fPrimDest.IsOpen()) {
@@ -132,7 +132,7 @@ G4DAWNFILEViewer::ClearView( void )
 void G4DAWNFILEViewer::DrawView () 
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4DAWNFILEViewer::DrawView () " << G4endl;
 #endif
 		//----- 
@@ -152,7 +152,7 @@ void G4DAWNFILEViewer::DrawView ()
 void G4DAWNFILEViewer::ShowView( void )
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4DAWNFILEViewer::ShowView () " << G4endl;
 #endif
 
@@ -247,7 +247,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
     G4cout << "***** G4DAWNFILEViewer::SendViewParameters()  "; 
     G4cout << "(GUI parameters)" << G4endl;
   }
@@ -278,7 +278,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	}
 
 	if ( camera_distance < radius ) { 
-	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
 		G4cout << "WARNING from DAWNFILE driver:" << G4endl;
 		G4cout << "  Camera cannot enter inside objects"      << G4endl;
 	  }

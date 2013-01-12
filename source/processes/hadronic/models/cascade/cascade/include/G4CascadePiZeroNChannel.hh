@@ -34,7 +34,8 @@
 
 struct G4CascadePiZeroNChannelData {
   typedef G4CascadeData<30,5,13,21,30,6,7,8,9> data_t;
-  static data_t data;
+  static data_t *data;
+  static data_t *initializer();
 };
 
 typedef G4CascadeFunctions<G4CascadePiZeroNChannelData,G4PionNucSampler> G4CascadePiZeroNChannel;

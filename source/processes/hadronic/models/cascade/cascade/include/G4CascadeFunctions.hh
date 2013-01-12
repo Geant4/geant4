@@ -58,11 +58,13 @@ public:
   virtual ~G4CascadeFunctions() {}
 
   virtual G4double getCrossSection(double ke) const {
-    return this->findCrossSection(ke, DATA::data.tot);
+    if (DATA::data == 0) DATA::initializer();
+    return this->findCrossSection(ke, DATA::data->tot);
   }
 
   virtual G4double getCrossSectionSum(double ke) const {
-    return this->findCrossSection(ke, DATA::data.sum);
+    if (DATA::data == 0) DATA::initializer();
+    return this->findCrossSection(ke, DATA::data->sum);
   }
 
   virtual G4int getMultiplicity(G4double ke) const;

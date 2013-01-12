@@ -198,7 +198,7 @@ public:
   static float kVoxelSpacing[3];
 
   //----- modality image -----//
-  static class GMocrenDataPrimitive<short> kModality;
+  static GMocrenDataPrimitive<short> kModality;
   // density map to modality (CT) values
   static std::vector<float> kModalityImageDensityMap;
   static std::string kModalityUnit;
@@ -234,10 +234,10 @@ public:
   void initialize();
 
   // set the gMocren data file name
-  void setFileName(std::string & _filename) {kFileName = _filename;}
-  void setFileName(char * _filename) {kFileName = _filename;}
+  void setFileName(std::string & _filename);// {kFileName = _filename;}
+  void setFileName(char * _filename);// {kFileName = _filename;}
   // get the gMocren data file name
-  std::string & getFileName() {return kFileName;}
+  std::string & getFileName();// {return kFileName;}
   // store all data in the gMocren data file
   bool storeData(char * _filename); // interface for version 4
   bool storeData();
@@ -258,9 +258,9 @@ public:
   bool retrieveData4();
     
   // get & set the file id
-  std::string & getID() {return kId;}
+  std::string & getID();// {return kId;}
   void setID();
-  void setID(std::string & _id) {kId = _id;}
+  void setID(std::string & _id);// {kId = _id;}
 
   // get & set the file version
   std::string & getVersion();
@@ -271,8 +271,8 @@ public:
   void setLittleEndianOutput(bool _little);
 
   // get & set comment
-  std::string & getComment() {return kComment;}
-  void setComment(std::string & _comment) {kComment = _comment;}
+  std::string & getComment();// {return kComment;}
+  void setComment(std::string & _comment);// {kComment = _comment;}
   
 
   // voxel spacing
@@ -436,7 +436,7 @@ public:
 
   void notStoredTracks() {kTracksWillBeStored = false;};
   void translateTracks(std::vector<float> & _translateo);
-  void clearTracks() {kTracks.clear();}
+  void clearTracks();// {kTracks.clear();}
 
 
   //----- Detectors -----//
@@ -448,7 +448,7 @@ public:
 		   std::vector<unsigned char *> & _color,
 		   std::string & _detectorName);
   void translateDetector(std::vector<float> & _translate);
-  void clearDetector() {kDetectors.clear();}
+  void clearDetector();// {kDetectors.clear();}
 
 protected:
   // endian conversion

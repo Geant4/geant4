@@ -90,6 +90,9 @@ G4Material::G4Material(const G4String& name, G4double z,
                        G4State state, G4double temp, G4double pressure)
   : fName(name)		       
 {
+
+  g4materialInstanceID = g4materialSubInstanceManager.CreateSubInstance();
+
   InitializePointers();
     
   if (density < universe_mean_density)
@@ -139,6 +142,9 @@ G4Material::G4Material(const G4String& name, G4double density,
                        G4State state, G4double temp, G4double pressure)
   : fName(name)		       
 {
+
+  g4materialInstanceID = g4materialSubInstanceManager.CreateSubInstance();
+
   InitializePointers();
     
   if (density < universe_mean_density)
@@ -217,8 +223,11 @@ G4Material::G4Material(__void__&)
   : fNumberOfComponents(0), fNumberOfElements(0), theElementVector(0), 
     fImplicitElement(false), fMassFractionVector(0), fAtomsVector(0), 
     fMaterialPropertiesTable(0), fIndexInTable(0), 
-    VecNbOfAtomsPerVolume(0), fIonisation(0), fSandiaTable(0)
+    VecNbOfAtomsPerVolume(0)
 {
+  fIonisationG4MTThreadPrivate = 0;
+  fSandiaTableG4MTThreadPrivate = 0;
+
   InitializePointers();
 }
 
@@ -231,9 +240,9 @@ G4Material::~G4Material()
     if (theElementVector)       { delete    theElementVector; }
     if (fMassFractionVector)    { delete [] fMassFractionVector; }
     if (fAtomsVector)           { delete [] fAtomsVector; }
-    if (fSandiaTable)           { delete    fSandiaTable; }
+    if (fSandiaTableG4MTThreadPrivate)           { delete    fSandiaTableG4MTThreadPrivate; }
   }
-  if (fIonisation)            { delete    fIonisation; }
+  if (fIonisationG4MTThreadPrivate)            { delete    fIonisationG4MTThreadPrivate; }
   if (VecNbOfAtomsPerVolume)  { delete [] VecNbOfAtomsPerVolume; }
 
   // Remove this material from theMaterialTable.
@@ -251,8 +260,8 @@ void G4Material::InitializePointers()
   fMaterialPropertiesTable = 0;
     
   VecNbOfAtomsPerVolume    = 0;
-  fIonisation              = 0;
-  fSandiaTable             = 0;
+  fIonisationG4MTThreadPrivate   = 0;
+  fSandiaTableG4MTThreadPrivate  = 0;
 
   fBaseMaterial            = 0;
 
@@ -301,10 +310,10 @@ void G4Material::ComputeDerivedQuantities()
   ComputeRadiationLength();
   ComputeNuclearInterLength();
 
-  if (fIonisation) { delete fIonisation; }
-  fIonisation  = new G4IonisParamMat(this);
-  if (fSandiaTable) { delete fSandiaTable; }
-  fSandiaTable = new G4SandiaTable(this);
+  if (fIonisationG4MTThreadPrivate) delete fIonisationG4MTThreadPrivate;
+  fIonisationG4MTThreadPrivate  = new G4IonisParamMat(this);
+  if (fSandiaTableG4MTThreadPrivate) delete fSandiaTableG4MTThreadPrivate;
+  fSandiaTableG4MTThreadPrivate = new G4SandiaTable(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -327,11 +336,11 @@ void G4Material::CopyPointersOfBaseMaterial()
   }
   fRadlen = fBaseMaterial->GetRadlen()/factor;
   fNuclInterLen = fBaseMaterial->GetNuclearInterLength()/factor;
-  if (fIonisation) { delete fIonisation; }
-  fIonisation  = new G4IonisParamMat(this);
+  if (fIonisationG4MTThreadPrivate) { delete fIonisationG4MTThreadPrivate; }
+  fIonisationG4MTThreadPrivate  = new G4IonisParamMat(this);
 
-  fSandiaTable = fBaseMaterial->GetSandiaTable();
-  fIonisation->SetMeanExcitationEnergy(fBaseMaterial->GetIonisation()->GetMeanExcitationEnergy());
+  fSandiaTableG4MTThreadPrivate = fBaseMaterial->GetSandiaTable();
+  fIonisationG4MTThreadPrivate->SetMeanExcitationEnergy(fBaseMaterial->GetIonisation()->GetMeanExcitationEnergy());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -559,7 +568,7 @@ void G4Material::ComputeNuclearInterLength()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4MaterialTable* G4Material::GetMaterialTable()
+G4MaterialTable* G4Material::GetMaterialTable()
 {
   return &theMaterialTable;
 }
@@ -642,8 +651,8 @@ const G4Material& G4Material::operator=(const G4Material& right)
 	if (theElementVector)       { delete    theElementVector; }
 	if (fMassFractionVector)    { delete [] fMassFractionVector; }
 	if (fAtomsVector)           { delete [] fAtomsVector; }
-	if (fIonisation)            { delete    fIonisation; }
-	if (fSandiaTable)           { delete    fSandiaTable; }
+	if (fIonisationG4MTThreadPrivate)            { delete    fIonisationG4MTThreadPrivate; }
+	if (fSandiaTableG4MTThreadPrivate)           { delete    fSandiaTableG4MTThreadPrivate; }
       }
 
       if (VecNbOfAtomsPerVolume)  { delete [] VecNbOfAtomsPerVolume; }
@@ -693,6 +702,41 @@ G4int G4Material::operator!=(const G4Material& right) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This static member is thread local. For each thread, it points to the
+//array of MaterialPrivateSubclass instances.
+template <class MaterialPrivateSubclass> __thread MaterialPrivateSubclass* G4MTPrivateSubInstanceManager<MaterialPrivateSubclass>::offset = 0;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This new field helps to use the class G4MaterialSubInstanceManager
+//introduced in the "G4Material.hh" file.
+G4MaterialSubInstanceManager G4Material::g4materialSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This method is similar to the constructor. It is used by each worker
+//thread to achieve the same effect as that of the master thread exept
+//to register the new created instance. This method is invoked explicitly.
+//It does not create a new G4Material instance. It only assign the value
+//for the fields encapsulated by the class MaterialPrivateSubclass. 
+void G4Material::SlaveG4Material()
+{
+  g4materialSubInstanceManager.SlaveCopySubInstanceArray();
+
+  fIonisationG4MTThreadPrivate  = new G4IonisParamMat(this);
+  fSandiaTableG4MTThreadPrivate = new G4SandiaTable(this);
+
+}
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This method is similar to the destructor. It is used by each worker
+//thread to achieve the partial effect as that of the master thread.
+//Here, worker threads need to destroy the thread-private pointers
+//created by the method SlaveG4Material().
+void G4Material::DestroySlaveG4Material()
+{
+  if (fIonisationG4MTThreadPrivate) delete fIonisationG4MTThreadPrivate;
+  if (fSandiaTableG4MTThreadPrivate) delete fSandiaTableG4MTThreadPrivate;
+}
 
 std::ostream& operator<<(std::ostream& flux, G4Material* material)
 {

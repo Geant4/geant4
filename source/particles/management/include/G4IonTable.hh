@@ -76,6 +76,11 @@ class G4IonTable
   // constructor
    G4IonTable();
 
+   //07.11.2009 Xin Dong Phase II change for Geant4 multithreading. This
+   //method is used by each worker thread to copy the content from the master
+   //thread.
+   void SlaveG4IonTable();
+
  protected:
    // hide copy construictor as protected 
    G4IonTable(const  G4IonTable &right);
@@ -214,6 +219,19 @@ class G4IonTable
    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4double E, G4int J);
    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, 
 				   G4double E, G4int J);
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //All threads share the particle table and particles including ions. This method
+  //is invoked by any work thread for ions that have been created by other threads
+  //to achieve the partial effect when ions are created by other threads.
+   G4ParticleDefinition* SlaveCreateIon(G4ParticleDefinition* ion, G4int Z, G4int A, G4double E, G4int J);
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //All threads share the particle table and particles including ions. This method
+  //is invoked by any work thread for ions that have been created by other threads
+  //to achieve the partial effect when ions are created by other threads.
+   G4ParticleDefinition* SlaveCreateIon(G4ParticleDefinition* ion, G4int Z, G4int A, G4int L, 
+				   G4double E, G4int J);
    // Create Ion 
    
    G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4double E, G4int J);
@@ -232,11 +250,18 @@ class G4IonTable
    G4int                GetVerboseLevel() const;
    // get Verbose Level defined in G4ParticleTable
 
- private:
-   G4IonList*                  fIonList; 
-
-   std::vector<G4VIsotopeTable*> *fIsotopeTableList;
-
+ //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+ //It is very important for multithreaded Geant4 to keep only one copy of the
+ //particle table pointer and the ion table pointer. However, we try to let 
+ //each worker thread hold its own copy of the particle dictionary and the 
+ //ion list. This implementation is equivalent to make the ion table thread
+ //private. The two shadow ponters are used by each worker thread to copy the
+ //content from the master thread.
+ public:
+   static G4IonList*                  fIonList; 
+   static std::vector<G4VIsotopeTable*> *fIsotopeTableList;
+   static G4IonList*                  fIonListShadow; 
+   static std::vector<G4VIsotopeTable*> *fIsotopeTableListShadow;
  
    enum { numberOfElements = 118};
    static const G4String       elementName[numberOfElements];

@@ -105,7 +105,16 @@ class G4RunManager
     static G4RunManager* fRunManager;
 
   public: // with description
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //To share data, the master thread is different from worker threads.
+    //This variable points out it is the master thread or not.    
+    static __thread int isSlave;
     G4RunManager();
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //The constructor is used by worker threads.
+    G4RunManager(int isSlaveFlag);
     virtual ~G4RunManager();
     //  The constructor and the destructor. The user must construct this class
     // object at the beginning of his/her main() and must delete it at the 

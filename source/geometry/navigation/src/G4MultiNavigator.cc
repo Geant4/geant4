@@ -543,7 +543,7 @@ G4MultiNavigator::PrintLimited()
 {
   // Report results -- for checking   
 
-  static G4String StrDoNot("DoNot"), StrUnique("Unique"),
+  static const G4String StrDoNot("DoNot"), StrUnique("Unique"),
                   StrUndefined("Undefined"),
                   StrSharedTransport("SharedTransport"),
                   StrSharedOther("SharedOther");
@@ -795,7 +795,7 @@ G4MultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
     normalGlobalCrd= fpNavigator[ fIdNavLimiting ]->GetLocalExitNormal( &isObtained); 
     *argpObtained= isObtained;
 
-    G4int static numberWarnings= 0;
+    static G4int numberWarnings= 0;
     G4int noWarningsStart= 10, noModuloWarnings=100; 
     numberWarnings++; 
     if( (numberWarnings < noWarningsStart ) || (numberWarnings%noModuloWarnings==0) ) 

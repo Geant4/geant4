@@ -483,7 +483,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     AddPrimitive (*pPolyhedron);
   }
   else {
-    G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
+    G4VisManager::Verbosity verbosity = G4VisManager::GetInstance()->GetVerbosity();
     if (verbosity >= G4VisManager::errors) {
       G4cout <<
       "ERROR: G4VSceneHandler::RequestPrimitives"
@@ -703,7 +703,7 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
      );
 
   pModelingParams->SetWarning
-    (G4VisManager::GetVerbosity() >= G4VisManager::warnings);
+    (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::warnings);
 
   pModelingParams->SetExplodeFactor(vp.GetExplodeFactor());
   pModelingParams->SetExplodeCentre(vp.GetExplodeCentre());

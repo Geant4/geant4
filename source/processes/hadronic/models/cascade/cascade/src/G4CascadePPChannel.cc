@@ -587,12 +587,19 @@ namespace {
 }
 
 // Initialize p-p cross-section table
+typedef G4CascadePPChannelData::data_t G4CascadePPChannelData_t;
+G4CascadePPChannelData_t *G4CascadePPChannelData::data=0;
 
-G4CascadePPChannelData::data_t
-G4CascadePPChannelData::data(pp2bfs, pp3bfs, pp4bfs, pp5bfs, pp6bfs, pp7bfs,
-			     pp8bfs, pp9bfs, ppCrossSections, ppTotXSec,
-			     pro*pro, "ProtonProton");
-
+G4CascadePPChannelData::data_t *G4CascadePPChannelData::initializer()
+{
+  if (G4CascadePPChannelData::data == 0)
+    G4CascadePPChannelData::data = 
+      new G4CascadePPChannelData::data_t(
+					 pp2bfs, pp3bfs, pp4bfs, pp5bfs, pp6bfs, pp7bfs,
+					 pp8bfs, pp9bfs, ppCrossSections, ppTotXSec,
+					 pro*pro, "ProtonProton");
+  return G4CascadePPChannelData::data;
+}
 
 // Overload base class interpolator to use function for 0-10 MeV total, elastic
 

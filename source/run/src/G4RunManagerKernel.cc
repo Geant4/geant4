@@ -60,6 +60,10 @@
 
 G4RunManagerKernel* G4RunManagerKernel::fRunManagerKernel = 0;
 
+__thread int G4RunManagerKernel::isSlave = 0;
+
+//pthread_mutex_t regionsVector = PTHREAD_MUTEX_INITIALIZER;
+
 G4RunManagerKernel* G4RunManagerKernel::GetRunManagerKernel()
 { return fRunManagerKernel; }
 
@@ -100,12 +104,26 @@ G4RunManagerKernel::G4RunManagerKernel()
   
   // construction of Geant4 kernel classes
   eventManager = new G4EventManager();
-  defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
-  defaultRegionForParallelWorld = new G4Region("DefaultRegionForParallelWorld"); // deleted by store
-  defaultRegion->SetProductionCuts(
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //The master thread creates the default region.
+  if (!isSlave)
+  {
+    defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
+    defaultRegionForParallelWorld = new G4Region("DefaultRegionForParallelWorld"); // deleted by store
+    defaultRegion->SetProductionCuts(
     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
-  defaultRegionForParallelWorld->SetProductionCuts(
+    defaultRegionForParallelWorld->SetProductionCuts(
     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+  }
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //Worker threads share all regions including the default region.
+  else
+  {
+    defaultRegion = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld", true);
+    defaultRegionForParallelWorld = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForParallelWorld", true);
+
+  }
 
   // Following line is tentatively moved from SetPhysics method
   // Commented out for introduction of non-static particle definition // G4ParticleTable::GetParticleTable()->SetReadiness();
@@ -115,7 +133,74 @@ G4RunManagerKernel::G4RunManagerKernel()
   // version banner
   G4String vs = G4Version;
   vs = vs.substr(1,vs.size()-2);
-  versionString = " Geant4 version ";
+  versionString = " Geant4MT version ";
+  versionString += vs;
+  versionString += "   ";
+  versionString += G4Date;
+  G4cout << G4endl
+    << "*************************************************************" << G4endl
+    << versionString << G4endl
+    << "                      Copyright : Geant4 Collaboration" << G4endl
+    << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
+    << "                            WWW : http://cern.ch/geant4" << G4endl
+    << "*************************************************************" << G4endl
+    << G4endl;
+}
+
+G4RunManagerKernel::G4RunManagerKernel(int isSlaveFlag)
+:physicsList(0),currentWorld(0),
+ geometryInitialized(false),physicsInitialized(false),
+ geometryNeedsToBeClosed(true),geometryToBeOptimized(true),
+ physicsNeedsToBeReBuilt(true),verboseLevel(0),
+ numberOfParallelWorld(0)
+{
+
+  isSlave = isSlaveFlag;
+
+#ifdef G4FPE_DEBUG
+  InvalidOperationDetection();
+#endif
+
+  defaultExceptionHandler = new G4ExceptionHandler();
+  if(fRunManagerKernel)
+  {
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0001",
+                FatalException,"More than one G4RunManagerKernel is constructed.");
+  }
+  fRunManagerKernel = this;
+  
+  // construction of Geant4 kernel classes
+  eventManager = new G4EventManager();
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //The master thread creates the default region.
+  if (!isSlave)
+  {
+    defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
+    defaultRegionForParallelWorld = new G4Region("DefaultRegionForParallelWorld"); // deleted by store
+    defaultRegion->SetProductionCuts(
+    G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+    defaultRegionForParallelWorld->SetProductionCuts(
+    G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+  }
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //Worker threads share all regions including the default region.
+  else
+  {
+    defaultRegion = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld", true);
+    defaultRegionForParallelWorld = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForParallelWorld", true);
+
+  }
+
+  // Following line is tentatively moved from SetPhysics method
+  // Commented out for introduction of non-static particle definition // G4ParticleTable::GetParticleTable()->SetReadiness();
+  // set the initial application state
+  G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
+
+  // version banner
+  G4String vs = G4Version;
+  vs = vs.substr(1,vs.size()-2);
+  versionString = " Geant4MT version ";
   versionString += vs;
   versionString += "   ";
   versionString += G4Date;
@@ -163,6 +248,57 @@ G4RunManagerKernel::~G4RunManagerKernel()
   delete defaultExceptionHandler;
   if(verboseLevel>1) G4cout << "RunManagerKernel is deleted." << G4endl;
   fRunManagerKernel = 0;
+}
+
+void G4RunManagerKernel::SlaveDefineWorldVolume(G4VPhysicalVolume* worldVol,
+                                     G4bool topologyIsChanged)
+{
+  G4StateManager*    stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
+  {
+    G4Exception("G4RunManagerKernel::DefineWorldVolume",
+		"DefineWorldVolumeAtIncorrectState",
+		JustWarning,
+		"Geant4 kernel is not PreInit or Idle state : Method ignored.");
+    if(verboseLevel>1) G4cerr << "Current application state is "
+      << stateManager->GetStateString(currentState) << G4endl;
+    return;
+  }
+
+  // The world volume MUST NOT have a region defined by the user                                                  
+  if(worldVol->GetLogicalVolume()->GetRegion())
+  {
+    if(worldVol->GetLogicalVolume()->GetRegion()!=defaultRegion)
+    {
+      G4cerr << "The world volume has a user-defined region <"
+	     << worldVol->GetLogicalVolume()->GetRegion()->GetName()
+	     << ">." << G4endl;
+      G4Exception("G4RunManager::DefineWorldVolume",
+		  "RUN:WorldHasUserDefinedRegion",
+		  FatalException,
+		  "World would have a default region assigned by RunManagerKernel.");
+    }
+  }
+
+  currentWorld = worldVol;
+
+  G4LogicalVolume* worldLog = currentWorld->GetLogicalVolume();
+  worldLog->SetRegion(defaultRegion);
+
+  G4TransportationManager::GetTransportationManager()
+    ->SetWorldForTracking(currentWorld);
+  if(topologyIsChanged) geometryNeedsToBeClosed = true;
+
+  // Notify the VisManager as well                                                                                
+  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+  if(pVVisManager) pVVisManager->GeometryHasChanged();
+
+  geometryInitialized = true;
+  if(physicsInitialized && currentState!=G4State_Idle)
+    { stateManager->SetNewState(G4State_Idle); }
+
+
 }
 
 void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
@@ -239,8 +375,15 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
-  G4ParticleTable::GetParticleTable()->SetReadiness();
-  physicsList->ConstructParticle();
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //The master thread handles shared data.
+  if (!isSlave)
+    G4ParticleTable::GetParticleTable()->SetReadiness();
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //The master thread handles shared data.
+  if (!isSlave)
+    physicsList->ConstructParticle();
   if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
   if(verboseLevel>1)
   {
@@ -349,6 +492,8 @@ G4bool G4RunManagerKernel::RunInitialization()
 void G4RunManagerKernel::RunTermination()
 { G4StateManager::GetStateManager()->SetNewState(G4State_Idle); }
 
+//pthread_mutex_t geomAccessmut = PTHREAD_MUTEX_INITIALIZER;
+
 void G4RunManagerKernel::ResetNavigator()
 {
   // We have to tweak the navigator's state in case a geometry has been
@@ -358,8 +503,14 @@ void G4RunManagerKernel::ResetNavigator()
   
   G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
   if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
-  geomManager->OpenGeometry();
-  geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //The master thread handles shared data.
+  if (!isSlave)
+  {
+    geomManager->OpenGeometry();
+    geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
+  }
  
   // Reseting Navigator has been moved to G4Eventmanager, so that resetting
   // is now done for every event.  
@@ -384,9 +535,19 @@ void G4RunManagerKernel::UpdateRegion()
     return;
   }
 
-  CheckRegions();
-  G4RegionStore::GetInstance()->UpdateMaterialList(currentWorld);
-  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(currentWorld);
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //The master thread handles shared data.
+  if (!isSlave) CheckRegions();
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //The master thread handles shared data.
+  if (!isSlave)
+    G4RegionStore::GetInstance()->UpdateMaterialList(currentWorld);
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //The master thread handles shared data.
+  if (!isSlave)
+    G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(currentWorld);
 }
 
 void G4RunManagerKernel::BuildPhysicsTables()

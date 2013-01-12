@@ -237,15 +237,15 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
   // Load the details of the parent and daughter particles if they have not
   // been defined properly
 
-  if (parent == 0) FillParent();
-  if (daughters == 0) FillDaughters();
+  if (parentG4MTThreadPrivate == 0) FillParent();
+  if (daughtersG4MTThreadPrivate == 0) FillDaughters();
 
   // We want to ensure that the difference between the total
   // parent and daughter masses equals the energy liberated by the transition.
 
   theParentMass = 0.0;
   for( G4int index=0; index < numberOfDaughters; index++)
-    {theParentMass += daughters[index]->GetPDGMass();}
+    {theParentMass += daughtersG4MTThreadPrivate[index]->GetPDGMass();}
   theParentMass += Qtransition  ;
   // bug fix for beta+ decay (flei 25/09/01)
   if (decayMode == 2) theParentMass -= 2*0.511 * MeV;
@@ -531,13 +531,13 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
   G4double pmass = GetParentMass();
   for (G4int index=0; index<3; index++)
     {
-     daughtermass[index] = daughters[index]->GetPDGMass();
+     daughtermass[index] = daughtersG4MTThreadPrivate[index]->GetPDGMass();
      sumofdaughtermass += daughtermass[index];
     }
 
   //create parent G4DynamicParticle at rest
   G4ParticleMomentum dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( parentG4MTThreadPrivate, dummy, 0.0);
 
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -585,7 +585,7 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
   cosphi = std::cos(phi);
   G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4DynamicParticle * daughterparticle
-      = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
+      = new G4DynamicParticle( daughtersG4MTThreadPrivate[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
     
   costhetan = (daughtermomentum[1]*daughtermomentum[1]-
@@ -606,12 +606,12 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
   direction2.setY(sinthetan*cosphin*costheta*sinphi +
                   sinthetan*sinphin*cosphi + costhetan*sintheta*sinphi);
   direction2.setZ(-sinthetan*cosphin*sintheta + costhetan*costheta);
-  daughterparticle = new G4DynamicParticle(daughters[2],
+  daughterparticle = new G4DynamicParticle(daughtersG4MTThreadPrivate[2],
                           direction2*(daughtermomentum[2]/direction2.mag()));
   products->PushProducts(daughterparticle);
     
   daughterparticle =
-    new G4DynamicParticle(daughters[1],
+    new G4DynamicParticle(daughtersG4MTThreadPrivate[1],
                          (direction0*daughtermomentum[0] +
 			  direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0));
   products->PushProducts(daughterparticle);

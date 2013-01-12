@@ -396,7 +396,7 @@ G4int G4Element::GetNbOfShellElectrons(G4int i) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4ElementTable* G4Element::GetElementTable()
+G4ElementTable* G4Element::GetElementTable()
 {
   return &theElementTable;
 }

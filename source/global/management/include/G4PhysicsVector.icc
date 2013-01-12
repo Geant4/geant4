@@ -64,26 +64,26 @@ inline G4double G4PhysicsVector::Value(G4double theEnergy)
   // Use cache for speed up - check if the value 'theEnergy' is same as the 
   // last call. If it is same, then use the last value, if not - recompute
 
-  if( theEnergy != cache->lastEnergy ) { ComputeValue(theEnergy); }
-  return cache->lastValue;
+  if( theEnergy != cacheG4MTThreadPrivate->lastEnergy ) { ComputeValue(theEnergy); }
+  return cacheG4MTThreadPrivate->lastValue;
 }
 
 inline
  G4double G4PhysicsVector::GetLastEnergy() const
 {
-  return cache->lastEnergy;	
+  return cacheG4MTThreadPrivate->lastEnergy;	
 }
 
 inline
  G4double G4PhysicsVector::GetLastValue() const
 {
-   return cache->lastValue;
+   return cacheG4MTThreadPrivate->lastValue;
 }
 
 inline 
  size_t G4PhysicsVector::GetLastBin() const
 {
-   return cache->lastBin;
+   return cacheG4MTThreadPrivate->lastBin;
 }
  
 inline
@@ -143,7 +143,7 @@ inline
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  G4double intplFactor = (cache->lastEnergy-binVector[lastBin]) 
+  G4double intplFactor = (cacheG4MTThreadPrivate->lastEnergy-binVector[lastBin]) 
      / (binVector[lastBin + 1]-binVector[lastBin]); // Interpol. factor
 
   return dataVector[lastBin] +
@@ -168,8 +168,8 @@ inline
   G4double x2 = binVector[lastBin + 1];
   G4double delta = x2 - x1;
 
-  G4double a = (x2 - cache->lastEnergy)/delta;
-  G4double b = (cache->lastEnergy - x1)/delta;
+  G4double a = (x2 - cacheG4MTThreadPrivate->lastEnergy)/delta;
+  G4double b = (cacheG4MTThreadPrivate->lastEnergy - x1)/delta;
    
   // Final evaluation of cubic spline polynomial for return   
   G4double y1 = dataVector[lastBin];
@@ -187,8 +187,8 @@ inline
 inline 
  void G4PhysicsVector::Interpolation(G4int lastBin)
 {
-  if(useSpline) { cache->lastValue = SplineInterpolation(lastBin); }
-  else          { cache->lastValue = LinearInterpolation(lastBin); }
+  if(useSpline) { cacheG4MTThreadPrivate->lastValue = SplineInterpolation(lastBin); }
+  else          { cacheG4MTThreadPrivate->lastValue = LinearInterpolation(lastBin); }
 }
 
 //---------------------------------------------------------------

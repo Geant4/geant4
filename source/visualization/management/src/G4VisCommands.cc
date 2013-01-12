@@ -356,8 +356,8 @@ G4VisCommandVerbose::G4VisCommandVerbose () {
   G4bool omitable;
 
   fpCommand = new G4UIcmdWithAString("/vis/verbose", this);
-  for (size_t i = 0; i < G4VisManager::VerbosityGuidanceStrings.size(); ++i) {
-    fpCommand -> SetGuidance(G4VisManager::VerbosityGuidanceStrings[i]);
+  for (size_t i = 0; i < G4VisManager::GetInstance()->VerbosityGuidanceStrings.size(); ++i) {
+    fpCommand -> SetGuidance(G4VisManager::GetInstance()->VerbosityGuidanceStrings[i]);
   }
   fpCommand -> SetParameterName("verbosity", omitable=true);
   fpCommand -> SetDefaultValue("warnings");
@@ -378,5 +378,5 @@ void G4VisCommandVerbose::SetNewValue (G4UIcommand*,
   fpVisManager->SetVerboseLevel(verbosity);
   // Always prints whatever the verbosity...
   G4cout << "Visualization verbosity changed to "
-	 << G4VisManager::VerbosityString(verbosity) << G4endl;
+	 << G4VisManager::GetInstance()->VerbosityString(verbosity) << G4endl;
 }

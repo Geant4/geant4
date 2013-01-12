@@ -86,6 +86,14 @@ class G4ParticleTable
    G4ParticleTable & operator=(const G4ParticleTable &);
 
  public:
+
+   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+   //This method is similar to the constructor. It is used by each worker
+   //thread to achieve the partial effect as that of the master thread.
+   void SlaveG4ParticleTable();
+
+   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+   //Do we need DestroySlaveG4ParticleTable()?
    virtual ~G4ParticleTable();
   
  public: // With Description
@@ -185,8 +193,9 @@ class G4ParticleTable
    void                 DeleteMessenger();
   // create/delete messenger for the particle table 
  
- protected:
    G4PTblDictionary* GetDictionary();
+
+ protected:
 
    const G4String& GetKey(const G4ParticleDefinition *particle) const;
    // return key value of the particle (i.e. particle name)
@@ -205,17 +214,45 @@ class G4ParticleTable
    void  SetVerboseLevel(G4int value);
    G4int GetVerboseLevel() const;
 
- private:
-   G4ParticleMessenger* fParticleMessenger;
-   G4PTblDictionary*  fDictionary;
-   G4PTblDicIterator* fIterator;
-   G4PTblEncodingDictionary* fEncodingDictionary;
-
+   //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+   //These fields should be thread local or thread private. For a singleton
+   //class, we can change any member field as static without any problem
+   //because there is only one instance. Then we are allowed to add 
+   //"__thread".
+   static G4ParticleMessenger* fParticleMessenger;
+   static G4PTblDictionary*  fDictionary;
+   static G4PTblDicIterator* fIterator;
+   static G4PTblEncodingDictionary* fEncodingDictionary;
+ 
+   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+   //Phase I changes this member to be thread local while each thread holds
+   //its own copy of particles.
+   //Phase II changes this member back in order to share particles.
    static G4ParticleTable*  fgParticleTable;
 
-   G4IonTable*            fIonTable;
-   G4ShortLivedTable*     fShortLivedTable;
+   //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+   //This field should be thread private. However, we have to keep one copy
+   //of the ion table pointer. So we change all important fields of G4IonTable
+   //to the thread local variable.
+   static G4IonTable*            fIonTable;
 
+   //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+   //This field should be thread local or thread private. For a singleton
+   //class, we can change any member field as static without any problem
+   //because there is only one instance. Then we are allowed to add 
+   //"__thread".
+   static G4ShortLivedTable*     fShortLivedTable;
+
+   //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+   //These shadow pointers are used by each worker thread to copy the content
+   //from the master thread. 
+   static G4ParticleMessenger* fParticleMessengerShadow;
+   static G4PTblDictionary*  fDictionaryShadow;
+   static G4PTblDicIterator* fIteratorShadow;
+   static G4PTblEncodingDictionary* fEncodingDictionaryShadow;
+   static G4ShortLivedTable*     fShortLivedTableShadow;
+
+ private:
    G4String               noName;
 
    G4bool  readyToUse;

@@ -36,6 +36,18 @@
 #include "G4UnitsTable.hh"
 #include "G4UIcommand.hh"
 
+G4bool G4AttCheck::fFirst = true;
+
+std::set<G4String> G4AttCheck::fUnitCategories;
+
+std::map<G4String,G4String> G4AttCheck::fStandardUnits;
+
+std::set<G4String> G4AttCheck::fCategories;
+
+std::set<G4String> G4AttCheck::fUnits;
+
+std::set<G4String> G4AttCheck::fValueTypes;
+
 G4AttCheck::G4AttCheck
 (const std::vector<G4AttValue>* values,
  const std::map<G4String,G4AttDef>* definitions):
@@ -94,18 +106,6 @@ G4AttCheck::G4AttCheck
 }
 
 G4AttCheck::~G4AttCheck() {}
-
-G4bool G4AttCheck::fFirst = true;
-
-std::set<G4String> G4AttCheck::fUnitCategories;
-
-std::map<G4String,G4String> G4AttCheck::fStandardUnits;
-
-std::set<G4String> G4AttCheck::fCategories;
-
-std::set<G4String> G4AttCheck::fUnits;
-
-std::set<G4String> G4AttCheck::fValueTypes;
 
 G4bool G4AttCheck::Check(const G4String& leader) const {
   // Check only.  Silent unless error - then G4cerr.  Returns error.

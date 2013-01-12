@@ -96,9 +96,9 @@ G4FermiPhaseSpaceDecay::PtwoBody(G4double E, G4double P1, G4double P2) const
 }
 
 inline std::vector<G4LorentzVector*> * G4FermiPhaseSpaceDecay::
-Decay(G4double parent_mass, const std::vector<G4double>& fragment_masses) const
+Decay(G4double parent_mass_parameter, const std::vector<G4double>& fragment_masses) const
 {
-  return KopylovNBodyDecay(parent_mass,fragment_masses);
+  return KopylovNBodyDecay(parent_mass_parameter,fragment_masses);
 }
 
 inline G4double G4FermiPhaseSpaceDecay::BetaKopylov(G4int K) const

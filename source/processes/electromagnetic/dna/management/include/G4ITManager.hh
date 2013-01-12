@@ -150,7 +150,7 @@ public :
 template<typename T>
 class G4ITManager : public G4VITManager
 {
-    static G4ITManager<T> *      fInstance;
+    static __thread G4ITManager<T> *      fInstance;
     G4ITManager<T>();
 
     typedef std::map<T,G4ITBox* > BoxMap;

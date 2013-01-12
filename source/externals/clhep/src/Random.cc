@@ -62,10 +62,22 @@ struct defaults {
 
   inline
   defaults &  theDefaults()  {
-    static  HepRandom       theDefaultGenerator;
-    static  HepJamesRandom  theDefaultEngine;
-    static  defaults theDefaults(theDefaultGenerator, theDefaultEngine);
-    return theDefaults;
+    //Xin Dong March 31, 2012 Make those static variables thread private.
+    static __thread HepRandom *theDefaultGenerator_G4MT_TLS_ = 0;
+    if (!theDefaultGenerator_G4MT_TLS_)
+      theDefaultGenerator_G4MT_TLS_ = new HepRandom;
+    HepRandom &theDefaultGenerator = *theDefaultGenerator_G4MT_TLS_;
+
+    static __thread HepJamesRandom *theDefaultEngine_G4MT_TLS_ = 0;
+    if (!theDefaultEngine_G4MT_TLS_) 
+      theDefaultEngine_G4MT_TLS_ = new HepJamesRandom;
+    HepJamesRandom  &theDefaultEngine = *theDefaultEngine_G4MT_TLS_;
+
+    static  __thread defaults *theDefaults_G4MT_TLS_ = 0;
+    if (theDefaults_G4MT_TLS_ == 0) 
+      theDefaults_G4MT_TLS_ = new defaults(theDefaultGenerator, theDefaultEngine);
+    return *theDefaults_G4MT_TLS_;//defaults &theDefaults = *theDefaults_G4MT_TLS_;
+      //    return theDefaults;
   }
 
 }  // namespace
@@ -193,10 +205,18 @@ std::istream& HepRandom::restoreFullState ( std::istream & is ) {
 }
 
 std::ostream& HepRandom::saveStaticRandomStates ( std::ostream & os ) {
+  //Xin Dong March 31, 2012 force to invoke the following function
+  //This function is not invoked via the static initialization
+  //implemented in Randomize.h.
+  createInstance();
   return StaticRandomStates::save(os);
 }
 
 std::istream& HepRandom::restoreStaticRandomStates ( std::istream & is ) {
+  //Xin Dong March 31, 2012 force to invoke the following function
+  //This function is not invoked via the static initialization
+  //implemented in Randomize.h.
+  createInstance();//Not necessary for this restore implementation.
   return StaticRandomStates::restore(is);
 }
 

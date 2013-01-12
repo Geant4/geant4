@@ -170,6 +170,7 @@ protected :
     const G4MoleculeDefinition* fMoleculeDefinition;
     const G4ElectronOccupancy* fElectronOccupancy;
 
+public:
     struct G4MolecularConfigurationManager
     {
         G4MolecularConfigurationManager(){;}
@@ -179,6 +180,7 @@ protected :
         MolecularConfigurationTable fTable;
     };
 
+protected:
     static G4MolecularConfigurationManager* fgManager;
 
     static G4MolecularConfigurationManager* GetManager();

@@ -47,6 +47,16 @@
 
 #include "Randomize.hh"
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This static member is thread local. For each thread, it points to the
+//array of PolyhedraSidePrivateSubclass instances.
+template <class PolyhedraSidePrivateSubclass> __thread PolyhedraSidePrivateSubclass* G4MTPrivateSubInstanceManager<PolyhedraSidePrivateSubclass>::offset = 0;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This new field helps to use the class G4PolyhedraSideSubInstanceManager
+//introduced in the "G4PolyhedraSide.hh" file.
+G4PolyhedraSideSubInstanceManager G4PolyhedraSide::g4polyhedraSideSubInstanceManager;
+
 //
 // Constructor
 //
@@ -63,10 +73,13 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
                                         G4bool thePhiIsOpen,
                                         G4bool isAllBehind )
 {
+
+  g4polyhedraSideInstanceID = g4polyhedraSideSubInstanceManager.CreateSubInstance();
+
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea=0.;
-  fPhi.first = G4ThreeVector(0,0,0);
-  fPhi.second= 0.0;
+  fPhiPHSG4MTThreadPrivate.first = G4ThreeVector(0,0,0);
+  fPhiPHSG4MTThreadPrivate.second= 0.0;
 
   //
   // Record values
@@ -321,6 +334,8 @@ G4PolyhedraSide::~G4PolyhedraSide()
 G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide &source )
   : G4VCSGface()
 {
+  g4polyhedraSideInstanceID = g4polyhedraSideSubInstanceManager.CreateSubInstance();
+
   CopyStuff( source );
 }
 
@@ -987,15 +1002,15 @@ G4double G4PolyhedraSide::GetPhi( const G4ThreeVector& p )
 {
   G4double val=0.;
 
-  if (fPhi.first != p)
+  if (fPhiPHSG4MTThreadPrivate.first != p)
   {
     val = p.phi();
-    fPhi.first = p;
-    fPhi.second = val;
+    fPhiPHSG4MTThreadPrivate.first = p;
+    fPhiPHSG4MTThreadPrivate.second = val;
   }
   else
   {
-    val = fPhi.second;
+    val = fPhiPHSG4MTThreadPrivate.second;
   }
   return val;
 }

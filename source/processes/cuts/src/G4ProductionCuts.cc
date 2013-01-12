@@ -37,10 +37,10 @@
 #include "G4ProductionCutsTable.hh"
 #include <iomanip>
 
-const G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
-const G4ParticleDefinition* G4ProductionCuts::electDef = 0;
-const G4ParticleDefinition* G4ProductionCuts::positDef = 0;
-const G4ParticleDefinition* G4ProductionCuts::protonDef = 0;
+G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
+G4ParticleDefinition* G4ProductionCuts::electDef = 0;
+G4ParticleDefinition* G4ProductionCuts::positDef = 0;
+G4ParticleDefinition* G4ProductionCuts::protonDef = 0;
 
 G4ProductionCuts::G4ProductionCuts() :
   isModified(true)
@@ -107,16 +107,16 @@ G4int  G4ProductionCuts::GetIndex(const G4ParticleDefinition* ptcl)
 { 
   if(!ptcl) return -1;
   // In the first call, pointers are set 
-  if(gammaDef==0  && ptcl->GetParticleName()=="gamma")  { gammaDef = ptcl; }
-  if(electDef==0  && ptcl->GetParticleName()=="e-")     { electDef = ptcl; }
-  if(positDef==0  && ptcl->GetParticleName()=="e+")     { positDef = ptcl; }
-  if(protonDef==0 && ptcl->GetParticleName()=="proton") { protonDef = ptcl; }
+  if(gammaDef==0  && ptcl->GetParticleName()=="gamma")  { gammaDef = (G4ParticleDefinition*) ptcl; }
+  if(electDef==0  && ptcl->GetParticleName()=="e-")     { electDef = (G4ParticleDefinition*) ptcl; }
+  if(positDef==0  && ptcl->GetParticleName()=="e+")     { positDef = (G4ParticleDefinition*) ptcl; }
+  if(protonDef==0 && ptcl->GetParticleName()=="proton") { protonDef = (G4ParticleDefinition*) ptcl; }
 
   G4int index;
-  if(ptcl==gammaDef)       { index = 0;  }
-  else if(ptcl==electDef)  { index = 1;  }
-  else if(ptcl==positDef)  { index = 2;  }
-  else if(ptcl==protonDef) { index = 3;  }
+  if(ptcl==(const G4ParticleDefinition*) gammaDef)       { index = 0;  }
+  else if(ptcl==(const G4ParticleDefinition*) electDef)  { index = 1;  }
+  else if(ptcl==(const G4ParticleDefinition*) positDef)  { index = 2;  }
+  else if(ptcl==(const G4ParticleDefinition*) protonDef) { index = 3;  }
   else                     { index = -1; }
 
   return index;

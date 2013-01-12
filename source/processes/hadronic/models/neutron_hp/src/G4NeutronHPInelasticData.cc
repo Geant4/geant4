@@ -129,7 +129,7 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 
   // make a PhysicsVector for each element
 
-  static const G4ElementTable *theElementTable = G4Element::GetElementTable();
+  static G4ElementTable *theElementTable = G4Element::GetElementTable();
   for( size_t i=0; i<numberOfElements; ++i )
   {
      G4PhysicsVector* physVec = G4NeutronHPData::
@@ -160,7 +160,7 @@ void G4NeutronHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
    G4cout << G4endl;
 
    size_t numberOfElements = G4Element::GetNumberOfElements();
-   static const G4ElementTable *theElementTable = G4Element::GetElementTable();
+   static G4ElementTable *theElementTable = G4Element::GetElementTable();
 
    for ( size_t i = 0 ; i < numberOfElements ; ++i )
    {

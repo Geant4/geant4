@@ -79,7 +79,21 @@ void G4ScoringCylinder::Construct(G4VPhysicalVolume* fWorldPhys)
   }
 }
 
+//Xin Dong 09302011 Scorers
+void G4ScoringCylinder::SlaveConstruct(G4VScoringMesh *masterMesh, G4VPhysicalVolume* fWorldPhys)
+{
+  if(fConstructed) {
 
+    if(verboseLevel > 0) 
+      G4cout << fWorldPhys->GetName() << " --- All quantities are reset." << G4endl;
+    ResetScore();
+
+  } else {
+    fConstructed = true;
+ 
+    fMeshElementLogical->SetSensitiveDetector(fMFD);
+  }
+}
 
 void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 

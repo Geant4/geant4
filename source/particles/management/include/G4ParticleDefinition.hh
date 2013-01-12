@@ -64,6 +64,59 @@ class G4DecayTable;
 class G4ParticleTable;
 class G4ParticlePropertyTable;
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//The class ParticlePrivateSubclass is introduced to
+//encapsulate the fields of the class G4ParticleDefinition that may not
+//be read-only.
+#ifndef PARTICLEPRIVATESUBCLASS_HH
+#define PARTICLEPRIVATESUBCLASS_HH
+
+class ParticlePrivateSubclass
+{
+public:
+  class G4ProcessManager *theProcessManager;
+  void initialize() {
+    theProcessManager = 0;    
+  };
+};
+#endif
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
+//The class G4ParticleDefinitionSubInstanceManager is introduced to
+//encapsulate the methods used by both the master thread and
+//worker threads to allocate memory space for the fields encapsulated
+//by the class ParticlePrivateSubclass. When each thread
+//changes the value for these fields, it refers to them using a macro
+//definition defined below. For every G4ParticleDefinition instance, there is
+//a corresponding ParticlePrivateSubclass instance. All            
+//ParticlePrivateSubclass instances are organized by the
+//class G4ParticleDefinitionSubInstanceManager as an array. The field "
+//int g4particleDefinitionInstanceID" is added to the class G4ParticleDefinition.
+//The value of this field in each G4ParticleDefinition instance is the subscript
+//of the corresponding ParticlePrivateSubclass instance. In order
+//to use the class G4ParticleDefinitionSubInstanceManager, we add a static member in
+//the class G4ParticleDefinition as follows: "
+//static G4ParticleDefinitionSubInstanceManager g4particleDefinitionSubInstanceManager".
+//Both the master thread and worker threads change the length of the array for
+//ParticlePrivateSubclass instances mutually along with G4ParticleDefinition
+//instances are created. For each worker thread, it dynamically creates ions.
+//Consider any thread A, if there is any other thread which creates an ion.
+//This ion is shared by the thread A. So the thread A leaves an empty space
+//in the array of ParticlePrivateSubclass instances for the ion.
+#ifndef G4PARTICLEDEFINITIONSUBINSTANCEMANAGER_HH
+#define G4PARTICLEDEFINITIONSUBINSTANCEMANAGER_HH
+
+#include "G4MTTransitoryParticle.hh"
+typedef G4MTPrivateParticleCounter<ParticlePrivateSubclass>  G4ParticleDefinitionSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//These macros changes the references to fields that are now encapsulated
+//in the class ParticlePrivateSubclass.
+#define theProcessManagerG4MTThreadPrivate ((g4particleDefinitionSubInstanceManager.offset[g4particleDefinitionInstanceID]).theProcessManager)
+
+#endif
+
+
 class G4ParticleDefinition 
 {
   // Class Description
@@ -73,6 +126,17 @@ class G4ParticleDefinition
   //
 
   friend class  G4ParticlePropertyTable;
+
+  public:
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field is used as instance ID.
+    int g4particleDefinitionInstanceID;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field helps to use the class G4LogicalVolumeSubInstanceManager
+    //introduced above.
+    static G4ParticleDefinitionSubInstanceManager g4particleDefinitionSubInstanceManager;
+
 
  public: // With Description
   //  Only one type of constructor can be used for G4ParticleDefinition.
@@ -312,9 +376,16 @@ class G4ParticleDefinition
 
       class G4DecayTable *theDecayTable;
       //  Points DecayTable 
- 
+
+   public:
+
+      //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+      //Each worker thread can access this field from the master thread
+      //through this pointer.
+      class G4ProcessManager *theProcessManagerShadow;
+
    private:
-      class G4ProcessManager *theProcessManager;
+
       //  Points to G4ProcessManager
 
       G4ParticleTable* theParticleTable;

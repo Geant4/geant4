@@ -65,10 +65,74 @@ struct G4PolyhedraSideRZ
   G4double r, z;  // start of vector
 };
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//The class PolyhedraSidePrivateSubclass is introduced to
+//encapsulate the fields of the class G4PolyhedraSide that may not
+//be read-only.
+#ifndef POLYHEDRASIDEPRIVATESUBCLASS_HH
+#define POLYHEDRASIDEPRIVATESUBCLASS_HH
+
+class PolyhedraSidePrivateSubclass
+{
+public:
+  std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
+
+  void initialize() {
+    fPhi.first = G4ThreeVector(0,0,0);
+    fPhi.second= 0.0;
+  };
+};
+#endif
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
+//The class G4PolyhedraSideSubInstanceManager is introduced to 
+//encapsulate the methods used by both the master thread and 
+//worker threads to allocate memory space for the fields encapsulated
+//by the class PolyhedraSidePrivateSubclass. When each thread
+//initializes the value for these fields, it refers to them using a macro
+//definition defined below. For every G4PolyhedraSide instance, there is
+//a corresponding PolyhedraSidePrivateSubclass instance. All
+//PolyhedraSidePrivateSubclass instances are organized by the
+//class G4PolyhedraSideSubInstanceManager as an array. The field "  
+//int g4polyhedraSideSubInstanceID" is added to the class G4PolyhedraSide.
+//The value of this field in each G4PolyhedraSide instance is the subscript
+//of the corresponding PolyhedraSidePrivateSubclass instance. In order
+//to use the class G4PolyhedraSideSubInstanceManager, we add a static member in
+//the class G4PolyhedraSide as follows: "  
+//static G4PolyhedraSideSubInstanceManager g4polyhedraSideSubInstanceManager".
+//For the master thread, the array for PolyhedraSidePrivateSubclass 
+//instances grows dynamically along with G4PolyhedraSide instances are
+//created. For each worker thread, it copies the array of 
+//PolyhedraSidePrivateSubclass instances from the master thread.
+//In addition, it invokes a method similiar to the constructor explicitly
+//to achieve the partial effect for each instance in the array.
+
+#ifndef G4PolyhedraSideSUBINSTANCEMANAGER_HH
+#define G4PolyhedraSideSUBINSTANCEMANAGER_HH
+
+#include "G4MTTransitory.hh"
+typedef G4MTPrivateSubInstanceManager<PolyhedraSidePrivateSubclass> G4PolyhedraSideSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//These macros changes the references to fields that are now encapsulated
+//in the class PolyhedraSidePrivateSubclass.
+#define fPhiPHSG4MTThreadPrivate ((g4polyhedraSideSubInstanceManager.offset[g4polyhedraSideInstanceID]).fPhi)
+
+#endif
+
 class G4PolyhedraSide : public G4VCSGface
 {
 
   public:  // with description
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field is used as instance ID.
+    int g4polyhedraSideInstanceID;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field helps to use the class G4PolyhedraSideSubInstanceManager
+    //introduced above.
+    static G4PolyhedraSideSubInstanceManager g4polyhedraSideSubInstanceManager;
 
     G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
                      const G4PolyhedraSideRZ *tail,
@@ -196,8 +260,8 @@ class G4PolyhedraSide : public G4VCSGface
     G4double    edgeNorm;   // Normal in RZ/Phi space to each side
 
   private:
-
-    std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
+    //Change to thread private
+    //    std::pair<G4ThreeVector, G4double> fPhiPHSG4MTThreadPrivate;  // Cached value for phi
     G4double kCarTolerance;  // Geometrical surface thickness
     G4double fSurfaceArea;   // Surface Area 
 };

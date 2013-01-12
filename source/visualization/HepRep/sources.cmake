@@ -32,6 +32,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/externals/zlib/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/modeling/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/visualization/gMocren/include)
 
 #
 # Define the Geant4 Module.

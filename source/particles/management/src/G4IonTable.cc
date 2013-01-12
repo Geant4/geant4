@@ -63,13 +63,71 @@
 
 #include <sstream>
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//lock for particle table accesses.
+extern pthread_mutex_t particleTable;
+extern int lockCount;
+
+//07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//It is very important for multithreaded Geant4 to keep only one copy of the
+//particle table pointer and the ion table pointer. However, we try to let 
+//each worker thread hold its own copy of the particle dictionary and the 
+//ion list. This implementation is equivalent to make the ion table thread
+//private. The two shadow ponters are used by each worker thread to copy the
+//content from the master thread.
+G4IonTable::G4IonList* G4IonTable::fIonList = 0;
+std::vector<G4VIsotopeTable*> *G4IonTable::fIsotopeTableList = 0;
+G4IonTable::G4IonList* G4IonTable::fIonListShadow = 0;
+std::vector<G4VIsotopeTable*> *G4IonTable::fIsotopeTableListShadow = 0;
 
 ////////////////////
 G4IonTable::G4IonTable()
 {
   fIonList = new G4IonList();
+
+  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //Set up the shadow pointer used by worker threads.
+  if (fIonListShadow == 0)
+  {
+    fIonListShadow = fIonList;
+  }
+
   fIsotopeTableList = new std::vector<G4VIsotopeTable*>;
+
+  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //Set up the shadow pointer used by worker threads.
+  if (fIsotopeTableListShadow == 0)
+  {
+    fIsotopeTableListShadow = fIsotopeTableList;
+  }
 }
+
+//07.11.2009 Xin Dong Phase II change for Geant4 multithreading. This
+//method is used by each worker thread to copy the content from the master
+//thread.
+void G4IonTable::SlaveG4IonTable()
+{
+  fIonList = new G4IonList();
+  fIsotopeTableList = new std::vector<G4VIsotopeTable*>;
+
+  //  printf("Copy all ions: %d\n", fIonListShadow->size());
+  G4IonListIterator it;
+  for (it = fIonListShadow->begin() ; it != fIonListShadow->end(); it++ )
+    fIonList->insert(*it);
+  //  for (size_t i = 0; i < fIonListShadow->size() ; i++)
+  //  {
+  //    fIonList->push_back((*fIonListShadow)[i]);
+  //  }
+
+  //  printf("Copy all IsotopeTabel: %d\n", fIsotopeTableListShadow->size());
+
+  for (size_t i = 0; i < fIsotopeTableListShadow->size(); i++)
+  {
+    fIsotopeTableList->push_back((*fIsotopeTableListShadow)[i]);
+  }
+
+}
+
 
 ////////////////////
 G4IonTable::~G4IonTable()
@@ -154,6 +212,13 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   // create an ion
   //   spin, parity, isospin values are fixed
   //
+
+  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //Request lock for particle table accesses. Some changes are inside 
+  //this critical region.
+  pthread_mutex_lock(&particleTable);
+  lockCount++;
+
   ion = new G4Ions(   name,            mass,       0.0*MeV,     charge, 
 			 J,              +1,             0,          
 			 0,               0,             0,             
@@ -161,6 +226,11 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
 		    stable,            life,    decayTable,       false,
 		  "generic",              0,
 		      E                       );
+
+  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //release lock for particle table accesses.
+  pthread_mutex_unlock(&particleTable);
+
   ion->SetPDGMagneticMoment(mu);
 
   //No Anti particle registered
@@ -230,6 +300,13 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
   // create an ion
   //   spin, parity, isospin values are fixed
   //
+
+  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //Request lock for particle table accesses. Some changes are inside 
+  //this critical region.
+  pthread_mutex_lock(&particleTable);
+  lockCount++;
+
   ion = new G4Ions(   name,            mass,       0.0*MeV,     charge, 
 			 J,              +1,             0,          
 			 0,               0,             0,             
@@ -237,6 +314,11 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
 		    stable,            life,    decayTable,       false,
 		  "generic",              0,
 		      E                       );
+
+  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //release lock for particle table accesses.
+  pthread_mutex_unlock(&particleTable);
+
   ion->SetPDGMagneticMoment(mu);
 
   //No Anti particle registered

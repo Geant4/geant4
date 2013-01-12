@@ -63,7 +63,12 @@ G4SolidStore::G4SolidStore()
 //
 G4SolidStore::~G4SolidStore() 
 {
+  #ifndef G4MULTITHREADED
+  //Changed by Xin Dong. Because parameterised solids are replicated by threads, 
+  //the master thread can not free them when thread private malloc library is used.
+  //May let the master thread to replicate.
   Clean();
+  #endif
 }
 
 // ***************************************************************************

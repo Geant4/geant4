@@ -39,7 +39,8 @@
 
 struct G4CascadeKzeroBarPChannelData {
   typedef G4CascadeData<31,5,15,28,42,20,11> data_t;
-  static data_t data;
+  static data_t *data;
+  static data_t *initializer();
 };
 
 typedef G4CascadeFunctions<G4CascadeKzeroBarPChannelData,G4KaonHypSampler> G4CascadeKzeroBarPChannel;

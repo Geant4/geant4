@@ -282,25 +282,28 @@ namespace G4INCL {
      * \return the charge number of the nuclide, or zero on fail
      */
     static G4int parseIUPACElement(std::string const &pS);
+    //Andrea Dotti (Jan 12, 2013): 
+    // change "const static" to "static const" this is needed
+    // For G4MT transformation tools to work correctly.
+    // In case of questions please send a e-mail to adotti@slac.stanford.edu
+    static const G4int elementTableSize = 113; // up to Cn
 
-    const static G4int elementTableSize = 113; // up to Cn
-
-    const static G4double effectiveNucleonMass;
-    const static G4double effectiveNucleonMass2;
-    const static G4double effectiveDeltaMass;
-    const static G4double effectivePionMass;
-    const static G4double effectiveDeltaDecayThreshold;
+    static const G4double effectiveNucleonMass;
+    static const G4double effectiveNucleonMass2;
+    static const G4double effectiveDeltaMass;
+    static const G4double effectivePionMass;
+    static const G4double effectiveDeltaDecayThreshold;
 
     static const G4int maxClusterMass = 12;
     static const G4int maxClusterCharge = 8;
 
-    const static G4int clusterTableZSize = ParticleTable::maxClusterCharge+1;
-    const static G4int clusterTableASize = ParticleTable::maxClusterMass+1;
-    const static G4double clusterPosFact[maxClusterMass+1];
-    const static G4double clusterPosFact2[maxClusterMass+1];
-    const static G4int clusterZMin[maxClusterMass+1]; // Lower limit of Z for cluster of mass A
-    const static G4int clusterZMax[maxClusterMass+1]; // Upper limit of Z for cluster of mass A
-    const static G4double clusterPhaseSpaceCut[maxClusterMass+1];
+    static const G4int clusterTableZSize = ParticleTable::maxClusterCharge+1;
+    static const G4int clusterTableASize = ParticleTable::maxClusterMass+1;
+    static const G4double clusterPosFact[maxClusterMass+1];
+    static const G4double clusterPosFact2[maxClusterMass+1];
+    static const G4int clusterZMin[maxClusterMass+1]; // Lower limit of Z for cluster of mass A
+    static const G4int clusterZMax[maxClusterMass+1]; // Upper limit of Z for cluster of mass A
+    static const G4double clusterPhaseSpaceCut[maxClusterMass+1];
 
 #ifdef INCLXX_IN_GEANT4_MODE
     static G4IonTable *theG4IonTable;
@@ -320,7 +323,7 @@ namespace G4INCL {
       ProtonUnbound,
       NeutronUnbound
     };
-    const static ClusterDecayType clusterDecayMode[clusterTableZSize][clusterTableASize];
+    static const ClusterDecayType clusterDecayMode[clusterTableZSize][clusterTableASize];
 
     /** \brief Coulomb conversion factor, in MeV*fm.
      *
@@ -355,20 +358,20 @@ namespace G4INCL {
     static G4double theRealChargedPiMass;
     static G4double theRealPiZeroMass;
 
-    const static G4int mediumNucleiTableSize = 30;
-    const static G4double mediumDiffuseness[mediumNucleiTableSize];
-    const static G4double mediumRadius[mediumNucleiTableSize];
-    const static G4double positionRMS[clusterTableZSize][clusterTableASize];
-    const static G4double momentumRMS[clusterTableZSize][clusterTableASize];
+    static const G4int mediumNucleiTableSize = 30;
+    static const G4double mediumDiffuseness[mediumNucleiTableSize];
+    static const G4double mediumRadius[mediumNucleiTableSize];
+    static const G4double positionRMS[clusterTableZSize][clusterTableASize];
+    static const G4double momentumRMS[clusterTableZSize][clusterTableASize];
 
-    const static std::string elementTable[elementTableSize];
+    static const std::string elementTable[elementTableSize];
     
 #ifndef INCLXX_IN_GEANT4_MODE
     /// \brief Read nuclear masses from a data file
     static void readRealMasses(std::string const &path);
 #endif
 
-    const static std::string elementIUPACDigits;
+    static const std::string elementIUPACDigits;
 
     /// \brief Transform a IUPAC char to an char representing an integer digit
     static char iupacToInt(char c) {

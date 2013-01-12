@@ -37,18 +37,18 @@ using namespace G4InuclParticleNames;
 namespace {
   // Outgoing particle types of a given multiplicity
  
-  static const G4int kpn2bfs[2][2] =
+  static G4int kpn2bfs[2][2] =
     {{2,11}, {1,15}};
  
-  static const G4int kpn3bfs[5][3] =
+  static G4int kpn3bfs[5][3] =
     {{2,7,11}, {1,5,11}, {2,3,15}, {1,7,15}, {11,15,21}};  
   
-  static const G4int kpn4bfs[13][4] =
+  static G4int kpn4bfs[13][4] =
     {{2,7,7,11},   {2,3,5,11},   {1,5,7,11},   {2,3,7,15},   {1,7,7,15},
      {1,3,5,15},   {2,11,11,13}, {2,11,15,17}, {1,15,15,17}, {1,11,13,15},
      {7,11,15,21}, {5,11,11,21}, {3,15,15,21}};
  
-  static const G4int kpn5bfs[22][5] =
+  static G4int kpn5bfs[22][5] =
     {{2,11,7,7,7},   {2,3,5,7,11},   {1,5,7,7,11},   {1,3,5,5,11},
      {2,3,7,7,15},   {2,3,3,5,15},   {1,7,7,7,15},   {1,3,5,7,15},
      {2,7,11,15,17}, {2,7,11,11,13}, {2,3,11,13,15}, {2,5,11,11,17},
@@ -56,7 +56,7 @@ namespace {
      {1,7,15,15,17}, {1,3,13,15,15}, {7,7,11,15,21}, {3,5,11,15,21},
      {5,7,11,11,21}, {3,7,15,15,21}};
 
-  static const G4int kpn6bfs[32][6] =
+  static G4int kpn6bfs[32][6] =
     {{2,7,7,7,7,11},   {2,3,5,7,7,11},   {2,3,3,5,5,11},   {1,5,7,7,7,11},
      {1,3,5,5,7,11},   {2,3,7,7,7,15},   {2,3,3,5,7,15},   {1,7,7,7,7,15},
      {1,3,5,7,7,15},   {1,3,3,5,5,15},   {2,7,7,11,11,13}, {2,3,5,11,11,13},
@@ -66,7 +66,7 @@ namespace {
      {1,3,5,15,15,17}, {1,3,7,13,15,15}, {7,7,7,11,15,21}, {3,5,7,11,15,21},
      {5,7,7,11,11,21}, {3,5,5,11,11,21}, {3,7,7,15,15,21}, {3,3,5,15,15,21}};
   
-  static const G4int kpn7bfs[41][7] =
+  static G4int kpn7bfs[41][7] =
     {{2,7,7,7,7,7,11},   {2,3,5,7,7,7,11},   {2,3,3,5,5,7,11},
      {1,5,7,7,7,7,11},   {1,3,5,5,7,7,11},   {1,3,3,5,5,5,11},
      {2,3,7,7,7,7,15},   {2,3,3,5,7,7,15},   {2,3,3,3,5,5,15},
@@ -94,7 +94,7 @@ namespace {
   //
   // second index: kinetic energy
   //
-  static const G4double kpnCrossSections[115][31] = {
+  static G4double kpnCrossSections[115][31] = {
     //
     // multiplicity 2 (2 channels)
     //
@@ -684,7 +684,14 @@ namespace {
       0.01, 0.01, 0.01, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02, 0.02}};
 }
 
-G4CascadeKplusNChannelData::data_t
-G4CascadeKplusNChannelData::data(kpn2bfs, kpn3bfs, kpn4bfs,
-				 kpn5bfs, kpn6bfs, kpn7bfs,
-				 kpnCrossSections, kpl*neu, "KplusN");
+typedef G4CascadeKplusNChannelData::data_t G4CascadeKplusNChannelData_t;
+
+G4CascadeKplusNChannelData_t *G4CascadeKplusNChannelData::data = 0;
+
+G4CascadeKplusNChannelData::data_t *G4CascadeKplusNChannelData::initializer()
+{
+  if (G4CascadeKplusNChannelData::data == 0)
+    G4CascadeKplusNChannelData::data = new G4CascadeKplusNChannelData::data_t(kpn2bfs, kpn3bfs, kpn4bfs, kpn5bfs, kpn6bfs, kpn7bfs, kpnCrossSections, kpl*neu, "KplusN");
+
+  return G4CascadeKplusNChannelData::data;
+}

@@ -46,7 +46,7 @@
 void G4VRML1SCENEHANDLER::AddSolid(const G4Trd& trd)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid trd" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
@@ -56,7 +56,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Trd& trd)
 void G4VRML1SCENEHANDLER::AddSolid(const G4Trap& trap)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid trap" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
@@ -66,7 +66,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Trap& trap)
 void G4VRML1SCENEHANDLER::AddSolid(const G4Para& para)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid para" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
@@ -76,7 +76,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Para& para)
 void G4VRML1SCENEHANDLER::AddSolid(const G4Torus& torus )
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid torus" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
@@ -87,7 +87,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Torus& torus )
 void G4VRML1SCENEHANDLER::AddSolid(const G4VSolid& vsolid)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid vsolid" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
@@ -97,7 +97,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4VSolid& vsolid)
 void G4VRML1SCENEHANDLER::AddSolid(const G4Tubs& tubs)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid tubs" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
@@ -135,7 +135,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Tubs& tubs)
 void G4VRML1SCENEHANDLER::AddSolid(const G4Cons& cons)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
         G4cout << "***** AddSolid cons" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
@@ -175,7 +175,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Cons& cons)
 void G4VRML1SCENEHANDLER::AddSolid(const G4Box& box)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid box" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
@@ -204,7 +204,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Box& box)
 void G4VRML1SCENEHANDLER::AddSolid(const G4Sphere& sphere)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid sphere" << "\n" ;
 #endif
 	VRMLBeginModeling () ;
@@ -241,7 +241,7 @@ void G4VRML1SCENEHANDLER::AddSolid(const G4Sphere& sphere)
 void G4VRML1SCENEHANDLER::AddPrimitive(const G4Polyline& polyline)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive polyline" << "\n" ;
 #endif 
 	if (fProcessing2D) {
@@ -293,7 +293,7 @@ void G4VRML1SCENEHANDLER::AddPrimitive(const G4Polyline& polyline)
 void G4VRML1SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive(G4Polyhedron)" << "\n";
 #endif
 
@@ -374,7 +374,7 @@ void G4VRML1SCENEHANDLER::AddPrimitive(const G4Polyhedron& polyhedron)
 void G4VRML1SCENEHANDLER::AddPrimitive( const G4Text& ) 
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive text" << "\n" ;
 #endif
 	/*** You might need this
@@ -391,7 +391,7 @@ void G4VRML1SCENEHANDLER::AddPrimitive( const G4Text& )
 	}
 	***/
 
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout <<
           "***** void G4VRML1SCENEHANDLER::AddPrimitive( const G4Text& text )"
           " not implemented yet."
@@ -403,7 +403,7 @@ void G4VRML1SCENEHANDLER::AddPrimitive( const G4Text& )
 void G4VRML1SCENEHANDLER::AddPrimitive( const G4Circle& circle ) 
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive circle" << "\n" ;
 #endif
 
@@ -446,7 +446,7 @@ void G4VRML1SCENEHANDLER::AddPrimitive( const G4Circle& circle )
 void G4VRML1SCENEHANDLER::AddPrimitive(const G4Square& square)
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive square" << "\n" ;
 #endif
 
@@ -491,7 +491,7 @@ void G4VRML1SCENEHANDLER::AddPrimitive(const G4Square& square)
 void G4VRML1SCENEHANDLER::BeginModeling()
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** BeginModeling " << "\n" ;
 #endif
 	G4VSceneHandler::BeginModeling();
@@ -500,7 +500,7 @@ void G4VRML1SCENEHANDLER::BeginModeling()
 void G4VRML1SCENEHANDLER::EndModeling()
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** EndModeling " << "\n" ;
 #endif
 	G4VSceneHandler::EndModeling();
@@ -510,7 +510,7 @@ void G4VRML1SCENEHANDLER::BeginPrimitives(const G4Transform3D& objectTransformat
 {
   G4VSceneHandler::BeginPrimitives (objectTransformation);
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** BeginPrimitives " << "\n" ;
 #endif
 	VRMLBeginModeling();
@@ -519,7 +519,7 @@ void G4VRML1SCENEHANDLER::BeginPrimitives(const G4Transform3D& objectTransformat
 void G4VRML1SCENEHANDLER::EndPrimitives()
 {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** EndPrimitives " << "\n" ;
 #endif
   G4VSceneHandler::EndPrimitives();
@@ -626,7 +626,7 @@ void G4VRML1SCENEHANDLER::VRMLBeginModeling()
 {
 	if (!IS_CONNECTED ) {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** VRMLBeginModeling() (started)" << "\n" ;
 #endif
 		this->connectPort();
@@ -639,7 +639,7 @@ void G4VRML1SCENEHANDLER::VRMLEndModeling()
 {
 	if ( IS_CONNECTED ) {
 #if defined DEBUG_SCENE_FUNC
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** VRMLEndModeling() (started)" << "\n" ;
 #endif
 

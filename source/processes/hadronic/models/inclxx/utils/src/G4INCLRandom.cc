@@ -46,7 +46,7 @@
 
 namespace G4INCL {
 
-  G4INCL::IRandomGenerator* Random::theGenerator;
+  IRandomGenerator* Random::theGenerator;
 
   G4double Random::gauss(G4double sigma) {
     // generate a Gaussian random number with standard deviation sigma

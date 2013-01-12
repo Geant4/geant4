@@ -46,7 +46,7 @@
 
 #include "G4ios.hh" 
 
-G4VelocityTable* G4VelocityTable::theInstance = new G4VelocityTable();
+G4VelocityTable* G4VelocityTable::theInstance = 0;
 
 ////////////////
 G4VelocityTable::G4VelocityTable()
@@ -56,6 +56,10 @@ G4VelocityTable::G4VelocityTable()
     lastEnergy(-DBL_MAX), lastValue(0.), lastBin(0),
     maxT( 1000.0 ), minT( 0.0001 ), NbinT( 500 )
 {
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  //Should not initialize itself in constructor
   PrepareVelocityTable();
 } 
 
@@ -63,6 +67,10 @@ G4VelocityTable::G4VelocityTable()
 G4VelocityTable::~G4VelocityTable()
 /////////////////
 {
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  if (theInstance == 0) theInstance = new G4VelocityTable();
   dataVector.clear();
   binVector.clear();
 }
@@ -72,6 +80,10 @@ G4VelocityTable::~G4VelocityTable()
 void G4VelocityTable::PrepareVelocityTable()
 ///////////////////
 {
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  //Should not initialize itself in constructor
   dataVector.clear();
   binVector.clear();
 
@@ -107,6 +119,11 @@ void G4VelocityTable::PrepareVelocityTable()
 
 size_t G4VelocityTable::FindBinLocation(G4double theEnergy) const
 {
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  if (theInstance == 0) theInstance = new G4VelocityTable();
+
   // For G4PhysicsLogVector, FindBinLocation is implemented using
   // a simple arithmetic calculation.
   //
@@ -122,6 +139,11 @@ size_t G4VelocityTable::FindBinLocation(G4double theEnergy) const
 
 G4double G4VelocityTable::Value(G4double theEnergy) 
 {
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  if (theInstance == 0) theInstance = new G4VelocityTable();
+
   // Use cache for speed up - check if the value 'theEnergy' is same as the 
   // last call. If it is same, then use the last bin location. Also the
   // value 'theEnergy' lies between the last energy and low edge of of the 
@@ -160,6 +182,11 @@ G4double G4VelocityTable::Value(G4double theEnergy)
 G4VelocityTable* G4VelocityTable::GetVelocityTable()
 ///////////////////
 {
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  if (theInstance == 0) theInstance = new G4VelocityTable();
+
   return theInstance;
 }
 
@@ -167,6 +194,11 @@ G4VelocityTable* G4VelocityTable::GetVelocityTable()
 void G4VelocityTable::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin)
 ///////////////////
 {
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  if (theInstance == 0) theInstance = new G4VelocityTable();
+
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   
@@ -189,15 +221,35 @@ void G4VelocityTable::SetVelocityTableProperties(G4double t_max, G4double t_min,
 ///////////////////
 G4double G4VelocityTable::GetMaxTOfVelocityTable()
 ///////////////////
-{ return theInstance->maxT; }
+{
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  if (theInstance == 0) theInstance = new G4VelocityTable();
+
+  return theInstance->maxT; 
+}
 
 ///////////////////
 G4double G4VelocityTable::GetMinTOfVelocityTable() 
 ///////////////////
-{ return theInstance->minT; }
+{
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  if (theInstance == 0) theInstance = new G4VelocityTable();
+
+  return theInstance->minT; 
+}
 
 ///////////////////
 G4int    G4VelocityTable::GetNbinOfVelocityTable() 
 ///////////////////
-{ return theInstance->NbinT; }
+{
+  //Xin Dong March 31, 2012
+  //Typical singleton implementation should use 
+  //G4VelocityTable* G4VelocityTable::GetVelocityTable()
+  if (theInstance == 0) theInstance = new G4VelocityTable();
 
+  return theInstance->NbinT; 
+}

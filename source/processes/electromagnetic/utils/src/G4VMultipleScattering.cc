@@ -168,6 +168,63 @@ G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
   return modelManager->GetModel(idx, ver);
 }
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//Worker threads share physics tables with the master thread for
+//this kind of process. This member function is used by worker
+//threads to achieve the partial effect of the master thread when
+//it builds physcis tables.
+void G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
+{
+  if(!firstParticle) { firstParticle = &part; }
+  if(part.GetParticleType() == "nucleus") {
+    SetStepLimitType(fMinimal);
+    SetLateralDisplasmentFlag(false);
+    SetRangeFactor(0.2);
+    if(&part == G4GenericIon::GenericIon()) { firstParticle = &part; }
+    isIon = true; 
+  }
+
+  emManager->SlavePreparePhysicsTable(&part, this);
+  currParticle = 0;
+
+  if(firstParticle == &part) {
+
+    InitialiseProcess(firstParticle);
+
+    // initialisation of models
+    numberOfModels = modelManager->NumberOfModels();
+    for(G4int i=0; i<numberOfModels; ++i) {
+      G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
+      msc->SetIonisation(0, firstParticle);
+      if(0 == i) { currentModel = msc; }
+      if(isIon) {
+	msc->SetStepLimitType(fMinimal);
+	msc->SetLateralDisplasmentFlag(false);
+	msc->SetRangeFactor(0.2);
+      } else {
+	msc->SetStepLimitType(StepLimitType());
+	msc->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
+	msc->SetSkin(Skin());
+	msc->SetRangeFactor(RangeFactor());
+	msc->SetGeomFactor(GeomFactor());
+      }
+      msc->SetPolarAngleLimit(polarAngleLimit);
+      G4double emax = 
+	std::min(msc->HighEnergyLimit(),emManager->MaxKinEnergy());
+      msc->SetHighEnergyLimit(emax);
+    }
+
+    modelManager->Initialise(firstParticle, G4Electron::Electron(), 
+			     10.0, verboseLevel);
+
+    if(!safetyHelper) {
+      safetyHelper = G4TransportationManager::GetTransportationManager()
+	->GetSafetyHelper();
+      safetyHelper->InitialiseHelper();
+    }
+  }
+}//From 182
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void 
@@ -230,9 +287,19 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
       safetyHelper->InitialiseHelper();
     }
   }
-}
+}//From 257
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//Worker threads share physics tables with the master thread for
+//this kind of process. This member function is used by worker
+//threads to achieve the partial effect of the master thread when
+//it prepares physcis tables.
+void G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, G4VMultipleScattering *firstProcess)
+{
+  emManager->SlaveBuildPhysicsTable(firstParticle,firstProcess);
+}//from 337
 
 void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
@@ -270,7 +337,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << " and particle " << num
            << G4endl;
   }
-}
+}//from 402
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -309,7 +376,7 @@ void G4VMultipleScattering::StartTracking(G4Track* track)
       if(eloss) { msc->SetIonisation(fIonisation, currParticle); }
     }
   }
-}
+} //from 382
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

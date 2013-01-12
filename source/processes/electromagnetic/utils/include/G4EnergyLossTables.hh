@@ -214,7 +214,7 @@ private:
 
   static G4EnergyLossTablesHelper t ;
   static G4EnergyLossTablesHelper null_loss ;
-  static const G4ParticleDefinition* lastParticle ;
+  static G4ParticleDefinition* lastParticle ;
   static G4double QQPositron ;
   static G4double Chargesquare ;
   static G4int oldIndex ;

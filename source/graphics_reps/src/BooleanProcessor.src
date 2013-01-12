@@ -366,7 +366,7 @@ class BooleanProcessor {
 
   void dump(); //G.Barrand
   static int get_shift(); //G.Barrand
-  static void set_shift(int); //G.Barrand
+  static void set_shift(int a_shift); //G.Barrand
   static int get_num_shift(); //G.Barrand
 };
 

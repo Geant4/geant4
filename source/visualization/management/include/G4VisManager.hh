@@ -96,6 +96,8 @@
 #include <vector>
 #include <map>
 
+#include "G4GMocrenIO.hh"
+
 class G4Scene;
 class G4UIcommand;
 class G4UImessenger;
@@ -132,11 +134,23 @@ class G4VisManager: public G4VVisManager {
   friend class G4OpenGLXmViewerMessenger;
   friend class G4HepRepFileSceneHandler;
 
+  friend class G4DAWNFILESceneHandler;
+  friend class G4DAWNFILEViewer;
+  friend class G4VRML1FileSceneHandler;
+  friend class G4VRML1FileViewer;
+  friend class G4VRML2FileSceneHandler;
+  friend class G4GMocrenIO;
+  friend class GMocrenTrack;
+  friend class G4GMocrenFileSceneHandler;
+  friend class G4GMocrenFileViewer;
+  friend class GMocrenDetector;
+  friend class GMocrenDataPrimitive<double>;
   // Management friends...
   friend class G4VSceneHandler;
   friend class G4VViewer;
   friend class G4VisStateDependent;
   friend class G4VisCommandList;
+  friend class G4VisCommandVerbose;
 
   // operator << friends...
   friend std::ostream& operator << (std::ostream&, const G4VGraphicsSystem&);
@@ -172,14 +186,14 @@ private:
   G4VisManager (const G4VisManager&);
   G4VisManager& operator = (const G4VisManager&);
 
+public: // With description
+
   static G4VisManager* GetInstance ();
   // Returns pointer to itself.  Throws a G4Exception if called before
   // instantiation.  Private so that only friends can use; the normal
   // user should instead use G4VVisManager::GetConcreteInstance () to
   // get a "higher level" pointer for general use - but always test
   // for non-zero.
-
-public: // With description
 
   void Initialise ();
   void Initialize ();  // Alias Initialise ().
@@ -386,7 +400,7 @@ public: // With description
   // already registered.
   const G4SceneHandlerList&    GetAvailableSceneHandlers   () const;
   const G4SceneList&           GetSceneList                () const;
-  static Verbosity             GetVerbosity                ();
+  Verbosity             GetVerbosity                ();
   G4bool                       GetTransientsDrawnThisRun   () const;
   G4bool                       GetTransientsDrawnThisEvent () const;
   const G4Event*               GetRequestedEvent           () const;
@@ -424,17 +438,17 @@ public: // With description
   // Returns zero if not found.  Can use long or short name, but find
   // is done on short name.
 
-  static Verbosity GetVerbosityValue(const G4String&);
+  Verbosity GetVerbosityValue(const G4String&);
   // Returns verbosity given a string.  (Uses first character only.)
 
-  static Verbosity GetVerbosityValue(G4int);
+  Verbosity GetVerbosityValue(G4int);
   // Returns verbosity given an integer.  If integer is out of range,
   // selects verbosity at extreme of range.
 
-  static G4String VerbosityString(Verbosity);
+  G4String VerbosityString(Verbosity);
   // Converts the verbosity into a string for suitable for printing.
   
-  static std::vector<G4String> VerbosityGuidanceStrings;
+  std::vector<G4String> VerbosityGuidanceStrings;
   // Guidance on the use of visualization verbosity.
 
 protected:
@@ -488,7 +502,7 @@ private:
   G4GraphicsSystemList  fAvailableGraphicsSystems;
   G4SceneList           fSceneList;
   G4SceneHandlerList    fAvailableSceneHandlers;
-  static Verbosity            fVerbosity;
+  Verbosity            fVerbosity;
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.

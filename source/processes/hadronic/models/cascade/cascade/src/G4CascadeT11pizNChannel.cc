@@ -37,16 +37,16 @@ using namespace G4InuclParticleNames;
 
 namespace {
   // pi0 p : Outgoing particle types of a given multiplicity
-  static const G4int pizP2bfs[5][2] =
+  static G4int pizP2bfs[5][2] =
   {{pi0,pro}, {pip,neu}, {kpl,lam}, {kpl,s0}, {k0,sp}};
 
-  static const G4int pizP3bfs[13][3] =
+  static G4int pizP3bfs[13][3] =
   {{pip,pro,pim}, {pi0,pro,pi0}, {pi0,neu,pip}, {pi0,lam,kpl}, 
     {pip,lam,k0},  {pi0,s0,kpl},   {pip,s0,k0},   {pi0,sp,k0},
     {pim,sp,kpl},   {pip,sm,kpl},   {kmi,pro,kpl},   {k0b,pro,k0},
     {k0b,neu,kpl}};
 
-  static const G4int pizP4bfs[21][4] =
+  static G4int pizP4bfs[21][4] =
   {{pi0,pro,pim,pip}, {pi0,pro,pi0,pi0}, {pip,neu,pip,pim},
     {pi0,neu,pip,pi0}, {pip,lam,kpl,pim},  {pip,s0,kpl,pim}, 
     {pi0,lam,kpl,pi0},  {pi0,s0,kpl,pi0},   {pi0,sp,k0,pi0}, 
@@ -55,7 +55,7 @@ namespace {
     {pi0,pro,k0,k0b},  {pip,pro,k0,kmi},   {pim,pro,kpl,k0b}, 
     {pip,neu,kpl,kmi},   {pip,neu,k0,k0b},  {pi0,neu,kpl,k0b}}; 
 
-  static const G4int pizP5bfs[30][5] =
+  static G4int pizP5bfs[30][5] =
   {{pip,pro,pip,pim,pim}, {pi0,pro,pip,pim,pi0}, {pi0,pro,pi0,pi0,pi0},
     {pi0,neu,pip,pip,pim}, {pi0,neu,pip,pi0,pi0}, {pi0,lam,kpl,pip,pim},
     {pi0,lam,kpl,pi0,pi0},  {pip,lam,k0,pip,pim},  {pi0,lam,k0,pip,pi0},  
@@ -67,24 +67,24 @@ namespace {
     {pip,pro,k0,k0b,pim},  {pi0,neu,kpl,kmi,pip},   {pi0,neu,k0,k0b,pip},
     {pi0,neu,kpl,k0b,pi0},  {pip,neu,k0,kmi,pip},   {pip,neu,kpl,k0b,pim}};
 
-  static const G4int pizP6bfs[6][6] =
+  static G4int pizP6bfs[6][6] =
   {{pi0,pro,pip,pip,pim,pim}, {pi0,pro,pip,pim,pi0,pi0},
     {pi0,pro,pi0,pi0,pi0,pi0}, {pip,neu,pip,pip,pim,pim},
     {pi0,neu,pip,pip,pim,pi0}, {pi0,neu,pip,pi0,pi0,pi0}};
  
-  static const G4int pizP7bfs[7][7] =
+  static G4int pizP7bfs[7][7] =
   {{pip,pro,pip,pip,pim,pim,pim}, {pi0,pro,pip,pip,pim,pim,pi0},
     {pi0,pro,pip,pim,pi0,pi0,pi0}, {pi0,pro,pi0,pi0,pi0,pi0,pi0},
     {pi0,neu,pip,pip,pip,pim,pim}, {pi0,neu,pip,pip,pim,pi0,pi0},
     {pi0,neu,pip,pi0,pi0,pi0,pi0}};
 
-  static const G4int pizP8bfs[8][8] =
+  static G4int pizP8bfs[8][8] =
   {{pi0,pro,pip,pip,pip,pim,pim,pim}, {pi0,pro,pip,pip,pim,pim,pi0,pi0},
     {pi0,pro,pip,pim,pi0,pi0,pi0,pi0}, {pi0,pro,pi0,pi0,pi0,pi0,pi0,pi0},
     {pip,neu,pip,pip,pip,pim,pim,pim}, {pi0,neu,pip,pip,pip,pim,pim,pi0},
     {pi0,neu,pip,pip,pim,pi0,pi0,pi0}, {pi0,neu,pip,pi0,pi0,pi0,pi0,pi0}};
 
-  static const G4int pizP9bfs[9][9] =
+  static G4int pizP9bfs[9][9] =
   {{pip,pro,pip,pip,pip,pim,pim,pim,pim}, {pi0,pro,pip,pip,pip,pim,pim,pim,pi0},
     {pi0,pro,pip,pip,pim,pim,pi0,pi0,pi0}, {pi0,pro,pip,pim,pi0,pi0,pi0,pi0,pi0},
     {pi0,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pi0,neu,pip,pip,pip,pip,pim,pim,pim},
@@ -94,16 +94,16 @@ namespace {
 
 namespace {
   // pi0 n : Outgoing particle types of a given multiplicity
-  static const G4int pizN2bfs[5][2] =
+  static G4int pizN2bfs[5][2] =
    {{pi0,neu}, {pim,pro}, {k0,lam}, {k0,s0}, {kpl,sm}};
 
-  static const G4int pizN3bfs[13][3] =
+  static G4int pizN3bfs[13][3] =
    {{pim,neu,pip}, {pi0,neu,pi0}, {pi0,pro,pim}, {pi0,lam,k0},
     {pim,lam,kpl},  {pi0,s0,k0},   {pim,s0,kpl},   {pi0,sm,kpl},  
     {pip,sm,k0},   {pim,sp,k0},   {k0b,neu,k0},  {kmi,neu,kpl},
     {kmi,pro,k0}};
 
-  static const G4int pizN4bfs[21][4] =
+  static G4int pizN4bfs[21][4] =
    {{pi0,neu,pim,pip}, {pi0,neu,pi0,pi0}, {pim,pro,pip,pim},
     {pi0,pro,pim,pi0}, {pip,lam,k0,pim},  {pip,s0,k0,pim},
     {pi0,lam,k0,pi0},  {pi0,s0,k0,pi0},   {pi0,sm,kpl,pi0},
@@ -112,7 +112,7 @@ namespace {
     {pi0,neu,kpl,kmi},   {pim,neu,kpl,k0b},  {pip,neu,k0,kmi},
     {pim,pro,k0,k0b},  {pim,pro,kpl,kmi},   {pi0,pro,k0,kmi}};
 
-  static const G4int pizN5bfs[30][5] =
+  static G4int pizN5bfs[30][5] =
   {{pim,neu,pip,pip,pim}, {pi0,neu,pip,pim,pi0}, {pi0,neu,pi0,pi0,pi0},
     {pi0,pro,pip,pim,pim}, {pi0,pro,pim,pi0,pi0}, {pi0,lam,k0,pip,pim},
     {pi0,lam,k0,pi0,pi0},  {pim,lam,kpl,pip,pim},  {pi0,lam,kpl,pim,pi0},
@@ -124,24 +124,24 @@ namespace {
     {pim,neu,kpl,kmi,pip},   {pi0,pro,k0,k0b,pim},  {pi0,pro,kpl,kmi,pim},
     {pi0,pro,k0,kmi,pi0},   {pim,pro,kpl,k0b,pim},  {pim,pro,k0,kmi,pip}};
 
-  static const G4int pizN6bfs[6][6] =
+  static G4int pizN6bfs[6][6] =
    {{pi0,neu,pip,pip,pim,pim}, {pi0,neu,pip,pim,pi0,pi0},
     {pi0,neu,pi0,pi0,pi0,pi0}, {pim,pro,pip,pip,pim,pim},
     {pi0,pro,pip,pim,pim,pi0}, {pi0,pro,pim,pi0,pi0,pi0}};
 
-  static const G4int pizN7bfs[7][7] =
+  static G4int pizN7bfs[7][7] =
    {{pim,neu,pip,pip,pip,pim,pim}, {pi0,neu,pip,pip,pim,pim,pi0},
     {pi0,neu,pip,pim,pi0,pi0,pi0}, {pi0,neu,pi0,pi0,pi0,pi0,pi0},
     {pi0,pro,pip,pip,pim,pim,pim}, {pi0,pro,pip,pim,pim,pi0,pi0},
     {pi0,pro,pim,pi0,pi0,pi0,pi0}};
 
-  static const G4int pizN8bfs[8][8] =
+  static G4int pizN8bfs[8][8] =
    {{pi0,neu,pip,pip,pip,pim,pim,pim}, {pi0,neu,pip,pip,pim,pim,pi0,pi0},
     {pi0,neu,pip,pim,pi0,pi0,pi0,pi0}, {pi0,neu,pi0,pi0,pi0,pi0,pi0,pi0},
     {pim,pro,pip,pip,pip,pim,pim,pim}, {pi0,pro,pip,pip,pim,pim,pim,pi0},
     {pi0,pro,pip,pim,pim,pi0,pi0,pi0}, {pi0,pro,pim,pi0,pi0,pi0,pi0,pi0}};
 
-  static const G4int pizN9bfs[9][9] =
+  static G4int pizN9bfs[9][9] =
    {{pim,neu,pip,pip,pip,pip,pim,pim,pim}, {pi0,neu,pip,pip,pip,pim,pim,pim,pi0},
     {pi0,neu,pip,pip,pim,pim,pi0,pi0,pi0}, {pi0,neu,pip,pim,pi0,pi0,pi0,pi0,pi0},
     {pi0,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pi0,pro,pip,pip,pip,pim,pim,pim,pim},
@@ -151,13 +151,13 @@ namespace {
 
 namespace {
   // Total pi- p cross section as a function of kinetic energy
-  static const G4double pizPtotXSec[30] =
+  static G4double pizPtotXSec[30] =
    { 6.43,  7.18,  7.54,  8.01,  8.52,  9.13, 10.22, 14.37, 20.96, 34.73,
     61.07, 98.23, 61.97, 32.62, 28.07, 31.37, 35.15, 40.17, 37.27, 33.49,
     31.06, 29.52, 28.29, 26.91, 26.25, 25.25, 24.75, 24.35, 24.0,  23.9};
 
   // pi- p cross sections as functions of kinetic energy and multiplicity
-  static const G4double pizPCrossSections[99][30] = {
+  static G4double pizPCrossSections[99][30] = {
   //
   // multiplicity 2 (5 channels)
   //
@@ -684,14 +684,26 @@ namespace {
 
 // Initialize both |T Tz> = |1/2 1/2> channels, using pizP cross-section table
 
-G4CascadePiZeroPChannelData::data_t
-G4CascadePiZeroPChannelData::data(pizP2bfs, pizP3bfs, pizP4bfs,
-				  pizP5bfs, pizP6bfs, pizP7bfs,
-				  pizP8bfs, pizP9bfs, pizPCrossSections,
-				  pizPtotXSec, pi0*pro, "PiZeroP");
+typedef G4CascadePiZeroPChannelData::data_t G4CascadePiZeroPChannelData_t; 
 
-G4CascadePiZeroNChannelData::data_t
-G4CascadePiZeroNChannelData::data(pizN2bfs, pizN3bfs, pizN4bfs,
-				  pizN5bfs, pizN6bfs, pizN7bfs,
-				  pizN8bfs, pizN9bfs, pizPCrossSections,
-				  pizPtotXSec, pi0*neu, "PiZeroN");
+G4CascadePiZeroPChannelData_t *G4CascadePiZeroPChannelData::data = 0;
+
+G4CascadePiZeroPChannelData::data_t *G4CascadePiZeroPChannelData::initializer()
+{
+  if (G4CascadePiZeroPChannelData::data == 0)
+    G4CascadePiZeroPChannelData::data = new G4CascadePiZeroPChannelData::data_t(pizP2bfs, pizP3bfs, pizP4bfs, pizP5bfs, pizP6bfs, pizP7bfs, pizP8bfs, pizP9bfs, pizPCrossSections, pizPtotXSec, pi0*pro, "PiZeroP");
+
+  return G4CascadePiZeroPChannelData::data;
+}
+
+typedef G4CascadePiZeroNChannelData::data_t G4CascadePiZeroNChannelData_t;
+
+G4CascadePiZeroNChannelData_t *G4CascadePiZeroNChannelData::data = 0;
+
+G4CascadePiZeroNChannelData::data_t *G4CascadePiZeroNChannelData::initializer()
+{
+  if (G4CascadePiZeroNChannelData::data == 0)
+    G4CascadePiZeroNChannelData::data = new G4CascadePiZeroNChannelData::data_t(pizN2bfs, pizN3bfs, pizN4bfs, pizN5bfs, pizN6bfs, pizN7bfs, pizN8bfs, pizN9bfs, pizPCrossSections, pizPtotXSec, pi0*neu, "PiZeroN");
+
+  return G4CascadePiZeroNChannelData::data;
+}

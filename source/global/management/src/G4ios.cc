@@ -37,10 +37,39 @@
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"
 
-G4strstreambuf G4coutbuf;
-G4strstreambuf G4cerrbuf;
-std::ostream G4cout(&G4coutbuf);
-std::ostream G4cerr(&G4cerrbuf);
+__thread G4strstreambuf *G4coutbuf_G4MT_TLS_ = 0;
+__thread G4strstreambuf *G4cerrbuf_G4MT_TLS_ = 0;
+__thread std::ostream *G4cout_G4MT_TLS_ = 0;
+__thread std::ostream *G4cerr_G4MT_TLS_ = 0;
+#define G4coutbuf (*G4coutbuf_G4MT_TLS_)
+#define G4cerrbuf (*G4cerrbuf_G4MT_TLS_)
+#define G4cout (*G4cout_G4MT_TLS_)
+#define G4cerr (*G4cerr_G4MT_TLS_)
 
+void G4iosInitialization()
+{
+  if (G4coutbuf_G4MT_TLS_ == 0) G4coutbuf_G4MT_TLS_ = new G4strstreambuf;
+  if (G4cerrbuf_G4MT_TLS_ == 0) G4cerrbuf_G4MT_TLS_ = new G4strstreambuf;
+  if (G4cout_G4MT_TLS_ == 0) G4cout_G4MT_TLS_ = new std::ostream(G4coutbuf_G4MT_TLS_);
+  if (G4cerr_G4MT_TLS_ == 0) G4cerr_G4MT_TLS_ = new std::ostream(G4cerrbuf_G4MT_TLS_);
+}
 
+void G4iosFinalization()
+{
+  delete G4cout_G4MT_TLS_;
+  delete G4cerr_G4MT_TLS_; 
+  delete G4coutbuf_G4MT_TLS_;
+  delete G4cerrbuf_G4MT_TLS_;
+}
 
+void __attribute__ ((constructor)) my_init(void)
+{
+  G4iosInitialization();
+  printf("G4ios is initialized\n");
+}
+
+void __attribute__ ((destructor)) my_fini(void)
+{
+  G4iosFinalization();
+  printf("G4ios is finalized\n");
+}

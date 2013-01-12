@@ -117,9 +117,24 @@ public:
 
   // Initialise for build of tables
   void PreparePhysicsTable(const G4ParticleDefinition&);
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //Worker threads share physics tables with the master thread for
+  //this kind of process. This member function is used by worker
+  //threads to achieve the partial effect of the master thread when
+  //it prepares physcis tables.
+  void SlavePreparePhysicsTable(const G4ParticleDefinition&);
   
   // Build physics table during initialisation
   void BuildPhysicsTable(const G4ParticleDefinition&);
+
+  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+  //Worker threads share physics tables with the master thread for
+  //this kind of process. This member function is used by worker
+  //threads to achieve the partial effect of the master thread when
+  //it builds physcis tables.
+  //Xin Dong 10022011 to facilitate verbose
+  void SlaveBuildPhysicsTable(const G4ParticleDefinition &part, G4VMultipleScattering* firstProcess);
 
   // Print out of generic class parameters
   void PrintInfoDefinition();

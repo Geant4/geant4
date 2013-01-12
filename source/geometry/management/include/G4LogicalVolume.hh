@@ -130,12 +130,106 @@ class G4VisAttributes;
 class G4FastSimulationManager;
 class G4MaterialCutsCouple;
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//The class LogicalVolumePrivateSubclass is introduced to 
+//encapsulate the fields of the class G4LogicalVolume that may not
+//be read-only. 
+#ifndef LOGICALVOLUMEPRIVATESUBCLASS_HH
+#define LOGICALVOLUMEPRIVATESUBCLASS_HH
+
+class LogicalVolumePrivateSubclass
+{
+public:
+  G4VSolid* fSolid;
+  G4VSensitiveDetector* fSensitiveDetector;
+  G4FieldManager* fFieldManager;
+  G4Material* fMaterial;
+  G4double fMass;
+  G4MaterialCutsCouple* fCutsCouple;
+  void initialize(){};
+};
+#endif
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
+//The class G4LogicalVolumeSubInstanceManager is introduced to 
+//encapsulate the methods used by both the master thread and 
+//worker threads to allocate memory space for the fields encapsulated
+//by the class LogicalVolumePrivateSubclass. When each thread
+//initializes the value for these fields, it refers to them using a macro
+//definition defined below. For every G4LogicalVolume instance, there is
+//a corresponding LogicalVolumePrivateSubclass instance. All
+//LogicalVolumePrivateSubclass instances are organized by the
+//class G4LogicalVolumeSubInstanceManager as an array. The field "  
+//int g4logicalVolumeInstanceID" is added to the class G4LogicalVolume.
+//The value of this field in each G4LogicalVolume instance is the subscript
+//of the corresponding LogicalVolumePrivateSubclass instance. In order
+//to use the class G4LogicalVolumeSubInstanceManager, we add a static member in
+//the class G4LogicalVolume as follows: "  
+//static G4LogicalVolumeSubInstanceManager g4logicalVolumeSubInstanceManager".
+//For the master thread, the array for LogicalVolumePrivateSubclass 
+//instances grows dynamically along with G4LogicalVolume instances are
+//created. For each worker thread, it copies the array of 
+//LogicalVolumePrivateSubclass instances from the master thread.
+//In addition, it invokes a method similiar to the constructor explicitly
+//to achieve the partial effect for each instance in the array.
+#ifndef G4LOGICALVOLUMESUBINSTANCEMANAGER_HH
+#define G4LOGICALVOLUMESUBINSTANCEMANAGER_HH
+
+#include "G4MTTransitory.hh"
+
+typedef G4MTPrivateSubInstanceManager<LogicalVolumePrivateSubclass>  G4LogicalVolumeSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//These macros changes the references to fields that are now encapsulated
+//in the class LogicalVolumePrivateSubclass.
+#define fSolidG4MTThreadPrivate ((g4logicalVolumeSubInstanceManager.offset[g4logicalVolumeInstanceID]).fSolid)
+#define fSensitiveDetectorG4MTThreadPrivate ((g4logicalVolumeSubInstanceManager.offset[g4logicalVolumeInstanceID]).fSensitiveDetector)
+#define fFieldManagerG4MTThreadPrivate ((g4logicalVolumeSubInstanceManager.offset[g4logicalVolumeInstanceID]).fFieldManager)
+#define fMaterialG4MTThreadPrivate ((g4logicalVolumeSubInstanceManager.offset[g4logicalVolumeInstanceID]).fMaterial)
+#define fMassG4MTThreadPrivate ((g4logicalVolumeSubInstanceManager.offset[g4logicalVolumeInstanceID]).fMass)
+#define fCutsCoupleG4MTThreadPrivate ((g4logicalVolumeSubInstanceManager.offset[g4logicalVolumeInstanceID]).fCutsCouple)
+
+#endif
+
 class G4LogicalVolume
 {
   typedef std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
 
+  public:
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field is used as instance ID.
+    int g4logicalVolumeInstanceID;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field helps to use the class G4LogicalVolumeSubInstanceManager
+    //introduced above.
+    static G4LogicalVolumeSubInstanceManager g4logicalVolumeSubInstanceManager;
+    
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This method is similar to the constructor. It is used by each worker
+    //thread to achieve the partial effect as that of the master thread.
+    void SlaveG4LogicalVolume(G4LogicalVolume *ptrMasterObject, G4VSolid* pSolid, G4VSensitiveDetector* pSDetector);
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This method is similar to the destructor. It is used by each worker
+    //thread to achieve the partial effect as that of the master thread.
+    void DestroySlaveG4LogicalVolume(G4LogicalVolume *ptrMasterObject);
+
   public:  // with description
-  
+    
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //Each worker thread can access this field from the master thread
+    //through this pointer.
+    G4VSolid* fSolid; //shadow of master
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //Each worker thread can access this field from the master thread
+    //through this pointer.
+    G4VSensitiveDetector* fSensitiveDetector; //shadow of master
+
+    G4FieldManager* fFieldManager; //shadow of master
+
     G4LogicalVolume(G4VSolid* pSolid,
                     G4Material* pMaterial,
               const G4String& name,
@@ -143,6 +237,10 @@ class G4LogicalVolume
                     G4VSensitiveDetector* pSDetector=0,
                     G4UserLimits* pULimits=0,
                     G4bool optimise=true);
+
+
+ 
+
       // Constructor. The solid and material pointer must be non null.
       // The parameters for field, detector and user limits are optional.
       // The volume also enters itself into the logical volume Store.
@@ -300,15 +398,22 @@ class G4LogicalVolume
 
     G4PhysicalVolumeList fDaughters;
       // Vector of daughters. Given initial size of 0.
-    G4FieldManager* fFieldManager;
+      //    G4FieldManager* fFieldManagerG4MTThreadPrivate;
       // Pointer (possibly 0) to (magnetic or other) field manager object.
-    G4Material* fMaterial;
+  //    G4Material* fMaterialG4MTThreadPrivate;
       // Pointer to material at this node.
     G4String fName;
       // Name of logical volume.
-    G4VSensitiveDetector* fSensitiveDetector;
       // Pointer (possibly 0) to `Hit' object.
-    G4VSolid* fSolid;
+      // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+      // This field is move from the original class definition to be
+      // encapsulated by the class LogicalVolumePrivateSubclass.
+      //    G4VSensitiveDetector *fSensitiveDetectorG4MTThreadPrivate;
+
+      // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+      // This field is move from the original class definition to be
+      // encapsulated by the class LogicalVolumePrivateSubclass.
+      //    G4VSolid* fSolidG4MTThreadPrivate;
       // Pointer to solid.
     G4UserLimits* fUserLimits;
       // Pointer (possibly 0) to user Step limit object for this node.
@@ -323,13 +428,13 @@ class G4LogicalVolume
     G4double fSmartless;
       // Quality for optimisation, average number of voxels to be spent
       // per content.
-    G4double fMass;
+  //    G4double fMassG4MTThreadPrivate;
       // Mass of the logical volume tree.
     const G4VisAttributes* fVisAttributes;
       // Pointer (possibly 0) to visualization attributes.
     G4Region* fRegion;
       // Pointer to the cuts region (if any)
-    G4MaterialCutsCouple* fCutsCouple;
+  //    G4MaterialCutsCouple* fCutsCoupleG4MTThreadPrivate;
       // Pointer (possibly 0) to associated production cuts.
     G4double fBiasWeight;
       // Weight used in the event biasing technique.

@@ -50,7 +50,7 @@ struct ZAMass {
     double mass;
 };
 
-static struct ZAMass ZAMasses[] = {
+static const struct ZAMass ZAMasses[] = {
          { "Am_242_m1", 2.420595491590000e+02 + 0.048 },
          { "FissionProductENDL99120", 117.5 },
          { "FissionProductENDL99121", 116.546 },

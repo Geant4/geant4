@@ -61,13 +61,13 @@ inline
 inline
  G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
 {
-    return theProcessManager;
+    return theProcessManagerG4MTThreadPrivate;
 }
 
 inline
  void G4ParticleDefinition::SetProcessManager(G4ProcessManager *aProcessManager)
 {
-      theProcessManager = aProcessManager;
+      theProcessManagerG4MTThreadPrivate = aProcessManager;
 }
 
 inline

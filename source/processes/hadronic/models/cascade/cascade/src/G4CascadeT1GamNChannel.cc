@@ -34,37 +34,37 @@ using namespace G4InuclParticleNames;
 
 namespace {
   // gamma p : Outgoing particle types of a given multiplicity
-  static const G4int gamp2bfs[6][2] =
+  static G4int gamp2bfs[6][2] =
   {{gam,pro}, {pro,pi0}, {neu,pip}, {lam,kpl}, {s0, kpl}, {sp,k0}};
 
-  static const G4int gamp3bfs[6][3] =
+  static G4int gamp3bfs[6][3] =
   {{pro,pip,pim}, {pro,pi0,pi0}, {neu,pip,pi0},
    {pro,kpl,kmi},  {pro,k0,k0b},  {neu,kpl,k0b}};
 
-  static const G4int gamp4bfs[4][4] =
+  static G4int gamp4bfs[4][4] =
   {{pro,pip,pim,pi0}, {pro,pi0,pi0,pi0}, {neu,pip,pip,pim}, {neu,pip,pi0,pi0}};
 
-  static const G4int gamp5bfs[5][5] =
+  static G4int gamp5bfs[5][5] =
   {{pro,pip,pip,pim,pim}, {pro,pip,pim,pi0,pi0}, {pro,pi0,pi0,pi0,pi0},
    {neu,pip,pip,pim,pi0}, {neu,pip,pi0,pi0,pi0}};
 
-  static const G4int gamp6bfs[6][6] =
+  static G4int gamp6bfs[6][6] =
   {{pro,pip,pip,pim,pim,pi0}, {pro,pip,pim,pi0,pi0,pi0}, {pro,pi0,pi0,pi0,pi0,pi0},
    {neu,pip,pip,pip,pim,pim}, {neu,pip,pip,pim,pi0,pi0}, {neu,pip,pi0,pi0,pi0,pi0}};
 
-  static const G4int gamp7bfs[7][7] =
+  static G4int gamp7bfs[7][7] =
   {{pro,pip,pip,pip,pim,pim,pim}, {pro,pip,pip,pim,pim,pi0,pi0},
    {pro,pip,pim,pi0,pi0,pi0,pi0}, {pro,pi0,pi0,pi0,pi0,pi0,pi0},
    {neu,pip,pip,pim,pi0,pi0,pi0}, {neu,pip,pip,pip,pim,pim,pi0},
    {neu,pip,pi0,pi0,pi0,pi0,pi0}};
 
-  static const G4int gamp8bfs[7][8] =
+  static G4int gamp8bfs[7][8] =
   {{pro,pip,pip,pim,pim,pi0,pi0,pi0}, {pro,pip,pip,pip,pim,pim,pim,pi0},
    {pro,pip,pim,pi0,pi0,pi0,pi0,pi0}, {neu,pip,pip,pip,pim,pim,pi0,pi0},
    {neu,pip,pip,pim,pi0,pi0,pi0,pi0}, {neu,pip,pip,pip,pip,pim,pim,pim},
    {neu,pip,pi0,pi0,pi0,pi0,pi0,pi0}};
 
-  static const G4int gamp9bfs[7][9] =
+  static G4int gamp9bfs[7][9] =
   {{pro,pip,pip,pip,pim,pim,pim,pi0,pi0}, {pro,pip,pip,pim,pim,pi0,pi0,pi0,pi0},
    {pro,pip,pip,pip,pip,pim,pim,pim,pim}, {pro,pip,pim,pi0,pi0,pi0,pi0,pi0,pi0},
    {neu,pip,pip,pip,pim,pim,pi0,pi0,pi0}, {neu,pip,pip,pip,pip,pim,pim,pim,pi0},
@@ -73,37 +73,37 @@ namespace {
 
 namespace {
   // gamma n : Outgoing particle types of a given multiplicity
-  static const G4int gamn2bfs[6][2] =
+  static G4int gamn2bfs[6][2] =
   {{gam,neu}, {neu,pi0}, {pro,pim}, {lam,k0}, {s0, k0}, {sm,kpl}};
 
-  static const G4int gamn3bfs[6][3] =
+  static G4int gamn3bfs[6][3] =
   {{neu,pip,pim}, {neu,pi0,pi0}, {pro,pim,pi0},
    {neu,k0,k0b},  {neu,kpl,kmi},   {pro,k0,kmi}};
 
-  static const G4int gamn4bfs[4][4] =
+  static G4int gamn4bfs[4][4] =
   {{neu,pip,pim,pi0}, {neu,pi0,pi0,pi0}, {pro,pip,pim,pim}, {pro,pim,pi0,pi0}};
 
-  static const G4int gamn5bfs[5][5] =
+  static G4int gamn5bfs[5][5] =
   {{neu,pip,pip,pim,pim}, {neu,pip,pim,pi0,pi0}, {neu,pi0,pi0,pi0,pi0},
    {pro,pip,pim,pim,pi0}, {pro,pim,pi0,pi0,pi0}};
 
-  static const G4int gamn6bfs[6][6] =
+  static G4int gamn6bfs[6][6] =
   {{neu,pip,pip,pim,pim,pi0}, {neu,pip,pim,pi0,pi0,pi0}, {neu,pi0,pi0,pi0,pi0,pi0},
    {pro,pip,pip,pim,pim,pim}, {pro,pip,pim,pim,pi0,pi0}, {pro,pim,pi0,pi0,pi0,pi0}};
 
-  static const G4int gamn7bfs[7][7] =
+  static G4int gamn7bfs[7][7] =
   {{neu,pip,pip,pip,pim,pim,pim}, {neu,pip,pip,pim,pim,pi0,pi0},
    {neu,pip,pim,pi0,pi0,pi0,pi0}, {neu,pi0,pi0,pi0,pi0,pi0,pi0},
    {pro,pip,pim,pim,pi0,pi0,pi0}, {pro,pip,pip,pim,pim,pim,pi0},
    {pro,pim,pi0,pi0,pi0,pi0,pi0}};
 
-  static const G4int gamn8bfs[7][8] =
+  static G4int gamn8bfs[7][8] =
   {{neu,pip,pip,pim,pim,pi0,pi0,pi0}, {neu,pip,pip,pip,pim,pim,pim,pi0},
    {neu,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pro,pip,pip,pim,pim,pim,pi0,pi0},
    {pro,pip,pim,pim,pi0,pi0,pi0,pi0}, {pro,pip,pip,pip,pim,pim,pim,pim},
    {pro,pim,pi0,pi0,pi0,pi0,pi0,pi0}};
 
-  static const G4int gamn9bfs[7][9] =
+  static G4int gamn9bfs[7][9] =
   {{neu,pip,pip,pip,pim,pim,pim,pi0,pi0}, {neu,pip,pip,pim,pim,pi0,pi0,pi0,pi0},
    {neu,pip,pip,pip,pip,pim,pim,pim,pim}, {neu,pip,pim,pi0,pi0,pi0,pi0,pi0,pi0},
    {pro,pip,pip,pim,pim,pim,pi0,pi0,pi0}, {pro,pip,pip,pip,pim,pim,pim,pim,pi0},
@@ -113,13 +113,13 @@ namespace {
 
 namespace {
   // Total gamma p cross section as a function of kinetic energy
-  static const G4double gampTotXSec[30] =
+  static G4double gampTotXSec[30] =
    {0.0002, 0.0002, 0.0002, 0.0002, 0.0002, 0.0002, 0.0002, 0.0002, 0.0002,
     0.0002, 0.0002, 0.0723, 0.2327, 0.54,   0.24,   0.19,   0.28,   0.21,
     0.18,   0.146,  0.138,  0.13,   0.1277, 0.124,  0.122,  0.12,   0.1185,
     0.117,  0.115,  0.115};
 
-  static const G4double gampCrossSections[48][30] = {
+  static G4double gampCrossSections[48][30] = {
   //
   // multiplicity 2 (6 channels)
   //
@@ -391,16 +391,25 @@ namespace {
 // Initialize both |T Tz> = |1/2 +-1/2> channels using gamma-p cross section
 // tables
 
-G4CascadeGamPChannelData::data_t
-G4CascadeGamPChannelData::data(gamp2bfs, gamp3bfs, gamp4bfs, gamp5bfs,
-                               gamp6bfs, gamp7bfs, gamp8bfs, gamp9bfs,
-                               gampCrossSections, gampTotXSec, gam*pro,
-                               "GammaProton");
+typedef G4CascadeGamPChannelData::data_t G4CascadeGamPChannelData_t;
 
-G4CascadeGamNChannelData::data_t
-G4CascadeGamNChannelData::data(gamn2bfs, gamn3bfs, gamn4bfs, gamn5bfs,
-                               gamn6bfs, gamn7bfs, gamn8bfs, gamn9bfs,
-                               gampCrossSections, gampTotXSec, gam*neu,
-                               "GammaNeutron");
+G4CascadeGamPChannelData_t *G4CascadeGamPChannelData::data = 0;
 
+G4CascadeGamPChannelData::data_t *G4CascadeGamPChannelData::initializer()
+{
+  if (G4CascadeGamPChannelData::data == 0)
+    G4CascadeGamPChannelData::data = new G4CascadeGamPChannelData::data_t(gamp2bfs, gamp3bfs, gamp4bfs, gamp5bfs, gamp6bfs, gamp7bfs, gamp8bfs, gamp9bfs, gampCrossSections, gampTotXSec, gam*pro, "GammaProton");
+  return G4CascadeGamPChannelData::data;
+}
 
+typedef G4CascadeGamNChannelData::data_t G4CascadeGamNChannelData_t;
+
+G4CascadeGamNChannelData_t *G4CascadeGamNChannelData::data = 0;
+
+G4CascadeGamNChannelData::data_t *G4CascadeGamNChannelData::initializer()
+{
+  if (G4CascadeGamNChannelData::data == 0)
+    G4CascadeGamNChannelData::data =new G4CascadeGamNChannelData::data_t(gamn2bfs, gamn3bfs, gamn4bfs, gamn5bfs, gamn6bfs, gamn7bfs, gamn8bfs, gamn9bfs, gampCrossSections, gampTotXSec, gam*neu, "GammaNeutron");
+
+  return G4CascadeGamNChannelData::data;
+}

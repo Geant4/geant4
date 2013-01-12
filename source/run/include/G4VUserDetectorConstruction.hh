@@ -55,6 +55,10 @@ class G4VUserDetectorConstruction
   public:
     virtual G4VPhysicalVolume* Construct() = 0;
 
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //The member function is used by worker threads.
+    virtual G4VPhysicalVolume* ConstructSlave(){};
+
   public:
     void RegisterParallelWorld(G4VUserParallelWorld*);
 

@@ -613,8 +613,10 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
 
     //    G4cout << "G4ITTransportation::AlongStepDoIt" << G4endl;
     // set  pdefOpticalPhoton
-    static  G4ParticleDefinition* pdefOpticalPhoton =
-            G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+    //Andrea Dotti: the following statement should be in a single line:
+    // G4-MT transformation tools get confused if statement spans two lines
+    // If needed contact: adotti@slac.stanford.edu
+    static  G4ParticleDefinition* pdefOpticalPhoton = G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
 
     static G4int noCalls=0;
     noCalls++;

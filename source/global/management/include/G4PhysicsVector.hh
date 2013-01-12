@@ -73,9 +73,80 @@
 
 typedef std::vector<G4double> G4PVDataVector;
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//The class PhysicsVectorPrivateSubclass is introduced to
+//encapsulate the fields associated to the class G4PhysicsVector that
+//may not be read-only.
+#ifndef PHYSICSVECTORPRIVATESUBCLASS_HH
+#define PHYSICSVECTORPRIVATESUBCLASS_HH
+
+class PhysicsVectorPrivateSubclass
+{
+public:
+  G4PhysicsVectorCache*  cache;
+  void initialize() {
+    cache = new G4PhysicsVectorCache();
+    //    cache->lastEnergy = 0;
+    //    cache->lastValue = 0;
+    //    cache->lastBin = 0;
+  };
+};
+#endif
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
+//The class G4LogicalVolumeSubInstanceManager is introduced to
+//encapsulate the methods used by both the master thread and
+//worker threads to allocate memory space for the fields encapsulated
+//by the class PhysicsVectorPrivateSubclass. When each thread                  
+//initializes the value for these fields, it refers to them using a macro           
+//definition defined below. For every G4PhysicsVectorCache instance, there is            
+//a corresponding PhysicsVectorPrivateSubclass instance. All                   
+//PhysicsVectorPrivateSubclass instances are organized by the                  
+//class G4PhysicsVectorSubInstanceManager as an array. The field "                       
+//int g4physicsVectorInstanceID" is added to the class G4PhysicsVectorCache.            
+//The value of this field in each G4PhysicsVectorCache instance is the subscript         
+//of the corresponding PhysicsVectorPrivateSubclass instance. In order         
+//to use the class G4PhysicsVectorSubInstanceManager, we add a static member in          
+//the class G4PhysicsVectorCache as follows: "                                           
+//static G4PhysicsVectorSubInstanceManager g4physicsVectorSubInstanceManager".                
+//Both the master and worker threads change the length of the array because         
+//threads do not share all physics vectors. For the master thread, the array        
+//for PhysicsVectorPrivateSubclass instances grows dynamically along with      
+//G4PhysicsVector instances are created. For each worker thread, it copies the      
+//array of PhysicsVectorPrivateSubclass instances from the master thread       
+//first. For some physics vectors, worker threads share them and each thread        
+//just uses the array copied to hold thread private data. However, each thread      
+//will still create some physics vectors which extend the array to hold thread      
+//private data although these physics vectors are not shared. It makes some         
+//elements in the thread private array useless and consumes more memory space.      
+//However, we determine to share almost all large physics vectors. Even if          
+//we ignore some small physics vectors, the waste due to replication of these       
+//small physics vectors is neglectable.
+#ifndef G4PHYSICSVECTORSUBINSTANCEMANAGER_HH
+#define G4PHYSICSVECTORSUBINSTANCEMANAGER_HH
+
+#include "G4MTTransitoryPhysicsVector.hh"
+typedef G4MTPrivatePhysicsVectorCounter<PhysicsVectorPrivateSubclass>  G4PhysicsVectorSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//These macros changes the references to fields that are now encapsulated
+//in the class PhysicsVectorPrivateSubclass.
+#define cacheG4MTThreadPrivate ((g4physicsVectorSubInstanceManager.offset[g4physicsVectorInstanceID]).cache)
+
+#endif
+
 class G4PhysicsVector 
 {
   public:  // with description
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.              
+    //This new field is used as instance ID.                                        
+    int g4physicsVectorInstanceID;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.              
+    //This new field helps to use the class G4PhysicsVectorSubInstanceManager            
+    //introduced above.                                                             
+    static G4PhysicsVectorSubInstanceManager g4physicsVectorSubInstanceManager;
 
     G4PhysicsVector(G4bool spline = false);
          // constructor  
@@ -206,7 +277,8 @@ class G4PhysicsVector
 
     size_t numberOfNodes;
 
-    G4PhysicsVectorCache*  cache;
+    //Change to thread private
+    //    G4PhysicsVectorCache*  cacheG4MTThreadPrivate;
 
     G4PVDataVector  dataVector;    // Vector to keep the crossection/energyloss
     G4PVDataVector  binVector;     // Vector to keep energy

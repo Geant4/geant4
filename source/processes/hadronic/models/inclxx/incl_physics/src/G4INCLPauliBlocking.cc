@@ -40,8 +40,8 @@
 
 namespace G4INCL {
 
-  G4INCL::IPauli const * Pauli::thePauliBlocker = 0;
-  G4INCL::IPauli const * Pauli::theCDPP = 0;
+  const IPauli * Pauli::thePauliBlocker = 0;
+  const IPauli * Pauli::theCDPP = 0;
 
   void Pauli::setBlocker(IPauli const * pauliBlocker) {
     thePauliBlocker = pauliBlocker;

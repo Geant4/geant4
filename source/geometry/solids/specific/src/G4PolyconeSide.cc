@@ -48,6 +48,16 @@
 
 #include "Randomize.hh"
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This static member is thread local. For each thread, it points to the
+//array of PolyconeSidePrivateSubclass instances.
+template <class PolyconeSidePrivateSubclass> __thread PolyconeSidePrivateSubclass* G4MTPrivateSubInstanceManager<PolyconeSidePrivateSubclass>::offset = 0;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//This new field helps to use the class G4PolyconeSideSubInstanceManager
+//introduced in the "G4PolyconeSide.hh" file.
+G4PolyconeSideSubInstanceManager G4PolyconeSide::g4polyconeSideSubInstanceManager;
+
 //
 // Constructor
 //
@@ -64,10 +74,13 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                                       G4bool isAllBehind )
   : ncorners(0), corners(0)
 {
+
+  g4polyconeSideInstanceID = g4polyconeSideSubInstanceManager.CreateSubInstance();
+
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea = 0.0;
-  fPhi.first = G4ThreeVector(0,0,0);
-  fPhi.second= 0.0;
+  fPhiPCSG4MTThreadPrivate.first = G4ThreeVector(0,0,0);
+  fPhiPCSG4MTThreadPrivate.second= 0.0;
 
   //
   // Record values
@@ -186,6 +199,8 @@ G4PolyconeSide::~G4PolyconeSide()
 G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide &source )
   : G4VCSGface(), ncorners(0), corners(0)
 {
+  g4polyconeSideInstanceID = g4polyconeSideSubInstanceManager.CreateSubInstance();
+
   CopyStuff( source );
 }
 
@@ -872,15 +887,15 @@ G4double G4PolyconeSide::GetPhi( const G4ThreeVector& p )
 {
   G4double val=0.;
 
-  if (fPhi.first != p)
+  if (fPhiPCSG4MTThreadPrivate.first != p)
   {
     val = p.phi();
-    fPhi.first = p;
-    fPhi.second = val;
+    fPhiPCSG4MTThreadPrivate.first = p;
+    fPhiPCSG4MTThreadPrivate.second = val;
   }
   else
   {
-    val = fPhi.second;
+    val = fPhiPCSG4MTThreadPrivate.second;
   }
   return val;
 }

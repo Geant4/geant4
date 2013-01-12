@@ -77,7 +77,17 @@ class G4RunManagerKernel
     static G4RunManagerKernel* fRunManagerKernel;
 
   public: // with description
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //To share data, the master thread is different from worker threads.
+    //This variable points out it is the master thread or not.
+    static __thread int isSlave; 
     G4RunManagerKernel();
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //The constructor is used by worker threads.
+    G4RunManagerKernel(int isSlaveFlag);
+
     virtual ~G4RunManagerKernel();
     //  The constructor and the destructor. The user must construct this class
     // object at the beginning of his/her main() and must delete it at the 
@@ -86,6 +96,13 @@ class G4RunManagerKernel
   public: // with description
     void DefineWorldVolume(G4VPhysicalVolume * worldVol,
                            G4bool topologyIsChanged=true);
+
+ 
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //The member function is used by worker threads.
+    void SlaveDefineWorldVolume(G4VPhysicalVolume * worldVol,
+                                G4bool topologyIsChanged=true);
+
     //  This method must be invoked if the geometry setup has been changed between
     // runs. The flag 'topologyIsChanged' will specify if the geometry topology is
     // different from the original one used in the previous run; if not, it must be

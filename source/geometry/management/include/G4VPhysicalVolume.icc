@@ -40,31 +40,31 @@ G4bool G4VPhysicalVolume::operator == (const G4VPhysicalVolume& right) const
 inline
 const G4ThreeVector& G4VPhysicalVolume::GetTranslation() const
 {
-  return ftrans;
+  return ftransG4MTThreadPrivate;
 }
 
 inline
 void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &vec)
 {
-  ftrans=vec;
+  ftransG4MTThreadPrivate=vec;
 }
 
 inline
 const G4RotationMatrix* G4VPhysicalVolume::GetRotation() const
 {
-  return frot;
+  return frotG4MTThreadPrivate;
 }
 
 inline
 G4RotationMatrix* G4VPhysicalVolume::GetRotation()
 {
-  return frot;
+  return frotG4MTThreadPrivate;
 }
 
 inline
 void G4VPhysicalVolume::SetRotation(G4RotationMatrix *pRot)
 {
-  frot=pRot;
+  frotG4MTThreadPrivate=pRot;
 }
 
 inline
@@ -108,10 +108,10 @@ G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 {
   G4RotationMatrix  aRotM;   // Initialised to identity
 
-  // Insure against frot being a null pointer
-  if(frot)
+  // Insure against frotG4MTThreadPrivate being a null pointer
+  if(frotG4MTThreadPrivate)
   {
-     aRotM= frot->inverse();
+     aRotM= frotG4MTThreadPrivate->inverse();
   }
   return aRotM;
 }
@@ -119,17 +119,17 @@ G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 inline
 G4ThreeVector  G4VPhysicalVolume::GetObjectTranslation() const
 {
-  return  ftrans;
+  return  ftransG4MTThreadPrivate;
 }
 
 inline
 const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
 {
-  return frot;
+  return frotG4MTThreadPrivate;
 }
 
 inline
 G4ThreeVector  G4VPhysicalVolume::GetFrameTranslation() const
 {
-  return -ftrans;
+  return -ftransG4MTThreadPrivate;
 }

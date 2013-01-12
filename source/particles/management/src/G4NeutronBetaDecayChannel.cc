@@ -134,24 +134,24 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4NeutronBetaDecayChannel::DecayIt ";
 #endif
 
-  if (parent == 0) FillParent();  
-  if (daughters == 0) FillDaughters();
+  if (parentG4MTThreadPrivate == 0) FillParent();  
+  if (daughtersG4MTThreadPrivate == 0) FillDaughters();
  
   // parent mass
-  G4double parentmass = parent->GetPDGMass();
+  G4double parentmass = parentG4MTThreadPrivate->GetPDGMass();
 
   //daughters'mass
   G4double daughtermass[3]; 
   G4double sumofdaughtermass = 0.0;
   for (G4int index=0; index<3; index++){
-    daughtermass[index] = daughters[index]->GetPDGMass();
+    daughtermass[index] = daughtersG4MTThreadPrivate[index]->GetPDGMass();
     sumofdaughtermass += daughtermass[index];
   }
   G4double xmax = parentmass-sumofdaughtermass;  
 
    //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( parentG4MTThreadPrivate, dummy, 0.0);
 
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -190,7 +190,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4ThreeVector direction0(0.0, 0.0, 1.0);
   direction0 = rm * direction0;
   G4DynamicParticle * daughterparticle0 
-         = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
+         = new G4DynamicParticle( daughtersG4MTThreadPrivate[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle0);
 
   // daughter 1 (nutrino) in XZ plane
@@ -203,7 +203,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4ThreeVector direction1(sinn, 0.0, cosn);
   direction1 = rm * direction1;
   G4DynamicParticle * daughterparticle1 
-         = new G4DynamicParticle( daughters[1], direction1*eNu);
+         = new G4DynamicParticle( daughtersG4MTThreadPrivate[1], direction1*eNu);
   products->PushProducts(daughterparticle1);
 
   // daughter 2 (proton) at REST
@@ -214,7 +214,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double pP  = std::sqrt(eP*(eP+2.*daughtermass[2]));
   G4ThreeVector direction2(pPx/pP, 0.0, pPz/pP);
     G4DynamicParticle * daughterparticle2 
-         = new G4DynamicParticle( daughters[2], direction2);
+         = new G4DynamicParticle( daughtersG4MTThreadPrivate[2], direction2);
   products->PushProducts(daughterparticle2);
  
 

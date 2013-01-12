@@ -875,7 +875,7 @@ void G4NeutronHPThermalScattering::buildPhysicsTable()
    std::map < G4String , G4int > co_dic;   
 
    //Searching Nist Materials
-   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+   static G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
    size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
    for ( size_t i = 0 ; i < numberOfMaterials ; i++ )
    {
@@ -908,7 +908,7 @@ void G4NeutronHPThermalScattering::buildPhysicsTable()
    }
 
    //Searching TS Elements 
-   static const G4ElementTable* theElementTable = G4Element::GetElementTable();
+   static G4ElementTable* theElementTable = G4Element::GetElementTable();
    size_t numberOfElements = G4Element::GetNumberOfElements();
    //size_t numberOfThermalElements = 0; 
    for ( size_t i = 0 ; i < numberOfElements ; i++ )

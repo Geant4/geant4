@@ -46,6 +46,69 @@ class    G4ParticleDefinition;
 class    G4DecayProducts;
 class    G4ParticleTable;
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//The class DecayChannelPrivateSubclass is introduced to
+//encapsulate the fields associated to the class G4VDecayChannel that
+//may not be read-only.
+#ifndef DECAYCHANNELPRIVATESUBCLASS_HH
+#define DECAYCHANNELPRIVATESUBCLASS_HH
+
+class DecayChannelPrivateSubclass
+{
+public:
+  G4ParticleDefinition*  parent;
+  G4ParticleDefinition** daughters;
+  G4double               parent_mass;
+  G4double*              daughters_mass;
+  void initialize() {
+    parent = 0;
+    daughters = 0;
+    parent_mass = 0.0;
+    daughters_mass = 0;
+  };
+};
+#endif
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
+//The class G4DecayChannelSubInstanceManager is introduced to 
+//encapsulate the methods used by both the master thread and 
+//worker threads to allocate memory space for the fields encapsulated
+//by the class DecayChannelPrivateSubclass. When each thread
+//initializes the value for these fields, it refers to them using a macro
+//definition defined below. For every G4DecayChannel instance, there is
+//a corresponding DecayChannelPrivateSubclass instance. All
+//DecayChannelPrivateSubclass instances are organized by the
+//class G4DecayChannelSubInstanceManager as an array. The field "  
+//int g4decayChannelSubInstanceID" is added to the class G4DecayChannel.
+//The value of this field in each G4DecayChannel instance is the subscript
+//of the corresponding DecayChannelPrivateSubclass instance. In order
+//to use the class G4DecayChannelSubInstanceManager, we add a static member in
+//the class G4DecayChannel as follows: "  
+//static G4DecayChannelSubInstanceManager g4decayChannelSubInstanceManager".
+//For the master thread, the array for DecayChannelPrivateSubclass 
+//instances grows dynamically along with G4DecayChannel instances are
+//created. For each worker thread, it copies the array of 
+//DecayChannelPrivateSubclass instances from the master thread.
+//In addition, it invokes a method similiar to the constructor explicitly
+//to achieve the partial effect for each instance in the array.
+
+#ifndef G4DECAYCHANNELSUBINSTANCEMANAGER_HH
+#define G4DECAYCHANNELSUBINSTANCEMANAGER_HH
+
+#include "G4MTTransitoryParticle.hh"
+typedef G4MTPrivateParticleCounter<DecayChannelPrivateSubclass> G4DecayChannelSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//These macros changes the references to fields that are now encapsulated
+//in the class DecayChannelPrivateSubclass.
+#define parentG4MTThreadPrivate ((G4VDecayChannel::g4decayChannelSubInstanceManager.offset[g4decayChannelInstanceID]).parent)
+#define daughtersG4MTThreadPrivate ((G4VDecayChannel::g4decayChannelSubInstanceManager.offset[g4decayChannelInstanceID]).daughters)
+#define parent_mass ((G4VDecayChannel::g4decayChannelSubInstanceManager.offset[g4decayChannelInstanceID]).parent_mass)
+#define daughters_mass ((G4VDecayChannel::g4decayChannelSubInstanceManager.offset[g4decayChannelInstanceID]).daughters_mass)
+
+#endif
+
+
 class G4VDecayChannel
 {
  // Class Description
@@ -53,6 +116,16 @@ class G4VDecayChannel
  //
 
   public:
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.              
+    //This new field is used as instance ID.                                        
+    int g4decayChannelInstanceID;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.              
+    //This new field helps to use the class G4DecayChannelSubInstanceManager            
+    //introduced above.                                                             
+    static G4DecayChannelSubInstanceManager g4decayChannelSubInstanceManager;
+
     //Constructors 
       G4VDecayChannel(const G4String &aName, G4int Verbose = 1);
       G4VDecayChannel(const G4String  &aName, 
@@ -143,13 +216,16 @@ class G4VDecayChannel
     G4ParticleTable*       particletable;
 
     // temporary buffers of pointers to G4ParticleDefinition
-    G4ParticleDefinition*  parent;
-    G4ParticleDefinition** daughters;
+    // Change to thread private fields
+    //    G4ParticleDefinition*  parentG4MTThreadPrivate;
+    // Change to thread private fields
+    //    G4ParticleDefinition** daughtersG4MTThreadPrivate;
 
     // parent mass
-    G4double               parent_mass;
-    G4double*              daughters_mass;
-    
+    // Change to thread private fields
+    //    G4double               parent_mass;
+    // Change to thread private fields
+    //    G4double*              daughters_mass;
 
     // fill daughters array
     void FillDaughters();
@@ -184,11 +260,11 @@ inline
   G4ParticleDefinition* G4VDecayChannel::GetDaughter(G4int anIndex)
  { 
   //pointers to daughter particles are filled, if they are not set yet 
-  if (daughters == 0) FillDaughters();
+  if (daughtersG4MTThreadPrivate == 0) FillDaughters();
 
   //get the pointer to a daughter particle
   if ( (anIndex>=0) && (anIndex<numberOfDaughters) ) {
-    return daughters[anIndex];
+    return daughtersG4MTThreadPrivate[anIndex];
   } else {
     if (verboseLevel>0)
       G4cout << "G4VDecayChannel::GetDaughter  index out of range "<<anIndex<<G4endl;
@@ -228,9 +304,9 @@ inline
   G4ParticleDefinition* G4VDecayChannel::GetParent()
 { 
   //the pointer to the parent particle is filled, if it is not set yet 
-   if (parent == 0) FillParent();
+   if (parentG4MTThreadPrivate == 0) FillParent();
   //get the pointer to the parent particle
-  return parent;
+  return parentG4MTThreadPrivate;
 }
 
 inline
@@ -251,7 +327,7 @@ inline
 {
   if (parent_name != 0) delete parent_name;
   parent_name = new G4String(particle_name);
-  parent = 0;
+  parentG4MTThreadPrivate = 0;
 }
 
 inline

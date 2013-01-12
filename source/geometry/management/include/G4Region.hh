@@ -58,6 +58,63 @@ class G4UserSteppingAction;
 #include "G4Types.hh"
 #include "G4String.hh"
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//The class RegionPrivateSubclass is introduced to
+//encapsulate the fields of the class G4Region that may not
+//be read-only.
+#ifndef REGIONPRIVATESUBCLASS_HH
+#define REGIONPRIVATESUBCLASS_HH
+
+class RegionPrivateSubclass
+{
+public:
+  G4FastSimulationManager* fFastSimulationManager;
+  G4UserSteppingAction* fRegionalSteppingAction;
+  void initialize() {
+    fFastSimulationManager = 0;
+    fRegionalSteppingAction = 0;
+  };
+};
+#endif
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
+//The class G4RegionSubInstanceManager is introduced to
+//encapsulate the methods used by both the master thread and
+//worker threads to allocate memory space for the fields encapsulated
+//by the class RegionPrivateSubclass. When each thread
+//initializes the value for these fields, it refers to them using a macro
+//definition defined below. For every G4Region instance, there is
+//a corresponding RegionPrivateSubclass instance. All
+//RegionPrivateSubclass instances are organized by the
+//class G4RegionSubInstanceManager as an array. The field "
+//int g4regionInstanceID" is added to the class G4Region.
+//The value of this field in each G4Region instance is the subscript
+//of the corresponding RegionPrivateSubclass instance. In order
+//to use the class G4RegionSubInstanceManager, we add a static member in
+//the class G4Region as follows: "
+//static G4RegionSubInstanceManager g4regionSubInstanceManager".
+//For the master thread, the array for RegionPrivateSubclass
+//instances grows dynamically along with G4Region instances are
+//created. For each worker thread, it copies the array of
+//RegionPrivateSubclass instances from the master thread.
+//In addition, it invokes a method similiar to the constructor explicitly
+//to achieve the partial effect for each instance in the array.
+#ifndef G4REGIONSUBINSTANCEMANAGER_HH
+#define G4REGIONSUBINSTANCEMANAGER_HH
+
+#include "G4MTTransitory.hh"
+typedef G4MTPrivateSubInstanceManager<RegionPrivateSubclass> G4RegionSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//These macros changes the references to fields that are now encapsulated
+//in the class RegionPrivateSubclass.
+#define fFastSimulationManagerG4MTThreadPrivate ((g4regionSubInstanceManager.offset[g4regionInstanceID]).fFastSimulationManager)
+#define fRegionalSteppingActionG4MTThreadPrivate ((g4regionSubInstanceManager.offset[g4regionInstanceID]).fRegionalSteppingAction)
+
+#endif
+
+
+
 class G4Region
 {
     typedef std::vector<G4LogicalVolume*> G4RootLVList;
@@ -66,6 +123,15 @@ class G4Region
     typedef std::map<G4Material*,G4MaterialCutsCouple*> G4MaterialCoupleMap;
 
   public:  // with description
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field is used as instance ID.
+    int g4regionInstanceID;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.          
+    //This new field helps to use the class G4RegionSubInstanceManager        
+    //introduced above.
+    static G4RegionSubInstanceManager g4regionSubInstanceManager;
 
     G4Region(const G4String& name);
     virtual ~G4Region();
@@ -214,11 +280,17 @@ class G4Region
     G4UserLimits* fUserLimits;
     G4FieldManager* fFieldManager;
 
-    G4FastSimulationManager* fFastSimulationManager;
+    // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.       
+    // This field is move from the original class definition to be            
+    // encapsulated by the class RegionPrivateSubclass.
+  //    G4FastSimulationManager* fFastSimulationManagerG4MTThreadPrivate;
 
     G4VPhysicalVolume* fWorldPhys;
 
-    G4UserSteppingAction* fRegionalSteppingAction;
+    // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.       
+    // This field is move from the original class definition to be            
+    // encapsulated by the class RegionPrivateSubclass.
+  //    G4UserSteppingAction* fRegionalSteppingActionG4MTThreadPrivate;
 
     G4bool fInMassGeometry;
     G4bool fInParallelGeometry;

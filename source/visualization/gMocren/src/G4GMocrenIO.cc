@@ -98,7 +98,7 @@ GMocrenDataPrimitive<T>::operator + (const GMocrenDataPrimitive<T> & _right) {
     if(kCenter[i] != _right.kCenter[i]) stat = false;
   }
   if(!stat) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "Warning: operator + "
 	     << "         Cannot do the operator +"
 	     << G4endl;
@@ -139,7 +139,7 @@ GMocrenDataPrimitive<T>::operator += (const GMocrenDataPrimitive<T> & _right) {
     if(kCenter[i] != _right.kCenter[i]) stat = false;
   }
   if(!stat) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "Warning: operator += " << G4endl
 	     << "         Cannot do the operator +="
 	     << G4endl;
@@ -266,7 +266,7 @@ void GMocrenTrack::getStep(float & _startx, float & _starty, float & _startz,
 			   float & _endx, float & _endy, float & _endz,
 			   int _num) {
   if(_num >= (int)kTrack.size()) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "GMocrenTrack::getStep(...) Error: "
 	     << "invalid step # : " << _num << G4endl;
     return;
@@ -317,7 +317,7 @@ void GMocrenDetector::getEdge(float & _startx, float & _starty, float & _startz,
 			   float & _endx, float & _endy, float & _endz,
 			   int _num) {
   if(_num >= (int)kDetector.size()) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "GMocrenDetector::getEdge(...) Error: "
 	     << "invalid edge # : " << _num << G4endl;
     return;
@@ -372,7 +372,7 @@ unsigned int G4GMocrenIO::kPointerToDetectorData = 0;
 
 // modality
 float G4GMocrenIO::kVoxelSpacing[3] = {0., 0., 0.};
-class GMocrenDataPrimitive<short>  G4GMocrenIO::kModality;
+GMocrenDataPrimitive<short>  G4GMocrenIO::kModality;
 std::vector<float> G4GMocrenIO::kModalityImageDensityMap;
 std::string G4GMocrenIO::kModalityUnit = "g/cm3       "; // 12 Bytes
 
@@ -406,6 +406,52 @@ G4GMocrenIO::G4GMocrenIO()
 // destructor
 G4GMocrenIO::~G4GMocrenIO() {
   ;
+}
+
+void G4GMocrenIO::setFileName(std::string & _filename)
+{
+  kFileName = _filename;
+}
+
+void G4GMocrenIO::setFileName(char * _filename)
+{
+  kFileName = _filename;
+}
+
+// get the gMocren data file name                                                        
+std::string & G4GMocrenIO::getFileName()
+{
+  return kFileName;
+}
+
+std::string & G4GMocrenIO::getID()
+{
+  return kId;
+}
+
+void G4GMocrenIO::setID(std::string & _id)
+{
+  kId = _id;
+}
+
+std::string & G4GMocrenIO::getComment()
+{
+  return kComment;
+}
+
+void G4GMocrenIO::setComment(std::string & _comment)
+{
+  kComment = _comment;
+}
+
+void G4GMocrenIO::clearTracks()
+{
+  kTracks.clear();
+}
+
+void G4GMocrenIO::clearDetector()
+{
+  kDetectors.clear();
 }
 
 // initialize
@@ -1308,7 +1354,7 @@ bool G4GMocrenIO::storeData3() {
   // track color
   int ntcolor = int(kStepColors.size());
   if(ntrk != ntcolor) 
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "# of track color information must be the same as # of tracks." 
 	     << G4endl;
   unsigned char white[3] = {255,255,255}; // default color
@@ -1603,7 +1649,7 @@ bool G4GMocrenIO::retrieveData() {
   // input file open
   std::ifstream ifile(kFileName.c_str(), std::ios_base::in|std::ios_base::binary);
   if(!ifile) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "Cannot open file: " << kFileName
 	     << " in G4GMocrenIO::retrieveData()." << G4endl;
     return false;
@@ -1627,7 +1673,7 @@ bool G4GMocrenIO::retrieveData() {
       G4cout << "         " << kFileName << G4endl;
       retrieveData4();
     } else {
-      if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+      if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
 	G4cout << "Error -- invalid file version : " << (int)ver
 		  << G4endl;
 	G4cout << "         " << kFileName << G4endl;
@@ -1639,7 +1685,7 @@ bool G4GMocrenIO::retrieveData() {
     G4cout << "         " << kFileName << G4endl;
     retrieveData2();
   } else {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << kFileName << " was not gdd file." << G4endl;
     return false;
   }
@@ -1660,7 +1706,7 @@ bool G4GMocrenIO::retrieveData4() {
   // input file open
   std::ifstream ifile(kFileName.c_str(), std::ios_base::in|std::ios_base::binary);
   if(!ifile) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "Cannot open file: " << kFileName
 		<< " in G4GMocrenIO::retrieveData3()." << G4endl;
     return false;
@@ -2193,7 +2239,7 @@ bool G4GMocrenIO::retrieveData3() {
   // input file open
   std::ifstream ifile(kFileName.c_str(), std::ios_base::in|std::ios_base::binary);
   if(!ifile) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "Cannot open file: " << kFileName
 		<< " in G4GMocrenIO::retrieveData3()." << G4endl;
     return false;
@@ -2631,7 +2677,7 @@ bool G4GMocrenIO::retrieveData2() {
   // input file open
   std::ifstream ifile(kFileName.c_str(), std::ios_base::in|std::ios_base::binary);
   if(!ifile) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "Cannot open file: " << kFileName
 		<< " in G4GMocrenIO::retrieveData2()." << G4endl;
     return false;
@@ -3579,7 +3625,7 @@ void G4GMocrenIO::setShortDoseDist(short * _image, int _num) {
 void G4GMocrenIO::getShortDoseDist(short * _data, int _z, int _num) {
 
   if(_data == NULL) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "In G4GMocrenIO::getShortDoseDist(), "
 		<< "first argument is NULL pointer. "
 		<< "The argument must be allocated array."
@@ -3682,7 +3728,7 @@ void G4GMocrenIO::copyDoseDist(std::vector<class GMocrenDataPrimitive<double> > 
 // merge two dose distributions
 bool G4GMocrenIO::mergeDoseDist(std::vector<class GMocrenDataPrimitive<double> > & _dose) {
   if(kDose.size() != _dose.size()) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
       G4cout << "G4GMocrenIO::mergeDoseDist() : Error" << G4endl; 
       G4cout << "   Unable to merge the dose distributions,"<< G4endl;
       G4cout << "   because of different size of dose maps."<< G4endl;
@@ -3694,7 +3740,7 @@ bool G4GMocrenIO::mergeDoseDist(std::vector<class GMocrenDataPrimitive<double> >
   std::vector<class GMocrenDataPrimitive<double> >::iterator itr1 = kDose.begin();
   std::vector<class GMocrenDataPrimitive<double> >::iterator itr2 = _dose.begin();
   for(int i = 0; i < num; i++, itr1++, itr2++) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       if(kVerbose > 0)
 	G4cout << "merged dose distribution [" << i << "]" << G4endl;
     *itr1 += *itr2;
@@ -3715,7 +3761,7 @@ void G4GMocrenIO::clearDoseDistAll() {
 //
 bool G4GMocrenIO::isDoseEmpty() {
   if(kDose.empty()) {
-    //if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    //if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
     //  G4cout << "!!! dose distribution data is empty." << G4endl;
     return true;
   } else {
@@ -3821,7 +3867,7 @@ void G4GMocrenIO::clearROIAll() {
 //
 bool G4GMocrenIO::isROIEmpty() {
   if(kRoi.empty()) {
-    //if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    //if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
     //  G4cout << "!!! ROI data is empty." << G4endl;
     return true;
   } else {
@@ -3911,7 +3957,7 @@ void G4GMocrenIO::getTrack(int _num, std::vector<float *> & _steps,
 			     std::vector<unsigned char *> & _color) {
 
   if(_num > (int)kTracks.size()) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "ERROR in getTrack() : " << G4endl;
     std::exit(-1);
   }
@@ -3971,7 +4017,7 @@ void G4GMocrenIO::getDetector(int _num, std::vector<float *> & _edges,
 				std::string & _detName) {
 
   if(_num > (int)kDetectors.size()) {
-    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
       G4cout << "ERROR in getDetector() : " << G4endl;
     std::exit(-1);
   }

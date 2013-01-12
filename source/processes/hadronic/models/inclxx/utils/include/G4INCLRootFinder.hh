@@ -61,6 +61,8 @@ namespace G4INCL {
     {};
   };
 
+  typedef std::pair<G4double,G4double> RootFinder_solution_t;
+
   class RootFinder {
   public:
     /** \brief Numerically solve a one-dimensional equation.
@@ -80,11 +82,11 @@ namespace G4INCL {
      *
      * \return the solution, as an (x,y) pair
      */
-    static std::pair<G4double,G4double> const &getSolution() { return RootFinder::solution; }
+    static std::pair<G4double,G4double> const &getSolution();
 
   private:
     /// \brief The solution obtained in the last call to solve().
-    static std::pair<G4double,G4double> solution;
+    static  RootFinder_solution_t solution;
 
     /** \brief Bracket the root of the function f.
      *

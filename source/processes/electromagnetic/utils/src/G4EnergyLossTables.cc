@@ -52,7 +52,7 @@
 
 G4EnergyLossTablesHelper G4EnergyLossTables::t  ;
 G4EnergyLossTablesHelper G4EnergyLossTables::null_loss ;
-const G4ParticleDefinition* G4EnergyLossTables::lastParticle = 0;
+G4ParticleDefinition* G4EnergyLossTables::lastParticle = 0;
 G4double G4EnergyLossTables::QQPositron = eplus*eplus ;
 G4double G4EnergyLossTables::Chargesquare ;
 G4int    G4EnergyLossTables::oldIndex = -1 ;
@@ -117,7 +117,7 @@ void G4EnergyLossTables::Register(
 		    highestKineticEnergy, massRatio,NumberOfBins);
 
   t = GetTables(p) ;    // important for cache !!!!!
-  lastParticle = p ;
+  lastParticle = (G4ParticleDefinition*) p ;
   Chargesquare = (p->GetPDGCharge())*(p->GetPDGCharge())/
                   QQPositron ;
   if (first_loss ) {
@@ -199,10 +199,10 @@ G4double G4EnergyLossTables::GetDEDX(
     const G4Material *aMaterial)
 {
   CPRWarning();
-  if(aParticle != lastParticle)
+  if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle ;
+    lastParticle = (G4ParticleDefinition*) aParticle ;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                    QQPositron ;
@@ -248,10 +248,10 @@ G4double G4EnergyLossTables::GetLabTime(
     const G4Material *aMaterial)
 {
   CPRWarning();
-  if(aParticle != lastParticle)
+  if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle ;
+    lastParticle = (G4ParticleDefinition*) aParticle ;
     oldIndex = -1 ;
   }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
@@ -297,10 +297,10 @@ G4double G4EnergyLossTables::GetDeltaLabTime(
     const G4Material *aMaterial)
 {
   CPRWarning();
-  if(aParticle != lastParticle)
+  if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle ;
+    lastParticle = (G4ParticleDefinition*) aParticle ;
     oldIndex = -1 ;
   }
   const G4PhysicsTable* labtimeTable= t.theLabTimeTable;
@@ -378,10 +378,10 @@ G4double G4EnergyLossTables::GetProperTime(
     const G4Material *aMaterial)
 {
   CPRWarning();
-  if(aParticle != lastParticle)
+  if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle ;
+    lastParticle = (G4ParticleDefinition*) aParticle ;
     oldIndex = -1 ;
   }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
@@ -427,10 +427,10 @@ G4double G4EnergyLossTables::GetDeltaProperTime(
     const G4Material *aMaterial)
 {
   CPRWarning();
-  if(aParticle != lastParticle)
+  if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle ;
+    lastParticle = (G4ParticleDefinition*) aParticle ;
     oldIndex = -1 ;
   }
   const G4PhysicsTable* propertimeTable= t.theProperTimeTable;
@@ -508,10 +508,10 @@ G4double G4EnergyLossTables::GetRange(
     const G4Material *aMaterial)
 {
   CPRWarning();
-  if(aParticle != lastParticle)
+  if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle ;
+    lastParticle = (G4ParticleDefinition*) aParticle ;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
@@ -562,10 +562,10 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
 // it returns the value of the kinetic energy for a given range
 {
   CPRWarning();
-  if( aParticle != lastParticle)
+  if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle;
+    lastParticle = (G4ParticleDefinition*) aParticle;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
@@ -628,10 +628,10 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     const G4Material *aMaterial)
 {
   CPRWarning();
-  if( aParticle != lastParticle)
+  if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle;
+    lastParticle = (G4ParticleDefinition*) aParticle;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
@@ -677,10 +677,10 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     const G4Material *aMaterial)
 {
   CPRWarning();
-  if( aParticle != lastParticle)
+  if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle;
+    lastParticle = (G4ParticleDefinition*) aParticle;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
@@ -734,10 +734,10 @@ G4double G4EnergyLossTables::GetDEDX(
     const G4MaterialCutsCouple *couple,
     G4bool check)
 {
-  if(aParticle != lastParticle)
+  if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle ;
+    lastParticle = (G4ParticleDefinition*) aParticle ;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                    QQPositron ;
@@ -785,10 +785,10 @@ G4double G4EnergyLossTables::GetRange(
     const G4MaterialCutsCouple *couple,
     G4bool check)
 {
-  if(aParticle != lastParticle)
+  if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle ;
+    lastParticle = (G4ParticleDefinition*) aParticle ;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
@@ -840,10 +840,10 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
 				           G4bool check)
 // it returns the value of the kinetic energy for a given range
 {
-  if( aParticle != lastParticle)
+  if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle;
+    lastParticle = (G4ParticleDefinition*) aParticle;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
@@ -908,10 +908,10 @@ G4double G4EnergyLossTables::GetPreciseDEDX(
     const G4MaterialCutsCouple *couple)
 {
 
-  if( aParticle != lastParticle)
+  if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle;
+    lastParticle = (G4ParticleDefinition*) aParticle;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;
@@ -954,10 +954,10 @@ G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
     G4double KineticEnergy,
     const G4MaterialCutsCouple *couple)
 {
-  if( aParticle != lastParticle)
+  if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
-    lastParticle = aParticle;
+    lastParticle = (G4ParticleDefinition*) aParticle;
     Chargesquare = (aParticle->GetPDGCharge())*
                    (aParticle->GetPDGCharge())/
                     QQPositron ;

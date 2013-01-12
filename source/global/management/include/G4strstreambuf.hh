@@ -40,11 +40,17 @@
 class G4strstreambuf;
 
 #if defined G4GLOB_ALLOC_EXPORT
-extern G4DLLEXPORT G4strstreambuf G4coutbuf;
-extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
+extern G4DLLEXPORT __thread G4strstreambuf *G4coutbuf_G4MT_TLS_;
+extern G4DLLEXPORT __thread G4strstreambuf *G4cerrbuf_G4MT_TLS_;
+#define G4coutbuf (*G4coutbuf_G4MT_TLS_)
+#define G4cerrbuf (*G4cerrbuf_G4MT_TLS_)
+
 #else
-extern G4DLLIMPORT G4strstreambuf G4coutbuf;
-extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
+extern G4DLLIMPORT __thread G4strstreambuf *G4coutbuf_G4MT_TLS_;
+extern G4DLLIMPORT __thread G4strstreambuf *G4cerrbuf_G4MT_TLS_;
+#define G4coutbuf (*G4coutbuf_G4MT_TLS_)
+#define G4cerrbuf (*G4cerrbuf_G4MT_TLS_)
+ 
 #endif
 
 class G4strstreambuf : public std::basic_streambuf<char>

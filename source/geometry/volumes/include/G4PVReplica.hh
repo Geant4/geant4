@@ -74,9 +74,85 @@
 
 #include "G4VPhysicalVolume.hh"
 
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//The class ReplicaPrivateSubclass is introduced to encapsulate
+//the fields of the class G4PVReplica that may not be read-only.
+//G4PVReplica inherits from the class G4VPhysicalVolume. The fields
+//from the ancestor that may not be read-only are handled the ancestor
+//class.
+#ifndef REPLICASHAREDSUBCLASS_HH
+#define REPLICASHAREDSUBCLASS_HH
+
+class ReplicaPrivateSubclass
+{
+public:
+  G4int    fcopyNo;
+  void initialize(){};
+};
+#endif
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
+//The class G4PVReplicaSubInstanceManager is introduced to
+//encapsulate the methods used by both the master thread and
+//worker threads to allocate memory space for the fields encapsulated
+//by the class ReplicaPrivateSubclass. When each thread
+//initializes the value for these fields, it refers to them using a macro
+//definition defined below. For every G4PVReplica instance, there is
+//a corresponding ReplicaPrivateSubclass instance. All
+//ReplicaPrivateSubclass instances are organized by the
+//class G4PVReplicaSubInstanceManager as an array. The field "
+//int g4pvreplicaInstanceID" is added to the class G4PVReplica.
+//The value of this field in each G4LogicalVolume instance is the subscript
+//of the corresponding ReplicaPrivateSubclass instance. In order
+//to use the class  G4PVReplicaSubInstanceManager, we add a static member in
+//the class G4LogicalVolume as follows: "
+//static G4PVReplicaSubInstanceManager g4pvreplicaSubInstanceManager".
+//For the master thread, the array for ReplicaPrivateSubclass
+//instances grows dynamically along with G4PVReplica instances are
+//created. For each worker thread, it copies the array of
+//ReplicaPrivateSubclass instances from the master thread.
+//In addition, it invokes a method similiar to the constructor explicitly
+//to achieve the partial effect for each instance in the array.
+#ifndef G4PVREPLICASUBINSTANCEMANAGER_HH
+#define G4PVREPLICASUBINSTANCEMANAGER_HH
+
+#include "G4MTTransitory.hh"
+
+typedef G4MTPrivateSubInstanceManager<ReplicaPrivateSubclass> G4PVReplicaSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//These macros changes the references to fields that are now encapsulated
+//in the class ReplicaPrivateSubclass.
+#define fcopyNoG4MTThreadPrivate ((g4pvreplicaSubInstanceManager.offset[g4pvreplicaInstanceID]).fcopyNo)
+
+#endif
+
+
 class G4PVReplica : public G4VPhysicalVolume
 {
-  public:  // with description
+
+  public:
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field is used as instance ID.
+    int g4pvreplicaInstanceID;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field helps to use the class G4PVReplicaSubInstanceManager
+    //introduced above.
+    static G4PVReplicaSubInstanceManager g4pvreplicaSubInstanceManager;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This method is similar to the constructor. It is used by each worker
+    //thread to achieve the partial effect as that of the master thread.
+    void SlaveG4PVReplica(G4PVReplica *pMasterObject);
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This method is similar to the destructor. It is used by each worker
+    //thread to achieve the partial effect as that of the master thread.
+    void DestroySlaveG4PVReplica(G4PVReplica *pMasterObject);
+
+public:  // with description
 
     G4PVReplica(const G4String& pName,
                       G4LogicalVolume* pLogical,
@@ -134,7 +210,11 @@ class G4PVReplica : public G4VPhysicalVolume
     EAxis faxis;
     G4int fnReplicas;
     G4double fwidth,foffset;
-    G4int    fcopyNo;
+ 
+    // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    // This field is move from the original class definition to be
+    // encapsulated by the class ReplicaPrivateSubclass.
+    //    G4int    fcopyNoG4MTThreadPrivate;
 
   private:
 

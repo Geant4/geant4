@@ -78,10 +78,9 @@
 
 G4VisManager* G4VisManager::fpInstance = 0;
 
-G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
-
 G4VisManager::G4VisManager (const G4String& verbosityString):
   fVerbose         (1),
+  fVerbosity       (warnings),
   fInitialised     (false),
   fpGraphicsSystem (0),
   fpScene          (0),
@@ -1710,7 +1709,6 @@ G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
   else return 0;
 }
 
-std::vector<G4String> G4VisManager::VerbosityGuidanceStrings;
 
 G4String G4VisManager::VerbosityString(Verbosity verbosity) {
   G4String rs;

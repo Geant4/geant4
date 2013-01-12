@@ -142,21 +142,21 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4TauLeptonicDecayChannel::DecayIt ";
 #endif
 
-  if (parent == 0) FillParent();  
-  if (daughters == 0) FillDaughters();
+  if (parentG4MTThreadPrivate == 0) FillParent();  
+  if (daughtersG4MTThreadPrivate == 0) FillDaughters();
  
   // parent mass
-  G4double parentmass = parent->GetPDGMass();
+  G4double parentmass = parentG4MTThreadPrivate->GetPDGMass();
 
   //daughters'mass
   G4double daughtermass[3]; 
   for (G4int index=0; index<3; index++){
-    daughtermass[index] = daughters[index]->GetPDGMass();
+    daughtermass[index] = daughtersG4MTThreadPrivate[index]->GetPDGMass();
   }
 
    //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( parentG4MTThreadPrivate, dummy, 0.0);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
@@ -186,7 +186,7 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
   cosphi = std::cos(phi);
   G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4DynamicParticle * daughterparticle 
-         = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
+         = new G4DynamicParticle( daughtersG4MTThreadPrivate[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
 
   // daughter 1 ,2 (nutrinos)
@@ -202,9 +202,9 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
 
   G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
   G4DynamicParticle * daughterparticle1 
-         = new G4DynamicParticle( daughters[1], direction1*(vmass/2.));
+         = new G4DynamicParticle( daughtersG4MTThreadPrivate[1], direction1*(vmass/2.));
   G4DynamicParticle * daughterparticle2
-         = new G4DynamicParticle( daughters[2], direction1*(-1.0*vmass/2.));
+         = new G4DynamicParticle( daughtersG4MTThreadPrivate[2], direction1*(-1.0*vmass/2.));
 
   // boost to the muon rest frame
   G4LorentzVector p4;

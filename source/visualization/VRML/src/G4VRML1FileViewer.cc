@@ -53,7 +53,7 @@ G4VRML1FileViewer::~G4VRML1FileViewer()
 void G4VRML1FileViewer::SetView()
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
         G4cout << "***** G4VRML1FileViewer::SetView(): No effects" << G4endl;
 #endif
 }
@@ -61,7 +61,7 @@ void G4VRML1FileViewer::SetView()
 void G4VRML1FileViewer::DrawView()
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4VRML1FileViewer::DrawView()" << G4endl;
 #endif
 
@@ -76,7 +76,7 @@ void G4VRML1FileViewer::DrawView()
 void G4VRML1FileViewer::ClearView(void)
 {
   #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
         G4cout << "***** G4VRML1File1View::ClearView()" << G4endl;
   #endif
   if(fSceneHandler.fFlagDestOpen) {
@@ -91,7 +91,7 @@ void G4VRML1FileViewer::ClearView(void)
 void G4VRML1FileViewer::ShowView(void)
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
         G4cout << "***** G4VRML1FileViewer::ShowView()" << G4endl;
 #endif
 	fSceneHandler.VRMLEndModeling();
@@ -100,7 +100,7 @@ void G4VRML1FileViewer::ShowView(void)
 void G4VRML1FileViewer::FinishView(void)
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
         G4cout << "***** G4VRML1FileViewer::FinishView(): No effects" << G4endl;
 #endif
 }

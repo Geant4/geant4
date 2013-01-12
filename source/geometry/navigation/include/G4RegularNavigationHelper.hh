@@ -44,6 +44,8 @@
 #include <vector>
 #include "globals.hh"
 
+typedef std::vector< std::pair<G4int,G4double> > G4RegularNavigationHelper_theStepLengths_t;
+
 class G4RegularNavigationHelper
 {
   public:

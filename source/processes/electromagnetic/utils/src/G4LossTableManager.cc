@@ -452,6 +452,22 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
   } 
 }
 
+void
+G4LossTableManager::SlavePreparePhysicsTable(const G4ParticleDefinition* particle,
+					G4VMultipleScattering* p)
+{
+  //if (1 < verbose) {
+  //  G4cout << "G4LossTableManager::PreparePhysicsTable for " 
+  //   << particle->GetParticleName() 
+  //	   << " and " << p->GetProcessName() << G4endl;
+  //}
+  if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
+
+  // start initialisation for the first run
+  if( 0 == run ) {
+    emConfigurator->PrepareModels(particle, p);
+  } 
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void 
@@ -462,7 +478,117 @@ G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition*)
   }
 }
 
+void 
+G4LossTableManager::SlaveBuildPhysicsTable(const G4ParticleDefinition* aParticle, 
+					   G4VMultipleScattering* p) 
+{
+  if(0 == run && startInitialisation) {
+    emConfigurator->Clear();
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//Worker threads share physics tables with the master thread for
+//energy loss processes. This member function is used by worker
+//threads to achieve the partial effect of the master thread when
+//it builds physcis tables.
+void G4LossTableManager::SlaveBuildPhysicsTable(
+     const G4ParticleDefinition* aParticle,
+     G4VEnergyLossProcess* p)
+{
+  //  if(1 < verbose) {
+  //    G4cout << "### G4LossTableManager::BuildDEDXTable() is requested for "
+  //           << aParticle->GetParticleName()
+  //	   << " and process " << p->GetProcessName()
+  //           << G4endl;
+  //  }
+  // clear configurator
+  if(0 == run && startInitialisation) {
+    emConfigurator->Clear();
+    firstParticle = aParticle; 
+  }
+  if(startInitialisation && atomDeexcitation) {
+    atomDeexcitation->InitialiseAtomicDeexcitation();
+  }
+  startInitialisation = false;
+
+  // initialisation before any table is built
+  if ( aParticle == firstParticle ) {
+    all_tables_are_built = true;
+
+    if(1 < verbose) {
+      G4cout << "### G4LossTableManager start initilisation for first particle "
+	     << firstParticle->GetParticleName() 
+	     << G4endl;
+    }
+    for (G4int i=0; i<n_loss; ++i) {
+      G4VEnergyLossProcess* el = loss_vector[i];
+
+      if(el) {
+	const G4ProcessManager* pm = el->GetProcessManager();
+        isActive[i] = false;
+	if(pm) { isActive[i] = pm->GetProcessActivation(el); }
+      	if(0 == run) { base_part_vector[i] = el->BaseParticle(); }
+        tables_are_built[i] = false;
+	all_tables_are_built= false;
+        if(!isActive[i]) { el->SetIonisation(false); }
+  
+	if(1 < verbose) { 
+	  G4cout << i <<".   "<< el->GetProcessName(); 
+	  if(el->Particle()) {
+	    G4cout << "  for "  << el->Particle()->GetParticleName();
+	  }
+          G4cout << "  active= " << pm->GetProcessActivation(el)
+                 << "  table= " << tables_are_built[i]
+		 << "  isIonisation= " << el->IsIonisationProcess();
+	  if(base_part_vector[i]) { 
+	    G4cout << "  base particle " << base_part_vector[i]->GetParticleName();
+	  }
+	  G4cout << G4endl;
+	}
+      } else {
+        tables_are_built[i] = true;
+        part_vector[i] = 0;
+      }
+    }
+    ++run;
+    currentParticle = 0;
+  }
+
+  // Set run time parameters 
+  SetParameters(aParticle, p);
+
+  if (all_tables_are_built) { return; }
+
+  // Build tables for given particle
+  all_tables_are_built = true;
+
+  for(G4int i=0; i<n_loss; ++i) {
+    if(p == loss_vector[i] && !tables_are_built[i] && !base_part_vector[i]) {
+      const G4ParticleDefinition* curr_part = part_vector[i];
+      if(1 < verbose) {
+        G4cout << "### BuildPhysicsTable for " << p->GetProcessName()
+               << " and " << curr_part->GetParticleName()
+               << " start BuildTable " << G4endl;
+      }
+      G4VEnergyLossProcess* curr_proc = SlaveBuildTables(curr_part);//G4VEnergyLossProcess* curr_proc = BuildTables(curr_part);
+      if(curr_proc) { SlaveCopyTables(curr_part, curr_proc); } //      if(curr_proc) CopyTables(curr_part, curr_proc);
+    }
+    if ( !tables_are_built[i] ) { all_tables_are_built = false; }
+  }
+
+  //  if(1 < verbose) {
+  //    G4cout << "### G4LossTableManager::BuildDEDXTable end: "
+  //           << "all_tables_are_built= " << all_tables_are_built
+  //           << G4endl;
+  //    
+  //    if(all_tables_are_built) {
+  //      G4cout << "### All dEdx and Range tables are built #####" << G4endl;
+  //    }
+  //  }
+}
 
 void G4LossTableManager::BuildPhysicsTable(
      const G4ParticleDefinition* aParticle,
@@ -560,6 +686,47 @@ void G4LossTableManager::BuildPhysicsTable(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//Worker threads share physics tables with the master thread for
+//energy loss processes. This member function is used by worker
+//threads to achieve the partial effect of the master thread when
+//it copies physcis tables.
+void G4LossTableManager::SlaveCopyTables(const G4ParticleDefinition* part,
+                                          G4VEnergyLossProcess* base_proc)
+{
+  for (G4int j=0; j<n_loss; j++) {
+
+    G4VEnergyLossProcess* proc = loss_vector[j];
+    //    if(proc == base_proc || proc->Particle() == part) 
+    //      tables_are_built[j] = true;
+
+    if (!tables_are_built[j] && part == base_part_vector[j]) {
+      tables_are_built[j] = true;
+      //      proc->SetDEDXTable(base_proc->DEDXTable(),fRestricted);
+      //      proc->SetDEDXTable(base_proc->DEDXTableForSubsec(),fSubRestricted);
+      //      proc->SetDEDXTable(base_proc->DEDXunRestrictedTable(),fTotal);
+      //      proc->SetCSDARangeTable(base_proc->CSDARangeTable());
+      //      proc->SetRangeTableForLoss(base_proc->RangeTableForLoss());
+      //      proc->SetInverseRangeTable(base_proc->InverseRangeTable());
+      //      proc->SetLambdaTable(base_proc->LambdaTable());
+      //      proc->SetSubLambdaTable(base_proc->SubLambdaTable());
+      //      proc->SetIonisation(base_proc->IsIonisationProcess());
+      loss_map[part_vector[j]] = proc;
+      //      if (1 < verbose) {
+      //         G4cout << "For " << proc->GetProcessName()
+      //                << " for " << part_vector[j]->GetParticleName()
+      //                << " base_part= " << part->GetParticleName()
+      //                << " tables are assigned "
+      //                << G4endl;
+      //      }
+    }
+
+    //    if (theElectron == part && theElectron == proc->SecondaryParticle() ) {
+    //      proc->SetSecondaryRangeTable(base_proc->RangeTableForLoss());
+    //    }
+  }
+}
+
 
 void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
                                           G4VEnergyLossProcess* base_proc)
@@ -598,6 +765,149 @@ void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//Worker threads share physics tables with the master thread for
+//energy loss processes. This member function is used by worker
+//threads to achieve the partial effect of the master thread when
+//it builds physcis tables.
+G4VEnergyLossProcess* G4LossTableManager::SlaveBuildTables(
+                      const G4ParticleDefinition* aParticle)
+{
+  //  if(1 < verbose) {
+  //    G4cout << "G4LossTableManager::BuildTables() for "
+  //           << aParticle->GetParticleName() << G4endl;
+  //  }
+
+  std::vector<G4PhysicsTable*> t_list;  
+  std::vector<G4VEnergyLossProcess*> loss_list;
+  loss_list.clear();
+  G4VEnergyLossProcess* em = 0;
+  G4VEnergyLossProcess* p = 0;
+  G4int iem = 0;
+  G4PhysicsTable* dedx = 0;
+  G4int i;
+
+  for (i=0; i<n_loss; i++) {
+    p = loss_vector[i];
+    if (p && aParticle == part_vector[i] && !tables_are_built[i]) {
+      if ((p->IsIonisationProcess() && isActive[i]) || 
+          !em || (em && !isActive[iem]) ) {
+        em = p;
+        iem= i;
+      }
+      //      dedx = p->BuildDEDXTable(fRestricted);
+      //      G4cout << "Build DEDX table for " << aParticle->GetParticleName()
+      //	     << "  " << dedx << " " << dedx->length() << G4endl;
+      //      p->SetDEDXTable(dedx,fRestricted); 
+      t_list.push_back(0);
+      loss_list.push_back(p);
+      tables_are_built[i] = true;
+    }
+  }
+
+  G4int n_dedx = t_list.size();
+  //  if (0 == n_dedx || !em) {
+  //    G4cout << "G4LossTableManager WARNING: no DEDX processes for " 
+  //	   << aParticle->GetParticleName() << G4endl;
+  //    return 0;
+  //  }
+  G4int nSubRegions = em->NumberOfSubCutoffRegions();
+
+  //  if (1 < verbose) {
+  //    G4cout << "G4LossTableManager::BuildTables() start to build range tables"
+  //           << " and the sum of " << n_dedx << " processes"
+  //           << " iem= " << iem << " em= " << em->GetProcessName()
+  //           << " buildCSDARange= " << buildCSDARange
+  //	   << " nSubRegions= " << nSubRegions
+  //	   << G4endl;
+  //  }
+
+  //  dedx = em->IonisationTable();
+  //  if (1 < n_dedx) {
+  //    em->SetDEDXTable(dedx, fIsIonisation);
+  //    dedx = 0;
+  //    dedx  = G4PhysicsTableHelper::PreparePhysicsTable(dedx);
+  //    tableBuilder->BuildDEDXTable(dedx, t_list);
+  //    em->SetDEDXTable(dedx, fRestricted);
+  //  }
+  //  dedx_vector[iem] = dedx;
+
+  //  G4PhysicsTable* range = em->RangeTableForLoss();
+  //  if(!range) range  = G4PhysicsTableHelper::PreparePhysicsTable(range);
+  //  range_vector[iem] = range;
+
+  //  G4PhysicsTable* invrange = em->InverseRangeTable();
+  //  if(!invrange) invrange = G4PhysicsTableHelper::PreparePhysicsTable(invrange);
+  //  inv_range_vector[iem]  = invrange;
+
+  //  G4bool flag = em->IsIonisationProcess();
+  //  tableBuilder->BuildRangeTable(dedx, range, flag);
+  //  tableBuilder->BuildInverseRangeTable(range, invrange, flag);
+
+  //  if(1<verbose) G4cout << *dedx << G4endl;
+
+  //  em->SetRangeTableForLoss(range);
+  //  em->SetInverseRangeTable(invrange);
+
+  //  if(1<verbose) G4cout << *range << G4endl;
+
+  //  std::vector<G4PhysicsTable*> listSub;
+  //  std::vector<G4PhysicsTable*> listCSDA;
+
+  for (i=0; i<n_dedx; i++) {
+    p = loss_list[i];
+    p->SetIonisation(false);
+    //    p->SetLambdaTable(p->BuildLambdaTable(fRestricted));
+    if (0 < nSubRegions) {
+      //      dedx = p->BuildDEDXTable(fSubRestricted);
+      //      p->SetDEDXTable(dedx,fSubRestricted);
+      //      listSub.push_back(dedx);
+      //      p->SetSubLambdaTable(p->BuildLambdaTable(fSubRestricted));
+      if(p != em) em->AddCollaborativeProcess(p);
+    }
+    //    if(buildCSDARange) { 
+    //      dedx = p->BuildDEDXTable(fTotal);
+    //      p->SetDEDXTable(dedx,fTotal);
+    //      listCSDA.push_back(dedx); 
+    //    }     
+  }
+
+  //  if (0 < nSubRegions) {
+  //    G4PhysicsTable* dedxSub = em->IonisationTableForSubsec();
+  //    if (1 < listSub.size()) {
+  //      em->SetDEDXTable(dedxSub, fIsSubIonisation);
+  //      dedxSub = 0;
+  //      dedxSub = G4PhysicsTableHelper::PreparePhysicsTable(dedxSub);
+  //      tableBuilder->BuildDEDXTable(dedxSub, listSub);
+  //      em->SetDEDXTable(dedxSub, fSubRestricted);
+  //    }
+  //  }
+  //  if(buildCSDARange) {
+  //    G4PhysicsTable* dedxCSDA = em->DEDXunRestrictedTable();
+  //    if (1 < n_dedx) {
+  //      dedxCSDA = 0;
+  //      dedxCSDA  = G4PhysicsTableHelper::PreparePhysicsTable(dedxCSDA);
+  //      tableBuilder->BuildDEDXTable(dedxCSDA, listCSDA);
+  //      em->SetDEDXTable(dedxCSDA,fTotal);
+  //    }
+  //    G4PhysicsTable* rCSDA = em->CSDARangeTable();
+  //    if(!rCSDA) rCSDA = G4PhysicsTableHelper::PreparePhysicsTable(rCSDA);
+  //    tableBuilder->BuildRangeTable(dedxCSDA, rCSDA, flag);
+  //    em->SetCSDARangeTable(rCSDA);
+  //  }
+
+  em->SetIonisation(true);
+  loss_map[aParticle] = em;
+
+  //  if (1 < verbose) {
+  //    G4cout << "G4LossTableManager::BuildTables: Tables are built for "
+  //           << aParticle->GetParticleName()
+  //	   << "; ionisation process: " << em->GetProcessName()
+  //           << G4endl;
+  //  }
+  return em;
+}
+
 
 G4VEnergyLossProcess* G4LossTableManager::BuildTables(
                       const G4ParticleDefinition* aParticle)

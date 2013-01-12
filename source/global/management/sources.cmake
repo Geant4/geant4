@@ -89,6 +89,10 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4Version.hh
         G4coutDestination.hh
         G4ios.hh
+        G4MTTransitory.hh
+        G4MTTransitoryParticle.hh
+        G4MTTransitoryPhysicsVector.hh
+
     SOURCES
         G4AllocatorPool.cc
         G4DataVector.cc

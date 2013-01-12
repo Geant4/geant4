@@ -101,7 +101,7 @@ void G4NeutronHPJENDLHEData::BuildPhysicsTable( const G4ParticleDefinition& aP )
 
    // make a PhysicsVector for each element
 
-   static const G4ElementTable *theElementTable = G4Element::GetElementTable();
+   static G4ElementTable *theElementTable = G4Element::GetElementTable();
    vElement.clear();
    vElement.resize( numberOfElements );
    for ( size_t i = 0; i < numberOfElements; ++i )

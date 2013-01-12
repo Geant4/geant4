@@ -34,7 +34,8 @@
 
 struct G4CascadePiPlusPChannelData {
   typedef G4CascadeData<30,2,7,15,24,5,6,7,8> data_t;
-  static data_t data;
+  static data_t *data;
+  static data_t *initializer();
 };
 
 typedef G4CascadeFunctions<G4CascadePiPlusPChannelData,G4PionNucSampler> G4CascadePiPlusPChannel;

@@ -58,6 +58,10 @@ class G4VScoringMesh
   public: // with description
   // a pure virtual function to construct this mesh geometry
   virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
+
+  //Xin Dong 09302011 for Scorers
+  virtual void SlaveConstruct(G4VScoringMesh *masterMesh, G4VPhysicalVolume* fWorldPhys)=0;
+
   // list infomration of this mesh 
   virtual void List() const;
   

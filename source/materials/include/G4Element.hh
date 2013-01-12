@@ -171,8 +171,7 @@ public:  // with description
 
   //the (static) Table of Elements:
   //
-  static 
-  const  G4ElementTable* GetElementTable();
+  static G4ElementTable* GetElementTable();
   
   static 
   size_t GetNumberOfElements();

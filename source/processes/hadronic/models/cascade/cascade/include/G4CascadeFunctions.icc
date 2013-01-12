@@ -54,14 +54,17 @@ G4CascadeFunctions<DATA,SAMP>::G4CascadeFunctions() : SAMP() {}
 
 template <class DATA, class SAMP>
 G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) const {
+
+  if (DATA::data == 0) DATA::initializer();
+
   // Use pointer comparison to see whether tot is just a ref to sum)
-  if (&DATA::data.sum != &DATA::data.tot) {
-    G4double summed = this->findCrossSection(ke, DATA::data.sum); 
-    G4double total  = this->findCrossSection(ke, DATA::data.tot);
-    if (G4UniformRand() > summed/total) return DATA::data.maxMultiplicity();
+  if (&DATA::data->sum != &DATA::data->tot) {
+    G4double summed = this->findCrossSection(ke, DATA::data->sum); 
+    G4double total  = this->findCrossSection(ke, DATA::data->tot);
+    if (G4UniformRand() > summed/total) return DATA::data->maxMultiplicity();
   }
 
-  return this->findMultiplicity(ke, DATA::data.multiplicities);
+  return this->findMultiplicity(ke, DATA::data->multiplicities);
 }
 
 
@@ -71,7 +74,10 @@ template <class DATA, class SAMP>
 void G4CascadeFunctions<DATA,SAMP>::
 getOutgoingParticleTypes(std::vector<G4int>& kinds, 
 			 G4int mult, G4double ke) const {
-  const G4int maxMult = DATA::data.maxMultiplicity();
+
+  if (DATA::data == 0) DATA::initializer();
+
+  const G4int maxMult = DATA::data->maxMultiplicity();
 
   if (mult > maxMult) {
     G4cerr << " Illegal multiplicity " << mult << " > " << maxMult << G4endl;
@@ -81,8 +87,8 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds,
   kinds.clear();
   kinds.reserve(mult);
 
-  G4int channel = this->findFinalStateIndex(mult, ke, DATA::data.index,
-				            DATA::data.crossSections);
+  G4int channel = this->findFinalStateIndex(mult, ke, DATA::data->index,
+				            DATA::data->crossSections);
 #ifdef G4CASCADE_DEBUG_SAMPLER
   G4cout << " getOutgoingParticleTypes: mult=" << mult << " KE=" << ke
 	 << ": channel=" << channel << G4endl;
@@ -90,14 +96,14 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds,
 
   // Identify final-state array to be copied
   const G4int* chan = 0;
-  if (mult == 2) chan = DATA::data.x2bfs[channel];
-  if (mult == 3) chan = DATA::data.x3bfs[channel];
-  if (mult == 4) chan = DATA::data.x4bfs[channel];
-  if (mult == 5) chan = DATA::data.x5bfs[channel];
-  if (mult == 6) chan = DATA::data.x6bfs[channel];
-  if (mult == 7) chan = DATA::data.x7bfs[channel];
-  if (mult == 8) chan = DATA::data.x8bfs[channel];
-  if (mult == 9) chan = DATA::data.x9bfs[channel];
+  if (mult == 2) chan = DATA::data->x2bfs[channel];
+  if (mult == 3) chan = DATA::data->x3bfs[channel];
+  if (mult == 4) chan = DATA::data->x4bfs[channel];
+  if (mult == 5) chan = DATA::data->x5bfs[channel];
+  if (mult == 6) chan = DATA::data->x6bfs[channel];
+  if (mult == 7) chan = DATA::data->x7bfs[channel];
+  if (mult == 8) chan = DATA::data->x8bfs[channel];
+  if (mult == 9) chan = DATA::data->x9bfs[channel];
 
   if (!chan) {
     G4cerr << " getOutgoingParticleTypes: invalid multiplicity " << mult
@@ -114,9 +120,12 @@ getOutgoingParticleTypes(std::vector<G4int>& kinds,
 
 template <class DATA, class SAMP>
 void G4CascadeFunctions<DATA,SAMP>::printTable(std::ostream& os) const {
-  os << " ---------- " << DATA::data.name << " ----------" << G4endl;
+
+  if (DATA::data == 0) DATA::initializer();
+
+  os << " ---------- " << DATA::data->name << " ----------" << G4endl;
   SAMP::print(os);
-  DATA::data.print(os);
+  DATA::data->print(os);
   os << " ------------------------------" << G4endl;
 }
 

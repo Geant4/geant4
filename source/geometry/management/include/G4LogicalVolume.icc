@@ -64,7 +64,7 @@ void G4LogicalVolume::SetName(const G4String& pName)
 inline
 G4FieldManager* G4LogicalVolume::GetFieldManager() const
 {
-  return fFieldManager;
+  return fFieldManagerG4MTThreadPrivate;
 }
 
 // ********************************************************************
@@ -120,7 +120,7 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
                 "Replica or parameterised volume must be the only daughter !");
   }
 
-  fMass = 0.;
+  fMassG4MTThreadPrivate = 0.;
   fDaughters.push_back(pNewDaughter);
 
   G4LogicalVolume* pDaughterLogical = pNewDaughter->GetLogicalVolume();
@@ -131,7 +131,7 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
 
   if( pDaughterFieldManager == 0 )
   {
-    pDaughterLogical->SetFieldManager(fFieldManager, false);
+    pDaughterLogical->SetFieldManager(fFieldManagerG4MTThreadPrivate, false);
   }
   if (fRegion)
   {
@@ -175,7 +175,7 @@ void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
   {
     fRegion->RegionModified(true);
   }
-  fMass = 0.;
+  fMassG4MTThreadPrivate = 0.;
 }
 
 // ********************************************************************
@@ -194,7 +194,7 @@ void G4LogicalVolume::ClearDaughters()
   {
     fRegion->RegionModified(true);
   }
-  fMass = 0.;
+  fMassG4MTThreadPrivate = 0.;
 }
 
 // ********************************************************************
@@ -204,7 +204,7 @@ void G4LogicalVolume::ClearDaughters()
 inline
 G4VSolid* G4LogicalVolume::GetSolid() const
 {
-  return fSolid;
+  return fSolidG4MTThreadPrivate;
 }
 
 // ********************************************************************
@@ -215,8 +215,8 @@ inline
 void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
 {
   assert(pSolid != 0);
-  fSolid=pSolid;
-  fMass = 0.;
+  fSolidG4MTThreadPrivate=pSolid;
+  fMassG4MTThreadPrivate = 0.;
 }
 
 // ********************************************************************
@@ -226,7 +226,7 @@ void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
 inline
 G4Material* G4LogicalVolume::GetMaterial() const
 {
-  return fMaterial;
+  return fMaterialG4MTThreadPrivate;
 }
 
 // ********************************************************************
@@ -236,8 +236,8 @@ G4Material* G4LogicalVolume::GetMaterial() const
 inline
 void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
 {
-  fMaterial=pMaterial;
-  fMass = 0.;
+  fMaterialG4MTThreadPrivate=pMaterial;
+  fMassG4MTThreadPrivate = 0.;
 }
 
 // ********************************************************************
@@ -247,9 +247,9 @@ void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
 inline
 void G4LogicalVolume::UpdateMaterial(G4Material *pMaterial)
 {
-  fMaterial=pMaterial;
-  if(fRegion) { fCutsCouple = fRegion->FindCouple(pMaterial); }
-  fMass = 0.;
+  fMaterialG4MTThreadPrivate=pMaterial;
+  if(fRegion) { fCutsCoupleG4MTThreadPrivate = fRegion->FindCouple(pMaterial); }
+  fMassG4MTThreadPrivate = 0.;
 }
 
 // ********************************************************************
@@ -259,7 +259,7 @@ void G4LogicalVolume::UpdateMaterial(G4Material *pMaterial)
 inline
 G4VSensitiveDetector* G4LogicalVolume::GetSensitiveDetector() const
 {
-  return fSensitiveDetector;
+  return fSensitiveDetectorG4MTThreadPrivate;
 }
 
 // ********************************************************************
@@ -269,7 +269,7 @@ G4VSensitiveDetector* G4LogicalVolume::GetSensitiveDetector() const
 inline
 void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector* pSDetector)
 {
-  fSensitiveDetector = pSDetector;
+  fSensitiveDetectorG4MTThreadPrivate = pSDetector;
 }
 
 // ********************************************************************
@@ -423,7 +423,7 @@ void G4LogicalVolume::PropagateRegion()
 inline
 const G4MaterialCutsCouple* G4LogicalVolume::GetMaterialCutsCouple() const
 {
-  return fCutsCouple;
+  return fCutsCoupleG4MTThreadPrivate;
 }
 
 // ********************************************************************
@@ -433,7 +433,7 @@ const G4MaterialCutsCouple* G4LogicalVolume::GetMaterialCutsCouple() const
 inline
 void G4LogicalVolume::SetMaterialCutsCouple(G4MaterialCutsCouple* cuts)
 {
-  fCutsCouple = cuts;
+  fCutsCoupleG4MTThreadPrivate = cuts;
 }
 
 // ********************************************************************

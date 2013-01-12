@@ -63,10 +63,75 @@ struct G4PolyconeSideRZ
 {
   G4double r, z;  // start of vector
 };
- 
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//The class PolyconeSidePrivateSubclass is introduced to
+//encapsulate the fields of the class G4PolyconeSide that may not
+//be read-only.
+#ifndef POLYCONESIDEPRIVATESUBCLASS_HH
+#define POLYCONESIDEPRIVATESUBCLASS_HH
+
+class PolyconeSidePrivateSubclass
+{
+public:
+  std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
+
+  void initialize() {
+    fPhi.first = G4ThreeVector(0,0,0);
+    fPhi.second= 0.0;
+  };
+};
+#endif
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
+//The class G4PolyconeSideSubInstanceManager is introduced to 
+//encapsulate the methods used by both the master thread and 
+//worker threads to allocate memory space for the fields encapsulated
+//by the class PolyconeSidePrivateSubclass. When each thread
+//initializes the value for these fields, it refers to them using a macro
+//definition defined below. For every G4PolyconeSide instance, there is
+//a corresponding PolyconeSidePrivateSubclass instance. All
+//PolyconeSidePrivateSubclass instances are organized by the
+//class G4PolyconeSideSubInstanceManager as an array. The field "  
+//int g4polyconeSideSubInstanceID" is added to the class G4PolyconeSide.
+//The value of this field in each G4PolyconeSide instance is the subscript
+//of the corresponding PolyconeSidePrivateSubclass instance. In order
+//to use the class G4PolyconeSideSubInstanceManager, we add a static member in
+//the class G4PolyconeSide as follows: "  
+//static G4PolyconeSideSubInstanceManager g4polyconeSideSubInstanceManager".
+//For the master thread, the array for PolyconeSidePrivateSubclass 
+//instances grows dynamically along with G4PolyconeSide instances are
+//created. For each worker thread, it copies the array of 
+//PolyconeSidePrivateSubclass instances from the master thread.
+//In addition, it invokes a method similiar to the constructor explicitly
+//to achieve the partial effect for each instance in the array.
+
+#ifndef G4PolyconeSideSUBINSTANCEMANAGER_HH
+#define G4PolyconeSideSUBINSTANCEMANAGER_HH
+
+#include "G4MTTransitory.hh"
+typedef G4MTPrivateSubInstanceManager<PolyconeSidePrivateSubclass> G4PolyconeSideSubInstanceManager;
+
+//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+//These macros changes the references to fields that are now encapsulated
+//in the class PolyconeSidePrivateSubclass.
+#define fPhiPCSG4MTThreadPrivate ((g4polyconeSideSubInstanceManager.offset[g4polyconeSideInstanceID]).fPhi)
+
+#endif
+
 class G4PolyconeSide : public G4VCSGface
 {
   public:
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field is used as instance ID.
+    int g4polyconeSideInstanceID;
+
+    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+    //This new field helps to use the class G4PolyconeSideSubInstanceManager
+    //introduced above.
+    static G4PolyconeSideSubInstanceManager g4polyconeSideSubInstanceManager;
+
 
     G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                     const G4PolyconeSideRZ *tail,
@@ -154,8 +219,8 @@ class G4PolyconeSide : public G4VCSGface
     G4ThreeVector *corners; // The coordinates of the corners (if phiIsOpen)
 
   private:
-
-    std::pair<G4ThreeVector, G4double> fPhi;  // Cached value for phi
+    //Change to thread private
+    //    std::pair<G4ThreeVector, G4double> fPhiPCSG4MTThreadPrivate;  // Cached value for phi
     G4double kCarTolerance; // Geometrical surface thickness
     G4double fSurfaceArea;  // Used for surface calculation 
 };

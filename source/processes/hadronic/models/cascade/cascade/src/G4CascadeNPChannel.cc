@@ -669,12 +669,19 @@ namespace {
 }
 
 // Initialize n-p channel
+typedef G4CascadeNPChannelData::data_t G4CascadeNPChannelData_t;
+G4CascadeNPChannelData_t *G4CascadeNPChannelData::data=0;
 
-G4CascadeNPChannelData::data_t
-G4CascadeNPChannelData::data(np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
-			     np8bfs, np9bfs, npCrossSections, npTotXSec,
-			     neu*pro, "NeutronProton");
-
+G4CascadeNPChannelData::data_t *G4CascadeNPChannelData::initializer()
+{
+  if (G4CascadeNPChannelData::data == 0)
+    G4CascadeNPChannelData::data = 
+      new G4CascadeNPChannelData::data_t(
+					 np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
+					 np8bfs, np9bfs, npCrossSections, npTotXSec,
+					 neu*pro, "NeutronProton");
+  return G4CascadeNPChannelData::data;
+}
 
 // Overload base class interpolator to use function for 0-10 MeV total, elastic
 
