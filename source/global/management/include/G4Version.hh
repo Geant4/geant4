@@ -50,14 +50,14 @@
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-09-06-ref-01 $"
+#define G4VERSION_TAG "$Name: geant4-09-06-refmt-01 $"
 #endif
 
 // as variables
 
 #include "G4String.hh"
 
-static const G4String G4Version = "$Name: geant4-09-06-ref-01 $";
-static const G4String G4Date    = "(20-December-2012)";
+static const G4String G4Version = "$Name: geant4-09-06-refmt-01 $";
+static const G4String G4Date    = "(15-January-2013)";
 
 #endif
