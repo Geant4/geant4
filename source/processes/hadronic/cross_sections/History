@@ -13,6 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+10 January 2013 W.Pokorski  (hadr-cross-V09-06-03)
+----------------------------------------------------
+- fixed memory leak
+
+
 19 December 2012 A.Galoyan (hadr-cross-V09-06-02)
 -G4ComponentAntiNuclNuclearXS
 bug fixed
