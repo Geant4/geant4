@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4MaterialsTest.cc,v 1.9 2006-06-29 19:13:14 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------

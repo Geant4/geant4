@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // History: Test for calculation Stopping Power of ions
