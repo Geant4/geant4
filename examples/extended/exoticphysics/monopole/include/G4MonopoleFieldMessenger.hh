@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleFieldMessenger.hh
 /// \brief Definition of the G4MonopoleFieldMessenger class
 //
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

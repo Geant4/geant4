@@ -51,7 +51,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   // extract Projected Range of primary particle
   if (aTrack->GetTrackID() == 1) {
-    G4double x = aTrack->GetPosition().x() + fRunAction->GetOffsetX();
+    G4double x = aTrack->GetPosition().x() - fRunAction->GetOffsetX();
     fRunAction->AddProjRange(x);
   }  
 }

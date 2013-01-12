@@ -26,6 +26,9 @@
 /// \file exoticphysics/monopole/include/G4Monopole.hh
 /// \brief Definition of the G4Monopole class
 //
+// $Id$
+//
+
 #ifndef G4Monopole_h
 #define G4Monopole_h 1
 

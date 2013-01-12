@@ -26,6 +26,8 @@
 /// \file exoticphysics/monopole/src/G4Monopole.cc
 /// \brief Implementation of the G4Monopole class
 //
+// $Id$
+//
 //---------------------------------------------------------------------------
 //
 // ClassName:   G4Monopole
