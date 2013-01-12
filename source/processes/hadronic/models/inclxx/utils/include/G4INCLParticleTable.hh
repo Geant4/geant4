@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -51,7 +49,6 @@
 #ifdef INCLXX_IN_GEANT4_MODE
 #include "G4IonTable.hh"
 #include "G4ParticleTable.hh"
-#include "globals.hh"
 #endif
 #include "G4INCLGlobals.hh"
 #include "G4INCLNaturalIsotopicDistributions.hh"
@@ -181,8 +178,6 @@ namespace G4INCL {
           return 0;
           break;
         default:
-/*          FATAL("Can't determine mass number for particle type " << t << std::endl);
-          std::abort();*/
           return 0;
           break;
       }
@@ -209,8 +204,6 @@ namespace G4INCL {
           return -1;
           break;
         default:
-/*          FATAL("Can't determine charge number for particle type " << t << std::endl);
-          std::abort();*/
           return 0;
           break;
       }

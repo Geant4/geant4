@@ -30,20 +30,21 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
 #include "G4INCLParticleTable.hh"
-#include "G4SystemOfUnits.hh"
-
 #include <algorithm>
 // #include <cassert>
 #include <cmath>
 #include <cctype>
 #include <sstream>
+
+#ifdef INCLXX_IN_GEANT4_MODE
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#endif
 
 namespace G4INCL {
 
@@ -339,7 +340,6 @@ namespace G4INCL {
       getSeparationEnergy = ParticleTable::getSeparationEnergyRealForLight;
     else {
       FATAL("Unrecognized separation-energy type in ParticleTable initialization: " << theConfig->getSeparationEnergyType() << std::endl);
-      std::abort();
     }
 
   }
@@ -645,7 +645,6 @@ namespace G4INCL {
     std::ifstream massTableIn(fileName.c_str());
     if(!massTableIn.good()) {
       FATAL("Cannot open " << fileName << " data file." << std::endl);
-      std::exit(EXIT_FAILURE);
       return;
     }
 

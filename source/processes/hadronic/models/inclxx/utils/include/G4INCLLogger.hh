@@ -30,8 +30,6 @@
 // Sylvie Leray, CEA
 // Joseph Cugnon, University of Liege
 //
-// INCL++ revision: v5.1.8
-//
 #define INCLXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
@@ -58,18 +56,14 @@ namespace G4INCL {
     DataBlockMsg = 10,
     ZeroMsg = 0 };
 
-#ifdef INCL_DEBUG_LOG
+#if defined(INCL_DEBUG_LOG) && !defined(INCLXX_IN_GEANT4_MODE)
 
   class LoggerSlave {
     public:
       // By default, log fatal errors, errors and warnings
       LoggerSlave(std::string const &logFileName) : logStream(0), verbosityLevel(4) {
         if(logFileName=="-") {
-#ifdef INCLXX_IN_GEANT4_MODE
-	  logStream = &(G4cout);
-#else
           logStream = &(std::cout);
-#endif
           logToStdout = true;
         } else {
           logToStdout = false;
@@ -84,9 +78,7 @@ namespace G4INCL {
         // Spell out "true" and "false" when logging G4bool variables
         std::boolalpha(*logStream);
 
-#ifndef INCLXX_IN_GEANT4_MODE
         logMessage(InfoMsg, __FILE__,__LINE__, "# Logging enabled!\n");
-#endif
       };
       ~LoggerSlave() {
         if(!logToStdout)
@@ -169,11 +161,12 @@ namespace G4INCL {
 
   // Macro definitions for line numbering in log files!
 #define FATAL(x) \
-  if(G4INCL::FatalMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+  if(true) {\
     std::stringstream ss;\
     ss << x;\
     G4INCL::Logger::logMessage(G4INCL::FatalMsg, __FILE__,__LINE__, ss.str());\
     G4INCL::Logger::flush();\
+    std::exit(EXIT_FAILURE);\
   } else (void)0
 #define ERROR(x) \
   if(G4INCL::ErrorMsg <= G4INCL::Logger::getVerbosityLevel()) {\
@@ -228,7 +221,14 @@ namespace G4INCL {
     static LoggerSlave *theLoggerSlave;
   };
 
-#define FATAL(x);
+#define FATAL(x) \
+  if(true) {\
+    std::stringstream ss;\
+    ss << x;\
+    std::stringstream location;\
+    location << __FILE__ << ":" << __LINE__;\
+    G4Exception(location.str().c_str(), "INCLXX0000", FatalException, ss.str().c_str());\
+  } else (void)0
 #define ERROR(x);
 #define WARN(x);
 #define INFO(x);
