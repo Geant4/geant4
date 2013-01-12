@@ -470,7 +470,7 @@ void G4QMDGroundStateNucleus::packNucleons()
 
          rho_a[ i ] += meanfield->GetRHA( j , i ); 
          G4int k = 0; 
-         if ( participants[i]->GetDefinition() != participants[i]->GetDefinition() )
+         if ( participants[i]->GetDefinition() != participants[j]->GetDefinition() )
          {
             k = 1;
          } 
