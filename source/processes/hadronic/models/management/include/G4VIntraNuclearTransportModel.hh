@@ -72,6 +72,11 @@ public:
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries,
 				     G4V3DNucleus* theNucleus) = 0;
 
+  virtual 
+  G4ReactionProductVector* PropagateNuclNucl(G4KineticTrackVector* theSecondaries,
+				     G4V3DNucleus* theNucleus,
+                                     G4V3DNucleus* theProjectileNucleus);    // Uzhi Nov. 2012
+
   inline void SetDeExcitation(G4VPreCompoundModel* ptr);
 
   inline void Set3DNucleus(G4V3DNucleus* const value);

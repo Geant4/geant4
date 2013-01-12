@@ -62,3 +62,13 @@ G4String G4VHighEnergyGenerator::GetModelName() const
 {
 	return theGeneratorModelName;
 }
+
+G4V3DNucleus * G4VHighEnergyGenerator::GetProjectileNucleus() const   // Uzhi Nov. 2012
+{                                                                     // Uzhi Nov. 2012
+  G4ExceptionDescription ed;
+  ed << "The used HighEnergyGenerator "<<GetModelName()<<" cannot manage with a residual projectile nucleus" << G4endl;
+  G4Exception("G4VHighEnergyGenerator::GetProjectileNucleus ", "G4had_mod_man",
+                FatalException, ed); 
+  return 0;
+   return 0;                                                          // Uzhi Nov. 2012
+}                                                                     // Uzhi Niv. 2012

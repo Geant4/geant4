@@ -56,6 +56,7 @@ class G4VHighEnergyGenerator
 
  public:
       virtual G4V3DNucleus * GetWoundedNucleus() const = 0;
+      virtual G4V3DNucleus * GetProjectileNucleus() const;  // Uzhi Nov. 2012
       virtual G4KineticTrackVector * Scatter(const G4Nucleus &theNucleus, 
                                              const G4DynamicParticle &thePrimary) = 0;
       std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;

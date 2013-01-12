@@ -14,6 +14,28 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+19 December 2012 - Michael Kelsey (hadr-modman-V09-06-02)
+---------------------------------------------------------
+- sources.cmake: remove G4VIsotopeProduction.hh and G4IsoParticleChange.hh
+
+19 December 2012 - Dennis Wright  (hadr-modman-V09-06-01)
+---------------------------------------------------------
+- remove classes G4VIsotopeProduction and G4IsoParticleChange: no longer
+  needed since isotope production model is gone
+
+19 December 2012 - Dennis Wright  (hadr-modman-V09-06-00)
+---------------------------------------------------------
+- tag trunk with Gunter's header changes
+
+21 November 2012 - Gunter Folger  (hadr-modman-V09-05-09)
+-  moved implementation of virtual PropagateNuclNucl() method to .cc file 
+
+20 November 2012 - V. Uzhinsky (hadr-modman-V09-05-08)
+-  An interface for a manipulation with nucleus-nucleus interactions was 
+   introduced.   New virtual method - PropagateNuclNucl, was created in
+   G4VIntraNuclearTransportModel.
+
 20 September 2012 - Gabriele Cosmo (hadr-modman-V09-05-07)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.
