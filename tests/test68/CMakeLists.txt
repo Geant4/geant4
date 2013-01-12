@@ -14,6 +14,7 @@ GEANT4_EXECUTABLE( test68 test68.cc src/*.cc )
 
 #---Test definition-----------------------------------------
 GEANT4_ADD_TEST( test68-build BUILD test68 
+                              TIMEOUT 2000
                               LABELS Nightly Continuous ) 
 
 #message( ${CMAKE_CURRENT_SOURCE_DIR} " " ${CMAKE_CURRENT_BINARY_DIR} )

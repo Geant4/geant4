@@ -13,6 +13,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 Jan 2013 Alberto Ribon                test68-V09-06-00
+- Increased the time limit to avoid timeout errors.
+
 13 Nov 2012 Alberto Ribon                test68-V09-05-09
 - Fixed the massive non-reproducibility in Windows due to use of
   a Unix command (mv) in the script reproducibility.py .
