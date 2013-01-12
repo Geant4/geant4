@@ -49,6 +49,7 @@
 // Declare the categories of collisions the Scatterer can handle
 typedef GROUP2(G4CollisionNN, G4CollisionMesonBaryon) theChannels;
 
+//----------------------------------------------------------------------------
 
 G4Scatterer::G4Scatterer()
 {
@@ -56,6 +57,7 @@ G4Scatterer::G4Scatterer()
   G4ForEach<theChannels>::Apply(&aR, &collisions);
 }
 
+//----------------------------------------------------------------------------
 
 G4Scatterer::~G4Scatterer()
 {
@@ -63,7 +65,9 @@ G4Scatterer::~G4Scatterer()
   collisions.clear();
 }
 
-G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1, 
+//----------------------------------------------------------------------------
+
+G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 					   const G4KineticTrack& trk2)
 {
   G4double time = DBL_MAX;
@@ -71,35 +75,35 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
   G4LorentzVector mom1 = trk1.GetTrackingMomentum();
 //  G4cout << "zcomp=" << std::abs(mom1.vect().unit().z() -1 ) << G4endl;
   G4double collisionTime;
-  
-  if ( std::abs(mom1.vect().unit().z() -1 ) < 1e-6 ) 
+
+  if ( std::abs(mom1.vect().unit().z() -1 ) < 1e-6 )
   {
      G4ThreeVector position = trk2.GetPosition() - trk1.GetPosition();
      G4double deltaz=position.z();
      G4double velocity = mom1.z()/mom1.e() * c_light;
-     
+
      collisionTime=deltaz/velocity;
      distance_fast=position.x()*position.x() + position.y()*position.y();
   } else {
-  
+
     //  The nucleons of the nucleus are FROZEN, ie. do not move..
 
-    G4ThreeVector position = trk2.GetPosition() - trk1.GetPosition();    
+    G4ThreeVector position = trk2.GetPosition() - trk1.GetPosition();
 
     G4ThreeVector velocity = mom1.vect()/mom1.e() * c_light;  // mom1.boostVector() will exit on slightly negative mass
     collisionTime = (position * velocity) / velocity.mag2();    // can't divide by /c_light;
     position -= velocity * collisionTime;
     distance_fast=position.mag2();
-    
+
 //    if ( collisionTime>0 ) G4cout << " dis1/2 square" << dis1 <<" "<< dis2 << G4endl;
 //     collisionTime = GetTimeToClosestApproach(trk1,trk2);
   }
      if (collisionTime > 0)
-	{ 
+	{
 	   static const G4double maxCrossSection = 500*millibarn;
 	   if(0.7*pi*distance_fast>maxCrossSection) return time;
 
-       
+
            G4LorentzVector mom2(0,0,0,trk2.Get4Momentum().mag());
 
 // 	   G4ThreeVector momLab = mom1.vect();// frozen Nucleus - mom2.vect();
@@ -112,7 +116,7 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 
 	   G4LorentzVector coordinate1(trk1.GetPosition(), 100.);
 	   G4LorentzVector coordinate2(trk2.GetPosition(), 100.);
-	   G4ThreeVector pos = ((toCMSFrame * coordinate1).vect() - 
+	   G4ThreeVector pos = ((toCMSFrame * coordinate1).vect() -
 				(toCMSFrame * coordinate2).vect());
 
 	   G4ThreeVector mom = mom1.vect() - mom2.vect();
@@ -121,40 +125,40 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 
 	   G4double distance = pos * pos - (pos*mom) * (pos*mom) / (mom.mag2());
 
-//     G4cout << " disDiff " << distance-disLab << " " << disLab 
+//     G4cout << " disDiff " << distance-disLab << " " << disLab
 //            << " " << std::abs(distance-disLab)/distance << G4endl
 //	    << " mom/Lab " << mom << " " << momLab << G4endl
-//	    << " pos/Lab " << pos << " " << posLab 
+//	    << " pos/Lab " << pos << " " << posLab
 //	    << G4endl;
 
 	   if(pi*distance>maxCrossSection) return time;
-	   
+
 	   // charged particles special
 	   static const G4double maxChargedCrossSection = 200*millibarn;
-	   if(std::abs(trk1.GetDefinition()->GetPDGCharge())>0.1 && 
+	   if(std::abs(trk1.GetDefinition()->GetPDGCharge())>0.1 &&
 	      std::abs(trk2.GetDefinition()->GetPDGCharge())>0.1 &&
 	      pi*distance>maxChargedCrossSection) return time;
-	      
+
            G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
-	   // neutrons special   
+	   // neutrons special  pn is largest cross-section, but above 1.91 GeV is less than 200 mb
 	   if(( trk1.GetDefinition() == G4Neutron::Neutron() ||
-	        trk1.GetDefinition() == G4Neutron::Neutron() ) &&
-		sqrtS>1.91*GeV && pi*distance>maxChargedCrossSection) return time;
+	        trk2.GetDefinition() == G4Neutron::Neutron() ) &&
+		     sqrtS>1.91*GeV && pi*distance>maxChargedCrossSection) return time;
 
 /*
  * 	  if(distance <= sqr(1.14*fermi))
  * 	  {
  * 	    time = collisionTime;
- * 	  
+ *
  * *
  *  * 	     G4cout << "Scatter distance/time: " << std::sqrt(distance)/fermi <<
  *  * 	         " / "<< time/ns << G4endl;
- *  * 	      G4ThreeVector pos1=trk1.GetPosition(); 
+ *  * 	      G4ThreeVector pos1=trk1.GetPosition();
  *  * 	      G4ThreeVector pos2=trk2.GetPosition();
  *  * 	      G4LorentzVector xmom1 = trk1.Get4Momentum();
- *  * 	      G4LorentzVector xmom2 = trk2.Get4Momentum();  
+ *  * 	      G4LorentzVector xmom2 = trk2.Get4Momentum();
  *  * 	      G4cout << "position1: " <<  pos1.x() << " " << pos1.y() << " "
- *  * 	      		<< pos1.z(); 
+ *  * 	      		<< pos1.z();
  *  * 	      pos1+=(collisionTime*c_light/xmom1.e())*xmom1.vect();
  *  * 	      G4cout << " straight line trprt: "
  *  * 	      		<<  pos1.x() << " " << pos1.y() << " "
@@ -169,15 +173,15 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
  *  * 	      G4cout << "straight line distance :" << (pos1-pos2).mag()/fermi << G4endl;
  *  *
  * 	  }
- * 	  
+ *
  * 	  if(1)
  * 	    return time;
  */
-	   
+
 	   if ((trk1.GetActualMass()+trk2.GetActualMass()) > sqrtS) return time;
 
-	    
-	  
+
+
 	  G4VCollision* collision = FindCollision(trk1,trk2);
 	  G4double totalCrossSection;
 	  // The cross section is interpreted geometrically as an area
@@ -260,8 +264,10 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
   return time;
 }
 
-G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1, 
-					      const G4KineticTrack& trk2)  
+//----------------------------------------------------------------------------
+
+G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
+					      const G4KineticTrack& trk2)
 {
 //   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
    G4LorentzVector pInitial=trk1.Get4Momentum() + trk2.Get4Momentum();
@@ -273,12 +279,12 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
                        + trk2.GetDefinition()->GetPDGCharge());
    G4int baryonBalance = trk1.GetDefinition()->GetBaryonNumber()
                        + trk2.GetDefinition()->GetBaryonNumber();
-   
+
    G4VCollision* collision = FindCollision(trk1,trk2);
    if (collision != 0)
    {
      G4double aCrossSection = collision->CrossSection(trk1,trk2);
-     if (aCrossSection > 0.0) 
+     if (aCrossSection > 0.0)
      {
 
 
@@ -297,7 +303,7 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
        if(!products || products->size() == 0) return products;
 
   	#ifdef debug_G4Scatterer
-       G4cout << "size of FS: "<<products->size()<<G4endl; 
+       G4cout << "size of FS: "<<products->size()<<G4endl;
 	#endif
 
        G4KineticTrack *final= products->operator[](0);
@@ -332,7 +338,7 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
        }
        G4cout << "Scatterer costh= " << trk1.Get4Momentum().vect().unit() *(products->operator[](0))->Get4Momentum().vect().unit()<< G4endl;
        #endif
-       
+
        for(size_t hpw=0; hpw<products->size(); hpw++)
        {
          energyBalance-=products->operator[](hpw)->Get4Momentum().t();
@@ -363,14 +369,15 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
              "Problem in ChargeBalance");
        }
        return products;
-     } 
-   } 
-   
+     }
+   }
+
    return NULL;
 }
 
+//----------------------------------------------------------------------------
 
-G4VCollision* G4Scatterer::FindCollision(const G4KineticTrack& trk1, 
+G4VCollision* G4Scatterer::FindCollision(const G4KineticTrack& trk1,
 					 const G4KineticTrack& trk2)
 {
   G4VCollision* collisionInCharge = 0;
@@ -387,7 +394,7 @@ G4VCollision* G4Scatterer::FindCollision(const G4KineticTrack& trk1,
     }
 //    if(collisionInCharge)
 //    {
-//      G4cout << "found collision : " 
+//      G4cout << "found collision : "
 //         << collisionInCharge->GetName()<< " "
 // 	<< "for "
 // 	<< trk1.GetDefinition()->GetParticleName()<<" + "
@@ -396,9 +403,11 @@ G4VCollision* G4Scatterer::FindCollision(const G4KineticTrack& trk1,
 //    }
   return collisionInCharge;
 }
-  
-G4double G4Scatterer::GetCrossSection(const G4KineticTrack& trk1, 
-				      const G4KineticTrack& trk2)  
+
+//----------------------------------------------------------------------------
+
+G4double G4Scatterer::GetCrossSection(const G4KineticTrack& trk1,
+				      const G4KineticTrack& trk2)
 {
    G4VCollision* collision = FindCollision(trk1,trk2);
    G4double aCrossSection = 0;
@@ -409,9 +418,10 @@ G4double G4Scatterer::GetCrossSection(const G4KineticTrack& trk1,
    return aCrossSection;
 }
 
+//----------------------------------------------------------------------------
 
 const std::vector<G4CollisionInitialState *> & G4Scatterer::
-GetCollisions(G4KineticTrack * aProjectile, 
+GetCollisions(G4KineticTrack * aProjectile,
               std::vector<G4KineticTrack *> & someCandidates,
 	      G4double aCurrentTime)
 {
@@ -428,16 +438,17 @@ GetCollisions(G4KineticTrack * aProjectile,
     aTarget.push_back(*j);
     theCollisions.push_back(
       new G4CollisionInitialState(collisionTime+aCurrentTime, aProjectile, aTarget, this) );
-//      G4cerr <<" !!!!!! debug collisions "<<collisionTime<<" "<<pkt->GetDefinition()->GetParticleName()<<G4endl;      
+//      G4cerr <<" !!!!!! debug collisions "<<collisionTime<<" "<<pkt->GetDefinition()->GetParticleName()<<G4endl;
    }
    return theCollisions;
 }
 
 
 G4KineticTrackVector * G4Scatterer::
-GetFinalState(G4KineticTrack * aProjectile, 
+GetFinalState(G4KineticTrack * aProjectile,
 	      std::vector<G4KineticTrack *> & theTargets)
 {
     G4KineticTrack target_reloc(*(theTargets[0]));
     return Scatter(*aProjectile, target_reloc);
 }
+//----------------------------------------------------------------------------
