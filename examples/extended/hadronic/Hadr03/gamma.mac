@@ -1,0 +1,23 @@
+# $Id: testEm1.in,v 1.25 2008-09-12 16:32:25 maire Exp $
+#
+# Macro file for "Hadr14.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setMat Molybdenum100
+/testhadr/det/setSize 100 m 
+#
+/run/initialize
+#
+/gun/particle gamma
+/gun/energy 20 MeV
+#
+/analysis/setFileName gamma
+/analysis/h1/set 2  100  -1. 30 keV	#recoil ion
+/analysis/h1/set 11 100 -10.  1 MeV	#Q
+#
+/testhadr/event/printModulo 1000
+#
+/run/beamOn 10000
