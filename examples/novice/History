@@ -15,12 +15,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 December 2012 Ivana Hrivnacova (exNovice-V09-06-03)
+- Removed N04, N07 from the novice examples
+  (moved in extended/runAndEvent/RE05,RE06)
+
+17 December 2012 Peter Gumplinger (exNovice-V09-06-02)
+- Removed N06 from the novice examples
+  (moved in extended/optical/OpNovice)
+
 15 December 2012 Ivana Hrivnacova (exNovice-V09-06-01)
 - Removed N05 from CMakeLists.txt and GNUmakefile
 - Set keyword Id property on files having cvs $Id (Gunter)
 
 13 December 2012 Ivana Hrivnacova (exNovice-V09-06-00)
-- Moved N05 example in extented/parameterisations/Par01
+- Moved N05 example in extended/parameterisations/Par01
 
 08 October 2012 Ivana Hrivnacova (exNovice-V09-05-01)
 - Adding back copying pythia_event.data in N04/CMakeLists.txt;

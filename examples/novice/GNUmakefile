@@ -9,7 +9,7 @@ endif
  
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIRS = N01 N02 N03 N04 N06 N07
+SUBDIRS = N01 N02 N03
 
 .PHONY : all clean clean_libs
 
