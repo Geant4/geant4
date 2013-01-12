@@ -75,7 +75,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/inclxx/utils/sources.cmake
             hadronic/models/inclxx/incl_physics/sources.cmake
             hadronic/models/inclxx/interface/sources.cmake
-            hadronic/models/isotope_production/sources.cmake
             hadronic/models/lend/sources.cmake
             hadronic/models/lepto_nuclear/sources.cmake
             hadronic/models/lll_fission/sources.cmake
