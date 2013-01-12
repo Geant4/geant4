@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+04-01-13 mma (exampleN03-V09-06-00)
+- RunAction: compute error on mean = rms/sqrt(n)
+     
 02-11-2012 L.Garnier Tag (exampleN03-V09-05-02)
 - Fix CMakeFile.txt, gui.mac and icons.mac. Now ok for cmake
      
