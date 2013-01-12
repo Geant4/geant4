@@ -51,15 +51,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4DecayPhysics.hh"
 
-#include "G4LEPionPlusInelastic.hh"
-#include "G4LEPionMinusInelastic.hh"
-#include "G4LEProtonInelastic.hh"
-#include "G4LENeutronInelastic.hh"
-#include "G4RPGPiPlusInelastic.hh"
-#include "G4RPGPiMinusInelastic.hh"
-#include "G4RPGProtonInelastic.hh"
-#include "G4RPGNeutronInelastic.hh"
-
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
@@ -137,47 +128,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   Test30VSecondaryGenerator* sg = 0;
 
   // Choose generator
-  if(gen_name == "lhep") {
-    if(part_name == "proton")   
-      sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
-    else if(part_name == "pi+") 
-      sg = new Test30VSecondaryGenerator(new G4LEPionPlusInelastic(),mat);
-    else if(part_name == "pi-") 
-      sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
-    else if(part_name == "neutron") 
-      sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
-    else {
-      G4cout << "Test30Physics::GetProcess FATAL ERROR: LHEP in test30 "
-	     << "is not applicable for " << part_name << G4endl;
-      exit(0);
-    }
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "rpg") {
-    if(part_name == "proton")   
-      sg = new Test30VSecondaryGenerator(new G4RPGProtonInelastic(),mat);
-    else if(part_name == "pi+") 
-      sg = new Test30VSecondaryGenerator(new G4RPGPiPlusInelastic(),mat);
-    else if(part_name == "pi-") 
-      sg = new Test30VSecondaryGenerator(new G4RPGPiMinusInelastic(),mat);
-    else if(part_name == "neutron") 
-      sg = new Test30VSecondaryGenerator(new G4RPGNeutronInelastic(),mat);
-    else {
-      G4cout << "Test30Physics::GetProcess FATAL ERROR: RPG in test30 "
-	     << "is not applicable for " << part_name << G4endl;
-      exit(0);
-    }
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-    //  } else if(gen_name == "Elastic") {
-    //    G4HadronElastic* els = new G4HadronElastic();
-    //    sg = new Test30VSecondaryGenerator(els, mat);
-    //    theProcess->SetSecondaryGenerator(sg);
-    //    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "preco") {
+  if(gen_name == "preco") {
     sg = new Test30VSecondaryGenerator(thePreCompound,mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);

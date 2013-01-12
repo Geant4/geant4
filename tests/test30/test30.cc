@@ -423,9 +423,10 @@ int main(int argc, char** argv)
       } else if(line == "#generator") {
 	nameGen = "";
         (*fin) >> nameGen;
-	if (nameGen == "" || nameGen == "chips") {
+	if (nameGen == "" || nameGen == "chips" || 
+	    nameGen == "lepar" || nameGen == "rpg") {
+	  G4cout << "Generator " << nameGen << " is not allowed" << G4endl; 
           nameGen = "";
-	  G4cout << "Generator name is empty! " << G4endl; 
 	  continue;
 	}
         usepaw = true;
