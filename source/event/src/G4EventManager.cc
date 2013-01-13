@@ -43,7 +43,7 @@
 #include "G4Navigator.hh"
 #include "Randomize.hh"
 
-G4EventManager* G4EventManager::fpEventManager = 0;
+__thread G4EventManager* G4EventManager::fpEventManager = 0;
 G4EventManager* G4EventManager::GetEventManager()
 { return fpEventManager; }
 
@@ -339,7 +339,7 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 
 void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent)
 {
-  static G4String randStat;
+  static __thread G4String *randStat_G4MT_TLS_ = 0 ; if (!randStat_G4MT_TLS_) randStat_G4MT_TLS_ = new  G4String  ;  G4String &randStat = *randStat_G4MT_TLS_;
   trackIDCounter = 0;
   G4bool tempEvent = false;
   if(!anEvent)

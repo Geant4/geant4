@@ -145,7 +145,7 @@ private:
   G4bool kbSetModalityVoxelSize;
   G4bool kbModelingTrajectory;
 
-  static G4int	kSceneIdCount;
+  static __thread G4int	kSceneIdCount;
   //std::vector<float *> fTrajectories;
   //std::vector<unsigned char *> fTrajectoryColors;
   G4Transform3D kVolumeTrans3D;

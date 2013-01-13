@@ -226,7 +226,7 @@ class G4AdjointSimManager
 
   private: 
   
-    static G4AdjointSimManager* instance;
+    static __thread G4AdjointSimManager* instance;
   
   private: // methods
     

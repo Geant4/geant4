@@ -62,7 +62,7 @@
 #include <sstream>
 
 /////////////////////////////////////////
-G4int G4ProcessTableMessenger::NumberOfProcessType = 10;
+__thread G4int G4ProcessTableMessenger::NumberOfProcessType = 10;
 
 //////////////////////////
 G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)

@@ -65,7 +65,7 @@ private:
 
   G4HadronicInteractionRegistry();
 
-  static G4HadronicInteractionRegistry* theInstance;
+  static __thread G4HadronicInteractionRegistry* theInstance;
   
   std::vector <G4HadronicInteraction*>  allModels;
 

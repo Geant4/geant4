@@ -312,21 +312,21 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   // The coffecient from Table.4 of Ziegler & Manoyan
   const G4double HeEff = 2.8735 ;    
   
-  static G4String name[numberOfMolecula] = {
-    "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
-    "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
-    "C_6H_6",    "C_4H_10",    "C_4H_6",   "C_4H_8O",            "CCl_4",
-    "CF_4",      "C_6H_8",     "C_6H_12",  "C_6H_10O",           "C_6H_10",
-    "C_8H_16",   "C_5H_10",    "C_5H_8",   "C_3H_6-Cyclopropane","C_2H_4F_2",
-    "C_2H_2F_2", "C_4H_8O_2",  "C_2H_6",   "C_2F_6",             "C_2H_6O",
-    "C_3H_6O",   "C_4H_10O",   "C_2H_4",   "C_2H_4O",            "C_2H_4S",
-    "SH_2",      "CH_4",       "CCLF_3",   "CCl_2F_2",           "CHCl_2F",
-    "(CH_3)_2S", "N_2O",       "C_5H_10O", "C_8H_6",             "(CH_2)_N",
-    "(C_3H_6)_N","(C_8H_8)_N", "C_3H_8",   "C_3H_6-Propylene",   "C_3H_6O",
-    "C_3H_6S",   "C_4H_4S",    "C_7H_8"
-  } ;
+  static __thread G4String *name = 0 ; if (!name) {name = new  G4String [numberOfMolecula]  ; name[0]=
+    "H_2O";name[1]=      "C_2H_4O";name[2]=    "C_3H_6O";name[3]=  "C_2H_2";name[4]=             "C_H_3OH";name[5]=
+    "C_2H_5OH";name[6]=  "C_3H_7OH";name[7]=   "C_3H_4";name[8]=   "NH_3";name[9]=               "C_14H_10";name[10]=
+    "C_6H_6";name[11]=    "C_4H_10";name[12]=    "C_4H_6";name[13]=   "C_4H_8O";name[14]=            "CCl_4";name[15]=
+    "CF_4";name[16]=      "C_6H_8";name[17]=     "C_6H_12";name[18]=  "C_6H_10O";name[19]=           "C_6H_10";name[20]=
+    "C_8H_16";name[21]=   "C_5H_10";name[22]=    "C_5H_8";name[23]=   "C_3H_6-Cyclopropane";name[24]="C_2H_4F_2";name[25]=
+    "C_2H_2F_2";name[26]= "C_4H_8O_2";name[27]=  "C_2H_6";name[28]=   "C_2F_6";name[29]=             "C_2H_6O";name[30]=
+    "C_3H_6O";name[31]=   "C_4H_10O";name[32]=   "C_2H_4";name[33]=   "C_2H_4O";name[34]=            "C_2H_4S";name[35]=
+    "SH_2";name[36]=      "CH_4";name[37]=       "CCLF_3";name[38]=   "CCl_2F_2";name[39]=           "CHCl_2F";name[40]=
+    "(CH_3)_2S";name[41]= "N_2O";name[42]=       "C_5H_10O";name[43]= "C_8H_6";name[44]=             "(CH_2)_N";name[45]=
+    "(C_3H_6)_N";name[46]="(C_8H_8)_N";name[47]= "C_3H_8";name[48]=   "C_3H_6-Propylene";name[49]=   "C_3H_6O";name[50]=
+    "C_3H_6S";name[51]=   "C_4H_4S";name[52]=    "C_7H_8"
+  ;} ;
     
-  static G4double expStopping[numberOfMolecula] = {
+  static __thread G4double expStopping[numberOfMolecula] = {
      66.1,  190.4, 258.7,  42.2, 141.5, 
     210.9,  279.6, 198.8,  31.0, 267.5,
     122.8,  311.4, 260.3, 328.9, 391.3,
@@ -340,7 +340,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     306.8,  324.4, 420.0
   } ;
 
-  static G4double expCharge[numberOfMolecula] = {
+  static __thread G4double expCharge[numberOfMolecula] = {
     HeEff, HeEff, HeEff,   1.0, HeEff, 
     HeEff, HeEff, HeEff,   1.0,   1.0,
       1.0, HeEff, HeEff, HeEff, HeEff,
@@ -354,7 +354,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     HeEff, HeEff, HeEff
   } ;
 
-  static G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
+  static __thread G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
     3.0,  7.0, 10.0,  4.0,  6.0,  
     9.0, 12.0,  7.0,  4.0, 24.0,
     12.0, 14.0, 10.0, 13.0,  5.0,

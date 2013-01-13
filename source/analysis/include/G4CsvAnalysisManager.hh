@@ -141,7 +141,7 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
   private:
     // static data members
     //
-    static G4CsvAnalysisManager* fgInstance;
+    static __thread G4CsvAnalysisManager* fgInstance;
 
     // methods
     //

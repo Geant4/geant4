@@ -177,3 +177,7 @@ double G4VScatteringCollision::SampleResonanceMass(const double poleMass,
     return BrWigInv(f, gamma, poleMass);
   }
 }
+
+void G4VScatteringCollision::establish_G4MT_TLS_G4VScatteringCollision(){establish_G4MT_TLS_G4VCollision(); 
+  theAngularDistribution = new G4AngularDistribution(true);
+}

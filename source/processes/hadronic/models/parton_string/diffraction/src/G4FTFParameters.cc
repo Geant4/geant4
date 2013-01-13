@@ -67,6 +67,9 @@ G4FTFParameters::G4FTFParameters() :
 
 G4FTFParameters::~G4FTFParameters()
 {}
+
+__thread bool G4FTFParameters::chipsComponentXSisInitialized = false;
+__thread G4ChipsComponentXS* G4FTFParameters::chipsComponentXSinstance = 0;
 //**********************************************************************************************
 G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle, 
                                                    G4int      theA,
@@ -128,7 +131,15 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
     TargetMass     /=GeV; TargetMass2     /=(GeV*GeV);
     ProjectileMass /=GeV; ProjectileMass2 /=(GeV*GeV);
 
-    static G4ChipsComponentXS* _instance = new G4ChipsComponentXS();  // Witek Pokorski
+    // Andrea Dotti (13Jan2013):
+    //The following lines are changed for G4MT. Originally the code was:
+    //    static G4ChipsComponentXS* _instance = new G4ChipsComponentXS();  // Witek Pokorski
+    //Note the code could go back at original if _instance could be shared among threads
+    if (!chipsComponentXSisInitialized) {
+      chipsComponentXSisInitialized = true;
+      chipsComponentXSinstance = new G4ChipsComponentXS();
+    }
+    G4ChipsComponentXS* _instance = chipsComponentXSinstance;
     FTFxsManager = _instance;
 
     Plab/=GeV;

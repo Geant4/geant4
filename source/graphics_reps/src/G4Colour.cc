@@ -79,12 +79,12 @@ G4bool G4Colour::operator != (const G4Colour& c) const {
   return false;
 }
 
-std::map<G4String, G4Colour> G4Colour::fColourMap;
-bool G4Colour::fInitColourMap = false;
+__thread std::map<G4String, G4Colour> *G4Colour::fColourMap_G4MT_TLS_ = 0;
+__thread bool G4Colour::fInitColourMap = false;
 
 void
 G4Colour::AddToMap(const G4String& key, const G4Colour& colour) 
-{
+{  ;;;   if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ; std::map<G4String, G4Colour> &fColourMap = *fColourMap_G4MT_TLS_;  ;;;  
   // Convert to lower case since colour map is case insensitive
   G4String myKey(key);
   myKey.toLower();
@@ -104,7 +104,7 @@ G4Colour::AddToMap(const G4String& key, const G4Colour& colour)
 
 void
 G4Colour::InitialiseColourMap() 
-{
+{  ;;;   if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ; std::map<G4String, G4Colour> &fColourMap = *fColourMap_G4MT_TLS_;  ;;;  
   // Standard colours
   AddToMap("white",   G4Colour::White());
   AddToMap("grey",    G4Colour::Grey());
@@ -121,7 +121,7 @@ G4Colour::InitialiseColourMap()
 
 bool
 G4Colour::GetColour(const G4String& key, G4Colour& result) 
-{
+{  ;;;   if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ; std::map<G4String, G4Colour> &fColourMap = *fColourMap_G4MT_TLS_;  ;;;  
   if (false == fInitColourMap) {
     fInitColourMap = true;
     // Add standard colours to map
@@ -142,7 +142,7 @@ G4Colour::GetColour(const G4String& key, G4Colour& result)
 }
 
 const std::map<G4String, G4Colour>& G4Colour::GetMap()
-{
+{  ;;;   if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ; std::map<G4String, G4Colour> &fColourMap = *fColourMap_G4MT_TLS_;  ;;;  
   if (false == fInitColourMap) {
     fInitColourMap = true;
     // Add standard colours to map

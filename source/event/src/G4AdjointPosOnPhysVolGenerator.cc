@@ -43,14 +43,14 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 
-G4AdjointPosOnPhysVolGenerator* G4AdjointPosOnPhysVolGenerator::theInstance = 0;
+__thread G4AdjointPosOnPhysVolGenerator* G4AdjointPosOnPhysVolGenerator::theInstance = 0;
 
 ////////////////////////////////////////////////////
 //
 G4AdjointPosOnPhysVolGenerator* G4AdjointPosOnPhysVolGenerator::GetInstance()
 {
   if(theInstance == 0) {
-    static G4AdjointPosOnPhysVolGenerator manager;
+    static __thread G4AdjointPosOnPhysVolGenerator *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4AdjointPosOnPhysVolGenerator  ;  G4AdjointPosOnPhysVolGenerator &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;

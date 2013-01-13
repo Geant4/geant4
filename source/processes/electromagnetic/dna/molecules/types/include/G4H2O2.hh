@@ -50,7 +50,7 @@
 class G4H2O2 : public G4MoleculeDefinition
 {
 private:
-    static G4H2O2* theInstance;
+    static __thread G4H2O2* theInstance;
     G4H2O2() {}
     virtual ~G4H2O2() {}
 

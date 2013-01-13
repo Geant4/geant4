@@ -73,7 +73,7 @@ protected:
 
   // In the derived class, override G4VScenehandler::RequestPrimitives
   // to implement dump of the geometry hierarchy.
-  static G4int         fSceneIdCount;  // Counter for Tree scene handlers.
+  static __thread G4int         fSceneIdCount;  // Counter for Tree scene handlers.
   const G4Transform3D* fpCurrentObjectTransformation;
   std::set<G4LogicalVolume*> fDrawnLVStore;  // Stores encountered LVs.
 };

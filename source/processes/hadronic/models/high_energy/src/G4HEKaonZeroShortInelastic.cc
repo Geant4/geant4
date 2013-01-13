@@ -235,9 +235,9 @@ G4HEKaonZeroShortInelastic::FirstIntInCasKaonZero(G4bool& inElastic,
   G4int targetCode = targetParticle.getCode();
   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
 
-  static G4bool first = true;
-  static G4double protmul[numMul], protnorm[numSec];  // proton constants
-  static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
+  static __thread G4bool first = true;
+  static __thread G4double protmul[numMul], protnorm[numSec];  // proton constants
+  static __thread G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
 
   // misc. local variables
   // npos = number of pi+,  nneg = number of pi-,  nzero = number of pi0
@@ -559,9 +559,9 @@ G4HEKaonZeroShortInelastic::FirstIntInCasAntiKaonZero(G4bool& inElastic,
   G4int targetCode = targetParticle.getCode();
   G4double incidentTotalMomentum = incidentParticle.getTotalMomentum();
 
-  static G4bool first = true;
-  static G4double protmul[numMul], protnorm[numSec];  // proton constants
-  static G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
+  static __thread G4bool first = true;
+  static __thread G4double protmul[numMul], protnorm[numSec];  // proton constants
+  static __thread G4double neutmul[numMul], neutnorm[numSec];  // neutron constants
 
   // misc. local variables
   // npos = number of pi+,  nneg = number of pi-,  nzero = number of pi0

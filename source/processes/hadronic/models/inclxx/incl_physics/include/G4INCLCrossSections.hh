@@ -82,18 +82,30 @@ namespace G4INCL {
      *
      * Used to determine the universe radius at any energy.
      */
+    static __thread bool interactionDistanceNN1GeVisInitialized;
+    static __thread G4double interactionDistanceNN1GeVanswer;
     static G4double interactionDistanceNN1GeV() {
-      static G4double answer = CrossSections::interactionDistanceNN(1000.);
-      return answer;
+      //Need special treatment to handle TLS...
+      if (!interactionDistanceNN1GeVisInitialized) {
+	interactionDistanceNN1GeVisInitialized = true;
+	interactionDistanceNN1GeVanswer = CrossSections::interactionDistanceNN(1000.);
+      }
+      return interactionDistanceNN1GeVanswer;
     }
 
     /** \brief The interaction distance for pions at 1 GeV.
      *
      * Used to determine the universe radius at any energy.
      */
+    static __thread bool interactionDistancePiN1GeVisInitialized;
+    static __thread G4double interactionDistancePiN1GeVanswer;
     static G4double interactionDistancePiN1GeV() {
-      static G4double answer = CrossSections::interactionDistancePiN(1000.);
-      return answer;
+      if (!interactionDistancePiN1GeVisInitialized) {
+	interactionDistancePiN1GeVisInitialized = true;
+	interactionDistancePiN1GeVanswer = CrossSections::interactionDistancePiN(1000.);
+      }
+      //static G4double answer = CrossSections::interactionDistancePiN(1000.);
+      return interactionDistancePiN1GeVanswer;
     }
 
   private:

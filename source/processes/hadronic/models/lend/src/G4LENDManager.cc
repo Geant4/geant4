@@ -42,7 +42,7 @@
 
 #include "G4Neutron.hh"
 
-G4LENDManager* G4LENDManager::lend_manager = NULL;
+__thread G4LENDManager* G4LENDManager::lend_manager = NULL;
 
 G4LENDManager::G4LENDManager()
 :verboseLevel( 0 )

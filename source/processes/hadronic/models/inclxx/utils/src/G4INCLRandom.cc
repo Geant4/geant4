@@ -46,13 +46,13 @@
 
 namespace G4INCL {
 
-  IRandomGenerator* Random::theGenerator;
+  __thread IRandomGenerator* Random::theGenerator;
 
   G4double Random::gauss(G4double sigma) {
     // generate a Gaussian random number with standard deviation sigma
     // uses the flat() and flat0() methods
-    static G4bool generated = false;
-    static G4double u, v;
+    static __thread G4bool generated = false;
+    static __thread G4double u, v;
 
     if( !generated )
     {

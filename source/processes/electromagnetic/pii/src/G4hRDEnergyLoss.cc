@@ -84,77 +84,77 @@
 
 // The following vectors have a fixed dimension this means that if they are
 // filled in with more than 100 elements will corrupt the memory.
-G4int G4hRDEnergyLoss::NumberOfProcesses = 1 ;
+__thread G4int G4hRDEnergyLoss::NumberOfProcesses = 1 ;
 
-G4int            G4hRDEnergyLoss::CounterOfProcess = 0 ;
-G4PhysicsTable** G4hRDEnergyLoss::RecorderOfProcess =
-  new G4PhysicsTable*[100] ;
+__thread G4int            G4hRDEnergyLoss::CounterOfProcess = 0 ;
+__thread G4PhysicsTable** G4hRDEnergyLoss::RecorderOfProcess  = 0 
+;
 
-G4int            G4hRDEnergyLoss::CounterOfpProcess = 0 ;
-G4PhysicsTable** G4hRDEnergyLoss::RecorderOfpProcess =
-  new G4PhysicsTable*[100] ;
+__thread G4int            G4hRDEnergyLoss::CounterOfpProcess = 0 ;
+__thread G4PhysicsTable** G4hRDEnergyLoss::RecorderOfpProcess  = 0 
+;
 
-G4int            G4hRDEnergyLoss::CounterOfpbarProcess = 0 ;
-G4PhysicsTable** G4hRDEnergyLoss::RecorderOfpbarProcess =
-  new G4PhysicsTable*[100] ;
+__thread G4int            G4hRDEnergyLoss::CounterOfpbarProcess = 0 ;
+__thread G4PhysicsTable** G4hRDEnergyLoss::RecorderOfpbarProcess  = 0 
+;
 
-G4PhysicsTable* G4hRDEnergyLoss::theDEDXpTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theDEDXpbarTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theRangepTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theRangepbarTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theInverseRangepTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theInverseRangepbarTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theLabTimepTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theLabTimepbarTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theProperTimepTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theProperTimepbarTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theDEDXpTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theDEDXpbarTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theRangepTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theRangepbarTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theInverseRangepTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theInverseRangepbarTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theLabTimepTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theLabTimepbarTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theProperTimepTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theProperTimepbarTable = 0 ;
 
-G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffATable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffBTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffCTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffATable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffBTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffCTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffATable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffBTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffCTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffATable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffBTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffCTable = 0 ;
 
-G4PhysicsTable* G4hRDEnergyLoss::theDEDXTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theRangeTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theInverseRangeTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theLabTimeTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theProperTimeTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theDEDXTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theRangeTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theInverseRangeTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theLabTimeTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theProperTimeTable = 0 ;
 
-G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffATable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffBTable = 0 ;
-G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffCTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffATable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffBTable = 0 ;
+__thread G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffCTable = 0 ;
 
 //const G4Proton* G4hRDEnergyLoss::theProton=G4Proton::Proton() ;
 //const G4AntiProton* G4hRDEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
 
-G4double G4hRDEnergyLoss::ParticleMass;
-G4double G4hRDEnergyLoss::ptableElectronCutInRange = 0.0*mm ;
-G4double G4hRDEnergyLoss::pbartableElectronCutInRange = 0.0*mm ;
+__thread G4double G4hRDEnergyLoss::ParticleMass;
+__thread G4double G4hRDEnergyLoss::ptableElectronCutInRange = 0.0*mm ;
+__thread G4double G4hRDEnergyLoss::pbartableElectronCutInRange = 0.0*mm ;
 
-G4double G4hRDEnergyLoss::Mass,
+__thread G4double G4hRDEnergyLoss::Mass,
   G4hRDEnergyLoss::taulow, 
   G4hRDEnergyLoss::tauhigh, 
   G4hRDEnergyLoss::ltaulow, 
   G4hRDEnergyLoss::ltauhigh; 
 
-G4double G4hRDEnergyLoss::dRoverRange = 0.20 ;
-G4double G4hRDEnergyLoss::finalRange = 200.*micrometer ;
+__thread G4double G4hRDEnergyLoss::dRoverRange = 0.20 ;
+__thread G4double G4hRDEnergyLoss::finalRange = 200.*micrometer ;
 
-G4double     G4hRDEnergyLoss::c1lim = dRoverRange ;
-G4double     G4hRDEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange ;
-G4double     G4hRDEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
+__thread G4double     G4hRDEnergyLoss::c1lim =(0.20);
+__thread G4double     G4hRDEnergyLoss::c2lim =2.*(1.-(0.20))*(200.*micrometer);
+__thread G4double     G4hRDEnergyLoss::c3lim =-(1.-(0.20))*(200.*micrometer)*(200.*micrometer);
 
-G4double         G4hRDEnergyLoss::Charge ;   
+__thread G4double         G4hRDEnergyLoss::Charge ;   
 
-G4bool   G4hRDEnergyLoss::rndmStepFlag   = false ;
-G4bool   G4hRDEnergyLoss::EnlossFlucFlag = true ;
+__thread G4bool   G4hRDEnergyLoss::rndmStepFlag   = false ;
+__thread G4bool   G4hRDEnergyLoss::EnlossFlucFlag = true ;
 
-G4double G4hRDEnergyLoss::LowestKineticEnergy = 10.*eV;
-G4double G4hRDEnergyLoss::HighestKineticEnergy= 100.*GeV;
-G4int    G4hRDEnergyLoss::TotBin = 360;
-G4double G4hRDEnergyLoss::RTable,G4hRDEnergyLoss::LOGRTable;
+__thread G4double G4hRDEnergyLoss::LowestKineticEnergy = 10.*eV;
+__thread G4double G4hRDEnergyLoss::HighestKineticEnergy= 100.*GeV;
+__thread G4int    G4hRDEnergyLoss::TotBin = 360;
+__thread G4double G4hRDEnergyLoss::RTable,G4hRDEnergyLoss::LOGRTable;
 
 //--------------------------------------------------------------------------------
 
@@ -170,12 +170,12 @@ G4hRDEnergyLoss::G4hRDEnergyLoss(const G4String& processName)
     theLossTable(0),
     linLossLimit(0.05),
     MinKineticEnergy(0.0) 
-{;}
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  ;}
 
 //--------------------------------------------------------------------------------
 
 G4hRDEnergyLoss::~G4hRDEnergyLoss() 
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   if(theLossTable) {
     theLossTable->clearAndDestroy();
     delete theLossTable;
@@ -185,56 +185,56 @@ G4hRDEnergyLoss::~G4hRDEnergyLoss()
 //--------------------------------------------------------------------------------
 
 G4int G4hRDEnergyLoss::GetNumberOfProcesses()    
-{   
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;     
   return NumberOfProcesses; 
 } 
 
 //--------------------------------------------------------------------------------
 
 void G4hRDEnergyLoss::SetNumberOfProcesses(G4int number)
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   NumberOfProcesses=number; 
 } 
 
 //--------------------------------------------------------------------------------
 
 void G4hRDEnergyLoss::PlusNumberOfProcesses()
-{ 
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;   
   NumberOfProcesses++; 
 } 
 
 //--------------------------------------------------------------------------------
 
 void G4hRDEnergyLoss::MinusNumberOfProcesses()
-{ 
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;   
   NumberOfProcesses--; 
 } 
 
 //--------------------------------------------------------------------------------
 
 void G4hRDEnergyLoss::SetdRoverRange(G4double value) 
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   dRoverRange = value;
 }
 
 //--------------------------------------------------------------------------------
 
 void G4hRDEnergyLoss::SetRndmStep (G4bool   value) 
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   rndmStepFlag = value;
 }
 
 //--------------------------------------------------------------------------------
 
 void G4hRDEnergyLoss::SetEnlossFluc (G4bool value) 
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   EnlossFlucFlag = value;
 }
 
 //--------------------------------------------------------------------------------
 
 void G4hRDEnergyLoss::SetStepFunction (G4double c1, G4double c2)
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   dRoverRange = c1; 
   finalRange = c2;
   c1lim=dRoverRange;
@@ -246,7 +246,7 @@ void G4hRDEnergyLoss::SetStepFunction (G4double c1, G4double c2)
  
 void G4hRDEnergyLoss::BuildDEDXTable(
 				     const G4ParticleDefinition& aParticleType)
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   //  calculate data members TotBin,LOGRTable,RTable first
 
   const G4ProductionCutsTable* theCoupleTable=
@@ -375,7 +375,7 @@ void G4hRDEnergyLoss::BuildDEDXTable(
 void G4hRDEnergyLoss::BuildRangeTable(
 				      const G4ParticleDefinition& aParticleType)
 // Build range table from the energy loss table
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   Mass = aParticleType.GetPDGMass();
 
   const G4ProductionCutsTable* theCoupleTable=
@@ -416,7 +416,7 @@ void G4hRDEnergyLoss::BuildRangeTable(
 
 void G4hRDEnergyLoss::BuildTimeTables(
 				      const G4ParticleDefinition& aParticleType)
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
 
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
@@ -476,7 +476,7 @@ void G4hRDEnergyLoss::BuildTimeTables(
 void G4hRDEnergyLoss::BuildRangeVector(G4int materialIndex,
 				       G4PhysicsLogVector* rangeVector)
 //  create range vector for a material
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   G4bool isOut;
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
   G4double energy1 = rangeVector->GetLowEdgeEnergy(0);
@@ -509,7 +509,7 @@ void G4hRDEnergyLoss::BuildRangeVector(G4int materialIndex,
 void G4hRDEnergyLoss::BuildLabTimeVector(G4int materialIndex,
 					 G4PhysicsLogVector* timeVector)
 //  create lab time vector for a material
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
 
   G4int nbin=100;
   G4bool isOut;
@@ -570,7 +570,7 @@ void G4hRDEnergyLoss::BuildLabTimeVector(G4int materialIndex,
 void G4hRDEnergyLoss::BuildProperTimeVector(G4int materialIndex,
 					    G4PhysicsLogVector* timeVector)
 //  create proper time vector for a material
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   G4int nbin=100;
   G4bool isOut;
   G4double tlim=5.*keV,parlowen=0.4,ppar=0.5-parlowen ;
@@ -630,7 +630,7 @@ void G4hRDEnergyLoss::BuildProperTimeVector(G4int materialIndex,
 G4double G4hRDEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
 				      G4int nbin)
 //  num. integration, linear binning
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   G4double dtau,Value,taui,ti,lossi,ci;
   G4bool isOut;
   dtau = (tauhigh-taulow)/nbin;
@@ -661,7 +661,7 @@ G4double G4hRDEnergyLoss::RangeIntLin(G4PhysicsVector* physicsVector,
 G4double G4hRDEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
 				      G4int nbin)
 //  num. integration, logarithmic binning
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   G4double ltt,dltau,Value,ui,taui,ti,lossi,ci;
   G4bool isOut;
   ltt = ltauhigh-ltaulow;
@@ -694,7 +694,7 @@ G4double G4hRDEnergyLoss::RangeIntLog(G4PhysicsVector* physicsVector,
 G4double G4hRDEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
 					G4int nbin)
 //  num. integration, logarithmic binning
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   G4double ltt,dltau,Value,ui,taui,ti,lossi,ci;
   G4bool isOut;
   ltt = ltauhigh-ltaulow;
@@ -727,7 +727,7 @@ G4double G4hRDEnergyLoss::LabTimeIntLog(G4PhysicsVector* physicsVector,
 G4double G4hRDEnergyLoss::ProperTimeIntLog(G4PhysicsVector* physicsVector,
 					   G4int nbin)
 //  num. integration, logarithmic binning
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   G4double ltt,dltau,Value,ui,taui,ti,lossi,ci;
   G4bool isOut;
   ltt = ltauhigh-ltaulow;
@@ -761,7 +761,7 @@ void G4hRDEnergyLoss::BuildRangeCoeffATable(
 					    const G4ParticleDefinition& )
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "A"
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
 
   G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
@@ -845,7 +845,7 @@ void G4hRDEnergyLoss::BuildRangeCoeffBTable(
 					    const G4ParticleDefinition& )
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
 
   G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
@@ -921,7 +921,7 @@ void G4hRDEnergyLoss::BuildRangeCoeffCTable(
 					    const G4ParticleDefinition& )
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
 
   G4int numOfCouples = G4ProductionCutsTable::GetProductionCutsTable()->GetTableSize();
 
@@ -991,7 +991,7 @@ void G4hRDEnergyLoss::BuildRangeCoeffCTable(
 void G4hRDEnergyLoss::BuildInverseRangeTable(
 					     const G4ParticleDefinition& aParticleType)
 // Build inverse table of the range table
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   G4bool b;
 
   const G4ProductionCutsTable* theCoupleTable=
@@ -1089,7 +1089,7 @@ void G4hRDEnergyLoss::BuildInverseRangeTable(
 void G4hRDEnergyLoss::InvertRangeVector(G4int materialIndex,
 					G4PhysicsLogVector* aVector)
 //  invert range vector for a material
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   G4double LowEdgeRange,A,B,C,discr,KineticEnergy ;
   G4double Tbin = LowestKineticEnergy/RTable ;
   G4double rangebin = 0.0 ;
@@ -1139,7 +1139,7 @@ void G4hRDEnergyLoss::InvertRangeVector(G4int materialIndex,
 //------------------------------------------------------------------------------
 
 G4bool G4hRDEnergyLoss::CutsWhereModified()
-{
+{  ;;;   if (!RecorderOfpbarProcess) RecorderOfpbarProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfpProcess) RecorderOfpProcess=  new G4PhysicsTable*[100] ;  ;;;    ;;;   if (!RecorderOfProcess) RecorderOfProcess=  new G4PhysicsTable*[100] ;  ;;;  
   G4bool wasModified = false;
   const G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();

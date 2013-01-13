@@ -152,7 +152,7 @@ G4SynchrotronRadiation::GetMeanFreePath( const G4Track& trackData,
       if( perpB > 0.0 ) MeanFreePath = fLambdaConst/perpB;
       else              MeanFreePath = DBL_MAX;
 
-      static G4bool FirstTime=true;
+      static __thread G4bool FirstTime=true;
       if(verboseLevel > 0 && FirstTime)
       {
         G4cout << "G4SynchrotronRadiation::GetMeanFreePath :" << '\n' 
@@ -400,7 +400,7 @@ G4double G4SynchrotronRadiation::GetRandomEnergySR(G4double gamma, G4double perp
 
   G4double Ecr=fEnergyConst*gamma*gamma*perpB;
 
-  static G4bool FirstTime=true;
+  static __thread G4bool FirstTime=true;
   if(verboseLevel > 0 && FirstTime)
   { G4double Emean=8./(15.*std::sqrt(3.))*Ecr; // mean photon energy
     G4double E_rms=std::sqrt(211./675.)*Ecr; // rms of photon energy distribution

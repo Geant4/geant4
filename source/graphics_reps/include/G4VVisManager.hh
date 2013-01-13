@@ -217,7 +217,7 @@ protected:
 
   static void SetConcreteInstance (G4VVisManager*);
 
-  static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
+  static __thread G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
 };
 
 #endif

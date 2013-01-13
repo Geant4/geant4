@@ -39,7 +39,7 @@
 
 struct G4CascadeKzeroPChannelData {
   typedef G4CascadeData<31,2,5,13,22,32,41> data_t;
-  static data_t *data;
+  static __thread data_t *data;
   static data_t *initializer();
 };
 

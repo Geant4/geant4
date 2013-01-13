@@ -41,7 +41,7 @@
 
 class G4QMDParameters 
 {
-      static G4QMDParameters* parameters;
+      static __thread G4QMDParameters* parameters;
      
       G4QMDParameters();
    public:

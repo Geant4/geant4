@@ -121,7 +121,7 @@ private:
   std::vector<G4CrossSectionBuffer> theBuffer;
   
   static const G4int nPoints;
-  static G4double theT[];
+  static __thread G4double theT[];
   
 };
 

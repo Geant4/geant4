@@ -45,8 +45,8 @@
 #include <sstream>
 #include <fstream>
 
-G4UImanager * G4UImanager::fUImanager = 0;
-G4bool G4UImanager::fUImanagerHasBeenKilled = false;
+__thread G4UImanager * G4UImanager::fUImanager = 0;
+__thread G4bool G4UImanager::fUImanagerHasBeenKilled = false;
 
 G4UImanager * G4UImanager::GetUIpointer()
 {

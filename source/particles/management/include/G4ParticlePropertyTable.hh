@@ -99,7 +99,7 @@ class G4ParticlePropertyTable
   
  private:
   G4int verboseLevel;
-  static G4ParticlePropertyTable*  fgParticlePropertyTable;
+  static __thread G4ParticlePropertyTable*  fgParticlePropertyTable;
   
  protected:
   std::vector<G4ParticlePropertyData*> arrayDataObject; 

@@ -44,7 +44,7 @@ namespace GIDI {
 using namespace GIDI;
 #endif
 
-static int nlab_Str = 0, nCOM_Str = 0;
+static __thread int nlab_Str = 0, nCOM_Str = 0;
 static const char lab_Str[] = "lab", COM_Str[] = "centerOfMass";
 /*
 ************************************************************

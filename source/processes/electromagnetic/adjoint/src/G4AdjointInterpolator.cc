@@ -29,12 +29,12 @@
 #include "G4AdjointCSMatrix.hh"
 #include "G4AdjointInterpolator.hh"
 
-G4AdjointInterpolator* G4AdjointInterpolator::theInstance = 0;
+__thread G4AdjointInterpolator* G4AdjointInterpolator::theInstance = 0;
 ///////////////////////////////////////////////////////
 //
 G4AdjointInterpolator* G4AdjointInterpolator::GetAdjointInterpolator()
 { if(theInstance == 0) {
-    static G4AdjointInterpolator interpolator;
+    static __thread G4AdjointInterpolator *interpolator_G4MT_TLS_ = 0 ; if (!interpolator_G4MT_TLS_) interpolator_G4MT_TLS_ = new  G4AdjointInterpolator  ;  G4AdjointInterpolator &interpolator = *interpolator_G4MT_TLS_;
      theInstance = &interpolator;
   }
  return theInstance; 
@@ -43,7 +43,7 @@ G4AdjointInterpolator* G4AdjointInterpolator::GetAdjointInterpolator()
 //
 G4AdjointInterpolator* G4AdjointInterpolator::GetInstance()
 { if(theInstance == 0) {
-    static G4AdjointInterpolator interpolator;
+    static __thread G4AdjointInterpolator *interpolator_G4MT_TLS_ = 0 ; if (!interpolator_G4MT_TLS_) interpolator_G4MT_TLS_ = new  G4AdjointInterpolator  ;  G4AdjointInterpolator &interpolator = *interpolator_G4MT_TLS_;
      theInstance = &interpolator;
   }
  return theInstance; 

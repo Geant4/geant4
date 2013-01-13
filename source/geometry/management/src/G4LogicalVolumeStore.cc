@@ -43,8 +43,8 @@
 // ***************************************************************************
 //
 G4LogicalVolumeStore* G4LogicalVolumeStore::fgInstance = 0;
-G4VStoreNotifier* G4LogicalVolumeStore::fgNotifier = 0;
-G4bool G4LogicalVolumeStore::locked = false;
+__thread G4VStoreNotifier* G4LogicalVolumeStore::fgNotifier = 0;
+__thread G4bool G4LogicalVolumeStore::locked = false;
 
 // ***************************************************************************
 // Protected constructor: Construct underlying container with

@@ -78,7 +78,7 @@ private:
   MapForHEP     managersForHEP;
   G4String      dirName;
 
-  static G4NuclearLevelStore* theInstance;
+  static __thread G4NuclearLevelStore* theInstance;
 
   G4bool userFiles;
   std::map<G4int, G4String> theUserDataFiles;

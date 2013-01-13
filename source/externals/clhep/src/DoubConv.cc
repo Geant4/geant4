@@ -13,8 +13,8 @@
 
 namespace CLHEP {
 
-bool DoubConv::byte_order_known = false;
-int  DoubConv::byte_order[8];
+__thread bool DoubConv::byte_order_known = false;
+__thread int  DoubConv::byte_order[8];
 
 void DoubConv::fill_byte_order () {
   double x = 1.0;

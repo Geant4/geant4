@@ -52,28 +52,28 @@ namespace G4INCL {
   const NaturalIsotopicDistributions *ParticleTable::theNaturalIsotopicDistributions = NULL;
 
   /// \brief Static pointer to the mass function for nuclei
-  ParticleTable::NuclearMassFn ParticleTable::getTableMass;
+  __thread ParticleTable::NuclearMassFn ParticleTable::getTableMass;
   /// \brief Static pointer to the mass function for particles
-  ParticleTable::ParticleMassFn ParticleTable::getTableParticleMass;
+  __thread ParticleTable::ParticleMassFn ParticleTable::getTableParticleMass;
   /// \brief Static pointer to the separation-energy function
-  ParticleTable::SeparationEnergyFn ParticleTable::getSeparationEnergy;
+  __thread ParticleTable::SeparationEnergyFn ParticleTable::getSeparationEnergy;
 
   const G4double ParticleTable::theINCLNucleonMass = 938.2796;
   const G4double ParticleTable::theINCLPionMass = 138.0;
-  G4double ParticleTable::protonMass = 0.0;
-  G4double ParticleTable::neutronMass = 0.0;
-  G4double ParticleTable::piPlusMass = 0.0;
-  G4double ParticleTable::piMinusMass = 0.0;
-  G4double ParticleTable::piZeroMass = 0.0;
+  __thread G4double ParticleTable::protonMass = 0.0;
+  __thread G4double ParticleTable::neutronMass = 0.0;
+  __thread G4double ParticleTable::piPlusMass = 0.0;
+  __thread G4double ParticleTable::piMinusMass = 0.0;
+  __thread G4double ParticleTable::piZeroMass = 0.0;
 
   // e^2/(4 pi epsilon_0) [MeV fm]
   const G4double ParticleTable::eSquared = 1.439964;
 
   // Hard-coded values of the real particle masses (MeV/c^2)
-  G4double ParticleTable::theRealProtonMass = 938.27203;
-  G4double ParticleTable::theRealNeutronMass = 939.56536;
-  G4double ParticleTable::theRealChargedPiMass = 139.57018;
-  G4double ParticleTable::theRealPiZeroMass = 134.9766;
+  __thread G4double ParticleTable::theRealProtonMass = 938.27203;
+  __thread G4double ParticleTable::theRealNeutronMass = 939.56536;
+  __thread G4double ParticleTable::theRealChargedPiMass = 139.57018;
+  __thread G4double ParticleTable::theRealPiZeroMass = 134.9766;
 
   const G4double ParticleTable::mediumDiffuseness[mediumNucleiTableSize] =
   {0.0,0.0,0.0,0.0,0.0,1.78,1.77,1.77,1.77,1.71,
@@ -291,17 +291,17 @@ namespace G4INCL {
     + 0.5;
   const G4double ParticleTable::theINCLProtonSeparationEnergy = 6.83;
   const G4double ParticleTable::theINCLNeutronSeparationEnergy = ParticleTable::theINCLProtonSeparationEnergy;
-  G4double ParticleTable::protonSeparationEnergy = theINCLProtonSeparationEnergy;
-  G4double ParticleTable::neutronSeparationEnergy = theINCLNeutronSeparationEnergy;
+  __thread G4double ParticleTable::protonSeparationEnergy = theINCLProtonSeparationEnergy;
+  __thread G4double ParticleTable::neutronSeparationEnergy = theINCLNeutronSeparationEnergy;
 
 #ifdef INCLXX_IN_GEANT4_MODE
-  G4IonTable *ParticleTable::theG4IonTable;
+  __thread G4IonTable *ParticleTable::theG4IonTable;
 #else
   std::vector< std::vector <G4bool> > ParticleTable::massTableMask;
   std::vector< std::vector <G4double> > ParticleTable::massTable;
 #endif
 
-  void ParticleTable::initialize(Config const * const theConfig /*=0*/) {
+  void ParticleTable::initialize(Config const * const theConfig /*=0*/) {  
     protonMass = theINCLNucleonMass;
     neutronMass = theINCLNucleonMass;
     piPlusMass = theINCLPionMass;
@@ -344,7 +344,7 @@ namespace G4INCL {
 
   }
 
-  G4int ParticleTable::getIsospin(const ParticleType t) {
+  G4int ParticleTable::getIsospin(const ParticleType t) {  
     // Actually this is the 3rd component of isospin (I_z) multiplied by 2!
     if(t == Proton) {
       return 1;
@@ -370,27 +370,27 @@ namespace G4INCL {
     return -10; // Unknown
   }
 
-  std::string ParticleTable::getShortName(const ParticleSpecies s) {
+  std::string ParticleTable::getShortName(const ParticleSpecies s) {  
     if(s.theType==Composite)
       return getShortName(s.theA,s.theZ);
     else
       return getShortName(s.theType);
   }
 
-  std::string ParticleTable::getName(const ParticleSpecies s) {
+  std::string ParticleTable::getName(const ParticleSpecies s) {  
     if(s.theType==Composite)
       return getName(s.theA,s.theZ);
     else
       return getName(s.theType);
   }
 
-  std::string ParticleTable::getName(const G4int A, const G4int Z) {
+  std::string ParticleTable::getName(const G4int A, const G4int Z) {  
     std::stringstream stream;
     stream << getElementName(Z) << "-" << A;
     return stream.str();
   }
 
-  std::string ParticleTable::getShortName(const G4int A, const G4int Z) {
+  std::string ParticleTable::getShortName(const G4int A, const G4int Z) {  
     std::stringstream stream;
     stream << getElementName(Z);
     if(A>0)
@@ -398,7 +398,7 @@ namespace G4INCL {
     return stream.str();
   }
 
-  std::string ParticleTable::getName(const ParticleType p) {
+  std::string ParticleTable::getName(const ParticleType p) {  
     if(p == G4INCL::Proton) {
       return std::string("proton");
     } else if(p == G4INCL::Neutron) {
@@ -423,7 +423,7 @@ namespace G4INCL {
     return std::string("unknown");
   }
 
-  std::string ParticleTable::getShortName(const ParticleType p) {
+  std::string ParticleTable::getShortName(const ParticleType p) {  
     if(p == G4INCL::Proton) {
       return std::string("p");
     } else if(p == G4INCL::Neutron) {
@@ -448,7 +448,7 @@ namespace G4INCL {
     return std::string("unknown");
   }
 
-  G4double ParticleTable::getINCLMass(const ParticleType pt) {
+  G4double ParticleTable::getINCLMass(const ParticleType pt) {  
     if(pt == Proton) {
       return protonMass;
     } else if(pt == Neutron) {
@@ -465,7 +465,7 @@ namespace G4INCL {
     }
   }
 
-  G4double ParticleTable::getRealMass(const ParticleType t) {
+  G4double ParticleTable::getRealMass(const ParticleType t) {  
     switch(t) {
       case Proton:
         return theRealProtonMass;
@@ -515,7 +515,7 @@ namespace G4INCL {
       return 0.;
   }
 
-  G4double ParticleTable::getINCLMass(const G4int A, const G4int Z) {
+  G4double ParticleTable::getINCLMass(const G4int A, const G4int Z) { 
 // assert(A>=0);
     // For nuclei with Z<0 or Z>A, assume that the exotic charge state is due to pions
     if(Z<0)

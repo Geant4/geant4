@@ -80,7 +80,7 @@ private:
 
   G4PhysicsConstructorRegistry();
 
-  static G4PhysicsConstructorRegistry* theInstance;
+  static __thread G4PhysicsConstructorRegistry* theInstance;
   
   std::vector <G4VPhysicsConstructor*> physConstr;
 

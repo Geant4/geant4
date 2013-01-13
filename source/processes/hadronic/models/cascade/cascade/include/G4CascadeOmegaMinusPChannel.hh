@@ -42,7 +42,7 @@
 
 struct G4CascadeOmegaMinusPChannelData {
   typedef G4CascadeData<31,4,18,55,76,20,34> data_t;
-  static data_t *data;
+  static __thread data_t *data;
   static data_t *initializer();
 };
 

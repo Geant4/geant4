@@ -72,8 +72,8 @@ class G4PolarizedBremsstrahlungCrossSection : public G4VPolarizedCrossSection
 
   void InitializeMe();
 
-  static G4bool scrnInitialized;
-  static G4double SCRN [3][20];  // screening function lookup table;
+  static __thread G4bool scrnInitialized;
+  static __thread G4double SCRN [3][20];  // screening function lookup table;
 };
 
 #endif

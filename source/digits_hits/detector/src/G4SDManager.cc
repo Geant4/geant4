@@ -35,7 +35,7 @@
 #include "G4ios.hh"
 
 
-G4SDManager* G4SDManager::fSDManager = 0;
+__thread G4SDManager* G4SDManager::fSDManager = 0;
 
 G4SDManager* G4SDManager::GetSDMpointer()
 {

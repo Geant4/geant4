@@ -40,18 +40,18 @@
 
 using namespace std;
 
-G4Allocator<G4IT> aITAllocator;
+__thread G4Allocator<G4IT> *aITAllocator_G4MT_TLS_ = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 ///
 // Static functions
 ///
 G4IT* GetIT(const G4Track* track)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return (dynamic_cast<G4IT*>(track->GetUserInformation()));
 }
 
 G4IT* GetIT(const G4Track& track)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return (dynamic_cast<G4IT*>(track.GetUserInformation()));
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,7 +63,7 @@ G4IT::G4IT() : G4VUserTrackInformation("G4IT"),
     fpPreviousIT(0), fpNextIT(0),
     fTrackingInformation()
 //    fpTrackingInformation(new G4TrackingInformation())
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     fpITBox=0;
     fpKDNode = 0 ;
     fpTrackNode = 0;
@@ -77,7 +77,7 @@ G4IT::G4IT(const G4IT& /*right*/) : G4VUserTrackInformation("G4IT"),
     fpPreviousIT(0), fpNextIT(0),
     fTrackingInformation()
 //    fpTrackingInformation(new G4TrackingInformation())
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     fpITBox=0;
     fpKDNode = 0 ;
     fpTrackNode = 0;
@@ -87,7 +87,7 @@ G4IT::G4IT(const G4IT& /*right*/) : G4VUserTrackInformation("G4IT"),
 
 // Should not be used
 G4IT& G4IT::operator=(const G4IT& right)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     G4ExceptionDescription exceptionDescription;
     exceptionDescription << "The assignment operator of G4IT should not be used, this feature is not supported."
                          << "If really needed, please contact the developers.";
@@ -112,7 +112,7 @@ G4IT::G4IT(G4Track * aTrack) : G4VUserTrackInformation("G4IT"),
     fpPreviousIT(0), fpNextIT(0),
     fTrackingInformation()
 //    fpTrackingInformation(new G4TrackingInformation())
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     fpITBox = 0;
     fpTrack = aTrack;
     fpKDNode = 0 ;
@@ -123,7 +123,7 @@ G4IT::G4IT(G4Track * aTrack) : G4VUserTrackInformation("G4IT"),
 }
 
 void G4IT::TakeOutBox()
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     if(fpITBox)
     {
         fpITBox->Extract(this);
@@ -137,7 +137,7 @@ void G4IT::TakeOutBox()
 }
 
 G4IT::~G4IT()
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     TakeOutBox();
 
 //    if(fpTrackingInformation)
@@ -155,7 +155,7 @@ G4IT::~G4IT()
 // Methods
 ///
 void G4IT::RecordCurrentPositionNTime()
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     if(fpTrack)
     {
         fTrackingInformation.RecordCurrentPositionNTime(fpTrack);
@@ -163,7 +163,7 @@ void G4IT::RecordCurrentPositionNTime()
 }
 
 G4bool G4IT::operator<(const G4IT& right) const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     if(GetITType() == right.GetITType() )
     {
         return  (this->diff(right)) ;
@@ -176,7 +176,7 @@ G4bool G4IT::operator<(const G4IT& right) const
 }
 
 G4bool G4IT::operator==(const G4IT& right) const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     if(GetITType() == right.GetITType() )
     {
         return this->equal(right);
@@ -185,6 +185,6 @@ G4bool G4IT::operator==(const G4IT& right) const
 }
 
 G4bool G4IT::operator!=(const G4IT& right) const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return !(this->operator==(right));
 }

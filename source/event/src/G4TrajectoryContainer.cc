@@ -29,17 +29,17 @@
 //
 
 #include "G4TrajectoryContainer.hh"
-G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;
+__thread G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator_G4MT_TLS_ = 0;
 
 G4TrajectoryContainer::G4TrajectoryContainer()
-{ vect = new TrajectoryVector; }
+{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;   vect = new TrajectoryVector; }
 
 G4TrajectoryContainer::~G4TrajectoryContainer()
-{ clearAndDestroy();
+{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;   clearAndDestroy();
   delete vect; }
 
 G4int G4TrajectoryContainer::operator==(const G4TrajectoryContainer& right) const
-{ return (this==&right); }
+{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;   return (this==&right); }
 G4int G4TrajectoryContainer::operator!=(const G4TrajectoryContainer& right) const
-{ return (this!=&right); }
+{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;   return (this!=&right); }
 

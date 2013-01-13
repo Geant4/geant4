@@ -46,7 +46,7 @@
 
 namespace G4INCL {
 
-  long IAvatar::nextID = 1;
+  __thread long IAvatar::nextID = 1;
 
   IAvatar::IAvatar() :
     type(UnknownAvatarType),

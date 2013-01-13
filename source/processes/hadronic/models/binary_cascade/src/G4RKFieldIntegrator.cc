@@ -107,8 +107,8 @@ G4double G4RKFieldIntegrator::Erf(G4double X)
    const G4double Q10 = +3.2584593;
    const G4double P11 = -9.7970465E-2;
 
-   static G4double P2[5] = { 7.3738883, 6.8650185,  3.0317993, 0.56316962, 4.3187787e-5 };
-   static G4double Q2[5] = { 7.3739609, 15.184908, 12.79553,   5.3542168,  1. };
+   static __thread G4double P2[5] = { 7.3738883, 6.8650185,  3.0317993, 0.56316962, 4.3187787e-5 };
+   static __thread G4double Q2[5] = { 7.3739609, 15.184908, 12.79553,   5.3542168,  1. };
    
    const G4double P30 = -1.2436854E-1;
    const G4double Q30 = +4.4091706E-1;

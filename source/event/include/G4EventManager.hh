@@ -64,7 +64,7 @@ class G4EventManager
       //  This method returns the singleton pointer of G4EventManager.
 
   private:
-      static G4EventManager* fpEventManager;
+      static __thread G4EventManager* fpEventManager;
 
   public:
       G4EventManager();

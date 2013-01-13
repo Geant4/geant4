@@ -36,24 +36,24 @@
 #include "G4UnitsTable.hh"
 #include "G4UIcommand.hh"
 
-G4bool G4AttCheck::fFirst = true;
+__thread G4bool G4AttCheck::fFirst = true;
 
-std::set<G4String> G4AttCheck::fUnitCategories;
+__thread std::set<G4String> *G4AttCheck::fUnitCategories_G4MT_TLS_ = 0;
 
-std::map<G4String,G4String> G4AttCheck::fStandardUnits;
+__thread std::map<G4String,G4String> *G4AttCheck::fStandardUnits_G4MT_TLS_ = 0;
 
-std::set<G4String> G4AttCheck::fCategories;
+__thread std::set<G4String> *G4AttCheck::fCategories_G4MT_TLS_ = 0;
 
-std::set<G4String> G4AttCheck::fUnits;
+__thread std::set<G4String> *G4AttCheck::fUnits_G4MT_TLS_ = 0;
 
-std::set<G4String> G4AttCheck::fValueTypes;
+__thread std::set<G4String> *G4AttCheck::fValueTypes_G4MT_TLS_ = 0;
 
 G4AttCheck::G4AttCheck
 (const std::vector<G4AttValue>* values,
  const std::map<G4String,G4AttDef>* definitions):
   fpValues(values),
   fpDefinitions(definitions)
-{
+{  ;;;   if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fValueTypes = *fValueTypes_G4MT_TLS_;  ;;;    ;;;   if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnits = *fUnits_G4MT_TLS_;  ;;;    ;;;   if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fCategories = *fCategories_G4MT_TLS_;  ;;;    ;;;   if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; std::map<G4String,G4String> &fStandardUnits = *fStandardUnits_G4MT_TLS_;  ;;;    ;;;   if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnitCategories = *fUnitCategories_G4MT_TLS_;  ;;;  
   if (fFirst) {  // Initialise static containers.
     fFirst = false;
 
@@ -105,12 +105,12 @@ G4AttCheck::G4AttCheck
   }
 }
 
-G4AttCheck::~G4AttCheck() {}
+G4AttCheck::~G4AttCheck() {  ;;;   if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fValueTypes = *fValueTypes_G4MT_TLS_;  ;;;    ;;;   if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnits = *fUnits_G4MT_TLS_;  ;;;    ;;;   if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fCategories = *fCategories_G4MT_TLS_;  ;;;    ;;;   if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; std::map<G4String,G4String> &fStandardUnits = *fStandardUnits_G4MT_TLS_;  ;;;    ;;;   if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnitCategories = *fUnitCategories_G4MT_TLS_;  ;;;  }
 
-G4bool G4AttCheck::Check(const G4String& leader) const {
+G4bool G4AttCheck::Check(const G4String& leader) const {  ;;;   if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fValueTypes = *fValueTypes_G4MT_TLS_;  ;;;    ;;;   if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnits = *fUnits_G4MT_TLS_;  ;;;    ;;;   if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fCategories = *fCategories_G4MT_TLS_;  ;;;    ;;;   if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; std::map<G4String,G4String> &fStandardUnits = *fStandardUnits_G4MT_TLS_;  ;;;    ;;;   if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnitCategories = *fUnitCategories_G4MT_TLS_;  ;;;  
   // Check only.  Silent unless error - then G4cerr.  Returns error.
   G4bool error = false;
-  static G4int iError = 0;
+  static __thread G4int iError = 0;
   G4bool print = false;
   if (iError < 10 || iError%100 == 0) {
     print = true;
@@ -263,38 +263,38 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac)
       const G4String& category = iDef->second.GetCategory();
       const G4String& extra = iDef->second.GetExtra();
       const G4String& valueType = iDef->second.GetValueType();
-      if (ac.fCategories.find(category) == ac.fCategories.end()) {
+      if ((*ac.fCategories_G4MT_TLS_).find(category) == (*ac.fCategories_G4MT_TLS_).end()) {
 	error = true;
 	os <<
 	  "G4AttCheck: ERROR: Illegal Category Field \"" << category
 	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
 	  "\n  Possible Categories:";
 	set<G4String>::iterator i;
-	for (i = ac.fCategories.begin(); i != ac.fCategories.end(); ++i) {
+	for (i = (*ac.fCategories_G4MT_TLS_).begin(); i != (*ac.fCategories_G4MT_TLS_).end(); ++i) {
 	  os << ' ' << *i;
 	}
 	os << endl;
       }
-      if(category == "Physics" && ac.fUnits.find(extra) == ac.fUnits.end()) {
+      if(category == "Physics" && (*ac.fUnits_G4MT_TLS_).find(extra) == (*ac.fUnits_G4MT_TLS_).end()) {
 	error = true;
 	os <<
 	  "G4AttCheck: ERROR: Illegal Extra field \""<< extra
 	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
 	  "\n  Possible Extra fields if Category==\"Physics\":\n    ";
 	set<G4String>::iterator i;
-	for (i = ac.fUnits.begin(); i != ac.fUnits.end(); ++i) {
+	for (i = (*ac.fUnits_G4MT_TLS_).begin(); i != (*ac.fUnits_G4MT_TLS_).end(); ++i) {
 	  os << ' ' << *i;
 	}
 	os << endl;
       }
-      if (ac.fValueTypes.find(valueType) == ac.fValueTypes.end()) {
+      if ((*ac.fValueTypes_G4MT_TLS_).find(valueType) == (*ac.fValueTypes_G4MT_TLS_).end()) {
 	error = true;
 	os <<
 	  "G4AttCheck: ERROR: Illegal Value Type field \"" << valueType
 	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
 	  "\n  Possible Value Types:";
 	set<G4String>::iterator i;
-	for (i = ac.fValueTypes.begin(); i != ac.fValueTypes.end(); ++i) {
+	for (i = (*ac.fValueTypes_G4MT_TLS_).begin(); i != (*ac.fValueTypes_G4MT_TLS_).end(); ++i) {
 	  os << ' ' << *i;
 	}
 	os << endl;
@@ -321,7 +321,7 @@ void G4AttCheck::AddValuesAndDefs
  const G4String& name,
  const G4String& value,
  const G4String& extra,
- const G4String& description) const {
+ const G4String& description) const {  ;;;   if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fValueTypes = *fValueTypes_G4MT_TLS_;  ;;;    ;;;   if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnits = *fUnits_G4MT_TLS_;  ;;;    ;;;   if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fCategories = *fCategories_G4MT_TLS_;  ;;;    ;;;   if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; std::map<G4String,G4String> &fStandardUnits = *fStandardUnits_G4MT_TLS_;  ;;;    ;;;   if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnitCategories = *fUnitCategories_G4MT_TLS_;  ;;;  
   // Add new G4AttDeff...
   standardValues->push_back(G4AttValue(name,value,""));
   // Copy original G4AttDef...
@@ -334,7 +334,7 @@ void G4AttCheck::AddValuesAndDefs
 
 G4bool G4AttCheck::Standard
 (std::vector<G4AttValue>* standardValues,
- std::map<G4String,G4AttDef>* standardDefinitions) const {
+ std::map<G4String,G4AttDef>* standardDefinitions) const {  ;;;   if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fValueTypes = *fValueTypes_G4MT_TLS_;  ;;;    ;;;   if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnits = *fUnits_G4MT_TLS_;  ;;;    ;;;   if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fCategories = *fCategories_G4MT_TLS_;  ;;;    ;;;   if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; std::map<G4String,G4String> &fStandardUnits = *fStandardUnits_G4MT_TLS_;  ;;;    ;;;   if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnitCategories = *fUnitCategories_G4MT_TLS_;  ;;;  
   // Places standard versions in provided vector and map and returns error.
   // Assumes valid input.  Use Check to check.
   using namespace std;

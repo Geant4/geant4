@@ -127,7 +127,7 @@ G4ParticleDefinition::G4ParticleDefinition(
                    verboseLevel(1),
   		   fApplyCutsFlag(false)
 {
-  static G4String nucleus("nucleus");
+  static __thread G4String *nucleus_G4MT_TLS_ = 0 ; if (!nucleus_G4MT_TLS_) nucleus_G4MT_TLS_ = new  G4String ("nucleus") ;  G4String &nucleus = *nucleus_G4MT_TLS_;
 
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   g4particleDefinitionInstanceID = g4particleDefinitionSubInstanceManager.CreateSubInstance();

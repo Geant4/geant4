@@ -138,7 +138,7 @@ private:
 	G4bool       fPVPickable ;
 	G4double     fPVTransparency ;
 
-	static G4int fSceneIdCount;
+	static __thread G4int fSceneIdCount;
 
 public: 
 	std::ofstream     fDest ;

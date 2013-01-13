@@ -1269,7 +1269,7 @@ namespace {
 
 
 typedef G4CascadeOmegaMinusNChannelData::data_t G4CascadeOmegaMinusNChannelData_t;
-G4CascadeOmegaMinusNChannelData_t *G4CascadeOmegaMinusNChannelData::data=0;
+__thread G4CascadeOmegaMinusNChannelData_t *G4CascadeOmegaMinusNChannelData::data=0;
 
 G4CascadeOmegaMinusNChannelData::data_t *G4CascadeOmegaMinusNChannelData::initializer()
 {

@@ -166,7 +166,7 @@ private:
 
   // ============= DATA MEMBERS ==================
 
-  static G4int errCount;
+  static __thread G4int errCount;
 
   G4int theA;
   

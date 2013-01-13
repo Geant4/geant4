@@ -2174,7 +2174,7 @@ void G4PAIxSection::CallError(G4int i, const G4String& methodName) const
 // Init  array of Lorentz factors
 //
 
-G4int G4PAIxSection::fNumberOfGammas = 111;
+__thread G4int G4PAIxSection::fNumberOfGammas = 111;
 
 const G4double G4PAIxSection::fLorentzFactor[112] =     // fNumberOfGammas+1
 {

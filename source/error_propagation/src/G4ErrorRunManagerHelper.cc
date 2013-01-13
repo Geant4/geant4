@@ -45,7 +45,7 @@
 
 //-----------------------------------------------------------------------
 
-G4ErrorRunManagerHelper* G4ErrorRunManagerHelper::fRunManagerKernel = 0;
+__thread G4ErrorRunManagerHelper* G4ErrorRunManagerHelper::fRunManagerKernel = 0;
 
 //-----------------------------------------------------------------------
 G4ErrorRunManagerHelper* G4ErrorRunManagerHelper::GetRunManagerKernel()

@@ -44,7 +44,7 @@ private:
   // Dummy constructor
   G4PairingCorrection();
   
-  static G4PairingCorrection* theInstance;
+  static __thread G4PairingCorrection* theInstance;
    
 public:
 	

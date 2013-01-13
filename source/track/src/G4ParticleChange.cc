@@ -487,7 +487,7 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
 {
   G4bool    exitWithError = false;
   G4double  accuracy;
-  static G4int nError = 0;
+  static __thread G4int nError = 0;
 #ifdef G4VERBOSE
   const  G4int maxError = 30;
 #endif

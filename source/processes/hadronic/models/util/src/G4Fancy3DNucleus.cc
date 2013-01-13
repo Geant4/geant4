@@ -283,7 +283,7 @@ void G4Fancy3DNucleus::ChoosePositions()
 	G4int i=0;
 	G4ThreeVector	aPos, delta;
 	G4bool		freeplace;
-	static G4double nd2 = sqr(nucleondistance);
+	static __thread G4double *nd2_G4MT_TLS_ = 0 ; if (!nd2_G4MT_TLS_) {nd2_G4MT_TLS_ = new  G4double  ; *nd2_G4MT_TLS_= sqr(nucleondistance) ; }  G4double &nd2 = *nd2_G4MT_TLS_;
 	G4double maxR=GetNuclearRadius(0.001);   //  there are no nucleons at a
 	                                        //  relative Density of 0.01
 	G4int jr=0;

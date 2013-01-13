@@ -77,7 +77,7 @@
 #include <iomanip>
 
 //------------------------------------------------------------------------
-G4tgbGeometryDumper* G4tgbGeometryDumper::theInstance = 0;
+__thread G4tgbGeometryDumper* G4tgbGeometryDumper::theInstance = 0;
 
 //------------------------------------------------------------------------
 G4tgbGeometryDumper::G4tgbGeometryDumper()

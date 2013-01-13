@@ -73,13 +73,13 @@ class G4LEpp : public G4HadronicInteraction
  // They are initialized in G4LEppData.hh
 
  // Coulomb effects suppressed:
-   static G4float Sig[NENERGY][NANGLE];
-   static G4float Pcm[NENERGY], Elab[NENERGY], 
+   static __thread G4float Sig[NENERGY][NANGLE];
+   static __thread G4float Pcm[NENERGY], Elab[NENERGY], 
      dSigmax[NENERGY], Sigtot[NENERGY];
 
  // Coulomb effects not suppressed:
-   static G4float SigCoul[NENERGYC][NANGLE];
-   static G4float PcmCoul[NENERGYC], ElabCoul[NENERGYC], 
+   static __thread G4float SigCoul[NENERGYC][NANGLE];
+   static __thread G4float PcmCoul[NENERGYC], ElabCoul[NENERGYC], 
      dSigmaxCoul[NENERGYC], SigtotCoul[NENERGYC];
 
 };

@@ -38,5 +38,5 @@
 #include "G4Types.hh"
 #include "G4ReferenceCountedHandle.hh"
 
-G4Allocator<G4CountedObject<void> > aCountedObjectAllocator;
-G4Allocator<G4ReferenceCountedHandle<void> > aRCHAllocator;
+__thread G4Allocator<G4CountedObject<void> > *aCountedObjectAllocator_G4MT_TLS_ = 0;
+__thread G4Allocator<G4ReferenceCountedHandle<void> > *aRCHAllocator_G4MT_TLS_ = 0;

@@ -61,7 +61,7 @@ class G4RTMessenger : public G4UImessenger
 
   private:
     G4RTMessenger(G4TheRayTracer* p1,G4RTSteppingAction* p2);
-    static G4RTMessenger* fpInstance;
+    static __thread G4RTMessenger* fpInstance;
     G4TheRayTracer* theDefaultTracer;  // The first tracer to
 				       // instantiate this messenger.
     G4TheRayTracer* theTracer;         // The current tracer.

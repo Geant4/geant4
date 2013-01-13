@@ -45,7 +45,7 @@ private:
   // Dummy constructor
   G4CameronShellPlusPairingCorrections();
 
-  static G4CameronShellPlusPairingCorrections* theInstance;
+  static __thread G4CameronShellPlusPairingCorrections* theInstance;
 	
 public:
 	

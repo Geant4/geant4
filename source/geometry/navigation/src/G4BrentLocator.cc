@@ -154,7 +154,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
 
   // Statistics for substeps
   //
-  static G4int max_no_seen= -1; 
+  static __thread G4int max_no_seen= -1; 
 
   // Counter for restarting Bintermed
   //

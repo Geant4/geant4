@@ -36,24 +36,24 @@
 #include "G4UnitsTable.hh"
 #include <sstream>
 
-G4Colour                   G4VVisCommand::fCurrentColour = G4Colour::White();
-G4Colour                   G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
-G4Text::Layout             G4VVisCommand::fCurrentTextLayout = G4Text::left;
-G4double                   G4VVisCommand::fCurrentLineWidth = 1.;
+__thread G4Colour                   *G4VVisCommand::fCurrentColour_G4MT_TLS_ = 0;
+__thread G4Colour                   *G4VVisCommand::fCurrentTextColour_G4MT_TLS_ = 0;
+__thread G4Text::Layout             *G4VVisCommand::fCurrentTextLayout_G4MT_TLS_ = 0;
+__thread G4double                   G4VVisCommand::fCurrentLineWidth = 1.;
 // Not yet used: G4VisAttributes::LineStyle G4VVisCommand::fCurrentLineStyle = G4VisAttributes::unbroken;
 // Not yet used: G4VMarker::FillStyle       G4VVisCommand::fCurrentFillStyle = G4VMarker::filled;
 // Not yet used: G4VMarker::SizeType        G4VVisCommand::fCurrentSizeType = G4VMarker::screen;
-G4ModelingParameters::PVNameCopyNoPath G4VVisCommand::fCurrentTouchablePath;
+__thread G4ModelingParameters::PVNameCopyNoPath *G4VVisCommand::fCurrentTouchablePath_G4MT_TLS_ = 0;
 
-G4VVisCommand::G4VVisCommand () {}
+G4VVisCommand::G4VVisCommand () {  ;;;   if (!fCurrentTouchablePath_G4MT_TLS_) fCurrentTouchablePath_G4MT_TLS_ = new G4ModelingParameters::PVNameCopyNoPath  ; G4ModelingParameters::PVNameCopyNoPath &fCurrentTouchablePath = *fCurrentTouchablePath_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextLayout_G4MT_TLS_) fCurrentTextLayout_G4MT_TLS_ = new G4Text::Layout             ( G4Text::left) ; G4Text::Layout             &fCurrentTextLayout = *fCurrentTextLayout_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextColour_G4MT_TLS_) fCurrentTextColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::Blue()) ; G4Colour                   &fCurrentTextColour = *fCurrentTextColour_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentColour_G4MT_TLS_) fCurrentColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::White()) ; G4Colour                   &fCurrentColour = *fCurrentColour_G4MT_TLS_;  ;;;  }
 
-G4VVisCommand::~G4VVisCommand () {}
+G4VVisCommand::~G4VVisCommand () {  ;;;   if (!fCurrentTouchablePath_G4MT_TLS_) fCurrentTouchablePath_G4MT_TLS_ = new G4ModelingParameters::PVNameCopyNoPath  ; G4ModelingParameters::PVNameCopyNoPath &fCurrentTouchablePath = *fCurrentTouchablePath_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextLayout_G4MT_TLS_) fCurrentTextLayout_G4MT_TLS_ = new G4Text::Layout             ( G4Text::left) ; G4Text::Layout             &fCurrentTextLayout = *fCurrentTextLayout_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextColour_G4MT_TLS_) fCurrentTextColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::Blue()) ; G4Colour                   &fCurrentTextColour = *fCurrentTextColour_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentColour_G4MT_TLS_) fCurrentColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::White()) ; G4Colour                   &fCurrentColour = *fCurrentColour_G4MT_TLS_;  ;;;  }
 
-G4VisManager* G4VVisCommand::fpVisManager = 0;
+__thread G4VisManager* G4VVisCommand::fpVisManager = 0;
 
 G4String G4VVisCommand::ConvertToString
 (G4double x, G4double y, const char * unitName)
-{
+{  ;;;   if (!fCurrentTouchablePath_G4MT_TLS_) fCurrentTouchablePath_G4MT_TLS_ = new G4ModelingParameters::PVNameCopyNoPath  ; G4ModelingParameters::PVNameCopyNoPath &fCurrentTouchablePath = *fCurrentTouchablePath_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextLayout_G4MT_TLS_) fCurrentTextLayout_G4MT_TLS_ = new G4Text::Layout             ( G4Text::left) ; G4Text::Layout             &fCurrentTextLayout = *fCurrentTextLayout_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextColour_G4MT_TLS_) fCurrentTextColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::Blue()) ; G4Colour                   &fCurrentTextColour = *fCurrentTextColour_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentColour_G4MT_TLS_) fCurrentColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::White()) ; G4Colour                   &fCurrentColour = *fCurrentColour_G4MT_TLS_;  ;;;  
   G4double uv = G4UIcommand::ValueOf(unitName);
   
   std::ostringstream oss;
@@ -64,7 +64,7 @@ G4String G4VVisCommand::ConvertToString
 void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
 					G4double& xval,
 					G4double& yval)
-{
+{  ;;;   if (!fCurrentTouchablePath_G4MT_TLS_) fCurrentTouchablePath_G4MT_TLS_ = new G4ModelingParameters::PVNameCopyNoPath  ; G4ModelingParameters::PVNameCopyNoPath &fCurrentTouchablePath = *fCurrentTouchablePath_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextLayout_G4MT_TLS_) fCurrentTextLayout_G4MT_TLS_ = new G4Text::Layout             ( G4Text::left) ; G4Text::Layout             &fCurrentTextLayout = *fCurrentTextLayout_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextColour_G4MT_TLS_) fCurrentTextColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::Blue()) ; G4Colour                   &fCurrentTextColour = *fCurrentTextColour_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentColour_G4MT_TLS_) fCurrentColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::White()) ; G4Colour                   &fCurrentColour = *fCurrentColour_G4MT_TLS_;  ;;;  
   G4double x, y;
   char unts[30];
   
@@ -79,7 +79,7 @@ void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
 }
 
 void G4VVisCommand::UpdateVisManagerScene
-(const G4String& sceneName) {
+(const G4String& sceneName) {  ;;;   if (!fCurrentTouchablePath_G4MT_TLS_) fCurrentTouchablePath_G4MT_TLS_ = new G4ModelingParameters::PVNameCopyNoPath  ; G4ModelingParameters::PVNameCopyNoPath &fCurrentTouchablePath = *fCurrentTouchablePath_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextLayout_G4MT_TLS_) fCurrentTextLayout_G4MT_TLS_ = new G4Text::Layout             ( G4Text::left) ; G4Text::Layout             &fCurrentTextLayout = *fCurrentTextLayout_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentTextColour_G4MT_TLS_) fCurrentTextColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::Blue()) ; G4Colour                   &fCurrentTextColour = *fCurrentTextColour_G4MT_TLS_;  ;;;    ;;;   if (!fCurrentColour_G4MT_TLS_) fCurrentColour_G4MT_TLS_ = new G4Colour                   ( G4Colour::White()) ; G4Colour                   &fCurrentColour = *fCurrentColour_G4MT_TLS_;  ;;;  
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 

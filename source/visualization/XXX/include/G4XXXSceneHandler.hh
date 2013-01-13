@@ -65,7 +65,7 @@ public:
 
 protected:
 
-  static G4int         fSceneIdCount;  // Counter for XXX scene handlers.
+  static __thread G4int         fSceneIdCount;  // Counter for XXX scene handlers.
 
 private:
 

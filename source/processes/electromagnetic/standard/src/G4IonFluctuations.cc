@@ -229,7 +229,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   // tabulation for lower beta2
   if( beta2 < 3.0*theBohrBeta2*Z ) {
 
-    static G4double a[96][4] = {
+    static __thread G4double a[96][4] = {
  {-0.3291, -0.8312,  0.2460, -1.0220},
  {-0.5615, -0.5898,  0.5205, -0.7258},
  {-0.5280, -0.4981,  0.5519, -0.5865},
@@ -359,7 +359,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   //                                    2 for ions in atomic gases
   //                                    3 for ions in molecular gases
   //                                    4 for ions in solids
-  static G4double b[5][4] = {
+  static __thread G4double b[5][4] = {
   {0.1014,  0.3700,  0.9642,  3.987},
   {0.1955,  0.6941,  2.522,   1.040},
   {0.05058, 0.08975, 0.1419, 10.80},

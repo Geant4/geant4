@@ -204,7 +204,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASColour,
-      fCurrentTouchablePath));
+      GetCurrentTouchablePath()));
   }
   
   else if (command == fpCommandSetDaughtersInvisible) {
@@ -213,7 +213,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASDaughtersInvisible,
-      fCurrentTouchablePath));
+      GetCurrentTouchablePath()));
   }
   
   else if (command == fpCommandSetForceAuxEdgeVisible) {
@@ -222,7 +222,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASForceAuxEdgeVisible,
-      fCurrentTouchablePath));
+      GetCurrentTouchablePath()));
   }
   
   else if (command == fpCommandSetLineSegmentsPerCircle) {
@@ -232,7 +232,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASForceLineSegmentsPerCircle,
-      fCurrentTouchablePath));
+      GetCurrentTouchablePath()));
   }
   
   else if (command == fpCommandSetForceSolid) {
@@ -241,7 +241,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASForceSolid,
-      fCurrentTouchablePath));
+      GetCurrentTouchablePath()));
   }
   
   else if (command == fpCommandSetForceWireframe) {
@@ -250,7 +250,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASForceWireframe,
-      fCurrentTouchablePath));
+      GetCurrentTouchablePath()));
   }
   
   else if (command == fpCommandSetLineStyle) {
@@ -266,7 +266,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASLineStyle,
-      fCurrentTouchablePath));
+      GetCurrentTouchablePath()));
   }
   
   else if (command == fpCommandSetLineWidth) {
@@ -275,7 +275,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASLineWidth,
-      fCurrentTouchablePath));
+      GetCurrentTouchablePath()));
   }
   
   else if (command == fpCommandSetVisibility) {
@@ -284,7 +284,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     (G4ModelingParameters::VisAttributesModifier
      (workingVisAtts,
       G4ModelingParameters::VASVisibility,
-      fCurrentTouchablePath));
+      GetCurrentTouchablePath()));
   }
   
   else {

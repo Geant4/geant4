@@ -41,7 +41,7 @@
 #include "G4tgrMessenger.hh"
 #include "G4UIcommand.hh"
 
-G4tgrParameterMgr* G4tgrParameterMgr::theInstance = 0;
+__thread G4tgrParameterMgr* G4tgrParameterMgr::theInstance = 0;
 
 
 //-------------------------------------------------------------

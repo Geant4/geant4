@@ -85,9 +85,9 @@ private:
   
 private:
 
-  static G4int hits;
-  static G4int totalTries;
-  static G4double area;
+  static __thread G4int hits;
+  static __thread G4int totalTries;
+  static __thread G4double area;
 
 };
 

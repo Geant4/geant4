@@ -60,7 +60,7 @@
 // Static class variable: ptr to single instance of class
 // ***************************************************************************
 //
-G4GeometryManager* G4GeometryManager::fgInstance = 0;
+__thread G4GeometryManager* G4GeometryManager::fgInstance = 0;
 
 // ***************************************************************************
 // Constructor. Set the geometry to be open
@@ -134,7 +134,7 @@ G4bool G4GeometryManager::IsGeometryClosed()
 //
 G4GeometryManager* G4GeometryManager::GetInstance()
 {
-  static G4GeometryManager worldManager;
+  static __thread G4GeometryManager *worldManager_G4MT_TLS_ = 0 ; if (!worldManager_G4MT_TLS_) worldManager_G4MT_TLS_ = new  G4GeometryManager  ;  G4GeometryManager &worldManager = *worldManager_G4MT_TLS_;
   if (!fgInstance)
   {
     fgInstance = &worldManager;

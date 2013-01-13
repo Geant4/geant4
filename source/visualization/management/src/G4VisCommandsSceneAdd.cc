@@ -146,11 +146,11 @@ void G4VisCommandSceneAddArrow::SetNewValue (G4UIcommand*, G4String newValue)
   // Consult scene for arrow width.
   const G4VisExtent& sceneExtent = pScene->GetExtent();
   G4double arrowWidth =
-    0.005 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
+    0.005 * GetCurrentLineWidth() * sceneExtent.GetExtentRadius();
 
   G4VModel* model = new G4ArrowModel
     (x1, y1, z1, x2, y2, z2,
-     arrowWidth, fCurrentColour, newValue);
+     arrowWidth, GetCurrentColour(), newValue);
 
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
@@ -208,7 +208,7 @@ void G4VisCommandSceneAddArrow2D::SetNewValue (G4UIcommand*, G4String newValue)
   is >> x1 >> y1 >> x2 >> y2;
 
   Arrow2D* arrow2D = new Arrow2D
-    (x1, y1, x2, y2, fCurrentLineWidth, fCurrentColour);
+    (x1, y1, x2, y2, GetCurrentLineWidth(), GetCurrentColour() );
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddArrow2D::Arrow2D>(arrow2D);
   model->SetType("Arrow2D");
@@ -336,7 +336,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
 
   // Consult scene for arrow width...
   G4double arrowWidth =
-    0.005 * fCurrentLineWidth * sceneExtent.GetExtentRadius();
+    0.005 * GetCurrentLineWidth() * sceneExtent.GetExtentRadius();
   // ...but limit it to length/50.
   if (arrowWidth > length/50.) arrowWidth = length/50.;
 
@@ -683,7 +683,7 @@ void G4VisCommandSceneAddFrame::SetNewValue (G4UIcommand*, G4String newValue)
   std::istringstream is(newValue);
   is >> size;
 
-  Frame* frame = new Frame(size, fCurrentLineWidth, fCurrentColour);
+  Frame* frame = new Frame(size, GetCurrentLineWidth(), GetCurrentColour() );
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddFrame::Frame>(frame);
   model->SetType("Frame");
@@ -933,7 +933,7 @@ void G4VisCommandSceneAddLine::SetNewValue (G4UIcommand*, G4String newValue)
   x2 *= unit; y2 *= unit; z2 *= unit;
 
   Line* line = new Line(x1, y1, z1, x2, y2, z2,
-			fCurrentLineWidth, fCurrentColour);
+			GetCurrentLineWidth() , GetCurrentColour() );
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddLine::Line>(line);
   model->SetType("Line");
@@ -1017,7 +1017,7 @@ void G4VisCommandSceneAddLine2D::SetNewValue (G4UIcommand*, G4String newValue)
   is >> x1 >> y1 >> x2 >> y2;
 
   Line2D* line2D = new Line2D
-    (x1, y1, x2, y2, fCurrentLineWidth, fCurrentColour);
+    (x1, y1, x2, y2, GetCurrentLineWidth(), GetCurrentColour() );
   G4VModel* model =
     new G4CallbackModel<G4VisCommandSceneAddLine2D::Line2D>(line2D);
   model->SetType("Line2D");
@@ -2152,9 +2152,9 @@ void G4VisCommandSceneAddText::SetNewValue (G4UIcommand*, G4String newValue) {
   x *= unit; y *= unit; z *= unit;
 
   G4Text g4text(text, G4Point3D(x,y,z));
-  G4VisAttributes visAtts(fCurrentTextColour);
+  G4VisAttributes visAtts(GetCurrentTextColour());
   g4text.SetVisAttributes(visAtts);
-  g4text.SetLayout(fCurrentTextLayout);
+  g4text.SetLayout(GetCurrentTextLayout());
   g4text.SetScreenSize(font_size);
   g4text.SetOffset(x_offset,y_offset);
   G4VModel* model = new G4TextModel(g4text);
@@ -2239,9 +2239,9 @@ void G4VisCommandSceneAddText2D::SetNewValue (G4UIcommand*, G4String newValue) {
   G4String text = next("\n");
 
   G4Text g4text(text, G4Point3D(x,y,0.));
-  G4VisAttributes visAtts(fCurrentTextColour);
+  G4VisAttributes visAtts(GetCurrentTextColour());
   g4text.SetVisAttributes(visAtts);
-  g4text.SetLayout(fCurrentTextLayout);
+  g4text.SetLayout(GetCurrentTextLayout());
   g4text.SetScreenSize(font_size);
   g4text.SetOffset(x_offset,y_offset);
   G4Text2D* g4text2D = new G4Text2D(g4text);
@@ -2342,7 +2342,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     G4TransportationManager::GetTransportationManager()->
     GetPropagatorInField();
   propagatorInField->SetTrajectoryFilter(0); // Switch off smooth trajectories.
-  static G4IdentityTrajectoryFilter auxiliaryPointsFilter;
+  static __thread G4IdentityTrajectoryFilter *auxiliaryPointsFilter_G4MT_TLS_ = 0 ; if (!auxiliaryPointsFilter_G4MT_TLS_) auxiliaryPointsFilter_G4MT_TLS_ = new  G4IdentityTrajectoryFilter  ;  G4IdentityTrajectoryFilter &auxiliaryPointsFilter = *auxiliaryPointsFilter_G4MT_TLS_;
   G4String defaultTrajectoryType;
   if (smooth && rich) {
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");
@@ -2655,7 +2655,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
   size_t nWorlds = transportationManager->GetNoWorlds();
   if (nWorlds > 1) {  // Parallel worlds in operation...
     if (verbosity >= G4VisManager::warnings) {
-      static G4bool warned = false;
+      static __thread G4bool warned = false;
       if (!warned && name != "worlds") {
 	G4cout <<
 	  "WARNING: Parallel worlds in operation.  To visualise, specify"

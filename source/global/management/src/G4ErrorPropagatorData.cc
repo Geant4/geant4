@@ -35,8 +35,8 @@
 
 //-------------------------------------------------------------------
 
-G4ErrorPropagatorData* G4ErrorPropagatorData::theErrorPropagatorData = 0;
-G4int G4ErrorPropagatorData::theVerbosity = 0;
+__thread G4ErrorPropagatorData* G4ErrorPropagatorData::theErrorPropagatorData = 0;
+__thread G4int G4ErrorPropagatorData::theVerbosity = 0;
 
 //-------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ G4ErrorPropagatorData::~G4ErrorPropagatorData()
 
 G4ErrorPropagatorData* G4ErrorPropagatorData::GetErrorPropagatorData()
 {
-  static G4ErrorPropagatorData errorPropagatorData;
+  static __thread G4ErrorPropagatorData *errorPropagatorData_G4MT_TLS_ = 0 ; if (!errorPropagatorData_G4MT_TLS_) errorPropagatorData_G4MT_TLS_ = new  G4ErrorPropagatorData  ;  G4ErrorPropagatorData &errorPropagatorData = *errorPropagatorData_G4MT_TLS_;
   if( !theErrorPropagatorData )
   {
     theErrorPropagatorData = &errorPropagatorData;

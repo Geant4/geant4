@@ -117,15 +117,15 @@ private:
 };
 
 #if defined G4TRACKING_ALLOC_EXPORT
-extern G4DLLEXPORT G4Allocator<G4RichTrajectoryPoint>
-aRichTrajectoryPointAllocator;
+extern G4DLLEXPORT __thread G4Allocator<G4RichTrajectoryPoint>
+*aRichTrajectoryPointAllocator_G4MT_TLS_;
 #else
-extern G4DLLIMPORT G4Allocator<G4RichTrajectoryPoint>
-aRichTrajectoryPointAllocator;
+extern G4DLLIMPORT __thread G4Allocator<G4RichTrajectoryPoint>
+*aRichTrajectoryPointAllocator_G4MT_TLS_;
 #endif
 
 inline void* G4RichTrajectoryPoint::operator new(size_t)
-{
+{  ;;;   if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ; G4Allocator<G4RichTrajectoryPoint> &aRichTrajectoryPointAllocator = *aRichTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
   void *aRichTrajectoryPoint;
   aRichTrajectoryPoint =
     (void *) aRichTrajectoryPointAllocator.MallocSingle();
@@ -134,7 +134,7 @@ inline void* G4RichTrajectoryPoint::operator new(size_t)
 
 inline void G4RichTrajectoryPoint::operator delete
 (void *aRichTrajectoryPoint)
-{
+{  ;;;   if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ; G4Allocator<G4RichTrajectoryPoint> &aRichTrajectoryPointAllocator = *aRichTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
   aRichTrajectoryPointAllocator.FreeSingle
     ((G4RichTrajectoryPoint *) aRichTrajectoryPoint);
 }

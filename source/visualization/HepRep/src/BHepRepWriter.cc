@@ -14,14 +14,14 @@
 namespace cheprep {
 
     // class variables
-    std::map<std::string, unsigned char> BHepRepWriter::tags; 
-    std::map<std::string, unsigned char> BHepRepWriter::attributes;           
-    std::map<std::string, unsigned char> BHepRepWriter::values;
+    __thread std::map<std::string, unsigned char> *BHepRepWriter::tags_G4MT_TLS_ = 0; 
+    __thread std::map<std::string, unsigned char> *BHepRepWriter::attributes_G4MT_TLS_ = 0;           
+    __thread std::map<std::string, unsigned char> *BHepRepWriter::values_G4MT_TLS_ = 0;
 
     BHepRepWriter::BHepRepWriter( std::ostream& ostrm) 
             : AbstractXMLWriter("heprep"), 
             os(ostrm), 
-            singlePrecision(true) {        
+            singlePrecision(true) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;          
 
         // resolve endiannes        
         union { long l; char c[sizeof (long)]; } u;
@@ -199,13 +199,13 @@ namespace cheprep {
         }        
     }
     
-    BHepRepWriter::~BHepRepWriter() {
+    BHepRepWriter::~BHepRepWriter() {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
     }
 
-    void BHepRepWriter::close() {
+    void BHepRepWriter::close() {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
     }
     
-    void BHepRepWriter::openDoc(std::string version, std::string /* encoding */, bool /* standalone */) {
+    void BHepRepWriter::openDoc(std::string version, std::string /* encoding */, bool /* standalone */) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         stringValues.clear();
         
         // header
@@ -223,26 +223,26 @@ namespace cheprep {
         
     }
     
-    void BHepRepWriter::closeDoc(bool /* force */) {
+    void BHepRepWriter::closeDoc(bool /* force */) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         writeByte(PI);
         writeByte(attributes["eof"]);
         writeByte(END);
     }
 
-    void BHepRepWriter::openTag(std::string name) {
+    void BHepRepWriter::openTag(std::string name) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         writeTag(name, true);
     }
     
-    void BHepRepWriter::closeTag() {
+    void BHepRepWriter::closeTag() {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         writePoints();
         writeByte(END);
     }
     
-    void BHepRepWriter::printTag(std::string name) {
+    void BHepRepWriter::printTag(std::string name) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         writeTag(name);
     }
     
-    void BHepRepWriter::writeTag(std::string tagName, bool hasContent) {
+    void BHepRepWriter::writeTag(std::string tagName, bool hasContent) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         std::string s = tagName;
         std::transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
         
@@ -382,7 +382,7 @@ namespace cheprep {
         }    
     }
     
-    void BHepRepWriter::writePoints() {
+    void BHepRepWriter::writePoints() {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         if (points.size() <= 0) return;
         
         writeByte(tags["point"] | CONTENT);                
@@ -398,11 +398,11 @@ namespace cheprep {
         points.clear();
     }
         
-    void BHepRepWriter::setAttribute(std::string name, char* value) {
+    void BHepRepWriter::setAttribute(std::string name, char* value) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         setAttribute(name, (std::string)value);
     }
 
-    void BHepRepWriter::setAttribute(std::string name, std::string value) {
+    void BHepRepWriter::setAttribute(std::string name, std::string value) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         if (name == "value") name = name.append("String");
                 
         // make sure the attribute name is defined
@@ -414,7 +414,7 @@ namespace cheprep {
         stringAttributes[name] = value;
     }
 
-    void BHepRepWriter::setAttribute(std::string name, std::vector<double> value) {
+    void BHepRepWriter::setAttribute(std::string name, std::vector<double> value) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         if (name == "value") name = name.append("Color");
 
         // make sure the attribute name is defined
@@ -426,7 +426,7 @@ namespace cheprep {
         colorAttributes[name] = value;
     }
     
-    void BHepRepWriter::setAttribute(std::string name, int64 value) {
+    void BHepRepWriter::setAttribute(std::string name, int64 value) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         if (name == "value") name = name.append("Long");
 
         // make sure the attribute name is defined
@@ -438,7 +438,7 @@ namespace cheprep {
         longAttributes[name] = value;
     }
     
-    void BHepRepWriter::setAttribute(std::string name, int value) {
+    void BHepRepWriter::setAttribute(std::string name, int value) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         if (name == "value") name = name.append("Int");
 
         // make sure the attribute name is defined
@@ -450,7 +450,7 @@ namespace cheprep {
         intAttributes[name] = value;
     }
     
-    void BHepRepWriter::setAttribute(std::string name, bool value) {
+    void BHepRepWriter::setAttribute(std::string name, bool value) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         if (name == "value") name = name.append("Boolean");
 
         // make sure the attribute name is defined
@@ -462,7 +462,7 @@ namespace cheprep {
         booleanAttributes[name] = value;
     }
     
-    void BHepRepWriter::setAttribute(std::string name, double value) {
+    void BHepRepWriter::setAttribute(std::string name, double value) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         if (name == "value") name = name.append("Double");
 
         // make sure the attribute name is defined
@@ -474,12 +474,12 @@ namespace cheprep {
         doubleAttributes[name] = value;
     }
 
-    void BHepRepWriter::writeStringDefine(std::string s) {
+    void BHepRepWriter::writeStringDefine(std::string s) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         writeByte(STR_D);
         writeString(s);
     }
 
-    void BHepRepWriter::writeMultiByteInt(unsigned int ui) {
+    void BHepRepWriter::writeMultiByteInt(unsigned int ui) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         unsigned char buf[5];
         int idx = 0;
         
@@ -495,7 +495,7 @@ namespace cheprep {
         writeByte(buf[0]);
     }
 
-    void BHepRepWriter::writeReal(double d) {
+    void BHepRepWriter::writeReal(double d) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         if (singlePrecision) {
             union {
     	        int i;
@@ -514,7 +514,7 @@ namespace cheprep {
         }
     }
 
-    void BHepRepWriter::writeLong(int64 i) {        
+    void BHepRepWriter::writeLong(int64 i) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;          
         // write network-order
         os.put((i >> 56) & 0xff);
         os.put((i >> 48) & 0xff);
@@ -526,7 +526,7 @@ namespace cheprep {
         os.put((i      ) & 0xff);
     }    
     
-    void BHepRepWriter::writeInt(int i) {
+    void BHepRepWriter::writeInt(int i) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         // write network-order
         os.put((i >> 24) & 0xff);
         os.put((i >> 16) & 0xff);
@@ -534,11 +534,11 @@ namespace cheprep {
         os.put((i      ) & 0xff);
     }
     
-    void BHepRepWriter::writeByte(unsigned char b) {
+    void BHepRepWriter::writeByte(unsigned char b) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         os.put((char)b);
     }
     
-    void BHepRepWriter::writeString(std::string s) {
+    void BHepRepWriter::writeString(std::string s) {  ;;;   if (!values_G4MT_TLS_) values_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &values = *values_G4MT_TLS_;  ;;;    ;;;   if (!attributes_G4MT_TLS_) attributes_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &attributes = *attributes_G4MT_TLS_;  ;;;    ;;;   if (!tags_G4MT_TLS_) tags_G4MT_TLS_ = new std::map<std::string, unsigned char>  ; std::map<std::string, unsigned char> &tags = *tags_G4MT_TLS_;  ;;;  
         os << s;
         os.put(0);
     }

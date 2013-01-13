@@ -166,63 +166,63 @@ public:
 class G4GMocrenIO {
 public:
   // file id
-  static std::string kId;
+  static __thread std::string *kId_G4MT_TLS_;
 
   // file version
-  static std::string kVersion;
+  static __thread std::string *kVersion_G4MT_TLS_;
 
   // data file name 
-  static std::string kFileName;
+  static __thread std::string *kFileName_G4MT_TLS_;
 
   // file data endian: little or not
-  static char kLittleEndianInput;
-  static char kLittleEndianOutput;
+  static __thread char *kLittleEndianInput_G4MT_TLS_;
+  static __thread char *kLittleEndianOutput_G4MT_TLS_;
 
-  static std::string kComment;
+  static __thread std::string *kComment_G4MT_TLS_;
 
   // number of events
-  static int kNumberOfEvents;
+  static __thread int kNumberOfEvents;
 
   // pointer to the modality image data
-  static unsigned int kPointerToModalityData;
+  static __thread unsigned int kPointerToModalityData;
   // pointer to the dose distribution image data
-  static std::vector<unsigned int> kPointerToDoseDistData;
+  static __thread std::vector<unsigned int> *kPointerToDoseDistData_G4MT_TLS_;
   // pointer to the ROI image data
-  static unsigned int kPointerToROIData;
+  static __thread unsigned int kPointerToROIData;
   // pointer to the track data
-  static unsigned int kPointerToTrackData;
+  static __thread unsigned int kPointerToTrackData;
   // pointer to the detector data
-  static unsigned int kPointerToDetectorData;
+  static __thread unsigned int kPointerToDetectorData;
 
   // voxel spacing (universal size)
-  static float kVoxelSpacing[3];
+  static __thread float kVoxelSpacing[3];
 
   //----- modality image -----//
-  static GMocrenDataPrimitive<short> kModality;
+  static __thread GMocrenDataPrimitive<short> *kModality_G4MT_TLS_;
   // density map to modality (CT) values
-  static std::vector<float> kModalityImageDensityMap;
-  static std::string kModalityUnit;
+  static __thread std::vector<float> *kModalityImageDensityMap_G4MT_TLS_;
+  static __thread std::string *kModalityUnit_G4MT_TLS_;
 
   //----- dose distribution -----//
-  static std::vector<class GMocrenDataPrimitive<double> > kDose;
+  static __thread std::vector<class GMocrenDataPrimitive<double> > *kDose_G4MT_TLS_;
   //std::vector<short *> kShortDose;
-  static std::string kDoseUnit;
+  static __thread std::string *kDoseUnit_G4MT_TLS_;
 
   //----- RoI -----//
-  static std::vector<class GMocrenDataPrimitive<short> > kRoi;
+  static __thread std::vector<class GMocrenDataPrimitive<short> > *kRoi_G4MT_TLS_;
 
   //----- track information -----//
-  static std::vector<float *> kSteps; // begin (x,y,z), end (x,y,z)
-  static std::vector<unsigned char *> kStepColors; // r, g, b
+  static __thread std::vector<float *> *kSteps_G4MT_TLS_; // begin (x,y,z), end (x,y,z)
+  static __thread std::vector<unsigned char *> *kStepColors_G4MT_TLS_; // r, g, b
 
-  static std::vector<class GMocrenTrack> kTracks;
+  static __thread std::vector<class GMocrenTrack> *kTracks_G4MT_TLS_;
   bool kTracksWillBeStored;
 
   //----- detector information -----//
-  static std::vector<class GMocrenDetector> kDetectors;
+  static __thread std::vector<class GMocrenDetector> *kDetectors_G4MT_TLS_;
 
   //----- verbose information -----//
-  static int kVerbose; // verbose level :  0 - 5 (none - overtalk)
+  static __thread int kVerbose; // verbose level :  0 - 5 (none - overtalk)
 
 public:
   // constructor

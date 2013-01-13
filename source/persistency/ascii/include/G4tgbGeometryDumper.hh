@@ -106,7 +106,7 @@ class G4tgbGeometryDumper
 
   private:
 
-    static G4tgbGeometryDumper* theInstance;
+    static __thread G4tgbGeometryDumper* theInstance;
 
     std::ofstream* theFile;
 

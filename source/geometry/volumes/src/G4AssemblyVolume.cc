@@ -41,7 +41,7 @@
 
 #include <sstream>
 
-unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
+__thread unsigned int G4AssemblyVolume::fsInstanceCounter = 0;
 
 // Default constructor
 //

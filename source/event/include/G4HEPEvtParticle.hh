@@ -79,20 +79,20 @@ class G4HEPEvtParticle
 };
 
 #if defined G4EVENT_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
+  extern G4DLLEXPORT __thread G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
+  extern G4DLLIMPORT __thread G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator_G4MT_TLS_;
 #endif
 
 inline void * G4HEPEvtParticle::operator new(size_t)
-{
+{  ;;;   if (!aHEPEvtParticleAllocator_G4MT_TLS_) aHEPEvtParticleAllocator_G4MT_TLS_ = new G4Allocator<G4HEPEvtParticle>  ; G4Allocator<G4HEPEvtParticle> &aHEPEvtParticleAllocator = *aHEPEvtParticleAllocator_G4MT_TLS_;  ;;;  
   void * aHEPEvtParticle;
   aHEPEvtParticle = (void *) aHEPEvtParticleAllocator.MallocSingle();
   return aHEPEvtParticle;
 }
 
 inline void G4HEPEvtParticle::operator delete(void * aHEPEvtParticle)
-{
+{  ;;;   if (!aHEPEvtParticleAllocator_G4MT_TLS_) aHEPEvtParticleAllocator_G4MT_TLS_ = new G4Allocator<G4HEPEvtParticle>  ; G4Allocator<G4HEPEvtParticle> &aHEPEvtParticleAllocator = *aHEPEvtParticleAllocator_G4MT_TLS_;  ;;;  
   aHEPEvtParticleAllocator.FreeSingle((G4HEPEvtParticle *) aHEPEvtParticle);
 }
 

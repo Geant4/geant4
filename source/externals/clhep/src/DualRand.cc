@@ -62,7 +62,7 @@ static const int MarkerLen = 64; // Enough room to hold a begin or end marker.
 std::string DualRand::name() const {return "DualRand";}
 
 // Number of instances with automatic seed selection
-int DualRand::numEngines = 0;
+__thread int DualRand::numEngines = 0;
 
 // The following constructors (excluding the istream constructor)  fill
 // the bits of the tausworthe and the starting state of the integer

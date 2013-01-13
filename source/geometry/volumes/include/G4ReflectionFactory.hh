@@ -240,7 +240,7 @@ class G4ReflectionFactory
   
   private:
 
-    static G4ReflectionFactory* fInstance;
+    static __thread G4ReflectionFactory* fInstance;
     static const G4String       fDefaultNameExtension;
     static const G4Scale3D      fScale;
     G4double                    fScalePrecision;

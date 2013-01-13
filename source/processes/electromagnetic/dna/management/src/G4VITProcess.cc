@@ -29,13 +29,14 @@
 #include "G4SystemOfUnits.hh"
 #include "G4IT.hh"
 
-size_t G4VITProcess::fNbProcess = 0;
+__thread size_t *G4VITProcess::fNbProcess_G4MT_TLS_ = 0;
 
 G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
     G4VProcess( name, type ),
-    fpState (0),
-    fProcessID(fNbProcess)
-{
+    fpState (0)//,
+			  //fProcessID(fNbProcess)
+{  ;;;   if (!fNbProcess_G4MT_TLS_) fNbProcess_G4MT_TLS_ = new size_t ( 0) ; size_t &fNbProcess = *fNbProcess_G4MT_TLS_;  ;;;  
+  fProcessID = fNbProcess;
         fNbProcess++;
         SetInstantiateProcessState(true);
         currentInteractionLength            = 0;
@@ -45,23 +46,23 @@ G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
 }
 
 G4VITProcess::G4ProcessState::G4ProcessState()
-{
+{  ;;;   if (!fNbProcess_G4MT_TLS_) fNbProcess_G4MT_TLS_ = new size_t ( 0) ; size_t &fNbProcess = *fNbProcess_G4MT_TLS_;  ;;;  
     theNumberOfInteractionLengthLeft = -1.0 ;
     theInteractionTimeLeft           = -1.0 ;
     currentInteractionLength         = -1.0 ;
 }
 
 G4VITProcess::G4ProcessState::~G4ProcessState()
-{;}
+{  ;;;   if (!fNbProcess_G4MT_TLS_) fNbProcess_G4MT_TLS_ = new size_t ( 0) ; size_t &fNbProcess = *fNbProcess_G4MT_TLS_;  ;;;  ;}
 
 G4VITProcess::~G4VITProcess()
-{
+{  ;;;   if (!fNbProcess_G4MT_TLS_) fNbProcess_G4MT_TLS_ = new size_t ( 0) ; size_t &fNbProcess = *fNbProcess_G4MT_TLS_;  ;;;  
     //dtor
     // As the owner, G4IT should delete fProcessState
 }
 
 G4VITProcess::G4VITProcess(const G4VITProcess& other)  : G4VProcess(other), fProcessID(other.fProcessID)
-{
+{  ;;;   if (!fNbProcess_G4MT_TLS_) fNbProcess_G4MT_TLS_ = new size_t ( 0) ; size_t &fNbProcess = *fNbProcess_G4MT_TLS_;  ;;;  
 	//copy ctor
         fpState                             = 0 ;
         currentInteractionLength            = 0;
@@ -72,14 +73,14 @@ G4VITProcess::G4VITProcess(const G4VITProcess& other)  : G4VProcess(other), fPro
 }
 
 G4VITProcess& G4VITProcess::operator=(const G4VITProcess& rhs)
-{
+{  ;;;   if (!fNbProcess_G4MT_TLS_) fNbProcess_G4MT_TLS_ = new size_t ( 0) ; size_t &fNbProcess = *fNbProcess_G4MT_TLS_;  ;;;  
 	if (this == &rhs) return *this; // handle self assignment
 	//assignment operator
 	return *this;
 }
 
 void G4VITProcess::StartTracking(G4Track* track)
-{
+{  ;;;   if (!fNbProcess_G4MT_TLS_) fNbProcess_G4MT_TLS_ = new size_t ( 0) ; size_t &fNbProcess = *fNbProcess_G4MT_TLS_;  ;;;  
     G4TrackingInformation* trackingInfo = GetIT(track)->GetTrackingInfo();
     if(InstantiateProcessState())
     {
@@ -95,7 +96,7 @@ void G4VITProcess::StartTracking(G4Track* track)
 
 void G4VITProcess::SubtractNumberOfInteractionLengthLeft(
                                   G4double previousStepSize )
-{
+{  ;;;   if (!fNbProcess_G4MT_TLS_) fNbProcess_G4MT_TLS_ = new size_t ( 0) ; size_t &fNbProcess = *fNbProcess_G4MT_TLS_;  ;;;  
   if (fpState->currentInteractionLength>0.0) {
     fpState->theNumberOfInteractionLengthLeft -= previousStepSize/(fpState->currentInteractionLength);
     if(fpState->theNumberOfInteractionLengthLeft<0.) {

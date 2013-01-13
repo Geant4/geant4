@@ -228,7 +228,7 @@ G4String G4VisCommandReviewKeptEvents::GetCurrentValue (G4UIcommand*)
 
 void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 {
-  static bool reviewing = false;
+  static __thread bool reviewing = false;
   if (reviewing) {
     G4cout <<
       "\"/vis/reviewKeptEvents\" not allowed within an already started review."
@@ -294,7 +294,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 	G4cout << "Drawing event : " << event->GetEventID() <<
 	  ".  At EndOfEvent, enter any command, then \"cont[inue]\"..."
 	       << G4endl;
-	static G4bool first = true;
+	static __thread G4bool first = true;
 	if (first) {
 	  first = false;
 	  G4cout <<

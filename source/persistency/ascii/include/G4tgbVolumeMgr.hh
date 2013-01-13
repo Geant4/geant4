@@ -137,7 +137,7 @@ class G4tgbVolumeMgr
 
   private:
 
-    static G4tgbVolumeMgr* theInstance;
+    static __thread G4tgbVolumeMgr* theInstance;
 
     G4mssvol theVolumeList;
       // Map of G4tgbVolume's: G4String is the G4tgbVolume name,

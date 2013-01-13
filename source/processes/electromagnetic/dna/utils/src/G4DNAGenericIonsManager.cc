@@ -167,5 +167,5 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNAGenericIonsManager * G4DNAGenericIonsManager::theInstance(0);
+__thread G4DNAGenericIonsManager * G4DNAGenericIonsManager::theInstance(0);
    

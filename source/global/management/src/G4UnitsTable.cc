@@ -52,7 +52,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
-G4UnitsTable G4UnitDefinition::theUnitsTable;
+__thread G4UnitsTable *G4UnitDefinition::theUnitsTable_G4MT_TLS_ = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -60,7 +60,7 @@ G4UnitDefinition::G4UnitDefinition(const G4String& name,
                                    const G4String& symbol,
                                    const G4String& category, G4double value)
   : Name(name),SymbolName(symbol),Value(value)   
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
     // Does the Category objet already exist ?
     //
     size_t nbCat = theUnitsTable.size();
@@ -83,20 +83,20 @@ G4UnitDefinition::G4UnitDefinition(const G4String& name,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition::~G4UnitDefinition()
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition::G4UnitDefinition(const G4UnitDefinition& right)
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
     *this = right;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition& G4UnitDefinition::operator=(const G4UnitDefinition& right)
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
   if (this != &right)
     {
       Name          = right.Name;
@@ -124,7 +124,7 @@ G4int G4UnitDefinition::operator!=(const G4UnitDefinition &right) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitsTable& G4UnitDefinition::GetUnitsTable()
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
   if(theUnitsTable.size()==0)  { BuildUnitsTable(); }
   return theUnitsTable;
 }
@@ -132,7 +132,7 @@ G4UnitsTable& G4UnitDefinition::GetUnitsTable()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4double G4UnitDefinition::GetValueOf(const G4String& str)
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
   G4String name,symbol;
   for (size_t i=0;i<(GetUnitsTable()).size();i++)
      {
@@ -154,7 +154,7 @@ G4double G4UnitDefinition::GetValueOf(const G4String& str)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4String G4UnitDefinition::GetCategory(const G4String& str)
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
   G4String name,symbol;
   for (size_t i=0;i<(GetUnitsTable()).size();i++)
      {
@@ -177,7 +177,7 @@ G4String G4UnitDefinition::GetCategory(const G4String& str)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4UnitDefinition::PrintDefinition()
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
   G4int nameL = theUnitsTable[CategoryIndex]->GetNameMxLen();
   G4int symbL = theUnitsTable[CategoryIndex]->GetSymbMxLen();
   G4cout << std::setw(nameL) << Name << " (" 
@@ -187,7 +187,7 @@ void G4UnitDefinition::PrintDefinition()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4UnitDefinition::BuildUnitsTable()
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
  //Length
  new G4UnitDefinition(    "parsec","pc"      ,"Length",parsec); 
  new G4UnitDefinition( "kilometer","km"      ,"Length",kilometer);
@@ -330,7 +330,7 @@ void G4UnitDefinition::BuildUnitsTable()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4UnitDefinition::PrintUnitsTable()
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
   G4cout << "\n          ----- The Table of Units ----- \n";
   for(size_t i=0;i<theUnitsTable.size();i++)
   {
@@ -341,7 +341,7 @@ void G4UnitDefinition::PrintUnitsTable()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4UnitDefinition::ClearUnitsTable()
-{
+{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
   for (size_t i=0;i<theUnitsTable.size();i++)
   {
     delete theUnitsTable[i];

@@ -33,12 +33,12 @@
 #include "G4PreCompoundParameters.hh"
 #include "G4SystemOfUnits.hh"
 
-G4PreCompoundParameters* G4PreCompoundParameters::theParameters = 0;
+__thread G4PreCompoundParameters* G4PreCompoundParameters::theParameters = 0;
 
 G4PreCompoundParameters * G4PreCompoundParameters::GetAddress()
 { 
   if(0 == theParameters) {
-    static G4PreCompoundParameters par;
+    static __thread G4PreCompoundParameters *par_G4MT_TLS_ = 0 ; if (!par_G4MT_TLS_) par_G4MT_TLS_ = new  G4PreCompoundParameters  ;  G4PreCompoundParameters &par = *par_G4MT_TLS_;
     theParameters = &par;
   }
   return theParameters; 

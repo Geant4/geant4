@@ -43,7 +43,7 @@
 
 #include "G4INCLXXInterfaceMessenger.hh"
 
-G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL;
+__thread G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL;
 
 G4INCLXXInterfaceStore::G4INCLXXInterfaceStore() :
   dumpInput(false),

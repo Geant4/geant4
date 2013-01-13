@@ -200,7 +200,7 @@ private:
   double dy;
   // The components.
 
-  static double tolerance;
+  static __thread double tolerance;
   // default tolerance criterion for isNear() to return true.
 
 };  // Hep2Vector

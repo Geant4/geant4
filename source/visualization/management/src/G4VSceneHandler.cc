@@ -301,7 +301,7 @@ void G4VSceneHandler::AddCompound (const G4THitsMap<G4double>& hits) {
     }
   }
   if (scoreMapHits) {
-    static G4bool first = true;
+    static __thread G4bool first = true;
     if (first) {
       first = false;
       G4cout <<

@@ -82,20 +82,20 @@ class G4TrajectoryContainer
 };
 
 #if defined G4EVENT_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;
+  extern G4DLLEXPORT __thread G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;
+  extern G4DLLIMPORT __thread G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator_G4MT_TLS_;
 #endif
 
 inline void* G4TrajectoryContainer::operator new(size_t)
-{
+{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;  
   void* aTrajectoryContainer;
   aTrajectoryContainer = (void*)aTrajectoryContainerAllocator.MallocSingle();
   return aTrajectoryContainer;
 }
 
 inline void G4TrajectoryContainer::operator delete(void* aTrajectoryContainer)
-{
+{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;  
   aTrajectoryContainerAllocator.FreeSingle((G4TrajectoryContainer*)aTrajectoryContainer);
 }
 

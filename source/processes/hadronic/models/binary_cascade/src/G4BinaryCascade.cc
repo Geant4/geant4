@@ -209,7 +209,7 @@ G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
         G4Nucleus & aNucleus)
 //----------------------------------------------------------------------------
 {
-    static G4int eventcounter=0;
+    static __thread G4int eventcounter=0;
 
     //   if ( eventcounter == 0 ) {
     //      SetEpReportLevel(3);   // report non conservation with model etc.

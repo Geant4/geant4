@@ -148,7 +148,7 @@ class G4ErrorPropagatorManager
  
  private:
 
-  static G4ErrorPropagatorManager* theG4ErrorPropagatorManager;
+  static __thread G4ErrorPropagatorManager* theG4ErrorPropagatorManager;
 
   G4ErrorRunManagerHelper* theG4ErrorRunManagerHelper;
 

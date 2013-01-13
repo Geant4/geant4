@@ -397,7 +397,7 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
 
     G4double T = kineticEnergy*rateMassHe2p/MeV ;
 
-    static G4double a[11][5] = {
+    static __thread G4double a[11][5] = {
        {9.43672, 0.54398, 84.341, 1.3705, 57.422},
        {67.1503, 0.41409, 404.512, 148.97, 20.99},
        {5.11203, 0.453,  36.718,  50.6,  28.058}, 
@@ -410,7 +410,7 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
        {2.959, 0.53255, 34.247, 60.655, 15.153}, 
        {3.80133, 0.41590, 12.9966, 117.83, 242.28} };   
 
-    static G4double atomicWeight[11] = {
+    static __thread G4double atomicWeight[11] = {
        101.96128, 44.0098, 16.0426, 28.0536, 42.0804,
        104.1512, 44.665, 60.0843, 18.0152, 18.0152, 12.0};       
 
@@ -469,7 +469,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
    // He energy in internal units of parametrisation formula (MeV)
   G4double T = kineticEnergy*rateMassHe2p/MeV ;
 
-  static G4double a[92][5] = {
+  static __thread G4double a[92][5] = {
     {0.35485, 0.6456, 6.01525,  20.8933, 4.3515
    },{ 0.58,    0.59,   6.3,     130.0,   44.07
    },{ 1.42,    0.49,   12.25,    32.0,    9.161
@@ -665,7 +665,7 @@ G4double G4BraggIonModel::HeEffChargeSquare(G4double z,
   // The Stopping and Range of Ions in Matter,
   // Vol.1, Pergamon Press, 1985
 
-  static G4double c[6] = {0.2865,  0.1266, -0.001429,
+  static __thread G4double c[6] = {0.2865,  0.1266, -0.001429,
                           0.02402,-0.01135, 0.001475};
 
   G4double e = std::max(0.0,std::log(kinEnergyHeInMeV*massFactor));

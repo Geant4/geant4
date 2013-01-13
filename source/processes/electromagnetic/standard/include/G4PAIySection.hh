@@ -152,7 +152,7 @@ private :
   static const G4double fDelta; // energy shift from interval border = 0.001
   static const G4double fError; // error in lin-log approximation = 0.005
 
-  static       G4int fNumberOfGammas;         // = 111;
+  static __thread       G4int fNumberOfGammas;         // = 111;
   static const G4double fLorentzFactor[112];  //  static gamma array
 
   static

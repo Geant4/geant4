@@ -44,7 +44,7 @@ private:
 
   G4CameronTruranHilfPairingCorrections();
 	
-  static G4CameronTruranHilfPairingCorrections* theInstance;
+  static __thread G4CameronTruranHilfPairingCorrections* theInstance;
 
 
 public:

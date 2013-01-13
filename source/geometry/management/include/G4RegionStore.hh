@@ -112,8 +112,8 @@ class G4RegionStore : public std::vector<G4Region*>
   private:
 
     static G4RegionStore* fgInstance;
-    static G4VStoreNotifier* fgNotifier;
-    static G4bool locked;
+    static __thread G4VStoreNotifier* fgNotifier;
+    static __thread G4bool locked;
 };
 
 #endif

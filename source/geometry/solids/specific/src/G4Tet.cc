@@ -575,7 +575,7 @@ G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
     }
     else if(calcNorm && n)
     {
-      static G4ThreeVector normal;
+      static __thread G4ThreeVector *normal_G4MT_TLS_ = 0 ; if (!normal_G4MT_TLS_) normal_G4MT_TLS_ = new  G4ThreeVector  ;  G4ThreeVector &normal = *normal_G4MT_TLS_;
       if(tt==t1)        { normal=fNormal123; }
       else if (tt==t2)  { normal=fNormal134; }
       else if (tt==t3)  { normal=fNormal142; }
@@ -791,7 +791,7 @@ G4Polyhedron* G4Tet::CreatePolyhedron () const
 {
   G4Polyhedron *ph=new G4Polyhedron;
   G4double xyz[4][3];
-  static G4int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
+  static __thread G4int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
   xyz[0][0]=fAnchor.x(); xyz[0][1]=fAnchor.y(); xyz[0][2]=fAnchor.z();
   xyz[1][0]=fP2.x(); xyz[1][1]=fP2.y(); xyz[1][2]=fP2.z();
   xyz[2][0]=fP3.x(); xyz[2][1]=fP3.y(); xyz[2][2]=fP3.z();

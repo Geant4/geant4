@@ -308,8 +308,8 @@ AlongStepGetPhysicalInteractionLength(const G4Track&                track,
   // --------------------------------------------------
   if ( fIsGhostGeometry )
     {
-      static G4FieldTrack endTrack('0');
-      static ELimited eLimited;
+      static __thread G4FieldTrack *endTrack_G4MT_TLS_ = 0 ; if (!endTrack_G4MT_TLS_) endTrack_G4MT_TLS_ = new  G4FieldTrack ('0') ;  G4FieldTrack &endTrack = *endTrack_G4MT_TLS_;
+      static __thread ELimited *eLimited_G4MT_TLS_ = 0 ; if (!eLimited_G4MT_TLS_) eLimited_G4MT_TLS_ = new  ELimited  ;  ELimited &eLimited = *eLimited_G4MT_TLS_;
       
       if (previousStepSize > 0.) fGhostSafety -= previousStepSize;
       if (fGhostSafety < 0.)     fGhostSafety = 0.0;

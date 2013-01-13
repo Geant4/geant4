@@ -193,8 +193,8 @@ private:
 
   unsigned long randomInt;
   unsigned long firstUnusedBit;
-  static unsigned long staticRandomInt;
-  static unsigned long staticFirstUnusedBit;
+  static __thread unsigned long staticRandomInt;
+  static __thread unsigned long staticFirstUnusedBit;
   
   shared_ptr<HepRandomEngine> localEngine;
   double defaultWidth;

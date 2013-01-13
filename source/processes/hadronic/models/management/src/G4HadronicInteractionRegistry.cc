@@ -31,12 +31,12 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4HadronicInteraction.hh"
 
-G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::theInstance = 0;
+__thread G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::theInstance = 0;
 
 G4HadronicInteractionRegistry* G4HadronicInteractionRegistry::Instance()
 {
   if(0 == theInstance) {
-    static G4HadronicInteractionRegistry manager;
+    static __thread G4HadronicInteractionRegistry *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4HadronicInteractionRegistry  ;  G4HadronicInteractionRegistry &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;

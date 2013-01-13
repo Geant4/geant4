@@ -39,12 +39,12 @@
 #include "G4VHCIOentry.hh"
 #include "G4VDCIOentry.hh"
 
-G4PersistencyCenter* G4PersistencyCenter::f_thePointer=G4PersistencyCenter::GetPersistencyCenter();
+__thread G4PersistencyCenter* G4PersistencyCenter::f_thePointer = 0 ;
 
 // Implementation of Constructor #1
 G4PersistencyCenter::G4PersistencyCenter()
  : m_verbose(0)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   f_wrObj[0] = "HepMC";
   f_wrObj[1] = "MCTruth";
   f_wrObj[2] = "Hits";
@@ -77,14 +77,14 @@ G4PersistencyCenter::G4PersistencyCenter()
 
 // Implementation of Destructor #1
 G4PersistencyCenter::~G4PersistencyCenter()
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   delete f_theMessenger;
   delete f_currentManager;
 }
 
 // Implementation of GetPersistencyCenter
 G4PersistencyCenter* G4PersistencyCenter::GetPersistencyCenter()
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( f_thePointer == 0 ) f_thePointer = new G4PersistencyCenter;
   return f_thePointer;
 }
@@ -92,7 +92,7 @@ G4PersistencyCenter* G4PersistencyCenter::GetPersistencyCenter()
 
 // Implementation of SelectSystem
 void G4PersistencyCenter::SelectSystem(std::string systemName)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   G4int st = 0;
 
   if (f_currentManager!=0) delete f_currentManager;
@@ -135,7 +135,7 @@ void G4PersistencyCenter::SelectSystem(std::string systemName)
 
 // Implementation of SetHepMCObjyReaderFile
 void G4PersistencyCenter::SetHepMCObjyReaderFile(std::string file)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( SetReadFile("HepMC", file) ) {
     SetRetrieveMode("HepMC", true);
   }
@@ -143,7 +143,7 @@ void G4PersistencyCenter::SetHepMCObjyReaderFile(std::string file)
 
 // Implementation of CurrentHepMCObjyReaderFile
 std::string G4PersistencyCenter::CurrentHepMCObjyReaderFile()
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( CurrentRetrieveMode("HepMC") ) {
     return CurrentReadFile("HepMC");
   } else {
@@ -153,7 +153,7 @@ std::string G4PersistencyCenter::CurrentHepMCObjyReaderFile()
 
 // Implementation of SetStoreMode
 void G4PersistencyCenter::SetStoreMode(std::string objName, StoreMode mode)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( (*(f_writeFileName.find(objName))).second != "" ) {
     f_writeFileMode[objName] = mode;
   } else {
@@ -164,7 +164,7 @@ void G4PersistencyCenter::SetStoreMode(std::string objName, StoreMode mode)
 
 // Implementation of SetRetrieveMode
 void G4PersistencyCenter::SetRetrieveMode(std::string objName, G4bool mode)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( (*(f_readFileName.find(objName))).second != "" ) {
     f_readFileMode[objName] = mode;
   } else {
@@ -175,7 +175,7 @@ void G4PersistencyCenter::SetRetrieveMode(std::string objName, G4bool mode)
 
 // Implementation of CurrentStoreMode
 StoreMode G4PersistencyCenter::CurrentStoreMode(std::string objName)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
 
 
   if ( (*(f_writeFileName.find(objName))).second != "" ) {
@@ -187,7 +187,7 @@ StoreMode G4PersistencyCenter::CurrentStoreMode(std::string objName)
 
 // Implementation of CurrentRetrieveMode
 G4bool G4PersistencyCenter::CurrentRetrieveMode(std::string objName)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( (*(f_readFileName.find(objName))).second != "" ) {
     return f_readFileMode[objName];
   } else {
@@ -197,7 +197,7 @@ G4bool G4PersistencyCenter::CurrentRetrieveMode(std::string objName)
 
 // Implementation of SetWriteFile
 G4bool G4PersistencyCenter::SetWriteFile(std::string objName, std::string writeFileName)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( (*(f_writeFileName.find(objName))).second != "" ) {
     f_writeFileName[objName] = writeFileName;
   } else {
@@ -210,7 +210,7 @@ G4bool G4PersistencyCenter::SetWriteFile(std::string objName, std::string writeF
 
 // Implementation of SetReadFile
 G4bool G4PersistencyCenter::SetReadFile(std::string objName, std::string readFileName)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
 #ifndef WIN32
   if ( f_ut.FileExists(readFileName) )
   {
@@ -228,7 +228,7 @@ G4bool G4PersistencyCenter::SetReadFile(std::string objName, std::string readFil
 
 // Implementation of CurrentWriteFile
 std::string G4PersistencyCenter::CurrentWriteFile(std::string objName)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( (*(f_writeFileName.find(objName))).second != "" ) {
     return f_writeFileName[objName];
   } else {
@@ -238,7 +238,7 @@ std::string G4PersistencyCenter::CurrentWriteFile(std::string objName)
 
 // Implementation of CurrentReadFile
 std::string G4PersistencyCenter::CurrentReadFile(std::string objName)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( (*(f_readFileName.find(objName))).second != "" ) {
     return f_readFileName[objName];
   } else {
@@ -248,7 +248,7 @@ std::string G4PersistencyCenter::CurrentReadFile(std::string objName)
 
 // Implementation of CurrentObject
 std::string G4PersistencyCenter::CurrentObject(std::string file)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   FileMap::iterator itr;
   for ( itr = f_readFileName.begin(); itr != f_readFileName.end(); itr++ ) {
     if ( file == (*itr).second ) return (*itr).first;
@@ -261,7 +261,7 @@ std::string G4PersistencyCenter::CurrentObject(std::string file)
 
 // Implementation of AddHCIOmanager
 void G4PersistencyCenter::AddHCIOmanager(std::string detName, std::string colName)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   G4HCIOcatalog* ioc = G4HCIOcatalog::GetHCIOcatalog();
 
   G4VHCIOentry* ioe = ioc->GetEntry(detName);
@@ -275,14 +275,14 @@ void G4PersistencyCenter::AddHCIOmanager(std::string detName, std::string colNam
 
 // Implementation of CurrentHCIOmanager
 std::string G4PersistencyCenter::CurrentHCIOmanager()
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   G4HCIOcatalog* ioc = G4HCIOcatalog::GetHCIOcatalog();
   return ioc->CurrentHCIOmanager();
 }
 
 // Implementation of AddDCIOmanager
 void G4PersistencyCenter::AddDCIOmanager(std::string detName)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   G4DCIOcatalog* ioc = G4DCIOcatalog::GetDCIOcatalog();
 
   std::string colName = "";
@@ -297,14 +297,14 @@ void G4PersistencyCenter::AddDCIOmanager(std::string detName)
 
 // Implementation of CurrentDCIOmanager
 std::string G4PersistencyCenter::CurrentDCIOmanager()
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   G4DCIOcatalog* ioc = G4DCIOcatalog::GetDCIOcatalog();
   return ioc->CurrentDCIOmanager();
 }
 
 // Implementation of PrintAll
 void G4PersistencyCenter::PrintAll()
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   G4cout << "Persistency Package: " << CurrentSystem() << G4endl;
   G4cout << G4endl;
 
@@ -376,14 +376,14 @@ void G4PersistencyCenter::PrintAll()
 // Implementation of SetPersistencyManager
 void G4PersistencyCenter::SetPersistencyManager(G4PersistencyManager* pm,
                                                   std::string name)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   f_currentManager=pm;
   f_currentSystemName=name;
 }
 
 // Implementation of GetPersistencyManager
 G4PersistencyManager* G4PersistencyCenter::GetPersistencyManager(std::string nam)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if (f_theCatalog.find(nam)!=f_theCatalog.end())
     return f_theCatalog[nam];
   return 0;
@@ -391,27 +391,27 @@ G4PersistencyManager* G4PersistencyCenter::GetPersistencyManager(std::string nam
 
 // Implementation of RegisterPersistencyManager
 void G4PersistencyCenter::RegisterPersistencyManager(G4PersistencyManager* pm)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   f_theCatalog[pm->GetName()]=pm;
 }
 
 // Implementation of DeletePersistencyManager
 void G4PersistencyCenter::DeletePersistencyManager()
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if (f_currentManager!=0) delete f_currentManager;
   f_currentManager=0;
 }
 
 // Implementation of SetVerboseLevel
 void G4PersistencyCenter::SetVerboseLevel(int v)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   m_verbose = v;
   if ( f_currentManager != 0 ) f_currentManager->SetVerboseLevel(m_verbose);
 }
 
 // Implementation of PadString
 std::string G4PersistencyCenter::PadString(std::string name, unsigned int width)
-{
+{  ;;;   if (!f_thePointer) f_thePointer=G4PersistencyCenter::GetPersistencyCenter();  ;;;  
   if ( name.length() > width ) {
     return name.substr(0,width-1) + "#";
   } else {

@@ -43,37 +43,37 @@
 #include "G4HadTmpUtil.hh"
 
 // Initialization of the statics
-G4int G4PhotoNuclearCrossSection::lastN=0;  
+__thread G4int G4PhotoNuclearCrossSection::lastN=0;  
                             // The last N of calculated nucleus
-G4int G4PhotoNuclearCrossSection::lastZ=0;  
+__thread G4int G4PhotoNuclearCrossSection::lastZ=0;  
                             // The last Z of calculated nucleus
-G4double G4PhotoNuclearCrossSection::lastSig=0.; 
+__thread G4double G4PhotoNuclearCrossSection::lastSig=0.; 
                             // Last value of the Cross Section
-G4double* G4PhotoNuclearCrossSection::lastGDR=0; 
+__thread G4double* G4PhotoNuclearCrossSection::lastGDR=0; 
                             // Pointer to the last array of GDR cross sections
-G4double* G4PhotoNuclearCrossSection::lastHEN=0; 
+__thread G4double* G4PhotoNuclearCrossSection::lastHEN=0; 
                             // Pointer to the last array of HEn cross sections
-G4double G4PhotoNuclearCrossSection::lastE=0.;  
+__thread G4double G4PhotoNuclearCrossSection::lastE=0.;  
                             // Last used in the cross section Energy
-G4double G4PhotoNuclearCrossSection::lastTH=0.; 
+__thread G4double G4PhotoNuclearCrossSection::lastTH=0.; 
                             // Last value of the Energy Threshold (A-dependent)
-G4double G4PhotoNuclearCrossSection::lastSP=0.; 
+__thread G4double G4PhotoNuclearCrossSection::lastSP=0.; 
                             // Last value of the ShadowingPomeron (A-dependent)
 
 
 // Vector of pointers to the GDRPhotonuclearCrossSection
-std::vector<G4double*> G4PhotoNuclearCrossSection::GDR;
+__thread std::vector<G4double*> *G4PhotoNuclearCrossSection::GDR_G4MT_TLS_ = 0;
 
 // Vector of pointers to the HighEnPhotonuclearCrossSect
-std::vector<G4double*> G4PhotoNuclearCrossSection::HEN;
+__thread std::vector<G4double*> *G4PhotoNuclearCrossSection::HEN_G4MT_TLS_ = 0;
 
 
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection(const G4String& nam)
  : G4VCrossSectionDataSet(nam)
-{}
+{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  }
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
-{
+{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
   std::vector<G4double*>::iterator pos;
   for(pos=GDR.begin(); pos<GDR.end(); pos++)
   { delete [] *pos; }
@@ -85,7 +85,7 @@ G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 
 void
 G4PhotoNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
-{
+{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
   outFile << "G4PhotoNuclearCrossSection provides the total inelastic\n"
           << "cross section for photon interactions with nuclei.  The\n"
           << "cross section is a parameterization of data which covers\n" 
@@ -96,7 +96,7 @@ G4bool
 G4PhotoNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle* particle, 
 					    G4int /*Z*/, G4int /*A*/,
 					    const G4Element*, const G4Material*)
-{
+{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
   G4bool result = false;
   if( particle->GetDefinition()->GetPDGEncoding()==22) result = true;
   return result;
@@ -108,7 +108,7 @@ G4double
 G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
                                                G4int ZZ, G4int AA, const G4Isotope*,
 					       const G4Element*, const G4Material*)
-{
+{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
   static const G4double THmin=2.;          // minimum Energy Threshold
   static const G4double dE=1.;             // step for the GDR table
   static const G4int    nL=105;            // A#of GDResonance points in E 
@@ -133,10 +133,10 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
 
   // Associative memory for acceleration
 
-  static std::vector <G4int> colN;      // N of calculated nuclei
-  static std::vector <G4int> colZ;      // Z of calculated nuclei
-  static std::vector <G4double> spA;    // shadowing coefficients (A-dependent)
-  static std::vector <G4double> eTH;    // energy threshold (A-dependent)
+  static __thread std::vector <G4int> *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colN = *colN_G4MT_TLS_;      // N of calculated nuclei
+  static __thread std::vector <G4int> *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colZ = *colZ_G4MT_TLS_;      // Z of calculated nuclei
+  static __thread std::vector <G4double> *spA_G4MT_TLS_ = 0 ; if (!spA_G4MT_TLS_) spA_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &spA = *spA_G4MT_TLS_;    // shadowing coefficients (A-dependent)
+  static __thread std::vector <G4double> *eTH_G4MT_TLS_ = 0 ; if (!eTH_G4MT_TLS_) eTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &eTH = *eTH_G4MT_TLS_;    // energy threshold (A-dependent)
   //
   const G4double Energy = aPart->GetKineticEnergy()/MeV;
   const G4int targetAtomicNumber = AA; //@@ Nat mixture (?!)
@@ -262,7 +262,7 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
 
 // Gives the threshold energy for different nuclei (min of p- and n-threshold)
 G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
-{
+{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
   // CHIPS - Direct GEANT
   //static const G4double mNeut = G4QPDGCode(2112).GetMass();
   //static const G4double mProt = G4QPDGCode(2212).GetMass();
@@ -346,7 +346,7 @@ G4double
 G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N, 
                                          const G4double X0, const G4double DX, 
                                          const G4double* Y)
-{
+{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
   if(DX<=0. || N<2)
   {
     G4cout<<"***G4PhotoNuclearCrossSection::EquLinearFit: DX="<<DX<<", N="<<N<<G4endl;
@@ -370,7 +370,7 @@ G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N,
 
 G4int 
 G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
-{
+{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
   static const G4int nLA=49;               // A#of GDResonance basic nuclei
   static const G4double LA[nLA]={
     2.,    4.,    6.,    7.,    9.,   12.,   14.,   15.,   16.,  19.,   23.,

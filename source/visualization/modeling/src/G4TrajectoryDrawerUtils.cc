@@ -84,7 +84,7 @@ namespace G4TrajectoryDrawerUtils {
 	  std::vector<G4AttValue>* trajectoryPointAttValues =
 	    aTrajectoryPoint->CreateAttValues();
 	  if (!trajectoryPointAttValues) {
-	    static G4bool warnedNoAttValues = false;
+	    static __thread G4bool warnedNoAttValues = false;
 	    if (!warnedNoAttValues) {
 	      G4cout <<
   "*************************************************************************"
@@ -111,7 +111,7 @@ namespace G4TrajectoryDrawerUtils {
 	      }
 	    }
 	    if (!foundPreTime || !foundPostTime) {
-	      static G4bool warnedTimesNotFound = false;
+	      static __thread G4bool warnedTimesNotFound = false;
 	      if (!warnedTimesNotFound) {
 		G4cout <<
   "*************************************************************************"

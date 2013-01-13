@@ -171,7 +171,7 @@ class G4ProcessTable
 
 
  private:
-  static G4ProcessTable*    fProcessTable;
+  static __thread G4ProcessTable*    fProcessTable;
   G4ProcessTableMessenger*   fProcTblMessenger;
 
  private:

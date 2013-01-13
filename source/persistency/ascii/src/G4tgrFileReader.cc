@@ -50,7 +50,7 @@
 #include "G4tgrMessenger.hh"
 
 
-G4tgrFileReader* G4tgrFileReader::theInstance = 0;
+__thread G4tgrFileReader* G4tgrFileReader::theInstance = 0;
 
 
 //---------------------------------------------------------------

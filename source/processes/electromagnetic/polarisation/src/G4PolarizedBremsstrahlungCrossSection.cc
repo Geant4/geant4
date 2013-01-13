@@ -40,8 +40,8 @@
 #include "G4PolarizedBremsstrahlungCrossSection.hh"
 #include "G4PhysicalConstants.hh"
 
-G4bool G4PolarizedBremsstrahlungCrossSection::scrnInitialized=false;
-G4double G4PolarizedBremsstrahlungCrossSection::SCRN [3][20];  
+__thread G4bool G4PolarizedBremsstrahlungCrossSection::scrnInitialized=false;
+__thread G4double G4PolarizedBremsstrahlungCrossSection::SCRN [3][20];  
 // screening function lookup table;
 
 

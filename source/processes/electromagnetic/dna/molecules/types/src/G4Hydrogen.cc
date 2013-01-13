@@ -41,7 +41,7 @@
 // ######################################################################
 // ###                         Hydrogen                               ###
 // ######################################################################
-G4Hydrogen* G4Hydrogen::theInstance = 0;
+__thread G4Hydrogen* G4Hydrogen::theInstance = 0;
 
 G4Hydrogen* G4Hydrogen::Definition()
 {

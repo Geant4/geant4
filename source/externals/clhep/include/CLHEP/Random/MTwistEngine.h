@@ -88,8 +88,8 @@ private:
   int count624;
 
   enum{ NminusM = 227, M = 397, N = 624};
-  static int numEngines;
-  static int maxIndex;
+  static __thread int numEngines;
+  static __thread int maxIndex;
 
 }; // MTwistEngine
 

@@ -732,7 +732,7 @@ G4double G4ITNavigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
 
-  static G4int sNavCScalls=0;
+  static __thread G4int sNavCScalls=0;
   sNavCScalls++;
 
   fLastTriedStepComputation= true; 
@@ -1684,7 +1684,7 @@ void G4ITNavigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
               << fAccuracyForException/mm << " mm.";
 
       suggestion << " ";
-      static G4int warnNow = 0;
+      static __thread G4int warnNow = 0;
       if( ((++warnNow % 100) == 1) )
       {
         message << G4endl

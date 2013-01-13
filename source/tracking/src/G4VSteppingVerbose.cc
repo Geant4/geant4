@@ -46,9 +46,9 @@
 #include "G4Track.hh"
 #include "G4ParticleDefinition.hh"
 
-G4VSteppingVerbose* G4VSteppingVerbose::fInstance = 0;
-G4int G4VSteppingVerbose::Silent = 0;
-G4int G4VSteppingVerbose::SilentStepInfo = 0;
+__thread G4VSteppingVerbose* G4VSteppingVerbose::fInstance = 0;
+__thread G4int G4VSteppingVerbose::Silent = 0;
+__thread G4int G4VSteppingVerbose::SilentStepInfo = 0;
 
 G4VSteppingVerbose::G4VSteppingVerbose()
   : fManager(0), fUserSteppingAction(0), 

@@ -78,7 +78,7 @@ G4double G4fissionEvent::G4SmpWatt(G4double ePart, G4int iso) {
               - energy of incoming particle
 */
 
-   static G4int nZA [nZAfis]= {
+   static __thread G4int nZA [nZAfis]= {
                       90231, 90232, 90233,
                       91233,
                       92232, 92233, 92234, 92235, 92236, 92237, 92238, 92239, 92240,
@@ -90,7 +90,7 @@ G4double G4fissionEvent::G4SmpWatt(G4double ePart, G4int iso) {
                       98249, 98250, 98251, 98252
                       };
 
-   static G4double Watta [nZAfis][3] = {
+   static __thread G4double Watta [nZAfis][3] = {
                       {6.00949285e-05, -8.36695381e-03,  9.50939496e-01},
                       {6.54348443e-05, -8.86574327e-03,  9.55404490e-01},
                       {7.08173682e-05, -9.22676286e-03,  9.50088329e-01},

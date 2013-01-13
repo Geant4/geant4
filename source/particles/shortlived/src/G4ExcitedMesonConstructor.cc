@@ -187,7 +187,7 @@ G4int  G4ExcitedMesonConstructor::GetQuarkContents(G4int iQ,
 
 G4double  G4ExcitedMesonConstructor::GetCharge(G4int iIsoSpin3, G4int idxType )
 {
-  static G4double quark_charge[7] = 
+  static __thread G4double quark_charge[7] = 
   {
     0., -1./3., +2./3., -1./3., +2./3., -1./3., +2./3.
   };

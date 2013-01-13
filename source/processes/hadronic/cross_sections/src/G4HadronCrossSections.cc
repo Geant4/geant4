@@ -57,7 +57,7 @@
 #include "G4Pow.hh"
  
 // Initialize static pointer for singleton instance
-G4HadronCrossSections* G4HadronCrossSections::theInstance = 0;
+__thread G4HadronCrossSections* G4HadronCrossSections::theInstance = 0;
 
 
 // Cross section tables from G3.21/GHEISHA routine GHESIG
@@ -65,7 +65,7 @@ G4HadronCrossSections* G4HadronCrossSections::theInstance = 0;
 //---------------------------------------------------------------------
 // Lab Momentum in GeV/c
 //---------------------------------------------------------------------
-G4float G4HadronCrossSections::plab[TSIZE] = {
+__thread G4float G4HadronCrossSections::plab[TSIZE] = {
        0.00000E+00    , 0.10000    , 0.15000    , 0.20000    , 0.25000    ,
        0.30000        , 0.35000    , 0.40000    , 0.45000    , 0.50000    ,
        0.55000        , 0.60000    , 0.65000    , 0.70000    , 0.75000    ,
@@ -81,7 +81,7 @@ G4float G4HadronCrossSections::plab[TSIZE] = {
 // Elastic scattering on free protons
 //---------------------------------------------------------------------
 
-G4float G4HadronCrossSections::csel[NPARTS][TSIZE] = {
+__thread G4float G4HadronCrossSections::csel[NPARTS][TSIZE] = {
       {0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, //1
        0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00,
        0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00,
@@ -440,7 +440,7 @@ G4float G4HadronCrossSections::csel[NPARTS][TSIZE] = {
 // Inelastic scattering on free protons
 //---------------------------------------------------------------------
 
-G4float G4HadronCrossSections::csin[NPARTS][TSIZE] = {
+__thread G4float G4HadronCrossSections::csin[NPARTS][TSIZE] = {
 
        {0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, //1
        0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00,
@@ -802,7 +802,7 @@ G4float G4HadronCrossSections::csin[NPARTS][TSIZE] = {
 // Elastic scattering of pion on nucleus
 //---------------------------------------------------------------------
 
-G4float G4HadronCrossSections::cspiel[3][TSIZE] = {
+__thread G4float G4HadronCrossSections::cspiel[3][TSIZE] = {
 
 // Elastic cross section for Pi on Al (mb)
        {0.00000E+00,  350.00    ,  580.00    ,  600.00    ,  550.00    , //1
@@ -842,7 +842,7 @@ G4float G4HadronCrossSections::cspiel[3][TSIZE] = {
 // Inelastic scattering of pion on nucleus
 //---------------------------------------------------------------------
 
-G4float G4HadronCrossSections::cspiin[3][TSIZE] = {
+__thread G4float G4HadronCrossSections::cspiin[3][TSIZE] = {
 
 // Inelastic cross section for Pi on Al (mb)
        {0.00000E+00,  200.00    ,  320.00    ,  500.00    ,  600.00    , //1
@@ -882,7 +882,7 @@ G4float G4HadronCrossSections::cspiin[3][TSIZE] = {
 // Elastic scattering of proton on nucleus
 //---------------------------------------------------------------------
 
-G4float G4HadronCrossSections::cspnel[3][TSIZE] = {
+__thread G4float G4HadronCrossSections::cspnel[3][TSIZE] = {
 
 // Elastic cross section for P on Al (mb)
         {2100.0    ,  1800.0    ,  1500.0    ,  1050.0    ,  900.00    , //1
@@ -922,7 +922,7 @@ G4float G4HadronCrossSections::cspnel[3][TSIZE] = {
 // Inelastic scattering of proton on nucleus
 //---------------------------------------------------------------------
 
-G4float G4HadronCrossSections::cspnin[3][TSIZE] = {
+__thread G4float G4HadronCrossSections::cspnin[3][TSIZE] = {
 
 // Inelastic cross section for P on Al (mb)
        {0.00000E+00,  200.00    ,  400.00    ,  800.00    ,  800.00    , //1
@@ -961,7 +961,7 @@ G4float G4HadronCrossSections::cspnin[3][TSIZE] = {
 //---------------------------------------------------------------------
 // Lab kinetic energy in GeV
 //---------------------------------------------------------------------
-G4float G4HadronCrossSections::elab[NELAB] = {
+__thread G4float G4HadronCrossSections::elab[NELAB] = {
        0.10000E-03, 0.20000E-03, 0.30000E-03, 0.40000E-03, 0.50000E-03,
        0.70000E-03, 0.10000E-02, 0.20000E-02, 0.30000E-02, 0.40000E-02,
        0.50000E-02, 0.70000E-02, 0.10000E-01, 0.15000E-01, 0.20000E-01,
@@ -973,13 +973,13 @@ G4float G4HadronCrossSections::elab[NELAB] = {
 //---------------------------------------------------------------------
 
 // Atomic weight
-G4float G4HadronCrossSections::cnlwat[NCNLW] = {
+__thread G4float G4HadronCrossSections::cnlwat[NCNLW] = {
         1.0000    ,  16.000    ,  27.000    ,  56.000    ,  59.000    ,
         64.000    ,  91.000    ,  112.00    ,  119.00    ,  127.00    ,
         137.00    ,  181.00    ,  207.00    ,  209.00    ,  238.00    
 };
 // Elastic cross section
-G4float G4HadronCrossSections::cnlwel[NCNLW][NELAB] = {
+__thread G4float G4HadronCrossSections::cnlwel[NCNLW][NELAB] = {
         {6000.0    ,  5500.0    ,  5200.0    ,  4900.0    ,  4800.0    , //1
         4400.0    ,  4000.0    ,  2900.0    ,  2200.0    ,  1800.0    ,
         1400.0    ,  1100.0    ,  900.00    ,  700.00    ,  600.00    ,
@@ -1042,7 +1042,7 @@ G4float G4HadronCrossSections::cnlwel[NCNLW][NELAB] = {
         3650.0    ,  3340.0}
 };
 // Inelastic cross section
-G4float G4HadronCrossSections::cnlwin[NCNLW][NELAB] = {
+__thread G4float G4HadronCrossSections::cnlwin[NCNLW][NELAB] = {
        {0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, //1
        0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00,
        0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00, 0.00000E+00,
@@ -1105,7 +1105,7 @@ G4float G4HadronCrossSections::cnlwin[NCNLW][NELAB] = {
         2450.0    ,  2360.0}
 };
 // Capture cross section indexed by Z
-G4float G4HadronCrossSections::cscap[100] = {
+__thread G4float G4HadronCrossSections::cscap[100] = {
         6.0000    ,  5.7000    ,  5.5000    ,  5.3000    ,  5.2000    ,
         5.1000    ,  5.0000    ,  4.9000    ,  4.8000    ,  4.8000    ,
         4.8000    ,  4.8000    ,  4.8000    ,  4.8000    ,  4.8000    ,
@@ -1133,7 +1133,7 @@ G4float G4HadronCrossSections::cscap[100] = {
 //---------------------------------------------------------------------
 
 // Lab kinetic energy in GeV
-G4float G4HadronCrossSections::ekfiss[NFISS] = {
+__thread G4float G4HadronCrossSections::ekfiss[NFISS] = {
        0.10000E-03, 0.20000E-03, 0.30000E-03, 0.50000E-03, 0.70000E-03,
        0.10000E-02, 0.15000E-02, 0.20000E-02, 0.30000E-02, 0.50000E-02,
        0.70000E-02, 0.10000E-01, 0.15000E-01, 0.20000E-01, 0.50000E-01,
@@ -1141,7 +1141,7 @@ G4float G4HadronCrossSections::ekfiss[NFISS] = {
         1000.0    
 };
 // Fission cross sections
-G4float G4HadronCrossSections::csfiss[4][NFISS] = {
+__thread G4float G4HadronCrossSections::csfiss[4][NFISS] = {
         {2600.0    ,  2300.0    ,  2300.0    ,  2100.0    ,  2000.0    , //1
         1950.0    ,  1930.0    ,  1900.0    ,  1800.0    ,  1600.0    ,
         2100.0    ,  2300.0    , 0.00000E+00, 0.00000E+00, 0.00000E+00,
@@ -1164,7 +1164,7 @@ G4float G4HadronCrossSections::csfiss[4][NFISS] = {
         1000.0}
 };
 
-G4float G4HadronCrossSections::alpha[NPARTS] = {
+__thread G4float G4HadronCrossSections::alpha[NPARTS] = {
                      0.7,0.7,0.7,0.7,0.7,0.7,
                      0.75,0.75,0.75,
                      0.76,0.76,0.76,0.76,
@@ -1173,7 +1173,7 @@ G4float G4HadronCrossSections::alpha[NPARTS] = {
                      0.7,0.7,0.7,0.685,0.63,0.7
 };
 
-G4float G4HadronCrossSections::alphac[TSIZE] = {
+__thread G4float G4HadronCrossSections::alphac[TSIZE] = {
                      1.2,1.2,1.2,1.15,0.90,0.91,0.98,1.06,1.10,1.11,
                      1.10,1.08,1.05,1.01,0.985,0.962,0.945,0.932,
                      0.925,0.920,0.920,0.921,0.922,0.923,0.928,0.931,
@@ -1181,13 +1181,13 @@ G4float G4HadronCrossSections::alphac[TSIZE] = {
                      0.982,0.988,0.992,1.010,1.020,1.030,1.040
 };
 
-G4float G4HadronCrossSections::partel[NPARTS] = {
+__thread G4float G4HadronCrossSections::partel[NPARTS] = {
                   0.,0.,0.,0.,0.,0.,
                   1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,
                   1.,1.,1.,1.,1.,1.,1.,1.,1.,1.,
                   1.,1.,1.,1.,1.,1.,1.,1.,1.
 };
-G4float G4HadronCrossSections::partin[NPARTS] = {
+__thread G4float G4HadronCrossSections::partin[NPARTS] = {
                   0.,0.,0.,0.,0.,0.,
                   1.00,0.00,1.05,1.20,1.35,1.30,1.20,1.00,1.30,
                   1.00,1.30,1.00,1.30,1.00,1.00,1.00,1.30,1.30,1.30,
@@ -1195,23 +1195,23 @@ G4float G4HadronCrossSections::partin[NPARTS] = {
 };
 
 // Enabling flags for corrections for compounds
-G4int G4HadronCrossSections::icorr[NPARTS] = {
+__thread G4int G4HadronCrossSections::icorr[NPARTS] = {
                   1,1,1,1,1,1,1,1,1,1,1,1,1,1,
                   0,1,0,1,0,1,1,1,0,0,0,1,1,0,0,1,1,1,1,0,0
 };
 
 // Enabling flags for interaction to occur
-G4int G4HadronCrossSections::intrc[NPARTS] = {
+__thread G4int G4HadronCrossSections::intrc[NPARTS] = {
                   0,0,0,0,0,0,
                   1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,2,2,0,
                   1,1,1,1,1,1,1,1,1,1,0
 };
 
-G4float G4HadronCrossSections::csa[4] = {1., 27.00, 63.54, 207.19};
+__thread G4float G4HadronCrossSections::csa[4] = {1., 27.00, 63.54, 207.19};
 
-G4int G4HadronCrossSections::ipart2[7] = {9, 8, 7, 11, 10, 13, 12};
+__thread G4int G4HadronCrossSections::ipart2[7] = {9, 8, 7, 11, 10, 13, 12};
 
-G4bool G4HadronCrossSections::correctInelasticNearZero = 0;
+__thread G4bool G4HadronCrossSections::correctInelasticNearZero = 0;
 
 G4HadronCrossSections::G4HadronCrossSections()
   : prevParticleDefinition(0), prevElement(0), prevZZ(0), prevAA(0), 
@@ -1227,7 +1227,7 @@ G4HadronCrossSections::~G4HadronCrossSections()
 G4HadronCrossSections* G4HadronCrossSections::Instance()
 {
   if (!theInstance) {
-    static G4HadronCrossSections xsection;
+    static __thread G4HadronCrossSections *xsection_G4MT_TLS_ = 0 ; if (!xsection_G4MT_TLS_) xsection_G4MT_TLS_ = new  G4HadronCrossSections  ;  G4HadronCrossSections &xsection = *xsection_G4MT_TLS_;
     theInstance = &xsection;
   }
   return theInstance;

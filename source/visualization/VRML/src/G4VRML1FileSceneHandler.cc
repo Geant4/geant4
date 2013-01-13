@@ -211,4 +211,4 @@ void G4VRML1FileSceneHandler::closePort()
 	}
 }
 
-G4int G4VRML1FileSceneHandler::fSceneIdCount = 0;
+__thread G4int G4VRML1FileSceneHandler::fSceneIdCount = 0;

@@ -44,7 +44,7 @@ private:
 
   G4CameronGilbertShellCorrections();
   
-  static G4CameronGilbertShellCorrections* theInstance;
+  static __thread G4CameronGilbertShellCorrections* theInstance;
 
 
 public:

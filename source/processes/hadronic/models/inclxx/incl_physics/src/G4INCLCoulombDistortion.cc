@@ -45,6 +45,6 @@
 
 namespace G4INCL {
 
-  ICoulomb* CoulombDistortion::theCoulomb = 0;
+  __thread ICoulomb* CoulombDistortion::theCoulomb = 0;
 
 }

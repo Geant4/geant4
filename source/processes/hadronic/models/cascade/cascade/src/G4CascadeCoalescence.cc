@@ -252,7 +252,7 @@ void G4CascadeCoalescence::removeNucleons() {
 
 G4LorentzVector 
 G4CascadeCoalescence::getClusterMomentum(const ClusterCandidate& aCluster) const {
-  static G4LorentzVector ptot;
+  static __thread G4LorentzVector *ptot_G4MT_TLS_ = 0 ; if (!ptot_G4MT_TLS_) ptot_G4MT_TLS_ = new  G4LorentzVector  ;  G4LorentzVector &ptot = *ptot_G4MT_TLS_;
   ptot.set(0.,0.,0.,0.);
   for (size_t i=0; i<aCluster.size(); i++)
     ptot += getHadron(aCluster[i]).getMomentum();

@@ -143,12 +143,12 @@ long RandPoissonQ::shoot(HepRandomEngine* anEngine, double mean) {
   // last time a large mean was supplied; they obviate certain calculations
   // if consecutive calls use the same mean.
 
-  static double lastLargeMean = -1.;	// Mean from previous shoot 
+  static __thread double lastLargeMean = -1.;	// Mean from previous shoot 
 					// requiring poissonDeviateQuick()
-  static double lastA0;		
-  static double lastA1;		
-  static double lastA2;		
-  static double lastSigma;		
+  static __thread double lastA0;		
+  static __thread double lastA1;		
+  static __thread double lastA2;		
+  static __thread double lastSigma;		
 
   if ( mean < LAST_MU + S ) {
     return poissonDeviateSmall ( anEngine, mean );

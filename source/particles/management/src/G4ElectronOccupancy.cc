@@ -39,11 +39,11 @@
 
 #include "G4ElectronOccupancy.hh"
 
-G4Allocator<G4ElectronOccupancy> aElectronOccupancyAllocator;
+__thread G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator_G4MT_TLS_ = 0;
 
 G4ElectronOccupancy::G4ElectronOccupancy(G4int sizeOrbit ):
                   theSizeOfOrbit(sizeOrbit)
-{
+{  ;;;   if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ; G4Allocator<G4ElectronOccupancy> &aElectronOccupancyAllocator = *aElectronOccupancyAllocator_G4MT_TLS_;  ;;;  
   // check size
   if  ( (theSizeOfOrbit <1 ) || (theSizeOfOrbit > MaxSizeOfOrbit) ) {
     theSizeOfOrbit = MaxSizeOfOrbit;
@@ -60,7 +60,7 @@ G4ElectronOccupancy::G4ElectronOccupancy(G4int sizeOrbit ):
 }
 
 G4ElectronOccupancy::~G4ElectronOccupancy()
-{
+{  ;;;   if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ; G4Allocator<G4ElectronOccupancy> &aElectronOccupancyAllocator = *aElectronOccupancyAllocator_G4MT_TLS_;  ;;;  
    theSizeOfOrbit = -1;
 
    delete [] theOccupancies;
@@ -70,7 +70,7 @@ G4ElectronOccupancy::~G4ElectronOccupancy()
 
 
 G4ElectronOccupancy::G4ElectronOccupancy(const G4ElectronOccupancy& right)
-{
+{  ;;;   if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ; G4Allocator<G4ElectronOccupancy> &aElectronOccupancyAllocator = *aElectronOccupancyAllocator_G4MT_TLS_;  ;;;  
   theSizeOfOrbit = right.theSizeOfOrbit;
 
   // allocate and clear the array of theOccupancies 
@@ -84,7 +84,7 @@ G4ElectronOccupancy::G4ElectronOccupancy(const G4ElectronOccupancy& right)
 }
 
 G4ElectronOccupancy& G4ElectronOccupancy::operator=(const G4ElectronOccupancy& right)
-{
+{  ;;;   if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ; G4Allocator<G4ElectronOccupancy> &aElectronOccupancyAllocator = *aElectronOccupancyAllocator_G4MT_TLS_;  ;;;  
   if ( this != &right) {
     theSizeOfOrbit = right.theSizeOfOrbit;
     
@@ -102,7 +102,7 @@ G4ElectronOccupancy& G4ElectronOccupancy::operator=(const G4ElectronOccupancy& r
 }
 
 G4int G4ElectronOccupancy::operator==(const G4ElectronOccupancy& right) const
-{
+{  ;;;   if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ; G4Allocator<G4ElectronOccupancy> &aElectronOccupancyAllocator = *aElectronOccupancyAllocator_G4MT_TLS_;  ;;;  
   G4int index;
   G4bool value = true;
   for (index = 0; index < MaxSizeOfOrbit; index++) {
@@ -119,13 +119,13 @@ G4int G4ElectronOccupancy::operator==(const G4ElectronOccupancy& right) const
 }
 
 G4int G4ElectronOccupancy::operator!=(const G4ElectronOccupancy& right) const
-{
+{  ;;;   if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ; G4Allocator<G4ElectronOccupancy> &aElectronOccupancyAllocator = *aElectronOccupancyAllocator_G4MT_TLS_;  ;;;  
   return !(*this == right);
 }
 
 
 void G4ElectronOccupancy::DumpInfo() const
-{
+{  ;;;   if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ; G4Allocator<G4ElectronOccupancy> &aElectronOccupancyAllocator = *aElectronOccupancyAllocator_G4MT_TLS_;  ;;;  
   G4cout << "  -- Electron Occupancy -- " << G4endl;
   G4int index;
   for (index = 0; index < theSizeOfOrbit; index++) {

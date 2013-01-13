@@ -47,7 +47,7 @@ struct compDoubleWithPrecision
         }
     }
 
-    static double fPrecision ;
+    static __thread double fPrecision ;
 };
 
 typedef map<G4double, G4int, compDoubleWithPrecision> NbMoleculeAgainstTime;
@@ -57,7 +57,7 @@ class G4MoleculeCounter
 protected:
     G4MoleculeCounter();
     virtual ~G4MoleculeCounter(){;}
-    static G4MoleculeCounter* fpInstance;
+    static __thread G4MoleculeCounter* fpInstance;
     typedef std::map<G4Molecule, NbMoleculeAgainstTime> CounterMapType;
 
     CounterMapType fCounterMap;

@@ -79,7 +79,7 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //lock for particle table accesses.
 pthread_mutex_t particleTable = PTHREAD_MUTEX_INITIALIZER;
-int lockCount = 0;
+__thread int lockCount = 0;
 
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()

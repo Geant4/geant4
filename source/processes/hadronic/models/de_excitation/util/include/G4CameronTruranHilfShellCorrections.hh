@@ -43,7 +43,7 @@ private:
 	
   G4CameronTruranHilfShellCorrections();
 	
-  static G4CameronTruranHilfShellCorrections* theInstance;
+  static __thread G4CameronTruranHilfShellCorrections* theInstance;
 
 
 public:

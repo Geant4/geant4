@@ -92,20 +92,20 @@ public:
 };
 
 #if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
+  extern G4DLLEXPORT __thread G4Allocator<G4SmoothTrajectoryPoint> *aSmoothTrajectoryPointAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT G4Allocator<G4SmoothTrajectoryPoint> aSmoothTrajectoryPointAllocator;
+  extern G4DLLIMPORT __thread G4Allocator<G4SmoothTrajectoryPoint> *aSmoothTrajectoryPointAllocator_G4MT_TLS_;
 #endif
 
 inline void* G4SmoothTrajectoryPoint::operator new(size_t)
-{
+{  ;;;   if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ; G4Allocator<G4SmoothTrajectoryPoint> &aSmoothTrajectoryPointAllocator = *aSmoothTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
    void *aTrajectoryPoint;
    aTrajectoryPoint = (void *) aSmoothTrajectoryPointAllocator.MallocSingle();
    return aTrajectoryPoint;
 }
 
 inline void G4SmoothTrajectoryPoint::operator delete(void *aTrajectoryPoint)
-{
+{  ;;;   if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ; G4Allocator<G4SmoothTrajectoryPoint> &aSmoothTrajectoryPointAllocator = *aSmoothTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
    aSmoothTrajectoryPointAllocator.FreeSingle((G4SmoothTrajectoryPoint *) aTrajectoryPoint);
 }
 

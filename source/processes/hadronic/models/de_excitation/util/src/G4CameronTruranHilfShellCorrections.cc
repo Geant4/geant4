@@ -73,7 +73,7 @@ const G4double G4CameronTruranHilfShellCorrections::ShellNTable
  2.621, 3.096
 };
 
-G4CameronTruranHilfShellCorrections* G4CameronTruranHilfShellCorrections::theInstance = 0;
+__thread G4CameronTruranHilfShellCorrections* G4CameronTruranHilfShellCorrections::theInstance = 0;
 
 
 G4CameronTruranHilfShellCorrections::G4CameronTruranHilfShellCorrections()
@@ -85,7 +85,7 @@ G4CameronTruranHilfShellCorrections::~G4CameronTruranHilfShellCorrections()
 G4CameronTruranHilfShellCorrections* G4CameronTruranHilfShellCorrections::GetInstance()
 {
   if (!theInstance)  { 
-    static G4CameronTruranHilfShellCorrections theCorrections;
+    static __thread G4CameronTruranHilfShellCorrections *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4CameronTruranHilfShellCorrections  ;  G4CameronTruranHilfShellCorrections &theCorrections = *theCorrections_G4MT_TLS_;
     theInstance = &theCorrections; 
   }
   return theInstance;

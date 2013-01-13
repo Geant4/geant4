@@ -129,8 +129,8 @@ public: // With description
 private:
   G4double red, green, blue, alpha;
 
-  static std::map<G4String, G4Colour> fColourMap;
-  static G4bool fInitColourMap;
+  static __thread std::map<G4String, G4Colour> *fColourMap_G4MT_TLS_;
+  static __thread G4bool fInitColourMap;
   static void InitialiseColourMap();
     
 };

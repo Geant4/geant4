@@ -267,8 +267,8 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
 #else
   // Statistics on the RMS value of the corrections
 
-  static G4int    noCorrections=0;
-  static G4double sumCorrectionsSq = 0;
+  static __thread G4int    noCorrections=0;
+  static __thread G4double sumCorrectionsSq = 0;
   noCorrections++; 
   if( goodAdvance )
   {

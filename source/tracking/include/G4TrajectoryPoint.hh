@@ -94,20 +94,20 @@ public: // without description
 };
 
 #if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4TrajectoryPoint> aTrajectoryPointAllocator;
+  extern G4DLLEXPORT __thread G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT G4Allocator<G4TrajectoryPoint> aTrajectoryPointAllocator;
+  extern G4DLLIMPORT __thread G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator_G4MT_TLS_;
 #endif
 
 inline void* G4TrajectoryPoint::operator new(size_t)
-{
+{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
    void *aTrajectoryPoint;
    aTrajectoryPoint = (void *) aTrajectoryPointAllocator.MallocSingle();
    return aTrajectoryPoint;
 }
 
 inline void G4TrajectoryPoint::operator delete(void *aTrajectoryPoint)
-{
+{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
    aTrajectoryPointAllocator.FreeSingle((G4TrajectoryPoint *) aTrajectoryPoint);
 }
 

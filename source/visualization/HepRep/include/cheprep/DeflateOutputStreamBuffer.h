@@ -74,7 +74,7 @@ namespace cheprep {
             }
             
         private:
-            static unsigned long crctable[256];                
+            static __thread unsigned long crctable[256];                
             std::streambuf *buffer;
             
             unsigned int crc;

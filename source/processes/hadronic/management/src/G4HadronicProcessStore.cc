@@ -58,14 +58,14 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4HadronicEPTestMessenger.hh"
 
-G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
+__thread G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 {
   if(0 == theInstance) {
-    static G4HadronicProcessStore manager;
+    static __thread G4HadronicProcessStore *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4HadronicProcessStore  ;  G4HadronicProcessStore &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;

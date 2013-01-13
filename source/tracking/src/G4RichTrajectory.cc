@@ -57,14 +57,14 @@
 
 #include <sstream>
 
-G4Allocator<G4RichTrajectory> aRichTrajectoryAllocator;
+__thread G4Allocator<G4RichTrajectory> *aRichTrajectoryAllocator_G4MT_TLS_ = 0;
 
 G4RichTrajectory::G4RichTrajectory():
   fpRichPointsContainer(0),
   fpCreatorProcess(0),
   fpEndingProcess(0),
   fFinalKineticEnergy(0.)
-{}
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  }
 
 G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
   G4Trajectory(aTrack)  // Note: this initialises the base class data
@@ -75,7 +75,7 @@ G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
 			// same information (plus more) in a
 			// G4RichTrajectoryPoint in the
 			// RichTrajectoryPointsContainer
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   fpInitialVolume = aTrack->GetTouchableHandle();
   fpInitialNextVolume = aTrack->GetNextTouchableHandle();
   fpCreatorProcess = aTrack->GetCreatorProcess();
@@ -92,7 +92,7 @@ G4RichTrajectory::G4RichTrajectory(const G4Track* aTrack):
 
 G4RichTrajectory::G4RichTrajectory(G4RichTrajectory & right):
   G4Trajectory(right)
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   fpInitialVolume = right.fpInitialVolume;
   fpInitialNextVolume = right.fpInitialNextVolume;
   fpCreatorProcess = right.fpCreatorProcess;
@@ -110,7 +110,7 @@ G4RichTrajectory::G4RichTrajectory(G4RichTrajectory & right):
 }
 
 G4RichTrajectory::~G4RichTrajectory()
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   if (fpRichPointsContainer) {
     //  fpRichPointsContainer->clearAndDestroy();
     size_t i;
@@ -123,7 +123,7 @@ G4RichTrajectory::~G4RichTrajectory()
 }
 
 void G4RichTrajectory::AppendStep(const G4Step* aStep)
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   fpRichPointsContainer->push_back(new G4RichTrajectoryPoint(aStep));
   // Except for first step, which is a sort of virtual step to start
   // the track, compute the final values...
@@ -140,7 +140,7 @@ void G4RichTrajectory::AppendStep(const G4Step* aStep)
 }
   
 void G4RichTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   if(!secondTrajectory) return;
 
   G4RichTrajectory* seco = (G4RichTrajectory*)secondTrajectory;
@@ -155,21 +155,21 @@ void G4RichTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
 }
 
 void G4RichTrajectory::ShowTrajectory(std::ostream& os) const
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::ShowTrajectory(os);
   // ... or override with your own code here.
 }
 
 void G4RichTrajectory::DrawTrajectory() const
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::DrawTrajectory();
   // ... or override with your own code here.
 }
 
 const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   G4bool isNew;
   std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4RichTrajectory",isNew);
@@ -222,7 +222,7 @@ const std::map<G4String,G4AttDef>* G4RichTrajectory::GetAttDefs() const
 }
 
 static G4String Path(const G4TouchableHandle& th)
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   std::ostringstream oss;
   G4int depth = th->GetHistoryDepth();
   for (G4int i = depth; i >= 0; --i) {
@@ -234,7 +234,7 @@ static G4String Path(const G4TouchableHandle& th)
 }
 
 std::vector<G4AttValue>* G4RichTrajectory::CreateAttValues() const
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   // Create base class att values...
   std::vector<G4AttValue>* values = G4Trajectory::CreateAttValues();
 

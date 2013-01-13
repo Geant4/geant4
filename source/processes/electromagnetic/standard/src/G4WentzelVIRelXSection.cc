@@ -57,8 +57,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelVIRelXSection::ScreenRSquare[] = {0.0};
-G4double G4WentzelVIRelXSection::FormFactor[]    = {0.0};
+__thread G4double G4WentzelVIRelXSection::ScreenRSquare[] = {0.0};
+__thread G4double G4WentzelVIRelXSection::FormFactor[]    = {0.0};
 
 using namespace std;
 

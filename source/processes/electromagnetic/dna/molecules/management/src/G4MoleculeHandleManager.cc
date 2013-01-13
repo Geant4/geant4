@@ -30,7 +30,7 @@
 
 using namespace std;
 
-G4MoleculeHandleManager* G4MoleculeHandleManager::fInstance (0);
+__thread G4MoleculeHandleManager* G4MoleculeHandleManager::fInstance (0);
 
 G4MoleculeHandleManager::G4MoleculeHandleManager()
 {

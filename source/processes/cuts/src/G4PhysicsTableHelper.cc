@@ -41,7 +41,7 @@
 #include "G4PhysicsTableHelper.hh" 
 #include  "G4ProductionCutsTable.hh"
 
-G4int G4PhysicsTableHelper::verboseLevel = 1; 
+__thread G4int G4PhysicsTableHelper::verboseLevel = 1; 
 
 G4PhysicsTableHelper::G4PhysicsTableHelper()
 {

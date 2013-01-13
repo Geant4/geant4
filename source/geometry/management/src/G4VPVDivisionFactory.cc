@@ -33,7 +33,7 @@
 
 #include "G4VPVDivisionFactory.hh"
 
-G4VPVDivisionFactory* G4VPVDivisionFactory::fgInstance = 0;
+__thread G4VPVDivisionFactory* G4VPVDivisionFactory::fgInstance = 0;
 
 //_____________________________________________________________________________
 

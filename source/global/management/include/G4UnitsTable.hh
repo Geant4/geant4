@@ -102,7 +102,7 @@ public:  // with description
     G4String SymbolName;      // SI symbol
     G4double Value;           // value in the internal system of units
     
-    static G4UnitsTable theUnitsTable;   // table of Units
+    static __thread G4UnitsTable *theUnitsTable_G4MT_TLS_;   // table of Units
 
     size_t CategoryIndex;                // category index of this unit
 };

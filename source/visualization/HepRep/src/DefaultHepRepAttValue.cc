@@ -22,55 +22,63 @@ using namespace HEPREP;
  */
 namespace cheprep {
 
-std::string DefaultHepRepAttValue::labelStrings[LABELSTRINGS_LEN];
-
+__thread std::string *DefaultHepRepAttValue::labelStrings = 0 ;
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, string aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_STRING), stringValue(aValue), showLabelValue(aShowLabel) {
+    : name(aName), type(HepRepConstants::TYPE_STRING), stringValue(aValue), showLabelValue(aShowLabel) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
 
     init();
 }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, int64 aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_LONG), longValue(aValue), showLabelValue(aShowLabel) {
+    : name(aName), type(HepRepConstants::TYPE_LONG), longValue(aValue), showLabelValue(aShowLabel) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
 
     init();
 }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, int aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_INT), longValue(aValue), showLabelValue(aShowLabel) {
+    : name(aName), type(HepRepConstants::TYPE_INT), longValue(aValue), showLabelValue(aShowLabel) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
 
     init();
 }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, double aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_DOUBLE), doubleValue(aValue), showLabelValue(aShowLabel) {
+    : name(aName), type(HepRepConstants::TYPE_DOUBLE), doubleValue(aValue), showLabelValue(aShowLabel) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
 
     init();
 }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, bool aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_BOOLEAN), booleanValue(aValue), showLabelValue(aShowLabel) {
+    : name(aName), type(HepRepConstants::TYPE_BOOLEAN), booleanValue(aValue), showLabelValue(aShowLabel) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
 
     init();
 }
 
 DefaultHepRepAttValue::DefaultHepRepAttValue(string aName, vector<double> aValue, int aShowLabel)
-    : name(aName), type(HepRepConstants::TYPE_COLOR), colorValue(aValue), showLabelValue(aShowLabel) {
+    : name(aName), type(HepRepConstants::TYPE_COLOR), colorValue(aValue), showLabelValue(aShowLabel) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
 
     init();
 }
 
-DefaultHepRepAttValue::~DefaultHepRepAttValue() {
+DefaultHepRepAttValue::~DefaultHepRepAttValue() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
 }
 
-void DefaultHepRepAttValue::init() {
+void DefaultHepRepAttValue::init() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     labelStrings[0] = "NAME";
     labelStrings[1] = "DESC";
     labelStrings[2] = "VALUE";
     labelStrings[3] = "EXTRA";
 }
 
-HepRepAttValue* DefaultHepRepAttValue::copy() {
+HepRepAttValue* DefaultHepRepAttValue::copy() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     switch(type) {
         case HepRepConstants::TYPE_COLOR: new DefaultHepRepAttValue(name, colorValue, showLabelValue);
         case HepRepConstants::TYPE_STRING: new DefaultHepRepAttValue(name, stringValue, showLabelValue);
@@ -82,21 +90,25 @@ HepRepAttValue* DefaultHepRepAttValue::copy() {
     }
 }
 
-string DefaultHepRepAttValue::getName() {
+string DefaultHepRepAttValue::getName() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     return name;
 }
 
-string DefaultHepRepAttValue::getLowerCaseName() {
+string DefaultHepRepAttValue::getLowerCaseName() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     string s = name;
     transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
     return s;
 }
 
-int DefaultHepRepAttValue::getType() {
+int DefaultHepRepAttValue::getType() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     return type;
 }
 
-string DefaultHepRepAttValue::getTypeName() {
+string DefaultHepRepAttValue::getTypeName() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     switch(type) {
         case HepRepConstants::TYPE_COLOR: return("Color");
         case HepRepConstants::TYPE_STRING: return("String");
@@ -108,49 +120,58 @@ string DefaultHepRepAttValue::getTypeName() {
     }
 }
 
-int DefaultHepRepAttValue::showLabel() {
+int DefaultHepRepAttValue::showLabel() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     return showLabelValue;
 }
 
-string DefaultHepRepAttValue::getString() {
+string DefaultHepRepAttValue::getString() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue '" << getName() << "' as 'string'" << endl;
     return stringValue;
 }
 
-string DefaultHepRepAttValue::getLowerCaseString() {
+string DefaultHepRepAttValue::getLowerCaseString() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue '" << getName() << "' as 'string'" << endl;
     string s = stringValue;
     transform(s.begin(), s.end(), s.begin(), (int(*)(int)) tolower);
     return s;
 }
 
-int64 DefaultHepRepAttValue::getLong() {
+int64 DefaultHepRepAttValue::getLong() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     if (type != HepRepConstants::TYPE_LONG) cerr << "Trying to access AttValue '" << getName() << "' as 'long'" << endl;
     return longValue;
 }
 
-int DefaultHepRepAttValue::getInteger() {
+int DefaultHepRepAttValue::getInteger() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     if (type != HepRepConstants::TYPE_INT) cerr << "Trying to access AttValue '" << getName() << "' as 'int'" << endl;
     return (int64)longValue;
 }
 
-double DefaultHepRepAttValue::getDouble() {
+double DefaultHepRepAttValue::getDouble() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     if (type != HepRepConstants::TYPE_DOUBLE) cerr << "Trying to access AttValue '" << getName() << "' as 'double'" << endl;
     return doubleValue;
 }
 
-bool DefaultHepRepAttValue::getBoolean() {
+bool DefaultHepRepAttValue::getBoolean() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     if (type != HepRepConstants::TYPE_BOOLEAN) cerr << "Trying to access AttValue '" << getName() << "' as 'boolean'" << endl;
     return booleanValue;
 }
 
-vector<double> DefaultHepRepAttValue::getColor() {
+vector<double> DefaultHepRepAttValue::getColor() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     if (type != HepRepConstants::TYPE_COLOR) cerr << "Trying to access AttValue '" << getName() << "' as 'color'" << endl;
     return colorValue;
 }
 
 
-string DefaultHepRepAttValue::getAsString() {
+string DefaultHepRepAttValue::getAsString() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     switch(type) {
         case HepRepConstants::TYPE_COLOR:   return getAsString(getColor());
         case HepRepConstants::TYPE_STRING:  return getString();
@@ -162,7 +183,8 @@ string DefaultHepRepAttValue::getAsString() {
     }
 }
 
-string DefaultHepRepAttValue::getAsString(vector<double> c) {
+string DefaultHepRepAttValue::getAsString(vector<double> c) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     char buffer[40];
     sprintf(buffer, "%4.2f, %4.2f, %4.2f, %4.2f",
                                                 c[0],
@@ -172,38 +194,44 @@ string DefaultHepRepAttValue::getAsString(vector<double> c) {
     return buffer;        
 }
 
-string DefaultHepRepAttValue::getAsString(int i) {
+string DefaultHepRepAttValue::getAsString(int i) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     char buffer[40];
     sprintf(buffer, "%d", i);
     return buffer;        
 }
 
-string DefaultHepRepAttValue::getAsString(int64 i) {
+string DefaultHepRepAttValue::getAsString(int64 i) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     char buffer[40];
     sprintf(buffer, CHEPREP_INT64_FORMAT, i);
     return buffer;        
 }
 
 // NOTE: keep at %g rather than %lg for backward compatibility
-string DefaultHepRepAttValue::getAsString(double d) {
+string DefaultHepRepAttValue::getAsString(double d) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     char buffer[40];
     sprintf(buffer, "%g", d);
     return buffer;        
 }
 
-string DefaultHepRepAttValue::getAsString(bool b) {
+string DefaultHepRepAttValue::getAsString(bool b) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     return b ? "true" : "false";        
 }
 
 
 
 
-string DefaultHepRepAttValue::toShowLabel() {
+string DefaultHepRepAttValue::toShowLabel() {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     return toShowLabel(showLabel());
 }
 
 
-string DefaultHepRepAttValue::toShowLabel(int showLabel) {
+string DefaultHepRepAttValue::toShowLabel(int showLabel) {  ;;;   if (!labelStrings) labelStrings = new std::string [LABELSTRINGS_LEN];
+  ;;;  
     string label = "";
     bool first = true;
     if (showLabel == HepRepConstants::SHOW_NONE) {

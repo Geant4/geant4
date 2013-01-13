@@ -107,7 +107,7 @@ const G4int GFDEBUG_DET = 0; // 0: false
 //////////////////////
 
 //----- static variables
-G4int G4GMocrenFileSceneHandler::kSceneIdCount = 0; 
+__thread G4int G4GMocrenFileSceneHandler::kSceneIdCount = 0; 
 
 ///////////////////////////
 // Driver-dependent part //
@@ -199,7 +199,7 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
   std::strncat ( kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME));
 
   // Automatic updation of file names
-  static G4int currentNumber = 0;
+  static __thread G4int currentNumber = 0;
   for( G4int i = currentNumber ; i < kMaxFileNum ; i++) { 
 
     // Message in the final execution
@@ -528,7 +528,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
     G4cout << "***** AddPrimitive" << G4endl;
 
   if (fProcessing2D) {
-    static G4bool warned = false;
+    static __thread G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception
@@ -542,7 +542,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
   //----- Initialize if necessary
   GFBeginModeling();
 
-  static G4int numTrajectories = 0;
+  static __thread G4int numTrajectories = 0;
   if(numTrajectories >= MAX_NUM_TRAJECTORIES) return;
 
   // draw trajectories
@@ -617,7 +617,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
 void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Text& text )
 {
   if (fProcessing2D) {
-    static G4bool warned = false;
+    static __thread G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception
@@ -648,7 +648,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Circle& mark_circle )
   G4Circle dummycircle = mark_circle;
 
   if (fProcessing2D) {
-    static G4bool warned = false;
+    static __thread G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception
@@ -677,7 +677,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
   G4Square dummysquare = mark_square;
 
   if (fProcessing2D) {
-    static G4bool warned = false;
+    static __thread G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception
@@ -709,7 +709,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron )
   if (polyhedron.GetNoFacets() == 0) return;
 
   if (fProcessing2D) {
-    static G4bool warned = false;
+    static __thread G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception

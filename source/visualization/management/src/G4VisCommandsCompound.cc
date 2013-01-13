@@ -217,7 +217,7 @@ void G4VisCommandDrawVolume::SetNewValue(G4UIcommand*, G4String newValue) {
   UImanager->ApplyCommand(G4String("/vis/scene/add/volume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
-  static G4bool warned = false;
+  static __thread G4bool warned = false;
   if (verbosity >= G4VisManager::confirmations && !warned) {
     G4cout <<
       "NOTE: For systems which are not \"auto-refresh\" you will need to"
@@ -332,7 +332,7 @@ void G4VisCommandSpecify::SetNewValue(G4UIcommand*, G4String newValue) {
   UImanager->ApplyCommand(G4String("/vis/scene/add/logicalVolume " + newValue));
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->SetVerboseLevel(keepVerbose);
-  static G4bool warned = false;
+  static __thread G4bool warned = false;
   if (verbosity >= G4VisManager::confirmations && !warned) {
     G4cout <<
       "NOTE: For systems which are not \"auto-refresh\" you will need to"

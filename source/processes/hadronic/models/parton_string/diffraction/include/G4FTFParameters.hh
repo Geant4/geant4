@@ -207,7 +207,10 @@ class G4FTFParameters
         G4double DofNuclearDestruction;         // D for momentum sampling
         G4double Pt2ofNuclearDestruction;       // Pt2
         G4double MaxPt2ofNuclearDestruction;    // Max Pt2
-
+  // G4-MT changes
+private:
+  static __thread bool chipsComponentXSisInitialized;
+  static __thread G4ChipsComponentXS* chipsComponentXSinstance;
 };
 
 // --------------------------------------------------------------------

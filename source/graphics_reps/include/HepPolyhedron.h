@@ -196,7 +196,7 @@ class HepPolyhedron {
   friend std::ostream& operator<<(std::ostream&, const HepPolyhedron &ph);
 
  protected:
-  static G4int fNumberOfRotationSteps;
+  static __thread G4int fNumberOfRotationSteps;
   G4int nvert, nface;
   G4Point3D  *pV;
   G4Facet    *pF;

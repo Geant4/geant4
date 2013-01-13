@@ -40,7 +40,7 @@ class G4TypeKeyT : public G4TypeKey {
 public:
   
   G4TypeKeyT() {
-    static Key key = NextKey();
+    static __thread Key *key_G4MT_TLS_ = 0 ; if (!key_G4MT_TLS_) {key_G4MT_TLS_ = new  Key  ; *key_G4MT_TLS_= NextKey() ; }  Key &key = *key_G4MT_TLS_;
     fMyKey = key;
   }
 

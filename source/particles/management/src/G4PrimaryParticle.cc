@@ -34,7 +34,7 @@
 #include "G4ios.hh"
 #include "G4VUserPrimaryParticleInformation.hh"
 
-G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
+__thread G4Allocator<G4PrimaryParticle> *aPrimaryParticleAllocator_G4MT_TLS_ = 0;
 
 G4PrimaryParticle::G4PrimaryParticle()
 :PDGcode(0),G4code(0),
@@ -42,7 +42,7 @@ G4PrimaryParticle::G4PrimaryParticle()
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
-{;}
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  ;}
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode)
 :PDGcode(Pcode),
@@ -50,7 +50,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode)
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
-{ 
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
   if (G4code !=0) {
     mass   = G4code->GetPDGMass();
@@ -65,7 +65,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
-{ 
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
   if (G4code !=0) {
     mass   = G4code->GetPDGMass();
@@ -81,7 +81,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
  nextParticle(0),daughterParticle(0),trackID(-1),
  charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
-{
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
  G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
  if (G4code !=0) {
     mass = G4code->GetPDGMass();
@@ -96,7 +96,7 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode)
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
-{ 
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
   if (G4code !=0) {
     PDGcode = Gcode->GetPDGEncoding(); 
     mass = G4code->GetPDGMass();
@@ -111,7 +111,7 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
-{ 
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
   if (G4code !=0) {
     PDGcode = Gcode->GetPDGEncoding(); 
     mass = G4code->GetPDGMass();
@@ -127,7 +127,7 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
  nextParticle(0),daughterParticle(0),trackID(-1),
  charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
-{
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
   if (G4code !=0) {
     PDGcode = Gcode->GetPDGEncoding(); 
     mass = G4code->GetPDGMass();
@@ -142,12 +142,12 @@ G4PrimaryParticle::G4PrimaryParticle(const G4PrimaryParticle& right)
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
-{
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
   *this = right;
 }
 
 G4PrimaryParticle & G4PrimaryParticle::operator=(const G4PrimaryParticle & right)
-{ 
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
   if (this != &right) {
     PDGcode      = right.PDGcode;
     G4code       = right.G4code;
@@ -182,13 +182,13 @@ G4PrimaryParticle & G4PrimaryParticle::operator=(const G4PrimaryParticle & right
 }
 
 G4int G4PrimaryParticle::operator==(const G4PrimaryParticle &right) const
-{ return (this==&right); }
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return (this==&right); }
 
 G4int G4PrimaryParticle::operator!=(const G4PrimaryParticle &right) const
-{ return (this!=&right); }
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return (this!=&right); }
 
 G4PrimaryParticle::~G4PrimaryParticle()
-{
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
   if(nextParticle != 0){ 
     delete nextParticle;
     nextParticle = 0;
@@ -204,7 +204,7 @@ G4PrimaryParticle::~G4PrimaryParticle()
 }
 
 void G4PrimaryParticle::SetMomentum(G4double px, G4double py, G4double pz)
-{ 
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
   if ((mass<0.)&&(G4code!=0)){ 
     mass =  G4code->GetPDGMass(); 
   }
@@ -218,7 +218,7 @@ void G4PrimaryParticle::SetMomentum(G4double px, G4double py, G4double pz)
 }
 
 void G4PrimaryParticle::Set4Momentum(G4double px, G4double py, G4double pz, G4double E)
-{ 
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
   G4double pmom =  std::sqrt(px*px+py*py+pz*pz);
   if (pmom>0.0) {
     direction.setX(px/pmom);
@@ -238,7 +238,7 @@ void G4PrimaryParticle::Set4Momentum(G4double px, G4double py, G4double pz, G4do
 }
 
 void G4PrimaryParticle::SetPDGcode(G4int Pcode)
-{
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
   PDGcode = Pcode;
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode);
   if (G4code!=0){ 
@@ -248,7 +248,7 @@ void G4PrimaryParticle::SetPDGcode(G4int Pcode)
 }
 
 void G4PrimaryParticle::SetParticleDefinition(const G4ParticleDefinition* Gcode)
-{
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
   G4code = Gcode;
   if (G4code!=0){ 
     PDGcode = Gcode->GetPDGEncoding();
@@ -258,7 +258,7 @@ void G4PrimaryParticle::SetParticleDefinition(const G4ParticleDefinition* Gcode)
 }
 
 void G4PrimaryParticle::Print() const
-{
+{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
   G4cout << "==== PDGcode " << PDGcode << "  Particle name ";
   if(G4code != 0)
   { G4cout << G4code->GetParticleName() << G4endl; }

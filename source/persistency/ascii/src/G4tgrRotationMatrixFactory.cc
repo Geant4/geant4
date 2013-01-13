@@ -38,7 +38,7 @@
 #include "G4tgrUtils.hh"
 
 
-G4tgrRotationMatrixFactory * G4tgrRotationMatrixFactory::theInstance = 0;
+__thread G4tgrRotationMatrixFactory * G4tgrRotationMatrixFactory::theInstance = 0;
 
 
 // -------------------------------------------------------------------------

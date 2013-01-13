@@ -218,7 +218,7 @@ namespace G4INCL {
       theLoggerSlave=NULL;
     }
   private:
-    static LoggerSlave *theLoggerSlave;
+    static __thread LoggerSlave *theLoggerSlave;
   };
 
 #define FATAL(x) \

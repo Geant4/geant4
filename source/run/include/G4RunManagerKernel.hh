@@ -74,7 +74,7 @@ class G4RunManagerKernel
     // its derived class.
 
   private:
-    static G4RunManagerKernel* fRunManagerKernel;
+    static __thread G4RunManagerKernel* fRunManagerKernel;
 
   public: // with description
 

@@ -45,7 +45,7 @@ private :
     friend G4MoleculeID operator -(const G4MoleculeID& left,const int& right);
     int fValue;
 
-    static int fLastValue;
+    static __thread int fLastValue;
 
 public :
 
@@ -79,6 +79,6 @@ public :
     inline bool operator<(const G4MoleculeID & rhs) const { return fValue < rhs.fValue; }
 };
 
-extern G4MoleculeID gStartCounter;
+extern __thread G4MoleculeID *gStartCounter_G4MT_TLS_;
 
 #endif

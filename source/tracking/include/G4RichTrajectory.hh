@@ -110,22 +110,22 @@ private:
 };
 
 #if defined G4TRACKING_ALLOC_EXPORT
-extern G4DLLEXPORT G4Allocator<G4RichTrajectory>
-aRichTrajectoryAllocator;
+extern G4DLLEXPORT __thread G4Allocator<G4RichTrajectory>
+*aRichTrajectoryAllocator_G4MT_TLS_;
 #else
-extern G4DLLIMPORT G4Allocator<G4RichTrajectory>
-aRichTrajectoryAllocator;
+extern G4DLLIMPORT __thread G4Allocator<G4RichTrajectory>
+*aRichTrajectoryAllocator_G4MT_TLS_;
 #endif
 
 inline void* G4RichTrajectory::operator new(size_t)
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   void* aRichTrajectory;
   aRichTrajectory = (void*)aRichTrajectoryAllocator.MallocSingle();
   return aRichTrajectory;
 }
 
 inline void G4RichTrajectory::operator delete(void* aRichTrajectory)
-{
+{  ;;;   if (!aRichTrajectoryAllocator_G4MT_TLS_) aRichTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectory>  ; G4Allocator<G4RichTrajectory> &aRichTrajectoryAllocator = *aRichTrajectoryAllocator_G4MT_TLS_;  ;;;  
   aRichTrajectoryAllocator.FreeSingle
     ((G4RichTrajectory*)aRichTrajectory);
 }

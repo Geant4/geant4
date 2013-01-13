@@ -71,9 +71,9 @@ class G4AllocStats
 
   public:
 
-    static G4ChunkIndexType * allocStat;
-    static G4int totSpace;
-    static G4int numCat;
+    static __thread G4ChunkIndexType * allocStat;
+    static __thread G4int totSpace;
+    static __thread G4int numCat;
 };
 
 template<typename _Tp>

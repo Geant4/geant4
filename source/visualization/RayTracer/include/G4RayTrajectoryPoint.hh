@@ -80,20 +80,20 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
 };
 
 #if defined G4VIS_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
+  extern G4DLLEXPORT __thread G4Allocator<G4RayTrajectoryPoint> *G4RayTrajectoryPointAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT G4Allocator<G4RayTrajectoryPoint> G4RayTrajectoryPointAllocator;
+  extern G4DLLIMPORT __thread G4Allocator<G4RayTrajectoryPoint> *G4RayTrajectoryPointAllocator_G4MT_TLS_;
 #endif
 
 inline void* G4RayTrajectoryPoint::operator new(size_t)
-{
+{  ;;;   if (!G4RayTrajectoryPointAllocator_G4MT_TLS_) G4RayTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectoryPoint>  ; G4Allocator<G4RayTrajectoryPoint> &G4RayTrajectoryPointAllocator = *G4RayTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
    void *aTrajectoryPoint;
    aTrajectoryPoint = (void *) G4RayTrajectoryPointAllocator.MallocSingle();
    return aTrajectoryPoint;
 }
 
 inline void G4RayTrajectoryPoint::operator delete(void *aTrajectoryPoint)
-{
+{  ;;;   if (!G4RayTrajectoryPointAllocator_G4MT_TLS_) G4RayTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectoryPoint>  ; G4Allocator<G4RayTrajectoryPoint> &G4RayTrajectoryPointAllocator = *G4RayTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
    G4RayTrajectoryPointAllocator.FreeSingle((G4RayTrajectoryPoint *) aTrajectoryPoint);
 }
 

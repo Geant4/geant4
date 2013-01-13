@@ -32,7 +32,7 @@
 
 #include <iostream>
 
-G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = 0;
+__thread G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = 0;
 
 //_____________________________________________________________________________
 G4RootAnalysisManager* G4RootAnalysisManager::Instance()

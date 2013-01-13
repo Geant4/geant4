@@ -43,7 +43,7 @@
 #include "G4tgrMessenger.hh"
 
 
-G4tgrMaterialFactory* G4tgrMaterialFactory::theInstance = 0;
+__thread G4tgrMaterialFactory* G4tgrMaterialFactory::theInstance = 0;
 
 
 //-------------------------------------------------------------

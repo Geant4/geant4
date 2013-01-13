@@ -49,8 +49,8 @@ class G4HadSignalHandler
   
   ~G4HadSignalHandler();
       
-  static std::vector<sighandler_t> theCache;  
-  static bool registered;
+  static __thread std::vector<sighandler_t> *theCache_G4MT_TLS_;  
+  static __thread bool registered;
 };
 
  

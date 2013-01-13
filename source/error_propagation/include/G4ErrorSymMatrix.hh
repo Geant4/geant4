@@ -220,13 +220,13 @@ class G4ErrorSymMatrix
    G4int nrow;
    G4int size;   // total number of elements
 
-   static G4double posDefFraction5x5;
-   static G4double adjustment5x5;
+   static __thread G4double posDefFraction5x5;
+   static __thread G4double adjustment5x5;
    static const  G4double CHOLESKY_THRESHOLD_5x5;
    static const  G4double CHOLESKY_CREEP_5x5;
 
-   static G4double posDefFraction6x6;
-   static G4double adjustment6x6;
+   static __thread G4double posDefFraction6x6;
+   static __thread G4double adjustment6x6;
    static const G4double CHOLESKY_THRESHOLD_6x6;
    static const G4double CHOLESKY_CREEP_6x6;
 

@@ -31,15 +31,15 @@
 // ----------------------------------------------------------------------
 
 #if defined G4GEOM_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
+  extern G4DLLEXPORT __thread G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT G4Allocator<G4TouchableHistory> aTouchableHistoryAllocator;
+  extern G4DLLIMPORT __thread G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator_G4MT_TLS_;
 #endif
 
 inline
 void  G4TouchableHistory::UpdateYourself( G4VPhysicalVolume*   pPhysVol,
                                     const G4NavigationHistory* pHistory ) 
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   fhistory = *pHistory;  
   G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
   if( pPhysVol == 0 )
@@ -56,38 +56,38 @@ void  G4TouchableHistory::UpdateYourself( G4VPhysicalVolume*   pPhysVol,
 
 inline
 G4int G4TouchableHistory::CalculateHistoryIndex( G4int stackDepth ) const
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   return (fhistory.GetDepth()-stackDepth); // was -1
 }
 
 inline
 G4VPhysicalVolume* G4TouchableHistory::GetVolume( G4int depth ) const
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   return fhistory.GetVolume(CalculateHistoryIndex(depth));
 }
 
 inline
 G4VSolid* G4TouchableHistory::GetSolid( G4int depth ) const
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   return fhistory.GetVolume(CalculateHistoryIndex(depth))
                             ->GetLogicalVolume()->GetSolid();
 }
 
 inline
 G4int G4TouchableHistory::GetReplicaNumber( G4int depth ) const
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   return fhistory.GetReplicaNo(CalculateHistoryIndex(depth));
 }
 
 inline
 G4int G4TouchableHistory::GetHistoryDepth()  const
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   return  fhistory.GetDepth();
 }
 
 inline
 G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   G4int maxLevelsMove = fhistory.GetDepth();
   G4int minLevelsMove = 0;              // Cannot redescend today!
                                         // Soon it will be possible
@@ -108,7 +108,7 @@ G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
 
 inline
 const G4NavigationHistory* G4TouchableHistory::GetHistory() const
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   return &fhistory;
 }
 
@@ -117,13 +117,13 @@ const G4NavigationHistory* G4TouchableHistory::GetHistory() const
 //
 inline
 void* G4TouchableHistory::operator new(size_t)
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   return (void *) aTouchableHistoryAllocator.MallocSingle();
 }
 
 inline
 void G4TouchableHistory::operator delete(void *aTH)
-{
+{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
   aTouchableHistoryAllocator.FreeSingle((G4TouchableHistory *) aTH);
 }
 

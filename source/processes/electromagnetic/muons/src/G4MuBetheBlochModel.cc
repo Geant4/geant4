@@ -65,10 +65,10 @@
 #include "G4EmCorrections.hh"
 #include "G4ParticleChangeForLoss.hh"
 
-G4double G4MuBetheBlochModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083, 0.5917,
+__thread G4double G4MuBetheBlochModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083, 0.5917,
                                       0.7628, 0.8983, 0.9801 };
 				      
-G4double G4MuBetheBlochModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813, 0.1813,
+__thread G4double G4MuBetheBlochModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813, 0.1813,
                                       0.1569, 0.1112, 0.0506 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

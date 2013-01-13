@@ -116,7 +116,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   // Helium ion case
   if( Zi < 2.5 ) {
 
-    static G4double c[6] = {0.2865,  0.1266, -0.001429,
+    static __thread G4double c[6] = {0.2865,  0.1266, -0.001429,
 			    0.02402,-0.01135, 0.001475} ;
 
     G4double Q = std::max(0.0,std::log(reducedEnergy*massFactor));

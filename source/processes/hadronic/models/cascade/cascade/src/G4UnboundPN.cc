@@ -47,7 +47,7 @@
 // ######################################################################
 // ###                          UNBOUNDPN                             ###
 // ######################################################################
-G4UnboundPN* G4UnboundPN::theInstance = 0;
+__thread G4UnboundPN* G4UnboundPN::theInstance = 0;
 
 //    Arguments for constructor are as follows
 //               name             mass          width         charge

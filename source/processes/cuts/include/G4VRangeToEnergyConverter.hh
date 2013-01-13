@@ -106,8 +106,8 @@ class G4VRangeToEnergyConverter
   virtual void Reset();
     
  protected:
-    static G4double               LowestEnergy, HighestEnergy;
-    static G4double               MaxEnergyCut; 
+    static __thread G4double               LowestEnergy, HighestEnergy;
+    static __thread G4double               MaxEnergyCut; 
     G4double                      fMaxEnergyCut;
    
     const G4ParticleDefinition*   theParticle;

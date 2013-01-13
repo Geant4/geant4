@@ -137,7 +137,7 @@ class G4TransportationManager
      G4GeometryMessenger*    fGeomMessenger;
      G4SafetyHelper*         fSafetyHelper;
 
-     static G4TransportationManager*  fTransportationManager;
+     static __thread G4TransportationManager*  fTransportationManager;
 };
 
 #include "G4TransportationManager.icc"

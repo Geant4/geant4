@@ -210,7 +210,7 @@ class G4AssemblyVolume
     //
     // Number of imprints of the given assembly volume.
 
-  static unsigned int fsInstanceCounter;
+  static __thread unsigned int fsInstanceCounter;
     //
     // Class instance counter.
 

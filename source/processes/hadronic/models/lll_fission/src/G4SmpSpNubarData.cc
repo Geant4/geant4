@@ -89,12 +89,12 @@ G4double G4fissionEvent::G4SmpSpNubarData(G4int isotope) {
  
   G4int i;
 
-  static G4int spzaid [nSPfissNubarIso] = {
+  static __thread G4int spzaid [nSPfissNubarIso] = {
       90232, 92232, 92233, 92234, 92235,
       92236, 92238, 93237, 94238, 94239,
       94240, 94241, 94242, 95241, 96242,
       96244, 97249, 98252 };
-  static G4double spnubar [nSPfissNubarIso] = {
+  static __thread G4double spnubar [nSPfissNubarIso] = {
       2.14,  1.71, 1.76,  1.81, 1.86,
       1.91,  2.01, 2.05,  2.21, 2.16,
       2.156, 2.25, 2.145, 3.22, 2.54,

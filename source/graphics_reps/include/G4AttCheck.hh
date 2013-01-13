@@ -98,12 +98,12 @@ private:
   const std::vector<G4AttValue>* fpValues;
   const std::map<G4String,G4AttDef>* fpDefinitions;
 
-  static G4bool fFirst;  // Flag for initialising the following containers.
-  static std::set<G4String> fUnitCategories;  // Set of legal unit categories.
-  static std::map<G4String,G4String> fStandardUnits;  // Standard units.
-  static std::set<G4String> fCategories;      // Set of legal categories.
-  static std::set<G4String> fUnits;           // Set of legal units.
-  static std::set<G4String> fValueTypes;      // Set of legal value types.
+  static __thread G4bool fFirst;  // Flag for initialising the following containers.
+  static __thread std::set<G4String> *fUnitCategories_G4MT_TLS_;  // Set of legal unit categories.
+  static __thread std::map<G4String,G4String> *fStandardUnits_G4MT_TLS_;  // Standard units.
+  static __thread std::set<G4String> *fCategories_G4MT_TLS_;      // Set of legal categories.
+  static __thread std::set<G4String> *fUnits_G4MT_TLS_;           // Set of legal units.
+  static __thread std::set<G4String> *fValueTypes_G4MT_TLS_;      // Set of legal value types.
 };
 
 #endif //G4ATTCHECK_HH

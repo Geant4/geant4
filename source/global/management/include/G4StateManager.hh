@@ -131,7 +131,7 @@ private:
 
 private:
 
-  static G4StateManager* theStateManager;
+  static __thread G4StateManager* theStateManager;
   G4ApplicationState theCurrentState;
   G4ApplicationState thePreviousState;
   std::vector<G4VStateDependent*> theDependentsList;

@@ -66,13 +66,13 @@ G4RToEConvForElectron::~G4RToEConvForElectron()
 G4double G4RToEConvForElectron::ComputeLoss(G4double AtomicNumber,
 					    G4double KineticEnergy) const
 {
-  static G4double Z;  
-  static G4double taul, ionpot, ionpotlog;
+  static __thread G4double Z;  
+  static __thread G4double taul, ionpot, ionpotlog;
   const  G4double cbr1=0.02, cbr2=-5.7e-5, cbr3=1., cbr4=0.072;
   const  G4double Tlow=10.*keV, Thigh=1.*GeV;
-  static G4double bremfactor= 0.1 ;
+  static __thread G4double bremfactor= 0.1 ;
 
-  static G4double Mass= theParticle->GetPDGMass();
+  static __thread G4double *Mass_G4MT_TLS_ = 0 ; if (!Mass_G4MT_TLS_) {Mass_G4MT_TLS_ = new  G4double  ; *Mass_G4MT_TLS_= theParticle->GetPDGMass() ; }  G4double &Mass = *Mass_G4MT_TLS_;
 
   //  calculate dE/dx for electrons
   if( std::fabs(AtomicNumber-Z)>0.1 ) {

@@ -73,7 +73,7 @@ void G4VVisCommandGeometrySet::SetLVVisAtts
 {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   const G4VisAttributes* oldVisAtts = pLV->GetVisAttributes();
-  fVisAttsMap.insert(std::make_pair(pLV,oldVisAtts));  // Store old vis atts.
+  fVisAttsMap_G4MT_TLS_->insert(std::make_pair(pLV,oldVisAtts));  // Store old vis atts.
   G4VisAttributes* newVisAtts = new G4VisAttributes;   // Memory leak!
   if (oldVisAtts) {
     *newVisAtts = *oldVisAtts;

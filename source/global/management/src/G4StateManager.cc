@@ -38,7 +38,7 @@
 
 // Initialization of the static pointer of the single class instance
 //
-G4StateManager* G4StateManager::theStateManager = 0;
+__thread G4StateManager* G4StateManager::theStateManager = 0;
 
 G4StateManager::G4StateManager()
  : theCurrentState(G4State_PreInit),

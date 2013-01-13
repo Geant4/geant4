@@ -22,7 +22,7 @@ namespace CLHEP  {
 //
 //-******************************
 
-double Hep4RotationInterface::tolerance = 
+__thread double Hep4RotationInterface::tolerance = 
 			Hep4RotationInterface::ToleranceTicks * 1.0e-08;
 
 double Hep4RotationInterface::getTolerance() {return tolerance;} 

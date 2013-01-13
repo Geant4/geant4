@@ -269,7 +269,7 @@ public:
 private:
 
   G4NistManager();
-  static G4NistManager* instance;
+  static __thread G4NistManager* instance;
 
   G4Pow* g4pow;
   G4double POWERA27[101];

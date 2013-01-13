@@ -131,7 +131,7 @@ private:
 
 	G4int        fMaxFileNum   ;	
 
-	static G4int fSceneIdCount;
+	static __thread G4int fSceneIdCount;
 
 };
 

@@ -151,24 +151,24 @@ G4PhysicsTable* fEnergyDistrTable;
 
 G4PhysicsLogVector* fProtonEnergyVector;
 
-static G4int fSympsonNumber;                // Accuracy of Sympson integration 
+static __thread G4int fSympsonNumber;                // Accuracy of Sympson integration 
 
-static G4double fTheMinEnergyTR;            //  static min TR energy
-static G4double fTheMaxEnergyTR;            //  static max TR energy
+static __thread G4double fTheMinEnergyTR;            //  static min TR energy
+static __thread G4double fTheMaxEnergyTR;            //  static max TR energy
        G4double fMinEnergyTR;               //  min TR energy in material
        G4double fMaxEnergyTR;               //  max TR energy in material
-static G4double  fTheMaxAngle;               //  max theta of TR quanta
-static G4double  fTheMinAngle;               //  max theta of TR quanta
+static __thread G4double  fTheMaxAngle;               //  max theta of TR quanta
+static __thread G4double  fTheMinAngle;               //  max theta of TR quanta
        G4double  fMaxThetaTR;               //  max theta of TR quanta
-static G4int          fBinTR;               //  number of bins in TR vectors
+static __thread G4int          fBinTR;               //  number of bins in TR vectors
 
-static G4double fMinProtonTkin;             // min Tkin of proton in tables
-static G4double fMaxProtonTkin;             // max Tkin of proton in tables
-static G4int    fTotBin;             // number of bins in log scale
+static __thread G4double fMinProtonTkin;             // min Tkin of proton in tables
+static __thread G4double fMaxProtonTkin;             // max Tkin of proton in tables
+static __thread G4int    fTotBin;             // number of bins in log scale
        G4double fGamma;             // current Lorentz factor
 
-static G4double fPlasmaCof;               // physical consts for plasma energy
-static G4double fCofTR;
+static __thread G4double fPlasmaCof;               // physical consts for plasma energy
+static __thread G4double fCofTR;
 
 G4double fSigma1;                       // plasma energy Sq of matter1
 G4double fSigma2;                       // plasma energy Sq of matter2

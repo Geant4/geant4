@@ -87,13 +87,13 @@ G4bool G4hICRU49He::HasMaterial(const G4Material* material)
 
   // ICRU Report N49, 1993. Power's model for He.
   const size_t numberOfMolecula = 30 ;    
-  static G4String name[numberOfMolecula] = {
-    "H_2", "Be-Solid", "C-Solid", "Graphite", "N_2",
-    "O_2", "Al-Solid", "Si-Solid", "Ar-Solid", "Cu-Solid",
-    "Ge", "W-Solid", "Au-Solid", "Pb-Solid", "C_2H_2",
-    "CO_2", "Cellulose-Nitrat", "C_2H_4", "LiF",
-    "CH_4", "Nylon", "Polycarbonate", "(CH_2)_N-Polyetilene", "PMMA",
-    "(C_8H_8)_N", "SiO_2", "CsI", "H_2O", "H_2O-Gas"} ;      
+  static __thread G4String *name = 0 ; if (!name) {name = new  G4String [numberOfMolecula]  ; name[0]=
+    "H_2";name[1]= "Be-Solid";name[2]= "C-Solid";name[3]= "Graphite";name[4]= "N_2";name[5]=
+    "O_2";name[6]= "Al-Solid";name[7]= "Si-Solid";name[8]= "Ar-Solid";name[9]= "Cu-Solid";name[10]=
+    "Ge";name[11]= "W-Solid";name[12]= "Au-Solid";name[13]= "Pb-Solid";name[14]= "C_2H_2";name[15]=
+    "CO_2";name[16]= "Cellulose-Nitrat";name[17]= "C_2H_4";name[18]= "LiF";name[19]=
+    "CH_4";name[20]= "Nylon";name[21]= "Polycarbonate";name[22]= "(CH_2)_N-Polyetilene";name[23]= "PMMA";name[24]=
+    "(C_8H_8)_N";name[25]= "SiO_2";name[26]= "CsI";name[27]= "H_2O";name[28]= "H_2O-Gas";} ;      
   
   // Special treatment for water in gas state
   
@@ -133,7 +133,7 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
     // in internal units of parametrisation formula (MeV)
     G4double T = kineticEnergy*rateMass/MeV ;  
   
-    static G4double c[30][7] = {
+    static __thread G4double c[30][7] = {
       {8.0080,  3.6287,  23.0700,  14.9900,  0.8507, 0.60, 2.0
    },{ 13.3100,  3.7432,  39.4130,  12.1990,  1.0950, 0.38, 1.4
    },{ 22.7240,  3.6040,  47.1810,  17.5490,  0.9040, 0.40, 1.4
@@ -214,7 +214,7 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
   // He energy in internal units of parametrisation formula (MeV)
   G4double T = kineticEnergy*rateMass/MeV ;  
   
-  static G4double a[92][5] = {
+  static __thread G4double a[92][5] = {
     {0.35485, 0.6456, 6.01525,  20.8933, 4.3515
    },{ 0.58,    0.59,   6.3,	 130.0,   44.07
    },{ 1.42,    0.49,   12.25,    32.0,    9.161

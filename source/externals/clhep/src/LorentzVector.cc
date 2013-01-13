@@ -19,9 +19,9 @@
 
 namespace CLHEP  {
 
-double HepLorentzVector::tolerance = 
+__thread double HepLorentzVector::tolerance = 
 				Hep3Vector::ToleranceTicks * 2.22045e-16;
-double HepLorentzVector::metric = 1.0;
+__thread double HepLorentzVector::metric = 1.0;
 
 double HepLorentzVector::operator () (int i) const {
   switch(i) {
@@ -39,7 +39,7 @@ double HepLorentzVector::operator () (int i) const {
 }  
 
 double & HepLorentzVector::operator () (int i) {
-  static double dummy;
+  static __thread double dummy;
   switch(i) {
   case X:
   case Y:

@@ -35,7 +35,7 @@
 
 #include "G4ITType.hh"
 
-G4ITTypeManager* G4ITTypeManager::fgInstance = 0;
+__thread G4ITTypeManager* G4ITTypeManager::fgInstance = 0;
 
 // static method
 size_t G4ITType::size()

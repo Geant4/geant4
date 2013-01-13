@@ -113,7 +113,7 @@ class Hep4RotationInterface  {
 
 public:
 
-  DLL_API static double tolerance;        // to determine relative nearness
+  DLL_API static __thread double tolerance;        // to determine relative nearness
 
   // ----------  Accessors:
 

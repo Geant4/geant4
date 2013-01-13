@@ -37,7 +37,7 @@
 class G4StatMFParameters
 {
 private:
-  static G4StatMFParameters  theStatMFParameters;
+  static __thread G4StatMFParameters  *theStatMFParameters_G4MT_TLS_;
   
   // +----------------------+
   // | Constant Parameters: |

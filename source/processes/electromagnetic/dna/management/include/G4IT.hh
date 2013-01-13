@@ -61,9 +61,9 @@ G4IT* GetIT(const G4Track* track) ;
 G4IT* GetIT(const G4Track& track) ;
 
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT G4Allocator<G4IT> aITAllocator;
+extern G4DLLEXPORT __thread G4Allocator<G4IT> *aITAllocator_G4MT_TLS_;
 #else
-extern G4DLLIMPORT G4Allocator<G4IT> aITAllocator;
+extern G4DLLIMPORT __thread G4Allocator<G4IT> *aITAllocator_G4MT_TLS_;
 #endif
 
 class G4TrackListNode;
@@ -89,7 +89,7 @@ public :
     inline void *operator new(size_t);
     inline void operator delete(void *aIT);
 
-    virtual void Print() const {}
+    virtual void Print() const {  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  }
     virtual const G4String& GetName() const = 0 ;
 
     ///
@@ -131,10 +131,10 @@ public :
     inline G4double                GetPreStepGlobalTime() const;
     inline G4KDNode*               GetNode() const;
 
-    inline G4TrackingInformation* GetTrackingInfo(){return &fTrackingInformation;}
+    inline G4TrackingInformation* GetTrackingInfo(){  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  return &fTrackingInformation;}
 
-    inline G4TrackListNode* GetTrackListNode(){return fpTrackNode;}
-    inline void SetTrackListNode(G4TrackListNode* node){ fpTrackNode = node;}
+    inline G4TrackListNode* GetTrackListNode(){  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  return fpTrackNode;}
+    inline void SetTrackListNode(G4TrackListNode* node){  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;   fpTrackNode = node;}
 
     virtual const G4ITType GetITType() const = 0 ;
 
@@ -160,104 +160,104 @@ private :
 // Inline methods
 ///
 inline void* G4IT::operator new(size_t)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     void *aIT;
     aIT = (void *) aITAllocator.MallocSingle();
     return aIT;
 }
 
 inline void G4IT::operator delete(void *aIT)
-{ aITAllocator.FreeSingle((G4IT *) aIT);}
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;   aITAllocator.FreeSingle((G4IT *) aIT);}
 
 inline const G4ITBox* G4IT::GetITBox() const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fpITBox ;
 }
 
 inline void G4IT::SetITBox(G4ITBox * aITBox)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     fpITBox = aITBox;
 }
 
 inline void G4IT::SetPrevious(G4IT* aIT)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     fpPreviousIT = aIT;
 }
 
 inline void G4IT::SetNext(G4IT* aIT)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     fpNextIT = aIT;
 }
 
 inline G4IT* G4IT::GetPrevious()
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fpPreviousIT;
 }
 
 inline G4IT* G4IT::GetNext()
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fpNextIT;
 }
 
 inline void G4IT::SetTrack(G4Track* track)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     fpTrack = track;
 }
 
 inline G4Track* G4IT::GetTrack()
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fpTrack;
 }
 
 inline const G4Track* G4IT::GetTrack() const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fpTrack;
 }
 
 inline void G4IT::SetParentID(int p_a, int p_b)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     fParentID_A = p_a;
     fParentID_B = p_b;
 }
 
 inline void G4IT::GetParentID(int& p_a,int&p_b)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     p_a = fParentID_A;
     p_b = fParentID_B ;
 }
 
 inline G4double G4IT::GetPreStepGlobalTime() const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fTrackingInformation.GetPreStepGlobalTime();
 }
 
 inline G4double G4IT::GetPreStepLocalTime() const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fTrackingInformation.GetPreStepLocalTime();
 }
 
 inline const G4ThreeVector& G4IT::GetPreStepPosition() const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fTrackingInformation.GetPreStepPosition();
 }
 
 inline const G4IT* G4IT::GetPrevious() const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fpPreviousIT ;
 }
 
 inline const G4IT* G4IT::GetNext() const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fpNextIT ;
 }
 
 inline void G4IT::SetNode(G4KDNode* aNode)
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     fpKDNode = aNode ;
 }
 
 inline G4KDNode* G4IT::GetNode() const
-{
+{  ;;;   if (!aITAllocator_G4MT_TLS_) aITAllocator_G4MT_TLS_ = new G4Allocator<G4IT>  ; G4Allocator<G4IT> &aITAllocator = *aITAllocator_G4MT_TLS_;  ;;;  
     return fpKDNode ;
 }
 #endif

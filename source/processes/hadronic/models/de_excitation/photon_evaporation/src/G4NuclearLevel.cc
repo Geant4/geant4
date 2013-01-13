@@ -64,7 +64,7 @@
 
 G4int G4NuclearLevel::Increment(G4int aF)
 {
-  static G4int instanceCount = 0;
+  static __thread G4int instanceCount = 0;
   instanceCount+=aF;
   return instanceCount;
 }

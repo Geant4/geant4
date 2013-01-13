@@ -50,7 +50,11 @@ public:
   virtual ~G4ASCIITreeMessenger();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
-  static std::vector<G4String> fVerbosityGuidance;
+  //change for G4MT
+private:
+  static __thread std::vector<G4String> *fVerbosityGuidance_G4MT_TLS_;
+public:
+  inline static std::vector<G4String>& GetVerbosityGuidance() { return *fVerbosityGuidance_G4MT_TLS_; }
 private:
   G4ASCIITree* fpASCIITree;
   G4UIcommand* fpDirectory;

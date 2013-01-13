@@ -56,7 +56,7 @@ namespace G4INCL {
 
     static ParticleSampler *createParticleSampler(const G4int A, const G4int Z);
 
-    static void clearCache() {
+    static void clearCache() {;;;   if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &pCDFTableCache = *pCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rCDFTableCache = *rCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rpCorrelationTableCache = *rpCorrelationTableCache_G4MT_TLS_;  ;;;    ;;;   if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ; std::map<G4int,NuclearDensity*> &nuclearDensityCache = *nuclearDensityCache_G4MT_TLS_;  ;;;  
       for(std::map<G4int,NuclearDensity*>::const_iterator i = nuclearDensityCache.begin(); i!=nuclearDensityCache.end(); ++i)
         delete i->second;
       nuclearDensityCache.clear();
@@ -79,11 +79,11 @@ namespace G4INCL {
     NuclearDensityFactory() {}
     ~NuclearDensityFactory() {}
 
-    static std::map<G4int,NuclearDensity*> nuclearDensityCache;
+    static __thread std::map<G4int,NuclearDensity*> *nuclearDensityCache_G4MT_TLS_;
 
-    static std::map<G4int,InverseInterpolationTable*> rpCorrelationTableCache;
-    static std::map<G4int,InverseInterpolationTable*> rCDFTableCache;
-    static std::map<G4int,InverseInterpolationTable*> pCDFTableCache;
+    static __thread std::map<G4int,InverseInterpolationTable*> *rpCorrelationTableCache_G4MT_TLS_;
+    static __thread std::map<G4int,InverseInterpolationTable*> *rCDFTableCache_G4MT_TLS_;
+    static __thread std::map<G4int,InverseInterpolationTable*> *pCDFTableCache_G4MT_TLS_;
 
   };
 }

@@ -41,7 +41,7 @@
 // ######################################################################
 // ###                         Electron_aq                            ###
 // ######################################################################
-G4Electron_aq* G4Electron_aq::theInstance = 0;
+__thread G4Electron_aq* G4Electron_aq::theInstance = 0;
 
 G4Electron_aq* G4Electron_aq::Definition()
 {

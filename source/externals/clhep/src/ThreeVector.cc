@@ -52,7 +52,7 @@ double Hep3Vector::operator () (int i) const {
 }
 
 double & Hep3Vector::operator () (int i) {
-  static double dummy;
+  static __thread double dummy;
   switch(i) {
   case X:
     return dx;
@@ -358,6 +358,6 @@ Hep3Vector & Hep3Vector::operator/= (double c) {
   return *this;
 }
 
-double Hep3Vector::tolerance = Hep3Vector::ToleranceTicks * 2.22045e-16;
+__thread double Hep3Vector::tolerance = Hep3Vector::ToleranceTicks * 2.22045e-16;
 
 }  // namespace CLHEP

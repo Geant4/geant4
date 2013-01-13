@@ -118,7 +118,7 @@ G4Transportation::G4Transportation( G4int verbosity )
   //  field and this process. That order is not guaranted.
   // Instead later the method DoesGlobalFieldExist() is called
 
-  static G4TouchableHandle nullTouchableHandle;  // Points to (G4VTouchable*) 0
+  static __thread G4TouchableHandle *nullTouchableHandle_G4MT_TLS_ = 0 ; if (!nullTouchableHandle_G4MT_TLS_) nullTouchableHandle_G4MT_TLS_ = new  G4TouchableHandle  ;  G4TouchableHandle &nullTouchableHandle = *nullTouchableHandle_G4MT_TLS_;  // Points to (G4VTouchable*) 0
   fCurrentTouchableHandle = nullTouchableHandle; 
 
 
@@ -378,7 +378,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         G4double  startEnergy= track.GetKineticEnergy();
         G4double  endEnergy= fTransportEndKineticEnergy; 
 
-        static G4int no_inexact_steps=0, no_large_ediff;
+        static __thread G4int no_inexact_steps=0, no_large_ediff;
         G4double absEdiff = std::fabs(startEnergy- endEnergy);
         if( absEdiff > perMillion * endEnergy )
         {
@@ -389,7 +389,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         {
           if( std::fabs(startEnergy- endEnergy) > perThousand * endEnergy )
           {
-            static G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10; 
+            static __thread G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10; 
             no_large_ediff ++;
             if( (no_large_ediff% warnModulo) == 0 )
             {
@@ -488,7 +488,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
-  static G4int noCalls=0;
+  static __thread G4int noCalls=0;
   noCalls++;
 
   fParticleChange.Initialize(track) ;
@@ -769,7 +769,7 @@ G4Transportation::StartTracking(G4Track* aTrack)
   }
 
   // Make sure to clear the chord finders of all fields (ie managers)
-  static G4FieldManagerStore* fieldMgrStore= G4FieldManagerStore::GetInstance();
+  static __thread G4FieldManagerStore* fieldMgrStore = 0 ; if (!fieldMgrStore) fieldMgrStore= G4FieldManagerStore::GetInstance();
   fieldMgrStore->ClearAllChordFindersState(); 
 
   // Update the current touchable handle  (from the track's)

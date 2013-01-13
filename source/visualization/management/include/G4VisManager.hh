@@ -489,7 +489,7 @@ private:
   // Clears transient store of current scene handler if it is marked
   // for clearing.  Assumes view is valid.
 
-  static G4VisManager*  fpInstance;         // Pointer to single instance. 
+  static __thread G4VisManager*  fpInstance;         // Pointer to single instance. 
   G4bool                fInitialised;
   std::vector<UserVisAction> fRunDurationUserVisActions;
   std::vector<UserVisAction> fEndOfEventUserVisActions;

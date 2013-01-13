@@ -119,6 +119,6 @@ G4double GVFlashShowerParameterisation::GeneratePhi()
 
 G4double GVFlashShowerParameterisation::gam(G4double x, G4double a) const 
 {
-  static MyGamma theG;
+  static __thread MyGamma *theG_G4MT_TLS_ = 0 ; if (!theG_G4MT_TLS_) theG_G4MT_TLS_ = new  MyGamma  ;  MyGamma &theG = *theG_G4MT_TLS_;
   return  theG.Gamma(a, x); 
 }

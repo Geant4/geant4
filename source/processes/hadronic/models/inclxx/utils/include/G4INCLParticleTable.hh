@@ -147,8 +147,8 @@ namespace G4INCL {
     // Typedefs and pointers for transparent handling of mass functions
     typedef G4double (*NuclearMassFn)(const G4int, const G4int);
     typedef G4double (*ParticleMassFn)(const ParticleType);
-    static NuclearMassFn getTableMass;
-    static ParticleMassFn getTableParticleMass;
+    static __thread NuclearMassFn getTableMass;
+    static __thread ParticleMassFn getTableParticleMass;
 
     static G4double getTableSpeciesMass(const ParticleSpecies &p) {
       if(p.theType == Composite)
@@ -159,7 +159,7 @@ namespace G4INCL {
 
     // Typedefs and pointers for transparent handling of separation energies
     typedef G4double (*SeparationEnergyFn)(const ParticleType, const G4int, const G4int);
-    static SeparationEnergyFn getSeparationEnergy;
+    static __thread SeparationEnergyFn getSeparationEnergy;
 
     /// \brief Get mass number from particle type
     static G4int getMassNumber(const ParticleType t) {
@@ -306,7 +306,7 @@ namespace G4INCL {
     static const G4double clusterPhaseSpaceCut[maxClusterMass+1];
 
 #ifdef INCLXX_IN_GEANT4_MODE
-    static G4IonTable *theG4IonTable;
+    static __thread G4IonTable *theG4IonTable;
 #else
     static std::vector< std::vector <G4bool> > massTableMask;
     static std::vector< std::vector <G4double> > massTable;
@@ -348,15 +348,15 @@ namespace G4INCL {
     static const G4double theINCLPionMass;
     static const G4double theINCLNeutronSeparationEnergy;
     static const G4double theINCLProtonSeparationEnergy;
-    static G4double protonMass;
-    static G4double neutronMass;
-    static G4double neutronSeparationEnergy;
-    static G4double protonSeparationEnergy;
-    static G4double piPlusMass, piMinusMass, piZeroMass;
-    static G4double theRealProtonMass;
-    static G4double theRealNeutronMass;
-    static G4double theRealChargedPiMass;
-    static G4double theRealPiZeroMass;
+    static __thread G4double protonMass;
+    static __thread G4double neutronMass;
+    static __thread G4double neutronSeparationEnergy;
+    static __thread G4double protonSeparationEnergy;
+    static __thread G4double piPlusMass, piMinusMass, piZeroMass;
+    static __thread G4double theRealProtonMass;
+    static __thread G4double theRealNeutronMass;
+    static __thread G4double theRealChargedPiMass;
+    static __thread G4double theRealPiZeroMass;
 
     static const G4int mediumNucleiTableSize = 30;
     static const G4double mediumDiffuseness[mediumNucleiTableSize];

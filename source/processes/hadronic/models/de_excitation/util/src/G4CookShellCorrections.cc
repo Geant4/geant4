@@ -66,7 +66,7 @@ const G4double G4CookShellCorrections::ShellNTable
    5.09,     5.03,     4.93,     5.28,     5.49,     5.50,     5.37,     5.30
 };
 
-G4CookShellCorrections* G4CookShellCorrections::theInstance = 0;
+__thread G4CookShellCorrections* G4CookShellCorrections::theInstance = 0;
 
 G4CookShellCorrections::G4CookShellCorrections()
 {;}
@@ -77,7 +77,7 @@ G4CookShellCorrections::~G4CookShellCorrections()
 G4CookShellCorrections* G4CookShellCorrections::GetInstance()
 {
   if (!theInstance) { 
-    static G4CookShellCorrections theCorrections;
+    static __thread G4CookShellCorrections *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4CookShellCorrections  ;  G4CookShellCorrections &theCorrections = *theCorrections_G4MT_TLS_;
     theInstance = &theCorrections; 
   }
   return theInstance;

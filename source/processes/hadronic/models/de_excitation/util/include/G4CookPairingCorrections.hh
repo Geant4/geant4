@@ -44,7 +44,7 @@ class G4CookPairingCorrections
 private:
   G4CookPairingCorrections();
 	
-  static G4CookPairingCorrections* theInstance;
+  static __thread G4CookPairingCorrections* theInstance;
   
 
 public:

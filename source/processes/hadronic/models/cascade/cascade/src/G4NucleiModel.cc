@@ -936,7 +936,7 @@ generateParticleFate(G4CascadParticle& cparticle,
       if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
 
       // For conservation checking (below), get particle before updating
-      static G4InuclElementaryParticle prescatCP;	// Avoid memory churn
+      static __thread G4InuclElementaryParticle *prescatCP_G4MT_TLS_ = 0 ; if (!prescatCP_G4MT_TLS_) prescatCP_G4MT_TLS_ = new  G4InuclElementaryParticle  ;  G4InuclElementaryParticle &prescatCP = *prescatCP_G4MT_TLS_;	// Avoid memory churn
       prescatCP = cparticle.getParticle();
 
       // Last "partner" is just a total-path placeholder
@@ -1671,7 +1671,7 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
 	0.071, 0.054,  0.0003, 0.0007, 0.0027, 0.0014, 0.001,  0.0012, 0.0005,
 	0.0003, 0.0002,0.0002, 0.0002, 0.0002, 0.0002, 0.0001, 0.0001, 0.0001,
 	0.0001, 0.0001, 0.0001 };
-    static G4CascadeInterpolator<30> interp(kebins);
+    static __thread G4CascadeInterpolator<30> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<30> (kebins) ;  G4CascadeInterpolator<30> &interp = *interp_G4MT_TLS_;
     csec = interp.interpolate(ke, gammaD) * gammaQDscale;
   }
 

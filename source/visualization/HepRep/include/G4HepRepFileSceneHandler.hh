@@ -133,7 +133,7 @@ public:
   G4HepRepFileXMLWriter *GetHepRepXMLWriter();
 
 protected:
-  static G4int         fSceneIdCount;  // Counter for HepRep scene handlers.
+  static __thread G4int         fSceneIdCount;  // Counter for HepRep scene handlers.
 
 private:
   G4HepRepFileXMLWriter *hepRepXMLWriter;

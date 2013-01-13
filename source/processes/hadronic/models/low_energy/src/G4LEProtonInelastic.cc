@@ -245,11 +245,11 @@ G4LEProtonInelastic::SlowProton(const G4HadProjectile* originalIncident,
       quasiElastic = true;
       return;
     }
-    static G4bool first = true;
+    static __thread G4bool first = true;
     const G4int numMul = 1200;
     const G4int numSec = 60;
-    static G4double protmul[numMul], protnorm[numSec]; // proton constants
-    static G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
+    static __thread G4double protmul[numMul], protnorm[numSec]; // proton constants
+    static __thread G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
     // npos = number of pi+, nneg = number of pi-, nzero = number of pi0
     G4int counter, nt=0, npos=0, nneg=0, nzero=0;
     const G4double c = 1.25;    

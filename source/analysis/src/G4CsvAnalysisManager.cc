@@ -35,7 +35,7 @@
 
 #include <iostream>
 
-G4CsvAnalysisManager* G4CsvAnalysisManager::fgInstance = 0;
+__thread G4CsvAnalysisManager* G4CsvAnalysisManager::fgInstance = 0;
 
 //_____________________________________________________________________________
 G4CsvAnalysisManager* G4CsvAnalysisManager::Instance()

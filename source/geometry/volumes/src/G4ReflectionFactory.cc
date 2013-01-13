@@ -62,7 +62,7 @@
 #include "G4VPVDivisionFactory.hh"
 #include "G4GeometryTolerance.hh"
 
-G4ReflectionFactory* G4ReflectionFactory::fInstance = 0;
+__thread G4ReflectionFactory* G4ReflectionFactory::fInstance = 0;
 const G4String  G4ReflectionFactory::fDefaultNameExtension = "_refl";
 const G4Scale3D G4ReflectionFactory::fScale = G4ScaleZ3D(-1.0);
 

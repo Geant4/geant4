@@ -147,13 +147,13 @@ G4int G4ProcessTable::operator!=(const G4ProcessTable &right) const
 }
 
 // Static class variable: ptr to single instance of class
-G4ProcessTable* G4ProcessTable::fProcessTable =0;
+__thread G4ProcessTable* G4ProcessTable::fProcessTable =0;
 
 
 //////////////////////////
 G4ProcessTable* G4ProcessTable::GetProcessTable()
 {
-    static G4ProcessTable theProcessTable;
+    static __thread G4ProcessTable *theProcessTable_G4MT_TLS_ = 0 ; if (!theProcessTable_G4MT_TLS_) theProcessTable_G4MT_TLS_ = new  G4ProcessTable  ;  G4ProcessTable &theProcessTable = *theProcessTable_G4MT_TLS_;
     if (!fProcessTable){
       fProcessTable =  &theProcessTable;
     }

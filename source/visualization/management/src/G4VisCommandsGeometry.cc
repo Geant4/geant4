@@ -35,11 +35,10 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4UImanager.hh"
 
-std::map<G4LogicalVolume*, const G4VisAttributes*>
-G4VVisCommandGeometry::fVisAttsMap;
+__thread std::map<G4LogicalVolume*, const G4VisAttributes*> *G4VVisCommandGeometry::fVisAttsMap_G4MT_TLS_ = 0;
 
 G4VVisCommandGeometry::~G4VVisCommandGeometry()
-{
+{  ;;;   if (!fVisAttsMap_G4MT_TLS_) fVisAttsMap_G4MT_TLS_ = new std::map<G4LogicalVolume*, const G4VisAttributes*>  ; std::map<G4LogicalVolume*, const G4VisAttributes*> &fVisAttsMap = *fVisAttsMap_G4MT_TLS_;  ;;;  
   // Delete all vis atts that were "new".  Do something like "restore"
   // without the "rebuild".
 }
@@ -124,8 +123,8 @@ void G4VisCommandGeometryRestore::SetNewValue(G4UIcommand*, G4String newValue)
     const G4String& logVolName = pLV->GetName();
     if (logVolName == newValue) found = true;
     if (newValue == "all" || logVolName == newValue) {
-      VisAttsMapIterator i = fVisAttsMap.find(pLV);
-      if (i != fVisAttsMap.end()) {
+      VisAttsMapIterator i = fVisAttsMap_G4MT_TLS_->find(pLV);
+      if (i != fVisAttsMap_G4MT_TLS_->end()) {
 	const G4VisAttributes* newVisAtts = pLV->GetVisAttributes();
 	const G4VisAttributes* oldVisAtts = i->second;
 	pLV->SetVisAttributes(oldVisAtts);

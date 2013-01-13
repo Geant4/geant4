@@ -58,7 +58,7 @@
 // Some static clobal for integration
 //
 
-static G4double  G4KineticTrack_Gmass, G4KineticTrack_xmass1;
+static __thread G4double  G4KineticTrack_Gmass, G4KineticTrack_xmass1;
 
 //
 //   Default constructor

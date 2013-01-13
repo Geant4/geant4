@@ -124,7 +124,7 @@ private:
   static const int maxSeq = 215;
   long table[215][2];
   int seq;
-  static int numEngines;
+  static __thread int numEngines;
 
 };
 

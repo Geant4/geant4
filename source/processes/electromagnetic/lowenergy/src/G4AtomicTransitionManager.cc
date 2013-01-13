@@ -157,7 +157,7 @@ std::map<G4int,std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
  
 }
 
-G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
+__thread G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
 
 G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
 {

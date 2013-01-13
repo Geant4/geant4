@@ -35,13 +35,13 @@
 
 #include "G4RegularNavigationHelper.hh"
 
-G4RegularNavigationHelper * G4RegularNavigationHelper::theInstance = 0;
+__thread G4RegularNavigationHelper * G4RegularNavigationHelper::theInstance = 0;
 
 G4RegularNavigationHelper* G4RegularNavigationHelper::Instance()
 {
   if(theInstance == 0)
   {
-    static G4RegularNavigationHelper helper;
+    static __thread G4RegularNavigationHelper *helper_G4MT_TLS_ = 0 ; if (!helper_G4MT_TLS_) helper_G4MT_TLS_ = new  G4RegularNavigationHelper  ;  G4RegularNavigationHelper &helper = *helper_G4MT_TLS_;
     theInstance = &helper;
   }
   return theInstance;

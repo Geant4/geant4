@@ -37,19 +37,19 @@ using namespace G4InuclParticleNames;
 namespace {
   // Outgoing particle types of a given multiplicity
 
-  static G4int spp2bfs[1][2] =
+  static __thread G4int spp2bfs[1][2] =
     {{1,23}};
 
-  static G4int spp3bfs[6][3] =
+  static __thread G4int spp3bfs[6][3] =
     {{1,1,17}, {1,3,21}, {1,7,23}, {2,3,23},  {1,3,25},  {1,11,29}};
 
-  static G4int spp4bfs[20][4] =
+  static __thread G4int spp4bfs[20][4] =
     {{1,1,7,17},   {1,1,3,13},   {1,2,3,17}, {1,3,7,21}, {2,3,3,21},
      {1,11,17,21}, {1,7,7,23},   {1,3,5,23}, {2,3,7,23}, {1,15,17,23}, 
      {1,11,13,23}, {2,11,17,23}, {1,3,7,25}, {2,3,3,25}, {1,11,17,25},
      {1,3,3,27},   {1,7,11,29},  {1,3,15,29},{2,3,11,29},{1,3,11,31}}; 
 
-  static G4int spp5bfs[42][5] =
+  static __thread G4int spp5bfs[42][5] =
     {{1,1,7,7,17},   {1,1,3,5,17},   {1,1,3,7,13},   {1,2,3,7,17},   
      {1,2,3,3,13},   {2,2,3,3,17},   {1,3,7,7,21},   {1,3,3,5,21},   
      {2,3,3,7,21},   {1,7,11,17,21}, {1,3,11,13,21}, {1,3,15,17,21}, 
@@ -62,7 +62,7 @@ namespace {
      {1,3,7,15,29},  {2,3,7,11,29},  {2,3,3,15,29},  {1,3,7,11,31},
      {1,3,3,15,31},  {2,3,3,11,31}};
 
-  static G4int spp6bfs[25][6] =
+  static __thread G4int spp6bfs[25][6] =
     {{1,1,7,7,7,17}, {1,1,3,5,7,17}, {1,1,3,7,7,13}, {1,1,3,3,5,13},
      {1,2,3,7,7,17}, {1,2,3,3,5,17}, {1,2,3,3,7,13}, {2,2,3,3,7,17},
      {2,2,3,3,3,13}, {1,3,7,7,7,21}, {1,3,3,5,7,21}, {2,3,3,7,7,21},
@@ -71,7 +71,7 @@ namespace {
      {2,3,3,7,7,25}, {2,3,3,3,5,25}, {1,3,3,7,7,27}, {1,3,3,3,5,27},
      {2,3,3,3,7,27}};
 
-  static G4int spp7bfs[17][7] =
+  static __thread G4int spp7bfs[17][7] =
     {{1,1,7,7,7,7,17}, {1,1,3,5,7,7,17}, {1,1,3,3,5,5,17},
      {1,1,3,7,7,7,13}, {1,1,3,3,5,7,13}, {1,2,3,7,7,7,17}, 
      {1,2,3,3,5,7,17}, {1,2,3,3,7,7,13}, {1,2,3,3,3,5,13}, 
@@ -90,7 +90,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  static G4double sppCrossSections[111][31] = {
+  static __thread G4double sppCrossSections[111][31] = {
     //
     // multiplicity 2 (1 channel)
     //
@@ -668,7 +668,7 @@ namespace {
 
 typedef G4CascadeSigmaPlusPChannelData::data_t G4CascadeSigmaPlusPChannelData_t;
 
-G4CascadeSigmaPlusPChannelData_t *G4CascadeSigmaPlusPChannelData::data = 0;
+__thread G4CascadeSigmaPlusPChannelData_t *G4CascadeSigmaPlusPChannelData::data = 0;
 
 G4CascadeSigmaPlusPChannelData::data_t *G4CascadeSigmaPlusPChannelData::initializer()
 {

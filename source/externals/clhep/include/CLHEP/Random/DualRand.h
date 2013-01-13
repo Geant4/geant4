@@ -103,7 +103,7 @@ public:
 
 private:
 
-  static int numEngines;
+  static __thread int numEngines;
 
   // This generator is composed of two others combined:
 

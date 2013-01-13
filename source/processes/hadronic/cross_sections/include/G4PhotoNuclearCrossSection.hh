@@ -65,20 +65,20 @@ class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
   // Body
   private:
 
-    static G4int     lastN;   // The last N of calculated nucleus
-    static G4int     lastZ;   // The last Z of calculated nucleus
-    static G4double  lastSig; // Last value of the Cross Section
-    static G4double* lastGDR; // Pointer to the last array of GDR cross sections
-    static G4double* lastHEN; // Pointer to the last array of HEn cross sections
-    static G4double  lastE;   // Last used in the cross section Energy
-    static G4double  lastTH;  // Last value of the Energy Threshold (A-dependent)
-    static G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
+    static __thread G4int     lastN;   // The last N of calculated nucleus
+    static __thread G4int     lastZ;   // The last Z of calculated nucleus
+    static __thread G4double  lastSig; // Last value of the Cross Section
+    static __thread G4double* lastGDR; // Pointer to the last array of GDR cross sections
+    static __thread G4double* lastHEN; // Pointer to the last array of HEn cross sections
+    static __thread G4double  lastE;   // Last used in the cross section Energy
+    static __thread G4double  lastTH;  // Last value of the Energy Threshold (A-dependent)
+    static __thread G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
 
     // Vector of pointers to the GDRPhotonuclearCrossSection
-    static std::vector <G4double*> GDR;
+    static __thread std::vector <G4double*> *GDR_G4MT_TLS_;
 
     // Vector of pointers to the HighEnPhotonuclearCrossSect
-    static std::vector <G4double*> HEN;
+    static __thread std::vector <G4double*> *HEN_G4MT_TLS_;
 };
 
 #endif

@@ -795,7 +795,7 @@ G4MultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
     normalGlobalCrd= fpNavigator[ fIdNavLimiting ]->GetLocalExitNormal( &isObtained); 
     *argpObtained= isObtained;
 
-    static G4int numberWarnings= 0;
+    static __thread G4int numberWarnings= 0;
     G4int noWarningsStart= 10, noModuloWarnings=100; 
     numberWarnings++; 
     if( (numberWarnings < noWarningsStart ) || (numberWarnings%noModuloWarnings==0) ) 

@@ -648,8 +648,8 @@ void G4ErrorMatrix::invert(G4int &ierr)
   if(ncol != nrow)
      { error("G4ErrorMatrix::invert: G4ErrorMatrix is not NxN"); }
 
-  static G4int max_array = 20;
-  static G4int *ir = new G4int [max_array+1];
+  static __thread G4int max_array = 20;
+  static __thread G4int *ir  = 0 ; if (!ir) ir= new G4int [max_array+1];
 
   if (ncol > max_array)
   {
@@ -776,8 +776,8 @@ void G4ErrorMatrix::invert(G4int &ierr)
 
 G4double G4ErrorMatrix::determinant() const
 {
-  static G4int max_array = 20;
-  static G4int *ir = new G4int [max_array+1];
+  static __thread G4int max_array = 20;
+  static __thread G4int *ir  = 0 ; if (!ir) ir= new G4int [max_array+1];
   if(ncol != nrow)
     { error("G4ErrorMatrix::determinant: G4ErrorMatrix is not NxN"); }
   if (ncol > max_array)

@@ -219,10 +219,10 @@ class G4ParticleTable
    //class, we can change any member field as static without any problem
    //because there is only one instance. Then we are allowed to add 
    //"__thread".
-   static G4ParticleMessenger* fParticleMessenger;
-   static G4PTblDictionary*  fDictionary;
-   static G4PTblDicIterator* fIterator;
-   static G4PTblEncodingDictionary* fEncodingDictionary;
+   static __thread G4ParticleMessenger* fParticleMessenger;
+   static __thread G4PTblDictionary*  fDictionary;
+   static __thread G4PTblDicIterator* fIterator;
+   static __thread G4PTblEncodingDictionary* fEncodingDictionary;
  
    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
    //Phase I changes this member to be thread local while each thread holds
@@ -241,7 +241,7 @@ class G4ParticleTable
    //class, we can change any member field as static without any problem
    //because there is only one instance. Then we are allowed to add 
    //"__thread".
-   static G4ShortLivedTable*     fShortLivedTable;
+   static __thread G4ShortLivedTable*     fShortLivedTable;
 
    //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
    //These shadow pointers are used by each worker thread to copy the content

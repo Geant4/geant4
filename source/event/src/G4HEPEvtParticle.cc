@@ -31,27 +31,27 @@
 
 #include "G4HEPEvtParticle.hh"
 
-G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
+__thread G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator_G4MT_TLS_ = 0;
 
 G4HEPEvtParticle::G4HEPEvtParticle()
   : theParticle(0), ISTHEP(1), JDAHEP1(1), JDAHEP2(1)
-{;}
+{  ;;;   if (!aHEPEvtParticleAllocator_G4MT_TLS_) aHEPEvtParticleAllocator_G4MT_TLS_ = new G4Allocator<G4HEPEvtParticle>  ; G4Allocator<G4HEPEvtParticle> &aHEPEvtParticleAllocator = *aHEPEvtParticleAllocator_G4MT_TLS_;  ;;;  ;}
 
 G4HEPEvtParticle::G4HEPEvtParticle(G4PrimaryParticle* pp,
         G4int isthep, G4int jdahep1, G4int jdahep2)
   : theParticle(pp),ISTHEP(isthep),JDAHEP1(jdahep1),JDAHEP2(jdahep2)
-{;}
+{  ;;;   if (!aHEPEvtParticleAllocator_G4MT_TLS_) aHEPEvtParticleAllocator_G4MT_TLS_ = new G4Allocator<G4HEPEvtParticle>  ; G4Allocator<G4HEPEvtParticle> &aHEPEvtParticleAllocator = *aHEPEvtParticleAllocator_G4MT_TLS_;  ;;;  ;}
 
 G4HEPEvtParticle::~G4HEPEvtParticle()
-{;}
+{  ;;;   if (!aHEPEvtParticleAllocator_G4MT_TLS_) aHEPEvtParticleAllocator_G4MT_TLS_ = new G4Allocator<G4HEPEvtParticle>  ; G4Allocator<G4HEPEvtParticle> &aHEPEvtParticleAllocator = *aHEPEvtParticleAllocator_G4MT_TLS_;  ;;;  ;}
 
 G4HEPEvtParticle& G4HEPEvtParticle::operator=(const G4HEPEvtParticle &)
-{ return *this; }
+{  ;;;   if (!aHEPEvtParticleAllocator_G4MT_TLS_) aHEPEvtParticleAllocator_G4MT_TLS_ = new G4Allocator<G4HEPEvtParticle>  ; G4Allocator<G4HEPEvtParticle> &aHEPEvtParticleAllocator = *aHEPEvtParticleAllocator_G4MT_TLS_;  ;;;   return *this; }
 
 G4int G4HEPEvtParticle::operator==(const G4HEPEvtParticle &right) const
-{ return (this==&right); }
+{  ;;;   if (!aHEPEvtParticleAllocator_G4MT_TLS_) aHEPEvtParticleAllocator_G4MT_TLS_ = new G4Allocator<G4HEPEvtParticle>  ; G4Allocator<G4HEPEvtParticle> &aHEPEvtParticleAllocator = *aHEPEvtParticleAllocator_G4MT_TLS_;  ;;;   return (this==&right); }
 G4int G4HEPEvtParticle::operator!=(const G4HEPEvtParticle &right) const
-{ return (this!=&right); }
+{  ;;;   if (!aHEPEvtParticleAllocator_G4MT_TLS_) aHEPEvtParticleAllocator_G4MT_TLS_ = new G4Allocator<G4HEPEvtParticle>  ; G4Allocator<G4HEPEvtParticle> &aHEPEvtParticleAllocator = *aHEPEvtParticleAllocator_G4MT_TLS_;  ;;;   return (this!=&right); }
 
 
 

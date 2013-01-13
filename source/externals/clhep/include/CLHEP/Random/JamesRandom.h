@@ -99,8 +99,8 @@ private:
   double u[97];
   double c, cd, cm;
   int i97, j97;
-  static int numEngines;
-  static int maxIndex;
+  static __thread int numEngines;
+  static __thread int maxIndex;
 };
 
 }  // namespace CLHEP

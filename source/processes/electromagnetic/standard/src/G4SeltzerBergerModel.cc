@@ -71,9 +71,9 @@
 
 using namespace std;
 
-G4Physics2DVector* G4SeltzerBergerModel::dataSB[101] = {0};
-G4double G4SeltzerBergerModel::ylimit[101] = {0.0};
-G4double G4SeltzerBergerModel::expnumlim = -12.;
+__thread G4Physics2DVector* G4SeltzerBergerModel::dataSB[101] = {0};
+__thread G4double G4SeltzerBergerModel::ylimit[101] = {0.0};
+__thread G4double G4SeltzerBergerModel::expnumlim = -12.;
 
 G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
 					   const G4String& nam)

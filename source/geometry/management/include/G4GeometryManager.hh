@@ -89,7 +89,7 @@ class G4GeometryManager
     void DeleteOptimisations(G4VPhysicalVolume* vol);
     static void ReportVoxelStats( std::vector<G4SmartVoxelStat> & stats,
                                   G4double totalCpuTime );
-    static G4GeometryManager* fgInstance;
+    static __thread G4GeometryManager* fgInstance;
     G4bool fIsClosed;
 };
 

@@ -68,11 +68,11 @@ G4RToEConvForPositron::~G4RToEConvForPositron()
 G4double G4RToEConvForPositron::ComputeLoss(G4double AtomicNumber,
 					    G4double KineticEnergy) const
 {
-  static G4double Z;  
-  static G4double taul, ionpot, ionpotlog;
+  static __thread G4double Z;  
+  static __thread G4double taul, ionpot, ionpotlog;
   const  G4double cbr1=0.02, cbr2=-5.7e-5, cbr3=1., cbr4=0.072;
   const  G4double Tlow=10.*keV, Thigh=1.*GeV;
-  static G4double bremfactor = 0.1 ;
+  static __thread G4double bremfactor = 0.1 ;
 
   G4double Mass = theParticle->GetPDGMass();       
   //  calculate dE/dx for electrons

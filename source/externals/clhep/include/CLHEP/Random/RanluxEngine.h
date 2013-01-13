@@ -115,8 +115,8 @@ private:
   float carry;
   int count24;
   static const int int_modulus = 0x1000000;
-  static int numEngines;
-  static int maxIndex;
+  static __thread int numEngines;
+  static __thread int maxIndex;
 };
 
 }  // namespace CLHEP

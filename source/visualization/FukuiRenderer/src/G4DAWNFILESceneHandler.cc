@@ -303,4 +303,4 @@ void G4DAWNFILESceneHandler::FRBeginModeling( void )
 //////////////////////
 
 	//----- static variables
-G4int G4DAWNFILESceneHandler::fSceneIdCount = 0; 
+__thread G4int G4DAWNFILESceneHandler::fSceneIdCount = 0; 

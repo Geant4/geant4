@@ -150,7 +150,7 @@ void G4ExcitedBaryonConstructor::ConstructAntiParticle(G4int idx)
 G4double  G4ExcitedBaryonConstructor::GetCharge(G4int iIsoSpin3)
 {
   G4double charge = 0.0;
-  static G4double quark_charge[7] = 
+  static __thread G4double quark_charge[7] = 
   {
     0., -1./3., +2./3., -1./3., +2./3., -1./3., +2./3.
   };

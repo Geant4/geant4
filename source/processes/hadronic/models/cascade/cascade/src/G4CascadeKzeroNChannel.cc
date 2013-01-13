@@ -37,24 +37,24 @@ using namespace G4InuclParticleNames;
 namespace {
   // Outgoing particle types of a given multiplicity
 
-  static G4int k0n2bfs[1][2] =
+  static __thread G4int k0n2bfs[1][2] =
     {{2,15}};
 
-  static G4int k0n3bfs[4][3] =
+  static __thread G4int k0n3bfs[4][3] =
     {{2,7,15}, {2,5,11}, {1,5,15}, {15,15,21}};
 
-  static G4int k0n4bfs[10][4] =
+  static __thread G4int k0n4bfs[10][4] =
     {{2,7,7,15},  {1,5,5,11},  {2,5,7,11},  {1,5,7,15},  {2,3,5,15},
      {1,13,15,15},{2,11,13,15},{2,15,15,17},{7,15,15,21},{5,11,15,21}};
 
-  static G4int k0n5bfs[19][5] =
+  static __thread G4int k0n5bfs[19][5] =
     {{2,7,7,7,15},   {1,5,5,7,11},   {2,5,7,7,11},   {2,3,5,5,11},
      {1,5,7,7,15},   {1,3,5,5,15},   {2,3,5,7,15},   {1,7,13,15,15},
      {2,7,11,13,15}, {2,5,11,15,17}, {1,5,11,13,15}, {2,7,15,15,17},
      {2,3,13,15,15}, {2,5,11,11,13}, {1,5,15,15,17}, {7,7,15,15,21},
      {5,5,11,11,21}, {5,7,11,15,21}, {3,5,15,15,21}}; 
 
-  static G4int k0n6bfs[28][6] =
+  static __thread G4int k0n6bfs[28][6] =
     {{2,7,7,7,7,15},   {1,5,5,7,7,11},   {1,3,5,5,5,11},
      {2,5,7,7,7,11},   {2,3,5,5,7,11},   {1,5,7,7,7,15},
      {1,3,5,5,7,15},   {2,3,5,7,7,15},   {2,3,3,5,5,15},
@@ -66,7 +66,7 @@ namespace {
      {5,5,7,11,11,21}, {5,7,7,11,15,21}, {3,5,5,11,15,21},
      {3,5,7,15,15,21}};
  
-  static G4int k0n7bfs[38][7] =
+  static __thread G4int k0n7bfs[38][7] =
     {{2,7,7,7,7,7,15},   {1,3,5,5,5,7,11},   {1,5,5,7,7,7,11},
      {2,5,7,7,7,7,11},   {2,3,5,5,7,7,11},   {2,3,3,5,5,5,11},
      {1,5,7,7,7,7,15},   {1,3,5,5,7,7,15},   {1,3,3,5,5,5,15},
@@ -92,7 +92,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  static G4double k0nCrossSections[100][31] = {
+  static __thread G4double k0nCrossSections[100][31] = {
     //
     // multiplicity 2 (1 channel)
     //
@@ -611,7 +611,7 @@ namespace {
 
 typedef G4CascadeKzeroNChannelData::data_t G4CascadeKzeroNChannelData_t;
 
-G4CascadeKzeroNChannelData_t *G4CascadeKzeroNChannelData::data = 0;
+__thread G4CascadeKzeroNChannelData_t *G4CascadeKzeroNChannelData::data = 0;
 
 G4CascadeKzeroNChannelData::data_t *G4CascadeKzeroNChannelData::initializer()
 {

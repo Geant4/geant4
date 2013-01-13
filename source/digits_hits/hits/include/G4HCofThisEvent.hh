@@ -87,20 +87,20 @@ class G4HCofThisEvent
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+  extern G4DLLEXPORT __thread G4Allocator<G4HCofThisEvent> *anHCoTHAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT G4Allocator<G4HCofThisEvent> anHCoTHAllocator;
+  extern G4DLLIMPORT __thread G4Allocator<G4HCofThisEvent> *anHCoTHAllocator_G4MT_TLS_;
 #endif
 
 inline void* G4HCofThisEvent::operator new(size_t)
-{
+{  ;;;   if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ; G4Allocator<G4HCofThisEvent> &anHCoTHAllocator = *anHCoTHAllocator_G4MT_TLS_;  ;;;  
   void* anHCoTH;
   anHCoTH = (void*)anHCoTHAllocator.MallocSingle();
   return anHCoTH;
 }
 
 inline void G4HCofThisEvent::operator delete(void* anHCoTH)
-{
+{  ;;;   if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ; G4Allocator<G4HCofThisEvent> &anHCoTHAllocator = *anHCoTHAllocator_G4MT_TLS_;  ;;;  
   anHCoTHAllocator.FreeSingle((G4HCofThisEvent*)anHCoTH);
 }
 

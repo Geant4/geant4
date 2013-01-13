@@ -86,9 +86,9 @@ G4double G4StatMFParameters::GetMaxAverageMultiplicity(const G4int A)
   return MaxAverageMultiplicity;
 }
 
-G4StatMFParameters G4StatMFParameters::theStatMFParameters;
+__thread G4StatMFParameters *G4StatMFParameters::theStatMFParameters_G4MT_TLS_ = 0;
 
 
 G4StatMFParameters * G4StatMFParameters::GetAddress()
-{ return &theStatMFParameters; }
+{  ;;;   if (!theStatMFParameters_G4MT_TLS_) theStatMFParameters_G4MT_TLS_ = new G4StatMFParameters  ; G4StatMFParameters &theStatMFParameters = *theStatMFParameters_G4MT_TLS_;  ;;;   return &theStatMFParameters; }
 

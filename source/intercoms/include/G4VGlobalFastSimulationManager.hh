@@ -78,7 +78,7 @@ protected:
   static void SetConcreteInstance (G4VGlobalFastSimulationManager*);
     // Sets the pointer to actual Global Fast Simulation manager.
 
-  static G4VGlobalFastSimulationManager* fpConcreteInstance;  
+  static __thread G4VGlobalFastSimulationManager* fpConcreteInstance;  
     // Pointer to real G4GlobalFastSimulationManager.
 
 };

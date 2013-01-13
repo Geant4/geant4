@@ -59,7 +59,7 @@ namespace G4INCL {
     virtual ~Random() {}
 
   private:
-    static IRandomGenerator *theGenerator;
+    static __thread IRandomGenerator *theGenerator;
 
   public:
     /**

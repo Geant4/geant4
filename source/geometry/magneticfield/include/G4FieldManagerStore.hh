@@ -80,8 +80,8 @@ class G4FieldManagerStore : public std::vector<G4FieldManager*>
 
   private:
 
-    static G4FieldManagerStore* fgInstance;
-    static G4bool locked;
+    static __thread G4FieldManagerStore* fgInstance;
+    static __thread G4bool locked;
 };
 
 #endif

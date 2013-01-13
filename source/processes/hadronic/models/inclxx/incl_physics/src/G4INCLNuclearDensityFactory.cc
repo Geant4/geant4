@@ -43,15 +43,15 @@
 
 namespace G4INCL {
 
-  std::map<G4int,NuclearDensity*> NuclearDensityFactory::nuclearDensityCache;
+  __thread std::map<G4int,NuclearDensity*> *NuclearDensityFactory::nuclearDensityCache_G4MT_TLS_ = 0;
 
-  std::map<G4int,InverseInterpolationTable*> NuclearDensityFactory::rpCorrelationTableCache;
+  __thread std::map<G4int,InverseInterpolationTable*> *NuclearDensityFactory::rpCorrelationTableCache_G4MT_TLS_ = 0;
 
-  std::map<G4int,InverseInterpolationTable*> NuclearDensityFactory::rCDFTableCache;
+  __thread std::map<G4int,InverseInterpolationTable*> *NuclearDensityFactory::rCDFTableCache_G4MT_TLS_ = 0;
 
-  std::map<G4int,InverseInterpolationTable*> NuclearDensityFactory::pCDFTableCache;
+  __thread std::map<G4int,InverseInterpolationTable*> *NuclearDensityFactory::pCDFTableCache_G4MT_TLS_ = 0;
 
-  NuclearDensity* NuclearDensityFactory::createDensity(const G4int A, const G4int Z) {
+  NuclearDensity* NuclearDensityFactory::createDensity(const G4int A, const G4int Z) {  ;;;   if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &pCDFTableCache = *pCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rCDFTableCache = *rCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rpCorrelationTableCache = *rpCorrelationTableCache_G4MT_TLS_;  ;;;    ;;;   if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ; std::map<G4int,NuclearDensity*> &nuclearDensityCache = *nuclearDensityCache_G4MT_TLS_;  ;;;  
     const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
     const std::map<G4int,NuclearDensity*>::const_iterator mapEntry = nuclearDensityCache.find(nuclideID);
     if(mapEntry == nuclearDensityCache.end()) {
@@ -66,7 +66,7 @@ namespace G4INCL {
     }
   }
 
-  InverseInterpolationTable *NuclearDensityFactory::createRPCorrelationTable(const G4int A, const G4int Z) {
+  InverseInterpolationTable *NuclearDensityFactory::createRPCorrelationTable(const G4int A, const G4int Z) {  ;;;   if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &pCDFTableCache = *pCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rCDFTableCache = *rCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rpCorrelationTableCache = *rpCorrelationTableCache_G4MT_TLS_;  ;;;    ;;;   if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ; std::map<G4int,NuclearDensity*> &nuclearDensityCache = *nuclearDensityCache_G4MT_TLS_;  ;;;  
     const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
     const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache.find(nuclideID);
     if(mapEntry == rpCorrelationTableCache.end()) {
@@ -121,7 +121,7 @@ namespace G4INCL {
     }
   }
 
-  InverseInterpolationTable *NuclearDensityFactory::createRCDFTable(const G4int A, const G4int Z) {
+  InverseInterpolationTable *NuclearDensityFactory::createRCDFTable(const G4int A, const G4int Z) {  ;;;   if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &pCDFTableCache = *pCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rCDFTableCache = *rCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rpCorrelationTableCache = *rpCorrelationTableCache_G4MT_TLS_;  ;;;    ;;;   if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ; std::map<G4int,NuclearDensity*> &nuclearDensityCache = *nuclearDensityCache_G4MT_TLS_;  ;;;  
     const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
     const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rCDFTableCache.find(nuclideID);
     if(mapEntry == rCDFTableCache.end()) {
@@ -161,7 +161,7 @@ namespace G4INCL {
     }
   }
 
-  InverseInterpolationTable *NuclearDensityFactory::createPCDFTable(const G4int A, const G4int Z) {
+  InverseInterpolationTable *NuclearDensityFactory::createPCDFTable(const G4int A, const G4int Z) {  ;;;   if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &pCDFTableCache = *pCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rCDFTableCache = *rCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rpCorrelationTableCache = *rpCorrelationTableCache_G4MT_TLS_;  ;;;    ;;;   if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ; std::map<G4int,NuclearDensity*> &nuclearDensityCache = *nuclearDensityCache_G4MT_TLS_;  ;;;  
     const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
     const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = pCDFTableCache.find(nuclideID);
     if(mapEntry == pCDFTableCache.end()) {
@@ -191,7 +191,7 @@ namespace G4INCL {
     }
   }
 
-  ParticleSampler *NuclearDensityFactory::createParticleSampler(const G4int A, const G4int Z) {
+  ParticleSampler *NuclearDensityFactory::createParticleSampler(const G4int A, const G4int Z) {  ;;;   if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &pCDFTableCache = *pCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rCDFTableCache = *rCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rpCorrelationTableCache = *rpCorrelationTableCache_G4MT_TLS_;  ;;;    ;;;   if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ; std::map<G4int,NuclearDensity*> &nuclearDensityCache = *nuclearDensityCache_G4MT_TLS_;  ;;;  
     InverseInterpolationTable *rCDFTable = NuclearDensityFactory::createRCDFTable(A, Z);
     InverseInterpolationTable *pCDFTable = NuclearDensityFactory::createPCDFTable(A, Z);
     return new ParticleSampler(A, Z, rCDFTable, pCDFTable);

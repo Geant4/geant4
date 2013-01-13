@@ -35,7 +35,7 @@
 
 #include <iostream>
 
-G4XmlAnalysisManager* G4XmlAnalysisManager::fgInstance = 0;
+__thread G4XmlAnalysisManager* G4XmlAnalysisManager::fgInstance = 0;
 
 //_____________________________________________________________________________
 G4XmlAnalysisManager* G4XmlAnalysisManager::Instance()

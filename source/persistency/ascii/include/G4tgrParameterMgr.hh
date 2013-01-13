@@ -81,7 +81,7 @@ class G4tgrParameterMgr
       // Map of Parameter's: G4String is the Parameter name,
       // double is its value
 
-    static G4tgrParameterMgr* theInstance;
+    static __thread G4tgrParameterMgr* theInstance;
 };
 
 #endif

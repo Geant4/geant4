@@ -114,11 +114,11 @@ class G4ProductionCuts
   G4bool                          isModified;
 
   private:
-  static G4ParticleDefinition* gammaDef;
-  static G4ParticleDefinition* electDef;
-  static G4ParticleDefinition* positDef;
+  static __thread G4ParticleDefinition* gammaDef;
+  static __thread G4ParticleDefinition* electDef;
+  static __thread G4ParticleDefinition* positDef;
 
-  static G4ParticleDefinition* protonDef; // for proton
+  static __thread G4ParticleDefinition* protonDef; // for proton
 
 };
 

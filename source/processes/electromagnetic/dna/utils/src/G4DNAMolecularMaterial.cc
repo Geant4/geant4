@@ -59,7 +59,7 @@ bool CompareMaterial::operator() (const G4Material* mat1, const G4Material* mat2
     return mat1 < baseMat2;
 }
 
-G4DNAMolecularMaterial* G4DNAMolecularMaterial::fInstance(0);
+__thread G4DNAMolecularMaterial* G4DNAMolecularMaterial::fInstance(0);
 
 G4DNAMolecularMaterial* G4DNAMolecularMaterial::Instance()
 {

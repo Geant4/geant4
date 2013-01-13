@@ -47,7 +47,7 @@
 #include "G4NistManager.hh"
 
 
-G4tgbMaterialMgr* G4tgbMaterialMgr::theInstance = 0;
+__thread G4tgbMaterialMgr* G4tgbMaterialMgr::theInstance = 0;
 
 
 // -------------------------------------------------------------------------

@@ -64,7 +64,7 @@ class G4VPersistencyManager
       virtual ~G4VPersistencyManager();
 
   private: 
-      static G4VPersistencyManager * fPersistencyManager;
+      static __thread G4VPersistencyManager * fPersistencyManager;
 
   public: // with description
       virtual G4bool Store(const G4Event* anEvent)=0;

@@ -99,13 +99,14 @@ void G4VisCommandSetColour::SetNewValue (G4UIcommand*, G4String newValue)
       (G4UIcommand::ConvertToDouble(redOrString), green, blue);
   }
   // Add opacity
-  fCurrentColour = G4Colour
-    (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+  //fCurrentColour = G4Colour
+  SetCurrentColour( G4Colour
+		    (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity) );
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout <<
       "Colour for future \"/vis/scene/add/\" commands has been set to "
-	   << fCurrentColour <<
+	   << GetCurrentColour() <<
       ".\n(Except \"/vis/scene/add/text\" commands - use \"/vis/set/textColour\".)"
 	   << G4endl;
   }
@@ -137,13 +138,13 @@ G4String G4VisCommandSetLineWidth::GetCurrentValue (G4UIcommand*)
 void G4VisCommandSetLineWidth::SetNewValue (G4UIcommand*, G4String newValue)
 {
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-
-  fCurrentLineWidth = fpCommand->GetNewDoubleValue(newValue);
+  SetCurrentLineWidth(fpCommand->GetNewDoubleValue(newValue));
+  //fCurrentLineWidth = fpCommand->GetNewDoubleValue(newValue);
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout <<
       "Line width for future \"/vis/scene/add/\" commands has been set to "
-	   << fCurrentLineWidth
+	   << GetCurrentLineWidth()
 	   << G4endl;
   }
 }
@@ -208,13 +209,14 @@ void G4VisCommandSetTextColour::SetNewValue (G4UIcommand*, G4String newValue)
       (G4UIcommand::ConvertToDouble(redOrString), green, blue);
   }
   // Add opacity
-  fCurrentTextColour = G4Colour
-    (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+  //fCurrentTextColour = G4Colour
+  SetCurrentTextColour( G4Colour
+			(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity) );
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout <<
       "Colour for future \"/vis/scene/add/text\" commands has been set to "
-	   << fCurrentTextColour << '.'
+	   << GetCurrentTextColour() << '.'
 	   << G4endl;
   }
 }
@@ -257,12 +259,12 @@ void G4VisCommandSetTextLayout::SetNewValue (G4UIcommand*, G4String newValue)
     layout = G4Text::centre;
   else if (newValue == "right") layout = G4Text::right;
 
-  fCurrentTextLayout = layout;
+  SetCurrentTextLayout(layout);
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Text layout (for future \"text\" commands) has been set to \""
-	   << fCurrentTextLayout << "\"."
+	   << GetCurrentTextLayout() << "\"."
 	   << G4endl;
   }
 }
@@ -343,10 +345,10 @@ void G4VisCommandSetTouchable::SetNewValue (G4UIcommand*, G4String newValue)
     iBegin = newValue.find_first_not_of(' ',iEnd);
   }
   
-  fCurrentTouchablePath = currentTouchablePath;
+  SetCurrentTouchablePath(currentTouchablePath);
   
   if (verbosity >= G4VisManager::confirmations) {
-    G4cout    << fCurrentTouchablePath
+    G4cout    << GetCurrentTouchablePath()
     << G4endl;
   }
 }

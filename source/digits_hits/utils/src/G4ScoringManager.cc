@@ -36,9 +36,9 @@
 #include "G4DefaultLinearColorMap.hh"
 #include "G4ScoreLogColorMap.hh"
 
-G4ScoringManager* G4ScoringManager::fSManager = 0;
+__thread G4ScoringManager* G4ScoringManager::fSManager = 0;
 
-G4int G4ScoringManager::replicaLevel = 3;
+__thread G4int G4ScoringManager::replicaLevel = 3;
 
 G4ScoringManager* G4ScoringManager::GetScoringManager()
 {

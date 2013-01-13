@@ -41,7 +41,10 @@
 // #include <cassert>
 
 namespace G4INCL {
-
+  __thread bool CrossSections::interactionDistanceNN1GeVisInitialized = false;
+  __thread G4double CrossSections::interactionDistanceNN1GeVanswer = 0;
+  __thread bool CrossSections::interactionDistancePiN1GeVisInitialized = false;
+  __thread G4double CrossSections::interactionDistancePiN1GeVanswer = 0;
   G4double CrossSections::total(Particle const * const p1, Particle const * const p2) {
     G4double inelastic = 0.0;
     if(p1->isNucleon() && p2->isNucleon()) {

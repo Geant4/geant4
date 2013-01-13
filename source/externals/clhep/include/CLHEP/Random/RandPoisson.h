@@ -118,8 +118,8 @@ private:
   double status[3], oldm;
 
   // static data
-  static double status_st[3];
-  static double oldm_st;
+  static __thread double status_st[3];
+  static __thread double oldm_st;
   static const double meanMax_st;
 
 };

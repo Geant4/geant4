@@ -51,8 +51,8 @@ static const int MarkerLen = 64; // Enough room to hold a begin or end marker.
 
 std::string MTwistEngine::name() const {return "MTwistEngine";}
 
-int MTwistEngine::numEngines = 0;
-int MTwistEngine::maxIndex = 215;
+__thread int MTwistEngine::numEngines = 0;
+__thread int MTwistEngine::maxIndex = 215;
 
 MTwistEngine::MTwistEngine() 
 : HepRandomEngine()

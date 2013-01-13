@@ -102,7 +102,7 @@ class G4RunManager
     // its derived class.
 
   private:
-    static G4RunManager* fRunManager;
+    static __thread G4RunManager* fRunManager;
 
   public: // with description
 

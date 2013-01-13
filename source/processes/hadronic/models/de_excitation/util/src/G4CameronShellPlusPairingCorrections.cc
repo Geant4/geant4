@@ -85,7 +85,7 @@ const G4double G4CameronShellPlusPairingCorrections::SPNTable
 
 
 
-G4CameronShellPlusPairingCorrections* G4CameronShellPlusPairingCorrections::theInstance = 0;
+__thread G4CameronShellPlusPairingCorrections* G4CameronShellPlusPairingCorrections::theInstance = 0;
 
 G4CameronShellPlusPairingCorrections::G4CameronShellPlusPairingCorrections()
 {;}
@@ -96,7 +96,7 @@ G4CameronShellPlusPairingCorrections::~G4CameronShellPlusPairingCorrections()
 G4CameronShellPlusPairingCorrections* G4CameronShellPlusPairingCorrections::GetInstance()
 {
   if (!theInstance)  { 
-    static G4CameronShellPlusPairingCorrections theCorrections;
+    static __thread G4CameronShellPlusPairingCorrections *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4CameronShellPlusPairingCorrections  ;  G4CameronShellPlusPairingCorrections &theCorrections = *theCorrections_G4MT_TLS_;
     theInstance = &theCorrections; 
   }
   return theInstance;

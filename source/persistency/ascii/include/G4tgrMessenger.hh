@@ -62,7 +62,7 @@ class G4tgrMessenger : public G4UImessenger
 
     G4UIdirectory* tgDirectory;
     G4UIcmdWithAnInteger* verboseCmd;
-    static G4int theVerboseLevel;
+    static __thread G4int theVerboseLevel;
 };
 
 #endif

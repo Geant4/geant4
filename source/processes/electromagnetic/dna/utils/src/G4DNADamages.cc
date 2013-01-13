@@ -28,7 +28,7 @@
 #include "G4DNADamages.hh"
 #include "G4UnitsTable.hh"
 
-G4DNADamages* G4DNADamages::fpInstance(0);
+__thread G4DNADamages* G4DNADamages::fpInstance(0);
 
 G4DNAIndirectHit::G4DNAIndirectHit(const G4String& baseName,
                                    const G4Molecule* molecule,

@@ -69,12 +69,12 @@ G4_REFERENCE_XS_FACTORY(G4GlauberGribovCrossSection);
 G4_REFERENCE_XS_FACTORY(G4GGNuclNuclCrossSection);
 
 
-G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
+__thread G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
 
 G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::Instance()
 {
   if(0 == theInstance) {
-    static G4CrossSectionDataSetRegistry manager;
+    static __thread G4CrossSectionDataSetRegistry *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4CrossSectionDataSetRegistry  ;  G4CrossSectionDataSetRegistry &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;

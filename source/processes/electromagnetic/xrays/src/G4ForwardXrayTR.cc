@@ -51,22 +51,22 @@
 
 // Initialization of local constants
 
-G4int    G4ForwardXrayTR::fSympsonNumber =  100;
+__thread G4int    G4ForwardXrayTR::fSympsonNumber =  100;
 
-G4double G4ForwardXrayTR::fTheMinEnergyTR = 1.0*keV;
-G4double G4ForwardXrayTR::fTheMaxEnergyTR = 100.0*keV;
-G4double G4ForwardXrayTR::fTheMaxAngle    = 1.0e-3;
-G4double G4ForwardXrayTR::fTheMinAngle    =  5.0e-6;
-G4int    G4ForwardXrayTR::fBinTR          =  50;
+__thread G4double G4ForwardXrayTR::fTheMinEnergyTR = 1.0*keV;
+__thread G4double G4ForwardXrayTR::fTheMaxEnergyTR = 100.0*keV;
+__thread G4double G4ForwardXrayTR::fTheMaxAngle    = 1.0e-3;
+__thread G4double G4ForwardXrayTR::fTheMinAngle    =  5.0e-6;
+__thread G4int    G4ForwardXrayTR::fBinTR          =  50;
 
-G4double G4ForwardXrayTR::fMinProtonTkin = 100.0*GeV;
-G4double G4ForwardXrayTR::fMaxProtonTkin = 100.0*TeV;
-G4int    G4ForwardXrayTR::fTotBin        =  50;
+__thread G4double G4ForwardXrayTR::fMinProtonTkin = 100.0*GeV;
+__thread G4double G4ForwardXrayTR::fMaxProtonTkin = 100.0*TeV;
+__thread G4int    G4ForwardXrayTR::fTotBin        =  50;
 
-G4double G4ForwardXrayTR::fPlasmaCof = 4.0*pi*fine_structure_const*
+__thread G4double G4ForwardXrayTR::fPlasmaCof = 4.0*pi*fine_structure_const*
                                        hbarc*hbarc*hbarc/electron_mass_c2;
 
-G4double G4ForwardXrayTR::fCofTR     = fine_structure_const/pi;
+__thread G4double G4ForwardXrayTR::fCofTR     = fine_structure_const/pi;
 
 
 //////////////////////////////////////////////////////////////////////

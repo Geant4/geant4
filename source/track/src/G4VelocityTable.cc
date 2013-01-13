@@ -46,7 +46,7 @@
 
 #include "G4ios.hh" 
 
-G4VelocityTable* G4VelocityTable::theInstance = 0;
+__thread G4VelocityTable* G4VelocityTable::theInstance = 0;
 
 ////////////////
 G4VelocityTable::G4VelocityTable()

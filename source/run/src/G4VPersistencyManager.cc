@@ -30,7 +30,7 @@
 
 #include "G4VPersistencyManager.hh"
 
-G4VPersistencyManager* G4VPersistencyManager::fPersistencyManager = 0;
+__thread G4VPersistencyManager* G4VPersistencyManager::fPersistencyManager = 0;
 
 G4VPersistencyManager* G4VPersistencyManager::GetPersistencyManager()
 {

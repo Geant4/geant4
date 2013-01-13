@@ -51,7 +51,7 @@
 
 #include <sstream>
 
-G4int G4XXXStoredSceneHandler::fSceneIdCount = 0;
+__thread G4int G4XXXStoredSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
 
 G4XXXStoredSceneHandler::G4XXXStoredSceneHandler(G4VGraphicsSystem& system,

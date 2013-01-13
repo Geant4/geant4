@@ -64,18 +64,32 @@ protected:
   void UpdateVisManagerScene (const G4String& sceneName = "");
 
   // Data members.
-  static G4VisManager* fpVisManager;
+  static __thread G4VisManager* fpVisManager;
 
   // Current quantities for use in appropriate commands
-  static G4Colour                   fCurrentColour;
-  static G4Colour                   fCurrentTextColour;
-  static G4Text::Layout             fCurrentTextLayout;
-  static G4double                   fCurrentLineWidth;
+private:
+  static __thread G4Colour                   *fCurrentColour_G4MT_TLS_;
+  static __thread G4Colour                   *fCurrentTextColour_G4MT_TLS_;
+  static __thread G4Text::Layout             *fCurrentTextLayout_G4MT_TLS_;
+  static __thread G4double                   fCurrentLineWidth;
   //static G4VisAttributes::LineStyle fCurrentLineStyle;  Not yet used.
   //static G4VMarker::FillStyle       fCurrentFillStyle;  Not yet used.
   //static G4VMarker::SizeType        fCurrentSizeType;  Not yet used.
-  static G4ModelingParameters::PVNameCopyNoPath fCurrentTouchablePath;
+  static __thread G4ModelingParameters::PVNameCopyNoPath *fCurrentTouchablePath_G4MT_TLS_;
+protected:
+  //Andrea Dotti (13Jan2013) Encapsulate data so derived class do not care about G4MT
+  inline G4Colour& GetCurrentColour() const { return *fCurrentColour_G4MT_TLS_; }
+  inline void SetCurrentColour( const G4Colour& col) { *fCurrentColour_G4MT_TLS_ = col; }
+  inline G4Colour& GetCurrentTextColour() const { return *fCurrentTextColour_G4MT_TLS_;}
+  inline void SetCurrentTextColour( const G4Colour& col) { *fCurrentTextColour_G4MT_TLS_ = col;}
+  inline G4Text::Layout& GetCurrentTextLayout() const { return *fCurrentTextLayout_G4MT_TLS_;}
+  inline void SetCurrentTextLayout( const G4Text::Layout& lay ) { *fCurrentTextLayout_G4MT_TLS_ = lay;}
+  inline G4double GetCurrentLineWidth() const { return fCurrentLineWidth; }
+  inline void SetCurrentLineWidth( const G4double lw ) { fCurrentLineWidth = lw; }
+  inline G4ModelingParameters::PVNameCopyNoPath& GetCurrentTouchablePath() { return *fCurrentTouchablePath_G4MT_TLS_; }
+  inline void SetCurrentTouchablePath( const G4ModelingParameters::PVNameCopyNoPath& val ) { *fCurrentTouchablePath_G4MT_TLS_ = val; }
 };
+
 
 #include "G4VVisCommand.icc"
 

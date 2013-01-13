@@ -75,5 +75,5 @@ namespace G4INCL {
 
 #endif
 
-  LoggerSlave * Logger::theLoggerSlave = NULL;
+  __thread LoggerSlave * Logger::theLoggerSlave = NULL;
 }

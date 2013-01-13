@@ -53,7 +53,7 @@ void G4HarmonicPolMagField::GetFieldValue(const G4double yTrack[7],
    G4double x2 = x*x, y2 = y*y, z2 = z*z ;
    G4double x3 = x2*x, y3 = y2*y, z3 = z2*z ;
    G4double xy = x*y, xz = x*z, yz = y*z, xyz = x*y*z ;
-   static G4double
+   static __thread G4double
    c[24] = {
              .010, .010, .010,                                       // 3(0)
 	     .0001, .0001, .0001, .0001, .0001,                      // 5(1)

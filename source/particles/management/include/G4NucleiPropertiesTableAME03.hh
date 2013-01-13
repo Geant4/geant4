@@ -127,27 +127,27 @@ private:
   // The inicialization is Done in G4NucleiPropertiesTableAME03.cc
 
   // Mass Excess
-  static G4double MassExcess[nEntries];
+  static __thread G4double MassExcess[nEntries];
   
   
   // Beta Decay Energy
-  static G4double BetaEnergy[nEntries];
+  static __thread G4double BetaEnergy[nEntries];
 
     
   // Table of Z (number of protons) and A (number of nucleons)
   //        indexArray[0][ ] --> Z
   //        indexArray[1][ ] --> A
-  static G4int indexArray[2][nEntries];
+  static __thread G4int indexArray[2][nEntries];
 
   // Reduced Table of A for shorter index search.
   //         The index in this table coincide with A-1
   //         For each A value shortTable[A-1] has the index of the 1st occurrence in
   //         the indexArray[][]
-  static G4int shortTable[MaxA+1];
+  static __thread G4int shortTable[MaxA+1];
 
   // electrom mass
-  static G4double electronMass[ZMax];
-  static G4bool   isIntialized;
+  static __thread G4double electronMass[ZMax];
+  static __thread G4bool   isIntialized;
 
 };
 

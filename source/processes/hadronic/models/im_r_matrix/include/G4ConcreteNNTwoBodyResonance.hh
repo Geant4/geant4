@@ -46,6 +46,12 @@ public:
 		       const G4ParticleDefinition* aSecondary,
 		       const G4ParticleDefinition* bSecondary,
 		       const G4VXResonanceTable& sigmaTable);
+void establish_G4MT_TLS_G4ConcreteNNTwoBodyResonance(const G4ParticleDefinition* aPrimary,
+		       const G4ParticleDefinition* bPriamry,
+		       const G4ParticleDefinition* aSecondary,
+		       const G4ParticleDefinition* bSecondary,
+		       const G4VXResonanceTable& sigmaTable);
+G4ConcreteNNTwoBodyResonance(void *s1, void *s2, void *s3, void *s4, void *s5, void *s6, void *s7);
 
   virtual ~G4ConcreteNNTwoBodyResonance();
 
@@ -67,9 +73,6 @@ public:
   G4bool operator==(const G4ConcreteNNTwoBodyResonance &right) const;
   G4bool operator!=(const G4ConcreteNNTwoBodyResonance &right) const;
 
-private:
-  G4ConcreteNNTwoBodyResonance(const G4ConcreteNNTwoBodyResonance &);
-  G4ConcreteNNTwoBodyResonance & operator= (const G4ConcreteNNTwoBodyResonance &);
 
 protected:
 

@@ -38,7 +38,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
 
-G4int G4tgrMessenger::theVerboseLevel = 0;
+__thread G4int G4tgrMessenger::theVerboseLevel = 0;
 
 
 // --------------------------------------------------------------------

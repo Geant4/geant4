@@ -87,7 +87,7 @@ void G4RayTracerViewer::ClearView() {}
 void G4RayTracerViewer::DrawView()
 {
   // Trap recursive call
-  static G4bool called = false;
+  static __thread G4bool called = false;
   if (called) return;
   called = true;
 

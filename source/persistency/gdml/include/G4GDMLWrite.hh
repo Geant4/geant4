@@ -119,7 +119,7 @@ class G4GDMLWrite
   protected:
 
     G4String SchemaLocation;
-    static G4bool addPointerToName;
+    static __thread G4bool addPointerToName;
     xercesc::DOMDocument* doc;
     xercesc::DOMElement* extElement;
     XMLCh tempStr[10000];

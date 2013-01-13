@@ -38,7 +38,7 @@
 #include "G4TransportationManager.hh"
 #include "G4ITNavigator.hh"
 
-G4ITTransportationManager* G4ITTransportationManager::fpInstance (0);
+__thread G4ITTransportationManager* G4ITTransportationManager::fpInstance (0);
 
 G4ITTransportationManager::G4ITTransportationManager()
 {

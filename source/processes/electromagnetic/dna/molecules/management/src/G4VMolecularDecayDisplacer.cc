@@ -28,21 +28,21 @@
 #include "G4VMolecularDecayDisplacer.hh"
 #include "G4Molecule.hh"
 
-DisplacementType G4VMolecularDecayDisplacer::Last = 0;
+__thread DisplacementType *G4VMolecularDecayDisplacer::Last_G4MT_TLS_ = 0;
 const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement = G4VMolecularDecayDisplacer::AddDisplacement();
 
 G4VMolecularDecayDisplacer::G4VMolecularDecayDisplacer()
-{
+{  ;;;   if (!Last_G4MT_TLS_) Last_G4MT_TLS_ = new DisplacementType ( 0) ; DisplacementType &Last = *Last_G4MT_TLS_;  ;;;  
     fVerbose = 0;
 }
 
 G4VMolecularDecayDisplacer::~G4VMolecularDecayDisplacer()
-{
+{  ;;;   if (!Last_G4MT_TLS_) Last_G4MT_TLS_ = new DisplacementType ( 0) ; DisplacementType &Last = *Last_G4MT_TLS_;  ;;;  
     ;
 }
 
 DisplacementType G4VMolecularDecayDisplacer::AddDisplacement()
-{
+{  ;;;   if (!Last_G4MT_TLS_) Last_G4MT_TLS_ = new DisplacementType ( 0) ; DisplacementType &Last = *Last_G4MT_TLS_;  ;;;  
     DisplacementType output = Last;
     Last++;
     return output;

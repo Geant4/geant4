@@ -208,20 +208,20 @@ private:
   static void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle, const G4String&);
 
   typedef std::map<K,G4EnergyLossTablesHelper,std::less<K> > helper_map;
-  static helper_map dict;
+  static __thread helper_map *dict_G4MT_TLS_;
 
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);
 
-  static G4EnergyLossTablesHelper t ;
-  static G4EnergyLossTablesHelper null_loss ;
-  static G4ParticleDefinition* lastParticle ;
-  static G4double QQPositron ;
-  static G4double Chargesquare ;
-  static G4int oldIndex ;
-  static G4double rmin,rmax,Thigh ;
-  static G4int  let_counter;
-  static G4int  let_max_num_warnings;
-  static G4bool first_loss;
+  static __thread G4EnergyLossTablesHelper *t_G4MT_TLS_;
+  static __thread G4EnergyLossTablesHelper *null_loss_G4MT_TLS_;
+  static __thread G4ParticleDefinition* lastParticle ;
+  static __thread G4double QQPositron ;
+  static __thread G4double Chargesquare ;
+  static __thread G4int oldIndex ;
+  static __thread G4double rmin,rmax,Thigh ;
+  static __thread G4int  let_counter;
+  static __thread G4int  let_max_num_warnings;
+  static __thread G4bool first_loss;
 
 };
 

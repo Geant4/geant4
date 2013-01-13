@@ -43,7 +43,7 @@ static const int MarkerLen = 64; // Enough room to hold a begin or end marker.
 std::string RanshiEngine::name() const {return "RanshiEngine";}
 
 // Number of instances with automatic seed selection
-int RanshiEngine::numEngines = 0;
+__thread int RanshiEngine::numEngines = 0;
 
 RanshiEngine::RanshiEngine()
 : HepRandomEngine(),

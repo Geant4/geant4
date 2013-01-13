@@ -165,7 +165,7 @@ G4MuonMinusBoundDecay::ApplyYourself(const G4HadProjectile& projectile,
 G4double G4MuonMinusBoundDecay::GetMuonCaptureRate(G4int Z, G4int A)
 {
   // Initialized data
-  static G4double zeff[101] = { 0.,
+  static __thread G4double zeff[101] = { 0.,
     1.,1.98,2.95,3.89,4.8,5.72,6.61,7.49,8.32,9.12,9.95,10.69,11.48,12.22,
     12.91,13.64,14.24,14.89,15.53,16.15,16.75,17.38,18.04,18.49,
     19.06,19.59,20.1,20.66,21.12,21.61,22.02,22.43,22.84,23.24,
@@ -183,7 +183,7 @@ G4double G4MuonMinusBoundDecay::GetMuonCaptureRate(G4int Z, G4int A)
   // Data for Helium from Phys. Rep. 354(2001)243
 
   const size_t ListZE = 67;
-  static G4int ListZExp[ListZE] = { 1, 2,
+  static __thread G4int ListZExp[ListZE] = { 1, 2,
       3,  4,  5,  6,  7,  8,  9, 10, 11, 12,
      13, 14, 15, 16, 17, 18, 19, 20, 22, 23,
      24, 25, 26, 27, 28, 31, 32, 33, 34, 37,
@@ -192,7 +192,7 @@ G4double G4MuonMinusBoundDecay::GetMuonCaptureRate(G4int Z, G4int A)
      62, 64, 65, 67, 72, 73, 74, 80, 81, 82,
      83, 90, 92, 93};
 
-  static G4double ListCaptureVel[ListZE] = { 0.000725, 0.000356,
+  static __thread G4double ListCaptureVel[ListZE] = { 0.000725, 0.000356,
      0.0057, 0.010, 0.0258, 0.0371, 0.0644,
      0.0974, 0.144, 0.250,  0.386,  0.479,
      0.700,  0.849, 1.119,  1.338,  1.40, 

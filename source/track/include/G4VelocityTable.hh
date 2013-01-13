@@ -99,7 +99,7 @@ class G4VelocityTable
  private:
   void  PrepareVelocityTable();
 
-  static G4VelocityTable* theInstance;
+  static __thread G4VelocityTable* theInstance;
   G4double             maxT;
   G4double             minT;
   G4int                NbinT;

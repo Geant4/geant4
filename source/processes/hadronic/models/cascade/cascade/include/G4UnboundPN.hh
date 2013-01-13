@@ -45,7 +45,7 @@
 
 class G4UnboundPN : public G4VShortLivedParticle {
 private:
-  static G4UnboundPN* theInstance;
+  static __thread G4UnboundPN* theInstance;
   G4UnboundPN();
   ~G4UnboundPN() { theInstance = 0; }
   

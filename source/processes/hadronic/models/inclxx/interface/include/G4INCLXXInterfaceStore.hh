@@ -191,7 +191,7 @@ class G4INCLXXInterfaceStore {
 
     /// \brief Create a new Config object from the current options
 
-    static G4INCLXXInterfaceStore *theInstance;
+    static __thread G4INCLXXInterfaceStore *theInstance;
 
     G4bool dumpInput;
     G4bool accurateProjectile;

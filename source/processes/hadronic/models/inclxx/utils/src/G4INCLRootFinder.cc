@@ -51,17 +51,17 @@
 
 namespace G4INCL {
 
-  RootFinder_solution_t RootFinder::solution;
+  __thread RootFinder_solution_t *RootFinder::solution_G4MT_TLS_ = 0;
 
   const G4double RootFinder::toleranceY = 1.e-4;
 
   std::pair<G4double,G4double> const &RootFinder::getSolution() 
-  { 
+  {  ;;;   if (!solution_G4MT_TLS_) solution_G4MT_TLS_ = new RootFinder_solution_t  ; RootFinder_solution_t &solution = *solution_G4MT_TLS_;  ;;;   
     return solution; 
   }
 
   G4bool RootFinder::solve(RootFunctor const * const f, const G4double x0) 
-  {
+  {  ;;;   if (!solution_G4MT_TLS_) solution_G4MT_TLS_ = new RootFinder_solution_t  ; RootFinder_solution_t &solution = *solution_G4MT_TLS_;  ;;;  
     // If we already have the solution, do nothing
     const G4double y0 = (*f)(x0);
     if( std::abs(y0) < toleranceY ) {
@@ -138,7 +138,7 @@ namespace G4INCL {
   }
 
   std::pair<G4double,G4double> RootFinder::bracketRoot(RootFunctor const * const f, G4double x0) 
-  {
+  {  ;;;   if (!solution_G4MT_TLS_) solution_G4MT_TLS_ = new RootFinder_solution_t  ; RootFinder_solution_t &solution = *solution_G4MT_TLS_;  ;;;  
     G4double y0 = (*f)(x0);
 
     const G4double scaleFactor = 1.5;

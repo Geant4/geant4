@@ -45,7 +45,7 @@
 // Singleton is created at first invocation
 
 G4CascadeChannelTables& G4CascadeChannelTables::instance() {
-  static G4CascadeChannelTables theInstance;
+  static __thread G4CascadeChannelTables *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4CascadeChannelTables  ;  G4CascadeChannelTables &theInstance = *theInstance_G4MT_TLS_;
   return theInstance;
 }
 

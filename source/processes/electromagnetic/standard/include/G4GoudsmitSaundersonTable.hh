@@ -63,8 +63,8 @@ private:
 
   void LoadPDFandCPDFdata();
 
-  static G4double* PDF;
-  static G4double* CPDF;
+  static __thread G4double* PDF;
+  static __thread G4double* CPDF;
 
 };
 

@@ -60,7 +60,7 @@ class G4RegularNavigationHelper
 
   private:
     G4RegularNavigationHelper();
-    static G4RegularNavigationHelper * theInstance;
+    static __thread G4RegularNavigationHelper * theInstance;
 };
 
 #endif

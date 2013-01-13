@@ -51,10 +51,10 @@ static const int MarkerLen = 64; // Enough room to hold a begin or end marker.
 std::string RanluxEngine::name() const {return "RanluxEngine";}
 
 // Number of instances with automatic seed selection
-int RanluxEngine::numEngines = 0;
+__thread int RanluxEngine::numEngines = 0;
 
 // Maximum index into the seed table
-int RanluxEngine::maxIndex = 215;
+__thread int RanluxEngine::maxIndex = 215;
 
 RanluxEngine::RanluxEngine(long seed, int lux)
 : HepRandomEngine()

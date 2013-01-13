@@ -122,7 +122,7 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
     
     // Expect definition to exist    
     if (!G4AttUtils::ExtractAttDef(object, fAttName, attDef)) {
-      static G4bool warnedUnableToExtract = false;
+      static __thread G4bool warnedUnableToExtract = false;
       if (!warnedUnableToExtract) {
 	G4ExceptionDescription ed;
 	ed <<"Unable to extract attribute definition named "<<fAttName;
@@ -153,7 +153,7 @@ G4AttributeFilterT<T>::Evaluate(const T& object) const
 
   // Expect value to exist
   if (!G4AttUtils::ExtractAttValue(object, fAttName, attVal)) {
-    static G4bool warnedUnableToExtract = false;
+    static __thread G4bool warnedUnableToExtract = false;
     if (!warnedUnableToExtract) {
       G4ExceptionDescription ed;
       ed <<"Unable to extract attribute value named "<<fAttName;

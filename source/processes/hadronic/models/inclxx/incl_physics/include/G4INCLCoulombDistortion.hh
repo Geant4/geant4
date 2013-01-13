@@ -126,7 +126,7 @@ namespace G4INCL {
     ~CoulombDistortion() {}
 
   private:
-    static ICoulomb *theCoulomb;
+    static __thread ICoulomb *theCoulomb;
 
   };
 }

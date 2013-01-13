@@ -47,12 +47,13 @@ G4String G4ComponentSAIDTotalXS::fnames[13] = {
   "pin","pie",
   "gp_pi0p","gp_pi+n","gn_pi-p","gn_pi0n","gp_etap","gp_etapp"
 };
-G4PhysicsVector* G4ComponentSAIDTotalXS::elastdata[13] = {0};
-G4PhysicsVector* G4ComponentSAIDTotalXS::inelastdata[13] = {0};
+
+__thread G4PhysicsVector* G4ComponentSAIDTotalXS::elastdata[13] = {0};
+__thread G4PhysicsVector* G4ComponentSAIDTotalXS::inelastdata[13] = {0};
 
 G4ComponentSAIDTotalXS::G4ComponentSAIDTotalXS() 
   : G4VComponentCrossSection("xsSAID"),numberOfSaidXS(13)
-{}
+{ }
 
 G4ComponentSAIDTotalXS::~G4ComponentSAIDTotalXS()
 {

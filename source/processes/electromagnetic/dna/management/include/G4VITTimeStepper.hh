@@ -85,8 +85,8 @@ public:
     inline const G4ITReactionTable* GetReactionTable();
 
 protected :
-    static G4double fCurrentGlobalTime ;
-    static G4double fUserMinTimeStep   ;
+    static __thread G4double fCurrentGlobalTime ;
+    static __thread G4double fUserMinTimeStep   ;
 
     G4double fSampledMinTimeStep ;
     G4TrackVectorHandle fReactants;

@@ -37,15 +37,15 @@ using namespace G4InuclParticleNames;
 namespace {
   // Outgoing particle types of a given multiplicity
 
-  static G4int x0p2bfs[3][2] =
+  static __thread G4int x0p2bfs[3][2] =
     {{1, 29}, {21,23}, {23,25}};
 
-  static G4int x0p3bfs[18][3] =
+  static __thread G4int x0p3bfs[18][3] =
     {{1,17,21}, {3,21,21}, {1,13,23}, {2,17,23}, {7,21,23}, {5,23,23},
      {7,23,25}, {3,23,27}, {1,17,25}, {3,21,25}, {3,25,25}, {1,7,29},
      {2,3,29},  {11,21,29},{11,25,29},{15,23,29},{1,3,31},  {11,23,31}};  
 
-  static G4int x0p4bfs[53][4] =
+  static __thread G4int x0p4bfs[53][4] =
     {{1,1,13,17},  {1,2,17,17},  {1,7,17,21},  {1,3,13,21},  {1,7,17,25},  
      {1,3,13,25},  {1,7,13,23},  {1,5,17,23},  {1,3,17,27},  {1,7,7,29},
      {1,3,5,29},   {1,11,13,29}, {1,15,17,29}, {1,3,7,31},   {1,11,17,31},
@@ -58,13 +58,13 @@ namespace {
      {11,17,23,27},{5,7,23,23},  {13,15,23,23},{7,15,23,29}, {5,11,23,29}, 
      {3,15,23,31}, {7,11,23,31}, {3,11,27,29}};
 
-  static G4int x0p5bfs[2][5] =
+  static __thread G4int x0p5bfs[2][5] =
     {{1,7,7,7,29},  {1,3,5,7,29}};
 
-  static G4int x0p6bfs[2][6] =
+  static __thread G4int x0p6bfs[2][6] =
     {{1,7,7,7,7,29},  {1,3,5,7,7,29}};
 
-  static G4int x0p7bfs[2][7] =
+  static __thread G4int x0p7bfs[2][7] =
     {{1,7,7,7,7,7,29},  {1,3,5,7,7,7,29}};
 
   // Cross sections for X0 p -> 2-7 body final states
@@ -78,7 +78,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  static G4double x0pCrossSections[80][31] = {
+  static __thread G4double x0pCrossSections[80][31] = {
     //
     // multiplicity 2 (3 channels)
     //
@@ -500,7 +500,7 @@ namespace {
 
 typedef G4CascadeXiZeroPChannelData::data_t G4CascadeXiZeroPChannelData_t;
 
-G4CascadeXiZeroPChannelData_t *G4CascadeXiZeroPChannelData::data = 0;
+__thread G4CascadeXiZeroPChannelData_t *G4CascadeXiZeroPChannelData::data = 0;
 
 G4CascadeXiZeroPChannelData::data_t *G4CascadeXiZeroPChannelData::initializer()
 {
