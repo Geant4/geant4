@@ -78,7 +78,7 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
 }
 
 //Xin Dong 09302011 for Scorers
-void G4ScoringBox::SlaveConstruct(G4VScoringMesh *masterMesh, G4VPhysicalVolume* fWorldPhys)
+void G4ScoringBox::SlaveConstruct(G4VScoringMesh* /*masterMesh*/, G4VPhysicalVolume* fWorldPhys)
 {
   if(fConstructed) {
  

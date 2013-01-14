@@ -296,7 +296,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 //this kind of process. This member function is used by worker
 //threads to achieve the partial effect of the master thread when
 //it prepares physcis tables.
-void G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, G4VMultipleScattering *firstProcess)
+void G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& /*part*/, G4VMultipleScattering *firstProcess)
 {
   emManager->SlaveBuildPhysicsTable(firstParticle,firstProcess);
 }//from 337

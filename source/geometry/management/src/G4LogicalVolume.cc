@@ -63,7 +63,7 @@ G4LogicalVolumeSubInstanceManager G4LogicalVolume::g4logicalVolumeSubInstanceMan
 //to register the new created instance. This method is invoked explicitly.
 //It does not create a new G4LogicalVolume instance. It only assign the value
 //for the fields encapsulated by the class LogicalVolumePrivateSubclass.
-void G4LogicalVolume::SlaveG4LogicalVolume( G4LogicalVolume *pMasterObject, G4VSolid* pSolid, G4VSensitiveDetector* pSDetector)
+void G4LogicalVolume::SlaveG4LogicalVolume( G4LogicalVolume* /*pMasterObject*/, G4VSolid* pSolid, G4VSensitiveDetector* pSDetector)
 {
   g4logicalVolumeSubInstanceManager.SlaveCopySubInstanceArray();
 
@@ -76,7 +76,7 @@ void G4LogicalVolume::SlaveG4LogicalVolume( G4LogicalVolume *pMasterObject, G4VS
 //This method is similar to the destructor. It is used by each worker
 //thread to achieve the partial effect as that of the master thread.
 //For G4LogicalVolume instances, nothing more to do here.
-void G4LogicalVolume::DestroySlaveG4LogicalVolume( G4LogicalVolume *pMasterObject)
+void G4LogicalVolume::DestroySlaveG4LogicalVolume( G4LogicalVolume* /*pMasterObject*/)
 {
 }
 

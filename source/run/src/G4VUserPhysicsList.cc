@@ -718,7 +718,8 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
     //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
     //Get processes from master thread
     G4ProcessManager* pManagerShadow = particle->theProcessManagerShadow;
-    G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
+    //Andrea Dotti 15 Jan 2013: Change of interface of MSC
+    //G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
 
     G4ProcessVector* pVector = pManager->GetProcessList();
     if (!pVector) {
@@ -743,7 +744,8 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       {
         if (pManagerShadow != pManager)
         {
-          G4VMultipleScattering *firstProcess = dynamic_cast<G4VMultipleScattering *>((*pVectorShadow)[j]);
+	  //Andrea Dotti 14 Jan 2013: Change to interface
+          //G4VMultipleScattering *firstProcess = dynamic_cast<G4VMultipleScattering *>((*pVectorShadow)[j]);
           //Xin Dong 10022011 to facilitate verbose
           currentProcess->SlavePreparePhysicsTable(*particle);
         }
@@ -759,7 +761,8 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       {
         if (pManagerShadow != pManager)
         {
-          G4VEnergyLossProcess *firstProcess2 = dynamic_cast<G4VEnergyLossProcess *>((*pVectorShadow)[j]);
+	  //Andrea Dotti 14 Jan 2013: Change to interface
+          //G4VEnergyLossProcess *firstProcess2 = dynamic_cast<G4VEnergyLossProcess *>((*pVectorShadow)[j]);
           //Xin Dong 10022011 to facilitate verbose
           currentProcess2->SlavePreparePhysicsTable(*particle);
         }

@@ -63,7 +63,7 @@ void G4PVReplica::SlaveG4PVReplica(G4PVReplica *pMasterObject)
 //This method is similar to the destructor. It is used by each worker
 //thread to achieve the partial effect as that of the master thread.
 //For G4PVReplica instances, it destories the rotation matrix.
-void G4PVReplica::DestroySlaveG4PVReplica(G4PVReplica *pMasterObject)
+void G4PVReplica::DestroySlaveG4PVReplica(G4PVReplica* /*pMasterObject*/)
 {
   if ( faxis==kPhi )
   {

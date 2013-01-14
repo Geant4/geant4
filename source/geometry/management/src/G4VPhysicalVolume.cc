@@ -52,7 +52,7 @@ G4VPhysicalVolumeSubInstanceManager G4VPhysicalVolume::g4vphysicalVolumeSubInsta
 //to register the new created instance. This method is invoked explicitly.
 //It does not create a new G4VPhysicalVolume instance. It only assign the value
 //for the fields encapsulated by the class PhysicalVolumePrivateSubclass.
-void G4VPhysicalVolume::SlaveG4VPhysicalVolume( G4VPhysicalVolume *pMasterObject, G4RotationMatrix *pRot,
+void G4VPhysicalVolume::SlaveG4VPhysicalVolume( G4VPhysicalVolume* /*pMasterObject*/, G4RotationMatrix *pRot,
 				      const G4ThreeVector &tlate)
 {
   g4vphysicalVolumeSubInstanceManager.SlaveCopySubInstanceArray();
@@ -66,7 +66,7 @@ void G4VPhysicalVolume::SlaveG4VPhysicalVolume( G4VPhysicalVolume *pMasterObject
 //This method is similar to the destructor. It is used by each worker
 //thread to achieve the partial effect as that of the master thread.
 //For G4VPhysicalVolume instances, nothing more to do here.
-void G4VPhysicalVolume::DestroySlaveG4VPhysicalVolume( G4VPhysicalVolume *pMasterObject)
+void G4VPhysicalVolume::DestroySlaveG4VPhysicalVolume( G4VPhysicalVolume* /*pMasterObject*/)
 {
 }
 

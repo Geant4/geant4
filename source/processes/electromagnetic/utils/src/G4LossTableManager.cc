@@ -479,8 +479,8 @@ G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition*)
 }
 
 void 
-G4LossTableManager::SlaveBuildPhysicsTable(const G4ParticleDefinition* aParticle, 
-					   G4VMultipleScattering* p) 
+G4LossTableManager::SlaveBuildPhysicsTable(const G4ParticleDefinition* /*aParticle*/, 
+					   G4VMultipleScattering* /*p*/) 
 {
   if(0 == run && startInitialisation) {
     emConfigurator->Clear();
@@ -692,7 +692,7 @@ void G4LossTableManager::BuildPhysicsTable(
 //threads to achieve the partial effect of the master thread when
 //it copies physcis tables.
 void G4LossTableManager::SlaveCopyTables(const G4ParticleDefinition* part,
-                                          G4VEnergyLossProcess* base_proc)
+					 G4VEnergyLossProcess* /*base_proc*/)
 {
   for (G4int j=0; j<n_loss; j++) {
 
@@ -784,7 +784,7 @@ G4VEnergyLossProcess* G4LossTableManager::SlaveBuildTables(
   G4VEnergyLossProcess* em = 0;
   G4VEnergyLossProcess* p = 0;
   G4int iem = 0;
-  G4PhysicsTable* dedx = 0;
+  //G4PhysicsTable* dedx = 0;
   G4int i;
 
   for (i=0; i<n_loss; i++) {

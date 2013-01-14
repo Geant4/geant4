@@ -75,7 +75,7 @@ G4bool G4ConcreteNNTwoBodyResonance::IsInCharge(const G4KineticTrack& trk1,
   return false;
 }
 
-G4ConcreteNNTwoBodyResonance::G4ConcreteNNTwoBodyResonance(void *s1, void *s2, void *s3, void *s4, void *s5, void *s6, void *s7){}
+G4ConcreteNNTwoBodyResonance::G4ConcreteNNTwoBodyResonance(void *, void *, void *, void *, void *, void *, void *){}
 void G4ConcreteNNTwoBodyResonance::establish_G4MT_TLS_G4ConcreteNNTwoBodyResonance(const G4ParticleDefinition* aPrimary,
 					   const G4ParticleDefinition* bPrimary,
 					   const G4ParticleDefinition* aSecondary,

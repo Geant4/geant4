@@ -58,7 +58,9 @@ namespace CLHEP {
 
 //Xin Dong March 31, 2012 it requires to eliminate the dynamic initialization
 //to make this variable thread-local
-static __thread int HepRandomGenActive = 0;//HepRandom::createInstance();
+//Andrea Dotti 14January 2013: Remove following line to avoid warnings in G4MT
+//To be protected with #ifndef G4MT, however it may be not necessary at all
+//static __thread int HepRandomGenActive = 0;//HepRandom::createInstance();
 
 }  // namespace CLHEP
 

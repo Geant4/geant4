@@ -45,8 +45,7 @@ if (!IdentityMatrix_G4MT_TLS_) IdentityMatrix_G4MT_TLS_ = new  G4RotationMatrix 
 
 G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient, G4ThreeVector
 pOrigin, G4RotationMatrix* pMatrix)
-{
-if (!IdentityMatrix_G4MT_TLS_) IdentityMatrix_G4MT_TLS_ = new  G4RotationMatrix  ;  G4RotationMatrix &IdentityMatrix = *IdentityMatrix_G4MT_TLS_; 
+{ if (!IdentityMatrix_G4MT_TLS_) IdentityMatrix_G4MT_TLS_ = new  G4RotationMatrix  ; 
    fGradient    = pGradient ;
    fOrigin      = pOrigin ;
    fpMatrix      = pMatrix ;
@@ -64,8 +63,7 @@ G4QuadrupoleMagField::~G4QuadrupoleMagField()
 
 void G4QuadrupoleMagField::GetFieldValue( const G4double y[7],
                                                 G4double B[3]  ) const  
-{
-if (!IdentityMatrix_G4MT_TLS_) IdentityMatrix_G4MT_TLS_ = new  G4RotationMatrix  ;  G4RotationMatrix &IdentityMatrix = *IdentityMatrix_G4MT_TLS_; 
+{ if (!IdentityMatrix_G4MT_TLS_) IdentityMatrix_G4MT_TLS_ = new  G4RotationMatrix  ;
    G4ThreeVector r_global = G4ThreeVector(
         y[0] - fOrigin.x(), 
         y[1] - fOrigin.y(), 

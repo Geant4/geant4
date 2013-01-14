@@ -623,7 +623,7 @@ void G4RunManager::ConstructScoringWorlds()
       G4ScoringBox* mastermeshbox =  dynamic_cast<G4ScoringBox*>(mastermesh);
       if (meshbox != NULL && mastermeshbox != NULL)
       {
-        printf("master mesh box: %lx, mesh box: %lx\n", mastermeshbox, meshbox);
+        //printf("master mesh box: %p, mesh box: %p\n", mastermeshbox, meshbox);
 	//        meshbox->fSegmentDirection = mastermeshbox->fSegmentDirection;
         meshbox->fMeshElementLogical = mastermeshbox->fMeshElementLogical;
       }
@@ -632,7 +632,7 @@ void G4RunManager::ConstructScoringWorlds()
       G4ScoringCylinder* mastermeshcylinder =  dynamic_cast<G4ScoringCylinder*>(mastermesh);
       if (meshcylinder != NULL && mastermeshcylinder != NULL)
       {
-        printf("master mesh cylinder: %lx, mesh cylinder: %lx\n", mastermeshcylinder, meshcylinder);
+        //printf("master mesh cylinder: %p, mesh cylinder: %p\n", mastermeshcylinder, meshcylinder);
         //      meshbox->fSegmentDirection = mastermeshbox->fSegmentDirection;
         meshcylinder->fMeshElementLogical = mastermeshcylinder->fMeshElementLogical;
       }

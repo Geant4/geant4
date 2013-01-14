@@ -130,7 +130,7 @@ void G4EnergyLossTables::Register(
 
 const G4PhysicsTable* G4EnergyLossTables::GetDEDXTable(
   const G4ParticleDefinition* p)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{ if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ;  
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) return 0;
   return (*it).second.theDEDXTable;
@@ -140,7 +140,7 @@ const G4PhysicsTable* G4EnergyLossTables::GetDEDXTable(
 
 const G4PhysicsTable* G4EnergyLossTables::GetRangeTable(
   const G4ParticleDefinition* p)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{ if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; 
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) return 0;
   return (*it).second.theRangeTable;
@@ -150,7 +150,7 @@ const G4PhysicsTable* G4EnergyLossTables::GetRangeTable(
 
 const G4PhysicsTable* G4EnergyLossTables::GetInverseRangeTable(
   const G4ParticleDefinition* p)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{ if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ;  
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) return 0;
   return (*it).second.theInverseRangeTable;
@@ -160,7 +160,7 @@ const G4PhysicsTable* G4EnergyLossTables::GetInverseRangeTable(
 
 const G4PhysicsTable* G4EnergyLossTables::GetLabTimeTable(
   const G4ParticleDefinition* p)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{ if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ;
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) return 0;
   return (*it).second.theLabTimeTable;
@@ -170,7 +170,7 @@ const G4PhysicsTable* G4EnergyLossTables::GetLabTimeTable(
 
 const G4PhysicsTable* G4EnergyLossTables::GetProperTimeTable(
   const G4ParticleDefinition* p)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{ if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ;
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) return 0;
   return (*it).second.theProperTimeTable;
@@ -180,7 +180,7 @@ const G4PhysicsTable* G4EnergyLossTables::GetProperTimeTable(
 
 G4EnergyLossTablesHelper G4EnergyLossTables::GetTables(
   const G4ParticleDefinition* p)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ;
   helper_map::iterator it;
   if ((it=dict.find(p))==dict.end()) {
 //    G4cout << "Table is not found out for " << p->GetParticleName() << G4endl;
@@ -197,7 +197,7 @@ G4double G4EnergyLossTables::GetDEDX(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
     const G4Material *aMaterial)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   CPRWarning();
   if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -246,7 +246,7 @@ G4double G4EnergyLossTables::GetLabTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
     const G4Material *aMaterial)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ;  if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   CPRWarning();
   if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -295,7 +295,7 @@ G4double G4EnergyLossTables::GetDeltaLabTime(
     G4double KineticEnergyStart,
     G4double KineticEnergyEnd,
     const G4Material *aMaterial)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   CPRWarning();
   if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -376,7 +376,7 @@ G4double G4EnergyLossTables::GetProperTime(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
     const G4Material *aMaterial)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   CPRWarning();
   if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -425,7 +425,7 @@ G4double G4EnergyLossTables::GetDeltaProperTime(
     G4double KineticEnergyStart,
     G4double KineticEnergyEnd,
     const G4Material *aMaterial)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   CPRWarning();
   if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -506,7 +506,7 @@ G4double G4EnergyLossTables::GetRange(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
     const G4Material *aMaterial)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   CPRWarning();
   if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -560,7 +560,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
                                            G4double range,
                                      const G4Material *aMaterial)
 // it returns the value of the kinetic energy for a given range
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   CPRWarning();
   if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -626,7 +626,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
     const G4Material *aMaterial)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   CPRWarning();
   if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -675,7 +675,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
     const G4Material *aMaterial)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   CPRWarning();
   if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -733,7 +733,7 @@ G4double G4EnergyLossTables::GetDEDX(
     G4double KineticEnergy,
     const G4MaterialCutsCouple *couple,
     G4bool check)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
@@ -784,7 +784,7 @@ G4double G4EnergyLossTables::GetRange(
     G4double KineticEnergy,
     const G4MaterialCutsCouple *couple,
     G4bool check)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ;  if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   if(aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
@@ -839,7 +839,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
                                      const G4MaterialCutsCouple *couple,
 				           G4bool check)
 // it returns the value of the kinetic energy for a given range
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ;  if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
@@ -906,7 +906,7 @@ G4double G4EnergyLossTables::GetPreciseDEDX(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
     const G4MaterialCutsCouple *couple)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
 
   if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
@@ -953,7 +953,7 @@ G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
     const G4MaterialCutsCouple *couple)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
   if( aParticle != (const G4ParticleDefinition*) lastParticle)
   {
     t= GetTables(aParticle);
@@ -1005,7 +1005,7 @@ G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EnergyLossTables::CPRWarning()
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; 
   if (let_counter <  let_max_num_warnings) {
 
     G4cout << G4endl;
@@ -1032,7 +1032,7 @@ void G4EnergyLossTables::CPRWarning()
 void 
 G4EnergyLossTables::ParticleHaveNoLoss(const G4ParticleDefinition*, 
 				       const G4String& /*q*/)
-{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; G4EnergyLossTables::helper_map &dict = *dict_G4MT_TLS_;  ;;;    ;;;   if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &null_loss = *null_loss_G4MT_TLS_;  ;;;    ;;;   if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; G4EnergyLossTablesHelper &t = *t_G4MT_TLS_;  ;;;  
+{  ;;;   if (!dict_G4MT_TLS_) dict_G4MT_TLS_ = new G4EnergyLossTables::helper_map  ; if (!null_loss_G4MT_TLS_) null_loss_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; if (!t_G4MT_TLS_) t_G4MT_TLS_ = new G4EnergyLossTablesHelper  ; 
   //G4String s = " " + q + " table not found for "
   //           + aParticle->GetParticleName() + " !";
   //G4Exception("G4EnergyLossTables::ParticleHaveNoLoss", "EM01",

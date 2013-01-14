@@ -80,7 +80,7 @@ void G4ScoringCylinder::Construct(G4VPhysicalVolume* fWorldPhys)
 }
 
 //Xin Dong 09302011 Scorers
-void G4ScoringCylinder::SlaveConstruct(G4VScoringMesh *masterMesh, G4VPhysicalVolume* fWorldPhys)
+void G4ScoringCylinder::SlaveConstruct(G4VScoringMesh* /*masterMesh*/, G4VPhysicalVolume* fWorldPhys)
 {
   if(fConstructed) {
 
