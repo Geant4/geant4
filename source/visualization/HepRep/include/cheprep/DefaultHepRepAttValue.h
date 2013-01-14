@@ -30,7 +30,7 @@ class DefaultHepRepAttValue : public virtual HEPREP::HepRepAttValue {
         std::vector<double> colorValue;
 
         int showLabelValue;
-        static __thread std::string *labelStrings;
+        static std::string labelStrings[LABELSTRINGS_LEN];
 
         void init();
 

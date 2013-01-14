@@ -80,7 +80,7 @@ G4VRML1SceneHandler::G4VRML1SceneHandler(G4VRML1& system, const G4String& name) 
 G4VRML1SceneHandler::~G4VRML1SceneHandler()
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** ~G4VRML1SceneHandler" << G4endl;
 #endif 
 }
@@ -101,7 +101,7 @@ void G4VRML1SceneHandler::connectPort(G4int max_trial)
 	for (trial = 0; !fDest.isConnected()&& trial < max_trial; trial++, port++ ) {
 		if (fDest.connect( (const char * )fSystem.getHostName(), port)) {
 		    // INET domain connection is established
-		  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 			G4cout << "*** GEANT4 is connected to port  ";
 			G4cout << fDest.getPort(); 
 			G4cout << " of server  " << fSystem.getHostName() << G4endl;
@@ -109,7 +109,7 @@ void G4VRML1SceneHandler::connectPort(G4int max_trial)
 			break; 
 		} else { 
 			// Connection failed. Try the next port.
-		  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 			G4cout << "*** GEANT4 incremented targeting port to ";
 			G4cout << port << G4endl;
 		  }
@@ -120,7 +120,7 @@ void G4VRML1SceneHandler::connectPort(G4int max_trial)
 	} // for
 
 	if (!fDest.isConnected()) {
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		G4cout << "*** INET Connection failed. " << G4endl;
 		G4cout << "    Maybe, you have not invoked viewer  g4vrmlview  yet, " << G4endl;
 		G4cout << "    or too many viewers are already running in the " << G4endl;
@@ -132,7 +132,7 @@ void G4VRML1SceneHandler::connectPort(G4int max_trial)
 void G4VRML1SceneHandler::closePort()
 {
 	fDest.close();
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	      G4cout << "*** INET Connection closed. " << G4endl;
 }
 

@@ -153,7 +153,7 @@ void G4XXXSGViewer::DrawFromStore(const G4String& source) {
   SceneGraph& sceneGraph =
     static_cast<G4XXXSGSceneHandler&>(fSceneHandler).fSceneGraph;
   // Write to a file for testing...
-  static __thread G4int iCount = 0;
+  static G4int iCount = 0;
   std::ostringstream oss;
   oss << source << '.' << fName << '.' << iCount++ << ".out";
   G4cout << "Writing " << oss.str() << G4endl;

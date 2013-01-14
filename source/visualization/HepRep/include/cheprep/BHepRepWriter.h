@@ -91,9 +91,9 @@ namespace cheprep {
             static const unsigned char STR_R            = EXT_T_0;
             
             // class definitions
-            static __thread std::map<std::string, unsigned char> *tags_G4MT_TLS_; 
-            static __thread std::map<std::string, unsigned char> *attributes_G4MT_TLS_;           
-            static __thread std::map<std::string, unsigned char> *values_G4MT_TLS_;
+            static std::map<std::string, unsigned char> tags; 
+            static std::map<std::string, unsigned char> attributes;           
+            static std::map<std::string, unsigned char> values;
 
             // outputstream variables
             std::ostream& os;

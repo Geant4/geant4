@@ -96,7 +96,7 @@ G4GMocrenFileViewer::~G4GMocrenFileViewer ()
 void G4GMocrenFileViewer::SetView () 
 {
   if(GFDEBUG)
-    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "***** G4GMocrenFileViewer::SetView(): No effects" << G4endl;
 
   // Do nothing, since DAWN is running as a different process.
@@ -109,7 +109,7 @@ void
 G4GMocrenFileViewer::ClearView( void )
 {
   if(GFDEBUG)
-    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "***** G4GMocrenFileViewer::ClearView (): No effects " << G4endl;
 
   //if(kSceneHandler.kGddDest) {
@@ -126,7 +126,7 @@ G4GMocrenFileViewer::ClearView( void )
 void G4GMocrenFileViewer::DrawView () 
 {
   if(GFDEBUG)
-    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "***** G4GMocrenFileViewer::DrawView () " << G4endl;
 
   //----- 
@@ -146,7 +146,7 @@ void G4GMocrenFileViewer::DrawView ()
 void G4GMocrenFileViewer::ShowView( void )
 {
   if(GFDEBUG)
-    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "***** G4GMocrenFileViewer::ShowView () " << G4endl;
 
   if( kSceneHandler.GFIsInModeling() ) 

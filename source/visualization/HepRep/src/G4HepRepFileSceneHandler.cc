@@ -64,7 +64,7 @@
 //HepRep
 #include "G4HepRepFileXMLWriter.hh"
 
-__thread G4int G4HepRepFileSceneHandler::fSceneIdCount = 0;
+G4int G4HepRepFileSceneHandler::fSceneIdCount = 0;
 // Counter for HepRep scene handlers.
 
 G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,

@@ -65,7 +65,7 @@ class G4HepRepMessenger : public G4UImessenger {
 
     private:            
 		G4HepRepMessenger();  // Private constructor.
-		static __thread G4HepRepMessenger* fpInstance;
+		static G4HepRepMessenger* fpInstance;
         
         G4UIdirectory* heprepDirectory;
         

@@ -111,7 +111,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         void closeFile();
 
     private:
-        static __thread G4int sceneIdCount;
+        static G4int sceneIdCount;
         const G4ModelingParameters* originalMP;  // Keeps pointer to original.
         G4ModelingParameters* nonCullingMP;      // For temporary non-culling.
 

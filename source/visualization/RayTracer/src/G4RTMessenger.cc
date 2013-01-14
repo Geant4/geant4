@@ -45,7 +45,7 @@
 #include "G4VisManager.hh"
 #include "G4RayTracerViewer.hh"
 
-__thread G4RTMessenger* G4RTMessenger::fpInstance = 0;
+G4RTMessenger* G4RTMessenger::fpInstance = 0;
 
 G4RTMessenger* G4RTMessenger::GetInstance
 (G4TheRayTracer* p1,G4RTSteppingAction* p2)

@@ -13,7 +13,7 @@
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
 // * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liabißlity.         *
+// * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration.                      *
@@ -196,26 +196,26 @@ void G4OpenGLXViewer::CreateGLXContext (XVisualInfo* v) {
       }
     if (!cmap) {
       fViewId = -1;  // This flags an error.
-      if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+      if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cerr <<
   "G4OpenGLXViewer::G4OpenGLXViewer failed to allocate a standard colormap."
 	       << G4endl;
       return;
     }
-    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+    if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "Got standard cmap" << G4endl;
   } else {
     cmap = XCreateColormap (dpy, 
 			    XRootWindow(dpy, vi -> screen), 
 			    vi -> visual, 
 			    AllocNone);
-    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+    if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "Created own cmap" << G4endl;
   }
 
   if (!cmap) {
     fViewId = -1;  // This flags an error.
-    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+    if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "G4OpenGLXViewer::G4OpenGLXViewer failed to allocate a Colormap."
 	     << G4endl;
     return;
@@ -253,7 +253,7 @@ void G4OpenGLXViewer::CreateMainWindow () {
   } else if ((!fVP.IsWindowSizeHintX ()) && fVP.IsWindowLocationHintX () && fVP.IsWindowLocationHintY ()) {
     size_hints->flags |= PPosition;
   }
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->confirmations)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "Window name: " << fName << G4endl;
   strncpy (charViewName, fName, 99); charViewName[99] = '\0';
   char *window_name = charViewName;

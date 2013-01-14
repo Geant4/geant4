@@ -48,7 +48,7 @@
 
 #include <sstream>
 
-__thread G4int G4XXXSGSceneHandler::fSceneIdCount = 0;
+G4int G4XXXSGSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
 
 G4XXXSGSceneHandler::G4XXXSGSceneHandler(G4VGraphicsSystem& system,
@@ -134,7 +134,7 @@ void G4XXXSGSceneHandler::CreateCurrentItem(const G4String& /*header*/) {
     std::cout << std::endl;
     */
 
-    static __thread G4int index = 0;  // Some index for future reference
+    static G4int index = 0;  // Some index for future reference
     JA::Insert(&drawnPVPath[0],drawnPVPath.size(),index++,&fSceneGraph);
     //JA::PrintTree(std::cout,&root);
 
@@ -463,7 +463,7 @@ void Insert(const PVNodeID* pvPath, size_t pathLength,
 
 void PrintTree(std::ostream& os, Node* node)
 {
-  static __thread G4int depth = -1;
+  static G4int depth = -1;
   depth++;
   PVNodeID& thisPVNodeID = node->fPVNodeID;
   G4int& thisIndex = node->fIndex;

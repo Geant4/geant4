@@ -96,8 +96,8 @@ void G4ASCIITreeSceneHandler::WriteHeader (std::ostream& os)
   const G4int detail = verbosity % 10;
   os << "#  Set verbosity with \"/vis/ASCIITree/verbose <verbosity>\":";
   for (size_t i = 0;
-       i < G4ASCIITreeMessenger::GetVerbosityGuidance().size(); ++i) {
-    os << "\n#  " << G4ASCIITreeMessenger::GetVerbosityGuidance()[i];
+       i < G4ASCIITreeMessenger::fVerbosityGuidance.size(); ++i) {
+    os << "\n#  " << G4ASCIITreeMessenger::fVerbosityGuidance[i];
   }
   os << "\n#  Now printing with verbosity " << verbosity;
   os << "\n#  Format is: PV:n";

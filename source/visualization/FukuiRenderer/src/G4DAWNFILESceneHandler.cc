@@ -127,7 +127,7 @@ fPrec (9), fPrec2 (16)
 G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler () 
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** ~G4DAWNFILESceneHandler" << G4endl;
 #endif 
 	if (fPrimDest.IsOpen()) 
@@ -157,7 +157,7 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 		// Message in the final execution
 		if( i == MAX_FILE_INDEX ) 
 		{
-		  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		    G4cout << "==========================================="   << G4endl; 
 		    G4cout << "WARNING MESSAGE from DAWNFILE driver:      "   << G4endl;
 		    G4cout << "  This file name is the final one in the   "   << G4endl;
@@ -209,14 +209,14 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 void	G4DAWNFILESceneHandler::BeginSavingG4Prim( void ) 
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** BeginSavingG4Prim (called)\n";
 #endif
 
 	if( !IsSavingG4Prim() ) 
 	{ 
 #if defined DEBUG_FR_SCENE
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 	        G4cout << "*****                   (started) " ;
 	        G4cout << "(open g4.prim, ##)"  << G4endl;
 	  }
@@ -232,14 +232,14 @@ void	G4DAWNFILESceneHandler::BeginSavingG4Prim( void )
 void	G4DAWNFILESceneHandler::EndSavingG4Prim  ( void ) 
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** EndSavingG4Prim (called)\n";
 #endif
 
 	if(  IsSavingG4Prim() )
 	{
 #if defined DEBUG_FR_SCENE
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	    G4cout << "*****                 (started) (close g4.prim)" << G4endl;
 #endif
 		fPrimDest.Close()               ;
@@ -254,7 +254,7 @@ void G4DAWNFILESceneHandler::FRBeginModeling( void )
 	if( !FRIsInModeling() )  	
 	{
 #if defined DEBUG_FR_SCENE
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	    G4cout << "***** G4DAWNFILESceneHandler::FRBeginModeling (called & started)" << G4endl;
 #endif
 
@@ -266,21 +266,21 @@ void G4DAWNFILESceneHandler::FRBeginModeling( void )
 
 			//----- send SET_CAMERA command 
 #if defined DEBUG_FR_SCENE
-		if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+		if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		  G4cout << "*****   (!SetCamera in FRBeginModeling())" << G4endl;
 #endif
 		SendStr( FR_SET_CAMERA );
 
 		//----- open device
 #if defined DEBUG_FR_SCENE
-		if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+		if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		  G4cout << "*****   (!OpenDevice in FRBeginModeling())" << G4endl;
 #endif
 		SendStr( FR_OPEN_DEVICE      );
 
 		//----- begin sending primitives
 #if defined DEBUG_FR_SCENE
-		if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+		if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		  G4cout << "*****   (!BeginModeling in FRBeginModeling())" << G4endl;
 #endif
 		SendStr( FR_BEGIN_MODELING );  FRflag_in_modeling = true ;
@@ -303,4 +303,4 @@ void G4DAWNFILESceneHandler::FRBeginModeling( void )
 //////////////////////
 
 	//----- static variables
-__thread G4int G4DAWNFILESceneHandler::fSceneIdCount = 0; 
+G4int G4DAWNFILESceneHandler::fSceneIdCount = 0; 

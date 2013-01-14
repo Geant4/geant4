@@ -44,7 +44,7 @@
 #include "G4Polyhedron.hh"
 #include "G4UnitsTable.hh"
 
-__thread G4int G4XXXSceneHandler::fSceneIdCount = 0;
+G4int G4XXXSceneHandler::fSceneIdCount = 0;
 // Counter for XXX scene handlers.
 
 G4XXXSceneHandler::G4XXXSceneHandler(G4VGraphicsSystem& system,

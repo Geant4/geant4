@@ -29,7 +29,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/modeling/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/visualization/gMocren/include)
 
 
 #

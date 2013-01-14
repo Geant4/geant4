@@ -38,7 +38,7 @@
 #include "G4HepRepFileViewer.hh"
 #include "G4HepRepMessenger.hh"
 
-static __thread G4HepRepFileXMLWriter* hepRepXMLWriter;
+static G4HepRepFileXMLWriter* hepRepXMLWriter;
 
 G4HepRepFile::G4HepRepFile():
   G4VGraphicsSystem("G4HepRepFile",

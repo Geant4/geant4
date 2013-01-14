@@ -25,7 +25,7 @@
 //
 #include "G4GMocrenFileCTtoDensityMap.hh"
 
-__thread G4double GMocrenFileCTDensMap[] =
+G4double GMocrenFileCTDensMap[] =
   {0.         , 0.000964744, 0.00192949 , 0.00289423 , 0.00385897 ,
    0.00482372 , 0.00578846 , 0.0067532  , 0.00771795 , 0.00868269 ,
    0.00964744 , 0.0106122  , 0.0115769  , 0.0125417  , 0.0135064 ,

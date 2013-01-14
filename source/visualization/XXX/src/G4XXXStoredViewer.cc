@@ -154,7 +154,7 @@ void G4XXXStoredViewer::DrawFromStore() {
   Store& store =
     static_cast<G4XXXStoredSceneHandler&>(fSceneHandler).fStore;
   // Write to a file for testing...
-  static __thread G4int iCount = 0;
+  static G4int iCount = 0;
   std::ostringstream oss;
   oss << fName << '.' << iCount++ << ".out";
   std::ofstream ofs(oss.str().c_str());

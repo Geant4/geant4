@@ -87,7 +87,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
     
     // Expect definition to exist    
     if (!G4AttUtils::ExtractAttDef(object, fAttName, attDef)) {
-      static __thread G4bool warnedUnableToExtract = false;
+      static G4bool warnedUnableToExtract = false;
       if (!warnedUnableToExtract) {
 	G4ExceptionDescription ed;
 	ed <<"Unable to extract attribute definition named "<<fAttName;
@@ -125,7 +125,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
 
   // Expect value to exist
   if (!G4AttUtils::ExtractAttValue(object, fAttName, attVal)) {
-    static __thread G4bool warnedUnableToExtract = false;
+    static G4bool warnedUnableToExtract = false;
     if (!warnedUnableToExtract) {
       G4ExceptionDescription ed;
       ed <<"Unable to extract attribute value named "<<fAttName;

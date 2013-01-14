@@ -43,8 +43,8 @@ class G4VVisCommandGeometry: public G4VVisCommand {
 public:
   virtual ~G4VVisCommandGeometry();
 protected:
-  static __thread std::map<G4LogicalVolume*, const G4VisAttributes*>
-  *fVisAttsMap_G4MT_TLS_;
+  static std::map<G4LogicalVolume*, const G4VisAttributes*>
+  fVisAttsMap;
   typedef std::map<G4LogicalVolume*, const G4VisAttributes*>::const_iterator
   VisAttsMapIterator;
 };

@@ -912,7 +912,7 @@ const G4ThreeVector& G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::GetT
 		FatalErrorInArgument,
 		"Index out of range. Asking for non-existent depth");
   }
-  static __thread G4ThreeVector *tempTranslation_G4MT_TLS_ = 0 ; if (!tempTranslation_G4MT_TLS_) tempTranslation_G4MT_TLS_ = new  G4ThreeVector  ;  G4ThreeVector &tempTranslation = *tempTranslation_G4MT_TLS_;
+  static G4ThreeVector tempTranslation;
   tempTranslation = fFullPVPath[i].GetTransform().getTranslation();
   return tempTranslation;
 }
@@ -926,7 +926,7 @@ const G4RotationMatrix* G4PhysicalVolumeModel::G4PhysicalVolumeModelTouchable::G
 		FatalErrorInArgument,
 		"Index out of range. Asking for non-existent depth");
   }
-  static __thread G4RotationMatrix *tempRotation_G4MT_TLS_ = 0 ; if (!tempRotation_G4MT_TLS_) tempRotation_G4MT_TLS_ = new  G4RotationMatrix  ;  G4RotationMatrix &tempRotation = *tempRotation_G4MT_TLS_;
+  static G4RotationMatrix tempRotation;
   tempRotation = fFullPVPath[i].GetTransform().getRotation();
   return &tempRotation;
 }

@@ -76,11 +76,12 @@
 #include <vector>
 #include <sstream>
 
-__thread G4VisManager* G4VisManager::fpInstance = 0;
+G4VisManager* G4VisManager::fpInstance = 0;
+
+G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
 
 G4VisManager::G4VisManager (const G4String& verbosityString):
   fVerbose         (1),
-  fVerbosity       (warnings),
   fInitialised     (false),
   fpGraphicsSystem (0),
   fpScene          (0),
@@ -966,7 +967,7 @@ void G4VisManager::CreateViewer (G4String name,G4String XGeometry) {
   }
 
   if (vp.IsCulling () && vp.IsCullingInvisible ()) {
-    static __thread G4bool warned = false;
+    static G4bool warned = false;
     if (fVerbosity >= confirmations) {
       if (!warned) {
 	G4cout <<
@@ -980,7 +981,7 @@ void G4VisManager::CreateViewer (G4String name,G4String XGeometry) {
     }
   }
   if (vp.IsCullingCovered ()) {
-    static __thread G4bool warned = false;
+    static G4bool warned = false;
     if (fVerbosity >= warnings) {
       if (!warned) {
 	G4cout <<
@@ -1565,7 +1566,7 @@ void G4VisManager::EndOfEvent ()
     G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
     if (maxNumberOfKeptEvents > 0 && nKeptEvents >= maxNumberOfKeptEvents) {
       fEventKeepingSuspended = true;
-      static __thread G4bool warned = false;
+      static G4bool warned = false;
       if (!warned) {
 	if (fVerbosity >= warnings) {
 	  G4cout <<
@@ -1637,7 +1638,7 @@ void G4VisManager::EndOfRun ()
       else G4cout << " events have";
       G4cout << " been kept for refreshing and/or reviewing." << G4endl;
     }
-    static __thread G4bool warned = false;
+    static G4bool warned = false;
     if (!valid && fVerbosity >= warnings && !warned) {
       G4cout <<
 	"  Only useful if before starting the run:"
@@ -1709,6 +1710,7 @@ G4VViewer* G4VisManager::GetViewer (const G4String& viewerName) const {
   else return 0;
 }
 
+std::vector<G4String> G4VisManager::VerbosityGuidanceStrings;
 
 G4String G4VisManager::VerbosityString(Verbosity verbosity) {
   G4String rs;
@@ -1780,7 +1782,7 @@ G4bool G4VisManager::IsValidView () {
 
   if (!fInitialised) Initialise ();
 
-  static __thread G4bool noGSPrinting = true;
+  static G4bool noGSPrinting = true;
   if (!fpGraphicsSystem) {
     // Limit printing - we do not want printing if the user simply does
     // not want to use graphics, e.g., in batch mode.

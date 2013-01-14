@@ -39,11 +39,11 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithAString.hh"
 
-__thread std::vector<G4String> *G4ASCIITreeMessenger::fVerbosityGuidance_G4MT_TLS_ = 0;
+std::vector<G4String> G4ASCIITreeMessenger::fVerbosityGuidance;
 
 G4ASCIITreeMessenger::G4ASCIITreeMessenger
 (G4ASCIITree* ASCIITree):
-  fpASCIITree(ASCIITree) {  ;;;   if (!fVerbosityGuidance_G4MT_TLS_) fVerbosityGuidance_G4MT_TLS_ = new std::vector<G4String>  ; std::vector<G4String> &fVerbosityGuidance = *fVerbosityGuidance_G4MT_TLS_;  ;;;  
+  fpASCIITree(ASCIITree) {
 
   G4bool omitable;
 
@@ -111,20 +111,20 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
   fpCommandSetOutFile -> SetDefaultValue ("G4cout");
 }
 
-G4ASCIITreeMessenger::~G4ASCIITreeMessenger() { if (!fVerbosityGuidance_G4MT_TLS_) fVerbosityGuidance_G4MT_TLS_ = new std::vector<G4String>  ;
+G4ASCIITreeMessenger::~G4ASCIITreeMessenger() {
   delete fpCommandSetOutFile;
   delete fpDirectorySet;
   delete fpCommandVerbose;
   delete fpDirectory;
 }
 
-G4String G4ASCIITreeMessenger::GetCurrentValue(G4UIcommand*) { if (!fVerbosityGuidance_G4MT_TLS_) fVerbosityGuidance_G4MT_TLS_ = new std::vector<G4String>  ;
+G4String G4ASCIITreeMessenger::GetCurrentValue(G4UIcommand*) {
   return "";
 }
 
 void G4ASCIITreeMessenger::SetNewValue
 (G4UIcommand* command,
- G4String newValue) { if (!fVerbosityGuidance_G4MT_TLS_) fVerbosityGuidance_G4MT_TLS_ = new std::vector<G4String>  ;
+ G4String newValue) {
   if (command == fpCommandVerbose)
     {
       fpASCIITree->SetVerbosity

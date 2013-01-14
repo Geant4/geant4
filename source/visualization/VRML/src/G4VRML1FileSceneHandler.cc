@@ -103,7 +103,7 @@ G4VRML1FileSceneHandler::G4VRML1FileSceneHandler(G4VRML1File& system, const G4St
 G4VRML1FileSceneHandler::~G4VRML1FileSceneHandler()
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** ~G4VRML1FileSceneHandler" << G4endl;
 #endif 
 	VRMLEndModeling();
@@ -134,7 +134,7 @@ void G4VRML1FileSceneHandler::connectPort()
 		// Message in the final execution
 		if( i == MAX_FILE_INDEX ) 
 		{
-		  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		    G4cout << "==========================================="   << G4endl; 
 		    G4cout << "WARNING MESSAGE from VRML1FILE driver:     "   << G4endl;
 		    G4cout << "  This file name is the final one in the   "   << G4endl;
@@ -168,7 +168,7 @@ void G4VRML1FileSceneHandler::connectPort()
 	} // for 
 
 	// open a VRML 1.0 file with determined file name
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 	  G4cout << "==========================================="  << G4endl; 
 	  G4cout << "Output VRML 1.0 file: " << fVRMLFileName << G4endl; 
 	  G4cout << "Maximum number of files in the destination directory: " << fMaxFileNum << G4endl; 
@@ -190,14 +190,14 @@ void G4VRML1FileSceneHandler::closePort()
 
 	// close VRML file	
 	fDest.close();  fFlagDestOpen = false ;
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	  G4cout << "*** VRML 1.0 File  " << fVRMLFileName << "  is generated." << G4endl;
 
 	
 	// Invoke viewer 
 
 	if ( !strcmp(viewer, NO_VRML_VIEWER )) {
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		G4cout << "MESSAGE from VRML1FILE driver:"     << G4endl;
 		G4cout << "    Set an environmental variable  " ;
 		G4cout <<      ENV_VRML_VIEWER << G4endl;
@@ -211,4 +211,4 @@ void G4VRML1FileSceneHandler::closePort()
 	}
 }
 
-__thread G4int G4VRML1FileSceneHandler::fSceneIdCount = 0;
+G4int G4VRML1FileSceneHandler::fSceneIdCount = 0;

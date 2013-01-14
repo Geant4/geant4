@@ -39,11 +39,11 @@
 void G4FRSCENEHANDLER::AddPrimitive (const G4Polyline& polyline) 
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "***** AddPrimitive\n";
 #endif 
      if (fProcessing2D) {
-          static __thread G4bool warned = false;
+          static G4bool warned = false;
           if (!warned) {
                warned = true;
                G4Exception
@@ -97,7 +97,7 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Text& text )
 {
 		//----- 
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive( G4Text )\n";
 #endif
 		//----- Initialize DAWN IF NECESSARY
@@ -131,7 +131,7 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Text& text )
 		//----- create buffer and copy the string there
 	int   MAX_STR_LENGTH   =  COMMAND_BUF_SIZE - 100 ;
 	if  ( MAX_STR_LENGTH <= 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		G4cout << "ERROR (FukuiRenderer) : Not enough buffer size for data transferring." << G4endl;
 		G4cout << "                        G4Text Visualization is aborted" << G4endl;
 	  }
@@ -183,11 +183,11 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Circle& mark_circle )
 {
 		//----- 
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive( G4Circle )\n";
 #endif
      if (fProcessing2D) {
-          static __thread G4bool warned = false;
+          static G4bool warned = false;
           if (!warned) {
                warned = true;
                G4Exception
@@ -238,11 +238,11 @@ void G4FRSCENEHANDLER::AddPrimitive (const G4Square& mark_square )
 {
 		//----- 
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive( G4Square )\n";
 #endif
      if (fProcessing2D) {
-          static __thread G4bool warned = false;
+          static G4bool warned = false;
           if (!warned) {
                warned = true;
                G4Exception
@@ -293,11 +293,11 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Polyhedron& polyhedron )
 {
 		//----- 
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddPrimitive( G4Polyhedron )\n";
 #endif
      if (fProcessing2D) {
-          static __thread G4bool warned = false;
+          static G4bool warned = false;
           if (!warned) {
                warned = true;
                G4Exception
@@ -353,13 +353,13 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Polyhedron& polyhedron )
 			SendStrInt4(FR_FACET, work[0], work[1], work[2], work[3] );
 			break;
 		default:
-		  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 			G4cout <<
 			  "ERROR G4FRSCENEHANDLER::AddPrimitive(G4Polyhedron)\n";
 		  G4PhysicalVolumeModel* pPVModel =
 		    dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
 		  if (pPVModel)
-		    if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+		    if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		      G4cout <<
 			"Volume " << pPVModel->GetCurrentPV()->GetName() <<
 			", Solid " << pPVModel->GetCurrentLV()->GetSolid()->GetName() <<
@@ -395,7 +395,7 @@ void G4FRSCENEHANDLER::SendNdiv ( void )
 	   num_division = GetNoOfSides(pVisAttribs);
 	// } else {
 #if defined DEBUG_FR_SCENE
-	   if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+	   if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 	     G4cout << "WARNING: GetNoOfSides() failed. " ;
 	     G4cout << "The default value " << num_division ;
 	     G4cout << " is assigned." << G4endl;
@@ -423,13 +423,13 @@ void G4FRSCENEHANDLER::FREndModeling ()
 {
 		//----- 		
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** FREndModeling (called)" << G4endl;
 #endif
 	if( FRIsInModeling() ) {
 
 #if defined DEBUG_FR_SCENE
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		G4cout << "***** FREndModeling (started) " ; 
 		G4cout << "(/EndModeling, /DrawAll, /CloseDevice)" << G4endl;
 	  }
@@ -459,7 +459,7 @@ void G4FRSCENEHANDLER::FREndModeling ()
 void G4FRSCENEHANDLER::BeginPrimitives (const G4Transform3D& objectTransformation)
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** BeginPrimitives \n";
 #endif
 
@@ -473,7 +473,7 @@ void G4FRSCENEHANDLER::BeginPrimitives (const G4Transform3D& objectTransformatio
 void G4FRSCENEHANDLER::EndPrimitives ()
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** EndPrimitives \n";
 #endif
   G4VSceneHandler::EndPrimitives ();
@@ -486,7 +486,7 @@ void G4FRSCENEHANDLER::EndPrimitives ()
 void G4FRSCENEHANDLER::AddSolid( const G4Box& box )
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid ( box )\n";
 #endif
 		//----- skip drawing invisible primitive
@@ -526,7 +526,7 @@ void
 G4FRSCENEHANDLER::AddSolid( const G4Tubs& tubes )
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid ( tubes )\n";
 #endif
 		//----- skip drawing invisible primitive
@@ -569,7 +569,7 @@ void
 G4FRSCENEHANDLER::AddSolid( const G4Cons& cons )
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid ( cons )\n";
 #endif
 		//----- skip drawing invisible primitive
@@ -612,7 +612,7 @@ G4FRSCENEHANDLER::AddSolid( const G4Cons& cons )
 void G4FRSCENEHANDLER::AddSolid ( const G4Trd& trd )
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid ( trd )\n";
 #endif
 
@@ -654,7 +654,7 @@ void G4FRSCENEHANDLER::AddSolid ( const G4Trd& trd )
 void G4FRSCENEHANDLER::AddSolid ( const G4Sphere& sphere )
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid ( sphere )\n";
 #endif
 		//----- skip drawing invisible primitive
@@ -715,7 +715,7 @@ void G4FRSCENEHANDLER::AddSolid ( const G4Sphere& sphere )
 void G4FRSCENEHANDLER::AddSolid (const G4Para& para)
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid ( para )\n";
 #endif
 
@@ -743,7 +743,7 @@ void G4FRSCENEHANDLER::AddSolid (const G4Para& para)
 		//----- parameters preprocessing
 	G4double cosTheta                  = para.GetSymAxis().z() ;
 	if( cosTheta < epsilon ) {
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		G4cout << "WARNING from FukuiRenderer (DAWN) driver:" << G4endl;
 		G4cout << "  Invalid parameter for parallelepiped."   << G4endl;
 		G4cout << "  Drawing is skipped."                     << G4endl;
@@ -774,7 +774,7 @@ void G4FRSCENEHANDLER::AddSolid (const G4Para& para)
 void G4FRSCENEHANDLER::AddSolid (const G4Trap& trap)
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid ( trap )\n";
 #endif
 
@@ -802,7 +802,7 @@ void G4FRSCENEHANDLER::AddSolid (const G4Trap& trap)
 		//----- parameters preprocessing
 	G4double cosTheta                  = trap.GetSymAxis().z() ;
 	if( cosTheta < epsilon ) {
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		G4cout << "WARNING from FukuiRenderer (DAWN) driver:" << G4endl;
 		G4cout << "  Invalid parameter for trap, 1" << G4endl;
 		G4cout << "  Drawing is skipped."           << G4endl;
@@ -868,7 +868,7 @@ void
 G4FRSCENEHANDLER::AddSolid( const G4Torus& torus )
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid ( torus )\n";
 #endif
 		//----- skip drawing invisible primitive
@@ -993,7 +993,7 @@ G4bool G4FRSCENEHANDLER::IsVisible()
 void G4FRSCENEHANDLER::SendBoundingBox( void )
 {
 #if defined DEBUG_FR_SCENE
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** SendBoundingBox ()  (/BoundingBox)" << G4endl;
 #endif
 
@@ -1113,7 +1113,7 @@ void G4FRSCENEHANDLER::SendStrInt(	const char*	char_string ,
 
 	num_char  = sprintf( command, "%s  %d", char_string , ival ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n" ;
 	}
 	SendStr( command );
@@ -1136,7 +1136,7 @@ G4FRSCENEHANDLER::SendStrInt3(	const char*	char_string ,
 	 sprintf( command, "%s  %d  %d  %d", char_string , ival1, ival2, ival3 ) ; 
 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt3(), 1\n" ;
 	}
 	SendStr( command );
@@ -1161,7 +1161,7 @@ G4FRSCENEHANDLER::SendStrInt4(	const char*	char_string ,
 	 sprintf( command, "%s  %d  %d  %d  %d", char_string , ival1, ival2, ival3, ival4 ) ; 
 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt4(), 1\n" ;
 	}
 	SendStr( command );
@@ -1181,7 +1181,7 @@ void G4FRSCENEHANDLER::SendStrDouble(	const char*	char_string ,
 					char_string , \
 					fPrec2, fPrec, dval ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble(), 1\n" ;
 	}
 	SendStr( command );
@@ -1204,7 +1204,7 @@ G4FRSCENEHANDLER::SendStrDouble2(	const char*	char_string ,
 					fPrec2, fPrec, dval1, \
 					fPrec2, fPrec, dval2         ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble2(), 1\n" ;
 	}
 	SendStr( command );
@@ -1230,7 +1230,7 @@ G4FRSCENEHANDLER::SendStrDouble3(	const char*	char_string ,
 				fPrec2, fPrec, dval2, \
 				fPrec2, fPrec, dval3   ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble3(), 1\n" ;
 	}
 	SendStr( command );
@@ -1258,7 +1258,7 @@ G4FRSCENEHANDLER::SendStrDouble4(	const char*	char_string ,
 					fPrec2, fPrec, dval3, \
 					fPrec2, fPrec, dval4) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble4(), 1\n" ;
 	}
 	SendStr( command );
@@ -1288,7 +1288,7 @@ G4FRSCENEHANDLER::SendStrDouble5(	const char*	char_string ,
 					fPrec2, fPrec, dval4, \
 					fPrec2, fPrec, dval5    ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble5(), 1\n" ;
 	}
 	SendStr( command );
@@ -1320,7 +1320,7 @@ G4FRSCENEHANDLER::SendStrDouble6(	const char*	char_string ,
 					fPrec2, fPrec, dval5, \
 					fPrec2, fPrec, dval6    ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble6(), 1\n" ;
 	}
 	SendStr( command );
@@ -1354,7 +1354,7 @@ G4FRSCENEHANDLER::SendStrDouble7(	const char*	char_string ,
 				fPrec2, fPrec, dval6,\
 				fPrec2, fPrec, dval7  ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble7(), 1\n" ;
 	}
 	SendStr( command );
@@ -1396,7 +1396,7 @@ G4FRSCENEHANDLER::SendStrDouble11(	const char*	char_string ,
 				fPrec2, fPrec, dval10,\
 				fPrec2, fPrec, dval11 ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble11(), 1\n" ;
 	}
 	SendStr( command );
@@ -1422,7 +1422,7 @@ G4FRSCENEHANDLER::SendIntDouble3(	G4int		ival   ,
 					fPrec2, fPrec, dval2, \
 					fPrec2, fPrec, dval3    ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendIntDouble3(),1\n" ;
 	}
 	SendStr( command );
@@ -1443,7 +1443,7 @@ G4FRSCENEHANDLER::SendInt3Str(	G4int		ival1  ,
 	num_char  = sprintf( command, "%d %d %d %s", \
                                        ival1, ival2, ival3, char_string ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendInt3Str(),1\n" ;
 	}
 	SendStr( command );
@@ -1465,7 +1465,7 @@ G4FRSCENEHANDLER::SendInt4Str(	G4int		ival1  ,
 	num_char  = sprintf( command, "%d %d %d %d %s", \
                                        ival1, ival2, ival3, ival4, char_string ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendInt4Str(),1\n" ;
 	}
 	SendStr( command );
@@ -1491,7 +1491,7 @@ G4FRSCENEHANDLER::SendStrDouble3Str(	const char*	char_string1 ,
 				fPrec2, fPrec, dval3 , \
 				char_string2              );
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble6Str(), 1\n" ;
 	}
 	SendStr( command );
@@ -1525,7 +1525,7 @@ G4FRSCENEHANDLER::SendStrDouble6Str(	const char*	char_string1 ,
 				fPrec2, fPrec, dval6, \
 				char_string2              );
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrDouble6Str(), 1\n" ;
 	}
 	SendStr( command );
@@ -1543,7 +1543,7 @@ void G4FRSCENEHANDLER::SendInt( G4int		val    )
 
 	num_char  = sprintf( command, "%d", val ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n" ;
 	}
 	SendStr( command );
@@ -1560,7 +1560,7 @@ void G4FRSCENEHANDLER::SendDouble( G4double	val    )
 
 	num_char  = sprintf( command, "%*.*g", fPrec2, fPrec, val ) ; 
 	if( num_char < 0 ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR G4FRSCENEHANDLER::SendStrInt(), 1\n" ;
 	}
 	SendStr( command );

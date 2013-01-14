@@ -229,7 +229,7 @@ public:
 
 private:
   G4DAWNFILE&	fSystem;     // Graphics system for this scene.
-  static __thread G4int	fSceneIdCount;
+  static G4int	fSceneIdCount;
 
   G4FRofstream	fPrimDest    ;  // defined here
   G4bool	FRflag_in_modeling ;	

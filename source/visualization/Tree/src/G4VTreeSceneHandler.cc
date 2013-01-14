@@ -38,7 +38,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
-__thread G4int G4VTreeSceneHandler::fSceneIdCount = 0;
+G4int G4VTreeSceneHandler::fSceneIdCount = 0;
 // Counter for Tree scene handlers.
 
 G4VTreeSceneHandler::G4VTreeSceneHandler(G4VGraphicsSystem& system,

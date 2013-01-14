@@ -114,7 +114,7 @@ public:
 
 protected:
 
-  static __thread G4int fSceneIdCount;  // Counter for XXXStored scene handlers.
+  static G4int fSceneIdCount;  // Counter for XXXStored scene handlers.
 
   //?? Define a store for your graphics system.  (For emulation, list
   //?? has good properties - removal of items is fast and does not

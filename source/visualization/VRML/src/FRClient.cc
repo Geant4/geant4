@@ -98,7 +98,7 @@ int FRClient::connect(const char *hostname, int port_)
 	}
 	hp = gethostbyname(hostname) ;
 	if ( !hp ) {
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		G4cout << "ERROR: gethostbyname() failed" << G4endl;
 	  return -1; 
 	}

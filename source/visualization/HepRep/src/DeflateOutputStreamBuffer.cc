@@ -10,7 +10,7 @@ namespace cheprep {
 
     using namespace std;
 
-    __thread unsigned long DeflateOutputStreamBuffer::crctable[] = {
+    unsigned long DeflateOutputStreamBuffer::crctable[] = {
         0x00000000L, 0x77073096L, 0xEE0E612CL, 0x990951BAL,
         0x076DC419L, 0x706AF48FL, 0xE963A535L, 0x9E6495A3L,
         0x0EDB8832L, 0x79DCB8A4L, 0xE0D5E91EL, 0x97D2D988L,

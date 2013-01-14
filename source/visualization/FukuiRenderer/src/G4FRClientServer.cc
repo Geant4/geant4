@@ -118,7 +118,7 @@ void	G4FRClientServer::Receive()
 	}
 
 #if defined DEBUG_CLIENT_SERVER
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	  G4cout << ">>>>> receivedMessage = " << fReceivedMessage << G4endl;
 #endif
 
@@ -150,7 +150,7 @@ void	G4FRClientServer::Send()
 	}
 
 #if defined DEBUG_CLIENT_SERVER
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	  G4cout << "<<<<< SentMessage = " << fSendingMessage << G4endl;
 #endif
 
@@ -256,7 +256,7 @@ int G4FRClientServer::ConnectINET()
 
 
 // #if defined DEBUG_CLIENT_SERVER
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	  G4cout << "***** Trying connection to  " << server_hostname << G4endl;
 // #endif 
 	

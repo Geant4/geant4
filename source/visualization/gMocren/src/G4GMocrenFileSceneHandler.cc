@@ -107,7 +107,7 @@ const G4int GFDEBUG_DET = 0; // 0: false
 //////////////////////
 
 //----- static variables
-__thread G4int G4GMocrenFileSceneHandler::kSceneIdCount = 0; 
+G4int G4GMocrenFileSceneHandler::kSceneIdCount = 0; 
 
 ///////////////////////////
 // Driver-dependent part //
@@ -161,7 +161,7 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
 //----- G4GMocrenFileSceneHandler, destructor
 G4GMocrenFileSceneHandler::~G4GMocrenFileSceneHandler () 
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "***** ~G4GMocrenFileSceneHandler" << G4endl;
 
   if(kGddDest) {
@@ -199,13 +199,13 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
   std::strncat ( kGddFileName, DEFAULT_GDD_FILE_NAME, std::strlen(DEFAULT_GDD_FILE_NAME));
 
   // Automatic updation of file names
-  static __thread G4int currentNumber = 0;
+  static G4int currentNumber = 0;
   for( G4int i = currentNumber ; i < kMaxFileNum ; i++) { 
 
     // Message in the final execution
     if( i == MAX_FILE_INDEX ) 
       {
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::warnings) {
+	if (G4VisManager::GetVerbosity() >= G4VisManager::warnings) {
 	  G4cout << "==========================================="   << G4endl; 
 	  G4cout << "WARNING MESSAGE from GMocrenFile driver:   "   << G4endl;
 	  G4cout << "  This file name is the final one in the   "   << G4endl;
@@ -260,12 +260,12 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
 //-----
 void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "***** BeginSavingGdd (called)" << G4endl;
 
   if( !IsSavingGdd() ) {
 
-    if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations) {
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations) {
       G4cout << "*****                   (started) " ;
       G4cout << "(open g4.gdd, ##)"  << G4endl;
     }
@@ -331,11 +331,11 @@ void	G4GMocrenFileSceneHandler::BeginSavingGdd( void )
 
 void	G4GMocrenFileSceneHandler::EndSavingGdd  ( void ) 
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** EndSavingGdd (called)" << G4endl;
 
   if(IsSavingGdd()) {
-    if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "*****                 (started) (close "
 	     << kGddFileName << ")" << G4endl;
 
@@ -494,7 +494,7 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
   if( !GFIsInModeling() ) {
 
 
-    if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "***** G4GMocrenFileSceneHandler::GFBeginModeling (called & started)" << G4endl;
 
       //----- Send saving command and heading comment
@@ -524,11 +524,11 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
 //----- Add polyline 
 void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline) 
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive" << G4endl;
 
   if (fProcessing2D) {
-    static __thread G4bool warned = false;
+    static G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception
@@ -542,7 +542,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
   //----- Initialize if necessary
   GFBeginModeling();
 
-  static __thread G4int numTrajectories = 0;
+  static G4int numTrajectories = 0;
   if(numTrajectories >= MAX_NUM_TRAJECTORIES) return;
 
   // draw trajectories
@@ -617,7 +617,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Polyline& polyline)
 void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Text& text )
 {
   if (fProcessing2D) {
-    static __thread G4bool warned = false;
+    static G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception
@@ -632,7 +632,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Text& text )
   G4Text dummytext = text;
 
   //----- 
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Text )" << G4endl;
 
   //----- Initialize IF NECESSARY
@@ -648,7 +648,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Circle& mark_circle )
   G4Circle dummycircle = mark_circle;
 
   if (fProcessing2D) {
-    static __thread G4bool warned = false;
+    static G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception
@@ -660,7 +660,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Circle& mark_circle )
   }
 
   //----- 
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Circle )" << G4endl;
 
   //----- Initialize IF NECESSARY
@@ -677,7 +677,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
   G4Square dummysquare = mark_square;
 
   if (fProcessing2D) {
-    static __thread G4bool warned = false;
+    static G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception
@@ -689,7 +689,7 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
   }
 
   //----- 
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Square )" << G4endl;
 
   //----- Initialize if necessary
@@ -702,14 +702,14 @@ void G4GMocrenFileSceneHandler::AddPrimitive (const G4Square& mark_square )
 void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron ) 
 {
   //----- 
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddPrimitive( G4Polyhedron )" << G4endl;
 
 
   if (polyhedron.GetNoFacets() == 0) return;
 
   if (fProcessing2D) {
-    static __thread G4bool warned = false;
+    static G4bool warned = false;
     if (!warned) {
       warned = true;
       G4Exception
@@ -745,18 +745,18 @@ void G4GMocrenFileSceneHandler::AddPrimitive ( const G4Polyhedron& polyhedron )
       //SendStrInt4(FR_FACET, work[0], work[1], work[2], work[3] );
       break;
     default:
-      if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+      if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
 	G4cout <<
 	  "ERROR G4GMocrenFileSceneHandler::AddPrimitive(G4Polyhedron)" << G4endl;
       G4PhysicalVolumeModel* pPVModel =
         dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
       if (pPVModel)   
-	if(G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+	if(G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
 	  G4cout << "Volume " << pPVModel->GetCurrentPV()->GetName() <<
 	    ", Solid " << pPVModel->GetCurrentLV()->GetSolid()->GetName() <<
 	    " (" << pPVModel->GetCurrentLV()->GetSolid()->GetEntityType();
 
-      if(G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+      if(G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
 	G4cout <<
 	  "\nG4Polyhedron facet with " << i << " edges" << G4endl;	
     }
@@ -771,12 +771,12 @@ void G4GMocrenFileSceneHandler::GFEndModeling ()
   G4VSceneHandler::EndModeling();
 
   //----- 		
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** GFEndModeling (called)" << G4endl;
 
   if( GFIsInModeling() ) {
 
-    if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations) {
+    if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations) {
       G4cout << "***** GFEndModeling (started) " ; 
       G4cout << "(/EndModeling, /DrawAll, /CloseDevice)" << G4endl;
     }
@@ -795,7 +795,7 @@ void G4GMocrenFileSceneHandler::GFEndModeling ()
 //----- 
 void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTransformation)
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** BeginPrimitives " << G4endl;
 
   GFBeginModeling();
@@ -808,7 +808,7 @@ void G4GMocrenFileSceneHandler::BeginPrimitives (const G4Transform3D& objectTran
 //----- 
 void G4GMocrenFileSceneHandler::EndPrimitives ()
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** EndPrimitives " << G4endl;
 
   G4VSceneHandler::EndPrimitives ();
@@ -820,7 +820,7 @@ void G4GMocrenFileSceneHandler::EndPrimitives ()
 //----- Add box
 void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( box )" << G4endl;
 
   if(GFDEBUG_DET > 0)
@@ -1368,7 +1368,7 @@ void G4GMocrenFileSceneHandler::AddSolid( const G4Box& box )
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( tubes )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1411,7 +1411,7 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Tubs& tubes )
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Cons& cons )
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( cons )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1429,7 +1429,7 @@ G4GMocrenFileSceneHandler::AddSolid( const G4Cons& cons )
 //----- Add trd
 void G4GMocrenFileSceneHandler::AddSolid ( const G4Trd& trd )
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( trd )" << G4endl;
 
 
@@ -1448,7 +1448,7 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4Trd& trd )
 //----- Add sphere
 void G4GMocrenFileSceneHandler::AddSolid ( const G4Sphere& sphere )
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( sphere )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1466,7 +1466,7 @@ void G4GMocrenFileSceneHandler::AddSolid ( const G4Sphere& sphere )
 //----- Add para
 void G4GMocrenFileSceneHandler::AddSolid (const G4Para& para)
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( para )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1484,7 +1484,7 @@ void G4GMocrenFileSceneHandler::AddSolid (const G4Para& para)
 //----- Add trap
 void G4GMocrenFileSceneHandler::AddSolid (const G4Trap& trap)
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( trap )" << G4endl;
 
   //----- skip drawing invisible primitive
@@ -1503,7 +1503,7 @@ void G4GMocrenFileSceneHandler::AddSolid (const G4Trap& trap)
 void 
 G4GMocrenFileSceneHandler::AddSolid( const G4Torus& torus )
 {
-  if(GFDEBUG || G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::confirmations)
+  if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
     G4cout << "***** AddSolid ( torus )" << G4endl;
 
   //----- skip drawing invisible primitive

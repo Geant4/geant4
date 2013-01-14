@@ -27,7 +27,7 @@
 //
 #include "G4HepRepMessenger.hh"
 
-__thread G4HepRepMessenger*
+G4HepRepMessenger*
 G4HepRepMessenger::fpInstance = 0;
 
 G4HepRepMessenger*

@@ -58,4 +58,4 @@ G4RayTracerSceneHandler::G4RayTracerSceneHandler(G4VGraphicsSystem& system,
 G4RayTracerSceneHandler::~G4RayTracerSceneHandler()
 {}
 
-__thread G4int G4RayTracerSceneHandler::fSceneIdCount = 0;
+G4int G4RayTracerSceneHandler::fSceneIdCount = 0;

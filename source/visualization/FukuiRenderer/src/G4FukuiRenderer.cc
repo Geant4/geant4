@@ -113,7 +113,7 @@ void G4FukuiRenderer::UseInetDomainAuto()
 	int		pid ;
 
 #if defined DEBUG_FR_SYSTEM
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	  G4cout << "***** Unix Inet Domain (AUTO mode)" << G4endl;
 #endif
 	fIPMode = G4FukuiRenderer::IP_UNIX ;
@@ -144,11 +144,11 @@ void G4FukuiRenderer::UseInetDomainAuto()
 	}
 
 	if(!flag_connected) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	    G4cout << "***** ERROR: Connection failed" << G4endl; 
 	}
 	else { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 	    G4cout << "***** GEANT4 is connected to FukuiRenderer DAWN ";
 	    G4cout << "in the same host" << G4endl; 
 	  }
@@ -162,7 +162,7 @@ void
 G4FukuiRenderer::UseInetDomain()
 {
 #if defined DEBUG_FR_SYSTEM
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** INET Domain " << G4endl;
 #endif
 	fIPMode = G4FukuiRenderer::IP_INET ;
@@ -170,11 +170,11 @@ G4FukuiRenderer::UseInetDomain()
 	this->ConnectPort();
 
 	if(!flag_connected) {
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	    G4cout << "***** ERROR: Connection failed" << G4endl; 
 	}
 	else { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 	    G4cout << "GEANT4 is connected to FukuiRenderer DAWN via socket" ; 
 	    G4cout << G4endl; 
 	  }
@@ -190,7 +190,7 @@ G4FukuiRenderer::ConnectPort( int max_port_incr )
   while(1) {
     if ( ++connect_trial > max_port_incr ) {
 	this->flag_connected = 0 ;
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 	  G4cout << "***** INET Connection failed."                << G4endl;
 	  G4cout << "      Maybe, you have not invoked DAWN yet,"  << G4endl;
 	  G4cout << "      or too many DAWN's are already running" << G4endl;
@@ -201,7 +201,7 @@ G4FukuiRenderer::ConnectPort( int max_port_incr )
     } else if ( fPrimDest.ConnectINET() ) { 
 	    // INET domain connection is established
 	this->flag_connected = 1 ;
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 	  G4cout << "***** GEANT4 is connected to port  " ;
 	  G4cout << fPrimDest.GetPortNumber() ; 
 	  G4cout << "  of server" << G4endl;
@@ -211,7 +211,7 @@ G4FukuiRenderer::ConnectPort( int max_port_incr )
 	    // Connection failed. Try the next port.
       this->flag_connected = 0 ;
       fPrimDest.IncrementPortNumber();
-      if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+      if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 	G4cout << "***** GEANT4 incremented targeting port to " ;
 	G4cout << fPrimDest.GetPortNumber() << G4endl;
       }
@@ -228,7 +228,7 @@ void G4FukuiRenderer::UseBSDUnixDomainAuto()
 	int     pid ;
 
 #if defined DEBUG_FR_SYSTEM
-	if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+	if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	  G4cout << "***** UseBSDUnixDomainAuto " << G4endl;
 #endif
 	fIPMode = G4FukuiRenderer::IP_UNIX ; // Unix domain
@@ -255,10 +255,10 @@ void G4FukuiRenderer::UseBSDUnixDomainAuto()
 
 			//----- display status
 		if(!flag_connected) {
-		  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 		    G4cout << "***** ERROR: Connection failed" << G4endl; 
 		} else { 
-		  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+		  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		    G4cout << "*** GEANT4 is connected to FukuiRenderer DAWN ";
 		    G4cout <<  "in the same host" << G4endl; 
 		  }

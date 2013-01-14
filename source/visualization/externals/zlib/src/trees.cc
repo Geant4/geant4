@@ -126,20 +126,20 @@ struct static_tree_desc_s {
     int     max_length;          /* max bit length for the codes */
 };
 
-local __thread static_tree_desc  static_l_desc =
+local static_tree_desc  static_l_desc =
 {static_ltree, extra_lbits, LITERALS+1, L_CODES, MAX_BITS};
 
-local __thread static_tree_desc  static_d_desc =
+local static_tree_desc  static_d_desc =
 {static_dtree, extra_dbits, 0,          D_CODES, MAX_BITS};
 
-local __thread static_tree_desc  static_bl_desc =
+local static_tree_desc  static_bl_desc =
 {(const ct_data *)0, extra_blbits, 0,   BL_CODES, MAX_BL_BITS};
 
 /* ===========================================================================
  * Local (static) routines in this file.
  */
 
-local void tr_static_init();
+local void tr_static_init OF((void));
 local void init_block     OF((deflate_state *s));
 local void pqdownheap     OF((deflate_state *s, ct_data *tree, int k));
 local void gen_bitlen     OF((deflate_state *s, tree_desc *desc));

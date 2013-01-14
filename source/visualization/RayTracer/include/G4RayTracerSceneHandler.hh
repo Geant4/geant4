@@ -66,7 +66,7 @@ public:
   void AddCompound(const G4THitsMap<G4double>&) {}
 
 private:
-  static __thread G4int    fSceneIdCount;  // Counter for RayTracer scene handlers.
+  static G4int    fSceneIdCount;  // Counter for RayTracer scene handlers.
 };
 
 #endif

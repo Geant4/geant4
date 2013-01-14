@@ -43,16 +43,16 @@
 #include "G4TransportationManager.hh"
 #include "G4ios.hh"
 
-__thread G4Allocator<G4RayTrajectory> *G4RayTrajectoryAllocator_G4MT_TLS_ = 0;
+G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
 
 G4RayTrajectory :: G4RayTrajectory()
-{ if (!G4RayTrajectoryAllocator_G4MT_TLS_) G4RayTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectory>  ;
+{
   positionRecord = new std::vector<G4RayTrajectoryPoint*>;
 }
 
 G4RayTrajectory :: G4RayTrajectory(G4RayTrajectory & right)
 : G4VTrajectory()
-{ if (!G4RayTrajectoryAllocator_G4MT_TLS_) G4RayTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectory>  ;
+{
   positionRecord = new std::vector<G4RayTrajectoryPoint*>;
   for(size_t i=0;i<right.positionRecord->size();i++)
   {
@@ -63,7 +63,7 @@ G4RayTrajectory :: G4RayTrajectory(G4RayTrajectory & right)
 }
 
 G4RayTrajectory :: ~G4RayTrajectory()
-{ if (!G4RayTrajectoryAllocator_G4MT_TLS_) G4RayTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectory>  ;
+{
   //positionRecord->clearAndDestroy();
   for(size_t i=0;i<positionRecord->size();i++)
   { delete (*positionRecord)[i]; }
@@ -72,7 +72,7 @@ G4RayTrajectory :: ~G4RayTrajectory()
 }
 
 void G4RayTrajectory::AppendStep(const G4Step* aStep)
-{ if (!G4RayTrajectoryAllocator_G4MT_TLS_) G4RayTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectory>  ;
+{
   G4RayTrajectoryPoint* trajectoryPoint = new G4RayTrajectoryPoint();
 
   trajectoryPoint->SetStepLength(aStep->GetStepLength());
@@ -114,10 +114,10 @@ void G4RayTrajectory::AppendStep(const G4Step* aStep)
 }
 
 void G4RayTrajectory::ShowTrajectory(std::ostream&) const
-{ if (!G4RayTrajectoryAllocator_G4MT_TLS_) G4RayTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectory>  ; }
+{ }
 
 void G4RayTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
-{ if (!G4RayTrajectoryAllocator_G4MT_TLS_) G4RayTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectory>  ;
+{
   if(!secondTrajectory) return;
 
   G4RayTrajectory* seco = (G4RayTrajectory*)secondTrajectory;

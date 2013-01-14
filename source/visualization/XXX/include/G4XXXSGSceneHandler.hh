@@ -139,7 +139,7 @@ public:
 
 protected:
 
-  static __thread G4int fSceneIdCount;  // Counter for XXXSG scene handlers.
+  static G4int fSceneIdCount;  // Counter for XXXSG scene handlers.
 
   // Utility for PreAddSolid and BeginPrimitives.
   void CreateCurrentItem(const G4String&);

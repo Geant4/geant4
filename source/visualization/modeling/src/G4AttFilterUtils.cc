@@ -53,8 +53,8 @@ namespace G4AttFilterUtils {
   
   // Create new G4AttValue filter factory
   G4AttValueFilterFactory* GetAttValueFilterFactory() {
-    static __thread G4AttValueFilterFactory* factory  = 0 ; if (!factory) factory= new G4AttValueFilterFactory;
-    static __thread G4bool init(false);
+    static G4AttValueFilterFactory* factory = new G4AttValueFilterFactory;
+    static G4bool init(false);
     
     if (!init) {
       // Register typekey<->creator pairs

@@ -83,7 +83,7 @@ using namespace HEPREP;
 using namespace cheprep;
 using namespace std;
 
-__thread G4int G4HepRepSceneHandler::sceneIdCount = 0;
+G4int G4HepRepSceneHandler::sceneIdCount = 0;
 
 //#define LDEBUG 1
 //#define SDEBUG 1
@@ -772,7 +772,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
     if (dontWrite()) return;
 
     if (fProcessing2D) {
-      static __thread G4bool warned = false;
+      static G4bool warned = false;
       if (!warned) {
 	warned = true;
 	G4Exception
@@ -808,7 +808,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     if (dontWrite()) return;
 
     if (fProcessing2D) {
-      static __thread G4bool warned = false;
+      static G4bool warned = false;
       if (!warned) {
 	warned = true;
 	G4Exception
@@ -858,7 +858,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
     if (dontWrite()) return;
 
     if (fProcessing2D) {
-      static __thread G4bool warned = false;
+      static G4bool warned = false;
       if (!warned) {
 	warned = true;
 	G4Exception
@@ -893,7 +893,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     if (dontWrite()) return;
 
     if (fProcessing2D) {
-      static __thread G4bool warned = false;
+      static G4bool warned = false;
       if (!warned) {
 	warned = true;
 	G4Exception
@@ -979,7 +979,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     if (dontWrite()) return;
 
     if (fProcessing2D) {
-      static __thread G4bool warned = false;
+      static G4bool warned = false;
       if (!warned) {
 	warned = true;
 	G4Exception

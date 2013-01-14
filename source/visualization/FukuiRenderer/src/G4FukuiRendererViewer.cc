@@ -76,7 +76,7 @@ G4FukuiRendererViewer::~G4FukuiRendererViewer ()
 void G4FukuiRendererViewer::SetView () 
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
     G4cout << "***** G4FukuiRendererViewer::SetView(): No effects" << G4endl;
 #endif 
 // Do nothing, since DAWN is running as a different process.
@@ -88,7 +88,7 @@ void
 G4FukuiRendererViewer::ClearView( void )
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
     G4cout << "***** G4FukuiRendererViewer::ClearView (): No effects " << G4endl;
 #endif
 
@@ -99,7 +99,7 @@ G4FukuiRendererViewer::ClearView( void )
 void G4FukuiRendererViewer::DrawView () 
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4FukuiRendererViewer::DrawView () " << G4endl;
 #endif
 
@@ -119,7 +119,7 @@ void G4FukuiRendererViewer::DrawView ()
 void G4FukuiRendererViewer::ShowView( void )
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4FukuiRendererViewer::ShowView () " << G4endl;
 #endif
 
@@ -141,13 +141,13 @@ void G4FukuiRendererViewer::ShowView( void )
 void  G4FukuiRendererViewer::Wait()
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4FukuiRendererViewer::Wait () : Begin" << G4endl;
 #endif
   fSceneHandler.SendStr    ( FR_WAIT );
   fSceneHandler.GetPrimDest().WaitSendBack( FR_WAIT );
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4FukuiRendererViewer::Wait () : end" << G4endl;
 #endif
 
@@ -159,7 +159,7 @@ void
 G4FukuiRendererViewer::SendDevice( FRDEV dev )
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4FukuiRendererViewer::SendDevice() " << G4endl;
 #endif
 
@@ -175,7 +175,7 @@ G4FukuiRendererViewer::SendDevice( FRDEV dev )
 void  G4FukuiRendererViewer::SendDrawingStyle() 
 {
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** G4FukuiRendererViewer::SendDrawingStyle() " << G4endl;
 #endif
 
@@ -209,7 +209,7 @@ void G4FukuiRendererViewer::SendViewParameters ()
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors)
+  if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
     G4cout << "***** G4FukuiRendererViewer::SendViewParameters()" << G4endl;
 #endif 
 
@@ -238,7 +238,7 @@ void G4FukuiRendererViewer::SendViewParameters ()
 	}
 
 	if ( camera_distance < radius ) { 
-	  if (G4VisManager::GetInstance()->GetVerbosity() >= G4VisManager::GetInstance()->errors) {
+	  if (G4VisManager::GetVerbosity() >= G4VisManager::errors) {
 		G4cout << "WARNING from FukuiRenderer (DAWN) driver:" << G4endl;
 		G4cout << "  Camera cannot enter inside objects"      << G4endl;
 	  }

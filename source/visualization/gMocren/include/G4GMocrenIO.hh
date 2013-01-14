@@ -166,63 +166,63 @@ public:
 class G4GMocrenIO {
 public:
   // file id
-  static __thread std::string *kId_G4MT_TLS_;
+  static std::string kId;
 
   // file version
-  static __thread std::string *kVersion_G4MT_TLS_;
+  static std::string kVersion;
 
   // data file name 
-  static __thread std::string *kFileName_G4MT_TLS_;
+  static std::string kFileName;
 
   // file data endian: little or not
-  static __thread char *kLittleEndianInput_G4MT_TLS_;
-  static __thread char *kLittleEndianOutput_G4MT_TLS_;
+  static char kLittleEndianInput;
+  static char kLittleEndianOutput;
 
-  static __thread std::string *kComment_G4MT_TLS_;
+  static std::string kComment;
 
   // number of events
-  static __thread int kNumberOfEvents;
+  static int kNumberOfEvents;
 
   // pointer to the modality image data
-  static __thread unsigned int kPointerToModalityData;
+  static unsigned int kPointerToModalityData;
   // pointer to the dose distribution image data
-  static __thread std::vector<unsigned int> *kPointerToDoseDistData_G4MT_TLS_;
+  static std::vector<unsigned int> kPointerToDoseDistData;
   // pointer to the ROI image data
-  static __thread unsigned int kPointerToROIData;
+  static unsigned int kPointerToROIData;
   // pointer to the track data
-  static __thread unsigned int kPointerToTrackData;
+  static unsigned int kPointerToTrackData;
   // pointer to the detector data
-  static __thread unsigned int kPointerToDetectorData;
+  static unsigned int kPointerToDetectorData;
 
   // voxel spacing (universal size)
-  static __thread float kVoxelSpacing[3];
+  static float kVoxelSpacing[3];
 
   //----- modality image -----//
-  static __thread GMocrenDataPrimitive<short> *kModality_G4MT_TLS_;
+  static class GMocrenDataPrimitive<short> kModality;
   // density map to modality (CT) values
-  static __thread std::vector<float> *kModalityImageDensityMap_G4MT_TLS_;
-  static __thread std::string *kModalityUnit_G4MT_TLS_;
+  static std::vector<float> kModalityImageDensityMap;
+  static std::string kModalityUnit;
 
   //----- dose distribution -----//
-  static __thread std::vector<class GMocrenDataPrimitive<double> > *kDose_G4MT_TLS_;
+  static std::vector<class GMocrenDataPrimitive<double> > kDose;
   //std::vector<short *> kShortDose;
-  static __thread std::string *kDoseUnit_G4MT_TLS_;
+  static std::string kDoseUnit;
 
   //----- RoI -----//
-  static __thread std::vector<class GMocrenDataPrimitive<short> > *kRoi_G4MT_TLS_;
+  static std::vector<class GMocrenDataPrimitive<short> > kRoi;
 
   //----- track information -----//
-  static __thread std::vector<float *> *kSteps_G4MT_TLS_; // begin (x,y,z), end (x,y,z)
-  static __thread std::vector<unsigned char *> *kStepColors_G4MT_TLS_; // r, g, b
+  static std::vector<float *> kSteps; // begin (x,y,z), end (x,y,z)
+  static std::vector<unsigned char *> kStepColors; // r, g, b
 
-  static __thread std::vector<class GMocrenTrack> *kTracks_G4MT_TLS_;
+  static std::vector<class GMocrenTrack> kTracks;
   bool kTracksWillBeStored;
 
   //----- detector information -----//
-  static __thread std::vector<class GMocrenDetector> *kDetectors_G4MT_TLS_;
+  static std::vector<class GMocrenDetector> kDetectors;
 
   //----- verbose information -----//
-  static __thread int kVerbose; // verbose level :  0 - 5 (none - overtalk)
+  static int kVerbose; // verbose level :  0 - 5 (none - overtalk)
 
 public:
   // constructor
@@ -234,10 +234,10 @@ public:
   void initialize();
 
   // set the gMocren data file name
-  void setFileName(std::string & _filename);// {kFileName = _filename;}
-  void setFileName(char * _filename);// {kFileName = _filename;}
+  void setFileName(std::string & _filename) {kFileName = _filename;}
+  void setFileName(char * _filename) {kFileName = _filename;}
   // get the gMocren data file name
-  std::string & getFileName();// {return kFileName;}
+  std::string & getFileName() {return kFileName;}
   // store all data in the gMocren data file
   bool storeData(char * _filename); // interface for version 4
   bool storeData();
@@ -258,9 +258,9 @@ public:
   bool retrieveData4();
     
   // get & set the file id
-  std::string & getID();// {return kId;}
+  std::string & getID() {return kId;}
   void setID();
-  void setID(std::string & _id);// {kId = _id;}
+  void setID(std::string & _id) {kId = _id;}
 
   // get & set the file version
   std::string & getVersion();
@@ -271,8 +271,8 @@ public:
   void setLittleEndianOutput(bool _little);
 
   // get & set comment
-  std::string & getComment();// {return kComment;}
-  void setComment(std::string & _comment);// {kComment = _comment;}
+  std::string & getComment() {return kComment;}
+  void setComment(std::string & _comment) {kComment = _comment;}
   
 
   // voxel spacing
@@ -436,7 +436,7 @@ public:
 
   void notStoredTracks() {kTracksWillBeStored = false;};
   void translateTracks(std::vector<float> & _translateo);
-  void clearTracks();// {kTracks.clear();}
+  void clearTracks() {kTracks.clear();}
 
 
   //----- Detectors -----//
@@ -448,7 +448,7 @@ public:
 		   std::vector<unsigned char *> & _color,
 		   std::string & _detectorName);
   void translateDetector(std::vector<float> & _translate);
-  void clearDetector();// {kDetectors.clear();}
+  void clearDetector() {kDetectors.clear();}
 
 protected:
   // endian conversion
