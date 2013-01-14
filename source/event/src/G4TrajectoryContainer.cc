@@ -32,14 +32,14 @@
 __thread G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator_G4MT_TLS_ = 0;
 
 G4TrajectoryContainer::G4TrajectoryContainer()
-{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;   vect = new TrajectoryVector; }
+{ if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; vect = new TrajectoryVector; }
 
 G4TrajectoryContainer::~G4TrajectoryContainer()
-{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;   clearAndDestroy();
+{ if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; clearAndDestroy();
   delete vect; }
 
 G4int G4TrajectoryContainer::operator==(const G4TrajectoryContainer& right) const
-{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;   return (this==&right); }
+{ if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; return (this==&right); }
 G4int G4TrajectoryContainer::operator!=(const G4TrajectoryContainer& right) const
-{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;   return (this!=&right); }
+{ if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; return (this!=&right); }
 

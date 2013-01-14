@@ -39,26 +39,26 @@ G4TouchableHistory::G4TouchableHistory()
   : frot(G4RotationMatrix()),
     ftlate(G4ThreeVector(0.,0.,0.)),
     fhistory()
-{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
    G4VPhysicalVolume* pPhysVol=0;
    fhistory.SetFirstEntry(pPhysVol);
 }
 
 G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
   : fhistory(history)
-{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
   G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
   ftlate = tf.NetTranslation();
   frot = tf.NetRotation();
 }
 
 G4TouchableHistory::~G4TouchableHistory()
-{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
 }
 
 const G4ThreeVector&
 G4TouchableHistory::GetTranslation(G4int depth) const
-{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
@@ -77,7 +77,7 @@ G4TouchableHistory::GetTranslation(G4int depth) const
 
 const G4RotationMatrix*
 G4TouchableHistory::GetRotation(G4int depth) const
-{  ;;;   if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ; G4Allocator<G4TouchableHistory> &aTouchableHistoryAllocator = *aTouchableHistoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //

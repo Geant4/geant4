@@ -40,7 +40,7 @@ using namespace std;
 __thread auto_ptr<G4AllITManager> *G4AllITManager::fInstance_G4MT_TLS_ = 0;
 
 G4AllITManager::G4AllITManager()
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ; auto_ptr<G4AllITManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ;
     fVerbose = 0 ;
 }
 
@@ -71,7 +71,7 @@ G4AllITManager::~G4AllITManager()
 }
 
 void  G4AllITManager::UpdatePositionMap()
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ; auto_ptr<G4AllITManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ;
     std::map<G4ITType, G4VITManager*>::iterator it = fITSubManager.begin() ;
 
     for(; it!=fITSubManager.end() ; it++)
@@ -81,7 +81,7 @@ void  G4AllITManager::UpdatePositionMap()
 }
 
 void  G4AllITManager::CreateTree()
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ; auto_ptr<G4AllITManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ;
     std::map<G4ITType, G4VITManager*>::iterator it = fITSubManager.begin() ;
 
     for(; it!=fITSubManager.end() ; it++)
@@ -96,7 +96,7 @@ template<typename T>  G4ITManager<T>* G4AllITManager::Instance()
 }
 
 G4VITManager* G4AllITManager::GetInstance(G4ITType type)
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ; auto_ptr<G4AllITManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ;
     map<G4ITType, G4VITManager*>::iterator it = fITSubManager.find(type);
 
     if(it == fITSubManager.end()) return 0;
@@ -105,12 +105,12 @@ G4VITManager* G4AllITManager::GetInstance(G4ITType type)
 }
 
 void G4AllITManager::RegisterManager(G4VITManager* manager)
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ; auto_ptr<G4AllITManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ;
     fITSubManager[manager->GetITType()] = manager;
 }
 
 G4ITBox* G4AllITManager::GetBox(const G4Track* track)
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ; auto_ptr<G4AllITManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ;
     map<G4ITType, G4VITManager*>::iterator it = fITSubManager.find(GetIT(track)->GetITType());
 
     if(it == fITSubManager.end()) return 0;
@@ -119,6 +119,6 @@ G4ITBox* G4AllITManager::GetBox(const G4Track* track)
 }
 
 void G4AllITManager::Push(G4Track* track)
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ; auto_ptr<G4AllITManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ;
     fITSubManager[GetIT(track)->GetITType()]->Push(track);
 }

@@ -58,7 +58,7 @@ class G4ReactionProduct
 
     friend G4ReactionProduct operator*(
      const G4double aDouble, const G4ReactionProduct &p2 )
-     {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;  
+     { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
        G4ReactionProduct result;
        result.SetMomentum(aDouble*p2.GetMomentum());
        result.SetMass(p2.GetMass());
@@ -72,7 +72,7 @@ class G4ReactionProduct
     
     G4ReactionProduct( G4ParticleDefinition *aParticleDefinition );
 
-    ~G4ReactionProduct() {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;  }
+    ~G4ReactionProduct() { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;}
     
     G4ReactionProduct( const G4ReactionProduct &right );
 
@@ -96,13 +96,13 @@ class G4ReactionProduct
     G4ReactionProduct &operator= ( const G4HadProjectile &right );
 
     inline G4bool operator== ( const G4ReactionProduct &right ) const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return ( this == (G4ReactionProduct*) &right ); }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return ( this == (G4ReactionProduct*) &right ); }
     
     inline G4bool operator!= ( const G4ReactionProduct &right ) const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return ( this != (G4ReactionProduct*) &right ); }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return ( this != (G4ReactionProduct*) &right ); }
     
     inline G4ParticleDefinition *GetDefinition() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return theParticleDefinition; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return theParticleDefinition; }
     
     void SetDefinition( G4ParticleDefinition *aParticleDefinition );
    
@@ -115,61 +115,61 @@ class G4ReactionProduct
     void SetMomentum( const G4double z );
 
     inline void SetMomentum( const G4ThreeVector &mom )
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   momentum = mom; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; momentum = mom; }
     
     inline G4ThreeVector GetMomentum() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return momentum; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return momentum; }
     
     inline G4double GetTotalMomentum() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return std::sqrt(std::abs(kineticEnergy*(totalEnergy+mass))); }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return std::sqrt(std::abs(kineticEnergy*(totalEnergy+mass))); }
     
     inline G4double GetTotalEnergy() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return totalEnergy; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return totalEnergy; }
     
     inline void SetKineticEnergy( const G4double en )
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;  
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
       kineticEnergy = en;
       totalEnergy = kineticEnergy + mass;
     }
     
     inline G4double GetKineticEnergy() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return kineticEnergy; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return kineticEnergy; }
 
     inline void SetTotalEnergy( const G4double en )
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;  
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
       totalEnergy = en;
       kineticEnergy = totalEnergy - mass;
     }
     
     inline void SetMass( const G4double mas )
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   mass = mas; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; mass = mas; }
     
     inline G4double GetMass() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return mass; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return mass; }
     
     inline void SetTOF( const G4double t )
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   timeOfFlight = t; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; timeOfFlight = t; }
     
     inline G4double GetTOF() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return timeOfFlight; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return timeOfFlight; }
     
     inline void SetSide( const G4int sid )
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   side = sid; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; side = sid; }
     
     inline G4int GetSide() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return side; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return side; }
     
     inline void SetNewlyAdded( const G4bool f )
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   NewlyAdded = f; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; NewlyAdded = f; }
     
     inline G4bool GetNewlyAdded() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return NewlyAdded; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return NewlyAdded; }
     
     inline void SetMayBeKilled( const G4bool f )
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   MayBeKilled = f; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; MayBeKilled = f; }
     
     inline G4bool GetMayBeKilled() const
-    {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return MayBeKilled; }
+    { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return MayBeKilled; }
 
     void SetZero();
     
@@ -178,29 +178,29 @@ class G4ReactionProduct
     G4double Angle( const G4ReactionProduct &p ) const;
     
     inline void SetPositionInNucleus(G4double x, G4double y, G4double z)
-     {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;  
+     { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
        positionInNucleus.setX(x);
        positionInNucleus.setY(y);
        positionInNucleus.setZ(z);
      }
     
     inline void SetPositionInNucleus( G4ThreeVector & aPosition )
-     {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;  
+     { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;
        positionInNucleus = aPosition;
      }
     
-    inline G4ThreeVector GetPositionInNucleus() const {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;  return positionInNucleus; }
-    inline G4double GetXPositionInNucleus() const {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return positionInNucleus.x(); }
-    inline G4double GetYPositionInNucleus() const {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return positionInNucleus.y(); }
-    inline G4double GetZPositionInNucleus() const {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return positionInNucleus.z(); }
+    inline G4ThreeVector GetPositionInNucleus() const { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ;return positionInNucleus; }
+    inline G4double GetXPositionInNucleus() const { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return positionInNucleus.x(); }
+    inline G4double GetYPositionInNucleus() const { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return positionInNucleus.y(); }
+    inline G4double GetZPositionInNucleus() const { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return positionInNucleus.z(); }
     
-    inline void SetFormationTime(G4double aTime) {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   formationTime = aTime; }
+    inline void SetFormationTime(G4double aTime) { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; formationTime = aTime; }
     
-    inline G4double GetFormationTime() const {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return formationTime; }
+    inline G4double GetFormationTime() const { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return formationTime; }
     
-    inline void HasInitialStateParton(G4bool aFlag) {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   hasInitialStateParton = aFlag; }
+    inline void HasInitialStateParton(G4bool aFlag) { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; hasInitialStateParton = aFlag; }
     
-    inline G4bool HasInitialStateParton() const {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   return hasInitialStateParton; }
+    inline G4bool HasInitialStateParton() const { if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; return hasInitialStateParton; }
  
 #ifdef PRECOMPOUND_TEST
      void SetCreatorModel(const G4String& aModel) {  ;;;   if (!aRPAllocator_G4MT_TLS_) aRPAllocator_G4MT_TLS_ = new G4Allocator<G4ReactionProduct>  ; G4Allocator<G4ReactionProduct> &aRPAllocator = *aRPAllocator_G4MT_TLS_;  ;;;   theCreatorModel = aModel; }

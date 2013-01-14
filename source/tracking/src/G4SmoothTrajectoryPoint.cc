@@ -49,13 +49,13 @@ __thread G4Allocator<G4SmoothTrajectoryPoint> *aSmoothTrajectoryPointAllocator_G
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint()
 : fAuxiliaryPointVector(0)
-{  ;;;   if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ; G4Allocator<G4SmoothTrajectoryPoint> &aSmoothTrajectoryPointAllocator = *aSmoothTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ;
   fPosition = G4ThreeVector(0.,0.,0.);
 }
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos)
 : fAuxiliaryPointVector(0)
-{  ;;;   if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ; G4Allocator<G4SmoothTrajectoryPoint> &aSmoothTrajectoryPointAllocator = *aSmoothTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ;
   fPosition = pos;
 }
 
@@ -63,16 +63,16 @@ G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos,
 						 std::vector<G4ThreeVector>* auxiliaryPoints)
 : fPosition(pos),
   fAuxiliaryPointVector(auxiliaryPoints)
-{  ;;;   if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ; G4Allocator<G4SmoothTrajectoryPoint> &aSmoothTrajectoryPointAllocator = *aSmoothTrajectoryPointAllocator_G4MT_TLS_;  ;;;  }
+{ if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ;}
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right)
 : G4VTrajectoryPoint(),
   fPosition(right.fPosition),fAuxiliaryPointVector(right.fAuxiliaryPointVector)
-{  ;;;   if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ; G4Allocator<G4SmoothTrajectoryPoint> &aSmoothTrajectoryPointAllocator = *aSmoothTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ;
 }
 
 G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint()
-{  ;;;   if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ; G4Allocator<G4SmoothTrajectoryPoint> &aSmoothTrajectoryPointAllocator = *aSmoothTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ;
   if(fAuxiliaryPointVector) {
     delete fAuxiliaryPointVector;
   }
@@ -81,7 +81,7 @@ G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint()
 
 const std::map<G4String,G4AttDef>*
 G4SmoothTrajectoryPoint::GetAttDefs() const
-{  ;;;   if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ; G4Allocator<G4SmoothTrajectoryPoint> &aSmoothTrajectoryPointAllocator = *aSmoothTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ;
   G4bool isNew;
   std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4SmoothTrajectoryPoint",isNew);
@@ -97,7 +97,7 @@ G4SmoothTrajectoryPoint::GetAttDefs() const
 }
 
 std::vector<G4AttValue>* G4SmoothTrajectoryPoint::CreateAttValues() const
-{  ;;;   if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ; G4Allocator<G4SmoothTrajectoryPoint> &aSmoothTrajectoryPointAllocator = *aSmoothTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryPointAllocator_G4MT_TLS_) aSmoothTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectoryPoint>  ;
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
   if (fAuxiliaryPointVector) {

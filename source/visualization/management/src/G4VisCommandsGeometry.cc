@@ -38,7 +38,7 @@
 __thread std::map<G4LogicalVolume*, const G4VisAttributes*> *G4VVisCommandGeometry::fVisAttsMap_G4MT_TLS_ = 0;
 
 G4VVisCommandGeometry::~G4VVisCommandGeometry()
-{  ;;;   if (!fVisAttsMap_G4MT_TLS_) fVisAttsMap_G4MT_TLS_ = new std::map<G4LogicalVolume*, const G4VisAttributes*>  ; std::map<G4LogicalVolume*, const G4VisAttributes*> &fVisAttsMap = *fVisAttsMap_G4MT_TLS_;  ;;;  
+{ if (!fVisAttsMap_G4MT_TLS_) fVisAttsMap_G4MT_TLS_ = new std::map<G4LogicalVolume*, const G4VisAttributes*>  ;
   // Delete all vis atts that were "new".  Do something like "restore"
   // without the "rebuild".
 }

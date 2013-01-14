@@ -90,7 +90,7 @@ G4DynamicParticle::G4DynamicParticle():
                    thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1),
 		   primaryParticle(0),
-                   thePDGcode(0) {  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  }
+                   thePDGcode(0) { if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;}
 
 ////////////////////
 // -- constructors ----
@@ -111,7 +111,7 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
                    thePreAssignedDecayTime(-1.0),
 		   verboseLevel(1),
 		   primaryParticle(0),
-                   thePDGcode(0) {  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  }
+                   thePDGcode(0) { if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;}
 
 ////////////////////
 G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
@@ -129,7 +129,7 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   verboseLevel(1),
 		   primaryParticle(0),
                    thePDGcode(0)
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   // 3-dim momentum is given
   SetMomentum(aParticleMomentum);
 }
@@ -150,7 +150,7 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   verboseLevel(1),
 		   primaryParticle(0),
                    thePDGcode(0)
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   // 4-momentum vector (Lorentz vecotr) is given
   Set4Momentum(aParticleMomentum);
 }
@@ -171,7 +171,7 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   verboseLevel(1),
 		   primaryParticle(0),
                    thePDGcode(0)
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   // total energy and 3-dim momentum are given
   G4double pModule2 = aParticleMomentum.mag2();
   if (pModule2>0.0) {
@@ -207,7 +207,7 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right):
   verboseLevel(right.verboseLevel),
   primaryParticle(right.primaryParticle),
   thePDGcode(right.thePDGcode)
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   if (right.theElectronOccupancy != 0) {
       theElectronOccupancy =
 	new G4ElectronOccupancy(*right.theElectronOccupancy);
@@ -217,7 +217,7 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right):
 ////////////////////
 // -- destructor ----
 ////////////////////
-G4DynamicParticle::~G4DynamicParticle() {  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+G4DynamicParticle::~G4DynamicParticle() { if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
 
   //  delete thePreAssignedDecayProducts
   if (thePreAssignedDecayProducts != 0) delete thePreAssignedDecayProducts;
@@ -232,7 +232,7 @@ G4DynamicParticle::~G4DynamicParticle() {  ;;;   if (!aDynamicParticleAllocator_
 // -- operators ----
 ////////////////////
 G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   if (this != &right) {
     theMomentumDirection = right.theMomentumDirection;
     theParticleDefinition = right.theParticleDefinition;
@@ -269,7 +269,7 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
 
 ////////////////////
 void G4DynamicParticle::SetDefinition(const G4ParticleDefinition * aParticleDefinition)
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   // remove preassigned decay
   if (thePreAssignedDecayProducts != 0) {
 #ifdef G4VERBOSE
@@ -302,13 +302,13 @@ void G4DynamicParticle::SetDefinition(const G4ParticleDefinition * aParticleDefi
 
 ////////////////////
 G4int G4DynamicParticle::operator==(const G4DynamicParticle &right) const
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   return (this == (G4DynamicParticle *) &right);
 }
 
 ////////////////////
 G4int G4DynamicParticle::operator!=(const G4DynamicParticle &right) const
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   return (this != (G4DynamicParticle *) &right);
 }
 
@@ -318,7 +318,7 @@ G4int G4DynamicParticle::operator!=(const G4DynamicParticle &right) const
 // -- AllocateElectronOccupancy --
 ////////////////////
 void  G4DynamicParticle::AllocateElectronOccupancy()
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   const G4ParticleDefinition* particle = GetDefinition();
 
   if (G4IonTable::IsIon(particle)) {
@@ -335,7 +335,7 @@ void  G4DynamicParticle::AllocateElectronOccupancy()
 // -- methods for setting Energy/Momentum  --
 ////////////////////
 void G4DynamicParticle::SetMomentum(const G4ThreeVector &momentum)
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   G4double pModule2 = momentum.mag2();
   if (pModule2>0.0) {
     G4double mass = theDynamicalMass;
@@ -349,7 +349,7 @@ void G4DynamicParticle::SetMomentum(const G4ThreeVector &momentum)
 
 ////////////////////
 void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   G4double pModule2 = momentum.vect().mag2();
   if (pModule2>0.0) {
     SetMomentumDirection(momentum.vect().unit());
@@ -374,7 +374,7 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
 ////////////////////
 #ifdef G4VERBOSE
 void G4DynamicParticle::DumpInfo(G4int mode) const
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   if (theParticleDefinition == 0) {
     G4cout << " G4DynamicParticle::DumpInfo():: !!!Particle type not defined !!!! " << G4endl;
   } else {
@@ -409,7 +409,7 @@ void G4DynamicParticle::DumpInfo(G4int) const
 
 ////////////////////////
 G4double  G4DynamicParticle::GetElectronMass() const
-{  ;;;   if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ; G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *aDynamicParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
   static __thread G4double electronMass = 0.0;
 
   // check if electron exits and get the mass

@@ -58,277 +58,277 @@
       // Override "delete" for "G4Allocator".
 
    inline G4bool G4Track::operator==( const G4Track& trk)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return (this==&trk);  }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return (this==&trk);  }
       // Define "==" operator because "G4TrackVector" uses 
       // "RWPtrOrderdVector" which requires this.
 
 // Get/Set functions
 // dynamic particle
    inline const G4DynamicParticle* G4Track::GetDynamicParticle() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpDynamicParticle; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpDynamicParticle; }
 
 // particle definition
    inline G4ParticleDefinition* G4Track::GetDefinition() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpDynamicParticle->GetDefinition(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpDynamicParticle->GetDefinition(); }
 
 // particle definition
    inline const G4ParticleDefinition* G4Track::GetParticleDefinition() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpDynamicParticle->GetParticleDefinition(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpDynamicParticle->GetParticleDefinition(); }
 
 // parent track ID
    inline G4int G4Track::GetParentID() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fParentID; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fParentID; }
 
    inline void G4Track::SetParentID(const G4int aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fParentID = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fParentID = aValue; }
 
 // current track ID
    inline G4int G4Track::GetTrackID() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fTrackID; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fTrackID; }
 
    inline void G4Track::SetTrackID(const G4int aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fTrackID = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fTrackID = aValue; }
 
 // position
    inline const G4ThreeVector& G4Track::GetPosition() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fPosition; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fPosition; }
 
    inline void G4Track::SetPosition(const G4ThreeVector& aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fPosition = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fPosition = aValue; }
 
 // global time
    inline G4double G4Track::GetGlobalTime() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fGlobalTime; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fGlobalTime; }
 
    inline void G4Track::SetGlobalTime(const G4double aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fGlobalTime = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fGlobalTime = aValue; }
      // Time since the event in which the track belongs is created.
 
 // local time
    inline G4double G4Track::GetLocalTime() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fLocalTime; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fLocalTime; }
 
    inline void G4Track::SetLocalTime(const G4double aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fLocalTime = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fLocalTime = aValue; }
       // Time since the current track is created.
 
 // proper time
    inline G4double G4Track::GetProperTime() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpDynamicParticle->GetProperTime(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpDynamicParticle->GetProperTime(); }
 
    inline void G4Track::SetProperTime(const G4double aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fpDynamicParticle->SetProperTime(aValue); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fpDynamicParticle->SetProperTime(aValue); }
       // Proper time of the current track
 
 // velocity
    inline G4double G4Track::GetVelocity() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fVelocity; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fVelocity; }
 
    inline void  G4Track::SetVelocity(G4double val)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fVelocity = val; } 
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fVelocity = val; } 
 
    inline G4bool   G4Track::UseGivenVelocity() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return  useGivenVelocity;}
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return  useGivenVelocity;}
 
    inline void     G4Track::UseGivenVelocity(G4bool val)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   useGivenVelocity = val;}
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; useGivenVelocity = val;}
 
 
 // volume
    inline G4VPhysicalVolume* G4Track::GetVolume() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   if ( fpTouchable ==0 ) return 0; 
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; if ( fpTouchable ==0 ) return 0; 
      return fpTouchable->GetVolume(); }
 
    inline G4VPhysicalVolume* G4Track::GetNextVolume() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;    if ( fpNextTouchable ==0 ) return 0; 
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;  if ( fpNextTouchable ==0 ) return 0; 
      return fpNextTouchable->GetVolume(); }
 
 // material
    inline 
     const G4MaterialCutsCouple* G4Track::GetMaterialCutsCouple() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpStep->GetPreStepPoint()->GetMaterialCutsCouple(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpStep->GetPreStepPoint()->GetMaterialCutsCouple(); }
 
    inline 
     const G4MaterialCutsCouple* G4Track::GetNextMaterialCutsCouple() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpStep->GetPostStepPoint()->GetMaterialCutsCouple(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpStep->GetPostStepPoint()->GetMaterialCutsCouple(); }
 
 // material
    inline G4Material* G4Track::GetMaterial() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpStep->GetPreStepPoint()->GetMaterial(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpStep->GetPreStepPoint()->GetMaterial(); }
 
    inline G4Material* G4Track::GetNextMaterial() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpStep->GetPostStepPoint()->GetMaterial(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpStep->GetPostStepPoint()->GetMaterial(); }
 
 
 // touchable
    inline const G4VTouchable* G4Track::GetTouchable() const 
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;  
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
      return fpTouchable();
    }
 
    inline const G4TouchableHandle& G4Track::GetTouchableHandle() const 
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;  
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
      return fpTouchable;
    }
 
    inline void G4Track::SetTouchableHandle( const G4TouchableHandle& apValue) 
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;  
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
      fpTouchable = apValue;
    }
 
    inline const  G4VTouchable* G4Track::GetNextTouchable() const 
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;  
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
      return fpNextTouchable();
    }
 
    inline const  G4TouchableHandle& G4Track::GetNextTouchableHandle() const 
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;  
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
      return fpNextTouchable;
    }
 
    inline void G4Track::SetNextTouchableHandle( const G4TouchableHandle& apValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;  
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
      fpNextTouchable = apValue;
    }
 
    inline const  G4VTouchable* G4Track::GetOriginTouchable() const 
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;  
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
      return fpOriginTouchable();
    }
 
    inline const  G4TouchableHandle& G4Track::GetOriginTouchableHandle() const 
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;  
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
      return fpOriginTouchable;
    }
 
    inline void G4Track::SetOriginTouchableHandle( const G4TouchableHandle& apValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;  
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
      fpOriginTouchable = apValue;
    }
 
 // kinetic energy
    inline G4double G4Track::GetKineticEnergy() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpDynamicParticle->GetKineticEnergy(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpDynamicParticle->GetKineticEnergy(); }
 
    inline void G4Track::SetKineticEnergy(const G4double aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fpDynamicParticle->SetKineticEnergy(aValue); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fpDynamicParticle->SetKineticEnergy(aValue); }
 
 // total energy
    inline G4double G4Track::GetTotalEnergy() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpDynamicParticle->GetTotalEnergy(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpDynamicParticle->GetTotalEnergy(); }
 
 // momentum
    inline G4ThreeVector G4Track::GetMomentum() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpDynamicParticle->GetMomentum(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpDynamicParticle->GetMomentum(); }
 
 // momentum (direction)
   inline const G4ThreeVector& G4Track::GetMomentumDirection() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpDynamicParticle->GetMomentumDirection(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpDynamicParticle->GetMomentumDirection(); }
 
    inline void G4Track::SetMomentumDirection(const G4ThreeVector& aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fpDynamicParticle->SetMomentumDirection(aValue) ;}
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fpDynamicParticle->SetMomentumDirection(aValue) ;}
 
 // polarization
    inline const G4ThreeVector& G4Track::GetPolarization() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpDynamicParticle->GetPolarization(); }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpDynamicParticle->GetPolarization(); }
 
    inline void G4Track::SetPolarization(const G4ThreeVector& aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fpDynamicParticle->SetPolarization(aValue.x(),
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fpDynamicParticle->SetPolarization(aValue.x(),
                                         aValue.y(),
                                         aValue.z()); }
 
 // track status
    inline G4TrackStatus G4Track::GetTrackStatus() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fTrackStatus; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fTrackStatus; }
 
    inline void G4Track::SetTrackStatus(const G4TrackStatus aTrackStatus)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fTrackStatus = aTrackStatus; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fTrackStatus = aTrackStatus; }
 
 // track length
    inline G4double G4Track::GetTrackLength() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fTrackLength; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fTrackLength; }
 
    inline void G4Track::AddTrackLength(const G4double aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fTrackLength += aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fTrackLength += aValue; }
       // Accumulated track length
 
 // step number 
    inline G4int G4Track::GetCurrentStepNumber() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fCurrentStepNumber; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fCurrentStepNumber; }
 
    inline void G4Track::IncrementCurrentStepNumber()
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fCurrentStepNumber++; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fCurrentStepNumber++; }
 
 // step length
    inline G4double G4Track::GetStepLength() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fStepLength; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fStepLength; }
 
    inline void G4Track::SetStepLength(G4double value)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fStepLength = value; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fStepLength = value; }
 
 // vertex (where this track was created) information
    inline const G4ThreeVector& G4Track::GetVertexPosition() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fVtxPosition; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fVtxPosition; }
 
    inline void G4Track::SetVertexPosition(const G4ThreeVector& aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fVtxPosition = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fVtxPosition = aValue; }
 
    inline const G4ThreeVector& G4Track::GetVertexMomentumDirection() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fVtxMomentumDirection; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fVtxMomentumDirection; }
    inline void G4Track::SetVertexMomentumDirection(const G4ThreeVector& aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fVtxMomentumDirection = aValue ;}
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fVtxMomentumDirection = aValue ;}
 
    inline G4double G4Track::GetVertexKineticEnergy() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fVtxKineticEnergy; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fVtxKineticEnergy; }
 
    inline void G4Track::SetVertexKineticEnergy(const G4double aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fVtxKineticEnergy = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fVtxKineticEnergy = aValue; }
 
    inline  const G4LogicalVolume* G4Track::GetLogicalVolumeAtVertex() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpLVAtVertex; } 
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpLVAtVertex; } 
 
    inline void G4Track::SetLogicalVolumeAtVertex(const G4LogicalVolume* aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fpLVAtVertex = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fpLVAtVertex = aValue; }
 
    inline const G4VProcess* G4Track::GetCreatorProcess() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpCreatorProcess; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpCreatorProcess; }
      // If the pointer is 0, this means the track is created
      // by the event generator, i.e. the primary track.If it is not
      // 0, it points to the process which created this track.
 
    inline void G4Track::SetCreatorProcess(const G4VProcess* aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fpCreatorProcess = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fpCreatorProcess = aValue; }
 
 // flag for "Below Threshold"
    inline G4bool G4Track::IsBelowThreshold() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fBelowThreshold; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fBelowThreshold; }
 
    inline void    G4Track::SetBelowThresholdFlag(G4bool value)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fBelowThreshold = value; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fBelowThreshold = value; }
 
 // flag for " Good for Tracking"
    inline G4bool  G4Track::IsGoodForTracking() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fGoodForTracking; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fGoodForTracking; }
 
    inline void    G4Track::SetGoodForTrackingFlag(G4bool value)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fGoodForTracking = value; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fGoodForTracking = value; }
 
 // track weight
    inline void  G4Track::SetWeight(G4double aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fWeight = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fWeight = aValue; }
 
    inline G4double G4Track::GetWeight() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fWeight; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fWeight; }
 
 // user information
    inline G4VUserTrackInformation* G4Track::GetUserInformation() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpUserInformation; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpUserInformation; }
    inline void G4Track::SetUserInformation(G4VUserTrackInformation* aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fpUserInformation = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fpUserInformation = aValue; }
 
    inline const G4Step* G4Track::GetStep() const
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   return fpStep; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return fpStep; }
 
    inline void G4Track::SetStep(const G4Step* aValue)
-   {  ;;;   if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; G4Allocator<G4Track> &aTrackAllocator = *aTrackAllocator_G4MT_TLS_;  ;;;   fpStep = aValue; }
+   { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; fpStep = aValue; }
 

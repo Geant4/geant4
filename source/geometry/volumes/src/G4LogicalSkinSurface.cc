@@ -60,14 +60,14 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&   name,
 
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface& right)
   : G4LogicalSurface(right.GetName(), right.GetSurfaceProperty())
-{  ;;;   if (!theSkinSurfaceTable_G4MT_TLS_) theSkinSurfaceTable_G4MT_TLS_ = new G4LogicalSkinSurfaceTable  ; G4LogicalSkinSurfaceTable &theSkinSurfaceTable = *theSkinSurfaceTable_G4MT_TLS_;  ;;;  
+{ if (!theSkinSurfaceTable_G4MT_TLS_) theSkinSurfaceTable_G4MT_TLS_ = new G4LogicalSkinSurfaceTable  ;
   SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
   LogVolume = right.LogVolume;
   (*theSkinSurfaceTable_G4MT_TLS_) = (*right.theSkinSurfaceTable_G4MT_TLS_);
 }
 
 G4LogicalSkinSurface::~G4LogicalSkinSurface()
-{  ;;;   if (!theSkinSurfaceTable_G4MT_TLS_) theSkinSurfaceTable_G4MT_TLS_ = new G4LogicalSkinSurfaceTable  ; G4LogicalSkinSurfaceTable &theSkinSurfaceTable = *theSkinSurfaceTable_G4MT_TLS_;  ;;;  
+{ if (!theSkinSurfaceTable_G4MT_TLS_) theSkinSurfaceTable_G4MT_TLS_ = new G4LogicalSkinSurfaceTable  ;
 }
 
 //
@@ -76,7 +76,7 @@ G4LogicalSkinSurface::~G4LogicalSkinSurface()
 
 const G4LogicalSkinSurface&
 G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface& right)
-{  ;;;   if (!theSkinSurfaceTable_G4MT_TLS_) theSkinSurfaceTable_G4MT_TLS_ = new G4LogicalSkinSurfaceTable  ; G4LogicalSkinSurfaceTable &theSkinSurfaceTable = *theSkinSurfaceTable_G4MT_TLS_;  ;;;  
+{ if (!theSkinSurfaceTable_G4MT_TLS_) theSkinSurfaceTable_G4MT_TLS_ = new G4LogicalSkinSurfaceTable  ;
   if (&right == this) return *this;
   if (&right)
   {

@@ -62,7 +62,7 @@ G4LogicalBorderSurface::G4LogicalBorderSurface(const G4String& name,
 G4LogicalBorderSurface::
 G4LogicalBorderSurface(const G4LogicalBorderSurface& right)
   : G4LogicalSurface(right.GetName(), right.GetSurfaceProperty())
-{  ;;;   if (!theBorderSurfaceTable_G4MT_TLS_) theBorderSurfaceTable_G4MT_TLS_ = new G4LogicalBorderSurfaceTable  ; G4LogicalBorderSurfaceTable &theBorderSurfaceTable = *theBorderSurfaceTable_G4MT_TLS_;  ;;;  
+{ if (!theBorderSurfaceTable_G4MT_TLS_) theBorderSurfaceTable_G4MT_TLS_ = new G4LogicalBorderSurfaceTable  ;
   SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
   Volume1 = right.Volume1;
   Volume2 = right.Volume2;
@@ -70,7 +70,7 @@ G4LogicalBorderSurface(const G4LogicalBorderSurface& right)
 }
 
 G4LogicalBorderSurface::~G4LogicalBorderSurface()
-{  ;;;   if (!theBorderSurfaceTable_G4MT_TLS_) theBorderSurfaceTable_G4MT_TLS_ = new G4LogicalBorderSurfaceTable  ; G4LogicalBorderSurfaceTable &theBorderSurfaceTable = *theBorderSurfaceTable_G4MT_TLS_;  ;;;  
+{ if (!theBorderSurfaceTable_G4MT_TLS_) theBorderSurfaceTable_G4MT_TLS_ = new G4LogicalBorderSurfaceTable  ;
 }
 
 //
@@ -79,7 +79,7 @@ G4LogicalBorderSurface::~G4LogicalBorderSurface()
 
 const G4LogicalBorderSurface&
 G4LogicalBorderSurface::operator=(const G4LogicalBorderSurface &right)
-{  ;;;   if (!theBorderSurfaceTable_G4MT_TLS_) theBorderSurfaceTable_G4MT_TLS_ = new G4LogicalBorderSurfaceTable  ; G4LogicalBorderSurfaceTable &theBorderSurfaceTable = *theBorderSurfaceTable_G4MT_TLS_;  ;;;  
+{ if (!theBorderSurfaceTable_G4MT_TLS_) theBorderSurfaceTable_G4MT_TLS_ = new G4LogicalBorderSurfaceTable  ;
   if (&right == this) return *this;
   if (&right)
   {

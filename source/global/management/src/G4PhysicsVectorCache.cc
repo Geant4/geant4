@@ -41,9 +41,9 @@ __thread G4Allocator<G4PhysicsVectorCache> *aPVCacheAllocator_G4MT_TLS_ = 0;
 
 G4PhysicsVectorCache::G4PhysicsVectorCache()
  : lastEnergy(-DBL_MAX), lastValue(0.), lastBin(0)
-{  ;;;   if (!aPVCacheAllocator_G4MT_TLS_) aPVCacheAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVectorCache>  ; G4Allocator<G4PhysicsVectorCache> &aPVCacheAllocator = *aPVCacheAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVCacheAllocator_G4MT_TLS_) aPVCacheAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVectorCache>  ;
 }
 
 G4PhysicsVectorCache::~G4PhysicsVectorCache()
-{  ;;;   if (!aPVCacheAllocator_G4MT_TLS_) aPVCacheAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVectorCache>  ; G4Allocator<G4PhysicsVectorCache> &aPVCacheAllocator = *aPVCacheAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVCacheAllocator_G4MT_TLS_) aPVCacheAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVectorCache>  ;
 }

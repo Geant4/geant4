@@ -59,10 +59,10 @@ G4SmoothTrajectory::G4SmoothTrajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),
    PDGEncoding( 0 ), PDGCharge(0.0), ParticleName(""),
    initialKineticEnergy( 0. ), initialMomentum( G4ThreeVector() )
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  ;}
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;;}
 
 G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
    G4ParticleDefinition * fpParticleDefinition = aTrack->GetDefinition();
    ParticleName = fpParticleDefinition->GetParticleName();
    PDGCharge = fpParticleDefinition->GetPDGCharge();
@@ -81,7 +81,7 @@ G4SmoothTrajectory::G4SmoothTrajectory(const G4Track* aTrack)
 }
 
 G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right):G4VTrajectory()
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
   ParticleName = right.ParticleName;
   PDGCharge = right.PDGCharge;
   PDGEncoding = right.PDGEncoding;
@@ -99,7 +99,7 @@ G4SmoothTrajectory::G4SmoothTrajectory(G4SmoothTrajectory & right):G4VTrajectory
 }
 
 G4SmoothTrajectory::~G4SmoothTrajectory()
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
   if (positionRecord) {
     //  positionRecord->clearAndDestroy();
     size_t i;
@@ -112,21 +112,21 @@ G4SmoothTrajectory::~G4SmoothTrajectory()
 }
 
 void G4SmoothTrajectory::ShowTrajectory(std::ostream& os) const
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::ShowTrajectory(os);
   // ... or override with your own code here.
 }
 
 void G4SmoothTrajectory::DrawTrajectory() const
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::DrawTrajectory();
   // ... or override with your own code here.
 }
 
 const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
   G4bool isNew;
   std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4SmoothTrajectory",isNew);
@@ -170,7 +170,7 @@ const std::map<G4String,G4AttDef>* G4SmoothTrajectory::GetAttDefs() const
 
 
 std::vector<G4AttValue>* G4SmoothTrajectory::CreateAttValues() const
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
   values->push_back
@@ -207,7 +207,7 @@ std::vector<G4AttValue>* G4SmoothTrajectory::CreateAttValues() const
 }
 
 void G4SmoothTrajectory::AppendStep(const G4Step* aStep)
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
   // (jacek 30/10/2002)
   positionRecord->push_back(
       new G4SmoothTrajectoryPoint(aStep->GetPostStepPoint()->GetPosition(),
@@ -215,12 +215,12 @@ void G4SmoothTrajectory::AppendStep(const G4Step* aStep)
 }
   
 G4ParticleDefinition* G4SmoothTrajectory::GetParticleDefinition()
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
    return (G4ParticleTable::GetParticleTable()->FindParticle(ParticleName));
 }
 
 void G4SmoothTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
-{  ;;;   if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ; G4Allocator<G4SmoothTrajectory> &aSmoothTrajectoryAllocator = *aSmoothTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aSmoothTrajectoryAllocator_G4MT_TLS_) aSmoothTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4SmoothTrajectory>  ;
   if(!secondTrajectory) return;
 
   G4SmoothTrajectory* seco = (G4SmoothTrajectory*)secondTrajectory;

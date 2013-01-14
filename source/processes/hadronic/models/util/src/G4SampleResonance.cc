@@ -102,7 +102,7 @@ G4double G4SampleResonance::GetMinimumMass(const G4ParticleDefinition* p) const
 
 
 G4double G4SampleResonance::SampleMass(const G4ParticleDefinition* p, const G4double maxMass) const
-{  ;;;   if (!minMassCache_G4MT_TLS_) minMassCache_G4MT_TLS_ = new G4SampleResonance::minMassMapType  ; G4SampleResonance::minMassMapType &minMassCache = *minMassCache_G4MT_TLS_;  ;;;  
+{ if (!minMassCache_G4MT_TLS_) minMassCache_G4MT_TLS_ = new G4SampleResonance::minMassMapType  ;
 	return SampleMass(p->GetPDGMass(), p->GetPDGWidth(), GetMinimumMass(p), maxMass);
 }
 
@@ -111,7 +111,7 @@ G4double G4SampleResonance::SampleMass(const G4double poleMass,
 		const G4double gamma,
 		const G4double minMass,
 		const G4double maxMass) const
-{  ;;;   if (!minMassCache_G4MT_TLS_) minMassCache_G4MT_TLS_ = new G4SampleResonance::minMassMapType  ; G4SampleResonance::minMassMapType &minMassCache = *minMassCache_G4MT_TLS_;  ;;;  
+{ if (!minMassCache_G4MT_TLS_) minMassCache_G4MT_TLS_ = new G4SampleResonance::minMassMapType  ;
 	// Chooses a mass randomly between minMass and maxMass
 	//     according to a Breit-Wigner function with constant
 	//     width gamma and pole poleMass

@@ -60,7 +60,7 @@ inline void G4PhysicsVector::operator delete(void* aVector)
 }
 
 inline G4double G4PhysicsVector::Value(G4double theEnergy) 
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   // Use cache for speed up - check if the value 'theEnergy' is same as the 
   // last call. If it is same, then use the last value, if not - recompute
 
@@ -70,25 +70,25 @@ inline G4double G4PhysicsVector::Value(G4double theEnergy)
 
 inline
  G4double G4PhysicsVector::GetLastEnergy() const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return cacheG4MTThreadPrivate->lastEnergy;	
 }
 
 inline
  G4double G4PhysicsVector::GetLastValue() const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
    return cacheG4MTThreadPrivate->lastValue;
 }
 
 inline 
  size_t G4PhysicsVector::GetLastBin() const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
    return cacheG4MTThreadPrivate->lastBin;
 }
  
 inline
  G4double G4PhysicsVector::operator[](const size_t binNumber) const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return  dataVector[binNumber];
 }
 
@@ -96,7 +96,7 @@ inline
 
 inline
  G4double G4PhysicsVector::operator()(const size_t binNumber) const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return dataVector[binNumber];
 }
 
@@ -104,7 +104,7 @@ inline
 
 inline
  G4double G4PhysicsVector::Energy(const size_t binNumber) const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return binVector[binNumber];
 }
 
@@ -112,7 +112,7 @@ inline
 
 inline
  G4double G4PhysicsVector::GetMaxEnergy() const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return edgeMax;
 }
 
@@ -120,7 +120,7 @@ inline
 
 inline 
  size_t G4PhysicsVector::GetVectorLength() const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return numberOfNodes;
 }
 
@@ -128,7 +128,7 @@ inline
 
 inline
  G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) 
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return Value(theEnergy);
 }
 
@@ -136,7 +136,7 @@ inline
 
 inline
  G4double G4PhysicsVector::LinearInterpolation(G4int lastBin)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   // Linear interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
   // there is an extra bin hidden from a user at locBin=numberOfBin, 
@@ -154,7 +154,7 @@ inline
 
 inline
  G4double G4PhysicsVector::SplineInterpolation(G4int lastBin)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   // Spline interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
   // there is an extra bin hidden from a user at locBin=numberOfBin, 
@@ -186,7 +186,7 @@ inline
 
 inline 
  void G4PhysicsVector::Interpolation(G4int lastBin)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   if(useSpline) { cacheG4MTThreadPrivate->lastValue = SplineInterpolation(lastBin); }
   else          { cacheG4MTThreadPrivate->lastValue = LinearInterpolation(lastBin); }
 }
@@ -195,7 +195,7 @@ inline
 
 inline 
  void G4PhysicsVector::PutValue(size_t binNumber, G4double theValue)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   dataVector[binNumber] = theValue;
 }
 
@@ -203,7 +203,7 @@ inline
 
 inline 
  G4bool G4PhysicsVector::IsFilledVectorExist() const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   G4bool status=false;
 
   if(numberOfNodes > 0) { status=true; }
@@ -214,7 +214,7 @@ inline
 
 inline 
  G4PhysicsVectorType G4PhysicsVector::GetType() const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return type;
 }
 
@@ -222,7 +222,7 @@ inline
 
 inline 
  void G4PhysicsVector::SetSpline(G4bool val)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   useSpline = val;
 }
 
@@ -230,7 +230,7 @@ inline
 
 inline
 void G4PhysicsVector::SetVerboseLevel(G4int value)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
    verboseLevel = value;
 }
 
@@ -238,7 +238,7 @@ void G4PhysicsVector::SetVerboseLevel(G4int value)
 
 inline
 G4int G4PhysicsVector::GetVerboseLevel(G4int)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
    return verboseLevel;
 }
 

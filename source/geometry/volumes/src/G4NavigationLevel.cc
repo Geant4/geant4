@@ -38,7 +38,7 @@ G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
                                 const G4AffineTransform& afTransform,
                                       EVolume            volTp,
                                       G4int              repNo )
-{  ;;;   if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ; G4Allocator<G4NavigationLevel> &aNavigationLevelAllocator = *aNavigationLevelAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ;
   fLevelRep = new G4NavigationLevelRep( pPhysVol, afTransform, volTp, repNo );
 }
 
@@ -47,7 +47,7 @@ G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
                                 const G4AffineTransform& relativeCurrent,
                                       EVolume            volTp,
                                       G4int              repNo )
-{  ;;;   if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ; G4Allocator<G4NavigationLevel> &aNavigationLevelAllocator = *aNavigationLevelAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ;
   fLevelRep = new G4NavigationLevelRep( pPhysVol, 
                                         levelAbove, 
                                         relativeCurrent, 
@@ -56,23 +56,23 @@ G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
 }
 
 G4NavigationLevel::G4NavigationLevel()
-{  ;;;   if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ; G4Allocator<G4NavigationLevel> &aNavigationLevelAllocator = *aNavigationLevelAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ;
   fLevelRep = new G4NavigationLevelRep();
 }
 
 G4NavigationLevel::G4NavigationLevel(const G4NavigationLevel& right)
   : fLevelRep( right.fLevelRep )
-{  ;;;   if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ; G4Allocator<G4NavigationLevel> &aNavigationLevelAllocator = *aNavigationLevelAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ;
   fLevelRep->AddAReference(); 
 }
 
 G4NavigationLevel::~G4NavigationLevel()
-{  ;;;   if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ; G4Allocator<G4NavigationLevel> &aNavigationLevelAllocator = *aNavigationLevelAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ;
   if( fLevelRep->RemoveAReference() )  { delete fLevelRep; }
 }
 
 G4NavigationLevel& G4NavigationLevel::operator=(const G4NavigationLevel &right)
-{  ;;;   if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ; G4Allocator<G4NavigationLevel> &aNavigationLevelAllocator = *aNavigationLevelAllocator_G4MT_TLS_;  ;;;   
+{ if (!aNavigationLevelAllocator_G4MT_TLS_) aNavigationLevelAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevel>  ; 
   if ( &right != this )
   {
     right.fLevelRep->AddAReference(); 

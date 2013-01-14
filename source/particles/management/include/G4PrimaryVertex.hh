@@ -118,31 +118,31 @@ inline void G4PrimaryVertex::operator delete(void * aPrimaryVertex)
 }
 
 inline G4ThreeVector  G4PrimaryVertex::GetPosition() const
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   return G4ThreeVector(X0,Y0,Z0); }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return G4ThreeVector(X0,Y0,Z0); }
 
 inline void G4PrimaryVertex::SetPosition(G4double x0,G4double y0,G4double z0)
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   X0 = x0; Y0 = y0; Z0 = z0; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; X0 = x0; Y0 = y0; Z0 = z0; }
 
 inline G4double G4PrimaryVertex::GetX0() const
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   return X0; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return X0; }
 
 inline G4double G4PrimaryVertex::GetY0() const
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   return Y0; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return Y0; }
 
 inline G4double G4PrimaryVertex::GetZ0() const
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   return Z0; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return Z0; }
 
 inline G4double G4PrimaryVertex::GetT0() const
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   return T0; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return T0; }
 
 inline void G4PrimaryVertex::SetT0(G4double t0)
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   T0 = t0; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; T0 = t0; }
 
 inline G4int G4PrimaryVertex::GetNumberOfParticle() const
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   return numberOfParticle; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return numberOfParticle; }
 
 inline void G4PrimaryVertex::SetPrimary(G4PrimaryParticle * pp)
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; 
   if(theParticle == 0) { theParticle = pp;     }
   else                 { theTail->SetNext(pp); }
   theTail = pp;
@@ -150,26 +150,26 @@ inline void G4PrimaryVertex::SetPrimary(G4PrimaryParticle * pp)
 }
 
 
-inline void G4PrimaryVertex::SetNext(G4PrimaryVertex* nv){  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   
+inline void G4PrimaryVertex::SetNext(G4PrimaryVertex* nv){ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; 
   if(nextVertex == 0) { nextVertex = nv; }
   else                { tailVertex->SetNext(nv); }
   tailVertex = nv;
 }
 
 inline G4PrimaryVertex* G4PrimaryVertex::GetNext() const
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   return nextVertex; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return nextVertex; }
 
 inline G4double G4PrimaryVertex::GetWeight() const
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   return Weight0; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return Weight0; }
 
 inline void G4PrimaryVertex::SetWeight(G4double w)
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   Weight0 = w; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; Weight0 = w; }
 
 inline void G4PrimaryVertex::SetUserInformation(G4VUserPrimaryVertexInformation* anInfo)
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   userInfo = anInfo; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; userInfo = anInfo; }
 
 inline G4VUserPrimaryVertexInformation* G4PrimaryVertex::GetUserInformation() const
-{  ;;;   if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; G4Allocator<G4PrimaryVertex> &aPrimaryVertexAllocator = *aPrimaryVertexAllocator_G4MT_TLS_;  ;;;   return userInfo; }
+{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return userInfo; }
 
 #endif
 

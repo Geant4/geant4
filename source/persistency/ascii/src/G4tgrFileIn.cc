@@ -50,13 +50,13 @@ __thread std::vector<G4tgrFileIn*> *G4tgrFileIn::theInstances_G4MT_TLS_ = 0;
 //-----------------------------------------------------------------------
 G4tgrFileIn::G4tgrFileIn()
   : theCurrentFile(-1), theName("")
-{  ;;;   if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; std::vector<G4tgrFileIn*> &theInstances = *theInstances_G4MT_TLS_;  ;;;  
+{ if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ;
 }
 
 
 //-----------------------------------------------------------------------
 G4tgrFileIn::~G4tgrFileIn()
-{  ;;;   if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; std::vector<G4tgrFileIn*> &theInstances = *theInstances_G4MT_TLS_;  ;;;  
+{ if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ;
 /*
   std::vector<G4tgrFileIn*>::const_iterator vfcite;
   for( vfcite = theInstances.begin(); vfcite != theInstances.end(); vfcite++)
@@ -96,7 +96,7 @@ G4tgrFileIn& G4tgrFileIn::GetInstance( const G4String& filename )
 
 //-----------------------------------------------------------------------
 void G4tgrFileIn::OpenNewFile( const char* filename )
-{  ;;;   if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; std::vector<G4tgrFileIn*> &theInstances = *theInstances_G4MT_TLS_;  ;;;   
+{ if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; 
   theCurrentFile++;
   std::ifstream* fin = new std::ifstream(filename);
   theFiles.push_back(fin);
@@ -118,7 +118,7 @@ void G4tgrFileIn::OpenNewFile( const char* filename )
 
 //-----------------------------------------------------------------------
 G4tgrFileIn& G4tgrFileIn::GetInstanceOpened( const G4String& filename )
-{  ;;;   if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; std::vector<G4tgrFileIn*> &theInstances = *theInstances_G4MT_TLS_;  ;;;  
+{ if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ;
 
   G4tgrFileIn& filein = G4tgrFileIn::GetInstance(filename);
   if (filein.GetName() != filename )
@@ -137,7 +137,7 @@ G4tgrFileIn& G4tgrFileIn::GetInstanceOpened( const G4String& filename )
 
 //----------------------------------------------------------------------- 
 G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
-{  ;;;   if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; std::vector<G4tgrFileIn*> &theInstances = *theInstances_G4MT_TLS_;  ;;;  
+{ if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ;
   G4int isok = 1;
 
   //---------- Read a line of file:
@@ -364,7 +364,7 @@ G4int G4tgrFileIn::GetWordsInLine( std::vector<G4String>& wordlist)
 
 //-----------------------------------------------------------------------
 void G4tgrFileIn::ErrorInLine()
-{  ;;;   if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; std::vector<G4tgrFileIn*> &theInstances = *theInstances_G4MT_TLS_;  ;;;  
+{ if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ;
   G4cerr << "!! EXITING: ERROR IN LINE No "
          << theLineNo[theCurrentFile] << " file: "
          << theNames[theCurrentFile] << " : ";
@@ -373,7 +373,7 @@ void G4tgrFileIn::ErrorInLine()
 
 //-----------------------------------------------------------------------
 G4bool G4tgrFileIn::EndOfFile()
-{  ;;;   if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; std::vector<G4tgrFileIn*> &theInstances = *theInstances_G4MT_TLS_;  ;;;  
+{ if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ;
   G4bool isok = theFiles[theCurrentFile]->eof();
   if( isok )
   {
@@ -412,7 +412,7 @@ G4bool G4tgrFileIn::EndOfFile()
 
 //-----------------------------------------------------------------------
 void G4tgrFileIn::Close()
-{  ;;;   if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; std::vector<G4tgrFileIn*> &theInstances = *theInstances_G4MT_TLS_;  ;;;  
+{ if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ;
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
@@ -428,7 +428,7 @@ void G4tgrFileIn::Close()
 
 //-----------------------------------------------------------------------
 void G4tgrFileIn::DumpException( const G4String& sent )
-{  ;;;   if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ; std::vector<G4tgrFileIn*> &theInstances = *theInstances_G4MT_TLS_;  ;;;  
+{ if (!theInstances_G4MT_TLS_) theInstances_G4MT_TLS_ = new std::vector<G4tgrFileIn*>  ;
   G4String Err1 = sent + " in file " + theName;
   G4String Err2 = " line No: "
                 + G4UIcommand::ConvertToString(theLineNo[theCurrentFile]);

@@ -41,8 +41,8 @@ G4RayTrajectoryPoint :: G4RayTrajectoryPoint()
   :preStepAtt(0)
   ,postStepAtt(0)
   ,stepLength(0.)
-{  ;;;   if (!G4RayTrajectoryPointAllocator_G4MT_TLS_) G4RayTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectoryPoint>  ; G4Allocator<G4RayTrajectoryPoint> &G4RayTrajectoryPointAllocator = *G4RayTrajectoryPointAllocator_G4MT_TLS_;  ;;;  ;}
+{ if (!G4RayTrajectoryPointAllocator_G4MT_TLS_) G4RayTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectoryPoint>  ;;}
 
 G4RayTrajectoryPoint :: ~G4RayTrajectoryPoint()
-{  ;;;   if (!G4RayTrajectoryPointAllocator_G4MT_TLS_) G4RayTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectoryPoint>  ; G4Allocator<G4RayTrajectoryPoint> &G4RayTrajectoryPointAllocator = *G4RayTrajectoryPointAllocator_G4MT_TLS_;  ;;;  ;}
+{ if (!G4RayTrajectoryPointAllocator_G4MT_TLS_) G4RayTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RayTrajectoryPoint>  ;;}
 

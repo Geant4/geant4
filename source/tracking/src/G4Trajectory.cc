@@ -58,10 +58,10 @@ G4Trajectory::G4Trajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),
    PDGEncoding( 0 ), PDGCharge(0.0), ParticleName(""),
    initialKineticEnergy( 0. ), initialMomentum( G4ThreeVector() )
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  ;}
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;;}
 
 G4Trajectory::G4Trajectory(const G4Track* aTrack)
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
    G4ParticleDefinition * fpParticleDefinition = aTrack->GetDefinition();
    ParticleName = fpParticleDefinition->GetParticleName();
    PDGCharge = fpParticleDefinition->GetPDGCharge();
@@ -76,7 +76,7 @@ G4Trajectory::G4Trajectory(const G4Track* aTrack)
 }
 
 G4Trajectory::G4Trajectory(G4Trajectory & right):G4VTrajectory()
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
   ParticleName = right.ParticleName;
   PDGCharge = right.PDGCharge;
   PDGEncoding = right.PDGEncoding;
@@ -94,7 +94,7 @@ G4Trajectory::G4Trajectory(G4Trajectory & right):G4VTrajectory()
 }
 
 G4Trajectory::~G4Trajectory()
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
   if (positionRecord) {
     //  positionRecord->clearAndDestroy();
     size_t i;
@@ -107,21 +107,21 @@ G4Trajectory::~G4Trajectory()
 }
 
 void G4Trajectory::ShowTrajectory(std::ostream& os) const
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::ShowTrajectory(os);
   // ... or override with your own code here.
 }
 
 void G4Trajectory::DrawTrajectory() const
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
   // Invoke the default implementation in G4VTrajectory...
   G4VTrajectory::DrawTrajectory();
   // ... or override with your own code here.
 }
 
 const std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
   G4bool isNew;
   std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4Trajectory",isNew);
@@ -164,7 +164,7 @@ const std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
 }
 
 std::vector<G4AttValue>* G4Trajectory::CreateAttValues() const
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
   values->push_back
@@ -201,18 +201,18 @@ std::vector<G4AttValue>* G4Trajectory::CreateAttValues() const
 }
 
 void G4Trajectory::AppendStep(const G4Step* aStep)
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
    positionRecord->push_back( new G4TrajectoryPoint(aStep->GetPostStepPoint()->
                                  GetPosition() ));
 }
   
 G4ParticleDefinition* G4Trajectory::GetParticleDefinition()
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
    return (G4ParticleTable::GetParticleTable()->FindParticle(ParticleName));
 }
 
 void G4Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
-{  ;;;   if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ; G4Allocator<G4Trajectory> &aTrajectoryAllocator = *aTrajectoryAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryAllocator_G4MT_TLS_) aTrajectoryAllocator_G4MT_TLS_ = new G4Allocator<G4Trajectory>  ;
   if(!secondTrajectory) return;
 
   G4Trajectory* seco = (G4Trajectory*)secondTrajectory;

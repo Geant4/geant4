@@ -47,26 +47,26 @@
 __thread G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator_G4MT_TLS_ = 0;
 
 G4TrajectoryPoint::G4TrajectoryPoint()
-{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ;
   fPosition = G4ThreeVector(0.,0.,0.);
 }
 
 G4TrajectoryPoint::G4TrajectoryPoint(G4ThreeVector pos)
-{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ;
   fPosition = pos;
 }
 
 G4TrajectoryPoint::G4TrajectoryPoint(const G4TrajectoryPoint &right)
  : G4VTrajectoryPoint(),fPosition(right.fPosition)
-{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ;
 }
 
 G4TrajectoryPoint::~G4TrajectoryPoint()
-{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ;
 }
 
 const std::map<G4String,G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
-{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ;
   G4bool isNew;
   std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4TrajectoryPoint",isNew);
@@ -79,7 +79,7 @@ const std::map<G4String,G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
 }
 
 std::vector<G4AttValue>* G4TrajectoryPoint::CreateAttValues() const
-{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
+{ if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ;
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
 
   values->push_back(G4AttValue("Pos",G4BestUnit(fPosition,"Length"),""));

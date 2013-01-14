@@ -55,7 +55,7 @@ __thread auto_ptr<G4DNAChemistryManager> *G4DNAChemistryManager::fInstance_G4MT_
 
 G4DNAChemistryManager::G4DNAChemistryManager() :
     fActiveChemistry(false)
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ; auto_ptr<G4DNAChemistryManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ;
     fExcitationLevel = 0;
     fIonisationLevel = 0;
     fWriteFile       = false;
@@ -90,7 +90,7 @@ void G4DNAChemistryManager::DeleteInstance()
 
 void G4DNAChemistryManager::WriteInto(const G4String& output,
                                       ios_base::openmode mode)
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ; auto_ptr<G4DNAChemistryManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ;
     fOutput.open(output.data(), mode);
     fOutput << std::setprecision(6) << std::scientific;
 
@@ -115,7 +115,7 @@ void G4DNAChemistryManager::WriteInto(const G4String& output,
 }
 
 void G4DNAChemistryManager::CloseFile()
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ; auto_ptr<G4DNAChemistryManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ;
     if (fOutput.is_open())
     {
         fOutput.close();
@@ -124,7 +124,7 @@ void G4DNAChemistryManager::CloseFile()
 }
 
 G4DNAWaterExcitationStructure* G4DNAChemistryManager::GetExcitationLevel()
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ; auto_ptr<G4DNAChemistryManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ;
     if(!fExcitationLevel)
     {
         fExcitationLevel = new G4DNAWaterExcitationStructure;
@@ -133,7 +133,7 @@ G4DNAWaterExcitationStructure* G4DNAChemistryManager::GetExcitationLevel()
 }
 
 G4DNAWaterIonisationStructure* G4DNAChemistryManager::GetIonisationLevel()
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ; auto_ptr<G4DNAChemistryManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ;
     if(!fIonisationLevel)
     {
         fIonisationLevel = new G4DNAWaterIonisationStructure;
@@ -144,7 +144,7 @@ G4DNAWaterIonisationStructure* G4DNAChemistryManager::GetIonisationLevel()
 void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modification,
                                                 G4int electronicLevel,
                                                 const G4Track* theIncomingTrack)
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ; auto_ptr<G4DNAChemistryManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ;
     if(fWriteFile)
     {
         G4double energy = -1.;
@@ -209,7 +209,7 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
 void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTrack,
                                                    G4ThreeVector* finalPosition)
 // finalPosition is a pointer because this argument is optional
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ; auto_ptr<G4DNAChemistryManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ;
     if(fWriteFile)
     {
         fOutput << setw(11)<< theIncomingTrack->GetTrackID()
@@ -254,7 +254,7 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTra
 
 void G4DNAChemistryManager::PushMolecule(G4Molecule*& molecule, double time,
                                          const G4ThreeVector& position, int parentID)
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ; auto_ptr<G4DNAChemistryManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ;
     if(fWriteFile)
     {
         fOutput << setw(11)<< parentID
@@ -286,7 +286,7 @@ void G4DNAChemistryManager::PushMolecule(G4Molecule*& molecule, double time,
 
 void G4DNAChemistryManager::PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecule,
                                                              const G4Track* theIncomingTrack)
-{  ;;;   if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ; auto_ptr<G4DNAChemistryManager> &fInstance = *fInstance_G4MT_TLS_;  ;;;  
+{ if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4DNAChemistryManager> (0) ;
     if(fWriteFile)
     {
         fOutput << setw(11)<< theIncomingTrack->GetTrackID()

@@ -195,136 +195,136 @@ inline void G4PrimaryParticle::operator delete(void * aPrimaryParticle)
 }
 
 inline G4double G4PrimaryParticle::GetMass() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return mass;  }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return mass;  }
 
 inline G4double G4PrimaryParticle::GetCharge() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return charge; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return charge; }
 
 inline G4int G4PrimaryParticle::GetPDGcode() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return PDGcode; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return PDGcode; }
      
 inline G4ParticleDefinition * G4PrimaryParticle::GetG4code() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return const_cast<G4ParticleDefinition*>(G4code); }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return const_cast<G4ParticleDefinition*>(G4code); }
 
 inline const G4ParticleDefinition * G4PrimaryParticle::GetParticleDefinition() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return G4code; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return G4code; }
     
 inline G4double G4PrimaryParticle::GetTotalMomentum() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; 
   if (mass<0.)  return kinE; 
   else          return std::sqrt(kinE*(kinE+2.*mass));
 }
 
 inline G4ThreeVector G4PrimaryParticle::GetMomentum() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return GetTotalMomentum()*direction;}
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return GetTotalMomentum()*direction;}
 
 inline const G4ThreeVector& G4PrimaryParticle::GetMomentumDirection() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return direction;}
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return direction;}
 
 inline void G4PrimaryParticle::SetMomentumDirection(const G4ThreeVector& p) 
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   direction = p;}
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; direction = p;}
 
 inline G4double G4PrimaryParticle::GetPx() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return GetTotalMomentum()*direction.x();}
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return GetTotalMomentum()*direction.x();}
 
 inline G4double G4PrimaryParticle::GetPy() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return GetTotalMomentum()*direction.y();}
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return GetTotalMomentum()*direction.y();}
 
 inline G4double G4PrimaryParticle::GetPz() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return GetTotalMomentum()*direction.z();}
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return GetTotalMomentum()*direction.z();}
 
 inline G4double G4PrimaryParticle::GetTotalEnergy() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; 
   if (mass<0.)  return kinE; 
   else          return kinE+mass;
 }
 
 inline void G4PrimaryParticle::SetTotalEnergy(G4double eTot ) 
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; 
   if (mass<0.)  kinE = eTot; 
   else          kinE = eTot - mass;
 }
 
 inline G4double G4PrimaryParticle::GetKineticEnergy() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return kinE; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return kinE; }
    
 inline void G4PrimaryParticle::SetKineticEnergy(G4double eKin) 
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   kinE = eKin; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; kinE = eKin; }
 
 inline G4PrimaryParticle * G4PrimaryParticle::GetNext() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return nextParticle; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return nextParticle; }
 
 inline G4PrimaryParticle * G4PrimaryParticle::GetDaughter() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return daughterParticle; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return daughterParticle; }
 
 inline G4int G4PrimaryParticle::GetTrackID() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return trackID; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return trackID; }
 
 inline G4ThreeVector G4PrimaryParticle::GetPolarization() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return G4ThreeVector(polX,polY,polZ); }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return G4ThreeVector(polX,polY,polZ); }
 
 inline G4double G4PrimaryParticle::GetPolX() const 
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return polX; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return polX; }
 
 inline G4double G4PrimaryParticle::GetPolY() const 
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return polY; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return polY; }
 
 inline G4double G4PrimaryParticle::GetPolZ() const 
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return polZ; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return polZ; }
 
 inline G4double G4PrimaryParticle::GetWeight() const 
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return Weight0; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return Weight0; }
 
 inline void G4PrimaryParticle::SetWeight(G4double w) 
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   Weight0 = w; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; Weight0 = w; }
 
 inline void G4PrimaryParticle::SetProperTime(G4double t)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   properTime = t; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; properTime = t; }
 
 inline G4double G4PrimaryParticle::GetProperTime() const 
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return properTime; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return properTime; }
 
 inline void G4PrimaryParticle::SetUserInformation(G4VUserPrimaryParticleInformation* anInfo)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   userInfo = anInfo; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; userInfo = anInfo; }
 
 inline G4VUserPrimaryParticleInformation* G4PrimaryParticle::GetUserInformation() const
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   return userInfo; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; return userInfo; }
 
 inline void G4PrimaryParticle::SetG4code(const G4ParticleDefinition* Gcode)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ;
   SetParticleDefinition(Gcode);
 }
 
 inline void G4PrimaryParticle::SetNext(G4PrimaryParticle * np)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; 
   if   (nextParticle == 0) { nextParticle = np; }
   else                     { nextParticle->SetNext(np); }
 }
 
 inline void G4PrimaryParticle::SetDaughter(G4PrimaryParticle * np)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; 
   if(daughterParticle == 0)  { daughterParticle = np; }
   else                       { daughterParticle->SetNext(np); }
 }
      
 inline void G4PrimaryParticle::SetTrackID(G4int id)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   trackID = id; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; trackID = id; }
 
 inline void G4PrimaryParticle::SetMass(G4double mas)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   mass = mas; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; mass = mas; }
 
 inline void G4PrimaryParticle::SetCharge(G4double chg)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;   charge = chg; }
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; charge = chg; }
 
 inline void G4PrimaryParticle::SetPolarization(G4double px,G4double py,G4double pz)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ;
   polX = px;
   polY = py;
   polZ = pz;
 }
   
 inline void G4PrimaryParticle::SetPolarization(const G4ThreeVector& pol)
-{  ;;;   if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ; G4Allocator<G4PrimaryParticle> &aPrimaryParticleAllocator = *aPrimaryParticleAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPrimaryParticleAllocator_G4MT_TLS_) aPrimaryParticleAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryParticle>  ;
   polX = pol.x();
   polY = pol.y();
   polZ = pol.z();

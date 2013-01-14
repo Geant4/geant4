@@ -49,13 +49,13 @@ __thread G4mmss *G4tgrVolumeDivision::theSupportedAxis_G4MT_TLS_ = 0;
 
 //-------------------------------------------------------------
 G4tgrVolumeDivision::~G4tgrVolumeDivision()
-{  ;;;   if (!theSupportedAxis_G4MT_TLS_) theSupportedAxis_G4MT_TLS_ = new G4mmss  ; G4mmss &theSupportedAxis = *theSupportedAxis_G4MT_TLS_;  ;;;  
+{ if (!theSupportedAxis_G4MT_TLS_) theSupportedAxis_G4MT_TLS_ = new G4mmss  ;
 }
 
 
 //-------------------------------------------------------------
 G4tgrVolumeDivision::G4tgrVolumeDivision( const std::vector<G4String>& wl ) 
-{  ;;;   if (!theSupportedAxis_G4MT_TLS_) theSupportedAxis_G4MT_TLS_ = new G4mmss  ; G4mmss &theSupportedAxis = *theSupportedAxis_G4MT_TLS_;  ;;;  
+{ if (!theSupportedAxis_G4MT_TLS_) theSupportedAxis_G4MT_TLS_ = new G4mmss  ;
   // wl: NAME PARENT  MATERIAL AXIS STEP/NDIV OFFSET
 
   G4tgrUtils::CheckWLsize( wl, 6, WLSIZE_GE,

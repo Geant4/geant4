@@ -70,7 +70,7 @@ __thread std::vector<G4double*> *G4PhotoNuclearCrossSection::HEN_G4MT_TLS_ = 0;
 
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection(const G4String& nam)
  : G4VCrossSectionDataSet(nam)
-{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  }
+{ if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ;}
 
 G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 {  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
@@ -85,7 +85,7 @@ G4PhotoNuclearCrossSection::~G4PhotoNuclearCrossSection()
 
 void
 G4PhotoNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
-{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
+{ if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ;
   outFile << "G4PhotoNuclearCrossSection provides the total inelastic\n"
           << "cross section for photon interactions with nuclei.  The\n"
           << "cross section is a parameterization of data which covers\n" 
@@ -96,7 +96,7 @@ G4bool
 G4PhotoNuclearCrossSection::IsIsoApplicable(const G4DynamicParticle* particle, 
 					    G4int /*Z*/, G4int /*A*/,
 					    const G4Element*, const G4Material*)
-{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
+{ if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ;
   G4bool result = false;
   if( particle->GetDefinition()->GetPDGEncoding()==22) result = true;
   return result;
@@ -262,7 +262,7 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
 
 // Gives the threshold energy for different nuclei (min of p- and n-threshold)
 G4double G4PhotoNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
-{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
+{ if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ;
   // CHIPS - Direct GEANT
   //static const G4double mNeut = G4QPDGCode(2112).GetMass();
   //static const G4double mProt = G4QPDGCode(2212).GetMass();
@@ -346,7 +346,7 @@ G4double
 G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N, 
                                          const G4double X0, const G4double DX, 
                                          const G4double* Y)
-{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
+{ if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ;
   if(DX<=0. || N<2)
   {
     G4cout<<"***G4PhotoNuclearCrossSection::EquLinearFit: DX="<<DX<<", N="<<N<<G4endl;
@@ -370,7 +370,7 @@ G4PhotoNuclearCrossSection::EquLinearFit(G4double X, G4int N,
 
 G4int 
 G4PhotoNuclearCrossSection::GetFunctions(G4double a, G4double* y, G4double* z)
-{  ;;;   if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &HEN = *HEN_G4MT_TLS_;  ;;;    ;;;   if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &GDR = *GDR_G4MT_TLS_;  ;;;  
+{ if (!HEN_G4MT_TLS_) HEN_G4MT_TLS_ = new std::vector<G4double*>  ; if (!GDR_G4MT_TLS_) GDR_G4MT_TLS_ = new std::vector<G4double*>  ;
   static const G4int nLA=49;               // A#of GDResonance basic nuclei
   static const G4double LA[nLA]={
     2.,    4.,    6.,    7.,    9.,   12.,   14.,   15.,   16.,  19.,   23.,

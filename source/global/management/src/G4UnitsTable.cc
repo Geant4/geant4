@@ -83,20 +83,20 @@ G4UnitDefinition::G4UnitDefinition(const G4String& name,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition::~G4UnitDefinition()
-{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
+{ if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition::G4UnitDefinition(const G4UnitDefinition& right)
-{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
+{ if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ;
     *this = right;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition& G4UnitDefinition::operator=(const G4UnitDefinition& right)
-{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
+{ if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ;
   if (this != &right)
     {
       Name          = right.Name;
@@ -187,7 +187,7 @@ void G4UnitDefinition::PrintDefinition()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4UnitDefinition::BuildUnitsTable()
-{  ;;;   if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ; G4UnitsTable &theUnitsTable = *theUnitsTable_G4MT_TLS_;  ;;;  
+{ if (!theUnitsTable_G4MT_TLS_) theUnitsTable_G4MT_TLS_ = new G4UnitsTable  ;
  //Length
  new G4UnitDefinition(    "parsec","pc"      ,"Length",parsec); 
  new G4UnitDefinition( "kilometer","km"      ,"Length",kilometer);

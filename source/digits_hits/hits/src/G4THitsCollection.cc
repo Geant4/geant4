@@ -32,15 +32,15 @@
 __thread G4Allocator<G4HitsCollection> *anHCAllocator_G4MT_TLS_ = 0;
 
 G4HitsCollection::G4HitsCollection() : theCollection((void*)0)
-{  ;;;   if (!anHCAllocator_G4MT_TLS_) anHCAllocator_G4MT_TLS_ = new G4Allocator<G4HitsCollection>  ; G4Allocator<G4HitsCollection> &anHCAllocator = *anHCAllocator_G4MT_TLS_;  ;;;  ;}
+{ if (!anHCAllocator_G4MT_TLS_) anHCAllocator_G4MT_TLS_ = new G4Allocator<G4HitsCollection>  ;;}
 
 G4HitsCollection::G4HitsCollection(G4String detName,G4String colNam)
 : G4VHitsCollection(detName,colNam), theCollection((void*)0)
-{  ;;;   if (!anHCAllocator_G4MT_TLS_) anHCAllocator_G4MT_TLS_ = new G4Allocator<G4HitsCollection>  ; G4Allocator<G4HitsCollection> &anHCAllocator = *anHCAllocator_G4MT_TLS_;  ;;;  ;}
+{ if (!anHCAllocator_G4MT_TLS_) anHCAllocator_G4MT_TLS_ = new G4Allocator<G4HitsCollection>  ;;}
 
 G4HitsCollection::~G4HitsCollection()
-{  ;;;   if (!anHCAllocator_G4MT_TLS_) anHCAllocator_G4MT_TLS_ = new G4Allocator<G4HitsCollection>  ; G4Allocator<G4HitsCollection> &anHCAllocator = *anHCAllocator_G4MT_TLS_;  ;;;  ;}
+{ if (!anHCAllocator_G4MT_TLS_) anHCAllocator_G4MT_TLS_ = new G4Allocator<G4HitsCollection>  ;;}
 
 int G4HitsCollection::operator==(const G4HitsCollection &right) const
-{  ;;;   if (!anHCAllocator_G4MT_TLS_) anHCAllocator_G4MT_TLS_ = new G4Allocator<G4HitsCollection>  ; G4Allocator<G4HitsCollection> &anHCAllocator = *anHCAllocator_G4MT_TLS_;  ;;;   return (collectionName==right.collectionName); }
+{ if (!anHCAllocator_G4MT_TLS_) anHCAllocator_G4MT_TLS_ = new G4Allocator<G4HitsCollection>  ; return (collectionName==right.collectionName); }
 

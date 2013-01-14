@@ -40,7 +40,7 @@
 __thread std::map<const G4Track*, G4bool> *G4ITModelProcessor::fHasReacted_G4MT_TLS_ = 0;
 
 G4ITModelProcessor::G4ITModelProcessor()
-{  ;;;   if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ; std::map<const G4Track*, G4bool> &fHasReacted = *fHasReacted_G4MT_TLS_;  ;;;  
+{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
     //ctor
     fpTrack = 0;
     fpModelHandler = 0;
@@ -57,7 +57,7 @@ G4ITModelProcessor::G4ITModelProcessor()
 }
 
 G4ITModelProcessor::~G4ITModelProcessor()
-{  ;;;   if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ; std::map<const G4Track*, G4bool> &fHasReacted = *fHasReacted_G4MT_TLS_;  ;;;  
+{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
     //dtor
 //    if(fpModelHandler) delete fpModelHandler; deleted by G4ITStepManager
     fCurrentModel.clear();
@@ -78,14 +78,14 @@ G4ITModelProcessor::G4ITModelProcessor(const G4ITModelProcessor& /*other*/)
 
 // Should not be used
 G4ITModelProcessor& G4ITModelProcessor::operator=(const G4ITModelProcessor& rhs)
-{  ;;;   if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ; std::map<const G4Track*, G4bool> &fHasReacted = *fHasReacted_G4MT_TLS_;  ;;;  
+{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
     if (this == &rhs) return *this; // handle self assignment
     //assignment operator
     return *this;
 }
 //______________________________________________________________________________
 void G4ITModelProcessor::Initialize()
-{  ;;;   if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ; std::map<const G4Track*, G4bool> &fHasReacted = *fHasReacted_G4MT_TLS_;  ;;;  
+{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
     fpModelHandler->Initialize();
     fInitialized = true;
 }
@@ -93,7 +93,7 @@ void G4ITModelProcessor::Initialize()
 //______________________________________________________________________________
 void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
                                            const G4double& userMinTime)
-{  ;;;   if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ; std::map<const G4Track*, G4bool> &fHasReacted = *fHasReacted_G4MT_TLS_;  ;;;  
+{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
     // G4cout << "G4ITModelProcessor::InitializeStepper" << G4endl;
     if(fpModelHandler==0)
     {
@@ -154,7 +154,7 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
 
 //______________________________________________________________________________
 void G4ITModelProcessor::CalculateTimeStep(const G4Track* track, const G4double userMinTimeStep)
-{  ;;;   if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ; std::map<const G4Track*, G4bool> &fHasReacted = *fHasReacted_G4MT_TLS_;  ;;;  
+{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
     // G4cout  << "G4ITModelProcessor::CalculateStep" << G4endl;
     CleanProcessor();
     if(track == 0)
@@ -172,7 +172,7 @@ void G4ITModelProcessor::CalculateTimeStep(const G4Track* track, const G4double 
 
 //______________________________________________________________________________
 void G4ITModelProcessor::DoCalculateStep()
-{  ;;;   if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ; std::map<const G4Track*, G4bool> &fHasReacted = *fHasReacted_G4MT_TLS_;  ;;;  
+{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
     if(fpModel) // ie only one model has been declared and will be used
     {
         fpModel -> GetTimeStepper()->CalculateStep(*fpTrack, fUserMinTimeStep);

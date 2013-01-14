@@ -109,7 +109,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
    useSpline(spline), 
    dBin(0.), baseBin(0.),
    verboseLevel(0)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
 
   g4physicsVectorInstanceID = g4physicsVectorSubInstanceManager.CreateSubInstance();
 
@@ -119,14 +119,14 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
 // --------------------------------------------------------------
 
 G4PhysicsVector::~G4PhysicsVector() 
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   delete cacheG4MTThreadPrivate; cacheG4MTThreadPrivate =0;
 }
 
 // --------------------------------------------------------------
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
 
   g4physicsVectorInstanceID = g4physicsVectorSubInstanceManager.CreateSubInstance();
 
@@ -143,7 +143,7 @@ G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 // --------------------------------------------------------------
 
 G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   if (&right==this)  { return *this; }
   dBin         = right.dBin;
   baseBin      = right.baseBin;
@@ -157,28 +157,28 @@ G4PhysicsVector& G4PhysicsVector::operator=(const G4PhysicsVector& right)
 // --------------------------------------------------------------
 
 G4int G4PhysicsVector::operator==(const G4PhysicsVector &right) const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return (this == &right);
 }
 
 // --------------------------------------------------------------
 
 G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return (this != &right);
 }
 
 // --------------------------------------------------------------
 
 void G4PhysicsVector::DeleteData()
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   secDerivative.clear();
 }
 
 // --------------------------------------------------------------
 
 void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   type = vec.type;
   edgeMin = vec.edgeMin;
   edgeMax = vec.edgeMax;
@@ -206,14 +206,14 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
 // --------------------------------------------------------------
 
 G4double G4PhysicsVector::GetLowEdgeEnergy(size_t binNumber) const
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   return binVector[binNumber];
 }
 
 // --------------------------------------------------------------
 
 G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   // Ascii mode
   if (ascii)
   {
@@ -246,7 +246,7 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 // --------------------------------------------------------------
 
 G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   // clear properties;
   cacheG4MTThreadPrivate->lastEnergy=-DBL_MAX;
   cacheG4MTThreadPrivate->lastValue =0.;
@@ -333,7 +333,7 @@ G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 
 void 
 G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   size_t n = dataVector.size();
   size_t i;
   if(n > 0) { 
@@ -361,7 +361,7 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
   //  First derivatives at the first and the last point should be provided
   //  See for example W.H. Press et al. "Numerical recipes in C"
   //  Cambridge University Press, 1997.
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   if(4 > numberOfNodes)   // cannot compute derivatives for less than 4 bins
   {
     ComputeSecDerivatives();
@@ -422,7 +422,7 @@ void G4PhysicsVector::FillSecondDerivatives()
   // Computation of second derivatives using "Not-a-knot" endpoint conditions
   // B.I. Kvasov "Methods of shape-preserving spline approximation"
   // World Scientific, 2000
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;    
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;  
   if(5 > numberOfNodes)  // cannot compute derivatives for less than 4 points
   {
     ComputeSecDerivatives();
@@ -490,7 +490,7 @@ void G4PhysicsVector::FillSecondDerivatives()
 void 
 G4PhysicsVector::ComputeSecDerivatives()
   //  A simplified method of computation of second derivatives 
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   if(!SplinePossible())  { return; }
 
   if(3 > numberOfNodes)  // cannot compute derivatives for less than 4 bins
@@ -517,7 +517,7 @@ G4PhysicsVector::ComputeSecDerivatives()
 G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   secDerivative.clear();
   if(!useSpline)  { return useSpline; }
   secDerivative.reserve(numberOfNodes);
@@ -535,7 +535,7 @@ G4bool G4PhysicsVector::SplinePossible()
 // --------------------------------------------------------------
 
 std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   // binning
   out << std::setprecision(12) << pv.edgeMin << " "
       << pv.edgeMax << " " << pv.numberOfNodes << G4endl; 
@@ -554,7 +554,7 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 //---------------------------------------------------------------
 
 void G4PhysicsVector::ComputeValue(G4double theEnergy) 
-{  ;;;   if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ; G4Allocator<G4PhysicsVector> &aPVAllocator = *aPVAllocator_G4MT_TLS_;  ;;;  
+{ if (!aPVAllocator_G4MT_TLS_) aPVAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVector>  ;
   // Use cache for speed up - check if the value 'theEnergy' lies 
   // between the last energy and low edge of of the 
   // bin of last call, then the last bin location is used.

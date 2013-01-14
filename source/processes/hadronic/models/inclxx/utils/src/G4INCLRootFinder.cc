@@ -138,7 +138,7 @@ namespace G4INCL {
   }
 
   std::pair<G4double,G4double> RootFinder::bracketRoot(RootFunctor const * const f, G4double x0) 
-  {  ;;;   if (!solution_G4MT_TLS_) solution_G4MT_TLS_ = new RootFinder_solution_t  ; RootFinder_solution_t &solution = *solution_G4MT_TLS_;  ;;;  
+  { if (!solution_G4MT_TLS_) solution_G4MT_TLS_ = new RootFinder_solution_t  ;
     G4double y0 = (*f)(x0);
 
     const G4double scaleFactor = 1.5;

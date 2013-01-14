@@ -104,7 +104,7 @@ G4Colour::AddToMap(const G4String& key, const G4Colour& colour)
 
 void
 G4Colour::InitialiseColourMap() 
-{  ;;;   if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ; std::map<G4String, G4Colour> &fColourMap = *fColourMap_G4MT_TLS_;  ;;;  
+{ if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ;
   // Standard colours
   AddToMap("white",   G4Colour::White());
   AddToMap("grey",    G4Colour::Grey());

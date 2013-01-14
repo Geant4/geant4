@@ -46,7 +46,7 @@ G4NavigationLevelRep::G4NavigationLevelRep( G4VPhysicalVolume* pPhysVol,
       sReplicaNo(repNo),
       sVolumeType(volTp),
       fCountRef(1) 
-{  ;;;   if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; G4Allocator<G4NavigationLevelRep> &aNavigLevelRepAllocator = *aNavigLevelRepAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ;
 }
 
 G4NavigationLevelRep::G4NavigationLevelRep()
@@ -55,7 +55,7 @@ G4NavigationLevelRep::G4NavigationLevelRep()
       sReplicaNo(-1),
       sVolumeType(kReplica),
       fCountRef(1) 
-{  ;;;   if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; G4Allocator<G4NavigationLevelRep> &aNavigLevelRepAllocator = *aNavigLevelRepAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ;
 }
 
 G4NavigationLevelRep::G4NavigationLevelRep( G4VPhysicalVolume* pPhysVol,
@@ -67,7 +67,7 @@ G4NavigationLevelRep::G4NavigationLevelRep( G4VPhysicalVolume* pPhysVol,
       sReplicaNo(repNo),
       sVolumeType(volTp),
       fCountRef(1) 
-{  ;;;   if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; G4Allocator<G4NavigationLevelRep> &aNavigLevelRepAllocator = *aNavigLevelRepAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ;
   sTransform.InverseProduct( levelAbove, relativeCurrent );
 }
 
@@ -77,14 +77,14 @@ G4NavigationLevelRep::G4NavigationLevelRep( G4NavigationLevelRep& right )
       sReplicaNo(right.sReplicaNo),
       sVolumeType(right.sVolumeType),
       fCountRef(1) 
-{  ;;;   if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; G4Allocator<G4NavigationLevelRep> &aNavigLevelRepAllocator = *aNavigLevelRepAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ;
 }
 
 // Destructor
 //--------------
 
 G4NavigationLevelRep::~G4NavigationLevelRep()
-{  ;;;   if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; G4Allocator<G4NavigationLevelRep> &aNavigLevelRepAllocator = *aNavigLevelRepAllocator_G4MT_TLS_;  ;;;  
+{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ;
 #ifdef DEBUG_NAVIG_LEVEL
   if(fCountRef>0)
   {
@@ -100,7 +100,7 @@ G4NavigationLevelRep::~G4NavigationLevelRep()
 
 G4NavigationLevelRep& 
 G4NavigationLevelRep::operator=( const G4NavigationLevelRep &right )
-{  ;;;   if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; G4Allocator<G4NavigationLevelRep> &aNavigLevelRepAllocator = *aNavigLevelRepAllocator_G4MT_TLS_;  ;;;   
+{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; 
   if ( &right != this )
   {
     sTransform =  right.sTransform;  
