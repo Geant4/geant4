@@ -83,8 +83,8 @@ namespace G4INCL {
      * Used to determine the universe radius at any energy.
      */
     static G4double interactionDistanceNN1GeV() {
-      static __thread bool interactionDistanceNN1GeVisInitialized = false;
-      static __thread G4double interactionDistanceNN1GeVanswer = 0;
+      static G4ThreadLocal bool interactionDistanceNN1GeVisInitialized = false;
+      static G4ThreadLocal G4double interactionDistanceNN1GeVanswer = 0;
       //Need special treatment to handle TLS...
       if (!interactionDistanceNN1GeVisInitialized) {
 	interactionDistanceNN1GeVisInitialized = true;
@@ -98,8 +98,8 @@ namespace G4INCL {
      * Used to determine the universe radius at any energy.
      */
     static G4double interactionDistancePiN1GeV() {
-    static __thread bool interactionDistancePiN1GeVisInitialized = false;
-    static __thread G4double interactionDistancePiN1GeVanswer = 0;
+    static G4ThreadLocal bool interactionDistancePiN1GeVisInitialized = false;
+    static G4ThreadLocal G4double interactionDistancePiN1GeVanswer = 0;
       if (!interactionDistancePiN1GeVisInitialized) {
 	interactionDistancePiN1GeVisInitialized = true;
 	interactionDistancePiN1GeVanswer = CrossSections::interactionDistancePiN(1000.);

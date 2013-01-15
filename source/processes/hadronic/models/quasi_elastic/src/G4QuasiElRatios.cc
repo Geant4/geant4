@@ -53,9 +53,9 @@
 
 
 // initialisation of statics
-__thread std::vector<G4double*> *G4QuasiElRatios::vT_G4MT_TLS_ = 0; // Vector of pointers to LinTable in C++ heap
-__thread std::vector<G4double*> *G4QuasiElRatios::vL_G4MT_TLS_ = 0; // Vector of pointers to LogTable in C++ heap
-__thread std::vector<std::pair<G4double,G4double>*> *G4QuasiElRatios::vX_G4MT_TLS_ = 0; // ETPointers to LogTable
+G4ThreadLocal std::vector<G4double*> *G4QuasiElRatios::vT_G4MT_TLS_ = 0; // Vector of pointers to LinTable in C++ heap
+G4ThreadLocal std::vector<G4double*> *G4QuasiElRatios::vL_G4MT_TLS_ = 0; // Vector of pointers to LogTable in C++ heap
+G4ThreadLocal std::vector<std::pair<G4double,G4double>*> *G4QuasiElRatios::vX_G4MT_TLS_ = 0; // ETPointers to LogTable
 
 G4QuasiElRatios::G4QuasiElRatios()
 { if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
@@ -84,7 +84,7 @@ G4QuasiElRatios::~G4QuasiElRatios()
 // Returns Pointer to the G4VQCrossSection class
 G4QuasiElRatios* G4QuasiElRatios::GetPointer()
 { if (!vX_G4MT_TLS_) vX_G4MT_TLS_ = new std::vector<std::pair<G4double,G4double>*>  ; if (!vL_G4MT_TLS_) vL_G4MT_TLS_ = new std::vector<G4double*>  ; if (!vT_G4MT_TLS_) vT_G4MT_TLS_ = new std::vector<G4double*>  ;
-    static __thread G4QuasiElRatios *theRatios_G4MT_TLS_ = 0 ; if (!theRatios_G4MT_TLS_) theRatios_G4MT_TLS_ = new  G4QuasiElRatios  ;  G4QuasiElRatios &theRatios = *theRatios_G4MT_TLS_;   // *** Static body of the QEl Cross Section ***
+    static G4ThreadLocal G4QuasiElRatios *theRatios_G4MT_TLS_ = 0 ; if (!theRatios_G4MT_TLS_) theRatios_G4MT_TLS_ = new  G4QuasiElRatios  ;  G4QuasiElRatios &theRatios = *theRatios_G4MT_TLS_;   // *** Static body of the QEl Cross Section ***
     return &theRatios;
 }
 
@@ -123,22 +123,22 @@ G4double G4QuasiElRatios::GetQF2IN_Ratio(G4double m_s, G4int A)
     static const G4double dl=(lsa-lsi)/nls;// Step of the logarithmic Table
     static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
     static const G4double toler=.01;      // The tolarence mb defining the same cross-section
-    static __thread G4double lastS=0.;             // The last sigma value for which R was calculated
-    static __thread G4double lastR=0.;             // The last ratio R which was calculated
+    static G4ThreadLocal G4double lastS=0.;             // The last sigma value for which R was calculated
+    static G4ThreadLocal G4double lastR=0.;             // The last ratio R which was calculated
     // Local Associative Data Base:
-    static __thread std::vector<G4int>     *vA_G4MT_TLS_ = 0 ; if (!vA_G4MT_TLS_) vA_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vA = *vA_G4MT_TLS_;     // Vector of calculated A
-    static __thread std::vector<G4double>  *vH_G4MT_TLS_ = 0 ; if (!vH_G4MT_TLS_) vH_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vH = *vH_G4MT_TLS_;     // Vector of max s initialized in the LinTable
-    static __thread std::vector<G4int>     *vN_G4MT_TLS_ = 0 ; if (!vN_G4MT_TLS_) vN_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vN = *vN_G4MT_TLS_;     // Vector of topBin number initialized in LinTable
-    static __thread std::vector<G4double>  *vM_G4MT_TLS_ = 0 ; if (!vM_G4MT_TLS_) vM_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vM = *vM_G4MT_TLS_;     // Vector of rel max ln(s) initialized in LogTable
-    static __thread std::vector<G4int>     *vK_G4MT_TLS_ = 0 ; if (!vK_G4MT_TLS_) vK_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vK = *vK_G4MT_TLS_;     // Vector of topBin number initialized in LogTable
+    static G4ThreadLocal std::vector<G4int>     *vA_G4MT_TLS_ = 0 ; if (!vA_G4MT_TLS_) vA_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vA = *vA_G4MT_TLS_;     // Vector of calculated A
+    static G4ThreadLocal std::vector<G4double>  *vH_G4MT_TLS_ = 0 ; if (!vH_G4MT_TLS_) vH_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vH = *vH_G4MT_TLS_;     // Vector of max s initialized in the LinTable
+    static G4ThreadLocal std::vector<G4int>     *vN_G4MT_TLS_ = 0 ; if (!vN_G4MT_TLS_) vN_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vN = *vN_G4MT_TLS_;     // Vector of topBin number initialized in LinTable
+    static G4ThreadLocal std::vector<G4double>  *vM_G4MT_TLS_ = 0 ; if (!vM_G4MT_TLS_) vM_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vM = *vM_G4MT_TLS_;     // Vector of rel max ln(s) initialized in LogTable
+    static G4ThreadLocal std::vector<G4int>     *vK_G4MT_TLS_ = 0 ; if (!vK_G4MT_TLS_) vK_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vK = *vK_G4MT_TLS_;     // Vector of topBin number initialized in LogTable
     // Last values of the Associative Data Base:
-    static __thread G4int     lastA=0;             // theLast of calculated A
-    static __thread G4double  lastH=0.;            // theLast of max s initialized in the LinTable
-    static __thread G4int     lastN=0;             // theLast of topBin number initialized in LinTable
-    static __thread G4double  lastM=0.;            // theLast of rel max ln(s) initialized in LogTable
-    static __thread G4int     lastK=0;             // theLast of topBin number initialized in LogTable
-    static __thread G4double* lastT=0;             // theLast of pointer to LinTable in the C++ heap
-    static __thread G4double* lastL=0;             // theLast of pointer to LogTable in the C++ heap
+    static G4ThreadLocal G4int     lastA=0;             // theLast of calculated A
+    static G4ThreadLocal G4double  lastH=0.;            // theLast of max s initialized in the LinTable
+    static G4ThreadLocal G4int     lastN=0;             // theLast of topBin number initialized in LinTable
+    static G4ThreadLocal G4double  lastM=0.;            // theLast of rel max ln(s) initialized in LogTable
+    static G4ThreadLocal G4int     lastK=0;             // theLast of topBin number initialized in LogTable
+    static G4ThreadLocal G4double* lastT=0;             // theLast of pointer to LinTable in the C++ heap
+    static G4ThreadLocal G4double* lastL=0;             // theLast of pointer to LogTable in the C++ heap
     // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
     if(m_s<toler || A<2) return 1.;
     if(m_s>min_s) return 0.;
@@ -596,19 +596,19 @@ std::pair<G4double,G4double> G4QuasiElRatios::FetchElTot(G4double p, G4int PDG, 
     static const G4double dl=(lpa-lpi)/nlp;// Step of the logarithmic Table
     static const G4double edl=std::exp(dl);// Multiplication step of the logarithmic Table
     //static const G4double toler=.001;      // Relative Tolarence defining "theSameMomentum"
-    static __thread G4double lastP=0.;              // The last momentum for which XS was calculated
-    static __thread G4int    lastH=0;               // The last projPDG for which XS was calculated
-    static __thread G4bool   lastF=true;            // The last nucleon for which XS was calculated
+    static G4ThreadLocal G4double lastP=0.;              // The last momentum for which XS was calculated
+    static G4ThreadLocal G4int    lastH=0;               // The last projPDG for which XS was calculated
+    static G4ThreadLocal G4bool   lastF=true;            // The last nucleon for which XS was calculated
     static std::pair<G4double,G4double> lastR(0.,0.); // The last result
     // Local Associative Data Base:
-    static __thread std::vector<G4int>     *vI_G4MT_TLS_ = 0 ; if (!vI_G4MT_TLS_) vI_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vI = *vI_G4MT_TLS_;      // Vector of index for which XS was calculated
-    static __thread std::vector<G4double>  *vM_G4MT_TLS_ = 0 ; if (!vM_G4MT_TLS_) vM_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vM = *vM_G4MT_TLS_;      // Vector of rel max ln(p) initialized in LogTable
-    static __thread std::vector<G4int>     *vK_G4MT_TLS_ = 0 ; if (!vK_G4MT_TLS_) vK_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vK = *vK_G4MT_TLS_;      // Vector of topBin number initialized in LogTable
+    static G4ThreadLocal std::vector<G4int>     *vI_G4MT_TLS_ = 0 ; if (!vI_G4MT_TLS_) vI_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vI = *vI_G4MT_TLS_;      // Vector of index for which XS was calculated
+    static G4ThreadLocal std::vector<G4double>  *vM_G4MT_TLS_ = 0 ; if (!vM_G4MT_TLS_) vM_G4MT_TLS_ = new  std::vector<G4double>   ;  std::vector<G4double>  &vM = *vM_G4MT_TLS_;      // Vector of rel max ln(p) initialized in LogTable
+    static G4ThreadLocal std::vector<G4int>     *vK_G4MT_TLS_ = 0 ; if (!vK_G4MT_TLS_) vK_G4MT_TLS_ = new  std::vector<G4int>      ;  std::vector<G4int>     &vK = *vK_G4MT_TLS_;      // Vector of topBin number initialized in LogTable
     // Last values of the Associative Data Base:
-    static __thread G4int     lastI=0;              // The Last index for which XS was calculated
-    static __thread G4double  lastM=0.;             // The Last rel max ln(p) initialized in LogTable
-    static __thread G4int     lastK=0;             // The Last topBin number initialized in LogTable
-    static __thread std::pair<G4double,G4double>* *lastX_G4MT_TLS_ = 0 ; if (!lastX_G4MT_TLS_) {lastX_G4MT_TLS_ = new  std::pair<G4double,G4double>*  ; *lastX_G4MT_TLS_=0 ; }  std::pair<G4double,G4double>* &lastX = *lastX_G4MT_TLS_; // The Last ETPointers to LogTable in heap
+    static G4ThreadLocal G4int     lastI=0;              // The Last index for which XS was calculated
+    static G4ThreadLocal G4double  lastM=0.;             // The Last rel max ln(p) initialized in LogTable
+    static G4ThreadLocal G4int     lastK=0;             // The Last topBin number initialized in LogTable
+    static G4ThreadLocal std::pair<G4double,G4double>* *lastX_G4MT_TLS_ = 0 ; if (!lastX_G4MT_TLS_) {lastX_G4MT_TLS_ = new  std::pair<G4double,G4double>*  ; *lastX_G4MT_TLS_=0 ; }  std::pair<G4double,G4double>* &lastX = *lastX_G4MT_TLS_; // The Last ETPointers to LogTable in heap
     // LogTable is created only if necessary. The ratio R(s>8100 mb) = 0 for any nuclei
     G4int nDB=vI.size();                   // A number of hadrons already initialized in AMDB
     if(nDB && lastH==PDG && lastF==F && p>0. && p==lastP) return lastR;// VI don't use toler.

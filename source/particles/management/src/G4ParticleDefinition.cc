@@ -62,12 +62,12 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it holds the array
 //size of ParticlePrivateSubclass instances.
-template <class ParticlePrivateSubclass> __thread int G4MTPrivateParticleCounter<ParticlePrivateSubclass>::slavetotalspace = 0;
+template <class ParticlePrivateSubclass> G4ThreadLocal int G4MTPrivateParticleCounter<ParticlePrivateSubclass>::slavetotalspace = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the
 //array of ParticlePrivateSubclass instances.
-template <class ParticlePrivateSubclass> __thread ParticlePrivateSubclass* G4MTPrivateParticleCounter<ParticlePrivateSubclass>::offset = 0;
+template <class ParticlePrivateSubclass> G4ThreadLocal ParticlePrivateSubclass* G4MTPrivateParticleCounter<ParticlePrivateSubclass>::offset = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This new field helps to use the class G4ParticleDefinitionSubInstanceManager
@@ -127,7 +127,7 @@ G4ParticleDefinition::G4ParticleDefinition(
                    verboseLevel(1),
   		   fApplyCutsFlag(false)
 {
-  static __thread G4String *nucleus_G4MT_TLS_ = 0 ; if (!nucleus_G4MT_TLS_) nucleus_G4MT_TLS_ = new  G4String ("nucleus") ;  G4String &nucleus = *nucleus_G4MT_TLS_;
+  static G4ThreadLocal G4String *nucleus_G4MT_TLS_ = 0 ; if (!nucleus_G4MT_TLS_) nucleus_G4MT_TLS_ = new  G4String ("nucleus") ;  G4String &nucleus = *nucleus_G4MT_TLS_;
 
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   g4particleDefinitionInstanceID = g4particleDefinitionSubInstanceManager.CreateSubInstance();

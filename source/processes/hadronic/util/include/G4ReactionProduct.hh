@@ -43,9 +43,9 @@
 // To support better memory management and reduced fragmentation
 class G4ReactionProduct;
 #if defined G4HADRONIC_ALLOC_EXPORT
-  extern G4DLLEXPORT __thread G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_;
+  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT __thread G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_;
+  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_;
 #endif
 
 class G4ReactionProduct

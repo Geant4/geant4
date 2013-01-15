@@ -30,7 +30,7 @@
 #include "G4NeutronHPGamma.hh"
 #include "G4SystemOfUnits.hh"
 
-__thread int G4NeutronHPGamma::instancecount = 0;
+G4ThreadLocal int G4NeutronHPGamma::instancecount = 0;
 
   G4NeutronHPGamma::G4NeutronHPGamma() 
   {

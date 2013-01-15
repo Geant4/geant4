@@ -41,7 +41,7 @@
 #include "G4Transform3D.hh"
 #include "G4PVDivision.hh"
 
-__thread G4bool G4GDMLWrite::addPointerToName = true;
+G4ThreadLocal G4bool G4GDMLWrite::addPointerToName = true;
 
 G4GDMLWrite::G4GDMLWrite() : doc(0), extElement(0)
 {
@@ -59,19 +59,19 @@ G4bool G4GDMLWrite::FileExists(const G4String& fname) const
 
 G4GDMLWrite::VolumeMapType& G4GDMLWrite::VolumeMap()
 {
-   static __thread VolumeMapType *instance_G4MT_TLS_ = 0 ; if (!instance_G4MT_TLS_) instance_G4MT_TLS_ = new  VolumeMapType  ;  VolumeMapType &instance = *instance_G4MT_TLS_;
+   static G4ThreadLocal VolumeMapType *instance_G4MT_TLS_ = 0 ; if (!instance_G4MT_TLS_) instance_G4MT_TLS_ = new  VolumeMapType  ;  VolumeMapType &instance = *instance_G4MT_TLS_;
    return instance;
 }
 
 G4GDMLWrite::PhysVolumeMapType& G4GDMLWrite::PvolumeMap()
 {
-   static __thread PhysVolumeMapType *instance_G4MT_TLS_ = 0 ; if (!instance_G4MT_TLS_) instance_G4MT_TLS_ = new  PhysVolumeMapType  ;  PhysVolumeMapType &instance = *instance_G4MT_TLS_;
+   static G4ThreadLocal PhysVolumeMapType *instance_G4MT_TLS_ = 0 ; if (!instance_G4MT_TLS_) instance_G4MT_TLS_ = new  PhysVolumeMapType  ;  PhysVolumeMapType &instance = *instance_G4MT_TLS_;
    return instance;
 }
 
 G4GDMLWrite::DepthMapType& G4GDMLWrite::DepthMap()
 {
-   static __thread DepthMapType *instance_G4MT_TLS_ = 0 ; if (!instance_G4MT_TLS_) instance_G4MT_TLS_ = new  DepthMapType  ;  DepthMapType &instance = *instance_G4MT_TLS_;
+   static G4ThreadLocal DepthMapType *instance_G4MT_TLS_ = 0 ; if (!instance_G4MT_TLS_) instance_G4MT_TLS_ = new  DepthMapType  ;  DepthMapType &instance = *instance_G4MT_TLS_;
    return instance;
 }
 

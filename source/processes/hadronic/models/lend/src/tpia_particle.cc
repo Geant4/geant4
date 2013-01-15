@@ -41,10 +41,10 @@ namespace GIDI {
 using namespace GIDI;
 #endif
 
-static __thread int initialSizeOfList = 100, incrementalSizeOfList = 100;
-static __thread int numberOfParticles = 0, sizeOfParticleSortedList = 0;
-static __thread tpia_particle **particleSortedList = NULL;
-static __thread tpia_particle *particleList = NULL, *particleListEnd = NULL;
+static G4ThreadLocal int initialSizeOfList = 100, incrementalSizeOfList = 100;
+static G4ThreadLocal int numberOfParticles = 0, sizeOfParticleSortedList = 0;
+static G4ThreadLocal tpia_particle **particleSortedList = NULL;
+static G4ThreadLocal tpia_particle *particleList = NULL, *particleListEnd = NULL;
 /*
 ************************************************************
 */

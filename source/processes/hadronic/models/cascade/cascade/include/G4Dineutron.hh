@@ -45,7 +45,7 @@
 
 class G4Dineutron : public G4VShortLivedParticle {
 private:
-  static __thread G4Dineutron* theInstance;
+  static G4ThreadLocal G4Dineutron* theInstance;
   G4Dineutron();
   virtual ~G4Dineutron() { theInstance = 0; }
   

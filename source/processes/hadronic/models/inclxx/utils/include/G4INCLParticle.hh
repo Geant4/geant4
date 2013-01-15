@@ -743,7 +743,7 @@ namespace G4INCL {
     G4bool outOfWell;
 
     G4double theMass;
-    static __thread long nextID;
+    static G4ThreadLocal long nextID;
 
   };
 }

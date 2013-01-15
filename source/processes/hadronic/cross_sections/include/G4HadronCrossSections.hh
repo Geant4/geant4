@@ -99,7 +99,7 @@ class G4HadronCrossSections
     void CalcScatteringCrossSections(const G4DynamicParticle*, 
                                      G4int /*ZZ*/, G4int /*AA*/);
 
-    static __thread G4HadronCrossSections* theInstance;
+    static G4ThreadLocal G4HadronCrossSections* theInstance;
 
     G4Pow* g4pow;
 
@@ -112,7 +112,7 @@ class G4HadronCrossSections
     G4double prevKineticEnergy;
     G4double lastEkx, lastEkxPower;
 
-    static __thread G4bool correctInelasticNearZero;
+    static G4ThreadLocal G4bool correctInelasticNearZero;
 
     G4int verboseLevel;
 
@@ -120,30 +120,30 @@ class G4HadronCrossSections
     // They are initialized in G4HadronCrossSections.cc, thus providing some 
     // data hiding.
 
-    static __thread G4float plab[TSIZE];
-    static __thread G4float csel[NPARTS][TSIZE];
-    static __thread G4float csin[NPARTS][TSIZE];
+    static G4ThreadLocal G4float plab[TSIZE];
+    static G4ThreadLocal G4float csel[NPARTS][TSIZE];
+    static G4ThreadLocal G4float csin[NPARTS][TSIZE];
 
-    static __thread G4float cspiel[3][TSIZE];
-    static __thread G4float cspiin[3][TSIZE];
+    static G4ThreadLocal G4float cspiel[3][TSIZE];
+    static G4ThreadLocal G4float cspiin[3][TSIZE];
 
-    static __thread G4float cspnel[3][TSIZE];
-    static __thread G4float cspnin[3][TSIZE];
+    static G4ThreadLocal G4float cspnel[3][TSIZE];
+    static G4ThreadLocal G4float cspnin[3][TSIZE];
 
-    static __thread G4float elab[NELAB];
-    static __thread G4float cnlwat[NCNLW], cnlwel[NCNLW][NELAB], cnlwin[NCNLW][NELAB];
+    static G4ThreadLocal G4float elab[NELAB];
+    static G4ThreadLocal G4float cnlwat[NCNLW], cnlwel[NCNLW][NELAB], cnlwin[NCNLW][NELAB];
 
-    static __thread G4float cscap[100];
+    static G4ThreadLocal G4float cscap[100];
 
-    static __thread G4float ekfiss[NFISS], csfiss[4][NFISS];
+    static G4ThreadLocal G4float ekfiss[NFISS], csfiss[4][NFISS];
 
-    static __thread G4float alpha[NPARTS], alphac[TSIZE];
+    static G4ThreadLocal G4float alpha[NPARTS], alphac[TSIZE];
 
-    static __thread G4float partel[35], partin[35];
-    static __thread G4int   icorr[35], intrc[35];
+    static G4ThreadLocal G4float partel[35], partin[35];
+    static G4ThreadLocal G4int   icorr[35], intrc[35];
 
-    static __thread G4float csa[4];
-    static __thread G4int ipart2[7];
+    static G4ThreadLocal G4float csa[4];
+    static G4ThreadLocal G4int ipart2[7];
 };
 #endif
 

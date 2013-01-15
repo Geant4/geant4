@@ -33,7 +33,7 @@ namespace CLHEP  {
 // static consts
 //-*************
 
-__thread double HepEulerAngles::tolerance = Hep3Vector::ToleranceTicks * 1.0e-8;
+G4ThreadLocal double HepEulerAngles::tolerance = Hep3Vector::ToleranceTicks * 1.0e-8;
 
 //-*******************
 // measure of distance

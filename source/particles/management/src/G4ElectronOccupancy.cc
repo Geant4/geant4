@@ -39,7 +39,7 @@
 
 #include "G4ElectronOccupancy.hh"
 
-__thread G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator_G4MT_TLS_ = 0;
 
 G4ElectronOccupancy::G4ElectronOccupancy(G4int sizeOrbit ):
                   theSizeOfOrbit(sizeOrbit)

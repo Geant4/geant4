@@ -51,7 +51,7 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the
 //array of PolyconeSidePrivateSubclass instances.
-template <class PolyconeSidePrivateSubclass> __thread PolyconeSidePrivateSubclass* G4MTPrivateSubInstanceManager<PolyconeSidePrivateSubclass>::offset = 0;
+template <class PolyconeSidePrivateSubclass> G4ThreadLocal PolyconeSidePrivateSubclass* G4MTPrivateSubInstanceManager<PolyconeSidePrivateSubclass>::offset = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This new field helps to use the class G4PolyconeSideSubInstanceManager

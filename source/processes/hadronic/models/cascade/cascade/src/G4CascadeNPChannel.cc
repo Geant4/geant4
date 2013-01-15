@@ -670,7 +670,7 @@ namespace {
 
 // Initialize n-p channel
 typedef G4CascadeNPChannelData::data_t G4CascadeNPChannelData_t;
-__thread G4CascadeNPChannelData_t *G4CascadeNPChannelData::data=0;
+G4ThreadLocal G4CascadeNPChannelData_t *G4CascadeNPChannelData::data=0;
 
 G4CascadeNPChannelData::data_t *G4CascadeNPChannelData::initializer()
 {

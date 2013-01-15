@@ -1319,7 +1319,7 @@ void G4PAIySection::CallError(G4int i, const G4String& methodName) const
 // Init  array of Lorentz factors
 //
 
-__thread G4int G4PAIySection::fNumberOfGammas = 111;
+G4ThreadLocal G4int G4PAIySection::fNumberOfGammas = 111;
 
 const G4double G4PAIySection::fLorentzFactor[112] =     // fNumberOfGammas+1
 {

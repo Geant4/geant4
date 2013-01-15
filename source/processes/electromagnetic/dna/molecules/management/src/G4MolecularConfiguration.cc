@@ -42,7 +42,7 @@ using namespace std;
 // G4MolecularConfigurationManager
 typedef G4MolecularConfiguration::G4MolecularConfigurationManager MolecularConfigurationManager;
 
-__thread MolecularConfigurationManager* G4MolecularConfiguration::fgManager = 0 ;
+G4ThreadLocal MolecularConfigurationManager* G4MolecularConfiguration::fgManager = 0 ;
 
 G4MolecularConfiguration::G4MolecularConfigurationManager*
         G4MolecularConfiguration::GetManager()

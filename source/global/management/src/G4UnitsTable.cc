@@ -52,7 +52,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
-__thread G4UnitsTable *G4UnitDefinition::theUnitsTable_G4MT_TLS_ = 0;
+G4ThreadLocal G4UnitsTable *G4UnitDefinition::theUnitsTable_G4MT_TLS_ = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  

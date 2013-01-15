@@ -845,8 +845,8 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
   // by having a new without a delete that is only done once.
   
   static const G4int max_array = 25;
-  static __thread std::vector<G4double> *xvec_G4MT_TLS_ = 0 ; if (!xvec_G4MT_TLS_) xvec_G4MT_TLS_ = new  std::vector<G4double> (max_array) ;  std::vector<G4double> &xvec = *xvec_G4MT_TLS_;
-  static __thread std::vector<G4int>    *pivv_G4MT_TLS_ = 0 ; if (!pivv_G4MT_TLS_) pivv_G4MT_TLS_ = new  std::vector<G4int>    (max_array) ;  std::vector<G4int>    &pivv = *pivv_G4MT_TLS_;
+  static G4ThreadLocal std::vector<G4double> *xvec_G4MT_TLS_ = 0 ; if (!xvec_G4MT_TLS_) xvec_G4MT_TLS_ = new  std::vector<G4double> (max_array) ;  std::vector<G4double> &xvec = *xvec_G4MT_TLS_;
+  static G4ThreadLocal std::vector<G4int>    *pivv_G4MT_TLS_ = 0 ; if (!pivv_G4MT_TLS_) pivv_G4MT_TLS_ = new  std::vector<G4int>    (max_array) ;  std::vector<G4int>    &pivv = *pivv_G4MT_TLS_;
   typedef std::vector<G4int>::iterator pivIter; 
   if (xvec.size() < static_cast<unsigned int>(nrow)) xvec.resize(nrow);
   if (pivv.size() < static_cast<unsigned int>(nrow)) pivv.resize(nrow);
@@ -1237,10 +1237,10 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
   return; // inversion successful
 }
 
-__thread G4double G4ErrorSymMatrix::posDefFraction5x5 = 1.0;
-__thread G4double G4ErrorSymMatrix::posDefFraction6x6 = 1.0;
-__thread G4double G4ErrorSymMatrix::adjustment5x5 = 0.0;
-__thread G4double G4ErrorSymMatrix::adjustment6x6 = 0.0;
+G4ThreadLocal G4double G4ErrorSymMatrix::posDefFraction5x5 = 1.0;
+G4ThreadLocal G4double G4ErrorSymMatrix::posDefFraction6x6 = 1.0;
+G4ThreadLocal G4double G4ErrorSymMatrix::adjustment5x5 = 0.0;
+G4ThreadLocal G4double G4ErrorSymMatrix::adjustment6x6 = 0.0;
 const G4double G4ErrorSymMatrix::CHOLESKY_THRESHOLD_5x5 = .5;
 const G4double G4ErrorSymMatrix::CHOLESKY_THRESHOLD_6x6 = .2;
 const G4double G4ErrorSymMatrix::CHOLESKY_CREEP_5x5 = .005;

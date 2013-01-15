@@ -36,17 +36,17 @@
 #include "G4UnitsTable.hh"
 #include "G4UIcommand.hh"
 
-__thread G4bool G4AttCheck::fFirst = true;
+G4ThreadLocal G4bool G4AttCheck::fFirst = true;
 
-__thread std::set<G4String> *G4AttCheck::fUnitCategories_G4MT_TLS_ = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fUnitCategories_G4MT_TLS_ = 0;
 
-__thread std::map<G4String,G4String> *G4AttCheck::fStandardUnits_G4MT_TLS_ = 0;
+G4ThreadLocal std::map<G4String,G4String> *G4AttCheck::fStandardUnits_G4MT_TLS_ = 0;
 
-__thread std::set<G4String> *G4AttCheck::fCategories_G4MT_TLS_ = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fCategories_G4MT_TLS_ = 0;
 
-__thread std::set<G4String> *G4AttCheck::fUnits_G4MT_TLS_ = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fUnits_G4MT_TLS_ = 0;
 
-__thread std::set<G4String> *G4AttCheck::fValueTypes_G4MT_TLS_ = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fValueTypes_G4MT_TLS_ = 0;
 
 G4AttCheck::G4AttCheck
 (const std::vector<G4AttValue>* values,
@@ -110,7 +110,7 @@ G4AttCheck::~G4AttCheck() { if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = 
 G4bool G4AttCheck::Check(const G4String& leader) const {  ;;;   if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fValueTypes = *fValueTypes_G4MT_TLS_;  ;;;    ;;;   if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnits = *fUnits_G4MT_TLS_;  ;;;    ;;;   if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fCategories = *fCategories_G4MT_TLS_;  ;;;   if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ;
   // Check only.  Silent unless error - then G4cerr.  Returns error.
   G4bool error = false;
-  static __thread G4int iError = 0;
+  static G4ThreadLocal G4int iError = 0;
   G4bool print = false;
   if (iError < 10 || iError%100 == 0) {
     print = true;

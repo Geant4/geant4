@@ -66,7 +66,7 @@ const G4double G4CookPairingCorrections::PairingNTable
  -0.06,    0.45,    0.05,    0.26,   -0.22,    0.39,    0.00,    0.39    
 };
 
-__thread G4CookPairingCorrections* G4CookPairingCorrections::theInstance = 0;
+G4ThreadLocal G4CookPairingCorrections* G4CookPairingCorrections::theInstance = 0;
 
 G4CookPairingCorrections::G4CookPairingCorrections()
 {;}
@@ -77,7 +77,7 @@ G4CookPairingCorrections::~G4CookPairingCorrections()
 G4CookPairingCorrections* G4CookPairingCorrections::GetInstance()
 {
   if (!theInstance)  { 
-    static __thread G4CookPairingCorrections *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4CookPairingCorrections  ;  G4CookPairingCorrections &theCorrections = *theCorrections_G4MT_TLS_;
+    static G4ThreadLocal G4CookPairingCorrections *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4CookPairingCorrections  ;  G4CookPairingCorrections &theCorrections = *theCorrections_G4MT_TLS_;
     theInstance = &theCorrections; 
   }
   return theInstance;

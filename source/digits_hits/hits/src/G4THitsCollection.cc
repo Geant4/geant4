@@ -29,7 +29,7 @@
 
 #include "G4THitsCollection.hh"
 
-__thread G4Allocator<G4HitsCollection> *anHCAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4HitsCollection> *anHCAllocator_G4MT_TLS_ = 0;
 
 G4HitsCollection::G4HitsCollection() : theCollection((void*)0)
 { if (!anHCAllocator_G4MT_TLS_) anHCAllocator_G4MT_TLS_ = new G4Allocator<G4HitsCollection>  ;;}

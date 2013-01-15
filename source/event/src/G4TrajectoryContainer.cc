@@ -29,7 +29,7 @@
 //
 
 #include "G4TrajectoryContainer.hh"
-__thread G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator_G4MT_TLS_ = 0;
 
 G4TrajectoryContainer::G4TrajectoryContainer()
 { if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; vect = new TrajectoryVector; }

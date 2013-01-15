@@ -153,7 +153,7 @@ protected:
   G4double z23;
   G4double lnZ;
 
-  static __thread G4double xgi[8],wgi[8];
+  static G4ThreadLocal G4double xgi[8],wgi[8];
 
 private:
 
@@ -169,7 +169,7 @@ private:
   G4int ntdat;
   G4int nbiny;
   size_t nmaxElements;
-  static __thread G4double zdat[5], adat[5], tdat[8];
+  static G4ThreadLocal G4double zdat[5], adat[5], tdat[8];
   G4double ya[1001], proba[5][8][1001];
 
   G4double ymin;

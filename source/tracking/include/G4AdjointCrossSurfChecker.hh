@@ -91,7 +91,7 @@ class G4AdjointCrossSurfChecker
    G4int FindRegisteredSurface(const G4String& name);
    
  private: 
-   static __thread G4AdjointCrossSurfChecker* instance;
+   static G4ThreadLocal G4AdjointCrossSurfChecker* instance;
   
    std::vector<G4String> ListOfSurfaceName;
    std::vector<G4String> ListOfSurfaceType;

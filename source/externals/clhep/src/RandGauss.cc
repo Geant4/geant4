@@ -43,8 +43,8 @@ std::string RandGauss::name() const {return "RandGauss";}
 HepRandomEngine & RandGauss::engine() {return *localEngine;}
 
 // Initialisation of static data
-__thread bool RandGauss::set_st = false;
-__thread double RandGauss::nextGauss_st = 0.0;
+G4ThreadLocal bool RandGauss::set_st = false;
+G4ThreadLocal double RandGauss::nextGauss_st = 0.0;
 
 RandGauss::~RandGauss() {
 }

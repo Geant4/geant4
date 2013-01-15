@@ -86,7 +86,7 @@ struct ReactionProduct4Mom
 G4HadFinalState *G4BinaryLightIonReaction::
 ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 {
-	static __thread G4int eventcounter=0;
+	static G4ThreadLocal G4int eventcounter=0;
 	eventcounter++;
 	if(getenv("BLICDEBUG") ) G4cerr << " ######### Binary Light Ion Reaction number starts ######### "<<eventcounter<<G4endl;
 	G4ping debug("debug_G4BinaryLightIonReaction");

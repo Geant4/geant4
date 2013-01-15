@@ -43,7 +43,7 @@
 
 #include "G4Pow.hh"
 
-__thread G4Pow* G4Pow::fInstance = 0;
+G4ThreadLocal G4Pow* G4Pow::fInstance = 0;
 
 // -------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ G4Pow* G4Pow::GetInstance()
 {
   if (fInstance == 0)
   {
-    static __thread G4Pow *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4Pow  ;  G4Pow &manager = *manager_G4MT_TLS_;
+    static G4ThreadLocal G4Pow *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4Pow  ;  G4Pow &manager = *manager_G4MT_TLS_;
     fInstance = &manager;
   }
   return fInstance;

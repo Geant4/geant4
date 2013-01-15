@@ -42,11 +42,11 @@
 #include "G4SystemOfUnits.hh"
 
 // energy range
-__thread G4double  G4VRangeToEnergyConverter::LowestEnergy = 0.99e-3*MeV;
-__thread G4double  G4VRangeToEnergyConverter::HighestEnergy = 100.0e6*MeV;
+G4ThreadLocal G4double  G4VRangeToEnergyConverter::LowestEnergy = 0.99e-3*MeV;
+G4ThreadLocal G4double  G4VRangeToEnergyConverter::HighestEnergy = 100.0e6*MeV;
 
 // max energy cut
-__thread G4double  G4VRangeToEnergyConverter::MaxEnergyCut = 10.0*GeV;
+G4ThreadLocal G4double  G4VRangeToEnergyConverter::MaxEnergyCut = 10.0*GeV;
 
 G4VRangeToEnergyConverter::G4VRangeToEnergyConverter():
   theParticle(0), theLossTable(0), NumberOfElements(0), TotBin(300),

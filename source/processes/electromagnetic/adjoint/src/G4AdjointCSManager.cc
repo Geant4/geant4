@@ -56,12 +56,12 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ProductionCutsTable.hh"
 
-__thread G4AdjointCSManager* G4AdjointCSManager::theInstance = 0;
+G4ThreadLocal G4AdjointCSManager* G4AdjointCSManager::theInstance = 0;
 ///////////////////////////////////////////////////////
 //
 G4AdjointCSManager* G4AdjointCSManager::GetAdjointCSManager()
 { if(theInstance == 0) {
-    static __thread G4AdjointCSManager *ins_G4MT_TLS_ = 0 ; if (!ins_G4MT_TLS_) ins_G4MT_TLS_ = new  G4AdjointCSManager  ;  G4AdjointCSManager &ins = *ins_G4MT_TLS_;
+    static G4ThreadLocal G4AdjointCSManager *ins_G4MT_TLS_ = 0 ; if (!ins_G4MT_TLS_) ins_G4MT_TLS_ = new  G4AdjointCSManager  ;  G4AdjointCSManager &ins = *ins_G4MT_TLS_;
      theInstance = &ins;
   }
  return theInstance; 

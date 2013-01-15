@@ -157,7 +157,7 @@ class G4PersistencyCenter
 
     private:
       G4PersistencyCenterMessenger* f_theMessenger;
-      static __thread G4PersistencyCenter*   f_thePointer;
+      static G4ThreadLocal G4PersistencyCenter*   f_thePointer;
       G4PersistencyManager*         f_currentManager;
       std::string                 f_currentSystemName;
       PMap                          f_theCatalog;

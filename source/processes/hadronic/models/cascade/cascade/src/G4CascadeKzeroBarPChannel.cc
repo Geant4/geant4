@@ -37,15 +37,15 @@ using namespace G4InuclParticleNames;
 namespace {
   // Outgoing particle types of a given multiplicity
 
-  static __thread G4int kzbp2bfs[5][2] =
+  static G4ThreadLocal G4int kzbp2bfs[5][2] =
     {{1, 17}, {3, 21}, {3, 25}, {7, 23}, {11, 29} };
 
-  static __thread G4int kzbp3bfs[15][3] =
+  static G4ThreadLocal G4int kzbp3bfs[15][3] =
     {{2,3,17},   {1,7,17},   {1,3,13},   {3,7,21},   {11,17,21},   
      {3,3,27},   {3,7,25},   {7,7,23},   {3,5,23},   {11,17,25},
      {15,17,23}, {11,13,23}, {3,11,31},  {7,11,29},  {3,15,29} };
 
-  static __thread G4int kzbp4bfs[28][4] =
+  static G4ThreadLocal G4int kzbp4bfs[28][4] =
     {{2,3,7,17},   {2,3,3,13},   {1,7,7,17},   {1,3,5,17},   
      {1,3,7,13},   {3,7,7,21},   {3,3,5,21},   {7,11,17,21},
      {3,15,17,21}, {3,11,13,21}, {7,7,7,23},   {3,5,7,23},
@@ -54,7 +54,7 @@ namespace {
      {3,11,13,25}, {3,3,7,27},   {3,11,17,27}, {3,7,11,31},
      {3,3,15,31},  {7,7,11,29},  {3,5,11,29},  {3,7,15,29} };
 
-  static __thread G4int kzbp5bfs[42][5] =
+  static G4ThreadLocal G4int kzbp5bfs[42][5] =
     {{2,3,7,7,17},   {2,3,3,5,17},   {2,3,3,7,13},   {1,7,7,7,17},
      {1,3,5,7,17},   {1,3,7,7,13},   {1,3,3,5,13},   {3,7,7,7,21},
      {3,3,5,7,21},   {7,7,11,17,21}, {3,3,13,15,21}, {3,7,15,17,21},
@@ -67,14 +67,14 @@ namespace {
      {3,3,5,11,31},  {3,3,7,15,31},  {7,7,7,11,29},  {3,5,7,11,29},
      {3,7,7,15,29},  {3,3,5,15,29} };  
 
-  static __thread G4int kzbp6bfs[20][6] =
+  static G4ThreadLocal G4int kzbp6bfs[20][6] =
     {{2,3,7,7,7,17}, {2,3,3,5,7,17}, {2,3,3,7,7,13}, {2,3,3,3,5,13},
      {1,7,7,7,7,17}, {1,3,5,7,7,17}, {1,3,3,5,5,17}, {1,3,7,7,7,13},
      {1,3,3,5,7,13}, {3,7,7,7,7,21}, {3,3,5,7,7,21}, {3,3,3,5,5,21},
      {3,3,7,7,7,27}, {3,3,3,5,7,27}, {3,7,7,7,7,25}, {3,3,5,7,7,25},
      {3,3,3,5,5,25}, {7,7,7,7,7,23}, {3,5,7,7,7,23}, {3,3,5,5,7,23} }; 
 
-  static __thread G4int kzbp7bfs[11][7] =
+  static G4ThreadLocal G4int kzbp7bfs[11][7] =
     {{2,3,7,7,7,7,17}, {2,3,3,5,7,7,17}, {2,3,3,3,5,5,17},
      {2,3,3,7,7,7,13}, {2,3,3,3,5,7,13}, {1,7,7,7,7,7,17},
      {1,3,5,7,7,7,17}, {1,3,3,5,5,7,17}, {1,3,7,7,7,7,13},
@@ -91,7 +91,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  static __thread G4double kzbpCrossSections[121][31] = {
+  static G4ThreadLocal G4double kzbpCrossSections[121][31] = {
     //
     // multiplicity 2 (5 channels)
     //  
@@ -718,7 +718,7 @@ namespace {
 
 typedef G4CascadeKzeroBarPChannelData::data_t G4CascadeKzeroBarPChannelData_t;
 
-__thread G4CascadeKzeroBarPChannelData_t *G4CascadeKzeroBarPChannelData::data = 0;
+G4ThreadLocal G4CascadeKzeroBarPChannelData_t *G4CascadeKzeroBarPChannelData::data = 0;
 
 G4CascadeKzeroBarPChannelData::data_t *G4CascadeKzeroBarPChannelData::initializer()
 {

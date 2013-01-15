@@ -33,7 +33,7 @@
 
 #include "G4TouchableHistory.hh"
 
-__thread G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator_G4MT_TLS_ = 0;
 
 G4TouchableHistory::G4TouchableHistory()
   : frot(G4RotationMatrix()),
@@ -62,7 +62,7 @@ G4TouchableHistory::GetTranslation(G4int depth) const
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static __thread G4ThreeVector *currTranslation_G4MT_TLS_ = 0 ; if (!currTranslation_G4MT_TLS_) currTranslation_G4MT_TLS_ = new  G4ThreeVector  ;  G4ThreeVector &currTranslation = *currTranslation_G4MT_TLS_;
+  static G4ThreadLocal G4ThreeVector *currTranslation_G4MT_TLS_ = 0 ; if (!currTranslation_G4MT_TLS_) currTranslation_G4MT_TLS_ = new  G4ThreeVector  ;  G4ThreeVector &currTranslation = *currTranslation_G4MT_TLS_;
   if(depth==0.0)
   {
     return ftlate;
@@ -81,7 +81,7 @@ G4TouchableHistory::GetRotation(G4int depth) const
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static __thread G4RotationMatrix *rotM_G4MT_TLS_ = 0 ; if (!rotM_G4MT_TLS_) rotM_G4MT_TLS_ = new  G4RotationMatrix  ;  G4RotationMatrix &rotM = *rotM_G4MT_TLS_;
+  static G4ThreadLocal G4RotationMatrix *rotM_G4MT_TLS_ = 0 ; if (!rotM_G4MT_TLS_) rotM_G4MT_TLS_ = new  G4RotationMatrix  ;  G4RotationMatrix &rotM = *rotM_G4MT_TLS_;
 
   if(depth==0.0)
   {

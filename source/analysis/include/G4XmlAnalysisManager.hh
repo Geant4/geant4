@@ -151,7 +151,7 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
   private:
     // static data members
     //
-    static __thread G4XmlAnalysisManager* fgInstance;
+    static G4ThreadLocal G4XmlAnalysisManager* fgInstance;
 
     // methods
     //

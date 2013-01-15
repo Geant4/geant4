@@ -1312,7 +1312,7 @@ G4double G4hImpactIonisation::BarkasTerm(const G4Material* material,
 //     Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397
 //
 {
-  static __thread double FTable[47][2] = {
+  static G4ThreadLocal double FTable[47][2] = {
     { 0.02, 21.5},
     { 0.03, 20.0},
     { 0.04, 18.0},

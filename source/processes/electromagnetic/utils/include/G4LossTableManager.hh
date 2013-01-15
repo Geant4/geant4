@@ -333,7 +333,7 @@ private:
   G4LossTableManager(G4LossTableManager &);
   G4LossTableManager & operator=(const G4LossTableManager &right);
 
-  static __thread G4LossTableManager* theInstance;
+  static G4ThreadLocal G4LossTableManager* theInstance;
 
   typedef const G4ParticleDefinition* PD;
 

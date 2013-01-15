@@ -38,7 +38,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ConcreteNNToDeltaDelta.hh"
 
-__thread G4XDeltaDeltaTable *G4ConcreteNNToDeltaDelta::theSigmaTable_G4MT_TLS_ = 0;
+G4ThreadLocal G4XDeltaDeltaTable *G4ConcreteNNToDeltaDelta::theSigmaTable_G4MT_TLS_ = 0;
 
 G4ConcreteNNToDeltaDelta::G4ConcreteNNToDeltaDelta(const G4ParticleDefinition* aPrimary,
 					   const G4ParticleDefinition* bPrimary,

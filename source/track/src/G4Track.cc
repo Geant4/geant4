@@ -47,9 +47,9 @@
 #include <iostream>
 #include <iomanip>
 
-__thread G4Allocator<G4Track> *aTrackAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4Track> *aTrackAllocator_G4MT_TLS_ = 0;
 
-__thread G4VelocityTable*  G4Track::velTable=0;
+G4ThreadLocal G4VelocityTable*  G4Track::velTable=0;
 
 ///////////////////////////////////////////////////////////
 G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
@@ -74,8 +74,8 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     is_OpticalPhoton(false),
     useGivenVelocity(false)
 { if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;    
-  static __thread G4bool isFirstTime = true;
-  static __thread G4ParticleDefinition* fOpticalPhoton =0;
+  static G4ThreadLocal G4bool isFirstTime = true;
+  static G4ThreadLocal G4ParticleDefinition* fOpticalPhoton =0;
   if ( isFirstTime ) {
     isFirstTime = false;
     // set  fOpticalPhoton

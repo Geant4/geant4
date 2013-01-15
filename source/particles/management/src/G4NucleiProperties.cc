@@ -43,12 +43,12 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-__thread G4double G4NucleiProperties::mass_proton = -1.;
-__thread G4double G4NucleiProperties::mass_neutron = -1.;
-__thread G4double G4NucleiProperties::mass_deuteron = -1.;
-__thread G4double G4NucleiProperties::mass_triton = -1.;
-__thread G4double G4NucleiProperties::mass_alpha = -1.;
-__thread G4double G4NucleiProperties::mass_He3 = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_proton = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_neutron = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_deuteron = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_triton = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_alpha = -1.;
+G4ThreadLocal G4double G4NucleiProperties::mass_He3 = -1.;
 
 G4double G4NucleiProperties::GetNuclearMass(const G4double A, const G4double Z)
 {

@@ -45,7 +45,7 @@ private:
   // Dummy constructor
   G4ShellCorrection();
   
-  static __thread G4ShellCorrection* theInstance;
+  static G4ThreadLocal G4ShellCorrection* theInstance;
   
 public:
   static G4ShellCorrection* GetInstance();

@@ -308,7 +308,7 @@ public: // With description
    mutable G4double                  prev_momentum;
 
    G4bool          is_OpticalPhoton; 
-   static __thread G4VelocityTable*  velTable;
+   static G4ThreadLocal G4VelocityTable*  velTable;
  
    G4bool          useGivenVelocity;
       // do not calclulate velocity and just use current fVelocity

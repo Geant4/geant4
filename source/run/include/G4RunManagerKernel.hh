@@ -74,14 +74,14 @@ class G4RunManagerKernel
     // its derived class.
 
   private:
-    static __thread G4RunManagerKernel* fRunManagerKernel;
+    static G4ThreadLocal G4RunManagerKernel* fRunManagerKernel;
 
   public: // with description
 
     //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
     //To share data, the master thread is different from worker threads.
     //This variable points out it is the master thread or not.
-    static __thread int isSlave; 
+    static G4ThreadLocal int isSlave; 
     G4RunManagerKernel();
 
     //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.

@@ -30,7 +30,7 @@
 #include "G4UnitsTable.hh"
 #include <iomanip>
 
-__thread double compDoubleWithPrecision::fPrecision = 5e-13;
+G4ThreadLocal double compDoubleWithPrecision::fPrecision = 5e-13;
 
 G4MoleculeCounter::G4MoleculeCounter()
 {
@@ -38,7 +38,7 @@ G4MoleculeCounter::G4MoleculeCounter()
     fVerbose = 0 ;
 }
 
-__thread G4MoleculeCounter* G4MoleculeCounter::fpInstance = 0;
+G4ThreadLocal G4MoleculeCounter* G4MoleculeCounter::fpInstance = 0;
 
 G4MoleculeCounter* G4MoleculeCounter::GetMoleculeCounter()
 {

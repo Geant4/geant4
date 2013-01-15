@@ -46,7 +46,7 @@
 
 namespace G4INCL {
 
-  __thread long Particle::nextID = 1;
+  G4ThreadLocal long Particle::nextID = 1;
 
   Particle::Particle()
     : theZ(0), theA(0),

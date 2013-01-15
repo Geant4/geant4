@@ -45,7 +45,7 @@
 #include "G4UIcommand.hh"
 
 
-__thread G4tgrEvaluator* G4tgrUtils::theEvaluator  = 0 ;
+G4ThreadLocal G4tgrEvaluator* G4tgrUtils::theEvaluator  = 0 ;
 
 
 //-------------------------------------------------------------

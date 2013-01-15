@@ -80,7 +80,7 @@ class G4SDManager
 
 
   private: 
-      static __thread G4SDManager * fSDManager;
+      static G4ThreadLocal G4SDManager * fSDManager;
       G4SDStructure * treeTop;
       G4int verboseLevel;
       G4HCtable* HCtable;

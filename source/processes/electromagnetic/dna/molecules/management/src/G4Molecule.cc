@@ -57,12 +57,12 @@
 
 using namespace std;
 
-__thread double G4Molecule::fgTemperature = 310*kelvin;
+G4ThreadLocal double G4Molecule::fgTemperature = 310*kelvin;
 // 37°C, used to shoot an energy
 
 ITImp(G4Molecule)
 
-__thread G4Allocator<G4Molecule> *aMoleculeAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator_G4MT_TLS_ = 0;
 
 G4Molecule* GetMolecule(const G4Track& track)
 { if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;

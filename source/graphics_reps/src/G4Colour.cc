@@ -79,8 +79,8 @@ G4bool G4Colour::operator != (const G4Colour& c) const {
   return false;
 }
 
-__thread std::map<G4String, G4Colour> *G4Colour::fColourMap_G4MT_TLS_ = 0;
-__thread bool G4Colour::fInitColourMap = false;
+G4ThreadLocal std::map<G4String, G4Colour> *G4Colour::fColourMap_G4MT_TLS_ = 0;
+G4ThreadLocal bool G4Colour::fInitColourMap = false;
 
 void
 G4Colour::AddToMap(const G4String& key, const G4Colour& colour) 

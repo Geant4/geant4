@@ -138,11 +138,11 @@ private:
   G4ParticleChangeForMSC*     fParticleChange;
   const G4MaterialCutsCouple* currentCouple;
 
-  static __thread G4double ener[106];
-  static __thread G4double TCSE[103][106];
-  static __thread G4double FTCSE[103][106];
-  static __thread G4double TCSP[103][106];
-  static __thread G4double FTCSP[103][106];
+  static G4ThreadLocal G4double ener[106];
+  static G4ThreadLocal G4double TCSE[103][106];
+  static G4ThreadLocal G4double FTCSE[103][106];
+  static G4ThreadLocal G4double TCSP[103][106];
+  static G4ThreadLocal G4double FTCSP[103][106];
 
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

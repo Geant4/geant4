@@ -40,33 +40,33 @@ class G4DetailedBalancePhaseSpaceIntegral
   G4double * data;
   
   private:
-  static __thread G4double sqrts[120];
+  static G4ThreadLocal G4double sqrts[120];
   
-  static __thread G4double delta[120];
-  static __thread G4double delta1600[120];
-  static __thread G4double delta1620[120];
-  static __thread G4double delta1700[120];
-  static __thread G4double delta1900[120];
-  static __thread G4double delta1905[120];
-  static __thread G4double delta1910[120];
-  static __thread G4double delta1920[120];
-  static __thread G4double delta1930[120];
-  static __thread G4double delta1950[120];
-  static __thread G4double N1440[120];
-  static __thread G4double N1520[120];
-  static __thread G4double N1535[120];
-  static __thread G4double N1650[120];
-  static __thread G4double N1675[120];
-  static __thread G4double N1680[120];
-  static __thread G4double N1700[120];
-  static __thread G4double N1710[120];
-  static __thread G4double N1720[120];
-  static __thread G4double N1900[120];
-  static __thread G4double N1990[120];
-  static __thread G4double N2090[120];
-  static __thread G4double N2190[120];
-  static __thread G4double N2220[120];
-  static __thread G4double N2250[120];
+  static G4ThreadLocal G4double delta[120];
+  static G4ThreadLocal G4double delta1600[120];
+  static G4ThreadLocal G4double delta1620[120];
+  static G4ThreadLocal G4double delta1700[120];
+  static G4ThreadLocal G4double delta1900[120];
+  static G4ThreadLocal G4double delta1905[120];
+  static G4ThreadLocal G4double delta1910[120];
+  static G4ThreadLocal G4double delta1920[120];
+  static G4ThreadLocal G4double delta1930[120];
+  static G4ThreadLocal G4double delta1950[120];
+  static G4ThreadLocal G4double N1440[120];
+  static G4ThreadLocal G4double N1520[120];
+  static G4ThreadLocal G4double N1535[120];
+  static G4ThreadLocal G4double N1650[120];
+  static G4ThreadLocal G4double N1675[120];
+  static G4ThreadLocal G4double N1680[120];
+  static G4ThreadLocal G4double N1700[120];
+  static G4ThreadLocal G4double N1710[120];
+  static G4ThreadLocal G4double N1720[120];
+  static G4ThreadLocal G4double N1900[120];
+  static G4ThreadLocal G4double N1990[120];
+  static G4ThreadLocal G4double N2090[120];
+  static G4ThreadLocal G4double N2190[120];
+  static G4ThreadLocal G4double N2220[120];
+  static G4ThreadLocal G4double N2250[120];
 };
 
 #endif

@@ -164,11 +164,11 @@ void G4LEAntiKaonZeroInelastic::Cascade(
                                           2.0*targetMass*etOriginal );
   G4double availableEnergy = centerofmassEnergy - (targetMass+mOriginal);
 
-  static __thread G4bool first = true;
+  static G4ThreadLocal G4bool first = true;
   const G4int numMul = 1200;
   const G4int numSec = 60;
-  static __thread G4double protmul[numMul], protnorm[numSec]; // proton constants
-  static __thread G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
+  static G4ThreadLocal G4double protmul[numMul], protnorm[numSec]; // proton constants
+  static G4ThreadLocal G4double neutmul[numMul], neutnorm[numSec]; // neutron constants
 
   // npos = number of pi+, nneg = number of pi-, nzero = number of pi0
   G4int counter;

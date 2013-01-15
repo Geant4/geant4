@@ -265,7 +265,7 @@ class G4PathFinder
 
    G4double kCarTolerance;
 
-   static __thread G4PathFinder* fpPathFinder;
+   static G4ThreadLocal G4PathFinder* fpPathFinder;
 };
 
 // ********************************************************************

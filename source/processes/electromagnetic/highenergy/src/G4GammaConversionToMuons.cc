@@ -151,12 +151,12 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
   static const G4double sqrte=sqrt(exp(1.));
   static const G4double PowSat=-0.88;
 
-  static __thread G4double CrossSection = 0.0 ;
+  static G4ThreadLocal G4double CrossSection = 0.0 ;
 
   if ( A < 1. ) return 0;
   if ( Egam < 4*Mmuon ) return 0 ; // below threshold return 0
 
-  static __thread G4double EgamLast=0,Zlast=0,PowThres,Ecor,B,Dn,Zthird,Winfty,WMedAppr,
+  static G4ThreadLocal G4double EgamLast=0,Zlast=0,PowThres,Ecor,B,Dn,Zthird,Winfty,WMedAppr,
       Wsatur,sigfac;
   
   if(Zlast==Z && Egam==EgamLast) return CrossSection; // already calculated
@@ -224,7 +224,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   G4double Z = anElement.GetZ();
   G4double A = anElement.GetA()/(g/mole);
 
-  static __thread G4double Zlast=0,B,Dn,Zthird,Winfty,A027,C1Num2,C2Term2;
+  static G4ThreadLocal G4double Zlast=0,B,Dn,Zthird,Winfty,A027,C1Num2,C2Term2;
   if(Zlast!=Z) // the element has changed
   { Zlast=Z;
     if(Z==1) // special case of Hydrogen

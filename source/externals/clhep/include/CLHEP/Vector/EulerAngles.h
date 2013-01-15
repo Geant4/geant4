@@ -40,7 +40,7 @@ class HepEulerAngles {
 
 protected:
   typedef HepEulerAngles EA;       // just an abbreviation
-  static __thread double tolerance;      // to determine relative nearness
+  static G4ThreadLocal double tolerance;      // to determine relative nearness
 
 public:
 

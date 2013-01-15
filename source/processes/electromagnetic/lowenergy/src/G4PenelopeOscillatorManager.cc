@@ -82,7 +82,7 @@ G4PenelopeOscillatorManager::~G4PenelopeOscillatorManager()
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-__thread G4PenelopeOscillatorManager* G4PenelopeOscillatorManager::instance = 0;
+G4ThreadLocal G4PenelopeOscillatorManager* G4PenelopeOscillatorManager::instance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

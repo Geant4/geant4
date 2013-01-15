@@ -56,8 +56,8 @@ private:
     double d;
   };
   static void fill_byte_order ();
-  static __thread bool byte_order_known;
-  static __thread int  byte_order[8];
+  static G4ThreadLocal bool byte_order_known;
+  static G4ThreadLocal int  byte_order[8];
     // Meaning of byte_order:  The first (high-order in IEEE 754) byte to
     // output (or the high-order byte of the first unsigned long)
     // is  of db.b[byte_order[0]].  Thus the index INTO byte_order

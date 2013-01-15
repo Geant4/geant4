@@ -31,7 +31,7 @@
 #include "G4QuadrupoleMagField.hh"
 #include "G4RotationMatrix.hh"
 
-static __thread G4RotationMatrix *IdentityMatrix_G4MT_TLS_ = 0 ; 
+static G4ThreadLocal G4RotationMatrix *IdentityMatrix_G4MT_TLS_ = 0 ; 
 
 G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient)
 {

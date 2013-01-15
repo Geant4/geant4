@@ -30,7 +30,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ConcreteNNToNDelta.hh"
 
-__thread G4XNDeltaTable *G4ConcreteNNToNDelta::theSigmaTable_G4MT_TLS_ = 0;
+G4ThreadLocal G4XNDeltaTable *G4ConcreteNNToNDelta::theSigmaTable_G4MT_TLS_ = 0;
 
 G4ConcreteNNToNDelta::G4ConcreteNNToNDelta(const G4ParticleDefinition* aPrimary,
 					   const G4ParticleDefinition* bPrimary,

@@ -84,7 +84,7 @@ double RandChiSquare::genChiSquare( HepRandomEngine *anEngine,
  * Implemented by R. Kremer, 1990                                 *
  ******************************************************************/
 
- static __thread double a_in = -1.0,b,vm,vp,vd;
+ static G4ThreadLocal double a_in = -1.0,b,vm,vp,vd;
  double u,v,z,zz,r;
 
 // Check for invalid input value

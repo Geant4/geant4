@@ -56,7 +56,7 @@
 #include "G4PhysicsVector.hh"
 #include <iomanip>
 
-__thread G4Allocator<G4PhysicsVector> *aPVAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4PhysicsVector> *aPVAllocator_G4MT_TLS_ = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading. 
 //Each thread must know it is master or not to initialize physics vectors. 
@@ -82,17 +82,17 @@ template <class PhysicsVectorPrivateSubclass> PhysicsVectorPrivateSubclass* G4MT
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading. 
 //This static member is thread local. For each thread, it holds the array 
 //size of PhysicsVectorPrivateSubclass instances.
-template <class PhysicsVectorPrivateSubclass> __thread int G4MTPrivatePhysicsVectorCounter<PhysicsVectorPrivateSubclass>::totalobj= 0;
+template <class PhysicsVectorPrivateSubclass> G4ThreadLocal int G4MTPrivatePhysicsVectorCounter<PhysicsVectorPrivateSubclass>::totalobj= 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it holds the space 
 //size preallocated to hold PhysicsVectorPrivateSubclass instances.
-template <class PhysicsVectorPrivateSubclass> __thread int G4MTPrivatePhysicsVectorCounter<PhysicsVectorPrivateSubclass>::totalspace = 0;
+template <class PhysicsVectorPrivateSubclass> G4ThreadLocal int G4MTPrivatePhysicsVectorCounter<PhysicsVectorPrivateSubclass>::totalspace = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the 
 //array of PhysicsVectorPrivateSubclass instances.
-template <class PhysicsVectorPrivateSubclass> __thread PhysicsVectorPrivateSubclass* G4MTPrivatePhysicsVectorCounter<PhysicsVectorPrivateSubclass>::offset = 0;
+template <class PhysicsVectorPrivateSubclass> G4ThreadLocal PhysicsVectorPrivateSubclass* G4MTPrivatePhysicsVectorCounter<PhysicsVectorPrivateSubclass>::offset = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This new field helps to use the class G4PhysicsVectorSubInstanceManager 

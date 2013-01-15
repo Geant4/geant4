@@ -45,7 +45,7 @@
 
 class G4Diproton : public G4VShortLivedParticle {
 private:
-  static __thread G4Diproton* theInstance;
+  static G4ThreadLocal G4Diproton* theInstance;
   G4Diproton();
   ~G4Diproton() { theInstance = 0; }
   

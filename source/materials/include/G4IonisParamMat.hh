@@ -183,7 +183,7 @@ private:
   G4double fMeanEnergyPerIon;
 
   // static data created only once
-  static __thread G4DensityEffectData* fDensityData;
+  static G4ThreadLocal G4DensityEffectData* fDensityData;
   G4double twoln10;
 };
 

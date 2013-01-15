@@ -157,7 +157,7 @@ private:
   void DisplayRegion(G4Region* motherRegion, G4int depth, std::vector<G4ParticleDefinition*>& particles) const;
 
   // The single instance.
-  static __thread G4GlobalFastSimulationManager*           fGlobalFastSimulationManager;
+  static G4ThreadLocal G4GlobalFastSimulationManager*           fGlobalFastSimulationManager;
   G4FastSimulationMessenger*                       fTheFastSimulationMessenger;
   G4FastSimulationVector <G4FastSimulationManager>             ManagedManagers;
   G4FastSimulationVector <G4FastSimulationManagerProcess>          fFSMPVector;

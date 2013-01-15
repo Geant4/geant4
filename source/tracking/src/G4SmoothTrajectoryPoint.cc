@@ -45,7 +45,7 @@
 #include "G4AttCheck.hh"
 #endif
 
-__thread G4Allocator<G4SmoothTrajectoryPoint> *aSmoothTrajectoryPointAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4SmoothTrajectoryPoint> *aSmoothTrajectoryPointAllocator_G4MT_TLS_ = 0;
 
 G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint()
 : fAuxiliaryPointVector(0)

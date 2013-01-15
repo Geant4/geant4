@@ -68,8 +68,8 @@ G4FTFParameters::G4FTFParameters() :
 G4FTFParameters::~G4FTFParameters()
 {}
 
-__thread bool G4FTFParameters::chipsComponentXSisInitialized = false;
-__thread G4ChipsComponentXS* G4FTFParameters::chipsComponentXSinstance = 0;
+G4ThreadLocal bool G4FTFParameters::chipsComponentXSisInitialized = false;
+G4ThreadLocal G4ChipsComponentXS* G4FTFParameters::chipsComponentXSinstance = 0;
 //**********************************************************************************************
 G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle, 
                                                    G4int      theA,

@@ -37,10 +37,10 @@
 #include "G4ProductionCutsTable.hh"
 #include <iomanip>
 
-__thread G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
-__thread G4ParticleDefinition* G4ProductionCuts::electDef = 0;
-__thread G4ParticleDefinition* G4ProductionCuts::positDef = 0;
-__thread G4ParticleDefinition* G4ProductionCuts::protonDef = 0;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::gammaDef = 0;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::electDef = 0;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::positDef = 0;
+G4ThreadLocal G4ParticleDefinition* G4ProductionCuts::protonDef = 0;
 
 G4ProductionCuts::G4ProductionCuts() :
   isModified(true)
@@ -87,10 +87,10 @@ G4int G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
 
 G4int  G4ProductionCuts::GetIndex(const G4String& name)
 {
-  static __thread G4String *gamma_G4MT_TLS_ = 0 ; if (!gamma_G4MT_TLS_) gamma_G4MT_TLS_ = new  G4String ("gamma") ;  G4String &gamma = *gamma_G4MT_TLS_;
-  static __thread G4String *electron_G4MT_TLS_ = 0 ; if (!electron_G4MT_TLS_) electron_G4MT_TLS_ = new  G4String ("e-") ;  G4String &electron = *electron_G4MT_TLS_;
-  static __thread G4String *positron_G4MT_TLS_ = 0 ; if (!positron_G4MT_TLS_) positron_G4MT_TLS_ = new  G4String ("e+") ;  G4String &positron = *positron_G4MT_TLS_;
-  static __thread G4String *proton_G4MT_TLS_ = 0 ; if (!proton_G4MT_TLS_) proton_G4MT_TLS_ = new  G4String ("proton") ;  G4String &proton = *proton_G4MT_TLS_;
+  static G4ThreadLocal G4String *gamma_G4MT_TLS_ = 0 ; if (!gamma_G4MT_TLS_) gamma_G4MT_TLS_ = new  G4String ("gamma") ;  G4String &gamma = *gamma_G4MT_TLS_;
+  static G4ThreadLocal G4String *electron_G4MT_TLS_ = 0 ; if (!electron_G4MT_TLS_) electron_G4MT_TLS_ = new  G4String ("e-") ;  G4String &electron = *electron_G4MT_TLS_;
+  static G4ThreadLocal G4String *positron_G4MT_TLS_ = 0 ; if (!positron_G4MT_TLS_) positron_G4MT_TLS_ = new  G4String ("e+") ;  G4String &positron = *positron_G4MT_TLS_;
+  static G4ThreadLocal G4String *proton_G4MT_TLS_ = 0 ; if (!proton_G4MT_TLS_) proton_G4MT_TLS_ = new  G4String ("proton") ;  G4String &proton = *proton_G4MT_TLS_;
   
   G4int index;
   if       ( name == gamma )        { index =  0; }

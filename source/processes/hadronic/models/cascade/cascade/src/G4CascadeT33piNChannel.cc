@@ -39,21 +39,21 @@ using namespace G4InuclParticleNames;
 namespace {
   // pi+ p : Outgoing particle types of a given multiplicity
 
-  static __thread G4int pipP2bfs[2][2] =
+  static G4ThreadLocal G4int pipP2bfs[2][2] =
    {{pip,pro}, {kpl,sp}};
 
-  static __thread G4int pipP3bfs[7][3] =
+  static G4ThreadLocal G4int pipP3bfs[7][3] =
    {{pip,pro,pi0}, {pip,neu,pip}, {pi0,sp,kpl}, {pip,sp,k0}, 
     {pip,s0,kpl},   {pip,lam,kpl},  {kpl,pro,k0b}};
 
-  static __thread G4int pipP4bfs[15][4] =
+  static G4ThreadLocal G4int pipP4bfs[15][4] =
    {{pip,pro,pip,pim},{pip,pro,pi0,pi0},{pip,neu,pip,pi0},
     {pip,sp,kpl,pim},  {pi0,sp,kpl,pi0},  {pip,sp,k0,pi0},
     {pip,s0,k0,pip},  {pip,s0,kpl,pi0},  {pip,lam,kpl,pi0},
     {pip,lam,k0,pip}, {pip,sm,kpl,pip},  {pip,pro,kpl,kmi},
     {pip,pro,k0,k0b}, {pi0,pro,kpl,k0b}, {pip,neu,kpl,k0b}};
 
-  static __thread G4int pipP5bfs[24][5] =
+  static G4ThreadLocal G4int pipP5bfs[24][5] =
    {{pip,pro,pip,pim,pi0}, {pip,pro,pi0,pi0,pi0}, {pip,neu,pip,pip,pim},
     {pip,neu,pip,pi0,pi0}, {pip,sp,kpl,pim,pi0},   {pi0,sp,kpl,pi0,pi0},
     {pip,sp,k0,pip,pim},   {pip,sp,k0,pi0,pi0},   {pip,lam,k0,pip,pi0},
@@ -63,23 +63,23 @@ namespace {
     {pip,pro,pi0,kpl,kmi},   {pip,pro,pi0,k0,k0b},  {pi0,pro,pi0,kpl,k0b},
     {pip,neu,pip,kpl,kmi},   {pip,neu,pip,k0,k0b},  {pip,neu,pi0,kpl,k0b}};
 
-  static __thread G4int pipP6bfs[5][6] =
+  static G4ThreadLocal G4int pipP6bfs[5][6] =
    {{pip,pro,pip,pip,pim,pim}, {pip,pro,pip,pim,pi0,pi0},
     {pip,pro,pi0,pi0,pi0,pi0}, {pip,neu,pip,pi0,pi0,pi0},
     {pip,neu,pip,pip,pim,pi0}};
 
-  static __thread G4int pipP7bfs[6][7] =
+  static G4ThreadLocal G4int pipP7bfs[6][7] =
    {{pip,pro,pip,pip,pim,pim,pi0}, {pip,pro,pip,pim,pi0,pi0,pi0},
     {pip,pro,pi0,pi0,pi0,pi0,pi0}, {pip,neu,pip,pip,pip,pim,pim},
     {pip,neu,pip,pip,pim,pi0,pi0}, {pip,neu,pip,pi0,pi0,pi0,pi0}};
 
-  static __thread G4int pipP8bfs[7][8] =
+  static G4ThreadLocal G4int pipP8bfs[7][8] =
    {{pip,pro,pip,pip,pip,pim,pim,pim}, {pip,pro,pip,pip,pim,pim,pi0,pi0},
     {pip,pro,pip,pim,pi0,pi0,pi0,pi0}, {pip,pro,pi0,pi0,pi0,pi0,pi0,pi0},
     {pip,neu,pip,pip,pip,pim,pim,pi0}, {pip,neu,pip,pip,pim,pi0,pi0,pi0},
     {pip,neu,pip,pi0,pi0,pi0,pi0,pi0}};
 
-  static __thread G4int pipP9bfs[8][9] =
+  static G4ThreadLocal G4int pipP9bfs[8][9] =
    {{pip,pro,pip,pip,pip,pim,pim,pim,pi0}, {pip,pro,pip,pip,pim,pim,pi0,pi0,pi0},
     {pip,pro,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pip,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
     {pip,neu,pip,pip,pip,pip,pim,pim,pim}, {pip,neu,pip,pip,pip,pim,pim,pi0,pi0},
@@ -89,21 +89,21 @@ namespace {
 namespace {
   // pi- n : Outgoing particle types of a given multiplicity
 
-  static __thread G4int pimN2bfs[2][2] =
+  static G4ThreadLocal G4int pimN2bfs[2][2] =
    {{pim,neu}, {k0,sm}};
 
-  static __thread G4int pimN3bfs[7][3] =
+  static G4ThreadLocal G4int pimN3bfs[7][3] =
    {{pim,neu,pi0}, {pim,pro,pim}, {pi0,sm,k0}, {pim,sm,kpl},
     {pim,s0,k0},   {pim,lam,k0},  {k0,neu,kmi}};
 
-  static __thread G4int pimN4bfs[15][4] =
+  static G4ThreadLocal G4int pimN4bfs[15][4] =
    {{pim,neu,pip,pim},{pim,neu,pi0,pi0},{pim,pro,pim,pi0},
     {pim,sm,k0,pip},  {pi0,sm,k0,pi0},  {pim,sm,kpl,pi0},
     {pim,s0,kpl,pim},  {pim,s0,k0,pi0},  {pim,lam,k0,pi0},
     {pim,lam,kpl,pim}, {pim,sp,k0,pim},  {pim,neu,k0,k0b},
     {pim,neu,kpl,kmi},  {pi0,neu,k0,kmi},  {pim,pro,k0,kmi}};
 
-  static __thread G4int pimN5bfs[24][5] =
+  static G4ThreadLocal G4int pimN5bfs[24][5] =
    {{pim,neu,pip,pim,pi0}, {pim,neu,pi0,pi0,pi0}, {pim,pro,pip,pim,pim},
     {pim,pro,pim,pi0,pi0}, {pim,sm,k0,pip,pi0},   {pi0,sm,k0,pi0,pi0},
     {pim,sm,kpl,pip,pim},   {pim,sm,kpl,pi0,pi0},   {pim,lam,kpl,pim,pi0},
@@ -113,23 +113,23 @@ namespace {
     {pim,neu,pi0,k0,k0b},  {pim,neu,pi0,kpl,kmi},   {pi0,neu,pi0,k0,kmi},
     {pim,pro,pim,k0,k0b},  {pim,pro,pim,kpl,kmi},   {pim,pro,pi0,k0,kmi}};
 
-  static __thread G4int pimN6bfs[5][6] =
+  static G4ThreadLocal G4int pimN6bfs[5][6] =
    {{pim,neu,pip,pip,pim,pim}, {pim,neu,pip,pim,pi0,pi0},
     {pim,neu,pi0,pi0,pi0,pi0}, {pim,pro,pim,pi0,pi0,pi0},
     {pim,pro,pip,pim,pim,pi0}};
 
-  static __thread G4int pimN7bfs[6][7] =
+  static G4ThreadLocal G4int pimN7bfs[6][7] =
    {{pim,neu,pip,pip,pim,pim,pi0}, {pim,neu,pip,pim,pi0,pi0,pi0},
     {pim,neu,pi0,pi0,pi0,pi0,pi0}, {pim,pro,pip,pip,pim,pim,pim},
     {pim,pro,pip,pim,pim,pi0,pi0}, {pim,pro,pim,pi0,pi0,pi0,pi0}};
 
-  static __thread G4int pimN8bfs[7][8] =
+  static G4ThreadLocal G4int pimN8bfs[7][8] =
    {{pim,neu,pip,pip,pip,pim,pim,pim}, {pim,neu,pip,pip,pim,pim,pi0,pi0},
     {pim,neu,pip,pim,pi0,pi0,pi0,pi0}, {pim,neu,pi0,pi0,pi0,pi0,pi0,pi0},
     {pim,pro,pip,pip,pim,pim,pim,pi0}, {pim,pro,pip,pim,pim,pi0,pi0,pi0},
     {pim,pro,pim,pi0,pi0,pi0,pi0,pi0}};
 
-  static __thread G4int pimN9bfs[8][9] =
+  static G4ThreadLocal G4int pimN9bfs[8][9] =
    {{pim,neu,pip,pip,pip,pim,pim,pim,pi0}, {pim,neu,pip,pip,pim,pim,pi0,pi0,pi0},
     {pim,neu,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pim,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
     {pim,pro,pip,pip,pip,pim,pim,pim,pim}, {pim,pro,pip,pip,pim,pim,pim,pi0,pi0},
@@ -139,13 +139,13 @@ namespace {
 namespace {
   // Total pi+ p cross sections as a function of kinetic energy
   // New cs after 9-body tuning (27 July 09)
-  static __thread G4double pipPtotXSec[30] = 
+  static G4ThreadLocal G4double pipPtotXSec[30] = 
    {  0.0,   1.2,   2.5,   3.8,   5.0,  7.0,   9.0,  15.0, 30.0,  64.0,
     130.0, 190.0, 130.0,  56.0,  28.0, 17.14, 19.28, 27.4, 40.05, 32.52,
      30.46, 29.0,  27.26, 25.84, 25.5, 24.5,  24.0,  23.5, 23.0,  23.0};
 
   // pi+ p cross sections as functions of kinetic energy and multiplicity
-  static __thread G4double pipPCrossSections[74][30] = {
+  static G4ThreadLocal G4double pipPCrossSections[74][30] = {
   //
   // multiplicity 2 (2 channels)
   //
@@ -538,7 +538,7 @@ namespace {
 
 typedef G4CascadePiPlusPChannelData::data_t G4CascadePiPlusPChannelData_t;
 
-__thread G4CascadePiPlusPChannelData_t *G4CascadePiPlusPChannelData::data = 0;
+G4ThreadLocal G4CascadePiPlusPChannelData_t *G4CascadePiPlusPChannelData::data = 0;
 
 G4CascadePiPlusPChannelData::data_t *G4CascadePiPlusPChannelData::initializer()
 {
@@ -550,7 +550,7 @@ G4CascadePiPlusPChannelData::data_t *G4CascadePiPlusPChannelData::initializer()
 
 typedef G4CascadePiMinusNChannelData::data_t G4CascadePiMinusNChannelData_t;
 
-__thread G4CascadePiMinusNChannelData_t *G4CascadePiMinusNChannelData::data = 0;
+G4ThreadLocal G4CascadePiMinusNChannelData_t *G4CascadePiMinusNChannelData::data = 0;
 
 G4CascadePiMinusNChannelData::data_t *G4CascadePiMinusNChannelData::initializer()
 {

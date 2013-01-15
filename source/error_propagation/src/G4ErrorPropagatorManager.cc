@@ -63,7 +63,7 @@
 #include "G4RunManager.hh"
 #include "G4VParticleChange.hh"
 
-__thread G4ErrorPropagatorManager*
+G4ThreadLocal G4ErrorPropagatorManager*
 G4ErrorPropagatorManager::theG4ErrorPropagatorManager = 0;
 
 //-----------------------------------------------------------------------

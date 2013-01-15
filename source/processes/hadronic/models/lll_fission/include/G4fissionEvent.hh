@@ -77,11 +77,11 @@ class G4fissionEvent {
       G4double* photonAges; 
 
       // options
-      static __thread G4int delayoption;
-      static __thread G4int correlationoption;
-      static __thread G4int nudistoption;
-      static __thread G4int Cf252ndistoption;
-      static __thread G4int Cf252nengoption;
+      static G4ThreadLocal G4int delayoption;
+      static G4ThreadLocal G4int correlationoption;
+      static G4ThreadLocal G4int nudistoption;
+      static G4ThreadLocal G4int Cf252ndistoption;
+      static G4ThreadLocal G4int Cf252nengoption;
       static G4double (*rngdptr)(void);
       static float (*rngfptr)(void);
 

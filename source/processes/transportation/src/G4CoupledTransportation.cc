@@ -97,7 +97,7 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
   fpSafetyHelper = transportMgr->GetSafetyHelper();  // New 
 
   // Following assignment is to fix small memory leak from simple use of 'new'
-  static __thread G4TouchableHandle *nullTouchableHandle_G4MT_TLS_ = 0 ; if (!nullTouchableHandle_G4MT_TLS_) nullTouchableHandle_G4MT_TLS_ = new  G4TouchableHandle  ;  G4TouchableHandle &nullTouchableHandle = *nullTouchableHandle_G4MT_TLS_;  // Points to (G4VTouchable*) 0
+  static G4ThreadLocal G4TouchableHandle *nullTouchableHandle_G4MT_TLS_ = 0 ; if (!nullTouchableHandle_G4MT_TLS_) nullTouchableHandle_G4MT_TLS_ = new  G4TouchableHandle  ;  G4TouchableHandle &nullTouchableHandle = *nullTouchableHandle_G4MT_TLS_;  // Points to (G4VTouchable*) 0
   fCurrentTouchableHandle = nullTouchableHandle; 
   // fCurrentTouchableHandle = G4TouchableHandle( 0 );  // new G4TouchableHistory();
 
@@ -397,7 +397,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 	  G4double  startEnergy= track.GetKineticEnergy();
 	  G4double  endEnergy= fTransportEndKineticEnergy; 
       
-	  static __thread G4int no_inexact_steps=0; // , no_large_ediff;
+	  static G4ThreadLocal G4int no_inexact_steps=0; // , no_large_ediff;
 	  G4double absEdiff = std::fabs(startEnergy- endEnergy);
 	  if( absEdiff > perMillion * endEnergy )  {
 	    no_inexact_steps++;
@@ -490,7 +490,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
 {
-  static __thread G4int noCalls=0;
+  static G4ThreadLocal G4int noCalls=0;
   noCalls++;
 
   fParticleChange.Initialize(track) ;
@@ -672,7 +672,7 @@ G4VParticleChange* G4CoupledTransportation::PostStepDoIt( const G4Track& track,
   // Check that the end position and direction are preserved 
   //   since call to AlongStepDoIt
   if( (fTransportEndPosition  - track.GetPosition()).mag2() >= 1.0e-16 ){
-     static __thread G4String *EndLabelString_G4MT_TLS_ = 0 ; if (!EndLabelString_G4MT_TLS_) EndLabelString_G4MT_TLS_ = new  G4String ("End of Step Position") ;  G4String &EndLabelString = *EndLabelString_G4MT_TLS_;  
+     static G4ThreadLocal G4String *EndLabelString_G4MT_TLS_ = 0 ; if (!EndLabelString_G4MT_TLS_) EndLabelString_G4MT_TLS_ = new  G4String ("End of Step Position") ;  G4String &EndLabelString = *EndLabelString_G4MT_TLS_;  
      ReportMove( track.GetPosition(), fTransportEndPosition, EndLabelString ); 
      G4cerr << " Problem in G4CoupledTransportation::PostStepDoIt " << G4endl; 
   }
@@ -805,7 +805,7 @@ void
 G4CoupledTransportation::StartTracking(G4Track* aTrack)
 {
 
-  static __thread G4TransportationManager* transportMgr = 0 ; if (!transportMgr) transportMgr=  
+  static G4ThreadLocal G4TransportationManager* transportMgr = 0 ; if (!transportMgr) transportMgr=  
       G4TransportationManager::GetTransportationManager(); 
 
   // G4VProcess::StartTracking(aTrack);
@@ -855,7 +855,7 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
      if( chordF ) chordF->ResetStepEstimate();
   }
   // Clear the chord finders of all fields (ie managers) derived objects
-  static __thread G4FieldManagerStore* fieldMgrStore = 0 ; if (!fieldMgrStore) fieldMgrStore= G4FieldManagerStore::GetInstance();
+  static G4ThreadLocal G4FieldManagerStore* fieldMgrStore = 0 ; if (!fieldMgrStore) fieldMgrStore= G4FieldManagerStore::GetInstance();
   fieldMgrStore->ClearAllChordFindersState(); 
 
 #ifdef G4DEBUG_TRANSPORT
@@ -879,7 +879,7 @@ void
 G4CoupledTransportation::
 ReportInexactEnergy(G4double startEnergy, G4double endEnergy)
 {
-  static __thread G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10, no_large_ediff= 0; 
+  static G4ThreadLocal G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10, no_large_ediff= 0; 
 
   if( std::fabs(startEnergy- endEnergy) > perThousand * endEnergy )
     {

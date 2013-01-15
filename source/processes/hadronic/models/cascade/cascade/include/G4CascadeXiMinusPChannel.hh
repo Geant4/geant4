@@ -39,7 +39,7 @@
 
 struct G4CascadeXiMinusPChannelData {
   typedef G4CascadeData<31,6,24,4,4,4,4> data_t;
-  static __thread data_t *data;
+  static G4ThreadLocal data_t *data;
   static data_t *initializer();
 };
 

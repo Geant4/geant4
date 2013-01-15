@@ -84,7 +84,7 @@ namespace G4INCL {
   private:
     long ID;
     AvatarType type;
-    static __thread long nextID;
+    static G4ThreadLocal long nextID;
   protected:
     G4double theTime;
   };

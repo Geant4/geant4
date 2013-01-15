@@ -30,7 +30,7 @@
 
 #include "G4ReactionProduct.hh"
 
-__thread G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator_G4MT_TLS_ = 0;
 
 
  G4ReactionProduct::G4ReactionProduct() :

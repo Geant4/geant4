@@ -15,7 +15,7 @@ class G4MTPrivatePhysicsVectorCounter
 {
 public:
   static G4MTPrivateObject* offsetshadow;
-  static __thread G4MTPrivateObject* offset;
+  static G4ThreadLocal G4MTPrivateObject* offset;
 
   G4MTPrivatePhysicsVectorCounter() {
   };
@@ -103,8 +103,8 @@ public:
 private:
   static int phaseshadow; //0: master initialization, 1: worker initialization
   static int totalobjshadow;
-  static __thread int totalobj;
-  static __thread int totalspace;
+  static G4ThreadLocal int totalobj;
+  static G4ThreadLocal int totalspace;
 };
 
 #endif

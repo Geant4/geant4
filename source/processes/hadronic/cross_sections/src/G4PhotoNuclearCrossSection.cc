@@ -43,29 +43,29 @@
 #include "G4HadTmpUtil.hh"
 
 // Initialization of the statics
-__thread G4int G4PhotoNuclearCrossSection::lastN=0;  
+G4ThreadLocal G4int G4PhotoNuclearCrossSection::lastN=0;  
                             // The last N of calculated nucleus
-__thread G4int G4PhotoNuclearCrossSection::lastZ=0;  
+G4ThreadLocal G4int G4PhotoNuclearCrossSection::lastZ=0;  
                             // The last Z of calculated nucleus
-__thread G4double G4PhotoNuclearCrossSection::lastSig=0.; 
+G4ThreadLocal G4double G4PhotoNuclearCrossSection::lastSig=0.; 
                             // Last value of the Cross Section
-__thread G4double* G4PhotoNuclearCrossSection::lastGDR=0; 
+G4ThreadLocal G4double* G4PhotoNuclearCrossSection::lastGDR=0; 
                             // Pointer to the last array of GDR cross sections
-__thread G4double* G4PhotoNuclearCrossSection::lastHEN=0; 
+G4ThreadLocal G4double* G4PhotoNuclearCrossSection::lastHEN=0; 
                             // Pointer to the last array of HEn cross sections
-__thread G4double G4PhotoNuclearCrossSection::lastE=0.;  
+G4ThreadLocal G4double G4PhotoNuclearCrossSection::lastE=0.;  
                             // Last used in the cross section Energy
-__thread G4double G4PhotoNuclearCrossSection::lastTH=0.; 
+G4ThreadLocal G4double G4PhotoNuclearCrossSection::lastTH=0.; 
                             // Last value of the Energy Threshold (A-dependent)
-__thread G4double G4PhotoNuclearCrossSection::lastSP=0.; 
+G4ThreadLocal G4double G4PhotoNuclearCrossSection::lastSP=0.; 
                             // Last value of the ShadowingPomeron (A-dependent)
 
 
 // Vector of pointers to the GDRPhotonuclearCrossSection
-__thread std::vector<G4double*> *G4PhotoNuclearCrossSection::GDR_G4MT_TLS_ = 0;
+G4ThreadLocal std::vector<G4double*> *G4PhotoNuclearCrossSection::GDR_G4MT_TLS_ = 0;
 
 // Vector of pointers to the HighEnPhotonuclearCrossSect
-__thread std::vector<G4double*> *G4PhotoNuclearCrossSection::HEN_G4MT_TLS_ = 0;
+G4ThreadLocal std::vector<G4double*> *G4PhotoNuclearCrossSection::HEN_G4MT_TLS_ = 0;
 
 
 G4PhotoNuclearCrossSection::G4PhotoNuclearCrossSection(const G4String& nam)
@@ -133,10 +133,10 @@ G4PhotoNuclearCrossSection::GetIsoCrossSection(const G4DynamicParticle* aPart,
 
   // Associative memory for acceleration
 
-  static __thread std::vector <G4int> *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colN = *colN_G4MT_TLS_;      // N of calculated nuclei
-  static __thread std::vector <G4int> *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colZ = *colZ_G4MT_TLS_;      // Z of calculated nuclei
-  static __thread std::vector <G4double> *spA_G4MT_TLS_ = 0 ; if (!spA_G4MT_TLS_) spA_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &spA = *spA_G4MT_TLS_;    // shadowing coefficients (A-dependent)
-  static __thread std::vector <G4double> *eTH_G4MT_TLS_ = 0 ; if (!eTH_G4MT_TLS_) eTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &eTH = *eTH_G4MT_TLS_;    // energy threshold (A-dependent)
+  static G4ThreadLocal std::vector <G4int> *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colN = *colN_G4MT_TLS_;      // N of calculated nuclei
+  static G4ThreadLocal std::vector <G4int> *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colZ = *colZ_G4MT_TLS_;      // Z of calculated nuclei
+  static G4ThreadLocal std::vector <G4double> *spA_G4MT_TLS_ = 0 ; if (!spA_G4MT_TLS_) spA_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &spA = *spA_G4MT_TLS_;    // shadowing coefficients (A-dependent)
+  static G4ThreadLocal std::vector <G4double> *eTH_G4MT_TLS_ = 0 ; if (!eTH_G4MT_TLS_) eTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &eTH = *eTH_G4MT_TLS_;    // energy threshold (A-dependent)
   //
   const G4double Energy = aPart->GetKineticEnergy()/MeV;
   const G4int targetAtomicNumber = AA; //@@ Nat mixture (?!)

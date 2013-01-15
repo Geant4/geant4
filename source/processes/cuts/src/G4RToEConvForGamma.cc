@@ -102,15 +102,15 @@ G4double G4RToEConvForGamma::ComputeCrossSection(G4double AtomicNumber,
   //  Compute the "absorption" cross section of the photon "absorption"
   //  cross section means here the sum of the cross sections of the
   //  pair production, Compton scattering and photoelectric processes
-  static __thread G4double Z;  
+  static G4ThreadLocal G4double Z;  
   const  G4double t1keV = 1.*keV;
   const  G4double t200keV = 200.*keV;
   const  G4double t100MeV = 100.*MeV;
 
-  static __thread G4double s200keV, s1keV;
-  static __thread G4double tmin, tlow; 
-  static __thread G4double smin, slow;
-  static __thread G4double cmin, clow, chigh;
+  static G4ThreadLocal G4double s200keV, s1keV;
+  static G4ThreadLocal G4double tmin, tlow; 
+  static G4ThreadLocal G4double smin, slow;
+  static G4ThreadLocal G4double cmin, clow, chigh;
   //  compute Z dependent quantities in the case of a new AtomicNumber
   if(std::abs(AtomicNumber-Z)>0.1)  {
     Z = AtomicNumber;

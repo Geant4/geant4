@@ -32,7 +32,7 @@
 
 #include "G4NavigationLevel.hh"
 
-__thread G4Allocator<G4NavigationLevel> *aNavigationLevelAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4NavigationLevel> *aNavigationLevelAllocator_G4MT_TLS_ = 0;
 
 G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
                                 const G4AffineTransform& afTransform,

@@ -32,7 +32,7 @@
 
 #include "G4NavigationLevelRep.hh"
 
-__thread G4Allocator<G4NavigationLevelRep> *aNavigLevelRepAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4NavigationLevelRep> *aNavigLevelRepAllocator_G4MT_TLS_ = 0;
 
 // Constructors
 //--------------

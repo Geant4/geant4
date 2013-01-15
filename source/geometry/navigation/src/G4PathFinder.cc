@@ -47,7 +47,7 @@
 
 // Initialise the static instance of the singleton
 //
-__thread G4PathFinder* G4PathFinder::fpPathFinder=0;
+G4ThreadLocal G4PathFinder* G4PathFinder::fpPathFinder=0;
 
 // ----------------------------------------------------------------------------
 // GetInstance()
@@ -56,7 +56,7 @@ __thread G4PathFinder* G4PathFinder::fpPathFinder=0;
 //
 G4PathFinder* G4PathFinder::GetInstance()
 {
-   static __thread G4PathFinder *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4PathFinder  ;  G4PathFinder &theInstance = *theInstance_G4MT_TLS_; 
+   static G4ThreadLocal G4PathFinder *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4PathFinder  ;  G4PathFinder &theInstance = *theInstance_G4MT_TLS_; 
    if( ! fpPathFinder )
    {
      fpPathFinder = &theInstance; 

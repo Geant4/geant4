@@ -258,9 +258,9 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
    
   static const G4ThreeVector VecCartAxes[3]=
    { G4ThreeVector(1.,0.,0.),G4ThreeVector(0.,1.,0.),G4ThreeVector(0.,0.,1.) };
-  static __thread G4ExitNormal::ESide *SideCartAxesPlus = 0 ; if (!SideCartAxesPlus) {SideCartAxesPlus = new  G4ExitNormal::ESide [3] ;
+  static G4ThreadLocal G4ExitNormal::ESide *SideCartAxesPlus = 0 ; if (!SideCartAxesPlus) {SideCartAxesPlus = new  G4ExitNormal::ESide [3] ;
    SideCartAxesPlus[0]= G4ExitNormal::kPX;SideCartAxesPlus[1]= G4ExitNormal::kPY;SideCartAxesPlus[2]= G4ExitNormal::kPZ ;};
-  static __thread G4ExitNormal::ESide *SideCartAxesMinus = 0 ; if (!SideCartAxesMinus) {SideCartAxesMinus = new  G4ExitNormal::ESide [3] ;
+  static G4ThreadLocal G4ExitNormal::ESide *SideCartAxesMinus = 0 ; if (!SideCartAxesMinus) {SideCartAxesMinus = new  G4ExitNormal::ESide [3] ;
    SideCartAxesMinus[0]= G4ExitNormal::kMX;SideCartAxesMinus[1]= G4ExitNormal::kMY;SideCartAxesMinus[2]= G4ExitNormal::kMZ ;};
 
   pVol->GetReplicationData(axis, nReplicas, width, offset, consuming);

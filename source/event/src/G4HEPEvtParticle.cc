@@ -31,7 +31,7 @@
 
 #include "G4HEPEvtParticle.hh"
 
-__thread G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator_G4MT_TLS_ = 0;
 
 G4HEPEvtParticle::G4HEPEvtParticle()
   : theParticle(0), ISTHEP(1), JDAHEP1(1), JDAHEP2(1)

@@ -360,8 +360,8 @@ class G4ProcessManager
    G4int verboseLevel;
   
  private:
-   static __thread G4ProcessManagerMessenger* fProcessManagerMessenger;
-   static __thread G4int                      counterOfObjects;
+   static G4ThreadLocal G4ProcessManagerMessenger* fProcessManagerMessenger;
+   static G4ThreadLocal G4int                      counterOfObjects;
 };
 #include "G4ProcessManager.icc"
 

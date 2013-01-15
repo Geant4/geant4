@@ -91,7 +91,7 @@ public:
 
 protected :
     G4DNADamages();
-    static __thread G4DNADamages* fpInstance;
+    static G4ThreadLocal G4DNADamages* fpInstance;
     virtual ~G4DNADamages();
 
     G4bool fJustCountDamage;

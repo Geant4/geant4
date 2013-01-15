@@ -86,7 +86,7 @@ namespace G4INCL {
 
   private:
     /// \brief The solution obtained in the last call to solve().
-    static __thread  RootFinder_solution_t *solution_G4MT_TLS_;
+    static G4ThreadLocal  RootFinder_solution_t *solution_G4MT_TLS_;
 
     /** \brief Bracket the root of the function f.
      *

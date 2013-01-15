@@ -72,7 +72,7 @@ const G4double G4CameronTruranHilfPairingCorrections::PairingNTable
 };
 
 
-__thread G4CameronTruranHilfPairingCorrections* G4CameronTruranHilfPairingCorrections::theInstance = 0;
+G4ThreadLocal G4CameronTruranHilfPairingCorrections* G4CameronTruranHilfPairingCorrections::theInstance = 0;
 
 G4CameronTruranHilfPairingCorrections::G4CameronTruranHilfPairingCorrections()
 {;}
@@ -83,7 +83,7 @@ G4CameronTruranHilfPairingCorrections::~G4CameronTruranHilfPairingCorrections()
 G4CameronTruranHilfPairingCorrections* G4CameronTruranHilfPairingCorrections::GetInstance()
 {
   if (!theInstance)  { 
-    static __thread G4CameronTruranHilfPairingCorrections *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4CameronTruranHilfPairingCorrections  ;  G4CameronTruranHilfPairingCorrections &theCorrections = *theCorrections_G4MT_TLS_;
+    static G4ThreadLocal G4CameronTruranHilfPairingCorrections *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4CameronTruranHilfPairingCorrections  ;  G4CameronTruranHilfPairingCorrections &theCorrections = *theCorrections_G4MT_TLS_;
     theInstance = &theCorrections; 
   }
   return theInstance;

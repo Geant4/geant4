@@ -181,7 +181,7 @@ public:
     };
 
 protected:
-    static __thread G4MolecularConfigurationManager* fgManager;
+    static G4ThreadLocal G4MolecularConfigurationManager* fgManager;
 
     static G4MolecularConfigurationManager* GetManager();
 

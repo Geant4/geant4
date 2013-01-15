@@ -114,7 +114,7 @@ namespace G4INCL {
       };
 
       /** \brief Number of the event */
-      static __thread Int_t eventNumber;
+      static G4ThreadLocal Int_t eventNumber;
       /** \brief Protjectile particle type */
       ParticleType projectileType;
 

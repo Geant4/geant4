@@ -54,7 +54,7 @@
 
 using namespace std;
 
-__thread G4int G4SurfaceVoxelizer::fDefaultVoxelsCount = -1;
+G4ThreadLocal G4int G4SurfaceVoxelizer::fDefaultVoxelsCount = -1;
 
 //______________________________________________________________________________
 G4SurfaceVoxelizer::G4SurfaceVoxelizer()

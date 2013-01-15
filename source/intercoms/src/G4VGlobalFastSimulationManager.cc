@@ -32,7 +32,7 @@
 
 #include "G4VGlobalFastSimulationManager.hh"
 
-__thread G4VGlobalFastSimulationManager* 
+G4ThreadLocal G4VGlobalFastSimulationManager* 
 G4VGlobalFastSimulationManager::fpConcreteInstance = 0;
 
 G4VGlobalFastSimulationManager* 

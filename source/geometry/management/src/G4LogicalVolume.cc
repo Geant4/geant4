@@ -50,7 +50,7 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the
 //array of LogicalVolumePrivateSubclass instances.
-template <class LogicalVolumePrivateSubclass> __thread LogicalVolumePrivateSubclass* G4MTPrivateSubInstanceManager<LogicalVolumePrivateSubclass>::offset = 0;      
+template <class LogicalVolumePrivateSubclass> G4ThreadLocal LogicalVolumePrivateSubclass* G4MTPrivateSubInstanceManager<LogicalVolumePrivateSubclass>::offset = 0;      
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This new field helps to use the class G4LogicalVolumeSubInstanceManager

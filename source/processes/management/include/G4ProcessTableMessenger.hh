@@ -75,7 +75,7 @@ class G4ProcessTableMessenger: public G4UImessenger
   private:
     G4String GetProcessTypeName(G4ProcessType aType) const;  
     G4int    GetProcessType(const G4String& aTypeName) const;
-    static __thread   G4int NumberOfProcessType;
+    static G4ThreadLocal   G4int NumberOfProcessType;
     void     SetNumberOfProcessType();
 
   private:

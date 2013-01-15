@@ -75,17 +75,17 @@ private:
   G4ChipsKaonMinusElasticXS* theKMinusCS; // K- cross-section
   G4ChipsKaonPlusElasticXS* theKPlusCS;  // K+ cross-section
 
-  static __thread G4double  lastSig; // Last value of the Cross Section
-  static __thread G4double* lastLEN; // Pointer to the last array of LowEnergy cross sections
-  static __thread G4double* lastHEN; // Pointer to the last array of HighEnergy cross sections
-  static __thread G4double  lastE;   // Last used in the cross section Energy
-  static __thread G4int     lastPDG; // The last projectile PDG
-  static __thread G4int     lastN;   // The last N of calculated nucleus
-  static __thread G4int     lastZ;   // The last Z of calculated nucleus
-  static __thread G4double  lastP;   // Last used in the cross section Momentum
-  static __thread G4double  lastTH;  // Last value of the Momentum Threshold
-  static __thread G4double  lastCS;  // Last value of the Cross Section
-  static __thread G4int     lastI;   // The last position in the DAMDB
+  static G4ThreadLocal G4double  lastSig; // Last value of the Cross Section
+  static G4ThreadLocal G4double* lastLEN; // Pointer to the last array of LowEnergy cross sections
+  static G4ThreadLocal G4double* lastHEN; // Pointer to the last array of HighEnergy cross sections
+  static G4ThreadLocal G4double  lastE;   // Last used in the cross section Energy
+  static G4ThreadLocal G4int     lastPDG; // The last projectile PDG
+  static G4ThreadLocal G4int     lastN;   // The last N of calculated nucleus
+  static G4ThreadLocal G4int     lastZ;   // The last Z of calculated nucleus
+  static G4ThreadLocal G4double  lastP;   // Last used in the cross section Momentum
+  static G4ThreadLocal G4double  lastTH;  // Last value of the Momentum Threshold
+  static G4ThreadLocal G4double  lastCS;  // Last value of the Cross Section
+  static G4ThreadLocal G4int     lastI;   // The last position in the DAMDB
 
 };
 

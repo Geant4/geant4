@@ -29,7 +29,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4IT.hh"
 
-__thread size_t *G4VITProcess::fNbProcess_G4MT_TLS_ = 0;
+G4ThreadLocal size_t *G4VITProcess::fNbProcess_G4MT_TLS_ = 0;
 
 G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
     G4VProcess( name, type ),

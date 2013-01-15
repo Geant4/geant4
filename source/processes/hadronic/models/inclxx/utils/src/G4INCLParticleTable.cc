@@ -52,28 +52,28 @@ namespace G4INCL {
   const NaturalIsotopicDistributions *ParticleTable::theNaturalIsotopicDistributions = NULL;
 
   /// \brief Static pointer to the mass function for nuclei
-  __thread ParticleTable::NuclearMassFn ParticleTable::getTableMass;
+  G4ThreadLocal ParticleTable::NuclearMassFn ParticleTable::getTableMass;
   /// \brief Static pointer to the mass function for particles
-  __thread ParticleTable::ParticleMassFn ParticleTable::getTableParticleMass;
+  G4ThreadLocal ParticleTable::ParticleMassFn ParticleTable::getTableParticleMass;
   /// \brief Static pointer to the separation-energy function
-  __thread ParticleTable::SeparationEnergyFn ParticleTable::getSeparationEnergy;
+  G4ThreadLocal ParticleTable::SeparationEnergyFn ParticleTable::getSeparationEnergy;
 
   const G4double ParticleTable::theINCLNucleonMass = 938.2796;
   const G4double ParticleTable::theINCLPionMass = 138.0;
-  __thread G4double ParticleTable::protonMass = 0.0;
-  __thread G4double ParticleTable::neutronMass = 0.0;
-  __thread G4double ParticleTable::piPlusMass = 0.0;
-  __thread G4double ParticleTable::piMinusMass = 0.0;
-  __thread G4double ParticleTable::piZeroMass = 0.0;
+  G4ThreadLocal G4double ParticleTable::protonMass = 0.0;
+  G4ThreadLocal G4double ParticleTable::neutronMass = 0.0;
+  G4ThreadLocal G4double ParticleTable::piPlusMass = 0.0;
+  G4ThreadLocal G4double ParticleTable::piMinusMass = 0.0;
+  G4ThreadLocal G4double ParticleTable::piZeroMass = 0.0;
 
   // e^2/(4 pi epsilon_0) [MeV fm]
   const G4double ParticleTable::eSquared = 1.439964;
 
   // Hard-coded values of the real particle masses (MeV/c^2)
-  __thread G4double ParticleTable::theRealProtonMass = 938.27203;
-  __thread G4double ParticleTable::theRealNeutronMass = 939.56536;
-  __thread G4double ParticleTable::theRealChargedPiMass = 139.57018;
-  __thread G4double ParticleTable::theRealPiZeroMass = 134.9766;
+  G4ThreadLocal G4double ParticleTable::theRealProtonMass = 938.27203;
+  G4ThreadLocal G4double ParticleTable::theRealNeutronMass = 939.56536;
+  G4ThreadLocal G4double ParticleTable::theRealChargedPiMass = 139.57018;
+  G4ThreadLocal G4double ParticleTable::theRealPiZeroMass = 134.9766;
 
   const G4double ParticleTable::mediumDiffuseness[mediumNucleiTableSize] =
   {0.0,0.0,0.0,0.0,0.0,1.78,1.77,1.77,1.77,1.71,
@@ -291,11 +291,11 @@ namespace G4INCL {
     + 0.5;
   const G4double ParticleTable::theINCLProtonSeparationEnergy = 6.83;
   const G4double ParticleTable::theINCLNeutronSeparationEnergy = ParticleTable::theINCLProtonSeparationEnergy;
-  __thread G4double ParticleTable::protonSeparationEnergy = theINCLProtonSeparationEnergy;
-  __thread G4double ParticleTable::neutronSeparationEnergy = theINCLNeutronSeparationEnergy;
+  G4ThreadLocal G4double ParticleTable::protonSeparationEnergy = theINCLProtonSeparationEnergy;
+  G4ThreadLocal G4double ParticleTable::neutronSeparationEnergy = theINCLNeutronSeparationEnergy;
 
 #ifdef INCLXX_IN_GEANT4_MODE
-  __thread G4IonTable *ParticleTable::theG4IonTable;
+  G4ThreadLocal G4IonTable *ParticleTable::theG4IonTable;
 #else
   std::vector< std::vector <G4bool> > ParticleTable::massTableMask;
   std::vector< std::vector <G4double> > ParticleTable::massTable;

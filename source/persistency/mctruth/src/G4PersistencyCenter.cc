@@ -39,7 +39,7 @@
 #include "G4VHCIOentry.hh"
 #include "G4VDCIOentry.hh"
 
-__thread G4PersistencyCenter* G4PersistencyCenter::f_thePointer = 0 ;
+G4ThreadLocal G4PersistencyCenter* G4PersistencyCenter::f_thePointer = 0 ;
 
 // Implementation of Constructor #1
 G4PersistencyCenter::G4PersistencyCenter()

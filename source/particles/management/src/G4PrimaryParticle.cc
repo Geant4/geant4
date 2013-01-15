@@ -34,7 +34,7 @@
 #include "G4ios.hh"
 #include "G4VUserPrimaryParticleInformation.hh"
 
-__thread G4Allocator<G4PrimaryParticle> *aPrimaryParticleAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4PrimaryParticle> *aPrimaryParticleAllocator_G4MT_TLS_ = 0;
 
 G4PrimaryParticle::G4PrimaryParticle()
 :PDGcode(0),G4code(0),

@@ -90,7 +90,7 @@ class G4NeutronHPGamma
   G4double probability;
   
   G4NeutronHPLevel * next;
-  static __thread int instancecount;
+  static G4ThreadLocal int instancecount;
 };
 
 #endif

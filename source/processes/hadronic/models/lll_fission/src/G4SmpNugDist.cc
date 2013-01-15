@@ -78,7 +78,7 @@ G4int G4fissionEvent::G4SmpNugDist(G4int isotope, G4double nubar) {
     G4SmpNugDist - sampled multiplicity
 */
  
-  static __thread G4double logcoeff[nfissg+1] = {
+  static G4ThreadLocal G4double logcoeff[nfissg+1] = {
      0.00000000000000e+00,
      3.25809653802149e+00,
      5.86078622346587e+00,

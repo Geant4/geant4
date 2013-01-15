@@ -44,12 +44,12 @@
 #include "G4VPhysicsConstructor.hh"
 #include "G4PhysicsConstructorFactory.hh"
 
-__thread G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::theInstance = 0;
+G4ThreadLocal G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::theInstance = 0;
 
 G4PhysicsConstructorRegistry* G4PhysicsConstructorRegistry::Instance()
 {
   if(0 == theInstance) {
-    static __thread G4PhysicsConstructorRegistry *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4PhysicsConstructorRegistry  ;  G4PhysicsConstructorRegistry &manager = *manager_G4MT_TLS_;
+    static G4ThreadLocal G4PhysicsConstructorRegistry *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4PhysicsConstructorRegistry  ;  G4PhysicsConstructorRegistry &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;

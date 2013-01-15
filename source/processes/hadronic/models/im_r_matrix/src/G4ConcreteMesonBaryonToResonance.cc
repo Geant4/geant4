@@ -30,19 +30,19 @@
 
 G4BaryonWidth & G4ConcreteMesonBaryonToResonance::theBaryonWidth()
 {
-  static __thread G4BaryonWidth *theWidth_G4MT_TLS_ = 0 ; if (!theWidth_G4MT_TLS_) theWidth_G4MT_TLS_ = new  G4BaryonWidth  ;  G4BaryonWidth &theWidth = *theWidth_G4MT_TLS_;
+  static G4ThreadLocal G4BaryonWidth *theWidth_G4MT_TLS_ = 0 ; if (!theWidth_G4MT_TLS_) theWidth_G4MT_TLS_ = new  G4BaryonWidth  ;  G4BaryonWidth &theWidth = *theWidth_G4MT_TLS_;
   return theWidth;
 }
 
 G4BaryonPartialWidth & G4ConcreteMesonBaryonToResonance::theBaryonPartialWidth()
 {
-  static __thread G4BaryonPartialWidth *theWidth_G4MT_TLS_ = 0 ; if (!theWidth_G4MT_TLS_) theWidth_G4MT_TLS_ = new  G4BaryonPartialWidth  ;  G4BaryonPartialWidth &theWidth = *theWidth_G4MT_TLS_;
+  static G4ThreadLocal G4BaryonPartialWidth *theWidth_G4MT_TLS_ = 0 ; if (!theWidth_G4MT_TLS_) theWidth_G4MT_TLS_ = new  G4BaryonPartialWidth  ;  G4BaryonPartialWidth &theWidth = *theWidth_G4MT_TLS_;
   return theWidth;
 }
 
 G4ParticleTypeConverter & G4ConcreteMesonBaryonToResonance::myConv() 
 {
-    static __thread G4ParticleTypeConverter *theConv_G4MT_TLS_ = 0 ; if (!theConv_G4MT_TLS_) theConv_G4MT_TLS_ = new  G4ParticleTypeConverter  ;  G4ParticleTypeConverter &theConv = *theConv_G4MT_TLS_;
+    static G4ThreadLocal G4ParticleTypeConverter *theConv_G4MT_TLS_ = 0 ; if (!theConv_G4MT_TLS_) theConv_G4MT_TLS_ = new  G4ParticleTypeConverter  ;  G4ParticleTypeConverter &theConv = *theConv_G4MT_TLS_;
     return theConv;
 }
 

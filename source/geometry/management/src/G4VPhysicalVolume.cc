@@ -39,7 +39,7 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the
 //array of PhysicalVolumePrivateSubclass instances.
-template <class PhysicalVolumePrivateSubclass> __thread PhysicalVolumePrivateSubclass* G4MTPrivateSubInstanceManager<PhysicalVolumePrivateSubclass>::offset = 0;
+template <class PhysicalVolumePrivateSubclass> G4ThreadLocal PhysicalVolumePrivateSubclass* G4MTPrivateSubInstanceManager<PhysicalVolumePrivateSubclass>::offset = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This new field helps to use the class G4VPhysicalVolumeSubInstanceManager
@@ -116,8 +116,8 @@ G4int G4VPhysicalVolume::GetMultiplicity() const
 
 G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
 {
-  static __thread G4RotationMatrix  *aRotM_G4MT_TLS_ = 0 ; if (!aRotM_G4MT_TLS_) aRotM_G4MT_TLS_ = new  G4RotationMatrix   ;  G4RotationMatrix  &aRotM = *aRotM_G4MT_TLS_; 
-  static __thread G4RotationMatrix  *IdentityRM_G4MT_TLS_ = 0 ; if (!IdentityRM_G4MT_TLS_) IdentityRM_G4MT_TLS_ = new  G4RotationMatrix   ;  G4RotationMatrix  &IdentityRM = *IdentityRM_G4MT_TLS_;  // Never changed (from "1")
+  static G4ThreadLocal G4RotationMatrix  *aRotM_G4MT_TLS_ = 0 ; if (!aRotM_G4MT_TLS_) aRotM_G4MT_TLS_ = new  G4RotationMatrix   ;  G4RotationMatrix  &aRotM = *aRotM_G4MT_TLS_; 
+  static G4ThreadLocal G4RotationMatrix  *IdentityRM_G4MT_TLS_ = 0 ; if (!IdentityRM_G4MT_TLS_) IdentityRM_G4MT_TLS_ = new  G4RotationMatrix   ;  G4RotationMatrix  &IdentityRM = *IdentityRM_G4MT_TLS_;  // Never changed (from "1")
   G4RotationMatrix* retval; 
 
   // Insure against frot being a null pointer

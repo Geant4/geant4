@@ -117,10 +117,10 @@ private:
 };
 
 #if defined G4TRACKING_ALLOC_EXPORT
-extern G4DLLEXPORT __thread G4Allocator<G4RichTrajectoryPoint>
+extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4RichTrajectoryPoint>
 *aRichTrajectoryPointAllocator_G4MT_TLS_;
 #else
-extern G4DLLIMPORT __thread G4Allocator<G4RichTrajectoryPoint>
+extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4RichTrajectoryPoint>
 *aRichTrajectoryPointAllocator_G4MT_TLS_;
 #endif
 

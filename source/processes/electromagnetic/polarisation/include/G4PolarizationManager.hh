@@ -89,7 +89,7 @@ private:
   G4int verboseLevel;
   G4bool activated;
 
-  static __thread G4PolarizationManager* instance;
+  static G4ThreadLocal G4PolarizationManager* instance;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

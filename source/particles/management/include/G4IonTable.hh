@@ -258,8 +258,8 @@ class G4IonTable
  //private. The two shadow ponters are used by each worker thread to copy the
  //content from the master thread.
  public:
-   static __thread G4IonList*                  fIonList; 
-   static __thread std::vector<G4VIsotopeTable*> *fIsotopeTableList;
+   static G4ThreadLocal G4IonList*                  fIonList; 
+   static G4ThreadLocal std::vector<G4VIsotopeTable*> *fIsotopeTableList;
    static G4IonList*                  fIonListShadow; 
    static std::vector<G4VIsotopeTable*> *fIsotopeTableListShadow;
  

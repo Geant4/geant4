@@ -56,7 +56,7 @@ private:
 
 private:  
 
-  static __thread G4XNDeltaTable *theSigmaTable_G4MT_TLS_;
+  static G4ThreadLocal G4XNDeltaTable *theSigmaTable_G4MT_TLS_;
 
 };
 

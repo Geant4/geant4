@@ -138,7 +138,7 @@ private:
   G4double bg2lim;
   G4double taulim;
   G4double alphaprime;
-  static __thread G4double xgi[8],wgi[8];
+  static G4ThreadLocal G4double xgi[8],wgi[8];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

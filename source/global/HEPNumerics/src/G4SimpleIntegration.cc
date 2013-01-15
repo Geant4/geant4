@@ -33,7 +33,7 @@
 #include "G4SimpleIntegration.hh"
 
 
-__thread G4int G4SimpleIntegration::fMaxDepth = 100 ;
+G4ThreadLocal G4int G4SimpleIntegration::fMaxDepth = 100 ;
 
 
 G4SimpleIntegration::G4SimpleIntegration( function pFunction )
@@ -94,7 +94,7 @@ G4SimpleIntegration::Gauss(G4double xInitial,
                            G4int iterationNumber ) 
 {
    G4double x=0.;
-   static __thread G4double root = 1.0/std::sqrt(3.0) ;
+   static G4ThreadLocal G4double root = 1.0/std::sqrt(3.0) ;
    G4double Step = (xFinal - xInitial)/(2.0*iterationNumber) ;
    G4double delta = Step*root ;
    G4double mean = 0.0 ;
@@ -146,7 +146,7 @@ G4double
 G4SimpleIntegration::Gauss( G4double xInitial,
                             G4double xFinal   ) 
 {
-   static __thread G4double root = 1.0/std::sqrt(3.0) ;
+   static G4ThreadLocal G4double root = 1.0/std::sqrt(3.0) ;
    
    G4double xMean = (xInitial + xFinal)/2.0 ;
    G4double Step = (xFinal - xInitial)/2.0 ;

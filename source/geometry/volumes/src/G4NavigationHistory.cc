@@ -40,9 +40,9 @@
   // Initialise static data for the specialized memory pool
   // for the internal STL vector of histories  ...
   //
-  __thread G4ChunkIndexType* G4AllocStats::allocStat = 0;
-  __thread G4int             G4AllocStats::totSpace = 0;
-  __thread G4int             G4AllocStats::numCat = 0;
+  G4ThreadLocal G4ChunkIndexType* G4AllocStats::allocStat = 0;
+  G4ThreadLocal G4int             G4AllocStats::totSpace = 0;
+  G4ThreadLocal G4int             G4AllocStats::numCat = 0;
 #endif
 
 G4NavigationHistory::G4NavigationHistory()

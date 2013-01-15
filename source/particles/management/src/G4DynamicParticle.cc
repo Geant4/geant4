@@ -71,7 +71,7 @@
 #include "G4IonTable.hh"
 #include "G4PrimaryParticle.hh"
 
-__thread G4Allocator<G4DynamicParticle> *aDynamicParticleAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4DynamicParticle> *aDynamicParticleAllocator_G4MT_TLS_ = 0;
 
 static const G4double EnergyMomentumRelationAllowance = keV;
 
@@ -410,7 +410,7 @@ void G4DynamicParticle::DumpInfo(G4int) const
 ////////////////////////
 G4double  G4DynamicParticle::GetElectronMass() const
 { if (!aDynamicParticleAllocator_G4MT_TLS_) aDynamicParticleAllocator_G4MT_TLS_ = new G4Allocator<G4DynamicParticle>  ;
-  static __thread G4double electronMass = 0.0;
+  static G4ThreadLocal G4double electronMass = 0.0;
 
   // check if electron exits and get the mass
   if (electronMass<=0.0) {

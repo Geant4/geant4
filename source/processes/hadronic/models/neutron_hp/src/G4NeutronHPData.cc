@@ -49,7 +49,7 @@
   
   G4NeutronHPData * G4NeutronHPData::Instance()
   {
-    static __thread G4NeutronHPData *theCrossSectionData_G4MT_TLS_ = 0 ; if (!theCrossSectionData_G4MT_TLS_) theCrossSectionData_G4MT_TLS_ = new  G4NeutronHPData  ;  G4NeutronHPData &theCrossSectionData = *theCrossSectionData_G4MT_TLS_;
+    static G4ThreadLocal G4NeutronHPData *theCrossSectionData_G4MT_TLS_ = 0 ; if (!theCrossSectionData_G4MT_TLS_) theCrossSectionData_G4MT_TLS_ = new  G4NeutronHPData  ;  G4NeutronHPData &theCrossSectionData = *theCrossSectionData_G4MT_TLS_;
     return &theCrossSectionData;
   }
 

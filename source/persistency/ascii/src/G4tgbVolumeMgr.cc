@@ -50,7 +50,7 @@
 #include "G4tgrMessenger.hh"
 #include "G4tgbDetectorBuilder.hh"
 
-__thread G4tgbVolumeMgr* G4tgbVolumeMgr::theInstance = 0;
+G4ThreadLocal G4tgbVolumeMgr* G4tgbVolumeMgr::theInstance = 0;
 
 //---------------------------------------------------------------------
 G4tgbVolumeMgr::G4tgbVolumeMgr() 

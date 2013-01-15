@@ -60,7 +60,7 @@ namespace CLHEP {
 //to make this variable thread-local
 //Andrea Dotti 14January 2013: Remove following line to avoid warnings in G4MT
 //To be protected with #ifndef G4MT, however it may be not necessary at all
-//static __thread int HepRandomGenActive = 0;//HepRandom::createInstance();
+//static G4ThreadLocal int HepRandomGenActive = 0;//HepRandom::createInstance();
 
 }  // namespace CLHEP
 

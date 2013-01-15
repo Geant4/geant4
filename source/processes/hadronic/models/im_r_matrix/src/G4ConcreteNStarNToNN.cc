@@ -31,7 +31,7 @@
 #include "G4ConcreteNStarNToNN.hh"
 #include "G4NNstarBuilder.hh"
 
-__thread G4XNNstarTable *G4ConcreteNStarNToNN::theSigmaTable_G4MT_TLS_ = 0;
+G4ThreadLocal G4XNNstarTable *G4ConcreteNStarNToNN::theSigmaTable_G4MT_TLS_ = 0;
 
 G4ConcreteNStarNToNN::G4ConcreteNStarNToNN(const G4ParticleDefinition* aPrimary,
 					   const G4ParticleDefinition* bPrimary,

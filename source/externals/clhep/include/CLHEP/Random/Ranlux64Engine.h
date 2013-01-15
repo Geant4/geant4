@@ -111,8 +111,8 @@ private:
   double randoms[12]; // randoms [i] is the x[n-i] of Luscher's note
   double carry;
 
-  static __thread int numEngines;	
-  static __thread int maxIndex;
+  static G4ThreadLocal int numEngines;	
+  static G4ThreadLocal int maxIndex;
 
 }; // Ranlux64Engine
 

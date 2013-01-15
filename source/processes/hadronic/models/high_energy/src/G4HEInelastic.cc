@@ -343,22 +343,22 @@ G4HEInelastic::StrangeParticlePairProduction(
    // energy data)
 
  {
-   static __thread G4double avrs[]  = {3.,4.,5.,6.,7.,8.,9.,10.,20.,30.,40.,50.};
-   static __thread G4double avkkb[] = {0.0015,0.0050,0.0120,0.0285,0.0525,0.0750,0.0975,
+   static G4ThreadLocal G4double avrs[]  = {3.,4.,5.,6.,7.,8.,9.,10.,20.,30.,40.,50.};
+   static G4ThreadLocal G4double avkkb[] = {0.0015,0.0050,0.0120,0.0285,0.0525,0.0750,0.0975,
                               0.1230,0.2800,0.3980,0.4950,0.5730};
-   static __thread G4double kkb[]   = {0.2500,0.3750,0.5000,0.5625,0.6250,0.6875,0.7500,
+   static G4ThreadLocal G4double kkb[]   = {0.2500,0.3750,0.5000,0.5625,0.6250,0.6875,0.7500,
                               0.8750,1.0000};
-   static __thread G4double ky[]    = {0.2000,0.3000,0.4000,0.5500,0.6250,0.7000,0.8000,
+   static G4ThreadLocal G4double ky[]    = {0.2000,0.3000,0.4000,0.5500,0.6250,0.7000,0.8000,
                               0.8500,0.9000,0.9500,0.9750,1.0000};
-   static __thread G4int ipakkb[]   = {10,13,10,11,10,12,11,11,11,12,12,11,12,12,
+   static G4ThreadLocal G4int ipakkb[]   = {10,13,10,11,10,12,11,11,11,12,12,11,12,12,
                               11,13,12,13};
-   static __thread G4int ipaky[]    = {18,10,18,11,18,12,20,10,20,11,20,12,21,10,
+   static G4ThreadLocal G4int ipaky[]    = {18,10,18,11,18,12,20,10,20,11,20,12,21,10,
                               21,11,21,12,22,10,22,11,22,12};
-   static __thread G4int ipakyb[]   = {19,13,19,12,19,11,23,13,23,12,23,11,24,13,
+   static G4ThreadLocal G4int ipakyb[]   = {19,13,19,12,19,11,23,13,23,12,23,11,24,13,
                               24,12,24,11,25,13,25,12,25,11};
-   static __thread G4double avky[]  = {0.0050,0.0300,0.0640,0.0950,0.1150,0.1300,0.1450,
+   static G4ThreadLocal G4double avky[]  = {0.0050,0.0300,0.0640,0.0950,0.1150,0.1300,0.1450,
                               0.1550,0.2000,0.2050,0.2100,0.2120};
-   static __thread G4double avnnb[] ={0.00001,0.0001,0.0006,0.0025,0.0100,0.0200,0.0400,
+   static G4ThreadLocal G4double avnnb[] ={0.00001,0.0001,0.0006,0.0025,0.0100,0.0200,0.0400,
                               0.0500,0.1200,0.1500,0.1800,0.2000};
 
    G4int i, ibin, i3, i4;       // misc. local variables

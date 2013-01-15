@@ -138,8 +138,8 @@ class G4UImanager : public G4VStateDependent
   //    void Interact(const char * promptCharacters);
 
   private:
-      static __thread G4UImanager * fUImanager;
-      static __thread G4bool fUImanagerHasBeenKilled;
+      static G4ThreadLocal G4UImanager * fUImanager;
+      static G4ThreadLocal G4bool fUImanagerHasBeenKilled;
       G4UIcommandTree * treeTop;
       G4UIsession * session;
       G4UIsession * g4UIWindow;

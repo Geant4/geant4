@@ -115,7 +115,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
 
   // Statistics for substeps
   //
-  static __thread G4int max_no_seen= -1; 
+  static G4ThreadLocal G4int max_no_seen= -1; 
 
   NormalAtEntry = GetSurfaceNormal( CurrentE_Point, validNormalAtE); 
 

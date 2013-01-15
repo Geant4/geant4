@@ -47,7 +47,7 @@
 
 #include "G4LogicalVolume.hh"
 
-__thread G4PolarizationManager * G4PolarizationManager::instance = 0;
+G4ThreadLocal G4PolarizationManager * G4PolarizationManager::instance = 0;
 
 G4PolarizationManager* G4PolarizationManager::GetInstance()
 {

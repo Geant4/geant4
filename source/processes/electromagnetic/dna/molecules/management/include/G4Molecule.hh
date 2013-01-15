@@ -241,14 +241,14 @@ private:
 
     G4MolecularConfiguration* fMolecularConfiguration;
 
-    static __thread double fgTemperature;
+    static G4ThreadLocal double fgTemperature;
 };
 
 
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT __thread G4Allocator<G4Molecule> *aMoleculeAllocator_G4MT_TLS_;
+extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator_G4MT_TLS_;
 #else
-extern G4DLLIMPORT __thread G4Allocator<G4Molecule> *aMoleculeAllocator_G4MT_TLS_;
+extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator_G4MT_TLS_;
 #endif
 
 

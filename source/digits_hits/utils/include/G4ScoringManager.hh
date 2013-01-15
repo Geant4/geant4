@@ -98,8 +98,8 @@ class G4ScoringManager
       void ListScoreColorMaps();
 
   private: 
-      static __thread G4ScoringManager * fSManager;
-      static __thread G4int replicaLevel;
+      static G4ThreadLocal G4ScoringManager * fSManager;
+      static G4ThreadLocal G4int replicaLevel;
       G4int verboseLevel;
       G4ScoringMessenger* fMessenger;
       G4ScoreQuantityMessenger* fQuantityMessenger;

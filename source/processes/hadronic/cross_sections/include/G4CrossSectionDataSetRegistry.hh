@@ -79,7 +79,7 @@ private:
 
   G4CrossSectionDataSetRegistry();
 
-  static __thread G4CrossSectionDataSetRegistry* theInstance;
+  static G4ThreadLocal G4CrossSectionDataSetRegistry* theInstance;
   
   std::vector <G4VCrossSectionDataSet*> xSections;
 

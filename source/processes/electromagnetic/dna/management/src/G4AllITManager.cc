@@ -37,7 +37,7 @@
 
 using namespace std;
 
-__thread auto_ptr<G4AllITManager> *G4AllITManager::fInstance_G4MT_TLS_ = 0;
+G4ThreadLocal auto_ptr<G4AllITManager> *G4AllITManager::fInstance_G4MT_TLS_ = 0;
 
 G4AllITManager::G4AllITManager()
 { if (!fInstance_G4MT_TLS_) fInstance_G4MT_TLS_ = new auto_ptr<G4AllITManager> (0) ;

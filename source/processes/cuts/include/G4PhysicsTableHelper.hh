@@ -84,7 +84,7 @@ class G4PhysicsTableHelper
 
 
  protected:
-   static __thread G4int verboseLevel;
+   static G4ThreadLocal G4int verboseLevel;
    // controle flag for output message
 };
 

@@ -87,11 +87,11 @@
 
 using namespace std;
 
-__thread G4double G4GoudsmitSaundersonMscModel::ener[] = {-1.};
-__thread G4double G4GoudsmitSaundersonMscModel::TCSE[103][106] ;
-__thread G4double G4GoudsmitSaundersonMscModel::FTCSE[103][106] ;
-__thread G4double G4GoudsmitSaundersonMscModel::TCSP[103][106] ;
-__thread G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106] ;
+G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::ener[] = {-1.};
+G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::TCSE[103][106] ;
+G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::FTCSE[103][106] ;
+G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::TCSP[103][106] ;
+G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106] ;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)

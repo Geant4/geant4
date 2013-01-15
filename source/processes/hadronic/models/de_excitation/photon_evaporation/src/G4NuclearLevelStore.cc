@@ -36,12 +36,12 @@
 #include <sstream>
 #include <fstream>
 
-__thread G4NuclearLevelStore* G4NuclearLevelStore::theInstance = 0;
+G4ThreadLocal G4NuclearLevelStore* G4NuclearLevelStore::theInstance = 0;
 
 G4NuclearLevelStore* G4NuclearLevelStore::GetInstance()
 {
   if(!theInstance) {
-    static __thread G4NuclearLevelStore *store_G4MT_TLS_ = 0 ; if (!store_G4MT_TLS_) store_G4MT_TLS_ = new  G4NuclearLevelStore  ;  G4NuclearLevelStore &store = *store_G4MT_TLS_;
+    static G4ThreadLocal G4NuclearLevelStore *store_G4MT_TLS_ = 0 ; if (!store_G4MT_TLS_) store_G4MT_TLS_ = new  G4NuclearLevelStore  ;  G4NuclearLevelStore &store = *store_G4MT_TLS_;
     theInstance = &store;
   }
   return theInstance;

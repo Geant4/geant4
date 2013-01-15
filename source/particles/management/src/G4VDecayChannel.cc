@@ -46,12 +46,12 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it holds the array
 //size of DecayChannelPrivateSubclass instances.
-template <class DecayChannelPrivateSubclass> __thread int G4MTPrivateParticleCounter<DecayChannelPrivateSubclass>::slavetotalspace = 0;
+template <class DecayChannelPrivateSubclass> G4ThreadLocal int G4MTPrivateParticleCounter<DecayChannelPrivateSubclass>::slavetotalspace = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the
 //array of DecayChannelPrivateSubclass instances.
-template <class DecayChannelPrivateSubclass> __thread DecayChannelPrivateSubclass* G4MTPrivateParticleCounter<DecayChannelPrivateSubclass>::offset = 0;
+template <class DecayChannelPrivateSubclass> G4ThreadLocal DecayChannelPrivateSubclass* G4MTPrivateParticleCounter<DecayChannelPrivateSubclass>::offset = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This new field helps to use the class G4VDecayChannelSubInstanceManager

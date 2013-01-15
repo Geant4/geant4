@@ -46,9 +46,9 @@
 #include "G4Proton.hh"
 #include "G4NucleiProperties.hh"
 
-__thread G4int G4LowEIonFragmentation::hits = 0;
-__thread G4int G4LowEIonFragmentation::totalTries = 0;
-__thread G4double G4LowEIonFragmentation::area = 0;
+G4ThreadLocal G4int G4LowEIonFragmentation::hits = 0;
+G4ThreadLocal G4int G4LowEIonFragmentation::totalTries = 0;
+G4ThreadLocal G4double G4LowEIonFragmentation::area = 0;
 
 G4LowEIonFragmentation::G4LowEIonFragmentation(G4ExcitationHandler * const value) 
 {

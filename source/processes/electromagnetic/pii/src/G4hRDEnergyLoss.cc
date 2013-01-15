@@ -84,77 +84,77 @@
 
 // The following vectors have a fixed dimension this means that if they are
 // filled in with more than 100 elements will corrupt the memory.
-__thread G4int G4hRDEnergyLoss::NumberOfProcesses = 1 ;
+G4ThreadLocal G4int G4hRDEnergyLoss::NumberOfProcesses = 1 ;
 
-__thread G4int            G4hRDEnergyLoss::CounterOfProcess = 0 ;
-__thread G4PhysicsTable** G4hRDEnergyLoss::RecorderOfProcess  = 0 
+G4ThreadLocal G4int            G4hRDEnergyLoss::CounterOfProcess = 0 ;
+G4ThreadLocal G4PhysicsTable** G4hRDEnergyLoss::RecorderOfProcess  = 0 
 ;
 
-__thread G4int            G4hRDEnergyLoss::CounterOfpProcess = 0 ;
-__thread G4PhysicsTable** G4hRDEnergyLoss::RecorderOfpProcess  = 0 
+G4ThreadLocal G4int            G4hRDEnergyLoss::CounterOfpProcess = 0 ;
+G4ThreadLocal G4PhysicsTable** G4hRDEnergyLoss::RecorderOfpProcess  = 0 
 ;
 
-__thread G4int            G4hRDEnergyLoss::CounterOfpbarProcess = 0 ;
-__thread G4PhysicsTable** G4hRDEnergyLoss::RecorderOfpbarProcess  = 0 
+G4ThreadLocal G4int            G4hRDEnergyLoss::CounterOfpbarProcess = 0 ;
+G4ThreadLocal G4PhysicsTable** G4hRDEnergyLoss::RecorderOfpbarProcess  = 0 
 ;
 
-__thread G4PhysicsTable* G4hRDEnergyLoss::theDEDXpTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theDEDXpbarTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theRangepTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theRangepbarTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theInverseRangepTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theInverseRangepbarTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theLabTimepTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theLabTimepbarTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theProperTimepTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theProperTimepbarTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theDEDXpTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theDEDXpbarTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theRangepTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theRangepbarTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theInverseRangepTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theInverseRangepbarTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theLabTimepTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theLabTimepbarTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theProperTimepTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theProperTimepbarTable = 0 ;
 
-__thread G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffATable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffBTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffCTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffATable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffBTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffCTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffATable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffBTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::thepRangeCoeffCTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffATable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffBTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::thepbarRangeCoeffCTable = 0 ;
 
-__thread G4PhysicsTable* G4hRDEnergyLoss::theDEDXTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theRangeTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theInverseRangeTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theLabTimeTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theProperTimeTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theDEDXTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theRangeTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theInverseRangeTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theLabTimeTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theProperTimeTable = 0 ;
 
-__thread G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffATable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffBTable = 0 ;
-__thread G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffCTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffATable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffBTable = 0 ;
+G4ThreadLocal G4PhysicsTable* G4hRDEnergyLoss::theRangeCoeffCTable = 0 ;
 
 //const G4Proton* G4hRDEnergyLoss::theProton=G4Proton::Proton() ;
 //const G4AntiProton* G4hRDEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
 
-__thread G4double G4hRDEnergyLoss::ParticleMass;
-__thread G4double G4hRDEnergyLoss::ptableElectronCutInRange = 0.0*mm ;
-__thread G4double G4hRDEnergyLoss::pbartableElectronCutInRange = 0.0*mm ;
+G4ThreadLocal G4double G4hRDEnergyLoss::ParticleMass;
+G4ThreadLocal G4double G4hRDEnergyLoss::ptableElectronCutInRange = 0.0*mm ;
+G4ThreadLocal G4double G4hRDEnergyLoss::pbartableElectronCutInRange = 0.0*mm ;
 
-__thread G4double G4hRDEnergyLoss::Mass,
+G4ThreadLocal G4double G4hRDEnergyLoss::Mass,
   G4hRDEnergyLoss::taulow, 
   G4hRDEnergyLoss::tauhigh, 
   G4hRDEnergyLoss::ltaulow, 
   G4hRDEnergyLoss::ltauhigh; 
 
-__thread G4double G4hRDEnergyLoss::dRoverRange = 0.20 ;
-__thread G4double G4hRDEnergyLoss::finalRange = 200.*micrometer ;
+G4ThreadLocal G4double G4hRDEnergyLoss::dRoverRange = 0.20 ;
+G4ThreadLocal G4double G4hRDEnergyLoss::finalRange = 200.*micrometer ;
 
-__thread G4double     G4hRDEnergyLoss::c1lim =(0.20);
-__thread G4double     G4hRDEnergyLoss::c2lim =2.*(1.-(0.20))*(200.*micrometer);
-__thread G4double     G4hRDEnergyLoss::c3lim =-(1.-(0.20))*(200.*micrometer)*(200.*micrometer);
+G4ThreadLocal G4double     G4hRDEnergyLoss::c1lim =(0.20);
+G4ThreadLocal G4double     G4hRDEnergyLoss::c2lim =2.*(1.-(0.20))*(200.*micrometer);
+G4ThreadLocal G4double     G4hRDEnergyLoss::c3lim =-(1.-(0.20))*(200.*micrometer)*(200.*micrometer);
 
-__thread G4double         G4hRDEnergyLoss::Charge ;   
+G4ThreadLocal G4double         G4hRDEnergyLoss::Charge ;   
 
-__thread G4bool   G4hRDEnergyLoss::rndmStepFlag   = false ;
-__thread G4bool   G4hRDEnergyLoss::EnlossFlucFlag = true ;
+G4ThreadLocal G4bool   G4hRDEnergyLoss::rndmStepFlag   = false ;
+G4ThreadLocal G4bool   G4hRDEnergyLoss::EnlossFlucFlag = true ;
 
-__thread G4double G4hRDEnergyLoss::LowestKineticEnergy = 10.*eV;
-__thread G4double G4hRDEnergyLoss::HighestKineticEnergy= 100.*GeV;
-__thread G4int    G4hRDEnergyLoss::TotBin = 360;
-__thread G4double G4hRDEnergyLoss::RTable,G4hRDEnergyLoss::LOGRTable;
+G4ThreadLocal G4double G4hRDEnergyLoss::LowestKineticEnergy = 10.*eV;
+G4ThreadLocal G4double G4hRDEnergyLoss::HighestKineticEnergy= 100.*GeV;
+G4ThreadLocal G4int    G4hRDEnergyLoss::TotBin = 360;
+G4ThreadLocal G4double G4hRDEnergyLoss::RTable,G4hRDEnergyLoss::LOGRTable;
 
 //--------------------------------------------------------------------------------
 

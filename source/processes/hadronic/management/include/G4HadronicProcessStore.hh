@@ -210,7 +210,7 @@ private:
   // print process info
   void Print(G4int idxProcess, G4int idxParticle);
 
-  static __thread G4HadronicProcessStore* theInstance;
+  static G4ThreadLocal G4HadronicProcessStore* theInstance;
 
   typedef const G4ParticleDefinition* PD;
   typedef G4HadronicProcess* HP;

@@ -375,7 +375,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
 
     G4double T = kineticEnergy/(keV*protonMassAMU) ; 
 
-     static __thread G4double a[11][5] = {
+     static G4ThreadLocal G4double a[11][5] = {
    {1.187E+1, 1.343E+1, 1.069E+4, 7.723E+2, 2.153E-2},
    {7.802E+0, 8.814E+0, 8.303E+3, 7.446E+2, 7.966E-3}, 
    {7.294E+0, 8.284E+0, 5.010E+3, 4.544E+2, 8.153E-3}, 
@@ -388,7 +388,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
    {4.571E+0, 5.173E+0, 4.346E+3, 4.779E+2, 8.572E-3},
    {2.631E+0, 2.601E+0, 1.701E+3, 1.279E+3, 1.638E-2} };
 
-     static __thread G4double atomicWeight[11] = {
+     static G4ThreadLocal G4double atomicWeight[11] = {
     101.96128, 44.0098, 16.0426, 28.0536, 42.0804,
     104.1512, 44.665, 60.0843, 18.0152, 18.0152, 12.0};       
 
@@ -441,7 +441,7 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
 
   G4double T = kineticEnergy/(keV*protonMassAMU) ; 
   
-  static __thread G4double a[92][5] = {
+  static G4ThreadLocal G4double a[92][5] = {
    {1.254E+0, 1.440E+0, 2.426E+2, 1.200E+4, 1.159E-1},
    {1.229E+0, 1.397E+0, 4.845E+2, 5.873E+3, 5.225E-2},
    {1.411E+0, 1.600E+0, 7.256E+2, 3.013E+3, 4.578E-2},
@@ -672,7 +672,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
   // The coffecient from Table.4 of Ziegler & Manoyan
   const G4double HeEff = 2.8735 ;
   
-  static __thread G4String *nameOfMol = 0 ; if (!nameOfMol) {nameOfMol = new  G4String [numberOfMolecula]  ; nameOfMol[0]=
+  static G4ThreadLocal G4String *nameOfMol = 0 ; if (!nameOfMol) {nameOfMol = new  G4String [numberOfMolecula]  ; nameOfMol[0]=
     "H_2O";nameOfMol[1]=      "C_2H_4O";nameOfMol[2]=    "C_3H_6O";nameOfMol[3]=  "C_2H_2";nameOfMol[4]=             "C_H_3OH";nameOfMol[5]=
     "C_2H_5OH";nameOfMol[6]=  "C_3H_7OH";nameOfMol[7]=   "C_3H_4";nameOfMol[8]=   "NH_3";nameOfMol[9]=               "C_14H_10";nameOfMol[10]=
     "C_6H_6";nameOfMol[11]=    "C_4H_10";nameOfMol[12]=    "C_4H_6";nameOfMol[13]=   "C_4H_8O";nameOfMol[14]=            "CCl_4";nameOfMol[15]=
@@ -686,7 +686,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     "C_3H_6S";nameOfMol[51]=   "C_4H_4S";nameOfMol[52]=    "C_7H_8"
   ;} ;
 
-  static __thread G4double expStopping[numberOfMolecula] = {
+  static G4ThreadLocal G4double expStopping[numberOfMolecula] = {
      66.1,  190.4, 258.7,  42.2, 141.5,
     210.9,  279.6, 198.8,  31.0, 267.5,
     122.8,  311.4, 260.3, 328.9, 391.3,
@@ -700,7 +700,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     306.8,  324.4, 420.0
   } ;
 
-  static __thread G4double expCharge[numberOfMolecula] = {
+  static G4ThreadLocal G4double expCharge[numberOfMolecula] = {
     HeEff, HeEff, HeEff,   1.0, HeEff,
     HeEff, HeEff, HeEff,   1.0,   1.0,
       1.0, HeEff, HeEff, HeEff, HeEff,
@@ -714,7 +714,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     HeEff, HeEff, HeEff
   } ;
 
-  static __thread G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
+  static G4ThreadLocal G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
     3.0,  7.0, 10.0,  4.0,  6.0,
     9.0, 12.0,  7.0,  4.0, 24.0,
     12.0, 14.0, 10.0, 13.0,  5.0,

@@ -12,7 +12,7 @@ template <class G4MTPrivateObject>
 class G4MTPrivateSubInstanceManager
 {
 public:
-  static __thread G4MTPrivateObject* offset;
+  static G4ThreadLocal G4MTPrivateObject* offset;
 
   G4MTPrivateSubInstanceManager() {
     totalobj = 0;

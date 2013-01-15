@@ -88,13 +88,13 @@
 
 // static members
 //
-__thread G4double G4MuPairProductionModel::zdat[]={1., 4., 13., 29., 92.};
-__thread G4double G4MuPairProductionModel::adat[]={1.01, 9.01, 26.98, 63.55, 238.03};
-__thread G4double G4MuPairProductionModel::tdat[]={1.e3, 1.e4, 1.e5, 1.e6, 1.e7, 1.e8,
+G4ThreadLocal G4double G4MuPairProductionModel::zdat[]={1., 4., 13., 29., 92.};
+G4ThreadLocal G4double G4MuPairProductionModel::adat[]={1.01, 9.01, 26.98, 63.55, 238.03};
+G4ThreadLocal G4double G4MuPairProductionModel::tdat[]={1.e3, 1.e4, 1.e5, 1.e6, 1.e7, 1.e8,
                                           1.e9, 1.e10};
-__thread G4double G4MuPairProductionModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
+G4ThreadLocal G4double G4MuPairProductionModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
                                           0.5917, 0.7628, 0.8983, 0.9801 };
-__thread G4double G4MuPairProductionModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
+G4ThreadLocal G4double G4MuPairProductionModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
                                           0.1813, 0.1569, 0.1112, 0.0506 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

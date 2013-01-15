@@ -100,14 +100,14 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4Region.hh"
 
-__thread G4LossTableManager* G4LossTableManager::theInstance = 0;
+G4ThreadLocal G4LossTableManager* G4LossTableManager::theInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4LossTableManager* G4LossTableManager::Instance()
 {
   if(0 == theInstance) {
-    static __thread G4LossTableManager *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4LossTableManager  ;  G4LossTableManager &manager = *manager_G4MT_TLS_;
+    static G4ThreadLocal G4LossTableManager *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4LossTableManager  ;  G4LossTableManager &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;

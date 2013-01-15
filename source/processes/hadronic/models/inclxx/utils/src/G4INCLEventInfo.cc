@@ -50,7 +50,7 @@
 
 namespace G4INCL {
 
-  __thread Int_t EventInfo::eventNumber = 0;
+  G4ThreadLocal Int_t EventInfo::eventNumber = 0;
 
 #ifdef INCL_INVERSE_KINEMATICS
   void EventInfo::fillInverseKinematics(const Double_t gamma) {

@@ -101,7 +101,7 @@ public :
 
 private :
     G4AllITManager();
-    static __thread std::auto_ptr<G4AllITManager> *fInstance_G4MT_TLS_;
+    static G4ThreadLocal std::auto_ptr<G4AllITManager> *fInstance_G4MT_TLS_;
     std::map<G4ITType, G4VITManager*> fITSubManager ;
 
     int fVerbose ;

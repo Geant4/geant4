@@ -37,7 +37,7 @@
 
 #include "G4PhysicsVectorCache.hh"
 
-__thread G4Allocator<G4PhysicsVectorCache> *aPVCacheAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4PhysicsVectorCache> *aPVCacheAllocator_G4MT_TLS_ = 0;
 
 G4PhysicsVectorCache::G4PhysicsVectorCache()
  : lastEnergy(-DBL_MAX), lastValue(0.), lastBin(0)

@@ -99,7 +99,7 @@ namespace G4INCL {
     ~Clustering() {}
 
   private:
-    static __thread IClusteringModel *theClusteringModel;
+    static G4ThreadLocal IClusteringModel *theClusteringModel;
   };
 
 }

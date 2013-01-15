@@ -92,7 +92,7 @@ private:
 
 private:
 
-  static __thread G4ErrorPropagatorData* theErrorPropagatorData;
+  static G4ThreadLocal G4ErrorPropagatorData* theErrorPropagatorData;
 
   G4ErrorMode theMode;
 
@@ -102,7 +102,7 @@ private:
 
   G4ErrorTarget* theTarget;
 
-  static __thread G4int theVerbosity;
+  static G4ThreadLocal G4int theVerbosity;
 
 };
 

@@ -181,7 +181,7 @@ void G4Fissioner::collide(G4InuclParticle* /*bullet*/,
   G4InuclNuclei nuclei2(mom2, A2, Z2, EEXS2, G4InuclParticle::Fissioner);
 
   // Pass only last two nuclear fragments
-  static __thread std::vector<G4InuclNuclei> *frags_G4MT_TLS_ = 0 ; if (!frags_G4MT_TLS_) frags_G4MT_TLS_ = new  std::vector<G4InuclNuclei> (2) ;  std::vector<G4InuclNuclei> &frags = *frags_G4MT_TLS_;		// Always the same size!
+  static G4ThreadLocal std::vector<G4InuclNuclei> *frags_G4MT_TLS_ = 0 ; if (!frags_G4MT_TLS_) frags_G4MT_TLS_ = new  std::vector<G4InuclNuclei> (2) ;  std::vector<G4InuclNuclei> &frags = *frags_G4MT_TLS_;		// Always the same size!
   frags[0] = nuclei1;
   frags[1] = nuclei2;
   validateOutput(0, target, frags);		// Check energy conservation

@@ -32,7 +32,7 @@
 #include "G4VUserPrimaryVertexInformation.hh"
 #include "G4ios.hh"
 
-__thread G4Allocator<G4PrimaryVertex> *aPrimaryVertexAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4PrimaryVertex> *aPrimaryVertexAllocator_G4MT_TLS_ = 0;
 
 G4PrimaryVertex::G4PrimaryVertex()
 :X0(0.),Y0(0.),Z0(0.),T0(0.),theParticle(0),theTail(0),

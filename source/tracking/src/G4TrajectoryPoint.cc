@@ -44,7 +44,7 @@
 #include "G4AttCheck.hh"
 #endif
 
-__thread G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator_G4MT_TLS_ = 0;
 
 G4TrajectoryPoint::G4TrajectoryPoint()
 { if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ;

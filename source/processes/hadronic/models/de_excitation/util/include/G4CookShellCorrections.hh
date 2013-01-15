@@ -45,7 +45,7 @@ private:
 
   G4CookShellCorrections();
 	
-  static __thread G4CookShellCorrections* theInstance;
+  static G4ThreadLocal G4CookShellCorrections* theInstance;
 
 
 public:

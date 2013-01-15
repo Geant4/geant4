@@ -47,7 +47,7 @@
 
 // Initialise the static instance of the singleton
 //
-__thread G4TransportationManager* G4TransportationManager::fTransportationManager=0;
+G4ThreadLocal G4TransportationManager* G4TransportationManager::fTransportationManager=0;
 
 // ----------------------------------------------------------------------------
 // Constructor
@@ -94,7 +94,7 @@ G4TransportationManager::~G4TransportationManager()
 //
 G4TransportationManager* G4TransportationManager::GetTransportationManager()
 {
-   static __thread G4TransportationManager *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4TransportationManager  ;  G4TransportationManager &theInstance = *theInstance_G4MT_TLS_;
+   static G4ThreadLocal G4TransportationManager *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4TransportationManager  ;  G4TransportationManager &theInstance = *theInstance_G4MT_TLS_;
    if (!fTransportationManager)
      fTransportationManager = &theInstance;
    

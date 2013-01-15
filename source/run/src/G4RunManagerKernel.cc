@@ -58,9 +58,9 @@
   #include "G4FPEDetection.hh"
 #endif
 
-__thread G4RunManagerKernel* G4RunManagerKernel::fRunManagerKernel = 0;
+G4ThreadLocal G4RunManagerKernel* G4RunManagerKernel::fRunManagerKernel = 0;
 
-__thread int G4RunManagerKernel::isSlave = 0;
+G4ThreadLocal int G4RunManagerKernel::isSlave = 0;
 
 //pthread_mutex_t regionsVector = PTHREAD_MUTEX_INITIALIZER;
 
@@ -777,7 +777,7 @@ void G4RunManagerKernel::SetScoreSplitter()
   G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
 
   // Ensure that Process is added only once to the particles' process managers
-  static __thread bool InitSplitter=false; 
+  static G4ThreadLocal bool InitSplitter=false; 
   if( ! InitSplitter ) {
     InitSplitter = true;
 

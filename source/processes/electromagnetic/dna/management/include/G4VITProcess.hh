@@ -167,7 +167,7 @@ private :
   /*const*/ size_t fProcessID; // During all the simulation will identify a
     // process, so if two identical process are created using a copy constructor
     // they will have the same fProcessID
-    static __thread size_t *fNbProcess_G4MT_TLS_;
+    static G4ThreadLocal size_t *fNbProcess_G4MT_TLS_;
 
     G4bool fInstantiateProcessState;
     //_________________________________________________

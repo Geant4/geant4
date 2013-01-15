@@ -227,9 +227,9 @@ G4double G4VLongitudinalStringDecay::FragmentationMass(
 {
 	
         G4double mass;
-        static __thread G4bool NeedInit(true);
-	static __thread std::vector<double> *nomix_G4MT_TLS_ = 0 ; if (!nomix_G4MT_TLS_) nomix_G4MT_TLS_ = new  std::vector<double>  ;  std::vector<double> &nomix = *nomix_G4MT_TLS_;
-	static __thread G4HadronBuilder * minMassHadronizer;
+        static G4ThreadLocal G4bool NeedInit(true);
+	static G4ThreadLocal std::vector<double> *nomix_G4MT_TLS_ = 0 ; if (!nomix_G4MT_TLS_) nomix_G4MT_TLS_ = new  std::vector<double>  ;  std::vector<double> &nomix = *nomix_G4MT_TLS_;
+	static G4ThreadLocal G4HadronBuilder * minMassHadronizer;
 	if ( NeedInit ) 
 	{
 	   NeedInit = false;

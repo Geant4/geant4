@@ -118,7 +118,7 @@ private:
   G4AtomicTransitionManager& operator=(const G4AtomicTransitionManager& right);
   G4AtomicTransitionManager(const G4AtomicTransitionManager&);
  
-  static __thread G4AtomicTransitionManager* instance;
+  static G4ThreadLocal G4AtomicTransitionManager* instance;
   
   // the first element of the map is the atomic number Z.
   // the second element is a vector of G4AtomicShell*.

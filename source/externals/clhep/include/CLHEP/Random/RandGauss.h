@@ -159,8 +159,8 @@ private:
   double nextGauss;
 
   // static data
-  static __thread bool set_st;
-  static __thread double nextGauss_st;
+  static G4ThreadLocal bool set_st;
+  static G4ThreadLocal double nextGauss_st;
 
 };
 

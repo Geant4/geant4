@@ -56,7 +56,7 @@ private:
 
   G4PreCompoundParameters();
 
-  static __thread G4PreCompoundParameters* theParameters;
+  static G4ThreadLocal G4PreCompoundParameters* theParameters;
 
   // Level density parameter
   G4double fLevelDensity;

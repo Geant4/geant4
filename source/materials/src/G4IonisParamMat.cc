@@ -49,7 +49,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-__thread G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
+G4ThreadLocal G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -416,7 +416,7 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
   // ICRU Report N#37, 1984  (energy in eV)
 
   const size_t numberOfMolecula = 54; 
-  static __thread G4String *name = 0 ; if (!name) {name = new  G4String [numberOfMolecula]  ; name[0]=
+  static G4ThreadLocal G4String *name = 0 ; if (!name) {name = new  G4String [numberOfMolecula]  ; name[0]=
     // gas 0 - 12
     "NH_3";name[1]=       "C_4H_10";name[2]=    "CO_2";name[3]=       "C_2H_6";name[4]=      "C_7H_16";name[5]=
     "C_6H_14";name[6]=    "CH_4";name[7]=       "NO";name[8]=         "N_2O";name[9]=        "C_8H_18";name[10]=
@@ -437,7 +437,7 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
     "LiF";name[51]=        "Photo_Emulsion";name[52]=  "(C_2F_4)-Teflon";name[53]=  "SiO_2"     
   ;};
     
-  static __thread G4double meanExcitation[numberOfMolecula] = {
+  static G4ThreadLocal G4double meanExcitation[numberOfMolecula] = {
 
     53.7,   48.3,  85.0,  45.4,  49.2,
     49.1,   41.7,  87.8,  84.9,  49.5,

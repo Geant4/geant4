@@ -29,7 +29,7 @@
 
 #include "G4TDigiCollection.hh"
 
-__thread G4Allocator<G4DigiCollection> *aDCAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4DigiCollection> *aDCAllocator_G4MT_TLS_ = 0;
 
 G4DigiCollection::G4DigiCollection() : theCollection((void*)0)
 { if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>  ;;}

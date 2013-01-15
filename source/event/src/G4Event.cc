@@ -38,7 +38,7 @@
 #include "G4VDigiCollection.hh"
 #include "G4ios.hh"
 
-__thread G4Allocator<G4Event> *anEventAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4Event> *anEventAllocator_G4MT_TLS_ = 0;
 
 G4Event::G4Event()
 :eventID(0),

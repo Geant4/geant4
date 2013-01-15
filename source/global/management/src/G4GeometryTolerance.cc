@@ -43,11 +43,11 @@
 // Static class data
 // ***************************************************************************
 //
-__thread G4GeometryTolerance* G4GeometryTolerance::fInstance = 0;
-__thread G4bool G4GeometryTolerance::fInitialised = false;
-__thread G4double G4GeometryTolerance::fCarTolerance = 1E-9*mm;
-__thread G4double G4GeometryTolerance::fAngTolerance = 1E-9*rad;
-__thread G4double G4GeometryTolerance::fRadTolerance = 1E-9*mm;
+G4ThreadLocal G4GeometryTolerance* G4GeometryTolerance::fInstance = 0;
+G4ThreadLocal G4bool G4GeometryTolerance::fInitialised = false;
+G4ThreadLocal G4double G4GeometryTolerance::fCarTolerance = 1E-9*mm;
+G4ThreadLocal G4double G4GeometryTolerance::fAngTolerance = 1E-9*rad;
+G4ThreadLocal G4double G4GeometryTolerance::fRadTolerance = 1E-9*mm;
 
 // ***************************************************************************
 // Constructor.
@@ -72,7 +72,7 @@ G4GeometryTolerance::~G4GeometryTolerance()
 //
 G4GeometryTolerance* G4GeometryTolerance::GetInstance()
 {
-  static __thread G4GeometryTolerance *theToleranceManager_G4MT_TLS_ = 0 ; if (!theToleranceManager_G4MT_TLS_) theToleranceManager_G4MT_TLS_ = new  G4GeometryTolerance  ;  G4GeometryTolerance &theToleranceManager = *theToleranceManager_G4MT_TLS_;
+  static G4ThreadLocal G4GeometryTolerance *theToleranceManager_G4MT_TLS_ = 0 ; if (!theToleranceManager_G4MT_TLS_) theToleranceManager_G4MT_TLS_ = new  G4GeometryTolerance  ;  G4GeometryTolerance &theToleranceManager = *theToleranceManager_G4MT_TLS_;
   if (!fInstance)
   {
     fInstance = &theToleranceManager;

@@ -92,7 +92,7 @@ class G4AdjointInterpolator
 	G4double InterpolateForLogVector(G4double& x,std::vector<G4double>& x_vec,std::vector<G4double>& y_vec);
    
    private:
-  	static __thread 	G4AdjointInterpolator* theInstance;
+  	static G4ThreadLocal 	G4AdjointInterpolator* theInstance;
    
    private:
   	G4AdjointInterpolator();  

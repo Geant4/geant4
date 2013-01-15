@@ -43,7 +43,7 @@
 #include "G4tgrSolidBoolean.hh"
 
 
-__thread G4tgrVolumeMgr* G4tgrVolumeMgr::theInstance = 0;
+G4ThreadLocal G4tgrVolumeMgr* G4tgrVolumeMgr::theInstance = 0;
 
 
 //-------------------------------------------------------------

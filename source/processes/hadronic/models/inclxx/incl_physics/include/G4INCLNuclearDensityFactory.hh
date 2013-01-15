@@ -79,11 +79,11 @@ namespace G4INCL {
     NuclearDensityFactory() {}
     ~NuclearDensityFactory() {}
 
-    static __thread std::map<G4int,NuclearDensity*> *nuclearDensityCache_G4MT_TLS_;
+    static G4ThreadLocal std::map<G4int,NuclearDensity*> *nuclearDensityCache_G4MT_TLS_;
 
-    static __thread std::map<G4int,InverseInterpolationTable*> *rpCorrelationTableCache_G4MT_TLS_;
-    static __thread std::map<G4int,InverseInterpolationTable*> *rCDFTableCache_G4MT_TLS_;
-    static __thread std::map<G4int,InverseInterpolationTable*> *pCDFTableCache_G4MT_TLS_;
+    static G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rpCorrelationTableCache_G4MT_TLS_;
+    static G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rCDFTableCache_G4MT_TLS_;
+    static G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *pCDFTableCache_G4MT_TLS_;
 
   };
 }

@@ -47,7 +47,7 @@
 // ######################################################################
 // ###                          DIPROTON                              ###
 // ######################################################################
-__thread G4Diproton* G4Diproton::theInstance = 0;
+G4ThreadLocal G4Diproton* G4Diproton::theInstance = 0;
 
 //    Arguments for constructor are as follows
 //               name             mass          width         charge

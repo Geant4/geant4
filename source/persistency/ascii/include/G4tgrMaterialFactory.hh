@@ -111,7 +111,7 @@ class G4tgrMaterialFactory
                             const G4bool bNoRepeating = true );
   private:
 
-    static __thread G4tgrMaterialFactory* theInstance;
+    static G4ThreadLocal G4tgrMaterialFactory* theInstance;
 
     G4mstgrisot theG4tgrIsotopes;
       // List of all G4tgrIsotopes created

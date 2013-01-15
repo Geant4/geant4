@@ -40,7 +40,7 @@
 
 using namespace std;
 
-__thread G4Allocator<G4IT> *aITAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4IT> *aITAllocator_G4MT_TLS_ = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 ///
 // Static functions

@@ -587,7 +587,7 @@ namespace {
 
 // Initialize n-n cross-section table
 typedef G4CascadeNNChannelData::data_t G4CascadeNNChannelData_t;
-__thread G4CascadeNNChannelData_t *G4CascadeNNChannelData::data=0;
+G4ThreadLocal G4CascadeNNChannelData_t *G4CascadeNNChannelData::data=0;
 
 G4CascadeNNChannelData::data_t *G4CascadeNNChannelData::initializer()
 {

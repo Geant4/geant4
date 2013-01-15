@@ -79,9 +79,9 @@ class G4HEPEvtParticle
 };
 
 #if defined G4EVENT_ALLOC_EXPORT
-  extern G4DLLEXPORT __thread G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator_G4MT_TLS_;
+  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT __thread G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator_G4MT_TLS_;
+  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4HEPEvtParticle> *aHEPEvtParticleAllocator_G4MT_TLS_;
 #endif
 
 inline void * G4HEPEvtParticle::operator new(size_t)

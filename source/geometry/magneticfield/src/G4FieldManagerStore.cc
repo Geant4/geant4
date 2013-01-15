@@ -42,8 +42,8 @@
 // Static class variables
 // ***************************************************************************
 //
-__thread G4FieldManagerStore* G4FieldManagerStore::fgInstance = 0;
-__thread G4bool G4FieldManagerStore::locked = false;
+G4ThreadLocal G4FieldManagerStore* G4FieldManagerStore::fgInstance = 0;
+G4ThreadLocal G4bool G4FieldManagerStore::locked = false;
 
 // ***************************************************************************
 // Protected constructor: Construct underlying container with
@@ -130,7 +130,7 @@ void G4FieldManagerStore::DeRegister(G4FieldManager* pFieldMgr)
 //
 G4FieldManagerStore* G4FieldManagerStore::GetInstance()
 {
-  static __thread G4FieldManagerStore *worldStore_G4MT_TLS_ = 0 ; if (!worldStore_G4MT_TLS_) worldStore_G4MT_TLS_ = new  G4FieldManagerStore  ;  G4FieldManagerStore &worldStore = *worldStore_G4MT_TLS_;
+  static G4ThreadLocal G4FieldManagerStore *worldStore_G4MT_TLS_ = 0 ; if (!worldStore_G4MT_TLS_) worldStore_G4MT_TLS_ = new  G4FieldManagerStore  ;  G4FieldManagerStore &worldStore = *worldStore_G4MT_TLS_;
   if (!fgInstance)
   {
     fgInstance = &worldStore;

@@ -62,8 +62,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-__thread G4double G4ICRU49NuclearStoppingModel::ad[] = {0.0};
-__thread G4double G4ICRU49NuclearStoppingModel::ed[] = {0.0};
+G4ThreadLocal G4double G4ICRU49NuclearStoppingModel::ad[] = {0.0};
+G4ThreadLocal G4double G4ICRU49NuclearStoppingModel::ed[] = {0.0};
 
 using namespace std;
 

@@ -90,9 +90,9 @@ private:
   G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right);
   G4SeltzerBergerModel(const  G4SeltzerBergerModel&);
 
-  static __thread G4Physics2DVector* dataSB[101];
-  static __thread G4double ylimit[101];
-  static __thread G4double expnumlim;
+  static G4ThreadLocal G4Physics2DVector* dataSB[101];
+  static G4ThreadLocal G4double ylimit[101];
+  static G4ThreadLocal G4double expnumlim;
   G4int  nwarn;
   G4bool useBicubicInterpolation;
 };

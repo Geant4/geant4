@@ -57,7 +57,7 @@
 
 #include <sstream>
 
-__thread G4Allocator<G4RichTrajectory> *aRichTrajectoryAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4RichTrajectory> *aRichTrajectoryAllocator_G4MT_TLS_ = 0;
 
 G4RichTrajectory::G4RichTrajectory():
   fpRichPointsContainer(0),

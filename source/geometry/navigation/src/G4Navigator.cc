@@ -716,7 +716,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fCalculatedExitNormal  = false;
     // Reset for new step
 
-  static __thread G4int sNavCScalls=0;
+  static G4ThreadLocal G4int sNavCScalls=0;
   sNavCScalls++;
 
   fLastTriedStepComputation= true; 
@@ -1901,7 +1901,7 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
               << fAccuracyForException/mm << " mm.";
 
       suggestion << " ";
-      static __thread G4int warnNow = 0;
+      static G4ThreadLocal G4int warnNow = 0;
       if( ((++warnNow % 100) == 1) )
       {
         message << G4endl

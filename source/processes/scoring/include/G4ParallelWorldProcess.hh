@@ -173,9 +173,9 @@ public:
   static const G4Step* GetHyperStep();
   static G4int GetHypNavigatorID();
 private:
-  static __thread G4Step* fpHyperStep;
-  static __thread G4int nParallelWorlds;
-  static __thread G4int fNavIDHyp;
+  static G4ThreadLocal G4Step* fpHyperStep;
+  static G4ThreadLocal G4int nParallelWorlds;
+  static G4ThreadLocal G4int fNavIDHyp;
   G4int iParallelWorld;
 };
 

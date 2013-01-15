@@ -41,14 +41,14 @@
 #include <iostream>
 
 #if defined G4GLOB_ALLOC_EXPORT
-  extern G4DLLEXPORT __thread std::ostream *G4cout_G4MT_TLS_;
-  extern G4DLLEXPORT __thread std::ostream *G4cerr_G4MT_TLS_;
+  extern G4DLLEXPORT G4ThreadLocal std::ostream *G4cout_G4MT_TLS_;
+  extern G4DLLEXPORT G4ThreadLocal std::ostream *G4cerr_G4MT_TLS_;
 #define G4cout (*G4cout_G4MT_TLS_)
 #define G4cerr (*G4cerr_G4MT_TLS_)
 
 #else
-  extern G4DLLIMPORT __thread std::ostream *G4cout_G4MT_TLS_;
-  extern G4DLLIMPORT __thread std::ostream *G4cerr_G4MT_TLS_;
+  extern G4DLLIMPORT G4ThreadLocal std::ostream *G4cout_G4MT_TLS_;
+  extern G4DLLIMPORT G4ThreadLocal std::ostream *G4cerr_G4MT_TLS_;
 #define G4cout (*G4cout_G4MT_TLS_)
 #define G4cerr (*G4cerr_G4MT_TLS_)
  

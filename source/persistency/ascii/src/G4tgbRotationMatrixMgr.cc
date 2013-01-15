@@ -41,7 +41,7 @@
 
 // -------------------------------------------------------------------------
 
-__thread G4tgbRotationMatrixMgr * G4tgbRotationMatrixMgr::theInstance = 0;
+G4ThreadLocal G4tgbRotationMatrixMgr * G4tgbRotationMatrixMgr::theInstance = 0;
 
 
 // -------------------------------------------------------------------------

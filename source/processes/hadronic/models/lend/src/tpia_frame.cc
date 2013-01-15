@@ -44,7 +44,7 @@ namespace GIDI {
 using namespace GIDI;
 #endif
 
-static __thread int nlab_Str = 0, nCOM_Str = 0;
+static G4ThreadLocal int nlab_Str = 0, nCOM_Str = 0;
 static const char lab_Str[] = "lab", COM_Str[] = "centerOfMass";
 /*
 ************************************************************

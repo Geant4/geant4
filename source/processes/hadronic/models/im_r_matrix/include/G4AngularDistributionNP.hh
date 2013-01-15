@@ -56,8 +56,8 @@ class G4AngularDistributionNP : public G4VAngularDistribution
 
  private:
 
-   static __thread G4float sig[NENERGY][NANGLE];
-   static __thread G4float pcm[NENERGY], elab[NENERGY],
+   static G4ThreadLocal G4float sig[NENERGY][NANGLE];
+   static G4ThreadLocal G4float pcm[NENERGY], elab[NENERGY],
      dsigmax[NENERGY], sigtot[NENERGY];
 };
 

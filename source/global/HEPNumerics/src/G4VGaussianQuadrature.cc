@@ -81,7 +81,7 @@ G4VGaussianQuadrature::GammaLogarithm(G4double xx)
 // xx > 1. For 0 < xx < 1. the reflection formula (6.1.4) can be used first.
 // (Adapted from Numerical Recipes in C)
 
-  static __thread G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
+  static G4ThreadLocal G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
                              24.01409824083091,      -1.231739572450155,
                               0.1208650973866179e-2, -0.5395239384953e-5  } ;
   G4double x = xx - 1.0;

@@ -109,7 +109,7 @@ class G4AdjointPosOnPhysVolGenerator
 //---------   
    private: //attributes
 //---------   
-   static __thread G4AdjointPosOnPhysVolGenerator* theInstance;
+   static G4ThreadLocal G4AdjointPosOnPhysVolGenerator* theInstance;
    G4VSolid* theSolid;
    G4VPhysicalVolume* thePhysicalVolume;
    G4int NStat;

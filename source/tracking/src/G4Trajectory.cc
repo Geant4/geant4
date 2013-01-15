@@ -52,7 +52,7 @@
 #include "G4AttCheck.hh"
 #endif
 
-__thread G4Allocator<G4Trajectory> *aTrajectoryAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4Trajectory> *aTrajectoryAllocator_G4MT_TLS_ = 0;
 
 G4Trajectory::G4Trajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),

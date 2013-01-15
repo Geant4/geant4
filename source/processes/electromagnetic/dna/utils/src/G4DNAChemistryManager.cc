@@ -51,7 +51,7 @@
 
 using namespace std;
 
-__thread auto_ptr<G4DNAChemistryManager> *G4DNAChemistryManager::fInstance_G4MT_TLS_ = 0;
+G4ThreadLocal auto_ptr<G4DNAChemistryManager> *G4DNAChemistryManager::fInstance_G4MT_TLS_ = 0;
 
 G4DNAChemistryManager::G4DNAChemistryManager() :
     fActiveChemistry(false)

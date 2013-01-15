@@ -88,8 +88,8 @@ class G4SolidStore : public std::vector<G4VSolid*>
   private:
 
     static G4SolidStore* fgInstance;
-    static __thread G4VStoreNotifier* fgNotifier;
-    static __thread G4bool locked;
+    static G4ThreadLocal G4VStoreNotifier* fgNotifier;
+    static G4ThreadLocal G4bool locked;
 };
 
 #endif

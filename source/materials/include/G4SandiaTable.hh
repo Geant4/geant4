@@ -114,8 +114,8 @@ private:
   static const G4double   fIonizationPotentials[101];
   static const G4double   funitc[5];
                
-  static __thread       G4int      fCumulInterval[101];
-  static __thread       G4double   fSandiaCofPerAtom[4];
+  static G4ThreadLocal       G4int      fCumulInterval[101];
+  static G4ThreadLocal       G4double   fSandiaCofPerAtom[4];
   
   // members of the class
   G4Material*     fMaterial;

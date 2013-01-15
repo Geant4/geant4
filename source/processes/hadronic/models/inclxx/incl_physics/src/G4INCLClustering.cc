@@ -46,6 +46,6 @@
 
 namespace G4INCL {
 
-  __thread IClusteringModel *Clustering::theClusteringModel = 0;
+  G4ThreadLocal IClusteringModel *Clustering::theClusteringModel = 0;
 
 }

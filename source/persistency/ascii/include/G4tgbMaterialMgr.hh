@@ -119,7 +119,7 @@ class G4tgbMaterialMgr
   
  private:
 
-    static __thread G4tgbMaterialMgr* theInstance;
+    static G4ThreadLocal G4tgbMaterialMgr* theInstance;
 
     G4mstgbisot theG4tgbIsotopes;
       // List of all tgbIsotopes created

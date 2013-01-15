@@ -43,8 +43,8 @@
 // ***************************************************************************
 //
 G4SolidStore* G4SolidStore::fgInstance = 0;
-__thread G4VStoreNotifier* G4SolidStore::fgNotifier = 0;
-__thread G4bool G4SolidStore::locked = false;
+G4ThreadLocal G4VStoreNotifier* G4SolidStore::fgNotifier = 0;
+G4ThreadLocal G4bool G4SolidStore::locked = false;
 
 // ***************************************************************************
 // Protected constructor: Construct underlying container with

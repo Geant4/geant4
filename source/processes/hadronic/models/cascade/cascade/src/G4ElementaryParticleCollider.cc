@@ -836,7 +836,7 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
     static const G4double nnCos[9] = {-1.0,  -1.0, 0.4226, 0.4226, 0.4384, 0.7193, 0.8788, 0.9164,  0.95};
     static const G4double nnFrac[9] = {1.0,   1.0, 0.4898, 0.7243, 0.7990, 0.8892, 0.8493, 0.9583,  1.0};
 
-    static __thread G4CascadeInterpolator<9> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<9> (nnke) ;  G4CascadeInterpolator<9> &interp = *interp_G4MT_TLS_;	// Only need one!
+    static G4ThreadLocal G4CascadeInterpolator<9> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<9> (nnke) ;  G4CascadeInterpolator<9> &interp = *interp_G4MT_TLS_;	// Only need one!
     pA = interp.interpolate(ekin, nnA);
     pC = interp.interpolate(ekin, nnC);
     pCos = interp.interpolate(ekin, nnCos);
@@ -855,7 +855,7 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
     static const G4double gnCos[10] =  {1.0,   1.0,   0.906,  0.940, 0.940, 0.906, 0.906,  0.91,   0.91,   0.94};
     static const G4double gnFrac[10] = {0.0,   0.0,   0.028,  0.012, 0.014, 0.044, 0.087,  0.122,  0.16,   1.0};
 
-    static __thread G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (gnke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;
+    static G4ThreadLocal G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (gnke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;
     pA = interp.interpolate(ekin, gnA);
     pC = interp.interpolate(ekin, gnC);
     pCos = interp.interpolate(ekin, gnCos);
@@ -873,7 +873,7 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
     static const G4double qxCos[10] =  {1.0,   1.0,    0.604, -0.033,  0.25,   0.55,   0.65,   0.80,   0.916,  0.916};
     static const G4double qxFrac[10] = {0.0,   0.0,    0.1156, 0.5832, 0.8125, 0.3357, 0.3269, 0.7765, 0.8633, 1.0};
 
-    static __thread G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (qxke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;	// Only need one!
+    static G4ThreadLocal G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (qxke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;	// Only need one!
     pA = interp.interpolate(ekin, qxA);
     pC = interp.interpolate(ekin, qxC);
     pCos = interp.interpolate(ekin, qxCos);
@@ -890,7 +890,7 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
     static const G4double hn1Cos[10] =  {1.0,  1.0,    0.174, -0.174, -0.7,   -0.295,  0.5,    0.732,  0.837,  0.89};
     static const G4double hn1Frac[10] = {0.0,  0.0,    0.2980, 0.7196, 0.9812, 0.8363, 0.5602, 0.9601, 0.9901, 1.0};
 
-    static __thread G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (hn1ke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;	// Only need one!
+    static G4ThreadLocal G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (hn1ke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;	// Only need one!
     pA = interp.interpolate(ekin, hn1A);
     pC = interp.interpolate(ekin, hn1C);
     pCos = interp.interpolate(ekin, hn1Cos);
@@ -907,7 +907,7 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
     static const G4double hn2Cos[10] = {-1.0, -1.0,  -0.235, -0.259, -0.276,  0.336,  0.250,  0.732,  0.875,  0.9};
     static const G4double hn2Frac[10] = {1.0,  1.0,   0.6918, 0.6419, 0.7821, 0.6542, 0.8382, 0.9722, 0.9784, 1.0};
 
-    static __thread G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (hn2ke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;	// Only need one!
+    static G4ThreadLocal G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (hn2ke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;	// Only need one!
     pA = interp.interpolate(ekin, hn2A);
     pC = interp.interpolate(ekin, hn2C);
     pCos = interp.interpolate(ekin, hn2Cos);

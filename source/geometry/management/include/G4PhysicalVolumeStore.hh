@@ -90,8 +90,8 @@ class G4PhysicalVolumeStore : public std::vector<G4VPhysicalVolume*>
   private:
 
     static G4PhysicalVolumeStore* fgInstance;
-    static __thread G4VStoreNotifier* fgNotifier;
-    static __thread G4bool locked;
+    static G4ThreadLocal G4VStoreNotifier* fgNotifier;
+    static G4ThreadLocal G4bool locked;
 };
 
 #endif

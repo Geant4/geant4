@@ -41,7 +41,7 @@
 #include "G4LogicalBorderSurface.hh"
 #include "G4VPhysicalVolume.hh"
 
-__thread G4LogicalBorderSurfaceTable *G4LogicalBorderSurface::theBorderSurfaceTable_G4MT_TLS_ = 0;
+G4ThreadLocal G4LogicalBorderSurfaceTable *G4LogicalBorderSurface::theBorderSurfaceTable_G4MT_TLS_ = 0;
 
 //
 // Constructor & destructor

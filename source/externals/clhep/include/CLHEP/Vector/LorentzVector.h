@@ -527,8 +527,8 @@ private:
   Hep3Vector pp;
   double  ee;
 
-  DLL_API static __thread double tolerance;
-  DLL_API static __thread double metric;
+  DLL_API static double tolerance;
+  DLL_API static double metric;
 
 };  // HepLorentzVector
 

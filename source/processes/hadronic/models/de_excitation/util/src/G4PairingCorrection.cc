@@ -31,7 +31,7 @@
 #include "G4PairingCorrection.hh"
 #include "G4SystemOfUnits.hh"
 
-__thread G4PairingCorrection* G4PairingCorrection::theInstance = 0;
+G4ThreadLocal G4PairingCorrection* G4PairingCorrection::theInstance = 0;
 
 G4PairingCorrection::G4PairingCorrection()
 {
@@ -46,7 +46,7 @@ G4PairingCorrection::~G4PairingCorrection()
 G4PairingCorrection* G4PairingCorrection::GetInstance()
 {
   if (!theInstance)  { 
-    static __thread G4PairingCorrection *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4PairingCorrection  ;  G4PairingCorrection &theCorrections = *theCorrections_G4MT_TLS_;
+    static G4ThreadLocal G4PairingCorrection *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4PairingCorrection  ;  G4PairingCorrection &theCorrections = *theCorrections_G4MT_TLS_;
     theInstance = &theCorrections; 
   }
   return theInstance;

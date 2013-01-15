@@ -680,7 +680,7 @@ G4double G4EquilibriumEvaporator::getQF(G4double x,
 
     QFF = G0 * FX * G4cbrt(a*a);
   } else {
-    static __thread G4CascadeInterpolator<72> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<72> (XREP) ;  G4CascadeInterpolator<72> &interp = *interp_G4MT_TLS_;	// Only need one!
+    static G4ThreadLocal G4CascadeInterpolator<72> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<72> (XREP) ;  G4CascadeInterpolator<72> &interp = *interp_G4MT_TLS_;	// Only need one!
     QFF = interp.interpolate(x, QFREP);
   }
 

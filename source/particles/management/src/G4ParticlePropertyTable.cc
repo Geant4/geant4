@@ -40,12 +40,12 @@
 #include "G4ParticlePropertyTable.hh"
 
 // Static class variable: ptr to single instance of class
-__thread G4ParticlePropertyTable* G4ParticlePropertyTable::fgParticlePropertyTable =0;
+G4ThreadLocal G4ParticlePropertyTable* G4ParticlePropertyTable::fgParticlePropertyTable =0;
 
 ////////////////////
 G4ParticlePropertyTable* G4ParticlePropertyTable::GetParticlePropertyTable()
 {
-  static __thread G4ParticlePropertyTable *theParticlePropertyTable_G4MT_TLS_ = 0 ; if (!theParticlePropertyTable_G4MT_TLS_) theParticlePropertyTable_G4MT_TLS_ = new  G4ParticlePropertyTable  ;  G4ParticlePropertyTable &theParticlePropertyTable = *theParticlePropertyTable_G4MT_TLS_;
+  static G4ThreadLocal G4ParticlePropertyTable *theParticlePropertyTable_G4MT_TLS_ = 0 ; if (!theParticlePropertyTable_G4MT_TLS_) theParticlePropertyTable_G4MT_TLS_ = new  G4ParticlePropertyTable  ;  G4ParticlePropertyTable &theParticlePropertyTable = *theParticlePropertyTable_G4MT_TLS_;
   if (!fgParticlePropertyTable){
     fgParticlePropertyTable =  &theParticlePropertyTable;
   }

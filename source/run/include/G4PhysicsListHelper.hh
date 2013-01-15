@@ -97,7 +97,7 @@ class G4PhysicsListHelper
 
   ////////////////////////////////////////////////////////////////////////
   private:
-    static __thread G4PhysicsListHelper* pPLHelper;
+    static G4ThreadLocal G4PhysicsListHelper* pPLHelper;
 
     // the particle table has the complete List of existing particle types
     G4ParticleTable* theParticleTable;

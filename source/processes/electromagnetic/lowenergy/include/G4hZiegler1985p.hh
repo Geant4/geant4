@@ -77,7 +77,7 @@ protected:
 
 private:
   const G4double protonMassAMU;
-  static __thread G4double a[92][8];
+  static G4ThreadLocal G4double a[92][8];
 
 };
 

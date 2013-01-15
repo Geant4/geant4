@@ -63,7 +63,7 @@
 // ------------------------------------------
 // -- static instance pointer initialisation:
 // ------------------------------------------
-__thread G4GlobalFastSimulationManager* G4GlobalFastSimulationManager::fGlobalFastSimulationManager = 0;
+G4ThreadLocal G4GlobalFastSimulationManager* G4GlobalFastSimulationManager::fGlobalFastSimulationManager = 0;
 
 // --------------------------------------------------
 // -- static methods to retrieve the manager pointer:

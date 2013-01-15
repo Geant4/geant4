@@ -1268,7 +1268,7 @@ namespace {
 }
 
 typedef G4CascadeOmegaMinusPChannelData::data_t G4CascadeOmegaMinusPChannelData_t;
-__thread G4CascadeOmegaMinusPChannelData_t *G4CascadeOmegaMinusPChannelData::data=0;
+G4ThreadLocal G4CascadeOmegaMinusPChannelData_t *G4CascadeOmegaMinusPChannelData::data=0;
 
 G4CascadeOmegaMinusPChannelData::data_t *G4CascadeOmegaMinusPChannelData::initializer()
 {

@@ -172,7 +172,7 @@ class G4AdjointCSManager
 	
 	
   private:
-        static __thread 	G4AdjointCSManager* theInstance;
+        static G4ThreadLocal 	G4AdjointCSManager* theInstance;
   	std::vector< std::vector<G4AdjointCSMatrix*> > theAdjointCSMatricesForScatProjToProj; //x dim is for G4VAdjointEM* while y dim is for elements
 	std::vector< std::vector<G4AdjointCSMatrix*> > theAdjointCSMatricesForProdToProj;
 	std::vector< G4VEmAdjointModel*> listOfAdjointEMModel;

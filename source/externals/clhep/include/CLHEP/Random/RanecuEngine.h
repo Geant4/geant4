@@ -124,7 +124,7 @@ private:
   static const int maxSeq = 215;
   long table[215][2];
   int seq;
-  static __thread int numEngines;
+  static G4ThreadLocal int numEngines;
 
 };
 

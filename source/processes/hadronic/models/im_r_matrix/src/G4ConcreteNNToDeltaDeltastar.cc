@@ -32,7 +32,7 @@
 #include "G4DeltaDeltastarBuilder.hh"
 #include <typeinfo>
 
-__thread G4XDeltaDeltastarTable *G4ConcreteNNToDeltaDeltastar::theSigmaTable_G4MT_TLS_ = 0;
+G4ThreadLocal G4XDeltaDeltastarTable *G4ConcreteNNToDeltaDeltastar::theSigmaTable_G4MT_TLS_ = 0;
 
 G4ConcreteNNToDeltaDeltastar::G4ConcreteNNToDeltaDeltastar(const G4ParticleDefinition* aPrimary,
 					   const G4ParticleDefinition* bPrimary,

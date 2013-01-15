@@ -782,7 +782,7 @@ void G4UIGainServer::SendDisableList(G4UIcommandTree* tree,int level){
 void G4UIGainServer::UpdateState(void)
 ///////////////////////////////
 {
-   static __thread G4ApplicationState *previousState_G4MT_TLS_ = 0 ; if (!previousState_G4MT_TLS_) {previousState_G4MT_TLS_ = new  G4ApplicationState  ; *previousState_G4MT_TLS_= G4State_PreInit ; }  G4ApplicationState &previousState = *previousState_G4MT_TLS_;
+   static G4ThreadLocal G4ApplicationState *previousState_G4MT_TLS_ = 0 ; if (!previousState_G4MT_TLS_) {previousState_G4MT_TLS_ = new  G4ApplicationState  ; *previousState_G4MT_TLS_= G4State_PreInit ; }  G4ApplicationState &previousState = *previousState_G4MT_TLS_;
    G4ApplicationState  newState;
    G4StateManager *statM = G4StateManager::GetStateManager();
    newState = statM->GetCurrentState();

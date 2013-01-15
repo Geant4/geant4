@@ -53,7 +53,7 @@
 #include "G4AttCheck.hh"
 #endif
 
-__thread G4Allocator<G4SmoothTrajectory> *aSmoothTrajectoryAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4SmoothTrajectory> *aSmoothTrajectoryAllocator_G4MT_TLS_ = 0;
 
 G4SmoothTrajectory::G4SmoothTrajectory()
 :  positionRecord(0), fTrackID(0), fParentID(0),

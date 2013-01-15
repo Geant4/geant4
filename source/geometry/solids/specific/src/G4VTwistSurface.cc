@@ -171,7 +171,7 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me,
    static const G4double kAngTolerance
      = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
-   static __thread G4RotationMatrix *unitrot_G4MT_TLS_ = 0 ; if (!unitrot_G4MT_TLS_) unitrot_G4MT_TLS_ = new  G4RotationMatrix  ;  G4RotationMatrix &unitrot = *unitrot_G4MT_TLS_;  // unit matrix
+   static G4ThreadLocal G4RotationMatrix *unitrot_G4MT_TLS_ = 0 ; if (!unitrot_G4MT_TLS_) unitrot_G4MT_TLS_ = new  G4RotationMatrix  ;  G4RotationMatrix &unitrot = *unitrot_G4MT_TLS_;  // unit matrix
    static const G4RotationMatrix rottol    = unitrot.rotateZ(0.5*kAngTolerance);
    static const G4RotationMatrix invrottol = unitrot.rotateZ(-1.*kAngTolerance);
 

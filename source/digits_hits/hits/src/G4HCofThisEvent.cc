@@ -29,7 +29,7 @@
 
 #include "G4HCofThisEvent.hh"
 
-__thread G4Allocator<G4HCofThisEvent> *anHCoTHAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4HCofThisEvent> *anHCoTHAllocator_G4MT_TLS_ = 0;
 
 G4HCofThisEvent::G4HCofThisEvent()
 { if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ;

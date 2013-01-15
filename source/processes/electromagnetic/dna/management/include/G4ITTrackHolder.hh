@@ -51,7 +51,7 @@ class G4ITTrackHolder
 protected :
     G4ITTrackHolder();
     virtual ~G4ITTrackHolder();
-    static __thread G4ITTrackHolder* fInstance;
+    static G4ThreadLocal G4ITTrackHolder* fInstance;
 
 public:
     static G4ITTrackHolder* Instance();

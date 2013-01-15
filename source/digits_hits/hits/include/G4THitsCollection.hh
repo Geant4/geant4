@@ -59,9 +59,9 @@ class G4HitsCollection : public G4VHitsCollection
 };
 
 #if defined G4DIGI_ALLOC_EXPORT
-  extern G4DLLEXPORT __thread G4Allocator<G4HitsCollection> *anHCAllocator_G4MT_TLS_;
+  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4HitsCollection> *anHCAllocator_G4MT_TLS_;
 #else
-  extern G4DLLIMPORT __thread G4Allocator<G4HitsCollection> *anHCAllocator_G4MT_TLS_;
+  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4HitsCollection> *anHCAllocator_G4MT_TLS_;
 #endif
 
 template <class T> class G4THitsCollection : public G4HitsCollection 

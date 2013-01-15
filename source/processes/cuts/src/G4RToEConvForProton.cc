@@ -75,8 +75,8 @@ G4double G4RToEConvForProton::ComputeLoss(G4double AtomicNumber,
 {
   //  calculate dE/dx
 
-  static __thread G4double Z;  
-  static __thread G4double ionpot, tau0, taum, taul, ca, cba, cc;
+  static G4ThreadLocal G4double Z;  
+  static G4ThreadLocal G4double ionpot, tau0, taum, taul, ca, cba, cc;
 
   G4double  z2Particle = theParticle->GetPDGCharge()/eplus;
   z2Particle *=  z2Particle;

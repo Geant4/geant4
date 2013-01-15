@@ -38,7 +38,7 @@
 #include "G4ITTrackHolder.hh"
 #include "G4Track.hh"
 
-__thread G4ITTrackHolder* G4ITTrackHolder::fInstance(0);
+G4ThreadLocal G4ITTrackHolder* G4ITTrackHolder::fInstance(0);
 
 G4ITTrackHolder::G4ITTrackHolder()
 {

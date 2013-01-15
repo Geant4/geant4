@@ -50,8 +50,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-__thread G4int    G4SandiaTable::fCumulInterval[101]  = {0};
-__thread G4double G4SandiaTable::fSandiaCofPerAtom[4] = {0.0};
+G4ThreadLocal G4int    G4SandiaTable::fCumulInterval[101]  = {0};
+G4ThreadLocal G4double G4SandiaTable::fSandiaCofPerAtom[4] = {0.0};
 G4double const G4SandiaTable::funitc[5] = {keV,
                                            cm2*keV/g,     
 					   cm2*keV*keV/g,     

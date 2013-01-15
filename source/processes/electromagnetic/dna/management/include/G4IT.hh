@@ -61,9 +61,9 @@ G4IT* GetIT(const G4Track* track) ;
 G4IT* GetIT(const G4Track& track) ;
 
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT __thread G4Allocator<G4IT> *aITAllocator_G4MT_TLS_;
+extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator_G4MT_TLS_;
 #else
-extern G4DLLIMPORT __thread G4Allocator<G4IT> *aITAllocator_G4MT_TLS_;
+extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator_G4MT_TLS_;
 #endif
 
 class G4TrackListNode;

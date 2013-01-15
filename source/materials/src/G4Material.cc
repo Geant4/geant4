@@ -705,7 +705,7 @@ G4int G4Material::operator!=(const G4Material& right) const
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the
 //array of MaterialPrivateSubclass instances.
-template <class MaterialPrivateSubclass> __thread MaterialPrivateSubclass* G4MTPrivateSubInstanceManager<MaterialPrivateSubclass>::offset = 0;
+template <class MaterialPrivateSubclass> G4ThreadLocal MaterialPrivateSubclass* G4MTPrivateSubInstanceManager<MaterialPrivateSubclass>::offset = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This new field helps to use the class G4MaterialSubInstanceManager

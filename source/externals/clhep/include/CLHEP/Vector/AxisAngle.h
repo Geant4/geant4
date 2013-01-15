@@ -40,7 +40,7 @@ public:
 
 protected:
   typedef HepAxisAngle AA;         // just an abbreviation
-  static __thread Scalar tolerance;      // to determine relative nearness
+  static G4ThreadLocal Scalar tolerance;      // to determine relative nearness
 
 public:
 

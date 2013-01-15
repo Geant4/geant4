@@ -48,7 +48,7 @@ class G4NeutronHPManager
       G4NeutronHPManager();
       G4NeutronHPManager( const G4NeutronHPManager& ){};
       ~G4NeutronHPManager();
-      static __thread G4NeutronHPManager* instance;
+      static G4ThreadLocal G4NeutronHPManager* instance;
 
    public:
       G4NeutronHPReactionWhiteBoard* GetReactionWhiteBoard();

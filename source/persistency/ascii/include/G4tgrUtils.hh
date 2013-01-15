@@ -105,7 +105,7 @@ class G4tgrUtils
 
   private:
 
-    static __thread G4tgrEvaluator* theEvaluator;
+    static G4ThreadLocal G4tgrEvaluator* theEvaluator;
 };
 
 #endif 

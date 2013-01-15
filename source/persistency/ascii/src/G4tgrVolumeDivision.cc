@@ -44,7 +44,7 @@
 #include "G4tgrMessenger.hh"
 
 
-__thread G4mmss *G4tgrVolumeDivision::theSupportedAxis_G4MT_TLS_ = 0;
+G4ThreadLocal G4mmss *G4tgrVolumeDivision::theSupportedAxis_G4MT_TLS_ = 0;
 
 
 //-------------------------------------------------------------

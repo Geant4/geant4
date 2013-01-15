@@ -37,7 +37,7 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the     
 //array of ReplicaPrivateSubclass instances.
-template <class ReplicaPrivateSubclass> __thread ReplicaPrivateSubclass* G4MTPrivateSubInstanceManager<ReplicaPrivateSubclass>::offset = 0;
+template <class ReplicaPrivateSubclass> G4ThreadLocal ReplicaPrivateSubclass* G4MTPrivateSubInstanceManager<ReplicaPrivateSubclass>::offset = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.          
 //This new field helps to use the class G4PVReplicaSubInstanceManager        

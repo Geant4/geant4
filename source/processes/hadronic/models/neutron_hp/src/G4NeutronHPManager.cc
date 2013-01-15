@@ -30,7 +30,7 @@
 
 #include "G4NeutronHPManager.hh"
 
-__thread G4NeutronHPManager* G4NeutronHPManager::instance = NULL;
+G4ThreadLocal G4NeutronHPManager* G4NeutronHPManager::instance = NULL;
 
 G4NeutronHPManager::G4NeutronHPManager()
 :RWB(NULL)

@@ -34,7 +34,7 @@
 
 struct G4CascadePiZeroPChannelData {
   typedef G4CascadeData<30,5,13,21,30,6,7,8,9> data_t;
-  static __thread data_t *data;
+  static G4ThreadLocal data_t *data;
   static data_t *initializer();
 };
 

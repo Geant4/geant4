@@ -43,7 +43,7 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the
 //array of RegionPrivateSubclass instances.
-template <class RegionPrivateSubclass> __thread RegionPrivateSubclass* G4MTPrivateSubInstanceManager<RegionPrivateSubclass>::offset = 0;  
+template <class RegionPrivateSubclass> G4ThreadLocal RegionPrivateSubclass* G4MTPrivateSubInstanceManager<RegionPrivateSubclass>::offset = 0;  
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This new field helps to use the class G4RegionSubInstanceManager

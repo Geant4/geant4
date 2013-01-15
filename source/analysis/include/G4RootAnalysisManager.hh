@@ -153,7 +153,7 @@ class G4RootAnalysisManager : public G4VAnalysisManager
   private:
     // static data members
     //
-    static __thread G4RootAnalysisManager* fgInstance;
+    static G4ThreadLocal G4RootAnalysisManager* fgInstance;
 
     // methods
     //

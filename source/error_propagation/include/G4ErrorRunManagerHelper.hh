@@ -90,7 +90,7 @@ class G4ErrorRunManagerHelper
 
  private:
 
-  static __thread G4ErrorRunManagerHelper* fRunManagerKernel;
+  static G4ThreadLocal G4ErrorRunManagerHelper* fRunManagerKernel;
   
   G4VUserPhysicsList* theUserPhysicsList;
   G4VPhysicalVolume* theUserWorld;

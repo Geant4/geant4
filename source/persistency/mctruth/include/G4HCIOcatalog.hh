@@ -89,7 +89,7 @@ class G4HCIOcatalog
 
     private:
       int m_verbose;
-      static __thread G4HCIOcatalog* f_thePointer;
+      static G4ThreadLocal G4HCIOcatalog* f_thePointer;
       HCIOmap theCatalog;
       HCIOstore theStore;
 

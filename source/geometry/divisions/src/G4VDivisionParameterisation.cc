@@ -40,7 +40,7 @@
 #include "G4ReflectedSolid.hh"
 #include "G4GeometryTolerance.hh"
 
-__thread G4int G4VDivisionParameterisation::verbose = 5;
+G4ThreadLocal G4int G4VDivisionParameterisation::verbose = 5;
 
 //--------------------------------------------------------------------------
 G4VDivisionParameterisation::

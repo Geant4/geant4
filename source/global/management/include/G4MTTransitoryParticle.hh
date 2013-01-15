@@ -11,8 +11,8 @@ template <class G4MTPrivateObject>
 class G4MTPrivateParticleCounter
 {
 public:
-  static __thread int slavetotalspace;
-  static __thread G4MTPrivateObject* offset;
+  static G4ThreadLocal int slavetotalspace;
+  static G4ThreadLocal G4MTPrivateObject* offset;
 
   G4MTPrivateParticleCounter() {
     totalobj = 0;

@@ -69,7 +69,7 @@ class G4tgrFileReader
 
   private:
 
-    static __thread G4tgrFileReader* theInstance;  
+    static G4ThreadLocal G4tgrFileReader* theInstance;  
 
     std::vector<G4String> theTextFiles;
     G4tgrLineProcessor* theLineProcessor;

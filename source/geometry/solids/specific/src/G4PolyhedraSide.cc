@@ -50,7 +50,7 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This static member is thread local. For each thread, it points to the
 //array of PolyhedraSidePrivateSubclass instances.
-template <class PolyhedraSidePrivateSubclass> __thread PolyhedraSidePrivateSubclass* G4MTPrivateSubInstanceManager<PolyhedraSidePrivateSubclass>::offset = 0;
+template <class PolyhedraSidePrivateSubclass> G4ThreadLocal PolyhedraSidePrivateSubclass* G4MTPrivateSubInstanceManager<PolyhedraSidePrivateSubclass>::offset = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //This new field helps to use the class G4PolyhedraSideSubInstanceManager

@@ -53,8 +53,8 @@
 // ---------------------------------
 //  function members implementation
 // ---------------------------------
-__thread G4ProcessManagerMessenger* G4ProcessManager::fProcessManagerMessenger = 0;
-__thread G4int  G4ProcessManager::counterOfObjects = 0;
+G4ThreadLocal G4ProcessManagerMessenger* G4ProcessManager::fProcessManagerMessenger = 0;
+G4ThreadLocal G4int  G4ProcessManager::counterOfObjects = 0;
 
 // ///////////////////////////////////////
 G4ProcessManager::G4ProcessManager(const G4ParticleDefinition* aParticleType):

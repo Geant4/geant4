@@ -32,7 +32,7 @@
 #include "G4ShellCorrection.hh"
 
 
-__thread G4ShellCorrection* G4ShellCorrection::theInstance = 0;
+G4ThreadLocal G4ShellCorrection* G4ShellCorrection::theInstance = 0;
 
 G4ShellCorrection::G4ShellCorrection()
 {
@@ -48,7 +48,7 @@ G4ShellCorrection::~G4ShellCorrection()
 G4ShellCorrection* G4ShellCorrection::GetInstance()
 {
   if (!theInstance)  { 
-    static __thread G4ShellCorrection *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4ShellCorrection  ;  G4ShellCorrection &theCorrections = *theCorrections_G4MT_TLS_;
+    static G4ThreadLocal G4ShellCorrection *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4ShellCorrection  ;  G4ShellCorrection &theCorrections = *theCorrections_G4MT_TLS_;
     theInstance = &theCorrections; 
   }
   return theInstance;

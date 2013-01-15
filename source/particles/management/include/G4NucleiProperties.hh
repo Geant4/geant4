@@ -99,16 +99,16 @@ private:
 private: 
   // table of orbit electrons mass - binding energy 
   enum  {MaxZ = 120};
-  static __thread G4double electronMass[MaxZ];
+  static G4ThreadLocal G4double electronMass[MaxZ];
 
 private:
-  static __thread G4bool   isIntialized;
-  static __thread G4double mass_proton;
-  static __thread G4double mass_neutron;
-  static __thread G4double mass_deuteron;
-  static __thread G4double mass_triton;
-  static __thread G4double mass_alpha;
-  static __thread G4double mass_He3;
+  static G4ThreadLocal G4bool   isIntialized;
+  static G4ThreadLocal G4double mass_proton;
+  static G4ThreadLocal G4double mass_neutron;
+  static G4ThreadLocal G4double mass_deuteron;
+  static G4ThreadLocal G4double mass_triton;
+  static G4ThreadLocal G4double mass_alpha;
+  static G4ThreadLocal G4double mass_He3;
  	
 };
 

@@ -49,7 +49,7 @@ public:
 private:
     G4ITTransportationManager();
     ~G4ITTransportationManager();
-    static __thread G4ITTransportationManager* fpInstance;
+    static G4ThreadLocal G4ITTransportationManager* fpInstance;
     void Initialize();
     G4ITNavigator* fpNavigator;
 };

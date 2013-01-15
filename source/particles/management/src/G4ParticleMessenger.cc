@@ -202,7 +202,7 @@ G4String G4ParticleMessenger::GetCurrentValue(G4UIcommand * command)
     }
     selectCmd->SetCandidates((const char *)(candidates));   
 
-    static __thread G4String *noName_G4MT_TLS_ = 0 ; if (!noName_G4MT_TLS_) noName_G4MT_TLS_ = new  G4String ("none") ;  G4String &noName = *noName_G4MT_TLS_;
+    static G4ThreadLocal G4String *noName_G4MT_TLS_ = 0 ; if (!noName_G4MT_TLS_) noName_G4MT_TLS_ = new  G4String ("none") ;  G4String &noName = *noName_G4MT_TLS_;
     // current value
     if(currentParticle == 0) {
       // no particle is selected. return null 

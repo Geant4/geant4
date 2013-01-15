@@ -37,7 +37,7 @@
 #include "G4VITTimeStepper.hh"
 #include "G4VITReactionProcess.hh"
 
-__thread std::map<const G4Track*, G4bool> *G4ITModelProcessor::fHasReacted_G4MT_TLS_ = 0;
+G4ThreadLocal std::map<const G4Track*, G4bool> *G4ITModelProcessor::fHasReacted_G4MT_TLS_ = 0;
 
 G4ITModelProcessor::G4ITModelProcessor()
 { if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;

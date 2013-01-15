@@ -48,7 +48,7 @@
 // signal handler for soft-abort
 // ====================================================================
 
-static __thread G4VUIshell* theshell= 0;
+static G4ThreadLocal G4VUIshell* theshell= 0;
 
 #ifndef WIN32
 

@@ -226,7 +226,7 @@ G4InuclNuclei::makeNuclearFragment(G4int a, G4int z) {
   //        (see comments in G4IonTable.cc::~G4IonTable)
 
   // If correct nucleus already created return it
-  static __thread std::map<G4int, G4ParticleDefinition*> *fragmentList_G4MT_TLS_ = 0 ; if (!fragmentList_G4MT_TLS_) fragmentList_G4MT_TLS_ = new  std::map<G4int, G4ParticleDefinition*>  ;  std::map<G4int, G4ParticleDefinition*> &fragmentList = *fragmentList_G4MT_TLS_;
+  static G4ThreadLocal std::map<G4int, G4ParticleDefinition*> *fragmentList_G4MT_TLS_ = 0 ; if (!fragmentList_G4MT_TLS_) fragmentList_G4MT_TLS_ = new  std::map<G4int, G4ParticleDefinition*>  ;  std::map<G4int, G4ParticleDefinition*> &fragmentList = *fragmentList_G4MT_TLS_;
   if (fragmentList.find(code) != fragmentList.end()) return fragmentList[code];
 
   // Name string follows format in G4IonTable.cc::GetIonName(Z,A,E)

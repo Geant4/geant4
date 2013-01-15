@@ -35,7 +35,7 @@
 
 struct G4CascadeGamPChannelData {
   typedef G4CascadeData<30,6,6,4,5,6,7,7,7> data_t;
-  static __thread data_t *data;
+  static G4ThreadLocal data_t *data;
   static data_t *initializer();
 };
 

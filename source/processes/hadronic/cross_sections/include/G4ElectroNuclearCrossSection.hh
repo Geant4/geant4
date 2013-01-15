@@ -78,27 +78,27 @@ private:
 
 // Body
 private:
-  static __thread G4int     lastN;    // The last N of calculated nucleus
-  static __thread G4int     lastZ;    // The last Z of calculated nucleus
-  static __thread G4int     lastF;    // Last used in the cross section TheFirstBin
-  static __thread G4double* lastJ1;   // Pointer to the last array of the J1 function
-  static __thread G4double* lastJ2;   // Pointer to the last array of the J2 function
-  static __thread G4double* lastJ3;   // Pointer to the last array of the J3 function
-  static __thread G4int     lastL;    // Last used in the cross section TheLastBin
-  static __thread G4double  lastE;    // Last used in the cross section Energy
-  static __thread G4double  lastTH;   // Last value of the Energy Threshold
-  static __thread G4double  lastSig;  // Last value of the Cross Section
-  static __thread G4double  lastG;    // Last value of gamma=lnE-ln(me)
-  static __thread G4double  lastH;    // Last value of the High energy A-dependence
+  static G4ThreadLocal G4int     lastN;    // The last N of calculated nucleus
+  static G4ThreadLocal G4int     lastZ;    // The last Z of calculated nucleus
+  static G4ThreadLocal G4int     lastF;    // Last used in the cross section TheFirstBin
+  static G4ThreadLocal G4double* lastJ1;   // Pointer to the last array of the J1 function
+  static G4ThreadLocal G4double* lastJ2;   // Pointer to the last array of the J2 function
+  static G4ThreadLocal G4double* lastJ3;   // Pointer to the last array of the J3 function
+  static G4ThreadLocal G4int     lastL;    // Last used in the cross section TheLastBin
+  static G4ThreadLocal G4double  lastE;    // Last used in the cross section Energy
+  static G4ThreadLocal G4double  lastTH;   // Last value of the Energy Threshold
+  static G4ThreadLocal G4double  lastSig;  // Last value of the Cross Section
+  static G4ThreadLocal G4double  lastG;    // Last value of gamma=lnE-ln(me)
+  static G4ThreadLocal G4double  lastH;    // Last value of the High energy A-dependence
 
   // Vector of pointers to the J1 tabulated functions
-  static __thread std::vector <G4double*> *J1_G4MT_TLS_;
+  static G4ThreadLocal std::vector <G4double*> *J1_G4MT_TLS_;
 
   // Vector of pointers to the J2 tabulated functions
-  static __thread std::vector <G4double*> *J2_G4MT_TLS_;
+  static G4ThreadLocal std::vector <G4double*> *J2_G4MT_TLS_;
 
   // Vector of pointers to the J3 tabulated functions
-  static __thread std::vector <G4double*> *J3_G4MT_TLS_;
+  static G4ThreadLocal std::vector <G4double*> *J3_G4MT_TLS_;
 };
 
 

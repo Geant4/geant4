@@ -47,7 +47,7 @@
 // ######################################################################
 // ###                          DINEUTRON                             ###
 // ######################################################################
-__thread G4Dineutron* G4Dineutron::theInstance = 0;
+G4ThreadLocal G4Dineutron* G4Dineutron::theInstance = 0;
 
 //    Arguments for constructor are as follows
 //               name             mass          width         charge

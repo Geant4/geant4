@@ -76,7 +76,7 @@ class G4tgrRotationMatrixFactory
 
   private:
 
-    static __thread G4tgrRotationMatrixFactory* theInstance;
+    static G4ThreadLocal G4tgrRotationMatrixFactory* theInstance;
    
     std::vector<G4tgrRotationMatrix*> theTgrRotMatList;
     G4mstgrrotm theTgrRotMats;

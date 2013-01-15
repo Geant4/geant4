@@ -83,7 +83,7 @@ class G4tgbRotationMatrixMgr
     G4tgbRotationMatrixMgr();
     void CopyRotMats();
 
-    static __thread G4tgbRotationMatrixMgr* theInstance;
+    static G4ThreadLocal G4tgbRotationMatrixMgr* theInstance;
    
   private:
 

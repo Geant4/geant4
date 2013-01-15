@@ -45,7 +45,7 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-__thread G4int G4Fragment::errCount = 0;
+G4ThreadLocal G4int G4Fragment::errCount = 0;
 
 // Default constructor
 G4Fragment::G4Fragment() :

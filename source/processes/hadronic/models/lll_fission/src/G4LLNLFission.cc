@@ -60,7 +60,7 @@
 
 #include "G4fissionEvent.hh"
 
-__thread G4fissionEvent* fe;
+G4ThreadLocal G4fissionEvent* fe;
 
 
    extern G4float (*rngfptr) (void);

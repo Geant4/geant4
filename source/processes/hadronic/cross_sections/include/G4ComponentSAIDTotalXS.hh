@@ -138,8 +138,8 @@ private:
   G4int numberOfSaidXS;
 
   static G4String fnames[13];
-  static __thread G4PhysicsVector* elastdata[13];
-  static __thread G4PhysicsVector* inelastdata[13];
+  static G4ThreadLocal G4PhysicsVector* elastdata[13];
+  static G4ThreadLocal G4PhysicsVector* inelastdata[13];
 
 };
 

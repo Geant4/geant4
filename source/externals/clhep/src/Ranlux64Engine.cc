@@ -67,10 +67,10 @@ static const int MarkerLen = 64; // Enough room to hold a begin or end marker.
 
 
 // Number of instances with automatic seed selection
-__thread int Ranlux64Engine::numEngines = 0;
+G4ThreadLocal int Ranlux64Engine::numEngines = 0;
 
 // Maximum index into the seed table
-__thread int Ranlux64Engine::maxIndex = 215;
+G4ThreadLocal int Ranlux64Engine::maxIndex = 215;
 
 #ifndef WIN32
 namespace detail {

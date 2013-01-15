@@ -58,12 +58,12 @@
 
 using namespace CLHEP;
 
-__thread G4RunManager* G4RunManager::fRunManager = 0;
+G4ThreadLocal G4RunManager* G4RunManager::fRunManager = 0;
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //To share data, the master thread is different from worker threads.
 //This variable points out it is the master thread or not.
-__thread int G4RunManager::isSlave = 0;
+G4ThreadLocal int G4RunManager::isSlave = 0;
 
 G4RunManager* G4RunManager::GetRunManager()
 { return fRunManager; }
@@ -657,7 +657,7 @@ void G4RunManager::ConstructScoringWorlds()
       static int masterNumPWorld = 0;
 
       //Should be privatized
-      static __thread int workerCurrentPWorld = 0;
+      static G4ThreadLocal int workerCurrentPWorld = 0;
 
       if (isSlave == 0)  //master thread
       {

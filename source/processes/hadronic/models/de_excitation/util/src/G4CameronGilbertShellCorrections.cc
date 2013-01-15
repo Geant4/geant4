@@ -67,7 +67,7 @@ const G4double G4CameronGilbertShellCorrections::ShellNTable
     5.05,  5.04,  5.03,  4.99,  4.98,  5.11,  5.27,  5.39,  5.37,  5.30
 };
 
-__thread G4CameronGilbertShellCorrections* G4CameronGilbertShellCorrections::theInstance = 0;
+G4ThreadLocal G4CameronGilbertShellCorrections* G4CameronGilbertShellCorrections::theInstance = 0;
 
 G4CameronGilbertShellCorrections::G4CameronGilbertShellCorrections()
 {;}
@@ -78,7 +78,7 @@ G4CameronGilbertShellCorrections::~G4CameronGilbertShellCorrections()
 G4CameronGilbertShellCorrections* G4CameronGilbertShellCorrections::GetInstance()
 {
   if (!theInstance)  { 
-    static __thread G4CameronGilbertShellCorrections *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4CameronGilbertShellCorrections  ;  G4CameronGilbertShellCorrections &theCorrections = *theCorrections_G4MT_TLS_;
+    static G4ThreadLocal G4CameronGilbertShellCorrections *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4CameronGilbertShellCorrections  ;  G4CameronGilbertShellCorrections &theCorrections = *theCorrections_G4MT_TLS_;
     theInstance = &theCorrections; 
   }
   return theInstance;

@@ -51,7 +51,7 @@
 
 namespace G4INCL {
 
-  __thread RootFinder_solution_t *RootFinder::solution_G4MT_TLS_ = 0;
+  G4ThreadLocal RootFinder_solution_t *RootFinder::solution_G4MT_TLS_ = 0;
 
   const G4double RootFinder::toleranceY = 1.e-4;
 

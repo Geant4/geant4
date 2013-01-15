@@ -35,8 +35,8 @@
 
 #include "G4VITTimeStepper.hh"
 
-__thread G4double G4VITTimeStepper::fCurrentGlobalTime = -1;
-__thread G4double G4VITTimeStepper::fUserMinTimeStep   = -1;
+G4ThreadLocal G4double G4VITTimeStepper::fCurrentGlobalTime = -1;
+G4ThreadLocal G4double G4VITTimeStepper::fUserMinTimeStep   = -1;
 
 G4VITTimeStepper::G4VITTimeStepper()
 {

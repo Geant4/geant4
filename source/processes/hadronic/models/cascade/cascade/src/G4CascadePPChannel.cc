@@ -588,7 +588,7 @@ namespace {
 
 // Initialize p-p cross-section table
 typedef G4CascadePPChannelData::data_t G4CascadePPChannelData_t;
-__thread G4CascadePPChannelData_t *G4CascadePPChannelData::data=0;
+G4ThreadLocal G4CascadePPChannelData_t *G4CascadePPChannelData::data=0;
 
 G4CascadePPChannelData::data_t *G4CascadePPChannelData::initializer()
 {

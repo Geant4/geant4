@@ -109,8 +109,8 @@ void G4PrimaryTransformer::GenerateSingleTrack
      (G4PrimaryParticle* primaryParticle,
       G4double x0,G4double y0,G4double z0,G4double t0,G4double wv)
 {
-  static __thread G4ParticleDefinition* optPhoton = 0;
-  static __thread G4int nWarn = 0;
+  static G4ThreadLocal G4ParticleDefinition* optPhoton = 0;
+  static G4ThreadLocal G4int nWarn = 0;
   if(!optPhoton) optPhoton = particleTable->FindParticle("opticalphoton");
 
   G4ParticleDefinition* partDef = GetDefinition(primaryParticle);

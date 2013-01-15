@@ -61,7 +61,7 @@
 
 #include <sstream>
 
-__thread G4Allocator<G4RichTrajectoryPoint> *aRichTrajectoryPointAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4RichTrajectoryPoint> *aRichTrajectoryPointAllocator_G4MT_TLS_ = 0;
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint():
   fpAuxiliaryPointVector(0),

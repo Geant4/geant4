@@ -57,8 +57,8 @@ class G4AngularDistributionPP : public G4VAngularDistribution
  private:
 
   // Coulomb effects suppressed:
-  static __thread G4float sig[NENERGY][NANGLE];
-  static __thread G4float pcm[NENERGY], elab[NENERGY],
+  static G4ThreadLocal G4float sig[NENERGY][NANGLE];
+  static G4ThreadLocal G4float pcm[NENERGY], elab[NENERGY],
   dsigmax[NENERGY], sigtot[NENERGY];
 
  };

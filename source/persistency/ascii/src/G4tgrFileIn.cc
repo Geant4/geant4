@@ -44,7 +44,7 @@
 #include "G4tgrUtils.hh"
 #include "G4UIcommand.hh"
 
-__thread std::vector<G4tgrFileIn*> *G4tgrFileIn::theInstances_G4MT_TLS_ = 0;
+G4ThreadLocal std::vector<G4tgrFileIn*> *G4tgrFileIn::theInstances_G4MT_TLS_ = 0;
 
 
 //-----------------------------------------------------------------------

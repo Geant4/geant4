@@ -430,18 +430,18 @@ const G4int G4QAOLowEnergyLoss::materialAvailable[6] = {13,14,29,73,79,78};
   */
 const G4int G4QAOLowEnergyLoss::nbofShellForMaterial[6] = {3,3,4,6,6,6 };
               
-__thread G4double G4QAOLowEnergyLoss::alShellEnergy[3]  ={ 2795e-6, 202e-6,  16.9e-6};
-__thread G4double G4QAOLowEnergyLoss::alShellStrength[3]={ 0.1349, 0.6387, 0.2264};
-__thread G4double G4QAOLowEnergyLoss::siShellEnergy[3]  ={ 3179e-6, 249e-6, 20.3e-6 };
-__thread G4double G4QAOLowEnergyLoss::siShellStrength[3]={ 0.1222, 0.5972, 0.2806};
-__thread G4double G4QAOLowEnergyLoss::cuShellEnergy[4]  ={ 16931e-6, 1930e-6, 199e-6, 39.6e-6};
-__thread G4double G4QAOLowEnergyLoss::cuShellStrength[4]={ 0.0505, 0.2561, 0.4913, 0.2021};
-__thread G4double G4QAOLowEnergyLoss::taShellEnergy[6]  ={ 88926e-6, 18012e-6, 3210e-6, 575e-6, 108.7e-6, 30.8e-6};
-__thread G4double G4QAOLowEnergyLoss::taShellStrength[6]={ 0.0126, 0.0896, 0.2599, 0.3413, 0.2057, 0.0908};
-__thread G4double G4QAOLowEnergyLoss::auShellEnergy[6]={ 96235e-6, 25918e-6, 4116e-6, 599e-6, 87.3e-6, 36.9e-6};
-__thread G4double G4QAOLowEnergyLoss::auShellStrength[6]={ 0.0139, 0.0803, 0.2473, 0.423, 0.1124, 0.1231};
-__thread G4double G4QAOLowEnergyLoss::ptShellEnergy[6]={ 95017e-6, 25590e-6, 4063e-6, 576e-6, 81.9e-6, 31.4e-6};
-__thread G4double G4QAOLowEnergyLoss::ptShellStrength[6]={ 0.0129, 0.0745, 0.2295, 0.4627, 0.1324, 0.0879};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::alShellEnergy[3]  ={ 2795e-6, 202e-6,  16.9e-6};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::alShellStrength[3]={ 0.1349, 0.6387, 0.2264};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::siShellEnergy[3]  ={ 3179e-6, 249e-6, 20.3e-6 };
+G4ThreadLocal G4double G4QAOLowEnergyLoss::siShellStrength[3]={ 0.1222, 0.5972, 0.2806};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::cuShellEnergy[4]  ={ 16931e-6, 1930e-6, 199e-6, 39.6e-6};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::cuShellStrength[4]={ 0.0505, 0.2561, 0.4913, 0.2021};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::taShellEnergy[6]  ={ 88926e-6, 18012e-6, 3210e-6, 575e-6, 108.7e-6, 30.8e-6};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::taShellStrength[6]={ 0.0126, 0.0896, 0.2599, 0.3413, 0.2057, 0.0908};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::auShellEnergy[6]={ 96235e-6, 25918e-6, 4116e-6, 599e-6, 87.3e-6, 36.9e-6};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::auShellStrength[6]={ 0.0139, 0.0803, 0.2473, 0.423, 0.1124, 0.1231};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::ptShellEnergy[6]={ 95017e-6, 25590e-6, 4063e-6, 576e-6, 81.9e-6, 31.4e-6};
+G4ThreadLocal G4double G4QAOLowEnergyLoss::ptShellStrength[6]={ 0.0129, 0.0745, 0.2295, 0.4627, 0.1324, 0.0879};
 
 
 const G4double G4QAOLowEnergyLoss::L0[67][2] =

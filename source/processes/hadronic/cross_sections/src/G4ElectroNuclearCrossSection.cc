@@ -44,32 +44,32 @@
 
 // Initialization of statics
 // Last used in the cross section TheEnergy
-__thread G4double G4ElectroNuclearCrossSection::lastE=0.;
+G4ThreadLocal G4double G4ElectroNuclearCrossSection::lastE=0.;
 
 // Last used in the cross section TheFirstBin
-__thread G4int G4ElectroNuclearCrossSection::lastF=0;
+G4ThreadLocal G4int G4ElectroNuclearCrossSection::lastF=0;
 
 // Last used in the cross section TheGamma
-__thread G4double G4ElectroNuclearCrossSection::lastG=0.;
+G4ThreadLocal G4double G4ElectroNuclearCrossSection::lastG=0.;
 
-__thread G4double  G4ElectroNuclearCrossSection::lastH=0.;  // Last value of the High Energy A-dependence
-__thread G4double* G4ElectroNuclearCrossSection::lastJ1=0;  // Pointer to the last array of the J1 function
-__thread G4double* G4ElectroNuclearCrossSection::lastJ2=0;  // Pointer to the last array of the J2 function
-__thread G4double* G4ElectroNuclearCrossSection::lastJ3=0;  // Pointer to the last array of the J3 function
-__thread G4int     G4ElectroNuclearCrossSection::lastL=0;   // Last used in the cross section TheLastBin
-__thread G4int     G4ElectroNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
-__thread G4int     G4ElectroNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
-__thread G4double  G4ElectroNuclearCrossSection::lastTH=0.; // Last energy threshold
-__thread G4double  G4ElectroNuclearCrossSection::lastSig=0.;// Last value of the Cross Section
+G4ThreadLocal G4double  G4ElectroNuclearCrossSection::lastH=0.;  // Last value of the High Energy A-dependence
+G4ThreadLocal G4double* G4ElectroNuclearCrossSection::lastJ1=0;  // Pointer to the last array of the J1 function
+G4ThreadLocal G4double* G4ElectroNuclearCrossSection::lastJ2=0;  // Pointer to the last array of the J2 function
+G4ThreadLocal G4double* G4ElectroNuclearCrossSection::lastJ3=0;  // Pointer to the last array of the J3 function
+G4ThreadLocal G4int     G4ElectroNuclearCrossSection::lastL=0;   // Last used in the cross section TheLastBin
+G4ThreadLocal G4int     G4ElectroNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
+G4ThreadLocal G4int     G4ElectroNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
+G4ThreadLocal G4double  G4ElectroNuclearCrossSection::lastTH=0.; // Last energy threshold
+G4ThreadLocal G4double  G4ElectroNuclearCrossSection::lastSig=0.;// Last value of the Cross Section
 
 // Vector of pointers to the J1 tabulated functions
-__thread std::vector<G4double*> *G4ElectroNuclearCrossSection::J1_G4MT_TLS_ = 0;
+G4ThreadLocal std::vector<G4double*> *G4ElectroNuclearCrossSection::J1_G4MT_TLS_ = 0;
 
 // Vector of pointers to the J2 tabulated functions
-__thread std::vector<G4double*> *G4ElectroNuclearCrossSection::J2_G4MT_TLS_ = 0;
+G4ThreadLocal std::vector<G4double*> *G4ElectroNuclearCrossSection::J2_G4MT_TLS_ = 0;
 
 // Vector of pointers to the J3 tabulated functions
-__thread std::vector<G4double*> *G4ElectroNuclearCrossSection::J3_G4MT_TLS_ = 0;
+G4ThreadLocal std::vector<G4double*> *G4ElectroNuclearCrossSection::J3_G4MT_TLS_ = 0;
 
 
 G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection(const G4String& nam)
@@ -133,11 +133,11 @@ G4ElectroNuclearCrossSection::GetIsoCrossSection(
   static const G4double mel=0.5109989;       // Mass of the electron in MeV
   static const G4double lmel=std::log(mel);       // Log of the electron mass
   // *** Begin of the Associative memory for acceleration of the cross section calculations
-  static __thread std::vector <G4int> *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colN = *colN_G4MT_TLS_;       // Vector of N for calculated nucleus (isotop)
-  static __thread std::vector <G4int> *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colZ = *colZ_G4MT_TLS_;       // Vector of Z for calculated nucleus (isotop)
-  static __thread std::vector <G4int> *colF_G4MT_TLS_ = 0 ; if (!colF_G4MT_TLS_) colF_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colF = *colF_G4MT_TLS_;       // Vector of Last StartPosition in the Ji-function tables
-  static __thread std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_;   // Vector of the energy thresholds for the eA->eX reactions
-  static __thread std::vector <G4double> *colH_G4MT_TLS_ = 0 ; if (!colH_G4MT_TLS_) colH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colH = *colH_G4MT_TLS_;    // Vector of HighEnergyCoefficients (functional calculations)
+  static G4ThreadLocal std::vector <G4int> *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colN = *colN_G4MT_TLS_;       // Vector of N for calculated nucleus (isotop)
+  static G4ThreadLocal std::vector <G4int> *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colZ = *colZ_G4MT_TLS_;       // Vector of Z for calculated nucleus (isotop)
+  static G4ThreadLocal std::vector <G4int> *colF_G4MT_TLS_ = 0 ; if (!colF_G4MT_TLS_) colF_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colF = *colF_G4MT_TLS_;       // Vector of Last StartPosition in the Ji-function tables
+  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_;   // Vector of the energy thresholds for the eA->eX reactions
+  static G4ThreadLocal std::vector <G4double> *colH_G4MT_TLS_ = 0 ; if (!colH_G4MT_TLS_) colH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colH = *colH_G4MT_TLS_;    // Vector of HighEnergyCoefficients (functional calculations)
   // *** End of Static Definitions (Associative Memory) ***
 
   const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
@@ -280,9 +280,9 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
 { if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;
   static const G4int nN=14;
   static const G4int nE=336; // !!  If you change this, change it in GetCrossSection() (*.cc) !!
-  static __thread G4int L[nN]={138, 2, 32, 75, 26, 41, 0, 67, 58, 46, 41, 38, 39, 36};
+  static G4ThreadLocal G4int L[nN]={138, 2, 32, 75, 26, 41, 0, 67, 58, 46, 41, 38, 39, 36};
   // !! @@ Change it from ln(A) to A approximation !!
-  static __thread G4double A[nN]={1.,2.,3.,4.,6.,7.,9.,12.,16.,27.,63.546,118.71,207.2,238.472};
+  static G4ThreadLocal G4double A[nN]={1.,2.,3.,4.,6.,7.,9.,12.,16.,27.,63.546,118.71,207.2,238.472};
   static const G4double P00[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,

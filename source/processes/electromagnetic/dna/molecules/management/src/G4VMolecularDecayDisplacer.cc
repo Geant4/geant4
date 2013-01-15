@@ -28,7 +28,7 @@
 #include "G4VMolecularDecayDisplacer.hh"
 #include "G4Molecule.hh"
 
-__thread DisplacementType *G4VMolecularDecayDisplacer::Last_G4MT_TLS_ = 0;
+G4ThreadLocal DisplacementType *G4VMolecularDecayDisplacer::Last_G4MT_TLS_ = 0;
 const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement = G4VMolecularDecayDisplacer::AddDisplacement();
 
 G4VMolecularDecayDisplacer::G4VMolecularDecayDisplacer()

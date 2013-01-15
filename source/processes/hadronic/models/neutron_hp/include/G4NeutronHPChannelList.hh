@@ -90,7 +90,7 @@ class G4NeutronHPChannelList
   }
   private:
 
-  static __thread G4int trycounter;
+  static G4ThreadLocal G4int trycounter;
   G4NeutronHPChannel ** theChannels;
   G4int nChannels;
   G4String theDir;

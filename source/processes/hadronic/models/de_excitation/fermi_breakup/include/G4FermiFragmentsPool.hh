@@ -68,7 +68,7 @@ private:
 
   inline G4bool IsAvailable(G4int Z, G4int A);
 
-  static __thread G4FermiFragmentsPool* theInstance;
+  static G4ThreadLocal G4FermiFragmentsPool* theInstance;
 
   std::vector<const G4VFermiFragment*> fragment_pool;
 

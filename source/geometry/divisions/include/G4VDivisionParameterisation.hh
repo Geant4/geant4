@@ -104,7 +104,7 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4bool fReflectedSolid;
     G4bool fDeleteSolid;
   
-    static __thread G4int verbose;
+    static G4ThreadLocal G4int verbose;
     G4int theVoluFirstCopyNo;
 
     G4double kCarTolerance;

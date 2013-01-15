@@ -76,9 +76,9 @@ public:
   virtual ~G4VSteppingVerbose();
   //
 protected:  
-  static __thread G4VSteppingVerbose* fInstance;// pointer to the instance 
-  static __thread G4int Silent; //flag for verbosity
-  static __thread G4int SilentStepInfo; //another flag for verbosity
+  static G4ThreadLocal G4VSteppingVerbose* fInstance;// pointer to the instance 
+  static G4ThreadLocal G4int Silent; //flag for verbosity
+  static G4ThreadLocal G4int SilentStepInfo; //another flag for verbosity
 public:   // with description
 // static methods to set/get the object's pointer 
   static void SetInstance(G4VSteppingVerbose* Instance);

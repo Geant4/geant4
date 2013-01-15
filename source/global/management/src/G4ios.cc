@@ -37,10 +37,10 @@
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"
 
-__thread G4strstreambuf *G4coutbuf_G4MT_TLS_ = 0;
-__thread G4strstreambuf *G4cerrbuf_G4MT_TLS_ = 0;
-__thread std::ostream *G4cout_G4MT_TLS_ = 0;
-__thread std::ostream *G4cerr_G4MT_TLS_ = 0;
+G4ThreadLocal G4strstreambuf *G4coutbuf_G4MT_TLS_ = 0;
+G4ThreadLocal G4strstreambuf *G4cerrbuf_G4MT_TLS_ = 0;
+G4ThreadLocal std::ostream *G4cout_G4MT_TLS_ = 0;
+G4ThreadLocal std::ostream *G4cerr_G4MT_TLS_ = 0;
 #define G4coutbuf (*G4coutbuf_G4MT_TLS_)
 #define G4cerrbuf (*G4cerrbuf_G4MT_TLS_)
 #define G4cout (*G4cout_G4MT_TLS_)

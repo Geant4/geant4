@@ -85,9 +85,9 @@ private:
 
   G4int verbose;
 
-  static __thread G4int Zfr[6];
-  static __thread G4int Afr[6];
-  static __thread G4double masses[6];
+  static G4ThreadLocal G4int Zfr[6];
+  static G4ThreadLocal G4int Afr[6];
+  static G4ThreadLocal G4double masses[6];
 
   G4NistManager* fNistManager;
 };

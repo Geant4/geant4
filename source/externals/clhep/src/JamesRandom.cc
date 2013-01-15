@@ -51,10 +51,10 @@ static const int MarkerLen = 64; // Enough room to hold a begin or end marker.
 std::string HepJamesRandom::name() const {return "HepJamesRandom";}
 
 // Number of instances with automatic seed selection
-__thread int HepJamesRandom::numEngines = 0;
+G4ThreadLocal int HepJamesRandom::numEngines = 0;
 
 // Maximum index into the seed table
-__thread int HepJamesRandom::maxIndex = 215;
+G4ThreadLocal int HepJamesRandom::maxIndex = 215;
 
 HepJamesRandom::HepJamesRandom(long seed)
 : HepRandomEngine()

@@ -35,7 +35,7 @@
 #include "G4HadProjectile.hh"
 #include "G4NeutronHPFinalState.hh"
 
-  __thread G4int G4NeutronHPChannelList::trycounter = 0;
+  G4ThreadLocal G4int G4NeutronHPChannelList::trycounter = 0;
 
   G4NeutronHPChannelList::G4NeutronHPChannelList(G4int n)
   { 

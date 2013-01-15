@@ -77,7 +77,7 @@ class G4tgrVolumeDivision : public G4tgrVolume
   private:
 
     G4tgrPlaceDivRep* thePlaceDiv;
-    static __thread G4mmss *theSupportedAxis_G4MT_TLS_;
+    static G4ThreadLocal G4mmss *theSupportedAxis_G4MT_TLS_;
 };
 
 #endif

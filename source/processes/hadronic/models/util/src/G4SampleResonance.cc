@@ -41,7 +41,7 @@
 #include "Randomize.hh"
 #include "G4HadronicException.hh"
 
-__thread G4SampleResonance::minMassMapType *G4SampleResonance::minMassCache_G4MT_TLS_ = 0;
+G4ThreadLocal G4SampleResonance::minMassMapType *G4SampleResonance::minMassCache_G4MT_TLS_ = 0;
 
 G4double G4SampleResonance::GetMinimumMass(const G4ParticleDefinition* p) const
 {  ;;;   if (!minMassCache_G4MT_TLS_) minMassCache_G4MT_TLS_ = new G4SampleResonance::minMassMapType  ; G4SampleResonance::minMassMapType &minMassCache = *minMassCache_G4MT_TLS_;  ;;;  

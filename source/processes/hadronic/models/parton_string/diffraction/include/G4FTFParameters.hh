@@ -209,8 +209,8 @@ class G4FTFParameters
         G4double MaxPt2ofNuclearDestruction;    // Max Pt2
   // G4-MT changes
 private:
-  static __thread bool chipsComponentXSisInitialized;
-  static __thread G4ChipsComponentXS* chipsComponentXSinstance;
+  static G4ThreadLocal bool chipsComponentXSisInitialized;
+  static G4ThreadLocal G4ChipsComponentXS* chipsComponentXSinstance;
 };
 
 // --------------------------------------------------------------------

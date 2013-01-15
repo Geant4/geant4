@@ -120,18 +120,18 @@ private:
   // number, energy and oscillator strenghts
   // for an harmonic oscillator model of material
   static const G4int nbofShellForMaterial[6];
-  static __thread  G4double alShellEnergy[3];
-  static __thread  G4double alShellStrength[3];
-  static __thread  G4double siShellEnergy[3];
-  static __thread  G4double siShellStrength[3];
-  static __thread  G4double cuShellEnergy[4];
-  static __thread  G4double cuShellStrength[4];
-  static __thread  G4double taShellEnergy[6];
-  static __thread  G4double taShellStrength[6];
-  static __thread  G4double auShellEnergy[6];
-  static __thread  G4double auShellStrength[6];
-  static __thread  G4double ptShellEnergy[6];
-  static __thread  G4double ptShellStrength[6];
+  static G4ThreadLocal  G4double alShellEnergy[3];
+  static G4ThreadLocal  G4double alShellStrength[3];
+  static G4ThreadLocal  G4double siShellEnergy[3];
+  static G4ThreadLocal  G4double siShellStrength[3];
+  static G4ThreadLocal  G4double cuShellEnergy[4];
+  static G4ThreadLocal  G4double cuShellStrength[4];
+  static G4ThreadLocal  G4double taShellEnergy[6];
+  static G4ThreadLocal  G4double taShellStrength[6];
+  static G4ThreadLocal  G4double auShellEnergy[6];
+  static G4ThreadLocal  G4double auShellStrength[6];
+  static G4ThreadLocal  G4double ptShellEnergy[6];
+  static G4ThreadLocal  G4double ptShellStrength[6];
   
   G4int numberOfMaterials;
 

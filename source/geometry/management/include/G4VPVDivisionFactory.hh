@@ -97,7 +97,7 @@ class G4VPVDivisionFactory
 
   protected:
 
-   static __thread G4VPVDivisionFactory* fgInstance;
+   static G4ThreadLocal G4VPVDivisionFactory* fgInstance;
      
 };
 

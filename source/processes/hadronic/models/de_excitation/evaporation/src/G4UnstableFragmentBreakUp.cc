@@ -50,9 +50,9 @@
 #include "G4NucleiProperties.hh"
 #include "G4NistManager.hh"
 
-__thread G4int G4UnstableFragmentBreakUp::Zfr[6] = {0};
-__thread G4int G4UnstableFragmentBreakUp::Afr[6] = {0};
-__thread G4double G4UnstableFragmentBreakUp::masses[6] = {0.0};
+G4ThreadLocal G4int G4UnstableFragmentBreakUp::Zfr[6] = {0};
+G4ThreadLocal G4int G4UnstableFragmentBreakUp::Afr[6] = {0};
+G4ThreadLocal G4double G4UnstableFragmentBreakUp::masses[6] = {0.0};
 
 G4UnstableFragmentBreakUp::G4UnstableFragmentBreakUp()
   :verbose(0)
