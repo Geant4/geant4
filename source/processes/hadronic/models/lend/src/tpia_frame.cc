@@ -38,6 +38,7 @@
 #include <string.h>
 #include <tpia_target.h>
 #include <tpia_misc.h>
+#include "G4Types.hh"
 
 #if defined __cplusplus
 namespace GIDI {

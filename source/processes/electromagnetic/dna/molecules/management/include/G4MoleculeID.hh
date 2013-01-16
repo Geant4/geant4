@@ -38,6 +38,8 @@
 #ifndef  G4MoleculeID_h
 #define  G4MoleculeID_h 1
 
+#include "G4Types.hh" 
+
 class G4MoleculeID
 {
 private :

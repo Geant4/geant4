@@ -54,6 +54,7 @@
 
 #ifndef G4VGLOBALFASTSIMULATIONMANAGER_HH
 #define G4VGLOBALFASTSIMULATIONMANAGER_HH
+#include "G4Types.hh"
 
 class G4VFlavoredParallelWorld;
 class G4ParticleDefinition;

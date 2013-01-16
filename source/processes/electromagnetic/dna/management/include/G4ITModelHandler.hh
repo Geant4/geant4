@@ -39,6 +39,7 @@
 #ifndef G4ITModelHandler_H
 #define G4ITModelHandler_H
 
+#include "G4Types.hh"
 #include "G4ITType.hh"
 #include "G4ITModelManager.hh"
 

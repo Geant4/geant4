@@ -40,6 +40,7 @@
 #define G4ITTYPE_HH 1
 
 #include <cstddef>
+#include "G4Types.hh"
 
 /**
   * Tag the G4IT

@@ -38,6 +38,8 @@
 #ifndef G4ITTRACKHOLDER_HH
 #define G4ITTRACKHOLDER_HH
 
+#include "G4Types.hh"
+
 class G4Track;
 
 /**

@@ -31,6 +31,7 @@
 #include <iostream>
 #include <signal.h>
 #include <vector>
+#include "G4Types.hh"
 
 // A simple, reasonably portable, but at present 
 // semantic-wise totally unsafe signalhandler prototype meant for SEGFAULT.

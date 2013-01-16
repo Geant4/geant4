@@ -27,7 +27,6 @@
 
 #include "G4HadSignalHandler.hh"
 
-
 namespace G4HadSignalHandler_local
 {
   extern "C" 
