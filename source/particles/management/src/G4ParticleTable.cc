@@ -59,8 +59,10 @@
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //lock for particle table accesses.
 
+#ifdef G4MULTITHREADED
 extern pthread_mutex_t particleTable;
 extern G4ThreadLocal int lockCount;
+#endif
 
 //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //These fields should be thread local or thread private. For a singleton
@@ -176,8 +178,10 @@ void G4ParticleTable::SlaveG4ParticleTable()
 
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //The iterator for the shadow particle table is not sharable.
+#ifdef G4MULTITHREADED
   pthread_mutex_lock(&particleTable);
   lockCount++;
+#endif
 
   fDictionary = new G4PTblDictionary();
 
@@ -208,7 +212,9 @@ void G4ParticleTable::SlaveG4ParticleTable()
 
   //  printf("Have copied encoding dictionary: %d\n", tempCount);
 
+#ifdef G4MULTITHREADED
   pthread_mutex_unlock(&particleTable);
+#endif
 
   fIonTable->SlaveG4IonTable();
 

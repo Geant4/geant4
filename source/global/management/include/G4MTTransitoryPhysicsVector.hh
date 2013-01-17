@@ -7,8 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifdef G4MULTITHREADED
 extern pthread_mutex_t mutexPhysicsVector;
 //pthread_mutex_t mutexPhysicsVector = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 template <class G4MTPrivateObject>
 class G4MTPrivatePhysicsVectorCounter
@@ -24,7 +26,9 @@ public:
   //Invoked by the master or work thread to create a new subinstance
   //whenever a new split class instance is created.
   int CreateSubInstance() {
+#ifdef G4MULTITHREADED
     pthread_mutex_lock(&mutexPhysicsVector);
+#endif
 
     totalobj++;
     if (totalobj > totalspace) NewSubInstances();
@@ -37,7 +41,9 @@ public:
 
     int totalobjlocal = totalobj;
 
+#ifdef G4MULTITHREADED
     pthread_mutex_unlock(&mutexPhysicsVector);
+#endif
 
     return (totalobjlocal - 1);
   };
@@ -48,7 +54,9 @@ public:
   //the subclass.
   void SlaveInitializeSubInstance()
   {
+#ifdef G4MULTITHREADED
     pthread_mutex_lock(&mutexPhysicsVector);
+#endif
 
     phaseshadow = 1;
     totalobj = totalobjshadow;
@@ -67,7 +75,9 @@ public:
       offset[i].initialize();
     }
 
+#ifdef G4MULTITHREADED
     pthread_mutex_unlock(&mutexPhysicsVector);
+#endif
   }
 
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.

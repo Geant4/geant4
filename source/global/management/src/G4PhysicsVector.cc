@@ -99,7 +99,9 @@ template <class PhysicsVectorPrivateSubclass> G4ThreadLocal PhysicsVectorPrivate
 //introduced in the "G4PhysicsVectorCache.hh" file.
 G4PhysicsVectorSubInstanceManager G4PhysicsVector::g4physicsVectorSubInstanceManager;
 
+#ifdef G4MULTITHREADED
 pthread_mutex_t mutexPhysicsVector = PTHREAD_MUTEX_INITIALIZER;
+#endif
 
 // --------------------------------------------------------------
 

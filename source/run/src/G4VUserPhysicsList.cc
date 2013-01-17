@@ -77,8 +77,10 @@
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //lock for particle table accesses.
+#ifdef G4MULTITHREADED
 pthread_mutex_t particleTable = PTHREAD_MUTEX_INITIALIZER;
 G4ThreadLocal int lockCount = 0;
+#endif
 
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()
@@ -262,9 +264,11 @@ void G4VUserPhysicsList::InitializeProcessManager()
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
+#ifdef G4MULTITHREADED
   pthread_mutex_lock(&particleTable);
   lockCount++;
   G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+#endif
 
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
@@ -285,8 +289,10 @@ void G4VUserPhysicsList::InitializeProcessManager()
 
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //release lock for particle table accesses.
+#ifdef G4MULTITHREADED
   pthread_mutex_unlock(&particleTable);
   G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+#endif
 
 }
 
@@ -296,9 +302,11 @@ void G4VUserPhysicsList::RemoveProcessManager()
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
+#ifdef G4MULTITHREADED
   pthread_mutex_lock(&particleTable);
   lockCount++;
   G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+#endif
 
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
@@ -325,8 +333,10 @@ void G4VUserPhysicsList::RemoveProcessManager()
 
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //release lock for particle table accesses.
+#ifdef G4MULTITHREADED
   pthread_mutex_unlock(&particleTable);
   G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+#endif
 
 }
 

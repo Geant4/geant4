@@ -65,8 +65,10 @@
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //lock for particle table accesses.
+#ifdef G4MULTITHREADED
 extern pthread_mutex_t particleTable;
 extern G4ThreadLocal int lockCount;
+#endif
 
 //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //It is very important for multithreaded Geant4 to keep only one copy of the
@@ -216,8 +218,10 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //Request lock for particle table accesses. Some changes are inside 
   //this critical region.
+#ifdef G4MULTITHREADED
   pthread_mutex_lock(&particleTable);
   lockCount++;
+#endif
 
   ion = new G4Ions(   name,            mass,       0.0*MeV,     charge, 
 			 J,              +1,             0,          
@@ -229,7 +233,9 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
 
   //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //release lock for particle table accesses.
+#ifdef G4MULTITHREADED
   pthread_mutex_unlock(&particleTable);
+#endif
 
   ion->SetPDGMagneticMoment(mu);
 
@@ -304,8 +310,10 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
   //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //Request lock for particle table accesses. Some changes are inside 
   //this critical region.
+#ifdef G4MULTITHREADED
   pthread_mutex_lock(&particleTable);
   lockCount++;
+#endif
 
   ion = new G4Ions(   name,            mass,       0.0*MeV,     charge, 
 			 J,              +1,             0,          
@@ -317,7 +325,9 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
 
   //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //release lock for particle table accesses.
+#ifdef G4MULTITHREADED
   pthread_mutex_unlock(&particleTable);
+#endif
 
   ion->SetPDGMagneticMoment(mu);
 
