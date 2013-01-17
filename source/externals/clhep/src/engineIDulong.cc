@@ -35,7 +35,7 @@ static std::vector<unsigned long> gen_crc_table() {
 }
 
 unsigned long crc32ul(const std::string & s) {
-  static G4ThreadLocal std::vector<unsigned long> *crc_table_G4MT_TLS_ = 0 ; if (!crc_table_G4MT_TLS_) {crc_table_G4MT_TLS_ = new  std::vector<unsigned long>  ; *crc_table_G4MT_TLS_=  gen_crc_table() ; }  std::vector<unsigned long> &crc_table = *crc_table_G4MT_TLS_;
+  static std::vector<unsigned long> crc_table =  gen_crc_table();
   unsigned long crc = 0;
   int end = s.length();
   for (int j = 0; j != end; ++j) {

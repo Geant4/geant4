@@ -193,8 +193,8 @@ private:
 
   unsigned long randomInt;
   unsigned long firstUnusedBit;
-  static G4ThreadLocal unsigned long staticRandomInt;
-  static G4ThreadLocal unsigned long staticFirstUnusedBit;
+  static unsigned long staticRandomInt;
+  static unsigned long staticFirstUnusedBit;
   
   shared_ptr<HepRandomEngine> localEngine;
   double defaultWidth;

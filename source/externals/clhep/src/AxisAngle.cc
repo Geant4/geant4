@@ -15,7 +15,7 @@
 
 namespace CLHEP  {
 
-G4ThreadLocal double HepAxisAngle::tolerance = Hep3Vector::ToleranceTicks * 1.0e-08;
+double HepAxisAngle::tolerance = Hep3Vector::ToleranceTicks * 1.0e-08;
 
 static void ZMpvAxisAngleRep( const HepAxisAngle & aa, double array[] ) {
 

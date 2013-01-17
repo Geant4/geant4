@@ -59,7 +59,7 @@ void RanecuEngine::further_randomize (int seq1, int col, int index, int modulus)
 }  // mf 6/22/10
 
 // Number of instances with automatic seed selection
-G4ThreadLocal int RanecuEngine::numEngines = 0;
+int RanecuEngine::numEngines = 0;
 
 RanecuEngine::RanecuEngine()
 : HepRandomEngine()

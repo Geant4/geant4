@@ -88,8 +88,8 @@ private:
   int count624;
 
   enum{ NminusM = 227, M = 397, N = 624};
-  static G4ThreadLocal int numEngines;
-  static G4ThreadLocal int maxIndex;
+  static int numEngines;
+  static int maxIndex;
 
 }; // MTwistEngine
 

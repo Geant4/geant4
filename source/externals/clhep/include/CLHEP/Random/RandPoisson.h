@@ -118,8 +118,8 @@ private:
   double status[3], oldm;
 
   // static data
-  static G4ThreadLocal double status_st[3];
-  static G4ThreadLocal double oldm_st;
+  static double status_st[3];
+  static double oldm_st;
   static const double meanMax_st;
 
 };

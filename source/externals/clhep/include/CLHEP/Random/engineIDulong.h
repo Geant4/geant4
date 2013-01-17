@@ -22,7 +22,7 @@ unsigned long crc32ul(const std::string & s);
 
 template <class E> 
 unsigned long engineIDulong() {
-  static G4ThreadLocal unsigned long *id_G4MT_TLS_ = 0 ; if (!id_G4MT_TLS_) {id_G4MT_TLS_ = new  unsigned long  ; *id_G4MT_TLS_= crc32ul(E::engineName()) ; }  unsigned long &id = *id_G4MT_TLS_;
+  static unsigned long id = crc32ul(E::engineName());
   return id;
 }
 

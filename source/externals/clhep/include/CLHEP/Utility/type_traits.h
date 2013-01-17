@@ -167,7 +167,7 @@ template< typename T, T v >
   typedef  T                       value_type;
   typedef  integral_constant<T,v>  type;
 
-  static const value_type  value  =  v;
+  static  value_type const  value  =  v;
 
   operator value_type()  { return value; }
 };  // integral_constant<,>
@@ -226,7 +226,7 @@ template< typename U >
 template< typename T >
 struct encode
 {
-  static const  primary_code  value
+  static  primary_code const  value
     =      ( sizeof(isAclass   <T>(0)) == sizeof(yes_t) )  ? _class
        : ( ( sizeof(isAfunction<T>(0)) == sizeof(yes_t) )  ? _function
        :   /* by elimination */                              _enum
@@ -244,197 +244,197 @@ template< typename T >
 // encode array:
 template< typename T >
   struct encode<T[]>
-{ static const  primary_code  value  =  _array; };
+{ static  primary_code const  value  =  _array; };
 template< typename T >
   struct encode<T const[]>
-{ static const  primary_code  value  =  _array; };
+{ static  primary_code const  value  =  _array; };
 template< typename T >
   struct encode<T volatile[]>
-{ static const  primary_code  value  =  _array; };
+{ static  primary_code const  value  =  _array; };
 template< typename T >
   struct encode<T const volatile[]>
-{ static const  primary_code  value  =  _array; };
+{ static  primary_code const  value  =  _array; };
 template< typename T, unsigned N >
   struct encode<T[N]>
-{ static const  primary_code  value  =  _array; };
+{ static  primary_code const  value  =  _array; };
 template< typename T, unsigned N >
   struct encode<T const[N]>
-{ static const  primary_code  value  =  _array; };
+{ static  primary_code const  value  =  _array; };
 template< typename T, unsigned N >
   struct encode<T volatile[N]>
-{ static const  primary_code  value  =  _array; };
+{ static  primary_code const  value  =  _array; };
 template< typename T, unsigned N >
   struct encode<T const volatile[N]>
-{ static const  primary_code  value  =  _array; };
+{ static  primary_code const  value  =  _array; };
 
 // encode floating_point:
 template<>
   struct encode<float>
-{ static const  primary_code  value  =  _floating_point; };
+{ static  primary_code const  value  =  _floating_point; };
 template<>
   struct encode<double>
-{ static const  primary_code  value  =  _floating_point; };
+{ static  primary_code const  value  =  _floating_point; };
 template<>
   struct encode<long double>
-{ static const  primary_code  value  =  _floating_point; };
+{ static  primary_code const  value  =  _floating_point; };
 
 // encode integral:
 template<>
   struct encode<bool>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 template<>
   struct encode<signed char>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 template<>
   struct encode<char>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 template<>
   struct encode<unsigned char>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 #if 0
 template<>
   struct encode<wchar_t>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 #endif
 template<>
   struct encode<short>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 template<>
   struct encode<unsigned short>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 template<>
   struct encode<int>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 template<>
   struct encode<unsigned int>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 template<>
   struct encode<long>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 template<>
   struct encode<unsigned long>
-{ static const  primary_code  value  =  _integral; };
+{ static  primary_code const  value  =  _integral; };
 
 // encode member_function_pointer:
 template< typename T, typename C >
   struct encode<T (C::*)()>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C >
   struct encode<T (C::*)() const>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C >
   struct encode<T (C::*)() volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C >
   struct encode<T (C::*)() const volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1 >
   struct encode<T (C::*)(A1)>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1 >
   struct encode<T (C::*)(A1) const>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1 >
   struct encode<T (C::*)(A1) volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1 >
   struct encode<T (C::*)(A1) const volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2 >
   struct encode<T (C::*)(A1,A2)>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2 >
   struct encode<T (C::*)(A1,A2) const>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2 >
   struct encode<T (C::*)(A1,A2) volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2 >
   struct encode<T (C::*)(A1,A2) const volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3 >
   struct encode<T (C::*)(A1,A2,A3)>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3 >
   struct encode<T (C::*)(A1,A2,A3) const>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3 >
   struct encode<T (C::*)(A1,A2,A3) volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3 >
   struct encode<T (C::*)(A1,A2,A3) const volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3, typename A4 >
   struct encode<T (C::*)(A1,A2,A3,A4)>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3, typename A4 >
   struct encode<T (C::*)(A1,A2,A3,A4) const>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3, typename A4 >
   struct encode<T (C::*)(A1,A2,A3,A4) volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3, typename A4 >
   struct encode<T (C::*)(A1,A2,A3,A4) const volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3, typename A4, typename A5 >
   struct encode<T (C::*)(A1,A2,A3,A4,A5)>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3, typename A4, typename A5 >
   struct encode<T (C::*)(A1,A2,A3,A4,A5) const>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3, typename A4, typename A5 >
   struct encode<T (C::*)(A1,A2,A3,A4,A5) volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 template< typename T, typename C
         , typename A1, typename A2, typename A3, typename A4, typename A5 >
   struct encode<T (C::*)(A1,A2,A3,A4,A5) const volatile>
-{ static const  primary_code  value  =  _member_function_pointer; };
+{ static  primary_code const  value  =  _member_function_pointer; };
 
 // encode member_object_pointer:
 template< typename T, typename C >
   struct encode<T C::*>
-{ static const  primary_code  value  =  _member_object_pointer; };
+{ static  primary_code const  value  =  _member_object_pointer; };
 
 // encode pointer:
 template< typename T >
   struct encode<T *>
-{ static const  primary_code  value  =  _pointer; };
+{ static  primary_code const  value  =  _pointer; };
 
 // encode lvalue_reference:
 template< typename T >
   struct encode<T &>
-{ static const  primary_code  value  =  _lvalue_reference; };
+{ static  primary_code const  value  =  _lvalue_reference; };
 
 // encode rvalue_reference:
 #if defined(CLHEP_HAS_RVALUE_REFERENCE)
 template< typename T >
   struct encode<T&&>
-{ static const  primary_code  value  =  _rvalue_reference; };
+{ static  primary_code const  value  =  _rvalue_reference; };
 #endif  // CLHEP_HAS_RVALUE_REFERENCE
 
 // encode void:
 template<>
   struct encode<void>
-{ static const  primary_code  value  =  _void; };
+{ static  primary_code const  value  =  _void; };
 
 // apply encoding:
 template< typename T, unsigned int p >
@@ -674,8 +674,8 @@ namespace tt  {
 template< typename T >
   struct cv
 {
-  static const   bool  is_c  = false;
-  static const   bool  is_v  = false;
+  static   bool const  is_c  = false;
+  static   bool const  is_v  = false;
   typedef  T const             add_c_type;
   typedef  T       volatile    add_v_type;
   typedef  T const volatile    add_cv_type;
@@ -687,8 +687,8 @@ template< typename T >
 template< typename T >
   struct cv<T const>
 {
-  static const   bool  is_c  = true;
-  static const   bool  is_v  = false;
+  static   bool const  is_c  = true;
+  static   bool const  is_v  = false;
   typedef  T const             add_c_type;
   typedef  T const volatile    add_v_type;
   typedef  T const volatile    add_cv_type;
@@ -700,8 +700,8 @@ template< typename T >
 template< typename T >
   struct cv<T volatile>
 {
-  static const   bool  is_c  = false;
-  static const   bool  is_v  = true;
+  static   bool const  is_c  = false;
+  static   bool const  is_v  = true;
   typedef  T const volatile    add_c_type;
   typedef  T       volatile    add_v_type;
   typedef  T const volatile    add_cv_type;
@@ -713,8 +713,8 @@ template< typename T >
 template< typename T >
   struct cv<T const volatile>
 {
-  static const   bool  is_c  = true;
-  static const   bool  is_v  = true;
+  static   bool const  is_c  = true;
+  static   bool const  is_v  = true;
   typedef  T const volatile    add_c_type;
   typedef  T const volatile    add_v_type;
   typedef  T const volatile    add_cv_type;
@@ -726,8 +726,8 @@ template< typename T >
 template< typename T >
   struct cv<T &>
 {
-  static const   bool  is_c  = false;
-  static const   bool  is_v  = false;
+  static   bool const  is_c  = false;
+  static   bool const  is_v  = false;
   typedef  T &                 add_c_type;
   typedef  T &                 add_v_type;
   typedef  T &                 add_cv_type;
@@ -777,7 +777,7 @@ protected:
     static  yes_t  take( ...      );
 
 public:
-  static const  bool  value  =  sizeof( take<C>(0) ) == sizeof(yes_t);
+  static  bool const  value  =  sizeof( take<C>(0) ) == sizeof(yes_t);
 };  // is_abstract_class<,true>
 
 }  // namespace tt
@@ -871,10 +871,10 @@ template< typename T >
   typedef  T  rem_ext_type;
   typedef  T  rem_arr_type;
 
-  static const  int  rank =  0;
+  static  int const  rank =  0;
 
   template< unsigned I >
-    struct extent  { static const  int  value  =  0; };
+    struct extent  { static  int const  value  =  0; };
 };
 
 template< typename T, unsigned N >
@@ -883,12 +883,12 @@ template< typename T, unsigned N >
   typedef  T                                  rem_ext_type;
   typedef  typename tt::arr<T>::rem_arr_type  rem_arr_type;
 
-  static const  int  rank =  1 + tt::arr<T>::rank;
+  static  int const  rank =  1 + tt::arr<T>::rank;
 
   template< unsigned I >
   struct extent
   {
-    static const  int  value  =  (I == rank)
+    static  int const  value  =  (I == rank)
                               ?  N
                               :  tt::arr<T>::template extent<I>::value;
   };
@@ -900,10 +900,10 @@ template< typename T >
   typedef  T  rem_ext_type;
   typedef  T  rem_arr_type;
 
-  static const  int  rank =  1;
+  static  int const  rank =  1;
 
   template< unsigned I >
-    struct extent  { static const  int  value  =  0; };
+    struct extent  { static  int const  value  =  0; };
 };
 
 }  // namespace tt
@@ -970,10 +970,10 @@ struct converts<From,To,false>  // To is non-abstract
 protected:
   static  yes_t  take( To, int );
   static  no_t   take( any_conversion, ... );
-  static  const From  from;
+  static  From  from;
 
 public:
-  static const  bool  value
+  static  bool const  value
     =  sizeof( take( from, 0 ) ) == sizeof(yes_t);
 };  // converts<>
 
@@ -1306,7 +1306,7 @@ protected:
   static  tt::no_t   take( ...  );
 
 public:
-  static const  bool  value
+  static  bool const  value
     =  sizeof( take( static_cast<From*>(0) ) ) == sizeof(tt::yes_t);
 };  // is_ptr_convertible<,>
 

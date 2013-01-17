@@ -99,7 +99,7 @@ public:
   bool getState (const std::vector<unsigned long> & v);
   
 private:
-    static G4ThreadLocal int numEngines;
+    static int numEngines;
     enum {numBuff = 512};
 
     unsigned int halfBuff, numFlats;

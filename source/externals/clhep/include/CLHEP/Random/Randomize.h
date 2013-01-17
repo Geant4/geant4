@@ -56,11 +56,7 @@ namespace CLHEP {
 // On some compilers the static instance of the HepRandom generator
 // needs to be created explicitly in the client code (i.e. here).
 
-//Xin Dong March 31, 2012 it requires to eliminate the dynamic initialization
-//to make this variable thread-local
-//Andrea Dotti 14January 2013: Remove following line to avoid warnings in G4MT
-//To be protected with #ifndef G4MT, however it may be not necessary at all
-//static G4ThreadLocal int HepRandomGenActive = 0;//HepRandom::createInstance();
+static int HepRandomGenActive = HepRandom::createInstance();
 
 }  // namespace CLHEP
 

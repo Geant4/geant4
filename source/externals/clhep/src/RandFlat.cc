@@ -35,8 +35,8 @@ namespace CLHEP {
 
 const int RandFlat::MSBBits= 15;
 const unsigned long RandFlat::MSB= 1ul<<RandFlat::MSBBits;
-G4ThreadLocal unsigned long RandFlat::staticRandomInt= 0;
-G4ThreadLocal unsigned long RandFlat::staticFirstUnusedBit= 0;
+unsigned long RandFlat::staticRandomInt= 0;
+unsigned long RandFlat::staticFirstUnusedBit= 0;
 
 std::string RandFlat::name() const {return "RandFlat";}
 HepRandomEngine & RandFlat::engine() {return *localEngine;}

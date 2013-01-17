@@ -15,7 +15,7 @@
 
 namespace CLHEP  {
 
-G4ThreadLocal double Hep2Vector::tolerance = Hep2Vector::ZMpvToleranceTicks * 2.22045e-16;
+double Hep2Vector::tolerance = Hep2Vector::ZMpvToleranceTicks * 2.22045e-16;
 
 double Hep2Vector::setTolerance (double tol) {
 // Set the tolerance for Hep2Vectors to be considered near one another
@@ -37,7 +37,7 @@ double Hep2Vector::operator () (int i) const {
 }
 
 double & Hep2Vector::operator () (int i) {
-  static G4ThreadLocal double dummy;
+  static double dummy;
   switch(i) {
   case X:
     return dx;
