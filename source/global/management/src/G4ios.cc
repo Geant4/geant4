@@ -65,11 +65,11 @@ void G4iosFinalization()
 void __attribute__ ((constructor)) my_init(void)
 {
   G4iosInitialization();
-  printf("G4ios is initialized\n");
+  //printf("G4ios is initialized\n");
 }
 
 void __attribute__ ((destructor)) my_fini(void)
 {
   G4iosFinalization();
-  printf("G4ios is finalized\n");
+  //printf("G4ios is finalized\n");
 }
