@@ -36,7 +36,7 @@
 #ifndef G4_TLS
 #define G4_TLS
 
-#if defined (G4LIB_BUILD_MULTITHREAD)
+#if defined (G4MULTITHREADED)
   #if defined(__MACH__) && defined(__clang__) && defined(MAC_OS_X_VERSION_10_7) && defined(__x86_64__)
   #  define G4ThreadLocalStatic static __thread
   #  define G4ThreadLocal __thread
