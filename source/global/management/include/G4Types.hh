@@ -58,7 +58,8 @@
 
 #include <complex>
 
-// Definitions for Thread Local Storage - empty if not Multithreading
+// Definitions for Thread Local Storage
+//
 #include "tls.hh"
 
 // Typedefs to decouple from library classes
