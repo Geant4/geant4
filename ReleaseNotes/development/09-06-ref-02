@@ -1,0 +1,142 @@
+
+                       geant4-09-06-ref-02
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Introduced merged changes (non-optimised) from Geant4-MT prototype
+   required for multi-threading.
+   Currently disabled and kept running in sequential mode.
+ o Important fix to G4VMultipleScattering and G4VMscModel classes for the
+   use of after the migration of multiple-scattering sampling from
+   PostStepDoIt() to AlongStepDoIt(), responsible for observed mis-behavior
+   in presence of magnetic-field. Addressing problem report #1403.
+ o Removed obsolete model 'isotope_production'.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+geometry/solids/specific                         geom-specific-V09-06-03
+--------
+- Fixed cases of hang-ups in G4ExtrudedSolid on 32-bits platforms, due to
+  G4TessellatedSolid and G4SurfVoxelizer, caused by accessing bitmask arrays
+  with negative indexes. The problem was related to floating-point rounding,
+  which can be different even on same platform with debug/release version.
+  Assure same number of computed voxels on 32-bit/64-bit platforms.
+  Fixed error in SetVertexIndex() method, which might cause problems on
+  certain configurations even for 64-bit systems. Fixed minor memory leaks.
+  Code cleanup for use of G4endl and tabs...
+- Fixed condition in G4VTwistSurface::GetBoundaryLimit() for logical error.
+  Addressing problem report #1420.
+
+materials                                        materials-V09-06-00
+---------
+- G4NistMaterialBuilder: fixed stainless steel parameters, taken from
+  http://www.azom.com/article.aspx?ArticleID=965.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-06-02
+------------------------------------
+- G4mplIonisationWithDeltaModel: fixed factor for cross-section of
+  delta-electron production. Some code cleanup.
+
+processes/electromagnetic/lowenergy              emlowen-V09-06-06
+-----------------------------------
+- G4AtomicDeexcitation is cloned from G4UAtomicDeexcitation.
+- Removed obsolete unused classes.
+
+processes/electromagnetic/standard               emstand-V09-06-06
+----------------------------------
+- Fixed signature of SampleScattering() for all multiple-scattering models.
+  Addressing problem report #1403.
+- G4UrbanMscModel93, G4UrbanMscModel95: use more safe expressions in
+  SampleCosineTheta() to avoid numerical problems (fix for ATLAS large
+  scattering angle problem).
+- G4UrbanMscModel96: new tuning of Urban model.
+
+processes/electromagnetic/utils                  emutils-V09-06-03
+-------------------------------
+- G4VMultipleScattering, G4VMscModel: use momentum direction from
+  PostStepPoint and not from G4Track. Fixing major bug of migration of
+  nultiple-scattering sampling from PostStepDoIt() to AlongStepDoIt(),
+  responsible for observed mis-behavior in presence of magnetic-field.
+  Addressing problem report #1403.
+- G4VMultipleScattering: position is changed to PostStep as it was in 9.6.
+
+processes/hadronic
+------------------
+- Removed obsolete model 'isotope_production'.
+- cross_sections (hadr-cross-V09-06-03)
+  o Fixed memory leak in cross-sections for GetZandACrossSection().
+    Addressing problem report #1424.
+  o Fixed bug to G4ComponentAntiNuclNuclearXS and added class description.
+- models/binary_cascade (had-binary-V09-06-02)
+  o Implemented interface to Precompound model for nucleus-nucleus 
+    interactions at high (> 2GeV/N).
+  o Use of simplified G4GeneratorPrecompoundInterface::Propagate() for
+    hadron-nucleus interactions and adoption of PropagateNuclNucl() for
+    simulation of nucleus-nucleus interactions..
+- models/im_r_matrix (hadr-im_r-V09-06-00)
+  o Fix in G4Scatterer::GetTimeToInteraction(); one shortcut in the
+    calculation of time was missed, as only one of the two particles was
+    checked. Physics unchanged, but small performance gain of few percent.
+    Addressing problem report #1334.
+- models/inclxx (hadr-inclxx-V09-06-01)
+  o Updated to INCL++ v5.1.9. Removed calls to abort() and exit().
+- models/management (hadr-modman-V09-06-02)
+  o Removed obsolete classes G4VIsotopeProduction and G4IsoParticleChange.
+- models/neutron_hp (hadr-hpn-V09-06-03)
+  o Fixed improper use of abort() in G4NeutronHPThermalScattering.
+- models/qmd (had-qmd-V09-06-01)
+  o Fix for logic error in G4QMDGroundStateNucleus::packNucleons().
+    Addressing problem report #1418.
+- models/radioactive_decay (radioactive_decay-V09-06-01)
+  o G4RadioactiveDecay: force boost of the decay products. The parent energy
+    considered in the boost is the total energy of the fully stripped parent
+    ion rather than the total energy of dynamic ion where the energy of shell
+    electrons is taken into account.
+    Some difference in momentum and energy balance is still observed but much
+    less than before. Addressing problem report #1359.
+
+tracking                                         tracking-V09-06-01
+--------
+- Replace plain printout to cerr with G4Exception warning in
+  G4SteppingManager::InvokeAtRestDoItProcs().
+  Addressing problem report #1421.
+
+examples                                         examples-V09-06-02
+--------
+- Updated reference outputs.
+- extended/analysis/N03Con (exampleN03Con-V09-06-00)
+  o RunAction: compute error on mean = rms/sqrt(n).
+- extended/electromagnetic/TestEm7 (testem7-V09-06-03)
+  o G4ScreenedNuclearRecoil: removed unused obsolete header.
+- extended/exoticphysics/monopole (monopole-V09-06-00)
+  o Fixed computation of monopole range.
+- extended/hadronic/Hadr03 (exhadr03-V09-06-01)
+  o DetectorConstruction: add function MaterialWithSingleIsotope().
+- extended/optical/OpNovice (OpNovice-V09-06-00)
+  o New example, copy of the original novice example N06.
+- extended/parameterisations (exParameterisations-V09-06-00)
+  o Added Par01 example, extracted as copy of novice/N05.
+- extended/runAndEvent (exRunAndEvent-V09-06-00)
+  o Added examples RE05, RE06, copies of the original novice N04 and N07.
+- extended/runAndEvent/RE02 (exampleRE02-V09-06-01)
+  o Includes changes missing from previous tag
+- novice (exNovice-V09-06-03)
+  o Removed examples N04, N06 and N06. Now moved to extended.
+- novice/N03 (exampleN03-V09-06-00)
+  o RunAction: compute error on mean = rms/sqrt(n).
+
+tests                                            tests-V09-06-02
+-----
+- Updated reference outputs and tools.
+- tests/test30 (test30-V09-06-02)
+  o Removed LHEP and RPG models.
+- tests/test67 (test67-V09-06-01)
+  o Moved declaration of "returnCode" in main() inside #ifdef block to
+    fix "unused variable" compiler warning.
+- tests/test68 (test68-V09-06-00)
+  o Increased time limit to avoid timeout errors.
