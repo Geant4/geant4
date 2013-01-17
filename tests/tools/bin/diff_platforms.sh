@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: diff_platforms.sh,v 1.1 1999-01-08 16:36:05 gunter Exp $
+# $Id$
 # Produces differences of *.out files between platforms.
 # The result is to standard output.
 # Usage:         diff_platforms.sh <platform1> <platform2>

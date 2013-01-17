@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.hh,v 1.8 2007-06-14 05:44:58 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4UItcsh_h

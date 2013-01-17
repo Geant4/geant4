@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VUserPhysicsList.cc,v 1.5 2006-06-29 15:35:30 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   pyG4VUserPhysicsList.cc
 //

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: evmandefs.hh,v 1.7 2009-09-16 23:10:46 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 ///#define G4EVENTMANAGER_DEBUG 1

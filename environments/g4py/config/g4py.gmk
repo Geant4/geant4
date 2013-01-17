@@ -1,4 +1,4 @@
-# $Id: g4py.gmk,v 1.7 2009-11-27 07:47:17 kmura Exp $
+# $Id$
 # ===========================================================
 #   Makefile for building Python module with Boost.Python
 #      

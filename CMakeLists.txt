@@ -3,8 +3,7 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt,v 1.6 2010-12-08 16:36:34 bmorgan Exp $
-# GEANT4 Tag $Name: not supported by cvs2svn $
+# $Id$
 #
 
 #------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-?RCS: $Id: Head.U,v 1.3 2002-06-23 20:31:44 sadilov Exp $
+?RCS: $Id$
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -93,7 +93,7 @@
 ?X: by your version, not mine: It credits your work.
 ?X:
 
-# $Id: Head.U,v 1.3 2002-06-23 20:31:44 sadilov Exp $
+# $Id$
 #
 # Generated on <DATE> [metaconfig <VERSION> PL<PATCHLEVEL>]
 

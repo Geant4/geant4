@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.hh,v 1.9 2007-05-03 17:59:18 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4VUserDetectorConstruction_h

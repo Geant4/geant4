@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Transform3D.cc,v 1.4 2006-06-29 15:33:30 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   pyG4Transform3D.cc
 //

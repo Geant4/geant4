@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // $Id: $
-// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // Author:  D.H. Wright (SLAC)
 // Date:    1 October 2012

@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: updt.sh,v 1.8 2006-05-03 15:47:49 mclareni Exp $
+# $Id$
 # Usage:
 #   csh: updt.sh < something.sdb >& something.update.log
 #    sh: updt.sh < something.sdb > something.update.log 2>&1

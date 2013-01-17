@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorMessenger.cc,v 1.10 2006-06-29 22:05:30 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 // author: Susanna Guatelli (guatelli@ge.infn.it)

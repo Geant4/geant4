@@ -24,7 +24,7 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: tog4.F,v 1.5 2006-06-29 18:15:21 gunter Exp $
+*     $Id$
 *     GEANT4 tag $Name: not supported by cvs2svn $
 *    
       subroutine tog4

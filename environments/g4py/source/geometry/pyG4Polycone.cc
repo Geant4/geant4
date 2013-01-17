@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Polycone.cc,v 1.1 2007-07-11 05:39:50 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   pyG4Polycone.cc
 //

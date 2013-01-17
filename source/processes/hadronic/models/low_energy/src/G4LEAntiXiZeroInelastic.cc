@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LEAntiXiZeroInelastic.cc,v 1.11 2006-06-29 20:44:55 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: AntiXiZero Inelastic Process
 // J.L. Chuma, TRIUMF, 20-Feb-1997

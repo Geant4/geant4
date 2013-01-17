@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4tracking.cc,v 1.4 2006-06-29 15:36:02 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   pymodG4tracking.cc [Geant4Py module]
 //

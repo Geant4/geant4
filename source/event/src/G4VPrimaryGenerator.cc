@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimaryGenerator.cc,v 1.5 2006-06-29 18:10:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 // G4VPrimaryGenerator

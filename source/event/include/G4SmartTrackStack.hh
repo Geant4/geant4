@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartTrackStack.hh,v 1.3 2009-09-16 23:10:46 asaim Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 //  Last Modification : 04/Oct/12 S. Kamperis

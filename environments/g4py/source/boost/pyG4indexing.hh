@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4indexing.hh,v 1.5 2008-12-03 07:24:21 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   pyG4indexing.hh
 //

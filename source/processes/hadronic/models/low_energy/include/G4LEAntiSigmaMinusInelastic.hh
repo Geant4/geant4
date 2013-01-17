@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LEAntiSigmaMinusInelastic.hh,v 1.11 2007-02-24 06:38:14 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Low Energy AntiSigmaMinus Inelastic Process
 // J.L. Chuma, TRIUMF, 19-Feb-1997

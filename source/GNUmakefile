@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.97 2010-09-30 09:05:24 gcosmo Exp $
+# $Id$
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.

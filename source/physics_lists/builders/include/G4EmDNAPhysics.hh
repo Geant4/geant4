@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmDNAPhysics.hh,v 1.2 2010-06-02 17:21:29 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #ifndef G4EmDNAPhysics_h
 #define G4EmDNAPhysics_h 1

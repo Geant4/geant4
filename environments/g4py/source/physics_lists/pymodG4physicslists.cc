@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pymodG4physicslists.cc,v 1.2 2007-05-28 03:11:20 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   pymodG4physicslists.cc [Geant4Py module]
 //

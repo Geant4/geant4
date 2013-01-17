@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyTestEm0.cc,v 1.2 2007-07-06 06:41:59 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   pyTestEm0.cc
 //

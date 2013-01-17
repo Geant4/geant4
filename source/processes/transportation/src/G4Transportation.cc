@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4Transportation.cc 2011/06/10 16:19:46 japost Exp japost $
-// GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
 //  GEANT 4  include file implementation

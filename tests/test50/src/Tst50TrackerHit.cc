@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerHit.cc,v 1.6 2006-06-29 22:06:26 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "Tst50TrackerHit.hh"
 #include "G4UnitsTable.hh"

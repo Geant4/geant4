@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2010-10-27 07:40:06 gcosmo Exp $
+# $Id$
 # --------------------------------------------------------------
 # GNUmakefile for global HEPRandom.  Gunter Folger 12-Dec-2000.
 # This is needed only for generating "installed" include files.

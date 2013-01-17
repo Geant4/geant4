@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4InelasticInteraction.cc,v 1.12 2009-01-24 11:56:27 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Hadronic Process: Inelastic Interaction 
 // original by H.P. Wellisch

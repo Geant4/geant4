@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.17 2008-07-18 06:37:06 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef WIN32

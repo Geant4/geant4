@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // $Id: G4ExcitationHandler.hh,v 1.13 2010-11-17 16:20:31 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Phase space decay for the Fermi BreakUp model
 // by V. Lara

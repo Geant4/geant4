@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // $Id: $
-// GEANT4 tag: $Name: not supported by cvs2svn $
 
 #ifndef G4_CASCADE_GAMN_CHANNEL_HH
 #define G4_CASCADE_GAMN_CHANNEL_HH

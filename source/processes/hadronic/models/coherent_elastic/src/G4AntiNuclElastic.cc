@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // $Id: G4AntiNuclElastic.cc  - A.Galoyan 02.05.2011
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Geant4 Header : G4AntiNuclElastic
 //

@@ -24,7 +24,7 @@
 *     ********************************************************************
 *    
 *    
-*     $Id: mztog4.F,v 1.4 2006-06-29 18:15:16 gunter Exp $
+*     $Id$
 *     GEANT4 tag $Name: not supported by cvs2svn $
 *    
       subroutine mztog4

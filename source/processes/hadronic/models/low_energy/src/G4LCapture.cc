@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LCapture.cc,v 1.14 2007-02-24 05:17:29 dennis Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //
 // G4 Model: Low-energy Neutron Capture

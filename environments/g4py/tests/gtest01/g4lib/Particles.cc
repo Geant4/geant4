@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Particles.cc,v 1.3 2006-06-29 15:37:02 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   Particles.cc
 //

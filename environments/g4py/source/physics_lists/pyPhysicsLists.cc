@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyPhysicsLists.cc,v 1.13 2010-12-02 08:24:22 kmura Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   pyPhysicsLists.cc
 //

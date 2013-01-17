@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLowEPPhysics.cc,v 1.12 2010-10-10 15:18:34 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 
 #include "G4EmLowEPPhysics.hh"
 #include "G4ParticleDefinition.hh"

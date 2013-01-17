@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VUserPrimaryGeneratorAction.cc,v 1.7 2006-06-29 15:35:33 gunter Exp $
-// $Name: not supported by cvs2svn $
+// $Id$
 // ====================================================================
 //   pyG4VUserPrimaryGeneratorAction.cc
 //

@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorMessenger.hh,v 1.1 2006-12-01 02:37:01 kmura Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // 
 

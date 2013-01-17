@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake,v 1.2 2010-09-29 20:31:16 bmorgan Exp $
+# $Id$
 #
 # 20110727  M. Kelsey -- Add G4DecayKineticTracks
 #------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.16 2006-05-03 15:47:49 mclareni Exp $
+# $Id$
 # For tagset NNN, extract and check  bonsai<NNN>.sdb then run update.sh.
 # Usage: update.sh [-n] < bonsai<NNN>.sdb >& update<NNN>.log
 

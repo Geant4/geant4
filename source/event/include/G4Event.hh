@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.19 2010-10-27 07:21:13 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 
 #ifndef G4Event_h

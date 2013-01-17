@@ -1,4 +1,4 @@
-// $Id: README.TXT,v 1.1 1999-01-07 16:14:15 gunter Exp $
+// $Id$
 
  GEANT4
  

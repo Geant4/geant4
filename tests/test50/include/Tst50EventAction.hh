@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.hh,v 1.14 2006-06-29 22:04:34 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
