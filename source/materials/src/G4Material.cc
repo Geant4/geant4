@@ -184,6 +184,7 @@ G4Material::G4Material(const G4String& name, G4double density,
                        G4State state, G4double temp, G4double pressure)
   : fName(name)		       
 {
+  g4materialInstanceID = g4materialSubInstanceManager.CreateSubInstance();
   InitializePointers();
     
   if (density < universe_mean_density)
