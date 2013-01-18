@@ -35,6 +35,7 @@
 // ------------------------------------------------------------
 
 #include "G4StateManager.hh"
+#include "G4ios.hh"
 
 // Initialization of the static pointer of the single class instance
 //
@@ -48,6 +49,9 @@ G4StateManager::G4StateManager()
    msgptr(0),
    exceptionHandler(0)
 {
+#ifdef G4MULTITHREADED
+  G4iosInitialization();
+#endif
 }
 
 G4StateManager::~G4StateManager()
@@ -72,6 +76,9 @@ G4StateManager::~G4StateManager()
     } 
     if ( state )  { delete state; }
   } 
+#ifdef G4MULTITHREADED
+  G4iosFinalization();
+#endif
 }
 
 // -------------------------------------------------------------------------

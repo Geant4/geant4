@@ -40,23 +40,38 @@
 
 #include <iostream>
 
-#if defined G4GLOB_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal std::ostream *G4cout_G4MT_TLS_;
-  extern G4DLLEXPORT G4ThreadLocal std::ostream *G4cerr_G4MT_TLS_;
-#define G4cout (*G4cout_G4MT_TLS_)
-#define G4cerr (*G4cerr_G4MT_TLS_)
+#ifdef G4MULTITHREADED
 
-#else
-  extern G4DLLIMPORT G4ThreadLocal std::ostream *G4cout_G4MT_TLS_;
-  extern G4DLLIMPORT G4ThreadLocal std::ostream *G4cerr_G4MT_TLS_;
-#define G4cout (*G4cout_G4MT_TLS_)
-#define G4cerr (*G4cerr_G4MT_TLS_)
+  #if defined G4GLOB_ALLOC_EXPORT
+    extern G4DLLEXPORT G4ThreadLocal std::ostream *G4cout_p;
+    extern G4DLLEXPORT G4ThreadLocal std::ostream *G4cerr_p;
+  #define G4cout (*G4cout_p)
+  #define G4cerr (*G4cerr_p)
+
+  #else
+    extern G4DLLIMPORT G4ThreadLocal std::ostream *G4cout_p;
+    extern G4DLLIMPORT G4ThreadLocal std::ostream *G4cerr_p;
+  #define G4cout (*G4cout_p)
+  #define G4cerr (*G4cerr_p)
  
+  #endif
+
+  void G4iosInitialization();
+  void G4iosFinalization();
+
+#else  // Sequential
+
+  #if defined G4GLOB_ALLOC_EXPORT
+    extern G4DLLEXPORT std::ostream G4cout;
+    extern G4DLLEXPORT std::ostream G4cerr;
+  #else
+    extern G4DLLIMPORT std::ostream G4cout;
+    extern G4DLLIMPORT std::ostream G4cerr;
+  #endif
+
 #endif
 
 #define G4cin std::cin
 #define G4endl std::endl
-void G4iosInitialization();
-void G4iosFinalization();
 
 #endif

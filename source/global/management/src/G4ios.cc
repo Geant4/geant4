@@ -37,39 +37,38 @@
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"
 
-G4ThreadLocal G4strstreambuf *G4coutbuf_G4MT_TLS_ = 0;
-G4ThreadLocal G4strstreambuf *G4cerrbuf_G4MT_TLS_ = 0;
-G4ThreadLocal std::ostream *G4cout_G4MT_TLS_ = 0;
-G4ThreadLocal std::ostream *G4cerr_G4MT_TLS_ = 0;
-#define G4coutbuf (*G4coutbuf_G4MT_TLS_)
-#define G4cerrbuf (*G4cerrbuf_G4MT_TLS_)
-#define G4cout (*G4cout_G4MT_TLS_)
-#define G4cerr (*G4cerr_G4MT_TLS_)
+#ifdef G4MULTITHREADED
 
-void G4iosInitialization()
-{
-  if (G4coutbuf_G4MT_TLS_ == 0) G4coutbuf_G4MT_TLS_ = new G4strstreambuf;
-  if (G4cerrbuf_G4MT_TLS_ == 0) G4cerrbuf_G4MT_TLS_ = new G4strstreambuf;
-  if (G4cout_G4MT_TLS_ == 0) G4cout_G4MT_TLS_ = new std::ostream(G4coutbuf_G4MT_TLS_);
-  if (G4cerr_G4MT_TLS_ == 0) G4cerr_G4MT_TLS_ = new std::ostream(G4cerrbuf_G4MT_TLS_);
-}
+  G4ThreadLocal G4strstreambuf *G4coutbuf_p = 0;
+  G4ThreadLocal G4strstreambuf *G4cerrbuf_p = 0;
+  G4ThreadLocal std::ostream *G4cout_p = 0;
+  G4ThreadLocal std::ostream *G4cerr_p = 0;
+  #define G4coutbuf (*G4coutbuf_p)
+  #define G4cerrbuf (*G4cerrbuf_p)
+  #define G4cout (*G4cout_p)
+  #define G4cerr (*G4cerr_p)
 
-void G4iosFinalization()
-{
-  delete G4cout_G4MT_TLS_;
-  delete G4cerr_G4MT_TLS_; 
-  delete G4coutbuf_G4MT_TLS_;
-  delete G4cerrbuf_G4MT_TLS_;
-}
+  void G4iosInitialization()
+  {
+    if (G4coutbuf_p == 0) G4coutbuf_p = new G4strstreambuf;
+    if (G4cerrbuf_p == 0) G4cerrbuf_p = new G4strstreambuf;
+    if (G4cout_p == 0) G4cout_p = new std::ostream(G4coutbuf_p);
+    if (G4cerr_p == 0) G4cerr_p = new std::ostream(G4cerrbuf_p);
+  }
 
-void __attribute__ ((constructor)) my_init(void)
-{
-  G4iosInitialization();
-  //printf("G4ios is initialized\n");
-}
+  void G4iosFinalization()
+  {
+    delete G4cout_p;
+    delete G4cerr_p; 
+    delete G4coutbuf_p;
+    delete G4cerrbuf_p;
+  }
 
-void __attribute__ ((destructor)) my_fini(void)
-{
-  G4iosFinalization();
-  //printf("G4ios is finalized\n");
-}
+#else  // Sequential
+
+  G4strstreambuf G4coutbuf;
+  G4strstreambuf G4cerrbuf;
+  std::ostream G4cout(&G4coutbuf);
+  std::ostream G4cerr(&G4cerrbuf);
+
+#endif
