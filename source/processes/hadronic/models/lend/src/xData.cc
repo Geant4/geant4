@@ -985,7 +985,7 @@ static int xData_smrUserInterface( void *userData, char **str ) {
     if( smrUserInterface->doc->fileName != NULL ) fileNameSize = strlen( smrUserInterface->doc->fileName ) + strlen( fl );
     if( currentRoot != NULL ) {
         if( currentRoot->parentElement != NULL ) {
-            sprintf( str_lcl, lcl, currentRoot->parentElement->docInfo.line, currentRoot->parentElement->docInfo.column );
+            sprintf( str_lcl, lcl, (int)currentRoot->parentElement->docInfo.line, (int)currentRoot->parentElement->docInfo.column );
             elementSize = strlen( str_lcl ) + strlen( currentRoot->parentElement->fullName ) + strlen( el );
         }
     }
