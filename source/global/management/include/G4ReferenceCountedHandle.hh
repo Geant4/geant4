@@ -125,9 +125,9 @@ private:
 };
 
 #ifdef G4GLOB_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *aRCHAllocator_G4MT_TLS_;
+  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *pRCHAllocator;
 #else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *aRCHAllocator_G4MT_TLS_;
+  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *pRCHAllocator;
 #endif
 
 template <class X>
@@ -169,9 +169,9 @@ private:
 };
 
 #ifdef G4GLOB_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4CountedObject<void> > *aCountedObjectAllocator_G4MT_TLS_;
+  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4CountedObject<void> > *pCountedObjectAllocator;
 #else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4CountedObject<void> > *aCountedObjectAllocator_G4MT_TLS_;
+  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4CountedObject<void> > *pCountedObjectAllocator;
 #endif
 
 // --------- G4CountedObject<X> Inline function definitions ---------
@@ -179,7 +179,8 @@ private:
 template <class X>
 G4CountedObject<X>::G4CountedObject( X* pObj )
  : fCount(0), fRep( pObj )
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     if( pObj != 0 ) {
       fCount = 1;
     }
@@ -187,31 +188,38 @@ G4CountedObject<X>::G4CountedObject( X* pObj )
 
 template <class X>
 G4CountedObject<X>::~G4CountedObject()
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     delete fRep;
 }
     
 template <class X>
 void G4CountedObject<X>::AddRef()
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     ++fCount;
 }
     
 template <class X>
 void G4CountedObject<X>::Release()
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     if( --fCount == 0 ) delete this;
 }
 
 template <class X>
 void* G4CountedObject<X>::operator new( size_t )
-{  ;;;   if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; G4Allocator<G4CountedObject<void> > &aCountedObjectAllocator = *aCountedObjectAllocator_G4MT_TLS_;  ;;;   if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  G4Allocator<G4CountedObject<void> > &aCountedObjectAllocator = *pCountedObjectAllocator;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     return( (void *)aCountedObjectAllocator.MallocSingle() );
 }
     
 template <class X>
 void G4CountedObject<X>::operator delete( void *pObj )
-{  ;;;   if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; G4Allocator<G4CountedObject<void> > &aCountedObjectAllocator = *aCountedObjectAllocator_G4MT_TLS_;  ;;;   if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  G4Allocator<G4CountedObject<void> > &aCountedObjectAllocator = *pCountedObjectAllocator;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     aCountedObjectAllocator.FreeSingle( (G4CountedObject<void>*)pObj );
 }
 
@@ -221,7 +229,8 @@ template <class X>
 G4ReferenceCountedHandle<X>::
  G4ReferenceCountedHandle( X* rep )
  : fObj( 0 )
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
   if( rep != 0 ) {
       fObj = new G4CountedObject<X>( rep );
   }
@@ -231,20 +240,23 @@ template <class X>
 G4ReferenceCountedHandle<X>::
  G4ReferenceCountedHandle( const G4ReferenceCountedHandle<X>& right )
  : fObj( right.fObj )
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     fObj->AddRef();
 }
   
 template <class X>
 G4ReferenceCountedHandle<X>::~G4ReferenceCountedHandle()
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     if( fObj ) fObj->Release();
 }
   
 template <class X>
 G4ReferenceCountedHandle<X>& G4ReferenceCountedHandle<X>::
  operator =( const G4ReferenceCountedHandle<X>& right )
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     if( fObj != right.fObj ) {
       if( fObj )
         fObj->Release();
@@ -257,7 +269,8 @@ G4ReferenceCountedHandle<X>& G4ReferenceCountedHandle<X>::
 template <class X>
 G4ReferenceCountedHandle<X>& G4ReferenceCountedHandle<X>::
  operator =( X* objPtr )
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     if( fObj )
       fObj->Release();
     this->fObj = new  G4CountedObject<X>( objPtr );
@@ -266,53 +279,62 @@ G4ReferenceCountedHandle<X>& G4ReferenceCountedHandle<X>::
   
 template <class X>
 unsigned int G4ReferenceCountedHandle<X>::Count() const
-{  ;;;   if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; G4Allocator<G4CountedObject<void> > &aCountedObjectAllocator = *aCountedObjectAllocator_G4MT_TLS_;  ;;;    ;;;   if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ; G4Allocator<G4ReferenceCountedHandle<void> > &aRCHAllocator = *aRCHAllocator_G4MT_TLS_;  ;;;  
+{   if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+    if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     return( fObj ? fObj->fCount : 0 );
 }
   
 template <class X>
 X* G4ReferenceCountedHandle<X>::operator ->() const
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     return( fObj ? fObj->fRep : 0 );
 }
   
 template <class X>
 G4bool G4ReferenceCountedHandle<X>::operator !() const
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     return( ( !fObj ) ? true : false );
 }
   
 template <class X>
 G4ReferenceCountedHandle<X>::operator bool() const
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     return( ( fObj ) ? true : false );
 }
   
 template <class X>
 X* G4ReferenceCountedHandle<X>::operator ()() const
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     return( fObj ? fObj->fRep : 0 );
 }
   
 template <class X>
 void* G4ReferenceCountedHandle<X>::operator new( size_t )
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ;  ;;;   if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ; G4Allocator<G4ReferenceCountedHandle<void> > &aRCHAllocator = *aRCHAllocator_G4MT_TLS_;  ;;;  
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+  G4Allocator<G4ReferenceCountedHandle<void> > &aRCHAllocator = *pRCHAllocator;
     return( (void *)aRCHAllocator.MallocSingle() );
 }
   
 template <class X>
 void G4ReferenceCountedHandle<X>::operator delete( void *pObj )
-{ if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ;  ;;;   if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ; G4Allocator<G4ReferenceCountedHandle<void> > &aRCHAllocator = *aRCHAllocator_G4MT_TLS_;  ;;;  
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
+  G4Allocator<G4ReferenceCountedHandle<void> > &aRCHAllocator = *pRCHAllocator;
     aRCHAllocator.FreeSingle( (G4ReferenceCountedHandle<void>*)pObj );
 }
 
 #ifdef G4RF_DEBUG
 template <class X>
 void* G4ReferenceCountedHandle<X>::operator new( size_t, void *pObj )
-{  ;;;   if (!aCountedObjectAllocator_G4MT_TLS_) aCountedObjectAllocator_G4MT_TLS_ = new G4Allocator<G4CountedObject<void> >  ; G4Allocator<G4CountedObject<void> > &aCountedObjectAllocator = *aCountedObjectAllocator_G4MT_TLS_;  ;;;    ;;;   if (!aRCHAllocator_G4MT_TLS_) aRCHAllocator_G4MT_TLS_ = new G4Allocator<G4ReferenceCountedHandle<void> >  ; G4Allocator<G4ReferenceCountedHandle<void> > &aRCHAllocator = *aRCHAllocator_G4MT_TLS_;  ;;;  
+{ if (!pCountedObjectAllocator) pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >  ;
+  if (!pRCHAllocator) pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >  ;
     return pObj;
 }
 #endif
 
 #endif // _G4REFERENCECOUNTEDHANDLE_H_
-
