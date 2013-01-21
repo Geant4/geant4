@@ -688,5 +688,46 @@ void G4ParticleTable::CheckReadiness()
   }
 }
 
+ 
+const G4ShortLivedTable*  G4ParticleTable::GetShortLivedTable()
+{
+  return fShortLivedTable;
+}
+
+G4IonTable*  G4ParticleTable::GetIonTable()
+{
+  return fIonTable;
+}
+ 
+G4ParticleTable::G4PTblDictionary* G4ParticleTable::GetDictionary()
+{
+  return fDictionary;
+}
+
+G4ParticleTable::G4PTblDicIterator* G4ParticleTable::GetIterator()
+{
+  return fIterator;
+}
+
+const G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::GetEncodingDictionary()
+{
+  return fEncodingDictionary;
+}
+
+G4bool  G4ParticleTable::contains(const G4String& particle_name)
+{
+  G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
+  return (it != fDictionary->end());
+}
+
+G4int G4ParticleTable::entries() const
+{
+  return fDictionary->size();
+}
+
+G4int G4ParticleTable::size() const
+{
+  return fDictionary->size();
+}
 
 
