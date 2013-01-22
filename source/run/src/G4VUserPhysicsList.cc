@@ -320,7 +320,6 @@ void G4VUserPhysicsList::RemoveProcessManager()
       G4ProcessManager* pmanager = particle->GetProcessManager();
       if  (pmanager!=0) delete pmanager;
       particle->SetProcessManager(0);
-      particle->theProcessManagerShadow = 0;
 #ifdef G4VERBOSE
       if (verboseLevel >2){
         G4cout << "G4VUserPhysicsList::RemoveProcessManager: ";
