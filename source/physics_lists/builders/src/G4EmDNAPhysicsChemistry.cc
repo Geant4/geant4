@@ -454,6 +454,21 @@ void G4EmDNAPhysicsChemistry::ConstructReactionTable()
     //------------------------------------------------------------------
 }
 
+
+void AddProcessManager(G4ParticleDefinition* newParticle, G4ProcessManager* newManager)
+{
+	// set particle type
+	newManager->SetParticleType(newParticle);
+
+	// add the process manager
+	newParticle->SetProcessManager(newManager);
+
+	//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
+	//record the process manager for each particle in master thread
+	if (newParticle->theProcessManagerShadow == 0 || newParticle->theProcessManagerShadow == NULL )
+	    newParticle->theProcessManagerShadow = newManager;
+}
+
 void G4EmDNAPhysicsChemistry::ConstructProcess()
 {
 
@@ -602,7 +617,7 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
         {
             if  (pmanager==0)
             {
-                particle->SetProcessManager(new G4ProcessManager(particle));
+		AddProcessManager(particle,new G4ProcessManager(particle));
             }
 
             G4DNABrownianTransportation* brown = new G4DNABrownianTransportation();
@@ -612,7 +627,7 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
         {
             if  (pmanager==0)
             {
-                particle->SetProcessManager(new G4ProcessManager(particle));
+		AddProcessManager(particle,new G4ProcessManager(particle));
             }
 
             G4DNAMolecularDecay* decayProcess = new G4DNAMolecularDecay("H2O_DNAMolecularDecay");
