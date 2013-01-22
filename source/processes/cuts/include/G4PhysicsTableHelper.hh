@@ -88,16 +88,4 @@ class G4PhysicsTableHelper
    // controle flag for output message
 };
 
-inline
- void  G4PhysicsTableHelper::SetVerboseLevel(G4int value)
-{
-  verboseLevel = value;
-}
-
-inline
- G4int G4PhysicsTableHelper::GetVerboseLevel()
-{
-  return verboseLevel;
-}
-
 #endif

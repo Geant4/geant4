@@ -227,5 +227,15 @@ void G4PhysicsTableHelper::SetPhysicsVector(G4PhysicsTable* physTable,
 }
 
 
+void  G4PhysicsTableHelper::SetVerboseLevel(G4int value)
+{
+  verboseLevel = value;
+}
+
+G4int G4PhysicsTableHelper::GetVerboseLevel()
+{
+  return verboseLevel;
+}
+
 
 

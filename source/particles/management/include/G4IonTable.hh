@@ -273,38 +273,6 @@ inline G4int  G4IonTable::GetNumberOfElements() const
   return numberOfElements;
 }
 
-inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
-{
-  if (!IsIon(particle)) return false;
-
-  G4int Z = particle->GetAtomicNumber();
-  G4int A = particle->GetAtomicMass();  
-  G4int L = particle->GetQuarkContent(3);  //strangeness 
-  G4int encoding=GetNucleusEncoding(Z, A, L);
-  G4bool found = false;
-  if (encoding !=0 ) {
-    G4IonList::iterator i = fIonList->find(encoding);
-    for( ;i != fIonList->end() ; i++) {
-      if (particle == i->second ) {
-	found  = true;
-	break;
-      }
-    }
-  }
-  return found;
-}
-
-inline G4int G4IonTable::Entries() const
-{
-  return fIonList->size();
-}
-
-inline G4int G4IonTable::size() const
-{
-  return fIonList->size();
-}
-
-
 #endif
 
 
