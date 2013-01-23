@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th January 2013  Gabriele Cosmo (examples-V09-06-02)
+- Updated reference outputs according to reference tag geant4-09-06-ref-02.
+- Includes tags: exampleN03Con-V09-06-00, testem7-V09-06-03,
+                 monopole-V09-06-00, exhadr03-V09-06-01, OpNovice-V09-06-00,
+                 exRunAndEvent-V09-06-00, exampleRE02-V09-06-01,
+                 exNovice-V09-06-03, exampleN03-V09-06-00.
+
 20th December 2012  Gabriele Cosmo (examples-V09-06-01)
 - Updated reference outputs according to reference tag geant4-09-06-ref-01.
 - Includes tags: gammaraytel-V09-06-01, human_phantom-V09-06-00,
