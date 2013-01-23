@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x13746070
+ creating G4RunManagerKernel 0xe6e2ef0
 
 The materials defined are : 
 
@@ -71,14 +71,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x13816f80G4ErrorPhysicsList:: particle process manager e+ = 0x138184a0
-0x13816d70G4ErrorPhysicsList:: particle process manager e- = 0x13819ac0
-0x13816a70G4ErrorPhysicsList:: particle process manager gamma = 0x13819cd0
-0x13817190G4ErrorPhysicsList:: particle process manager mu+ = 0x13819f20
-0x138175e0G4ErrorPhysicsList:: particle process manager mu- = 0x1381a170
-0x13817a50G4ErrorPhysicsList:: particle process manager pi+ = 0x1381a3c0
-0x13817e70G4ErrorPhysicsList:: particle process manager pi- = 0x1381a610
-0x13818290G4ErrorPhysicsList:: particle process manager proton = 0x1381a860
+0xe7c3ef0G4ErrorPhysicsList:: particle process manager e+ = 0xe7c9410
+0xe7c3ce0G4ErrorPhysicsList:: particle process manager e- = 0xe7caa30
+0xe7c2950G4ErrorPhysicsList:: particle process manager gamma = 0xe7cac40
+0xe7c4100G4ErrorPhysicsList:: particle process manager mu+ = 0xe7cae90
+0xe7c8580G4ErrorPhysicsList:: particle process manager mu- = 0xe7cb0e0
+0xe7c89d0G4ErrorPhysicsList:: particle process manager pi+ = 0xe7cb330
+0xe7c8de0G4ErrorPhysicsList:: particle process manager pi- = 0xe7cb580
+0xe7c91f0G4ErrorPhysicsList:: particle process manager proton = 0xe7cb7d0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

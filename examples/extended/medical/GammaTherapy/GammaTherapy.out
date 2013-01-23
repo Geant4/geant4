@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -200,21 +200,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.99s Real=7.12s Sys=0.01s
+  User=8.31s Real=8.32s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.32
-Average number of gamma                      19.43
-Average number of e+                         0.7391
-Average number of steps in the phantom       12.26
-Average number of e- steps in the target     18.01
-Average number of g  produced in the target  18.57
-Average number of e- produced in the target  20.7
-Average number of g produced in the phantom  0.506
-Average number of e- produced in the phantom 6.169
-Total fGamma fluence in front of the phantom 8.182 MeV 
+Average number of e-                         33.71
+Average number of gamma                      19.53
+Average number of e+                         0.759
+Average number of steps in the phantom       12.67
+Average number of e- steps in the target     18.04
+Average number of g  produced in the target  18.66
+Average number of e- produced in the target  20.82
+Average number of g produced in the phantom  0.5129
+Average number of e- produced in the phantom 6.36
+Total fGamma fluence in front of the phantom 8.29 MeV 
 ========================================================
 
 
