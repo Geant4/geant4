@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -466,7 +466,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=26.68s Real=28.9s Sys=0.02s
+  User=31.1s Real=31.14s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -993,7 +993,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.21s Real=4.32s Sys=0.01s
+  User=3.92s Real=3.92s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1264,7 +1264,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.41s Real=2.43s Sys=0s
+  User=1.79s Real=1.78s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1319,7 +1319,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=5.64s Real=6.16s Sys=0.05s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1427,7 +1427,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.8s Real=0.85s Sys=0s
+  User=0.38s Real=0.38s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1706,7 +1706,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=20.49s Real=22.01s Sys=0.08s
+  User=31.75s Real=31.85s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

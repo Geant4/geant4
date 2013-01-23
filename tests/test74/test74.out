@@ -1,0 +1,168 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+PhysicsList::SetCuts:CutLength : 1 nm 
+/run/verbose 1
+/run/initialize
+/tracking/verbose 0
+/process/list
+     Transportation,ion_G4MuElecInelastic, e-_G4MuElecElastic,e-_G4MuElecInelastic
+p_G4MuElecInelastic
+/particle/list
+         GenericIon,        anti_proton,                 e+,                 e-
+              gamma,           geantino,      opticalphoton,             proton
+
+/run/particle/dumpCutValues
+#
+/gun/direction 0 0 1
+#
+/gun/particle e-
+/gun/energy 10000 eV
+/run/beamOn 1
+
+e-_G4MuElecElastic:   for  e-    SubType= 51
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  MuElecElasticModel :  Emin=        0 eV    Emax=      100 MeV
+
+e-_G4MuElecInelastic:   for  e-    SubType= 53
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+MuElecInelasticModel :  Emin=        0 eV    Emax=      100 MeV
+
+p_G4MuElecInelastic:   for  proton    SubType= 53
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+MuElecInelasticModel :  Emin=        0 eV    Emax=        1 GeV
+
+ion_G4MuElecInelastic:   for  GenericIon    SubType= 53
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+MuElecInelasticModel :  Emin=        0 eV    Emax=      100 GeV
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Si
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.22s Real=0.22s Sys=0s
+
+ The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
+
+ Process calls frequency --->	e-_G4MuElecElastic = 1940	e-_G4MuElecInelastic = 361
+ Total transfered energy (keV)=10
+
+#
+/gun/particle proton
+/gun/energy 0.1 MeV
+/run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Si
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.54s Real=0.54s Sys=0s
+
+ The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
+
+ Process calls frequency --->	p_G4MuElecInelastic = 1395	e-_G4MuElecElastic = 11211	e-_G4MuElecInelastic = 903
+ Total transfered energy (keV)=100
+
+#
+/gun/particle ion
+/gun/ion 20 48 15
+/gun/energy 4.8 MeV
+/run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : G4_Si
+ Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=26.87s Real=26.89s Sys=0.02s
+
+ The run consists of 1 Ca48[0.0] of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
+
+ Process calls frequency --->	ion_G4MuElecInelastic = 68208	e-_G4MuElecElastic = 569734	e-_G4MuElecInelastic = 43540
+ Total transfered energy (keV)=4800
+
+#
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.

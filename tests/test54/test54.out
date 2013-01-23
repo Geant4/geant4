@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -469,7 +469,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=3.85s Real=3.92s Sys=0s
+  User=4.46s Real=4.47s Sys=0s
 
  ======================== run summary ======================
 
@@ -483,16 +483,16 @@ Run Summary
    restricted dEdx = 3.016 MeV/cm	(1.295 MeV*cm2/g)
    full dEdx       = 13.55 MeV/cm	(5.817 MeV*cm2/g)
 
- Leakage :  primary = 99.97 MeV +- 2.521 keV   secondaries = 18.82 keV +- 2.521 keV
+ Leakage :  primary = 99.97 MeV +- 2.52 keV   secondaries = 18.74 keV +- 2.519 keV
  Energy balance :  edep + eleak = 100 MeV
 
- Total track length (charged) in absorber per event = 20.25 um  +- 7.718 nm 
- Total track length (neutral) in absorber per event = 30.52 nm  +- 2.022 nm 
+ Total track length (charged) in absorber per event = 20.25 um  +- 7.729 nm 
+ Total track length (neutral) in absorber per event = 30.6 nm  +- 2.025 nm 
 
- Number of steps (charged) in absorber per event = 3.714 +- 8.785e-06
- Number of steps (neutral) in absorber per event = 0.00334 +- 8.785e-06
+ Number of steps (charged) in absorber per event = 3.714 +- 8.792e-06
+ Number of steps (neutral) in absorber per event = 0.00334 +- 8.792e-06
 
- Number of secondaries per event : Gammas = 0.00334   electrons = 0.01699   positrons = 0
+ Number of secondaries per event : Gammas = 0.00334   electrons = 0.01698   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -501,9 +501,9 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0.126 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.325 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.324 mrad (central part only)
   computed theta0 (Highland formula)          = 1.342 mrad
-  central part defined as +- 4.026 mrad   Tail ratio = 2.933 %
+  central part defined as +- 4.026 mrad   Tail ratio = 2.94 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -950,7 +950,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.63s Real=5.15s Sys=0s
+  User=5.32s Real=5.34s Sys=0s
 
  ======================== run summary ======================
 
