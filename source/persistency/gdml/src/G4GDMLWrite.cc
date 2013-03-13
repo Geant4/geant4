@@ -59,20 +59,20 @@ G4bool G4GDMLWrite::FileExists(const G4String& fname) const
 
 G4GDMLWrite::VolumeMapType& G4GDMLWrite::VolumeMap()
 {
-   static G4ThreadLocal VolumeMapType *instance_G4MT_TLS_ = 0 ; if (!instance_G4MT_TLS_) instance_G4MT_TLS_ = new  VolumeMapType  ;  VolumeMapType &instance = *instance_G4MT_TLS_;
-   return instance;
+   static G4ThreadLocal VolumeMapType *instance = new  VolumeMapType;
+   return *instance;
 }
 
 G4GDMLWrite::PhysVolumeMapType& G4GDMLWrite::PvolumeMap()
 {
-   static G4ThreadLocal PhysVolumeMapType *instance_G4MT_TLS_ = 0 ; if (!instance_G4MT_TLS_) instance_G4MT_TLS_ = new  PhysVolumeMapType  ;  PhysVolumeMapType &instance = *instance_G4MT_TLS_;
-   return instance;
+   static G4ThreadLocal PhysVolumeMapType *instance = new  PhysVolumeMapType;
+   return *instance;
 }
 
 G4GDMLWrite::DepthMapType& G4GDMLWrite::DepthMap()
 {
-   static G4ThreadLocal DepthMapType *instance_G4MT_TLS_ = 0 ; if (!instance_G4MT_TLS_) instance_G4MT_TLS_ = new  DepthMapType  ;  DepthMapType &instance = *instance_G4MT_TLS_;
-   return instance;
+   static G4ThreadLocal DepthMapType *instance = new  DepthMapType;
+   return *instance;
 }
 
 void G4GDMLWrite::AddExtension(xercesc::DOMElement*,

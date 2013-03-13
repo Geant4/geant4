@@ -71,7 +71,6 @@ class G4STRead
     G4Box* world_box;
     G4ThreeVector world_extent;
     G4Material* solid_material;
-    G4Material* medium_material;
     G4LogicalVolume* world_volume;
     std::vector<G4TessellatedSolid*> tessellatedList;
     std::map<G4TessellatedSolid*,G4LogicalVolume*> volumeMap;
