@@ -36,15 +36,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4ANALYSIS_USE
-#ifndef FCALAnalysisMessenger_h
-#define FCALAnalysisMessenger_h 1
+#ifndef FCALRunActionMessenger_h
+#define FCALRunActionMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
 
-class FCALAnalysisManager;
+class FCALRunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
@@ -52,24 +51,23 @@ class G4UIcmdWithAString;
 
 
 class G4UIcmdWithAString;
-class FCALAnalysisMessenger: public G4UImessenger
+class FCALRunActionMessenger: public G4UImessenger
 
 {
 public:
-  FCALAnalysisMessenger(FCALAnalysisManager* );
-  ~FCALAnalysisMessenger();
+  FCALRunActionMessenger(FCALRunActionManager* );
+  ~FCALRunActionMessenger();
   
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
 
   //pointer to FCALAnalysisManager
-  FCALAnalysisManager* xrayFluoAnalysis;
+  FCALRunAction* fRunAction;
   G4UIdirectory* FCALAnalysisDir;
   G4UIcmdWithAString* ouputFileCommand;
 
 };
-#endif
 #endif
 
 

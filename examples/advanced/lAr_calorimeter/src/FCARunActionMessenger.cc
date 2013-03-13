@@ -31,47 +31,41 @@
 //--------------------------------------------------------------------------
 
 #ifdef G4ANALYSIS_USE
-#include "FCALAnalysisMessenger.hh"
+#include "FCALRunAction.hh"
 
-#include "FCALAnalysisManager.hh"
+#include "FCALRunActionManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FCALAnalysisMessenger::FCALAnalysisMessenger(FCALAnalysisManager* analysisManager)
-  :xrayFluoAnalysis(analysisManager)
+FCALRunActionMessenger::FCALRunActionMessenger(FCALRunAction* theRunAction)
+  :fRunAction(theRunAction)
 
 { 
-  FCALAnalysisDir = new G4UIdirectory("/analysis/");
-  FCALAnalysisDir->SetGuidance("analysis control.");
+  FCALRunActionDir = new G4UIdirectory("/analysis/");
+  FCALRunActionDir->SetGuidance("analysis control.");
 
   ouputFileCommand = new G4UIcmdWithAString("/analysis/outputFile",this);
-  ouputFileCommand->SetGuidance("specify the name of the output file (lowercase for Hbook)");
-  ouputFileCommand->SetGuidance("default: xrayfluo.hbk");
+  ouputFileCommand->SetGuidance("specify the name of the output file");
   ouputFileCommand->SetParameterName("choice",true);
-  ouputFileCommand->SetDefaultValue("fcal.his");
+  ouputFileCommand->SetDefaultValue("fcal.root");
   ouputFileCommand->AvailableForStates(G4State_Idle);
   
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FCALAnalysisMessenger::~FCALAnalysisMessenger()
+FCALRunActionMessenger::~FCALRunActionMessenger()
 {
-  
-  delete FCALAnalysisDir; 
- 
+  delete FCALRunActionDir; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void FCALAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void FCALRunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-
-if(command == ouputFileCommand)
-    {xrayFluoAnalysis->SetOutputFileName(newValue);}
-
-   
+  if(command == ouputFileCommand)
+    fRunAction->SetOutputFileName(newValue);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,15 +20,6 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
-find_package(AIDA QUIET)
-if(NOT AIDA_FOUND)
-  message(STATUS "G4 Examples: AIDA package not found. --> lArCalorimeter example disabled")  
-  return()
-else()
-  add_definitions(-DG4ANALYSIS_USE) 
-endif()
-
-#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 # NB: headers are included so they will show up in IDEs
 #
@@ -36,13 +27,13 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 # Setup include directory for this project
-include_directories(${PROJECT_SOURCE_DIR}/include ${AIDA_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(lArCal lArCal.cc ${sources} ${headers})
-target_link_libraries(lArCal ${Geant4_LIBRARIES} ${AIDA_LIBRARIES})
+target_link_libraries(lArCal ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

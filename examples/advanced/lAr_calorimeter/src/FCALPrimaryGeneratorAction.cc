@@ -80,7 +80,9 @@ FCALPrimaryGeneratorAction::FCALPrimaryGeneratorAction()
 	 >> Cos_X[InEvent] >> Cos_Y[InEvent] >> Cos_Z[InEvent];
   };   
 
-  Nevent = 2500;
+  G4cout << "Read " << InEvent << " events from file " << file_name << G4endl;
+  Nevent = 0;
+
 }
 
 
@@ -105,7 +107,6 @@ void FCALPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
        //this function is called at the begining of event
 
   Nevent++;
-  
   particleGun->SetParticlePosition(G4ThreeVector(X[Nevent]*cm,Y[Nevent]*cm,Z[Nevent]*cm));
   particleGun->SetParticleMomentumDirection(G4ThreeVector(-Cos_X[Nevent],Cos_Y[Nevent],-Cos_Z[Nevent]));
   
@@ -115,7 +116,8 @@ void FCALPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4cout << "--------------------------------------------" << G4endl;
   G4cout << " Event,  X,Y,Z Generated Vertex : " << G4endl;
   G4cout << Nevent << " " << X[Nevent] << " " << Y[Nevent] << " " << Z[Nevent]<< G4endl;
-  G4cout << "--------------------------------------------" << G4endl;
+  G4cout << -Cos_X[Nevent] << " " << Cos_Y[Nevent] << " " << -Cos_Z[Nevent] << G4endl; 
+ G4cout << "--------------------------------------------" << G4endl;
  
 
 }

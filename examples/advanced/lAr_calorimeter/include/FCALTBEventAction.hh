@@ -38,7 +38,6 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 
-class FCALRunAction;
 class FCALTBEventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,7 +62,6 @@ class FCALTBEventAction : public G4UserEventAction
      
     FCALSteppingAction* StepAction;
     FCALTBEventActionMessenger*  eventMessenger;
-    FCALRunAction* runManager;
 
   private:
   G4double NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
