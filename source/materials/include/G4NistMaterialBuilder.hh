@@ -174,7 +174,7 @@ private:
   void AddElementByAtomCount     (const G4String& name, G4int);
 
   // build a G4Material from dataBase
-  G4Material* BuildMaterial(G4int idx, G4bool isotopes);
+  G4Material* BuildMaterial(G4int idx);
 
   void DumpElm(G4int);
   void DumpMix(G4int);

@@ -48,7 +48,7 @@
 // 26-02-02: fIndexInTable renewed
 // 30-03-05: warning in GetElement(elementName)
 // 15-11-05: GetElement(elementName, G4bool warning=true) 
-// 17-10-06: Add fNaturalAbandances (V.Ivanchenko)
+// 17-10-06: Add fNaturalAbundances (V.Ivanchenko)
 // 27-07-07: improve destructor (V.Ivanchenko) 
 // 18-10-07: move definition of material index to ComputeDerivedQuantities (VI) 
 // 25.10.11: new scheme for G4Exception  (mma)
@@ -171,7 +171,7 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     fRelativeAbundanceVector[fNumberOfIsotopes] = abundance;
     (*theIsotopeVector)[fNumberOfIsotopes] = isotope;
     ++fNumberOfIsotopes;
-    isotope->increaseCountUse();
+    //    isotope->increaseCountUse();
   } else {
     G4ExceptionDescription ed;
     ed << "Fail to add Isotope Z= " << iz << " to G4Element " << fName 
@@ -224,17 +224,16 @@ void G4Element::InitializePointers()
   fNbOfShellElectrons = 0;
   fIonisation = 0;
   fNumberOfIsotopes = 0;
-  fNaturalAbandances = false;
+  fNaturalAbundance = false;
 
   // add initialisation of all remaining members
   fZeff = 0;
   fNeff = 0;
   fAeff = 0;
   fNbOfAtomicShells = 0; 
-  fCountUse = 0;
-  fIndexZ = 0;
+  // fCountUse = 0;
+  // fIndexZ = 0;
   fIndexInTable = 0;
-  fNaturalAbandances = false;
   fCoulomb = 0.0;
   fRadTsai = 0.0;
 }
@@ -275,7 +274,8 @@ void G4Element::ComputeDerivedQuantities()
   // Store in table
   theElementTable.push_back(this);
   fIndexInTable = theElementTable.size() - 1;
-      
+
+  /*      
   // check if elements with same Z already exist
   fIndexZ = 0; 
   for (size_t J=0 ; J<fIndexInTable ; J++) {
@@ -283,6 +283,7 @@ void G4Element::ComputeDerivedQuantities()
   }
   //nb of materials which use this element
   fCountUse = 0;
+  */
 
   // Radiation Length
   ComputeCoulombFactor();
@@ -360,6 +361,7 @@ void G4Element::AddNaturalIsotopes()
   if(xsum != 0.0 && xsum != 1.0) {
     for(G4int i=0; i<idx; ++i) { fRelativeAbundanceVector[i] /= xsum; }
   }
+  fNaturalAbundance = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

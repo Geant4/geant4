@@ -114,83 +114,9 @@
 enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//The class MaterialPrivateSubclass is introduced to
-//encapsulate the fields of the class G4Material that may not
-//be read-only.
-#ifndef MATERIALPRIVATESUBCLASS_HH
-#define MATERIALPRIVATESUBCLASS_HH
-
-class MaterialPrivateSubclass
-{
-public:
-  G4IonisParamMat* fIonisation;           // ionisation parameters
-  G4SandiaTable*   fSandiaTable;          // Sandia table         
-  void initialize() {};
-};
-#endif
-
-//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
-//The class G4MaterialSubInstanceManager is introduced to
-//encapsulate the methods used by both the master thread and
-//worker threads to allocate memory space for the fields encapsulated
-//by the class MaterialPrivateSubclass. When each thread
-//initializes the value for these fields, it refers to them using a macro
-//definition defined below. For every G4Material instance, there is
-//a corresponding MaterialPrivateSubclass instance. All
-//MaterialPrivateSubclass instances are organized by the
-//class G4MaterialSubInstanceManager as an array. The field "
-//int g4materialInstanceID" is added to the class G4Material.
-//The value of this field in each G4Material instance is the subscript
-//of the corresponding MaterialPrivateSubclass instance. In order
-//to use the class G4MaterialSubInstanceManager, we add a static member in
-//the class G4Material as follows: "
-//static G4MaterialSubInstanceManager g4materialSubInstanceManager".
-//For the master thread, the array for MaterialPrivateSubclass
-//instances grows dynamically along with G4Material instances are
-//created. For each worker thread, it copies the array of
-//MaterialPrivateSubclass instances from the master thread.
-//In addition, it invokes a method similiar to the constructor explicitly
-//to achieve the partial effect for each instance in the array.
-#ifndef G4MATERIALSUBINSTANCEMANAGER_HH
-#define G4MATERIALSUBINSTANCEMANAGER_HH
-
-#include "G4MTTransitory.hh"
-typedef G4MTPrivateSubInstanceManager<MaterialPrivateSubclass> G4MaterialSubInstanceManager;
-
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//These macros changes the references to fields that are now encapsulated
-//in the class MaterialPrivateSubclass.
-#define fIonisationG4MTThreadPrivate ((g4materialSubInstanceManager.offset[g4materialInstanceID]).fIonisation)
-#define fSandiaTableG4MTThreadPrivate ((g4materialSubInstanceManager.offset[g4materialInstanceID]).fSandiaTable)
-
-#endif
 
 class G4Material
 {
-
-public:
-
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //This new field is used as instance ID.
-  int g4materialInstanceID;
-
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //This new field helps to use the class G4MaterialSubInstanceManager
-  //introduced above.
-  static G4MaterialSubInstanceManager g4materialSubInstanceManager;
-
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //This method is similar to the constructor. It is used by each worker
-  //thread to achieve the partial effect as that of the master thread.
-  void SlaveG4Material();
-
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //This method is similar to the destructor. It is used by each worker
-  //thread to achieve the partial effect as that of the master thread.
-  void DestroySlaveG4Material();
-  
 public:  // with description
   //
   // Constructor to create a material from single element
@@ -295,17 +221,17 @@ public:  // with description
   inline G4double GetNuclearInterLength() const {return fNuclInterLen;}
         
   // ionisation parameters:
-  inline G4IonisParamMat* GetIonisation() const {return fIonisationG4MTThreadPrivate;}
+  inline G4IonisParamMat* GetIonisation() const {return fIonisation;}
   
   // Sandia table:
-  inline G4SandiaTable*  GetSandiaTable() const {return fSandiaTableG4MTThreadPrivate;}
+  inline G4SandiaTable*  GetSandiaTable() const {return fSandiaTable;}
 
   // Base material:
   inline 
   const G4Material* GetBaseMaterial()     const {return fBaseMaterial;}
   
   // material components:
-  inline 
+  inline
   std::map<G4Material*,G4double> GetMatComponents() const 
                                                {return fMatComponents;}
 					       
@@ -413,16 +339,10 @@ private:
   G4double  TotNbOfElectPerVolume;        // total nb of electrons per volume 
   G4double  fRadlen;                      // Radiation length
   G4double  fNuclInterLen;                // Nuclear interaction length  
-
-  // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  // This field is move from the original class definition to be
-  // encapsulated by the class MaterialPrivateSubclass.
-  //  G4IonisParamMat* fIonisationG4MTThreadPrivate;           // ionisation parameters
-  // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  // This field is move from the original class definition to be
-  // encapsulated by the class MaterialPrivateSubclass.
-  //  G4SandiaTable*   fSandiaTableG4MTThreadPrivate;          // Sandia table
   
+  G4IonisParamMat* fIonisation;           // ionisation parameters
+  G4SandiaTable*   fSandiaTable;          // Sandia table         
+
   // utilities
   //         
   const G4Material* fBaseMaterial;        // Pointer to the base material

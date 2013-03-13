@@ -92,7 +92,7 @@ G4NistMaterialBuilder::~G4NistMaterialBuilder()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
-                                                       G4bool isotopes,
+                                                       G4bool iso,
 						       G4bool warning)
 {
   if(first) {
@@ -106,7 +106,7 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
   if("G4_NYLON-6/6" == matname)  { name = "G4_NYLON-6-6"; }
   if("G4_NYLON-6/10" == matname) { name = "G4_NYLON-6-10";}
 
-  if (verbose > 1) {
+  if(verbose > 1) {
     G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " << name << G4endl;
   }
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
@@ -119,7 +119,14 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
 
     if (name == names[i]) {
       // Build new Nist material 
-      if(matIndex[i] == -1) { mat = BuildMaterial(i, isotopes); }
+      if(matIndex[i] == -1) { 
+	if(!iso && (warning || verbose > 0)) {
+	  G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial warning for "
+		 << name 
+		 << " - since Geant4 9.6 isotopes are always built" << G4endl;
+	}
+	mat = BuildMaterial(i); 
+      }
       // Nist material was already built
       else                  { mat = (*theMaterialTable)[matIndex[i]]; }
       return mat;
@@ -146,7 +153,7 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i, G4bool isotopes)
+G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
 {
   if (verbose > 1) {
     G4cout << "G4NistMaterialBuilder: BuildMaterial #" << i
@@ -181,7 +188,7 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i, G4bool isotopes)
     G4int idx = indexes[i];
     for (G4int j=0; j<nc; ++j) {
       G4int Z = elements[idx+j];
-      G4Element* el = elmBuilder->FindOrBuildElement(Z, isotopes);
+      G4Element* el = elmBuilder->FindOrBuildElement(Z);
       if(!el) {
 	G4cout << "G4NistMaterialBuilder::BuildMaterial:"
 	       << "  ERROR: elements Z= " << Z << " is not found "
@@ -223,7 +230,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
 				      G4double dens, 
-				      G4bool isotopes,
+				      G4bool,
 				      G4State state,     
 				      G4double temp,  
 				      G4double pres)
@@ -263,7 +270,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
     AddElementByAtomCount(elmBuilder->GetZ(elm[i]), nbAtoms[i]);
   }
 
-  return BuildMaterial(nMaterials-1, isotopes);
+  return BuildMaterial(nMaterials-1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -273,7 +280,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4double>& w,
 				      G4double dens, 
-				      G4bool isotopes,
+				      G4bool,
 				      G4State state,     
 				      G4double temp,  
 				      G4double pres)
@@ -312,7 +319,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewMaterial(
     AddElementByWeightFraction(elmBuilder->GetZ(elm[i]), w[i]);
   }
   
-  return BuildMaterial(nMaterials-1, isotopes);    
+  return BuildMaterial(nMaterials-1); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -367,7 +374,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
                                       const G4String& name,
                                       const std::vector<G4String>& elm,
                                       const std::vector<G4int>& nbAtoms,
-                                      G4bool isotopes,
+                                      G4bool,
                                       G4double temp,
                                       G4double pres)
 {
@@ -421,7 +428,7 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
 
   if(!stp) { AddGas(name,temp,pres); }
 
-  return BuildMaterial(nMaterials-1, isotopes);
+  return BuildMaterial(nMaterials-1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

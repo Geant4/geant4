@@ -16,10 +16,41 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+01-03-13 mma (materials-V09-06-07)
+- G4Element: NaturalAbanbancesFlag -> NaturalAbundanceFlag
+- G4NistElementBuilder - SetNaturalAbundanceFlag(true)
+    
+28-02-13 V.Ivanchenko (materials-V09-06-06)
+- G4SandiaTable - changed signature of GetSandiaCofPerAtom() to make
+    class be thread safe
+- G4Material, G4IonisParamMat - make classes thread safe - objects
+    are shared between all threads
+- G4NistManager, G4NistMaterialBuilder, G4NistElementBuilder - always
+    create isotope vector with natural abundaces
+
+23-02-13 V.Ivanchenko (materials-V09-06-05)
+- G4SandiaTable - attempt to fix compillation problems
+
+22-02-13 V.Ivanchenko (materials-V09-06-04)
+- G4Element - make GetNaturalAbandancesFlag() const
+- G4Isotope, G4Element, G4Material - comment out counters 
+
+21-02-13 V.Ivanchenko (materials-V09-06-03)
+- G4SandiaTable - fixed typo introduced in previous tag, reduced
+    number of static methods/members, removed G4ThreadLocal declarations
+
+20-02-13 V.Ivanchenko (materials-V09-06-02)
+- G4SandiaTable - return back fCumulInterval array to be static
+
+19-02-13 V.Ivanchenko (materials-V09-06-01)
+- G4SandiaTable, G4IonisParamElm, G4IonisParamMat - removed part
+    of G4ThreadLocal declarations and part of static methods/members 
 
 09-01-13 V.Ivanchenko (materials-V09-06-00)
 - G4NistMaterialBuilder fixed: stainless steel parameters from
   http://www.azom.com/article.aspx?ArticleID=965
+  according to the Geometry Forum post 1251
 
 14-11-12 P. Mato (materials-V09-05-33)
 - Added include G4SystemOfUnits.hh in unit tests 

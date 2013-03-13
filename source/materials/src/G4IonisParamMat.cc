@@ -49,7 +49,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-G4ThreadLocal G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
+G4DensityEffectData* G4IonisParamMat::fDensityData = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -133,7 +133,7 @@ void G4IonisParamMat::ComputeMeanParameters()
   const G4ElementVector* elmVector = fMaterial->GetElementVector();
   const G4double* nAtomsPerVolume = fMaterial->GetVecNbOfAtomsPerVolume();
  
-  const G4String ch = fMaterial->GetChemicalFormula();
+  G4String ch = fMaterial->GetChemicalFormula();
 
   if(ch != "") { fMeanExcitationEnergy = FindMeanExcitationEnergy(ch); }
 
@@ -183,7 +183,7 @@ void G4IonisParamMat::ComputeDensityEffect()
   // R.M. Sternheimer, Atomic Data and Nuclear Data Tables, 30: 261 (1984)
   G4int idx = fDensityData->GetIndex(fMaterial->GetName());
   G4int nelm= fMaterial->GetNumberOfElements();
-  G4int Z0  = G4int((*(fMaterial->GetElementVector()))[0]->GetZ()+0.5);
+  G4int Z0  = G4lrint((*(fMaterial->GetElementVector()))[0]->GetZ());
   if(idx < 0 && 1 == nelm) {
     idx = fDensityData->GetElementIndex(Z0, fMaterial->GetState());
   }
@@ -415,29 +415,29 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
   // from "Stopping Powers for Electrons and Positrons"
   // ICRU Report N#37, 1984  (energy in eV)
 
-  const size_t numberOfMolecula = 54; 
-  static G4ThreadLocal G4String *name = 0 ; if (!name) {name = new  G4String [numberOfMolecula]  ; name[0]=
-    // gas 0 - 12
-    "NH_3";name[1]=       "C_4H_10";name[2]=    "CO_2";name[3]=       "C_2H_6";name[4]=      "C_7H_16";name[5]=
-    "C_6H_14";name[6]=    "CH_4";name[7]=       "NO";name[8]=         "N_2O";name[9]=        "C_8H_18";name[10]=
-    "C_5H_12";name[11]=    "C_3H_8";name[12]=     "H_2O-Gas";name[13]= 
+  size_t numberOfMolecula = 54; 
+  const G4String name[54] = {
+    // gas
+    "NH_3",       "C_4H_10",    "CO_2",       "C_2H_6",      "C_7H_16",
+    "C_6H_14",    "CH_4",       "NO",         "N_2O",        "C_8H_18",
+    "C_5H_12",    "C_3H_8",     "H_2O-Gas", 
 
-    // liquid 13 - 39
-    "C_3H_6O";name[14]=    "C_6H_5NH_2";name[15]=  "C_6H_6";name[16]=    "C_4H_9OH";name[17]=    "CCl_4";name[18]=    
-    "C_6H_5Cl";name[19]=   "CHCl_3";name[20]=      "C_6H_12";name[21]=   "C_6H_4Cl_2";name[22]=  "C_4Cl_2H_8O";name[23]= 
-    "C_2Cl_2H_4";name[24]= "(C_2H_5)_2O";name[25]= "C_2H_5OH";name[26]=  "C_3H_5(OH)_3";name[27]="C_7H_16";name[28]=     
-    "C_6H_14";name[29]=    "CH_3OH";name[30]=      "C_6H_5NO_2";name[31]="C_5H_12";name[32]=     "C_3H_7OH";name[33]=    
-    "C_5H_5N";name[34]=    "C_8H_8";name[35]=      "C_2Cl_4";name[36]=   "C_7H_8";name[37]=      "C_2Cl_3H";name[38]=    
-    "H_2O";name[39]=       "C_8H_10";name[40]=
+    // liquid
+    "C_3H_6O",    "C_6H_5NH_2",  "C_6H_6",    "C_4H_9OH",    "CCl_4",    
+    "C_6H_5Cl",   "CHCl_3",      "C_6H_12",   "C_6H_4Cl_2",  "C_4Cl_2H_8O", 
+    "C_2Cl_2H_4", "(C_2H_5)_2O", "C_2H_5OH",  "C_3H_5(OH)_3","C_7H_16",     
+    "C_6H_14",    "CH_3OH",      "C_6H_5NO_2","C_5H_12",     "C_3H_7OH",    
+    "C_5H_5N",    "C_8H_8",      "C_2Cl_4",   "C_7H_8",      "C_2Cl_3H",    
+    "H_2O",       "C_8H_10",
 
-    // solid 40 - 53
-    "C_5H_5N_5";name[41]=  "C_5H_5N_5O";name[42]=  "(C_6H_11NO)-nylon";name[43]=  "C_25H_52";name[44]= 
-    "(C_2H_4)-Polyethylene";name[45]=     "(C_5H_8O-2)-Polymethil_Methacrylate";name[46]=   
-    "(C_8H_8)-Polystyrene";name[47]=      "A-150-tissue";name[48]=       "Al_2O_3";name[49]=  "CaF_2";name[50]= 
-    "LiF";name[51]=        "Photo_Emulsion";name[52]=  "(C_2F_4)-Teflon";name[53]=  "SiO_2"     
-  ;};
+    //solid
+    "C_5H_5N_5",  "C_5H_5N_5O",  "(C_6H_11NO)-nylon",  "C_25H_52", 
+    "(C_2H_4)-Polyethylene",     "(C_5H_8O-2)-Polymethil_Methacrylate",   
+    "(C_8H_8)-Polystyrene",      "A-150-tissue",       "Al_2O_3",  "CaF_2", 
+    "LiF",        "Photo_Emulsion",  "(C_2F_4)-Teflon",  "SiO_2"     
+  } ;
     
-  static G4ThreadLocal G4double meanExcitation[numberOfMolecula] = {
+  const G4double meanExcitation[54] = {
 
     53.7,   48.3,  85.0,  45.4,  49.2,
     49.1,   41.7,  87.8,  84.9,  49.5,

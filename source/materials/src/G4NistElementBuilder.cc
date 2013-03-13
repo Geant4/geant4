@@ -98,8 +98,7 @@ G4double G4NistElementBuilder::GetAtomicMassAmu(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
-						    G4bool buildIsotopes)
+G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb, G4bool)
 {
   if(first) {
     if(verbose > 0) {
@@ -110,7 +109,7 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
   G4Element* elm = 0;
   for(G4int Z = 1; Z<maxNumElements; ++Z) {
     if(symb == elmSymbol[Z]) { 
-      elm = FindOrBuildElement(Z, buildIsotopes);
+      elm = FindOrBuildElement(Z);
       break;
     }
   }
@@ -119,8 +118,7 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
-                                                    G4bool buildIsotopes)
+G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z, G4bool)
 {
   G4Element* anElement = 0;
   if(Z <= 0 || Z >= maxNumElements) { return anElement; }
@@ -132,7 +130,7 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
 
     // build new element
   } else {
-    anElement = BuildElement(Z, buildIsotopes);
+    anElement = BuildElement(Z);
     if(anElement) { elmIndex[Z] = anElement->GetIndex(); }
   }  
   return anElement;
@@ -140,59 +138,48 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Element* G4NistElementBuilder::BuildElement(G4int Z, G4bool buildIsotopes)
+G4Element* G4NistElementBuilder::BuildElement(G4int Z)
 {
   G4Element* theElement = 0;
   if(Z<1 || Z>=maxNumElements) { return theElement; }
-  G4double Zeff = (G4double)Z;
   G4double Aeff = atomicMass[Z];
   if (verbose > 1) {
     G4cout << "G4NistElementBuilder: Build Element <" << elmSymbol[Z]
-           << ">  Z= " << Zeff
-	   << "  A= " << Aeff;
-    if(buildIsotopes) { G4cout << "  with natural isotope composition" << G4endl; } 
-    else              { G4cout << "  isotopes are not built" << G4endl; }
+           << ">  Z= " << Z
+	   << "  Aeff= " << Aeff;
+    G4cout << "  with natural isotope composition" << G4endl; 
   }
   
   //build Element with its Isotopes
   //
-  if (buildIsotopes) {
-    G4int nc  = nIsotopes[Z];
-    G4int n0  = nFirstIsotope[Z];
-    G4int idx = idxIsotopes[Z];
-    std::vector<G4Isotope*> iso;
-    G4Isotope* ist;
-    for (G4int i=0; i<nc; ++i) {
-       if (relAbundance[idx + i] > 0.0) {
-	 std::ostringstream os; 
-	 os << elmSymbol[Z] << n0 + i;
-         ist = new G4Isotope(os.str(), Z, n0 + i, 
-			     GetAtomicMass(Z, n0 + i)*g/(mole*amu_c2));
-	 /*
-	 G4cout << " Z= " << Z << " N= " << n0 + i
-		<< " miso(amu)= " <<  GetIsotopeMass(Z, n0 + i)/amu_c2
-		<< " matom(amu)= " << GetAtomicMass(Z, n0 + i)/amu_c2 << G4endl;
-	 */
-	 iso.push_back(ist);
-       }
-    }
-    G4int ni = iso.size();
-    G4double w;
-    theElement = new G4Element(elmSymbol[Z],elmSymbol[Z],ni);
-    for(G4int j=0; j<ni; ++j) {
-      w = relAbundance[idx + (iso[j])->GetN() - n0];
-      ist = iso[j];
-      theElement->AddIsotope(ist, w);
+  G4int nc  = nIsotopes[Z];
+  G4int n0  = nFirstIsotope[Z];
+  G4int idx = idxIsotopes[Z];
+  std::vector<G4Isotope*> iso;
+  G4Isotope* ist;
+  for (G4int i=0; i<nc; ++i) {
+    if (relAbundance[idx + i] > 0.0) {
+      std::ostringstream os; 
+      os << elmSymbol[Z] << n0 + i;
+      ist = new G4Isotope(os.str(), Z, n0 + i, 
+			  GetAtomicMass(Z, n0 + i)*g/(mole*amu_c2));
+      /*
+	G4cout << " Z= " << Z << " N= " << n0 + i
+	<< " miso(amu)= " <<  GetIsotopeMass(Z, n0 + i)/amu_c2
+	<< " matom(amu)= " << GetAtomicMass(Z, n0 + i)/amu_c2 << G4endl;
+      */
+      iso.push_back(ist);
     }
   }
-  
-  //build Element without Isotopes
-  //  
-  else {
-    theElement = new G4Element(elmSymbol[Z],elmSymbol[Z],Zeff,Aeff*gram/mole);
+  G4int ni = iso.size();
+  G4double w;
+  theElement = new G4Element(elmSymbol[Z],elmSymbol[Z],ni);
+  for(G4int j=0; j<ni; ++j) {
+    w = relAbundance[idx + (iso[j])->GetN() - n0];
+    ist = iso[j];
+    theElement->AddIsotope(ist, w);
   }
-  theElement->SetNaturalAbandancesFlag(buildIsotopes);
-  
+  theElement->SetNaturalAbundanceFlag(true);  
   return theElement;
 }
 

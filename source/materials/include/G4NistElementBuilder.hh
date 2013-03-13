@@ -131,7 +131,7 @@ private:
 		  const G4double& W);
 
   // Build a G4Element from the G4 dataBase
-  G4Element* BuildElement(G4int Z, G4bool buildIsotopes);
+  G4Element* BuildElement(G4int Z);
 
 private:
 

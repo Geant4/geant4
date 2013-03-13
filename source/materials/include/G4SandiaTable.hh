@@ -43,6 +43,8 @@
 //          in GetSandiaCofPerAtom(). mma
 // 03.04.01 fnulcof[4] added; returned if energy < emin
 // 05.03.04 V.Grichine, new methods for old sorting algorithm for PAI model
+// 21.21.13 V.Ivanchenko, changed signature of methods, reduced number of 
+//                        static variables, methods
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -54,6 +56,7 @@
 #include "G4OrderedTable.hh"      
 #include "G4ios.hh"
 #include "globals.hh"
+#include <vector>
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -70,21 +73,21 @@ public:  // with description
   ~G4SandiaTable();
 
   //main computation per atom:
-  static G4double* GetSandiaCofPerAtom(G4int Z, G4double energy);
+  void GetSandiaCofPerAtom(G4int Z, G4double energy, std::vector<G4double>& coeff);
   static G4double GetZtoA(G4int Z);
 
   //per volume of a material:
   G4int GetMatNbOfIntervals();
   G4double  GetSandiaCofForMaterial(G4int,G4int);
-  G4double* GetSandiaCofForMaterial(G4double energy);
   G4double  GetSandiaMatTable(G4int,G4int);
+  const G4double* GetSandiaCofForMaterial(G4double energy);
 
   G4double  GetSandiaCofForMaterialPAI(G4int,G4int);
-  G4double* GetSandiaCofForMaterialPAI(G4double energy);
   G4double  GetSandiaMatTablePAI(G4int,G4int);
-  G4OrderedTable*  GetSandiaMatrixPAI();
+  const G4double* GetSandiaCofForMaterialPAI(G4double energy);
+  G4OrderedTable* GetSandiaMatrixPAI();
 
-  void SetVerbose(G4int ver){fVerbose = ver;};
+  inline void SetVerbose(G4int ver) { fVerbose = ver; };
 
 public:  // without description
 
@@ -99,9 +102,9 @@ private:
   void ComputeMatSandiaMatrixPAI();
 
   // methods per atom
-  G4int     GetNbOfIntervals   (G4int Z);
-  G4double  GetSandiaCofPerAtom(G4int Z, G4int, G4int);
-  G4double  GetIonizationPot   (G4int Z);
+  G4int     GetNbOfIntervals(G4int Z);
+  G4double  GetSandiaPerAtom(G4int Z, G4int, G4int);
+  G4double  GetIonizationPot(G4int Z);
 
   // static members of the class
   static const G4int      fNumberOfElements;
@@ -113,9 +116,13 @@ private:
   static const G4double   fZtoAratio[101];
   static const G4double   fIonizationPotentials[101];
   static const G4double   funitc[5];
+  static const G4double   fnulcof[4];
                
-  static G4ThreadLocal       G4int      fCumulInterval[101];
-  static G4ThreadLocal       G4double   fSandiaCofPerAtom[4];
+  // computed once
+  static G4int            fCumulInterval[101];
+
+  // used at initialisation
+  std::vector<G4double>   fSandiaCofPerAtom;
   
   // members of the class
   G4Material*     fMaterial;
@@ -123,7 +130,6 @@ private:
   G4OrderedTable* fMatSandiaMatrix;
   G4OrderedTable* fMatSandiaMatrixPAI;
   
-  G4double        fnulcof[4];
 		   
 /////////////////////////////////////////////////////////////////////
 //

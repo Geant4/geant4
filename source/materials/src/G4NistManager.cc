@@ -61,14 +61,14 @@
 #include "G4NistMessenger.hh"
 #include "G4Isotope.hh"
 
-G4ThreadLocal G4NistManager* G4NistManager::instance = 0;
+G4NistManager* G4NistManager::instance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4NistManager* G4NistManager::Instance()
 {
   if (instance == 0) {
-    static G4ThreadLocal G4NistManager *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4NistManager  ;  G4NistManager &manager = *manager_G4MT_TLS_;
+    static G4NistManager manager;
     instance = &manager;
   }
   return instance;
