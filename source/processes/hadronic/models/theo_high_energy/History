@@ -13,6 +13,15 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+29-January-2013   V. Uzhinsky had-theo-HE-V09-06-03
+-  A new attempt to implement NuclNucl interactions
+
+8-January-2013   V. Uzhinsky had-theo-HE-V09-06-02
+-  A new attempt to implement NuclNucl interactions
+
+17-December-2012 V. Uzhinsky had-theo-HE-V09-06-01
+-  An interface for a manipulation with nucleus-nucleus interactions was
+   introduced. Alberto's comments are removed.
 
 13-December-2012 A.Ribon    had-theo-HE-V09-06-00
 -  Removed G4ProjectileDiffractiveChannel (which depends on CHIPS),

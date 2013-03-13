@@ -155,12 +155,10 @@ G4HadFinalState * G4TheoFSGenerator::ApplyYourself(const G4HadProjectile & thePr
 
   G4ReactionProductVector * theTransportResult = NULL;
 
-  /* A.R.13-Dec-2012: temporary hack --- START ---
 // Uzhi Nov. 2012
   G4V3DNucleus* theProjectileNucleus = theHighEnergyGenerator->GetProjectileNucleus(); 
 if(theProjectileNucleus == 0)                                       // Uzhi Nov. 2012
 {                                                                   // Uzhi Nov. 2012
-  */ // A.R.13-Dec-2012 --- END ---
 
   G4int hitCount = 0;
   const std::vector<G4Nucleon>& they = theHighEnergyGenerator->GetWoundedNucleus()->GetNucleons();
@@ -187,7 +185,6 @@ if(theProjectileNucleus == 0)                                       // Uzhi Nov.
     }   
   }
 
-/* A.R.13-Dec-2012: temporary hack --- START ---
 } else                                                              // Uzhi Nov. 2012
 {                                                                   // Uzhi Nov. 2012
     theTransport->SetPrimaryProjectile(thePrimary);
@@ -200,7 +197,6 @@ if(theProjectileNucleus == 0)                                       // Uzhi Nov.
        throw G4HadronicException(__FILE__, __LINE__, "Null ptr from transport propagate");
     } 
 }                                                                   // Uzhi Nov. 2012
-*/ // A.R.13-Dec-2012 --- END ---
 
   // Fill particle change
   unsigned int i;
