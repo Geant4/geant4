@@ -104,6 +104,10 @@ public:
 
   inline void SetParticle(const G4ParticleDefinition*);
 
+  inline G4double GetSecondaryEnergy(G4int iy);
+
+  inline G4double GetDifferentialCrossSection(G4int iz, G4int it, G4int iy);
+
 protected:
 
   G4double ComputMuPairLoss(G4double Z, G4double tkin, G4double cut,
@@ -134,7 +138,7 @@ private:
 
   inline G4double InterpolatedIntegralCrossSection(
 		     G4double dt, G4double dz, G4int iz,
-		     G4int it, G4int iy, G4double z);
+		     G4int it, G4int iy);
 
   // hide assignment operator
   G4MuPairProductionModel & operator=(const  G4MuPairProductionModel &right);
@@ -153,7 +157,7 @@ protected:
   G4double z23;
   G4double lnZ;
 
-  static G4ThreadLocal G4double xgi[8],wgi[8];
+  static G4double xgi[8],wgi[8];
 
 private:
 
@@ -169,8 +173,9 @@ private:
   G4int ntdat;
   G4int nbiny;
   size_t nmaxElements;
-  static G4ThreadLocal G4double zdat[5], adat[5], tdat[8];
-  G4double ya[1001], proba[5][8][1001];
+
+  static G4double zdat[5], adat[5], tdat[41];
+  G4double ya[1001], proba[5][41][1001];
 
   G4double ymin;
   G4double ymax;
@@ -214,8 +219,7 @@ inline void G4MuPairProductionModel::SetCurrentElement(G4double Z)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4MuPairProductionModel::InterpolatedIntegralCrossSection(
-	        G4double dt, G4double dz,
-                G4int iz, G4int it, G4int iy, G4double z)
+	        G4double dt, G4double dz, G4int iz, G4int it, G4int iy)
 {
   G4double fac =  1./(zdat[iz]  *(zdat[iz]  +1.));
   G4double fac1 = 1./(zdat[iz-1]*(zdat[iz-1]+1.));
@@ -223,7 +227,22 @@ inline G4double G4MuPairProductionModel::InterpolatedIntegralCrossSection(
                 (fac*proba[iz][it-1][iy]-fac1*proba[iz-1][it-1][iy])*dz;
   G4double f1 = fac1*proba[iz-1][it  ][iy] + 
                 (fac*proba[iz][it  ][iy]-fac1*proba[iz-1][it  ][iy])*dz;
-  return (f0 + (f1-f0)*dt)*z*(z+1.);
+  return (f0 + (f1-f0)*dt);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4MuPairProductionModel::GetSecondaryEnergy(G4int iy)
+{
+  return ya[iy];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double 
+G4MuPairProductionModel::GetDifferentialCrossSection(G4int iz, G4int it, G4int iy)
+{
+  return proba[iz][it][iy];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

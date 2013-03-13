@@ -88,14 +88,26 @@
 
 // static members
 //
-G4ThreadLocal G4double G4MuPairProductionModel::zdat[]={1., 4., 13., 29., 92.};
-G4ThreadLocal G4double G4MuPairProductionModel::adat[]={1.01, 9.01, 26.98, 63.55, 238.03};
-G4ThreadLocal G4double G4MuPairProductionModel::tdat[]={1.e3, 1.e4, 1.e5, 1.e6, 1.e7, 1.e8,
-                                          1.e9, 1.e10};
-G4ThreadLocal G4double G4MuPairProductionModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
-                                          0.5917, 0.7628, 0.8983, 0.9801 };
-G4ThreadLocal G4double G4MuPairProductionModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
-                                          0.1813, 0.1569, 0.1112, 0.0506 };
+G4double G4MuPairProductionModel::zdat[]={1., 4., 13., 29., 92.};
+G4double G4MuPairProductionModel::adat[]={1.01, 9.01, 26.98, 63.55, 238.03};
+G4double G4MuPairProductionModel::tdat[]={1.e3, 2.5e3, 5.e3, 7.5e3,
+					  1.e4, 2.5e4, 5.e4, 7.5e4,
+					  1.e5, 2.5e5, 5.e5, 7.5e5,
+					  1.e6, 2.5e6, 5.e6, 7.5e6,
+					  1.e7, 2.5e7, 5.e7, 7.5e7,
+					  1.e8, 2.5e8, 5.e8, 7.5e8,
+					  1.e9, 2.5e9, 5.e9, 7.5e9,
+					  1.e10, 2.5e10, 5.e10, 7.5e10,
+					  1.e11, 2.5e11, 5.e11, 7.5e11,
+					  1.e12, 2.5e12, 5.e12, 7.5e12,1.e13};
+
+G4double G4MuPairProductionModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
+					  0.5917, 0.7628, 0.8983, 0.9801 };
+G4double G4MuPairProductionModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
+					  0.1813, 0.1569, 0.1112, 0.0506 };
+
+//G4double G4MuPairProductionModel::ya[] = {0.0};
+//G4double G4MuPairProductionModel::proba[5][41][4001];
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -113,7 +125,7 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
     minPairEnergy(4.*electron_mass_c2),
     lowestKinEnergy(GeV),
     nzdat(5),
-    ntdat(8),
+    ntdat(41),
     nbiny(1000),
     nmaxElements(0),
     ymin(-5.),
@@ -129,7 +141,7 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
 
   particleMass = lnZ = z13 = z23 = 0;
 
-  for(size_t i=0; i<1001; ++i) { ya[i] = 0.0; }
+  for(G4int i=0; i<=nbiny; ++i) { ya[i] = 0.0; }
 
   if(p) { SetParticle(p); }
 }
@@ -163,7 +175,12 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
 { 
   if (!samplingTablesAreFilled) {
     if(p) { SetParticle(p); }
-    MakeSamplingTables();
+    G4double emax = HighEnergyLimit();
+    G4int i=0;
+    for(; i<ntdat; ++i) { if(emax < MeV*tdat[i]) { break; } }
+    if(i+1 < ntdat) { ntdat = i + 1; }
+
+    MakeSamplingTables(); 
   }
   if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
 }
@@ -279,12 +296,12 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
  // using the cross section formula of R.P. Kokoulin (18/01/98)
  // Code modified by R.P. Kokoulin, V.N. Ivanchenko (27/01/04)
 {
-  G4double bbbtf= 183. ;
-  G4double bbbh = 202.4 ;
-  G4double g1tf = 1.95e-5 ;
-  G4double g2tf = 5.3e-5 ;
-  G4double g1h  = 4.4e-5 ;
-  G4double g2h  = 4.8e-5 ;
+  const G4double bbbtf= 183. ;
+  const G4double bbbh = 202.4 ;
+  const G4double g1tf = 1.95e-5 ;
+  const G4double g2tf = 5.3e-5 ;
+  const G4double g1h  = 4.4e-5 ;
+  const G4double g2h  = 4.8e-5 ;
 
   G4double totalEnergy  = tkin + particleMass;
   G4double residEnergy  = totalEnergy - pairEnergy;
@@ -297,7 +314,7 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double c3 = 0.75*sqrte*particleMass;
   if (residEnergy <= c3*z13) { return cross; }
 
-  G4double c7 = 4.*electron_mass_c2;
+  const G4double c7 = 4.*electron_mass_c2;
   G4double c8 = 6.*particleMass*particleMass;
   G4double alf = c7/pairEnergy;
   G4double a3 = 1. - alf;
@@ -477,9 +494,9 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4ThreeVector partDirection = aDynamicParticle->GetMomentumDirection();
 
   G4int it;
-  for(it=1; it<ntdat; ++it) { if(kineticEnergy <= tdat[it]) { break; } }
+  for(it=1; it<ntdat; ++it) { if(kineticEnergy <= MeV*tdat[it]) { break; } }
   if(it == ntdat) { --it; }
-  G4double dt = log(kineticEnergy/tdat[it-1])/log(tdat[it]/tdat[it-1]);
+  G4double dt = log(kineticEnergy/(MeV*tdat[it-1]))/log(tdat[it]/tdat[it-1]);
 
   // select randomly one element constituing the material
   const G4Element* anElement = 
@@ -514,29 +531,62 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   }
 
   // sample e-e+ energy, pair energy first
-  G4int iz, iy;
+  G4int iz;
 
   for(iz=1; iz<nzdat; ++iz) { if(currentZ <= zdat[iz]) { break; } }
   if(iz == nzdat) { --iz; }
 
   G4double dz = log(currentZ/zdat[iz-1])/log(zdat[iz]/zdat[iz-1]);
 
-  G4double pmin = InterpolatedIntegralCrossSection(dt,dz,iz,it,iymin,currentZ);
-  G4double pmax = InterpolatedIntegralCrossSection(dt,dz,iz,it,iymax,currentZ);
+  G4double pmin = InterpolatedIntegralCrossSection(dt,dz,iz,it,iymin);
+  G4double pmax = InterpolatedIntegralCrossSection(dt,dz,iz,it,iymax);
 
   G4double p = pmin+G4UniformRand()*(pmax - pmin);
 
   // interpolate sampling vector;
   G4double p1 = pmin;
   G4double p2 = pmin;
+  /*
   for(iy=iymin+1; iy<=iymax; ++iy) {
     p1 = p2;
     p2 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy, currentZ);
     if(p <= p2) { break; }
   }
+  */
+  //G4double p0;
+  G4int lb = iymin+1;
+  G4int rb = iymax;
+  G4int iy = (lb+rb)/2;
+  while( rb-lb > 1 )
+    {
+      p1 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy);
+      if(p == p1) { break; }
+      if(p1 < p) { lb = iy; }
+      else       { rb = iy; }
+      iy = (lb+rb)/2;
+    }            
+  if(p < p1)
+    {
+      p2 = p1;
+      iy = iy-1;
+      p1 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy);
+    }
+  else 
+    {
+      p2 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy+1);
+    } 
+  /*        
+  if(p < p0)
+    {
+      p2 = p0;
+      p1 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy-1, currentZ);
+      iy = iy-1;
+    }
+  iy = iy + 1;
+  */
   // G4cout << "iy= " << iy << " iymin= " << iymin << " iymax= " 
   //        << iymax << " Z= " << currentZ << G4endl;
-  G4double y = ya[iy-1] + dy*(p - p1)/(p2 - p1);
+  G4double y = ya[iy] + dy*(p - p1)/(p2 - p1);
 
   G4double PairEnergy = minPairEnergy*exp( exp(y)*logmaxmin );
 		       
@@ -641,11 +691,11 @@ const G4Element* G4MuPairProductionModel::SelectRandomAtom(
 	  G4int iy = (G4int)((log(xc) - ymin)/dy);
 	  if(iy < 0) { iy = 0; }
 	  if(iy >= nbiny) { iy = nbiny-1; }
-	  sigcut = InterpolatedIntegralCrossSection(dt,dz,iz,it,iy, Z);
+	  sigcut = InterpolatedIntegralCrossSection(dt,dz,iz,it,iy);
 	}
 
-      G4double sigtot = InterpolatedIntegralCrossSection(dt,dz,iz,it,nbiny,Z);
-      dl = (sigtot - sigcut)*theAtomNumDensityVector[i];
+      G4double sigtot = InterpolatedIntegralCrossSection(dt,dz,iz,it,nbiny);
+      dl = (sigtot - sigcut)*Z*(Z + 1)*theAtomNumDensityVector[i];
     }
     // protection
     if(dl < 0.0) { dl = 0.0; }

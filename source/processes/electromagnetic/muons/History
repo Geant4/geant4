@@ -17,6 +17,39 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 February 2012: V.Ivant (emmuons-V09-06-06)
+- G4MuPairProductionModel - number of bins for virtual gamma returned
+    to be 1000
+
+19 February 2012: V.Ivant (emmuons-V09-06-05)
+- G4MuMultipleScattering - G4UrbanMscModel become default
+- G4MuPairProductionModel - number of bins for virtual gamma returned
+    to be 2000
+
+19 February 2012: V.Ivant (emmuons-V09-06-04)
+- G4MuPairProductionModel - number of bins for virtual gamma reduced
+    from 2000 to 1600
+- G4MuBetheBlochModel - removed G4ThreadLocal declaration
+
+18 February 2012: V.Ivant (emmuons-V09-06-02)
+- G4MuPairProductionModel - add check on max energy to reduce number
+    of bins in muon energy; number of bins for virtual gamma reduced
+    from 4000 to 2000.
+
+02 February 2012: V.Ivant (emmuons-V09-06-01)
+- G4MuPairProductionModel - make main table of differential cross
+    section private and not static, because G4hPairProductionModel
+    inherit of this class and muons cannot share the same tables with 
+    hadrons; two new inline access methods are added GetSecondaryEnergy
+    and GetDifferentialCrossSection.
+
+
+01 February 2012: V.Ivant (emmuons-V09-06-00)
+- G4MuPairProductionModel - (A.Bogdanov) - extended grid of differential
+  cross section tables (from 8 to 40 points in muon energy, from 1000 to
+  4000 points in energy of e+e- pair); use more fast binary search of 
+  index in the table; make table static - common for all threads 
+
 06 November 2012: V.Ivant (emmuons-V09-05-06)
 - G4MuBremsstrahlungModel, G4MuPairProductionModel - reduce number of
     computations of log of the same argument, no change in results
