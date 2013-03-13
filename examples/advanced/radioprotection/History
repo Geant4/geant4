@@ -9,6 +9,10 @@ $Id$
                       Category History file
                       ---------------------
 
+04.02.2013 - G.Folger; tag radioprotection-V09-06-01
+           RemSimPhysicsList.cc: Update for renamed physics builders
+	   GNUmakefile: correct G4INSTALL
+
 14.12.2012 A. Ribon, tag radioprotection-V09-06-00
            Removed use of obsolete G4HadronQElasticPhysics.
 

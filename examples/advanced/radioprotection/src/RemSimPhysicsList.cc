@@ -50,9 +50,9 @@
 #include "G4IonFluctuations.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4EmProcessOptions.hh"
-#include "HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4RadioactiveDecayPhysics.hh"
-#include "HadronPhysicsQGSP_BIC.hh"
+#include "G4HadronPhysicsQGSP_BIC.hh"
 
 // The electromagnetic physics and the decay are 
 // registered by default. The user has to execute the
@@ -144,7 +144,7 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
     helIsRegistered = true;
 
   } else if (name == "binary" && !bicIsRegistered) {
-    hadronPhys.push_back(new HadronPhysicsQGSP_BIC);
+    hadronPhys.push_back(new G4HadronPhysicsQGSP_BIC);
     bicIsRegistered = true;
     G4cout << "THE FOLLOWING HADRONIC INELASTIC PHYSICS LIST HAS BEEN ACTIVATED: QGSP_BIC" << G4endl;
 
