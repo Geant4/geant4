@@ -1,0 +1,22 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+    Hadronic physics-list/constructors/limiters History
+    ---------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+02-Feb-2013, V.Ivanchenko               (phys-ctor-limiters-V09-06-01)
+- added forgotten G4StepLimiterPhysics and fixed source.cmake 
+
+10-Jan-2013, Gunter Folger              (phys-ctor-limiters-V09-06-00)
+- new directory structure introduced. 
+   constructors/limiters classes

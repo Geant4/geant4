@@ -63,7 +63,7 @@
 #include "G4HadronElasticPhysicsLEND.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsShielding.hh"
+#include "G4HadronPhysicsShielding.hh"
 
 //template<class T> TShielding<T>::TShielding(G4int ver):  T()
 template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model ):  T()
@@ -117,7 +117,7 @@ G4cout << LEN_model << G4endl;
   } 
 
    // Hadron Physics
-  HadronPhysicsShielding* hps = new HadronPhysicsShielding(verbose);
+  G4HadronPhysicsShielding* hps = new G4HadronPhysicsShielding(verbose);
   if ( LEN_model == "HP" ) 
   {
      ;
@@ -133,7 +133,7 @@ G4cout << LEN_model << G4endl;
      //G4cout << "Will use neutron HP package." <<G4endl;
   }
   this->RegisterPhysics( hps );
-  //this->RegisterPhysics( new HadronPhysicsShielding(verbose,lend));
+  //this->RegisterPhysics( new G4HadronPhysicsShielding(verbose,lend));
 
 
   // Stopping Physics

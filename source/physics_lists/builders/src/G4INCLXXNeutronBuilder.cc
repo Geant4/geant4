@@ -29,18 +29,33 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4BGGNucleonInelasticXS.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4HadronicInteraction.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 G4INCLXXNeutronBuilder::
 G4INCLXXNeutronBuilder() 
 {
-  theMin = 0;
+  withPreCompound = true;
+  thePreCompoundMin = 0;
+  thePreCompoundMax = 2*MeV;
+  theMin = 1.0*MeV;
   theMax = 3.0*GeV;
-  theModel = new G4INCLXXInterface();
+  G4HadronicInteraction* p =
+    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+  thePreCompoundModel = static_cast<G4VPreCompoundModel*>(p);
+  if(!thePreCompoundModel) { thePreCompoundModel = new G4PreCompoundModel(); }
+  theModel = new G4INCLXXInterface(thePreCompoundModel);
 }
 
 void G4INCLXXNeutronBuilder::
 Build(G4NeutronInelasticProcess * aP)
 {
+  if(withPreCompound) {
+    thePreCompoundModel->SetMinEnergy(thePreCompoundMin);
+    thePreCompoundModel->SetMaxEnergy(thePreCompoundMax);
+    aP->RegisterMe(thePreCompoundModel);
+  }
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);

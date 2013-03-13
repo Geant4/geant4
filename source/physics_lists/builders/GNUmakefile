@@ -16,6 +16,9 @@ CPPFLAGS += -DG4PROCESSES_EXPORT
 ifeq ($(G4SYSTEM), WIN32-VC)
 CPPFLAGS += -I$(G4BASE)/externals/expat/include
 endif
+ifdef G4LIB_BUILD_EXPAT
+CPPFLAGS += -I$(G4BASE)/externals/expat/include
+endif
 
 
 CPPFLAGS += -I$(G4BASE)/global/management/include \
@@ -36,6 +39,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
             -I$(G4BASE)/run/include \
+            -I$(G4BASE)/physics_lists/constructors/factory/include \
+            -I$(G4BASE)/physics_lists/util/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \

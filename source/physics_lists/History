@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-03-2013, Gabriele Cosmo (physics_lists-V09-06-00)
+- Grouping all tags for geant4-09-06-ref-03.
+- NOTE: new tag format for top directory.
+        To be tagged -only- for further reorganization and grouping.
+        From now on only sub-modules should be tagged.
+
+01-02-2013, V.Ivanchenko		(phys-lists-V09-06-04)
+- Fixed GNUmakefile and add forgotten util directiory
+
 13-12-2012, A.Ribon    		        (phys-lists-V09-06-03)
 - Removed projectile diffraction (which uses CHIPS).
 - Removed all obsolete physics lists and associated builders

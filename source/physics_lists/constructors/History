@@ -1,0 +1,24 @@
+$Id: History 66704 2013-01-10 18:20:17Z gunter $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+     	    Hadronic physics-list-constructors History
+     	    ------------------------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+15-01-2013, Gunter Folger
+
+      -------- Please tag at subdirectory level----------------
+
+15-01-2013, Gunter Folger               (phys-ctor-V09-06-00)
+- Collect constructors subdirectories tags, and CMakeLists.txt & GNUmakefile 
+  to allow testing to check out a complete set. Without this tag, CMakeLists.txt
+  will not be checked out, as constructors directory is not part of any tag yet.  

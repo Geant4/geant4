@@ -1,0 +1,39 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                  Hadronic physics-list/lists History
+                  -----------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-06)
+04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-05)
+04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-04)
+04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-03)
+- Added new INCL++-based physics lists:
+  o QGSP_INCLXX_HP
+  o FTFP_INCLXX
+  o FTFP_INCLXX_HP
+  These are based on the new INCLXXPhysicsListHelper class, which avoids
+  unnecessary code duplication.
+- Depends on tag phys-ctor-hinelastic-V09-06-05.
+- Provides QGSP_INCLXX.hh and similar headers for backwards compatibility.
+
+30-Jan-2013, Gunter Folger              (phys-lists-V09-06-02)
+- fix sources.cmake for moved files
+
+29-Jan-2013, Gunter Folger              (phys-lists-V09-06-01)
+- move G4PhysListFactory from constructor/factory to lists.
+
+10-Jan-2013, Gunter Folger              (phys-lists-V09-06-00)
+- new directory structure introduced. 
+   lists directory only keeps physics lists, hadronic constructors moved to 
+   constructors/hadron_inelastic

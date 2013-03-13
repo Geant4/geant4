@@ -12,7 +12,6 @@
 # Generated on : 24/9/2010
 #
 # $Id$
-# GEANT4 Tag $Name: not supported by cvs2svn $
 #
 #------------------------------------------------------------------------------
 
@@ -41,6 +40,16 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/builders/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/decay/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/electromagnetic/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/factory/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/gamma_lepto_nuclear/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/hadron_elastic/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/hadron_inelastic/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/ions/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/limiters/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/stopping/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/include)
@@ -103,75 +112,43 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_lists
     HEADERS
-        FTF_BIC.hh
-        FTF_BIC.icc
-        FTFP_BERT.hh
-        FTFP_BERT.icc
-        FTFP_BERT_HP.hh
-        FTFP_BERT_HP.icc
-        FTFP_BERT_TRV.hh
-        FTFP_BERT_TRV.icc
-        G4GenericPhysicsList.hh
-        G4GenericPhysicsList.icc
-        G4HadronInelasticQBBC.hh
+	FTF_BIC.hh
+	FTF_BIC.icc
+	FTFP_BERT.hh
+	FTFP_BERT_HP.hh
+	FTFP_BERT_HP.icc
+	FTFP_BERT.icc
+	FTFP_BERT_TRV.hh
+	FTFP_BERT_TRV.icc
+	G4GenericPhysicsList.hh
+	G4GenericPhysicsList.icc
         G4PhysListFactory.hh
-        G4VHadronPhysics.hh
-        HadronPhysicsFTF_BIC.hh
-        HadronPhysicsFTFP_BERT.hh
-        HadronPhysicsFTFP_BERT_HP.hh
-        HadronPhysicsFTFP_BERT_TRV.hh
-        HadronPhysicsQGS_BIC.hh
-        HadronPhysicsQGSP_BERT.hh
-        HadronPhysicsQGSP_BERT_HP.hh
-        HadronPhysicsQGSP_BIC.hh
-        HadronPhysicsQGSP_BIC_HP.hh
-        HadronPhysicsQGSP_FTFP_BERT.hh
-	HadronPhysicsQGSP_INCLXX.hh
-        HadronPhysicsShielding.hh
-        LBE.hh
-        LBE.icc
-        MaxTimeCuts.hh
-        MinEkineCuts.hh
-        QBBC.hh
-        QGS_BIC.hh
-        QGS_BIC.icc
-        QGSP_BERT.hh
-        QGSP_BERT.icc
-        QGSP_BERT_HP.hh
-        QGSP_BERT_HP.icc
-        QGSP_BIC.hh
-        QGSP_BIC_HP.hh
-        QGSP_BIC_HP.icc
-        QGSP_BIC.icc
-        QGSP_FTFP_BERT.hh
-        QGSP_FTFP_BERT.icc
-	QGSP_INCLXX.hh
-	QGSP_INCLXX.icc
-        Shielding.hh
-        Shielding.icc
-        SpecialCuts.hh
-	G4PhysListUtil.hh
+	LBE.hh
+	LBE.icc
+	QBBC.hh
+	QGS_BIC.hh
+	QGS_BIC.icc
+	QGSP_BERT.hh
+	QGSP_BERT_HP.hh
+	QGSP_BERT_HP.icc
+	QGSP_BERT.icc
+	QGSP_BIC.hh
+	QGSP_BIC_HP.hh
+	QGSP_BIC_HP.icc
+	QGSP_BIC.icc
+	QGSP_FTFP_BERT.hh
+	QGSP_FTFP_BERT.icc
+        INCLXXPhysicsListHelper.hh
+        INCLXXPhysicsListHelper.icc
+        QGSP_INCLXX.hh
+        QGSP_INCLXX_HP.hh
+        FTFP_INCLXX.hh
+        FTFP_INCLXX_HP.hh
+	Shielding.hh
+	Shielding.icc
     SOURCES
-        G4HadronInelasticQBBC.cc
         G4PhysListFactory.cc
-        G4VHadronPhysics.cc
-        HadronPhysicsFTF_BIC.cc
-        HadronPhysicsFTFP_BERT.cc
-        HadronPhysicsFTFP_BERT_HP.cc
-        HadronPhysicsFTFP_BERT_TRV.cc
-        HadronPhysicsQGS_BIC.cc
-        HadronPhysicsQGSP_BERT.cc
-        HadronPhysicsQGSP_BERT_HP.cc
-        HadronPhysicsQGSP_BIC.cc
-        HadronPhysicsQGSP_BIC_HP.cc
-        HadronPhysicsQGSP_FTFP_BERT.cc
-        HadronPhysicsQGSP_INCLXX.cc
-        HadronPhysicsShielding.cc
-        MaxTimeCuts.cc
-        MinEkineCuts.cc
         QBBC.cc
-        SpecialCuts.cc
-	G4PhysListUtil.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

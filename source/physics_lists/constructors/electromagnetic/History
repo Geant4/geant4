@@ -1,0 +1,41 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+              Hadronic physics-list/constructors/factory History
+              --------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+27-Feb-2013, V.Ivanchenko (phys-ctor-em-V09-06-05)
+-  in all constructors improved verbose oputput and fixed warning from
+      the clang compiler on MacOS
+
+19-Feb-2013, V.Ivanchenko (phys-ctor-em-V09-06-04)
+-  in all constructors G4UrbanMscModel95 substituted by G4UrbanMscModel
+-  G4EmStandardPhysics_option4 - low limit increased from 10 eV to 100 eV
+
+13-Feb-2013, V.Ivanchenko (phys-ctor-em-V09-06-03)
+-  G4EmLivermorePhysics - set low-limit 100 eV and number of bins
+     for tables 220 to avoid problems in Livermore ionisation for
+     electron stopping powers and ranges 
+
+01-Feb-2013, V.Ivanchenko (phys-ctor-em-V09-06-02)
+-  G4EmExtraPhysics and G4EmMessenger are moved to gamma_lepto_nuclear
+   subdirectory
+-  removed unused dependences from GNUmakefile and source.cmake
+
+30-Jan-2013, Mathieu Karamitros, G.Folger (phys-ctor-em-V09-06-01)
+-  First and simple approach to solve process manager initialization after 
+    migratioon to G4MT.
+    
+10-Jan-2013, Gunter Folger              (phys-ctor-em-V09-06-00)
+- new directory structure introduced. 
+   constructors/electromagnetic classes

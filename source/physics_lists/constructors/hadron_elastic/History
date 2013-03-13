@@ -1,0 +1,26 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+     Hadronic physics-list/constructors/hadron_elastic History
+     ---------------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+27-Feb-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-02)
+- G4ChargeExchangePhysics - removed obsolete constructor and member of 
+    the class to fixed warning from the clang compiler on MacOS
+
+08-Feb-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-01)
+- GNUmakefile fixed - G4LIB_BUILD_EXPAT is added
+
+10-Jan-2013, Gunter Folger              (phys-ctor-helastic-V09-06-00)
+- new directory structure introduced. 
+   constructors/hadron_elastic

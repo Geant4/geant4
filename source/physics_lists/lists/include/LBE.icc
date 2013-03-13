@@ -201,8 +201,8 @@ template<class T> TLBE<T>::~TLBE()
 
 
 // Transportation ///////////////////////////////////////////////////////////
-#include "MaxTimeCuts.hh"
-#include "MinEkineCuts.hh"
+#include "G4MaxTimeCuts.hh"
+#include "G4MinEkineCuts.hh"
 
  template<class T> void TLBE<T>::AddTransportation() {
   
@@ -215,9 +215,9 @@ template<class T> TLBE<T>::~TLBE()
     G4String particleName = particle->GetParticleName();
     // time cuts for ONLY neutrons:
     if(particleName == "neutron") 
-    pmanager->AddDiscreteProcess(new MaxTimeCuts());
+    pmanager->AddDiscreteProcess(new G4MaxTimeCuts());
     // Energy cuts to kill charged (embedded in method) particles:
-    pmanager->AddDiscreteProcess(new MinEkineCuts());
+    pmanager->AddDiscreteProcess(new G4MinEkineCuts());
   }		      
 }
 

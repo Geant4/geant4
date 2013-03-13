@@ -35,6 +35,7 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4INCLXXInterface.hh"   
+#include "G4VPreCompoundModel.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 
 /**
@@ -66,9 +67,18 @@ class G4INCLXXNeutronBuilder : public G4VNeutronBuilder
     void SetMinEnergy(G4double aM) {theMin = aM;}
     void SetMaxEnergy(G4double aM) {theMax = aM;}
 
+    void SetMinPreCompoundEnergy(G4double aM) {thePreCompoundMin = aM;}
+    void SetMaxPreCompoundEnergy(G4double aM) {thePreCompoundMax = aM;}
+
+    void UsePreCompound(const G4bool w) { withPreCompound = w;}
+
   private:
     G4INCLXXInterface * theModel;    
+    G4VPreCompoundModel * thePreCompoundModel;    
     G4NeutronInelasticCrossSection theXSec;
+    G4bool withPreCompound;
+    G4double thePreCompoundMin;
+    G4double thePreCompoundMax;
     G4double theMin;
     G4double theMax;
 

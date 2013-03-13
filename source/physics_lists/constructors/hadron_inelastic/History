@@ -1,0 +1,43 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+    Hadronic physics-list/constructors/hadron_inelastic History
+    -----------------------------------------------------------
+This file should be used  to briefly summarize all major modifications 
+introduced in the code and keeptrack of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+08-Mar-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-06)
+- Fix problem with overlapping model ranges.
+- Depends on phys-builders-V09-06-03.
+
+04-Mar-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-05)
+- Fix file/class name mismatch.
+
+04-Mar-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-04)
+- Parametrized the INCL++ physics constructor to avoid code duplication for
+  each INCL++-based physics list.
+
+27-Feb-2013, Vladimir Ivanchenko        (phys-ctor-hinelastic-V09-06-03)
+- G4HadronPhysicsFTFP_BERT, G4HadronPhysicsFTFP_BERT_HP - comment out
+    unused members of the class to fix warning from the clang compiler 
+    on MacOS
+
+22-Feb-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-02)
+- Modified constructor for QGSP_INCLXX to use PreCompound in nucleon-induced
+  reactions below 2 MeV.
+- Depends on tag phys-builders-V09-06-02.
+
+08-Feb-2013, Vladimir Ivanchenko        (phys-ctor-hinelastic-V09-06-01)
+- GNUmakefile fixed - G4LIB_BUILD_EXPAT is added
+
+10-Jan-2012, Gunter Folger              (phys-ctor-hinelastic-V09-06-00)
+- new directory structure introduced. 
+   constructors/hadron_inelastic classes

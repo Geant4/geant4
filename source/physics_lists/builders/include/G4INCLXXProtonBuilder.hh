@@ -35,6 +35,7 @@
 #include "G4VProtonBuilder.hh"
 
 #include "G4INCLXXInterface.hh"   
+#include "G4VPreCompoundModel.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 
 /**
@@ -83,6 +84,9 @@ class G4INCLXXProtonBuilder : public G4VProtonBuilder
   private:
     G4ProtonInelasticCrossSection theXSec;
     G4INCLXXInterface * theModel;    
+    G4VPreCompoundModel * thePreCompoundModel;    
+    G4double thePreCompoundMin;
+    G4double thePreCompoundMax;
     G4double theMin;
     G4double theMax;
 

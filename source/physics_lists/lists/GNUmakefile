@@ -38,6 +38,17 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/tracking/include \
             -I$(G4BASE)/digits_hits/hits/include \
             -I$(G4BASE)/digits_hits/digits/include \
+	    -I$(G4BASE)/physics_lists/builders/include \
+            -I$(G4BASE)/physics_lists/constructors/decay/include \
+            -I$(G4BASE)/physics_lists/constructors/electromagnetic/include \
+            -I$(G4BASE)/physics_lists/constructors/factory/include \
+            -I$(G4BASE)/physics_lists/constructors/gamma_lepto_nuclear/include \
+            -I$(G4BASE)/physics_lists/constructors/hadron_elastic/include \
+            -I$(G4BASE)/physics_lists/constructors/hadron_inelastic/include \
+            -I$(G4BASE)/physics_lists/constructors/ions/include \
+            -I$(G4BASE)/physics_lists/constructors/limiters/include \
+            -I$(G4BASE)/physics_lists/constructors/stopping/include \
+            -I$(G4BASE)/physics_lists/util/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/processes/cuts/include \
@@ -57,6 +68,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/physics_lists/builders/include \
+            -I$(G4BASE)/physics_lists/constructors/limiters/include \
             -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/processes/hadronic/models/util/include \
             -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
