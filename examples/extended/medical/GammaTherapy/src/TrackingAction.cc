@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/GammaTherapy/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //

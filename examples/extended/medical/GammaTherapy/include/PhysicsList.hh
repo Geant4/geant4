@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/GammaTherapy/include/PhysicsList.hh
-/// \brief Definition of the PhysicsList class
-//
 // $Id$
 //
-// Modified:
+/// \file medical/GammaTherapy/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

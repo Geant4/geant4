@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/GammaTherapy/src/Histo.cc
 /// \brief Implementation of the Histo class
-//
-// $Id$
 //
 //---------------------------------------------------------------------------
 //
