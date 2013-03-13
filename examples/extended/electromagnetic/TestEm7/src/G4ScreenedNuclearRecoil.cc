@@ -26,9 +26,7 @@
 /// \file electromagnetic/TestEm7/src/G4ScreenedNuclearRecoil.cc
 /// \brief Implementation of the G4ScreenedNuclearRecoil class
 //
-//
-// G4ScreenedNuclearRecoil.cc,v 1.57 2008/05/07 11:51:26 marcus Exp
-// GEANT4 tag 
+// $Id$
 //
 //
 // Class Description
@@ -289,10 +287,10 @@ void G4ScreenedCoulombCrossSection::BuildMFPTables()
 
 G4ScreenedNuclearRecoil::
 G4ScreenedNuclearRecoil(const G4String& processName, 
-                                                           const G4String &ScreeningKey,
-                                                           G4bool GenerateRecoils, 
-                                                           G4double RecoilCutoff, G4double PhysicsCutoff) : 
-        G4VDiscreteProcess(processName),
+			const G4String &ScreeningKey,
+			G4bool GenerateRecoils, 
+			G4double RecoilCutoff, G4double PhysicsCutoff) : 
+  G4VDiscreteProcess(processName, fElectromagnetic),
         screeningKey(ScreeningKey),
         generateRecoils(GenerateRecoils), avoidReactions(1), 
         recoilCutoff(RecoilCutoff), physicsCutoff(PhysicsCutoff),
@@ -704,6 +702,18 @@ IsApplicable(const G4ParticleDefinition& aParticleType)
         aParticleType.GetParticleType() == "static_nucleus";
 }
 
+void 
+G4ScreenedNuclearRecoil::
+BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
+{
+  G4String nam = aParticleType.GetParticleName();
+  if(nam == "GenericIon" || nam == "proton" 
+     || nam == "deuteron" || nam == "triton" || nam == "alpha" || nam == "He3") {
+    G4cout << G4endl << GetProcessName() << ":   for  " << nam
+           << "    SubType= " << GetProcessSubType() 
+	   << "    maxEnergy(MeV)= " << processMaxEnergy/MeV << G4endl;
+  }
+}
 
 void 
 G4ScreenedNuclearRecoil::

@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-01-13 V.Ivant (testem7-V09-06-05)
+15-01-13 V.Ivant (testem7-V09-06-04)
+- G4ScreenedNuclearRecoil - defined type and sub-type of the process
+- PhysListEmStandardNR - use standard electron ionisation instead 
+    of Penelope, use multiple scatteing for ions above 100 MeV/u
+- RunAction - delete analysys manager and all histograms the end 
+    of a run
+
 20-12-12 V.Ivant (testem7-V09-06-03)
 - G4ScreenedNuclearRecoil - removed unused obsolete header
 

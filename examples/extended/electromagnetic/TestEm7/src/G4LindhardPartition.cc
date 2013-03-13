@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm7/src/G4LindhardPartition.cc
-/// \brief Implementation of the G4LindhardPartition class
-//
-// $Id$
-//
-
 /*
- *  G4LindhardPartition.cc
+ *  \file electromagnetic/TestEm7/src/G4LindhardPartition.cc
+ *  \brief Implementation of the G4LindhardPartition class
  *
  *  Created by Marcus Mendenhall on 1/14/08.
  *  2008 Vanderbilt University, Nashville, TN, USA.
  *
  */
+
+//
+// $Id$
 
 #include "G4LindhardPartition.hh"
 #include "G4Material.hh"

@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm7/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-//
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

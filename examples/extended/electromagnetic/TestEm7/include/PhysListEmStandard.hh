@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm7/include/PhysListEmStandard.hh
 /// \brief Definition of the PhysListEmStandard class
 //
-//
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -26,7 +26,6 @@
 /// \file electromagnetic/TestEm7/src/SteppingVerbose.cc
 /// \brief Implementation of the SteppingVerbose class
 //
-//
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

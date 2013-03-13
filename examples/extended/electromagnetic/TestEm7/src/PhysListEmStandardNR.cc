@@ -53,6 +53,7 @@
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
+#include "G4UrbanMscModel95.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -105,7 +106,7 @@ void PhysListEmStandardNR::ConstructProcess()
   G4double energyLimit = 100.*MeV;
   nucr->SetMaxEnergyForScattering(energyLimit);
   G4eCoulombScatteringModel* csm = new G4eCoulombScatteringModel();
-  csm->SetLowEnergyLimit(energyLimit);
+  csm->SetActivationLowEnergyLimit(energyLimit);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -117,9 +118,6 @@ void PhysListEmStandardNR::ConstructProcess()
        // Compton scattering
       G4ComptonScattering* cs = new G4ComptonScattering;
       cs->SetEmModel(new G4KleinNishinaModel(),1);
-      G4VEmModel* theLowEPComptonModel = new G4LowEPComptonModel();
-      theLowEPComptonModel->SetHighEnergyLimit(20*MeV);
-      cs->AddEmModel(0, theLowEPComptonModel);
       ph->RegisterProcess(cs, particle);
 
       // Photoelectric
@@ -144,31 +142,31 @@ void PhysListEmStandardNR::ConstructProcess()
       // ionisation
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);
-      G4VEmModel* theIoniPenelope = new G4PenelopeIonisationModel();
-      theIoniPenelope->SetHighEnergyLimit(0.1*MeV);
-      eIoni->AddEmModel(0, theIoniPenelope, new G4UniversalFluctuation());
+      //G4VEmModel* theIoniPenelope = new G4PenelopeIonisationModel();
+      //theIoniPenelope->SetHighEnergyLimit(0.1*MeV);
+      //eIoni->AddEmModel(0, theIoniPenelope, new G4UniversalFluctuation());
 
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
 
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
-      ph->RegisterProcess(new G4CoulombScattering(), particle);
             
     } else if (particleName == "e+") {
       // ionisation
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);
-      G4VEmModel* theIoniPenelope = new G4PenelopeIonisationModel();
-      theIoniPenelope->SetHighEnergyLimit(0.1*MeV);
-      eIoni->AddEmModel(0, theIoniPenelope, new G4UniversalFluctuation());
+      //      G4VEmModel* theIoniPenelope = new G4PenelopeIonisationModel();
+      //      theIoniPenelope->SetHighEnergyLimit(0.1*MeV);
+      //      eIoni->AddEmModel(0, theIoniPenelope, new G4UniversalFluctuation());
 
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
 
+      ph->RegisterProcess(new G4eMultipleScattering(), particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
-      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
       // annihilation at rest and in flight
       ph->RegisterProcess(new G4eplusAnnihilation(), particle);
@@ -186,41 +184,47 @@ void PhysListEmStandardNR::ConstructProcess()
              
     } else if (particleName == "alpha" || particleName == "He3") {
 
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      G4UrbanMscModel95* model = new G4UrbanMscModel95();
+      model->SetActivationLowEnergyLimit(energyLimit);
+      msc->SetEmModel(model, 1);
+      ph->RegisterProcess(msc, particle);
+
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetStepFunction(0.1, 10*um);
       ph->RegisterProcess(ionIoni, particle);
 
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->SetBuildTableFlag(false);
-      cs->SetEmModel(csm, 1);
-      ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(nucr, particle);
 
     } else if (particleName == "GenericIon" ) { 
+
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      G4UrbanMscModel95* model = new G4UrbanMscModel95();
+      model->SetActivationLowEnergyLimit(energyLimit);
+      msc->SetEmModel(model, 1);
+      ph->RegisterProcess(msc, particle);
 
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
       ionIoni->SetStepFunction(0.1, 1*um);
       ph->RegisterProcess(ionIoni, particle);
 
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->SetBuildTableFlag(false);
-      cs->SetEmModel(csm, 1);
-      ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(nucr, particle);
      
     } else if (particleName == "proton" ||
                particleName == "deuteron" ||
                particleName == "triton") { 
 
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      G4UrbanMscModel95* model = new G4UrbanMscModel95();
+      model->SetActivationLowEnergyLimit(energyLimit);
+      msc->SetEmModel(model, 1);
+      ph->RegisterProcess(msc, particle);
+
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.05, 1*um);
       ph->RegisterProcess(hIoni, particle);
 
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->SetBuildTableFlag(false);
-      cs->SetEmModel(csm, 1);
-      ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(nucr, particle);
 
     } else if ((!particle->IsShortLived()) &&
@@ -228,11 +232,8 @@ void PhysListEmStandardNR::ConstructProcess()
                (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
 
+      ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
-      G4CoulombScattering* cs = new G4CoulombScattering();
-      cs->SetBuildTableFlag(false);
-      ph->RegisterProcess(cs, particle);
-
     }
   }
   

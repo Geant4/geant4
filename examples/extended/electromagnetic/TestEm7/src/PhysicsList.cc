@@ -51,7 +51,7 @@
 #include "G4HadronDElasticPhysics.hh"
 #include "G4HadronHElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
-#include "G4IonBinaryCascadePhysics.hh"
+#include "G4IonPhysics.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4EmConfigurator.hh"
@@ -234,7 +234,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fBicIsRegisted = true;
 
   } else if (name == "binary_ion" && !fBiciIsRegisted) {
-    fHadronPhys.push_back(new G4IonBinaryCascadePhysics());
+    fHadronPhys.push_back(new G4IonPhysics());
     fBiciIsRegisted = true;
 
   } else {
