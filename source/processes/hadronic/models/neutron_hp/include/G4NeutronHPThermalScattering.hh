@@ -97,9 +97,9 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
   
 
       G4NeutronHPThermalScatteringData* theXSection;
-      G4double * xSec;
+//      G4double * xSec;
       //G4String dirName;
-      G4int numEle;
+//      G4int numEle;
 
 
 

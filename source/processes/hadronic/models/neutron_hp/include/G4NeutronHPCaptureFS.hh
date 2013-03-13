@@ -71,7 +71,7 @@ class G4NeutronHPCaptureFS : public G4NeutronHPFinalState
   
   G4NeutronHPNames theNames;
   
-  G4double theCurrentA;
-  G4double theCurrentZ;
+//  G4double theCurrentA;
+//  G4double theCurrentZ;
 };
 #endif
