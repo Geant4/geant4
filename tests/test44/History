@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31-01-13  V.Ivant (test44-V09-06-01)
+- PhysicsList - add modifications to address reorganisation of PHysics List
+
 07-12-12  V.Ivant (test44-V09-06-00)
 - PhysicsList - removed CHIPS and LHEP builders
 

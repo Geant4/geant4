@@ -63,15 +63,15 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4EmProcessOptions.hh"
 
-#include "HadronPhysicsFTFP_BERT.hh"
-#include "HadronPhysicsFTF_BIC.hh"
+#include "G4HadronPhysicsFTFP_BERT.hh"
+#include "G4HadronPhysicsFTFP_BERT_HP.hh"
+#include "G4HadronPhysicsFTF_BIC.hh"
 #include "G4HadronInelasticQBBC.hh"
-#include "HadronPhysicsQGSP_BERT.hh"
-#include "HadronPhysicsQGSP_BERT_HP.hh"
-#include "HadronPhysicsQGSP_BIC.hh"
-#include "HadronPhysicsQGSP_BIC_HP.hh"
-#include "HadronPhysicsQGSP_FTFP_BERT.hh"
-#include "HadronPhysicsQGS_BIC.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BIC.hh"
+#include "G4HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4HadronPhysicsQGSP_FTFP_BERT.hh"
+#include "G4HadronPhysicsQGS_BIC.hh"
 
 #include "G4LossTableManager.hh"
 
@@ -180,12 +180,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "FTFP_BERT") {
 
     SetBuilderList1();
-    hadronPhys.push_back( new HadronPhysicsFTFP_BERT());
+    hadronPhys.push_back( new G4HadronPhysicsFTFP_BERT());
 
   } else if (name == "FTF_BIC") {
 
     SetBuilderList0();
-    hadronPhys.push_back( new HadronPhysicsFTF_BIC());
+    hadronPhys.push_back( new G4HadronPhysicsFTF_BIC());
     hadronPhys.push_back( new G4NeutronCrossSectionXS(verboseLevel));
 
   } else if (name == "QBBC") {
@@ -197,12 +197,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "QGSP_BERT") {
 
     SetBuilderList1();
-    hadronPhys.push_back( new HadronPhysicsQGSP_BERT());
+    hadronPhys.push_back( new G4HadronPhysicsQGSP_BERT());
 
   } else if (name == "QGSP_FTFP_BERT") {
 
     SetBuilderList1();
-    hadronPhys.push_back( new HadronPhysicsQGSP_FTFP_BERT());
+    hadronPhys.push_back( new G4HadronPhysicsQGSP_FTFP_BERT());
 
   } else if (name == "QGSP_BERT_EMV") {
 
@@ -214,32 +214,32 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     AddPhysicsList("emstandard_opt2");
     AddPhysicsList("QGSP_BERT");
 
-  } else if (name == "QGSP_BERT_HP") {
+  } else if (name == "FTFP_BERT_HP") {
 
     SetBuilderList1(true);
-    hadronPhys.push_back( new HadronPhysicsQGSP_BERT_HP());
+    hadronPhys.push_back( new G4HadronPhysicsFTFP_BERT_HP());
 
   } else if (name == "QGSP_BIC") {
 
     SetBuilderList0();
-    hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+    hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
 
   } else if (name == "QGSP_BIC_EMY") {
 
     AddPhysicsList("emstandard_opt3");
     SetBuilderList0();
-    hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+    hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
 
   } else if (name == "QGS_BIC") {
 
     SetBuilderList0();
-    hadronPhys.push_back( new HadronPhysicsQGS_BIC());
+    hadronPhys.push_back( new G4HadronPhysicsQGS_BIC());
     hadronPhys.push_back( new G4NeutronCrossSectionXS(verboseLevel));
 
   } else if (name == "QGSP_BIC_HP") {
 
     SetBuilderList0(true);
-    hadronPhys.push_back( new HadronPhysicsQGSP_BIC_HP());
+    hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC_HP());
 
   } else {
 
