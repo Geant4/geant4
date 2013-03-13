@@ -57,6 +57,10 @@
 // Binary cascade
 #include "G4BinaryLightIonReaction.hh"
 
+// PreCompound
+#include "G4VPreCompoundModel.hh"
+#include "G4PreCompoundModel.hh"
+
 #include <fstream>
 #include <iostream>
 
@@ -75,8 +79,8 @@ class G4INCLXXInterfaceStore;
  * inclModel -> SetMinEnergy(0.0 * MeV); // Set the energy limits
  * inclModel -> SetMaxEnergy(3.0 * GeV);
  *
- * G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess(); 
- * G4ProtonInelasticCrossSection* protonInelasticCrossSection =  new G4ProtonInelasticCrossSection(); 
+ * G4ProtonInelasticProcess* protonInelasticProcess = new G4ProtonInelasticProcess();
+ * G4ProtonInelasticCrossSection* protonInelasticCrossSection =  new G4ProtonInelasticCrossSection();
  *
  * protonInelasticProcess -> RegisterMe(inclModel);
  * protonInelasticProcess -> AddDataSet(protonInelasticCrossSection);
@@ -90,7 +94,7 @@ class G4INCLXXInterfaceStore;
  */
 class G4INCLXXInterface : public G4VIntraNuclearTransportModel {
 public:
-  G4INCLXXInterface(const G4String& name = "INCL++ cascade with G4ExcitationHandler");
+  G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound = 0);
   ~G4INCLXXInterface(); // Destructor
 
   G4int operator==(G4INCLXXInterface& right) {
@@ -109,7 +113,7 @@ public:
    * @param theNucleus target nucleus
    * @return the output of the INCL physics model
    */
-  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,  G4Nucleus& theNucleus); 
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,  G4Nucleus& theNucleus);
 
   void DeleteModel() {
     delete theINCLModel;
@@ -146,6 +150,9 @@ private:
       G4double px, G4double py, G4double pz) const;
 
   G4INCL::INCL *theINCLModel;
+
+  G4VPreCompoundModel *thePreCompoundModel;
+
   G4HadFinalState theResult;
 
   G4ExcitationHandler *theExcitationHandler;
@@ -155,7 +162,7 @@ private:
   G4INCLXXInterfaceStore * const theInterfaceStore;
 
   G4bool complainedAboutBackupModel;
-
+  G4bool complainedAboutPreCompound;
 };
 
 #endif

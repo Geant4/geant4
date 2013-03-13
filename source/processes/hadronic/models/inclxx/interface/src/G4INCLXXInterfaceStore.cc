@@ -51,6 +51,7 @@ G4INCLXXInterfaceStore::G4INCLXXInterfaceStore() :
   theMaxClusterMassDefault(8),
   theMaxClusterMass(theMaxClusterMassDefault),
   theMaxProjMassINCL(18),
+  cascadeMinEnergyPerNucleon(1.*MeV),
   theINCLModel(NULL),
   nWarnings(0),
   maxWarnings(50)

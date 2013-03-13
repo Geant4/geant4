@@ -61,10 +61,10 @@ namespace G4INCL {
     {};
   };
 
-  typedef std::pair<G4double,G4double> RootFinder_solution_t;
+  typedef std::pair<G4double,G4double> RootFinderSolution;
 
-  class RootFinder {
-  public:
+  namespace RootFinder {
+
     /** \brief Numerically solve a one-dimensional equation.
      *
      * Numerically solves the equation f(x)==0. This implementation uses the
@@ -76,40 +76,14 @@ namespace G4INCL {
      * \param x0 initial value of the function argument
      * \return true if a root was found
      */
-    static G4bool solve(RootFunctor const * const f, const G4double x0);
+    G4bool solve(RootFunctor const * const f, const G4double x0);
 
     /** \brief Get the solution of the last call to solve().
      *
      * \return the solution, as an (x,y) pair
      */
-    static std::pair<G4double,G4double> const &getSolution();
+    RootFinderSolution const &getSolution();
 
-  private:
-    /// \brief The solution obtained in the last call to solve().
-    static G4ThreadLocal  RootFinder_solution_t *solution_G4MT_TLS_;
-
-    /** \brief Bracket the root of the function f.
-     *
-     * Tries to find a bracketing value for the function root.
-     *
-     * \param f pointer to a RootFunctor
-     * \param x0 starting value
-     * \return if the root could be bracketed, returns two values of x
-     *   bracketing the root, as a pair. If the bracketing failed, returns a
-     *   pair with first > second.
-     */
-    static std::pair<G4double,G4double> bracketRoot(RootFunctor const * const f, const G4double x0);
-
-    /// \brief Maximum number of iterations for convergence
-    static const G4int maxIterations=50;
-
-    /// \brief Tolerance on the y value
-    static const G4double toleranceY;
-
-  protected:
-    RootFinder() {};
-    ~RootFinder() {};
-    
-  };
+  }
 }
 #endif /* G4INCLROOTFINDER_HH_ */

@@ -154,9 +154,9 @@ namespace G4INCL {
           /// \brief Pointer to the boost vector
           ThreeVector const *boostVector;
           /// \brief true if we must apply local energy to nucleons
-          G4bool hasLocalEnergy;
+//          G4bool hasLocalEnergy;
           /// \brief true if we must apply local energy to deltas
-          G4bool hasLocalEnergyDelta;
+//          G4bool hasLocalEnergyDelta;
 
           /// \brief True if we should use local energy
           const G4bool shouldUseLocalEnergy;
@@ -166,7 +166,7 @@ namespace G4INCL {
            * Set the momenta of the modified and created particles to alpha times
            * their original momenta (stored in particleMomenta). You must call
            * init() before using this method.
-           * 
+           *
            * \param alpha scale factor
            */
           void scaleParticleMomenta(const G4double alpha) const;

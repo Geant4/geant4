@@ -154,7 +154,7 @@ namespace G4INCL {
      * of the step from the avatar times.
      */
     void timeStep(G4double step);
-    
+
     /**
      * Mark the particle as ejected. This removes it from the list of
      * inside particles and removes all avatars related to this
@@ -389,7 +389,7 @@ namespace G4INCL {
     void connectParticleAndAvatar(long particleID, long avatarID);
 
     /**
-     * Removes an avatar 
+     * Removes an avatar
      */
     void removeAvatarFromParticle(long particleID, long avatarID);
     void removeAvatarByID(long ID);

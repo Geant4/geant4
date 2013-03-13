@@ -42,15 +42,16 @@
 #include "G4INCLIChannel.hh"
 
 namespace G4INCL {
-  class CrossSections {
-  public:
-    static G4double elastic(Particle const * const p1, Particle const * const p2);
-    static G4double total(Particle const * const p1, Particle const * const p2);
+  namespace CrossSections {
 
-    static G4double pionNucleon(Particle const * const p1, Particle const * const p2);
+    G4double elastic(Particle const * const p1, Particle const * const p2);
+    G4double total(Particle const * const p1, Particle const * const p2);
 
-    static G4double recombination(Particle const * const p1, Particle const * const p2);
-    static G4double deltaProduction(Particle const * const p1, Particle const * const p2);
+    G4double pionNucleon(Particle const * const p1, Particle const * const p2);
+
+    G4double recombination(Particle const * const p1, Particle const * const p2);
+    G4double deltaProduction(Particle const * const p1, Particle const * const p2);
+
     /** \brief Calculate the slope of the NN DDXS.
      *
      * \param energyCM energy in the CM frame, in MeV
@@ -58,7 +59,7 @@ namespace G4INCL {
      *
      * \return the slope of the angular distribution
      */
-    static G4double calculateNNDiffCrossSection(G4double energyCM, G4int iso);
+    G4double calculateNNDiffCrossSection(G4double energyCM, G4int iso);
 
     /** \brief Compute the "interaction distance".
      *
@@ -67,7 +68,7 @@ namespace G4INCL {
      *
      * \return the interaction distance
      */
-    static G4double interactionDistanceNN(const G4double projectileKineticEnergy);
+    G4double interactionDistanceNN(const G4double projectileKineticEnergy);
 
     /** \brief Compute the "interaction distance".
      *
@@ -76,55 +77,21 @@ namespace G4INCL {
      *
      * \return the interaction distance
      */
-    static G4double interactionDistancePiN(const G4double projectileKineticEnergy);
+    G4double interactionDistancePiN(const G4double projectileKineticEnergy);
 
     /** \brief The interaction distance for nucleons at 1 GeV.
      *
      * Used to determine the universe radius at any energy.
      */
-    static G4double interactionDistanceNN1GeV() {
-      static G4ThreadLocal bool interactionDistanceNN1GeVisInitialized = false;
-      static G4ThreadLocal G4double interactionDistanceNN1GeVanswer = 0;
-      //Need special treatment to handle TLS...
-      if (!interactionDistanceNN1GeVisInitialized) {
-	interactionDistanceNN1GeVisInitialized = true;
-	interactionDistanceNN1GeVanswer = CrossSections::interactionDistanceNN(1000.);
-      }
-      return interactionDistanceNN1GeVanswer;
-    }
+    G4double interactionDistanceNN1GeV();
 
     /** \brief The interaction distance for pions at 1 GeV.
      *
      * Used to determine the universe radius at any energy.
      */
-    static G4double interactionDistancePiN1GeV() {
-    static G4ThreadLocal bool interactionDistancePiN1GeVisInitialized = false;
-    static G4ThreadLocal G4double interactionDistancePiN1GeVanswer = 0;
-      if (!interactionDistancePiN1GeVisInitialized) {
-	interactionDistancePiN1GeVisInitialized = true;
-	interactionDistancePiN1GeVanswer = CrossSections::interactionDistancePiN(1000.);
-      }
-      //static G4double answer = CrossSections::interactionDistancePiN(1000.);
-      return interactionDistancePiN1GeVanswer;
-    }
+    G4double interactionDistancePiN1GeV();
 
-  private:
-    static G4double elasticNNHighEnergy(const G4double momentum);
-    static G4double elasticProtonNeutron(const G4double momentum);
-    static G4double elasticProtonProtonOrNeutronNeutron(const G4double momentum);
-    static G4double elasticNN(Particle const * const p1, Particle const * const p2);
-    static G4double elasticNNLegacy(Particle const * const p1, Particle const * const p2);
-
-    static G4double deltaProduction(const G4int isospin, const G4double pCM);
-
-    static G4double spnPiPlusPHE(const G4double x);
-    static G4double spnPiMinusPHE(const G4double x);
-
-  protected:
-    CrossSections() {};
-    ~CrossSections() {};
-    
-  };
+  }
 }
 
 #endif

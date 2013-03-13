@@ -68,13 +68,9 @@ namespace G4INCL {
       const G4double mp = ParticleTable::getINCLMass(Proton);
       const G4double mn = ParticleTable::getINCLMass(Neutron);
 
-      G4double theFermiMomentum;
-      if(theA<ParticleTable::clusterTableASize && theZ<ParticleTable::clusterTableZSize)
-        // Use momentum RMS from tables to define the Fermi momentum for light
-        // nuclei
-        theFermiMomentum = Math::sqrtFiveThirds * ParticleTable::getMomentumRMS(theA,theZ);
-      else
-        theFermiMomentum = PhysicalConstants::Pf;
+      // Use momentum RMS from tables to define the Fermi momentum for light
+      // nuclei
+      const G4double theFermiMomentum = Math::sqrtFiveThirds * ParticleTable::getMomentumRMS(theA,theZ);
 
       fermiMomentum[Proton] = theFermiMomentum * Math::pow13(2.*ZOverA);
       const G4double theProtonFermiEnergy = std::sqrt(fermiMomentum[Proton]*fermiMomentum[Proton] + mp*mp) - mp;

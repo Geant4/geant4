@@ -52,8 +52,8 @@
 
 namespace G4INCL {
 
-  RecombinationChannel::RecombinationChannel(Nucleus *n, Particle *p1, Particle *p2)
-    :theNucleus(n)
+  RecombinationChannel::RecombinationChannel(Nucleus*, Particle *p1, Particle *p2)
+//    :theNucleus(n)
   {
     if(p1->isDelta()) {
 // assert(p2->isNucleon());

@@ -184,7 +184,7 @@ namespace G4INCL {
   std::string DecayAvatar::dump() const {
     std::stringstream ss;
     ss << "(avatar " << theTime << " 'decay" << std::endl
-      << "(list " << std::endl 
+      << "(list " << std::endl
       << particle1->dump()
       << "))" << std::endl;
     return ss.str();

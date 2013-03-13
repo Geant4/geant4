@@ -16,6 +16,34 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+12 March 2013 - Dennis Wright (hadr-inclxx-V09-06-06)
+-----------------------------------------------------
+- fixed MacOS Clang compiler warnings: unused private variables in classes
+  G4INCLRecombinationChannel, G4INCLElasticChannel, G4INCLPionNucleonChannel,
+  G4INCLDeltaDecayChannel, G4INCLDeltaProductionChannel,
+  G4INCLInteractionAvatar
+
+1 March 2013 - Davide Mancusi (hadr-inclxx-V09-06-05)
+-----------------------------------------------------------
+- Fix a compilation warning
+
+25 February 2013 - Davide Mancusi (hadr-inclxx-V09-06-04)
+-----------------------------------------------------------
+- Fix some compilation warnings and errors
+
+22 February 2013 - Davide Mancusi (hadr-inclxx-V09-06-03)
+-----------------------------------------------------------
+- Use PreCompound only for incident nucleons
+
+22 February 2013 - Davide Mancusi (hadr-inclxx-V09-06-02)
+-----------------------------------------------------------
+- INCL++ v5.1.10
+  o Relies on PreCompound for reactions below 1 AMeV (configurable via the
+    G4INCLXXInterfaceMessenger)
+  o Adapted some of the MT modifications -- the code should still be
+    thread-safe
+  o Some code refactoring
+
 8 January 2013 - Davide Mancusi (hadr-inclxx-V09-06-01)
 -----------------------------------------------------------
 - INCL++ v5.1.9

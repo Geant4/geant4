@@ -43,8 +43,8 @@
 
 namespace G4INCL {
 
-  PionNucleonChannel::PionNucleonChannel(Particle *p1, Particle *p2, Nucleus *nucleus, const G4bool localE)
-    : theNucleus(nucleus), particle1(p1), particle2(p2), locE(localE)
+  PionNucleonChannel::PionNucleonChannel(Particle *p1, Particle *p2, Nucleus *nucleus, const G4bool)
+    : theNucleus(nucleus), particle1(p1), particle2(p2)
   {
 
   }

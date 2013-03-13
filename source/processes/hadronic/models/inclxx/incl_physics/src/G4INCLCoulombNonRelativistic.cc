@@ -107,7 +107,7 @@ namespace G4INCL {
           const G4double bInf = std::sqrt(b0*(b0-eta));
           const G4double thr = std::atan(eta/(2.*bInf));
           G4double uTemp = (1.-b0/transmissionRadius) * std::sin(thr) +
-            b0/transmissionRadius;      
+            b0/transmissionRadius;
           if(uTemp>tcos) uTemp=tcos;
           const G4double thd = std::acos(cosTheta)-Math::piOverTwo + thr +
             std::acos(uTemp);

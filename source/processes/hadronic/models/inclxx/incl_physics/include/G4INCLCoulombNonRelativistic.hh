@@ -102,7 +102,7 @@ namespace G4INCL {
         const G4double particleMass = ParticleTable::getTableSpeciesMass(p);
         const G4double nucleusMass = n->getTableMass();
         const G4double reducedMass = particleMass*nucleusMass/(particleMass+nucleusMass);
-        return ParticleTable::eSquared * p.theZ * n->getZ() * particleMass
+        return PhysicalConstants::eSquared * p.theZ * n->getZ() * particleMass
           / (kineticEnergy * reducedMass);
       }
 

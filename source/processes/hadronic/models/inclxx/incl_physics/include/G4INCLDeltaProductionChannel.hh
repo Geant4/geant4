@@ -53,7 +53,7 @@ namespace G4INCL {
   private:
     G4double sampleDeltaMass(G4double ecm);
 
-    Nucleus *theNucleus;
+//    Nucleus *theNucleus;
     Particle *particle1, *particle2;
   };
 }

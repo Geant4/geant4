@@ -173,7 +173,7 @@ namespace G4INCL {
   std::string SurfaceAvatar::dump() const {
     std::stringstream ss;
     ss << "(avatar " << theTime << " 'reflection" << std::endl
-      << "(list " << std::endl 
+      << "(list " << std::endl
       << theParticle->dump()
       << "))" << std::endl;
     return ss.str();

@@ -73,12 +73,22 @@ G4INCLXXInterfaceMessenger::G4INCLXXInterfaceMessenger(G4INCLXXInterfaceStore *a
   maxClusterMassCmd->SetDefaultValue(8);
   maxClusterMassCmd->SetRange("MaxClusterMass>=2 && MaxClusterMass<=12");
 
+  // This command sets the energy below which PreCoumpound will be used
+  cascadeMinEnergyPerNucleonCmd = new G4UIcmdWithADoubleAndUnit((theUIDirectory + "cascadeMinEnergyPerNucleon").data(),this);
+  cascadeMinEnergyPerNucleonCmd->SetGuidance("Set the minimum energy per nucleon at which cascade will be used.");
+  cascadeMinEnergyPerNucleonCmd->SetGuidance(" INCL++ will rely on PreCompound for reactions induced by projectiles slower than the given energy (per nucleon, where applicable)");
+  cascadeMinEnergyPerNucleonCmd->SetParameterName("cascadeMinEnergyPerNucleon",true);
+  cascadeMinEnergyPerNucleonCmd->SetDefaultValue(1.*MeV);
+  cascadeMinEnergyPerNucleonCmd->SetRange("cascadeMinEnergyPerNucleon>=0");
+  cascadeMinEnergyPerNucleonCmd->SetUnitCategory("Energy");
+
 }
 
 G4INCLXXInterfaceMessenger::~G4INCLXXInterfaceMessenger() {
   delete theINCLXXDirectory;
   delete accurateNucleusCmd;
   delete maxClusterMassCmd;
+  delete cascadeMinEnergyPerNucleonCmd;
 }
 
 void G4INCLXXInterfaceMessenger::SetNewValue(G4UIcommand *command, G4String newValues) {
@@ -92,5 +102,8 @@ void G4INCLXXInterfaceMessenger::SetNewValue(G4UIcommand *command, G4String newV
   } else if(command==maxClusterMassCmd) {
     const G4int parameter = maxClusterMassCmd->GetNewIntValue(newValues);
     theINCLXXInterfaceStore->SetMaxClusterMass(parameter);
+  } else if(command==cascadeMinEnergyPerNucleonCmd) {
+    const G4double parameter = cascadeMinEnergyPerNucleonCmd->GetNewDoubleValue(newValues);
+    theINCLXXInterfaceStore->SetCascadeMinEnergyPerNucleon(parameter);
   }
 }

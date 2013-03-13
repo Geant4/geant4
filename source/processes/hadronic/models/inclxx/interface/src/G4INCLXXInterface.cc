@@ -45,13 +45,25 @@
 #include "G4ReactionProduct.hh"
 #include "G4INCLXXInterfaceStore.hh"
 #include "G4String.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
-G4INCLXXInterface::G4INCLXXInterface(const G4String& nam) :
-  G4VIntraNuclearTransportModel(nam),
+G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
+  G4VIntraNuclearTransportModel("INCL++ cascade with G4ExcitationHandler"),
   theINCLModel(NULL),
+  thePreCompoundModel(aPreCompound),
   theInterfaceStore(G4INCLXXInterfaceStore::GetInstance()),
-  complainedAboutBackupModel(false)
+  complainedAboutBackupModel(false),
+  complainedAboutPreCompound(false)
 {
+  if(!thePreCompoundModel) {
+    G4HadronicInteraction* p =
+      G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+    thePreCompoundModel = static_cast<G4VPreCompoundModel*>(p);
+    if(!thePreCompoundModel) { thePreCompoundModel = new G4PreCompoundModel(); }
+  }
+
   // Use the environment variable G4INCLXX_NO_DE_EXCITATION to disable de-excitation
   if(getenv("G4INCLXX_NO_DE_EXCITATION")) {
     G4String message = "de-excitation is completely disabled!";
@@ -130,9 +142,28 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
         << ". A backup model ("
         << theBackupModel->GetModelName()
         << ") will be used instead.";
-      G4cout << "[INCL++] Warning: " << ss.str() << G4endl;
+      theInterfaceStore->EmitBigWarning(ss.str());
     }
     return theBackupModel->ApplyYourself(aTrack, theNucleus);
+  }
+
+  // For energies lower than cascadeMinEnergyPerNucleon, use PreCompound
+  const G4double cascadeMinEnergyPerNucleon = theInterfaceStore->GetCascadeMinEnergyPerNucleon();
+  const G4double trackKinE = aTrack.GetKineticEnergy();
+  const G4ParticleDefinition *trackDefinition = aTrack.GetDefinition();
+  if((trackDefinition==G4Neutron::NeutronDefinition() || trackDefinition==G4Proton::ProtonDefinition())
+      && trackKinE < cascadeMinEnergyPerNucleon) {
+    if(!complainedAboutPreCompound) {
+      complainedAboutPreCompound = true;
+      std::stringstream ss;
+      ss << "INCL++ refuses to handle nucleon-induced reactions below "
+        << cascadeMinEnergyPerNucleon / MeV
+        << " MeV. A PreCoumpound model ("
+        << thePreCompoundModel->GetModelName()
+        << ") will be used instead.";
+      theInterfaceStore->EmitBigWarning(ss.str());
+    }
+    return thePreCompoundModel->ApplyYourself(aTrack, theNucleus);
   }
 
   const G4int maxTries = 200;
@@ -335,14 +366,14 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     theResult.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
     return &theResult;
   }
-  
+
   // De-excitation:
 
   if(theExcitationHandler != 0) {
     for(std::list<G4Fragment>::const_iterator i = remnants.begin();
 	i != remnants.end(); i++) {
       G4ReactionProductVector *deExcitationResult = theExcitationHandler->BreakItUp((*i));
-    
+
       for(G4ReactionProductVector::iterator fragment = deExcitationResult->begin();
 	  fragment != deExcitationResult->end(); ++fragment) {
 	G4ParticleDefinition *def = (*fragment)->GetDefinition();
@@ -357,7 +388,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	delete (*fragment);
       }
       deExcitationResult->clear();
-      delete deExcitationResult;    
+      delete deExcitationResult;
     }
   }
 
@@ -365,7 +396,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   return &theResult;
 }
-  
+
 G4ReactionProductVector* G4INCLXXInterface::Propagate(G4KineticTrackVector* , G4V3DNucleus* ) {
   return 0;
 }

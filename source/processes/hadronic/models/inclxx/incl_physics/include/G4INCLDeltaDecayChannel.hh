@@ -56,7 +56,7 @@ namespace G4INCL {
     void sampleAngles(G4double*, G4double*, G4double*);
 
     Particle *theParticle;
-    Nucleus *theNucleus;
+//    Nucleus *theNucleus;
     ThreeVector const incidentDirection;
   };
 }

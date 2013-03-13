@@ -41,6 +41,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/processes/hadronic/models/inclxx/utils/include \
 	    -I$(G4BASE)/processes/hadronic/models/binary_cascade/include/ \
 	    -I$(G4BASE)/processes/hadronic/models/im_r_matrix/include/ \
+            -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
 	    -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

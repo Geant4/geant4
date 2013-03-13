@@ -312,7 +312,7 @@ namespace G4INCL {
     }
     return result;
   }
-    
+
   void Store::clearAvatars() {
     for(std::map<long, IAvatar*>::iterator iter = avatars.begin();
 	iter != avatars.end(); ++iter) {
@@ -419,7 +419,7 @@ namespace G4INCL {
       }
       add(p);
     }
-    
+
     in.close();
   }
 

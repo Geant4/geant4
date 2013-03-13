@@ -53,7 +53,7 @@ namespace G4INCL {
     FinalState* getFinalState();
 
   private:
-    Nucleus *theNucleus;
+//    Nucleus *theNucleus;
     Particle *particle1, *particle2;
   };
 

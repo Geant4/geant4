@@ -43,158 +43,210 @@
 
 namespace G4INCL {
 
-  G4ThreadLocal std::map<G4int,NuclearDensity*> *NuclearDensityFactory::nuclearDensityCache_G4MT_TLS_ = 0;
+  namespace NuclearDensityFactory {
 
-  G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *NuclearDensityFactory::rpCorrelationTableCache_G4MT_TLS_ = 0;
+    namespace {
 
-  G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *NuclearDensityFactory::rCDFTableCache_G4MT_TLS_ = 0;
+      G4ThreadLocal std::map<G4int,NuclearDensity*> *nuclearDensityCache = NULL;
+      G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rpCorrelationTableCache = NULL;
+      G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rCDFTableCache = NULL;
+      G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *pCDFTableCache = NULL;
 
-  G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *NuclearDensityFactory::pCDFTableCache_G4MT_TLS_ = 0;
-
-  NuclearDensity* NuclearDensityFactory::createDensity(const G4int A, const G4int Z) { if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ;  ;;;   if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ; std::map<G4int,NuclearDensity*> &nuclearDensityCache = *nuclearDensityCache_G4MT_TLS_;  ;;;  
-    const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
-    const std::map<G4int,NuclearDensity*>::const_iterator mapEntry = nuclearDensityCache.find(nuclideID);
-    if(mapEntry == nuclearDensityCache.end()) {
-      InverseInterpolationTable *rpCorrelationTable = NuclearDensityFactory::createRPCorrelationTable(A, Z);
-      if(!rpCorrelationTable)
-        return NULL;
-      NuclearDensity *density = new NuclearDensity(A, Z, rpCorrelationTable);
-      nuclearDensityCache[nuclideID] = density;
-      return density;
-    } else {
-      return mapEntry->second;
     }
-  }
 
-  InverseInterpolationTable *NuclearDensityFactory::createRPCorrelationTable(const G4int A, const G4int Z) { if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ;  ;;;   if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rpCorrelationTableCache = *rpCorrelationTableCache_G4MT_TLS_;  ;;;   if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ;
-    const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
-    const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache.find(nuclideID);
-    if(mapEntry == rpCorrelationTableCache.end()) {
+    NuclearDensity* createDensity(const G4int A, const G4int Z) {
+      if(!nuclearDensityCache)
+        nuclearDensityCache = new std::map<G4int,NuclearDensity*>;
 
-      IFunction1D *rpCorrelationFunction;
-      if(A > 19) {
-        const G4double radius = ParticleTable::getRadiusParameter(A, Z);
-        const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-        const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
-        rpCorrelationFunction = new NuclearDensityFunctions::WoodsSaxonRP(radius, maximumRadius, diffuseness);
-      } else if(A <= 19 && A > 6) {
-        const G4double radius = ParticleTable::getRadiusParameter(A, Z);
-        const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-        const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
-        rpCorrelationFunction = new NuclearDensityFunctions::ModifiedHarmonicOscillatorRP(radius, maximumRadius, diffuseness);
-      } else if(A <= 6 && A > 1) { // Gaussian distribution for light nuclei
-        const G4double radius = ParticleTable::getRadiusParameter(A, Z);
-        const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
-        rpCorrelationFunction = new NuclearDensityFunctions::GaussianRP(maximumRadius, Math::oneOverSqrtThree * radius);
+      const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+      const std::map<G4int,NuclearDensity*>::const_iterator mapEntry = nuclearDensityCache->find(nuclideID);
+      if(mapEntry == nuclearDensityCache->end()) {
+        InverseInterpolationTable *rpCorrelationTable = createRPCorrelationTable(A, Z);
+        if(!rpCorrelationTable)
+          return NULL;
+        NuclearDensity *density = new NuclearDensity(A, Z, rpCorrelationTable);
+        (*nuclearDensityCache)[nuclideID] = density;
+        return density;
       } else {
-        ERROR("No r-p correlation function for target A = "
-            << A << " Z = " << Z << std::endl);
-        return NULL;
+        return mapEntry->second;
+      }
+    }
+
+    InverseInterpolationTable *createRPCorrelationTable(const G4int A, const G4int Z) {
+      if(!rpCorrelationTableCache)
+        rpCorrelationTableCache = new std::map<G4int,InverseInterpolationTable*>;
+
+      const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+      const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache->find(nuclideID);
+      if(mapEntry == rpCorrelationTableCache->end()) {
+
+        IFunction1D *rpCorrelationFunction;
+        if(A > 19) {
+          const G4double radius = ParticleTable::getRadiusParameter(A, Z);
+          const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
+          const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          rpCorrelationFunction = new NuclearDensityFunctions::WoodsSaxonRP(radius, maximumRadius, diffuseness);
+        } else if(A <= 19 && A > 6) {
+          const G4double radius = ParticleTable::getRadiusParameter(A, Z);
+          const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
+          const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          rpCorrelationFunction = new NuclearDensityFunctions::ModifiedHarmonicOscillatorRP(radius, maximumRadius, diffuseness);
+        } else if(A <= 6 && A > 1) { // Gaussian distribution for light nuclei
+          const G4double radius = ParticleTable::getRadiusParameter(A, Z);
+          const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          rpCorrelationFunction = new NuclearDensityFunctions::GaussianRP(maximumRadius, Math::oneOverSqrtThree * radius);
+        } else {
+          ERROR("No r-p correlation function for target A = "
+                << A << " Z = " << Z << std::endl);
+          return NULL;
+        }
+
+        class InverseCDFOneThird : public IFunction1D {
+          public:
+            InverseCDFOneThird(IFunction1D const * const f) :
+              IFunction1D(f->getXMinimum(), f->getXMaximum()),
+              theFunction(f),
+              normalisation(1./theFunction->integrate(xMin,xMax))
+          {}
+
+            G4double operator()(const G4double x) const {
+              return Math::pow13(normalisation * theFunction->integrate(xMin,x));
+            }
+          private:
+            IFunction1D const * const theFunction;
+            const G4double normalisation;
+        } *theInverseCDFOneThird = new InverseCDFOneThird(rpCorrelationFunction);
+
+        InverseInterpolationTable *theTable = new InverseInterpolationTable(*theInverseCDFOneThird);
+        delete theInverseCDFOneThird;
+        delete rpCorrelationFunction;
+        DEBUG("Creating r-p correlation function for A=" << A << ", Z=" << Z << ":"
+              << std::endl << theTable->print() << std::endl);
+
+        (*rpCorrelationTableCache)[nuclideID] = theTable;
+        return theTable;
+      } else {
+        return mapEntry->second;
+      }
+    }
+
+    InverseInterpolationTable *createRCDFTable(const G4int A, const G4int Z) {
+      if(!rCDFTableCache)
+        rCDFTableCache = new std::map<G4int,InverseInterpolationTable*>;
+
+      const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+      const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rCDFTableCache->find(nuclideID);
+      if(mapEntry == rCDFTableCache->end()) {
+
+        IFunction1D *rDensityFunction;
+        if(A > 19) {
+          G4double radius = ParticleTable::getRadiusParameter(A, Z);
+          G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
+          G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          rDensityFunction = new NuclearDensityFunctions::WoodsSaxon(radius, maximumRadius, diffuseness);
+        } else if(A <= 19 && A > 6) {
+          G4double radius = ParticleTable::getRadiusParameter(A, Z);
+          G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
+          G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          rDensityFunction = new NuclearDensityFunctions::ModifiedHarmonicOscillator(radius, maximumRadius, diffuseness);
+        } else if(A <= 6 && A > 2) { // Gaussian distribution for light nuclei
+          G4double radius = ParticleTable::getRadiusParameter(A, Z);
+          G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          rDensityFunction = new NuclearDensityFunctions::Gaussian(maximumRadius, Math::oneOverSqrtThree * radius);
+        } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
+          rDensityFunction = new NuclearDensityFunctions::ParisR();
+        } else {
+          ERROR("No nuclear density function for target A = "
+                << A << " Z = " << Z << std::endl);
+          return NULL;
+        }
+
+        InverseInterpolationTable *theTable = rDensityFunction->inverseCDFTable();
+        delete rDensityFunction;
+        DEBUG("Creating inverse position CDF for A=" << A << ", Z=" << Z << ":" <<
+              std::endl << theTable->print() << std::endl);
+
+        (*rCDFTableCache)[nuclideID] = theTable;
+        return theTable;
+      } else {
+        return mapEntry->second;
+      }
+    }
+
+    InverseInterpolationTable *createPCDFTable(const G4int A, const G4int Z) {
+      if(!pCDFTableCache)
+        pCDFTableCache = new std::map<G4int,InverseInterpolationTable*>;
+
+      const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+      const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = pCDFTableCache->find(nuclideID);
+      if(mapEntry == pCDFTableCache->end()) {
+        IFunction1D *pDensityFunction;
+        if(A > 19) {
+          pDensityFunction = new NuclearDensityFunctions::HardSphere(PhysicalConstants::Pf);
+        } else if(A <= 19 && A > 2) { // Gaussian distribution for light nuclei
+          G4double momentumRMS = Math::oneOverSqrtThree * ParticleTable::getMomentumRMS(A, Z);
+          pDensityFunction = new NuclearDensityFunctions::Gaussian(5.*momentumRMS, momentumRMS);
+        } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
+          pDensityFunction = new NuclearDensityFunctions::ParisP();
+        } else {
+          ERROR("No nuclear density function for target A = "
+                << A << " Z = " << Z << std::endl);
+          return NULL;
+        }
+
+        InverseInterpolationTable *theTable = pDensityFunction->inverseCDFTable();
+        delete pDensityFunction;
+        DEBUG("Creating inverse momentum CDF for A=" << A << ", Z=" << Z << ":" <<
+              std::endl << theTable->print() << std::endl);
+
+        (*pCDFTableCache)[nuclideID] = theTable;
+        return theTable;
+      } else {
+        return mapEntry->second;
+      }
+    }
+
+    ParticleSampler *createParticleSampler(const G4int A, const G4int Z) {
+      InverseInterpolationTable *rCDFTable = createRCDFTable(A, Z);
+      InverseInterpolationTable *pCDFTable = createPCDFTable(A, Z);
+      return new ParticleSampler(A, Z, rCDFTable, pCDFTable);
+    }
+
+    void clearCache() {
+
+      if(nuclearDensityCache) {
+        for(std::map<G4int,NuclearDensity*>::const_iterator i = nuclearDensityCache->begin(); i!=nuclearDensityCache->end(); ++i)
+          delete i->second;
+        nuclearDensityCache->clear();
+        delete nuclearDensityCache;
+        nuclearDensityCache = NULL;
       }
 
-      class InverseCDFOneThird : public IFunction1D {
-        public:
-          InverseCDFOneThird(IFunction1D const * const f) :
-            IFunction1D(f->getXMinimum(), f->getXMaximum()),
-            theFunction(f),
-            normalisation(1./theFunction->integrate(xMin,xMax))
-        {}
-
-          G4double operator()(const G4double x) const {
-            return Math::pow13(normalisation * theFunction->integrate(xMin,x));
-          }
-        private:
-          IFunction1D const * const theFunction;
-          const G4double normalisation;
-      } *theInverseCDFOneThird = new InverseCDFOneThird(rpCorrelationFunction);
-
-      InverseInterpolationTable *theTable = new InverseInterpolationTable(*theInverseCDFOneThird);
-      delete theInverseCDFOneThird;
-      delete rpCorrelationFunction;
-      DEBUG("Creating r-p correlation function for A=" << A << ", Z=" << Z << ":"
-          << std::endl << theTable->print() << std::endl);
-
-      rpCorrelationTableCache[nuclideID] = theTable;
-      return theTable;
-    } else {
-      return mapEntry->second;
-    }
-  }
-
-  InverseInterpolationTable *NuclearDensityFactory::createRCDFTable(const G4int A, const G4int Z) { if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ;  ;;;   if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rCDFTableCache = *rCDFTableCache_G4MT_TLS_;  ;;;   if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ;
-    const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
-    const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rCDFTableCache.find(nuclideID);
-    if(mapEntry == rCDFTableCache.end()) {
-
-      IFunction1D *rDensityFunction;
-      if(A > 19) {
-        G4double radius = ParticleTable::getRadiusParameter(A, Z);
-        G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-        G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
-        rDensityFunction = new NuclearDensityFunctions::WoodsSaxon(radius, maximumRadius, diffuseness);
-      } else if(A <= 19 && A > 6) {
-        G4double radius = ParticleTable::getRadiusParameter(A, Z);
-        G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-        G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
-        rDensityFunction = new NuclearDensityFunctions::ModifiedHarmonicOscillator(radius, maximumRadius, diffuseness);
-      } else if(A <= 6 && A > 2) { // Gaussian distribution for light nuclei
-        G4double radius = ParticleTable::getRadiusParameter(A, Z);
-        G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
-        rDensityFunction = new NuclearDensityFunctions::Gaussian(maximumRadius, Math::oneOverSqrtThree * radius);
-      } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
-        rDensityFunction = new NuclearDensityFunctions::ParisR();
-      } else {
-        ERROR("No nuclear density function for target A = "
-            << A << " Z = " << Z << std::endl);
-        return NULL;
+      if(rpCorrelationTableCache) {
+        for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rpCorrelationTableCache->begin(); i!=rpCorrelationTableCache->end(); ++i)
+          delete i->second;
+        rpCorrelationTableCache->clear();
+        delete rpCorrelationTableCache;
+        rpCorrelationTableCache = NULL;
       }
 
-      InverseInterpolationTable *theTable = rDensityFunction->inverseCDFTable();
-      delete rDensityFunction;
-      DEBUG("Creating inverse position CDF for A=" << A << ", Z=" << Z << ":" <<
-          std::endl << theTable->print() << std::endl);
-
-      rCDFTableCache[nuclideID] = theTable;
-      return theTable;
-    } else {
-      return mapEntry->second;
-    }
-  }
-
-  InverseInterpolationTable *NuclearDensityFactory::createPCDFTable(const G4int A, const G4int Z) {  ;;;   if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &pCDFTableCache = *pCDFTableCache_G4MT_TLS_;  ;;;   if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ;
-    const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
-    const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = pCDFTableCache.find(nuclideID);
-    if(mapEntry == pCDFTableCache.end()) {
-      IFunction1D *pDensityFunction;
-      if(A > 19) {
-        pDensityFunction = new NuclearDensityFunctions::HardSphere(PhysicalConstants::Pf);
-      } else if(A <= 19 && A > 2) { // Gaussian distribution for light nuclei
-        G4double momentumRMS = Math::oneOverSqrtThree * ParticleTable::getMomentumRMS(A, Z);
-        pDensityFunction = new NuclearDensityFunctions::Gaussian(5.*momentumRMS, momentumRMS);
-      } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
-        pDensityFunction = new NuclearDensityFunctions::ParisP();
-      } else {
-        ERROR("No nuclear density function for target A = "
-            << A << " Z = " << Z << std::endl);
-        return NULL;
+      if(rCDFTableCache) {
+        for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rCDFTableCache->begin(); i!=rCDFTableCache->end(); ++i)
+          delete i->second;
+        rCDFTableCache->clear();
+        delete rCDFTableCache;
+        rCDFTableCache = NULL;
       }
 
-      InverseInterpolationTable *theTable = pDensityFunction->inverseCDFTable();
-      delete pDensityFunction;
-      DEBUG("Creating inverse momentum CDF for A=" << A << ", Z=" << Z << ":" <<
-          std::endl << theTable->print() << std::endl);
-
-      pCDFTableCache[nuclideID] = theTable;
-      return theTable;
-    } else {
-      return mapEntry->second;
+      if(pCDFTableCache) {
+        for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = pCDFTableCache->begin(); i!=pCDFTableCache->end(); ++i)
+          delete i->second;
+        pCDFTableCache->clear();
+        delete pCDFTableCache;
+        pCDFTableCache = NULL;
+      }
     }
-  }
 
-  ParticleSampler *NuclearDensityFactory::createParticleSampler(const G4int A, const G4int Z) { if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ;
-    InverseInterpolationTable *rCDFTable = NuclearDensityFactory::createRCDFTable(A, Z);
-    InverseInterpolationTable *pCDFTable = NuclearDensityFactory::createPCDFTable(A, Z);
-    return new ParticleSampler(A, Z, rCDFTable, pCDFTable);
-  }
+  } // namespace NuclearDensityFactory
 
-}
+} // namespace G4INCL

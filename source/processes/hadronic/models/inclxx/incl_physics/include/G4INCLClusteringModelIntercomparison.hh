@@ -76,10 +76,10 @@ namespace G4INCL {
       clusterZMaxAll = 0;
       clusterNMaxAll = 0;
       for(G4int A=0; A<=runningMaxClusterAlgorithmMass; ++A) {
-        if(ParticleTable::clusterZMax[A]>clusterZMaxAll)
-          clusterZMaxAll = ParticleTable::clusterZMax[A];
-        if(A-ParticleTable::clusterZMin[A]>clusterNMaxAll)
-          clusterNMaxAll = A-ParticleTable::clusterZMin[A];
+        if(clusterZMax[A]>clusterZMaxAll)
+          clusterZMaxAll = clusterZMax[A];
+        if(A-clusterZMin[A]>clusterNMaxAll)
+          clusterNMaxAll = A-clusterZMin[A];
       }
       std::fill(candidateConfiguration,
                 candidateConfiguration + ParticleTable::maxClusterMass,
@@ -131,6 +131,20 @@ namespace G4INCL {
     G4int clusterZMaxAll, clusterNMaxAll;
 
     G4double cascadingEnergyPool;
+
+    /// \brief Lower limit of Z for cluster of mass A
+    static const G4int clusterZMin[ParticleTable::maxClusterMass+1];
+    /// \brief Upper limit of Z for cluster of mass A
+    static const G4int clusterZMax[ParticleTable::maxClusterMass+1];
+
+    /// \brief Precomputed factor 1.0/A
+    static const G4double clusterPosFact[ParticleTable::maxClusterMass+1];
+
+    /// \brief Precomputed factor (1.0/A)^2
+    static const G4double clusterPosFact2[ParticleTable::maxClusterMass+1];
+
+    /// \brief Phase-space parameters for cluster formation
+    static const G4double clusterPhaseSpaceCut[ParticleTable::maxClusterMass+1];
 
     static const G4double limitCosEscapeAngle;
 

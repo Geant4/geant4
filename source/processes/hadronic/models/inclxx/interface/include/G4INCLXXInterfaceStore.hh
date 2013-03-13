@@ -47,6 +47,7 @@
 #include "G4INCLXXInterface.hh"
 #include "G4INCLCascade.hh"
 #include "G4INCLConfig.hh"
+#include "G4SystemOfUnits.hh"
 #include <list>
 #include <sstream>
 
@@ -128,6 +129,26 @@ class G4INCLXXInterfaceStore {
       theMaxClusterMass=aMass;
     }
 
+    /// \brief Setter for cascadeMinEnergyPerNucleon
+    void SetCascadeMinEnergyPerNucleon(const G4double anEnergy) {
+      if(cascadeMinEnergyPerNucleon!=anEnergy) {
+        // Parameter is changed, emit a big warning message
+        std::stringstream ss;
+        ss << "Changing minimim cascade energy from "
+          << cascadeMinEnergyPerNucleon / MeV
+          << " to "
+          << anEnergy / MeV
+          << " MeV."
+          << G4endl
+          << "Do this ONLY if you fully understand what this setting does!";
+        EmitBigWarning(ss.str());
+      }
+
+      // No need to delete the model object
+
+      cascadeMinEnergyPerNucleon=anEnergy;
+    }
+
 
 
 
@@ -137,6 +158,13 @@ class G4INCLXXInterfaceStore {
      * this parameter.
      */
     G4bool GetAccurateProjectile() const { return accurateProjectile; }
+
+    /** \brief Getter for cascadeMinEnergyPerNucleon
+     *
+     * The \see{G4INCLXXInterfaceMessenger} class provides a UI command to set
+     * this parameter.
+     */
+    G4double GetCascadeMinEnergyPerNucleon() const { return cascadeMinEnergyPerNucleon; }
 
     /** \brief Getter for ClusterMaxMass
      *
@@ -198,6 +226,7 @@ class G4INCLXXInterfaceStore {
     const G4int theMaxClusterMassDefault;
     G4int theMaxClusterMass;
     const G4int theMaxProjMassINCL;
+    G4double cascadeMinEnergyPerNucleon;
 
     G4INCLXXInterfaceMessenger *theINCLXXInterfaceMessenger;
 

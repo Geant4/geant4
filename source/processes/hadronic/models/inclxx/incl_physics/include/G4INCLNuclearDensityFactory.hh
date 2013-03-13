@@ -44,48 +44,21 @@
 
 namespace G4INCL {
 
-  class NuclearDensityFactory {
-  public:
-    static NuclearDensity *createDensity(const G4int A, const G4int Z);
+  namespace NuclearDensityFactory {
 
-    static InverseInterpolationTable *createRPCorrelationTable(const G4int A, const G4int Z);
+    NuclearDensity *createDensity(const G4int A, const G4int Z);
 
-    static InverseInterpolationTable *createRCDFTable(const G4int A, const G4int Z);
+    InverseInterpolationTable *createRPCorrelationTable(const G4int A, const G4int Z);
 
-    static InverseInterpolationTable *createPCDFTable(const G4int A, const G4int Z);
+    InverseInterpolationTable *createRCDFTable(const G4int A, const G4int Z);
 
-    static ParticleSampler *createParticleSampler(const G4int A, const G4int Z);
+    InverseInterpolationTable *createPCDFTable(const G4int A, const G4int Z);
 
-    static void clearCache() {;;;   if (!pCDFTableCache_G4MT_TLS_) pCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &pCDFTableCache = *pCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rCDFTableCache_G4MT_TLS_) rCDFTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rCDFTableCache = *rCDFTableCache_G4MT_TLS_;  ;;;    ;;;   if (!rpCorrelationTableCache_G4MT_TLS_) rpCorrelationTableCache_G4MT_TLS_ = new std::map<G4int,InverseInterpolationTable*>  ; std::map<G4int,InverseInterpolationTable*> &rpCorrelationTableCache = *rpCorrelationTableCache_G4MT_TLS_;  ;;;    ;;;   if (!nuclearDensityCache_G4MT_TLS_) nuclearDensityCache_G4MT_TLS_ = new std::map<G4int,NuclearDensity*>  ; std::map<G4int,NuclearDensity*> &nuclearDensityCache = *nuclearDensityCache_G4MT_TLS_;  ;;;  
-      for(std::map<G4int,NuclearDensity*>::const_iterator i = nuclearDensityCache.begin(); i!=nuclearDensityCache.end(); ++i)
-        delete i->second;
-      nuclearDensityCache.clear();
+    ParticleSampler *createParticleSampler(const G4int A, const G4int Z);
 
-      for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rpCorrelationTableCache.begin(); i!=rpCorrelationTableCache.end(); ++i)
-        delete i->second;
-      rpCorrelationTableCache.clear();
+    void clearCache();
 
-      for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rCDFTableCache.begin(); i!=rCDFTableCache.end(); ++i)
-        delete i->second;
-      rCDFTableCache.clear();
-
-      for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = pCDFTableCache.begin(); i!=pCDFTableCache.end(); ++i)
-        delete i->second;
-      pCDFTableCache.clear();
-    }
-
-  protected:
-    // We will not construct any instances of this class
-    NuclearDensityFactory() {}
-    ~NuclearDensityFactory() {}
-
-    static G4ThreadLocal std::map<G4int,NuclearDensity*> *nuclearDensityCache_G4MT_TLS_;
-
-    static G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rpCorrelationTableCache_G4MT_TLS_;
-    static G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rCDFTableCache_G4MT_TLS_;
-    static G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *pCDFTableCache_G4MT_TLS_;
-
-  };
+  }
 }
 
 #endif

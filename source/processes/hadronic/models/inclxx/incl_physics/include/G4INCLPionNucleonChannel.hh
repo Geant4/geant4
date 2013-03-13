@@ -53,7 +53,7 @@ namespace G4INCL {
     private:
       Nucleus *theNucleus;
       Particle *particle1, *particle2;
-      const G4bool locE;
+//      const G4bool locE;
 
   };
 }

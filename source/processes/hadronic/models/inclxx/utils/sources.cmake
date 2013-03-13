@@ -39,6 +39,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 
 #
 # Define the Geant4 Module.
@@ -112,6 +114,15 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4track
         G4volumes
         G4intercoms
+        G4had_preequ_exciton
+        G4hadronic_deex_evaporation
+        G4hadronic_deex_fermi_breakup
+        G4hadronic_deex_handler
+        G4hadronic_deex_management
+        G4hadronic_deex_multifragmentation
+        G4hadronic_deex_photon_evaporation
+        G4hadronic_deex_util
+        G4hadronic_mgt
 
     GLOBAL_DEPENDENCIES
         G4geometry

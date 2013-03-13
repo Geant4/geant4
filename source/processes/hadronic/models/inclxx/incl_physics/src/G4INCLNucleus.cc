@@ -155,7 +155,7 @@ namespace G4INCL {
     ParticleList participants = theStore->getParticipants();
     for(ParticleIter i = participants.begin(); i != participants.end(); ++i) {
       ss <<"(make-particle-avatar-map " << std::endl
-        << (*i)->dump() 
+        << (*i)->dump()
         << "(list ;; List of avatars in this particle" << std::endl
         << ")) ;; Close the list of avatars and the particle-avatar-map" << std::endl;
     }

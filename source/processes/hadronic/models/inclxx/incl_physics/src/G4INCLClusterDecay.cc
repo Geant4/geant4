@@ -50,6 +50,30 @@
 
 namespace G4INCL {
 
+  /** \brief Table for cluster decays
+   *
+   * Definition of "Stable": halflife > 1 ms
+   *
+   * These table includes decay data for clusters that INCL presently does
+   * not produce. It can't hurt.
+   *
+   * Unphysical nuclides (A<Z) are marked as stable, but should never be
+   * produced by INCL. If you find them in the output, something is fishy.
+   */
+  const ClusterDecay::ClusterDecayType ClusterDecay::clusterDecayMode[ParticleTable::clusterTableZSize][ParticleTable::clusterTableASize] =
+  {
+    /*                       A = 0              1               2               3               4                5               6                7               8               9             10             11             12 */
+    /* Z =  0 */    {StableCluster, StableCluster,   NeutronDecay, NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound, NeutronUnbound},
+    /* Z =  1 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,   NeutronDecay, TwoNeutronDecay,   NeutronDecay, TwoNeutronDecay, NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound, NeutronUnbound},
+    /* Z =  2 */    {StableCluster, StableCluster,    ProtonDecay,  StableCluster,  StableCluster,    NeutronDecay,  StableCluster,    NeutronDecay,  StableCluster,   NeutronDecay, TwoNeutronDecay, NeutronUnbound, NeutronUnbound},
+    /* Z =  3 */    {StableCluster, StableCluster,  StableCluster,  ProtonUnbound,    ProtonDecay,     ProtonDecay,  StableCluster,   StableCluster,  StableCluster,  StableCluster,    NeutronDecay,  StableCluster,   NeutronDecay},
+    /* Z =  4 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  ProtonUnbound,     ProtonDecay, TwoProtonDecay,   StableCluster,     AlphaDecay,  StableCluster,   StableCluster,  StableCluster,  StableCluster},
+    /* Z =  5 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   ProtonUnbound, TwoProtonDecay,     ProtonDecay,  StableCluster,    ProtonDecay,   StableCluster,  StableCluster,  StableCluster},
+    /* Z =  6 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   StableCluster,  ProtonUnbound,   ProtonUnbound, TwoProtonDecay,  StableCluster,   StableCluster,  StableCluster,  StableCluster},
+    /* Z =  7 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   StableCluster,  StableCluster,   ProtonUnbound,  ProtonUnbound,  ProtonUnbound,     ProtonDecay,    ProtonDecay,  StableCluster},
+    /* Z =  8 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   StableCluster,  StableCluster,   StableCluster,  ProtonUnbound,  ProtonUnbound,   ProtonUnbound,  ProtonUnbound,    ProtonDecay}
+  };
+
   ParticleList ClusterDecay::decay(Cluster * const c) {
     ParticleList decayProducts;
     recursiveDecay(c, &decayProducts);
@@ -75,29 +99,29 @@ namespace G4INCL {
       c->setExcitationEnergy(0.);
 
     if(Z<ParticleTable::clusterTableZSize && A<ParticleTable::clusterTableASize) {
-      ParticleTable::ClusterDecayType theDecayMode = ParticleTable::clusterDecayMode[Z][A];
+      ClusterDecayType theDecayMode = clusterDecayMode[Z][A];
 
       switch(theDecayMode) {
         default:
           ERROR("Unrecognized cluster-decay mode: " << theDecayMode << std::endl
               << c->print());
-        case ParticleTable::StableCluster:
+        case StableCluster:
           // For stable clusters, just return
           return;
           break;
-        case ParticleTable::ProtonDecay:
-        case ParticleTable::NeutronDecay:
-        case ParticleTable::AlphaDecay:
+        case ProtonDecay:
+        case NeutronDecay:
+        case AlphaDecay:
           // Two-body decays
           twoBodyDecay(c, theDecayMode, decayProducts);
           break;
-        case ParticleTable::TwoProtonDecay:
-        case ParticleTable::TwoNeutronDecay:
+        case TwoProtonDecay:
+        case TwoNeutronDecay:
           // Three-body decays
           threeBodyDecay(c, theDecayMode, decayProducts);
           break;
-        case ParticleTable::ProtonUnbound:
-        case ParticleTable::NeutronUnbound:
+        case ProtonUnbound:
+        case NeutronUnbound:
           // Phase-space decays
           phaseSpaceDecay(c, theDecayMode, decayProducts);
           break;
@@ -113,28 +137,28 @@ namespace G4INCL {
       DEBUG("Cluster is outside the decay-mode table." << c->print() << std::endl);
       if(Z==A) {
         DEBUG("Z==A, will decompose it in free protons." << std::endl);
-        phaseSpaceDecay(c, ParticleTable::ProtonUnbound, decayProducts);
+        phaseSpaceDecay(c, ProtonUnbound, decayProducts);
       } else if(Z==0) {
         DEBUG("Z==0, will decompose it in free neutrons." << std::endl);
-        phaseSpaceDecay(c, ParticleTable::NeutronUnbound, decayProducts);
+        phaseSpaceDecay(c, NeutronUnbound, decayProducts);
       }
     }
   }
 
-  void ClusterDecay::twoBodyDecay(Cluster * const c, ParticleTable::ClusterDecayType theDecayMode, ParticleList *decayProducts) {
+  void ClusterDecay::twoBodyDecay(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts) {
     Particle *decayParticle = 0;
     const ThreeVector mom(0.0, 0.0, 0.0);
     const ThreeVector pos = c->getPosition();
 
     // Create the emitted particle
     switch(theDecayMode) {
-      case ParticleTable::ProtonDecay:
+      case ProtonDecay:
         decayParticle = new Particle(Proton, mom, pos);
         break;
-      case ParticleTable::NeutronDecay:
+      case NeutronDecay:
         decayParticle = new Particle(Neutron, mom, pos);
         break;
-      case ParticleTable::AlphaDecay:
+      case AlphaDecay:
         decayParticle = new Cluster(2,4);
         break;
       default:
@@ -183,7 +207,7 @@ namespace G4INCL {
     decayProducts->push_back(decayParticle);
   }
 
-  void ClusterDecay::threeBodyDecay(Cluster * const c, ParticleTable::ClusterDecayType theDecayMode, ParticleList *decayProducts) {
+  void ClusterDecay::threeBodyDecay(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts) {
     Particle *decayParticle1 = 0;
     Particle *decayParticle2 = 0;
     const ThreeVector mom(0.0, 0.0, 0.0);
@@ -191,11 +215,11 @@ namespace G4INCL {
 
     // Create the emitted particles
     switch(theDecayMode) {
-      case ParticleTable::TwoProtonDecay:
+      case TwoProtonDecay:
         decayParticle1 = new Particle(Proton, mom, pos);
         decayParticle2 = new Particle(Proton, mom, pos);
         break;
-      case ParticleTable::TwoNeutronDecay:
+      case TwoNeutronDecay:
         decayParticle1 = new Particle(Neutron, mom, pos);
         decayParticle2 = new Particle(Neutron, mom, pos);
         break;
@@ -278,7 +302,7 @@ namespace G4INCL {
     decayProducts->push_back(decayParticle2);
   }
 
-  void ClusterDecay::phaseSpaceDecay(Cluster * const c, ParticleTable::ClusterDecayType theDecayMode, ParticleList *decayProducts) {
+  void ClusterDecay::phaseSpaceDecay(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts) {
     const G4int theA = c->getA();
     const G4int theZ = c->getZ();
     const ThreeVector mom(0.0, 0.0, 0.0);
@@ -287,11 +311,11 @@ namespace G4INCL {
     G4int theZStep;
     ParticleType theEjectileType;
     switch(theDecayMode) {
-      case ParticleTable::ProtonUnbound:
+      case ProtonUnbound:
         theZStep = 1;
         theEjectileType = Proton;
         break;
-      case ParticleTable::NeutronUnbound:
+      case NeutronUnbound:
         theZStep = 0;
         theEjectileType = Neutron;
         break;
@@ -307,13 +331,13 @@ namespace G4INCL {
     if(theZ<ParticleTable::clusterTableZSize && theA<ParticleTable::clusterTableASize) {
       finalDaughterZ=theZ;
       finalDaughterA=theA;
-      while(ParticleTable::clusterDecayMode[finalDaughterZ][finalDaughterA]==theDecayMode) {
+      while(clusterDecayMode[finalDaughterZ][finalDaughterA]==theDecayMode) {
         finalDaughterA--;
         finalDaughterZ -= theZStep;
       }
     } else {
       finalDaughterA = 1;
-      if(theDecayMode==ParticleTable::ProtonUnbound)
+      if(theDecayMode==ProtonUnbound)
         finalDaughterZ = 1;
       else
         finalDaughterZ = 0;

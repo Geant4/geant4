@@ -43,8 +43,8 @@
 
 namespace G4INCL {
 
-  ElasticChannel::ElasticChannel(Nucleus *n, Particle *p1, Particle *p2)
-    :theNucleus(n), particle1(p1), particle2(p2)
+  ElasticChannel::ElasticChannel(Nucleus*, Particle *p1, Particle *p2)
+    : particle1(p1), particle2(p2)
   {
   }
 

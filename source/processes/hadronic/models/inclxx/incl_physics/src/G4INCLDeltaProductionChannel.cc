@@ -45,8 +45,8 @@ namespace G4INCL {
 
   DeltaProductionChannel::DeltaProductionChannel(Particle *p1,
 						 Particle *p2,
-						 Nucleus *n)
-    :theNucleus(n), particle1(p1), particle2(p2)
+						 Nucleus*)
+    : particle1(p1), particle2(p2)
   {}
 
   DeltaProductionChannel::~DeltaProductionChannel() {}

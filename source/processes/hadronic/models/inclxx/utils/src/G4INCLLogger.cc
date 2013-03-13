@@ -63,7 +63,7 @@ namespace G4INCL {
     }
     (*logStream) << s;
   }
-  
+
   void LoggerSlave::logDataBlock(const std::string &block, const std::string &fileName, const G4int lineNumber) const {
     (*logStream) << typeToString(DataBlockMsg) << " [" <<
       fileName.substr(fileName.find_last_of("/")+1) <<

@@ -354,13 +354,13 @@ namespace G4INCL {
         G4double barr, radius = 0.;
         if(zp==1 && ap==2) { // d
           barr = 0.2565*Math::pow23((G4double)theA)-0.78;
-          radius = ParticleTable::eSquared*zp*theZ/barr - 2.5;
+          radius = PhysicalConstants::eSquared*zp*theZ/barr - 2.5;
         } else if((zp==1 || zp==2) && ap==3) { // t, He3
           barr = 0.5*(0.5009*Math::pow23((G4double)theA)-1.16);
-          radius = ParticleTable::eSquared*theZ/barr - 0.5;
+          radius = PhysicalConstants::eSquared*theZ/barr - 0.5;
         } else if(zp==2 && ap==4) { // alpha
           barr = 0.5939*Math::pow23((G4double)theA)-1.64;
-          radius = ParticleTable::eSquared*zp*theZ/barr - 0.5;
+          radius = PhysicalConstants::eSquared*zp*theZ/barr - 0.5;
         } else if(zp>2) {
           radius = getUniverseRadius();
         }
