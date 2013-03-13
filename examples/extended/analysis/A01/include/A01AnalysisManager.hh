@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/include/A01AnalysisManager.hh
 /// \brief Definition of the A01AnalysisManager class
 

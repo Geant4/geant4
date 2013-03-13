@@ -28,7 +28,6 @@
 //
 //
 // $Id$
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

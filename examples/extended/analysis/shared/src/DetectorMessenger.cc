@@ -46,7 +46,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger( DetectorConstruction* Det)
-:Detector(Det)
+: G4UImessenger(),
+ fDetector(Det),
+ fN03Dir(0),
+ fDetDir(0),
+ fAbsMaterCmd(0),
+ fGapMaterCmd(0),
+ fAbsThickCmd(0),
+ fGapThickCmd(0),
+ fSizeYZCmd(0),
+ fNbLayersCmd(0),    
+ fUpdateCmd(0)
 { 
   fN03Dir = new G4UIdirectory("/N03/");
   fN03Dir->SetGuidance("UI commands of this example");
@@ -115,26 +125,26 @@ DetectorMessenger::~DetectorMessenger()
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == fAbsMaterCmd )
-   { Detector->SetAbsorberMaterial(newValue);}
+   { fDetector->SetAbsorberMaterial(newValue);}
    
   if( command == fGapMaterCmd )
-   { Detector->SetGapMaterial(newValue);}
+   { fDetector->SetGapMaterial(newValue);}
   
   if( command == fAbsThickCmd )
-   { Detector->SetAbsorberThickness(fAbsThickCmd
+   { fDetector->SetAbsorberThickness(fAbsThickCmd
                                                ->GetNewDoubleValue(newValue));}
    
   if( command == fGapThickCmd )
-   { Detector->SetGapThickness(fGapThickCmd->GetNewDoubleValue(newValue));}
+   { fDetector->SetGapThickness(fGapThickCmd->GetNewDoubleValue(newValue));}
    
   if( command == fSizeYZCmd )
-   { Detector->SetCalorSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));}
+   { fDetector->SetCalorSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));}
    
   if( command == fNbLayersCmd )
-   { Detector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(newValue));}
+   { fDetector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(newValue));}
   
   if( command == fUpdateCmd )
-   { Detector->UpdateGeometry(); }
+   { fDetector->UpdateGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

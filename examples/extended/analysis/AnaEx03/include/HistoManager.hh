@@ -68,11 +68,11 @@ class HistoManager
         
   private:
   
-    AIDA::IAnalysisFactory*  af;        
-    AIDA::ITree*             tree;
+    AIDA::IAnalysisFactory*  fAF;        
+    AIDA::ITree*             fTree;
     
-    AIDA::IHistogram1D*      histo[MaxHisto];            
-    AIDA::ITuple*            ntupl;    
+    AIDA::IHistogram1D*      fHisto[MaxHisto];            
+    AIDA::ITuple*            fNtupl;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

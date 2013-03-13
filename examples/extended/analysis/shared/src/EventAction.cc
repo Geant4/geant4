@@ -44,7 +44,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* run, HistoManager* histo)
-:fRunAct(run),fHistoManager(histo)
+:G4UserEventAction(),
+ fRunAct(run),fHistoManager(histo),
+ fEnergyAbs(0.), fEnergyGap(0.),
+ fTrackLAbs(0.), fTrackLGap(0.),
+ fPrintModulo(0)                             
 {
  fPrintModulo = 100; }
 

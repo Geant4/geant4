@@ -68,8 +68,8 @@ class HistoManager
 
   private:
 
-    G4String      fileName[2];
-    G4bool        factoryOn;    
+    G4String      fFileName[2];
+    G4bool        fFactoryOn;    
 
     G4int         fHistId[MaxHisto];
     G4AnaH1*      fHistPt[MaxHisto];

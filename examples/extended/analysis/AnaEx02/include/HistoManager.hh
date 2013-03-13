@@ -67,14 +67,14 @@ class HistoManager
         
   private:
   
-    TFile*   rootFile;
-    TH1D*    histo[MaxHisto];            
-    TTree*   ntupl;    
+    TFile*   fRootFile;
+    TH1D*    fHisto[MaxHisto];            
+    TTree*   fNtupl;    
 
-    G4double Eabs;
-    G4double Egap;
-    G4double Labs;
-    G4double Lgap;
+    G4double fEabs;
+    G4double fEgap;
+    G4double fLabs;
+    G4double fLgap;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

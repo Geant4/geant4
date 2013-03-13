@@ -53,12 +53,12 @@ class DetectorMessenger: public G4UImessenger
 {
   public:
     DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+    virtual ~DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    DetectorConstruction* Detector;
+    DetectorConstruction* fDetector;
     
     G4UIdirectory*             fN03Dir;
     G4UIdirectory*             fDetDir;

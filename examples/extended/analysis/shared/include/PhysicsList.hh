@@ -49,10 +49,10 @@ public:
   virtual ~PhysicsList();
 
   // Construct particle and physics
-  void ConstructParticle();
-  void ConstructProcess();
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();
  
-  void SetCuts();
+  virtual void SetCuts();
    
 private:
 

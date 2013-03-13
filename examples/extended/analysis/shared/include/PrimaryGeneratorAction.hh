@@ -52,7 +52,7 @@ public:
   PrimaryGeneratorAction(DetectorConstruction*);    
   virtual ~PrimaryGeneratorAction();
 
-  void GeneratePrimaries(G4Event*);
+  virtual void GeneratePrimaries(G4Event*);
 
 private:
   G4ParticleGun*           fParticleGun;  //pointer a to G4 class

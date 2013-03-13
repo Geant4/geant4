@@ -40,8 +40,8 @@
 
 HistoManager::HistoManager()
 {
-  fileName[0] = "AnaEx01";
-  factoryOn = false;
+  fFileName[0] = "AnaEx01";
+  fFactoryOn = false;
   
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -69,7 +69,7 @@ void HistoManager::book()
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetVerboseLevel(2);
   G4String extension = analysisManager->GetFileType();
-  fileName[1] = fileName[0] + "." + extension;
+  fFileName[1] = fFileName[0] + "." + extension;
       
   // Create directories 
   analysisManager->SetHistoDirectoryName("histo");
@@ -77,9 +77,9 @@ void HistoManager::book()
     
   // Open an output file
   //
-  G4bool fileOpen = analysisManager->OpenFile(fileName[0]);
+  G4bool fileOpen = analysisManager->OpenFile(fFileName[0]);
   if (!fileOpen) {
-    G4cout << "\n---> HistoManager::book(): cannot open " << fileName[1] 
+    G4cout << "\n---> HistoManager::book(): cannot open " << fFileName[1] 
            << G4endl;
     return;
   }
@@ -113,22 +113,22 @@ void HistoManager::book()
   fNtColId[3] = analysisManager->CreateNtupleDColumn("Lgap");
   analysisManager->FinishNtuple();
   
-  factoryOn = true;       
-  G4cout << "\n----> Histogram Tree is opened in " << fileName[1] << G4endl;
+  fFactoryOn = true;       
+  G4cout << "\n----> Histogram Tree is opened in " << fFileName[1] << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::save()
 {
-  if (factoryOn) {
+  if (fFactoryOn) {
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
     analysisManager->Write();
     analysisManager->CloseFile();  
-    G4cout << "\n----> Histogram Tree is saved in " << fileName[1] << G4endl;
+    G4cout << "\n----> Histogram Tree is saved in " << fFileName[1] << G4endl;
       
     delete G4AnalysisManager::Instance();
-    factoryOn = false;
+    fFactoryOn = false;
   }                    
 }
 
@@ -175,7 +175,7 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
 
 void HistoManager::PrintStatistic()
 {
-  if(factoryOn) {
+  if(fFactoryOn) {
     G4cout << "\n ----> print histograms statistic \n" << G4endl;
     
     G4cout 

@@ -53,7 +53,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-   ~DetectorConstruction();
+    virtual ~DetectorConstruction();
 
   public:
      
@@ -66,7 +66,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetCalorSizeYZ(G4double);          
      void SetNbOfLayers (G4int);   
      
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
 
      void UpdateGeometry();
      

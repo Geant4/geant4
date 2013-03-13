@@ -51,8 +51,8 @@ public:
   RunAction(HistoManager*);
   virtual ~RunAction();
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void   EndOfRunAction(const G4Run*);
     
   void fillPerEvent(G4double, G4double, G4double, G4double); 
 

@@ -42,7 +42,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(HistoManager* histo)
-:fHistoManager(histo)
+: G4UserRunAction(),
+  fHistoManager(histo),
+  fSumEAbs(0.), fSum2EAbs(0.),
+  fSumEGap(0.), fSum2EGap(0.),
+  fSumLAbs(0.), fSum2LAbs(0.),
+  fSumLGap(0.), fSum2LGap(0.)    
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
