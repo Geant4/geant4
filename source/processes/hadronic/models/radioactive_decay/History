@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+8 March 2013  Gabriele Cosmo  radioactive_decay-V09-06-02
+---------------------------------------------------------
+- Fixed use of internal MT data in G4NuclearDecayChannel.
+
 1 January 2013  Laurent Desorgher  radioactive_decay-V09-06-01
 ------------------------------------------------------------
 - G4RadioactiveDecay: fix partly bug 1359
