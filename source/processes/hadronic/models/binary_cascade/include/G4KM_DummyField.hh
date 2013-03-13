@@ -50,7 +50,8 @@ public:
   G4KM_DummyField() { }
   ~G4KM_DummyField() { }
 
-  virtual void  GetFieldValue(const G4double [], G4double * ) const { }
+  void  GetFieldValue(const G4double [], G4double * ) const { }
+  G4Field* Clone() const { return new G4KM_DummyField; }
 };
 
 #endif

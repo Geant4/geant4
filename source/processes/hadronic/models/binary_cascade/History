@@ -12,6 +12,15 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+26 Feb 2013 Andrea Dotti	 had-binary-V09-06-04
+- Adding clonging of Dummy Field (required by multi-threadeing)
+  
+22 Feb 2013 Gunter Folger        had-binary-V09-06-03
+-  Checking for changes made for transition to MT
+     - G4BinaryCascade, G4BinaryLightIonReaction:
+         remove static variable used only to count interactions in debug mode
+     - G4RKFieldIntegrator.cc: make static array in fuction const array    
+     
 9 Jan. 2013 V. Uzhinsky          had-binary-V09-06-02
 -  Checking of G4GeneratorPrecompoundInterface::PropagateNuclNucl
    for simulation of nucleus-nucleus interactions.
