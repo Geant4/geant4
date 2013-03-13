@@ -53,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4NucleiPropertiesTableAME03.hh
         G4NucleiPropertiesTheoreticalTable.hh
         G4PDGCodeChecker.hh
+        G4PDefSplitter.hh
         G4ParticleDefinition.hh
         G4ParticleDefinition.icc
         G4ParticleMessenger.hh
@@ -75,6 +76,7 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4VIsotopeTable.hh
         G4VUserPrimaryParticleInformation.hh
         G4VUserPrimaryVertexInformation.hh
+        pwdefs.hh
     SOURCES
         G4DalitzDecayChannel.cc
         G4DecayProducts.cc

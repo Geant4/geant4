@@ -34,11 +34,7 @@
 //                             17 AUg. 1999   H.Kurashige  
 // ------------------------------------------------------------
 
-#if defined G4PARTICLES_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator;
-#else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator;
-#endif
+extern G4PART_DLL G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator;
 
 // ------------------------
 // Inlined operators

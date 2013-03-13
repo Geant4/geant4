@@ -57,6 +57,8 @@
 #include "G4Allocator.hh"
 #include "G4ios.hh"
 
+#include "pwdefs.hh"
+
 class G4ElectronOccupancy 
 {
  public:
@@ -100,43 +102,41 @@ class G4ElectronOccupancy
 
 };
 
-#if defined G4PARTICLES_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator_G4MT_TLS_;
-#else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator_G4MT_TLS_;
-#endif
+extern G4PART_DLL G4ThreadLocal G4Allocator<G4ElectronOccupancy> *aElectronOccupancyAllocator;
 
 // ------------------------
 // Inlined operators
 // ------------------------
 
 inline void * G4ElectronOccupancy::operator new(size_t)
-{  ;;;   if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ; G4Allocator<G4ElectronOccupancy> &aElectronOccupancyAllocator = *aElectronOccupancyAllocator_G4MT_TLS_;  ;;;  
-  void * aElectronOccupancy;
-  aElectronOccupancy = (void *) aElectronOccupancyAllocator.MallocSingle();
-  return aElectronOccupancy;
+{
+  if (!aElectronOccupancyAllocator)
+  {
+    aElectronOccupancyAllocator = new G4Allocator<G4ElectronOccupancy>;
+  }
+  return (void *) aElectronOccupancyAllocator->MallocSingle();
 }
 
 inline void G4ElectronOccupancy::operator delete(void * aElectronOccupancy)
-{  ;;;   if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ; G4Allocator<G4ElectronOccupancy> &aElectronOccupancyAllocator = *aElectronOccupancyAllocator_G4MT_TLS_;  ;;;  
-  aElectronOccupancyAllocator.FreeSingle((G4ElectronOccupancy *) aElectronOccupancy);
+{
+  aElectronOccupancyAllocator->FreeSingle((G4ElectronOccupancy *) aElectronOccupancy);
 }
 
 inline
  G4int  G4ElectronOccupancy::GetSizeOfOrbit() const
-{ if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ;
+{
   return  theSizeOfOrbit;
 }
 
 inline
  G4int G4ElectronOccupancy::GetTotalOccupancy() const
-{ if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ;
+{
   return  theTotalOccupancy;
 }
 
 inline
  G4int  G4ElectronOccupancy::GetOccupancy(G4int orbit) const
-{ if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ;
+{
   G4int value = 0;
   if ((orbit >=0)&&(orbit<theSizeOfOrbit)){
     value = theOccupancies[orbit];
@@ -146,7 +146,7 @@ inline
 
 inline 
  G4int  G4ElectronOccupancy::AddElectron(G4int orbit, G4int number)
-{ if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ;
+{
   G4int value =0;
   if ((orbit >=0)&&(orbit<theSizeOfOrbit)){
     theOccupancies[orbit] += number;
@@ -158,7 +158,7 @@ inline
 
 inline 
  G4int  G4ElectronOccupancy::RemoveElectron(G4int orbit, G4int number)
-{ if (!aElectronOccupancyAllocator_G4MT_TLS_) aElectronOccupancyAllocator_G4MT_TLS_ = new G4Allocator<G4ElectronOccupancy>  ;
+{
   G4int value =0;
   if ((orbit >=0)&&(orbit<theSizeOfOrbit) ){
     if ( theOccupancies[orbit] < number ) number = theOccupancies[orbit];
@@ -169,9 +169,3 @@ inline
   return value;
 }
 #endif
-
-
-
-
-
-

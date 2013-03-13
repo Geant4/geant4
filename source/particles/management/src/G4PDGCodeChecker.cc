@@ -44,7 +44,7 @@
 /////////////
 G4PDGCodeChecker::G4PDGCodeChecker()
   :code(0),theParticleType(""),
-   thePDGiSpin(0),higherSpin(0),
+   higherSpin(0),
    exotic(0),radial(0),multiplet(0),
    quark1(0),quark2(0),quark3(0),spin(0)
 {

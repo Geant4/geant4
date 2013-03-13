@@ -17,6 +17,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 12 Mar. 2013 G.Cosmo (particles-V09-06-06)
+- Added public accessors for MT data to G4ParticleDefinition and
+  G4VDecayChannel.
+
+- 11 Mar. 2013 G.Cosmo (particles-V09-06-05)
+- Redefined G4DLL_API to G4PART_DLL to avoid cases of macro redefinition.
+
+- 08 Mar. 2013 G. Cosmo (particles-V09-06-04)
+- Moved G4MTTransitoryParticle class from "global" to management module
+  and renamed to G4PDefSplitter.
+- Adapted split classes (G4ParticleDefinition and G4VDecayChannel) to the
+  change and made code cleanup.
+- Code cleanup from MT changes on most classes under management.
+
+- 25 Feb. 2013 A. Dotti (particles-V09-06-03)
+- Removed "extern" lockCount and particleTable global variables, they are now static
+  data member of the G4ParticleTable class (needed for G4MT)
+
+- 25 Feb. 2013 H.Kurashige (particles-V09-06-02)
+- Update trunk to geant4-09-06-ref-02 for following files 
+  in order to resolve compiler errors 
+   G4DynamicParticle.icc G4DynamicParticle.cc G4IonTable.cc G4ParticleTable.cc
+   
+- 24 Feb. 2013 H.Kurashige (particles-V09-06-01)
+- Remove unused variable of thePDGiSpin from G4PDGCodeChecker
+
 - 9 Sep. 2012 G.Cosmo (particles-V09-05-07)
 - Fix constructor of G4PhaseSpaceDecayChannel
 

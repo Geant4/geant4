@@ -63,20 +63,13 @@
 
 #include <sstream>
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//lock for particle table accesses.
-#ifdef G4MULTITHREADED
-extern pthread_mutex_t particleTable;
-extern G4ThreadLocal int lockCount;
-#endif
-
-//07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//It is very important for multithreaded Geant4 to keep only one copy of the
-//particle table pointer and the ion table pointer. However, we try to let 
-//each worker thread hold its own copy of the particle dictionary and the 
-//ion list. This implementation is equivalent to make the ion table thread
-//private. The two shadow ponters are used by each worker thread to copy the
-//content from the master thread.
+// It is very important for multithreaded Geant4 to keep only one copy of the
+// particle table pointer and the ion table pointer. However, we try to let 
+// each worker thread hold its own copy of the particle dictionary and the 
+// ion list. This implementation is equivalent to make the ion table thread
+// private. The two shadow ponters are used by each worker thread to copy the
+// content from the master thread.
+//
 G4ThreadLocal G4IonTable::G4IonList* G4IonTable::fIonList = 0;
 G4ThreadLocal std::vector<G4VIsotopeTable*> *G4IonTable::fIsotopeTableList = 0;
 G4IonTable::G4IonList* G4IonTable::fIonListShadow = 0;
@@ -87,8 +80,8 @@ G4IonTable::G4IonTable()
 {
   fIonList = new G4IonList();
 
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Set up the shadow pointer used by worker threads.
+  // Set up the shadow pointer used by worker threads.
+  //
   if (fIonListShadow == 0)
   {
     fIonListShadow = fIonList;
@@ -96,38 +89,32 @@ G4IonTable::G4IonTable()
 
   fIsotopeTableList = new std::vector<G4VIsotopeTable*>;
 
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Set up the shadow pointer used by worker threads.
+  // Set up the shadow pointer used by worker threads.
+  //
   if (fIsotopeTableListShadow == 0)
   {
     fIsotopeTableListShadow = fIsotopeTableList;
   }
 }
 
-//07.11.2009 Xin Dong Phase II change for Geant4 multithreading. This
-//method is used by each worker thread to copy the content from the master
-//thread.
+// This method is used by each worker thread to copy the content
+// from the master thread.
+//
 void G4IonTable::SlaveG4IonTable()
 {
   fIonList = new G4IonList();
   fIsotopeTableList = new std::vector<G4VIsotopeTable*>;
 
-  //  printf("Copy all ions: %d\n", fIonListShadow->size());
   G4IonListIterator it;
   for (it = fIonListShadow->begin() ; it != fIonListShadow->end(); it++ )
+  {
     fIonList->insert(*it);
-  //  for (size_t i = 0; i < fIonListShadow->size() ; i++)
-  //  {
-  //    fIonList->push_back((*fIonListShadow)[i]);
-  //  }
-
-  //  printf("Copy all IsotopeTabel: %d\n", fIsotopeTableListShadow->size());
+  }
 
   for (size_t i = 0; i < fIsotopeTableListShadow->size(); i++)
   {
     fIsotopeTableList->push_back((*fIsotopeTableListShadow)[i]);
   }
-
 }
 
 
@@ -135,8 +122,10 @@ void G4IonTable::SlaveG4IonTable()
 G4IonTable::~G4IonTable()
 {
   // delete IsotopeTable if exists
-  if (fIsotopeTableList != 0) {
-    for (size_t i = 0; i< fIsotopeTableList->size(); ++i) {
+  if (fIsotopeTableList != 0)
+  {
+    for (size_t i = 0; i< fIsotopeTableList->size(); ++i)
+    {
       G4VIsotopeTable* fIsotopeTable= (*fIsotopeTableList)[i];
       delete fIsotopeTable;
     }
@@ -215,12 +204,12 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   //   spin, parity, isospin values are fixed
   //
 
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Request lock for particle table accesses. Some changes are inside 
-  //this critical region.
+  // Request lock for particle table accesses. Some changes are inside 
+  // this critical region.
+  //
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&particleTable);
-  lockCount++;
+  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4ParticleTable::lockCount++;
 #endif
 
   ion = new G4Ions(   name,            mass,       0.0*MeV,     charge, 
@@ -231,10 +220,10 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
 		  "generic",              0,
 		      E                       );
 
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //release lock for particle table accesses.
+  // Release lock for particle table accesses.
+  //
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&particleTable);
+  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
 #endif
 
   ion->SetPDGMagneticMoment(mu);
@@ -307,12 +296,12 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
   //   spin, parity, isospin values are fixed
   //
 
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Request lock for particle table accesses. Some changes are inside 
-  //this critical region.
+  // Request lock for particle table accesses. Some changes are inside 
+  // this critical region.
+  //
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&particleTable);
-  lockCount++;
+  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4ParticleTable::lockCount++;
 #endif
 
   ion = new G4Ions(   name,            mass,       0.0*MeV,     charge, 
@@ -323,10 +312,10 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
 		  "generic",              0,
 		      E                       );
 
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //release lock for particle table accesses.
+  // Release lock for particle table accesses.
+  //
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&particleTable);
+  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
 #endif
 
   ion->SetPDGMagneticMoment(mu);
@@ -649,8 +638,8 @@ G4bool G4IonTable::GetNucleusByEncoding(G4int encoding,
 /////////////////
 const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const 
 {
-  static G4ThreadLocal G4String *name_G4MT_TLS_ = 0 ; if (!name_G4MT_TLS_) name_G4MT_TLS_ = new  G4String  ;  G4String &name = *name_G4MT_TLS_;
-  name ="";
+  static G4ThreadLocal G4String *pname = new G4String("");
+  G4String &name = *pname;
   if ( (0< Z) && (Z <=numberOfElements) ) {
     name = elementName[Z-1];
   } else if (Z > numberOfElements) {
@@ -673,8 +662,8 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
 const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4int L, G4double E) const 
 {
   if (L==0) return GetIonName(Z, A, E); 
-  static G4ThreadLocal G4String *name_G4MT_TLS_ = 0 ; if (!name_G4MT_TLS_) name_G4MT_TLS_ = new  G4String  ;  G4String &name = *name_G4MT_TLS_;
-  name ="";
+  static G4ThreadLocal G4String *pname = new G4String("");
+  G4String &name = *pname;
   for (int i =0; i<L; i++){
     name +="L";
   }
@@ -687,8 +676,10 @@ G4bool G4IonTable::IsIon(const G4ParticleDefinition* particle)
 {
   // return true if the particle is ion
 
-  static G4ThreadLocal G4String *nucleus_G4MT_TLS_ = 0 ; if (!nucleus_G4MT_TLS_) nucleus_G4MT_TLS_ = new  G4String ("nucleus") ;  G4String &nucleus = *nucleus_G4MT_TLS_;
-  static G4ThreadLocal G4String *proton_G4MT_TLS_ = 0 ; if (!proton_G4MT_TLS_) proton_G4MT_TLS_ = new  G4String ("proton") ;  G4String &proton = *proton_G4MT_TLS_;
+  static G4ThreadLocal G4String *pnucleus = new  G4String("nucleus");
+  G4String &nucleus = *pnucleus;
+  static G4ThreadLocal G4String *pproton = new  G4String("proton");
+  G4String &proton = *pproton;
 
   // neutron is not ion
   if ((particle->GetAtomicMass()>0)   && 
@@ -712,8 +703,10 @@ G4bool G4IonTable::IsAntiIon(const G4ParticleDefinition* particle)
 {
   // return true if the particle is ion
 
-  static G4ThreadLocal G4String *anti_nucleus_G4MT_TLS_ = 0 ; if (!anti_nucleus_G4MT_TLS_) anti_nucleus_G4MT_TLS_ = new  G4String ("anti_nucleus") ;  G4String &anti_nucleus = *anti_nucleus_G4MT_TLS_;
-  static G4ThreadLocal G4String *anti_proton_G4MT_TLS_ = 0 ; if (!anti_proton_G4MT_TLS_) anti_proton_G4MT_TLS_ = new  G4String ("anti_proton") ;  G4String &anti_proton = *anti_proton_G4MT_TLS_;
+  static G4ThreadLocal G4String *panti_nucleus = new G4String("anti_nucleus");
+  G4String &anti_nucleus = *panti_nucleus;
+  static G4ThreadLocal G4String *panti_proton = new G4String("anti_proton");
+  G4String &anti_proton = *panti_proton;
 
   // anti_neutron is not ion
   if ((particle->GetAtomicMass()>0)   && 

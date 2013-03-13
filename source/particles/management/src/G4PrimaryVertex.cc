@@ -32,23 +32,25 @@
 #include "G4VUserPrimaryVertexInformation.hh"
 #include "G4ios.hh"
 
-G4ThreadLocal G4Allocator<G4PrimaryVertex> *aPrimaryVertexAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4PrimaryVertex> *aPrimaryVertexAllocator = 0;
 
 G4PrimaryVertex::G4PrimaryVertex()
 :X0(0.),Y0(0.),Z0(0.),T0(0.),theParticle(0),theTail(0),
  nextVertex(0),tailVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ;;}
+{
+}
 
 G4PrimaryVertex::G4PrimaryVertex(
           G4double x0,G4double y0,G4double z0,G4double t0)
 :X0(x0),Y0(y0),Z0(z0),T0(t0),theParticle(0),theTail(0),
  nextVertex(0),tailVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ;;}
+{
+}
 
 G4PrimaryVertex::G4PrimaryVertex(G4ThreeVector xyz0,G4double t0)
 :T0(t0),theParticle(0),theTail(0),
  nextVertex(0),tailVertex(0),numberOfParticle(0),Weight0(1.0),userInfo(0)
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ;
+{
   X0=xyz0.x();
   Y0=xyz0.y();
   Z0=xyz0.z();
@@ -57,13 +59,13 @@ G4PrimaryVertex::G4PrimaryVertex(G4ThreeVector xyz0,G4double t0)
 G4PrimaryVertex::G4PrimaryVertex(const G4PrimaryVertex & right)
 :theParticle(0),theTail(0),
  nextVertex(0),tailVertex(0),userInfo(0)
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ;
+{
   numberOfParticle = right.numberOfParticle;
   *this = right;
 }
 
 G4PrimaryVertex::~G4PrimaryVertex()
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ;
+{
   if(theParticle != 0) {
     delete theParticle; 
     theParticle = 0;
@@ -79,7 +81,7 @@ G4PrimaryVertex::~G4PrimaryVertex()
 }
 
 G4PrimaryVertex &  G4PrimaryVertex::operator=(const G4PrimaryVertex & right)
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; 
+{  
   if (this != &right) {
     X0       = right.X0;
     Y0       = right.Y0;
@@ -123,13 +125,13 @@ G4PrimaryVertex &  G4PrimaryVertex::operator=(const G4PrimaryVertex & right)
 }
 
 G4int G4PrimaryVertex::operator==(const G4PrimaryVertex &right) const
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return (this==&right); }
+{ return (this==&right); }
 
 G4int G4PrimaryVertex::operator!=(const G4PrimaryVertex &right) const
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; return (this!=&right); }
+{ return (this!=&right); }
 
 G4PrimaryParticle* G4PrimaryVertex::GetPrimary(G4int i) const
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ; 
+{  
   if( i >= 0 && i < numberOfParticle ) {
     G4PrimaryParticle* particle = theParticle;
     for( G4int j=0; j<i; j++ ){ 
@@ -142,7 +144,7 @@ G4PrimaryParticle* G4PrimaryVertex::GetPrimary(G4int i) const
 }
 
 void G4PrimaryVertex::Print() const
-{ if (!aPrimaryVertexAllocator_G4MT_TLS_) aPrimaryVertexAllocator_G4MT_TLS_ = new G4Allocator<G4PrimaryVertex>  ;
+{ 
   G4cout << "Vertex  ( "
 	 << X0/mm  << "[mm], " 
 	 << Y0/mm << "[mm], " 

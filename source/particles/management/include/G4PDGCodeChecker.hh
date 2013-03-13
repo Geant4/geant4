@@ -86,7 +86,6 @@ class G4PDGCodeChecker
 
   G4int code;
   G4String theParticleType;
-  G4int thePDGiSpin; 
 
   G4int higherSpin;
   G4int exotic;

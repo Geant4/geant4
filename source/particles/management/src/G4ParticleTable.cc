@@ -56,40 +56,32 @@
 #include "G4ShortLivedTable.hh"
 #include "G4StateManager.hh"
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//lock for particle table accesses.
-
-#ifdef G4MULTITHREADED
-extern pthread_mutex_t particleTable;
-extern G4ThreadLocal int lockCount;
-#endif
-
-//07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//These fields should be thread local or thread private. For a singleton
-//class, we can change any member field as static without any problem
-//because there is only one instance. Then we are allowed to add 
-//"G4ThreadLocal".
+// These fields should be thread local or thread private. For a singleton
+// class, we can change any member field as static without any problem
+// because there is only one instance. Then we are allowed to add 
+// "G4ThreadLocal".
+//
 G4ThreadLocal G4ParticleMessenger* G4ParticleTable::fParticleMessenger = 0;
 G4ThreadLocal G4ParticleTable::G4PTblDictionary*  G4ParticleTable::fDictionary = 0;
 G4ThreadLocal G4ParticleTable::G4PTblDicIterator* G4ParticleTable::fIterator = 0;
 G4ThreadLocal G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::fEncodingDictionary = 0;
 
-//07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This field should be thread private. However, we have to keep one copy
-//of the ion table pointer. So we change all important fields of G4IonTable
-//to the thread local variable.
+// This field should be thread private. However, we have to keep one copy
+// of the ion table pointer. So we change all important fields of G4IonTable
+// to the thread local variable.
+//
 G4IonTable*            G4ParticleTable::fIonTable = 0;
 
-//07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This field should be thread local or thread private. For a singleton
-//class, we can change any member field as static without any problem
-//because there is only one instance. Then we are allowed to add 
-//"G4ThreadLocal".
+// This field should be thread local or thread private. For a singleton
+// class, we can change any member field as static without any problem
+// because there is only one instance. Then we are allowed to add 
+// "G4ThreadLocal".
+//
 G4ThreadLocal G4ShortLivedTable*     G4ParticleTable::fShortLivedTable = 0;
 
-//07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//These shadow pointers are used by each worker thread to copy the content
-//from the master thread. 
+// These shadow pointers are used by each worker thread to copy the content
+// from the master thread. 
+//
 G4ParticleMessenger* G4ParticleTable::fParticleMessengerShadow = 0;
 G4ParticleTable::G4PTblDictionary*  G4ParticleTable::fDictionaryShadow = 0;
 G4ParticleTable::G4PTblDicIterator* G4ParticleTable::fIteratorShadow = 0;
@@ -99,11 +91,14 @@ G4ShortLivedTable*     G4ParticleTable::fShortLivedTableShadow = 0;
 
 // Static class variable: ptr to single instance of class
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//Phase I changes this member to be thread local while each thread holds
-//its own copy of particles.
-//Phase II changes this member back in order to share particles.
 G4ParticleTable* G4ParticleTable::fgParticleTable =0;
+
+#ifdef G4MULTITHREADED
+// Lock for particle table accesses.
+//
+pthread_mutex_t G4ParticleTable::particleTableMutex = PTHREAD_MUTEX_INITIALIZER;
+G4int G4ParticleTable::lockCount = 0;
+#endif 
 
 ////////////////////
 G4ParticleTable* G4ParticleTable::GetParticleTable()
@@ -113,8 +108,8 @@ G4ParticleTable* G4ParticleTable::GetParticleTable()
       fgParticleTable =  &theParticleTable;
     }
 
-    //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    //Here we initialize all thread private data members.
+    // Here we initialize all thread private data members.
+    //
     if (fDictionary == 0) fgParticleTable->SlaveG4ParticleTable();
 
     return fgParticleTable;
@@ -129,8 +124,8 @@ G4ParticleTable::G4ParticleTable()
   fDictionary = new G4PTblDictionary();
 
 
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Set up the shadow pointer used by worker threads.
+  // Set up the shadow pointer used by worker threads.
+  //
   if (fDictionaryShadow == 0)
   {
     fDictionaryShadow = fDictionary;
@@ -138,8 +133,8 @@ G4ParticleTable::G4ParticleTable()
 
   fIterator   = new G4PTblDicIterator( *fDictionary );
 
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Set up the shadow pointer used by worker threads.
+  // Set up the shadow pointer used by worker threads.
+  //
   if (fIteratorShadow == 0)
   {
     fIteratorShadow = fIterator;
@@ -148,8 +143,9 @@ G4ParticleTable::G4ParticleTable()
   fEncodingDictionary = new G4PTblEncodingDictionary();
 
  // Ion Table
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Set up the shadow pointer used by worker threads.
+ 
+  // Set up the shadow pointer used by worker threads.
+  //
   if (fEncodingDictionaryShadow == 0)
   {
     fEncodingDictionaryShadow = fEncodingDictionary;
@@ -160,60 +156,56 @@ G4ParticleTable::G4ParticleTable()
   // short lived table
   fShortLivedTable = new G4ShortLivedTable();
 
-  //07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Set up the shadow pointer used by worker threads.
+  // Set up the shadow pointer used by worker threads.
+  //
   if (fShortLivedTableShadow == 0)
   {
     fShortLivedTableShadow = fShortLivedTable;
   }
 }
 
-//07.11.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This method is similar to the constructor. It is used by each worker
-//thread to achieve the partial effect as that of the master thread.
-//Here we initialize all thread private data members.
+// This method is similar to the constructor. It is used by each worker
+// thread to achieve the partial effect as that of the master thread.
+// Here we initialize all thread private data members.
+//
 void G4ParticleTable::SlaveG4ParticleTable()
 {
   if (fDictionary != 0) return;
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The iterator for the shadow particle table is not sharable.
+  // The iterator for the shadow particle table is not sharable.
+  //
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&particleTable);
-  lockCount++;
+  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4ParticleTable::lockCount++;
 #endif
 
   fDictionary = new G4PTblDictionary();
 
   fIteratorShadow->reset();
-  //  int tempCount = 0;
-  while( (*fIteratorShadow)() ){
+  while( (*fIteratorShadow)() )
+  {
     G4ParticleDefinition* particle = fIteratorShadow->value();
-    //    tempCount++;
     fDictionary->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) );
   }       
-
-  //  printf("Have copied dictionary: %d\n", tempCount);
 
   fIterator =  new G4PTblDicIterator( *fDictionary);
 
   fEncodingDictionary = new G4PTblEncodingDictionary();
 
   fIteratorShadow->reset();
-  //  tempCount = 0;
-  while( (*fIteratorShadow)() ){
+
+  while( (*fIteratorShadow)() )
+  {
     G4ParticleDefinition* particle = fIteratorShadow->value();
     G4int code = particle->GetPDGEncoding();
-    if (code !=0 ) {
-      //      tempCount++;
+    if (code !=0 )
+    {
       fEncodingDictionary->insert( std::pair<G4int, G4ParticleDefinition*>(code ,particle) );
     }
   }       
 
-  //  printf("Have copied encoding dictionary: %d\n", tempCount);
-
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&particleTable);
+  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
 #endif
 
   fIonTable->SlaveG4IonTable();
@@ -221,18 +213,14 @@ void G4ParticleTable::SlaveG4ParticleTable()
   fShortLivedTable = new G4ShortLivedTable();
   G4int numOfShortLived = fShortLivedTableShadow->size();
 
-  //  printf("Copy all short lived pointers: %d\n", numOfShortLived);
-
   for (G4int i = 0; i < numOfShortLived ; i++)
   {
     fShortLivedTable->Insert(fShortLivedTableShadow->GetParticle(i));
   }
-
 }
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//Do we need DestroySlaveG4ParticleTable()? 
- 
+// Do we need DestroySlaveG4ParticleTable()? 
+//
 ////////////////////
 G4ParticleTable::~G4ParticleTable()
 {

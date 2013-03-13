@@ -45,9 +45,9 @@ G4ThreadLocal G4ParticlePropertyTable* G4ParticlePropertyTable::fgParticleProper
 ////////////////////
 G4ParticlePropertyTable* G4ParticlePropertyTable::GetParticlePropertyTable()
 {
-  static G4ThreadLocal G4ParticlePropertyTable *theParticlePropertyTable_G4MT_TLS_ = 0 ; if (!theParticlePropertyTable_G4MT_TLS_) theParticlePropertyTable_G4MT_TLS_ = new  G4ParticlePropertyTable  ;  G4ParticlePropertyTable &theParticlePropertyTable = *theParticlePropertyTable_G4MT_TLS_;
-  if (!fgParticlePropertyTable){
-    fgParticlePropertyTable =  &theParticlePropertyTable;
+  if (!fgParticlePropertyTable)
+  {
+    fgParticlePropertyTable = new  G4ParticlePropertyTable;
   }
   return fgParticlePropertyTable;
 }
@@ -232,9 +232,3 @@ G4bool G4ParticlePropertyTable::SetParticleProperty(const G4ParticlePropertyData
   
   return true;
 }
-
-
-
-
-
-

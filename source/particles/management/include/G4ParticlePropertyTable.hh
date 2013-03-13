@@ -107,12 +107,3 @@ class G4ParticlePropertyTable
 
 
 #endif
-
-
-
-
-
-
-
-
-
