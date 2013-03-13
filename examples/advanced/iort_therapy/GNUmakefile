@@ -11,7 +11,7 @@ G4EXLIB := true
 #CPPFLAGS += -g 
 
 ifndef G4INSTALL
-  G4INSTALL = ../..
+  G4INSTALL = ../../..
 endif
 
 .PHONY: all

@@ -99,7 +99,7 @@
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4ProcessManager.hh"
-#include "HadronPhysicsQGSP_BIC.hh"  
+#include "G4HadronPhysicsQGSP_BIC.hh"  
 #include "G4IonFluctuations.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4EmProcessOptions.hh"
@@ -254,7 +254,7 @@ void IORTPhysicsList::AddPhysicsList(const G4String& name)
     }
     else if (name == "Hadron_QGSP_BIC")
     {
-	    hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+	    hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
 	   // helIsRegistered = true;
     }
     else if (name == "Hadron_QBBC") 
@@ -310,7 +310,7 @@ void IORTPhysicsList::AddPhysicsList(const G4String& name)
 	hadronPhys.push_back( new G4StoppingPhysics());
 	hadronPhys.push_back( new G4IonBinaryCascadePhysics());
 	hadronPhys.push_back( new G4NeutronTrackingCut());
-	hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+	hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
 	hadronPhys.push_back( new G4DecayPhysics());
 
     }
