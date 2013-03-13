@@ -63,7 +63,7 @@ class G4QMDCollision
 
       G4double deltar;
       G4double bcmax0 , bcmax1;
-      G4double sig0 , sig1;
+//      G4double sig0 , sig1;
       G4double epse; 
 
       G4Scatterer* theScatterer;

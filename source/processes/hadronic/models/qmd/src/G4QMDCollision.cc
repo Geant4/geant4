@@ -40,7 +40,7 @@ G4QMDCollision::G4QMDCollision()
 : deltar ( 4 )
 , bcmax0 ( 1.323142 ) // NN maximum impact parameter
 , bcmax1 ( 2.523 )    // others maximum impact parameter
-, sig0 ( 55 )   // NN cross section
+// , sig0 ( 55 )   // NN cross section
 //110617 fix for gcc 4.6 compilation warnings 
 //, sig1 ( 200 )  // others cross section
 , epse ( 0.0001 )
