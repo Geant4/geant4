@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file radioactivedecay/rdecay02/include/exrdmHisto.hh
 /// \brief Definition of the exrdmHisto class
 //

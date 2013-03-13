@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file radioactivedecay/rdecay02/src/exrdmPhysListParticles.cc
 /// \brief Implementation of the exrdmPhysListParticles class
 //

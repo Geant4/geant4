@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file radioactivedecay/rdecay02/src/exrdmDetectorMessenger.cc
 /// \brief Implementation of the exrdmDetectorMessenger class
 //

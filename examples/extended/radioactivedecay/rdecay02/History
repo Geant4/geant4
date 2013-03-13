@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2010-11-17 15:31:08 flei Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01/02/2013  Vladimir Ivanchenko (rdecay02-V09-06-00)
+- Migration to new physics_lists directory structure
 
 28/11/2012  Gabriele Cosmo (rdecay02-V09-05-05)
 - Fixed cases of variable shadowing.

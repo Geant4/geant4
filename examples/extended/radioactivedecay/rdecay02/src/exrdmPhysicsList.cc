@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file radioactivedecay/rdecay02/src/exrdmPhysicsList.cc
 /// \brief Implementation of the exrdmPhysicsList class
 //
@@ -49,10 +51,10 @@
 #include "G4UnitsTable.hh"
 #include "G4LossTableManager.hh"
 
-#include "HadronPhysicsQGSP_BERT.hh"
-#include "HadronPhysicsQGSP_BIC.hh"
-#include "HadronPhysicsQGSP_BERT_HP.hh"
-#include "HadronPhysicsQGSP_BIC_HP.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BIC.hh"
+#include "G4HadronPhysicsQGSP_BERT_HP.hh"
+#include "G4HadronPhysicsQGSP_BIC_HP.hh"
 
 #include "G4EmExtraPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
@@ -87,9 +89,6 @@ exrdmPhysicsList::exrdmPhysicsList() :
 
   // EM physics
   fEmPhysicsList = new G4EmStandardPhysics();
-  
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,16 +146,16 @@ void exrdmPhysicsList::SelectPhysicsList(const G4String& name)
     fHadPhysicsList = new exrdmPhysListHadron("hadron");
   } else if (name == "QGSP_BERT") {
     AddExtraBuilders(false);
-    fHadPhysicsList = new HadronPhysicsQGSP_BERT("std-hadron");
+    fHadPhysicsList = new G4HadronPhysicsQGSP_BERT("std-hadron");
   } else if (name == "QGSP_BIC" && !fHadPhysicsList) {
     AddExtraBuilders(false);
-    fHadPhysicsList = new HadronPhysicsQGSP_BIC("std-hadron");
+    fHadPhysicsList = new G4HadronPhysicsQGSP_BIC("std-hadron");
   } else if (name == "QGSP_BERT_HP"  && !fHadPhysicsList) {
     AddExtraBuilders(true);
-    fHadPhysicsList = new HadronPhysicsQGSP_BERT_HP("std-hadron");
+    fHadPhysicsList = new G4HadronPhysicsQGSP_BERT_HP("std-hadron");
   } else if (name == "QGSP_BIC_HP"  && !fHadPhysicsList) {
     AddExtraBuilders(true);
-    fHadPhysicsList = new HadronPhysicsQGSP_BIC_HP("std-hadron");
+    fHadPhysicsList = new G4HadronPhysicsQGSP_BIC_HP("std-hadron");
   } else if (name == "LowEnergy_EM") {
       delete fEmPhysicsList;
       fEmPhysicsList = new exrdmPhysListEmLowEnergy("lowe-em");
