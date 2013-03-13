@@ -42,6 +42,7 @@
 #include "G4SystemOfUnits.hh"
 
 PerspectiveVisAction::PerspectiveVisAction():
+  G4VUserVisAction(),
   fpVisManager(0),
   fOptionString("none"),
   fScene("room-and-chair"),

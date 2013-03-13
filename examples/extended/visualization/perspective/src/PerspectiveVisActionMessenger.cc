@@ -40,7 +40,12 @@
 
 PerspectiveVisActionMessenger::PerspectiveVisActionMessenger
 (PerspectiveVisAction* PVA):
-  fPVA(PVA)
+  G4UImessenger(),
+  fPVA(PVA),
+  fpDirectory(0),
+  fpCommandOS(0),
+  fpCommandScene(0)
+  
 {
   G4bool omitable;
 
