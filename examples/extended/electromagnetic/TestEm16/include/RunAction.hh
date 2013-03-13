@@ -54,12 +54,13 @@ class RunAction : public G4UserRunAction
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
 
-    G4int    n_gam_sync; // number of synchrotron radiation photons generated
-    G4double e_gam_sync, e_gam_sync2, e_gam_sync_max; // energy of synchrotron radiation photons generated
-    G4double lam_gam_sync; // step length between synchrotron radiation photons
+    G4int    f_n_gam_sync;     // number of synchrotron radiation photons generated
+    G4double f_e_gam_sync, f_e_gam_sync2, f_e_gam_sync_max; // energy of synchrotron
+                                                            // radiation photons generated
+    G4double f_lam_gam_sync;   // step length between synchrotron radiation photons
 
   private:
-    HistoManager*   fHistoManager;
+    HistoManager* fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

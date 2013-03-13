@@ -40,7 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:fDrawFlag("none"),fPrintModulo(10000),fEventMessenger(0)
+:G4UserEventAction(),fDrawFlag("none"),fPrintModulo(10000),fEventMessenger(0)
 {
   fEventMessenger = new EventActionMessenger(this);
 }

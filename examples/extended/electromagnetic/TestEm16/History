@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2010-11-09 20:56:00 asaim Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+13-02-13 I.Hrivnacova (testem16-V09-06-00) 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
 16-10-12 mma (testem16-V09-05-03)
 -use G4AnalysisManager
 - coding convention: virtual

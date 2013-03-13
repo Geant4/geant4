@@ -40,7 +40,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
-:fPhysList(physL)
+:G4UImessenger(),fPhysList(physL),
+ fPhysDir(0),
+ fSRTypeCmd(0)
 {
   fPhysDir = new G4UIdirectory("/testem/phys/");
   fPhysDir->SetGuidance("physics list commands");

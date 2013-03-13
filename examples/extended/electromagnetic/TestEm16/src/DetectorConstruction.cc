@@ -53,7 +53,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fBox(0), fBoxSize(500*m), fMaterial(0), fMagField(0)
+:G4VUserDetectorConstruction(),
+ fBox(0), fBoxSize(500*m), fMaterial(0), fMagField(0),
+ fUserLimits(0), fDetectorMessenger(0)
 {
   DefineMaterials();
   SetMaterial("Iron");

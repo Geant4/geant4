@@ -44,7 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-:fDetector(DC)                                        
+:G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(DC)                                        
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
