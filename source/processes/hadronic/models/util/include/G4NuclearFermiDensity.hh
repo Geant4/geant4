@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-//
+
 #ifndef G4NuclearFermiDensity_h
 #define G4NuclearFermiDensity_h 1
 
@@ -37,7 +37,6 @@
 
 class G4NuclearFermiDensity : public G4VNuclearDensity
 {
-
   public:
     G4NuclearFermiDensity(G4int anA, G4int aZ);
     ~G4NuclearFermiDensity();
@@ -61,12 +60,9 @@ class G4NuclearFermiDensity : public G4VNuclearDensity
     }   
    
   private:
-  
-    G4int    theA;
-    G4int    theZ;
+    G4int theA;
     G4double theR;      // Nuclear Radius 
     const G4double a;	// Determines the nuclear surface thickness
-  
 };
 
 #endif
