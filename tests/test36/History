@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-02-13 V.Ivanchenko (test36-V09-06-01)
+- XTRPhotoElectricEffect - changed method to access G4SandiaTable
+
+22-02-13 V.Ivanchenko (test36-V09-06-00)
+- XTRPhotoElectricEffect - changed method to access G4SandiaTable
+
 28-11-12  G.Cosmo (test36-V09-05-05)
 - Fixed cases of variable shadowing.
 

@@ -108,20 +108,20 @@ class XTRPhotoElectricEffect : public G4VDiscreteProcess
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
         
-  public:  // with description
+public:  // with description
   
-       // utilities to access the cross Section and mean free path:
-	   	  
-     virtual
-     G4double ComputeCrossSectionPerAtom(G4double PhotonEnergy, 
-                                         G4double AtomicNumber);
+  // utilities to access the cross Section and mean free path:
+  G4double ComputeCrossSectionPerAtom(G4double PhotonEnergy, 
+				      G4double AtomicNumber,
+				      const G4Material*);
 		 
-     virtual
-     G4double ComputeMeanFreePath(G4double PhotonEnergy, 
-                                  G4Material* aMaterial);
-  void SetMinElectronEnergy(G4double E){fMinElectronEnergy=E;};      
+  G4double ComputeMeanFreePath(G4double PhotonEnergy, 
+			       G4Material* aMaterial);
+ 
+  inline void SetMinElectronEnergy(G4double E){fMinElectronEnergy=E;};      
 				  
   protected:
+
      virtual
      G4double ElecThetaDistribution(G4double ElecKineEnergy);				  
 

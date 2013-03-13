@@ -99,19 +99,24 @@ inline G4bool XTRPhotoElectricEffect::IsApplicable(const G4ParticleDefinition&
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double XTRPhotoElectricEffect::ComputeCrossSectionPerAtom(G4double GammaEnergy,
-                                                          G4double AtomicNumber)
+G4double 
+XTRPhotoElectricEffect::ComputeCrossSectionPerAtom(G4double GammaEnergy,
+						   G4double AtomicNumber,
+						   const G4Material* mat)
 
 // returns the photoElectric cross Section in GEANT4 internal units
 {
- G4double* SandiaCof 
-           = G4SandiaTable::GetSandiaCofPerAtom((int)AtomicNumber,GammaEnergy);
+  std::vector<G4double> SandiaCof;
+  SandiaCof.resize(4,0.0);
+  mat->GetSandiaTable()->GetSandiaCofPerAtom((G4int)AtomicNumber,
+					     GammaEnergy,
+					     SandiaCof);
 				    
- G4double energy2 = GammaEnergy*GammaEnergy, energy3 = GammaEnergy*energy2, 
-          energy4 = energy2*energy2;
+  G4double energy2 = GammaEnergy*GammaEnergy, energy3 = GammaEnergy*energy2, 
+    energy4 = energy2*energy2;
 
- return SandiaCof[0]/GammaEnergy + SandiaCof[1]/energy2 +
-        SandiaCof[2]/energy3     + SandiaCof[3]/energy4; 
+  return SandiaCof[0]/GammaEnergy + SandiaCof[1]/energy2 +
+    SandiaCof[2]/energy3     + SandiaCof[3]/energy4; 
           
 }
 
@@ -122,7 +127,7 @@ G4double XTRPhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
 
 // returns the gamma mean free path in GEANT4 internal units
 {
- G4double* SandiaCof = aMaterial->GetSandiaTable()
+ const G4double* SandiaCof = aMaterial->GetSandiaTable()
                                 ->GetSandiaCofForMaterial(GammaEnergy);
 				    
  G4double energy2 = GammaEnergy*GammaEnergy, energy3 = GammaEnergy*energy2, 
@@ -137,15 +142,15 @@ G4double XTRPhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double XTRPhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
-                                                       G4double,
-                                                       G4ForceCondition*)
+G4double XTRPhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
+						 G4double,
+						 G4ForceCondition*)
 
 // returns the gamma mean free path in GEANT4 internal units
 {
  G4double  GammaEnergy = aTrack.GetDynamicParticle()->GetKineticEnergy();
- G4double* SandiaCof   = aTrack.GetMaterial()->GetSandiaTable()
-                                   ->GetSandiaCofForMaterial(GammaEnergy);
+ const G4double* SandiaCof = aTrack.GetMaterial()->GetSandiaTable()
+   ->GetSandiaCofForMaterial(GammaEnergy);
 				    
  G4double energy2 = GammaEnergy*GammaEnergy, energy3 = GammaEnergy*energy2, 
           energy4 = energy2*energy2;
@@ -161,7 +166,7 @@ inline G4double XTRPhotoElectricEffect::GetMeanFreePath(const G4Track& aTrack,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4VParticleChange* XTRPhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
-                                                      const G4Step&  aStep)
+							const G4Step&  aStep)
 //
 // Generate an electron resulting of a photo electric effect.
 // The incident photon disappear.
@@ -264,8 +269,10 @@ G4Element* XTRPhotoElectricEffect::SelectRandomAtom(
  
   for ( G4int elm=0 ; elm < NumberOfElements ; elm++ )
      {PartialSumSigma += NbOfAtomsPerVolume[elm] *
-                         ComputeCrossSectionPerAtom(GammaEnergy,
-                                         (*theElementVector)[elm]->GetZ());
+	 ComputeCrossSectionPerAtom(GammaEnergy,
+				    (*theElementVector)[elm]->GetZ(),
+				    aMaterial);
+
       if (rval<=PartialSumSigma*MeanFreePath) return ((*theElementVector)[elm]);
      }
   return ((*theElementVector)[NumberOfElements-1]);    
