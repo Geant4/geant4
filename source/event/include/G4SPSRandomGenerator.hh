@@ -210,7 +210,7 @@ private:
 	G4PhysicsOrderedFreeVector PosPhiBiasH;
 	G4PhysicsOrderedFreeVector IPDFPosPhiBiasH;
 
-	G4double alpha;   // for biasing energy
+	//G4double alpha;   // for biasing energy
 
 	G4double bweights[9]; //record x,y,z,theta,phi,energy,posThet,posPhi,intensity weights
 

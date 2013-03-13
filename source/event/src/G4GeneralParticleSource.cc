@@ -62,7 +62,7 @@
 #include "G4GeneralParticleSource.hh"
 
 G4GeneralParticleSource::G4GeneralParticleSource()
-  : multiple_vertex(false), flat_sampling(false), weight_change(1.)
+  : multiple_vertex(false), flat_sampling(false)
 {
   sourceVector.clear();
   sourceIntensity.clear();
