@@ -159,7 +159,6 @@ private:
   G4int                      fGhostNavigatorIndex;
   G4bool                         fIsGhostGeometry;
   G4double                           fGhostSafety;
-  G4bool                              fOnBoundary;
   G4FieldTrack                        fFieldTrack;
   
   
