@@ -63,6 +63,16 @@ ifndef INCFLAGS
               -I$(G4BASE)/particles/shortlived/include \
               -I$(G4BASE)/physics_lists/lists/include \
               -I$(G4BASE)/physics_lists/builders/include \
+              -I$(G4BASE)/physics_lists/constructors/decay/include \
+              -I$(G4BASE)/physics_lists/constructors/electromagnetic/include \
+              -I$(G4BASE)/physics_lists/constructors/factory/include \
+              -I$(G4BASE)/physics_lists/constructors/gamma_lepto_nuclear/include \
+              -I$(G4BASE)/physics_lists/constructors/hadron_elastic/include \
+              -I$(G4BASE)/physics_lists/constructors/hadron_inelastic/include \
+              -I$(G4BASE)/physics_lists/constructors/ions/include \
+              -I$(G4BASE)/physics_lists/constructors/limiters/include \
+              -I$(G4BASE)/physics_lists/constructors/stopping/include \
+              -I$(G4BASE)/physics_lists/util/include \
               -I$(G4BASE)/processes/management/include \
               -I$(G4BASE)/processes/cuts/include \
               -I$(G4BASE)/processes/biasing/include \
@@ -91,8 +101,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/abrasion/include \
               -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
               -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
-              -I$(G4BASE)/processes/hadronic/models/cascade/evaporation/include \
-              -I$(G4BASE)/processes/hadronic/models/cascade/utils/include \
               -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/ablation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \

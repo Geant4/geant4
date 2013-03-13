@@ -1,4 +1,4 @@
-$Id$
+svn log $Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+12th March 2013   Gunter Folger    (config-V09-06-03)
+- clean up of Bertini cascade, removing two obsolete directorys, 
+    cascade/evaporation and cascade/utils
+
+11th January 2013 Gunter Folger    (config-V09-06-02)
+- Add includes for new structure of physics_lists
 
 14th December 2012 Gabriele Cosmo  (config-V09-06-01)
 - Removed includes for BREPS module.
