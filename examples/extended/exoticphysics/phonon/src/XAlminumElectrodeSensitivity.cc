@@ -43,7 +43,7 @@
 
 using namespace std;
 
-XAlminumElectrodeHitsCollection* XAlminumElectrodeSensitivity::hitsCollection = NULL;
+XAlminumElectrodeHitsCollection* XAlminumElectrodeSensitivity::fHitsCollection = NULL;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -52,7 +52,7 @@ XAlminumElectrodeSensitivity::XAlminumElectrodeSensitivity(G4String name)
 {
   G4String HCname;
   collectionName.insert(HCname="XAlminumElectrodeHit");
-  HCID = -1;
+  fHCID = -1;
   fWriter.open("caustic.ssv", fstream::out | fstream::ate);
   fWriter2.open("timing.ssv", fstream::out | fstream::ate);
 
@@ -85,18 +85,18 @@ XAlminumElectrodeSensitivity::~XAlminumElectrodeSensitivity(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XAlminumElectrodeHitsCollection* XAlminumElectrodeSensitivity::GetHitsCollection(){
-  return hitsCollection;
+  return fHitsCollection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XAlminumElectrodeSensitivity::Initialize(G4HCofThisEvent*HCE)
 {
-  hitsCollection = new XAlminumElectrodeHitsCollection
+  fHitsCollection = new XAlminumElectrodeHitsCollection
                    (SensitiveDetectorName,collectionName[0]);
-  if(HCID<0)
-  { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(hitsCollection); }
-  HCE->AddHitsCollection(HCID,hitsCollection);
+  if(fHCID<0)
+  { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
+  HCE->AddHitsCollection(fHCID,fHitsCollection);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -121,7 +121,7 @@ G4bool XAlminumElectrodeSensitivity::ProcessHits(G4Step* aStep,G4TouchableHistor
   aHit->SetWorldPos(fWorldPos);
   aHit->SetLocalPos(fLocalPos);
 
-  hitsCollection->insert(aHit);
+  fHitsCollection->insert(aHit);
 
   fWriter<<"\n"<<fWorldPos.getX()/mm
          <<","<<fWorldPos.getY()/mm

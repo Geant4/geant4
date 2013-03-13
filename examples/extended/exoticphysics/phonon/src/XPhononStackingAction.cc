@@ -41,11 +41,17 @@
 #include "XTPhononSlow.hh"
 #include "XLPhonon.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 XPhononStackingAction::XPhononStackingAction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 XPhononStackingAction::~XPhononStackingAction()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ClassificationOfNewTrack XPhononStackingAction::ClassifyNewTrack(const G4Track* aTrack)
 {

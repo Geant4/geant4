@@ -49,7 +49,7 @@ G4Allocator<XAlminumElectrodeHit> XAlminumElectrodeHitAllocator;
 
 XAlminumElectrodeHit::XAlminumElectrodeHit()
 {
-  time = 0.;
+  fTime = 0.;
   fEdep = 0.;
 }
 
@@ -62,7 +62,7 @@ XAlminumElectrodeHit::~XAlminumElectrodeHit()
 
 XAlminumElectrodeHit::XAlminumElectrodeHit(const XAlminumElectrodeHit &right)
 : G4VHit() {
-  time = right.time;
+  fTime = right.fTime;
   fEdep = right.fEdep;
   fWorldPos = right.fWorldPos;
   fLocalPos = right.fLocalPos;
@@ -72,7 +72,7 @@ XAlminumElectrodeHit::XAlminumElectrodeHit(const XAlminumElectrodeHit &right)
 
 const XAlminumElectrodeHit& XAlminumElectrodeHit::operator=(const XAlminumElectrodeHit &right)
 {
-  time = right.time;
+  fTime = right.fTime;
   fEdep = right.fEdep;
   fWorldPos = right.fWorldPos;
   fLocalPos = right.fLocalPos;
@@ -98,8 +98,8 @@ void XAlminumElectrodeHit::Draw()
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(0.65,0.65,0.);
     G4VisAttributes attribs(colour);
-    attribs.SetStartTime(time);
-    attribs.SetEndTime(time+1*ms);
+    attribs.SetStartTime(fTime);
+    attribs.SetEndTime(fTime+1*ms);
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
   }
@@ -138,7 +138,7 @@ std::vector<G4AttValue>* XAlminumElectrodeHit::CreateAttValues() const
   values->push_back(G4AttValue("HitType","XAlminumElectrodeHit",""));
 
   values->push_back
-    (G4AttValue("Time",G4BestUnit(time,"Time"),""));
+    (G4AttValue("Time",G4BestUnit(fTime,"Time"),""));
 
   values->push_back
     (G4AttValue("EDep",G4BestUnit(fEdep,"Energy"),""));
@@ -153,7 +153,7 @@ std::vector<G4AttValue>* XAlminumElectrodeHit::CreateAttValues() const
 
 void XAlminumElectrodeHit::Print()
 {
-  G4cout << "  time " << time/ns << " (nsec) : at " << fLocalPos
+  G4cout << "  time " << fTime/ns << " (nsec) : at " << fLocalPos
          << "  -- fEdep = " << fEdep/eV << " [eV]" << G4endl;
 }
 

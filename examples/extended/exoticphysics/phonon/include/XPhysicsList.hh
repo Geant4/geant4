@@ -42,9 +42,9 @@ class XPhysicsList: public G4VUserPhysicsList
 
   public:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
-    void SetCuts();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+    virtual void SetCuts();
 private:
    
 };

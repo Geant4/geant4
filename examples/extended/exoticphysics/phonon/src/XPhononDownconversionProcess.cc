@@ -58,7 +58,7 @@ XPhononDownconversionProcess::XPhononDownconversionProcess(const G4String& aName
    if (verboseLevel>1) {
      G4cout << GetProcessName() << " is created "<< G4endl;
    }
-   Lattice=0;
+   fLattice=0;
 
 }
 
@@ -86,9 +86,9 @@ G4double
   //Get pointer to lattice manager singleton and use it to find the
   //XPhysicalLattice object for current volume
   XLatticeManager3* LM = XLatticeManager3::GetXLatticeManager();
-  Lattice = LM->GetXPhysicalLattice(aTrack.GetVolume());
+  fLattice = LM->GetXPhysicalLattice(aTrack.GetVolume());
 
-  G4double A=Lattice->GetAnhDecConstant();
+  G4double A=fLattice->GetAnhDecConstant();
   G4double h=6.626068e-34*m2*kg/s; //Schroedinger's constant
   G4double E= aTrack.GetKineticEnergy();
   
@@ -114,13 +114,13 @@ G4VParticleChange*
   //Get pointer to lattice manager singleton and use it to find the
   //XPhysicalLattice object for current volume
   XLatticeManager3* LM = XLatticeManager3::GetXLatticeManager();
-  Lattice = LM->GetXPhysicalLattice(aTrack.GetVolume());
+  fLattice = LM->GetXPhysicalLattice(aTrack.GetVolume());
 
   //Obtain dynamical constants from this volume's lattice
-  fBeta=Lattice->GetBeta();
-  fGamma=Lattice->GetGamma();
-  fLambda=Lattice->GetLambda();
-  fMu=Lattice->GetMu();
+  fBeta=fLattice->GetBeta();
+  fGamma=fLattice->GetGamma();
+  fLambda=fLattice->GetLambda();
+  fMu=fLattice->GetMu();
 
   //Destroy the parent phonon and create the daughter phonons.
   //74% chance that daughter phonons are both transverse: call MakeTTSecondaries 
@@ -238,35 +238,35 @@ void XPhononDownconversionProcess::MakeTTSecondaries(const G4Track& aTrack){
   G4Track* sec1;
   G4Track* sec2;
   
-  G4double probST = Lattice->GetSTDOS()/(Lattice->GetSTDOS()+Lattice->GetFTDOS());
+  G4double probST = fLattice->GetSTDOS()/(fLattice->GetSTDOS()+fLattice->GetFTDOS());
 
  //First secondary:Make FT or ST phonon, probability density is funciton of eqn of state
   int polarization1;
   if(G4UniformRand()<probST){ // DOS_slow / (DOS_slow+DOS_fast) = 0.59345 according to ModeDensity.m
     polarization1 = 1;
-    sec1 = new G4Track(new G4DynamicParticle(XTPhononSlow::PhononDefinition(),Lattice->MapKtoVDir(1,dir1), x*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
+    sec1 = new G4Track(new G4DynamicParticle(XTPhononSlow::PhononDefinition(),fLattice->MapKtoVDir(1,dir1), x*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
   }else{
     polarization1 = 2;
-    sec1 = new G4Track(new G4DynamicParticle(XTPhononFast::PhononDefinition(),Lattice->MapKtoVDir(2,dir1), x*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
+    sec1 = new G4Track(new G4DynamicParticle(XTPhononFast::PhononDefinition(),fLattice->MapKtoVDir(2,dir1), x*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
   }
 
  //Second secondary:Make FT or ST phonon, probability density is funciton of eqn of state
     int polarization2;
   if(G4UniformRand()<probST){ // DOS_slow / (DOS_slow+DOS_fast) = 0.59345 according to ModeDensity.m
     polarization2 = 1;
-    sec2 = new G4Track(new G4DynamicParticle(XTPhononSlow::PhononDefinition(),Lattice->MapKtoVDir(1,dir2), (1-x)*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
+    sec2 = new G4Track(new G4DynamicParticle(XTPhononSlow::PhononDefinition(),fLattice->MapKtoVDir(1,dir2), (1-x)*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
   }else{
     polarization2 = 2;
-    sec2 = new G4Track(new G4DynamicParticle(XTPhononFast::PhononDefinition(),Lattice->MapKtoVDir(2,dir2), (1-x)*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
+    sec2 = new G4Track(new G4DynamicParticle(XTPhononFast::PhononDefinition(),fLattice->MapKtoVDir(2,dir2), (1-x)*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
   }
 
   //Set the k-vectors for the two secondaries and add them to the process
   sec1->SetUserInformation(new XPhononTrackInformation(dir1));
-  sec1->SetVelocity(Lattice->MapKtoV(polarization1, dir1)*m/s);
+  sec1->SetVelocity(fLattice->MapKtoV(polarization1, dir1)*m/s);
   sec1->UseGivenVelocity(true);
 
   sec2->SetUserInformation(new XPhononTrackInformation(dir2));
-  sec2->SetVelocity(Lattice->MapKtoV(polarization2, dir2)*m/s);
+  sec2->SetVelocity(fLattice->MapKtoV(polarization2, dir2)*m/s);
   sec2->UseGivenVelocity(true);
 
   aParticleChange.AddSecondary(sec1);
@@ -312,31 +312,31 @@ void XPhononDownconversionProcess::MakeLTSecondaries(const G4Track& aTrack){
   aParticleChange.SetNumberOfSecondaries(2);
   G4double E=aTrack.GetKineticEnergy();
 
-  G4Track* sec1 = new G4Track(new G4DynamicParticle(XLPhonon::PhononDefinition(),Lattice->MapKtoVDir(0,dir1), x*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
+  G4Track* sec1 = new G4Track(new G4DynamicParticle(XLPhonon::PhononDefinition(),fLattice->MapKtoVDir(0,dir1), x*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
 
   G4Track* sec2;
 
   //Make FT or ST phonon, probability density is funciton of eqn of state
-  G4double probST = Lattice->GetSTDOS()/(Lattice->GetSTDOS()+Lattice->GetFTDOS());
+  G4double probST = fLattice->GetSTDOS()/(fLattice->GetSTDOS()+fLattice->GetFTDOS());
   int polarization;
   if(G4UniformRand()<probST){ // DOS_slow / (DOS_slow+DOS_fast) = 0.59345 according to ModeDensity.m
     
-    sec2 = new G4Track(new G4DynamicParticle(XTPhononSlow::PhononDefinition(),Lattice->MapKtoVDir(1,dir2), (1-x)*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
+    sec2 = new G4Track(new G4DynamicParticle(XTPhononSlow::PhononDefinition(),fLattice->MapKtoVDir(1,dir2), (1-x)*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
     polarization = 1;
   
   }else{
     
-    sec2 = new G4Track(new G4DynamicParticle(XTPhononFast::PhononDefinition(),Lattice->MapKtoVDir(2,dir2), (1-x)*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
+    sec2 = new G4Track(new G4DynamicParticle(XTPhononFast::PhononDefinition(),fLattice->MapKtoVDir(2,dir2), (1-x)*E),aTrack.GetGlobalTime(), aTrack.GetPosition() );
     polarization = 2;
 
   }
 
   sec1->SetUserInformation(new XPhononTrackInformation(dir1));
-  sec1->SetVelocity(Lattice->MapKtoV(0, dir1)*m/s);
+  sec1->SetVelocity(fLattice->MapKtoV(0, dir1)*m/s);
   sec1->UseGivenVelocity(true);
   
   sec2->SetUserInformation(new XPhononTrackInformation(dir2));
-  sec2->SetVelocity(Lattice->MapKtoV(polarization, dir2)*m/s);
+  sec2->SetVelocity(fLattice->MapKtoV(polarization, dir2)*m/s);
   sec2->UseGivenVelocity(true);
 
   aParticleChange.AddSecondary(sec1);

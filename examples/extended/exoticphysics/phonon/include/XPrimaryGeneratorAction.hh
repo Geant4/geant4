@@ -49,7 +49,7 @@ public:
     virtual void GeneratePrimaries(G4Event*);
 
   private:
-    G4ParticleGun*                particleGun;
+    G4ParticleGun*                fParticleGun;
 
 };
 

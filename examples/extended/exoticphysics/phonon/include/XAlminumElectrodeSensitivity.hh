@@ -56,14 +56,14 @@ class XAlminumElectrodeSensitivity : public G4VSensitiveDetector
       virtual void EndOfEvent(G4HCofThisEvent*);
 
   XAlminumElectrodeHitsCollection* GetHitsCollection();
-  static XAlminumElectrodeHitsCollection* hitsCollection;
+  static XAlminumElectrodeHitsCollection* fHitsCollection;
 
   private:
   //XAlminumElectrodeHitsCollection * hitsCollection;
   ofstream fWriter; //writing hit posn to file. Temporary fix.
   ofstream fWriter2; //writing timing information to file. Temporary fix.
 
-      G4int HCID;
+      G4int fHCID;
 };
 
 

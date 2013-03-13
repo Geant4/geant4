@@ -77,7 +77,7 @@ class XPhononDownconversionProcess : public G4VDiscreteProcess
 
 
 
-  XPhysicalLattice* Lattice;
+  XPhysicalLattice* fLattice;
 
 
 };

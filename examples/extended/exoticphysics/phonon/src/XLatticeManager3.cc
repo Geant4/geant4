@@ -33,7 +33,7 @@
 #include "G4VPhysicalVolume.hh"
 
 //int XLatticeManager3::fTotalLattices = 0;
-XLatticeManager3* XLatticeManager3::LM;
+XLatticeManager3* XLatticeManager3::fLM;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -54,10 +54,10 @@ XLatticeManager3::~XLatticeManager3()
 XLatticeManager3* XLatticeManager3::GetXLatticeManager(){
 
   //if no lattice manager exists, create one.
-  if(!LM) LM = new XLatticeManager3();
+  if(!fLM) fLM = new XLatticeManager3();
 
   //return pointer to single existing lattice manager
-  return LM;
+  return fLM;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

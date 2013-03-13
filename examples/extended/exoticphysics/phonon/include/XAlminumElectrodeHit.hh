@@ -58,14 +58,14 @@ class XAlminumElectrodeHit : public G4VHit
       virtual void Print();
 
   private:
-      G4double time;
+      G4double fTime;
       G4double fEdep;
       G4ThreeVector fLocalPos;
       G4ThreeVector fWorldPos;
 
   public:
-      inline void SetTime(G4double t) { time = t; }
-      inline G4double GetTime() const { return time; }
+      inline void SetTime(G4double t) { fTime = t; }
+      inline G4double GetTime() const { return fTime; }
       inline void SetEDep(G4double e) { fEdep = e; }
       inline G4double GetEDep() const { return fEdep; }
       inline void SetLocalPos(G4ThreeVector xyz) { fLocalPos = xyz; }

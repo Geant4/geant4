@@ -40,7 +40,7 @@
 class XLatticeManager3
 {
 private:
-  static XLatticeManager3* LM;
+  static XLatticeManager3* fLM;
 
 protected:
   XLatticeManager3();
