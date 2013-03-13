@@ -14,10 +14,72 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 March 2013  Dennis Wright  (hadr-cross-V09-06-12)
+----------------------------------------------------
+- fixed MacOS clang compiler warnings for unused private variables
+  files affected:
+  G4ChipsNeutronInelasticXS.hh
+  G4ChipsProtonInelasticXS.hh
+  G4ChipsKaonMinusInelasticXS.hh
+  G4ChipsHyperonInelasticXS.hh
+  G4ChipsAntiBaryonInelasticXS.hh
+
+  G4IonsKoxCrossSection.hh, .cc
+  G4IonsShenCrossSection.hh, .cc
+  G4HadronCrossSections.hh, .cc
+  G4HadronNucleonXsc.hh, .cc
+  G4GlauberGribovCrossSection.hh, .cc
+  G4ComponentGGNuclNuclXsc.hh, .cc
+  G4ComponentGGHadronNucleusXsc.hh, .cc
+  G4ComponentAntiNuclNuclearXS.hh, .cc
+  G4GGNuclNuclCrossSection.hh, .cc
+     
+ 7 March 2013 M.Maire   (hadr-cross-V09-06-11)
+- fix a bug in DumpPhysicsTable     
+     
+ 7 March 2013 M.Maire   (hadr-cross-V09-06-10)
+- cosmetics in DumpPhysicsTable
+     
+ 4 March 2013 V. Uzhinsky   (hadr-cross-V09-06-09)
+---------------------------------------------------
+ - Bugs are fixed in G4ChipsProtonInelasticXS.cc
+                     G4ChipsNeutronInelasticXS.cc
+     
+01 March 2013 M.Maire   (hadr-cross-V09-06-08)
+----------------------------------------------
+- G4CrossSectionDataStore.cc - elm->GetNaturalAbundanceFlag()
+    
+27 February 2013 V.Ivanchenko   (hadr-cross-V09-06-07)
+-----------------------------------------------------
+- G4CrossSectionDataStore - fixed logic to compute cross section
+    for not natural isotopes
+- G4HadronCrossSection - fixed IsApplicable method - return false
+    if particle is not in the list - not G4HadronicException
+
+22 February 2013 V.Ivanchenko   (hadr-cross-V09-06-06)
+-----------------------------------------------------
+- G4ComponentSAIDTotalXS - removed G4ThreadLocal dclarations
+- G4NeutronCaptureXS, G4NeutronInelasticXS - set IsIsoApplicable
+    to "true"
+
+21 February 2013 V.Ivanchenko   (hadr-cross-V09-06-05)
+-----------------------------------------------------
+- G4ComponentSAIDTotalXS - initialise data in constructor; make
+    data static; G4ThreadLocal declaration is left so far, because
+    it is not clear if internal G4PhysicsVectors may be shared between 
+    threads
+- G4NeutronCaptureXS, G4NeutronInelasticXS - cleaned up isotope data
+    retrieve; added private method IsoCrossSection
+
+29 January 2013 A.Ribon     (hadr-cross-V09-06-04)
+----------------------------------------------------
+- G4ComponentAntiNuclNuclearXS : consider anti-protons and ant-neutrons
+  as default particles, so that they can be used also for anti-hyperons.
+  This fixes also a non-reproducibility seen in QBBC.
+
 10 January 2013 W.Pokorski  (hadr-cross-V09-06-03)
 ----------------------------------------------------
 - fixed memory leak
-
 
 19 December 2012 A.Galoyan (hadr-cross-V09-06-02)
 -G4ComponentAntiNuclNuclearXS

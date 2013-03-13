@@ -116,12 +116,12 @@ public:
 
 private:
 
-  const G4double fUpperLimit;
+//  const G4double fUpperLimit;
   G4double fLowerLimit; 
   const G4double fRadiusConst;
  
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
-  G4double fHadronNucleonXsc;
+//  G4double fHadronNucleonXsc;
  
   G4ParticleDefinition* theProton;
   G4ParticleDefinition* theNeutron;

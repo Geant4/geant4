@@ -1214,7 +1214,9 @@ G4ThreadLocal G4int G4HadronCrossSections::ipart2[7] = {9, 8, 7, 11, 10, 13, 12}
 G4ThreadLocal G4bool G4HadronCrossSections::correctInelasticNearZero = 0;
 
 G4HadronCrossSections::G4HadronCrossSections()
-  : prevParticleDefinition(0), prevElement(0), prevZZ(0), prevAA(0), 
+  : prevParticleDefinition(0),
+//  prevElement(0),
+    prevZZ(0), prevAA(0), 
     prevKineticEnergy(DBL_MAX), lastEkx(0.), lastEkxPower(0.), verboseLevel(0)
 {
   siginelastic = sigelastic = 0.0;
@@ -1624,7 +1626,7 @@ G4HadronCrossSections::GetParticleCode(const G4DynamicParticle* aParticle)
   // Returns GHEISHA code for particle
   // Case entries ordered by estimated frequency
 
-  G4int ipart;
+  G4int ipart = 0;
 
   switch( aParticle->GetPDGcode()) {
     case 111:
@@ -1711,10 +1713,13 @@ G4HadronCrossSections::GetParticleCode(const G4DynamicParticle* aParticle)
     case -3334:
       ipart = 34;  // anti-omega-
       break;
+      /*
     default:      
       throw G4HadronicException(__FILE__, __LINE__,
-        "G4HadronCrossSections::GetParticleCode: unsupported particle");
+	"G4HadronCrossSections::GetParticleCode: unsupported particle "
+	+ aParticle->GetDefinition()->GetParticleName());
       return 0;
+      */
   }
 
   return ipart;

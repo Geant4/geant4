@@ -24,8 +24,6 @@
 // ********************************************************************
 //
 //
-//
-//
 // GEANT4 Hadron physics class -- header file
 // F.W. Jones, TRIUMF, 03-DEC-96
 //  
@@ -106,7 +104,7 @@ class G4HadronCrossSections
     G4double sigelastic;
     G4double siginelastic;
     G4ParticleDefinition* prevParticleDefinition;
-    G4Element* prevElement;
+//    G4Element* prevElement;
     G4int prevZZ;
     G4int prevAA;
     G4double prevKineticEnergy;

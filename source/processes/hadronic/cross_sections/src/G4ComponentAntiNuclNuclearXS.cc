@@ -45,8 +45,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4ComponentAntiNuclNuclearXS::G4ComponentAntiNuclNuclearXS() 
-: G4VComponentCrossSection("AntiAGlauber"), fUpperLimit(10000*GeV),
-  fLowerLimit(10*MeV), fRadiusEff(0.0), fRadiusNN2(0.0),
+: G4VComponentCrossSection("AntiAGlauber"),
+// fUpperLimit(10000*GeV), fLowerLimit(10*MeV),
+  fRadiusEff(0.0), fRadiusNN2(0.0),
   fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0),
   fAntiHadronNucleonTotXsc(0.0), fAntiHadronNucleonElXsc(0.0),
   Elab(0.0), S(0.0), SqrtS(0) 
@@ -98,8 +99,10 @@ G4double G4ComponentAntiNuclNuclearXS::GetTotalElementCrossSection
 
 // calculation of effective nuclear radius for Pbar and Nbar interactions (can be changed)
 
-  if ( (theParticle == theAProton) || (theParticle == theANeutron) )
- {   
+  //A.R. 29-Jan-2013 : use antiprotons/antineutrons as the default case,
+  //                   to be used for instance, as first approximation
+  //                   without validation, for anti-hyperons. 
+  //if ( (theParticle == theAProton) || (theParticle == theANeutron) ) {   
      if(A==1)
      { fTotalXsc = sigmaTotal * millibarn;
         return fTotalXsc;  }
@@ -110,9 +113,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetTotalElementCrossSection
    if( (Z==1) && (A==3) ) fRadiusEff = 3.300;  
    if( (Z==2) && (A==3) ) fRadiusEff = 3.300;  
    if( (Z==2) && (A==4) ) fRadiusEff = 2.376;     
-
-
- }
+ //}
       
 //calculation of effective nuclear radius for AntiDeuteron interaction (can be changed)
   if (theParticle == theADeuteron) 
@@ -187,8 +188,10 @@ G4double G4ComponentAntiNuclNuclearXS::GetInelasticElementCrossSection
 
 // calculation of effective nuclear radius for Pbar and Nbar interaction (can be changed)
 
-  if ( (theParticle == theAProton) || (theParticle == theANeutron) )
- {
+  //A.R. 29-Jan-2013 : use antiprotons/antineutrons as the default case,
+  //                   to be used for instance, as first approximation
+  //                   without validation, for anti-hyperons. 
+  //if ( (theParticle == theAProton) || (theParticle == theANeutron) ) {   
   if (A==1)
       { fInelasticXsc = (sigmaTotal - sigmaElastic) * millibarn;
         return fInelasticXsc;  
@@ -199,7 +202,7 @@ G4double G4ComponentAntiNuclNuclearXS::GetInelasticElementCrossSection
     if( (Z==1) && (A==3) ) fRadiusEff = 3.105;               
     if( (Z==2) && (A==3) ) fRadiusEff = 3.105;
     if( (Z==2) && (A==4) ) fRadiusEff = 2.209;
- }
+ //}
 
 //calculation of effective nuclear radius for AntiDeuteron interaction (can be changed)
 

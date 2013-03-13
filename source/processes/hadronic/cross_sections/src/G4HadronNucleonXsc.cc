@@ -37,9 +37,11 @@
 
 
 G4HadronNucleonXsc::G4HadronNucleonXsc() 
-: fUpperLimit( 10000 * GeV ),
+: 
+// fUpperLimit( 10000 * GeV ),
   fLowerLimit( 0.03 * MeV ),
-  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fHadronNucleonXsc(0.0)
+  fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0)
+// , fHadronNucleonXsc(0.0)
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();

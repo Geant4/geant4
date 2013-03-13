@@ -111,8 +111,8 @@ G4double GetAntiHadronNucleonElCrSc(const G4ParticleDefinition* aParticle, G4dou
 
 private:
 
-  const G4double fUpperLimit;
-  const G4double fLowerLimit; 
+//  const G4double fUpperLimit;
+//  const G4double fLowerLimit; 
   G4double fRadiusEff;  // Effective Radius for AntiNucleus 
   G4double fRadiusNN2;  // Sqr of radius of NN collision
 

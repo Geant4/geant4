@@ -42,18 +42,20 @@
 #include "G4LPhysicsFreeVector.hh"
 #include "G4HadronicException.hh"
 
-G4String G4ComponentSAIDTotalXS::fnames[13] = {
+const G4String G4ComponentSAIDTotalXS::fnames[13] = {
   "","pp","np","pip","pim",
   "pin","pie",
   "gp_pi0p","gp_pi+n","gn_pi-p","gn_pi0n","gp_etap","gp_etapp"
 };
 
-G4ThreadLocal G4PhysicsVector* G4ComponentSAIDTotalXS::elastdata[13] = {0};
-G4ThreadLocal G4PhysicsVector* G4ComponentSAIDTotalXS::inelastdata[13] = {0};
-
 G4ComponentSAIDTotalXS::G4ComponentSAIDTotalXS() 
-  : G4VComponentCrossSection("xsSAID"),numberOfSaidXS(13)
-{ }
+  : G4VComponentCrossSection("xsSAID")
+{
+  for(G4int i=0; i<numberOfSaidXS; ++i) {
+    elastdata[i] = 0;
+    inelastdata[i] = 0;
+  }
+}
 
 G4ComponentSAIDTotalXS::~G4ComponentSAIDTotalXS()
 {

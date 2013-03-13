@@ -43,10 +43,12 @@
 
 G4ComponentGGHadronNucleusXsc::G4ComponentGGHadronNucleusXsc() 
  : G4VComponentCrossSection("Glauber-Gribov"),
-   fUpperLimit(100000*GeV), fLowerLimit(10.*MeV),// fLowerLimit(3*GeV),
+//   fUpperLimit(100000*GeV),
+   fLowerLimit(10.*MeV),// fLowerLimit(3*GeV),
    fRadiusConst(1.08*fermi),  // 1.1, 1.3 ?
    fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
-   fDiffractionXsc(0.0), fHadronNucleonXsc(0.0)
+   fDiffractionXsc(0.0)
+// , fHadronNucleonXsc(0.0)
 {
   theGamma    = G4Gamma::Gamma();
   theProton   = G4Proton::Proton();
@@ -1457,7 +1459,8 @@ void G4ComponentGGHadronNucleusXsc::CrossSectionDescription(std::ostream& outFil
 
 const G4double G4ComponentGGHadronNucleusXsc::fNeutronBarCorrectionTot[93] = {
 
-1.0, 1.0,     1.118517e+00, 1.082002e+00, 1.116171e+00, 1.078747e+00, 1.061315e+00, 
+  1.0, 1.0,     1.42517e+00,  // 1.118517e+00, 
+1.082002e+00, 1.116171e+00, 1.078747e+00, 1.061315e+00, 
 1.058205e+00, 1.082663e+00, 1.068500e+00, 1.076912e+00, 1.083475e+00, 1.079117e+00, 
 1.071856e+00, 1.071990e+00, 1.073774e+00, 1.079356e+00, 1.081314e+00, 1.082056e+00,
 1.090772e+00, 1.096776e+00, 1.095828e+00, 1.097678e+00, 1.099157e+00, 1.103677e+00, 
@@ -1522,11 +1525,15 @@ const G4double G4ComponentGGHadronNucleusXsc::fProtonBarCorrectionTot[93] = {
 const G4double G4ComponentGGHadronNucleusXsc::fProtonBarCorrectionIn[93] = {
 
 1.0, 1.0,     
-1.167419e+00, 1.156248e+00, 1.205362e+00, 1.154224e+00, 1.120390e+00, 1.124630e+00, 
+1.147419e+00, // 1.167419e+00, 
+1.156248e+00, 1.205362e+00, 1.154224e+00, 1.120390e+00, 1.124630e+00, 
 1.129459e+00, 1.107861e+00, 1.102151e+00, 1.104591e+00, 1.100284e+00, 1.098449e+00, 
 1.092675e+00, 1.101122e+00, 1.106460e+00, 1.115048e+00, 1.123902e+00, 1.126659e+00, 
 1.131258e+00, 1.133948e+00, 1.134183e+00, 1.133766e+00, 1.132812e+00, 1.131514e+00, 
-1.130337e+00, 1.134170e+00, 1.139205e+00, 1.141472e+00, 1.142188e+00, 1.140724e+00, 
+1.150337e+00, // 1.130337e+00, 
+
+1.134170e+00, 1.139205e+00, 1.151472e+00,  // 1.141472e+00, 
+1.142188e+00, 1.140724e+00, 
 1.140099e+00, 1.139847e+00, 1.137672e+00, 1.138644e+00, 1.136338e+00, 1.136438e+00, 
 1.135945e+00, 1.136429e+00, 1.135701e+00, 1.135702e+00, 1.134112e+00, 1.131934e+00, 
 1.128380e+00, 1.126371e+00, 1.122452e+00, 1.120907e+00, 1.115952e+00, 1.115946e+00, 
@@ -1590,7 +1597,7 @@ const G4double G4ComponentGGHadronNucleusXsc::fPionPlusBarCorrectionIn[93] = {
 const G4double G4ComponentGGHadronNucleusXsc::fPionMinusBarCorrectionTot[93] = {
 
 1.0, 1.0,     
-1.075927e+00, 1.077959e+00, 1.129145e+00, 1.102088e+00, 1.089765e+00, 1.083542e+00, 
+1.3956e+00, 1.077959e+00, 1.129145e+00, 1.102088e+00, 1.089765e+00, 1.083542e+00, 
 1.089995e+00, 1.104895e+00, 1.097154e+00, 1.127663e+00, 1.133063e+00, 1.137425e+00, 
 1.136724e+00, 1.133859e+00, 1.132498e+00, 1.130276e+00, 1.127896e+00, 1.127656e+00, 
 1.127905e+00, 1.164210e+00, 1.162259e+00, 1.160075e+00, 1.158978e+00, 1.156649e+00, 
@@ -1612,7 +1619,7 @@ const G4double G4ComponentGGHadronNucleusXsc::fPionMinusBarCorrectionTot[93] = {
 const G4double G4ComponentGGHadronNucleusXsc::fPionMinusBarCorrectionIn[93] = {
 
 1.0, 1.0,    
-1.140246e+00, 1.100898e+00, 1.106773e+00, 1.070289e+00, 1.044514e+00, 1.062628e+00, 
+1.463e+00, 1.100898e+00, 1.106773e+00, 1.070289e+00, 1.044514e+00, 1.062628e+00, 
 1.047992e+00, 1.038041e+00, 1.035862e+00, 1.043679e+00, 1.052466e+00, 1.065780e+00, 
 1.070551e+00, 1.078869e+00, 1.081541e+00, 1.090455e+00, 1.100847e+00, 1.098511e+00, 
 1.102226e+00, 1.118865e+00, 1.123143e+00, 1.126904e+00, 1.127785e+00, 1.130444e+00, 

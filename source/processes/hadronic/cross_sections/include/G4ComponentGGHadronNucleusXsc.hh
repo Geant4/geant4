@@ -148,7 +148,7 @@ virtual
 
 private:
 
-  const G4double fUpperLimit;
+//  const G4double fUpperLimit;
   G4double fLowerLimit; 
   const G4double fRadiusConst;
 
@@ -165,7 +165,7 @@ private:
   static const G4double fPionMinusBarCorrectionIn[93];
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
-  G4double fHadronNucleonXsc;
+//  G4double fHadronNucleonXsc;
  
   G4ParticleDefinition* theGamma;
   G4ParticleDefinition* theProton;
