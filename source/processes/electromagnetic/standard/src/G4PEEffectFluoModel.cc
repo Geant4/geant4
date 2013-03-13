@@ -52,6 +52,7 @@
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
 #include "Randomize.hh"
+#include "G4Material.hh"
 #include "G4DataVector.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4VAtomDeexcitation.hh"
@@ -71,6 +72,8 @@ G4PEEffectFluoModel::G4PEEffectFluoModel(const G4String& nam)
   SetDeexcitationFlag(true);
   fParticleChange = 0;
   fAtomDeexcitation = 0;
+
+  fSandiaCof.resize(4,0.0);
 
   // default generator
   SetAngularDistribution(new G4SauterGavrilaAngularDistribution());
@@ -98,14 +101,18 @@ G4PEEffectFluoModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 						G4double Z, G4double,
 						G4double, G4double)
 {
-  G4double* SandiaCof = G4SandiaTable::GetSandiaCofPerAtom((G4int)Z, energy);
+  // This method may be used only if G4MaterialCutsCouple pointer
+  //   has been set properly
+
+  CurrentCouple()->GetMaterial()
+    ->GetSandiaTable()->GetSandiaCofPerAtom((G4int)Z, energy, fSandiaCof);
 
   G4double energy2 = energy*energy;
   G4double energy3 = energy*energy2;
   G4double energy4 = energy2*energy2;
 
-  return SandiaCof[0]/energy  + SandiaCof[1]/energy2 +
-    SandiaCof[2]/energy3 + SandiaCof[3]/energy4;
+  return fSandiaCof[0]/energy  + fSandiaCof[1]/energy2 +
+    fSandiaCof[2]/energy3 + fSandiaCof[3]/energy4;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,7 +123,7 @@ G4PEEffectFluoModel::CrossSectionPerVolume(const G4Material* material,
 					   G4double energy,
 					   G4double, G4double)
 {
-  G4double* SandiaCof = 
+  const G4double* SandiaCof = 
     material->GetSandiaTable()->GetSandiaCofForMaterial(energy);
 				
   G4double energy2 = energy*energy;
@@ -136,6 +143,7 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 				       G4double,
 				       G4double)
 {
+  SetCurrentCouple(couple);
   const G4Material* aMaterial = couple->GetMaterial();
 
   G4double energy = aDynamicPhoton->GetKineticEnergy();

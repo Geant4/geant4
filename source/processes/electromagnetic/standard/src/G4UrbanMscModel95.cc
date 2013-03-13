@@ -424,6 +424,8 @@ void G4UrbanMscModel95::StartTracking(G4Track* track)
   inside = false;
   insideskin = false;
   tlimit = geombig;
+  stepmin = tlimitminfix ;
+  tlimitmin = 10.*stepmin ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -530,11 +532,11 @@ G4double G4UrbanMscModel95::ComputeTruePathLengthLimit(
 
       // shortcut
       if((tPathLength < tlimit) && (tPathLength < presafety) &&
-         (smallstep >= skin) && (tPathLength < geomlimit-0.999*skindepth))
+         (smallstep > skin) && (tPathLength < geomlimit-0.999*skindepth))
 	return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 
       // step reduction near to boundary
-      if(smallstep < skin)
+      if(smallstep <= skin)
 	{
 	  tlimit = stepmin;
 	  insideskin = true;
@@ -825,19 +827,20 @@ G4UrbanMscModel95::SampleScattering(const G4ThreeVector& oldDirection,
   if(std::fabs(cth) > 1.) { return fDisplacement; }
 
   // extra protection agaist high energy particles backscattered 
-  //if(cth < 1.0 - 1000*tPathLength/lambda0 && kineticEnergy > 20*MeV) { 
     //G4cout << "Warning: large scattering E(MeV)= " << kineticEnergy 
     //	   << " s(mm)= " << tPathLength/mm
     //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
     // do Gaussian central scattering
-  if(kineticEnergy > 5*GeV && cth < 0.9) {
+  //if(kineticEnergy > 5*GeV && cth < 0.9) {
+  if(cth < 1.0 - 1000*tPathLength/lambda0 
+     && cth < 0.8 && kineticEnergy > 20*MeV) { 
     G4ExceptionDescription ed;
     ed << particle->GetParticleName()
        << " E(MeV)= " << kineticEnergy/MeV
        << " Step(mm)= " << tPathLength/mm
        << " in " << CurrentCouple()->GetMaterial()->GetName()
        << " CosTheta= " << cth 
-       << " is too big" << G4endl;
+       << " is too big";
     G4Exception("G4UrbanMscModel95::SampleScattering","em0004",
 		JustWarning, ed,"");
 /*
@@ -1013,9 +1016,23 @@ G4double G4UrbanMscModel95::SampleCosineTheta(G4double trueStepLength,
       if(ltau < -10.63)
         { c *= (0.016*ltau+1.17008); }
 
-      if(abs(c-3.) < 0.001)  c = 3.001;      
-      if(abs(c-2.) < 0.001)  c = 2.001;      
-      if(abs(c-1.) < 0.001)  c = 1.001;      
+      // tail should not be too big
+      if(c < 1.9) { 
+	/*
+	if(KineticEnergy > 20*MeV && c < 1.6) {
+	  G4cout << "G4UrbanMscModel95::SampleCosineTheta: E(GeV)= " 
+		 << KineticEnergy/GeV 
+		 << " !!** c= " << c
+		 << " **!! length(mm)= " << trueStepLength << " Zeff= " << Zeff 
+		 << " " << couple->GetMaterial()->GetName()
+		 << " tau= " << tau << G4endl;
+	}
+	*/
+	c = 1.9; 
+      }
+
+      if(fabs(c-3.) < 0.001)      { c = 3.001; }
+      else if(fabs(c-2.) < 0.001) { c = 2.001; }
 
       G4double c1 = c-1.;
 

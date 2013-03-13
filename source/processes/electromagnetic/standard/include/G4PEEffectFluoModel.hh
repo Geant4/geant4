@@ -50,6 +50,7 @@
 #define G4PEEffectFluoModel_h 1
 
 #include "G4VEmModel.hh"
+#include <vector>
 
 class G4ParticleChangeForGamma;
 class G4VAtomDeexcitation;
@@ -95,6 +96,7 @@ private:
   G4VAtomDeexcitation*      fAtomDeexcitation;
 
   G4double                  fminimalEnergy;
+  std::vector<G4double>     fSandiaCof;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

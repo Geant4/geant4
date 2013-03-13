@@ -18,10 +18,74 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+07 March 13: V.Ivanchenko (emstand-V09-06-19)
+- G4UrbanMscModel, G4UrbanMscModel93, G4UrbanMscModel95, 
+    G4UrbanMscModel96 - comment out extra printout
+  G4UrbanMscModel96 - added warning that it is an obsolete class
+
+28 February 13: V.Ivanchenko (emstand-V09-06-18)
+- G4PEEffectFluoModel - changed interface to SandiaTable allowing
+    materials to be shared between threads 
+
+23 February 13: V.Ivanchenko (emstand-V09-06-17)
+- G4PEEffectFluoModel - attempt to fix compillation problems
+
+21 February 13: V.Ivanchenko (emstand-V09-06-16)
+- G4PEEffectFluoModel - use const pointers to access Sandia table array;
+    changed access to G4SandiaTable in ComputeCrossSectionPerAtom method
+    by using pointer os G4MaterialCutsCouple (before sttic method was used)
+
+19 February 13: V.Ivanchenko (emstand-V09-06-15)
+- G4UrbanMscModel, G4UrbanMscModel96 - L.Urban make modification
+    in SampleCosineTheta to provide higher stability versus step size
+- G4UrbanMscModel - modified format of warning about big scatterings
+
+19 February 13: V.Ivanchenko (emstand-V09-06-14)
+- G4SeltzerBergerModel, G4PAIxSection, G4PAIySection, 
+  G4GoudsmitSaundersonTable, G4GoudsmitSaundersonMscModel
+    - removed G4endl from G4ExceptionDescription
+  G4UrbanMscModel - copied from G4UrbanMscModel96 and become
+    default for G4eMultipleScattering, G4hMultipleScattering
+
+18 February 13: V.Ivanchenko (emstand-V09-06-13)
+- G4eBremsstrahlungModel, G4WentzelVIRelXSection, 
+  G4WentzelOKandVIxSection, G4SeltzerBergerModel, G4PAIxSection,
+  G4PAIySection, G4IonFluctuations, G4ICRU49NuclearStoppingModel,
+  G4ICRU49NuclearStoppingModel, G4GoudsmitSaundersonTable,
+  G4BraggModel, G4BraggIonModel - removed G4ThreadLocal declarations
+
+01 February 13: V.Ivanchenko (emstand-V09-06-12)
+- G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96:
+    added warning printout for particles with E>20 MeV and value
+    of c < 1.6
+- G4UrbanMscModel96 - extra tuning of probability of no scattering
+    in thin layers to be more similar to the single scattering model 
+    (L.Urban)
+
+29 January 13: V.Ivanchenko (emstand-V09-06-11)
+- G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96:
+    added limit c>1.9 for the main parameter responsible for 
+    sumpling of tail of scattering (fix for ATLAS large scattering 
+    angle problem)
+- G4WentzelVIModel - more clean logic of sampling for single
+    scattering mode
+
+25 January 13: V.Ivanchenko (emstand-V09-06-10)
+- G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96 - extended
+    initialisation at StartTracking method: class members
+    'tlimitmin' and 'stepmin' are reset to default values to avoid rare
+    cases of non-reproducibility (L.Urban).
+
+23 January 13: V.Ivanchenko (emstand-V09-06-09)
+11 January 13: V.Ivanchenko (emstand-V09-06-08)
+11 January 13: V.Ivanchenko (emstand-V09-06-07)
+- Removed obsolete models: G4UrbanMscModel90, G4UrbanMscModel92,
+    G4PEEffectModel
+
 09 January 13: V.Ivanchenko (emstand-V09-06-06)
 - G4UrbanMscModel96 - new tuning by L.Urban
 
-29 December 12: V.Ivanchenko (emstand-V09-06-04)
+29 December 12: V.Ivanchenko (emstand-V09-06-05)
 - G4UrbanMscModel95 - use more safe expressions in SampleCosineTheta
     to avoid numerical problem seenith G4UrbanMscmOdel93
 - G4UrbanMscModel93 - added extra double members of the class

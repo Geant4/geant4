@@ -71,9 +71,9 @@
 
 using namespace std;
 
-G4ThreadLocal G4Physics2DVector* G4SeltzerBergerModel::dataSB[101] = {0};
-G4ThreadLocal G4double G4SeltzerBergerModel::ylimit[101] = {0.0};
-G4ThreadLocal G4double G4SeltzerBergerModel::expnumlim = -12.;
+G4Physics2DVector* G4SeltzerBergerModel::dataSB[101] = {0};
+G4double G4SeltzerBergerModel::ylimit[101] = {0.0};
+G4double G4SeltzerBergerModel::expnumlim = -12.;
 
 G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
 					   const G4String& nam)
@@ -146,7 +146,7 @@ void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
   if( !fin.is_open()) {
     G4ExceptionDescription ed;
     ed << "Bremsstrahlung data file <" << ost.str().c_str()
-       << "> is not opened!" << G4endl;
+       << "> is not opened!";
     G4Exception("G4SeltzerBergerModel::ReadData()","em0003",FatalException,
 		ed,"G4LEDATA version should be G4EMLOW6.23 or later.");
     return;
@@ -162,7 +162,7 @@ void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
   } else {
     G4ExceptionDescription ed;
     ed << "Bremsstrahlung data file <" << ost.str().c_str()
-       << "> is not retrieved!" << G4endl;
+       << "> is not retrieved!";
     G4Exception("G4SeltzerBergerModel::ReadData()","em0005",FatalException,
 		ed,"G4LEDATA version should be G4EMLOW6.23 or later.");
     delete v;
@@ -277,18 +277,19 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
    
     if (v > 1.05*vmax && nwarn < 20) {
       ++nwarn;
-      G4cout << "### G4SeltzerBergerModel Warning: Majoranta exceeded! "
-	     << v << " > " << vmax << " by " << v/vmax
-	     << " Egamma(MeV)= " << gammaEnergy
-	     << " Ee(MeV)= " << kineticEnergy
-	     << " Z= " << Z << "  " << particle->GetParticleName()
-	//<< " ncount= " << ncount
-	     << G4endl;
+      G4ExceptionDescription ed;
+      ed << "### G4SeltzerBergerModel Warning: Majoranta exceeded! "
+	 << v << " > " << vmax << " by " << v/vmax
+	 << " Egamma(MeV)= " << gammaEnergy
+	 << " Ee(MeV)= " << kineticEnergy
+	 << " Z= " << Z << "  " << particle->GetParticleName();
      
       if ( 20 == nwarn ) {
-	G4cout << "### G4SeltzerBergerModel Warnings will not be printed anymore"
-	       << G4endl;
+	ed << "\n ### G4SeltzerBergerModel Warnings stopped";
       }
+      G4Exception("G4SeltzerBergerModel::SampleScattering","em0044",
+		  JustWarning, ed,"");
+
     }
   } while (v < vmax*G4UniformRand());
 

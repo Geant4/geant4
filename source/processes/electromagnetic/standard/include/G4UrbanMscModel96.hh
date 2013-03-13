@@ -194,7 +194,8 @@ void G4UrbanMscModel96::UpdateCache()
 {
     lnZ = std::log(Zeff);
     // correction in theta0 formula
-    G4double facz = 0.74845+0.13354*exp(log(Zeff)/6.);
+    G4double w = exp(lnZ/6.);
+    G4double facz = 0.990395+w*(-0.168386+w*0.093286) ;
     coeffth1 = facz*(1. - 8.7780e-2/Zeff);
     coeffth2 = facz*(4.0780e-2 + 1.7315e-4*Zeff);
 

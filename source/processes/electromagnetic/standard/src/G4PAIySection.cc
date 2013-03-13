@@ -1310,7 +1310,7 @@ void G4PAIySection::CallError(G4int i, const G4String& methodName) const
 {
   G4String head = "G4PAIySection::" + methodName + "()";
   G4ExceptionDescription ed;
-  ed << "Wrong index " << i << " fSplineNumber= " << fSplineNumber << G4endl;
+  ed << "Wrong index " << i << " fSplineNumber= " << fSplineNumber;
   G4Exception(head,"pai001",FatalException,ed);
 }
 
@@ -1319,7 +1319,7 @@ void G4PAIySection::CallError(G4int i, const G4String& methodName) const
 // Init  array of Lorentz factors
 //
 
-G4ThreadLocal G4int G4PAIySection::fNumberOfGammas = 111;
+G4int G4PAIySection::fNumberOfGammas = 111;
 
 const G4double G4PAIySection::fLorentzFactor[112] =     // fNumberOfGammas+1
 {

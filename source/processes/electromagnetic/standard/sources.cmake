@@ -77,7 +77,6 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PAIxSection.hh
         G4PAIySection.hh
         G4PEEffectFluoModel.hh
-        G4PEEffectModel.hh
         G4PSTARStopping.hh
         G4PairProductionRelModel.hh
         G4PhotoElectricEffect.hh
@@ -85,8 +84,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ScreeningMottCrossSection.hh
         G4SeltzerBergerModel.hh
         G4UniversalFluctuation.hh
-        G4UrbanMscModel90.hh
-        G4UrbanMscModel92.hh
+        G4UrbanMscModel.hh
         G4UrbanMscModel93.hh
         G4UrbanMscModel95.hh
         G4UrbanMscModel96.hh
@@ -144,7 +142,6 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PAIxSection.cc
         G4PAIySection.cc
         G4PEEffectFluoModel.cc
-        G4PEEffectModel.cc
         G4PSTARStopping.cc
         G4PairProductionRelModel.cc
         G4PhotoElectricEffect.cc
@@ -152,8 +149,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ScreeningMottCrossSection.cc
         G4SeltzerBergerModel.cc
         G4UniversalFluctuation.cc
-        G4UrbanMscModel90.cc
-        G4UrbanMscModel92.cc
+        G4UrbanMscModel.cc
         G4UrbanMscModel93.cc
         G4UrbanMscModel95.cc
         G4UrbanMscModel96.cc

@@ -98,8 +98,8 @@ private:
 
   G4Pow* g4pow;
 
-  static G4ThreadLocal G4double ed[104];
-  static G4ThreadLocal G4double ad[104];
+  static G4double ed[104];
+  static G4double ad[104];
 
   G4double theZieglerFactor;
 

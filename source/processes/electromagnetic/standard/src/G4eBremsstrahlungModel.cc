@@ -330,9 +330,9 @@ G4double G4eBremsstrahlungModel::ComputeBremLoss(G4double Z, G4double T,
    0.00017519}
 
     } ;
-  static G4ThreadLocal G4double aaa = 0.414;
-  static G4ThreadLocal G4double bbb = 0.345;
-  static G4ThreadLocal G4double ccc = 0.460;
+  const G4double aaa = 0.414;
+  const G4double bbb = 0.345;
+  const G4double ccc = 0.460;
 
   G4int iz = 0;
   G4double delz = 1.e6;

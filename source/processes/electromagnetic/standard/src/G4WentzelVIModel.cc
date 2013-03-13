@@ -305,7 +305,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   // initialisation of single scattering x-section
   xtsec = 0.0;
   cosThetaMin = cosTetMaxNuc;
-  /*
+  /*  
   G4cout << "ComputeTrueStepLength: Step= " << geomStepLength 
 	 << "  Lambda= " <<  lambdaeff 
   	 << " 1-cosThetaMaxNuc= " << 1 - cosTetMaxNuc << G4endl;
@@ -381,7 +381,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
     } 
   }
 
-  /*   
+  /*     
   G4cout <<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength
 	 <<" Leff(mm)= "<<lambdaeff/mm<<" sig0(1/mm)= " << xtsec <<G4endl;
   G4cout << particle->GetParticleName() << " 1-cosThetaMin= " << 1-cosThetaMin
@@ -411,7 +411,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
   // use average kinetic energy over the step
   G4double cut = (*currentCuts)[currentMaterialIndex];
-  /*  
+  /*    
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy/MeV
   	 << " Leff= " << lambdaeff <<" sig0(1/mm)= " << xtsec 
  	 << " xmsc= " <<  tPathLength*invlambda 
@@ -458,21 +458,27 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double x2 = x0;
   G4double step, z;
   G4bool singleScat;
-  /*  
-      G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
-      << " 1-cost1= " << 1 - cosThetaMin << "  " << singleScatteringMode 
-      << " xtsec= " << xtsec << G4endl;
+  /*    
+    G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
+    << " 1-cost1= " << 1 - cosThetaMin << "  " << singleScatteringMode 
+    << " xtsec= " << xtsec << G4endl;
   */
   do {
 
+    //G4cout << "# x1(mm)= "<< x1<< " x2(mm)= "<< x2 << G4endl;
     // single scattering case
-    if(singleScatteringMode || x1 <= x2) { 
+    if(singleScatteringMode && x1 > x2) { break; }
+
+    // what is next single of multiple?
+    if(x1 <= x2) { 
       step = x1;
       singleScat = true;
     } else {
       step = x2;
       singleScat = false;
     }
+
+    //G4cout << "# step(mm)= "<< step<< "  singlScat= "<< singleScat << G4endl;
 
     // new position
     fDisplacement += step*mscfac*dir;
@@ -497,7 +503,6 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       // new proposed step length
       x2 -= step; 
       x1  = -log(G4UniformRand())/xtsec; 
-      if(singleScatteringMode && x1 > x2) { break; }
 
     // multiple scattering
     } else { 
@@ -548,7 +553,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
     
   dir.rotateUz(oldDirection);
 
-  //G4cout << "G4WentzelVIModel sampling of scattering is done" << G4endl;
+  //G4cout<<"G4WentzelVIModel sampling is done 1-cost= "<< 1.-dir.z()<<G4endl;
   // end of sampling -------------------------------
 
   fParticleChange->ProposeMomentumDirection(dir);

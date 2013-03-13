@@ -458,6 +458,8 @@ void G4UrbanMscModel93::StartTracking(G4Track* track)
   inside = false;
   insideskin = false;
   tlimit = geombig;
+  stepmin = tlimitminfix ;
+  tlimitmin = 10.*stepmin ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -846,23 +848,25 @@ G4UrbanMscModel93::SampleScattering(const G4ThreeVector& oldDirection,
     //	   << " s(mm)= " << tPathLength/mm
     //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
     // do Gaussian central scattering
-  if(kineticEnergy > 5*GeV && cth < 0.9) {
+  //  if(kineticEnergy > 0.5*GeV && cth < 0.9) {
+  if(cth < 1.0 - 1000*tPathLength/lambda0 && 
+     cth < 0.9 && kineticEnergy > 500*MeV) { 
     G4ExceptionDescription ed;
     ed << particle->GetParticleName()
        << " E(MeV)= " << kineticEnergy/MeV
        << " Step(mm)= " << tPathLength/mm
+       << " tau= " << tPathLength/lambda0
        << " in " << CurrentCouple()->GetMaterial()->GetName()
        << " CosTheta= " << cth 
-       << " is too big" << G4endl;
+       << " is too big";
     G4Exception("G4UrbanMscModel93::SampleScattering","em0004",
 		JustWarning, ed,"");
-  }
-  /*
+    /*
     do {
       cth = 1.0 + 2*log(G4UniformRand())*tPathLength/lambda0;
     } while(cth < -1.0);
+    */
   }
-  */
 
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
@@ -1020,11 +1024,25 @@ G4double G4UrbanMscModel93::SampleCosineTheta(G4double trueStepLength,
         return SimpleScattering(xmeanth,x2meanth);
       }
       // from e- and muon scattering data                    
-      G4double c = coeffc1+coeffc2*y; ;                         
+      G4double c = coeffc1+coeffc2*y; 
 
-      if(abs(c-3.) < 0.001)  c = 3.001;      
-      if(abs(c-2.) < 0.001)  c = 2.001;      
-      if(abs(c-1.) < 0.001)  c = 1.001;      
+      // tail should not be too big
+      if(c < 1.9) { 
+	/*
+	if(KineticEnergy > 200*MeV && c < 1.6) {
+	  G4cout << "G4UrbanMscModel93::SampleCosineTheta: E(GeV)= " 
+		 << KineticEnergy/GeV 
+		 << " !!** c= " << c
+		 << " **!! length(mm)= " << trueStepLength << " Zeff= " << Zeff 
+		 << " " << couple->GetMaterial()->GetName()
+		 << " tau= " << tau << G4endl;
+	}
+	*/
+	c = 1.9; 
+      }
+
+      if(fabs(c-3.) < 0.001)      { c = 3.001; }
+      else if(fabs(c-2.) < 0.001) { c = 2.001; }
 
       G4double c1 = c-1.;
 

@@ -87,11 +87,11 @@
 
 using namespace std;
 
-G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::ener[] = {-1.};
-G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::TCSE[103][106] ;
-G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::FTCSE[103][106] ;
-G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::TCSP[103][106] ;
-G4ThreadLocal G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106] ;
+G4double G4GoudsmitSaundersonMscModel::ener[] = {-1.};
+G4double G4GoudsmitSaundersonMscModel::TCSE[103][106] ;
+G4double G4GoudsmitSaundersonMscModel::FTCSE[103][106] ;
+G4double G4GoudsmitSaundersonMscModel::TCSP[103][106] ;
+G4double G4GoudsmitSaundersonMscModel::FTCSP[103][106] ;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
@@ -782,7 +782,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
   if (infile == 0)
     {
       G4ExceptionDescription ed;
-      ed << "Data file <" + dirFile + "> is not opened!" << G4endl;
+      ed << "Data file <" + dirFile + "> is not opened!";
       G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
 		  "em0003",FatalException,ed);
       return;
@@ -796,7 +796,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
       else            { aRead = 0.0; }
     } else {
       G4ExceptionDescription ed;
-      ed << "Error reading <" + dirFile + "> loop #1 i= " << i << G4endl;
+      ed << "Error reading <" + dirFile + "> loop #1 i= " << i;
       G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
 		  "em0003",FatalException,ed);
       return;
@@ -811,7 +811,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
       } else {
 	G4ExceptionDescription ed;
 	ed << "Error reading <" + dirFile + "> loop #2 j= " << j 
-	   << "; i= " << i << G4endl;
+	   << "; i= " << i;
 	G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
 		    "em0003",FatalException,ed);
 	return;
@@ -827,7 +827,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
       } else {
 	G4ExceptionDescription ed;
 	ed << "Error reading <" + dirFile + "> loop #3 j= " << j 
-	   << "; i= " << i << G4endl;
+	   << "; i= " << i;
 	G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
 		    "em0003",FatalException,ed);
 	return;
@@ -843,7 +843,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
       } else {
 	G4ExceptionDescription ed;
 	ed << "Error reading <" + dirFile + "> loop #4 j= " << j 
-	   << "; i= " << i << G4endl;
+	   << "; i= " << i;
 	G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
 		    "em0003",FatalException,ed);
 	return;
@@ -859,7 +859,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
       } else {
 	G4ExceptionDescription ed;
 	ed << "Error reading <" + dirFile + "> loop #5 j= " << j 
-	   << "; i= " << i << G4endl;
+	   << "; i= " << i;
 	G4Exception("G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()",
 		    "em0003",FatalException,ed);
 	return;

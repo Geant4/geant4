@@ -43,7 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4eMultipleScattering.hh"
-#include "G4UrbanMscModel95.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -75,7 +75,7 @@ G4bool G4eMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 void G4eMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(isInitialized) { return; }
-  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel95(), 1); }
+  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel(), 1); }
   AddEmModel(1, EmModel(1));
   isInitialized = true;
 }

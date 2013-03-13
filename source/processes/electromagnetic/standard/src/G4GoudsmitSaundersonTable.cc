@@ -173,8 +173,8 @@ static const G4double uvalues[320]={0,7.61544e-09,3.04617e-08,6.85389e-08,1.2184
   0.975528,0.978152,0.980631,0.982963,0.985148,0.987185,0.989074,0.990814,0.992404,0.993844,0.995134,
   0.996273,0.997261,0.998097,0.998782,0.999315,0.999695,0.999924,1.0};
 
-G4ThreadLocal G4double* G4GoudsmitSaundersonTable::PDF  = 0;
-G4ThreadLocal G4double* G4GoudsmitSaundersonTable::CPDF = 0;
+G4double* G4GoudsmitSaundersonTable::PDF  = 0;
+G4double* G4GoudsmitSaundersonTable::CPDF = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4GoudsmitSaundersonTable::G4GoudsmitSaundersonTable()
@@ -277,7 +277,7 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
     if (infile == 0)
       {
 	G4ExceptionDescription ed;
-	ed << "Data file <" + dirFile + "> is not opened!" << G4endl;
+	ed << "Data file <" + dirFile + "> is not opened!";
 	G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()",
 		    "em0003",FatalException,ed);
         return;
@@ -295,7 +295,7 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
 	  } else {
 	    G4ExceptionDescription ed;
 	    ed << "Error reading <" + dirFile + "> k= " << k 
-	       << "; j= " << j << "; i= " << i << G4endl;
+	       << "; j= " << j << "; i= " << i;
 	    G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()",
 			"em0003",FatalException,ed);
 	    return;

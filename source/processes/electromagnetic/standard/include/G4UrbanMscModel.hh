@@ -23,7 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id:   $
+// GEANT4 tag $Name:  $
 //
 // -------------------------------------------------------------------
 //
@@ -31,17 +32,16 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4UrbanMscModel92
+// File name:     G4UrbanMscModel
 //
 // Author:        Laszlo Urban
 //
-// Creation date: 06.03.2008
+// Creation date: 19.02.2013
 //
-// Modifications:
+// Created from G4UrbanMscModel96 
 //
-// 28-10-2009  V.Ivanchenko moved G4UrbanMscModel to G4UrbanMscModel92, 
-//             now it is a frozen version of the Urban model corresponding 
-//             to g4 9.2
+// New parametrization for theta0
+// Correction for very small step length
 //
 // Class Description:
 //
@@ -51,8 +51,8 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4UrbanMscModel92_h
-#define G4UrbanMscModel92_h 1
+#ifndef G4UrbanMscModel_h
+#define G4UrbanMscModel_h 1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,14 +67,14 @@ class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4UrbanMscModel92 : public G4VMscModel
+class G4UrbanMscModel : public G4VMscModel
 {
 
 public:
 
-  G4UrbanMscModel92(const G4String& nam = "UrbanMsc92");
+  G4UrbanMscModel(const G4String& nam = "UrbanMsc");
 
-  virtual ~G4UrbanMscModel92();
+  virtual ~G4UrbanMscModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -114,8 +114,8 @@ private:
   inline void UpdateCache();
 
   //  hide assignment operator
-  G4UrbanMscModel92 & operator=(const  G4UrbanMscModel92 &right);
-  G4UrbanMscModel92(const  G4UrbanMscModel92&);
+  G4UrbanMscModel & operator=(const  G4UrbanMscModel &right);
+  G4UrbanMscModel(const  G4UrbanMscModel&);
 
   const G4ParticleDefinition* particle;
   G4ParticleChangeForMSC*     fParticleChange;
@@ -166,8 +166,7 @@ private:
   G4double Zold;
   G4double Zeff,Z2,Z23,lnZ;
   G4double coeffth1,coeffth2;
-  G4double coeffc1,coeffc2;
-  G4double scr1ini,scr2ini,scr1,scr2;
+  G4double coeffc1,coeffc2,coeffc3,coeffc4;
 
   G4bool   firstStep;
   G4bool   inside;
@@ -178,7 +177,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void G4UrbanMscModel92::SetParticle(const G4ParticleDefinition* p)
+void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
 {
   if (p != particle) {
     particle = p;
@@ -191,18 +190,25 @@ void G4UrbanMscModel92::SetParticle(const G4ParticleDefinition* p)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-void G4UrbanMscModel92::UpdateCache()                                   
+void G4UrbanMscModel::UpdateCache()                                   
 {
     lnZ = std::log(Zeff);
-    coeffth1 = 0.885+lnZ*(0.104-0.0170*lnZ);
-    coeffth2 = 0.028+lnZ*(0.012-0.00125*lnZ);
-    coeffc1  = 2.134-lnZ*(0.1045-0.00602*lnZ);
-    coeffc2  = 0.001126-lnZ*(0.0001089+0.0000247*lnZ);
-    Z2 = Zeff*Zeff;
-    Z23 = std::exp(2.*lnZ/3.);
-    scr1     = scr1ini*Z23;
-    scr2     = scr2ini*Z2*ChargeSquare;
-  //  lastMaterial = couple->GetMaterial();
+    // correction in theta0 formula
+    G4double w = exp(lnZ/6.);
+    G4double facz = 0.990395+w*(-0.168386+w*0.093286) ;
+    coeffth1 = facz*(1. - 8.7780e-2/Zeff);
+    coeffth2 = facz*(4.0780e-2 + 1.7315e-4*Zeff);
+
+    // tail parameters
+    G4double Z13 = std::exp(lnZ/3.);
+    coeffc1  = 2.3785    - Z13*(4.1981e-1 - Z13*6.3100e-2);
+    coeffc2  = 4.7526e-1 + Z13*(1.7694    - Z13*3.3885e-1);
+    coeffc3  = 2.3683e-1 - Z13*(1.8111    - Z13*3.2774e-1);
+    coeffc4  = 1.7888e-2 + Z13*(1.9659e-2 - Z13*2.6664e-3);
+
+    Z2   = Zeff*Zeff;
+    Z23  = Z13*Z13;               
+                                              
     Zold = Zeff;
 }
 

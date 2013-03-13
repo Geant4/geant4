@@ -57,8 +57,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal G4double G4WentzelOKandVIxSection::ScreenRSquare[] = {0.0};
-G4ThreadLocal G4double G4WentzelOKandVIxSection::FormFactor[]    = {0.0};
+G4double G4WentzelOKandVIxSection::ScreenRSquare[] = {0.0};
+G4double G4WentzelOKandVIxSection::FormFactor[]    = {0.0};
 
 using namespace std;
 
