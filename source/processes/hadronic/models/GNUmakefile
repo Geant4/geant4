@@ -7,8 +7,6 @@ name := G4hadronic_models
 
 SUBDIRS  = abrasion
 SUBDIRS += binary_cascade
-SUBDIRS += cascade/evaporation
-SUBDIRS += cascade/utils
 SUBDIRS += cascade/cascade
 SUBDIRS += coherent_elastic
 SUBDIRS += de_excitation/evaporation
@@ -63,8 +61,6 @@ SUBLIBS +=  G4hadronic_radioactivedecay
 SUBLIBS +=  G4had_theo_max
 SUBLIBS +=  G4had_mod_util
 SUBLIBS +=  G4hadronic_bert_cascade
-SUBLIBS +=  G4hadronic_hetcpp_evaporation
-SUBLIBS +=  G4hadronic_hetcpp_utils
 SUBLIBS +=  G4hadronic_inclxx_utils
 SUBLIBS +=  G4hadronic_inclxx_physics
 SUBLIBS +=  G4hadronic_inclxx_interface
