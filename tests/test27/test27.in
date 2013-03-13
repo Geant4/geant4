@@ -12,21 +12,33 @@
 /gun/particle deuteron
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial U
-/run/beamOn 20
+/run/beamOn 2000
+#
+# and at 30 MeV
+/gun/energy 30 MeV
+/run/beamOn 1000
 #
 # deuteron at 1 GeV/nucleon on H 
 #
 /gun/particle deuteron
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial H
-/run/beamOn 20
+/run/beamOn 2000
+#
+# and at 30 MeV
+/gun/energy 30 MeV
+/run/beamOn 1000
 #
 # deuteron at 1 GeV/nucleon on Silicon 
 #
 /gun/particle deuteron
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial Si
-/run/beamOn 20
+/run/beamOn 2000
+#
+# and at 30 MeV
+/gun/energy 30 MeV
+/run/beamOn 1000
 #
 #
 # deuteron at 200 MeV in U
@@ -34,21 +46,25 @@
 /gun/particle deuteron
 /gun/energy 200 MeV
 /mydet/SelectMaterial U
-/run/beamOn 20
+/run/beamOn 2000
+#
+# and at 30 MeV
+/gun/energy 30 MeV
+/run/beamOn 1000
 #
 # deuteron at 200 MeV/nucleon on H 
 #
 /gun/particle deuteron
 /gun/energy 200 MeV
 /mydet/SelectMaterial H
-/run/beamOn 20
+/run/beamOn 2000
 #
 # deuteron at 200 MeV/nucleon on Silicon 
 #
 /gun/particle deuteron
 /gun/energy 200 MeV
 /mydet/SelectMaterial Si
-/run/beamOn 20
+/run/beamOn 2000
 #
 #  .....end deuteron.............
 #
@@ -57,21 +73,21 @@
 /gun/particle alpha
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial U
-/run/beamOn 20
+/run/beamOn 2000
 #
 # alpha at 1 GeV/nucleon on H 
 #
 /gun/particle alpha
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial H
-/run/beamOn 20
+/run/beamOn 2000
 #
 # alpha at 1 GeV/nucleon on Silicon 
 #
 /gun/particle alpha
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial Si
-/run/beamOn 20
+/run/beamOn 2000
 #
 
 # deuteron at 200 MeV/nucleon in U
@@ -79,21 +95,21 @@
 /gun/particle alpha
 /gun/energy 200 MeV
 /mydet/SelectMaterial U
-/run/beamOn 20
+/run/beamOn 2000
 #
 # alpha at 200 MeV/nucleon on H 
 #
 /gun/particle alpha
 /gun/energy 200 MeV
 /mydet/SelectMaterial H
-/run/beamOn 20
+/run/beamOn 2000
 #
 # alpha at 200 MeV/nucleon on Silicon 
 #
 /gun/particle alpha
 /gun/energy 200 MeV
 /mydet/SelectMaterial Si
-/run/beamOn 20
+/run/beamOn 2000
 #
 #  .....end alpha............
 #
@@ -103,7 +119,7 @@
 /gun/ion 6 12 2
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial U
-/run/beamOn 20
+/run/beamOn 2000
 #
 # C(12,6)++ at 1 GeV/nucleon on H 
 #
@@ -111,7 +127,7 @@
 /gun/ion 6 12 2
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial H
-/run/beamOn 20
+/run/beamOn 2000
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon 
 #
@@ -119,7 +135,7 @@
 /gun/ion 6 12 2
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial Si
-/run/beamOn 20
+/run/beamOn 2000
 #
 # C(12,6)++ at 1 GeV/nucleon on Water 
 #
@@ -127,7 +143,7 @@
 /gun/ion 6 12 2
 /gun/energy 1.0 GeV
 /mydet/SelectMaterial H2O
-/run/beamOn 20
+/run/beamOn 2000
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -136,7 +152,7 @@
 /gun/ion 6 12 2
 /gun/energy 200 MeV
 /mydet/SelectMaterial U
-/run/beamOn 20
+/run/beamOn 2000
 #
 # C(12,6)++ at 200 MeV/nucleon on H 
 #
@@ -144,7 +160,7 @@
 /gun/ion 6 12 2
 /gun/energy 200 MeV
 /mydet/SelectMaterial H
-/run/beamOn 20
+/run/beamOn 2000
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon 
 #
@@ -152,7 +168,7 @@
 /gun/ion 6 12 2
 /gun/energy 200 MeV
 /mydet/SelectMaterial Si
-/run/beamOn 20
+/run/beamOn 2000
 #
 #  .....end C(12,6)++............
 #
