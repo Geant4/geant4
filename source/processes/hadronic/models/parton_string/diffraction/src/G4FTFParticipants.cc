@@ -47,18 +47,21 @@
 #include "G4ios.hh"
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4FTFParameters.hh"                            // Uzhi 29.03.08
+#include "G4FTFParameters.hh"                            
 #include "G4DiffractiveSplitableHadron.hh"
 #include "G4VSplitableHadron.hh"
 
 G4FTFParticipants::G4FTFParticipants() :
-  theProjectileNucleus(0),
+//  theProjectileNucleus(0),
   currentInteraction(-1)
 {
 }
 
+//#define debugFTFparticipant
+
 G4FTFParticipants::G4FTFParticipants(const G4FTFParticipants &): G4VParticipants()
-  , theProjectileNucleus(0), currentInteraction(-1)   //A.R. 14-Aug-2012 Coverity fix.
+  , currentInteraction(-1)   //A.R. 14-Aug-2012 Coverity fix.
+//  , theProjectileNucleus(0), currentInteraction(-1)   //A.R. 14-Aug-2012 Coverity fix.
 {
 	G4Exception("G4FTFParticipants::G4FTFParticipants()","HAD_FTF_001",
 	        FatalException," Must not use copy ctor()");
@@ -67,10 +70,10 @@ G4FTFParticipants::G4FTFParticipants(const G4FTFParticipants &): G4VParticipants
 
 G4FTFParticipants::~G4FTFParticipants()
 {
-	if ( theProjectileNucleus != NULL ) delete theProjectileNucleus;
+//	if ( theProjectileNucleus != NULL ) delete theProjectileNucleus;
 }
 
-//-------------------------------------------------------------------------
+/*-------------------------------------------------------------------------
 
 void G4FTFParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
 {
@@ -79,7 +82,7 @@ void G4FTFParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
   theProjectileNucleus = aNucleus;
 }
 
-G4V3DNucleus * G4FTFParticipants::GetProjectileNucleus()
+G4V3DNucleus * G4FTFParticipants::GetProjectileNucleus()  const
 {
   return theProjectileNucleus;
 }
@@ -91,31 +94,39 @@ void G4FTFParticipants::InitProjectileNucleus(G4int theA, G4int theZ)
         theProjectileNucleus->SortNucleonsDecZ();
 }
 //-------------------------------------------------------------------------
+*/
 void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
                                       G4FTFParameters    *theParameters) 
 { 
-//G4cout<<"Participants::GetList"<<G4endl;
-//G4cout<<"thePrimary "<<thePrimary.GetMomentum()<<G4endl;
+#ifdef debugFTFparticipant
+ G4cout<<"Participants::GetList"<<G4endl;
+ G4cout<<"thePrimary "<<thePrimary.GetMomentum()<<G4endl<<G4endl;
+#endif
+
+    G4double betta_z=thePrimary.GetMomentum().z()/thePrimary.GetTotalEnergy();
+    if(betta_z < 1.0e-10) betta_z=1.0e-10;
+
     StartLoop();  // reset Loop over Interactions
 
     for(unsigned int i=0; i<theInteractions.size(); i++) delete theInteractions[i];
     theInteractions.clear();
 
     G4double deltaxy=2 * fermi;                       // Extra nuclear radius
-//G4cout<<"theProjectileNucleus "<<theProjectileNucleus<<G4endl;
+
     if(theProjectileNucleus == 0)
     { // Hadron-nucleus or anti-baryon-nucleus interactions
-//G4cout<<"Hadron-nucleus or anti-baryon-nucleus interactions"<<G4endl;
 
      G4double impactX(0.), impactY(0.);
 
      G4VSplitableHadron * primarySplitable=new G4DiffractiveSplitableHadron(thePrimary);
-//G4cout<<"Prim in Part "<<primarySplitable->Get4Momentum()<<G4endl;
+
+#ifdef debugFTFparticipant
+ G4cout<<"Hadron-nucleus or anti-baryon-nucleus interactions"<<G4endl;
+#endif
+
      G4double xyradius;                          
-     xyradius =theNucleus->GetOuterRadius() + deltaxy; // Impact parameter sampling
-                                                    
-//    G4bool nucleusNeedsShift = true;                // Uzhi 20 July 2009
-    
+     xyradius =theNucleus->GetOuterRadius() + deltaxy; // Range of impact parameter sampling
+                                                        
      do 
      {
 	 std::pair<G4double, G4double> theImpactParameter;
@@ -123,13 +134,21 @@ void G4FTFParticipants::GetList(const G4ReactionProduct  &thePrimary,
 	 impactX = theImpactParameter.first; 
 	 impactY = theImpactParameter.second;
 
-         G4ThreeVector thePosition(impactX, impactY, -DBL_MAX);     
-         primarySplitable->SetPosition(thePosition);                
+#ifdef debugFTFparticipant
+ G4cout<<"New interaction list,";
+ G4cout<<" b= "<<std::sqrt(sqr(impactX)+sqr(impactY))/fermi<<G4endl;
+#endif
+
+         G4ThreeVector thePosition(impactX, impactY, 0.);
+         primarySplitable->SetPosition(thePosition);
 
 	 theNucleus->StartLoop();
 	 G4Nucleon * nucleon;
 
-G4int TrN(0);
+#ifdef debugFTFparticipant
+ G4int TrN(0);
+#endif
+
 	 while ( (nucleon=theNucleus->GetNextNucleon()) ) 
 	 {
     	   G4double impact2= sqr(impactX - nucleon->GetPosition().x()) +
@@ -145,74 +164,91 @@ G4int TrN(0);
 	   	{
 	   	    targetSplitable= new G4DiffractiveSplitableHadron(*nucleon);
 	   	    nucleon->Hit(targetSplitable);
-	   	    nucleon->SetBindingEnergy(3.*nucleon->GetBindingEnergy()); 
-//G4cout<<" Part nucl "<<TrN<<" "<<nucleon->Get4Momentum()<<G4endl;
-//G4cout<<" Part nucl "<<G4endl;
                     targetSplitable->SetStatus(1);     // It takes part in the interaction
+
+#ifdef debugFTFparticipant
+ G4cout<<"Participated nucleons #, "<<TrN<<" "
+       <<"Splitable Pr* Tr* "<<primarySplitable<<" "<<targetSplitable<<G4endl;
+#endif
 	   	}
+
 	   	G4InteractionContent * aInteraction = 
                                        new G4InteractionContent(primarySplitable);
+                G4Nucleon * PrNucleon=0;
+                aInteraction->SetProjectileNucleon(PrNucleon);
 		aInteraction->SetTarget(targetSplitable);
-                aInteraction->SetTargetNucleon(nucleon);     // Uzhi 16.07.09
-                aInteraction->SetStatus(1);                  // Uzhi Feb26
+                aInteraction->SetTargetNucleon(nucleon);     
+                aInteraction->SetStatus(1);                  
+                aInteraction->SetInteractionTime(
+        (primarySplitable->GetPosition().z() + nucleon->GetPosition().z())/betta_z);
 		theInteractions.push_back(aInteraction);
 	   }
+
+#ifdef debugFTFparticipant
 TrN++;
+#endif
+
 	 } 
      } while ( theInteractions.size() == 0 );
 
-     //if ( theInteractions.size() == 0 ) delete primarySplitable; //A.R. 14-Aug-2012 Coverity fix
+#ifdef debugFTFparticipant
+	G4cout << "Number of Hit nucleons " << theInteractions.size()
+		<< "\t Bx " << impactX/fermi << "\t By "<<impactY/fermi
+		<< "\t B " << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl<<G4endl;
+#endif
 
-//	G4cout << "Number of Hit nucleons " << theInteractions.size()
-//		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
-//		<< "\t" << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
-
+//   SortInteractionsIncT();    // It does not need because nucleons are sorted
+                                // in increasing z-coordinates.
+     ShiftInteractionTime();    // To put correct times and z-coordinates
      return;
     }       // end of if(theProjectileNucleus == 0)
 
 //-------------------------------------------------------------------
 //                Projectile and target are nuclei
 //-------------------------------------------------------------------
-//VU    G4VSplitableHadron * primarySplitable=new G4DiffractiveSplitableHadron(thePrimary);
-//G4cout<<"Prim in Part "<<primarySplitable->Get4Momentum()<<G4endl;
-//G4cout<<"Projectile and target are nuclei"<<G4endl;
-//G4cout<<thePrimary.GetMomentum()<<G4endl;
-//G4cout<<"Part Pr Tr "<<theProjectileNucleus<<" "<<theNucleus<<G4endl;
-
+#ifdef debugFTFparticipant
+ G4cout<<"Projectile and target are nuclei"<<G4endl;
+#endif
 
     G4double xyradius;                          
-    xyradius =theProjectileNucleus->GetOuterRadius() +  // Impact parameter sampling
+    xyradius =theProjectileNucleus->GetOuterRadius() +  // Range of impact parameter sampling
                         theNucleus->GetOuterRadius() + deltaxy;
 
     G4double impactX(0.), impactY(0.);
 
     do
     {
-//G4cout<<"New interaction list"<<G4endl;
 	 std::pair<G4double, G4double> theImpactParameter;
 	 theImpactParameter = theNucleus->ChooseImpactXandY(xyradius);
 	 impactX = theImpactParameter.first; 
 	 impactY = theImpactParameter.second;
-//G4cout<<"B "<<std::sqrt(sqr(impactX)+sqr(impactY))/fermi<<G4endl;
 
-         G4ThreeVector thePosition(impactX, impactY, -DBL_MAX);     
-//VU         primarySplitable->SetPosition(thePosition);                
+#ifdef debugFTFparticipant
+ G4cout<<"New interaction list, ";
+ G4cout<<"b "<<std::sqrt(sqr(impactX)+sqr(impactY))/fermi<<G4endl;
+#endif
+
+         G4ThreeVector theBeamPosition(impactX, impactY, 0.);                    
 
 	 theProjectileNucleus->StartLoop();
 	 G4Nucleon * ProjectileNucleon;
-G4int PrNuclN(0);
 
+#ifdef debugFTFparticipant
+ G4int PrNuclN(0);
+#endif
 	 while ( (ProjectileNucleon=theProjectileNucleus->GetNextNucleon()) ) 
 	 {
            G4VSplitableHadron * ProjectileSplitable=0;
-//G4cout<<G4endl<<"Prj N mom "<<ProjectileNucleon->Get4Momentum()<<"-------------"<<G4endl;
            theNucleus->StartLoop();
-           G4Nucleon * TargetNucleon;
+           G4Nucleon * TargetNucleon=0;
 
+#ifdef debugFTFparticipant
 G4int TrNuclN(0);
+#endif
+
            while ( (TargetNucleon=theNucleus->GetNextNucleon()) )
            {
-//G4cout<<"Trg N mom "<<TargetNucleon->Get4Momentum()<<G4endl;
+
     	    G4double impact2=
             sqr(impactX+ProjectileNucleon->GetPosition().x()-TargetNucleon->GetPosition().x())+
             sqr(impactY+ProjectileNucleon->GetPosition().y()-TargetNucleon->GetPosition().y());
@@ -222,14 +258,23 @@ G4int TrNuclN(0);
 	    if ( theParameters->GetProbabilityOfInteraction(impact2/fermi/fermi) 
 		 > G4UniformRand() )
 	    { // An Interaction has happend!
-//G4cout<<"An Interaction has happend"<<G4endl;
-//G4cout<<"PrN TrN "<<PrNuclN<<" "<<TrNuclN<<" "<<ProjectileNucleon->GetPosition().z()/fermi<<" "<<TargetNucleon->GetPosition().z()/fermi<<" "<<ProjectileNucleon->GetPosition().z()/fermi + TargetNucleon->GetPosition().z()/fermi <<G4endl;
+
+#ifdef debugFTFparticipant
+ G4cout<<G4endl<<"An Interaction has happend"<<G4endl;
+ G4cout<<"Proj N mom "<<PrNuclN<<" "<<
+      ProjectileNucleon->Get4Momentum()<<"-------------"<<G4endl;
+ G4cout<<"Targ N mom "<<TrNuclN<<" "<<TargetNucleon->Get4Momentum()<<G4endl;
+
+ G4cout<<"PrN TrN Z coords "<<ProjectileNucleon->GetPosition().z()/fermi<<" "
+                            <<TargetNucleon->GetPosition().z()/fermi<<" "
+                            <<ProjectileNucleon->GetPosition().z()/fermi + 
+                              TargetNucleon->GetPosition().z()/fermi <<G4endl;
+#endif
 
              if ( ! ProjectileNucleon->AreYouHit() )
              { // Projectile nucleon was not involved until now.
               ProjectileSplitable= new G4DiffractiveSplitableHadron(*ProjectileNucleon);
               ProjectileNucleon->Hit(ProjectileSplitable);
-              ProjectileNucleon->SetBindingEnergy(3.*ProjectileNucleon->GetBindingEnergy());
               ProjectileSplitable->SetStatus(1);     // It takes part in the interaction
              }
              else
@@ -241,7 +286,6 @@ G4int TrNuclN(0);
              {  // Target nucleon was not involved until now
               TargetSplitable= new G4DiffractiveSplitableHadron(*TargetNucleon);
               TargetNucleon->Hit(TargetSplitable);
-              TargetNucleon->SetBindingEnergy(3.*ProjectileNucleon->GetBindingEnergy());
               TargetSplitable->SetStatus(1);     // It takes part in the interaction
              }
              else
@@ -252,28 +296,84 @@ G4int TrNuclN(0);
              G4InteractionContent * anInteraction = 
                                    new G4InteractionContent(ProjectileSplitable);
              anInteraction->SetTarget(TargetSplitable);
+             anInteraction->SetProjectileNucleon(ProjectileNucleon); // Uzhi Nov. 2012
              anInteraction->SetTargetNucleon(TargetNucleon);
-             anInteraction->SetStatus(1);                      // Uzhi Feb26
-//             anInteraction->SetInteractionTime(ProjectileNucleon->GetPosition().z()+
-//                                                   TargetNucleon->GetPosition().z());
-//G4cout<<"Z's pr tr "<<ProjectileNucleon->GetPosition().z()/fermi<<" "<<TargetNucleon->GetPosition().z()/fermi<<" "<<ProjectileNucleon->GetPosition().z()/fermi + TargetNucleon->GetPosition().z()/fermi <<G4endl;
+             anInteraction->SetInteractionTime(
+       (ProjectileNucleon->GetPosition().z()+TargetNucleon->GetPosition().z())/betta_z);
+
+             anInteraction->SetStatus(1);                     
+
+#ifdef debugFTFparticipant
+G4cout<<"Part anInteraction->GetInteractionTime() "<<
+         anInteraction->GetInteractionTime()/fermi<<G4endl;
+G4cout<<"Splitable Pr* Tr* "<<ProjectileSplitable<<" "<<TargetSplitable<<G4endl;
+#endif
+
              theInteractions.push_back(anInteraction);
-//G4cout<<"Ppr tr "<<ProjectileSplitable<<" "<<TargetSplitable<<G4endl;
+
             } // End of An Interaction has happend!
+#ifdef debugFTFparticipant
 TrNuclN++;
+#endif
            } // End of while ( (TargetNucleon=theNucleus->GetNextNucleon()) )
+#ifdef debugFTFparticipant
 PrNuclN++;
+#endif
 	 } // End of   while ( (ProjectileNucleon=theProjectileNucleus->GetNextNucleon()) )
+
+         if(theInteractions.size() != 0) 
+           theProjectileNucleus->DoTranslation(theBeamPosition);
+
     }  while ( theInteractions.size() == 0 );  // end of while ( theInteractions.size() == 0 )
 
-//std::sort(theInteractions.begin(),theInteractions.end()); // ????
+    SortInteractionsIncT();
+    ShiftInteractionTime();
 
-//	G4cout << "Number of primary collisions " << theInteractions.size() 
-//		<< "\t" << impactX/fermi << "\t"<<impactY/fermi
-//		<< "\t" << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
-//G4int Uzhi; G4cin >> Uzhi;
+#ifdef debugFTFparticipant
+	G4cout <<G4endl<< "Number of primary collisions " << theInteractions.size() 
+		<< "\t Bx " << impactX/fermi << "\t By "<<impactY/fermi
+		<< "\t B " << std::sqrt(sqr(impactX)+sqr(impactY))/fermi <<G4endl;
+        G4cout<<"FTF participant End. #######################"<<G4endl<<G4endl;
+#endif
     return;
 }
 //--------------------------------------------------------------
 
 // Implementation (private) methods
+//
+// Class-scope function to sort interaction by time
+bool G4FTFPartHelperForSortInT(const G4InteractionContent* Int1, const G4InteractionContent* Int2)
+{
+	return Int1->GetInteractionTime() < Int2->GetInteractionTime();
+}
+
+void G4FTFParticipants::SortInteractionsIncT() // on increased T 
+{
+  if (theInteractions.size() < 2 ) return;	 	// Avoid unnecesary work
+
+  std::sort(theInteractions.begin(), theInteractions.end(),
+	    G4FTFPartHelperForSortInT); 
+}
+//
+void G4FTFParticipants::ShiftInteractionTime()
+{
+  G4double InitialTime=theInteractions[0]->GetInteractionTime();
+  for(unsigned int i=1; i < theInteractions.size(); i++)
+  {
+   G4double InterTime=theInteractions[i]->GetInteractionTime()-InitialTime;
+   theInteractions[i]->SetInteractionTime(InterTime);
+
+   G4InteractionContent * aCollision=theInteractions[i];
+   G4VSplitableHadron * projectile=aCollision->GetProjectile();
+   G4VSplitableHadron *     target=aCollision->GetTarget();
+
+   G4ThreeVector prPosition=projectile->GetPosition();
+   prPosition.setZ(target->GetPosition().z());
+   projectile->SetPosition(prPosition);
+
+   projectile->SetTimeOfCreation(InterTime);
+   target->SetTimeOfCreation(InterTime);
+
+  }
+  return;
+}

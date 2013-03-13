@@ -64,6 +64,7 @@ G4FTFParameters::G4FTFParameters() :
   DofNuclearDestruction(0.0), Pt2ofNuclearDestruction(0.0), MaxPt2ofNuclearDestruction(0.0) 
 {}
 
+//#define debugFTFparams
 
 G4FTFParameters::~G4FTFParameters()
 {}
@@ -115,9 +116,12 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
     G4double S=ProjectileMass2 + TargetMass2 + 2.*TargetMass*Elab;
 
-//G4cout<<"Proj Plab "<<ProjectilePDGcode<<" "<<Plab<<G4endl;
-//G4cout<<"Mass KinE "<<ProjectileMass<<" "<<KineticEnergy<<G4endl;
-//G4cout<<" A Z "<<theA<<" "<<theZ<<G4endl;
+#ifdef debugFTFparams
+ G4cout<<"--------- FTF Parameters --------------"<<G4endl;
+ G4cout<<"Proj Plab "<<ProjectilePDGcode<<" "<<Plab<<G4endl;
+ G4cout<<"Mass KinE "<<ProjectileMass<<" "<<KineticEnergy<<G4endl;
+ G4cout<<" A Z "<<theA<<" "<<theZ<<G4endl;
+#endif
 
     G4double Ylab,Xtotal,Xelastic,Xannihilation;
     G4int NumberOfTargetNucleons;
@@ -126,7 +130,10 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
 
     G4double ECMSsqr=S/GeV/GeV;
     G4double SqrtS  =std::sqrt(S)/GeV;
-//G4cout<<"Sqrt(s) "<<SqrtS<<G4endl;
+
+#ifdef debugFTFparams
+ G4cout<<"Sqrt(s) "<<SqrtS<<G4endl;
+#endif
 
     TargetMass     /=GeV; TargetMass2     /=(GeV*GeV);
     ProjectileMass /=GeV; ProjectileMass2 /=(GeV*GeV);
@@ -165,8 +172,10 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                   GetElasticElementCrossSection(particle,KineticEnergy,1,0);
        G4double XelPN  = FTFxsManager->
                   GetElasticElementCrossSection(   Neutron,KineticEnergy,1,0);
-//G4cout<<"Xs "<<XtotPP/millibarn<<" "<<XelPP/millibarn<<G4endl;
-//G4cout<<"Xs "<<XtotPN/millibarn<<" "<<XelPN/millibarn<<G4endl;
+#ifdef debugFTFparams
+ G4cout<<"XsPP "<<XtotPP/millibarn<<" "<<XelPP/millibarn<<G4endl;
+ G4cout<<"XsPN "<<XtotPN/millibarn<<" "<<XelPN/millibarn<<G4endl;
+#endif
        if(!ProjectileIsNucleus)
        { // Projectile is hadron
         Xtotal          = ( NumberOfTargetProtons  * XtotPP + 
@@ -297,11 +306,10 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
        if(SqrtS > MesonProdThreshold) {Xftf=36.*(1.-MesonProdThreshold/SqrtS);}
 
        Xtotal = Xelastic + Xannihilation + Xftf;
-/*
+#ifdef debugFTFparams
 G4cout<<"Plab Xtotal, Xelastic  Xinel Xftf "<<Plab<<" "<<Xtotal<<" "<<Xelastic<<" "<<Xtotal-Xelastic<<" "<<Xtotal-Xelastic-Xannihilation<<G4endl;
 G4cout<<"Plab Xelastic/Xtotal,  Xann/Xin "<<Plab<<" "<<Xelastic/Xtotal<<" "<<Xannihilation/(Xtotal-Xelastic)<<G4endl;
-//G4int Uzhi; G4cin>>Uzhi;
-*/
+#endif
 //---------------------------------------------------------------
       }
     else if( ProjectilePDGcode ==  211 )    //------Projectile is PionPlus -------
@@ -492,7 +500,7 @@ if(Xtotal-Xelastic != 0.)
   (Xtotal-Xelastic)<<G4endl;
 } else 
 {
-  G4cout<<"Plab Xelastic/Xtotal,  Xann     "<<Plab<<" "<<Xelastic/Xtotal<<" "<<
+//  G4cout<<"Plab Xelastic/Xtotal,  Xann     "<<Plab<<" "<<Xelastic/Xtotal<<" "<<
   Xannihilation<<G4endl;
 }
 //G4int Uzhi; G4cin>>Uzhi;
@@ -585,7 +593,8 @@ if(Xtotal-Xelastic != 0.)
               SetProjMinDiffMass(0.5);                               // GeV
               SetProjMinNonDiffMass(0.5);                            // GeV 0.3
 //              SetProbabilityOfProjDiff(0.);                        // Uzhi 3.06.2012 
-              SetProbabilityOfProjDiff((6.2-3.7*std::exp(-sqr(SqrtS-7.)/16.))/Xinel*0.);
+              SetProbabilityOfProjDiff((6.2-3.7*std::exp(-sqr(SqrtS-7.)/16.))/Xinel);
+// Uzhi 8 Feb.
 
               SetTarMinDiffMass(1.16);                               // GeV
               SetTarMinNonDiffMass(1.16);                            // GeV
@@ -609,7 +618,7 @@ if(Xtotal-Xelastic != 0.)
               SetProjMinDiffMass(0.6);                               // GeV 0.7 0.6
               SetProjMinNonDiffMass(0.6);                            // GeV 0.7 0.6
 //            SetProbabilityOfProjDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
-              SetProbabilityOfProjDiff(0.*4.7/Xinel);                   // Uzhi 5.06.2012
+              SetProbabilityOfProjDiff(4.7/Xinel);                   // Uzhi 8 Feb.
 
               SetTarMinDiffMass(1.1);                                // GeV
               SetTarMinNonDiffMass(1.1);                             // GeV
@@ -729,10 +738,10 @@ if(Xtotal-Xelastic != 0.)
 //SetDeltaProbAtQuarkExchange(0.6);
 //SetProjMinDiffMass(0.7);                    // GeV 1.1
 //SetProjMinNonDiffMass(0.7);                 // GeV
-//SetProbabilityOfProjDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
+//SetProbabilityOfProjDiff(0.); //0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
 //SetTarMinDiffMass(1.1);                     // GeV
 //SetTarMinNonDiffMass(1.1);                  // GeV
-//SetProbabilityOfTarDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
+//SetProbabilityOfTarDiff(0.); //0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
 //
 //SetAveragePt2(0.3);                         // GeV^2
 //------------------------------------

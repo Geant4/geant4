@@ -57,24 +57,28 @@ class G4FTFParticipants : public G4VParticipants
 
       int operator==(const G4FTFParticipants &right) const;
       int operator!=(const G4FTFParticipants &right) const;
-//---------------------------------------------------
+/*---------------------------------------------------       // Uzhi Nov. 2012
       void InitProjectileNucleus(G4int theZ, G4int theA);
       void SetProjectileNucleus(G4V3DNucleus * aNucleus);
-      G4V3DNucleus * GetProjectileNucleus();
+      G4V3DNucleus * GetProjectileNucleus() const;
 //---------------------------------------------------
+*/
       void GetList(const G4ReactionProduct  &thePrimary, 
                          G4FTFParameters    *theParameters);
 
       void StartLoop();
       G4bool Next();
-//Vova      const G4InteractionContent & GetInteraction() const;
+
+      void SortInteractionsIncT();
+      void ShiftInteractionTime();
+
+//??  const G4InteractionContent & GetInteraction() const;
       G4InteractionContent & GetInteraction();
       
       std::vector<G4InteractionContent *> theInteractions;
-      G4V3DNucleus *theProjectileNucleus;
+//      G4V3DNucleus *theProjectileNucleus;
   private:
 
-      //A.R. 25-Jul-2012 Coverity fix : copy constructor becomes private.
       G4FTFParticipants(const G4FTFParticipants &right);
 
 //      std::vector<G4InteractionContent *> theInteractions;

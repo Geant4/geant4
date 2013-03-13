@@ -43,9 +43,6 @@ class G4FTFParameters
   	G4FTFParameters(const G4ParticleDefinition * , G4int theA, 
                                                        G4int theZ, 
                                                        G4double s);
-//  	G4FTFParameters(const G4ParticleDefinition * , G4double theA, 
-//                                                       G4double theZ, 
-//                                                       G4double s);
 
 	~G4FTFParameters();
 
@@ -56,7 +53,7 @@ class G4FTFParameters
         void SetInelasticCrossSection(const G4double Xinelastic);
         void SetProbabilityOfElasticScatt(const G4double Xtotal, const G4double Xelastic);
         void SetProbabilityOfElasticScatt(const G4double aValue);
-        void SetProbabilityOfAnnihilation(const G4double aValue); // Uzhi 18.11.10
+        void SetProbabilityOfAnnihilation(const G4double aValue); 
 
         void SetRadiusOfHNinteractions2(const G4double Radius2);
         void SetSlope(const G4double Slope);
@@ -114,7 +111,7 @@ class G4FTFParameters
 	G4double GetInelasticProbability(const G4double impactsquare);
         G4double GetProbabilityOfElasticScatt();
         G4double GetSlope();
-        G4double GetProbabilityOfAnnihilation(); // Uzhi 18.11.10
+        G4double GetProbabilityOfAnnihilation(); 
 
 // --------- Get parameters of elastic scattering --------------------
         G4double GetAvaragePt2ofElasticScattering();
@@ -166,10 +163,10 @@ class G4FTFParameters
         G4double FTFXtotal;                     // Total X in mb
         G4double FTFXelastic;                   // Elastic X in mb
         G4double FTFXinelastic;                 // Inelastic X in mb
-        G4double FTFXannihilation;              // Annihilation X in mb // Uzhi 18.11.10
-        G4double ProbabilityOfAnnihilation;     // Xannih/Xinelast      // Uzhi 18.11.10
+        G4double FTFXannihilation;              // Annihilation X in mb 
+        G4double ProbabilityOfAnnihilation;     // Xannih/Xinelast     
         G4double ProbabilityOfElasticScatt;     // Xel/Xtot
-        G4double RadiusOfHNinteractions2;       // Xtot/pi, in fn^2
+        G4double RadiusOfHNinteractions2;       // Xtot/pi, in fm^2
         G4double FTFSlope;                      // in fm^-1
         G4double AvaragePt2ofElasticScattering; // in MeV^2
         G4double FTFGamma0;
@@ -356,7 +353,6 @@ inline  G4double G4FTFParameters::GetInelasticProbability( const G4double impact
 
 inline G4double G4FTFParameters::GetProbabilityOfAnnihilation()
        {return ProbabilityOfAnnihilation;} 
-                                                // Uzhi 18.11.10
 
 // --------- Get parameters of elastic scattering ---------------------
 inline  G4double G4FTFParameters::GetAvaragePt2ofElasticScattering()
