@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21.02.2013  V.Ivanchenko, L. Pandola, tag emlowen-V09-06-10 
+            G4Generator2BN and G4PenelopeComptonModel 
+	    - removed G4ThreadLocal declarations
+
+15.02.2013  V.Ivanchenko, tag emlowen-V09-06-09
+- G4LowEPComptonModel - fixed compillation problem at MAC and Windows
+
+14.02.2013  V.Ivanchenko, tag emlowen-V09-06-08
+- G4LowEPComptonModel - J.Brown fixed numerical problem (seen by FPE)
+
+06.02.2013  S. Incerti, tag emlowen-V09-06-07
+- Removed useless verbosity
+
 20.12.2012  V.Ivanchenko, tag emlowen-V09-06-06
 - Fixed build
 

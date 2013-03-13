@@ -103,8 +103,8 @@ private:
   G4double kmin, Ekmin;
   G4double dtheta;
   G4double kcut;
-  static G4ThreadLocal G4double Atab[320];
-  static G4ThreadLocal G4double ctab[320];
+  static G4double Atab[320];
+  static G4double ctab[320];
 
   G4int nwarn;
 
