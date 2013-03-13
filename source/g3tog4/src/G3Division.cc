@@ -28,6 +28,8 @@
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
 
+#include <assert.h>
+
 #include "G3Division.hh"
 #include "G3VolTableEntry.hh"
 #include "G3toG4MakeSolid.hh"

@@ -25,7 +25,6 @@
 *    
 *    
 *     $Id$
-*     GEANT4 tag $Name: not supported by cvs2svn $
 *    
       INTEGER IQ,LQ,NZEBRA,IXSTOR,IXDIV,IXCONS,LMAIN,LR1,JCG
       INTEGER KWBANK,KWWORK,IWS

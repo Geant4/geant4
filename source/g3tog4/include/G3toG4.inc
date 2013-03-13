@@ -25,7 +25,6 @@
 *    
 *    
 *     $Id$
-*     GEANT4 tag $Name: not supported by cvs2svn $
 *    
       integer maxlines
       parameter (maxlines = 750) ! max no. of cmd lines per C++ source file
