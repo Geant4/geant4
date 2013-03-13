@@ -70,7 +70,8 @@ G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr)
 				      //maxZ(9), maxA(17)
 {
   if(!ptr) { SetExcitationHandler(new G4ExcitationHandler()); }
-  theParameters = G4PreCompoundParameters::GetAddress();
+  G4PreCompoundParameters param;
+  fLevelDensity = param.GetLevelDensity();
 
   theEmission = new G4PreCompoundEmission();
   if(useHETCEmission) { theEmission->SetHETCModel(); }
@@ -210,7 +211,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 
     theEmission->Initialize(aFragment);
     
-    G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
+    G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*fLevelDensity;
     
     G4int EquilibriumExcitonNumber = 
       G4lrint(std::sqrt(2*gg*aFragment.GetExcitationEnergy()));

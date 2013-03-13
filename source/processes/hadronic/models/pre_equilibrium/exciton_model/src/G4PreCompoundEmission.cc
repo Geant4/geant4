@@ -58,13 +58,15 @@ G4PreCompoundEmission::G4PreCompoundEmission()
   theFragmentsVector = 
     new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
   g4pow = G4Pow::GetInstance();
-  theParameters = G4PreCompoundParameters::GetAddress();
+  G4PreCompoundParameters param;
+  fLevelDensity = param.GetLevelDensity();
+  fFermiEnergy  = param.GetFermiEnergy();
 }
 
 G4PreCompoundEmission::~G4PreCompoundEmission()
 {
-  if (theFragmentsFactory) { delete theFragmentsFactory; }
-  if (theFragmentsVector)  { delete theFragmentsVector; }
+  delete theFragmentsFactory; 
+  delete theFragmentsVector; 
 }
 
 void G4PreCompoundEmission::SetDefaultModel()
@@ -184,39 +186,36 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragmen
 
   // Emission particle separation energy
   G4double Bemission = thePreFragment->GetBindingEnergy();
-
-  // Fermi energy
-  G4double Ef = theParameters->GetFermiEnergy();
 	
   //
   //  G4EvaporationLevelDensityParameter theLDP;
   //  G4double gg = (6.0/pi2)*aFragment.GetA()*
 
-  G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*theParameters->GetLevelDensity();
+  G4double gg = (6.0/pi2)*aFragment.GetA_asInt()*fLevelDensity;
 	
   // Average exciton energy relative to bottom of nuclear well
   G4double Eav = 2*p*(p+1)/((p+h)*gg);
 	
   // Excitation energy relative to the Fermi Level
-  G4double Uf = std::max(U - (p - h)*Ef , 0.0);
+  G4double Uf = std::max(U - (p - h)*fFermiEnergy , 0.0);
   //  G4double Uf = U - KineticEnergyOfEmittedFragment - Bemission;
 
-  G4double w_num = rho(p+1, h, gg, Uf, Ef);
-  G4double w_den = rho(p,   h, gg, Uf, Ef);
+  G4double w_num = rho(p+1, h, gg, Uf, fFermiEnergy);
+  G4double w_den = rho(p,   h, gg, Uf, fFermiEnergy);
   if (w_num > 0.0 && w_den > 0.0)
     {
       Eav *= (w_num/w_den);
-      Eav += - Uf/(p+h) + Ef;
+      Eav += - Uf/(p+h) + fFermiEnergy;
     }
   else 
     {
-      Eav = Ef;
+      Eav = fFermiEnergy;
     }
   
   // VI + JMQ 19/01/2010 update computation of the parameter an
   //
   G4double an = 0.0;
-  G4double Eeff = ekin + Bemission + Ef;
+  G4double Eeff = ekin + Bemission + fFermiEnergy;
   if(ekin > DBL_MIN && Eeff > DBL_MIN) {
 
     G4double zeta = std::max(1.0,9.3/std::sqrt(ekin/MeV));
@@ -227,7 +226,7 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragmen
     // seems to work well enough
     G4double ProjEnergy = aFragment.GetExcitationEnergy();
 
-    an = 3*std::sqrt((ProjEnergy+Ef)*Eeff)/(zeta*Eav);
+    an = 3*std::sqrt((ProjEnergy+fFermiEnergy)*Eeff)/(zeta*Eav);
 
     G4int ne = aFragment.GetNumberOfExcitons() - 1;
     if ( ne > 1 ) { an /= (G4double)ne; }

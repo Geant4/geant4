@@ -48,13 +48,15 @@ G4VPreCompoundFragment::G4VPreCompoundFragment(
   theA = particle->GetBaryonNumber();
   theZ = G4int(particle->GetPDGCharge()/eplus + 0.1);
   theMass = particle->GetPDGMass();
-  theParameters = G4PreCompoundParameters::GetAddress();
+  theParameters = new G4PreCompoundParameters();
   g4pow = G4Pow::GetInstance();
   theRestNucleusA13 = 0;
 }
 
 G4VPreCompoundFragment::~G4VPreCompoundFragment()
-{}
+{
+  delete theParameters;
+}
 
 std::ostream& 
 operator << (std::ostream &out, const G4VPreCompoundFragment &theFragment)

@@ -45,9 +45,7 @@
 #include "G4PreCompoundFragmentVector.hh"
 
 class G4VPreCompoundEmissionFactory;
-
 class G4Pow;
-class G4PreCompoundParameters;
 
 class G4PreCompoundEmission
 {
@@ -90,7 +88,8 @@ private:
   //==============
 
   G4Pow* g4pow;
-  G4PreCompoundParameters* theParameters;
+  G4double fLevelDensity;
+  G4double fFermiEnergy;
 
   // A vector with the allowed emission fragments 
   G4PreCompoundFragmentVector * theFragmentsVector;

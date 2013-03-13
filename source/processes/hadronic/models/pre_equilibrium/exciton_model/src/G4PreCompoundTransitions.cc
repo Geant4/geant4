@@ -57,9 +57,10 @@
 G4PreCompoundTransitions::G4PreCompoundTransitions() 
 {
   proton = G4Proton::Proton();
-  FermiEnergy = G4PreCompoundParameters::GetAddress()->GetFermiEnergy();
-  r0 = G4PreCompoundParameters::GetAddress()->GetTransitionsr0();
-  aLDP = G4PreCompoundParameters::GetAddress()->GetLevelDensity();
+  G4PreCompoundParameters param;
+  FermiEnergy = param.GetFermiEnergy();
+  r0 = param.GetTransitionsr0();
+  aLDP = param.GetLevelDensity();
   g4pow = G4Pow::GetInstance();
 }
 

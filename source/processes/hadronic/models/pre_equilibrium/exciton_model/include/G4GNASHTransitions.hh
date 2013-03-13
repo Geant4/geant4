@@ -31,6 +31,8 @@
 #include "G4VPreCompoundTransitions.hh"
 #include "G4Fragment.hh"
 
+class G4PreCompoundParameters;
+
 class G4GNASHTransitions : public G4VPreCompoundTransitions
 {
 public:
@@ -52,6 +54,7 @@ const G4GNASHTransitions& operator=(const G4GNASHTransitions &right);
 
   G4bool operator!=(const G4GNASHTransitions &right) const;
 
+  G4PreCompoundParameters* theParameters;
 
 };
 

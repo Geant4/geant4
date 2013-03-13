@@ -40,7 +40,7 @@ class G4PreCompoundParameters
 {
 public:
 
-  static G4PreCompoundParameters * GetAddress();
+  G4PreCompoundParameters();
 
   ~G4PreCompoundParameters();
  
@@ -54,9 +54,6 @@ public:
 
 private:
 
-  G4PreCompoundParameters();
-
-  static G4ThreadLocal G4PreCompoundParameters* theParameters;
 
   // Level density parameter
   G4double fLevelDensity;

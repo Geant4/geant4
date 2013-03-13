@@ -33,23 +33,13 @@
 #include "G4PreCompoundParameters.hh"
 #include "G4SystemOfUnits.hh"
 
-G4ThreadLocal G4PreCompoundParameters* G4PreCompoundParameters::theParameters = 0;
-
-G4PreCompoundParameters * G4PreCompoundParameters::GetAddress()
-{ 
-  if(0 == theParameters) {
-    static G4ThreadLocal G4PreCompoundParameters *par_G4MT_TLS_ = 0 ; if (!par_G4MT_TLS_) par_G4MT_TLS_ = new  G4PreCompoundParameters  ;  G4PreCompoundParameters &par = *par_G4MT_TLS_;
-    theParameters = &par;
-  }
-  return theParameters; 
-}
-
 G4PreCompoundParameters::G4PreCompoundParameters() 
-  : fLevelDensity(0.10/MeV),
-    fR0(1.5*fermi),
-    fTransitions_r0(0.6*fermi),
-    fFermiEnergy(35.0*MeV) 
-{}
+{
+  fLevelDensity = 0.10/MeV;
+  fR0 = 1.5*fermi;
+  fTransitions_r0 = 0.6*fermi;
+  fFermiEnergy = 35.0*MeV; 
+}
 
 G4PreCompoundParameters::~G4PreCompoundParameters() 
 {}

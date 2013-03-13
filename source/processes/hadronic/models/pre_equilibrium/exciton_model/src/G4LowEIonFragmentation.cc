@@ -46,15 +46,14 @@
 #include "G4Proton.hh"
 #include "G4NucleiProperties.hh"
 
-G4ThreadLocal G4int G4LowEIonFragmentation::hits = 0;
-G4ThreadLocal G4int G4LowEIonFragmentation::totalTries = 0;
-G4ThreadLocal G4double G4LowEIonFragmentation::area = 0;
-
 G4LowEIonFragmentation::G4LowEIonFragmentation(G4ExcitationHandler * const value) 
 {
   theHandler = value;
   theModel = new G4PreCompoundModel(theHandler);
   proton = G4Proton::Proton();
+  hits = 0;
+  totalTries = 1;
+  area = 0.0;
 }
 
 G4LowEIonFragmentation::G4LowEIonFragmentation() 
@@ -72,7 +71,7 @@ G4LowEIonFragmentation::~G4LowEIonFragmentation()
 G4HadFinalState * G4LowEIonFragmentation::
 ApplyYourself(const G4HadProjectile & thePrimary, G4Nucleus & theNucleus)
 {
-  area = 0;
+  area = 0.0;
   // initialize the particle change
   theResult.Clear();
   theResult.SetStatusChange( stopAndKill );

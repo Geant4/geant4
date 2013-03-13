@@ -106,12 +106,13 @@ private:
   // Data Members 
   //==============
 
-  G4PreCompoundParameters*   theParameters;
   G4PreCompoundEmission*     theEmission;
   G4VPreCompoundTransitions* theTransition;
 
   const G4ParticleDefinition* proton;
   const G4ParticleDefinition* neutron;
+
+  G4double fLevelDensity;
 
   G4bool useHETCEmission;
   G4bool useGNASHTransition;
