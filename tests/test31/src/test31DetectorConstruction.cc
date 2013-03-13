@@ -144,8 +144,6 @@ void test31DetectorConstruction::DefineMaterials()
   temperature = CLHEP::STP_Temperature*0.1;
   pressure = CLHEP::STP_Pressure;
   man->ConstructNewGasMaterial("Xe2","G4_Xe",temperature,pressure);
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -240,8 +238,11 @@ void test31DetectorConstruction::PrintGeomParameters()
 G4Material* test31DetectorConstruction::GetMaterial(const G4String& mat)
 {
   // search the material by its name
-  G4Material* pttoMaterial = G4NistManager::Instance()->FindOrBuildMaterial(mat, false);
-  if(!pttoMaterial) G4cout << "Find or BUild material " << mat << " fail " << G4endl;  
+  G4Material* pttoMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial(mat);
+  if(!pttoMaterial) {
+    G4cout << "Find or BUild material " << mat << " fail " << G4endl;  
+  }
   if(detIsConstructed) MaterialIsChanged();
   return pttoMaterial;
 }
