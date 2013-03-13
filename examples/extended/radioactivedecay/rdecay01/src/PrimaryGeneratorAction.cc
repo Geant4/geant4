@@ -47,7 +47,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
-  
+
   fParticleGun->SetParticleEnergy(0*eV);
   fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,0.));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));          
@@ -73,8 +73,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
        = G4ParticleTable::GetParticleTable()->GetIon(Z,A,excitEnergy);
     fParticleGun->SetParticleDefinition(ion);
     fParticleGun->SetParticleCharge(ionCharge);
-  }  
-  
+  }    
   //create vertex
   //   
   fParticleGun->GeneratePrimaryVertex(anEvent);

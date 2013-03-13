@@ -127,9 +127,6 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   if (nbtrk) {
     //there are secondaries --> it is a decay
     //
-    //force 'single' decay
-    if ((!fullChain)&&(ID > 1)) G4RunManager::GetRunManager()->AbortEvent();
-    //
     //balance    
     G4double EkinTot = 0.;
     G4ThreeVector Pbalance = - track->GetMomentum();
