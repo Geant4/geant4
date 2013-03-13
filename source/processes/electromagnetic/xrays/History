@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21  Feb 13: V.Ivanchenko (xrays-V09-06-01)
+- G4VXTRenergyLoss, G4StrawTubeXTRadiator - use const declaration to
+    array of G4SandiaTable values
+
+18  Feb 13: V.Ivanchenko (xrays-V09-06-00)
+- G4SynchrotronRadiation, G4ForwardXrayTR - removed G4ThreadLocal 
+    declarations
+
 21 Sept 12: P.Gumplinger (xrays-V09-05-06)
 - Remove what has now become an annoying NOTE warning in the constructor of 
   G4Cerenkov

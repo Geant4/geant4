@@ -1091,7 +1091,7 @@ G4double G4VXTRenergyLoss::GetPlateLinearPhotoAbs(G4double omega)
   omega3 = omega2*omega;
   omega4 = omega2*omega2;
 
-  G4double* SandiaCof = fPlatePhotoAbsCof->GetSandiaCofForMaterial(omega);
+  const G4double* SandiaCof = fPlatePhotoAbsCof->GetSandiaCofForMaterial(omega);
   G4double cross = SandiaCof[0]/omega  + SandiaCof[1]/omega2 +
                    SandiaCof[2]/omega3 + SandiaCof[3]/omega4;
   return cross;
@@ -1162,7 +1162,7 @@ G4double G4VXTRenergyLoss::GetGasLinearPhotoAbs(G4double omega)
   omega3 = omega2*omega;
   omega4 = omega2*omega2;
 
-  G4double* SandiaCof = fGasPhotoAbsCof->GetSandiaCofForMaterial(omega);
+  const G4double* SandiaCof = fGasPhotoAbsCof->GetSandiaCofForMaterial(omega);
   G4double cross = SandiaCof[0]/omega  + SandiaCof[1]/omega2 +
                    SandiaCof[2]/omega3 + SandiaCof[3]/omega4;
   return cross;

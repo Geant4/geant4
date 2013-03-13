@@ -101,7 +101,8 @@ private:
   G4double fEnergyConst;
 
   G4PropagatorInField* fFieldPropagator;
-
+  G4bool FirstTime;
+  G4bool FirstTime1;
 };
 
 //////////////////////////  INLINE METHODS  /////////////////////////////
