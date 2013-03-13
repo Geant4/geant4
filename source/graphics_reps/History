@@ -1,4 +1,4 @@
-cvs log $Id$
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th March 2013  John Allison (greps-V09-06-04)
+- HepPolyhedron.cc:
+  o Introduced const G4double spatialTolerance = 0.01*nm;
+  o Used in RotateAroundZ and in HepPolyhedronSphere and HepPolyhedronTorus
+    constructors.
+  o Allows creation of nm-sized objects.
+  o Fixes bug report 1452.
+
+14th February 2013 Jean Jacquemier
+- Removed modifcations G4AttCheck.cc and G4DimentionedTypeUtil.cc for G4UnitTable
+  ( see  TAG greps-V09-06-02 ). These modifications will be done once 
+  MultiThreading performance loss will be recover
+  
+8th February 2013 Jean Jacquemier (greps-V09-06-02)
+- Modify G4AttCheck.cc and G4DimentionedTypeUtil.cc for G4UnitTable 
+  modification
+
 14th December 2012  John Allison (greps-V09-06-01)
-- $Id$ expansion.
+- Added dollar-Id expansion into first line of this file.
 
 3rd December 2012  John Allison (greps-V09-06-00)
 - Removed NURBS and i_mode.

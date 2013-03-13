@@ -71,6 +71,8 @@ using CLHEP::perMillion;
 using CLHEP::deg;
 using CLHEP::pi;
 using CLHEP::twopi;
+using CLHEP::nm;
+const G4double spatialTolerance = 0.01*nm;
 
 /***********************************************************************
  *                                                                     *
@@ -467,7 +469,7 @@ void HepPolyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
   G4int i, j, k;
 
   for(i=i1beg; i<=i2end; i++) {
-    if (std::abs(r[i]) < perMillion) r[i] = 0.;
+    if (std::abs(r[i]) < spatialTolerance) r[i] = 0.;
   }
 
   j = 0;                                                // external nodes
@@ -1944,7 +1946,7 @@ HepPolyhedronSphere::HepPolyhedronSphere(G4double rmin, G4double rmax,
   G4int nds = (GetNumberOfRotationSteps() + 1) / 2;
   G4int np1 = G4int(dthe*nds/pi+.5) + 1;
   if (np1 <= 1) np1 = 2;
-  G4int np2 = rmin < perMillion ? 1 : np1;
+  G4int np2 = rmin < spatialTolerance ? 1 : np1;
 
   G4double *zz, *rr;
   zz = new G4double[np1+np2];
@@ -2018,7 +2020,7 @@ HepPolyhedronTorus::HepPolyhedronTorus(G4double rmin,
   //   P R E P A R E   T W O   P O L Y L I N E S
 
   G4int np1 = GetNumberOfRotationSteps();
-  G4int np2 = rmin < perMillion ? 1 : np1;
+  G4int np2 = rmin < spatialTolerance ? 1 : np1;
 
   G4double *zz, *rr;
   zz = new G4double[np1+np2];
