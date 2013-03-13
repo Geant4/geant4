@@ -78,6 +78,14 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fListCmd->SetGuidance("Add modula physics list.");
   fListCmd->SetParameterName("PList",false);
   fListCmd->AvailableForStates(G4State_PreInit);  
+
+  fADCCmd = new G4UIcmdWithADoubleAndUnit("/testem/setEnergyPerChannel",this);
+  fADCCmd->SetGuidance("Set energy per ADC channel");
+  fADCCmd->SetParameterName("enadc",false,false);
+  fADCCmd->SetUnitCategory("Energy");
+  fADCCmd->SetDefaultUnit("keV");
+  fADCCmd->SetRange("enadc>0.");
+  fADCCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,6 +96,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
   delete fEBCmd;
   delete fCBCmd;
   delete fListCmd;
+  delete fADCCmd; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,6 +116,9 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
 
   if( command == fListCmd )
    { fPhysicsList->AddPhysicsList(newValue); }
+
+  if( command == fADCCmd )
+    { man->SetEnergyPerChannel(fADCCmd->GetNewDoubleValue(newValue)); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

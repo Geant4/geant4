@@ -23,58 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/PhysicsListMessenger.hh
-/// \brief Definition of the PhysicsListMessenger class
+/// \file electromagnetic/TestEm5/include/StackingAction.hh
+/// \brief Definition of the StackingAction class
 //
+// $Id: StackingAction.hh,v 1.4 2006-09-25 17:06:29 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id$
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   PhysicsListMessenger
-//
-// Description: EM physics with a possibility to add PAI model
-//
-// Author:      V.Ivanchenko 01.09.2010
-//
-//----------------------------------------------------------------------------
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#ifndef StackingAction_h
+#define StackingAction_h 1
 
+#include "G4UserStackingAction.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
 
-class PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+class StackingMessenger;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class StackingAction : public G4UserStackingAction
 {
 public:
-  
-  PhysicsListMessenger(PhysicsList* );
-  virtual ~PhysicsListMessenger();
-    
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  StackingAction();
+  ~StackingAction();
+   
+  inline void SetKillStatus(G4bool value) { fKillSecondary = value; };
+     
+  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
 private:
-  
-  PhysicsList* fPhysicsList;
     
-  G4UIcmdWithADoubleAndUnit* fECmd;
-  G4UIcmdWithAnInteger*      fEBCmd;
-  G4UIcmdWithAnInteger*      fCBCmd;
-  G4UIcmdWithAString*        fListCmd;
-  G4UIcmdWithADoubleAndUnit* fADCCmd;
-    
+  G4bool              fKillSecondary;
+  StackingMessenger*  fStackMessenger;
+  HistoManager*       fHisto;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

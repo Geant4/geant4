@@ -23,61 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/PhysicsListMessenger.hh
-/// \brief Definition of the PhysicsListMessenger class
+/// \file electromagnetic/TestEm5/include/StackingMessenger.hh
+/// \brief Definition of the StackingMessenger class
 //
+// $Id: StackingMessenger.hh,v 1.6 2006-09-25 17:06:29 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id$
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   PhysicsListMessenger
-//
-// Description: EM physics with a possibility to add PAI model
-//
-// Author:      V.Ivanchenko 01.09.2010
-//
-//----------------------------------------------------------------------------
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#ifndef StackingMessenger_h
+#define StackingMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
+#include "globals.hh"
 
-class PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+class StackingAction;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class StackingMessenger: public G4UImessenger
 {
 public:
-  
-  PhysicsListMessenger(PhysicsList* );
-  virtual ~PhysicsListMessenger();
+  StackingMessenger(StackingAction*);
+  ~StackingMessenger();
     
   virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
-  
-  PhysicsList* fPhysicsList;
-    
-  G4UIcmdWithADoubleAndUnit* fECmd;
-  G4UIcmdWithAnInteger*      fEBCmd;
-  G4UIcmdWithAnInteger*      fCBCmd;
-  G4UIcmdWithAString*        fListCmd;
-  G4UIcmdWithADoubleAndUnit* fADCCmd;
-    
+
+  StackingAction*    fStackAction;    
+  G4UIcmdWithABool*  fKillCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

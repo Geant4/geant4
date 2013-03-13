@@ -40,6 +40,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "StackingAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -68,6 +69,7 @@ int main(int argc,char** argv)
   runManager->SetUserAction(gun);
   runManager->SetUserAction(new RunAction());
   runManager->SetUserAction(new EventAction());
+  runManager->SetUserAction(new StackingAction());
   
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 

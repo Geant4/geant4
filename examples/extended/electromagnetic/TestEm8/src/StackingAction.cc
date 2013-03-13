@@ -23,61 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/PhysicsListMessenger.hh
-/// \brief Definition of the PhysicsListMessenger class
+/// \file electromagnetic/TestEm5/src/StackingAction.cc
+/// \brief Implementation of the StackingAction class
 //
+// $Id: StackingAction.cc,v 1.8 2009-03-06 18:04:23 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id$
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   PhysicsListMessenger
-//
-// Description: EM physics with a possibility to add PAI model
-//
-// Author:      V.Ivanchenko 01.09.2010
-//
-//----------------------------------------------------------------------------
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#include "StackingAction.hh"
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "HistoManager.hh"
+#include "StackingMessenger.hh"
 
-class PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+#include "G4Track.hh"
+#include "G4Step.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+StackingAction::StackingAction()
+  : fHisto(HistoManager::GetPointer())
 {
-public:
-  
-  PhysicsListMessenger(PhysicsList* );
-  virtual ~PhysicsListMessenger();
-    
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  
-  PhysicsList* fPhysicsList;
-    
-  G4UIcmdWithADoubleAndUnit* fECmd;
-  G4UIcmdWithAnInteger*      fEBCmd;
-  G4UIcmdWithAnInteger*      fCBCmd;
-  G4UIcmdWithAString*        fListCmd;
-  G4UIcmdWithADoubleAndUnit* fADCCmd;
-    
-};
+  fKillSecondary  = false;
+  fStackMessenger = new StackingMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+StackingAction::~StackingAction()
+{
+  delete fStackMessenger;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ClassificationOfNewTrack
+StackingAction::ClassifyNewTrack(const G4Track* aTrack)
+{
+  //stack or delete secondaries
+  G4ClassificationOfNewTrack status = fUrgent;
+
+  //keep primary particle
+  if (aTrack->GetParentID() == 0 || !fKillSecondary) { return status; }
+  
+  // charged tracks are killed only inside sensitive volumes
+  if(aTrack->GetVolume()->GetLogicalVolume()->GetSensitiveDetector() &&
+     aTrack->GetDefinition()->GetPDGCharge() != 0.0) 
+    {
+      fHisto->AddEnergy(aTrack->GetKineticEnergy(), 0); 
+      status = fKill;    
+    }
+  return status;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -101,10 +101,9 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
   fIonCmd->SetGuidance("Set energy per electron-ion pair for detector");
   fIonCmd->SetParameterName("en",false,false);
   fIonCmd->SetUnitCategory("Energy");
-  fIonCmd->SetDefaultUnit("eV");
+  fIonCmd->SetDefaultUnit("MeV");
   fIonCmd->SetRange("en>0.");
-  fIonCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-    
+  fIonCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
 }
 
 //////////////////////////////////////////////////////////////////////////////

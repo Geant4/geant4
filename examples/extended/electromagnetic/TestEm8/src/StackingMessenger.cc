@@ -23,61 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/PhysicsListMessenger.hh
-/// \brief Definition of the PhysicsListMessenger class
+/// \file electromagnetic/TestEm5/src/StackingMessenger.cc
+/// \brief Implementation of the StackingMessenger class
 //
+// $Id: StackingMessenger.cc,v 1.5 2006-09-25 17:06:29 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id$
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   PhysicsListMessenger
-//
-// Description: EM physics with a possibility to add PAI model
-//
-// Author:      V.Ivanchenko 01.09.2010
-//
-//----------------------------------------------------------------------------
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#include "StackingMessenger.hh"
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-class PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+#include "StackingAction.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+StackingMessenger::StackingMessenger(StackingAction* stack)
+:fStackAction(stack)
+{   
+  fKillCmd = new G4UIcmdWithABool("/testem/killSecondaries",this);
+  fKillCmd->SetGuidance("Kill secondary charged particles");
+  fKillCmd->SetParameterName("choice",true);
+  fKillCmd->SetDefaultValue(false);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+StackingMessenger::~StackingMessenger()
 {
-public:
-  
-  PhysicsListMessenger(PhysicsList* );
-  virtual ~PhysicsListMessenger();
-    
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  
-  PhysicsList* fPhysicsList;
-    
-  G4UIcmdWithADoubleAndUnit* fECmd;
-  G4UIcmdWithAnInteger*      fEBCmd;
-  G4UIcmdWithAnInteger*      fCBCmd;
-  G4UIcmdWithAString*        fListCmd;
-  G4UIcmdWithADoubleAndUnit* fADCCmd;
-    
-};
+  delete fKillCmd;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void StackingMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{     
+  if(command == fKillCmd)
+    {fStackAction->SetKillStatus(fKillCmd->GetNewBoolValue(newValue));}
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
