@@ -114,8 +114,8 @@ private:
   G4double _excitation;
   G4double _gammaCreationTime;
   //JMQ 180410
-  G4int _A;
-  G4int _Z;
+//  G4int _A;
+//  G4int _Z;
   G4NuclearLevelManager * _levelManager;
   //JMQ 190410
   G4double _tolerance;

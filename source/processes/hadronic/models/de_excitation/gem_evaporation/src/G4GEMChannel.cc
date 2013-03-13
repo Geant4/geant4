@@ -199,7 +199,7 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
 							     fragment.GetZ_asInt());
   G4double aCN = theLevelDensityPtr->LevelDensityParameter(fragment.GetA_asInt(),
 							   fragment.GetZ_asInt(),U-deltaCN);   
-  G4double UxCN = (2.5 + 150.0/fragment.GetA())*MeV;
+  G4double UxCN = (2.5 + 150.0/G4double(fragment.GetA_asInt()))*MeV;
   G4double ExCN = UxCN + deltaCN;
   G4double TCN = 1.0/(std::sqrt(aCN/UxCN) - 1.5/UxCN);
   //                       ***end PARENT***

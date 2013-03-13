@@ -92,7 +92,7 @@ G4ExcitationHandler::G4ExcitationHandler():
   
   theMultiFragmentation = new G4StatMF;
   theFermiModel = new G4FermiBreakUp;
-  thePhotonEvaporation = new G4PhotonEvaporation;
+  thePhotonEvaporation = new G4PhotonEvaporation("ExcitationHandler",fDelayedEmission);
   theEvaporation = new G4Evaporation(thePhotonEvaporation);
   thePool = G4FermiFragmentsPool::Instance();
   SetParameters();
@@ -234,6 +234,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	{
 	  theTempResult = theFermiModel->BreakItUp(*(*iList));
 	  wasFBU = true; 
+	  // if initial fragment returned unchanged try to evaporate it
+          if(1 == theTempResult->size()) {
+            delete theTempResult;
+	    theTempResult = theEvaporation->BreakItUp(*(*iList)); 
+	  }
 	}
       else // apply Evaporation in another case
 	{
@@ -314,7 +319,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
       exEnergy = (*iList)->GetExcitationEnergy();
 
       // only hot fragments
-      if(exEnergy >= minExcitation) {  
+      if(exEnergy > minExcitation) {  
 	theTempResult = thePhotonEvaporation->BreakUpFragment(*iList);	  
 	size_t nsec = theTempResult->size();
 	//G4cout << "Nproducts= " << nsec << G4endl;  
@@ -353,6 +358,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
     {
       theFragmentA = (*i)->GetA_asInt();
       theFragmentZ = (*i)->GetZ_asInt();
+      G4double etot= (*i)->GetMomentum().e();
       G4ParticleDefinition* theKindOfFragment = 0;
       if (theFragmentA == 0) {       // photon or e-
 	theKindOfFragment = (*i)->GetParticleDefinition();   
@@ -369,14 +375,25 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
       } else if (theFragmentA == 4 && theFragmentZ == 2) { // alpha
 	theKindOfFragment = G4Alpha::AlphaDefinition();;
       } else {
+        G4double excitation = 0.0;
+        G4double eexc = (*i)->GetExcitationEnergy();
+
+	// production of an isomer
+        if(eexc > minExcitation) {
+	  excitation = eexc;
+
+	  // correction of total energy for ground state isotopes
+	} else if(0.0 != eexc) {
+          etot -= eexc;
+	}
 	theKindOfFragment = 
-	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,0.0);
+	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,excitation);
       }
       if (theKindOfFragment != 0) 
 	{
 	  G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);
 	  theNew->SetMomentum((*i)->GetMomentum().vect());
-	  theNew->SetTotalEnergy((*i)->GetMomentum().e());
+	  theNew->SetTotalEnergy(etot);
 	  theNew->SetFormationTime((*i)->GetCreationTime());
 	  theReactionProductVector->push_back(theNew);
 	}

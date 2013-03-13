@@ -13,6 +13,45 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+12 March 2013  Dennis Wright (hadr-deex-V09-06-06)
+--------------------------------------------------
+- fixed MacOS clang compiler warnings: unused private variables _A, _Z
+  removed these from G4DiscreteGammaTransition
+
+8 March 2013 Vladimir Ivanchenko (hadr-deex-V09-06-05)
+----------------------------------------------------------
+- G4UnstableFragmentBreakUp - fixed initialisation
+
+1 March 2013 Andrea Dotti (hadr-deex-V09-06-04)
+----------------------------------------------------------
+- G4RandGeneralTmp.hh - prepared modification for G4MT.
+  No effect (#ifdef protection) for sequential build.
+
+14 February 2013 Vladimir Ivanchenko (hadr-deex-V09-06-03)
+----------------------------------------------------------
+- G4StatMFMicroPartition - fixed compillation at Windows
+
+14 February 2013 Vladimir Ivanchenko (hadr-deex-V09-06-02)
+----------------------------------------------------------
+- G4UnstableFragmentBreakUp - removed static and G4ThreadLocal
+- G4StatMF, G4StatMFMicroCanonical, G4StatMFMicroManager, 
+  G4StatMFMicroPartition - use integer Z and A
+- G4VEvaporationChannel - added virtual method GetLifeTime,
+    enumerator G4EvaporationChannelType, which is defined in 
+    constructor of the class; by default 
+    G4EvaporationChannelType = fDelayedEmission
+
+12 February 2013 Vladimir Ivanchenko (hadr-deex-V09-06-01)
+----------------------------------------------------------
+- G4ExcitationHandler - fixed typo in access method name: 
+    GetPhotonEvaporation instead of wrong SetPhotonEvaporation
+
+24 January 2013 Vladimir Ivanchenko (hadr-deex-V09-06-00)
+----------------------------------------------------------
+- G4ExcitationHandler - if FermiBreakUp returns unchanged 
+    fragment then the fragment is decayed by Evaporation instead of
+    PhotonEvaporation to avoid production of non-physical isotopes
+    like (4H)
 
 21 September 2012 Gabriele Cosmo (hadr-deex-V09-05-11)
 ------------------------------------------------------

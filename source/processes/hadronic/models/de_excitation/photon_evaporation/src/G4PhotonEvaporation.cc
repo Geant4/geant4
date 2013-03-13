@@ -69,8 +69,10 @@
 #include "G4DiscreteGammaDeexcitation.hh"
 #include "G4E1Probability.hh"
 
-G4PhotonEvaporation::G4PhotonEvaporation()
-  :_verbose(0),_myOwnProbAlgorithm (true),
+G4PhotonEvaporation::G4PhotonEvaporation(const G4String & aName,
+					 G4EvaporationChannelType timeType)
+  : G4VEvaporationChannel(aName, timeType),
+   _verbose(0),_myOwnProbAlgorithm (true),
    _eOccupancy(0), _vShellNumber(-1),_gammaE(0.)
 { 
   _probAlgorithm = new G4E1Probability;

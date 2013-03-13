@@ -75,7 +75,8 @@ class G4PhotonEvaporation : public G4VEvaporationChannel {
 
 public:
 
-    G4PhotonEvaporation();
+    G4PhotonEvaporation(const G4String & aName = "Anonymous",
+                        G4EvaporationChannelType timeType = fDelayedEmission);
 
     virtual ~G4PhotonEvaporation();
 

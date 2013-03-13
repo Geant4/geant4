@@ -72,9 +72,10 @@
 #include "G4NuclearLevelStore.hh"
 #include "G4Pow.hh"
 
-G4DiscreteGammaTransition::G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int A): 
-  _nucleusZ(Z), _orbitE(-1), _bondE(0.), _aGamma(true), _icm(false), _gammaEnergy(0.), 
-  _level(level), _excitation(0.),  _gammaCreationTime(0.),_A(A),_Z(Z)
+G4DiscreteGammaTransition::
+G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int /*A*/)
+ : _nucleusZ(Z), _orbitE(-1), _bondE(0.), _aGamma(true), _icm(false),
+   _gammaEnergy(0.), _level(level), _excitation(0.), _gammaCreationTime(0.)
 {
   _levelManager = 0;
   _verbose = 0;

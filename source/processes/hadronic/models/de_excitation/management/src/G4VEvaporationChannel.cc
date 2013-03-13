@@ -36,12 +36,18 @@
 
 #include "G4VEvaporationChannel.hh"
 
-G4VEvaporationChannel::G4VEvaporationChannel(const G4String & aName) 
-  :OPTxs(3),useSICB(false),Name(aName) 
+G4VEvaporationChannel::G4VEvaporationChannel(const G4String & aName,
+					     G4EvaporationChannelType timeType) 
+  :sampleDecayTime(timeType),OPTxs(3),useSICB(false),Name(aName) 
 {}
 
 G4VEvaporationChannel::~G4VEvaporationChannel() 
 {}
+
+G4double G4VEvaporationChannel::GetLifeTime(G4Fragment*)
+{
+  return 0.0;
+}
 
 G4Fragment* G4VEvaporationChannel::EmittedFragment(G4Fragment*)
 {

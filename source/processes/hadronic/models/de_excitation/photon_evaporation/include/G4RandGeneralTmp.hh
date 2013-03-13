@@ -32,9 +32,12 @@
 
 #ifndef G4RandGeneralTmp_h
 #define G4RandGeneralTmp_h 1
-
-#include <CLHEP/Random/RandGeneral.h>
- 
-typedef CLHEP::RandGeneral G4RandGeneralTmp;
+#if G4MULTITHREADED
+   //Not needed in MT, this include defines already what is needed
+   #include "Randomize.hh"
+#else
+   #include <CLHEP/Random/RandGeneral.h>
+   typedef CLHEP::RandGeneral G4RandGeneralTmp;
+#endif
 
 #endif
