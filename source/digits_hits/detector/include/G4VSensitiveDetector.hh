@@ -153,6 +153,8 @@ class G4VSensitiveDetector
       { return ROgeometry; }
       inline G4VSDFilter* GetFilter() const
       { return filter; }
+public:
+    virtual G4VSensitiveDetector* Clone() const;
 };
 
 

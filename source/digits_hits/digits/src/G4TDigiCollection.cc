@@ -29,23 +29,18 @@
 
 #include "G4TDigiCollection.hh"
 
-G4ThreadLocal G4Allocator<G4DigiCollection> *pDCAllocator = 0;
+G4ThreadLocal G4Allocator<G4DigiCollection> *aDCAllocator_G4MT_TLS_ = 0;
 
 G4DigiCollection::G4DigiCollection() : theCollection((void*)0)
-{
-  if (!pDCAllocator) pDCAllocator = new G4Allocator<G4DigiCollection>;
-}
+{ if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>  ;;}
 
 G4DigiCollection::G4DigiCollection(G4String detName,G4String colNam)
-  : G4VDigiCollection(detName,colNam), theCollection((void*)0)
-{
-  if (!pDCAllocator) pDCAllocator = new G4Allocator<G4DigiCollection>;
-}
+: G4VDigiCollection(detName,colNam), theCollection((void*)0)
+{ if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>  ;;}
 
 G4DigiCollection::~G4DigiCollection()
-{}
+{ if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>  ;;}
 
 G4int G4DigiCollection::operator==(const G4DigiCollection &right) const
-{
-  return (collectionName==right.collectionName);
-}
+{ if (!aDCAllocator_G4MT_TLS_) aDCAllocator_G4MT_TLS_ = new G4Allocator<G4DigiCollection>  ; return (collectionName==right.collectionName); }
+

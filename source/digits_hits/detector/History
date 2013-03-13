@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Febr 26, 2013 Andrea Dotti
+- Adding cloning capbailities to SD
 
 June 4, 2007, A.Howard
 - Put back some classes required for scoring of geometrical biasing cells:
