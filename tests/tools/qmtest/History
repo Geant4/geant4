@@ -12,6 +12,9 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-September-2012, G.Folger        (testtools-QMtest-V09-05-11)
+-  testing tag, after svn repository reorg, ignore.
+
 21-June-2012, G.Folger             (testtools-QMtest-V09-05-10)
 - examples/extended/g3tog4/clGeometry needs make setup be4 make
 

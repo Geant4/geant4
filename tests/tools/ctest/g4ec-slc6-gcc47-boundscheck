@@ -1,0 +1,90 @@
+#!/usr/bin/env bash
+
+#------------------------------------------------------------------
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+CONFIG=slc6-gcc47
+
+platform=x86_64-${CONFIG}-opt
+
+#---CMake----------------------------------------------------------
+export PATH=/afs/cern.ch/sw/lcg/external/CMake/2.8.6/${platform}/bin:${PATH}
+
+#---Xerces-C-------------------------------------------------------
+export XERCESC_ROOT_DIR=/afs/cern.ch/sw/lcg/external/XercesC/3.1.1p2/${platform}
+export LD_LIBRARY_PATH=${XERCESC_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
+
+#---Inventor--------------------------------------------------------
+export PATH=/afs/cern.ch/sw/lcg/external/coin3d/3.1.3p2/${platform}/bin:${PATH}
+export LD_LIBRARY_PATH=/afs/cern.ch/sw/lcg/external/coin3d/3.1.3p2/x86_64-slc5-gcc47-opt/lib:${LD_LIBRARY_PATH}
+
+#---CLHEP----------------------------------------------------------
+export CLHEP_ROOT_DIR=/afs/cern.ch/sw/lcg/external/clhep/2.1.3.1/${platform}
+export LD_LIBRARY_PATH=${CLHEP_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
+
+#---Qt-------------------------------------------------------------
+export QTDIR=/afs/cern.ch/sw/lcg/external/qt/4.8.3/${platform}
+
+#---ROOT---(gcc46!!!!!)-------------------------------------------
+. /afs/cern.ch/sw/lcg/app/releases/ROOT/5.34.03_python2.7/x86_64-slc6-gcc46-opt/root/bin/thisroot.sh
+
+#---Python--------------------------------------------------------
+#Needed for PhysicsChecks: python compatible with ROOT
+export PATH=/afs/cern.ch/sw/lcg/external/Python/2.7.3/${platform}/bin:${PATH}
+export LD_LIBRARY_PATH=/afs/cern.ch/sw/lcg/external/Python/2.7.3/${platform}/lib:${LD_LIBRARY_PATH}
+
+#---GCCXML--------------------------------------------------------
+export PATH=/afs/cern.ch/sw/lcg/external/gccxml/0.9.0_20120309p1/${platform}/bin:${PATH}
+
+#---Compiler------------------------------------------------------
+export PATH=/afs/cern.ch/sw/lcg/contrib/gcc/4.7.2/${platform}/bin:${PATH}
+export LD_LIBRARY_PATH=/afs/cern.ch/sw/lcg/contrib/gcc/4.7.2/${platform}/lib64:${LD_LIBRARY_PATH}
+
+#-----------------------------------------------------------------
+THIS=$(dirname $0)
+
+if [ x$MODE = x ]; then
+  export MODE=experimental
+fi
+if [ x$WORKDIR = x ]; then 
+  WORKDIR=/ec/build 
+fi
+if [ x$VERSION = x ]; then 
+  export VERSION=g4tags-dev
+fi
+
+#---Enable FPE -----------------------------------------------------
+export CXXFLAGS="-DG4FPE_DEBUG -D_GLIBCXX_DEBUG"
+
+if [ x$BUILDTYPE = xstaticlibs ]
+then
+  export G4_XOPTS="-DBUILD_STATIC_LIBS=ON;-DBUILD_SHARED_LIBS=OFF"
+else
+  export G4_XOPTS="-DGEANT4_USE_G3TOG4=ON;\
+-DGEANT4_USE_OPENGL_X11=ON;\
+-DGEANT4_USE_QT=ON;\
+-DGEANT4_USE_RAYTRACER_X11=ON;\
+-DGEANT4_USE_SYSTEM_CLHEP=ON;\
+-DCLHEP_ROOT_DIR=${CLHEP_ROOT_DIR};\
+-DGEANT4_USE_XM=ON"
+fi
+
+
+export SOURCE=${WORKDIR}/${MODE}/${VERSION}
+if [ x$BUILDTYPE = x ]; then
+  export BINARY=${WORKDIR}/${MODE}/${CONFIG}
+else
+  export BINARY=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
+fi
+
+if [ ! -d "${SOURCE}" ]; then
+  ${THIS}/g4tagsvn.py update -c ${VERSION} -d ${SOURCE} -q
+fi
+
+#---Run the CTest script-------------------------------------------
+echo "Starting CTest script for configutation ${CONFIG} at `date`" 
+ctest -V -S ${THIS}/g4${MODE}.cmake 
+
+
+

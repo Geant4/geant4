@@ -19,18 +19,7 @@
 # Checks applied for all systems ONLY IF g4ui_none HAS NOT BEEN SET TO y
 if test "x$g4ui_none" = "xn" ; then
     # Query the user to see if build of Qt UI module is needed
-    g4message=`cat <<EOM
-
-    G4UI_BUILD_QT_SESSION
-    G4UI_USE_QT
-
-Setting these variables will enable the building of the G4 Qt based 
-user interface module and the use of this module in your applications
-respectively.
-The Qt3 or Qt4 headers, libraries and moc application are required to enable
-the building of this module.
-Do you want to enable build and use of this module?
-EOM`
+	g4message="Enable building of the Qt UI module?"
 
     # Read in the user response
     dflt=$g4ui_build_qt_session
@@ -57,22 +46,21 @@ EOM`
     # installation
     #
     if test "x$g4ui_build_qt_session" = "xy" ; then
-	echo " "
 	# NB Have to supply arg to qt script, just blank in this case!
 	qt_search_dir=""
 	. ./qt
 
 	# If we didn't find Qt automatically, then ask user if they know
 	# where it's installed...
-	if test "x$g4_havegoodqt" = "xno" ; then
+	if test "x$g4_havegoodqt" = "xno" || test "x$g4_is_qt4" = "xno" ; then
 	    promptend="no"
 	    user_qthome="the standard locations"
 
             while test "x$promptend" = "xno" ; do
 	        g4message=`cat << EOM
 
-Autodetection failed to locate Qt3 or Qt4 in $qthomeloc on your system.
-Please enter the path to your Qt3 OR Qt4 install (i.e. if Qt4 is installed
+Autodetection failed to locate Qt4 in $qthomeloc on your system.
+Please enter the path to your Qt4 install (i.e. if Qt4 is installed
 in PATH/include/QT, PATH/include or PATH/include/qt4, enter PATH),
 or type '-' to CANCEL the build of the Qt UI module.
 Qt path:
@@ -95,7 +83,7 @@ EOM`
 		    qt_search_dir=$user_qthome
 		    . ./qt
 
-		    if test "x$g4_havegoodqt" = "xyes" ; then
+		    if test "x$g4_havegoodqt" = "xyes" && test "x$g4_is_qt4" = "xyes" ; then
 			promptend=yes
 		    fi
 		fi #END TEST user_qthome = -

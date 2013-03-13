@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+#------------------------------------------------------------------
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+export XERCESC_ROOT_DIR=/afs/cern.ch/sw/lcg/external/XercesC/3.1.0/x86_64-slc5-gcc43-opt
+export LD_LIBRARY_PATH=${XERCESC_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
+export PATH=${PATH}:/afs/cern.ch/sw/lcg/external/CMake/2.8.2/x86_64-slc5-gcc43-opt/bin
+
+cd /build/mato/nightlies
+export WORKDIR=`date +%a-%H-%M`
+mkdir $WORKDIR
+cd $WORKDIR
+
+rm -rf source
+#---Checkout Geant4 sources ---------------------------------------
+${0%/*}/g4checkout.py -c g4tags-dev -d source --quiet
+#${0%/*}/g4checkout.py -c 09-04-ref-08_branch -d source --quiet
+
+#---Additional changes in sources----------------------------------
+cd source
+#svn switch svn+ssh://svn.cern.ch/reps/geant4/trunk/geant4/CMakeLists.txt CMakeLists.txt
+#svn switch svn+ssh://svn.cern.ch/reps/g4tests/tags/benchmarks/_symbols/benchmarks-V09-04-00 ./benchmarks
+#svn switch svn+ssh://svn.cern.ch/reps/geant4/trunk/geant4/tests/CMakeLists.txt tests/CMakeLists.txt
+cd ..
+
+#---Run the CTest script-------------------------------------------
+ctest -S ${0%/*}/g4nightly.cmake 
+
+

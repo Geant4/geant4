@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.5  2005/06/16 10:00:51  sadilov
+?RCS: build and install
+?RCS:
 ?RCS: Revision 1.4  2002/12/12 22:48:32  sadilov
 ?RCS: MOve G4 header.
 ?RCS:
@@ -58,44 +61,31 @@ case "$user" in
 '') user=`whoami 2>&1`;;
 esac
 
-#if [ X$install = Xyes ] ; then
-#
-#echo " "
-#echo " "
-#echo " "
-#echo "                --- Geant4 Toolkit Installation  ---"
-#echo " "
-#echo " "
-#echo " "
-#echo " "
-#
-##if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
-##	firsttime=false
-##	echo " "
-##	rp='Would you like to see the instructions?'
-##	dflt=n
-##	. ./myread
-##	case "$ans" in
-##	[yY]*) ;;
-##	*) needman=false;;
-##	esac
-##fi
-#fi
-
 if [ X$g4build = Xyes ] ; then
 
 echo " "
+echo "                    --- Geant4 Toolkit Build  ---"
 echo " "
-echo " "
-echo "                --- Geant4 Toolkit Build  ---"
-echo " "
-echo " "
-echo " "
-echo " "
+cat<<EOM
+                       * DEPRECATION WARNING *
+= This installation script is now deprecated in favour of the newer CMake  =
+= buildsystem for Geant4.                                                  =
+= Whilst you may still use this script to configure and build Geant4, it   =
+= will no longer be supported in terms of adding functionality or user     =
+= support as of Geant4 9.5.0.                                              =
+=                                                                          =
+= You are recommended to use CMake to build Geant4, and you may find       =
+= instruction on the use of this buildsystem in the file                   =
+=                                                                          =
+=  cmake/INSTALL.g4cmake                                                   =
+=                                                                          =
+= located at the top of the Geant4 source tree, or from the 9.5.0 release, =
+= in the Geant4 Installation Guide.                                        =
+
+EOM
 
 if $contains "^$user\$" ../../.config/instruct >/dev/null 2>&1; then
 	firsttime=false
-	echo " "
 	rp='Would you like to see the instructions?'
 	dflt=n
 	. ./myread
