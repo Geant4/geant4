@@ -135,13 +135,6 @@ GEANT4_ADD_TEST(example-bas-b4c COMMAND ${BINDIR}/exampleB4c -m ${SRCDIR}/basic/
 GEANT4_ADD_TEST(example-bas-b4d COMMAND ${BINDIR}/exampleB4d -m ${SRCDIR}/basic/B4/B4d/exampleB4.in
                                 BUILD ${SRCDIR}/basic/B4/B4d)
 
-GEANT4_ADD_TEST(example-nov-n01 COMMAND ${BINDIR}/exampleN01 ${SRCDIR}/novice/N01/exampleN01.in
-                                BUILD ${SRCDIR}/novice/N01)
-GEANT4_ADD_TEST(example-nov-n02 COMMAND ${BINDIR}/exampleN02 ${SRCDIR}/novice/N02/exampleN02.in
-                                BUILD ${SRCDIR}/novice/N02)
-GEANT4_ADD_TEST(example-nov-n03 COMMAND ${BINDIR}/exampleN03 ${SRCDIR}/novice/N03/exampleN03.in
-                                BUILD ${SRCDIR}/novice/N03)
-                                
 GEANT4_ADD_TEST(example-ext-analysis-a01 COMMAND ${BINDIR}/A01app ${SRCDIR}/extended/analysis/A01/test.in
                                 BUILD ${SRCDIR}/extended/analysis/A01)
 foreach(_i 01 03) 
@@ -207,14 +200,6 @@ endforeach()
 #                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry
 #                  BUILD clGeometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 #endif()
-#GEANT4_ADD_TEST(example-ext-geometry-olap 
-#                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/geometry/olap/olapex
-#                        ${SRCDIR}/extended/geometry/olap/batch.mac
-#                ERROR batch.err
-#                POSTCMD ${CMAKE_COMMAND} -E compare_files batch.err ${SRCDIR}/extended/geometry/olap/batch.err
-#                BUILD ${SRCDIR}/extended/geometry/olap
-#                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/geometry/olap
-#                BUILD olapex)
 foreach(_i 00 01 02)
   GEANT4_ADD_TEST(example-ext-hadronic-hadr${_i} 
                   COMMAND ${BINDIR}/Hadr${_i} ${SRCDIR}/extended/hadronic/Hadr${_i}/hadr${_i}.in

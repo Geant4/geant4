@@ -74,27 +74,6 @@ GEANT4_ADD_TEST(example-bas-b4d
                 BUILD exampleB4d PROJECT B4d ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
 #-------------------------------------------------------------------------------------------------
-#---Novice----------------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------------------------
-GEANT4_ADD_TEST(example-nov-n01 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N01/exampleN01 
-                        ${CMAKE_SOURCE_DIR}/examples/novice/N01/exampleN01.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N01
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N01
-                BUILD exampleN01 PROJECT N01)
-GEANT4_ADD_TEST(example-nov-n02 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N02/exampleN02
-                        ${CMAKE_SOURCE_DIR}/examples/novice/N02/exampleN02.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N02
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N02
-                BUILD exampleN02 PROJECT N02 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-nov-n03 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/novice/N03/exampleN03 
-                        ${CMAKE_SOURCE_DIR}/examples/novice/N03/exampleN03.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/novice/N03
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/novice/N03
-                BUILD exampleN03 PROJECT N03 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-#-------------------------------------------------------------------------------------------------
 #---Extended-----------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------
 GEANT4_ADD_TEST(example-ext-analysis-a01 
@@ -216,14 +195,6 @@ if(GEANT4_USE_G3TOG4)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry
                   BUILD clGeometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endif()
-GEANT4_ADD_TEST(example-ext-geometry-olap 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/geometry/olap/olapex
-                        ${CMAKE_SOURCE_DIR}/examples/extended/geometry/olap/batch.mac
-                ERROR batch.err
-                POSTCMD ${CMAKE_COMMAND} -E compare_files batch.err ${CMAKE_SOURCE_DIR}/examples/extended/geometry/olap/batch.err
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/geometry/olap
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/geometry/olap
-                BUILD olapex PROJECT olap )
 GEANT4_ADD_TEST(example-ext-geometry-transforms 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/geometry/transforms/transforms
                         ${CMAKE_SOURCE_DIR}/examples/extended/geometry/transforms/debug.mac

@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-06-08 01st March 2013 Ivana Hrivnacova
+- Updated test for removing novice/N01,N02,N03 examples
+
+ctests-V09-06-07 14th February 2013 Ivana Hrivnacova
+- Updated test for removal extended/geometry/olap example
+
 ctests-V09-06-06  9th January 2012 Gunter Folger
 - remove fake subtree tags/home/work/packages/geant4/geant4_... including a
    duplicate CMakeLists.txt.
