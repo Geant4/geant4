@@ -26,6 +26,8 @@
 /// \file medical/electronScattering2/src/ElectronEventAction.cc
 /// \brief Implementation of the ElectronEventAction class
 //
+// $Id$
+//
 
 #include "ElectronEventAction.hh"
 

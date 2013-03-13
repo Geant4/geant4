@@ -26,6 +26,8 @@
 /// \file medical/electronScattering2/include/ElectronEventAction.hh
 /// \brief Definition of the ElectronEventAction class
 //
+// $Id$
+//
 
 #ifndef ElectronEventAction_h
 #define ElectronEventAction_h 1

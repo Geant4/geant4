@@ -26,6 +26,8 @@
 /// \file medical/electronScattering2/src/ElectronRun.cc
 /// \brief Implementation of the ElectronRun class
 //
+// $Id$
+//
 
 #include "ElectronRun.hh"
 #include "G4MultiFunctionalDetector.hh"

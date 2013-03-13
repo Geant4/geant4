@@ -26,6 +26,8 @@
 /// \file medical/electronScattering2/include/ElectronRun.hh
 /// \brief Definition of the ElectronRun class
 //
+// $Id$
+//
 
 #ifndef ELECTRONRUN_HH
 #define ELECTRONRUN_HH

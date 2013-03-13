@@ -26,6 +26,8 @@
 /// \file medical/electronScattering2/include/ElectronPrimaryGeneratorAction.hh
 /// \brief Definition of the ElectronPrimaryGeneratorAction class
 //
+// $Id$
+//
 
 #ifndef ElectronPrimaryGeneratorAction_h
 #define ElectronPrimaryGeneratorAction_h 1

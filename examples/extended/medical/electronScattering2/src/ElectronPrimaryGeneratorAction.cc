@@ -26,6 +26,8 @@
 /// \file medical/electronScattering2/src/ElectronPrimaryGeneratorAction.cc
 /// \brief Implementation of the ElectronPrimaryGeneratorAction class
 //
+// $Id$
+//
 
 #include "ElectronPrimaryGeneratorAction.hh"
 #include "G4Event.hh"

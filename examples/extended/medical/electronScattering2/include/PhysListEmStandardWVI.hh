@@ -26,7 +26,6 @@
 /// \file medical/electronScattering2/include/PhysListEmStandardWVI.hh
 /// \brief Definition of the PhysListEmStandardWVI class
 //
-//
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

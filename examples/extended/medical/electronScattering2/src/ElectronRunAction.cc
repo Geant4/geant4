@@ -26,6 +26,8 @@
 /// \file medical/electronScattering2/src/ElectronRunAction.cc
 /// \brief Implementation of the ElectronRunAction class
 //
+// $Id$
+//
 
 #include "ElectronRunAction.hh"
 #include "ElectronRun.hh"

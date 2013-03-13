@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/electronScattering2/electronScattering2.cc
 /// \brief Main program of the medical/electronScattering2 example
 //

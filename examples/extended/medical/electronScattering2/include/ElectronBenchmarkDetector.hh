@@ -26,6 +26,8 @@
 /// \file medical/electronScattering2/include/ElectronBenchmarkDetector.hh
 /// \brief Definition of the ElectronBenchmarkDetector class
 //
+// $Id$
+//
 
 #ifndef ElectronBenchmarkDetector_h
 #define ElectronBenchmarkDetector_h 1

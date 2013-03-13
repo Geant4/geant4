@@ -26,6 +26,8 @@
 /// \file medical/electronScattering2/include/ElectronBenchmarkDetectorMessenger.hh
 /// \brief Definition of the ElectronBenchmarkDetectorMessenger class
 //
+// $Id$
+//
 
 #ifndef ELECTRONBENCHMARKDETECTORMESSENGER_HH
 #define ELECTRONBENCHMARKDETECTORMESSENGER_HH 1
