@@ -50,6 +50,8 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4Allocator.hh"
 
+#include "geomwdefs.hh"
+
 class G4NavigationLevelRep
 {
 

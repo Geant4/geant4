@@ -34,36 +34,47 @@
 #include "G4PVReplica.hh"
 #include "G4LogicalVolume.hh"
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This static member is thread local. For each thread, it points to the     
-//array of ReplicaPrivateSubclass instances.
-template <class ReplicaPrivateSubclass> G4ThreadLocal ReplicaPrivateSubclass* G4MTPrivateSubInstanceManager<ReplicaPrivateSubclass>::offset = 0;
+// This static member is thread local. For each thread, it points to the     
+// array of G4ReplicaData instances.
+//
+template <class G4ReplicaData> G4ThreadLocal
+G4ReplicaData* G4GeomSplitter<G4ReplicaData>::offset = 0;
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.          
-//This new field helps to use the class G4PVReplicaSubInstanceManager        
-//introduced in the "G4PVReplica.hh" file.
-G4PVReplicaSubInstanceManager G4PVReplica::g4pvreplicaSubInstanceManager;
+// This new field helps to use the class G4PVRManager.
+//
+G4PVRManager G4PVReplica::subInstanceManager;
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This method is similar to the constructor. It is used by each worker
-//thread to achieve the same effect as that of the master thread exept
-//to register the new created instance. This method is invoked explicitly.
-//It does not create a new G4PVReplica instance. It only assigns the value
-//for the fields encapsulated by the class ReplicaPrivateSubclass.
-void G4PVReplica::SlaveG4PVReplica(G4PVReplica *pMasterObject)
+// ********************************************************************
+// GetSubInstanceManager
+//
+// Returns the private data instance manager.
+// *******************************************************************
+const G4PVRManager& G4PVReplica::GetSubInstanceManager()
+{
+    return subInstanceManager;
+}
+
+
+// This method is similar to the constructor. It is used by each worker
+// thread to achieve the same effect as that of the master thread exept
+// to register the new created instance. This method is invoked explicitly.
+// It does not create a new G4PVReplica instance. It only assigns the value
+// for the fields encapsulated by the class G4ReplicaData.
+//
+void G4PVReplica::InitialiseWorker(G4PVReplica *pMasterObject)
 {
 
-  SlaveG4VPhysicalVolume( pMasterObject, 0, G4ThreeVector());
-  g4pvreplicaSubInstanceManager.SlaveCopySubInstanceArray();
-  fcopyNoG4MTThreadPrivate = -1;
+  G4VPhysicalVolume::InitialiseWorker( pMasterObject, 0, G4ThreeVector());
+  subInstanceManager.SlaveCopySubInstanceArray();
+  G4MT_copyNo = -1;
   CheckAndSetParameters (faxis, fnReplicas, fwidth, foffset);
 } 
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This method is similar to the destructor. It is used by each worker
-//thread to achieve the partial effect as that of the master thread.
-//For G4PVReplica instances, it destories the rotation matrix.
-void G4PVReplica::DestroySlaveG4PVReplica(G4PVReplica* /*pMasterObject*/)
+// This method is similar to the destructor. It is used by each worker
+// thread to achieve the partial effect as that of the master thread.
+// For G4PVReplica instances, it destories the rotation matrix.
+//
+void G4PVReplica::TerminateWorker(G4PVReplica* /*pMasterObject*/)
 {
   if ( faxis==kPhi )
   {
@@ -81,9 +92,9 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   : G4VPhysicalVolume(0, G4ThreeVector(), pName, pLogical, pMother), fRegularVolsId(0)
 {
 
-  g4pvreplicaInstanceID = g4pvreplicaSubInstanceManager.CreateSubInstance();
+  instanceID = subInstanceManager.CreateSubInstance();
 
-  fcopyNoG4MTThreadPrivate = -1;
+  G4MT_copyNo = -1;
 
   if ((!pMother) || (!pMother->GetLogicalVolume()))
   {
@@ -127,8 +138,8 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   : G4VPhysicalVolume(0,G4ThreeVector(),pName,pLogical,0), fRegularVolsId(0)
 {
 
-  g4pvreplicaInstanceID = g4pvreplicaSubInstanceManager.CreateSubInstance();
-  fcopyNoG4MTThreadPrivate = -1; 
+  instanceID = subInstanceManager.CreateSubInstance();
+  G4MT_copyNo = -1; 
 
   if (!pMotherLogical)
   {
@@ -213,8 +224,8 @@ G4PVReplica::G4PVReplica( __void__& a )
   : G4VPhysicalVolume(a), faxis(kZAxis), fnReplicas(0), fwidth(0.),
     foffset(0.), fRegularStructureCode(0), fRegularVolsId(0)
 {
-  g4pvreplicaInstanceID = g4pvreplicaSubInstanceManager.CreateSubInstance();
-  fcopyNoG4MTThreadPrivate = -1; 
+  instanceID = subInstanceManager.CreateSubInstance();
+  G4MT_copyNo = -1; 
 }
 
 G4PVReplica::~G4PVReplica()
@@ -232,12 +243,12 @@ G4bool G4PVReplica::IsMany() const
 
 G4int G4PVReplica::GetCopyNo() const
 {
-  return fcopyNoG4MTThreadPrivate;
+  return G4MT_copyNo;
 }
 
 void  G4PVReplica::SetCopyNo(G4int newCopyNo)
 {
-  fcopyNoG4MTThreadPrivate = newCopyNo;
+  G4MT_copyNo = newCopyNo;
 }
 
 G4bool G4PVReplica::IsReplicated() const

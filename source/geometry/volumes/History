@@ -16,6 +16,41 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+March 12th, 2013 A. Dotti - geomvol-V09-06-05
+- Bug-fix: Added implementation of missing member funciton:
+  G4PVReplica::GetSubInstanceManager()
+
+March 12th, 2013 G.Cosmo - geomvol-V09-06-04
+- Added public accessors for MT data to G4PVReplica.
+
+March 11th, 2013 G.Cosmo - geomvol-V09-06-03
+- Fixed accessors adding check for existance of static surface table.
+
+March 10th, 2013 G.Cosmo - geomvol-V09-06-02
+- Redefined G4DLL_API to G4GEOM_DLL to avoid cases of macro redefinition.
+
+March 8th, 2013 G.Cosmo - geomvol-V09-06-01
+- Renamed G4MTTransitory to G4GeomSplitter. Adapted G4PVReplica.
+- More cleanup of MT changes in G4PVReplica split class and other classes:
+  G4NavigationLevel, G4NavigationLevelRep, G4TouchableHistory,
+  G4LogicalBorderSurface and G4LogicalSkinSurface.
+
+February 12th, 2013 J.Apostolakis - geomvol-V09-06-00
+- G4TouchableHistory: inspected changes for Geant4-MT.
+  Took out unneeded calls that initialised allocator in many methods.
+  Only the call in new() is needed, and is kept.
+  Cleared extra code introducing a performance penalty and also complicating
+  the code without reason.
+  Note: constructors cannot check that the Allocator is initialised.
+        They could be called first to create an object which was created
+        in a different way (e.g. on the stack, via new(prealloc) or new[ ] ).
+
+January 13th, 2013 A.Dotti
+- Introduced changes for thread-safety from G4MT prototype.
+  Classes with Allocator: all methods now initialising allocator pointer.
+  Revised key classes, to separate the part of the state which is
+  thread-dependent (changed in event loop), including: 
+  G4LogicalVolume, G4PhysicalVolume, G4PVReplica, G4PVPlacement.
 
 November 6th, 2012 G.Cosmo - geomvol-V09-05-02
 - Fix in G4EnhancedVecAllocator for porting on AIX.

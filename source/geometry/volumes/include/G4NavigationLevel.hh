@@ -49,6 +49,8 @@
 #include "G4NavigationLevelRep.hh"
 #include "G4Allocator.hh"
 
+#include "geomwdefs.hh"
+
 class G4NavigationLevel
 {
 

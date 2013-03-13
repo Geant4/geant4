@@ -96,7 +96,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
     G4VPhysicalVolume* Volume1;  // Physical Volume pointer on side 1
     G4VPhysicalVolume* Volume2;  // Physical Volume pointer on side 2
 
-    static G4ThreadLocal G4LogicalBorderSurfaceTable *theBorderSurfaceTable_G4MT_TLS_;
+    static G4ThreadLocal G4LogicalBorderSurfaceTable *theBorderSurfaceTable;
       // The static Table of BorderSurfaces.
 };
 

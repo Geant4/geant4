@@ -158,7 +158,7 @@ G4PVPlacement::G4PVPlacement( __void__& a )
 //
 G4PVPlacement::~G4PVPlacement()
 {
-  if( fallocatedRotM ){ delete frotG4MTThreadPrivate; }
+  if( fallocatedRotM ){ delete G4MT_rot; }
 }
 
 // ----------------------------------------------------------------------

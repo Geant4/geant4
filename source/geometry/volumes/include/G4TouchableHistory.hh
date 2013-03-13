@@ -48,6 +48,8 @@
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
 
+#include "geomwdefs.hh"
+
 class G4TouchableHistory : public G4VTouchable
 {
 

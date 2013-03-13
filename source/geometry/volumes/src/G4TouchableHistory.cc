@@ -33,36 +33,37 @@
 
 #include "G4TouchableHistory.hh"
 
-G4ThreadLocal G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator = 0;
 
 G4TouchableHistory::G4TouchableHistory()
   : frot(G4RotationMatrix()),
     ftlate(G4ThreeVector(0.,0.,0.)),
     fhistory()
-{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
+{ 
    G4VPhysicalVolume* pPhysVol=0;
    fhistory.SetFirstEntry(pPhysVol);
 }
 
 G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
   : fhistory(history)
-{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
+{ 
   G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
   ftlate = tf.NetTranslation();
   frot = tf.NetRotation();
 }
 
 G4TouchableHistory::~G4TouchableHistory()
-{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
+{ 
 }
 
 const G4ThreeVector&
 G4TouchableHistory::GetTranslation(G4int depth) const
-{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
+{ 
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static G4ThreadLocal G4ThreeVector *currTranslation_G4MT_TLS_ = 0 ; if (!currTranslation_G4MT_TLS_) currTranslation_G4MT_TLS_ = new  G4ThreeVector  ;  G4ThreeVector &currTranslation = *currTranslation_G4MT_TLS_;
+  static G4ThreadLocal G4ThreeVector *ctrans = new  G4ThreeVector;
+  G4ThreeVector &currTranslation = *ctrans;
   if(depth==0.0)
   {
     return ftlate;
@@ -77,19 +78,19 @@ G4TouchableHistory::GetTranslation(G4int depth) const
 
 const G4RotationMatrix*
 G4TouchableHistory::GetRotation(G4int depth) const
-{ if (!aTouchableHistoryAllocator_G4MT_TLS_) aTouchableHistoryAllocator_G4MT_TLS_ = new G4Allocator<G4TouchableHistory>  ;
+{ 
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static G4ThreadLocal G4RotationMatrix *rotM_G4MT_TLS_ = 0 ; if (!rotM_G4MT_TLS_) rotM_G4MT_TLS_ = new  G4RotationMatrix  ;  G4RotationMatrix &rotM = *rotM_G4MT_TLS_;
+  static G4ThreadLocal G4RotationMatrix *rotM = new G4RotationMatrix();
 
-  if(depth==0.0)
+  if(depth==0)
   {
     return &frot;
   }
   else
   {
-    rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
-    return &rotM;
+    *rotM = fhistory.GetTransform(CalculateHistoryIndex(depth)).NetRotation();
+    return rotM;
   }
 }

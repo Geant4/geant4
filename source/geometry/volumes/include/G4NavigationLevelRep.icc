@@ -30,11 +30,8 @@
 //                        
 // ----------------------------------------------------------------------
 
-#if defined G4GEOM_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4NavigationLevelRep> *aNavigLevelRepAllocator_G4MT_TLS_;
-#else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4NavigationLevelRep> *aNavigLevelRepAllocator_G4MT_TLS_;
-#endif
+extern G4GEOM_DLL G4ThreadLocal
+G4Allocator<G4NavigationLevelRep> *aNavigLevelRepAllocator;
 
 // Accessors
 // --------------
@@ -42,45 +39,45 @@
 inline
 G4VPhysicalVolume*
 G4NavigationLevelRep::GetPhysicalVolume()
-{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; 
+{
   return sPhysicalVolumePtr; 
 }
 
 inline
 const G4AffineTransform&
 G4NavigationLevelRep::GetTransform() const 
-{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; 
+{
   return sTransform; 
 } 
 
 inline
 const G4AffineTransform*
 G4NavigationLevelRep::GetTransformPtr() const 
-{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; 
+{
   return &sTransform; 
 } 
 
 inline
 EVolume G4NavigationLevelRep::GetVolumeType() const 
-{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; 
+{
   return sVolumeType; 
 }
 
 inline
 G4int G4NavigationLevelRep::GetReplicaNo() const 
-{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; 
+{
   return sReplicaNo; 
 }
 
 inline
 void G4NavigationLevelRep::AddAReference() 
-{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ;
+{
   fCountRef++; 
 }
 
 inline
 G4bool G4NavigationLevelRep::RemoveAReference() 
-{ if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ;
+{
   return( --fCountRef <= 0 ); 
 }
 
@@ -90,12 +87,16 @@ G4bool G4NavigationLevelRep::RemoveAReference()
 //
 inline
 void* G4NavigationLevelRep::operator new(size_t)
-{  ;;;   if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; G4Allocator<G4NavigationLevelRep> &aNavigLevelRepAllocator = *aNavigLevelRepAllocator_G4MT_TLS_;  ;;;  
-  return (void *) aNavigLevelRepAllocator.MallocSingle();
+{
+  if (!aNavigLevelRepAllocator)
+  {
+    aNavigLevelRepAllocator = new G4Allocator<G4NavigationLevelRep>;
+  }
+  return (void *) aNavigLevelRepAllocator->MallocSingle();
 }
 
 inline
 void G4NavigationLevelRep::operator delete(void *aLevelRep)
-{  ;;;   if (!aNavigLevelRepAllocator_G4MT_TLS_) aNavigLevelRepAllocator_G4MT_TLS_ = new G4Allocator<G4NavigationLevelRep>  ; G4Allocator<G4NavigationLevelRep> &aNavigLevelRepAllocator = *aNavigLevelRepAllocator_G4MT_TLS_;  ;;;  
-  aNavigLevelRepAllocator.FreeSingle((G4NavigationLevelRep *) aLevelRep);
+{
+  aNavigLevelRepAllocator->FreeSingle((G4NavigationLevelRep *) aLevelRep);
 }
