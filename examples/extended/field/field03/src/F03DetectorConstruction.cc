@@ -59,7 +59,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F03DetectorConstruction::F03DetectorConstruction()
- : fMagField(0), fEmFieldSetup(0), fDetectorMessenger(0), fCalorimeterSD(0),
+ : G4VUserDetectorConstruction(),
+   fMagField(0), fEmFieldSetup(0), fDetectorMessenger(0), fCalorimeterSD(0),
    fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
    fSolidAbsorber(0), fLogicAbsorber(0), fPhysiAbsorber(0),
    fSolidRadSlice(0), fLogicRadSlice(0), fPhysiRadSlice(0),   

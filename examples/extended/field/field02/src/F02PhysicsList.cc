@@ -26,7 +26,6 @@
 /// \file field/field02/src/F02PhysicsList.cc
 /// \brief Implementation of the F02PhysicsList class
 //
-//
 // $Id$
 // 
 

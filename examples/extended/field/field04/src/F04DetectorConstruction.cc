@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/src/F04DetectorConstruction.cc
 /// \brief Implementation of the F04DetectorConstruction class
 //
-//
+
 #include "G4ios.hh"
 #include "globals.hh"
 

@@ -26,7 +26,6 @@
 /// \file field/field02/include/F02PhysicsListMessenger.hh
 /// \brief Definition of the F02PhysicsListMessenger class
 //
-//
 // $Id$
 //
 // 

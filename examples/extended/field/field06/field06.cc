@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field06/field06.cc
 /// \brief Main program of the field/field06 example
 //

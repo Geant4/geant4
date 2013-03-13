@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04PrimaryGeneratorMessenger.hh
 /// \brief Definition of the F04PrimaryGeneratorMessenger class
 //
-//
+
 #ifndef F04PrimaryGeneratorMessenger_h
 #define F04PrimaryGeneratorMessenger_h 1
 

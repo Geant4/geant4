@@ -26,10 +26,9 @@
 /// \file field/field02/src/F02SteppingVerbose.cc
 /// \brief Implementation of the F02SteppingVerbose class
 //
-//
 // $Id$
 //
-//
+
 //---------------------------------------------------------------
 //
 // F02SteppingVerbose.cc
@@ -48,21 +47,22 @@
 
 #include "G4UnitsTable.hh"
 
-////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 F02SteppingVerbose::F02SteppingVerbose()
-////////////////////////////////////////////////
+ : G4SteppingVerbose()
 {
 }
 
-//////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 F02SteppingVerbose::~F02SteppingVerbose()
-//////////////////////////////////////////////////
 {
 }
 
-/////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void F02SteppingVerbose::StepInfo()
-/////////////////////////////////////////
 {
   CopyState();
   
@@ -133,9 +133,9 @@ void F02SteppingVerbose::StepInfo()
   G4cout.precision(prec);
 }
 
-////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void F02SteppingVerbose::TrackingStarted()
-////////////////////////////////////////////////
 {
 
   CopyState();
@@ -171,3 +171,5 @@ G4int prec = G4cout.precision(3);
   }
   G4cout.precision(prec);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

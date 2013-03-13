@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/src/F04TrackingAction.cc
 /// \brief Implementation of the F04TrackingAction class
 //
-//
+
 #include "globals.hh"
 #include "G4RunManager.hh"
 

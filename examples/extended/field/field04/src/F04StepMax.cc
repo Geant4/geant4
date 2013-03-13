@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/src/F04StepMax.cc
 /// \brief Implementation of the F04StepMax class
 //
-//
+
 #include "G4Track.hh"
 #include "G4VParticleChange.hh"
 

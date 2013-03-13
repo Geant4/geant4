@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04FocusSolenoid.hh
 /// \brief Definition of the F04FocusSolenoid class
 //
-//
+
 #ifndef F04FocusSolenoid_h
 #define F04FocusSolenoid_h 1
 

@@ -56,7 +56,8 @@
 
 F01PrimaryGeneratorAction::F01PrimaryGeneratorAction(
                                             F01DetectorConstruction* det)
-  : fParticleGun(0),
+  : G4VUserPrimaryGeneratorAction(),
+    fParticleGun(0),
     fDetector(det), 
     fGunMessenger(0),
     fRndmFlag("off"),

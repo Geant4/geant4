@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 12, 2012 A.Ribon  - not tagged
+- I have rejected my previous tag (fieldex04-V09-06-01) and
+  switched back to QGSP_BERT_EMV, because it is used via the
+  physics list factory, so it is fine!
+
+Dec 12, 2012 A.Ribon - fieldex04-V09-06-01
+- Replaced QGSP_BERT_EMV with QGSP_BERT.
+
 Dec 02, 2012 J.Allison - fieldex04-V09-06-00
   Migration to DrawTrajectory() (i_mode argument is no longer available):
   o F04Trajectory.cc: Removed DrawTrajectory(G4int i_mode).

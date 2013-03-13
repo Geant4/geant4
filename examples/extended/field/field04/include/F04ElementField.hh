@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04ElementField.hh
 /// \brief Definition of the F04ElementField class
 //
-//
+
 #ifndef F04ElementField_h
 #define F04ElementField_h 1
 

@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04SteppingActionMessenger.hh
 /// \brief Definition of the F04SteppingActionMessenger class
 //
-//
+
 #ifndef F04SteppingActionMessenger_h
 #define F04SteppingActionMessenger_h 1
 

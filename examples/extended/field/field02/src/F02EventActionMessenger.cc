@@ -26,7 +26,6 @@
 /// \file field/field02/src/F02EventActionMessenger.cc
 /// \brief Implementation of the F02EventActionMessenger class
 //
-//
 // $Id$
 //
 // 

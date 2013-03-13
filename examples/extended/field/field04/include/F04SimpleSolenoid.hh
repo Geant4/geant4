@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04SimpleSolenoid.hh
 /// \brief Definition of the F04SimpleSolenoid class
 //
-//
+
 #ifndef F04SimpleSolenoid_h
 #define F04SimpleSolenoid_h 1
 

@@ -53,7 +53,8 @@ G4String F02PrimaryGeneratorAction::fgPrimaryParticleName = "proton" ;
 
 F02PrimaryGeneratorAction::F02PrimaryGeneratorAction(
                                             F02DetectorConstruction* det)
-  : fParticleGun(0),
+  : G4VUserPrimaryGeneratorAction(),
+    fParticleGun(0),
     fDetector(det), 
     fMessenger(0),
     fRndmFlag("off"),

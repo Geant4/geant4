@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/src/F04RunActionMessenger.cc
 /// \brief Implementation of the F04RunActionMessenger class
 //
-//
+
 #include "globals.hh"
 #include "Randomize.hh"
 

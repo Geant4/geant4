@@ -26,10 +26,8 @@
 /// \file field/field02/src/F02PhysicsListMessenger.cc
 /// \brief Implementation of the F02PhysicsListMessenger class
 //
-//
 // $Id$
 //
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

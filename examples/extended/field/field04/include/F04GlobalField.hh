@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04GlobalField.hh
 /// \brief Definition of the F04GlobalField class
 //
-//
+
 #ifndef F04GlobalField_h
 #define F04GlobalField_h 1
 

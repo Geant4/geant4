@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04StackingAction.hh
 /// \brief Definition of the F04StackingAction class
 //
-//
+
 #ifndef F04StackingAction_h
 #define F04StackingAction_h 1
 

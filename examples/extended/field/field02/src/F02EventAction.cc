@@ -49,7 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F02EventAction::F02EventAction(F02RunAction* action)
- : fCalorimeterCollID(-1), 
+ : G4UserEventAction(),
+   fCalorimeterCollID(-1), 
    fEventMessenger(0),
    fRunAction(action), 
    fVerboseLevel(0),

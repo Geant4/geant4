@@ -62,7 +62,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 F01DetectorConstruction::F01DetectorConstruction()
- : fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
+ : G4VUserDetectorConstruction(),
+   fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
    fSolidAbsorber(0),fLogicAbsorber(0), fPhysiAbsorber(0),
    fEmFieldSetup(0), fDetectorMessenger(0), fCalorimeterSD(0),
    fAbsorberMaterial(0), fAbsorberThickness(0.),fAbsorberRadius(0.),

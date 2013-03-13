@@ -1,4 +1,4 @@
-$Id: History,v 1.28 2010-08-24 07:38:09 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 14, 2013 - I.Hrivnacova
+-----------------------------
+- Applied coding guidelines (data members initialization);
+  tagged in examples/field
 
 November 15, 2012 - I.Hrivnacova - fieldex01-V09-05-01
 -----------------------------

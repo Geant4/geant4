@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/src/F04PrimaryGeneratorAction.cc
 /// \brief Implementation of the F04PrimaryGeneratorAction class
 //
-//
+
 #include "G4ios.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"

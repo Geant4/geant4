@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04UserTrackInformation.hh
 /// \brief Definition of the F04UserTrackInformation class
 //
-//
+
 #ifndef F04UserTrackInformation_h
 #define F04UserTrackInformation_h 1
 

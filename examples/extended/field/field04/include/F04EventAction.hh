@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04EventAction.hh
 /// \brief Definition of the F04EventAction class
 //
-//
+
 #ifndef F04EventAction_h
 #define F04EventAction_h 1
 

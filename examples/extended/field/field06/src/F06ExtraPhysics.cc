@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field06/src/F06ExtraPhysics.cc
 /// \brief Implementation of the F06ExtraPhysics class
-//
-//
 //
 
 #include "globals.hh"

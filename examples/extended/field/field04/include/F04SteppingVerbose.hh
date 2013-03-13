@@ -23,10 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file field/field04/include/F04SteppingVerbose.hh
 /// \brief Definition of the F04SteppingVerbose class
 //
-//
+
 #ifndef F04SteppingVerbose_h
 #define F04SteppingVerbose_h 1
 
