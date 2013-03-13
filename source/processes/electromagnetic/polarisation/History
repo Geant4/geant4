@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 February 13: V.Ivanchenko (empolar-V09-06-00)
+- G4PolarizedComptonCrossSection - removed unused class memebers:
+     gammaPol0, electronPol1, epsilon
+
 20 October 12: V.Ivanchenko (empolar-V09-05-02)
 - G4PolarizedPhotoElectricEffect, G4PolarizedPEEffectModel - substitute 
     methods Model(), SetModel() by EmModel(), SetEmModel()

@@ -48,10 +48,9 @@
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4PolarizedComptonCrossSection::G4PolarizedComptonCrossSection() :
-  gammaPol0(false), electronPol1(false), gammaPol2(false), electronPol3(false),
-  epsilon(0.)
-  {
+G4PolarizedComptonCrossSection::G4PolarizedComptonCrossSection() 
+  : gammaPol2(false), electronPol3(false)
+{
   SetYmin(0.);
 
   //  G4cout<<"G4PolarizedComptonCrossSection() init\n";
