@@ -53,7 +53,7 @@ class TrackingAction : public G4UserTrackingAction {
     virtual void  PreUserTrackingAction(const G4Track*);
     virtual void PostUserTrackingAction(const G4Track*);
     
-    void SetFullChain(G4bool flag) { fullChain = flag;};
+    void SetFullChain(G4bool flag) { fFullChain = flag;};
     
   private:
     RunAction*          fRun;
@@ -61,7 +61,7 @@ class TrackingAction : public G4UserTrackingAction {
     TrackingMessenger*  fTrackMessenger;
     
     G4double fCharge, fMass;        
-    G4bool   fullChain;
+    G4bool   fFullChain;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

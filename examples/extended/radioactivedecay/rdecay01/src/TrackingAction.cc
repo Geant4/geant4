@@ -46,9 +46,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(RunAction* RA, EventAction* EA)
-:fRun(RA),fEvent(EA)
+:G4UserTrackingAction(),
+ fRun(RA),fEvent(EA),fTrackMessenger(0),
+ fFullChain(false)
+ 
 {
-  fullChain = false;
   fTrackMessenger = new TrackingMessenger(this);   
 }
 
@@ -89,11 +91,11 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   else if (fCharge > 2.) ih = 5;
   if (ih) G4AnalysisManager::Instance()->FillH1(ih, Ekin);
   
-  //fullChain: stop ion and print decay chain
+  //fFullChain: stop ion and print decay chain
   //
   if (fCharge > 2.) {
     G4Track* tr = (G4Track*) track;
-    if (fullChain) tr->SetTrackStatus(fStopButAlive);
+    if (fFullChain) tr->SetTrackStatus(fStopButAlive);
     if (ID == 1) fEvent->AddDecayChain(name);
       else       fEvent->AddDecayChain(" ---> " + name); 
   }

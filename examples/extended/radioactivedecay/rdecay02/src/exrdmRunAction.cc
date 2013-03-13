@@ -41,6 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exrdmRunAction::exrdmRunAction()
+ : G4UserRunAction()
 {
 }
 

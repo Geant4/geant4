@@ -41,7 +41,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmDetectorMessenger::exrdmDetectorMessenger(exrdmDetectorConstruction* myDet)
-:fMyDetector(myDet)
+:G4UImessenger(),
+ fMyDetector(myDet),
+ fExrdmDir(0),
+ fDetDir(0),
+ fTargMatCmd(0),
+ fDetectMatCmd(0),
+ fTargRadiusCmd(0),
+ fDetectThicknessCmd(0),
+ fTargLengthCmd(0),
+ fDetectLengthCmd(0)
 { 
   fExrdmDir = new G4UIdirectory("/exrdm/");
   fExrdmDir->SetGuidance("UI commands specific to this example.");

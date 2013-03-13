@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19/02/2013 I. Hrivnacova 
+- Applied coding guidelines (data members initialization)    
+
 01/02/2013  Vladimir Ivanchenko (rdecay02-V09-06-00)
 - Migration to new physics_lists directory structure
 

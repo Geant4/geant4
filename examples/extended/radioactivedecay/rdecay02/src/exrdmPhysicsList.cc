@@ -71,8 +71,13 @@
 exrdmPhysicsList::exrdmPhysicsList() :
  G4VModularPhysicsList(),
  fCutForGamma(1.*mm), fCutForElectron(1.*mm),
- fCutForPositron(1.*mm), fHadPhysicsList(0),
- fNhadcomp(0),fDetectorCuts(0), fTargetCuts(0)
+ fCutForPositron(1.*mm), 
+ fEmPhysicsList(0),
+ fRaddecayList(0),
+ fParticleList(0),
+ fHadPhysicsList(0),
+ fNhadcomp(0),
+ fPMessenger(0),fDetectorCuts(0), fTargetCuts(0)
 {
   G4LossTableManager::Instance();
   defaultCutValue =1.*mm;

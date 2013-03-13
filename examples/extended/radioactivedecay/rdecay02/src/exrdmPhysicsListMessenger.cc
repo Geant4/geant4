@@ -41,7 +41,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmPhysicsListMessenger::exrdmPhysicsListMessenger(exrdmPhysicsList* pPhys)
-:fPPhysicsList(pPhys)
+:G4UImessenger(),
+ fPPhysicsList(pPhys),
+ fPhysDir(0),  
+ fGammaCutCmd(0),
+ fElectCutCmd(0),
+ fProtoCutCmd(0),    
+ fAllCutCmd(0),    
+ fMCutCmd(0),
+ fECutCmd(0),
+ fPListCmd(0)
 {   
   fPhysDir = new G4UIdirectory("/exrdm/phys/");
   fPhysDir->SetGuidance("physics control.");

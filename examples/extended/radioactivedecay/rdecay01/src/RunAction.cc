@@ -46,7 +46,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(PrimaryGeneratorAction* kin)
-:fPrimary(kin)
+:G4UserRunAction(),
+ fHistoManager(0), fPrimary(kin)
 {
   fHistoManager = new HistoManager();
 }

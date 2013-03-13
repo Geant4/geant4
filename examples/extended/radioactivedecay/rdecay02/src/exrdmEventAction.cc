@@ -45,7 +45,9 @@ extern G4bool drawEvent;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exrdmEventAction::exrdmEventAction()
-  : fDrawFlag("all")
+  : G4UserEventAction(),
+    fDrawFlag("all"), 
+    fEventMessenger(0)
 {
   fEventMessenger = new exrdmEventActionMessenger(this);
 }

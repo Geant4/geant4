@@ -43,7 +43,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exrdmHistoMessenger::exrdmHistoMessenger(exrdmHisto* manager)
-:fHisto (manager)
+:G4UImessenger(),
+ fHisto (manager),
+ fHistoDir(0),   
+ fActoryCmd(0),
+ fIleCmd(0),
+ fHistoCmd(0)
 {
   fHistoDir = new G4UIdirectory("/histo/");
   fHistoDir->SetGuidance("histograms control");

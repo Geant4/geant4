@@ -52,9 +52,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 exrdmDetectorConstruction::exrdmDetectorConstruction()
-:fSolidWorld(0),  fLogicWorld(0),  fPhysiWorld(0),
+:G4VUserDetectorConstruction(),
+ fSolidWorld(0),  fLogicWorld(0),  fPhysiWorld(0),
  fSolidTarget(0), fLogicTarget(0), fPhysiTarget(0), 
  fSolidDetector(0),fLogicDetector(0),fPhysiDetector(0),
+ fDetectorMessenger(0),
  fMaterialsManager(0),
  fDefaultMater(0),fTargetMater(0),fDetectorMater(0),
  fTargetLength (1.*cm), fTargetRadius(0.5*cm),

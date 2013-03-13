@@ -44,6 +44,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 exrdmMaterial::exrdmMaterial ()
+ : fMaterialMessenger(0)
 {
   fMaterial.clear();
   fElement.clear();

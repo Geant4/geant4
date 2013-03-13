@@ -41,7 +41,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventMessenger::EventMessenger(EventAction* EvAct)
-:fEventAction(EvAct)
+:G4UImessenger(),
+ fEventAction(EvAct),
+ fDir(0),       
+ fEventDir(0),   
+ fPrintCmd(0)
 {   
   fDir = new G4UIdirectory("/rdecay01/");
   fDir->SetGuidance("this example");

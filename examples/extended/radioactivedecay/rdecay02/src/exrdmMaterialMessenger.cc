@@ -40,7 +40,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
 exrdmMaterialMessenger::exrdmMaterialMessenger (exrdmMaterial * exrdmMat)
-  :fMaterialsManager(exrdmMat)
+  :G4UImessenger(),
+   fMaterialsManager(exrdmMat),
+   fMaterialDir(0),
+   fListCmd(0),
+   fDeleteIntCmd(0),
+   fDeleteNameCmd(0),
+   fAddCmd(0)
 { 
   fMaterialDir = new G4UIdirectory("/geometry/material/");
   fMaterialDir->SetGuidance(" Controls for defining geometry materials" );

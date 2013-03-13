@@ -39,6 +39,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exrdmPrimaryGeneratorAction::exrdmPrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(), 
+   fParticleGun(0)
 {
   fParticleGun = new G4GeneralParticleSource ();
 }
