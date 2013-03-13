@@ -1,0 +1,30 @@
+$Id: $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 75 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+January 30, 2013 Julia Yarba (test75-V09-06-02)
+- fix type in (c)test definition/addition
+
+January 29, 2013 Julia Yarba (test75-V09-06-01)
+-- include exp.data for 668MeV gamma on Cu or Pb target
+-- improve the code and analysis scripts
+-- add CMakeList.txt
+-- add config for CTest
+
+November 28, 2012 Julia Yarba (test75-V09-05-01)
+- first version of gamma-nuclear validation package 
+  (incl. Bertini and CHIPS, plus exp.points)
+

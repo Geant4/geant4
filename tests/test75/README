@@ -1,0 +1,33 @@
+Author: Julia Yarba, Fermilab
+Created: Nov.27, 2012
+
+This package is meant for testing gamma-nuclear interactions
+(and potentially lepto-nuclear interactions as well, if neede
+in the future).
+
+We simulate gamma+A interactions, and we look at the double
+differential spectra of secondary proton, pi-, or pi+, that
+we compare vs available experimental data.
+
+We currently model the following cases:
+
+1. 300 MeV gamma on Cu target. 
+   We look at the spectra of secondary protons, at theta=45, 90, 
+   or 135 degree, as a function of proton's kinetic energy.
+   Experimental data from: 
+   R. Schumacher et al., Phys. Rev. C 25, 2269 (1982)
+
+2. 668 MeV gamma on Cu or Pb target.
+   In the case of Cu target, we look at the spectra of secondary 
+   pi+/-, at theta=28.4 or 44.2 degree, as a function of pion
+   momentum.
+   In the case of Pb target, we look at the spectra of pi-/+ at
+   44.2 degree, as a function of pion momentum.
+   Experimental data from:
+   K. Baba et al., Nucl. Phys. A322, 349 (1979)
+   
+3. In the near future we plan to add gamma on C test.
+   Experimental data from:
+   K. Baba et al., Nucl. Phys. A306, 292 (1978)
+   
+   
