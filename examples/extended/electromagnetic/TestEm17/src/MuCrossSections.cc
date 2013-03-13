@@ -84,7 +84,8 @@ G4double MuCrossSections::CR_PerAtom(const G4String& process, G4Element* element
  else if (process == "muIoni")
    sigma = CRK_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
- else if (process == "muNucl")
+ //else if (process == "muNucl")
+ else if (process == "muonNuclear")
    sigma = CRN_Mephi(z,a/(g/mole),tkin/GeV,ep/GeV)*(cm2/(g*GeV))*a/Avogadro;
    
  else if (process == "muPairProd")

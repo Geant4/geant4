@@ -54,7 +54,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
   
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
      
      void SetSize     (G4double);              
      void SetMaterial (G4String);            

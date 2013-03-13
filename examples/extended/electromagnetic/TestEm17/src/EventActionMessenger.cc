@@ -41,7 +41,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:fEventAction(EvAct)
+:G4UImessenger(),fEventAction(EvAct),
+ fEventDir(0),   
+ fPrintCmd(0)
 { 
   fEventDir = new G4UIdirectory("/testem/event/");
   fEventDir ->SetGuidance("physics list");

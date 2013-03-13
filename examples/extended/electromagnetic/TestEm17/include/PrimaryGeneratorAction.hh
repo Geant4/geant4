@@ -50,7 +50,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
     G4ParticleGun* GetParticleGun() {return fParticleGun;};
 
   private:

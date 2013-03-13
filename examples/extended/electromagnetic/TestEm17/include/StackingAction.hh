@@ -48,7 +48,7 @@ class StackingAction : public G4UserStackingAction
     StackingAction();
    ~StackingAction();
 
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* );
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* );
     
 };
 

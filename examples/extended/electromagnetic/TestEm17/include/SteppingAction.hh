@@ -48,7 +48,7 @@ class SteppingAction : public G4UserSteppingAction
     SteppingAction(RunAction*, HistoManager*);
    ~SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
     
   private:
     RunAction*    fRunAction;
