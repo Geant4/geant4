@@ -1,4 +1,4 @@
-$Id: README 66261 2012-12-14 10:06:09Z ribon $
+$Id: README 67993 2013-03-13 11:05:01Z gunter $
 -------------------------------------------------------------------
 
      =========================================================
@@ -39,10 +39,10 @@ test15 ## available; up to 9.5 used for Isotope Production
 test16 ## n and p Cross-Sections
 test17 ## LowEnergy e.m. (protons, antiprotons and ions). 
 test18 ## Radioactive decay.
-test19 ## Free slot
+test19 ## Hadronic interactions in the range from ~20GeV and up to ~100-120GeV
 test20 ## Pi0 production test 
-test22 ## Free slot
-test23 ## Free slot
+test22 ## Thin-target validation tests of FTF
+test23 ## Thin target tests using physics lists
 test24 ## Binary cascade hadronic model.
 test25 ## Classical cascade hadronic model.
 test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
@@ -66,7 +66,7 @@ test44 ## Bragg peak distribution validation (not for stt).
 test45 ## Validation of thick target data for low-energy proton and ion beams
        ## stopped in different targets (not for stt).
 test46 ## Validation of CMS-type combined calorimeter (not for stt).
-test47 ## CMS combined calorimeter (not for stt).
+test47 ## Validation of hadronic models vs ITEP data (1.4-7.5GeV p, pi+, pi- on various target), BNL data (14.6GeV), and MIPP data (56 & 120GeV)
 test48 ## Stopping processes validation
 test49 ## Free slot
 test50 ## Statistical test suite for e.m. processes:
@@ -91,6 +91,7 @@ test68 ## Reproducibility tests of FTFP_BERT with simplified calorimeters.
 test69 ## INCL++ model 
 test73 ## Multiple Scattering Test: test models in semi-realistic setup (inspired by LHCb)
 test74 ## EM low-energy G4MuElec* processes and models
+test75 ## photon-nuclear (electro-nucl.) interactions
 test201 # Visualization and graphical interfaces
 test202 # Visualization setup of generic geometry constructs
 ______________________________________________________________________________

@@ -236,10 +236,10 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test16                 dwright@slac.stanford.edu       Dennis Wright
       test17                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test18                 flei@space.qinetiq.com          Fan Lei
-      test19                 (not currently used)
+      test19                 Julia.Yarba@cern.ch             Julia Yarba
       test20                 (not currently used)
       test21                 (not currently used)
-      test22                 (not currently used)
+      test22                 Aida.Galoyan@cern.ch            Aida Galoyan
       test23                 (not currently used)
       test24                 Gunter.Folger@cern.ch           Gunter Folger
       test25                 Gunter.Folger@cern.ch           Gunter Folger
@@ -262,7 +262,7 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test44                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test45                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test46                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
-      test47                 Sunanda.Banerjee@cern.ch        Sunanda Banerjee
+      test47                 Julia.Yarba@cern.ch             Julia Yarba
       test48                 genser@fnal.gov                 Krzysztof Genser
       test49                 (not currently used)
       test50                 incerti@cenbg.in2p3.fr          Sebastien Incerti
@@ -283,5 +283,6 @@ tests                        Gunter.Folger@cern.ch           Gunter Folger
       test70                 kara@cenbg.in2p3.fr             Mathieu Karamitros
       test73                 andrea.dotti@cern.ch	     Andrea Dotti
       test74                 Melanie.Raine@cea.fr	     Melanie Raine
+      test75                 Julia.Yarba@cern.ch             Julia Yarba
       test201                barrand@lal.in2p3.fr            Guy Barrand
       test202                John.Allison@man.ac.uk          John Allison
