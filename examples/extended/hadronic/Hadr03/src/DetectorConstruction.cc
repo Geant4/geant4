@@ -50,6 +50,11 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4RunManager.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
@@ -79,20 +84,7 @@ void DetectorConstruction::DefineMaterials()
 {
  // define a Material from isotopes
  //
- MaterialWithSingleIsotope("Tritium",      "H3",     0.09*g/cm3, 1,  3); 
- MaterialWithSingleIsotope("Beryllium9",   "Be9",    1.85*g/cm3, 4,  9);  
- MaterialWithSingleIsotope("Boron10",      "B10",    2.46*g/cm3, 5,  10);
- MaterialWithSingleIsotope("Boron11",      "B11",    2.46*g/cm3, 5,  11);
- MaterialWithSingleIsotope("Oxygen16",     "O16",    1.43*g/cm3, 8,  16);
- MaterialWithSingleIsotope("Cacium40",     "Ca40",   1.55*g/cm3, 20, 40);
- MaterialWithSingleIsotope("Zirconium90",  "Zr90",   6.51*g/cm3, 40, 90);    
  MaterialWithSingleIsotope("Molybdenum98", "Mo98",  10.28*g/cm3, 42, 98);
- MaterialWithSingleIsotope("Molybdenum100","Mo100", 10.28*g/cm3, 42, 100);
- MaterialWithSingleIsotope("Iodine127",    "I127",   4.94*g/cm3, 53, 127);
- MaterialWithSingleIsotope("Xenon135",     "Xe135",  5.89*g/cm3, 54, 135);   
- MaterialWithSingleIsotope("Lead208",      "Pb208", 11.34*g/cm3, 82, 208); 
- MaterialWithSingleIsotope("Uranium235",   "U235",  19.05*g/cm3, 92, 235);  
- MaterialWithSingleIsotope("Uranium238",   "U238",  19.05*g/cm3, 92, 238);     
     
  // or use G4-NIST materials data base
  //
@@ -170,12 +162,16 @@ void DetectorConstruction::PrintParameters()
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name
-  ////G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   G4Material* pttoMaterial = 
      G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   
-  if (pttoMaterial) { fMaterial = pttoMaterial;
-    } else {
+  if (pttoMaterial) { 
+    if(fMaterial != pttoMaterial) {
+      fMaterial = pttoMaterial;
+      if(fLBox) { fLBox->SetMaterial(pttoMaterial); }
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
+  } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;
   }              
@@ -189,9 +185,6 @@ void DetectorConstruction::SetSize(G4double value)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
 
 void DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -215,8 +208,6 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
 
 void DetectorConstruction::UpdateGeometry()
 {

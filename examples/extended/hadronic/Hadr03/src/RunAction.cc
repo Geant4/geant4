@@ -200,33 +200,40 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << "crossSections from G4HadronicProcessStore:";
   
   G4HadronicProcessStore* store = G4HadronicProcessStore::Instance();  
-  G4double sumc = 0.0;  
-  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
-    const G4VProcess* process = it->first;
-    G4double xs =
-    store->GetCrossSectionPerVolume(particle,energy,process,material);                   
-    G4double massSigma = xs/density;                                                  
-    sumc += massSigma;
-    G4String procName = process->GetProcessName();    
-    G4cout << "\n    " << procName << "= " 
-           << G4BestUnit(massSigma, "Surface/Mass");
-  }             
-  G4cout << "\n    total = " 
-         << G4BestUnit(sumc, "Surface/Mass") << G4endl;
-	 
- // per atom
+  G4double sumc1 = 0.0, sumc2 = 0.0; 
   if (material->GetNumberOfElements() == 1) {
     const G4Element* element = material->GetElement(0);
-    sumc = 0.0;
+    for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
+      const G4VProcess* process = it->first;
+      G4double xs1 =
+      store->GetCrossSectionPerVolume(particle,energy,process,material);                   
+      G4double massSigma = xs1/density;                                                  
+      sumc1 += massSigma;      
+      G4double xs2 =
+      store->GetCrossSectionPerAtom(particle,energy,process,element,material);
+      sumc2 += xs2;
+      G4String procName = process->GetProcessName();    
+      G4cout << "\n" << std::setw(20) << procName << "= "
+             << G4BestUnit(massSigma, "Surface/Mass") << "\t"
+             << G4BestUnit(xs2, "Surface");
+      
+    }             
+    G4cout << "\n" << std::setw(20) << "total" << "= "
+           << G4BestUnit(sumc1, "Surface/Mass") << "\t" 
+           << G4BestUnit(sumc2, "Surface") << G4endl;  
+  } else {
     for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
       const G4VProcess* process = it->first;
       G4double xs =
-      store->GetCrossSectionPerAtom(particle,energy,process,element);
-      sumc += xs;
+      store->GetCrossSectionPerVolume(particle,energy,process,material);                   
+      G4double massSigma = xs/density;                                                  
+      sumc1 += massSigma;
       G4String procName = process->GetProcessName();    
-      G4cout << "\n    " << procName << "= " << G4BestUnit(xs, "Surface");
+      G4cout << "\n" << std::setw(20)  << procName << "= " 
+             << G4BestUnit(massSigma, "Surface/Mass");
     }             
-    G4cout << "\n    total = " << G4BestUnit(sumc, "Surface") << G4endl;  
+    G4cout << "\n" << std::setw(20) << "total" << "= " 
+           << G4BestUnit(sumc1, "Surface/Mass") << G4endl;  
   }
               
  //nuclear channel count
@@ -250,7 +257,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
    G4cout << "\n" << std::setw(58) << "Number of gamma: N = " 
            << fNbGamma[1] << " --> " << fNbGamma[2] << G4endl;
  }
-       
+
+ G4cout 
+   << "\n   --> NOTE: neutronHP is unable to return target nucleus"
+   << G4endl;
+        
  //particles count
  //
  G4cout << "\n   List of generated particles: \n" << G4endl;

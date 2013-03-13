@@ -30,7 +30,14 @@
    In order not to introduce 'artificial' constraints on the step size,
    electromagnetic processes are not registered: there is no continuous energy 
    loss.  
- 	 
+ 
+   Several hadronic physics options are controlled by environment variables.
+   To trigger them, an envHadronic.csh has been added in this example.
+   One must select the options wished, and do
+\verbatim   
+        source envHadronic.csh  (or sh)
+\endverbatim	 
+  	 
 \section Hadr03_s3 AN EVENT : THE PRIMARY GENERATOR
  
    The primary kinematic consists of a single particle starting at the edge

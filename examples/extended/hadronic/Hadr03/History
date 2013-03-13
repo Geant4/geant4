@@ -1,5 +1,4 @@
 $Id$
--------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -14,6 +13,45 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+  13-03-13 V.Ivanchenko (exhadr03-V09-06-12)
+- RunAction - change printout from "warning XXXX" to "NOTE:"
+    because CDASH interpretation of "warning" is test failer 
+
+  12-03-13 V.Ivanchenko (exhadr03-V09-06-11)
+- DetectorConstruction - improved material definition
+- HistoManager - do not delete singleton
+- PhsyicsList - new name for INCLXX physics constructor 
+     
+  10-03-13 mma (exhadr03-V09-06-10)
+- PhysicsList: remove G4HadronPhysicsQGSP_INCLXX
+    
+ 10-03-13 mma (exhadr03-V09-06-09)
+- modify readme
+     
+ 09-03-13 mma (exhadr03-V09-06-08)
+- add envHadronic.csh to control environment variables
+     
+ 06-03-13 mma (exhadr03-V09-06-07)
+- RunAction - modify printing of cross section per atom
+     
+ 01-03-13 mma (exhadr03-V09-06-06)
+- DetectorConstruction - suppress natural abundance flag
+    
+ 22-02-13 V.Ivanchenko (exhadr03-V09-06-05)
+- DetectorConstruction - set natural abundances flag "false" for 
+    elements built from one isotope
+
+ 01-02-13 V.Ivanchenko (exhadr03-V09-06-04)
+- PhysicsList - adopted migration to new physics_lists directory 
+    structure and change of class names
+     
+ 01-02-13 mma (exhadr03-V09-06-03)
+- DetectorMessenger: change /buildMatIsotope to /setIsotopeMat
+      
+ 31-01-13 mma (exhadr03-V09-06-02)
+- DetectorMessenger: add command /buildMatIsotope 
+- RunAction: add material in GetCrossSectionPerAtom()
      
  08-01-13 mma (exhadr03-V09-06-01)
 - DetectorConstruction: add function MaterialWithSingleIsotope()

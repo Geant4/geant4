@@ -33,6 +33,11 @@ $Id$
    In order not to introduce 'artificial' constraints on the step size,
    electromagnetic processes are not registered: there is no continuous energy 
    loss.  
+ 
+   Several hadronic physics options are controlled by environment variables.
+   To trigger them, an envHadronic.csh has been added in this example.
+   One must select the options wished, and do
+        source envHadronic.csh  (or sh) 
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -126,4 +131,3 @@ $Id$
  	Idle> type your commands
  	....
  	Idle> exit
-  

@@ -6,7 +6,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testhadr/det/setMat Molybdenum100
+/testhadr/det/setMat Molybdenum98
 /testhadr/det/setSize 100 m 
 #
 /run/initialize
