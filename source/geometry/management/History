@@ -17,6 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 12, 2013 G.Cosmo                     geommng-V09-06-06
+- Removed thread-locality in obsolete G4VPhysicalVolume::GetObjectRotation()
+  implementation.
+
+March 12, 2013 G.Cosmo                     geommng-V09-06-05
+- Added public accessors for MT data to G4LogicalVolume, G4VPhysicalVolume
+  and G4Region.
+
+March 11, 2013 G.Cosmo                     geommng-V09-06-04
+- Redefined G4DLL_API to G4GEOM_DLL to avoid cases of macro redefinition.
+
+March 08, 2013  G.Cosmo                    geommng-V09-06-03, geommng-V09-06-02
+- Renamed G4MT macros to safer ID.
+- Moved MT data to protected in G4VPhysicalVolume.
+
+March 07, 2013  G.Cosmo                    geommng-V09-06-01
+- Added splitter class G4GeomSplitter from original MT transitory class
+  introduced in "global" module.
+- Added geomwdef.hh header including definition of G4DLL_API flag for
+  import/export of symbols for Windows DLL build.
+- Cleanup of code from MT automatic changes.
+
 December 02, 2012  J.Allison               geommng-V09-06-00
 - Removed NURBS.
 

@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4ErrorSurfaceTarget.hh
         G4ErrorTanPlaneTarget.hh
         G4ErrorTarget.hh
+        G4GeomSplitter.hh
         G4GeometryManager.hh
         G4IdentityTrajectoryFilter.hh
         G4LogicalSurface.hh
@@ -77,6 +78,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4VVolumeMaterialScanner.hh
         G4VoxelLimits.hh
         G4VoxelLimits.icc
+        geomwdefs.hh
         meshdefs.hh
         voxeldefs.hh
     SOURCES

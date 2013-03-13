@@ -36,38 +36,47 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This static member is thread local. For each thread, it points to the
-//array of PhysicalVolumePrivateSubclass instances.
-template <class PhysicalVolumePrivateSubclass> G4ThreadLocal PhysicalVolumePrivateSubclass* G4MTPrivateSubInstanceManager<PhysicalVolumePrivateSubclass>::offset = 0;
+// This static member is thread local. For each thread, it points to the
+// array of G4PVData instances.
+//
+template <class G4PVData> G4ThreadLocal
+G4PVData* G4GeomSplitter<G4PVData>::offset = 0;
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This new field helps to use the class G4VPhysicalVolumeSubInstanceManager
-//introduced in the "G4VPhysicalVolume.hh" file.
-G4VPhysicalVolumeSubInstanceManager G4VPhysicalVolume::g4vphysicalVolumeSubInstanceManager;
+// This new field helps to use the class G4PVManager
+//
+G4PVManager G4VPhysicalVolume::subInstanceManager;
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This method is similar to the constructor. It is used by each worker
-//thread to achieve the same effect as that of the master thread exept
-//to register the new created instance. This method is invoked explicitly.
-//It does not create a new G4VPhysicalVolume instance. It only assign the value
-//for the fields encapsulated by the class PhysicalVolumePrivateSubclass.
-void G4VPhysicalVolume::SlaveG4VPhysicalVolume( G4VPhysicalVolume* /*pMasterObject*/, G4RotationMatrix *pRot,
-				      const G4ThreeVector &tlate)
+// This method is similar to the constructor. It is used by each worker
+// thread to achieve the same effect as that of the master thread exept
+// to register the new created instance. This method is invoked explicitly.
+// It does not create a new G4VPhysicalVolume instance.
+// It only assign the value for the fields encapsulated by the class G4PVData.
+//
+void G4VPhysicalVolume::
+InitialiseWorker( G4VPhysicalVolume* /*pMasterObject*/,
+                  G4RotationMatrix *pRot,
+                  const G4ThreeVector &tlate)
 {
-  g4vphysicalVolumeSubInstanceManager.SlaveCopySubInstanceArray();
+  subInstanceManager.SlaveCopySubInstanceArray();
 
-  frotG4MTThreadPrivate = pRot;
-  ftransG4MTThreadPrivate = tlate;
+  G4MT_rot = pRot;
+  G4MT_trans = tlate;
   //  G4PhysicalVolumeStore::Register(this);
 }
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This method is similar to the destructor. It is used by each worker
-//thread to achieve the partial effect as that of the master thread.
-//For G4VPhysicalVolume instances, nothing more to do here.
-void G4VPhysicalVolume::DestroySlaveG4VPhysicalVolume( G4VPhysicalVolume* /*pMasterObject*/)
+// This method is similar to the destructor. It is used by each worker
+// thread to achieve the partial effect as that of the master thread.
+// For G4VPhysicalVolume instances, nothing more to do here.
+//
+void G4VPhysicalVolume::TerminateWorker( G4VPhysicalVolume* /*pMasterObject*/)
 {
+}
+
+// Returns the private data instance manager.
+//
+const G4PVManager& G4VPhysicalVolume::GetSubInstanceManager()
+{
+  return subInstanceManager;
 }
 
 // Constructor: init parameters and register in Store
@@ -80,13 +89,11 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
   : flogical(pLogical),
     fname(pName), flmother(0)
 {
-  g4vphysicalVolumeInstanceID = g4vphysicalVolumeSubInstanceManager.CreateSubInstance();
-  frotG4MTThreadPrivate = pRot;
-  ftransG4MTThreadPrivate = tlate; 
+  instanceID = subInstanceManager.CreateSubInstance();
+  G4MT_rot = pRot;
+  G4MT_trans = tlate; 
   G4PhysicalVolumeStore::Register(this);
 }
-
-
 
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
@@ -96,9 +103,9 @@ G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
 {
   // Register to store
   //
-  g4vphysicalVolumeInstanceID = g4vphysicalVolumeSubInstanceManager.CreateSubInstance();
+  instanceID = subInstanceManager.CreateSubInstance();
 
-  frotG4MTThreadPrivate = 0; 
+  G4MT_rot = 0; 
   G4PhysicalVolumeStore::Register(this);
 }
 
@@ -116,19 +123,16 @@ G4int G4VPhysicalVolume::GetMultiplicity() const
 
 G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
 {
-  static G4ThreadLocal G4RotationMatrix  *aRotM_G4MT_TLS_ = 0 ; if (!aRotM_G4MT_TLS_) aRotM_G4MT_TLS_ = new  G4RotationMatrix   ;  G4RotationMatrix  &aRotM = *aRotM_G4MT_TLS_; 
-  static G4ThreadLocal G4RotationMatrix  *IdentityRM_G4MT_TLS_ = 0 ; if (!IdentityRM_G4MT_TLS_) IdentityRM_G4MT_TLS_ = new  G4RotationMatrix   ;  G4RotationMatrix  &IdentityRM = *IdentityRM_G4MT_TLS_;  // Never changed (from "1")
-  G4RotationMatrix* retval; 
+  static G4RotationMatrix aRotM;
+  static G4RotationMatrix IdentityRM;
+
+  G4RotationMatrix* retval = &IdentityRM;
 
   // Insure against frot being a null pointer
-  if(frotG4MTThreadPrivate)
+  if(G4MT_rot)
   {
-    aRotM= frotG4MTThreadPrivate->inverse();
+    aRotM = G4MT_rot->inverse();
     retval= &aRotM;
-  }
-  else
-  {
-    retval= &IdentityRM;
   }
   return retval;
 }

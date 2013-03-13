@@ -134,10 +134,9 @@ G4bool G4GeometryManager::IsGeometryClosed()
 //
 G4GeometryManager* G4GeometryManager::GetInstance()
 {
-  static G4ThreadLocal G4GeometryManager *worldManager_G4MT_TLS_ = 0 ; if (!worldManager_G4MT_TLS_) worldManager_G4MT_TLS_ = new  G4GeometryManager  ;  G4GeometryManager &worldManager = *worldManager_G4MT_TLS_;
   if (!fgInstance)
   {
-    fgInstance = &worldManager;
+    fgInstance = new G4GeometryManager;
   }
   return fgInstance;    
 }

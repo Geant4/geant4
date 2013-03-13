@@ -43,6 +43,16 @@ G4bool G4Region::operator==(const G4Region& rg) const
 }
 
 // ********************************************************************
+// GetInstanceID
+// ********************************************************************
+//
+inline
+G4int G4Region::GetInstanceID() const
+{
+  return instanceID;
+}
+    
+// ********************************************************************
 // GetName
 // ********************************************************************
 //
@@ -234,7 +244,7 @@ G4MaterialCutsCouple* G4Region::FindCouple(G4Material* mat)
 inline
 void G4Region::SetFastSimulationManager(G4FastSimulationManager* fsm)
 {
-  fFastSimulationManagerG4MTThreadPrivate = fsm;
+  G4MT_fsmanager = fsm;
 }
 
 // ********************************************************************
@@ -244,7 +254,7 @@ void G4Region::SetFastSimulationManager(G4FastSimulationManager* fsm)
 inline 
 G4FastSimulationManager* G4Region::GetFastSimulationManager() const
 {
-  return fFastSimulationManagerG4MTThreadPrivate;
+  return G4MT_fsmanager;
 }
 
 // ********************************************************************
@@ -300,7 +310,7 @@ void G4Region::AddMaterial(G4Material* aMaterial)
 inline
 void G4Region::SetRegionalSteppingAction(G4UserSteppingAction* rusa)
 {
-  fRegionalSteppingActionG4MTThreadPrivate = rusa;
+  G4MT_rsaction = rusa;
 }
 
 // ********************************************************************
@@ -310,7 +320,7 @@ void G4Region::SetRegionalSteppingAction(G4UserSteppingAction* rusa)
 inline
 G4UserSteppingAction* G4Region::GetRegionalSteppingAction() const
 {
-  return fRegionalSteppingActionG4MTThreadPrivate;
+  return G4MT_rsaction;
 }
 
 // ********************************************************************

@@ -29,7 +29,8 @@
 // 
 // class G4LogicalVolume Inline Implementation file
 //
-// 10.20.97 - P. MoraDeFreitas : Added SetFastSimulation method.
+// 15.01.13 - G.Cosmo, A.Dotti: Modified for thread-safety for MT
+// 10.20.97 - P. MoraDeFreitas : Added SetFastSimulation method
 // 05.11.98 - M. Verderi: Add Get/Set methods for fBiasWeight
 // 09.11.98 - J. Apostolakis:  Changed MagneticField to FieldManager
 // 12.02.99 - S.Giani: Added set/get methods for voxelization quality
@@ -58,13 +59,33 @@ void G4LogicalVolume::SetName(const G4String& pName)
 }
 
 // ********************************************************************
+// GetInstanceID
+// ********************************************************************
+//
+inline
+G4int G4LogicalVolume::GetInstanceID() const
+{
+  return instanceID;
+}
+
+// ********************************************************************
 // GetFieldManager
 // ********************************************************************
 //
 inline
 G4FieldManager* G4LogicalVolume::GetFieldManager() const
 {
-  return fFieldManagerG4MTThreadPrivate;
+  return G4MT_fmanager;
+}
+
+// ********************************************************************
+// GetMasterFieldManager
+// ********************************************************************
+//
+inline
+G4FieldManager* G4LogicalVolume::GetMasterFieldManager() const
+{
+  return fFieldManager;
 }
 
 // ********************************************************************
@@ -120,7 +141,7 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
                 "Replica or parameterised volume must be the only daughter !");
   }
 
-  fMassG4MTThreadPrivate = 0.;
+  G4MT_mass = 0.;
   fDaughters.push_back(pNewDaughter);
 
   G4LogicalVolume* pDaughterLogical = pNewDaughter->GetLogicalVolume();
@@ -131,7 +152,7 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
 
   if( pDaughterFieldManager == 0 )
   {
-    pDaughterLogical->SetFieldManager(fFieldManagerG4MTThreadPrivate, false);
+    pDaughterLogical->SetFieldManager(G4MT_fmanager, false);
   }
   if (fRegion)
   {
@@ -175,7 +196,7 @@ void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
   {
     fRegion->RegionModified(true);
   }
-  fMassG4MTThreadPrivate = 0.;
+  G4MT_mass = 0.;
 }
 
 // ********************************************************************
@@ -194,7 +215,7 @@ void G4LogicalVolume::ClearDaughters()
   {
     fRegion->RegionModified(true);
   }
-  fMassG4MTThreadPrivate = 0.;
+  G4MT_mass = 0.;
 }
 
 // ********************************************************************
@@ -204,7 +225,17 @@ void G4LogicalVolume::ClearDaughters()
 inline
 G4VSolid* G4LogicalVolume::GetSolid() const
 {
-  return fSolidG4MTThreadPrivate;
+  return G4MT_solid;
+}
+
+// ********************************************************************
+// GetMasterSolid
+// ********************************************************************
+//
+inline
+G4VSolid* G4LogicalVolume::GetMasterSolid() const
+{
+  return fSolid;
 }
 
 // ********************************************************************
@@ -214,9 +245,8 @@ G4VSolid* G4LogicalVolume::GetSolid() const
 inline
 void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
 {
-  assert(pSolid != 0);
-  fSolidG4MTThreadPrivate=pSolid;
-  fMassG4MTThreadPrivate = 0.;
+  G4MT_solid=pSolid;
+  G4MT_mass = 0.;
 }
 
 // ********************************************************************
@@ -226,7 +256,7 @@ void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
 inline
 G4Material* G4LogicalVolume::GetMaterial() const
 {
-  return fMaterialG4MTThreadPrivate;
+  return G4MT_material;
 }
 
 // ********************************************************************
@@ -236,8 +266,8 @@ G4Material* G4LogicalVolume::GetMaterial() const
 inline
 void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
 {
-  fMaterialG4MTThreadPrivate=pMaterial;
-  fMassG4MTThreadPrivate = 0.;
+  G4MT_material=pMaterial;
+  G4MT_mass = 0.;
 }
 
 // ********************************************************************
@@ -247,9 +277,9 @@ void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
 inline
 void G4LogicalVolume::UpdateMaterial(G4Material *pMaterial)
 {
-  fMaterialG4MTThreadPrivate=pMaterial;
-  if(fRegion) { fCutsCoupleG4MTThreadPrivate = fRegion->FindCouple(pMaterial); }
-  fMassG4MTThreadPrivate = 0.;
+  G4MT_material=pMaterial;
+  if(fRegion) { G4MT_ccouple = fRegion->FindCouple(pMaterial); }
+  G4MT_mass = 0.;
 }
 
 // ********************************************************************
@@ -259,7 +289,17 @@ void G4LogicalVolume::UpdateMaterial(G4Material *pMaterial)
 inline
 G4VSensitiveDetector* G4LogicalVolume::GetSensitiveDetector() const
 {
-  return fSensitiveDetectorG4MTThreadPrivate;
+  return G4MT_sdetector;
+}
+
+// ********************************************************************
+// GetMasterSensitiveDetector
+// ********************************************************************
+//
+inline
+G4VSensitiveDetector* G4LogicalVolume::GetMasterSensitiveDetector() const
+{
+  return fSensitiveDetector;
 }
 
 // ********************************************************************
@@ -269,7 +309,7 @@ G4VSensitiveDetector* G4LogicalVolume::GetSensitiveDetector() const
 inline
 void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector* pSDetector)
 {
-  fSensitiveDetectorG4MTThreadPrivate = pSDetector;
+  G4MT_sdetector = pSDetector;
 }
 
 // ********************************************************************
@@ -423,7 +463,7 @@ void G4LogicalVolume::PropagateRegion()
 inline
 const G4MaterialCutsCouple* G4LogicalVolume::GetMaterialCutsCouple() const
 {
-  return fCutsCoupleG4MTThreadPrivate;
+  return G4MT_ccouple;
 }
 
 // ********************************************************************
@@ -433,7 +473,7 @@ const G4MaterialCutsCouple* G4LogicalVolume::GetMaterialCutsCouple() const
 inline
 void G4LogicalVolume::SetMaterialCutsCouple(G4MaterialCutsCouple* cuts)
 {
-  fCutsCoupleG4MTThreadPrivate = cuts;
+  G4MT_ccouple = cuts;
 }
 
 // ********************************************************************

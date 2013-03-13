@@ -37,10 +37,11 @@
 // be represented by a particular G4VPhysicalVolume.
 
 // History:
-// 09.11.99 J.Apostolakis  Added GetObjectRotationValue() method & redid comments.
-// 28.08.96 P.Kent Replaced transform by rotmat + vector
-// 25.07.96 P.Kent Modified interface for new `Replica' capable geometry 
-// 24.07.95 P.Kent First non-stub version
+// 15.01.13 G.Cosmo, A.Dotti: Modified for thread-safety for MT
+// 09.11.99 J.Apostolakis: Added GetObjectRotationValue() method & comments
+// 28.08.96 P.Kent: Replaced transform by rotmat + vector
+// 25.07.96 P.Kent: Modified interface for new `Replica' capable geometry 
+// 24.07.95 P.Kent: First non-stub version
 // --------------------------------------------------------------------
 #ifndef G4VPHYSICALVOLUME_HH
 #define G4VPHYSICALVOLUME_HH
@@ -52,86 +53,52 @@
 
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
+#include "G4GeomSplitter.hh"
 
 class G4LogicalVolume;
 class G4VPVParameterisation;
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//The class PhysicalVolumePrivateSubclass is introduced to
-//encapsulate the fields of the class G4VPhysicalVolume that may not
-//be read-only.          
-#ifndef PHYSICALVOLUMEPRIVATESUBCLASS_HH
-#define PHYSICALVOLUMEPRIVATESUBCLASS_HH
-
-class PhysicalVolumePrivateSubclass
+class G4PVData
 {
-public:
-  G4RotationMatrix *frot;
-  G4ThreeVector ftrans;
-  void initialize() {};
+  // Encapsulates the fields associated to the class
+  // G4VPhysicalVolume that may not be read-only.          
+
+  public:
+
+    void initialize() {}
+
+    G4RotationMatrix *frot;
+    G4ThreeVector ftrans;
 };
-#endif
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multithreading.
-//The class G4VPhysicalVolumeSubInstanceManager is introduced to
-//encapsulate the methods used by both the master thread and
-//worker threads to allocate memory space for the fields encapsulated
-//by the class PhysicalVolumePrivateSubclass. When each thread
-//initializes the value for these fields, it refers to them using a macro
-//definition defined below. For every G4VPhysicalVolume instance, there is
-//a corresponding PhysicalVolumePrivateSubclass instance. All
-//PhysicalVolumePrivateSubclass instances are organized by the
-//class G4VPhysicalVolumeSubInstanceManager as an array. The field "
-//int g4vphysicalVolumeInstanceID" is added to the class G4VPhysicalVolume.
-//The value of this field in each G4VPhysicalVolume instance is the subscript
-//of the corresponding PhysicalVolumePrivateSubclass instance. In order
-//to use the class G4VPhysicalVolumeSubInstanceManager, we add a static member in      
-//the class G4VPhysicalVolume as follows: "                                       
-//static G4VPhysicalVolumeSubInstanceManager g4vphysicalVolumeSubInstanceManager;".
-//For the master thread, the array for PhysicalVolumePrivateSubclass
-//instances grows dynamically along with G4VPhysicalVolume instances are
-//created. For each worker thread, it copies the array of
-//PhysicalVolumePrivateSubclass instances from the master thread.           
-//In addition, it invokes a method similiar to the constructor explicitly       
-//to achieve the partial effect for each instance in the array. 
-#ifndef G4VPHYSICALVOLUMESUBINSTANCEMANAGER_HH
-#define G4VPHYSICALVOLUMESUBINSTANCEMANAGER_HH
+// The type G4PVManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4PVData. When each thread
+// initializes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4VPhysicalVolume instance, there is
+// a corresponding G4PVData instance. All G4PVData instances are organized
+// by the class G4PVManager as an array.
+// The field "int instanceID" is added to the class G4VPhysicalVolume.
+// The value of this field in each G4VPhysicalVolume instance is the subscript
+// of the corresponding G4PVData instance.
+// In order to use the class G4PVManager, we add a static member in the class
+// G4VPhysicalVolume as follows: "static G4PVManager subInstanceManager;".
+// For the master thread, the array for G4PVData instances grows dynamically
+// along with G4VPhysicalVolume instances are created. For each worker thread,
+// it copies the array of G4PVData instances from the master thread.           
+// In addition, it invokes a method similiar to the constructor explicitly
+// to achieve the partial effect for each instance in the array.
+//
+typedef G4GeomSplitter<G4PVData> G4PVManager;
 
-#include "G4MTTransitory.hh"
-typedef G4MTPrivateSubInstanceManager<PhysicalVolumePrivateSubclass> G4VPhysicalVolumeSubInstanceManager;
-
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//These macros changes the references to fields that are now encapsulated
-//in the class PhysicalVolumePrivateSubclass.
-#define frotG4MTThreadPrivate ((g4vphysicalVolumeSubInstanceManager.offset[g4vphysicalVolumeInstanceID]).frot)
-#define ftransG4MTThreadPrivate ((g4vphysicalVolumeSubInstanceManager.offset[g4vphysicalVolumeInstanceID]).ftrans)
-
-#endif
+// These macros change the references to fields that are now encapsulated
+// in the class G4PVData.
+//
+#define G4MT_rot ((subInstanceManager.offset[instanceID]).frot)
+#define G4MT_trans ((subInstanceManager.offset[instanceID]).ftrans)
 
 class G4VPhysicalVolume
 {
-  public:
-
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    //This new field is used as instance ID.
-    int g4vphysicalVolumeInstanceID;
-
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    //This new field helps to use the class G4VPhysicalVolumeSubInstanceManager
-    //introduced above.
-    static G4VPhysicalVolumeSubInstanceManager g4vphysicalVolumeSubInstanceManager;
-
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    //This method is similar to the constructor. It is used by each worker
-    //thread to achieve the partial effect as that of the master thread.
-    void SlaveG4VPhysicalVolume(G4VPhysicalVolume *pMasterObject, G4RotationMatrix *pRot,
-				const G4ThreeVector &tlate);
-
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    //This method is similar to the destructor. It is used by each worker
-    //thread to achieve the partial effect as that of the master thread.
-    void DestroySlaveG4VPhysicalVolume(G4VPhysicalVolume *pMasterObject);
-
   public:  // with description
 
     G4VPhysicalVolume(G4RotationMatrix *pRot,
@@ -139,8 +106,6 @@ class G4VPhysicalVolume
                 const G4String &pName,
                       G4LogicalVolume *pLogical,
                       G4VPhysicalVolume *pMother);
-
-
       // Initialise volume, positioned in a frame which is rotated by *pRot, 
       // relative to the coordinate system of the mother volume pMother.
       // The center of the object is then placed at tlate in the new
@@ -161,11 +126,12 @@ class G4VPhysicalVolume
       // Equality defined by equal addresses only.
 
     // Access functions
+    //
+    // The following are accessor functions that make a distinction
+    // between whether the rotation/translation is being made for the
+    // frame or the object/volume that is being placed.
+    // (They are the inverse of each other).
 
-      // The following are accessor functions that make a distinction
-      // between whether the rotation/translation is being made for the
-      // frame or the object/volume that is being placed.
-      // (They are the inverse of each other).
     G4RotationMatrix* GetObjectRotation() const;              //  Obsolete 
     inline G4RotationMatrix  GetObjectRotationValue() const;  //  Replacement
     inline G4ThreeVector  GetObjectTranslation() const;
@@ -255,23 +221,35 @@ class G4VPhysicalVolume
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
+    inline G4int GetInstanceID() const;
+      // Returns the instance ID.
+
+    static const G4PVManager& GetSubInstanceManager();
+      // Returns the private data instance manager.
+
+  protected:
+
+    void InitialiseWorker(G4VPhysicalVolume *pMasterObject,
+                          G4RotationMatrix *pRot, const G4ThreeVector &tlate);
+      // This method is similar to the constructor. It is used by each worker
+      // thread to achieve the partial effect as that of the master thread.
+
+    void TerminateWorker(G4VPhysicalVolume *pMasterObject);
+      // This method is similar to the destructor. It is used by each worker
+      // thread to achieve the partial effect as that of the master thread.
+
+  protected:
+
+    G4int instanceID;
+      // This new field is used as instance ID.
+    G4GEOM_DLL static G4PVManager subInstanceManager;
+      // This new field helps to use the class G4PVManager introduced above.
+
   private:
 
     G4VPhysicalVolume(const G4VPhysicalVolume&);
     G4VPhysicalVolume& operator=(const G4VPhysicalVolume&);
       // Private copy constructor and assignment operator.
-
-  protected:
-
-  // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  // This field is move from the original class definition to be
-  // encapsulated by the class PhysicalVolumePrivateSubclass.
-  //    G4RotationMatrix *frotG4MTThreadPrivate;
-
-  // 01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  // This field is move from the original class definition to be
-  // encapsulated by the class PhysicalVolumePrivateSubclass.
-  //    G4ThreeVector ftransG4MTThreadPrivate;
 
   private:
 

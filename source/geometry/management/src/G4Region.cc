@@ -40,15 +40,25 @@
 #include "G4VUserRegionInformation.hh"
 #include "G4Material.hh"
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This static member is thread local. For each thread, it points to the
-//array of RegionPrivateSubclass instances.
-template <class RegionPrivateSubclass> G4ThreadLocal RegionPrivateSubclass* G4MTPrivateSubInstanceManager<RegionPrivateSubclass>::offset = 0;  
+// This static member is thread local. For each thread, it points to the
+// array of G4RegionData instances.
+//
+template <class G4RegionData> G4ThreadLocal
+G4RegionData* G4GeomSplitter<G4RegionData>::offset = 0;  
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This new field helps to use the class G4RegionSubInstanceManager
-//introduced in the "G4Region.hh" file.
-G4RegionSubInstanceManager G4Region::g4regionSubInstanceManager;
+// This new field helps to use the class G4RegionManager
+//
+G4RegionManager G4Region::subInstanceManager;
+
+// *******************************************************************
+// GetSubInstanceManager:
+//  - Returns the private data instance manager.
+// *******************************************************************
+//
+const G4RegionManager& G4Region::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
 
 // *******************************************************************
 // Constructor:
@@ -61,10 +71,9 @@ G4Region::G4Region(const G4String& pName)
     fInMassGeometry(false), fInParallelGeometry(false)
 {
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  g4regionInstanceID = g4regionSubInstanceManager.CreateSubInstance();
-  fFastSimulationManagerG4MTThreadPrivate = 0;
-  fRegionalSteppingActionG4MTThreadPrivate = 0;
+  instanceID = subInstanceManager.CreateSubInstance();
+  G4MT_fsmanager = 0;
+  G4MT_rsaction = 0;
 
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
@@ -92,10 +101,9 @@ G4Region::G4Region( __void__& )
     fFieldManager(0), fWorldPhys(0),
     fInMassGeometry(false), fInParallelGeometry(false)
 {
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  g4regionInstanceID = g4regionSubInstanceManager.CreateSubInstance();
-  fFastSimulationManagerG4MTThreadPrivate = 0;
-  fRegionalSteppingActionG4MTThreadPrivate = 0;
+  instanceID = subInstanceManager.CreateSubInstance();
+  G4MT_fsmanager = 0;
+  G4MT_rsaction = 0;
 
   // Register to store
   //
@@ -379,7 +387,7 @@ void G4Region::ClearFastSimulationManager()
   {
     if (isUnique)
     {
-      fFastSimulationManagerG4MTThreadPrivate = parent->GetFastSimulationManager();
+      G4MT_fsmanager = parent->GetFastSimulationManager();
     }
     else
     {
@@ -391,14 +399,12 @@ void G4Region::ClearFastSimulationManager()
               << "to have fast-simulation assigned.";
       G4Exception("G4Region::ClearFastSimulationManager()",
                   "GeomMgt1002", JustWarning, message);
-      //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-      fFastSimulationManagerG4MTThreadPrivate = 0;
+      G4MT_fsmanager = 0;
     }
   }
   else
   {
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    fFastSimulationManagerG4MTThreadPrivate = 0;
+    G4MT_fsmanager = 0;
   }
 }
 
