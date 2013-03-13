@@ -26,7 +26,6 @@
 /// \file persistency/P02/include/ExP02PrimaryGeneratorAction.hh
 /// \brief Definition of the ExP02PrimaryGeneratorAction class
 //
-//
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

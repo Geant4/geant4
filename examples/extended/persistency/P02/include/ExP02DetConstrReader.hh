@@ -26,6 +26,8 @@
 /// \file persistency/P02/include/ExP02DetConstrReader.hh
 /// \brief Definition of the ExP02DetConstrReader class
 //
+// $Id$
+//
 //
 #ifndef ExP02DetConstrReader_h
 #define ExP02DetConstrReader_h 1

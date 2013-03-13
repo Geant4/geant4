@@ -26,6 +26,8 @@
 /// \file persistency/P01/include/ExP01Classes.hh
 /// \brief Declaration of the classes for generating dictionaries
 //
+// $Id$
+//
 #include "ExP01TrackerHit.hh"
 
 std::vector<ExP01TrackerHit*> a;

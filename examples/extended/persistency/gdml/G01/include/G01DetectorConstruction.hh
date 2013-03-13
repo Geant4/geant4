@@ -47,7 +47,7 @@ class G01DetectorConstruction : public G4VUserDetectorConstruction
       fWorld = setWorld;
     }
 
-    G4VPhysicalVolume *Construct()
+    virtual G4VPhysicalVolume *Construct()
     {
       return fWorld;
     }

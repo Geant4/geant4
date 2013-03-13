@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file persistency/P03/textGeom.cc
 /// \brief Main program of the persistency/P03 example
 //

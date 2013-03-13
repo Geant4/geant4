@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file persistency/P01/readHits.cc
 /// \brief Main program of the persistency/P01 example
 //

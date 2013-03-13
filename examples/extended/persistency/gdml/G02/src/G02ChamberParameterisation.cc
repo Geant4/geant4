@@ -48,6 +48,7 @@ G02ChamberParameterisation( G4int    NoChambers,
                          G4double widthChamber, 
                          G4double lengthInitial, 
                          G4double lengthFinal )
+ : G4VPVParameterisation()
 {
   fNoChambers =  NoChambers; 
   fStartZ     =  startZ; 

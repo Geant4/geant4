@@ -44,7 +44,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G02DetectorMessenger::G02DetectorMessenger( G02DetectorConstruction* myDet )
-  : fTheDetector( myDet )
+  : G4UImessenger(),
+    fTheDetector( myDet ),
+    fTheDetectorDir(0),
+    fTheReadCommand(0),
+    fTheWriteCommand(0),
+    fTheStepCommand(0)
 { 
   fTheDetectorDir = new G4UIdirectory( "/mydet/" );
   fTheDetectorDir->SetGuidance("Detector control.");

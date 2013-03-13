@@ -48,6 +48,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G02RunAction::G02RunAction()
+ : G4UserRunAction()
 { 
 }
 

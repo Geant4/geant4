@@ -26,6 +26,8 @@
 /// \file persistency/P02/src/ExP02PrimaryGeneratorAction.cc
 /// \brief Implementation of the ExP02PrimaryGeneratorAction class
 //
+// $Id$
+//
 #include "ExP02PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"

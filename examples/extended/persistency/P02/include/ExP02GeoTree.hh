@@ -27,6 +27,7 @@
 /// \brief Definition of the ExP02GeoTree class
 //
 // $Id$
+
 #ifndef INCLUDE_EXP02GEOTREE_H 
 #define INCLUDE_EXP02GEOTREE_H 1
 

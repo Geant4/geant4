@@ -42,6 +42,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G03PrimaryGeneratorAction::G03PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(), 
+   fParticleGun(0), 
+   fParticleTable(0)
 {
   // Particle gun and particle table 
   //

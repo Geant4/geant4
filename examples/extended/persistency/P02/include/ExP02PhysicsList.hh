@@ -26,7 +26,6 @@
 /// \file persistency/P02/include/ExP02PhysicsList.hh
 /// \brief Definition of the ExP02PhysicsList class
 //
-//
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

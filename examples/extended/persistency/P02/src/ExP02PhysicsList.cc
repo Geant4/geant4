@@ -26,7 +26,6 @@
 /// \file persistency/P02/src/ExP02PhysicsList.cc
 /// \brief Implementation of the ExP02PhysicsList class
 //
-//
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -58,8 +58,7 @@ class G02DetectorMessenger: public G4UImessenger
     G02DetectorMessenger( G02DetectorConstruction* );
    ~G02DetectorMessenger();
     
-    void SetNewValue( G4UIcommand*, G4String );
-    void SetNewValue( G4UIcommand*, G4int );  
+    virtual void SetNewValue( G4UIcommand*, G4String );
 
   private:
 

@@ -26,6 +26,9 @@
 /// \file persistency/P01/src/RootIO.cc
 /// \brief Implementation of the RootIO class
 //
+// $Id$
+//
+
 #include <sstream>
 
 #include "RootIO.hh"

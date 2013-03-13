@@ -36,6 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G04PhysicsList::G04PhysicsList()
+ : G4VUserPhysicsList()
 {
 }
 

@@ -26,6 +26,8 @@
 /// \file persistency/P02/src/ExP02DetConstrReader.cc
 /// \brief Implementation of the ExP02DetConstrReader class
 //
+// $Id$
+//
 //ROOT
 #include "TROOT.h"
 #include "TFile.h"

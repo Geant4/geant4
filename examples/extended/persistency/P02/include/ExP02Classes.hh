@@ -26,6 +26,8 @@
 /// \file persistency/P02/include/ExP02Classes.hh
 /// \brief Declaration of the classes for generating dictionaries
 //
+// $Id$
+//
 #include "ExP02GeoTree.hh"
 //
 #include "ExP02DetectorConstruction.hh"

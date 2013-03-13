@@ -63,7 +63,7 @@ class G02DetectorConstruction : public G4VUserDetectorConstruction
 
     // Construction of SubDetectors
     //
-    G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
     G4LogicalVolume* ConstructSubDetector1();
     G4LogicalVolume* ConstructSubDetector2();
     G4VPhysicalVolume* ConstructDetector();
