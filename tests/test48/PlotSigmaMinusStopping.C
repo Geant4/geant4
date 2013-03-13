@@ -22,23 +22,20 @@
 #include "TLegend.h"
 
 
-const int NModelsSigma=2;
-std::string ModelsSigma[2] = { "CHIPS", "Bertini" };
+//const int NModelsSigma=2;
+//std::string ModelsSigma[2] = { "CHIPS", "Bertini" };
+const int NModelsSigma=1;
+std::string ModelsSigma[1] = { "Bertini" };
 
-int         ColorModel[3]    = { 1, 6, 3 };
-int         SymbModel[4]     = { 20, 29, 21, 8 };
+int         ColorModel[2]    = { 6, 3 };
+// int         ColorModel[3]    = { 1, 6, 3 };
+// not needed, in fact...
+// int         SymbModel[4]     = { 20, 29, 21, 8 };
 
 const int NDModes = 2;
 float SigmaHyBR[2] = { 0.58, 0.42 };
 int ModeID[2] =  { 7, 9 };
 std::string Labels[2] = { "#Lambda^{0}", "#Sigma^{-}" }
-
-
-//const int NDModes = 7;
-//float KaonicHyBR[7] = { 0.067, 0.273, 0.178, 0.430, 0.0004, 0.0028, 0.273 } ;
-//int ModeID[7] = { 1, 2, 3, 4, 7, 8, 9 };
-//std::string Labels[7] = { "#Lambda #pi^{0}", "#Lambda #gamma #pi^{0}", "#Sigma^{+} #pi^{-}", "#Sigma^{-} #pi^{+}", "#Sigma^{0} #gamma", "#Lambda #gamma", "#Sigma^{0} #pi^{0}" };
-
 
 
 const int NVersions = 1;

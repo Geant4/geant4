@@ -21,18 +21,18 @@
 #include "TGraph.h"
 #include "TLegend.h"
 
-// provision for near-future use of FTF for baryons
+// Note that BertiniPreCo doesn't make much sense for H
+// that's why there're 2 models here
 //
-const int NModelsBaryons=3;
-std::string ModelsBaryons[3] = { "CHIPS", "stopping", "FTF" };
+const int NModelsMesons=2; 
+std::string ModelsMesons[2] = { "Bertini", "BertiniPreCo" };
 
-const int NModelsMesons=4;
-std::string ModelsMesons[4] = { "CHIPS", "stopping", "Bertini", "BertiniPreCo" };
+//int         ColorModel[4]    = { 1, 2, 6, 3 };
+//int         SymbModel[4]     = { 20, 29, 21, 8 };
+int         ColorModel[2]    = {  6, 3 };
+int         SymbModel[2]     = { 21, 8 };
 
-int         ColorModel[4]    = { 1, 2, 6, 3 };
-int         SymbModel[4]     = { 20, 29, 21, 8 };
-
-// K- beam business
+// K- beam business - exp. data
 const int NPointsKMinus_Pi0Energy = 82;
 float Pi0Energy[82], Pi0EnergyStat[82];
 
@@ -47,9 +47,7 @@ const int NVersions = 2;
 //int ColorVersion[4] = { kBlack, kRed, kGreen, kMagenta };
 int ColorVersion[3] = { kGreen, kRed, kBlack };
 
-//std::string Versions[2] = { "geant4-09-04-ref10", "geant4-09-05-ref01" };
-std::string Versions[2] = { "geant4-09-05-ref02", "geant4-09-05-ref01" };
-
+std::string Versions[2] = { "geant4-09-06-b01", "geant4-09-06-p01" };
  
 void readKMinusPi0Energy()
 {
@@ -65,7 +63,6 @@ void readKMinusPi0Energy()
       infile >> Pi0Energy[i] >> Pi0EnergyStat[i] ;
       // rescale for (approx.) stat
       Pi0EnergyStat[i] /= 1028571;
-      // std::cout << Pi0Energy[i] << " " << Pi0EnergyStat[i] << std::endl;
    
    }
    
@@ -86,8 +83,7 @@ void drawKMinusBertiniForCTest( std::string target="H" )
    hi->SetLineWidth(2);
    
    hi->Draw();
-   
-   
+      
    TH1F* h = new TH1F("h", " ", 10, 0, 10. );
 
    for ( int i=0; i<NDModes; i++ )
@@ -101,8 +97,7 @@ void drawKMinusBertiniForCTest( std::string target="H" )
    h->SetMarkerColor(4);
    h->SetMarkerSize(1.6);
    h->Draw("psame");
-   leg->AddEntry( h, "exp.data", "p" );
-   
+  
    return;
 
 }
@@ -234,8 +229,15 @@ void drawKMinus( std::string target, std::string histo )
    TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
    
    for ( int m=0; m<NCounts; m++ )
-   {
-      hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*1.5); // hi[m]->SetTitle("");
+   {      
+      if ( histo == "EnergyPi0" ) 
+      {
+         hi[m]->GetYaxis()->SetRangeUser( 0.000001, ymax*3. );
+      }
+      else
+      {
+         hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*3.); // hi[m]->SetTitle("");
+      }
       leg->AddEntry( hi[m], ModelsMesons[m].c_str(), "L" );
    }
    
@@ -250,7 +252,6 @@ void drawKMinus( std::string target, std::string histo )
       leg->AddEntry( gr, "exp.data", "p" );
    }
    
-
    if ( histo == "Topology" && target == "H" )
    {
       TH1F* h = new TH1F("h", " ", 10, 0, 10. );
@@ -301,28 +302,3 @@ void setStyle()
 
 }
 
-/*
-int findTarget (std::string target )
-{
-
-   int TargetID = -1;
-   
-   for ( int i=0; i<NTargetsMadey; i++ )
-   {
-      if ( TargetsMadey[i] == target ) 
-      {
-         TargetID = i;
-	 break;
-      }
-   }
-      
-   if ( TargetID == -1 || TargetID >= NTargetsMadey )
-   {
-      std::cout << " Invalid Target: " << target << std::endl;
-      return -1;
-   }
-   
-   return TargetID;
-
-}
-*/

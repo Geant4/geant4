@@ -15,6 +15,26 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 3, 2013 Julia Yarba ( test48-V09-06-09)
+- finish cleaning up Root scripts for pi-, K-, Sigma- 
+  (somehow overlooked in previous round) 
+- remove several unnecessary variables and methods from
+  the source code
+
+January 30, 2013 Julia Yarba (test48-V09-06-08)
+- Fix name duplication in CMakeList (for CTest)
+
+January 29, 2013 Julia Yarba (test48-V09-06-07)
+- Include mu- capture test in CTest (actually there's a name duplication there)
+
+January 24, 2013 Julia Yarba (test48-V09-06-06)
+- Add config for mu- capture CTest
+- Update CMakeList.txt
+- Minor cleanups
+
+January 24, 2013 Julia Yarba (test48-V09-06-05)
+- Finish removing all ties to CHIPS; improve analysis scripts; update README
+
 December 18, 2012 Krzysztof Genser (test48-V09-06-04)
 - correcting CMakeLists.txt after deprecation of
   GEANT4_COLLATE_APPLICATION_SOURCES

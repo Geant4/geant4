@@ -22,20 +22,16 @@
 #include "TLegend.h"
 
 
-const int NModelsMesons=3;
-std::string ModelsMesons[4] = { "CHIPS", "stopping", "BertiniPreCo", "Bertini" };
+//const int NModelsMesons=3;
+//std::string ModelsMesons[4] = { "CHIPS", "stopping", "BertiniPreCo", "Bertini" };
+const int NModelsMesons=1;
+std::string ModelsMesons[2] = { "BertiniPreCo", "Bertini" };
 
-int         ColorModel[4]    = { 1, 2, 3, 6 };
-int         SymbModel[4]     = { 20, 29, 8, 21 };
+//int         ColorModel[4]    = { 1, 2, 3, 6 };
+//int         SymbModel[4]     = { 20, 29, 8, 21 };
+int         ColorModel[2]    = { 3, 6 };
+int         SymbModel[2]     = { 8, 21 };
 
-// pi- beam business
-/*
-const int   NPointsMadey = 30;
-const int   NTargetsMadey = 7; 
-float KENeut[30];  
-float Value[7][30], Error[7][30];
-std::string TargetsMadey[7] = { "C", "N", "O", "Al", "Cu", "Ta", "Pb" };
-*/
 
 
 const int NVersions = 4;
@@ -49,61 +45,6 @@ std::string Versions[4] = { "geant4-09-06-b01", "geant4-09-05-p01", "geant4-09-0
 
  
 static int isExpReadLoaded = 0;
-
-// gROOT->LoadMacro("ReadExpData.C");
-
-
-/*
-
-void readMadey()
-{
-
-   std::string fname = "./piminus/madey_spectra.dat";
-   std::cout << "Reads data from file " << fname << "\n";
-   ifstream infile;
-   infile.open(fname.c_str());
-      
-   for ( int i=0; i<NPointsMadey; i++ )
-   {
-
-      infile >> KENeut[i];
-      for ( int j=0; j<NTargetsMadey; j++ )
-      {
-         infile >> Value[j][i] >> Error[j][i];
-	 // rescale as numbers are per 100 pi-'s
-	 Value[j][i] /= 100. ;
-	 Error[j][i] /= 100. ;
-      }
-   }
-      
-   return;
-
-}
-int findTarget (std::string target )
-{
-
-   int TargetID = -1;
-   
-   for ( int i=0; i<NTargetsMadey; i++ )
-   {
-      if ( TargetsMadey[i] == target ) 
-      {
-         TargetID = i;
-	 break;
-      }
-   }
-      
-   if ( TargetID == -1 || TargetID >= NTargetsMadey )
-   {
-      std::cout << " Invalid Target: " << target << std::endl;
-      return -1;
-   }
-   
-   return TargetID;
-
-}
-
-*/
 
 void plotPiMinusDataAndRegression( std::string target )
 {

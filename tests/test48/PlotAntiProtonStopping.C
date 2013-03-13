@@ -30,10 +30,9 @@ int         ColorModel[4]    = { 2, 1, 6, 3 };
 int         SymbModel[4]     = { 29, 20, 21, 8 };
 */
 
-const int NModelsBaryons=2;
-std::string ModelsBaryons[2] = { "CHIPS", "FTF" };
-int         ColorModel[3]    = { 1, 6, 3 };
-int         SymbModel[3]     = { 20, 21, 8 };
+const int NModelsBaryons=1;
+std::string ModelsBaryons[1] = { "FTF" };
+int         ColorModel[1]    = { 6 };
 
 
 // pbar beam business
@@ -42,10 +41,10 @@ const int NPointsPbar_PionMult = 6;
 float MomX[44], MomValue[44], MomError[44];
 float MultX[6], MultValue[6], MultError[6];
 
-const int NVersions = 2;
+const int NVersions = 1;
 int ColorVersion[4] = { kBlack, kRed, kGreen, kMagenta };
-
-std::string Versions[2] = { "geant4-09-04-ref10", "geant4-09-05-ref01" };
+// std::string Versions[2] = { "geant4-09-04-ref10", "geant4-09-05-ref01" };
+std::string Versions[1] = { "geant4-09-06-b01" };
 
  
 void readAntiProton()
@@ -199,6 +198,8 @@ void drawAntiProtonMC2DataMom( std::string target="H" )
 void plotAntiProton( std::string target="H" )
 {
 
+   readAntiProton();
+   
    TH1F* hi_mom[NModelsBaryons];
    TH1F* hi_mult[NModelsBaryons];
    
@@ -238,6 +239,20 @@ void plotAntiProton( std::string target="H" )
       
    double ymin_mom = 100000., ymin_mult = 100000. ; // something big... don't know if I can use FLT_MAX
    double ymax_mom = -1., ymax_mult = -1. ;
+   
+   // now run over exp.data to determine min/max
+   //
+   for ( int ipp=0; ipp<NPointsPbar_PionMom; ipp++ )
+   {
+      if ( MomValue[ipp]+MomError[ipp] > ymax_mom ) ymax_mom = MomValue[ipp]+MomError[ipp];
+      if ( MomValue[ipp]-MomError[ipp] < ymin_mom )
+      {
+         ymin_mom = MomValue[ipp]-MomError[ipp];
+	 if ( ymin_mom < 0. ) ymin_mom = 0.;
+      }
+   }
+   
+   
    for ( int m=0; m<NModelsBaryons; m++ )
    {
       std::string histofile = "antiproton" + target + ModelsBaryons[m];
@@ -295,7 +310,7 @@ void plotAntiProton( std::string target="H" )
       leg2->AddEntry( hi_mult[m], ModelsBaryons[m].c_str(), "L" );
    }
    
-   readAntiProton();
+   // readAntiProton();
    
    TGraph*  gr1 = new TGraphErrors(NPointsPbar_PionMom,MomX,MomValue,0,MomError);
    TGraph*  gr2 = new TGraphErrors(NPointsPbar_PionMult,MultX,MultValue,0,MultError);

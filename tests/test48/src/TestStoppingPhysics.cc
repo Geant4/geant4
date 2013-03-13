@@ -62,9 +62,11 @@
 #include "G4SystemOfUnits.hh"
 
 //
-// traditional code
+// (what remains of the) traditional stopping code
 //
 #include "G4MuonMinusCaptureAtRest.hh"
+#include "G4AntiNeutronAnnihilationAtRest.hh"
+
 //
 // new development, in place since g4.9.6.b01
 //
@@ -72,27 +74,15 @@
 
 #include "G4PreCompoundModel.hh"
 
-// #include "G4AntiProtonAnnihilationAtRest.hh"
-// #include "G4AntiNeutronAnnihilationAtRest.hh"
-
-//
-// there're 2 alternative implementations of the pi- absorbtion at rest
-// the former was widely used in a variety of physics lists until replaced
-// by the chips-bound code, while the later has not been used/test at all
-//
-// #include "G4PionMinusAbsorptionAtRest.hh"
-// #include "G4PiMinusAbsorptionAtRest.hh"
-//
-// another "duplicate"
-//
-// #include "G4KaonMinusAbsorption.hh"
-// #include "G4KaonMinusAbsorptionAtRest.hh"
-
 // Bertini cascade
-// for pi-
-#include "G4PiMinusAbsorptionBertini.hh"
-// local code for K- & Sigma-
+// local code for pi-, K- & Sigma-
+// (very original implementation before the standard interface
+//  went in place; still kept here for cross-checks)
 #include "TestBertiniStopping.hh"
+//
+// standard interface for pi-
+//
+#include "G4PiMinusAbsorptionBertini.hh"
 //
 // standard interface for K- and Sigma- available since g4.9.6.b01
 //
@@ -177,22 +167,18 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
     
   if (part_name == "anti_proton")   
   {
-     // man = G4AntiProton::AntiProton()->GetProcessManager();
      man = new G4ProcessManager(G4AntiProton::AntiProton());
   }
   else if (part_name == "anti_neutron") 
   {
-     // man = G4AntiNeutron::AntiNeutron()->GetProcessManager();
      man = new G4ProcessManager(G4AntiNeutron::AntiNeutron());
   }
   else if (part_name == "pi-") 
   {
-     //man = G4PionMinus::PionMinus()->GetProcessManager();
      man = new G4ProcessManager(G4PionMinus::PionMinus());
   }
   else if (part_name == "kaon-")  
   {
-     //man = G4KaonMinus::KaonMinus()->GetProcessManager();
      man = new G4ProcessManager(G4KaonMinus::KaonMinus());
   }
   else if (part_name == "mu-")  
@@ -266,42 +252,11 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
      ) 
   {
 
-/*
-    if(part_name == "anti_proton")   
-    {
-      theProcess = new G4AntiProtonAnnihilationAtRest();
-    }
-    else if (part_name == "anti_neutron" )
+    if (part_name == "anti_neutron" )
     {
        theProcess = new G4AntiNeutronAnnihilationAtRest();
     }
-    else if(part_name == "pi-") 
-    {  
-      if ( gen_name == "stopping" )
-      {
-         theProcess = new G4PionMinusAbsorptionAtRest();
-      }
-      else
-      {
-         theProcess = new G4PiMinusAbsorptionAtRest(); // alternative (old) code
-	                                               // by M.G.Pia 
-      }
-    }
-    else if ( part_name == "kaon-")
-    {
-       if ( gen_name == "stopping" )
-       {
-          theProcess = new G4KaonMinusAbsorption();
-       }
-       else
-       {
-          // another "duplicate" (but NOT by M.G.P.)
-	  theProcess = new G4KaonMinusAbsorptionAtRest();
-       }
-    }
-
-    else */ 
-    if ( part_name == "mu-")
+    else if ( part_name == "mu-")
     {
 
       if (gen_name == "stopping" )
@@ -331,7 +286,7 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
   else if ( gen_name == "Bertini" || gen_name == "BertiniPreCo" )
   {
 
-     if ( part_name == "kaon-" ) //|| part_name == "sigma-" ) // I'm not sure if this will work for mu-... || part_name == "mu-" )
+     if ( part_name == "kaon-" ) 
      {
         // for K-, still use the local interface
 	// although it should be noted that PreCo 
@@ -346,7 +301,14 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
         proc->InitTarget(mat);
         theProcess = proc;
 */
-        theProcess = new G4KaonMinusAbsorptionBertini();
+        // NOTE (JVY):
+	// Standard interface will pull in an "EMcascade" part 
+	// of the capture business (unlike "Test" interface); 
+	// secondaries coming from the "EMcascade" will be
+	// filtered out for K- by the analysis part of the code, 
+	// but Sigma- they're still in the histo... 
+	//
+	theProcess = new G4KaonMinusAbsorptionBertini();
      }
      else if ( part_name == "sigma-" )
      {

@@ -46,6 +46,8 @@
 #include "G4VCrossSectionDataSet.hh"
 
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
+
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
 
@@ -93,7 +95,7 @@ int main(int argc, char** argv) {
   G4String  namePart = "pi-";
   G4String  nameMatRaw  = "Cu";
   ostringstream osMat(ios_base::out|ios_base::app);// to enable appending in output operations
-  G4String  nameGen  = "stopping";
+  G4String  nameGen  = "Bertini";
   G4double  energy   = 0.;
   G4double  m_p      = 125.*MeV;
   G4int     nevt     = 1000;
@@ -279,17 +281,13 @@ int main(int argc, char** argv) {
       (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
 
     G4VProcess* proc = phys->GetProcess(nameGen, namePart);
-    
-    G4double amass = phys->GetNucleusMass();
 
     if (!proc) { 
       G4cout << "For particle: " << part->GetParticleName()
 	     << " generator " << nameGen << " is unavailable"
 	     << G4endl;
       exit(1);
-    } else {
-      G4cout << "Nucleus mass " << amass << G4endl;
-    }
+    } 
 
     //    proc->SetVerboseLevel(2);
 
@@ -300,7 +298,7 @@ int main(int argc, char** argv) {
 
     G4int A = (G4int)(elm->GetN()+0.5);
     G4int Z = (G4int)(elm->GetZ()+0.5);
-    
+        
     G4int NIso = G4NistManager::Instance()->GetNumberOfNistIsotopes( Z );
     G4cout << " For materials " << material->GetName() << " Number of NISTIsotopes = " << NIso << G4endl;
     
@@ -364,13 +362,14 @@ int main(int argc, char** argv) {
     // so make the life cycle be run only, rather than delete ??
     if ( jobid > -1 ) histo.SetJobID(jobid);
 
-    
-    G4Timer* timer = new G4Timer();
-    timer->Start();
+// -->    G4LorentzVector labv; // not needed in this application ???
+// amass would be needed to calculate labv )see above) 
+// which is needed in some parts of test47 but not in this one
+//    G4double amass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, A);    
+//    std::cout << " Nucleus mass = " << amass << std::endl;
+
     G4ThreeVector   mom;
-    G4LorentzVector labv;
     G4VParticleChange* aChange = 0;
-    //    G4VParticleChange* bChange = 0;
 
     if (verbose>=2) {
       G4cout << "Possible secondary status codes: " 
@@ -382,6 +381,11 @@ int main(int argc, char** argv) {
              << " fPostponeToNextEvent " << fPostponeToNextEvent
              << G4endl;
     }
+
+// the timer should start right before the loop
+//
+    G4Timer* timer = new G4Timer();
+    timer->Start();
     
     for (G4int iter=0; iter<nevt; ++iter) {
 
@@ -394,11 +398,13 @@ int main(int argc, char** argv) {
 
       gTrack->SetStep(step);
       gTrack->SetKineticEnergy(e0);
-      gTrack->SetTouchableHandle(touch);// Set Box touchable history 
-                                        // - this darn stuff is needed by CHIPS
+      // gTrack->SetTouchableHandle(touch);// Set Box touchable history 
+                                           // - this darn stuff used to be needed by CHIPS
       
-      labv = G4LorentzVector(0., 0., sqrt(e0*(e0 + 2.0*mass))/GeV,
-                             (e0 + mass + amass)/GeV);
+// not needed in this application ???
+//
+//      labv = G4LorentzVector(0., 0., sqrt(e0*(e0 + 2.0*mass))/GeV,
+//                             (e0 + mass + amass)/GeV);
       
       aChange = proc->AtRestDoIt(*gTrack,*step);
       

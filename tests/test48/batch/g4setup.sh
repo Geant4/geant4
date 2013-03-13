@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # export G4INSTALL=/home-cluck/syjun/g4p/work/g4.9.6.b01/geant4.9.6.b01
-export G4INSTALL=/home-cluck/yarba_j/work/test-geant4.9.6-ref00/geant4
+export G4INSTALL=/home-cluck/yarba_j/work/test-geant4.9.6-ref02/geant4
 export G4SYSTEM=Linux-g++
 export G4SRC=${G4INSTALL}/source
 export G4LIB=${G4INSTALL}/lib64
@@ -20,7 +20,8 @@ export G4ABLADATA=${G4DATA}/G4ABLA3.0
 export G4REALSURFACEDATA=${G4DATA}/RealSurface1.0
 export G4NEUTRONXSDATA=${G4DATA}/G4NEUTRONXS1.2
 export G4PIIDATA=${G4DATA}/G4PII1.3
-export G4SAIDDATA=${G4DATA}/G4SAIDDATA1.1
+# export G4SAIDDATA=${G4DATA}/G4SAIDDATA1.1
+export G4SAIDXSDATA=${G4DATA}/G4SAIDDATA1.1
 
 # export G4WORKDIR=/home-cluck/yarba_j/work/test-central-geant4.9.6.b01/tests/test48-build
 export G4WORKDIR=${G4INSTALL}/tests

@@ -57,8 +57,6 @@ public:
 
   G4VProcess* GetProcess(const G4String&, const G4String&);
 
-  G4double GetNucleusMass() {return 0.; /* theProcess->GetMass(); */ }; // why 0.?
-
 private:
 
 #if defined (USE_MUCAPTURE) 

@@ -22,8 +22,8 @@
 #include "TLegend.h"
 
 
-const int NModelsMuons=3;
-std::string ModelsMuons[3] = { "stopping", "captureUpdate", "CHIPS" };
+const int NModelsMuons=2;
+std::string ModelsMuons[2] = { "stopping", "captureUpdate" };
 
 // int         ColorModel[4]    = { 1, 6, 2, 3 };
 int         ColorModel[4]    = { 1, 3, 2, 6 };

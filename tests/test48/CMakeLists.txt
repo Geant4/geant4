@@ -43,7 +43,10 @@ if(CMAKE_PROJECT_NAME STREQUAL Geant4)
   endif()
 
   GEANT4_ADD_TEST(test48-build BUILD test48)
-  GEANT4_ADD_TEST(test48 COMMAND test48 ${CMAKE_CURRENT_SOURCE_DIR}/ctest48-picapture-Pb.config
+  GEANT4_ADD_TEST(test48-piminus COMMAND test48 ${CMAKE_CURRENT_SOURCE_DIR}/ctest48-picapture-Pb.config
+                         DEPENDS test48-build
+                         ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+  GEANT4_ADD_TEST(test48-muminus COMMAND test48 ${CMAKE_CURRENT_SOURCE_DIR}/ctest48-mucapture-Si.config
                          DEPENDS test48-build
                          ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
