@@ -102,8 +102,6 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
    G4ThreeVector  fpInitial;
    G4ThreeVector  BfldIn;
    G4double       hStep;
-  
-   G4Mag_EqRhs*  fPtrMagEqOfMot;
 };
 
 #endif

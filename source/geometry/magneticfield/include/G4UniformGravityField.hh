@@ -69,6 +69,8 @@ class G4UniformGravityField : public G4Field
       // Since a gravitational field can change track energy
 
     virtual void GetFieldValue(const G4double Point[4], G4double *field) const;
+    
+    virtual G4UniformGravityField* Clone() const;
 
   private:
 

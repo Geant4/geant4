@@ -31,24 +31,33 @@
 #include "G4QuadrupoleMagField.hh"
 #include "G4RotationMatrix.hh"
 
-static G4ThreadLocal G4RotationMatrix *IdentityMatrix_G4MT_TLS_ = 0 ; 
+static G4RotationMatrix IdentityMatrix; 
 
 G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient)
 {
-if (!IdentityMatrix_G4MT_TLS_) IdentityMatrix_G4MT_TLS_ = new  G4RotationMatrix  ;  G4RotationMatrix &IdentityMatrix = *IdentityMatrix_G4MT_TLS_; 
    fGradient = pGradient ;
-   fOrigin      = G4ThreeVector( 0.0, 0.0, 0.0) ;
-   fpMatrix      = &IdentityMatrix;
+   fOrigin   = G4ThreeVector( 0.0, 0.0, 0.0) ;
+   fpMatrix  = &IdentityMatrix;
 }
+
 
 /////////////////////////////////////////////////////////////////////////
 
-G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient, G4ThreeVector
-pOrigin, G4RotationMatrix* pMatrix)
-{ if (!IdentityMatrix_G4MT_TLS_) IdentityMatrix_G4MT_TLS_ = new  G4RotationMatrix  ; 
+G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient,
+                                           G4ThreeVector pOrigin,
+                                           G4RotationMatrix* pMatrix)
+{
    fGradient    = pGradient ;
    fOrigin      = pOrigin ;
-   fpMatrix      = pMatrix ;
+   fpMatrix     = pMatrix ;
+}
+
+G4QuadrupoleMagField* G4QuadrupoleMagField::Clone() const
+{
+    //TODO: Can the fpMatrix be shared??
+    return new G4QuadrupoleMagField(this->fGradient,
+                                    this->fOrigin,
+                                    this->fpMatrix);
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -63,7 +72,7 @@ G4QuadrupoleMagField::~G4QuadrupoleMagField()
 
 void G4QuadrupoleMagField::GetFieldValue( const G4double y[7],
                                                 G4double B[3]  ) const  
-{ if (!IdentityMatrix_G4MT_TLS_) IdentityMatrix_G4MT_TLS_ = new  G4RotationMatrix  ;
+{
    G4ThreeVector r_global = G4ThreeVector(
         y[0] - fOrigin.x(), 
         y[1] - fOrigin.y(), 

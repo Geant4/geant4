@@ -80,6 +80,7 @@ class G4ElectroMagneticField : public G4Field
        //  For field with an electric component this should be true
        //  For pure magnetic field this should be false
        //    Alternative: default safe implementation { return true; }
+    
 };
 
 #endif /* G4ELECTROMAGNETIC_FIELD_DEF */

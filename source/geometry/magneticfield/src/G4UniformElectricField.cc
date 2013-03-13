@@ -65,6 +65,11 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
    fFieldComponents[5] = vField*std::cos(vTheta) ;
 }
 
+G4UniformElectricField* G4UniformElectricField::Clone() const
+{
+    return new G4UniformElectricField( G4ThreeVector(this->fFieldComponents[3],this->fFieldComponents[4],this->fFieldComponents[5]) );
+}
+
 G4UniformElectricField::~G4UniformElectricField()
 {
 }

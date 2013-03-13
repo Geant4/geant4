@@ -33,6 +33,10 @@ G4LineCurrentMagField::G4LineCurrentMagField(G4double pFieldConstant)
 {
    fFieldConstant = pFieldConstant ;
 }
+G4LineCurrentMagField* G4LineCurrentMagField::Clone() const
+{
+    return new G4LineCurrentMagField( this->fFieldConstant );
+}
 ////////////////////////////////////////////////////////////////////////
 
 G4LineCurrentMagField::~G4LineCurrentMagField()

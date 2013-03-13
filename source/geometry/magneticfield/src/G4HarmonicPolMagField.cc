@@ -35,6 +35,10 @@ G4HarmonicPolMagField::G4HarmonicPolMagField()
 {
 }
 
+G4HarmonicPolMagField* G4HarmonicPolMagField::Clone() const
+{
+    return new G4HarmonicPolMagField;
+}
 /////////////////////////////////////////////////////////////////////////  
 
 G4HarmonicPolMagField::~G4HarmonicPolMagField()

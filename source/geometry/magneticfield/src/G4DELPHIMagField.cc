@@ -35,6 +35,10 @@ G4DELPHIMagField::G4DELPHIMagField()
 {
 }
 
+G4DELPHIMagField* G4DELPHIMagField::Clone() const
+{
+    return new G4DELPHIMagField;
+}
 ////////////////////////////////////////////////////////////////////////
 
 G4DELPHIMagField::~G4DELPHIMagField()

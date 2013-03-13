@@ -63,6 +63,7 @@ class G4QuadrupoleMagField : public G4MagneticField
 
     void GetFieldValue(const G4double yTrack[],
                              G4double B[]     ) const;
+    G4QuadrupoleMagField* Clone() const;
   private:
 
     G4double          fGradient;

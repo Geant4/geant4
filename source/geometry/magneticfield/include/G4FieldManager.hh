@@ -139,6 +139,9 @@ class G4FieldManager
      inline void     SetFieldChangesEnergy(G4bool value);
        //  For electric field this should be true
        //  For magnetic field this should be false
+    
+    virtual G4FieldManager* Clone() const;
+    //Needed for multi-threading, create a clone of this object
 
   private:
 

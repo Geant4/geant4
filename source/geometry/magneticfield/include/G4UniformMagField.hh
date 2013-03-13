@@ -69,7 +69,9 @@ class G4UniformMagField : public G4MagneticField
     void SetFieldValue(const G4ThreeVector& newFieldValue);
 
     G4ThreeVector GetConstantFieldValue() const;
-      // Return the field value  
+      // Return the field value
+    
+    virtual G4UniformMagField* Clone() const;
 
   private:
 

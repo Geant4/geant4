@@ -50,4 +50,14 @@ G4Field::G4Field (const G4Field &p)
   : fGravityActive(p.fGravityActive)
 {
 }
+
+G4Field* G4Field::Clone() const
+{
+    G4ExceptionDescription msg;
+    msg << "Derived class does not implement cloning,\n"
+        << "but Clone method called.\n"
+        << "Cannot continue;";
+    G4Exception("G4Field::Clone", "GeomField004", FatalException,msg );
+    return NULL;
+}
 // ------------------------------------------------------------------------

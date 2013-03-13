@@ -55,6 +55,7 @@ class G4HarmonicPolMagField : public G4MagneticField
      
     void GetFieldValue(const G4double yTrack[] ,
                              G4double B[]      ) const  ;
+    G4HarmonicPolMagField* Clone() const;
 };
 
 #endif

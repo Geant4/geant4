@@ -75,6 +75,7 @@ public:
   void SetFieldValue(G4double      fieldValue) ;
   G4ThreeVector GetConstantFieldValue();
   G4FieldManager*  GetLocalFieldManager() { return fLocalFieldManager ;};
+
 protected:
 
       // Find the global Field Manager

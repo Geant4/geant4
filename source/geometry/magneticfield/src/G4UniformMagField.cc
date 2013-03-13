@@ -43,6 +43,13 @@ G4UniformMagField::G4UniformMagField(const G4ThreeVector& FieldVector )
       fFieldComponents[2] = FieldVector.z();
 }
 
+G4UniformMagField* G4UniformMagField::Clone() const
+{
+    return new G4UniformMagField( G4ThreeVector(this->fFieldComponents[0],
+                                                this->fFieldComponents[1],
+                                                this->fFieldComponents[2]) );
+}
+
 void
 G4UniformMagField::SetFieldValue(const G4ThreeVector& newFieldVector )
 {

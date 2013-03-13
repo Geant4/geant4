@@ -58,6 +58,11 @@ G4UniformGravityField::G4UniformGravityField(const G4double gy )
       fFieldComponents[2] = 0.0;
 }
 
+G4UniformGravityField* G4UniformGravityField::Clone() const
+{
+    return new G4UniformGravityField( G4ThreeVector(this->fFieldComponents[0],this->fFieldComponents[1],this->fFieldComponents[2]) );
+}
+
 G4UniformGravityField::~G4UniformGravityField()
 {
 }

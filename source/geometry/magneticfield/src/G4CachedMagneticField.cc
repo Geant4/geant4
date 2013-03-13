@@ -44,6 +44,17 @@ G4CachedMagneticField::G4CachedMagneticField(G4MagneticField *pMagField,
   this->ClearCounts(); 
 }
 
+G4CachedMagneticField* G4CachedMagneticField::Clone() const
+{
+    //Cannot use copy constructor: I need to clone the associated magnetif field
+    G4MagneticField* aF = static_cast<G4MagneticField*>(this->fpMagneticField->Clone());
+    G4CachedMagneticField* cloned = new G4CachedMagneticField( aF ,
+                                                              this->fDistanceConst );
+    cloned->fLastLocation = this->fLastLocation;
+    cloned->fLastValue = this->fLastValue;
+    return cloned;
+}
+
 G4CachedMagneticField::~G4CachedMagneticField()
 {
 }
