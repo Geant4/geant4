@@ -45,7 +45,8 @@ G4UIcommand::G4UIcommand()
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
 			 G4UImessenger * theMessenger)
-:messenger(theMessenger),token(IDENTIFIER),paramERR(0)
+:messenger(theMessenger),toBeBroadcasted(true),toBeFlushed(false),
+token(IDENTIFIER),paramERR(0)
 {
   G4String comStr = theCommandPath;
   if(!theMessenger)

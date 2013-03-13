@@ -171,6 +171,20 @@ class G4UIcommand
       }
 
   protected:
+    G4bool toBeBroadcasted;
+    G4bool toBeFlushed;
+
+  public:
+    inline void SetToBeBroadcasted(G4bool val)
+    { toBeBroadcasted = val; }
+    inline G4bool ToBeBroadcasted() const
+    { return toBeBroadcasted; }
+    inline void SetToBeFlushed(G4bool val)
+    { toBeFlushed = val; }
+    inline G4bool ToBeFlushed() const
+    { return toBeFlushed; }
+
+  protected:
     G4int CheckNewValue(const char* newValue);
 
     // --- the following is used by CheckNewValue() --------

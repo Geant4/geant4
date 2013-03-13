@@ -63,7 +63,8 @@ G4UImanager * G4UImanager::GetUIpointer()
 
 G4UImanager::G4UImanager()
   : G4VStateDependent(true),
-    UImessenger(0), UnitsMessenger(0)
+    UImessenger(0), UnitsMessenger(0),
+    ignoreCmdNotFound(false), stackCommandsForBroadcast(false)
 {
   savedCommand = 0;
   treeTop = new G4UIcommandTree("/");
@@ -79,6 +80,7 @@ G4UImanager::G4UImanager()
   pauseAtEndOfEvent = false;
   maxHistSize = 20;
   searchPath="";
+  commandStack = new std::vector<G4String>;
 }
 
 void G4UImanager::CreateMessenger()
@@ -98,6 +100,11 @@ G4UImanager::~G4UImanager()
   delete aliasList;
   fUImanagerHasBeenKilled = true;
   fUImanager = NULL;
+  if(commandStack)
+  {
+    commandStack->clear();
+    delete commandStack;
+  }
 }
 
 G4UImanager::G4UImanager(const G4UImanager& ui)
@@ -408,9 +415,21 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
     { ll++; }
   }
 
+
   G4UIcommand * targetCommand = treeTop->FindPath( commandString );
   if( targetCommand == NULL )
-  { return fCommandNotFound; }
+  {
+    if(ignoreCmdNotFound)
+    {
+      if(stackCommandsForBroadcast) commandStack->push_back(commandString);
+      return fCommandSucceeded;
+    }
+    else
+    { return fCommandNotFound; }
+  }
+
+  if(stackCommandsForBroadcast || targetCommand->ToBeBroadcasted())
+  { commandStack->push_back(commandString); }
 
   if(!(targetCommand->IsAvailable()))
   { return fIllegalApplicationState; }
@@ -604,3 +623,11 @@ G4String G4UImanager::FindMacroPath(const G4String& fname) const
 
   return macrofile;
 }
+
+std::vector<G4String>& G4UImanager::GetCommandStack()
+{
+  std::vector<G4String>* returnValue = commandStack;
+  commandStack = new std::vector<G4String>;
+  return *returnValue;
+}
+

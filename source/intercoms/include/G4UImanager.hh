@@ -238,14 +238,18 @@ class G4UImanager : public G4VStateDependent
       void ParseMacroSearchPath();
       G4String FindMacroPath(const G4String& fname) const;
 
-  // Old methods kept for backward compatibility
-  //    inline G4UIcommandTree * GetTree() const
-  //    { return treeTop; };
-  //    inline G4UIsession * GetSession() const
-  //    { return session; };
-  //    inline void SetSession(G4UIsession *const  value)
-  //    { session = value; };
+  private:
+      G4bool ignoreCmdNotFound;
+      G4bool stackCommandsForBroadcast;
+      std::vector<G4String>* commandStack;
 
+  public:
+      inline void SetMasterUIManager(G4bool val)
+      {
+        ignoreCmdNotFound = val;
+        stackCommandsForBroadcast = val;
+      }
+      std::vector<G4String>& GetCommandStack();
 };
 
 #endif

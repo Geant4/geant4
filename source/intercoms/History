@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 March, 2013 M. Asai (intercoms-V09-06-03)
+- Adding flags for commands to be boradcasted to thread-local UI mamaners.
+
+12 March, 2013 M. Asai (intercoms-V09-06-02)
+- Adding IgnoreCmdNotFound into G4UImanager required for multi-threading.
+
+14 February 2013 Jean Jacquemier (intercoms-V09-06-01)
+- Removed modifcation G4UIcommand.cc for G4UnitTable (see tag intercoms-V09-06-00). These
+  modification will be done once MultiThreading performance loss will be recover.
+
+February 08, 2013 J.Jacquemier (intercoms-V09-06-00)
+- G4UIcommand.cc: Modification for G4UnitTable (std::map).
+
 26 October, 2012 P. Mato (intercoms-V09-05-07)
  - G4AnyMethod.hh avoided compilation warning.
 
