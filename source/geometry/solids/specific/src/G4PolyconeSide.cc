@@ -48,15 +48,22 @@
 
 #include "Randomize.hh"
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This static member is thread local. For each thread, it points to the
-//array of PolyconeSidePrivateSubclass instances.
-template <class PolyconeSidePrivateSubclass> G4ThreadLocal PolyconeSidePrivateSubclass* G4MTPrivateSubInstanceManager<PolyconeSidePrivateSubclass>::offset = 0;
+// This static member is thread local. For each thread, it points to the
+// array of G4PlSideData instances.
+//
+template <class G4PlSideData> G4ThreadLocal
+         G4PlSideData* G4GeomSplitter<G4PlSideData>::offset = 0;
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This new field helps to use the class G4PolyconeSideSubInstanceManager
-//introduced in the "G4PolyconeSide.hh" file.
-G4PolyconeSideSubInstanceManager G4PolyconeSide::g4polyconeSideSubInstanceManager;
+// This new field helps to use the class G4PlSideManager.
+//
+G4PlSideManager G4PolyconeSide::subInstanceManager;
+
+// Returns the private data instance manager.
+//
+const G4PlSideManager& G4PolyconeSide::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
 
 //
 // Constructor
@@ -75,12 +82,12 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
   : ncorners(0), corners(0)
 {
 
-  g4polyconeSideInstanceID = g4polyconeSideSubInstanceManager.CreateSubInstance();
+  instanceID = subInstanceManager.CreateSubInstance();
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea = 0.0;
-  fPhiPCSG4MTThreadPrivate.first = G4ThreeVector(0,0,0);
-  fPhiPCSG4MTThreadPrivate.second= 0.0;
+  G4MT_pcphi.first = G4ThreeVector(0,0,0);
+  G4MT_pcphi.second= 0.0;
 
   //
   // Record values
@@ -199,7 +206,7 @@ G4PolyconeSide::~G4PolyconeSide()
 G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide &source )
   : G4VCSGface(), ncorners(0), corners(0)
 {
-  g4polyconeSideInstanceID = g4polyconeSideSubInstanceManager.CreateSubInstance();
+  instanceID = subInstanceManager.CreateSubInstance();
 
   CopyStuff( source );
 }
@@ -887,15 +894,15 @@ G4double G4PolyconeSide::GetPhi( const G4ThreeVector& p )
 {
   G4double val=0.;
 
-  if (fPhiPCSG4MTThreadPrivate.first != p)
+  if (G4MT_pcphi.first != p)
   {
     val = p.phi();
-    fPhiPCSG4MTThreadPrivate.first = p;
-    fPhiPCSG4MTThreadPrivate.second = val;
+    G4MT_pcphi.first = p;
+    G4MT_pcphi.second = val;
   }
   else
   {
-    val = fPhiPCSG4MTThreadPrivate.second;
+    val = G4MT_pcphi.second;
   }
   return val;
 }

@@ -575,7 +575,8 @@ G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
     }
     else if(calcNorm && n)
     {
-      static G4ThreadLocal G4ThreeVector *normal_G4MT_TLS_ = 0 ; if (!normal_G4MT_TLS_) normal_G4MT_TLS_ = new  G4ThreeVector  ;  G4ThreeVector &normal = *normal_G4MT_TLS_;
+      static G4ThreadLocal G4ThreeVector *pnormal = new  G4ThreeVector;
+      G4ThreeVector &normal = *pnormal;
       if(tt==t1)        { normal=fNormal123; }
       else if (tt==t2)  { normal=fNormal134; }
       else if (tt==t3)  { normal=fNormal142; }

@@ -47,15 +47,23 @@
 
 #include "Randomize.hh"
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This static member is thread local. For each thread, it points to the
-//array of PolyhedraSidePrivateSubclass instances.
-template <class PolyhedraSidePrivateSubclass> G4ThreadLocal PolyhedraSidePrivateSubclass* G4MTPrivateSubInstanceManager<PolyhedraSidePrivateSubclass>::offset = 0;
+// This static member is thread local. For each thread, it points to the
+// array of G4PhSideData instances.
+//
+template <class G4PhSideData> G4ThreadLocal
+         G4PhSideData* G4GeomSplitter<G4PhSideData>::offset = 0;
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//This new field helps to use the class G4PolyhedraSideSubInstanceManager
-//introduced in the "G4PolyhedraSide.hh" file.
-G4PolyhedraSideSubInstanceManager G4PolyhedraSide::g4polyhedraSideSubInstanceManager;
+// This new field helps to use the class G4PhSideManager.
+//
+G4PhSideManager G4PolyhedraSide::subInstanceManager;
+
+//
+// Returns the private data instance manager.
+//
+const G4PhSideManager& G4PolyhedraSide::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
 
 //
 // Constructor
@@ -74,12 +82,12 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
                                         G4bool isAllBehind )
 {
 
-  g4polyhedraSideInstanceID = g4polyhedraSideSubInstanceManager.CreateSubInstance();
+  instanceID = subInstanceManager.CreateSubInstance();
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   fSurfaceArea=0.;
-  fPhiPHSG4MTThreadPrivate.first = G4ThreeVector(0,0,0);
-  fPhiPHSG4MTThreadPrivate.second= 0.0;
+  G4MT_phphi.first = G4ThreeVector(0,0,0);
+  G4MT_phphi.second= 0.0;
 
   //
   // Record values
@@ -334,7 +342,7 @@ G4PolyhedraSide::~G4PolyhedraSide()
 G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide &source )
   : G4VCSGface()
 {
-  g4polyhedraSideInstanceID = g4polyhedraSideSubInstanceManager.CreateSubInstance();
+  instanceID = subInstanceManager.CreateSubInstance();
 
   CopyStuff( source );
 }
@@ -1002,15 +1010,15 @@ G4double G4PolyhedraSide::GetPhi( const G4ThreeVector& p )
 {
   G4double val=0.;
 
-  if (fPhiPHSG4MTThreadPrivate.first != p)
+  if (G4MT_phphi.first != p)
   {
     val = p.phi();
-    fPhiPHSG4MTThreadPrivate.first = p;
-    fPhiPHSG4MTThreadPrivate.second = val;
+    G4MT_phphi.first = p;
+    G4MT_phphi.second = val;
   }
   else
   {
-    val = fPhiPHSG4MTThreadPrivate.second;
+    val = G4MT_phphi.second;
   }
   return val;
 }

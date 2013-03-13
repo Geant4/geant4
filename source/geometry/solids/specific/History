@@ -17,6 +17,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-Mar-2013  G.Cosmo (geom-specific-V09-06-08)
+- Added public accessors for MT data to G4PolyconeSide and G4PolyhedraSide.
+
+11-Mar-2013  G.Cosmo (geom-specific-V09-06-07)
+- Redefined G4DLL_API to G4GEOM_DLL to avoid cases of macro redefinition.
+
+08-Mar-2013  G.Cosmo (geom-specific-V09-06-06)
+- Renamed G4MT macros to safer ID in G4PolyconeSide and G4PolyhedraSide.
+
+07-Mar-2013  G.Cosmo (geom-specific-V09-06-05)
+- Adopt G4GeomSplitter instead of G4MTTransitory in G4PolyconeSide and
+  G4PolyhedraSide. Fixed import/export of static symbols for WIN32 DLLs build.
+
+22-Feb-2013  G.Cosmo (geom-specific-V09-06-04)
+- Cleanup changes for multi-threading in G4Tet, G4VTwistSurface,
+  G4PolyconeSide and G4PolyhedraSide.
+- Removed unused private data member in G4TwistTrapParallelSide.
+
+07-Mar-2013  G.Cosmo (geom-specific-V09-06-05)
+- Adopt G4GeomSplitter instead of G4MTTransitory in G4PolyconeSide and
+  G4PolyhedraSide. Fixed import/export of static symbols for WIN32 DLLs build.
+
+22-Feb-2013  G.Cosmo (geom-specific-V09-06-04)
+- Cleanup changes for multi-threading in G4Tet, G4VTwistSurface,
+  G4PolyconeSide and G4PolyhedraSide.
+- Removed unused private data member in G4TwistTrapParallelSide.
+
 11-Jan-2013  G.Cosmo (geom-specific-V09-06-03)
 - Fixed condition in G4VTwistSurface::GetBoundaryLimit() for logical error.
   Addressing problem report #1420.
