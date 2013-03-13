@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file eventgenerator/exgps/src/exGPSEventAction.cc
 /// \brief Implementation of the exGPSEventAction class
 //
@@ -44,7 +46,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 exGPSEventAction::exGPSEventAction()
-:fDrawFlag("all"), fPrintModulo(1000), fEventMessenger(NULL) 
+:G4UserEventAction(),
+ fDrawFlag("all"), fPrintModulo(1000), fEventMessenger(NULL) 
 {
   fEventMessenger = new exGPSEventActionMessenger(this);
 }

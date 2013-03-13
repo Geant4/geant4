@@ -23,19 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file eventgenerator/exgps/src/exGPSEventActionMessenger.cc
 /// \brief Implementation of the exGPSEventActionMessenger class
 //
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-// $Id$
-//
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -51,7 +43,10 @@
 
 exGPSEventActionMessenger::exGPSEventActionMessenger(
                                                                                                                 exGPSEventAction* EvAct)
-:fEventAction(EvAct)
+:G4UImessenger(),
+ fEventAction(EvAct),
+ fDrawCmd(0),
+ fPrintCmd(0)    
 { 
   fDrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
   fDrawCmd->SetGuidance("Draw the tracks in the event");

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file eventgenerator/exgps/include/exGPSPhysicsList.hh
 /// \brief Definition of the exGPSPhysicsList class
 //

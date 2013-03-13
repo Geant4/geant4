@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file eventgenerator/exgps/src/exGPSAnalysisManager.cc
 /// \brief Implementation of the exGPSAnalysisManager class
 //
+
 #ifdef G4ANALYSIS_USE
 #include <AIDA/AIDA.h>
 #include "exGPSAnalysisManager.hh"

@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file eventgenerator/exgps/src/exGPSAnalysisMessenger.cc
 /// \brief Implementation of the exGPSAnalysisMessenger class
 //
+
 #ifdef G4ANALYSIS_USE
 
 #include "exGPSAnalysisMessenger.hh"
@@ -38,7 +41,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSAnalysisMessenger::exGPSAnalysisMessenger(exGPSAnalysisManager* analysisManager)
-  :fExGPSAnalysis(analysisManager)
+  :G4UImessenger(),
+   fExGPSAnalysis(analysisManager),
+   fFileNameCmd(0),
+   fFileTypeCmd(0),
+   fMaxEngCmd(0),
+   fMinEngCmd(0),
+   fMaxPosCmd(0),
+   fMinPosCmd(0)
 
 { 
   fExGPSAnalysisDir = new G4UIdirectory("/analysis/");

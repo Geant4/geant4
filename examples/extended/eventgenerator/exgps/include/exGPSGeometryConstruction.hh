@@ -23,9 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file eventgenerator/exgps/include/exGPSGeometryConstruction.hh
 /// \brief Definition of the exGPSGeometryConstruction class
 //
+
 #ifndef exGPSGeometryConstruction1_h
 #define exGPSGeometryConstruction1_h 1
 //

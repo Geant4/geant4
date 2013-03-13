@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file eventgenerator/exgps/src/exGPSRunAction.cc
 /// \brief Implementation of the exGPSRunAction class
 //
@@ -41,6 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSRunAction::exGPSRunAction()
+ : G4UserRunAction()
 {
 }
 
