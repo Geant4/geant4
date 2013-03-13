@@ -5,8 +5,10 @@ $Id$
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Example N07 History file
+                    Example RE06 History file
                     ------------------------
+                    (previously N07)
+                    
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
@@ -14,6 +16,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 15, 2013 I. Hrivnacova
+- Applied coding guidelines (data members names and initialization)
+- Fixed GNUmakefile 
+
+Dec. 19, 2012 I.Hrivnacova
+- /novice/N07 moved in runAndEvent as RE06
 
 20 June 2012 Pere Mato (exampleN07-V09-05-00)
 - ExN07SteppingVerbose.cc added propection with G4VERBOSE

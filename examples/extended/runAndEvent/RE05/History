@@ -5,8 +5,10 @@ $Id$
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Example N04 History file
+                    Example RE05 History file
                     ------------------------
+                    (previously N04)
+                    
 This file should be used by the G4 example coordinator to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
@@ -14,6 +16,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 15, 2013 I. Hrivnacova
+- Fixed GNUmakefile 
+
+Dec. 19, 2012 I.Hrivnacova
+- /novice/N04 moved in runAndEvent as RE05
+
+Feb 15, 2013 I. Hrivnacova
+- Applied coding guidelines (data members initialization)
 
 29-11-11 Ben Morgan (exampleN04-V09-04-02)
 - CMakeLists.txt edited to add standard UI/Vis activation and copying of scripts

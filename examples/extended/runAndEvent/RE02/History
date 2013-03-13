@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Feb 15, 2013 I. Hrivnacova
+- Applied coding guidelines (data members initialization)
+
 Dec 27, 2012 Gunter Folger  (exampleRE02-V09-06-01)
 -  re-tag, no change. 
     Tag exRunAndEvent-V09-06-00 in runAndEvent missed to inlcude this tag.

@@ -40,7 +40,7 @@
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01PhysicsList::RE01PhysicsList():  G4VModularPhysicsList()
@@ -68,7 +68,7 @@ RE01PhysicsList::RE01PhysicsList():  G4VModularPhysicsList()
   RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
   // Hadron Physics
-  RegisterPhysics( new HadronPhysicsQGSP_BERT(ver));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BERT(ver));
 
   // Stopping Physics
   RegisterPhysics( new G4StoppingPhysics(ver) );

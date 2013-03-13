@@ -51,7 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // Constructor
 RE02RunAction::RE02RunAction()
-  : fNx(0), fNy(0), fNz(0)
+  : G4UserRunAction(),
+    fNx(0), fNy(0), fNz(0)
 {
   // - Prepare data member for RE02Run.
   //   vector represents a list of MultiFunctionalDetector names.

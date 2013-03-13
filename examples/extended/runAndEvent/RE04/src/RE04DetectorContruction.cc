@@ -46,7 +46,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04DetectorConstruction::RE04DetectorConstruction()
-  : fAir(0), fWater(0), fPb(0), fWorldPhys(0), fConstructed(false)
+  : G4VUserDetectorConstruction(),
+    fAir(0), fWater(0), fPb(0), fWorldPhys(0), fConstructed(false)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

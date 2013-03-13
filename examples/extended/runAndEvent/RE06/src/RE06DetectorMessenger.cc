@@ -41,7 +41,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE06DetectorMessenger::RE06DetectorMessenger(RE06DetectorConstruction* det)
- : RE06Detector(det)
+ : G4UImessenger(),
+   fDetector(det),
+   fDirectory(0),
+   fAbsMaterialCmd(0),
+   fGapMaterialCmd(0),
+   fNumLayerCmd(0),
+   fSerialCmd(0),
+   fVerboseCmd(0),
+   fAddMaterialCmd(0)
 { 
   fDirectory = new G4UIdirectory("/RE06/");
   fDirectory->SetGuidance("UI commands of this example");
@@ -104,22 +112,22 @@ RE06DetectorMessenger::~RE06DetectorMessenger()
 void RE06DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == fAbsMaterialCmd ) {
-    RE06Detector->SetAbsorberMaterial(newValue);
+    fDetector->SetAbsorberMaterial(newValue);
 
   } else if( command == fGapMaterialCmd ){
-    RE06Detector->SetGapMaterial(newValue);
+    fDetector->SetGapMaterial(newValue);
   
   } else if( command == fNumLayerCmd ) {
-    RE06Detector->SetNumberOfLayers(fNumLayerCmd->GetNewIntValue(newValue));
+    fDetector->SetNumberOfLayers(fNumLayerCmd->GetNewIntValue(newValue));
 
   } else if( command == fSerialCmd ) {
-    RE06Detector->SetSerialGeometry(fSerialCmd->GetNewBoolValue(newValue));
+    fDetector->SetSerialGeometry(fSerialCmd->GetNewBoolValue(newValue));
 
   } else if( command == fVerboseCmd ) {
-    RE06Detector->SetVerboseLevel(fVerboseCmd->GetNewIntValue(newValue));
+    fDetector->SetVerboseLevel(fVerboseCmd->GetNewIntValue(newValue));
 
   } else if( command == fAddMaterialCmd ) {
-    RE06Detector->AddMaterial();
+    fDetector->AddMaterial();
     UpdateMaterialList(); 
   }
 }
@@ -130,22 +138,22 @@ G4String RE06DetectorMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String ans;
   if( command == fAbsMaterialCmd ){
-    ans=RE06Detector->GetAbsorberMaterial(); 
+    ans=fDetector->GetAbsorberMaterial(); 
 
   } else if( command == fGapMaterialCmd ){ 
-    ans=RE06Detector->GetGapMaterial(); 
+    ans=fDetector->GetGapMaterial(); 
 
   } else if( command == fNumLayerCmd ) {
-    ans=fNumLayerCmd->ConvertToString(RE06Detector->GetNumberOfLayers()); 
+    ans=fNumLayerCmd->ConvertToString(fDetector->GetNumberOfLayers()); 
 
   } else if( command == fSerialCmd ){
-    ans=fSerialCmd->ConvertToString(RE06Detector->IsSerial()); 
+    ans=fSerialCmd->ConvertToString(fDetector->IsSerial()); 
 
   } else if( command == fSerialCmd ) {
-    ans=fSerialCmd->ConvertToString(RE06Detector->IsSerial()); 
+    ans=fSerialCmd->ConvertToString(fDetector->IsSerial()); 
   
   } else if( command == fVerboseCmd ) {
-    ans=fVerboseCmd->ConvertToString(RE06Detector->GetVerboseLevel()); 
+    ans=fVerboseCmd->ConvertToString(fDetector->GetVerboseLevel()); 
  
   }
   return ans;

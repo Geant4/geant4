@@ -38,7 +38,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01PrimaryGeneratorMessenger
 ::RE01PrimaryGeneratorMessenger(RE01PrimaryGeneratorAction * mpga)
-  :G4UImessenger(),fMyAction(mpga)
+  :G4UImessenger(),fMyAction(mpga),
+   fMydetDirectory(0),fGenCmd(0)
 {
   fMydetDirectory = new G4UIdirectory("/mydet/");
   fMydetDirectory->SetGuidance("RE01 detector control commands.");

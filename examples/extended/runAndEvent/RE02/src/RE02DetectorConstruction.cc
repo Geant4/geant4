@@ -104,6 +104,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE02DetectorConstruction::RE02DetectorConstruction()
+ : G4VUserDetectorConstruction() 
 {
   // Default size of water phantom,and segmentation.
     fPhantomSize.setX(200.*mm);

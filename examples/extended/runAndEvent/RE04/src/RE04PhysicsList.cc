@@ -34,14 +34,15 @@
 #include "G4EmExtraPhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
-#include "HadronPhysicsQGSP_BERT.hh"
+#include "G4HadronPhysicsQGSP_BERT.hh"
 #include "G4StoppingPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4SystemOfUnits.hh"    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04PhysicsList::RE04PhysicsList(G4String& parWorldName)
-:fpWorldName(parWorldName)
+: G4VModularPhysicsList(),
+  fpWorldName(parWorldName)
 {
   defaultCutValue = 0.01*mm;
   G4int ver = 1;
@@ -60,7 +61,7 @@ RE04PhysicsList::RE04PhysicsList(G4String& parWorldName)
   this->RegisterPhysics( new G4HadronElasticPhysics(ver) );
 
   // Hadron Physics
-  this->RegisterPhysics( new HadronPhysicsQGSP_BERT(ver));
+  this->RegisterPhysics( new G4HadronPhysicsQGSP_BERT(ver));
 
   // Stopping Physics
   this->RegisterPhysics( new G4StoppingPhysics(ver) );

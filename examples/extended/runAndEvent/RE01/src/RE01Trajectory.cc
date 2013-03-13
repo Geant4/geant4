@@ -51,7 +51,8 @@ G4Allocator<RE01Trajectory> myTrajectoryAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01Trajectory::RE01Trajectory(const G4Track* aTrack)
-:G4VTrajectory()
+:G4VTrajectory(),
+ fPositionRecord(0),fParticleDefinition(0)
 {
    fParticleDefinition = aTrack->GetDefinition();
    fParticleName = fParticleDefinition->GetParticleName();

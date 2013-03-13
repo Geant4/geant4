@@ -41,7 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01PrimaryGeneratorAction::RE01PrimaryGeneratorAction()
-  : G4VUserPrimaryGeneratorAction()
+  : G4VUserPrimaryGeneratorAction(),
+    fHEPEvt(0), fParticleGun(0), fMessenger(0)
 {
   const char* filename = "pythia_event.data";
   fHEPEvt = new G4HEPEvtInterface(filename);

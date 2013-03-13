@@ -45,7 +45,7 @@
 class RE04TrackingAction : public G4UserTrackingAction {
 
   public:
-    RE04TrackingAction(){};
+    RE04TrackingAction() : G4UserTrackingAction() {};
     virtual ~RE04TrackingAction(){};
    
     virtual void PreUserTrackingAction(const G4Track*);

@@ -53,7 +53,7 @@ class RE06DetectorMessenger: public G4UImessenger
   private:
     void UpdateMaterialList();
 
-    RE06DetectorConstruction* RE06Detector;
+    RE06DetectorConstruction* fDetector;
     
     G4UIdirectory*             fDirectory;
     G4UIcmdWithAString*        fAbsMaterialCmd;

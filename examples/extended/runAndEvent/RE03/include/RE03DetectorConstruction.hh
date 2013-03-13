@@ -26,9 +26,7 @@
 /// \file runAndEvent/RE03/include/RE03DetectorConstruction.hh
 /// \brief Definition of the RE03DetectorConstruction class
 //
-//
 // $Id$
-//
 // 
 
 #ifndef RE03DetectorConstruction_h

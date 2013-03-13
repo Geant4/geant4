@@ -37,6 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE06Run::RE06Run()
+ : G4Run()
 {
   G4String detName[6] 
     = {"Calor-A_abs","Calor-A_gap",

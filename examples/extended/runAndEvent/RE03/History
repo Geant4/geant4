@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Feb 15, 2013 I. Hrivnacova
+- Applied coding guidelines (data members initialization)
+
 Oct 15, 2012 I.Hrivnacova (exampleRE03-V09-05-01)
 - Replaced tabulators with space characters
 

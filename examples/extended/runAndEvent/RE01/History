@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Feb 15, 2013 I. Hrivnacova
+- Applied coding guidelines (data members initialization)
+
+Feb 1, 2013 V.Ivanchenko (exampleRE01-V09-06-02)
+- Migration to new physics_lists directory structure
+
 Dec 14, 2012 A.Ribon (exampleRE01-V09-06-01)
 - Replaced obsolete class G4QStoppingPhysics with G4StoppingPhysics.
 

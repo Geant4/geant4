@@ -46,7 +46,8 @@ G4Allocator<RE04Trajectory> faTrajAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04Trajectory::RE04Trajectory()
-:  fPositionRecord(0), fTrackID(0), fParentID(0),
+:  G4VTrajectory(),
+   fPositionRecord(0), fTrackID(0), fParentID(0),
    fPDGEncoding( 0 ), fPDGCharge(0.0), fParticleName(""),
    fInitialKineticEnergy( 0. ), fInitialMomentum( G4ThreeVector() )
 {;}

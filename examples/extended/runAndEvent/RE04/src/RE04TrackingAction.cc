@@ -34,7 +34,7 @@
 #include "RE04Trajectory.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void RE04TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
+void RE04TrackingAction::PreUserTrackingAction(const G4Track* aTrack) 
 {
   fpTrackingManager->SetStoreTrajectory(true);
   fpTrackingManager->SetTrajectory(new RE04Trajectory(aTrack));

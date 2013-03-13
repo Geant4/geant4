@@ -37,6 +37,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04ParallelWorldParam::RE04ParallelWorldParam()
+ : G4VPVParameterisation(), 
+   fWater(0), fPb(0)
 {
   fWater = G4Material::GetMaterial("Water");
   fPb = G4Material::GetMaterial("Lead");

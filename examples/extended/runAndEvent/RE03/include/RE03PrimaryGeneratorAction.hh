@@ -26,7 +26,6 @@
 /// \file runAndEvent/RE03/include/RE03PrimaryGeneratorAction.hh
 /// \brief Definition of the RE03PrimaryGeneratorAction class
 //
-//
 // $Id$
 //
 
