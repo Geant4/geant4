@@ -39,6 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
+ : fHistoMessenger(0)
 {
   fileName[0]  = "particleGun";
   factoryOn = false;

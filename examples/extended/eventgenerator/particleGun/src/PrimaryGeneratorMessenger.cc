@@ -40,7 +40,10 @@
 
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                                              PrimaryGeneratorAction* Gun)
-:Action(Gun)
+:G4UImessenger(),
+ Action(Gun),
+ fDir(0),       
+ fSelectActionCmd(0)
 {
   fDir = new G4UIdirectory("/gunExample/");
   fDir->SetGuidance("this example");

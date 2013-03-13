@@ -49,8 +49,8 @@ class RunAction : public G4UserRunAction
     RunAction(HistoManager*);
    ~RunAction();
    
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
     
   private:
     HistoManager*  fHistoManager;    

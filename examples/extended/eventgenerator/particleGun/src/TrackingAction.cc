@@ -46,7 +46,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(PrimaryGeneratorAction* prim,HistoManager* histo)
-:fPrimary(prim),fHistoManager(histo)
+:G4UserTrackingAction(),
+ fPrimary(prim),fHistoManager(histo)
 { 
  // parameters for generator action #3
   fNewUz = fPrimary->GetAction3()->GetNewUz();

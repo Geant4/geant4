@@ -43,6 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
+ : G4VUserDetectorConstruction()
 {
   fWorldSizeXY = 2*cm;
   fWorldSizeZ  = 2*cm;    

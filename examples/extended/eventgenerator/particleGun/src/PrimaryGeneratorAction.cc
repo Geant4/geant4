@@ -48,6 +48,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   particleGun(0),
+   action1(0),
+   action2(0),
+   action3(0),
+   action4(0),
+   selectedAction(1),
+   gunMessenger(0)     
 {
   // default particle kinematic
   //
@@ -64,8 +72,6 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   action2 = new PrimaryGeneratorAction2(particleGun);
   action3 = new PrimaryGeneratorAction3(particleGun);
   action4 = new PrimaryGeneratorAction4(particleGun);
-  
-  selectedAction = 1;
   
   //create a messenger for this class
   gunMessenger = new PrimaryGeneratorMessenger(this);    

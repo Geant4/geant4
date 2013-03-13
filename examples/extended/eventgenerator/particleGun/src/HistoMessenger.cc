@@ -46,7 +46,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::HistoMessenger(HistoManager* manager)
-:fHistoManager (manager)
+:G4UImessenger(),
+ fHistoManager (manager),
+ fHistoDir(0),   
+ fFileNameCmd(0),
+ fHistoCmd(0),
+ fPrtHistoCmd(0)
 {
   fHistoDir = new G4UIdirectory("/gunExample/histo/");
   fHistoDir->SetGuidance("histograms control");

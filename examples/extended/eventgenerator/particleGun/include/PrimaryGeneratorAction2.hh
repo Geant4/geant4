@@ -51,7 +51,7 @@ class PrimaryGeneratorAction2
    ~PrimaryGeneratorAction2();
 
   public:
-    void GeneratePrimaries(G4Event*);
+   void GeneratePrimaries(G4Event*);
 
   public:        
     G4double RejectAccept();
