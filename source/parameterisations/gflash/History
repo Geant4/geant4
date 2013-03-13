@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Feb 27th, 2013, M. Verderi (gflash-V09-06-00)
+--------------------------
+- fix warning compilation in clang from
+  GFlashShowerModelMessenger.hh about
+  unused data member.
+
 Jul 5th, 2012 G.Cosmo (gflash-V09-05-00)
 ---------------------
 - Explicitly use inclusion of headers for system of units and physical
