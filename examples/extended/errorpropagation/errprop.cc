@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file errorpropagation/errprop.cc
 /// \brief Main program of the errorpropagation example
 //
