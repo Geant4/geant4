@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Feb. 26th, 2013, G.Cosmo transport-V09-06-01
+------------------------
+- Removed unused data members in G4Transportation and G4CoupledTransportation.
+  Some code cleanup.
+
+Feb. 6th, 2013, G.Cosmo transport-V09-06-00
+-----------------------
+- G4Transportation.cc, G4CoupledTransportation.cc: 
+    Corrected condition for warning message in AlongStepDoIt().
+    Code cleanup on MT changes.
+
+Jan. 15th, 2013, A.Dotti
+------------------------
+- Merged changes for multi-threading through automatic process.
+  Modified files: G4Transportation.cc and G4CoupledTransportation.cc.
 
 Jul. 12th, 2011, J.Apostolakis transport-V09-05-02
 ------------------------------
