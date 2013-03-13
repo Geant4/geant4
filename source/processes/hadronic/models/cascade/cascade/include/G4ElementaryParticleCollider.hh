@@ -43,11 +43,19 @@
 // 20100726  M. Kelsey -- Move remaining std::vector<> buffers here
 // 20100804  M. Kelsey -- Add printFinalStateTables() function.
 // 20110923  M. Kelsey -- Add optional stream& to printFinalStateTables().
+// 20130129  M. Kelsey -- Add static arrays and interpolators for two-body
+//		angular distributions (addresses MT thread-local issue)
+// 20130131  D. Wright -- Use new *AngDst classes for gamma-N two-body
+// 20130220  M. Kelsey -- Replace two-body angular code with new *AngDst classes
+// 20130221  M. Kelsey -- Move two-body angular dist classes to factory
+// 20130306  M. Kelsey -- Move printFinalStateTables() to table factory
+// 20130307  M. Kelsey -- Reverse order of dimensions for rmn array
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
 
 #include "G4CascadeColliderBase.hh"
+#include "G4CascadeInterpolator.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzVector.hh"
 #include <iosfwd>
@@ -55,6 +63,7 @@
 
 class G4LorentzConvertor;
 class G4CollisionOutput;
+class G4TwoBodyAngularDist;
 
 
 class G4ElementaryParticleCollider : public G4CascadeColliderBase {
@@ -87,15 +96,8 @@ private:
   // Samples the CM momentum for elastic and charge exchange scattering
   //
   G4LorentzVector
-  sampleCMmomentumFor2to2(G4int is, G4int kw, G4double ekin,
+  sampleCMmomentumFor2to2(G4int is, G4int fs, G4int kw, G4double ekin,
 			  G4double pscm) const; 
-
-
-  // Samples cos(theta) in the CM for elastic and charge exchange scattering
-  //
-  G4double sampleCMcosFor2to2(G4double pscm, G4double pFrac,
-                              G4double pA, G4double pC, G4double pCos) const;
-
 
   G4double getMomModuleFor2toMany(G4int is, G4int mult, G4int knd, 
 				  G4double ekin) const; 
@@ -107,8 +109,6 @@ private:
   particleSCMmomentumFor2to3(G4int is, G4int knd, G4double ekin, 
 			     G4double pmod) const; 
 
-  void printFinalStateTables(std::ostream& os=G4cout) const;
-
   // Internal buffers for lists of secondaries
   std::vector<G4InuclElementaryParticle> particles;
   std::vector<G4LorentzVector> scm_momentums;
@@ -116,8 +116,8 @@ private:
   std::vector<G4double> masses2;
   std::vector<G4int> particle_kinds;
 
-  // Parameter arrays
-  static const G4double rmn[14][10][2];    
+  // Parameter arrays for momentum distributions
+  static const G4double rmn[2][10][14];    
   static const G4double abn[4][4][4];
 };
 

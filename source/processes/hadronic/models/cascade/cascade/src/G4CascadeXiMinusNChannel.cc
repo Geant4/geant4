@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeXiMinusNChannel.cc 66885 2013-01-16 17:37:13Z gunter $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -37,15 +37,15 @@ using namespace G4InuclParticleNames;
 namespace {
   // Outgoing particle types of a given multiplicity
 
-  static G4ThreadLocal G4int xmn2bfs[3][2] =
+  static const G4int xmn2bfs[3][2] =
     {{2, 31}, {21,27}, {25,27}};
 
-  static G4ThreadLocal G4int xmn3bfs[18][3] =
+  static const G4int xmn3bfs[18][3] =
     {{2,13,21}, {5,21,21}, {1,13,27}, {2,13,25}, {7,21,27}, {5,23,27},
      {7,25,27}, {3,27,27}, {2,17,27}, {5,21,25}, {5,25,25}, {2,5,29},
      {2,7,31},  {15,21,31},{11,27,31},{15,27,29},{1,5,31},  {15,25,31}};  
 
-  static G4ThreadLocal G4int xmn4bfs[53][4] =
+  static const G4int xmn4bfs[53][4] =
     {{1,2,13,13},  {1,5,13,21},  {1,5,13,25},  {1,7,13,27},  {1,5,17,27},  
      {1,5,5,29},   {1,5,7,31},   {1,13,15,31}, {2,2,13,17},  {2,7,13,21},
      {2,5,17,21},  {2,7,13,25},  {2,5,17,25},  {2,5,13,23},  {2,7,17,27}, 
@@ -58,13 +58,13 @@ namespace {
      {5,15,25,29}, {7,15,25,31}, {5,11,25,31}, {5,15,23,31}, {5,11,27,29}, 
      {3,15,27,31}, {7,11,27,31}, {7,15,27,29}};
 
-  static G4ThreadLocal G4int xmn5bfs[2][5] =
+  static const G4int xmn5bfs[2][5] =
     {{2,7,7,7,31},  {2,3,5,7,31}};
 
-  static G4ThreadLocal G4int xmn6bfs[2][6] =
+  static const G4int xmn6bfs[2][6] =
     {{2,7,7,7,7,31},  {2,3,5,7,7,31}};
 
-  static G4ThreadLocal G4int xmn7bfs[2][7] =
+  static const G4int xmn7bfs[2][7] =
     {{2,7,7,7,7,7,31},  {2,3,5,7,7,7,31}};
 
   // Cross sections for X- n -> 2-7 body final states
@@ -78,7 +78,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  static G4ThreadLocal G4double xmnCrossSections[80][31] = {
+  static const G4double xmnCrossSections[80][31] = {
     //
     // multiplicity 2 (3 channels)
     //
@@ -498,13 +498,7 @@ namespace {
       0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01, 0.01} };
 }
 
-typedef G4CascadeXiMinusNChannelData::data_t G4CascadeXiMinusNChannelData_t; 
-
-G4ThreadLocal G4CascadeXiMinusNChannelData_t *G4CascadeXiMinusNChannelData::data = 0;
-
-G4CascadeXiMinusNChannelData::data_t *G4CascadeXiMinusNChannelData::initializer()
-{
-  if (G4CascadeXiMinusNChannelData::data == 0)
-    G4CascadeXiMinusNChannelData::data = new G4CascadeXiMinusNChannelData::data_t(xmn2bfs, xmn3bfs, xmn4bfs, xmn5bfs, xmn6bfs, xmn7bfs, xmnCrossSections, xim*neu, "XiMinusN");
-  return  G4CascadeXiMinusNChannelData::data;
-}
+const G4CascadeXiMinusNChannelData::data_t
+G4CascadeXiMinusNChannelData::data(xmn2bfs, xmn3bfs, xmn4bfs,
+				   xmn5bfs, xmn6bfs, xmn7bfs,
+				   xmnCrossSections, xim*neu, "XiMinusN");

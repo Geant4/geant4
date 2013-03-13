@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeT31piNChannel.cc 66885 2013-01-16 17:37:13Z gunter $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -37,16 +37,16 @@ using namespace G4InuclParticleNames;
 
 namespace {
   // pi- p : Outgoing particle types of a given multiplicity
-  static G4ThreadLocal G4int pimP2bfs[5][2] =
+  static const G4int pimP2bfs[5][2] =
   {{pim,pro}, {pi0,neu}, {k0,lam}, {k0,s0}, {kpl,sm}};
 
-  static G4ThreadLocal G4int pimP3bfs[13][3] =
+  static const G4int pimP3bfs[13][3] =
   {{pim,pro,pi0}, {pim,neu,pip}, {pi0,neu,pi0}, {pi0,lam,k0}, 
     {pim,lam,kpl},  {pip,sm,k0},   {pi0,sm,kpl},   {pim,sp,k0},
     {pim,s0,kpl},   {pi0,s0,k0},   {kmi,pro,k0},   {kmi,neu,kpl},
     {k0b,neu,k0}};
 
-  static G4ThreadLocal G4int pimP4bfs[22][4] =
+  static const G4int pimP4bfs[22][4] =
   {{pim,pro,pip,pim}, {pim,pro,pi0,pi0}, {pim,neu,pip,pi0},
     {pi0,neu,pi0,pi0}, {pim,lam,k0,pip},  {pi0,lam,k0,pi0},
     {pim,lam,kpl,pi0},  {pim,s0,k0,pip},   {pi0,s0,k0,pi0},
@@ -56,7 +56,7 @@ namespace {
     {pip,neu,k0,kmi},   {pi0,neu,k0,k0b},  {pi0,neu,kpl,kmi},
     {pim,neu,kpl,k0b}};
 
-  static G4ThreadLocal G4int pimP5bfs[31][5] =
+  static const G4int pimP5bfs[31][5] =
   {{pim,pro,pip,pim,pi0}, {pim,pro,pi0,pi0,pi0}, {pim,neu,pip,pip,pim},
     {pim,neu,pip,pi0,pi0}, {pi0,neu,pi0,pi0,pi0}, {pim,lam,k0,pip,pi0},
     {pim,lam,kpl,pi0,pi0},  {pim,lam,kpl,pip,pim},  {pi0,lam,k0,pi0,pi0},
@@ -69,24 +69,24 @@ namespace {
     {pip,neu,pi0,k0,kmi},   {pim,neu,pi0,kpl,k0b},  {pi0,neu,pi0,k0,k0b},
     {pi0,neu,pi0,kpl,kmi}}; 
 
-  static G4ThreadLocal G4int pimP6bfs[6][6] =
+  static const G4int pimP6bfs[6][6] =
   {{pim,pro,pip,pip,pim,pim}, {pim,pro,pip,pim,pi0,pi0},
     {pim,pro,pi0,pi0,pi0,pi0}, {pim,neu,pip,pip,pim,pi0},
     {pim,neu,pip,pi0,pi0,pi0}, {pi0,neu,pi0,pi0,pi0,pi0}};
 
-  static G4ThreadLocal G4int pimP7bfs[7][7] =
+  static const G4int pimP7bfs[7][7] =
   {{pim,pro,pip,pip,pim,pim,pi0}, {pim,pro,pip,pim,pi0,pi0,pi0},
     {pim,pro,pi0,pi0,pi0,pi0,pi0}, {pim,neu,pip,pip,pip,pim,pim},
     {pim,neu,pip,pip,pim,pi0,pi0}, {pim,neu,pip,pi0,pi0,pi0,pi0},
     {pi0,neu,pi0,pi0,pi0,pi0,pi0}};
 
-  static G4ThreadLocal G4int pimP8bfs[8][8] =
+  static const G4int pimP8bfs[8][8] =
   {{pim,pro,pip,pip,pip,pim,pim,pim}, {pim,pro,pip,pip,pim,pim,pi0,pi0},
     {pim,pro,pip,pim,pi0,pi0,pi0,pi0}, {pim,pro,pi0,pi0,pi0,pi0,pi0,pi0},
     {pi0,neu,pi0,pi0,pi0,pi0,pi0,pi0}, {pim,neu,pip,pi0,pi0,pi0,pi0,pi0},
     {pim,neu,pip,pip,pim,pi0,pi0,pi0}, {pim,neu,pip,pip,pip,pim,pim,pi0}};
 
-  static G4ThreadLocal G4int pimP9bfs[9][9] =
+  static const G4int pimP9bfs[9][9] =
   {{pim,pro,pip,pip,pip,pim,pim,pim,pi0}, {pim,pro,pip,pip,pim,pim,pi0,pi0,pi0},
     {pim,pro,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pim,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
     {pi0,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pim,neu,pip,pi0,pi0,pi0,pi0,pi0,pi0},
@@ -96,16 +96,16 @@ namespace {
 
 namespace {
   // pi+ n : Outgoing particle types of a given multiplicity
-  static G4ThreadLocal G4int pipN2bfs[5][2] =
+  static const G4int pipN2bfs[5][2] =
    {{pip,neu}, {pi0,pro}, {kpl,lam}, {kpl,s0}, {k0,sp}};
 
-  static G4ThreadLocal G4int pipN3bfs[13][3] =
+  static const G4int pipN3bfs[13][3] =
    {{pip,neu,pi0}, {pip,pro,pim}, {pi0,pro,pi0}, {pi0,lam,kpl},
     {pip,lam,k0},  {pim,sp,kpl},   {pi0,sp,k0},   {pip,sm,kpl},
     {pip,s0,k0},   {pi0,s0,kpl},   {k0b,neu,kpl},  {k0b,pro,k0},
     {kmi,pro,kpl}};
 
-  static G4ThreadLocal G4int pipN4bfs[22][4] =
+  static const G4int pipN4bfs[22][4] =
    {{pip,neu,pip,pim},  {pip,neu,pi0,pi0}, {pip,pro,pim,pi0},
     {pi0,pro,pi0,pi0},  {pip,lam,kpl,pim},  {pi0,lam,kpl,pi0},
     {pip,lam,k0,pi0},   {pip,s0,kpl,pim},   {pi0,s0,kpl,pi0},
@@ -115,7 +115,7 @@ namespace {
     {pim,pro,kpl,k0b},   {pi0,pro,kpl,kmi},   {pi0,pro,k0,k0b},
     {pip,pro,k0,kmi}};
 
-  static G4ThreadLocal G4int pipN5bfs[31][5] =
+  static const G4int pipN5bfs[31][5] =
    {{pip,neu,pip,pim,pi0}, {pip,neu,pi0,pi0,pi0}, {pip,pro,pip,pim,pim},
     {pip,pro,pim,pi0,pi0}, {pi0,pro,pi0,pi0,pi0}, {pip,lam,kpl,pim,pi0},
     {pip,lam,k0,pi0,pi0},  {pip,lam,k0,pip,pim},  {pi0,lam,kpl,pi0,pi0},
@@ -128,24 +128,24 @@ namespace {
     {pim,pro,pi0,kpl,k0b},  {pip,pro,pi0,k0,kmi},   {pi0,pro,pi0,kpl,kmi},
     {pi0,pro,pi0,k0,k0b}};
 
-  static G4ThreadLocal G4int pipN6bfs[6][6] =
+  static const G4int pipN6bfs[6][6] =
    {{pip,neu,pip,pip,pim,pim}, {pip,neu,pip,pim,pi0,pi0},
     {pip,neu,pi0,pi0,pi0,pi0}, {pip,pro,pip,pim,pim,pi0},
     {pip,pro,pim,pi0,pi0,pi0}, {pi0,pro,pi0,pi0,pi0,pi0}};
 
-  static G4ThreadLocal G4int pipN7bfs[7][7] =
+  static const G4int pipN7bfs[7][7] =
    {{pip,neu,pip,pip,pim,pim,pi0}, {pip,neu,pip,pim,pi0,pi0,pi0},
     {pip,neu,pi0,pi0,pi0,pi0,pi0}, {pip,pro,pip,pip,pim,pim,pim},
     {pip,pro,pip,pim,pim,pi0,pi0}, {pip,pro,pim,pi0,pi0,pi0,pi0},
     {pi0,pro,pi0,pi0,pi0,pi0,pi0}};
 
-  static G4ThreadLocal G4int pipN8bfs[8][8] =
+  static const G4int pipN8bfs[8][8] =
    {{pip,neu,pip,pip,pip,pim,pim,pim}, {pip,neu,pip,pip,pim,pim,pi0,pi0},
     {pip,neu,pip,pim,pi0,pi0,pi0,pi0}, {pip,neu,pi0,pi0,pi0,pi0,pi0,pi0},
     {pi0,pro,pi0,pi0,pi0,pi0,pi0,pi0}, {pip,pro,pim,pi0,pi0,pi0,pi0,pi0},
     {pip,pro,pip,pim,pim,pi0,pi0,pi0}, {pip,pro,pip,pip,pim,pim,pim,pi0}};
 
-  static G4ThreadLocal G4int pipN9bfs[9][9] =
+  static const G4int pipN9bfs[9][9] =
    {{pip,neu,pip,pip,pip,pim,pim,pim,pi0}, {pip,neu,pip,pip,pim,pim,pi0,pi0,pi0},
     {pip,neu,pip,pim,pi0,pi0,pi0,pi0,pi0}, {pip,neu,pi0,pi0,pi0,pi0,pi0,pi0,pi0},
     {pi0,pro,pi0,pi0,pi0,pi0,pi0,pi0,pi0}, {pip,pro,pim,pi0,pi0,pi0,pi0,pi0,pi0},
@@ -156,13 +156,13 @@ namespace {
 namespace {
   // Total pi- p cross section as a function of kinetic energy
   // New cs values after 9B tuning (27 July 09)
-  static G4ThreadLocal G4double pimPtotXSec[30] = 
+  static const G4double pimPtotXSec[30] = 
    { 6.13,  6.4,   6.67,  6.94,  7.22,  7.5,   8.3,  12.0,  14.4,  24.0,
     46.0,  72.04, 43.02, 27.19, 27.32, 43.8,  37.08, 51.37, 34.21, 34.79,
     32.08, 31.19, 30.32, 28.5,  27.0,  25.9,  25.5,  25.2,  25.0,  24.8};
 
   // pi- p cross sections as functions of kinetic energy and multiplicity
-  G4ThreadLocal G4double pimPCrossSections[101][30] = {
+  const G4double pimPCrossSections[101][30] = {
   //
   // multiplicity 2 (5 channels)
   //
@@ -688,26 +688,14 @@ namespace {
 
 // Initialize both |T Tz> = |3/2 1/2> channels, using pipP cross-section table
 
-typedef G4CascadePiMinusPChannelData::data_t G4CascadePiMinusPChannelData_t;
+const G4CascadePiMinusPChannelData::data_t
+G4CascadePiMinusPChannelData::data(pimP2bfs, pimP3bfs, pimP4bfs,
+				   pimP5bfs, pimP6bfs, pimP7bfs,
+				   pimP8bfs, pimP9bfs, pimPCrossSections,
+				   pimPtotXSec, pim*pro, "PiMinusP");
 
-G4ThreadLocal G4CascadePiMinusPChannelData_t *G4CascadePiMinusPChannelData::data = 0;
-
-G4CascadePiMinusPChannelData::data_t *G4CascadePiMinusPChannelData::initializer()
-{
-  if (G4CascadePiMinusPChannelData::data == 0)
-    G4CascadePiMinusPChannelData::data = new G4CascadePiMinusPChannelData::data_t(pimP2bfs, pimP3bfs, pimP4bfs, pimP5bfs, pimP6bfs, pimP7bfs, pimP8bfs, pimP9bfs, pimPCrossSections, pimPtotXSec, pim*pro, "PiMinusP");
-
-  return G4CascadePiMinusPChannelData::data;
-}
-
-typedef G4CascadePiPlusNChannelData::data_t G4CascadePiPlusNChannelData_t;
-
-G4ThreadLocal G4CascadePiPlusNChannelData_t *G4CascadePiPlusNChannelData::data = 0;
-
-G4CascadePiPlusNChannelData::data_t *G4CascadePiPlusNChannelData::initializer()
-{
-  if (G4CascadePiPlusNChannelData::data == 0)
-    G4CascadePiPlusNChannelData::data = new G4CascadePiPlusNChannelData::data_t(pipN2bfs, pipN3bfs, pipN4bfs, pipN5bfs, pipN6bfs, pipN7bfs, pipN8bfs, pipN9bfs, pimPCrossSections, pimPtotXSec, pip*neu, "PiPlusN");
-
-  return G4CascadePiPlusNChannelData::data;
-}
+const G4CascadePiPlusNChannelData::data_t
+G4CascadePiPlusNChannelData::data(pipN2bfs, pipN3bfs, pipN4bfs,
+				  pipN5bfs, pipN6bfs, pipN7bfs,
+				  pipN8bfs, pipN9bfs, pimPCrossSections,
+				  pimPtotXSec, pip*neu, "PiPlusN");

@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 // $Id: $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 
 #ifndef G4_CASCADE_GAMP_CHANNEL_HH
 #define G4_CASCADE_GAMP_CHANNEL_HH
@@ -34,8 +35,7 @@
 
 struct G4CascadeGamPChannelData {
   typedef G4CascadeData<30,6,6,4,5,6,7,7,7> data_t;
-  static G4ThreadLocal data_t *data;
-  static data_t *initializer();
+  static const data_t data;
 };
 
 typedef G4CascadeFunctions<G4CascadeGamPChannelData,G4PionNucSampler> G4CascadeGamPChannel;

@@ -35,11 +35,14 @@
 // 20110801  M. Kelsey -- Move "parms" buffer to data member, allocate in
 //		constructor.
 // 20110809  M. Kelsey -- Move "foutput" buffer to data member
+// 20130129  M. Kelsey -- Move QF interpolation to global statics for
+//		multi-threaded shared memory.
 
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
 
 #include "G4CascadeColliderBase.hh"
+#include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4Fissioner.hh"
 #include "G4BigBanger.hh"
@@ -76,6 +79,10 @@ private:
   // Buffer for parameter sets
   std::pair<std::vector<G4double>, std::vector<G4double> > parms;
   G4CollisionOutput fission_output;
+
+  // Interpolation arrays for QF
+  static const G4double QFREP[72];
+  static const G4CascadeInterpolator<72> QFinterp;
 
   G4Fissioner theFissioner;
   G4BigBanger theBigBanger;

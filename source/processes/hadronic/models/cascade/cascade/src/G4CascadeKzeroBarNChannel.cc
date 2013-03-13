@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeKzeroBarNChannel.cc 66885 2013-01-16 17:37:13Z gunter $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -37,17 +37,17 @@ using namespace G4InuclParticleNames;
 namespace {
   // Outgoing particle types of a given multiplicity
 
-  static G4ThreadLocal G4int kzbn2bfs[8][2] =
+  static const G4int kzbn2bfs[8][2] =
     {{2, 17}, {1, 13}, {7, 21},  {5, 23}, 
      {7, 25}, {3, 27}, {15, 29}, {11, 31} };
 
-  static G4ThreadLocal G4int kzbn3bfs[20][3] =
+  static const G4int kzbn3bfs[20][3] =
     {{2,7,17},   {2,3,13},   {1,5,17},   {1,7,13},   {7,7,21},
      {3,5,21},   {11,13,21}, {15,17,21}, {5,7,23},   {13,15,23},
      {7,7,25},   {3,5,25},   {11,13,25}, {15,17,25}, {3,7,27},
      {11,17,27}, {7,15,29},  {5,11,29},  {3,15,31},  {7,11,31} };
 
-  static G4ThreadLocal G4int kzbn4bfs[34][4] =
+  static const G4int kzbn4bfs[34][4] =
     {{2,7,7,17},   {2,3,5,17},   {2,3,7,13},   {1,5,7,17}, 
      {1,7,7,13},   {1,3,5,13},   {7,7,7,21},   {3,5,7,21},
      {3,13,15,21}, {5,11,17,21}, {7,11,13,21}, {7,15,17,21},
@@ -58,7 +58,7 @@ namespace {
      {7,7,15,29},  {3,5,15,29},  {5,7,11,29},  {3,7,15,31},
      {7,7,11,31},  {3,5,11,31} };
 
-  static G4ThreadLocal G4int kzbn5bfs[48][5] =
+  static const G4int kzbn5bfs[48][5] =
     {{2,7,7,7,17},   {2,3,5,7,17},   {2,3,7,7,13},   {2,3,3,5,13},
      {1,5,7,7,17},   {1,3,5,5,17},   {1,7,7,7,13},   {1,3,5,7,13},   
      {7,7,7,7,21},   {3,5,7,7,21},   {3,3,5,5,21},   {3,7,13,15,21},
@@ -72,7 +72,7 @@ namespace {
      {7,7,7,15,29},  {3,5,7,15,29},  {5,7,7,11,29},  {3,5,5,11,29},
      {7,7,7,11,31},  {3,5,7,11,31},  {3,7,7,15,31},  {3,3,5,15,31} };
 
-  static G4ThreadLocal G4int kzbn6bfs[22][6] =
+  static const G4int kzbn6bfs[22][6] =
     {{2,7,7,7,7,17}, {2,3,5,7,7,17}, {2,3,3,5,5,17}, {2,3,7,7,7,13}, 
      {2,3,3,5,7,13}, {1,5,7,7,7,17}, {1,3,5,5,7,17}, {1,7,7,7,7,13},
      {1,3,5,7,7,13}, {1,3,3,5,5,13}, {7,7,7,7,7,21}, {3,5,7,7,7,21}, 
@@ -80,7 +80,7 @@ namespace {
      {7,7,7,7,7,25}, {3,5,7,7,7,25}, {3,3,5,5,7,25}, {3,7,7,7,7,27},
      {3,3,5,7,7,27}, {3,3,3,5,5,27} };
 
-  static G4ThreadLocal G4int kzbn7bfs[16][7] =
+  static const G4int kzbn7bfs[16][7] =
     {{2,7,7,7,7,7,17}, {2,3,5,7,7,7,17}, {2,3,3,5,5,7,17},
      {2,3,7,7,7,7,13}, {2,3,3,5,7,7,13}, {2,3,3,3,5,5,13},
      {1,5,7,7,7,7,17}, {1,3,5,5,7,7,17}, {1,3,3,5,5,5,17},
@@ -99,7 +99,7 @@ namespace {
   //
   // second index: kinetic energy
   // 
-  static G4ThreadLocal G4double kzbnCrossSections[148][31] = {
+  static const G4double kzbnCrossSections[148][31] = {
     //
     // multiplicity 2 (8 channels)
     //  
@@ -859,15 +859,7 @@ namespace {
       0.02, 0.02, 0.02, 0.02, 0.03, 0.03, 0.03, 0.02, 0.02, 0.02, 0.01} };
 }
 
-typedef G4CascadeKzeroBarNChannelData::data_t G4CascadeKzeroBarNChannelData_t;
-
-G4ThreadLocal G4CascadeKzeroBarNChannelData_t *G4CascadeKzeroBarNChannelData::data = 0;
-
-G4CascadeKzeroBarNChannelData::data_t *G4CascadeKzeroBarNChannelData::initializer()
-{
-  if (G4CascadeKzeroBarNChannelData::data == 0)
-    G4CascadeKzeroBarNChannelData::data = new G4CascadeKzeroBarNChannelData::data_t(kzbn2bfs, kzbn3bfs, kzbn4bfs, kzbn5bfs, kzbn6bfs, kzbn7bfs, kzbnCrossSections, k0b*neu, "KzeroBarN");
-
-  return G4CascadeKzeroBarNChannelData::data;
-}
-
+const G4CascadeKzeroBarNChannelData::data_t
+G4CascadeKzeroBarNChannelData::data(kzbn2bfs, kzbn3bfs, kzbn4bfs,
+				    kzbn5bfs, kzbn6bfs, kzbn7bfs,
+				    kzbnCrossSections, k0b*neu, "KzeroBarN");

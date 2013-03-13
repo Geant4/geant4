@@ -23,9 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4CascadeParamMessenger.hh
+// $Id$
 // Define simple UI commands as alternative to environment variables
 //
+// 20130304  M. Kelsey -- Add flag to collect and display cascade structure
+
 #ifndef G4CascadeParamMessenger_hh
 #define G4CascadeParamMessenger_hh
 
@@ -65,6 +67,7 @@ private:
   G4UIcmdWithoutParameter* reportCmd;
   G4UIcmdWithABool*     usePreCoCmd;
   G4UIcmdWithABool*     doCoalCmd;
+  G4UIcmdWithABool*     historyCmd;
   G4UIcmdWithAString*   randomFileCmd;
   G4UIcmdWithABool*     nucUseBestCmd;
   G4UIcmdWithADouble*   nucRad2parCmd;

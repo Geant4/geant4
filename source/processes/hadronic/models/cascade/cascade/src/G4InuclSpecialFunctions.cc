@@ -111,8 +111,9 @@ G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p,
   G4double phi = randomPHI();
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
 
-  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = 0 ; if (!pvec_G4MT_TLS_) pvec_G4MT_TLS_ = new  G4ThreeVector  ;  G4ThreeVector &pvec = *pvec_G4MT_TLS_;	// Buffers to avoid memory thrashing
-  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = 0 ; if (!momr_G4MT_TLS_) momr_G4MT_TLS_ = new  G4LorentzVector  ;  G4LorentzVector &momr = *momr_G4MT_TLS_;
+  // Buffers to avoid memory thrashing
+  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = new G4ThreeVector; G4ThreeVector &pvec = *pvec_G4MT_TLS_;
+  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = new G4LorentzVector; G4LorentzVector &momr = *momr_G4MT_TLS_;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*ct);
   momr.setVectM(pvec, mass);
@@ -125,9 +126,10 @@ G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double mass) {
   std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double phi = randomPHI();
   G4double pt = p * COS_SIN.second;
-  
-  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = 0 ; if (!pvec_G4MT_TLS_) pvec_G4MT_TLS_ = new  G4ThreeVector  ;  G4ThreeVector &pvec = *pvec_G4MT_TLS_;	// Buffers to avoid memory thrashing
-  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = 0 ; if (!momr_G4MT_TLS_) momr_G4MT_TLS_ = new  G4LorentzVector  ;  G4LorentzVector &momr = *momr_G4MT_TLS_;
+
+  // Buffers to avoid memory thrashing  
+  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = new G4ThreeVector; G4ThreeVector &pvec = *pvec_G4MT_TLS_;
+  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = new G4LorentzVector; G4LorentzVector &momr = *momr_G4MT_TLS_;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*COS_SIN.first);
   momr.setVectM(pvec, mass);

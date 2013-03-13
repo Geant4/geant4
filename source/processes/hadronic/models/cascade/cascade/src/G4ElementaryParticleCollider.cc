@@ -86,6 +86,16 @@
 // 20120308  M. Kelsey -- Allow photons to interact with dibaryons (see
 //		changes in G4NucleiModel).
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20121206  M. Kelsey -- Add Omega to printFinalStateTables(), remove line
+//		about "preliminary" gamma-N.
+// 20130129  M. Kelsey -- Add static arrays and interpolators for two-body
+//		angular distributions (addresses MT thread-local issue)
+// 20130221  M. Kelsey -- Move two-body angular dist classes to factory
+// 20130306  M. Kelsey -- Use particle-name enums in if-blocks; add comments
+//		to sections of momentum-coefficient matrix; move final state
+//		table printing to G4CascadeChannelTables.
+// 20130307  M. Kelsey -- Reverse order of dimensions for rmn array
+// 20130307  M. Kelsey -- Use new momentum generator factory instead of rmn
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -95,7 +105,11 @@
 #include "G4InuclParticleNames.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4MultiBodyMomentumDist.hh"
 #include "G4ParticleLargerEkin.hh"
+#include "G4TwoBodyAngularDist.hh"
+#include "G4VMultiBodyMomDst.hh"
+#include "G4VTwoBodyAngDst.hh"
 #include "Randomize.hh"
 #include <algorithm>
 #include <cfloat>
@@ -108,7 +122,7 @@ typedef std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 
 
 G4ElementaryParticleCollider::G4ElementaryParticleCollider()
-  : G4CascadeColliderBase("G4ElementaryParticleCollider") {}
+  : G4CascadeColliderBase("G4ElementaryParticleCollider") {;}
 
 
 void
@@ -128,7 +142,7 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 #ifdef G4CASCADE_DEBUG_SAMPLER
   static G4bool doPrintTables = true;	// Once and only once per job
   if (doPrintTables) {
-    printFinalStateTables();		// For diagnostic reporting
+    G4CascadeChannelTables::Print();
     doPrintTables = false;
   }
 #endif
@@ -356,7 +370,7 @@ G4ElementaryParticleCollider::generateSCMfinalState(G4double ekin,
 	pmod = std::sqrt(a)/(2.*etot_scm);
       }
 
-      G4LorentzVector mom = sampleCMmomentumFor2to2(is, kw, ekin, pmod);
+      G4LorentzVector mom = sampleCMmomentumFor2to2(is, finaltype, kw, ekin, pmod);
 
       if (verboseLevel > 3) {
 	G4cout << " Particle kinds = " << particle_kinds[0] << " , "
@@ -682,75 +696,29 @@ G4ElementaryParticleCollider::generateOutgoingPartTypes(G4int is, G4int mult,
 
 
 G4double 
-G4ElementaryParticleCollider::getMomModuleFor2toMany(G4int is, G4int /*mult*/, 
+G4ElementaryParticleCollider::getMomModuleFor2toMany(G4int is, G4int mult, 
 					             G4int knd, 
 					     	     G4double ekin) const 
 {
   if (verboseLevel > 2) {
     G4cout << " >>> G4ElementaryParticleCollider::getMomModuleFor2toMany "
-	   << " is " << is << " knd " << knd << " ekin " << ekin << G4endl;
+	   << " is " << is << " mult " << mult << " knd " << knd
+	   << " ekin " << ekin << G4endl;
   }
 
-  G4double S = inuclRndm();
-  G4double PS = 0.0;
-  G4double PR = 0.0;
-  G4double PQ = 0.0;
-  G4int KM = 2;
-  G4int IL = 4;
-  G4int JK = 4;
-  G4int JM = 2;
-  G4int IM = 3;
-
-  if (is == 1 || is == 2 || is == 4) KM = 1;
-  if (knd == 1 || knd == 2) JK = 0;
-
-  if (verboseLevel > 3) {
-    G4cout << " S " << S << " KM " << KM << " IL " << IL << " JK " << JK
-	   << " JM " << JM << " IM " << IM << G4endl;
-  }
-
-  for(G4int i = 0; i < 4; i++) {
-    G4double V = 0.0;
-    for(G4int k = 0; k < 4; k++) {
-      if (verboseLevel > 3) {
-	G4cout << " k " << k << " : rmn[k+JK][i+IL][KM-1] "
-	       << rmn[k+JK][i+IL][KM-1] << " ekin^k " << std::pow(ekin, k)
-	       << G4endl;
-      }
-
-      V += rmn[k + JK][i + IL][KM - 1] * std::pow(ekin, k);
-    }
-
-    if (verboseLevel > 3) {
-      G4cout << " i " << i << " : V " << V << " S^i " << std::pow(S, i)
-	     << G4endl;
-    }
-
-    PR += V * std::pow(S, i);
-    PQ += V;
-  }
-
-  if (verboseLevel > 3) G4cout << " PR " << PR << " PQ " << PQ << G4endl;
-
-  if (knd == 1 || knd == 2) JM = 1;
-  if (verboseLevel > 3) G4cout << " JM " << JM << G4endl;
-
-  for(G4int im = 0; im < 3; im++) {
-    if (verboseLevel >3) {
-      G4cout << " im " << im << " : rmn[8+IM+im][7+JM][KM-1] "
-	     << rmn[8+IM+im][7+JM][KM-1] << " ekin^im " << std::pow(ekin, im)
-	     << G4endl;
-    }
-    PS += rmn[8 + IM + im][7 + JM][KM - 1] * std::pow(ekin, im);
-  }
-  
-  G4double PRA = PS * std::sqrt(S) * (PR + (1 - PQ) * (S*S*S*S));
-
-  if (verboseLevel > 3) 
-    G4cout << " PS " << PS << " PRA = PS*sqrt(S)*(PR+(1-PQ)*S^4) " << PRA
+  // Get generator for specified state
+  const G4VMultiBodyMomDst* momDist = G4MultiBodyMomentumDist::GetDist(is,mult);
+  if (!momDist && verboseLevel) {
+    G4cerr << " G4ElementaryParticleCollider::getMomModuleFor2toMany:"
+	   << " interaction is=" << is << " mult=" << mult << " not recognized "
 	   << G4endl;
+  }
 
-  return std::fabs(PRA);
+  // Choose momentum modulus for state, or fraction of kinetic energy
+  if (verboseLevel && momDist)
+    const_cast<G4VMultiBodyMomDst*>(momDist)->setVerboseLevel(verboseLevel);
+
+  return (momDist ? momDist->GetMomentum(knd, ekin) : ekin/mult);
 }
 
 
@@ -768,12 +736,11 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
 
   const G4int itry_max = 100;
   G4double ct = 2.0;
-  G4int K = 3;
+  G4int K = 2;
   G4int J = 1;
 
-  if(is == 1 || is == 2 || is == 4) K = 1;
-
-  if(knd == 1 || knd == 2) J = 0;
+  if(is == pro*pro || is == pro*neu || is == neu*neu) K = 0;
+  if(knd == proton || knd == neutron) J = 0;
 
   G4int itry = 0;
 
@@ -787,7 +754,7 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
       G4double V = 0.0;
 
       for(G4int im = 0; im < 4; im++) {
-	V += abn[im][l][K+J-1] * std::pow(ekin, im);
+	V += abn[K+J][l][im] * std::pow(ekin, im);
       };
 
       U += V;
@@ -810,7 +777,7 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
 
 
 G4LorentzVector 
-G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw, 
+G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int fs, G4int kw, 
                                                       G4double ekin, 
 			                              G4double pscm) const 
 {
@@ -819,149 +786,21 @@ G4ElementaryParticleCollider::sampleCMmomentumFor2to2(G4int is, G4int kw,
 	   << " is " << is << " kw " << kw << " ekin " << ekin << " pscm "
 	   << pscm << G4endl;
 
-  G4double pA=0.0, pC=0.0, pCos=0.0, pFrac=0.0;		// Angular parameters
+  // Get generator for specified state
+  const G4VTwoBodyAngDst* angDist = G4TwoBodyAngularDist::GetDist(is,fs,kw);
+  if (!angDist && verboseLevel) {
+    G4cerr << " G4ElementaryParticleCollider::sampleCMmomentumFor2to2:"
+	   << " interaction is=" << is << " kw=" << kw << " not recognized "
+	   << G4endl;
+  }
 
-  // Arrays below are parameters for two-exponential sampling of angular
-  // distributions of two-body scattering in the specified channels
+  // Choose cos(theta) for state, or forward scatter if problem
+  if (verboseLevel && angDist) 
+    const_cast<G4VTwoBodyAngDst*>(angDist)->setVerboseLevel(verboseLevel);
 
-  if (is == 1 || is == 2 || is == 4 ||
-      is == 21 || is == 23 || is == 25 || is == 27 || is ==29 || is == 31 ||
-      is == 42 || is == 46 || is == 50 || is == 54 || is ==58 || is == 62) {
-    // nucleon-nucleon or hyperon-nucleon
-    if (verboseLevel > 3) G4cout << " nucleon/hyperon elastic" << G4endl;
-
-    static const G4double nnke[9] =  { 0.0,   0.44, 0.59,   0.80,   1.00,   2.24,   4.40,   6.15,  10.00};
-    static const G4double nnA[9] =   { 0.0,   0.34, 2.51,   4.59,   4.2,    5.61,   6.38,   7.93,   8.7};
-    static const G4double nnC[9] =   { 0.0,   0.0,  1.21,   1.54,   1.88,   1.24,   1.91,   4.04,   8.7};
-    static const G4double nnCos[9] = {-1.0,  -1.0, 0.4226, 0.4226, 0.4384, 0.7193, 0.8788, 0.9164,  0.95};
-    static const G4double nnFrac[9] = {1.0,   1.0, 0.4898, 0.7243, 0.7990, 0.8892, 0.8493, 0.9583,  1.0};
-
-    static G4ThreadLocal G4CascadeInterpolator<9> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<9> (nnke) ;  G4CascadeInterpolator<9> &interp = *interp_G4MT_TLS_;	// Only need one!
-    pA = interp.interpolate(ekin, nnA);
-    pC = interp.interpolate(ekin, nnC);
-    pCos = interp.interpolate(ekin, nnCos);
-    pFrac = interp.interpolate(ekin, nnFrac);
-
-  } else if (kw == 2 && (is == 9 || is == 18)) {
-    // gamma p -> pi+ n, gamma p -> pi0 p, gamma p -> K Y (and isospin variants)
-    // for now and due to lack of better data, use the gamma p -> pi+ n angular
-    // distribution for all of these channels
-    if (verboseLevel > 3)
-      G4cout << " gamma-nucleon inelastic with 2-body final state" << G4endl;
-
-    static const G4double gnke[10] =   {0.0,   0.11,  0.22,   0.26,  0.30,  0.34,  0.42,   0.59,   0.79,  10.0};
-    static const G4double gnA[10] =    {0.0,   0.0,   5.16,   5.55,  5.33,  7.40, 13.55,  13.44,  13.31,   7.3};
-    static const G4double gnC[10] =    {0.0, -10.33, -5.44,  -5.92, -4.27, -0.66,  1.37,   1.07,   0.52,   7.3};
-    static const G4double gnCos[10] =  {1.0,   1.0,   0.906,  0.940, 0.940, 0.906, 0.906,  0.91,   0.91,   0.94};
-    static const G4double gnFrac[10] = {0.0,   0.0,   0.028,  0.012, 0.014, 0.044, 0.087,  0.122,  0.16,   1.0};
-
-    static G4ThreadLocal G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (gnke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;
-    pA = interp.interpolate(ekin, gnA);
-    pC = interp.interpolate(ekin, gnC);
-    pCos = interp.interpolate(ekin, gnCos);
-    pFrac = interp.interpolate(ekin, gnFrac);
-
-  } else if (kw == 2) {
-    // pi- p -> pi0 n, pi0 p -> pi+ n, pi- p -> K Y, pi0 p -> K Y (and isospin variants)
-    // includes charge and strangeness exchange  
-    if (verboseLevel > 3)
-      G4cout << " pion-nucleon inelastic with 2-body final state " << G4endl;
-
-    static const G4double qxke[10] =   {0.0,   0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
-    static const G4double qxA[10] =    {0.0,   0.0,    2.48,   7.93,  10.0,    9.78,   5.08,   8.13,   8.13,   8.13};
-    static const G4double qxC[10] =    {0.0, -39.58, -12.55,  -4.38,   1.81,  -1.99,  -0.33,   1.2,    1.43,   8.13};
-    static const G4double qxCos[10] =  {1.0,   1.0,    0.604, -0.033,  0.25,   0.55,   0.65,   0.80,   0.916,  0.916};
-    static const G4double qxFrac[10] = {0.0,   0.0,    0.1156, 0.5832, 0.8125, 0.3357, 0.3269, 0.7765, 0.8633, 1.0};
-
-    static G4ThreadLocal G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (qxke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;	// Only need one!
-    pA = interp.interpolate(ekin, qxA);
-    pC = interp.interpolate(ekin, qxC);
-    pCos = interp.interpolate(ekin, qxCos);
-    pFrac = interp.interpolate(ekin, qxFrac);
-
-  } else if (is == 3 || is == 7 || is == 9 || is == 11 || is == 17 ||
-             is == 10 || is == 14 || is == 18 || is == 26 || is == 30) {
-    // pi+p, pi0p, gammap, k+p, k0bp, pi-n, pi0n, gamman, k-n, or k0n
-    if (verboseLevel > 3) G4cout << " meson-nucleon elastic (1)" << G4endl;
-
-    static const G4double hn1ke[10] =   {0.0,  0.062,  0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
-    static const G4double hn1A[10] =    {0.0,  0.0,   27.58,  19.83,   6.46,   4.59,   6.47,   6.68,   6.43,   6.7};
-    static const G4double hn1C[10] =    {0.0, -26.4, -30.55, -19.42,  -5.05,  -5.24,  -1.00,   2.14,   2.9,    6.7};
-    static const G4double hn1Cos[10] =  {1.0,  1.0,    0.174, -0.174, -0.7,   -0.295,  0.5,    0.732,  0.837,  0.89};
-    static const G4double hn1Frac[10] = {0.0,  0.0,    0.2980, 0.7196, 0.9812, 0.8363, 0.5602, 0.9601, 0.9901, 1.0};
-
-    static G4ThreadLocal G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (hn1ke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;	// Only need one!
-    pA = interp.interpolate(ekin, hn1A);
-    pC = interp.interpolate(ekin, hn1C);
-    pCos = interp.interpolate(ekin, hn1Cos);
-    pFrac = interp.interpolate(ekin, hn1Frac);
-
-  } else if (is == 5 || is == 6 || is == 13 || is == 34 || is == 22 ||
-	     is == 15) {
-    // pi-p, pi+n, k-p, k0bn, k+n, or k0p
-    if (verboseLevel > 3) G4cout << " meson-nucleon elastic (2)" << G4endl;
-
-    static const G4double hn2ke[10] =   {0.0,  0.062, 0.12,   0.217,  0.533,  0.873,  1.34,   2.86,   5.86,  10.0};
-    static const G4double hn2A[10] =    {0.0, 27.08, 19.32,   9.92,   7.74,   9.86,   5.51,   7.25,   7.23,   7.3};
-    static const G4double hn2C[10] =    {0.0,  0.0, -19.49, -15.78,  -9.78,  -2.74,  -1.16,   2.31,   2.96,   7.3};
-    static const G4double hn2Cos[10] = {-1.0, -1.0,  -0.235, -0.259, -0.276,  0.336,  0.250,  0.732,  0.875,  0.9};
-    static const G4double hn2Frac[10] = {1.0,  1.0,   0.6918, 0.6419, 0.7821, 0.6542, 0.8382, 0.9722, 0.9784, 1.0};
-
-    static G4ThreadLocal G4CascadeInterpolator<10> *interp_G4MT_TLS_ = 0 ; if (!interp_G4MT_TLS_) interp_G4MT_TLS_ = new  G4CascadeInterpolator<10> (hn2ke) ;  G4CascadeInterpolator<10> &interp = *interp_G4MT_TLS_;	// Only need one!
-    pA = interp.interpolate(ekin, hn2A);
-    pC = interp.interpolate(ekin, hn2C);
-    pCos = interp.interpolate(ekin, hn2Cos);
-    pFrac = interp.interpolate(ekin, hn2Frac);
-
-  } else {
-    if (verboseLevel)
-      G4cerr << " G4ElementaryParticleCollider::sampleCMmomentumFor2to2:"
-	     << " interaction is=" << is << " not recognized " << G4endl;
-  } 
-
-  // Bound parameters by their physical ranges
-  pCos = std::max(-1.,std::min(pCos,1.));
-  pFrac = std::max(0.,std::min(pFrac,1.));
-
-  // Use parameters determined above to get polar angle
-  G4double ct = sampleCMcosFor2to2(pscm, pFrac, pA, pC, pCos);
+  G4double ct = angDist ? angDist->GetCosTheta(ekin, pscm) : 1.;
 
   return generateWithFixedTheta(ct, pscm);
-}
-
-
-G4double
-G4ElementaryParticleCollider::sampleCMcosFor2to2(G4double pscm, G4double pFrac,
-                                                 G4double pA, G4double pC,
-                                                 G4double pCos) const 
-{
-  if (verboseLevel>3) {
-    G4cout << " sampleCMcosFor2to2: pscm " << pscm << " pFrac " << pFrac
-	   << " pA " << pA << " pC " << pC << " pCos " << pCos << G4endl;
-  }
-
-  G4bool smallAngle = (G4UniformRand() < pFrac);	// 0 < theta < theta0
-
-  G4double term1 = 2.0 * pscm*pscm * (smallAngle ? pA : pC);
-
-  if (std::abs(term1) < 1e-7) return 1.0;	// No actual scattering here!
-  if (term1 > DBL_MAX_EXP) return 1.0;
-
-  G4double term2 = std::exp(-2.0*term1);
-  G4double randScale = (std::exp(-term1*(1.0 - pCos)) - term2)/(1.0 - term2);
-
-  G4double randVal;
-  if (smallAngle) randVal = (1.0 - randScale)*G4UniformRand() + randScale;
-  else randVal = randScale*G4UniformRand();
-
-  G4double costheta = 1.0 + std::log(randVal*(1.0 - term2) + term2)/term1;
-
-  if (verboseLevel>3) {
-    G4cout << " term1 " << term1 << " term2 " << term2 << " randVal "
-	   << randVal << " => costheta " << costheta << G4endl;
-  }
-
-  return costheta;
 }
 
 
@@ -1043,112 +882,33 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 }
 
 
-// Dump lookup tables for N-body final states
-
-void G4ElementaryParticleCollider::
-printFinalStateTables(std::ostream& os) const {
-  G4CascadeChannelTables::PrintTable(pro*pro, os);
-  G4CascadeChannelTables::PrintTable(neu*pro, os);
-  G4CascadeChannelTables::PrintTable(neu*neu, os);
-  G4CascadeChannelTables::PrintTable(kmi*neu, os);
-  G4CascadeChannelTables::PrintTable(kmi*pro, os);
-  G4CascadeChannelTables::PrintTable(kpl*neu, os);
-  G4CascadeChannelTables::PrintTable(kpl*pro, os);
-  G4CascadeChannelTables::PrintTable(k0b*neu, os);
-  G4CascadeChannelTables::PrintTable(k0b*pro, os);
-  G4CascadeChannelTables::PrintTable(k0*neu, os);
-  G4CascadeChannelTables::PrintTable(k0*pro, os);
-  G4CascadeChannelTables::PrintTable(lam*neu, os);
-  G4CascadeChannelTables::PrintTable(lam*pro, os);
-  G4CascadeChannelTables::PrintTable(pim*neu, os);
-  G4CascadeChannelTables::PrintTable(pim*pro, os);
-  G4CascadeChannelTables::PrintTable(pip*neu, os);
-  G4CascadeChannelTables::PrintTable(pip*pro, os);
-  G4CascadeChannelTables::PrintTable(pi0*neu, os);
-  G4CascadeChannelTables::PrintTable(pi0*pro, os);
-  G4CascadeChannelTables::PrintTable(sm*neu, os);
-  G4CascadeChannelTables::PrintTable(sm*pro, os);
-  G4CascadeChannelTables::PrintTable(sp*neu, os);
-  G4CascadeChannelTables::PrintTable(sp*pro, os);
-  G4CascadeChannelTables::PrintTable(s0*neu, os);
-  G4CascadeChannelTables::PrintTable(s0*pro, os);
-  G4CascadeChannelTables::PrintTable(xim*neu, os);
-  G4CascadeChannelTables::PrintTable(xim*pro, os);
-  G4CascadeChannelTables::PrintTable(xi0*neu, os);
-  G4CascadeChannelTables::PrintTable(xi0*pro, os);
-
-  os << " * * * PRELIMINARY -- GAMMA-NUCLEON TABLES * * *" << G4endl;
-  G4CascadeChannelTables::PrintTable(gam*neu, os);
-  G4CascadeChannelTables::PrintTable(gam*pro, os);
-}
-
-
-// Parameter array for momentum calculation of many body final states
-const G4double G4ElementaryParticleCollider::rmn[14][10][2] = {
-  {{0.5028,   0.6305}, {3.1442, -3.7333}, {-7.8172,  13.464}, {8.1667, -18.594}, 
-   {1.6208,   1.9439}, {-4.3139, -4.6268}, {12.291,  9.7879}, {-15.288, -9.6074}, 
-   {   0.0,     0.0}, {   0.0,      0.0}},     
-
-  {{0.9348,   2.1801}, {-10.59,  1.5163}, { 29.227,  -16.38}, {-34.55,  27.944}, 
-   {-0.2009, -0.3464}, {1.3641,   1.1093}, {-3.403, -1.9313}, { 3.8559,  1.7064}, 
-   {   0.0,     0.0}, {    0.0,     0.0}},    
-  
-  {{-0.0967, -1.2886}, {4.7335,  -2.457}, {-14.298,  15.129}, {17.685, -23.295}, 
-   { 0.0126,  0.0271}, {-0.0835, -0.1164}, { 0.186,  0.2697}, {-0.2004, -0.3185}, 
-   {   0.0,     0.0}, {    0.0,     0.0}},    
-  
-  {{-0.025,   0.2091}, {-0.6248, 0.5228}, { 2.0282, -2.8687}, {-2.5895, 4.2688}, 
-   {-0.0002, -0.0007}, {0.0014,   0.0051}, {-0.0024, -0.015}, { 0.0022,  0.0196}, 
-   {    0.0,    0.0}, {    0.0,     0.0}},     
-  
-  {{1.1965,   0.9336}, {-0.8289,-1.8181}, { 1.0426,  5.5157}, { -1.909,-8.5216}, 
-   { 1.2419,  1.8693}, {-4.3633, -5.5678}, { 13.743, 14.795}, {-18.592, -16.903}, 
-   {    0.0,    0.0}, {    0.0,     0.0}},     
-  
-  {{0.287,    1.7811}, {-4.9065,-8.2927}, { 16.264,  20.607}, {-19.904,-20.827}, 
-   {-0.244,  -0.4996}, {1.3158,   1.7874}, {-3.5691, -4.133}, { 4.3867,  3.8393}, 
-   {    0.0,    0.0}, {   0.0,      0.0}}, 
-  
-  {{-0.2449, -1.5264}, { 2.9191, 6.8433}, {-9.5776, -16.067}, { 11.938, 16.845}, 
-   {0.0157,   0.0462}, {-0.0826, -0.1854}, { 0.2143, 0.4531}, {-0.2585, -0.4627}, 
-   {    0.0,    0.0}, {   0.0,      0.0}},
-  
-  {{0.0373,   0.2713}, {-0.422, -1.1944}, { 1.3883,  2.7495}, {-1.7476,-2.9045}, 
-   {-0.0003, -0.0013}, {0.0014,   0.0058}, {-0.0034,-0.0146}, { 0.0039,  0.0156}, 
-   {    0.0,    0.0}, {    0.0,     0.0}},     
-  
-  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, 
-   { 0.1451,  0.0929},{ 0.1538,  0.1303}},  
-  
-  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, 
-   { 0.4652,  0.5389},{ 0.2744,  0.4071}},  
-  
-  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
-   { -0.033, -0.0545},{-0.0146, -0.0288}},  
-  
-  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
-   { 0.6296,  0.1491},{ 0.8381,  0.1802}},  
-  
-  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
-   { 0.1787,   0.385},{ 0.0086,  0.3302}},  
-  
-  {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},
-   {    0.0,     0.0}, {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0},
-   {-0.0026, -0.0128},{ 0.0033, -0.0094}}
-};
+// Parameter array for cos(theta) calculation of three body final states
+// See particleSCMmomentumFor2to3() for variables mentioned below
+//
+// Outer:   [0] (K=0 NN initial state, J=0 outgoing N)
+//          [1] (K=0 NN initial state, J=1 outgoing h,K,Y)
+//          [2] (K=2 hN,KN,YN,gN initial state, J=0 outgoing N)
+//          [3] (K=2 hN,KN,YN,gN initial state, J=1 outgoing h,K,Y)
+//
+// Middle:  blocks for powers of S^0..3
+//
+// Inner:   Powers of Ekin^0..3
 
 const G4double G4ElementaryParticleCollider::abn[4][4][4] = {
-  {{0.0856,  0.0716,  0.1729,  0.0376},  {5.0390,  3.0960,  7.1080,  1.4331},
-   {-13.782, -11.125, -17.961, -3.1350},  {14.661,  18.130,  16.403,  6.4864}},
-  {{0.0543,  0.0926, -0.1450,  0.2383}, {-9.2324, -3.2186, -13.032,  1.8253},
-   {36.397,  20.273,  41.781,  1.7648}, {-42.962, -33.245, -40.799, -16.735}},
-  {{-0.0511, -0.0515,  0.0454, -0.1541}, {4.6003,  0.8989,  8.3515, -1.5201},
-   {-20.534, -7.5084, -30.260, -1.5692},  {27.731,  13.188,  32.882,  17.185}},
-  {{0.0075,  0.0058, -0.0048,  0.0250}, {-0.6253, -0.0017, -1.4095,  0.3059},
-   {2.9159,  0.7022,  5.3505,  0.3252}, {-4.1101, -1.4854, -6.0946, -3.5277}} 
+  // -------- Initial state nucleon-nucleon, outgoing N --------
+  { { 0.0856, 0.0543,-0.0511, 0.0075 }, {  5.039,-9.2324, 4.6003,-0.6253 },
+    {-13.782, 36.397,-20.534, 2.9159 }, { 14.661,-42.962, 27.731,-4.1101 } 
+  },
+  // -------- Initial state nucleon-nucleon, outgoing h,K,Y --------
+  { { 0.0716, 0.0926,-0.0515, 0.0058 }, {  3.096,-3.2186, 0.8989,-0.0017 },
+    {-11.125, 20.273,-7.5084, 0.7022 }, {  18.13,-33.245, 13.188,-1.4854 } 
+  },
+  // -------- Initial state (h,K,Y,g)-nucleon, outgoing N --------
+  { { 0.1729, -0.145, 0.0454,-0.0048 }, {  7.108,-13.032, 8.3515,-1.4095 },
+    {-17.961, 41.781, -30.26, 5.3505 }, { 16.403,-40.799, 32.882,-6.0946 } 
+  },
+  // -------- Initial state (h,K,Y,g)-nucleon, outgoing h,K,Y --------
+  { { 0.0376, 0.2383,-0.1541,  0.025 }, { 1.4331, 1.8253,-1.5201, 0.3059 },
+    { -3.135, 1.7648,-1.5692, 0.3252 }, { 6.4864,-16.735, 17.185,-3.5277 } 
+  }
 };

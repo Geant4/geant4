@@ -23,9 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4CascadeParamMessenger.hh
+// $Id$
 // Define simple UI commands as alternative to environment variables
 //
+// 20130304  M. Kelsey -- Add flag to collect and display cascade structure
 
 #include "G4CascadeParamMessenger.hh"
 #include "G4CascadeParameters.hh"
@@ -55,6 +56,8 @@ G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
 			"Use PreCompoundModel for nuclear de-excitation");
   doCoalCmd = CreateCommand<G4UIcmdWithABool>("doCoalescence",
 			"Apply final-state nucleon clustering");
+  historyCmd = CreateCommand<G4UIcmdWithABool>("showHistory",
+		        "Collect and report full structure of cascade");
   randomFileCmd = CreateCommand<G4UIcmdWithAString>("randomFile",
 			"Save random-engine to file at each interaction");
   nucUseBestCmd = CreateCommand<G4UIcmdWithABool>("useBestNuclearModel",
@@ -88,6 +91,7 @@ G4CascadeParamMessenger::~G4CascadeParamMessenger() {
   delete reportCmd;
   delete usePreCoCmd;
   delete doCoalCmd;
+  delete historyCmd;
   delete randomFileCmd;
   delete nucUseBestCmd;
   delete nucRad2parCmd;
@@ -142,6 +146,9 @@ void G4CascadeParamMessenger::SetNewValue(G4UIcommand* cmd, G4String arg) {
 
   if (cmd == doCoalCmd) 
     theParams->G4CASCADE_DO_COALESCENCE = StoB(arg) ? strdup(arg.c_str()) : 0;
+
+  if (cmd == historyCmd) 
+    theParams->G4CASCADE_SHOW_HISTORY = StoB(arg) ? strdup(arg.c_str()) : 0;
 
   if (cmd == randomFileCmd)
     theParams->G4CASCADE_RANDOM_FILE = arg.empty() ? 0 : strdup(arg.c_str());

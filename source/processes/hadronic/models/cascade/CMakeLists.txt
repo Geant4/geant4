@@ -9,9 +9,7 @@
 #
 # $Id$
 #
+# 20130225  Remove evaporation and utils subdirectories
 #------------------------------------------------------------------------------
 
 add_subdirectory(cascade)
-add_subdirectory(evaporation)
-add_subdirectory(utils)
-

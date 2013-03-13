@@ -63,16 +63,20 @@
 // 20120307  M. Kelsey -- Add zone volume array for use with quasideuteron
 //		density, functions to identify projectile, compute interaction
 //		distance.
+// 20130129  M. Kelsey -- Add static objects for gamma-quasideuteron scattering
+// 20130221  M. Kelsey -- Add function to emplant particle along trajectory
+// 20130226  M. Kelsey -- Allow forcing zone selection in MFP calculation.
+// 20130302  M. Kelsey -- Add forceFirst() wrapper function (allows configuring)
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
 
 #include <algorithm>
 #include <vector>
-#include <CLHEP/Units/SystemOfUnits.h>
 
 #include "G4InuclElementaryParticle.hh"
 #include "G4CascadParticle.hh"
+#include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4LorentzConvertor.hh"
 
@@ -85,7 +89,7 @@ public:
   G4NucleiModel(G4int a, G4int z);
   explicit G4NucleiModel(G4InuclNuclei* nuclei);
 
-  ~G4NucleiModel();
+  virtual ~G4NucleiModel();
 
   void setVerboseLevel(G4int verbose) { verboseLevel = verbose; }
 
@@ -163,6 +167,7 @@ public:
 			    G4ElementaryParticleCollider* theEPCollider,
 			    std::vector<G4CascadParticle>& cascade); 
 
+  G4bool forceFirst(const G4CascadParticle& cparticle) const;
   G4bool isProjectile(const G4CascadParticle& cparticle) const;
   G4bool worthToPropagate(const G4CascadParticle& cparticle) const; 
     
@@ -173,15 +178,15 @@ public:
   G4double absorptionCrossSection(G4double e, G4int type) const;
   G4double totalCrossSection(G4double ke, G4int rtype) const;
 
-private:
-  G4int verboseLevel;
-
+protected:
   G4bool passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
 		   G4int zone);
 
   G4bool passTrailing(const G4ThreeVector& hit_position);
 
   void boundaryTransition(G4CascadParticle& cparticle);
+
+  void choosePointAlongTraj(G4CascadParticle& cparticle);
 
   G4InuclElementaryParticle generateQuasiDeutron(G4int type1, 
 						 G4int type2,
@@ -220,12 +225,16 @@ private:
   // Average path length for any interaction of projectile and target
   //	= 1. / (density * cross-section)
   G4double inverseMeanFreePath(const G4CascadParticle& cparticle,
-			       const G4InuclElementaryParticle& target);
+			       const G4InuclElementaryParticle& target,
+			       G4int zone = -1);	// Override zone value
   // NOTE:  Function is non-const in order to use dummy_converter
 
   // Use path-length and MFP (above) to throw random distance to collision
   G4double generateInteractionLength(const G4CascadParticle& cparticle,
 				     G4double path, G4double invmfp) const;
+
+private:
+  G4int verboseLevel;
 
   // Buffers for processing interactions on each cycle
   G4LorentzConvertor dummy_convertor;	// For getting collision frame
@@ -246,7 +255,7 @@ private:
   G4double v1[6];		// Pseudo-volume (delta r^3) by zone
   std::vector<G4double> rod;	// Nucleon density
   std::vector<G4double> pf;	// Fermi momentum
-  std::vector<G4double> vz;	// Nucleo potential
+  std::vector<G4double> vz;	// Nucleon potential
 
   // Nuclear model configuration
   std::vector<std::vector<G4double> > nucleon_densities;
@@ -293,6 +302,11 @@ private:
   static const G4double piTimes4thirds;
   static const G4double crossSectionUnits;
   static const G4double radiusUnits;
+
+  // Cross-section table, parameters for gamma-quasideuteron scattering
+  static const G4double gammaQDscale;
+  static const G4double gammaQDxsec[30];
+  static const G4CascadeInterpolator<30> gammaQDinterp;
 };        
 
 #endif // G4NUCLEI_MODEL_HH 

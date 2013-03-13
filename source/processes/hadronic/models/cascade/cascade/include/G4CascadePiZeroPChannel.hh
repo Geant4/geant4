@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadePiZeroPChannel.hh 66885 2013-01-16 17:37:13Z gunter $
 
 #ifndef G4_CASCADE_PIZEROP_CHANNEL_HH
 #define G4_CASCADE_PIZEROP_CHANNEL_HH
@@ -34,8 +34,7 @@
 
 struct G4CascadePiZeroPChannelData {
   typedef G4CascadeData<30,5,13,21,30,6,7,8,9> data_t;
-  static G4ThreadLocal data_t *data;
-  static data_t *initializer();
+  static const data_t data;
 };
 
 typedef G4CascadeFunctions<G4CascadePiZeroPChannelData,G4PionNucSampler> G4CascadePiZeroPChannel;

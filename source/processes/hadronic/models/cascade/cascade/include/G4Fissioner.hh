@@ -32,12 +32,14 @@
 // 20100728  M. Kelsey -- Move G4FissionStore to data member and reuse
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20110801  M. Kelsey -- Pass C arrays to ::potentialMinimization()
+// 20130129  M. Kelsey -- Put buffer for output nuclei here for thread-safety
 
 #ifndef G4FISSIONER_HH
 #define G4FISSIONER_HH
 
 #include "G4CascadeColliderBase.hh"
 #include "G4FissionStore.hh"
+#include "G4InuclNuclei.hh"
 #include <vector>
 
 class G4CollisionOutput;
@@ -46,14 +48,15 @@ class G4InuclParticle;
 
 class G4Fissioner : public G4CascadeColliderBase {
 public:
-  G4Fissioner();
-  virtual ~G4Fissioner() {}
+  G4Fissioner() : G4CascadeColliderBase("G4Fissioner"), frags(2) {;}
+  virtual ~G4Fissioner() {;}
 
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
 private: 
   G4FissionStore fissionStore;
+  std::vector<G4InuclNuclei> frags;
 
   G4double getC2(G4int A1, 
 		 G4int A2, 

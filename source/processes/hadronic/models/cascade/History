@@ -15,6 +15,248 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+7 March 2013  Michael Kelsey (hadr-casc-V09-06-14)
+--------------------------------------------------
+Introduce multi-body final state momentum distribution classes and factory,
+modelled on the two-body angular distribution system.  Leaf classes
+implement functionality of G4EPCollider::getMomModuleFor2toMany(), split by
+initial state and multiplicity.
+
+- G4VMultiBodyMomDst:  Abstract base class for all multi-body final state
+  momentum generators.  Subclasses may cover one or several categories.
+
+- G4InuclParamMomDst:  Intermediate base class implementing parametrization
+  in G4EPCollider, derived from original INUCL Fortran code, with power
+  expansions in Ekin and random fraction.  Subclasses provide coeffient
+  arrays for specific initial state and multiplicity, with subarrays for
+  different final-state particles.
+
+- G4NuclNucl3BodyDst:  Leaf class for pp,pn,nn 3-body final state from INUCL.
+- G4NuclNucl4BodyDst:  Leaf class for pp,pn,nn >= 4-body final state from INUCL.
+- G4HadNucl3BodyDst:  Leaf class for Xp,Xn 3-body final state from INUCL.
+- G4HadNucl4BodyDst:  Leaf class for Xp,Xn >= 4-body final state from INUCL.
+
+- G4MultiBodyMomentumDist:  Factory class to select individual generators
+  above from initial-state code and multiplicity.
+
+- G4ElementaryParticleCollider.cc:  Replace getMomModuleFor2toMany() with
+  call to G4MultiBodyMomentumDist factory and constituent generators.
+
+7 March 2013  Michael Kelsey
+----------------------------
+- G4ElementaryParticleCollider: Reverse order of indices for rmn[][][] array
+  used for multibody momentum selection, and abn[][][] used for three-body
+  angular distribution.  This allows direct grouping by initial state, so
+  functionality can be refactored later.
+
+6 March 2013  Michael Kelsey
+----------------------------
+- G4CascadeChannelTables:  Implement global Print() function which dumps all
+  tables registered in map.
+
+- G4ElementaryParticleCollider:  Remove printFinalStateTables() function,
+  do work directly in G4CascadeChannelTables.  Replace numeric values of
+  particle-type checks with enums.  Add detailed comments explaining array
+  indices for momentum arrays.
+
+6 March 2013  Michael Kelsey (hadr-casc-V09-06-13)
+--------------------------------------------------
+Remove obsolete directories evaporation/ and utils/.
+
+- GNUmakefile, CMakeLists.txt:  Remove references to obsolete
+  subdirectories and their corresponding libraries.
+
+NOTE:  This tag requires changes at the top level of processes/CMakeLists.txt
+       and must not be used independently of those changes.
+
+6 March 2013  Michael Kelsey (hadr-casc-V09-06-12)
+--------------------------------------------------
+- G4CascadeHistory.cc:  Cast calls to "getCharge()" to G4int to avoid
+  compiler warnings.
+
+5 March 2013  Michael Kelsey (hadr-casc-V09-06-10, -11)
+--------------------------------------------------
+- G4CascadeHistory:  Support "reabsorbed" cascade particles (excitons and
+  trapped decays) using "-1 daughters" as a flag.  Add heading with legend
+  to output.
+
+- G4IntraNucleiCascader.cc:  Add exciton and trapped-decay info to history.
+  Move history reporting outside of "itry" loops (only shows final version).
+
+4 March 2013  Michael Kelsey (hadr-casc-V09-06-09)
+--------------------------------------------------
+- G4CascadeHistory:  NEW container class to collect all secondaries, along
+  with generated daughters, and report cascade structure hierarchically.
+
+- G4CascadParticle:  Add new index data member for use with G4CascadeHistory.
+
+- G4CascadeParameters:  Add new G4CASCADE_SHOW_HISTORY envvar to activate
+  use of G4CascadeHistory.
+
+- G4CascadeParamMessenger:  Add macro command for G4CASCADE_SHOW_HISTORY.
+
+- G4IntraNucleiCascader:  Add option G4CascadeHistory data member, created
+  and used only if G4CASCADE_SHOW_HISTORY envvar is set.
+
+- sources.cmake:  Add G4CascadeHistory.hh and .cc.
+
+3 March 2013  Michael Kelsey (hadr-casc-V09-06-08)
+--------------------------------------------------
+Re-tag with subdirectories "utils" and "evaporation" (excluded by mistake).
+
+2 March 2013  Michael Kelsey (hadr-casc-V09-06-07)
+--------------------------------------------------
+- G4NucleiModel:  Encapsulate forcing decision in forceFirst() function,
+  apply to photons only, not hadrons.
+
+27 February 2013  Michael Kelsey (hadr-casc-V09-06-06)
+------------------------------------------------------
+- G4NucleiModel:  Modify choosePointAlongTraj() to use mean free path to
+  bias point selection non-uniformly in each zone.  Make member functions
+  protected (instead of private) to allow external testing.
+
+- G4BarashenkovTwoBodyAngDst: RENAME to G4ParamExpTwoBodyAngDst; previous
+  name was a misattribution.
+
+- sources.cmake:  Follow renaming above.
+
+- G4GammaNuclAngDst, G4HadNElastic1AngDst, G4HadNElastic2AngDst,
+  G4NuclNuclAngDst, G4PiNInelasticAngDst:  Follow renaming of base class.
+
+25 February 2013  Michael Kelsey
+--------------------------------
+- G4RegionModel, G4BertiniElasticCollision, G4BertiniHydrogenCollision:
+  REMOVE obsolete, unused code.
+
+- sources.cmake:  Remove obsolete code above.
+
+23 February 2013  Michael Kelsey (hadr-casc-V09-06-05)
+------------------------------------------------------
+- G4NucleiModel.cc: Spurious character got into .cc file during save/commit.
+
+23 February 2013  Michael Kelsey (hadr-casc-V09-06-04)
+------------------------------------------------------
+- G4NucleiModel.cc: Fix zone-density weighting in choosePointAlongTraj.  Now
+  done correctly, if not with optimal code efficiency: more points will be
+  chosen in core of nucleus than in outer shell.  Work needed to reduce
+  vector arithmetic, move std:vector<>'s out to class data members, etc.
+
+21 February 2013  Michael Kelsey
+--------------------------------
+- G4VTwoBodyAngDst: Bug fix: Data member "theName" should be a local copy of
+  the ctor input string, not a reference to it.  When literals are passed
+  in, a _temporary_ object is created for the ctor which then goes out of
+  scope, leaving an undefined reference behind.  This causes segfaults when
+  running with verbosity.
+
+- G4CascadParticle:  Move ctor body to .cc file, use global envvar to set
+  initial verbosity (no other code changes verbosity of cparticles).
+
+- G4NucleiModel:  Add function to select random point along particle's
+  trajectory, use with incident photons at initial step to nucleus.
+  Selection is weighted by average nucleon density in each zone.  Code uses
+  mutliple local G4ThreeVector and std::vector buffers, which need to be
+  made class members or static-local to reduce memory churn.
+
+21 February 2013  Michael Kelsey (hadr-casc-V09-06-03)
+------------------------------------------------------
+- G4TwoBodyAngularDist:  NEW Factory singleton containing all of the
+  angular-distribution generators created below.  Code from G4EPCollider to
+  choose generator based on intial and final states moved here, accessed
+  through static function.
+
+- G4ElementaryParticleCollider:  Angular distribution generators moved to
+  new singleton factory.  Access to factory is through a static function, so
+  it can be shared across MT threads.
+
+20 February 2013  Michael Kelsey
+--------------------------------
+- G4VTwoBodyAngDst:  Add Id string.
+
+- G4NumIntTwoBodyAngDst:  Convert to templated, using array dimensions as
+  template arguments (c.f. G4CascadeSampler).  Pass references to C-style
+  arrays as ctor arguments, use to initialize C-style array const
+  references.  Add local C-style array as reuable buffer for interpolation.
+  Add Id string.  Move .cc file to .icc, referenced from .hh, as required
+  for template instantiation.
+
+- G4GamP2NPipAngDst, G4GamP2PPi0AngDst: Follow change of base to templated
+  form, passing arrays as base ctor args, move array initializations to
+  namespace with "static const".  Add Id string.
+
+Extract parametrized two-body angular distribution code from
+G4ElementaryParticleCollider to new subclasses of G4VTwoBodyAngDst.  These
+subclasses will likely be replaced over time with numerically-integrated
+CDFs as above.
+
+- G4BarashenkovTwoBodyAngDst:  Templated base class for double-exponential
+  two-body parametrizations, extracted from G4EPCollider.
+
+- G4GammaNuclAngDst, G4NuclNuclAngDst, G4PiNInelasticAngDst,
+  G4HadNElastic1AngDst, G4HadNElastic2AngDst: Sublcasses of
+  G4BarashenkovTwoBodyAngDst, with parameter arrays and energy bins
+  extracted G4EPCollider.
+
+- sources.cmake:  Follow filename changes to G4NumIntTwoBodyAngDst.cc -> .icc,
+  add new parametrized angular distribution classes.
+
+31 January 2013  Dennis Wright (hadr-casc-V09-06-02)
+----------------------------------------------------
+Add detailed two-body final state angular distributions for (gamma,p) and
+(gamma,n) reactions, using tables of numerical integrals to sample cos(theta)
+
+- created base classes G4VTwoBodyAngDst and G4NumIntTwoBodyAngDst, and concrete
+  classes G4GamP2NPipAngDst and G4GamP2PPi0AngDst to hold the tables
+
+- added these channels to G4ElementaryParticleCollider::   
+
+- added new cross section data to G4CascadeT1GamNChannel
+
+29 January 2013  Michael Kelsey (hadr-casc-V09-06-01)
+-----------------------------------------------------
+In consultation with Andrea Dotti, revert or modify many of the automatic
+code changes (below) for improved MT performance.
+
+- G4Cascade*Channel.hh,cc:  Restore "static const" declarations of all final
+  state arrays, eliminate use of "initialize()" function.  In all of the .hh
+  files, declare "static const data_t data;" to allow sharing across threads.
+
+- G4CascadeFunctions.hh,cc:  Restore DATA::data as simple object, not
+  pointer.
+
+- G4NucleiModel.hh,cc:  Move function-static arrays and interpolator for
+  gamma-quasideuteron cross sections to be class members with file-scope
+  initialization.  Eliminates need to use TLS pointers.
+
+- G4Fissioner.hh,cc:  Make two-element std::vector for nuclear fragments
+  class data member; use G4InuclNuclei::fill() to change contents.
+
+- G4InuclSpecialFunctions.cc, G4CascadeCoalescence.cc: Collapse TLS pointer
+  initializtion to eliminate unncessary if-blocks.
+
+- G4EquilibriumEvaporator.hh,cc, G4ElementaryParticleCollider.hh,cc: Move
+  function-static interpolators and arrays to be class members with
+  file-scope initialization.  Eliminates need to use TLS pointers.
+
+25 January 2013  Andrea Dotti et al.
+------------------------------------
+Apply automatic conversion to all code for Geant4-MT thread-safe operation.
+
+20 December 2012  Michael Kelsey
+--------------------------------
+- G4ElementaryParticleCollider.cc:  Add Omega tables to printout function,
+  remove line referring to gamma-N as "preliminary."
+
+06 December 2012  Michael Kelsey (hadr-casc-V09-06-00)
+------------------------------------------------------
+- G4IntraNucleiCascader.cc:  For rescattering, set generation number of
+  new secondaries to '1' instead of '0' (so they aren't identified as
+  projectiles).
+
+- G4NucleiModel.cc:  In generateParticleFate() set generation number of
+  interaction daughters to one more than the parent secondary.  Eliminate
+  complex isProjectile() code in favor of checking for generation==0.
+
 20 October 2012  Michael Kelsey (hadr-casc-V09-05-26)
 -----------------------------------------------------
 - G4CascadePPChannel.cc, G4CascadeNNChannel.cc, G4CascadeNPChannel.cc:  For

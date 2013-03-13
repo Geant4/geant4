@@ -1267,19 +1267,7 @@ namespace {
 
 }
 
-
-typedef G4CascadeOmegaMinusNChannelData::data_t G4CascadeOmegaMinusNChannelData_t;
-G4ThreadLocal G4CascadeOmegaMinusNChannelData_t *G4CascadeOmegaMinusNChannelData::data=0;
-
-G4CascadeOmegaMinusNChannelData::data_t *G4CascadeOmegaMinusNChannelData::initializer()
-{
-  if (G4CascadeOmegaMinusNChannelData::data == 0)
-    G4CascadeOmegaMinusNChannelData::data = 
-      new G4CascadeOmegaMinusNChannelData::data_t(
-						  omn2bfs, omn3bfs, omn4bfs,
-						  omn5bfs, omn6bfs, omn7bfs,
-						  omnCrossSections, om*neu, "OmegaMinusN");
-  return G4CascadeOmegaMinusNChannelData::data;
-}
-
-
+const G4CascadeOmegaMinusNChannelData::data_t
+G4CascadeOmegaMinusNChannelData::data(omn2bfs, omn3bfs, omn4bfs,
+                                      omn5bfs, omn6bfs, omn7bfs,
+                                      omnCrossSections, om*neu, "OmegaMinusN");

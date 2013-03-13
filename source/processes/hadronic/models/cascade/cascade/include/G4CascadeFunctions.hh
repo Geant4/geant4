@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeFunctions.hh 66885 2013-01-16 17:37:13Z gunter $
 //
 // 20100407  M. Kelsey -- Return particle types std::vector<> by const ref,
 //		using a static variable in the function as a buffer.
@@ -58,13 +58,11 @@ public:
   virtual ~G4CascadeFunctions() {}
 
   virtual G4double getCrossSection(double ke) const {
-    if (DATA::data == 0) DATA::initializer();
-    return this->findCrossSection(ke, DATA::data->tot);
+    return this->findCrossSection(ke, DATA::data.tot);
   }
 
   virtual G4double getCrossSectionSum(double ke) const {
-    if (DATA::data == 0) DATA::initializer();
-    return this->findCrossSection(ke, DATA::data->sum);
+    return this->findCrossSection(ke, DATA::data.sum);
   }
 
   virtual G4int getMultiplicity(G4double ke) const;

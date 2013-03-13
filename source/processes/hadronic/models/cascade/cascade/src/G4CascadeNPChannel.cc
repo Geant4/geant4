@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 // $Id: G4CascadeT0npChannel.cc,v 1.3 2010-08-04 05:28:24 mkelsey Exp $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // 20100804  M. Kelsey -- Add name string to ctor
 // 20110719  M. Kelsey -- Add initial state code to ctor
@@ -668,19 +669,12 @@ namespace {
 }
 
 // Initialize n-p channel
-typedef G4CascadeNPChannelData::data_t G4CascadeNPChannelData_t;
-G4ThreadLocal G4CascadeNPChannelData_t *G4CascadeNPChannelData::data=0;
 
-G4CascadeNPChannelData::data_t *G4CascadeNPChannelData::initializer()
-{
-  if (G4CascadeNPChannelData::data == 0)
-    G4CascadeNPChannelData::data = 
-      new G4CascadeNPChannelData::data_t(
-					 np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
-					 np8bfs, np9bfs, npCrossSections, npTotXSec,
-					 neu*pro, "NeutronProton");
-  return G4CascadeNPChannelData::data;
-}
+const G4CascadeNPChannelData::data_t
+G4CascadeNPChannelData::data(np2bfs, np3bfs, np4bfs, np5bfs, np6bfs, np7bfs,
+			     np8bfs, np9bfs, npCrossSections, npTotXSec,
+			     neu*pro, "NeutronProton");
+
 
 // Overload base class interpolator to use function for 0-10 MeV total, elastic
 

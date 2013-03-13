@@ -586,19 +586,11 @@ namespace {
 }
 
 // Initialize n-n cross-section table
-typedef G4CascadeNNChannelData::data_t G4CascadeNNChannelData_t;
-G4ThreadLocal G4CascadeNNChannelData_t *G4CascadeNNChannelData::data=0;
 
-G4CascadeNNChannelData::data_t *G4CascadeNNChannelData::initializer()
-{
-  if (G4CascadeNNChannelData::data == 0)
-    G4CascadeNNChannelData::data = 
-      new G4CascadeNNChannelData::data_t(
-					 nn2bfs, nn3bfs, nn4bfs, nn5bfs, nn6bfs, nn7bfs,
-					 nn8bfs, nn9bfs, nnCrossSections, nnTotXSec,
-					 neu*neu, "NeutronNeutron");
-  return G4CascadeNNChannelData::data;
-}
+const G4CascadeNNChannelData::data_t
+G4CascadeNNChannelData::data(nn2bfs, nn3bfs, nn4bfs, nn5bfs, nn6bfs, nn7bfs,
+			     nn8bfs, nn9bfs, nnCrossSections, nnTotXSec,
+			     neu*neu, "NeutronNeutron");
 
 // Overload base class interpolator to use function for 0-10 MeV total, elastic
 

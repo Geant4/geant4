@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// G4CascadeParameters.hh
+// $Id$
 // Encapsulate all user-configurable parameters with associated envvars
 //
 // 20120912  M. Kelsey -- Add interface to support UI commands
+// 20130304  M. Kelsey -- Add flag to collect and display cascade structure
 
 #ifndef G4CascadeParameters_hh
 #define G4CascadeParameters_hh 1
@@ -46,6 +47,7 @@ public:
   static G4int verbose()              { return Instance()->VERBOSE_LEVEL; }
   static G4bool usePreCompound()      { return Instance()->USE_PRECOMPOUND; }
   static G4bool doCoalescence()       { return Instance()->DO_COALESCENCE; }
+  static G4bool showHistory()         { return Instance()->SHOW_HISTORY; }
   static const G4String& randomFile() { return Instance()->RANDOM_FILE; }
 
   // Nuclear structure parameters
@@ -69,6 +71,7 @@ private:	// Environment variable values, null pointers mean not set
   const char* G4CASCADE_VERBOSE;
   const char* G4CASCADE_USE_PRECOMPOUND;
   const char* G4CASCADE_DO_COALESCENCE;
+  const char* G4CASCADE_SHOW_HISTORY;
   const char* G4CASCADE_RANDOM_FILE;
   const char* G4NUCMODEL_USE_BEST;
   const char* G4NUCMODEL_RAD_2PAR;
@@ -88,6 +91,7 @@ private:	// Environment variable values, null pointers mean not set
   G4int VERBOSE_LEVEL;		// Top-level configuration flags
   G4bool USE_PRECOMPOUND;
   G4bool DO_COALESCENCE;
+  G4bool SHOW_HISTORY;
   G4String RANDOM_FILE;
 
   G4bool BEST_PAR;		// Nuclear structure parameters

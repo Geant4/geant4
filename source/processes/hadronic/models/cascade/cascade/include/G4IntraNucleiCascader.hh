@@ -61,6 +61,7 @@
 // 20110801  M. Kelsey -- Add local target buffers for rescattering, to avoid
 //		memory leak.
 // 20110919  M. Kelsey -- Add optional final-state clustering
+// 20130304  M. Kelsey -- Add new G4CascadeHistory for cacasde structure reporting
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -72,6 +73,7 @@
 
 class G4CascadParticle;
 class G4CascadeCoalescence;
+class G4CascadeHistory;
 class G4CascadeRecoilMaker;
 class G4ElementaryParticleCollider;
 class G4InuclElementaryParticle;
@@ -133,6 +135,7 @@ private:
   G4ElementaryParticleCollider* theElementaryParticleCollider;
   G4CascadeRecoilMaker* theRecoilMaker;
   G4CascadeCoalescence* theClusterMaker;
+  G4CascadeHistory* theCascadeHistory;
 
   // Buffers and parameters for cascade attempts
   G4InuclNuclei* tnuclei;		// Target nucleus (must be non-zero)

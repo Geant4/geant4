@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4CascadeSigmaMinusPChannel.hh 66885 2013-01-16 17:37:13Z gunter $
 //
 // 20100507  M. Kelsey -- Remove redundant total-bins template argument
 // 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler
@@ -39,8 +39,7 @@
 
 struct G4CascadeSigmaMinusPChannelData {
   typedef G4CascadeData<31,3,12,33,59,30,20> data_t;
-  static G4ThreadLocal data_t *data;
-  static data_t *initializer();
+  static const data_t data;
 };
 
 typedef G4CascadeFunctions<G4CascadeSigmaMinusPChannelData,G4KaonHypSampler> G4CascadeSigmaMinusPChannel;

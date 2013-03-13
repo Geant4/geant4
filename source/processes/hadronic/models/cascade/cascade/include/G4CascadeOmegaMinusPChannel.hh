@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 // $Id: $
+// GEANT4 tag: $Name: not supported by cvs2svn $
 //
 // Author:  D.H. Wright (SLAC)
 // Date:    1 October 2012
@@ -41,8 +42,7 @@
 
 struct G4CascadeOmegaMinusPChannelData {
   typedef G4CascadeData<31,4,18,55,76,20,34> data_t;
-  static G4ThreadLocal data_t *data;
-  static data_t *initializer();
+  static const data_t data;
 };
 
 typedef G4CascadeFunctions<G4CascadeOmegaMinusPChannelData,G4KaonHypSampler> G4CascadeOmegaMinusPChannel;
