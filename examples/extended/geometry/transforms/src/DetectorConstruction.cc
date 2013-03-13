@@ -74,8 +74,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   // Materials
   G4NistManager* nist = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
-  G4Material* material = nist->FindOrBuildMaterial("G4_AIR", fromIsotopes);
+  G4Material* material = nist->FindOrBuildMaterial("G4_AIR");
   
   // Clean old geometry, if any
   //
