@@ -104,8 +104,7 @@ void B4dDetectorConstruction::DefineMaterials()
 { 
   // Lead material defined using NIST Manager
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
-  nistManager->FindOrBuildMaterial("G4_Pb", fromIsotopes);
+  nistManager->FindOrBuildMaterial("G4_Pb");
   
   // Liquid argon material
   G4double a;  // mass of a mole;

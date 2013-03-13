@@ -1,3 +1,5 @@
+# $Id$
+
 #---Adding examples subdirectories explicitly 
 #   and a custom target to for building all basic examples -------------
 

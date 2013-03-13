@@ -1,3 +1,5 @@
+# $Id$
+
 #---Adding example N3 subdirectories explicitly 
 #   and a custom target to for building all example N3 options ----------
 

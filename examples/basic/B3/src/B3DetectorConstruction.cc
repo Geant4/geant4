@@ -99,7 +99,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   G4double detector_dZ = nb_rings*cryst_dX;
   //
   G4NistManager* nist = G4NistManager::Instance();
-  G4Material* default_mat = nist->FindOrBuildMaterial("G4_AIR", false);
+  G4Material* default_mat = nist->FindOrBuildMaterial("G4_AIR");
   G4Material* cryst_mat   = nist->FindOrBuildMaterial("Lu2SiO5");
         
   //     
@@ -214,7 +214,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
   //
   G4double patient_radius = 8*cm;
   G4double patient_dZ = 10*cm;  
-  G4Material* patient_mat = nist->FindOrBuildMaterial("G4_BRAIN_ICRP", false);
+  G4Material* patient_mat = nist->FindOrBuildMaterial("G4_BRAIN_ICRP");
     
   G4Tubs* solidPatient =
     new G4Tubs("Patient", 0., patient_radius, 0.5*patient_dZ, 0., twopi);

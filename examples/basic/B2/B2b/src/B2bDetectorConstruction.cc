@@ -98,16 +98,14 @@ void B2bDetectorConstruction::DefineMaterials()
 
   G4NistManager* nistManager = G4NistManager::Instance();
 
-  G4bool fromIsotopes = false;
-
   // Air defined using NIST Manager
-  nistManager->FindOrBuildMaterial("G4_AIR", fromIsotopes);
+  nistManager->FindOrBuildMaterial("G4_AIR");
   
   // Lead defined using NIST Manager
-  fTargetMaterial  = nistManager->FindOrBuildMaterial("G4_Pb", fromIsotopes);
+  fTargetMaterial  = nistManager->FindOrBuildMaterial("G4_Pb");
 
   // Xenon gas defined using NIST Manager
-  fChamberMaterial = nistManager->FindOrBuildMaterial("G4_Xe", fromIsotopes);
+  fChamberMaterial = nistManager->FindOrBuildMaterial("G4_Xe");
 
   // Print materials
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
@@ -289,10 +287,9 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
 void B2bDetectorConstruction::SetTargetMaterial(G4String materialName)
 {
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
 
   G4Material* pttoMaterial =
-              nistManager->FindOrBuildMaterial(materialName, fromIsotopes);
+              nistManager->FindOrBuildMaterial(materialName);
 
   if (fTargetMaterial != pttoMaterial) {
      if ( pttoMaterial ) {
@@ -311,10 +308,9 @@ void B2bDetectorConstruction::SetTargetMaterial(G4String materialName)
 void B2bDetectorConstruction::SetChamberMaterial(G4String materialName)
 {
   G4NistManager* nistManager = G4NistManager::Instance();
-  G4bool fromIsotopes = false;
 
   G4Material* pttoMaterial =
-              nistManager->FindOrBuildMaterial(materialName, fromIsotopes);
+              nistManager->FindOrBuildMaterial(materialName);
 
   if (fChamberMaterial != pttoMaterial) {
      if ( pttoMaterial ) {

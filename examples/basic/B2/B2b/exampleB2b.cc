@@ -33,7 +33,7 @@
 #include "B2RunAction.hh"
 #include "B2EventAction.hh"
 
-#include "G4StepLimiterBuilder.hh"
+#include "G4StepLimiterPhysics.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -66,7 +66,7 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new B2bDetectorConstruction());
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
-  physicsList->RegisterPhysics(new G4StepLimiterBuilder());
+  physicsList->RegisterPhysics(new G4StepLimiterPhysics());
   runManager->SetUserInitialization(physicsList);
     
   // Set user action classes
