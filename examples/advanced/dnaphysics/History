@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+15 February 2013 - tag dnaphysics-V09-06-00 - S. Incerti
+- Changed default water definition 
+
 3 November 2012 - tag dnaphysics-V09-05-07 - S. Incerti
 - Removed shadowing in SteppingAction 
 
