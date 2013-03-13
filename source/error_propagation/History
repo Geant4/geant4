@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 February 2013 - G.Cosmo (error-propagation-V09-06-02)
+- Removed unused data member in G4ErrorPropagator.
+
+25 February 2013 - G.Cosmo (error-propagation-V09-06-01)
+- Corrected composed printout in G4ErrorPropagator.
+- Cleanup of MT changes in G4ErrorSymMatrix.
+
 07 December 2012 - V.Ivanchenko (error-propagation-V09-06-00)
 - G4ErrorPhysicsList - remove unnecessary header
 

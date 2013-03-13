@@ -844,18 +844,20 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
   // by having a new without a delete that is only done once.
   
   static const G4int max_array = 25;
-  static G4ThreadLocal std::vector<G4double> *xvec_G4MT_TLS_ = 0 ; if (!xvec_G4MT_TLS_) xvec_G4MT_TLS_ = new  std::vector<G4double> (max_array) ;  std::vector<G4double> &xvec = *xvec_G4MT_TLS_;
-  static G4ThreadLocal std::vector<G4int>    *pivv_G4MT_TLS_ = 0 ; if (!pivv_G4MT_TLS_) pivv_G4MT_TLS_ = new  std::vector<G4int>    (max_array) ;  std::vector<G4int>    &pivv = *pivv_G4MT_TLS_;
+  static G4ThreadLocal std::vector<G4double> *xvec
+    = new  std::vector<G4double> (max_array) ;
+  static G4ThreadLocal std::vector<G4int>    *pivv
+    = new  std::vector<G4int>    (max_array) ;
   typedef std::vector<G4int>::iterator pivIter; 
-  if (xvec.size() < static_cast<unsigned int>(nrow)) xvec.resize(nrow);
-  if (pivv.size() < static_cast<unsigned int>(nrow)) pivv.resize(nrow);
+  if (xvec->size() < static_cast<unsigned int>(nrow)) xvec->resize(nrow);
+  if (pivv->size() < static_cast<unsigned int>(nrow)) pivv->resize(nrow);
     // Note - resize should do  nothing if the size is already larger than nrow,
     //        but on VC++ there are indications that it does so we check.
     // Note - the data elements in a vector are guaranteed to be contiguous,
     //        so x[i] and piv[i] are optimally fast.
-  G4ErrorMatrixIter   x   = xvec.begin();
+  G4ErrorMatrixIter   x   = xvec->begin();
     // x[i] is used as helper storage, needs to have at least size nrow.
-  pivIter piv = pivv.begin();
+  pivIter piv = pivv->begin();
     // piv[i] is used to store details of exchanges
       
   G4double temp1, temp2;

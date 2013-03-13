@@ -118,7 +118,6 @@ class G4ErrorPropagator
   G4double theStepLength;
 
   G4ErrorTrajState* theInitialTrajState;
-  G4ErrorTrajState* theFinalTrajState;
 
   G4int theStepN;
 
