@@ -387,11 +387,11 @@ G4int G4VEnergyLossProcess::NumberOfModels()
 void 
 G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  //  if(1 < verboseLevel) {
-  //    G4cout << "G4VEnergyLossProcess::PreparePhysicsTable for "
-  //           << GetProcessName() << " for " << part.GetParticleName() 
-  //	   << "  " << this << G4endl;
-  //  }
+  if(1 < verboseLevel) {
+    G4cout << "G4VEnergyLossProcess::SlavePreparePhysicsTable for "
+	   << GetProcessName() << " for " << part.GetParticleName() 
+	   << "  " << this << G4endl;
+  }
 
   currentCouple = 0;
   preStepLambda = 0.0;
@@ -556,7 +556,7 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
       }
     }
   }
-}//from 385
+}
 
 void 
 G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
@@ -727,7 +727,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       }
     }
   }
-}//from 559
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
@@ -754,19 +754,20 @@ void G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& pa
   theEnergyOfCrossSectionMax = firstProcess->theEnergyOfCrossSectionMax;
   theCrossSectionMax = firstProcess->theCrossSectionMax;
   
-  //  if(1 < verboseLevel) {
-  //    G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
-  //           << GetProcessName()
-  //           << " and particle " << part.GetParticleName()
-  //           << "; local: " << particle->GetParticleName();
-  //    if(baseParticle) { G4cout << "; base: " << baseParticle->GetParticleName(); }
-  //    G4cout << " TablesAreBuilt= " << tablesAreBuilt
-  //           << " isIon= " << isIon << "  " << this << G4endl;
-  //  }
+  if(1 < verboseLevel) {
+    G4cout << "### G4VEnergyLossProcess::SlaveBuildPhysicsTable() for "
+	   << GetProcessName()
+	   << " and particle " << part.GetParticleName()
+	   << "; local: " << particle->GetParticleName();
+    if(baseParticle) { G4cout << "; base: " << baseParticle->GetParticleName(); }
+    G4cout << " TablesAreBuilt= " << tablesAreBuilt
+	   << " isIon= " << isIon << "  " << this << G4endl;
+  }
 
   if(&part == particle) {
     if(!tablesAreBuilt) {
-      G4LossTableManager::Instance()->SlaveBuildPhysicsTable(particle, this);//G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
+      G4LossTableManager::Instance()->SlaveBuildPhysicsTable(particle, this);
+      //G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
     }
     if(!baseParticle) {
       //Xin Dong 10022011 to facilitate verbose
@@ -787,15 +788,14 @@ void G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& pa
     }
   }
 
-  //  if(1 < verboseLevel) {
-  //    G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
-  //           << GetProcessName()
-  //           << " and particle " << part.GetParticleName();
-  //    if(isIonisation) G4cout << "  isIonisation  flag = 1";
-  //    G4cout << G4endl;
-  //  }
-}//from 757
-
+  if(1 < verboseLevel) {
+    G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
+	   << GetProcessName()
+	   << " and particle " << part.GetParticleName();
+    if(isIonisation) G4cout << "  isIonisation  flag = 1";
+    G4cout << G4endl;
+  }
+}
 
 void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
@@ -1513,7 +1513,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if(eloss < 0.0) { eloss = 0.0; }
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
-
+  /*
   if(1 < verboseLevel) {
     G4double del = finalT + eloss + esec - preStepKinEnergy;
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
@@ -1524,7 +1524,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << "  status= " << track.GetTrackStatus()
            << G4endl;
   }
-  
+  */
   return &fParticleChange;
 }
 

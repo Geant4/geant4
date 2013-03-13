@@ -107,7 +107,9 @@ G4ThreadLocal G4LossTableManager* G4LossTableManager::theInstance = 0;
 G4LossTableManager* G4LossTableManager::Instance()
 {
   if(0 == theInstance) {
-    static G4ThreadLocal G4LossTableManager *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4LossTableManager  ;  G4LossTableManager &manager = *manager_G4MT_TLS_;
+    static G4ThreadLocal G4LossTableManager *manager_G4MT_TLS_ = 0 ; 
+    if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4LossTableManager;  
+    G4LossTableManager &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
   }
   return theInstance;
@@ -452,15 +454,17 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
   } 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void
 G4LossTableManager::SlavePreparePhysicsTable(const G4ParticleDefinition* particle,
-					G4VMultipleScattering* p)
+					     G4VMultipleScattering* p)
 {
-  //if (1 < verbose) {
-  //  G4cout << "G4LossTableManager::PreparePhysicsTable for " 
-  //   << particle->GetParticleName() 
-  //	   << " and " << p->GetProcessName() << G4endl;
-  //}
+  if (1 < verbose) {
+    G4cout << "G4LossTableManager::PreparePhysicsTable for " 
+	   << particle->GetParticleName() 
+  	   << " and " << p->GetProcessName() << G4endl;
+  }
   if(!startInitialisation) { tableBuilder->SetInitialisationFlag(false); }
 
   // start initialisation for the first run
@@ -468,6 +472,7 @@ G4LossTableManager::SlavePreparePhysicsTable(const G4ParticleDefinition* particl
     emConfigurator->PrepareModels(particle, p);
   } 
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void 
@@ -498,12 +503,12 @@ void G4LossTableManager::SlaveBuildPhysicsTable(
      const G4ParticleDefinition* aParticle,
      G4VEnergyLossProcess* p)
 {
-  //  if(1 < verbose) {
-  //    G4cout << "### G4LossTableManager::BuildDEDXTable() is requested for "
-  //           << aParticle->GetParticleName()
-  //	   << " and process " << p->GetProcessName()
-  //           << G4endl;
-  //  }
+  if(1 < verbose) {
+    G4cout << "### G4LossTableManager::BuildDEDXTable() is requested for "
+	   << aParticle->GetParticleName()
+  	   << " and process " << p->GetProcessName()
+	   << G4endl;
+  }
   // clear configurator
   if(0 == run && startInitialisation) {
     emConfigurator->Clear();
@@ -573,22 +578,25 @@ void G4LossTableManager::SlaveBuildPhysicsTable(
                << " and " << curr_part->GetParticleName()
                << " start BuildTable " << G4endl;
       }
-      G4VEnergyLossProcess* curr_proc = SlaveBuildTables(curr_part);//G4VEnergyLossProcess* curr_proc = BuildTables(curr_part);
-      if(curr_proc) { SlaveCopyTables(curr_part, curr_proc); } //      if(curr_proc) CopyTables(curr_part, curr_proc);
+      G4VEnergyLossProcess* curr_proc = SlaveBuildTables(curr_part);
+      //G4VEnergyLossProcess* curr_proc = BuildTables(curr_part);
+      if(curr_proc) { SlaveCopyTables(curr_part, curr_proc); } 
+      //      if(curr_proc) CopyTables(curr_part, curr_proc);
     }
     if ( !tables_are_built[i] ) { all_tables_are_built = false; }
   }
 
-  //  if(1 < verbose) {
-  //    G4cout << "### G4LossTableManager::BuildDEDXTable end: "
-  //           << "all_tables_are_built= " << all_tables_are_built
-  //           << G4endl;
-  //    
-  //    if(all_tables_are_built) {
-  //      G4cout << "### All dEdx and Range tables are built #####" << G4endl;
-  //    }
-  //  }
+  if(1 < verbose) {
+    G4cout << "### G4LossTableManager::BuildDEDXTable end: "
+	   << "all_tables_are_built= " << all_tables_are_built
+	   << G4endl;
+    if(all_tables_are_built) {
+      G4cout << "### All dEdx and Range tables are built #####" << G4endl;
+    }
+  }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::BuildPhysicsTable(
      const G4ParticleDefinition* aParticle,
@@ -727,6 +735,7 @@ void G4LossTableManager::SlaveCopyTables(const G4ParticleDefinition* part,
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::CopyTables(const G4ParticleDefinition* part,
                                           G4VEnergyLossProcess* base_proc)
@@ -1061,7 +1070,7 @@ void G4LossTableManager::ParticleHaveNoLoss(
 {
   G4ExceptionDescription ed;
   ed << "Energy loss process not found for " << aParticle->GetParticleName() 
-     << " !" << G4endl;
+     << " !";
   G4Exception("G4LossTableManager::ParticleHaveNoLoss", "em0001",
 	      FatalException, ed);
 

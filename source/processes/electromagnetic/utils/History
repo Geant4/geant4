@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 February 13: V.Ivant (emutils-V09-06-04)
+- G4ionEffectiveCharge - static array become "const G4double"
+- G4VEnergyLossProcess - uncomment verbise output in new "Slave" methods
+- G4LossTableManager, G4EmModelManager - removed G4endl from description
+    of exceptions
+
 23 December 12: V.Ivant (emutils-V09-06-03)
 - G4VMultipleScattering - position is changed PostStep as it was in 9.6
 

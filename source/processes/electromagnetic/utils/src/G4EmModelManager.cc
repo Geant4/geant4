@@ -238,7 +238,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   if(nEmModels < 1) {
     G4ExceptionDescription ed;
     ed << "No models found out for " << p->GetParticleName() 
-       << " !" << G4endl;
+       << " !";
     G4Exception("G4EmModelManager::Initialise","em0002",
 		FatalException, ed);
   }
@@ -278,7 +278,7 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   if(!isWorld) {
     G4ExceptionDescription ed;
     ed << "No models defined for the World volume for " << p->GetParticleName() 
-       << " !" << G4endl;
+       << " !";
     G4Exception("G4EmModelManager::Initialise","em0002",
 		FatalException, ed);
   }
