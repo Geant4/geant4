@@ -10,6 +10,7 @@
 #
 # $Id$
 #
+# 20130225  M. Kelsey -- Remove cascade/evaporation, cascade/utils
 #------------------------------------------------------------------------------
 
 # Add allocation export symbol for the EM category
@@ -56,8 +57,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/abrasion/sources.cmake
             hadronic/models/binary_cascade/sources.cmake
             hadronic/models/cascade/cascade/sources.cmake
-            hadronic/models/cascade/evaporation/sources.cmake
-            hadronic/models/cascade/utils/sources.cmake
             hadronic/models/coherent_elastic/sources.cmake
             hadronic/models/de_excitation/ablation/sources.cmake
             hadronic/models/de_excitation/evaporation/sources.cmake
