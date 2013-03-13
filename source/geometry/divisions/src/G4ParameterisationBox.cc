@@ -126,10 +126,11 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
     origin.setX( posi ); 
   }
   else
-  { 
+  {
+    std::ostringstream message;
+    message << "Only axes along X are allowed !  Axis: " << faxis;
     G4Exception("G4ParameterisationBoxX::ComputeTransformation()",
-                "GeomDiv0002", FatalException,
-                "Only axes along X are allowed !  Axis: "+faxis);
+                "GeomDiv0002", FatalException, message);
   }
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
@@ -228,9 +229,10 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
   }
   else
   {
+    std::ostringstream message;
+    message << "Only axes along Y are allowed !  Axis: " << faxis;
     G4Exception("G4ParameterisationBoxY::ComputeTransformation()",
-                "GeomDiv0002", FatalException,
-                "Only axes along Y are allowed !  Axis: "+faxis);
+                "GeomDiv0002", FatalException, message);
   }
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )
@@ -329,9 +331,10 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
   }
   else
   { 
+    std::ostringstream message;
+    message << "Only axes along Z are allowed !  Axis: " << faxis;
     G4Exception("G4ParameterisationBoxZ::ComputeTransformation()",
-                "GeomDiv0002", FatalException,
-                "Only axes along Z are allowed !  Axis: "+faxis);
+                "GeomDiv0002", FatalException, message);
   }
 #ifdef G4DIVDEBUG
   if( verbose >= 2 )

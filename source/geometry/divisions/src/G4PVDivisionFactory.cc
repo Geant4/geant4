@@ -54,12 +54,13 @@ G4PVDivisionFactory::~G4PVDivisionFactory()
 
 G4PVDivisionFactory* G4PVDivisionFactory::GetInstance()
 {
-  static G4ThreadLocal G4PVDivisionFactory *theFactory_G4MT_TLS_ = 0 ; if (!theFactory_G4MT_TLS_) theFactory_G4MT_TLS_ = new  G4PVDivisionFactory  ;  G4PVDivisionFactory &theFactory = *theFactory_G4MT_TLS_;
+  static G4ThreadLocal G4PVDivisionFactory *
+    theFactory = new G4PVDivisionFactory;
   if (!fgInstance)
   {
-    fgInstance = &theFactory;
+    fgInstance = theFactory;
   }
-  return &theFactory;
+  return theFactory;
 } 
 
 //_____________________________________________________________________________
