@@ -45,6 +45,8 @@
 # The list of components available generally corresponds to the optional 
 # extras that Geant4 can be built with and are:
 #
+#  multithreaded     (Libraries built with multithreading support)
+#
 #  gdml              (GDML support)
 #  g3tog4            (Geant3 geometry call list reader library)
 #
@@ -190,6 +192,13 @@ endif()
 # Many components are simply present as parts of libraries or always built
 # but require additional compile definitions.
 #
+# - Multithreading
+set(Geant4_multithreaded_FOUND @GEANT4_BUILD_MULTITHREADED@)
+if(Geant4_multithreaded_FOUND)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS multithreaded)
+  list(APPEND Geant4_DEFINITIONS -DG4MULTITHREADED)
+endif()
+
 # - GDML
 set(Geant4_gdml_FOUND @GEANT4_USE_GDML@)
 if(Geant4_gdml_FOUND)

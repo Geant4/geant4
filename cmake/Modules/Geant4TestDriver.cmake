@@ -51,9 +51,9 @@ else()
 endif()
 
 if(TIM)
-  math(EXPR _timeout "${TIM} - 5")
+  math(EXPR _timeout "${TIM} - 120")
 else()
-  math(EXPR _timeout "1500 - 5")
+  math(EXPR _timeout "1500 - 120")
 endif()
 
 if(CWD)

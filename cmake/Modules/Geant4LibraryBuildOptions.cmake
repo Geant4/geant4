@@ -27,6 +27,20 @@ endif()
 #-----------------------------------------------------------------------
 # Optional compiler definitions which are applicable globally
 #
+# - G4MULTITHREADED
+# OFF by default. Switching on will enable multithreading, adding the
+# G4MULTITHREADED definition globally and appending the relevant
+# compiler flags to CMAKE_CXX_FLAGS
+option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant" OFF)
+
+if(GEANT4_BUILD_MULTITHREADED)
+  add_definitions(-DG4MULTITHREADED)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GEANT4_MULTITHREADED_CXX_FLAGS}")
+endif()
+
+geant4_add_feature(GEANT4_BUILD_MULTITHREADED "Build multithread enabled libraries")
+
+
 # - G4_STORE_TRAJECTORY
 # ON by default, switching off can improve performance. Needs to be on
 # for visualization to work fully. Mark as advanced because most users

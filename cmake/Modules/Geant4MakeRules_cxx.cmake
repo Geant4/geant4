@@ -123,7 +123,7 @@ endfunction()
 # GNU C++ or LLVM/Clang Compiler on all(?) platforms
 # NB: At present, only identifies clang correctly on CMake > 2.8.1
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-# set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -DG4MULTITHREADED -ftls-model=initial-exec")
+  #set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe -DG4MULTITHREADED -ftls-model=initial-exec")
   set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe")
   set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g") 
   set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
@@ -148,6 +148,9 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   else()
     __configure_cxxstd_gnu()
   endif()
+
+  # - Multithreading
+  set(GEANT4_MULTITHREADED_CXX_FLAGS "-ftls-model=initial-exec")
 endif()
 
 
