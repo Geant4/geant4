@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 30, 2013 Julia Yarba (test47-V09-06-01)
+- Finish cleaning up ties to CHIPS/QGSC/FTFC, 
+  from the code and the ITEP scripts
+- Remove MaterialsTest47 and replace with the use if G4NistManager
+- Update test47.inp for CTest 
+
 December 11, 2012 - Alberto Ribon (test47-V09-06-00)
 - Eliminated CHIPS and FTFC.
   (Clean-up of shell scripts and ROOT macros need to be done!)

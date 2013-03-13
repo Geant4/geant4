@@ -29,7 +29,8 @@
 
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
-#include "MaterialTest47.hh"
+#include "G4NistManager.hh"
+
 #include "Test30Physics.hh"
 #include "HistoBNLTest47.hh"
 #include "HistoITEPTest47.hh"
@@ -70,7 +71,6 @@
 
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
-#include "G4QInelastic.hh"
 #include "G4ForceCondition.hh"
 #include "G4TouchableHistory.hh"
 
@@ -101,7 +101,8 @@ int main(int argc, char** argv) {
 
   // Set default parameter values
   G4String  namePart = "proton";
-  G4String  nameMat  = "Be";
+  G4String  nameMat  = "Be";  
+  ostringstream osMat(ios_base::out|ios_base::app);// to enable appending in output operations
   G4String  nameGen  = "Binary";
   G4double  energy   = 0;
   G4double  m_p      = 1.40*CLHEP::GeV;
@@ -168,8 +169,8 @@ int main(int argc, char** argv) {
   }
 
   //--------- Materials definition ---------
-
-  MaterialTest47*  mate = new MaterialTest47();
+  // NOTE (JVY): local material definition replaced by the standard G4NistManager - see later in the code
+  
   Test30Physics*   phys = new Test30Physics();
   HistoITEPTest47  histoITEP(namePart, nameMat, m_p/CLHEP::GeV, nameGen);
   HistoBNLTest47   histoBNL(namePart, nameMat, m_p/CLHEP::GeV, nameGen);
@@ -313,7 +314,15 @@ int main(int argc, char** argv) {
 
     G4cout << "###### Start new run # " << run << "     #####" << G4endl;
 
-    material = mate->GetMaterial(nameMat);
+    osMat.clear();
+    osMat.str("G4_");
+    osMat << nameMat;
+    G4String nameMatG4 = osMat.str();   
+     
+    G4cout << "###### Material: " << nameMatG4 << " derived from " << nameMat << G4endl;
+    
+    material = G4NistManager::Instance()->FindOrBuildMaterial(nameMatG4);
+
     if (!material) {
       G4cout << "Material <" << nameMat << "> is not found out" << G4endl;
       exit(1);
@@ -323,8 +332,7 @@ int main(int argc, char** argv) {
       (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
 
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
-    G4QInelastic* chips = 0;
-    if(nameGen == "CHIPS") { chips = new G4QInelastic(); }
+
     G4double amass = phys->GetNucleusMass();
     G4double pmass = (G4Proton::Proton())->GetPDGMass();
 
@@ -367,10 +375,8 @@ int main(int argc, char** argv) {
     G4DynamicParticle dParticle(part,aDirection,energy);
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
-
-    if(chips) {
-      chips->SetParameters();
-    } else if(nameGen == "LElastic" || nameGen == "BertiniElastic" || nameGen == "elastic") {
+    
+    if(nameGen == "LElastic" || nameGen == "BertiniElastic" || nameGen == "elastic") {
       cs = new G4HadronElasticDataSet();
     } else if(part == proton && Z > 1 && nameGen != "lepar") {
       if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
@@ -412,12 +418,7 @@ int main(int argc, char** argv) {
     step->SetPostStepPoint(bPoint);
     step->SetStepLength(theStep);
 
-    if(chips) {
-      G4ForceCondition condition = NotForced;
-      cross_sec = 1.0/(material->GetTotNbOfAtomsPerVolume()*
-		       chips->GetMeanFreePath(*gTrack, DBL_MAX, 
-					      &condition));
-    } else if(cs) {
+    if(cs) {
       cs->BuildPhysicsTable(*part);
       cross_sec = cs->GetCrossSection(&dParticle, elm);
     } else {
@@ -483,12 +484,13 @@ int main(int argc, char** argv) {
 			     mom.z()/CLHEP::GeV, (e0+mass+amass)/CLHEP::GeV);
       labp = G4LorentzVector(mom.x()/CLHEP::GeV, mom.y()/CLHEP::GeV,
 			     mom.z()/CLHEP::GeV, (e0+mass+pmass)/CLHEP::GeV);
-      if(chips) { aChange = chips->PostStepDoIt(*gTrack,*step); }
-      else      { aChange = proc->PostStepDoIt(*gTrack,*step); }
+      aChange = proc->PostStepDoIt(*gTrack,*step); 
 
       G4int n = aChange->GetNumberOfSecondaries();
-      if (verbose>1) {
-	if (iter < 10 || (n <=2 && nsec2 < 10)) {
+      if (verbose>1) 
+      {
+	if (iter < 10 || (n <=2 && nsec2 < 10)) 
+	{
 	  G4cout << "Event " << iter << " Process " << proc->GetProcessName() <<  " Type " << proc->GetProcessType() << "/" << proc->GetProcessSubType() << " Secondaries " << n << G4endl;
 	}
       }
@@ -517,7 +519,6 @@ int main(int argc, char** argv) {
     else             histoITEP.write(cross_sec, nevt);
   }
 
-  delete mate;
   delete fin;
   delete phys;
 

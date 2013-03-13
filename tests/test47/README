@@ -40,13 +40,17 @@ II. Comparison of Geant4 predictions and experimentally measured inclusive
     13) p Cu at 14.6 GeV/c
     14) p Au at 14.6 GeV/c
 
-Data are stored in CVS, together with the C++ code of the package, in a form 
-of ASCII tables, under /itep or /bnl subdirectories.
+Data are stored in SVN (in the past, in CVS), together with the C++ code of 
+the package, in a form of ASCII tables, under /itep or /bnl subdirectories.
 
-The following Geant4 models: LEP, Bertini, Binary, FTF/Preco, FTF/Binary, 
-QGS/CHIPS (except that FTF/Preco and QGS/Chips are not supposed to run at 
-1.4 GeV/c; and they are NOT employed in the low energy tests).
-
+The following Geant4 modelsb are: Bertini, Binary, FTFP(reco).
+Note that CHIPS model has been discontinued, and with that we've also removed
+QGSC and FTFC tests.
+LEP model is currently depricated, and is not in tests either.
+Bertini is tested at all of the above energies.
+FTFP is NOT used at 1.4GeV as this energy is outside of the model validity range.
+Binary is not used at 5.0GeV or 7.5GeV, as the model isn't really applicable there
+(it runs but the results are poor).
 
 Monte Carlo predictions are obtained by running Geant4-based application, that 
 can be configured at run time, to simulate a given number of events (1,000,000 
@@ -81,8 +85,25 @@ Geant4 hadronic model.
 
 To analyze the output and to compare predictions of different Geant4 hadronic 
 models (vs experimental data, or vs each other) several ROOT scripts are
-provided and they are combined in a single script Plot.C, also stored in CVS 
-as a part of the package.
+provided, via PlotITEPAnalysis.C, Plot.C, and PlotMIPS.C; they also stored in 
+SVN as a part of the package.
+
+
+Creation of the executable:
+---------------------------
+
+The makefile in the directory will create the executable in the bin area.
+However one need to setup the environment for Geant4 as well as ROOT. It 
+is important to setup the compiler to the same one by which the Geant4 
+and ROOT library are created. 
+
+For usage in the cmslpc cluster and using Geant4 and ROOT libraries already
+created for CMS application, a directory "misc" is created which provides
+"g4setup.csh" for defining the environment variable. One need to comment and
+uncomment a few lines in GNUmakefile to create the executable. 
+
+Additional information:
+----------------------
 
 Together with the Geant4 application code and the data tables shell run 
 scripts are provided that allow to execute these tests, either interactively, 
@@ -112,17 +133,3 @@ and delivers comparison plots in the encapsulated postscript format (eps).
    
 -- run_all.csh will submit to batch 15 jobs, i.e. the 12 jobs of the ITEP 
    tests, and the 3 jobs of the BNL test
-
-
-Creation of the executable:
----------------------------
-
-The makefile in the directory will create the executable in the bin area.
-However one need to setup the environment for Geant4 as well as ROOT. It 
-is important to setup the compiler to the same one by which the Geant4 
-and ROOT library are created. 
-
-For usage in the cmslpc cluster and using Geant4 and ROOT libraries already
-created for CMS application, a directory "misc" is created which provides
-"g4setup.csh" for defining the environment variable. One need to comment and
-uncomment a few lines in GNUmakefile to create the executable. 

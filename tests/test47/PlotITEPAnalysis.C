@@ -47,15 +47,13 @@ int ColorVersion[4] = { kBlack, 7, kRed, kGreen }; // 7 = very light sky-blue
 
 // model comparison business
 //
- const int NModels = 6;
-//std::string Models[3] = { "bertini", "ftfp", "qgsc" };
-//int ColorModel[3] = { kRed, 7, kGreen };
-std::string Models[6] = { "bertini", "binary", "qgsc", "qgsp", "CHIPS", "ftfp" };
+ const int NModels = 3;
+std::string Models[3] = { "bertini", "binary", "ftfp" };
 
 //const int NModels = 2;
 //std::string Models[2] = { "bertini", "ftfp" };
 
-int ColorModel[6] = { 6, 3, 7, 9, 12, 14 };
+int ColorModel[6] = { 6, 3, 14 };
 
 // --> General purspose exp.data read-in
 //
@@ -190,55 +188,6 @@ void plotFTFSummary( std::string beam, std::string target )
 
 // --> end of FTF business
 
-// --> CHIPS (regression) business
-
-void plotCHIPSSummary( std::string beam, std::string target )
-{
-
-   TCanvas *myc1 = new TCanvas("myc1","",800,600);
-   myc1->Divide(2,2);
-
-   myc1->cd(1);
-   plotMC2Data( beam, target, "1.40", "proton", "59.1", "CHIPS" );
-   myc1->cd(2);
-   plotMC2Data( beam, target, "1.40", "neutron", "59.1", "CHIPS" );
-   myc1->cd(3);
-   plotMC2Data( beam, target, "1.40", "proton", "119.0", "CHIPS" );
-   myc1->cd(4);
-   plotMC2Data( beam, target, "1.40", "neutron", "119.0", "CHIPS" );
-
-   std::string en;
-   if ( beam == "proton" )
-   {
-      en = "7.50";
-   }
-   else if ( beam == "piplus" || beam == "piminus" )
-   {
-      en = "5.00";
-   }
-   else
-   {
-      std::cout << " Nothing available for " << beam << " beam " << std::endl;
-      return;
-   }
-
-   TCanvas *myc2 = new TCanvas("myc2","",800,600);
-   myc2->Divide(2,2);
-
-   myc2->cd(1);
-   plotMC2Data( beam, target, en, "proton", "59.1", "CHIPS" );
-   myc2->cd(2);
-   plotMC2Data( beam, target, en, "neutron", "59.1", "CHIPS" );
-   myc2->cd(3);
-   plotMC2Data( beam, target, en, "proton", "119.0", "CHIPS" );
-   myc2->cd(4);
-   plotMC2Data( beam, target, en, "neutron", "119.0", "CHIPS" );
-
-   return;
-
-}
-
-// --> end of CHIPS business
 
 // --> model comparison
 
@@ -448,12 +397,24 @@ void plotModelsMC2Data( std::string beam, std::string target, std::string energy
    
    TGraph* gr[NModels];
    
-   int NMod = NModels;
-   if ( energy == "1.40" ) NMod -= 1;    
+//   int NMod = NModels;
+//   if ( energy == "1.40" ) NMod -= 1;  
    
-   for ( int iv=0; iv<NMod; iv++ )
+   std::string skip ="";
+   if ( energy == "1.40" ) 
+   {
+      skip = "ftfp";
+   }
+   else 
+   {
+      skip = "binary";
+   }  
+   
+   for ( int iv=0; iv<NModels; iv++ )
    {
 
+      if ( Models[iv] == skip ) continue;
+      
    // open G4 output root file (histo)
    std::string histofile = beam + target + Models[iv] + energy + "GeV.root";
    std::string histoname = "KE" + secondary_type + "0" + beam + target + Models[iv] + energy + "GeV";
@@ -532,8 +493,9 @@ void plotModelsMC2Data( std::string beam, std::string target, std::string energy
    
    TLegend* leg = new TLegend(0.75, 0.70, 0.99, 0.99);   
    
-   for ( int iv=0; iv<NMod; iv++ )
+   for ( int iv=0; iv<NModels; iv++ )
    {
+      if ( Models[iv] == skip ) continue;
       gr[iv]->Draw("lpsame");   
       leg->AddEntry( gr[iv], Models[iv].c_str(), "p" );
    } 
@@ -547,37 +509,8 @@ void plotModelsMC2Data( std::string beam, std::string target, std::string energy
 
 }
 
-void mergeFiles( std::string beam, std::string target, std::string energy, std::string model )
-{
-
-   TFileMerger* fm = new TFileMerger();
-   
-   std::string output = beam + target + model + energy + "GeV.root";
-   
-   fm->OutputFile( output.c_str() );
-   
-
-   for ( int id=1; id<=32; id++ )
-   {
-      std::string filename = beam + target + model + energy + "GeV-";
-      char buf[5];
-      sprintf( buf, "%i", id );
-      filename.append( buf ); 
-      filename += ".root";    
-      // std::cout << " file name = " << file << std::endl;           
-      fm->AddFile( filename.c_str() );
-   }
-   
-   fm->Merge();
-   
-
-   return;
-
-}
-
 void crudeMerge( std::string beam, std::string target, std::string energy, std::string model )
 {
-
 
 // Note: if one merges weighted/normilized histograms, in this case 
 //       the resulting histogram(s) will be 32 times the statistics;

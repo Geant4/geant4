@@ -20,5 +20,7 @@ include $(G4INSTALL)/config/architecture.gmk
 CPPFLAGS += $(shell $(ROOTSYS)/bin/root-config --cflags)
 LDFLAGS  += $(shell $(ROOTSYS)/bin/root-config --glibs)
 
-include $(G4INSTALL)/config/binmake.gmk
+#include $(G4INSTALL)/config/binmake.gmk
+include ../test48/binmake.gmk
+
 

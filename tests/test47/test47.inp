@@ -2,7 +2,7 @@
 0
 #rad
 #events
-1000000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -18,6 +18,6 @@ Be
 0. 0. 1.
 // ---
 #generator
-lepar
+bertini
 #run
 #exit
