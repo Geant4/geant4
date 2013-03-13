@@ -35,7 +35,7 @@
 #include "G4NeutronTrackingCut.hh"
 
 #include "G4DataQuestionaire.hh"
-#include "HadronPhysicsQGSP_FTFP_BERT.hh"
+#include "G4HadronPhysicsQGSP_FTFP_BERT.hh"
 
 QGSPCMS_FTFP_BERT_EML95msc93::QGSPCMS_FTFP_BERT_EML95msc93()
 {
@@ -61,7 +61,7 @@ QGSPCMS_FTFP_BERT_EML95msc93::QGSPCMS_FTFP_BERT_EML95msc93()
   RegisterPhysics( new G4HadronElasticPhysics(ver));
 
   // Hadron Physics
-  RegisterPhysics( new HadronPhysicsQGSP_FTFP_BERT(ver)); 
+  RegisterPhysics( new G4HadronPhysicsQGSP_FTFP_BERT(ver)); 
   
   // Stopping Physics
   RegisterPhysics( new G4StoppingPhysics(ver));
