@@ -132,7 +132,7 @@ G4RunManagerKernel::G4RunManagerKernel()
   // version banner
   G4String vs = G4Version;
   vs = vs.substr(1,vs.size()-2);
-  versionString = " Geant4MT version ";
+  versionString = " Geant4 version ";
   versionString += vs;
   versionString += "   ";
   versionString += G4Date;
@@ -199,7 +199,7 @@ G4RunManagerKernel::G4RunManagerKernel(int isSlaveFlag)
   // version banner
   G4String vs = G4Version;
   vs = vs.substr(1,vs.size()-2);
-  versionString = " Geant4MT version ";
+  versionString = " Geant4 version ";
   versionString += vs;
   versionString += "   ";
   versionString += G4Date;
