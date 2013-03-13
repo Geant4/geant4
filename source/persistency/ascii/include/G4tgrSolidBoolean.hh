@@ -83,10 +83,11 @@ inline const G4tgrSolid* G4tgrSolidBoolean::GetSolid( G4int ii ) const
 {  
   if((ii != 0) && (ii != 1))
   {
-    G4String ErrMessage = "Only two G4tgrSolids (0,1) possible ! Asking for... "
-                        + ii;
+    std::ostringstream message;
+    message << "Only two G4tgrSolids (0,1) possible ! Asking for... "
+            << ii;
     G4Exception("G4tgrSolidBoolean::GetSolid()", "InvalidInput",
-                FatalException, ErrMessage); 
+                FatalException, message); 
   }
   return theSolids[ii];
 }

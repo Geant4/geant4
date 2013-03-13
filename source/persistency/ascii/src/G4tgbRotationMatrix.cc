@@ -41,7 +41,7 @@
 
 // -------------------------------------------------------------------------
 G4tgbRotationMatrix::G4tgbRotationMatrix()
-  : theTgrRM(0), theG4RM(0)
+  : theTgrRM(0)
 {
 }
 
@@ -54,7 +54,7 @@ G4tgbRotationMatrix::~G4tgbRotationMatrix()
 
 // -------------------------------------------------------------------------
 G4tgbRotationMatrix::G4tgbRotationMatrix( G4tgrRotationMatrix* tgr )
-  : theTgrRM(tgr), theG4RM(0)
+  : theTgrRM(tgr)
 {
 }
 

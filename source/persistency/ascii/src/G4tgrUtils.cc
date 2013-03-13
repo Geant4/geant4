@@ -50,19 +50,21 @@ G4ThreadLocal G4tgrEvaluator* G4tgrUtils::theEvaluator  = 0 ;
 
 //-------------------------------------------------------------
 G4tgrUtils::G4tgrUtils()
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
+  if (!theEvaluator)  { theEvaluator= new G4tgrEvaluator; }
 }
 
 
 //-------------------------------------------------------------
 G4tgrUtils::~G4tgrUtils()
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
+  delete theEvaluator; theEvaluator = 0;
 }
 
 
 //-------------------------------------------------------------
 G4bool G4tgrUtils::IsSeparator( const char ch)
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   char nonCharacters[7] = {"()+-*/"};
   for( size_t ii = 0; ii < 6; ii++ )
   {
@@ -77,7 +79,7 @@ G4bool G4tgrUtils::IsSeparator( const char ch)
 
 //-------------------------------------------------------------
 G4bool G4tgrUtils::IsNumber( const G4String& str)
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   G4int isnum = 1;
   G4int numE = 0;
   for(size_t ii=0; ii<str.length(); ii++)
@@ -108,7 +110,7 @@ G4bool G4tgrUtils::IsNumber( const G4String& str)
 
 //-------------------------------------------------------------
 G4bool G4tgrUtils::IsInteger( const G4double val, const G4double precision )
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   if( G4int(val) / val - 1 > precision )
   { 
     return 0;
@@ -122,7 +124,7 @@ G4bool G4tgrUtils::IsInteger( const G4double val, const G4double precision )
 
 //-------------------------------------------------------------
 void G4tgrUtils::Dump3v( const G4ThreeVector& vec, const char* msg) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   G4cout << msg << std::setprecision(8)
          << vec << std::setprecision(6) << G4endl;
 }
@@ -130,7 +132,7 @@ void G4tgrUtils::Dump3v( const G4ThreeVector& vec, const char* msg)
 
 //-------------------------------------------------------------
 void G4tgrUtils::Dumprm( const G4RotationMatrix& rm, const char* msg)
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   G4cout << msg << G4endl
        << " xx=" << rm.xx() << " yx=" << rm.yx() << " zx=" << rm.zx() << G4endl
        << " xy=" << rm.xy() << " yy=" << rm.yy() << " zy=" << rm.zy() << G4endl
@@ -141,7 +143,7 @@ void G4tgrUtils::Dumprm( const G4RotationMatrix& rm, const char* msg)
 //-------------------------------------------------------------
 void G4tgrUtils::DumpVS( const std::vector<G4String>& wl,
                          const char* msg, std::ostream& outs ) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   outs << msg << G4endl;
   std::vector<G4String>::const_iterator ite;
   for( ite = wl.begin(); ite != wl.end(); ite++ )
@@ -154,14 +156,14 @@ void G4tgrUtils::DumpVS( const std::vector<G4String>& wl,
 
 //-------------------------------------------------------------
 void G4tgrUtils::DumpVS( const std::vector<G4String>& wl , const char* msg) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   DumpVS( wl, msg, G4cout);
 }
 
 
 //-------------------------------------------------------------
 G4String G4tgrUtils::SubColon( const G4String& str ) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   if( str.find(':') != 0 )
   {
     G4String ErrMessage = "Trying to subtract leading colon from a word\n"
@@ -176,7 +178,7 @@ G4String G4tgrUtils::SubColon( const G4String& str )
 
 //-------------------------------------------------------------
 G4String G4tgrUtils::GetString( const G4String& str ) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   //----------- first check if it is parameter
   const char* cstr = str.c_str();
   if( cstr[0] == '$' )
@@ -201,7 +203,8 @@ G4String G4tgrUtils::GetString( const G4String& str )
 
 //-------------------------------------------------------------
 G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval ) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
+  if (!theEvaluator)  { theEvaluator= new G4tgrEvaluator; }
 #ifdef G4VERBOSE
   if( G4tgrMessenger::GetVerboseLevel() >= 3 )
   {
@@ -425,7 +428,7 @@ G4double G4tgrUtils::GetDouble( const G4String& str, G4double unitval )
 
 //-------------------------------------------------------------
 G4int G4tgrUtils::GetInt( const G4String& str ) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   //----- Convert it to a number (it can be a parameter)
   G4double val = GetDouble(str);
 
@@ -443,7 +446,7 @@ G4int G4tgrUtils::GetInt( const G4String& str )
 
 //-------------------------------------------------------------
 G4bool G4tgrUtils::GetBool( const G4String& str ) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   G4bool val = false;
   
   //----------- first check that it is a not number
@@ -472,8 +475,7 @@ G4bool G4tgrUtils::GetBool( const G4String& str )
 void G4tgrUtils::CheckWLsize( const std::vector<G4String>& wl,
                               unsigned int nWcheck, WLSIZEtype st,
                               const G4String& methodName )
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
-
+{
   G4String outStr = methodName + G4String(".  Line read with number of words ");
   unsigned int wlsize = wl.size();
 
@@ -494,7 +496,7 @@ void G4tgrUtils::CheckWLsize( const std::vector<G4String>& wl,
 //-------------------------------------------------------------
 G4bool G4tgrUtils::CheckListSize( unsigned int nWreal, unsigned int nWcheck,
                                   WLSIZEtype st, G4String& outStr )
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   G4bool isOK = true;
   switch (st)
   {
@@ -552,7 +554,7 @@ G4bool G4tgrUtils::CheckListSize( unsigned int nWreal, unsigned int nWcheck,
 
 //-------------------------------------------------------------
 G4bool G4tgrUtils::WordIsUnit( const G4String& word ) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   return !IsNumber(word);
   if(    word == "mm"
       || word == "cm"
@@ -591,7 +593,7 @@ G4bool G4tgrUtils::WordIsUnit( const G4String& word )
 
 //-------------------------------------------------------------
 G4bool G4tgrUtils::IsFunction( const G4String& word ) 
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   if(    word == "sin"
       || word == "cos"
       || word == "tan"
@@ -622,7 +624,7 @@ G4bool G4tgrUtils::IsFunction( const G4String& word )
 
 //-------------------------------------------------------------
 G4RotationMatrix G4tgrUtils::GetRotationFromDirection( G4ThreeVector dir )
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   G4RotationMatrix rotation;
 
   if( std::fabs(dir.mag()-1.) > G4GeometryTolerance::GetInstance()
@@ -669,7 +671,7 @@ G4RotationMatrix G4tgrUtils::GetRotationFromDirection( G4ThreeVector dir )
 //-------------------------------------------------------------
 G4bool G4tgrUtils::AreWordsEquivalent( const G4String& word1,
                                        const G4String& word2 )
-{  ;;;   if (!theEvaluator) theEvaluator= new G4tgrEvaluator;  ;;;  
+{
   G4bool bEqual = true;
   std::vector< std::pair<size_t,size_t> > stringPairs;
     // start of substring, number of characters

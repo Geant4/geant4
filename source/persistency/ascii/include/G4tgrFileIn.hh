@@ -89,7 +89,7 @@ class G4tgrFileIn
     G4int theCurrentFile;
       // Index of file being read in theFiles
   
-    static G4ThreadLocal std::vector<G4tgrFileIn*> *theInstances_G4MT_TLS_;
+    static G4ThreadLocal std::vector<G4tgrFileIn*> *theInstances;
       // Vector of class instances (each one identified by its name)
   
     G4String theName;

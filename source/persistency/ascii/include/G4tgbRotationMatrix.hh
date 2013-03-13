@@ -71,7 +71,6 @@ class G4tgbRotationMatrix
   private:
 
     G4tgrRotationMatrix* theTgrRM;
-    G4RotationMatrix* theG4RM;
 };
 
 #endif

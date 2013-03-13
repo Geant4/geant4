@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 February 2013 - G.Cosmo (ascii-V09-06-01)
+- Removed unused data member in G4tgbRotationMatrix.
+- Corrected composed text in expection in G4tgrSolidBoolean.
+- Cleanup of MT changes in several classes.
+
 15 December 2012 - G.Cosmo (ascii-V09-06-00)
 - Removed BREPS solids.
 
