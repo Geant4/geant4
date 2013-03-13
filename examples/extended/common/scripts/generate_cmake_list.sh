@@ -50,12 +50,15 @@ generate() {
     fi  
   done
   
-  # Extract use of visualization
+  # Extract use of ui/visualization
+  UI_VIS=""
+  GREP_UI=`cat "$EXAMPLE_PROGRAM_NAME"".cc" | grep G4UIExecutive`
+  if [ "${GREP_UI}" != "" ]; then
+    UI_VIS=${UI_VIS}"_ui"
+  fi
   GREP_VIS=`cat "$EXAMPLE_PROGRAM_NAME"".cc" | grep G4VisExecutive`
-  if [ "${GREP_VIS}" = "" ]; then
-    NO_VIS="_no_vis"
-  else
-    NO_VIS=""
+  if [ "${GREP_VIS}" != "" ]; then
+    UI_VIS=${UI_VIS}"_vis"
   fi   
   
   # Extract list of scripts:
@@ -84,7 +87,7 @@ generate() {
   # Project
   cat $CURDIR/CMakeLists_template_1.txt | sed s/"EXAMPLE_NAME"/"${EXAMPLE_NAME}"/g > CMakeLists.txt
   # Use Geant4 
-  cat $CURDIR/CMakeLists_template_2"${NO_VIS}".txt >> CMakeLists.txt
+  cat $CURDIR/CMakeLists_template_2"${UI_VIS}".txt >> CMakeLists.txt
   # Find extern package
   cat $CURDIR/CMakeLists_template_3"${WITH_EXTERN}""${OPTIONAL}".txt | sed s/"EXAMPLE_NAME"/"${EXAMPLE_NAME}"/g | sed s/"EXTERN_PACKAGE_TO_UPPER"/"${EXTERN_PACKAGE_TO_UPPER}"/g | sed s/"EXTERN_PACKAGE"/"${EXTERN_PACKAGE}"/g >> CMakeLists.txt
   # Locate sources and headers
@@ -227,6 +230,24 @@ generate_visualization() {
   generate visualization/standalone
   generate visualization/userVisAction
 }
+
+generate_novice() {
+  generate ../novice/N01
+  generate ../novice/N02
+  generate ../novice/N03
+  generate ../novice/N04
+  generate ../novice/N05
+  generate ../novice/N06
+  generate ../novice/N07
+}  
+
+generate_advanced() {
+  generate ../advanced/air_shower
+  generate ../advanced/gammaknife
+  generate ../advanced/ChargeExchangeMC
+  generate ../advanced/dnaphysics
+  # to be completed
+}  
 
 # Check arguments
 if [ $# -ne 1 ]; then

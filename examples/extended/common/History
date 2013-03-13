@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28/02/13 I. Hrivnacova (excommon-V09-06-00)
+- When building materials with NistManager
+  do not set fromIsotopes argument (which was set to false), 
+  as since 9.6 all materials have to be built from isotopes.
+  Thanks to V. Ivantchenko for pointing at this.
+
 26/09/2012 I. Hrivnacova (excommon-V09-05-02)
 - Added/updated CMakeLists.txt files:
   adding copying macros, install target, comment lines
