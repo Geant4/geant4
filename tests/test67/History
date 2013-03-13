@@ -15,6 +15,27 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-Feb-2013 L.Pandola and A.Dotti (test67-V09-06-06)
+	Fixed bug which caused the failure of the tests on 
+	CDash-PhysicsChecks with the standard_opt0 list.
+
+09-Feb-2013 L.Pandola and A.Dotti (test67-V09-06-05)
+	Solve issue with warning of shadowing of variables in PhysicsList.cc
+
+08-Feb-2013 L.Pandola and A.Dotti (test67-V09-06-04)
+	Correct CMakeLists.txt introducing correct tests names and 
+	dependencies
+
+06-Feb-2013 L.Pandola and A.Dotti (test67-V09-06-03)
+	Updated the CMakeLists.txt file to include 4 executions of 
+	test67 (one per each EM builder) in the PhysicsChecks 
+	testing on CDash.
+
+06-Feb-2013 L.Pandola (test67-V09-06-02)
+	fix units of measurements in src/ROOTAnalysis.cc. Fix the 
+	returnCode in test67.cc. Add a new macro to test std_opt0 
+	builder. One reference dataset replaced.
+
 21-Dec-2012 M.Kelsey (test67-V09-06-01)
 	test67.cc: Move declaration of "returnCode" inside #ifdef block to
 	fix "unused variable" compiler warning.

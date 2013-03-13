@@ -34,6 +34,9 @@
 // 10 Apr 2012      Remove PhysListEmPenelope01 (obsolete, models removed), Luciano
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#ifdef G4_USE_ROOT
+#include "ROOTAnalysis.hh"
+#endif
 
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
@@ -53,10 +56,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4DecayPhysics.hh"
 #include "G4ProcessManager.hh"
-
-#ifdef G4_USE_ROOT
-#include "ROOTAnalysis.hh"
-#endif
 
 
 #include "G4LossTableManager.hh"
@@ -82,7 +81,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   SetVerboseLevel(1);
 
   // EM physics
-  emName = G4String("emstandard");
+  emName = G4String("emstandard0");
   emPhysicsList = new G4EmStandardPhysics();
   decayPhysicsList = new G4DecayPhysics();
 
@@ -129,7 +128,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if (name == emName) return;
+  if (name == emName) return; 
 
   if (name == "emstandard") {
 

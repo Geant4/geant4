@@ -32,6 +32,7 @@
 #ifdef G4_USE_ROOT
 
 #include "ROOTAnalysis.hh"
+#include "TError.h"
 #include "G4Version.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -292,6 +293,7 @@ int ROOTAnalysis::CheckPhysicalResults()
   G4double CompRef=0,IoniRef=0,PERef=0;
 
   //Read reference values
+  gErrorIgnoreLevel = kFatal;
   TFile* file = new TFile(filename,"READ");
   if (!file)
     {
@@ -333,6 +335,8 @@ int ROOTAnalysis::CheckPhysicalResults()
       fTree->GetEntry(i);
 
       //G4cout << "energy: " << energy << " " << energyRef << G4endl;      
+      energy *= keV; //specify units
+      energyRef *= keV;
 
       //Now start checking energy by energy
       if (TMath::Abs(energy-energyRef)<10*eV) 
