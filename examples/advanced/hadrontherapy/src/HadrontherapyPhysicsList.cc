@@ -60,7 +60,7 @@
 #include "LocalIonIonInelasticPhysic.hh"             // Physic dedicated to the ion-ion inelastic processes
 
 // Physic lists (contained inside the Geant4 source code, in the 'physicslists folder')
-#include "HadronPhysicsQGSP_BIC.hh"
+#include "G4HadronPhysicsQGSP_BIC.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
@@ -192,7 +192,7 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 
   } else if (name == "QGSP_BIC_EMY") {
     AddPhysicsList("emstandard_opt3");
-    hadronPhys.push_back( new HadronPhysicsQGSP_BIC());
+    hadronPhys.push_back( new G4HadronPhysicsQGSP_BIC());
     hadronPhys.push_back( new G4EmExtraPhysics());
     hadronPhys.push_back( new G4HadronElasticPhysics());
     hadronPhys.push_back( new G4StoppingPhysics());
