@@ -38,7 +38,6 @@
 #include "G4strstreambuf.hh"
 
 #ifdef G4MULTITHREADED
-
   G4ThreadLocal G4strstreambuf *G4coutbuf_p = 0;
   G4ThreadLocal G4strstreambuf *G4cerrbuf_p = 0;
   G4ThreadLocal std::ostream *G4cout_p = 0;

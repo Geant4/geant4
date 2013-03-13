@@ -37,5 +37,5 @@
 #include "G4Types.hh"
 #include "G4ReferenceCountedHandle.hh"
 
-G4ThreadLocal G4Allocator<G4CountedObject<void> > *pCountedObjectAllocator = 0;
-G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *pRCHAllocator = 0;
+G4ThreadLocal G4Allocator<G4CountedObject<void> > *aCountedObjectAllocator = 0;
+G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *aRCHAllocator = 0;

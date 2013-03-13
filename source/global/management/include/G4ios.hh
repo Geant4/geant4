@@ -42,32 +42,18 @@
 
 #ifdef G4MULTITHREADED
 
-  #if defined G4GLOB_ALLOC_EXPORT
-    extern G4DLLEXPORT G4ThreadLocal std::ostream *G4cout_p;
-    extern G4DLLEXPORT G4ThreadLocal std::ostream *G4cerr_p;
+  extern G4GLOB_DLL G4ThreadLocal std::ostream *G4cout_p;
+  extern G4GLOB_DLL G4ThreadLocal std::ostream *G4cerr_p;
   #define G4cout (*G4cout_p)
   #define G4cerr (*G4cerr_p)
-
-  #else
-    extern G4DLLIMPORT G4ThreadLocal std::ostream *G4cout_p;
-    extern G4DLLIMPORT G4ThreadLocal std::ostream *G4cerr_p;
-  #define G4cout (*G4cout_p)
-  #define G4cerr (*G4cerr_p)
- 
-  #endif
 
   void G4iosInitialization();
   void G4iosFinalization();
 
 #else  // Sequential
 
-  #if defined G4GLOB_ALLOC_EXPORT
-    extern G4DLLEXPORT std::ostream G4cout;
-    extern G4DLLEXPORT std::ostream G4cerr;
-  #else
-    extern G4DLLIMPORT std::ostream G4cout;
-    extern G4DLLIMPORT std::ostream G4cerr;
-  #endif
+  extern G4GLOB_DLL std::ostream G4cout;
+  extern G4GLOB_DLL std::ostream G4cerr;
 
 #endif
 

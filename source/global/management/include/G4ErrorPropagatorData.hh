@@ -92,7 +92,7 @@ private:
 
 private:
 
-  static G4ThreadLocal G4ErrorPropagatorData* theErrorPropagatorData;
+  static G4ThreadLocal G4ErrorPropagatorData* fpInstance;
 
   G4ErrorMode theMode;
 

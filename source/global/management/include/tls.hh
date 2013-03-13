@@ -23,10 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: $
-// GEANT4 tag $Name: $
-//
+// $Id$
 //
 // Thread Local Storage typedefs
 
@@ -37,7 +34,7 @@
 #define G4_TLS
 
 #if defined (G4MULTITHREADED)
-  #if defined(__MACH__) && defined(__clang__) && defined(MAC_OS_X_VERSION_10_7) && defined(__x86_64__)
+  #if defined(__MACH__) && defined(__clang__) && defined(__x86_64__)
   #  define G4ThreadLocalStatic static __thread
   #  define G4ThreadLocal __thread
   #elif defined(__linux__) || defined(_AIX)

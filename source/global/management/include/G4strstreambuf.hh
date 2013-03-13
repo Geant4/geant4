@@ -41,27 +41,15 @@ class G4strstreambuf;
 
 #ifdef G4MULTITHREADED
 
-  #if defined G4GLOB_ALLOC_EXPORT
-    extern G4DLLEXPORT G4ThreadLocal G4strstreambuf *G4coutbuf_G4MT_TLS_;
-    extern G4DLLEXPORT G4ThreadLocal G4strstreambuf *G4cerrbuf_G4MT_TLS_;
-    #define G4coutbuf (*G4coutbuf_G4MT_TLS_)
-    #define G4cerrbuf (*G4cerrbuf_G4MT_TLS_)
-  #else
-    extern G4DLLIMPORT G4ThreadLocal G4strstreambuf *G4coutbuf_G4MT_TLS_;
-    extern G4DLLIMPORT G4ThreadLocal G4strstreambuf *G4cerrbuf_G4MT_TLS_;
-    #define G4coutbuf (*G4coutbuf_G4MT_TLS_)
-    #define G4cerrbuf (*G4cerrbuf_G4MT_TLS_)
-  #endif
+  extern G4GLOB_DLL G4ThreadLocal G4strstreambuf *G4coutbuf_p;
+  extern G4GLOB_DLL G4ThreadLocal G4strstreambuf *G4cerrbuf_p;
+  #define G4coutbuf (*G4coutbuf_p)
+  #define G4cerrbuf (*G4cerrbuf_p)
 
 #else  // Sequential
 
-  #if defined G4GLOB_ALLOC_EXPORT
-    extern G4DLLEXPORT G4strstreambuf G4coutbuf;
-    extern G4DLLEXPORT G4strstreambuf G4cerrbuf;
-  #else
-    extern G4DLLIMPORT G4strstreambuf G4coutbuf;
-    extern G4DLLIMPORT G4strstreambuf G4cerrbuf;
-  #endif
+  extern G4GLOB_DLL G4strstreambuf G4coutbuf;
+  extern G4GLOB_DLL G4strstreambuf G4cerrbuf;
 
 #endif
 

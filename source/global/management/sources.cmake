@@ -29,11 +29,11 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         globals.hh
         templates.hh
         tls.hh
-        G4strstreambuf.hh
         G4Allocator.hh
         G4strstreambuf.icc
         G4AllocatorPool.hh
         G4ApplicationState.hh
+        G4AutoLock.hh
         G4DataVector.hh
         G4DataVector.icc
         G4ErrorPropagatorData.hh
@@ -63,6 +63,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4Physics2DVector.icc
         G4Physics2DVectorCache.hh
         G4Pow.hh
+        G4PVSplitter.hh
         G4ReferenceCountedHandle.hh
         G4RotationMatrix.hh
         G4SIunits.hh
@@ -73,6 +74,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4String.hh
         G4String.icc
         G4SystemOfUnits.hh
+	G4Threading.hh
         G4ThreeVector.hh
         G4Timer.hh
         G4Timer.icc
@@ -89,9 +91,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4Version.hh
         G4coutDestination.hh
         G4ios.hh
-        G4MTTransitory.hh
-        G4MTTransitoryParticle.hh
-        G4MTTransitoryPhysicsVector.hh
+        G4strstreambuf.hh
 
     SOURCES
         G4AllocatorPool.cc
@@ -115,6 +115,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4ReferenceCountedHandle.cc
         G4SliceTimer.cc
         G4StateManager.cc
+	G4Threading.cc
         G4Timer.cc
         G4UnitsTable.cc
         G4VExceptionHandler.cc
@@ -122,6 +123,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4VStateDependent.cc
         G4coutDestination.cc
         G4ios.cc
+
     GRANULAR_DEPENDENCIES
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES

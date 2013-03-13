@@ -124,11 +124,7 @@ private:
     // The object subject to reference counting.
 };
 
-#ifdef G4GLOB_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *pRCHAllocator;
-#else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *pRCHAllocator;
-#endif
+extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *aRCHAllocator;
 
 template <class X>
 class G4CountedObject
@@ -168,11 +164,7 @@ private:
     // The counted object.
 };
 
-#ifdef G4GLOB_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4CountedObject<void> > *pCountedObjectAllocator;
-#else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4CountedObject<void> > *pCountedObjectAllocator;
-#endif
+extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4CountedObject<void> > *aCountedObjectAllocator;
 
 // --------- G4CountedObject<X> Inline function definitions ---------
 
@@ -180,8 +172,6 @@ template <class X>
 G4CountedObject<X>::G4CountedObject( X* pObj )
  : fCount(0), fRep( pObj )
 {
-    if (!pCountedObjectAllocator)
-      pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >;
     if( pObj != 0 ) fCount = 1;
 }
 
@@ -206,21 +196,15 @@ void G4CountedObject<X>::Release()
 template <class X>
 void* G4CountedObject<X>::operator new( size_t )
 {
-    if (!pCountedObjectAllocator)
-      pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >;
-    G4Allocator<G4CountedObject<void> > &aCountedObjectAllocator =
-     *pCountedObjectAllocator;
-    return( (void *)aCountedObjectAllocator.MallocSingle() );
+    if (!aCountedObjectAllocator)
+      aCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >;
+    return( (void *)aCountedObjectAllocator->MallocSingle() );
 }
     
 template <class X>
 void G4CountedObject<X>::operator delete( void *pObj )
 {
-    if (!pCountedObjectAllocator)
-      pCountedObjectAllocator = new G4Allocator<G4CountedObject<void> >;
-    G4Allocator<G4CountedObject<void> > &aCountedObjectAllocator =
-     *pCountedObjectAllocator;
-    aCountedObjectAllocator.FreeSingle( (G4CountedObject<void>*)pObj );
+    aCountedObjectAllocator->FreeSingle( (G4CountedObject<void>*)pObj );
 }
 
 // --------- G4ReferenceCountedHandle<X> Inline function definitions ---------
@@ -230,8 +214,6 @@ G4ReferenceCountedHandle<X>::
  G4ReferenceCountedHandle( X* rep )
  : fObj( 0 )
 {
-    if (!pRCHAllocator)
-      pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >;
     if( rep != 0 )
       fObj = new G4CountedObject<X>( rep );
 }
@@ -241,8 +223,6 @@ G4ReferenceCountedHandle<X>::
  G4ReferenceCountedHandle( const G4ReferenceCountedHandle<X>& right )
  : fObj( right.fObj )
 {
-    if (!pRCHAllocator)
-      pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >;
     fObj->AddRef();
 }
   
@@ -256,8 +236,6 @@ template <class X>
 G4ReferenceCountedHandle<X>& G4ReferenceCountedHandle<X>::
  operator =( const G4ReferenceCountedHandle<X>& right )
 {
-    if (!pRCHAllocator)
-      pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >;
     if( fObj != right.fObj )
     {
       if( fObj )
@@ -272,8 +250,6 @@ template <class X>
 G4ReferenceCountedHandle<X>& G4ReferenceCountedHandle<X>::
  operator =( X* objPtr )
 {
-    if (!pRCHAllocator)
-      pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >;
     if( fObj )
       fObj->Release();
     this->fObj = new  G4CountedObject<X>( objPtr );
@@ -313,19 +289,15 @@ X* G4ReferenceCountedHandle<X>::operator ()() const
 template <class X>
 void* G4ReferenceCountedHandle<X>::operator new( size_t )
 {
-    if (!pRCHAllocator)
-      pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >;
-    G4Allocator<G4ReferenceCountedHandle<void> > &aRCHAllocator = *pRCHAllocator;
-    return( (void *)aRCHAllocator.MallocSingle() );
+    if (!aRCHAllocator)
+      aRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >;
+    return( (void *)aRCHAllocator->MallocSingle() );
 }
   
 template <class X>
 void G4ReferenceCountedHandle<X>::operator delete( void *pObj )
 {
-    if (!pRCHAllocator)
-      pRCHAllocator = new G4Allocator<G4ReferenceCountedHandle<void> >;
-    G4Allocator<G4ReferenceCountedHandle<void> > &aRCHAllocator = *pRCHAllocator;
-    aRCHAllocator.FreeSingle( (G4ReferenceCountedHandle<void>*)pObj );
+    aRCHAllocator->FreeSingle( (G4ReferenceCountedHandle<void>*)pObj );
 }
 
 #ifdef G4RF_DEBUG

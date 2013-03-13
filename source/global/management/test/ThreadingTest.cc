@@ -23,66 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
-//
-//
-// GEANT4 native types
-//
-
-#ifndef G4TYPES_HH
-#define G4TYPES_HH
-
+#include "G4AutoLock.hh"
+#include "G4Threading.hh"
+//int fake_mutex_lock_unlock( G4Mutex* ) { return 0; }
+//Debug this code: skip this part
+#include <iostream>
+G4Mutex g4autolockdebug = G4MUTEX_INITIALIZER;
 #ifdef WIN32
-  // Disable warning C4786 on WIN32 architectures:
-  // identifier was truncated to '255' characters
-  // in the debug information
-  //
-  #pragma warning ( disable : 4786 )
-  //
-  // Define DLL export macro for WIN32 systems for
-  // importing/exporting external symbols to DLLs
-  //
-  #if defined G4LIB_BUILD_DLL
-    #define G4DLLEXPORT __declspec( dllexport )
-    #define G4DLLIMPORT __declspec( dllimport )
-  #else
-    #define G4DLLEXPORT
-    #define G4DLLIMPORT
-  #endif
-  //
-  // Unique identifier for global module
-  //
-  #if defined G4GLOB_ALLOC_EXPORT
-    #define G4GLOB_DLL G4DLLEXPORT
-  #else
-    #define G4GLOB_DLL G4DLLIMPORT
-  #endif
+  #define TID GetCurrentThreadId()
+#elif __MACH__
+  #include <pthread.h>
+  #include <sys/syscall.h>
+  #define TID syscall(SYS_thread_selfid)
 #else
-  #define G4DLLEXPORT
-  #define G4DLLIMPORT
-  #define G4GLOB_DLL
+  #include <pthread.h>
+  #include <sys/syscall.h>
+  #define TID syscall(SYS_gettid)
 #endif
+#define MESSAGE( msg ) {		  \
+	G4MUTEXLOCK(&g4autolockdebug); \
+  std::cout<<"ThreadID: "<<TID<<" "<<msg<<std::endl; \
+  G4MUTEXUNLOCK(&g4autolockdebug); }
 
-#include <complex>
+//Example of usage of threading classes of G4
+//Create a global mutex
+G4Mutex mutex = G4MUTEX_INITIALIZER;
 
-// Definitions for Thread Local Storage
-//
-#include "tls.hh"
+//Define a thread-function using G4 types
+G4ThreadFunReturnType myfunc(  G4ThreadFunArgType val) {
+  double value = *(double*)val;
+  MESSAGE( "value is:"<<value );
+  //Play w/ mutex
+  G4AutoLock l(&mutex);
+  l.lock();
+  l.unlock();
+  l.lock();
+  return /*(G4ThreadFunReturnType)*/NULL;
+}
 
-// Typedefs to decouple from library classes
-// Typedefs for numeric types
-//
-typedef double G4double;
-typedef float G4float;
-typedef int G4int;
-typedef bool G4bool;
-typedef long G4long;
-typedef std::complex<G4double> G4complex;
-
-// Forward declation of void type argument for usage in direct object
-// persistency to define fake default constructors
-//
-class __void__;
-
-#endif /* G4TYPES_HH */
+//Example: spawn 10 threads that execute myfunc
+int main(int,char**) {
+  MESSAGE( "Starting program ");
+  int nthreads = 10;
+  G4Thread* tid = new G4Thread[nthreads];
+  double *valss = new double[nthreads];
+  for ( int idx = 0 ; idx < nthreads ; ++idx ) {
+    valss[idx] = (double)idx;
+    G4THREADCREATE( &(tid[idx]) , myfunc, &(valss[idx]) );
+  }
+  for ( int idx = 0 ; idx < nthreads ; ++idx ) {
+    G4THREADJOIN( (tid[idx]) );
+  } 
+  MESSAGE( "Program ended ");
+  return 0;
+}

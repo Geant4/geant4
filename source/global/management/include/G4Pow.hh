@@ -95,7 +95,7 @@ class G4Pow
 
   private:
 
-    static G4ThreadLocal G4Pow* fInstance;
+    static G4ThreadLocal G4Pow* fpInstance;
 
     G4double onethird;
 

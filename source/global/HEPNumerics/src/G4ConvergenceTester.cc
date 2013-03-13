@@ -47,7 +47,7 @@ G4ConvergenceTester::G4ConvergenceTester()
    r2eff(0.), r2int(0.), shift(0.), vov(0.), fom(0.), largest(0.),
    largest_score_happened(0), mean_1(0.), var_1(0.), sd_1(0.), r_1(0.),
    shift_1(0.), vov_1(0.), fom_1(0.), noBinOfHistory(16), slope(0.),
-   noBinOfPDF(10), minimizer(0), noPass(0), noTotal(8)
+   noBinOfPDF(10), minimizer(0), noPass(0), noTotal(8), statsAreUpdated(true)
 {
    nonzero_histories.clear();
    largest_scores.clear();
@@ -116,6 +116,8 @@ void G4ConvergenceTester::AddScore( G4double x )
        sum += x; 
    }
 
+    // Data has been added so statistics have not been updated to new values
+   statsAreUpdated = false;
    n++;
    return; 
 }
@@ -222,7 +224,7 @@ void G4ConvergenceTester::calStat()
 
    if ( nonzero_histories.size() < 500 ) 
    {
-      G4cout << "Number of non zero history too small to calcuarte SLOPE" << G4endl;
+      G4cout << "Number of non zero history too small to calculate SLOPE" << G4endl;
    }
    else
    {
@@ -239,6 +241,10 @@ void G4ConvergenceTester::calStat()
 
    calc_grid_point_of_history();
    calc_stat_history();
+   
+   // statistics have been calculated and this function does not need
+   // to be called again until data has been added
+   statsAreUpdated = true;
 }
 
 
@@ -336,50 +342,52 @@ void G4ConvergenceTester::calc_stat_history()
 
 
 
-void G4ConvergenceTester::ShowResult()
+void G4ConvergenceTester::ShowResult(std::ostream& out)
 {
-   calStat();
+    // if data has been added since the last computation of the statistical values (not statsAreUpdated)
+    // call calStat to recompute the statistical values
+   if(!statsAreUpdated) { calStat(); }
 
-   G4cout << "EFFICIENCY = " << efficiency << G4endl;
-   G4cout << "MEAN = " << mean << G4endl;
-   G4cout << "VAR = " << var << G4endl;
-   G4cout << "SD = " << sd << G4endl;
-   G4cout << "R = "<< r << G4endl;
-   G4cout << "SHIFT = "<< shift << G4endl;
-   G4cout << "VOV = "<< vov << G4endl;
-   G4cout << "FOM = "<< fom << G4endl;
+   out << "EFFICIENCY = " << efficiency << G4endl;
+   out << "MEAN = " << mean << G4endl;
+   out << "VAR = " << var << G4endl;
+   out << "SD = " << sd << G4endl;
+   out << "R = "<< r << G4endl;
+   out << "SHIFT = "<< shift << G4endl;
+   out << "VOV = "<< vov << G4endl;
+   out << "FOM = "<< fom << G4endl;
 
-   G4cout << "THE LARGEST SCORE = " << largest << " and it happend at " << largest_score_happened << "th event" << G4endl;
-   G4cout << "Affected Mean = " << mean_1 << " and its ratio to orignal is " << mean_1/mean << G4endl;
-   G4cout << "Affected VAR = " << var_1 << " and its ratio to orignal is " << var_1/var << G4endl;
-   G4cout << "Affected R = " << r_1 << " and its ratio to orignal is " << r_1/r << G4endl;
-   G4cout << "Affected SHIFT = " << shift_1 << " and its ratio to orignal is " << shift_1/shift << G4endl;
-   G4cout << "Affected FOM = " << fom_1 << " and its ratio to orignal is " << fom_1/fom << G4endl;
+   out << "THE LARGEST SCORE = " << largest << " and it happend at " << largest_score_happened << "th event" << G4endl;
+   out << "Affected Mean = " << mean_1 << " and its ratio to orignal is " << mean_1/mean << G4endl;
+   out << "Affected VAR = " << var_1 << " and its ratio to orignal is " << var_1/var << G4endl;
+   out << "Affected R = " << r_1 << " and its ratio to orignal is " << r_1/r << G4endl;
+   out << "Affected SHIFT = " << shift_1 << " and its ratio to orignal is " << shift_1/shift << G4endl;
+   out << "Affected FOM = " << fom_1 << " and its ratio to orignal is " << fom_1/fom << G4endl;
 
-   check_stat_history();
+   check_stat_history(out);
 
 // check SLOPE and output result
    if ( slope >= 3 )
    {    
       noPass++;
-      G4cout << "SLOPE is large enough" << G4endl; 
+      out << "SLOPE is large enough" << G4endl; 
    }
    else
    {
-      G4cout << "SLOPE is not large enough" << G4endl; 
+      out << "SLOPE is not large enough" << G4endl; 
    }
 
-   G4cout << "This result passes " << noPass << " / "<< noTotal << " Convergence Test." << G4endl; 
-   G4cout << G4endl;
+   out << "This result passes " << noPass << " / "<< noTotal << " Convergence Test." << G4endl; 
+   out << G4endl;
 
 }
 
-void G4ConvergenceTester::ShowHistory()
+void G4ConvergenceTester::ShowHistory(std::ostream& out)
 {
-   G4cout << "i/" << noBinOfHistory << " till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int" << G4endl;
+   out << "i/" << noBinOfHistory << " till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int" << G4endl;
    for ( G4int i = 1 ; i <=  noBinOfHistory  ; i++ )
    {
-      G4cout << i << " " 
+      out << i << " " 
              << history_grid [ i-1 ] << " "
              << mean_history [ i-1 ] << " "  
              << var_history [ i-1 ] << " "  
@@ -395,7 +403,7 @@ void G4ConvergenceTester::ShowHistory()
    }
 }
 
-void G4ConvergenceTester::check_stat_history()
+void G4ConvergenceTester::check_stat_history(std::ostream& out)
 {
 
 // 1 sigma rejection for null hypothesis 
@@ -426,12 +434,12 @@ void G4ConvergenceTester::check_stat_history()
 
    if ( t < 0.429318 ) // Student t of (Degree of freedom = N-2 )  
    {    
-      G4cout << "MEAN distribution is  RANDOM" << G4endl; 
+      out << "MEAN distribution is  RANDOM" << G4endl; 
       noPass++;
    }
    else
    {
-      G4cout << "MEAN distribution is not RANDOM" << G4endl; 
+      out << "MEAN distribution is not RANDOM" << G4endl; 
    }
 
 
@@ -448,31 +456,31 @@ void G4ConvergenceTester::check_stat_history()
       
    if ( t > 1.090546 )
    {    
-      G4cout << "r follows 1/std::sqrt(N)" << G4endl; 
+      out << "r follows 1/std::sqrt(N)" << G4endl; 
       noPass++;
    }
    else
    {
-      G4cout << "r does not follow 1/std::sqrt(N)" << G4endl; 
+      out << "r does not follow 1/std::sqrt(N)" << G4endl; 
    }
 
    if (  is_monotonically_decrease( second_ally ) == true ) 
    {
-      G4cout << "r is monotonically decrease " << G4endl;
+      out << "r is monotonically decrease " << G4endl;
    }
    else
    {
-      G4cout << "r is NOT monotonically decrease " << G4endl;
+      out << "r is NOT monotonically decrease " << G4endl;
    }
 
    if ( r_history.back() < 0.1 )  
    {
-      G4cout << "r is less than 0.1. r = " <<  r_history.back() << G4endl;
+      out << "r is less than 0.1. r = " <<  r_history.back() << G4endl;
       noPass++;
    }
    else
    {
-      G4cout << "r is NOT less than 0.1. r = " <<  r_history.back() << G4endl;
+      out << "r is NOT less than 0.1. r = " <<  r_history.back() << G4endl;
    }
 
 
@@ -488,21 +496,21 @@ void G4ConvergenceTester::check_stat_history()
       
    if ( t > 1.090546 )
    {    
-      G4cout << "VOV follows 1/std::sqrt(N)" << G4endl; 
+      out << "VOV follows 1/std::sqrt(N)" << G4endl; 
       noPass++;
    }
    else
    {
-      G4cout << "VOV does not follow 1/std::sqrt(N)" << G4endl; 
+      out << "VOV does not follow 1/std::sqrt(N)" << G4endl; 
    }
 
    if ( is_monotonically_decrease( second_ally ) == true )
    {
-      G4cout << "VOV is monotonically decrease " << G4endl;
+      out << "VOV is monotonically decrease " << G4endl;
    }
    else
    {
-      G4cout << "VOV is NOT monotonically decrease " << G4endl;
+      out << "VOV is NOT monotonically decrease " << G4endl;
    }
 
 // FOM
@@ -518,12 +526,12 @@ void G4ConvergenceTester::check_stat_history()
 
    if ( t < 0.429318 )
    {    
-      G4cout << "FOM distribution is RANDOM" << G4endl; 
+      out << "FOM distribution is RANDOM" << G4endl; 
       noPass++;
    }
    else
    {
-      G4cout << "FOM distribution is not RANDOM" << G4endl; 
+      out << "FOM distribution is not RANDOM" << G4endl; 
    }
 
 }

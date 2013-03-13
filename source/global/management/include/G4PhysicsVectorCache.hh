@@ -65,21 +65,19 @@ class G4PhysicsVectorCache
     size_t lastBin;             // Cache the last bin location
 };
 
-#if defined G4GLOB_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4PhysicsVectorCache> *aPVCacheAllocator_G4MT_TLS_;
-#else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4PhysicsVectorCache> *aPVCacheAllocator_G4MT_TLS_;
-#endif
+extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4PhysicsVectorCache> *fpPVCacheAllocator;
 
 inline void* G4PhysicsVectorCache::operator new(size_t)
-{  ;;;   if (!aPVCacheAllocator_G4MT_TLS_) aPVCacheAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVectorCache>  ; G4Allocator<G4PhysicsVectorCache> &aPVCacheAllocator = *aPVCacheAllocator_G4MT_TLS_;  ;;;  
-  void* aCache;
-  aCache = (void*)aPVCacheAllocator.MallocSingle();
-  return aCache;
+{ 
+  if (!fpPVCacheAllocator) { fpPVCacheAllocator = new G4Allocator<G4PhysicsVectorCache>; }
+  G4Allocator<G4PhysicsVectorCache> &aPVCacheAllocator = *fpPVCacheAllocator;
+  return (void*)aPVCacheAllocator.MallocSingle();
 }
 
 inline void G4PhysicsVectorCache::operator delete(void* aCache)
-{  ;;;   if (!aPVCacheAllocator_G4MT_TLS_) aPVCacheAllocator_G4MT_TLS_ = new G4Allocator<G4PhysicsVectorCache>  ; G4Allocator<G4PhysicsVectorCache> &aPVCacheAllocator = *aPVCacheAllocator_G4MT_TLS_;  ;;;  
+{ 
+  if (!fpPVCacheAllocator) { fpPVCacheAllocator = new G4Allocator<G4PhysicsVectorCache>; }
+  G4Allocator<G4PhysicsVectorCache> &aPVCacheAllocator = *fpPVCacheAllocator;
   aPVCacheAllocator.FreeSingle((G4PhysicsVectorCache*)aCache);
 }
 

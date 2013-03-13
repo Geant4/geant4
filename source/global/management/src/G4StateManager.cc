@@ -76,7 +76,7 @@ G4StateManager::~G4StateManager()
     } 
     if ( state )  { delete state; }
   } 
-#ifdef G4MULTITHREADED
+#ifdef G4MULTITHREADED_DEACTIVATE
   G4iosFinalization();
 #endif
 }

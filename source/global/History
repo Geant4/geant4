@@ -17,6 +17,61 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 12, 2013 G.Cosmo (global-V09-06-12, global-V09-06-11)
+- Added public accessors for MT data to G4PhysicsVector.
+
+March 11, 2013 G.Cosmo (global-V09-06-10)
+- Further optimisation in G4ReferenceCountedHandle for the use of allocators.
+- Redefined G4DLL_API to G4GLOB_DLL to avoid cases of macro redefinition.
+
+March 9, 2013 G.Cosmo (global-V09-06-09)
+- Take out G4Threading revision picked up from trunk, causing compilation
+  errors on Linux and Windows. Restored version as in "global-V09-06-05".
+
+March 8, 2013 G.Cosmo (global-V09-06-08)
+- Renamed MT macro to safer ID in G4PhysicsVector.
+
+March 7, 2013 G.Cosmo (global-V09-06-07)
+- Renamed internal type name in G4PhysicsVector for MT split.
+
+March 7, 2013 G.Cosmo (global-V09-06-06)
+- Renamed G4MTTransitoryPhysicsVector to G4PVSplitter and adopt export/import
+  flag for static members to overcome problems on Windows DLLs build.
+- Cleanup of code for MT changes in G4PhysicsVector, G4ios and G4strstreambuf.
+- Moved G4MTTransitory and G4MTTransitoryParticle headers in geometry and
+  particles categories respectively.
+- Simplified setup for import/export flags on Windows in G4Types.hh.
+  Replacing G4DLLIMPORT/G4DLLEXPORT flags with G4DLL_API.
+
+February 25, 2013 A.Dotti (global-V09-06-05)
+- Fixing naming clash with G4MT for G4cout variables.
+
+February 25, 2013 A.Dotti (global-V09-06-04)
+- Fixed compilation warning and naming issue in G4AutoLock and G4Threading.
+
+February 22, 2013 G.Cosmo (global-V09-06-03)
+- Removed unused private members in G4JTPolynomialSolver.
+
+February 21, 2013 J.Madsen
+- Minor changes to G4ConvergenceTester: output can now optionally be
+  redirected a different stream (defaults is cout).
+  Accessors are made public and check if data has been added.
+
+February 20, 2013 A.Dotti (global-V09-06-02)
+- Added new classes implementing platform independent threading
+  G4AutoLock and G4Threading. Not yet activated.
+- Generalised flags for MacOS multi-threaded mode (G.Cosmo).
+
+February 13, 2013 G.Cosmo (global-V09-06-01)
+- Withdrawn changes introduced in previous tag for G4UnitsTable.
+- Cleanup of MT code on kernel G4 classes.
+
+February 08, 2013 J.Jacquemier (global-V09-06-00)
+- G4UnitsTable: Migrated to STL map, iterator and algorithm
+
+January 14, 2013 A.Dotti, G.Cosmo
+- Merged changes for MT development.
+
 November 16, 2012 V.Ivantchenko (global-V09-05-15)
 - G4Physics2DVector: fixed comments, more correct references.
 - Updated date for release 9.6.

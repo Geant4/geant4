@@ -35,7 +35,7 @@
 
 //-------------------------------------------------------------------
 
-G4ThreadLocal G4ErrorPropagatorData* G4ErrorPropagatorData::theErrorPropagatorData = 0;
+G4ThreadLocal G4ErrorPropagatorData* G4ErrorPropagatorData::fpInstance = 0;
 G4ThreadLocal G4int G4ErrorPropagatorData::theVerbosity = 0;
 
 //-------------------------------------------------------------------
@@ -48,16 +48,16 @@ G4ErrorPropagatorData::G4ErrorPropagatorData()
 
 G4ErrorPropagatorData::~G4ErrorPropagatorData()
 {
+  delete fpInstance; fpInstance = 0;
 }
 
 G4ErrorPropagatorData* G4ErrorPropagatorData::GetErrorPropagatorData()
 {
-  static G4ThreadLocal G4ErrorPropagatorData *errorPropagatorData_G4MT_TLS_ = 0 ; if (!errorPropagatorData_G4MT_TLS_) errorPropagatorData_G4MT_TLS_ = new  G4ErrorPropagatorData  ;  G4ErrorPropagatorData &errorPropagatorData = *errorPropagatorData_G4MT_TLS_;
-  if( !theErrorPropagatorData )
+  if (fpInstance == 0)
   {
-    theErrorPropagatorData = &errorPropagatorData;
+    fpInstance = new G4ErrorPropagatorData;
   }
-  return theErrorPropagatorData;
+  return fpInstance;
 }
 
 G4int G4ErrorPropagatorData::verbose() 
