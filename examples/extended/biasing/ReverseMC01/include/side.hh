@@ -26,6 +26,8 @@
 /// \file biasing/ReverseMC01/include/side.hh
 /// \brief Definition of the side class
 //
+// $Id$
+//
 #ifndef side_h
 #define side_h 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

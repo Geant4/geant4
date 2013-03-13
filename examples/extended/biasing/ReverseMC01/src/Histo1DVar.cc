@@ -26,6 +26,8 @@
 /// \file biasing/ReverseMC01/src/Histo1DVar.cc
 /// \brief Implementation of the Histo1DVar class
 //
+// $Id$
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              Histo1DVar.cc

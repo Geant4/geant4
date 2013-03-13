@@ -26,6 +26,8 @@
 /// \file biasing/ReverseMC01/include/Histo1DVar.hh
 /// \brief Definition of the Histo1DVar class
 //
+// $Id$
+//
 #ifndef Histo1DVar_h
 #define Histo1DVar_h 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

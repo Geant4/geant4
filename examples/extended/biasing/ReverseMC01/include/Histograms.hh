@@ -26,6 +26,8 @@
 /// \file biasing/ReverseMC01/include/Histograms.hh
 /// \brief Definition of the Histograms class
 //
+// $Id$
+//
 #ifndef Histograms_h
 #define Histograms_h 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

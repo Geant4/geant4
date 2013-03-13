@@ -26,6 +26,8 @@
 /// \file biasing/ReverseMC01/src/VariableLengthPartition.cc
 /// \brief Implementation of the VariableLengthPartition class
 //
+// $Id$
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // MODULE:              VariableLengthParition.cc

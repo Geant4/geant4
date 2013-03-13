@@ -175,7 +175,7 @@ void G4AdjointPhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4PEEffectModel.hh"
+//#include "G4PEEffectFluoModel.hh"
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
@@ -186,7 +186,7 @@ void G4AdjointPhysicsList::ConstructProcess()
 #include "G4eplusAnnihilation.hh"
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
-#include "G4IonParametrisedLossModel.hh"
+//#include "G4IonParametrisedLossModel.hh"
 
 #include "G4ContinuousGainOfEnergy.hh"
 #include "G4eInverseIonisation.hh"
