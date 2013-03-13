@@ -15,6 +15,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 February 13: V.Ivant (monopole-V09-06-04)
+- G4MonopoleTransportation - removed local variable fVerboseLevel
+    and Get/Set methods; use insead verboseLevel variable from 
+    the base class
+
+13 February 13: I.Hrivnacova (monopole-V09-06-03)
+- Applied coding guidelines 
+  (virtual keyword, data members names and initialization)
+
+01 February 13: V.Ivant (monopole-V09-06-02)
+- G4MonopolePhysics - fixed warning at initialisation 
+
+31 January 13: V.Ivant (monopole-V09-06-01)
+- fixed initialisation after MT was introduced
+
 10 January 13: V.Ivant (monopole-V09-06-00)
 - fixed computation of monopole range
 

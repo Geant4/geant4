@@ -15,9 +15,13 @@
 
 /testex/run/binSize 0.2 mm
 #
+/process/em/verbose 1
 /run/initialize
+/process/em/verbose 1
+/particle/select monopole
+/particle/process/dump
 #
-/process/eLoss/verbose 1
+#/process/eLoss/verbose 1
 /testex/event/printModulo 10
 #
 /gun/particle monopole

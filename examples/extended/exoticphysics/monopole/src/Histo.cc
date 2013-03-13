@@ -49,8 +49,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Histo::Histo()
+ : fManager(0),
+   fMessenger(0)
 {
-  fManager   = 0;
   fMessenger = new HistoMessenger(this);
  
   fHistName   = "test";

@@ -46,7 +46,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopolePhysicsMessenger::G4MonopolePhysicsMessenger(G4MonopolePhysics* p)
-  : fPhys(p) 
+  : G4UImessenger(),
+    fPhys(p), 
+    fPhysicsDir(0),    
+    fPhysicsCmd(0),
+    fMCmd(0),
+    fZCmd(0),
+    fMassCmd(0)
 {
   fPhysicsDir = new G4UIdirectory("/monopole/");
   fPhysicsDir->SetGuidance("histograms control");

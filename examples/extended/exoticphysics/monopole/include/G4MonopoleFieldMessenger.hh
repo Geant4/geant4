@@ -54,7 +54,7 @@ public:
   G4MonopoleFieldMessenger(G4MonopoleFieldSetup* );
   ~G4MonopoleFieldMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   

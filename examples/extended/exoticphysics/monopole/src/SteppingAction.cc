@@ -38,7 +38,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct):fRunAction(RuAct)
+SteppingAction::SteppingAction(RunAction* RuAct)
+ : G4UserSteppingAction(),
+   fRunAction(RuAct)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

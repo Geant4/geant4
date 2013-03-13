@@ -40,7 +40,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunActionMessenger::RunActionMessenger(RunAction * ra): fRunAction(ra)
+RunActionMessenger::RunActionMessenger(RunAction * ra)
+ : G4UImessenger(),
+   fRunAction(ra),
+   fActDir(0),    
+   fBinSizeCmd(0),
+   fVerboseCmd(0)
 {   
   fActDir = new G4UIdirectory("/testex/run/");
   fActDir->SetGuidance("run commands");

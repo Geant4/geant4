@@ -43,7 +43,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
-  :fDetector(det)
+  :G4UImessenger(),
+   fDetector(det),
+   fDetDir(0),
+   fMaterCmd(0),
+   fSizeXCmd(0),
+   fSizeYZCmd(0),
+   fStepSizeCmd(0),
+   fMagFieldCmd(0)
+    
 { 
   fDetDir = new G4UIdirectory("/testex/det/");
   fDetDir->SetGuidance("detector construction commands");

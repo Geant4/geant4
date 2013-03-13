@@ -49,7 +49,7 @@ public:
   PrimaryGeneratorAction(DetectorConstruction*);    
   ~PrimaryGeneratorAction();
 
-  void GeneratePrimaries(G4Event*);
+  virtual void GeneratePrimaries(G4Event*);
     
   inline G4ParticleGun* GetParticleGun() {return fParticleGun;}
     

@@ -52,7 +52,7 @@ public:
   G4MonopolePhysicsMessenger(G4MonopolePhysics*);
   ~G4MonopolePhysicsMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
 

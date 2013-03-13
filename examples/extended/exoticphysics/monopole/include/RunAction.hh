@@ -52,8 +52,8 @@ public:
   RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
   virtual ~RunAction();
 
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
 
   void FillHisto(G4int id, G4double x, G4double weight = 1.0);
            

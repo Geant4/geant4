@@ -50,7 +50,7 @@ public:
   EventActionMessenger(EventAction*);
   ~EventActionMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
 

@@ -40,7 +40,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* evAct)
-  :fEventAction(evAct)
+  : G4UImessenger(),
+    fEventAction(evAct),
+    fEventDir(0),        
+    fPrintCmd(0)
 {
   fEventDir = new G4UIdirectory("/testex/event/");
   fEventDir->SetGuidance("event control");

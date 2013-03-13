@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-  :fDetector(det)
+  :G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(det)
 {
   fParticleGun  = new G4ParticleGun(1);
   fParticleGun->SetParticleEnergy(100 * GeV);

@@ -45,7 +45,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MonopoleFieldMessenger::G4MonopoleFieldMessenger(G4MonopoleFieldSetup * fld)
-:fField(fld)
+:G4UImessenger(),
+ fField(fld),
+ fFieldDir(0),
+ fSetFieldCmd(0)
+ 
 { 
   fFieldDir = new G4UIdirectory("/testex/fld/");
   fFieldDir->SetGuidance("field setup commands");

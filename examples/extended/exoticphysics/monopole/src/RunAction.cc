@@ -48,7 +48,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-  :fDetector(det), fKinematic(kin)
+  :G4UserRunAction(),
+   fHisto(0),fDetector(det),fKinematic(kin),fRunActionMessenger(0)
 { 
   fVerboseLevel = 1;
   fProjRange = fProjRange2 = fBinLength = fOffsetX = 0.;

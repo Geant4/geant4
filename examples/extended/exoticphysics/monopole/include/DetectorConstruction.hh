@@ -52,7 +52,7 @@ public:
   DetectorConstruction();
   ~DetectorConstruction();
 
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
   // set geometry and field parameters
   void SetSizeX(G4double);

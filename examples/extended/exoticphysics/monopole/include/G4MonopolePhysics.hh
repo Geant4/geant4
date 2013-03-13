@@ -47,6 +47,7 @@ class G4MonopolePhysics : public G4VPhysicsConstructor
 public:
 
   G4MonopolePhysics(const G4String& nam = "Monopole Physics");
+
   ~G4MonopolePhysics();
 
   // This method is dummy for physics

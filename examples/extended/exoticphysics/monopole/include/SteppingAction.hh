@@ -47,7 +47,7 @@ public:
   SteppingAction(RunAction*);
   ~SteppingAction();
 
-  void UserSteppingAction(const G4Step*);
+  virtual void UserSteppingAction(const G4Step*);
     
 private:
 

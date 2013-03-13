@@ -37,7 +37,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(RunAction* run): fRunAction(run)
+TrackingAction::TrackingAction(RunAction* run)
+ : G4UserTrackingAction(), 
+   fRunAction(run)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
