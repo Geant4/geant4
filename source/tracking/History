@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5th Feburary 2013 Takashi Sasaki(tracking-V09-06-02)
+- fix for the problem report number 1397. More than two AtRest
+  processes are allowed. Needs the checks for the results.
+
 11th January 2013  Gabriele Cosmo (tracking-V09-06-01)
 - Replace plain printout to cerr with G4Exception warning in
   G4SteppingManager::InvokeAtRestDoItProcs().
