@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2010-11-19 20:13:26 vnivanch Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31-01-13  V.Ivanchenko (exhadr01-V09-06-02)
+- PhysicsList - migration to new structure of physics_lists
 
 12-12-12  V.Ivanchenko (exhadr01-V09-06-01)
 - PhysicsList - removed unused LHEP builder header
