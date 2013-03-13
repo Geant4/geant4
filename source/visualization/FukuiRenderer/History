@@ -20,6 +20,12 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+29th January 2013  John Allison  (DAWN-V09-06-03)
+- Revert to DAWN-V09-06-00.
+
+12th January 2013  John Allison  (DAWN-V09-06-02)
+- Coverity fixes.
+
 2nd December 2012  John Allison  (DAWN-V09-06-00)
   o Removed NURBS.
 

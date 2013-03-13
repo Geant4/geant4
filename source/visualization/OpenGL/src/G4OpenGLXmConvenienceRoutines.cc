@@ -47,6 +47,8 @@
 #include <Xm/Separator.h>
 #include <Xm/Scale.h>
 
+#include <sstream>
+
 void G4OpenGLXmViewer::Add_four_arrow_buttons (G4OpenGLXmViewer* pView,
 					     XtCallbackRec** arrow_callbacks,
 					     Widget* parent_widget) {
@@ -509,8 +511,9 @@ void G4OpenGLXmViewer::get_double_value_callback (Widget w,
 		 XmNvalue, &string,
 		 NULL);
 
-  sscanf (string, "%lg", val);
-
+//  sscanf (string, "%lg", val);
+  std::istringstream iss(string);
+  iss >> *val;
 }
 
 void G4OpenGLXmViewer::get_text_callback (Widget w, 
@@ -524,7 +527,9 @@ void G4OpenGLXmViewer::get_text_callback (Widget w,
 		 XmNvalue, &string,
 		 NULL);
 
-  sscanf (string, "%s", txt);
+//  sscanf (string, "%s", txt);
+  std::istringstream iss(string);
+  iss >> txt;
 }
 
 G4bool G4OpenGLXmViewer::get_boolean_userData (Widget w)

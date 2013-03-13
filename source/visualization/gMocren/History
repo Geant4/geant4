@@ -20,6 +20,16 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+24th February 2013  John Allison (gMocren-V09-06-03)
+- G4GMocrenFileViewer, G4GMocrenMessenger:
+  o Removed unused fields as warned by new clang compiler.
+
+22nd January 2013  Akinori Kimura (gMocren-V09-06-02)
+- Fixed wrong parameters of G4Exception() in G4GMocrenIO.cc.
+
+22nd January 2013  Akinori Kimura (gMocren-V09-06-01)
+- Replaced exit() with G4Exception() in G4GMocrenIO.cc.
+
 2nd December 2012  John Allison  (gMocren-V09-06-00)
 - Remove NURBS.
 - Remove references to i_mode.

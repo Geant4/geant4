@@ -40,6 +40,9 @@
 #include "globals.hh"
 
 G4OpenGLXmFourArrowButtons::G4OpenGLXmFourArrowButtons (XtCallbackRec** c)
+: arrow_form(0)
+, arrow(0)
+, parent(0)
 {
   callback = c;
 }

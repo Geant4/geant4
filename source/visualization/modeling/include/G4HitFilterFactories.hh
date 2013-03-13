@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+/// $Id$
 //
 //
 // Hit filter model factories creating filters

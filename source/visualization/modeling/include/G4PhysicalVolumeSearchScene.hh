@@ -55,7 +55,8 @@ public:
   G4PhysicalVolumeSearchScene
   (G4PhysicalVolumeModel*,
    const G4String& requiredPhysicalVolumeName,
-   G4int requiredCopyNo);
+   G4int requiredCopyNo,
+   G4int verbosity = 99);
   virtual ~G4PhysicalVolumeSearchScene ();
   void PreAddSolid (const G4Transform3D& objectTransformation,
 		    const G4VisAttributes&);
@@ -109,6 +110,7 @@ private:
   G4VPhysicalVolume*   fpFoundPV;                   // Found physical volume.
   G4LogicalVolume*     fpFoundLV;                   // Found logical volume.
   G4Transform3D        fFoundObjectTransformation;  // Found transformation.
+  G4int                fVerbosity;
   G4bool               fMultipleOccurrence;
 };
 

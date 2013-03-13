@@ -257,7 +257,8 @@ private:
 	  float closestPointZCoord;
 
 	  sceneElement operator=(sceneElement const &rhs) const {
-		  sceneElement el;
+                  if (&rhs == this) return *this;
+                  sceneElement el;
 		  el.name = rhs.name;
 		  el.path = rhs.path;
 		  el.center = rhs.center;

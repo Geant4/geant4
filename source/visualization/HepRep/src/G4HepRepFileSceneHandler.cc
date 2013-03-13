@@ -82,6 +82,11 @@ G4VSceneHandler(system, fSceneIdCount++, name)
 	doneInitTraj = false;
 	drawingHit = false;
 	doneInitHit = false;
+        trajContext = 0;
+        trajAttValues = 0;
+        trajAttDefs = 0;
+        hitAttValues = 0;
+        hitAttDefs = 0;
 }
 
 
@@ -719,15 +724,14 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 							strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
 							strcmp(iAttVal->GetName(),"Pos-Z")!=0)
 							hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-					delete pointAttValues;
 				}
-				delete rawPointAttValues;
 			}
 			
 			// Clean up point attributes.
-			if (pointAttDefs)
-				delete pointAttDefs;
-			
+                        delete pointAttDefs;
+                        delete pointAttValues;
+                        delete rawPointAttValues;
+
 			// Each trajectory point is made of a single primitive, a point.
 			hepRepXMLWriter->addPrimitive();
 			G4Point3D vertex = aTrajectoryPoint->GetPosition();
@@ -818,15 +822,14 @@ void G4HepRepFileSceneHandler::AddCompound (const G4VTrajectory& traj) {
 							strcmp(iAttVal->GetName(),"Pos-Y")!=0 &&
 							strcmp(iAttVal->GetName(),"Pos-Z")!=0)
 							hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
-					delete pointAttValues;
 				}
-				delete rawPointAttValues;
 			}
 			
 			// Clean up point attributes.
-			if (pointAttDefs)
-				delete pointAttDefs;
-			
+			delete pointAttDefs;
+                        delete pointAttValues;
+                        delete rawPointAttValues;
+
 			// Each trajectory point is made of a single primitive, a point.
 			G4Point3D vertex = aTrajectoryPoint->GetPosition();
 			

@@ -266,7 +266,6 @@ private:
     ~G4Logo();
     void operator()(G4VGraphicsScene&, const G4Transform3D&);
   private:
-    G4double fHeight;
     G4VisAttributes fVisAtts;
     G4Polyhedron *fpG, *fp4;
   };

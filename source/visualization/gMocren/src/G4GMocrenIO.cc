@@ -1632,7 +1632,10 @@ bool G4GMocrenIO::retrieveData() {
 		  << G4endl;
 	G4cout << "         " << kFileName << G4endl;
       }
-      std::exit(-1);
+      G4Exception("G4GMocrenIO::retrieveDadta()",
+                  "gMocren2001", FatalException,
+                  "Error.");
+
     }
   } else if(std::strncmp(verid, "GRAPE", 5) == 0) {
     G4cout << ">>>>>>>  retrieve data (ver.2) <<<<<<<" << G4endl;
@@ -3584,7 +3587,9 @@ void G4GMocrenIO::getShortDoseDist(short * _data, int _z, int _num) {
 		<< "first argument is NULL pointer. "
 		<< "The argument must be allocated array."
 		<< G4endl;
-    std::exit(-1);
+    G4Exception("G4GMocrenIO::getShortDoseDist()",
+                "gMocren2002", FatalException,
+                "Error.");
   }
 
   int size[3];
@@ -3913,7 +3918,9 @@ void G4GMocrenIO::getTrack(int _num, std::vector<float *> & _steps,
   if(_num > (int)kTracks.size()) {
     if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "ERROR in getTrack() : " << G4endl;
-    std::exit(-1);
+    G4Exception("G4GMocrenIO::getTrack()",
+                "gMocren2003", FatalException,
+                "Error.");
   }
   unsigned char * color = new unsigned char[3];
   kTracks[_num].getColor(color);
@@ -3973,7 +3980,10 @@ void G4GMocrenIO::getDetector(int _num, std::vector<float *> & _edges,
   if(_num > (int)kDetectors.size()) {
     if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
       G4cout << "ERROR in getDetector() : " << G4endl;
-    std::exit(-1);
+    
+    G4Exception("G4GMocrenIO::getDetector()",
+                "gMocren2004", FatalException,
+                "Error.");
   }
 
   _detName = kDetectors[_num].getName();

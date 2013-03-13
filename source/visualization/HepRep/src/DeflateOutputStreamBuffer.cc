@@ -92,6 +92,10 @@ namespace cheprep {
         zStream.zalloc = Z_NULL;
         zStream.zfree = Z_NULL;
         zStream.opaque = Z_NULL;
+        zStream.msg = 0;
+        zStream.next_in = 0;
+        zStream.next_out = 0;
+        zStream.state = 0;
 #endif // CHEPREP_NO_ZLIB
     }
         

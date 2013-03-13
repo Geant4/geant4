@@ -42,7 +42,11 @@
 #include "G4Point3D.hh"
 #include "G4Transform3D.hh"
 
-G4ArrowModel::~G4ArrowModel () {}
+G4ArrowModel::~G4ArrowModel ()
+{
+  delete fpHeadPolyhedron;
+  delete fpShaftPolyhedron;
+}
 
 G4ArrowModel::G4ArrowModel
 (G4double x1, G4double y1, G4double z1,

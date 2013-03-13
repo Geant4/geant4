@@ -52,10 +52,6 @@ public: // With description
    const G4ModelingParameters* mp = 0);
 
   ~G4FlavoredParallelWorldModel ();
-  
-private:
-
-  G4VFlavoredParallelWorld* theFlavoredParallelWorld;
 
 };
 

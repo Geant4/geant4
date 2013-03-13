@@ -42,6 +42,8 @@ G4OpenGLXmRadioButton::G4OpenGLXmRadioButton (const char* n,
 					      XtCallbackRec* c,
 					      G4bool d,
 					      G4int num) 
+: button(0)
+, parent(0)
 {
   name = n;
   callback = c;

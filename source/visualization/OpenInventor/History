@@ -20,6 +20,18 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+24th February 2013  John Allison  (openinventor-V09-06-02)
+- SbPainterPS:
+  o Removed unused fields as warned by new clang compiler.
+
+29th January 2013  John Allison  (openinventor-V09-06-01)
+- More Coverity fixes and un-doing of some previous ones.
+
+8th January 2013  John Allison
+- G4OpenInventorXtExaminerViewer.cc, G4OpenInventorXtExtendedViewer.cc,
+  G4OpenInventorXtViewer.cc, SbPainterPS.cc:
+  o Fixes some Coverity warnings.
+
 2nd December 2012  John Allison  (openinventor-V09-06-00)
 - Remove NURBS.
 

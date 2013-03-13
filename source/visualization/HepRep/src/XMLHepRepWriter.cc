@@ -20,7 +20,8 @@ namespace cheprep {
 
 XMLHepRepWriter::XMLHepRepWriter(ostream* os, bool randomAccess, bool useCompression) 
         : out(os),
-          compress(useCompression) {
+          compress(useCompression),
+          xml(0) {
             
     this->nameSpace = NAMESPACE;
 

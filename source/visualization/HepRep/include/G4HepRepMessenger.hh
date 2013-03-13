@@ -103,7 +103,6 @@ class G4HepRepMessenger : public G4UImessenger {
         G4UIcmdWithABool* useSolidsCommand;
         
         G4bool invisibles;
-        G4UIcmdWithABool* writeInvisiblesCommand;
 };
 
 #endif

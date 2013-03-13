@@ -60,7 +60,6 @@ public:
 
 private:
   G4GMocrenFileSceneHandler& kSceneHandler; // Reference to Graphics Scene for this view.
-  G4GMocrenMessenger & kMessenger;
 
   char  kG4GddViewer[32] ;
   char  kG4GddViewerInvocation[64] ;

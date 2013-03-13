@@ -42,7 +42,8 @@
 #include "G4UIcommand.hh"
 
 G4TrajectoriesModel::G4TrajectoriesModel ():
-  fpCurrentTrajectory(0)
+  fpCurrentTrajectory(0),
+  fEventID(0)
 {
   fType = "G4TrajectoriesModel";
   fGlobalTag = "G4TrajectoriesModel for all trajectories.";

@@ -59,11 +59,10 @@ const bool GFDEBUG = false;
 
 //----- G4GMocrenFileViewer, constructor
 G4GMocrenFileViewer::G4GMocrenFileViewer (G4GMocrenFileSceneHandler& sceneHandler,
-					  G4GMocrenMessenger & messenger,
+					  G4GMocrenMessenger &,
 					  const G4String& name)
   : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount (), name),
-    kSceneHandler (sceneHandler),
-    kMessenger(messenger)
+    kSceneHandler (sceneHandler)
 {
   // Set a g4.gdd-file viewer 
   std::strncpy( kG4GddViewer, "gMocren", 7); 

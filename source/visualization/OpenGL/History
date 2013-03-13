@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th January 2013  John Allison  (opengl-V09-06-02)
+- More Coverity fixes and un-doing of some previous ones.
+
+13th January 2013  John Allison  (opengl-V09-06-01)
+- Coverity fixes.
+
 2nd December 2012  John Allison  (opengl-V09-06-00)
 - Remove NURBS.
 

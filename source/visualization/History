@@ -24,8 +24,35 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-14th December 2012  John Allison  (vis-V09-06-01)
-- $Id$ expansion.
+24th February 2013  John Allison  (vis-V09-06-09)
+- modeling-V09-06-03, visman-V09-06-04, vis-HepRep-V09-06-04,
+  openinventor-V09-06-02, gMocren-V09-06-03:
+  o Removed unused fields as warned by new clang compiler.
+
+29th January 2013  John Allison  (vis-V09-06-08)
+- VRML-V09-06-03, DAWN-V09-06-03, vis-HepRep-V09-06-03,
+  opengl-V09-06-02, openinventor-V09-06-01:
+  o More Coverity fixes and un-doing of some previous ones.
+
+29th January 2013  John Allison  (vis-V09-06-06)
+- Changed strncpy and strncat to strlcpy and strlcat.
+
+21st January 2013  John Allison  (vis-V09-06-05)
+- Eliminated snprintf.
+  o Not available on Windows.
+  o Reverted to sprintf.
+
+21st January 2013  John Allison  (vis-V09-06-04)
+- Added #include <cstdio> in files containing snprintf.
+
+12-14th January 2013  John Allison  (vis-V09-06-03)
+- visman-V09-06-01, DAWN-V09-06-02, vis-HepRep-V09-06-02, opengl-V09-06-01,
+  VRML-V09-06-01:
+  o Coverity fixes.
+- modeling-V09-06-01 and 02:
+  o Coverity fixes and new verbosity flag.
+- visman-V09-06-02 and 03:
+  o Fixed bug in /vis/scene/add/trajectories. 
 
 2nd December 2012  John Allison  (vis-V09-06-00)
 - Removed NURBS and references to i_mode:

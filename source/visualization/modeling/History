@@ -20,6 +20,20 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+24th February 2013  John Allison  (modeling-V09-06-03)
+- G4FlavoredParallelWorldModel:
+  o Removed unused field as warned by new clang compiler.
+
+14th January 2013  John Allison  (modeling-V09-06-02)
+- G4ArrowModel, G4AxesModel:
+  o Coverity fixes.
+
+12th January 2013  John Allison  (modeling-V09-06-01)
+- Coverity fixes:
+  o G4PhysicalVolumeModel, G4TrajectoriesModel.
+- Added verbosity flag for G4PhysicalVolumeSearchScene to reduce verbiage:
+  o G4PhysicalVolumeModel, G4PhysicalVolumeSearchScene.
+
 2nd December 2012  John Allison  (modeling-V09-06-00)
   o Removed NURBS and references to i_mode.
 

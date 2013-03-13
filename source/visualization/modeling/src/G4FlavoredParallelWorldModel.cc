@@ -44,8 +44,7 @@ G4FlavoredParallelWorldModel::G4FlavoredParallelWorldModel
   : G4PhysicalVolumeModel (FPW -> GetThePhysicalVolumeWorld (),
 			   soughtDepth,
 			   modelTransformation,
-			   mp),
-    theFlavoredParallelWorld (FPW) 
+			   mp) 
 {
   fType = "G4FlavoredParallelWorldModel";
   FPW -> GetThePhysicalVolumeWorld () ->

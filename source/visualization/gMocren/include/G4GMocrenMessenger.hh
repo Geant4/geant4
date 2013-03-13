@@ -81,7 +81,6 @@ private:
   G4UIcmdWithABool* useSolidsCommand;
 
   G4bool invisibles;
-  G4UIcmdWithABool* writeInvisiblesCommand;
 
   G4String kgMocrenVolumeName;
   G4UIcmdWithAString* kSetgMocrenVolumeNameCommand;

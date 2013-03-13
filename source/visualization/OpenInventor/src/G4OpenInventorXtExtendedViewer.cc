@@ -59,6 +59,8 @@
 #include <Xm/RowColumn.h>
 #include <Xm/Text.h>
 
+#include <cstdio>
+
 #include "HEPVis/actions/SoGL2PSAction.h"
 
 #include "G4OpenInventor.hh"

@@ -43,6 +43,9 @@
 
 G4OpenGLXmTextField::G4OpenGLXmTextField (const char* n,
 					  G4double* val)
+: text_label(0)
+, text_field(0)
+, parent(0)
 {
   name = n;
   initial = new char[50];
@@ -53,6 +56,9 @@ G4OpenGLXmTextField::G4OpenGLXmTextField (const char* n,
 
 G4OpenGLXmTextField::G4OpenGLXmTextField (const char* n,
 					  const char* val)
+: text_label(0)
+, text_field(0)
+, parent(0)
 {
   name = n;
   initial = new char[50];

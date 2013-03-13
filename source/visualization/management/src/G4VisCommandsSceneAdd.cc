@@ -1484,7 +1484,6 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
 (G4double height, const G4VisAttributes& visAtts):
-  fHeight(height),
   fVisAtts(visAtts)
  {
   const G4double& h =  height;
@@ -2330,9 +2329,18 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     return;
   }
 
-  G4bool smooth = false, rich = false;
+  G4bool smooth = false;
+  G4bool rich = false;
   if (newValue.find("smooth") != std::string::npos) smooth = true;
   if (newValue.find("rich") != std::string::npos) rich = true;
+  if (newValue.size() && !(rich || smooth)) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Unrecognised parameter \"" << newValue << "\""
+      "\n  No action taken."
+      << G4endl;
+    }
+    return;
+  }
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
@@ -2356,12 +2364,8 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");
     defaultTrajectoryType = "G4RichTrajectory";
   } else {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Unrecognised parameter \"" << newValue << "\""
-      "\n  No action taken."
-      << G4endl;
-    }
-    return;
+    UImanager->ApplyCommand("/tracking/storeTrajectory 1");
+    defaultTrajectoryType = "G4Trajectory";
   }
   UImanager->SetVerboseLevel(keepVerbose);
 

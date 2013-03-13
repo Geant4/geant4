@@ -39,6 +39,8 @@
 #include "globals.hh"
 
 G4OpenGLXmSeparator::G4OpenGLXmSeparator (unsigned char l) 
+: line(0)
+, parent(0)
 {
   line_type = l;
 }

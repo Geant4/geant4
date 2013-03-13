@@ -20,6 +20,12 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
+29th January 2013  John Allison  (VRML-V09-06-03)
+- Revert to VRML-V09-06-00.
+
+14th January 2013  John Allison  (VRML-V09-06-01)
+- Coverity fixes.
+
 2nd December 2012  John Allison  (VRML-V09-06-00)
 - Remove NURBS.
 

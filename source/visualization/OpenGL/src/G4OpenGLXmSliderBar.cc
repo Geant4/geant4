@@ -46,6 +46,8 @@ G4OpenGLXmSliderBar::G4OpenGLXmSliderBar (const char* n,
 					  G4double min,
 					  unsigned char o,
 					  unsigned char d) 
+: sliderbar(0)
+, parent(0)
 {
   name = n;
   callback = c;

@@ -20,6 +20,16 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+24th February 2013  John Allison  (vis-HepRep-V09-06-04)
+- G4HepRepMessenger, G4HepRepSceneHandler:
+  o Removed unused fields as warned by new clang compiler.
+
+29th January 2013  John Allison  (vis-HepRep-V09-06-03)
+- More Coverity fixes and un-doing of some previous ones.
+
+12th and 13th January 2013  John Allison  (vis-HepRep-V09-06-02)
+  o Coverity fixes.
+
 2nd December 2012  John Allison  (vis-HepRep-V09-06-00)
 - Remove NURBS.
 

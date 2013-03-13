@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+/// $Id$
 //
 //
 // Digi filter model factories creating filters

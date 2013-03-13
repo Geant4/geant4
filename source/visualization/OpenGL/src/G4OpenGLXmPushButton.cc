@@ -39,7 +39,9 @@
 #include "globals.hh"
 
 G4OpenGLXmPushButton::G4OpenGLXmPushButton (const char* n,
-					    XtCallbackRec* c) 
+					    XtCallbackRec* c)
+: button(0)
+, parent(0)
 {
   name = n;
   callback = c;

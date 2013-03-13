@@ -34,6 +34,9 @@
 #include "G4OpenGLXmVWidgetObject.hh"
 
 G4OpenGLXmVWidgetObject::G4OpenGLXmVWidgetObject ()
+: pView(0)
+, visual(0)
+, top(0)
 {}
 
 G4OpenGLXmVWidgetObject::~G4OpenGLXmVWidgetObject ()

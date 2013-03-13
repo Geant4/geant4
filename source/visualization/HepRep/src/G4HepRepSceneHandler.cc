@@ -91,6 +91,7 @@ G4int G4HepRepSceneHandler::sceneIdCount = 0;
 
 G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4String& name)
         : G4VSceneHandler (system, sceneIdCount++, name),
+          out                   (0),
           geometryLayer         ("Geometry"),
           eventLayer            ("Event"),
           calHitLayer           ("CalHit"),
@@ -139,7 +140,8 @@ G4HepRepSceneHandler::~G4HepRepSceneHandler () {
     delete factory;
     factory = NULL;
 
-    dynamic_cast<G4HepRep*>(GetGraphicsSystem())->removeSceneHandler();
+    G4HepRep* pHepRepSystem = dynamic_cast<G4HepRep*>(GetGraphicsSystem());
+    if (pHepRepSystem) pHepRepSystem->removeSceneHandler();
 }
 
 
@@ -422,7 +424,7 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
         char eventFormat[128];
         sprintf(eventFormat, "%s%d%s%s", "event-%0", eventNumberWidth, "d", (writeBinary ? ".bheprep" : ".heprep"));
         sprintf(eventName, eventFormat, eventNumber);
-        writer->write(_heprep, G4String(eventName));
+        if (writer) writer->write(_heprep, G4String(eventName));
 
         eventNumber++;
     }

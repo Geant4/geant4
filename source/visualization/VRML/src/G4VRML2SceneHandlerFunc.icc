@@ -33,6 +33,8 @@
 
 #include "G4VisManager.hh"
 
+#include <sstream>
+
 void G4VRML2SCENEHANDLER::AddSolid(const G4Trd& trd)
 {
 #if defined DEBUG_SCENE_FUNC
@@ -506,17 +508,19 @@ void G4VRML2SCENEHANDLER::SendMaterialNode( const G4VisAttributes*  pVA )
 
 	//  Wireframe or not
 	const	G4ViewParameters& cur_view_param = fpViewer -> GetViewParameters ();
-	if (pVA->IsForceDrawingStyle() &&
-	   (pVA->GetForcedDrawingStyle() == G4VisAttributes::wireframe)) 
-	{
-		// wireframe style is assigned to this object
-		flagWF = true ;
+        if (pVA) {
+          if (pVA->IsForceDrawingStyle() &&
+              (pVA->GetForcedDrawingStyle() == G4VisAttributes::wireframe))
+          {
+            // wireframe style is assigned to this object
+            flagWF = true ;
 
-	} else if ( cur_view_param.GetDrawingStyle() == G4ViewParameters::wireframe )   
-	{
-		// current viewing style is  wireframe 
-		flagWF = true  ;
-	} 
+          } else if ( cur_view_param.GetDrawingStyle() == G4ViewParameters::wireframe )
+          {
+            // current viewing style is  wireframe 
+            flagWF = true  ;
+          }
+        }
 
 	// VRML codes are generated below
 	if (!pVA) { 
@@ -711,9 +715,11 @@ G4double      G4VRML2SCENEHANDLER::SetPVTransparency ()
 	if( getenv( "G4VRML_TRANSPARENCY" ) != NULL ) {
 
 		// get a value from the env value
-		sscanf( getenv("G4VRML_TRANSPARENCY"), "%lg", &TRANSPARENCY ) ;
+//		sscanf( getenv("G4VRML_TRANSPARENCY"), "%lg", &TRANSPARENCY ) ;
+          std::istringstream iss( getenv("G4VRML_TRANSPARENCY") );
+          iss >> TRANSPARENCY;
 
-		// truncation 
+		// truncation
 		TRANSPARENCY = std::fabs ( TRANSPARENCY ) ; 
 		if ( TRANSPARENCY > 1.0 ) { TRANSPARENCY = 1.0 ; }
 	} 
