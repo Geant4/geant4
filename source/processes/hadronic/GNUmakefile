@@ -14,8 +14,6 @@ SUBDIRS += stopping
 
 SUBDIRS += models/abrasion
 SUBDIRS += models/binary_cascade
-SUBDIRS += models/cascade/evaporation
-SUBDIRS += models/cascade/utils
 SUBDIRS += models/cascade/cascade
 SUBDIRS += models/coherent_elastic
 SUBDIRS += models/de_excitation/evaporation
@@ -73,8 +71,6 @@ SUBLIBS +=  G4hadronic_radioactivedecay
 SUBLIBS +=  G4had_theo_max
 SUBLIBS +=  G4had_mod_util
 SUBLIBS +=  G4hadronic_bert_cascade
-SUBLIBS +=  G4hadronic_hetcpp_evaporation
-SUBLIBS +=  G4hadronic_hetcpp_utils
 SUBLIBS +=  G4hadronic_inclxx_utils
 SUBLIBS +=  G4hadronic_inclxx_physics
 SUBLIBS +=  G4hadronic_inclxx_interface
