@@ -97,9 +97,9 @@ F05Field::~F05Field()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F05Field::GetFieldValue( const G4double Point[3],G4double* Bfield ) const
+void F05Field::GetFieldValue( const G4double Point[4], G4double* Bfield ) const
 {
-  // Point[0],Point[1],Point[2] are x-, y-, z-cordinates 
+  // Point[0],Point[1],Point[2] are x-, y-, z-cordinates, Point[3] is time
 
   const G4double Bz = 0.24*tesla;
   const G4double Er = 2.113987E+6*volt/m;

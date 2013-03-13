@@ -47,7 +47,7 @@
 #include "F05DetectorConstruction.hh"
 #include "F05PrimaryGeneratorAction.hh"
 
-#include "G4SteppingVerbose.hh"
+#include "F05SteppingVerbose.hh"
 #include "F05SteppingAction.hh"
 
 #ifdef G4VIS_USE
@@ -72,7 +72,7 @@ int main(int argc,char** argv)
   
   // User Verbose output class
   //
-  G4VSteppingVerbose::SetInstance(new G4SteppingVerbose());
+  G4VSteppingVerbose::SetInstance(new F05SteppingVerbose());
 
   // Construct the default run manager
   //

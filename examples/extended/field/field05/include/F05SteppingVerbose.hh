@@ -23,53 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file field/field05/include/F05SteppingVerbose.hh
+/// \brief Definition of the F05SteppingVerbose class
+//
+//
 // $Id$
 //
-/// \file field/field05/include/F05Field.hh
-/// \brief Definition of the F05Field class
+//  
+//---------------------------------------------------------------
 //
+// F05SteppingVerbose.hh
+//
+// Description:
+//   This class manages the vervose outputs in G4SteppingManager. 
+//   
+//
+// Contact:
+//   Questions and comments to this code should be sent to
+//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
+//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//
+//---------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#ifndef F05SteppingVerbose_h
+#define F05SteppingVerbose_h 1
 
-#ifndef F05Field_h
-#define F05Field_h 1
+#include "G4SteppingVerbose.hh"
 
-#include "globals.hh"
-#include "G4ElectroMagneticField.hh"
-
-class G4EqEMFieldWithSpin;
-class G4MagIntegratorStepper;
-class G4ChordFinder;
-class G4PropagatorInField;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class F05Field : public G4ElectroMagneticField
+class F05SteppingVerbose : public G4SteppingVerbose 
 {
+  public:   
 
-public:
+    F05SteppingVerbose();
+   ~F05SteppingVerbose();
+      // Constructor/Destructor
 
-  F05Field();
-  ~F05Field();
-
-  /// DoesFieldChangeEnergy() returns true.
-  G4bool DoesFieldChangeEnergy() const { return true; };
-
-  /// GetFieldValue() returns the field value at a given point[].
-  /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
-  /// point[] is in global coordinates: x,y,z,t.
-  void GetFieldValue( const G4double Point[4],  G4double* Bfield ) const;
-
-private:
-
-  G4EqEMFieldWithSpin*    fEquation;
-  G4MagIntegratorStepper* fStepper;
-  G4ChordFinder*          fChordFinder;
-  G4PropagatorInField*    fieldPropagator;
+    void StepInfo();
+    void TrackingStarted();
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
