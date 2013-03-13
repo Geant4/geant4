@@ -13,6 +13,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 Feb 2013 Alberto Ribon                test68-V09-06-01
+- Reduced the number of events from 100 to 80 to avoid timeout errors.
+
 10 Jan 2013 Alberto Ribon                test68-V09-06-00
 - Increased the time limit to avoid timeout errors.
 

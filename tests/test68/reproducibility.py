@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------------
-# Last update: 13-Nov-2012
+# Last update: 26-Feb-2013
 #
 # This python script, which has at most one input parameter
 # (the configuration in which Geant4 has been built: this is needed only
@@ -118,7 +118,7 @@ BfieldValue = "4 tesla"
 # the number of single event checks, and
 # the gap between successive extra single event checks.
 NumEvents = "1"
-NumSingleEventChecks = 100;
+NumSingleEventChecks = 80;
 GapBetweenExtraSingleEventChecks = 0;
 
 if ( NumEvents < 0 ) :
