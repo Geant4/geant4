@@ -48,9 +48,9 @@ class PhysicsList: public G4VUserPhysicsList
 
   protected:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess(); 
-    void SetCuts();   
+    virtual void ConstructParticle();
+    virtual void ConstructProcess(); 
+    virtual void SetCuts();   
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

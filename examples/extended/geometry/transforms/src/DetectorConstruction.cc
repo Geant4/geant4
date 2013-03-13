@@ -53,7 +53,10 @@
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction(),
    fMessenger(0),
-   fMethod(kWithDirectMatrix)
+   fMethod(kWithDirectMatrix),
+   fWorldVolume(0),
+   fTrdVolume(0)
+   
 {
   fMessenger = new DetectorMessenger(this);
 }

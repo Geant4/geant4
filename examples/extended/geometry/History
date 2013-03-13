@@ -16,6 +16,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14/02/2013 I. Hrivnacova (exGeometry-V09-06-00)
+- Removed olap example (now obsolete)
+- Applied coding guidelines (data member initialization) in transforms
+
 26/11/2012 I. Hrivnacova (exGeometry-V09-05-02)
 - Fixed .README files (the transforms example page name) 
 
