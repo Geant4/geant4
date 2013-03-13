@@ -79,7 +79,8 @@ public:
     const G4ParticleDefinition* particle,
     G4double kineticEnergy,
     const G4VProcess* process,
-    const G4Element*  element);
+    const G4Element*  element,
+    const G4Material* material=0);
       
   G4double GetCrossSectionPerVolume(
     const G4ParticleDefinition* particle,
