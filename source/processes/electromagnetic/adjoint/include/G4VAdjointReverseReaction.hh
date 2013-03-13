@@ -103,10 +103,6 @@ protected:
   
 
 private:
-  G4Material*  currentMaterial;
-  G4MaterialCutsCouple* currentCouple;
-  size_t   currentMaterialIndex; 
-  G4double currentTcut;
   G4double lastCS;
   std::vector<G4double> CS_Vs_Element;
   G4bool IsFwdCSUsed;

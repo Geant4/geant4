@@ -266,4 +266,5 @@ void G4AdjointPhotoElectricModel::DefineCurrentMaterialAndElectronEnergy(const G
   currentCoupleIndex = couple->GetIndex();
   currentMaterialIndex = currentMaterial->GetIndex();
   current_eEnergy = anEnergy;	
+  theDirectPEEffectModel->SetCurrentCouple(couple);
 }

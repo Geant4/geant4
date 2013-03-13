@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 Jan 2013: V.Ivanchenko (emadjoint-V09-06-04)
+- G4AdjointPhotoElectricModel - define current G4MaterialCutsCouple
+    for the direct model
+     
+22 Feb 2013: L.Desorgher (emadjoint-V09-06-03)
+-Remove of unused variables detected by compilation warnings.     
+
+23 Jan 2013: V.Ivanchenko (emadjoint-V09-06-02)
+11 Jan 2013: V.Ivanchenko (emadjoint-V09-06-01)
+- G4AdjointhMultipleScattering - use msc95 instead of msc90
+- G4AdjointeIonisationModel - removed unused obsolete header
+
 12 Dec 2012: V.Ivanchenko (emadjoint-V09-06-00)
 - G4AdjointPhotoElectricModel use G4PEEffectFluoModel instead of obsolete
     G4PEEffectModel

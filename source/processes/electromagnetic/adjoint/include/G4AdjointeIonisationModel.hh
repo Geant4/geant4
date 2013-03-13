@@ -48,7 +48,6 @@
 
 #include "globals.hh"
 #include "G4VEmAdjointModel.hh"
-#include "G4PEEffectModel.hh"
 
 class G4AdjointeIonisationModel: public G4VEmAdjointModel
 {
