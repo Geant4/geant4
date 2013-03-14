@@ -9,6 +9,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(*)  Fixes included in release 9.6.p01
 
 Summarised, the list of changes is the following:
 
@@ -30,20 +31,13 @@ error_propagation                                error-propagation-V09-06-00
 
 event                                            event-V09-06-01
 -----
-- Delete undeleted UI command in destructor of G4StackMessenger.
+- Delete undeleted UI command in destructor of G4StackMessenger.             (*)
   Addressing problem report #1380.
 - Removed obsolete classes G4CellScorer and G4CellScorerStore.
 
-externals                                        externals-V09-05-04
----------
-- Updated internal CLHEP module to CLHEP-2.1.3.1:
-  o Made the HepLorentzVector(double t) constructor explicit.
-  o Fixed typo in operator*() for HepRotation.
-  o Clean up remaining naming overlap between Units and internal variables.
-
 geometry                                         geometry-V09-06-00
 --------
-- Cleared left-over debug check in G4VoxelNavigation.
+- Cleared left-over debug check in G4VoxelNavigation.                        (*)
   Addressing problem report #1406.
 - Removed deprecated BREPs module.
 - Removed obsolete classes G4VCellScorer and G4VCellScorerStore.
@@ -80,15 +74,15 @@ processes/electromagnetic/adjoint                emadjoint-V09-06-00
 - G4AdjointPhotoElectricModel: use G4PEEffectFluoModel instead of obsolete
   G4PEEffectModel.
 
-processes/electromagnetic/highenergy             emhighenergy-V09-06-00
+processes/electromagnetic/highenergy             emhighenergy-V09-06-00      (*)
 ------------------------------------
 - G4eeTo3PiModel: removed printout from destructor.
   Addressing problem report #1404.
 
 processes/electromagnetic/lowenergy              emlowen-V09-06-02
 -----------------------------------
-- G4LivermorePhotoElectricModel: fix addressing problem report #1402.
-- G4UAtomDeexcitation: added some debug options.
+- G4LivermorePhotoElectricModel: fix addressing problem report #1402.        (*)
+- G4UAtomDeexcitation: removed shortcut when Auger is activated.             (*)
 - G4MuElecInelastic, G4MuElecElastic: substituted calls to obsolete method.
 
 processes/electromagnetic/standard               emstand-V09-06-00
@@ -104,13 +98,13 @@ processes/electromagnetic/utils                  emutils-V09-06-01
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V09-06-00)
+- cross_sections (hadr-cross-V09-06-00)                                      (*)
   o Fixed several Coverity defects for initialisation of class members
     and minor potential memory leaks.
 - models/chiral_inv_phase_space (hadr-chips-V09-06-00)
   o Removed deprecated CHIPS classes.
 - models/coherent_elastic (hadr-cohe-V09-06-01)
-  o Fixed conditional statement depending on uninitialised variable.
+  o Fixed conditional statement depending on uninitialised variable.         (*)
   o Removed deperecated CHIPS elastic classes.
 - models/low_energy (hadr-lep-V09-06-00)
   o Removed isotope production from all models.
@@ -119,7 +113,7 @@ processes/hadronic
 - models/theo_high_energy (had-theo-HE-V09-06-00)
   o Removed deprecated G4ProjectileDiffractiveChannel class.
 - processes (hadr-proc-V09-06-00)
-  o G4HadronElasticProcess: added full printout from hadronic exception
+  o G4HadronElasticProcess: added full printout from hadronic exception      (*)
     inside G4Exception text. Addressing problem #1377 for inelastic process.
   o Removed deprecated class G4WHadronElasticProcess.
 - stopping (hadr-stopping-V09-06-01)
@@ -151,15 +145,14 @@ examples                                         examples-V09-06-01
   o Removed G4HadronQElasticPhysics, and replaced G4QStoppingPhysics.
 - advanced/medical_linac (medical_linac-V09-06-00)
   o Removed obsolete G4HadronQElasticPhysics.
-- advanced/nanobeam (nanobeam-V09-06-00)
+- advanced/nanobeam (nanobeam-V09-06-00)                                     (*)
   o Corrected order and format of inclusion of CLHEP headers.
 - advanced/radioprotection (radioprotection-V09-06-00)
   o Removed use of obsolete G4HadronQElasticPhysics.
-- advanced/underground_physics (DMX-V09-06-01)
+- advanced/underground_physics (DMX-V09-06-01)                               (*)
   o Fixed case of missing inclusion of units header when analysis activated.
   o Make Auger, fluorescence and PIXE on by default.
     Addressing problem report #1386.
-  o Migrated hadron-stopping processes.
 - extended/analysis/A01 (exampleA01-V09-06-00)
   o Replaced G4AntiProtonAnnihiliationAtRest with G4AntiProtonAbsorptionFritiof.
 - extended/biasing/B01 (B01-V09-06-00)
@@ -173,10 +166,10 @@ examples                                         examples-V09-06-01
 - extended/electromagnetic/TestEm3 (testem3-V09-06-00)
 - extended/electromagnetic/TestEm5 (testem5-V09-06-00)
   o PhysListEmStandard: use SetEmModel() method.
-- extended/electromagnetic/TestEm7 (testem7-V09-06-02)
+- extended/electromagnetic/TestEm7 (testem7-V09-06-02)                       (*)
   o PhysListEmStandardSS, PhysListEmStandardNR: updated according to
     Option4 physics list models and parameters.
-  o Removed obsolete class G4HadronQElasticPhysics.
+  o Removed use of obsolete class G4HadronQElasticPhysics.
   o c2_function: fixed variable shadowing.
 - extended/electromagnetic/TestEm9 (testem9-V09-06-00)
 - extended/electromagnetic/TestEm11 (testem11-V09-06-00)
