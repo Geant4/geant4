@@ -638,7 +638,8 @@ G4bool G4IonTable::GetNucleusByEncoding(G4int encoding,
 /////////////////
 const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const 
 {
-  static G4ThreadLocal G4String *pname = new G4String("");
+  static G4ThreadLocal G4String *pname = 0;
+  if (!pname)  { pname = new G4String(""); }
   G4String &name = *pname;
   if ( (0< Z) && (Z <=numberOfElements) ) {
     name = elementName[Z-1];
@@ -662,7 +663,8 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
 const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4int L, G4double E) const 
 {
   if (L==0) return GetIonName(Z, A, E); 
-  static G4ThreadLocal G4String *pname = new G4String("");
+  static G4ThreadLocal G4String *pname = 0;
+  if (!pname)  { pname = new G4String(""); }
   G4String &name = *pname;
   for (int i =0; i<L; i++){
     name +="L";
@@ -676,10 +678,8 @@ G4bool G4IonTable::IsIon(const G4ParticleDefinition* particle)
 {
   // return true if the particle is ion
 
-  static G4ThreadLocal G4String *pnucleus = new  G4String("nucleus");
-  G4String &nucleus = *pnucleus;
-  static G4ThreadLocal G4String *pproton = new  G4String("proton");
-  G4String &proton = *pproton;
+  static const G4String nucleus("nucleus");
+  static const G4String proton("proton");
 
   // neutron is not ion
   if ((particle->GetAtomicMass()>0)   && 
@@ -703,10 +703,8 @@ G4bool G4IonTable::IsAntiIon(const G4ParticleDefinition* particle)
 {
   // return true if the particle is ion
 
-  static G4ThreadLocal G4String *panti_nucleus = new G4String("anti_nucleus");
-  G4String &anti_nucleus = *panti_nucleus;
-  static G4ThreadLocal G4String *panti_proton = new G4String("anti_proton");
-  G4String &anti_proton = *panti_proton;
+  static const G4String anti_nucleus("anti_nucleus");
+  static const G4String anti_proton("anti_proton");
 
   // anti_neutron is not ion
   if ((particle->GetAtomicMass()>0)   && 

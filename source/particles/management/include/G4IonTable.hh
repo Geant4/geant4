@@ -249,9 +249,9 @@ class G4IonTable
    // get Verbose Level defined in G4ParticleTable
 
  public:
-   static G4ThreadLocal G4IonList*                  fIonList; 
+   static G4ThreadLocal G4IonList* fIonList; 
    static G4ThreadLocal std::vector<G4VIsotopeTable*> *fIsotopeTableList;
-   static G4IonList*                  fIonListShadow; 
+   static G4IonList* fIonListShadow; 
    static std::vector<G4VIsotopeTable*> *fIsotopeTableListShadow;
    // It is very important for multithreaded Geant4 to keep only one copy of the
    // particle table pointer and the ion table pointer. However, we try to let 

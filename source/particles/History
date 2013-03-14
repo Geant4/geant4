@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 14 Mar. 2013 G.Cosmo (particles-V09-06-07)
+- Simplified implementation for IsIon() and IsAntiIon() in G4IonTable.
+  Use workaround for local thread-local pointers.
+
 - 12 Mar. 2013 G.Cosmo (particles-V09-06-06)
 - Added public accessors for MT data to G4ParticleDefinition and
   G4VDecayChannel.
