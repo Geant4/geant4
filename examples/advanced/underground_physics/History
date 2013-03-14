@@ -8,6 +8,8 @@ $Id$
 
                       Category History file
                       ---------------------
+13.03.2013 - A. Dotti (DMX-V09-06-02)
+           - New SetEmModel interface used in physics list
 
 18.12.2012 - M.Kelsey (DMX-V09-06-01)
 	   - Migrate hadron-stopping processes
