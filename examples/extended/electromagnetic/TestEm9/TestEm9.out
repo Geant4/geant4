@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+ Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -140,7 +140,7 @@ hPairProd:   for  proton    SubType= 4
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -154,7 +154,7 @@ ionIoni:   for  GenericIon    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -422,39 +422,39 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.94s Real=1.93s Sys=0s
+  User=1.86s Real=3.5s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         399.1
-Average number of gamma      636.3
-Average number of e+         48
-Average number of steps      2923
-Edep 1x1 =                   0.8303 +- 0.003104  res=  3.739 %   100
-Edep 3x3 =                   0.9581 +- 0.001285  res=  1.341 %   100
-Edep 5x5 =                   0.9798 +- 0.001002  res=  1.023 %   100
+Average number of e-         399.4
+Average number of gamma      634.2
+Average number of e+         47.69
+Average number of steps      2903
+Edep 1x1 =                   0.8335 +- 0.002988  res=  3.584 %   100
+Edep 3x3 =                   0.9608 +- 0.001073  res=  1.117 %   100
+Edep 5x5 =                   0.9805 +- 0.0008905  res=  0.9082 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8665 +- 0.002887
-  E1/E25 =                   0.8474 +- 0.003024
-  E9/E25 =                   0.9779 +- 0.0008374
+  E1/E9  =                   0.8675 +- 0.002969
+  E1/E25 =                   0.8502 +- 0.003045
+  E9/E25 =                   0.98 +- 0.0007649
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8303  delEdep1x1= -0.1697 nrms= -1.697
-Erms1x1: 0.03104  delErms1x1= -0.969 nrms= -9.69
-Edep3x3: 0.9581  delEdep3x3= -0.04186 nrms= -0.4186
-Erms3x3: 0.01285  delErms3x3= -0.9872 nrms= -9.872
-Edep5x5: 0.9798  delEdep5x5= -0.02021 nrms= -0.2021
-Erms5x5: 0.01002  delErms5x5= -0.99 nrms= -9.9
+Edep1x1: 0.8335  delEdep1x1= -0.1665 nrms= -1.665
+Erms1x1: 0.02988  delErms1x1= -0.9701 nrms= -9.701
+Edep3x3: 0.9608  delEdep3x3= -0.03915 nrms= -0.3915
+Erms3x3: 0.01073  delErms3x3= -0.9893 nrms= -9.893
+Edep5x5: 0.9805  delEdep5x5= -0.01953 nrms= -0.1953
+Erms5x5: 0.008905  delErms5x5= -0.9911 nrms= -9.911
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
   13           0           0         156           0
-  53         261          42           0          45
-  55         278          45           0          47
+  53         263          40           0          44
+  55         275          46           0          49
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -542,22 +542,22 @@ EventAction: Event # 900 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.81s Real=2.82s Sys=0s
+  User=2.74s Real=3.17s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         68.25
-Average number of gamma      61.21
-Average number of e+         3.366
-Average number of steps      389.4
-Edep 1x1 =                   0.01415 +- 0.0001979
-Edep 3x3 =                   0.01448 +- 0.0002213
-Edep 5x5 =                   0.01455 +- 0.0002254
+Average number of e-         68.35
+Average number of gamma      60.95
+Average number of e+         3.354
+Average number of steps      388.4
+Edep 1x1 =                   0.01424 +- 0.0002324
+Edep 3x3 =                   0.01456 +- 0.0002557
+Edep 5x5 =                   0.01462 +- 0.0002592
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9837 +- 0.0007341
-  E1/E25 =                   0.9808 +- 0.0008363
-  E9/E25 =                   0.997 +- 0.0002123
+  E1/E9  =                   0.9847 +- 0.0006931
+  E1/E25 =                   0.9817 +- 0.0007917
+  E9/E25 =                   0.9969 +- 0.0002081
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -694,7 +694,7 @@ hPairProd:   for  proton    SubType= 4
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -708,7 +708,7 @@ ionIoni:   for  GenericIon    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -976,22 +976,22 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.38s Real=1.43s Sys=0s
+  User=1.36s Real=3.67s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         169.2
-Average number of gamma      218.8
-Average number of e+         46.82
-Average number of steps      1789
-Edep 1x1 =                   0.8383 +- 0.003472  res=  4.141 %   100
-Edep 3x3 =                   0.9616 +- 0.002852  res=  2.966 %   100
-Edep 5x5 =                   0.9839 +- 0.003213  res=  3.265 %   100
+Average number of e-         170.4
+Average number of gamma      221.8
+Average number of e+         47.76
+Average number of steps      1799
+Edep 1x1 =                   0.8258 +- 0.003916  res=  4.741 %   100
+Edep 3x3 =                   0.9573 +- 0.003399  res=  3.55 %   100
+Edep 5x5 =                   0.9784 +- 0.003384  res=  3.459 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.872 +- 0.003139
-  E1/E25 =                   0.8524 +- 0.003349
-  E9/E25 =                   0.9775 +- 0.00116
+  E1/E9  =                   0.8627 +- 0.002855
+  E1/E25 =                   0.8442 +- 0.003137
+  E9/E25 =                   0.9785 +- 0.001
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1128,7 +1128,7 @@ hPairProd:   for  proton    SubType= 4
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1142,7 +1142,7 @@ ionIoni:   for  GenericIon    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -1410,22 +1410,22 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.62s Real=1.63s Sys=0s
+  User=1.63s Real=3s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         173.3
-Average number of gamma      374.7
-Average number of e+         47.25
-Average number of steps      1955
-Edep 1x1 =                   0.8384 +- 0.003685  res=  4.395 %   100
-Edep 3x3 =                   0.9688 +- 0.003468  res=  3.58 %   100
-Edep 5x5 =                   0.9903 +- 0.003687  res=  3.724 %   100
+Average number of e-         173.8
+Average number of gamma      376.7
+Average number of e+         47.44
+Average number of steps      1966
+Edep 1x1 =                   0.8319 +- 0.003552  res=  4.27 %   100
+Edep 3x3 =                   0.9624 +- 0.003426  res=  3.56 %   100
+Edep 5x5 =                   0.9837 +- 0.003399  res=  3.456 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8656 +- 0.00294
-  E1/E25 =                   0.847 +- 0.003114
-  E9/E25 =                   0.9784 +- 0.001212
+  E1/E9  =                   0.8646 +- 0.002838
+  E1/E25 =                   0.8459 +- 0.002936
+  E9/E25 =                   0.9784 +- 0.000886
 Beam Energy                  1 GeV
 ==================================================================
 

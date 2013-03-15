@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+ Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -78,7 +78,7 @@ conv:   for  gamma    SubType= 14
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -98,7 +98,7 @@ eBrem:   for  e-    SubType= 3
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -122,7 +122,7 @@ annihil:   for  e+    SubType= 5
 msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -148,7 +148,7 @@ muPairProd:   for  mu+    SubType= 4
 msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -170,12 +170,16 @@ muPairProd:   for  mu-    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
-============================================================================================
-             HADRONIC PROCESSES SUMMARY (verbose level 1)
 
-                     Hadronic Processes for <mu->
-          muMinusCaptureAtRest
-============================================================================================
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muMinusCaptureAtRest
+
+================================================================
 
 ========= Table of registered couples ==============================
 
@@ -211,7 +215,7 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 Start Run processing.
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for LXe  0.126 mm/MeV
-	Energy weighted position of hits in LXe : (-0.219429,0.220274,-103.497)
+	Energy weighted position of hits in LXe : (-0.219476,0.220233,-103.497)
 	Total energy deposition in scintillator : 511 (keV)
 	Reconstructed position of hits in LXe : (-0.30828,0.608085,-17.4269)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
@@ -237,7 +241,7 @@ Unacounted for photons in this event : 0
 	Number of photons absorbed (OpAbsorption) in this event : 4004
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
-	Energy weighted position of hits in LXe : (0.0989774,-0.191502,-101.253)
+	Energy weighted position of hits in LXe : (0.09898,-0.191498,-101.253)
 	Total energy deposition in scintillator : 511 (keV)
 	Reconstructed position of hits in LXe : (-0.851717,-0.466269,-17.585)
 	Number of photons that hit PMTs in this event : 1420
@@ -250,7 +254,7 @@ Unacounted for photons in this event : 0
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.67s Real=1.74s Sys=0s
+  User=0.63s Real=0.63s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

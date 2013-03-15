@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+ Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -71,7 +71,7 @@ Available colours:
 
 Defining the materials
 There are 10 crystals per row in the calorimeter, so in total 100 crystals
-The have widthof  3  cm and a lenght of  24 cm. The Material is  Material:    PbWO4    density:  8.280 g/cm3   RadL:   8.924 mm   Nucl.Int.Length:  20.740 cm   Imean: 542.741 eV 
+The have widthof  3  cm and a lenght of  24 cm. The Material is  Material:    PbWO4    density:  8.280 g/cm3   RadL:   8.924 mm   Nucl.Int.Length:  20.739 cm   Imean: 542.741 eV 
    --->  Element: Lead (Pb)   Z = 82.0   N = 207.2   A = 207.19 g/mole
          --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:   1.40 %
          --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance:  24.10 %
@@ -135,7 +135,7 @@ phot:   for  gamma    SubType= 12
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -155,7 +155,7 @@ eBrem:   for  e-    SubType= 3
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -187,7 +187,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -200,7 +200,7 @@ hIoni:   for  GenericIon    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -212,7 +212,7 @@ hIoni:   for  alpha    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -225,7 +225,7 @@ hIoni:   for  anti_proton    SubType= 2
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -238,7 +238,7 @@ hIoni:   for  kaon+    SubType= 2
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -251,7 +251,7 @@ hIoni:   for  kaon-    SubType= 2
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -265,7 +265,7 @@ muIoni:   for  mu+    SubType= 2
 msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -291,7 +291,7 @@ muIoni:   for  mu-    SubType= 2
 msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -316,7 +316,7 @@ hIoni:   for  pi+    SubType= 2
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -329,7 +329,7 @@ hIoni:   for  pi-    SubType= 2
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 ========= Table of registered couples ==============================
 
@@ -360,13 +360,13 @@ WARNING: Scene "none" not found.
 
 ******************************************
 Internal Real Elapsed Time is: 0.02
-Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.02
+Internal System Elapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
-  11979 hits are stored in ExGflashHitsCollection 
-   e1  12.1241   e3x3  48.4572   GeV  e5x5  48.8813
- Total energy deposited in the calorimeter: 49.8602 (GeV)
+  11988 hits are stored in ExGflashHitsCollection 
+   e1  12.3186   e3x3  48.7081   GeV  e5x5  49.1343
+ Total energy deposited in the calorimeter: 49.9229 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -379,9 +379,9 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 1  -----
-  11973 hits are stored in ExGflashHitsCollection 
-   e1  12.1962   e3x3  48.3563   GeV  e5x5  48.846
- Total energy deposited in the calorimeter: 49.8882 (GeV)
+  11886 hits are stored in ExGflashHitsCollection 
+   e1  12.0791   e3x3  48.0528   GeV  e5x5  48.5336
+ Total energy deposited in the calorimeter: 49.5006 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -389,14 +389,14 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 2  -----
-  11984 hits are stored in ExGflashHitsCollection 
-   e1  12.0657   e3x3  48.1039   GeV  e5x5  48.6966
- Total energy deposited in the calorimeter: 49.6693 (GeV)
+  11963 hits are stored in ExGflashHitsCollection 
+   e1  12.0732   e3x3  48.456   GeV  e5x5  48.9252
+ Total energy deposited in the calorimeter: 49.8631 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -406,12 +406,12 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 3  -----
-  13136 hits are stored in ExGflashHitsCollection 
-   e1  12.1552   e3x3  48.4599   GeV  e5x5  48.9368
- Total energy deposited in the calorimeter: 49.8006 (GeV)
+  11977 hits are stored in ExGflashHitsCollection 
+   e1  12.2716   e3x3  48.453   GeV  e5x5  48.8695
+ Total energy deposited in the calorimeter: 49.8631 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -419,14 +419,14 @@ Internal GetUserElapsed Time: 0.02
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 4  -----
-  11920 hits are stored in ExGflashHitsCollection 
-   e1  12.2584   e3x3  48.0806   GeV  e5x5  48.5995
- Total energy deposited in the calorimeter: 49.6193 (GeV)
+  11977 hits are stored in ExGflashHitsCollection 
+   e1  12.1174   e3x3  48.4415   GeV  e5x5  48.916
+ Total energy deposited in the calorimeter: 49.912 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -434,14 +434,14 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 5  -----
-  11940 hits are stored in ExGflashHitsCollection 
-   e1  12.0775   e3x3  48.3219   GeV  e5x5  48.7755
- Total energy deposited in the calorimeter: 49.7316 (GeV)
+  11967 hits are stored in ExGflashHitsCollection 
+   e1  12.2363   e3x3  48.3303   GeV  e5x5  48.8989
+ Total energy deposited in the calorimeter: 49.8874 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -451,12 +451,12 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 6  -----
-  11975 hits are stored in ExGflashHitsCollection 
-   e1  12.3202   e3x3  48.4633   GeV  e5x5  48.9393
- Total energy deposited in the calorimeter: 49.9003 (GeV)
+  11902 hits are stored in ExGflashHitsCollection 
+   e1  12.2765   e3x3  48.3285   GeV  e5x5  48.6938
+ Total energy deposited in the calorimeter: 49.5215 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -469,9 +469,9 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 7  -----
-  11961 hits are stored in ExGflashHitsCollection 
-   e1  12.3146   e3x3  48.5128   GeV  e5x5  48.8494
- Total energy deposited in the calorimeter: 49.8747 (GeV)
+  11995 hits are stored in ExGflashHitsCollection 
+   e1  12.2351   e3x3  48.5201   GeV  e5x5  49.0148
+ Total energy deposited in the calorimeter: 49.9107 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -481,12 +481,12 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 8  -----
-  11916 hits are stored in ExGflashHitsCollection 
-   e1  11.9694   e3x3  48.2134   GeV  e5x5  48.694
- Total energy deposited in the calorimeter: 49.6446 (GeV)
+  11974 hits are stored in ExGflashHitsCollection 
+   e1  12.1763   e3x3  48.5291   GeV  e5x5  48.9649
+ Total energy deposited in the calorimeter: 49.8695 (GeV)
     0 trajectories stored in this event.
 ::Initializing the sensitive detector
  ------ Start ExGflashEventAction ----- 
@@ -499,18 +499,18 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 9  -----
-  11969 hits are stored in ExGflashHitsCollection 
-   e1  11.9678   e3x3  48.3082   GeV  e5x5  48.8588
- Total energy deposited in the calorimeter: 49.8771 (GeV)
+  11909 hits are stored in ExGflashHitsCollection 
+   e1  12.0091   e3x3  48.1503   GeV  e5x5  48.6506
+ Total energy deposited in the calorimeter: 49.6084 (GeV)
     0 trajectories stored in this event.
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.0144444
+Internal Real Elapsed Time /event is: 0.0133333
 
 ******************************************
-Total Real Elapsed Time is: 0.63
-Total System Elapsed Time: 0.01
-Total GetUserElapsed Time: 0.62
+Total Real Elapsed Time is: 1.14
+Total System Elapsed Time: 0
+Total GetUserElapsed Time: 1.1
 ******************************************
