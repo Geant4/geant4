@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+ Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -52,7 +52,7 @@ H^{0} + H^{0} -> H_{2}^{0}                                  1.2e+10             
 -----------------------------------------------------------------------------------------------------------------------------------------
 DNAMolecularStepByStepModel will be used
 PhysicsList::SetCuts:CutLength : 1 nm 
-Seed used : 1358873961
+Seed used : 1363295305
 Will start to process the script commands.mac
 
 phot:   for  gamma    SubType= 12
@@ -194,11 +194,11 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 !!!e- finished tracking track 1 
-!!! Penetration : 6.01159 um 
-End of tracking primary particle, its final energy is :747.962
+!!! Penetration : 14.3802 um 
+End of tracking primary particle, its final energy is :747.923
 You are launching the chemistry ...
 *** G4ITStepManager starts processing 
 *** G4ITStepManager ends at time : 1.1 ps 
 ___________________________________
-Seed used :1358873961
+Seed used :1363295305
 Has finished to process the script commands.mac
