@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15th March 2013  Gabriele Cosmo (examples-V09-06-03)
+- Updated reference outputs according to reference tag geant4-09-06-ref-03.
+- Includes tags: dnaphysics-V09-06-00, hadrontherapy-V09-06-00,
+                 iort_therapy-V09-06-01, lAr_calorimeter-V09-06-01,
+                 radioprotection-V09-06-01, DMX-V09-06-02, exbasic-V09-06-00,
+                 analysisExample-V09-06-00, ReverseMC01-V09-06-00,
+                 excommon-V09-06-00, testem7-V09-06-05, testem8-V09-06-00,
+                 testem9-V09-06-01, testem11-V09-06-01, testem12-V09-06-01,
+                 testem16-V09-06-00, testem17-V09-06-03, exerrprop-V09-06-00,
+                 exgps-V09-06-00, particleGunExample-V09-06-01,
+                 monopole-V09-06-04, phononExample-V09-06-01, fieldex-V09-06-00,
+                 fieldex05-V09-06-00, exGeometry-V09-06-00,
+                 exTransforms-V09-06-01, exhadr01-V09-06-02, exhadr03-V09-06-12,
+                 exampleES2-V09-06-00, gtherapy-V09-06-00,
+                 exPersistency-V09-06-00, exRadioactivedecay-V09-06-00,
+                 exRunAndEvent-V09-06-01, exam-ext-vis-persp-V09-06-00,
+                 exampleN02-V09-06-00.
+
 18th January 2013  Gabriele Cosmo (examples-V09-06-02)
 - Updated reference outputs according to reference tag geant4-09-06-ref-02.
 - Includes tags: exampleN03Con-V09-06-00, testem7-V09-06-03,
