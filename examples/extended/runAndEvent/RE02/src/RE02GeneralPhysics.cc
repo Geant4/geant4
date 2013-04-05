@@ -102,9 +102,9 @@ void RE02GeneralPhysics::ConstructProcess()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();  
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (theDecayProcess->IsApplicable(*particle)) {
       pmanager ->AddProcess(theDecayProcess);
