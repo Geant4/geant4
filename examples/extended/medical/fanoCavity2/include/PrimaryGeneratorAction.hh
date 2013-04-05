@@ -52,7 +52,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   public:      
     void RunInitialisation(G4double, G4double);   
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
          
     G4ParticleGun* GetParticleGun() {return fParticleGun;}
     

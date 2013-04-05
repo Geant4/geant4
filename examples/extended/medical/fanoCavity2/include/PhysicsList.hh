@@ -48,15 +48,15 @@ class PhysicsList: public G4VModularPhysicsList
 {
 public:
   PhysicsList(DetectorConstruction*);
-  virtual ~PhysicsList();
+ ~PhysicsList();
 
-  void ConstructParticle();
+  virtual void ConstructParticle();
         
   void AddPhysicsList(const G4String& name);    
-  void ConstructProcess();    
+  virtual void ConstructProcess();    
   void AddStepMax(); 
   
-  void SetCuts();      
+  virtual void SetCuts();      
     
 private:
 

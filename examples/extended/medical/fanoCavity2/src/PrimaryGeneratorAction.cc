@@ -47,7 +47,7 @@
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det,
                                                HistoManager* histo)
-:fDetector(det),fHistoManager(histo)                                               
+:fParticleGun(0), fDetector(det), fHistoManager(histo)                                               
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle

@@ -48,8 +48,8 @@ class TrackingAction : public G4UserTrackingAction {
     TrackingAction(RunAction*, HistoManager*);
    ~TrackingAction();
    
-    void  PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
+    virtual void  PreUserTrackingAction(const G4Track*);
+    virtual void PostUserTrackingAction(const G4Track*);
     
     void AddEdepCavity(G4double de) { fEdepCavity += de;};
         

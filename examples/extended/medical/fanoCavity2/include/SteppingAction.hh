@@ -55,7 +55,7 @@ class SteppingAction : public G4UserSteppingAction
                                         TrackingAction*,HistoManager*);
    ~SteppingAction();
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
     
   private:
     DetectorConstruction* fDetector;

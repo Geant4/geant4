@@ -46,7 +46,7 @@ public:
   MyMollerBhabhaModel(const G4ParticleDefinition* p = 0, 
                       const G4String& nam = "myMollerBhabha");
 
-  virtual ~MyMollerBhabhaModel();
+ ~MyMollerBhabhaModel();
                                                                  
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                 const G4ParticleDefinition*,

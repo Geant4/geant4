@@ -55,7 +55,7 @@ class HistoMessenger: public G4UImessenger
    HistoMessenger(HistoManager* );
   ~HistoMessenger();
 
-   void SetNewValue(G4UIcommand* ,G4String );
+   virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
