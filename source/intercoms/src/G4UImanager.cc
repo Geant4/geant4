@@ -421,15 +421,16 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   {
     if(ignoreCmdNotFound)
     {
-      if(stackCommandsForBroadcast) commandStack->push_back(commandString);
+      if(stackCommandsForBroadcast)
+         commandStack->push_back(commandString+" "+commandParameter);
       return fCommandSucceeded;
     }
     else
     { return fCommandNotFound; }
   }
 
-  if(stackCommandsForBroadcast || targetCommand->ToBeBroadcasted())
-  { commandStack->push_back(commandString); }
+  if(stackCommandsForBroadcast && targetCommand->ToBeBroadcasted())
+  { commandStack->push_back(commandString+" "+commandParameter); }
 
   if(!(targetCommand->IsAvailable()))
   { return fIllegalApplicationState; }
@@ -624,10 +625,10 @@ G4String G4UImanager::FindMacroPath(const G4String& fname) const
   return macrofile;
 }
 
-std::vector<G4String>& G4UImanager::GetCommandStack()
+std::vector<G4String>* G4UImanager::GetCommandStack()
 {
   std::vector<G4String>* returnValue = commandStack;
   commandStack = new std::vector<G4String>;
-  return *returnValue;
+  return returnValue;
 }
 

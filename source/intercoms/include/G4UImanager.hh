@@ -249,7 +249,7 @@ class G4UImanager : public G4VStateDependent
         ignoreCmdNotFound = val;
         stackCommandsForBroadcast = val;
       }
-      std::vector<G4String>& GetCommandStack();
+      std::vector<G4String>* GetCommandStack();
 };
 
 #endif

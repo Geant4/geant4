@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+14 March, 2013 A. Dotti (intercoms-V09-06-04)
+- Changing signature for GetCommandStack() 
 
 12 March, 2013 M. Asai (intercoms-V09-06-03)
 - Adding flags for commands to be boradcasted to thread-local UI mamaners.
