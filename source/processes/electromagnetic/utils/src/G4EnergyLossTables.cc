@@ -185,7 +185,6 @@ G4EnergyLossTablesHelper G4EnergyLossTables::GetTables(
   if ((it=dict.find(p))==dict.end()) {
 //    G4cout << "Table is not found out for " << p->GetParticleName() << G4endl;
 //    G4Exception("G4EnergyLossTables::GetTables: table not found!");
-//    exit(1);
     return null_loss;
   }
   return (*it).second;
@@ -1017,7 +1016,6 @@ void G4EnergyLossTables::CPRWarning()
     let_counter++;
 //  if ((G4RegionStore::GetInstance())->size() > 1) {
 //     G4Exception("G4EnergyLossTables:: More than 1 region - table can't be accessed with obsolete interface");
-//     exit(1);
 //  }
 
   } else if (let_counter == let_max_num_warnings) {

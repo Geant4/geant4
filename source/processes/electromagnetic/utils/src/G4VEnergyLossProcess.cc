@@ -1718,17 +1718,19 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   // sample secondaries
   secParticles.clear();
   //G4cout << "Energy of primary: " << dynParticle->GetKineticEnergy()/MeV<<G4endl;
-  currentModel->SampleSecondaries(&secParticles, currentCouple, dynParticle, tcut);
+  currentModel->SampleSecondaries(&secParticles, currentCouple, 
+				  dynParticle, tcut);
 
   // bremsstrahlung splitting or Russian roulette  
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
       G4double eloss = 0.0;
-      weight *= biasManager->ApplySecondaryBiasing(secParticles,
-						   track, currentModel, 
-						   &fParticleChange, eloss,
-						   currentCoupleIndex, tcut, 
-						   step.GetPostStepPoint()->GetSafety());
+      weight *= 
+	biasManager->ApplySecondaryBiasing(secParticles,
+					   track, currentModel, 
+					   &fParticleChange, eloss,
+					   currentCoupleIndex, tcut, 
+					   step.GetPostStepPoint()->GetSafety());
       if(eloss > 0.0) {
 	eloss += fParticleChange.GetLocalEnergyDeposit();
         fParticleChange.ProposeLocalEnergyDeposit(eloss);
@@ -1741,11 +1743,11 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   if(num > 0) {
 
     fParticleChange.SetNumberOfSecondaries(num);
+    G4double time = track.GetGlobalTime();
 
     for (G4int i=0; i<num; ++i) {
       if(secParticles[i]) {
-	G4Track* t = new G4Track(secParticles[i], track.GetGlobalTime(), 
-				 track.GetPosition());
+	G4Track* t = new G4Track(secParticles[i], time, track.GetPosition());
 	t->SetTouchableHandle(track.GetTouchableHandle());
 	t->SetWeight(weight); 
 	//G4cout << "Secondary(post step) has weight " << t->GetWeight() 

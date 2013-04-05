@@ -125,6 +125,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   thePositron  = G4Positron::Positron();
 
   pParticleChange = &fParticleChange;
+  fParticleChange.SetSecondaryWeightByProcess(true);
   secParticles.reserve(5);
 
   preStepLambda = 0.0;
@@ -690,6 +691,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 
     fParticleChange.SetNumberOfSecondaries(num);
     G4double edep = fParticleChange.GetLocalEnergyDeposit();
+    G4double time = track.GetGlobalTime();
      
     for (G4int i=0; i<num; ++i) {
       if (secParticles[i]) {
@@ -714,7 +716,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 	  // added secondary if it is good
         }
         if (good) { 
-          G4Track* t = new G4Track(dp, track.GetGlobalTime(), track.GetPosition());
+          G4Track* t = new G4Track(dp, time, track.GetPosition());
           t->SetTouchableHandle(track.GetTouchableHandle());
           t->SetWeight(weight);
           pParticleChange->AddSecondary(t); 

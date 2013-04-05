@@ -17,9 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 April 13: V.Ivant (emutils-V09-06-08)
+- G4VEnergyLossProcess, G4VEmProcess - clean up filling of 
+    secondary particles to particle change, use AddSecondary
+    from G4VParticleChange in all cases; little performance
+    improvement expected
+
+22 March 13: V.Ivant (emutils-V09-06-07)
+- G4VMultipleScattering, G4ionEffectiveCharge - for const parameters
+    used "static const G4double"
+
+18 March 13: V.Ivant (emutils-V09-06-06)
+- G4VMultipleScattering - L.Urban reduced geom limit from 1 um
+    to 0.01 um (result of discussion at Space User Workshop)
+
+15 March 13: V.Ivant (emutils-V09-06-05)
+- G4LossTableManager - fixed Coverity reports
+
 24 February 13: V.Ivant (emutils-V09-06-04)
 - G4ionEffectiveCharge - static array become "const G4double"
-- G4VEnergyLossProcess - uncomment verbise output in new "Slave" methods
+- G4VEnergyLossProcess - uncomment verbose output in new "Slave" methods
 - G4LossTableManager, G4EmModelManager - removed G4endl from description
     of exceptions
 

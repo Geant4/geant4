@@ -545,7 +545,7 @@ void G4LossTableManager::SlaveBuildPhysicsTable(
 	  if(el->Particle()) {
 	    G4cout << "  for "  << el->Particle()->GetParticleName();
 	  }
-          G4cout << "  active= " << pm->GetProcessActivation(el)
+          G4cout << "  active= " << isActive[i]
                  << "  table= " << tables_are_built[i]
 		 << "  isIonisation= " << el->IsIonisationProcess();
 	  if(base_part_vector[i]) { 
@@ -820,7 +820,8 @@ G4VEnergyLossProcess* G4LossTableManager::SlaveBuildTables(
   //	   << aParticle->GetParticleName() << G4endl;
   //    return 0;
   //  }
-  G4int nSubRegions = em->NumberOfSubCutoffRegions();
+  G4int nSubRegions = 0;
+  if(em) { em->NumberOfSubCutoffRegions(); }
 
   //  if (1 < verbose) {
   //    G4cout << "G4LossTableManager::BuildTables() start to build range tables"
@@ -905,7 +906,7 @@ G4VEnergyLossProcess* G4LossTableManager::SlaveBuildTables(
   //    em->SetCSDARangeTable(rCSDA);
   //  }
 
-  em->SetIonisation(true);
+  if(em) { em->SetIonisation(true); }
   loss_map[aParticle] = em;
 
   //  if (1 < verbose) {

@@ -99,7 +99,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   SetProcessSubType(fMultipleScattering);
   if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
 
-  geomMin = 1.e-6*CLHEP::mm;
+  geomMin = 0.01*CLHEP::nm;
   lowestKinEnergy = 1*eV;
 
   // default limit on polar angle
@@ -579,7 +579,7 @@ G4VMultipleScattering::StorePhysicsTable(const G4ParticleDefinition* part,
   G4bool yes = true;
   if(part != firstParticle) { return yes; }
   G4int nmod = modelManager->NumberOfModels();
-  const G4String ss[4] = {"1","2","3","4"};
+  static const G4String ss[4] = {"1","2","3","4"};
   for(G4int i=0; i<nmod; ++i) {
     G4VEmModel* msc = modelManager->GetModel(i);
     yes = true;
