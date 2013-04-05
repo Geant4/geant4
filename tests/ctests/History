@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ctests-V09-06-09 14th March 2013 Andrea Dotti
+- Adding tests example-adv-underground_physics and
+  example-adv-lArCal
 
 ctests-V09-06-08 01st March 2013 Ivana Hrivnacova
 - Updated test for removing novice/N01,N02,N03 examples

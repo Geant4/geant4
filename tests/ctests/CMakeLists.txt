@@ -488,6 +488,21 @@ GEANT4_ADD_TEST(example-adv-medical_linac-build
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/medical_linac
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/medical_linac
                 BUILD ml2 PROJECT medical_linac)
+GEANT4_ADD_TEST(example-adv-underground_physics
+		COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/underground_physics/DMX
+			${CMAKE_BINARY_DIR}/examples/advanced/underground_physics/gamma_1000.mac
+		SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/underground_physics
+		BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/underground_physics
+		BUILD DMX PROJECT underground_physics
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-adv-lArCal
+		COMMAND
+                ${CMAKE_BINARY_DIR}/examples/advanced/lAr_calorimeter/lArCal
+			${CMAKE_BINARY_DIR}/examples/advanced/lAr_calorimeter/run1.mac
+		SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/lAr_calorimeter
+		BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced//lAr_calorimeter
+		BUILD lArCal 
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
 #-------------------------------------------------------------------------------------------------
 #---Simplified Calorimeter-----------------------------------------------------------------------------
