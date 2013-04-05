@@ -100,7 +100,6 @@ class G4TransportationManager
        // or the pointer to world physical volume. If not existing already
        // create it and register it in the collection
 
-     //Xin Dong 09302011 Scorers
      G4bool RegisterWorld( G4VPhysicalVolume* aWorld );
      void DeRegisterNavigator( G4Navigator* aNavigator );
      G4int  ActivateNavigator( G4Navigator* aNavigator );

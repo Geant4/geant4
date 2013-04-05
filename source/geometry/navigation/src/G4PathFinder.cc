@@ -56,10 +56,9 @@ G4ThreadLocal G4PathFinder* G4PathFinder::fpPathFinder=0;
 //
 G4PathFinder* G4PathFinder::GetInstance()
 {
-   static G4ThreadLocal G4PathFinder *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4PathFinder  ;  G4PathFinder &theInstance = *theInstance_G4MT_TLS_; 
    if( ! fpPathFinder )
    {
-     fpPathFinder = &theInstance; 
+     fpPathFinder = new G4PathFinder; 
    }
    return fpPathFinder;
 }
@@ -115,7 +114,8 @@ G4PathFinder::G4PathFinder()
 //
 G4PathFinder::~G4PathFinder() 
 {
-   delete fpMultiNavigator; 
+   delete fpMultiNavigator;
+   if (fpPathFinder)  { delete fpPathFinder; fpPathFinder=0; }
 }
 
 // ----------------------------------------------------------------------------

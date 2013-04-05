@@ -35,14 +35,14 @@
 
 #include "G4RegularNavigationHelper.hh"
 
-G4ThreadLocal G4RegularNavigationHelper * G4RegularNavigationHelper::theInstance = 0;
+G4ThreadLocal G4RegularNavigationHelper*
+G4RegularNavigationHelper::theInstance = 0;
 
 G4RegularNavigationHelper* G4RegularNavigationHelper::Instance()
 {
-  if(theInstance == 0)
+  if(!theInstance)
   {
-    static G4ThreadLocal G4RegularNavigationHelper *helper_G4MT_TLS_ = 0 ; if (!helper_G4MT_TLS_) helper_G4MT_TLS_ = new  G4RegularNavigationHelper  ;  G4RegularNavigationHelper &helper = *helper_G4MT_TLS_;
-    theInstance = &helper;
+    theInstance = new G4RegularNavigationHelper;
   }
   return theInstance;
 }
@@ -57,6 +57,7 @@ G4RegularNavigationHelper::G4RegularNavigationHelper()
 //
 G4RegularNavigationHelper::~G4RegularNavigationHelper()
 {
+  if (theInstance)  { delete theInstance; theInstance=0; }
 }
 
 // --------------------------------------------------------------------

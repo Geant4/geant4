@@ -47,7 +47,8 @@
 
 // Initialise the static instance of the singleton
 //
-G4ThreadLocal G4TransportationManager* G4TransportationManager::fTransportationManager=0;
+G4ThreadLocal G4TransportationManager*
+G4TransportationManager::fTransportationManager=0;
 
 // ----------------------------------------------------------------------------
 // Constructor
@@ -85,6 +86,10 @@ G4TransportationManager::~G4TransportationManager()
   ClearNavigators(); 
   delete fGeomMessenger;
   delete fSafetyHelper;
+  if (fTransportationManager)
+  {
+    delete fTransportationManager; fTransportationManager=0;
+  }
 }
 
 // ----------------------------------------------------------------------------
@@ -94,10 +99,10 @@ G4TransportationManager::~G4TransportationManager()
 //
 G4TransportationManager* G4TransportationManager::GetTransportationManager()
 {
-   static G4ThreadLocal G4TransportationManager *theInstance_G4MT_TLS_ = 0 ; if (!theInstance_G4MT_TLS_) theInstance_G4MT_TLS_ = new  G4TransportationManager  ;  G4TransportationManager &theInstance = *theInstance_G4MT_TLS_;
    if (!fTransportationManager)
-     fTransportationManager = &theInstance;
-   
+   {
+     fTransportationManager = new G4TransportationManager;
+   }   
    return fTransportationManager;
 }
 

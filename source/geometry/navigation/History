@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 19th, 2013 - G.Cosmo  (geomnav-V09-06-01)
+------------------------
+- Cleanup of MT changes in G4PathFinder, G4RegularNavigationHelper
+  and G4TransportationManager.
+
 Dec 10th, 2012 - G.Cosmo  (geomnav-V09-06-00)
 ------------------------
 - Cleared left-over debug check in G4VoxelNavigation.
