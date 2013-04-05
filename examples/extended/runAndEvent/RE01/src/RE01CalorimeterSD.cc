@@ -110,7 +110,8 @@ G4bool RE01CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
   else
   { 
     (*fCalCollection)[fCellID[copyIDinZ][copyIDinPhi]]->AddEdep(edep);
-    (*fCalCollection)[fCellID[copyIDinZ][copyIDinPhi]]->SetTrackInformation(aStep->GetTrack());
+    (*fCalCollection)[fCellID[copyIDinZ][copyIDinPhi]]
+                             ->SetTrackInformation(aStep->GetTrack());
     if(verboseLevel>0)
     { G4cout << " Energy added to CellID " 
            << copyIDinZ << " " << copyIDinPhi << G4endl; }

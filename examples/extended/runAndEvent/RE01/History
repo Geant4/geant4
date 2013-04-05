@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Apr 01, 2013 A. Dotti (exampleRE01-V09-06-04)
+- New API for physics lists needed for MT
+
+Mar 14, 2013 M. Asai (exampleRE01-V09-06-03)
+- Enforcing the coding guideline.
 
 Feb 15, 2013 I. Hrivnacova
 - Applied coding guidelines (data members initialization)

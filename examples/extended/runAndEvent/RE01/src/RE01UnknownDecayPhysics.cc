@@ -52,9 +52,9 @@ void RE01UnknownDecayPhysics::ConstructParticle()
 void RE01UnknownDecayPhysics::ConstructProcess()
 {
   // Add Decay Process
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if(particle->GetParticleName()=="unknown") {
       pmanager ->AddProcess(&fUnknownDecay);
