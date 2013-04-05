@@ -13,6 +13,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+03-04-13  A.Dotti (test58-V09-06-00)
+- Migrating to new G4VPhysicsConstructor API needed for G4MT
 
 12-11-12  V.Ivanchenko (test58-V09-05-01)
 - RunAction - fixed variable shadowing
