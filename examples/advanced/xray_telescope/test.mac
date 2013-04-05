@@ -13,6 +13,6 @@
 /gps/ene/type Mono
 /gps/ene/mono 0.5 MeV
 
-/control/execute vis.mac
+#/control/execute vis.mac
 
 /run/beamOn 1000

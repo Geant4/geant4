@@ -20,24 +20,6 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
-#Check here for G4ANALYSIS_USE_PLOTTER
-#Use it if the environment variable is set, and the user has *not* supplied the CMake 
-#command line argument. Otherwise, the argument of the command line has the
-priority.
-#
-if("$ENV{G4ANALYSIS_USE_PLOTTER}" AND NOT DEFINED G4ANALYSIS_USE_PLOTTER)
-  set(PLOTTER_USE_DEFAULT ON)
-else()
-  set(PLOTTER_USE_DEFAULT ${G4ANALYSIS_USE_PLOTTER})
-endif()
-
-option(G4ANALYSIS_USE_PLOTTER "Build xray_telescope with support for Plotter"
-${PLOTTER_USE_DEFAULT})
-mark_as_advanced(G4ANALYSIS_USE_PLOTTER)
-
-if(G4ANALYSIS_USE_PLOTTER)
-  add_definitions(-DG4ANALYSIS_USE_PLOTTER)
-endif()
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -60,6 +42,7 @@ target_link_libraries(XrayTel ${Geant4_LIBRARIES} )
 #
 set(xray_telescope_SCRIPTS
     test.mac
+    vis.mac
   )
 
 foreach(_script ${xray_telescope_SCRIPTS})

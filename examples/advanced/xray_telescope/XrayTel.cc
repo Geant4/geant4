@@ -121,9 +121,12 @@ int main( int argc, char** argv )
   G4UImanager *UImanager = G4UImanager::GetUIpointer();  
   if ( argc==1 ){
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-      ui->SessionStart();
-      delete ui;
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);    
+#ifdef G4VIS_USE
+       UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif    
+       ui->SessionStart();
+       delete ui;
 #endif
   }
   else {
