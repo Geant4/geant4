@@ -89,13 +89,16 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
     return status; 
 
   } else if(0 < nBiased) {
-    for(G4int i=0; i<nBiased; ++i) {
-      if(aTrack->GetDefinition() == biasedParticle[i]) {
-        if(aTrack->GetKineticEnergy() < biasedEnergy[i]) {
-	  if(G4UniformRand() < rrProbability[i]) {
-	    const_cast<G4Track*>(aTrack)->SetWeight(aTrack->GetWeight()/rrProbability[i]);
-	  } else {
-	    status = fKill;
+    G4double w = aTrack->GetWeight();
+    if(w <= 1.0) {
+      for(G4int i=0; i<nBiased; ++i) {
+	if(aTrack->GetDefinition() == biasedParticle[i]) {
+	  if(aTrack->GetKineticEnergy() < biasedEnergy[i]) {
+	    if(G4UniformRand() < rrProbability[i]) {
+	      const_cast<G4Track*>(aTrack)->SetWeight(w/rrProbability[i]);
+	    } else {
+	      status = fKill;
+	    }
 	  }
 	}
 	break;

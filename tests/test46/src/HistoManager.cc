@@ -355,6 +355,7 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
 {
   const G4ParticleDefinition* pd = track->GetDefinition();
   G4double e = track->GetKineticEnergy();
+  G4double w = track->GetWeight();
   //  G4cout << "### KineticEnergy= " << e << G4endl;
 
   // Primary track
@@ -363,10 +364,10 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     primaryDef = pd;
   } else {
     e = log10(e/MeV);
-    if(pd == G4Gamma::Gamma())            { histo->Fill(16,e,1.0); }
-    else if(pd == G4Electron::Electron()) { histo->Fill(17,e,1.0); }
-    else if(pd == G4Proton::Proton())     { histo->Fill(18,e,1.0); }
-    else if(pd == G4Neutron::Neutron())   { histo->Fill(19,e,1.0); }
+    if(pd == G4Gamma::Gamma())            { histo->Fill(16,e,w); }
+    else if(pd == G4Electron::Electron()) { histo->Fill(17,e,w); }
+    else if(pd == G4Proton::Proton())     { histo->Fill(18,e,w); }
+    else if(pd == G4Neutron::Neutron())   { histo->Fill(19,e,w); }
   }
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
