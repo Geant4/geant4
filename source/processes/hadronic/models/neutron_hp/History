@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 March 2013  Ben Morgan (hadr-hpn-V09-06-05)
+- sources.cmake : Use new ZLIB variables for include paths and library
+  links to allow transparent use of internal/external zlib.
+  NB: The code does not use ZLIB at present, but this patch allows
+  usage from now on as you require.
+
 12 March 2013  Dennis Wright (hadr-hpn-V09-06-04)
 - fix MacOS Clang compiler warnings: 
   G4NeutronHPCapture.hh : remove unused private variable "it"
