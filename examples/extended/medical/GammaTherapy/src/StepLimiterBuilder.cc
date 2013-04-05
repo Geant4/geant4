@@ -70,9 +70,9 @@ void StepLimiterBuilder::ConstructProcess()
 {
   StepLimiter* stepMax = new StepLimiter();
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (stepMax->IsApplicable(*particle) && !particle->IsShortLived()) {
