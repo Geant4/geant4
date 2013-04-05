@@ -62,17 +62,17 @@ G4TouchableHistory::GetTranslation(G4int depth) const
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static G4ThreadLocal G4ThreeVector *ctrans = new  G4ThreeVector;
-  G4ThreeVector &currTranslation = *ctrans;
+  static G4ThreadLocal G4ThreeVector* ctrans = 0;
+  if ( !ctrans )  { ctrans = new G4ThreeVector; }
   if(depth==0.0)
   {
     return ftlate;
   }
   else
   {
-    currTranslation =
+    *ctrans =
       fhistory.GetTransform(CalculateHistoryIndex(depth)).NetTranslation();
-    return currTranslation;
+    return *ctrans;
   }
 }
 
@@ -82,7 +82,8 @@ G4TouchableHistory::GetRotation(G4int depth) const
   // The value returned will change at the next call
   // Copy it if you want to use it!
   //
-  static G4ThreadLocal G4RotationMatrix *rotM = new G4RotationMatrix();
+  static G4ThreadLocal G4RotationMatrix* rotM = 0;
+  if (!rotM )  { rotM = new G4RotationMatrix(); }
 
   if(depth==0)
   {

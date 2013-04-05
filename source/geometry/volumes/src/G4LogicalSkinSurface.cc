@@ -77,7 +77,7 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface& right)
 
 G4LogicalSkinSurface::~G4LogicalSkinSurface()
 {
-  delete theSkinSurfaceTable; theSkinSurfaceTable = 0;
+//  delete theSkinSurfaceTable; theSkinSurfaceTable = 0;
 }
 
 //
@@ -126,26 +126,25 @@ const G4LogicalSkinSurfaceTable* G4LogicalSkinSurface::GetSurfaceTable()
 
 size_t G4LogicalSkinSurface::GetNumberOfSkinSurfaces()
 {
-  if (!theSkinSurfaceTable)
+  if (theSkinSurfaceTable)
   {
-    theSkinSurfaceTable = new G4LogicalSkinSurfaceTable;
+    return theSkinSurfaceTable->size();
   }
-  return theSkinSurfaceTable->size();
+  return 0;
 }
 
 G4LogicalSkinSurface*
 G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
-  if (!theSkinSurfaceTable)
+  if (theSkinSurfaceTable)
   {
-    theSkinSurfaceTable = new G4LogicalSkinSurfaceTable;
+    for (size_t i=0; i<theSkinSurfaceTable->size(); i++)
+    {
+      if((*theSkinSurfaceTable)[i]->GetLogicalVolume() == vol)
+        return (*theSkinSurfaceTable)[i];
+    }
   }
-  for (size_t i=0; i<theSkinSurfaceTable->size(); i++)
-  {
-    if((*theSkinSurfaceTable)[i]->GetLogicalVolume() == vol)
-      return (*theSkinSurfaceTable)[i];
-  }
-  return NULL;
+  return 0;
 }
 
 // Dump info for known surfaces
@@ -155,31 +154,31 @@ void G4LogicalSkinSurface::DumpInfo()
   G4cout << "***** Skin Surface Table : Nb of Surfaces = "
          << GetNumberOfSkinSurfaces() << " *****" << G4endl;
 
-  if (!theSkinSurfaceTable)
+  if (theSkinSurfaceTable)
   {
-    theSkinSurfaceTable = new G4LogicalSkinSurfaceTable;
-  }
-  for (size_t i=0; i<theSkinSurfaceTable->size(); i++)
-  {
-    G4LogicalSkinSurface* pSkinSurface = (*theSkinSurfaceTable)[i];
-    G4cout << pSkinSurface->GetName() << " : " << G4endl
-           << " Skin of logical volume "
-           << pSkinSurface->GetLogicalVolume()->GetName()
-           << G4endl;
+    for (size_t i=0; i<theSkinSurfaceTable->size(); i++)
+    {
+      G4LogicalSkinSurface* pSkinSurface = (*theSkinSurfaceTable)[i];
+      G4cout << pSkinSurface->GetName() << " : " << G4endl
+             << " Skin of logical volume "
+             << pSkinSurface->GetLogicalVolume()->GetName()
+             << G4endl;
+    }
   }
   G4cout << G4endl;
 }
 
 void G4LogicalSkinSurface::CleanSurfaceTable()
 {
-  if (!theSkinSurfaceTable)
+  if (theSkinSurfaceTable)
   {
-    theSkinSurfaceTable = new G4LogicalSkinSurfaceTable;
+    G4LogicalSkinSurfaceTable::iterator pos;
+    for(pos=theSkinSurfaceTable->begin();
+        pos!=theSkinSurfaceTable->end(); pos++)
+    {
+      if (*pos) { delete *pos; }
+    }
+    theSkinSurfaceTable->clear();
   }
-  G4LogicalSkinSurfaceTable::iterator pos;
-  for(pos=theSkinSurfaceTable->begin(); pos!=theSkinSurfaceTable->end(); pos++)
-  {
-    if (*pos) delete *pos;
-  }
-  theSkinSurfaceTable->clear();
+  return;
 }

@@ -16,9 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-March 12th, 2013 A. Dotti - geomvol-V09-06-05
-- Bug-fix: Added implementation of missing member funciton:
-  G4PVReplica::GetSubInstanceManager()
+
+April 2nd, 2013 G.Cosmo - geomvol-V09-06-07
+- More optimisation to G4LogicalBorderSurface and G4LogicalSkinSurface
+  in the use of static tables.
+
+March 18th, 2013 G.Cosmo - geomvol-V09-06-06
+- More cleanup from MT changes in G4TouchableHistory.
+
+March 12th, 2013 A.Dotti - geomvol-V09-06-05
+- Added missing implementation of member function GetSubInstanceManager()
+  in G4PVReplica.
 
 March 12th, 2013 G.Cosmo - geomvol-V09-06-04
 - Added public accessors for MT data to G4PVReplica.
