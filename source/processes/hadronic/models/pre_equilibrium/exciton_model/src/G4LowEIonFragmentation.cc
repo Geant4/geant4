@@ -61,6 +61,9 @@ G4LowEIonFragmentation::G4LowEIonFragmentation()
   theHandler = new G4ExcitationHandler;
   theModel = new G4PreCompoundModel(theHandler);
   proton = G4Proton::Proton();
+  hits = 0;
+  totalTries = 1;
+  area = 0.0;
 }
 
 G4LowEIonFragmentation::~G4LowEIonFragmentation() 
