@@ -48,7 +48,7 @@ class G4NuclearShellModelDensity : public G4VNuclearDensity
 
   private:
     G4int    theA;
-    G4int    theZ;
+    //G4int    theZ;
     G4double theRsquare;
   
 };

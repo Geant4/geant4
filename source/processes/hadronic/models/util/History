@@ -15,6 +15,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21-Mar-2013 Alberto Ribon                  hadr-mod-util-V09-06-03
+- Fixed warning in the class G4NuclearShellModelDensity.
+
 08-Mar-2013 Gabriele Cosmo                 hadr-mod-util-V09-06-02
 - Fixed use of internal MT data in G4GeneralPhaseSpaceDecay.
 
