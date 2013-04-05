@@ -1,0 +1,205 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    fanoCavity History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+01-04-13 Andrea Dotti (fano-V09-06-03)
+- New G4VUserPhysicsList interface 
+     
+27-03-13 mma (fano-V09-06-02)
+- more on coding conventions
+     
+15-03-13 mma (fano-V09-06-01)
+- G4 coding conventions
+     
+11-12-12 V.Ivant (fano-V09-06-00)
+- Used SetEmModel method in physics builders
+
+28-11-12 G. Cosmo (fano-V09-05-09)
+- Fixed cases of variable shadowing.
+
+13-10-12 A. Dotti (fano-V09-05-08)
+- Removing double include of system of units
+
+13-10-12 A. Dotti (fano-V09-05-07)
+- Adding explicit use of system of units
+
+04-09-12 I. Hrivnacova (fano-V09-05-06)
+- Updated CMakeLists.txt:
+  adding visualization, copying macros, install target and comment lines 
+- Added .README  
+     
+18-04-12 mma (fano-V09-05-05)
+- all classes : apply G4 coding conventions
+     
+23-02-12 mma (fano-V09-05-04)
+- HistoManager : GetFileType()
+     
+14-02-12 mma (fano-V09-05-03)
+- HistoManager : new handle namespace and fileName[2]
+                 no subdirectory in histos file
+- HistoManager : add protections for histo file management
+
+09-02-12 V.Ivant (fano-V09-05-02)
+- PhysListEmStandard_WVI - fixed typo
+
+09-02-12 V.Ivant (fano-V09-05-01)
+- PhysListEmStandard_WVI - more safe initialisation method         
+     
+17-01-12 mma (fano-V09-05-00)        
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoManager : histId and histPt
+- SetHisto() : simplification of Unit handling (HistoManager and HistoMessenger)  
+- HistoMessenger.hh and .cc : suppress fileType command
+- HistoManager and HistoMessenger : coding conventions
+- Update Readme and all macros accordingly
+          
+08-11-11 mma (fano-V09-04-03)
+- modify SteppingVerbose for OutOfWorld
+          
+31-05-11 mma (fano-V09-04-02)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+     
+13-05-2011 mma (fano-V09-04-01)
+- PhysListEmStandard_opt3 updated for msc95
+- PhysListEmStandard_opt2 suppressed
+- PhysListEmStandard_GS, VWI, SS : same options as opt3
+
+04-01-2011 V.Ivanchenko (fano-V09-04-00)
+- Minor cleanup of SS physics constructor
+
+09-11-2010 M.Asai (fano-V09-03-05)
+- Fix AIDA file option.
+
+25-10-2010 G.Folger  (fano-V09-03-04)
+- Correct initialisation of directinIn in ctor; needed by clhep 2.1...
+
+06-06-10 J.Perl (fano-V09-03-03)
+- Remove unused variable in EventAction 
+
+04-06-10 J.Perl (fano-V09-03-02)
+- Updated vis usage 
+    
+22-05-10 mma (fano-V09-03-01)
+- fanoCavity.cc : introduction of G4UIExecutive
+     
+19-01-10 mma (fano-V09-03-00)
+- introduce PhysListEmStandard_option2 : UrbanMscModel93 without options
+            PhysListEmStandard_WVI : WentzelVIModel
+- put in run01.mac all physics lists choice	    
+     
+16-11-09 mma (fano-V09-02-03)
+- PhysListEmStandard_option3 : use UrbanMscModel93
+     
+29-10-09 mma (fano-V09-02-02)
+- new PhysListEmStandard_GS for GoudsmitSaundersonMsc model
+       
+25-10-09 mma (fano-V09-02-01)
+- splite PhysicsList in 2, as others TestEm examples.
+- local copy of PhysListEmStandard_option0, PhysListEmStandard_option3,
+  PhysListEmStandard_SS
+- PhysicsList: add cut for proton recoil in case of Single Scattering
+     
+30-01-09 mma (fano-V09-02-00)
+- EndOfRun : error = ratio*std::sqrt(dEoverE*dEoverE + dToverT*dToverT)
+     
+16-11-08 mma (fano-V09-01-06)
+- Em options: 20bins/decade  LinLossLimit=default=0.01
+     
+01-11-08 mma (fano-V09-01-05)
+- PhysicsList : add comments for Em options
+     
+26-10-08 mma (fano-V09-01-04)
+- PhysicsList : modified Em options
+     
+28-09-08 mma (fano-V09-01-03)
+- HistoManager : root format by default
+
+11-06-08 V.Ivant (fano-V09-01-02)
+- Remove AIDA from GNUmakefile
+     
+07-05-08 mma (fano-V09-01-01)
+- README : update Aida informations     
+     
+11-04-08 mma
+- HistoManager::Scale() : suppress warning
+     
+04-04-08 mma(fano-V09-01-00)
+- PhysicsList : replace G4MultipleScattering by new G4eMultipleScattering
+  --> allows to use MscUrbanModel2
+     
+12-11-07 mma (fano-V09-00-08) 
+- HistoManager/HistoMessenger : print selected histos on ascii file
+     
+05-11-07 mma(fano-V09-00-07)
+- syntax correction in DetectorMessenger.cc
+     
+29-10-07 mma(fano-V09-00-06)
+- Error on energy deposit : per e- track instead of per incident gamma
+     
+29-10-07 mma(fano-V09-00-05)
+- EventAction : histogram of energy deposit in cavity per incident gamma
+- RunAction : compute error on energy deposit and mean kinetic energy
+     
+08-10-07 mma(fano-V09-00-04)
+- DetectorConstruction : wallRadius automatically recomputed
+     
+02-10-07 mma(fano-V09-00-03)
+- PhysicsList : implement G4CoulombScattering process (option)
+
+26-09-07 mma(fano-V09-00-02)
+- MyKleinNishina.cc : do not cancel Compton crossSection in cavity
+- PhysicsList.cc : physics tables, 100 bins per decade (emOptions)
+
+03-09-07 mma
+- DetectorConstruction.cc : add materials graphite and aluminium
+     
+05-07-07 mma (fano-V09-00-01)
+- fano-00 retaged in fano-01
+     
+27-06-07 mma (fano-V09-00-00)
+- emOptions : fUseDistanceToBoundary
+- cosmetic in fanoCavity.cc
+     
+12-06-07 mma (fano-V08-03-01)
+- emOptions : SetLinearLossLimit(1.e-6); SetSkin(2.);
+
+23-05-07 V.Ivanch (fano-V08-03-00)
+- follow change of interface of G4VEmModel::SampleSecondaries
+      
+19-03-07 mma (fano-V08-02-05)
+- add histo of theta distr before enter in cavity 
+    
+01-03-07 mma (fano-V08-02-04)
+- default cut 10 km
+- StackingAction: range < 0.8*safe
+     
+06-02-07 mma (fano-V08-02-03)
+- RunAction: use G4long instead of G4int
+- fanoCavity.in : 4000 events
+     
+30-01-07 mma (fano-V08-02-02)
+- MyKleinNishinaModel::CrossSectionPerVolume(): cancel crossSection in cavity
+     
+24-01-07 mma (fano-V08-02-01)
+- use StackingAction to kill particles
+- do not save random seed
+- set crossSection factor = 1000
+     
+22-01-07 mma (fano-V08-02-00)
+- use fpTrackingManager to get non const Track
+    
+20-01-07 michel maire
+- created, from TestEm11

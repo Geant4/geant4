@@ -1,0 +1,12 @@
+# $Id$
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/phys/addPhysics standard_opt3
+#
+/run/initialize
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 4000
