@@ -24,4 +24,4 @@ if [ Xy == Xy ] then
   export G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS       
 fi
 
-env |grep G4
+env |grep G4NEUTRONHP

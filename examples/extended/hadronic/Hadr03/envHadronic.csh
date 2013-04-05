@@ -15,4 +15,4 @@ if ( Xy == Xy ) then
   setenv G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS 1       
 endif
 
-env |grep G4
+env |grep G4NEUTRONHP

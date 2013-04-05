@@ -183,7 +183,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << " +- "                   << G4BestUnit( rms,"Length")
          << "\tmassic: "             << G4BestUnit(massicMFP, "Mass/Surface")
          << "\n CrossSection:\t"     << CrossSection*cm << " cm^-1 "
-         << "\t\tmassic: "         << G4BestUnit(massicCS, "Surface/Mass")
+         << "\t\tmassic: "           << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
 	 
   //cross section per atom (only for single material)
@@ -259,7 +259,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  }
 
  G4cout 
-   << "\n   --> NOTE: neutronHP is unable to return target nucleus"
+   << "\n   --> NOTE: XXXX because neutronHP is unable to return target nucleus"
    << G4endl;
         
  //particles count
@@ -304,7 +304,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   fEmean.clear();  fEmin.clear(); fEmax.clear();  
   
   //save histograms      
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  ////G4double factor = 1./NbOfEvents;
+  ////analysisManager->ScaleH1(3,factor);      
   if ( analysisManager->IsActive() ) {
     analysisManager->Write();
     analysisManager->CloseFile();
