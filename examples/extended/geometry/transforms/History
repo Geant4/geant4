@@ -1,4 +1,4 @@
-$Id$
+$Id:$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+24/03/2013 mma (exTransforms-V09-06-03)
+ - polish coding conventions
+      
+17/03/2013 mma (exTransforms-V09-06-02)
+ - G4 coding conventions
+ 
 28/02/13 I. Hrivnacova (exTransforms-V09-06-01) 
 - When building materials with NistManager
   do not set fromIsotopes argument (which was set to false), 

@@ -30,8 +30,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "SteppingVerbose.hh"
 
 #include "G4SteppingManager.hh"
@@ -102,13 +101,13 @@ void SteppingVerbose::StepInfo()
                         lp1<(*fSecondary).size(); lp1++){
           G4cout << "   "
                  << std::setw(13)                 
-                 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName()          
+                 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName()
                  << ":  energy ="
                  << std::setw(6)
-                 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy")         
+                 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy")
                  << "  time ="
                  << std::setw(6)
-                 << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time");                                  
+                 << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time");
           G4cout << G4endl;
         }
               

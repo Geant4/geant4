@@ -51,7 +51,7 @@ class DetectorMessenger: public G4UImessenger
 {
   public:
     DetectorMessenger(DetectorConstruction* );
-    virtual ~DetectorMessenger();
+   ~DetectorMessenger();
     
     virtual void SetNewValue(G4UIcommand* command, G4String newValue);
     
