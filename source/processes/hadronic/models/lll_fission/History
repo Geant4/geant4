@@ -14,6 +14,15 @@ code and to keep track of all tags.
     * Please list in reverse chronological order (last date on top)
     ---------------------------------------------------------------
 
+4 April 2013  Dennis Wright (hadr-lllfis-V09-06-01)
+---------------------------------------------------
+- remove G4ThreadLocal since no static variables change within a
+  run.  Files affected:
+    G4fissionEvent.hh, G4SmpNuDistDataU233_235_MC.cc
+    G4fissionEvent.cc, G4SmpSpNuDistData.cc, G4SmpSpNubarData.cc,
+    G4SmpNuDistDataPu239_241_MC.cc, G4SmpNuDistDataU232_234_236_238_MC.cc,
+    G4SmpSpNugDistData.cc, G4LLNLFission.cc, G4SmpNugDist.cc, G4SmpWatt.cc
+
 12 March 2013  Dennis Wright (hadr-lllfis-V09-06-00)
 ----------------------------------------------------
 - G4SmpWatt.cc : fix MacOS Clang compiler warning for appending int to string

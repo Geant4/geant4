@@ -57,11 +57,11 @@
 
 #include "G4fissionEvent.hh"
 
-G4ThreadLocal G4int G4fissionEvent::delayoption=0;
-G4ThreadLocal G4int G4fissionEvent::correlationoption=0;
-G4ThreadLocal G4int G4fissionEvent::nudistoption=3;
-G4ThreadLocal G4int G4fissionEvent::Cf252ndistoption=0;
-G4ThreadLocal G4int G4fissionEvent::Cf252nengoption=0;
+G4int G4fissionEvent::delayoption=0;
+G4int G4fissionEvent::correlationoption=0;
+G4int G4fissionEvent::nudistoption=3;
+G4int G4fissionEvent::Cf252ndistoption=0;
+G4int G4fissionEvent::Cf252nengoption=0;
 
 G4fissionEvent::G4fissionEvent(G4int isotope, G4double time,
                                G4double nubar, G4double eng)

@@ -97,7 +97,7 @@ G4int G4fissionEvent::G4SmpSpNuDistData(G4int isotope, G4int Cf252option) {
   G4double sum, nubar;
   G4double r;
 
-  static G4ThreadLocal G4double sfnu [nSPfissIso][nSPfissn] = { 
+  static G4double sfnu [nSPfissIso][nSPfissn] = { 
     {0.0481677,0.2485215,0.4253044,0.2284094,0.0423438,0.0072533,
      0.0000000,0.0000000,0.0000000,0.0000000,0.0000000},
 
