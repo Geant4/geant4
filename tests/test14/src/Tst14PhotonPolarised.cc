@@ -60,11 +60,11 @@ void Tst14PhotonPolarised::ConstructProcess()
 {
   // Add polarised processes for photons
   
-  theParticleIterator->reset();
+  aParticleIterator->reset();
 
-  while( (*theParticleIterator)() )
+  while( (*aParticleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = aParticleIterator->value();
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
 

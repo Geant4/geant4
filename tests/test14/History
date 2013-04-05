@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+3 Apr 2013  - A.Dotti tag test14-V09-06-00
+              - New PhysicsList interface needed for G4MT
 
 9 Oct 2012  - G.Cosmo tag test14-V09-05-00
               - Explicit inclusion of units and constants headers.
