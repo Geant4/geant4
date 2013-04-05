@@ -43,7 +43,6 @@ target_link_libraries(lArCal ${Geant4_LIBRARIES})
 set(EXAMPLELARCALORIMETER_SCRIPTS
   gui.mac
   run1.mac
-  run2.mac
   vis.mac
   icons.mac
   )
@@ -55,6 +54,19 @@ foreach(_script ${EXAMPLELARCALORIMETER_SCRIPTS})
     COPYONLY
     )
 endforeach()
+
+file( MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/data-tracks)
+file(GLOB _datatracks ${PROJECT_SOURCE_DIR}/data-tracks/*.dat)
+foreach(_datatrackfile ${_datatracks})
+   configure_file( ${_datatrackfile} ${PROJECT_BINARY_DIR}/data-tracks)    
+endforeach()
+
+file( MAKE_DIRECTORY ${PROJECT_BINARY_DIR}/geom_data)
+file(GLOB _geomdata ${PROJECT_SOURCE_DIR}/geom_data/*.dat)
+foreach(_geomdatafile ${_geomdata})
+   configure_file( ${_geomdatafile} ${PROJECT_BINARY_DIR}/geom_data)    
+endforeach()
+
 
 #----------------------------------------------------------------------------
 # For internal Geant4 use - but has no effect if you build this

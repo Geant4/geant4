@@ -9,6 +9,19 @@ $Id$
                       Category History file
                       ---------------------
 
+21.03.2013 - L.Pandola Tag (lAr_calorimeter-V09-06-04)
+	     Remove other compiler warnings (showing up only for 
+	     some systems/compilers)
+
+19.03.2013 - L.Pandola Tag (lAr_calorimeter-V09-06-03)
+	     Remove compiler warning (shadowing a class member by 
+	     a local variable).
+
+14.03.2013 - A.Dotti and L.Pandola Tag (lAr_calorimeter-V09-06-02)
+             Changed CMakeLists.txt to copy the content of the directories 
+	     data-tracks and geom_data (used at run time). Modified macros.
+             Cleaning in FCALPrimaryGeneratorAction
+
 12.03.2013 - L.Pandola Tag (lAr_calorimeter-V09-06-01)
 	     Migrated analysis to g4tools (removed AIDA dependency) and other small 
              cosmetics. CMakeLists.txt and README updated accordingly

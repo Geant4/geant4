@@ -31,7 +31,7 @@
  The primary kinematic consists of a single particle which hits the
  geometry perpendicular to the input face. The FCALPrimaryGeneratorAction 
  class gives the particle and its energy (by default it is an electron of
- 80 GeV). These parameters can be changed in commands of ParticleGun class
+ 20 GeV). These parameters can be changed in commands of ParticleGun class
  inside the macros given in this example. 
  
  The subdirectory data-tracks contains the kinematic files 

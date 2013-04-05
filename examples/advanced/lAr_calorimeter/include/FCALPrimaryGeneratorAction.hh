@@ -38,36 +38,37 @@
 
 class G4ParticleGun;
 class G4Event;
-class FCALTestbeamSetup;
-
+class G4DataVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class FCALPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
-    FCALPrimaryGeneratorAction();    
-   ~FCALPrimaryGeneratorAction();
-
-  public:
-    void GeneratePrimaries(G4Event*);
-  //    void SetRndmFlag(G4String val) { rndmFlag = val;}
-
-  private:
-    G4ParticleGun*                particleGun;	  //pointer a to G4 service class
-    
+public:
+  FCALPrimaryGeneratorAction();    
+  ~FCALPrimaryGeneratorAction();
   
-  private:
-  G4int Ievent;
-  G4double* X;
-  G4double* Y;
-  G4double* Z;
-  G4double* Cos_X;
-  G4double* Cos_Y;
-  G4double* Cos_Z;
+public:
+  void GeneratePrimaries(G4Event*); 
+  void SetVerbosity(G4int ver){fVerbosity = ver;};
 
-  G4int Nevent;
-
+private:
+  void ReadKinematicFromFile(G4double energy);
+  
+  G4ParticleGun*  particleGun;	  //pointer a to G4 service class
+  
+  G4DataVector* fX;
+  G4DataVector* fY;
+  G4DataVector* fZ;
+  G4DataVector* fCosX;
+  G4DataVector* fCosY;
+  G4DataVector* fCosZ;
+  
+  G4bool isFileRead;
+  G4int fVerbosity;
+  
+  size_t nEvent;
+  
 };
 
 #endif
