@@ -1,0 +1,56 @@
+macro mumsc.kumac
+*
+set * ; opt * 
+*
+filecase keep
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
+
+title '100 GeV muon : dispersion after 1 m iron'
+
+h/file 1 ref10.opt2.hbook
+h/file 2 ref10.opt0.hbook
+
+opt stat
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/14
+key 3 2500  1 'opt2 (WVI)' ! l
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun2/14 s
+key 3 3000  1 'opt0 (Urban90)' ! l
+atitle x(mm)  nb
+
+opt logy
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/15
+key 6 200  1 'opt2 (WVI)' ! l
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun2/15 s
+key 6 500  1 'opt0 (Urban90)' ! l
+atitle radius(mm)  nb
+
+exec Redraw-Axis
+
+return
+     
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return
+  

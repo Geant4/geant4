@@ -1,0 +1,31 @@
+# $Id$
+#
+# Macro file for "TestEm7.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSizeX  10 cm
+/testem/det/setSizeYZ 10 cm
+#
+/testem/phys/addPhysics local
+#/testem/phys/addPhysics emstandard_opt0
+#/testem/phys/addPhysics emstandard_opt3
+#
+/run/initialize
+#
+/gun/particle alpha
+/gun/energy 400 MeV
+#
+# step limit
+/testem/stepMax 0.5 mm
+#
+/testem/event/printModulo 1000
+#
+/analysis/setFileName alpha
+/analysis/h1/set 2 100 75 85 mm
+/analysis/h1/set 3 100 75 85 mm
+#
+/run/beamOn 10000

@@ -1,0 +1,15 @@
+FILE  kulchi.hbook
+LIST
+ABSOR  22 (aluminium)  98.5185e-4 (thicknX) 1. (sizeYZ)  0. (field)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*6.89e-6 (bcute/m)  2*597.e-6 (dcute/m)   
+KINE   3 (electron) 0.00225 (Ekin) 90.0 (theta)  0.0 (phi)
+*HISTO 12 (idh) 100 (nbins)   0. (tetmin)  25. (tetmax) 1.74533e-2 (deg)
+*HISTO 13 (idh) 100 (nbins) -25. (tetmin) +25. (tetmax) 1.74533e-2 (deg)
+SWIT   0 (draw)      
+DEBUG  1 1 10000 
+TRIG   100000
+END

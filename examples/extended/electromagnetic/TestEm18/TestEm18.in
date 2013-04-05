@@ -1,0 +1,20 @@
+# $Id$
+#
+# macro file for TestEm18.cc
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Water
+/testem/det/setSize 1 cm
+#
+/testem/phys/addPhysics standard
+#
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+/gun/particle e- 
+/gun/energy 10 MeV
+#
+/run/beamOn 100000

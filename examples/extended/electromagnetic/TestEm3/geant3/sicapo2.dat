@@ -1,0 +1,22 @@
+FILE  sicapo2.paw
+LIST
+C
+C  Lead-Iron-Silicium  15 layers; electon 6, 8, 10, 12 GeV
+C
+C  SICAPO Collaboration. CERN-PPE/91-218  Nov.91
+C                        NIM A332 (85-90) Feb.93
+C
+CALOR  3 (nbAbs) 15 (nbLay)  40. (calorYZ) 0. (field)
+MATE   8 (pb)   7 (Fe)      10 (Si)
+THICK  1.3 (cm) 1.008 (cm)  0.04 (cm)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*541.e-6 (dcute/m)
+C   CUTS       10.0e-6 (cutgam)     541.e-6 (cutele)     
+KINE   3 (Itype) 6.0 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+SWIT   0 (draw)
+DEBUG  10  5 10 
+TRIG   100
+END

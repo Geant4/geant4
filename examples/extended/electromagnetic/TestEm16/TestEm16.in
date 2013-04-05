@@ -1,0 +1,33 @@
+# $Id$
+#
+# Macro file for "TestEm16.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Vacuum
+#
+/run/initialize
+#
+# inactivate other processes to make SynchrotronRadiation more visible
+/process/inactivate msc
+/process/inactivate eIoni
+/process/inactivate eBrem
+/process/inactivate annihil
+/process/inactivate phot
+/process/inactivate compt
+/process/inactivate conv
+/process/inactivate Rayl
+#
+/testem/det/setField 1.0 tesla
+#
+/gun/particle e-
+/gun/energy 9.9994890009 GeV
+#
+# expected results is:
+# Emean = 20.48 keV
+# E_rms = 37.18 keV
+#
+/run/beamOn 100

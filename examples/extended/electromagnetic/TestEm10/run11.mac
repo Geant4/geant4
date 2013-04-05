@@ -1,0 +1,148 @@
+#
+# Macro file 'run11.mac' for the initialization phase of "TestEm10.cc"       
+#
+/control/verbose 2
+#
+#control/saveHistory
+#
+/run/verbose 2
+#
+#/run/initialize
+#
+# Parameters of MWPC detector: material and its thickness
+# Xe55He15CH4, Xe10CH4, Xe20CH4, Xe5CH4, Xe20CO2, Kr20CO2
+# Kr7CH4, Ar7CH4, XeArCH4
+#
+#/XTRdetector/setAbsMat Xe10CH4 
+#/XTRdetector/setAbsThick 30.0 mm
+#/XTRdetector/setWorldZ 4000.0 mm
+#
+# Parameters of Radiator (default mm)
+# TRT_CH2, Radiator, CarbonFiber, Li, Be, Mylar, Kapton ?, CH2
+# Air, CO2, He, Ne, Kr, Ar, Xe, 
+#
+#/XTRdetector/setRadMat Li
+#/XTRdetector/setWorldMat He
+#/XTRdetector/setRadThick 0.04 mm
+#/XTRdetector/setGasGapThick 0.126 mm
+#/XTRdetector/setFoilNum 300
+# 
+# Selection of XTR parametrisation model: 1-10
+# TRmodel/XTRdEdx: Foam 1/2, GamDistr 3/4, Irr 5/6, Plate 7/8, Reg 9/10, no model 0 
+#
+#/XTRdetector/setModel 0
+#
+# Update geometry after changing its parametrs
+#
+#/XTRdetector/update
+# window: Mylar 51 micron
+#  PLOT: energy deposit distribution in absorber (g4.11)
+#
+/plots/sethistName g4.p11
+/plots/setnbinEn 35
+/plots/setEnlow 0.0 MeV
+/plots/setEnhigh 0.07  MeV
+#
+#
+# Change and choice of experimental setups. Can be
+# simpleALICE., 
+#
+#
+/XTRdetector/setup simpleALICE
+#
+# these commands do not change energy cuts???
+#
+# Set XTR model (default: transpM). Name list consits:
+# gammaR, gammaM, regR, regM, strawR, transpR, transpM
+#
+# R - XTR dE/dx models, M - XTR flux after radiator models
+#
+#/emphyslist/setXTRModel  transpM
+#/emphyslist/setXTRModel  transpR
+/emphyslist/setXTRModel  gammaM
+#/emphyslist/setXTRModel  gammaR
+#/emphyslist/setXTRModel  strawR
+#/emphyslist/setXTRModel  regM
+#/emphyslist/setXTRModel  regR
+#
+#/emphyslist/eMinEnergy 100.  
+#/emphyslist/gMinEnergy 100.  
+#
+#/run/initialize
+#
+#/run/particle/dumpCutValues
+#
+/run/particle/applyCuts
+#
+# set cuts in XTR radiator
+#
+/emphyslist/setGammaCut 1.0
+/emphyslist/setElectronCut 100.0
+/emphyslist/setPositronCut 100.
+/emphyslist/setRadiatorCuts 1.
+#
+# set cuts in XTR detector
+#
+/emphyslist/setGammaCut 100.0
+/emphyslist/setElectronCut 100.0
+/emphyslist/setPositronCut 100.
+/emphyslist/setDetectorCuts 1.
+#
+/run/initialize
+#
+#/XTRdetector/update
+#
+#Innactivate some processes: msc eIoni eBrem RegularXTRadiator
+#                            hIoni 
+#
+# (switch off dEdx and msc always together!)
+#
+/process/inactivate msc
+/process/inactivate eIoni
+/process/inactivate hIoni
+#
+#/process/inactivate eBrem
+#
+# Inactivate gamma processes
+#
+#/process/inactivate phot
+#/process/inactivate compt
+#/process/inactivate conv
+#
+#/process/inactivate RegularXTRadiator
+#
+#/process/inactivate GammaXTRadiator
+#
+#/process/eLoss/fluct false
+#
+#/process/verbose 1
+#
+#
+# Particle and its energy
+#
+/gun/particle e-
+/gun/energy 2000.0 MeV
+#
+#/gun/particle proton
+#/gun/energy 6000000.0 MeV
+#
+#/tracking/verbose 2
+#
+/event/printModulo 1000
+/run/beamOn 5000
+#
+#/run/beamOn 1
+#/process/inactivate eIoni
+#/process/inactivate eBrem
+#
+#
+
+
+
+
+
+
+
+
+
+

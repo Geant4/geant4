@@ -1,0 +1,24 @@
+# $Id: run01.mac,v 1.7 2009-09-22 15:18:20 maire Exp $
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_WATER
+/testem/det/setRadius  100 nm
+#
+/testem/phys/addPhysics  dna	# em DNA physics
+#
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 1 keV
+#
+/testem/histo/setFileName dna
+/testem/histo/setHisto 1 50  0.   100 nm	#edep profile
+/testem/histo/setHisto 3 50  0.   300 nm	#true track length
+#
+/testem/applyAutomaticStepMax false
+#
+/testem/event/printModulo 1000
+#
+/run/beamOn 5000

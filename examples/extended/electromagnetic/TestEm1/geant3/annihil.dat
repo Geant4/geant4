@@ -1,0 +1,20 @@
+LIST
+C
+C       e+ beam; 100 MeV
+C 
+CALOR   5 (Al) 20. (cm) 0. (field)
+TRIG    20
+KINE    2 (positron)   0.1 (GeV)  1. (xBeam)  0.8 (rBeam)
+DEBUG   10  5 1000
+SWIT    0 (draw) 0 (save)
+C
+CUTS    10.e-6 (cutgam)    10.e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.e+3 (bcute/m) 2*10.e+3 (dcute/m)   10.e-3 (ppcutm)
+MULS    0      
+PHOT    0
+COMP    0
+PAIR    0
+LOSS    1
+C
+ABAN    0
+TIME    2=1.

@@ -1,0 +1,74 @@
+macro berger.kumac
+*
+set * ; opt * 
+*
+filecase keep
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2
+
+title 'e- 500 keV in water : Dose Point Kernel'
+*
+h/file 1 opt0.500kev.hbook
+h/file 2 opt2.500kev.hbook
+*
+opt grid
+*
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl //lun1/8
+key 0.2 0.65  1 'ref10-opt0 (urban)' ! l
+*
+set dmod 1 ; set hcol 2 ; set plci 2
+h/pl //lun2/8 s
+key 0.2 0.55  1 'ref10-opt2 (urban2)' ! l
+
+atitle 'r/r0'  'DPK'
+
+* *** data
+* Berger & Seltzer, Appl. Radiat. Isot. 42(1991) page 917
+* Mainegra et al. Med. Phys. 32, 685-699 (2005)    
+*    
+*fname = 'EGSnrc/1MeV-DPK.ascii'
+fname = 'Etran/500keV-DPK.ascii'
+
+vector/create nb(1)
+vector/read nb [fname] ! 'O'
+nbin = nb(1)
+vector/create vect(2,[nbin])
+vector/read vect [fname] ! 'C'
+***vector/write vect ! (1x,f6.4,3x,f5.3)
+
+set mtyp 22
+set pmci 3
+graph [nbin] vect(1) vect(2)  P
+
+vector/create xmark(1)
+vector/create mark(1)
+vector/input xmark 0.15
+vector/input mark  0.45
+graph 1 xmark mark P
+itx   0.24 0.45 'EGSnrc simul'
+			           
+exec Redraw-Axis
+close 1
+return
+	     
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return
+  

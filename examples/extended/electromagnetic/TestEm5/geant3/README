@@ -1,0 +1,48 @@
+
+ testem5 is the geant3 equivalent of TestEm5
+
+ % cd geant3
+ % gmakeB           to make an executable  (Batch version)
+ % gmakeT           to make an executable  (inTeractive version) 
+
+ To execute:
+
+ % cd geant3
+ % $G4SYSTEM/testem5.xb (for batch) or  testem5.xt (for interactive)
+
+ The program will ask:
+ G3 > gives the filename of the data cards to be read:
+
+ myMacro.dat      (myMacro.dat is the equivalent of the G4 myMacro.mac)
+
+ data cards
+ ----------  
+ Most of the data cards used in xxxx.dat are standard data cards of GEANT3,
+ but some of them are defined in testem5:
+
+      KEY      VARIABLE/type           Short description
+
+      FILE    fileName (character)     fileName of the histos
+                                       (the FILE data card should be the
+				        first, with the format A4,A2,A25)
+					
+      ABSO    MATABS (integer)         mat.number  of the absorber
+	      XABSOR (real)            X thickness of the absorber
+	      YZABSO (real)            YZ size     of the absorber
+	      
+      KILL    kill (logical)           do not track the secondary particles
+      
+      STMA    stma (real)              control STEMAX
+      
+ histograms
+ ----------
+ The list of built-in histograms is identical to TestEm5.cc 
+ (see G4 README or histo.F)
+ 
+ One can control the binning of the histograms with the data card:
+  *HISTO  id1  nbBins  valMin  valMax  valUnit 
+  *HISTO  id2  nbBins  valMin  valMax  valUnit
+  ... etc ...........
+  
+  valMin and ValMax are given in the desired unit, whose numerical value must
+  be specified in valUnit. Remember that Geant3 defaults are: GeV, cm, rad. 

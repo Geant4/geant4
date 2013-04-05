@@ -1,0 +1,40 @@
+# macro file for TestEm5.cc    
+#     		    
+/control/verbose 2
+/run/verbose 2
+#
+#/testem/det/setAbsMat Gold     
+/testem/det/setAbsMat G4_Au
+/testem/det/setAbsThick 50 um
+/testem/det/setAbsYZ    50 um
+#
+#/testem/phys/addPhysics local
+#/testem/phys/addPhysics emstandard_opt0
+/testem/phys/addPhysics emlivermore
+#/testem/phys/addPhysics empenelope
+###/testem/phys/addPhysics emstandard_opt3
+/testem/phys/setGCut 0.5 um
+/testem/phys/setECut 1 mm
+/testem/phys/setPCut 1 mm
+#
+/run/initialize
+#
+#/process/em/deexcitation world true false true
+/process/em/fluo true
+/process/em/pixe true
+/process/em/auger false
+#
+/testem/gun/setDefault
+/gun/particle e-
+#/gun/particle proton 
+/gun/energy 20 MeV
+# 
+/analysis/setFileName pixe
+/analysis/h1/set  3 100 0 100 keV	#gamma: energy at vertex
+/analysis/h1/set  5 100 1 100 keV log10	#gamma: energy at vertex (log scale)	
+/analysis/h1/set 20 100 0 100 keV	#gamma: energy at exit
+/analysis/h1/set 40 100 0 100 keV	#gamma: energy at back
+#
+/testem/event/printModulo 10000
+# 
+/run/beamOn 10000

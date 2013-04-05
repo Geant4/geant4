@@ -1,0 +1,36 @@
+# $Id: TestEm1.in,v 1.25 2008-09-12 16:32:25 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+# (can be run in batch, without graphic)
+#
+# electron 100 MeV; all processes
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium 
+/testem/det/setSize 10 m
+#
+/run/initialize
+#
+/testem/gun/setDefault 
+/gun/particle e-
+/gun/energy 100 MeV
+#
+/analysis/h1/set 1 100 0   50 cm        #track length of primary
+/analysis/h1/set 2 100 0  300 none      #nb steps of primary
+/analysis/h1/set 3 200 0   20 mm        #step size of primary
+/analysis/h1/set 4 100 50  150 MeV      #total energy deposit
+/analysis/h1/set 5 100 0   100 MeV      #sec. chared energy spectrum
+/analysis/h1/set 6 100 0   100 MeV      #sec. neutral energy spectrum
+/analysis/h1/setAscii 1  
+#
+/testem/phys/setCuts 1 mm
+/analysis/setFileName run0 
+/run/beamOn 2000
+#
+/process/eLoss/verbose 0
+#
+/testem/phys/setCuts 10 um
+/analysis/setFileName run1
+/run/beamOn 2000

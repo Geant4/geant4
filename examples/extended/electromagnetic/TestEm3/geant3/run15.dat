@@ -1,0 +1,44 @@
+FILE  run15.paw
+LIST
+C
+C    Iron-scintillator 20 layers
+C
+CALOR  2 (nbAbs) 20 (nbLay)  30. (calorYZ) 0. (field)
+MATE   7 (iron)    14 (Sc)
+THICK  1.4(cm)    0.3 (cm)
+C
+LOSS   1
+HADR   0
+ABAN   0
+C
+CUTS  10.0e-6 (cutgam) 10.0e-6 (cutele)  3*10.e-3 (cutn/h/mu)
+C
+C 10 mum       
+CUTPR  1. (tmed)   10.0e-6 (bcute/m)   58.0e-6 (dcute/m)  58.0e-6 (ppcutm)
+       2. (tmed)   10.0e-6 (bcute/m)   10.0e-6 (dcute/m)  10.0e-6 (ppcutm)
+C 100 mum       
+C CUTPR  1. (tmed)   10.0e-6 (bcute/m)  234.0e-6 (dcute/m) 234.0e-6 (ppcutm)
+C        2. (tmed)   10.0e-6 (bcute/m)   85.3e-6 (dcute/m)  85.3e-6 (ppcutm)
+C 1 mm       
+C CUTPR  1. (tmed)   20.8e-6 (bcute/m)    1.3e-3 (dcute/m)   1.3e-3 (ppcutm)
+C        2. (tmed)   10.0e-6 (bcute/m)  356.0e-6 (dcute/m) 356.0e-6 (ppcutm)
+C 1 cm       
+C CUTPR  1. (tmed)   60.4e-6 (bcute/m)   13.0e-3 (dcute/m)   13.0e-3 (ppcutm)
+C        2. (tmed)   10.0e-6 (bcute/m)    2.2e-3 (dcute/m)    2.2e-3 (ppcutm)       
+C
+C 10 cm       
+C CUTPR  1. (tmed)  626.0e-6 (bcute/m)  209.0e-3 (dcute/m)  209.0e-3 (ppcutm)
+C        2. (tmed)   19.0e-6 (bcute/m)   23.4e-3 (dcute/m)   23.4e-3 (ppcutm)       
+C              
+C 100 cm       
+C CUTPR  1. (tmed)   10.0e+3 (bcute/m)  161.0e+0 (dcute/m)  161.0e+0 (ppcutm)
+C        2. (tmed)  842.0e-6 (bcute/m)  318.0e-3 (dcute/m)  318.0e-3 (ppcutm)       
+C       
+KINE   5 (muon) 20. (GeV) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+C
+*HISTO 1 (idh) 100 (nbin) 0. (Emin)   2. (Emax) 1.    (GeV)
+*HISTO 2 (idh) 100 (nbin) 0. (Emin) 100. (Emax) 1.e-3 (MeV)
+C
+SWIT   0 (draw)
+DEBUG  10  5 1000
+TRIG   20000

@@ -1,0 +1,15 @@
+# $Id$
+#
+# Macro file for "TestEm6.cc"
+# (can be run in batch, without graphic)
+#
+#
+/control/verbose 2
+/run/verbose 2
+#
+/run/initialize
+#
+/testem/phys/SetAnnihiToMuPairFac 10000
+#
+/gun/particle e+
+/run/beamOn 1

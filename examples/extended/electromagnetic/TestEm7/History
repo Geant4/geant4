@@ -1,0 +1,489 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm7 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+01-04-13 A.Dotti (testem7-V09-06-07,testem7-V09-06-08)
+- New G4VUserPhysicsList interface needed for MT
+     
+20-03-13 mma (testem7-V09-06-06)
+- PhysListEmStandard : use default G4UrbanMscModel
+
+13-02-13 I.Hrivnacova 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+23-01-13 V.Ivant (testem7-V09-06-05)
+15-01-13 V.Ivant (testem7-V09-06-04)
+- G4ScreenedNuclearRecoil - defined type and sub-type of the process
+- PhysListEmStandardNR - use standard electron ionisation instead 
+    of Penelope, use multiple scatteing for ions above 100 MeV/u
+- RunAction - delete analysys manager and all histograms the end 
+    of a run
+
+20-12-12 V.Ivant (testem7-V09-06-03)
+- G4ScreenedNuclearRecoil - removed unused obsolete header
+
+15-12-12 V.Ivant (testem7-V09-06-02)
+- PhysListEmStandardSS, PhysListEmStandardNR: updated according 
+    Option4 physics list models and parameters
+- c2_function - fixed variable shadowing
+
+14-12-12 A.Ribon (testem7-V09-06-01)
+- Removed obsolete class G4HadronQElasticPhysics.
+
+11-12-12 V.Ivant (testem7-V09-06-00)
+- PhysListEmStandard: use SetEmModel method
+          
+20-11-12 I.Hrivnacova (testem7-V09-05-11)
+- Fixed typo in .README
+
+02-11-12 V.Ivant (testem7-V09-05-10)
+- c2_functions - fixed variable shadowing
+     
+19-10-12 mma (testem7-V09-05-09)
+- PhysListEmStandard: use G4UrbanMsc96
+      
+18-10-12 mma (testem7-V09-05-08)
+- coding conventions: virtual and initialisation lists
+- back: fill histo in SteppingAction and TrackingAction
+
+12-10-12 V.Ivant (testem7-V09-05-07)
+- Migration to the updated analysis tool and implicit units
+- RunAction - added functionality from HistoManager, which not
+    needed anymore and deleted, added protection against division
+    by zero
+- SteppinAction and RunAction - moved histogram filling into
+    RunAction
+- PhysicsList - added Opt4 builder
+    
+07-10-12 mma (testem7-V09-05-06)
+- HistoManager : use G4AnalysisManager
+
+11-07-12 V.Ivant (testem7-V09-05-05)
+- c2_functions - removed not used arguments
+
+12-04-12 V.Ivant (testem7-V09-05-04)
+- c2_functions (M.Mendenhall) fixed compillation problems at gcc 4.7
+- G4ScreenedNuclearRecoil (M.Mendenhall) fixed division by zero at 
+    initialisation (no effect at run time)
+
+05-04-12 V.Ivant (testem7-V09-05-03)
+- c2_functions (M.Mendenhall) fixed compillation problems at gcc 4.7
+- TestEm7 - added extra test case for low-energy ions
+     
+03-04-12 mma (testem7-V09-05-02)
+- all classes : apply G4 coding conventions
+       
+05-03-12 mma (testem7-V09-05-01)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+
+09-02-12 V.Ivant (testem7-V09-05-00)
+- PhysListEmStandard,PhysListEmStandardSS - more correct process 
+    order  
+
+11-11-11 V.Ivant (testem7-V09-04-14)
+- G4ScreenedNuclearRecoil - commented out G4Exceptions
+     
+08-11-11 mma (testem7-V09-04-13)
+- modify SteppingVerbose for OutOfWorld
+     
+01-11-11 V.Ivant (testem7-V09-04-12)
+- c2_function.hh - removed compiler depended selection of the math library 
+     
+31-10-11 mma (testem7-V09-04-11)
+- PhysListEmStandard : msc95 by default
+
+31-10-11 V.Ivant (testem7-V09-04-10)
+- TestEm7.in, DetectorConstruction - added Water_1.05 material and 
+    test of variable density option
+
+07-06-11 V.Ivant (testem7-V09-04-09)
+- c2_function.hh - added compiler depended selection of the math library 
+     
+03-06-11 mma (testem7-V09-04-08)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
+     
+30-05-11 mma (testem7-V09-04-07)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+    
+08-04-11 mma (testem7-V09-04-06)
+- PhysicsList : set back default lowest production cut (990 eV)
+- update PhysListEmStandard for msc95 and deexcitation (see ref-03)
+
+23-03-11 V.Ivant (testem7-V09-04-05)
+- PhysListEmStandardNR - remove calls to obsolete methods,
+     cleaned up options
+- PhysListEmStandardSS - cleaned up options
+     
+20-02-11 mma (testem7-V09-04-04)
+- update PhysListEmStandard for deexcitation
+- PhysicsList : set lowest production cut to 100 eV
+     
+14-02-11 mma (testem7-V09-04-03)
+- update HistoManager
+     
+11-02-11 mma (testem7-V09-04-02)
+- update SteppingVerbose
+     
+08-02-11 mma (testem7-V09-04-01)
+- allow tallies of different materials and sizes.
+  affected : DetectorConstruction, DetectorMessenger, RunAction, SteppingAction
+
+05-01-11 V.Ivant (testem7-V09-04-00)
+- Minor cleanup of SS physics constructor
+
+19-11-10 V.Ivant (testem7-V09-03-08)
+- Added ion scattering model into SS physics constructor
+
+13-10-10 V.Ivant (testem7-V09-03-07)
+- PhysListEmStandardNR - removed obsolete set of nuclear stopping flag 
+     
+21-09-10 mma (testem7-V09-03-06)
+- add HistoManager in cvs !     
+     
+17-09-10 mma (testem7-V09-03-05)
+- use 'standard' HistoManager
+- fixe normalisation factor in histos 2 and 3
+
+21-06-10 V.Ivant (testem7-V09-03-04)
+- Cleanup Histo according to expert recommendations
+     
+06-06-10 J.Perl (testem7-V09-03-03)
+- Remove unused variable in EventAction
+
+03-06-10 J.Perl (testem7-V09-03-02)
+- Updated vis usage 
+   
+04-06-10 V.Ivant (testem7-V09-03-01)
+- Added extra EM option "ionGasModels", which diseble effective ion
+  charge and enable to use new models G4BraggIonGasModel, 
+  G4BetheBlochIonGasModel; added extra macro ionGasC12.mac
+       
+21-05-10 mma (testem7-V09-03-00)
+- TestEm7.cc : introduction of G4UIExecutive
+
+01-12-09 V.Ivant (testem7-V09-02-04)
+- An attempt to fix SLC5 compillation problem
+
+26-11-09 G.Cosmo (testem7-V09-02-03)
+- Corrected disclaimer in some files.
+
+25-11-09 V.Ivant (testem7-V09-02-02)
+- (M.Mendenhall) Fixed compillation warnings at SLC5 
+- G4LiniardPartition moved back from the standard library
+     
+21-11-09 mma (testem7-V09-02-01)
+- PhysicsList.cc :
+  - renamed "standard" -> "local"; "emstandard" -> "emstandard_opt0"
+- remove obsolete G4MultipleScattering in PhysListEmStandardNR  
+- updated README and macro files
+  
+20-11-09 V.Ivant (testem7-V09-02-00)
+- use Livermore and Penelope builders from PhysList library
+- G4LiniardPartition moved to source
+
+21-11-08 V.Ivant (testem7-V09-01-17)
+- Added process type to G4SceenNuclearRecoil process
+- Added "standardICRU73" Physics List in which ion ionisation
+  is simulated using new model G4IonLossParametrisedModel,
+  which is configured via G4EmConfigurator
+- removed options from the default "emstandard_local" 
+  Physics List
+     
+16-11-08 mma (testem7-V09-01-16)
+- Em options: 20bins/decade  LinLossLimit=default=0.01
+
+31-10-08 mma (testem7-V09-01-15)
+- Use G4hMultipleScattering for muons and protons
+- Modify EM options 
+     
+23-10-08 mma (testem7-V09-01-14)
+- update PhysListEmStandard and README
+
+16-10-08 V.Ivant (testem7-V09-01-13)
+- Removed temporary builder PhysListEmStandardIG
+     
+22-09-08 mma (testem7-V09-01-12)
+- Histo.cc : root format by default
+ 
+21-09-08 V.Ivant (testem7-V09-01-11)
+- added macro for alpha incident
+- extended TestEm7.in - added run with alpha 
+- fixed GNUmakefile
+
+22-08-08 V.Ivant (testem7-V09-01-10)
+- PhysicsList simplified
+- added Histo class and its messenger from TestEm9
+- Added histograms for zoomed Bragg peak and for projectile range
+ 
+12-06-08 mma (testem7-V09-01-09)
+- Remove AIDA from GNUmakefile 
+
+22-05-08 V.Ivant (testem7-V09-01-08)
+- c2_function fixed compillation problem at SUN
+
+14-05-08 V.Ivant (testem7-V09-01-07)
+- README: updated Phys List description
+- c2_function fixed
+     
+09-05-08 mma
+- README: update Aida information
+
+21-04-08 V.Ivant (testem7-V09-01-06)
+- G4ScreenedNuclearRecoil - added NIEL computation using 
+  G4LinhardPartition class; 
+- c2_function updated
+- G4LinhardPartition - new class to compute NIEL
+
+21-04-08 V.Ivant (testem7-V09-01-05)
+- Add spline to physics tables
+- DetectorConstruction more flexible to change parameters between runs
+     
+11-04-08 mma
+- RunAction::FillHisto : suppress warning
+     
+04-04-08 mma (testem7-V09-01-04)
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering.
+- complete EmOptions
+     
+17-03-08 mma (testem7-V09-01-03)
+- TestEm7.in : physicsList emstandard_opt3
+ 
+04-02-08 V.Ivant (testem7-V09-01-02)
+- Add material - TechVacuum with density 1.e-5*g/cm3 to 
+  test ion transport;
+- fixed computation of range - exclude backscattering
+- add to main macro test of alpha particle in TechVacuum 
+
+14-01-08 V.Ivant (testem7-V09-01-01)
+- Added PhysListStandardNR PhysList in which G4ScreenedNuclearRecoil
+  process is used ("standardNR");
+- Use PhysListStandardIG for new G4MUMultipleScattering and 
+  G4IonFluctuations model for protons ("standardIG");
+- Added computation of mean NIEL energy loss
+
+19-12-07 V.Ivant (testem7-V09-01-00)
+- Deactivate nuclear stopping in G4ionIonisation for 
+  PhysListStandardIG Physics List ("standardNR"), because it is
+  already simulated by G4ScreenNuclearRecoil process;
+- linLossLimit=10^-6; nbuns=360 both for standard and
+  standardNR Physics Lists
+
+07-12-07 V.Ivant (testem7-V09-00-10)
+- Fixed disclaimer
+
+19-11-07 V.Ivant (testem7-V09-00-09)
+- Updated README
+
+19-11-07 V.Ivant (testem7-V09-00-08)
+- Fixed usage of elastic builders
+
+13-11-07 V.Ivant (testem7-V09-00-07)
+- c2_functions (M.Mendenhall) substitute snsprintf by ostringstream 
+                              (better for Windows)
+
+12-11-07 V.Ivant (testem7-V09-00-06)
+- c2_functions (M.Mendenhall) fixed compilation problems at SUN and 
+                              Windows 
+
+12-11-07 V.Ivant (testem7-V09-00-05)
+- c2_functions (M.Mendenhall) fixed compilation problems at SUN 
+
+11-11-07 V.Ivant (testem7-V09-00-04)
+- G4ScreenNuclearRecoil, c2_functions (M.Mendenhall) fixed compilation
+       problems at SUN and Windows
+
+07-11-07 V.Ivant (testem7-V09-00-03)
+- PhysListStandardSS - use G4ionGasIonisation
+- PhysListStandardIG - use G4ScreenNuclearRecoil
+- G4ScreenNuclearRecoil - ion-ion scattering provided by Vanderbuilt
+                          University     
+
+30-07-07 mma (testem7-V09-00-02)
+- PhysListStandardSS and PhysListStandardIG: review process ordering
+
+28-07-07 V.Ivant (testem7-V09-00-01)
+- add PhysListStandardIG - ion G4ionIonisation process is
+  substituted by G4ionGasIonisation and for Coulomb scattering
+  the model taking into account the recoil is used
+     
+26-07-07 mma (testem7-V09-00-00)
+- update README for physicsList names
+     
+22-06-07 mma (testem7-V08-03-02)
+- cosmetic in TestEm7.cc
+   
+12-06-07 V.Ivant (testem7-V08-03-01)
+- add output of mean number of primary steps, add kaon+ run in 
+  main macro TestEm7.in 
+
+16-05-07 V.Ivant (testem7-V08-03-00)
+- Fixed bug in standardSS Physics Lists
+- Added EM builders from physics_lists library
+
+24-04-07: V.Ivant (testem7-V08-02-02)
+- use standard names for "livermore" and "penelope" PhysLists
+- use skin = 1 as default 
+
+20-03-07: V.Ivant (testem7-V08-02-01)
+- Fix usage elastic builders in PhysicsList
+     
+12-01-07: mma (testem7-V08-02-00)
+- cleanup macros
+
+11-12-06: V.Ivant (testem7-V08-01-03)
+- fix Livermore phys constructor
+- fix use of elastic constructor
+
+22-11-06: V.Ivant (testem7-V08-01-02)
+- Fix cout for the case when range exceed width of the absober
+- Rename standard options: "G4standard", "G4standard_fast"
+- Add Livermore and Penelope options
+
+15-11-06: V.Ivant (testem7-V08-01-01)
+- Add NIST materials
+
+26-10-06 mma (testem7-V08-01-00)
+- Add "standardSS" and "standardMSC" options to Physics List
+- Remove "g4v52" and "g4v71" options
+- substitute LDFLAGS -> LOADLIBS
+     
+02-06-06 mma (testem7-V08-00-05)
+- SteppingAction: prePoint->GetTouchableHandle->GetVolume()
+     
+29-05-06 mma (testem7-V08-00-04)
+- SteppingAction: prePoint->GetTouchable->GetVolume()
+    
+19-05-06 mma (testem7-V08-00-03)
+- update README
+     
+12-04-06: mma (testem7-V08-00-02)
+- SteppingAction : edep randomly distribued along step
+     
+30-01-06: mma (testem7-V08-00-01)
+- new macro : tallies.mac;  completed TestEm7.in
+
+25-01-06: V.Ivant (testem7-V08-00-00)
+- Trivial fix of memory leak
+
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+02-12-05: V.Ivant (testem7-V07-01-02)
+- Fix crash connected with non-static hadrons
+
+22-11-05 mma (testem7-V07-01-01)
+- update README for OpenScientist
+          
+06-10-05 mma (testem7-V07-01-00)
+- create PhysListEmG4v71 (g4v71) for G4MultipleScattering71
+     
+01-06-05 mma (testem7-V07-00-03)
+- RunAction : option "--noErrors" for hbook
+     
+13-05-05 mma (testem7-V07-00-02)
+- add ionC12 in TestEm7.in
+- PhysListEmG4v52 : photon processes v52
+      
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+16-03-05 mma (testem7-V07-00-01)
+- remove He3 from predefined particles.
+- PhysListEmStandard : treat alpha as GenericIon
+- IonBinaryCascade : remove He3 (--> GenericIon)
+    
+02-03-05 mma (testem7-V07-00-00)
+- RunAction : put a protection for the creation of analysis factory;
+
+02 Dec 04: V.Ivant (testem7-V06-02-04)
+- Migration to cmath
+     
+27-09-04 mma (testem7-V06-02-03)
+- define correctly all UI subdirectories.
+- modifs in RunAction for hbook,root,XML (Jaida)
+     
+13-08-04 mma (testem7-V06-02-02)
+- update proton.mac, ionC12.mac and remove run01.mac
+
+06-08-04 V.Ivanchenko (testem7-V06-02-01)
+- fix minor problem in stepping action
+- optimise interfaces
+- add proton.mac and update ionC12.mac
+
+08-07-04 mma (testem7-V06-02-00)
+- reset histo and dose calculation by run.
+- introduce RunAction::FillHisto() method.
+- compute projected range of primary particle --> New class TrackingAction.
+- remove static ionC12. Use generic ion instead.
+     
+09-06-04 mma (testem7-V06-01-01)
+- remove  PhysicsList Particles and General
+     
+31-03-04 mma (testem7-V06-01-00)
+- remove direct root interface
+     
+15-03-04 mma (testem7-V06-00-02)
+- put back G4ANALYSIS_USE in GNUmakefile
+     
+10-03-04 mma (testem7-V06-00-01)
+- example of histogram with ROOT: USE_ROOT
+
+06-02-04 V.Ivanchenko (testem7-V06-00-00)
+- Remove "add binary" from TestEm7.in macro
+
+05-12-03 V.Ivanchenko (testem7-V05-02-05)
+- Update hadronic physics according to the hadronics_lists
+
+25-11-03 V.Ivanchenko (testem7-V05-02-04)
+- Fix geometry (G.Cosmo)
+
+19-11-03 V.Ivanchenko (testem7-V05-02-03)
+- Update BinaryCascade add light ion interactions
+     
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
+
+24-10-03 mma (testem7-V05-02-02)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..     
+     
+13-10-03 V.Ivanchenko (testem7-V05-02-01)
+- Update Binary cascade constructor
+
+10-10-03 mma (testem7-V05-02-00)
+ - migration em STD -> em standard
+ - NOHIST -> ANALYSIS_USE
+ - cosmetic in material definitions
+ 
+18-06-03 V.Ivant (testem7-V05-01-04)
+ - remove wrappers G4std 
+
+14-06-03 V.Ivant (testem7-V05-01-03)
+ - StepCut process applicable only for long live particles
+
+05-06-03 mma (testem7-V05-01-02)
+ - StepMax in tallies too.
+ - TestEm7.in updated
+ 
+03-06-03 V.Ivant (testem7-V05-01-01)
+ - Clean up compilation warnings
+
+15-05-03 V.Ivant (testem7-V05-01-00)
+ - Add hadron interactions
+
+22-04-03 mma (testem7-V05-00-00)
+ - Creation. Derived from TestEm6

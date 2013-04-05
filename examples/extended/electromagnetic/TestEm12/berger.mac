@@ -1,0 +1,31 @@
+# $Id$
+#
+# macro for TestEm12 : Dose Point Kernel
+# Seltzer, Appl. Radiat. Isot. 42(1991) page 917
+# L. Ferrer et al. Cancer Bio. Rad. 22-1 (2007)
+# Mainegra et al. Med. Phys. 32, 685-699 (2005)       
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat G4_WATER
+/testem/det/setRadius  3 cm
+#
+###/testem/phys/addPhysics  emstandard_opt0	# em physics
+/testem/phys/addPhysics  local	# em physics
+###/testem/phys/addPhysics  emlivermore	# em physics
+#
+###/run/setCut 2 um	#will include cut for proton
+/testem/phys/setCuts 2 um
+#
+/run/initialize
+#
+/gun/particle e-
+/gun/energy 100 keV
+#
+/testem/histo/setFileName berger/100keV.local
+/testem/histo/setHisto 8 120  0.  1.2 none	#normalized edep profile
+#
+/testem/event/printModulo 10000
+#
+/run/beamOn 160000

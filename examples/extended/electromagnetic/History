@@ -1,0 +1,29 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+01-04-13 A.Dotti (electromagnetic-V09-06-00,electromagnetic-V09-06-01)
+- Collect tags needed for new physics list APIs needed for MT
+
+16-11-12 I. Hrivnacova (electromagnetic-V09-05-00)
+- Updated documentation:
+  - Fixed .README files for artefacts from Markdown support
+  - Removed obsolete instructions (how to compile & link)
+    
+02-11-08 mma (electromagnetic-V09-01-01)
+- all PhysListEmStandard: update EM options (~option_3) 
+     
+27-08-08 mma (electromagnetic-V09-01-00)
+- create README

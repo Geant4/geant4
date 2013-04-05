@@ -1,0 +1,32 @@
+#
+# @(#) Script to build a Batch geant executable
+#
+set name=g4mat
+
+set extnam=" "
+if ($G4SYSTEM == AIX-AFS) set extnam=-qextname
+#
+mkdir $G4SYSTEM
+cd    $G4SYSTEM
+#
+# fortran compilation
+#
+hepf77  $extnam -c -g -Dbatch  -I/cern/pro/include -I../include ../src/*.F
+
+#
+# Link
+#
+echo 'linking geant3+cernlib libraries ...'
+#
+hepf77  $extnam -g -o $name.xb  *.o \
+   `cernlib geant321 pawlib graflib packlib mathlib kernlib`
+#
+#
+chmod +x $name.xb
+#
+# cleanup
+#
+rm -f *.o
+echo 'done'  
+exit
+ 

@@ -1,0 +1,19 @@
+FILE  berger.hbook
+LIST
+ABSOR  23 (silicon)  61.e-4 (thicknX) 1.0 (sizeYZ)  0. (field)
+C  ABSOR  23 (silicon) 105.e-4 (thicknX) 1.0 (sizeYZ)  0. (field)
+C  ABSOR  23 (silicon) 191.e-4 (thicknX) 1.0 (sizeYZ)  0. (field)
+C  ABSOR  23 (silicon) 530.e-4 (thicknX) 1.0 (sizeYZ)  0. (field)
+C  ABSOR  23 (silicon)   1.e-1 (thicknX) 1.0 (sizeYZ)  0. (field)
+C  ABSOR  23 (silicon)   3.e-1 (thicknX) 1.0 (sizeYZ)  0. (field)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*10.0e-6 (dcute/m)
+KINE   3 (electron) 0.001 (Ekine) 90.0 (theta)  0.0 (phi)
+*HISTO 1 (idh) 55 (nbins) 0. (Emin) 1. (Emax) 1.e-3 (MeV)
+SWIT   0 (draw)      
+DEBUG  1  1 100000 
+TRIG   1000000
+END

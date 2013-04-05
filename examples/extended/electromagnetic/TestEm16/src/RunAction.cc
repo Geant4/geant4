@@ -1,0 +1,113 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+/// \file electromagnetic/TestEm16/src/RunAction.cc
+/// \brief Implementation of the RunAction class
+//
+// $Id$
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "RunAction.hh"
+
+#include "G4Run.hh"
+#include "G4RunManager.hh"
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "Randomize.hh"
+#include "HistoManager.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::RunAction()
+ : G4UserRunAction(),
+   fHistoManager(0)
+{
+  f_n_gam_sync = 0;
+  f_e_gam_sync = 0;
+  f_e_gam_sync2 = 0;
+  f_e_gam_sync_max = 0;
+  f_lam_gam_sync = 0;
+  fHistoManager = new HistoManager();   
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::~RunAction()
+{
+  delete fHistoManager;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::BeginOfRunAction(const G4Run* aRun)
+{
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+
+  // save Rndm status
+  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  CLHEP::HepRandom::showEngineStatus();
+     
+  //histograms
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }       
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::EndOfRunAction(const G4Run*)
+{
+  if (f_n_gam_sync > 0)
+  {
+    G4double Emean = f_e_gam_sync/f_n_gam_sync;
+    G4double E_rms = std::sqrt(f_e_gam_sync2/f_n_gam_sync - Emean*Emean);
+    G4cout
+    << "Summary for synchrotron radiation :" << '\n' << std::setprecision(4)
+    << "  Number of photons = " << f_n_gam_sync << '\n'
+    << "  Emean             = " << Emean/keV << " +/- "
+    << E_rms/(keV * std::sqrt((G4double) f_n_gam_sync)) << " keV" << '\n'
+    << "  E_rms             = " << G4BestUnit(E_rms,"Energy") << '\n'
+    << "  Energy Max / Mean = " << f_e_gam_sync_max / Emean << '\n'
+    << "  MeanFreePath      = " << G4BestUnit(f_lam_gam_sync/f_n_gam_sync,"Length")
+    << G4endl;
+  }
+  
+  // show Rndm status
+  CLHEP::HepRandom::showEngineStatus();
+
+  //save histograms      
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }       
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,158 @@
+//$Id$
+
+///\file "electromagnetic/TestEm2/.README"
+///\brief Example TestEm2 README page
+
+/*! \page ExampleTestEm2 Example TestEm2
+			    
+   How to do shower profiles in an homogenous medium, with virtual
+   voxelisation.
+
+\section TestEm2_s1 GEOMETRY DEFINITION
+
+   The geometry consists of a cylinder of homegenous material.
+
+   The default geometry is constructed in DetectorConstruction class,
+   but all of the above parameters can be modified interactively via
+   the commands defined in the DetectorMessenger class.
+
+   Material can be choosen: Air Water lAr Al Fe BGO PbWO4 Pb.
+   eg: 
+\verbatim
+/testem/det/setMat PbWO4
+\endverbatim
+   
+   The cylinder is virtually sliced longitudinaly (slice) and radialy (ring).
+   The size of the slices and rings are expressed in radiation length units
+   and can be changed.
+   eg: 
+\verbatim
+/testem/det/setLbin 20   1.    ---> 20 slices of 1. radl
+/testem/det/setRbin  5   0.25  --->  5 rings of 0.25 radl
+/testem/det/update             ---> rebuild the geometry
+\endverbatim
+   (MaxBin = 500 in both directions)	 
+
+   An uniform magnetic field along the cylinder axis can be set.
+   eg: 
+\verbatim
+/testem/det/setField 5 tesla 
+\endverbatim
+   
+\section TestEm2_s2 PHYSICS LISTS
+ 
+   Physics lists can be local (eg. in this example) or from G4 kernel
+   physics_lists subdirectory.
+   
+   Local physics lists:	 
+   - "local"	standard EM physics with current 'best' options setting.
+              these options are explicited in PhysListEmStandard
+    
+   From geant4/source/physics_lists/builders:   
+   - "emstandard_opt0" recommended standard EM physics for LHC
+   - "emstandard_opt1" best CPU performance standard physics for LHC
+   - "emstandard_opt2"     
+   - "emstandard_opt3" best current advanced EM options. 
+                       analog to "local" above 
+   
+   Physics lists and options can be (re)set with UI commands
+   
+   Please, notice that options set through G4EmProcessOPtions are global, eg
+   for all particle types. In G4 builders, it is shown how to set options per
+   particle type.
+
+\section TestEm2_s3 AN EVENT : THE PRIMARY GENERATOR
+
+   The primary kinematic consists of a single particle which hits the
+   cylinder perpendicular to the input face. The type of the particle
+   and its energy are set in the PrimaryGeneratorAction class, and can
+   changed via the G4 build-in commands of G4ParticleGun class (see
+   the macros provided with this example).
+
+   A RUN is a set of events.
+
+\section TestEm2_s4 VISUALIZATION
+
+   The Visualization Manager is set in the main () (see TestEm2.cc).
+   The initialisation of the drawing is done via the commands
+   /vis/.. in the macro vis.mac. In interactive session:
+\verbatim
+PreInit or Idle > /control/execute vis.mac
+\endverbatim
+
+   The detector has a default view which is a longitudinal view of the
+   cylinder.
+
+   The tracks are drawn at the end of event, and erased at the end of run.
+   Optionaly one can choose to draw all particles, only the charged one,
+   or none. This command is defined in EventActionMessenger class.
+
+\section TestEm2_s5 PHYSICS DEMO
+
+   The particle's type and the physic processes which will be available
+   in this example are set in PhysicsList class.
+
+   In addition a build-in interactive command (/process/inactivate proname)
+   allows to activate/inactivate the processes one by one.
+
+   The threshold for producing secondaries can be changed.
+   eg: 
+\verbatim
+/testem/phys/setCuts 100 microm
+/run/initialize
+\endverbatim
+	 
+   The shower profiles are histogramed, if histograming is activated.
+   They can be also printed with the command /testem/run/verbose 1     
+
+\section TestEm2_s6 HOW TO START ?
+
+   - Execute TestEm2 in 'batch' mode from macro files
+\verbatim
+% TestEm2   run01.mac
+\endverbatim
+
+   - Execute TestEm2 in 'interactive mode' with visualization
+\verbatim
+% TestEm2
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+
+\section TestEm2_s7 HISTOGRAMS
+
+   TestEm2 produces several histograms:
+
+   Content of these histo:
+
+   - 1 : energy deposit       per event
+   - 2 : charged track length per event
+   - 3 : neutral track length per event
+
+   - 4 : longitudinal energy profile
+   - 5 : rms of longitudinal energy profile      
+   - 6 : cumulated longitudinal energy profile
+   - 7 : rms of cumulated longitudinal energy profile
+
+   - 8 : radial energy profile
+   - 9 : rms of radial energy profile      
+   - 10 : cumulated radial energy profile
+   - 11 : rms of cumulated radial energy profile
+
+ To define the output file name with histograms, use the UI command :
+\verbatim
+/testem/histo/setFileName name
+\endverbatim
+   
+ The format of the histogram file can be : root (default),
+ hbook, xml, csv, by selecting g4nnn.hh in RunAction.hh 
+ 
+\subsection TestEm2_subs2 Using hbook format
+ 
+ Need a special treatement : the Cern Library must be installed and the
+ environment variable CERNLIB correctly set. Then, *before* compiling,
+ activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in RunAction.hh
+
+*/

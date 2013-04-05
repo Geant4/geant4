@@ -1,0 +1,29 @@
+# $Id$
+#
+# macro file for TestEm5.cc
+#
+# to control dE/dx calculation
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Air   
+/testem/det/setAbsThick 1 cm  
+/testem/det/setAbsYZ    1 cm
+#
+/testem/phys/addPhysics local
+#
+/testem/phys/setCuts 1 km
+#    
+/run/initialize
+#
+/process/inactivate msc
+/process/eLoss/fluct false
+#
+/testem/gun/setDefault
+/gun/particle proton 
+/gun/energy 10 MeV
+#
+/tracking/verbose 1
+#
+/run/beamOn 5

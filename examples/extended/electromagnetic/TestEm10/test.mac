@@ -1,0 +1,24 @@
+#
+# Macro file 'TestEm10.in' for testing "TestEm10"
+#
+#
+/run/verbose     1
+#  PLOT: energy deposit distribution in absorber (g4.11)
+#
+/plots/sethistName g4.p11
+/plots/setnbinEn 65
+/plots/setEnlow 0.0 MeV
+/plots/setEnhigh 0.1  MeV
+/run/initialize
+/gun/particle e-
+/gun/energy 2 GeV
+/tracking/verbose 1
+/run/beamOn 10
+/run/dumpCouples
+
+
+
+
+
+
+

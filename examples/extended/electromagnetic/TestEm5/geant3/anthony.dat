@@ -1,0 +1,15 @@
+FILE  anthony.hbook
+LIST
+ABSOR  22 (aluminium)  0.53 (thicknX) 10.0 (sizeYZ)  0. (field)
+C  ABSOR  28 (lead)  0.015 (thicknX) 10.0 (sizeYZ)  0. (field)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*10.0e-6 (dcute/m)
+KINE   3 (electron) 25.0 (Ekin) 90.0 (theta)  0.0 (phi)
+*HISTO 20 (idh)  80 (nbins) 1.e-4 (Emin) 1. (Emax) 1. (GeV)
+SWIT   0 (draw)      
+DEBUG  2  1 10000 
+TRIG   100000
+END

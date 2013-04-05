@@ -1,0 +1,21 @@
+FILE  sicapo3.paw
+LIST
+C
+C  Lead-Silicium  10 layers; electon 2, 4, 6 GeV
+C
+C  SICAPO Collaboration. NIM A345 (244-249) Oct.93
+C
+CALOR  4 (nbAbs) 10 (nbLay)  16. (calorYZ) 0. (field)
+MATE    8 (pb)   12 (G10)   10 (Si)    12 (G10)
+THICK   1.9 (cm) 0.02 (cm)  0.04 (cm)  0.1 (cm)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*541.e-6 (dcute/m)
+C   CUTS       10.0e-6 (cutgam)     541.e-6 (cutele)      
+KINE   3 (Itype) 6.0 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+SWIT   0 (draw)
+DEBUG  10  5 100
+TRIG   500
+END

@@ -1,0 +1,127 @@
+$Id$
+----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm18 History file
+                    ---------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+01-04-13 A.Dotti (testem18-V09-06-02)
+- New G4VUserPhysicsList interface
+     
+22-03-13 mma (testem18-V09-06-01)
+- coding conventions
+
+13-02-13 I.Hrivnacova 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+11-12-12 V.Ivant (testem18-V09-06-00)
+- PhysListEmStandard: use SetEmModel method
+     
+17-10-12 mma (testem18-V09-05-03)
+- use G4AnalysisManager
+- coding convention: virtual
+     
+28-04-12 mma (testem18-V09-05-02)
+- RunAction::EndOfRunAction() : printing corrections
+     
+16-04-12 mma (testem18-V09-05-01)
+- all classes : apply G4 coding conventions
+        
+09-03-12 mma (testem18-V09-05-00)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+     
+08-11-11 mma (testem18-V09-04-04)
+- modify SteppingVerbose for OutOfWorld
+          
+05-06-11 mma (testem18-V09-04-03)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
+     
+31-05-11 mma (testem18-V09-04-02)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+     
+12-05-11 mma (testem18-V09-04-01)
+- PhysListEmStandard: adapted for 9.4-ref-03 
+  include AtomicDeexcitation, new G4PEEffectFluoModel, G4KleinNishinaModel.
+- macro pixe.mac  
+       
+06-01-11 mma (testem18-V09-04-00)
+- Go back to tag testem18-V09-03-03. Fluo test moved to TestEm14
+
+22-11-10 V.Ivanchenko (testem18-V09-03-05)
+- PhysicsList, PhysListEmStandardFLUO - changed coherently with
+   emutils upgrade
+
+19-11-10 V.Ivanchenko (testem18-V09-03-04)
+- PhysicsList is taken from TestEm5, obsolete builders for 
+   Livermore and Penelope are removed; fluorescence and PIXE
+   options are added
+ 
+09-11-10 M.Asai (testem18-V09-03-03)
+- Fix AIDA file option.
+    
+06-06-10 J.Perl (testem18-V09-03-02)
+- Remove unused variable in EventAction
+
+03-06-10 J.Perl (testem18-V09-03-01)
+- Updated vis usage 
+
+21-05-10 mma (testem18-V09-03-00)
+- TestEm18.cc : introduction of G4UIExecutive
+     
+19-11-09 mma (testem18-V09-02-04)
+- cosmetics in low-energy physics lists  
+      
+12-10-09 mma (testem18-V09-02-03)
+- Substituted obsolete low-energy physics builders by builders from
+  the physics_list library;
+         
+06-03-09 mma (testem18-V09-02-01)
+- PhysicsList::SetCuts() : remove SetEnergyRange(1*keV,100*GeV)
+- remove command "/testem/phys/cutLimit" already in /cuts/setLowEdge
+    
+22-02-09 mma (testem18-V09-02-00)
+- PhysicsList. EmOptions : 12*20 bins; lll=1.e-2
+- PhysicsList::SetCuts() : SetEnergyRange(1*keV,100*GeV)
+- added command "/testem/phys/cutLimit" allowing to change low limit for
+  production threshold
+  
+24-09-08 mma (testem18-V09-01-04)
+- HistoManager : root as default format 
+
+12-06-08 mma (testem18-V09-01-03)
+- Remove AIDA from GNUmakefile 
+     
+07-05-08 mma (testem18-V09-01-02)
+- PhysicsList : add spline option for physics tables
+- README : update Aida informations
+     
+07-04-08 mma (testem18-V09-01-01)
+- HistoManager::saveAscii() : redefinition of binEdge     
+     
+08-01-08 mma (testem18-V09-01-00) 
+- HistoManager : ascii[0] = flag to control creation of .ascii file
+      
+ 20-nov-07 mma (testem18-V09-00-01) 
+- PhysicsList : more EmOptions
+     
+ 13-nov-07 mma (testem18-V09-00-00) 
+- HistoManager/HistoMessenger : print selected histos on ascii file
+    
+16-feb-07 mma (testem18-V08-02-01)
+- add Water-vapor
+- correct RunAction::GetEnergyFromRange()
+     
+14-feb-07 michel maire (testem18-V08-02-00)
+- created

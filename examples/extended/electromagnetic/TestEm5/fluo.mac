@@ -1,0 +1,35 @@
+# macro file for TestEm5.cc    
+#     		    
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setAbsMat Gold     
+/testem/det/setAbsThick 50 um
+/testem/det/setAbsYZ    50 um
+#
+/testem/phys/addPhysics emlivermore
+#
+/testem/phys/setGCut 10 nm
+/testem/phys/setECut 10 nm
+/testem/phys/setPCut 10 nm
+#
+/cuts/setLowEdge 250 eV
+#
+/run/initialize
+#
+/process/em/deexcitation World true true true
+/process/em/fluo true
+/process/em/auger true
+/process/em/pixe true
+#
+/testem/gun/setDefault
+/gun/particle gamma 
+/gun/energy 1 MeV
+# 
+/analysis/setFileName fluo
+/analysis/h1/set  2 100 0 1000 keV #e-: energy at vertex
+/analysis/h1/set  3 100 1 1000 keV #gamma: energy at vertex
+#
+/testem/event/printModulo 10000
+# 
+/run/beamOn 100000

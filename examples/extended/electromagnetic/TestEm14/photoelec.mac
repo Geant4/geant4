@@ -1,0 +1,38 @@
+# $Id$
+#
+# Macro file for "TestEm14.cc"
+# (can be run in batch, without graphic)
+#
+# photon 100 keV; photoelectric
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Gold
+#
+/testem/phys/addPhysics standard
+#
+/run/initialize
+#
+/testem/phys/setCuts 1 nm
+#
+/process/inactivate compt
+/process/inactivate conv
+/process/inactivate Rayl
+/process/inactivate GammaToMuPair
+#
+###/process/em/auger true
+#
+/gun/particle gamma
+/gun/energy 80 keV
+#
+/analysis/setFileName photoelec
+/analysis/h1/set 3 100 0. 100. keV	#energy  of ch. secondaries  
+/analysis/h1/set 4  200 -1. +1. none	#costeta of ch. secondaries
+/analysis/h1/set 5  100 0. 100. keV	#energy  of gamma  
+/analysis/h1/set 6  200 -1. +1. none	#costeta of gamma
+#
+###/tracking/verbose 2
+###/run/beamOn 1
+#
+/run/beamOn 100000

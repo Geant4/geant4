@@ -1,0 +1,136 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm0 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+01-04-13 A.Dotti (testem0-V09-06-06)
+- New G4VUserPhysicsList interface needed for MT
+
+20-03-13 V.Ivant (testem0-V09-06-05)
+- RunAction - added computation of unrestricted energy loss to reduce 
+    user confusions
+
+20-03-13 V.Ivant (testem0-V09-06-04)
+- RunAction - if cut in energy above 1 GeV set it to primary energy
+    in order to compute unrestricted energy loss; fixed computation
+    of total energy loss
+     
+19-03-13 mma (testem0-V09-06-03)
+- PhysListEmStandard : use default G4UrbanMscModel
+
+13-02-13 I.Hrivnacova (testem0-V09-06-02) 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+12-12-12 V.Ivant (testem0-V09-06-01)
+- DirectAccess - use G4PEEffectFluoModel instead of obsolete
+    G4PEEffectModel
+
+11-12-12 V.Ivant (testem0-V09-06-00)
+- PhysListEmStandard : substitute obsolete call
+     
+19-10-12 mma (testem0-V09-05-09)
+- PhysListEmStandard : use G4UrbanMscModel96
+
+12-10-12 V.Ivant (testem0-V09-05-08)
+- Migration to the updated analysis tool and implicit units
+     
+09-10-12 mma (testem0-V09-05-07)
+- PhysicsList : add G4EmStandardPhysics_option4
+     
+08-10-12 mma (testem0-V09-05-06)
+- PhysicsList : add more units for cross sections
+     
+01-10-12 mma (testem0-V09-05-05)
+- coding conventions : virtual and initialisation list
+
+06-09-12 I.Hrivnacova (testem0-V09-05-04)
+- Fixed libraries in CMakeLists.txt
+
+06-09-12 V.Ivant (testem0-V09-05-03)
+- Ivana Hrivnacova updated CMakeLists.txt
+     
+27-08-12 mma (testem0-V09-05-02)
+- add .README
+    
+10-06-12 mma (testem0-V09-05-01)
+- update PhyListEmStandard  (for GenericIon)
+     
+26-03-12 mma (testem0-V09-05-00)
+- all classes : apply G4 coding conventions
+     
+31-05-11 mma (testem0-V09-04-00)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+     
+02-02-10 ja (testem0-V09-03-05)
+- TestEm0.cc : 
+  Removal of #include "G4UIterminal.hh" and #include "G4UItcsh.hh".
+    
+17-05-10 mma (testem0-V09-03-04)
+- TestEm0.cc : introduction of G4UIExecutive 
+    
+10-05-10 mma (testem0-V09-03-03)
+- RunAction - reverse order: ComputeCrossSection, then GetCrossSection
+
+06-04-10 V.Ivant (testem0-V09-03-02)
+- RunAction - printout both GetCrossSection and ComputeCrossSection
+     
+29-03-10 mma (testem0-V09-03-01)
+- RunAction - come back to  "Get.." methods
+
+23-03-10 V.Ivant (testem0-V09-03-00)
+- new PhysicsLists : emstandard_opt0,1,2,3
+- RunAction - use calculator methods "Compute.." instead of "Get.."
+     
+17-11-09 mma (testem0-V09-02-01)
+- new PhysicsLists : livermore, penelope
+  remove runManger->Initialize() from TestEm0.cc 
+     
+14-11-09 mma (testem0-V09-02-00)
+- PhysListEmStandard : replace obsolete G4MultipleScattering
+     
+17-11-08 mma (testem0-V09-01-01)
+- Em options : 20 bins/decade
+     
+17-12-07 mma (testem0-V09-01-00)
+- compute max energy transferable
+     
+26-06-07 mma
+- G4ProductionCutsTable::SetEnergyRange(100*eV, 1*GeV)
+     
+21-06-07 mma (testem0-V08-03-00)
+- cosmetic in TestEm0.cc
+     
+08-12-06 mma (testem0-V08-01-02)
+- correct a cout in BeginOfRun
+     
+16-08-06 mma (testem0-V08-01-01)
+    
+21-07-06 V.Ivant (testem0-V08-01-00)
+- open a possibility to use NIST materials additionally to 
+  predefined materials
+     
+17-06-06 mma (testem0-V08-00-04)
+- compute e- critical energy and Moliere radius
+    
+19-05-06 mma (testem0-V08-00-03)
+- modify binning for CSDA range table
+
+18-04-06 V.Ivant (testem0-V08-00-02)
+- fix compilation warning, improve cout
+     
+05-04-06 mma (testem0-V08-00-01)
+- add transport mean free path (for multiple scattering)
+     
+21-03-06 mma (testem0-V08-00-00)
+- creation

@@ -1,0 +1,19 @@
+FILE  run07.paw
+LIST
+C
+C     LiquidArgon-Lead 2 layers; proton 500 MeV
+C
+CALOR  2 (nbAbs) 2 (nbLay)  1.6 (calorYZ) 0. (field)
+MATE   5 (larg)    8 (lead)
+THICK  0.4(cm)  0.4 (cm)
+LOSS   1
+MULS   0 
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*455.0e-6 (dcute/m)
+KINE   14 (Itype) 0.5 (Ekine) 1000. (x0) 0. (y0) 0. (z0) 1. (ux) 0. (uy) 0. (uz)
+SWIT   0 (draw)
+DEBUG  10  5 100
+TRIG   1000
+END

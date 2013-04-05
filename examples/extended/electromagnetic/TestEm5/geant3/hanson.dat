@@ -1,0 +1,16 @@
+FILE  hanson.hbook
+LIST
+ABSOR  27 (gold)  9.658e-4 (thicknX) 1.0 (sizeYZ)  0. (field)
+C  ABSOR  27 (gold) 19.296e-4 (thicknX) 1.0 (sizeYZ)  0. (field)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*10.0e-6 (dcute/m)
+KINE   3 (electron) 0.01570 (Ekine) 90.0 (theta)  0.0 (phi)
+*HISTO 12 (idh) 100 (nbins) 0. (tetmin) 10. (tetmax) 1.74533e-2 (deg)
+C  *HISTO 12 (idh)  60 (nbins) 0. (tetmin) 30. (tetmax) 1.74533e-2 (deg)
+SWIT   0 (draw)      
+DEBUG  1  1 100000 
+TRIG   1000000
+END

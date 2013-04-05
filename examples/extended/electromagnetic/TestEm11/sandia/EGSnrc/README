@@ -1,0 +1,26 @@
+------------------
+EGSnrc Simulations
+------------------
+
+These results were computed with the EGSnrc user code DOSRZnrc.
+ Yann Perrot (perrot@clermont.in2p3.fr)  December 2010
+
+Simulation parameters:
+----------------------
+
+Electron Stepping Algorithm : PRESTA-II
+Boundary Crossing Algoritm : EXACT with skin parameter=3
+Maximum Energy Loss per Step : ESTEPE = 1%
+Electron tracking cut : 10keV for E>=1MeV
+			1keV for E<1MeV			
+
+References:
+----------
+
+Rogers and Bielajew 1986
+Med. Phys. 13, 687-694
+
+Rogers et al 2003
+NRC User Codes for EGSnrc
+Technical Report PIRS-702(RevB)
+National Research Council of Canada

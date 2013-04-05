@@ -1,0 +1,51 @@
+
+ testem3/src is the geant3 equivalent of TestEm3
+ 
+ % cd geant3
+ % gmakeB           to make an executable  (Batch version) 
+ % gmakeT           to make an executable  (inTeractive version)
+ 
+ To execute:
+  
+ % cd geant3
+ % $G4SYSTEM/testem3.xb (for batch) or testem1.xt (for interactive)
+ 
+ The program will ask:
+ G3 > gives the filename of the data cards to be read:
+ 
+ run01.dat      (runNN.dat is the equivalent of the G4 runNN.mac)
+ 
+ It is possible to set the production cuts BCUTE, DCUTE and PPCUTM
+ medium by medium, via the data cards:
+ CUTPR  imed1  bcute/m   dcute/m  ppcutm
+ CUTPR  imed2  bcute/m   dcute/m  ppcutm
+ ...etc............
+ 
+ testem3 can produce histograms : 
+  histo 1 : energy deposit in absorber 1
+  histo 2 : energy deposit in absorber 2
+  ...etc...........
+  
+  histo 11 : longitudinal profile of energy deposit in absorber 1 (MeV/event)
+  histo 12 : longitudinal profile of energy deposit in absorber 2 (MeV/event)  
+  ...etc...........  
+  
+  histo 21 : energy flow (MeV/event)
+  histo 22 : lateral energy leakage (MeV/event)  
+  
+ One can control the binning of the histograms with the data card:
+  *HISTO  id1  nbBins  valMin  valMax  valUnit 
+  *HISTO  id2  nbBins  valMin  valMax  valUnit
+  ... etc ...........
+  
+  valMin and ValMax are given in the desired unit, whose numerical value must
+  be specified in valUnit. Remember that Geant3 defaults are: GeV, cm, rad.
+  
+ The name of de histograms file must be defined with the data card:
+ FILE  fileName (character)   This data card is mandatory; it must be the first,
+			      with the format A4,A2,A25
+
+ It is possible to set the max allowed step size STEMAX,
+ via the data card:
+ STEPMX  stepmax (in cm)
+ (However this value will be taken into account only if auto=0)

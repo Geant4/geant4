@@ -1,0 +1,56 @@
+#
+# Macro file for the initialization phase of "TestEm8.cc"
+# author: V. Grichine (based on TestEm8.in)
+# It creates the default geometry (simple absorber cylinder )        
+# Few powerful commands (see also README):
+#  /testem/setGasMat      XeCH4C3H8
+#    /testem/setWindowMat   G4_MYLAR
+#    /testem/setWorldMat    G4_AIR
+#    /testem/setGasThick    10 cm
+#    /testem/setGasRad      20 cm
+#    /testem/setWindowThick 50 um
+#
+# List of available materials (basically gases at STP): G4_Ar, G4_Kr, G4_Xe, G4CARBON_DIOXIDE, G4_MYLAR, G4_METHANE, 
+# G4_PROPANE, empty (G4_Galactic), Kr7CH4, ArCO2, Xe20CO2, Kr20CO2,  
+# Now few gas mixtures from experiments:
+# 
+
+/control/verbose 2
+/run/verbose 2
+#/tracking/verbose 2
+#
+#  select EM PhysicsList: emstandard (default)
+#  also available: emstandard_opt1, emstandard_opt2, emstandard_opt3, 
+#                  emlivermore, empenelope, pai, pai_photon
+#
+/testem/phys/addPhysics  pai
+#
+#/testem/phys/addPhysics  pai_photon
+#
+#/testem/phys/addPhysics  emtandard_opt3
+#
+#/testem/stepMax         10 mm
+#
+/testem/phys/setNbinsE 20
+/testem/phys/setMaxE 0.010  MeV  
+#
+#/testem/setGasMat      ArCO2
+/testem/setGasMat      G4_Ar
+/testem/setGasThick    1.5 cm
+#
+/run/initialize
+#
+/run/setCut  0.5 mm
+/run/setCutForRegion GasDetector 1.8 mm
+/run/particle/dumpCutValues
+#
+#/gun/particle e-
+#
+/gun/particle proton
+#
+#/gun/particle mu-
+# 
+/gun/energy 200000.00 MeV
+#
+/run/beamOn 1000
+#

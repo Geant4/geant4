@@ -1,0 +1,555 @@
+$Id$
+----------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm5 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+01-04-13 A. Dotti (testem5-V09-06-02,testem5-V09-06-03)
+- Change use of theParticleIterator -> aParticleIterator (needed for G4MT)
+     
+20-03-13 mma (testem5-V09-06-01)
+- PhysListEmStandard : use default G4UrbanMscModel
+
+13-02-13 I.Hrivnacova 
+- Applied coding guidelines (virtual keyword, data members initialization)
+
+11-12-12 V.Ivant (testem5-V09-06-00)
+- PhysListEmStandard: use SetEmModel method
+          
+15-11-12 I. Hrivnacova (testem5-V09-05-12)
+- Synchronized .README with changes in README
+
+08-11-12 V.Ivant (testem5-V09-05-11)
+- Fixed README and pixe.mac
+     
+19-10-12 mma (testem5-V09-05-10)
+- PhysListEmStandard: use G4UrbanMsc96 
+ 
+12-10-12 V.Ivant (testem5-V09-05-09)
+- Migration to the updated analysis tool and explicit units
+- RunAction - by default do not save random number for each event
+    -because it is a serious overhead in CPU performance    
+ 
+11-10-12 mma (testem5-V09-05-08)
+- PhysicsList: add EM option4
+
+24-09-12 V.Ivant (testem5-V09-05-07)
+- Added code cleanup and protections against division by zero
+     
+23-08-12 mma (testem5-V09-05-06)
+- HistoManager functionalities transfered to G4Analysis and its messenger.
+    - Need analysis-V09-05-09
+    - all userAction classes and all macros affected
+     
+20-05-12 SI (testem5-V09-05-05)
+- added fluo.mac
+
+02-04-12 mma (testem5-V09-05-04)
+- all classes : apply G4 coding conventions
+        
+04-03-12 mma (testem5-V09-05-03)
+- HistoManager.hh and .cc : migrate to new g4tools histogramming system
+  Do not need aida anymore, nor G4ANALYSIS_USE
+- HistoMessenger.hh and .cc : suppress fileType command
+- Update Readme and all macros accordingly
+
+09-02-12 V.Ivant (testem5-V09-05-02)
+- PhysListEmStandardSSM - added alternative single scattering models 
+
+09-02-12 V.Ivant (testem5-V09-05-01)
+- PhysListEmStandardWVI,PhysListEmStandardSS - more correct process 
+    order and WVI model 
+     
+05-02-12 mma (testem5-V09-05-00)
+- new histograms --> modify numbering :
+	2	"energy of charged secondaries at creation"
+	3	"energy of neutral secondaries at creation"	
+	4	"energy of charged at creation (log10(Ekin/MeV))"
+	5	"energy of neutral at creation (log10(Ekin/MeV))"	
+	6       "x_vertex of charged secondaries (all)"
+	7       "x_vertex of charged secondaries (not absorbed)" 
+     
+09-11-11 SI (testem5-V09-04-13)
+- added Auger production in pixe.mac
+
+09-11-11 SI (testem5-V09-04-12)
+- added atomic dex. UI control per region in pixe.mac
+
+08-11-11 mma (testem5-V09-04-11)
+- modify SteppingVerbose for OutOfWorld
+          
+31-10-11 mma (testem5-V09-04-10)
+- PhysListEmStandard : msc95 by default
+     
+03-06-11 mma (testem5-V09-04-09)
+- PhysListEmStandard migrated to the new approach based on G4PhysicsListHelper
+     
+30-05-11 mma (testem5-V09-04-08)
+- DetectorConstruction : for Water, set I = 78 eV (instead of 75 eV)
+     
+12-05-11 mma (testem5-V09-04-07)
+- add pixe.mac and pixe.C
+     
+08-04-11 mma (testem5-V09-04-06)
+- PhysicsList : set back default lowest production cut (990 eV)
+- update PhysListEmStandard for msc95 and deexcitation (see ref-03)
+
+22-03-11 V.Ivant (testem5-V09-04-05)
+- PhysListEmStandardWVI - fixed memory corruption
+     
+21-03-11 mma (testem5-V09-04-04)
+- update PhysListEmStandard for deexcitation
+- PhysicsList : set lowest production cut to 100 eV
+     
+15-03-11 mma (testem5-V09-04-03)
+- put data for hanson.mac
+     
+20-02-11 mma (testem5-V09-04-02)
+- update vis.mac
+- update SteppingVerbose
+     
+29-01-11 mma (testem5-V09-04-01)
+- Add gammaSpectrum.mac --> fluorescence in emstandard
+
+05-01-11 V.Ivant (testem5-V09-04-00)
+- Minor cleanup of SS physics constructor
+
+19-11-10 V.Ivant (testem5-V09-03-04)
+- Added ion scattering model to SS and WVI Physics constructors
+ 
+09-11-10 M.Asai (testem5-V09-03-03)
+- Fix AIDA file option.
+    
+06-06-10 J.Perl (testem5-V09-03-02)
+- Remove unused variable in EventAction
+
+03-06-10 J.Perl (testem5-V09-03-01)
+- Updated vis usage 
+
+19-05-10 mma (testem5-V09-03-00)
+- TestEm5.cc : introduction of G4UIExecutive
+     
+15-11-09 mma (testem5-V09-02-07)
+- PhysListEmStandard.cc (local): eMultipleScattering -> UrbanMscModel93
+- new local physics list : PhysListEmStandardGS
+- PhysicsList : remove G4EmConfigurator
+     
+18-09-09 mma (testem5-V09-02-06)
+- PhysicsList.cc :
+    renamed "standard" -> "local"; "emstandard" -> "emstandard_opt0" 
+- updated README and macro files  
+  
+26-06-09 V.Ivant (testem5-V09-02-05)
+- fixed compillation problem of the previous tag
+
+25-06-09 V.Ivant (testem5-V09-02-04)
+- PhysicsList - removed obsolete low-energy EM builders
+
+18-06-09 V.Ivant (testem5-V09-02-03)
+- RunAction - fixed output of mean scattering angle
+- PhysicsList - added "standardGS" option - use GoudsmitSaunderson
+              msc model; substitute low-energy builders by builders from
+              physics_list library        
+     
+06-03-09 mma (testem5-V09-02-02)
+- rm command "/testem/phys/cutLimit" already in /cuts/setLowEdge
+- PhysicsList::SetCuts() : rm SetEnergyRange(1*eV,100*GeV)
+     
+22-02-09 mma (testem5-V09-02-01)
+- PhysicsList: code cleanup
+
+22-01-09 V.Ivant (testem5-V09-02-00)
+- added command "/testem/phys/cutLimit" allowing to change low limit for
+  production threshold
+- added notification to G4RunManager when geometry or material are
+  modified between runs
+- added PAI models configuration to Physics List
+- extended number of runs in TestEm5.in 
+- use Opt3 Physics List in TestEm5.in
+     
+21-01-09 vi
+- PhysicsList::SetCuts() : SetEnergyRange(1*eV,100*GeV)
+- add blaha.mac
+          
+16-11-08 mma (testem5-V09-01-13)
+- Em options: 20bins/decade  LinLossLimit=default=0.01
+     
+11-11-08 mma (testem5-V09-01-12)
+- update PhysListEmStandardSS
+     
+31-10-08 mma (testem5-V09-01-11)
+- Use G4hMultipleScattering for muons and protons
+- Modify EM options 
+    
+23-10-08 mma (testem5-V09-01-10)
+- update PhysListEmStandard and README
+
+16-10-08 V.Ivant (testem5-V09-01-09)
+- Removed temporary builder PhysListEmStandardIG
+     
+12-09-08 mma (testem5-V09-01-08)
+- HistoManager.cc : change default histo format
+ 
+28-08-08 mma (testem5-V09-01-07)
+- TrackingAction.cc : reset id=0 between blocks
+      
+23-08-08 mma (testem5-V09-01-06)
+- HistoManager.cc : add missing comma in title array.
+- TrackingAction.cc : use vertex position to help to define transmit 
+
+12-06-08 mma (testem5-V09-01-05)
+- Remove AIDA from GNUmakefile 
+     
+06-05-08 mma (testem5-V09-01-04)
+- PhysListEmStandard : add spline option for physics tables
+- README : update Aida informations
+     
+11-04-08 mma
+- HistoManager::Scale() : suppress warning
+     
+07-04-08 mma (testem5-V09-01-03)
+- PhysicsList : add emstandard_opt3
+- PhysListEmStandard : replace G4MultipleScattering by G4eMultipleScattering 
+- HistoManager::saveAscii() : redefinition of binEdge
+      
+17-03-08 mma (testem5-V09-01-02)
+- macro TestEm5.in : physics list emstandard_opt2
+     
+14-01-08 mma (testem5-V09-01-01)
+- normalize histo 1
+- new subdirectory berger : berger.kumac, berger.C, 530um.ascii  
+    
+19-12-07 mma (testem5-V09-01-00)
+- PhysListEmStandard.cc : select G4hMultipleScattering for muon and proton
+- subdirectory mumsc : mumsc.kumac, deviation.ascii
+     
+3-12-07 mma (testem5-V09-00-08)
+- subdirectory tramu : data mars14.ascii, macros tramu.kumac and tramu.C 
+     
+30-11-07 mma
+- HistoManager: add function Scale(). 
+                ascii[0] = flag to control creation of .ascii file
+- RunAction: normalize histo 10 (--> tramu.mac)
+- add subdirectory tramu
+     
+28-11-07 mma (testem5-V09-00-07)
+- TrackingAction: new histos (4 and 5) to plot vertex position of secondaries
+     
+21-11-07 mma (testem5-V09-00-06)
+- RunAction: compute and print energy leakage and energy balance
+
+19-11-07 V.Ivant (testem5-V09-00-05)
+- Fixed usage of elstic builders
+     
+16-11-07 mma (testem5-V09-00-04) 
+- PhysListEmStandard : PhysicsTables set with 100 bins per decade (EmOptions)
+
+13-11-07 V.Ivant (testem5-V09-00-03)
+- added PhysListEmStandardIG experimental PhysList
+     
+12-11-07 mma (testem5-V09-00-02) 
+- HistoManager/HistoMessenger : print selected histos on ascii file
+     
+31-07-07 mma (testem5-V09-00-01)
+- new histogram numbering (see README). Change all macros acording to.
+- idem in geant3
+- reordering processes in PhysListEmStandardSS
+     
+05-07-07 mma (testem5-V09-00-00)
+- histos 17->20 : energy fluence
+     
+22-06-07 mma (testem5-V08-03-01)
+- more options in PhysListEmStandard
+- cosmetic in TestEm5.cc
+
+16-05-07 V.Ivant (testem5-V08-03-00)
+- Fixed bug in standardSS Physics Lists
+- Added EM builders from physics_lists library
+
+20-03-07 V.Ivant (testem5-V08-02-00)
+- Use all default values in default PhysList
+- Use hadronic builders from physics_lists library
+     
+06-11-06 mma (testem5-V08-01-02)
+- remove PhysicsLists g4v52 and g4v71
+     
+25-09-06 mma (testem5-V08-01-01)
+- StackingAction: more options for killSecondaries
+
+10-08-06 V.Ivant (testem5-V08-01-00)
+- Add NIST materials
+- Add "standardSS" physics - single scattering instead of multiple
+     
+29-06-06 mma
+- PhysicsList::ConstructProcess() : mv AddDecay() after EmProcess
+     
+02-06-06 mma (testem5-V08-00-04)
+- SteppingAction. prePoint->GetTouchableHandle()->GetVolume()
+     
+30-05-06 mma (testem5-V08-00-03)
+- SteppingAction. prePoint->GetTouchable()->GetVolume()
+- RunAction. Msc proj angle : compute rms of central part only
+- new macros for e- backscattering : acosta.mac tavora.mac 
+     
+19-05-06 mma (testem5-V08-00-02)
+- update README
+- count energy of killed secondaries
+- print full dEdx
+     
+29-03-06 mma (testem5-V08-00-01)
+- TrackingAction: more precise definition of transmit and reflect
+     
+28-03-06 mma (testem5-V08-00-00)
+- add livermore physicsList
+
+20-03-06 mma
+- migration mum -> um in many macros
+- complete penelope physicsList
+       
+09-12-05 mma
+- TestEm5.in : change Si sizes (20mum * 50mum) to better drawing
+
+06-12-05 Gabriele Cosmo
+- Trivial changes for support of CLHEP-2.0.X series.
+
+02-12-05: V.Ivant (testem5-V07-01-03)
+- Fix crash connected with non-static hadrons
+
+22-11-05 mma (testem5-V07-01-02)
+- update README for OpenScientist
+     
+14-11-05 Gabriele Cosmo (testem5-V07-01-01)
+- Migration to <sstream> for HistoMessenger.
+
+07-10-05 mma (testem5-V07-01-00)
+- create PhysListEmG4v71 (g4v71) for G4MultipleScattering71
+     
+01-06-05 mma (testem5-V07-00-02)
+- PhysListEmG4v52 : old photon processes marked as 52 (and eplusAnnihilation) 
+- HistoManager : option "--noErrors" for hbook
+
+3rd May 2005  John Allison  (examples-V07-00-03)
+- Replaced vis manager with G4VisExecutive.
+
+16-03-05 mma(testem5-V07-00-01)
+- remove He3 and ionC12 from predefined particles.
+- remove IonC12 class
+- PhysListEmStandard : treat alpha as GenericIon
+- IonBinaryCascade : remove He3 and IonC12 (--> GenericIon)
+- add PhysListEmPenelope
+     
+02-03-05 mma (testem5-V07-00-00)
+- HistoManager : - put a protection for the creation of analysis factory;
+                 - file extension is fileType;
+- HistoMessenger : new command setFileOption
+ 		 
+02 Dec 04: V.Ivant (testem5-V06-02-06)
+- Migration to cmath
+     
+22-11-04 mma (testem5-V06-02-05)
+- change in call G4EmCalculator. Need utils-V06-02-16
+     
+24-09-04 mma (testem5-V06-02-04)
+- define correctly all UI subdirectories.
+- do not delete AnalysisFactory (for Jaida)
+- add neutron.mac and hadron.mac 
+
+23-09-04 V.Ivant (testem5-V06-02-03)
+- Fix compilation problem for 2.95.2 (include <memory>)
+
+07-09-04 V.Ivant (testem5-V06-02-02)
+- Fix problem of PhysicsList for hadrons
+- Remove deletion of histo factories, add auto_ptr
+
+07-09-04 V.Ivant (testem5-V06-02-01)
+- fix a minor problem is energy deposit
+
+28-07-04 mma (testem5-V06-02-00)
+- print stopping power.
+- example of use of G4EmCalculator.
+- add dedx1.mac and dedx2.mac
+     
+21-06-04 mma (testem5-V06-01-04)
+- simplifications in HistoManager.
+     
+16-06-04 mma (testem5-V06-01-03)
+- print rms of projected angle at exit if histo=6 selected.
+     
+10-06-04 mma (testem5-V06-01-02)
+- modify HistoManager and its Messenger in order to allow a multirun job.
+     
+29-04-04 mma (testem5-V06-01-01)
+- add physicsLists: HadronElastic, BinaryCascade, IonBinaryCascade (Ivanch.)
+- rm  physicsLists: Particles, General
+     
+31-03-04 mma  (testem5-V06-01-00)
+- identical to V06-00-01
+     
+17-03-04 mma  (testem5-V06-00-01)
+- new macro dedx.mac
+- sign corrected in ComputeMscHighland()
+
+19-02-04 mma  (testem5-V06-00-00)
+- modify histo 7 : projected position at exit
+- RunAction: remove UI commands for visualisation
+- RunAction: add a function ComputeMscHighland()
+
+25-11-03 V.Ivanchenko (testem5-V05-02-06)
+- Fix geometry (G.Cosmo)
+     
+13-11-03 John Allison
+- Removed OPACS from Vis Manager.
+
+27-10-03 mma (testem5-V05-02-05)
+- TestEm5.in : units mum instead of um
+
+24-10-03 mma (testem5-V05-02-04)
+- PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+     
+07-10-03 mma (testem5-V05-02-03)
+- migration em STD -> em standard
+ 
+12-09-03 V.Ivant (testem5-V05-02-02)
+- No AIDA histograms by default 
+
+27-08-03 V.Ivant (testem5-V05-02-01)
+- Replace obsolete interface to GetRange
+
+11-08-03 mma (testem5-V05-02-00)
+
+12-07-03 mma
+- suppresion of Em5 in the class names.
+- suppresion of sensitive detector and hits.
+- EmPhysicsList : SetFacRange in multiple scattering
+- new classes HistoManager, TrackingAction, StackingAction in order 
+  to book and fill histograms.
+- new UI command setHisto to control the binning of histograms.
+- more histos and new numbering scheme : see README
+- StackingAction and its messenger : possibility to kill secondaries.
+- DetectorConstruction::DefineMaterials() invoked in constructor. 
+  The UI commands /testem/det work in preInit state as well in Idle.
+- all macros updated and renamed according to authors of experimental results.
+- replace G4NOHIST by G4ANALYSIS_USE
+- adapt geant3   
+       
+06-06-03 mma (testem5-V05-01-01)
+- new histogram (ID=11) for the projeted angle at exit.
+  In geant3 as well. Bug corrected in gustep.
+- new macros for multiple Scattering tests: run61,71,81,91
+- proper deletion of old geometry when it is updated.
+- fix compilation warnings.
+     
+30-04-03 mma (testem5-V05-01-00)
+- modular PhysicsList
+- class StepCut becomes StepMax (as in TestEm7)
+
+17-04-03 V.Ivant (testem5-V05-00-06)
+- Fix crash out of WorldVolume
+     
+01-04-03 mma (testem5-V05-00-05)
+- PVPlacement in logical mother
+
+06-03-03 mma (testem5-V05-00-03)
+- PhysicsList::SetCuts : suppress cutForProton
+
+20-02-03 V.Ivant (testem5-V05-00-02)
+-migration to cut per region
+
+12-02-03 mma (testem5-V05-00-01)
+- add a blank in SteppingVerbose
+
+16-12-02 mma (testem5-V05-00-00)
+-new UI directory /testem/
+
+12-12-02 mma (testem5-V04-01-01)
+-migration to aida 3.0
+
+08-08-02 mma (testem5-V04-01-00)
+-in RunAction: bookHisto() only at runID=0
+-in PhysicsList::SetMaxStep() : "Length"
+     
+06-06-02 mma (testem5-V04-00-03)
+-old histograming package clhep/hist replaced by AIDA 2.2/anaphe. See README
+     
+08-03-02 mma (testem5-V04-00-01)
+- PhysicsList: uniformisation of the setG(E)Cut commands
+
+06-02-02 mma (testem5-V04-00-00)
+     
+06-12-01  mma
+- In PrimaryGeneratorAction, possibility to randomize the beam spot
+- command /gun/rndm in PrimaryGeneratorMessenger
+- similar functionality in geant3: gukine.F
+     
+28-11-01  mma (testem5-V03-02-02) 
+- EventAction: DrawTrack "none"
+- small change in vis.mac
+- suppression of the rndm commands, now managed by G4RunManager: 
+  --> RunAction, RunActionMessenger, EventAction.
+     
+05-11-01  mma (testem5-V03-02-01)
+- mods in TestEm3.cc: the initialisation and vis initialisation are
+  not done by default. --> inserted /run/initialize in all macros.
+- To get visualisation: > /control/execute vis.mac
+
+        
+19-10-01 Steve O'Neale (examples-V03-02-00)
+- Update reference output
+
+16-10-01 mma (testem5-V03-02-00)
+- removal of G4RW header (EventAction.cc)
+- new vis commands (init.mac)
+- 80 columns everywhere
+    
+27-03-01 mma (testem5-V03-00-04)
+- set cppflag G4NOHIST = true in gnumakefile
+	  
+21-02-01 mma (testem5-V03-00-03)
+- hbook histograms restored
+	  
+20-02-01 mma (testem5-V03-00-02)
+- verbose stepping adapted for STL
+- save rndm at begin of event 
+	     
+09-01-01 mma
+- modified Em5PhysicsList and Em5StepCut in order to make the
+  command /step/setMaxStep working
+	      
+07-12-00 mma (testem5-V02-00-03 & testem-noHist)
+- remove hbook histograms: GNUmakefile,runAction
+				   
+06-12-00 mma (testem5-V02-00-02 & testem-withHist)
+- update of init.mac for new vis commands.
+- G4UItcsh in the main()
+	  
+25th November 2000 Steve O'Neale (tagset210)
+- update test outputs for min.delta energy cut and cut table
+- Change in processes below ~ 1 per cent.
+
+June 17, 2000  John Allison  (testem5-V01-00-00)
+- Updated TestEm5.out for geant4-01-01-ref-06.
+     
+17-01-00 cppflag G4NOHIST to protect hbook histograms.
+- new histo: normalizsed distribution of energy deposit.
+- new materials (mainly gas)
+     
+12-10-99 moved to examples/extended/electromagnetic/TestEm5
+
+09-08-99 commands for save/read Rndm status
+     
+07-07-99 Michel Maire
+- (re)introduce visualisation.
+- TestEm5 looks like TestEm1 and TestEm3
+
+April 09, 98 G. Cosmo
+- Created.

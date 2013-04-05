@@ -1,0 +1,113 @@
+#
+# Macro file 'salice.mac' for the initialization phase of "TestEm10.cc"       
+# with NIM A294 (1990) 465-472 (fig. 11) setup
+#
+/control/verbose 2
+#
+#
+/run/verbose 2
+#
+#  PLOT: energy deposit distribution in absorber (g4.11)
+#
+/plots/sethistName g4.p11
+/plots/setnbinEn 65
+/plots/setEnlow 0.0 MeV
+/plots/setEnhigh 0.1  MeV
+#
+#
+# Change and choice of experimental setups. Can be
+# simpleALICE., 
+#
+#
+/XTRdetector/setup barr90
+#
+# these commands do not change energy cuts???
+#
+# Set XTR model (default: transpM). Name list consits:
+# gammaR, gammaM, regR, regM, strawR, transpR, transpM
+#
+# R - XTR dE/dx models, M - XTR flux after radiator models
+#
+#/emphyslist/setXTRModel  transpM
+/emphyslist/setXTRModel  transpR
+#
+#/emphyslist/setXTRModel  gammaM
+#/emphyslist/setXTRModel  gammaR
+#
+#/emphyslist/setXTRModel  strawR
+#
+#/emphyslist/setXTRModel  regM
+#/emphyslist/setXTRModel  regR
+#
+#/emphyslist/eMinEnergy 100.  
+#/emphyslist/gMinEnergy 100.  
+#
+#
+/run/particle/applyCuts
+#
+# set cuts in XTR radiator
+#
+/emphyslist/setGammaCut 1.0
+/emphyslist/setElectronCut 1.0
+/emphyslist/setPositronCut 1.0
+/emphyslist/setRadiatorCuts 1.0
+#
+# set cuts in XTR detector
+#
+/emphyslist/setGammaCut 1.0
+/emphyslist/setElectronCut 1.0
+/emphyslist/setPositronCut 1.0
+/emphyslist/setDetectorCuts 1.0
+#
+/run/initialize
+#
+#/XTRdetector/update
+#
+#Innactivate some processes: msc eIoni eBrem RegularXTRadiator
+#                            hIoni 
+#
+# (switch off dEdx and msc always together!)
+#
+#/process/inactivate msc
+#/process/inactivate eIoni
+#/process/inactivate hIoni
+#
+#/process/inactivate eBrem
+#
+# Inactivate gamma processes
+#
+#/process/inactivate phot
+#/process/inactivate compt
+#/process/inactivate conv
+#
+#/process/inactivate RegularXTRadiator
+#
+#/process/inactivate GammaXTRadiator
+#
+#/process/eLoss/fluct false
+#
+#/process/verbose 1
+#
+#
+# Particle and its energy
+#
+/gun/particle e+
+/gun/energy 20000.0 MeV
+#
+#/tracking/verbose 1
+#
+/event/printModulo 1000
+/run/beamOn 10000
+#/tracking/verbose 0
+#/run/beamOn 1
+#
+
+
+
+
+
+
+
+
+
+

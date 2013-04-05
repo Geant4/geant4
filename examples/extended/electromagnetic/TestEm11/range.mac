@@ -1,0 +1,36 @@
+# $Id$
+#
+# Macro file for "TestEm11.cc"
+# 
+# compute the csda range of the primary particle
+# with or without fluctuations
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setNbOfAbsor  1
+/testem/det/setAbsor 1 Water  5 mm
+/testem/det/setSizeYZ 5 mm
+#
+/testem/phys/addPhysics  local
+###/testem/phys/addPhysics  empenelope
+###/testem/phys/addPhysics  emlivermore
+#
+/run/initialize
+#
+# prevent any secondary production
+/testem/phys/setCuts 1 km
+#
+# eliminate straggling
+/process/inactivate msc
+/process/eLoss/fluct false
+#
+/gun/particle e-
+/gun/energy 600 keV
+#
+/analysis/setFileName range
+/analysis/h1/se 3 200 0 4 mm	# csda range
+#	 
+/testem/event/printModulo 2000
+#
+/run/beamOn 20000
