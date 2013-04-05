@@ -12,6 +12,15 @@ summarize all major modifications introduced in the code and keep
 track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+     
+28-03-13 mma (particleGunExample-V09-06-04)
+- simplify histos management
+     
+24-03-13 mma (particleGunExample-V09-06-03)
+- polish coding conventions
+     
+17-03-13 mma (particleGunExample-V09-06-02)
+- G4 coding conventions
 
 14-02-13  I.Hrivnacova (particleGunExample-V09-06-01)
 - Do not declare virtual functions in PrimaryGeneratorActionN

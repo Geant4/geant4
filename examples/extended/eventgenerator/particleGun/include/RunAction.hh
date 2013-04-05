@@ -46,7 +46,7 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(HistoManager*);
+    RunAction();
    ~RunAction();
    
     virtual void BeginOfRunAction(const G4Run*);

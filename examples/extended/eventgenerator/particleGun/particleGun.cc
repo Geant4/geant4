@@ -42,7 +42,6 @@
 #include "RunAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -73,10 +72,9 @@ int main(int argc,char** argv) {
       
   // set user action classes
   // 
-  HistoManager*           histo = new HistoManager();  
-  RunAction*              run   = new RunAction(histo);
+  RunAction*              run   = new RunAction();
   PrimaryGeneratorAction* prim  = new PrimaryGeneratorAction();
-  TrackingAction*         track = new TrackingAction(prim,histo);
+  TrackingAction*         track = new TrackingAction(prim);
         
   runManager->SetUserAction(run);
   runManager->SetUserAction(prim);  
@@ -118,7 +116,6 @@ int main(int argc,char** argv) {
 
   // job termination
   //
-  delete histo;  
   delete runManager;
 
   return 0;

@@ -50,10 +50,10 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
     
   fSelectActionCmd = new G4UIcmdWithAnInteger("/gunExample/selectGunAction",this);
   fSelectActionCmd->SetGuidance("Select primary generator action");
-  fSelectActionCmd->SetGuidance(" id = 1 : Generate several vertices and particles per event");
-  fSelectActionCmd->SetGuidance(" id = 2 : Show how to sample a tabulated function");  
-  fSelectActionCmd->SetGuidance(" id = 3 : Divergent beam in an arbitrary direction");
-  fSelectActionCmd->SetGuidance(" id = 4 : In spherical coordinates with rotation matrix");
+  fSelectActionCmd->SetGuidance("id=1 Generate several vertices and particles per event");
+  fSelectActionCmd->SetGuidance("id=2 Show how to sample a tabulated function");  
+  fSelectActionCmd->SetGuidance("id=3 Divergent beam in an arbitrary direction");
+  fSelectActionCmd->SetGuidance("id=4 In spherical coordinates with rotation matrix");
   fSelectActionCmd->SetParameterName("id",false);
   fSelectActionCmd->SetRange("id>0 && id<5");
 }

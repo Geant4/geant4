@@ -3,8 +3,8 @@
 #
 /gunExample/selectGunAction 3
 #
-/gunExample/histo/setFileName run3
-/gunExample/histo/setHisto 2  90   0. 180 deg	#moment dN/dalfa for gun #3
-/gunExample/histo/setHisto 3  180  0. 360 deg	#moment dN/dpsi for gun  #3
+/analysis/setFileName run3
+/analysis/h1/set 2  90   0. 180 deg	#moment dN/dalfa for gun #3
+/analysis/h1/set 3  180  0. 360 deg	#moment dN/dpsi for gun  #3
 #  
 /run/beamOn 100000

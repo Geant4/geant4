@@ -40,14 +40,13 @@
 #include "globals.hh"
 
 class PrimaryGeneratorAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(PrimaryGeneratorAction*, HistoManager*);
+    TrackingAction(PrimaryGeneratorAction*);
    ~TrackingAction() {};
    
     virtual void  PreUserTrackingAction(const G4Track*);
@@ -55,7 +54,6 @@ class TrackingAction : public G4UserTrackingAction {
     
   private:
     PrimaryGeneratorAction* fPrimary;
-    HistoManager*  fHistoManager;
 
    // parameters for generator action #3
     G4ThreeVector fNewUz;
