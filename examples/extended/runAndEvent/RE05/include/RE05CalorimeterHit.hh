@@ -48,7 +48,7 @@ class RE05CalorimeterHit : public G4VHit
 
       RE05CalorimeterHit();
       RE05CalorimeterHit(G4LogicalVolume* logVol,G4int z,G4int phi);
-      ~RE05CalorimeterHit();
+      virtual ~RE05CalorimeterHit();
       RE05CalorimeterHit(const RE05CalorimeterHit &right);
       const RE05CalorimeterHit& operator=(const RE05CalorimeterHit &right);
       G4int operator==(const RE05CalorimeterHit &right) const;
@@ -56,10 +56,10 @@ class RE05CalorimeterHit : public G4VHit
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);
 
-      void Draw();
-      const std::map<G4String,G4AttDef>* GetAttDefs() const;
-      std::vector<G4AttValue>* CreateAttValues() const;
-      void Print();
+      virtual void Draw();
+      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+      virtual std::vector<G4AttValue>* CreateAttValues() const;
+      virtual void Print();
 
   private:
       G4int ZCellID;

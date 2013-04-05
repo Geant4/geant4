@@ -43,14 +43,14 @@ class RE05CalorimeterSD : public G4VSensitiveDetector
 
   public:
       RE05CalorimeterSD(G4String name);
-      ~RE05CalorimeterSD();
+      virtual ~RE05CalorimeterSD();
 
-      void Initialize(G4HCofThisEvent*HCE);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      void EndOfEvent(G4HCofThisEvent*HCE);
-      void clear();
-      void DrawAll();
-      void PrintAll();
+      virtual void Initialize(G4HCofThisEvent*HCE);
+      virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+      virtual void EndOfEvent(G4HCofThisEvent*HCE);
+      virtual void clear();
+      virtual void DrawAll();
+      virtual void PrintAll();
 
   private:
       RE05CalorimeterHitsCollection *CalCollection;

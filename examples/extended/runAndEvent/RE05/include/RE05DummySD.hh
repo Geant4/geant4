@@ -43,14 +43,14 @@ class RE05DummySD : public G4VSensitiveDetector
 {
 public:
   RE05DummySD();
-  ~RE05DummySD() {}
+  virtual ~RE05DummySD() {}
   
-  void Initialize(G4HCofThisEvent*) {}
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*) {return false;}
-  void EndOfEvent(G4HCofThisEvent*) {}
-  void clear() {}
-  void DrawAll() {}
-  void PrintAll() {}
+  virtual void Initialize(G4HCofThisEvent*) {}
+  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*) {return false;}
+  virtual void EndOfEvent(G4HCofThisEvent*) {}
+  virtual void clear() {}
+  virtual void DrawAll() {}
+  virtual void PrintAll() {}
 };
 RE05DummySD::RE05DummySD()
   : G4VSensitiveDetector("dummySD")

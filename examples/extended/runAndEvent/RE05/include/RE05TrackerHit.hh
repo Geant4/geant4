@@ -44,7 +44,7 @@ class RE05TrackerHit : public G4VHit
   public:
 
       RE05TrackerHit();
-      ~RE05TrackerHit();
+      virtual ~RE05TrackerHit();
       RE05TrackerHit(const RE05TrackerHit &right);
       const RE05TrackerHit& operator=(const RE05TrackerHit &right);
       G4int operator==(const RE05TrackerHit &right) const;
@@ -52,10 +52,10 @@ class RE05TrackerHit : public G4VHit
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);
 
-      void Draw();
-      const std::map<G4String,G4AttDef>* GetAttDefs() const;
-      std::vector<G4AttValue>* CreateAttValues() const;
-      void Print();
+      virtual void Draw();
+      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+      virtual std::vector<G4AttValue>* CreateAttValues() const;
+      virtual void Print();
 
   private:
       G4double edep;

@@ -43,14 +43,14 @@ class RE05MuonSD : public G4VSensitiveDetector
 
   public:
       RE05MuonSD(G4String name);
-      ~RE05MuonSD();
+      virtual ~RE05MuonSD();
 
-      void Initialize(G4HCofThisEvent*HCE);
-      G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      void EndOfEvent(G4HCofThisEvent*HCE);
-      void clear();
-      void DrawAll();
-      void PrintAll();
+      virtual void Initialize(G4HCofThisEvent*HCE);
+      virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+      virtual void EndOfEvent(G4HCofThisEvent*HCE);
+      virtual void clear();
+      virtual void DrawAll();
+      virtual void PrintAll();
 
   private:
       RE05MuonHitsCollection * muonCollection;

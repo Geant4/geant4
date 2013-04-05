@@ -43,11 +43,11 @@ class RE05StackingActionMessenger: public G4UImessenger
 {
   public:
     RE05StackingActionMessenger(RE05StackingAction* msa);
-    ~RE05StackingActionMessenger();
+    virtual ~RE05StackingActionMessenger();
     
   public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
     RE05StackingAction * myAction;

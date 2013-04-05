@@ -46,10 +46,10 @@ class RE05RunAction : public G4UserRunAction
 {
   public:
     RE05RunAction();
-   ~RE05RunAction();
+    virtual ~RE05RunAction();
 
   public:
-    void BeginOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

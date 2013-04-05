@@ -17,6 +17,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-03-2013 A.Kimura        (exampleRE05-V09-06-00)
+- fixed some member functions to virtual ones along the super classes
+
 Feb 15, 2013 I. Hrivnacova
 - Fixed GNUmakefile 
 

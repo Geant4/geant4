@@ -39,9 +39,9 @@ class RE05Field : public G4MagneticField
 {
   public:
     RE05Field();
-    ~RE05Field();
+    virtual ~RE05Field();
 
-    void GetFieldValue( const  double Point[3],
+    virtual void GetFieldValue(const double Point[3],
                                double *Bfield ) const;
 
   private:

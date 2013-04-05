@@ -39,11 +39,11 @@ class RE05EventAction : public G4UserEventAction
 {
   public:
     RE05EventAction();
-    ~RE05EventAction();
+    virtual ~RE05EventAction();
 
   public:
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
+    virtual void BeginOfEventAction(const G4Event*);
+    virtual void EndOfEventAction(const G4Event*);
 
   private:
     G4int trackerCollID;

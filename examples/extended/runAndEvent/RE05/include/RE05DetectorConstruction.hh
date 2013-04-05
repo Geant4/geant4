@@ -43,10 +43,10 @@ class RE05DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
     RE05DetectorConstruction();
-    ~RE05DetectorConstruction();
+    virtual ~RE05DetectorConstruction();
 
   public:
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
 
   private:
      void DefineMaterials();

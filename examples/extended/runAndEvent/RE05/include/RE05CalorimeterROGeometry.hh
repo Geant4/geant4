@@ -41,10 +41,10 @@ class RE05CalorimeterROGeometry : public G4VReadOutGeometry
 public:
   RE05CalorimeterROGeometry();
   RE05CalorimeterROGeometry(G4String);
-  ~RE05CalorimeterROGeometry();
+  virtual ~RE05CalorimeterROGeometry();
 
 private:
-  G4VPhysicalVolume* Build();
+  virtual G4VPhysicalVolume* Build();
   G4Material* dummyMat;
 
 #include "RE05DetectorParameterDef.hh"

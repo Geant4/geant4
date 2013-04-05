@@ -43,10 +43,10 @@ class RE05PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     RE05PrimaryGeneratorAction();
-    ~RE05PrimaryGeneratorAction();
+    virtual ~RE05PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event* anEvent);
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
     G4VPrimaryGenerator* HEPEvt;

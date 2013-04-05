@@ -44,7 +44,7 @@ class RE05MuonHit : public G4VHit
   public:
 
       RE05MuonHit();
-      ~RE05MuonHit();
+      virtual ~RE05MuonHit();
       RE05MuonHit(const RE05MuonHit &right);
       const RE05MuonHit& operator=(const RE05MuonHit &right);
       G4int operator==(const RE05MuonHit &right) const;
@@ -53,10 +53,10 @@ class RE05MuonHit : public G4VHit
       inline void *operator new(size_t);
       inline void operator delete(void *aHit);
 
-      void Draw();
-      const std::map<G4String,G4AttDef>* GetAttDefs() const;
-      std::vector<G4AttValue>* CreateAttValues() const;
-      void Print();
+      virtual void Draw();
+      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+      virtual std::vector<G4AttValue>* CreateAttValues() const;
+      virtual void Print();
 
   private:
       G4double edep;
