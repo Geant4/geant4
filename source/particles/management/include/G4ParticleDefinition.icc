@@ -76,6 +76,12 @@ inline
 }
 
 inline
+  void G4ParticleDefinition::SetMasterProcessManager( G4ProcessManager* aNewPM )
+{
+   theProcessManagerShadow = aNewPM;
+}
+
+inline
  void G4ParticleDefinition::SetProcessManager(G4ProcessManager *aProcessManager)
 {
     G4MT_pmanager = aProcessManager;

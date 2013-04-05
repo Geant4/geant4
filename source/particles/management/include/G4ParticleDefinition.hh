@@ -239,13 +239,15 @@ class G4ParticleDefinition
 
       inline G4ProcessManager* GetMasterProcessManager() const;
       // Returns the process manager master pointer.
+      inline void SetMasterProcessManager(G4ProcessManager* aNewPM);
+      //Sets the shadow master pointer (not to be used by user)
 
       inline G4int GetInstanceID() const;
       // Returns the instance ID.
 
       static const G4PDefManager& GetSubInstanceManager();
       // Returns the private data instance manager.
-
+ private:
       // --- Shadow of master pointers.
 
       G4ProcessManager *theProcessManagerShadow;

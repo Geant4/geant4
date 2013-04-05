@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- 2. Apr. 2013 A. Dotti (partciles-V09-06-13)
+- Merging with particled-V09-06-08
+
+- 2. Apr. 2013 Hisay Kurashige (particles-V09-06-12)
+- Fix bug of using ProcessManager in G4ParticleDefinition
+- Fix bug in leptons
+
+- 30 Mar. 2013 Hisay Kurashige (particles-V09-06-11)
+- Fix bug of using thePDGMass
+
+- 26 Mar. 2013 Hisay Kurashige (particles-V09-06-10)
+- Fix bugs in leptons for setting magnetic moment
+
+- 23 Mar. 2013 Hisay Kurashige (particles-V09-06-09)
+- Fix bugs in G4MuonPlus for setting magnetic moment
+- Update magnetic moment for proton and charged leptons.
+- Add G4Excepen if G4ParticleDefintion::CalculateAnomaly is invoked
+
+- 21 Mar. 2013 A. Dotti (particles-V09-06-08)
+- Adding G4ParticleDefinition::SetMasterProcessManager method needed for MT
 
 - 14 Mar. 2013 G.Cosmo (particles-V09-06-07)
 - Simplified implementation for IsIon() and IsAntiIon() in G4IonTable.
