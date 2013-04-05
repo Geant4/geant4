@@ -201,7 +201,6 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 #endif
 	  
 	    }
-	  // Here we call the analysis manager function for visualization
 #ifdef G4ANALYSIS_USE
 	  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
 	  analysis->EndOfEvent(n_hit);

@@ -9,6 +9,14 @@ $Id$
                           History file
                           ------------
 
+04.04.2013   F.Longo and L.Pandola, Tag: gammaraytel-V09-06-04
+	     Migrated analysis from AIDA-based to the g4tools
+	     README and CMakeLists.txt updated accondingly. No 
+	     external dependencies any longer
+
+04.01.2013   A.Dotti, Tag: gammaraytel-V09-06-02,gammaraytel-V09-06-03
+             New interface for G4VUserPhysicsList needed for MT
+
 12.18.2012   M.Kelsey, Tag: gammaraytel-V09-06-01
 	     GammaRayTelHadronPhysics: Migrate stopping processes
 

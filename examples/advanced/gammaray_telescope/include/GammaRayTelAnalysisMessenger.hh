@@ -63,10 +63,6 @@ private:
   GammaRayTelAnalysis*       gammaRayTelAnalysis;
   G4UIdirectory*             gammaRayTelAnalysisDir;
   
-  G4UIcmdWithAString*        Histo1DDrawCmd;
-  G4UIcmdWithAString*        Histo2DDrawCmd;
-  G4UIcmdWithAString*        Histo1DSaveCmd;
-  G4UIcmdWithAString*        Histo2DSaveCmd;
   G4UIcmdWithAString*        Histo2DModeCmd;
 };
 #endif

@@ -119,7 +119,7 @@ void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
   // If analysis is used, print out the histograms
 #ifdef G4ANALYSIS_USE
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-  analysis->EndOfRun(aRun->GetRunID());
+  analysis->EndOfRun();
 #endif
 }
 

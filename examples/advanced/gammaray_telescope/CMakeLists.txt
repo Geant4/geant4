@@ -21,31 +21,23 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
-# Find AIDA (optional package)
-#
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-find_package(AIDA QUIET)
-if(AIDA_FOUND)
-  message(STATUS "G4 Examples: AIDA found. --> gammaray_telescope example with AIDA enabled.") 
-  add_definitions(-DG4ANALYSIS_USE)  
-else()
-  message(STATUS "G4 Example: AIDA not found --> gammaray_telescope example with AIDA disabled.")
-endif()
-
-#----------------------------------------------------------------------------
 # Add option to control storage 
 #
 option(G4STORE_DATA "Stores output data" OFF)
+option(G4ANALYSIS_USE "Histograms for Analysis" ON)
+
 if(G4STORE_DATA)
   add_definitions(-DG4STORE_DATA)
+endif()
+if(G4ANALYSIS_USE)
+  add_definitions(-DG4ANALYSIS_USE)  
 endif()
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-                    ${AIDA_INCLUDE_DIR})
+                    ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -53,7 +45,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(GammaRayTel GammaRayTel.cc ${sources} ${headers})
-target_link_libraries(GammaRayTel ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
+target_link_libraries(GammaRayTel ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -61,8 +53,7 @@ target_link_libraries(GammaRayTel ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(gammaray_telescope_SCRIPTS
-    emlowe.mac emstd.mac gammaraytel.in gammaraytel.out macro1.mac macro2.mac macro3.mac macro4.mac macro5.mac prerunGammaRayTel.mac
-  )
+    emlowe.mac emstd.mac gammaraytel.in gammaraytel.out macro1.mac macro2.mac macro3.mac macro4.mac macro5.mac prerunGammaRayTel.mac)
 
 foreach(_script ${gammaray_telescope_SCRIPTS})
   configure_file(

@@ -51,9 +51,9 @@ void GammaRayTelGeneralPhysics::ConstructParticle()
 void GammaRayTelGeneralPhysics::ConstructProcess()
 {
   // Add Decay Process
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (fDecayProcess.IsApplicable(*particle) && !particle->IsShortLived()) { 
       pmanager ->AddProcess(&fDecayProcess);
