@@ -58,7 +58,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:fPBox(0), fLBox(0), fMaterial(0), fMagField(0)
+:fPBox(0), fLBox(0), fMaterial(0), fMagField(0), fDetectorMessenger(0)
 {
   fBoxSize = 10*m;
   DefineMaterials();

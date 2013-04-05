@@ -63,7 +63,7 @@ PhysicsList::PhysicsList()
   
   //add new units for cross sections
   // 
-  new G4UnitDefinition( "mm2/g", "mm2/g","Surface/Mass", mm2/g);
+  new G4UnitDefinition( "mm2/g",  "mm2/g", "Surface/Mass", mm2/g);
   new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);  
   
   // Hadron Elastic scattering
@@ -76,7 +76,7 @@ PhysicsList::PhysicsList()
   
   // Ion Physics
   RegisterPhysics( new G4IonPhysics(verb));
-  ////RegisterPhysics( new G4IonINCLXXPhysics(verb));      
+  ///RegisterPhysics( new G4IonINCLXXPhysics(verb));      
     
   // Gamma Physics
   RegisterPhysics( new GammaPhysics("gamma"));  
