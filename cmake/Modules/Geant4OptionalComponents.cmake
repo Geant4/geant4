@@ -11,7 +11,6 @@
 #  CLHEP  - Control use of internal G4clhep, or locate external CLHEP
 #  EXPAT  - Control use of internal G4expat, or locate external EXPAT.
 #  ZLIB   - Control use of internal G4zlib, or locate external ZLIB
-#           (NOTIMPLEMENTEDYET - always uses internal zlib)
 #  GDML   - Requires external XercesC
 #  G3TOG4 - UNIX only
 
@@ -82,13 +81,27 @@ GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_EXPAT "Using system EXPAT library")
 
 #-----------------------------------------------------------------------
 # Find required ZLIB package
-# For now, we always use the internal Geant4 zlib...
-#
-#option(GEANT4_USE_SYSTEM_ZLIB "Use the system's zlib library" OFF)
+# Default to use internal zlib, otherwise point interface variables to
+# internal zlib
+option(GEANT4_USE_SYSTEM_ZLIB "Use system zlib library" OFF)
 if(GEANT4_USE_SYSTEM_ZLIB)
-  # This needs more work - use ITK's way of doing it as an example.
   find_package(ZLIB REQUIRED)
-endif(GEANT4_USE_SYSTEM_ZLIB)
+
+  # NB : FindZLIB on cmake < 2.8 does not set the ZLIB_INCLUDE_DIRS
+  # variable, only the ZLIB_INCLUDE_DIR variable. Set the DIRS variable
+  # here for backward compatibility.
+  if(${CMAKE_VERSION} VERSION_LESS "2.8.0")
+    set(ZLIB_INCLUDE_DIRS "${ZLIB_INCLUDE_DIR}")
+  endif()
+else()
+  set(ZLIB_FOUND TRUE)
+  set(ZLIB_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/zlib/include)
+  if(BUILD_SHARED_LIBS)
+    set(ZLIB_LIBRARIES G4zlib)
+  else()
+    set(ZLIB_LIBRARIES G4zlib-static)
+  endif()
+endif()
 
 GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_ZLIB "Using system zlib library")
 
@@ -106,7 +119,7 @@ option(GEANT4_USE_GDML "Build Geant4 with GDML support" ${_default_use_gdml}
 
 if(GEANT4_USE_GDML)
   find_package(XercesC REQUIRED)
-endif(GEANT4_USE_GDML)
+endif()
 
 GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
 

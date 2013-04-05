@@ -29,6 +29,26 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+25th March 2013 - Ben Morgan (cmake-V09-06-07)
+- Modules/Geant4OptionalComponents.cmake : BUGFIX #1322 Noted that
+  FindZLIB in CMake < 2.8 does not set the ZLIB_INCLUDE_DIRS variable,
+  so set it manually to ensure uniform behaviour in ZLIB clients. 
+
+25th March 2013 - Ben Morgan
+- Modules/Geant4OptionalComponents.cmake : BUGFIX #1322 Enable option
+  GEANT4_USE_SYSTEM_ZLIB to locate system zlib if requested and otherwise
+  use internal version. This will co-work with externals-V09-06-00.
+  It *breaks* the analysis module, and HepRep module requires adjustment
+  as reported in above bug report to ensure zlib is enabled.
+
+25th March 2013 - Ben Morgan (cmake-V09-06-06)
+- Modules/Geant4MacroLibraryTargets.cmake : BUGFIX #1353 : Add a build
+  mode dependent compiler definition to the build of each Geant4 target
+  in the form GEANT4_DEVELOPER_<CONFIG> where <CONFIG> is the uppercased
+  build mode as determined from CMAKE_CONFIGURATION_TYPES or 
+  CMAKE_BUILD_TYPE as appropriate for the generator.
+  Checked on Linux and Mac with Make/Xcode generators, tagging for testing
+
 1st March 2013 - Ben Morgan (cmake-V09-06-05)
 - Templates/Geant4Config.cmake.in : Add 'multithreaded' component to 
   indicate if Geant4 was built with multithreading. If it is requested,
