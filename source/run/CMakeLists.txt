@@ -13,7 +13,6 @@
 
 # Add allocation export symbol for the run category
 add_definitions(-DG4RUN_ALLOC_EXPORT)
-add_definitions(-DG4VUSERPL_ALLOC_EXPORT)
 
 include(Geant4MacroLibraryTargets)
 if(GEANT4_BUILD_GRANULAR_LIBS)

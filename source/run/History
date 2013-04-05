@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr. 5th, 2013, G.Cosmo (run-V09-06-12)
+- Use existing G4RUN_ALLOC_EXPORT flag instead of G4VUSERPL_ALLOC_EXPORT
+  and moved macros definition to rundefs.hh.
+- Fix in GNUmakefile for temporary inclusion of dependency on
+  solids/specific module...
+
 Apr. 4th, 2013, A.Dotti (run-V09-06-11)
 - Use global flag G4VUSERPL_ALLOC_EXPORT to export extern symbols for DLLs
 

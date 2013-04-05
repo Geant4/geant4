@@ -46,7 +46,7 @@
 #include <stdlib.h>
 
 #include "globals.hh"
-#include "vupldefs.hh"
+#include "rundefs.hh"
 
 //
 // This class implements the split-mechanism for shared objects.
@@ -143,8 +143,8 @@ class G4VUPLSplitter
     }
   public:
 
-    G4VUPL_DLL static G4ThreadLocal G4int slavetotalspace; //Per-thread available number of slots
-    G4VUPL_DLL static G4ThreadLocal T* offset; //Pointer to first instance of an array
+    G4RUN_DLL static G4ThreadLocal G4int slavetotalspace; //Per-thread available number of slots
+    G4RUN_DLL static G4ThreadLocal T* offset; //Pointer to first instance of an array
 
   private:
 

@@ -83,9 +83,11 @@
 // ------------------------------------------------------------
 #ifndef G4VUserPhysicsList_h
 #define G4VUserPhysicsList_h 1
+
 #include "globals.hh"
-#include "G4ios.hh"
 #include "tls.hh"
+#include "rundefs.hh"
+#include "G4ios.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh" 
@@ -387,7 +389,7 @@ class G4VUserPhysicsList
   //Changes for MT
   protected:
     G4int g4vuplInstanceID;
-    G4VUPL_DLL static G4VUPLManager subInstanceManager;
+    G4RUN_DLL static G4VUPLManager subInstanceManager;
   public:
     inline G4int GetInstanceID() const;
     static const G4VUPLManager& GetSubInstanceManager();

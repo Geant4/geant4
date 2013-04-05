@@ -30,8 +30,8 @@
 // Defines for Windows DLLs import/export
 //
 
-#ifndef UPLDEFS_HH
-#define UPLDEFS_HH
+#ifndef RUNDEFS_HH
+#define RUNDEFS_HH
 
 #include "G4Types.hh"
 
@@ -39,13 +39,13 @@
   //
   // Unique identifier for global module
   //
-  #if defined G4VUSERPL_ALLOC_EXPORT
-    #define G4VUPL_DLL G4DLLEXPORT
+  #if defined G4RUN_ALLOC_EXPORT
+    #define G4RUN_DLL G4DLLEXPORT
   #else
-    #define G4VUPL_DLL G4DLLIMPORT
+    #define G4RUN_DLL G4DLLIMPORT
   #endif
 #else
-  #define G4VUPL_DLL
+  #define G4RUN_DLL
 #endif
 
-#endif /* G4VUPLDEFS_HH */
+#endif /* G4RUNDEFS_HH */

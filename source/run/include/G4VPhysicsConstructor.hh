@@ -61,6 +61,7 @@
 #define G4VPhysicsConstructor_h 1
 
 #include "globals.hh"
+#include "rundefs.hh"
 #include "G4ios.hh"
 #include "G4ParticleTable.hh"
 #include "G4PhysicsListHelper.hh"
@@ -163,7 +164,7 @@ class G4VPhysicsConstructor
 
     G4ParticleTable* theParticleTable;
     G4int g4vpcInstanceID;
-    G4VUPL_DLL static G4VPCManager subInstanceManager;
+    G4RUN_DLL static G4VPCManager subInstanceManager;
 public:
     inline G4int GetInstanceID() const;
     static const G4VPCManager& GetSubInstanceManager();

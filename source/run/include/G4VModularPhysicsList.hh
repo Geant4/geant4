@@ -50,9 +50,11 @@
 #ifndef G4VModularPhysicsList_h
 #define G4VModularPhysicsList_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
 #include <vector>
+
+#include "globals.hh"
+#include "rundefs.hh"
+#include "G4ios.hh"
 
 #include "G4VUserPhysicsList.hh"
 #include "G4VPhysicsConstructor.hh"
@@ -144,7 +146,7 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
    G4int verboseLevel;
     typedef G4VMPLData::G4PhysConstVectorData G4PhysConstVector;
     G4int g4vmplInstanceID;
-    G4VUPL_DLL static G4VMPLManager G4VMPLsubInstanceManager;
+    G4RUN_DLL static G4VMPLManager G4VMPLsubInstanceManager;
   public:
     inline G4int GetInstanceID() const;
     static const G4VMPLManager& GetSubInstanceManager();

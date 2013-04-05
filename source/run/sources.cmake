@@ -83,7 +83,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
 	G4WorkerThread.hh
 	G4VUserWorkerInitialization.hh
         G4VUPLSplitter.hh
-        vupldefs.hh
+        rundefs.hh
     SOURCES
         G4AdjointPrimaryGeneratorAction.cc
         G4AdjointSimManager.cc

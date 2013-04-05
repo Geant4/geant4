@@ -22,7 +22,6 @@ ifdef G4FPE_DEBUG
 endif
 
 CPPFLAGS += -DG4RUN_ALLOC_EXPORT
-CPPFLAGS += -DG4VUSERPL_ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
@@ -40,6 +39,7 @@ CPPFLAGS += \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/geometry/magneticfield/include \
+            -I$(G4BASE)/geometry/solids/specific/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/tracking/include \
             -I$(G4BASE)/digits_hits/detector/include \
