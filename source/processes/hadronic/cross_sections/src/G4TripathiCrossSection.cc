@@ -72,8 +72,8 @@ GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ,
   G4double projectileAtomicNumber = 
     aPart->GetDefinition()->GetBaryonNumber();
 
-  const G4double nuleonRadius=1.1E-15;
-  const G4double myNuleonRadius=1.36E-15;
+  static const G4double nuleonRadius=1.1E-15;
+  static const G4double myNuleonRadius=1.36E-15;
   
   // needs target mass
   G4double targetMass = 

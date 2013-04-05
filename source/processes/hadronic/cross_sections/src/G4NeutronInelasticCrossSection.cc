@@ -84,7 +84,7 @@ G4NeutronInelasticCrossSection::GetCrossSection(G4double anEnergy,
   G4double elog = std::log10(anEnergy/MeV);
   G4int nOfNeutrons = A - Z;
   G4double atomicNumber = G4double(A);
-  const G4double p1=1.3773;
+  static const G4double p1=1.3773;
   G4double p2 = 1. + 10./atomicNumber   - 0.0006*atomicNumber;
   G4double p3 = 0.6+ 13./atomicNumber   - 0.0005*atomicNumber;
   G4double p4 = 7.2449 - 0.018242*atomicNumber;

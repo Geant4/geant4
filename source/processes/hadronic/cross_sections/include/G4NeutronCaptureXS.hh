@@ -103,6 +103,7 @@ private:
   G4NeutronCaptureXS(const G4NeutronCaptureXS&);
 
   G4double emax;
+  G4double elimit;
   G4bool   isInitialized;
 
   G4ElementData data;

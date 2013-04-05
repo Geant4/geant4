@@ -77,7 +77,7 @@ const G4int G4NeutronCaptureXS::amax[] = {0,
 
 G4NeutronCaptureXS::G4NeutronCaptureXS() 
  : G4VCrossSectionDataSet("G4NeutronCaptureXS"),
-   emax(20*MeV)
+   emax(20*MeV),elimit(1.0e-10*eV)
 {
   //  verboseLevel = 0;
   if(verboseLevel > 0){
@@ -124,7 +124,6 @@ G4NeutronCaptureXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
   G4double xs = 0.0;
   G4double ekin = aParticle->GetKineticEnergy();
   if(ekin > emax || Z < 1 || Z >= MAXZCAPTURE) { return xs; }
-  const G4double elimit = 1.0e-10*eV;
   if(ekin < elimit) { ekin = elimit; }
 
   G4PhysicsVector* pv = data.GetElementData(Z);
@@ -161,7 +160,6 @@ G4NeutronCaptureXS::GetIsoCrossSection(const G4DynamicParticle* aParticle,
 G4double G4NeutronCaptureXS::IsoCrossSection(G4double ekin, G4int Z, G4int A)
 {
   G4double xs = 0.0;
-  const G4double elimit = 1.0e-10*eV;
   if(ekin < elimit) { ekin = elimit; }
 
   G4PhysicsVector* pv = data.GetElementData(Z);

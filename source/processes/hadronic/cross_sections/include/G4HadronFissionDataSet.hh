@@ -35,9 +35,9 @@
 #define G4HadronFissionDataSet_h 1
 
 #include "G4VCrossSectionDataSet.hh"
-#include "G4HadronCrossSections.hh"
+//#include "G4HadronCrossSections.hh"
 #include "G4DynamicParticle.hh"
-#include "G4Element.hh"
+//#include "G4Element.hh"
 
 
 class G4HadronFissionDataSet : public G4VCrossSectionDataSet
@@ -61,7 +61,7 @@ public:
 
 private:
   
-  G4HadronCrossSections* theHadronCrossSections;
+  //G4HadronCrossSections* theHadronCrossSections;
 };
 
 #endif

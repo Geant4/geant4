@@ -77,8 +77,8 @@ G4double G4ProtonInelasticCrossSection::GetProtonCrossSection(
   kineticEnergy /=GeV;
   G4double alog10E = std::log10(kineticEnergy);
 
-  const G4double nuleonRadius=1.36E-15;
-  const G4double fac=CLHEP::pi*nuleonRadius*nuleonRadius;
+  static const G4double nuleonRadius=1.36e-15;
+  static const G4double fac=CLHEP::pi*nuleonRadius*nuleonRadius;
 
   G4double b0   = 2.247-0.915*(1 - a13);
   G4double fac1 = b0*(1 - a13);

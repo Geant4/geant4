@@ -139,14 +139,6 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
     G4int nIso = elm->GetNumberOfIsotopes();    
     G4Isotope* iso = 0;
 
-    if (0 >= nIso) { 
-      G4cout << " Element " << elm->GetName() << " Z= " << Z 
-	     << " has no isotopes " << G4endl; 
-      throw G4HadronicException(__FILE__, __LINE__, 
-                      " Isotope vector is not defined");
-      //ALB 14-Aug-2012 Coverity fix.  
-      return elmCrossSection;
-    }
     // user-defined isotope abundances        
     G4IsotopeVector* isoVector = elm->GetIsotopeVector();
     G4double* abundVector = elm->GetRelativeAbundanceVector();

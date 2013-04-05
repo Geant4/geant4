@@ -99,7 +99,9 @@ G4NeutronInelasticXS::G4NeutronInelasticXS()
 }
 
 G4NeutronInelasticXS::~G4NeutronInelasticXS()
-{}
+{
+  delete fNucleon;
+}
 
 void G4NeutronInelasticXS::CrossSectionDescription(std::ostream& outFile) const
 {
@@ -329,9 +331,9 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
     for(G4int A=amin[Z]; A<=amax[Z]; ++A) {
       std::ostringstream ost1;
       ost1 << path << "/cap" << Z << "_" << A;
-      v = RetrieveVector(ost1, false);
-      if(v) { ++n; }
-      work[i] = v;
+      G4PhysicsVector* v1 = RetrieveVector(ost1, false);
+      if(v1) { ++n; }
+      work[i] = v1;
       ++i;
     }
     data.InitialiseForComponent(Z, n);

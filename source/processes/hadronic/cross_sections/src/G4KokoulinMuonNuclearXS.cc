@@ -112,10 +112,10 @@ ComputeMicroscopicCrossSection(G4double KineticEnergy,
   // Calculate cross section (differential in muon incident kinetic energy) by 
   // integrating the double differential cross section over the energy loss
 
-  const G4double xgi[] = {0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801};
-  const G4double wgi[] = {0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506};
-  const G4double ak1 = 6.9;
-  const G4double ak2 = 1.0;
+  static const G4double xgi[] = {0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801};
+  static const G4double wgi[] = {0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506};
+  static const G4double ak1 = 6.9;
+  static const G4double ak2 = 1.0;
 
   G4double Mass = G4MuonMinus::MuonMinus()->GetPDGMass();
 
@@ -159,9 +159,9 @@ ComputeDDMicroscopicCrossSection(G4double KineticEnergy,
   // incident kinetic energy and energy loss) using the cross section formula
   // of R.P. Kokoulin (18/01/98)
 
-  const G4double alam2 = 0.400*GeV*GeV;
-  const G4double alam  = 0.632456*GeV;
-  const G4double coeffn = fine_structure_const/pi;   
+  static const G4double alam2 = 0.400*GeV*GeV;
+  static const G4double alam  = 0.632456*GeV;
+  static const G4double coeffn = fine_structure_const/pi;   
 
   G4double ParticleMass = G4MuonMinus::MuonMinus()->GetPDGMass();
   G4double TotalEnergy = KineticEnergy + ParticleMass;
