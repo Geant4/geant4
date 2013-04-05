@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 April 2013, Andrea Dotti (exampleES2-V09-06-01)
+- new API for G4MT physics list
+
 19 February 2012, Ivana Hrivnacova (exampleES2-V09-06-00)
 - Used SetEmModel method in physics builders
 
