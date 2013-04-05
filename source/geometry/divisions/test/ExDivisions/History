@@ -15,7 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-03-13 G.Cosmo
+----------------
+- Fixed compilation warnings for variable shadowing...
+
 05-12-12 J.Allison
+----------------
 - Migrated to DrawTrajectory (i_mode argument no longer available).
 
 16-06-10 G.Cosmo

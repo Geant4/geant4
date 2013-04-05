@@ -54,13 +54,11 @@ G4PVDivisionFactory::~G4PVDivisionFactory()
 
 G4PVDivisionFactory* G4PVDivisionFactory::GetInstance()
 {
-  static G4ThreadLocal G4PVDivisionFactory *
-    theFactory = new G4PVDivisionFactory;
   if (!fgInstance)
   {
-    fgInstance = theFactory;
+    fgInstance =  new G4PVDivisionFactory;
   }
-  return theFactory;
+  return dynamic_cast<G4PVDivisionFactory*>(fgInstance);
 } 
 
 //_____________________________________________________________________________

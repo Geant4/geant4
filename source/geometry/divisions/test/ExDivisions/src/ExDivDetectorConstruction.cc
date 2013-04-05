@@ -99,12 +99,12 @@ G4VPhysicalVolume* ExDivDetectorConstruction::Construct()
 //--------------------------------------------------------------------------
 ExVDivTester*
 ExDivDetectorConstruction::CreateSolidTester( const G4String& stype,
-                                              const G4String& thePVTypeStr,
-                                              const G4String& thePosTypeStr,
+                                              const G4String& PVTypeStr,
+                                              const G4String& PosTypeStr,
                                               std::vector<G4String>& extraPars )
 {
-  PVType pvtype = getPVType( thePVTypeStr );
-  PlaceType postype = getPosType( thePosTypeStr );
+  PVType pvtype = getPVType( PVTypeStr );
+  PlaceType postype = getPosType( PosTypeStr );
 
   ExVDivTester* theSolidTester = 0;
   if( stype == "box" ) {

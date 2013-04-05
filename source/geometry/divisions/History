@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 22nd, 2013        G.Cosmo (geomdiv-V09-06-02)
+- Use dynamic instead of static cast in singleton accessor implementation
+  for G4PVDivisionFactory.
+
+March 21st, 2013        A.Dotti (geomdiv-V09-06-01)
+- Corrected definition of G4PVDivisionFactory singleton accessor for MT.
+
 February 22nd, 2013     G.Cosmo (geomdiv-V09-06-00)
 - Cleanup of changes for multi-threading in G4PVDivisionFactory.
 - Corrected composed cout in exceptions for G4ParameterisationBox and

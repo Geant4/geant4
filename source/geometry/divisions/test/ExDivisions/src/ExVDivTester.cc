@@ -422,7 +422,6 @@ void ExVDivTester::BuildChildrenVolumes()
   }
   else if( thePVType == pvReplica )
   {
-    G4int nParents = theAxis.size();
     for( ii = 0; ii < nParents; ii++ )
     {
       G4String childstr = "child-";

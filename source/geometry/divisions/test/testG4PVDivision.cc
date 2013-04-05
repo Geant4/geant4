@@ -214,13 +214,13 @@ void generateScanPointsForBox()
   G4int ii;
 
   G4int nPointsPerReplica = 2;
-  G4int numberOfPoints = theNReplicas*nPointsPerReplica;
+  G4int numPoints = theNReplicas*nPointsPerReplica;
   // For division along X
   G4ThreeVector centre(0.,0.,-2*theWorldDim);
-  for( ii = 0; ii < numberOfPoints; ii++ ) {
+  for( ii = 0; ii < numPoints; ii++ ) {
     // any Z, any Y
     G4ThreeVector pR( 0., theWorldDim/100., theWorldDim/100. );
-    G4double X = -theWorldDim + (ii+0.001) * 2*theWorldDim/numberOfPoints;
+    G4double X = -theWorldDim + (ii+0.001) * 2*theWorldDim/numPoints;
     pR.setX( X );
     pR += centre;
     fout << pR.x() << " " << pR.y() << " " << pR.z() << G4endl;
@@ -228,10 +228,10 @@ void generateScanPointsForBox()
 
   // For division along Y
   centre = G4ThreeVector(0.,0.,0.);
-  for( ii = 0; ii < numberOfPoints; ii++ ) {
+  for( ii = 0; ii < numPoints; ii++ ) {
     // any X, any Z
     G4ThreeVector pR( theWorldDim/100., 0., theWorldDim/100. );
-    G4double Y = -theWorldDim + (ii+0.001) * 2*theWorldDim/numberOfPoints;
+    G4double Y = -theWorldDim + (ii+0.001) * 2*theWorldDim/numPoints;
     pR.setY( Y );
     pR += centre;
     fout << pR.x() << " " << pR.y() << " " << pR.z() << G4endl;
@@ -239,10 +239,10 @@ void generateScanPointsForBox()
 
   // For division along Z
   centre = G4ThreeVector(0.,0.,2*theWorldDim);
-  for( ii = 0; ii < numberOfPoints; ii++ ) {
+  for( ii = 0; ii < numPoints; ii++ ) {
     // any X, any Y
     G4ThreeVector pR( theWorldDim/100., 0., theWorldDim/100. );
-    G4double Z = -theWorldDim + (ii+0.001) * 2*theWorldDim/numberOfPoints;
+    G4double Z = -theWorldDim + (ii+0.001) * 2*theWorldDim/numPoints;
     pR.setZ( Z );
     pR += centre;
     fout << pR.x() << " " << pR.y() << " " << pR.z() << G4endl;
@@ -256,13 +256,13 @@ void generateScanPointsForTrd()
   G4int ii;
 
   G4int nPointsPerReplica = 2;
-  G4int numberOfPoints = theNReplicas*nPointsPerReplica;
+  G4int numPoints = theNReplicas*nPointsPerReplica;
   // For division along X
   G4ThreeVector centre(0.,0.,-2*theWorldDim);
-  for( ii = 0; ii < numberOfPoints; ii++ ) {
+  for( ii = 0; ii < numPoints; ii++ ) {
     // any Z, any Y
     G4ThreeVector pR( 0., theWorldDim/100., theWorldDim/100. );
-    G4double X = -theWorldDim*0.75 + (ii+0.001) * 1.5*theWorldDim/numberOfPoints;
+    G4double X = -theWorldDim*0.75 + (ii+0.001) * 1.5*theWorldDim/numPoints;
     pR.setX( X );
     pR += centre;
     fout << pR.x() << " " << pR.y() << " " << pR.z() << G4endl;
@@ -270,10 +270,10 @@ void generateScanPointsForTrd()
 
   // For division along Y
   centre = G4ThreeVector(0.,0.,0.);
-  for( ii = 0; ii < numberOfPoints; ii++ ) {
+  for( ii = 0; ii < numPoints; ii++ ) {
     // any X, any Z
     G4ThreeVector pR( theWorldDim/100., 0., theWorldDim/100. );
-    G4double Y = -theWorldDim*0.75 + (ii+0.001) * 1.5*theWorldDim/numberOfPoints;
+    G4double Y = -theWorldDim*0.75 + (ii+0.001) * 1.5*theWorldDim/numPoints;
     pR.setY( Y );
     pR += centre;
     fout << pR.x() << " " << pR.y() << " " << pR.z() << G4endl;
@@ -281,10 +281,10 @@ void generateScanPointsForTrd()
 
   // For division along Z
   centre = G4ThreeVector(0.,0.,2*theWorldDim);
-  for( ii = 0; ii < numberOfPoints; ii++ ) {
+  for( ii = 0; ii < numPoints; ii++ ) {
     // any X, any Y
     G4ThreeVector pR( theWorldDim/100., 0., theWorldDim/100. );
-    G4double Z = -theWorldDim + (ii+0.001) * 2*theWorldDim/numberOfPoints;
+    G4double Z = -theWorldDim + (ii+0.001) * 2*theWorldDim/numPoints;
     pR.setZ( Z );
     pR += centre;
     fout << pR.x() << " " << pR.y() << " " << pR.z() << G4endl;
@@ -298,16 +298,16 @@ void generateScanPointsForTube()
   G4int ii;
 
   G4int nPointsPerReplica = 2;
-  G4int numberOfPoints = theNReplicas*nPointsPerReplica;
-  G4cout << " numberOfPoints " << numberOfPoints << G4endl; 
+  G4int numPoints = theNReplicas*nPointsPerReplica;
+  G4cout << " numberOfPoints " << numPoints << G4endl; 
   // For division along R
   G4ThreeVector centre(0.,0.,-2*theWorldDim);
-  for( ii = 0; ii < numberOfPoints; ii++ ) {
+  for( ii = 0; ii < numPoints; ii++ ) {
     // any Z, phi close initial phi
     G4double phi = 1.*deg;
     //t?    if( theExtraPars.size() > 0 ) phi = (theExtraPars[0]+1.)*deg;
     G4ThreeVector pR( std::cos(phi), std::sin(phi), theWorldDim/100. );
-    G4double rho = (ii+0.001) * theWorldDim/numberOfPoints;
+    G4double rho = (ii+0.001) * theWorldDim/numPoints;
     pR.setRho( rho );
     pR += centre;
     fout << pR.x() << " " << pR.y() << " " << pR.z() << G4endl;
@@ -315,8 +315,8 @@ void generateScanPointsForTube()
 
   // For division along phi
   centre = G4ThreeVector(0.,0.,0.);
-  for( ii = 0; ii < numberOfPoints; ii++ ) {
-    G4double phi = (ii+0.001) * 360*deg/numberOfPoints;
+  for( ii = 0; ii < numPoints; ii++ ) {
+    G4double phi = (ii+0.001) * 360*deg/numPoints;
     // any rho (=1), any Z
     G4ThreeVector pR( std::cos(phi), std::sin(phi), theWorldDim/100. );
     pR += centre;
@@ -325,12 +325,12 @@ void generateScanPointsForTube()
 
   // For division along Z
   centre = G4ThreeVector(0.,0.,2*theWorldDim);
-  for( ii = 0; ii < numberOfPoints; ii++ ) {
+  for( ii = 0; ii < numPoints; ii++ ) {
     //any rho (=1), phi close initial phi
     G4double phi = 1.*deg;
     //t?  if( theExtraPars.size() > 0 ) phi = (theExtraPars[0]+1.)*deg;
     G4ThreeVector pR( std::cos(phi), std::sin(phi),0.);
-    G4double Z = -theWorldDim + (ii+0.001) * 2*theWorldDim / numberOfPoints;
+    G4double Z = -theWorldDim + (ii+0.001) * 2*theWorldDim / numPoints;
     pR.setZ( Z );
     pR += centre;
     fout << pR.x() << " " << pR.y() << " " << pR.z() << G4endl;
@@ -598,7 +598,7 @@ void calculateChildSolids( SolidType solType, G4VSolid* pSolid )
   }else if( solType == g4polyhedra ) {
     G4Polyhedra* pPhedra = reinterpret_cast<G4Polyhedra*>( pSolid );
     G4PolyhedraHistorical* origparam = pPhedra->GetOriginalParameters() ;
-    G4int ns = origparam->numSide;
+    G4int nsd = origparam->numSide;
     G4int nz = origparam->Num_z_planes;
     theWidths.push_back( (origparam->Rmax[0] - origparam->Rmin[0] ) / theNReplicas );
     theWidths.push_back( (pPhedra->GetEndPhi() - pPhedra->GetStartPhi() ) / theNReplicas );
@@ -611,9 +611,9 @@ void calculateChildSolids( SolidType solType, G4VSolid* pSolid )
     G4double* rOuter = new G4double[4];
     rOuter[0] = theWorldDim; rOuter[1] = theWorldDim*0.9; rOuter[2] = theWorldDim*0.9; rOuter[3] = theWorldDim;
 
-    theChildSolids.push_back( new G4Polyhedra("child", 0., 360.*deg, ns, nz, zPlane, rInner, rOuter) );
-    theChildSolids.push_back( new G4Polyhedra("child", 0., 360.*deg, ns, nz, zPlane, rInner, rOuter) );
-    theChildSolids.push_back( new G4Polyhedra("child", 0., 360.*deg, ns, nz, zPlane, rInner, rOuter) );
+    theChildSolids.push_back( new G4Polyhedra("child", 0., 360.*deg, nsd, nz, zPlane, rInner, rOuter) );
+    theChildSolids.push_back( new G4Polyhedra("child", 0., 360.*deg, nsd, nz, zPlane, rInner, rOuter) );
+    theChildSolids.push_back( new G4Polyhedra("child", 0., 360.*deg, nsd, nz, zPlane, rInner, rOuter) );
 
   }
   for( size_t ii = 0; ii < theChildSolids.size(); ii++) {
