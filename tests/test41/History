@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-04-13  A.Dotti (test41-V09-06-00)
+- Porting to new G4VPhysicsConstructor API needed for G4MT
+
 05-11-12  V.Ivanchenko (test41-V09-05-03)
 - Fixed variable shadowing
 
