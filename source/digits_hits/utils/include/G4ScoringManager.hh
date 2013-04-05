@@ -82,6 +82,7 @@ class G4ScoringManager
 
   public:
       void Accumulate(G4VHitsCollection* map);
+      void Merge(const G4ScoringManager* scMan);
       G4VScoringMesh* FindMesh(const G4String&);
       void List() const;
       void Dump() const;

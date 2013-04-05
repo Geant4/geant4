@@ -221,4 +221,14 @@ void G4ScoringManager::ListScoreColorMaps()
   G4cout << G4endl;
 }
 
+void G4ScoringManager::Merge(const G4ScoringManager * mgr)
+{  
+  for(size_t i = 0; i< GetNumberOfMesh() ; i++)
+  {
+    G4VScoringMesh* fMesh = GetMesh(i);
+    G4VScoringMesh* scMesh = mgr->GetMesh(i);
+    fMesh->Merge(scMesh);
+  }
+}
+
 

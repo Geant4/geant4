@@ -47,10 +47,7 @@ public:
   ~G4ScoringBox();
 
 public:
-  void Construct(G4VPhysicalVolume* fWorldPhys);
-
-  //Xin Dong 09302011 for Scorers
-  void SlaveConstruct(G4VScoringMesh *masterMesh, G4VPhysicalVolume* fWorldPhys);
+  virtual void Construct(G4VPhysicalVolume* fWorldPhys);
 
   void List() const;
   void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
@@ -70,11 +67,8 @@ private:
   // get sequential index from 3D index (x,y,z)
   G4int GetIndex(G4int x, G4int y, G4int z) const;
 
-  //Xin Dong 09302011 for Scorers
-public:
-  //private:
+private:
   G4int fSegmentDirection; // =1: x, =2: y, =3: z
-  G4LogicalVolume * fMeshElementLogical;
   
 };
 

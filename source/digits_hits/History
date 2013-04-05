@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 29, 2013, T. Aso  (digits_hits-V09-06-05)
+- Adding missing options in command-based scorers in G4ScoreQuantityMessenger and
+  G4ScoreQuantityMessengerQCmd.
+
+Mar 22, 2013, M. Asai (digits_hits-V09-06-04)
+- Adding Merge() for scoring meshes to be used in multi-threaded mode to reduce the score after the run.
+
+Mar 12, 2013, M. Asai (digits_hits-V09-06-03)
+- Changing method names in G4VScoringMesh and its derived classes.
+
+Mar 12, 2013, M. Asai (digits_hits-V09-06-02)
+- Adding Merge() methods to G4ScoringManager and G4VScoringMesh (needed for multi-threaded)
+
 Mar 4, 2013, A. Dotti (digits_hits-V09-06-01)
 - Fixing unused variables warnings
 

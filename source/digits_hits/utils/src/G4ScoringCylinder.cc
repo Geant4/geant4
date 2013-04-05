@@ -53,7 +53,7 @@
 
 
 G4ScoringCylinder::G4ScoringCylinder(G4String wName)
-  :G4VScoringMesh(wName), fMeshElementLogical(0)
+  :G4VScoringMesh(wName)
 {
   fShape = cylinderMesh;
 
@@ -76,22 +76,6 @@ void G4ScoringCylinder::Construct(G4VPhysicalVolume* fWorldPhys)
   } else {
     fConstructed = true;
     SetupGeometry(fWorldPhys);
-  }
-}
-
-//Xin Dong 09302011 Scorers
-void G4ScoringCylinder::SlaveConstruct(G4VScoringMesh* /*masterMesh*/, G4VPhysicalVolume* fWorldPhys)
-{
-  if(fConstructed) {
-
-    if(verboseLevel > 0) 
-      G4cout << fWorldPhys->GetName() << " --- All quantities are reset." << G4endl;
-    ResetScore();
-
-  } else {
-    fConstructed = true;
- 
-    fMeshElementLogical->SetSensitiveDetector(fMFD);
   }
 }
 

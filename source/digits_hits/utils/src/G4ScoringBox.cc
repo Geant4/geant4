@@ -50,8 +50,7 @@
 #include <fstream>
 
 G4ScoringBox::G4ScoringBox(G4String wName)
-  :G4VScoringMesh(wName), fSegmentDirection(-1),
-   fMeshElementLogical(0)
+  :G4VScoringMesh(wName), fSegmentDirection(-1)
 {
   fShape = boxMesh;
   fDivisionAxisNames[0] = "X";
@@ -77,21 +76,6 @@ void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
   }
 }
 
-//Xin Dong 09302011 for Scorers
-void G4ScoringBox::SlaveConstruct(G4VScoringMesh* /*masterMesh*/, G4VPhysicalVolume* fWorldPhys)
-{
-  if(fConstructed) {
- 
-    if(verboseLevel > 0) 
-      G4cout << fWorldPhys->GetName() << " --- All quantities are reset." << G4endl;
-    ResetScore();
-
-  } else {
-    fConstructed = true;
-    fMeshElementLogical->SetSensitiveDetector(fMFD);
-  }
-}
-
 void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   if(verboseLevel > 9) G4cout << "G4ScoringBox::SetupGeometry() ..." << G4endl;
@@ -106,7 +90,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   if(verboseLevel > 9) G4cout << fSize[0] << ", " << fSize[1] << ", " << fSize[2] << G4endl;
   G4VSolid * boxSolid = new G4Box(boxName+"0", fSize[0], fSize[1], fSize[2]);
-  G4LogicalVolume *  boxLogical = new G4LogicalVolume(boxSolid, 0, boxName);
+  G4LogicalVolume *  boxLogical = new G4LogicalVolume(boxSolid, 0, boxName+"_0");
   new G4PVPlacement(fRotationMatrix, fCenterPosition,
 		    boxLogical, boxName+"0", worldLogical, false, 0);
 
@@ -115,7 +99,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   //GetSegmentOrder(fSegmentDirection, fNSegment, segOrder, fsegment);
   //EAxis axis[3] = {kXAxis, kYAxis, kZAxis};
 
-  G4String layerName[2] = {boxName + "1",  boxName + "2"};
+  G4String layerName[2] = {boxName + "_1",  boxName + "_2"};
   G4VSolid * layerSolid[2]; 
   G4LogicalVolume * layerLogical[2];
 
@@ -193,7 +177,7 @@ void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   // mesh elements (replicated to z direction)
   if(verboseLevel > 9) G4cout << "mesh elements :" << G4endl;
-  G4String elementName = boxName +"3";
+  G4String elementName = boxName +"_3";
   G4VSolid * elementSolid = new G4Box(elementName,
 				      fSize[0]/fNSegment[0],
 				      fSize[1]/fNSegment[1],
