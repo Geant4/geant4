@@ -133,7 +133,7 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
     // in internal units of parametrisation formula (MeV)
     G4double T = kineticEnergy*rateMass/MeV ;  
   
-    static G4ThreadLocal G4double c[30][7] = {
+    static const G4double c[30][7] = {
       {8.0080,  3.6287,  23.0700,  14.9900,  0.8507, 0.60, 2.0
    },{ 13.3100,  3.7432,  39.4130,  12.1990,  1.0950, 0.38, 1.4
    },{ 22.7240,  3.6040,  47.1810,  17.5490,  0.9040, 0.40, 1.4
@@ -214,7 +214,7 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
   // He energy in internal units of parametrisation formula (MeV)
   G4double T = kineticEnergy*rateMass/MeV ;  
   
-  static G4ThreadLocal G4double a[92][5] = {
+  static const G4double a[92][5] = {
     {0.35485, 0.6456, 6.01525,  20.8933, 4.3515
    },{ 0.58,    0.59,   6.3,	 130.0,   44.07
    },{ 1.42,    0.49,   12.25,    32.0,    9.161

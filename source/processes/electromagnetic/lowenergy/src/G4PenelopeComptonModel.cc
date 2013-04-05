@@ -673,8 +673,8 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta,G4do
   G4double ionEnergy = osc->GetIonisationEnergy();
   G4double harFunc = osc->GetHartreeFactor(); 
 
-  const G4double k2 = std::sqrt(2.);
-  const G4double k1 = 1./k2; 
+  static const G4double k2 = std::sqrt(2.);
+  static const G4double k1 = 1./k2; 
 
   if (energy < ionEnergy)
     return 0;

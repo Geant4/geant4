@@ -310,7 +310,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   const size_t numberOfMolecula = 53 ;
 
   // The coffecient from Table.4 of Ziegler & Manoyan
-  const G4double HeEff = 2.8735 ;    
+  static const G4double HeEff = 2.8735 ;    
   
   static G4ThreadLocal G4String *name = 0 ; if (!name) {name = new  G4String [numberOfMolecula]  ; name[0]=
     "H_2O";name[1]=      "C_2H_4O";name[2]=    "C_3H_6O";name[3]=  "C_2H_2";name[4]=             "C_H_3OH";name[5]=
@@ -326,7 +326,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     "C_3H_6S";name[51]=   "C_4H_4S";name[52]=    "C_7H_8"
   ;} ;
     
-  static G4ThreadLocal G4double expStopping[numberOfMolecula] = {
+  static const G4double expStopping[numberOfMolecula] = {
      66.1,  190.4, 258.7,  42.2, 141.5, 
     210.9,  279.6, 198.8,  31.0, 267.5,
     122.8,  311.4, 260.3, 328.9, 391.3,
@@ -340,7 +340,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     306.8,  324.4, 420.0
   } ;
 
-  static G4ThreadLocal G4double expCharge[numberOfMolecula] = {
+  static const G4double expCharge[numberOfMolecula] = {
     HeEff, HeEff, HeEff,   1.0, HeEff, 
     HeEff, HeEff, HeEff,   1.0,   1.0,
       1.0, HeEff, HeEff, HeEff, HeEff,
@@ -354,7 +354,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     HeEff, HeEff, HeEff
   } ;
 
-  static G4ThreadLocal G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
+  static const G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
     3.0,  7.0, 10.0,  4.0,  6.0,  
     9.0, 12.0,  7.0,  4.0, 24.0,
     12.0, 14.0, 10.0, 13.0,  5.0,

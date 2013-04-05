@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29.03.2013  L.Pandola, tag emlowen-V09-06-11
+	    - replaced "static G4ThreadLocal" with "static const" 
+	      when applicable
+            - added static keyword to some constants.
+
 21.02.2013  V.Ivanchenko, L. Pandola, tag emlowen-V09-06-10 
             G4Generator2BN and G4PenelopeComptonModel 
 	    - removed G4ThreadLocal declarations
