@@ -153,10 +153,6 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
 	g4vmgr->RegisterMe( logvol );
 	g4vmgr->RegisterChildParentLVs( logvol, parentLV ); 
       }
-      else
-      {
-        return;
-      }
     }
     else
     {
