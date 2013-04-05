@@ -844,10 +844,10 @@ void G4ErrorSymMatrix::invertBunchKaufman(G4int &ifail)
   // by having a new without a delete that is only done once.
   
   static const G4int max_array = 25;
-  static G4ThreadLocal std::vector<G4double> *xvec
-    = new  std::vector<G4double> (max_array) ;
-  static G4ThreadLocal std::vector<G4int>    *pivv
-    = new  std::vector<G4int>    (max_array) ;
+  static G4ThreadLocal std::vector<G4double> *xvec = 0;
+  if (!xvec) xvec = new  std::vector<G4double> (max_array) ;
+  static G4ThreadLocal std::vector<G4int>    *pivv = 0;
+  if (!pivv) pivv = new  std::vector<G4int>    (max_array) ;
   typedef std::vector<G4int>::iterator pivIter; 
   if (xvec->size() < static_cast<unsigned int>(nrow)) xvec->resize(nrow);
   if (pivv->size() < static_cast<unsigned int>(nrow)) pivv->resize(nrow);

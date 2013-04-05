@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+27 March 2013 - A.Dotti (error-propagation-V09-06-04)
+- Implement changes for split class mechanism of base class G4VUserPhysicsList
+  (needed for G4MT), co-working with tag in run category
+
+21 March 2013 - A.Dotti (error-propagation-V09-06-03)
+- Fix compilation error for TLS variables
 
 26 February 2013 - G.Cosmo (error-propagation-V09-06-02)
 - Removed unused data member in G4ErrorPropagator.
