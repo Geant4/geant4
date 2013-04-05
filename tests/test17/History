@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+3 April 2013, Andrea Dotti (test17-V09-06-00)
+	     Migration to new API of G4VPhysicsConstructor needed
+ 	     for G4MT
 
 9 October 2012, Gabriele Cosmo  (test17-V09-05-00)
              Explicit inclusion of units and constants headers.
