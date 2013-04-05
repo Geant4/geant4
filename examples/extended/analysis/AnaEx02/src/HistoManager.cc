@@ -43,14 +43,17 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:fRootFile(0), fNtupl(0), fEabs(0), fEgap(0) ,fLabs(0), fLgap(0)
+:fRootFile(0), 
+ fNtuple1(0), fNtuple2(0), 
+ fEabs(0), fEgap(0) ,fLabs(0), fLgap(0)
 {
       
   // histograms
   for (G4int k=0; k<MaxHisto; k++) fHisto[k] = 0;
     
   // ntuple
-  fNtupl = 0;
+  fNtuple1 = 0;
+  fNtuple2 = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,13 +88,17 @@ void HistoManager::book()
  fHisto[4] = new TH1D("4", "trackL in gap", 100, 0., 50*CLHEP::cm);
  if (!fHisto[4]) G4cout << "\n can't create histo 4" << G4endl;  
 
- // create 1 ntuple in subdirectory "tuples"
+ // create 1st ntuple in subdirectory "tuples"
  //
- fNtupl = new TTree("101", "Edep and TrackL");
- fNtupl->Branch("fEabs", &fEabs, "fEabs/D");
- fNtupl->Branch("fEgap", &fEgap, "fEgap/D");
- fNtupl->Branch("fLabs", &fLabs, "fLabs/D");
- fNtupl->Branch("fLgap", &fLgap, "fLgap/D");
+ fNtuple1 = new TTree("101", "Edep");
+ fNtuple1->Branch("Eabs", &fEabs, "Eabs/D");
+ fNtuple1->Branch("Egap", &fEgap, "Egap/D");
+
+ // create 2nd ntuple in subdirectory "tuples"
+ //
+ fNtuple2 = new TTree("102", "TrackL");
+ fNtuple2->Branch("Labs", &fLabs, "Labs/D");
+ fNtuple2->Branch("Lgap", &fLgap, "Lgap/D");
 
  
  G4cout << "\n----> Histogram file is opened in " << fileName << G4endl;
@@ -143,7 +150,8 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
  fLabs = trackLAbs;
  fLgap = trackLGap;
 
-  if (fNtupl) fNtupl->Fill();
+  if (fNtuple1) fNtuple1->Fill();
+  if (fNtuple2) fNtuple2->Fill();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -69,7 +69,8 @@ class HistoManager
   
     TFile*   fRootFile;
     TH1D*    fHisto[MaxHisto];            
-    TTree*   fNtupl;    
+    TTree*   fNtuple1;    
+    TTree*   fNtuple2;    
 
     G4double fEabs;
     G4double fEgap;
