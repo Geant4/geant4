@@ -10,6 +10,8 @@ $Id$
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+01 April 2013 Andrea Dotti (exampleA01-V09-06-01)
+- New G4VUserPhysicsList interface 
 
 18 December 2012 Michael Kelsey (exampleA01-V09-06-00)
 - Replace G4AntiProtonAnnihiliationAtRest with G4AntiProtonAbsorptionFritiof.
