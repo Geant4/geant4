@@ -87,6 +87,7 @@ void HistoManager::book()
   // create selected histograms
   //
   analysisManager->SetFirstHistoId(1);
+  analysisManager->SetFirstNtupleId(1);
 
   fHistId[1] = analysisManager->CreateH1("1","Edep in absorber (MeV)",
                                               100, 0., 800*MeV);
@@ -104,11 +105,16 @@ void HistoManager::book()
                                               100, 0., 50*cm);
   fHistPt[4] = analysisManager->GetH1(fHistId[4]);
                                   
-  // Create 1 ntuple
+  // Create 1st ntuple (id = 1)
   //    
-  analysisManager->CreateNtuple("101", "Edep and TrackL");
+  analysisManager->CreateNtuple("101", "Edep");
   fNtColId[0] = analysisManager->CreateNtupleDColumn("Eabs");
   fNtColId[1] = analysisManager->CreateNtupleDColumn("Egap");
+  analysisManager->FinishNtuple();
+
+  // Create 2nd ntuple (id = 2)
+  //    
+  analysisManager->CreateNtuple("102", "TrackL");
   fNtColId[2] = analysisManager->CreateNtupleDColumn("Labs");
   fNtColId[3] = analysisManager->CreateNtupleDColumn("Lgap");
   analysisManager->FinishNtuple();
@@ -164,11 +170,14 @@ void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
                               G4double trackLAbs, G4double trackLGap)
 {                
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->FillNtupleDColumn(fNtColId[0], energyAbs);
-  analysisManager->FillNtupleDColumn(fNtColId[1], energyGap);
-  analysisManager->FillNtupleDColumn(fNtColId[2], trackLAbs);
-  analysisManager->FillNtupleDColumn(fNtColId[2], trackLGap);
-  analysisManager->AddNtupleRow();  
+  // Fill 1st ntuple ( id = 1)
+  analysisManager->FillNtupleDColumn(1,fNtColId[0], energyAbs);
+  analysisManager->FillNtupleDColumn(1,fNtColId[1], energyGap);
+  analysisManager->AddNtupleRow(1);  
+  // Fill 2nd ntuple ( id = 2)
+  analysisManager->FillNtupleDColumn(2,fNtColId[2], trackLAbs);
+  analysisManager->FillNtupleDColumn(2,fNtColId[3], trackLGap);
+  analysisManager->AddNtupleRow(2);  
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
