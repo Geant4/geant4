@@ -13,6 +13,20 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+27-Mar-2013, Andrea Dotti		(phys-lists-V09-06-10)
+- Adding mechanism for splitting class of base class G4VUserPhysicsList
+  for LBE physics list (needed for G4MT). 
+  Co-working with tag in run category
+
+28-Mar-2013, Alberto Ribon              (phys-lists-V09-06-09)
+- LBE physics list: replaced LEP/HEP with FTFP+BERT.
+
+20-Mar-2013, Vladimir Ivantchenko       (phys-lists-V09-06-08)
+- PhysListFactory - fixed typo in previous tag
+
+18-Mar-2013, Vladimir Ivantchenko       (phys-lists-V09-06-07)
+- PhysListFactory - fixed bug report #1458 (correct printout of
+    available Physics Lists); clean up of the code
 
 04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-06)
 04-Mar-2013, Davide Mancusi             (phys-lists-V09-06-05)

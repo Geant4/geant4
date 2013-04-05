@@ -151,9 +151,9 @@ void G4HadronInelasticQBBC::ConstructProcess()
     new G4CrossSectionInelastic(theAntiNuclXS);
 
   // loop over particles
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ) {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ) {
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String pname = particle->GetParticleName();
     //G4ProcessManager* pmanager = particle->GetProcessManager();
     if(verbose > 1) { 

@@ -88,10 +88,10 @@ void G4ChargeExchangePhysics::ConstructProcess()
 	   << model->GetModelName() << ">" << G4endl;
   }
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() )
   {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String pname = particle->GetParticleName();
     if(pname == "neutron"   || 
        pname == "pi-"       || 

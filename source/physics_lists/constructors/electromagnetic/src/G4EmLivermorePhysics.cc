@@ -215,11 +215,11 @@ void G4EmLivermorePhysics::ConstructProcess()
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Livermore EM Processes
-  theParticleIterator->reset();
+  aParticleIterator->reset();
 
-  while( (*theParticleIterator)() ){
+  while( (*aParticleIterator)() ){
   
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     //Applicability range for Livermore models

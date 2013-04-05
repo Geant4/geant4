@@ -13,6 +13,16 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+29-Mar-2013, Andrea Dotti		(phys-ctor-hinelastic-V09-06-09)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
+
+19-Mar-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-08)
+- Fixed quasi-elastic treatment (on for QGS; off for FTF) of the
+  previous tag.
+
+19-Mar-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-07)
+- Replaced LEP with FTFP+BERT in all inelastic physics constructors.
+- Depends on phys-builders-V09-06-05.
 
 08-Mar-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-06)
 - Fix problem with overlapping model ranges.

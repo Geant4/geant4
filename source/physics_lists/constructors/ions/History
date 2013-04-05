@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-Mar-2013, Alberto Ribon              (phys-ctor-ions-V09-06-01)
+- Fixed warning messages in G4IonQMDPhysics.
+
 10-Jan-2013, Gunter Folger              (phys-ctor-ions-V09-06-00)
 - new directory structure introduced. 
    constructors/ions classes

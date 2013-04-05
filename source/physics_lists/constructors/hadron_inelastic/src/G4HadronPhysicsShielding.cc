@@ -49,6 +49,7 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+#include "G4IonConstructor.hh"
 
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4NeutronHPBGGNucleonInelasticXS.hh"
@@ -119,9 +120,10 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool 
 #include "G4NeutronLENDBuilder.hh"
 void G4HadronPhysicsShielding::CreateModels()
 {
+  G4bool quasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
 
   theNeutrons=new G4NeutronBuilder;
-  theFTFPNeutron=new G4FTFPNeutronBuilder(QuasiElastic);
+  theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF);
   theNeutrons->RegisterMe(theFTFPNeutron);
   theNeutrons->RegisterMe(theBertiniNeutron=new G4BertiniNeutronBuilder);
   theBertiniNeutron->SetMinEnergy(19.9*MeV);
@@ -140,13 +142,13 @@ void G4HadronPhysicsShielding::CreateModels()
   }
 
   thePro=new G4ProtonBuilder;
-  theFTFPPro=new G4FTFPProtonBuilder(QuasiElastic);
+  theFTFPPro=new G4FTFPProtonBuilder(quasiElasticFTF);
   thePro->RegisterMe(theFTFPPro);
   thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
   theBertiniPro->SetMaxEnergy(5*GeV);
 
   thePiK=new G4PiKBuilder;
-  theFTFPPiK=new G4FTFPPiKBuilder(QuasiElastic);
+  theFTFPPiK=new G4FTFPPiKBuilder(quasiElasticFTF);
   thePiK->RegisterMe(theFTFPPiK);
   thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
   theBertiniPiK->SetMaxEnergy(5*GeV);
@@ -154,7 +156,7 @@ void G4HadronPhysicsShielding::CreateModels()
   theHyperon=new G4HyperonFTFPBuilder;
     
   theAntiBaryon=new G4AntiBarionBuilder;
-  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(QuasiElastic));
+  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasticFTF));
 }
 
 G4HadronPhysicsShielding::~G4HadronPhysicsShielding()
@@ -193,6 +195,9 @@ void G4HadronPhysicsShielding::ConstructParticle()
 
   G4ShortLivedConstructor pShortLivedConstructor;
   pShortLivedConstructor.ConstructParticle();  
+
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle();
 }
 
 #include "G4ProcessManager.hh"

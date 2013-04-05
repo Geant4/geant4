@@ -67,6 +67,7 @@ class G4FTFBinaryPionBuilder : public G4VPionBuilder
     virtual void Build(G4PionMinusInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
@@ -78,7 +79,7 @@ class G4FTFBinaryPionBuilder : public G4VPionBuilder
 
     G4VCrossSectionDataSet* thePiData;
     G4double theMin;
-
+    G4double theMax;
 };
 
 #endif

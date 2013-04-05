@@ -199,9 +199,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add standard EM Processes
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "gamma") {

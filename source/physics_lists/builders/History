@@ -1,4 +1,4 @@
-$Id: History 66704 2013-01-10 18:20:17Z gunter $
+ $Id: History 66704 2013-01-10 18:20:17Z gunter $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,19 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-Mar-2013, Alberto Ribon              (phys-builders-V09-06-06)
+- Fixed warning message in G4FTFBinaryKaonBuilder and G4HyperonFTFPBuilder.
+
+19-Mar-2013, Alberto Ribon              (phys-builders-V09-06-05)
+- Added a new method to the builders: G4FTFBinaryNeutronBuilder,
+                                      G4FTFBinaryProtonBuilder.
+
+19-Mar-2013, Alberto Ribon              (phys-builders-V09-06-04)
+- Added the new builders: G4FTFPPionBuilder, G4FTFPKaonBuilder,
+                          G4QGSBinaryPionBuilder, G4QGSBinaryKaonBuilder.
+- Added a new method to the builders: G4FTFBinaryPionBuilder,
+                                      G4FTFBinaryKaonBuilder.
 
 08-Mar-2013, Davide Mancusi             (phys-builders-V09-06-03)
 - Fix problem with overlapping model ranges.

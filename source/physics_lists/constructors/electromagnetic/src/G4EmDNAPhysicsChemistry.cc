@@ -465,15 +465,14 @@ void AddProcessManager(G4ParticleDefinition* newParticle, G4ProcessManager* newM
 
 	//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 	//record the process manager for each particle in master thread
-	if (newParticle->theProcessManagerShadow == 0 || newParticle->theProcessManagerShadow == NULL )
-	    newParticle->theProcessManagerShadow = newManager;
+    if ( newParticle->GetMasterProcessManager() == 0 )
+        newParticle->SetMasterProcessManager(newManager);
+	//if (newParticle->theProcessManagerShadow == 0 || newParticle->theProcessManagerShadow == NULL )
+	    //newParticle->theProcessManagerShadow = newManager;
 }
 
 void G4EmDNAPhysicsChemistry::ConstructProcess()
 {
-  if(verbose > 1) {
-    G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
-  }
 
     ConstructMolecules();
     // Is placed outside ConstructParticles to avoid
@@ -481,10 +480,10 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
 
     G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-    theParticleIterator->reset();
-    while( (*theParticleIterator)() )
+    aParticleIterator->reset();
+    while( (*aParticleIterator)() )
     {
-        G4ParticleDefinition* particle = theParticleIterator->value();
+        G4ParticleDefinition* particle = aParticleIterator->value();
         G4String particleName = particle->GetParticleName();
         G4String particleType = particle->GetParticleType();
         G4ProcessManager* pmanager = particle->GetProcessManager();

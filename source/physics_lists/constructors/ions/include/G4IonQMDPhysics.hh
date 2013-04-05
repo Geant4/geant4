@@ -85,9 +85,9 @@ private:
   std::vector<G4HadronInelasticProcess*> p_list;
   std::vector<G4HadronicInteraction*> model_list;
 
-  G4TripathiCrossSection* fTripathi;
-  G4TripathiLightCrossSection* fTripathiLight;
-  G4IonsShenCrossSection* fShen;
+  //G4TripathiCrossSection* fTripathi;
+  //G4TripathiLightCrossSection* fTripathiLight;
+  //G4IonsShenCrossSection* fShen;
 
   G4LEDeuteronInelastic*  fLEDModel;
   G4LETritonInelastic*    fLETModel;

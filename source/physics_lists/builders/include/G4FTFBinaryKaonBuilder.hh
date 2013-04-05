@@ -69,6 +69,7 @@ class G4FTFBinaryKaonBuilder : public G4VKaonBuilder
     virtual void Build(G4KaonZeroSInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
@@ -78,9 +79,8 @@ class G4FTFBinaryKaonBuilder : public G4VKaonBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
 
-    G4VCrossSectionDataSet* theKaonData;
     G4double theMin;
-
+    G4double theMax;
 };
 
 #endif

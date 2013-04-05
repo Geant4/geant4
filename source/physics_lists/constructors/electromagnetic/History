@@ -13,6 +13,12 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+29-Mar-2013, Andrea Dotti		(phys-ctor-em-V09-06-07)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
+
+21-Mar-2013, A. Dotti (phys-ctor-em-V09-06-06)
+- Use Get/Set methods to access master process manager pointer for G4ParticleDefinition 
+in EmDNA constructor (co-working tag with particles-V09-06-08)
 
 27-Feb-2013, V.Ivanchenko (phys-ctor-em-V09-06-05)
 -  in all constructors improved verbose oputput and fixed warning from

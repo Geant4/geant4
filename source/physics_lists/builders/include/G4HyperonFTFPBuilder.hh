@@ -81,7 +81,6 @@ class G4HyperonFTFPBuilder
     G4GeneratorPrecompoundInterface * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
-    G4QuasiElasticChannel * theQuasiElastic;
     G4LundStringFragmentation * theLund;
     G4CascadeInterface * theBertini;
     G4LambdaInelasticProcess*  theLambdaInelastic;

@@ -136,10 +136,10 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
   G4DiffuseElastic* model = 0;
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() )
   {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String pname = particle->GetParticleName();
     if(pname == "anti_lambda"  ||

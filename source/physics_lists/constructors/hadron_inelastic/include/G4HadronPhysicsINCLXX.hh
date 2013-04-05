@@ -32,6 +32,7 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// 19.03.2013 A.Ribon: Replace LEP with FTFP and BERT
 // 01.03.2013 D. Mancusi: Rename to G4HadronPhysicsINCLXX and introduce
 //                        parameters for FTFP and NeutronHP
 // 31.10.2012 A.Ribon: Use G4MiscBuilder
@@ -46,17 +47,14 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscBuilder.hh"
 
 #include "G4PiKBuilder.hh"
-#include "G4LEPPiKBuilder.hh"
 #include "G4QGSPPiKBuilder.hh"
 #include "G4FTFPPiKBuilder.hh"
 #include "G4BertiniPiKBuilder.hh"
 #include "G4INCLXXPiKBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
-#include "G4LEPProtonBuilder.hh"
 #include "G4QGSPProtonBuilder.hh"
 #include "G4FTFPProtonBuilder.hh"
 #include "G4BertiniProtonBuilder.hh"
@@ -98,22 +96,24 @@ class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
 
   private:
     void CreateModels();
+
     G4NeutronBuilder * theNeutrons;
     G4LEPNeutronBuilder * theLEPNeutron;
-    G4VNeutronBuilder * theHighEnergyNeutron;
+    G4QGSPNeutronBuilder * theQGSPNeutron;
+    G4FTFPNeutronBuilder * theFTFPNeutron;
     G4BertiniNeutronBuilder * theBertiniNeutron;
     G4INCLXXNeutronBuilder * theINCLXXNeutron;
     G4NeutronHPBuilder * theNeutronHP;
     
     G4PiKBuilder * thePiK;
-    G4LEPPiKBuilder * theLEPPiK;
-    G4VPiKBuilder * theHighEnergyPiK;
+    G4QGSPPiKBuilder * theQGSPPiK;
+    G4FTFPPiKBuilder * theFTFPPiK;
     G4BertiniPiKBuilder * theBertiniPiK;
     G4INCLXXPiKBuilder * theINCLXXPiK;
     
     G4ProtonBuilder * thePro;
-    G4LEPProtonBuilder * theLEPPro;
-    G4VProtonBuilder * theHighEnergyPro; 
+    G4QGSPProtonBuilder * theQGSPPro;
+    G4FTFPProtonBuilder * theFTFPPro;
     G4BertiniProtonBuilder * theBertiniPro;
     G4INCLXXProtonBuilder * theINCLXXPro;
     
@@ -121,9 +121,7 @@ class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
     
     G4AntiBarionBuilder * theAntiBaryon;
     G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-    G4MiscBuilder * theMisc;
-    
+ 
     G4bool QuasiElastic;
     G4bool withNeutronHP;
     G4bool withFTFP;

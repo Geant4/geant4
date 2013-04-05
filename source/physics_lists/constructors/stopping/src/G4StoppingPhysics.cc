@@ -121,11 +121,11 @@ void G4StoppingPhysics::ConstructProcess() {
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* pmanager = 0;
 
-  theParticleIterator->reset();
+  aParticleIterator->reset();
 
-  while ( (*theParticleIterator)() ) {
+  while ( (*aParticleIterator)() ) {
 
-    particle = theParticleIterator->value();
+    particle = aParticleIterator->value();
     pmanager = particle->GetProcessManager();
 
     if ( particle == G4MuonMinus::MuonMinus() ) {

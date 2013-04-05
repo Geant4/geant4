@@ -13,6 +13,8 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+29-Mar-2013, Andrea Dotti		(phys-ctor-limiters-V09-06-02)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
 
 02-Feb-2013, V.Ivanchenko               (phys-ctor-limiters-V09-06-01)
 - added forgotten G4StepLimiterPhysics and fixed source.cmake 

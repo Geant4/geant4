@@ -69,6 +69,7 @@ class G4FTFBinaryNeutronBuilder : public G4VNeutronBuilder
     virtual void Build(G4NeutronInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
     G4TheoFSGenerator * theModel;
@@ -78,7 +79,7 @@ class G4FTFBinaryNeutronBuilder : public G4VNeutronBuilder
     G4QuasiElasticChannel * theQuasiElastic;
 
     G4double theMin;
-
+    G4double theMax;
 };
 
 #endif

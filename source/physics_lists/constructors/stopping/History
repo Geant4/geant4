@@ -13,6 +13,8 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+29-Mar-2013, Andrea Dotti		(phys-ctor-stopping-V09-06-01)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
 
 10-Jan-2013, Gunter Folger              (phys-ctor-stopping-V09-06-00)
 - new directory structure introduced. 

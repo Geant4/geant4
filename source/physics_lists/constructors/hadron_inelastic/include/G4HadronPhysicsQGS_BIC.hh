@@ -43,22 +43,33 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscBuilder.hh"
 
-#include "G4PiKBuilder.hh"
-#include "G4BinaryPiKBuilder.hh"
-#include "G4LEPPiKBuilder.hh"
-#include "G4QGSBinaryPiKBuilder.hh"
+#include "G4PionBuilder.hh"
+#include "G4BinaryPionBuilder.hh"
+#include "G4BertiniPionBuilder.hh"
+#include "G4FTFBinaryPionBuilder.hh"
+#include "G4QGSBinaryPionBuilder.hh"
+
+#include "G4KaonBuilder.hh"
+#include "G4BertiniKaonBuilder.hh"
+#include "G4FTFBinaryKaonBuilder.hh"
+#include "G4QGSBinaryKaonBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
-#include "G4LEPProtonBuilder.hh"
+#include "G4FTFBinaryProtonBuilder.hh"
 #include "G4QGSBinaryProtonBuilder.hh"
 #include "G4BinaryProtonBuilder.hh"
 
 #include "G4NeutronBuilder.hh"
 #include "G4LEPNeutronBuilder.hh"
+#include "G4FTFBinaryNeutronBuilder.hh"
 #include "G4QGSBinaryNeutronBuilder.hh"
 #include "G4BinaryNeutronBuilder.hh"
+
+#include "G4HyperonFTFPBuilder.hh"
+#include "G4AntiBarionBuilder.hh"
+#include "G4FTFPAntiBarionBuilder.hh"
+
 
 class G4HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
 {
@@ -73,22 +84,33 @@ class G4HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
 
   private:
     void CreateModels();
+
     G4NeutronBuilder * theNeutrons;
     G4LEPNeutronBuilder * theLEPNeutron;
+    G4FTFBinaryNeutronBuilder * theFTFBinaryNeutron;
     G4QGSBinaryNeutronBuilder * theQGSBinaryNeutron;
     G4BinaryNeutronBuilder * theBinaryNeutron;
-    
-    G4PiKBuilder * thePiK;
-    G4BinaryPiKBuilder * theBICPiK;
-    G4LEPPiKBuilder * theLEPPiK;
-    G4QGSBinaryPiKBuilder * theQGSBinaryPiK;
-    
+
+    G4PionBuilder * thePion;
+    G4BinaryPionBuilder * theBinaryPion;
+    G4BertiniPionBuilder * theBertiniPion;
+    G4FTFBinaryPionBuilder * theFTFBinaryPion;
+    G4QGSBinaryPionBuilder * theQGSBinaryPion;
+
+    G4KaonBuilder * theKaon;
+    G4BertiniKaonBuilder * theBertiniKaon;
+    G4FTFBinaryKaonBuilder * theFTFBinaryKaon;
+    G4QGSBinaryKaonBuilder * theQGSBinaryKaon;
+
     G4ProtonBuilder * thePro;
-    G4LEPProtonBuilder * theLEPPro;
-    G4QGSBinaryProtonBuilder * theQGSBinaryPro; 
+    G4FTFBinaryProtonBuilder * theFTFBinaryPro;
+    G4QGSBinaryProtonBuilder * theQGSBinaryPro;
     G4BinaryProtonBuilder * theBinaryPro;
-    
-    G4MiscBuilder * theMisc;
+
+    G4HyperonFTFPBuilder * theHyperon;
+
+    G4AntiBarionBuilder * theAntiBaryon;
+    G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
     
     G4bool QuasiElastic;
 };

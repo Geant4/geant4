@@ -27,45 +27,34 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4FTFBinaryProtonBuilder
-//
-// Author: 2008 G.Folger
-//
 // Modified:
-// 18.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
-//             section at high energies.
-// 30.03.2009 V.Ivanchenko create cross section by new
 //
 //----------------------------------------------------------------------------
 //
-#include "G4FTFBinaryProtonBuilder.hh"
+#include "G4FTFPPionBuilder.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProtonInelasticCrossSection.hh"
-#include "G4BGGNucleonInelasticXS.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4CrossSectionPairGG.hh"
 
-G4FTFBinaryProtonBuilder::
-G4FTFBinaryProtonBuilder(G4bool quasiElastic) 
+G4FTFPPionBuilder::
+G4FTFPPionBuilder(G4bool quasiElastic) 
 {
+  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
   theMin = 4*GeV;
   theMax = 100*TeV;
-  theModel = new G4TheoFSGenerator("FTFB");
+  theModel = new G4TheoFSGenerator("FTFP");
 
   theStringModel = new G4FTFModel;
-  theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
+  theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
-  theModel->SetTransport(theCascade);
+  thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
+  theCascade = new G4GeneratorPrecompoundInterface(thePreEquilib);
 
   theModel->SetHighEnergyGenerator(theStringModel);
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-
   if (quasiElastic)
   {
      theQuasiElastic=new G4QuasiElasticChannel;
@@ -73,28 +62,40 @@ G4FTFBinaryProtonBuilder(G4bool quasiElastic)
   } else 
   {  theQuasiElastic=0;}  
 
-}
-
-void G4FTFBinaryProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
-{
+  theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theModel);
-  aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
+  theModel->SetMaxEnergy(100*TeV);
 }
 
-G4FTFBinaryProtonBuilder::
-~G4FTFBinaryProtonBuilder() 
+G4FTFPPionBuilder::~G4FTFPPionBuilder() 
 {
+  delete theCascade;
   delete theStringDecay;
   delete theStringModel;
   delete theModel;
-  delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
+  //delete theHandler;
+  delete theLund;
 }
 
-void G4FTFBinaryProtonBuilder::
-Build(G4HadronElasticProcess * )
+void G4FTFPPionBuilder::
+Build(G4HadronElasticProcess * ) {}
+
+void G4FTFPPionBuilder::
+Build(G4PionPlusInelasticProcess * aP)
 {
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP->AddDataSet(thePiData);
+  aP->RegisterMe(theModel);
 }
+
+void G4FTFPPionBuilder::
+Build(G4PionMinusInelasticProcess * aP)
+{
+  theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
+  aP->AddDataSet(thePiData);
+  aP->RegisterMe(theModel);
+}
+

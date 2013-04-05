@@ -36,6 +36,7 @@
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 25.04.2007 G.Folger: Add quasielastic as option, use quasielastic by default
 // 31.10.2012 A.Ribon: Use G4MiscBuilder
+// 19.03.2013 A.Ribon: Replace LEP with FTFP and BERT
 //
 //----------------------------------------------------------------------------
 //
@@ -46,21 +47,27 @@
 #include "G4ios.hh"
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4MiscBuilder.hh"
 
 #include "G4PiKBuilder.hh"
-#include "G4LEPPiKBuilder.hh"
+#include "G4FTFPPiKBuilder.hh"
 #include "G4QGSPPiKBuilder.hh"
+#include "G4BertiniPiKBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
-#include "G4LEPProtonBuilder.hh"
+#include "G4FTFPProtonBuilder.hh"
 #include "G4QGSPProtonBuilder.hh"
 #include "G4BinaryProtonBuilder.hh"
 
 #include "G4NeutronBuilder.hh"
 #include "G4LEPNeutronBuilder.hh"
+#include "G4FTFPNeutronBuilder.hh"
 #include "G4QGSPNeutronBuilder.hh"
 #include "G4BinaryNeutronBuilder.hh"
+
+#include "G4HyperonFTFPBuilder.hh"
+#include "G4AntiBarionBuilder.hh"
+#include "G4FTFPAntiBarionBuilder.hh"
+
 
 class G4HadronPhysicsQGSP_BIC : public G4VPhysicsConstructor
 {
@@ -75,22 +82,28 @@ class G4HadronPhysicsQGSP_BIC : public G4VPhysicsConstructor
 
   private:
     void CreateModels();
+
     G4NeutronBuilder * theNeutrons;
     G4LEPNeutronBuilder * theLEPNeutron;
+    G4FTFPNeutronBuilder * theFTFPNeutron;
     G4QGSPNeutronBuilder * theQGSPNeutron;
     G4BinaryNeutronBuilder * theBinaryNeutron;
     
     G4PiKBuilder * thePiK;
-    G4LEPPiKBuilder * theLEPPiK;
+    G4FTFPPiKBuilder * theFTFPPiK;
     G4QGSPPiKBuilder * theQGSPPiK;
+    G4BertiniPiKBuilder * theBertiniPiK;
     
     G4ProtonBuilder * thePro;
-    G4LEPProtonBuilder * theLEPPro;
+    G4FTFPProtonBuilder * theFTFPPro;
     G4QGSPProtonBuilder * theQGSPPro; 
     G4BinaryProtonBuilder * theBinaryPro;
-    
-    G4MiscBuilder * theMisc;
-    
+
+    G4HyperonFTFPBuilder * theHyperon;
+
+    G4AntiBarionBuilder * theAntiBaryon;
+    G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+
     G4bool QuasiElastic;
 };
 

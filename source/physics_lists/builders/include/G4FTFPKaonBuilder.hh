@@ -27,74 +27,66 @@
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4FTFBinaryProtonBuilder
+// ClassName:   G4FTFPKaonBuilder
 //
-// Author: 2008 G.Folger
+// Author: 14-Mar-2013 A. Ribon
 //
-// Modified:
-// 18.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
-//             section at high energies.
-// 30.03.2009 V.Ivanchenko create cross section by new
+// Description: Modified version of G4FTFPPiKBuilder to include on kaons.
+//
+// Modified
 //
 //----------------------------------------------------------------------------
 //
-#include "G4FTFBinaryProtonBuilder.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
-#include "G4ProcessManager.hh"
-#include "G4ProtonInelasticCrossSection.hh"
-#include "G4BGGNucleonInelasticXS.hh"
+#ifndef G4FTFPKaonBuilder_h
+#define G4FTFPKaonBuilder_h 1
 
-G4FTFBinaryProtonBuilder::
-G4FTFBinaryProtonBuilder(G4bool quasiElastic) 
+#include "globals.hh"
+
+#include "G4HadronElasticProcess.hh"
+#include "G4VKaonBuilder.hh"
+
+#include "G4TheoFSGenerator.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4FTFModel.hh"
+#include "G4LundStringFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
+
+#include "G4VCrossSectionDataSet.hh"
+
+class G4FTFPKaonBuilder : public G4VKaonBuilder
 {
-  theMin = 4*GeV;
-  theMax = 100*TeV;
-  theModel = new G4TheoFSGenerator("FTFB");
+  public: 
+    G4FTFPKaonBuilder(G4bool quasiElastic=false);
+    virtual ~G4FTFPKaonBuilder();
 
-  theStringModel = new G4FTFModel;
-  theStringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
-  theStringModel->SetFragmentationModel(theStringDecay);
+  public: 
+    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4KaonPlusInelasticProcess * aP);
+    virtual void Build(G4KaonMinusInelasticProcess * aP);
+    virtual void Build(G4KaonZeroLInelasticProcess * aP);
+    virtual void Build(G4KaonZeroSInelasticProcess * aP);
+    
+    void SetMinEnergy(G4double aM) {theMin = aM;}
+    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
-  theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
-  theModel->SetTransport(theCascade);
+  private:
+    G4TheoFSGenerator * theModel;
+    G4PreCompoundModel * thePreEquilib;
+    G4GeneratorPrecompoundInterface * theCascade;
+    G4FTFModel * theStringModel;
+    G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
+    G4LundStringFragmentation * theLund;
+    G4ExcitationHandler * theHandler;
 
-  theModel->SetHighEnergyGenerator(theStringModel);
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
+    G4double theMin;
+    G4double theMax;
 
-  if (quasiElastic)
-  {
-     theQuasiElastic=new G4QuasiElasticChannel;
-     theModel->SetQuasiElasticChannel(theQuasiElastic);
-  } else 
-  {  theQuasiElastic=0;}  
+};
 
-}
 
-void G4FTFBinaryProtonBuilder::
-Build(G4ProtonInelasticProcess * aP)
-{
-  theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(theMax);
-  aP->RegisterMe(theModel);
-  aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Proton::Proton()));
-}
+#endif
 
-G4FTFBinaryProtonBuilder::
-~G4FTFBinaryProtonBuilder() 
-{
-  delete theStringDecay;
-  delete theStringModel;
-  delete theModel;
-  delete theCascade;
-  if ( theQuasiElastic ) delete theQuasiElastic;
-}
-
-void G4FTFBinaryProtonBuilder::
-Build(G4HadronElasticProcess * )
-{
-}

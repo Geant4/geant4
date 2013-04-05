@@ -13,6 +13,8 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+29-Mar-2013, Andrea Dotti		(phys-ctor-helastic-V09-06-03)
+- Changes needed for MT: now G4VUserPhysicsList is a split class
 
 27-Feb-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-02)
 - G4ChargeExchangePhysics - removed obsolete constructor and member of 

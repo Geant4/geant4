@@ -118,8 +118,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4FTFBinaryProtonBuilder.hh
         G4FTFBuilder.hh
         G4FTFPAntiBarionBuilder.hh
+        G4FTFPKaonBuilder.hh
         G4FTFPNeutronBuilder.hh
         G4FTFPPiKBuilder.hh
+        G4FTFPPionBuilder.hh
         G4FTFPProtonBuilder.hh
         G4HyperonFTFPBuilder.hh
         G4INCLXXNeutronBuilder.hh
@@ -140,8 +142,10 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4PrecoNeutronBuilder.hh
         G4PrecoProtonBuilder.hh
         G4ProtonBuilder.hh
+        G4QGSBinaryKaonBuilder.hh
         G4QGSBinaryNeutronBuilder.hh
         G4QGSBinaryPiKBuilder.hh
+        G4QGSBinaryPionBuilder.hh
         G4QGSBinaryProtonBuilder.hh
         G4QGSBuilder.hh
         G4QGSPNeutronBuilder.hh
@@ -155,7 +159,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4VPiKBuilder.hh
         G4VPionBuilder.hh
         G4VProtonBuilder.hh
-TheoModelFactory.hh
+        TheoModelFactory.hh
     SOURCES
         G4AntiBarionBuilder.cc
         G4BertiniKaonBuilder.cc
@@ -174,8 +178,10 @@ TheoModelFactory.hh
         G4FTFBinaryProtonBuilder.cc
         G4FTFBuilder.cc
         G4FTFPAntiBarionBuilder.cc
+        G4FTFPKaonBuilder.cc
         G4FTFPNeutronBuilder.cc
         G4FTFPPiKBuilder.cc
+        G4FTFPPionBuilder.cc
         G4FTFPProtonBuilder.cc
         G4HyperonFTFPBuilder.cc
         G4INCLXXNeutronBuilder.cc
@@ -196,8 +202,10 @@ TheoModelFactory.hh
         G4PrecoNeutronBuilder.cc
         G4PrecoProtonBuilder.cc
         G4ProtonBuilder.cc
+        G4QGSBinaryKaonBuilder.cc
         G4QGSBinaryNeutronBuilder.cc
         G4QGSBinaryPiKBuilder.cc
+        G4QGSBinaryPionBuilder.cc
         G4QGSBinaryProtonBuilder.cc
         G4QGSBuilder.cc
         G4QGSPNeutronBuilder.cc

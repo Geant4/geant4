@@ -53,6 +53,7 @@ G4FTFBinaryKaonBuilder::
 G4FTFBinaryKaonBuilder(G4bool quasiElastic)
 {    
   theMin = 4*GeV;
+  theMax = 100*TeV;
   theModel = new G4TheoFSGenerator("FTFB");
 
   theStringModel = new G4FTFModel;
@@ -73,7 +74,7 @@ G4FTFBinaryKaonBuilder(G4bool quasiElastic)
 
   theModel->SetTransport(theCascade);
   theModel->SetMinEnergy(theMin);
-  theModel->SetMaxEnergy(100*TeV);
+  theModel->SetMaxEnergy(theMax);
 }
 
 G4FTFBinaryKaonBuilder:: ~G4FTFBinaryKaonBuilder()
@@ -92,6 +93,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonPlusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
@@ -100,6 +102,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonMinusInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
@@ -108,6 +111,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonZeroLInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
+  theModel->SetMaxEnergy(theMax);
   aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
@@ -116,7 +120,7 @@ void G4FTFBinaryKaonBuilder::
 Build(G4KaonZeroSInelasticProcess * aP)
 {
   theModel->SetMinEnergy(theMin);
-    
+  theModel->SetMaxEnergy(theMax);    
   aP->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   aP->RegisterMe(theModel);
 }
