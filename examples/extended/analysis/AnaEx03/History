@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-04-13 I. Hrivnacova (AnaEx03-V09-06-00)
+- Create two ntuples instead of one in order to demonstrate 
+  how to do this with all tools.
+    
 13-11-12 I. Hrivnacova (AnaEx03-V09-05-05)   
 - Fixed order of instatiating G4VisExecutive and G4UIExecutive
   (required when Qt driver is activated).

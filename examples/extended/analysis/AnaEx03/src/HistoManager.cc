@@ -42,7 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:fAF(0),fTree(0),fNtupl(0)
+:fAF(0),fTree(0), fNtuple1(0), fNtuple2(0)
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
@@ -57,9 +57,6 @@ HistoManager::HistoManager()
       
   // histograms
   for (G4int k=0; k<MaxHisto; k++) fHisto[k] = 0;
-    
-  // ntuple
-  fNtupl = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,7 +132,8 @@ void HistoManager::book()
  fTree->mkdir("tuples");
  fTree->cd("tuples");
   
- fNtupl = ntf->create("101", "Edep and TrackL", "double Eabs, Egap, Labs, Lgap");
+ fNtuple1 = ntf->create("101", "Edep", "double Eabs, Egap");
+ fNtuple2 = ntf->create("102", "TrackL", "double Labs, Lgap");
  
  delete ntf;
  fTree->cd("..");
@@ -195,12 +193,15 @@ void HistoManager::Normalize(G4int ih, G4double fac)
 void HistoManager::FillNtuple(G4double energyAbs, G4double energyGap,
                               G4double trackLAbs, G4double trackLGap)
 {                              
-  if (fNtupl) {
-    fNtupl->fill(0, energyAbs);
-    fNtupl->fill(1, energyGap);
-    fNtupl->fill(2, trackLAbs);
-    fNtupl->fill(3, trackLGap);
-    fNtupl->addRow();
+  if (fNtuple1) {
+    fNtuple1->fill(0, energyAbs);
+    fNtuple1->fill(1, energyGap);
+    fNtuple1->addRow();
+  }  
+  if (fNtuple2) {
+    fNtuple2->fill(0, trackLAbs);
+    fNtuple2->fill(1, trackLGap);
+    fNtuple2->addRow();
   }  
 }
 #else
@@ -217,17 +218,17 @@ void HistoManager::PrintStatistic()
     G4cout << "\n ----> print histograms statistic \n" << G4endl;
     
     G4cout 
-       << " EAbs : mean = " << G4BestUnit(fHisto[1]->mean(), "Energy") 
-               << " rms = " << G4BestUnit(fHisto[1]->rms(),  "Energy") << G4endl;
+      << " EAbs : mean = " << G4BestUnit(fHisto[1]->mean(), "Energy") 
+              << " rms = " << G4BestUnit(fHisto[1]->rms(),  "Energy") << G4endl;
     G4cout                
-       << " EGap : mean = " << G4BestUnit(fHisto[2]->mean(), "Energy") 
-               << " rms = " << G4BestUnit(fHisto[2]->rms(),  "Energy") << G4endl;
+      << " EGap : mean = " << G4BestUnit(fHisto[2]->mean(), "Energy") 
+              << " rms = " << G4BestUnit(fHisto[2]->rms(),  "Energy") << G4endl;
     G4cout 
-       << " LAbs : mean = " << G4BestUnit(fHisto[3]->mean(), "Length") 
-               << " rms = " << G4BestUnit(fHisto[3]->rms(),  "Length") << G4endl;
+      << " LAbs : mean = " << G4BestUnit(fHisto[3]->mean(), "Length") 
+              << " rms = " << G4BestUnit(fHisto[3]->rms(),  "Length") << G4endl;
     G4cout 
-       << " LGap : mean = " << G4BestUnit(fHisto[4]->mean(), "Length") 
-               << " rms = " << G4BestUnit(fHisto[4]->rms(),  "Length") << G4endl;
+      << " LGap : mean = " << G4BestUnit(fHisto[4]->mean(), "Length") 
+              << " rms = " << G4BestUnit(fHisto[4]->rms(),  "Length") << G4endl;
 
   }
 #endif
