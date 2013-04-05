@@ -21,9 +21,15 @@ if(NOT GEANT4_USE_SYSTEM_CLHEP)
 endif()
 
 #----------------------------------------------------------------------------
-# We only need internal exapt if it was requested
+# We only need internal expat if it was requested
 #
 if(NOT GEANT4_USE_SYSTEM_EXPAT)
     add_subdirectory(expat)
 endif()
 
+#
+# Geant4 internal ZLIB build optional
+#
+if(NOT GEANT4_USE_SYSTEM_ZLIB)
+    add_subdirectory(zlib)
+endif()

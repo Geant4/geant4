@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-March-2013: G.Cosmo (externals-V09-06-00)
+- Moved G4 zlib module from visualization/externals.
+
 15-November-2012: G.Cosmo (externals-V09-05-04)
 - Updated CLHEP module to version 2.1.3.1.
 

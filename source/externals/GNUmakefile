@@ -30,6 +30,10 @@ ifdef G4LIB_USE_EXPAT
   SUBDIRS += expat
   SUBLIBS += G4expat
 endif
+ifdef G4LIB_USE_ZLIB
+  SUBDIRS += zlib
+  SUBLIBS += G4zlib
+endif
 
 .PHONY: granular obj glob global clean
 

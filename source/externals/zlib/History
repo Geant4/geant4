@@ -1,0 +1,28 @@
+$Id: History 66373 2012-12-18 09:41:34Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for G4 zlib package
+--------------------------------
+
+20 March 2013 Gabriele Cosmo (zlib-V09-06-00)
+- Moved from visualization/externals module
+
+25 May 2005 Mark Donszelmann
+- zlib version 1.2.2
+
