@@ -68,6 +68,9 @@ class G4Run
     //  Method to be overwritten by the user for recording events in this run.
     //  In such a case, it is the user's responsibility to increment numberOfEvent.
     //  Also, user's run class object must be instantiated in user's runAction.
+    virtual void Merge(const G4Run*);
+    //  Method to be overwritten by the user for merging local G4Run object to 
+    //  the global G4Run object.
 
   public: // with description
     inline G4int GetRunID() const

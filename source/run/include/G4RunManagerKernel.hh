@@ -91,9 +91,11 @@ class G4RunManagerKernel
     //  The constructor and the destructor. The user must construct this class
     // object at the beginning of his/her main() and must delete it at the 
     // bottom of the main(), unless he/she used G4RunManager.
-
+protected:
+    G4RunManagerKernel(G4bool isWorkerRunManagerKernel);
+    //Constructor to be used by derived classes if a kernel for workers is needed
   public: // with description
-    void DefineWorldVolume(G4VPhysicalVolume * worldVol,
+    virtual void DefineWorldVolume(G4VPhysicalVolume * worldVol,
                            G4bool topologyIsChanged=true);
 
  
@@ -108,7 +110,7 @@ class G4RunManagerKernel
     // set to false, so that the original optimisation and navigation history is
     // preserved. This method is invoked also at initialisation.
 
-    void SetPhysics(G4VUserPhysicsList* uPhys);
+    virtual void SetPhysics(G4VUserPhysicsList* uPhys);
     //  This method must be invoked at least once by the user with a valid
     // concrete implementation of user physics list. 
 
@@ -124,13 +126,17 @@ class G4RunManagerKernel
     //  Set the application state to G4State_Idle so that the user can modify
     // physics/geometry.
 
+  protected:
+    virtual void SetupDefaultRegion();
+    //Called by DefineWorldVolume
+    virtual void SetupPhysics();
   private:
-    void ResetNavigator();
+    virtual void ResetNavigator();
     void BuildPhysicsTables();
     void CheckRegions();
 
   public: // with description
-    void UpdateRegion();
+    virtual void UpdateRegion();
     // Update region list. 
     // This method is mandatory before invoking following two dump methods.
     // At RunInitialization(), this method is automatically invoked, and thus
@@ -148,7 +154,6 @@ class G4RunManagerKernel
     G4VPhysicalVolume* currentWorld;
     G4bool geometryInitialized;
     G4bool physicsInitialized;
-    G4bool geometryNeedsToBeClosed;
     G4bool geometryToBeOptimized;
     G4bool physicsNeedsToBeReBuilt;
     G4int verboseLevel;
@@ -156,10 +161,11 @@ class G4RunManagerKernel
 
     G4EventManager * eventManager;
     G4ExceptionHandler* defaultExceptionHandler;
+    G4String versionString;
+  protected:
     G4Region* defaultRegion;
     G4Region* defaultRegionForParallelWorld;
-    G4String versionString;
-
+    G4bool geometryNeedsToBeClosed;
   public: // with description
     inline void GeometryHasBeenModified()
     { geometryNeedsToBeClosed = true; }
@@ -206,6 +212,11 @@ class G4RunManagerKernel
     inline void SetNumberOfParallelWorld(G4int i)
     { numberOfParallelWorld = i; }
 
+    inline G4VUserPhysicsList* GetPhysicsList() const
+    { return physicsList; }
+
+    inline G4VPhysicalVolume* GetCurrentWorld() const
+    { return currentWorld; }
   private:
     void CheckRegularGeometry();
     G4bool ConfirmCoupledTransportation();

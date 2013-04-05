@@ -44,6 +44,10 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
+#TODO ANDREA: TODO REMOVE THIS DEPENDENCY AFTER REFACTORING G4WorkerThread
+# Check also granula dependency
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
+
 
 #
 # Define the Geant4 Module.
@@ -62,7 +66,10 @@ GEANT4_DEFINE_MODULE(NAME G4run
 	G4PhysicsListOrderingParameter.hh
         G4Run.hh
         G4RunManager.hh
+	G4WorkerRunManager.hh
+	G4MTRunManager.hh
         G4RunManagerKernel.hh
+        G4WorkerRunManagerKernel.hh
         G4RunMessenger.hh
         G4UserPhysicsListMessenger.hh
         G4UserRunAction.hh
@@ -73,6 +80,10 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4VUserParallelWorld.hh
         G4VUserPhysicsList.hh
         G4VUserPrimaryGeneratorAction.hh
+	G4WorkerThread.hh
+	G4VUserWorkerInitialization.hh
+        G4VUPLSplitter.hh
+        vupldefs.hh
     SOURCES
         G4AdjointPrimaryGeneratorAction.cc
         G4AdjointSimManager.cc
@@ -85,7 +96,10 @@ GEANT4_DEFINE_MODULE(NAME G4run
 	G4PhysicsListOrderingParamater.cc
         G4Run.cc
         G4RunManager.cc
+	G4WorkerRunManager.cc
+	G4MTRunManager.cc
         G4RunManagerKernel.cc
+        G4WorkerRunManagerKernel.cc
         G4RunMessenger.cc
         G4UserPhysicsListMessenger.cc
         G4UserRunAction.cc
@@ -96,6 +110,8 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4VPhysicsConstructor.cc
         G4VUserPhysicsList.cc
         G4VUserPrimaryGeneratorAction.cc
+	G4WorkerThread.cc
+	G4VUserWorkerInitialization.cc
     GRANULAR_DEPENDENCIES
         G4cuts
         G4decay
@@ -120,6 +136,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4tracking
         G4transportation
         G4volumes
+	G4specsolids
     GLOBAL_DEPENDENCIES
         G4digits_hits
         G4event

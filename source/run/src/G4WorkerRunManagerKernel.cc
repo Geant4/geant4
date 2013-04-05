@@ -23,37 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
-//
 
-#include "G4Run.hh"
-#include "G4Event.hh"
+#include "G4WorkerRunManagerKernel.hh"
+#include "G4RegionStore.hh"
+#include "G4StateManager.hh"
 
-G4Run::G4Run()
-:runID(0),numberOfEvent(0),numberOfEventToBeProcessed(0),HCtable(0),DCtable(0)
-{ eventVector = new std::vector<const G4Event*>; }
-
-G4Run::~G4Run()
+G4WorkerRunManagerKernel::G4WorkerRunManagerKernel() : G4RunManagerKernel(true)
 {
-  std::vector<const G4Event*>::iterator itr = eventVector->begin();
-  for(;itr!=eventVector->end();itr++)
-  { delete *itr; }
-  delete eventVector;
+    //This version of the constructor should never be called in sequential mode!
+#ifndef G4MULTITHREADED
+    G4ExceptionDescription msg;
+    msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
+    msg<<" This type of RunManager can only be used in mult-threaded applications.";
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
+#endif
+
 }
 
-void G4Run::RecordEvent(const G4Event*)
-{ numberOfEvent++; }
-
-void G4Run::Merge(const G4Run* right)
+G4WorkerRunManagerKernel::~G4WorkerRunManagerKernel()
 {
-  numberOfEvent += right->numberOfEvent; 
-  std::vector<const G4Event*>::iterator itr = right->eventVector->begin();
-  for(;itr!=right->eventVector->end();itr++)
-  { eventVector->push_back(*itr); }
-  right->eventVector->clear();
 }
 
-void G4Run::StoreEvent(G4Event* evt)
-{ eventVector->push_back(evt); }
+void G4WorkerRunManagerKernel::SetupDefaultRegion()
+{
+    //Nothing to do for worker
+}
+
+void G4WorkerRunManagerKernel::SetupPhysics()
+{
+    //Nothing to do for worker
+}
+
+void G4WorkerRunManagerKernel::UpdateRegion()
+{
+    //Just check the state, the rest is done by master thread
+    G4StateManager*    stateManager = G4StateManager::GetStateManager();
+    G4ApplicationState currentState = stateManager->GetCurrentState();
+    if( currentState != G4State_Idle )
+    {
+        G4Exception("G4RunManagerKernel::UpdateRegion",
+                    "Run0024",
+                    JustWarning,
+                    "Geant4 kernel not in Idle state : method ignored.");
+        return;
+    }
+}
+
+void G4WorkerRunManagerKernel::ResetNavigator()
+{
+    //All the work is done by master thread
+    geometryNeedsToBeClosed = false;
+
+}
 

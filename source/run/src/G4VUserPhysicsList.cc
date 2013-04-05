@@ -44,9 +44,13 @@
 //       Modify PreparePhysicsList        18 Jan 2006 by H.Kurashige
 //       Added PhysicsListHelper           29 APr. 2011 H.Kurashige
 //       Added default impelmentation of SetCuts 10 June 2011 H.Kurashige 
-//           SetCuts is not 'pure virtual' any more 
+//           SetCuts is not 'pure virtual' any more
+//       Transformation for G4MT         26 Mar 2013 A. Dotti
+//           PL is shared by threads. Adding a method for workers
+//           To initialize thread specific data
 // ------------------------------------------------------------
 
+#include "G4PhysicsListHelper.hh"
 #include "G4VUserPhysicsList.hh"
 
 //Andrea Dotti (Jan 13, 2013), transformation for G4MT
@@ -56,7 +60,6 @@
 
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4PhysicsListHelper.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTable.hh"
@@ -75,12 +78,28 @@
 #include <iomanip>
 #include <fstream>
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//lock for particle table accesses.
-#ifdef G4MULTITHREADED
-pthread_mutex_t particleTable = PTHREAD_MUTEX_INITIALIZER;
-G4ThreadLocal int lockCount = 0;
-#endif
+// This static member is thread local. For each thread, it holds the array
+// size of G4VUPLData instances.
+//
+template <class G4VUPLData> G4ThreadLocal
+G4int G4VUPLSplitter<G4VUPLData>::slavetotalspace = 0;
+
+// This static member is thread local. For each thread, it points to the
+// array of G4VUPLData instances.
+//
+template <class G4VUPLData> G4ThreadLocal
+G4VUPLData* G4VUPLSplitter<G4VUPLData>::offset = 0;
+
+// This field helps to use the class G4VUPLManager
+//
+G4VUPLManager G4VUserPhysicsList::subInstanceManager;
+
+void G4VUPLData::initialize()
+{
+    _theParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
+    _theMessenger = 0;
+    _thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+}
 
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()
@@ -96,12 +115,13 @@ G4VUserPhysicsList::G4VUserPhysicsList()
    fIsPhysicsTableBuilt(false),
    fDisableCheckParticleList(false)
 {
+    g4vuplInstanceID = subInstanceManager.CreateSubInstance(); //AND
   // default cut value  (1.0mm)
   defaultCutValue = 1.0*mm;
 
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
-  theParticleIterator = theParticleTable->GetIterator();
+  //theParticleIterator = theParticleTable->GetIterator();
 
   // pointer to the cuts table
   fCutsTable =  G4ProductionCutsTable::GetProductionCutsTable();
@@ -110,20 +130,30 @@ G4VUserPhysicsList::G4VUserPhysicsList()
   fCutsTable->SetEnergyRange(0.99*keV, 100*TeV);
 
   // UI Messenger
-  theMessenger = new G4UserPhysicsListMessenger(this);
+  //theMessenger = new G4UserPhysicsListMessenger(this);
+    G4MT_theMessenger = new G4UserPhysicsListMessenger(this); //AND
  
   // PhysicsListHelper
-  thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
-  thePLHelper->SetVerboseLevel(verboseLevel);
+  //thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+  //thePLHelper->SetVerboseLevel(verboseLevel);
+    //G4MT_thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper(); //AND
+    G4MT_thePLHelper->SetVerboseLevel(verboseLevel); //AND
 
+}
+
+void G4VUserPhysicsList::InitializeWorker()
+{
+    //Remember messengers are per-thread, so this needs to be done by each worker
+    //and due to the presence of "this" cannot be done in G4VUPLData::initialize()
+    G4MT_theMessenger = new G4UserPhysicsListMessenger(this);
 }
 
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::~G4VUserPhysicsList()
 {
-  if (theMessenger != 0) {
-    delete theMessenger;
-    theMessenger = 0;
+  if (G4MT_theMessenger != 0) {
+    delete G4MT_theMessenger;
+    G4MT_theMessenger = 0;
   }
   RemoveProcessManager();
 
@@ -146,20 +176,22 @@ G4VUserPhysicsList::G4VUserPhysicsList(const G4VUserPhysicsList& right)
    fIsPhysicsTableBuilt(right.fIsPhysicsTableBuilt),
    fDisableCheckParticleList(right.fDisableCheckParticleList)
 {
+  g4vuplInstanceID = subInstanceManager.CreateSubInstance(); //AND
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
   theParticleIterator = theParticleTable->GetIterator();
-
   // pointer to the cuts table
   fCutsTable =  G4ProductionCutsTable::GetProductionCutsTable();
 
   // UI Messenger
-  theMessenger = new G4UserPhysicsListMessenger(this);
+  //theMessenger = new G4UserPhysicsListMessenger(this);
+  G4MT_theMessenger = new G4UserPhysicsListMessenger(this); //AND
  
   // PhysicsListHelper
-  thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
-  thePLHelper->SetVerboseLevel(verboseLevel);
-
+  //thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+  //thePLHelper->SetVerboseLevel(verboseLevel);
+    G4MT_thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper(); //AND
+    G4MT_thePLHelper->SetVerboseLevel(verboseLevel); //AND
 }
 
 
@@ -239,8 +271,9 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
 
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //record the process manager for each particle in master thread
-  if (newParticle->theProcessManagerShadow == 0 || newParticle->theProcessManagerShadow == NULL ) 
-    newParticle->theProcessManagerShadow = newManager;
+  if( newParticle->GetMasterProcessManager() == 0 ) newParticle->SetMasterProcessManager(newManager);
+  //if (newParticle->theProcessManagerShadow == 0 || newParticle->theProcessManagerShadow == NULL )
+  //  newParticle->theProcessManagerShadow = newManager;
 
 #ifdef G4VERBOSE
  if (verboseLevel >2){
@@ -265,34 +298,34 @@ void G4VUserPhysicsList::InitializeProcessManager()
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&particleTable);
-  lockCount++;
-  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4ParticleTable::lockCount++;
 #endif
+  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
+
     if  (pmanager==0) {
       // create process manager if the particle has no its one
       pmanager = new G4ProcessManager(particle);
       particle->SetProcessManager(pmanager);
 
       //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-      if (particle->theProcessManagerShadow == 0 || particle->theProcessManagerShadow == NULL)
-        particle->theProcessManagerShadow = pmanager;
-
+      if( particle->GetMasterProcessManager() == 0 ) particle->SetMasterProcessManager(pmanager);
     }
+      
   }
 
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&particleTable);
-  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
 #endif
+  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
 }
 
@@ -303,10 +336,10 @@ void G4VUserPhysicsList::RemoveProcessManager()
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&particleTable);
-  lockCount++;
-  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4ParticleTable::lockCount++;
 #endif
+  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
@@ -314,7 +347,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
     G4ParticleDefinition* particle = theParticleIterator->value();
 
     //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    if (particle->g4particleDefinitionInstanceID < G4ParticleDefinitionSubInstanceManager::slavetotalspace)
+    if (particle->GetInstanceID() < G4ParticleDefinitionSubInstanceManager::slavetotalspace)
     {
 
       G4ProcessManager* pmanager = particle->GetProcessManager();
@@ -334,9 +367,9 @@ void G4VUserPhysicsList::RemoveProcessManager()
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&particleTable);
-  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
 #endif
+  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
 }
 
@@ -644,7 +677,7 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 
     //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
     //Get processes from master thread;
-    G4ProcessManager* pManagerShadow = particle->theProcessManagerShadow;
+    G4ProcessManager* pManagerShadow = particle->GetMasterProcessManager();
     G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
 
     G4ProcessVector* pVector = pManager->GetProcessList();
@@ -726,7 +759,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
     
     //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
     //Get processes from master thread
-    G4ProcessManager* pManagerShadow = particle->theProcessManagerShadow;
+    G4ProcessManager* pManagerShadow = particle->GetMasterProcessManager();
     //Andrea Dotti 15 Jan 2013: Change of interface of MSC
     //G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
 
@@ -974,27 +1007,27 @@ G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
 void G4VUserPhysicsList::CheckParticleList()
 {
   if (! fDisableCheckParticleList ){
-    thePLHelper->CheckParticleList();
+    G4MT_thePLHelper->CheckParticleList();
   }
 }
 
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::AddTransportation()
 {   
-  thePLHelper->AddTransportation();
+  G4MT_thePLHelper->AddTransportation();
 }
 
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::UseCoupledTransportation(G4bool vl)
 { 
-  thePLHelper->UseCoupledTransportation(vl);
+  G4MT_thePLHelper->UseCoupledTransportation(vl);
 }
 
 ////////////////////////////////////////////////////////
 G4bool G4VUserPhysicsList::RegisterProcess(G4VProcess*            process,
 					  G4ParticleDefinition*  particle)
 {
-  return thePLHelper->RegisterProcess(process, particle);
+  return G4MT_thePLHelper->RegisterProcess(process, particle);
 }
 
 ////////////////////////////////////////////////////////
@@ -1004,7 +1037,7 @@ void G4VUserPhysicsList::SetVerboseLevel(G4int value)
   // set verboseLevel for G4ProductionCutsTable same as one for G4VUserPhysicsList: 
   fCutsTable->SetVerboseLevel(verboseLevel);
 
-  thePLHelper->SetVerboseLevel(verboseLevel);
+  G4MT_thePLHelper->SetVerboseLevel(verboseLevel);
 
 #ifdef G4VERBOSE
   if (verboseLevel >1){

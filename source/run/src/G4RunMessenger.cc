@@ -79,6 +79,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   p3->SetDefaultValue(-1);
   p3->SetParameterRange("nSelect>=-1");
   beamOnCmd->SetParameter(p3);
+  //beamOnCmd->SetToBeBroadcasted(false);
 
   verboseCmd = new G4UIcmdWithAnInteger("/run/verbose",this);
   verboseCmd->SetGuidance("Set the Verbose level of G4RunManager.");

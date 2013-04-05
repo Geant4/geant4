@@ -24,36 +24,51 @@
 // ********************************************************************
 //
 //
-// $Id$
+//
 //
 
-#include "G4Run.hh"
-#include "G4Event.hh"
+// class description:
+//
+// This is a class to encapsulate thread-specific data
+// Used by G4MTRunManager and G4WorkerRunManager classes
 
-G4Run::G4Run()
-:runID(0),numberOfEvent(0),numberOfEventToBeProcessed(0),HCtable(0),DCtable(0)
-{ eventVector = new std::vector<const G4Event*>; }
+#ifndef G4WorkerThread_hh
+#define G4WorkerThread_hh
+#include "G4Types.hh"
 
-G4Run::~G4Run()
-{
-  std::vector<const G4Event*>::iterator itr = eventVector->begin();
-  for(;itr!=eventVector->end();itr++)
-  { delete *itr; }
-  delete eventVector;
-}
+class G4MTRunManager;
+class G4WorkerRunManager;
+class G4VUserWorkerInitialization;
 
-void G4Run::RecordEvent(const G4Event*)
-{ numberOfEvent++; }
-
-void G4Run::Merge(const G4Run* right)
-{
-  numberOfEvent += right->numberOfEvent; 
-  std::vector<const G4Event*>::iterator itr = right->eventVector->begin();
-  for(;itr!=right->eventVector->end();itr++)
-  { eventVector->push_back(*itr); }
-  right->eventVector->clear();
-}
-
-void G4Run::StoreEvent(G4Event* evt)
-{ eventVector->push_back(evt); }
+class G4WorkerThread {
+public:
+    //void SetWorkerRunManager( G4WorkerRunManager* workerRM );
+    //G4WorkerRunManager* GetWorkerRunManager() const;
+    //void SetUserWorkerInitialization( G4VUserWorkerInitialization* userWorkerInit );
+    //G4VUserWorkerInitialization* GetUserWorkerInitialization() const;
+        
+    void SetThreadId( G4int threadId );
+    G4int GetThreadId() const;
+        
+    void SetNumberThreads( G4int numnberThreads );
+    G4int GetNumberThreads() const; 
+        
+    void SetNumberEvents( G4int totNevents );
+    G4int GetNumberEvents() const;
+    
+    //void SetMasterRunManager( G4MTRunManager* masterRM );
+    //G4MTRunManager* GetMasterRunManager() const;
+    
+    //Build geometry for workers
+    static void BuildGeometryAndPhysicsVector();
+    static void DestroyGeometryAndPhysicsVector();
+private:
+    //G4MTRunManager* masterRunManager;
+    //G4WorkerRunManager* workerRunManager;
+    //G4VUserWorkerInitialization* uWorkerInit;
+    G4int threadId;
+    G4int numThreads;
+    G4int totalNumEvents;
+};
+#endif //G4WorkerThread_hh
 

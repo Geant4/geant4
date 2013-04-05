@@ -132,10 +132,7 @@ class G4AdjointSimMessenger: public G4UImessenger
     G4AdjointSimManager* theAdjointRunManager;
     
     G4UIdirectory*             AdjointSimDir;
-    G4UIdirectory*             PhysicsDir;
-    
     G4UIcommand *               beamOnCmd;
-    G4UIcommand *               testSourceCmd;   
     
     G4UIcommand *  DefineSpherExtSourceCmd;
     G4UIcommand *  DefineSpherExtSourceCenteredOnAVolumeCmd;

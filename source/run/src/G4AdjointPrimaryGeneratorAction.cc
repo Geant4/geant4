@@ -45,7 +45,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 G4AdjointPrimaryGeneratorAction::G4AdjointPrimaryGeneratorAction()
-  : Emin(0.), Emax(0.), EminIon(0.), EmaxIon(0.), NbOfAdjointPrimaryTypes(0),
+  : Emin(0.), Emax(0.), EminIon(0.), EmaxIon(0.),
     index_particle(100000), last_generated_part_was_adjoint(false),
     radius_spherical_source(0.), fwd_ion(0), adj_ion(0), 
     ion_name("not_defined")

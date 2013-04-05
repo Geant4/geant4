@@ -123,7 +123,7 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     std::vector<G4ParticleDefinition*> ListOfPrimaryFwdParticles;
     std::vector<G4ParticleDefinition*> ListOfPrimaryAdjParticles;
     std::map<G4String, G4bool> PrimariesConsideredInAdjointSim; //if true considered if false not considered
-    G4int NbOfAdjointPrimaryTypes;
+
 
     size_t index_particle;
     G4bool last_generated_part_was_adjoint;

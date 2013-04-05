@@ -78,20 +78,77 @@
 //          added    void BuildPhysicsTable()    
 //       Added PhysicsListHelper           29 Apr. 2011 H.Kurashige
 //       Added default impelmentation of SetCuts 10 June 2011 H.Kurashige 
-//           SetCuts is not 'pure virtual' any more 
+//           SetCuts is not 'pure virtual' any more
+//       Trasnformations for multi-threading 26 Mar. 2013 A. Dotti
 // ------------------------------------------------------------
 #ifndef G4VUserPhysicsList_h
 #define G4VUserPhysicsList_h 1
 #include "globals.hh"
 #include "G4ios.hh"
+#include "tls.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh" 
 #include "G4ProductionCutsTable.hh"
+#include "G4VUPLSplitter.hh"
+
+#include "G4Threading.hh"
 
 class G4UserPhysicsListMessenger;
 class G4PhysicsListHelper;
 class G4VProcess;
+
+class G4VUPLData
+{
+    //Encapsulate the fields of class G4VUserPhysicsList
+    //that are per-thread.
+public:
+    void initialize();
+    G4ParticleTable::G4PTblDicIterator* _theParticleIterator;
+    G4UserPhysicsListMessenger* _theMessenger;
+    G4PhysicsListHelper* _thePLHelper;
+};
+// The type G4VUPLManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4VUPLData. When each thread
+// changes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4VUserPhysicsList instance,
+// there is a corresponding G4VUPLData instance. All G4VUPLData instances
+// are organized by the class G4VUPLManager as an array.
+// The field "int g4vuplInstanceID" is added to the class G4VUserPhysicsList.
+// The value of this field in each G4VUserPhysicsList instance is the
+// subscript of the corresponding G44VUPLData instance.
+// In order to use the class G44VUPLManager, we add a static member in the class
+// G4VUserPhysicsList as follows: "static G4VUPLManager subInstanceManager".
+// Both the master thread and worker threads change the length of the array
+// for G44VUPLData instances mutually along with G4VUserPhysicsList
+// instances are created. For each worker thread, it dynamically creates ions.
+// Consider any thread A, if there is any other thread which creates an ion.
+// This ion is shared by the thread A. So the thread A leaves an empty space
+// in the array of G4PDefData instances for the ion.
+//
+// Important Note: you may wonder why we are introducing this mechanism
+//                 since there is only one PL for each application.
+//                 This is true, in the sense that only one PL is allowed
+//                 to be associated to a G4RunManager, however user can instantiate
+//                 as many PLs are needed and at run-time select one of the PLs to be used
+//                 we thus need this mechanism to guarantee that the system works without
+//                 problems in case of this (unusual) case. This may be reviewed in the future
+typedef G4VUPLSplitter<G4VUPLData> G4VUPLManager;
+typedef G4VUPLManager G4VUserPhysicsListSubInstanceManager;
+
+// This macros change the references to fields that are now encapsulated
+// in the class G4VUPLData.
+//
+// Note1:  the use of this-> this is needed to avoid compilation errors
+// when using templated class with T=G4VUserPhysicsList. Don't know why.
+// Note2: the name of the first #define is different, because otherwise
+//        we need to change its use in all classes that inherits from
+//        this base class (all examples). However one should note comment
+//        on JIRA task: http://jira-geant4.kek.jp/browse/DEV-27
+#define theParticleIterator ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theParticleIterator)
+#define G4MT_theMessenger ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theMessenger)
+#define G4MT_thePLHelper ((this->subInstanceManager.offset[this->g4vuplInstanceID])._thePLHelper)
 
 class G4VUserPhysicsList
 {
@@ -284,11 +341,11 @@ class G4VUserPhysicsList
   protected:
    // the particle table has the complete List of existing particle types
    G4ParticleTable* theParticleTable;
-   G4ParticleTable::G4PTblDicIterator* theParticleIterator;
+   //G4ParticleTable::G4PTblDicIterator* theParticleIterator; //AND
 
   protected: 
    // pointer to G4UserPhysicsListMessenger
-   G4UserPhysicsListMessenger* theMessenger;
+   //G4UserPhysicsListMessenger* theMessenger;
 
   protected:
    G4int verboseLevel;
@@ -322,12 +379,21 @@ class G4VUserPhysicsList
   G4bool fDisableCheckParticleList; 
 
   // PhysicsListHelper
-  G4PhysicsListHelper* thePLHelper;
+  //G4PhysicsListHelper* thePLHelper;
 
   private:
    enum { FixedStringLengthForStore = 32 }; 
 
-
+  //Changes for MT
+  protected:
+    G4int g4vuplInstanceID;
+    G4VUPL_DLL static G4VUPLManager subInstanceManager;
+  public:
+    inline G4int GetInstanceID() const;
+    static const G4VUPLManager& GetSubInstanceManager();
+    //Used by Worker threads on the shared instance of
+    // PL to initialize workers
+    void InitializeWorker();
 };
 
 inline void G4VUserPhysicsList::Construct()
@@ -402,5 +468,16 @@ inline
   fDisableCheckParticleList = true;
 }
 
+inline
+G4int G4VUserPhysicsList::GetInstanceID() const
+{
+    return g4vuplInstanceID;
+}
+
+inline
+const G4VUPLManager& G4VUserPhysicsList::GetSubInstanceManager()
+{
+    return subInstanceManager;
+}
 #endif
 

@@ -22,6 +22,7 @@ ifdef G4FPE_DEBUG
 endif
 
 CPPFLAGS += -DG4RUN_ALLOC_EXPORT
+CPPFLAGS += -DG4VUSERPL_ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \

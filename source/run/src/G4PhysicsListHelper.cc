@@ -59,7 +59,7 @@ G4PhysicsListHelper::G4PhysicsListHelper()
 {
   // pointer to the particle table
   theParticleTable = G4ParticleTable::GetParticleTable();
-  theParticleIterator = theParticleTable->GetIterator();
+  aParticleIterator = theParticleTable->GetIterator();
 
   ReadOrdingParameterTable();
 
@@ -106,9 +106,9 @@ void G4PhysicsListHelper::CheckParticleList() const
   bool isEmProc   = false;
 
   // loop over all particles in G4ParticleTable
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4String name = particle->GetParticleName();
     // check if any EM process exists
     if (!isEmProc) {
@@ -231,9 +231,9 @@ void G4PhysicsListHelper::AddTransportation()
   }
  
   // loop over all particles in G4ParticleTable
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     // Add transportation process for all particles 
     if ( pmanager == 0) {
@@ -920,8 +920,8 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processType     = 1;
   tmp.processSubType  = 61;
   tmp.ordering[0]     = -1;
-  tmp.ordering[1]     = -1; 
-  tmp.ordering[2]     = -1;
+  tmp.ordering[1]     = 0; 
+  tmp.ordering[2]     = 0;
   tmp.isDuplicable =  false;
   theTable->push_back(tmp);
   sizeOfTable +=1;

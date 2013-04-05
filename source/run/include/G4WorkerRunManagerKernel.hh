@@ -23,37 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////
 //
-// $Id$
+
+// class description:
 //
+//     This is a class for mandatory control of GEANT4 kernel.
+//     This class implements Worker behavior in a MT application.
+//
+//     This class is constructed by G4WorkerRunManager. If a user uses his/her own
+//     class instead of G4WorkerRunManager, this class must be instantiated by
+//     him/herself at the very beginning of the application and must be deleted
+//     at the very end of the application. Also, following methods must be
+//     invoked in the proper order.
+//       DefineWorldVolume
+//       InitializePhysics
+//       RunInitialization
+//       RunTermination
+//
+//     User must provide his/her own classes derived from the following
+//     abstract class and register it to the RunManagerKernel.
+//        G4VUserPhysicsList - Particle types, Processes and Cuts
+//
+//     G4WorkerRunManagerKernel does not have any eveny loop. Handling of events
+//     is managed by G4RunManager.
+//
+//     This class re-implements only the method that require special treatment
+//     to implement worker behavior
 
-#include "G4Run.hh"
-#include "G4Event.hh"
+#ifndef G4WorkerRunManagerKernel_h
+#define G4WorkerRunManagerKernel_h 1
 
-G4Run::G4Run()
-:runID(0),numberOfEvent(0),numberOfEventToBeProcessed(0),HCtable(0),DCtable(0)
-{ eventVector = new std::vector<const G4Event*>; }
+#include "G4RunManagerKernel.hh"
 
-G4Run::~G4Run()
-{
-  std::vector<const G4Event*>::iterator itr = eventVector->begin();
-  for(;itr!=eventVector->end();itr++)
-  { delete *itr; }
-  delete eventVector;
-}
+class G4WorkerRunManagerKernel : public G4RunManagerKernel {
+public:
+    G4WorkerRunManagerKernel();
+    virtual ~G4WorkerRunManagerKernel();
+protected:
+    void SetupDefaultRegion();
+    void SetupPhysics();
+public:
+    void UpdateRegion();
+private:
+    void ResetNavigator();
+    
+};
 
-void G4Run::RecordEvent(const G4Event*)
-{ numberOfEvent++; }
-
-void G4Run::Merge(const G4Run* right)
-{
-  numberOfEvent += right->numberOfEvent; 
-  std::vector<const G4Event*>::iterator itr = right->eventVector->begin();
-  for(;itr!=right->eventVector->end();itr++)
-  { eventVector->push_back(*itr); }
-  right->eventVector->clear();
-}
-
-void G4Run::StoreEvent(G4Event* evt)
-{ eventVector->push_back(evt); }
-
+#endif //G4WorkerRunManagerKernel_h

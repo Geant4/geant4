@@ -16,6 +16,53 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Apr. 4th, 2013, A.Dotti (run-V09-06-11)
+- Use global flag G4VUSERPL_ALLOC_EXPORT to export extern symbols for DLLs
+
+Apr. 4th, 2013, A.Dotti (run-V09-06-10)
+- Fix bug introduced in run-V09-06-08 tag in which AddTransportation
+  was not called for modular phsysics lists
+
+Apr. 3rd, 2013, A.Dotti (run-V09-06-09)
+- RNG Engine is "cloned" in worker threads from master thread one.
+  This functionality is at the moment implemented in RunManager classes,
+  but we may want to remove it from there and put it somewhere else
+- Fix compilation warnings in gcc 
+
+Apr. 2nd, 2013, A.Dotti (run-V09-06-08)
+- Further round of refinements for sharing of phusocs lists.
+   (co-working tag with: hadr-cross-V09-06-16, particles-V09-06-13,
+    run-V09-06-08, intercoms-V09-06-04, error-propagation-V09-06-04,
+    physics_lists-V09-06-01, 
+    rdecay02-V09-06-01, gtherapy-V09-06-02, electronScattering-V09-06-04,
+    exampleSE2-V09-06-01, fano-V09-06-03, fano2-V09-06-02, exampleRE01-V09-06-04,
+    exampleRE02-V09-06-02, exPolarisation-V09-05-03, exOptical-V09-06-01,
+    fieldex-V09-06-01,  electromagnetic-V09-06-01,
+    exampleA01-V09-06-01, gammaraytel-V09-06-03, amsEcal-V09-06-00).
+    Note: to run G4MT an additional tag is needed global-V09-06-13a
+
+Mar. 29th, 2013, A.Dotti (run-V09-06-07)
+- G4VUSerPhysicsList is now shared between threads and is a split-class
+  (co-working with: phys-ctor-em-V09-06-06, error-propagation-V09-06-04,
+   phys-ctor-helastic-V09-06-03, phys-ctor-em-V09-06-07, phys-ctor-hinelastic-V09-06-09,
+   phys-ctor-stopping-V09-06-01, phys-ctor-decay-V09-06-01, phys-ctor-limiters-V09-06-02)
+
+Mar. 26th, 2013, M.Asai (run-V09-06-06)
+- Fix G4MTRunManager and related classes for the handling of parallel worlds.
+
+Mar. 20th, 2013, .Kurashige (run-V09-06-05)
+- Fix a bug in PhysicsListHelper for DNABrownianTransportation
+
+Feb. 26th, 2013, A. Dotti (run-09-06-04)
+- First commit of new RunManager for MT
+
+Feb. 26th, 2013, L.Desorgher (run-V09-06-03)
+- Remove unused variables in G4AdjointPrimaryGeneratorAction, G4AdjointSimManager,
+  and G4AdjointSimMessenger
+
+Feb. 9th, 2013, M.Asai (run-V09-06-02)
+- Adding verbosity to G4RunManager::
+- Introducing SetSensitiveDetector() method to G4VUserDetectorConstruction.
 
 Dec. 3rd, 2012, M.Asai (run-V09-06-01)
 - Removing obsolete UI commands for random number handling.

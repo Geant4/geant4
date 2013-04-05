@@ -294,9 +294,9 @@ class G4AdjointSimManager
 
     //Weight Analysis
     //----------
-    G4PhysicsLogVector* electron_last_weight_vector;
+    /*G4PhysicsLogVector* electron_last_weight_vector;
     G4PhysicsLogVector* proton_last_weight_vector;
-    G4PhysicsLogVector* gamma_last_weight_vector;
+    G4PhysicsLogVector* gamma_last_weight_vector;*/
     
     G4bool welcome_message;
     

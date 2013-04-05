@@ -34,6 +34,7 @@
 
 #include "G4RunManager.hh"
 #include "G4RunManagerKernel.hh"
+#include "G4WorkerRunManagerKernel.hh"
 
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
@@ -42,6 +43,7 @@
 #include "G4RunMessenger.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "G4VUserWorkerInitialization.hh"
 #include "G4UserRunAction.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4VPersistencyManager.hh"
@@ -59,6 +61,11 @@ using namespace CLHEP;
 
 G4ThreadLocal G4RunManager* G4RunManager::fRunManager = 0;
 
+//The following lines are needed since G4VUserPhysicsList
+//uses a #define theParticleIterator
+#ifdef theParticleIterator
+#undef theParticleIterator
+#endif
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //To share data, the master thread is different from worker threads.
 //This variable points out it is the master thread or not.
@@ -68,7 +75,7 @@ G4RunManager* G4RunManager::GetRunManager()
 { return fRunManager; }
 
 G4RunManager::G4RunManager()
-:userDetector(0),physicsList(0),
+:userDetector(0),physicsList(0),userWorkerInitialization(0),
  userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
  userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
  geometryInitialized(false),physicsInitialized(false),
@@ -86,7 +93,7 @@ G4RunManager::G4RunManager()
                 FatalException, "G4RunManager constructed twice.");
   }
   fRunManager = this;
-
+      
   kernel = new G4RunManagerKernel();
   eventManager = kernel->GetEventManager();
 
@@ -101,6 +108,57 @@ G4RunManager::G4RunManager()
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
 }
+
+G4RunManager::G4RunManager(G4bool workerRM)
+:userDetector(0),physicsList(0),
+userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
+userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
+geometryInitialized(false),physicsInitialized(false),
+runAborted(false),initializedAtLeastOnce(false),
+geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
+currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
+numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
+storeRandomNumberStatusToG4Event(0),
+currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
+numberOfEventProcessed(0)
+{
+    //This version of the constructor should never be called in sequential mode!
+#ifndef G4MULTITHREADED
+    G4ExceptionDescription msg;
+    msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
+    msg<<" This type of RunManager can only be used in mult-threaded applications.";
+    G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msg);
+#endif
+    
+    if(fRunManager)
+    {
+        G4Exception("G4RunManager::G4RunManager()", "Run0031",
+                    FatalException, "G4RunManager constructed twice.");
+    }
+    fRunManager = this;
+    
+    //If we are creating a G4WorkerRunManager class, we need to skip this, since the equivalent
+    // for a WorkerThread is slightly different and will be executed by the derived class
+    if ( workerRM ) {
+        kernel = new G4WorkerRunManagerKernel();
+    } else {
+        kernel = new G4RunManagerKernel();
+    }
+        eventManager = kernel->GetEventManager();
+        
+        timer = new G4Timer();
+        runMessenger = new G4RunMessenger(this);
+        previousEvents = new std::vector<G4Event*>;
+        G4ParticleTable::GetParticleTable()->CreateMessenger();
+        G4ProcessTable::GetProcessTable()->CreateMessenger();
+        randomNumberStatusDir = "./";
+        std::ostringstream oss;
+        HepRandom::saveFullState(oss);
+        randomNumberStatusForThisRun = oss.str();
+        randomNumberStatusForThisEvent = oss.str();
+}
+
+
 
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //The constructor is used by worker threads.
@@ -137,6 +195,7 @@ G4RunManager::G4RunManager(int isSlaveFlag)
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
 
+  //Andrea Dotti: 28 Jan 2013: This call will be only in the G4WorkerRunManager
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //Worker threads initialize the particle table.
   if (isSlave) G4ParticleTable::GetParticleTable()->SlaveG4ParticleTable();
@@ -166,14 +225,16 @@ G4RunManager::~G4RunManager()
   G4ProcessTable::GetProcessTable()->DeleteMessenger();
   delete previousEvents;
 
+    //Andrea Dotti: 28 Jan 2013: this is refactored in DeleteUserDetector
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //The master thread destroys the user detector.
-  if((!isSlave) && userDetector)
-  {
-    delete userDetector;
-    userDetector = 0;
-    if(verboseLevel>1) G4cout << "UserDetectorConstruction deleted." << G4endl;
-  }
+  //if((!isSlave) && userDetector)
+  //{
+  //  delete userDetector;
+  //  userDetector = 0;
+  //  if(verboseLevel>1) G4cout << "UserDetectorConstruction deleted." << G4endl;
+  //}
+    DeleteUserDetector();
   if(physicsList)
   {
     delete physicsList;
@@ -197,6 +258,16 @@ G4RunManager::~G4RunManager()
 
   if(verboseLevel>1) G4cout << "RunManager is deleted." << G4endl;
   fRunManager = 0;
+}
+
+void G4RunManager::DeleteUserDetector()
+{
+    if( userDetector )
+    {
+        delete userDetector;
+        userDetector = 0;
+        if(verboseLevel>1) G4cout << "UserDetectorConstruction deleted." << G4endl;
+    }
 }
 
 void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
@@ -586,7 +657,7 @@ void G4RunManager::DumpRegion(G4Region* region) const
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
-#include "G4ParallelWorldScoringProcess.hh"
+#include "G4ParallelWorldProcess.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
 
@@ -597,11 +668,12 @@ void G4RunManager::ConstructScoringWorlds()
 {
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if(!ScM) return;
-
+/*******************************************************************
   //Xin Dong 09302011 for Scorers, should not be privatized
   static G4ScoringManager* masterScM = 0;
   //Xin Dong 09302011 for Scorers
   if (isSlave == 0) masterScM = ScM;
+*******************************************************************/
 
   G4int nPar = ScM->GetNumberOfMesh();
   if(nPar<1) return;
@@ -610,10 +682,9 @@ void G4RunManager::ConstructScoringWorlds()
    = G4ParticleTable::GetParticleTable()->GetIterator();
   for(G4int iw=0;iw<nPar;iw++)
   {
-
     G4VScoringMesh* mesh = ScM->GetMesh(iw);
 
-
+/******************************************************************
     //Xin Dong 09302011 for Scorers
     G4VScoringMesh* mastermesh = masterScM->GetMesh(iw);
     if (isSlave)
@@ -636,16 +707,20 @@ void G4RunManager::ConstructScoringWorlds()
         meshcylinder->fMeshElementLogical = mastermeshcylinder->fMeshElementLogical;
       }
     }
+**********************************************************************/
 
     G4VPhysicalVolume* pWorld
        = G4TransportationManager::GetTransportationManager()
          ->IsWorldExisting(ScM->GetWorldName(iw));
 
+/***********************************************************************
     //Xin Dong 09302011 for Scorers, workers should not change the geometry
     //Worker threads should also do it
+**********************************************************************/
     if(!pWorld)
     {
 
+/***********************************************************************
       //Xin Dong 09302011 for Scorers
       printf("Add more processes, isSlave: %d\n", isSlave);
 
@@ -672,10 +747,15 @@ void G4RunManager::ConstructScoringWorlds()
       //Xin Dong 09302011 for Scorers
       if (isSlave == 0)
         pWorld->SetName(ScM->GetWorldName(iw));
+**************************************************************************/
 
-      G4ParallelWorldScoringProcess* theParallelWorldScoringProcess
-        = new G4ParallelWorldScoringProcess(ScM->GetWorldName(iw));
-      theParallelWorldScoringProcess->SetParallelWorld(ScM->GetWorldName(iw));
+      pWorld = G4TransportationManager::GetTransportationManager()
+           ->GetParallelWorld(ScM->GetWorldName(iw));
+      pWorld->SetName(ScM->GetWorldName(iw));
+
+      G4ParallelWorldProcess* theParallelWorldProcess
+        = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
+      theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
 
       theParticleIterator->reset();
       while( (*theParticleIterator)() ){
@@ -683,26 +763,34 @@ void G4RunManager::ConstructScoringWorlds()
         G4ProcessManager* pmanager = particle->GetProcessManager();
         if(pmanager)
         {
-          pmanager->AddProcess(theParallelWorldScoringProcess);
-          if(theParallelWorldScoringProcess->IsAtRestRequired(particle))
-          { pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxAtRest, 9999); }
-          pmanager->SetProcessOrderingToSecond(theParallelWorldScoringProcess, idxAlongStep);
-          pmanager->SetProcessOrdering(theParallelWorldScoringProcess, idxPostStep, 9999);
+          pmanager->AddProcess(theParallelWorldProcess);
+          if(theParallelWorldProcess->IsAtRestRequired(particle))
+          { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
+          pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
+          pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
         }
       }
     }
+
+/***********************************************************************
     //Xin Dong 09302011 for Scorers, workers should not change the geometry
     //Worker meshes should relate to the corresponding logic volumes
     //Any reverse relationship?
     if (isSlave == 0)
       mesh->Construct(pWorld);
     else
-      mesh->SlaveConstruct(mastermesh, pWorld);
+      mesh->WorkerConstruct(mastermesh, pWorld);
+**************************************************************************/
+
+    mesh->Construct(pWorld);
   }
 
+/**************************************************************************
   //Xin Dong 09302011 for Scorers, workers should not change the geometry? or should 
   if (isSlave == 0)
-    GeometryHasBeenModified();
+**************************************************************************/
+
+  GeometryHasBeenModified();
 }
 
 void G4RunManager::UpdateScoring()
@@ -725,6 +813,7 @@ void G4RunManager::UpdateScoring()
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4SmartVoxelHeader.hh"
+#include "G4SmartVoxelStat.hh"
 
 void G4RunManager::ReOptimizeMotherOf(G4VPhysicalVolume* pPhys)
 {
@@ -734,9 +823,71 @@ void G4RunManager::ReOptimizeMotherOf(G4VPhysicalVolume* pPhys)
 
 void G4RunManager::ReOptimize(G4LogicalVolume* pLog)
 {
+  G4Timer localtimer;
+  if(verboseLevel>1)
+  { localtimer.Start(); }
   G4SmartVoxelHeader* header = pLog->GetVoxelHeader();
   delete header;
   header = new G4SmartVoxelHeader(pLog);
   pLog->SetVoxelHeader(header);
+  if(verboseLevel>1)
+  {
+    localtimer.Stop();
+    G4SmartVoxelStat stat(pLog,header,localtimer.GetSystemElapsed(),
+                          localtimer.GetUserElapsed());
+    G4cout << G4endl << "Voxelisation of logical volume <"
+           << pLog->GetName() << ">" << G4endl;
+    G4cout << " heads : " << stat.GetNumberHeads() << " - nodes : "
+           << stat.GetNumberNodes() << " - pointers : " 
+           << stat.GetNumberPointers() << G4endl;
+    G4cout << " Memory used : " << (stat.GetMemoryUse()+512)/1024
+           << "k - total time : " << stat.GetTotalTime()
+           << " - system time : " << stat.GetSysTime() << G4endl;
+  }
+}
+
+void G4RunManager::SetUserInitialization(G4VUserDetectorConstruction* userInit)
+{ userDetector = userInit; }
+
+void G4RunManager::SetUserInitialization(G4VUserPhysicsList* userInit)
+{
+  physicsList = userInit;
+  kernel->SetPhysics(userInit);
+}
+
+void G4RunManager::SetUserInitialization(G4VUserWorkerInitialization* /*userInit*/)
+{
+  G4Exception("G4RunManager::SetUserInitialization()", "Run3001", FatalException,
+    "Base-class G4RunManager cannot take G4VUserWorkerInitialization. Use G4MTRunManager.");
+}
+
+void G4RunManager::SetUserAction(G4UserRunAction* userAction)
+{ userRunAction = userAction; }
+
+void G4RunManager::SetUserAction(G4VUserPrimaryGeneratorAction* userAction)
+{ userPrimaryGeneratorAction = userAction; }
+
+void G4RunManager::SetUserAction(G4UserEventAction* userAction)
+{
+  eventManager->SetUserAction(userAction);
+  userEventAction = userAction;
+}
+
+void G4RunManager::SetUserAction(G4UserStackingAction* userAction)
+{
+  eventManager->SetUserAction(userAction);
+  userStackingAction = userAction;
+}
+
+void G4RunManager::SetUserAction(G4UserTrackingAction* userAction)
+{
+  eventManager->SetUserAction(userAction);
+  userTrackingAction = userAction;
+}
+
+void G4RunManager::SetUserAction(G4UserSteppingAction* userAction)
+{
+  eventManager->SetUserAction(userAction);
+  userSteppingAction = userAction;
 }
 
