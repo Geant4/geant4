@@ -44,6 +44,7 @@
 #include "G4KaonZeroLong.hh"
 #include "G4KaonZeroShort.hh"
 #include "G4AntiKaonZero.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 // factory
 #include "G4CrossSectionFactory.hh"

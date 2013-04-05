@@ -28,8 +28,9 @@
 
 
 #include "globals.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
 #include "G4VCrossSectionDataSet.hh"
+#include "G4CrossSectionFactoryRegistry.hh"
+#include "G4Threading.hh"
 
 class G4VBaseXSFactory
 {
@@ -41,29 +42,91 @@ public:
 };
 
 
-template <typename T> class G4CrossSectionFactory : public G4VBaseXSFactory
+//Generic template XS-factory
+template <typename T, int mode> class G4CrossSectionFactory : public G4VBaseXSFactory
 {
 public:
-  
   G4CrossSectionFactory(const G4String& name)
   {
-    G4CrossSectionDataSetRegistry::Instance()->AddFactory(name, this);
+      G4CrossSectionFactoryRegistry::Instance()->Register(name,this);
   }
   
   virtual G4VCrossSectionDataSet* Instantiate() 
   {
-    return new T();
+      G4ExceptionDescription msg;
+      msg<<"Factory mode: "<<mode<<" not supported!";
+      G4Exception("G4CrossSectionFactory::Instantiate","CrossSectionFactory001",FatalException,msg);
+    return static_cast<T*>(0);
   }
 };
 
+//Partial specialized template for non-singleton non-shared factory
+// each call to Instantiate creates a new XS
+template <typename T> class G4CrossSectionFactory<T,0> : public G4VBaseXSFactory
+{
+public:
+    
+    G4CrossSectionFactory(const G4String& name)
+    {
+        G4CrossSectionFactoryRegistry::Instance()->Register(name,this);
+    }
+    
+    virtual G4VCrossSectionDataSet* Instantiate()
+    {
+        return new T();
+    }
+};
 
-#define G4_DECLARE_XS_FACTORY(cross_section) \
-  const G4CrossSectionFactory<cross_section>& cross_section##Factory = G4CrossSectionFactory<cross_section>(cross_section::Default_Name())
+//Partial specialized template for singleton, shared factory
+// each call to Instantiate returns pointer to static object
+template <typename T> class G4CrossSectionFactory<T,1> : public G4VBaseXSFactory
+{
+public:
+    G4CrossSectionFactory(const G4String& name)
+    {
+        G4CrossSectionFactoryRegistry::Instance()->Register(name,this);
+    }
+    
+    virtual G4VCrossSectionDataSet* Instantiate()
+    {
+        static T* shared = new T();
+        return shared;
+    }
+};
 
-#define G4_REFERENCE_XS_FACTORY(cross_section) \
+//Partial specialized template for singleton, shared factory
+// each call to Instantiate returns pointer to static thread-local object
+template <typename T> class G4CrossSectionFactory<T,2> : public G4VBaseXSFactory
+{
+    G4CrossSectionFactory(const G4String& name)
+    {
+        G4CrossSectionFactoryRegistry::Instance()->Register(name,this);
+    }
+    
+    virtual G4VCrossSectionDataSet* Instantiate()
+    {
+        static G4ThreadLocal T* shared = new T();
+        return shared;
+    }
+};
+
+
+#define G4_BASE_DECLARE_XS_FACTORY(cross_section, flag) \
+  const G4CrossSectionFactory<cross_section,flag>& cross_section##Factory = G4CrossSectionFactory<cross_section,flag>(cross_section::Default_Name())
+
+#define G4_BASE_REFERENCE_XS_FACTORY(cross_section,flag) \
   class cross_section; \
-  extern const G4CrossSectionFactory<cross_section>& cross_section##Factory; \
-  const G4CrossSectionFactory<cross_section>& cross_section##FactoryRef = cross_section##Factory
+  extern const G4CrossSectionFactory<cross_section,flag>& cross_section##Factory; \
+  const G4CrossSectionFactory<cross_section,flag>& cross_section##FactoryRef = cross_section##Factory
 
+//Macros to help define and reference factories
+#define G4_DECLARE_XS_FACTORY(cross_section) G4_BASE_DECLARE_XS_FACTORY(cross_section,0)
+#define G4_DECLARE_SHAREDXS_FACTORY(cross_section) G4_BASE_DECLARE_XS_FACTORY(cross_section,1)
+#define G4_DECLARE_SHAREDTLSXS_FACTORY(cross_section) G4_BASE_DECLARE_XS_FACTORY(cross_section,2)
+
+
+#define G4_REFERENCE_XS_FACTORY(cross_section) G4_BASE_REFERENCE_XS_FACTORY(cross_section,0)
+#define G4_REFERENCE_SHAREDXS_FACTORY(cross_section) G4_BASE_REFERENCE_XS_FACTORY(cross_section,1)
+#define G4_REFERENCE_SHAREDTLSXS_FACTORY(cross_section) G4_BASE_REFERENCE_XS_FACTORY(cross_section,2)
 
 #endif

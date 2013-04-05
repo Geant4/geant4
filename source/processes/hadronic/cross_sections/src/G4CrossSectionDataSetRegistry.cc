@@ -43,6 +43,7 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4CrossSectionFactory.hh"
+#include "G4CrossSectionFactoryRegistry.hh"
 
 // Neeed for running with 'static' libraries to pull the references of the 
 // declared factories
@@ -129,10 +130,10 @@ void G4CrossSectionDataSetRegistry::DeRegister(G4VCrossSectionDataSet* p)
   }
 }
 
-void G4CrossSectionDataSetRegistry::AddFactory(G4String name, G4VBaseXSFactory* factory)
-{
-  factories[name] = factory;
-}
+//void G4CrossSectionDataSetRegistry::AddFactory(G4String name, G4VBaseXSFactory* factory)
+//{
+//  factories[name] = factory;
+//}
 
 G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(const G4String& name, G4bool warning)
 {
@@ -148,18 +149,11 @@ G4VCrossSectionDataSet* G4CrossSectionDataSetRegistry::GetCrossSectionDataSet(co
     }
   // check if factory exists...
   //
-  if (factories.find(name)!=factories.end())
-    {
-      return factories[name]->Instantiate();
-    }
-  else
-    {
-        if(warning)
-        {
-         G4ExceptionDescription ED;
-         ED << "Factory for ["<< name << "] cross section data set not found." << G4endl;
-         G4Exception("G4CrossSectionDataSetRegistry::GetCrossSectionDataSet", "CrossSection001", FatalException, ED);
-        }
-      return 0;
-    }
+    G4CrossSectionFactoryRegistry* factories = G4CrossSectionFactoryRegistry::Instance();
+    //This thorws if factory is not found, add second parameter to false to avoid this
+    G4VBaseXSFactory* factory = factories->GetFactory(name, warning );
+    if ( factory )
+        return factory->Instantiate();
+    else
+        return static_cast<G4VCrossSectionDataSet*>(0);
 }

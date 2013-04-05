@@ -109,6 +109,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4UPiNuclearCrossSection.hh
 	G4VComponentCrossSection.hh
 	G4VCrossSectionDataSet.hh
+	G4CrossSectionFactoryRegistry.hh
     SOURCES
 	G4BGGNucleonElasticXS.cc
 	G4BGGNucleonInelasticXS.cc
@@ -174,6 +175,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4UPiNuclearCrossSection.cc
 	G4VComponentCrossSection.cc
 	G4VCrossSectionDataSet.cc
+	G4CrossSectionFactoryRegistry.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

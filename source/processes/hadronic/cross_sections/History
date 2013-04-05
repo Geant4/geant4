@@ -13,6 +13,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+1 April 2013 A. Dotti (hadr-cross-V09-06-16)
+-----------------------------------------------------
+- Rewrite mechansim of CrossSection factories to work with MT applications.
+  Factory registry is now a class on its own and it is shared among threads.
+  TLS CrossSectionDataSetRegistry access the shared resource to get XS. 
+  XS data sets can be created as now per-thread or shared. See factoy mechanism.
 
 22 March 2013 V.Ivanchenko   (hadr-cross-V09-06-15)
 -----------------------------------------------------
