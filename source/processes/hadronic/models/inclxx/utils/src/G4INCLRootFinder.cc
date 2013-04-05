@@ -55,9 +55,6 @@ namespace G4INCL {
 
     namespace {
 
-      /// \brief The solution obtained in the last call to solve().
-      G4ThreadLocal RootFinderSolution *solution = NULL;
-
       /// \brief Tolerance on the y value
       const G4double toleranceY = 1.e-4;
 
@@ -74,7 +71,7 @@ namespace G4INCL {
        *   bracketing the root, as a pair. If the bracketing failed, returns a
        *   pair with first > second.
        */
-      RootFinderSolution bracketRoot(RootFunctor const * const f, G4double x0) {
+      std::pair<G4double,G4double> bracketRoot(RootFunctor const * const f, G4double x0) {
         G4double y0 = (*f)(x0);
 
         const G4double scaleFactor = 1.5;
@@ -117,19 +114,11 @@ namespace G4INCL {
 
     }
 
-    RootFinderSolution const &getSolution() {
-      return *solution;
-    }
-
-    G4bool solve(RootFunctor const * const f, const G4double x0) {
-      if(!solution)
-        solution = new RootFinderSolution;
-
+    Solution solve(RootFunctor const * const f, const G4double x0) {
       // If we already have the solution, do nothing
       const G4double y0 = (*f)(x0);
       if( std::abs(y0) < toleranceY ) {
-        *solution = std::make_pair(x0,y0);
-        return true;
+        return Solution(x0,y0);
       }
 
       // Bracket the root and set the initial values
@@ -142,12 +131,11 @@ namespace G4INCL {
         G4double y_at_zero = (*f)(0.);
         if(std::abs(y_at_zero)<=toleranceY) {
           f->cleanUp(true);
-          *solution = std::make_pair(0.,y_at_zero);
-          return true;
+          return Solution(0.,y_at_zero);
         } else {
           WARN("Root-finding algorithm could not bracket the root." << std::endl);
           f->cleanUp(false);
-          return false;
+          return Solution();
         }
       }
 
@@ -168,7 +156,7 @@ namespace G4INCL {
         if(iterations > maxIterations) {
           WARN("Root-finding algorithm did not converge." << std::endl);
           f->cleanUp(false);
-          return false;
+          return Solution();
         }
 
         // Estimate the root position by linear interpolation
@@ -195,9 +183,8 @@ namespace G4INCL {
        * End of the false-position loop
        * ******************************/
 
-      *solution = std::make_pair(x,y);
       f->cleanUp(true);
-      return true;
+      return Solution(x,y);
     }
 
   } // namespace RootFinder

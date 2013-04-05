@@ -68,7 +68,7 @@ namespace G4INCL {
       static const G4int maxIterLocE;
 
     protected:
-      virtual G4INCL::IChannel* getChannel() const = 0;
+      virtual G4INCL::IChannel* getChannel() = 0;
 
       G4bool bringParticleInside(Particle * const p);
 
@@ -153,10 +153,6 @@ namespace G4INCL {
           Nucleus *theNucleus;
           /// \brief Pointer to the boost vector
           ThreeVector const *boostVector;
-          /// \brief true if we must apply local energy to nucleons
-//          G4bool hasLocalEnergy;
-          /// \brief true if we must apply local energy to deltas
-//          G4bool hasLocalEnergyDelta;
 
           /// \brief True if we should use local energy
           const G4bool shouldUseLocalEnergy;

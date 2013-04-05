@@ -57,6 +57,9 @@ namespace G4INCL {
     /// \brief Fermi momentum squared [(MeV/c)^2]
     const G4double PfSquared = Pf*Pf;
 
+    /// \brief Fermi momentum cubed [(MeV/c)^3]
+    const G4double PfCubed = Pf*PfSquared;
+
     /** \brief Coulomb conversion factor [MeV*fm]
      *
      * \f[ e^2/(4 pi epsilon_0) \f]
@@ -94,6 +97,10 @@ namespace G4INCL {
 
     inline G4double pow23(G4double x) {
       return std::pow(x, twoThirds);
+    }
+
+    inline G4double aSinH(G4double x) {
+      return std::log(x + std::sqrt(x*x+1.));
     }
 
     /**

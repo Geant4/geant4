@@ -45,15 +45,24 @@
 
 namespace G4INCL {
 
-  ParticleSampler::ParticleSampler(const G4int A, const G4int Z, InverseInterpolationTable const * const rCDFTable, InverseInterpolationTable const * const pCDFTable) :
+  ParticleSampler::ParticleSampler(const G4int A, const G4int Z,
+                                   InverseInterpolationTable const * const rCDFTableProton,
+                                   InverseInterpolationTable const * const pCDFTableProton,
+                                   InverseInterpolationTable const * const rCDFTableNeutron,
+                                   InverseInterpolationTable const * const pCDFTableNeutron) :
     sampleOneParticle(&ParticleSampler::sampleOneParticleWithoutRPCorrelation),
     theA(A),
     theZ(Z),
-    theRCDFTable(rCDFTable),
-    thePCDFTable(pCDFTable),
     theDensity(NULL),
     thePotential(NULL)
-  {}
+  {
+    std::fill(theRCDFTable, theRCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
+    std::fill(thePCDFTable, thePCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
+    theRCDFTable[Proton] = rCDFTableProton;
+    thePCDFTable[Proton] = pCDFTableProton;
+    theRCDFTable[Neutron] = rCDFTableNeutron;
+    thePCDFTable[Neutron] = pCDFTableNeutron;
+  }
 
   ParticleSampler::~ParticleSampler() {
   }
@@ -106,13 +115,13 @@ namespace G4INCL {
     const G4double theFermiMomentum = thePotential->getFermiMomentum(t);
     const ThreeVector momentumVector = Random::sphereVector(theFermiMomentum);
     const G4double momentumRatio = momentumVector.mag()/theFermiMomentum;
-    const ThreeVector positionVector = Random::sphereVector(theDensity->getMaxRFromP(momentumRatio));
+    const ThreeVector positionVector = Random::sphereVector(theDensity->getMaxRFromP(t, momentumRatio));
     return new Particle(t, momentumVector, positionVector);
   }
 
   Particle *ParticleSampler::sampleOneParticleWithoutRPCorrelation(const ParticleType t) const {
-    const G4double position = (*theRCDFTable)(Random::shoot());
-    const G4double momentum = (*thePCDFTable)(Random::shoot());
+    const G4double position = (*(theRCDFTable[t]))(Random::shoot());
+    const G4double momentum = (*(thePCDFTable[t]))(Random::shoot());
     ThreeVector positionVector = Random::normVector(position);
     ThreeVector momentumVector = Random::normVector(momentum);
     return new Particle(t, momentumVector, positionVector);

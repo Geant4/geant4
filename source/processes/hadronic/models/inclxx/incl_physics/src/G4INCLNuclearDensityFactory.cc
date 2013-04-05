@@ -61,10 +61,11 @@ namespace G4INCL {
       const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
       const std::map<G4int,NuclearDensity*>::const_iterator mapEntry = nuclearDensityCache->find(nuclideID);
       if(mapEntry == nuclearDensityCache->end()) {
-        InverseInterpolationTable *rpCorrelationTable = createRPCorrelationTable(A, Z);
-        if(!rpCorrelationTable)
+        InverseInterpolationTable *rpCorrelationTableProton = createRPCorrelationTable(Proton, A, Z);
+        InverseInterpolationTable *rpCorrelationTableNeutron = createRPCorrelationTable(Neutron, A, Z);
+        if(!rpCorrelationTableProton || !rpCorrelationTableNeutron)
           return NULL;
-        NuclearDensity *density = new NuclearDensity(A, Z, rpCorrelationTable);
+        NuclearDensity *density = new NuclearDensity(A, Z, rpCorrelationTableProton, rpCorrelationTableNeutron);
         (*nuclearDensityCache)[nuclideID] = density;
         return density;
       } else {
@@ -72,11 +73,13 @@ namespace G4INCL {
       }
     }
 
-    InverseInterpolationTable *createRPCorrelationTable(const G4int A, const G4int Z) {
+    InverseInterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z) {
+// assert(t==Proton || t==Neutron);
+
       if(!rpCorrelationTableCache)
         rpCorrelationTableCache = new std::map<G4int,InverseInterpolationTable*>;
 
-      const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+      const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
       const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache->find(nuclideID);
       if(mapEntry == rpCorrelationTableCache->end()) {
 
@@ -96,9 +99,10 @@ namespace G4INCL {
           const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
           rpCorrelationFunction = new NuclearDensityFunctions::GaussianRP(maximumRadius, Math::oneOverSqrtThree * radius);
         } else {
-          ERROR("No r-p correlation function for target A = "
+          ERROR("No r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A = "
                 << A << " Z = " << Z << std::endl);
           return NULL;
+
         }
 
         class InverseCDFOneThird : public IFunction1D {
@@ -120,7 +124,7 @@ namespace G4INCL {
         InverseInterpolationTable *theTable = new InverseInterpolationTable(*theInverseCDFOneThird);
         delete theInverseCDFOneThird;
         delete rpCorrelationFunction;
-        DEBUG("Creating r-p correlation function for A=" << A << ", Z=" << Z << ":"
+        DEBUG("Creating r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A=" << A << ", Z=" << Z << ":"
               << std::endl << theTable->print() << std::endl);
 
         (*rpCorrelationTableCache)[nuclideID] = theTable;
@@ -130,11 +134,13 @@ namespace G4INCL {
       }
     }
 
-    InverseInterpolationTable *createRCDFTable(const G4int A, const G4int Z) {
+    InverseInterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z) {
+// assert(t==Proton || t==Neutron);
+
       if(!rCDFTableCache)
         rCDFTableCache = new std::map<G4int,InverseInterpolationTable*>;
 
-      const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+      const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
       const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rCDFTableCache->find(nuclideID);
       if(mapEntry == rCDFTableCache->end()) {
 
@@ -173,18 +179,21 @@ namespace G4INCL {
       }
     }
 
-    InverseInterpolationTable *createPCDFTable(const G4int A, const G4int Z) {
+    InverseInterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z) {
+// assert(t==Proton || t==Neutron);
+
       if(!pCDFTableCache)
         pCDFTableCache = new std::map<G4int,InverseInterpolationTable*>;
 
-      const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+      const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
       const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = pCDFTableCache->find(nuclideID);
       if(mapEntry == pCDFTableCache->end()) {
         IFunction1D *pDensityFunction;
         if(A > 19) {
-          pDensityFunction = new NuclearDensityFunctions::HardSphere(PhysicalConstants::Pf);
+          const G4double theFermiMomentum = ParticleTable::getFermiMomentum(A, Z);
+          pDensityFunction = new NuclearDensityFunctions::HardSphere(theFermiMomentum);
         } else if(A <= 19 && A > 2) { // Gaussian distribution for light nuclei
-          G4double momentumRMS = Math::oneOverSqrtThree * ParticleTable::getMomentumRMS(A, Z);
+          const G4double momentumRMS = Math::oneOverSqrtThree * ParticleTable::getMomentumRMS(A, Z);
           pDensityFunction = new NuclearDensityFunctions::Gaussian(5.*momentumRMS, momentumRMS);
         } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
           pDensityFunction = new NuclearDensityFunctions::ParisP();
@@ -204,12 +213,6 @@ namespace G4INCL {
       } else {
         return mapEntry->second;
       }
-    }
-
-    ParticleSampler *createParticleSampler(const G4int A, const G4int Z) {
-      InverseInterpolationTable *rCDFTable = createRCDFTable(A, Z);
-      InverseInterpolationTable *pCDFTable = createPCDFTable(A, Z);
-      return new ParticleSampler(A, Z, rCDFTable, pCDFTable);
     }
 
     void clearCache() {
@@ -245,6 +248,14 @@ namespace G4INCL {
         delete pCDFTableCache;
         pCDFTableCache = NULL;
       }
+    }
+
+    ParticleSampler *createParticleSampler(const G4int A, const G4int Z) {
+      InverseInterpolationTable *rCDFTableProton = createRCDFTable(Proton, A, Z);
+      InverseInterpolationTable *pCDFTableProton = createPCDFTable(Proton, A, Z);
+      InverseInterpolationTable *rCDFTableNeutron = createRCDFTable(Neutron, A, Z);
+      InverseInterpolationTable *pCDFTableNeutron = createPCDFTable(Neutron, A, Z);
+      return new ParticleSampler(A, Z, rCDFTableProton, pCDFTableProton, rCDFTableNeutron, pCDFTableNeutron);
     }
 
   } // namespace NuclearDensityFactory

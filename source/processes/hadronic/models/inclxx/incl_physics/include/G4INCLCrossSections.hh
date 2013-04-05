@@ -68,7 +68,7 @@ namespace G4INCL {
      *
      * \return the interaction distance
      */
-    G4double interactionDistanceNN(const G4double projectileKineticEnergy);
+    G4double interactionDistanceNN(const ParticleSpecies &aSpecies, const G4double kineticEnergy);
 
     /** \brief Compute the "interaction distance".
      *
@@ -78,18 +78,6 @@ namespace G4INCL {
      * \return the interaction distance
      */
     G4double interactionDistancePiN(const G4double projectileKineticEnergy);
-
-    /** \brief The interaction distance for nucleons at 1 GeV.
-     *
-     * Used to determine the universe radius at any energy.
-     */
-    G4double interactionDistanceNN1GeV();
-
-    /** \brief The interaction distance for pions at 1 GeV.
-     *
-     * Used to determine the universe radius at any energy.
-     */
-    G4double interactionDistancePiN1GeV();
 
   }
 }

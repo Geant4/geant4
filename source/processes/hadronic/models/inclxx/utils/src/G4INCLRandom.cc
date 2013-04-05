@@ -46,37 +46,103 @@
 
 namespace G4INCL {
 
-  G4ThreadLocal IRandomGenerator* Random::theGenerator;
+  namespace Random {
 
-  G4double Random::gauss(G4double sigma) {
-    // generate a Gaussian random number with standard deviation sigma
-    // uses the flat() and flat0() methods
-    static G4ThreadLocal G4bool generated = false;
-    static G4ThreadLocal G4double u, v;
+    namespace {
 
-    if( !generated )
-    {
-      u = shoot0();
-      v = Math::twoPi*shoot();
-      generated = true;
-      return sigma*std::sqrt(-2*std::log(u))*std::cos(v);
+      G4ThreadLocal IRandomGenerator* theGenerator;
+
     }
-    else
-    {
-      generated = false;
-      return sigma*std::sqrt(-2*std::log(u))*std::sin(v);
+
+    void setGenerator(G4INCL::IRandomGenerator *aGenerator) {
+      if(isInitialized()) {
+        ERROR("INCL random number generator already initialized." << std::endl);
+      } else {
+        theGenerator = aGenerator;
+      }
     }
-  }
 
-  ThreeVector Random::normVector(G4double norm) {
+    void setSeeds(const SeedVector &sv) {
+      theGenerator->setSeeds(sv);
+    }
 
-    const G4double ctheta = (1.-2.*shoot());
-    const G4double stheta = std::sqrt(1.-ctheta*ctheta);
-    const G4double phi = Math::twoPi*shoot();
-    return ThreeVector(
-        norm * stheta * std::cos(phi),
-        norm * stheta * std::sin(phi),
-        norm * ctheta);
+    SeedVector getSeeds() {
+      return theGenerator->getSeeds();
+    }
+
+    G4double shoot() {
+      return theGenerator->flat();
+    }
+
+    G4double shoot0() {
+      G4double r;
+      while( (r=shoot()) <= 0. )
+        ;
+      return r;
+    }
+
+    G4double shoot1() {
+      G4double r;
+      while( (r=shoot()) >= 1. )
+        ;
+      return r;
+    }
+
+    template<typename T>
+      T shootInteger(T n) {
+        return static_cast<T>(shoot1() * n);
+      }
+
+    G4double gauss(G4double sigma) {
+      // generate a Gaussian random number with standard deviation sigma
+      // uses the flat() and flat0() methods
+      static G4ThreadLocal G4bool generated = false;
+      static G4ThreadLocal G4double u, v;
+
+      if( !generated )
+      {
+        u = shoot0();
+        v = Math::twoPi*shoot();
+        generated = true;
+        return sigma*std::sqrt(-2*std::log(u))*std::cos(v);
+      }
+      else
+      {
+        generated = false;
+        return sigma*std::sqrt(-2*std::log(u))*std::sin(v);
+      }
+    }
+
+    ThreeVector normVector(G4double norm) {
+
+      const G4double ctheta = (1.-2.*shoot());
+      const G4double stheta = std::sqrt(1.-ctheta*ctheta);
+      const G4double phi = Math::twoPi*shoot();
+      return ThreeVector(
+                         norm * stheta * std::cos(phi),
+                         norm * stheta * std::sin(phi),
+                         norm * ctheta);
+
+    }
+
+    ThreeVector sphereVector(G4double rmax) {
+      return normVector( rmax*Math::pow13(shoot0()) );
+    }
+
+    ThreeVector gaussVector(G4double sigma) {
+      const G4double sigmax = sigma * Math::oneOverSqrtThree;
+      return ThreeVector(gauss(sigmax), gauss(sigmax), gauss(sigmax));
+    }
+
+    void deleteGenerator() {
+      delete theGenerator;
+      theGenerator = 0;
+    }
+
+    G4bool isInitialized() {
+      if(theGenerator == 0) return false;
+      return true;
+    }
 
   }
 

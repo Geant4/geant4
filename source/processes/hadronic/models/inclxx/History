@@ -16,6 +16,21 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+26 March 2013 - Davide Mancusi (hadr-inclxx-V09-06-09)
+-----------------------------------------------------------
+- Fix another compilation error for G4-MT.
+
+15 March 2013 - Davide Mancusi (hadr-inclxx-V09-06-08)
+-----------------------------------------------------------
+- Fix compilation errors for G4-MT.
+
+13 March 2013 - Davide Mancusi (hadr-inclxx-V09-06-07)
+-----------------------------------------------------------
+- INCL++ v5.1.11
+  o Several adjustments in the nucleus-nucleus sector. Fixes a big bug which
+    involved light targets.
+  o Some code refactoring.
+
 12 March 2013 - Dennis Wright (hadr-inclxx-V09-06-06)
 -----------------------------------------------------
 - fixed MacOS Clang compiler warnings: unused private variables in classes

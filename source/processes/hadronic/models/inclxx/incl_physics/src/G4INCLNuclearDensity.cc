@@ -41,39 +41,88 @@
 
 namespace G4INCL {
 
-  NuclearDensity::NuclearDensity(G4int A, G4int Z, InverseInterpolationTable *rpCorrelationTable) :
+  NuclearDensity::NuclearDensity(const G4int A, const G4int Z, InverseInterpolationTable const * const rpCorrelationTableProton, InverseInterpolationTable const * const rpCorrelationTableNeutron) :
     theA(A),
     theZ(Z),
-    theMaximumRadius((*rpCorrelationTable)(1.)),
-    theNuclearRadius(ParticleTable::getNuclearRadius(theA,theZ)),
-    rFromP(rpCorrelationTable),
+    theMaximumRadius(std::min((*rpCorrelationTableProton)(1.), (*rpCorrelationTableProton)(1.))),
+    theNuclearRadius(ParticleTable::getNuclearRadius(theA,theZ))
+  {
+    std::fill(rFromP, rFromP + UnknownParticle, static_cast<InverseInterpolationTable*>(NULL));
+    rFromP[Proton] = rpCorrelationTableProton;
+    rFromP[Neutron] = rpCorrelationTableNeutron;
+    rFromP[DeltaPlusPlus] = rpCorrelationTableProton;
+    rFromP[DeltaPlus] = rpCorrelationTableProton;
+    rFromP[DeltaZero] = rpCorrelationTableNeutron;
+    rFromP[DeltaMinus] = rpCorrelationTableNeutron;
     // The interpolation table for local-energy look-ups is simply obtained by
     // inverting the r-p correlation table.
-    tFromR(new InverseInterpolationTable(rFromP->getNodeValues(), rFromP->getNodeAbscissae()))
-  {
-    DEBUG("Interpolation table for local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
-        << std::endl
-        << tFromR->print()
-        << std::endl);
+    std::fill(tFromR, tFromR + UnknownParticle, static_cast<InverseInterpolationTable*>(NULL));
+    tFromR[Proton] = new InverseInterpolationTable(rFromP[Proton]->getNodeValues(), rFromP[Proton]->getNodeAbscissae());
+    tFromR[Neutron] = new InverseInterpolationTable(rFromP[Neutron]->getNodeValues(), rFromP[Neutron]->getNodeAbscissae());
+    tFromR[DeltaPlusPlus] = new InverseInterpolationTable(rFromP[DeltaPlusPlus]->getNodeValues(), rFromP[DeltaPlusPlus]->getNodeAbscissae());
+    tFromR[DeltaPlus] = new InverseInterpolationTable(rFromP[DeltaPlus]->getNodeValues(), rFromP[DeltaPlus]->getNodeAbscissae());
+    tFromR[DeltaZero] = new InverseInterpolationTable(rFromP[DeltaZero]->getNodeValues(), rFromP[DeltaZero]->getNodeAbscissae());
+    tFromR[DeltaMinus] = new InverseInterpolationTable(rFromP[DeltaMinus]->getNodeValues(), rFromP[DeltaMinus]->getNodeAbscissae());
+    DEBUG("Interpolation table for proton local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
+          << std::endl
+          << tFromR[Proton]->print()
+          << std::endl
+          << "Interpolation table for neutron local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
+          << std::endl
+          << tFromR[Neutron]->print()
+          << std::endl
+          << "Interpolation table for delta++ local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
+          << std::endl
+          << tFromR[DeltaPlusPlus]->print()
+          << std::endl
+          << "Interpolation table for delta+ local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
+          << std::endl
+          << tFromR[DeltaPlus]->print()
+          << std::endl
+          << "Interpolation table for delta0 local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
+          << std::endl
+          << tFromR[DeltaZero]->print()
+          << std::endl
+          << "Interpolation table for delta- local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
+          << std::endl
+          << tFromR[DeltaMinus]->print()
+          << std::endl);
     initializeTransmissionRadii();
   }
 
   NuclearDensity::~NuclearDensity() {
-    // We don't delete the rFromP table, which is cached in the
+    // We don't delete the rFromP tables, which are cached in the
     // NuclearDensityFactory
-    delete tFromR;
+    delete tFromR[Proton];
+    delete tFromR[Neutron];
+    delete tFromR[DeltaPlusPlus];
+    delete tFromR[DeltaPlus];
+    delete tFromR[DeltaZero];
+    delete tFromR[DeltaMinus];
   }
 
   NuclearDensity::NuclearDensity(const NuclearDensity &rhs) :
     theA(rhs.theA),
     theZ(rhs.theZ),
     theMaximumRadius(rhs.theMaximumRadius),
-    theNuclearRadius(rhs.theNuclearRadius),
-    // rFromP is owned by NuclearDensityFactory, so shallow copy is sufficient
-    rFromP(rhs.rFromP),
-    // deep copy for tFromR
-    tFromR(new InverseInterpolationTable(*(rhs.tFromR)))
+    theNuclearRadius(rhs.theNuclearRadius)
   {
+    // rFromP is owned by NuclearDensityFactory, so shallow copy is sufficient
+    std::fill(rFromP, rFromP + UnknownParticle, static_cast<InverseInterpolationTable*>(NULL));
+    rFromP[Proton] = rhs.rFromP[Proton];
+    rFromP[Neutron] = rhs.rFromP[Neutron];
+    rFromP[DeltaPlusPlus] = rhs.rFromP[DeltaPlusPlus];
+    rFromP[DeltaPlus] = rhs.rFromP[DeltaPlus];
+    rFromP[DeltaZero] = rhs.rFromP[DeltaZero];
+    rFromP[DeltaMinus] = rhs.rFromP[DeltaMinus];
+    // deep copy for tFromR
+    std::fill(tFromR, tFromR + UnknownParticle, static_cast<InverseInterpolationTable*>(NULL));
+    tFromR[Proton] = new InverseInterpolationTable(*(rhs.tFromR[Proton]));
+    tFromR[Neutron] = new InverseInterpolationTable(*(rhs.tFromR[Neutron]));
+    tFromR[DeltaPlusPlus] = new InverseInterpolationTable(*(rhs.tFromR[DeltaPlusPlus]));
+    tFromR[DeltaPlus] = new InverseInterpolationTable(*(rhs.tFromR[DeltaPlus]));
+    tFromR[DeltaZero] = new InverseInterpolationTable(*(rhs.tFromR[DeltaZero]));
+    tFromR[DeltaMinus] = new InverseInterpolationTable(*(rhs.tFromR[DeltaMinus]));
     std::copy(rhs.transmissionRadius, rhs.transmissionRadius+UnknownParticle, transmissionRadius);
   }
 
@@ -89,8 +138,18 @@ namespace G4INCL {
     std::swap(theMaximumRadius, rhs.theMaximumRadius);
     std::swap(theNuclearRadius, rhs.theNuclearRadius);
     std::swap_ranges(transmissionRadius, transmissionRadius+UnknownParticle, rhs.transmissionRadius);
-    std::swap(rFromP, rhs.rFromP);
-    std::swap(tFromR, rhs.tFromR);
+    std::swap(rFromP[Proton], rhs.rFromP[Proton]);
+    std::swap(rFromP[Neutron], rhs.rFromP[Neutron]);
+    std::swap(rFromP[DeltaPlusPlus], rhs.rFromP[DeltaPlusPlus]);
+    std::swap(rFromP[DeltaPlus], rhs.rFromP[DeltaPlus]);
+    std::swap(rFromP[DeltaZero], rhs.rFromP[DeltaZero]);
+    std::swap(rFromP[DeltaMinus], rhs.rFromP[DeltaMinus]);
+    std::swap(tFromR[Proton], rhs.tFromR[Proton]);
+    std::swap(tFromR[Neutron], rhs.tFromR[Neutron]);
+    std::swap(tFromR[DeltaPlusPlus], rhs.tFromR[DeltaPlusPlus]);
+    std::swap(tFromR[DeltaPlus], rhs.tFromR[DeltaPlus]);
+    std::swap(tFromR[DeltaZero], rhs.tFromR[DeltaZero]);
+    std::swap(tFromR[DeltaMinus], rhs.tFromR[DeltaMinus]);
  }
 
   void NuclearDensity::initializeTransmissionRadii() {
@@ -107,12 +166,14 @@ namespace G4INCL {
     // transmission radii for neutral particles intentionally left uninitialised
   }
 
-  G4double NuclearDensity::getMaxRFromP(G4double p) const {
-    return (*rFromP)(p);
+  G4double NuclearDensity::getMaxRFromP(ParticleType const t, const G4double p) const {
+// assert(t==Proton || t==Neutron || t==DeltaPlusPlus || t==DeltaPlus || t==DeltaZero || t==DeltaMinus);
+    return (*(rFromP[t]))(p);
   }
 
-  G4double NuclearDensity::getMaxTFromR(G4double r) const {
-    return (*tFromR)(r);
+  G4double NuclearDensity::getMaxTFromR(ParticleType const t, const G4double r) const {
+// assert(t==Proton || t==Neutron || t==DeltaPlusPlus || t==DeltaPlus || t==DeltaZero || t==DeltaMinus);
+    return (*(tFromR[t]))(r);
   }
 
 }

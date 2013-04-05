@@ -55,11 +55,10 @@ namespace G4INCL {
 
   }
 
-  G4INCL::IChannel* DecayAvatar::getChannel() const
-  {
+  G4INCL::IChannel* DecayAvatar::getChannel() {
     if(particle1->isDelta()) {
       DEBUG("DeltaDecayChannel chosen." << std::endl);
-      return new DeltaDecayChannel(theNucleus, particle1, incidentDirection);
+      return new DeltaDecayChannel(particle1, incidentDirection);
     }
     else
       return NULL;

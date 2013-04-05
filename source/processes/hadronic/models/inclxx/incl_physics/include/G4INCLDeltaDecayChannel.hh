@@ -46,7 +46,7 @@
 namespace G4INCL {
   class DeltaDecayChannel : public IChannel {
   public:
-    DeltaDecayChannel(Nucleus *n, Particle *, ThreeVector const);
+    DeltaDecayChannel(Particle *, ThreeVector const);
     virtual ~DeltaDecayChannel();
 
     static G4double computeDecayTime(Particle *p);
@@ -56,7 +56,6 @@ namespace G4INCL {
     void sampleAngles(G4double*, G4double*, G4double*);
 
     Particle *theParticle;
-//    Nucleus *theNucleus;
     ThreeVector const incidentDirection;
   };
 }

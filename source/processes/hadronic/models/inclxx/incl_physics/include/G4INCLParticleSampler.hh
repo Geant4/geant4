@@ -56,10 +56,16 @@ namespace G4INCL {
        *
        * \param A the mass number
        * \param Z the charge number
-       * \param rCDFTable the interpolation table for the inverse CDF in r-space
-       * \param pCDFTable the interpolation table for the inverse CDF in p-space
+       * \param rCDFTableProton the interpolation table for the inverse CDF in r-space (protons)
+       * \param pCDFTableProton the interpolation table for the inverse CDF in p-space (protons)
+       * \param rCDFTableNeutron the interpolation table for the inverse CDF in r-space (neutrons)
+       * \param pCDFTableNeutron the interpolation table for the inverse CDF in p-space (neutrons)
        */
-      ParticleSampler(const G4int A, const G4int Z, InverseInterpolationTable const * const rCDFTable, InverseInterpolationTable const * const pCDFTable);
+      ParticleSampler(const G4int A, const G4int Z,
+                      InverseInterpolationTable const * const rCDFTableProton,
+                      InverseInterpolationTable const * const pCDFTableProton,
+                      InverseInterpolationTable const * const rCDFTableNeutron,
+                      InverseInterpolationTable const * const pCDFTableNeutron);
 
       /// \brief Destructor
       ~ParticleSampler();
@@ -101,11 +107,11 @@ namespace G4INCL {
       /// \brief Charge number
       const G4int theZ;
 
-      /// \brief Pointer to the r-space CDF table
-      InverseInterpolationTable const *theRCDFTable;
+      /// \brief Array of pointers to the r-space CDF table
+      InverseInterpolationTable const *theRCDFTable[UnknownParticle];
 
-      /// \brief Pointer to the p-space CDF table
-      InverseInterpolationTable const *thePCDFTable;
+      /// \brief Array of pointers to the p-space CDF table
+      InverseInterpolationTable const *thePCDFTable[UnknownParticle];
 
       /// \brief Pointer to the Cluster's NuclearDensity
       NuclearDensity const *theDensity;

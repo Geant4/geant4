@@ -56,6 +56,12 @@ namespace G4INCL {
 
       ~INCL();
 
+      /// \brief Dummy copy constructor to silence Coverity warning
+      INCL(const INCL &rhs);
+
+      /// \brief Dummy assignment operator to silence Coverity warning
+      INCL &operator=(const INCL &rhs);
+
       G4bool prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z);
       G4bool initializeTarget(const G4int A, const G4int Z);
       inline const EventInfo &processEvent() {
@@ -91,6 +97,7 @@ namespace G4INCL {
       AvatarAction *avatarAction;
       Config const * const theConfig;
       Nucleus *nucleus;
+      G4bool forceTransparent;
 
       EventInfo theEventInfo;
       GlobalInfo theGlobalInfo;
@@ -328,6 +335,9 @@ namespace G4INCL {
        * live in.
        */
       void initUniverseRadius(ParticleSpecies const &p, const G4double kineticEnergy, const G4int A, const G4int Z);
+
+      /// \brief Update global counters and other members of theGlobalInfo object
+      void updateGlobalInfo();
   };
 }
 

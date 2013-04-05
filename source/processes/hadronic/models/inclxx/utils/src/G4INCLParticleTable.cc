@@ -40,6 +40,9 @@
 #include <cmath>
 #include <cctype>
 #include <sstream>
+#ifdef INCLXX_IN_GEANT4_MODE
+#include "G4SystemOfUnits.hh"
+#endif
 
 #ifdef INCLXX_IN_GEANT4_MODE
 #include "G4PhysicalConstants.hh"
@@ -350,6 +353,18 @@ namespace G4INCL {
         FATAL("Unrecognized separation-energy type in ParticleTable initialization: " << theConfig->getSeparationEnergyType() << std::endl);
       }
 
+      // Initialise the Fermi-momentum function
+      if(!theConfig || theConfig->getFermiMomentumType()==ConstantFermiMomentum)
+        getFermiMomentum = ParticleTable::getFermiMomentumConstant;
+      else if(theConfig->getFermiMomentumType()==ConstantLightFermiMomentum)
+        getFermiMomentum = ParticleTable::getFermiMomentumConstantLight;
+      else if(theConfig->getFermiMomentumType()==MassDependentFermiMomentum)
+        getFermiMomentum = ParticleTable::getFermiMomentumMassDependent;
+      else {
+        FATAL("Unrecognized Fermi-momentum type in ParticleTable initialization: " << theConfig->getFermiMomentumType() << std::endl);
+        std::abort();
+      }
+
     }
 
     G4int getIsospin(const ParticleType t) {
@@ -635,7 +650,7 @@ namespace G4INCL {
         if(thisRMS>0.0)
           return thisRMS;
         else {
-          ERROR("getRadiusParameter : Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
+          ERROR("getNuclearRadius: Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
           return 0.0;
         }
       } else if(A < 19) {
@@ -716,10 +731,7 @@ namespace G4INCL {
 
     G4double getMomentumRMS(const G4int A, const G4int Z) {
 // assert(Z>=0 && A>=0 && Z<=A);
-      if(Z<clusterTableZSize && A<clusterTableASize)
-        return momentumRMS[Z][A];
-      else
-        return Math::sqrtThreeFifths * PhysicalConstants::Pf;
+      return getFermiMomentum(A,Z) * Math::sqrtThreeFifths;
     }
 
     G4double getSeparationEnergyINCL(const ParticleType t, const G4int /*A*/, const G4int /*Z*/) {
@@ -814,10 +826,31 @@ namespace G4INCL {
       return getNaturalIsotopicDistributions()->drawRandomIsotope(Z);
     }
 
+    G4double getFermiMomentumConstant(const G4int /*A*/, const G4int /*Z*/) {
+      return PhysicalConstants::Pf;
+    }
+
+    G4double getFermiMomentumConstantLight(const G4int A, const G4int Z) {
+// assert(Z>0 && A>0 && Z<=A);
+      if(Z<clusterTableZSize && A<clusterTableASize)
+        return momentumRMS[Z][A] * Math::sqrtFiveThirds;
+      else
+        return getFermiMomentumConstant(A,Z);
+    }
+
+    G4double getFermiMomentumMassDependent(const G4int A, const G4int /*Z*/) {
+// assert(A>0);
+      static const G4double alphaParam = 259.416; // MeV/c
+      static const G4double betaParam  = 152.824; // MeV/c
+      static const G4double gammaParam = 9.5157E-2;
+      return alphaParam - betaParam*std::exp(-gammaParam*((G4double)A));
+    }
+
     G4ThreadLocal G4double effectiveDeltaDecayThreshold = 0.;
     G4ThreadLocal NuclearMassFn getTableMass = NULL;
     G4ThreadLocal ParticleMassFn getTableParticleMass = NULL;
     G4ThreadLocal SeparationEnergyFn getSeparationEnergy = NULL;
+    G4ThreadLocal FermiMomentumFn getFermiMomentum = NULL;
 
   } // namespace ParticleTable
 } // namespace G4INCL

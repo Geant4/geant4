@@ -64,8 +64,8 @@ namespace G4INCL {
   class Particle {
   public:
     Particle();
-    Particle(ParticleType t, G4double energy, ThreeVector momentum, ThreeVector position);
-    Particle(ParticleType t, ThreeVector momentum, ThreeVector position);
+    Particle(ParticleType t, G4double energy, ThreeVector const &momentum, ThreeVector const &position);
+    Particle(ParticleType t, ThreeVector const &momentum, ThreeVector const &position);
     virtual ~Particle() {}
 
     /** \brief Copy constructor

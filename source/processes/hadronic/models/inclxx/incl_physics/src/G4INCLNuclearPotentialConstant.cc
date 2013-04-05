@@ -65,7 +65,7 @@ namespace G4INCL {
       const G4double mp = ParticleTable::getINCLMass(Proton);
       const G4double mn = ParticleTable::getINCLMass(Neutron);
 
-      const G4double theFermiMomentum = Math::sqrtFiveThirds * ParticleTable::getMomentumRMS(theA,theZ);
+      const G4double theFermiMomentum = ParticleTable::getFermiMomentum(theA,theZ);
 
       fermiMomentum[Proton] = theFermiMomentum;
       const G4double theProtonFermiEnergy = std::sqrt(theFermiMomentum*theFermiMomentum + mp*mp) - mp;
@@ -91,6 +91,36 @@ namespace G4INCL {
       separationEnergy[DeltaPlus] = vDelta - fermiEnergy.find(DeltaPlus)->second;
       separationEnergy[DeltaZero] = vDelta - fermiEnergy.find(DeltaZero)->second;
       separationEnergy[DeltaMinus] = vDelta - fermiEnergy.find(DeltaMinus)->second;
+
+      separationEnergy[PiPlus] = 0.;
+      separationEnergy[PiZero] = 0.;
+      separationEnergy[PiMinus] = 0.;
+
+      DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
+            << "  proton:  " << separationEnergy[Proton] << std::endl
+            << "  neutron: " << separationEnergy[Neutron] << std::endl
+            << "  delta++: " << separationEnergy[DeltaPlusPlus] << std::endl
+            << "  delta+:  " << separationEnergy[DeltaPlus] << std::endl
+            << "  delta0:  " << separationEnergy[DeltaZero] << std::endl
+            << "  delta-:  " << separationEnergy[DeltaMinus] << std::endl
+            << "  pi+:     " << separationEnergy[PiPlus] << std::endl
+            << "  pi0:     " << separationEnergy[PiZero] << std::endl
+            << "  pi-:     " << separationEnergy[PiMinus] << std::endl
+            );
+
+      DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
+            << "  proton:  " << fermiEnergy[Proton] << std::endl
+            << "  neutron: " << fermiEnergy[Neutron] << std::endl
+            << "  delta++: " << fermiEnergy[DeltaPlusPlus] << std::endl
+            << "  delta+:  " << fermiEnergy[DeltaPlus] << std::endl
+            << "  delta0:  " << fermiEnergy[DeltaZero] << std::endl
+            << "  delta-:  " << fermiEnergy[DeltaMinus] << std::endl
+            );
+
+      DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << std::endl
+            << "  proton:  " << fermiMomentum[Proton] << std::endl
+            << "  neutron: " << fermiMomentum[Neutron] << std::endl
+            );
     }
 
     G4double NuclearPotentialConstant::computePotentialEnergy(const Particle *particle) const {

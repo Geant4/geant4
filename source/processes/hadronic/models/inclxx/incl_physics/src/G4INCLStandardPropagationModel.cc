@@ -193,17 +193,6 @@ namespace G4INCL {
           0.);
       pr->setPosition(position);
 
-      /* Store the internal kinematics of the projectile remnant.
-       *
-       * Note that this is at variance with the Fortran version, which stores
-       * the initial kinematics of the particles *after* putting the spectators
-       * on mass shell, but *before* removing the same energy from the
-       * participants. Due to the different code flow, doing so in the C++
-       * version leads to wrong excitation energies for the forced compound
-       * nucleus.
-       */
-      pr->storeComponents();
-
       // Fill in the relevant kinematic variables
       theNucleus->setIncomingAngularMomentum(pr->getAngularMomentum());
       theNucleus->setIncomingMomentum(pr->getMomentum());
@@ -223,6 +212,17 @@ namespace G4INCL {
         delete pr;
         return -1.;
       }
+
+      /* Store the internal kinematics of the projectile remnant.
+       *
+       * Note that this is at variance with the Fortran version, which stores
+       * the initial kinematics of the particles *after* putting the spectators
+       * on mass shell, but *before* removing the same energy from the
+       * participants. Due to the different code flow, doing so in the C++
+       * version leads to wrong excitation energies for the forced compound
+       * nucleus.
+       */
+      pr->storeComponents();
 
       // Tell the Nucleus about the ProjectileRemnant
       theNucleus->setProjectileRemnant(pr);
@@ -324,7 +324,7 @@ namespace G4INCL {
       // Is the CM energy > cutNN? (no cutNN on the first collision)
       if(theNucleus->getStore()->getBook()->getAcceptedCollisions()>0
           && p1->isNucleon() && p2->isNucleon()
-          && squareTotalEnergyInCM < BinaryCollisionAvatar::cutNNSquared) return NULL;
+          && squareTotalEnergyInCM < BinaryCollisionAvatar::getCutNNSquared()) return NULL;
 
       // Do the particles come close enough to each other?
       if(Math::tenPi*minDistOfApproachSquared > totalCrossSection) return NULL;

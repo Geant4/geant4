@@ -72,7 +72,7 @@ namespace G4INCL {
   }
 
   Particle::Particle(ParticleType t, G4double energy,
-      ThreeVector momentum, ThreeVector position)
+      ThreeVector const &momentum, ThreeVector const &position)
     : theEnergy(energy),
     thePropagationEnergy(&theEnergy),
     theFrozenEnergy(theEnergy),
@@ -95,7 +95,7 @@ namespace G4INCL {
   }
 
   Particle::Particle(ParticleType t,
-      ThreeVector momentum, ThreeVector position)
+      ThreeVector const &momentum, ThreeVector const &position)
     : thePropagationEnergy(&theEnergy),
     theMomentum(momentum),
     thePropagationMomentum(&theMomentum),

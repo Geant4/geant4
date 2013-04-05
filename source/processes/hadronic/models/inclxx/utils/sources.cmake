@@ -86,7 +86,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLGlobals.cc
         G4INCLConfigVersion.cc
         G4INCLParticle.cc
-        G4INCLIntersection.cc
         G4INCLConfig.cc
         G4INCLRootFinder.cc
         G4INCLRanecu.cc

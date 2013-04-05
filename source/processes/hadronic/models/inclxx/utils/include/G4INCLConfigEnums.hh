@@ -99,6 +99,13 @@ namespace G4INCL {
     RealForLightSeparationEnergy
   };
 
+  // Enumerator for Fermi-momentum types
+  enum FermiMomentumType {
+    ConstantFermiMomentum,
+    ConstantLightFermiMomentum,
+    MassDependentFermiMomentum
+  };
+
 }
 
 #endif

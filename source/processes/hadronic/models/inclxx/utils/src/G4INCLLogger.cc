@@ -73,7 +73,53 @@ namespace G4INCL {
       << "ENDDATA" << std::endl;
   }
 
-#endif
+  namespace Logger {
 
-  G4ThreadLocal LoggerSlave * Logger::theLoggerSlave = NULL;
+    namespace {
+      G4ThreadLocal LoggerSlave *theLoggerSlave = NULL;
+    }
+
+    void logMessage(const MessageType type, std::string const &fileName, const G4int lineNumber, std::string const &s) {
+      theLoggerSlave->logMessage(type, fileName, lineNumber, s);
+    }
+
+    void flush() { theLoggerSlave->flush(); }
+
+    void dataBlock(const std::string &block, const std::string &fileName, const G4int lineNumber) {
+      theLoggerSlave->logDataBlock(block, fileName, lineNumber);
+    }
+
+    void setLoggerSlave(LoggerSlave * const logger) { theLoggerSlave = logger; }
+
+    void setVerbosityLevel(G4int lvl) { theLoggerSlave->setVerbosityLevel(lvl); }
+
+    G4int getVerbosityLevel() { return theLoggerSlave->getVerbosityLevel(); }
+
+    void deleteLoggerSlave() {
+      delete theLoggerSlave;
+      theLoggerSlave=NULL;
+    }
+
+  }
+
+#else
+
+  namespace Logger {
+
+    namespace {
+      G4ThreadLocal LoggerSlave *theLoggerSlave = NULL;
+    }
+
+    void setLoggerSlave(LoggerSlave * const logger) { theLoggerSlave = logger; }
+
+    void setVerbosityLevel(G4int lvl) { theLoggerSlave->setVerbosityLevel(lvl); }
+
+    void deleteLoggerSlave() {
+      delete theLoggerSlave;
+      theLoggerSlave=NULL;
+    }
+
+  }
+
+#endif
 }

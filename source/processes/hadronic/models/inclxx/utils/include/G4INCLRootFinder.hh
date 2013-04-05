@@ -61,9 +61,26 @@ namespace G4INCL {
     {};
   };
 
-  typedef std::pair<G4double,G4double> RootFinderSolution;
-
   namespace RootFinder {
+
+    class Solution {
+      public:
+        Solution() :
+          success(false),
+          x(0.),
+          y(0.)
+      {}
+        Solution( const G4double x0, const G4double y0) :
+          success(true),
+          x(x0),
+          y(y0)
+      {}
+        ~Solution() {}
+
+        G4bool success;
+        G4double x;
+        G4double y;
+    };
 
     /** \brief Numerically solve a one-dimensional equation.
      *
@@ -74,15 +91,9 @@ namespace G4INCL {
      *
      * \param f pointer to a RootFunctor
      * \param x0 initial value of the function argument
-     * \return true if a root was found
+     * \return a Solution object describing the root, if it was found
      */
-    G4bool solve(RootFunctor const * const f, const G4double x0);
-
-    /** \brief Get the solution of the last call to solve().
-     *
-     * \return the solution, as an (x,y) pair
-     */
-    RootFinderSolution const &getSolution();
+    Solution solve(RootFunctor const * const f, const G4double x0);
 
   }
 }

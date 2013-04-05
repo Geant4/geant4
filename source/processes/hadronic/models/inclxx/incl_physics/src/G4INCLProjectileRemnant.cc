@@ -140,6 +140,53 @@ namespace G4INCL {
     return pL;
   }
 
+  ParticleList ProjectileRemnant::addAllDynamicalSpectators(ParticleList pL) {
+    // Put all the spectators in the projectile
+    ThreeVector theNewMomentum = theMomentum;
+    G4double theNewEnergy = theEnergy;
+    G4int theNewA = theA;
+    G4int theNewZ = theZ;
+    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+// assert((*p)->isNucleon());
+      // Add the initial (off-shell) momentum and energy to the projectile remnant
+      theNewMomentum += getStoredMomentum(*p);
+      theNewEnergy += (*p)->getEnergy();
+      theNewA += (*p)->getA();
+      theNewZ += (*p)->getZ();
+    }
+
+    // Check that the excitation energy of the new projectile remnant is non-negative
+    const G4double theNewMass = ParticleTable::getTableMass(theNewA,theNewZ);
+    const G4double theNewExcitationEnergy = computeExcitationEnergyWith(pL);
+    const G4double theNewEffectiveMass = theNewMass + theNewExcitationEnergy;
+
+    // If this condition is satisfied, there is no solution. Fall back on the
+    // "most" method
+    if(theNewEnergy<theNewEffectiveMass) {
+      WARN("Could not add all the dynamical spectators back into the projectile remnant."
+           << " Falling back to the \"most\" method." << std::endl);
+      return addMostDynamicalSpectators(pL);
+    }
+
+    // Add all the participants to the projectile remnant
+    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+      particles.push_back(*p);
+    }
+
+    // Rescale the momentum of the projectile remnant so that sqrt(s) has the
+    // correct value
+    const G4double scalingFactorSquared = (theNewEnergy*theNewEnergy-theNewEffectiveMass*theNewEffectiveMass)/theNewMomentum.mag2();
+    const G4double scalingFactor = std::sqrt(scalingFactorSquared);
+    DEBUG("Scaling factor for the projectile-remnant momentum = " << scalingFactor << std::endl);
+
+    theA = theNewA;
+    theZ = theNewZ;
+    theMomentum = theNewMomentum * scalingFactor;
+    theEnergy = theNewEnergy;
+
+    return ParticleList();
+  }
+
   ParticleList ProjectileRemnant::addMostDynamicalSpectators(ParticleList pL) {
     // Try as hard as possible to add back all the dynamical spectators.
     // Don't add spectators that lead to negative excitation energies. Start by
@@ -265,24 +312,65 @@ namespace G4INCL {
     return true;
   }
 
-  G4double ProjectileRemnant::computeExcitationEnergy(const long exceptID) const {
+  G4double ProjectileRemnant::computeExcitationEnergyExcept(const long exceptID) const {
+    const EnergyLevels theEnergyLevels = getPresentEnergyLevelsExcept(exceptID);
+    return computeExcitationEnergy(theEnergyLevels);
+  }
+
+  G4double ProjectileRemnant::computeExcitationEnergyWith(const ParticleList &pL) const {
+    const EnergyLevels theEnergyLevels = getPresentEnergyLevelsWith(pL);
+    return computeExcitationEnergy(theEnergyLevels);
+  }
+
+  G4double ProjectileRemnant::computeExcitationEnergy(const EnergyLevels &levels) const {
     // The ground-state energy is the sum of the A smallest initial projectile
     // energies.
     // For the last nucleon, return 0 so that the algorithm will just put it on
     // shell.
-    if(theA==1)
+    const unsigned theNewA = levels.size();
+// assert(theNewA>0);
+    if(theNewA==1)
       return 0.;
 
-    const G4double groundState = theGroundStateEnergies.at(theA-2);
+    const G4double groundState = theGroundStateEnergies.at(theNewA-1);
 
     // Compute the sum of the presently occupied energy levels
-    const EnergyLevels theEnergyLevels = getPresentEnergyLevels(exceptID);
     const G4double excitedState = std::accumulate(
-        theEnergyLevels.begin(),
-        theEnergyLevels.end(),
+        levels.begin(),
+        levels.end(),
         0.);
 
     return excitedState-groundState;
+  }
+
+  ProjectileRemnant::EnergyLevels ProjectileRemnant::getPresentEnergyLevelsExcept(const long exceptID) const {
+    EnergyLevels theEnergyLevels;
+    for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      if((*p)->getID()!=exceptID) {
+        EnergyLevelMap::const_iterator i = theInitialEnergyLevels.find((*p)->getID());
+// assert(i!=theInitialEnergyLevels.end());
+        theEnergyLevels.push_back(i->second);
+      }
+    }
+// assert(theEnergyLevels.size()==particles.size()-1);
+    return theEnergyLevels;
+  }
+
+  ProjectileRemnant::EnergyLevels ProjectileRemnant::getPresentEnergyLevelsWith(const ParticleList &pL) const {
+    EnergyLevels theEnergyLevels;
+    for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      EnergyLevelMap::const_iterator i = theInitialEnergyLevels.find((*p)->getID());
+// assert(i!=theInitialEnergyLevels.end());
+      theEnergyLevels.push_back(i->second);
+    }
+    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+      EnergyLevelMap::const_iterator i = theInitialEnergyLevels.find((*p)->getID());
+// assert(i!=theInitialEnergyLevels.end());
+      theEnergyLevels.push_back(i->second);
+    }
+
+// assert(theEnergyLevels.size()==particles.size()+pL.size());
+    return theEnergyLevels;
   }
 
 }

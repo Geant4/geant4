@@ -67,7 +67,7 @@ namespace G4INCL {
     return fs;
   }
 
-  IChannel* ParticleEntryAvatar::getChannel() const {
+  IChannel* ParticleEntryAvatar::getChannel() {
     return new ParticleEntryChannel(theNucleus, theParticle);
   }
 }

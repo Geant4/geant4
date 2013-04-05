@@ -76,7 +76,6 @@ namespace G4INCL {
      blockedDelta(NULL),
      initialEnergy(0.),
      tryCN(false),
-     forceTransparent(false),
      projectileZ(0),
      projectileA(0),
      theUniverseRadius(universeRadius),
@@ -197,6 +196,11 @@ namespace G4INCL {
       for(ParticleIter iter = out.begin(); iter != out.end(); ++iter) {
         if((*iter)->isCluster()) {
 	  Cluster *clusterOut = dynamic_cast<Cluster*>((*iter));
+// assert(clusterOut);
+#ifdef INCLXX_IN_GEANT4_MODE
+          if(!clusterOut)
+            continue;
+#endif
           ParticleList const components = clusterOut->getParticles();
           for(ParticleIter in = components.begin(); in != components.end(); ++in)
             theStore->particleHasBeenEjected((*in)->getID());
@@ -218,16 +222,9 @@ namespace G4INCL {
       }
     } else if(validity == PauliBlockedFS) {
       blockedDelta = finalstate->getBlockedDelta();
-    } else if(validity == ParticleBelowFermiFS) {
+    } else if(validity == ParticleBelowFermiFS || validity == ParticleBelowZeroFS) {
       DEBUG("A Particle is entering below the Fermi sea:" << std::endl << finalstate->print() << std::endl);
       tryCN = true;
-      ParticleList const &entering = finalstate->getEnteringParticles();
-      for(ParticleIter iter = entering.begin(); iter != entering.end(); ++iter) {
-        insertParticle(*iter);
-      }
-    } else if(validity == ParticleBelowZeroFS) {
-      DEBUG("A Particle is entering below zero energy:" << std::endl << finalstate->print() << std::endl);
-      forceTransparent = true;
       ParticleList const &entering = finalstate->getEnteringParticles();
       for(ParticleIter iter = entering.begin(); iter != entering.end(); ++iter) {
         insertParticle(*iter);
@@ -452,6 +449,11 @@ namespace G4INCL {
 
     for(ParticleIter i = clusters.begin(); i != clusters.end(); ++i) {
       Cluster *cluster = dynamic_cast<Cluster*>(*i); // Can't avoid using a cast here
+// assert(cluster);
+#ifdef INCLXX_IN_GEANT4_MODE
+      if(!cluster)
+        continue;
+#endif
       cluster->deleteParticles(); // Don't need them
       ParticleList decayProducts = ClusterDecay::decay(cluster);
       for(ParticleIter j = decayProducts.begin(); j!=decayProducts.end(); ++j)
@@ -506,31 +508,13 @@ namespace G4INCL {
 
   G4bool Nucleus::isEventTransparent() const {
 
-    // Forced transparent
-    if(forceTransparent)
+    const G4int nEventCollisions = theStore->getBook()->getAcceptedCollisions();
+    const G4int nEventDecays = theStore->getBook()->getAcceptedDecays();
+    const G4int nEventClusters = theStore->getBook()->getEmittedClusters();
+    if(nEventCollisions==0 && nEventDecays==0 && nEventClusters==0)
       return true;
 
-    ParticleList const &pL = theStore->getOutgoingParticles();
-    G4int outZ = 0, outA = 0;
-
-    // If any of the particles has undergone a collision, the event is not a
-    // transparent.
-    for(ParticleIter p = pL.begin(); p != pL.end(); ++p ) {
-      if( (*p)->getNumberOfCollisions() != 0 ) return false;
-      if( (*p)->getNumberOfDecays() != 0 ) return false;
-      outZ += (*p)->getZ();
-      outA += (*p)->getA();
-    }
-
-    // Add the geometrical spectators to the Z and A count
-    if(theProjectileRemnant) {
-      outZ += theProjectileRemnant->getZ();
-      outA += theProjectileRemnant->getA();
-    }
-
-    if(outZ!=projectileZ || outA!=projectileA) return false;
-
-    return true;
+    return false;
 
   }
 
@@ -819,6 +803,9 @@ namespace G4INCL {
     eventInfo->nBlockedDecays = getStore()->getBook()->getBlockedDecays();
     eventInfo->firstCollisionTime = getStore()->getBook()->getFirstCollisionTime();
     eventInfo->firstCollisionXSec = getStore()->getBook()->getFirstCollisionXSec();
+    eventInfo->firstCollisionSpectatorPosition = getStore()->getBook()->getFirstCollisionSpectatorPosition();
+    eventInfo->firstCollisionSpectatorMomentum = getStore()->getBook()->getFirstCollisionSpectatorMomentum();
+    eventInfo->firstCollisionIsElastic = getStore()->getBook()->getFirstCollisionIsElastic();
     eventInfo->nReflectionAvatars = getStore()->getBook()->getAvatars(SurfaceAvatarType);
     eventInfo->nCollisionAvatars = getStore()->getBook()->getAvatars(CollisionAvatarType);
     eventInfo->nDecayAvatars = getStore()->getBook()->getAvatars(DecayAvatarType);

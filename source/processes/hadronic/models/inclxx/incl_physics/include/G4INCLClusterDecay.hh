@@ -49,25 +49,18 @@
 
 namespace G4INCL {
 
-  /**
-   * Pauli blocking
-   *
-   */
-  class ClusterDecay {
-    public:
+  /// \brief Namespace for functions that handle decay of unstable clusters
+  namespace ClusterDecay {
+
       /// \brief True if the cluster is stable.
-      static G4bool isStable(Cluster const * const c) {
-        const G4int Z = c->getZ();
-        const G4int A = c->getA();
-        return (clusterDecayMode[Z][A]==StableCluster);
-      }
+      G4bool isStable(Cluster const * const c);
 
       /** \brief Carries out a cluster decay
        *
        * \param c cluster that should decay
        * \return list of decay products
        */
-      static ParticleList decay(Cluster * const c);
+      ParticleList decay(Cluster * const c);
 
       enum ClusterDecayType {
         StableCluster,
@@ -90,41 +83,9 @@ namespace G4INCL {
        * Unphysical nuclides (A<Z) are marked as stable, but should never be
        * produced by INCL. If you find them in the output, something is fishy.
        */
-      static const ClusterDecayType clusterDecayMode[ParticleTable::clusterTableZSize][ParticleTable::clusterTableASize];
+      extern const ClusterDecayType clusterDecayMode[ParticleTable::clusterTableZSize][ParticleTable::clusterTableASize];
 
-    protected:
-      ClusterDecay() {}
-      ~ClusterDecay() {}
-
-    private:
-      /** \brief Recursively decay clusters
-       *
-       * \param c cluster that should decay
-       * \param decayProducts decay products are appended to the end of this list
-       */
-      static void recursiveDecay(Cluster * const c, ParticleList *decayProducts);
-
-      /// \brief Carries out two-body decays
-      static void twoBodyDecay(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts);
-
-      /// \brief Carries out three-body decays
-      static void threeBodyDecay(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts);
-
-      /** \brief Disassembles unbound nuclei using a simple phase-space model
-       *
-       * The decay products are assumed to uniformly populate the momentum space
-       * (the "phase-space" naming is a long-standing but misleading convention).
-       * The generation of the final state is done by rejection, using the
-       * Raubold-Lynch method. Parts of our implementation were "inspired" by
-       * ROOT's TGenPhaseSpace class, which in turn is a translation of CERNLIB's
-       * historical GENBOD routine [CERN report 68-15 (1968)]. The ROOT
-       * implementation is documented at the following URL:
-       *
-       * http://root.cern.ch/root/html/TGenPhaseSpace.html#TGenPhaseSpace
-       */
-      static void phaseSpaceDecay(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts);
-
-  };
+  }
 
 }
 

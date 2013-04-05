@@ -427,26 +427,55 @@ sel100: return sel;
       return interactionDistance;
     }
 
-    G4double interactionDistanceNN1GeV() {
-      static G4ThreadLocal G4bool interactionDistanceNN1GeVisInitialized = false;
-      static G4ThreadLocal G4double interactionDistanceNN1GeVanswer = 0;
-      //Need special treatment to handle TLS...
-      if (!interactionDistanceNN1GeVisInitialized) {
-	interactionDistanceNN1GeVisInitialized = true;
-	interactionDistanceNN1GeVanswer = CrossSections::interactionDistanceNN(1000.);
-      }
-      return interactionDistanceNN1GeVanswer;
-    }
+    G4double interactionDistanceNN(const ParticleSpecies &aSpecies, const G4double kineticEnergy) {
+// assert(aSpecies.theType==Proton || aSpecies.theType==Neutron || aSpecies.theType==Composite);
+// assert(aSpecies.theA>0);
+      ThreeVector nullVector;
+      ThreeVector unitVector(0.,0.,1.);
 
-    G4double interactionDistancePiN1GeV() {
-      static G4ThreadLocal G4bool interactionDistancePiN1GeVisInitialized = false;
-      static G4ThreadLocal G4double interactionDistancePiN1GeVanswer = 0;
-      if (!interactionDistancePiN1GeVisInitialized) {
-        interactionDistancePiN1GeVisInitialized = true;
-        interactionDistancePiN1GeVanswer = CrossSections::interactionDistancePiN(1000.);
-      }
-      //static G4double answer = CrossSections::interactionDistancePiN(1000.);
-      return interactionDistancePiN1GeVanswer;
+      const G4double kineticEnergyPerNucleon = kineticEnergy / aSpecies.theA;
+      const G4double nucleonMass = ParticleTable::getINCLMass(Proton);
+
+      // s_NN averaged over the Fermi sphere of the target
+
+      // relativistic formula
+      /*
+         const G4double totalEnergy = nucleonMass + kineticEnergyPerNucleon;
+         const G4double averageS = 2.*nucleonMass*nucleonMass
+         + 0.75 * totalEnergy * (
+         PhysicalConstants::Pf
+       * std::sqrt(nucleonMass*nucleonMass + PhysicalConstants::PfSquared)
+       * (nucleonMass*nucleonMass + 2.*PhysicalConstants::PfSquared)
+       - std::pow(nucleonMass,4.) * Math::aSinH(PhysicalConstants::Pf/nucleonMass)
+       )
+       / PhysicalConstants::PfCubed;
+       energyCM = 0.5 * std::sqrt(averageS);
+       */
+
+      // semi-relativistic formula
+      const G4double energyCM = 0.25 * kineticEnergyPerNucleon + (3. * PhysicalConstants::PfSquared) / (40. * nucleonMass)
+        + nucleonMass;
+
+      Particle protonProjectile(Proton, unitVector, nullVector);
+      protonProjectile.setEnergy(energyCM);
+      protonProjectile.adjustMomentumFromEnergy();
+      Particle neutronProjectile(Neutron, protonProjectile.getMomentum(), nullVector);
+      Particle protonTarget(Proton, -protonProjectile.getMomentum(), nullVector);
+      Particle neutronTarget(Neutron, -protonProjectile.getMomentum(), nullVector);
+
+      const G4double sigmapp = total(&protonProjectile, &protonTarget);
+      const G4double sigmapn = total(&protonProjectile, &neutronTarget);
+      const G4double sigmanp = total(&neutronProjectile, &protonTarget);
+      const G4double sigmann = total(&neutronProjectile, &neutronTarget);
+      /* We compute the interaction distance from the largest of the NN cross
+       * sections. Note that this is different from INCL4.6, which just takes the
+       * average of the four, and will in general lead to a different geometrical
+       * cross section.
+       */
+      const G4double largestSigma = std::max(sigmapp, std::max(sigmapn, std::max(sigmanp,sigmann)));
+      const G4double interactionDistance = std::sqrt(largestSigma/Math::tenPi);
+
+      return interactionDistance;
     }
 
   } // namespace CrossSections

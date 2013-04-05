@@ -44,8 +44,7 @@
 namespace G4INCL {
 
   DeltaProductionChannel::DeltaProductionChannel(Particle *p1,
-						 Particle *p2,
-						 Nucleus*)
+						 Particle *p2)
     : particle1(p1), particle2(p2)
   {}
 
@@ -168,18 +167,14 @@ namespace G4INCL {
     //      if(k4.ne.0) go to 161
 
     // long-lived delta
-    G4int m1 = 0;
-    G4int m2 = 0;
     if (index != 1) {
       ThreeVector mom(xp1, xp2, xp3);
       particle1->setMomentum(mom);
       //       e1=ecm-eout1
-      m1=1;
     } else {
       ThreeVector mom(-xp1, -xp2, -xp3);
       particle1->setMomentum(mom);
       //      e1=ecm-eout1
-      m1=1;
     }
 
     particle1->setEnergy(ecm - e3);
@@ -202,38 +197,26 @@ namespace G4INCL {
     } else {
       rndm = Random::shoot();
       if (rndm >= 0.25) {
-        is1=3*is1*m1-(1-m1)*is1;
-        is2=3*is2*m2-(1-m2)*is2;
+        is1=3*is1;
+        is2=-is2;
       }
       particle1->setHelicity(ctet*ctet);
     }
 
-    if(is1 == ParticleTable::getIsospin(Proton) && m1 == 0) {
-      particle1->setType(Proton);
-    } else if(is1 == ParticleTable::getIsospin(Neutron) && m1 == 0) {
-      particle1->setType(Neutron);
-    } else if(is1 == ParticleTable::getIsospin(DeltaMinus) && m1 == 1) {
+    if(is1 == ParticleTable::getIsospin(DeltaMinus)) {
       particle1->setType(DeltaMinus);
-    } else if(is1 == ParticleTable::getIsospin(DeltaZero) && m1 == 1) {
+    } else if(is1 == ParticleTable::getIsospin(DeltaZero)) {
       particle1->setType(DeltaZero);
-    } else if(is1 == ParticleTable::getIsospin(DeltaPlus) && m1 == 1) {
+    } else if(is1 == ParticleTable::getIsospin(DeltaPlus)) {
       particle1->setType(DeltaPlus);
-    } else if(is1 == ParticleTable::getIsospin(DeltaPlusPlus) && m1 == 1) {
+    } else if(is1 == ParticleTable::getIsospin(DeltaPlusPlus)) {
       particle1->setType(DeltaPlusPlus);
     }
 
-    if(is2 == ParticleTable::getIsospin(Proton) && m2 == 0) {
+    if(is2 == ParticleTable::getIsospin(Proton)) {
       particle2->setType(Proton);
-    } else if(is2 == ParticleTable::getIsospin(Neutron) && m2 == 0) {
+    } else if(is2 == ParticleTable::getIsospin(Neutron)) {
       particle2->setType(Neutron);
-    } else if(is2 == ParticleTable::getIsospin(DeltaMinus) && m2 == 1) {
-      particle2->setType(DeltaMinus);
-    } else if(is2 == ParticleTable::getIsospin(DeltaZero) && m2 == 1) {
-      particle2->setType(DeltaZero);
-    } else if(is2 == ParticleTable::getIsospin(DeltaPlus) && m2 == 1) {
-      particle2->setType(DeltaPlus);
-    } else if(is2 == ParticleTable::getIsospin(DeltaPlusPlus) && m2 == 1) {
-      particle2->setType(DeltaPlusPlus);
     }
 
     if(particle1->isDelta()) particle1->setMass(xmdel);

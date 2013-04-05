@@ -47,13 +47,12 @@ namespace G4INCL {
   class ElasticChannel : public IChannel {
 
   public:
-    ElasticChannel(Nucleus *n, Particle *p1, Particle *p2);
+    ElasticChannel(Particle *p1, Particle *p2);
     virtual ~ElasticChannel();
 
     FinalState* getFinalState();
 
   private:
-//    Nucleus *theNucleus;
     Particle *particle1, *particle2;
   };
 

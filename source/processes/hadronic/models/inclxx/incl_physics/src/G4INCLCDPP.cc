@@ -45,9 +45,6 @@ namespace G4INCL {
   G4bool CDPP::isBlocked(ParticleList const created, Nucleus const * const nucleus) const {
     G4double S = nucleus->computeSeparationEnergyBalance();
 
-    const G4double Sp = nucleus->getPotential()->getSeparationEnergy(Proton);
-    const G4double Sn = nucleus->getPotential()->getSeparationEnergy(Neutron);
-
     ParticleList remnantParticles = nucleus->getStore()->getParticles();
     remnantParticles.insert(remnantParticles.end(), created.begin(), created.end());
 
@@ -66,20 +63,10 @@ namespace G4INCL {
         } else {
           TbelowTf += T - (*i)->getPotentialEnergy();
         }
-      } else if((*i)->isResonance()) {
-        const G4double Tf = nucleus->getPotential()->getFermiEnergy(*i);
-        const G4double T = (*i)->getKineticEnergy();
-
-        if(T > Tf) {
-          const G4double sep = nucleus->getPotential()->getSeparationEnergy(*i);
-          Sk += sep;
-        } else { // Ugly! We should use total energies everywhere!
-          TbelowTf += (*i)->getEnergy() - ParticleTable::getINCLMass(Proton) - (*i)->getPotentialEnergy();
-        }
-      } else if((*i)->getType() == PiPlus)
-        Sk += Sp - Sn;
-      else if((*i)->getType() == PiMinus)
-        Sk += Sn - Sp;
+      } else if((*i)->isPion() || (*i)->isResonance()) {
+        const G4double sep = nucleus->getPotential()->getSeparationEnergy(*i);
+        Sk += sep;
+      }
 
     }
     G4double Tinitial = nucleus->getInitialInternalEnergy();

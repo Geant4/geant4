@@ -122,16 +122,26 @@ namespace G4INCL {
     void setProjectileSpecies(ParticleSpecies const &ps) { projectileSpecies=ps; }
 
     /// \brief Get the projectile kinetic energy.
-    G4float getProjectileKineticEnergy() const { return projectileKineticEnergy; }
+    G4double getProjectileKineticEnergy() const { return projectileKineticEnergy; }
 
     /// \brief Set the projectile kinetic energy.
-    void setProjectileKineticEnergy(G4float const kinE) { projectileKineticEnergy=kinE; }
+    void setProjectileKineticEnergy(G4double const kinE) { projectileKineticEnergy=kinE; }
 
     /// \brief Get the number of the verbose event.
     G4int getVerboseEvent() const { return verboseEvent; }
 
     /// \brief Get the INCL version ID.
     static std::string const getVersionID();
+
+    /// \brief Get the INCL version hash.
+    static std::string const getVersionHash();
+
+    /// \brief Get the INCL version string.
+    static std::string const getVersionString() {
+      std::stringstream ss;
+      ss << getVersionID() << "-" << getVersionHash();
+      return ss.str();
+    }
 
     /// \brief Get the seeds for the random-number generator.
     SeedVector const getRandomSeeds() const {
@@ -224,14 +234,23 @@ namespace G4INCL {
 
     G4double getImpactParameter() const { return impactParameter; }
 
-    /// \brief Get the separation-energy type.
+    /// \brief Get the separation-energy type
     SeparationEnergyType getSeparationEnergyType() const { return separationEnergyType; }
+
+    /// \brief Get the Fermi-momentum type
+    FermiMomentumType getFermiMomentumType() const { return fermiMomentumType; }
+
+    /// \brief Set the Fermi-momentum type
+    void setFermiMomentumType(FermiMomentumType const f) { fermiMomentumType=f; }
+
+    G4double getCutNN() const { return cutNN; }
 
   private:
     G4int verbosity;
     std::string inputFileName;
     std::string title;
     std::string outputFileRoot;
+    std::string fileSuffix;
     std::string logFileName;
 
     G4int nShots;
@@ -242,7 +261,7 @@ namespace G4INCL {
 
     std::string projectileString;
     ParticleSpecies projectileSpecies;
-    G4float projectileKineticEnergy;
+    G4double projectileKineticEnergy;
 
     G4int verboseEvent;
 
@@ -265,6 +284,8 @@ namespace G4INCL {
     std::string localEnergyPiString;
     LocalEnergyType localEnergyPiType;
 
+    std::string deExcitationModelList;
+    std::string deExcitationOptionDescription;
     std::string deExcitationString;
     DeExcitationType deExcitationType;
 #ifdef INCL_DEEXCITATION_ABLAXX
@@ -291,6 +312,11 @@ namespace G4INCL {
 
     std::string separationEnergyString;
     SeparationEnergyType separationEnergyType;
+
+    std::string fermiMomentumString;
+    FermiMomentumType fermiMomentumType;
+
+    G4double cutNN;
 
   };
 

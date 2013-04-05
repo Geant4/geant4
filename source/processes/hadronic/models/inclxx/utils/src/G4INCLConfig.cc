@@ -70,6 +70,87 @@ namespace G4INCL {
   Config::Config(G4int argc, char *argv[], G4bool isFullRun) : naturalTarget(false) {
     const std::string suggestHelpMsg("You might want to run `INCLCascade -h' to get a help message.\n");
 
+    // Define the names of the de-excitation models
+    const std::string theNoneName = "none";
+#ifdef INCL_DEEXCITATION_SMM
+    const std::string theSMMName = "SMM";
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+    const std::string theGEMINIXXName = "GEMINIXX";
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+    const std::string theABLAv3pName = "ABLAv3p";
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+    const std::string theABLA07Name = "ABLA07";
+#endif
+
+    // Define the default de-excitation model, in decreasing order of priority
+    std::string defaultDeExcitationModel = theNoneName;
+#ifdef INCL_DEEXCITATION_SMM
+    defaultDeExcitationModel = theSMMName;
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+    defaultDeExcitationModel = theGEMINIXXName;
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+    defaultDeExcitationModel = theABLAv3pName;
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+    defaultDeExcitationModel = theABLA07Name;
+#endif
+
+    const std::string listSeparator = "\n  \t";
+    deExcitationModelList =
+      listSeparator + theNoneName
+#ifdef INCL_DEEXCITATION_ABLA07
+      + listSeparator + theABLA07Name
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+      + listSeparator + theABLAv3pName
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+      + listSeparator + theGEMINIXXName
+#endif
+#ifdef INCL_DEEXCITATION_SMM
+      + listSeparator + theSMMName
+#endif
+      ;
+
+    const std::string optionDescriptionSeparator = ", ";
+    deExcitationOptionDescription =
+      theNoneName
+#ifdef INCL_DEEXCITATION_ABLA07
+      + optionDescriptionSeparator + theABLA07Name
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+      + optionDescriptionSeparator + theABLAv3pName
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+      + optionDescriptionSeparator + theGEMINIXXName
+#endif
+#ifdef INCL_DEEXCITATION_SMM
+      + optionDescriptionSeparator + theSMMName
+#endif
+      ;
+
+    // Append " (default)" to the name of the default model
+    size_t defaultModelIndex = deExcitationModelList.find(defaultDeExcitationModel);
+    if(defaultModelIndex!=std::string::npos) {
+      deExcitationModelList = deExcitationModelList.substr(0, defaultModelIndex+defaultDeExcitationModel.size())
+        + " (default)"
+        + deExcitationModelList.substr(defaultModelIndex+defaultDeExcitationModel.size(), std::string::npos);
+    }
+    defaultModelIndex = deExcitationOptionDescription.find(defaultDeExcitationModel);
+    if(defaultModelIndex!=std::string::npos) {
+      deExcitationOptionDescription = deExcitationOptionDescription.substr(0, defaultModelIndex+defaultDeExcitationModel.size())
+        + " (default)"
+        + deExcitationOptionDescription.substr(defaultModelIndex+defaultDeExcitationModel.size(), std::string::npos);
+    }
+
+    // Spell out the G4bool values
+    std::cout << std::boolalpha;
+
     try {
 
       // Hidden options
@@ -100,7 +181,8 @@ namespace G4INCL {
       boost::program_options::options_description runOptDesc("Run options");
       runOptDesc.add_options()
         ("title", boost::program_options::value<std::string>(&title)->default_value("INCL default run title"), "run title")
-        ("output,o", boost::program_options::value<std::string>(&outputFileRoot), "root for generating output file names. Suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name, if given; otherwise, defaults to a string composed of the explicitly specified options")
+        ("output,o", boost::program_options::value<std::string>(&outputFileRoot), "root for generating output file names. File-specific suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name, if given; otherwise, defaults to a string composed of the explicitly specified options and of a customisable suffix, if provided using the -s option")
+        ("suffix,s", boost::program_options::value<std::string>(&fileSuffix), "suffix to be appended to generated output file names")
         ("logfile,l", boost::program_options::value<std::string>(&logFileName), "log file name. Defaults to `<output_root>.log'. Use `-' if you want to redirect logging to stdout")
         ("number-shots,N", boost::program_options::value<G4int>(&nShots), "* number of shots")
         ("target,t", boost::program_options::value<std::string>(&targetString), "* target nuclide. Can be specified as Fe56, 56Fe, Fe-56, 56-Fe, Fe_56, 56_Fe or Fe. If the mass number is omitted, natural target composition is assumed.")
@@ -112,16 +194,16 @@ namespace G4INCL {
          "  \tpi-, piminus, pion-, pionminus\n"
          "  \td, t, a, deuteron, triton, alpha\n"
          "  \tHe-4, He4, 4He (and so on)\n")
-        ("energy,E", boost::program_options::value<G4float>(&projectileKineticEnergy), "* total kinetic energy of the projectile, in MeV")
+        ("energy,E", boost::program_options::value<G4double>(&projectileKineticEnergy), "* total kinetic energy of the projectile, in MeV")
         ("verbose-event", boost::program_options::value<G4int>(&verboseEvent)->default_value(-1), "request verbose logging for the specified event only")
         ("random-seed-1", boost::program_options::value<G4int>(&randomSeed1)->default_value(666), "first seed for the random-number generator")
         ("random-seed-2", boost::program_options::value<G4int>(&randomSeed2)->default_value(777), "second seed for the random-number generator")
         ("inclxx-datafile-path", boost::program_options::value<std::string>(&INCLXXDataFilePath)->default_value("./data/"))
-#ifdef INCL_DEEXCITATION_ABLAXX
-        ("ablav3p-cxx-datafile-path", boost::program_options::value<std::string>(&ablav3pCxxDataFilePath)->default_value("./de-excitation/ablaxx/data/G4ABLA3.0/"))
-#endif
 #ifdef INCL_DEEXCITATION_ABLA07
         ("abla07-datafile-path", boost::program_options::value<std::string>(&abla07DataFilePath)->default_value("./de-excitation/abla07/upstream/tables/"))
+#endif
+#ifdef INCL_DEEXCITATION_ABLAXX
+        ("ablav3p-cxx-datafile-path", boost::program_options::value<std::string>(&ablav3pCxxDataFilePath)->default_value("./de-excitation/ablaxx/data/G4ABLA3.0/"))
 #endif
 #ifdef INCL_DEEXCITATION_GEMINIXX
         ("geminixx-datafile-path", boost::program_options::value<std::string>(&geminixxDataFilePath)->default_value("./de-excitation/geminixx/upstream/"))
@@ -132,6 +214,7 @@ namespace G4INCL {
       // Physics options
       boost::program_options::options_description physicsOptDesc("Physics options");
       physicsOptDesc.add_options()
+        ("de-excitation,d", boost::program_options::value<std::string>(&deExcitationString)->default_value(defaultDeExcitationModel.c_str()), ("which de-excitation model to use:" + deExcitationModelList).c_str())
         ("pauli", boost::program_options::value<std::string>(&pauliString)->default_value("strict-statistical"), "Pauli-blocking algorithm:\n"
          "  \tstrict-statistical (default)\n"
          "  \tstrict\n"
@@ -144,26 +227,13 @@ namespace G4INCL {
         ("pion-potential", boost::program_options::value<G4bool>(&pionPotential)->default_value("true"), "whether to use a pion potential:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("local-energy-BB", boost::program_options::value<std::string>(&localEnergyBBString)->default_value("first-collision"), "local energy in baryon-baryon collisions:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
         ("local-energy-pi", boost::program_options::value<std::string>(&localEnergyPiString)->default_value("first-collision"), "local energy in pi-N collisions and in delta decays:\n  \talways\n  \tfirst-collision (default)\n  \tnever")
-        ("de-excitation", boost::program_options::value<std::string>(&deExcitationString)->default_value("none"), "which de-excitation model to use:"
-         "\n  \tnone (default)"
-#ifdef INCL_DEEXCITATION_ABLAXX
-         "\n  \tABLAv3p"
-#endif
-#ifdef INCL_DEEXCITATION_ABLA07
-         "\n  \tABLA07"
-#endif
-#ifdef INCL_DEEXCITATION_SMM
-         "\n  \tSMM"
-#endif
-#ifdef INCL_DEEXCITATION_GEMINIXX
-         "\n  \tGEMINIXX"
-#endif
-         )
         ("cluster-algorithm", boost::program_options::value<std::string>(&clusterAlgorithmString)->default_value("intercomparison"), "clustering algorithm for production of composites:\n  \tintercomparison (default)\n  \tnone")
         ("cluster-max-mass", boost::program_options::value<G4int>(&clusterMaxMass)->default_value(8), "maximum mass of produced composites:\n  \tminimum 2\n  \tmaximum 12")
         ("back-to-spectator", boost::program_options::value<G4bool>(&backToSpectator)->default_value("true"), "whether to use back-to-spectator:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("use-real-masses", boost::program_options::value<G4bool>(&useRealMasses)->default_value("true"), "whether to use real masses for the outgoing particle energies:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("separation-energies", boost::program_options::value<std::string>(&separationEnergyString)->default_value("INCL"), "how to assign the separation energies of the INCL nucleus:\n  \tINCL (default)\n  \treal\n  \treal-light")
+        ("fermi-momentum", boost::program_options::value<std::string>(&fermiMomentumString)->default_value("constant"), "how to assign the Fermi momentum of the INCL nucleus:\n  \tconstant (default)\n  \tconstant-light\n  \tmass-dependent")
+        ("cutNN", boost::program_options::value<G4double>(&cutNN)->default_value(1910.), "minimum CM energy for nucleon-nucleon collisions, in MeV. Default: 1910.")
         ;
 
       // Select options allowed on the command line
@@ -218,7 +288,7 @@ namespace G4INCL {
               continue;
             }
             if(i->rfind(match) == i->length()-match.length()) {
-              std::cerr << "Ignoring unrecognized option " << *i << std::endl;
+              std::cout << "Ignoring unrecognized option " << *i << std::endl;
               ignoreNext = true;
             } else {
               std::cerr << "Error: unrecognized option " << *i << std::endl;
@@ -254,7 +324,7 @@ namespace G4INCL {
       std::ifstream configFileStream(configFileName.c_str());
       std::cout << "Reading config file " << configFileName << std::endl;
       if(!configFileStream) {
-        std::cerr << "INCL++ config file " << configFileName
+        std::cout << "INCL++ config file " << configFileName
           << " not found. Continuing the run regardless."
           << std::endl;
       } else {
@@ -273,7 +343,7 @@ namespace G4INCL {
             continue;
           }
           if(i->rfind(match) == i->length()-match.length()) {
-            std::cerr << "Ignoring unrecognized option " << *i << std::endl;
+            std::cout << "Ignoring unrecognized option " << *i << std::endl;
             ignoreNext = true;
           } else {
             std::cerr << "Error: unrecognized option " << *i << std::endl;
@@ -294,15 +364,16 @@ namespace G4INCL {
 
       // -h/--help: print the help message and exit successfully
       if(variablesMap.count("help")) {
-        std::cout << "Usage: INCLCascade [options] <input_file>" << std::endl;
-        std::cout << std::endl << "Options marked with a * are compulsory, i.e. they must be provided either on\nthe command line or in the input file." << std::endl;
-        std::cout << visibleOptions << std::endl;
+        std::cout
+          << "Usage: INCLCascade [options] <input_file>" << std::endl
+          << std::endl << "Options marked with a * are compulsory, i.e. they must be provided either on\nthe command line or in the input file." << std::endl
+          << visibleOptions << std::endl;
         std::exit(EXIT_SUCCESS);
       }
 
       // --version: print the version string and exit successfully
       if(variablesMap.count("version")) {
-        std::cout <<"INCL++ version " << getVersionID() << std::endl;
+        std::cout <<"INCL++ version " << getVersionString() << std::endl;
         std::exit(EXIT_SUCCESS);
       }
 
@@ -456,7 +527,7 @@ namespace G4INCL {
         }
       }
 
-      // --de-excitation
+      // -d/--de-excitation
       if(variablesMap.count("de-excitation")) {
         std::string deExcitationNorm = deExcitationString;
         std::transform(deExcitationNorm.begin(),
@@ -483,20 +554,7 @@ namespace G4INCL {
         else {
           std::cerr << "Unrecognized de-excitation model. "
             << "Must be one of:" << std::endl
-            << "  none (default)" << std::endl
-#ifdef INCL_DEEXCITATION_ABLAXX
-            << "  ABLAv3p" << std::endl
-#endif
-#ifdef INCL_DEEXCITATION_ABLA07
-            << "  ABLA07" << std::endl
-#endif
-#ifdef INCL_DEEXCITATION_SMM
-            << "  SMM" << std::endl
-#endif
-#ifdef INCL_DEEXCITATION_GEMINIXX
-            << "  GEMINIXX" << std::endl
-#endif
-            ;
+            << deExcitationModelList << std::endl;
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
         }
@@ -559,13 +617,38 @@ namespace G4INCL {
         separationEnergyType = INCLSeparationEnergy;
       }
 
+      // --fermi-momentum
+      if(variablesMap.count("fermi-momentum")) {
+        std::string fermiMomentumNorm = fermiMomentumString;
+        std::transform(fermiMomentumNorm.begin(),
+            fermiMomentumNorm.end(),
+            fermiMomentumNorm.begin(), ::tolower);
+        if(fermiMomentumNorm=="constant")
+          fermiMomentumType = ConstantFermiMomentum;
+        else if(fermiMomentumNorm=="constant-light")
+          fermiMomentumType = ConstantLightFermiMomentum;
+        else if(fermiMomentumNorm=="mass-dependent")
+          fermiMomentumType = MassDependentFermiMomentum;
+        else {
+          std::cerr << "Unrecognized fermi-momentum option. "
+            << "Must be one of:" << std::endl
+            << "  constant (default)" << std::endl
+            << "  constant-light" << std::endl
+            << "  mass-dependent" << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      } else {
+        fermiMomentumType = ConstantFermiMomentum;
+      }
+
       // --output: construct a reasonable output file root if not specified
       if(!variablesMap.count("output") && isFullRun) {
+        std::stringstream outputFileRootStream;
         // If an input file was specified, use its name as the output file root
         if(variablesMap.count("input-file"))
-          outputFileRoot = inputFileName;
+          outputFileRootStream << inputFileName << fileSuffix;
         else {
-          std::stringstream outputFileRootStream;
           outputFileRootStream.precision(0);
           outputFileRootStream.setf(std::ios::fixed, std::ios::floatfield);
           outputFileRootStream <<
@@ -579,29 +662,31 @@ namespace G4INCL {
             std::string const &name = i->first;
             // Only process CLI options
             if(name!="projectile"
-                && name!="target"
-                && name!="energy"
-                && name!="number-shots"
-                && name!="random-seed-1"
-                && name!="random-seed-2"
-                && name!="inclxx-datafile-path"
+               && name!="target"
+               && name!="energy"
+               && name!="number-shots"
+               && name!="random-seed-1"
+               && name!="random-seed-2"
+               && name!="verbosity"
+               && name!="suffix"
+               && name!="inclxx-datafile-path"
 #ifdef INCL_DEEXCITATION_ABLA07
-                && name!="abla07-datafile-path"
+               && name!="abla07-datafile-path"
 #endif
 #ifdef INCL_DEEXCITATION_ABLAXX
-                && name!="ablav3p-cxx-datafile-path"
+               && name!="ablav3p-cxx-datafile-path"
 #endif
 #ifdef INCL_DEEXCITATION_GEMINIXX
-                && name!="geminixx-datafile-path"
+               && name!="geminixx-datafile-path"
 #endif
-                ) {
+              ) {
               boost::program_options::variable_value v = i->second;
               if(!v.defaulted()) {
                 const std::type_info &type = v.value().type();
                 if(type==typeid(std::string))
                   outputFileRootStream << "_" << name << "=" << v.as<std::string>();
-                else if(type==typeid(G4float))
-                  outputFileRootStream << "_" << name << "=" << v.as<G4float>();
+                else if(type==typeid(G4double))
+                  outputFileRootStream << "_" << name << "=" << v.as<G4double>();
                 else if(type==typeid(G4int))
                   outputFileRootStream << "_" << name << "=" << v.as<G4int>();
                 else if(type==typeid(G4bool))
@@ -610,8 +695,10 @@ namespace G4INCL {
             }
           }
 
-          outputFileRoot = outputFileRootStream.str();
+          outputFileRootStream << fileSuffix;
+
         }
+        outputFileRoot = outputFileRootStream.str();
       }
 
       // -l/--logfile
@@ -671,11 +758,14 @@ namespace G4INCL {
       impactParameter = -1.;
       separationEnergyString = "INCL";
       separationEnergyType = INCLSeparationEnergy;
+      fermiMomentumString = "constant";
+      fermiMomentumType = ConstantFermiMomentum;
+      cutNN = 1910.;
   }
 
   std::string Config::summary() {
     std::stringstream message;
-    message << "INCL++ version " << getVersionID() << std::endl;
+    message << "INCL++ version " << getVersionString() << std::endl;
     if(projectileSpecies.theType != Composite)
       message << "Projectile: " << ParticleTable::getName(projectileSpecies) << std::endl;
     else
@@ -725,6 +815,7 @@ namespace G4INCL {
       << "         " << "# the projectile nuclide was parsed as Z=" << projectileSpecies.theZ << ", A=" << projectileSpecies.theA << std::endl
       << "energy = " << projectileKineticEnergy << "\t# * total kinetic energy of the projectile, in MeV" << std::endl
       << std::endl << "# Physics options " << std::endl
+      << "de-excitation = " << deExcitationString << "\t # which de-excitation model to use. Must be one of: " << deExcitationOptionDescription << std::endl
       << "pauli = " << pauliString << "\t# Pauli-blocking algorithm. Must be one of: strict-statistical (default), strict, statistical, global, none" << std::endl
       << "cdpp = " << CDPP << "\t# whether to apply CDPP after collisions" << std::endl
       << "coulomb = " << coulombString << "\t# Coulomb-distortion algorithm. Must be one of: non-relativistic (default), none" << std::endl
@@ -732,26 +823,14 @@ namespace G4INCL {
       << "pion-potential = " << pionPotential << "\t# whether to use a pion potential" << std::endl
       << "local-energy-BB = " << localEnergyBBString << "\t# local energy in baryon-baryon collisions. Must be one of: always, first-collision (default), never" << std::endl
       << "local-energy-pi = " << localEnergyPiString << "\t# local energy in pi-N collisions and in delta decays. Must be one of: always, first-collision (default), never" << std::endl
-      << "de-excitation = " << deExcitationString << "\t # which de-excitation model to use. Must be one of:"
-      " none (default)"
-#ifdef INCL_DEEXCITATION_ABLAXX
-      ", ABLAv3p"
-#endif
-#ifdef INCL_DEEXCITATION_ABLA07
-      ", ABLA07"
-#endif
-#ifdef INCL_DEEXCITATION_SMM
-      ", SMM"
-#endif
-#ifdef INCL_DEEXCITATION_GEMINIXX
-      ", GEMINIXX"
-#endif
       << std::endl
       << "cluster-algorithm = " << clusterAlgorithmString << "\t# clustering algorithm for production of composites. Must be one of: intercomparison (default), none" << std::endl
       << "cluster-max-mass = " << clusterMaxMass << "\t# maximum mass of produced composites. Must be between 2 and 12 (included)" << std::endl
       << "back-to-spectator = " << backToSpectator << "\t# whether to use back-to-spectator" << std::endl
       << "use-real-masses = " << useRealMasses << "\t# whether to use real masses for the outgoing particle energies" << std::endl
       << "separation-energies = " << separationEnergyString << "\t# how to assign the separation energies of the INCL nucleus. Must be one of: INCL (default), real, real-light" << std::endl
+      << "fermi-momentum = " << fermiMomentumString << "\t# how to assign the Fermi momentum of the INCL nucleus. Must be one of: constant (default), constant-light, mass-dependent" << std::endl
+      << "cutNN = " << cutNN << "\t# minimum CM energy for nucleon-nucleon collisions, in MeV. Default: 1910." << std::endl
       << std::endl << "# Technical options " << std::endl
       << "verbosity = " << verbosity << "\t# from 0 (quiet) to 10 (most verbose)" << std::endl
       << "verbose-event = " << verboseEvent << "\t# request verbose logging for the specified event only" << std::endl

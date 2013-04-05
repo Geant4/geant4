@@ -62,8 +62,8 @@ namespace G4INCL {
     SurfaceAvatar(G4INCL::Particle *aParticle, G4double time, G4INCL::Nucleus *aNucleus);
     virtual ~SurfaceAvatar();
 
-    G4INCL::IChannel* getChannel() const;
-    G4INCL::FinalState* getFinalState() const;
+    G4INCL::IChannel* getChannel();
+    G4INCL::FinalState* getFinalState();
 
     virtual void preInteraction();
     virtual FinalState *postInteraction(FinalState *);

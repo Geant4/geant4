@@ -67,7 +67,7 @@ namespace G4INCL {
     const G4double effectiveNucleonMass2 = 8.8036860777616e5;
     const G4double effectiveDeltaMass = 1232.0;
     const G4double effectivePionMass = 138.0;
-    G4ThreadLocal extern G4double effectiveDeltaDecayThreshold;
+    extern G4ThreadLocal G4double effectiveDeltaDecayThreshold;
 
     /// \brief Initialize the particle table
     void initialize(Config const * const theConfig = 0);
@@ -203,14 +203,48 @@ namespace G4INCL {
     typedef G4double (*NuclearMassFn)(const G4int, const G4int);
     typedef G4double (*ParticleMassFn)(const ParticleType);
     /// \brief Static pointer to the mass function for nuclei
-    G4ThreadLocal extern NuclearMassFn getTableMass;
+    extern G4ThreadLocal NuclearMassFn getTableMass;
     /// \brief Static pointer to the mass function for particles
-    G4ThreadLocal extern ParticleMassFn getTableParticleMass;
+    extern G4ThreadLocal ParticleMassFn getTableParticleMass;
 
     // Typedefs and pointers for transparent handling of separation energies
     typedef G4double (*SeparationEnergyFn)(const ParticleType, const G4int, const G4int);
     /// \brief Static pointer to the separation-energy function
-    G4ThreadLocal extern SeparationEnergyFn getSeparationEnergy;
+    extern G4ThreadLocal SeparationEnergyFn getSeparationEnergy;
+
+    // Typedefs and pointers for transparent handling of Fermi momentum
+    typedef G4double (*FermiMomentumFn)(const G4int, const G4int);
+    extern G4ThreadLocal FermiMomentumFn getFermiMomentum;
+
+    /** \brief Return the constant value of the Fermi momentum
+     *
+     * This function should always return PhysicalConstants::Pf.
+     */
+    G4double getFermiMomentumConstant(const G4int /*A*/, const G4int /*Z*/);
+
+    /** \brief Return the constant value of the Fermi momentum - special for light
+     *
+     * This function should always return PhysicalConstants::Pf for heavy
+     * nuclei, and values from the momentumRMS table for light nuclei.
+     *
+     * \param A mass number
+     * \param Z charge number
+     */
+    G4double getFermiMomentumConstantLight(const G4int A, const G4int Z);
+
+    /** \brief Return the value Fermi momentum from a fit
+     *
+     * This function returns a fitted Fermi momentum, based on data from Moniz
+     * et al., Phys. Rev. Lett. 26 (1971) 445. The fitted functional form is
+     * \f[
+     * p_F(A)=\alpha-\beta\cdot e^{(-A\cdot\gamma)}
+     * \f]
+     * with \f$\alpha=259.416\f$ MeV/\f$c\f$, \f$\beta=152.824\f$ MeV/\f$c\f$
+     * and \f$\gamma=9.5157\cdot10^{-2}\f$.
+     *
+     * \param A mass number
+     */
+    G4double getFermiMomentumMassDependent(const G4int A, const G4int /*Z*/);
 
   }
 }

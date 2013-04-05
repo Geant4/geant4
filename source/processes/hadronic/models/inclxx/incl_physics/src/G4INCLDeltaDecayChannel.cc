@@ -42,7 +42,7 @@
 
 namespace G4INCL {
 
-  DeltaDecayChannel::DeltaDecayChannel(Nucleus*, Particle *p, ThreeVector const dir)
+  DeltaDecayChannel::DeltaDecayChannel(Particle *p, ThreeVector const dir)
     :theParticle(p), incidentDirection(dir)
   { }
 

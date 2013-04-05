@@ -53,113 +53,80 @@
 
 namespace G4INCL {
 
-  class Random {
-  private:
-    Random() {}
-    virtual ~Random() {}
-
-  private:
-    static G4ThreadLocal IRandomGenerator *theGenerator;
-
-  public:
+  namespace Random {
     /**
      * Set the random number generator implementation to be used globally by INCL.
      *
      * @see G4INCL::IRandomGenerator
      */
-    static void setGenerator(G4INCL::IRandomGenerator *aGenerator) {
-      if(isInitialized()) {
-        ERROR("INCL random number generator already initialized." << std::endl);
-      } else {
-        theGenerator = aGenerator;
-      }
-    };
+    void setGenerator(G4INCL::IRandomGenerator *aGenerator);
 
     /**
      * Set the seeds of the current generator.
      *
      */
-    static void setSeeds(const SeedVector &sv) {
-      theGenerator->setSeeds(sv);
-    };
+    void setSeeds(const SeedVector &sv);
 
     /**
      * Get the seeds of the current generator.
      *
      */
-    static SeedVector getSeeds() {
-      return theGenerator->getSeeds();
-    };
+    SeedVector getSeeds();
 
     /**
      * Generate flat distribution of random numbers.
      */
-    static G4double shoot() {return theGenerator->flat(); };
+    G4double shoot();
 
     /**
      * Return a random number in the ]0,1] interval
      */
-    static G4double shoot0() {
-      G4double r;
-      while( (r=shoot()) <= 0. )
-        ;
-      return r;
-    }
+    G4double shoot0();
 
     /**
      * Return a random number in the [0,1[ interval
      */
-    static G4double shoot1() {
-      G4double r;
-      while( (r=shoot()) >= 1. )
-        ;
-      return r;
-    }
+    G4double shoot1();
+
+    /**
+     * Return a random integer in the [0,n[ interval
+     */
+    template<typename T> T shootInteger(T n);
 
     /**
      * Generate random numbers using gaussian distribution.
      */
-    static G4double gauss(G4double sigma=1.);
+    G4double gauss(G4double sigma=1.);
 
     /**
      * Generate isotropically-distributed ThreeVectors of given norm.
      */
-    static ThreeVector normVector(G4double norm=1.);
+    ThreeVector normVector(G4double norm=1.);
 
     /**
      * Generate ThreeVectors that are uniformly distributed in a sphere of
      * radius rmax.
      */
-    static ThreeVector sphereVector(G4double rmax=1.) {
-      return normVector( rmax*Math::pow13(shoot0()) );
-    }
+    ThreeVector sphereVector(G4double rmax=1.);
 
     /** \brief Generate Gaussianly-distributed ThreeVectors
      *
      * Generate ThreeVectors that are distributed as a three-dimensional
      * Gaussian of the given sigma.
      */
-    static ThreeVector gaussVector(G4double sigma=1.) {
-      const G4double sigmax = sigma * Math::oneOverSqrtThree;
-      return ThreeVector(gauss(sigmax), gauss(sigmax), gauss(sigmax));
-    }
+    ThreeVector gaussVector(G4double sigma=1.);
 
     /**
      * Delete the generator
      */
-    static void deleteGenerator() {
-      delete theGenerator;
-      theGenerator = 0;
-    }
+    void deleteGenerator();
 
     /**
      * Check if the generator is initialized.
      */
-    static G4bool isInitialized() {
-      if(theGenerator == 0) return false;
-      return true;
-    };
-  };
+    G4bool isInitialized();
+
+  }
 
 }
 

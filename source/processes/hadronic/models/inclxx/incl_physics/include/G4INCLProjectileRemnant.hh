@@ -129,6 +129,12 @@ namespace G4INCL {
      */
     ParticleList addMostDynamicalSpectators(ParticleList pL);
 
+    /** \brief Add back all dynamical spectators to the projectile remnant
+     *
+     * Return a list of rejected dynamical spectators.
+     */
+    ParticleList addAllDynamicalSpectators(ParticleList pL);
+
     /// \brief Clear the stored projectile components and delete the particles
     void deleteStoredComponents() {
       for(std::map<long,Particle*>::const_iterator p=storedComponents.begin(); p!=storedComponents.end(); ++p)
@@ -147,7 +153,7 @@ namespace G4INCL {
       theGroundStateEnergies.clear();
     }
 
-    /** \brief Compute the excitation energy
+    /** \brief Compute the excitation energy when a nucleon is removed
      *
      * Compute the excitation energy of the projectile-like remnant as the
      * difference between the initial and the present configuration. This
@@ -156,20 +162,13 @@ namespace G4INCL {
      *
      * \return the excitation energy
      */
-    G4double computeExcitationEnergy(const long exceptID) const;
+    G4double computeExcitationEnergyExcept(const long exceptID) const;
 
-    EnergyLevels getPresentEnergyLevels(const long exceptID) const {
-      EnergyLevels theEnergyLevels;
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
-        if((*p)->getID()!=exceptID) {
-          EnergyLevelMap::const_iterator i = theInitialEnergyLevels.find((*p)->getID());
-// assert(i!=theInitialEnergyLevels.end());
-          theEnergyLevels.push_back(i->second);
-        }
-      }
-// assert(theEnergyLevels.size()==particles.size()-1);
-      return theEnergyLevels;
-    }
+    /** \brief Compute the excitation energy if some nucleons are put back
+     *
+     * \return the excitation energy
+     */
+    G4double computeExcitationEnergyWith(const ParticleList &pL) const;
 
     /// \brief Store the projectile components
     void storeComponents() {
@@ -204,6 +203,20 @@ namespace G4INCL {
     }
 
     private:
+
+    /** \brief Compute the excitation energy for a given configuration
+     *
+     * The function that does the real job of calculating the excitation energy
+     * for a given configuration of energy levels.
+     *
+     * \param levels a configuration of energy levels
+     * \return the excitation energy
+     */
+    G4double computeExcitationEnergy(const EnergyLevels &levels) const;
+
+    EnergyLevels getPresentEnergyLevelsExcept(const long exceptID) const;
+
+    EnergyLevels getPresentEnergyLevelsWith(const ParticleList &pL) const;
 
     /// \brief Shuffle the list of stored projectile components
     ParticleList shuffleStoredComponents() {

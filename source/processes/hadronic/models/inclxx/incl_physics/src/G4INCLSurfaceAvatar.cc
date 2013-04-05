@@ -61,8 +61,7 @@ namespace G4INCL {
 
   }
 
-  G4INCL::IChannel* SurfaceAvatar::getChannel() const
-  {
+  G4INCL::IChannel* SurfaceAvatar::getChannel() {
     if(theParticle->isTargetSpectator()) {
       DEBUG("Particle " << theParticle->getID() << " is a spectator, reflection" << std::endl);
       return new ReflectionChannel(theNucleus, theParticle);
@@ -110,6 +109,7 @@ namespace G4INCL {
         DEBUG("Transmission probability for cluster " << candidateCluster->getID() << " = " << clusterTransmissionProbability << std::endl);
 
         if (x <= clusterTransmissionProbability) {
+          theNucleus->getStore()->getBook()->incrementEmittedClusters();
           DEBUG("Cluster " << candidateCluster->getID() << " passes the Coulomb barrier, transmitting." << std::endl);
           return new TransmissionChannel(theNucleus, candidateCluster);
         } else {
@@ -143,8 +143,7 @@ namespace G4INCL {
     }
   }
 
-  G4INCL::FinalState* SurfaceAvatar::getFinalState() const
-  {
+  G4INCL::FinalState* SurfaceAvatar::getFinalState() {
     return getChannel()->getFinalState();
   }
 

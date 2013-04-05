@@ -61,7 +61,8 @@ namespace G4INCL {
 
   InteractionAvatar::InteractionAvatar(G4double time, G4INCL::Nucleus *n, G4INCL::Particle *p1)
     : IAvatar(time), theNucleus(n),
-    particle1(p1), particle2(NULL), isPiN(false)
+    particle1(p1), particle2(NULL), isPiN(false),
+    violationEFunctor(NULL)
   {
   }
 
@@ -69,7 +70,8 @@ namespace G4INCL {
       G4INCL::Particle *p2)
     : IAvatar(time), theNucleus(n),
     particle1(p1), particle2(p2),
-    isPiN((p1->isPion() && p2->isNucleon()) || (p2->isPion() && p1->isNucleon()))
+    isPiN((p1->isPion() && p2->isNucleon()) || (p2->isPion() && p1->isNucleon())),
+    violationEFunctor(NULL)
   {
   }
 
@@ -356,15 +358,15 @@ namespace G4INCL {
     }
 
     // Apply the root-finding algorithm
-    const G4bool success = RootFinder::solve(violationEFunctor, 1.0);
-    if(success) { // Apply the solution
-      std::pair<G4double,G4double> theSolution = RootFinder::getSolution();
-      (*violationEFunctor)(theSolution.first);
+    const RootFinder::Solution theSolution = RootFinder::solve(violationEFunctor, 1.0);
+    if(theSolution.success) { // Apply the solution
+      (*violationEFunctor)(theSolution.x);
     } else {
       WARN("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
     }
     delete violationEFunctor;
-    return success;
+    violationEFunctor = NULL;
+    return theSolution.success;
   }
 
   /* ***                                                      ***

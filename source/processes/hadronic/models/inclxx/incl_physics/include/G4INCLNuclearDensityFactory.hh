@@ -46,13 +46,13 @@ namespace G4INCL {
 
   namespace NuclearDensityFactory {
 
+    InverseInterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z);
+
+    InverseInterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z);
+
+    InverseInterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z);
+
     NuclearDensity *createDensity(const G4int A, const G4int Z);
-
-    InverseInterpolationTable *createRPCorrelationTable(const G4int A, const G4int Z);
-
-    InverseInterpolationTable *createRCDFTable(const G4int A, const G4int Z);
-
-    InverseInterpolationTable *createPCDFTable(const G4int A, const G4int Z);
 
     ParticleSampler *createParticleSampler(const G4int A, const G4int Z);
 

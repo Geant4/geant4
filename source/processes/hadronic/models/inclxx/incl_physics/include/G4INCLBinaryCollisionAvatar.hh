@@ -55,7 +55,7 @@ namespace G4INCL {
   public:
     BinaryCollisionAvatar(G4double, G4double, G4INCL::Nucleus*, G4INCL::Particle*, G4INCL::Particle*);
     virtual ~BinaryCollisionAvatar();
-    G4INCL::IChannel* getChannel() const;
+    G4INCL::IChannel* getChannel();
     ParticleList getParticles() const {
       ParticleList theParticleList;
       theParticleList.push_back(particle1);
@@ -68,10 +68,22 @@ namespace G4INCL {
 
     std::string dump() const;
 
-    static const G4double cutNN;
-    static const G4double cutNNSquared;
+    static void setCutNN(const G4double c) {
+      cutNN = c;
+      cutNNSquared = cutNN*cutNN;
+    }
+
+    static G4double getCutNN() { return cutNN; }
+
+    static G4double getCutNNSquared() { return cutNNSquared; }
+
   private:
+    static G4ThreadLocal G4double cutNN;
+    static G4ThreadLocal G4double cutNNSquared;
     G4double theCrossSection;
+    G4bool isParticle1Spectator;
+    G4bool isParticle2Spectator;
+    G4bool isElastic;
   };
 
 }

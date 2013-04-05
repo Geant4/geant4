@@ -45,7 +45,7 @@
 namespace G4INCL {
   class PionNucleonChannel : public IChannel {
     public:
-      PionNucleonChannel(Particle *, Particle *, Nucleus *, const G4bool localE=false);
+      PionNucleonChannel(Particle *, Particle *, Nucleus *);
       virtual ~PionNucleonChannel();
 
       FinalState* getFinalState();
@@ -53,7 +53,6 @@ namespace G4INCL {
     private:
       Nucleus *theNucleus;
       Particle *particle1, *particle2;
-//      const G4bool locE;
 
   };
 }

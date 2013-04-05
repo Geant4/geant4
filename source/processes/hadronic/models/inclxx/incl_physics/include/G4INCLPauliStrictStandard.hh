@@ -47,6 +47,12 @@ namespace G4INCL {
     PauliStrictStandard();
     ~PauliStrictStandard();
 
+    /// \brief Dummy copy constructor to silence Coverity warning
+    PauliStrictStandard(const PauliStrictStandard &rhs);
+
+    /// \brief Dummy assignment operator to silence Coverity warning
+    PauliStrictStandard &operator=(const PauliStrictStandard &rhs);
+
     G4bool isBlocked(ParticleList const, Nucleus const * const) const;
 
   private:
