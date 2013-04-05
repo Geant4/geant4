@@ -97,6 +97,7 @@ SetParallelWorld(G4String parallelWorldName)
   fGhostWorldName = parallelWorldName;
   fGhostWorld = fTransportationManager->GetParallelWorld(fGhostWorldName);
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
+  fGhostNavigator->SetPushVerbosity(false);
 }
 
 void G4ParallelWorldProcess::
@@ -105,6 +106,7 @@ SetParallelWorld(G4VPhysicalVolume* parallelWorld)
   fGhostWorldName = parallelWorld->GetName();
   fGhostWorld = parallelWorld;
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
+  fGhostNavigator->SetPushVerbosity(false);
 }
 
 void G4ParallelWorldProcess::StartTracking(G4Track* trk)
@@ -129,15 +131,13 @@ void G4ParallelWorldProcess::StartTracking(G4Track* trk)
   fGhostPreStepPoint->SetStepStatus(fUndefined);
   fGhostPostStepPoint->SetStepStatus(fUndefined);
 
-//  G4VPhysicalVolume* thePhys = fNewGhostTouchable->GetVolume();
-//  G4cout << "======= G4ParallelWorldProcess::StartTracking() =======" << G4endl;
-//  if(thePhys)
-//  {
-//    G4cout << " --- Parallel world volume : " << thePhys->GetName() << G4endl;
-//    G4Material* ghostMaterial = thePhys->GetLogicalVolume()->GetMaterial();
-//    if(ghostMaterial)
-//    { G4cout << " --- Material : " << ghostMaterial->GetName() << G4endl; }
-//  }
+  G4VPhysicalVolume* thePhys = fNewGhostTouchable->GetVolume();
+  if(thePhys)
+  {
+    G4Material* ghostMaterial = thePhys->GetLogicalVolume()->GetMaterial();
+    if(ghostMaterial)
+    { G4cout << " --- Material : " << ghostMaterial->GetName() << G4endl; }
+  }
 
   *(fpHyperStep->GetPostStepPoint()) = *(trk->GetStep()->GetPostStepPoint());
   if(layeredMaterialFlag)
