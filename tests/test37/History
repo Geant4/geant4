@@ -13,6 +13,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+03-04-13  A.Dotti (test37-V09-06-00)
+- Porting to new G4VPhysicsConstructor API needed for G4MT
 
 11-10-12  G.Cosmo (test37-V09-05-03)
 - Explicit inclusion of units and constants headers.
