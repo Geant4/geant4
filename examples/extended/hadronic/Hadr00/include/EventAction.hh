@@ -81,16 +81,22 @@ private:
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline void EventAction::SetPrintModulo(G4int val)   
 { 
   fPrintModulo = val;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 inline void EventAction::AddEventToDebug(G4int val)  
 { 
   fSelectedEvents.push_back(val);
   ++fSelected;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
 

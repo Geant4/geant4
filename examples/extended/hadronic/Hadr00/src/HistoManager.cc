@@ -129,22 +129,30 @@ void HistoManager::BeginOfRun()
     fHisto->SetHisto1D(7,fBinsE,e1,e2,1.0);
 
   } else {
-    fHisto->Add1D("h1","Elastic cross section (barn,1.0) as a functions of log10(p/GeV)",
-                 fBinsP,p1,p2,1.0);
-    fHisto->Add1D("h2","Elastic cross section (barn) as a functions of log10(E/MeV)",
-                 fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h3","Inelastic cross section (barn) as a functions of log10(p/GeV)",
-                 fBinsP,p1,p2,1.0);
-    fHisto->Add1D("h4","Inelastic cross section (barn) as a functions of log10(E/MeV)",
-                 fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h5","Capture cross section (barn) as a functions of log10(E/MeV)",
-                 fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h6","Fission cross section (barn) as a functions of log10(E/MeV)",
-                 fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h7","Charge exchange cross section (barn) as a functions of log10(E/MeV)",
-                 fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h8","Total cross section (barn) as a functions of log10(E/MeV)",
-                 fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h1",
+     "Elastic cross section (barn,1.0) as a functions of log10(p/GeV)",
+		  fBinsP,p1,p2,1.0);
+    fHisto->Add1D("h2",
+     "Elastic cross section (barn) as a functions of log10(E/MeV)",
+		  fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h3",
+     "Inelastic cross section (barn) as a functions of log10(p/GeV)",
+		  fBinsP,p1,p2,1.0);
+    fHisto->Add1D("h4",
+     "Inelastic cross section (barn) as a functions of log10(E/MeV)",
+		  fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h5",
+     "Capture cross section (barn) as a functions of log10(E/MeV)",
+		  fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h6",
+     "Fission cross section (barn) as a functions of log10(E/MeV)",
+		  fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h7",
+     "Charge exchange cross section (barn) as a functions of log10(E/MeV)",
+		  fBinsE,e1,e2,1.0);
+    fHisto->Add1D("h8",
+     "Total cross section (barn) as a functions of log10(E/MeV)",
+		  fBinsE,e1,e2,1.0);
   }
 
   fIsInitialised = true;
@@ -170,12 +178,12 @@ void HistoManager::EndOfRun()
          << " off " << fElementName
          << G4endl;
   if(fVerbose > 0) {
-    G4cout << "------------------------------------------------------------------------" 
+    G4cout << "-------------------------------------------------------------" 
            << G4endl;
     G4cout << "    N     E(MeV)   Elastic(b)   Inelastic(b)";
     if(particle == fNeutron) { G4cout << " Capture(b)   Fission(b)"; }
     G4cout << "   Total(b)" << G4endl;     
-    G4cout << "------------------------------------------------------------------------" 
+    G4cout << "-------------------------------------------------------------" 
            << G4endl;
   }
   if(!particle || !elm) {
@@ -240,7 +248,7 @@ void HistoManager::EndOfRun()
     fHisto->Fill(2, x, xs/barn); 
   }
   if(fVerbose > 0) {
-    G4cout << "-----------------------------------------------------------------" 
+    G4cout << "-------------------------------------------------------------" 
            << G4endl;
   }
   G4cout.precision(prec);

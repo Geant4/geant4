@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2010-10-11 11:03:56 vnivanch Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-04-13  V.Ivanchenko (exhadr00-V09-06-00)
+- Appling code guidelines
 
 15-11-12 I. Hrivnacova (exhadr00-V09-05-07)
 - Synchronized .README with changes in README

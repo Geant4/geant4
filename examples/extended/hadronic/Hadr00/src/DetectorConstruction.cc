@@ -76,7 +76,8 @@ DetectorConstruction::DetectorConstruction()
   fLength = 10.*cm;
 
   fTargetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-  fWorldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  fWorldMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

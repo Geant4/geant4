@@ -69,7 +69,7 @@ public:
 
   // In this method 1-D histogramms are predefined
   void Add1D(const G4String&, const G4String&, G4int nb, G4double x1, 
-                                               G4double x2, G4double u=1.);
+	     G4double x2, G4double u=1.);
 
   // It change bins and boundaries
   void SetHisto1D(G4int, G4int, G4double, G4double, G4double);
