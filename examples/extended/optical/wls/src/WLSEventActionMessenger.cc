@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/wls/src/WLSEventActionMessenger.cc
 /// \brief Implementation of the WLSEventActionMessenger class
-//
-//
 //
 
 #include "globals.hh"

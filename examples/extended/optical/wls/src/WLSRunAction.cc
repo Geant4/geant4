@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/wls/src/WLSRunAction.cc
 /// \brief Implementation of the WLSRunAction class
-//
-//
 //
 
 #include "WLSRunAction.hh"

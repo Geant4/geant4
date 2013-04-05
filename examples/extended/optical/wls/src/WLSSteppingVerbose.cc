@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/wls/src/WLSSteppingVerbose.cc
 /// \brief Implementation of the WLSSteppingVerbose class
-//
-//
 //
 
 #include "G4UnitsTable.hh"

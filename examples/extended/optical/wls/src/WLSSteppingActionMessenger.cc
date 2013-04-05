@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/wls/src/WLSSteppingActionMessenger.cc
 /// \brief Implementation of the WLSSteppingActionMessenger class
-//
-//
 //
 
 #include "G4UIdirectory.hh"

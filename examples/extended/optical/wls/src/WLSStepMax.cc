@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/wls/src/WLSStepMax.cc
 /// \brief Implementation of the WLSStepMax class
-//
-//
 //
 
 #include "G4Track.hh"

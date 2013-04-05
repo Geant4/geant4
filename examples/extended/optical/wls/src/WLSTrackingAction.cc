@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/wls/src/WLSTrackingAction.cc
 /// \brief Implementation of the WLSTrackingAction class
-//
-//
 //
 
 #include "globals.hh"

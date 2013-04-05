@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/wls/include/WLSUserTrackInformation.hh
 /// \brief Definition of the WLSUserTrackInformation class
-//
-//
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

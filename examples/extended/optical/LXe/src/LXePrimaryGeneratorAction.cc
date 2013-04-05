@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/LXe/src/LXePrimaryGeneratorAction.cc
 /// \brief Implementation of the LXePrimaryGeneratorAction class
 //

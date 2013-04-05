@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/wls/src/WLSDetectorConstruction.cc
 /// \brief Implementation of the WLSDetectorConstruction class
-//
-//
 //
 
 #include "G4ios.hh"

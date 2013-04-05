@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/LXe/src/LXeGeneralPhysics.cc
 /// \brief Implementation of the LXeGeneralPhysics class
 //
@@ -66,9 +68,9 @@ void LXeGeneralPhysics::ConstructProcess()
   fDecayProcess = new G4Decay();
 
   // Add Decay Process
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  aParticleIterator->reset();
+  while( (*aParticleIterator)() ){
+    G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (fDecayProcess->IsApplicable(*particle)) {
       pmanager ->AddProcess(fDecayProcess);

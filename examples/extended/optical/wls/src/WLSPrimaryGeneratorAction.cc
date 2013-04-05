@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file optical/wls/src/WLSPrimaryGeneratorAction.cc
 /// \brief Implementation of the WLSPrimaryGeneratorAction class
-//
-//
 //
 
 #include "G4ios.hh"
