@@ -88,23 +88,25 @@
 
 // static members
 //
-G4double G4MuPairProductionModel::zdat[]={1., 4., 13., 29., 92.};
-G4double G4MuPairProductionModel::adat[]={1.01, 9.01, 26.98, 63.55, 238.03};
-G4double G4MuPairProductionModel::tdat[]={1.e3, 2.5e3, 5.e3, 7.5e3,
-					  1.e4, 2.5e4, 5.e4, 7.5e4,
-					  1.e5, 2.5e5, 5.e5, 7.5e5,
-					  1.e6, 2.5e6, 5.e6, 7.5e6,
-					  1.e7, 2.5e7, 5.e7, 7.5e7,
-					  1.e8, 2.5e8, 5.e8, 7.5e8,
-					  1.e9, 2.5e9, 5.e9, 7.5e9,
-					  1.e10, 2.5e10, 5.e10, 7.5e10,
-					  1.e11, 2.5e11, 5.e11, 7.5e11,
-					  1.e12, 2.5e12, 5.e12, 7.5e12,1.e13};
+const G4double G4MuPairProductionModel::zdat[]={1., 4., 13., 29., 92.};
+const G4double G4MuPairProductionModel::adat[]={1.01, 9.01, 26.98, 63.55, 238.03};
+const G4double G4MuPairProductionModel::tdat[]={
+  CLHEP::MeV*1.e3, CLHEP::MeV*2.5e3, CLHEP::MeV*5.e3, CLHEP::MeV*7.5e3,
+  CLHEP::MeV*1.e4, CLHEP::MeV*2.5e4, CLHEP::MeV*5.e4, CLHEP::MeV*7.5e4,
+  CLHEP::MeV*1.e5, CLHEP::MeV*2.5e5, CLHEP::MeV*5.e5, CLHEP::MeV*7.5e5,
+  CLHEP::MeV*1.e6, CLHEP::MeV*2.5e6, CLHEP::MeV*5.e6, CLHEP::MeV*7.5e6,
+  CLHEP::MeV*1.e7, CLHEP::MeV*2.5e7, CLHEP::MeV*5.e7, CLHEP::MeV*7.5e7,
+  CLHEP::MeV*1.e8, CLHEP::MeV*2.5e8, CLHEP::MeV*5.e8, CLHEP::MeV*7.5e8,
+  CLHEP::MeV*1.e9, CLHEP::MeV*2.5e9, CLHEP::MeV*5.e9, CLHEP::MeV*7.5e9,
+  CLHEP::MeV*1.e10, CLHEP::MeV*2.5e10, CLHEP::MeV*5.e10, CLHEP::MeV*7.5e10,
+  CLHEP::MeV*1.e11, CLHEP::MeV*2.5e11, CLHEP::MeV*5.e11, CLHEP::MeV*7.5e11,
+  CLHEP::MeV*1.e12, CLHEP::MeV*2.5e12, CLHEP::MeV*5.e12, CLHEP::MeV*7.5e12,
+  CLHEP::MeV*1.e13};
 
-G4double G4MuPairProductionModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
-					  0.5917, 0.7628, 0.8983, 0.9801 };
-G4double G4MuPairProductionModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
-					  0.1813, 0.1569, 0.1112, 0.0506 };
+const G4double G4MuPairProductionModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
+						0.5917, 0.7628, 0.8983, 0.9801 };
+const G4double G4MuPairProductionModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
+						0.1813, 0.1569, 0.1112, 0.0506 };
 
 //G4double G4MuPairProductionModel::ya[] = {0.0};
 //G4double G4MuPairProductionModel::proba[5][41][4001];
@@ -177,7 +179,7 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
     if(p) { SetParticle(p); }
     G4double emax = HighEnergyLimit();
     G4int i=0;
-    for(; i<ntdat; ++i) { if(emax < MeV*tdat[i]) { break; } }
+    for(; i<ntdat; ++i) { if(emax < tdat[i]) { break; } }
     if(i+1 < ntdat) { ntdat = i + 1; }
 
     MakeSamplingTables(); 
@@ -296,12 +298,12 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
  // using the cross section formula of R.P. Kokoulin (18/01/98)
  // Code modified by R.P. Kokoulin, V.N. Ivanchenko (27/01/04)
 {
-  const G4double bbbtf= 183. ;
-  const G4double bbbh = 202.4 ;
-  const G4double g1tf = 1.95e-5 ;
-  const G4double g2tf = 5.3e-5 ;
-  const G4double g1h  = 4.4e-5 ;
-  const G4double g2h  = 4.8e-5 ;
+  static const G4double bbbtf= 183. ;
+  static const G4double bbbh = 202.4 ;
+  static const G4double g1tf = 1.95e-5 ;
+  static const G4double g2tf = 5.3e-5 ;
+  static const G4double g1h  = 4.4e-5 ;
+  static const G4double g2h  = 4.8e-5 ;
 
   G4double totalEnergy  = tkin + particleMass;
   G4double residEnergy  = totalEnergy - pairEnergy;
@@ -314,7 +316,7 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double c3 = 0.75*sqrte*particleMass;
   if (residEnergy <= c3*z13) { return cross; }
 
-  const G4double c7 = 4.*electron_mass_c2;
+  static const G4double c7 = 4.*electron_mass_c2;
   G4double c8 = 6.*particleMass*particleMass;
   G4double alf = c7/pairEnergy;
   G4double a3 = 1. - alf;
@@ -494,7 +496,7 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4ThreeVector partDirection = aDynamicParticle->GetMomentumDirection();
 
   G4int it;
-  for(it=1; it<ntdat; ++it) { if(kineticEnergy <= MeV*tdat[it]) { break; } }
+  for(it=1; it<ntdat; ++it) { if(kineticEnergy <= tdat[it]) { break; } }
   if(it == ntdat) { --it; }
   G4double dt = log(kineticEnergy/(MeV*tdat[it-1]))/log(tdat[it]/tdat[it-1]);
 

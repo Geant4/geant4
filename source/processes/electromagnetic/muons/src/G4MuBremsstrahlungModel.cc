@@ -79,6 +79,12 @@
 
 using namespace std;
 
+const G4double G4MuBremsstrahlungModel::xgi[] = 
+  {0.03377,0.16940,0.38069,0.61931,0.83060,0.96623};
+const G4double G4MuBremsstrahlungModel::wgi[] = 
+  {0.08566,0.18038,0.23396,0.23396,0.18038,0.08566};
+G4double G4MuBremsstrahlungModel::fDN[] = {0.0};
+
 G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
@@ -97,12 +103,13 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
 
   mass = rmass = cc = coeff = 1.0;
 
-  fDN[0] = 0.0;
-  for(G4int i=1; i<93; ++i) {
-    G4double dn = 1.54*nist->GetA27(i);
-    fDN[i] = dn;
-    if(1 < i) {
-      fDN[i] /= std::pow(dn, 1./G4double(i));
+  if(0.0 == fDN[1]) {
+    for(G4int i=1; i<93; ++i) {
+      G4double dn = 1.54*nist->GetA27(i);
+      fDN[i] = dn;
+      if(1 < i) {
+	fDN[i] /= std::pow(dn, 1./G4double(i));
+      }
     }
   }
 
@@ -217,10 +224,8 @@ G4double G4MuBremsstrahlungModel::ComputMuBremLoss(G4double Z,
                                                    G4double tkin, G4double cut)
 {
   G4double totalEnergy = mass + tkin;
-  G4double ak1 = 0.05;
-  G4int    k2=5;
-  G4double xgi[]={0.03377,0.16940,0.38069,0.61931,0.83060,0.96623};
-  G4double wgi[]={0.08566,0.18038,0.23396,0.23396,0.18038,0.08566};
+  static const G4double ak1 = 0.05;
+  static const G4int    k2=5;
   G4double loss = 0.;
 
   G4double vcut = cut/totalEnergy;
@@ -256,10 +261,8 @@ G4double G4MuBremsstrahlungModel::ComputeMicroscopicCrossSection(
                                            G4double cut)
 {
   G4double totalEnergy = tkin + mass;
-  G4double ak1 = 2.3;
-  G4int    k2  = 4;
-  G4double xgi[]={0.03377,0.16940,0.38069,0.61931,0.83060,0.96623};
-  G4double wgi[]={0.08566,0.18038,0.23396,0.23396,0.18038,0.08566};
+  static const G4double ak1 = 2.3;
+  static const G4int    k2  = 4;
   G4double cross = 0.;
 
   if(cut >= tkin) return cross;

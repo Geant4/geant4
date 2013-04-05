@@ -157,7 +157,7 @@ protected:
   G4double z23;
   G4double lnZ;
 
-  static G4double xgi[8],wgi[8];
+  static const G4double xgi[8],wgi[8];
 
 private:
 
@@ -174,7 +174,7 @@ private:
   G4int nbiny;
   size_t nmaxElements;
 
-  static G4double zdat[5], adat[5], tdat[41];
+  static const G4double zdat[5], adat[5], tdat[41];
   G4double ya[1001], proba[5][41][1001];
 
   G4double ymin;
