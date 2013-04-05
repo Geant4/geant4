@@ -98,7 +98,7 @@ G4Transportation::G4Transportation( G4int verbosity )
     fVerboseLevel( verbosity )
 {
   // set Process Sub Type
-  SetProcessSubType(static_cast<int>(TRANSPORTATION));
+  SetProcessSubType(static_cast<G4int>(TRANSPORTATION));
 
   G4TransportationManager* transportMgr ; 
 
@@ -115,8 +115,8 @@ G4Transportation::G4Transportation( G4int verbosity )
   //  field and this process. That order is not guaranted.
   // Instead later the method DoesGlobalFieldExist() is called
 
-  static G4ThreadLocal G4TouchableHandle *pNullTouchableHandle
-    = new  G4TouchableHandle;
+  static G4ThreadLocal G4TouchableHandle* pNullTouchableHandle = 0;
+  if ( !pNullTouchableHandle)  { pNullTouchableHandle = new G4TouchableHandle; }
   fCurrentTouchableHandle = *pNullTouchableHandle;
     // Points to (G4VTouchable*) 0
 
@@ -391,7 +391,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         {
           if( std::fabs(startEnergy- endEnergy) > perThousand * endEnergy )
           {
-            static G4ThreadLocal G4int no_warnings= 0, warnModulo=1,  moduloFactor= 10; 
+            static G4ThreadLocal G4int no_warnings= 0, warnModulo=1,
+                                       moduloFactor= 10; 
             no_large_ediff ++;
             if( (no_large_ediff% warnModulo) == 0 )
             {
@@ -785,8 +786,8 @@ G4Transportation::StartTracking(G4Track* aTrack)
   }
 
   // Make sure to clear the chord finders of all fields (ie managers)
-  static G4ThreadLocal G4FieldManagerStore* fieldMgrStore
-    = G4FieldManagerStore::GetInstance();
+  //
+  G4FieldManagerStore* fieldMgrStore = G4FieldManagerStore::GetInstance();
   fieldMgrStore->ClearAllChordFindersState(); 
 
   // Update the current touchable handle  (from the track's)

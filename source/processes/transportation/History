@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar. 22nd, 2013, G. Cosmo transport-V09-06-03
+-------------------------
+- Removed unnecessary static local variables in G4Transportation and
+  G4CoupledTransportation.
+
+Mar. 21st, 2013, A. Dotti transport-V09-06-02
+-------------------------
+- Correcting initialisation of thread-local pointers in G4Transportation
+  and G4CoupledTransportation for MT.
+
 Feb. 26th, 2013, G.Cosmo transport-V09-06-01
 ------------------------
 - Removed unused data members in G4Transportation and G4CoupledTransportation.

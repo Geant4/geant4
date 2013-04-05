@@ -25,7 +25,7 @@
 //
 //
 // $Id$
-// --> Merged with 1.60.4.2.2.3 2007/05/09 09:30:28 japost 
+//
 // ------------------------------------------------------------
 //  GEANT 4 class implementation
 // =======================================================================
@@ -97,8 +97,8 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
   fpSafetyHelper = transportMgr->GetSafetyHelper();  // New 
 
   // Following assignment is to fix small memory leak from simple use of 'new'
-  static G4ThreadLocal
-    G4TouchableHandle *pNullTouchableHandle = new  G4TouchableHandle;
+  static G4ThreadLocal G4TouchableHandle* pNullTouchableHandle = 0;
+  if ( !pNullTouchableHandle)  { pNullTouchableHandle = new G4TouchableHandle; }
   fCurrentTouchableHandle = *pNullTouchableHandle;
     // Points to (G4VTouchable*) 0
 
@@ -497,8 +497,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
 //////////////////////////////////////////////////////////////////////////
 
-G4VParticleChange* G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
-                                                           const G4Step&  stepData )
+G4VParticleChange*
+G4CoupledTransportation::AlongStepDoIt( const G4Track& track,
+                                        const G4Step&  stepData )
 {
   static G4ThreadLocal G4int noCalls=0;
   noCalls++;
@@ -829,8 +830,8 @@ void
 G4CoupledTransportation::StartTracking(G4Track* aTrack)
 {
 
-  static G4ThreadLocal G4TransportationManager* transportMgr
-    = G4TransportationManager::GetTransportationManager(); 
+  G4TransportationManager* transportMgr =
+    G4TransportationManager::GetTransportationManager();
 
   // G4VProcess::StartTracking(aTrack);
 
@@ -882,8 +883,7 @@ G4CoupledTransportation::StartTracking(G4Track* aTrack)
 
   // Clear the chord finders of all fields (ie managers) derived objects
   //
-  static G4ThreadLocal G4FieldManagerStore* fieldMgrStore
-    = G4FieldManagerStore::GetInstance();
+  G4FieldManagerStore* fieldMgrStore = G4FieldManagerStore::GetInstance();
   fieldMgrStore->ClearAllChordFindersState(); 
 
 #ifdef G4DEBUG_TRANSPORT
