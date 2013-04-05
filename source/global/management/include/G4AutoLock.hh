@@ -61,15 +61,15 @@
 
 #include "G4Threading.hh"
 
-
-//Note: Note that G4TemplateAutoLock by itself is not thread-safe and
-//      cannot be shared among threads due to the locked switch
+// Note: Note that G4TemplateAutoLock by itself is not thread-safe and
+//       cannot be shared among threads due to the locked switch
+//
 template<class M, typename L, typename U>
 class G4TemplateAutoLock
 {
   public:
 
-    G4TemplateAutoLock(M* m, L l, U u) : locked(false), _m(m), _l(l), _u(u)
+    G4TemplateAutoLock(M* mtx, L l, U u) : locked(false), _m(mtx), _l(l), _u(u)
     {
         _l(_m);
         locked = true;
@@ -108,9 +108,9 @@ class G4TemplateAutoLock
 struct G4ImpMutexAutoLock
   : public G4TemplateAutoLock<G4Mutex,thread_lock,thread_unlock>
 {
-    G4ImpMutexAutoLock(G4Mutex* m)
+    G4ImpMutexAutoLock(G4Mutex* mtx)
       : G4TemplateAutoLock<G4Mutex, thread_lock, thread_unlock>
-        (m, &G4MUTEXLOCK, &G4MUTEXUNLOCK) {}
+        (mtx, &G4MUTEXLOCK, &G4MUTEXUNLOCK) {}
 };
 typedef G4ImpMutexAutoLock G4AutoLock;
 

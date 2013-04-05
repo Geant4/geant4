@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 18, 2013 A.Dotti (global-V09-06-13)
+- Enable MT mode for MacOSX with gcc >= 4.7.
+- Corrected getpid() problem in G4Threading.
+- Fixed shadowing warning from G4Autolock (G.Cosmo).
+
 March 12, 2013 G.Cosmo (global-V09-06-12, global-V09-06-11)
 - Added public accessors for MT data to G4PhysicsVector.
 

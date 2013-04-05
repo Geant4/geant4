@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id:$
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -35,12 +35,43 @@
 // ---------------------------------------------------------------
 
 #include "G4Threading.hh"
+#if defined (WIN32)
+   #include "Windows.h"
+#else
+   #include <unistd.h>
+   #include <sys/types.h>
+   #include <sys/syscall.h>
+#endif
 
 #if defined(G4MULTITHREADED)
-  #if defined(WIN32)
-    DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m ) { return WaitForSingleObject( m , INFINITE); }
-    BOOL G4ReleaseMutex( __in G4Mutex m) { return ReleaseMutex(m); }
-  #endif
-#else
+
+    G4Pid_t G4GetPidId()
+    { // In multithreaded mode return Thread ID
+      #if defined(__MACH__)
+        return syscall(SYS_thread_selfid);
+      #elif defined(WIN32)
+        return GetCurrentThreadId();
+      #else
+        return syscall(SYS_gettid);
+      #endif
+    }
+
+    #if defined(WIN32)  // WIN32 stuff needed for MT
+      DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m ) { return WaitForSingleObject( m , INFINITE); }
+      BOOL G4ReleaseMutex( __in G4Mutex m) { return ReleaseMutex(m); }
+    #endif
+
+#else  // Sequential mode
+
     G4int fake_mutex_lock_unlock( G4Mutex* ) { return 0; }
+
+    G4Pid_t G4GetPidId()
+    {  // In sequential mode return Process ID and not Thread ID
+    #if defined(WIN32)
+        return GetCurrentProcessId();
+    #else
+        return getpid();
+    #endif
+    }
+
 #endif

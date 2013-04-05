@@ -35,6 +35,8 @@
 // ---------------------------------------------------------------
 // Author: Andrea Dotti (15 Feb 2013): First Implementation
 // ---------------------------------------------------------------
+#ifndef G4Threading_hh
+#define G4Threading_hh
 
 #include "G4Types.hh"
 
@@ -42,11 +44,17 @@
   //===============================
   // Multi-threaded build
   //===============================
-  #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || defined(__linux__) || defined(_AIX)
+#if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
+    ( defined(__MACH__) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 ) || \
+    defined(__linux__) || defined(_AIX)
     //
     // Multi-threaded build: for POSIX systems
     //
     #include <pthread.h>
+    #if defined(__MACH__)
+       //needed only for MacOSX for definition of pid_t
+       #include <sys/types.h>
+    #endif
 
     typedef pthread_mutex_t G4Mutex;
     typedef pthread_t G4Thread;
@@ -80,6 +88,7 @@
     typedef G4int (*thread_lock)(G4Mutex*);
     typedef G4int (*thread_unlock)(G4Mutex*);
 
+    typedef pid_t G4Pid_t;
   #elif defined(WIN32)
     //
     // Multi-threaded build: for Windows systems
@@ -101,7 +110,7 @@
     typedef LPVOID G4ThreadFunArgType;
     typedef DWORD (*thread_lock)(G4Mutex);
     typedef BOOL (*thread_unlock)(G4Mutex);
-
+    typedef DWORD G4Pid_t;
   #else
 
     #error "No Threading model technology supported for this platform. Use sequential build !"
@@ -124,5 +133,9 @@
   typedef void* G4ThreadFunArgType;
   typedef G4int (*thread_lock)(G4Mutex*);
   typedef G4int (*thread_unlock)(G4Mutex*);
-
+  typedef G4int G4Pid_t;
 #endif //G4MULTITHREADING
+
+G4Pid_t G4GetPidId();
+
+#endif //G4Threading_hh
