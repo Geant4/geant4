@@ -156,8 +156,8 @@ G4VTwistSurface::~G4VTwistSurface()
 //* AmIOnLeftSide -----------------------------------------------------
 
 G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me, 
-                                const G4ThreeVector &vec,
-                                      G4bool        withtol) 
+                                     const G4ThreeVector &vec,
+                                     G4bool        withtol) 
 {
    // AmIOnLeftSide returns phi-location of "me"
    // (phi relation between me and vec projected on z=0 plane).
@@ -171,9 +171,9 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me,
    static const G4double kAngTolerance
      = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
-   static G4ThreadLocal G4RotationMatrix * unitrot = new G4RotationMatrix;
-   static const G4RotationMatrix rottol    = unitrot->rotateZ(0.5*kAngTolerance);
-   static const G4RotationMatrix invrottol = unitrot->rotateZ(-1.*kAngTolerance);
+   G4RotationMatrix unitrot;
+   static const G4RotationMatrix rottol    = unitrot.rotateZ(0.5*kAngTolerance);
+   static const G4RotationMatrix invrottol = unitrot.rotateZ(-1.*kAngTolerance);
 
    if (fAmIOnLeftSide.me == me 
        && fAmIOnLeftSide.vec == vec

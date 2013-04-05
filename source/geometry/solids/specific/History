@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-Mar-2013  G.Cosmo (geom-specific-V09-06-09)
+- G4TessellatedSolid: fixed problem with navigation in tessellated solids
+  with concave surfaces. Addresses problem report #1456.
+- More cleanup from MT changes in G4VTwistSurface and G4Tet.
+
 12-Mar-2013  G.Cosmo (geom-specific-V09-06-08)
 - Added public accessors for MT data to G4PolyconeSide and G4PolyhedraSide.
 

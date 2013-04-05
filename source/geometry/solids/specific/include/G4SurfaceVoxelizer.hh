@@ -184,7 +184,7 @@ class G4SurfaceVoxelizer
 
   private:
 
-    static G4ThreadLocal int fDefaultVoxelsCount;
+    static G4ThreadLocal G4int fDefaultVoxelsCount;
 
     void BuildEmpty ();
 
