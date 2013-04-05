@@ -102,7 +102,6 @@ void G4XXXStoredViewer::KernelVisitDecision () {
   // of either the scene handler or this viewer, trigger a rebuild.
 
   typedef std::list<G4String> Store;
-  typedef std::list<G4String>::iterator StoreIterator;
   Store& store =
     static_cast<G4XXXStoredSceneHandler&>(fSceneHandler).fStore;
   if (store.empty() || CompareForKernelVisit(fLastVP)) {

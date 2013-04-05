@@ -801,11 +801,11 @@ bool G4OpenGLViewer::printGl2PS() {
   return true;
 }
 
-unsigned int G4OpenGLViewer::getWinWidth() {
+unsigned int G4OpenGLViewer::getWinWidth() const{
   return fWinSize_x;
 }
 
-unsigned int G4OpenGLViewer::getWinHeight() {
+unsigned int G4OpenGLViewer::getWinHeight() const{
   return fWinSize_y;
 }
 

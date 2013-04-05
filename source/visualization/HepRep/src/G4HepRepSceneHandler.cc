@@ -207,35 +207,6 @@ void G4HepRepSceneHandler::open(G4String name) {
                 int dot = name.length() - extension.length();
                 baseName = (dot >= 0) ? name.substr(0, dot) : "";
 
-#ifndef G4LIB_USE_ZLIB               
-                if (writeGZ) {
-                    cerr << endl;
-                    cerr << "WARNING: the .gz output file you are creating will be a plain file," << endl;
-                    cerr << "       since compression support (ZLIB) was not compiled into the Geant4." << endl;
-                    cerr << "       To avoid confusion with real gz files, the output filename has been" << endl;
-                    cerr << "       extended with the name '.no-gz'." << endl;
-                    cerr << "       A plain heprep or bheprep file can be fairly large." << endl; 
-                }
-                if (writeZip) {
-                    cerr << endl;
-                    cerr << "WARNING: the .zip output file you are creating will not be compressed," << endl;
-                    cerr << "       since compression support (ZLIB) was not compiled into the Geant4." << endl;
-                    cerr << "       A zip file containing non-compressed heprep or bheprep files can" << endl;
-                    cerr << "       be fairly large." << endl;
-                }
-                if (writeGZ || writeZip) {
-                    cerr << "SOLUTION: To add compression support using ZLIB, you need to:" << endl;
-                    cerr << "       1. Define G4LIB_USE_ZLIB and recompile the visualization category." << endl;
-                    cerr << "       2. Optionally define G4_LIB_BUILD_ZLIB if your system does not have" << endl;
-                    cerr << "          zlib installed (e.g. WIN32-VC)." << endl;
-                    cerr << "       3. Relink your application code." << endl;  
-                    cerr << endl;
-                }
-                if (writeGZ) {
-                    extension = extension + ".no-gz";
-                    writeGZ = false;
-                }
-#endif // G4LIB_USE_ZLIB
             } else {
                 // Default for no extension  
                 extension = ".heprep.zip";

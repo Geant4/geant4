@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
 
+26th March 2013  John Allison  (visXXX-V09-06-01)
+- G4XXXStoredViewer.cc: Removed unused typedef.
+
 2nd December 2012  John Allison  (visXXX-V09-06-00)
 - Remove NURBS.
 

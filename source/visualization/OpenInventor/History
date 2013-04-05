@@ -20,6 +20,11 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+15th March 2013  John Allison  (openinventor-V09-06-03)
+- G4OpenInventorXtExaminerViewer.cc:
+  o Changed strlcpy back to strncpy.  Fixes SLC5 compilation error.
+    (Can't remember why I changed to strlcopy in the first place.)
+
 24th February 2013  John Allison  (openinventor-V09-06-02)
 - SbPainterPS:
   o Removed unused fields as warned by new clang compiler.

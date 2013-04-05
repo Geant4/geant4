@@ -238,7 +238,8 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   // test the outcome since viewer is guaranteed to be a
   // G4OpenGLViewer, but test it anyway to keep Coverity happy.
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
-  if (pGLViewer) pGLViewer->ChangeLineWidth(lineWidth);
+  if (!pGLViewer) return;
+  pGLViewer->ChangeLineWidth(lineWidth);
 
   G4VMarker::FillStyle style = polymarker.GetFillStyle();
 

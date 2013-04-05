@@ -94,8 +94,8 @@ protected:
   // set print filename. 
   // if inc, then the filename will be increment by one each time
   std::string getRealPrintFilename();
-  unsigned int getWinWidth();
-  unsigned int getWinHeight();
+  unsigned int getWinWidth() const;
+  unsigned int getWinHeight() const;
   G4bool sizeHasChanged();
   // return true if size has change since last redraw
   GLdouble getSceneNearWidth();

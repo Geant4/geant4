@@ -23,7 +23,7 @@ QTLIBS  =
 GLQTLIBS =
 
 ifdef G4LIB_BUILD_ZLIB
-  CPPFLAGS += -I$(G4BASE)/visualization/externals/zlib/include
+  CPPFLAGS += -I$(G4BASE)/externals/zlib/include
 endif
 
 include $(G4INSTALL)/config/common.gmk

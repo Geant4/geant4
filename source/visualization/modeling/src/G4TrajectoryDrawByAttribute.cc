@@ -93,7 +93,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
 	ed <<"Unable to extract attribute definition named "<<fAttName;
 	G4Exception
 	  ("G4TrajectoryDrawByAttribute::Draw",
-	   "modeling0117", JustWarning, ed, "Invalid attribute name");
+	   "modeling0117", JustWarning, ed, ". Invalid attribute name");
 	G4cout << "Available attributes:\n"
 	       << object.GetAttDefs();
 	warnedUnableToExtract = true;
@@ -131,7 +131,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
       ed <<"Unable to extract attribute value named "<<fAttName;
       G4Exception
 	("G4TrajectoryDrawByAttribute::Draw",
-	 "modeling0118", JustWarning, ed, "Invalid attribute name");
+	 "modeling0118", JustWarning, ed, ". Invalid attribute name");
 	G4cout << "Available attributes:\n"
 	       << object.GetAttDefs();
       warnedUnableToExtract = true;
@@ -216,7 +216,7 @@ G4TrajectoryDrawByAttribute::AddIntervalContext(const G4String& name, G4VisTrajC
     ed <<"Interval "<< name <<" already exists";
     G4Exception
       ("G4TrajectoryDrawByAttribute::AddIntervalContext",
-       "modeling0119", FatalErrorInArgument, ed, "Invalid interval");
+       "modeling0119", FatalErrorInArgument, ed, ". Invalid interval");
   }
 
   fContextMap[myPair] = context;
@@ -235,7 +235,7 @@ G4TrajectoryDrawByAttribute::AddValueContext(const G4String& name, G4VisTrajCont
     ed <<"Single value "<< name <<" already exists";
     G4Exception
       ("G4TrajectoryDrawByAttribute::AddSingleValueContext",
-       "modeling0120", FatalErrorInArgument, ed, "Invalid value");
+       "modeling0120", FatalErrorInArgument, ed, ". Invalid value");
   }
 
   fContextMap[myPair] = context;

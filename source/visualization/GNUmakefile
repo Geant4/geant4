@@ -19,11 +19,6 @@ include $(G4INSTALL)/config/interactivity.gmk
 SUBDIRS := modeling
 SUBLIBS := G4modeling
 
-ifdef G4LIB_BUILD_ZLIB
-  SUBDIRS += externals/zlib
-  SUBLIBS += G4zlib
-endif
-
 # For Debug mode
 # CPPFLAGS += -DG4DEBUG_VIS_OGL
 # CPPFLAGS += -DG4DEBUG_VIS_OI

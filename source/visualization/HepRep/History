@@ -20,6 +20,15 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+26th March 2013  Ben Morgan  (vis-HepRep-V09-06-05)
+- sources.cmake:
+  o BUGFIX #1322 : Update include paths/library linking to use new 
+  ZLIB variables allowing transparent use of internal/external ZLIB
+  as required.
+- G4HepRepSceneHandler:
+  o BUGFIX #1322 : Remove #ifndef block on G4LIB_USE_ZLIB as we now
+  always have zlib available.
+
 24th February 2013  John Allison  (vis-HepRep-V09-06-04)
 - G4HepRepMessenger, G4HepRepSceneHandler:
   o Removed unused fields as warned by new clang compiler.

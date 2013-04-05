@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th March 2013  Ben Morgan (visexternal-V09-06-01)
+- source.cmake : Update include paths/library links to use new ZLIB
+  variables for transparent use of internal/external zlib.
+
+21st October 2013  Gabriele Cosmo  (visexternal-V09-06-00)
+- Moved G4zlib package to source/externals; updated configuration
+  accordingly.
+
 26th October 2012  Laurent Garnier  (visexternal-V09-04-04 and visexternal-V09-04-05)
 - gl2ps.cc : Remove create date in eps files (very useful to be able to compare them)
 

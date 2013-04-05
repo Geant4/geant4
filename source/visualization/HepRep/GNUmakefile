@@ -22,7 +22,7 @@ include $(G4INSTALL)/config/interactivity.gmk
 ifdef G4LIB_USE_ZLIB
   CPPFLAGS += -DG4LIB_USE_ZLIB
   ifdef G4LIB_BUILD_ZLIB
-    CPPFLAGS += -I$(G4BASE)/visualization/externals/zlib/include
+    CPPFLAGS += -I$(G4BASE)/externals/zlib/include
   endif
 else
   CPPFLAGS += -DCHEPREP_NO_ZLIB

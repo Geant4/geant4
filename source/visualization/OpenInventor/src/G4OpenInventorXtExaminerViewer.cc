@@ -2387,7 +2387,7 @@ void G4OpenInventorXtExaminerViewer::constructListsDialog(Widget w,
    std::string dialogNameStr = This->fileName.substr(This->fileName.rfind('/') + 1);
    const int nDialog = dialogNameStr.size() + 1;
    char *dialogName = new char[nDialog];
-   strlcpy(dialogName, dialogNameStr.c_str(), nDialog);
+   strncpy(dialogName, dialogNameStr.c_str(), nDialog);
 
    n = 0;
    XtSetArg(args[n], XmNx, 610);	n++;
@@ -3033,7 +3033,7 @@ void G4OpenInventorXtExaminerViewer::getViewPtNameCB(Widget w,
    if (!nameExists) {
       const int nVPName = This->MAX_VP_NAME + 1;
       name = new char[nVPName];
-      strlcpy(name, strName.c_str(), nVPName);
+      strncpy(name, strName.c_str(), nVPName);
       if (This->viewPtIdx == -1)
          This->viewPtIdx = 0;
       This->saveViewPt(name);
@@ -4198,7 +4198,7 @@ void G4OpenInventorXtExaminerViewer::renameBookmarkCB(Widget,
    vpNameStr = vpNameStr.substr(beg, end - beg + 1);
    const int nVPName = vpNameStr.size() + 1;
    vpName = new char[nVPName];
-   strlcpy(vpName, vpNameStr.c_str(), nVPName);
+   strncpy(vpName, vpNameStr.c_str(), nVPName);
 
    int size = This->viewPtList.size();
    for (int i = 0; i < size; i++) {
@@ -4262,7 +4262,7 @@ void G4OpenInventorXtExaminerViewer::sortBookmarksCB(Widget,
          This->viewPtIdx = i;
       const int nVPName = charList[i].size() + 1;
       char *vpName2 = new char[nVPName];
-      strlcpy(vpName2, charList[i].c_str(), nVPName);
+      strncpy(vpName2, charList[i].c_str(), nVPName);
       newStrList[i] = XmStringCreateLocalized(vpName2);
       delete vpName2;
    }

@@ -24,6 +24,30 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+26th March 2013  John Allison  (vis-V09-06-11)
+- modeling-V09-06-04: Improved G4Exception messages.
+- visXXX-V09-06-01, opengl-V09-06-04:
+  o Removed or commented out unused typedefs that give warnings
+    with gcc-4.8.0.
+- vis-HepRep-V09-06-05 (Ben Morgan): BUGFIX #1322: Fixes for zlib move.
+
+21st March 2013  Gabriele Cosmo  (vis-V09-06-10)
+- opengl-V09-06-03:
+  o G4OpenGLQtExportDialog : changed "TRUE" by "true".
+  o G4OpenGLViewer : added "const" on getWin...();
+    removed bad "printf" statement.
+  o G4OpenGLSceneHandler : Null pointer fix (thanks to XCode analyzer).
+- visexternals-V09-06-00:
+  o Moved G4zlib package to source/externals; updated build configuration
+    accordingly.
+- Requires co-working tag "externals-V09-06-00".
+
+15th March 2013  John Allison
+- openinventor-V09-06-03:
+  o Changed strlcpy back to strncpy.  Fixes SLC5 compilation error.
+    (Can't remember why I changed to strlcopy in the first place -
+     see 29th January.  Only OpenInventor was changed.)
+
 24th February 2013  John Allison  (vis-V09-06-09)
 - modeling-V09-06-03, visman-V09-06-04, vis-HepRep-V09-06-04,
   openinventor-V09-06-02, gMocren-V09-06-03:

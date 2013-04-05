@@ -76,8 +76,8 @@ G4bool G4OpenGLStoredQtSceneHandler::ExtraPOProcessing
     // PVNodeID object, which is a physical volume and copy number.  It
     // is a vector of PVNodeIDs corresponding to the geometry hierarchy
     // actually selected, i.e., not culled.
-    typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
-    typedef std::vector<PVNodeID> PVPath;
+    //    typedef G4PhysicalVolumeModel::G4PhysicalVolumeNodeID PVNodeID;
+    //    typedef std::vector<PVNodeID> PVPath;
 
     // The simplest algorithm, used by the Open Inventor Driver
     // developers, is to rely on the fact the G4PhysicalVolumeModel
