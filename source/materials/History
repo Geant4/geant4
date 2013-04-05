@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-03-13 V.Ivanchenko (materials-V09-06-09)
+- G4Element, G4Material, G4IonisParamElm, G4IonisParamMat, 
+  G4SandiaTable - use "static const G4double" for const parameters 
+    instead of "const G4double"
+     
+14-03-13 mma (materials-V09-06-08)
+- G4Material: cosmetic in printout (operator<<)
      
 01-03-13 mma (materials-V09-06-07)
 - G4Element: NaturalAbanbancesFlag -> NaturalAbundanceFlag

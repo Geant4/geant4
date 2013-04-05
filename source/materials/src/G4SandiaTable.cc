@@ -239,7 +239,7 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   
   const G4double* NbOfAtomsPerVolume = fMaterial->GetVecNbOfAtomsPerVolume();
   
-  const G4double prec = 1.e-03*eV;
+  static const G4double prec = 1.e-03*eV;
   G4double coef, oldsum(0.), newsum(0.);
   fMatNbOfIntervals = 0;
          

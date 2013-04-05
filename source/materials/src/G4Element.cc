@@ -301,7 +301,7 @@ void G4Element::ComputeCoulombFactor()
   //
   //  Compute Coulomb correction factor (Phys Rev. D50 3-1 (1994) page 1254)
 
-  const G4double k1 = 0.0083 , k2 = 0.20206 ,k3 = 0.0020 , k4 = 0.0369 ;
+  static const G4double k1 = 0.0083 , k2 = 0.20206 ,k3 = 0.0020 , k4 = 0.0369 ;
 
   G4double az2 = (fine_structure_const*fZeff)*(fine_structure_const*fZeff);
   G4double az4 = az2 * az2;
@@ -317,8 +317,8 @@ void G4Element::ComputeLradTsaiFactor()
   //  Compute Tsai's Expression for the Radiation Length
   //  (Phys Rev. D50 3-1 (1994) page 1254)
 
-  const G4double Lrad_light[]  = {5.31  , 4.79  , 4.74 ,  4.71} ;
-  const G4double Lprad_light[] = {6.144 , 5.621 , 5.805 , 5.924} ;
+  static const G4double Lrad_light[]  = {5.31  , 4.79  , 4.74 ,  4.71} ;
+  static const G4double Lprad_light[] = {6.144 , 5.621 , 5.805 , 5.924} ;
   
   const G4double logZ3 = std::log(fZeff)/3.;
 

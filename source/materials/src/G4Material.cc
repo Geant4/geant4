@@ -547,7 +547,7 @@ void G4Material::ComputeRadiationLength()
 
 void G4Material::ComputeNuclearInterLength()
 {
-  const G4double lambda0 = 35*g/cm2;
+  static const G4double lambda0 = 35*g/cm2;
   G4double NILinv = 0.0;
   for (size_t i=0; i<fNumberOfElements; ++i) {
     NILinv +=
@@ -706,7 +706,7 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
     << "  RadL: "            << std::setw(7)  << std::setprecision(3)  
     << G4BestUnit(material->fRadlen,"Length")
     << "  Nucl.Int.Length: " << std::setw(7)  << std::setprecision(3)  
-    << G4BestUnit(material->fNuclInterLen,"Length")    
+    << G4BestUnit(material->fNuclInterLen,"Length") <<"\n" << std::setw(30)   
     << "  Imean: "           << std::setw(7)  << std::setprecision(3)  
     << G4BestUnit(material->GetIonisation()->GetMeanExcitationEnergy(),"Energy");
     
@@ -717,6 +717,8 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
       << "  pressure: "    << std::setw(6) << std::setprecision(2)   
       << (material->fPressure)/atmosphere << " atm";
   }
+  flux << "\n";
+  
   for (size_t i=0; i<material->fNumberOfElements; i++) {
     flux 
       << "\n   ---> " << (*(material->theElementVector))[i] 

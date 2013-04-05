@@ -217,7 +217,7 @@ void G4IonisParamMat::ComputeDensityEffect()
 
   } else {
 
-    const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
+    static const G4double Cd2 = 4*pi*hbarc_squared*classic_electr_radius;
     fPlasmaEnergy = std::sqrt(Cd2*fMaterial->GetTotNbOfElectPerVolume());
 
     // Compute parameters for the density effect correction in DE/Dx formula.
@@ -230,10 +230,10 @@ void G4IonisParamMat::ComputeDensityEffect()
     //  
     if ((State == kStateSolid)||(State == kStateLiquid)) {
 
-      const G4double E100eV  = 100.*eV; 
-      const G4double ClimiS[] = {3.681 , 5.215 };
-      const G4double X0valS[] = {1.0   , 1.5   };
-      const G4double X1valS[] = {2.0   , 3.0   };
+      static const G4double E100eV  = 100.*eV; 
+      static const G4double ClimiS[] = {3.681 , 5.215 };
+      static const G4double X0valS[] = {1.0   , 1.5   };
+      static const G4double X1valS[] = {2.0   , 3.0   };
                                 
       if(fMeanExcitationEnergy < E100eV) { icase = 0; }
       else                               { icase = 1; } 
@@ -253,9 +253,9 @@ void G4IonisParamMat::ComputeDensityEffect()
     //
     if (State == kStateGas) { 
 
-      const G4double ClimiG[] = { 10. , 10.5 , 11. , 11.5 , 12.25 , 13.804};
-      const G4double X0valG[] = { 1.6 , 1.7 ,  1.8 ,  1.9 , 2.0   ,  2.0 };
-      const G4double X1valG[] = { 4.0 , 4.0 ,  4.0 ,  4.0 , 4.0   ,  5.0 };
+      static const G4double ClimiG[] = { 10. , 10.5 , 11. , 11.5 , 12.25 , 13.804};
+      static const G4double X0valG[] = { 1.6 , 1.7 ,  1.8 ,  1.9 , 2.0   ,  2.0 };
+      static const G4double X1valG[] = { 4.0 , 4.0 ,  4.0 ,  4.0 , 4.0   ,  5.0 };
 
       icase = 5;
       fX0density = 0.326*fCdensity-2.5 ; fX1density = 5.0 ; fMdensity = 3. ; 
@@ -416,7 +416,7 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
   // ICRU Report N#37, 1984  (energy in eV)
 
   size_t numberOfMolecula = 54; 
-  const G4String name[54] = {
+  static const G4String name[54] = {
     // gas
     "NH_3",       "C_4H_10",    "CO_2",       "C_2H_6",      "C_7H_16",
     "C_6H_14",    "CH_4",       "NO",         "N_2O",        "C_8H_18",
@@ -437,7 +437,7 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
     "LiF",        "Photo_Emulsion",  "(C_2F_4)-Teflon",  "SiO_2"     
   } ;
     
-  const G4double meanExcitation[54] = {
+  static const G4double meanExcitation[54] = {
 
     53.7,   48.3,  85.0,  45.4,  49.2,
     49.1,   41.7,  87.8,  84.9,  49.5,
