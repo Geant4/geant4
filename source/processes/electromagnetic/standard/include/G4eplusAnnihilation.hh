@@ -59,8 +59,6 @@
 #define G4eplusAnnihilation_h 1
 
 #include "G4VEmProcess.hh"
-#include "G4Positron.hh"
-#include "G4VEmModel.hh"
 
 class G4ParticleDefinition;
 

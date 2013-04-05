@@ -313,7 +313,7 @@ G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
   } else {
 
     // small step use only single scattering
-    const G4double singleScatLimit = 1.0e-7;
+    static const G4double singleScatLimit = 1.0e-7;
     if(geomStepLength < lambdaeff*singleScatLimit*(1.0 - cosTetMaxNuc)) {
       singleScatteringMode = true;
       cosThetaMin = 1.0;
@@ -410,7 +410,7 @@ G4WentzelVIRelModel::SampleScattering(const G4ThreeVector& oldDirection,
   // step limit due msc
   G4double x0 = tPathLength;
   //  const G4double thinlimit = 0.5; 
-  const G4double thinlimit = 0.1; 
+  static const G4double thinlimit = 0.1; 
   G4int nMscSteps = 1;
   // large scattering angle case - two step approach
   if(tPathLength*invlambda > thinlimit && safety > tlimitminfix) { 

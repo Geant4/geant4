@@ -246,7 +246,9 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
   G4double u;
-  const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
+  static const G4double a1 = 0.625; 
+  static const G4double a2 = 3.*a1;
+  static const G4double  d = 27. ;
 
   if (9./(9.+d) >G4UniformRand()) u= - log(G4UniformRand()*G4UniformRand())/a1;
   else                            u= - log(G4UniformRand()*G4UniformRand())/a2;

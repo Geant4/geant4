@@ -77,9 +77,9 @@ G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
 
   G4double uMax = 2*(1. + dp->GetKineticEnergy()/electron_mass_c2);   
 
-  const G4double a1     = 0.625;
-  const G4double a2     = 1.875;
-  const G4double border = 0.25;
+  static const G4double a1     = 0.625;
+  static const G4double a2     = 1.875;
+  static const G4double border = 0.25;
   G4double u;
 
   do {

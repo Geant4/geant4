@@ -229,7 +229,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   // tabulation for lower beta2
   if( beta2 < 3.0*theBohrBeta2*Z ) {
 
-    const G4double a[96][4] = {
+  static const G4double a[96][4] = {
  {-0.3291, -0.8312,  0.2460, -1.0220},
  {-0.5615, -0.5898,  0.5205, -0.7258},
  {-0.5280, -0.4981,  0.5519, -0.5865},
@@ -337,20 +337,19 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
  {-0.4227, -0.3217,  1.6360, -0.6438}
     } ;
 
-    G4int iz = G4int(Z) - 2;
-    if( 0 > iz )      iz = 0;
-    else if(95 < iz ) iz = 95;
+    G4int iz = G4lrint(Z) - 2;
+    if( 0 > iz )      { iz = 0; }
+    else if(95 < iz ) { iz = 95; }
 
     G4double ss = 1.0 + a[iz][0]*pow(energy,a[iz][1])+
       + a[iz][2]*pow(energy,a[iz][3]);
   
     // protection for the validity range for low beta
-    G4double slim = 0.001;
-    if(ss < slim) s1 = 1.0/slim;
+    static const G4double slim = 0.001;
+    if(ss < slim) { s1 = 1.0/slim; }
     // for high value of beta
-    else if(s1*ss < 1.0) s1 = 1.0/ss;
+    else if(s1*ss < 1.0) { s1 = 1.0/ss; }
   }
-
   G4int i = 0 ;
   G4double factor = 1.0 ;
 
@@ -359,7 +358,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   //                                    2 for ions in atomic gases
   //                                    3 for ions in molecular gases
   //                                    4 for ions in solids
-  const G4double b[5][4] = {
+  static const G4double b[5][4] = {
   {0.1014,  0.3700,  0.9642,  3.987},
   {0.1955,  0.6941,  2.522,   1.040},
   {0.05058, 0.08975, 0.1419, 10.80},

@@ -330,13 +330,13 @@ G4bool G4BraggModel::HasMaterial(const G4Material* material)
   if("" == chFormula) { return false; }
 
   // ICRU Report N49, 1993. Power's model for He.
-  const size_t numberOfMolecula = 11;
-  const G4String molName[numberOfMolecula] = {
+  static const size_t numberOfMolecula = 11;
+  static const G4String molName[numberOfMolecula] = {
     "Al_2O_3",                 "CO_2",                      "CH_4",
     "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",
     "C_3H_8",                  "SiO_2",                     "H_2O",
     "H_2O-Gas",                "Graphite" } ;
-  const G4int idxPSTAR[numberOfMolecula] = {
+  static const G4int idxPSTAR[numberOfMolecula] = {
     6,  16,  36,
     52, 55,  56,
     59, 62,  71,
@@ -375,7 +375,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
 
     G4double T = kineticEnergy/(keV*protonMassAMU) ; 
 
-     const G4double a[11][5] = {
+    static const G4double a[11][5] = {
    {1.187E+1, 1.343E+1, 1.069E+4, 7.723E+2, 2.153E-2},
    {7.802E+0, 8.814E+0, 8.303E+3, 7.446E+2, 7.966E-3}, 
    {7.294E+0, 8.284E+0, 5.010E+3, 4.544E+2, 8.153E-3}, 
@@ -388,7 +388,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
    {4.571E+0, 5.173E+0, 4.346E+3, 4.779E+2, 8.572E-3},
    {2.631E+0, 2.601E+0, 1.701E+3, 1.279E+3, 1.638E-2} };
 
-     const G4double atomicWeight[11] = {
+    static const G4double atomicWeight[11] = {
     101.96128, 44.0098, 16.0426, 28.0536, 42.0804,
     104.1512, 44.665, 60.0843, 18.0152, 18.0152, 12.0};       
 
@@ -441,7 +441,7 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
 
   G4double T = kineticEnergy/(keV*protonMassAMU) ; 
   
-  const G4double a[92][5] = {
+  static const G4double a[92][5] = {
    {1.254E+0, 1.440E+0, 2.426E+2, 1.200E+4, 1.159E-1},
    {1.229E+0, 1.397E+0, 4.845E+2, 5.873E+3, 5.225E-2},
    {1.411E+0, 1.600E+0, 7.256E+2, 3.013E+3, 4.578E-2},
@@ -669,10 +669,10 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     
 
   // The coffecient from Table.4 of Ziegler & Manoyan
-  const G4double HeEff = 2.8735 ;
+  static const G4double HeEff = 2.8735 ;
   
-  const size_t numberOfMolecula = 53;
-  const G4String nameOfMol[53] = {
+  static const size_t numberOfMolecula = 53;
+  static const G4String nameOfMol[53] = {
     "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
     "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
     "C_6H_6",    "C_4H_10",    "C_4H_6",   "C_4H_8O",            "CCl_4",
@@ -686,7 +686,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     "C_3H_6S",   "C_4H_4S",    "C_7H_8"
   };
 
-  const G4double expStopping[numberOfMolecula] = {
+  static const G4double expStopping[numberOfMolecula] = {
      66.1,  190.4, 258.7,  42.2, 141.5,
     210.9,  279.6, 198.8,  31.0, 267.5,
     122.8,  311.4, 260.3, 328.9, 391.3,
@@ -700,7 +700,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     306.8,  324.4, 420.0
   } ;
 
-  const G4double expCharge[53] = {
+  static const G4double expCharge[53] = {
     HeEff, HeEff, HeEff,   1.0, HeEff,
     HeEff, HeEff, HeEff,   1.0,   1.0,
       1.0, HeEff, HeEff, HeEff, HeEff,
@@ -714,7 +714,7 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     HeEff, HeEff, HeEff
   } ;
 
-  const G4double numberOfAtomsPerMolecula[53] = {
+  static const G4double numberOfAtomsPerMolecula[53] = {
     3.0,  7.0, 10.0,  4.0,  6.0,
     9.0, 12.0,  7.0,  4.0, 24.0,
     12.0, 14.0, 10.0, 13.0,  5.0,

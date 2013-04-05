@@ -81,7 +81,8 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   tausmall      = 1.e-16;
   taulim        = 1.e-6;
   currentTau    = taulim;
-  tlimitminfix  = 1.e-6*mm;            
+  tlimitminfix  = 0.01*nm;             
+  tlimitminfix2 =   1.*nm;             
   stepmin       = tlimitminfix;
   smallstep     = 1.e10;
   currentRange  = 0. ;
@@ -168,15 +169,16 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
                                    G4double AtomicNumber,G4double,
 				   G4double, G4double)
 {
-  const G4double sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
-  const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
+  static const G4double sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
+  static const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
                             Bohr_radius*Bohr_radius/(hbarc*hbarc);
-  const G4double epsmin = 1.e-4 , epsmax = 1.e10;
+  static const G4double epsmin = 1.e-4 , epsmax = 1.e10;
 
-  const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38., 47.,
-                             50., 56., 64., 74., 79., 82. };
+  static const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38., 47.,
+				     50., 56., 64., 74., 79., 82. };
 
-  const G4double Tdat[22] = { 100*eV,  200*eV,  400*eV,  700*eV,
+  static const G4double Tdat[22] = { 
+                              100*eV,  200*eV,  400*eV,  700*eV,
                                1*keV,   2*keV,   4*keV,   7*keV,
 			      10*keV,  20*keV,  40*keV,  70*keV,
                              100*keV, 200*keV, 400*keV, 700*keV,
@@ -184,7 +186,7 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
 			      10*MeV,  20*MeV};
 
   // corr. factors for e-/e+ lambda for T <= Tlim
-          G4double celectron[15][22] =
+  static const G4double celectron[15][22] =
           {{1.125,1.072,1.051,1.047,1.047,1.050,1.052,1.054,
             1.054,1.057,1.062,1.069,1.075,1.090,1.105,1.111,
             1.112,1.108,1.100,1.093,1.089,1.087            },
@@ -231,7 +233,7 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
             1.985,1.609,1.343,1.188,1.113,1.013,0.960,0.939,
             0.933,0.930,0.933,0.936,0.939,0.949            }};
 	    
-           G4double cpositron[15][22] = {
+  static const G4double cpositron[15][22] = {
            {2.589,2.044,1.658,1.446,1.347,1.217,1.144,1.110,
             1.097,1.083,1.080,1.086,1.092,1.108,1.123,1.131,
             1.131,1.126,1.117,1.108,1.103,1.100            },
@@ -279,20 +281,21 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
             1.456,1.412,1.364,1.328,1.307,1.282            }};
 
   //data/corrections for T > Tlim  
-  G4double Tlim = 10.*MeV;
-  G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
-                      ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
-  G4double bg2lim   = Tlim*(Tlim+2.*electron_mass_c2)/
-                      (electron_mass_c2*electron_mass_c2);
+  static const G4double Tlim = 10.*MeV;
+  static G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
+    ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
+  static const G4double bg2lim   = Tlim*(Tlim+2.*electron_mass_c2)/
+    (electron_mass_c2*electron_mass_c2);
 
-  G4double sig0[15] = {0.2672*barn,  0.5922*barn, 2.653*barn,  6.235*barn,
-                      11.69*barn  , 13.24*barn  , 16.12*barn, 23.00*barn ,
-		      35.13*barn  , 39.95*barn  , 50.85*barn, 67.19*barn ,
-                      91.15*barn  , 104.4*barn  , 113.1*barn};
+  static const G4double sig0[15] = {
+    0.2672*barn,  0.5922*barn, 2.653*barn,  6.235*barn,
+    11.69*barn  , 13.24*barn  , 16.12*barn, 23.00*barn ,
+    35.13*barn  , 39.95*barn  , 50.85*barn, 67.19*barn ,
+    91.15*barn  , 104.4*barn  , 113.1*barn};
 		      		       
-  G4double hecorr[15] = {120.70, 117.50, 105.00, 92.92, 79.23,  74.510,  68.29,
-                          57.39,  41.97,  36.14, 24.53, 10.21,  -7.855, -16.84,
-			 -22.30};
+  static const G4double hecorr[15] = {
+    120.70, 117.50, 105.00, 92.92, 79.23,  74.510,  68.29,
+    57.39,  41.97,  36.14, 24.53, 10.21,  -7.855, -16.84, -22.30};
 
   G4double sigma;
   SetParticle(part);
@@ -649,7 +652,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   zPathLength = tPathLength;
 
   // z = t for very small tPathLength
-  if(tPathLength < tlimitminfix) return zPathLength;
+  if(tPathLength < tlimitminfix2) return zPathLength;
 
   // this correction needed to run MSC with eIoni and eBrem inactivated
   // and makes no harm for a normal run
@@ -699,7 +702,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   //  sample z
   if(samplez)
   {
-    const G4double  ztmax = 0.999 ;
+    static const G4double  ztmax = 0.999 ;
     G4double zt = zmean/tPathLength ;
 
     if (tPathLength > stepmin && zt < ztmax)              
@@ -740,7 +743,7 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
   zPathLength = geomStepLength;
 
   // t = z for very small step
-  if(geomStepLength < tlimitminfix) { 
+  if(geomStepLength < tlimitminfix2) { 
     tPathLength = geomStepLength; 
   
   // recalculation
@@ -777,7 +780,7 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
   // for all particles take the width of the central part
   //  from a  parametrization similar to the Highland formula
   // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
-  const G4double c_highland = 13.6*MeV ;
+  static const G4double c_highland = 13.6*MeV ;
   G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
                          KineticEnergy*(KineticEnergy+2.*mass)/
                       ((currentKinEnergy+mass)*(KineticEnergy+mass)));
@@ -820,6 +823,7 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
     //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
     // do Gaussian central scattering
   //  if(kineticEnergy > 5*GeV && cth < 0.9) {
+  /*
   if(cth < 1.0 - 1000*tPathLength/lambda0 && cth < 0.5 &&
      kineticEnergy > 20*MeV) { 
     G4cout << "### G4UrbanMscModel::SampleScattering for "
@@ -829,7 +833,7 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
 	   << " in " << CurrentCouple()->GetMaterial()->GetName()
 	   << " CosTheta= " << cth << G4endl;
   }
-
+  */
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
   G4double dirx = sth*cos(phi);
@@ -845,7 +849,7 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
 	 << " geomStep(mm)= " << zPathLength
 	 << G4endl;
   */
-  if (latDisplasment && safety > tlimitminfix) {
+  if (latDisplasment && safety > tlimitminfix2) {
 
     G4double r = SampleDisplacement();
     /*    
@@ -913,7 +917,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 
   if (tau >= taubig) { cth = -1.+2.*G4UniformRand(); }
   else if (tau >= tausmall) {
-    const G4double numlim = 0.01;
+    static const G4double numlim = 0.01;
     G4double xmeanth, x2meanth;
     if(tau < numlim) {
       xmeanth = 1.0 - tau*(1.0 - 0.5*tau);
@@ -1095,8 +1099,8 @@ G4double G4UrbanMscModel::SampleDisplacement()
 
 G4double G4UrbanMscModel::LatCorrelation()
 {
-  const G4double kappa = 2.5;
-  const G4double kappami1 = kappa-1.;
+  static const G4double kappa = 2.5;
+  static const G4double kappami1 = kappa-1.;
 
   G4double latcorr = 0.;
   if((currentTau >= tausmall) && !insideskin)

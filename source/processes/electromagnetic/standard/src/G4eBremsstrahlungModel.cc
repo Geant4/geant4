@@ -172,14 +172,14 @@ G4double G4eBremsstrahlungModel::ComputeDEDXPerVolume(
   if(!particle) { SetParticle(p); }
   if(kineticEnergy < lowKinEnergy) { return 0.0; }
 
-  const G4double thigh = 100.*GeV;
+  static const G4double thigh = 100.*GeV;
 
   G4double cut = std::min(cutEnergy, kineticEnergy);
 
   G4double rate, loss;
-  const G4double factorHigh = 36./(1450.*GeV);
-  const G4double coef1 = -0.5;
-  const G4double coef2 = 2./9.;
+  static const G4double factorHigh = 36./(1450.*GeV);
+  static const G4double coef1 = -0.5;
+  static const G4double coef2 = 2./9.;
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();

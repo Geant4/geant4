@@ -133,7 +133,7 @@ private:
   G4double currentTau;
   G4double tlimit;
   G4double tlimitmin;
-  G4double tlimitminfix;
+  G4double tlimitminfix,tlimitminfix2;
   G4double tgeom;
 
   G4double geombig;

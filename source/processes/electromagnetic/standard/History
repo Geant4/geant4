@@ -18,6 +18,25 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+04 April 13: V.Ivanchenko (emstand-V09-06-22)
+- G4eplusAnnihilation - use G4VParticleChange interface to add
+    secondary track for more clean weight update; cleanup headers
+
+22 March 13: V.Ivanchenko (emstand-V09-06-21)
+- G4MottCoefficients, G4BetheHeitlerModel, G4ASTARStopping, G4BraggIonModel,
+  G4BraggModel, G4InitXscPAI, G4IonFluctuations, G4ModifiedTsai,  
+  G4MottCoefficients, G4PAIySection, G4PSTARStopping, 
+  G4PairProductionRelModel, G4SauterGavrilaAngularDistribution,
+  G4ScreeningMottCrossSection, G4SeltzerBergerModel, G4UrbanMscModel,
+  G4WentzelVIModel, G4WentzelVIRelModel, G4eBremsstrahlungModel
+    for const parameters use "static const G4double"
+
+18 March 13: V.Ivanchenko (emstand-V09-06-20)
+- G4UrbanMscModel - L.Urban have added a new geometrical limit
+    0.01 nm to allow scattering in very small steps; 
+- G4UrbanMscModel, G4UrbanMscModel93, G4UrbanMscModel95 -
+    warning printout about large angle scattering is commented out
+
 07 March 13: V.Ivanchenko (emstand-V09-06-19)
 - G4UrbanMscModel, G4UrbanMscModel93, G4UrbanMscModel95, 
     G4UrbanMscModel96 - comment out extra printout

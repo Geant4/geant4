@@ -849,6 +849,7 @@ G4UrbanMscModel93::SampleScattering(const G4ThreeVector& oldDirection,
     //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
     // do Gaussian central scattering
   //  if(kineticEnergy > 0.5*GeV && cth < 0.9) {
+  /*
   if(cth < 1.0 - 1000*tPathLength/lambda0 && 
      cth < 0.9 && kineticEnergy > 500*MeV) { 
     G4ExceptionDescription ed;
@@ -861,12 +862,8 @@ G4UrbanMscModel93::SampleScattering(const G4ThreeVector& oldDirection,
        << " is too big";
     G4Exception("G4UrbanMscModel93::SampleScattering","em0004",
 		JustWarning, ed,"");
-    /*
-    do {
-      cth = 1.0 + 2*log(G4UniformRand())*tPathLength/lambda0;
-    } while(cth < -1.0);
-    */
   }
+  */
 
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();

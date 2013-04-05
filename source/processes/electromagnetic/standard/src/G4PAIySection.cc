@@ -217,9 +217,9 @@ void G4PAIySection::ComputeLowEnergyCof(const G4Material* material)
   G4int i, numberOfElements = material->GetNumberOfElements();
   G4double sumZ = 0., sumCof = 0.; 
 
-  const G4double p0 =  1.20923e+00; 
-  const G4double p1 =  3.53256e-01; 
-  const G4double p2 = -1.45052e-03; 
+  static const G4double p0 =  1.20923e+00; 
+  static const G4double p1 =  3.53256e-01; 
+  static const G4double p2 = -1.45052e-03; 
   
   G4double* thisMaterialZ   = new G4double[numberOfElements];
   G4double* thisMaterialCof = new G4double[numberOfElements];
@@ -561,7 +561,7 @@ G4double G4PAIySection::DifPAIySection( G4int              i ,
   G4double beta, be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result;
    //G4double beta, be4;
    //G4double be4;
-   G4double betaBohr = fine_structure_const;
+   static const G4double betaBohr = fine_structure_const;
    // G4double betaBohr2 = fine_structure_const*fine_structure_const;
    // G4double betaBohr4 = betaBohr2*betaBohr2*4.0;
    be2 = betaGammaSq/(1 + betaGammaSq);
@@ -627,12 +627,12 @@ G4double G4PAIySection::PAIdNdxCerenkov( G4int    i ,
                                          G4double betaGammaSq  )
 {        
    G4double logarithm, x3, x5, argument, modul2, dNdxC; 
-   G4double be2, be4, betaBohr2,betaBohr4,cofBetaBohr;
+   G4double be2, be4;
 
    //G4double cof         = 1.0;
-   cofBetaBohr = 4.0;
-   betaBohr2   = fine_structure_const*fine_structure_const;
-   betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
+   static const G4double cofBetaBohr = 4.0;
+   static const G4double betaBohr2   = fine_structure_const*fine_structure_const;
+   static const G4double betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
 
    be2 = betaGammaSq/(1 + betaGammaSq);
    be4 = be2*be2;
@@ -689,12 +689,12 @@ G4double G4PAIySection::PAIdNdxPlasmon( G4int    i ,
                                         G4double betaGammaSq  )
 {        
    G4double cof, resonance, modul2, dNdxP;
-   G4double be2, be4, betaBohr2, betaBohr4, cofBetaBohr;
+   G4double be2, be4;
 
    cof = 1;
-   cofBetaBohr = 4.0;
-   betaBohr2   = fine_structure_const*fine_structure_const;
-   betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
+   static const G4double cofBetaBohr = 4.0;
+   static const G4double betaBohr2   = fine_structure_const*fine_structure_const;
+   static const G4double betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
 
    be2 = betaGammaSq/(1 + betaGammaSq);
    be4 = be2*be2;

@@ -309,7 +309,7 @@ G4double G4ScreeningMottCrossSection::NuclearCrossSection()
         G4double anglemin =std::acos(cosTetMinNuc);
         G4double anglemax =std::acos(cosTetMaxNuc); 
 
-        const G4double limit = 1.e-9;
+        static const G4double limit = 1.e-9;
         if(anglemin < limit) {
 	  anglemin = GetScreeningAngle()/10.;
           if(anglemin < limit) { anglemin = limit; }
@@ -430,7 +430,7 @@ G4double G4ScreeningMottCrossSection::GetScatteringAngle()
 	G4double anglemin=std::acos(cosTetMinNuc);	
 	G4double anglemax= std::acos(cosTetMaxNuc);
 
-        const G4double limit = 1.e-9;
+        static const G4double limit = 1.e-9;
         if(anglemin < limit) {
 	  anglemin = GetScreeningAngle()/10.;
           if(anglemin < limit) { anglemin = limit; }

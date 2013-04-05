@@ -292,7 +292,7 @@ G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*
 {
   //  static const G4double gammaEnergyLimit = 1.5*MeV;
   G4double crossSection = 0.0 ;
-  if ( Z < 0.9 ) return crossSection;
+  //  if ( Z < 0.9 ) return crossSection;
   if ( gammaEnergy <= 2.0*electron_mass_c2 ) return crossSection;
 
   SetCurrentElement(Z);
@@ -300,8 +300,10 @@ G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*
   // in the moment only one calculator:
   crossSection=ComputeXSectionPerAtom(gammaEnergy,Z);
 
+  static const G4double xsfactor = 4*fine_structure_const*classic_electr_radius*classic_electr_radius;
+
   G4double xi = Finel/(Fel - fCoulomb); // inelastic contribution
-  crossSection*=4.*Z*(Z+xi)*fine_structure_const*classic_electr_radius*classic_electr_radius;
+  crossSection *= xsfactor*Z*(Z+xi);
 
   return crossSection;
 }
@@ -425,7 +427,9 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
   G4double u;
-  const G4double a1 = 0.625 , a2 = 3.*a1 , d = 27. ;
+  static const G4double a1 = 0.625; 
+  static const G4double a2 = 3.*a1;
+  static const G4double  d = 27. ;
 
   if (9./(9.+d) >G4UniformRand()) u= - log(G4UniformRand()*G4UniformRand())/a1;
   else                            u= - log(G4UniformRand()*G4UniformRand())/a2;
