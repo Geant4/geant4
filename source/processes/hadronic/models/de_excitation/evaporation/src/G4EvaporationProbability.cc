@@ -100,7 +100,7 @@ G4EvaporationProbability::CalculateProbability(const G4Fragment & fragment,
       theEvapLDPptr->LevelDensityParameter(fragment.GetA_asInt(),fragment.GetZ_asInt(),U)*
       (U-delta0));
 								  
-    const G4double RN = 1.5*fermi;
+    static const G4double RN = 1.5*fermi;
 
     G4double Alpha = CalcAlphaParam(fragment);
     G4double Beta = CalcBetaParam(fragment);

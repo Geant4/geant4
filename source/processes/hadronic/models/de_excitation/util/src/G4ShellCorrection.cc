@@ -28,27 +28,36 @@
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
 // 
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #include "G4ShellCorrection.hh"
 
-
-G4ThreadLocal G4ShellCorrection* G4ShellCorrection::theInstance = 0;
+G4ShellCorrection* G4ShellCorrection::theInstance = 0;
 
 G4ShellCorrection::G4ShellCorrection()
 {
-  theCookShellCorrections = G4CookShellCorrections::GetInstance();
-  theCameronGilbertShellCorrections = G4CameronGilbertShellCorrections::GetInstance();
-//  theCameronTruranHilfShellCorrections = G4CameronTruranHilfShellCorrections::GetInstance();
+  theCookShellCorrections = new G4CookShellCorrections();
+  theCameronGilbertShellCorrections = 
+    new G4CameronGilbertShellCorrections();
+  theCameronTruranHilfShellCorrections = 
+    new G4CameronTruranHilfShellCorrections();
+  theCameronShellPlusPairingCorrections = 
+    new G4CameronShellPlusPairingCorrections();
 }
 
 G4ShellCorrection::~G4ShellCorrection()
 {
+  delete theCookShellCorrections;
+  delete theCameronGilbertShellCorrections;
+  delete theCameronTruranHilfShellCorrections;
+  delete theCameronShellPlusPairingCorrections;
 }
 
 G4ShellCorrection* G4ShellCorrection::GetInstance()
 {
   if (!theInstance)  { 
-    static G4ThreadLocal G4ShellCorrection *theCorrections_G4MT_TLS_ = 0 ; if (!theCorrections_G4MT_TLS_) theCorrections_G4MT_TLS_ = new  G4ShellCorrection  ;  G4ShellCorrection &theCorrections = *theCorrections_G4MT_TLS_;
+    static G4ShellCorrection theCorrections;
     theInstance = &theCorrections; 
   }
   return theInstance;

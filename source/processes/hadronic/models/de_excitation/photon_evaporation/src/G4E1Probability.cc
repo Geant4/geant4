@@ -166,7 +166,7 @@ G4double G4E1Probability::EmissionIntegration(const G4Fragment& frag,
   // Simple integration
   // VI replace by direct integration over 100 point
 
-  const G4int numIters = 100;
+  static const G4int numIters = 100;
   G4double Step = (upLim-lowLim)/G4double(numIters);
 
   G4double res = 0.0;

@@ -28,23 +28,25 @@
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #ifndef G4PairingCorrection_h
 #define G4PairingCorrection_h 1
 
 #include "globals.hh"
-#include "G4CookPairingCorrections.hh"
-#include "G4CameronGilbertPairingCorrections.hh"
-//#include "G4CameronTruranHilfPairingCorrections.hh"
+
+class G4CookPairingCorrections;
+class G4CameronGilbertPairingCorrections;
 
 class G4PairingCorrection
 {
 private:
   
-  // Dummy constructor
   G4PairingCorrection();
   
-  static G4ThreadLocal G4PairingCorrection* theInstance;
+  static G4PairingCorrection* theInstance;
    
 public:
 	
@@ -58,9 +60,7 @@ public:
 
 private:
 
-  
   G4CookPairingCorrections* theCookPairingCorrections;
-  //  G4CameronTruranHilfPairingCorrections* theCameronTruranHilfPairingCorrections;
   G4CameronGilbertPairingCorrections* theCameronGilbertPairingCorrections;
 
 };

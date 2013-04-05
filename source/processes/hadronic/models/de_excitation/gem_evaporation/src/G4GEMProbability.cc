@@ -162,7 +162,7 @@ G4double G4GEMProbability::CalcProbability(const G4Fragment & fragment,
 
     //VI minor speedup
     G4double expE0T = std::exp(E0/T);
-    const G4double sqrt2 = std::sqrt(2.0);
+    static const G4double sqrt2 = std::sqrt(2.0);
 
     G4double tx = Ex/T;
     G4double s0 = 2.0*std::sqrt(a*(MaximalKineticEnergy-delta0));

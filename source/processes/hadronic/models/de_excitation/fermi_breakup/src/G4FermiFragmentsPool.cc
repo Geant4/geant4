@@ -51,12 +51,12 @@
 #include "G4He5FermiFragment.hh"
 #include "G4Li5FermiFragment.hh"
 
-G4ThreadLocal G4FermiFragmentsPool* G4FermiFragmentsPool::theInstance = 0;
+G4FermiFragmentsPool* G4FermiFragmentsPool::theInstance = 0;
  
 G4FermiFragmentsPool* G4FermiFragmentsPool::Instance()
 {
   if(0 == theInstance) {
-    static G4ThreadLocal G4FermiFragmentsPool *pool_G4MT_TLS_ = 0 ; if (!pool_G4MT_TLS_) pool_G4MT_TLS_ = new  G4FermiFragmentsPool  ;  G4FermiFragmentsPool &pool = *pool_G4MT_TLS_;
+    static G4FermiFragmentsPool pool;
     theInstance = &pool;
   }
   return theInstance;

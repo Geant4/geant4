@@ -591,6 +591,8 @@ void G4WilsonAblationModel::PrintWelcomeMessage ()
          <<G4endl;
   G4cout <<" (Written by QinetiQ Ltd for the European Space Agency)"
          <<G4endl;
+  G4cout <<" !!! WARNING: This model is not well validation and should not be used for accurate simulation !!!"
+         <<G4endl;
   G4cout <<" *****************************************************************"
          <<G4endl;
   G4cout << G4endl;

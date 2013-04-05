@@ -166,7 +166,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 {
   G4FragmentVector * theResult = new G4FragmentVector;
   G4FragmentVector * theTempResult;
-  const G4double Elimit = 3*MeV;
+  static const G4double Elimit = 3*MeV;
 
   // The residual nucleus (after evaporation of each fragment)
   G4Fragment* theResidualNucleus = new G4Fragment(theNucleus);

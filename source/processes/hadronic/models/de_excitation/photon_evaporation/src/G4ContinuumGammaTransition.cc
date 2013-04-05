@@ -207,7 +207,7 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
   G4double Egdp = (40.3 /G4Pow::GetInstance()->powZ(_nucleusA,0.2) )*MeV;
   G4double GammaR = 0.30 * Egdp;
  
-  const G4double normC = 1.0 / (pi * hbarc)*(pi * hbarc);
+  static const G4double normC = 1.0 / (pi * hbarc)*(pi * hbarc);
 
   G4double numerator = sigma0 * e*e * GammaR*GammaR;
   G4double denominator = (e*e - Egdp*Egdp)* (e*e - Egdp*Egdp) + GammaR*GammaR*e*e;

@@ -23,11 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
+//
+// Modified:
+// 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #ifndef G4ShellCorrection_h
 #define G4ShellCorrection_h 1
@@ -35,32 +37,46 @@
 #include "globals.hh"
 #include "G4CookShellCorrections.hh"
 #include "G4CameronGilbertShellCorrections.hh"
-//#include "G4CameronTruranHilfShellCorrections.hh"
-
+#include "G4CameronTruranHilfShellCorrections.hh"
+#include "G4CameronShellPlusPairingCorrections.hh"
 
 class G4ShellCorrection
 {
 private:
   
-  // Dummy constructor
   G4ShellCorrection();
   
-  static G4ThreadLocal G4ShellCorrection* theInstance;
+  static G4ShellCorrection* theInstance;
   
 public:
+
   static G4ShellCorrection* GetInstance();
+
   ~G4ShellCorrection();
 
-  G4double GetShellCorrection(const G4int A, const G4int Z) const 
+  inline G4CameronTruranHilfShellCorrections* 
+  GetCameronTruranHilfShellCorrections()
+  {
+    return theCameronTruranHilfShellCorrections;
+  }
+
+  inline G4CameronShellPlusPairingCorrections*
+  GetCameronShellPlusPairingCorrections()
+  {
+    return theCameronShellPlusPairingCorrections;
+  }
+
+  inline 
+  G4double GetShellCorrection(G4int A, G4int Z) const 
   {
     G4double SCorrection = 0.0;
     if (theCookShellCorrections->IsInTableThisN(A-Z) || 
-	theCookShellCorrections->IsInTableThisZ(Z)) 
+	theCookShellCorrections->IsInTableThisZ(Z)) {
       SCorrection = theCookShellCorrections->GetShellCorrection(A,Z);
-    else if (theCameronGilbertShellCorrections->IsInTableThisN(A-Z) || 
-	     theCameronGilbertShellCorrections->IsInTableThisZ(Z))
+    } else if (theCameronGilbertShellCorrections->IsInTableThisN(A-Z) || 
+	       theCameronGilbertShellCorrections->IsInTableThisZ(Z)) {
       SCorrection = theCameronGilbertShellCorrections->GetShellCorrection(A,Z);
-    
+    }    
     return SCorrection;
   }
 
@@ -68,8 +84,8 @@ private:
 
   G4CookShellCorrections* theCookShellCorrections;
   G4CameronGilbertShellCorrections* theCameronGilbertShellCorrections;
-//  G4CameronTruranHilfShellCorrections* theCameronTruranHilfShellCorrections;
-
+  G4CameronTruranHilfShellCorrections* theCameronTruranHilfShellCorrections;
+  G4CameronShellPlusPairingCorrections* theCameronShellPlusPairingCorrections;
 
 };
 #endif

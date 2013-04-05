@@ -13,6 +13,35 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+22 March 2013 Vladimir Ivanchenko (hadr-deex-V09-06-09)
+----------------------------------------------------------
+- G4WilsonAblationModel - fixed typo
+
+22 March 2013 Vladimir Ivanchenko (hadr-deex-V09-06-08)
+----------------------------------------------------------
+- G4Evaporation, G4EvaporationProbability, G4CompetitiveFission,
+  G4FissionBarrier, G4GEMProbability, G4StatMFMacroNucleon,
+  G4StatMFMacroTetraNucleon, G4StatMFMacroTriNucleon,
+  G4ContinuumGammaDeexcitation, G4ContinuumGammaTransition,
+  G4E1Probability, G4E1SingleProbability1, G4PairingCorrection,
+  G4TritonCoulombBarrier - make "const G4double" -> "static const G4double"
+    a little performance improvement is expected, improved readability
+- G4WilsonAblationModel - added warning that the model is not well validated
+
+21 March 2013 Vladimir Ivanchenko (hadr-deex-V09-06-07)
+----------------------------------------------------------
+- G4StatMFParameters, G4FermiFragmentsPool, G4PairingCorrection,
+  G4ShellCorrection are now singletons initilized once and shared 
+    between threads
+- G4CameronGilbertPairingCorrections, G4CameronGilbertShellCorrections,
+  G4CameronShellPlusPairingCorrections, G4CookPairingCorrections,
+  G4CameronTruranHilfPairingCorrections, G4CookShellCorrections,
+  G4CameronTruranHilfShellCorrections  become simple classes (not 
+    singletons anymore), which are keeping static data initialized once
+- G4EvaporationLevelDensityParameter, G4FissionBarrier are modified
+    accordingly 
+
 12 March 2013  Dennis Wright (hadr-deex-V09-06-06)
 --------------------------------------------------
 - fixed MacOS clang compiler warnings: unused private variables _A, _Z

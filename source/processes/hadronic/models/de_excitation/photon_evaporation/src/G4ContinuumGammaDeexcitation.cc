@@ -103,7 +103,7 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition()
   //     of the right discrete ones (when excitation energy is slightly 
   //     over maximum discrete  energy): changed
   //  G4double tolerance = 10*eV;
-  const G4double tolerance = CLHEP::keV;
+  static const G4double tolerance = CLHEP::keV;
 
   if (_transition == 0) 
     {
