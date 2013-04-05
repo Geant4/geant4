@@ -14,6 +14,10 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+21-Mar-2013 A. Ribon       (hadr-string-diff-V09-06-11)
+-  Fixed warning message in G4DiffractiveHHScatterer.
+
 14-Feb-2013 V. Uzhinsky    (hadr-string-diff-V09-06-10)
 -  Division by 0 erased in G4FTFAnnihilation for DbarPb
    if(Prel2 <= 0. ) is inserted.

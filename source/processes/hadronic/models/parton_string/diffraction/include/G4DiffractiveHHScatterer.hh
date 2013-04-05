@@ -67,7 +67,7 @@ private:
 
 const G4DiffractiveExcitation * theExcitation;
 G4LundStringFragmentation * theStringFragmentation;
-G4FTFParameters  *theParameters;
+//G4FTFParameters  *theParameters;
 };
 
 #endif
