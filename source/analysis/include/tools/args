@@ -34,7 +34,8 @@ public:
   }
   args(const std::vector<std::string>& a_args){add(a_args);}
   args(const std::vector<arg>& a_args):m_args(a_args){}
-  args(const std::string& a_args,const std::string& a_sep = " ",bool a_strip = false){
+  //args(const std::string& a_args,const std::string& a_sep = " ",bool a_strip = false){
+  args(const std::string& a_args,const std::string& a_sep,bool a_strip){
     std::vector<std::string> _args;
     words(a_args,a_sep,false,_args);  
     add(_args,a_strip);
@@ -145,6 +146,11 @@ public:
     }
   }
 
+  void add(const std::vector<arg>& a_args){
+    std::vector<arg>::const_iterator it;
+    for(it=a_args.begin();it!=a_args.end();++it) m_args.push_back(*it);
+  }
+
   int remove(const std::string& a_key){
     unsigned int nbeg = m_args.size();
     for(std::vector<arg>::iterator it = m_args.begin();it!=m_args.end();) {
@@ -227,17 +233,17 @@ public:
       if(!p) {a_argc = 0;a_argv = 0;return false;} //some delete are lacking.
       *av = p;
      {char* pf = (char*)(*it).first.c_str();
-      for(std::string::size_type i=0;i<lf;i++) {*p++ = *pf++;}
+      for(std::string::size_type i=0;i<lf;i++,p++,pf++) {*p = *pf;}
       *p = 0;}
       if(ls) {*p = '=';p++;}
      {char* ps = (char*)(*it).second.c_str();
-      for(std::string::size_type i=0;i<ls;i++) {*p++ = *ps++;}
+      for(std::string::size_type i=0;i<ls;i++,p++,ps++) {*p = *ps;}
       *p = 0;}
     }
     a_argc = (int)m_args.size();
     return true;
   }
-  void delete_argcv(int& a_argc,char**& a_argv) const {
+  static void delete_argcv(int& a_argc,char**& a_argv) {
     for(int index=0;index<a_argc;index++) delete [] a_argv[index];
     delete [] a_argv;
     a_argc = 0;
@@ -484,6 +490,18 @@ inline void window_size_from_args(const args& a_args,
     a_ww = a_wh;
     a_wh = tmp;
   }
+}
+
+inline void remove_window_size_args(args& a_args) {
+  //use with Wt apps.
+  a_args.remove("-iPod");
+  a_args.remove("-iPhone");
+  a_args.remove("-iPad");
+  a_args.remove("-iPhone4");
+  a_args.remove("-SGS");
+  a_args.remove("-ww");
+  a_args.remove("-wh");
+  a_args.remove("-land");
 }
 
 }

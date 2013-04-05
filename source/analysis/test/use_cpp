@@ -34,6 +34,8 @@ else
   fi
 fi
 
+cpp_linker="${link_cmd}"
+
 cppflags=
 G4_cppflags=
 if [ ${build_cl_exe} = "yes" ] ; then

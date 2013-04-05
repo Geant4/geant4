@@ -93,26 +93,39 @@ class G4VAnalysisManager
     virtual G4bool ScaleH2(G4int id, G4double factor) = 0;
                            
     // Methods for handling ntuples
-    virtual void  CreateNtuple(const G4String& name, const G4String& title) = 0;
+    virtual G4int CreateNtuple(const G4String& name, const G4String& title) = 0;
+    // Create columns in the last created ntuple
     virtual G4int CreateNtupleIColumn(const G4String& name) = 0;
     virtual G4int CreateNtupleFColumn(const G4String& name) = 0;
     virtual G4int CreateNtupleDColumn(const G4String& name) = 0;
     virtual void  FinishNtuple() = 0;   
+    // Create columns in the ntuple with given id
+    virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name) = 0;
+    virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name) = 0;
+    virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name) = 0;
+    virtual void  FinishNtuple(G4int ntupleId) = 0; 
     
     // The ids of histograms and ntuples are generated automatically
     // starting from 0; with following functions it is possible to
     // change the first Id to start from other value
     virtual G4bool SetFirstHistoId(G4int firstId);
+    virtual G4bool SetFirstNtupleId(G4int firstId);
     virtual G4bool SetFirstNtupleColumnId(G4int firstId);
   
     // Methods to fill histogrammes, ntuples
     virtual G4bool FillH1(G4int id, G4double value, G4double weight = 1.0) = 0;
     virtual G4bool FillH2(G4int id, G4double xvalue, G4double yvalue,
                           G4double weight = 1.0) = 0;
+    // Methods for ntuple with id = FirstNtupleId                     
     virtual G4bool FillNtupleIColumn(G4int id, G4int value) = 0;
     virtual G4bool FillNtupleFColumn(G4int id, G4float value) = 0;
     virtual G4bool FillNtupleDColumn(G4int id, G4double value) = 0;
     virtual G4bool AddNtupleRow() = 0;
+    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
+    virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) = 0;
+    virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) = 0;
+    virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value) = 0;
+    virtual G4bool AddNtupleRow(G4int ntupleId) = 0;
     
     // Activation option
     
@@ -237,11 +250,13 @@ class G4VAnalysisManager
     G4int    fVerboseLevel;
     G4bool   fActivation;
     G4int    fFirstHistoId;
+    G4int    fFirstNtupleId;
     G4int    fFirstNtupleColumnId;
     G4String fFileName;
     G4String fHistoDirectoryName;
     G4String fNtupleDirectoryName; 
     G4bool   fLockFirstHistoId;     
+    G4bool   fLockFirstNtupleId;     
     G4bool   fLockFirstNtupleColumnId;     
     G4bool   fLockFileName;     
     G4bool   fLockHistoDirectoryName;     

@@ -118,6 +118,16 @@ inline const std::string& s_malloc() {
   return s_v;
 }
 
+inline const std::string& s_tex() {
+  static const std::string s_v("tex");
+  return s_v;
+}
+
+inline const std::string& s_vbo() {
+  static const std::string s_v("vbo");
+  return s_v;
+}
+
 }
 
 #endif

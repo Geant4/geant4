@@ -5,14 +5,19 @@ f77flags=
 f77_compiler=gfortran
 
 if [ "`uname | grep CYGWIN`" != "" ] ; then
-  # not tested yet.
   f77_compiler=F77.EXE
-  f77flags=/nologo /MD /compile_only
+  f77flags="/nologo /compile_only"
 fi
 
 if [ "`uname -n | grep lal.in2p3.fr | grep lx`" != "" ] ; then
   f77_compiler=g77
-  # hbook.f does not pass with gfortran
+  # tools/examples/cpp/hbook.f does not compile with gfortran
+fi
+if [ "`uname -n | grep lal.in2p3.fr | grep nemo`" != "" ] ; then
+  f77_compiler=g77
+fi
+if [ "`uname -n`" = pc-89182.lal.in2p3.fr ] ; then
+  f77_compiler=g77
 fi
 
 if [ "${f77_compiler}" = "g77" ] ; then

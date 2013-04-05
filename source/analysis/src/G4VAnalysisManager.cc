@@ -38,11 +38,13 @@ G4VAnalysisManager::G4VAnalysisManager(const G4String& type)
   : fVerboseLevel(0),
     fActivation(false),
     fFirstHistoId(0),
+    fFirstNtupleId(0),
     fFirstNtupleColumnId(0),
     fFileName(""), 
     fHistoDirectoryName(""), 
     fNtupleDirectoryName(""),
     fLockFirstHistoId(false),
+    fLockFirstNtupleId(false),
     fLockFirstNtupleColumnId(false),
     fLockFileName(false),
     fLockHistoDirectoryName(false), 
@@ -354,13 +356,29 @@ G4bool G4VAnalysisManager::SetFirstHistoId(G4int firstId)
 }  
 
 //_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetFirstNtupleId(G4int firstId) 
+{
+  if ( fLockFirstNtupleId ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set FirstNtupleId as its value was already used.";
+    G4Exception("G4VAnalysisManager::SetFirstNtupleId()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }              
+
+  fFirstNtupleId = firstId;
+  return true;
+}  
+
+//_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetFirstNtupleColumnId(G4int firstId) 
 {
   if ( fLockFirstNtupleColumnId ) {
     G4ExceptionDescription description;
     description 
       << "Cannot set FirstNtupleColumnId as its value was already used.";
-    G4Exception("G4VAnalysisManager::SetFirstHistoId()",
+    G4Exception("G4VAnalysisManager::SetFirstNtupleColumnId()",
                 "Analysis_W010", JustWarning, description);
     return false;
   }              

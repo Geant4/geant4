@@ -17,6 +17,24 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 29, 2013 I.Hrivnacova (analysis-V09-06-05)
+- Extended analysis managers for handling more than one ntuple
+
+March 26, 2013 B.Morgan (analysis-V09-06-04)
+- source.cmake : Corrected zlib setup for transparent use of
+  internal or external variants.
+
+March 22, 2013 G.Cosmo (analysis-V09-06-03)
+- Corrected GNUmakefile and CMakeLists.txt for zlib dependency.
+
+March 21, 2013 I.Hrivnacova (analysis-V09-06-02)
+- Updated CMakeList.txt for zlib dependencies
+
+March 21, 2013 I.Hrivnacova (analysis-V09-06-01)
+- Updated to g4tools 1.5.0 (by G. Barrand) - see History_tools
+- Adding file compression in Root manager (now available)
+- Adding use of zlib in GNUmakefile (needed for compression)
+
 December 17, 2012 I.Hrivnacova (analysis-V09-06-00)
 - Added 'svn:keywords' property to all files (except for tools) 
 

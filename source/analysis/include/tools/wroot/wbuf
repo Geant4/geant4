@@ -77,7 +77,7 @@ class wbuf {
   typedef void (*w_8_func)(char*,char*);
 public:
   wbuf(std::ostream& a_out,bool a_byte_swap,
-              const char* a_eob,char*& a_pos)
+       const char* a_eob,char*& a_pos)
   :m_out(a_out)
   ,m_byte_swap(a_byte_swap)
   ,m_eob(a_eob)
@@ -90,6 +90,42 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
+    set_byte_swap(a_byte_swap);
+  }
+  virtual ~wbuf(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  wbuf(const wbuf& a_from)
+  :m_out(a_from.m_out) //a ref.
+  ,m_byte_swap(a_from.m_byte_swap)
+  ,m_eob(a_from.m_eob)
+  ,m_pos(a_from.m_pos) //a ref.
+  ,m_w_2_func(a_from.m_w_2_func)
+  ,m_w_4_func(a_from.m_w_4_func)
+  ,m_w_8_func(a_from.m_w_8_func)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    set_byte_swap(a_from.m_byte_swap);
+  }
+  wbuf& operator=(const wbuf& a_from){
+    set_byte_swap(a_from.m_byte_swap);
+    m_eob = a_from.m_eob;
+    //m_pos is a ref.
+    m_w_2_func = a_from.m_w_2_func;
+    m_w_4_func = a_from.m_w_4_func;
+    m_w_8_func = a_from.m_w_8_func;
+    return *this;
+  }
+public:
+  void set_eob(const char* a_eob){m_eob = a_eob;}
+  bool byte_swap() const {return m_byte_swap;}
+  void set_byte_swap(bool a_value) {
+    m_byte_swap = a_value;
     if(m_byte_swap) {
       m_w_2_func = write_swap_2;
       m_w_4_func = write_swap_4;
@@ -100,22 +136,6 @@ public:
       m_w_8_func = write_nswp_8;
     }
   }
-  virtual ~wbuf(){
-#ifdef TOOLS_MEM
-    mem::decrement(s_class().c_str());
-#endif
-  }
-protected:
-  wbuf(const wbuf& a_from)
-  :m_out(a_from.m_out),m_eob(a_from.m_eob),m_pos(a_from.m_pos){
-#ifdef TOOLS_MEM
-    mem::increment(s_class().c_str());
-#endif
-  }
-  wbuf& operator=(const wbuf&){return *this;}
-public:
-  void set_eob(const char* a_eob){m_eob = a_eob;}
-
 public:
   bool write(unsigned char a_x) {
     if(!check_eob<unsigned char>()) return false;

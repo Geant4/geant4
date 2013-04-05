@@ -1,6 +1,8 @@
 // Copyright (C) 2010, Guy Barrand. All rights reserved.
 // See the file tools.license for terms.
 
+//tools_build_use inlib zlib
+
 //  This program produces a out.root file.
 //
 //  See rroot.C for an example of how to manipulate
@@ -18,6 +20,11 @@
 #include <tools/random>
 #include <tools/randf>
 
+#ifdef TOOLS_DONT_HAVE_ZLIB
+#else
+#include <tools/gzip_buffer>
+#endif
+
 #include <tools/args>
 #include <iostream>
 
@@ -30,6 +37,14 @@ int main(int argc,char** argv) {
   //////////////////////////////////////////////////////////
   std::string file = "out.root";
   tools::wroot::file rfile(std::cout,file);
+#ifdef TOOLS_DONT_HAVE_ZLIB
+#else
+  if(args.is_arg("-noz")){
+  } else {
+    rfile.add_ziper('Z',tools::gzip_buffer);
+    rfile.set_compression(9);
+  }
+#endif
 
   tools::wroot::directory* dir = rfile.dir().mkdir("histo");
   if(!dir) {

@@ -1,4 +1,4 @@
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # CMakeLists.txt
 # Module : G4analysis
 # Package: Geant4.src.G4analysis
@@ -22,15 +22,16 @@
 #
 # $Id$
 #
-#------------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Includes for this modules
 #
 include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
+include_directories(${ZLIB_INCLUDE_DIRS})
 
 # List the headers and sources
 #
@@ -39,70 +40,73 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 # will need to work out how to either locate them, or generate a list.
 # This isn't critical for building the analysis library.
 set(G4analysis_HEADERS
-    include/G4AnalysisMessenger.hh
-    include/G4AnalysisVerbose.hh
-    include/G4CsvAnalysisManager.hh
-    include/g4csv_defs.hh
-    include/g4csv.hh
-    include/G4Fcn.hh
-    include/G4HnInformation.hh
-    include/G4RootAnalysisManager.hh
-    include/g4root_defs.hh
-    include/g4root.hh
-    include/G4VAnalysisManager.hh
-    include/G4XmlAnalysisManager.hh
-    include/g4xml_defs.hh
-    include/g4xml.hh
-)
+  include/G4AnalysisMessenger.hh
+  include/G4AnalysisVerbose.hh
+  include/G4CsvAnalysisManager.hh
+  include/G4CsvNtupleDescription.hh
+  include/g4csv_defs.hh
+  include/g4csv.hh
+  include/G4Fcn.hh
+  include/G4HnInformation.hh
+  include/G4RootAnalysisManager.hh
+  include/G4RootNtupleDescription.hh
+  include/g4root_defs.hh
+  include/g4root.hh
+  include/G4VAnalysisManager.hh
+  include/G4XmlAnalysisManager.hh
+  include/G4XmlNtupleDescription.hh
+  include/g4xml_defs.hh
+  include/g4xml.hh
+  )
 
 # - Sources
 set(G4analysis_SOURCES
-    src/G4AnalysisMessenger.cc
-    src/G4AnalysisVerbose.cc
-    src/G4CsvAnalysisManager.cc
-    src/G4RootAnalysisManager.cc
-    src/G4VAnalysisManager.cc
-    src/G4XmlAnalysisManager.cc
-)
+  src/G4AnalysisMessenger.cc
+  src/G4AnalysisVerbose.cc
+  src/G4CsvAnalysisManager.cc
+  src/G4RootAnalysisManager.cc
+  src/G4VAnalysisManager.cc
+  src/G4XmlAnalysisManager.cc
+  )
 
-
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Now add the library targets
 #
 include(Geant4MacroLibraryTargets)
 if(GEANT4_BUILD_GRANULAR_LIBS)
   GEANT4_LIBRARY_TARGET(NAME G4analysis 
     SOURCES ${G4analysis_SOURCES} ${G4analysis_HEADERS}
-    GEANT4_LINK_LIBRARIES G4globman G4intercoms
+    GEANT4_LINK_LIBRARIES G4globman G4intercoms 
+    LINK_LIBRARIES ${ZLIB_LIBRARIES}
     )
 else()
   GEANT4_LIBRARY_TARGET(NAME G4analysis 
     SOURCES ${G4analysis_SOURCES} ${G4analysis_HEADERS}
-    GEANT4_LINK_LIBRARIES G4global G4intercoms
+    GEANT4_LINK_LIBRARIES G4global G4intercoms 
+    LINK_LIBRARIES ${ZLIB_LIBRARIES}
     )
 endif()
 
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Ensure the header directory gets added to the list of ones to export
 #
 set_property(GLOBAL APPEND PROPERTY GEANT4_BUILDTREE_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/include
-)
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  )
 
-
-#----------------------------------------------------------------------------
+#-----------------------------------------------------------------------
 # Install the headers, retaining their nested structure
 #
 install(DIRECTORY include/
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-    COMPONENT Development
-    PATTERN ".svn" EXCLUDE
-)
+  DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
+  COMPONENT Development
+  PATTERN ".svn" EXCLUDE
+  )
 
 #----------------------------------------------------------------------------
 # We also need to install the tools license
 #
 install(FILES tools.license
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
-)
+  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
+  )
 

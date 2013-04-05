@@ -159,6 +159,15 @@ public:
     return write_fast_array(a_v);
   }
 
+  template <class T>
+  bool write_array2(const std::vector< std::vector<T> > a_v) {
+    if(!write((uint32)a_v.size())) return false;
+    for(unsigned int index=0;index<a_v.size();index++) {
+      if(!write_array(a_v[index])) return false;
+    }
+    return true;
+  }
+
 public:
   bool write_version(short a_version){
     if(a_version>kMaxVersion()) {

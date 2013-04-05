@@ -50,16 +50,12 @@ G4XmlAnalysisManager* G4XmlAnalysisManager::Instance()
 //_____________________________________________________________________________
 G4XmlAnalysisManager::G4XmlAnalysisManager()
  : G4VAnalysisManager("Xml"),
-   fFile(0),
+   fHnFile(0),
    fH1Vector(),   
    fH2Vector(),   
    fH1NameIdMap(),  
    fH2NameIdMap(),  
-   fNtuple(0),
-   fNtupleBooking(0),
-   fNtupleIColumnMap(),
-   fNtupleFColumnMap(),
-   fNtupleDColumnMap()
+   fNtupleVector()
 {
   if ( fgInstance ) {
     G4ExceptionDescription description;
@@ -68,7 +64,6 @@ G4XmlAnalysisManager::G4XmlAnalysisManager()
     G4Exception("G4XmlAnalysisManager::G4XmlAnalysisManager",
                 "Analysis_F001", FatalException, description);
   }              
-   
   fgInstance = this;
 }
 
@@ -84,10 +79,13 @@ G4XmlAnalysisManager::~G4XmlAnalysisManager()
   for ( it2 = fH2Vector.begin(); it2 != fH2Vector.end(); it2++ ) {
     delete *it2;
   }
-    
-  delete fNtuple;
-  delete fNtupleBooking;
-  delete fFile;  
+  
+  std::vector<G4XmlNtupleDescription*>::iterator it3;  
+  for (it3 = fNtupleVector.begin(); it3 != fNtupleVector.end(); it3++ ) {
+    delete (*it3);
+  }   
+   
+  delete fHnFile;  
 
   fgInstance = 0;
 }
@@ -97,53 +95,211 @@ G4XmlAnalysisManager::~G4XmlAnalysisManager()
 //
 
 //_____________________________________________________________________________
-void G4XmlAnalysisManager::CreateNtupleFromBooking()
+G4String G4XmlAnalysisManager::GetHnFileName() const
+{                                  
+  G4String name(fFileName);
+  // Add file extension .xml if no extension is given
+  if ( name.find(".") == std::string::npos ) { 
+    name.append(".");
+    name.append(GetFileType());
+  }
+  return name;
+}      
+
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::CreateHnFile()
 {
-// Create ntuple from ntuple_booking.
-#ifdef G4VERBOSE
+ #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create from booking", "ntuple", fNtupleBooking->m_name);
+    fpVerboseL4->Message("create", "file", GetHnFileName());
+#endif
+  
+  // delete a previous file if it exists
+  if ( fHnFile ) delete fHnFile; 
+  
+  fHnFile = new std::ofstream(GetHnFileName());
+  if ( fHnFile->fail() ) {
+    G4ExceptionDescription description;
+    description << "      " << "Cannot open file " << GetHnFileName();
+    G4Exception("G4XmlAnalysisManager::OpenFile()",
+              "Analysis_W001", JustWarning, description);
+    return false;
+  }
+
+  tools::waxml::begin(*fHnFile);
+#ifdef G4VERBOSE
+  if ( fpVerboseL1 ) 
+    fpVerboseL1->Message("create", "file", GetHnFileName());
 #endif
 
-  fNtuple = new tools::waxml::ntuple(*fFile, G4cerr, *fNtupleBooking);
-  if ( fNtupleBooking->m_columns.size() ) {
-    // store ntuple columns in local maps
-    const std::vector<tools::ntuple_booking::col_t>& columns 
-      = fNtupleBooking->m_columns;
-    std::vector<tools::ntuple_booking::col_t>::const_iterator it;
-    G4int index = 0;
-    for ( it = columns.begin(); it!=columns.end(); ++it) {
-      if ( (*it).second == tools::_cid(int(0) ) ) {
-        G4cout << "adding int " << fNtuple->find_column<int>((*it).first) << G4endl;
-        fNtupleIColumnMap[index++] = fNtuple->find_column<int>((*it).first);
-      }
-      else if( (*it).second == tools::_cid(float(0) ) ) {
-        fNtupleFColumnMap[index++] = fNtuple->find_column<float>((*it).first);
-      } 
-      else if((*it).second== tools::_cid(double(0))) {
-        fNtupleDColumnMap[index++] = fNtuple->find_column<double>((*it).first);
-      }
-      else {
-        G4ExceptionDescription description;
-        description << "      " 
-                    << "Unsupported column type " << (*it).first;
-        G4Exception("G4XmlAnalysisManager::OpenFile()",
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::CloseHnFile()
+{
+#ifdef G4VERBOSE
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("close", "file", GetHnFileName());
+#endif
+
+  // close file
+  tools::waxml::end(*fHnFile);
+  fHnFile->close(); 
+
+#ifdef G4VERBOSE
+  if ( fpVerboseL1 ) 
+    fpVerboseL1->Message("close", "file", GetHnFileName());
+#endif
+
+  return true; 
+} 
+   
+//_____________________________________________________________________________
+G4String G4XmlAnalysisManager::GetNtupleFileName(
+                                    G4XmlNtupleDescription* ntupleDescription) const
+{                                  
+  G4String name(fFileName);
+  name.append("_");
+  name.append(ntupleDescription->fNtupleBooking->m_name);
+  // Add file extension .xml if no extension is given
+  if ( name.find(".") == std::string::npos ) { 
+    name.append(".");
+    name.append(GetFileType());
+  }
+  return name;
+}      
+
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::CreateNtupleFile(
+                                    G4XmlNtupleDescription* ntupleDescription)
+{
+#ifdef G4VERBOSE
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("create", "file", GetNtupleFileName(ntupleDescription));
+#endif
+
+  std::ofstream* ntupleFile 
+    = new std::ofstream(GetNtupleFileName(ntupleDescription));
+  if ( ntupleFile->fail() ) {
+    G4ExceptionDescription description;
+    description << "      " << "Cannot open file " 
+                << GetNtupleFileName(ntupleDescription);
+    G4Exception("G4XmlAnalysisManager::CreateNtupleFile()",
+                "Analysis_W001", JustWarning, description);
+    return false;
+  }
+  
+  tools::waxml::begin(*ntupleFile);
+  ntupleDescription->fFile = ntupleFile;
+
+#ifdef G4VERBOSE
+  if ( fpVerboseL1 ) 
+    fpVerboseL1->Message("create", "file", GetNtupleFileName(ntupleDescription));
+#endif
+
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::CloseNtupleFile(
+                                    G4XmlNtupleDescription* ntupleDescription)
+{
+#ifdef G4VERBOSE
+  if ( fpVerboseL4 ) 
+    fpVerboseL4->Message("close", "file", GetNtupleFileName(ntupleDescription));
+#endif
+
+  // close file
+  tools::waxml::end(*(ntupleDescription->fFile));
+  ntupleDescription->fFile->close(); 
+
+#ifdef G4VERBOSE
+  if ( fpVerboseL1 ) 
+    fpVerboseL1->Message("close", "file", GetNtupleFileName(ntupleDescription));
+#endif
+
+  return true; 
+} 
+   
+//_____________________________________________________________________________
+void G4XmlAnalysisManager::CreateNtuplesFromBooking()
+{
+// Create ntuple from ntuple_booking.
+
+  if ( ! fNtupleVector.size() ) return;     
+  
+  std::vector<G4XmlNtupleDescription*>::iterator itn;  
+  for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {
+
+    tools::ntuple_booking* ntupleBooking = (*itn)->fNtupleBooking;
+    if ( ! ntupleBooking ) continue;
+
+// Create ntuple from ntuple_booking.
+#ifdef G4VERBOSE
+    if ( fpVerboseL4 ) 
+      fpVerboseL4->Message("create from booking", "ntuple", ntupleBooking->m_name);
+#endif
+
+    // create a file for this ntuple
+    if ( ! CreateNtupleFile((*itn)) ) continue;
+
+    // create ntuple
+    (*itn)->fNtuple
+      = new tools::waxml::ntuple(*((*itn)->fFile), G4cerr, *ntupleBooking);
+
+    if ( ntupleBooking->m_columns.size() ) {
+      // store ntuple columns in local maps
+      const std::vector<tools::ntuple_booking::col_t>& columns 
+        = ntupleBooking->m_columns;
+      std::vector<tools::ntuple_booking::col_t>::const_iterator it;
+      G4int index = 0;
+      for ( it = columns.begin(); it!=columns.end(); ++it) {
+        if ( (*it).second == tools::_cid(int(0) ) ) {
+          (*itn)->fNtupleIColumnMap[index++] 
+            = (*itn)->fNtuple->find_column<int>((*it).first);
+        }
+        else if( (*it).second == tools::_cid(float(0) ) ) {
+          (*itn)->fNtupleFColumnMap[index++] 
+            = (*itn)->fNtuple->find_column<float>((*it).first);
+        } 
+        else if((*it).second== tools::_cid(double(0))) {
+          (*itn)->fNtupleDColumnMap[index++] 
+            = (*itn)->fNtuple->find_column<double>((*it).first);
+        }
+        else {
+          G4ExceptionDescription description;
+          description << "      " 
+                      << "Unsupported column type " << (*it).first;
+          G4Exception("G4XmlAnalysisManager::CreateNtuplesFromBooking()",
                     "Analysis_W004", JustWarning, description);
+        }
       }
     }
-  }
-  FinishNtuple();
+    FinishNtuple();
+#ifdef G4VERBOSE
+    if ( fpVerboseL3 ) 
+      fpVerboseL3->Message("create from booking", "ntuple", ntupleBooking->m_name);
+#endif
+  }  
 }   
 
 //_____________________________________________________________________________
 tools::waxml::ntuple::column<int>*    
-G4XmlAnalysisManager::GetNtupleIColumn(G4int id) const
+G4XmlAnalysisManager::GetNtupleIColumn(G4int ntupleId, G4int columnId) const
 {
+  G4XmlNtupleDescription* ntupleDecription
+    = GetNtupleInFunction(ntupleId, "GetNtupleIColumn");
+  if ( ! ntupleDecription ) return 0;
+
+  std::map<G4int, tools::waxml::ntuple::column<int>* >& ntupleIColumnMap
+    = ntupleDecription->fNtupleIColumnMap;
   std::map<G4int, tools::waxml::ntuple::column<int>* >::const_iterator it
-    = fNtupleIColumnMap.find(id);
-  if ( it == fNtupleIColumnMap.end() ) {
+    = ntupleIColumnMap.find(columnId);
+  if ( it == ntupleIColumnMap.end() ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      "  << "ntupleId " << ntupleId
+                << "column " << columnId << " does not exist.";
     G4Exception("G4XmlAnalysisManager::GetNtupleIColumn()",
                 "Analysis_W009", JustWarning, description);
     return 0;
@@ -154,13 +310,44 @@ G4XmlAnalysisManager::GetNtupleIColumn(G4int id) const
     
 //_____________________________________________________________________________
 tools::waxml::ntuple::column<float>*  
-G4XmlAnalysisManager::GetNtupleFColumn(G4int id) const
+G4XmlAnalysisManager::GetNtupleFColumn(G4int ntupleId, G4int columnId) const
 {
+  G4XmlNtupleDescription* ntupleDecription
+    = GetNtupleInFunction(ntupleId, "GetNtupleFColumn");
+  if ( ! ntupleDecription ) return 0;
+
+  std::map<G4int, tools::waxml::ntuple::column<float>* >& ntupleFColumnMap
+    = ntupleDecription->fNtupleFColumnMap;
   std::map<G4int, tools::waxml::ntuple::column<float>* >::const_iterator it
-    = fNtupleFColumnMap.find(id);
-  if ( it == fNtupleFColumnMap.end() ) {
+    = ntupleFColumnMap.find(columnId);
+  if ( it == ntupleFColumnMap.end() ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      "  << "ntupleId " << ntupleId
+                << "column " << columnId << " does not exist.";
+    G4Exception("G4XmlAnalysisManager::GetNtupleFColumn()",
+                "Analysis_W009", JustWarning, description);
+    return 0;
+  }
+  
+  return it->second;
+}  
+
+//_____________________________________________________________________________
+tools::waxml::ntuple::column<double>* 
+G4XmlAnalysisManager::GetNtupleDColumn(G4int ntupleId, G4int columnId) const
+{
+  G4XmlNtupleDescription* ntupleDecription
+    = GetNtupleInFunction(ntupleId, "GetNtupleDColumn");
+  if ( ! ntupleDecription ) return 0;
+
+  std::map<G4int, tools::waxml::ntuple::column<double>* >& ntupleDColumnMap
+    = ntupleDecription->fNtupleDColumnMap;
+  std::map<G4int, tools::waxml::ntuple::column<double>* >::const_iterator it
+    = ntupleDColumnMap.find(columnId);
+  if ( it == ntupleDColumnMap.end() ) {
+    G4ExceptionDescription description;
+    description << "      "  << "ntupleId " << ntupleId
+                << "column " << columnId << " does not exist.";
     G4Exception("G4XmlAnalysisManager::GetNtupleFColumn()",
                 "Analysis_W009", JustWarning, description);
     return 0;
@@ -188,28 +375,13 @@ G4bool G4XmlAnalysisManager::Reset()
     if ( ! result ) finalResult = false;
   }  
 
-  delete fNtuple;
-  fNtuple = 0;
+  std::vector<G4XmlNtupleDescription*>::iterator it3;  
+  for (it3 = fNtupleVector.begin(); it3 != fNtupleVector.end(); it3++ ) {
+    delete (*it3)->fNtuple;
+    (*it3)->fNtuple = 0;
+  }  
   
   return finalResult;
-}  
- 
-
-//_____________________________________________________________________________
-tools::waxml::ntuple::column<double>* 
-G4XmlAnalysisManager::GetNtupleDColumn(G4int id) const
-{
-  std::map<G4int, tools::waxml::ntuple::column<double>* >::const_iterator it
-    = fNtupleDColumnMap.find(id);
-  if ( it == fNtupleDColumnMap.end() ) {
-    G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
-    G4Exception("G4XmlAnalysisManager::GetNtupleDColumn()",
-                "Analysis_W009", JustWarning, description);
-    return 0;
-  }
-  
-  return it->second;
 }  
  
 //_____________________________________________________________________________
@@ -263,6 +435,26 @@ tools::histo::h2d*  G4XmlAnalysisManager::GetH2InFunction(G4int id,
 }
   
 //_____________________________________________________________________________
+G4XmlNtupleDescription* G4XmlAnalysisManager::GetNtupleInFunction(G4int id, 
+                                      G4String functionName, G4bool warn,
+                                      G4bool /*onlyIfActive*/) const
+{                                      
+  G4int index = id - fFirstNtupleId;
+  if ( index < 0 || index >= G4int(fNtupleVector.size()) ) {
+    if ( warn) {
+      G4String inFunction = "G4XmlAnalysisManager::";
+      inFunction += functionName;
+      G4ExceptionDescription description;
+      description << "      " << "ntuple " << id << " does not exist.";
+      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+    }
+    return 0;         
+  }
+  
+  return fNtupleVector[index];
+}
+  
+//_____________________________________________________________________________
 void G4XmlAnalysisManager::UpdateTitle(G4String& title, 
                                         const G4String& unitName, 
                                         const G4String& fcnName) const
@@ -310,7 +502,6 @@ G4bool G4XmlAnalysisManager::WriteOnAscii(std::ofstream& output)
   return true;
 }  
 
-
 // 
 // public methods
 //
@@ -318,49 +509,29 @@ G4bool G4XmlAnalysisManager::WriteOnAscii(std::ofstream& output)
 //_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::OpenFile(const G4String& fileName)
 {
-  // Add file extension .Xml if no extension is given
-  G4String name(fileName);
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }  
+  // Keep file name
+  fFileName =  fileName;
 
- #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("open", "analysis file", name);
-#endif
-  
-  // delete a previous file if it exists
-  if ( fFile ) delete fFile; 
-  
-  fFile = new std::ofstream(name);
-  if ( fFile->fail() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " << name;
-    G4Exception("G4XmlAnalysisManager::OpenFile()",
-              "Analysis_W001", JustWarning, description);
-    return false;
-  }
+  // Create file for histograms
+  G4bool result
+    = CreateHnFile();
 
-  tools::waxml::begin(*fFile);
-#ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("open", "analysis file", name);
-#endif
-
-  // Create ntuple if it is booked
-  if ( fNtupleBooking && ( ! fNtuple ) )
-    CreateNtupleFromBooking();
+  // Create ntuples if they are booked
+  if ( fNtupleVector.size() ) 
+    CreateNtuplesFromBooking();
 
   fLockFileName = true;
-  return true;
+
+  return result;
 }  
   
 //_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::Write() 
 {
-  // ntuple 
-  if ( fNtuple ) fNtuple->write_trailer();
+  // ntuples 
+  for ( G4int i=0; i<G4int(fNtupleVector.size()); ++i ) {
+    if ( fNtupleVector[i]->fNtuple ) fNtupleVector[i]->fNtuple->write_trailer();
+  }
 
   // h1 histograms
   for ( G4int i=0; i<G4int(fH1Vector.size()); ++i ) {
@@ -376,7 +547,7 @@ G4bool G4XmlAnalysisManager::Write()
     G4String path = "/";
     path.append(fHistoDirectoryName);
     G4bool result
-      = tools::waxml::write(*fFile, *h1, path, info->fName);
+      = tools::waxml::write(*fHnFile, *h1, path, info->fName);
     if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "saving histogram " << info->fName << " failed";
@@ -401,7 +572,7 @@ G4bool G4XmlAnalysisManager::Write()
     G4String path = "/";
     path.append(fHistoDirectoryName);
     G4bool result
-      = tools::waxml::write(*fFile, *h2, path, info->fName);
+      = tools::waxml::write(*fHnFile, *h2, path, info->fName);
     if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "saving histogram " << info->fName << " failed";
@@ -433,8 +604,17 @@ G4bool G4XmlAnalysisManager::CloseFile()
 
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("close", "file", GetFullFileName());
+    fpVerboseL4->Message("close", "files", "");
 #endif
+
+  // close histogram file
+  CloseHnFile();
+  
+  // close ntuple foles
+  std::vector<G4XmlNtupleDescription*>::iterator it;  
+  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
+    CloseNtupleFile((*it));
+  }  
 
   // reset data
   result = Reset();
@@ -446,14 +626,11 @@ G4bool G4XmlAnalysisManager::CloseFile()
       result = false;       
   } 
 
-  // close file
-  tools::waxml::end(*fFile);
-  fFile->close(); 
   fLockFileName = false;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("close", "file", GetFullFileName());
+    fpVerboseL1->Message("close", "files", "");
 #endif
 
   return result; 
@@ -631,174 +808,261 @@ G4bool G4XmlAnalysisManager::ScaleH2(G4int id, G4double factor)
 }  
                            
 //_____________________________________________________________________________
-void G4XmlAnalysisManager::CreateNtuple(const G4String& name, 
-                                        const G4String& title)
+G4int G4XmlAnalysisManager::CreateNtuple(const G4String& name, 
+                                         const G4String& title)
 {
-  if ( fNtupleBooking ) {
-    G4ExceptionDescription description;
-    description << "      " 
-                << "Ntuple already exists. "
-                << "(Only one ntuple is currently supported.)";
-    G4Exception("G4XmlAnalysisManager::CreateNtuple()",
-                "Analysis_W006", JustWarning, description);
-    return;       
-  }
-
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
     fpVerboseL4->Message("create", "ntuple", name);
 #endif
 
-  // Create ntuple booking
-  fNtupleBooking = new tools::ntuple_booking();
-  fNtupleBooking->m_name = name;
-  fNtupleBooking->m_title = title;
+  // Create ntuple description
+  G4int index = fNtupleVector.size();
+  G4XmlNtupleDescription* ntupleDescription
+    = new G4XmlNtupleDescription();
+  fNtupleVector.push_back(ntupleDescription);  
 
-  // Create ntuple if the file is open
-  if ( fFile ) {
-    fNtuple = new tools::waxml::ntuple(*fFile);
+  // Create ntuple booking
+  ntupleDescription->fNtupleBooking = new tools::ntuple_booking();
+  ntupleDescription->fNtupleBooking->m_name = name;
+  ntupleDescription->fNtupleBooking->m_title = title;
+
+  // Create ntuple if the file is open (what means here that
+  // a filename was already set)
+  if ( fFileName.size() ) {
+    if ( CreateNtupleFile(ntupleDescription) ) {
+      ntupleDescription->fNtuple 
+        = new tools::waxml::ntuple(*(ntupleDescription->fFile));
            // ntuple object is deleted when closing a file
+    }       
   }
 
+  fLockFirstNtupleId = true;
+
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple", name);
+  if ( fpVerboseL2 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << index + fFirstNtupleId;
+    fpVerboseL2->Message("create", "ntuple", description);
+  } 
 #endif
+
+  return index + fFirstNtupleId;
 }                                         
 
 //_____________________________________________________________________________
 G4int G4XmlAnalysisManager::CreateNtupleIColumn(const G4String& name)
 {
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "ntuple I column", name);
-#endif
+  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
+  return CreateNtupleIColumn(ntupleId, name);
+}  
 
-  if ( ! fNtupleBooking ) {
+//_____________________________________________________________________________
+G4int G4XmlAnalysisManager::CreateNtupleFColumn(const G4String& name)
+{
+  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
+  return CreateNtupleFColumn(ntupleId, name);
+}  
+
+//_____________________________________________________________________________
+G4int G4XmlAnalysisManager::CreateNtupleDColumn(const G4String& name)
+{
+  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
+  return CreateNtupleDColumn(ntupleId, name);
+}  
+
+//_____________________________________________________________________________
+void G4XmlAnalysisManager::FinishNtuple()
+{ 
+  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
+  FinishNtuple(ntupleId);
+}
+   
+//_____________________________________________________________________________
+G4int G4XmlAnalysisManager::CreateNtupleIColumn(G4int ntupleId, const G4String& name)
+{
+#ifdef G4VERBOSE
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL4->Message("create", "ntuple I column", description);
+  }  
+ #endif
+
+  G4XmlNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "CreateNtupleIColumn");
+  tools::ntuple_booking* ntupleBooking
+    = ntupleDescription->fNtupleBooking;  
+
+  if ( ! ntupleBooking ) {
     G4ExceptionDescription description;
     description << "      " 
-                << "Ntuple has to be created first. ";
+                << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4XmlAnalysisManager::CreateNtupleIColumn()",
                 "Analysis_W005", JustWarning, description);
     return -1;       
   }
 
   // Save column info in booking
-  G4int index = fNtupleBooking->m_columns.size();
-  fNtupleBooking->add_column<int>(name);  
+  G4int index = ntupleBooking->m_columns.size();
+  ntupleBooking->add_column<int>(name);  
  
   // Create column if ntuple already exists
-  if ( fNtuple ) {
+  if ( ntupleDescription->fNtuple ) {
     tools::waxml::ntuple::column<int>* column 
-      = fNtuple->create_column<int>(name);  
-    fNtupleIColumnMap[index] = column;
+      = ntupleDescription->fNtuple->create_column<int>(name);  
+    ntupleDescription->fNtupleIColumnMap[index] = column;
   }
     
   fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple I column", name);
+  if ( fpVerboseL2 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL2->Message("create", "ntuple I column", description);
+  }  
 #endif
 
   return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateNtupleFColumn(const G4String& name)
+G4int G4XmlAnalysisManager::CreateNtupleFColumn(G4int ntupleId, const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "ntuple F column", name);
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL4->Message("create", "ntuple F column", description);
+  } 
 #endif
 
-  if ( ! fNtupleBooking )  {
+  G4XmlNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "CreateNtupleFColumn");
+  tools::ntuple_booking* ntupleBooking
+    = ntupleDescription->fNtupleBooking;  
+
+  if ( ! ntupleBooking ) {
     G4ExceptionDescription description;
     description << "      " 
-                << "Ntuple has to be created first. ";
+                << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4XmlAnalysisManager::CreateNtupleFColumn()",
                 "Analysis_W005", JustWarning, description);
     return -1;       
   }
 
   // Save column info in booking
-  G4int index = fNtupleBooking->m_columns.size();
-  fNtupleBooking->add_column<float>(name);  
+  G4int index = ntupleBooking->m_columns.size();
+  ntupleBooking->add_column<float>(name);  
  
   // Create column if ntuple already exists
-  if ( fNtuple ) {
+  if ( ntupleDescription->fNtuple ) {
     tools::waxml::ntuple::column<float>* column 
-      = fNtuple->create_column<float>(name);  
-    fNtupleFColumnMap[index] = column;
+      = ntupleDescription->fNtuple->create_column<float>(name);  
+    ntupleDescription->fNtupleFColumnMap[index] = column;
   }
     
   fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple F column", name);
+  if ( fpVerboseL2 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL2->Message("create", "ntuple F column", description);
+  }  
 #endif
 
   return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateNtupleDColumn(const G4String& name)   
+G4int G4XmlAnalysisManager::CreateNtupleDColumn(G4int ntupleId, const G4String& name)   
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "ntuple D column", name);
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL4->Message("create", "ntuple D column", description);
+  }  
 #endif
 
-  if ( ! fNtupleBooking ) {
+  G4XmlNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "CreateNtupleDColumn");
+  tools::ntuple_booking* ntupleBooking
+    = ntupleDescription->fNtupleBooking;  
+
+  if ( ! ntupleBooking ) {
     G4ExceptionDescription description;
-    description << "      " 
-                << "Ntuple has to be created first. ";
+    description << "      "
+                << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4XmlAnalysisManager::CreateNtupleDColumn()",
                 "Analysis_W005", JustWarning, description);
     return -1;       
   }
 
   // Save column info in booking
-  G4int index = fNtupleBooking->m_columns.size();
-  fNtupleBooking->add_column<double>(name);  
+  G4int index = ntupleBooking->m_columns.size();
+  ntupleBooking->add_column<double>(name);  
  
   // Create column if ntuple already exists
-  if ( fNtuple ) {
+  if ( ntupleDescription->fNtuple ) {
     tools::waxml::ntuple::column<double>* column 
-      = fNtuple->create_column<double>(name);  
-    fNtupleDColumnMap[index] = column;
+      = ntupleDescription->fNtuple->create_column<double>(name);  
+    ntupleDescription->fNtupleDColumnMap[index] = column;
   }
     
   fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple D column", name);
-#endif
+  if ( fpVerboseL2 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL2->Message("create", "ntuple D column", description);
+  }  
+ #endif
 
   return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
-void G4XmlAnalysisManager::FinishNtuple()
+void G4XmlAnalysisManager::FinishNtuple(G4int ntupleId)
 { 
-  if ( ! fNtuple ) return;
+  G4XmlNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "FinishNtuple");
+  tools::ntuple_booking* ntupleBooking
+    = ntupleDescription->fNtupleBooking;  
+
+  if ( ! ntupleBooking ) {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "Ntuple " << ntupleId << " has to be created first. ";
+    G4Exception("G4XmlAnalysisManager::CreateNtupleDColumn()",
+                "Analysis_W005", JustWarning, description);
+    return;       
+  }
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("finish", "ntuple", fNtupleBooking->m_name);
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << ntupleBooking->m_name << " ntupleId " << ntupleId; 
+    fpVerboseL4->Message("finish", "ntuple", description);
+  }  
 #endif
 
   G4String path = "/";
   path.append(fNtupleDirectoryName);
-  fNtuple->write_header(path, fNtupleBooking->m_name, fNtupleBooking->m_title);  
+  ntupleDescription->fNtuple
+    ->write_header(path, ntupleBooking->m_name, ntupleBooking->m_title);  
 
   fLockNtupleDirectoryName = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("finish", "ntuple", fNtupleBooking->m_name);
+  if ( fpVerboseL2 ) {
+    G4ExceptionDescription description;
+    description << ntupleBooking->m_name << " ntupleId " << ntupleId; 
+    fpVerboseL2->Message("finish", "ntuple", description);
+  }  
 #endif
 }
    
@@ -852,12 +1116,32 @@ G4bool G4XmlAnalysisManager::FillH2(G4int id,
 }
 
 //_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
+G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int columnId, G4int value)
 {
-  tools::waxml::ntuple::column<int>* column = GetNtupleIColumn(id);
+  return FillNtupleIColumn(fFirstNtupleId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int columnId, G4float value)
+{
+  return FillNtupleFColumn(fFirstNtupleId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int columnId, G4double value)
+{
+  return FillNtupleDColumn(fFirstNtupleId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int ntupleId, G4int columnId, 
+                                               G4int value)
+{
+  tools::waxml::ntuple::column<int>* column 
+    = GetNtupleIColumn(ntupleId, columnId);
   if ( ! column ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      " << "column " << columnId << " does not exist.";
     G4Exception("G4XmlAnalysisManager::FillNtupleIColumn()",
                 "Analysis_W009", JustWarning, description);
     return false;
@@ -867,19 +1151,22 @@ G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
+    description << " ntupleId " << ntupleId  
+                << " columnId " << columnId << " value " << value;
     fpVerboseL4->Message("fill", "ntuple I column", description);
   }  
 #endif
   return true;       
 }                                         
 //_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
+G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int ntupleId, G4int columnId, 
+                                               G4float value)
 {
-  tools::waxml::ntuple::column<float>* column = GetNtupleFColumn(id);
+  tools::waxml::ntuple::column<float>* column 
+    = GetNtupleFColumn(ntupleId, columnId);
   if ( ! column ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      " << "column " << columnId << " does not exist.";
     G4Exception("G4XmlAnalysisManager::FillNtupleFColumn()",
                 "Analysis_W009", JustWarning, description);
     return false;
@@ -889,7 +1176,8 @@ G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
+    description << " ntupleId " << ntupleId  
+                << " columnId " << columnId << " value " << value;
     fpVerboseL4->Message("fill", "ntuple F column", description);
   }  
 #endif
@@ -897,12 +1185,14 @@ G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 }                                         
 
 //_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
+G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int ntupleId, G4int columnId, 
+                                               G4double value)
 {
-  tools::waxml::ntuple::column<double>* column = GetNtupleDColumn(id);
+  tools::waxml::ntuple::column<double>* column 
+    = GetNtupleDColumn(ntupleId, columnId);
   if ( ! column ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      " << "column " << columnId << " does not exist.";
     G4Exception("G4XmlAnalysisManager::FillNtupleDColumn()",
                 "Analysis_W009", JustWarning, description);
     return false;
@@ -912,7 +1202,8 @@ G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
+    description << " ntupleId " << ntupleId  
+                << " columnId " << columnId << " value " << value;
     fpVerboseL4->Message("fill", "ntuple D column", description);
   }  
 #endif
@@ -922,12 +1213,24 @@ G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 //_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::AddNtupleRow()
 { 
+  return AddNtupleRow(fFirstNtupleId);
+}  
+
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::AddNtupleRow(G4int ntupleId)
+{ 
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 )
-    fpVerboseL4->Message("add", "ntuple row", "");
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId;  
+    fpVerboseL4->Message("add", "ntuple row", description);
+  }  
 #endif
 
-  if ( ! fNtuple ) {
+  G4XmlNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "AddNtupleRow");
+
+  if ( ! ntupleDescription || ! ntupleDescription->fNtuple ) {
     G4ExceptionDescription description;
     description << "      " << "ntuple does not exist. ";
     G4Exception("G4XmlAnalysisManager::AddNtupleRow()",
@@ -935,10 +1238,13 @@ G4bool G4XmlAnalysisManager::AddNtupleRow()
     return false;
   }  
   
-  fNtuple->add_row();
+  ntupleDescription->fNtuple->add_row();
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 )
-    fpVerboseL4->Message("add", "ntuple row", "");
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId;  
+    fpVerboseL4->Message("add", "ntuple row", description);
+  }  
 #endif
 
   return true;
@@ -964,7 +1270,7 @@ G4int  G4XmlAnalysisManager::GetH1Id(const G4String& name, G4bool warn) const
   std::map<G4String, G4int>::const_iterator it = fH1NameIdMap.find(name);
   if ( it ==  fH1NameIdMap.end() ) {  
     if ( warn) {
-      G4String inFunction = "G4RootAnalysisManager::GetH1Id";
+      G4String inFunction = "G4XmlAnalysisManager::GetH1Id";
       G4ExceptionDescription description;
       description << "      " << "histogram " << name << " does not exist.";
       G4Exception(inFunction, "Analysis_W007", JustWarning, description);
@@ -980,7 +1286,7 @@ G4int  G4XmlAnalysisManager::GetH2Id(const G4String& name, G4bool warn) const
   std::map<G4String, G4int>::const_iterator it = fH2NameIdMap.find(name);
   if ( it ==  fH2NameIdMap.end() ) {  
     if ( warn) {
-      G4String inFunction = "G4RootAnalysisManager::GetH2Id";
+      G4String inFunction = "G4XmlAnalysisManager::GetH2Id";
       G4ExceptionDescription description;
       description << "      " << "histogram " << name << " does not exist.";
       G4Exception(inFunction, "Analysis_W007", JustWarning, description);
@@ -993,7 +1299,16 @@ G4int  G4XmlAnalysisManager::GetH2Id(const G4String& name, G4bool warn) const
 //_____________________________________________________________________________
 tools::waxml::ntuple* G4XmlAnalysisManager::GetNtuple() const
 {
-  return fNtuple;
+  return GetNtuple(fFirstNtupleId);
+}  
+
+//_____________________________________________________________________________
+tools::waxml::ntuple* G4XmlAnalysisManager::GetNtuple(G4int ntupleId) const
+{
+  G4XmlNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "GetNtuple");
+    
+  return ntupleDescription->fNtuple;
 }  
 
 //_____________________________________________________________________________

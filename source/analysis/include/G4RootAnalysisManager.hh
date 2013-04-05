@@ -31,6 +31,7 @@
 #define G4RootAnalysisManager_h 1
 
 #include "G4VAnalysisManager.hh"
+#include "G4RootNtupleDescription.hh"
 #include "globals.hh"
 
 #include "tools/wroot/file"
@@ -86,20 +87,32 @@ class G4RootAnalysisManager : public G4VAnalysisManager
     virtual G4bool ScaleH1(G4int id, G4double factor);
     virtual G4bool ScaleH2(G4int id, G4double factor);
                            
-    virtual void  CreateNtuple(const G4String& name, const G4String& title);
+    virtual G4int CreateNtuple(const G4String& name, const G4String& title);
+    // Create columns in the last created ntuple
     virtual G4int CreateNtupleIColumn(const G4String& name);
     virtual G4int CreateNtupleFColumn(const G4String& name);
     virtual G4int CreateNtupleDColumn(const G4String& name);   
     virtual void  FinishNtuple();   
+    // Create columns in the ntuple with given id
+    virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name);
+    virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name);
+    virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name);   
+    virtual void  FinishNtuple(G4int ntupleId);   
   
     // Methods to fill histogrammes, ntuples
     virtual G4bool FillH1(G4int id, G4double value, G4double weight = 1.0);
     virtual G4bool FillH2(G4int id, G4double xvalue, G4double yvalue,
                           G4double weight = 1.0);
-    virtual G4bool FillNtupleIColumn(G4int id, G4int value);
-    virtual G4bool FillNtupleFColumn(G4int id, G4float value);
-    virtual G4bool FillNtupleDColumn(G4int id, G4double value);
+    // Methods for ntuple with id = FirstNtupleId                     
+    virtual G4bool FillNtupleIColumn(G4int columnId, G4int value);
+    virtual G4bool FillNtupleFColumn(G4int columnId, G4float value);
+    virtual G4bool FillNtupleDColumn(G4int columnId, G4double value);
     virtual G4bool AddNtupleRow();
+    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
+    virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value);
+    virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value);
+    virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value);
+    virtual G4bool AddNtupleRow(G4int ntupleId);
     
     // Access methods
     virtual tools::histo::h1d*  GetH1(G4int id, G4bool warn = true,
@@ -108,6 +121,7 @@ class G4RootAnalysisManager : public G4VAnalysisManager
                                       G4bool onlyIfActive = true) const;
     
     virtual tools::wroot::ntuple* GetNtuple() const;
+    virtual tools::wroot::ntuple* GetNtuple(G4int ntupleId) const;
 
     // Access methods via names
     virtual G4int  GetH1Id(const G4String& name, G4bool warn = true) const;
@@ -159,10 +173,15 @@ class G4RootAnalysisManager : public G4VAnalysisManager
     //
     G4bool CreateHistoDirectory();
     G4bool CreateNtupleDirectory();
-    void CreateNtupleFromBooking();
-    tools::wroot::ntuple::column<int>*    GetNtupleIColumn(G4int id) const;
-    tools::wroot::ntuple::column<float>*  GetNtupleFColumn(G4int id) const;
-    tools::wroot::ntuple::column<double>* GetNtupleDColumn(G4int id) const;
+    void CreateNtuplesFromBooking();
+
+    tools::wroot::ntuple::column<int>*    
+      GetNtupleIColumn(G4int ntupleId, G4int columnId) const;
+    tools::wroot::ntuple::column<float>*  
+      GetNtupleFColumn(G4int ntupleId, G4int columnId) const;
+    tools::wroot::ntuple::column<double>* 
+      GetNtupleDColumn(G4int ntupleId, G4int columnId) const;
+
     virtual G4bool Reset();
     virtual tools::histo::h1d*  GetH1InFunction(G4int id, G4String function,
                                       G4bool warn = true,
@@ -170,6 +189,11 @@ class G4RootAnalysisManager : public G4VAnalysisManager
     virtual tools::histo::h2d*  GetH2InFunction(G4int id, G4String function,
                                       G4bool warn = true,
                                       G4bool onlyIfActive = true) const;
+
+    virtual G4RootNtupleDescription*  GetNtupleInFunction(G4int id, 
+                                        G4String function,
+                                        G4bool warn = true,
+                                        G4bool onlyIfActive = true) const;
     void UpdateTitle(G4String& title, 
                      const G4String& unitName, const G4String& fcnName) const;                                      
 
@@ -184,11 +208,7 @@ class G4RootAnalysisManager : public G4VAnalysisManager
     std::map<G4String, G4int>  fH1NameIdMap;            
     std::map<G4String, G4int>  fH2NameIdMap;            
     
-    tools::wroot::ntuple*   fNtuple; 
-    tools::ntuple_booking*  fNtupleBooking; 
-    std::map<G4int, tools::wroot::ntuple::column<int>* >    fNtupleIColumnMap;           
-    std::map<G4int, tools::wroot::ntuple::column<float>* >  fNtupleFColumnMap;           
-    std::map<G4int, tools::wroot::ntuple::column<double>* > fNtupleDColumnMap;           
+    std::vector<G4RootNtupleDescription*> fNtupleVector;
 };
 
 #endif

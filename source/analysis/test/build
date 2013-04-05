@@ -9,9 +9,7 @@ build_clang=no
 build_mem=no
 
 build_cl_exe=no
-if [ "`uname | grep CYGWIN`" != "" ] ; then
-  build_cl_exe=yes
-fi
+if [ "`uname | grep CYGWIN`" != "" ] ; then build_cl_exe=yes; fi
 
 args=""
 while test $# -ge 1 ; do
@@ -75,12 +73,20 @@ else
   cppflags="${cppflags} -I../include" # if within G4.
 fi
 
+if [ ${exa} = "wroot" ] ; then
+  if [ ${build_cl_exe} = "yes" ] ; then
+    cppflags="${cppflags} -DTOOLS_DONT_HAVE_ZLIB"  
+  else
+    libs="${libs} -lz"
+  fi
+fi
+
 # let the freedom to some application to not use G4_cppflags.
 cppflags="${G4_cppflags} ${cppflags}"
 
 if [ ${build_cl_exe} = "yes" ] ; then
   eval ${cpp_compiler} /c ${cppflags} /Fomain.o ${exa}.cpp
-  eval ${link_cmd} /nologo /OPT:NOREF /out:tools_test_${exa}.exe main.o ${objs} ${libs}
+  eval ${cpp_linker} /nologo /OPT:NOREF /out:tools_test_${exa}.exe main.o ${objs} ${libs}
 else
-  eval ${link_cmd} -o tools_test_${exa} ${cppflags} ${exa}.cpp
+  eval ${cpp_linker} -o tools_test_${exa} ${cppflags} ${exa}.cpp ${libs}
 fi

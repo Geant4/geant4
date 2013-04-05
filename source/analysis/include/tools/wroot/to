@@ -58,4 +58,117 @@ inline bool to(directory& a_dir,
 
 }}
 
+#include "member_writer"
+#include "../osc_streamers"
+
+namespace tools {
+namespace wroot {
+
+inline bool to_osc(directory& a_dir,
+                   const histo::h1d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_h1d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Histogram1D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to_osc(directory& a_dir,
+                   const histo::h2d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_h2d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Histogram2D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to_osc(directory& a_dir,
+                   const histo::h3d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_h3d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Histogram3D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to_osc(directory& a_dir,
+                   const histo::p1d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_p1d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Profile1D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to_osc(directory& a_dir,
+                   const histo::p2d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),osc::s_p2d());
+
+  //Stream as in a BatchLab/Rio/Data.h :
+  if(!bo->write_version(1)) return false;
+  if(!Named_stream(*bo,a_name,a_histo.title())) return false;
+
+  member_writer mw(*bo);
+  if(!osc::visit(mw,a_histo)) {
+    a_dir.file().out() << "tools::wroot::to_osc :"
+                       << " Profile2D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+}}
+
 #endif
