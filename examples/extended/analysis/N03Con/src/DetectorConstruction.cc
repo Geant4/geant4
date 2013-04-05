@@ -256,7 +256,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                                    
   fPhysiWorld = new G4PVPlacement(0,                        //no rotation
                                    G4ThreeVector(),         //at (0,0,0)
-                                 logicWorld,                //its logical volume                                 
+                                 logicWorld,                //its logical volume
                                  "World",                   //its name
                                  0,                         //its mother  volume
                                  false,                     //no boolean operation
@@ -270,7 +270,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   
   if (fCalorThickness > 0.)  
     { solidCalor = new G4Box("Calorimeter",                 //its name
-                           fCalorThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2);//size
+                        fCalorThickness/2,fCalorSizeYZ/2,fCalorSizeYZ/2);//size
                                  
       logicCalor = new G4LogicalVolume(solidCalor,             //its solid
                                              fDefaultMaterial, //its material
@@ -303,7 +303,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
       else
         new G4PVPlacement(0,               //no rotation
                         G4ThreeVector(),   //at (0,0,0)
-                        logicLayer,        //its logical volume                                 
+                        logicLayer,        //its logical volume
                         "Layer",           //its name
                         logicCalor,        //its mother  volume
                         false,             //no boolean operation
@@ -326,7 +326,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                                                 
       fPhysiAbsorber = new G4PVPlacement(0,                  //no rotation
                            G4ThreeVector(-fGapThickness/2,0.,0.),  //its position
-                                         logicAbsorber,     //its logical volume                    
+                                         logicAbsorber,     //its logical volume
                                          fAbsorberMaterial->GetName(), //its name
                                          logicLayer,        //its mother
                                          false,             //no boulean operat
@@ -350,7 +350,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                                            
       fPhysiGap = new G4PVPlacement(0,                    //no rotation
                G4ThreeVector(fAbsorberThickness/2,0.,0.), //its position
-                             logicGap,                    //its logical volume               
+                             logicGap,                    //its logical volume
                              fGapMaterial->GetName(),     //its name
                              logicLayer,                  //its mother
                              false,                       //no boulean operat
