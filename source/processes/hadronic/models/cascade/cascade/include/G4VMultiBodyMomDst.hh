@@ -30,6 +30,7 @@
 // Description: pure virtual base class for final-state momentum
 //              distributions in Bertini-style cascade
 //
+// 20130308  M. Kelsey -- Add access to name string for diagnostic utilities
 
 #ifndef G4VMultiBodyMomDst_h
 #define G4VMultiBodyMomDst_h 1
@@ -45,7 +46,8 @@ public:
   virtual G4double GetMomentum(G4int ptype, const G4double& ekin) const = 0;
 
   virtual void setVerboseLevel(G4int verbose = 0) { verboseLevel = verbose; }
-  
+  virtual const G4String& GetName() const { return theName; }
+
 protected:
   G4String theName;
   G4int verboseLevel;

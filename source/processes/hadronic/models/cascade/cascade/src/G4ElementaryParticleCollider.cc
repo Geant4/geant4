@@ -96,6 +96,7 @@
 //		table printing to G4CascadeChannelTables.
 // 20130307  M. Kelsey -- Reverse order of dimensions for rmn array
 // 20130307  M. Kelsey -- Use new momentum generator factory instead of rmn
+// 20130308  M. Kelsey -- Move 3-body angle calc to G4InuclSpecialFunctions.
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -718,7 +719,11 @@ G4ElementaryParticleCollider::getMomModuleFor2toMany(G4int is, G4int mult,
   if (verboseLevel && momDist)
     const_cast<G4VMultiBodyMomDst*>(momDist)->setVerboseLevel(verboseLevel);
 
-  return (momDist ? momDist->GetMomentum(knd, ekin) : ekin/mult);
+  G4double pmod = 0.;
+  if (momDist) pmod = momDist->GetMomentum(knd, ekin);
+  else pmod = inuclRndm() * ekin/mult;
+
+  return pmod;
 }
 
 
@@ -739,34 +744,21 @@ G4ElementaryParticleCollider::particleSCMmomentumFor2to3(
   G4int K = 2;
   G4int J = 1;
 
-  if(is == pro*pro || is == pro*neu || is == neu*neu) K = 0;
-  if(knd == proton || knd == neutron) J = 0;
+  if (is == pro*pro || is == pro*neu || is == neu*neu) K = 0;
+  if (knd == proton || knd == neutron) J = 0;
 
   G4int itry = 0;
 
-  while(std::fabs(ct) > 1.0 && itry < itry_max) {
+  while (std::fabs(ct) > 1.0 && itry < itry_max) {
     itry++;
-    G4double S = inuclRndm();
-    G4double U = 0.0;
-    G4double W = 0.0;
+    G4double Spow = randomInuclPowers(ekin, abn[K+J]);
+    ct = 2.0*Spow - 1.0;
+  }
 
-    for(G4int l = 0; l < 4; l++) {
-      G4double V = 0.0;
-
-      for(G4int im = 0; im < 4; im++) {
-	V += abn[K+J][l][im] * std::pow(ekin, im);
-      };
-
-      U += V;
-      W += V * std::pow(S, l);
-    };  
-    ct = 2.0 * std::sqrt(S) * (W + (1.0 - U) * (S*S*S*S)) - 1.0;
-  };
-
-  if(itry == itry_max) {
-
-    if(verboseLevel > 2){
-      G4cout << " particleSCMmomentumFor2to3 -> itry = itry_max " << itry << G4endl;
+  if (itry == itry_max) {	// No success, just throw flat distribution
+    if (verboseLevel > 2) {
+      G4cout << " particleSCMmomentumFor2to3 -> itry = itry_max " << itry
+	     << G4endl;
     }
 
     ct = 2.0 * inuclRndm() - 1.0;

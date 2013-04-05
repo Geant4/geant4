@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeT33piNChannel.cc 66885 2013-01-16 17:37:13Z gunter $
+// $Id$
 //
 // 20100612  M. Kelsey -- BUG FIX:  Swapped eight-body channel final-states
 // 20100804  M. Kelsey -- Add name string to ctor

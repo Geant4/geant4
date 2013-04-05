@@ -23,12 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadNuclAngDst.cc 67633 2013-02-27 20:38:04Z mkelsey $
+// $Id$
 // Author:  Michael Kelsey (SLAC)
 // Date:    7 March 2013
 //
 // Description: class containing parametrized momentum distributions
-//              in the CM for hadron/nucleon 3-body final states
+//              in the CM for hadron/nucleon >= 4-body final states
 
 #include "G4HadNucl4BodyMomDst.hh"
 

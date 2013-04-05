@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadePiZeroPChannel.hh 66885 2013-01-16 17:37:13Z gunter $
+// $Id$
 
 #ifndef G4_CASCADE_PIZEROP_CHANNEL_HH
 #define G4_CASCADE_PIZEROP_CHANNEL_HH

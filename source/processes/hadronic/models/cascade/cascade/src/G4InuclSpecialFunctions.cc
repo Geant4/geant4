@@ -29,6 +29,8 @@
 // 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard pointless
 //		verbosity.
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20130308  M. Kelsey -- New function to compute INUCL-style random value
+// 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
 
 #include <cmath>
 
@@ -37,6 +39,31 @@
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
 #include "Randomize.hh"
+
+
+// Compute power series in random value, with powers-of-Ekin coeffciences
+
+G4double 
+G4InuclSpecialFunctions::randomInuclPowers(G4double ekin, 
+					   const G4double (&coeff)[4][4]) {
+  G4double S = G4UniformRand();		// Random fraction for expansion
+
+  G4double C, V;
+  G4double PQ=0., PR=0.;
+  for (G4int i=0; i<4; i++) {
+    V = 0.0;
+    for (G4int k=0; k<4; k++) {
+      C = coeff[i][k];
+      V += C * std::pow(ekin, k);
+    }
+
+    PQ += V;
+    PR += V * std::pow(S, i);
+  }
+
+  return std::sqrt(S) * (PR + (1-PQ)*(S*S*S*S));
+}
+
 
 
 G4double G4InuclSpecialFunctions::getAL(G4int A) {
@@ -112,8 +139,13 @@ G4InuclSpecialFunctions::generateWithFixedTheta(G4double ct, G4double p,
   G4double pt = p * std::sqrt(std::fabs(1.0 - ct * ct));
 
   // Buffers to avoid memory thrashing
-  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = new G4ThreeVector; G4ThreeVector &pvec = *pvec_G4MT_TLS_;
-  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = new G4LorentzVector; G4LorentzVector &momr = *momr_G4MT_TLS_;
+  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = 0;
+  if (!pvec_G4MT_TLS_) pvec_G4MT_TLS_ = new G4ThreeVector;
+  G4ThreeVector &pvec = *pvec_G4MT_TLS_;
+
+  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = 0;
+  if (!momr_G4MT_TLS_) momr_G4MT_TLS_ = new G4LorentzVector;
+  G4LorentzVector &momr = *momr_G4MT_TLS_;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*ct);
   momr.setVectM(pvec, mass);
@@ -128,8 +160,13 @@ G4InuclSpecialFunctions::generateWithRandomAngles(G4double p, G4double mass) {
   G4double pt = p * COS_SIN.second;
 
   // Buffers to avoid memory thrashing  
-  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = new G4ThreeVector; G4ThreeVector &pvec = *pvec_G4MT_TLS_;
-  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = new G4LorentzVector; G4LorentzVector &momr = *momr_G4MT_TLS_;
+  static G4ThreadLocal G4ThreeVector *pvec_G4MT_TLS_ = 0;
+  if (!pvec_G4MT_TLS_) pvec_G4MT_TLS_ = new G4ThreeVector;
+  G4ThreeVector &pvec = *pvec_G4MT_TLS_;
+
+  static G4ThreadLocal G4LorentzVector *momr_G4MT_TLS_ = 0;
+  if (!momr_G4MT_TLS_) momr_G4MT_TLS_ = new G4LorentzVector;
+  G4LorentzVector &momr = *momr_G4MT_TLS_;
 
   pvec.set(pt*std::cos(phi), pt*std::sin(phi), p*COS_SIN.first);
   momr.setVectM(pvec, mass);

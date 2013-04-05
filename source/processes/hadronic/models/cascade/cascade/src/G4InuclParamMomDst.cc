@@ -29,10 +29,14 @@
 //
 // Description: intermediate base class for INUCL parametrizations of
 //		final-state momentum distributions in Bertini-style cascade
+//
+// 20130308  M. Kelsey -- Move PQ,PR calculation to G4InuclSpecialFunctions.
 
 #include "G4InuclParamMomDst.hh"
 #include "Randomize.hh"
+#include "G4InuclSpecialFunctions.hh"
 #include "G4InuclParticleNames.hh"
+using namespace G4InuclSpecialFunctions;
 using namespace G4InuclParticleNames;
 
 
@@ -45,38 +49,13 @@ G4InuclParamMomDst::GetMomentum(G4int ptype, const G4double& ekin) const {
 	   << G4endl;
   }
 
-  G4double S = G4UniformRand();		// Random fraction for expansion
-
   G4int JK = (ptype==pro || ptype==neu) ? 0 : 1;	// nucleon vs. other
 
-  if (verboseLevel > 3) G4cout << " random S " << S << " JK " << JK << G4endl;
+  if (verboseLevel > 3) G4cout << " JK " << JK << G4endl;
 
-  G4double PQ=0., PR=0.;
-  G4double C;
-  for(G4int i = 0; i < 4; i++) {
-    G4double V = 0.0;
-    for(G4int k = 0; k < 4; k++) {
-      C = coeffPR[JK][i][k];
-      V += C * std::pow(ekin, k);
+  G4double Spow = randomInuclPowers(ekin, coeffPR[JK]);
 
-      if (verboseLevel > 3) {
-	G4cout << " i " << i << " k " << k << " : coeffPR[JK][i][k] "
-	       << C << " ekin^k " << std::pow(ekin, k) << G4endl;
-      }
-    }
-
-    PQ += V;
-    PR += V * std::pow(S, i);
-
-    if (verboseLevel > 3) {
-      G4cout << " i " << i << " : V " << V << " S^i " << std::pow(S, i)
-	     << G4endl;
-    }
-  }
-
-  if (verboseLevel > 3) G4cout << " PR " << PR << " PQ " << PQ << G4endl;
-
-  G4double PS=0.;
+  G4double C=0., PS=0.;
   for(G4int im = 0; im < 3; im++) {
     C = coeffPS[JK][im];
     PS += C * std::pow(ekin, im);
@@ -87,11 +66,11 @@ G4InuclParamMomDst::GetMomentum(G4int ptype, const G4double& ekin) const {
     }
   }
   
-  G4double PRA = PS * std::sqrt(S) * (PR + (1-PQ)*(S*S*S*S));
+  G4double PRA = PS * Spow;
 
   if (verboseLevel > 3) 
-    G4cout << " PS " << PS << " PRA = PS*sqrt(S)*(PR+(1-PQ)*S^4) " << PRA
-	   << G4endl;
+    G4cout << " PS " << PS << " Spow = sqrt(S)*(PR+(1-PQ)*S^4) " << Spow
+	   << " PRA = PS*Spow " << PRA << G4endl;
 
   return std::fabs(PRA);
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeNPChannel.hh 66885 2013-01-16 17:37:13Z gunter $
+// $Id$
 //
 // 20120907  M. Kelsey -- Subclass and overload findCrossSection() function.
 

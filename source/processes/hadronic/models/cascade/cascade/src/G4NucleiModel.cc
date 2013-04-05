@@ -120,6 +120,7 @@
 // 20130223  M. Kelsey -- Fix bugs in weighting and selection of traj points
 // 20130302  M. Kelsey -- Replace "isProjectile()" with "forceFirst()" in
 //		path-length calculation.
+// 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
 
 #include "G4NucleiModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -955,7 +956,10 @@ generateParticleFate(G4CascadParticle& cparticle,
       if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
 
       // For conservation checking (below), get particle before updating
-      static G4ThreadLocal G4InuclElementaryParticle *prescatCP_G4MT_TLS_ = new  G4InuclElementaryParticle;  G4InuclElementaryParticle &prescatCP = *prescatCP_G4MT_TLS_;	// Avoid memory churn
+      static G4ThreadLocal G4InuclElementaryParticle *prescatCP_G4MT_TLS_ = 0;
+      if (!prescatCP_G4MT_TLS_)
+	prescatCP_G4MT_TLS_ = new G4InuclElementaryParticle;
+      G4InuclElementaryParticle &prescatCP = *prescatCP_G4MT_TLS_;	// Avoid memory churn
       prescatCP = cparticle.getParticle();
 
       // Last "partner" is just a total-path placeholder

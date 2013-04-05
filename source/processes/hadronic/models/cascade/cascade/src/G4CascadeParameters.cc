@@ -28,6 +28,7 @@
 //
 // 20120912  M. Kelsey -- Add interface to support UI commands
 // 20130304  M. Kelsey -- Add flag to collect and display cascade structure
+// 20130308  M. Kelsey -- Add flag to use separate 3-body momentum generators
 
 #include "G4CascadeParameters.hh"
 #include "G4CascadeParamMessenger.hh"
@@ -53,6 +54,7 @@ G4CascadeParameters::G4CascadeParameters()
     G4CASCADE_USE_PRECOMPOUND(getenv("G4CASCADE_USE_PRECOMPOUND")),
     G4CASCADE_DO_COALESCENCE(getenv("G4CASCADE_DO_COALESCENCE")),
     G4CASCADE_SHOW_HISTORY(getenv("G4CASCADE_SHOW_HISTORY")),
+    G4CASCADE_USE_3BODYMOM(getenv("G4CASCADE_USE_3BODYMOM")),
     G4CASCADE_RANDOM_FILE(getenv("G4CASCADE_RANDOM_FILE")),
     G4NUCMODEL_USE_BEST(getenv("G4NUCMODEL_USE_BEST")),
     G4NUCMODEL_RAD_2PAR(getenv("G4NUCMODEL_RAD_2PAR")),
@@ -76,6 +78,7 @@ void G4CascadeParameters::Initialize() {
   USE_PRECOMPOUND = (0!=G4CASCADE_USE_PRECOMPOUND);
   DO_COALESCENCE = (0!=G4CASCADE_DO_COALESCENCE);
   SHOW_HISTORY = (0!=G4CASCADE_SHOW_HISTORY);
+  USE_3BODYMOM = (0!=G4CASCADE_USE_3BODYMOM);
   RANDOM_FILE = (G4CASCADE_RANDOM_FILE ? G4CASCADE_RANDOM_FILE : "");
   BEST_PAR = (0!=G4NUCMODEL_USE_BEST);
   TWOPARAM_RADIUS = (0!=G4NUCMODEL_RAD_2PAR);
@@ -113,6 +116,8 @@ void G4CascadeParameters::DumpConfig(std::ostream& os) const {
     os << "G4CASCADE_DO_COALESCENCE = " << G4CASCADE_DO_COALESCENCE << endl;
   if (G4CASCADE_SHOW_HISTORY)
     os << "G4CASCADE_SHOW_HISTORY = " << G4CASCADE_SHOW_HISTORY << endl;
+  if (G4CASCADE_USE_3BODYMOM)
+    os << "G4CASCADE_USE_3BODYMOM = " << G4CASCADE_USE_3BODYMOM << endl;
   if (G4CASCADE_RANDOM_FILE)
     os << "G4CASCADE_RANDOM_FILE = " << G4CASCADE_RANDOM_FILE << endl;
   if (G4NUCMODEL_USE_BEST)

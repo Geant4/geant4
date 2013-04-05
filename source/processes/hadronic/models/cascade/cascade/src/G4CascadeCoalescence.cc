@@ -41,6 +41,7 @@
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20110927  M. Kelsey -- Bug fix; missing <iterator> header, strtof -> strtod
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
+// 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
 
 #include "G4CascadeCoalescence.hh"
 #include "G4CascadeParameters.hh"
@@ -252,7 +253,11 @@ void G4CascadeCoalescence::removeNucleons() {
 
 G4LorentzVector 
 G4CascadeCoalescence::getClusterMomentum(const ClusterCandidate& aCluster) const {
-  static G4ThreadLocal G4LorentzVector *ptot_G4MT_TLS_ = new G4LorentzVector; G4LorentzVector &ptot = *ptot_G4MT_TLS_;
+  // Local buffer to avoid memory churn
+  static G4ThreadLocal G4LorentzVector *ptot_G4MT_TLS_ = 0;
+  if (!ptot_G4MT_TLS_) ptot_G4MT_TLS_ = new G4LorentzVector;
+  G4LorentzVector &ptot = *ptot_G4MT_TLS_;
+
   ptot.set(0.,0.,0.,0.);
   for (size_t i=0; i<aCluster.size(); i++)
     ptot += getHadron(aCluster[i]).getMomentum();

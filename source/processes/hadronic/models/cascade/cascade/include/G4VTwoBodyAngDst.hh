@@ -30,8 +30,9 @@
 // Description: pure virtual base class for two-body final state angular
 //              distributions in Bertini-style cascade
 //
-// 20130221  M. Kelsey: Bug fix: theName should not be a reference,
+// 20130221  M. Kelsey -- Bug fix: theName should not be a reference,
 //		but a local copy.
+// 20130308  M. Kelsey -- Add access to name string for diagnostic utilities
 
 #ifndef G4VTwoBodyAngDst_h
 #define G4VTwoBodyAngDst_h 1
@@ -47,7 +48,8 @@ public:
   virtual G4double GetCosTheta(const G4double& ekin, const G4double& pcm) const = 0;
   
   virtual void setVerboseLevel(G4int verbose = 0) { verboseLevel = verbose; }
-  
+  virtual const G4String& GetName() const { return theName; }
+
 protected:
   G4String theName;
   G4int verboseLevel;

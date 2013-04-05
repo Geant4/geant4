@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadePiPlusNChannel.hh 66885 2013-01-16 17:37:13Z gunter $
+// $Id$
 
 #ifndef G4_CASCADE_PIPLUSN_CHANNEL_HH
 #define G4_CASCADE_PIPLUSN_CHANNEL_HH

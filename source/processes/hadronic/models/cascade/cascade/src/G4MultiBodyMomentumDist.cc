@@ -30,8 +30,10 @@
 // Description: Singleton class to evaluate multi-body momentum distribution
 //		functions based on intial state codes and multiplicity.
 //
+// 20130308  Use envvar to enable/disable use of 3-body generators.
 
 #include "G4MultiBodyMomentumDist.hh"
+#include "G4CascadeParameters.hh"
 #include "G4NuclNucl3BodyMomDst.hh"
 #include "G4NuclNucl4BodyMomDst.hh"
 #include "G4HadNucl3BodyMomDst.hh"
@@ -74,18 +76,16 @@ void G4MultiBodyMomentumDist::passVerbose(G4int verbose) {
 // Return appropriate distribution generator for specified interaction
 
 const G4VMultiBodyMomDst* 
-G4MultiBodyMomentumDist::ChooseDist(G4int is, G4int /*mult*/) const {
+G4MultiBodyMomentumDist::ChooseDist(G4int is, G4int mult) const {
   if (is == pro*pro || is == pro*neu || is == neu*neu) {
-    /***** REMOVED BY VLADIMIR UZHINSKY 18 JULY 2011
-    if (mult == 3) return nn3BodyDst;
-    *****/
+    //***** REMOVED BY VLADIMIR UZHINSKY 18 JULY 2011
+    if (G4CascadeParameters::use3BodyMom() && mult==3) return nn3BodyDst;
     return nn4BodyDst;
   }
 
   else {	// FIXME:  All other initial states use pi-N scattering
-    /***** REMOVED BY VLADIMIR UZHINSKY 18 JULY 2011
-    if (mult == 3) return hn3BodyDst;
-    *****/
+    //***** REMOVED BY VLADIMIR UZHINSKY 18 JULY 2011
+    if (G4CascadeParameters::use3BodyMom() && mult==3) return hn3BodyDst;
     return hn4BodyDst;
   }
 

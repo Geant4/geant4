@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeLambdaNChannel.hh 66885 2013-01-16 17:37:13Z gunter $
+// $Id$
 //
 // 20100507  M. Kelsey -- Remove redundant total-bins template argument
 // 20100510  M. Kelsey -- Add initial "31" template arg.  Add G4CascSampler

@@ -49,23 +49,27 @@
 // 20110919  M. Kelsey -- Special case:  Allow fill(A=0,Z=0) to make dummy
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 // 20121009  M. Kelsey -- Add report of excitons if non-empty
-
-#include <assert.h>
-#include <sstream>
-#include <map>
+// 20130314  M. Kelsey -- Use G4IonList typedef for fragment map, encapsulate
+//		it in a static function with mutexes.
 
 #include "G4InuclNuclei.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4AutoLock.hh"
 #include "G4Fragment.hh"
 #include "G4HadronicException.hh"
 #include "G4InuclSpecialFunctions.hh"
-#include "G4Ions.hh"
 #include "G4IonTable.hh"
+#include "G4Ions.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Nucleon.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 #include "G4V3DNucleus.hh"
+
+#include <assert.h>
+#include <sstream>
+#include <map>
 
 using namespace G4InuclSpecialFunctions;
 
@@ -205,7 +209,13 @@ G4ParticleDefinition* G4InuclNuclei::makeDefinition(G4int a, G4int z) {
   return pd;		// This could return a null pointer if above fails
 }
 
-// Creates a non-standard excited nucleus
+
+// Shared buffer of nuclear fragments created below, to avoid memory leaks
+
+namespace {
+  static std::map<G4int,G4ParticleDefinition*> fragmentList;
+  G4Mutex fragListMutex = G4MUTEX_INITIALIZER;
+}
 
 // Creates a non-physical pseudo-nucleus, for return as final-state fragment
 // from G4IntraNuclearCascader
@@ -221,13 +231,13 @@ G4InuclNuclei::makeNuclearFragment(G4int a, G4int z) {
 
   G4int code = G4IonTable::GetNucleusEncoding(z, a);
 
-  // Use local lookup table (see G4IonTable.hh) to maintain singletons
+  // Use local lookup table (see above) to maintain singletons
   // NOTE:  G4ParticleDefinitions don't need to be explicitly deleted
   //        (see comments in G4IonTable.cc::~G4IonTable)
 
-  // If correct nucleus already created return it
-  static G4ThreadLocal std::map<G4int, G4ParticleDefinition*> *fragmentList_G4MT_TLS_ = new  std::map<G4int, G4ParticleDefinition*>  ;  std::map<G4int, G4ParticleDefinition*> &fragmentList = *fragmentList_G4MT_TLS_;
+  G4AutoLock fragListLock(&fragListMutex);
   if (fragmentList.find(code) != fragmentList.end()) return fragmentList[code];
+  fragListLock.unlock();
 
   // Name string follows format in G4IonTable.cc::GetIonName(Z,A,E)
   std::stringstream zstr, astr;
@@ -254,6 +264,7 @@ G4InuclNuclei::makeNuclearFragment(G4int a, G4int z) {
 			      true, "generic",  0,  0.);
   fragPD->SetAntiPDGEncoding(0);
 
+  fragListLock.lock();		    // Protect before saving new fragment
   return (fragmentList[code] = fragPD);     // Store in table for next lookup
 }
 

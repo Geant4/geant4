@@ -33,6 +33,7 @@
 // 20100914  M. Kelsey -- Migrate to integer A and Z.  Discard unused binding
 //		energy functions
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+// 20130308  M. Kelsey -- New function to encapsulate INUCL power expansion
 
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
@@ -63,9 +64,12 @@ namespace G4InuclSpecialFunctions {
 
   G4double G4cbrt(G4double x);	// Can't use "cbrt" name, clashes with <math.h>
 
-  G4double inuclRndm();
+  G4double inuclRndm();				// Wrapper for G4UniformRand()
 
-  G4double randomGauss(G4double sigma);
+  G4double randomInuclPowers(G4double ekin, 	// Power series in Ekin, S
+			     const G4double (&coeff)[4][4]);
+
+  G4double randomGauss(G4double sigma);		// Gaussian distribution
 
   G4double randomPHI();
 

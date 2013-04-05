@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CascadeChannel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id$
 //
 // 20100514  M. Kelsey -- All functionality removed except quantum-number
 //		validation functions.
