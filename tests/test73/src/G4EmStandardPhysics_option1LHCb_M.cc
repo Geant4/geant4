@@ -144,9 +144,9 @@ void G4EmStandardPhysics_option1LHCb_M::ConstructProcess()
 	// Add standard EM Processes
 	G4double mscEnergyLimit = 1.05*GeV;
 
-	theParticleIterator->reset();
-	while( (*theParticleIterator)() ){
-		G4ParticleDefinition* particle = theParticleIterator->value();
+	aParticleIterator->reset();
+	while( (*aParticleIterator)() ){
+		G4ParticleDefinition* particle = aParticleIterator->value();
 		G4ProcessManager* pmanager = particle->GetProcessManager();
 		G4String particleName = particle->GetParticleName();
 		if(verbose > 1)
