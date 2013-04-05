@@ -53,10 +53,10 @@ void F06ExtraPhysics::ConstructParticle() {;}
 
 void F06ExtraPhysics::ConstructProcess()
 {
-    theParticleIterator->reset();
+    aParticleIterator->reset();
 
-    while ((*theParticleIterator)()) {
-        G4ParticleDefinition* particle = theParticleIterator->value();
+    while ((*aParticleIterator)()) {
+        G4ParticleDefinition* particle = aParticleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
 
@@ -76,11 +76,11 @@ void F06ExtraPhysics::ConstructProcess()
 
 void F06ExtraPhysics::AddBetaDecay()
 {
-    theParticleIterator->reset();
+    aParticleIterator->reset();
 
-    while ((*theParticleIterator)()) {
+    while ((*aParticleIterator)()) {
 
-        G4ParticleDefinition* particle = theParticleIterator->value();
+        G4ParticleDefinition* particle = aParticleIterator->value();
         G4String particleName = particle->GetParticleName();
 
         if (particleName == "neutron") {

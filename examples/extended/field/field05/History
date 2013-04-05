@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+April 1st, 2013 A. Dotti - fieldex05-V09-06-01
+- New API for physics list needed for MT
 
 February 22th, 2013 Peter Gumplinger - fieldex05-V09-06-00
 - changed GetFieldValue signature to Point[4] and added
