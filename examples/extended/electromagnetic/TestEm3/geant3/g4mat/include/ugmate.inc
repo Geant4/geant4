@@ -1,2 +1,0 @@
-
-      COMMON/UGMATE/Imat
