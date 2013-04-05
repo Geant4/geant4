@@ -77,11 +77,11 @@ public:
 
   void ModelDescription(std::ostream& outFile) const; 
 
-private:
-
   G4double GetMuonCaptureRate(G4int Z, G4int A);
 
   G4double GetMuonDecayRate(G4int Z);
+
+private:
 
   inline void AddNewParticle(G4DynamicParticle* dp, G4double time);
 

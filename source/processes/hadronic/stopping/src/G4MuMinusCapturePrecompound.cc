@@ -69,6 +69,7 @@ G4MuMinusCapturePrecompound::G4MuMinusCapturePrecompound(
   fProton = G4Proton::Proton();
   fNeutron = G4Neutron::Neutron();
   fThreshold = 10*MeV;
+  fTime = 0.0;
   fPreCompound = ptr;
   if(!ptr) { 
     G4HadronicInteraction* p =
