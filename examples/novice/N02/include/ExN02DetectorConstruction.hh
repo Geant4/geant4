@@ -56,7 +56,10 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
      G4VPhysicalVolume* Construct();
-     
+    // MT interface
+    void ConstructSDandField();
+    G4VPhysicalVolume* ConstructSlave();//TO BE REMOVED
+    
      const 
      G4VPhysicalVolume* GetTracker() {return physiTracker;};
      G4double GetTrackerFullLength() {return fTrackerLength;};
@@ -92,9 +95,10 @@ class ExN02DetectorConstruction : public G4VUserDetectorConstruction
      G4VPVParameterisation* chamberParam; // pointer to chamber parameterisation
      G4UserLimits* stepLimit;             // pointer to user step limits
 
-     ExN02MagneticField* fpMagField;   // pointer to the magnetic field 
-     
-     ExN02DetectorMessenger* detectorMessenger;  // pointer to the Messenger
+     //Problem: these two are TLS in prototype
+    //Ok for field, but why messenger???
+     static G4ThreadLocal ExN02MagneticField* fpMagField;   // pointer to the magnetic field
+     static G4ThreadLocal ExN02DetectorMessenger* detectorMessenger;  // pointer to the Messenger
        
      G4double fWorldLength;            // Full length of the world volume
      G4double fTargetLength;           // Full length of Target

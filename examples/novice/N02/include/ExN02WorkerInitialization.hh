@@ -24,45 +24,28 @@
 // ********************************************************************
 //
 //
-// $Id$
+//  27 Feb 2013: Andrea Dotti, first implementation
 //
-//
-//    A class for control of the Magnetic Field of the detector.
-//  The field is assumed to be uniform.
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// MT initializaiton code. Each thread will execute this code that contains the
+// per-thread initialization code (e.g. instantiaion of user actions, etc)
 
-#ifndef ExN02MagneticField_H
-#define ExN02MagneticField_H
+#ifndef ExN02WorkerInitialization_hh
+#define ExN02WorkerInitialization_hh
 
-#include "G4UniformMagField.hh"
+#include "G4VUserWorkerInitialization.hh"
 
-class G4FieldManager;
+class ExN02DetectorConstruction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-class ExN02MagneticField: public G4UniformMagField
-{
-  public:
-  
-   ExN02MagneticField(G4ThreeVector);  //  The value of the field
-   ExN02MagneticField();               //  A zero field
-  ~ExN02MagneticField();  
-      
-   //Set the field (fieldValue,0,0)
-   void SetMagFieldValue(G4double fieldValue);
-   void SetMagFieldValue(G4ThreeVector fieldVector);
-      
-   G4ThreeVector GetConstantFieldValue();
-
-  protected:
-
-      // Find the global Field Manager
-      G4FieldManager* GetGlobalFieldManager();   // static
+class ExN02WorkerInitialization : public G4VUserWorkerInitialization {
+protected:
+    void WorkerStart() const;
+//Application specific stuff
+private:
+    ExN02DetectorConstruction* detector;
+    G4String macroFileName;
+public:
+    void SetDetectorConstruction( ExN02DetectorConstruction* det ) { detector = det; }
+    void SetMacroFileName( const G4String& macFileName ) { macroFileName = macFileName; }
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
+#endif //ExN02WorkerInitialization_hh

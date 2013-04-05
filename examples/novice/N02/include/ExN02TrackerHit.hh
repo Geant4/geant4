@@ -36,6 +36,7 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
+#include "tls.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,14 +80,16 @@ class ExN02TrackerHit : public G4VHit
 
 typedef G4THitsCollection<ExN02TrackerHit> ExN02TrackerHitsCollection;
 
-extern G4Allocator<ExN02TrackerHit> ExN02TrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<ExN02TrackerHit> *ExN02TrackerHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void* ExN02TrackerHit::operator new(size_t)
 {
+  if ( !ExN02TrackerHitAllocator )
+      ExN02TrackerHitAllocator = new G4Allocator<ExN02TrackerHit>;
   void *aHit;
-  aHit = (void *) ExN02TrackerHitAllocator.MallocSingle();
+  aHit = (void *) ExN02TrackerHitAllocator->MallocSingle();
   return aHit;
 }
 
@@ -94,7 +97,9 @@ inline void* ExN02TrackerHit::operator new(size_t)
 
 inline void ExN02TrackerHit::operator delete(void *aHit)
 {
-  ExN02TrackerHitAllocator.FreeSingle((ExN02TrackerHit*) aHit);
+    if ( !ExN02TrackerHitAllocator )
+        ExN02TrackerHitAllocator = new G4Allocator<ExN02TrackerHit>;
+  ExN02TrackerHitAllocator->FreeSingle((ExN02TrackerHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

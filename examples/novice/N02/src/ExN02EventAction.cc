@@ -36,6 +36,7 @@
 #include "G4TrajectoryContainer.hh"
 #include "G4Trajectory.hh"
 #include "G4ios.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -67,7 +68,7 @@ void ExN02EventAction::EndOfEventAction(const G4Event* evt)
   // periodic printing
   //
   if (event_id < 100 || event_id%100 == 0) {
-    G4cout << ">>> Event " << evt->GetEventID() << G4endl;
+    G4cout << "TID:"<<G4GetPidId()<<" >>> Event " << evt->GetEventID() << G4endl;
     G4cout << "    " << n_trajectories 
            << " trajectories stored in this event." << G4endl;
   }

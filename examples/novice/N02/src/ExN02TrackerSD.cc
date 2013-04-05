@@ -35,6 +35,7 @@
 #include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
+#include "tls.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,7 +56,7 @@ void ExN02TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   trackerCollection = new ExN02TrackerHitsCollection
                           (SensitiveDetectorName,collectionName[0]); 
-  static G4int HCID = -1;
+  static G4ThreadLocal G4int HCID = -1;
   if(HCID<0)
   { HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]); }
   HCE->AddHitsCollection( HCID, trackerCollection ); 

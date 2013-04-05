@@ -53,14 +53,18 @@
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
+
+
+G4ThreadLocal ExN02MagneticField* ExN02DetectorConstruction::fpMagField = 0;
+G4ThreadLocal ExN02DetectorMessenger* ExN02DetectorConstruction::detectorMessenger = 0;
+
 ExN02DetectorConstruction::ExN02DetectorConstruction()
 :solidWorld(0),  logicWorld(0),  physiWorld(0),
  solidTarget(0), logicTarget(0), physiTarget(0), 
  solidTracker(0),logicTracker(0),physiTracker(0), 
  solidChamber(0),logicChamber(0),physiChamber(0), 
  TargetMater(0), ChamberMater(0),chamberParam(0),
- stepLimit(0), fpMagField(0),
+ stepLimit(0), 
  fWorldLength(0.),  fTargetLength(0.), fTrackerLength(0.),
  NbOfChambers(0) ,  ChamberWidth(0.),  ChamberSpacing(0.)
 {
@@ -267,6 +271,29 @@ G4VPhysicalVolume* ExN02DetectorConstruction::Construct()
   return physiWorld;
 }
 
+void ExN02DetectorConstruction::ConstructSDandField()
+{
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    
+    G4String trackerChamberSDname = "ExN02/TrackerChamberSD";
+    ExN02TrackerSD* aTrackerSD = new ExN02TrackerSD( trackerChamberSDname );
+    //aTrackerSD->SetVerboseLevel(2);
+    SDman->AddNewDetector( aTrackerSD );
+    logicChamber->SetSensitiveDetector( aTrackerSD );
+    
+    //This should work also in MT. The ExN02MagneticField creates the object
+    //and setis it to the per-thread manager
+    fpMagField = new ExN02MagneticField();
+    
+    detectorMessenger = new ExN02DetectorMessenger(this);
+
+}
+
+G4VPhysicalVolume* ExN02DetectorConstruction::ConstructSlave()
+{
+    ConstructSDandField();
+    return physiWorld;
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void ExN02DetectorConstruction::setTargetMaterial(G4String materialName)
@@ -299,7 +326,10 @@ void ExN02DetectorConstruction::setChamberMaterial(G4String materialName)
  
 void ExN02DetectorConstruction::SetMagField(G4double fieldValue)
 {
-  fpMagField->SetMagFieldValue(fieldValue);  
+    //This should work also per-thread:
+    //Get per-thread magfiled
+    //This should work because basically this is equivalent to a static
+  fpMagField->SetMagFieldValue(fieldValue);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

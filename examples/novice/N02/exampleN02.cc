@@ -49,10 +49,24 @@
 #include "G4UIExecutive.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "Randomize.hh"
 
+#ifdef G4MULTITHREADED
+#include "ExN02WorkerInitialization.hh"
+#include "G4MTRunManager.hh"
+#endif
+
+#include "FTFP_BERT.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 int main(int argc,char** argv)
 {
+    //TODO: To remove
+    CLHEP::RanluxEngine defaultEngine( 1234567, 4 );
+    G4Random::setTheEngine( &defaultEngine );
+    //G4int seed = time( NULL );
+    //  CLHEP::HepRandom::setTheSeed( seed );
+    G4Random::setTheSeed( 1220515164 );
   // User Verbose output class
   //
   G4VSteppingVerbose* verbosity = new ExN02SteppingVerbose;
@@ -60,6 +74,69 @@ int main(int argc,char** argv)
   
   // Run manager
   //
+#ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+    runManager->SetNumberThreads( 2 );
+    //Common to all threads
+    ExN02DetectorConstruction* detector = new ExN02DetectorConstruction;
+    runManager->SetUserInitialization(detector);
+    ExN02WorkerInitialization* workerInit = new ExN02WorkerInitialization;
+    runManager->SetUserInitialization( workerInit );
+
+    
+    //The following three lines are specific of this application
+    workerInit->SetDetectorConstruction(detector);
+    G4String fileName = argv[1];
+    workerInit->SetMacroFileName(fileName);
+    
+    //Needed for initialization...
+    G4VUserPhysicsList* physics = new ExN02PhysicsList;
+    //G4VUserPhysicsList* physics = new FTFP_BERT;
+    runManager->SetUserInitialization(physics);
+
+    // User Action classes., These should not be needed
+    //Problem: this action defines the /gun commands that, if used in macroFile used below
+    //will cause the job to stop.
+    //Why we need to execute the macroFile? Because it may contains commands that modify the
+    //setup (e.g. geometry related).
+    
+    //TODO: Implement a correct way that the "master" thread can skip commands that are not found
+    //G4VUserPrimaryGeneratorAction* gen_action = new ExN02PrimaryGeneratorAction(detector);
+    //srunManager->SetUserAction(gen_action);
+    //
+    //G4UserRunAction* run_action = new ExN02RunAction;
+    //runManager->SetUserAction(run_action);
+    //
+    //G4UserEventAction* event_action = new ExN02EventAction;
+    //runManager->SetUserAction(event_action);
+    //
+    //G4UserSteppingAction* stepping_action = new ExN02SteppingAction;
+    //runManager->SetUserAction(stepping_action);
+    
+    
+    // Initialize G4 kernel
+    //
+    runManager->Initialize();
+    
+    // Get the pointer to the User Interface manager
+    //
+    G4UImanager * UImanager = G4UImanager::GetUIpointer();
+    
+    if (argc!=1)   // batch mode
+    {
+        G4String command = "/control/execute ";
+        UImanager->ApplyCommand(command+fileName);
+    }
+    else           // interactive mode : define UI session
+    {
+        //Not supported yet!!!!
+        return 1;
+    }
+    
+    // Free the store: user actions, physics_list and detector_description are
+    //                 owned and deleted by the run manager, so they should not
+    //                 be deleted in the main() program !
+#else
   G4RunManager * runManager = new G4RunManager;
 
   // User Initialization classes (mandatory)
@@ -122,7 +199,7 @@ int main(int argc,char** argv)
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
-
+#endif //G4MULTITHREADED
   delete runManager;
   delete verbosity;
 
