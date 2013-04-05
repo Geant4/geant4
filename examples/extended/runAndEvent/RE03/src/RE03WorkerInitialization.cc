@@ -23,42 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE03/include/RE03DetectorConstruction.hh
-/// \brief Definition of the RE03DetectorConstruction class
+/// \file runAndEvent/RE03/src/RE03WorkerInitialization.cc
+/// \brief Implementation of the RE03WorkerInitialization class
 //
-// $Id$
-// 
+//
+// $Id: RE03WorkerInitialization.cc 66780 2013-01-12 14:56:35Z gcosmo $
+//
 
-#ifndef RE03DetectorConstruction_h
-#define RE03DetectorConstruction_h 1
+#include "RE03WorkerInitialization.hh"
+#include "RE03PrimaryGeneratorAction.hh"
+#include "ExN02PhysicsList.hh"
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+RE03WorkerInitialization::RE03WorkerInitialization()
+{;} 
 
-class G4VPhysicalVolume;
-class G4Material;
+RE03WorkerInitialization::~RE03WorkerInitialization()
+{;}
 
-class RE03DetectorConstruction : public G4VUserDetectorConstruction
+void RE03WorkerInitialization::WorkerStart() const
 {
-  public:
-    RE03DetectorConstruction();
-    virtual ~RE03DetectorConstruction();
-
-  public:
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
-     
-  private:
-    void DefineMaterials();
-    void SetupGeometry();
-
-  private:
-    G4Material* fAir;
-    G4Material* fWater;
-    G4VPhysicalVolume* fWorldPhys;
-    G4VPhysicalVolume* fPhantomPhys;
-    G4bool fConstructed;
-};
-
-#endif
-
+  G4RunManager::GetRunManager()->SetUserInitialization(new ExN02PhysicsList);
+  SetUserAction(new RE03PrimaryGeneratorAction);
+}
+ 

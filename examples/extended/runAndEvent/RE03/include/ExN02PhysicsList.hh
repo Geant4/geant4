@@ -23,42 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE03/include/RE03DetectorConstruction.hh
-/// \brief Definition of the RE03DetectorConstruction class
 //
-// $Id$
-// 
+// $Id: ExN02PhysicsList.hh 66241 2012-12-13 18:34:42Z gunter $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RE03DetectorConstruction_h
-#define RE03DetectorConstruction_h 1
+#ifndef ExN02PhysicsList_h
+#define ExN02PhysicsList_h 1
 
-#include "G4VUserDetectorConstruction.hh"
+#include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-class G4VPhysicalVolume;
-class G4Material;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RE03DetectorConstruction : public G4VUserDetectorConstruction
+class ExN02PhysicsList: public G4VUserPhysicsList
 {
   public:
-    RE03DetectorConstruction();
-    virtual ~RE03DetectorConstruction();
+    ExN02PhysicsList();
+   ~ExN02PhysicsList();
 
-  public:
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
-     
-  private:
-    void DefineMaterials();
-    void SetupGeometry();
+  protected:
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
+ 
+    void SetCuts();
 
-  private:
-    G4Material* fAir;
-    G4Material* fWater;
-    G4VPhysicalVolume* fWorldPhys;
-    G4VPhysicalVolume* fPhantomPhys;
-    G4bool fConstructed;
+   
+  protected:
+    // these methods Construct particles 
+    void ConstructBosons();
+    void ConstructLeptons();
+    void ConstructMesons();
+    void ConstructBaryons();
+
+  protected:
+  // these methods Construct physics processes and register them
+    void ConstructGeneral();
+    void ConstructEM();
+    void AddStepMax();
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+ 

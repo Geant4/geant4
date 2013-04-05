@@ -111,4 +111,6 @@ void RE03DetectorConstruction::SetupGeometry()
   phantomLogical->SetVisAttributes(simpleBoxVisAtt);
 }
 
+void RE03DetectorConstruction::ConstructSDandField()
+{;}
 

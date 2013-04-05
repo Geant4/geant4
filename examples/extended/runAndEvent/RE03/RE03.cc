@@ -30,13 +30,14 @@
 // $Id: $
 // 
 
-#include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
 #include "G4ScoringManager.hh"
 
 #include "RE03DetectorConstruction.hh"
-#include "QGS_BIC.hh"
-#include "RE03PrimaryGeneratorAction.hh"
+//#include "FTFP_BERT.hh" 
+#include "ExN02PhysicsList.hh"
+#include "RE03WorkerInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -55,7 +56,7 @@ int main(int argc,char** argv)
 {
  // Construct the run manager
  //
- G4RunManager * runManager = new G4RunManager;
+ G4MTRunManager * runManager = new G4MTRunManager;
 
  // Activate UI-command base scorer
  G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
@@ -71,13 +72,14 @@ int main(int argc,char** argv)
  G4VUserDetectorConstruction* detector = new RE03DetectorConstruction;
  runManager->SetUserInitialization(detector);
  //
- G4VUserPhysicsList* physics = new QGS_BIC;
+ //G4VUserPhysicsList* physics = new FTFP_BERT;
+ G4VUserPhysicsList* physics = new ExN02PhysicsList;
  runManager->SetUserInitialization(physics);
     
  // Set user action classes
  //
- G4VUserPrimaryGeneratorAction* gen_action = new RE03PrimaryGeneratorAction;
- runManager->SetUserAction(gen_action);
+ RE03WorkerInitialization* worker = new RE03WorkerInitialization;
+ runManager->SetUserInitialization(worker);
   
 #ifdef G4VIS_USE
  // Visualization manager
@@ -87,6 +89,7 @@ int main(int argc,char** argv)
     
  // Initialize G4 kernel
  //
+ runManager->SetNumberThreads(4);
  runManager->Initialize();
   
  // Get the pointer to the User Interface manager
