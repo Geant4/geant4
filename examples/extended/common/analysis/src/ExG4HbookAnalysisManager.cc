@@ -42,7 +42,6 @@ extern "C" int setntuc();
 
 ExG4HbookAnalysisManager* ExG4HbookAnalysisManager::fgInstance = 0;
 const G4int ExG4HbookAnalysisManager::fgkDefaultH2HbookIdOffset = 100;
-const G4int ExG4HbookAnalysisManager::fgkDefaultNtupleHbookId = 1;
 const G4String ExG4HbookAnalysisManager::fgkDefaultNtupleDirectoryName = "ntuple";
 
 //_____________________________________________________________________________
@@ -60,7 +59,7 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
  : G4VAnalysisManager("Hbook"),
    fH1HbookIdOffset(-1),
    fH2HbookIdOffset(-1),
-   fNtupleHbookId(-1),
+   fNtupleHbookIdOffset(-1),
    fFile(0),
    fH1Vector(),
    fH2Vector(),
@@ -68,18 +67,14 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
    fH2BookingVector(),
    fH1NameIdMap(),  
    fH2NameIdMap(),  
-   fNtuple(0),
-   fNtupleBooking(0),
-   fNtupleIColumnMap(),
-   fNtupleFColumnMap(),
-   fNtupleDColumnMap()
+   fNtupleVector()
 {
   if ( fgInstance ) {
     G4ExceptionDescription description;
     description << "      " 
                 << "G4HbookAnalysisManager already exists." 
                 << "Cannot create another instance.";
-    G4Exception("G4HbookAnalysisManager::G4HbookAnalysisManager()",
+    G4Exception("ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()",
                 "Analysis_F001", FatalException, description);
   }              
    
@@ -106,7 +101,11 @@ ExG4HbookAnalysisManager::~ExG4HbookAnalysisManager()
     delete *it2;
   }  
 
-  delete fNtupleBooking;
+  std::vector<ExG4HbookNtupleDescription*>::iterator it3;  
+  for (it3 = fNtupleVector.begin(); it3 != fNtupleVector.end(); it3++ ) {
+    delete *it3;
+  }   
+
   delete fFile;  
 
   fgInstance = 0;
@@ -151,6 +150,26 @@ void ExG4HbookAnalysisManager::SetH2HbookIdOffset()
       G4ExceptionDescription description;
       description << "H2 will be defined in HBOOK with ID = G4_firstHistoId + 1";
       G4Exception("ExG4HbookAnalysisManager::SetH1HbookIdOffset",
+                  "Analysis_W011", JustWarning, description);
+    }              
+  }
+}  
+
+//_____________________________________________________________________________
+void ExG4HbookAnalysisManager::SetNtupleHbookIdOffset()
+{
+// Set  fH1HbookIdOffset if needed
+
+  if ( fNtupleHbookIdOffset == -1 ) {
+    if ( fFirstNtupleId > 0 ) 
+      fNtupleHbookIdOffset = 0;
+    else
+      fNtupleHbookIdOffset = 1;
+        
+    if ( fNtupleHbookIdOffset > 0 ) {
+      G4ExceptionDescription description;
+      description << "Ntuple will be defined in HBOOK with ID = G4_firstNtupleId + 1";
+      G4Exception("ExG4HbookAnalysisManager::SetNtupleHbookIdOffset()",
                   "Analysis_W011", JustWarning, description);
     }              
   }
@@ -264,73 +283,93 @@ void ExG4HbookAnalysisManager::CreateH2FromBooking()
 }   
 
 //_____________________________________________________________________________
-void ExG4HbookAnalysisManager::CreateNtupleFromBooking()
+void ExG4HbookAnalysisManager::CreateNtuplesFromBooking()
 {
 // Create ntuple from ntuple_booking.
 
-  if ( fNtuple || (! fNtupleBooking) ) return;       
+  if ( ! fNtupleVector.size() ) return;     
+  
+  // Set fNtupleHbookIdOffset if needed
+  SetNtupleHbookIdOffset();
+  
+  G4int index = 0;
+  std::vector<ExG4HbookNtupleDescription*>::iterator itn;  
+  for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {
+
+    tools::ntuple_booking* ntupleBooking = (*itn)->fNtupleBooking;
+    if ( ! ntupleBooking ) continue;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create from booking", "ntuple", fNtupleBooking->m_name);
+    if ( fpVerboseL4 ) 
+      fpVerboseL4->Message("create from booking", "ntuple", ntupleBooking->m_name);
 #endif
 
-  // Create an "ntuple" directory both in memory and in the file
-  fFile->cd_home();      //go under //PAWC/LUN1
-  if ( fNtupleDirectoryName == "" )
-    fFile->mkcd(fgkDefaultNtupleDirectoryName.data());
-  else  
-    fFile->mkcd(fNtupleDirectoryName.data());
-  fLockNtupleDirectoryName = true;
+    // Create an "ntuple" directory both in memory and in the file
+    fFile->cd_home();      //go under //PAWC/LUN1
+    if ( fNtupleDirectoryName == "" )
+      fFile->mkcd(fgkDefaultNtupleDirectoryName.data());
+    else  
+      fFile->mkcd(fNtupleDirectoryName.data());
+    fLockNtupleDirectoryName = true;
 
-  // Define ntuple ID in HBOOK
-  if ( fNtupleHbookId == -1 ) fNtupleHbookId = fgkDefaultNtupleHbookId;
-  
-  // We should be under //PAWC/LUN1/ntuple
-  fNtuple = new tools::hbook::wntuple(fNtupleHbookId, G4cout, *fNtupleBooking);
-  if ( fNtupleBooking->m_columns.size() ) {
-    // store ntuple columns in local maps
-    const std::vector<tools::ntuple_booking::col_t>& columns 
-      = fNtupleBooking->m_columns;
-    std::vector<tools::ntuple_booking::col_t>::const_iterator it;
-    G4int index = 0;
-    for ( it = columns.begin(); it!=columns.end(); ++it) {
-      if ( (*it).second == tools::_cid(int(0) ) ) {
-        G4cout << "adding int " << fNtuple->find_column<int>((*it).first) << G4endl;
-        fNtupleIColumnMap[index++] = fNtuple->find_column<int>((*it).first);
-      }
-      else if( (*it).second == tools::_cid(float(0) ) ) {
-        fNtupleFColumnMap[index++] = fNtuple->find_column<float>((*it).first);
-      } 
-      else if((*it).second== tools::_cid(double(0))) {
-        fNtupleDColumnMap[index++] = fNtuple->find_column<double>((*it).first);
-      }
-      else {
-        G4ExceptionDescription description;
-        description << "      " 
-                    << "Unsupported column type " << (*it).first;
-        G4Exception("G4HbookAnalysisManager::CreateNtupleFromBooking()",
-                    "Analysis_W004", JustWarning, description);
+    G4int hbookIndex = fNtupleHbookIdOffset + index + fFirstNtupleId;
+    ++index;
+
+    // We should be under //PAWC/LUN1/ntuple
+    (*itn)->fNtuple
+      = new tools::hbook::wntuple(hbookIndex, G4cout, *ntupleBooking);
+    if ( ntupleBooking->m_columns.size() ) {
+      // store ntuple columns in local maps
+      const std::vector<tools::ntuple_booking::col_t>& columns 
+        = ntupleBooking->m_columns;
+      std::vector<tools::ntuple_booking::col_t>::const_iterator it;
+      G4int counter = 0;
+      for ( it = columns.begin(); it!=columns.end(); ++it) {
+        if ( (*it).second == tools::_cid(int(0) ) ) {
+          (*itn)->fNtupleIColumnMap[counter++] 
+            = (*itn)->fNtuple->find_column<int>((*it).first);
+        }
+        else if( (*it).second == tools::_cid(float(0) ) ) {
+          (*itn)->fNtupleFColumnMap[counter++] 
+            = (*itn)->fNtuple->find_column<float>((*it).first);
+        } 
+        else if((*it).second== tools::_cid(double(0))) {
+          (*itn)->fNtupleDColumnMap[counter++] 
+            = (*itn)->fNtuple->find_column<double>((*it).first);
+        }
+        else {
+          G4ExceptionDescription description;
+          description << "      " 
+                      << "Unsupported column type " << (*it).first;
+          G4Exception("G4HbookAnalysisManager::CreateNtupleFromBooking()",
+                      "Analysis_W004", JustWarning, description);
+        }
       }
     }
-  }
-  FinishNtuple();
-
+    FinishNtuple();
 #ifdef G4VERBOSE
   if ( fpVerboseL3 ) 
-    fpVerboseL3->Message("create from booking", "ntuple", fNtupleBooking->m_name);
+    fpVerboseL3->Message("create from booking", "ntuple", ntupleBooking->m_name);
 #endif
+  }  
 }   
 
 //_____________________________________________________________________________
 tools::hbook::wntuple::column<int>*    
-ExG4HbookAnalysisManager::GetNtupleIColumn(G4int id) const
+ExG4HbookAnalysisManager::GetNtupleIColumn(G4int ntupleId, G4int columnId) const
 {
+  ExG4HbookNtupleDescription* ntupleDecription
+    = GetNtupleInFunction(ntupleId, "GetNtupleIColumn");
+  if ( ! ntupleDecription ) return 0;
+
+  std::map<G4int, tools::hbook::wntuple::column<int>* >& ntupleIColumnMap
+    = ntupleDecription->fNtupleIColumnMap;
   std::map<G4int, tools::hbook::wntuple::column<int>* >::const_iterator it
-    = fNtupleIColumnMap.find(id);
-  if ( it == fNtupleIColumnMap.end() ) {
+    = ntupleIColumnMap.find(columnId);
+  if ( it == ntupleIColumnMap.end() ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      "  << "ntupleId " << ntupleId
+                << "column " << columnId << " does not exist.";
     G4Exception("G4HbookAnalysisManager::GetNtupleIColumn()",
                 "Analysis_W009", JustWarning, description);
     return 0;
@@ -341,13 +380,20 @@ ExG4HbookAnalysisManager::GetNtupleIColumn(G4int id) const
     
 //_____________________________________________________________________________
 tools::hbook::wntuple::column<float>*  
-ExG4HbookAnalysisManager::GetNtupleFColumn(G4int id) const
+ExG4HbookAnalysisManager::GetNtupleFColumn(G4int ntupleId, G4int columnId) const
 {
+  ExG4HbookNtupleDescription* ntupleDecription
+    = GetNtupleInFunction(ntupleId, "GetNtupleFColumn");
+  if ( ! ntupleDecription ) return 0;
+
+  std::map<G4int, tools::hbook::wntuple::column<float>* >& ntupleFColumnMap
+    = ntupleDecription->fNtupleFColumnMap;
   std::map<G4int, tools::hbook::wntuple::column<float>* >::const_iterator it
-    = fNtupleFColumnMap.find(id);
-  if ( it == fNtupleFColumnMap.end() ) {
+    = ntupleFColumnMap.find(columnId);
+  if ( it == ntupleFColumnMap.end() ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      "  << "ntupleId " << ntupleId
+                << "column " << columnId << " does not exist.";
     G4Exception("G4HbookAnalysisManager::GetNtupleFColumn()",
                 "Analysis_W009", JustWarning, description);
     return 0;
@@ -356,6 +402,30 @@ ExG4HbookAnalysisManager::GetNtupleFColumn(G4int id) const
   return it->second;
 }  
 
+//_____________________________________________________________________________
+tools::hbook::wntuple::column<double>* 
+ExG4HbookAnalysisManager::GetNtupleDColumn(G4int ntupleId, G4int columnId) const
+{
+  ExG4HbookNtupleDescription* ntupleDecription
+    = GetNtupleInFunction(ntupleId, "GetNtupleDColumn");
+  if ( ! ntupleDecription ) return 0;
+
+  std::map<G4int, tools::hbook::wntuple::column<double>* >& ntupleDColumnMap
+    = ntupleDecription->fNtupleDColumnMap;
+  std::map<G4int, tools::hbook::wntuple::column<double>* >::const_iterator it
+    = ntupleDColumnMap.find(columnId);
+  if ( it == ntupleDColumnMap.end() ) {
+    G4ExceptionDescription description;
+    description << "      "  << "ntupleId " << ntupleId
+                << "column " << columnId << " does not exist.";
+    G4Exception("G4HbookAnalysisManager::GetNtupleDColumn()",
+                "Analysis_W009", JustWarning, description);
+    return 0;
+  }
+  
+  return it->second;
+}  
+ 
 //_____________________________________________________________________________
 void ExG4HbookAnalysisManager::Reset()
 {
@@ -372,13 +442,15 @@ void ExG4HbookAnalysisManager::Reset()
     delete *it2;
   }  
 
+  std::vector<ExG4HbookNtupleDescription*>::iterator it3;  
+  for (it3 = fNtupleVector.begin(); it3 != fNtupleVector.end(); it3++ ) {
+    delete (*it3)->fNtuple;
+    (*it3)->fNtuple = 0;
+  }  
+
   // Clear vectors
   fH1Vector.clear();
   fH2Vector.clear();
-
-  // Delete ntuple
-  delete fNtuple;
-  fNtuple = 0;
 }  
  
 //_____________________________________________________________________________
@@ -517,22 +589,26 @@ tools::hbook::h2*  ExG4HbookAnalysisManager::GetH2InFunction(G4int id,
 }
   
 //_____________________________________________________________________________
-tools::hbook::wntuple::column<double>* 
-ExG4HbookAnalysisManager::GetNtupleDColumn(G4int id) const
-{
-  std::map<G4int, tools::hbook::wntuple::column<double>* >::const_iterator it
-    = fNtupleDColumnMap.find(id);
-  if ( it == fNtupleDColumnMap.end() ) {
-    G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
-    G4Exception("G4HbookAnalysisManager::GetNtupleDColumn()",
-                "Analysis_W009", JustWarning, description);
-    return 0;
+ExG4HbookNtupleDescription* ExG4HbookAnalysisManager::GetNtupleInFunction(
+                                      G4int id, 
+                                      G4String functionName, G4bool warn,
+                                      G4bool /*onlyIfActive*/) const
+{                                      
+  G4int index = id - fFirstNtupleId;
+  if ( index < 0 || index >= G4int(fNtupleVector.size()) ) {
+    if ( warn) {
+      G4String inFunction = "G4HbookAnalysisManager::";
+      inFunction += functionName;
+      G4ExceptionDescription description;
+      description << "      " << "ntuple " << id << " does not exist.";
+      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+    }
+    return 0;         
   }
   
-  return it->second;
-}  
- 
+  return fNtupleVector[index];
+}
+  
 // 
 // public methods
 //
@@ -543,7 +619,7 @@ G4bool ExG4HbookAnalysisManager::OpenFile(const G4String& fileName)
   // Keep file name
   fFileName =  fileName;
 
-  // Add file extension .root if no extension is given
+  // Add file extension .hbook if no extension is given
   G4String name(fileName);
   if ( name.find(".") == std::string::npos ) { 
     name.append(".");
@@ -594,9 +670,9 @@ G4bool ExG4HbookAnalysisManager::OpenFile(const G4String& fileName)
   if ( ( fH2Vector.size() == 0 ) && ( fH2BookingVector.size() ) )  
     CreateH2FromBooking();
 
-  // Create ntuple if it is booked
-  if ( fNtupleBooking && ( ! fNtuple ) ) 
-    CreateNtupleFromBooking();
+  // Create ntuples if they are booked
+  if ( fNtupleVector.size() ) 
+     CreateNtuplesFromBooking();
 
   fLockFileName = true;
   fLockHistoDirectoryName = true;
@@ -843,7 +919,6 @@ G4bool ExG4HbookAnalysisManager::SetH1(G4int id,
   if ( fH1Vector.size() ) {
     tools::hbook::h1* h1 = GetH1(id);
     h1->configure(nbins, fcn(xmin), fcn(xmax));
-    G4cout << " h1 = " << h1 << G4endl;   
   }  
   
   return true;
@@ -928,24 +1003,9 @@ G4bool ExG4HbookAnalysisManager::ScaleH2(G4int id, G4double factor)
 }  
                            
 //_____________________________________________________________________________
-void ExG4HbookAnalysisManager::CreateNtuple(const G4String& name, 
-                                            const G4String& title)
+G4int ExG4HbookAnalysisManager::CreateNtuple(const G4String& name, 
+                                             const G4String& title)
 {
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "ntuple", name);
-#endif
-
-  if ( fNtupleBooking ) {
-    G4ExceptionDescription description;
-    description << "      " 
-                << "Ntuple already exists. "
-                << "(Only one ntuple is currently supported.)";
-    G4Exception("G4HbookAnalysisManager::CreateNtuple()",
-                "Analysis_W006", JustWarning, description);
-    return;       
-  }
-
   // Create an "ntuple" directory both in memory and in the file
   if ( fFile ) {
     fFile->cd_home();      //go under //PAWC/LUN1
@@ -961,102 +1021,164 @@ void ExG4HbookAnalysisManager::CreateNtuple(const G4String& name,
     fpVerboseL4->Message("create", "ntuple", name);
 #endif
 
-  // Define ntuple ID in HBOOK
-  if ( fNtupleHbookId == -1 ) fNtupleHbookId = fgkDefaultNtupleHbookId;
-  
+  // Create ntuple description
+  G4int index = fNtupleVector.size();
+  ExG4HbookNtupleDescription* ntupleDescription
+    = new ExG4HbookNtupleDescription();
+  fNtupleVector.push_back(ntupleDescription);  
+
   // Create ntuple booking
-  fNtupleBooking = new tools::ntuple_booking();
-  fNtupleBooking->m_name = name;
-  fNtupleBooking->m_title = title;
+  ntupleDescription->fNtupleBooking = new tools::ntuple_booking();
+  ntupleDescription->fNtupleBooking->m_name = name;
+  ntupleDescription->fNtupleBooking->m_title = title;
            // ntuple booking object is deleted in destructor
 
+  // Set fNtupleHbookIdOffset if needed
+  SetNtupleHbookIdOffset();
+  
   // Create ntuple if the file is open
   // We should be under //PAWC/LUN1/ntuple
   if ( fFile ) {
-    fNtuple = new tools::hbook::wntuple(fNtupleHbookId, name);
+    G4int hbookIndex = fNtupleHbookIdOffset + index + fFirstNtupleId;
+    ntupleDescription->fNtuple 
+      = new tools::hbook::wntuple(hbookIndex, name);
            // ntuple object is deleted when closing a file
   }  
 
 #ifdef G4VERBOSE
   if ( fpVerboseL2 ) {
     G4ExceptionDescription description;
-    description << " name : " << name << " hbook index : " << fNtupleHbookId; 
+    description << name << " ntupleId " << index + fFirstNtupleId; 
     fpVerboseL2->Message("create", "ntuple", description);
   }  
 #endif
+
+  return index + fFirstNtupleId;
 }                                         
 
 //_____________________________________________________________________________
 G4int ExG4HbookAnalysisManager::CreateNtupleIColumn(const G4String& name)
 {
+  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
+  return CreateNtupleIColumn(ntupleId, name);
+}  
+
+//_____________________________________________________________________________
+G4int ExG4HbookAnalysisManager::CreateNtupleFColumn(const G4String& name)
+{
+  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
+  return CreateNtupleFColumn(ntupleId, name);
+}  
+
+//_____________________________________________________________________________
+G4int ExG4HbookAnalysisManager::CreateNtupleDColumn(const G4String& name)
+{
+  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
+  return CreateNtupleDColumn(ntupleId, name);
+}  
+
+//_____________________________________________________________________________
+void ExG4HbookAnalysisManager::FinishNtuple()
+{ 
+  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
+  FinishNtuple(ntupleId);
+}
+  
+//_____________________________________________________________________________
+G4int ExG4HbookAnalysisManager::CreateNtupleIColumn(G4int ntupleId, 
+                                                    const G4String& name)
+{
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "ntuple I column", name);
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL4->Message("create", "ntuple I column", description);
+  }  
 #endif
 
-  if ( ! fNtupleBooking ) {
+  ExG4HbookNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "CreateNtupleIColumn");
+  tools::ntuple_booking* ntupleBooking
+    = ntupleDescription->fNtupleBooking;  
+
+  if ( ! ntupleBooking ) {
     G4ExceptionDescription description;
     description << "      " 
-                << "Ntuple has to be created first. ";
+                << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4HbookAnalysisManager::CreateNtupleIColumn()",
                 "Analysis_W005", JustWarning, description);
     return -1;       
   }
 
   // Save column info in booking
-  G4int index = fNtupleBooking->m_columns.size();
-  fNtupleBooking->add_column<int>(name);  
+  G4int index = ntupleBooking->m_columns.size();
+  ntupleBooking->add_column<int>(name);  
  
   // Create column if ntuple already exists
-  if ( fNtuple ) {
+  if ( ntupleDescription->fNtuple ) {
     tools::hbook::wntuple::column<int>* column 
-      = fNtuple->create_column<int>(name);  
-    fNtupleIColumnMap[index] = column;
+      = ntupleDescription->fNtuple->create_column<int>(name);  
+    ntupleDescription->fNtupleIColumnMap[index] = column;
   }  
     
   fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple I column", name);
+  if ( fpVerboseL2 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL2->Message("create", "ntuple I column", description);
+  }  
 #endif
 
   return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
-G4int ExG4HbookAnalysisManager::CreateNtupleFColumn(const G4String& name)
+G4int ExG4HbookAnalysisManager::CreateNtupleFColumn(G4int ntupleId, 
+                                                    const G4String& name)
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "ntuple F column", name);
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL4->Message("create", "ntuple F column", description);
+  } 
 #endif
 
-  if ( ! fNtupleBooking )  {
+  ExG4HbookNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "CreateNtupleFColumn");
+  tools::ntuple_booking* ntupleBooking
+    = ntupleDescription->fNtupleBooking;  
+
+  if ( ! ntupleBooking ) {
     G4ExceptionDescription description;
     description << "      " 
-                << "Ntuple has to be created first. ";
+                << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4HbookAnalysisManager::CreateNtupleFColumn()",
                 "Analysis_W005", JustWarning, description);
     return -1;       
   }
 
   // Save column info in booking
-  G4int index = fNtupleBooking->m_columns.size();
-  fNtupleBooking->add_column<float>(name);  
+  G4int index = ntupleBooking->m_columns.size();
+  ntupleBooking->add_column<float>(name);  
  
   // Create column if ntuple already exists
-  if ( fNtuple ) {
+  if ( ntupleDescription->fNtuple ) {
     tools::hbook::wntuple::column<float>* column 
-      = fNtuple->create_column<float>(name);  
-    fNtupleFColumnMap[index] = column;
+      = ntupleDescription->fNtuple->create_column<float>(name);  
+    ntupleDescription->fNtupleFColumnMap[index] = column;
   }
     
   fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple F column", name);
+  if ( fpVerboseL2 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL2->Message("create", "ntuple F column", description);
+  }  
 #endif
 
   return index + fFirstNtupleColumnId;       
@@ -1064,51 +1186,68 @@ G4int ExG4HbookAnalysisManager::CreateNtupleFColumn(const G4String& name)
 
 
 //_____________________________________________________________________________
-G4int ExG4HbookAnalysisManager::CreateNtupleDColumn(const G4String& name) 
+G4int ExG4HbookAnalysisManager::CreateNtupleDColumn(G4int ntupleId, 
+                                                    const G4String& name) 
 {
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "ntuple D column", name);
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL4->Message("create", "ntuple D column", description);
+  }  
 #endif
 
-  if ( ! fNtupleBooking ) {
+  ExG4HbookNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "CreateNtupleDColumn");
+  tools::ntuple_booking* ntupleBooking
+    = ntupleDescription->fNtupleBooking;  
+
+  if ( ! ntupleBooking ) {
     G4ExceptionDescription description;
     description << "      " 
-                << "Ntuple has to be created first. ";
+                << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4HbookAnalysisManager::CreateNtupleDColumn()",
                 "Analysis_W005", JustWarning, description);
     return -1;       
   }
 
   // Save column info in booking
-  G4int index = fNtupleBooking->m_columns.size();
-  fNtupleBooking->add_column<double>(name);  
+  G4int index = ntupleBooking->m_columns.size();
+  ntupleBooking->add_column<double>(name);  
  
   // Create column if ntuple already exists
-  if ( fNtuple ) {
+  if ( ntupleDescription->fNtuple ) {
     tools::hbook::wntuple::column<double>* column 
-      = fNtuple->create_column<double>(name);  
-    fNtupleDColumnMap[index] = column;
+      = ntupleDescription->fNtuple->create_column<double>(name);  
+    ntupleDescription->fNtupleDColumnMap[index] = column;
   }
     
   fLockFirstNtupleColumnId = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "ntuple D column", name);
+  if ( fpVerboseL2 ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fpVerboseL2->Message("create", "ntuple D column", description);
+  }  
 #endif
 
   return index + fFirstNtupleColumnId;       
 }                                         
 
 //_____________________________________________________________________________
-void ExG4HbookAnalysisManager::FinishNtuple()
+void ExG4HbookAnalysisManager::FinishNtuple(G4int ntupleId)
 { 
-  if ( ! fNtuple ) return;
+  ExG4HbookNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "CreateNtupleDColumn");
+  tools::hbook::wntuple* ntuple = ntupleDescription->fNtuple;  
+
+  if ( ! ntuple ) return;
 
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("finish", "ntuple", fNtupleBooking->m_name);
+    fpVerboseL4
+      ->Message("finish", "ntuple", ntupleDescription->fNtupleBooking->m_name);
 #endif
 
   // Return to //PAWC/LUN1 :
@@ -1117,7 +1256,8 @@ void ExG4HbookAnalysisManager::FinishNtuple()
   //fNtuple->add_row_beg();
 #ifdef G4VERBOSE
   if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("finish", "ntuple", fNtupleBooking->m_name);
+    fpVerboseL2
+      ->Message("finish", "ntuple", ntupleDescription->fNtupleBooking->m_name);
 #endif
 }
   
@@ -1169,12 +1309,40 @@ G4bool ExG4HbookAnalysisManager::FillH2(G4int id,
 }
 
 //_____________________________________________________________________________
-G4bool ExG4HbookAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
+G4bool ExG4HbookAnalysisManager::FillNtupleIColumn(G4int columnId, G4int value)
 {
-  tools::hbook::wntuple::column<int>* column = GetNtupleIColumn(id);
+  return FillNtupleIColumn(fFirstNtupleId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+G4bool ExG4HbookAnalysisManager::FillNtupleFColumn(G4int columnId, G4float value)
+{
+  return FillNtupleFColumn(fFirstNtupleId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(G4int columnId, G4double value)
+{
+  return FillNtupleDColumn(fFirstNtupleId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+G4bool ExG4HbookAnalysisManager::AddNtupleRow()
+{ 
+  return AddNtupleRow(fFirstNtupleId);
+}  
+
+//_____________________________________________________________________________
+G4bool ExG4HbookAnalysisManager::FillNtupleIColumn(
+                                            G4int ntupleId, G4int columnId, 
+                                            G4int value)
+{
+  tools::hbook::wntuple::column<int>* column 
+    = GetNtupleIColumn(ntupleId, columnId);
   if ( ! column ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      " << "ntupleId " <<  ntupleId
+                << "column " << columnId << " does not exist.";
     G4Exception("G4HbookAnalysisManager::FillNtupleIColumn()",
                 "Analysis_W009", JustWarning, description);
     return false;
@@ -1184,19 +1352,24 @@ G4bool ExG4HbookAnalysisManager::FillNtupleIColumn(G4int id, G4int value)
  #ifdef G4VERBOSE
   if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
+    description << " ntupleId " << ntupleId  
+                << " columnId " << columnId << " value " << value;
     fpVerboseL4->Message("fill", "ntuple I column", description);
   }  
 #endif
  return true;       
 }                                         
 //_____________________________________________________________________________
-G4bool ExG4HbookAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
+G4bool ExG4HbookAnalysisManager::FillNtupleFColumn(
+                                            G4int ntupleId, G4int columnId, 
+                                            G4float value)
 {
-  tools::hbook::wntuple::column<float>* column = GetNtupleFColumn(id);
+  tools::hbook::wntuple::column<float>* column 
+    = GetNtupleFColumn(ntupleId, columnId);
   if ( ! column ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      " << "ntupleId " <<  ntupleId
+                << "column " << columnId << " does not exist.";
     G4Exception("G4HbookAnalysisManager::FillNtupleFColumn()",
                 "Analysis_W009", JustWarning, description);
     return false;
@@ -1206,19 +1379,24 @@ G4bool ExG4HbookAnalysisManager::FillNtupleFColumn(G4int id, G4float value)
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
+    description << " ntupleId " << ntupleId  
+                << " columnId " << columnId << " value " << value;
     fpVerboseL4->Message("fill", "ntuple F column", description);
   }  
 #endif
   return true;       
 }                                         
 //_____________________________________________________________________________
-G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
+G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(
+                                            G4int ntupleId, G4int columnId, 
+                                            G4double value)
 {
-  tools::hbook::wntuple::column<double>* column = GetNtupleDColumn(id);
+  tools::hbook::wntuple::column<double>* column 
+    = GetNtupleDColumn(ntupleId, columnId);
   if ( ! column ) {
     G4ExceptionDescription description;
-    description << "      " << "column " << id << " does not exist.";
+    description << "      " << "ntupleId " <<  ntupleId
+                << "column " << columnId << " does not exist.";
     G4Exception("G4HbookAnalysisManager::FillNtupleDColumn()",
                 "Analysis_W009", JustWarning, description);
     return false;
@@ -1228,7 +1406,8 @@ G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) {
     G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
+    description << " ntupleId " << ntupleId  
+                << " columnId " << columnId << " value " << value;
     fpVerboseL4->Message("fill", "ntuple D column", description);
   }  
 #endif
@@ -1236,27 +1415,35 @@ G4bool ExG4HbookAnalysisManager::FillNtupleDColumn(G4int id, G4double value)
 }                                         
 
 //_____________________________________________________________________________
-G4bool ExG4HbookAnalysisManager::AddNtupleRow()
+G4bool ExG4HbookAnalysisManager::AddNtupleRow(G4int ntupleId)
 { 
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 )
-    fpVerboseL4->Message("add", "ntuple row", "");
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId;  
+    fpVerboseL4->Message("add", "ntuple row", description);
+  }  
 #endif
 
-  //G4cout << "Hbook: Going to add Ntuple row ..." << G4endl;
-  if ( ! fNtuple ) {
+  ExG4HbookNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "AddNtupleRow");
+
+  if ( ! ntupleDescription || ! ntupleDescription->fNtuple ) {
     G4ExceptionDescription description;
-    description << "      " << "ntuple does not exist. ";
+    description << "      " << " ntupleId " << ntupleId 
+                << " does not exist. ";
     G4Exception("G4HbookAnalysisManager::AddNtupleRow()",
                 "Analysis_W008", JustWarning, description);
     return false;
   }  
   
-  //fNtuple->add_row_fast();
-  fNtuple->add_row();
+  ntupleDescription->fNtuple->add_row();
 #ifdef G4VERBOSE
-  if ( fpVerboseL3 )
-    fpVerboseL3->Message("add", "ntuple row", "");
+  if ( fpVerboseL4 ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId;  
+    fpVerboseL4->Message("add", "ntuple row", description, true);
+  }  
 #endif
   return true;
 }
@@ -1310,7 +1497,16 @@ G4int  ExG4HbookAnalysisManager::GetH2Id(const G4String& name, G4bool warn) cons
 //_____________________________________________________________________________
 tools::hbook::wntuple* ExG4HbookAnalysisManager::GetNtuple() const
 {
-  return fNtuple;
+  return GetNtuple(fFirstNtupleId);
+}
+
+//_____________________________________________________________________________
+tools::hbook::wntuple* ExG4HbookAnalysisManager::GetNtuple(G4int ntupleId) const
+{
+  ExG4HbookNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "GetNtuple");
+    
+  return ntupleDescription->fNtuple;  
 }
 
 //_____________________________________________________________________________
@@ -1724,27 +1920,27 @@ G4bool ExG4HbookAnalysisManager::SetH2HbookIdOffset(G4int offset)
 }  
 
 //_____________________________________________________________________________
-G4bool ExG4HbookAnalysisManager::SetNtupleHbookId(G4int ntupleId)
+G4bool ExG4HbookAnalysisManager::SetNtupleHbookIdOffset(G4int offset) 
 {
-  if ( fNtuple ) {
+  if ( fNtupleVector.size() ) {
     G4ExceptionDescription description;
     description 
-      << "Cannot set NtupleHbookId as an ntuple already exists.";
-    G4Exception("G4HbookAnalysisManager::SetNtupleHbookId()",
-                 "Analysis_W010", JustWarning, description);
-    return false;             
-  }
-
-  if ( ntupleId < 1 ) {
-    G4ExceptionDescription description;
-    description << "The ntuple HBOOK id must be >= 1.";
-    G4Exception("G4HbookAnalysisManager::SetNtupleHbookId()",
-                 "Analysis_W010", JustWarning, description);
+      << "Cannot set NtupleHbookIdOffset as some ntuples already exist.";
+    G4Exception("G4HbookAnalysisManager::SetNtupleHbookIdOffset()",
+                 "Analysis_W009", JustWarning, description);
     return false;             
   }
   
-  fNtupleHbookId = ntupleId;
+  if ( fFirstNtupleId + offset < 1 ) {
+    G4ExceptionDescription description;
+    description << "The first ntuple HBOOK id must be >= 1.";
+    G4Exception("G4HbookAnalysisManager::SetNtupleHbookIdOffset()",
+                 "Analysis_W009", JustWarning, description);
+    return false;             
+  }
+  
+  fNtupleHbookIdOffset = offset;
   return true;
-}
+}  
 
 #endif
