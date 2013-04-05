@@ -60,11 +60,11 @@ public: // Without description
   TargetSD(const G4String&);
   virtual ~TargetSD();
 
-  void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-  void EndOfEvent(G4HCofThisEvent*);
-  void clear();
-  void PrintAll();
+  virtual void Initialize(G4HCofThisEvent*);
+  virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+  virtual void EndOfEvent(G4HCofThisEvent*);
+  virtual void clear();
+  virtual void PrintAll();
 
 private:
 

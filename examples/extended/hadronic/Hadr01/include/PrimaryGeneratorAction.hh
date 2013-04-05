@@ -59,7 +59,7 @@ public:
   PrimaryGeneratorAction();
   virtual ~PrimaryGeneratorAction();
 
-  void GeneratePrimaries(G4Event*);
+  virtual void GeneratePrimaries(G4Event*);
 
 private:
 

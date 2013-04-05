@@ -129,7 +129,8 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   } else if( command == fElectCutCmd ) {
     if(fPhysicsList) {
-      fPhysicsList->SetCutForElectron(fElectCutCmd->GetNewDoubleValue(newValue));
+      fPhysicsList->SetCutForElectron(
+	fElectCutCmd->GetNewDoubleValue(newValue));
     } else {
       UI->ApplyCommand("/run/setCutForAGivenParticle e- " + newValue);
     }

@@ -62,7 +62,7 @@ public:
   PhysicsListMessenger(PhysicsList* p = 0);
   virtual ~PhysicsListMessenger();
     
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
 private:
   

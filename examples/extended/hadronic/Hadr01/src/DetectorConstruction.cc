@@ -82,7 +82,8 @@ DetectorConstruction::DetectorConstruction()
   fRadius = 10.*cm;
 
   fTargetMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-  fWorldMaterial = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  fWorldMaterial = 
+    G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
 
   // Prepare sensitive detectors
   fCheckSD = new CheckVolumeSD("checkSD");
@@ -128,9 +129,9 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   // Check volume
   //
   G4Tubs* solidC = new G4Tubs("Check",0.,checkR,checkZ,0.,twopi);
-  fLogicCheck = new G4LogicalVolume( solidC,fWorldMaterial,"Check");
-  //  G4VPhysicalVolume* physC = 
-  new G4PVPlacement(0,G4ThreeVector(),fLogicCheck,"Check",fLogicWorld,false,0);
+  fLogicCheck = new G4LogicalVolume( solidC,fWorldMaterial,"Check"); 
+  new G4PVPlacement(0,G4ThreeVector(),fLogicCheck,"Check",
+		    fLogicWorld,false,0);
   fLogicCheck->SetSensitiveDetector(fCheckSD);
 
   //
@@ -144,7 +145,8 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   for(G4int i=0; i<nSlices; i++) {
     // physC = 
-    new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),fLogicTarget,"Target",fLogicCheck,false,i);
+    new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),fLogicTarget,"Target",
+		      fLogicCheck,false,i);
     z += 2.0*sliceZ;
   }
   G4cout << "### Target consist of " << nSlices

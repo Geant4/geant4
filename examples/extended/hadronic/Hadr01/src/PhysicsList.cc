@@ -360,13 +360,17 @@ void PhysicsList::SetCutForProton(G4double cut)
 
 void PhysicsList::List()
 {
-  G4cout << "### PhysicsLists available: FTFP_BERT FTFP_BERT_EMV FTFP_BERT_EMX FTFP_BERT_EMZ"
+  G4cout << "### PhysicsLists available: FTFP_BERT FTFP_BERT_EMV "
+	 << "FTFP_BERT_EMX FTFP_BERT_EMZ"
          << G4endl;
-  G4cout << "                            FTF_BIC QBBC QGSP_BERT QGSP_BERT_EMV QGSP_BERT_EMX"
+  G4cout << "                            FTF_BIC QBBC QGSP_BERT "
+	 << "QGSP_BERT_EMV QGSP_BERT_EMX"
          << G4endl; 
-  G4cout << "                            QGSP_BERT_HP QGSP_FTFP_BERT QGSP_FTFP_BERT_EMV"
+  G4cout << "                            QGSP_BERT_HP QGSP_FTFP_BERT "
+	 << "QGSP_FTFP_BERT_EMV"
          << G4endl; 
-  G4cout << "                            QGS_BIC QGSP_BIC QGSP_BIC_EMY QGSP_BIC_HP" 
+  G4cout << "                            QGS_BIC QGSP_BIC QGSP_BIC_EMY "
+	 << "QGSP_BIC_HP" 
          << G4endl; 
 }
 

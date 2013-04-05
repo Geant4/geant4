@@ -61,9 +61,7 @@ public:
   DetectorConstruction();
   virtual ~DetectorConstruction();
 
-public:
-
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
   void SetWorldMaterial(const G4String&);
   void SetTargetMaterial(const G4String&);

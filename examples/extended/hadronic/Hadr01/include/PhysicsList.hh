@@ -59,16 +59,17 @@ public:
   PhysicsList();
   virtual ~PhysicsList();
 
-  void ConstructParticle();
-    
-  void SetCuts();
+  virtual void ConstructParticle();
+  virtual void ConstructProcess();    
+
+  virtual void SetCuts();
+
   void SetCutForGamma(G4double);
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
   void SetCutForProton(G4double);
         
   void AddPhysicsList(const G4String& name);
-  void ConstructProcess();
   void List();
   
 private:

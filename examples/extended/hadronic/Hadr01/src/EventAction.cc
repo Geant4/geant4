@@ -104,7 +104,8 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   HistoManager* man = HistoManager::GetPointer();
   man->EndOfEvent(); 
   if(man->GetVerbose() > 1) {
-    G4cout << "EventAction: Event " << evt->GetEventID() << " ended" << G4endl;
+    G4cout << "EventAction: Event " << evt->GetEventID() << " ended" 
+	   << G4endl;
   }
 }
 

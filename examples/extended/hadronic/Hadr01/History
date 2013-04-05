@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-04-13  V.Ivanchenko (exhadr01-V09-06-03)
+- Appling code guidelines
+
 31-01-13  V.Ivanchenko (exhadr01-V09-06-02)
 - PhysicsList - migration to new structure of physics_lists
 

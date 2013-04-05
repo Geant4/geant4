@@ -63,7 +63,7 @@ public:
   void SetKillStatus(G4bool value);
   void SetKill(const G4String& name);
      
-  G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
+  virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
 private:
 
