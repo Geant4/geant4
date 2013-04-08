@@ -1,0 +1,25 @@
+#================================================
+#     Macro file for Hadr02
+#     03.03.2011 V.Ivanchneko
+#================================================
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+#
+/testhadr/TargetMat        G4_Al 
+/testhadr/TargetRadius     20 cm
+/testhadr/TargetLength     10 cm
+/testhadr/PrintModulo      100
+#
+/testhadr/ionPhysics UrQMD
+#/testhadr/ionPhysics FTF
+/run/initialize
+#
+/run/setCut           1 km
+/gun/particle ion
+/gun/ion 16 32
+/gun/energy 200. GeV
+#/testhadr/HistoType  root
+#/testhadr/HistoName  s32_al_dpmjet
+/run/beamOn 1000
+#
