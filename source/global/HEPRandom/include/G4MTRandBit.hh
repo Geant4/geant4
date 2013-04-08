@@ -24,26 +24,56 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id:$
 //
+// Class G4MTRandBit
 // 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-// Class description:
-//
-// G4Poisson is the C++ implementation of the CERNLIB GPOISS algorithm
-// for the generation of Poisson distributed random numbers. It has been
-// adapted to invoke HepRandom from CLHEP for the primary engine generators.
-// GPOISS is recognized to be a faster algorithm, providing however a less
-// accurate output, than the algorithm adopted in CLHEP.
+// Modified version with MT extensions
+// of corresponding CLHEP class RandBit
 
-// ------------------------------------------------------------
-#ifndef G4POISSON_HH
-#define G4POISSON_HH
+// --------------------------------------------------------------------
+#ifndef G4MTRandBit_h
+#define G4MTRandBit_h 1
 
-#include "G4Types.hh"
+#include "G4MTRandFlat.hh"
 
-G4long G4Poisson(G4double mean);
+class G4MTRandBit : public G4MTRandFlat
+{
 
-#endif  /* G4POISSON_HH */
+public:
+
+  inline G4MTRandBit ( CLHEP::HepRandomEngine& anEngine );
+  inline G4MTRandBit ( CLHEP::HepRandomEngine& anEngine, G4double width );
+  inline G4MTRandBit ( CLHEP::HepRandomEngine& anEngine, G4double a, G4double b );
+  inline G4MTRandBit ( CLHEP::HepRandomEngine* anEngine );
+  inline G4MTRandBit ( CLHEP::HepRandomEngine* anEngine, G4double width );
+  inline G4MTRandBit ( CLHEP::HepRandomEngine* anEngine, G4double a, G4double b );
+  // These constructors should be used to instantiate a G4MTRandBit
+  // distribution object defining a local engine for it.
+  // The static generator will be skipped using the non-static methods
+  // defined below.
+  // If the engine is passed by pointer the corresponding engine object
+  // will be deleted by the G4MTRandBit destructor.
+  // If the engine is passed by reference the corresponding engine object
+  // will not be deleted by the G4MTRandBit destructor.
+
+  virtual ~G4MTRandBit();
+  // Destructor
+
+  // Other than the Bit routines, constructors, and destructor, everything is
+  // simply inherited from RandFlat.
+
+  static G4int shootBit();
+
+  static G4int shootBit( CLHEP::HepRandomEngine* );
+
+  //  Methods using the localEngine to shoot random values, by-passing
+  //  the static generator.
+
+  inline G4int fireBit();
+
+};
+
+#include "G4MTRandBit.icc"
+
+#endif

@@ -24,26 +24,56 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id:$
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-// Class description:
-//
-// G4Poisson is the C++ implementation of the CERNLIB GPOISS algorithm
-// for the generation of Poisson distributed random numbers. It has been
-// adapted to invoke HepRandom from CLHEP for the primary engine generators.
-// GPOISS is recognized to be a faster algorithm, providing however a less
-// accurate output, than the algorithm adopted in CLHEP.
+G4MTRandGaussQ::
+G4MTRandGaussQ(CLHEP::HepRandomEngine & anEngine, G4double mean,
+                                                  G4double stdDev )
+: G4MTRandGauss(anEngine, mean, stdDev)
+{
+}
 
-// ------------------------------------------------------------
-#ifndef G4POISSON_HH
-#define G4POISSON_HH
+G4MTRandGaussQ::
+G4MTRandGaussQ(CLHEP::HepRandomEngine * anEngine, G4double mean,
+                                                  G4double stdDev )
+: G4MTRandGauss(anEngine, mean, stdDev)
+{
+}
 
-#include "G4Types.hh"
+// Getting a Gaussian deviate - static methods
+// -------------------------------------------
 
-G4long G4Poisson(G4double mean);
+G4double G4MTRandGaussQ::shoot()
+{
+  CLHEP::HepRandomEngine* anEngine = G4MTHepRandom::getTheEngine();
+  return transformQuick (anEngine->flat());
+}
 
-#endif  /* G4POISSON_HH */
+G4double G4MTRandGaussQ::shoot( CLHEP::HepRandomEngine* anotherEngine )
+{ 
+  return transformQuick  (anotherEngine->flat());
+}
+
+G4double G4MTRandGaussQ::shoot(G4double mean, G4double stdDev)
+{
+  return shoot()*stdDev + mean;
+}
+
+G4double G4MTRandGaussQ::shoot(CLHEP::HepRandomEngine* anotherEngine,
+                                  G4double mean, G4double stdDev)
+{
+  return shoot(anotherEngine)*stdDev + mean;
+}
+
+// Getting a Gaussian deviate - instance methods
+// ---------------------------------------------
+
+G4double G4MTRandGaussQ::fire()
+{
+  return transformQuick(localEngine->flat()) * defaultStdDev + defaultMean;
+}
+
+G4double G4MTRandGaussQ::fire(G4double mean, G4double stdDev)
+{
+  return transformQuick(localEngine->flat()) * stdDev + mean;
+}

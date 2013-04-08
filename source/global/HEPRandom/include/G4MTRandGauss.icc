@@ -24,26 +24,39 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id:$
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-// Class description:
-//
-// G4Poisson is the C++ implementation of the CERNLIB GPOISS algorithm
-// for the generation of Poisson distributed random numbers. It has been
-// adapted to invoke HepRandom from CLHEP for the primary engine generators.
-// GPOISS is recognized to be a faster algorithm, providing however a less
-// accurate output, than the algorithm adopted in CLHEP.
+inline G4MTRandGauss::
+G4MTRandGauss(CLHEP::HepRandomEngine& anEngine, G4double mean, G4double stdDev )
+: defaultMean(mean), defaultStdDev(stdDev),
+  localEngine(&anEngine), deleteEngine(false), set(false), nextGauss(0.0)
+{
+}
 
-// ------------------------------------------------------------
-#ifndef G4POISSON_HH
-#define G4POISSON_HH
+inline G4MTRandGauss::
+G4MTRandGauss(CLHEP::HepRandomEngine* anEngine, G4double mean, G4double stdDev )
+: defaultMean(mean), defaultStdDev(stdDev),
+  localEngine(anEngine), deleteEngine(true), set(false), nextGauss(0.0)
+{
+}
 
-#include "G4Types.hh"
+inline G4double G4MTRandGauss::shoot(G4double mean, G4double stdDev)
+{
+  return shoot()*stdDev + mean;
+}
 
-G4long G4Poisson(G4double mean);
+inline G4double G4MTRandGauss::shoot(CLHEP::HepRandomEngine* anEngine,
+                                     G4double mean, G4double stdDev)
+{
+  return shoot(anEngine)*stdDev + mean;
+}
 
-#endif  /* G4POISSON_HH */
+inline G4double G4MTRandGauss::fire()
+{
+  return normal()*defaultStdDev + defaultMean;
+}
+
+inline G4double G4MTRandGauss::fire(G4double mean, G4double stdDev)
+{
+  return normal()*stdDev + mean;
+}

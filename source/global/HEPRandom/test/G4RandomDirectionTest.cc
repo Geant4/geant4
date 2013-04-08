@@ -47,7 +47,7 @@
 #include "G4RandomDirection.hh"
 #include "G4UnitsTable.hh"
 #include "G4Timer.hh"
-
+using namespace CLHEP;
 ///////////////////////////////////////////////////////////////////////
 //
 // Random algorithm from Geant3 RAND3

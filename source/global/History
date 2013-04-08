@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 29, 2013 G.Cosmo (global-V09-06-14)
+- Code cleanup for HEPRandom module and new introduced MT classes.
+  Added G4heprandom sub-library to the build system.
+  Moved G4Poisson to non-inline.
+
 March 18, 2013 A.Dotti (global-V09-06-13)
 - Enable MT mode for MacOSX with gcc >= 4.7.
 - Corrected getpid() problem in G4Threading.

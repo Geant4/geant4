@@ -5,8 +5,8 @@
 
 name := G4global
 
-SUBDIRS = management HEPNumerics
-SUBLIBS = G4globman G4hepnumerics
+SUBDIRS = management HEPNumerics HEPRandom
+SUBLIBS = G4globman G4hepnumerics G4heprandom
 
 GLOBLIBS = 
 
@@ -17,6 +17,6 @@ endif
 include $(G4INSTALL)/config/globlib.gmk
 
 includes::
-	@for dir in HEPGeometry HEPRandom; do \
+	@for dir in HEPGeometry; do \
 	    (cd $$dir && $(MAKE) $@); \
 	 done   

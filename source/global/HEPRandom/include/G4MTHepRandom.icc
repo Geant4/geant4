@@ -24,26 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id:$
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-// Class description:
-//
-// G4Poisson is the C++ implementation of the CERNLIB GPOISS algorithm
-// for the generation of Poisson distributed random numbers. It has been
-// adapted to invoke HepRandom from CLHEP for the primary engine generators.
-// GPOISS is recognized to be a faster algorithm, providing however a less
-// accurate output, than the algorithm adopted in CLHEP.
+inline G4double G4MTHepRandom::flat(CLHEP::HepRandomEngine* theNewEngine)
+{
+  return theNewEngine->flat();
+}
 
-// ------------------------------------------------------------
-#ifndef G4POISSON_HH
-#define G4POISSON_HH
+inline void G4MTHepRandom::flatArray(CLHEP::HepRandomEngine* theNewEngine, 
+                                     const G4int size, G4double* vect)
+{
+  theNewEngine->flatArray(size,vect);
+}
 
-#include "G4Types.hh"
-
-G4long G4Poisson(G4double mean);
-
-#endif  /* G4POISSON_HH */

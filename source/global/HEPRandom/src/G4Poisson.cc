@@ -24,26 +24,42 @@
 // ********************************************************************
 //
 //
-// $Id$
-//
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-// Class description:
-//
-// G4Poisson is the C++ implementation of the CERNLIB GPOISS algorithm
-// for the generation of Poisson distributed random numbers. It has been
-// adapted to invoke HepRandom from CLHEP for the primary engine generators.
-// GPOISS is recognized to be a faster algorithm, providing however a less
-// accurate output, than the algorithm adopted in CLHEP.
+// $Id:$
 
 // ------------------------------------------------------------
-#ifndef G4POISSON_HH
-#define G4POISSON_HH
 
-#include "G4Types.hh"
+#include <CLHEP/Units/PhysicalConstants.h>
 
-G4long G4Poisson(G4double mean);
+#include "G4Poisson.hh"
+#include "Randomize.hh"
 
-#endif  /* G4POISSON_HH */
+G4long G4Poisson(G4double mean)
+{
+  G4long number = 0;
+  const G4int border = 16;
+  G4double limit = 2e9;
+
+  if(mean <= border)
+  {
+    G4double position = G4UniformRand();
+    G4double poissonValue = std::exp(-mean);
+    G4double poissonSum = poissonValue;
+
+    while(poissonSum <= position)
+    {
+      number++ ;
+      poissonValue *= mean/number;
+      poissonSum += poissonValue;
+    }
+    return number;
+  } // the case of mean <= 16
+
+  G4double value, t, y;
+  t = std::sqrt(-2*std::log(G4UniformRand()));
+  y = CLHEP::twopi*G4UniformRand();
+  t *= std::cos(y);
+  value = mean + t*std::sqrt(mean) + 0.5;
+  if(value <= 0) {return 0;}
+  if(value >= limit) { return G4long(limit);}
+  return G4long(value);
+}

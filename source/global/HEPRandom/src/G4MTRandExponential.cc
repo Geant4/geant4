@@ -24,26 +24,62 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id:$
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file 
-// ------------------------------------------------------------
-// Class description:
-//
-// G4Poisson is the C++ implementation of the CERNLIB GPOISS algorithm
-// for the generation of Poisson distributed random numbers. It has been
-// adapted to invoke HepRandom from CLHEP for the primary engine generators.
-// GPOISS is recognized to be a faster algorithm, providing however a less
-// accurate output, than the algorithm adopted in CLHEP.
+#ifdef G4MULTITHREADED
 
-// ------------------------------------------------------------
-#ifndef G4POISSON_HH
-#define G4POISSON_HH
+#include "G4MTRandExponential.hh"
 
-#include "G4Types.hh"
+G4MTRandExponential::~G4MTRandExponential()
+{
+  if ( deleteEngine ) delete localEngine;
+}
 
-G4long G4Poisson(G4double mean);
+G4double G4MTRandExponential::operator()()
+{
+  return fire( defaultMean );
+}
 
-#endif  /* G4POISSON_HH */
+G4double G4MTRandExponential::operator()( G4double mean )
+{
+  return fire( mean );
+}
+
+G4double G4MTRandExponential::shoot()
+{
+  return -log(G4MTHepRandom::getTheEngine()->flat());
+}
+
+G4double G4MTRandExponential::shoot(G4double mean)
+{
+  return -log(G4MTHepRandom::getTheEngine()->flat())*mean;
+}
+
+void G4MTRandExponential::shootArray( const G4int size, G4double* vect,
+                                  G4double mean )
+{
+   for (G4int i=0; i<size; ++i)
+     vect[i] = shoot(mean);
+}
+
+void G4MTRandExponential::shootArray(CLHEP::HepRandomEngine* anEngine,
+                      const G4int size, G4double* vect, G4double mean )
+{
+   for (G4int i=0; i<size; ++i)
+     vect[i] = shoot(anEngine, mean);
+}
+
+void G4MTRandExponential::fireArray( const G4int size, G4double* vect)
+{
+   for (G4int i=0; i<size; ++i)
+     vect[i] = fire( defaultMean );
+}
+
+void G4MTRandExponential::fireArray( const G4int size, G4double* vect,
+                                     G4double mean )
+{
+   for (G4int i=0; i<size; ++i)
+     vect[i] = fire( mean );
+}
+
+#endif
