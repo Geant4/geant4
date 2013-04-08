@@ -80,7 +80,7 @@ class G4VUserDetectorConstruction
     G4VUserParallelWorld* GetParallelWorld(G4int i) const;
 
   protected:
-    void SetSensitiveDetector(G4String& logVolName,
+    void SetSensitiveDetector(const G4String& logVolName,
                 G4VSensitiveDetector* aSD,G4bool multi=false);
 };
 

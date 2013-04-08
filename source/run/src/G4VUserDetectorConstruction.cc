@@ -34,6 +34,7 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4FieldManager.hh"
+#include "G4SDManager.hh"
 #include <assert.h>
 
 G4VUserDetectorConstruction::G4VUserDetectorConstruction()
@@ -195,7 +196,7 @@ void G4VUserDetectorConstruction::CloneSD()
 }
 
 void G4VUserDetectorConstruction::SetSensitiveDetector
-(G4String& logVolName, G4VSensitiveDetector* aSD, G4bool multi)
+(const G4String& logVolName, G4VSensitiveDetector* aSD, G4bool multi)
 { 
   G4bool found = false;
   G4LogicalVolumeStore* store = G4LogicalVolumeStore::GetInstance();
@@ -214,7 +215,18 @@ void G4VUserDetectorConstruction::SetSensitiveDetector
                     "Run0052",FatalErrorInArgument,eM);
       }
       found = true;
+      G4SDManager::GetSDMpointer()->AddNewDetector(aSD);
       (*pos)->SetSensitiveDetector(aSD);
     }
   } 
+  if(!found)
+  {
+    G4String eM2 = "No logical volume of the name <";
+    eM2 += logVolName;
+    eM2 += "> is found. The specified sensitive detector <";
+    eM2 += aSD->GetName();
+    eM2 += "> couldn't be assigned to any volume.";
+    G4Exception("G4VUserDetectorConstruction::SetSensitiveDetector",
+                    "Run0053",FatalErrorInArgument,eM2);
+  }
 } 

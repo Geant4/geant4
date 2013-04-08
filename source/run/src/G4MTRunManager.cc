@@ -35,6 +35,7 @@
 #include "G4UImanager.hh"
 #include "G4AutoLock.hh"
 #include "G4WorkerRunManager.hh"
+#include "G4UserRunAction.hh"
 
 long* G4MTRunManager::seeds = 0;
 G4int G4MTRunManager::seedsnum = 0;
@@ -116,7 +117,7 @@ long G4MTRunManager::GetSeed(G4int i)
     G4ExceptionDescription msg;
     msg << "Not enough random seeds, requested seed number "<<i<<" but "<<seedsnum<<" seeds available (i>=seedsnum)";
     G4Exception("G4MTRunManager::GetSeed","Run0035", FatalException,msg);
-    return -DBL_MAX;
+    return -LONG_MAX;
 }
 
 void G4MTRunManager::PrepareCommandsStack() {
@@ -262,7 +263,10 @@ void G4MTRunManager::SetUserInitialization(G4VUserDetectorConstruction *userDC)
 }
 
 void G4MTRunManager::SetUserAction(G4UserRunAction* userAction)
-{ userRunAction = userAction; }
+{
+    userRunAction = userAction; 
+    userRunAction->SetMaster();
+}
 
 void G4MTRunManager::SetUserAction(G4VUserPrimaryGeneratorAction* /*userAction*/)
 {

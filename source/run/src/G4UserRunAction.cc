@@ -33,6 +33,7 @@
 
 
 G4UserRunAction::G4UserRunAction()
+:isMaster(false)
 {
  if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
  {

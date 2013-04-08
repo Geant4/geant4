@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr. 5th, 2013, M.Asai (run-V09-06-15)
+- Fix G4VUserDetectorConstruction::SetSentitiveDetector() method.
+
+Apr. 5th, 2013, M.Asai (run-V09-06-14)
+- Adding isMaster boolean flag to G4UserRunAction. It is set to true 
+for the user action object assigned to G4MTRunManager.
+
+Apr. 5th, 2013, A.Dotti (run-V09-06-13)
+- Fix warning in compilation for GCC 4.1: G4MTRunManager::getSeed returns
+  -LONG_MAX instead of -DBL_MAX in case of error.
+
 Apr. 5th, 2013, G.Cosmo (run-V09-06-12)
 - Use existing G4RUN_ALLOC_EXPORT flag instead of G4VUSERPL_ALLOC_EXPORT
   and moved macros definition to rundefs.hh.
