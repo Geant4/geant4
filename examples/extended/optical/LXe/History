@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 05, 2013 P. Gumplinger (LXe-V09-06-04)
+- properly initialize fExpectedNextStatus at the first step
+
+Apr 05, 2013 P. Gumplinger (LXe-V09-06-03)
+- rename to aParticleIterator as per A. Dotti
+
+Apr 05, 2013 P. Gumplinger (LXe-V09-06-02)
+- fix geometry overlap
+
 Apr 01, 2013 A. Dotti (LXe-V09-06-01)
 - Migrate to new G4VUserPhysicsList interface needed for MT
 

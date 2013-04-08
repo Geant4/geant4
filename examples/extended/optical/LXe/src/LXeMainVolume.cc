@@ -63,9 +63,9 @@ LXeMainVolume::LXeMainVolume(G4RotationMatrix *pRot,
 
   if(!fHousing_log || fUpdated){
  
-    G4double housing_x=fScint_x+fD_mtl;
-    G4double housing_y=fScint_y+fD_mtl;
-    G4double housing_z=fScint_z+fD_mtl;
+    G4double housing_x=fScint_x+2.*fD_mtl;
+    G4double housing_y=fScint_y+2.*fD_mtl;
+    G4double housing_z=fScint_z+2.*fD_mtl;
  
     //*************************** housing and scintillator
     fScint_box = new G4Box("scint_box",fScint_x/2.,fScint_y/2.,fScint_z/2.);
