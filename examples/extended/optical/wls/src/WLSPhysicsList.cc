@@ -89,7 +89,14 @@ WLSPhysicsList::WLSPhysicsList(G4String physName) : G4VModularPhysicsList()
     }
 
     AbsorptionOn = true;
-
+    
+    //This looks complex, but it is not:
+    //Get from base-class the pointer of the phsyicsVector
+    //to be used. Remember: G4VModularPhysicsList is now a split class.
+    //Why G4VModularPhysicsList::RegisterPhysics method is not used instead?
+    //If possible we can remove this...
+    physicsVector = GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
+    
     physicsVector->push_back(new WLSExtraPhysics());
     physicsVector->push_back(opticalPhysics = new WLSOpticalPhysics(AbsorptionOn));
 

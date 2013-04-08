@@ -90,6 +90,8 @@ private:
     WLSPhysicsListMessenger* fMessenger;
 
     G4bool AbsorptionOn;
+    
+    G4VMPLData::G4PhysConstVectorData* physicsVector;
 
 };
 
