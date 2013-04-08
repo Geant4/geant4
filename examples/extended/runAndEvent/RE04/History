@@ -12,6 +12,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Apr 05, 2013 A. Dotti (exampleRE04-V09-06-02)
+  Migration to new API of physics list needed for G4MT  
 
 Feb 15, 2013 I. Hrivnacova
 - Applied coding guidelines (data members initialization)

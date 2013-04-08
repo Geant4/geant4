@@ -81,7 +81,9 @@ void RE04PhysicsList::ConstructProcess()
   AddTransportation();
 
   AddParallelWorldProcess();
-
+    
+  //Get the pointer of the physicsVector object that is now a member of the split class mechanism of the base class
+  G4VMPLData::G4PhysConstVectorData* physicsVector = GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
   G4PhysConstVector::iterator itr;
   for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
     (*itr)->ConstructProcess();
