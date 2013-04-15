@@ -16,10 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+April 9, 2013 A.Dotti (global-V09-06-17,global-V09-06-18)
+- Fix for compilation on Windows, bug introduced in latest tag
+  for Conditions
+
+April 9, 2013 A.Dotti (global-V09-06-16)
+- Adding typedef for new G4Condtion type (pthread_cond_t) and macros
+  G4CONDITIONWAIT and G4CONDITIONBROADCAST
+
+April 7, 2013 A.Dotti (global-V09-06-15)
+- Bug fixing: do not delete static data mamber theGenerator 
+  (only affects MT builds)
 
 March 29, 2013 G.Cosmo (global-V09-06-14)
 - Code cleanup for HEPRandom module and new introduced MT classes.
-  Added G4heprandom sub-library to the build system.
+  Added G4heprandom sub-library to the build system.i
   Moved G4Poisson to non-inline.
 
 March 18, 2013 A.Dotti (global-V09-06-13)

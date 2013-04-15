@@ -71,7 +71,7 @@ G4MTHepRandom::G4MTHepRandom(CLHEP::HepRandomEngine * algorithm)
 G4MTHepRandom::~G4MTHepRandom()
 {
   if ( deleteEngine )  { delete theEngine; theEngine = 0; }
-  if ( theGenerator )  { delete theGenerator; theGenerator = 0; }
+  //if ( theGenerator )  { delete theGenerator; theGenerator = 0; }
 }
 
 G4double G4MTHepRandom::flat()

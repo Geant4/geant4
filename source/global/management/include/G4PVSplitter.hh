@@ -129,6 +129,7 @@ class G4PVSplitter
       {
         G4Exception("G4PVSPlitter::NewSubInstances()", "OutOfMemory",
                     FatalException, "Cannot malloc space!");
+          return;
       }
 
       for (G4int i = originaltotalspace ; i < totalspace ; i++)

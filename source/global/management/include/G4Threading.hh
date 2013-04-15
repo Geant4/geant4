@@ -89,6 +89,17 @@
     typedef G4int (*thread_unlock)(G4Mutex*);
 
     typedef pid_t G4Pid_t;
+
+    //Conditions
+    //See G4MTRunManager for example on how to use these
+    //This complication is needed to be portable with WIN32
+    //Note that WIN32 requires an additional initialization step. See example code
+    typedef pthread_cond_t G4Condition;
+    #define G4CONDITION_INITIALIZER PTHREAD_COND_INITIALIZER
+
+    #define G4CONDITIONWAIT( cond, mutex ) pthread_cond_wait( cond , mutex );
+    #define G4CONDTIONBROADCAST( cond ) pthread_cond_broadcast( cond );
+
   #elif defined(WIN32)
     //
     // Multi-threaded build: for Windows systems
@@ -111,6 +122,14 @@
     typedef DWORD (*thread_lock)(G4Mutex);
     typedef BOOL (*thread_unlock)(G4Mutex);
     typedef DWORD G4Pid_t;
+
+    //Conditions
+    typedef CONDITION_VARIABLE G4Condition;
+    #define G4CONDITION_INITIALIZER CONDITION_VARIABLE_INIT
+
+    #define G4CONDITIONWAIT( cond , criticalsectionmutex ) SleepConditionVariableCS( cond, criticalsectionmutex , INFINITE );
+    #define G4CONDTIONBROADCAST( cond ) WakeAllConditionVariable( cond );
+
   #else
 
     #error "No Threading model technology supported for this platform. Use sequential build !"
@@ -134,6 +153,10 @@
   typedef G4int (*thread_lock)(G4Mutex*);
   typedef G4int (*thread_unlock)(G4Mutex*);
   typedef G4int G4Pid_t;
+  typedef G4int G4Condition;
+  #define G4CONDITION_INITIALIZER 1
+  #define G4CONDITIONWAIT( cond, mutex ) ;;
+  #define G4CONDTIONBROADCAST( cond ) ;;
 #endif //G4MULTITHREADING
 
 G4Pid_t G4GetPidId();
