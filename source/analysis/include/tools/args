@@ -504,6 +504,12 @@ inline void remove_window_size_args(args& a_args) {
   a_args.remove("-land");
 }
 
+inline std::vector<std::string> to(int a_argc,char** a_argv) {
+  std::vector<std::string> v;
+  for(int index=0;index<a_argc;index++) v.push_back(a_argv[index]);
+  return v;
+}
+
 }
 
 #endif

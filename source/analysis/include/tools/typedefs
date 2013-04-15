@@ -82,6 +82,13 @@ typedef const char* const_cstr_t;
 class fits_bit {public:char m_c;}; //for exlib/cfitsio
 class csv_time {public:long m_l;}; //for inlib/rcsv_ntuple
 
+inline unsigned int size_char()   {return 1;}
+inline unsigned int size_short()  {return 2;}
+inline unsigned int size_int()    {return 4;}
+inline unsigned int size_int64()  {return 8;}
+inline unsigned int size_float()  {return 4;}
+inline unsigned int size_double() {return 8;}
+
 }
 
 #endif

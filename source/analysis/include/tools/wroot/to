@@ -59,7 +59,7 @@ inline bool to(directory& a_dir,
 }}
 
 #include "member_writer"
-#include "../osc_streamers"
+#include "../store/osc_streamers"
 
 namespace tools {
 namespace wroot {

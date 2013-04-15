@@ -28,14 +28,21 @@ public: //ibo
     // of a branch when it is streamed from branch::stream().
 
     // some consitency checks :
-    if(!m_data.length()) {
-      // to be sure to not work on a basket already written
-      // with write_on_file()
-      m_file.out() << "tools::wroot::basket::stream :" 
-                   << " m_data.length() is null."
-                   << std::endl;
-      return false;
-    }
+    //G.Barrand : the below test is "too much". Someone
+    //            may have to write a tree (and then a basket)
+    //            which had been never filled.
+    //            Moreover with the today branch code, a
+    //              basket.write_on_file()
+    //            happens only in a branch.fill() that deletes
+    //            the basket just after the call. 
+  //if(!m_data.length()) {
+  //  // to be sure to not work on a basket already written
+  //  // with write_on_file()
+  //  m_file.out() << "tools::wroot::basket::stream :" 
+  //               << " m_data.length() is null."
+  //               << std::endl;
+  //  return false;
+  //}
     if(m_seek_key) {
       m_file.out() << "tools::wroot::basket::stream :" 
                    << " m_seek_key is not null."

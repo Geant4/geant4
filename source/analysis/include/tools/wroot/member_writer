@@ -4,7 +4,7 @@
 #ifndef tools_wroot_member_writer
 #define tools_wroot_member_writer
 
-#include "../iobj_const_visitor"
+#include "../store/iobj_const_visitor"
 
 #include "buffer"
 
@@ -13,6 +13,11 @@ namespace wroot {
 
 class member_writer : public virtual iobj_const_visitor {
 public:
+  virtual bool begin(const istorable&,
+                     const std::string&,
+                     local_func) {return true;}
+  virtual bool end(const istorable&){return true;}
+
   virtual bool visit(const std::string&,bool a_v){return m_buf.write(a_v);}
   virtual bool visit(const std::string&,char a_v){return m_buf.write(a_v);}
   virtual bool visit(const std::string&,short a_v){return m_buf.write(a_v);}
@@ -100,16 +105,6 @@ public:
     if(!a_v.visit(*this)) return false;
     return true;  
   }
-
-/*
-  virtual bool begin(const Slash::Store::IStorable&,
-                     const std::string&,
-                     Slash::Store::IConstVisitor::Local) {return true;}
-  virtual bool end(const Slash::Store::IStorable&){return true;}
-  virtual bool visit_double(const std::string&,const Slash::Store::IArray&);
-  virtual bool visit(const std::string&,const Slash::Store::IStorable&);
-*/
-
 public:
   member_writer(buffer& a_buf):m_buf(a_buf){}
   virtual ~member_writer(){}

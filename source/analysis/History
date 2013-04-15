@@ -17,6 +17,9 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 10, 2013 I.Hrivnacova (analysis-V09-06-06)
+- Updated to g4tools 1.6.0 (by G. Barrand) - see History_tools
+
 March 29, 2013 I.Hrivnacova (analysis-V09-06-05)
 - Extended analysis managers for handling more than one ntuple
 

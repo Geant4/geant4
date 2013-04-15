@@ -37,14 +37,14 @@ inline bool is_iOS() {return true;}
 inline bool is_iOS() {return false;}
 #endif
 
-#if ANDROID_NDK
+#if ANDROID
 inline bool is_Android() {return true;}
 #else
 inline bool is_Android() {return false;}
 #endif
 
 
-#if ANDROID_NDK || TARGET_OS_IPHONE
+#if ANDROID || TARGET_OS_IPHONE
 inline bool small_screen()           {return true;}
 inline bool no_cursor()              {return true;}
 inline bool stop_app_button()        {return true;}

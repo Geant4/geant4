@@ -111,6 +111,15 @@ inline std::string tos(const std::vector<T>& a_vals,
   return result;
 }
 
+inline std::string tos(unsigned int a_linen,const char* a_lines[]) {
+  std::string s;
+  for(unsigned int index=0;index<a_linen;index++) {
+    s += std::string(a_lines[index]);
+    s += "\n";
+  }
+  return s;
+}
+
 }
 
 #endif

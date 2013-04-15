@@ -1,7 +1,7 @@
 // Copyright (C) 2010, Guy Barrand. All rights reserved.
 // See the file tools.license for terms.
 
-//tools_build_use inlib zlib
+//tools_build_use tools inlib zlib
 
 //  This program produces a out.root file.
 //
@@ -167,6 +167,13 @@ int main(int argc,char** argv) {
       }
     }
   }}
+
+  //////////////////////////////////////////////////////////
+  /// consistency check : create an empty ntuple : /////////
+  //////////////////////////////////////////////////////////
+ {tools::wroot::ntuple* ntu = 
+    new tools::wroot::ntuple(rfile.dir(),"empty","empty");
+  ntu->create_column<int>("empty");}
 
   //////////////////////////////////////////////////////////
   /// write and close file : ///////////////////////////////

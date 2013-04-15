@@ -162,6 +162,41 @@ inline std::string dir_name(const std::string& a_path,unsigned int a_num = 1){
   return path;
 }
 
+//used in OpenPAW, BatchLab.
+inline bool is_f77(const std::string& a_path){
+  std::string sfx = suffix(a_path);
+
+  //tolowercase(sfx);
+  for(std::string::iterator it=sfx.begin();it!=sfx.end();++it) {
+    char c = *it;
+    *it = ((c) >= 'A' && (c) <= 'Z' ?  c - 'A' + 'a' : c);
+  }
+
+  if(sfx=="f") return true;       //the standard.
+  if(sfx=="for") return true;     //for opaw. Known by g77.
+  if(sfx=="ftn") return true;     //for opaw.
+  if(sfx=="fortran") return true; //for opaw.
+  if(sfx=="f77") return true;
+  return false;
+}
+
+//used in OpenPAW, BatchLab.
+inline bool is_cpp(const std::string& a_path){
+  std::string sfx = suffix(a_path);
+
+  //tolowercase(sfx);
+  for(std::string::iterator it=sfx.begin();it!=sfx.end();++it) {
+    char c = *it;
+    *it = ((c) >= 'A' && (c) <= 'Z' ?  c - 'A' + 'a' : c);
+  }
+
+  if(sfx=="c") return true;
+  if(sfx=="cxx") return true;
+  if(sfx=="cpp") return true;
+  if(sfx=="C") return true;
+  return false;
+}
+
 }
 
 #endif
