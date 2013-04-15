@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 April 2013 Gabriele Cosmo (gdml-V09-06-02)
+- Removed TLS changes in G4GDMLWrite as not necessary.
+
 26 February 2013 Gabriele Cosmo (gdml-V09-06-01)
 - Removed unused data member in G4STRead.
 - Cleanup of MT changes in G4GDMLWrite.

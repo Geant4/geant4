@@ -41,7 +41,7 @@
 #include "G4Transform3D.hh"
 #include "G4PVDivision.hh"
 
-G4ThreadLocal G4bool G4GDMLWrite::addPointerToName = true;
+G4bool G4GDMLWrite::addPointerToName = true;
 
 G4GDMLWrite::G4GDMLWrite() : doc(0), extElement(0)
 {
@@ -59,20 +59,20 @@ G4bool G4GDMLWrite::FileExists(const G4String& fname) const
 
 G4GDMLWrite::VolumeMapType& G4GDMLWrite::VolumeMap()
 {
-   static G4ThreadLocal VolumeMapType *instance = new  VolumeMapType;
-   return *instance;
+   static VolumeMapType instance;
+   return instance;
 }
 
 G4GDMLWrite::PhysVolumeMapType& G4GDMLWrite::PvolumeMap()
 {
-   static G4ThreadLocal PhysVolumeMapType *instance = new  PhysVolumeMapType;
-   return *instance;
+   static PhysVolumeMapType instance;
+   return instance;
 }
 
 G4GDMLWrite::DepthMapType& G4GDMLWrite::DepthMap()
 {
-   static G4ThreadLocal DepthMapType *instance = new  DepthMapType;
-   return *instance;
+   static DepthMapType instance;
+   return instance;
 }
 
 void G4GDMLWrite::AddExtension(xercesc::DOMElement*,
