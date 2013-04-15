@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 April 2013 - G.Cosmo (error-propagation-V09-06-05)
+- Fixed compilation error for inclusion of not-existing header in
+  G4ErrorPhysicsList code.
+- Reintroduced thread-local keywords for static data, which was erroneously
+  removed in previous commit by P.Arce, included all lost changes introduced
+  since last November!
+- Removed use of printf and left-over debug printout...
+
+4 April 2013 - P.Arce
+- Changes to correct several bugs: 1435, 1447, 1448, 1453.
+
 27 March 2013 - A.Dotti (error-propagation-V09-06-04)
 - Implement changes for split class mechanism of base class G4VUserPhysicsList
   (needed for G4MT), co-working with tag in run category

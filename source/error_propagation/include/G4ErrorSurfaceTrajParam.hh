@@ -79,6 +79,7 @@ class G4ErrorSurfaceTrajParam
   G4double GetPW() const{ return fPW; }
   G4double GetV() const{ return fV; }
   G4double GetW() const{ return fW; }
+  G4double GetInvP() const{ return fInvP; }
 
  private:
 

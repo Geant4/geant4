@@ -95,12 +95,18 @@ SetParameters( const G4Point3D& pos, const G4Vector3D& mom,
   G4ThreeVector momv(mom);
   //check 3 vectors are ortogonal and right handed
 
-  fPV = momv.project( vecV ).mag();
-  fPW = momv.project( vecW ).mag();
+  // now all 4 scalar memeber variables retain the signs
+  //  fPV = momv.project( vecV ).mag();
+  //  fPW = momv.project( vecW ).mag();
+  fPV = momv.dot( vecV );
+  fPW = momv.dot( vecW );
+
 
   G4ThreeVector posv(pos);
-  fV = posv.project( vecV ).mag();
-  fW = posv.project( vecW ).mag();
+  // fV = posv.project( vecV ).mag();
+  // fW = posv.project( vecW ).mag();
+  fV = posv.dot( vecV );
+  fW = posv.dot( vecW );
 }
 
 
