@@ -57,12 +57,13 @@
 #ifndef G4RICHTRAJECTORYPOINT_HH
 #define G4RICHTRAJECTORYPOINT_HH
 
-#include "G4TrajectoryPoint.hh"
+#include <vector>
 
+#include "trkgdefs.hh"
+#include "G4TrajectoryPoint.hh"
 #include "G4TouchableHandle.hh"
 #include "G4ThreeVector.hh"
 #include "G4StepStatus.hh"
-#include <vector>
 
 class G4Track;
 class G4Step;
@@ -116,28 +117,20 @@ private:
   G4double fPostStepPointWeight;
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4RichTrajectoryPoint>
-*aRichTrajectoryPointAllocator_G4MT_TLS_;
-#else
-extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4RichTrajectoryPoint>
-*aRichTrajectoryPointAllocator_G4MT_TLS_;
-#endif
+extern G4TRACKING_DLL G4ThreadLocal
+G4Allocator<G4RichTrajectoryPoint> *aRichTrajectoryPointAllocator;
 
 inline void* G4RichTrajectoryPoint::operator new(size_t)
-{  ;;;   if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ; G4Allocator<G4RichTrajectoryPoint> &aRichTrajectoryPointAllocator = *aRichTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
-  void *aRichTrajectoryPoint;
-  aRichTrajectoryPoint =
-    (void *) aRichTrajectoryPointAllocator.MallocSingle();
-  return aRichTrajectoryPoint;
+{
+  if (!aRichTrajectoryPointAllocator)
+  { aRichTrajectoryPointAllocator = new G4Allocator<G4RichTrajectoryPoint>; }
+  return (void *) aRichTrajectoryPointAllocator->MallocSingle();
 }
 
-inline void G4RichTrajectoryPoint::operator delete
-(void *aRichTrajectoryPoint)
-{  ;;;   if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ; G4Allocator<G4RichTrajectoryPoint> &aRichTrajectoryPointAllocator = *aRichTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
-  aRichTrajectoryPointAllocator.FreeSingle
+inline void G4RichTrajectoryPoint::operator delete(void *aRichTrajectoryPoint)
+{
+  aRichTrajectoryPointAllocator->FreeSingle
     ((G4RichTrajectoryPoint *) aRichTrajectoryPoint);
 }
 
 #endif
-

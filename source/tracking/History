@@ -17,9 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-5th Feburary 2013 Takashi Sasaki(tracking-V09-06-02)
-- fix for the problem report number 1397. More than two AtRest
-  processes are allowed. Needs the checks for the results.
+11th April 2013 G.Cosmo (tracking-V09-06-03)
+- Cleanup of automatic changes for MT in classes: G4RichTrajectory,
+  G4RichTrajectoryPoint, G4SmoothTrajectory, G4SmoothTrajectoryPoint,
+  G4Trajectory, G4TrajectoryPoint.
+
+5th February 2013 Takashi Sasaki (tracking-V09-06-02)
+- Fix for the problem report #1397. More than two AtRest
+  processes are allowed. Needs checks for the results.
 
 11th January 2013  Gabriele Cosmo (tracking-V09-06-01)
 - Replace plain printout to cerr with G4Exception warning in

@@ -24,69 +24,28 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: $
 //
-// ---------------------------------------------------------------
 //
-// G4TrajectoryPoint.cc
+// Defines for Windows DLLs import/export
 //
-// ---------------------------------------------------------------
 
-#include "G4TrajectoryPoint.hh"
+#ifndef TRKGDEFS_HH
+#define TRKGDEFS_HH
 
-#include "G4AttDefStore.hh"
-#include "G4AttDef.hh"
-#include "G4AttValue.hh"
-#include "G4UnitsTable.hh"
+#include "G4Types.hh"
 
-//#define G4ATTDEBUG
-#ifdef G4ATTDEBUG
-#include "G4AttCheck.hh"
+#ifdef WIN32
+  //
+  // Unique identifier for global module
+  //
+  #if defined G4TRACKING_ALLOC_EXPORT
+    #define G4TRACKING_DLL G4DLLEXPORT
+  #else
+    #define G4TRACKING_DLL G4DLLIMPORT
+  #endif
+#else
+  #define G4TRACKING_DLL
 #endif
 
-G4ThreadLocal G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator = 0;
-
-G4TrajectoryPoint::G4TrajectoryPoint()
-{
-  fPosition = G4ThreeVector(0.,0.,0.);
-}
-
-G4TrajectoryPoint::G4TrajectoryPoint(G4ThreeVector pos)
-{
-  fPosition = pos;
-}
-
-G4TrajectoryPoint::G4TrajectoryPoint(const G4TrajectoryPoint &right)
- : G4VTrajectoryPoint(),fPosition(right.fPosition)
-{
-}
-
-G4TrajectoryPoint::~G4TrajectoryPoint()
-{
-}
-
-const std::map<G4String,G4AttDef>* G4TrajectoryPoint::GetAttDefs() const
-{
-  G4bool isNew;
-  std::map<G4String,G4AttDef>* store
-    = G4AttDefStore::GetInstance("G4TrajectoryPoint",isNew);
-  if (isNew) {
-    G4String Pos("Pos");
-    (*store)[Pos] =
-      G4AttDef(Pos, "Position", "Physics","G4BestUnit","G4ThreeVector");
-  }
-  return store;
-}
-
-std::vector<G4AttValue>* G4TrajectoryPoint::CreateAttValues() const
-{
-  std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
-
-  values->push_back(G4AttValue("Pos",G4BestUnit(fPosition,"Length"),""));
-
-#ifdef G4ATTDEBUG
-  G4cout << G4AttCheck(values,GetAttDefs());
-#endif
-
-  return values;
-}
+#endif /* G4TRKGDEFS_HH */

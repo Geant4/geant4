@@ -60,6 +60,7 @@ GEANT4_DEFINE_MODULE(NAME G4tracking
         G4VSteppingVerbose.hh
         G4VTrajectory.hh
         G4VTrajectoryPoint.hh
+        trkgdefs.hh
     SOURCES
         G4AdjointCrossSurfChecker.cc
         G4AdjointSteppingAction.cc

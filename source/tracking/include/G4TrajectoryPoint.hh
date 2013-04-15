@@ -49,6 +49,7 @@
 #ifndef G4TrajectoryPoint_h
 #define G4TrajectoryPoint_h 1
 
+#include "trkgdefs.hh"
 #include "G4VTrajectoryPoint.hh"
 #include "globals.hh"                // Include from 'global'
 #include "G4ThreeVector.hh"          // Include from 'geometry'
@@ -93,23 +94,19 @@ public: // without description
 
 };
 
-#if defined G4TRACKING_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator_G4MT_TLS_;
-#else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator_G4MT_TLS_;
-#endif
+extern G4TRACKING_DLL G4ThreadLocal
+G4Allocator<G4TrajectoryPoint> *aTrajectoryPointAllocator;
 
 inline void* G4TrajectoryPoint::operator new(size_t)
-{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
-   void *aTrajectoryPoint;
-   aTrajectoryPoint = (void *) aTrajectoryPointAllocator.MallocSingle();
-   return aTrajectoryPoint;
+{
+  if (!aTrajectoryPointAllocator)
+  { aTrajectoryPointAllocator = new G4Allocator<G4TrajectoryPoint>; }
+  return (void *) aTrajectoryPointAllocator->MallocSingle();
 }
 
 inline void G4TrajectoryPoint::operator delete(void *aTrajectoryPoint)
-{  ;;;   if (!aTrajectoryPointAllocator_G4MT_TLS_) aTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryPoint>  ; G4Allocator<G4TrajectoryPoint> &aTrajectoryPointAllocator = *aTrajectoryPointAllocator_G4MT_TLS_;  ;;;  
-   aTrajectoryPointAllocator.FreeSingle((G4TrajectoryPoint *) aTrajectoryPoint);
+{
+  aTrajectoryPointAllocator->FreeSingle((G4TrajectoryPoint *) aTrajectoryPoint);
 }
 
 #endif
-

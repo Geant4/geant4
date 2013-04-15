@@ -61,7 +61,7 @@
 
 #include <sstream>
 
-G4ThreadLocal G4Allocator<G4RichTrajectoryPoint> *aRichTrajectoryPointAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4RichTrajectoryPoint> *aRichTrajectoryPointAllocator = 0;
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint():
   fpAuxiliaryPointVector(0),
@@ -74,7 +74,7 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint():
   fPostStepPointGlobalTime(0),
   fPreStepPointWeight(1.),
   fPostStepPointWeight(1.)
-{ if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ;}
+{}
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Track* aTrack):
   G4TrajectoryPoint(aTrack->GetPosition()),
@@ -90,13 +90,13 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Track* aTrack):
   fpPostStepPointVolume(aTrack->GetNextTouchableHandle()),
   fPreStepPointWeight(aTrack->GetWeight()),
   fPostStepPointWeight(aTrack->GetWeight())
-{ if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ;}
+{}
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Step* aStep):
   G4TrajectoryPoint(aStep->GetPostStepPoint()->GetPosition()),
   fpAuxiliaryPointVector(aStep->GetPointerToVectorOfAuxiliaryPoints()),
   fTotEDep(aStep->GetTotalEnergyDeposit())
-{ if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ;
+{
   G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
   G4StepPoint* postStepPoint = aStep->GetPostStepPoint();
   if (aStep->GetTrack()->GetCurrentStepNumber() <= 0) {  // First step
@@ -113,33 +113,6 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint(const G4Step* aStep):
   fpPostStepPointVolume = postStepPoint->GetTouchableHandle();
   fPreStepPointWeight = preStepPoint->GetWeight();
   fPostStepPointWeight = postStepPoint->GetWeight();
-
-  /*
-  G4cout << "fpAuxiliaryPointVector "
-	 << (void*) fpAuxiliaryPointVector;
-  G4cout << ": ";
-  if (fpAuxiliaryPointVector) {
-    G4cout << "size: " << fpAuxiliaryPointVector->size();
-    for (size_t i = 0; i < fpAuxiliaryPointVector->size(); ++i)
-      G4cout << "\n  " << (*fpAuxiliaryPointVector)[i];
-  } else {
-    G4cout << "non-existent";
-  }
-  G4cout << G4endl;
-
-  static const G4Step* lastStep = 0;
-  if (aStep && aStep == lastStep) {
-    G4cout << "********* aStep is same as last" << G4endl;
-  }
-  lastStep = aStep;
-
-  static std::vector<G4ThreeVector>*  lastAuxiliaryPointVector = 0;
-  if (fpAuxiliaryPointVector &&
-      fpAuxiliaryPointVector == lastAuxiliaryPointVector) {
-    G4cout << "********* fpAuxiliaryPointVector is same as last" << G4endl;
-  }
-  lastAuxiliaryPointVector = fpAuxiliaryPointVector;
-  */
 }
 
 G4RichTrajectoryPoint::G4RichTrajectoryPoint
@@ -157,10 +130,10 @@ G4RichTrajectoryPoint::G4RichTrajectoryPoint
   fpPostStepPointVolume(right.fpPostStepPointVolume),
   fPreStepPointWeight(right.fPreStepPointWeight),
   fPostStepPointWeight(right.fPostStepPointWeight)
-{ if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ;}
+{}
 
 G4RichTrajectoryPoint::~G4RichTrajectoryPoint()
-{ if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ;
+{
   if(fpAuxiliaryPointVector) {
     /*
     G4cout << "Deleting fpAuxiliaryPointVector at "
@@ -173,7 +146,7 @@ G4RichTrajectoryPoint::~G4RichTrajectoryPoint()
 
 const std::map<G4String,G4AttDef>*
 G4RichTrajectoryPoint::GetAttDefs() const
-{ if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ;
+{
   G4bool isNew;
   std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4RichTrajectoryPoint",isNew);
@@ -228,7 +201,7 @@ G4RichTrajectoryPoint::GetAttDefs() const
 }
 
 static G4String Status(G4StepStatus stps)
-{ if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ;
+{
   G4String status;
   switch (stps) {
   case fWorldBoundary:         status = "fWorldBoundary"; break;
@@ -245,7 +218,7 @@ static G4String Status(G4StepStatus stps)
 }
 
 static G4String Path(const G4TouchableHandle& th)
-{ if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ;
+{
   std::ostringstream oss;
   G4int depth = th->GetHistoryDepth();
   for (G4int i = depth; i >= 0; --i) {
@@ -257,7 +230,7 @@ static G4String Path(const G4TouchableHandle& th)
 }
 
 std::vector<G4AttValue>* G4RichTrajectoryPoint::CreateAttValues() const
-{ if (!aRichTrajectoryPointAllocator_G4MT_TLS_) aRichTrajectoryPointAllocator_G4MT_TLS_ = new G4Allocator<G4RichTrajectoryPoint>  ;
+{
   // Create base class att values...
   std::vector<G4AttValue>* values = G4TrajectoryPoint::CreateAttValues();
 
