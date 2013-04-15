@@ -28,7 +28,7 @@
 /gun/energy 15.7 MeV
 #
 /analysis/setFileName hanson/19um.local
-/anlysis/h1/set 12  120 0 30 deg		#space angle    
+/analysis/h1/set 12  120 0 30 deg		#space angle    
 #
 /testem/event/printModulo 100000
 # 

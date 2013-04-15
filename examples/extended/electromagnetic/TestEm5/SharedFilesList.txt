@@ -1,0 +1,7 @@
+EXAMPLE extended/electromagnetic/TestEm1
+
+COMMON_CLASSES_PATH ../../common
+COMMON_CLASSES_LIST
+g4hbook.hh
+g4hbook_defs.hh
+ExG4HbookAnalysisManager
