@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
 
                        Package History file
                        --------------------
+
+10 Apr 2013 - S. Incerti - microdosimetry-V09-06-00
+- Updated msc model
 
 3 Nov 2012 - S.Incerti - microdosimetry-V09-05-06
 - Removed shadowing in SteppingAction

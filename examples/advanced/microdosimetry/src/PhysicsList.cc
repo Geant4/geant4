@@ -146,7 +146,7 @@ void PhysicsList::ConstructProcess()
 #include "G4hMultipleScattering.hh"
 #include "G4BraggIonGasModel.hh"
 #include "G4BetheBlochIonGasModel.hh"
-#include "G4UrbanMscModel93.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4MollerBhabhaModel.hh"
 #include "G4IonFluctuations.hh"
 #include "G4UniversalFluctuation.hh"
@@ -319,12 +319,12 @@ void PhysicsList::ConstructEM()
 
   // ---> STANDARD EM processes are inactivated below 1 MeV
   
-  mod =  new G4UrbanMscModel93();
+  mod =  new G4UrbanMscModel();
   mod->SetActivationLowEnergyLimit(1*MeV);
   em_config->SetExtraEmModel("e-","msc",mod,"Target");
   
   mod = new G4MollerBhabhaModel();
-  mod->SetActivationLowEnergyLimit(0.99*MeV);
+  mod->SetActivationLowEnergyLimit(1*MeV);
   em_config->SetExtraEmModel("e-","eIoni",mod,"Target",0.0,100*TeV, new G4UniversalFluctuation());
 
   // ---> DNA processes activated
