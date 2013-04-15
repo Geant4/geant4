@@ -40,7 +40,7 @@ The code can be compiled with gmake.
 
 In interactive mode, run:
 
-> $G4WORDIR/bin/$G4SYSTEM/dnahysics
+> $G4WORDIR/bin/$G4SYSTEM/dnaphysics
 
 The macro dna.mac is executed by default. It shows how to shoot different 
 particle types.
@@ -63,6 +63,7 @@ The output results consists in a dna.root file, containing for each simulation s
 - the type of process for the current step
 - the track position of the current step (in nanometers)
 - the energy deposit along the current step (in eV)
+- the total enery loss along the current step (in eV)
 
 This file can be easily analyzed using for example the provided ROOT macro 
 file plot.C; to do so :
@@ -73,6 +74,8 @@ file plot.C; to do so :
 * alternatively you can type directly under your session : root plot.C
 
 The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
+
+This is the same naming scheme as in the "microdosimetry" advanced example.
 
 -particles:
 
@@ -91,26 +94,26 @@ e-_G4DNAIonisation		13
 e-_G4DNAAttachment		14
 e-_G4DNAVibExcitation		15
 
-proton_G4DNAExcitation		16
-proton_G4DNAIonisation		17
-proton_G4DNAChargeDecrease	18
+proton_G4DNAExcitation		17
+proton_G4DNAIonisation		18
+proton_G4DNAChargeDecrease	19
 
-hydrogen_G4DNAExcitation	19
-hydrogen_G4DNAIonisation	20
-hydrogen_G4DNAChargeIncrease	21
+hydrogen_G4DNAExcitation	20
+hydrogen_G4DNAIonisation	21
+hydrogen_G4DNAChargeIncrease	22
 
-alpha_G4DNAExcitation		22
-alpha_G4DNAIonisation		23
-alpha_G4DNAChargeDecrease	24
+alpha_G4DNAExcitation		23
+alpha_G4DNAIonisation		24
+alpha_G4DNAChargeDecrease	25
 
-alpha+_G4DNAExcitation		25
-alpha+_G4DNAIonisation		26
-alpha+_G4DNAChargeDecrease	27
-alpha+_G4DNAChargeIncrease	28
+alpha+_G4DNAExcitation		26
+alpha+_G4DNAIonisation		27
+alpha+_G4DNAChargeDecrease	28
+alpha+_G4DNAChargeIncrease	29
 
-helium_G4DNAExcitation		29
-helium_G4DNAIonisation		30
-helium_G4DNAChargeIncrease	31
+helium_G4DNAExcitation		30
+helium_G4DNAIonisation		31
+helium_G4DNAChargeIncrease	32
 
 ---------------------------------------------------------------------------
 

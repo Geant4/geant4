@@ -71,7 +71,6 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAIonisation")		flagProcess =13;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAAttachment")		flagProcess =14;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNAVibExcitation")	flagProcess =15;
- if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="e-_G4DNACapture")		flagProcess =16;
 
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="proton_G4DNAExcitation")	flagProcess =17;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="proton_G4DNAIonisation")	flagProcess =18;
