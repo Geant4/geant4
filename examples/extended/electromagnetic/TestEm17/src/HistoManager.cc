@@ -161,7 +161,7 @@ void HistoManager::SetHisto(G4int ih,
                   "log10(Etransfert/Emu) hPair",                     //6
                   "log10(Etransfert/Emu) hBrems",                    //7
                   "dummy",                                           //8
-                  "dummy"                                            //9
+                  "dummy",                                           //9
                   "dummy",                                           //10
                   "log10(Etransfert/Emu) muIonization",              //11
                   "log10(Etransfert/Emu) muPair",                    //12

@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-04-13 V.Ivant (testem17-V09-06-05)
+- HistoManager - (A.Bogdanov) fixed typo
      
 22-03-13 mma (testem17-V09-06-04)
 - coding conventions
