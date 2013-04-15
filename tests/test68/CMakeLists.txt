@@ -14,7 +14,6 @@ GEANT4_EXECUTABLE( test68 test68.cc src/*.cc )
 
 #---Test definition-----------------------------------------
 GEANT4_ADD_TEST( test68-build BUILD test68 
-                              TIMEOUT 2000
                               LABELS Nightly Continuous ) 
 
 #message( ${CMAKE_CURRENT_SOURCE_DIR} " " ${CMAKE_CURRENT_BINARY_DIR} )
@@ -23,6 +22,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/start.rndm ${CMAKE_CURRENT_BINARY_DI
 
 GEANT4_ADD_TEST( test68-reproducibility 
 		 COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/reproducibility.py $<CONFIGURATION> 
+     TIMEOUT 2000
 		 DEPENDS test68-build
 		 LABELS Nightly Continuous
 		 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
