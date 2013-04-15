@@ -51,19 +51,20 @@
 //
 G4_DECLARE_XS_FACTORY(G4ChipsKaonZeroElasticXS);
 
-// Initialization of the
-G4ThreadLocal G4double* G4ChipsKaonZeroElasticXS::lastLEN=0;// Pointer to the lastArray of LowEn CS
-G4ThreadLocal G4double* G4ChipsKaonZeroElasticXS::lastHEN=0;// Pointer to the lastArray of HighEnCS
-G4ThreadLocal G4int     G4ChipsKaonZeroElasticXS::lastN=0;  // The last N of calculated nucleus
-G4ThreadLocal G4int     G4ChipsKaonZeroElasticXS::lastZ=0;  // The last Z of calculated nucleus
-G4ThreadLocal G4double  G4ChipsKaonZeroElasticXS::lastP=0.; // Last used in cross section Momentum
-G4ThreadLocal G4double  G4ChipsKaonZeroElasticXS::lastTH=0.;// Last threshold momentum
-G4ThreadLocal G4double  G4ChipsKaonZeroElasticXS::lastCS=0.;// Last value of the Cross Section
-G4ThreadLocal G4int     G4ChipsKaonZeroElasticXS::lastI=0;  // The last position in the DAMDB
 
 
 G4ChipsKaonZeroElasticXS::G4ChipsKaonZeroElasticXS():G4VCrossSectionDataSet(Default_Name())
 {
+    
+    lastLEN=0;// Pointer to the lastArray of LowEn CS
+    lastHEN=0;// Pointer to the lastArray of HighEnCS
+    lastN=0;  // The last N of calculated nucleus
+    lastZ=0;  // The last Z of calculated nucleus
+    lastP=0.; // Last used in cross section Momentum
+    lastTH=0.;// Last threshold momentum
+    lastCS=0.;// Last value of the Cross Section
+    lastI=0;  // The last position in the DAMDB
+
   theKMinusCS = (G4ChipsKaonMinusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusElasticXS::Default_Name());;
   theKPlusCS = (G4ChipsKaonPlusElasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusElasticXS::Default_Name());
 }
