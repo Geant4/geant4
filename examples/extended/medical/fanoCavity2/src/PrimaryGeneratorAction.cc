@@ -45,9 +45,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det,
-                                               HistoManager* histo)
-:fParticleGun(0), fDetector(det), fHistoManager(histo)                                               
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
+:fParticleGun(0), fDetector(det)
 {
   fParticleGun  = new G4ParticleGun(1);
   G4ParticleDefinition* particle
@@ -98,8 +97,9 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   
   //histograms
   //
-  fHistoManager->FillHisto(1,Zvertex);
-  fHistoManager->FillHisto(2,fParticleGun->GetParticleEnergy()); 
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+  analysisManager->FillH1(1,Zvertex);
+  analysisManager->FillH1(2,fParticleGun->GetParticleEnergy()); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

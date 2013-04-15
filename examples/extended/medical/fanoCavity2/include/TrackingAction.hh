@@ -38,14 +38,13 @@
 #include "globals.hh"
 
 class RunAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(RunAction*, HistoManager*);
+    TrackingAction(RunAction*);
    ~TrackingAction();
    
     virtual void  PreUserTrackingAction(const G4Track*);
@@ -54,9 +53,7 @@ class TrackingAction : public G4UserTrackingAction {
     void AddEdepCavity(G4double de) { fEdepCavity += de;};
         
   private:
-    RunAction*     fRunAction;
-    HistoManager*  fHistoManager;
-    
+    RunAction*     fRunAction;    
     G4double       fEdepCavity;            
 };
 

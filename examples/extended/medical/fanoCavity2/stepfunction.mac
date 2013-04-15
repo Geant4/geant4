@@ -12,8 +12,8 @@
 #
 /process/eLoss/StepFunction 1 10 um
 #
-/testem/histo/setFileName nothing.dr100
-/testem/histo/setHisto 9 100  0  5 mm	#step size in wall
+/analysis/setFileName nothing_dr100
+/analysis/h1/set 9 100  0  5 mm	#step size in wall
 #
 /testem/event/printModulo 200000
 #

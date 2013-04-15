@@ -44,7 +44,6 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -71,17 +70,16 @@ int main(int argc,char** argv) {
   DetectorConstruction* det;
   PhysicsList* phys;
   PrimaryGeneratorAction* kin;
-  HistoManager* histo   = new HistoManager();
      
   runManager->SetUserInitialization(det  = new DetectorConstruction);
   runManager->SetUserInitialization(phys = new PhysicsList(det));
-  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det,histo));
+  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
     
   //set user action classes  
-  RunAction* run        = new RunAction(det,kin,histo);
-  EventAction* event    = new EventAction(run,histo);
-  TrackingAction* track = new TrackingAction(run,histo);      
-  SteppingAction* step  = new SteppingAction(det,run,event,track,histo);
+  RunAction* run        = new RunAction(det,kin);
+  EventAction* event    = new EventAction(run);
+  TrackingAction* track = new TrackingAction(run);      
+  SteppingAction* step  = new SteppingAction(det,run,event,track);
   
   runManager->SetUserAction(run); 
   runManager->SetUserAction(event);
@@ -122,7 +120,6 @@ int main(int argc,char** argv) {
 
   //job termination
   //
-  delete histo;
   delete runManager;
 
   return 0;

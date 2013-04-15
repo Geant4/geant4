@@ -42,7 +42,6 @@ class DetectorConstruction;
 class RunAction;
 class EventAction;
 class TrackingAction;
-class HistoManager;
 
 class G4VPhysicalVolume;
 
@@ -51,8 +50,8 @@ class G4VPhysicalVolume;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*,RunAction*,EventAction*,
-                                        TrackingAction*,HistoManager*);
+    SteppingAction(DetectorConstruction*,RunAction*,
+                                         EventAction*,TrackingAction*);
    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
@@ -62,7 +61,6 @@ class SteppingAction : public G4UserSteppingAction
     RunAction*            fRunAction;
     EventAction*          fEventAction;
     TrackingAction*       fTrackAction;        
-    HistoManager*         fHistoManager;
     
     G4VPhysicalVolume*    fWall;
     G4VPhysicalVolume*    fCavity;

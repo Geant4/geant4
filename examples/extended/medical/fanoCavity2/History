@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+11-04-13 mma (fano2-V09-06-03)
+- HistoManager functionalities transfered to G4Analysis and its messenger.
+    - userAction classes and all macros affected
+         
 01-04-13 A. Dotti (fano2-V09-06-02)
 - new API for physics list for MT
      

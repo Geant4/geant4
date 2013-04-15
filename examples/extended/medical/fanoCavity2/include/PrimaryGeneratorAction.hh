@@ -40,14 +40,13 @@
 
 class G4Event;
 class DetectorConstruction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction(DetectorConstruction*, HistoManager*);    
+    PrimaryGeneratorAction(DetectorConstruction*);    
    ~PrimaryGeneratorAction();
 
   public:      
@@ -66,7 +65,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4double                   fCavityThickness;
     G4double                   fMassWallRatio;
     G4int                      fNwall, fNcavity;
-    HistoManager*              fHistoManager;     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
