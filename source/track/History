@@ -18,6 +18,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- April 10, 2013 G.Cosmo (track-V09-06-01)
+- Cleanup of automatic changes for MT in classes in G4Track.
+- Moved constructor and destructor of G4VelocityTable singleton to private.
+
 - April 4, 2013 V.Ivanchenko (track-V09-06-00)
 - G4ParticleChange - fixed bug #1451 - neutron do not change velocity 
     after elastic scattering; little clean up useful for MT

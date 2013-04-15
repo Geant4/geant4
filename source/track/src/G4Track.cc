@@ -47,7 +47,7 @@
 #include <iostream>
 #include <iomanip>
 
-G4ThreadLocal G4Allocator<G4Track> *aTrackAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4Track> *aTrackAllocator = 0;
 
 G4ThreadLocal G4VelocityTable*  G4Track::velTable=0;
 
@@ -73,7 +73,7 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     prev_velocity(0.0), prev_momentum(0.0),
     is_OpticalPhoton(false),
     useGivenVelocity(false)
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;    
+{
   static G4ThreadLocal G4bool isFirstTime = true;
   static G4ThreadLocal G4ParticleDefinition* fOpticalPhoton =0;
   if ( isFirstTime ) {
@@ -110,8 +110,9 @@ G4Track::G4Track()
     prev_velocity(0.0), prev_momentum(0.0),
     is_OpticalPhoton(false),
     useGivenVelocity(false)
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
+{
 }
+
 //////////////////
 G4Track::G4Track(const G4Track& right)
 //////////////////
@@ -132,14 +133,14 @@ G4Track::G4Track(const G4Track& right)
     prev_velocity(0.0), prev_momentum(0.0),
     is_OpticalPhoton(false),
     useGivenVelocity(false)
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
+{
   *this = right;
 }
 
 ///////////////////
 G4Track::~G4Track()
 ///////////////////
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
+{
    delete fpDynamicParticle;
    delete fpUserInformation;
 }
@@ -147,7 +148,7 @@ G4Track::~G4Track()
 //////////////////
 G4Track & G4Track::operator=(const G4Track &right)
 //////////////////
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
+{
   if (this != &right) {
    fPosition = right.fPosition;
    fGlobalTime = right.fGlobalTime;
@@ -202,14 +203,14 @@ G4Track & G4Track::operator=(const G4Track &right)
 ///////////////////
 void G4Track::CopyTrackInfo(const G4Track& right)
 //////////////////
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
+{
   *this = right;
 }
 
 ///////////////////
 G4double G4Track::CalculateVelocity() const
 ///////////////////
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; 
+{
   if (useGivenVelocity) return fVelocity;    
 
   G4double velocity = c_light ;
@@ -242,7 +243,7 @@ G4double G4Track::CalculateVelocity() const
 ///////////////////
 G4double G4Track::CalculateVelocityForOpticalPhoton() const
 ///////////////////
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; 
+{
     
   G4double velocity = c_light ;
   
@@ -288,7 +289,7 @@ G4double G4Track::CalculateVelocityForOpticalPhoton() const
 ///////////////////
 void G4Track::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int nbin)
 ///////////////////
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ;
+{
   G4VelocityTable::SetVelocityTableProperties(t_max, t_min, nbin);
   velTable = G4VelocityTable::GetVelocityTable();
 }
@@ -296,15 +297,14 @@ void G4Track::SetVelocityTableProperties(G4double t_max, G4double t_min, G4int n
 ///////////////////
 G4double G4Track::GetMaxTOfVelocityTable()
 ///////////////////
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return G4VelocityTable::GetMaxTOfVelocityTable();}
+{ return G4VelocityTable::GetMaxTOfVelocityTable(); }
 
 ///////////////////
 G4double G4Track::GetMinTOfVelocityTable() 
 ///////////////////
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return G4VelocityTable::GetMinTOfVelocityTable();}
+{ return G4VelocityTable::GetMinTOfVelocityTable(); }
 
 ///////////////////
 G4int    G4Track::GetNbinOfVelocityTable() 
 ///////////////////
-{ if (!aTrackAllocator_G4MT_TLS_) aTrackAllocator_G4MT_TLS_ = new G4Allocator<G4Track>  ; return G4VelocityTable::GetNbinOfVelocityTable();}
-
+{ return G4VelocityTable::GetNbinOfVelocityTable(); }

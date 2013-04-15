@@ -62,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4track
         G4VParticleChange.icc
         G4VelocityTable.hh
         G4VUserTrackInformation.hh
+        trkdefs.hh
     SOURCES
         G4FieldTrackUpdator.cc
         G4ParticleChange.cc

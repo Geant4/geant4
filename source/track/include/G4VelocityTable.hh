@@ -56,8 +56,6 @@ class G4VelocityTable
   typedef std::vector<G4double> G4VTDataVector;
 
  public:
-  G4VelocityTable();
-  ~G4VelocityTable();
 
   G4double Value(G4double theEnergy);
    // Get the cross-section/energy-loss value corresponding to the
@@ -74,6 +72,9 @@ class G4VelocityTable
   static G4int    GetNbinOfVelocityTable();
 
  private:
+
+  G4VelocityTable();
+  ~G4VelocityTable();
 
   size_t FindBinLocation(G4double theEnergy) const;
    // Find the bin# in which theEnergy belongs - pure virtual function

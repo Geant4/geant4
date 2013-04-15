@@ -49,8 +49,10 @@
 #ifndef G4Track_h
 #define G4Track_h 1
 
-#include "globals.hh"                 // Include from 'global'
 #include <cmath>                      // Include from 'system'
+
+#include "globals.hh"                 // Include from 'global'
+#include "trkdefs.hh"                 // Include DLL defs...
 #include "G4ThreeVector.hh"           // Include from 'geometry'
 #include "G4LogicalVolume.hh"         // Include from 'geometry'
 #include "G4VPhysicalVolume.hh"       // Include from 'geometry'
@@ -313,24 +315,8 @@ public: // With description
    G4bool          useGivenVelocity;
       // do not calclulate velocity and just use current fVelocity
       // if this flag is set
-      
-};  
+};
 
 #include "G4Track.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
