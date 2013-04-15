@@ -39,7 +39,6 @@
 
 class DetectorConstruction;
 class RunAction;
-class HistoManager;
 class StackingMessenger;
 class G4Material;
 class G4EmCalculator;
@@ -49,7 +48,7 @@ class G4EmCalculator;
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction(DetectorConstruction*,RunAction*,HistoManager* );
+    StackingAction(DetectorConstruction*,RunAction* );
    ~StackingAction();
    
     virtual void SetKillStatus(G4bool value) {fKillTrack = value;};
@@ -59,7 +58,6 @@ class StackingAction : public G4UserStackingAction
   private:
     DetectorConstruction* fDetector;  
     RunAction*            fRunAction;
-    HistoManager*         fHistoManager;
     StackingMessenger*    fStackMessenger;
 
     G4Material*           fMatWall;

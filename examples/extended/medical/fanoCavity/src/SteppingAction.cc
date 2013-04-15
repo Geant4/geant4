@@ -45,10 +45,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
-                               EventAction* EvAct,TrackingAction* TrAct,
-                               HistoManager* histo)
+                               EventAction* EvAct,TrackingAction* TrAct)
 :fDetector(det), fRunAction(RuAct), fEventAction(EvAct), fTrackAction(TrAct),
- fHistoManager(histo), fWall(0), fCavity(0)
+ fWall(0), fCavity(0)
 { 
   first = true;
   fTrackSegm = 0.;
@@ -70,7 +69,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    fCavity = fDetector->GetCavity();
    first  = false;
  }
- 
+
+ //histograms 
+ G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
  //get volume
  //
  G4StepPoint* point1 = step->GetPreStepPoint();
@@ -99,7 +101,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  G4double steplen = step->GetStepLength();
  if (volume == fWall) {fRunAction->StepInWall  (steplen); id = 9;}
  else                {fRunAction->StepInCavity(steplen); id = 10;}
- fHistoManager->FillHisto(id,steplen);
+ analysisManager->FillH1(id,steplen);
  
  //last step before hitting the cavity
  //
@@ -119,16 +121,16 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  if (point1->GetStepStatus() == fGeomBoundary) {
    fTrackSegm = 0.;
    G4ThreeVector vertex = step->GetTrack()->GetVertexPosition();
-   fHistoManager->FillHisto(4,vertex.z());          
+   analysisManager->FillH1(4,vertex.z());          
    fRunAction->FlowInCavity(0,ekin1);
-   fHistoManager->FillHisto(5,ekin1);
+   analysisManager->FillH1(5,ekin1);
    if (steplen>0.) {    
      G4ThreeVector directionOut = 
               (point2->GetPosition() - point1->GetPosition()).unit();
      G4ThreeVector normal = point1->GetTouchableHandle()->GetSolid()
                             ->SurfaceNormal(point1->GetPosition());
-     fHistoManager->FillHisto(6,std::acos(-fDirectionIn*normal));
-     fHistoManager->FillHisto(7,std::acos(-directionOut*normal));
+     analysisManager->FillH1(6,std::acos(-fDirectionIn*normal));
+     analysisManager->FillH1(7,std::acos(-directionOut*normal));
    }                   
  }
   
@@ -138,7 +140,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  fTrackSegm += steplen;
  if (ekin2 <= 0.) {
    fRunAction->AddTrakCavity(fTrackSegm);
-   fHistoManager->FillHisto(8,fTrackSegm);      
+   analysisManager->FillH1(8,fTrackSegm);      
  } 
  
  //exit cavity
@@ -146,7 +148,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  if (point2->GetStepStatus() == fGeomBoundary) {
    fRunAction->FlowInCavity(1,ekin2);
    fRunAction->AddTrakCavity(fTrackSegm);
-   fHistoManager->FillHisto(8,fTrackSegm);      
+   analysisManager->FillH1(8,fTrackSegm);      
  }
 }
 

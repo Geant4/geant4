@@ -41,9 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run, HistoManager* histo)
-:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fHistoManager(histo),
- fEventMessenger(0)
+EventAction::EventAction(RunAction* run)
+:fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fEventMessenger(0)
 {
   fEventMessenger = new EventActionMessenger(this);
 }

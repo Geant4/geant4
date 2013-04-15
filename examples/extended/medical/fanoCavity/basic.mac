@@ -8,8 +8,8 @@
 /process/inactivate msc
 /process/eLoss/fluct false
 #
-/testem/histo/setFileName nothing
-/testem/histo/setHisto 9 100  0  1 mm	#step size in wall
+/analysis/setFileName nothing
+/analysis/h1/set 9 100  0  1 mm	#step size in wall
 #
 /testem/event/printModulo 10000
 #
