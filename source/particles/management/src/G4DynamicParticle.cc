@@ -288,11 +288,11 @@ void G4DynamicParticle::SetDefinition(const G4ParticleDefinition * aParticleDefi
   if (thePreAssignedDecayProducts != 0) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cerr << " G4DynamicParticle::SetDefinition()::"
+      G4cout << " G4DynamicParticle::SetDefinition()::"
              << "!!! Pre-assigned decay products is attached !!!! " << G4endl;
-      G4cerr << "!!! New Definition is " << aParticleDefinition->GetParticleName() 
+      G4cout << "!!! New Definition is " << aParticleDefinition->GetParticleName() 
 	     << " !!! " << G4endl;
-      G4cerr << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl;
+      G4cout << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl;
     }
 #endif
     delete thePreAssignedDecayProducts;

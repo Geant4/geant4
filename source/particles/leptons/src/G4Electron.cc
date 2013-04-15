@@ -79,7 +79,7 @@ G4Electron* G4Electron::Definition()
     // Bohr Magnetron
    G4double muB =  -0.5*eplus*hbar_Planck/(electron_mass_c2/c_squared) ;
    
-   anInstance->SetPDGMagneticMoment( muB * 2.* 1.0011596521859 );
+   anInstance->SetPDGMagneticMoment( muB * 1.00115965218076 );
 
   }
   theInstance = reinterpret_cast<G4Electron*>(anInstance);

@@ -159,7 +159,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   if (currentState == G4State_PreInit){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
-      G4cerr << "G4IonTable::CreateIon() : can not create ion of  " 
+      G4cout << "G4IonTable::CreateIon() : can not create ion of  " 
              << " Z =" << Z << "  A = " << A 
              << "  because the current state is PreInit !!" <<   G4endl;
     }
@@ -174,7 +174,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A,
   if ( name(0) == '?') {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::CreateIon() : can not create ions " 
+      G4cout << "G4IonTable::CreateIon() : can not create ions " 
              << " Z =" << Z << "  A = " << A <<  G4endl;
     }
 #endif
@@ -261,7 +261,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
   if (currentState == G4State_PreInit){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
-      G4cerr << "G4IonTable::CreateIon() : can not create ion of  " 
+      G4cout << "G4IonTable::CreateIon() : can not create ion of  " 
              << " Z =" << Z << "  A = " << A <<  " L = " <<L 
              << " because the current state is PreInit !!" <<   G4endl;
     }
@@ -276,7 +276,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
   if ( name(L) == '?') {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::CreateIon() : can not create ions " 
+      G4cout << "G4IonTable::CreateIon() : can not create ions " 
              << " Z =" << Z << "  A = " << A << "  L = " << L <<  G4endl;
     }
 #endif
@@ -287,7 +287,8 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L,
   G4DecayTable* decayTable =0;
   G4bool stable = true;
   G4double mu = 0.0;
-  G4double mass =  GetNucleusMass(Z, A, L)+ E;
+  const G4double EnergyUnit = 0.1 * keV;
+  G4double mass =  GetNucleusMass(Z, A, L)+ ((int)(E/EnergyUnit+0.5))*EnergyUnit;
   G4double charge =  G4double(Z)*eplus;
  
   G4int encoding = GetNucleusEncoding(Z,A,L,E,J);
@@ -358,7 +359,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int encoding)
   if (!GetNucleusByEncoding(encoding,Z,A,L,E,J) ){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::GetIon() : illegal encoding" 
+      G4cout << "G4IonTable::GetIon() : illegal encoding" 
              << " CODE:" << encoding << G4endl;
     }
 #endif
@@ -376,7 +377,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E, G4int J)
   if ( (A<1) || (Z<=0) || (J<0) || (E<0.0) || (A>999) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::GetIon() : illegal atomic number/mass" 
+      G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" 
              << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
@@ -402,7 +403,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int L, G4double E, 
   if (A < 2 || Z < 0 || Z > A-L || L>A || A>999 ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::GetIon() : illegal atomic number/mass" 
+      G4cout << "G4IonTable::GetIon() : illegal atomic number/mass" 
              << " Z =" << Z << "  A = " << A << " L = " << L 
 	     <<"  E = " << E/keV << G4endl;
     }
@@ -411,7 +412,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int L, G4double E, 
   } else if( A==2 ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::GetIon() : No boud state for " 
+      G4cout << "G4IonTable::GetIon() : No boud state for " 
              << " Z =" << Z << "  A = " << A << " L = " << L 
 	     <<  "  E = " << E/keV << G4endl;
     }
@@ -433,12 +434,10 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int L, G4double E, 
 ////////////////////
 G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
 {
-  const G4double EnergyTorelance = 0.1 * keV;
-
   if ( (A<1) || (Z<=0) || (J<0) || (E<0.0) || (A>999) ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " 
+      G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " 
              << " Z =" << Z << "  A = " << A <<  "  E = " << E/keV << G4endl;
     }
 #endif
@@ -453,14 +452,14 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
 
   // -- loop over all particles in Ion table
   G4int encoding=GetNucleusEncoding(Z, A, 0);
+  G4String name = GetIonName(Z, A, E);
   G4IonList::iterator i = fIonList->find(encoding);
   for( ;i != fIonList->end() ; i++) {
     ion = i->second;
     if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
 
-     // excitation level
-    G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-    if ( ( std::fabs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
+    // check  name
+    if (ion->GetParticleName() == name) {
       isFound = true;
       break;
     }
@@ -479,12 +478,10 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
 {
   if (L==0) return FindIon(Z,A,E,J);
   
-  const G4double EnergyTorelance = 0.1 * keV;
-
   if (A < 2 || Z < 0 || Z > A-L || L>A || A>999 ) {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " 
+      G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " 
              << " Z =" << Z << "  A = " << A << " L = " << L 
 	     <<"  E = " << E/keV << G4endl;
     }    
@@ -500,16 +497,15 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
 
   // -- loop over all particles in Ion table
   G4int encoding=GetNucleusEncoding(Z, A, L);
+  G4String name = GetIonName(Z, A, E);
   G4IonList::iterator i = fIonList->find(encoding);
   for( ;i != fIonList->end() ; i++) {
     ion = i->second;
     if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
     if(  ion->GetQuarkContent(3) != L) break;
 
-     // excitation level
-    G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-
-    if ( ( std::fabs(E - anExcitaionEnergy ) < EnergyTorelance ) ) {
+    // check  name
+    if (ion->GetParticleName() == name) {
       isFound = true;
       break;
     }
@@ -543,7 +539,7 @@ G4int G4IonTable::GetNucleusEncoding(G4int Z, G4int A, G4double E, G4int )
   G4int encoding = 1000000000;
   encoding += Z * 10000;
   encoding += A *10;
-  if (E>0.0) encoding += 1;
+  if (E>0.0) encoding += 1;  //isomer level
   
   return encoding;
 }
@@ -826,7 +822,7 @@ G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A, G4int L) const
   if ( (A<1)  || (Z<0) || (L<0) ){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
-      G4cerr << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " 
+      G4cout << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " 
              << " Z =" << Z << "  A = " << A  << G4endl;
     }
 #endif
@@ -936,7 +932,7 @@ void G4IonTable::Remove(const G4ParticleDefinition* particle)
   } else {
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>1) {
-      G4cerr << "G4IonTable::Remove :" << particle->GetParticleName() 
+      G4cout << "G4IonTable::Remove :" << particle->GetParticleName() 
              << " is not ions" << G4endl; 
     }
 #endif
@@ -1108,7 +1104,7 @@ G4ParticleDefinition* G4IonTable::GetParticle(G4int index) const
   } 
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1){
-    G4cerr << " G4IonTable::GetParticle"
+    G4cout << " G4IonTable::GetParticle"
            << " invalid index (=" << index << ")" 
 	   << " entries = " << Entries() << G4endl;
   }

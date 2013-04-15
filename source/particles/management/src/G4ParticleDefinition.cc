@@ -152,8 +152,8 @@ G4ParticleDefinition::G4ParticleDefinition(
    if (this->FillQuarkContents() != thePDGEncoding) {
 #ifdef G4VERBOSE
      if (verboseLevel>0) {
-       // Using G4cerr expecting that it is available in construction of static objects 
-       G4cerr << "Particle " << aName << " has a strange PDGEncoding " <<G4endl;
+       // Using G4cout expecting that it is available in construction of static objects 
+       G4cout << "Particle " << aName << " has a strange PDGEncoding " <<G4endl;
      }
 #endif
      G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
@@ -167,7 +167,7 @@ G4ParticleDefinition::G4ParticleDefinition(
    if ( !fShortLivedFlag && (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
 #ifdef G4VERBOSE
      if (GetVerboseLevel()>0) {
-       G4cerr << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  " 
+       G4cout << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  " 
               << aName << G4endl;
      }
 #endif
@@ -283,7 +283,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
 		  "Inconsistent charge against PDG code ");
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
-	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
+	  G4cout << "G4ParticleDefinition::FillQuarkContents  : "
 	         << " illegal charge (" << thePDGCharge/eplus
 	         << " PDG code=" << thePDGEncoding <<G4endl;
 	}
@@ -297,7 +297,7 @@ G4int G4ParticleDefinition::FillQuarkContents()
 		  "Inconsistent spin against PDG code ");
 #ifdef G4VERBOSE
 	if (verboseLevel>0) {
-	  G4cerr << "G4ParticleDefinition::FillQuarkContents  : "
+	  G4cout << "G4ParticleDefinition::FillQuarkContents  : "
 	         << " illegal SPIN (" << thePDGiSpin << "/2"
 	         << " PDG code=" << thePDGEncoding <<G4endl;
 	}
@@ -375,11 +375,27 @@ void G4ParticleDefinition::SetApplyCutsFlag(G4bool flg)
   { fApplyCutsFlag = flg; }
   else
   {
-    G4cerr
+    G4cout
      << "G4ParticleDefinition::SetApplyCutsFlag() for " << theParticleName
      << G4endl;
-    G4cerr
+    G4cout
      << "becomes obsolete. Production threshold is applied only for "
      << "gamma, e- ,e+ and proton." << G4endl;
   }
 }
+
+G4double G4ParticleDefinition::CalculateAnomaly()  const
+{
+  G4Exception( "G4ParticleDefintion::G4ParticleDefintion",
+               "PART114", JustWarning, 
+               "CalculateAnomaly() method will be removed in next release");
+  
+  // gives the anomaly of magnetic moment for spin 1/2 particles 
+  if (thePDGiSpin==1) {
+    G4double muB = 0.5*CLHEP::eplus*CLHEP::hbar_Planck/(thePDGMass/CLHEP::c_squared);
+    return 0.5*std::fabs(thePDGMagneticMoment/muB - 2.*thePDGCharge/CLHEP::eplus);   
+  } else {
+    return 0.0;
+  }
+}
+

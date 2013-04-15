@@ -16,8 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-- 2. Apr. 2013 A. Dotti (partciles-V09-06-13)
-- Merging with particled-V09-06-08
+
+- 10. Apr. 2013 Hisaya Kurashige (particles-V09-06-16)
+- remove G4Exceptions which added in G4ParticleTable
+  (it is not problem.)
+
+- 9. Apr. 2013 Hisaya Kurashige (particles-V09-06-15)
+- Merged developents from 09 to 12
+- remove G4cerr 
+- Modify G4IonTable::FindIon to remove EnergyTorelance
+
+- 4. Apr. 2013 A. Ribon (particles-V09-06-14)
+- Reproducibility fix in G4IonTable: re-use an already created ion
+  only if the excitation energy is the same (no tolerance).
+
+- 2. Apr. 2013 A. Dotti (particles-V09-06-13)
+- Merging with particles-V09-06-08
+(lost modification from 09 to 12)
 
 - 2. Apr. 2013 Hisay Kurashige (particles-V09-06-12)
 - Fix bug of using ProcessManager in G4ParticleDefinition

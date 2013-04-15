@@ -226,7 +226,7 @@ void G4VDecayChannel::ClearDaughtersName()
     if (numberOfDaughters>0) {
 #ifdef G4VERBOSE
       if (verboseLevel>1) {
-	G4cerr << "G4VDecayChannel::ClearDaughtersName "
+	G4cout << "G4VDecayChannel::ClearDaughtersName "
 	       << " for " << *parent_name << G4endl;
       }
 #endif
@@ -265,7 +265,7 @@ void G4VDecayChannel::SetDaughter(G4int anIndex,
   if (numberOfDaughters<=0) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cerr << "G4VDecayChannel::SetDaughter: "
+      G4cout << "G4VDecayChannel::SetDaughter: "
              << "Number of daughters is not defined" << G4endl;
     }
 #endif
@@ -285,7 +285,7 @@ void G4VDecayChannel::SetDaughter(G4int anIndex,
   if ( (anIndex<0) || (anIndex>=numberOfDaughters) ) {
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cerr << "G4VDecayChannel::SetDaughter"
+      G4cout << "G4VDecayChannel::SetDaughter"
              << "index out of range " << anIndex << G4endl;
     }
 #endif
@@ -331,7 +331,7 @@ void G4VDecayChannel::FillDaughters()
   if ((numberOfDaughters <=0) || (daughters_name == 0) ){
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cerr << "G4VDecayChannel::FillDaughters   "
+      G4cout << "G4VDecayChannel::FillDaughters   "
              << "[ " << G4MT_parent->GetParticleName() << " ]"
              << "numberOfDaughters is not defined yet";
     }
@@ -352,7 +352,7 @@ void G4VDecayChannel::FillDaughters()
       // daughter name is not defined
 #ifdef G4VERBOSE
       if (verboseLevel>0) {
-	G4cerr << "G4VDecayChannel::FillDaughters  "
+	G4cout << "G4VDecayChannel::FillDaughters  "
 	       << "[ " << G4MT_parent->GetParticleName() << " ]"
 	       << index << "-th daughter is not defined yet" << G4endl;
       }
@@ -368,11 +368,11 @@ void G4VDecayChannel::FillDaughters()
       // can not find the daughter particle
 #ifdef G4VERBOSE
       if (verboseLevel>0) {
-	G4cerr << "G4VDecayChannel::FillDaughters  "
+	G4cout << "G4VDecayChannel::FillDaughters  "
 	        << "[ " << G4MT_parent->GetParticleName() << " ]"
                << index << ":" << *daughters_name[index]
 	       << " is not defined !!" << G4endl;
-        G4cerr << " The BR of this decay mode is set to zero " << G4endl;
+        G4cout << " The BR of this decay mode is set to zero " << G4endl;
       }
 #endif
       SetBR(0.0);
@@ -395,14 +395,14 @@ void G4VDecayChannel::FillDaughters()
    // !!! illegal mass  !!!
 #ifdef G4VERBOSE
    if (GetVerboseLevel()>0) {
-     G4cerr << "G4VDecayChannel::FillDaughters "
+     G4cout << "G4VDecayChannel::FillDaughters "
             << "[ " << G4MT_parent->GetParticleName() << " ]"
             << "    Energy/Momentum conserevation breaks " <<G4endl;
      if (GetVerboseLevel()>1) {
-       G4cerr << "    parent:" << *parent_name
+       G4cout << "    parent:" << *parent_name
               << " mass:" << parentmass/GeV << "[GeV/c/c]" <<G4endl;
        for (index=0; index < numberOfDaughters; index++){
-	 G4cerr << "     daughter " << index << ":" << *daughters_name[index]
+	 G4cout << "     daughter " << index << ":" << *daughters_name[index]
 	        << " mass:" << G4MT_daughters[index]->GetPDGMass()/GeV
   	        << "[GeV/c/c]" <<G4endl;
        }
@@ -419,7 +419,7 @@ void G4VDecayChannel::FillParent()
     // parent name is not defined
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cerr << "G4VDecayChannel::FillParent   "
+      G4cout << "G4VDecayChannel::FillParent   "
              << ": parent name is not defined !!" << G4endl;
     }
 #endif
@@ -434,7 +434,7 @@ void G4VDecayChannel::FillParent()
     // parent particle does not exist
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
-      G4cerr << "G4VDecayChannel::FillParent   "
+      G4cout << "G4VDecayChannel::FillParent   "
              << *parent_name << " does not exist !!" << G4endl;
     }
 #endif
