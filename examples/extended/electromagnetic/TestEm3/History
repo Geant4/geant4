@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-04-13 I.Hrivnacova (testem3-V09-06-05)
+- Removed ExG4HbookAnalysisManager and related files and updated CMake/GNUmake
+  files to use it from extended/common          
+     
 01-04-13 A.Dotti (testem3-V09-06-02,testem3-V09-06-03,testem3-V09-06-04)
 - New G4VUserPhysicsList interface 
      
