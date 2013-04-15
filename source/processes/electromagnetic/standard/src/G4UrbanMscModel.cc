@@ -65,6 +65,7 @@
 #include "G4ParticleChangeForMSC.hh"
 
 #include "G4Poisson.hh"
+#include "G4Pow.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,21 +170,21 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
                                    G4double AtomicNumber,G4double,
 				   G4double, G4double)
 {
-  static const G4double sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
+  static const G4double sigmafactor =
+                         twopi*classic_electr_radius*classic_electr_radius;
   static const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
                             Bohr_radius*Bohr_radius/(hbarc*hbarc);
   static const G4double epsmin = 1.e-4 , epsmax = 1.e10;
 
-  static const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38., 47.,
+  static const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38.,47.,
 				     50., 56., 64., 74., 79., 82. };
 
-  static const G4double Tdat[22] = { 
-                              100*eV,  200*eV,  400*eV,  700*eV,
-                               1*keV,   2*keV,   4*keV,   7*keV,
-			      10*keV,  20*keV,  40*keV,  70*keV,
-                             100*keV, 200*keV, 400*keV, 700*keV,
-                               1*MeV,   2*MeV,   4*MeV,   7*MeV,
-			      10*MeV,  20*MeV};
+  static const G4double Tdat[22] = { 100*eV,  200*eV,  400*eV,  700*eV,
+				     1*keV,   2*keV,   4*keV,   7*keV,
+				     10*keV,  20*keV,  40*keV,  70*keV,
+				     100*keV, 200*keV, 400*keV, 700*keV,
+				     1*MeV,   2*MeV,   4*MeV,   7*MeV,
+				     10*MeV,  20*MeV};
 
   // corr. factors for e-/e+ lambda for T <= Tlim
   static const G4double celectron[15][22] =
@@ -282,10 +283,10 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
 
   //data/corrections for T > Tlim  
   static const G4double Tlim = 10.*MeV;
-  static G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
-    ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
+  static const G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
+                      ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
   static const G4double bg2lim   = Tlim*(Tlim+2.*electron_mass_c2)/
-    (electron_mass_c2*electron_mass_c2);
+                      (electron_mass_c2*electron_mass_c2);
 
   static const G4double sig0[15] = {
     0.2672*barn,  0.5922*barn, 2.653*barn,  6.235*barn,
@@ -295,12 +296,13 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
 		      		       
   static const G4double hecorr[15] = {
     120.70, 117.50, 105.00, 92.92, 79.23,  74.510,  68.29,
-    57.39,  41.97,  36.14, 24.53, 10.21,  -7.855, -16.84, -22.30};
+    57.39,  41.97,  36.14, 24.53, 10.21,  -7.855, -16.84,
+    -22.30};
 
   G4double sigma;
   SetParticle(part);
 
-  Z23 = pow(AtomicNumber,2./3.);
+  Z23 = G4Pow::GetInstance()->Z23(G4lrint(AtomicNumber));
 
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy
@@ -617,8 +619,24 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
       //lower limit for tlimit
       if(tlimit < tlimitmin) tlimit = tlimitmin;
-      
-      if(tPathLength > tlimit) tPathLength = tlimit;
+
+      if(firstStep || stepStatus == fGeomBoundary)
+      {
+        G4double temptlimit = tlimit;
+        if(temptlimit > tlimitmin)
+        {
+          do {
+            temptlimit = G4RandGauss::shoot(tlimit,0.3*tlimit);
+             } while ((temptlimit < tlimitmin) ||
+                      (temptlimit > 2.*tlimit-tlimitmin));
+        }
+        else
+          temptlimit = tlimitmin;
+
+        if(tPathLength > temptlimit) tPathLength = temptlimit;
+      }
+      else
+        if(tPathLength > tlimit) tPathLength = tlimit;
 
     }
   
@@ -631,8 +649,25 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 	  else                        tlimit = facrange*lambda0;
 
 	  if(tlimit < tlimitmin) tlimit = tlimitmin;
-	  if(tPathLength > tlimit) tPathLength = tlimit;
-	}
+        }
+
+      if(firstStep || stepStatus == fGeomBoundary)
+      {
+        G4double temptlimit = tlimit;
+        if(temptlimit > tlimitmin)
+        {
+          do {
+            temptlimit = G4RandGauss::shoot(tlimit,0.3*tlimit);
+             } while ((temptlimit < tlimitmin) ||
+                      (temptlimit > 2.*tlimit-tlimitmin));
+        }
+        else
+          temptlimit = tlimitmin;
+
+        if(tPathLength > temptlimit) tPathLength = temptlimit;
+      }
+      else
+        if(tPathLength > tlimit) tPathLength = tlimit;
     }
   //G4cout << "tPathLength= " << tPathLength 
   //	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
@@ -698,34 +733,6 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   }
 
   zPathLength = zmean;
-
-  //  sample z
-  if(samplez)
-  {
-    static const G4double  ztmax = 0.999 ;
-    G4double zt = zmean/tPathLength ;
-
-    if (tPathLength > stepmin && zt < ztmax)              
-    {
-      G4double u,cz1;
-      if(zt >= third)
-      {
-        G4double cz = 0.5*(3.*zt-1.)/(1.-zt) ;
-        cz1 = 1.+cz ;
-        G4double u0 = cz/cz1 ;
-        G4double grej ;
-        do {
-            u = exp(log(G4UniformRand())/cz1) ;
-            grej = exp(cz*log(u/u0))*(1.-u)/(1.-u0) ;
-           } while (grej < G4UniformRand()) ;
-      }
-      else
-      {
-        u = 2.*zt*G4UniformRand();
-      }
-      zPathLength = tPathLength*u ;
-    }
-  }
 
   if(zPathLength > lambda0) { zPathLength = lambda0; }
   //G4cout<< "zPathLength= "<< zPathLength<< " lambda1= " << lambda0 << G4endl;

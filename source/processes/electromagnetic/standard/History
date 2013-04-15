@@ -18,6 +18,14 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+04 April 13: V.Ivanchenko (emstand-V09-06-23)
+- G4UrbanMscModel - use G4Pow in compute transport cross section
+
+09 April 13: L.Urban 
+- G4UrbanMscModel - random first step/ random first step in volume 
+   instead of sampling z (the geam. step length). After this modification
+   there in no zero step length for eIoni,eBrem and annihilation in flight 
+
 04 April 13: V.Ivanchenko (emstand-V09-06-22)
 - G4eplusAnnihilation - use G4VParticleChange interface to add
     secondary track for more clean weight update; cleanup headers
