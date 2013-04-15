@@ -39,10 +39,12 @@
 #ifndef G4TrajectoryContainer_h
 #define G4TrajectoryContainer_h 1
 
+#include <vector>
+
 #include "globals.hh"
+#include "evtdefs.hh"
 #include "G4VTrajectory.hh"
 #include "G4Allocator.hh"
-#include <vector>
 
 typedef std::vector<G4VTrajectory*> TrajectoryVector;
 
@@ -80,23 +82,18 @@ class G4TrajectoryContainer
     TrajectoryVector* vect;
 };
 
-#if defined G4EVENT_ALLOC_EXPORT
-  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator_G4MT_TLS_;
-#else
-  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator_G4MT_TLS_;
-#endif
+extern G4EVENT_DLL G4ThreadLocal G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator;
 
 inline void* G4TrajectoryContainer::operator new(size_t)
-{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;  
-  void* aTrajectoryContainer;
-  aTrajectoryContainer = (void*)aTrajectoryContainerAllocator.MallocSingle();
-  return aTrajectoryContainer;
+{
+  if (!aTrajectoryContainerAllocator)
+    aTrajectoryContainerAllocator = new G4Allocator<G4TrajectoryContainer>;
+  return (void*)aTrajectoryContainerAllocator->MallocSingle();
 }
 
 inline void G4TrajectoryContainer::operator delete(void* aTrajectoryContainer)
-{  ;;;   if (!aTrajectoryContainerAllocator_G4MT_TLS_) aTrajectoryContainerAllocator_G4MT_TLS_ = new G4Allocator<G4TrajectoryContainer>  ; G4Allocator<G4TrajectoryContainer> &aTrajectoryContainerAllocator = *aTrajectoryContainerAllocator_G4MT_TLS_;  ;;;  
-  aTrajectoryContainerAllocator.FreeSingle((G4TrajectoryContainer*)aTrajectoryContainer);
+{
+  aTrajectoryContainerAllocator->FreeSingle((G4TrajectoryContainer*)aTrajectoryContainer);
 }
-
 
 #endif

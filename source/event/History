@@ -17,13 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr. 10th, 2013, G.Cosmo (event-V09-06-03)
+- Cleanup of automatic changes for MT in classes: G4Event, G4HEPEvtParticle,
+  G4TrajectoryContainer, G4AdjointPosOnPhysVolGenerator and G4EventManager.
+
 Feb. 26th, 2013, L.Desorgher (event-V09-06-02)
 - Remove unused variables in G4AdjointPosOnPhysVolGenerator,
-     G4AdjointPosOnPhysVolGenerator, G4GeneralParticleSource, G4SPSEneDistribution, and 
-     G4SPSRandomGenerator
+  G4AdjointPosOnPhysVolGenerator, G4GeneralParticleSource,
+  G4SPSEneDistribution, and G4SPSRandomGenerator.
 
 December 4th, 2012, M.Asai (event-V09-06-01)
-- Delete undeleted UI command in the destructor of G4StackMessenger. Addressing to bug report #1380.
+- Delete undeleted UI command in the destructor of G4StackMessenger.
+  Addressing problem report #1380.
 
 December 3rd, 2012, M.Asai (event-V09-06-00)
 - Remove obsolete classes G4CellScorer and G4CellScorerStore.

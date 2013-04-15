@@ -26,27 +26,16 @@
 //
 // $Id$
 //
-
-#ifndef G4HEPEvtInterface_h
-#define G4HEPEvtInterface_h 1
-
-#include <fstream>
-#include <vector>
-#include "globals.hh"
-#include "G4VPrimaryGenerator.hh"
-#include "G4HEPEvtParticle.hh"
-
-class G4PrimaryVertex;
-class G4Event;
-
+//
 // class description:
 //
-//  This is a concrete class of G4VPrimaryGenerator.
-//  This class object reads an ASCII file which contains particles generated
+// This is a concrete class of G4VPrimaryGenerator.
+// This class object reads an ASCII file which contains particles generated
 // by a physics generator which supports /HEPEVT/ common block.
 // 
-//  The format of ASCII file must be equivalent to the follwing sample fortran
-// code.
+// The format of ASCII file must be equivalent to the following sample
+// Fortran code:
+//
 //***********************************************************
 //      SUBROUTINE HEP2G4
 //*
@@ -69,9 +58,22 @@ class G4Event;
 //      RETURN
 //      END
 //
-//  The position and time of the primary interaction must be set by the corresponding
-// set methods of G4VPrimaryGenerator base class, otherwise zero will be set.
-//
+// The position and time of the primary interaction must be set by the
+// corresponding set methods of G4VPrimaryGenerator base class, otherwise
+// zero will be set.
+
+#ifndef G4HEPEvtInterface_h
+#define G4HEPEvtInterface_h 1
+
+#include <fstream>
+#include <vector>
+
+#include "globals.hh"
+#include "G4VPrimaryGenerator.hh"
+#include "G4HEPEvtParticle.hh"
+
+class G4PrimaryVertex;
+class G4Event;
 
 class G4HEPEvtInterface:public G4VPrimaryGenerator
 {
@@ -92,4 +94,3 @@ class G4HEPEvtInterface:public G4VPrimaryGenerator
 };
 
 #endif
-

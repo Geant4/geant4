@@ -48,9 +48,9 @@ G4ThreadLocal G4AdjointPosOnPhysVolGenerator* G4AdjointPosOnPhysVolGenerator::th
 //
 G4AdjointPosOnPhysVolGenerator* G4AdjointPosOnPhysVolGenerator::GetInstance()
 {
-  if(theInstance == 0) {
-    static G4ThreadLocal G4AdjointPosOnPhysVolGenerator *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4AdjointPosOnPhysVolGenerator  ;  G4AdjointPosOnPhysVolGenerator &manager = *manager_G4MT_TLS_;
-    theInstance = &manager;
+  if(!theInstance)
+  {
+    theInstance = new  G4AdjointPosOnPhysVolGenerator;
   }
   return theInstance;
 }

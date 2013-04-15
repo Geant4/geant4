@@ -84,6 +84,7 @@ GEANT4_DEFINE_MODULE(NAME G4event
         G4VUserEventInformation.hh
         eventgendefs.hh
         evmandefs.hh
+        evtdefs.hh
         trajectoryControl.hh
     SOURCES
         G4AdjointPosOnPhysVolGenerator.cc

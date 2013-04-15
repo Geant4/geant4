@@ -37,7 +37,7 @@
 #include "G4VDigiCollection.hh"
 #include "G4ios.hh"
 
-G4ThreadLocal G4Allocator<G4Event> *anEventAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4Event> *anEventAllocator = 0;
 
 G4Event::G4Event()
 :eventID(0),
@@ -46,7 +46,8 @@ G4Event::G4Event()
  randomNumberStatus(0),validRandomNumberStatus(false),
  randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
  keepTheEvent(false)
-{ if (!anEventAllocator_G4MT_TLS_) anEventAllocator_G4MT_TLS_ = new G4Allocator<G4Event>  ;;}
+{
+}
 
 G4Event::G4Event(G4int evID)
 :eventID(evID),
@@ -55,10 +56,11 @@ G4Event::G4Event(G4int evID)
  randomNumberStatus(0),validRandomNumberStatus(false),
  randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
  keepTheEvent(false)
-{ if (!anEventAllocator_G4MT_TLS_) anEventAllocator_G4MT_TLS_ = new G4Allocator<G4Event>  ;;}
+{
+}
 
 G4Event::~G4Event()
-{ if (!anEventAllocator_G4MT_TLS_) anEventAllocator_G4MT_TLS_ = new G4Allocator<G4Event>  ; 
+{
   if(thePrimaryVertex) delete thePrimaryVertex;
   if(HC) delete HC;
   if(DC) delete DC;
@@ -73,22 +75,22 @@ G4Event::~G4Event()
 }
 
 G4int G4Event::operator==(const G4Event &right) const
-{ if (!anEventAllocator_G4MT_TLS_) anEventAllocator_G4MT_TLS_ = new G4Allocator<G4Event>  ;
+{
   return ( eventID == right.eventID );
 }
 
 G4int G4Event::operator!=(const G4Event &right) const
-{ if (!anEventAllocator_G4MT_TLS_) anEventAllocator_G4MT_TLS_ = new G4Allocator<G4Event>  ;
+{
   return ( eventID != right.eventID );
 }
 
 void G4Event::Print() const
-{ if (!anEventAllocator_G4MT_TLS_) anEventAllocator_G4MT_TLS_ = new G4Allocator<G4Event>  ;
+{
   G4cout << "G4Event " << eventID << G4endl;
 }
 
 void G4Event::Draw() const
-{ if (!anEventAllocator_G4MT_TLS_) anEventAllocator_G4MT_TLS_ = new G4Allocator<G4Event>  ;
+{
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(!pVVisManager) return;
 
@@ -119,4 +121,3 @@ void G4Event::Draw() const
     }
   }
 }
-

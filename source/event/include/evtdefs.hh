@@ -24,30 +24,28 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: $
+//
+//
+// Defines for Windows DLLs import/export
 //
 
-#include "G4TrajectoryContainer.hh"
+#ifndef EVTDEFS_HH
+#define EVTDEFS_HH
 
-G4ThreadLocal G4Allocator<G4TrajectoryContainer> *aTrajectoryContainerAllocator = 0;
+#include "G4Types.hh"
 
-G4TrajectoryContainer::G4TrajectoryContainer()
-{
-  vect = new TrajectoryVector;
-}
+#ifdef WIN32
+  //
+  // Unique identifier for global module
+  //
+  #if defined G4EVENT_ALLOC_EXPORT
+    #define G4EVENT_DLL G4DLLEXPORT
+  #else
+    #define G4EVENT_DLL G4DLLIMPORT
+  #endif
+#else
+  #define G4EVENT_DLL
+#endif
 
-G4TrajectoryContainer::~G4TrajectoryContainer()
-{
-  clearAndDestroy();
-  delete vect;
-}
-
-G4int G4TrajectoryContainer::operator==(const G4TrajectoryContainer& right) const
-{ 
-  return (this==&right);
-}
-
-G4int G4TrajectoryContainer::operator!=(const G4TrajectoryContainer& right) const
-{
-  return (this!=&right);
-}
+#endif /* G4EVTDEFS_HH */

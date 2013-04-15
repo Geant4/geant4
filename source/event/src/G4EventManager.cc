@@ -338,7 +338,8 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 
 void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent)
 {
-  static G4ThreadLocal G4String *randStat_G4MT_TLS_ = 0 ; if (!randStat_G4MT_TLS_) randStat_G4MT_TLS_ = new  G4String  ;  G4String &randStat = *randStat_G4MT_TLS_;
+  static G4ThreadLocal G4String *randStat = 0;
+  if (!randStat) randStat = new G4String;
   trackIDCounter = 0;
   G4bool tempEvent = false;
   if(!anEvent)
@@ -350,7 +351,7 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent
   {
     std::ostringstream oss;
     CLHEP::HepRandom::saveFullState(oss);
-    anEvent->SetRandomNumberStatus(randStat=oss.str());
+    anEvent->SetRandomNumberStatus(*randStat=oss.str());
   }
   StackTracks(trackVector,false);
   DoProcessing(anEvent);
