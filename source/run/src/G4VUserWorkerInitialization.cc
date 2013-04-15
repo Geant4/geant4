@@ -46,8 +46,11 @@ G4Thread* G4VUserWorkerInitialization::CreateAndStartWorker(G4WorkerThread*)
 }
 #endif
 
+
+
 void* G4VUserWorkerInitialization::StartThread( void* context )
 {
+    
     //!!!!!!!!!!!!!!!!!!!!!!!!!!
     //!!!!!! IMPORTANT !!!!!!!!!
     //!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -64,18 +67,19 @@ void* G4VUserWorkerInitialization::StartThread( void* context )
     //wThreadContext is a G4ThreadLocal variable, so this will work!
     wThreadContext = (G4WorkerThread*)context;
     
+        
     //0- RNG Engine need to be initialized "cloning" the master one.
-    //Since the 
-    G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager();
+    //Since the
+    G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager(); 
     const CLHEP::HepRandomEngine* masterEngine = masterRM->getMasterRandomEngine();
     masterRM->GetUserWorkerInitialization()->SetupRNGEngine(masterEngine);
-    
     
     //Now initialize worker part of shared objects (geometry/physics)
     wThreadContext->BuildGeometryAndPhysicsVector();
     
     //1- Create a G4WorkerRunManager
     G4WorkerRunManager* wrm = new G4WorkerRunManager;
+        
     wrm->SetWorkerThread(wThreadContext);
     
     //2- Set the detector and physics list to the worker thread. Share with master
@@ -96,19 +100,16 @@ void* G4VUserWorkerInitialization::StartThread( void* context )
     std::vector<G4String> cmds = masterRM->GetCommandStack();
     G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance
     
-//    //TODO: TEMP, remove /control/execute, skipping first command
-//    std::vector<G4String>::const_iterator it = cmds.begin();
-//    ++it;
-//    for ( //std::vector<G4String>::const_iterator it = cmds.begin() 
     for ( std::vector<G4String>::const_iterator it = cmds.begin()
          ; it != cmds.end() ; ++it )
         {
+            std::cout<<"AAA"<<*it<<std::endl;
             uimgr->ApplyCommand(*it);
         }
     
     //TODO: when /run/beamOn is not passed, do it here!
     // wrm->BeamOn( .... );
-    
+    //wrm->BeamOn(1); //AND <-Simulate a second call to /run/beamOn
     //TODO: move this stuff away since it will be allowed to have always the same threads for more runs
     //in interactive mode
     //6- Ok, now the event loop is finished, called user defined stuff

@@ -88,8 +88,10 @@ G4PhysicsListHelper::~G4PhysicsListHelper()
 ////////////////////////////////////////////////////////
 G4PhysicsListHelper* G4PhysicsListHelper::GetPhysicsListHelper()  
 {
-  static G4ThreadLocal G4PhysicsListHelper *thePLHelper_G4MT_TLS_ = 0 ; if (!thePLHelper_G4MT_TLS_) thePLHelper_G4MT_TLS_ = new  G4PhysicsListHelper  ;  G4PhysicsListHelper &thePLHelper = *thePLHelper_G4MT_TLS_;
-  if (pPLHelper == 0) pPLHelper = &thePLHelper;
+  if (!pPLHelper)
+  {
+    pPLHelper = new G4PhysicsListHelper;
+  }
   return pPLHelper;
 }
 

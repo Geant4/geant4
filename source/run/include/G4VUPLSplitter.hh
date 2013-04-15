@@ -108,6 +108,7 @@ class G4VUPLSplitter
         {
             G4Exception("G4VUPLSplitter::NewSubInstances()",
                         "OutOfMemory", FatalException, "Cannot malloc space!");
+            return;
         }
         //The newly created objects need to be initialized
         for (G4int i = originaltotalspace; i < slavetotalspace; i++)
@@ -137,6 +138,7 @@ class G4VUPLSplitter
         {
             G4Exception("G4VUPLSplitter::SlaveCopySubInstanceArray()",
                         "OutOfMemory", FatalException, "Cannot malloc space!");
+            return;
         }
         //Now just copy from master thread (sharedOffset)
         memcpy(offset,sharedOffset,totalspace*sizeof(T));

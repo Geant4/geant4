@@ -23,41 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
+// Author: Ivana Hrivnacova, 10/04/2013  (ivana@ipno.in2p3.fr)
+//
+// A default worker initialization using G4VUserApplication
 
-#include "G4UserRunAction.hh"
-#include "G4ParticleTable.hh"
-#include "globals.hh"
+#ifndef G4WorkerInitialization_hh
+#define G4WorkerInitialization_hh
 
+#include "G4VUserWorkerInitialization.hh"
 
-G4UserRunAction::G4UserRunAction()
-:isMaster(true)
-{
- if(!(G4ParticleTable::GetParticleTable()->GetReadiness()))
- {
-   G4String msg;
-   msg =  " You are instantiating G4UserRunAction BEFORE your G4VUserPhysicsList is\n";
-   msg += "instantiated and assigned to G4RunManager.\n";
-   msg += " Such an instantiation is prohibited by Geant4 version 8.0. To fix this problem,\n";
-   msg += "please make sure that your main() instantiates G4VUserPhysicsList AND\n";
-   msg += "set it to G4RunManager before instantiating other user action classes\n";
-   msg += "such as G4UserRunAction.";
-   G4Exception("G4UserRunAction::G4UserRunAction()",
-              "Run0041",FatalException,msg);
- }
-}
+class G4VUserApplication;
 
-G4UserRunAction::~G4UserRunAction()
-{;}
+class G4WorkerInitialization : public G4VUserWorkerInitialization {
 
-G4Run* G4UserRunAction::GenerateRun()
-{ return 0; }
+  public: // with description
+    G4WorkerInitialization(G4VUserApplication* userApplication);
+    virtual ~G4WorkerInitialization();
 
-void G4UserRunAction::BeginOfRunAction(const G4Run*)
-{;}
+    virtual void WorkerStart() const;
+    //    Default implementation of the instantiation of user actions
+    //on worker with use of G4VUserApplication interface.
 
-void G4UserRunAction::EndOfRunAction(const G4Run*)
-{;}
+  private:
+    G4VUserApplication* fUserApplication;
+};
+
+#endif //G4WorkerInitialization_hh
 

@@ -41,6 +41,7 @@
 #include "Randomize.hh"
 #include "G4Run.hh"
 #include "G4RunMessenger.hh"
+#include "G4VUserApplication.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VUserWorkerInitialization.hh"
@@ -75,7 +76,8 @@ G4RunManager* G4RunManager::GetRunManager()
 { return fRunManager; }
 
 G4RunManager::G4RunManager()
-:userDetector(0),physicsList(0),userWorkerInitialization(0),
+:userApplication(0),
+ userDetector(0),physicsList(0),userWorkerInitialization(0),
  userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
  userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
  geometryInitialized(false),physicsInitialized(false),
@@ -110,7 +112,7 @@ G4RunManager::G4RunManager()
 }
 
 G4RunManager::G4RunManager(G4bool workerRM)
-:userDetector(0),physicsList(0),
+:userApplication(0),userDetector(0),physicsList(0),
 userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
 userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
 geometryInitialized(false),physicsInitialized(false),
@@ -163,7 +165,7 @@ numberOfEventProcessed(0)
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //The constructor is used by worker threads.
 G4RunManager::G4RunManager(int isSlaveFlag)
-  :userDetector(0),physicsList(0),
+  :userApplication(0),userDetector(0),physicsList(0),
    userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
    userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
    geometryInitialized(false),physicsInitialized(false),
@@ -252,6 +254,12 @@ G4RunManager::~G4RunManager()
     delete userPrimaryGeneratorAction;
     userPrimaryGeneratorAction = 0;
     if(verboseLevel>1) G4cout << "UserPrimaryGenerator deleted." << G4endl;
+  }
+  if(userApplication)
+  {
+    delete userApplication;
+    userApplication = 0;
+    if(verboseLevel>1) G4cout << "UserApplication deleted." << G4endl;
   }
 
   delete kernel;
@@ -845,6 +853,36 @@ void G4RunManager::ReOptimize(G4LogicalVolume* pLog)
            << " - system time : " << stat.GetSysTime() << G4endl;
   }
 }
+
+void G4RunManager::SetUserApplication(G4VUserApplication* userAppl)
+{ 
+  userApplication = userAppl; 
+  
+  // Set user initialization for mandatory classes
+  SetUserInitialization(userApplication->CreateDetectorConstruction());
+  SetUserInitialization(userApplication->CreatePhysicsList());
+  SetUserAction(userApplication->CreatePrimaryGeneratorAction());
+
+  // Set user initialization for user action classes
+  G4UserRunAction* runAction = userApplication->CreateRunAction();
+  if ( runAction) SetUserAction(runAction);
+  
+  G4UserEventAction* eventAction = userApplication->CreateEventAction();
+  if (eventAction) SetUserAction(eventAction);
+  
+  G4UserTrackingAction* trackingAction = userApplication->CreateTrackingAction();
+  if (trackingAction) SetUserAction(trackingAction);
+  
+  G4UserSteppingAction* steppingAction = userApplication->CreateSteppingAction();
+  if (steppingAction) SetUserAction(steppingAction);
+  
+  G4UserStackingAction* stackingAction = userApplication->CreateStackingAction();
+  if (stackingAction) SetUserAction(stackingAction);
+  
+  // perform additional setting (if needed)
+  userApplication->Initialize();
+}
+
 
 void G4RunManager::SetUserInitialization(G4VUserDetectorConstruction* userInit)
 { userDetector = userInit; }

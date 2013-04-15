@@ -71,10 +71,11 @@ public:
 protected:
     //Initialize the seeds list, if derived class does not implement this method
     //A default generation will be used (nevents*2 random seeds)
-    virtual void InitializeSeeds( G4int /*nevts*/) { };
+    //Return true if initialization is done.
+    virtual G4bool InitializeSeeds( G4int /*nevts*/) { return false; };
     //Adds one seed to the list of seeds
-    void AddOneSeed( long seed ) { seeds[seedsnum++] = seed; }
-    void InitializeSeedsQueue( G4int ns ) { seeds = new long[ns]; }
+    void AddOneSeed( long seed );
+    void InitializeSeedsQueue( G4int ns );
     virtual void PrepareCommandsStack();
 public:
     std::vector<G4String> GetCommandStack();
@@ -99,7 +100,33 @@ private:
     //List of UI commands for workers.
     CLHEP::HepRandomEngine* masterRNGEngine;
     //Pointer to the mastet thread random engine
+    void WaitForReadyWorkers();
+    //Master thread barrier:
+    //Call this function to block master thread and
+    //wait workers to be ready to process work.
+    //This function will return only when all
+    //workers are ready to perform event loop.
+    void WaitForEndEventLoopWorkers();
+    //Master thread barrier:
+    //Call this function to block master thread and
+    //wait workers have finished current event loop.
+    //This function will return only when all
+    //workers have finished processing events for this run.
 public:
+    void ThisWorkerReady();
+    //Worker threads barrier:
+    //This method should be called by each
+    //worker when ready to start thread event-loop
+    //This method will return only when all workers
+    //are ready.
+    //static void ThisWorkerFinishWork();
+    //Worker threads barrier:
+    //This static method should be called by each
+    //worker when finish to process events
+    void ThisWorkerEndEventLoop();
+    //Worker threads barrier:
+    //This method should be called by each
+    //worker when worker event loop is terminated.
     typedef std::map<G4int,G4VPhysicalVolume*> masterWorlds_t;
     static G4ScoringManager* GetMasterScoringManager() { return masterScM; }
     static masterWorlds_t& GetMasterWorlds() { return masterWorlds; }
@@ -118,7 +145,8 @@ public: // with description
     // Returns the singleton instance of the run manager common to all threads implementing the master behavior
     static G4RunManagerKernel* GetMasterRunManagerKernel();
     // Returns the singleton instance of the run manager kernel common to all threads
-    
+
+    virtual void SetUserApplication(G4VUserApplication* userAppl);
     virtual void SetUserInitialization(G4VUserWorkerInitialization* userInit);
     virtual void SetUserInitialization(G4VUserPhysicsList* userPL);
     virtual void SetUserInitialization(G4VUserDetectorConstruction* userDC);

@@ -36,6 +36,7 @@
 #include "G4WorkerThread.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4VUserWorkerInitialization.hh"
+#include "G4UserRunAction.hh"
 
 G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(true) {
     //This constructor should never be called in non-multithreaded mode
@@ -77,7 +78,6 @@ void G4WorkerRunManager::InitializeGeometry() {
     //G4RunManager* masterRM = G4MTRunManager::GetMasterRunManager();
     G4RunManagerKernel* masterKernel = G4MTRunManager::GetMasterRunManagerKernel();
     G4VPhysicalVolume* worldVol = masterKernel->GetCurrentWorld();
-    //?????? G4RunManager::GetRunManager()->GetSomething...
     //Step3:, Call a new "SlaveDefineWorldVolume( pointer from 2-, false); //TODO: Change name
     kernel->SlaveDefineWorldVolume(worldVol,false);
     
@@ -91,7 +91,9 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     //This is the same as in the sequential case, just the for-loop indexes are
     //different
     InitializeEventLoop(n_event,macroFile,n_select);
-    
+    //Signal this thread can start event loop.
+    //Note this will return only when all threads reach this point
+    G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
     // Event loop
     for ( G4int i_event = workerContext->GetThreadId(); i_event<n_event; i_event += workerContext->GetNumberThreads() )
     {
@@ -99,6 +101,9 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
         TerminateOneEvent();
         if(runAborted) break;
     }
+    //Signal this thread has finished envent-loop.
+    //Note this will return only whan all threads reach this point
+    G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
     
     TerminateEventLoop();
 
@@ -194,6 +199,12 @@ void G4WorkerRunManager::SetUserInitialization(G4VUserPhysicsList* pl)
     G4RunManager::SetUserInitialization(pl);
 }
 
+void G4WorkerRunManager::SetUserAction(G4UserRunAction* userAction)
+{
+    userRunAction = userAction;
+    userRunAction->SetMaster(false);
+}
+
 void G4WorkerRunManager::SetupDefaultRNGEngine()
 {
     const CLHEP::HepRandomEngine* mrnge = G4MTRunManager::GetMasterRunManager()->getMasterRandomEngine();
@@ -202,20 +213,29 @@ void G4WorkerRunManager::SetupDefaultRNGEngine()
     uwi->SetupRNGEngine(mrnge);
 }
 
-//G4int G4WorkerRunManager::NewCommands(const std::vector<G4String>& newCmds, G4String& currCmd)
-//{
-    //TODO: Check state.....
-    //Is it really needed? or return code of ApplyCommand already checks the state?
-    //Step1- Get TLS UI magr
-//    G4UImanager* mgr = G4UImanager::GetUIpointer();
-    //Step2- Loop on all received commands and do what is needed
-    //G4int retCode = 0;
-    //for ( std::vector<G4String>::const_iterator it = newCmds.begin() ;
-    //     it != newCmds.end(); ++it )
-    //{
-     //   currCmd = *it;
-     //   retCode = mgr->ApplyCommand(*it);
-     //   if ( retCode != 0 ) return retCode;
-    //}
-    //return retCode;
-//}
+
+//Forward calls (avoid GCC compilation warnings)
+void G4WorkerRunManager::SetUserAction(G4UserEventAction* ua)
+{
+    G4RunManager::SetUserAction(ua);
+}
+
+void G4WorkerRunManager::SetUserAction(G4VUserPrimaryGeneratorAction* ua)
+{
+    G4RunManager::SetUserAction(ua);
+}
+
+void G4WorkerRunManager::SetUserAction(G4UserStackingAction* ua)
+{
+    G4RunManager::SetUserAction(ua);
+}
+
+void G4WorkerRunManager::SetUserAction(G4UserTrackingAction* ua)
+{
+    G4RunManager::SetUserAction(ua);
+}
+
+void G4WorkerRunManager::SetUserAction(G4UserSteppingAction* ua)
+{
+    G4RunManager::SetUserAction(ua);
+}

@@ -81,6 +81,12 @@ private:
 public:
     virtual void SetUserInitialization(G4VUserWorkerInitialization* userInit);
     virtual void SetUserInitialization(G4VUserPhysicsList* userInit);
-    virtual void SetUserInitialization(G4VUserDetectorConstruction*);
+    virtual void SetUserInitialization(G4VUserDetectorConstruction* userInit);
+    virtual void SetUserAction(G4UserRunAction* userAction);
+    virtual void SetUserAction(G4VUserPrimaryGeneratorAction* userAction);
+    virtual void SetUserAction(G4UserEventAction* userAction);
+    virtual void SetUserAction(G4UserStackingAction* userAction);
+    virtual void SetUserAction(G4UserTrackingAction* userAction);
+    virtual void SetUserAction(G4UserSteppingAction* userAction);
 };
 #endif //G4WorkerRunManager_h

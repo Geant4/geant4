@@ -689,8 +689,8 @@ void G4RunManagerKernel::UpdateRegion()
 }
 
 void G4RunManagerKernel::BuildPhysicsTables()
-{ 
-  if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified()
+{
+  if( G4ProductionCutsTable::GetProductionCutsTable()->IsModified()
   || physicsNeedsToBeReBuilt)
   {
     physicsList->BuildPhysicsTable();
