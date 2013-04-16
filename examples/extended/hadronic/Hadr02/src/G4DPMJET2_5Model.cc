@@ -131,6 +131,9 @@ G4DPMJET2_5Model::G4DPMJET2_5Model () : G4HadronicInteraction("DPMJET2_5")
 //
   SetMinEnergy(5.0*GeV);
   SetMaxEnergy(1000.0*TeV);
+
+  SetEnergyMomentumCheckLevels(100*perCent, 1*TeV);
+
 //
 //
 // Initialise the DPMJET model - this effectively does what the DPMJET
@@ -158,6 +161,14 @@ G4DPMJET2_5Model::G4DPMJET2_5Model () : G4HadronicInteraction("DPMJET2_5")
 //
 //
 }
+
+const std::pair<G4double, G4double> 
+G4DPMJET2_5Model::GetFatalEnergyCheckLevels() const
+{
+  // default level of Check
+  return std::pair<G4double, G4double>(100.*perCent, 500 * GeV);
+}
+
 /////////////////////////////////////////////////////////////////////////////////
 //
 // Constructor with DPMJET-II.5 initialisation type

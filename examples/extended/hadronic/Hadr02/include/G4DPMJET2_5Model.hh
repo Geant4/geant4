@@ -110,6 +110,8 @@ public:
     
   virtual G4HadFinalState *ApplyYourself(const G4HadProjectile &, 
 					 G4Nucleus &);
+
+  virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
     
   inline G4GlaubAADataSetHandler *GetGlauberDataSetHandler ();
 
