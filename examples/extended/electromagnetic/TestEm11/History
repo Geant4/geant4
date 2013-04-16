@@ -14,7 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-01-04-13 A. Dotti (testem11-V09-06-03,testem11-V09-06-04,testem11-V09-06-05,testem11-V09-06-06)
+
+15-04-13 I.Hrivnacova (testem11-V09-06-07)
+- Removed ExG4HbookAnalysisManager and related files and updated CMake/GNUmake
+  files to use it from extended/common 
+      
+01-04-13 A. Dotti (testem11-V09-06-03,testem11-V09-06-04,testem11-V09-06-05,
+                   testem11-V09-06-06)
 - Substitute theParticleIterator -> aParticleIterator (needed for MT)
      
 21-03-13 mma (testem11-V09-06-02)
