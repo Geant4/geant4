@@ -711,7 +711,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
                                const G4ThreeVector& v   ) const
 {
   G4double snxt = kInfinity ;      // snxt = default return value
-  const G4double dRmax = 100*std::min(fRmax1,fRmax2);
+  const G4double dRmax = 50*(fRmax1+fRmax2);// 100*(Rmax1+Rmax2)/2.
   static const G4double halfCarTolerance=kCarTolerance*0.5;
   static const G4double halfRadTolerance=kRadTolerance*0.5;
 
@@ -886,6 +886,7 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
             if ( c <= 0 ) // second >=0
             {
               sd = -b + std::sqrt(d) ;
+              if((sd<0) & (sd>-halfRadTolerance)) sd=0;
             }
             else  // both negative, travel away
             {
