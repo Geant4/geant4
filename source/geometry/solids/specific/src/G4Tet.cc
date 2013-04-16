@@ -419,12 +419,53 @@ G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
   G4double r142=std::fabs(p.dot(fNormal142)-fCdotN142);
   G4double r234=std::fabs(p.dot(fNormal234)-fCdotN234);
 
-  if( (r123<=r134) && (r123<=r142) && (r123<=r234) )  { return fNormal123; }
-  else if ( (r134<=r142) && (r134<=r234) )  { return fNormal134; }
-  else if (r142 <= r234)  { return fNormal142; }
-  return fNormal234;
-}
+  static const G4double delta = 0.5*kCarTolerance;
+  G4ThreeVector sumnorm(0., 0., 0.);
+  G4int noSurfaces=0; 
 
+  if (r123 <= delta)         
+  {
+     noSurfaces ++; 
+     sumnorm= fNormal123; 
+  }
+
+  if (r134 <= delta)    
+  {
+     noSurfaces ++; 
+     sumnorm += fNormal134; 
+  }
+ 
+  if (r142 <= delta)    
+  {
+     noSurfaces ++; 
+     sumnorm += fNormal142;
+  }
+  if (r234 <= delta)    
+  {
+     noSurfaces ++; 
+     sumnorm += fNormal234;
+  }
+  
+  if( noSurfaces > 0 )
+  { 
+     if( noSurfaces == 1 )
+     { 
+       return sumnorm; 
+     }
+     else
+     {
+       return sumnorm.unit();
+     }
+  }
+  else // Approximative Surface Normal
+  {
+
+    if( (r123<=r134) && (r123<=r142) && (r123<=r234) ) { return fNormal123; }
+    else if ( (r134<=r142) && (r134<=r234) )           { return fNormal134; }
+    else if (r142 <= r234)                             { return fNormal142; }
+    return fNormal234;
+  }
+}
 ///////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance to box from an outside point
@@ -580,7 +621,7 @@ G4double G4Tet::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
       else if (tt==t2)  { normal=fNormal134; }
       else if (tt==t3)  { normal=fNormal142; }
       else if (tt==t4)  { normal=fNormal234; }
-      n=&normal;
+      *n=normal;
       if(validNorm) { *validNorm=true; }
     }
 

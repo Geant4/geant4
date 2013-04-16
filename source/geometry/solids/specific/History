@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-Apr-2013  T.Nikitina (geom-specific-V09-06-10)
+- Fix in calculation of normal in G4Tet::DistanceToOut(p,v,..) and
+  SurfaceNormal(p).
+- Fix in G4Polycone::GetPointOnCone() for cases of shape with decreasing Z.
+  Fixes cases of false report for overlaps detection. Problem report #1462.
+  Added check with exception in constructor for polycone with rInner > rOuter
+  for the same Z.
+
 18-Mar-2013  G.Cosmo (geom-specific-V09-06-09)
 - G4TessellatedSolid: fixed problem with navigation in tessellated solids
   with concave surfaces. Addresses problem report #1456.
