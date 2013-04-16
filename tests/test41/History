@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-11-12  V.Ivanchenko (test41-V09-06-01)
+- Added Xi2 analysis
+
 03-04-13  A.Dotti (test41-V09-06-00)
 - Porting to new G4VPhysicsConstructor API needed for G4MT
 
