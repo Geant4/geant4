@@ -19,3 +19,5 @@ mv Sandia.out TaAl_${1}.log
 ${2} ${3}AlAuAl.in >>& ${1}.out
 mv Sandia.out AlAuAl_${1}.log
 
+${2} ${3}Beryllium.in >>& ${1}.out
+mv Sandia.out Be_${1}.log

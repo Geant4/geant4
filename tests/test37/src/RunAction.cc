@@ -58,10 +58,13 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   // get particle energy 
   G4double energy   = primary->GetParticleGun()->GetParticleEnergy();
+  G4cout << "### Run " << aRun->GetRunID() 
+	 << " start; E(MeV)= " << energy/MeV
+	 << "   diff= " << energy - 1.033*MeV 
+	 << G4endl;
 
   // get name of material 1, 2 & 3
   matName1     = detector->GetAbsorber1Material()->GetName();
@@ -81,12 +84,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     { 
       // MFP1, MFP2 &  MFP3 values were taken from SANDIA Report
       density1 =16.654*g/cm3; 
-      if(energy==1.033*MeV)      MFP1 = 0.788*g/cm2  ; 
-      else if(energy==1.000*MeV) MFP1 = 0.763*g/cm2  ;
-      else if(energy==0.521*MeV) MFP1 = 0.339*g/cm2 ;
-      else if(energy==0.500*MeV) MFP1 = 0.325*g/cm2  ;
-      else if(energy==0.314*MeV) MFP1 = 0.167*g/cm2  ;
-      else if(energy==0.300*MeV) MFP1 = 0.160*g/cm2  ;
+      if(fabs(energy-1.033*MeV) < 0.001) MFP1 = 0.788*g/cm2  ; 
+      else if(fabs(energy-1.000*MeV)<0.001) MFP1 = 0.763*g/cm2  ;
+      else if(fabs(energy-0.521*MeV)<0.001) MFP1 = 0.339*g/cm2 ;
+      else if(fabs(energy-0.500*MeV)<0.001) MFP1 = 0.325*g/cm2  ;
+      else if(fabs(energy-0.314*MeV)<0.001) MFP1 = 0.167*g/cm2  ;
+      else if(fabs(energy-0.300*MeV)<0.001) MFP1 = 0.160*g/cm2  ;
       else G4cout << "WARNING! for 1st material " 
 		  << matName1 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
@@ -94,7 +97,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   else if (matName1=="G4_Mo") // Molybdenum 
     { 
       density1 =10.22*g/cm3; 
-      if(energy==0.5*MeV)      MFP1 = 0.281*g/cm2  ;
+      if(fabs(energy-0.5*MeV)<0.001)      MFP1 = 0.281*g/cm2  ;
+      else if(fabs(energy-1.000*MeV)<0.001) MFP1 = 0.673*g/cm2  ;
+      else if(fabs(energy-0.314*MeV)<0.001) MFP1 = 0.137*g/cm2 ;
+      else if(fabs(energy-0.109*MeV)<0.001) MFP1 = 0.0246*g/cm2 ;
       else G4cout << "WARNING! for 1st material " 
 		  << matName1 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
@@ -102,10 +108,24 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   else if(matName1=="G4_Al")//Aluminium
     { 
       density1 = 2.699*g/cm3;
-      if(energy==1.033*MeV)      MFP1 = 0.569*g/cm2  ;
-      else if(energy==1.000*MeV) MFP1 = 0.551*g/cm2  ;
-      else if(energy==0.521*MeV) MFP1 = 0.234*g/cm2  ;
-      else if(energy==0.314*MeV) MFP1 = 0.113*g/cm2 ;
+      if(fabs(energy-1.033*MeV)<0.001)      MFP1 = 0.569*g/cm2  ;
+      else if(fabs(energy-1.000*MeV)<0.001) MFP1 = 0.551*g/cm2  ;
+      else if(fabs(energy-0.521*MeV)<0.001) MFP1 = 0.234*g/cm2  ;
+      else if(fabs(energy-0.314*MeV)<0.001) MFP1 = 0.113*g/cm2 ;
+      else if(fabs(energy-0.109*MeV)<0.001) MFP1 = 0.0203*g/cm2 ;
+      else if(fabs(energy-0.058*MeV)<0.001) MFP1 = 0.00663*g/cm2 ;
+      else G4cout << "WARNING! for 1st material " 
+		  << matName1 << " and E(MeV)= " << energy
+		  << " R0 is not defined!" << G4endl; 
+    }
+  else if(matName1=="G4_Be")//Beryllium
+    { 
+      density1 = 1.848*g/cm3;
+      if(fabs(energy-1.033*MeV)<0.001)      MFP1 = 0.554*g/cm2  ;
+      else if(fabs(energy-0.521*MeV)<0.001) MFP1 = 0.224*g/cm2  ;
+      else if(fabs(energy-0.314*MeV)<0.001) MFP1 = 0.107*g/cm2 ;
+      else if(fabs(energy-0.109*MeV)<0.001) MFP1 = 0.0189*g/cm2 ;
+      else if(fabs(energy-0.058*MeV)<0.001) MFP1 = 0.00604*g/cm2 ;
       else G4cout << "WARNING! for 1st material " 
 		  << matName1 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
@@ -113,7 +133,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   else if(matName1=="G4_Au")//Gold
     { 
       density1 = 19.32*g/cm3;
-      if(energy==1.000*MeV)      MFP1 = 0.772*g/cm2  ;
+      if(fabs(energy-1.000*MeV)<0.001)      MFP1 = 0.772*g/cm2  ;
       else G4cout << "WARNING! for 1st material " 
 		  << matName1 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
@@ -124,40 +144,40 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   if (matName2=="G4_Ta") // Tantalum 
     { 
       density2 =16.654*g/cm3; 
-      if(energy==1.033*MeV)      MFP2 = 0.788*g/cm2  ;
-      else if(energy==1.000*MeV) MFP2 = 0.763*g/cm2  ;
-      else if(energy==0.521*MeV) MFP2 = 0.339*g/cm2 ;
-      else if(energy==0.500*MeV) MFP2 = 0.325*g/cm2  ;
-      else if(energy==0.314*MeV) MFP2 = 0.167*g/cm2  ;
-      else if(energy==0.300*MeV) MFP2 = 0.160*g/cm2  ;
-      else G4cout << "WARNING! for 1st material " 
+      if(fabs(energy-1.033*MeV)<0.001)      MFP2 = 0.788*g/cm2  ;
+      else if(fabs(energy-1.000*MeV)<0.001) MFP2 = 0.763*g/cm2  ;
+      else if(fabs(energy-0.521*MeV)<0.001) MFP2 = 0.339*g/cm2 ;
+      else if(fabs(energy-0.500*MeV)<0.001) MFP2 = 0.325*g/cm2  ;
+      else if(fabs(energy-0.314*MeV)<0.001) MFP2 = 0.167*g/cm2  ;
+      else if(fabs(energy-0.300*MeV)<0.001) MFP2 = 0.160*g/cm2  ;
+      else G4cout << "WARNING! for 2d material " 
 		  << matName2 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
     }
   else if (matName2=="G4_Mo") // Molybdenum 
     { 
       density2 =10.22*g/cm3; 
-      if(energy==0.5*MeV)      MFP2 = 0.281*g/cm2  ;
-      else G4cout << "WARNING! for 1st material " 
+      if(fabs(energy-0.5*MeV)<0.001)      MFP2 = 0.281*g/cm2  ;
+      else G4cout << "WARNING! for 2d material " 
 		  << matName2 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
     }
   else if(matName2=="G4_Al")//Aluminium
     { 
       density2 = 2.699*g/cm3;
-      if(energy==1.033*MeV)      MFP2 = 0.569*g/cm2  ;
-      else if(energy==1.000*MeV) MFP2 = 0.551*g/cm2  ;
-      else if(energy==0.521*MeV) MFP2 = 0.234*g/cm2  ;
-      else if(energy==0.314*MeV) MFP2 = 0.113*g/cm2 ;
-      else G4cout << "WARNING! for 1st material " 
+      if(fabs(energy-1.033*MeV)<0.001)      MFP2 = 0.569*g/cm2  ;
+      else if(fabs(energy-1.000*MeV)<0.001) MFP2 = 0.551*g/cm2  ;
+      else if(fabs(energy-0.521*MeV)<0.001) MFP2 = 0.234*g/cm2  ;
+      else if(fabs(energy-0.314*MeV)<0.001) MFP2 = 0.113*g/cm2 ;
+      else G4cout << "WARNING! for 2nd material " 
 		  << matName2 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
     }
   else if(matName2=="G4_Au")//Gold
     { 
       density2 = 19.32*g/cm3;
-      if(energy==1.000*MeV)      MFP2 = 0.772*g/cm2  ;
-      else G4cout << "WARNING! for 1st material " 
+      if(fabs(energy-1.000*MeV)<0.001)      MFP2 = 0.772*g/cm2  ;
+      else G4cout << "WARNING! for 2d material " 
 		  << matName2 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
   }
@@ -166,40 +186,40 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   if (matName3=="G4_Ta") // Tantalum 
     { 
       density3 =16.654*g/cm3; 
-      if(energy==1.033*MeV)      MFP3 = 0.788*g/cm2  ;
-      else if(energy==1.000*MeV) MFP3 = 0.763*g/cm2  ;
-      else if(energy==0.521*MeV) MFP3 = 0.339*g/cm2 ;
-      else if(energy==0.500*MeV) MFP3 = 0.325*g/cm2  ;
-      else if(energy==0.314*MeV) MFP3 = 0.167*g/cm2  ;
-      else if(energy==0.300*MeV) MFP3 = 0.160*g/cm2  ;
-      else G4cout << "WARNING! for 1st material " 
+      if(fabs(energy-1.033*MeV)<0.001)      MFP3 = 0.788*g/cm2  ;
+      else if(fabs(energy-1.000*MeV)<0.001) MFP3 = 0.763*g/cm2  ;
+      else if(fabs(energy-0.521*MeV)<0.001) MFP3 = 0.339*g/cm2 ;
+      else if(fabs(energy-0.500*MeV)<0.001) MFP3 = 0.325*g/cm2  ;
+      else if(fabs(energy-0.314*MeV)<0.001) MFP3 = 0.167*g/cm2  ;
+      else if(fabs(energy-0.300*MeV)<0.001) MFP3 = 0.160*g/cm2  ;
+      else G4cout << "WARNING! for 3d material " 
 		  << matName3 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
     }
   else if (matName3=="G4_Mo") // Molybdenum 
     { 
       density3 =10.22*g/cm3; 
-      if(energy==0.5*MeV)      MFP3 = 0.281*g/cm2  ;
-      else G4cout << "WARNING! for 1st material " 
+      if(fabs(energy-0.5*MeV)<0.001)      MFP3 = 0.281*g/cm2  ;
+      else G4cout << "WARNING! for 3d material " 
 		  << matName3 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
     }
   else if(matName3=="G4_Al")//Aluminium
     { 
       density3 = 2.699*g/cm3;
-      if(energy==1.033*MeV)      MFP3 = 0.569*g/cm2  ;
-      else if(energy==1.000*MeV) MFP3 = 0.551*g/cm2  ;
-      else if(energy==0.521*MeV) MFP3 = 0.234*g/cm2  ;
-      else if(energy==0.314*MeV) MFP3 = 0.113*g/cm2 ;
-      else G4cout << "WARNING! for 1st material " 
+      if(fabs(energy-1.033*MeV)<0.001)      MFP3 = 0.569*g/cm2  ;
+      else if(fabs(energy-1.000*MeV)<0.001) MFP3 = 0.551*g/cm2  ;
+      else if(fabs(energy-0.521*MeV)<0.001) MFP3 = 0.234*g/cm2  ;
+      else if(fabs(energy-0.314*MeV)<0.001) MFP3 = 0.113*g/cm2 ;
+      else G4cout << "WARNING! for 3d material " 
 		  << matName3 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
     }
   else if(matName3=="G4_Au")//Gold
     { 
       density3 = 19.32*g/cm3;
-      if(energy==1.000*MeV)      MFP3 = 0.772*g/cm2  ;
-      else G4cout << "WARNING! for 1st material " 
+      if(fabs(energy-1.000*MeV)<0.001)      MFP3 = 0.772*g/cm2  ;
+      else G4cout << "WARNING! for 3d material " 
 		  << matName3 << " and E(MeV)= " << energy
 		  << " R0 is not defined!" << G4endl; 
     }

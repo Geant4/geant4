@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-04-13  V.Ivanchenko (test37-V09-06-01)
+- RunAction - use tolerance (1 keV) to select beam energy
+- macro files extended - Be target is added
+
 03-04-13  A.Dotti (test37-V09-06-00)
 - Porting to new G4VPhysicsConstructor API needed for G4MT
 

@@ -2,7 +2,9 @@
 /testem/det/setMat1 G4_Ta
 #/testem/det/setThick1 95.42752 um
 #/testem/det/setThick1 195.15 um
-/testem/det/setThick1  98 um
+#/testem/det/setThick1 203.6 um
+/testem/det/setThick1 458.1 um
+#/testem/det/setThick1  99.4 um
 /testem/det/setNbOfLayers1 100 
 
 /testem/phys/addPhysics  PHYSLIST
@@ -16,9 +18,9 @@
 
 /gun/particle e- 
 
-/gun/energy 0.5 MeV
+#/gun/energy 0.5 MeV
 #/gun/energy 0.3 MeV
-#/gun/energy 1.0 MeV
+/gun/energy 1.0 MeV
 
 # 0 degree
 /gun/direction 1.0  0.0  0.0 
