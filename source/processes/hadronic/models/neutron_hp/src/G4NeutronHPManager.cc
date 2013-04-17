@@ -29,6 +29,7 @@
 // 121031 First implementation done by T. Koi (SLAC/PPA)
 
 #include "G4NeutronHPManager.hh"
+#include "G4HadronicException.hh"
 
 G4ThreadLocal G4NeutronHPManager* G4NeutronHPManager::instance = NULL;
 
@@ -57,4 +58,64 @@ G4NeutronHPReactionWhiteBoard* G4NeutronHPManager::GetReactionWhiteBoard()
       RWB = new G4NeutronHPReactionWhiteBoard();
    }
    return RWB; 
+}
+#include "zlib.h"
+#include <fstream>
+void G4NeutronHPManager::GetDataStream( G4String filename , std::istringstream& iss ) 
+{
+   G4String* data=NULL;
+   G4String compfilename(filename);
+   compfilename += ".z";
+   std::ifstream* in = new std::ifstream ( compfilename , std::ios::binary | std::ios::ate );
+   if ( in->good() )
+   {
+// Use the compressed file 
+/* TK130416 Temporally disable reading zlibed files 
+      G4int file_size = in->tellg();
+      in->seekg( 0 , std::ios::beg );
+      Bytef* compdata = new Bytef[ file_size ];
+
+      while ( *in ) {
+         in->read( (char*)compdata , file_size );
+      }
+
+      uLongf complen = (uLongf) ( file_size*4 );
+      Bytef* uncompdata = new Bytef[complen];
+
+      while ( Z_OK != uncompress ( uncompdata , &complen , compdata , file_size ) ) {
+         //G4cout << "Too small, retry 2 times bigger size." << G4endl;
+         delete[] uncompdata;
+         complen *= 2;
+         uncompdata = new Bytef[complen];
+      }
+      delete [] compdata;
+      //                                 Now "complen" has uncomplessed size
+      data = new G4String ( (char*)uncompdata , (G4long)complen );
+      delete [] uncompdata;
+*/
+      throw G4HadronicException(__FILE__, __LINE__, "Capability of reading zlibed G4NEUTRONHPDATA library is deactivated, please use regular library.");
+   }
+   else {
+// Use regular text file 
+      std::ifstream thefData( filename , std::ios::in | std::ios::ate );
+      if ( thefData.good() ) {
+         G4int file_size = thefData.tellg();
+         thefData.seekg( 0 , std::ios::beg );
+         char* filedata = new char[ file_size ];
+         while ( thefData ) {
+            thefData.read( filedata , file_size );
+         }
+         thefData.close();
+         data = new G4String ( filedata , file_size );
+         delete [] filedata;
+      } else {
+// found no data file
+//                 set error bit to the stream   
+         iss.setstate( std::ios::badbit ); 
+      }
+   }
+   if (data != NULL) iss.str(*data);
+   //G4cout << iss.rdbuf()->in_avail() << G4endl;
+   in->close(); delete in;
+   delete data;
 }

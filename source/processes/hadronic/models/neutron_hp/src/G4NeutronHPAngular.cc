@@ -36,7 +36,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-void G4NeutronHPAngular::Init(std::ifstream & aDataFile)
+void G4NeutronHPAngular::Init(std::istream & aDataFile)
 {
 //  G4cout << "here we are entering the Angular Init"<<G4endl;
   aDataFile >> theAngularDistributionType >> targetMass;

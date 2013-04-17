@@ -44,6 +44,7 @@
 // 110430 add Reaction Q value and break up flag (MF3::QI and LR)
 //
 #include "G4NeutronHPInelasticCompFS.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
@@ -102,13 +103,15 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4String
   }
   //theBaseA = A;
   //theBaseZ = G4int(Z+.5);
-  std::ifstream theData(filename, std::ios::in);
-  if(!theData)
+   //std::ifstream theData(filename, std::ios::in);
+   std::istringstream theData(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
+  if(!theData) //"!" is a operator of ios
   {
     hasAnyData = false;
     hasFSData = false; 
     hasXsec = false;
-    theData.close();
+    //theData.close();
     return;
   }
   // here we go
@@ -177,7 +180,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4int M, G4String
       throw G4HadronicException(__FILE__, __LINE__, "Data-type unknown to G4NeutronHPInelasticCompFS");
     }
   }
-  theData.close();
+  //theData.close();
 }
 
 G4int G4NeutronHPInelasticCompFS::SelectExitChannel(G4double eKinetic)

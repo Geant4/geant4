@@ -50,7 +50,7 @@ class G4NeutronHPWattSpectrum : public G4VNeutronHPEDis
   {
   }
   
-  inline void Init(std::ifstream & aDataFile)
+  inline void Init(std::istream & aDataFile)
   {
     theFractionalProb.Init(aDataFile, CLHEP::eV);
     theApar.Init(aDataFile, CLHEP::eV);

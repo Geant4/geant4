@@ -55,6 +55,8 @@ class G4NeutronHPManager
       void OpenReactionWhiteBoard();
       void CloseReactionWhiteBoard(){delete RWB; RWB=NULL;};
 
+      void GetDataStream( G4String , std::istringstream& iss );
+
    private:
       G4NeutronHPReactionWhiteBoard* RWB;
 };

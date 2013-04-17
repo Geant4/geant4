@@ -131,13 +131,13 @@ public:
      delete [] thePhotonTransitionFraction;
   }
   
-  G4bool InitMean(std::ifstream & aDataFile);
+  G4bool InitMean(std::istream & aDataFile);
     
-  void InitAngular(std::ifstream & aDataFile);
+  void InitAngular(std::istream & aDataFile);
   
-  void InitEnergies(std::ifstream & aDataFile);
+  void InitEnergies(std::istream & aDataFile);
   
-  void InitPartials(std::ifstream & aDataFile);
+  void InitPartials(std::istream & aDataFile);
   
   G4ReactionProductVector * GetPhotons(G4double anEnergy);
   

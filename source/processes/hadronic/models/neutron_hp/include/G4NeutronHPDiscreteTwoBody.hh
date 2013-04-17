@@ -51,7 +51,7 @@ class G4NeutronHPDiscreteTwoBody : public G4VNeutronHPEnergyAngular
     if(theCoeff!=0) delete [] theCoeff;
   }
   
-  void Init(std::ifstream & aDataFile)
+  void Init(std::istream & aDataFile)
   {
     aDataFile >> nEnergy;
     theManager.Init(aDataFile);

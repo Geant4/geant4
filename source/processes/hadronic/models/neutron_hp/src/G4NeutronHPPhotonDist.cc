@@ -51,7 +51,7 @@
 #include "G4Electron.hh"
 #include "G4Poisson.hh"
 
-G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
+G4bool G4NeutronHPPhotonDist::InitMean(std::istream & aDataFile)
 {
 
   G4bool result = true;
@@ -118,7 +118,7 @@ G4bool G4NeutronHPPhotonDist::InitMean(std::ifstream & aDataFile)
   return result;
 }
 
-void G4NeutronHPPhotonDist::InitAngular(std::ifstream & aDataFile)
+void G4NeutronHPPhotonDist::InitAngular(std::istream & aDataFile)
 {
 
   G4int i, ii;
@@ -224,7 +224,7 @@ if ( repFlag == 2 ) G4cout << "G4NeutronHPPhotonDist: repFlag == 2 && isoFlag !=
 }
 
 
-void G4NeutronHPPhotonDist::InitEnergies(std::ifstream & aDataFile)
+void G4NeutronHPPhotonDist::InitEnergies(std::istream & aDataFile)
 {
   G4int i, energyDistributionsNeeded = 0;
   for (i=0; i<nDiscrete; i++)
@@ -249,7 +249,7 @@ void G4NeutronHPPhotonDist::InitEnergies(std::ifstream & aDataFile)
   }
 }
 
-void G4NeutronHPPhotonDist::InitPartials(std::ifstream & aDataFile)
+void G4NeutronHPPhotonDist::InitPartials(std::istream & aDataFile)
 {
 
   //G4cout << "G4NeutronHPPhotonDist::InitPartials " << G4endl;

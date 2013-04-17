@@ -59,7 +59,7 @@ class G4NeutronHPPhotonXSection
     if(theExDisFlag != 0) delete [] theExDisFlag;
   }
   
-  inline void Init(std::ifstream & aDataFile)
+  inline void Init(std::istream & aDataFile)
   {
     aDataFile  >> nChannels >> targetMass;
     if(nChannels!=1) 

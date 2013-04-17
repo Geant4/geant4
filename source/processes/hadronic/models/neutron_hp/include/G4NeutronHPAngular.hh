@@ -60,7 +60,7 @@ class G4NeutronHPAngular
       delete theProbArray;
    }
   
-  void Init(std::ifstream & aDataFile);
+  void Init(std::istream & aDataFile);
   
   void SampleAndUpdate(G4ReactionProduct & aNeutron);
     

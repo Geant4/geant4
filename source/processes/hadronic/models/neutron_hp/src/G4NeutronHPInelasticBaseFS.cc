@@ -33,6 +33,7 @@
 // 101111 Add Special treatment for Be9(n,2n)Be8(2a) case by T. Koi
 //
 #include "G4NeutronHPInelasticBaseFS.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
 #include "G4NucleiProperties.hh"
@@ -95,13 +96,17 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4int M, G4String
   }
   //theBaseA = A;
   //theBaseZ = G4int(Z+.5);
-  std::ifstream theData(filename, std::ios::in);
-  if(!(theData))
+  //std::ifstream theData(filename, std::ios::in);
+   //130205 For compressed data files 
+   std::istringstream theData(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
+   //130205 END
+  if(!theData) //"!" is a operator of ios
   {
     hasAnyData = false;
     hasFSData = false; 
     hasXsec = false;
-    theData.close();
+    //theData.close();
     return; // no data for exactly this isotope and FS
   }
   // here we go
@@ -162,7 +167,7 @@ void G4NeutronHPInelasticBaseFS::Init (G4double A, G4double Z, G4int M, G4String
       throw G4HadronicException(__FILE__, __LINE__, "Data-type unknown to G4NeutronHPInelasticBaseFS");
     }
   }
-  theData.close();
+  //theData.close();
 }
   
 void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack, 

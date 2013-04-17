@@ -55,7 +55,7 @@
 #include "G4NeutronHPKallbachMannSyst.hh"
 #include "G4ParticleTable.hh"
  
-  void G4NeutronHPContAngularPar::Init(std::ifstream & aDataFile)
+  void G4NeutronHPContAngularPar::Init(std::istream & aDataFile)
   {
     aDataFile >> theEnergy >> nEnergies >> nDiscreteEnergies >> nAngularParameters;
     theEnergy *= eV;

@@ -52,7 +52,7 @@ class G4NeutronHPArbitaryTab : public G4VNeutronHPEDis
    if(theDistFunc!=0) delete [] theDistFunc;
   }
   
-  inline void Init(std::ifstream & theData)
+  inline void Init(std::istream & theData)
   {
     G4int i;
     theFractionalProb.Init(theData, CLHEP::eV);

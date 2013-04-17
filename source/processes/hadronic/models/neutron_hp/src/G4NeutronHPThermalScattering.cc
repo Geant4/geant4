@@ -42,6 +42,7 @@
 // 100729 Add model name in constructor Problem #1116
 
 #include "G4NeutronHPThermalScattering.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
@@ -127,7 +128,9 @@ std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* G4Ne
 
    std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >* aCoherentFSDATA = new std::map < G4double , std::vector < std::pair< G4double , G4double >* >* >;
 
-   std::ifstream theChannel( name.c_str() );
+   //std::ifstream theChannel( name.c_str() );
+   std::istringstream theChannel(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(name,theChannel);
 
    std::vector< G4double > vBraggE;
 
@@ -170,7 +173,9 @@ std::map < G4double , std::vector < E_P_E_isoAng* >* >* G4NeutronHPThermalScatte
 {
    std::map < G4double , std::vector < E_P_E_isoAng* >* >* anT_E_P_E_isoAng = new std::map < G4double , std::vector < E_P_E_isoAng* >* >;
 
-   std::ifstream theChannel( name.c_str() );
+   //std::ifstream theChannel( name.c_str() );
+   std::istringstream theChannel(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(name,theChannel);
 
    G4int dummy; 
    while ( theChannel >> dummy )   // MF
@@ -187,14 +192,14 @@ std::map < G4double , std::vector < E_P_E_isoAng* >* >* G4NeutronHPThermalScatte
       }
       anT_E_P_E_isoAng->insert ( std::pair < G4double , std::vector < E_P_E_isoAng* >* > ( temp , vE_P_E_isoAng ) );
    }    
-   theChannel.close();
+   //theChannel.close();
 
    return anT_E_P_E_isoAng; 
 }
 
 
 
-E_P_E_isoAng* G4NeutronHPThermalScattering::readAnE_P_E_isoAng( std::ifstream* file )
+E_P_E_isoAng* G4NeutronHPThermalScattering::readAnE_P_E_isoAng( std::istream* file )
 {
    E_P_E_isoAng* aData = new E_P_E_isoAng;
 
@@ -250,7 +255,9 @@ std::map < G4double , std::vector < E_isoAng* >* >* G4NeutronHPThermalScattering
 {
    std::map < G4double , std::vector < E_isoAng* >* >* T_E = new std::map < G4double , std::vector < E_isoAng* >* >;
 
-   std::ifstream theChannel( name.c_str() );
+   //std::ifstream theChannel( name.c_str() );
+   std::istringstream theChannel(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(name,theChannel);
 
    G4int dummy; 
    while ( theChannel >> dummy )   // MF
@@ -265,14 +272,14 @@ std::map < G4double , std::vector < E_isoAng* >* >* G4NeutronHPThermalScattering
         vE_isoAng->push_back ( readAnE_isoAng( &theChannel ) );
       T_E->insert ( std::pair < G4double , std::vector < E_isoAng* >* > ( temp , vE_isoAng ) );
    }
-   theChannel.close();
+   //theChannel.close();
 
    return T_E;
 }
 
 
 
-E_isoAng* G4NeutronHPThermalScattering::readAnE_isoAng( std::ifstream* file )
+E_isoAng* G4NeutronHPThermalScattering::readAnE_isoAng( std::istream* file )
 {
    E_isoAng* aData = new E_isoAng;
 

@@ -30,6 +30,7 @@
 //080901 Avoiding troubles which caused by G4PhysicsVecotor of length 0 by T. Koi
 //
 #include "G4NeutronHPIsoData.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NeutronHPDataUsed.hh"
 
@@ -44,7 +45,9 @@
     G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, M, dirName, aFSType, result);
     filename = aFile.GetName();
 //    if(filename=="") return false;
-    std::ifstream theChannel(filename);
+   //std::ifstream theChannel(filename);
+   std::istringstream theChannel(filename,std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theChannel);
     
     if(Z==1 && (aFile.GetZ()!=Z || std::abs(aFile.GetA()-A)>0.0001) )
     {
@@ -54,10 +57,10 @@
       //theChannel.close();
       //return false;
     }
-    if(!theChannel) {theChannel.close(); return false;}
+    if(!theChannel) {/*theChannel.close()*/; return false;}
     // accommodating deficiencie of some compilers
-    if(theChannel.eof()) {theChannel.close(); return false;} 
-    if(!theChannel) {theChannel.close(); return false;}
+    if(theChannel.eof()) {/*theChannel.close()*/; return false;} 
+    if(!theChannel) {/*theChannel.close()*/; return false;}
     G4int dummy; 
     theChannel >> dummy >> dummy;
     theChannelData = new G4NeutronHPVector;
@@ -69,7 +72,7 @@
 //     G4int hpw;
 //     G4cin >> hpw;
 //    theChannelData->Dump();
-    theChannel.close();
+    //theChannel.close();
     return result;
   }
   

@@ -43,7 +43,7 @@ class G4NeutronHPGamma
   G4NeutronHPGamma();
   ~G4NeutronHPGamma();
   
-  G4bool Init(std::ifstream & aDataFile);
+  G4bool Init(std::istream & aDataFile);
   
   inline void SetNext(G4NeutronHPLevel * aLevel)
   {

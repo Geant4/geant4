@@ -48,7 +48,7 @@ class G4NeutronHPAngularP
     if(theProb!=0) delete [] theProb;
   }
   
-  inline void Init(std::ifstream & aDataFile)
+  inline void Init(std::istream & aDataFile)
   {
     G4double eNeu, cosTheta, probDist;
     G4int nProb;

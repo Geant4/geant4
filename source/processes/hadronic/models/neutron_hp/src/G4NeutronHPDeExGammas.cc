@@ -32,7 +32,7 @@
 #include "G4NeutronHPDeExGammas.hh"
 #include "G4SystemOfUnits.hh"
 
-void G4NeutronHPDeExGammas::Init(std::ifstream & aDataFile)
+void G4NeutronHPDeExGammas::Init(std::istream & aDataFile)
 {
   G4NeutronHPGamma ** theGammas = new G4NeutronHPGamma * [50];
   G4int nGammas = 0;

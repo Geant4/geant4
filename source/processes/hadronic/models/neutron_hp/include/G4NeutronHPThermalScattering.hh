@@ -87,13 +87,13 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
       //         ElementID          temp        aFS for this temp (and this element)
       std::map < G4int , std::map < G4double , std::vector < E_isoAng* >* >* > incoherentFSs;
       std::map < G4double , std::vector < E_isoAng* >* >* readAnIncoherentFSDATA( G4String );
-      E_isoAng* readAnE_isoAng ( std::ifstream* );
+      E_isoAng* readAnE_isoAng ( std::istream* );
 
       // Inelastic 
       //         ElementID          temp         aFS for this temp (and this element) 
       std::map < G4int ,  std::map < G4double , std::vector < E_P_E_isoAng* >* >* > inelasticFSs;
       std::map < G4double , std::vector < E_P_E_isoAng* >* >* readAnInelasticFSDATA( G4String );
-      E_P_E_isoAng* readAnE_P_E_isoAng ( std::ifstream* );
+      E_P_E_isoAng* readAnE_P_E_isoAng ( std::istream* );
   
 
       G4NeutronHPThermalScatteringData* theXSection;

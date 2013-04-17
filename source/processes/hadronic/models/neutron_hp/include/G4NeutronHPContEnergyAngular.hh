@@ -56,7 +56,7 @@ class G4NeutronHPContEnergyAngular : public G4VNeutronHPEnergyAngular
   
   public:
   
-  void Init(std::ifstream & aDataFile)
+  void Init(std::istream & aDataFile)
   {
     aDataFile >> theTargetCode >> theAngularRep >> theInterpolation >> nEnergy;
     theAngular = new G4NeutronHPContAngularPar[nEnergy];

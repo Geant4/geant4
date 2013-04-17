@@ -34,6 +34,7 @@
 // 110430 Temporary solution in the case of being MF6 final state in Capture reaction (MT102)
 //
 #include "G4NeutronHPCaptureFS.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
@@ -325,32 +326,19 @@
 
      G4String element_name = theNames.GetName( static_cast<G4int>(Z)-1 );
      G4String filenameMF6 = dirName+"/FSMF6/"+sZ+"_"+sA+sM+"_"+element_name;
-     std::ifstream dummyIFS(filenameMF6, std::ios::in);
-     if ( dummyIFS.good() == true ) hasExactMF6=true;
-
-     //TK110430 Just for checking 
-     //ENDF-VII.0 no case (check done at 110430 
-     /*
-     if ( hasExactMF6 == true ) 
-     {
-        G4String filename = dirName+"FS/"+sZ+"_"+sA+"_"+element_name;
-        std::ifstream dummyIFS(filename, std::ios::in);
-        if ( dummyIFS.good() == true ) 
-        {
-           G4cout << "TKDB Capture Both FS and FSMF6 are exist for Z = " << sZ << ", A = " << sA << G4endl;;
-        }
-     }
-     */
+     //std::ifstream dummyIFS(filenameMF6, std::ios::in);
+     //if ( dummyIFS.good() == true ) hasExactMF6=true;
+   std::istringstream theData(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filenameMF6,theData);
 
      //TK110430 Only use MF6MT102 which has exactly same A and Z 
      //Even _nat_ do not select and there is no _nat_ case in ENDF-VII.0 
-     if ( hasExactMF6 == true )
-     { 
-        std::ifstream theData(filenameMF6, std::ios::in);
-        theMF6FinalState.Init(theData);
-        theData.close();
-         return;
-     }
+   if ( theData.good() == true ) { 
+      hasExactMF6=true;
+      theMF6FinalState.Init(theData);
+      //theData.close();
+      return;
+   }
      //TK110430 END
 
 
@@ -369,8 +357,10 @@
       hasXsec = false;
       return;
     }
-    std::ifstream theData(filename, std::ios::in);
-    
+   //std::ifstream theData(filename, std::ios::in);
+   //std::istringstream theData(std::ios::in);
+   theData.clear();
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
     hasFSData = theFinalStatePhotons.InitMean(theData); 
     if(hasFSData)
     {
@@ -378,5 +368,5 @@
       theFinalStatePhotons.InitAngular(theData); 
       theFinalStatePhotons.InitEnergies(theData); 
     }
-    theData.close();
+    //theData.close();
   }

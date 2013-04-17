@@ -53,7 +53,7 @@ class G4NeutronHPContAngularPar
     if(theAngular!=0) delete [] theAngular;
   }
   
-  void Init(std::ifstream & aDataFile);
+  void Init(std::istream & aDataFile);
   
   G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass, 
                              G4int angularRep, G4int interpol);

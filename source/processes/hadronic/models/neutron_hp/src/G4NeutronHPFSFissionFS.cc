@@ -28,6 +28,7 @@
 // A prototype of the low energy neutron transport model.
 //
 #include "G4NeutronHPFSFissionFS.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4ReactionProduct.hh"
 #include "G4Nucleus.hh"
 #include "G4Proton.hh"
@@ -53,7 +54,9 @@
       hasXsec = false;
       return;
     }
-    std::ifstream theData(filename, std::ios::in);
+   //std::ifstream theData(filename, std::ios::in);
+   std::istringstream theData(std::ios::in);
+   G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
 
     // here it comes
     G4int infoType, dataType;
@@ -91,7 +94,7 @@
       }
     }
     targetMass = theFinalStateNeutrons.GetTargetMass();
-    theData.close();
+    //theData.close();
   }
   
   

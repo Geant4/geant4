@@ -48,7 +48,7 @@
     if(i==nEntries) nEntries++;
   }
   
-  void G4NeutronHPList::Init(std::ifstream & aDataFile, G4int nPar, G4double unit)
+  void G4NeutronHPList::Init(std::istream & aDataFile, G4int nPar, G4double unit)
   {
     G4int i;
     G4double y;
@@ -59,7 +59,7 @@
     }
   }
 
-  void G4NeutronHPList::Init(std::ifstream & aDataFile, G4double unit)
+  void G4NeutronHPList::Init(std::istream & aDataFile, G4double unit)
   {
     G4int total, i;
     aDataFile >> total;

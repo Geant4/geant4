@@ -14,11 +14,29 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 April 2013 Tatsumi Koi (hadr-hpn-V09-06-07)
+Deactivate capability of reading zlibed G4NEUTRONHPDATA library 
+	src/G4NeutronHPManager.cc
+
+
+16 April 2013 Tatsumi Koi (hadr-hpn-V09-06-06)
+Merging branch of "hpz" which enable to read zlibed data files 
+Step 1 merge trunk to the branch
+svn merge -r 67425:68410 svn+ssh://svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp
+Step 2 merge the branch to trunk
+g4svn merge --branch hpz
+Step 3 restore test before commit
+svn update --force test
+Step 4 
+svn commit
+
+
 26 March 2013  Ben Morgan (hadr-hpn-V09-06-05)
 - sources.cmake : Use new ZLIB variables for include paths and library
   links to allow transparent use of internal/external zlib.
   NB: The code does not use ZLIB at present, but this patch allows
   usage from now on as you require.
+
 
 12 March 2013  Dennis Wright (hadr-hpn-V09-06-04)
 - fix MacOS Clang compiler warnings: 
@@ -27,6 +45,7 @@ code and to keep track of all tags.
                             and "theCurrentZ"  
   G4NeutronHPThermalScattering.hh : remove unused private variable "xSec" 
                             and "numEle"  
+
 
 9 January  2013  Tatsumi Koi (hadr-hpn-V09-06-03)
 Fixed improper use of abort() 

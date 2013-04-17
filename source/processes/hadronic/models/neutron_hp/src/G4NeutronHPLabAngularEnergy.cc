@@ -43,7 +43,7 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 
-void G4NeutronHPLabAngularEnergy::Init(std::ifstream & aDataFile)
+void G4NeutronHPLabAngularEnergy::Init(std::istream & aDataFile)
 {
   aDataFile >> nEnergies;
   theManager.Init(aDataFile);

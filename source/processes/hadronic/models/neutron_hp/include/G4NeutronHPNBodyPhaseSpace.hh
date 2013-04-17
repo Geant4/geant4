@@ -52,7 +52,7 @@ class G4NeutronHPNBodyPhaseSpace : public G4VNeutronHPEnergyAngular
     theTotalCount=aCount;
   }
 
-  void Init(std::ifstream & aDataFile)
+  void Init(std::istream & aDataFile)
   {
     aDataFile >> theTotalMass >> theTotalCount;
     theTotalMass *= G4Neutron::Neutron()->GetPDGMass();

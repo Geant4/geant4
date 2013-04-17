@@ -98,7 +98,7 @@ class G4InterpolationManager
      nEntries = aRange;
    }
    
-   inline void Init(std::ifstream & aDataFile)
+   inline void Init(std::istream & aDataFile)
    {
      delete [] start;
      delete [] range;

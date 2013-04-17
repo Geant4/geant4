@@ -43,7 +43,7 @@
 #include "G4ParticleTable.hh"
 
 
-void G4NeutronHPIsotropic::Init(std::ifstream & )
+void G4NeutronHPIsotropic::Init(std::istream & )
 {
 }
 

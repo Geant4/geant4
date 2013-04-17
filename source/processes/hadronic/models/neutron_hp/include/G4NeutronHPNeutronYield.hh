@@ -49,7 +49,7 @@ class G4NeutronHPNeutronYield
   
   G4double GetTargetMass() { return targetMass; }
   
-  void InitMean(std::ifstream & aDataFile)
+  void InitMean(std::istream & aDataFile)
   {
     G4int iflag;
     aDataFile >> targetMass >>iflag;
@@ -64,7 +64,7 @@ class G4NeutronHPNeutronYield
     }
   }
 
-  void InitPrompt(std::ifstream & aDataFile)
+  void InitPrompt(std::istream & aDataFile)
   { 
     hasPromptData = true;
     G4int iflag;
@@ -80,7 +80,7 @@ class G4NeutronHPNeutronYield
     }
   }
  
-  void InitDelayed(std::ifstream & aDataFile)
+  void InitDelayed(std::istream & aDataFile)
   {
     hasDelayedData = true;
     G4int iflag;
