@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 17th, 2013 - G.Cosmo (geomnav-V09-06-04)
+------------------------
+- Minor code cleanup.
+
+Apr 16th, 2013 - J.Apostolakis  (geomnav-V09-06-03)
+------------------------------
+- G4Navigator: made new safety (from G4VoxelSafety) the default.
+
+Apr 16th, 2013 - J.Apostolakis  (geomnav-V09-06-02)
+------------------------------
+- G4VoxelSafety: corrected calculation of edges of voxels.
+  Identified when point's coordinate is beyond the range of voxels. 
+
 Mar 19th, 2013 - G.Cosmo  (geomnav-V09-06-01)
 ------------------------
 - Cleanup of MT changes in G4PathFinder, G4RegularNavigationHelper

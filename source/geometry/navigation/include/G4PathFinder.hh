@@ -104,10 +104,6 @@ class G4PathFinder
 
    // -----------------------------------------------------------------
 
-   inline void SetChargeMomentumMass( G4double charge,     // in e+ units
-                                      G4double momentum,   // in Geant4 units
-                                      G4double pMass );  
-
    inline G4bool   IsParticleLooping() const;
 
    inline G4double GetCurrentSafety() const;
