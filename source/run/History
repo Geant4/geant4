@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Apr. 16th, 2013, A.Dotti (run-V09-06-21)
+- Finalizing API for examples migration removing previous tag classes
 
 Apr. 11th, 2013, I.Hrivnacova (run-V09-06-20)
 - Added G4VUserApplication and G4WorkerInitialization classes

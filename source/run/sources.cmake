@@ -77,12 +77,10 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4VPersistencyManager.hh
         G4VPhysicsConstructor.hh
         G4VUserDetectorConstruction.hh
-        G4VUserApplication.hh
         G4VUserParallelWorld.hh
         G4VUserPhysicsList.hh
         G4VUserPrimaryGeneratorAction.hh
 	G4WorkerThread.hh
-	G4WorkerInitialization.hh
 	G4VUserWorkerInitialization.hh
         G4VUPLSplitter.hh
         rundefs.hh
@@ -113,7 +111,6 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4VUserPhysicsList.cc
         G4VUserPrimaryGeneratorAction.cc
 	G4WorkerThread.cc
-	G4WorkerInitialization.cc
 	G4VUserWorkerInitialization.cc
     GRANULAR_DEPENDENCIES
         G4cuts

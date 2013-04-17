@@ -29,9 +29,7 @@
 #include "G4Timer.hh"
 #include "G4ScoringManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4VUserApplication.hh"
 #include "G4VUserWorkerInitialization.hh"
-#include "G4WorkerInitialization.hh"
 #include "G4WorkerThread.hh"
 #include "G4Run.hh"
 #include "G4UImanager.hh"
@@ -277,22 +275,6 @@ void G4MTRunManager::ConstructScoringWorlds()
     for(size_t iWorld=0;iWorld<nWorlds;iWorld++)
     { addWorld(iWorld,*itrW); itrW++; }
 
-}
-
-void G4MTRunManager::SetUserApplication(G4VUserApplication* userAppl)
-{ 
-  userApplication = userAppl; 
-  
-  // Set user initialization for mandatory classes
-  SetUserInitialization(userApplication->CreateDetectorConstruction());
-  SetUserInitialization(userApplication->CreatePhysicsList());
-  SetUserInitialization(new G4WorkerInitialization(userApplication));
-  
-  G4UserRunAction* runAction = userApplication->CreateRunAction();
-  if ( runAction) SetUserAction(runAction);
-
-  // perform additional setting (if needed)
-  userApplication->Initialize();
 }
 
 void G4MTRunManager::SetUserInitialization(G4VUserWorkerInitialization* userInit)

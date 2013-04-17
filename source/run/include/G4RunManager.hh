@@ -100,7 +100,6 @@
 #define G4RunManager_h 1
 
 // userAction classes
-class G4VUserApplication;
 class G4VUserDetectorConstruction;
 class G4VUserPhysicsList;
 class G4VUserWorkerInitialization;
@@ -267,8 +266,6 @@ public: // with description
     G4RunManagerKernel * kernel;
     G4EventManager * eventManager;
 
-    G4VUserApplication* userApplication;
-
     G4VUserDetectorConstruction * userDetector;
     G4VUserPhysicsList * physicsList;
     G4VUserWorkerInitialization * userWorkerInitialization;
@@ -320,7 +317,6 @@ public: // with description
     virtual void RestoreRandomNumberStatus(const G4String& fileN);
 
   public: // with description
-    virtual void SetUserApplication(G4VUserApplication* userAppl);
     virtual void SetUserInitialization(G4VUserDetectorConstruction* userInit);
     virtual void SetUserInitialization(G4VUserPhysicsList* userInit);
     virtual void SetUserInitialization(G4VUserWorkerInitialization* userInit);

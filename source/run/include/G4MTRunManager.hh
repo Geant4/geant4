@@ -146,7 +146,6 @@ public: // with description
     static G4RunManagerKernel* GetMasterRunManagerKernel();
     // Returns the singleton instance of the run manager kernel common to all threads
 
-    virtual void SetUserApplication(G4VUserApplication* userAppl);
     virtual void SetUserInitialization(G4VUserWorkerInitialization* userInit);
     virtual void SetUserInitialization(G4VUserPhysicsList* userPL);
     virtual void SetUserInitialization(G4VUserDetectorConstruction* userDC);
