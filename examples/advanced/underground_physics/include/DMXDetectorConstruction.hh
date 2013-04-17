@@ -93,8 +93,6 @@ private:
 
 #include "DMXDetectorMaterial.ihh"  // materials used
 
-  G4double worldRadius;                // sizes
-  G4double worldHeight;
   G4double sourceZ;
   G4double sourceZ2;
 

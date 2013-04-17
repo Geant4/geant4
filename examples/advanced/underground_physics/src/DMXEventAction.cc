@@ -301,10 +301,10 @@ void DMXEventAction::writeScintHitsToFile(void) {
   G4String filename=runAct->GetsavehitsFile();
   std::ofstream hitsfile(filename, std::ios::app);
   if(!event_id) {
-    std::ofstream hitsfile(filename);
-    hitsfile <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
+    std::ofstream hitsfileInit(filename);
+    hitsfileInit <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
 	     << G4endl;
-    hitsfile <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
+    hitsfileInit <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
 	     << G4endl
 	     << G4endl;
   }
