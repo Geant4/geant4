@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-April-2013: G.Cosmo (externals-V09-06-01)
+- Moved 'tpmalloc' and 'memoryprotection' modules from global.
+- Fixed compilation errors and warnings (NOTE: "tracer" application
+  in memoryprotection does -not- compile yet!).
+- Adapted build setup (currently disabled).
+
 20-March-2013: G.Cosmo (externals-V09-06-00)
 - Moved G4 zlib module from visualization/externals.
 

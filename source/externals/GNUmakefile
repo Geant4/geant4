@@ -34,6 +34,10 @@ ifdef G4LIB_USE_ZLIB
   SUBDIRS += zlib
   SUBLIBS += G4zlib
 endif
+#ifdef G4MULTITHREADED
+#  SUBDIRS += tpmalloc memoryprotection
+#  SUBLIBS += G4tpmalloc G4memoryprotection
+#endif
 
 .PHONY: granular obj glob global clean
 

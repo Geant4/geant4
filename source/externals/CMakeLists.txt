@@ -27,9 +27,17 @@ if(NOT GEANT4_USE_SYSTEM_EXPAT)
     add_subdirectory(expat)
 endif()
 
-#
+#----------------------------------------------------------------------------
 # Geant4 internal ZLIB build optional
 #
 if(NOT GEANT4_USE_SYSTEM_ZLIB)
     add_subdirectory(zlib)
 endif()
+
+----------------------------------------------------------------------------
+# Use of tpmalloc (and memoryprotection?) only for MT build
+#
+#if(GEANT4_BUILD_MULTITHREADED)
+#    add_subdirectory(tpmalloc)
+#    add_subdirectory(memoryprotection)
+#endif()
