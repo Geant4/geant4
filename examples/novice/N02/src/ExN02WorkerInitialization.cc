@@ -37,6 +37,7 @@
 #include "Randomize.hh"
 #include "FTFP_BERT.hh"
 void ExN02WorkerInitialization::WorkerStart() const {
+    //G4Random::setTheEngine( new CLHEP::RanluxEngine(1234567,4) );
 
     G4RunManager* workerRM = G4RunManager::GetRunManager();
     
@@ -79,3 +80,8 @@ void ExN02WorkerInitialization::WorkerStart() const {
     //G4String command = "/control/execute ";
     //UImanager->ApplyCommand(command+macroFileName);
 }
+
+void ExN02WorkerInitialization::WorkerStop() const {
+    dynamic_cast<const ExN02SteppingAction*>(G4RunManager::GetRunManager()->GetUserSteppingAction())->Dump();
+}
+
