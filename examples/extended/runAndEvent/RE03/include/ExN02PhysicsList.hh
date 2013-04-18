@@ -23,26 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE03/src/RE03WorkerInitialization.cc
-/// \brief Implementation of the RE03WorkerInitialization class
 //
+// $Id: ExN02PhysicsList.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-// $Id: RE03WorkerInitialization.cc 66780 2013-01-12 14:56:35Z gcosmo $
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "RE03WorkerInitialization.hh"
-#include "RE03PrimaryGeneratorAction.hh"
-#include "ExN02PhysicsList.hh"
+#ifndef ExN02PhysicsList_h
+#define ExN02PhysicsList_h 1
 
-RE03WorkerInitialization::RE03WorkerInitialization()
-{;} 
+#include "G4VUserPhysicsList.hh"
+#include "globals.hh"
 
-RE03WorkerInitialization::~RE03WorkerInitialization()
-{;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RE03WorkerInitialization::WorkerStart() const
+class ExN02PhysicsList: public G4VUserPhysicsList
 {
-  G4RunManager::GetRunManager()->SetUserInitialization(new ExN02PhysicsList);
-  SetUserAction(new RE03PrimaryGeneratorAction);
-}
+  public:
+    ExN02PhysicsList();
+   ~ExN02PhysicsList();
+
+  protected:
+    // Construct particle and physics
+    void ConstructParticle();
+    void ConstructProcess();
+ 
+    void SetCuts();
+
+   
+  protected:
+    // these methods Construct particles 
+    void ConstructBosons();
+    void ConstructLeptons();
+    void ConstructMesons();
+    void ConstructBaryons();
+
+  protected:
+  // these methods Construct physics processes and register them
+    void ConstructGeneral();
+    void ConstructEM();
+    void AddStepMax();
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
  
