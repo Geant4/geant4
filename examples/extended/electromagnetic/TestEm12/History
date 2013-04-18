@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+18-04-13 mma (testem12-V09-06-06)
+- use G4AnalysisManager
+     
 01-04-13 A.Dotti (testem12-V09-06-03,testem12-V09-06-04,testem12-V09-06-05)
 - New G4VUserPhysicsList interface needed for MT
      

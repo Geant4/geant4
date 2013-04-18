@@ -48,8 +48,7 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PhysicsList*,PrimaryGeneratorAction*,
-              HistoManager*);
+    RunAction(DetectorConstruction*, PhysicsList*,PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
@@ -62,6 +61,8 @@ class RunAction : public G4UserRunAction
     void AddStepSize    (G4int nb, G4double s)
                                      { fNbOfSteps += nb; fNbOfSteps2 += nb*nb;
                                        fStepSize  += s ; fStepSize2  += s*s;  };
+				       
+    G4double GetCsdaRange() { return fCsdaRange;};				       
                                                                                          
     
   private:

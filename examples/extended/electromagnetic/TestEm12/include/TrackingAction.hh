@@ -40,15 +40,13 @@
 class DetectorConstruction;
 class RunAction;
 class PrimaryGeneratorAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*, RunAction*, PrimaryGeneratorAction*,
-                                          HistoManager*);
+    TrackingAction(DetectorConstruction*, RunAction*, PrimaryGeneratorAction*);
    ~TrackingAction() {};
    
     virtual void PostUserTrackingAction(const G4Track*);
@@ -57,7 +55,6 @@ class TrackingAction : public G4UserTrackingAction {
     DetectorConstruction*   fDetector;
     RunAction*              fRunAction;
     PrimaryGeneratorAction* fKinematic;
-    HistoManager*           fHistoManager;       
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

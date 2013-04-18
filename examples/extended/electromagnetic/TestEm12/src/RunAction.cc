@@ -50,15 +50,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
-                     PrimaryGeneratorAction* kin, HistoManager* histo)
+                     PrimaryGeneratorAction* kin)
 :G4UserRunAction(),
- fDetector(det),fPhysics(phys),fKinematic(kin),fHistoManager(histo)
-{ }
+ fDetector(det),fPhysics(phys),fKinematic(kin),fHistoManager(0)
+{
+  // Book predefined histograms
+  fHistoManager = new HistoManager();
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{
+  delete fHistoManager; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -99,12 +104,25 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
                          
   //histograms
   //
-  fHistoManager->book();
-  
-  //set StepMax from histos
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  }
+     
+  //set StepMax from histos 1 and 8
   //
-  G4double stepMax = fHistoManager->ComputeStepMax(fCsdaRange);
+  G4double stepMax = fCsdaRange;
+  G4int ih = 1;
+  if (analysisManager->GetH1Activation(ih))
+    stepMax = analysisManager->GetH1Width(ih);
+  ih = 8;
+  if (analysisManager->GetH1Activation(ih)) {
+    G4double width = analysisManager->GetH1Width(ih);
+    stepMax = std::min(stepMax, width*fCsdaRange);        
+  }  				      
   fPhysics->GetStepMaxProcess()->SetMaxStep2(stepMax);
+  G4cout << "\n---> stepMax from histos 1 and 8 = " 
+         << G4BestUnit(stepMax,"Length") << G4endl;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -205,24 +223,28 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      
   // normalize histogram of longitudinal energy profile
   //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
   G4int ih = 1;
-  G4double binWidth = fHistoManager->GetBinWidth(ih);
+  G4double binWidth = analysisManager->GetH1Width(ih);
   G4double fac = (1./(NbofEvents*binWidth))*(mm/MeV);
-  fHistoManager->Normalize(ih,fac);
-  
+  analysisManager->ScaleH1(ih,fac);
+    
   // normalize histogram d(E/E0)/d(r/r0)
   //
   ih = 8;
-  binWidth = fHistoManager->GetBinWidth(ih);
+  binWidth = analysisManager->GetH1Width(ih);
   fac = 1./(NbofEvents*binWidth*energy);
-  fHistoManager->Normalize(ih,fac);
+  analysisManager->ScaleH1(ih,fac);  
     
    // reset default formats
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
   
   // save histograms
-  fHistoManager->save();
+  if ( analysisManager->IsActive() ) {  
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }      
  
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();

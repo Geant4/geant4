@@ -41,10 +41,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run, HistoManager* histo)
+EventAction::EventAction(RunAction* run)
 :G4UserEventAction(),
- fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fHistoManager(histo),
- fEventMessenger(0)
+ fRunAct(run), fDrawFlag("none"), fPrintModulo(10000), fEventMessenger(0)
 {
   fEventMessenger = new EventActionMessenger(this);
 }
@@ -78,7 +77,8 @@ void EventAction::EndOfEventAction(const G4Event*)
   //
   if (fTotalEdep > 0.) {
     fRunAct->AddEdep(fTotalEdep);
-    fHistoManager->FillHisto(2,fTotalEdep);
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+    analysisManager->FillH1(2,fTotalEdep);
   }  
 }
 

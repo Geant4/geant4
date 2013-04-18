@@ -23,8 +23,8 @@
 /gun/particle e-
 /gun/energy 100 keV
 #
-/testem/histo/setFileName berger/100keV.local
-/testem/histo/setHisto 8 120  0.  1.2 none	#normalized edep profile
+/analysis/setFileName berger/100keV_local
+/analysis/h1/set 8 120  0.  1.2 none	#normalized edep profile
 #
 /testem/event/printModulo 10000
 #
