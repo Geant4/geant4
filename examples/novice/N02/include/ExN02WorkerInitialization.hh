@@ -32,13 +32,14 @@
 #ifndef ExN02WorkerInitialization_hh
 #define ExN02WorkerInitialization_hh
 
-#include "G4VUserWorkerInitialization.hh"
+#include "G4UserWorkerInitialization.hh"
 
 class ExN02DetectorConstruction;
 
-class ExN02WorkerInitialization : public G4VUserWorkerInitialization {
+class ExN02WorkerInitialization : public G4UserWorkerInitialization {
 protected:
     void WorkerStart() const;
+    void WorkerStop() const;
 //Application specific stuff
 private:
     ExN02DetectorConstruction* detector;
@@ -49,3 +50,4 @@ public:
 };
 
 #endif //ExN02WorkerInitialization_hh
+

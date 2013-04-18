@@ -62,11 +62,15 @@
 int main(int argc,char** argv)
 {
     //TODO: To remove
-    CLHEP::RanluxEngine defaultEngine( 1234567, 4 );
-    G4Random::setTheEngine( &defaultEngine );
+    //Setting of seed in case the "default" is used need to be done after
+    //G4MTRunManager is created because G4MTRunManager creates the default one
+    // if needed
+    G4Random::setTheEngine(new CLHEP::RanshiEngine);
+    //CLHEP::RanluxEngine defaultEngine( 1234567, 4 );
+    //G4Random::setTheEngine( &defaultEngine );
     //G4int seed = time( NULL );
     //  CLHEP::HepRandom::setTheSeed( seed );
-    G4Random::setTheSeed( 1220515164 );
+    //G4Random::setTheSeed( 1220515164 );
   // User Verbose output class
   //
   G4VSteppingVerbose* verbosity = new ExN02SteppingVerbose;
@@ -76,7 +80,7 @@ int main(int argc,char** argv)
   //
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberThreads( 2 );
+    runManager->SetNumberOfThreads( 1 );
     //Common to all threads
     ExN02DetectorConstruction* detector = new ExN02DetectorConstruction;
     runManager->SetUserInitialization(detector);
@@ -90,8 +94,8 @@ int main(int argc,char** argv)
     workerInit->SetMacroFileName(fileName);
     
     //Needed for initialization...
-    G4VUserPhysicsList* physics = new ExN02PhysicsList;
-    //G4VUserPhysicsList* physics = new FTFP_BERT;
+    //G4VUserPhysicsList* physics = new ExN02PhysicsList;
+    G4VUserPhysicsList* physics = new FTFP_BERT;
     runManager->SetUserInitialization(physics);
 
     // User Action classes., These should not be needed
