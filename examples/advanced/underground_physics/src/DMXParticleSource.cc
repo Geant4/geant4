@@ -126,9 +126,9 @@ void DMXParticleSource::SetHalfZ(G4double zhalf)
   halfz = zhalf;
 }
 
-void DMXParticleSource::SetRadius(G4double radius)
+void DMXParticleSource::SetRadius(G4double rad)
 {
-  Radius = radius;
+  Radius = rad;
 }
 
 void DMXParticleSource::ConfineSourceToVolume(G4String Vname)
