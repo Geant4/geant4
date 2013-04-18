@@ -33,10 +33,10 @@
 #ifndef RE03WorkerInitialization_h
 #define RE03WorkerInitialization_h 1
 
-#include "G4VUserWorkerInitialization.hh"
+#include "G4UserWorkerInitialization.hh"
 #include "globals.hh"
 
-class RE03WorkerInitialization : public G4VUserWorkerInitialization
+class RE03WorkerInitialization : public G4UserWorkerInitialization
 {
   public:
     RE03WorkerInitialization();    

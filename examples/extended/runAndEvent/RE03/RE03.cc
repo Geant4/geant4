@@ -35,8 +35,7 @@
 #include "G4ScoringManager.hh"
 
 #include "RE03DetectorConstruction.hh"
-//#include "FTFP_BERT.hh" 
-#include "ExN02PhysicsList.hh"
+#include "FTFP_BERT.hh" 
 #include "RE03WorkerInitialization.hh"
 
 #ifdef G4VIS_USE
@@ -72,8 +71,7 @@ int main(int argc,char** argv)
  G4VUserDetectorConstruction* detector = new RE03DetectorConstruction;
  runManager->SetUserInitialization(detector);
  //
- //G4VUserPhysicsList* physics = new FTFP_BERT;
- G4VUserPhysicsList* physics = new ExN02PhysicsList;
+ G4VUserPhysicsList* physics = new FTFP_BERT;
  runManager->SetUserInitialization(physics);
     
  // Set user action classes
@@ -89,7 +87,7 @@ int main(int argc,char** argv)
     
  // Initialize G4 kernel
  //
- runManager->SetNumberThreads(4);
+ runManager->SetNumberOfThreads(4);
  runManager->Initialize();
   
  // Get the pointer to the User Interface manager
