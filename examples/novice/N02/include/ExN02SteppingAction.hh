@@ -36,68 +36,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4String.hh"
-#include "G4Types.hh"
-#include <list>
-#include <sstream>
-class G4VLoggingFilter {
-public:
-    virtual ~G4VLoggingFilter() {};
-    virtual G4String Name() const = 0;
-    virtual G4bool AcceptStep( const G4Step* aStep ) = 0;
-    virtual G4VLoggingFilter* Clone() const = 0;
-    virtual void  Dump(std::ostream& out) const;
-};
-std::ostream& operator<<(std::ostream& out, const G4VLoggingFilter& logfileter);
-
-class G4StepInfo {
-private:
-    G4String name;
-    std::list<G4VLoggingFilter*> filters;
-    G4int counter;
-    G4double sum;
-    G4double sum2;
-    G4double sum3;
-    G4double sum4;
-    std::list<float> vals;
-    static G4bool debug;
-    void Clear();
-public:
-    G4StepInfo(const G4StepInfo& rhs);
-    G4StepInfo(const char* aName);
-    ~G4StepInfo();
-    void AddFilter(G4VLoggingFilter* f);
-    G4bool LogStep(const G4Step* aStep , G4double weigth = 1 );
-    void SetName( const char* newName ) { name = newName; }
-    void Dump(std::ostream& out) const;
-    G4double Mean() const ;
-    G4double Variance() const ;
-    G4double ExcKurtosis() const ;
-    G4double Skewness() const ;
-    G4int GetCounter() const { return counter; }
-};
-std::ostream& operator<<(std::ostream& out, const G4StepInfo& stepinfo);
-
-class G4DistributionInfo {
-private:
-    G4String name;
-    long counter;
-    std::list<G4StepInfo*> infos;
-public:
-    void AddInfoLogger( G4StepInfo* logger ) { infos.push_back(logger); }
-    void Dump( std::ostream& out ) const;
-    G4DistributionInfo( const char* aName ) : name(aName) { }
-    virtual ~G4DistributionInfo();
-    G4bool LogStep( const G4Step* aStep , G4double quantity );
-};
-std::ostream& operator<<(std::ostream& out,const G4DistributionInfo& distinfo);
-
 class ExN02SteppingAction : public G4UserSteppingAction
 {
   public:
     ExN02SteppingAction();
-   ~ExN02SteppingAction();
-    void Dump() const;
+   ~ExN02SteppingAction(){};
+
     void UserSteppingAction(const G4Step*);
 };
 
