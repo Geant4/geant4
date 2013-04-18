@@ -73,15 +73,16 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4RunMessenger.hh
         G4UserPhysicsListMessenger.hh
         G4UserRunAction.hh
+        G4UserWorkerInitialization.hh
         G4VModularPhysicsList.hh
         G4VPersistencyManager.hh
         G4VPhysicsConstructor.hh
+        G4VUserActionInitialization.hh
         G4VUserDetectorConstruction.hh
         G4VUserParallelWorld.hh
         G4VUserPhysicsList.hh
         G4VUserPrimaryGeneratorAction.hh
 	G4WorkerThread.hh
-	G4VUserWorkerInitialization.hh
         G4VUPLSplitter.hh
         rundefs.hh
     SOURCES
@@ -103,15 +104,16 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4RunMessenger.cc
         G4UserPhysicsListMessenger.cc
         G4UserRunAction.cc
+        G4UserWorkerInitialization.cc
         G4VModularPhysicsList.cc
         G4VPersistencyManager.cc
+        G4VUserActionInitialization.cc
         G4VUserDetectorConstruction.cc
         G4VUserParallelWorld.cc
         G4VPhysicsConstructor.cc
         G4VUserPhysicsList.cc
         G4VUserPrimaryGeneratorAction.cc
 	G4WorkerThread.cc
-	G4VUserWorkerInitialization.cc
     GRANULAR_DEPENDENCIES
         G4cuts
         G4decay
