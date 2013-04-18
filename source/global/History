@@ -16,7 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-April 9, 2013 A.Dotti (global-V09-06-17,global-V09-06-18)
+
+April 18, 2013 G.Cosmo (global-V09-06-19)
+- Moved 'tpmalloc' and 'memoryprotection' modules to source/externals.
+
+April 9, 2013 A.Dotti (global-V09-06-18, global-V09-06-17)
 - Fix for compilation on Windows, bug introduced in latest tag
   for Conditions
 
