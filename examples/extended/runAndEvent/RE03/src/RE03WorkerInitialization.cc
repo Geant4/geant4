@@ -32,7 +32,6 @@
 
 #include "RE03WorkerInitialization.hh"
 #include "RE03PrimaryGeneratorAction.hh"
-#include "ExN02PhysicsList.hh"
 
 RE03WorkerInitialization::RE03WorkerInitialization()
 {;} 
@@ -42,7 +41,6 @@ RE03WorkerInitialization::~RE03WorkerInitialization()
 
 void RE03WorkerInitialization::WorkerStart() const
 {
-  G4RunManager::GetRunManager()->SetUserInitialization(new ExN02PhysicsList);
   SetUserAction(new RE03PrimaryGeneratorAction);
 }
  
