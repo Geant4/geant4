@@ -44,9 +44,7 @@
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 
-#ifdef G4ANALYSIS_USE
 #include"PurgMagAnalysisManager.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

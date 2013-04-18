@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.13 2010-11-18 13:10:47 allison Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,11 @@ $Id: History,v 1.13 2010-11-18 13:10:47 allison Exp $
 
                       Category History file
                       ---------------------
+
+17.04.2013 - Luciano Pandola (purmag-V09-06-00)
+- Migrate analysis from AIDA to g4analysis (remove the 
+  external AIDA dependency). Some clean-up in other 
+  classe (RunAction, EventAction, StepAction)
 
 06.11.2012 - Luciano Pandola (purmag-V09-05-03)
 - Fix syntax in CMakeLists.txt

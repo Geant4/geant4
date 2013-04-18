@@ -45,9 +45,8 @@
 #include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"
 
-#ifdef G4ANALYSIS_USE
-#include"PurgMagAnalysisManager.hh"
-#endif
+#include "PurgMagAnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -62,7 +61,6 @@ PurgMagSteppingAction::~PurgMagSteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4ANALYSIS_USE
 void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
   
 { 
@@ -140,9 +138,5 @@ void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
 	  analysis->fill_Tuple_Positrons(px, py, pz, pe, ppx, ppy, ppz);
 	}
     }
-#else
-void PurgMagSteppingAction::UserSteppingAction(const G4Step* )
-{ 
-#endif
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
