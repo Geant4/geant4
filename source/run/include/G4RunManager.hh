@@ -48,24 +48,17 @@
 //         G4UserStackingAction              - Tracks Stacking selection
 //         G4UserTrackingAction              - Actions for each Track
 //         G4UserSteppingAction              - Actions for each Step
-//
-//     User may use G4VUserActionInitialization class to instantiate
-//     any of the six user action classes (1 mandatory + 6 optional).
-//     In this case, user's concrete G4VUserActionInitialization should
-//     be defined to RunManager.
 //     
 //     For the multi-threaed mode of Geant4 application,
 //     user must provide his own classes derived from the following
-//     two abstract classes and register them to the MTRunManager.
+//     three abstract classes and register them to the RunManager.
+//     In addition, user may optionally specify a Run Action for the entire run.
 //        G4VUserDetectorConstruction       - Detector Geometry, Materials
 //        G4VUserPhysicsList                - Particle types and Processes
-//     In addition, user may optionally specify the following.
-//        G4UserWorkerInitialization       - Defining thread-local actions
+//        G4VUserWorkerInitialization       - Defining thread-local actions
 //        G4UserRunAction                   - Actions for entire Run
 //
-//     For the multi-threaded mode, use of G4VUserActionInitialization
-//     is mandatory.
-//     In G4VUserActionInitialization, the user has to specify
+//     In G4VUserWorkerInitialization, the user has to specify
 //     G4VUserPrimaryGeneratorAction class. In addition user may
 //     customize of the default functionality of GEANT4 simulation
 //     by making his own classes derived from the following 5 user
@@ -109,8 +102,7 @@
 // userAction classes
 class G4VUserDetectorConstruction;
 class G4VUserPhysicsList;
-class G4UserWorkerInitialization;
-class G4VUserActionInitialization;
+class G4VUserWorkerInitialization;
 class G4UserRunAction;
 class G4VUserPrimaryGeneratorAction;
 class G4UserEventAction;
@@ -270,14 +262,13 @@ public: // with description
 
   protected:
     //This constructor is called in case of Geant4 Multi-threaded build
-    G4RunManager( G4bool workerFlag );
+    G4RunManager( G4bool isWorkerRunManger );
     G4RunManagerKernel * kernel;
     G4EventManager * eventManager;
 
     G4VUserDetectorConstruction * userDetector;
     G4VUserPhysicsList * physicsList;
-    G4VUserActionInitialization * userActionInitialization;
-    G4UserWorkerInitialization * userWorkerInitialization;
+    G4VUserWorkerInitialization * userWorkerInitialization;
     G4UserRunAction * userRunAction;
     G4VUserPrimaryGeneratorAction * userPrimaryGeneratorAction;
     G4UserEventAction * userEventAction;
@@ -328,8 +319,7 @@ public: // with description
   public: // with description
     virtual void SetUserInitialization(G4VUserDetectorConstruction* userInit);
     virtual void SetUserInitialization(G4VUserPhysicsList* userInit);
-    virtual void SetUserInitialization(G4VUserActionInitialization* userInit);
-    virtual void SetUserInitialization(G4UserWorkerInitialization* userInit);
+    virtual void SetUserInitialization(G4VUserWorkerInitialization* userInit);
     virtual void SetUserAction(G4UserRunAction* userAction);
     virtual void SetUserAction(G4VUserPrimaryGeneratorAction* userAction);
     virtual void SetUserAction(G4UserEventAction* userAction);
@@ -342,9 +332,7 @@ public: // with description
     { return userDetector; }
     inline const G4VUserPhysicsList* GetUserPhysicsList() const
     { return physicsList; }
-    inline const G4VUserActionInitialization* GetUserActionInitialization() const
-    { return userActionInitialization; }
-    inline const G4UserWorkerInitialization* GetUserWorkerInitialization() const
+    inline const G4VUserWorkerInitialization* GetUserWorkerInitialization() const
     { return userWorkerInitialization; }
     inline const G4UserRunAction* GetUserRunAction() const
     { return userRunAction; }
@@ -514,15 +502,6 @@ public: // with description
     { numberOfEventToBeProcessed = val; }
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }
-
-  public:
-    enum RMType { sequentialRM, masterRM, workerRM };
-    inline RMType GetRunManagerType() const
-    { return runManagerType; }
-
-  protected:
-    RMType runManagerType;
-    G4bool actionInitialized;
 
   public:
     virtual void ConstructScoringWorlds();

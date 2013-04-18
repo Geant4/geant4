@@ -36,7 +36,7 @@
 //      WorkerStart() implements what in a sequential G4 application
 //      is done in the "main" function.
 //      For example a MT application can be defined with:
-//          class myWorkerInitialization : public G4UserWorkerInitialization {
+//          class myWorkerInitialization : public G4VUserWorkerInitialization {
 //          public:
 //              void WorkerStart() {
 //                  SetUserAction( //…//);
@@ -51,8 +51,8 @@
 //              rm->BeamOn( … );
 //          }
 
-#ifndef G4UserWorkerInitialization_hh
-#define G4UserWorkerInitialization_hh
+#ifndef G4VUserWorkerInitialization_hh
+#define G4VUserWorkerInitialization_hh
 
 class G4VUserPrimaryGeneratorAction;
 class G4UserRunAction;
@@ -66,11 +66,9 @@ class G4UserSteppingAction;
 #include "G4WorkerRunManager.hh"
 #include "G4MTRunManager.hh"
 
-class G4UserWorkerInitialization {
+class G4VUserWorkerInitialization {
 public: // with description
-    G4UserWorkerInitialization();
-    virtual ~G4UserWorkerInitialization();
-
+    virtual ~G4VUserWorkerInitialization () {}
     virtual G4Thread* CreateAndStartWorker(G4WorkerThread* workerThreadContext);
     //  Called by the kernel to create a new thread/worker
     //  and start work.
@@ -85,11 +83,17 @@ public: // with description
     // Important: this method is called by all threads at the same time
     //   if is user responsibilitiy to make it thread-safe
 protected: // with description
-    virtual void WorkerStart() const;
-    // This method is called once at the beginning of simulation job
-    // Implement here a setting-up action.
+    virtual void WorkerStart() const = 0;
+    //    User should write the following method to contain, what is
+    //usually contained in the main function of a G4 application
+    //For example instantiation of per-thread/worker user actions
+    //Each thread/worker will call this method once at the beginning of
+    //simulation.
+    //Note that, differently from other user actions,
+    //there is a single instance of G4UserWorkerAction
+    //for all threads.
 
-    virtual void WorkerStop() const;
+    virtual void WorkerStop() const { };
     // This method is called once at the end of simulation job
     // Implement here a clean up action.
     
@@ -110,9 +114,8 @@ private:
     // worker.
     // context is the instance of type G4UserWorkerAction.
     // Method called by CreateAndStartWorker
-
 };
     
 //                  G4WorkerRunManager* rm = GetRunManager();
-#endif //G4UserWorkerInitialization_hh
+#endif //G4VUserWorkerInitialization_hh
 

@@ -43,8 +43,7 @@
 #include "G4RunMessenger.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "G4VUserActionInitialization.hh"
-#include "G4UserWorkerInitialization.hh"
+#include "G4VUserWorkerInitialization.hh"
 #include "G4UserRunAction.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4VPersistencyManager.hh"
@@ -108,11 +107,9 @@ G4RunManager::G4RunManager()
   HepRandom::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
-  runManagerType = sequentialRM;
-  actionInitialized = false;
 }
 
-G4RunManager::G4RunManager(G4bool workerFlag)
+G4RunManager::G4RunManager(G4bool workerRM)
 :userDetector(0),physicsList(0),
 userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
 userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
@@ -125,44 +122,40 @@ storeRandomNumberStatusToG4Event(0),
 currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
 numberOfEventProcessed(0)
 {
-  //This version of the constructor should never be called in sequential mode!
+    //This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
-  G4ExceptionDescription msg;
-  msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
-  msg<<" This type of RunManager can only be used in mult-threaded applications.";
-  G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msg);
+    G4ExceptionDescription msg;
+    msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
+    msg<<" This type of RunManager can only be used in mult-threaded applications.";
+    G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msg);
 #endif
     
-  if(fRunManager)
-  {
-    G4Exception("G4RunManager::G4RunManager()", "Run0031",
+    if(fRunManager)
+    {
+        G4Exception("G4RunManager::G4RunManager()", "Run0031",
                     FatalException, "G4RunManager constructed twice.");
-  }
-  fRunManager = this;
+    }
+    fRunManager = this;
     
-  //If we are creating a G4WorkerRunManager class, we need to skip this, since the equivalent
-  // for a WorkerThread is slightly different and will be executed by the derived class
-  if ( workerFlag ) {
-    kernel = new G4WorkerRunManagerKernel();
-    runManagerType = workerRM;
-  } else {
-    kernel = new G4RunManagerKernel();
-    runManagerType = masterRM;
-  }
-
-  eventManager = kernel->GetEventManager();
+    //If we are creating a G4WorkerRunManager class, we need to skip this, since the equivalent
+    // for a WorkerThread is slightly different and will be executed by the derived class
+    if ( workerRM ) {
+        kernel = new G4WorkerRunManagerKernel();
+    } else {
+        kernel = new G4RunManagerKernel();
+    }
+        eventManager = kernel->GetEventManager();
         
-  timer = new G4Timer();
-  runMessenger = new G4RunMessenger(this);
-  previousEvents = new std::vector<G4Event*>;
-  G4ParticleTable::GetParticleTable()->CreateMessenger();
-  G4ProcessTable::GetProcessTable()->CreateMessenger();
-  randomNumberStatusDir = "./";
-  std::ostringstream oss;
-  HepRandom::saveFullState(oss);
-  randomNumberStatusForThisRun = oss.str();
-  randomNumberStatusForThisEvent = oss.str();
-  actionInitialized = false;
+        timer = new G4Timer();
+        runMessenger = new G4RunMessenger(this);
+        previousEvents = new std::vector<G4Event*>;
+        G4ParticleTable::GetParticleTable()->CreateMessenger();
+        G4ProcessTable::GetProcessTable()->CreateMessenger();
+        randomNumberStatusDir = "./";
+        std::ostringstream oss;
+        HepRandom::saveFullState(oss);
+        randomNumberStatusForThisRun = oss.str();
+        randomNumberStatusForThisEvent = oss.str();
 }
 
 
@@ -282,14 +275,6 @@ void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
   G4bool cond = ConfirmBeamOnCondition();
   if(cond)
   {
-    if(userActionInitialization && !actionInitialized)
-    {
-      if(runManagerType==masterRM)
-      { userActionInitialization->BuildForMaster(); }
-      else
-      { userActionInitialization->Build(); }
-      actionInitialized = true;
-    }
     numberOfEventToBeProcessed = n_event;
     ConstructScoringWorlds();
     RunInitialization();
@@ -870,14 +855,11 @@ void G4RunManager::SetUserInitialization(G4VUserPhysicsList* userInit)
   kernel->SetPhysics(userInit);
 }
 
-void G4RunManager::SetUserInitialization(G4UserWorkerInitialization* /*userInit*/)
+void G4RunManager::SetUserInitialization(G4VUserWorkerInitialization* /*userInit*/)
 {
   G4Exception("G4RunManager::SetUserInitialization()", "Run3001", FatalException,
-    "Base-class G4RunManager cannot take G4UserWorkerInitialization. Use G4MTRunManager.");
+    "Base-class G4RunManager cannot take G4VUserWorkerInitialization. Use G4MTRunManager.");
 }
-
-void G4RunManager::SetUserInitialization(G4VUserActionInitialization* userInit)
-{ userActionInitialization = userInit; }
 
 void G4RunManager::SetUserAction(G4UserRunAction* userAction)
 { userRunAction = userAction; }

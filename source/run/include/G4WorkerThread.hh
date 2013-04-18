@@ -38,7 +38,7 @@
 
 class G4MTRunManager;
 class G4WorkerRunManager;
-//class G4VUserWorkerInitialization;
+class G4VUserWorkerInitialization;
 
 class G4WorkerThread {
 public:

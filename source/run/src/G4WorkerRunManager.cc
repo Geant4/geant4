@@ -35,8 +35,7 @@
 #include "G4ParallelWorldProcess.hh"
 #include "G4WorkerThread.hh"
 #include "G4VUserPhysicsList.hh"
-#include "G4VUserActionInitialization.hh"
-#include "G4UserWorkerInitialization.hh"
+#include "G4VUserWorkerInitialization.hh"
 #include "G4UserRunAction.hh"
 
 G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(true) {
@@ -182,15 +181,9 @@ void G4WorkerRunManager::ConstructScoringWorlds()
     }
 }
 
-void G4WorkerRunManager::SetUserInitialization(G4UserWorkerInitialization*)
+void G4WorkerRunManager::SetUserInitialization(G4VUserWorkerInitialization*)
 {
-    G4Exception("G4RunManager::SetUserInitialization(G4UserWorkerInitialization*)", "Run3021",
-                FatalException, "This method should be used only with an instance of G4MTRunManager");
-}
-
-void G4WorkerRunManager::SetUserInitialization(G4VUserActionInitialization*)
-{
-    G4Exception("G4RunManager::SetUserInitialization(G4VUserActionInitialization*)", "Run3021",
+    G4Exception("G4RunManager::SetUserInitialization(G4VUserWorkerInitialization*)", "Run3021",
                 FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
@@ -216,7 +209,7 @@ void G4WorkerRunManager::SetupDefaultRNGEngine()
 {
     const CLHEP::HepRandomEngine* mrnge = G4MTRunManager::GetMasterRunManager()->getMasterRandomEngine();
     assert(mrnge);//Master has created RNG
-    const G4UserWorkerInitialization* uwi =G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
+    const G4VUserWorkerInitialization* uwi =G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
     uwi->SetupRNGEngine(mrnge);
 }
 

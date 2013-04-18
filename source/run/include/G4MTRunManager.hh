@@ -45,7 +45,7 @@
 #include <map>
 
 class G4ScoringManager;
-class G4UserWorkerInitialization;
+class G4VUserWorkerInitialization;
 class G4WorkerRunManager;
 
 //TODO: Split random number storage from this class
@@ -55,8 +55,7 @@ public:
     G4MTRunManager();
     virtual ~G4MTRunManager();
     //New method
-    void SetNumberOfThreads( G4int n ) { nworkers = n; }
-    G4int GetNumberOfThreads() const { return nworkers; }
+    void SetNumberThreads( G4int n ) { nworkers = n; }
     //Returns i-th seed
     static long GetSeed( G4int i );
     //Returns number of available seeds
@@ -147,10 +146,9 @@ public: // with description
     static G4RunManagerKernel* GetMasterRunManagerKernel();
     // Returns the singleton instance of the run manager kernel common to all threads
 
+    virtual void SetUserInitialization(G4VUserWorkerInitialization* userInit);
     virtual void SetUserInitialization(G4VUserPhysicsList* userPL);
     virtual void SetUserInitialization(G4VUserDetectorConstruction* userDC);
-    virtual void SetUserInitialization(G4UserWorkerInitialization* userInit);
-    virtual void SetUserInitialization(G4VUserActionInitialization* userInit);
     virtual void SetUserAction(G4UserRunAction* userAction);
     virtual void SetUserAction(G4VUserPrimaryGeneratorAction* userAction);
     virtual void SetUserAction(G4UserEventAction* userAction);
