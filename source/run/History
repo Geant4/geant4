@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr. 18th, 2013, M.Asai (run-V09-06-23)
+- Fix uninitialized pointers in G4RunManager.
+
+Apr. 17th, 2013, M.Asai (run-V09-06-22)
+- Implement changes in G4(V)UserWorkerInitialization class (note removal of "V"), also
+  introducing G4VUserActionInitialization class.
+- New GetNumberOfThreads method, changed name of SetNumberThreads to SetNumberOfThreads in
+  G4MTRunManager
+
 Apr. 16th, 2013, A.Dotti (run-V09-06-21)
 - Finalizing API for examples migration removing previous tag classes
 

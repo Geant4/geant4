@@ -23,24 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4VUserWorkerInitialization.hh"
+#include "G4UserWorkerInitialization.hh"
 #include "G4UImanager.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4AutoLock.hh"
 
-G4ThreadLocal G4WorkerThread* G4VUserWorkerInitialization::wThreadContext = 0;
+G4ThreadLocal G4WorkerThread* G4UserWorkerInitialization::wThreadContext = 0;
 
 #ifdef G4MULTITHREADED
-G4Thread* G4VUserWorkerInitialization::CreateAndStartWorker(G4WorkerThread* wTC)
+G4Thread* G4UserWorkerInitialization::CreateAndStartWorker(G4WorkerThread* wTC)
 {
     //Note: this method is called by G4MTRunManager, here we are still sequential
     //Create a new thread/worker structure
     G4Thread* worker = new G4Thread;
-    G4THREADCREATE(worker,&G4VUserWorkerInitialization::StartThread , wTC );
+    G4THREADCREATE(worker,&G4UserWorkerInitialization::StartThread , wTC );
     return worker;
 }
 #else
-G4Thread* G4VUserWorkerInitialization::CreateAndStartWorker(G4WorkerThread*)
+G4Thread* G4UserWorkerInitialization::CreateAndStartWorker(G4WorkerThread*)
 {
     return new G4Thread;
 }
@@ -48,15 +48,15 @@ G4Thread* G4VUserWorkerInitialization::CreateAndStartWorker(G4WorkerThread*)
 
 
 
-void* G4VUserWorkerInitialization::StartThread( void* context )
+void* G4UserWorkerInitialization::StartThread( void* context )
 {
     
     //!!!!!!!!!!!!!!!!!!!!!!!!!!
     //!!!!!! IMPORTANT !!!!!!!!!
     //!!!!!!!!!!!!!!!!!!!!!!!!!!
-    //This is not sequential anymore and G4VUserWorkerInitialization is
+    //This is not sequential anymore and G4UserWorkerInitialization is
     // a shared user initialization class
-    // This mean I cannot use data memebers from G4VUserWorkerInitialization
+    // This mean I cannot use data memebers from G4UserWorkerInitialization
     // unless they are invariant ("read-only") and can be safely shared. All the rest that is not
     // invariant should be incapsualted into the context (or, as for wThreadContext be G4ThreadLocal)
     //!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -122,26 +122,38 @@ void* G4VUserWorkerInitialization::StartThread( void* context )
     return static_cast<void*>(0);
 }
 
-void G4VUserWorkerInitialization::SetUserAction(G4VUserPrimaryGeneratorAction* action) const
+G4UserWorkerInitialization::G4UserWorkerInitialization()
+{;}
+
+G4UserWorkerInitialization::~G4UserWorkerInitialization()
+{;}
+
+void G4UserWorkerInitialization::WorkerStart() const
+{;}
+
+void G4UserWorkerInitialization::WorkerStop() const
+{;}
+
+void G4UserWorkerInitialization::SetUserAction(G4VUserPrimaryGeneratorAction* action) const
 { G4RunManager::GetRunManager()->SetUserAction(action); } 
 
-void G4VUserWorkerInitialization::SetUserAction(G4UserRunAction* action) const
+void G4UserWorkerInitialization::SetUserAction(G4UserRunAction* action) const
 { G4RunManager::GetRunManager()->SetUserAction(action); } 
 
-void G4VUserWorkerInitialization::SetUserAction(G4UserEventAction* action) const
+void G4UserWorkerInitialization::SetUserAction(G4UserEventAction* action) const
 { G4RunManager::GetRunManager()->SetUserAction(action); } 
 
-void G4VUserWorkerInitialization::SetUserAction(G4UserStackingAction* action) const
+void G4UserWorkerInitialization::SetUserAction(G4UserStackingAction* action) const
 { G4RunManager::GetRunManager()->SetUserAction(action); } 
 
-void G4VUserWorkerInitialization::SetUserAction(G4UserTrackingAction* action) const
+void G4UserWorkerInitialization::SetUserAction(G4UserTrackingAction* action) const
 { G4RunManager::GetRunManager()->SetUserAction(action); } 
 
-void G4VUserWorkerInitialization::SetUserAction(G4UserSteppingAction* action) const
+void G4UserWorkerInitialization::SetUserAction(G4UserSteppingAction* action) const
 { G4RunManager::GetRunManager()->SetUserAction(action); } 
 
 
-void G4VUserWorkerInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
+void G4UserWorkerInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
 {
     //No default available, let's create the instance of random stuff
     //A Call to this just forces the creation to defaults

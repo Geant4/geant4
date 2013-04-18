@@ -29,7 +29,8 @@
 #include "G4Timer.hh"
 #include "G4ScoringManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4VUserWorkerInitialization.hh"
+#include "G4VUserActionInitialization.hh"
+#include "G4UserWorkerInitialization.hh"
 #include "G4WorkerThread.hh"
 #include "G4Run.hh"
 #include "G4UImanager.hh"
@@ -48,6 +49,8 @@ namespace {
  //Mutex to access/manipulate workersRM
  G4Mutex cmdHandlingMutex = G4MUTEX_INITIALIZER;
  //Mutex to access/manipulate uiCmdsForWorker command stack
+ G4Mutex scorerMergerMutex = G4MUTEX_INITIALIZER;
+ G4Mutex runMergerMutex = G4MUTEX_INITIALIZER;
 }
 
 //This is needed to initialize windows conditions
@@ -176,8 +179,9 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     //Now initialize workers. Check if user defined a WorkerInitialization
     if ( userWorkerInitialization == 0 )
     {
-        G4Exception("G4MTRunManager::InitializeEventLoop(G4int,const char*,G4int)",
-                    "Run0035",FatalException,"No G4VUserWorkerInitialization found");
+////        G4Exception("G4MTRunManager::InitializeEventLoop(G4int,const char*,G4int)",
+////                    "Run0035",FatalException,"No G4VUserWorkerInitialization found");
+      userWorkerInitialization = new G4UserWorkerInitialization();
     }
     
     //Prepare UI commands for threads
@@ -277,9 +281,14 @@ void G4MTRunManager::ConstructScoringWorlds()
 
 }
 
-void G4MTRunManager::SetUserInitialization(G4VUserWorkerInitialization* userInit)
+void G4MTRunManager::SetUserInitialization(G4UserWorkerInitialization* userInit)
 {
   userWorkerInitialization = userInit;
+}
+
+void G4MTRunManager::SetUserInitialization(G4VUserActionInitialization* userInit)
+{
+  userActionInitialization = userInit;
 }
 
 void G4MTRunManager::SetUserInitialization(G4VUserPhysicsList *userPL)
@@ -301,38 +310,44 @@ void G4MTRunManager::SetUserAction(G4UserRunAction* userAction)
 void G4MTRunManager::SetUserAction(G4VUserPrimaryGeneratorAction* /*userAction*/)
 {
   G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
-    "For multi-threaded version, define G4VUserPrimaryGeneratorAction in G4VUserWorkerInitialization.");
+    "For multi-threaded version, define G4VUserPrimaryGeneratorAction in G4VUserActionInitialization.");
 }
 
 void G4MTRunManager::SetUserAction(G4UserEventAction* /*userAction*/)
 {
   G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
-    "For multi-threaded version, define G4UserEventAction in G4VUserWorkerInitialization.");
+    "For multi-threaded version, define G4UserEventAction in G4VUserActionInitialization.");
 }
 
 void G4MTRunManager::SetUserAction(G4UserStackingAction* /*userAction*/)
 {
   G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
-    "For multi-threaded version, define G4UserStackingAction in G4VUserWorkerInitialization.");
+    "For multi-threaded version, define G4UserStackingAction in G4VUserActionInitialization.");
 }
 
 void G4MTRunManager::SetUserAction(G4UserTrackingAction* /*userAction*/)
 {
   G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
-    "For multi-threaded version, define G4UserTrackingAction in G4VUserWorkerInitialization.");
+    "For multi-threaded version, define G4UserTrackingAction in G4VUserActionInitialization.");
 }
 
 void G4MTRunManager::SetUserAction(G4UserSteppingAction* /*userAction*/)
 {
   G4Exception("G4MTRunManager::SetUserAction()", "Run3011", FatalException,
-    "For multi-threaded version, define G4UserSteppingAction in G4VUserWorkerInitialization.");
+    "For multi-threaded version, define G4UserSteppingAction in G4VUserActionInitialization.");
 }
 
 void G4MTRunManager::MergeScores(const G4ScoringManager* localScoringManager)
-{ if(masterScM) masterScM->Merge(localScoringManager); }
+{
+  G4AutoLock l(&scorerMergerMutex);
+  if(masterScM) masterScM->Merge(localScoringManager); 
+}
 
 void G4MTRunManager::MergeRun(const G4Run* localRun)
-{ if(currentRun) currentRun->Merge(localRun); }
+{
+  G4AutoLock l(&runMergerMutex);
+  if(currentRun) currentRun->Merge(localRun); 
+}
 
 
 namespace  {

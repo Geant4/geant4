@@ -26,7 +26,7 @@
 #include "G4WorkerThread.hh"
 #include "G4WorkerRunManager.hh"
 #include "G4MTRunManager.hh"
-#include "G4VUserWorkerInitialization.hh"
+//#include "G4VUserWorkerInitialization.hh"
 
 //void G4WorkerThread::SetUserWorkerInitialization(G4VUserWorkerInitialization *userWorkerInit)
 //{
