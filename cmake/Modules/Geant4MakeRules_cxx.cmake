@@ -150,7 +150,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   endif()
 
   # - Multithreading
-  set(GEANT4_MULTITHREADED_CXX_FLAGS "-ftls-model=initial-exec")
+  set(GEANT4_MULTITHREADED_CXX_FLAGS "-ftls-model=initial-exec -pthread")
 endif()
 
 

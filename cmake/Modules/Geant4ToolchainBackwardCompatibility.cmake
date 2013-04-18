@@ -103,6 +103,7 @@ fi
     set(GEANT4_TC_IF_SELFLOCATED "" PARENT_SCOPE)
     set(GEANT4_TC_ENDIF_SELFLOCATED "" PARENT_SCOPE)
 
+
   elseif(${SHELL_FAMILY} STREQUAL "cshell")
     set(${TEMPLATE_NAME}
       "# Self locate script when sourced
@@ -110,10 +111,17 @@ fi
 #
 #   source path_to_script_dir/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}
 #
+unset g4sls_sourced_dir
+unset ${LOCATION_VARIABLE}
+
 set ARGS=($_)
 if (\"$ARGS\" != \"\") then
-  set g4sls_sourced_dir=\"`dirname \${ARGS[2]}`\"
-else
+  if (\"$ARGS[2]\" =~ */${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}) then
+    set g4sls_sourced_dir=\"`dirname \${ARGS[2]}`\"
+  endif
+endif
+
+if (! \$?g4sls_sourced_dir) then
   # Oh great, we were sourced non-interactively. This means that $_
   # won't be set, so we need an external source of information on
   # where the script is located.
@@ -132,30 +140,30 @@ else
     else
       echo \"ERROR \${1} does not contain a Geant4 installation\"
     endif
-  else
-    unset g4sls_sourced_dir
-    echo \"ERROR: ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} could NOT self-locate Geant4 installation\"
-    echo \"because it was sourced (i.e. embedded) in another script.\"
-    echo \"This is due to limitations of (t)csh but can be worked around by providing\"
-    echo \"the directory where ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} is located\"
-    echo \"to it, either via cd-ing to the directory before sourcing:\"
-    echo \"  cd where_script_is ; source ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}\"
-    echo \"or by supplying the directory as an argument to the script:\"
-    echo \"  source where_script_is/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} where_script_is\"
-    echo \" \"
   endif
 endif
 
-if (\$?g4sls_sourced_dir) then
-  set ${LOCATION_VARIABLE}=\"`cd \${g4sls_sourced_dir} > /dev/null ; pwd`\"
+if (! \$?g4sls_sourced_dir) then
+  echo \"ERROR: ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} could NOT self-locate Geant4 installation\"
+  echo \"because it was sourced (i.e. embedded) in another script.\"
+  echo \"This is due to limitations of (t)csh but can be worked around by providing\"
+  echo \"the directory where ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} is located\"
+  echo \"to it, either via cd-ing to the directory before sourcing:\"
+  echo \"  cd where_script_is ; source ${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}\"
+  echo \"or by supplying the directory as an argument to the script:\"
+  echo \"  source where_script_is/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION} where_script_is\"
+  echo \" \"
+  exit 1
 endif
+
+set ${LOCATION_VARIABLE}=\"`cd \${g4sls_sourced_dir} > /dev/null ; pwd`\"
 "
       PARENT_SCOPE
       )
 
     # For C-shell, set the values of the guard variables
-    set(GEANT4_TC_IF_SELFLOCATED "if (\${?g4sls_sourced_dir}) then" PARENT_SCOPE)
-   set(GEANT4_TC_ENDIF_SELFLOCATED "endif" PARENT_SCOPE)
+    set(GEANT4_TC_IF_SELFLOCATED "" PARENT_SCOPE)
+   set(GEANT4_TC_ENDIF_SELFLOCATED "" PARENT_SCOPE)
   endif()
 endfunction()
 
