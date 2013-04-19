@@ -129,11 +129,11 @@ public:
 
 class G4ProcessFilter : public G4VLoggingFilter {
 public:
-    virtual G4bool AcceptStep( const G4VProcess* aProc) = 0 ;
+    virtual G4bool AcceptProc( const G4VProcess* aProc) = 0 ;
     G4bool AcceptStep(const G4Step* aStep )
     {
         const G4VProcess* proc = aStep->GetPostStepPoint()->GetProcessDefinedStep();
-        return AcceptStep(proc);
+        return AcceptProc(proc);
     }
 };
 
@@ -150,7 +150,7 @@ public:
         if ( procsubtype > -1 ) msg<<"_"<<procsubtype;
         return msg.str();
     }
-    G4bool AcceptStep( const G4VProcess* proc )
+    G4bool AcceptProc( const G4VProcess* proc )
     {
         if ( proctype == proc->GetProcessType() )
         {
@@ -169,7 +169,7 @@ private:
 public:
     G4ProcessNameFilter(const G4String& pn ) : pname(pn) { }
     G4String Name() const { return "ProcessNameFilter_"+pname; }
-    G4bool AcceptStep(const G4VProcess* proc )
+    G4bool AcceptProc(const G4VProcess* proc )
     {
         if ( pname == proc->GetProcessName() ) return true;
         else return false;
@@ -245,9 +245,16 @@ void ExN02SteppingAction::UserSteppingAction(const G4Step* aStep)
     /*G4bool result =*/ dist->LogStep(aStep,aStep->GetTotalEnergyDeposit());
 }
 
+#include <fstream>
 void ExN02SteppingAction::Dump() const
 {
-    G4cout<<"ANDREA:"<<*dist<<G4endl;
+    G4cout<<"Writing monitoring stuff in data.xml"<<G4endl;
+    std::ofstream fout;
+    fout.open("data.xml");
+    fout<<"<statistics>\n";
+    fout<<*dist;
+    fout<<"</statistics>";
+    fout.close();
 }
 
 ExN02SteppingAction::~ExN02SteppingAction()
@@ -276,9 +283,9 @@ std::ostream& operator<<(std::ostream& out, const G4VLoggingFilter& logfileter)
     return out;
 }
 
-std::ostream& operator<<(std::ostream& out,const G4DistributionInfo& dist )
+std::ostream& operator<<(std::ostream& out,const G4DistributionInfo& mydist )
 {
-    dist.Dump(out);
+    mydist.Dump(out);
     return out;
 }
 
@@ -301,32 +308,34 @@ void G4StepInfo::Clear()
 void G4StepInfo::Dump(std::ostream& out) const
 {
     out<<"<G4StepInfo name=\""<<name<<"\">\n";
-    out<<"<results ctr=\""<<counter<<"\"";
-    out<<" mu=\""<<Mean()<<"\" sigma=\""<<Variance()<<"\" ExKurt=\""<<ExcKurtosis()<<"\" Skew=\""<<Skewness()<<"\"/>\n";
-    out<<"<Filters>\n";
+    out<<"<results>\n<counter>"<<counter<<"</counter>\n";
+    out<<"<mean>"<<Mean()<<"</mean>\n"<<"<variance>"<<Variance()<<"</variance>\n"<<"<excesskurtosis>"<<ExcKurtosis()<<"</excesskurtosis>\n"<<"<skewness>"<<Skewness()<<"</skewness>\n";
+    out<<"</results>\n";
+    out<<"<filters>\n";
     for ( std::list<G4VLoggingFilter*>::const_iterator it = filters.begin() ;
          it != filters.end() ; ++it )
         out<<*(*it);
-    out<<"</Filters>\n";
+    out<<"</filters>\n";
     if ( debug )
     {
-        out<<"<data values=\"";
+        out<<"<data>";
         for ( std::list<float>::const_iterator it = vals.begin();
              it != vals.end() ; ++it )
-            out<<*it<<",";
-        out<<"\"/>";
+            out<<*it<<" ";
+        out<<"\n</data/>";
     }
     out<<"</G4StepInfo>\n";
 }
 
 void G4DistributionInfo::Dump(std::ostream& out) const
 {
-    out<<"<G4DistributionInfo name=\""<<name<<"\" counter=\""<<counter<<"\">\n";
-    out<<"<Loggers>\n";
+    out<<"<G4DistributionInfo name=\""<<name<<"\">\n";
+    out<<"<counter>"<<counter<<"</counter>\n";
+    out<<"<loggers>\n";
     for ( std::list<G4StepInfo*>::const_iterator it = infos.begin() ;
          it != infos.end() ;
          ++it ) out<<*(*it);
-    out<<"</Loggers>\n";
+    out<<"</loggers>\n";
     out<<"</G4DistributionInfo>\n";
 }
 

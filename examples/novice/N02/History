@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+18-04-13 A.Dotti (exampleN02-V09-06-03)
+- Fixing compilation warnings
+
 17-04-13 A.Dotti (exampleN02-V09-06-02)
 - Co-working with run-V09-06-22
 - Adding temporary logging of info on number of steps
