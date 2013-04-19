@@ -6,6 +6,7 @@
 #include <libgen.h> /* for basename() */
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <errno.h>
@@ -34,14 +35,12 @@ static char *endPosition = 0;
 
 void* AllocateInProtectedHeap(size_t size)
 {
-  //  printf("In AllocateInProtectedHeap %d.\n", size);
-  if (startPosition > 0)
+  if (startPosition != 0)
   {
     currentPosition = nextPosition;
     nextPosition = &nextPosition[size];
     if (nextPosition >= endPosition)
     {
-      //      printf("Insufficient protected Heap\n");
       nextPosition = currentPosition;
       return malloc(size);
     }
@@ -49,7 +48,6 @@ void* AllocateInProtectedHeap(size_t size)
   }
   else
   {
-    //    printf("No protected Heap\n");
     return malloc(size);
   }
 }
@@ -63,7 +61,6 @@ static void AllocateProtectedHeap(size_t totalSize, size_t pagesize)
   currentPosition = startPosition;
   nextPosition = currentPosition + pagesize;
   endPosition = nextPosition + totalSize;
-  //  printf("Current position: %ld\n", protectedHeap->currentPosition);
 }
 
 
@@ -114,7 +111,6 @@ void PhaseChange()
   char outputfilename[1024];  
   outputfilename[0] = 0;
   sprintf(outputfilename, "./memoryhotpot.out.%d.%d", phase, myselfpid);
-  //  printf("%s\n", outputfilename);
 
   outputFile = open(outputfilename, O_CREAT|O_RDWR, S_IRWXU);
   close(tmpoutputFile);
@@ -134,7 +130,7 @@ static void show_stackframe() {
 
 static int isCalled = 0;
 
-static void handler0(int signum, siginfo_t * siginfo, void * context)
+static void handler0(int, siginfo_t *, void *)
 {
   #ifdef PROTECTEDMEMORYDEBUG
   printf("In handler 0 p1.\n");
@@ -153,7 +149,7 @@ static void handler0(int signum, siginfo_t * siginfo, void * context)
   }
 }
 
-static void handler1(int signum, siginfo_t * siginfo, void * context)
+static void handler1(int, siginfo_t *, void *)
 {
   #ifdef PROTECTEDMEMORYDEBUG
   printf("In handler 1 p1.\n");
@@ -175,7 +171,7 @@ static void handler1(int signum, siginfo_t * siginfo, void * context)
 // mprotect_map and mprotect_addr should be the statically defined arrays
 // this function protect only one page, it is not correct because
 // we do not know how large the memory is in one assemble instruction
-static void handler2(int signum, siginfo_t * siginfo, void * context)
+static void handler2(int, siginfo_t *, void *)
 {
   #ifdef PROTECTEDMEMORYDEBUG
   printf("In handler 2 p1.\n");
@@ -192,7 +188,6 @@ void BuildProtectedMemory(size_t totalHeap)
   char outputfilename[1024];  
   outputfilename[0] = 0;
   sprintf(outputfilename, "./memoryhotpot.out.%d.%d", phase, myselfpid);
-  //  printf("%s\n", outputfilename);
   outputFile = open(outputfilename, O_CREAT|O_RDWR, S_IRWXU);
 
   show_stackframe();
@@ -265,55 +260,55 @@ void BuildProtectedMemory(size_t totalHeap)
     if (writable ==  1)
     {
       //ignore 
-      if (strstr(filename2, "ld") > 0)
+      if (strstr(filename2, "ld") != 0)
       {
         std::cout << "Not protected: " << start << ", " << end << ", "
                                        << writable << ", " << filename2
                   << std::endl;
       }
-      else if (strstr(filename2, "vdso") > 0)
+      else if (strstr(filename2, "vdso") != 0)
       {
         std::cout << "Not protected: " << start << ", " << end << ", "
                                        << writable << ", " << filename2
                   << std::endl;
       }
-      else if (strstr(filename2, "stack") > 0)
+      else if (strstr(filename2, "stack") != 0)
       {
         std::cout << "Not protected: " << start << ", " << end << ", "
                                        << writable << ", " << filename2
                   << std::endl;
       }
-      else if (strstr(filename2, "libc") > 0)
+      else if (strstr(filename2, "libc") != 0)
       {
         std::cout << "Not protected: " << start << ", " << end << ", "
                                        << writable << ", " << filename2
                   << std::endl;
       }
-      else if (strstr(filename2, "libProtectedMemory.so") > 0)
+      else if (strstr(filename2, "libProtectedMemory.so") != 0)
       {
         std::cout << "Not protected: " << start << ", " << end << ", "
                                        << writable << ", " << filename2
                   << std::endl;
       }
-      else if (strstr(filename2, "libParRunManagerMP.so") > 0)
+      else if (strstr(filename2, "libParRunManagerMP.so") != 0)
       {
         std::cout << "Not protected: " << start << ", " << end << ", "
                                        << writable << ", " << filename2
                   << std::endl;
       }
-      else if (strstr(filename2, "libmymalloc.so") > 0)
+      else if (strstr(filename2, "libmymalloc.so") != 0)
       {
         std::cout << "Not protected: " << start << ", " << end << ", "
                                        << writable << ", " << filename2
                   << std::endl;
       }
-      else if (strstr(filename2, "libtpmallocstub.so") > 0)
+      else if (strstr(filename2, "libtpmallocstub.so") != 0)
       {
         std::cout << "Not protected: " << start << ", " << end << ", "
                                        << writable << ", " << filename2
                   << std::endl;
       }
-      else if (strstr(filename2, "heap") > 0)
+      else if (strstr(filename2, "heap") != 0)
       {
         static int Heapcount = 0;
         //Only one is the data segment follows with [heap] [thread private heap, empty, thread local storage]*          
@@ -334,7 +329,7 @@ void BuildProtectedMemory(size_t totalHeap)
                     << std::endl;
         }
       }
-      else if (strstr(filename2, "ParA01") > 0)
+      else if (strstr(filename2, "ParA01") != 0)
       {
         static int Parmaincount = 0;
 	//Only one is the data segment follows with [heap] [thread private heap, empty, thread local storage]*
@@ -350,7 +345,7 @@ void BuildProtectedMemory(size_t totalHeap)
           numOfSegments++;
 	}
       }
-      else if (strstr(filename2, "geant4") > 0)
+      else if (strstr(filename2, "geant4") != 0)
       {
         std::cout << "Protected: " << numOfSegments << ", " << start << ", " << end << ", "
                                    << writable << ", " << filename2

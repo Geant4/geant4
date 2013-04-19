@@ -52,12 +52,11 @@ bin: $(G4BINDIR)/$(G4TARGET)
 $(G4BINDIR)/$(G4TARGET) : $(Tbinobjects)
 	@if [ ! -d $(G4BINDIR) ] ; then mkdir $(G4BINDIR) ;fi
 	@echo Linking $(G4TARGET) ...
-	$(RM) $@
-	echo $(G4TARGET) dependencies: $^
+	@$(RM) $@
 ifneq ($(G4LIB_BUILD_SHARED),)
-	$(CC) $(Tbinobjects) -o $@ -lpthread $(G4LIBDIR)/lib$(name).$(SHEXT)
+	@$(CC) $(Tbinobjects) -o $@ -lpthread -lstdc++ $(G4LIBDIR)/lib$(name).$(SHEXT)
 else
-	$(CC) $(Tbinobjects) -o $@ -lpthread $(G4LIBDIR)/lib$(name).a
+	@$(CC) $(Tbinobjects) -o $@ -lpthread -lstdc++ $(G4LIBDIR)/lib$(name).a
 endif
 	@echo Finished linking $(G4TARGET)
 
@@ -67,7 +66,7 @@ endif
 #
 $(G4TMPDIR)/%.o : src/%.cxx libc
 	@echo Building $(G4TARGET) ...
-	@$(CC) $(CXXFLAGS) $(CPPFLAGS) -o $(G4TMPDIR)/$(*cxx).o -c src/$(G4TARGET).cxx
+	@$(CC) $(CXXFLAGS) $(CPPFLAGS) -o $(G4TMPDIR)/$(G4TARGET).o -c src/$(G4TARGET).cxx
 
 ### --------------------- .d files --------------------------------------------
 

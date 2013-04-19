@@ -1,3 +1,4 @@
+#include <iostream>
 #include <stdio.h>
 #include <time.h>
 #include "tls.hh"
@@ -33,7 +34,7 @@ void *malloc (size_t __size)
   #endif
 
   #if HJMALLOCDEBUG
-  printf("in malloc of mymalloc\n");
+  std::cout << "in malloc of mymalloc" << std::endl;
   #endif
 
   if (mallocswitch == 0)
@@ -41,7 +42,7 @@ void *malloc (size_t __size)
   else
   {
     #if HJMALLOCDEBUG
-    printf("mspace in malloc of mymalloc\n");
+    std::cout << "mspace in malloc of mymalloc" << std::endl;
     #endif
     if (tlms == 0) tlms = create_mspace(TLMSSIZE * 1024 * 1024, 0);
 
@@ -70,14 +71,14 @@ void *calloc (size_t __nmemb, size_t __size)
   #endif
 
   #if HJMALLOCDEBUG
-  printf("in calloc of mymalloc\n");
+  std::cout << "in calloc of mymalloc" << std::endl;
   #endif
   if (mallocswitch == 0)
     return mycalloc(__nmemb, __size);
   else
   {
     #if HJMALLOCDEBUG
-    printf("mspace in alloc of mymalloc\n");
+    std::cout << "mspace in alloc of mymalloc" << std::endl;
     #endif
     if (tlms == 0) tlms = create_mspace(TLMSSIZE * 1024 * 1024, 0);
 
@@ -107,14 +108,14 @@ void *realloc (void *__ptr, size_t __size)
   #endif
 
   #if HJMALLOCDEBUG
-  printf("in realloc of mymalloc\n");
+  std::cout << "in realloc of mymalloc" << std::endl;
   #endif
   if (mallocswitch == 0)
     return myrealloc(__ptr, __size);
   else
   {
     #if HJMALLOCDEBUG
-    printf("mspace in realloc of mymalloc\n");
+    std::cout << "mspace in realloc of mymalloc" << std::endl;
     #endif
     if (tlms == 0) tlms = create_mspace(TLMSSIZE * 1024 * 1024, 0);
 
@@ -143,14 +144,14 @@ void free (void *__ptr)
   #endif
 
   #if HJMALLOCDEBUG
-  printf("in free of mymalloc\n");
+  std::cout << "in free of mymalloc" << std::endl;
   #endif
   if (mallocswitch == 0)
     myfree(__ptr);
   else
   {
     #if HJMALLOCDEBUG
-    printf("mspace in free of mymalloc\n");
+    std::cout << "mspace in free of mymalloc" << std::endl;
     #endif
 
     #if HJMALLOCPROFILE
@@ -177,14 +178,14 @@ void cfree (void *__ptr)
   #endif
 
   #if HJMALLOCDEBUG
-  printf("in cfree of mymalloc\n");
+  std::cout << "in cfree of mymalloc" << std::endl;
   #endif
   if (mallocswitch == 0)
     cfree(__ptr);
   else
   {
     #if HJMALLOCDEBUG
-    printf("mspace in cfree of mymalloc\n");
+    std::cout << "mspace in cfree of mymalloc" << std::endl;
     #endif
 
     #if HJMALLOCPROFILE
@@ -211,14 +212,14 @@ void *valloc (size_t __size)
   #endif
 
   #if HJMALLOCDEBUG
-  printf("in valloc of mymalloc\n");
+  std::cout << "in valloc of mymalloc" << std::endl;
   #endif
   if (mallocswitch == 0)
     return myvalloc(__size);
   else
   {
     #if HJMALLOCDEBUG
-    printf("mspace in valloc of mymalloc\n");
+    std::cout << "mspace in valloc of mymalloc" << std::endl;
     #endif
     if (tlms == 0) tlms = create_mspace(TLMSSIZE * 1024 * 1024, 0);
 

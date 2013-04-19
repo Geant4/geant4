@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-April-2013: G.Cosmo (externals-V09-06-03)
+- More corrections for compilation warnings on gcc for tpmalloc
+  and memoryprotection modules.
+
 18-April-2013: G.Cosmo (externals-V09-06-02, externals-V09-06-01)
 - Moved 'tpmalloc' and 'memoryprotection' modules from global.
 - Fixed compilation errors and warnings (NOTE: "tracer" application

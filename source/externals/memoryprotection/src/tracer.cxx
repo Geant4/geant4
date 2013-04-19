@@ -98,7 +98,7 @@ char *getLibName(long int address)
   return NULL;
 }
 
-void processParameters(int argc, char *argv[])
+void processParameters(int, char *argv[])
 {
   strcpy(cmd, argv[1]);
   printf("tracer: traced process executable file: %s:: %s %s\n", cmd, argv[1], argv[2]);
@@ -259,8 +259,8 @@ int traceloop(pid_t pid)
 
   do
   {
-    //    printf("tracer for %d tracerloop\n", pid);
-    pid_t frompid = my_wait(pid, &wait_val);
+    // printf("tracer for %d tracerloop\n", pid);
+    // pid_t frompid = my_wait(pid, &wait_val);
 
     if (WSTOPSIG(wait_val) == SIGSEGV)
     {
@@ -370,6 +370,7 @@ int traceloop(pid_t pid)
       printf("tracer for %d ptrace detach", pid);
   }
 
+  return 0;
 }
 
 void *tracer_thread(void *pid_ptr)
@@ -379,6 +380,7 @@ void *tracer_thread(void *pid_ptr)
   pid = * ((pid_t *) pid_ptr);
 
   traceloop(pid);
+  return 0;
 }
 
 void startThreadTracers(pid_t pid)
@@ -448,7 +450,6 @@ void openFilter()
 void closeFilter()
 {
   printf("tracer stopping...\n");
-  int i;
   unsigned long exitCode = 0;
 
   printf("tracer: notifying filter to exit\n");

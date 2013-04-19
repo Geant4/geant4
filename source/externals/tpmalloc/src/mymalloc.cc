@@ -697,6 +697,7 @@ MAX_RELEASE_CHECK_RATE   default: 4095 unless not HAVE_MMAP
 
 /* #define HAVE_USR_INCLUDE_MALLOC_H */
 
+#include <iostream>
 #include "tls.hh"
 #ifdef HAVE_USR_INCLUDE_MALLOC_H
 #include "/usr/include/malloc.h"
@@ -3393,9 +3394,9 @@ static void internal_malloc_stats(mstate m) {
       }
     }
 
-    fprintf(stderr, "max system bytes = %10lu\n", (unsigned long)(maxfp));
-    fprintf(stderr, "system bytes     = %10lu\n", (unsigned long)(fp));
-    fprintf(stderr, "in use bytes     = %10lu\n", (unsigned long)(used));
+    std::cerr << "max system bytes = " << (unsigned long)(maxfp) << std::endl
+              << "system bytes     = " << (unsigned long)(fp) << std::endl
+              << "in use bytes     = " << (unsigned long)(used) << std::endl;
 
     POSTACTION(m);
   }
@@ -4973,7 +4974,11 @@ static mstate init_user_mstate(char* tbase, size_t tsize) {
 mspace create_mspace(size_t capacity, int locked) {
 
   //Added by xindong
-  printf("HAVE_MORECORE: %d, MSPACES: %d, ONLY_MSPACES: %d, HAVE_MMAP: %d, USE_LOCKS: %d\n", HAVE_MORECORE, MSPACES, ONLY_MSPACES, HAVE_MMAP, USE_LOCKS);  
+  std::cout << "HAVE_MORECORE: " << HAVE_MORECORE << ", "
+            << "MSPACES: " << MSPACES  << ", "
+            << "ONLY_MSPACES: " << ONLY_MSPACES << ", "
+            << "HAVE_MMAP: " << HAVE_MMAP << ", "
+            << " USE_LOCKS: " << USE_LOCKS << std::endl;  
 
   mstate m = 0;
   size_t msize;
@@ -4981,7 +4986,9 @@ mspace create_mspace(size_t capacity, int locked) {
   msize = pad_request(sizeof(struct malloc_state));
   //Commented out by xindong
   if (capacity < (size_t) -(msize + TOP_FOOT_SIZE + mparams.page_size)) {
-    printf("handle capacity paramenter: %ld < %ld\n", capacity, (size_t) -(msize + TOP_FOOT_SIZE + mparams.page_size));
+    std::cout << "handle capacity paramenter: " << capacity << ", "
+              << (size_t) -(msize + TOP_FOOT_SIZE + mparams.page_size)
+              << std::endl;
     size_t rs = ((capacity == 0)? mparams.granularity :
                  (capacity + TOP_FOOT_SIZE + msize));
     size_t tsize = granularity_align(rs);
