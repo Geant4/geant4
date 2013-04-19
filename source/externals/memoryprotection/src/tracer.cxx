@@ -34,6 +34,31 @@ pid_t threads[MAXTHREADS];
 pthread_t tids[MAXTHREADS];
 static char libname[4096][1024];
 
+#if defined(__MACH__) 
+struct user_regs_struct
+{
+ long int ebx;
+ long int ecx;
+ long int edx;
+ long int esi;
+ long int edi;
+ long int ebp;
+ long int eax;
+ long int xds;
+ long int xes;
+ long int xfs;
+ long int xgs;
+ long int orig_eax;
+ long int eip;
+ long int xcs;
+ long int eflags;
+ long int esp;
+ long int xss;
+ long int rip;
+};
+#define __WCLONE     0x80000000
+#endif
+
 G4ThreadLocal struct user_regs_struct regs;
 G4ThreadLocal struct user_regs_struct regssinglestep;
 G4ThreadLocal int detectionFlag = 0;
@@ -169,11 +194,13 @@ int SingleSteps(pid_t pid)
 {
   int wait_val;           /*  traced's return value        */
 
-  if (ptrace(PTRACE_GETREGS, pid, 0, &regssinglestep) != 0)
+#if defined(__linux__) 
+  if (ptrace(PT_GETREGS, pid, 0, &regssinglestep) != 0)
   {
     printf("tracer for %d ptrace getregs", pid);
     exit(-1);
   }
+#endif
 
 #ifdef __x86_64__ 
   write(fildes[1], &(regssinglestep.rip), sizeof(regssinglestep.rip));
@@ -181,7 +208,7 @@ int SingleSteps(pid_t pid)
   write(fildes[1], &(regssinglestep.eip), sizeof(regssinglestep.eip));
 #endif
 
-  if (ptrace(PTRACE_SINGLESTEP, pid, 0, 0) != 0)
+  if (ptrace(PT_STEP, pid, 0, 0) != 0)
   {
     printf("tracer for %d ptrace singlestep", pid);
     exit(-1);
@@ -210,7 +237,7 @@ int traceloop(pid_t pid)
 {
   int wait_val;
 
-  if (ptrace(PTRACE_ATTACH, pid, 0, 0) != 0)
+  if (ptrace(PT_ATTACH, pid, 0, 0) != 0)
   {
     printf("tracer for %d ptrace attach", pid);
     exit(-1);
@@ -221,7 +248,7 @@ int traceloop(pid_t pid)
 
   if (isMain)
   {
-    if (ptrace(PTRACE_CONT, pid, 0, SIGUSR2) != 0)
+    if (ptrace(PT_CONTINUE, pid, 0, SIGUSR2) != 0)
     {
       printf("tracer for %d ptrace continue with SIGUSR2", pid);
       exit(-1);
@@ -233,7 +260,7 @@ int traceloop(pid_t pid)
     protect = 1;
     printf("tracer for %d after memory protection\n", pid);
 
-    if (ptrace(PTRACE_CONT, pid, 0, 0) != 0)
+    if (ptrace(PT_CONTINUE, pid, 0, 0) != 0)
     {
       printf("tracer for %d ptrace continue without SIGUSR2", pid);
       exit(-1);
@@ -245,7 +272,7 @@ int traceloop(pid_t pid)
     printf("tracer for %d Waiting for the memory is protected\n", pid);
     while (!protect) usleep(10);
 
-    if (ptrace(PTRACE_CONT, pid, 0, 0) != 0)
+    if (ptrace(PT_CONTINUE, pid, 0, 0) != 0)
     {
       printf("tracer for %d ptrace continue without SIGUSR2", pid);
       exit(-1);
@@ -266,11 +293,12 @@ int traceloop(pid_t pid)
     {
       pthread_mutex_lock(&segFaultHandlingLock);
 
-
-      if (ptrace(PTRACE_GETREGS, pid, 0, &regssinglestep) != 0)
+#if defined(__linux__) 
+      if (ptrace(PT_GETREGS, pid, 0, &regssinglestep) != 0)
       {
         printf("tracer for %d ptrace getregs", pid);
       }
+#endif
 
       if (detectionFlag && !isMain)
       {
@@ -291,7 +319,7 @@ int traceloop(pid_t pid)
         system(convertcmd);
       }
 
-      if (ptrace(PTRACE_CONT, pid, 0, SIGSEGV) != 0)
+      if (ptrace(PT_CONTINUE, pid, 0, SIGSEGV) != 0)
       {
         printf("tracer for %d ptrace continue with SIGSEGV", pid);
 	tmp = -6;
@@ -312,7 +340,7 @@ int traceloop(pid_t pid)
       //      counter++;
       //      printf("Counter: %d\n", counter);
 
-        if (ptrace(PTRACE_CONT, pid, 0, SIGUSR1) != 0)
+        if (ptrace(PT_CONTINUE, pid, 0, SIGUSR1) != 0)
         {
           printf("tracer for %d ptrace continue with SIGUSR1\n", pid);
           tmp = -5;
@@ -333,7 +361,7 @@ int traceloop(pid_t pid)
       {
 	//        test(pid, wait_val);
         detectionFlag = 0;
-        if (ptrace(PTRACE_DETACH, pid, 0, 0) != 0)
+        if (ptrace(PT_DETACH, pid, 0, 0) != 0)
         {
           printf("tracer for %d ptrace detach\n", pid);
           tmp = -6;
@@ -342,7 +370,7 @@ int traceloop(pid_t pid)
       else if (WSTOPSIG(wait_val) == SIGUSR2)
       {
         detectionFlag = 1;
-        if (ptrace(PTRACE_CONT, pid, 0, 0) != 0)
+        if (ptrace(PT_CONTINUE, pid, 0, 0) != 0)
         {
           printf("tracer for %d ptrace continue without SIGSEGV\n", pid);
           tmp = -4;
@@ -350,7 +378,7 @@ int traceloop(pid_t pid)
       }
       else
       {
-        if (ptrace(PTRACE_CONT, pid, 0, 0) != 0)
+        if (ptrace(PT_CONTINUE, pid, 0, 0) != 0)
         {
           printf("tracer for %d ptrace continue without SIGSEGV\n", pid);
           tmp = -4;
@@ -366,7 +394,7 @@ int traceloop(pid_t pid)
 
   if (tmp != -6)
   {
-    if (ptrace(PTRACE_DETACH, pid, 0, 0) != 0)
+    if (ptrace(PT_DETACH, pid, 0, 0) != 0)
       printf("tracer for %d ptrace detach", pid);
   }
 
