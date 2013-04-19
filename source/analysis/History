@@ -17,6 +17,15 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 18, 2013 I.Hrivnacova (analysis-V09-06-07)
+- Manager classes updated for MT:
+  Added fgMasterInstance, fIsMaster data members and functions for 
+  mergings histograms (Root, Xml) from worker tom master:
+    void AddH1Vector(std::vector<tools::histo::h1d*>& h1Vector);
+    void AddH2Vector(std::vector<tools::histo::h2d*>& h2Vector);
+  These functions are automatically called on Worker::Write().
+  Added ThreadId to ntuple file names when processing on workers.
+
 April 10, 2013 I.Hrivnacova (analysis-V09-06-06)
 - Updated to g4tools 1.6.0 (by G. Barrand) - see History_tools
 

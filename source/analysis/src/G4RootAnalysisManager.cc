@@ -29,12 +29,34 @@
 
 #include "G4RootAnalysisManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 #include <tools/gzip_buffer>
 
 #include <iostream>
 
+// mutex in a file scope
+
+namespace {
+  //Mutex to lock master manager when merging H1 histograms 
+  G4Mutex mergeH1Mutex = G4MUTEX_INITIALIZER;
+  //Mutex to lock master manager when merging H1 histograms 
+  G4Mutex mergeH2Mutex = G4MUTEX_INITIALIZER;
+}  
+
+G4RootAnalysisManager* G4RootAnalysisManager::fgMasterInstance = 0;
 G4ThreadLocal G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = 0;
+
+//_____________________________________________________________________________
+G4RootAnalysisManager* G4RootAnalysisManager::Create(G4bool isMaster)
+{
+  if ( fgInstance == 0 ) {
+    fgInstance = new G4RootAnalysisManager(isMaster);
+  }
+  
+  return fgInstance;
+}    
 
 //_____________________________________________________________________________
 G4RootAnalysisManager* G4RootAnalysisManager::Instance()
@@ -47,8 +69,9 @@ G4RootAnalysisManager* G4RootAnalysisManager::Instance()
 }    
 
 //_____________________________________________________________________________
-G4RootAnalysisManager::G4RootAnalysisManager()
+G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
  : G4VAnalysisManager("Root"),
+   fIsMaster(isMaster),
    fFile(0),
    fHistoDirectory(0),
    fNtupleDirectory(0),
@@ -58,15 +81,17 @@ G4RootAnalysisManager::G4RootAnalysisManager()
    fH2NameIdMap(),  
    fNtupleVector()
 {
-  if ( fgInstance ) {
+  if ( ( isMaster && fgMasterInstance ) ||
+       ( (! isMaster ) && fgInstance ) ) {
     G4ExceptionDescription description;
-    description << "      " 
-                << "G4RootAnalysisManager already exists." 
-                << "Cannot create another instance.";
+    description 
+      << "      " 
+      << "G4RootAnalysisManager already exists." 
+      << "Cannot create another instance.";
     G4Exception("G4RootAnalysisManager::G4RootAnalysisManager()",
                 "Analysis_F001", FatalException, description);
-  }              
-   
+  }
+  if ( isMaster ) fgMasterInstance = this;
   fgInstance = this;
 }
 
@@ -90,6 +115,7 @@ G4RootAnalysisManager::~G4RootAnalysisManager()
     
   delete fFile;  
 
+  if ( fIsMaster ) fgMasterInstance = 0;
   fgInstance = 0;
 }
 
@@ -218,6 +244,44 @@ void G4RootAnalysisManager::CreateNtuplesFromBooking()
 #endif
   }
 }   
+
+//_____________________________________________________________________________
+void G4RootAnalysisManager::AddH1Vector(
+                               std::vector<tools::histo::h1d*>& h1Vector)
+{
+#ifdef G4VERBOSE
+    if ( fpVerboseL4 ) 
+      fpVerboseL4->Message("merge", "all h1", "");
+#endif
+  std::vector<tools::histo::h1d*>::iterator itw = h1Vector.begin();
+  std::vector<tools::histo::h1d*>::iterator it;
+  for (it = fH1Vector.begin(); it != fH1Vector.end(); it++ ) {
+    (*it)->add(*(*itw++));
+  }  
+#ifdef G4VERBOSE
+    if ( fpVerboseL1 ) 
+      fpVerboseL1->Message("merge", "all h1", "");
+#endif
+}  
+
+//_____________________________________________________________________________
+void G4RootAnalysisManager::AddH2Vector(
+                               std::vector<tools::histo::h2d*>& h2Vector)
+{
+#ifdef G4VERBOSE
+    if ( fpVerboseL4 ) 
+      fpVerboseL4->Message("merge", "all h2", "");
+#endif
+  std::vector<tools::histo::h2d*>::iterator itw = h2Vector.begin();
+  std::vector<tools::histo::h2d*>::iterator it;
+  for (it = fH2Vector.begin(); it != fH2Vector.end(); it++ ) {
+    (*it)->add(*(*itw++));
+  }  
+#ifdef G4VERBOSE
+    if ( fpVerboseL1 ) 
+      fpVerboseL1->Message("merge", "all h2", "");
+#endif
+}  
 
 //_____________________________________________________________________________
 tools::wroot::ntuple::column<int>*    
@@ -452,8 +516,15 @@ G4bool G4RootAnalysisManager::OpenFile(const G4String& fileName)
   // Keep file name
   fFileName =  fileName;
 
-  // Add file extension .root if no extension is given
   G4String name(fileName);
+  // Add thread Id to a file name if MT processing
+  if ( ! fIsMaster ) {
+    std::ostringstream os;
+    os << G4GetPidId();
+    name.append("_t");
+    name.append(os.str());
+  }  
+ // Add file extension .root if no extension is given
   if ( name.find(".") == std::string::npos ) { 
     name.append(".");
     name.append(GetFileType());
@@ -502,49 +573,74 @@ G4bool G4RootAnalysisManager::OpenFile(const G4String& fileName)
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::Write() 
 {
-  // h1 histograms
-  for ( G4int i=0; i<G4int(fH1Vector.size()); ++i ) {
-    G4int id = i + fFirstHistoId;
-    G4HnInformation* info = GetH1Information(id); 
-    // skip writing if activation is enabled and H1 is inactivated
-    if ( fActivation && ( ! info->fActivation ) ) continue; 
-    tools::histo::h1d* h1 = fH1Vector[i];
-#ifdef G4VERBOSE
-    if ( fpVerboseL3 ) 
-      fpVerboseL3->Message("write", "h1d", info->fName);
-#endif
-    G4bool result
-      = to(*fHistoDirectory,*h1,info->fName);
-    if ( ! result ) {
-      G4ExceptionDescription description;
-      description << "      " << "saving histogram " << info->fName << " failed";
-      G4Exception("G4RootAnalysisManager::Write()",
-                "Analysis_W003", JustWarning, description);
-      return false;       
-    } 
-  }
+  if ( fIsMaster || ( ! fgMasterInstance ) )  {
 
-  // h2 histograms
-  for ( G4int i=0; i<G4int(fH2Vector.size()); ++i ) {
-    G4int id = i + fFirstHistoId;
-    G4HnInformation* info = GetH2Information(id); 
-    // skip writing if inactivated
-    if ( fActivation && ( ! info->fActivation ) ) continue;
-    tools::histo::h2d* h2 = fH2Vector[i];
-#ifdef G4VERBOSE
-    if ( fpVerboseL3 ) 
-      fpVerboseL3->Message("write", "h2d", info->fName);
-#endif
-    G4bool result
-      = to(*fHistoDirectory,*h2,info->fName);
-    if ( ! result ) {
+    if ( ! fgMasterInstance && 
+         ( fH1Vector.size() || fH2Vector.size() ) ) {
       G4ExceptionDescription description;
-      description << "      " << "saving histogram " << info->fName << " failed";
-      G4Exception("G4RootAnalysisManager::Write()",
-                "Analysis_W003", JustWarning, description);
-      return false;       
-    } 
+      description 
+        << "      " << "No master G4RootAnalysisManager instance exists." 
+        << G4endl 
+        << "      " << "Histogram data will not be merged.";
+        G4Exception("G4RootAnalysisManager::Write()",
+                  "Analysis_W014", JustWarning, description);
+    }
+
+    // h1 histograms
+    for ( G4int i=0; i<G4int(fH1Vector.size()); ++i ) {
+      G4int id = i + fFirstHistoId;
+      G4HnInformation* info = GetH1Information(id); 
+      // skip writing if activation is enabled and H1 is inactivated
+      if ( fActivation && ( ! info->fActivation ) ) continue; 
+      tools::histo::h1d* h1 = fH1Vector[i];
+#ifdef G4VERBOSE
+      if ( fpVerboseL3 ) 
+        fpVerboseL3->Message("write", "h1d", info->fName);
+#endif
+      G4bool result
+        = to(*fHistoDirectory,*h1,info->fName);
+      if ( ! result ) {
+        G4ExceptionDescription description;
+        description << "      " << "saving histogram " << info->fName << " failed";
+        G4Exception("G4RootAnalysisManager::Write()",
+                  "Analysis_W003", JustWarning, description);
+        return false;       
+      } 
+    }
+
+    // h2 histograms
+    for ( G4int i=0; i<G4int(fH2Vector.size()); ++i ) {
+      G4int id = i + fFirstHistoId;
+      G4HnInformation* info = GetH2Information(id); 
+      // skip writing if inactivated
+      if ( fActivation && ( ! info->fActivation ) ) continue;
+      tools::histo::h2d* h2 = fH2Vector[i];
+#ifdef G4VERBOSE
+      if ( fpVerboseL3 ) 
+        fpVerboseL3->Message("write", "h2d", info->fName);
+#endif
+      G4bool result
+        = to(*fHistoDirectory,*h2,info->fName);
+      if ( ! result ) {
+        G4ExceptionDescription description;
+        description << "      " << "saving histogram " << info->fName << " failed";
+        G4Exception("G4RootAnalysisManager::Write()",
+                  "Analysis_W003", JustWarning, description);
+        return false;       
+      } 
+    }
   }
+  else {
+    // The worker manager just adds its histograms to the master
+    // This operation needs a lock
+    G4AutoLock lH1(&mergeH1Mutex);
+    fgMasterInstance->AddH1Vector(fH1Vector);
+    lH1.unlock();
+    
+    G4AutoLock lH2(&mergeH2Mutex);
+    fgMasterInstance->AddH2Vector(fH2Vector);
+    lH2.unlock();
+  }  
 
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 

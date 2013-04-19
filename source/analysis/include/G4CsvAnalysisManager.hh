@@ -44,10 +44,11 @@
 class G4CsvAnalysisManager : public G4VAnalysisManager
 {
   public:
-    G4CsvAnalysisManager();
+    G4CsvAnalysisManager(G4bool isMaster = true);
     ~G4CsvAnalysisManager();
     
     // static methods
+    static G4CsvAnalysisManager* Create(G4bool isMaster = true);
     static G4CsvAnalysisManager* Instance();
 
     // Methods to manipulate files
@@ -155,6 +156,7 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
   private:
     // static data members
     //
+    static G4CsvAnalysisManager* fgMasterInstance;
     static G4ThreadLocal G4CsvAnalysisManager* fgInstance;
 
     // methods
@@ -180,6 +182,7 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
  
     // data members
     //
+    G4bool  fIsMaster;
     std::vector<G4CsvNtupleDescription*> fNtupleVector;
 };
 

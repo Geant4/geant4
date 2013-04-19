@@ -29,10 +29,22 @@
 
 #include "G4CsvAnalysisManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4Threading.hh"
 
 #include <iostream>
 
+G4CsvAnalysisManager* G4CsvAnalysisManager::fgMasterInstance = 0;
 G4ThreadLocal G4CsvAnalysisManager* G4CsvAnalysisManager::fgInstance = 0;
+
+//_____________________________________________________________________________
+G4CsvAnalysisManager* G4CsvAnalysisManager::Create(G4bool isMaster)
+{
+  if ( fgInstance == 0 ) {
+    fgInstance = new G4CsvAnalysisManager(isMaster);
+  }
+  
+  return fgInstance;
+}    
 
 //_____________________________________________________________________________
 G4CsvAnalysisManager* G4CsvAnalysisManager::Instance()
@@ -45,11 +57,13 @@ G4CsvAnalysisManager* G4CsvAnalysisManager::Instance()
 }    
 
 //_____________________________________________________________________________
-G4CsvAnalysisManager::G4CsvAnalysisManager()
+G4CsvAnalysisManager::G4CsvAnalysisManager(G4bool isMaster)
  : G4VAnalysisManager("Csv"),
+   fIsMaster(isMaster),
    fNtupleVector()
 {
-  if ( fgInstance ) {
+  if ( ( isMaster && fgMasterInstance ) ||
+       ( (! isMaster ) && fgInstance ) ) {
     G4ExceptionDescription description;
     description << "      " 
                 << "G4CsvAnalysisManager already exists." 
@@ -58,6 +72,7 @@ G4CsvAnalysisManager::G4CsvAnalysisManager()
                 "Analysis_F001", FatalException, description);
   }              
    
+  if ( isMaster ) fgMasterInstance = this;
   fgInstance = this;
 }
 
@@ -69,6 +84,7 @@ G4CsvAnalysisManager::~G4CsvAnalysisManager()
     delete (*it);
   }   
 
+  if ( fIsMaster ) fgMasterInstance = 0;
   fgInstance = 0;
 }
 
@@ -83,6 +99,13 @@ G4String G4CsvAnalysisManager::GetNtupleFileName(
   G4String name(fFileName);
   name.append("_");
   name.append(ntupleDescription->fNtupleBooking->m_name);
+  // Add thread Id to a file name if MT processing
+  if ( ! fIsMaster ) {
+    std::ostringstream os;
+    os << G4GetPidId();
+    name.append("_t");
+    name.append(os.str());
+  }  
   // Add file extension .csv if no extension is given
   if ( name.find(".") == std::string::npos ) { 
     name.append(".");

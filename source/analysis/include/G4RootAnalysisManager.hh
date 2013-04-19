@@ -47,10 +47,11 @@
 class G4RootAnalysisManager : public G4VAnalysisManager
 {
   public:
-    G4RootAnalysisManager();
+    G4RootAnalysisManager(G4bool isMaster = true);
     virtual ~G4RootAnalysisManager();
     
     // static methods
+    static G4RootAnalysisManager* Create(G4bool isMaster = true);
     static G4RootAnalysisManager* Instance();
 
     // Methods to manipulate files
@@ -167,6 +168,7 @@ class G4RootAnalysisManager : public G4VAnalysisManager
   private:
     // static data members
     //
+    static G4RootAnalysisManager* fgMasterInstance;
     static G4ThreadLocal G4RootAnalysisManager* fgInstance;
 
     // methods
@@ -174,6 +176,8 @@ class G4RootAnalysisManager : public G4VAnalysisManager
     G4bool CreateHistoDirectory();
     G4bool CreateNtupleDirectory();
     void CreateNtuplesFromBooking();
+    void AddH1Vector(std::vector<tools::histo::h1d*>& h1Vector);
+    void AddH2Vector(std::vector<tools::histo::h2d*>& h2Vector);
 
     tools::wroot::ntuple::column<int>*    
       GetNtupleIColumn(G4int ntupleId, G4int columnId) const;
@@ -199,6 +203,8 @@ class G4RootAnalysisManager : public G4VAnalysisManager
 
     // data members
     //
+    G4bool  fIsMaster;
+    
     tools::wroot::file*       fFile;
     tools::wroot::directory*  fHistoDirectory;
     tools::wroot::directory*  fNtupleDirectory;

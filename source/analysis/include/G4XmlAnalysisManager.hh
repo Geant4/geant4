@@ -46,10 +46,11 @@
 class G4XmlAnalysisManager : public G4VAnalysisManager
 {
   public:
-    G4XmlAnalysisManager();
+    G4XmlAnalysisManager(G4bool isMaster = true);
     ~G4XmlAnalysisManager();
     
     // static methods
+    static G4XmlAnalysisManager* Create(G4bool isMaster = true);
     static G4XmlAnalysisManager* Instance();
 
     // Methods to manipulate files
@@ -165,6 +166,7 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
   private:
     // static data members
     //
+    static G4XmlAnalysisManager* fgMasterInstance;
     static G4ThreadLocal G4XmlAnalysisManager* fgInstance;
 
     // methods
@@ -176,6 +178,8 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     G4bool CreateHnFile();
     G4bool CreateNtupleFile(G4XmlNtupleDescription* ntupleDescription);
     G4bool CloseNtupleFile(G4XmlNtupleDescription* ntupleDescription); 
+    void AddH1Vector(std::vector<tools::histo::h1d*>& h1Vector);
+    void AddH2Vector(std::vector<tools::histo::h2d*>& h2Vector);
 
     void CreateNtuplesFromBooking();
     tools::waxml::ntuple::column<int>*    
@@ -203,6 +207,8 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     
     // data members
     //
+    G4bool  fIsMaster;
+    
     std::ofstream* fHnFile;
     std::vector<tools::histo::h1d*>  fH1Vector;            
     std::vector<tools::histo::h2d*>  fH2Vector;            
