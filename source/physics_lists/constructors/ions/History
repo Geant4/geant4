@@ -14,6 +14,16 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-Apr-2013, Alberto Ribon              (phys-ctor-ions-V09-06-03)
+- Use G4ComponentGGNuclNuclXsc in all ion constructors.
+  (Before, G4GGNuclNuclCrossSection was used in G4IonPhysics,
+   G4IonBinaryCascadePhysics and G4IonQMDPhysics, whereas
+   G4IonINCLXXPhysics used Tripathi.)
+
+22-Mar-2013, Alberto Ribon              (phys-ctor-ions-V09-06-02)
+- Replaced LEP with FTFP in G4IonBinaryCascadePhysics, G4IonINCLXXPhysics
+  and G4IonQMDPhysics.
+
 21-Mar-2013, Alberto Ribon              (phys-ctor-ions-V09-06-01)
 - Fixed warning messages in G4IonQMDPhysics.
 

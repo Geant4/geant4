@@ -40,20 +40,26 @@
 #include "G4IonQMDPhysics.hh"
 
 #include "G4SystemOfUnits.hh"
-#include "G4DeuteronInelasticProcess.hh"
-#include "G4TritonInelasticProcess.hh"
-#include "G4AlphaInelasticProcess.hh"
-#include "G4HadronInelasticProcess.hh"
 
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4He3.hh"
+#include "G4Alpha.hh"
+#include "G4GenericIon.hh"
+#include "G4IonConstructor.hh"
+
+#include "G4HadronInelasticProcess.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4QMDReaction.hh"
 
-//#include "G4TripathiCrossSection.hh"
-//#include "G4TripathiLightCrossSection.hh"
-//#include "G4IonsShenCrossSection.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4FTFBuilder.hh"
+#include "G4HadronicInteraction.hh"
+#include "G4BuilderType.hh"
 
-#include "G4GGNuclNuclCrossSection.hh"
-#include "G4CrossSectionDataSetRegistry.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
+#include "G4CrossSectionInelastic.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -71,16 +77,15 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4IonQMDPhysics);
 G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
   :  G4VPhysicsConstructor("IonQMD"), verbose(ver), wasActivated(false)
 {
-  fLEDModel = 0;
-  fLETModel = 0;
-  fLEAModel = 0;
-//  fTripathi = 0;
-//  fTripathiLight = 0;
-//  fShen = 0;
+  theNuclNuclData = 0; 
+  theGGNuclNuclXS = 0;
+  theIonBC = 0;
+  theFTFP = 0;
+  theBuilder = 0;
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
   emaxQMD  = 10.*GeV;
-  emaxLHEP = 1.*TeV;
+  emaxFTFP = 1.*TeV;
   overlap  = 10*MeV;
   SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonQMDPhysics" << G4endl;
@@ -90,16 +95,15 @@ G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name,
 						     G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
-  fLEDModel = 0;
-  fLETModel = 0;
-  fLEAModel = 0;
-//  fTripathi = 0;
-//  fTripathiLight = 0;
-//  fShen = 0;
+  theNuclNuclData = 0; 
+  theGGNuclNuclXS = 0;
+  theIonBC = 0;
+  theFTFP = 0;
+  theBuilder = 0;
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
   emaxQMD  = 10.*GeV;
-  emaxLHEP = 1.*TeV;
+  emaxFTFP = 1.*TeV;
   overlap  = 10*MeV;
   SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonQMDPhysics" << G4endl;
@@ -108,12 +112,9 @@ G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name,
 G4IonQMDPhysics::~G4IonQMDPhysics()
 {
   if(wasActivated) {
-//    delete fTripathi;
-//    delete fTripathiLight;
-//    delete fShen;
-    delete fLEDModel;
-    delete fLETModel;
-    delete fLEAModel;
+    delete theBuilder;
+    delete theGGNuclNuclXS;
+    delete theNuclNuclData;
     G4int i;
     G4int n = p_list.size();
     for(i=0; i<n; i++) {delete p_list[i];}
@@ -127,44 +128,42 @@ void G4IonQMDPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  G4BinaryLightIonReaction* fBC= new G4BinaryLightIonReaction();
-  model_list.push_back(fBC);
-  G4QMDReaction* fQMD= new G4QMDReaction();
-  model_list.push_back(fQMD);
-  
-//  fShen = new G4IonsShenCrossSection;
-//  fTripathi = new G4TripathiCrossSection
-//    fTripathiLight = new G4TripathiLightCrossSection;
+  G4ExcitationHandler* handler = new G4ExcitationHandler();
+  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
 
-  fLEDModel = new G4LEDeuteronInelastic();
-  fLETModel = new G4LETritonInelastic();
-  fLEAModel = new G4LEAlphaInelastic();
+  theIonBC = new G4BinaryLightIonReaction(thePreCompound);
+  model_list.push_back(theIonBC);
 
-  AddProcess("dInelastic", G4Deuteron::Deuteron(), fBC, fQMD, fLEDModel );
-  AddProcess("tInelastic",G4Triton::Triton(),      fBC, fQMD, fLETModel );
-  AddProcess("He3Inelastic",G4He3::He3(),          fBC, fQMD, 0 );
-  AddProcess("alphaInelastic", G4Alpha::Alpha(),   fBC, fQMD, fLEAModel );
-  AddProcess("ionInelastic",G4GenericIon::GenericIon(), fBC, fQMD, 0);
+  theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
+  theFTFP = theBuilder->GetModel();
+  model_list.push_back(theFTFP);
+
+  theQMD= new G4QMDReaction();
+  model_list.push_back(theQMD);
+
+  theNuclNuclData = new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
+
+  AddProcess("dInelastic", G4Deuteron::Deuteron(), theIonBC, theQMD, theFTFP);
+  AddProcess("tInelastic", G4Triton::Triton(), theIonBC, theQMD, theFTFP);
+  AddProcess("He3Inelastic", G4He3::He3(), theIonBC, theQMD, theFTFP);
+  AddProcess("alphaInelastic", G4Alpha::Alpha(), theIonBC, theQMD, theFTFP);
+  AddProcess("ionInelastic", G4GenericIon::GenericIon(), theIonBC, theQMD, theFTFP);
 
 }
 
 void G4IonQMDPhysics::AddProcess(const G4String& name,
-					   G4ParticleDefinition* p, 
-					   G4BinaryLightIonReaction* BIC,
-					   G4QMDReaction* QMD,
-					   G4HadronicInteraction* LHEP)
+			         G4ParticleDefinition* p, 
+				 G4BinaryLightIonReaction* BIC,
+				 G4QMDReaction* QMD,
+				 G4HadronicInteraction* FTFP)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, p);
   p_list.push_back(hadi);
   G4ProcessManager* pManager = p->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
-  
-//  hadi->AddDataSet(fShen);
-//  hadi->AddDataSet(fTripathi);
-//  hadi->AddDataSet(fTripathiLight);
 
-  hadi->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GGNuclNuclCrossSection::Default_Name()));
-    
+  hadi->AddDataSet(theNuclNuclData);
+
   BIC->SetMinEnergy(eminBIC);
   BIC->SetMaxEnergy(emaxQMD);  //reset when QMD is present 
   hadi->RegisterMe(BIC);
@@ -176,11 +175,12 @@ void G4IonQMDPhysics::AddProcess(const G4String& name,
     hadi->RegisterMe(QMD);
   }  
 
-  if(LHEP) {
-    LHEP->SetMinEnergy(emaxQMD - overlap);
-    LHEP->SetMaxEnergy(emaxLHEP);
-    hadi->RegisterMe(LHEP);
+  if(FTFP) {
+    FTFP->SetMinEnergy(emaxQMD - overlap);
+    FTFP->SetMaxEnergy(emaxFTFP);
+    hadi->RegisterMe(FTFP);
   }  
+
   if(verbose > 1) {
     G4cout << "Register " << hadi->GetProcessName()
 	   << " for " << p->GetParticleName() << G4endl
@@ -189,8 +189,8 @@ void G4IonQMDPhysics::AddProcess(const G4String& name,
     if(QMD) {
       G4cout  << G4endl <<"       QMD for E(MeV)= " << eminQMD << " - " << emaxQMD;
     }
-    if(LHEP) {
-      G4cout << G4endl<< "       LHEP for E(MeV)= " << emaxQMD-overlap << " - " << emaxLHEP;
+    if(FTFP) {
+      G4cout << G4endl<< "       FTFP for E(MeV)= " << emaxQMD-overlap << " - " << emaxFTFP;
     }
     G4cout << G4endl;
   }

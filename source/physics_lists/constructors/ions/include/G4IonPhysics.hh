@@ -46,6 +46,7 @@
 
 class G4HadronicInteraction;
 class G4VCrossSectionDataSet;
+class G4VComponentCrossSection;
 class G4FTFBuilder;
 class G4BinaryLightIonReaction;
 
@@ -67,11 +68,8 @@ private:
 
   void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
 
-//  G4VCrossSectionDataSet*   fTripathi;
-//  G4VCrossSectionDataSet*   fTripathiLight;
-//  G4VCrossSectionDataSet*   fShen;
-//  G4VCrossSectionDataSet*   fIonH;
-    G4VCrossSectionDataSet*   fGGNuclNucl;
+  G4VCrossSectionDataSet* theNuclNuclData; 
+  G4VComponentCrossSection* theGGNuclNuclXS;
 
   G4BinaryLightIonReaction* theIonBC;
   G4HadronicInteraction*    theFTFP;

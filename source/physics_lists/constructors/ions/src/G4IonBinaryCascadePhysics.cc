@@ -32,6 +32,7 @@
 // Author:      V.Ivanchenko 09.11.2005
 //
 // Modified:
+// 21.03.13 A.Ribon : replace LHEP with FTFP.
 // 23.06.06 V.Ivanchenko set emaxLHEP=1 TeV
 // 24.06.06 V.Ivanchenko fix typo
 //
@@ -41,23 +42,24 @@
 #include "G4IonBinaryCascadePhysics.hh"
 
 #include "G4SystemOfUnits.hh"
-#include "G4DeuteronInelasticProcess.hh"
-#include "G4TritonInelasticProcess.hh"
-#include "G4AlphaInelasticProcess.hh"
-#include "G4HadronInelasticProcess.hh"
-
-#include "G4BinaryLightIonReaction.hh"
-#include "G4TripathiCrossSection.hh"
-#include "G4TripathiLightCrossSection.hh"
-#include "G4IonsShenCrossSection.hh"
-#include "G4IonProtonCrossSection.hh"
-
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-
-// Nuclei
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4He3.hh"
+#include "G4Alpha.hh"
+#include "G4GenericIon.hh"
 #include "G4IonConstructor.hh"
+
+#include "G4HadronInelasticProcess.hh"
+#include "G4BinaryLightIonReaction.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
+#include "G4CrossSectionInelastic.hh"
+
+#include "G4PreCompoundModel.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4FTFBuilder.hh"
+#include "G4HadronicInteraction.hh"
 #include "G4BuilderType.hh"
 
 // factory
@@ -69,48 +71,36 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4IonBinaryCascadePhysics);
 G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(G4int ver)
   :  G4VPhysicsConstructor("IonBinaryCascade"), verbose(ver), wasActivated(false)
 {
-  fLEDModel = 0;
-  fLETModel = 0;
-  fLEAModel = 0;
-  fTripathi = 0; 
-  fTripathiLight = 0;
-  fShen = 0;
-  fIonH = 0;
-  emax     = 20.*GeV;
-  emaxLHEP = 1.*TeV;
-  eminBIC  = 0.*MeV;
+  theNuclNuclData = 0; 
+  theGGNuclNuclXS = 0;
+  theIonBC = 0;
+  theFTFP = 0;
+  theBuilder = 0;
   SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonBinaryCascadePhysics" << G4endl;
 }
+
 
 G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(const G4String& name, 
 						     G4int ver)
   :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
 {
-  fLEDModel = 0;
-  fLETModel = 0;
-  fLEAModel = 0;
-  fTripathi = 0; 
-  fTripathiLight = 0;
-  fShen = 0;
-  fIonH = 0;
-  emax     = 20.*GeV;
-  emaxLHEP = 1.*TeV;
-  eminBIC  = 0.*MeV;
+  theNuclNuclData = 0; 
+  theGGNuclNuclXS = 0;
+  theIonBC = 0;
+  theFTFP = 0;
+  theBuilder = 0;
   SetPhysicsType(bIons);
   if(verbose > 1) G4cout << "### G4IonBinaryCascadePhysics" << G4endl;
 }
 
+
 G4IonBinaryCascadePhysics::~G4IonBinaryCascadePhysics()
 {
   if(wasActivated) {
-    delete fTripathi;
-    delete fTripathiLight;
-    delete fShen;
-    delete fIonH;
-    delete fLEDModel;
-    delete fLETModel;
-    delete fLEAModel;
+    delete theBuilder;
+    delete theGGNuclNuclXS;
+    delete theNuclNuclData; 
     G4int i;
     G4int n = p_list.size();
     for(i=0; i<n; i++) {delete p_list[i];}
@@ -119,61 +109,50 @@ G4IonBinaryCascadePhysics::~G4IonBinaryCascadePhysics()
   }
 }
 
+
 void G4IonBinaryCascadePhysics::ConstructProcess()
 {
   if(wasActivated) { return; }
   wasActivated = true;
 
-  G4BinaryLightIonReaction* fBC= new G4BinaryLightIonReaction();
-  model_list.push_back(fBC);
-  fShen = new G4IonsShenCrossSection;
-  //fTripathi = new G4TripathiCrossSection;
-  //fTripathiLight = new G4TripathiLightCrossSection;
-  fIonH = new G4IonProtonCrossSection;
+  G4ExcitationHandler* handler = new G4ExcitationHandler();
+  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
 
-  fLEDModel = new G4LEDeuteronInelastic();
-  fLETModel = new G4LETritonInelastic();
-  fLEAModel = new G4LEAlphaInelastic();
+  theIonBC = new G4BinaryLightIonReaction(thePreCompound);
+  theIonBC->SetMinEnergy(0.0);
+  theIonBC->SetMaxEnergy(4.0*GeV);
+  model_list.push_back(theIonBC);
 
-  AddProcess("dInelastic", G4Deuteron::Deuteron(), fBC, fLEDModel);
-  AddProcess("tInelastic",G4Triton::Triton(),  fBC, fLETModel);
-  AddProcess("He3Inelastic",G4He3::He3(),  fBC, 0);
-  AddProcess("alphaInelastic", G4Alpha::Alpha(),  fBC, fLEAModel);
-  AddProcess("ionInelastic",G4GenericIon::GenericIon(),  fBC, 0);
+  theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
+  theFTFP = theBuilder->GetModel();
+  theFTFP->SetMinEnergy(2.0*GeV);
+  theFTFP->SetMaxEnergy(100.0*TeV);
+  model_list.push_back(theFTFP);
 
+  theNuclNuclData = new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
+
+  AddProcess("dInelastic", G4Deuteron::Deuteron());
+  AddProcess("tInelastic", G4Triton::Triton());
+  AddProcess("He3Inelastic", G4He3::He3());
+  AddProcess("alphaInelastic", G4Alpha::Alpha());
+  AddProcess("ionInelastic", G4GenericIon::GenericIon());
 }
 
-void G4IonBinaryCascadePhysics::AddProcess(const G4String& name,
-					   G4ParticleDefinition* p, 
-					   G4HadronicInteraction* hmodel,
-					   G4HadronicInteraction* lmodel)
+
+void G4IonBinaryCascadePhysics::AddProcess(const G4String& name, 
+                                           G4ParticleDefinition* part)
 {
-  G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, p);
+  G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
   p_list.push_back(hadi);
-  G4ProcessManager* pManager = p->GetProcessManager();
+  G4ProcessManager* pManager = part->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
-  hadi->AddDataSet(fShen);
-  //hadi->AddDataSet(fTripathi);
-  //hadi->AddDataSet(fTripathiLight);
-  if(p == G4GenericIon::GenericIon()) { hadi->AddDataSet(fIonH); }
-  hmodel->SetMinEnergy(eminBIC);
-  hmodel->SetMaxEnergy(emax);
-  hadi->RegisterMe(hmodel);
-  if(lmodel) {
-    lmodel->SetMinEnergy(emax - MeV);
-    lmodel->SetMaxEnergy(emaxLHEP);
-    hadi->RegisterMe(lmodel);
-  }  
-  if(verbose > 1) {
-    G4cout << "Register " << hadi->GetProcessName()
-	   << " for " << p->GetParticleName()
-	   << " Binary Cascade for E(MeV)= " << eminBIC << " - " << emax;
-    if(lmodel) {
-      G4cout  << " LHEP for E(MeV)= " << emax-MeV << " - " << emaxLHEP;
-    }
-    G4cout << G4endl;
-  }
+
+  hadi->AddDataSet(theNuclNuclData);
+    
+  hadi->RegisterMe(theIonBC);
+  hadi->RegisterMe(theFTFP);
 }
+
 
 void G4IonBinaryCascadePhysics::ConstructParticle()
 {

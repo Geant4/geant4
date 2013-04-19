@@ -42,19 +42,14 @@
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4LEDeuteronInelastic.hh"
-#include "G4LETritonInelastic.hh"
-#include "G4LEAlphaInelastic.hh"
-
 #include <vector>
 
 class G4HadronInelasticProcess;
 class G4HadronicInteraction;
-class G4TripathiLightCrossSection;
-class G4TripathiCrossSection;
-class G4IonsShenCrossSection;
 class G4INCLXXInterface;
-
+class G4FTFBuilder;
+class G4VCrossSectionDataSet;
+class G4VComponentCrossSection;
 
 class G4IonINCLXXPhysics : public G4VPhysicsConstructor
 {
@@ -82,20 +77,17 @@ private:
   std::vector<G4HadronInelasticProcess*> p_list;
   std::vector<G4HadronicInteraction*> model_list;
 
-  G4INCLXXInterface* fINCLXXIons;
+  G4VCrossSectionDataSet* theNuclNuclData; 
+  G4VComponentCrossSection* theGGNuclNuclXS;
 
-  G4TripathiCrossSection* fTripathi;
-  G4TripathiLightCrossSection* fTripathiLight;
-  G4IonsShenCrossSection* fShen;
-
-  G4LEDeuteronInelastic*  fLEDModel;
-  G4LETritonInelastic*    fLETModel;
-  G4LEAlphaInelastic*     fLEAModel;
+  G4INCLXXInterface* theINCLXXIons;
+  G4HadronicInteraction* theFTFP;
+  G4FTFBuilder* theBuilder;
 
   G4double emin;
   G4double emax_d, emax_t, emax_he3, emax_alpha;
   G4double emax;
-  G4double emaxLHEP;
+  G4double emaxFTFP;
 
   G4int  verbose;
   G4bool wasActivated;
