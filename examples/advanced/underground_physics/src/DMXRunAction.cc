@@ -47,13 +47,9 @@
 #include "DMXRunAction.hh"
 
 #include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
 #include "G4ios.hh"
 
 #include <fstream>
-#include <iomanip>
-#include <vector>
 
 #ifdef G4ANALYSIS_USE
 #include "DMXAnalysisManager.hh"
@@ -87,11 +83,6 @@ void DMXRunAction::BeginOfRunAction(const G4Run* aRun)
  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
-  if (G4VVisManager::GetConcreteInstance()) {
-    G4UImanager* UI = G4UImanager::GetUIpointer(); 
-    UI->ApplyCommand("/vis/scene/notifyHandlers");
-  } 
-
 #ifdef G4ANALYSIS_USE
   // Book histograms and ntuples
   DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
@@ -103,11 +94,6 @@ void DMXRunAction::BeginOfRunAction(const G4Run* aRun)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DMXRunAction::EndOfRunAction(const G4Run*)
-{
-  if (G4VVisManager::GetConcreteInstance()) {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

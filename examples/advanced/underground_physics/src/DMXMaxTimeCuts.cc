@@ -45,7 +45,6 @@
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
 #include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
 
 DMXMaxTimeCuts::DMXMaxTimeCuts(const G4String& aName)
   : DMXSpecialCuts(aName)

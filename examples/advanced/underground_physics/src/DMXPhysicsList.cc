@@ -248,7 +248,6 @@ void DMXPhysicsList::AddTransportation() {
 
 
 // alpha and GenericIon and deuterons, triton, He3:
-#include "G4EnergyLossTables.hh"
 
 //muon:
 #include "G4MuIonisation.hh"

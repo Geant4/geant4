@@ -8,6 +8,20 @@ $Id$
 
                       Category History file
                       ---------------------
+ 
+18.04.2013 - L. Pandola (DMX-V09-06-05)
+	     In DMXMinEkineCuts.cc, migrate calculation of the range 
+             from G4EnergyLossTable (obsolete class) to 
+             G4LossTableManager. This should hopefully fix the problems 
+	     observed in DMX-V09-06-04. Other minor cosmetics.
+
+16.04.2013 - L. Pandola (DMX-V09-06-04)
+	   - Trying to understand the origin of the crashes which 
+	     caused the rejection of DMX-V09-06-03
+
+21.03.2013 - L. Pandola (DMX-V09-06-03)
+	   - Fix compiler warnings (appearing only for some compilers)
+
 13.03.2013 - A. Dotti (DMX-V09-06-02)
            - New SetEmModel interface used in physics list
 
