@@ -104,8 +104,12 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
 
   factB1= 0.5*CLHEP::pi*fine_structure_const;
 
-  Initialise(theElectron, 1.0);
+  tkin = mom2 = momCM2 = factorA2 = mass = spin = chargeSquare = charge3 = 0.0;
+  ecut = etag = DBL_MAX;
+  targetZ = 0;
+  cosThetaMax = 1.0;
   targetMass = proton_mass_c2;
+  particle = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,10 +127,18 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
   ecut = etag = DBL_MAX;
   targetZ = 0;
   cosThetaMax = CosThetaLim;
-  G4double a = 
-    G4LossTableManager::Instance()->FactorForAngleLimit()*CLHEP::hbarc/CLHEP::fermi;
+  G4double a = G4LossTableManager::Instance()->FactorForAngleLimit()
+    *CLHEP::hbarc/CLHEP::fermi;
   factorA2 = 0.5*a*a;
   currentMaterial = 0;
+
+  if(p->GetPDGMass() < MeV) {
+    G4double a0 = electron_mass_c2/0.88534; 
+    for(G4int j=2; j<100; ++j) {
+      G4double x = a0*fG4pow->Z13(j);
+      ScreenRSquare[j] = 0.5*alpha2*x*x;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -180,6 +180,7 @@ G4UrbanMscModel93::G4UrbanMscModel93(const G4String& nam)
   currentMaterialIndex = -1;
   fParticleChange = 0;
   couple = 0;
+  SetSampleZ(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -215,23 +216,24 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
                                    G4double AtomicNumber,G4double,
 				   G4double, G4double)
 {
-  const G4double sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
-  const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
+  static const G4double sigmafactor = 
+    twopi*classic_electr_radius*classic_electr_radius;
+  static const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
                             Bohr_radius*Bohr_radius/(hbarc*hbarc);
-  const G4double epsmin = 1.e-4 , epsmax = 1.e10;
+  static const G4double epsmin = 1.e-4 , epsmax = 1.e10;
 
-  const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38., 47.,
-                             50., 56., 64., 74., 79., 82. };
+  static const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38., 47.,
+				     50., 56., 64., 74., 79., 82. };
 
-  const G4double Tdat[22] = { 100*eV,  200*eV,  400*eV,  700*eV,
-                               1*keV,   2*keV,   4*keV,   7*keV,
-			      10*keV,  20*keV,  40*keV,  70*keV,
-                             100*keV, 200*keV, 400*keV, 700*keV,
-                               1*MeV,   2*MeV,   4*MeV,   7*MeV,
-			      10*MeV,  20*MeV};
+  static const G4double Tdat[22] = { 100*eV,  200*eV,  400*eV,  700*eV,
+				     1*keV,   2*keV,   4*keV,   7*keV,
+				     10*keV,  20*keV,  40*keV,  70*keV,
+				     100*keV, 200*keV, 400*keV, 700*keV,
+				     1*MeV,   2*MeV,   4*MeV,   7*MeV,
+				     10*MeV,  20*MeV};
 
   // corr. factors for e-/e+ lambda for T <= Tlim
-          G4double celectron[15][22] =
+  static const G4double celectron[15][22] =
           {{1.125,1.072,1.051,1.047,1.047,1.050,1.052,1.054,
             1.054,1.057,1.062,1.069,1.075,1.090,1.105,1.111,
             1.112,1.108,1.100,1.093,1.089,1.087            },
@@ -278,7 +280,7 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
             1.985,1.609,1.343,1.188,1.113,1.013,0.960,0.939,
             0.933,0.930,0.933,0.936,0.939,0.949            }};
 	    
-           G4double cpositron[15][22] = {
+  static const G4double cpositron[15][22] = {
            {2.589,2.044,1.658,1.446,1.347,1.217,1.144,1.110,
             1.097,1.083,1.080,1.086,1.092,1.108,1.123,1.131,
             1.131,1.126,1.117,1.108,1.103,1.100            },
@@ -326,18 +328,20 @@ G4double G4UrbanMscModel93::ComputeCrossSectionPerAtom(
             1.456,1.412,1.364,1.328,1.307,1.282            }};
 
   //data/corrections for T > Tlim  
-  G4double Tlim = 10.*MeV;
-  G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
+  static const G4double Tlim = 10.*MeV;
+  static const G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
                       ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
-  G4double bg2lim   = Tlim*(Tlim+2.*electron_mass_c2)/
+  static const G4double bg2lim   = Tlim*(Tlim+2.*electron_mass_c2)/
                       (electron_mass_c2*electron_mass_c2);
 
-  G4double sig0[15] = {0.2672*barn,  0.5922*barn, 2.653*barn,  6.235*barn,
+  static const G4double sig0[15] = {
+                     0.2672*barn,  0.5922*barn, 2.653*barn,  6.235*barn,
                       11.69*barn  , 13.24*barn  , 16.12*barn, 23.00*barn ,
 		      35.13*barn  , 39.95*barn  , 50.85*barn, 67.19*barn ,
                       91.15*barn  , 104.4*barn  , 113.1*barn};
 		      		       
-  G4double hecorr[15] = {120.70, 117.50, 105.00, 92.92, 79.23,  74.510,  68.29,
+  static const G4double hecorr[15] = {
+                         120.70, 117.50, 105.00, 92.92, 79.23,  74.510,  68.29,
                           57.39,  41.97,  36.14, 24.53, 10.21,  -7.855, -16.84,
 			 -22.30};
 
@@ -806,7 +810,7 @@ G4double G4UrbanMscModel93::ComputeTheta0(G4double trueStepLength,
   // for all particles take the width of the central part
   //  from a  parametrization similar to the Highland formula
   // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
-  const G4double c_highland = 13.6*MeV ;
+  static const G4double c_highland = 13.6*MeV ;
   G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
                          KineticEnergy*(KineticEnergy+2.*mass)/
                       ((currentKinEnergy+mass)*(KineticEnergy+mass)));

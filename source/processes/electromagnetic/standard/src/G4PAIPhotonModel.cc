@@ -140,14 +140,6 @@ G4PAIPhotonModel::~G4PAIPhotonModel()
         fPAIplasmonTable->clearAndDestroy();
         delete fPAIplasmonTable ;
   }
-  if(fSandiaPhotoAbsCof)
-  {
-    for(G4int i=0;i<fSandiaIntervalNumber;i++)
-    {
-        delete[] fSandiaPhotoAbsCof[i];
-    }
-    delete[] fSandiaPhotoAbsCof;
-  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -167,7 +159,7 @@ void G4PAIPhotonModel::SetParticle(const G4ParticleDefinition* p)
 ////////////////////////////////////////////////////////////////////////////
 
 void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
-                                   const G4DataVector&)
+				  const G4DataVector&)
 {
   //  G4cout<<"G4PAIPhotonModel::Initialise for "<<p->GetParticleName()<<G4endl;
   if(isInitialised) { return; }
@@ -177,52 +169,59 @@ void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
 
   fParticleChange = GetParticleChangeForLoss();
 
-  const G4ProductionCutsTable* theCoupleTable =
-        G4ProductionCutsTable::GetProductionCutsTable();
+  //const G4ProductionCutsTable* theCoupleTable =
+  //      G4ProductionCutsTable::GetProductionCutsTable();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  size_t numOfMat   = G4Material::GetNumberOfMaterials();
+  size_t numRegions = fPAIRegionVector.size();
 
-  for(size_t iReg = 0; iReg < fPAIRegionVector.size();++iReg) // region loop
+  for(size_t iReg = 0; iReg < numRegions; ++iReg) // region loop
   {
     const G4Region* curReg = fPAIRegionVector[iReg];
+    G4Region* reg = const_cast<G4Region*>(curReg); 
 
-    vector<G4Material*>::const_iterator matIter = curReg->GetMaterialIterator();
-    size_t jMat; 
-    size_t numOfMat = curReg->GetNumberOfMaterials();
-
-    //  for(size_t jMat = 0; jMat < curReg->GetNumberOfMaterials();++jMat){}
-    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    size_t numberOfMat = G4Material::GetNumberOfMaterials();
-
-    for(jMat = 0 ; jMat < numOfMat; ++jMat) // region material loop
+    for(size_t jMat = 0 ; jMat < numOfMat; ++jMat) // material loop
     {
-      const G4MaterialCutsCouple* matCouple = theCoupleTable->
-      GetMaterialCutsCouple( *matIter, curReg->GetProductionCuts() );
-      fMaterialCutsCoupleVector.push_back(matCouple);
+      G4Material* material = (*theMaterialTable)[jMat];
+      const G4MaterialCutsCouple* couple = reg->FindCouple(material);
 
-      size_t iMatGlob;
-      for(iMatGlob = 0 ; iMatGlob < numberOfMat ; iMatGlob++ )
-      {
-        if( *matIter == (*theMaterialTable)[iMatGlob]) break ;
+      //	theCoupleTable->GetMaterialCutsCouple( material, 
+      //	 curReg->GetProductionCuts() );
+
+      if(couple) {
+	//G4cout << "Reg <" <<curReg->GetName() << ">  mat <" 
+	//       << material->GetName() << ">  fCouple= " 
+	//       << couple<<"  " << p->GetParticleName() <<G4endl;
+
+	fMaterialCutsCoupleVector.push_back(couple);
+
+	fMatIndex = jMat;
+
+	ComputeSandiaPhotoAbsCof();
+	BuildPAIonisationTable();
+
+        if( fSandiaPhotoAbsCof ) // delete SANDIA cofs've been used for pai-xsc
+        {
+          for( G4int i = 0;i < fSandiaIntervalNumber;i++)
+          {
+            delete[] fSandiaPhotoAbsCof[i];
+          }
+          delete[] fSandiaPhotoAbsCof;
+          fSandiaPhotoAbsCof = 0;
+        }
+	fPAIxscBank.push_back(fPAItransferTable);
+	fPAIphotonBank.push_back(fPAIphotonTable);
+	fPAIplasmonBank.push_back(fPAIplasmonTable);
+	fPAIdEdxBank.push_back(fPAIdEdxTable);
+	fdEdxTable.push_back(fdEdxVector);
+
+	BuildLambdaVector(couple);
+
+	fdNdxCutTable.push_back(fdNdxCutVector);
+	fdNdxCutPhotonTable.push_back(fdNdxCutPhotonVector);
+	fdNdxCutPlasmonTable.push_back(fdNdxCutPlasmonVector);
+	fLambdaTable.push_back(fLambdaVector);
       }
-      fMatIndex = iMatGlob;
-
-      ComputeSandiaPhotoAbsCof();
-      BuildPAIonisationTable();
-
-      fPAIxscBank.push_back(fPAItransferTable);
-      fPAIphotonBank.push_back(fPAIphotonTable);
-      fPAIplasmonBank.push_back(fPAIplasmonTable);
-      fPAIdEdxBank.push_back(fPAIdEdxTable);
-      fdEdxTable.push_back(fdEdxVector);
-
-      BuildLambdaVector(matCouple);
-
-      fdNdxCutTable.push_back(fdNdxCutVector);
-      fdNdxCutPhotonTable.push_back(fdNdxCutPhotonVector);
-      fdNdxCutPlasmonTable.push_back(fdNdxCutPlasmonVector);
-      fLambdaTable.push_back(fLambdaVector);
-
-
-      matIter++;
     }
   }
 }
@@ -670,7 +669,15 @@ G4double G4PAIPhotonModel::ComputeDEDXPerVolume(const G4Material*,
     if( matCC == fMaterialCutsCoupleVector[jMat] ) break;
   }
   if(jMat == fMaterialCutsCoupleVector.size() && jMat > 0) jMat--;
-
+  /*
+  G4cout << "G4PAIPhotonModel::ComputeDEDXPerVolume: jMat= " << jMat 
+  	 << " jMax= " << fMaterialCutsCoupleVector.size()
+         << " matCC: " << matCC;
+  if(matCC) G4cout << " mat: " << matCC->GetMaterial()->GetName();
+  G4cout << G4endl;
+  G4cout << fPAIdEdxTable << " " << fdEdxVector << " " 
+	 << fProtonEnergyVector << G4endl;
+  */
   fPAIdEdxTable = fPAIdEdxBank[jMat];
   fdEdxVector = fdEdxTable[jMat];
   for(iTkin = 0 ; iTkin <= fTotBin ; iTkin++)
@@ -679,6 +686,7 @@ G4double G4PAIPhotonModel::ComputeDEDXPerVolume(const G4Material*,
   }
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
+  else if(iPlace > fTotBin) iPlace = fTotBin;
   dEdx = charge2*( (*fdEdxVector)(iPlace) - GetdEdxCut(iPlace,cut) ) ;  
 
   if( dEdx < 0.) dEdx = 0.;
