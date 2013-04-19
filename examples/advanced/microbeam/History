@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History,v 1.31 2010-11-17 20:42:36 allison Exp $
 
                        Package History file
                        --------------------
+
+19 April 2013 - S. Incerti - tag microbeam-V09-06-00
+- Removed comparisons of strings in MicrobeamSteppingAction
 
 06 November 2012 - L. Pandola - tag microbeam-V09-05-07
 - Fix syntax in CMakeLists.txt

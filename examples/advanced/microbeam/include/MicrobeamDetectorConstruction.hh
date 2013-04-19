@@ -71,6 +71,14 @@ public:
   void SetNbOfPixelsInPhantom(G4int nP){ nbOfPixelsInPhantom = nP;}
   G4int GetNbOfPixelsInPhantom(){return nbOfPixelsInPhantom;}          
 
+  // Returns the logical volumes
+
+  G4LogicalVolume* GetLogicalCollDetYoke() {return logicYoke2;};
+  G4LogicalVolume* GetLogicalIsobutane() {return logicBoiteIso;};
+  G4LogicalVolume* GetLogicalCollDetGap4() {return logic4Gap;};
+  G4LogicalVolume* GetLogicalPolyprop() {return logicBoite3;};
+  G4LogicalVolume* GetLogicalKgm() {return logicKgm;};
+  
 private:
 
   G4float massPhantom;
@@ -183,12 +191,14 @@ private:
   G4VPhysicalVolume* physiVerre2;
   G4LogicalVolume*   logicVerre2;  
   G4Box*             solidVerre2;
-    
+
 // CELL
 
   G4VPhysicalVolume* physiPhantom;
   G4LogicalVolume*   logicPhantom;  
   G4Box*             solidPhantom; 
+
+//
 
   MicrobeamPhantomConfiguration myMicrobeamPhantomConfiguration;
   MicrobeamCellParameterisation* phantomParam ; 

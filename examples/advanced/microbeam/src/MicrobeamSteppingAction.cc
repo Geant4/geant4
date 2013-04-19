@@ -34,6 +34,8 @@
 #include "MicrobeamRunAction.hh"
 #include "MicrobeamDetectorConstruction.hh"
 
+#include "G4Alpha.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 MicrobeamSteppingAction::MicrobeamSteppingAction(MicrobeamRunAction* run,MicrobeamDetectorConstruction* det,
@@ -54,20 +56,20 @@ void MicrobeamSteppingAction::UserSteppingAction(const G4Step* aStep)
 
 // COUNT GAS DETECTOR HITS
 
-if (       ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "_CollDet_yoke_")
-        &&  (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "Isobutane")
-        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha"))
+if (       ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalCollDetYoke())
+        &&  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalIsobutane())
+        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
 	
         || 
-	   ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "_CollDet_gap4_")
-        &&  (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "Isobutane")
-	&&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha"))
+	   ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalCollDetGap4())
+        &&  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalIsobutane())
+        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
 
 	||
 
-    	   ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "_CollDet_gap5_")
-        &&  (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "Isobutane")
-	&&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha"))
+    	   ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalCollDetGap4())
+        &&  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalIsobutane())
+        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
 
     )
 	{
@@ -76,14 +78,14 @@ if (       ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "_CollD
 	
 // STOPPING POWER AND BEAM SPOT SIZE AT CELL ENTRANCE
 
-if (       ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Polyprop")
-        &&  (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "KGM")
-        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha"))
+if (       ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalPolyprop())
+        &&  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalKgm())
+        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
 	
         || 
-	   ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Polyprop")
+	   ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalPolyprop())
         &&  (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalCytoplasm")
-	&&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha"))
+        &&  (aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition() ))
     )
 	{
 	
@@ -122,7 +124,7 @@ if (       ((aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName() == "Polypr
 
 if (
 
-	(aStep->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "alpha")
+	(aStep->GetTrack()->GetDynamicParticle()->GetDefinition() == G4Alpha::AlphaDefinition())
 	
 	&&
 	
@@ -131,7 +133,7 @@ if (
 	&&
 			
           ( (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalCytoplasm")
-	||  (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "KGM")	
+	||  (aStep->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume() == Detector->GetLogicalKgm())	
 	||  (aStep->GetPostStepPoint()->GetPhysicalVolume()->GetName() == "physicalNucleus") )	
 		
    )
