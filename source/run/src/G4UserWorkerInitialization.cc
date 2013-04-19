@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 #include "G4UserWorkerInitialization.hh"
+#include "G4VUserActionInitialization.hh"
 #include "G4UImanager.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4AutoLock.hh"
@@ -91,6 +92,7 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //3- Call user method to define user actions and all other stuff
     //Note: Even if thiscontext is per-thread object, the UserWorkerInitialization
     // object is shared
+    masterRM->GetUserActionInitialization()->Build();
     masterRM->GetUserWorkerInitialization()->WorkerStart();
     
     //4- Now initialize run manager

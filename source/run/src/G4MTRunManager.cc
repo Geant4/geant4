@@ -289,6 +289,7 @@ void G4MTRunManager::SetUserInitialization(G4UserWorkerInitialization* userInit)
 void G4MTRunManager::SetUserInitialization(G4VUserActionInitialization* userInit)
 {
   userActionInitialization = userInit;
+  userActionInitialization->BuildForMaster();
 }
 
 void G4MTRunManager::SetUserInitialization(G4VUserPhysicsList *userPL)

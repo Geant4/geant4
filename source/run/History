@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr. 18th, 2013, M.Asai (run-V09-06-24)
+- Make G4VUserActionInitialization class enabled.
+
 Apr. 18th, 2013, M.Asai (run-V09-06-23)
 - Fix uninitialized pointers in G4RunManager.
 

@@ -522,7 +522,6 @@ public: // with description
 
   protected:
     RMType runManagerType;
-    G4bool actionInitialized;
 
   public:
     virtual void ConstructScoringWorlds();

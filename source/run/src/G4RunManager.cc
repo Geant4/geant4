@@ -110,7 +110,6 @@ G4RunManager::G4RunManager()
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
   runManagerType = sequentialRM;
-  actionInitialized = false;
 }
 
 G4RunManager::G4RunManager(G4bool workerFlag)
@@ -164,7 +163,6 @@ numberOfEventProcessed(0)
   HepRandom::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
-  actionInitialized = false;
 }
 
 
@@ -285,14 +283,6 @@ void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
   G4bool cond = ConfirmBeamOnCondition();
   if(cond)
   {
-    if(userActionInitialization && !actionInitialized)
-    {
-      if(runManagerType==masterRM)
-      { userActionInitialization->BuildForMaster(); }
-      else
-      { userActionInitialization->Build(); }
-      actionInitialized = true;
-    }
     numberOfEventToBeProcessed = n_event;
     ConstructScoringWorlds();
     RunInitialization();
@@ -880,7 +870,10 @@ void G4RunManager::SetUserInitialization(G4UserWorkerInitialization* /*userInit*
 }
 
 void G4RunManager::SetUserInitialization(G4VUserActionInitialization* userInit)
-{ userActionInitialization = userInit; }
+{
+  userActionInitialization = userInit; 
+  userActionInitialization->Build();
+}
 
 void G4RunManager::SetUserAction(G4UserRunAction* userAction)
 { userRunAction = userAction; }
