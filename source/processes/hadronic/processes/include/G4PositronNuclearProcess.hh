@@ -41,7 +41,7 @@ class G4PositronNuclearProcess : public G4HadronInelasticProcess
 {
 public:
     
-  G4PositronNuclearProcess(const G4String& processName = "PositronNuclear");
+  G4PositronNuclearProcess(const G4String& processName = "positronNuclear");
 
   virtual ~G4PositronNuclearProcess();
 

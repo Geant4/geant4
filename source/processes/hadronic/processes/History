@@ -15,7 +15,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-
+     
+19 April 2013 Michel Maire (hadr-proc-V09-06-01)
+------------------------------------------------
+- modify all processNames to try to get coherence between various packages.
+    
 17 December 2012 Vladimir Ivantchenko (hadr-proc-V09-06-00)
 -------------------------------------------------------
 - G4WHadronElasticProcess - removed

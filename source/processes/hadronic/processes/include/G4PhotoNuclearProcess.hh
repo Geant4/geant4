@@ -45,7 +45,7 @@ class G4PhotoNuclearProcess : public G4HadronInelasticProcess
 {
   public:
     
-    G4PhotoNuclearProcess(const G4String& processName = "PhotonInelastic")
+    G4PhotoNuclearProcess(const G4String& processName = "photonNuclear")
       : G4HadronInelasticProcess(processName, G4Gamma::Gamma() )
     {
       G4CrossSectionDataStore* theStore = GetCrossSectionDataStore();

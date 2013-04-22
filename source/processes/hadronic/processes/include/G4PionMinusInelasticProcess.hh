@@ -43,7 +43,7 @@ class G4PionMinusInelasticProcess : public G4HadronInelasticProcess
     
   public:
     
-    G4PionMinusInelasticProcess(const G4String& processName = "PionMinusInelastic");
+    G4PionMinusInelasticProcess(const G4String& processName = "pi-Inelastic");
     
     ~G4PionMinusInelasticProcess() {}
 

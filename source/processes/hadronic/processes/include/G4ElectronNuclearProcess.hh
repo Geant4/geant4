@@ -45,7 +45,7 @@ class G4ElectronNuclearProcess : public G4HadronInelasticProcess
 {
 public:
     
-  G4ElectronNuclearProcess(const G4String& processName = "ElectroNuclear" );
+  G4ElectronNuclearProcess(const G4String& processName = "electronNuclear" );
   virtual ~G4ElectronNuclearProcess();
 
   virtual void ProcessDescription(std::ostream& outFile) const;
