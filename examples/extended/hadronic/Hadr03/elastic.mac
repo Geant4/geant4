@@ -1,4 +1,6 @@
-# Macro file for "Hadr14.cc"
+# $Id$
+#
+# Macro file for "Hadr03.cc"
 # (can be run in batch, without graphic)
 #
 # proton 10 MeV; all processes
@@ -18,7 +20,6 @@
 #
 /process/list
 /process/inactivate protonInelastic
-/process/inactivate ProtonInelastic
 #
 /analysis/setFileName elastic
 /analysis/h1/set 1  100  9. 11 MeV	# scaterred proton

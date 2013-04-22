@@ -1,0 +1,22 @@
+# $Id$
+#
+# Macro file for "Hadr03.cc"
+# (can be run in batch, without graphic)
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testhadr/det/setIsotopeMat U235 92 235 19.05 g/cm3
+/testhadr/det/setSize 100 km
+#
+/run/initialize
+#
+/gun/particle neutron
+/gun/energy 100 MeV
+#
+/process/list
+/process/inactivate hadElastic
+###/process/inactivate neutronInelastic
+/process/inactivate nCapture
+#
+/run/beamOn 100
