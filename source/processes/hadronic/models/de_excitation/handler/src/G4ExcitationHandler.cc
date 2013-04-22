@@ -447,7 +447,7 @@ void G4ExcitationHandler::SetMaxZForFermiBreakUp(G4int aZ)
 
 void G4ExcitationHandler::SetMaxAForFermiBreakUp(G4int anA)
 {
-  maxAForFermiBreakUp = std::min(5,anA);
+  maxAForFermiBreakUp = anA;
 }
 
 void G4ExcitationHandler::SetMaxAandZForFermiBreakUp(G4int anA, G4int aZ)
