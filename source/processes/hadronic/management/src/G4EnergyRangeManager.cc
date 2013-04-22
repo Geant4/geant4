@@ -165,5 +165,20 @@ G4HadronicInteraction*
     return theHadronicInteraction[mem];
   } 
  
+#include "G4SystemOfUnits.hh"
+void G4EnergyRangeManager::Dump( G4int verbose )
+{
+
+   G4cout << "G4EnergyRangeManager " << this << G4endl;
+   for ( G4int i = 0 ; i < theHadronicInteractionCounter; i++ ) {
+      G4cout << "   HadronicModel " << i <<":" << theHadronicInteraction[i] -> GetModelName()
+             << G4endl;
+      if ( verbose > 0 ) {
+         G4cout << "      Minimum Energy " << theHadronicInteraction[i]->GetMinEnergy()/GeV << " [GeV], "
+                      << "Maximum Energy " << theHadronicInteraction[i]->GetMaxEnergy()/GeV << " [GeV]"
+               << G4endl;
+      }
+   }
+}
  /* end of file */
  

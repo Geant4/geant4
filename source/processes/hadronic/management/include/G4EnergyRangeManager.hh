@@ -69,6 +69,8 @@
     
     inline G4int GetHadronicInteractionCounter() const
     { return theHadronicInteractionCounter; }
+
+    void Dump( G4int verbose = 0 ); 
     
  private:
      
