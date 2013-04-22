@@ -31,7 +31,7 @@ endif()
 # OFF by default. Switching on will enable multithreading, adding the
 # G4MULTITHREADED definition globally and appending the relevant
 # compiler flags to CMAKE_CXX_FLAGS
-option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant" OFF)
+option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" OFF)
 
 if(GEANT4_BUILD_MULTITHREADED)
   add_definitions(-DG4MULTITHREADED)
