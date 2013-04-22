@@ -140,6 +140,11 @@ else
   endif
 endif
 
+ifdef G4MULTITHREADED
+  CPPFLAGS += -DG4MULTITHREADED
+  G4MULTITHREADED := 1
+endif
+
 # CLHEP path, etc.
 #
 ifndef CLHEP_BASE_DIR

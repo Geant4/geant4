@@ -15,6 +15,9 @@ ifeq ($(G4SYSTEM),Linux-g++)
 #       platforms. Will only run on Pentium4-based architectures !
 #
 # CXXFLAGS  += -march=pentium4 -mfpmath=sse
+  ifdef G4MULTITHREADED
+    CXXFLAGS += -ftls-model=initial-exec -pthread
+  endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2
     FCFLAGS   := -O2

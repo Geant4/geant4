@@ -9,6 +9,9 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   CXXFLAGS  := -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   CXXFLAGS  += -Wno-variadic-macros -Wshadow
+  ifdef G4MULTITHREADED
+    CXXFLAGS += -ftls-model=initial-exec -pthread
+  endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2
     FCFLAGS   := -O2
