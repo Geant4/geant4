@@ -18,6 +18,37 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+22 April 13: V.Ivanchenko (emstand-V09-06-29)
+- G4PAIySection, G4PAIModel, G4PAIPhotonModel - restore tag -06-23
+    to allow acceptance of msc models for the reference tag
+
+20 April 13: V.Ivanchenko (emstand-V09-06-28)
+- G4PAIySection - fixed usage array length
+- G4WentzelVIModel - minor optimisation of the code (no effect on
+    physics results)  
+
+19 April 13: V.Ivanchenko (emstand-V09-06-27)
+- G4WentzelOKandVIxSection - fixed initialisation - really different 
+    screening parameter for e+- and heavy particles
+
+18 April 13: V.Ivanchenko (emstand-V09-06-26)
+- G4PAIModel - fixed valgrind reported problem in unit test
+
+18 April 13: V.Ivanchenko (emstand-V09-06-25)
+- G4PAIModel - fixed destructor
+- G4WentzelOKandVIxSection - added different screening parameter formula
+    for e+- and heavy particles in order to return back width of electron
+    scattering
+
+14 April 13: V.Grichine
+- G4PAIModel, G4PAIPhotonModel, G4PAIySection - modifications to make both PAI and
+  PAIPhoton to be edentical in terms of SANDIA data used.
+
+10 April 13: V.Ivanchenko (emstand-V09-06-24)
+- G4PAIModel, G4PAIPhotonModel - change Initilise method allowing to
+    work with these models in unit test where geometry is not 
+    constructed 
+
 04 April 13: V.Ivanchenko (emstand-V09-06-23)
 - G4UrbanMscModel - use G4Pow in compute transport cross section
 

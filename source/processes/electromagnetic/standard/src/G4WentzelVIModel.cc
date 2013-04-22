@@ -91,7 +91,8 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   fG4pow = G4Pow::GetInstance();
   wokvi = new G4WentzelOKandVIxSection();
 
-  preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange = xtsec = 0;
+  preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange 
+    = xtsec = 0;
   currentMaterialIndex = 0;
   cosThetaMax = cosTetMaxNuc = 1.0;
 
@@ -373,7 +374,9 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 
       lambdaeff = 1./cross; 
       G4double tau = zPathLength*cross;
-      if(tau < numlimit) { tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); } 
+      if(tau < numlimit) { 
+	tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
+      } 
       else if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
       else                    { tPathLength = currentRange; }
 
@@ -411,7 +414,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
   // use average kinetic energy over the step
   G4double cut = (*currentCuts)[currentMaterialIndex];
-  /*    
+  /*  
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy/MeV
   	 << " Leff= " << lambdaeff <<" sig0(1/mm)= " << xtsec 
  	 << " xmsc= " <<  tPathLength*invlambda 
@@ -419,15 +422,21 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   */
 
   // step limit due msc
-  G4double x0 = tPathLength;
-  //  const G4double thinlimit = 0.5; 
-  static const G4double thinlimit = 0.1; 
   G4int nMscSteps = 1;
+  G4double x0 = tPathLength;
+  G4double z0 = x0*invlambda;
+  G4double zzz = 0.0;
+
   // large scattering angle case - two step approach
-  if(!singleScatteringMode && tPathLength*invlambda > thinlimit 
-     && safety > tlimitminfix) { 
-    x0 *= 0.5; 
-    nMscSteps = 2; 
+
+  if(!singleScatteringMode) {
+    static const G4double zzmin = 0.05;
+    if(z0 > zzmin && safety > tlimitminfix) { 
+      x0 *= 0.5; 
+      z0 *= 0.5;
+      nMscSteps = 2;
+    } 
+    if(z0 > zzmin) { zzz = exp(-1.0/z0); }
   } 
 
   // step limit due to single scattering
@@ -458,10 +467,10 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double x2 = x0;
   G4double step, z;
   G4bool singleScat;
-  /*    
+  /*
     G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
     << " 1-cost1= " << 1 - cosThetaMin << "  " << singleScatteringMode 
-    << " xtsec= " << xtsec << G4endl;
+	   << " xtsec= " << xtsec << "  "  << nMscSteps << G4endl;
   */
   do {
 
@@ -493,7 +502,8 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       }
       G4double cosTetM = 
 	wokvi->SetupTarget(G4lrint((*theElementVector)[i]->GetZ()), cut);
-      //G4cout << "!!! " << cosThetaMin << "  " << cosTetM << "  " << prob[i] << G4endl;
+      //G4cout << "!!! " << cosThetaMin << "  " << cosTetM << "  " 
+      //       << prob[i] << G4endl;
       temp = wokvi->SampleSingleScattering(cosThetaMin, cosTetM, prob[i]);
 
       // direction is changed
@@ -510,13 +520,8 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       x1 -= step;
       x2  = x0;
 
-      // for multiple scattering x0 should be used as a step size
-      G4double z0 = x0*invlambda;
-
       // sample z in interval 0 - 1
       do {
-	G4double zzz = 0.0;
-	if(z0 > 0.1) { zzz = exp(-1.0/z0); }
 	z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand());
       } while(z > 1.0);
       cost = 1.0 - 2.0*z/*factCM*/;
@@ -540,13 +545,14 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 	G4double dy  = r*(0.5*vy1 + rms*G4RandGauss::shoot(0.0,1.0));
 	G4double dz;
 	G4double d   = r*r - dx*dx - dy*dy;
-	if(d >= 0.0)  { dz = sqrt(d) - r; }
-	else          { dx = dy = dz = 0.0; }
 
 	// change position
-	temp.set(dx,dy,dz);
-	temp.rotateUz(dir); 
-	fDisplacement += temp;
+	if(d >= 0.0)  { 
+	  dz = sqrt(d) - r; 
+	  temp.set(dx,dy,dz);
+	  temp.rotateUz(dir); 
+	  fDisplacement += temp;
+	}
       }
     }
   } while (0 < nMscSteps);
