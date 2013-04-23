@@ -59,7 +59,8 @@ B4cDetectorConstruction::B4cDetectorConstruction()
  : G4VUserDetectorConstruction(),
    fMessenger(0),
    fMagField(0),
-   fCheckOverlaps(true)
+   fCheckOverlaps(true),
+   nofLayers(-1)
 {
   // Define /B4/det commands using generic messenger class
   fMessenger 
@@ -121,7 +122,7 @@ void B4cDetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
 {
   // Geometry parameters
-  G4int nofLayers = 10;
+  nofLayers = 10;
   G4double absoThickness = 10.*mm;
   G4double gapThickness =  5.*mm;
   G4double calorSizeXY  = 10.*cm;
@@ -221,7 +222,7 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
     = new G4LogicalVolume(
                  absorberS,        // its solid
                  absorberMaterial, // its material
-                 "Abso");          // its name
+                 "AbsoLV");        // its name
                                    
    new G4PVPlacement(
                  0,                // no rotation
@@ -244,7 +245,7 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
     = new G4LogicalVolume(
                  gapS,             // its solid
                  gapMaterial,      // its material
-                 "Gap");           // its name
+                 "GapLV");         // its name
                                    
   new G4PVPlacement(
                  0,                // no rotation
@@ -266,20 +267,6 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
          << gapThickness/mm << "mm of " << gapMaterial->GetName() << " ] " 
          << "\n------------------------------------------------------------\n";
   
-  
-  // 
-  // Sensitive detectors
-  //
-  B4cCalorimeterSD* absoSD 
-    = new B4cCalorimeterSD("AbsorberSD", "AbsorberHitsCollection", nofLayers);
-  G4SDManager::GetSDMpointer()->AddNewDetector(absoSD );
-  absorberLV->SetSensitiveDetector(absoSD);
-
-  B4cCalorimeterSD* gapSD 
-    = new B4cCalorimeterSD("GapSD", "GapHitsCollection", nofLayers);
-  G4SDManager::GetSDMpointer()->AddNewDetector(gapSD );
-  gapLV->SetSensitiveDetector(gapSD);
-
   //                                        
   // Visualization attributes
   //
@@ -296,6 +283,24 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B4cDetectorConstruction::ConstructSDandField()
+{
+//  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+  
+  // 
+  // Sensitive detectors
+  //
+  B4cCalorimeterSD* absoSD 
+    = new B4cCalorimeterSD("AbsorberSD", "AbsorberHitsCollection", nofLayers);
+  SetSensitiveDetector("AbsoLV",absoSD);
+
+  B4cCalorimeterSD* gapSD 
+    = new B4cCalorimeterSD("GapSD", "GapHitsCollection", nofLayers);
+  SetSensitiveDetector("GapLV",gapSD);
+
+  SetMagField(0.);
+}
 
 void B4cDetectorConstruction::SetMagField(G4double fieldValue)
 {

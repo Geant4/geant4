@@ -69,12 +69,15 @@ void B4bSteppingAction::UserSteppingAction(const G4Step* step)
     stepLength = step->GetStepLength();
   }
       
+  B4bRunData* runData = static_cast<B4bRunData*>
+    (G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
   if ( volume == fDetConstruction->GetAbsorberPV() ) {
-    B4bRunData::GetInstance()->Add(kAbs, edep, stepLength);
+    runData->Add(kAbs, edep, stepLength);
   }
   
   if ( volume == fDetConstruction->GetGapPV() ) {
-    B4bRunData::GetInstance()->Add(kGap, edep, stepLength);
+    runData->Add(kGap, edep, stepLength);
   }
 }
 

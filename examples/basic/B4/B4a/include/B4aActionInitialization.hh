@@ -23,66 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
-// 
-/// \file B4cEventAction.hh
-/// \brief Definition of the B4cEventAction class
+// $Id: B4aActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
+//
+/// \file B4aActionInitialization.hh
+/// \brief Definition of the B4aActionInitialization class
 
-#ifndef B4cEventAction_h
-#define B4cEventAction_h 1
+#ifndef B4aActionInitialization_h
+#define B4aActionInitialization_h 1
 
-#include "G4UserEventAction.hh"
+#include "G4VUserActionInitialization.hh"
 
-#include "B4cCalorHit.hh"
+class B4DetectorConstruction;
 
-#include "globals.hh"
-
-class G4GenericMessenger;
-
-/// Event action class
+/// Action initialization class.
 ///
-/// In EndOfEventAction(), it prints the accumulated quantities of the energy 
-/// deposit and track lengths of charged particles in Absober and Gap layers 
-/// stored in the hits collections.
-///
-/// The data member fPrintModulo defines the frequency of printing
-/// the accumulated quantities. Its value can be changed via a command
-/// defined using G4GenericMessenger class:
-/// - /B4/event/setPrintModulo value
 
-class B4cEventAction : public G4UserEventAction
+class B4aActionInitialization : public G4VUserActionInitialization
 {
-public:
-  B4cEventAction();
-  virtual ~B4cEventAction();
+  public:
+    B4aActionInitialization(B4DetectorConstruction*);
+    virtual ~B4aActionInitialization();
 
-  virtual void  BeginOfEventAction(const G4Event* event);
-  virtual void    EndOfEventAction(const G4Event* event);
-                     
-  // set methods
-  void SetPrintModulo(G4int value);
-    
-private:
-  // methods
-  B4cCalorHitsCollection* GetHitsCollection(G4int hcID,
-                                            const G4Event* event) const;
-  void PrintEventStatistics(G4double absoEdep, G4double absoTrackLength,
-                            G4double gapEdep, G4double gapTrackLength) const;
-  
-  // data members                   
-  G4GenericMessenger*  fMessenger;
-  G4int  fPrintModulo;
-  G4int  absHCID;
-  G4int  gapHCID;
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+
+  private:
+    B4DetectorConstruction* fDetConstruction;
 };
-
-// inline functions
-
-inline void B4cEventAction::SetPrintModulo(G4int value) {
-  fPrintModulo = value;
-}
-                     
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

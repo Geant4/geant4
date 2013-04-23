@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // $Id$
-//
+// 
 /// \file B4PrimaryGeneratorAction.hh
 /// \brief Definition of the B4PrimaryGeneratorAction class
 

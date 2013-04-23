@@ -289,6 +289,11 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void B4DetectorConstruction::ConstructSDandField()
+{ SetMagField(0.); }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void B4DetectorConstruction::SetMagField(G4double fieldValue)
 {
   // Apply a global uniform magnetic field along X axis

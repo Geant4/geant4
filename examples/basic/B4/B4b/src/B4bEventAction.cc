@@ -95,17 +95,19 @@ void B4bEventAction::BeginOfEventAction(const G4Event* evt)
     //CLHEP::HepRandom::showEngineStatus();
   }
 
-  B4bRunData::GetInstance()->Reset();  
+  B4bRunData* runData = static_cast<B4bRunData*>
+    (G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  runData->Reset();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B4bEventAction::EndOfEventAction(const G4Event* event)
 {
-  //accumulates statistic
-  //
-  B4bRunData::GetInstance()->FillPerEvent();
-  
+  B4bRunData* runData = static_cast<B4bRunData*>
+      (G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  runData->FillPerEvent();
+
   //print per event (modulo n)
   //
   G4int eventID = event->GetEventID();
@@ -113,10 +115,10 @@ void B4bEventAction::EndOfEventAction(const G4Event* event)
     G4cout << "---> End of event: " << eventID << G4endl;     
 
     PrintEventStatistics(
-      B4bRunData::GetInstance()->GetEdep(kAbs),
-      B4bRunData::GetInstance()->GetTrackLength(kAbs),
-      B4bRunData::GetInstance()->GetEdep(kGap),
-      B4bRunData::GetInstance()->GetTrackLength(kGap));
+      runData->GetEdep(kAbs),
+      runData->GetTrackLength(kAbs),
+      runData->GetEdep(kGap),
+      runData->GetTrackLength(kGap));
   }
 }  
 

@@ -46,7 +46,11 @@
 B4dEventAction::B4dEventAction()
  : G4UserEventAction(),
    fMessenger(0),
-   fPrintModulo(1)
+   fPrintModulo(1),
+   absEdepHCID(-1),
+   gapEdepHCID(-1),
+   absTLenHCID(-1),
+   gapTLenHCID(-1)
 {
   // Define /B4/event commands using generic messenger class
   fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
@@ -69,17 +73,15 @@ B4dEventAction::~B4dEventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4THitsMap<G4double>* 
-B4dEventAction::GetHitsCollection(const G4String& hcName,
+B4dEventAction::GetHitsCollection(G4int hcID,
                                   const G4Event* event) const
 {
-  G4int hcID 
-    = G4SDManager::GetSDMpointer()->GetCollectionID(hcName);
   G4THitsMap<G4double>* hitsCollection 
     = static_cast<G4THitsMap<G4double>*>(
         event->GetHCofThisEvent()->GetHC(hcID));
   
   if ( ! hitsCollection ) {
-    G4cerr << "Cannot access hitsCollection " << hcName << G4endl;
+    G4cerr << "Cannot access hitsCollection ID " << hcID << G4endl;
     exit(1);
   }         
 
@@ -135,17 +137,33 @@ void B4dEventAction::EndOfEventAction(const G4Event* event)
 {  
   // Get sum value from hits collections
   //
+  if(absEdepHCID==-1) {
+    absEdepHCID = G4SDManager::GetSDMpointer()
+            ->GetCollectionID("Absorber/Edep");
+  }
   G4double absoEdep 
-    = GetSum(GetHitsCollection("Absorber/Edep", event));
+    = GetSum(GetHitsCollection(absEdepHCID, event));
 
+  if(gapEdepHCID==-1) {
+    gapEdepHCID = G4SDManager::GetSDMpointer()
+            ->GetCollectionID("Gap/Edep");
+  }
   G4double gapEdep 
-    = GetSum(GetHitsCollection("Gap/Edep", event));
+    = GetSum(GetHitsCollection(gapEdepHCID, event));
 
+  if(absTLenHCID==-1) {
+    absTLenHCID = G4SDManager::GetSDMpointer()
+            ->GetCollectionID("Absorber/TrackLength");
+  }
   G4double absoTrackLength 
-    = GetSum(GetHitsCollection("Absorber/TrackLength", event));
+    = GetSum(GetHitsCollection(absTLenHCID, event));
 
+  if(gapTLenHCID==-1) {
+    gapTLenHCID = G4SDManager::GetSDMpointer()
+            ->GetCollectionID("Gap/TrackLength");
+  }
   G4double gapTrackLength 
-    = GetSum(GetHitsCollection("Gap/TrackLength", event));
+    = GetSum(GetHitsCollection(gapTLenHCID, event));
 
   // get analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();

@@ -63,7 +63,7 @@ public:
     
 private:
   // methods
-  G4THitsMap<G4double>* GetHitsCollection(const G4String& hcName,
+  G4THitsMap<G4double>* GetHitsCollection(G4int hcID,
                                           const G4Event* event) const;
   G4double GetSum(G4THitsMap<G4double>* hitsMap) const;
   void PrintEventStatistics(G4double absoEdep, G4double absoTrackLength,
@@ -72,6 +72,10 @@ private:
   // data members                   
   G4GenericMessenger*  fMessenger;
   G4int  fPrintModulo;
+  G4int absEdepHCID;
+  G4int gapEdepHCID;
+  G4int absTLenHCID;
+  G4int gapTLenHCID;
 };
 
 // inline functions

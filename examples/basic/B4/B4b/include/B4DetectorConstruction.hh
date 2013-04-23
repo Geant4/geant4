@@ -55,6 +55,7 @@ class G4GenericMessenger;
 /// via a command defined using G4GenericMessenger class: 
 /// - /B4/det/setMagField value unit
 
+
 class B4DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
@@ -63,6 +64,7 @@ class B4DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
     // set methods
     //

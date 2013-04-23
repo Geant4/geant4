@@ -37,7 +37,7 @@
 
 #include <iomanip>
 
-G4Allocator<B4cCalorHit> B4cCalorHitAllocator;
+G4ThreadLocal G4Allocator<B4cCalorHit>* B4cCalorHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

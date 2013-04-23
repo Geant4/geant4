@@ -226,7 +226,7 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
     = new G4LogicalVolume(
                  absorberS,        // its solid
                  absorberMaterial, // its material
-                 "Abso");          // its name
+                 "AbsoLV");          // its name
                                    
    new G4PVPlacement(
                  0,                // no rotation
@@ -249,7 +249,7 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
     = new G4LogicalVolume(
                  gapS,             // its solid
                  gapMaterial,      // its material
-                 "Gap");      // its name
+                 "GapLV");      // its name
                                    
   new G4PVPlacement(
                  0,                // no rotation
@@ -271,43 +271,6 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
          << gapThickness/mm << "mm of " << gapMaterial->GetName() << " ] " 
          << "\n------------------------------------------------------------\n";
   
-  
-  // 
-  // Scorers
-  //
-
-  // declare Absorber as a MultiFunctionalDetector scorer
-  //  
-  G4MultiFunctionalDetector* absDetector 
-    = new G4MultiFunctionalDetector("Absorber");
-
-  G4VPrimitiveScorer* primitive;
-  G4SDChargedFilter* charged = new G4SDChargedFilter("chargedFilter");
-  primitive = new G4PSEnergyDeposit("Edep");
-  absDetector->RegisterPrimitive(primitive);
-
-  primitive = new G4PSTrackLength("TrackLength");
-  primitive ->SetFilter(charged);
-  absDetector->RegisterPrimitive(primitive);  
-
-  G4SDManager::GetSDMpointer()->AddNewDetector(absDetector);
-  absorberLV->SetSensitiveDetector(absDetector);
-  
-  // declare Gap as a MultiFunctionalDetector scorer
-  //  
-  G4MultiFunctionalDetector* gapDetector 
-    = new G4MultiFunctionalDetector("Gap");
-
-  primitive = new G4PSEnergyDeposit("Edep");
-  gapDetector->RegisterPrimitive(primitive);
-  
-  primitive = new G4PSTrackLength("TrackLength");
-  primitive ->SetFilter(charged);
-  gapDetector->RegisterPrimitive(primitive);  
-  
-  G4SDManager::GetSDMpointer()->AddNewDetector(gapDetector);
-  gapLV->SetSensitiveDetector(gapDetector);  
-
   //                                        
   // Visualization attributes
   //
@@ -321,6 +284,52 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
   // Always return the physical World
   //
   return worldPV;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B4dDetectorConstruction::ConstructSDandField()
+{
+  G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
+  // 
+  // Scorers
+  //
+
+  // declare Absorber as a MultiFunctionalDetector scorer
+  //  
+  G4MultiFunctionalDetector* absDetector 
+    = new G4MultiFunctionalDetector("Absorber");
+
+  G4VPrimitiveScorer* primitive;
+  primitive = new G4PSEnergyDeposit("Edep");
+  absDetector->RegisterPrimitive(primitive);
+
+  primitive = new G4PSTrackLength("TrackLength");
+  G4SDChargedFilter* charged = new G4SDChargedFilter("chargedFilter");
+  primitive ->SetFilter(charged);
+  absDetector->RegisterPrimitive(primitive);  
+
+  SetSensitiveDetector("AbsoLV",absDetector);
+  
+  // declare Gap as a MultiFunctionalDetector scorer
+  //  
+  G4MultiFunctionalDetector* gapDetector 
+    = new G4MultiFunctionalDetector("Gap");
+
+  primitive = new G4PSEnergyDeposit("Edep");
+  gapDetector->RegisterPrimitive(primitive);
+  
+  primitive = new G4PSTrackLength("TrackLength");
+  primitive ->SetFilter(charged);
+  gapDetector->RegisterPrimitive(primitive);  
+  
+  SetSensitiveDetector("GapLV",gapDetector);  
+
+  // 
+  // Magnetic field
+  //
+
+  SetMagField(0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

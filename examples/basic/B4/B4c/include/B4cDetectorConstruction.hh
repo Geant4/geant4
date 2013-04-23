@@ -66,6 +66,7 @@ class B4cDetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
     // set methods
     //
@@ -83,6 +84,8 @@ class B4cDetectorConstruction : public G4VUserDetectorConstruction
     G4UniformMagField*   fMagField;  // magnetic field
 
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps
+
+    G4int nofLayers;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

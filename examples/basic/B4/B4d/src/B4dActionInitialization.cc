@@ -23,67 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
-// 
-/// \file B4cEventAction.hh
-/// \brief Definition of the B4cEventAction class
+// $Id: B4dActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+//
+/// \file B4dActionInitialization.cc
+/// \brief Implementation of the B4dActionInitialization class
 
-#ifndef B4cEventAction_h
-#define B4cEventAction_h 1
+#include "B4dActionInitialization.hh"
+#include "B4PrimaryGeneratorAction.hh"
+#include "B4RunAction.hh"
+#include "B4dEventAction.hh"
 
-#include "G4UserEventAction.hh"
-
-#include "B4cCalorHit.hh"
-
-#include "globals.hh"
-
-class G4GenericMessenger;
-
-/// Event action class
-///
-/// In EndOfEventAction(), it prints the accumulated quantities of the energy 
-/// deposit and track lengths of charged particles in Absober and Gap layers 
-/// stored in the hits collections.
-///
-/// The data member fPrintModulo defines the frequency of printing
-/// the accumulated quantities. Its value can be changed via a command
-/// defined using G4GenericMessenger class:
-/// - /B4/event/setPrintModulo value
-
-class B4cEventAction : public G4UserEventAction
-{
-public:
-  B4cEventAction();
-  virtual ~B4cEventAction();
-
-  virtual void  BeginOfEventAction(const G4Event* event);
-  virtual void    EndOfEventAction(const G4Event* event);
-                     
-  // set methods
-  void SetPrintModulo(G4int value);
-    
-private:
-  // methods
-  B4cCalorHitsCollection* GetHitsCollection(G4int hcID,
-                                            const G4Event* event) const;
-  void PrintEventStatistics(G4double absoEdep, G4double absoTrackLength,
-                            G4double gapEdep, G4double gapTrackLength) const;
-  
-  // data members                   
-  G4GenericMessenger*  fMessenger;
-  G4int  fPrintModulo;
-  G4int  absHCID;
-  G4int  gapHCID;
-};
-
-// inline functions
-
-inline void B4cEventAction::SetPrintModulo(G4int value) {
-  fPrintModulo = value;
-}
-                     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B4dActionInitialization::B4dActionInitialization()
+ : G4VUserActionInitialization()
+{}
 
-    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B4dActionInitialization::~B4dActionInitialization()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B4dActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new B4RunAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B4dActionInitialization::Build() const
+{
+  SetUserAction(new B4PrimaryGeneratorAction);
+  SetUserAction(new B4RunAction);
+  SetUserAction(new B4dEventAction);
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

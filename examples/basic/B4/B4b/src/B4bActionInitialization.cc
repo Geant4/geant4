@@ -23,48 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
-// 
-/// \file B4RunAction.hh
-/// \brief Definition of the B4RunAction class
+// $Id: B4bActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+//
+/// \file B4bActionInitialization.cc
+/// \brief Implementation of the B4bActionInitialization class
 
-#ifndef B4RunAction_h
-#define B4RunAction_h 1
-
-#include "G4UserRunAction.hh"
-#include "globals.hh"
-
-class G4Run;
-
-/// Run action class
-///
-/// It accumulates statistic and computes dispersion of the energy deposit 
-/// and track lengths of charged particles with use of analysis tools:
-/// H1D histograms are created in BeginOfRunAction() for the following 
-/// physics quantities:
-/// - Edep in absorber
-/// - Edep in gap
-/// - Track length in absorber
-/// - Track length in gap
-/// The same values are also saved in the ntuple.
-/// The histograms and ntuple are saved in the output file in a format
-/// accoring to a selected technology in B4Analysis.hh.
-///
-/// In EndOfRunAction(), the accumulated statistic and computed 
-/// dispersion is printed.
-///
-
-class B4RunAction : public G4UserRunAction
-{
-  public:
-    B4RunAction();
-    virtual ~B4RunAction();
-
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
-};
+#include "B4bActionInitialization.hh"
+#include "B4PrimaryGeneratorAction.hh"
+#include "B4bRunAction.hh"
+#include "B4bEventAction.hh"
+#include "B4bSteppingAction.hh"
+#include "G4MTRunManager.hh"
+#include "B4DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B4bActionInitialization::B4bActionInitialization
+                            (B4DetectorConstruction* detConstruction)
+ : G4VUserActionInitialization(),
+   fDetConstruction(detConstruction)
+{}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B4bActionInitialization::~B4bActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B4bActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new B4bRunAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B4bActionInitialization::Build() const
+{
+  SetUserAction(new B4PrimaryGeneratorAction);
+  SetUserAction(new B4bRunAction);
+  SetUserAction(new B4bEventAction);
+  SetUserAction(new B4bSteppingAction(fDetConstruction));
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

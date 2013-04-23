@@ -32,7 +32,6 @@
 #include "B4Analysis.hh"
 
 #include "G4Run.hh"
-#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -64,13 +63,15 @@ void B4RunAction::BeginOfRunAction(const G4Run* run)
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
   // in B4Analysis.hh
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  //G4cout << "Create analysis manager " << isMaster << "  " << this << G4endl;
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isMaster);
   G4cout << "Using " << analysisManager->GetType() 
          << " analysis manager" << G4endl;
 
   // Create directories 
   //analysisManager->SetHistoDirectoryName("histograms");
   //analysisManager->SetNtupleDirectoryName("ntuple");
+  analysisManager->SetVerboseLevel(1);
   
   // Open an output file
   //
@@ -106,7 +107,13 @@ void B4RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->GetH1(1) ) {
-    G4cout << "\n ----> print histograms statistic \n" << G4endl;
+    G4cout << "\n ----> print histograms statistic ";
+    if(isMaster) {
+      G4cout << "for the entire run \n" << G4endl; 
+    }
+    else {
+      G4cout << "for the local thread \n" << G4endl; 
+    }
     
     G4cout 
        << " EAbs : mean = " << G4BestUnit(analysisManager->GetH1(1)->mean(), "Energy") 

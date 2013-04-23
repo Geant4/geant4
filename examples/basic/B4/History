@@ -15,6 +15,22 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23/04/13 I. Hrivnacova (exampleB4-V09-06-03)
+- Use G4Random::setTheEngine instead of CLHEP::HepRandom in main 
+  (needed for MT)
+- In B4b: merged  B4bRunAction and B4RunAction in one class
+- Removed unnecessary includes in run action files
+- Minor fixes of coding guidelines 
+
+18/04/13 M. Asai (exampleB4-V09-06-02)
+- Migrated to the new G4VUserActionInitialization class.
+
+08/04/13 M. Asai (exampleB4-V09-06-01)
+- Fixed the use of thread-local G4Allocator for B4c.
+
+06/04/13 M. Asai (exampleB4-V09-06-00)
+- Migrated to multi-threading.
+
 28/02/13 I. Hrivnacova
 - When building materials with NistManager
   do not set fromIsotopes argument (which was set to false), 

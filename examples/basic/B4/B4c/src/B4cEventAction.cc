@@ -48,7 +48,9 @@
 B4cEventAction::B4cEventAction()
  : G4UserEventAction(),
    fMessenger(0),
-   fPrintModulo(1)
+   fPrintModulo(1),
+   absHCID(-1),
+   gapHCID(-1)
 {
   // Define /B4/event commands using generic messenger class
   fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
@@ -71,17 +73,15 @@ B4cEventAction::~B4cEventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4cCalorHitsCollection* 
-B4cEventAction::GetHitsCollection(const G4String& hcName,
+B4cEventAction::GetHitsCollection(G4int hcID,
                                   const G4Event* event) const
 {
-  G4int hcID 
-    = G4SDManager::GetSDMpointer()->GetCollectionID(hcName);
   B4cCalorHitsCollection* hitsCollection 
     = static_cast<B4cCalorHitsCollection*>(
         event->GetHCofThisEvent()->GetHC(hcID));
   
   if ( ! hitsCollection ) {
-    G4cerr << "Cannot access hitsCollection " << hcName << G4endl;
+    G4cerr << "Cannot access hitsCollection ID " << hcID << G4endl;
     exit(1);
   }         
 
@@ -125,10 +125,18 @@ void B4cEventAction::BeginOfEventAction(const G4Event* event)
 void B4cEventAction::EndOfEventAction(const G4Event* event)
 {  
   // Get hits collections
+  if(absHCID==-1) {
+    absHCID = G4SDManager::GetSDMpointer()
+            ->GetCollectionID("AbsorberHitsCollection");
+  }
   B4cCalorHitsCollection* absoHC
-    = GetHitsCollection("AbsorberHitsCollection", event);
+    = GetHitsCollection(absHCID, event);
+  if(gapHCID==-1) {
+    gapHCID = G4SDManager::GetSDMpointer()
+            ->GetCollectionID("GapHitsCollection");
+  }
   B4cCalorHitsCollection* gapHC
-    = GetHitsCollection("GapHitsCollection", event);
+    = GetHitsCollection(gapHCID, event);
 
   // Get hit with total values
   B4cCalorHit* absoHit = (*absoHC)[absoHC->entries()-1];

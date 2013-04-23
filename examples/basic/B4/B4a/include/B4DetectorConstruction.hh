@@ -64,6 +64,7 @@ class B4DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
     // set methods
     //

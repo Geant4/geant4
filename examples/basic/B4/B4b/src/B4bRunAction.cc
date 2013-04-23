@@ -23,35 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B4bRunAction.cc 68835 2013-04-06 07:12:41Z asaim $
 //
-/// \file B4RunAction.cc
-/// \brief Implementation of the B4RunAction class
+/// \file B4bRunAction.cc
+/// \brief Implementation of the B4bRunAction class
 
-#include "B4RunAction.hh"
+#include "B4bRunAction.hh"
+#include "B4bRunData.hh"
 #include "B4Analysis.hh"
 
 #include "G4Run.hh"
-#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B4RunAction::B4RunAction()
+B4bRunAction::B4bRunAction()
  : G4UserRunAction()
 { 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B4RunAction::~B4RunAction()
+B4bRunAction::~B4bRunAction()
 {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4RunAction::BeginOfRunAction(const G4Run* run)
+G4Run* B4bRunAction::GenerateRun()
+{
+  return (new B4bRunData);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B4bRunAction::BeginOfRunAction(const G4Run* run)
 { 
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
 
@@ -64,13 +71,15 @@ void B4RunAction::BeginOfRunAction(const G4Run* run)
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
   // in B4Analysis.hh
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  //G4cout << "Create analysis manager " << isMaster << "  " << this << G4endl;
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isMaster);
   G4cout << "Using " << analysisManager->GetType() 
          << " analysis manager" << G4endl;
 
   // Create directories 
   //analysisManager->SetHistoDirectoryName("histograms");
   //analysisManager->SetNtupleDirectoryName("ntuple");
+  analysisManager->SetVerboseLevel(1);
   
   // Open an output file
   //
@@ -97,7 +106,7 @@ void B4RunAction::BeginOfRunAction(const G4Run* run)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4RunAction::EndOfRunAction(const G4Run* aRun)
+void B4bRunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4int nofEvents = aRun->GetNumberOfEvent();
   if ( nofEvents == 0 ) return;
@@ -106,7 +115,13 @@ void B4RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->GetH1(1) ) {
-    G4cout << "\n ----> print histograms statistic \n" << G4endl;
+    G4cout << "\n ----> print histograms statistic ";
+    if(isMaster) {
+      G4cout << "for the entire run \n" << G4endl; 
+    }
+    else {
+      G4cout << "for the local thread \n" << G4endl; 
+    }
     
     G4cout 
        << " EAbs : mean = " << G4BestUnit(analysisManager->GetH1(1)->mean(), "Energy") 
