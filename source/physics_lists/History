@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-04-2013, Andrea Dotti (physics_lists-V09-06-01)
+- Adaptation for MT with new G4VUserPhysicsList API, needed to share
+  physics-list objects between threads.
+
 12-03-2013, Gabriele Cosmo (physics_lists-V09-06-00)
 - Grouping all tags for geant4-09-06-ref-03.
 - NOTE: new tag format for top directory.
