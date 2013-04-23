@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 23. Apr. 2013 Hisaya Kurashige (particles-V09-06-17)
+- Fix bug in G4IonTable::FindIon for light ions
+
 - 10. Apr. 2013 Hisaya Kurashige (particles-V09-06-16)
 - remove G4Exceptions which added in G4ParticleTable
   (it is not problem.)

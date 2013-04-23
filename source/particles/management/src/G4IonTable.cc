@@ -449,19 +449,25 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
   //  !! J is omitted now !!
   const G4ParticleDefinition* ion=0;
   G4bool isFound = false;
-
-  // -- loop over all particles in Ion table
-  G4int encoding=GetNucleusEncoding(Z, A, 0);
-  G4String name = GetIonName(Z, A, E);
-  G4IonList::iterator i = fIonList->find(encoding);
-  for( ;i != fIonList->end() ; i++) {
-    ion = i->second;
-    if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
-
-    // check  name
-    if (ion->GetParticleName() == name) {
-      isFound = true;
-      break;
+ 
+  // check light ion
+  ion = GetLightIon(Z,A);
+  if (ion!=0 && E==0.0) {
+    isFound = true;
+  } else {    
+    // -- loop over all particles in Ion table
+    G4int encoding=GetNucleusEncoding(Z, A, 0);
+    G4String name = GetIonName(Z, A, E);
+    G4IonList::iterator i = fIonList->find(encoding);
+    for( ;i != fIonList->end() ; i++) {
+      ion = i->second;
+      if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
+      
+      // check  name
+      if (ion->GetParticleName() == name) {
+	isFound = true;
+	break;
+      }
     }
   }
 
@@ -650,7 +656,14 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
   }
   std::ostringstream os;
   os.setf(std::ios::fixed);
-  os << A << '[' << std::setprecision(1) << E/keV << ']';
+  os << A ;
+  std::ostringstream os2;
+  os2.setf(std::ios::fixed);
+  os2 << std::setprecision(1) << E/keV;
+  if (os2.str()!="0.0"){
+    // Excited nucelus
+    os << '[' << std::setprecision(1) << E/keV << ']';
+  }
   name += os.str();
   return name;
 }
