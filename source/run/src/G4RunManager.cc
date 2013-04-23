@@ -528,6 +528,7 @@ void G4RunManager::InitializeGeometry()
   //The master thread construct the detector.
   else
     kernel->DefineWorldVolume(userDetector->Construct(),false);
+  if(runManagerType == sequentialRM) userDetector->ConstructSDandField();
   nParallelWorlds = userDetector->ConstructParallelGeometries();
   kernel->SetNumberOfParallelWorld(nParallelWorlds);
   geometryInitialized = true;
