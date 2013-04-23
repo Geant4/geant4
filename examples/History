@@ -1,4 +1,4 @@
-$Id: History 66555 2012-12-20 08:56:08Z gcosmo $
+$Id: History 69230 2013-04-23 14:40:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th April 2013  Gabriele Cosmo (examples-V09-06-04)
+- Updated reference outputs according to reference tag geant4-09-06-ref-04.
+- Includes tags: amsEcal-V09-06-00, dnaphysics-V09-06-01,
+                 gammaraytel-V09-06-04, lAr_calorimeter-V09-06-04,
+                 microbeam-V09-06-00, microdosimetry-V09-06-00, DMX-V09-06-05,
+                 purmag-V09-06-00, xraytel-V09-06-00, exampleB4-V09-06-03,
+                 exampleA01-V09-06-01, AnaEx01-V09-06-00, AnaEx02-V09-06-00,
+                 AnaEx03-V09-06-00, exampleN03Con-V09-06-01, testem1-V09-06-04,
+                 excommon-analysis-V09-06-00, electromagnetic-V09-06-01,
+                 testem2-V09-06-03, testem3-V09-06-05, testem4-V09-06-01,
+                 testem5-V09-06-04, testem11-V09-06-07, testem12-V09-06-06,
+                 testem14-V09-06-04, testem17-V09-06-05, fieldex-V09-06-01,
+                 particleGunExample-V09-06-04, exhadr00-V09-06-00,
+                 exhadr01-V09-06-03, exhadr02-V09-06-03, exhadr03-V09-06-15,
+                 exTransforms-V09-06-03, electronScattering-V09-06-06,
+                 exampleES2-V09-06-01, fanoCavity-V09-06-04, fano2-V09-06-03,
+                 gtherapy-V09-06-02, exOptical-V09-06-01, LXe-V09-06-04,
+                 WLS-V09-06-02, exPolarisation-V09-06-00, rdecay02-V09-06-01,
+                 rdecay01-V09-06-01, exampleRE01-V09-06-04,
+                 exampleRE02-V09-06-02, exampleRE03-V09-06-01,
+                 exampleRE04-V09-06-02, exampleRE05-V09-06-00,
+                 exampleN02-V09-06-03.
 
 15th March 2013  Gabriele Cosmo (examples-V09-06-03)
 - Updated reference outputs according to reference tag geant4-09-06-ref-03.
