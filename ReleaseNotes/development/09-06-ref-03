@@ -89,7 +89,7 @@ geometry/management                              geommng-V09-06-06
 - Cleanup of code from MT automatic changes.
 
 geometry/solids/specific                         geom-specific-V09-06-08
---------
+------------------------
 - Cleanup changes for multi-threading in G4Tet, G4VTwistSurface,
   G4PolyconeSide and G4PolyhedraSide.
   Added public accessors for MT data to G4PolyconeSide and G4PolyhedraSide.
@@ -222,7 +222,7 @@ processes/electromagnetic/polarisation           empolar-V09-06-00
 --------------------------------------
 - G4PolarizedComptonCrossSection: removed unused class members.
 
-processes/electromagnetic/standard               emstand-V09-06-06
+processes/electromagnetic/standard               emstand-V09-06-18
 ----------------------------------
 - G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96: extended          (*)
   initialisation at StartTracking() method: class members 'tlimitmin' and
