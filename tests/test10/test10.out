@@ -53,6 +53,21 @@ Available colours:
 
 
  You selected a Sphere detector
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
 
 ---> Begin of Event: 0
@@ -284,3 +299,5 @@ Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
 
 ---> Begin of Event: 0
   A 10000 optical photons vertex has been generated at (425.997,986.539,203.459)
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

@@ -10,6 +10,21 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 WARNING: model G4LEAlphaInelastic is being deprecated and will
 disappear in Geant4 version 10.0
 WARNING: model G4LEAntiLambdaInelastic is being deprecated and will
@@ -475,15 +490,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
-    1000.000           1           0     Na24[0.0]
-         348           1    4.61e+04     e-
-    1.04e+03           1    4.61e+04     anti_nu_e
-      0.0554           1    4.61e+04     Mg24[4122.9]
-      0.0492           1    4.61e+04     Mg24[1368.8]
-           0           1    4.61e+04     Mg24[0.0]
-    1.37e+03           1    4.61e+04     gamma
-    2.75e+03           1    4.61e+04     gamma
+  User=0.01s Real=0s Sys=0s
+    1000.000           1           0     Na24
+         256           1   1.166e+05     e-
+    1.13e+03           1   1.166e+05     anti_nu_e
+      0.0543           1   1.166e+05     Mg24[4122.9]
+      0.0522           1   1.166e+05     Mg24[1368.8]
+           0           1   1.166e+05     Mg24
+    1.37e+03           1   1.166e+05     gamma
+    2.75e+03           1   1.166e+05     gamma
 
 #
 #
@@ -523,20 +538,22 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
-       1e+03           1           0     Ne24[0.0]
-         834           1       56.64     e-
-    1.16e+03           1       56.64     anti_nu_e
-     0.00488           1       56.64     Na24[472.2]
-           0           1       56.72     Na24[0.0]
-         209           1   7.648e+04     e-
-         472           1       56.72     gamma
-    1.18e+03           1   7.648e+04     anti_nu_e
-      0.0283           1   7.648e+04     Mg24[4122.9]
-      0.0281           1   7.648e+04     Mg24[1368.8]
-           0           1   7.648e+04     Mg24[0.0]
-    1.37e+03           1   7.648e+04     gamma
-    2.75e+03           1   7.648e+04     gamma
+  User=0s Real=0.01s Sys=0s
+       1e+03           1           0     Ne24
+         482           1       542.8     e-
+         641           1       542.8     anti_nu_e
+     0.00621           1       542.8     Na24[1346.6]
+           0           1       542.8     Na24[472.2]
+           0           1       542.8     Na24
+         401           1    3.65e+04     e-
+         472           1       542.8     gamma
+         874           1       542.8     gamma
+         990           1    3.65e+04     anti_nu_e
+      0.0616           1    3.65e+04     Mg24[4122.9]
+      0.0519           1    3.65e+04     Mg24[1368.8]
+           0           1    3.65e+04     Mg24
+    1.37e+03           1    3.65e+04     gamma
+    2.75e+03           1    3.65e+04     gamma
 
 #
 #
@@ -576,25 +593,25 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
-       1e+03           1           0     F24[0.0]
-    1.05e+04           1       1.113     e-
-    2.23e+03           1       1.113     anti_nu_e
-        3.78           1       1.113     Ne24[1981.6]
-           0           1       1.113     Ne24[0.0]
-    1.23e+03           1       141.5     e-
-    1.98e+03           1       1.113     gamma
-         763           1       141.5     anti_nu_e
-      0.0577           1       141.5     Na24[472.2]
-           0           1       141.5     Na24[0.0]
-    1.15e+03           1   1.503e+05     e-
-         472           1       141.5     gamma
-         243           1   1.503e+05     anti_nu_e
-      0.0422           1   1.503e+05     Mg24[4122.9]
-      0.0236           1   1.503e+05     Mg24[1368.8]
-           0           1   1.503e+05     Mg24[0.0]
-    1.37e+03           1   1.503e+05     gamma
-    2.75e+03           1   1.503e+05     gamma
+  User=0s Real=0s Sys=0s
+       1e+03           1           0     F24
+    8.14e+03           1     0.02085     e-
+    4.57e+03           1     0.02085     anti_nu_e
+         1.6           1     0.02085     Ne24[1981.6]
+           0           1     0.02085     Ne24
+         613           1       332.6     e-
+    1.98e+03           1     0.02085     gamma
+    1.38e+03           1       332.6     anti_nu_e
+        0.11           1       332.6     Na24[472.2]
+           0           1       332.6     Na24
+         550           1   1.221e+05     e-
+         472           1       332.6     gamma
+         841           1   1.221e+05     anti_nu_e
+      0.0409           1   1.221e+05     Mg24[4122.9]
+      0.0348           1   1.221e+05     Mg24[1368.8]
+      0.0334           1   1.221e+05     Mg24
+    1.37e+03           1   1.221e+05     gamma
+    2.75e+03           1   1.221e+05     gamma
 
 #
 #
@@ -634,17 +651,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
-       1e+03           1           0     Al24[0.0]
-    2.47e+03           1      0.1984     nu_e
-       0.277           1      0.1984     Mg24[8439.3]
-       0.276           1      0.1984     Mg24[1369.8]
-           0           1      0.1984     Mg24[0.0]
-    1.37e+03           1      0.1984     gamma
-    7.07e+03           1      0.1984     gamma
-    1.94e+03           1      0.1984     e+
-         511           1      0.1984     gamma
-         511           1      0.1984     gamma
+  User=0s Real=0.01s Sys=0s
+       1e+03           1           0     Al24
+    2.26e+03           1       1.695     nu_e
+       0.139           1       1.695     Mg24[9516.2]
+      0.0995           1       1.695     Mg24[4123.5]
+      0.0897           1       1.695     Mg24[1369.5]
+           0           1       1.695     Mg24
+    1.37e+03           1       1.695     gamma
+    2.75e+03           1       1.695     gamma
+    5.39e+03           1       1.695     gamma
+    1.08e+03           1       1.695     e+
+         511           1       1.695     gamma
+         511           1       1.695     gamma
 
 #
 #
@@ -686,15 +705,15 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
        1e+03           1           0     Na24[472.0]
-           0           1     0.04622     Na24[0.0]
-         598           1   7.087e+04     e-
-         472           1     0.04622     gamma
-         793           1   7.087e+04     anti_nu_e
-      0.0351           1   7.087e+04     Mg24[4122.9]
-       0.035           1   7.087e+04     Mg24[1368.8]
-           0           1   7.087e+04     Mg24[0.0]
-    1.37e+03           1   7.087e+04     gamma
-    2.75e+03           1   7.087e+04     gamma
+           0           1    0.009158     Na24
+         747           1   2.179e+05     e-
+         472           1    0.009158     gamma
+         644           1   2.179e+05     anti_nu_e
+      0.0634           1   2.179e+05     Mg24[4122.9]
+      0.0613           1   2.179e+05     Mg24[1368.8]
+           0           1   2.179e+05     Mg24
+    1.37e+03           1   2.179e+05     gamma
+    2.75e+03           1   2.179e+05     gamma
 
 #
 #
@@ -734,18 +753,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
-       1e+03           1           0     Cr46[0.0]
-    3.01e+03           1      0.9352     nu_e
-       0.361           1      0.9352     V46[0.0]
-    4.54e+03           1       2.595     nu_e
-       0.188           1       2.595     Ti46[0.0]
-    1.49e+03           1       2.595     e+
-    3.57e+03           1      0.9352     e+
-         511           1      0.9352     gamma
-         511           1      0.9352     gamma
-         511           1       2.595     gamma
-         511           1       2.595     gamma
+  User=0s Real=0.18s Sys=0s
+       1e+03           1           0     Cr46
+    4.82e+03           1      0.1344     nu_e
+       0.176           1      0.1344     V46
+    3.21e+03           1      0.1471     nu_e
+       0.399           1      0.1471     Ti46
+    2.82e+03           1      0.1471     e+
+    1.76e+03           1      0.1344     e+
+         511           1      0.1344     gamma
+         511           1      0.1344     gamma
+         511           1      0.1471     gamma
+         511           1      0.1471     gamma
 
 #
 #
@@ -786,8 +805,10 @@ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0.01s Sys=0s
-       1e+03           1           0     Po215[0.0]
-    7.39e+03           1    0.000387     alpha
-         140           1    0.000387     Pb211[0.0]
+       1e+03           1           0     Po215
+    7.39e+03           1    0.003909     alpha
+         140           1    0.003909     Pb211
 
 G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

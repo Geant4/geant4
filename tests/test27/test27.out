@@ -17,8 +17,23 @@ Tst27PhysicsList::SetCuts:CutLength : 1000 (mm)
 /run/initialize
 userDetector->Construct() start.
 SLog is registered to the default region.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 physicsList->Construct() start.
 physicsList->Construct() start.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 WARNING: model G4LEAlphaInelastic is being deprecated and will
 disappear in Geant4 version 10.0
 WARNING: model G4LEAntiLambdaInelastic is being deprecated and will
@@ -308,7 +323,7 @@ hIoni:   for  pi-    SubType= 2
 ---------------------------------------------------
                            Hadronic Processes for GenericIon
 
-  Process: IonInelastic
+  Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV  ---> 10 GeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
@@ -465,7 +480,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=49s Real=68.52s Sys=0.39s
+  User=59.16s Real=153.7s Sys=0.3s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -499,7 +514,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.12s Sys=0s
+  User=0.02s Real=0.23s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -798,7 +813,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.18s Real=0.28s Sys=0s
+  User=0.17s Real=0.57s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon
 #
@@ -1060,11 +1075,10 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
-### G4UrbanMscModel::SampleScattering for proton E(MeV)= 71.0658 Step(mm)= 5.9271 in Silicon CosTheta= -0.177813
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=15.47s Real=28.12s Sys=0.23s
+  User=15.92s Real=41.6s Sys=0s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -1105,12 +1119,10 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
-### G4UrbanMscModel::SampleScattering for deuteron E(MeV)= 21.2159 Step(mm)= 0.590301 in Silicon CosTheta= 0.324693
-### G4UrbanMscModel::SampleScattering for deuteron E(MeV)= 21.3267 Step(mm)= 0.59394 in Silicon CosTheta= 0.482597
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.04s Sys=0s
+  User=0.05s Real=0.25s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -1159,7 +1171,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.69s Real=3.18s Sys=0.06s
+  User=1.85s Real=5.46s Sys=0s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -1203,7 +1215,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.22s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1251,7 +1263,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.05s Real=0.06s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon
 #
@@ -1299,7 +1311,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.14s Real=3.04s Sys=0s
+  User=1.06s Real=2.22s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -1349,7 +1361,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=20.85s Real=33.45s Sys=0.12s
+  User=24.81s Real=60.25s Sys=0.39s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1397,7 +1409,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.04s Real=0.05s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon
 #
@@ -1442,11 +1454,10 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
-### G4UrbanMscModel::SampleScattering for proton E(MeV)= 27.0746 Step(mm)= 1.23317 in Silicon CosTheta= -0.835045
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=8.6s Real=12.67s Sys=0s
+  User=8.77s Real=25.5s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1491,14 +1502,10 @@ Index : 2     used in the geometry : No      recalculation needed : No
 ====================================================================
 
 Start Run processing.
-### G4UrbanMscModel::SampleScattering for alpha E(MeV)= 88.2294 Step(mm)= 0.368905 in Uranium CosTheta= 0.227068
-### G4UrbanMscModel::SampleScattering for alpha E(MeV)= 168.029 Step(mm)= 0.720289 in Uranium CosTheta= -0.213677
-### G4UrbanMscModel::SampleScattering for alpha E(MeV)= 39.1132 Step(mm)= 0.223025 in Uranium CosTheta= -0.798397
-### G4UrbanMscModel::SampleScattering for alpha E(MeV)= 112.941 Step(mm)= 0.462249 in Uranium CosTheta= 0.0194238
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.18s Real=0.21s Sys=0s
+  User=0.16s Real=0.26s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H
 #
@@ -1546,7 +1553,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.04s Real=0.06s Sys=0s
+  User=0.04s Real=0.14s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -1594,7 +1601,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.21s Real=0.22s Sys=0.01s
+  User=0.2s Real=0.92s Sys=0s
 #
 #  .....end alpha............
 #
@@ -1645,7 +1652,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=2.17s Real=2.4s Sys=0.01s
+  User=1.79s Real=4.18s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1694,7 +1701,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.09s Real=0.12s Sys=0s
+  User=0.11s Real=0.22s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1743,7 +1750,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.86s Real=0.87s Sys=0s
+  User=0.91s Real=1.99s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -2014,7 +2021,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.75s Real=0.83s Sys=0.01s
+  User=0.7s Real=1.52s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -2069,7 +2076,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -2123,7 +2130,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.45s Real=0.51s Sys=0s
+  User=0.37s Real=0.75s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -2177,7 +2184,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.07s Real=0.07s Sys=0s
+  User=0.07s Real=0.06s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -2459,6 +2466,8 @@ Run Summary
   User=0s Real=0s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.

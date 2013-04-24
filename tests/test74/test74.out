@@ -50,6 +50,21 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 PhysicsList::SetCuts:CutLength : 1 nm 
 /run/verbose 1
 /run/initialize
@@ -100,7 +115,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.22s Real=0.42s Sys=0s
+  User=0.22s Real=0.22s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -127,7 +142,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.54s Real=1.14s Sys=0s
+  User=0.54s Real=0.94s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -155,9 +170,9 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=26.58s Real=53.11s Sys=0.02s
+  User=26.9s Real=67.45s Sys=0.01s
 
- The run consists of 1 Ca48[0.0] of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
+ The run consists of 1 Ca48 of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
  Process calls frequency --->	ion_G4MuElecInelastic = 68208	e-_G4MuElecElastic = 569734	e-_G4MuElecInelastic = 43540
  Total transfered energy (keV)=4800
@@ -166,3 +181,5 @@ Run Summary
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

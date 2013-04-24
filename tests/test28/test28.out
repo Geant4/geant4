@@ -17,8 +17,23 @@ Tst28PhysicsList::SetCuts:CutLength : 1000 (mm)
 /run/initialize
 userDetector->Construct() start.
 SLog is registered to the default region.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 physicsList->Construct() start.
 physicsList->Construct() start.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 
  *****************************************************************
  Nuclear abrasion model for nuclear-nuclear interactions activated
@@ -320,14 +335,14 @@ hIoni:   for  pi-    SubType= 2
 ---------------------------------------------------
                            Hadronic Processes for GenericIon
 
-  Process: IonInelastic
+  Process: ionInelastic
         Model:          G4WilsonAbrasion: 0 eV  ---> 10 GeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
      Cr_sctns:                  Tripathi: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-  Process: IonInelastic
+  Process: ionInelastic
         Model:            EMDissociation: 0 eV  ---> 100 TeV
      Cr_sctns: Electromagnetic dissociation: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -483,7 +498,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.58s Real=1.43s Sys=0s
+  User=0.65s Real=1.4s Sys=0.01s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -1018,7 +1033,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.39s Real=1.16s Sys=0s
+  User=0.24s Real=0.84s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -1072,7 +1087,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1178,7 +1193,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.11s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -1233,7 +1248,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.17s Real=1.21s Sys=0s
+  User=0.18s Real=0.58s Sys=0s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1339,7 +1354,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.85s Sys=0s
+  User=0.11s Real=0.31s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1392,7 +1407,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H
 #
@@ -1445,7 +1460,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -1554,7 +1569,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0.12s Real=0.32s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1608,7 +1623,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1662,7 +1677,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.08s Real=0.27s Sys=0s
+  User=0.04s Real=0.23s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1938,7 +1953,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.06s Sys=0s
+  User=0.06s Real=0.27s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1998,7 +2013,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.09s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -2116,7 +2131,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -2403,6 +2418,8 @@ Run Summary
   User=0s Real=0s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.

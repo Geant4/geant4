@@ -17,8 +17,23 @@ Tst61PhysicsList::SetCuts:CutLength : 1000 (mm)
 /run/initialize
 userDetector->Construct() start.
 SLog is registered to the default region.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 physicsList->Construct() start.
 physicsList->Construct() start.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 WARNING: model G4LEAlphaInelastic is being deprecated and will
 disappear in Geant4 version 10.0
 WARNING: model G4LEAntiLambdaInelastic is being deprecated and will
@@ -310,7 +325,7 @@ hIoni:   for  pi-    SubType= 2
 ---------------------------------------------------
                            Hadronic Processes for GenericIon
 
-  Process: IonInelastic
+  Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV  ---> 100 MeV
         Model:                  QMDModel: 90 MeV ---> 10 GeV
      Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
@@ -468,7 +483,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=28.88s Real=78.76s Sys=0.01s
+  User=29.73s Real=70.86s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -729,7 +744,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.01s Real=0.21s Sys=0s
+  User=0.02s Real=0.12s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -995,7 +1010,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=3.75s Real=10.91s Sys=0s
+  User=4.99s Real=11.71s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1266,7 +1281,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=1.79s Real=4.43s Sys=0s
+  User=1.56s Real=3.16s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1321,7 +1336,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=4.08s Real=9.79s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1429,7 +1444,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.2s Real=0.5s Sys=0s
+  User=0.34s Real=0.67s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1708,9 +1723,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=33.99s Real=72.97s Sys=0.01s
+  User=24.77s Real=53.42s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.

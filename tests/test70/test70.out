@@ -12,6 +12,21 @@
 
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
 *** G4Exception : 
       issued by : *** WARNING : G4DNAChampionElasticModel::SetKillBelowThreshold INACTIVE for now
 
@@ -52,7 +67,7 @@ H^{0} + H^{0} -> H_{2}^{0}                                  1.2e+10             
 -----------------------------------------------------------------------------------------------------------------------------------------
 DNAMolecularStepByStepModel will be used
 PhysicsList::SetCuts:CutLength : 1 nm 
-Seed used : 1363295305
+Seed used : 1366761640
 Will start to process the script commands.mac
 
 phot:   for  gamma    SubType= 12
@@ -194,11 +209,50 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 !!!e- finished tracking track 1 
-!!! Penetration : 14.3802 um 
-End of tracking primary particle, its final energy is :747.923
+!!! Penetration : 17.4372 um 
+End of tracking primary particle, its final energy is :748
 You are launching the chemistry ...
 *** G4ITStepManager starts processing 
-*** G4ITStepManager ends at time : 1.1 ps 
+At time : 1       ps  Reaction : e_{aq}^{-1} (-74) + OH^{0} (-276) -> OH^{-1} (-396)
+At time : 1       ps  Reaction : H_{2}^{0} (-185) + OH^{0} (-187) -> H^{0} (-397)
+At time : 1       ps  Reaction : OH^{-1} (-396) + H_{3}O^{1} (-275) -> No product
+At time : 20.054  ps  Reaction : OH^{0} (-184) + OH^{0} (-197) -> H_{2}O_{2}^{2} (-398)
+At time : 32.054  ps  Reaction : e_{aq}^{-1} (-126) + OH^{0} (-231) -> OH^{-1} (-399)
+At time : 42.054  ps  Reaction : OH^{0} (-199) + OH^{0} (-201) -> H_{2}O_{2}^{2} (-400)
+At time : 54.054  ps  Reaction : H_{3}O^{1} (-181) + OH^{-1} (-186) -> No product
+At time : 56.054  ps  Reaction : OH^{0} (-226) + H^{0} (-227) -> No product
+At time : 61.054  ps  Reaction : e_{aq}^{-1} (-164) + H_{3}O^{1} (-183) -> H^{0} (-401)
+At time : 64.054  ps  Reaction : OH^{0} (-260) + e_{aq}^{-1} (-262) -> OH^{-1} (-402)
+At time : 67.054  ps  Reaction : OH^{-1} (-402) + H_{3}O^{1} (-261) -> No product
+At time : 108.425 ps  Reaction : e_{aq}^{-1} (-65) + OH^{0} (-282) -> OH^{-1} (-403)
+At time : 108.425 ps  Reaction : OH^{-1} (-403) + H_{3}O^{1} (-281) -> No product
+At time : 126.425 ps  Reaction : e_{aq}^{-1} (-87) + H_{3}O^{1} (-321) -> H^{0} (-404)
+At time : 129.425 ps  Reaction : e_{aq}^{-1} (-166) + OH^{0} (-195) -> OH^{-1} (-405)
+At time : 159.425 ps  Reaction : OH^{0} (-182) + OH^{0} (-193) -> H_{2}O_{2}^{2} (-406)
+At time : 183.425 ps  Reaction : OH^{-1} (-399) + H_{3}O^{1} (-230) -> No product
+At time : 244.755 ps  Reaction : H_{3}O^{1} (-188) + OH^{-1} (-405) -> No product
+At time : 363.944 ps  Reaction : OH^{0} (-249) + OH^{0} (-357) -> H_{2}O_{2}^{2} (-407)
+At time : 396.944 ps  Reaction : OH^{0} (-207) + OH^{0} (-387) -> H_{2}O_{2}^{2} (-408)
+At time : 537.42  ps  Reaction : e_{aq}^{-1} (-79) + OH^{0} (-314) -> OH^{-1} (-409)
+At time : 586.652 ps  Reaction : e_{aq}^{-1} (-104) + OH^{0} (-351) -> OH^{-1} (-410)
+At time : 779.21  ps  Reaction : e_{aq}^{-1} (-145) + OH^{0} (-379) -> OH^{-1} (-411)
+At time : 1.50133 ns  Reaction : OH^{0} (-180) + OH^{0} (-203) -> H_{2}O_{2}^{2} (-412)
+At time : 1.56133 ns  Reaction : e_{aq}^{-1} (-76) + OH^{0} (-278) -> OH^{-1} (-413)
+At time : 1.97835 ns  Reaction : OH^{-1} (-413) + H_{3}O^{1} (-273) -> No product
+At time : 4.49932 ns  Reaction : e_{aq}^{-1} (-95) + OH^{0} (-336) -> OH^{-1} (-414)
+At time : 5.18711 ns  Reaction : e_{aq}^{-1} (-78) + OH^{0} (-312) -> OH^{-1} (-415)
+At time : 7.10405 ns  Reaction : e_{aq}^{-1} (-58) + OH^{0} (-290) -> OH^{-1} (-416)
+At time : 7.87109 ns  Reaction : e_{aq}^{-1} (-62) + OH^{0} (-288) -> OH^{-1} (-417)
+At time : 12.6992 ns  Reaction : OH^{0} (-250) + OH^{0} (-256) -> H_{2}O_{2}^{2} (-418)
+At time : 32.0547 ns  Reaction : e_{aq}^{-1} (-170) + H_{2}O_{2}^{2} (-398) -> OH^{-1} (-419) + OH^{0} (-420)
+At time : 57.2666 ns  Reaction : e_{aq}^{-1} (-82) + OH^{0} (-270) -> OH^{-1} (-421)
+At time : 63.7083 ns  Reaction : e_{aq}^{-1} (-153) + H_{3}O^{1} (-179) -> H^{0} (-422)
+At time : 70.9049 ns  Reaction : e_{aq}^{-1} (-64) + OH^{0} (-298) -> OH^{-1} (-423)
+At time : 413.898 ns  Reaction : e_{aq}^{-1} (-103) + OH^{0} (-347) -> OH^{-1} (-424)
+At time : 989.894 ns  Reaction : OH^{0} (-304) + OH^{0} (-306) -> H_{2}O_{2}^{2} (-425)
+*** G4ITStepManager ends at time : 1 mus
 ___________________________________
-Seed used :1363295305
+Seed used :1366761640
 Has finished to process the script commands.mac
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
