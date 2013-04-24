@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr. 23rd, 2013, M.Asai (run-V09-06-26)
+- Add null pointer protection against the case the user does not have
+  G4VUserActionInitialization class.
+
 Apr. 23rd, 2013, M.Asai (run-V09-06-25)
 - Make G4VUserDetectorConstruction::ConstructSDandField() be invoked from G4RunManager
   for sequential mode.

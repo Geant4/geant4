@@ -92,7 +92,8 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //3- Call user method to define user actions and all other stuff
     //Note: Even if thiscontext is per-thread object, the UserWorkerInitialization
     // object is shared
-    masterRM->GetUserActionInitialization()->Build();
+    if(masterRM->GetUserActionInitialization())
+    { masterRM->GetUserActionInitialization()->Build(); }
     masterRM->GetUserWorkerInitialization()->WorkerStart();
     
     //4- Now initialize run manager
