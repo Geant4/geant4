@@ -304,12 +304,11 @@ processes/transportation                         transport-V09-06-03
   and G4CoupledTransportation for MT. Removed unnecessary static local
   variables.
 
-run                                              run-V09-06-25
+run                                              run-V09-06-26
 ---
-- Finalized API for examples migration: implemented changes in
-  G4UserWorkerInitialization class (renamed from G4VUserWorkerInitialization);
-  introducing G4VUserActionInitialization class.
-  Enable G4VUserActionInitialization class.
+- Finalized API for examples migration: implemented changes in class
+  G4UserWorkerInitialization (renamed from G4VUserWorkerInitialization);
+  introduced and enabled G4VUserActionInitialization class.
   Make G4VUserDetectorConstruction::ConstructSDandField() be invoked from
   G4RunManager for sequential mode.
 - Revised G4MTRunManager and related classes for the handling of parallel
