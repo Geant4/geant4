@@ -19,7 +19,7 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 /monopole/setup 
 Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
-/control/execute /ec/build/release/09-06-ref-03_branch/examples/extended/exoticphysics/monopole/monopole.in
+/control/execute /ec/build/nightly/g4tags-dev/examples/extended/exoticphysics/monopole/monopole.in
 /control/verbose 1
 /run/verbose 0
 /testex/run/verbose 1
@@ -36,6 +36,21 @@ Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
 ---> The Absorber is 10 cm  of G4_Si
 
 ---------------------------------------------------------
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /process/em/verbose 1
 /particle/select monopole
@@ -390,7 +405,7 @@ hPairProd:   for  pi-    SubType= 4
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
         Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -400,7 +415,7 @@ hPairProd:   for  pi-    SubType= 4
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: AntiNeutronInelastic
+  Process: anti_neutronInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -414,7 +429,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: AntiProtonInelastic
+  Process: anti_protonInelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -424,7 +439,7 @@ hPairProd:   for  pi-    SubType= 4
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: PositronNuclear
+  Process: positronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -432,7 +447,7 @@ hPairProd:   for  pi-    SubType= 4
 ---------------------------------------------------
                            Hadronic Processes for e-
 
-  Process: ElectroNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -440,7 +455,7 @@ hPairProd:   for  pi-    SubType= 4
 ---------------------------------------------------
                            Hadronic Processes for gamma
 
-  Process: PhotonInelastic
+  Process: photonNuclear
         Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
@@ -453,7 +468,7 @@ hPairProd:   for  pi-    SubType= 4
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: KaonPlusInelastic
+  Process: kaon+Inelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
@@ -466,7 +481,7 @@ hPairProd:   for  pi-    SubType= 4
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: KaonMinusInelastic
+  Process: kaon-Inelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
@@ -481,7 +496,7 @@ hPairProd:   for  pi-    SubType= 4
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: LambdaInelastic
+  Process: lambdaInelastic
         Model:            BertiniCascade: 0 eV  ---> 6 GeV
         Model:                      FTFP: 2 GeV ---> 100 TeV
      Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
@@ -500,7 +515,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: NeutronInelastic
+  Process: neutronInelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
@@ -523,7 +538,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: PionPlusInelastic
+  Process: pi+Inelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
@@ -540,7 +555,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: PionMinusInelastic
+  Process: pi-Inelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
@@ -558,7 +573,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: ProtonInelastic
+  Process: protonInelastic
         Model:                      FTFP: 4 GeV ---> 100 TeV
         Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
@@ -590,7 +605,7 @@ hPairProd:   for  pi-    SubType= 4
 
  The run consists of 100 monopole of 100 GeV through 10 cm  of G4_Si (density: 2.33 g/cm3 )
 
- projected Range= 7.7399 cm    rms= 99.886 um 
+ projected Range= 7.74 cm    rms= 90.499 um 
 ### Stopping Powers
  E(MeV)= 0.001  dedxp= 24.465 dedxmp= 1.4828
  E(MeV)= 0.0012589  dedxp= 27.276 dedxmp= 1.6637
@@ -697,8 +712,10 @@ Range table for G4_Si
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.410947 0.364051 0.733493 0.768908 0.244099 0.143304 0.354122 0.29399 0.126349 0.568057 0.703003 0.730223 0.850022 0.752202 0.636164 0.500219 0.174672 0.686644 0.29633 0.314912 0.843872 0.85233 0.446686 0.241508 
- i_lag = 10, j_lag = 20
- carry = 0, count24 = 4
+ float_seed_table[] = 0.0251203 0.198192 0.107692 0.353115 0.32246 0.879658 0.0110285 0.0516393 0.692973 0.174786 0.441598 0.352163 0.385061 0.613494 0.203555 0.25971 0.615125 0.652866 0.392688 0.528879 0.308984 0.897423 0.747486 0.219415 
+ i_lag = 22, j_lag = 8
+ carry = 5.96046e-08, count24 = 5
  luxury = 3 nskip = 199
 ----------------------------------------
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

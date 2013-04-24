@@ -61,8 +61,23 @@ Available colours:
 /run/initialize
 userDetector->Construct() start.
 world is registered to the default region.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 physicsList->Construct() start.
 physicsList->Construct() start.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 /vis/open ATree
@@ -404,7 +419,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
 #  Set verbosity with "/vis/ASCIITree/verbose <verbosity>":
 #    <  10: - does not print daughters of repeated placements, does not repeat replicas.
@@ -439,6 +454,8 @@ Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.

@@ -14,6 +14,21 @@
 Checking overlaps for volume Envelope ... OK! 
 Checking overlaps for volume Shape1 ... OK! 
 Checking overlaps for volume Shape2 ... OK! 
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -388,7 +403,7 @@ hPairProd:   for  pi-    SubType= 4
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
         Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -422,7 +437,7 @@ hPairProd:   for  pi-    SubType= 4
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: PositronNuclear
+  Process: positronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -430,7 +445,7 @@ hPairProd:   for  pi-    SubType= 4
 ---------------------------------------------------
                            Hadronic Processes for e-
 
-  Process: ElectroNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -438,7 +453,7 @@ hPairProd:   for  pi-    SubType= 4
 ---------------------------------------------------
                            Hadronic Processes for gamma
 
-  Process: PhotonInelastic
+  Process: photonNuclear
         Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
@@ -588,7 +603,7 @@ hPairProd:   for  pi-    SubType= 4
 
 --------------------End of Run------------------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume Shape2 : 50.7675 picoGy  +- 4.3005 picoGy 
+ Dose in scoring volume Shape2 : 39.7929 picoGy  +- 3.64196 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 start.
@@ -615,8 +630,10 @@ hPairProd:   for  pi-    SubType= 4
 
 --------------------End of Run------------------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume Shape2 : 4.8494 nanoGy  +- 145.522 picoGy 
+ Dose in scoring volume Shape2 : 5.2675 nanoGy  +- 146.173 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.
 Visualization Manager deleting...
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

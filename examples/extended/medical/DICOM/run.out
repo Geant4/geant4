@@ -80,86 +80,21 @@
  totalPixels 49152
  placing voxel container volume at (0,0,87.5)
 DicomRegularDetectorConstruction::ConstructPhantom 
-WARNING: model G4LENeutronInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEProtonInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEPionPlusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEPionMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEKaonPlusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEKaonMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEKaonZeroInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiKaonZeroInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEKaonZeroLInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEKaonZeroInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiKaonZeroInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEKaonZeroSInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiProtonInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEAntiProtonInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiNeutronInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEAntiNeutronInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LELambdaInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HELambdaInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiLambdaInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEAntiLambdaInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LESigmaMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HESigmaMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiSigmaMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEAntiSigmaMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LESigmaPlusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HESigmaPlusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiSigmaPlusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEAntiSigmaPlusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEXiMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEXiMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiXiMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEAntiXiMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEXiZeroInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEXiZeroInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiXiZeroInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEAntiXiZeroInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEOmegaMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEOmegaMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4LEAntiOmegaMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
-WARNING: model G4HEAntiOmegaMinusInelastic is being deprecated and will
-disappear in Geant4 version 10.0
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -541,7 +476,7 @@ hPairProd:   for  pi-    SubType= 4
   Process: ionInelastic
         Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
         Model:                      FTFP: 2 GeV ---> 100 TeV
-     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -551,9 +486,8 @@ hPairProd:   for  pi-    SubType= 4
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: AntiNeutronInelastic
-        Model:  G4LEAntiNeutronInelastic: 0 eV  ---> 25 GeV
-        Model:  G4HEAntiNeutronInelastic: 20 GeV ---> 100 TeV
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -566,9 +500,8 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: AntiProtonInelastic
-        Model:   G4LEAntiProtonInelastic: 0 eV  ---> 25 GeV
-        Model:   G4HEAntiProtonInelastic: 20 GeV ---> 100 TeV
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -577,7 +510,7 @@ hPairProd:   for  pi-    SubType= 4
 ---------------------------------------------------
                            Hadronic Processes for e+
 
-  Process: PositronNuclear
+  Process: positronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -585,7 +518,7 @@ hPairProd:   for  pi-    SubType= 4
 ---------------------------------------------------
                            Hadronic Processes for e-
 
-  Process: ElectroNuclear
+  Process: electronNuclear
         Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
      Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -593,7 +526,7 @@ hPairProd:   for  pi-    SubType= 4
 ---------------------------------------------------
                            Hadronic Processes for gamma
 
-  Process: PhotonInelastic
+  Process: photonNuclear
         Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
         Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
@@ -606,9 +539,10 @@ hPairProd:   for  pi-    SubType= 4
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: KaonPlusInelastic
+  Process: kaon+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:     G4LEKaonPlusInelastic: 0 eV  ---> 25 GeV
+        Model:                      FTFP: 4 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -619,9 +553,10 @@ hPairProd:   for  pi-    SubType= 4
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: KaonMinusInelastic
+  Process: kaon-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:    G4LEKaonMinusInelastic: 0 eV  ---> 25 GeV
+        Model:                      FTFP: 4 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
      Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -634,9 +569,9 @@ hPairProd:   for  pi-    SubType= 4
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: LambdaInelastic
-        Model:       G4LELambdaInelastic: 0 eV  ---> 25 GeV
-        Model:       G4HELambdaInelastic: 20 GeV ---> 100 TeV
+  Process: lambdaInelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
      Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -653,10 +588,11 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: NeutronInelastic
+  Process: neutronInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:      G4LENeutronInelastic: 9.5 GeV ---> 25 GeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
         Model:            Binary Cascade: 0 eV  ---> 9.9 GeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -677,9 +613,13 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: PionPlusInelastic
+  Process: pi+Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:     G4LEPionPlusInelastic: 0 eV  ---> 25 GeV
+        Model:                      FTFP: 4 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -694,9 +634,13 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: PionMinusInelastic
+  Process: pi-Inelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:    G4LEPionMinusInelastic: 0 eV  ---> 25 GeV
+        Model:                      FTFP: 4 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -712,10 +656,11 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: ProtonInelastic
+  Process: protonInelastic
         Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:       G4LEProtonInelastic: 9.5 GeV ---> 25 GeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
         Model:            Binary Cascade: 0 eV  ---> 9.9 GeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -895,47 +840,39 @@ EV: 99
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.98s Real=1.04s Sys=0.02s
+  User=0.99s Real=2.28s Sys=0s
  ###### EndOfRunAction  
 =============================================================
  Number of event processed : 100
 =============================================================
  opened file dicom.out for dose output
      Voxel |   DoseDeposit  |
-    8127     6.65161e-20 Gy
-    8128     5.44095e-20 Gy
-    8255     8.17733e-20 Gy
-    8256     8.74166e-20 Gy
-    23996     4.657e-22 Gy
-    23997     2.21325e-21 Gy
-    24125     3.51519e-21 Gy
-    24253     1.19074e-21 Gy
-    24254     2.28553e-21 Gy
-    24382     8.64591e-21 Gy
-    24383     3.69081e-22 Gy
-    24511     8.16664e-20 Gy
-    24512     6.12663e-20 Gy
-    24639     1.05294e-19 Gy
-    24640     6.14582e-20 Gy
-    24767     4.03401e-21 Gy
-    24893     6.02458e-22 Gy
-    24894     1.61309e-20 Gy
-    24895     5.04263e-21 Gy
-    25023     3.08108e-21 Gy
-    40252     8.24347e-21 Gy
-    40380     2.72168e-21 Gy
-    40769     1.98479e-21 Gy
-    40770     2.76464e-21 Gy
-    40771     1.1788e-21 Gy
-    40772     6.07456e-22 Gy
-    40895     7.70504e-20 Gy
-    40896     7.9548e-20 Gy
-    40897     7.74359e-22 Gy
-    41023     6.6583e-20 Gy
-    41024     7.2726e-20 Gy
-    41152     5.8178e-21 Gy
+    8127     8.12129e-20 Gy
+    8128     5.8679e-20 Gy
+    8254     2.6705e-21 Gy
+    8255     5.50118e-20 Gy
+    8256     6.87635e-20 Gy
+    24511     6.3313e-20 Gy
+    24512     5.35066e-20 Gy
+    24638     2.67047e-21 Gy
+    24639     7.74359e-20 Gy
+    24640     6.24709e-20 Gy
+    40508     9.66456e-22 Gy
+    40636     9.31037e-22 Gy
+    40637     1.85645e-21 Gy
+    40765     3.81825e-22 Gy
+    40766     2.51919e-21 Gy
+    40767     2.4267e-22 Gy
+    40895     8.1285e-20 Gy
+    40896     4.83613e-20 Gy
+    40897     2.38942e-21 Gy
+    41022     2.67045e-21 Gy
+    41023     5.58675e-20 Gy
+    41024     6.13566e-20 Gy
 =============================================
  closed file dicom.out for dose output
 G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 Graphics systems deleted.
 Visualization Manager deleting...

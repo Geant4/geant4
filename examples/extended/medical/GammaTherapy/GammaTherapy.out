@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+ Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,13 +13,17 @@
 
 ***** Table : Nb of materials = 6 *****
 
- Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm   Imean:  63.700 eV 
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm 
+                       Imean:  63.700 eV 
+
    --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     G4_W    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.306 cm   Imean: 727.000 eV 
+ Material:     G4_W    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.310 cm 
+                       Imean: 727.000 eV 
+
    --->  Element: W (W)   Z = 74.0   N = 183.9   A = 183.84 g/mole
          --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:   0.12 %
          --->  Isotope:  W182   Z = 74   N = 182   A = 181.95 g/mole   abundance:  26.50 %
@@ -29,14 +33,18 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_He    density:  0.166 kg/m3   RadL:   5.671 km   Nucl.Int.Length:   3.343 km   Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:    G4_He    density:  0.166 kg/m3   RadL:   5.671 km   Nucl.Int.Length:   3.343 km 
+                       Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: He (He)   Z =  2.0   N =   4.0   A =   4.00 g/mole
          --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
          --->  Isotope:   He4   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.517 cm   Imean:  78.000 eV 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm 
+                       Imean:  78.000 eV 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -49,7 +57,9 @@
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.261 m    Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+ Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.137 m  
+                       Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
@@ -73,7 +83,9 @@
           ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
 
 
- Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.985 cm   Imean:  78.700 eV 
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
+                       Imean:  78.700 eV 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -141,6 +153,21 @@
 ===================================================
 Phantom R= 200 dz= 150
 Absorber R= 200 dz= 2.5 posZ= -77.5
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Run0052
+      issued by : G4VUserDetectorConstruction::ConstructSDandField
+User-derived class does not implement ConstructSDandFiled method:
+workers will not have SD and fields!
+If user defined SD and Field classes implement cloning, you can
+re-implement this method as:
+void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### PhysicsList Construte Processes
 /run/beamOn 10000
 
@@ -200,22 +227,24 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.31s Real=8.32s Sys=0s
+  User=7.17s Real=19.46s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.71
-Average number of gamma                      19.53
-Average number of e+                         0.759
-Average number of steps in the phantom       12.67
-Average number of e- steps in the target     18.04
-Average number of g  produced in the target  18.66
-Average number of e- produced in the target  20.82
-Average number of g produced in the phantom  0.5129
-Average number of e- produced in the phantom 6.36
-Total fGamma fluence in front of the phantom 8.29 MeV 
+Average number of e-                         33.09
+Average number of gamma                      19.52
+Average number of e+                         0.7577
+Average number of steps in the phantom       11.76
+Average number of e- steps in the target     18.03
+Average number of g  produced in the target  18.67
+Average number of e- produced in the target  20.79
+Average number of g produced in the phantom  0.4959
+Average number of e- produced in the phantom 5.973
+Total fGamma fluence in front of the phantom 8.127 MeV 
 ========================================================
 
 
 G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
