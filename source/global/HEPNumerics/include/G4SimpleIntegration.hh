@@ -114,7 +114,7 @@ class G4SimpleIntegration
 
         function fFunction ;
         G4double fTolerance ;
-        static G4ThreadLocal G4int fMaxDepth ;
+        const G4int fMaxDepth ;
 };
 
 #endif

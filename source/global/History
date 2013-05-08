@@ -17,6 +17,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 8, 2013 G.Cosmo (global-V09-06-24)
+- Improved accuracy for log10A() and powA() in G4Pow (V.Ivantchenko).
+- Get rid of thread-local specifications for constant variables and data
+  in HEPNumerics module.
+
+May 7, 2013 V.Ivanchenko (global-V09-06-23)
+- G4Pow: added new methods logX() and expA(); improved accuracy of
+  logA() and A13(): now all these methods provide accuracy better than 0.1%
+  for any value of argument.
+- Added post-const qualifier to all methods in G4Pow (G.Cosmo).
+
+May 2, 2013 V.Ivanchenko (global-V09-06-22)
+- Fixed typo introduced in G4Pow in tag "06-20".
+
+May 2, 2013 G.Cosmo (global-V09-06-21)
+- Updated tags in G4Version.
+
+April 30, 2013 V.Ivanchenko (global-V09-06-20)
+- G4Pow: fixed bug in interpolation inside logA() and A13() methods,
+  now interpolation is accurate at better than per mille level; in worse
+  cases (x~1.45 or x~0.75) better than 2% level.
+
 April 18, 2013 G.Cosmo (global-V09-06-19)
 - Moved 'tpmalloc' and 'memoryprotection' modules to source/externals.
 
