@@ -482,6 +482,7 @@ class G4Navigator
   G4ParameterisedNavigation fparamNav;
   G4ReplicaNavigation freplicaNav;
   G4RegularNavigation fregularNav;
+  G4VoxelSafety       *fpVoxelSafety;
 };
 
 #include "G4Navigator.icc"

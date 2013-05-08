@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 16th, 2013 - J.Apostolakis  (geomnav-V09-06-05)
+------------------------------
+- G4Navigator: Added new helper object G4VoxelSafety.
+    A helper object is owned by a Navigator instance.
+    To avoid including header it is stored as pointer.
+    Resolves issue with Multi-threading (thanks to Andrea Dotti 
+         for identifying and reporting the issue.)
+
 Apr 17th, 2013 - G.Cosmo (geomnav-V09-06-04)
 ------------------------
 - Minor code cleanup.
