@@ -79,8 +79,8 @@ private:
 inline G4double G4HETCFragment::
 BetaRand(const G4int N, const G4int L) const
 {
-  G4double Y1 = CLHEP::RandGamma::shoot(N,1);
-  G4double Y2 = CLHEP::RandGamma::shoot(L,1);
+  G4double Y1 = G4RandGamma::shoot(N,1);
+  G4double Y2 = G4RandGamma::shoot(L,1);
   
   return Y1/(Y1+Y2);
 }

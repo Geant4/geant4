@@ -46,7 +46,7 @@ G4GNASHTransitions::~G4GNASHTransitions()
 G4double G4GNASHTransitions::
 CalculateProbability(const G4Fragment & aFragment)
 {
-  const G4double k = 135.0 * MeV*MeV*MeV;
+  static const G4double k = 135.0 * MeV*MeV*MeV;
   G4double E = aFragment.GetExcitationEnergy();
   G4double P = aFragment.GetNumberOfParticles();
   G4double H = aFragment.GetNumberOfHoles();

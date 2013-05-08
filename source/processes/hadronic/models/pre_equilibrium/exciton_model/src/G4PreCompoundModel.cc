@@ -241,10 +241,10 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       if (test <= EquilibriumExcitonNumber) { go_ahead=true; }
 
       //J. M. Quesada (Apr. 08): soft-cutoff switched off by default
-      if (useSCO && !go_ahead)
+      if (useSCO && go_ahead)
 	{
 	  G4double x = G4double(test)/G4double(EquilibriumExcitonNumber) - 1;
-	  if( G4UniformRand() < 1.0 -  std::exp(-x*x/0.32) ) { go_ahead = true; }
+	  if( G4UniformRand() < 1.0 -  std::exp(-x*x/0.32) ) { go_ahead = false; }
 	} 
         
       // JMQ: WARNING:  CalculateProbability MUST be called prior to Get methods !! 
