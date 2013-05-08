@@ -79,6 +79,10 @@ class G4NeutronHPCaptureData : public G4VCrossSectionDataSet
 
       void IgnoreOnFlightDopplerBroadening(){ onFlightDB = false; };
       void EnableOnFlightDopplerBroadening(){ onFlightDB = true; };
+
+   public:
+      G4int GetVerboseLevel();
+      void SetVerboseLevel( G4int );
    
    private:
    

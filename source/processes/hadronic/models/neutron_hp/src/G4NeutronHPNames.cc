@@ -66,6 +66,8 @@
 G4NeutronHPDataUsed G4NeutronHPNames::GetName(G4int A, G4int Z, G4int M, G4String base, G4String rest, G4bool & aFlag)
 {
 
+   G4int verboseLevel = G4NeutronHPManager::GetInstance()->GetVerboseLevel();
+
    //G4cout << Z << " " << A << " " << M << " " << base << " " << rest << G4endl;
 
    //Excited isomer indicator
@@ -347,7 +349,9 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
           reac.erase ( 0 , dir.length() );
           if ( getenv ( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) && !( Z == result.GetZ() && result.IsThisNaturalAbundance() ) )
           {
-             G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and CrossSection set to 0." << G4endl;
+             if ( verboseLevel > 0 ) {
+                G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and CrossSection set to 0." << G4endl;
+             }
              G4String new_name = base+"/"+rest+"/"+"0_0_Zero";  
              result.SetName( new_name );
           }
@@ -364,7 +368,9 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
              }
              else
              {
-                G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and NeutronHP will use " << result.GetName() << G4endl;
+                if ( verboseLevel > 0 ) {
+                   G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and NeutronHP will use " << result.GetName() << G4endl;
+                }
              }
           }
        }

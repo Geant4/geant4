@@ -61,6 +61,10 @@ class G4NeutronHPElastic : public G4HadronicInteraction
 
   void DoNotSuspend() {overrideSuspension = true;}
 
+   public:
+      G4int GetVerboseLevel();
+      void SetVerboseLevel( G4int );
+
   private:
   
   G4double * xSec;

@@ -420,7 +420,7 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
          }
          else
          {
-            std::cout << "Do not Suuport yet." << std::endl; 
+            G4cout << "Do not Suuport yet." << G4endl; 
          }
      
          //set 
@@ -581,7 +581,7 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
          }
          else
          {
-            std::cout << "Do not Suuport yet." << std::endl; 
+            G4cout << "Do not Suuport yet." << G4endl; 
          }
 
          // Decide mu 
@@ -681,7 +681,7 @@ G4double G4NeutronHPThermalScattering::get_linear_interpolated ( G4double x , st
    if ( High.first - Low.first != 0 ) 
       y = ( High.second - Low.second ) / ( High.first - Low.first ) * ( x - Low.first ) + Low.second;
    else 
-      std::cout << "G4NeutronHPThermalScattering liner interpolation err!!" << std::endl; 
+      G4cout << "G4NeutronHPThermalScattering liner interpolation err!!" << G4endl; 
       
    return y; 
 } 
@@ -700,7 +700,7 @@ E_isoAng G4NeutronHPThermalScattering::create_E_isoAng_from_energy ( G4double en
       v_e.push_back ( (*iv)->energy );
 
    std::pair < G4double , G4double > energyLH = find_LH ( energy , &v_e );
-   //std::cout << " " << energy/eV << " " << energyLH.first/eV  << " " << energyLH.second/eV << std::endl;
+   //G4cout << " " << energy/eV << " " << energyLH.first/eV  << " " << energyLH.second/eV << G4endl;
 
    E_isoAng* panEPM_T_EL=0;
    E_isoAng* panEPM_T_EH=0;
@@ -774,7 +774,7 @@ G4double G4NeutronHPThermalScattering::get_secondary_energy_from_E_P_E_isoAng ( 
       total += ( ( anE_P_E_isoAng->prob[i] ) * dE );
    }
 
-   if ( std::abs( total - anE_P_E_isoAng->sum_of_probXdEs ) > 1.0e-14 ) std::cout << total - anE_P_E_isoAng->sum_of_probXdEs << std::endl;
+   if ( std::abs( total - anE_P_E_isoAng->sum_of_probXdEs ) > 1.0e-14 ) G4cout << total - anE_P_E_isoAng->sum_of_probXdEs << G4endl;
 */
    total =  anE_P_E_isoAng->sum_of_probXdEs;
 
@@ -867,7 +867,7 @@ std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM
          }
          else
          {
-            std::cout << "Do not Suuport yet." << std::endl; 
+            G4cout << "Do not Suuport yet." << G4endl; 
          }
      
    

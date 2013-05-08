@@ -35,6 +35,7 @@
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
 #include "G4NeutronHPElasticData.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
@@ -54,7 +55,7 @@ G4NeutronHPElasticData::G4NeutronHPElasticData()
 
    theCrossSections = 0;
    onFlightDB = true;
-   BuildPhysicsTable( *G4Neutron::Neutron() );
+// BuildPhysicsTable( *G4Neutron::Neutron() );
 }
    
 G4NeutronHPElasticData::~G4NeutronHPElasticData()
@@ -267,4 +268,16 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
          << (*((*theCrossSections)(index))).GetValue(eKinetic, outOfRange) /result << G4endl;
 */
   return result;
+}
+
+G4int G4NeutronHPElasticData::
+GetVerboseLevel() 
+{
+   return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
+}
+
+void G4NeutronHPElasticData::
+SetVerboseLevel( G4int newValue ) 
+{
+   G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
 }

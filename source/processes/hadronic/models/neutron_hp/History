@@ -14,6 +14,43 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 May 2013 Tatsumi Koi (hadr-hpn-V09-06-09)
+Add package-wide verbose level control 
+Sharing one value on entire package 
+	include/G4NeutronHPManager.hh
+	include/G4NeutronHPCapture.hh
+	include/G4NeutronHPCaptureData.hh
+	include/G4NeutronHPElastic.hh
+	include/G4NeutronHPElasticData.hh
+	include/G4NeutronHPFission.hh
+	include/G4NeutronHPFissionData.hh
+	include/G4NeutronHPInelastic.hh
+	include/G4NeutronHPInelasticData.hh
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPElastic.cc
+	src/G4NeutronHPElasticData.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPInelasticData.cc
+Delete (Comment out) BuildPhysicsTable from constructor 
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPElasticData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+Construction for UR-14 
+	src/G4NeutronHPName.cc
+	
+
+30 April 2013 Tatsumi Koi (hadr-hpn-V09-06-08)
+Fix UNINIT_CTOR "theBuffer"
+	src/G4NeutronHPElementData.cc
+Replace std::cout to G4cout
+	src/G4NeutronHPThermalScattering.cc
+
+
 16 April 2013 Tatsumi Koi (hadr-hpn-V09-06-07)
 Deactivate capability of reading zlibed G4NEUTRONHPDATA library 
 	src/G4NeutronHPManager.cc

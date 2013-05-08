@@ -95,6 +95,10 @@ class G4NeutronHPInelastic : public G4HadronicInteraction
 
   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
+   public:
+      G4int GetVerboseLevel();
+      void SetVerboseLevel( G4int );
+
   private:
   
   G4double * xSec;

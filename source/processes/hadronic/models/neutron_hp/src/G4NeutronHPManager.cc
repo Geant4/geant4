@@ -34,7 +34,7 @@
 G4ThreadLocal G4NeutronHPManager* G4NeutronHPManager::instance = NULL;
 
 G4NeutronHPManager::G4NeutronHPManager()
-:RWB(NULL)
+:RWB(NULL),verboseLevel(1)
 {
 ;
 }
@@ -118,4 +118,11 @@ void G4NeutronHPManager::GetDataStream( G4String filename , std::istringstream& 
    //G4cout << iss.rdbuf()->in_avail() << G4endl;
    in->close(); delete in;
    delete data;
+}
+
+void G4NeutronHPManager::SetVerboseLevel( G4int newValue )
+{
+   G4cout << "You are setting a new verbose level for neutron HP package." << G4endl;
+   G4cout << "the new value will be used in whole of the neutron HP package, i.e., models and cross sections for Capture, Elastic, Fission and Inelastic interaction." << G4endl;
+   verboseLevel = newValue;
 }

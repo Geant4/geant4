@@ -75,6 +75,10 @@ class G4NeutronHPFissionData : public G4VCrossSectionDataSet
 
       void DumpPhysicsTable(const G4ParticleDefinition&);
    
+   public:
+      G4int GetVerboseLevel();
+      void SetVerboseLevel( G4int );
+
    private:
    
       G4PhysicsTable * theCrossSections;

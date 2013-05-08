@@ -34,6 +34,7 @@
 // 100729 Add safty for 0 lenght cross sections by T. Koi
 
 #include "G4NeutronHPFissionData.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
@@ -51,7 +52,7 @@ G4NeutronHPFissionData::G4NeutronHPFissionData()
    material_cache = NULL;
 
    theCrossSections = 0;
-   BuildPhysicsTable(*G4Neutron::Neutron());
+   //BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
 G4NeutronHPFissionData::~G4NeutronHPFissionData()
@@ -236,4 +237,13 @@ if ( ( ( *theCrossSections )( index ) )->GetVectorLength() == 0 ) return result;
   }
   result /= counter;
   return result;
+}
+
+G4int G4NeutronHPFissionData::GetVerboseLevel() 
+{
+   return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
+}
+void G4NeutronHPFissionData::SetVerboseLevel( G4int newValue ) 
+{
+   G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
 }
