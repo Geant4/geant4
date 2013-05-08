@@ -16,14 +16,41 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 7th, 2013, A. Dotti (run-V09-06-31)
+- Add explicit initialization of all ions and isomers needed, for MT
+  coworking with particles-V09-06-26
+
+May 6th, 2013, M.Asai (run-V09-06-30)
+- Change the default number of threads from 0 to 2.
+
+May 5th, 2013, A.Dotti, M.Asai (run-V09-06-29)
+- Adding two possibly temporary hacks for hadroncis physics instabilities
+  1. All ions are created in MT by master thread (workers copy ions table)
+  2. G4VModularPhysicsList::ConstructProcess has a global mutex lock, in this
+     way all worker threads call this method one at a time. This limitation is 
+     needed since with many threads we have seen instabilities due to one or more
+     hadronics model corrupting common shared part of physics (most likely particles
+     table). Not yet found the correct solution for this problem.
+- Introducing /run/numberOfThreads command.
+
+May 5th, 2013, H.Kurashige (run-V09-06-28)
+- 'run/particle/AddProcManager' can be used in Pre_Init state
+  (requested by particles-V09-06-24 tag)
+ 
+Apr. 25th, 2013, M.Asai (run-V09-06-27)
+- Remove unnecessary G4Exception warning message for not having
+  G4VUserDetectorConstruction::ConstructSDandField() implemented.
+- Add G4VUserParallelWorld::ConstructSD() for the use-case of
+  defining sensitive detector in a parallel world. G4RunManager
+  and G4WorkerRunManager are modified accordingly.
 
 Apr. 23rd, 2013, M.Asai (run-V09-06-26)
 - Add null pointer protection against the case the user does not have
   G4VUserActionInitialization class.
 
 Apr. 23rd, 2013, M.Asai (run-V09-06-25)
-- Make G4VUserDetectorConstruction::ConstructSDandField() be invoked from G4RunManager
-  for sequential mode.
+- Make G4VUserDetectorConstruction::ConstructSDandField() be invoked
+  from G4RunManager for sequential mode.
 
 Apr. 18th, 2013, M.Asai (run-V09-06-24)
 - Make G4VUserActionInitialization class enabled.

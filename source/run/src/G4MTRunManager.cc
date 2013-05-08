@@ -71,7 +71,7 @@ G4RunManagerKernel* G4MTRunManager::GetMasterRunManagerKernel()
 }
 
 G4MTRunManager::G4MTRunManager() : G4RunManager(false) ,
-    nworkers(0),
+    nworkers(2),
     masterRNGEngine(0)
 {
     if ( masterRM )
@@ -295,6 +295,7 @@ void G4MTRunManager::SetUserInitialization(G4VUserActionInitialization* userInit
 void G4MTRunManager::SetUserInitialization(G4VUserPhysicsList *userPL)
 {
     G4RunManager::SetUserInitialization(userPL);
+    //Needed for MT, to be moved in kernel 
 }
 
 void G4MTRunManager::SetUserInitialization(G4VUserDetectorConstruction *userDC)
@@ -373,6 +374,18 @@ void G4MTRunManager::AddWorkerRunManager(G4WorkerRunManager* wrm)
     workersRM.push_back(wrm);
 }
 
+
+#include "G4IonTable.hh"
+#include "G4ParticleTable.hh"
+//#include "G4InuclElementaryParticle.hh"
+void G4MTRunManager::InitializePhysics()
+{
+    G4RunManager::InitializePhysics();
+    G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIon();
+    G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+    //BERTINI, this is needed to create pseudo-particles, to be removed
+    //G4InuclElementaryParticle::Initialize();
+}
 
 //Barriers mechanism
 // We want to implement two barriers.

@@ -75,6 +75,7 @@ void G4WorkerRunManager::InitializeGeometry() {
     //TODO: add new revised way of doing this after Boston, that is:
     //Step1: Call user's ConstructSDandField()
     userDetector->ConstructSDandField();
+    userDetector->ConstructParallelSD();
     //Step2: Get pointer to the physiWorld (note: needs to get the "super pointer, i.e. the one shared by all threads"
     //G4RunManager* masterRM = G4MTRunManager::GetMasterRunManager();
     G4RunManagerKernel* masterKernel = G4MTRunManager::GetMasterRunManagerKernel();

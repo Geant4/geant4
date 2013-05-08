@@ -38,6 +38,9 @@ G4VUserParallelWorld::G4VUserParallelWorld(G4String worldName)
 G4VUserParallelWorld::~G4VUserParallelWorld()
 { ; }
 
+void G4VUserParallelWorld::ConstructSD()
+{ ; }
+
 G4VPhysicalVolume* G4VUserParallelWorld::GetWorld()
 {
   G4VPhysicalVolume* pWorld

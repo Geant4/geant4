@@ -51,6 +51,7 @@ class G4VUserParallelWorld
 
   public:
     virtual void Construct() = 0;
+    virtual void ConstructSD();
 
   protected:
     G4String fWorldName;

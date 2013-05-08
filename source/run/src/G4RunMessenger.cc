@@ -29,6 +29,7 @@
 
 #include "G4RunMessenger.hh"
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
@@ -89,6 +90,16 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   verboseCmd->SetParameterName("level",true);
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=2");
+
+  nThreadsCmd = new G4UIcmdWithAnInteger("/run/numberOfThreads",this);
+  nThreadsCmd->SetGuidance("Set the number of threads to be used.");
+  nThreadsCmd->SetGuidance("This command is valid only for multi-threaded mode.");
+  nThreadsCmd->SetGuidance("The command is ignored if it is issued in sequential mode.");
+  nThreadsCmd->SetParameterName("nThreads",true);
+  nThreadsCmd->SetDefaultValue(2);
+  nThreadsCmd->SetRange("nThreads >0");
+  nThreadsCmd->SetToBeBroadcasted(false);
+  nThreadsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   dumpRegCmd = new G4UIcmdWithAString("/run/dumpRegion",this);
   dumpRegCmd->SetGuidance("Dump region information.");
@@ -217,6 +228,7 @@ G4RunMessenger::~G4RunMessenger()
   delete materialScanner;
   delete beamOnCmd;
   delete verboseCmd;
+  delete nThreadsCmd;
   delete optCmd;
   delete dumpRegCmd;
   delete dumpCoupleCmd;
@@ -256,6 +268,25 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }
   else if( command==verboseCmd )
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }
+  else if( command==nThreadsCmd )
+  {
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if( rmType==G4RunManager::masterRM )
+    {
+      static_cast<G4MTRunManager*>(runManager)->SetNumberOfThreads(
+       nThreadsCmd->GetNewIntValue(newValue));
+    }
+    else if ( rmType==G4RunManager::sequentialRM )
+    {
+      G4cout<<"*** /run/numberOfThreads command is issued in sequential mode."
+            <<"\nCommand is ignored.";
+    }
+    else
+    {
+      G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
+      "/run/numberOfThreads command is issued to local thread.");
+    }
+  }
   else if( command==dumpRegCmd )
   { 
     if(newValue=="**ALL**")
@@ -327,6 +358,19 @@ G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
   { cv = runManager->GetRandomNumberStoreDir(); }
   else if( command==randEvtCmd )
   { cv = randEvtCmd->ConvertToString(runManager->GetFlagRandomNumberStatusToG4Event()); }
+  else if( command==nThreadsCmd )
+  {
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if( rmType==G4RunManager::masterRM )
+    {
+      cv = nThreadsCmd->ConvertToString(
+       static_cast<G4MTRunManager*>(runManager)->GetNumberOfThreads());
+    }
+    else if ( rmType==G4RunManager::sequentialRM )
+    {
+      cv = "0";
+    }
+  }
   
   return cv;
 }

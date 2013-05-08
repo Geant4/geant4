@@ -116,8 +116,20 @@ void G4VModularPhysicsList::ConstructParticle()
 }
 
 
+//Andrea Dotti: May 6 2013
+//Current limitation being debugged: Construction of physics processes
+//needs to be sequential (there is at least one HAD processes creating problems)
+//This is not yet understood and needs to be debugged since we do not want
+//this part to be sequential (imagine when one has 100 threads)
+//TODO: Remove this lock
+#include "G4AutoLock.hh"
+namespace {
+    G4Mutex constructProcessMutex = G4MUTEX_INITIALIZER;
+}
+
 void G4VModularPhysicsList::ConstructProcess()
 {
+    G4AutoLock l(&constructProcessMutex); //Protection to be removed (A.Dotti)
  AddTransportation();
     
  G4PhysConstVector::iterator itr;

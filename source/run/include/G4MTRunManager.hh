@@ -69,6 +69,8 @@ public:
     virtual void ProcessOneEvent(G4int i_event);
     virtual void TerminateEventLoop();
     virtual void ConstructScoringWorlds();
+    virtual void InitializePhysics();
+    //Method called by Initialize() method
 protected:
     //Initialize the seeds list, if derived class does not implement this method
     //A default generation will be used (nevents*2 random seeds)

@@ -44,10 +44,10 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
-#TODO ANDREA: TODO REMOVE THIS DEPENDENCY AFTER REFACTORING G4WorkerThread
+#TODO ANDREA: TODO REMOVE THIS DEPENDENCY AFTER REFACTORING G4WorkerThread and removing explicit BERT initialization
 # Check also granula dependency
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
-
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
 
 #
 # Define the Geant4 Module.

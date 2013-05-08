@@ -72,6 +72,13 @@ G4int G4VUserDetectorConstruction::ConstructParallelGeometries()
   return nP;
 }
 
+void G4VUserDetectorConstruction::ConstructParallelSD()
+{
+  std::vector<G4VUserParallelWorld*>::iterator pwItr;
+  for(pwItr=parallelWorld.begin();pwItr!=parallelWorld.end();pwItr++)
+  { (*pwItr)->ConstructSD(); }
+}
+
 G4int G4VUserDetectorConstruction::GetNumberOfParallelWorld() const
 { return parallelWorld.size(); }
 
@@ -81,15 +88,22 @@ G4VUserParallelWorld* G4VUserDetectorConstruction::GetParallelWorld(G4int i) con
   return parallelWorld[i];
 }
 
+#include "G4RunManager.hh"
+
 void G4VUserDetectorConstruction::ConstructSDandField()
 {
-    G4ExceptionDescription msg;
-	msg << "User-derived class does not implement ConstructSDandFiled method:\n"
+   G4RunManager::RMType rmtype = G4RunManager::GetRunManager()->GetRunManagerType();
+   if(rmtype != G4RunManager::sequentialRM)
+   {
+    G4cout 
+    << "User-derived class does not implement ConstructSDandFiled method:\n"
     << "workers will not have SD and fields!\n"
     << "If user defined SD and Field classes implement cloning, you can\n"
     << "re-implement this method as:\n"
-    << "void UserDerivedClass::ConstructSDandField() { CloneSD(); CloneF(); }\n";
-    G4Exception("G4VUserDetectorConstruction::ConstructSDandField", "Run0052", JustWarning,msg);
+    << "void UserDerivedClass::ConstructSDandField() { CloneSD(); CloneF(); }\n"
+    << "The user can safely ignore this message if (s)he has no sensitive\n"
+    << "detector or field in her/his application." << G4endl;
+   }
 }
 
 #include <map>
@@ -215,8 +229,7 @@ void G4VUserDetectorConstruction::SetSensitiveDetector
                     "Run0052",FatalErrorInArgument,eM);
       }
       found = true;
-      G4SDManager::GetSDMpointer()->AddNewDetector(aSD);
-      (*pos)->SetSensitiveDetector(aSD);
+      SetSensitiveDetector(*pos,aSD);
     }
   } 
   if(!found)
@@ -230,3 +243,10 @@ void G4VUserDetectorConstruction::SetSensitiveDetector
                     "Run0053",FatalErrorInArgument,eM2);
   }
 } 
+
+void G4VUserDetectorConstruction::SetSensitiveDetector
+(G4LogicalVolume* logVol, G4VSensitiveDetector* aSD)
+{ 
+  G4SDManager::GetSDMpointer()->AddNewDetector(aSD);
+  logVol->SetSensitiveDetector(aSD);
+}

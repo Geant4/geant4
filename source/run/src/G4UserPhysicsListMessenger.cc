@@ -124,10 +124,11 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
 
   // /run/particle/addProcManager command
   addProcManCmd = new G4UIcmdWithAString("/run/particle/addProcManager", this);
+    addProcManCmd->SetToBeBroadcasted(false);
   addProcManCmd->SetGuidance("add process manager to specified particle type");
   addProcManCmd->SetParameterName("particleType", true);
   addProcManCmd->SetDefaultValue("");
-  addProcManCmd->AvailableForStates(G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
+  addProcManCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
   // /run/particle/buildPhysicsTable command
   buildPTCmd = new G4UIcmdWithAString("/run/particle/buildPhysicsTable", this);

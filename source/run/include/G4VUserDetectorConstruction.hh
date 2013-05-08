@@ -31,6 +31,7 @@
 #define G4VUserDetectorConstruction_h 1
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 class G4VUserParallelWorld;
 class G4VSensitiveDetector;
 
@@ -59,7 +60,6 @@ class G4VUserDetectorConstruction
     //The member function is used by worker threads.
     virtual G4VPhysicalVolume* ConstructSlave(){ return NULL; }
     
-    //01.28.2013 Andrea Dotti: New interface for Geant4 Ver. 10
     virtual void ConstructSDandField();
     //This method is used in multi-threaded applications to build
     //per-worker non-shared objects: SensitiveDetectors and Field managers
@@ -71,6 +71,7 @@ class G4VUserDetectorConstruction
 
   public:
     G4int ConstructParallelGeometries();
+    void ConstructParallelSD();
 
   private:
     std::vector<G4VUserParallelWorld*> parallelWorld;
@@ -82,6 +83,8 @@ class G4VUserDetectorConstruction
   protected:
     void SetSensitiveDetector(const G4String& logVolName,
                 G4VSensitiveDetector* aSD,G4bool multi=false);
+    void SetSensitiveDetector(G4LogicalVolume* logVol,
+                G4VSensitiveDetector* aSD);
 };
 
 #endif

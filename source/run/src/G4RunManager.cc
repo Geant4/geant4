@@ -530,6 +530,7 @@ void G4RunManager::InitializeGeometry()
     kernel->DefineWorldVolume(userDetector->Construct(),false);
   if(runManagerType == sequentialRM) userDetector->ConstructSDandField();
   nParallelWorlds = userDetector->ConstructParallelGeometries();
+  if(runManagerType == sequentialRM) userDetector->ConstructParallelSD();
   kernel->SetNumberOfParallelWorld(nParallelWorlds);
   geometryInitialized = true;
 }
@@ -547,6 +548,7 @@ void G4RunManager::InitializePhysics()
                 FatalException, "G4VUserPhysicsList is not defined!");
   }
   physicsInitialized = true;
+
 }
 
 void G4RunManager::AbortRun(G4bool softAbort)

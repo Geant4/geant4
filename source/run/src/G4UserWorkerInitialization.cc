@@ -97,7 +97,8 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     masterRM->GetUserWorkerInitialization()->WorkerStart();
     
     //4- Now initialize run manager
-    G4RunManager::GetRunManager()->Initialize();
+    wrm->Initialize();
+    //G4RunManager::GetRunManager()->Initialize();
     
     //5- Execute all stacked UI commands
     std::vector<G4String> cmds = masterRM->GetCommandStack();

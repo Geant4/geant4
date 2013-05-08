@@ -75,7 +75,7 @@ G4RunManagerKernel* G4RunManagerKernel::GetRunManagerKernel()
 { return fRunManagerKernel; }
 
 G4RunManagerKernel::G4RunManagerKernel()
-:physicsList(0),currentWorld(0),
+: physicsList(0),currentWorld(0),
  geometryInitialized(false),physicsInitialized(false),
  geometryToBeOptimized(true),
  physicsNeedsToBeReBuilt(true),verboseLevel(0),
@@ -155,7 +155,7 @@ G4RunManagerKernel::G4RunManagerKernel()
 }
 
 G4RunManagerKernel::G4RunManagerKernel(G4bool isWorkerRMK)
-:physicsList(0),currentWorld(0),
+: physicsList(0),currentWorld(0),
 geometryInitialized(false),physicsInitialized(false),
 geometryToBeOptimized(true),
 physicsNeedsToBeReBuilt(true),verboseLevel(0),
@@ -531,10 +531,13 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
   }
 }
 
+#include "G4IonTable.hh"
 void G4RunManagerKernel::SetupPhysics()
 {
     G4ParticleTable::GetParticleTable()->SetReadiness();
     physicsList->ConstructParticle();
+    //Andrea: Temporary for MT
+    G4ParticleTable::GetParticleTable()->GetIonTable()->InitializeLightIons();
 }
 
 void G4RunManagerKernel::InitializePhysics()
