@@ -261,7 +261,7 @@ G4bool G4FTFAnnihilation::
 #ifdef debugFTFannih 
   G4cout<<"Process a, 3 shirt diagram"<<G4endl;
 #endif
-      G4int SampledCase=CLHEP::RandFlat::shootInt(G4long(6));
+      G4int SampledCase=G4RandFlat::shootInt(G4long(6));
 
       G4int Tmp1(0), Tmp2(0);
       if(SampledCase == 0) {                                    }
@@ -620,7 +620,7 @@ G4cout<<tmp<<" "<<tmp.mag()<<G4endl;
 
       if(CandidatsN != 0) 
       {
-       G4int SampledCase=CLHEP::RandFlat::shootInt(G4long(CandidatsN));
+       G4int SampledCase=G4RandFlat::shootInt(G4long(CandidatsN));
 
        LeftAQ1=AQ[CandAQ[SampledCase][0]];
        LeftAQ2=AQ[CandAQ[SampledCase][1]];
@@ -718,7 +718,7 @@ G4cout<<tmp<<" "<<tmp.mag()<<G4endl;
 
       if(CandidatsN != 0) 
       {
-       G4int SampledCase=CLHEP::RandFlat::shootInt(G4long(CandidatsN));
+       G4int SampledCase=G4RandFlat::shootInt(G4long(CandidatsN));
 
        LeftAQ1=AQ[CandAQ[SampledCase][0]];
        LeftAQ2=AQ[CandAQ[SampledCase][1]];
@@ -1021,7 +1021,7 @@ G4cout<<"2 str "<<Pstring2<<" "<<Pstring2.mag()<<" "<<Ystring2<<G4endl;
 
       if(CandidatsN != 0) 
       {
-       G4int SampledCase=CLHEP::RandFlat::shootInt(G4long(CandidatsN));
+       G4int SampledCase=G4RandFlat::shootInt(G4long(CandidatsN));
 
        LeftAQ=AQ[CandAQ[SampledCase]];
 

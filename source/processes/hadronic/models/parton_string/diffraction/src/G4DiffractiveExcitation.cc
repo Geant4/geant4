@@ -316,7 +316,7 @@ G4int Uzhi_QE=0;
         if(ProjExchangeQ != TargQ2) Navailable++;
         if(ProjExchangeQ != TargQ3) Navailable++;
 
-        G4int Nsampled=CLHEP::RandFlat::shootInt(G4long(Navailable))+1;
+        G4int Nsampled=G4RandFlat::shootInt(G4long(Navailable))+1;
 
         Navailable=0;
         if(ProjExchangeQ != TargQ1) 
@@ -347,7 +347,7 @@ G4int Uzhi_QE=0;
         if(ProjExchangeQ != TargQ2) Navailable++;
         if(ProjExchangeQ != TargQ3) Navailable++;
 
-        G4int Nsampled=CLHEP::RandFlat::shootInt(G4long(Navailable))+1;
+        G4int Nsampled=G4RandFlat::shootInt(G4long(Navailable))+1;
 
         Navailable=0;
         if(ProjExchangeQ != TargQ1) 

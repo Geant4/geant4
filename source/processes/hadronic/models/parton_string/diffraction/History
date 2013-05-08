@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02-May-2013 A. Ribon       (hadr-string-diff-V09-06-12)
+-  For thread safety, replaced CLHEP::RandFlat with G4RandFlat in 
+   G4DiffractiveExcitation.cc and G4FTFAnnihilation.cc.
+
 21-Mar-2013 A. Ribon       (hadr-string-diff-V09-06-11)
 -  Fixed warning message in G4DiffractiveHHScatterer.
 
