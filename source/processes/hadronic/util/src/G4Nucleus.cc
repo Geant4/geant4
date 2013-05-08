@@ -401,11 +401,11 @@ G4Nucleus::SetParameters(G4int A, const G4int Z )
     
     // momentum is equally distributed in each phasespace volume dpx, dpy, dpz.
     G4double ranflat1=
-      CLHEP::RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
+      G4RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
     G4double ranflat2=
-      CLHEP::RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
+      G4RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
     G4double ranflat3=
-      CLHEP::RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
+      G4RandFlat::shoot((G4double)0.,(G4double)fermiMomentum);   
     G4double ranmax = (ranflat1>ranflat2? ranflat1: ranflat2);
     ranmax = (ranmax>ranflat3? ranmax : ranflat3);
     
