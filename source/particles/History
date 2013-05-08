@@ -16,6 +16,52 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- 07. May 2013 Andrea Dotti (particles-V09-06-26)
+- Adding G4IonTable::InitializeLightIon() method to create (anti-)lightions
+  at initialization time (needed by MT).
+
+- 05. May  2013 Hisaya Kurashige (particles-V09-06-25)
+- Add G4IsomerTable to create isomers (including ground state)
+- Modify GetIon methods with isomer level 
+  - the ion name has isomer level in the bracket (only for excited state)	
+  !!NOTE  
+    - GetIon methods with excited enregy can be used still (as before)
+    - If no isomers with matched excitation energy is found in IsomerTable,
+      an ion will be created with isomer level = 9 
+      and the ion name has excited energy in the bracket   
+- G4IonTable::CreateIon() is now can be used in Pre_init state
+
+- 02. May  2013 Hisaya Kurashige (particles-V09-06-22)
+- Add Isomer Level to G4Ions
+   - Assign level = 0 for ground state
+   - Assign level = 1 for excited states except for giving its level explicitly 
+   - Add level = 0 in constructors for light ions (proton, deuteron ....etc))  
+- Add following methods of using isomer level to GetIon 
+  !!NOTE  Currently these methods are relevant only for isomer level ==0 (ground state)
+  - G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int lvl=0);
+  - G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int L, G4int lvl);
+- Modify following methods. The last argument is now interpreted to Isomer level
+  - static G4int GetNucleusEncoding
+  - static G4bool GetNucleusByEncoding
+- Add Isomer Level to G4IsotopeProperty and add following methods to G4VIsotopeTable
+  - void              DumpTable(G4int Zmin=1, G4int Zmax=118);
+  - const G4String&   GetName() const;
+- Add /particle/createAllIsomer commnd for future (currently it gives NO effects)
+- Modify G4IsotopeMagneticMomentTable to deal with isomer level.
+ - Modify G4IsotopeMagneticMoment.table
+
+- 29. Apr. 2013 Hisaya Kurashige (particles-V09-06-21)
+- Fix a bug to avoid creatiing ions with same name
+ 
+- 27. Apr. 2013 Hisaya Kurashige (particles-V09-06-20)
+- Modify G4IonTable::GetIonName to use a static TLS for the ostringstream object.
+
+- 27. Apr. 2013 Hisaya Kurashige (particles-V09-06-19)
+- Modify G4IonTable::GetIon and CreateIon
+  - remove string comparison in GetIon 
+  - compare excited energy with precion of 0.1 keV in GetIon
+  - set excitation energy consistent with mass and AtomicMass in CreateIon  
+- Modify element name for Z>111
 
 - 23. Apr. 2013 Hisaya Kurashige (particles-V09-06-17)
 - Fix bug in G4IonTable::FindIon for light ions

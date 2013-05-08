@@ -71,8 +71,8 @@ G4Alpha* G4Alpha::Definition()
                     0,               0,             0,
             "nucleus",               0,            +4,  1000020040,
                  true,            -1.0,          NULL,
-		 false,       "static",   -1000020040, 
-                 0.0
+		false,        "static",   -1000020040, 
+                  0.0,               0
                );
 
   }

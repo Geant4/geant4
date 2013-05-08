@@ -404,11 +404,14 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 #ifdef G4VERBOSE
       if (verboseLevel>1){
 	G4cout << "The particle " << particle->GetParticleName() 
-	       << "has been already registered in the Particle Table "<< G4endl;
+	       << "  has been already registered in the Particle Table "<< G4endl;
       }
+      G4String msg = "The particle ";
+      msg += particle->GetParticleName();
+      msg += "  has been already registered in the Particle Table ";
       G4Exception("G4ParticleTable::Insert()",
-		  "PART122", JustWarning,
-		  "Particle with the same name has been already registered.");        if (verboseLevel>2){
+		  "PART122", JustWarning,msg);	
+      if (verboseLevel>2){
         FindParticle(particle) -> DumpTable();
       }
 #endif

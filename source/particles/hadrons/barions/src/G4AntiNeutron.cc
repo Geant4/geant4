@@ -78,7 +78,7 @@ G4AntiNeutron* G4AntiNeutron::Definition()
 		    1,              +1,             0,             
 	     "baryon",               0,            -1,       -2112,
 		 true,    885.7*second,          NULL,
-                false,        "nucleon"
+	        false,       "nucleon",          2112
               );
     // Magnetic Moment
     G4double mN = eplus*hbar_Planck/2./(proton_mass_c2 /c_squared);

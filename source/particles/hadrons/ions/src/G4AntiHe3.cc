@@ -73,7 +73,7 @@ G4AntiHe3* G4AntiHe3::Definition()
        "anti_nucleus",               0,            -3, -1000020030,
                  true,            -1.0,          NULL,
 		false,        "static",    1000020030,
-                  0.0
+		 0.0,                0
               );
  
     // Magnetic Moment

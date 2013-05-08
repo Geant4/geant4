@@ -74,7 +74,7 @@ G4Triton* G4Triton::Definition()
             "nucleus",               0,            +3, 1000010030,
                  true,      12.32*year,          NULL,
 		false,        "static",   -1000010030, 
-                  0.0
+		 0.0,                0
               );
  
     // Magnetic Moment

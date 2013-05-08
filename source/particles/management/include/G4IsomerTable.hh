@@ -23,19 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4IsotopeMagneticMomentTable_h
-#define G4IsotopeMagneticMomentTable_h 1
+#ifndef G4IsomerTable_h
+#define G4IsomerTable_h 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:              G4IsotopeMagneticMomentTable.hh
+// MODULE:              G4IsomerTable.hh
 //
-// Date:                16/03/07
+// Date:                5/05/13
 // Author:              H.Kurashige
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // HISTORY
-////////////////////////////////////////////////////////////////////////////////// IsomerLevel is added                         30 Apr. 2013  H.Kurashige
+///////////////////////////////////////////////////////////////////////////////
 
 //
 #include "globals.hh"
@@ -50,39 +50,33 @@
 
 ////////////////////////////////////////////////////////////////////////////////
 //
-class G4IsotopeMagneticMomentTable : public G4VIsotopeTable
+class G4IsomerTable : public G4VIsotopeTable
 {
   // class description
-  //   G4IsotopeMagneticMomentTable is the table of pointers to G4IsotopeProperty,
+  //   G4IsomerTable is the table of pointers to G4IsotopeProperty,
   //   which has magnetic moment and spin.
   //   Data File name is given by G4IONMAGNETICMOMENT 
   //   
 public:
   //
   typedef std::vector<G4IsotopeProperty*> G4IsotopeList;
-  typedef std::vector<G4String>           G4IsotopeNameList;
 
 public:
   // constructor
   //
-  G4IsotopeMagneticMomentTable();
+  G4IsomerTable();
 
 protected:
   // hide copy construictor and assignment operator as protected
-  G4IsotopeMagneticMomentTable(const  G4IsotopeMagneticMomentTable &right);
-  G4IsotopeMagneticMomentTable & operator= (const  G4IsotopeMagneticMomentTable &right);
+  G4IsomerTable(const  G4IsomerTable &right);
+  G4IsomerTable & operator= (const  G4IsomerTable &right);
 
 public:
   // destructor
-  virtual ~G4IsotopeMagneticMomentTable();
+  virtual ~G4IsomerTable();
 
 public:
   // with description
-  //
-  virtual G4bool FindIsotope(G4IsotopeProperty* property);
-  // The FindIsotope function will replace the pure virtual one defined in the
-  // abstract base class G4VIstopeTable.  We don't use this fuction in this
-  // implementation, instead we use the next function.
   //
   virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E);
   virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl=0);
@@ -93,28 +87,43 @@ public:
   //   A: Atomic Mass
   //   E: Excitaion energy
   //    or
-  //    G4int  level: isomer level
-  // 
+  //   lvl: isomer level
+  //  
+
+  size_t  entries() const; 
+  G4IsotopeProperty* GetIsotopeByIndex(size_t idx) const;
+
+protected: 
+  void FillIsotopeList();
 
 private:
-  G4int GetVerboseLevel() const;
-  // get Verbose Level defined in G4ParticleTable
+  enum {nEntries=3075,MaxA=260, MinZ=2, MaxZ=100};
+  static G4ThreadLocal G4double isomerTable[nEntries][5];
+  // Table of Isomer Property
+  //  0: PID = Z*10000 + 10*A + Lvl
+  //  1: Energy [keV]
+  //  2: Life Time [ns]
+  //  3: Spin  [h_bar/2]
+  //  4: Magnetic Moment [joule/tesla]
+  enum {idxPID=0, idxEnergy, idxLife, idxSpin, idxMu };
 
-private:
-
-  G4IsotopeList         fIsotopeList;
-
+  G4IsotopeList*        fIsotopeList;
   static const G4double levelTolerance;
-  static const G4double nuclearMagneton;
 };
 
 
-inline 
- G4int G4IsotopeMagneticMomentTable::GetVerboseLevel() const
+inline
+ size_t  G4IsomerTable::entries() const
 {
-  return G4ParticleTable::GetParticleTable()->GetVerboseLevel();
+  return fIsotopeList->size();
 }
 
+inline
+  G4IsotopeProperty* G4IsomerTable::GetIsotopeByIndex(size_t idx) const
+{
+  if (idx<fIsotopeList->size()) return (*fIsotopeList)[idx];
+  else                          return 0;
+}
 #endif
 
 

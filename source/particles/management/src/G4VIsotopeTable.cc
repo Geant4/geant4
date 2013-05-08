@@ -24,64 +24,76 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VIsotopeTable.cc 66241 2012-12-13 18:34:42Z gunter $
 //
 // 
 // ----------------------------------------------------------------------
 //      GEANT 4 class implementation file
 //
-//      History: first implementation, based on object model of
-//      4th April 1996, G.Cosmo
 // **********************************************************************
+//      New design using G4VIsotopeTable          30 Apr.. 2013 H.Kurashige
 
-#include <fstream>
-#include <iomanip>
+#include "G4VIsotopeTable.hh"
 
-#include "G4Ions.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
-
- // ######################################################################
-// ###                           Ions                                ###
+// ######################################################################
+// ###                           IsotopeTable                         ###
 // ######################################################################
 
-G4Ions::G4Ions(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable , G4bool              shortlived,
-       const G4String&     subType,
-       G4int               anti_encoding,
-       G4double            excitation,
-       G4int               isomer
-)
-  : G4ParticleDefinition( aName,mass,width,charge,iSpin,iParity,
-           iConjugation,iIsospin,iIsospin3,gParity,pType,
-           lepton,baryon,encoding,stable,lifetime,decaytable,
-			  shortlived, subType, anti_encoding),
-    theExcitationEnergy(excitation),
-    theIsomerLevel(isomer)
-{
-  // isomer level isset to 10 
-  // if isomer level is set to 0 for excited state
-  if ((theExcitationEnergy > 0.0) && (isomer==0)) isomer =9; 
+#include "G4IsotopeProperty.hh"
+#include "G4VIsotopeTable.hh"
 
-   if (GetAtomicNumber() == 0  ) {
-     // AtomicNumber/Mass is positve even for anti_nulceus
-     SetAtomicNumber( std::abs(G4int(GetPDGCharge()/eplus)) );
-     SetAtomicMass( std::abs(GetBaryonNumber()) );
-   }
+G4VIsotopeTable::G4VIsotopeTable()
+  : fName(""), verboseLevel(0)
+{
+}
+
+G4VIsotopeTable::G4VIsotopeTable(const G4String& name)
+  : fName(name), verboseLevel(0)
+{
+}
+
+G4VIsotopeTable::G4VIsotopeTable(const G4VIsotopeTable & right)
+  : fName(right.fName), verboseLevel(right.verboseLevel)
+{
+}
+
+G4VIsotopeTable& G4VIsotopeTable::operator=(const G4VIsotopeTable & right)
+{
+  if (this != &right){
+    fName = right.fName;
+    verboseLevel = right.verboseLevel;
+  }
+  return *this;
+}
+
+G4VIsotopeTable::~G4VIsotopeTable()
+{
+}
+
+G4IsotopeProperty* G4VIsotopeTable::GetIsotopeByIsoLvl(G4int Z, G4int A, G4int level)
+{
+  // temporal implementation
+  if (level==0)  return GetIsotope(Z, A, 0.0);
+  else           return 0;
 }
 
 
-G4Ions::~G4Ions()
+void G4VIsotopeTable::DumpTable(G4int Zmin, G4int Zmax) 
 {
+  G4int Z, A;
+  G4int lvl;
+  for ( Z =Zmin; Z<=Zmax; Z+=1){
+    for ( A= Z; A<=3*Z; A+=1){
+      for ( lvl=0; lvl<=9; lvl+=1){
+	G4IsotopeProperty* ptr = GetIsotope(Z,A,lvl);
+	if (ptr!=0) ptr->DumpInfo();
+      }
+    }      
+  }
 }
+
+
+
 
 
 
