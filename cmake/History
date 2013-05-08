@@ -29,6 +29,26 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+7th May 2013 - Ben Morgan (cmake-V09-06-11)
+- Modules/Geant4OptionalComponents.cmake : Set variables 
+  GEANT4_USE_BUILTIN_{CLHEP,EXPAT,ZLIB} when the builtin versions
+  of these packages are used. This is to assist the generation of
+  Geant4Config.cmake using simple expansion variables
+- Templates/Geant4Config.cmake.in : Add and document new variables
+  Geant4_builtin_{clhep,expat,zlib}_FOUND which are expanded to
+  the value of GEANT4_USE_BUILTIN_{CLHEP,EXPAT,ZLIB} respectively.
+- These fixes are applied to support an issue in the nanobeam example,
+  which requires the full CLHEP, so must check that the builtin
+  version is not used. Whilst the test build is protected in
+  tests/ctests/CMakeLists.txt, the nanobeam example uses an
+  internal Geant4 variable to check for an external CLHEP, and so
+  always fails.
+
+6th May 2013 - Gunter Folger (cmake-V09-06-10)
+- modification for internal zlib:
+   ZLIB_INCLUDE_DIRS: added ${PROJECT_BINARY_DIR}/source/externals/zlib to 
+    make generated zconf.h available; as side effect this zconf.h will be 
+    installed.
 
 22nd April 2013 - Gabriele Cosmo (cmake-V09-06-09)
 - Fixed comments in scripts Geant4MakeRules_cxx.cmake and
