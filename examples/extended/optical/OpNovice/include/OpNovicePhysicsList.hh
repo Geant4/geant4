@@ -49,13 +49,13 @@ class OpNovicePhysicsList : public G4VUserPhysicsList
 {
   public:
     OpNovicePhysicsList();
-   ~OpNovicePhysicsList();
+    virtual ~OpNovicePhysicsList();
 
   public:
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
 
-    void SetCuts();
+    virtual void SetCuts();
 
     //these methods Construct particles
     void ConstructBosons();
@@ -67,20 +67,20 @@ class OpNovicePhysicsList : public G4VUserPhysicsList
     void ConstructGeneral();
     void ConstructEM();
     void ConstructOp();
-    
+
     //for the Messenger 
     void SetVerbose(G4int);
     void SetNbOfPhotonsCerenkov(G4int);
-    
+ 
   private:
-    G4Cerenkov*          theCerenkovProcess;
-    G4Scintillation*     theScintillationProcess;
-    G4OpAbsorption*      theAbsorptionProcess;
-    G4OpRayleigh*        theRayleighScatteringProcess;
-    G4OpMieHG*           theMieHGScatteringProcess;
-    G4OpBoundaryProcess* theBoundaryProcess;
-    
-    OpNovicePhysicsListMessenger* pMessenger;   
+    G4Cerenkov*          fCerenkovProcess;
+    G4Scintillation*     fScintillationProcess;
+    G4OpAbsorption*      fAbsorptionProcess;
+    G4OpRayleigh*        fRayleighScatteringProcess;
+    G4OpMieHG*           fMieHGScatteringProcess;
+    G4OpBoundaryProcess* fBoundaryProcess;
+ 
+    OpNovicePhysicsListMessenger* fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

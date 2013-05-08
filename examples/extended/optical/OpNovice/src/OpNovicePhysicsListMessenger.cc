@@ -39,49 +39,50 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNovicePhysicsListMessenger::
-  OpNovicePhysicsListMessenger(OpNovicePhysicsList* pPhys):pPhysicsList(pPhys)
+  OpNovicePhysicsListMessenger(OpNovicePhysicsList* pPhys) : fPhysicsList(pPhys)
 {
-  OpNoviceDir = new G4UIdirectory("/OpNovice/");
-  OpNoviceDir->SetGuidance("UI commands of this example");
-  
-  physDir = new G4UIdirectory("/OpNovice/phys/");
-  physDir->SetGuidance("PhysicsList control");
+  fOpNoviceDir = new G4UIdirectory("/OpNovice/");
+  fOpNoviceDir->SetGuidance("UI commands of this example");
+
+  fPhysDir = new G4UIdirectory("/OpNovice/phys/");
+  fPhysDir->SetGuidance("PhysicsList control");
  
-  verboseCmd = new G4UIcmdWithAnInteger("/OpNovice/phys/verbose",this);  
-  verboseCmd->SetGuidance("set verbose for physics processes");
-  verboseCmd->SetParameterName("verbose",true);
-  verboseCmd->SetDefaultValue(1);
-  verboseCmd->SetRange("verbose>=0");
-  verboseCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  cerenkovCmd =
-           new G4UIcmdWithAnInteger("/OpNovice/phys/cerenkovMaxPhotons",this);  
-  cerenkovCmd->SetGuidance("set max nb of photons per step");
-  cerenkovCmd->SetParameterName("MaxNumber",false);
-  cerenkovCmd->SetRange("MaxNumber>=0");
-  cerenkovCmd->AvailableForStates(G4State_Idle);  
+  fVerboseCmd = new G4UIcmdWithAnInteger("/OpNovice/phys/verbose",this);
+  fVerboseCmd->SetGuidance("set verbose for physics processes");
+  fVerboseCmd->SetParameterName("verbose",true);
+  fVerboseCmd->SetDefaultValue(1);
+  fVerboseCmd->SetRange("verbose>=0");
+  fVerboseCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+ 
+  fCerenkovCmd =
+           new G4UIcmdWithAnInteger("/OpNovice/phys/cerenkovMaxPhotons",this);
+  fCerenkovCmd->SetGuidance("set max nb of photons per step");
+  fCerenkovCmd->SetParameterName("MaxNumber",false);
+  fCerenkovCmd->SetRange("MaxNumber>=0");
+  fCerenkovCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNovicePhysicsListMessenger::~OpNovicePhysicsListMessenger()
 {
-  delete verboseCmd;
-  delete cerenkovCmd;
-  delete physDir;
-  delete OpNoviceDir;
+  delete fVerboseCmd;
+  delete fCerenkovCmd;
+  delete fPhysDir;
+  delete fOpNoviceDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void OpNovicePhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{       
-  if( command == verboseCmd )
-   { pPhysicsList->SetVerbose(verboseCmd->GetNewIntValue(newValue));}
-   
-  if( command == cerenkovCmd )
-   {pPhysicsList->SetNbOfPhotonsCerenkov(cerenkovCmd->GetNewIntValue(newValue));}
+                                               G4String newValue)
+{
+  if( command == fVerboseCmd )
+   {fPhysicsList->SetVerbose(fVerboseCmd->GetNewIntValue(newValue));}
+
+  if( command == fCerenkovCmd )
+   {fPhysicsList->
+              SetNbOfPhotonsCerenkov(fCerenkovCmd->GetNewIntValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

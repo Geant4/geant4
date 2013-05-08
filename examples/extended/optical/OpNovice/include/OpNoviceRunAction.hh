@@ -43,14 +43,14 @@ class OpNoviceRunAction : public G4UserRunAction
 {
   public:
     OpNoviceRunAction();
-   ~OpNoviceRunAction();
+    virtual ~OpNoviceRunAction();
 
   public:
-    void BeginOfRunAction(const G4Run* aRun);
-    void EndOfRunAction(const G4Run* aRun);
+    virtual void BeginOfRunAction(const G4Run* aRun);
+    virtual void EndOfRunAction(const G4Run* aRun);
 
   private:
-    G4Timer* timer;
+    G4Timer* fTimer;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

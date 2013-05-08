@@ -41,43 +41,43 @@
 
 OpNovicePrimaryGeneratorMessenger::
   OpNovicePrimaryGeneratorMessenger(OpNovicePrimaryGeneratorAction* OpNoviceGun)
-  : OpNoviceAction(OpNoviceGun)
+  : fOpNoviceAction(OpNoviceGun)
 {
-  gunDir = new G4UIdirectory("/OpNovice/gun/");
-  gunDir->SetGuidance("PrimaryGenerator control");
-   
-  polarCmd = new G4UIcmdWithADoubleAndUnit("/OpNovice/gun/optPhotonPolar",this);
-  polarCmd->SetGuidance("Set linear polarization");
-  polarCmd->SetGuidance("  angle w.r.t. (k,n) plane");
-  polarCmd->SetParameterName("angle",true);
-  polarCmd->SetUnitCategory("Angle");  
-  polarCmd->SetDefaultValue(-360.0);
-  polarCmd->SetDefaultUnit("deg");
-  polarCmd->AvailableForStates(G4State_Idle);
+  fGunDir = new G4UIdirectory("/OpNovice/gun/");
+  fGunDir->SetGuidance("PrimaryGenerator control");
+
+  fPolarCmd =
+           new G4UIcmdWithADoubleAndUnit("/OpNovice/gun/optPhotonPolar",this);
+  fPolarCmd->SetGuidance("Set linear polarization");
+  fPolarCmd->SetGuidance("  angle w.r.t. (k,n) plane");
+  fPolarCmd->SetParameterName("angle",true);
+  fPolarCmd->SetUnitCategory("Angle");
+  fPolarCmd->SetDefaultValue(-360.0);
+  fPolarCmd->SetDefaultUnit("deg");
+  fPolarCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNovicePrimaryGeneratorMessenger::~OpNovicePrimaryGeneratorMessenger()
 {
-  delete polarCmd;
-  delete gunDir;
+  delete fPolarCmd;
+  delete fGunDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void OpNovicePrimaryGeneratorMessenger::SetNewValue(
                                         G4UIcommand* command, G4String newValue)
-{ 
-  if( command == polarCmd ) {
-      G4double angle = polarCmd->GetNewDoubleValue(newValue);
+{
+  if( command == fPolarCmd ) {
+      G4double angle = fPolarCmd->GetNewDoubleValue(newValue);
       if ( angle == -360.0*deg ) {
-         OpNoviceAction->SetOptPhotonPolar();
+         fOpNoviceAction->SetOptPhotonPolar();
       } else {
-         OpNoviceAction->SetOptPhotonPolar(angle);
+         fOpNoviceAction->SetOptPhotonPolar(angle);
       }
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

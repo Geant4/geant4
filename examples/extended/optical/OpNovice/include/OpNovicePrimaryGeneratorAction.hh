@@ -44,17 +44,17 @@ class OpNovicePrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
     OpNovicePrimaryGeneratorAction();
-   ~OpNovicePrimaryGeneratorAction();
+    virtual ~OpNovicePrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
     void SetOptPhotonPolar();
     void SetOptPhotonPolar(G4double);
 
   private:
-    G4ParticleGun* particleGun;
-    OpNovicePrimaryGeneratorMessenger* gunMessenger;
+    G4ParticleGun* fParticleGun;
+    OpNovicePrimaryGeneratorMessenger* fGunMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

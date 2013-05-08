@@ -45,18 +45,17 @@ class G4UIcmdWithADoubleAndUnit;
 class OpNovicePrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
-    OpNovicePrimaryGeneratorMessenger(OpNovicePrimaryGeneratorAction*);
-   ~OpNovicePrimaryGeneratorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+    OpNovicePrimaryGeneratorMessenger(OpNovicePrimaryGeneratorAction* );
+    virtual ~OpNovicePrimaryGeneratorMessenger();
+ 
+    virtual void SetNewValue(G4UIcommand*, G4String);
+ 
   private:
-    OpNovicePrimaryGeneratorAction* OpNoviceAction;
-    G4UIdirectory*               gunDir; 
-    G4UIcmdWithADoubleAndUnit*   polarCmd;
+    OpNovicePrimaryGeneratorAction* fOpNoviceAction;
+    G4UIdirectory*                  fGunDir;
+    G4UIcmdWithADoubleAndUnit*      fPolarCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

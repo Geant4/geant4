@@ -40,13 +40,13 @@ class OpNoviceSteppingVerbose;
 
 class OpNoviceSteppingVerbose : public G4SteppingVerbose
 {
- public:   
+ public:
 
    OpNoviceSteppingVerbose();
-  ~OpNoviceSteppingVerbose();
+   virtual ~OpNoviceSteppingVerbose();
 
-   void StepInfo();
-   void TrackingStarted();
+   virtual void StepInfo();
+   virtual void TrackingStarted();
 
 };
 

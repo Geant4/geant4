@@ -45,9 +45,9 @@
 
 OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
 {
-  expHall_x = expHall_y = expHall_z = 10.0*m;
-  tank_x    = tank_y    = tank_z    =  5.0*m;
-  bubble_x  = bubble_y  = bubble_z  =  0.5*m;
+  fExpHall_x = fExpHall_y = fExpHall_z = 10.0*m;
+  fTank_x    = fTank_y    = fTank_z    =  5.0*m;
+  fBubble_x  = fBubble_y  = fBubble_z  =  0.5*m;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,28 +65,28 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   G4int nelements;
 
 // Air
-// 
+//
   G4Element* N = new G4Element("Nitrogen", "N", z=7 , a=14.01*g/mole);
   G4Element* O = new G4Element("Oxygen"  , "O", z=8 , a=16.00*g/mole);
 
-  G4Material* Air = new G4Material("Air", density=1.29*mg/cm3, nelements=2);
-  Air->AddElement(N, 70.*perCent);
-  Air->AddElement(O, 30.*perCent);
+  G4Material* air = new G4Material("Air", density=1.29*mg/cm3, nelements=2);
+  air->AddElement(N, 70.*perCent);
+  air->AddElement(O, 30.*perCent);
 
 // Water
-// 
+//
   G4Element* H = new G4Element("Hydrogen", "H", z=1 , a=1.01*g/mole);
 
-  G4Material* Water = new G4Material("Water", density= 1.0*g/cm3, nelements=2);
-  Water->AddElement(H, 2);
-  Water->AddElement(O, 1);
+  G4Material* water = new G4Material("Water", density= 1.0*g/cm3, nelements=2);
+  water->AddElement(H, 2);
+  water->AddElement(O, 1);
 
 //
 // ------------ Generate & Add Material Properties Table ------------
 //
   const G4int nEntries = 32;
 
-  G4double PhotonEnergy[nEntries] =
+  G4double photonEnergy[nEntries] =
             { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
               2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
               2.341*eV, 2.386*eV, 2.433*eV, 2.481*eV,
@@ -97,8 +97,8 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
               3.760*eV, 3.877*eV, 4.002*eV, 4.136*eV };
 //
 // Water
-//              
-  G4double RefractiveIndex1[nEntries] =
+//
+  G4double refractiveIndex1[nEntries] =
             { 1.3435, 1.344,  1.3445, 1.345,  1.3455,
               1.346,  1.3465, 1.347,  1.3475, 1.348,
               1.3485, 1.3492, 1.35,   1.3505, 1.351,
@@ -107,7 +107,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
               1.3572, 1.358,  1.3585, 1.359,  1.3595,
               1.36,   1.3608};
 
-  G4double Absorption1[nEntries] =
+  G4double absorption[nEntries] =
            {3.448*m,  4.082*m,  6.329*m,  9.174*m, 12.346*m, 13.889*m,
            15.152*m, 17.241*m, 18.868*m, 20.000*m, 26.316*m, 35.714*m,
            45.455*m, 47.619*m, 52.632*m, 52.632*m, 55.556*m, 52.632*m,
@@ -115,13 +115,13 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
            30.000*m, 28.500*m, 27.000*m, 24.500*m, 22.000*m, 19.500*m,
            17.500*m, 14.500*m };
 
-  G4double ScintilFast[nEntries] =
+  G4double scintilFast[nEntries] =
             { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00 };
-  G4double ScintilSlow[nEntries] =
+  G4double scintilSlow[nEntries] =
             { 0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00,
               7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 4.00,
               3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00,
@@ -130,24 +130,24 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 
   G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
 
-  myMPT1->AddProperty("RINDEX",       PhotonEnergy, RefractiveIndex1,nEntries)
+  myMPT1->AddProperty("RINDEX",       photonEnergy, refractiveIndex1,nEntries)
         ->SetSpline(true);
-  myMPT1->AddProperty("ABSLENGTH",    PhotonEnergy, Absorption1,     nEntries)
+  myMPT1->AddProperty("ABSLENGTH",    photonEnergy, absorption,     nEntries)
         ->SetSpline(true);
-  myMPT1->AddProperty("FASTCOMPONENT",PhotonEnergy, ScintilFast,     nEntries)
+  myMPT1->AddProperty("FASTCOMPONENT",photonEnergy, scintilFast,     nEntries)
         ->SetSpline(true);
-  myMPT1->AddProperty("SLOWCOMPONENT",PhotonEnergy, ScintilSlow,     nEntries)
+  myMPT1->AddProperty("SLOWCOMPONENT",photonEnergy, scintilSlow,     nEntries)
         ->SetSpline(true);
-  
+
   myMPT1->AddConstProperty("SCINTILLATIONYIELD",50./MeV);
   myMPT1->AddConstProperty("RESOLUTIONSCALE",1.0);
   myMPT1->AddConstProperty("FASTTIMECONSTANT", 1.*ns);
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",10.*ns);
   myMPT1->AddConstProperty("YIELDRATIO",0.8);
 
-  const G4int NUMENTRIES_water = 60;
+  const G4int numentries_water = 60;
 
-  G4double ENERGY_water[NUMENTRIES_water] = {
+  G4double energy_water[numentries_water] = {
      1.56962*eV, 1.58974*eV, 1.61039*eV, 1.63157*eV,
      1.65333*eV, 1.67567*eV, 1.69863*eV, 1.72222*eV,
      1.74647*eV, 1.77142*eV, 1.7971 *eV, 1.82352*eV,
@@ -166,7 +166,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   };
 
   //assume 100 times larger than the rayleigh scattering for now.
-  G4double MIE_water[NUMENTRIES_water] = {
+  G4double mie_water[numentries_water] = {
      167024.4*m, 158726.7*m, 150742  *m,
      143062.5*m, 135680.2*m, 128587.4*m,
      121776.3*m, 115239.5*m, 108969.5*m,
@@ -190,24 +190,24 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   };
 
   // gforward, gbackward, forward backward ratio
-  G4double MIE_water_const[3]={0.99,0.99,0.8};
+  G4double mie_water_const[3]={0.99,0.99,0.8};
 
-  myMPT1->AddProperty("MIEHG",ENERGY_water,MIE_water,NUMENTRIES_water)
+  myMPT1->AddProperty("MIEHG",energy_water,mie_water,numentries_water)
         ->SetSpline(true);
-  myMPT1->AddConstProperty("MIEHG_FORWARD",MIE_water_const[0]);
-  myMPT1->AddConstProperty("MIEHG_BACKWARD",MIE_water_const[1]);
-  myMPT1->AddConstProperty("MIEHG_FORWARD_RATIO",MIE_water_const[2]);
+  myMPT1->AddConstProperty("MIEHG_FORWARD",mie_water_const[0]);
+  myMPT1->AddConstProperty("MIEHG_BACKWARD",mie_water_const[1]);
+  myMPT1->AddConstProperty("MIEHG_FORWARD_RATIO",mie_water_const[2]);
 
-  Water->SetMaterialPropertiesTable(myMPT1);
+  water->SetMaterialPropertiesTable(myMPT1);
 
   // Set the Birks Constant for the Water scintillator
 
-  Water->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
+  water->GetIonisation()->SetBirksConstant(0.126*mm/MeV);
 
 //
 // Air
 //
-  G4double RefractiveIndex2[nEntries] =
+  G4double refractiveIndex2[nEntries] =
             { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
@@ -215,40 +215,40 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
               1.00, 1.00, 1.00, 1.00 };
 
   G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
-  myMPT2->AddProperty("RINDEX", PhotonEnergy, RefractiveIndex2, nEntries);
-  
-  Air->SetMaterialPropertiesTable(myMPT2);
+  myMPT2->AddProperty("RINDEX", photonEnergy, refractiveIndex2, nEntries);
+
+  air->SetMaterialPropertiesTable(myMPT2);
 
 //
 // ------------- Volumes --------------
 
 // The experimental Hall
 //
-  G4Box* expHall_box = new G4Box("World",expHall_x,expHall_y,expHall_z);
+  G4Box* expHall_box = new G4Box("World",fExpHall_x,fExpHall_y,fExpHall_z);
 
   G4LogicalVolume* expHall_log
-    = new G4LogicalVolume(expHall_box,Air,"World",0,0,0);
+    = new G4LogicalVolume(expHall_box,air,"World",0,0,0);
 
   G4VPhysicalVolume* expHall_phys
     = new G4PVPlacement(0,G4ThreeVector(),expHall_log,"World",0,false,0);
 
 // The Water Tank
-//        
-  G4Box* waterTank_box = new G4Box("Tank",tank_x,tank_y,tank_z);
+//
+  G4Box* waterTank_box = new G4Box("Tank",fTank_x,fTank_y,fTank_z);
 
   G4LogicalVolume* waterTank_log
-    = new G4LogicalVolume(waterTank_box,Water,"Tank",0,0,0);
+    = new G4LogicalVolume(waterTank_box,water,"Tank",0,0,0);
 
   G4VPhysicalVolume* waterTank_phys
     = new G4PVPlacement(0,G4ThreeVector(),waterTank_log,"Tank",
                         expHall_log,false,0);
 
 // The Air Bubble
-//   
-  G4Box* bubbleAir_box = new G4Box("Bubble",bubble_x,bubble_y,bubble_z);
+//
+  G4Box* bubbleAir_box = new G4Box("Bubble",fBubble_x,fBubble_y,fBubble_z);
 
   G4LogicalVolume* bubbleAir_log
-    = new G4LogicalVolume(bubbleAir_box,Air,"Bubble",0,0,0);
+    = new G4LogicalVolume(bubbleAir_box,air,"Bubble",0,0,0);
 
 //G4VPhysicalVolume* bubbleAir_phys =
       new G4PVPlacement(0,G4ThreeVector(0,2.5*m,0),bubbleAir_log,"Bubble",
@@ -258,26 +258,26 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 //
 // Water Tank
 //
-  G4OpticalSurface* OpWaterSurface = new G4OpticalSurface("WaterSurface");
-  OpWaterSurface->SetType(dielectric_dielectric);
-  OpWaterSurface->SetFinish(ground);
-  OpWaterSurface->SetModel(unified);
+  G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
+  opWaterSurface->SetType(dielectric_dielectric);
+  opWaterSurface->SetFinish(ground);
+  opWaterSurface->SetModel(unified);
 
   new G4LogicalBorderSurface("WaterSurface",
-                                 waterTank_phys,expHall_phys,OpWaterSurface);
+                                 waterTank_phys,expHall_phys,opWaterSurface);
 
 // Air Bubble
 //
-  G4OpticalSurface* OpAirSurface = new G4OpticalSurface("AirSurface");
-  OpAirSurface->SetType(dielectric_dielectric);
-  OpAirSurface->SetFinish(polished);
-  OpAirSurface->SetModel(glisur);
+  G4OpticalSurface* opAirSurface = new G4OpticalSurface("AirSurface");
+  opAirSurface->SetType(dielectric_dielectric);
+  opAirSurface->SetFinish(polished);
+  opAirSurface->SetModel(glisur);
 
-  G4LogicalSkinSurface* AirSurface = 
-          new G4LogicalSkinSurface("AirSurface", bubbleAir_log, OpAirSurface);
+  G4LogicalSkinSurface* airSurface =
+          new G4LogicalSkinSurface("AirSurface", bubbleAir_log, opAirSurface);
 
   G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
-        (AirSurface->GetSurface(bubbleAir_log)->GetSurfaceProperty());
+        (airSurface->GetSurface(bubbleAir_log)->GetSurfaceProperty());
 
   if (opticalSurface) opticalSurface->DumpInfo();
 
@@ -285,33 +285,33 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 // Generate & Add Material Properties Table attached to the optical surfaces
 //
   const G4int num = 2;
-  G4double Ephoton[num] = {2.034*eV, 4.136*eV};
+  G4double ephoton[num] = {2.034*eV, 4.136*eV};
 
-  //OpticalWaterSurface 
-  G4double RefractiveIndex[num] = {1.35, 1.40};
-  G4double SpecularLobe[num]    = {0.3, 0.3};
-  G4double SpecularSpike[num]   = {0.2, 0.2};
-  G4double Backscatter[num]     = {0.2, 0.2};
+  //OpticalWaterSurface
+  G4double refractiveIndex[num] = {1.35, 1.40};
+  G4double specularLobe[num]    = {0.3, 0.3};
+  G4double specularSpike[num]   = {0.2, 0.2};
+  G4double backScatter[num]     = {0.2, 0.2};
 
   G4MaterialPropertiesTable* myST1 = new G4MaterialPropertiesTable();
-  
-  myST1->AddProperty("RINDEX",                Ephoton, RefractiveIndex, num);
-  myST1->AddProperty("SPECULARLOBECONSTANT",  Ephoton, SpecularLobe,    num);
-  myST1->AddProperty("SPECULARSPIKECONSTANT", Ephoton, SpecularSpike,   num);
-  myST1->AddProperty("BACKSCATTERCONSTANT",   Ephoton, Backscatter,     num);
 
-  OpWaterSurface->SetMaterialPropertiesTable(myST1);
+  myST1->AddProperty("RINDEX",                ephoton, refractiveIndex, num);
+  myST1->AddProperty("SPECULARLOBECONSTANT",  ephoton, specularLobe,    num);
+  myST1->AddProperty("SPECULARSPIKECONSTANT", ephoton, specularSpike,   num);
+  myST1->AddProperty("BACKSCATTERCONSTANT",   ephoton, backScatter,     num);
+
+  opWaterSurface->SetMaterialPropertiesTable(myST1);
 
   //OpticalAirSurface
-  G4double Reflectivity[num] = {0.3, 0.5};
-  G4double Efficiency[num]   = {0.8, 1.0};
+  G4double reflectivity[num] = {0.3, 0.5};
+  G4double efficiency[num]   = {0.8, 1.0};
 
   G4MaterialPropertiesTable *myST2 = new G4MaterialPropertiesTable();
 
-  myST2->AddProperty("REFLECTIVITY", Ephoton, Reflectivity, num);
-  myST2->AddProperty("EFFICIENCY",   Ephoton, Efficiency,   num);
+  myST2->AddProperty("REFLECTIVITY", ephoton, reflectivity, num);
+  myST2->AddProperty("EFFICIENCY",   ephoton, efficiency,   num);
 
-  OpAirSurface->SetMaterialPropertiesTable(myST2);
+  opAirSurface->SetMaterialPropertiesTable(myST2);
 
 //always return the physical World
   return expHall_phys;

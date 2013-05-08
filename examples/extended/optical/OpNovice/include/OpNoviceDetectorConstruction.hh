@@ -40,23 +40,23 @@ class OpNoviceDetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
     OpNoviceDetectorConstruction();
-   ~OpNoviceDetectorConstruction();
+    virtual ~OpNoviceDetectorConstruction();
 
   public:
-    G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
 
   private:
-    G4double expHall_x;
-    G4double expHall_y;
-    G4double expHall_z;
+    G4double fExpHall_x;
+    G4double fExpHall_y;
+    G4double fExpHall_z;
 
-    G4double tank_x;
-    G4double tank_y;
-    G4double tank_z;
+    G4double fTank_x;
+    G4double fTank_y;
+    G4double fTank_z;
 
-    G4double bubble_x;
-    G4double bubble_y;
-    G4double bubble_z;
+    G4double fBubble_x;
+    G4double fBubble_y;
+    G4double fBubble_z;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id$
+$Id: History 66435 2012-12-18 11:08:04Z ihrivnac $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 May 2013 P. Gumplinger (OpNovice-V09-06-01)
+- Apply all Examples Coding Guidelines
 
 18 Dec 2012 I. Hrivnacova (OpNovice-V09-06-00)
 - Fixed CMake build: removed add_custom_target(..)

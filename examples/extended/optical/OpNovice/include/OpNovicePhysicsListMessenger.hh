@@ -44,22 +44,21 @@ class G4UIcmdWithAnInteger;
 
 class OpNovicePhysicsListMessenger: public G4UImessenger
 {
-  public:  
+  public:
     OpNovicePhysicsListMessenger(OpNovicePhysicsList* );
-   ~OpNovicePhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:  
-    OpNovicePhysicsList*     pPhysicsList;
-    
-    G4UIdirectory*        OpNoviceDir;
-    G4UIdirectory*        physDir;
-    G4UIcmdWithAnInteger* verboseCmd;
-    G4UIcmdWithAnInteger* cerenkovCmd;
+    virtual ~OpNovicePhysicsListMessenger();
+ 
+    virtual void SetNewValue(G4UIcommand*, G4String);
+ 
+  private:
+    OpNovicePhysicsList*  fPhysicsList;
+ 
+    G4UIdirectory*        fOpNoviceDir;
+    G4UIdirectory*        fPhysDir;
+    G4UIcmdWithAnInteger* fVerboseCmd;
+    G4UIcmdWithAnInteger* fCerenkovCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

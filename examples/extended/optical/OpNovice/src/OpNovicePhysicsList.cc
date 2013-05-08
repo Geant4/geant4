@@ -52,20 +52,20 @@
 
 OpNovicePhysicsList::OpNovicePhysicsList() :  G4VUserPhysicsList()
 {
-  theCerenkovProcess           = NULL;
-  theScintillationProcess      = NULL;
-  theAbsorptionProcess         = NULL;
-  theRayleighScatteringProcess = NULL;
-  theMieHGScatteringProcess    = NULL;
-  theBoundaryProcess           = NULL;
-  
-  pMessenger = new OpNovicePhysicsListMessenger(this);  
+  fCerenkovProcess           = NULL;
+  fScintillationProcess      = NULL;
+  fAbsorptionProcess         = NULL;
+  fRayleighScatteringProcess = NULL;
+  fMieHGScatteringProcess    = NULL;
+  fBoundaryProcess           = NULL;
+
+  fMessenger = new OpNovicePhysicsListMessenger(this);
   SetVerboseLevel(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNovicePhysicsList::~OpNovicePhysicsList() { delete pMessenger;}
+OpNovicePhysicsList::~OpNovicePhysicsList() { delete fMessenger; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -247,51 +247,52 @@ void OpNovicePhysicsList::ConstructEM()
 
 void OpNovicePhysicsList::ConstructOp()
 {
-  theCerenkovProcess           = new G4Cerenkov("Cerenkov");
-  theScintillationProcess      = new G4Scintillation("Scintillation");
-  theAbsorptionProcess         = new G4OpAbsorption();
-  theRayleighScatteringProcess = new G4OpRayleigh();
-  theMieHGScatteringProcess    = new G4OpMieHG();
-  theBoundaryProcess           = new G4OpBoundaryProcess();
+  fCerenkovProcess           = new G4Cerenkov("Cerenkov");
+  fScintillationProcess      = new G4Scintillation("Scintillation");
+  fAbsorptionProcess         = new G4OpAbsorption();
+  fRayleighScatteringProcess = new G4OpRayleigh();
+  fMieHGScatteringProcess    = new G4OpMieHG();
+  fBoundaryProcess           = new G4OpBoundaryProcess();
 
-//  theCerenkovProcess->DumpPhysicsTable();
-//  theScintillationProcess->DumpPhysicsTable();
-//  theRayleighScatteringProcess->DumpPhysicsTable();
+//  fCerenkovProcess->DumpPhysicsTable();
+//  fScintillationProcess->DumpPhysicsTable();
+//  fRayleighScatteringProcess->DumpPhysicsTable();
 
   SetVerbose(1);
   
-  theCerenkovProcess->SetMaxNumPhotonsPerStep(20);
-  theCerenkovProcess->SetMaxBetaChangePerStep(10.0);
-  theCerenkovProcess->SetTrackSecondariesFirst(true);
+  fCerenkovProcess->SetMaxNumPhotonsPerStep(20);
+  fCerenkovProcess->SetMaxBetaChangePerStep(10.0);
+  fCerenkovProcess->SetTrackSecondariesFirst(true);
   
-  theScintillationProcess->SetScintillationYieldFactor(1.);
-  theScintillationProcess->SetTrackSecondariesFirst(true);
+  fScintillationProcess->SetScintillationYieldFactor(1.);
+  fScintillationProcess->SetTrackSecondariesFirst(true);
 
   // Use Birks Correction in the Scintillation process
 
-  G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
-  theScintillationProcess->AddSaturation(emSaturation);
+  G4EmSaturation* emSaturation =
+                               G4LossTableManager::Instance()->EmSaturation();
+  fScintillationProcess->AddSaturation(emSaturation);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-    if (theCerenkovProcess->IsApplicable(*particle)) {
-      pmanager->AddProcess(theCerenkovProcess);
-      pmanager->SetProcessOrdering(theCerenkovProcess,idxPostStep);
+    if (fCerenkovProcess->IsApplicable(*particle)) {
+      pmanager->AddProcess(fCerenkovProcess);
+      pmanager->SetProcessOrdering(fCerenkovProcess,idxPostStep);
     }
-    if (theScintillationProcess->IsApplicable(*particle)) {
-      pmanager->AddProcess(theScintillationProcess);
-      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxAtRest);
-      pmanager->SetProcessOrderingToLast(theScintillationProcess, idxPostStep);
+    if (fScintillationProcess->IsApplicable(*particle)) {
+      pmanager->AddProcess(fScintillationProcess);
+      pmanager->SetProcessOrderingToLast(fScintillationProcess, idxAtRest);
+      pmanager->SetProcessOrderingToLast(fScintillationProcess, idxPostStep);
     }
     if (particleName == "opticalphoton") {
       G4cout << " AddDiscreteProcess to OpticalPhoton " << G4endl;
-      pmanager->AddDiscreteProcess(theAbsorptionProcess);
-      pmanager->AddDiscreteProcess(theRayleighScatteringProcess);
-      pmanager->AddDiscreteProcess(theMieHGScatteringProcess);
-      pmanager->AddDiscreteProcess(theBoundaryProcess);
+      pmanager->AddDiscreteProcess(fAbsorptionProcess);
+      pmanager->AddDiscreteProcess(fRayleighScatteringProcess);
+      pmanager->AddDiscreteProcess(fMieHGScatteringProcess);
+      pmanager->AddDiscreteProcess(fBoundaryProcess);
     }
   }
 }
@@ -300,30 +301,30 @@ void OpNovicePhysicsList::ConstructOp()
 
 void OpNovicePhysicsList::SetVerbose(G4int verbose)
 {
-  theCerenkovProcess->SetVerboseLevel(verbose);
-  theScintillationProcess->SetVerboseLevel(verbose);
-  theAbsorptionProcess->SetVerboseLevel(verbose);
-  theRayleighScatteringProcess->SetVerboseLevel(verbose);
-  theMieHGScatteringProcess->SetVerboseLevel(verbose);
-  theBoundaryProcess->SetVerboseLevel(verbose);  
+  fCerenkovProcess->SetVerboseLevel(verbose);
+  fScintillationProcess->SetVerboseLevel(verbose);
+  fAbsorptionProcess->SetVerboseLevel(verbose);
+  fRayleighScatteringProcess->SetVerboseLevel(verbose);
+  fMieHGScatteringProcess->SetVerboseLevel(verbose);
+  fBoundaryProcess->SetVerboseLevel(verbose);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void OpNovicePhysicsList::SetNbOfPhotonsCerenkov(G4int MaxNumber)
-{  
-  theCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumber);
+{
+  fCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumber);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void OpNovicePhysicsList::SetCuts()
 {
-  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets
   //   the default cut value for all particle types
-  // 
+  //
   SetCutsWithDefault();
-  
-  if (verboseLevel>0) DumpCutValuesTable();   
+
+  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

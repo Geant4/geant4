@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNoviceStackingAction::OpNoviceStackingAction()
-: gammaCounter(0)
+  : fGammaCounter(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@ OpNoviceStackingAction::ClassifyNewTrack(const G4Track * aTrack)
   { // particle is optical photon
     if(aTrack->GetParentID()>0)
     { // particle is secondary
-      gammaCounter++;
+      fGammaCounter++;
     }
   }
   return fUrgent;
@@ -65,12 +65,12 @@ OpNoviceStackingAction::ClassifyNewTrack(const G4Track * aTrack)
 void OpNoviceStackingAction::NewStage()
 {
   G4cout << "Number of optical photons produced in this event : "
-         << gammaCounter << G4endl;
+         << fGammaCounter << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void OpNoviceStackingAction::PrepareNewEvent()
-{ gammaCounter = 0; }
+{ fGammaCounter = 0; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

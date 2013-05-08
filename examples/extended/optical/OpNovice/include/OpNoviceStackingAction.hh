@@ -39,18 +39,17 @@ class OpNoviceStackingAction : public G4UserStackingAction
 {
   public:
     OpNoviceStackingAction();
-   ~OpNoviceStackingAction();
+    virtual ~OpNoviceStackingAction();
 
   public:
-    G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
-    void NewStage();
-    void PrepareNewEvent();
+    virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack);
+    virtual void NewStage();
+    virtual void PrepareNewEvent();
 
   private:
-    G4int gammaCounter;
+    G4int fGammaCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
