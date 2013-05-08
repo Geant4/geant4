@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: RunAction.cc,v 1.4 2010-10-06 12:16:59 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include <iomanip>
@@ -87,47 +87,48 @@ void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
 if (detector->GetCoef()==1)
 {
 
-	CLHEP::HepMatrix m;
-	
-	// VECTOR READING
-	// VECTOR READING
+   CLHEP::HepMatrix m;
+   
+   // VECTOR READING
+   // VECTOR READING
 
-	m = CLHEP::HepMatrix(32,32);
-	m = primary->GetMatrix();
+   m = CLHEP::HepMatrix(32,32);
+   m = primary->GetMatrix();
 
-	G4cout << G4endl;
-	G4cout << "===> NANOBEAM LINE INTRINSIC ABERRATION COEFFICIENTS (units of micrometer and mrad) :" << G4endl;
-	G4cout << G4endl;
+   G4cout << G4endl;
+   G4cout << "===> NANOBEAM LINE INTRINSIC ABERRATION COEFFICIENTS "
+          << "(units of micrometer and mrad) :" << G4endl;
+   G4cout << G4endl;
 
-	int inv;
+   int inv;
 
-	m.invert(inv);
-	CLHEP::HepVector tmp(32,0);
-	tmp=m*xVector;
-	CLHEP::HepVector b;
-	b=tmp.sub(2,2);   G4cout << "<x|theta>=" << b << G4endl;
-	b=tmp.sub(8,8);   G4cout << "<x|theta*delta>=" << b << G4endl;
-	b=tmp.sub(10,10); G4cout << "<x|theta^3>=" << b << G4endl;
-	b=tmp.sub(12,12); G4cout << "<x|theta*phi^2>=" << b << G4endl;
-	m.invert(inv);
+   m.invert(inv);
+   CLHEP::HepVector tmp(32,0);
+   tmp=m*xVector;
+   CLHEP::HepVector b;
+   b=tmp.sub(2,2);   G4cout << "<x|theta>=" << b << G4endl;
+   b=tmp.sub(8,8);   G4cout << "<x|theta*delta>=" << b << G4endl;
+   b=tmp.sub(10,10); G4cout << "<x|theta^3>=" << b << G4endl;
+   b=tmp.sub(12,12); G4cout << "<x|theta*phi^2>=" << b << G4endl;
+   m.invert(inv);
 
-	m.invert(inv);
-	tmp = m*thetaVector;
-	m.invert(inv);
-	b=tmp.sub(2,2); G4cout << "<x|x>=" << b << G4endl;
+   m.invert(inv);
+   tmp = m*thetaVector;
+   m.invert(inv);
+   b=tmp.sub(2,2); G4cout << "<x|x>=" << b << G4endl;
 
-	m.invert(inv);
-	tmp=m*yVector;
-	b=tmp.sub(3,3);   G4cout << "<y|phi>=" << b << G4endl;
-	b=tmp.sub(9,9);   G4cout << "<y|phi*delta>=" << b << G4endl;
-	b=tmp.sub(11,11); G4cout << "<y|theta^2*phi>=" << b << G4endl;
-	b=tmp.sub(13,13); G4cout << "<y|phi^3>=" << b << G4endl;
-	m.invert(inv);
+   m.invert(inv);
+   tmp=m*yVector;
+   b=tmp.sub(3,3);   G4cout << "<y|phi>=" << b << G4endl;
+   b=tmp.sub(9,9);   G4cout << "<y|phi*delta>=" << b << G4endl;
+   b=tmp.sub(11,11); G4cout << "<y|theta^2*phi>=" << b << G4endl;
+   b=tmp.sub(13,13); G4cout << "<y|phi^3>=" << b << G4endl;
+   m.invert(inv);
 
-	m.invert(inv);
-	tmp = m*phiVector;
-	m.invert(inv);
-	b=tmp.sub(3,3); G4cout << "<y|y>=" << b << G4endl;
+   m.invert(inv);
+   tmp = m*phiVector;
+   m.invert(inv);
+   b=tmp.sub(3,3); G4cout << "<y|y>=" << b << G4endl;
 
 }
 

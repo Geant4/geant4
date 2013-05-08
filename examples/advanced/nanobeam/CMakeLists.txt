@@ -29,7 +29,9 @@ if(AIDA_FOUND)
   # Uncomment this line if suitable (some customization may be needed)
   add_definitions(-DG4ANALYSIS_USE)   
 endif()
-
+if(GEANT4_builtin_clhep_FOUND)
+  message(FATAL_ERROR "G4 Examples: nanobeam example requires system CLHEP --> nanobeam cannot be built")
+endif() 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #

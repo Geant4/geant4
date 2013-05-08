@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HistoManager.hh,v 1.1 2010-10-06 12:16:59 sincerti Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,9 +63,9 @@ class HistoManager
     G4String                 fileOption;    
     AIDA::IAnalysisFactory*  af;
     AIDA::ITree*             tree;
-    AIDA::ITuple*      	     ntupl0;    
-    AIDA::ITuple*      	     ntupl1;    
-    AIDA::ITuple*      	     ntupl2;    
+    AIDA::ITuple*            ntupl0;    
+    AIDA::ITuple*            ntupl1;    
+    AIDA::ITuple*            ntupl2;    
  
     G4bool                   factoryOn;
     

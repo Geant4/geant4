@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: TabulatedField3D.hh,v 1.2 2008-01-25 20:49:24 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #include "G4MagneticField.hh"
@@ -47,7 +47,7 @@ class TabulatedField3D
 public:
   TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4float gr4, G4int quadModel);
   void  GetFieldValue( const  double Point[4],
-		       double *Bfield          ) const;
+                       double *Bfield          ) const;
 
 private:
   vector< vector< vector< double > > > xField;

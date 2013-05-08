@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: PrimaryGeneratorAction.hh,v 1.3 2010-10-06 12:16:59 sincerti Exp $
+// $Id$
 // -------------------------------------------------------------------
 
 #ifndef PrimaryGeneratorAction_h
@@ -65,7 +65,7 @@ public:
  
 private:
   
-  G4double XYofAngle(G4double);	
+  G4double XYofAngle(G4double);
   
   G4ParticleGun* particleGun;
   DetectorConstruction* detector;
@@ -74,7 +74,7 @@ private:
   G4bool shoot;
   
    // Matrix
-  CLHEP::HepMatrix beamMatrix;	
+  CLHEP::HepMatrix beamMatrix;
 };
 
 #endif
