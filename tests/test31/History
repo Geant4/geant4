@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23-04-13  V.Ivant (test31-V09-06-02)
+- test31Histo - changed ion name convension in G4IonTable (for 
+    example, C12[0.0] renamed to C12) 
+
 03-04-13  A.Dotti (test31-V09-06-01)
 - Porting to new G4VPhysicsConstructor interface needed for G4MT
 

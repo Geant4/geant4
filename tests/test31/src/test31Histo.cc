@@ -446,8 +446,8 @@ void test31Histo::TableControl()
 		   500., 1000., 2000., 3000., 5000., 10000., 20000.};
   //                  30000., 100000., 300000., 1000000., 10000000.,};
   const G4int np = 8;
-  G4String namep[np] = {"e-","mu+","pi-","proton","alpha", "C12[0.0]", 
-			"Ar40[0.0]", "Pb208[0.0]"};
+  G4String namep[np] = {"e-","mu+","pi-","proton","alpha", "C12", 
+			"Ar40", "Pb208"};
 
   G4int ii1 = 5;
   G4int ii2 = 6;
