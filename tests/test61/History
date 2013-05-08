@@ -12,6 +12,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-Apr-2013  Tatsumi Koi (test61-V09-06-01)
+- Replace CLHEP::HepRandom to G4Random
+- Add "showEngineStatus" at the end of job
+
+22-Apr-2013  Tatsumi Koi (test61-V09-06-00)
+- Replace deprecated hadronic models
+
 30-Oct-2012, Gunter Folger (test61-V09-05-02)
 - Use default Precompound, and therefore default setting for de-excitation.
 
