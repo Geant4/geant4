@@ -474,7 +474,7 @@ G4ThreeVector G4VLongitudinalStringDecay::SampleQuarkPt(G4double ptMax)
       Pt = -std::log(G4UniformRand());
    } else {
       // sample in limited range
-      Pt = -std::log(CLHEP::RandFlat::shoot(std::exp(-sqr(ptMax)/sqr(SigmaQT)), 1.));
+      Pt = -std::log(G4RandFlat::shoot(std::exp(-sqr(ptMax)/sqr(SigmaQT)), 1.));
    }
    Pt = SigmaQT * std::sqrt(Pt);
    G4double phi = 2.*pi*G4UniformRand();
