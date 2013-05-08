@@ -295,6 +295,6 @@ G4double GFlashHomoShowerParameterisation::
 GenerateExponential(const G4double /* Energy */ )
 {
   G4double ParExp1 =  9./7.*X0;
-  G4double random  = -ParExp1*CLHEP::RandExponential::shoot() ;
+  G4double random  = -ParExp1*G4RandExponential::shoot() ;
   return random;
 }

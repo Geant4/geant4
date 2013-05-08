@@ -304,7 +304,7 @@ ApplySampling(const G4double DEne, const G4double )
   if(Resolution >0.0 && DEne > 0.00)
   {
     G4float x1=DEne/Resolution;
-    G4float x2 = CLHEP::RandGamma::shoot(x1, 1.0)*Resolution;     
+    G4float x2 = G4RandGamma::shoot(x1, 1.0)*Resolution;     
     DEneFluctuated=x2;
   }
   return DEneFluctuated;
@@ -412,6 +412,6 @@ G4double GFlashSamplingShowerParameterisation::
 GenerateExponential(const G4double /* Energy */ )
 {
   G4double ParExp1 =  9./7.*X0eff;
-  G4double random  = -ParExp1*CLHEP::RandExponential::shoot() ;
+  G4double random  = -ParExp1*G4RandExponential::shoot() ;
   return random;
 }

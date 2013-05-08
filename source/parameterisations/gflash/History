@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 30th, 2013, M. Verderi (gflash-V09-06-02)
+--------------------------
+- Replace CLHEP::RandXXX by G4RandXXX for thread safety in
+       src/GFlashSamplingShowerParameterisation.cc
+       src/GFlashHomoShowerParameterisation.cc
+
 Apr 11th, 2013, G.Cosmo (gflash-V09-06-01)
 -----------------------
 - Removed unnecessary thread-local specification in
