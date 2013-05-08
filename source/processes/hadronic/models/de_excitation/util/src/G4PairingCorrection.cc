@@ -32,24 +32,15 @@
 // 21.03.2013 V.Ivanchenko redesigned and cleaned up
 
 #include "G4PairingCorrection.hh"
-#include "G4CookPairingCorrections.hh"
-#include "G4CameronGilbertPairingCorrections.hh"
 #include "G4SystemOfUnits.hh"
 
 G4PairingCorrection* G4PairingCorrection::theInstance = 0;
 
 G4PairingCorrection::G4PairingCorrection()
-{
-  theCookPairingCorrections = new G4CookPairingCorrections();
-  theCameronGilbertPairingCorrections = 
-    new G4CameronGilbertPairingCorrections();
-}
+{}
 
 G4PairingCorrection::~G4PairingCorrection()
-{
-  delete theCookPairingCorrections;
-  delete theCameronGilbertPairingCorrections;
-}
+{}
 
 G4PairingCorrection* G4PairingCorrection::GetInstance()
 {
@@ -64,16 +55,16 @@ G4double G4PairingCorrection::GetPairingCorrection(G4int A, G4int Z) const
 {
   G4double PCorrection = 0.0;
   G4int N = A - Z;
-  if (theCookPairingCorrections->IsInTableThisN(N) &&
-      theCookPairingCorrections->IsInTableThisZ(Z)) {
+  if (theCookPairingCorrections.IsInTableThisN(N) &&
+      theCookPairingCorrections.IsInTableThisZ(Z)) {
 
-    PCorrection = theCookPairingCorrections->GetParingCorrection(A,Z);
+    PCorrection = theCookPairingCorrections.GetParingCorrection(A,Z);
 
-  } else if (theCameronGilbertPairingCorrections->IsInTableThisN(N) &&
-	     theCameronGilbertPairingCorrections->IsInTableThisZ(Z)) {
+  } else if (theCameronGilbertPairingCorrections.IsInTableThisN(N) &&
+	     theCameronGilbertPairingCorrections.IsInTableThisZ(Z)) {
 
     PCorrection = 
-      theCameronGilbertPairingCorrections->GetPairingCorrection(A,Z);
+      theCameronGilbertPairingCorrections.GetPairingCorrection(A,Z);
 
   } else {
 

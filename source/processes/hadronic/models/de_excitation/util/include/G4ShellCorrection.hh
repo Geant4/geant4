@@ -57,35 +57,35 @@ public:
   inline G4CameronTruranHilfShellCorrections* 
   GetCameronTruranHilfShellCorrections()
   {
-    return theCameronTruranHilfShellCorrections;
+    return &theCameronTruranHilfShellCorrections;
   }
 
   inline G4CameronShellPlusPairingCorrections*
   GetCameronShellPlusPairingCorrections()
   {
-    return theCameronShellPlusPairingCorrections;
+    return &theCameronShellPlusPairingCorrections;
   }
 
   inline 
   G4double GetShellCorrection(G4int A, G4int Z) const 
   {
     G4double SCorrection = 0.0;
-    if (theCookShellCorrections->IsInTableThisN(A-Z) || 
-	theCookShellCorrections->IsInTableThisZ(Z)) {
-      SCorrection = theCookShellCorrections->GetShellCorrection(A,Z);
-    } else if (theCameronGilbertShellCorrections->IsInTableThisN(A-Z) || 
-	       theCameronGilbertShellCorrections->IsInTableThisZ(Z)) {
-      SCorrection = theCameronGilbertShellCorrections->GetShellCorrection(A,Z);
+    if (theCookShellCorrections.IsInTableThisN(A-Z) || 
+	theCookShellCorrections.IsInTableThisZ(Z)) {
+      SCorrection = theCookShellCorrections.GetShellCorrection(A,Z);
+    } else if (theCameronGilbertShellCorrections.IsInTableThisN(A-Z) || 
+	       theCameronGilbertShellCorrections.IsInTableThisZ(Z)) {
+      SCorrection = theCameronGilbertShellCorrections.GetShellCorrection(A,Z);
     }    
     return SCorrection;
   }
 
 private:
 
-  G4CookShellCorrections* theCookShellCorrections;
-  G4CameronGilbertShellCorrections* theCameronGilbertShellCorrections;
-  G4CameronTruranHilfShellCorrections* theCameronTruranHilfShellCorrections;
-  G4CameronShellPlusPairingCorrections* theCameronShellPlusPairingCorrections;
+  G4CookShellCorrections theCookShellCorrections;
+  G4CameronGilbertShellCorrections theCameronGilbertShellCorrections;
+  G4CameronTruranHilfShellCorrections theCameronTruranHilfShellCorrections;
+  G4CameronShellPlusPairingCorrections theCameronShellPlusPairingCorrections;
 
 };
 #endif

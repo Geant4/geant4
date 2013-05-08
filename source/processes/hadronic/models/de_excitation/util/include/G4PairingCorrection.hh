@@ -36,9 +36,8 @@
 #define G4PairingCorrection_h 1
 
 #include "globals.hh"
-
-class G4CookPairingCorrections;
-class G4CameronGilbertPairingCorrections;
+#include "G4CookPairingCorrections.hh"
+#include "G4CameronGilbertPairingCorrections.hh"
 
 class G4PairingCorrection
 {
@@ -60,8 +59,8 @@ public:
 
 private:
 
-  G4CookPairingCorrections* theCookPairingCorrections;
-  G4CameronGilbertPairingCorrections* theCameronGilbertPairingCorrections;
+  G4CookPairingCorrections theCookPairingCorrections;
+  G4CameronGilbertPairingCorrections theCameronGilbertPairingCorrections;
 
 };
 #endif

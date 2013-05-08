@@ -36,23 +36,10 @@
 G4ShellCorrection* G4ShellCorrection::theInstance = 0;
 
 G4ShellCorrection::G4ShellCorrection()
-{
-  theCookShellCorrections = new G4CookShellCorrections();
-  theCameronGilbertShellCorrections = 
-    new G4CameronGilbertShellCorrections();
-  theCameronTruranHilfShellCorrections = 
-    new G4CameronTruranHilfShellCorrections();
-  theCameronShellPlusPairingCorrections = 
-    new G4CameronShellPlusPairingCorrections();
-}
+{}
 
 G4ShellCorrection::~G4ShellCorrection()
-{
-  delete theCookShellCorrections;
-  delete theCameronGilbertShellCorrections;
-  delete theCameronTruranHilfShellCorrections;
-  delete theCameronShellPlusPairingCorrections;
-}
+{}
 
 G4ShellCorrection* G4ShellCorrection::GetInstance()
 {
