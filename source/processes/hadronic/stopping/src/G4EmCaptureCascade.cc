@@ -94,7 +94,7 @@ G4EmCaptureCascade::G4EmCaptureCascade()
     fKLevelEnergy[z2] = listKEnergy[i];
     idx = i;  
   }
-  for( G4int i = 0; i<15; ++i) { fLevelEnergy[i] = 0.0; }
+  for( G4int i = 0; i<14; ++i) { fLevelEnergy[i] = 0.0; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

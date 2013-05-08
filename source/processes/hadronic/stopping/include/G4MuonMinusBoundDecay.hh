@@ -49,6 +49,10 @@
 //-----------------------------------------------------------------------------
 //
 // Modifications: 
+// 23/04/2013  K.Genser     Made GetMuonCaptureRate and 
+//                          GetMuonDecayRate public static
+// 04/30/2013  K.Genser     Added GetMuonZeff
+//
 //
 //-----------------------------------------------------------------------------
 
@@ -77,9 +81,11 @@ public:
 
   void ModelDescription(std::ostream& outFile) const; 
 
-  G4double GetMuonCaptureRate(G4int Z, G4int A);
+  static G4double GetMuonCaptureRate(G4int Z, G4int A);
 
-  G4double GetMuonDecayRate(G4int Z);
+  static G4double GetMuonDecayRate(G4int Z);
+
+  static G4double GetMuonZeff(G4int Z);
 
 private:
 
