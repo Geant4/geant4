@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+22-Apr-2013  J.Apostolakis (geom-specific-V09-06-11)
+- Revised G4ExtrudedSolid::IsSameLine to use the perpendicular
+  distance to a line when deciding - not the y-intercept difference.
+  ( Issue responsible for a problem in Subtraction Solid in Atlas.  
+     Tatiana & Ivana contributed to debugging. )
+- Changed GNUmakefile in test directory to work with Cmake and granular 
+  builds.
+
 16-Apr-2013  T.Nikitina (geom-specific-V09-06-10)
 - Fix in calculation of normal in G4Tet::DistanceToOut(p,v,..) and
   SurfaceNormal(p).
@@ -91,6 +100,9 @@ committal in the CVS repository !
 14-Nov-2012  P.Mato (geom-specific-V09-05-21)
 - Added #undef NDEBUG in unit tests to ensure assert works also in
   full optimised mode.
+
+14-Nov-2012  P. Mato (geom-specific-V09-05-20)
+- Added #undef NDEBUG in unit tests to ensure that assert always works
 
 13-Nov-2012  M.Gayer (geom-specific-V09-05-19)
 - More fixes for out-of-bound array accesses in G4SurfaceVoxelizer.
