@@ -28,6 +28,8 @@
 // M.V. Kossov, ITEP(Moscow), 24-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 25-Sept-03
 
+// A. Dotti 2-May-2013: Re-write caching logic and optimizations
+
 #ifndef G4ElectroNuclearCrossSection_h
 #define G4ElectroNuclearCrossSection_h 1
 
@@ -78,55 +80,9 @@ private:
 
 // Body
 private:
-  static G4ThreadLocal G4int     lastN;    // The last N of calculated nucleus
-  static G4ThreadLocal G4int     lastZ;    // The last Z of calculated nucleus
-  static G4ThreadLocal G4int     lastF;    // Last used in the cross section TheFirstBin
-  static G4ThreadLocal G4double* lastJ1;   // Pointer to the last array of the J1 function
-  static G4ThreadLocal G4double* lastJ2;   // Pointer to the last array of the J2 function
-  static G4ThreadLocal G4double* lastJ3;   // Pointer to the last array of the J3 function
-  static G4ThreadLocal G4int     lastL;    // Last used in the cross section TheLastBin
-  static G4ThreadLocal G4double  lastE;    // Last used in the cross section Energy
-  static G4ThreadLocal G4double  lastTH;   // Last value of the Energy Threshold
-  static G4ThreadLocal G4double  lastSig;  // Last value of the Cross Section
-  static G4ThreadLocal G4double  lastG;    // Last value of gamma=lnE-ln(me)
-  static G4ThreadLocal G4double  lastH;    // Last value of the High energy A-dependence
-
-  // Vector of pointers to the J1 tabulated functions
-  static G4ThreadLocal std::vector <G4double*> *J1_G4MT_TLS_;
-
-  // Vector of pointers to the J2 tabulated functions
-  static G4ThreadLocal std::vector <G4double*> *J2_G4MT_TLS_;
-
-  // Vector of pointers to the J3 tabulated functions
-  static G4ThreadLocal std::vector <G4double*> *J3_G4MT_TLS_;
+    G4int currentN;
+    G4int currentZ;
 };
-
-
-inline G4double
-G4ElectroNuclearCrossSection::DFun(G4double x)
-{
-  // Parametrization of the PhotoNucCS
-  static const G4double shd=1.0734;              // HE PomShadowing(D)
-  static const G4double poc=0.0375;              // HE Pomeron coefficient
-  static const G4double pos=16.5;                // HE Pomeron shift
-  static const G4double reg=.11;                 // HE Reggeon slope
-  static const G4double mel=0.5109989;           // Mass of an electron in MeV
-  static const G4double lmel=std::log(mel);      // Log of an electron mass
-  G4double y=std::exp(x-lastG-lmel);             // y for the x
-  G4double flux=lastG*(2.-y*(2.-y))-1.;          // flux factor
-  return (poc*(x-pos)+shd*std::exp(-reg*x))*flux;
-}
-
-
-inline G4double
-G4ElectroNuclearCrossSection::Fun(G4double x)
-{
-  // Integrated PhoNuc cross section
-  G4double dlg1=lastG+lastG-1.;
-  G4double lgoe=lastG/lastE;
-  G4double HE2=HighEnergyJ2(x);
-  return dlg1*HighEnergyJ1(x)-lgoe*(HE2+HE2-HighEnergyJ3(x)/lastE);
-}
 
 
 inline G4double

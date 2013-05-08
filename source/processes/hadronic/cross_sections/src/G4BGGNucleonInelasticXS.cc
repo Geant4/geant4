@@ -309,14 +309,14 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
   // from G4ProtonInelasticCrossSection
   if(isProton) {
 
-    G4double ff1 = 0.70 - 0.002*aa;           // slope of the drop at medium energies.
-    G4double ff2 = 1.00 + 1/aa;               // start of the slope.
-    G4double ff3 = 0.8  + 18/aa - 0.002*aa;   // stephight
-    res = 1.0 + ff3*(1.0 - (1.0/(1+std::exp(-8*ff1*(elog + 1.37*ff2)))));
+    G4double ff1 = 5.6  - 0.016*aa;           // slope of the drop at medium energies.
+    G4double ff2 = 1.37 + 1.37/aa;            // start of the slope.
+    G4double ff3 = 0.8  + 18./aa - 0.002*aa;   // stephight
+    res = 1.0 + ff3*(1.0 - (1.0/(1+std::exp(-ff1*(elog + ff2)))));
 
-    ff1 = 1.   - 1./aa - 0.001*aa; // slope of the rise
-    ff2 = 1.17 - 2.7/aa-0.0014*aa; // start of the rise
-    res /= (1 + std::exp(-8.*ff1*(elog + 2*ff2)));
+    ff1 = 8.   - 8./aa  - 0.008*aa; // slope of the rise
+    ff2 = 2.34 - 5.4/aa - 0.0028*aa; // start of the rise
+    res /= (1 + std::exp(-ff1*(elog + ff2)));
 
   } else {
 

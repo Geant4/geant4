@@ -29,7 +29,14 @@
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
 // The last update: M.V. Kossov, CERN/ITEP (Moscow) 17-Oct-03
 
-//#define debug
+// A. Dotti 2-May-2013: I keep exactly the same algorithm, including the same
+//                      general assumptions about optimization (i.e. cache 
+//                      and "lastSeen" reuse), but I rewrite the caching
+//                      mechanism and redue the use of TLS.
+//                      On simple setups this algo should be 40%
+//                      faster
+
+#define debug
 #define edebug
 //#define pdebug
 //#define ppdebug
@@ -41,58 +48,78 @@
 #include "G4ElectroNuclearCrossSection.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4HadTmpUtil.hh"
-
-// Initialization of statics
-// Last used in the cross section TheEnergy
-G4ThreadLocal G4double G4ElectroNuclearCrossSection::lastE=0.;
-
-// Last used in the cross section TheFirstBin
-G4ThreadLocal G4int G4ElectroNuclearCrossSection::lastF=0;
-
-// Last used in the cross section TheGamma
-G4ThreadLocal G4double G4ElectroNuclearCrossSection::lastG=0.;
-
-G4ThreadLocal G4double  G4ElectroNuclearCrossSection::lastH=0.;  // Last value of the High Energy A-dependence
-G4ThreadLocal G4double* G4ElectroNuclearCrossSection::lastJ1=0;  // Pointer to the last array of the J1 function
-G4ThreadLocal G4double* G4ElectroNuclearCrossSection::lastJ2=0;  // Pointer to the last array of the J2 function
-G4ThreadLocal G4double* G4ElectroNuclearCrossSection::lastJ3=0;  // Pointer to the last array of the J3 function
-G4ThreadLocal G4int     G4ElectroNuclearCrossSection::lastL=0;   // Last used in the cross section TheLastBin
-G4ThreadLocal G4int     G4ElectroNuclearCrossSection::lastN=0;   // The last N of calculated nucleus
-G4ThreadLocal G4int     G4ElectroNuclearCrossSection::lastZ=0;   // The last Z of calculated nucleus
-G4ThreadLocal G4double  G4ElectroNuclearCrossSection::lastTH=0.; // Last energy threshold
-G4ThreadLocal G4double  G4ElectroNuclearCrossSection::lastSig=0.;// Last value of the Cross Section
-
-// Vector of pointers to the J1 tabulated functions
-G4ThreadLocal std::vector<G4double*> *G4ElectroNuclearCrossSection::J1_G4MT_TLS_ = 0;
-
-// Vector of pointers to the J2 tabulated functions
-G4ThreadLocal std::vector<G4double*> *G4ElectroNuclearCrossSection::J2_G4MT_TLS_ = 0;
-
-// Vector of pointers to the J3 tabulated functions
-G4ThreadLocal std::vector<G4double*> *G4ElectroNuclearCrossSection::J3_G4MT_TLS_ = 0;
+//A. Dotti 2-May-2013
+//Optimizing code
+#include <map>
+namespace {
+    //A cache element
+    struct cacheEl_t {
+        G4int F;
+        G4double* J1;
+        G4double* J2;
+        G4double* J3;
+        G4double H;
+        G4double TH;
+    };
+    //Cache structure
+    static G4ThreadLocal std::map<G4int,cacheEl_t>* cache = 0;
+    static G4ThreadLocal G4int lastUsedKey = 0;
+    static G4ThreadLocal cacheEl_t* lastUsedCacheEl = 0;
+    //Cache values for XS
+    static G4ThreadLocal G4double lastE   = 0; //Last used energy value
+    static G4ThreadLocal G4double lastSig = 0; //Last used XS value
+    static G4ThreadLocal G4double lastG   = 0; //Last value of gamma=lnE-ln(me)
+    static G4ThreadLocal G4int    lastL   = 0; //Last used in the cross section TheLastBin
+}
 
 
 G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection(const G4String& nam)
  : G4VCrossSectionDataSet(nam)
-{ if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;}
+{}
 
 G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
-{  ;;;   if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &J3 = *J3_G4MT_TLS_;  ;;;    ;;;   if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &J2 = *J2_G4MT_TLS_;  ;;;    ;;;   if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &J1 = *J1_G4MT_TLS_;  ;;;  
-  std::vector<G4double*>::iterator pos;
-  for(pos=J1.begin(); pos<J1.end(); pos++)
-  { delete [] *pos; }
-  J1.clear();
-  for(pos=J2.begin(); pos<J2.end(); pos++)
-  { delete [] *pos; }
-  J2.clear();
-  for(pos=J3.begin(); pos<J3.end(); pos++)
-  { delete [] *pos; }
-  J3.clear();
+{
+    if ( cache ) {
+        std::map<G4int,cacheEl_t>::iterator it = cache->begin();
+        while ( it != cache->end() )
+        {
+            delete[] it->second.J1; it->second.J1 = 0;
+            delete[] it->second.J2; it->second.J2 = 0;
+            delete[] it->second.J3; it->second.J3 = 0;
+            ++it;
+        }
+    cache->clear();
+    }
+}
+
+inline G4double
+G4ElectroNuclearCrossSection::DFun(G4double x)
+{
+    // Parametrization of the PhotoNucCS
+    static const G4double shd=1.0734;              // HE PomShadowing(D)
+    static const G4double poc=0.0375;              // HE Pomeron coefficient
+    static const G4double pos=16.5;                // HE Pomeron shift
+    static const G4double reg=.11;                 // HE Reggeon slope
+    static const G4double mel=0.5109989;           // Mass of an electron in MeV
+    static const G4double lmel=std::log(mel);      // Log of an electron mass
+    G4double y=std::exp(x-lastG-lmel);             // y for the x
+    G4double flux=lastG*(2.-y*(2.-y))-1.;          // flux factor
+    return (poc*(x-pos)+shd*std::exp(-reg*x))*flux;
+}
+
+inline G4double
+G4ElectroNuclearCrossSection::Fun(G4double x)
+{
+    // Integrated PhoNuc cross section
+    G4double dlg1=lastG+lastG-1.;
+    G4double lgoe=lastG/lastE;
+    G4double HE2=HighEnergyJ2(x);
+    return dlg1*HighEnergyJ1(x)-lgoe*(HE2+HE2-HighEnergyJ3(x)/lastE);
 }
 
 void
 G4ElectroNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) const
-{ if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
   outFile << "G4ElectroNuclearCrossSection provides the total inelastic\n"
           << "cross section for e- and e+ interactions with nuclei.  The\n"
           << "cross sections are retrieved from a table which is\n"
@@ -107,7 +134,7 @@ G4bool
 G4ElectroNuclearCrossSection::IsIsoApplicable(
           const G4DynamicParticle* aParticle, G4int /*Z*/,
 	  G4int /*A*/, const G4Element*, const G4Material*)
-{ if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;
+{ 
   G4bool result = false;
   if (aParticle->GetDefinition() == G4Electron::ElectronDefinition())
     result = true;
@@ -116,85 +143,85 @@ G4ElectroNuclearCrossSection::IsIsoApplicable(
   return result;
 }
 
+
 G4double 
 G4ElectroNuclearCrossSection::GetIsoCrossSection(
          const G4DynamicParticle* aPart,
 	 G4int ZZ, G4int AA,
 	 const G4Isotope*, const G4Element*, const G4Material*)
-{  ;;;   if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &J3 = *J3_G4MT_TLS_;  ;;;    ;;;   if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &J2 = *J2_G4MT_TLS_;  ;;;    ;;;   if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ; std::vector<G4double*> &J1 = *J1_G4MT_TLS_;  ;;;  
-  static const G4int nE=336; // !!  If you change this, change it in GetFunctions() (*.hh) !!
-  static const G4int mL=nE-1;
-  static const G4double EMi=2.0612; // Minimum tabulated Energy of the Electron
-  static const G4double EMa=50000.; // Maximum tabulated Energy of the Electron
-  static const G4double lEMi=std::log(EMi);  // Minimum tabulated logarithmic Energy of the Electron
-  static const G4double lEMa=std::log(EMa);  // Maximum tabulated logarithmic Energy of the Electron
-  static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic step in the table for the electron Energy
-  static const G4double alop=1./137.036/3.14159265; //coef. for the calculated functions (Ee>50000.)
-  static const G4double mel=0.5109989;       // Mass of the electron in MeV
-  static const G4double lmel=std::log(mel);       // Log of the electron mass
-  // *** Begin of the Associative memory for acceleration of the cross section calculations
-  static G4ThreadLocal std::vector <G4int> *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colN = *colN_G4MT_TLS_;       // Vector of N for calculated nucleus (isotop)
-  static G4ThreadLocal std::vector <G4int> *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colZ = *colZ_G4MT_TLS_;       // Vector of Z for calculated nucleus (isotop)
-  static G4ThreadLocal std::vector <G4int> *colF_G4MT_TLS_ = 0 ; if (!colF_G4MT_TLS_) colF_G4MT_TLS_ = new  std::vector <G4int>  ;  std::vector <G4int> &colF = *colF_G4MT_TLS_;       // Vector of Last StartPosition in the Ji-function tables
-  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_;   // Vector of the energy thresholds for the eA->eX reactions
-  static G4ThreadLocal std::vector <G4double> *colH_G4MT_TLS_ = 0 ; if (!colH_G4MT_TLS_) colH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colH = *colH_G4MT_TLS_;    // Vector of HighEnergyCoefficients (functional calculations)
-  // *** End of Static Definitions (Associative Memory) ***
+{
+    static const G4int nE=336; // !!  If you change this, change it in GetFunctions() (*.hh) !!
+    static const G4int mL=nE-1;
+    static const G4double EMi=2.0612; // Minimum tabulated Energy of the Electron
+    static const G4double EMa=50000.; // Maximum tabulated Energy of the Electron
+    static const G4double lEMi=std::log(EMi);  // Minimum tabulated logarithmic Energy of the Electron
+    static const G4double lEMa=std::log(EMa);  // Maximum tabulated logarithmic Energy of the Electron
+    static const G4double dlnE=(lEMa-lEMi)/mL; // Logarithmic step in the table for the electron Energy
+    static const G4double alop=1./137.036/3.14159265; //coef. for the calculated functions (Ee>50000.)
+    static const G4double mel=0.5109989;       // Mass of the electron in MeV
+    static const G4double lmel=std::log(mel);       // Log of the electron mass
 
-  const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
-  const G4int targetAtomicNumber = AA;
-  const G4int targZ = ZZ;
-  const G4int targN = targetAtomicNumber-targZ; // @@ Get isotops (can change initial A)
-  if (Energy<=EMi) return 0.;              // Energy is below the minimum energy in the table
+    //Initialize caches
+    if ( !cache ) cache = new std::map<G4int,cacheEl_t>;
+    if ( !lastUsedCacheEl ) lastUsedCacheEl = new cacheEl_t;
+    std::map<G4int,cacheEl_t>& thecache = *cache; //optmization: reduce calls to get_tls_addr
+    cacheEl_t& lastUCE = *lastUsedCacheEl;
 
-  G4int PDG=aPart->GetDefinition()->GetPDGEncoding();
-  if (PDG == 11 || PDG == -11)            // @@ Now only for electrons, but can be fo muons
-  {
-    G4double A = targN + targZ;           // New A (can differ from G4double targetAtomicNumber)
-    if(targN!=lastN || targZ!=lastZ)      // This nucleus was not the last used isotop
-	{
-      lastE    = 0.;                       // New history in the electron Energy
-      lastG    = 0.;                       // New history in the photon Energy
-      lastN    = targN;                    // The last N of calculated nucleus
-      lastZ    = targZ;                    // The last Z of calculated nucleus
-      G4int n=colN.size();                 // Size of the Associative Memory DB in the heap
-      G4bool in=false;                     // "Found in AMDB" flag
-      if(n) for(G4int i=0; i<n; i++) if(colN[i]==targN && colZ[i]==targZ) // Calculated nuclei
-	  { // The nucleus is found in AMDB
-        in=true;                           // Rais the "Found in AMDB" flag
-        lastTH =colTH[i];                  // Last Energy threshold (A-dependent)
-        lastF  =colF[i];                   // Last ZeroPosition in the J-functions
-        lastH  =colH[i];                   // Last High Energy Coefficient (A-dependent)
-        lastJ1 =J1[i];                     // Pointer to the prepared J1 function
-        lastJ2 =J2[i];                     // Pointer to the prepared J2 function
-        lastJ3 =J3[i];                     // Pointer to the prepared J3 function
-	  }
-	  if(!in)                              // This nucleus has not been calculated previously
-	  {
-        lastJ1 = new G4double[nE];        // Allocate memory for the new J1 function
-        lastJ2 = new G4double[nE];        // Allocate memory for the new J2 function
-        lastJ3 = new G4double[nE];        // Allocate memory for the new J3 function
-        lastF   = GetFunctions(A,lastJ1,lastJ2,lastJ3); // new ZeroPos and filling of J-functions
-        lastH   = alop*A*(1.-.072*std::log(A));// corresponds to lastSP from G4PhotonuclearCrossSection 
-        lastTH  = ThresholdEnergy(targZ, targN); // The last Threshold Energy
-#ifdef pdebug
-        G4cout<<"G4ElNucCS::GetCrossSection: lastH="<<lastH<<",A="<<A<<G4endl;
-#endif
-        colN.push_back(targN);
-        colZ.push_back(targZ);
-        colF.push_back(lastF);
-        J1.push_back(lastJ1);
-        J2.push_back(lastJ2);
-        J3.push_back(lastJ3);
-        colH.push_back(lastH);
-        colTH.push_back(lastTH);
-	  } // End of creation of the new set of parameters
-    } // End of parameters udate
+    const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
+    const G4int targetAtomicNumber = AA;
+    const G4int targZ = ZZ;
+    const G4int targN = targetAtomicNumber-targZ; // @@ Get isotops (can change initial A)
+    if (Energy<=EMi) return 0.;              // Energy is below the minimum energy in the table
 
+    G4int PDG=aPart->GetDefinition()->GetPDGEncoding();
+    if (PDG == 11 || PDG == -11)
+    {
+        //A. Dotti: optimization, create key to search isotopes
+        G4int key = targZ*10000 + targN;
+        currentZ = targZ;
+        currentN = targN;
+        //A. Dotti: optimization 1 (as from original code), re-use data if last isotope is the same
+        if ( lastUsedKey != key ) //Not the same as last call
+            //if(targN!=lastN || targZ!=lastZ)      // This nucleus was not the last used isotop
+        {
+            lastUsedKey = key;  //Remember this key for next call
+            lastE    = 0.;                       // New history in the electron Energy
+            lastG    = 0.;                       // New history in the photon Energy
+            //A. Dotti: optimize
+            //key to search in cache
+            std::map<G4int,cacheEl_t>::iterator it = thecache.find( key );
+            if ( it == thecache.end() ) { // not found
+                lastUCE.J1 = new G4double[nE];  // Allocate memory for the new J1 function
+                lastUCE.J2 = new G4double[nE];  // Allocate memory for the new J2 function
+                lastUCE.J3 = new G4double[nE];  // Allocate memory for the new J3 function
+                G4double A = targN + targZ;           // New A (can differ from G4double targetAtomicNumber)
+                lastUCE.F  = GetFunctions(A,lastUCE.J1,lastUCE.J2,lastUCE.J3); // new ZeroPos and filling of J-functions
+                lastUCE.H  = alop*A*(1.-.072*std::log(A));// corresponds to lastSP from G4PhotonuclearCrossSection
+                lastUCE.TH = ThresholdEnergy(targZ, targN); // The last Threshold Energy
+                thecache.insert(std::make_pair(key,lastUCE)); //COPY element into cache
+                #ifdef pdebug
+                G4cout<<"G4ElNucCS::GetCrossSection: lastH="<<lastH<<",A="<<A<<G4endl;
+                #endif
+            } else { //found in cache
+                const cacheEl_t& el = it->second;
+                lastUCE.F  = el.F;
+                lastUCE.TH = el.TH;
+                lastUCE.H  = el.H;
+                lastUCE.J1 = el.J1;
+                lastUCE.J2 = el.J2;
+                lastUCE.J3 = el.J3;
+            }
+    } else { //current isotope is the same as previous one
+        if ( lastE == Energy ) return lastSig*millibarn; // Don't calc. same CS twice
+    }
+    //End of optimization: now lastUCE structure contains the correct data for this isotope
+        
     //    else if(std::abs((lastE-Energy)/Energy)<.001) return lastSig*millibarn; // Don't calc. same CS twice
-    else if(lastE == Energy) return lastSig*millibarn; // Don't calc. same CS twice
+    //else if(lastE == Energy) return lastSig*millibarn; // Don't calc. same CS twice
     // ============================== NOW Calculate the Cross Section ==========================
     lastE=Energy;                          // lastE - the electron energy
-    if (Energy<=lastTH)                    // Once more check that the eE is higher than the ThreshE
+    if ( Energy <= lastUCE.TH )
+    //if (Energy<=lastTH)                    // Once more check that the eE is higher than the ThreshE
     {
       lastSig=0.;
       return 0.;
@@ -211,8 +238,8 @@ G4ElectroNuclearCrossSection::GetIsoCrossSection(
       if(blast>=mL) blast=mL-1;
       shift-=blast;
       lastL=blast+1;
-      G4double YNi=dlg1*lastJ1[blast]-lgoe*(lastJ2[blast]+lastJ2[blast]-lastJ3[blast]/lastE);
-      G4double YNj=dlg1*lastJ1[lastL]-lgoe*(lastJ2[lastL]+lastJ2[lastL]-lastJ3[lastL]/lastE);
+      G4double YNi=dlg1*lastUCE.J1[blast]-lgoe*(lastUCE.J2[blast]+lastUCE.J2[blast]-lastUCE.J3[blast]/lastE);
+      G4double YNj=dlg1*lastUCE.J1[lastL]-lgoe*(lastUCE.J2[lastL]+lastUCE.J2[lastL]-lastUCE.J3[lastL]/lastE);
       lastSig= YNi+shift*(YNj-YNi);
       if(lastSig>YNj)lastSig=YNj;
 #ifdef pdebug
@@ -223,17 +250,17 @@ G4ElectroNuclearCrossSection::GetIsoCrossSection(
     else
 	{
       lastL=mL;
-      G4double term1=lastJ1[mL]+lastH*HighEnergyJ1(lE);
-      G4double term2=lastJ2[mL]+lastH*HighEnergyJ2(lE);
-      G4double term3=lastJ3[mL]+lastH*HighEnergyJ3(lE);
+      G4double term1=lastUCE.J1[mL]+lastUCE.H*HighEnergyJ1(lE);
+      G4double term2=lastUCE.J2[mL]+lastUCE.H*HighEnergyJ2(lE);
+      G4double term3=lastUCE.J3[mL]+lastUCE.H*HighEnergyJ3(lE);
       lastSig=dlg1*term1-lgoe*(term2+term2-term3/lastE);
 #ifdef pdebug
       G4cout<<"G4ElNucCS::GetCrossSec:S="<<lastSig<<",lE="<<lE<<",J1="<<lastH*HighEnergyJ1(lE)<<",Pm="
             <<lastJ1[mL]<<",Fm="<<lastJ2[mL]<<",Fh="<<lastH*HighEnergyJ2(lE)<<",EM="<<lEMa<<G4endl;
 #endif
-	}
-  } // End of "sigma" calculation
-  else return 0.;
+    }
+    } // End of "sigma" calculation
+    else return 0.; //Not an e+/-
   if(lastSig<0.) lastSig = 0.;
   lastE=Energy;
   return lastSig*millibarn;
@@ -241,10 +268,7 @@ G4ElectroNuclearCrossSection::GetIsoCrossSection(
 
 // Gives the threshold energy for different nuclei (min of p- and n-threshold)
 G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
-{ if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;
-  // CHIPS - Direct GEANT
-  //static const G4double mNeut = G4QPDGCode(2112).GetMass();
-  //static const G4double mProt = G4QPDGCode(2212).GetMass();
+{
   static const G4double mNeut = G4NucleiProperties::GetNuclearMass(1,0);
   static const G4double mProt = G4NucleiProperties::GetNuclearMass(1,1);
   // ---------
@@ -253,8 +277,7 @@ G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
   G4int A=Z+N;
   if(A<1) return infEn;
   else if(A==1) return 134.9766; // Pi0 threshold for the nucleon
-  // CHIPS - Direct GEANT
-  //G4double mT= G4QPDGCode(111).GetNuclMass(Z,N,0);
+ 
   G4double mT= 0.;
   if(G4NucleiProperties::IsInStableTable(A,Z)) mT = G4NucleiProperties::GetNuclearMass(A,Z);
   // If it is not in the Table of Stable Nuclei, then the Threshold=inf
@@ -277,12 +300,12 @@ G4double G4ElectroNuclearCrossSection::ThresholdEnergy(G4int Z, G4int N)
 
 // Calculate the functions for the std::log(A)
 G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4double* y, G4double* z)
-{ if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
   static const G4int nN=14;
   static const G4int nE=336; // !!  If you change this, change it in GetCrossSection() (*.cc) !!
-  static G4ThreadLocal G4int L[nN]={138, 2, 32, 75, 26, 41, 0, 67, 58, 46, 41, 38, 39, 36};
+  static const G4int L[nN]={138, 2, 32, 75, 26, 41, 0, 67, 58, 46, 41, 38, 39, 36};
   // !! @@ Change it from ln(A) to A approximation !!
-  static G4ThreadLocal G4double A[nN]={1.,2.,3.,4.,6.,7.,9.,12.,16.,27.,63.546,118.71,207.2,238.472};
+  static const G4double A[nN]={1.,2.,3.,4.,6.,7.,9.,12.,16.,27.,63.546,118.71,207.2,238.472};
   static const G4double P00[nE]={
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
     0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,0.000000e+00,
@@ -2392,9 +2415,10 @@ G4int G4ElectroNuclearCrossSection::GetFunctions(G4double a, G4double* x, G4doub
 }
 
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
-{ if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
   if(lastSig <= 0.0) { return 0.0; }  // VI
-
+    assert(lastUsedCacheEl);
+    cacheEl_t& lastUCE = *lastUsedCacheEl;
   // All constants are the copy of that from GetCrossSection funct.
   //  => Make them general.
   static const G4int nE=336; // !!  If you change this, change it in 
@@ -2412,16 +2436,16 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
 
 #ifdef debug
   G4cout << "G4ElectroNuclearCrossSection::GetEguPhotE:B="
-         << lastF<<",l=" << lastL << ",J1=" << lastJ1[lastL]
-         << ",J2=" << lastJ2[lastL] << ",J3=" << lastJ3[lastL] << ",S="
+         << lastUCE.F<<",l=" << lastL << ",J1=" << lastUCE.J1[lastL]
+         << ",J2=" << lastUCE.J2[lastL] << ",J3=" << lastUCE.J3[lastL] << ",S="
          << lastSig << ",E=" << lastE << G4endl;
 #endif
 
   G4double lastLE=lastG+lmel;   // recover std::log(eE) from the gamma (lastG)
   G4double dlg1=lastG+lastG-1.;
   G4double lgoe=lastG/lastE;
-  for (G4int i=lastF;i<=lastL;i++) {
-    Y[i] = dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
+  for (G4int i=lastUCE.F;i<=lastL;i++) {
+    Y[i] = dlg1*lastUCE.J1[i]-lgoe*(lastUCE.J2[i]+lastUCE.J2[i]-lastUCE.J3[i]/lastE);
     if(Y[i] < 0.0) { Y[i] = 0.0; }
   }
   // Tempory IF of H.P.: delete it if the *HP* err message does not 
@@ -2439,7 +2463,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
          << ",Y=" << Y[lastL] << G4endl;
 #endif
   if (ris < Y[lastL]) {               // Search the table
-    G4int j = lastF;
+    G4int j = lastUCE.F;
     G4double Yj = Y[j];               // It must be 0 (sometimes just very small)
     while (ris > Yj && j < lastL) {   // Associative search
       j++;
@@ -2455,7 +2479,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   } else {                            // Search with the function
     if (lastL < mL) G4cerr << "**G4EleNucCS::GetEfPhE:L=" << lastL << ",S="
                            << lastSig << ",Y=" << Y[lastL] << G4endl;
-    G4double f = (ris-Y[lastL])/lastH;    // The scaled residual value of the cross-section integral
+    G4double f = (ris-Y[lastL])/lastUCE.H;    // The scaled residual value of the cross-section integral
 #ifdef pdebug
     G4cout << "G4EleNucCS::GetEfPhE:HighEnergy f=" << f << ",ris=" << ris
            << ",lastH=" << lastH << G4endl;
@@ -2467,9 +2491,9 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   }
 
   if (phLE>lastLE) {
-    G4cerr << "***G4ElectroNuclearCS::GetEquPhotE:N=" << lastN << ",Z="
-           << lastZ << ", lpE" << phLE << ">leE" << lastLE << ",Sig="
-           << lastSig << ",rndSig=" << ris << ",Beg=" << lastF << ",End="
+    G4cerr << "***G4ElectroNuclearCS::GetEquPhotE:N=" << currentN << ",Z="
+           << currentZ << ", lpE" << phLE << ">leE" << lastLE << ",Sig="
+           << lastSig << ",rndSig=" << ris << ",Beg=" << lastUCE.F << ",End="
            << lastL << ",Y=" << Y[lastL] << G4endl;
     if(lastLE<7.2) phLE=std::log(std::exp(lastLE)-.511);
     else phLE=7.;
@@ -2479,7 +2503,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
 
 
 G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
-{ if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
   // This parameters must correspond to the G4PhotonuclearCrossSection::GetCrossSection parameters
   static const G4double shd=1.0734;                    // HE PomShadowing(D)
   static const G4double poc=0.0375;                    // HE Pomeron coefficient
@@ -2512,19 +2536,19 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
     if(x>=lastLE)
 	{
       G4cerr<<"*G4ElNCS::SolveTheEq:*Correction*"<<i<<",d="<<d<<",x="<<x<<">lE="<<lastLE<<",f="<<f
-            <<",fx="<<fx<<",df="<<df<<",A(Z="<<lastZ<<",N="<<lastN<<")"<<G4endl;
+            <<",fx="<<fx<<",df="<<df<<",A(Z="<<currentZ<<",N="<<currentN<<")"<<G4endl;
       x=topLim;
       //if(i)G4Exception("G4ElectroNuclearCrossSection::SolveTheEquation()","009",FatalException,"E>eE");
     }
     if(std::abs(d)<eps) break;
     if(i+1>=imax) G4cerr<<"*G4ElNucCS::SolveTheEq:"<<i+2<<">"<<imax<<"->Use bigger max. ln(eE)="
-                        <<lastLE<<",Z="<<lastZ<<", N="<<lastN<<G4endl;
+                        <<lastLE<<",Z="<<currentZ<<", N="<<currentN<<G4endl;
   }
   return x;
 }
 
 G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
-{ if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
   if(lastG <= 0.0 || lastE <= 0.0) { return 0.; } // VI
   if(lastSig <= 0.0) { return 0.0; }  // VI
   static const G4double mel=0.5109989;    // Mass of electron in MeV
@@ -2579,7 +2603,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
 }
 
 G4double G4ElectroNuclearCrossSection::GetVirtualFactor(G4double nu, G4double Q2)
-{ if (!J3_G4MT_TLS_) J3_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J2_G4MT_TLS_) J2_G4MT_TLS_ = new std::vector<G4double*>  ; if (!J1_G4MT_TLS_) J1_G4MT_TLS_ = new std::vector<G4double*>  ;
+{
   if(nu <= 0.0 || Q2 <= 0.0) { return 0.0; }
   static const G4double dM=938.27+939.57; // Mean double nucleon mass = m_n+m_p (@@ no binding)
   static const G4double Q0=843.;          // Coefficient of the dipole nucleonic form-factor
