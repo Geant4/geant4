@@ -145,9 +145,7 @@ public: //with description
 
 public: // Without Description
 
-  virtual G4int GetVerboseLevel() const;
-
-  virtual void SetVerboseLevel(G4int value);
+  inline void SetVerboseLevel(G4int value);
 
   inline G4double GetMinKinEnergy() const;
 
@@ -182,12 +180,6 @@ G4VCrossSectionDataSet::GetCrossSection(const G4DynamicParticle* dp,
 					const G4Material* mat)
 {
   return ComputeCrossSection(dp, elm, mat);
-}
-
-
-inline G4int G4VCrossSectionDataSet::GetVerboseLevel() const
-{
-  return verboseLevel;
 }
 
 inline void G4VCrossSectionDataSet::SetVerboseLevel(G4int value)
