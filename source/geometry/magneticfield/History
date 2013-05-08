@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 26th, 2013 A. Dotti - field-V09-06-01
+March 19th, 2013 G.Cosmo - field-V09-06-03, field-V09-06-02
+-------------------------
+- Cleanup of MT changes in G4FieldManagerStore.
+
+February 26th, 2013 A.Dotti - field-V09-06-01
 ---------------------------
 - First implementation of Cloning mechanism (needed for MT)
 

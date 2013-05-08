@@ -63,6 +63,7 @@ G4FieldManagerStore::G4FieldManagerStore()
 G4FieldManagerStore::~G4FieldManagerStore()
 {
   Clean();
+  if (fgInstance)  { delete fgInstance; fgInstance=0; }
 }
 
 // ***************************************************************************
@@ -130,10 +131,9 @@ void G4FieldManagerStore::DeRegister(G4FieldManager* pFieldMgr)
 //
 G4FieldManagerStore* G4FieldManagerStore::GetInstance()
 {
-  static G4ThreadLocal G4FieldManagerStore *worldStore_G4MT_TLS_ = 0 ; if (!worldStore_G4MT_TLS_) worldStore_G4MT_TLS_ = new  G4FieldManagerStore  ;  G4FieldManagerStore &worldStore = *worldStore_G4MT_TLS_;
   if (!fgInstance)
   {
-    fgInstance = &worldStore;
+    fgInstance = new G4FieldManagerStore;
   }
   return fgInstance;
 }
