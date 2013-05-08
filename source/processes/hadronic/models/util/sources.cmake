@@ -55,6 +55,10 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4Fragment.hh
         G4FragmentVector.hh
         G4GeneralPhaseSpaceDecay.hh
+	G4HadDecayGenerator.hh
+	G4HadPhaseSpaceGenbod.hh
+	G4HadPhaseSpaceKopylov.hh
+	G4HadPhaseSpaceNBodyAsai.hh
         G4KineticTrack.hh
         G4KineticTrackVector.hh
         G4NuclearFermiDensity.hh
@@ -63,6 +67,8 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4Parton.hh
         G4PartonVector.hh
         G4SampleResonance.hh
+	G4VHadDecayAlgorithm.hh
+	G4VHadPhaseSpaceAlgorithm.hh
         G4WilsonRadius.hh
     SOURCES
 	G4DecayKineticTracks.cc
@@ -72,6 +78,10 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4FermiMomentum.cc
         G4Fragment.cc
         G4GeneralPhaseSpaceDecay.cc
+	G4HadDecayGenerator.cc
+	G4HadPhaseSpaceGenbod.cc
+	G4HadPhaseSpaceKopylov.cc
+	G4HadPhaseSpaceNBodyAsai.cc
         G4KineticTrack.cc
         G4KineticTrackVector.cc
         G4NuclearFermiDensity.cc
@@ -79,6 +89,8 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4Nucleon.cc
         G4Parton.cc
         G4SampleResonance.cc
+	G4VHadDecayAlgorithm.cc
+	G4VHadPhaseSpaceAlgorithm.cc
         G4WilsonRadius.cc
     GRANULAR_DEPENDENCIES
         G4baryons

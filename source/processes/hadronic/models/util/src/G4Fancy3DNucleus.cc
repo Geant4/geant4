@@ -305,7 +305,8 @@ void G4Fancy3DNucleus::ChoosePositions()
 		if ( jr < 3 ) 
 		{
 		    jr=std::min(600,9*(myA - i));
-		    CLHEP::RandFlat::shootArray(jr, prand );
+            G4RandFlat::shootArray(jr,prand);
+		    //CLHEP::RandFlat::shootArray(jr, prand );
 		}
 		jx=--jr;
 		jy=--jr;
