@@ -54,14 +54,15 @@ G4bool G4LENDCrossSection::IsIsoApplicable( const G4DynamicParticle* dp, G4int /
 }
 
 G4double G4LENDCrossSection::GetIsoCrossSection( const G4DynamicParticle* dp , G4int iZ , G4int iA ,
-                                                 const G4Isotope* /*isotope*/ , const G4Element* /*elment*/ , const G4Material* material )
+                                                 const G4Isotope* isotope , const G4Element* /*elment*/ , const G4Material* material )
 {
 
    G4double xs = 0.0;
    G4double ke = dp->GetKineticEnergy();
    G4double temp = material->GetTemperature();
+   G4int iM = isotope->Getm();
 
-   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA ) )->second->GetTarget();
+   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA , iM ) )->second->GetTarget();
 
    xs = getLENDCrossSection ( aTarget , ke , temp );
 
@@ -83,7 +84,10 @@ G4LENDCrossSection::G4LENDCrossSection( const G4String nam )
 :G4VCrossSectionDataSet( nam )
 {
 
-   default_evaluation = "endl99";
+   proj = NULL; //will be set in an inherited class
+   //default_evaluation = "endl99";
+   default_evaluation = "ENDF.B-VII.0";
+
    allow_nat = false;
    allow_any = false;
 
@@ -288,12 +292,13 @@ void G4LENDCrossSection::create_used_target_map()
          {
             G4int iZ = anElement->GetIsotope( i_iso )->GetZ();
             G4int iA = anElement->GetIsotope( i_iso )->GetN();
+            G4int iIsomer = anElement->GetIsotope( i_iso )->Getm();
 
             //G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( G4Neutron::Neutron() , default_evaluation , iZ , iA );  
             G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iA );  
             if ( allow_nat == true ) aTarget->AllowNat();
             if ( allow_any == true ) aTarget->AllowAny();
-            usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iA ) , aTarget ) );
+            usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iA , iIsomer ) , aTarget ) );
          }
       }
       else
@@ -311,11 +316,12 @@ void G4LENDCrossSection::create_used_target_map()
             {
                G4int iMass = nistElementBuild->GetNistFirstIsotopeN( iZ ) + ii;  
                //G4cout << iZ << " " << nistElementBuild->GetNistFirstIsotopeN( iZ ) + i << " " << nistElementBuild->GetIsotopeAbundance ( iZ , iMass ) << G4endl;  
+               G4int iIsomer = 0; 
 
                G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iMass );  
                if ( allow_nat == true ) aTarget->AllowNat();
                if ( allow_any == true ) aTarget->AllowAny();
-               usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iMass ) , aTarget ) );
+               usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iMass , iIsomer ) , aTarget ) );
 
             }
 
