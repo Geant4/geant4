@@ -118,13 +118,13 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   currentRange = 0.0;
 
   cosThetaMax = cos(PolarAngleLimit());
-  G4cout << "G4WentzelVIModel::Initialise " << p->GetParticleName() << G4endl;
+  //G4cout << "G4WentzelVIModel::Initialise " << p->GetParticleName() << G4endl;
   wokvi->Initialise(p, cosThetaMax);
- 
+  /*
   G4cout << "G4WentzelVIModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMax 
 	 << G4endl;
-  
+  */
   currentCuts = &cuts;
 
   // set values of some data members

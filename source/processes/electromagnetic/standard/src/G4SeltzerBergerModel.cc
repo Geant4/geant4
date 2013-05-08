@@ -71,8 +71,8 @@
 
 using namespace std;
 
-G4Physics2DVector* G4SeltzerBergerModel::dataSB[101] = {0};
-G4double G4SeltzerBergerModel::ylimit[101] = {0.0};
+G4Physics2DVector* G4SeltzerBergerModel::dataSB[] = {0};
+G4double G4SeltzerBergerModel::ylimit[] = {0.0};
 G4double G4SeltzerBergerModel::expnumlim = -12.;
 
 G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
@@ -277,7 +277,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
       else { v *= exp(xxx); }
     }
    
-    if (v > 1.05*vmax && nwarn < 20) {
+    if (v > 1.05*vmax && nwarn < 5) {
       ++nwarn;
       G4ExceptionDescription ed;
       ed << "### G4SeltzerBergerModel Warning: Majoranta exceeded! "
