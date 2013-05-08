@@ -48,18 +48,18 @@ class WLSPrimaryGeneratorMessenger : public G4UImessenger
   public:
 
     WLSPrimaryGeneratorMessenger(WLSPrimaryGeneratorAction*);
-    ~WLSPrimaryGeneratorMessenger();
+    virtual ~WLSPrimaryGeneratorMessenger();
  
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
  
   private:
 
-    WLSPrimaryGeneratorAction*   action;
+    WLSPrimaryGeneratorAction*   fAction;
 
-    G4UIdirectory*               gunDir;
+    G4UIdirectory*               fGunDir;
 
-    G4UIcmdWithADoubleAndUnit*   SetPolarizationCmd;
-    G4UIcmdWithADoubleAndUnit*   SetDecayTimeConstantCmd;
+    G4UIcmdWithADoubleAndUnit*   fSetPolarizationCmd;
+    G4UIcmdWithADoubleAndUnit*   fSetDecayTimeConstantCmd;
 };
 
 #endif

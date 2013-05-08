@@ -62,7 +62,7 @@ class WLSPhysicsListMessenger : public G4UImessenger
     WLSPhysicsListMessenger(WLSPhysicsList* );
     virtual ~WLSPhysicsListMessenger();
 
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
 
@@ -73,8 +73,8 @@ class WLSPhysicsListMessenger : public G4UImessenger
 
     G4UIcmdWithABool* fSetAbsorptionCMD;
 
-    G4UIcmdWithAnInteger* verboseCmd;
-    G4UIcmdWithAnInteger* cerenkovCmd;
+    G4UIcmdWithAnInteger* fVerboseCmd;
+    G4UIcmdWithAnInteger* fCerenkovCmd;
 
     G4UIcmdWithADoubleAndUnit* fGammaCutCMD;
     G4UIcmdWithADoubleAndUnit* fElectCutCMD;
@@ -89,12 +89,6 @@ class WLSPhysicsListMessenger : public G4UImessenger
 
     G4UIcmdWithoutParameter* fPienuCMD;
     G4UIcmdWithoutParameter* fPimunuCMD;
-
-    G4ParticleTable* particleTable;
-    G4ParticleDefinition* particleDef;
-
-    G4DecayTable* table;
-    G4VDecayChannel* mode;
 
 };
 

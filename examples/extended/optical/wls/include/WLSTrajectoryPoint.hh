@@ -56,8 +56,8 @@ class WLSTrajectoryPoint : public G4TrajectoryPoint {
 // Constructor/Destructor
 
     WLSTrajectoryPoint();
-    WLSTrajectoryPoint(const G4Track* aTrack);
-    WLSTrajectoryPoint(const G4Step* aStep);
+    WLSTrajectoryPoint(const G4Track* );
+    WLSTrajectoryPoint(const G4Step* );
     WLSTrajectoryPoint(const WLSTrajectoryPoint &right);
     virtual ~WLSTrajectoryPoint();
 

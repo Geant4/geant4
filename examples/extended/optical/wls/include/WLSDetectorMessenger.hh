@@ -54,17 +54,17 @@ class WLSDetectorMessenger : public G4UImessenger
   public:
 
     WLSDetectorMessenger(WLSDetectorConstruction* );
-    ~WLSDetectorMessenger();
+    virtual ~WLSDetectorMessenger();
  
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
 
-    WLSDetectorConstruction*   Detector;
+    WLSDetectorConstruction*   fDetector;
  
-    G4UIdirectory*          detDir;
+    G4UIdirectory*             fDetDir;
 
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithoutParameter*   fUpdateCmd;
 
     G4UIcmdWithAString*        SetPhotonDetGeometryCmd;
     G4UIcmdWithAnInteger*      SetNumOfCladLayersCmd;

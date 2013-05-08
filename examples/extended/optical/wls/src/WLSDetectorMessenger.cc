@@ -28,7 +28,7 @@
 /// \file optical/wls/src/WLSDetectorMessenger.cc
 /// \brief Implementation of the WLSDetectorMessenger class
 //
-
+//
 #include "WLSDetectorMessenger.hh"
 
 #include "G4UIdirectory.hh"
@@ -39,17 +39,19 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * Det)
- : Detector(Det)
-{
-  detDir = new G4UIdirectory("/WLS/");
-  detDir->SetGuidance(" Geometry Setup ");
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  UpdateCmd = new G4UIcmdWithoutParameter("/WLS/Update",this);
-  UpdateCmd->SetGuidance("Update musr geometry");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
+WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
+  : fDetector(det)
+{
+  fDetDir = new G4UIdirectory("/WLS/");
+  fDetDir->SetGuidance(" Geometry Setup ");
+
+  fUpdateCmd = new G4UIcmdWithoutParameter("/WLS/Update",this);
+  fUpdateCmd->SetGuidance("Update musr geometry");
+  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
+  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
+  fUpdateCmd->AvailableForStates(G4State_Idle);
 
   SetPhotonDetGeometryCmd =
                       new G4UIcmdWithAString("/WLS/setPhotonDetGeometry",this);
@@ -218,11 +220,13 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * Det)
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSDetectorMessenger::~WLSDetectorMessenger()
 {
-  delete detDir;
+  delete fDetDir;
 
-  delete UpdateCmd;
+  delete fUpdateCmd;
 
   delete SetPhotonDetGeometryCmd;
   delete SetNumOfCladLayersCmd;
@@ -245,100 +249,103 @@ WLSDetectorMessenger::~WLSDetectorMessenger()
   delete SetCoatingRadiusCmd;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSDetectorMessenger::SetNewValue(G4UIcommand* command,G4String val)
 {
-  if( command == UpdateCmd ) {
+  if( command == fUpdateCmd ) {
 
-    Detector->UpdateGeometry();
+    fDetector->UpdateGeometry();
+
   }
   else if( command == SetPhotonDetGeometryCmd ) {
  
-    Detector->SetPhotonDetGeometry(val);
+    fDetector->SetPhotonDetGeometry(val);
   }
   else if( command == SetNumOfCladLayersCmd ) {
 
-    Detector->SetNumberOfCladding(G4UIcmdWithAnInteger::GetNewIntValue(val));
+    fDetector->SetNumberOfCladding(G4UIcmdWithAnInteger::GetNewIntValue(val));
   }
   else if( command == SetSurfaceRoughnessCmd ) {
 
-    Detector->SetSurfaceRoughness(G4UIcmdWithADouble::GetNewDoubleValue(val));
+    fDetector->SetSurfaceRoughness(G4UIcmdWithADouble::GetNewDoubleValue(val));
   }
   else if( command == SetXYRatioCmd ) {
  
-    Detector->SetXYRatio(G4UIcmdWithADouble::GetNewDoubleValue(val));
+    fDetector->SetXYRatio(G4UIcmdWithADouble::GetNewDoubleValue(val));
   }
   else if( command == SetMirrorPolishCmd ) {
 
-    Detector->SetMirrorPolish(G4UIcmdWithADouble::GetNewDoubleValue(val));
+    fDetector->SetMirrorPolish(G4UIcmdWithADouble::GetNewDoubleValue(val));
   }
   else if( command == SetMirrorReflectivityCmd ) {
  
-    Detector->
+    fDetector->
              SetMirrorReflectivity(G4UIcmdWithADouble::GetNewDoubleValue(val));
   }
   else if( command == SetPhotonDetPolishCmd ) {
  
-    Detector->SetPhotonDetPolish(G4UIcmdWithADouble::GetNewDoubleValue(val));
+    fDetector->SetPhotonDetPolish(G4UIcmdWithADouble::GetNewDoubleValue(val));
   }
   else if( command == SetPhotonDetReflectivityCmd ) {
  
-    Detector->
+    fDetector->
           SetPhotonDetReflectivity(G4UIcmdWithADouble::GetNewDoubleValue(val));
   }
   else if( command == SetWLSLengthCmd ) {
  
-    Detector->SetWLSLength(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
+    fDetector->SetWLSLength(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
   }
   else if( command == SetWLSRadiusCmd ) {
  
-    Detector->SetWLSRadius(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
+    fDetector->SetWLSRadius(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
   }
   else if( command == SetClad1RadiusCmd ) {
  
-    Detector->
+    fDetector->
              SetClad1Radius(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
   }
   else if( command == SetClad2RadiusCmd ) {
  
-    Detector->
+    fDetector->
              SetClad2Radius(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
   }
   else if( command == SetPhotonDetHalfLengthCmd ) {
  
-    Detector->
+    fDetector->
      SetPhotonDetHalfLength(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
   }
   else if( command == SetGapCmd ) {
  
-   Detector->SetGap(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
+   fDetector->SetGap(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
   }
   else if( command == SetPhotonDetAlignmentCmd ) {
  
-   Detector->
+   fDetector->
       SetPhotonDetAlignment(G4UIcmdWithADoubleAndUnit::GetNewDoubleValue(val));
   }
   else if( command == SetMirrorCmd ) {
 
-   Detector->SetMirror(G4UIcmdWithABool::GetNewBoolValue(val));
+   fDetector->SetMirror(G4UIcmdWithABool::GetNewBoolValue(val));
   }
   else if( command == SetBarLengthCmd ) {
 
-   Detector->SetBarLength(G4UIcmdWithABool::GetNewBoolValue(val));
+   fDetector->SetBarLength(G4UIcmdWithABool::GetNewBoolValue(val));
   }
   else if( command == SetBarBaseCmd ) {
 
-   Detector->SetBarBase(G4UIcmdWithABool::GetNewBoolValue(val));
+   fDetector->SetBarBase(G4UIcmdWithABool::GetNewBoolValue(val));
   }
   else if( command == SetHoleRadiusCmd ) {
 
-   Detector->SetHoleRadius(G4UIcmdWithABool::GetNewBoolValue(val));
+   fDetector->SetHoleRadius(G4UIcmdWithABool::GetNewBoolValue(val));
   }
   else if( command == SetCoatingThicknessCmd ) {
 
-   Detector->SetCoatingThickness(G4UIcmdWithABool::GetNewBoolValue(val));
+   fDetector->SetCoatingThickness(G4UIcmdWithABool::GetNewBoolValue(val));
   }
   else if( command == SetCoatingRadiusCmd ) {
 
-   Detector->SetCoatingRadius(G4UIcmdWithABool::GetNewBoolValue(val));
+   fDetector->SetCoatingRadius(G4UIcmdWithABool::GetNewBoolValue(val));
   }
 }

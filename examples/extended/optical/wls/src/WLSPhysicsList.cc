@@ -28,7 +28,7 @@
 /// \file optical/wls/src/WLSPhysicsList.cc
 /// \brief Implementation of the WLSPhysicsList class
 //
-
+//
 #include "WLSPhysicsList.hh"
 #include "WLSPhysicsListMessenger.hh"
 
@@ -62,6 +62,8 @@
 
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSPhysicsList::WLSPhysicsList(G4String physName) : G4VModularPhysicsList()
 {
     G4LossTableManager::Instance();
@@ -88,38 +90,46 @@ WLSPhysicsList::WLSPhysicsList(G4String physName) : G4VModularPhysicsList()
        RegisterPhysics(elem);
     }
 
-    AbsorptionOn = true;
+    fAbsorptionOn = true;
     
     //This looks complex, but it is not:
     //Get from base-class the pointer of the phsyicsVector
     //to be used. Remember: G4VModularPhysicsList is now a split class.
     //Why G4VModularPhysicsList::RegisterPhysics method is not used instead?
     //If possible we can remove this...
-    physicsVector = GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
+    fPhysicsVector =
+                GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
     
-    physicsVector->push_back(new WLSExtraPhysics());
-    physicsVector->push_back(opticalPhysics = new WLSOpticalPhysics(AbsorptionOn));
+    fPhysicsVector->push_back(new WLSExtraPhysics());
+    fPhysicsVector->push_back(fOpticalPhysics =
+                                        new WLSOpticalPhysics(fAbsorptionOn));
 
-    physicsVector->push_back(new G4RadioactiveDecayPhysics());
+    fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
 
-    stepMaxProcess = new WLSStepMax();
+    fStepMaxProcess = new WLSStepMax();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSPhysicsList::~WLSPhysicsList()
 {
     delete fMessenger;
 
-    delete stepMaxProcess;
+    delete fStepMaxProcess;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSPhysicsList::ClearPhysics()
 {
-    for (G4PhysConstVector::iterator p  = physicsVector->begin();
-                                     p != physicsVector->end(); ++p) {
+    for (G4PhysConstVector::iterator p  = fPhysicsVector->begin();
+                                     p != fPhysicsVector->end(); ++p) {
         delete (*p);
     }
-    physicsVector->clear();
+    fPhysicsVector->clear();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSPhysicsList::ConstructParticle()
 {
@@ -141,6 +151,8 @@ void WLSPhysicsList::ConstructParticle()
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPhysicsList::ConstructProcess()
 {
     G4VModularPhysicsList::ConstructProcess();
@@ -154,67 +166,69 @@ void WLSPhysicsList::ConstructProcess()
     G4VProcess* decay;
     decay = processTable->FindProcess("Decay",G4MuonPlus::MuonPlus());
 
-    G4ProcessManager* fManager;
-    fManager = G4MuonPlus::MuonPlus()->GetProcessManager();
+    G4ProcessManager* pManager;
+    pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
 
-    if (fManager) {
-      if (decay) fManager->RemoveProcess(decay);
-      fManager->AddProcess(decayWithSpin);
+    if (pManager) {
+      if (decay) pManager->RemoveProcess(decay);
+      pManager->AddProcess(decayWithSpin);
       // set ordering for PostStepDoIt and AtRestDoIt
-      fManager ->SetProcessOrdering(decayWithSpin, idxPostStep);
-      fManager ->SetProcessOrdering(decayWithSpin, idxAtRest);
+      pManager ->SetProcessOrdering(decayWithSpin, idxPostStep);
+      pManager ->SetProcessOrdering(decayWithSpin, idxAtRest);
     }
 
     decay = processTable->FindProcess("Decay",G4MuonMinus::MuonMinus());
 
-    fManager = G4MuonMinus::MuonMinus()->GetProcessManager();
+    pManager = G4MuonMinus::MuonMinus()->GetProcessManager();
 
-    if (fManager) {
-      if (decay) fManager->RemoveProcess(decay);
-      fManager->AddProcess(decayWithSpin);
+    if (pManager) {
+      if (decay) pManager->RemoveProcess(decay);
+      pManager->AddProcess(decayWithSpin);
       // set ordering for PostStepDoIt and AtRestDoIt
-      fManager ->SetProcessOrdering(decayWithSpin, idxPostStep);
-      fManager ->SetProcessOrdering(decayWithSpin, idxAtRest);
+      pManager ->SetProcessOrdering(decayWithSpin, idxPostStep);
+      pManager ->SetProcessOrdering(decayWithSpin, idxAtRest);
     }
 
     G4PionDecayMakeSpin* poldecay = new G4PionDecayMakeSpin();
 
     decay = processTable->FindProcess("Decay",G4PionPlus::PionPlus());
 
-    fManager = G4PionPlus::PionPlus()->GetProcessManager();
+    pManager = G4PionPlus::PionPlus()->GetProcessManager();
 
-    if (fManager) {
-      if (decay) fManager->RemoveProcess(decay);
-      fManager->AddProcess(poldecay);
+    if (pManager) {
+      if (decay) pManager->RemoveProcess(decay);
+      pManager->AddProcess(poldecay);
       // set ordering for PostStepDoIt and AtRestDoIt
-      fManager ->SetProcessOrdering(poldecay, idxPostStep);
-      fManager ->SetProcessOrdering(poldecay, idxAtRest);
+      pManager ->SetProcessOrdering(poldecay, idxPostStep);
+      pManager ->SetProcessOrdering(poldecay, idxAtRest);
     }
 
     decay = processTable->FindProcess("Decay",G4PionMinus::PionMinus());
 
-    fManager = G4PionMinus::PionMinus()->GetProcessManager();
+    pManager = G4PionMinus::PionMinus()->GetProcessManager();
 
-    if (fManager) {
-      if (decay) fManager->RemoveProcess(decay);
-      fManager->AddProcess(poldecay);
+    if (pManager) {
+      if (decay) pManager->RemoveProcess(decay);
+      pManager->AddProcess(poldecay);
       // set ordering for PostStepDoIt and AtRestDoIt
-      fManager ->SetProcessOrdering(poldecay, idxPostStep);
-      fManager ->SetProcessOrdering(poldecay, idxAtRest);
+      pManager ->SetProcessOrdering(poldecay, idxPostStep);
+      pManager ->SetProcessOrdering(poldecay, idxAtRest);
     }
 
     AddStepMax();
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPhysicsList::RemoveFromPhysicsList(const G4String& name)
 {
     G4bool success = false;
-    for (G4PhysConstVector::iterator p  = physicsVector->begin();
-                                     p != physicsVector->end(); ++p) {
+    for (G4PhysConstVector::iterator p  = fPhysicsVector->begin();
+                                     p != fPhysicsVector->end(); ++p) {
         G4VPhysicsConstructor* e = (*p);
         if (e->GetPhysicsName() == name) {
-           physicsVector->erase(p);
+           fPhysicsVector->erase(p);
            success = true;
            break;
         }
@@ -227,13 +241,18 @@ void WLSPhysicsList::RemoveFromPhysicsList(const G4String& name)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPhysicsList::SetAbsorption(G4bool toggle)
 {
-       AbsorptionOn = toggle;
+       fAbsorptionOn = toggle;
        RemoveFromPhysicsList("Optical");
-       physicsVector->push_back(opticalPhysics = new WLSOpticalPhysics(toggle));
-       opticalPhysics->ConstructProcess();
+       fPhysicsVector->
+                    push_back(fOpticalPhysics = new WLSOpticalPhysics(toggle));
+       fOpticalPhysics->ConstructProcess();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSPhysicsList::SetCuts()
 {
@@ -252,11 +271,15 @@ void WLSPhysicsList::SetCuts()
     if (verboseLevel>0) DumpCutValuesTable();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPhysicsList::SetCutForGamma(G4double cut)
 {
     fCutForGamma = cut;
     SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSPhysicsList::SetCutForElectron(G4double cut)
 {
@@ -264,22 +287,29 @@ void WLSPhysicsList::SetCutForElectron(G4double cut)
     SetParticleCuts(fCutForElectron, G4Electron::Electron());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPhysicsList::SetCutForPositron(G4double cut)
 {
     fCutForPositron = cut;
     SetParticleCuts(fCutForPositron, G4Positron::Positron());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSPhysicsList::SetStepMax(G4double step)
 {
-  MaxChargedStep = step;
-  stepMaxProcess->SetStepMax(MaxChargedStep);
+  fStepMaxProcess->SetStepMax(step);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSStepMax* WLSPhysicsList::GetStepMaxProcess()
 {
-  return stepMaxProcess;
+  return fStepMaxProcess;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSPhysicsList::AddStepMax()
 {
@@ -290,24 +320,28 @@ void WLSPhysicsList::AddStepMax()
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
-      if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
+      if (fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())
       {
-         if (pmanager) pmanager ->AddDiscreteProcess(stepMaxProcess);
+         if (pmanager) pmanager ->AddDiscreteProcess(fStepMaxProcess);
       }
   }
 }
 
-void WLSPhysicsList::SetNbOfPhotonsCerenkov(G4int MaxNumber)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void WLSPhysicsList::SetNbOfPhotonsCerenkov(G4int maxNumber)
 {
-   opticalPhysics->SetNbOfPhotonsCerenkov(MaxNumber);
+   fOpticalPhysics->SetNbOfPhotonsCerenkov(maxNumber);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSPhysicsList::SetVerbose(G4int verbose)
 {
-   opticalPhysics->GetCerenkovProcess()->SetVerboseLevel(verbose);
-   opticalPhysics->GetScintillationProcess()->SetVerboseLevel(verbose);
-   opticalPhysics->GetAbsorptionProcess()->SetVerboseLevel(verbose);
-   opticalPhysics->GetRayleighScatteringProcess()->SetVerboseLevel(verbose);
-   opticalPhysics->GetMieHGScatteringProcess()->SetVerboseLevel(verbose);
-   opticalPhysics->GetBoundaryProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetCerenkovProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetScintillationProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetAbsorptionProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetRayleighScatteringProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetMieHGScatteringProcess()->SetVerboseLevel(verbose);
+   fOpticalPhysics->GetBoundaryProcess()->SetVerboseLevel(verbose);
 }

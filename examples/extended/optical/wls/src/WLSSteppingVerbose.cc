@@ -28,7 +28,7 @@
 /// \file optical/wls/src/WLSSteppingVerbose.cc
 /// \brief Implementation of the WLSSteppingVerbose class
 //
-
+//
 #include "G4UnitsTable.hh"
 
 #include "WLSSteppingVerbose.hh"
@@ -36,12 +36,18 @@
 
 // Print out of the steps
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSSteppingVerbose::WLSSteppingVerbose()
 {
   G4VSteppingVerbose::SetSilent(1);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSSteppingVerbose::~WLSSteppingVerbose() { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSSteppingVerbose::StepInfo()
 {
@@ -145,6 +151,8 @@ void WLSSteppingVerbose::StepInfo()
   }
   G4cout.precision(prec);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSSteppingVerbose::TrackingStarted()
 {

@@ -28,7 +28,7 @@
 /// \file optical/wls/src/WLSExtraPhysics.cc
 /// \brief Implementation of the WLSExtraPhysics class
 //
-
+//
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -39,12 +39,20 @@
 
 #include "WLSExtraPhysics.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSExtraPhysics::WLSExtraPhysics()
     : G4VPhysicsConstructor("Extra") { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 WLSExtraPhysics::~WLSExtraPhysics() { }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void WLSExtraPhysics::ConstructParticle() { }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSExtraPhysics::ConstructProcess()
 {

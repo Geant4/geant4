@@ -42,10 +42,10 @@ class WLSSteppingVerbose : public G4SteppingVerbose
   public:
 
     WLSSteppingVerbose();
-    ~WLSSteppingVerbose();
+    virtual ~WLSSteppingVerbose();
 
-    void StepInfo();
-    void TrackingStarted();
+    virtual void StepInfo();
+    virtual void TrackingStarted();
 };
 
 #endif

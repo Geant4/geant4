@@ -42,10 +42,10 @@ class WLSTrackingAction : public G4UserTrackingAction {
   public:
 
     WLSTrackingAction() { };
-    ~WLSTrackingAction() { };
+    virtual ~WLSTrackingAction() { };
 
-    void PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
+    virtual void PreUserTrackingAction(const G4Track*);
+    virtual void PostUserTrackingAction(const G4Track*);
 
 };
 

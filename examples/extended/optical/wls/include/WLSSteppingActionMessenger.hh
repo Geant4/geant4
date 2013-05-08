@@ -47,17 +47,17 @@ class WLSSteppingActionMessenger : public G4UImessenger
   public:
 
     WLSSteppingActionMessenger(WLSSteppingAction* );
-    ~WLSSteppingActionMessenger();
+    virtual ~WLSSteppingActionMessenger();
 
-    void SetNewValue(G4UIcommand* ,G4String );
+    virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-    WLSSteppingAction* steppingAction;
+    WLSSteppingAction* fSteppingAction;
 
-    G4UIdirectory*     steppingDir;
+    G4UIdirectory*     fSteppingDir;
  
-    G4UIcmdWithAnInteger* SetBounceLimitCmd;
+    G4UIcmdWithAnInteger* fSetBounceLimitCmd;
 
 };
 

@@ -47,17 +47,17 @@ class WLSEventActionMessenger: public G4UImessenger
   public:
 
     WLSEventActionMessenger(WLSEventAction*);
-    ~WLSEventActionMessenger();
+    virtual ~WLSEventActionMessenger();
 
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
 
   private:
 
-    WLSEventAction* eventAction;
+    WLSEventAction* fEventAction;
 
-    G4UIcmdWithAnInteger* setVerboseCmd;
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;
+    G4UIcmdWithAnInteger* fSetVerboseCmd;
+    G4UIcmdWithAString*   fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;
 };
 
 #endif

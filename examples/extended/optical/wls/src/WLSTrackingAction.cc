@@ -28,7 +28,7 @@
 /// \file optical/wls/src/WLSTrackingAction.cc
 /// \brief Implementation of the WLSTrackingAction class
 //
-
+//
 #include "globals.hh"
 #include "G4RunManager.hh"
 
@@ -41,6 +41,8 @@
 #include "G4TrackingManager.hh"
 
 #include "WLSTrackingAction.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
@@ -65,6 +67,8 @@ void WLSTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
   fpTrackingManager->SetUserTrackInformation(trackInformation);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {

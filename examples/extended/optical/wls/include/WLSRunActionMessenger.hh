@@ -53,18 +53,18 @@ class WLSRunActionMessenger : public G4UImessenger
   public:
 
     WLSRunActionMessenger(WLSRunAction* );
-    ~WLSRunActionMessenger();
+    virtual ~WLSRunActionMessenger();
 
-    void SetNewValue(G4UIcommand* ,G4String );
+    virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
 
-    WLSRunAction*              runAction;
+    WLSRunAction*              fRunAction;
 
-    G4UIdirectory*             RndmDir;
-    G4UIcmdWithAnInteger*      RndmSaveCmd;
-    G4UIcmdWithAString*        RndmReadCmd;
-    G4UIcmdWithABool*          SetAutoSeedCmd;
+    G4UIdirectory*             fRndmDir;
+    G4UIcmdWithAnInteger*      fRndmSaveCmd;
+    G4UIcmdWithAString*        fRndmReadCmd;
+    G4UIcmdWithABool*          fSetAutoSeedCmd;
 
 };
 
