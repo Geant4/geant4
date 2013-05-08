@@ -418,7 +418,7 @@ SampleX(G4double anXmin, G4int nSea, G4int totalSea, G4double aBeta)
 	}
 	do
 	{
-		x1 = CLHEP::RandFlat::shoot(anXmin, xMax);
+		x1 = G4RandFlat::shoot(anXmin, xMax);
 		y = std::pow(x1, alpha);
 		y *= std::pow( std::pow(1-x1-totalSea*anXmin, alpha+1) - std::pow(anXmin, alpha+1), nSea);
 		y *= std::pow(1-x1-totalSea*anXmin, aBeta+1) - std::pow(anXmin, aBeta+1);
