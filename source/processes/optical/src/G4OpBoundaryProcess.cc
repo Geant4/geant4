@@ -773,8 +773,8 @@ void G4OpBoundaryProcess::DielectricLUT()
               // Take random angles THETA and PHI, 
               // and see if below Probability - if not - Redo
               do {
-                 thetaIndex = CLHEP::RandFlat::shootInt(thetaIndexMax-1);
-                 phiIndex = CLHEP::RandFlat::shootInt(phiIndexMax-1);
+                 thetaIndex = G4RandFlat::shootInt(thetaIndexMax-1);
+                 phiIndex = G4RandFlat::shootInt(phiIndexMax-1);
                  // Find probability with the new indeces from LUT
                  AngularDistributionValue = OpticalSurface -> 
                    GetAngularDistributionValue(angleIncident,

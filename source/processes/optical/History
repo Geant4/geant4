@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th Apr.2013 P.Gumplinger (op-V09-06-00)
+              replace CLHEP::Rand*::shoot.. with G4Rand*::shoot...
+              in G4OpBoundaryProcess
+
 19th Oct.2012 G.Cosmo (op-V09-05-12)
               Corrected debug flag in G4OpBoundaryProcess.cc to be
               G4OPTICAL_DEBUG, as the one defined in GNUmakefile...
