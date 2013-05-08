@@ -59,7 +59,7 @@ public:
 
   void Initialize(const G4Material* material, 
 		  G4double maxEnergyTransfer, 
-		  G4double betaGammaSq);
+		  G4double betaGammaSq, G4double** sandiaCofs, G4int sandiaNumber);
 	            
   void     ComputeLowEnergyCof(const G4Material* material);
 
@@ -169,11 +169,11 @@ private :
 
   G4SandiaTable*  fSandia;
 
-  G4double fEnergyInterval[500];
-  G4double fA1[500]; 
-  G4double fA2[500];
-  G4double fA3[500]; 
-  G4double fA4[500];
+  G4double* fEnergyInterval;
+  G4double* fA1; 
+  G4double* fA2;
+  G4double* fA3; 
+  G4double* fA4;
 
   static
   const G4int   fMaxSplineSize ;          // Max size of output splain arrays = 500

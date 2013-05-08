@@ -174,7 +174,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       } else {
 
 	G4double neff = sn*sn;
-	loss = meanLoss*CLHEP::RandGamma::shoot(neff,1.0)/neff;
+	loss = meanLoss*G4RandGamma::shoot(neff,1.0)/neff;
       }
       //G4cout << "Gauss: " << loss << G4endl;
       return loss;

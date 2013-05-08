@@ -74,6 +74,7 @@
 
 #include "G4Poisson.hh"
 #include "globals.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -313,7 +314,7 @@ G4double G4UrbanMscModel95::ComputeCrossSectionPerAtom(
   G4double sigma;
   SetParticle(part);
 
-  Z23 = pow(AtomicNumber,2./3.);
+  Z23 = G4Pow::GetInstance()->Z23(G4lrint(AtomicNumber));
 
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy
@@ -1144,8 +1145,8 @@ G4double G4UrbanMscModel95::SampleDisplacement()
 
 G4double G4UrbanMscModel95::LatCorrelation()
 {
-  const G4double kappa = 2.5;
-  const G4double kappami1 = kappa-1.;
+  static const G4double kappa = 2.5;
+  static const G4double kappami1 = kappa-1.;
 
   G4double latcorr = 0.;
   if((currentTau >= tausmall) && !insideskin)

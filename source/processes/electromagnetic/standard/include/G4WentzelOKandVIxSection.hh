@@ -166,6 +166,7 @@ private:
   G4double gam0pcmp;
   G4double pcmp2;
 
+  static G4double ScreenRSquareElec[100];
   static G4double ScreenRSquare[100];
   static G4double FormFactor[100];
 };

@@ -18,6 +18,23 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+07 May 13: V.Ivanchenko (emstand-V09-06-32)
+- G4WentzelOKandVIxSection - fixed old problem - difference in
+    scattering for electrons and heavy particle by introduction
+    of separate arrays for screening radiuses
+
+30 April 13: V.Ivanchenko (emstand-V09-06-31)
+- G4HeatedKleinNishinaCompton, G4IonFluctuations, G4PAIModel,
+   G4PAIPhotonModel, G4UniversalFluctuation - CLHEP::Rand 
+     substituted by G4Rand (needed for MT)
+- G4PAIySection restore original algorith of cheking of
+    maxenergy transfer
+
+25 April 13: V.Ivanchenko (emstand-V09-06-30)
+- G4UrbanMscModel95, G4UrbanMscModel96 - added usage of G4Pow and 
+- G4PAIySection, G4PAIModel, G4PAIPhotonModel - return back working 
+  versions from the tag emstand-V09-06-28
+
 22 April 13: V.Ivanchenko (emstand-V09-06-29)
 - G4PAIySection, G4PAIModel, G4PAIPhotonModel - restore tag -06-23
     to allow acceptance of msc models for the reference tag

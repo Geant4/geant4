@@ -154,7 +154,7 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
   } else if(sn > 0.1) {
 
     G4double neff = sn*sn;
-    loss = meanLoss*CLHEP::RandGamma::shoot(neff,1.0)/neff;
+    loss = meanLoss*G4RandGamma::shoot(neff,1.0)/neff;
 
     // uniform distribution for very small steps
   } else {

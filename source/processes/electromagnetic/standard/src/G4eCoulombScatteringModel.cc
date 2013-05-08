@@ -121,7 +121,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   currentCouple = 0;
   cosThetaMin = cos(PolarAngleLimit());
   wokvi->Initialise(p, cosThetaMin);
-  /*    
+  /*      
   G4cout << "G4eCoulombScatteringModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
 	 << "  cos(thetaMax)= " <<  cosThetaMax
@@ -132,7 +132,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
   	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
   	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
-  G4cout << "cut0= " << cuts[0] << "  cut1= " << cuts[1] << G4endl;
+  G4cout << "cut= " << pCuts[0] << "  cut1= " << pCuts[1] << G4endl;
   */
   if(!isInitialised) {
     isInitialised = true;
