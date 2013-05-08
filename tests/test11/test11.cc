@@ -43,7 +43,7 @@ int main(int argc,char** argv) {
 
   // Set the default random engine to RanecuEngine
   CLHEP::RanecuEngine defaultEngine;
-  CLHEP::HepRandom::setTheEngine(&defaultEngine);
+  G4Random::setTheEngine(&defaultEngine);
 
   // Run manager
   G4RunManager * runManager = new G4RunManager;
@@ -72,7 +72,7 @@ int main(int argc,char** argv) {
     UImanager->ApplyCommand(command+fileName);
   }
 
-  CLHEP::HepRandom::showEngineStatus();
+  G4Random::showEngineStatus();
   delete runManager;
   return 0;
 }

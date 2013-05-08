@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(test11)
 find_package(Geant4 REQUIRED)
 include(${Geant4_USE_FILE})
+##include(UseGeant4_internal)
 
 GEANT4_EXECUTABLE(test11 test11.cc src/*.cc)
 GEANT4_EXECUTABLE(test11_hadronic_exerciser test11_hadronic_exerciser.cc)
