@@ -35,6 +35,7 @@
 #include "globals.hh"
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
 
 /// Detector construction class to define materials and geometry.
 
@@ -44,8 +45,12 @@ class B1DetectorConstruction : public G4VUserDetectorConstruction
     B1DetectorConstruction();
     virtual ~B1DetectorConstruction();
 
-  public:
     virtual G4VPhysicalVolume* Construct();
+    
+    G4LogicalVolume* GetScoringVolume() const { return fScoringVolume; }
+
+  protected:
+    G4LogicalVolume*  fScoringVolume;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

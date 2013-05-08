@@ -29,8 +29,6 @@
 /// \brief Implementation of the B1DetectorConstruction class
 
 #include "B1DetectorConstruction.hh"
-#include "B1SteppingAction.hh"
-   // use of stepping action to set the accounting volume
 
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
@@ -46,7 +44,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1DetectorConstruction::B1DetectorConstruction()
-: G4VUserDetectorConstruction()
+: G4VUserDetectorConstruction(),
+  fScoringVolume(0)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -212,13 +211,9 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
                     0,                       //copy number
                     checkOverlaps);          //overlaps checking
                 
-  // Set scoring volume to stepping action 
-  // (where we will account energy deposit)
+  // Set Shape2 as scoring volume
   //
-  B1SteppingAction* steppingAction = B1SteppingAction::Instance(); 
-  ////steppingAction->SetVolume(logicShape1);
-  steppingAction->SetVolume(logicShape2);
-
+  fScoringVolume = logicShape2;
 
   //
   //always return the physical World

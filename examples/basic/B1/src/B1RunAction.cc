@@ -30,15 +30,12 @@
 
 #include "B1RunAction.hh"
 #include "B1PrimaryGeneratorAction.hh"
-#include "B1EventAction.hh"
-#include "B1SteppingAction.hh"
-  // use of other actions 
-  // - primary generator: to get info for printing about the primary
-  // - event action: to get and reset accumulated energy sums
-  // - stepping action: to get info about accounting volume 
+#include "B1DetectorConstruction.hh"
+#include "B1Run.hh"
 
-#include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4LogicalVolume.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -46,7 +43,7 @@
 
 B1RunAction::B1RunAction()
 : G4UserRunAction()
-{
+{ 
   // add new units for dose
   // 
   const G4double milligray = 1.e-3*gray;
@@ -63,7 +60,12 @@ B1RunAction::B1RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1RunAction::~B1RunAction()
-{}
+{ ; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Run* B1RunAction::GenerateRun()
+{ return new B1Run; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,9 +75,6 @@ void B1RunAction::BeginOfRunAction(const G4Run* aRun)
 
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-    
-  //initialize event cumulative quantities
-  B1EventAction::Instance()->Reset();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,35 +84,54 @@ void B1RunAction::EndOfRunAction(const G4Run* aRun)
   G4int nofEvents = aRun->GetNumberOfEvent();
   if (nofEvents == 0) return;
   
+  const B1Run* b1Run = static_cast<const B1Run*>(aRun);
+
   // Compute dose
   //
-  G4double energySum  = B1EventAction::Instance()->GetEnergySum();
-  G4double energy2Sum = B1EventAction::Instance()->GetEnergy2Sum();
+  G4double energySum  = b1Run->GetEnergySum();
+  G4double energy2Sum = b1Run->GetEnergy2Sum();
   G4double rms = energy2Sum - energySum*energySum/nofEvents;
   if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
 
-  G4double mass = B1SteppingAction::Instance()->GetVolume()->GetMass();
+  const B1DetectorConstruction* detectorConstruction
+   = static_cast<const B1DetectorConstruction*>
+     (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  G4double mass = detectorConstruction->GetScoringVolume()->GetMass();
   G4double dose = energySum/mass;
   G4double rmsDose = rms/mass;
 
   // Run conditions
-  //
-  const G4ParticleGun* particleGun 
-    = B1PrimaryGeneratorAction::Instance()->GetParticleGun();
-  G4String particleName 
-    = particleGun->GetParticleDefinition()->GetParticleName();                       
-  G4double particleEnergy = particleGun->GetParticleEnergy();
+  //  note: There is no primary generator action object for "master"
+  //        run manager for multi-threaded mode.
+  const B1PrimaryGeneratorAction* generatorAction
+   = static_cast<const B1PrimaryGeneratorAction*>
+     (G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
+  G4String runCondition;
+  if (generatorAction)
+  {
+    const G4ParticleGun* particleGun = generatorAction->GetParticleGun();
+    runCondition += particleGun->GetParticleDefinition()->GetParticleName();                       
+    runCondition += " of ";
+    G4double particleEnergy = particleGun->GetParticleEnergy();
+    runCondition += G4BestUnit(particleEnergy,"Energy");
+  }
         
   // Print
   //  
+  if (IsMaster())
+  {
+    G4cout
+     << "\n--------------------End of Global Run-----------------------";
+  }
+  else
+  {
+    G4cout
+     << "\n--------------------End of Local Run------------------------";
+  }
   G4cout
-     << "\n--------------------End of Run------------------------------\n"
-     << " The run consists of " << nofEvents << " "<< particleName << " of "
-     <<   G4BestUnit(particleEnergy,"Energy")      
-     << "\n Dose in scoring volume " 
-     << B1SteppingAction::Instance()->GetVolume()->GetName() << " : " 
-     << G4BestUnit(dose,"Dose")
-     << " +- "                   << G4BestUnit(rmsDose,"Dose")
+     << "\n The run consists of " << nofEvents << " "<< runCondition
+     << "\n Dose in scoring volume : " 
+     << G4BestUnit(dose,"Dose") << " +- " << G4BestUnit(rmsDose,"Dose")
      << "\n------------------------------------------------------------\n"
      << G4endl;
 }

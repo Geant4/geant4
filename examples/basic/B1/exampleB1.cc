@@ -29,12 +29,14 @@
 /// \brief Main program of the B1 example
 
 #include "B1DetectorConstruction.hh"
-#include "B1PrimaryGeneratorAction.hh"
-#include "B1RunAction.hh"
-#include "B1EventAction.hh"
-#include "B1SteppingAction.hh"
+#include "B1ActionInitialization.hh"
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "QBBC.hh"
 
@@ -54,11 +56,16 @@ int main(int argc,char** argv)
 {
   // Choose the Random engine
   //
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
   // Construct the default run manager
   //
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(2);
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // Set mandatory initialization classes
   //
@@ -70,20 +77,9 @@ int main(int argc,char** argv)
   physicsList->SetVerboseLevel(1);
   runManager->SetUserInitialization(physicsList);
     
-  // Primary generator action
-  runManager->SetUserAction(new B1PrimaryGeneratorAction());
+  // User action initialization
+  runManager->SetUserInitialization(new B1ActionInitialization());
 
-  // Set user action classes
-  //
-  // Stepping action
-  runManager->SetUserAction(new B1SteppingAction());     
-
-  // Event action
-  runManager->SetUserAction(new B1EventAction());
-
-  // Run action
-  runManager->SetUserAction(new B1RunAction());
-     
   // Initialize G4 kernel
   //
   runManager->Initialize();

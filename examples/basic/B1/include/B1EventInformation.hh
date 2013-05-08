@@ -23,38 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1EventInformation.hh 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-/// \file B1RunAction.hh
-/// \brief Definition of the B1RunAction class
+/// \file B1EventInformation.hh
+/// \brief Definition of the B1EventInformation class
 
-#ifndef B1RunAction_h
-#define B1RunAction_h 1
+#ifndef B1EventInformation_h
+#define B1EventInformation_h 1
 
-#include "G4UserRunAction.hh"
+#include "G4VUserEventInformation.hh"
 #include "globals.hh"
 
-class G4Run;
-class G4LogicalVolume;
-
-/// Run action class
+/// Event information class
 ///
-/// In EndOfRunAction(), it calculates the dose in the selected volume 
-/// from the energy deposit accumulated via stepping and event actions.
-/// The computed dose is then printed on the screen.
+/// It holds data member fEnergySum for accumulating 
+/// the event energy deposit for an event.
+/// These data are then used in the run action to compute the dose.
 
-class B1RunAction : public G4UserRunAction
+class B1EventInformation : public G4VUserEventInformation
 {
   public:
-    B1RunAction();
-    virtual ~B1RunAction();
-
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    B1EventInformation();
+    virtual ~B1EventInformation();
+    
+    virtual void Print() const;
+    
+    G4double GetEnergySum() const { return fEnergySum; }
+    void AddEDep(G4double eDep) { fEnergySum += eDep; }
+     
+  private:
+    G4double  fEnergySum;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    

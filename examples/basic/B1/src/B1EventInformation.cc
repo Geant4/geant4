@@ -23,38 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1EventInformation.cc 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-/// \file B1RunAction.hh
-/// \brief Definition of the B1RunAction class
+/// \file B1EventInformation.cc
+/// \brief Implementation of the B1EventInformation class
 
-#ifndef B1RunAction_h
-#define B1RunAction_h 1
+#include "B1EventInformation.hh"
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
-
-class G4Run;
-class G4LogicalVolume;
-
-/// Run action class
-///
-/// In EndOfRunAction(), it calculates the dose in the selected volume 
-/// from the energy deposit accumulated via stepping and event actions.
-/// The computed dose is then printed on the screen.
-
-class B1RunAction : public G4UserRunAction
-{
-  public:
-    B1RunAction();
-    virtual ~B1RunAction();
-
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
-};
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B1EventInformation::B1EventInformation()
+: G4VUserEventInformation(),
+  fEnergySum(0.)
+{ ; } 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B1EventInformation::~B1EventInformation()
+{ ; } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1EventInformation::Print() const
+{  
+  G4cout << "Stored energy deposition : " << fEnergySum/MeV << " [MeV]" 
+         << G4endl;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,38 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B1RunAction.hh
-/// \brief Definition of the B1RunAction class
+/// \file B1ActionInitialization.cc
+/// \brief Implementation of the B1ActionInitialization class
 
-#ifndef B1RunAction_h
-#define B1RunAction_h 1
-
-#include "G4UserRunAction.hh"
-#include "globals.hh"
-
-class G4Run;
-class G4LogicalVolume;
-
-/// Run action class
-///
-/// In EndOfRunAction(), it calculates the dose in the selected volume 
-/// from the energy deposit accumulated via stepping and event actions.
-/// The computed dose is then printed on the screen.
-
-class B1RunAction : public G4UserRunAction
-{
-  public:
-    B1RunAction();
-    virtual ~B1RunAction();
-
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
-};
+#include "B1ActionInitialization.hh"
+#include "B1PrimaryGeneratorAction.hh"
+#include "B1RunAction.hh"
+#include "B1EventAction.hh"
+#include "B1SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B1ActionInitialization::B1ActionInitialization()
+ : G4VUserActionInitialization()
+{}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B1ActionInitialization::~B1ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1ActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new B1RunAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1ActionInitialization::Build() const
+{
+  SetUserAction(new B1PrimaryGeneratorAction);
+  SetUserAction(new B1RunAction);
+  SetUserAction(new B1EventAction);
+  SetUserAction(new B1SteppingAction);
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,38 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B1RunAction.hh
-/// \brief Definition of the B1RunAction class
+/// \file B1ActionInitialization.hh
+/// \brief Definition of the B1ActionInitialization class
 
-#ifndef B1RunAction_h
-#define B1RunAction_h 1
+#ifndef B1ActionInitialization_h
+#define B1ActionInitialization_h 1
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class G4Run;
-class G4LogicalVolume;
-
-/// Run action class
+/// Action initialization class.
 ///
-/// In EndOfRunAction(), it calculates the dose in the selected volume 
-/// from the energy deposit accumulated via stepping and event actions.
-/// The computed dose is then printed on the screen.
 
-class B1RunAction : public G4UserRunAction
+class B1ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    B1RunAction();
-    virtual ~B1RunAction();
+    B1ActionInitialization();
+    virtual ~B1ActionInitialization();
 
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    

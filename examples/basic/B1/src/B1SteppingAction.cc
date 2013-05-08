@@ -29,64 +29,54 @@
 /// \brief Implementation of the B1SteppingAction class
 
 #include "B1SteppingAction.hh"
-
+#include "B1EventInformation.hh"
 #include "B1DetectorConstruction.hh"
 
 #include "G4Step.hh"
+#include "G4Event.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B1SteppingAction* B1SteppingAction::fgInstance = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B1SteppingAction* B1SteppingAction::Instance()
-{
-// Static acces function via G4RunManager 
-
-  return fgInstance;
-}      
+#include "G4LogicalVolumeStore.hh"
+#include "G4LogicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1SteppingAction::B1SteppingAction()
 : G4UserSteppingAction(),
-  fVolume(0),
-  fEnergy(0.)
-{ 
-  fgInstance = this;
-}
+  fScoringVolume(0)
+{ ; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1SteppingAction::~B1SteppingAction()
-{ 
-  fgInstance = 0;
-}
+{ ; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1SteppingAction::UserSteppingAction(const G4Step* step)
 {
+  if (!fScoringVolume)
+  { 
+    const B1DetectorConstruction* detectorConstruction
+      = static_cast<const B1DetectorConstruction*>
+        (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    fScoringVolume = detectorConstruction->GetScoringVolume();   
+  }
+
   // get volume of the current step
   G4LogicalVolume* volume 
     = step->GetPreStepPoint()->GetTouchableHandle()
       ->GetVolume()->GetLogicalVolume();
       
   // check if we are in scoring volume
-  if (volume != fVolume ) return;
+  if (volume != fScoringVolume) return;
 
   // collect energy and track length step by step
-  G4double edep = step->GetTotalEnergyDeposit();
-  fEnergy += edep;
+  G4double eDep = step->GetTotalEnergyDeposit();
+  B1EventInformation* evInfo
+    = static_cast<B1EventInformation*>(G4RunManager::GetRunManager()
+               ->GetCurrentEvent()->GetUserInformation());
+  evInfo->AddEDep(eDep);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1SteppingAction::Reset()
-{
-  fEnergy = 0.;
-}
 

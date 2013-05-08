@@ -23,38 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1Run.cc 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-/// \file B1RunAction.hh
-/// \brief Definition of the B1RunAction class
+/// \file B1Run.cc
+/// \brief Implementation of the B1Run class
 
-#ifndef B1RunAction_h
-#define B1RunAction_h 1
+#include "B1Run.hh"
+#include "B1EventInformation.hh"
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
-
-class G4Run;
-class G4LogicalVolume;
-
-/// Run action class
-///
-/// In EndOfRunAction(), it calculates the dose in the selected volume 
-/// from the energy deposit accumulated via stepping and event actions.
-/// The computed dose is then printed on the screen.
-
-class B1RunAction : public G4UserRunAction
-{
-  public:
-    B1RunAction();
-    virtual ~B1RunAction();
-
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
-};
+#include "G4Event.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B1Run::B1Run()
+: G4Run(),
+  fEnergySum(0.), fEnergy2Sum(0.)
+{ ; } 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B1Run::~B1Run()
+{ ; } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1Run::RecordEvent(const G4Event* event)
+{  
+  B1EventInformation* evInfo
+    = static_cast<B1EventInformation*>(event->GetUserInformation());
+  G4double eDep = evInfo->GetEnergySum();
+  fEnergySum += eDep;
+  fEnergy2Sum += eDep*eDep;
+
+  G4Run::RecordEvent(event);
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1Run::Merge(const G4Run* aRun)
+{
+  const B1Run* localRun = static_cast<const B1Run*>(aRun);
+  fEnergySum += localRun->fEnergySum;
+  fEnergy2Sum += localRun->fEnergy2Sum;
+
+  G4Run::Merge(aRun); 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
