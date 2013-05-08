@@ -129,37 +129,31 @@ private:
   G4int           fMatNbOfIntervals;
   G4OrderedTable* fMatSandiaMatrix;
   G4OrderedTable* fMatSandiaMatrixPAI;
-  
-		   
+  		   
 /////////////////////////////////////////////////////////////////////
 //
-// Methods for old implementation of PAI model
-// Will be removed for the next major release
+// Methods for implementation of PAI model
+//
+/////////////////////////////////////////////////////////////////////
 
 public:  // without description
 
   G4SandiaTable(G4int);	         
 
-  inline void SandiaSwap( G4double** da,
-			  G4int i,
-			  G4int j );
+  void SandiaSwap(G4double** da, G4int i, G4int j);
 
-  void SandiaSort( G4double** da,
-		   G4int sz );
+  void SandiaSort(G4double** da, G4int sz);
 
-  G4int SandiaIntervals( G4int Z[],
-			 G4int el );
+  G4int SandiaIntervals(G4int Z[], G4int el);
 
-  G4int SandiaMixing(       G4int Z[],
-			    const G4double* fractionW,
-			    G4int el,
-			    G4int mi );
+  G4int SandiaMixing(G4int Z[], const G4double* fractionW,
+		     G4int el, G4int mi);
 
-  inline G4double GetPhotoAbsorpCof(G4int i , G4int j) const;
+  G4double GetPhotoAbsorpCof(G4int i , G4int j) const;
 
-  inline G4int GetMaxInterval() const; 
+  G4int GetMaxInterval() const; 
 
-  inline G4double** GetPointerToCof(); 
+  G4double** GetPointerToCof(); 
 
 private:
 
@@ -169,59 +163,13 @@ private:
   G4SandiaTable(G4SandiaTable &);
   G4SandiaTable & operator=(const G4SandiaTable &right);
 
-//////////////////////////////////////////////////////////////////////////
-//
-// data members for PAI model
+  // data members for PAI model
 
-private:
-		
-  G4double** fPhotoAbsorptionCof ;	// SandiaTable  for mixture
+  G4double** fPhotoAbsorptionCof;  // SandiaTable  for mixture
 
   G4int fMaxInterval ;
   G4int fVerbose;
   
-
-//
-//
-//////////////////////////////////////////////////////////////////////////
-  
 };
     
-///////////////////////////////////////////////////////////////////////
-//
-// Inline methods for PAI model, will be removed in next major release
-
-inline G4int 
-G4SandiaTable::GetMaxInterval() const { 
-  return fMaxInterval;
-}
-
-inline G4double** 
-G4SandiaTable::GetPointerToCof() 
-{ 
-  if(!fPhotoAbsorptionCof) { ComputeMatTable(); }
-  return fPhotoAbsorptionCof;
-}
-
-inline void
-G4SandiaTable::SandiaSwap( G4double** da ,
-                           G4int i,
-                           G4int j )
-{
-  G4double tmp = da[i][0] ;
-  da[i][0] = da[j][0] ;
-  da[j][0] = tmp ;
-}
-
-inline
-G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const
-{
-  return  fPhotoAbsorptionCof[i][j]*funitc[j];
-}
-
-//
-//
-////////////////////////////////////////////////////////////////////////////
-
-
 #endif 

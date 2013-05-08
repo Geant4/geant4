@@ -417,24 +417,37 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
 
   size_t numberOfMolecula = 54; 
   static const G4String name[54] = {
-    // gas
-    "NH_3",       "C_4H_10",    "CO_2",       "C_2H_6",      "C_7H_16",
-    "C_6H_14",    "CH_4",       "NO",         "N_2O",        "C_8H_18",
-    "C_5H_12",    "C_3H_8",     "H_2O-Gas", 
+    // gas 0 - 12
+    "NH_3",       "C_4H_10",    "CO_2",       "C_2H_6",      "C_7H_16",      
+    // "G4_AMMONIA", "G4_BUTANE","G4_CARBON_DIOXIDE","G4_ETHANE", "G4_N-HEPTANE"
+    "C_6H_14",    "CH_4",       "NO",         "N_2O",        "C_8H_18",      
+    // "G4_N-HEXANE" , "G4_METHANE", "x", "G4_NITROUS_OXIDE", "G4_OCTANE"
+    "C_5H_12",    "C_3H_8",     "H_2O-Gas",                        
+    // "G4_N-PENTANE", "G4_PROPANE", "G4_WATER_VAPOR"
 
-    // liquid
-    "C_3H_6O",    "C_6H_5NH_2",  "C_6H_6",    "C_4H_9OH",    "CCl_4",    
-    "C_6H_5Cl",   "CHCl_3",      "C_6H_12",   "C_6H_4Cl_2",  "C_4Cl_2H_8O", 
-    "C_2Cl_2H_4", "(C_2H_5)_2O", "C_2H_5OH",  "C_3H_5(OH)_3","C_7H_16",     
-    "C_6H_14",    "CH_3OH",      "C_6H_5NO_2","C_5H_12",     "C_3H_7OH",    
-    "C_5H_5N",    "C_8H_8",      "C_2Cl_4",   "C_7H_8",      "C_2Cl_3H",    
-    "H_2O",       "C_8H_10",
+    // liquid 13 - 39
+    "C_3H_6O",    "C_6H_5NH_2",  "C_6H_6",    "C_4H_9OH",    "CCl_4", 
+    //"G4_ACETONE","G4_ANILINE","G4_BENZENE","G4_N-BUTYL_ALCOHOL","G4_CARBON_TETRACHLORIDE"  
+    "C_6H_5Cl",   "CHCl_3",      "C_6H_12",   "C_6H_4Cl_2",  "C_4Cl_2H_8O",
+    //"G4_CHLOROBENZENE","G4_CHLOROFORM","G4_CYCLOHEXANE","G4_1,2-DICHLOROBENZENE","G4_DICHLORODIETHYL_ETHER"
+    "C_2Cl_2H_4", "(C_2H_5)_2O", "C_2H_5OH",  "C_3H_5(OH)_3","C_7H_16",
+    //"G4_1,2-DICHLOROETHANE","G4_DIETHYL_ETHER","G4_ETHYL_ALCOHOL","G4_GLYCEROL","G4_N-HEPTANE"
+    "C_6H_14",    "CH_3OH",      "C_6H_5NO_2","C_5H_12",     "C_3H_7OH",
+    //"G4_N-HEXANE","G4_METHANOL","G4_NITROBENZENE","G4_N-PENTANE","G4_N-PROPYL_ALCOHOL",  
+    "C_5H_5N",    "C_8H_8",      "C_2Cl_4",   "C_7H_8",      "C_2Cl_3H",
+    //"G4_PYRIDINE","G4_POLYSTYRENE","G4_TETRACHLOROETHYLENE","G4_TOLUENE","G4_TRICHLOROETHYLENE"
+    "H_2O",       "C_8H_10",                                                 
+    // "G4_WATER", "G4_XYLENE"
 
-    //solid
-    "C_5H_5N_5",  "C_5H_5N_5O",  "(C_6H_11NO)-nylon",  "C_25H_52", 
-    "(C_2H_4)-Polyethylene",     "(C_5H_8O-2)-Polymethil_Methacrylate",   
-    "(C_8H_8)-Polystyrene",      "A-150-tissue",       "Al_2O_3",  "CaF_2", 
-    "LiF",        "Photo_Emulsion",  "(C_2F_4)-Teflon",  "SiO_2"     
+    // solid 40 - 53
+    "C_5H_5N_5",  "C_5H_5N_5O",  "(C_6H_11NO)-nylon",  "C_25H_52",
+    // "G4_ADENINE", "G4_GUANINE", "G4_NYLON-6-6", "G4_PARAFFIN"
+    "(C_2H_4)-Polyethylene",     "(C_5H_8O_2)-Polymethil_Methacrylate",
+    // "G4_ETHYLENE", "G4_PLEXIGLASS"
+    "(C_8H_8)-Polystyrene",      "A-150-tissue",       "Al_2O_3",  "CaF_2",
+    // "G4_POLYSTYRENE", "G4_A-150_TISSUE", "G4_ALUMINUM_OXIDE", "G4_CALCIUM_FLUORIDE"
+    "LiF",        "Photo_Emulsion",  "(C_2F_4)-Teflon",  "SiO_2"
+    // "G4_LITHIUM_FLUORIDE", "G4_PHOTO_EMULSION", "G4_TEFLON", "G4_SILICON_DIOXIDE"
   } ;
     
   static const G4double meanExcitation[54] = {

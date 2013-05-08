@@ -54,7 +54,12 @@
 //                    data from ICRU Report 37 used previously
 // 26.10.11 new scheme for G4Exception  (mma)
 // 09.02.12 P.Gumplinger add ConstructNewIdealGasMaterial
-//
+// 30.04.13 M.Trocme & S.Seltzer:
+//        - Replace AddElementByWeightFraction() by AddElementByAtomCount() 
+//          as much as possible
+//        - Comment out ill-defined material GLUCOSE 
+//        - Fixed density and atom composition of  POLYCHLOROSTYRENE, 
+//          POLYVINYL_BUTYRAL, TERPHENYL
 // -------------------------------------------------------------------
 //
 // Class Description:
@@ -467,7 +472,7 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
   matIndex.push_back(-1);
   atomCount.push_back(false);
 
-  if (ncomp == 1 && Z > 0) {
+  if (1 == ncomp && Z > 0) {
     elements.push_back(Z);
     fractions.push_back(1.0);
     atomCount[nMaterials] = true;
@@ -821,20 +826,21 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 8, 0.052316);
   AddElementByWeightFraction( 9, 0.017422);
   AddElementByWeightFraction(20, 0.018378);
+  //chFormulas[nMaterials-1] = "A-150-tissue";
 
   AddMaterial("G4_ACETONE", 0.7899, 0, 64.2, 3);
-  AddElementByWeightFraction( 1, 0.104122);
-  AddElementByWeightFraction( 6, 0.620405);
-  AddElementByWeightFraction( 8, 0.275473);
+  AddElementByAtomCount("C" ,  3);
+  AddElementByAtomCount("H" ,  6);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_ACETYLENE", 0.0010967, 0, 58.2, 2, kStateGas);
-  AddElementByWeightFraction( 1, 0.077418);
-  AddElementByWeightFraction( 6, 0.922582);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  2);
 
   AddMaterial("G4_ADENINE", 1.6/*1.35*/, 0, 71.4, 3);
-  AddElementByAtomCount("H",5 );
-  AddElementByAtomCount("C",5 );
-  AddElementByAtomCount("N",5 );
+  AddElementByAtomCount("C" ,  5);
+  AddElementByAtomCount("H" ,  5);
+  AddElementByAtomCount("N" ,  5);
 
   AddMaterial("G4_ADIPOSE_TISSUE_ICRP", 0.95, 0, 63.2, 7);
   AddElementByWeightFraction( 1, 0.114);
@@ -852,14 +858,14 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(18, 0.012827);
 
   AddMaterial("G4_ALANINE", 1.42, 0, 71.9, 4);
-  AddElementByWeightFraction( 1, 0.07919 );
-  AddElementByWeightFraction( 6, 0.404439);
-  AddElementByWeightFraction( 7, 0.157213);
-  AddElementByWeightFraction( 8, 0.359159);
+  AddElementByAtomCount("C" ,  3);
+  AddElementByAtomCount("H" ,  7);
+  AddElementByAtomCount("N" ,  1);
+  AddElementByAtomCount("O" ,  2);
 
   AddMaterial("G4_ALUMINUM_OXIDE", 3.97, 0, 145.2, 2);
-  AddElementByWeightFraction( 8, 0.470749);
-  AddElementByWeightFraction(13, 0.529251);
+  AddElementByAtomCount("Al",  2);
+  AddElementByAtomCount("O" ,  3);
   chFormulas[nMaterials-1] = "Al_2O_3";
 
   AddMaterial("G4_AMBER", 1.1, 0, 63.2, 3);
@@ -868,17 +874,18 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 8, 0.105096);
 
   AddMaterial("G4_AMMONIA", 0.000826019, 0, 53.7, 2, kStateGas);
-  AddElementByWeightFraction( 1, 0.177547);
-  AddElementByWeightFraction( 7, 0.822453);
+  AddElementByAtomCount("N" ,  1);
+  AddElementByAtomCount("H" ,  3);
+  ///chFormulas[nMaterials-1] = "NH_3   ";
 
   AddMaterial("G4_ANILINE", 1.0235, 0, 66.2, 3);
-  AddElementByWeightFraction( 1, 0.075759);
-  AddElementByWeightFraction( 6, 0.773838);
-  AddElementByWeightFraction( 7, 0.150403);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" ,  7);
+  AddElementByAtomCount("N" ,  1);
 
   AddMaterial("G4_ANTHRACENE", 1.283, 0, 69.5, 2);
-  AddElementByWeightFraction( 1, 0.05655);
-  AddElementByWeightFraction( 6, 0.94345);
+  AddElementByAtomCount("C" , 14);
+  AddElementByAtomCount("H" , 10);
 
   AddMaterial("G4_B-100_BONE", 1.45, 0, 85.9, 6);
   AddElementByWeightFraction( 1, 0.065471);
@@ -894,26 +901,29 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 8, 0.167968);
 
   AddMaterial("G4_BARIUM_FLUORIDE", 4.89 ,0, 375.9, 2);
-  AddElementByWeightFraction( 9, 0.21672);
-  AddElementByWeightFraction(56, 0.78328);
+  AddElementByAtomCount("Ba",  1);
+  AddElementByAtomCount("F" ,  2);
 
   AddMaterial("G4_BARIUM_SULFATE", 4.5, 0, 285.7, 3);
-  AddElementByWeightFraction( 8,0.274212);
-  AddElementByWeightFraction(16,0.137368);
-  AddElementByWeightFraction(56,0.58842 );
+  AddElementByAtomCount("Ba",  1);
+  AddElementByAtomCount("S" ,  1);
+  AddElementByAtomCount("O" ,  4);
 
   AddMaterial("G4_BENZENE", 0.87865, 0, 63.4, 2);
-  AddElementByWeightFraction( 1, 0.077418);
-  AddElementByWeightFraction( 6, 0.922582);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" ,  6);
 
   AddMaterial("G4_BERYLLIUM_OXIDE", 3.01, 0, 93.2, 2);
-  AddElementByWeightFraction( 4, 0.36032);
-  AddElementByWeightFraction( 8, 0.63968);
+  AddElementByAtomCount("Be",  1);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_BGO", 7.13, 0, 534.1, 3);
-  AddElementByWeightFraction( 8, 0.154126);
-  AddElementByWeightFraction(32, 0.17482 );
-  AddElementByWeightFraction(83, 0.671054);
+  ///AddElementByWeightFraction( 8, 0.154126);
+  ///AddElementByWeightFraction(32, 0.17482 );
+  ///AddElementByWeightFraction(83, 0.671054);
+  AddElementByAtomCount("Bi",  4);
+  AddElementByAtomCount("Ge",  3);
+  AddElementByAtomCount("O" , 12);
 
   AddMaterial("G4_BLOOD_ICRP", 1.06, 0, 75.2, 10);
   AddElementByWeightFraction( 1, 0.102);
@@ -950,12 +960,14 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(20, 0.225);
 
   AddMaterial("G4_BORON_CARBIDE", 2.52, 0, 84.7, 2);
-  AddElementByWeightFraction( 5, 0.78261);
-  AddElementByWeightFraction( 6, 0.21739);
+  ///AddElementByWeightFraction( 5, 0.78261);
+  ///AddElementByWeightFraction( 6, 0.21739);
+  AddElementByAtomCount("B" ,  4);
+  AddElementByAtomCount("C" ,  1);
 
   AddMaterial("G4_BORON_OXIDE", 1.812, 0, 99.6, 2);
-  AddElementByWeightFraction( 5, 0.310551);
-  AddElementByWeightFraction( 8, 0.689449);
+  AddElementByAtomCount("B" ,  2);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_BRAIN_ICRP", 1.04, 0, 73.3, 9);
   AddElementByWeightFraction( 1, 0.107);
@@ -969,13 +981,13 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(19, 0.003);
 
   AddMaterial("G4_BUTANE", 0.00249343, 0, 48.3, 2, kStateGas);
-  AddElementByWeightFraction( 1, 0.173408);
-  AddElementByWeightFraction( 6, 0.826592);
+  AddElementByAtomCount("C" ,  4);
+  AddElementByAtomCount("H" , 10);
 
   AddMaterial("G4_N-BUTYL_ALCOHOL", 0.8098, 0, 59.9, 3);
-  AddElementByWeightFraction( 1, 0.135978);
-  AddElementByWeightFraction( 6, 0.648171);
-  AddElementByWeightFraction( 8, 0.215851);
+  AddElementByAtomCount("C" ,  4);
+  AddElementByAtomCount("H" , 10);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_C-552", 1.76, 0, 86.8, 5);
   AddElementByWeightFraction( 1, 0.02468 );
@@ -985,50 +997,50 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(14, 0.003973);
 
   AddMaterial("G4_CADMIUM_TELLURIDE", 6.2, 0, 539.3, 2);
-  AddElementByWeightFraction(48, 0.468355);
-  AddElementByWeightFraction(52, 0.531645);
+  AddElementByAtomCount("Cd",  1);
+  AddElementByAtomCount("Te",  1);
 
   AddMaterial("G4_CADMIUM_TUNGSTATE", 7.9, 0, 468.3, 3);
-  AddElementByWeightFraction( 8, 0.177644);
-  AddElementByWeightFraction(48, 0.312027);
-  AddElementByWeightFraction(74, 0.510329);
+  AddElementByAtomCount("Cd",  1);
+  AddElementByAtomCount("W" ,  1);
+  AddElementByAtomCount("O" ,  4);
 
   AddMaterial("G4_CALCIUM_CARBONATE", 2.8, 0, 136.4, 3);
-  AddElementByWeightFraction( 6, 0.120003);
-  AddElementByWeightFraction( 8, 0.479554);
-  AddElementByWeightFraction(20, 0.400443);
+  AddElementByAtomCount("Ca",  1);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_CALCIUM_FLUORIDE", 3.18, 0, 166., 2);
-  AddElementByWeightFraction( 9, 0.486659);
-  AddElementByWeightFraction(20, 0.513341);
+  AddElementByAtomCount("Ca",  1);
+  AddElementByAtomCount("F" ,  2);
 
   AddMaterial("G4_CALCIUM_OXIDE", 3.3, 0, 176.1, 2);
-  AddElementByWeightFraction( 8, 0.285299);
-  AddElementByWeightFraction(20, 0.714701);
+  AddElementByAtomCount("Ca",  1);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_CALCIUM_SULFATE", 2.96, 0, 152.3, 3);
-  AddElementByWeightFraction( 8, 0.470095);
-  AddElementByWeightFraction(16, 0.235497);
-  AddElementByWeightFraction(20, 0.294408);
+  AddElementByAtomCount("Ca",  1);
+  AddElementByAtomCount("S" ,  1);
+  AddElementByAtomCount("O" ,  4);
 
   AddMaterial("G4_CALCIUM_TUNGSTATE", 6.062, 0, 395., 3);
-  AddElementByWeightFraction( 8, 0.22227 );
-  AddElementByWeightFraction(20, 0.139202);
-  AddElementByWeightFraction(74, 0.638529);
+  AddElementByAtomCount("Ca",  1);
+  AddElementByAtomCount("W" ,  1);
+  AddElementByAtomCount("O" ,  4);
 
   AddMaterial("G4_CARBON_DIOXIDE", 0.00184212, 0, 85., 2, kStateGas);
-  AddElementByWeightFraction( 6, 0.272916);
-  AddElementByWeightFraction( 8, 0.727084);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("O" ,  2);
   chFormulas[nMaterials-1] = "CO_2";
 
   AddMaterial("G4_CARBON_TETRACHLORIDE", 1.594, 0, 166.3, 2);
-  AddElementByWeightFraction( 6, 0.078083);
-  AddElementByWeightFraction(17, 0.921917);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("Cl",  4);
 
   AddMaterial("G4_CELLULOSE_CELLOPHANE", 1.42, 0, 77.6, 3);
-  AddElementByWeightFraction( 1, 0.062162);
-  AddElementByWeightFraction( 6, 0.444462);
-  AddElementByWeightFraction( 8, 0.493376);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" , 10);
+  AddElementByAtomCount("O" ,  5);
 
   AddMaterial("G4_CELLULOSE_BUTYRATE", 1.2, 0, 74.6, 3);
   AddElementByWeightFraction( 1, 0.067125);
@@ -1049,22 +1061,22 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(58, 0.002001);
 
   AddMaterial("G4_CESIUM_FLUORIDE", 4.115, 0, 440.7, 2);
-  AddElementByWeightFraction( 9, 0.125069);
-  AddElementByWeightFraction(55, 0.874931);
+  AddElementByAtomCount("Cs",  1);
+  AddElementByAtomCount("F" ,  1);
 
   AddMaterial("G4_CESIUM_IODIDE", 4.51, 0, 553.1, 2);
-  AddElementByWeightFraction(53, 0.488451);
-  AddElementByWeightFraction(55, 0.511549);
+  AddElementByAtomCount("Cs",  1);
+  AddElementByAtomCount("I" ,  1);
 
   AddMaterial("G4_CHLOROBENZENE", 1.1058, 0, 89.1, 3);
-  AddElementByWeightFraction( 1, 0.044772);
-  AddElementByWeightFraction( 6, 0.640254);
-  AddElementByWeightFraction(17, 0.314974);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" ,  5);
+  AddElementByAtomCount("Cl",  1);
 
   AddMaterial("G4_CHLOROFORM", 1.4832, 0, 156., 3);
-  AddElementByWeightFraction( 1, 0.008443);
-  AddElementByWeightFraction( 6, 0.100613);
-  AddElementByWeightFraction(17, 0.890944);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("H" ,  1);
+  AddElementByAtomCount("Cl",  3);
 
   AddMaterial("G4_CONCRETE", 2.3, 0, 135.2, 10);
   AddElementByWeightFraction( 1, 0.01    );
@@ -1079,50 +1091,50 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(26, 0.014   );
 
   AddMaterial("G4_CYCLOHEXANE", 0.779, 0, 56.4, 2);
-  AddElementByWeightFraction( 1, 0.143711);
-  AddElementByWeightFraction( 6, 0.856289);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" , 12);
 
   AddMaterial("G4_1,2-DICHLOROBENZENE", 1.3048, 0, 106.5, 3);
-  AddElementByWeightFraction( 1, 0.027425);
-  AddElementByWeightFraction( 6, 0.490233);
-  AddElementByWeightFraction(17, 0.482342);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" ,  4);
+  AddElementByAtomCount("Cl",  2);
 
   AddMaterial("G4_DICHLORODIETHYL_ETHER", 1.2199, 0, 103.3, 4);
-  AddElementByWeightFraction( 1, 0.056381);
-  AddElementByWeightFraction( 6, 0.335942);
-  AddElementByWeightFraction( 8, 0.111874);
-  AddElementByWeightFraction(17, 0.495802);
+  AddElementByAtomCount("C" ,  4);
+  AddElementByAtomCount("H" ,  8);
+  AddElementByAtomCount("O" ,  1);
+  AddElementByAtomCount("Cl",  2);
 
   AddMaterial("G4_1,2-DICHLOROETHANE", 1.2351, 0, 111.9, 3);
-  AddElementByWeightFraction( 1, 0.04074 );
-  AddElementByWeightFraction( 6, 0.242746);
-  AddElementByWeightFraction(17, 0.716515);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  4);
+  AddElementByAtomCount("Cl",  2);
 
   AddMaterial("G4_DIETHYL_ETHER", 0.71378, 0, 60., 3);
-  AddElementByWeightFraction( 1, 0.135978);
-  AddElementByWeightFraction( 6, 0.648171);
-  AddElementByWeightFraction( 8, 0.215851);
+  AddElementByAtomCount("C" ,  4);
+  AddElementByAtomCount("H" , 10);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_N,N-DIMETHYL_FORMAMIDE", 0.9487, 0, 66.6, 4);
-  AddElementByWeightFraction( 1, 0.096523);
-  AddElementByWeightFraction( 6, 0.492965);
-  AddElementByWeightFraction( 7, 0.191625);
-  AddElementByWeightFraction( 8, 0.218887);
+  AddElementByAtomCount("C" ,  3);
+  AddElementByAtomCount("H" ,  7);
+  AddElementByAtomCount("N" ,  1);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_DIMETHYL_SULFOXIDE", 1.1014, 0, 98.6, 4);
-  AddElementByWeightFraction( 1, 0.077403);
-  AddElementByWeightFraction( 6, 0.307467);
-  AddElementByWeightFraction( 8, 0.204782);
-  AddElementByWeightFraction(16, 0.410348);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  6);
+  AddElementByAtomCount("O" ,  1);
+  AddElementByAtomCount("S" ,  1);
 
   AddMaterial("G4_ETHANE", 0.00125324, 0, 45.4, 2, kStateGas);
-  AddElementByWeightFraction( 1, 0.201115);
-  AddElementByWeightFraction( 6, 0.798885);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  6);
 
   AddMaterial("G4_ETHYL_ALCOHOL", 0.7893, 0, 62.9, 3);
-  AddElementByWeightFraction( 1, 0.131269);
-  AddElementByWeightFraction( 6, 0.521438);
-  AddElementByWeightFraction( 8, 0.347294);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  6);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_ETHYL_CELLULOSE", 1.13, 0, 69.3, 3);
   AddElementByWeightFraction( 1, 0.090027);
@@ -1130,8 +1142,8 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 8, 0.324791);
 
   AddMaterial("G4_ETHYLENE", 0.00117497, 0, 50.7, 2, kStateGas);
-  AddElementByWeightFraction( 1, 0.143711);
-  AddElementByWeightFraction( 6, 0.856289);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  4);
 
   AddMaterial("G4_EYE_LENS_ICRP", 1.07, 0, 73.3, 8);
   AddElementByWeightFraction( 1, 0.096);
@@ -1144,16 +1156,16 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(17, 0.001);
 
   AddMaterial("G4_FERRIC_OXIDE", 5.2, 0, 227.3, 2);
-  AddElementByWeightFraction( 8, 0.300567);
-  AddElementByWeightFraction(26, 0.699433);
+  AddElementByAtomCount("Fe",  2);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_FERROBORIDE", 7.15, 0, 261., 2);
-  AddElementByWeightFraction( 5, 0.162174);
-  AddElementByWeightFraction(26, 0.837826);
+  AddElementByAtomCount("Fe",  1);
+  AddElementByAtomCount("B" ,  1);
 
   AddMaterial("G4_FERROUS_OXIDE", 5.7, 0, 248.6, 2);
-  AddElementByWeightFraction( 8, 0.222689);
-  AddElementByWeightFraction(26, 0.777311);
+  AddElementByAtomCount("Fe",  1);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_FERROUS_SULFATE", 1.024, 0, 76.4, 7);
   AddElementByWeightFraction( 1, 0.108259);
@@ -1180,9 +1192,9 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(17, 0.339396);
 
   AddMaterial("G4_FREON-13B1", 1.5, 0, 210.5, 3);
-  AddElementByWeightFraction( 6, 0.080659);
-  AddElementByWeightFraction( 9, 0.382749);
-  AddElementByWeightFraction(35, 0.536592);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("F" ,  3);
+  AddElementByAtomCount("Br",  1);
 
   AddMaterial("G4_FREON-13I1", 1.8, 0, 293.5, 3);
   AddElementByWeightFraction( 6, 0.061309);
@@ -1190,13 +1202,13 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(53, 0.647767);
 
   AddMaterial("G4_GADOLINIUM_OXYSULFIDE", 7.44, 0, 493.3, 3);
-  AddElementByWeightFraction( 8, 0.084528);
-  AddElementByWeightFraction(16, 0.08469 );
-  AddElementByWeightFraction(64, 0.830782);
+  AddElementByAtomCount("Gd",  2);
+  AddElementByAtomCount("O" ,  2);
+  AddElementByAtomCount("S" ,  1);
 
   AddMaterial("G4_GALLIUM_ARSENIDE", 5.31, 0, 384.9, 2);
-  AddElementByWeightFraction(31, 0.482019);
-  AddElementByWeightFraction(33, 0.517981);
+  AddElementByAtomCount("Ga",  1);
+  AddElementByAtomCount("As",  1);
 
   AddMaterial("G4_GEL_PHOTO_EMULSION", 1.2914, 0, 74.8, 5);
   AddElementByWeightFraction( 1, 0.08118);
@@ -1226,92 +1238,95 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(14, 0.336553);
   AddElementByWeightFraction(20, 0.107205);
 
-  AddMaterial("G4_GLUCOSE", 1.54, 0, 77.2, 3);
-  AddElementByWeightFraction( 1, 0.071204);
-  AddElementByWeightFraction( 6, 0.363652);
-  AddElementByWeightFraction( 8, 0.565144);
+  //  AddMaterial("G4_GLUCOSE", 1.54, 0, 77.2, 3);
+  //  AddElementByWeightFraction( 1, 0.071204);
+  //  AddElementByWeightFraction( 6, 0.363652);
+  //  AddElementByWeightFraction( 8, 0.565144);
+  //  These weight fractions correspond to 0.90909 glucose + 0.09091 water 
+  //  (in mass), not pure glucose. The density used is that of pure glucose!
+  //  M.Trocme & S.Seltzer
 
   AddMaterial("G4_GLUTAMINE", 1.46, 0, 73.3, 4);
-  AddElementByWeightFraction( 1, 0.068965);
-  AddElementByWeightFraction( 6, 0.410926);
-  AddElementByWeightFraction( 7, 0.191681);
-  AddElementByWeightFraction( 8, 0.328427);
+  AddElementByAtomCount("C" ,  5);
+  AddElementByAtomCount("H" , 10);
+  AddElementByAtomCount("N" ,  2);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_GLYCEROL", 1.2613, 0, 72.6, 3);
-  AddElementByWeightFraction( 1, 0.087554);
-  AddElementByWeightFraction( 6, 0.391262);
-  AddElementByWeightFraction( 8, 0.521185);
+  AddElementByAtomCount("C" ,  3);
+  AddElementByAtomCount("H" ,  8);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_GUANINE", 2.2/*1.58*/, 0, 75. ,4);
-  AddElementByAtomCount("H",5 );
-  AddElementByAtomCount("C",5 );
-  AddElementByAtomCount("N",5 );
-  AddElementByAtomCount("O",1 );
+  AddElementByAtomCount("C" ,  5);
+  AddElementByAtomCount("H" ,  5);
+  AddElementByAtomCount("N" ,  5);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_GYPSUM", 2.32, 0, 129.7, 4);
-  AddElementByWeightFraction( 1, 0.023416);
-  AddElementByWeightFraction( 8, 0.557572);
-  AddElementByWeightFraction(16, 0.186215);
-  AddElementByWeightFraction(20, 0.232797);
+  AddElementByAtomCount("Ca",  1);
+  AddElementByAtomCount("S" ,  1);
+  AddElementByAtomCount("O" ,  6);
+  AddElementByAtomCount("H" ,  4);
 
   AddMaterial("G4_N-HEPTANE", 0.68376, 0, 54.4, 2);
-  AddElementByWeightFraction( 1, 0.160937);
-  AddElementByWeightFraction( 6, 0.839063);
+  AddElementByAtomCount("C" ,  7);
+  AddElementByAtomCount("H" , 16);
 
   AddMaterial("G4_N-HEXANE", 0.6603, 0, 54., 2);
-  AddElementByWeightFraction( 1, 0.163741);
-  AddElementByWeightFraction( 6, 0.836259);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" , 14);
 
   AddMaterial("G4_KAPTON", 1.42, 0, 79.6, 4);
-  AddElementByWeightFraction( 1, 0.026362);
-  AddElementByWeightFraction( 6, 0.691133);
-  AddElementByWeightFraction( 7, 0.07327 );
-  AddElementByWeightFraction( 8, 0.209235);
+  AddElementByAtomCount("C" , 22);
+  AddElementByAtomCount("H" , 10);
+  AddElementByAtomCount("N" ,  2);
+  AddElementByAtomCount("O" ,  5);
 
   AddMaterial("G4_LANTHANUM_OXYBROMIDE", 6.28, 0, 439.7, 3);
-  AddElementByWeightFraction( 8, 0.068138);
-  AddElementByWeightFraction(35, 0.340294);
-  AddElementByWeightFraction(57, 0.591568);
+  AddElementByAtomCount("La",  1);
+  AddElementByAtomCount("Br",  1);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_LANTHANUM_OXYSULFIDE", 5.86, 0, 421.2, 3);
-  AddElementByWeightFraction( 8, 0.0936  );
-  AddElementByWeightFraction(16, 0.093778);
-  AddElementByWeightFraction(57, 0.812622);
+  AddElementByAtomCount("La",  2);
+  AddElementByAtomCount("O" ,  2);
+  AddElementByAtomCount("S" ,  1);
 
   AddMaterial("G4_LEAD_OXIDE", 9.53, 0, 766.7, 2);
   AddElementByWeightFraction( 8, 0.071682);
   AddElementByWeightFraction(82, 0.928318);
 
   AddMaterial("G4_LITHIUM_AMIDE", 1.178, 0, 55.5, 3);
-  AddElementByWeightFraction( 1, 0.087783);
-  AddElementByWeightFraction( 3, 0.302262);
-  AddElementByWeightFraction( 7, 0.609955);
+  AddElementByAtomCount("Li",  1);
+  AddElementByAtomCount("N" ,  1);
+  AddElementByAtomCount("H" ,  2);
 
   AddMaterial("G4_LITHIUM_CARBONATE", 2.11, 0, 87.9, 3);
-  AddElementByWeightFraction( 3, 0.187871);
-  AddElementByWeightFraction( 6, 0.16255 );
-  AddElementByWeightFraction( 8, 0.649579);
+  AddElementByAtomCount("Li",  2);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_LITHIUM_FLUORIDE", 2.635, 0, 94., 2);
-  AddElementByWeightFraction( 3, 0.267585);
-  AddElementByWeightFraction( 9, 0.732415);
+  AddElementByAtomCount("Li",  1);
+  AddElementByAtomCount("F" ,  1);
 
   AddMaterial("G4_LITHIUM_HYDRIDE", 0.82, 0, 36.5, 2);
-  AddElementByWeightFraction( 1, 0.126797);
-  AddElementByWeightFraction( 3, 0.873203);
+  AddElementByAtomCount("Li",  1);
+  AddElementByAtomCount("H" ,  1);
 
   AddMaterial("G4_LITHIUM_IODIDE", 3.494, 0, 485.1, 2);
-  AddElementByWeightFraction( 3, 0.051858);
-  AddElementByWeightFraction(53, 0.948142);
+  AddElementByAtomCount("Li",  1);
+  AddElementByAtomCount("I" ,  1);
 
   AddMaterial("G4_LITHIUM_OXIDE", 2.013, 0, 73.6, 2);
-  AddElementByWeightFraction( 3, 0.46457);
-  AddElementByWeightFraction( 8, 0.53543);
+  AddElementByAtomCount("Li",  2);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_LITHIUM_TETRABORATE", 2.44, 0, 94.6, 3);
-  AddElementByWeightFraction( 3, 0.082085);
-  AddElementByWeightFraction( 5, 0.25568 );
-  AddElementByWeightFraction( 8, 0.662235);
+  AddElementByAtomCount("Li",  2);
+  AddElementByAtomCount("B" ,  4);
+  AddElementByAtomCount("O" ,  7);
 
   //Adult Lung congested
   AddMaterial("G4_LUNG_ICRP", 1.04, 0, 75.3, 9);
@@ -1333,35 +1348,35 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(20, 0.002883);
 
   AddMaterial("G4_MAGNESIUM_CARBONATE", 2.958, 0, 118., 3);
-  AddElementByWeightFraction( 6, 0.142455);
-  AddElementByWeightFraction( 8, 0.569278);
-  AddElementByWeightFraction(12, 0.288267);
+  AddElementByAtomCount("Mg",  1);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_MAGNESIUM_FLUORIDE", 3.0, 0, 134.3, 2);
-  AddElementByWeightFraction( 9, 0.609883);
-  AddElementByWeightFraction(12, 0.390117);
+  AddElementByAtomCount("Mg",  1);
+  AddElementByAtomCount("F" ,  2);
 
   AddMaterial("G4_MAGNESIUM_OXIDE", 3.58, 0, 143.8, 2);
-  AddElementByWeightFraction( 8, 0.396964);
-  AddElementByWeightFraction(12, 0.603036);
+  AddElementByAtomCount("Mg",  1);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_MAGNESIUM_TETRABORATE", 2.53, 0, 108.3, 3);
-  AddElementByWeightFraction( 5, 0.240837);
-  AddElementByWeightFraction( 8, 0.62379);
-  AddElementByWeightFraction(12, 0.135373);
+  AddElementByAtomCount("Mg",  1);
+  AddElementByAtomCount("B" ,  4);
+  AddElementByAtomCount("O" ,  7);
 
   AddMaterial("G4_MERCURIC_IODIDE", 6.36, 0, 684.5, 2);
-  AddElementByWeightFraction(53, 0.55856);
-  AddElementByWeightFraction(80, 0.44144);
+  AddElementByAtomCount("Hg",  1);
+  AddElementByAtomCount("I" ,  2);
 
   AddMaterial("G4_METHANE", 0.000667151, 0, 41.7, 2, kStateGas);
-  AddElementByWeightFraction( 1, 0.251306);
-  AddElementByWeightFraction( 6, 0.748694);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("H" ,  4);
 
   AddMaterial("G4_METHANOL", 0.7914, 0, 67.6, 3);
-  AddElementByWeightFraction( 1, 0.125822);
-  AddElementByWeightFraction( 6, 0.374852);
-  AddElementByWeightFraction( 8, 0.499326);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("H" ,  4);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_MIX_D_WAX", 0.99, 0, 60.9, 5);
   AddElementByWeightFraction( 1, 0.13404 );
@@ -1413,18 +1428,18 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 8, 0.742522);
 
   AddMaterial("G4_NAPHTHALENE", 1.145, 0, 68.4, 2);
-  AddElementByWeightFraction( 1, 0.062909);
-  AddElementByWeightFraction( 6, 0.937091);
+  AddElementByAtomCount("C" , 10);
+  AddElementByAtomCount("H" ,  8);
 
   AddMaterial("G4_NITROBENZENE", 1.19867, 0, 75.8, 4);
-  AddElementByWeightFraction( 1, 0.040935);
-  AddElementByWeightFraction( 6, 0.585374);
-  AddElementByWeightFraction( 7, 0.113773);
-  AddElementByWeightFraction( 8, 0.259918);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" ,  5);
+  AddElementByAtomCount("N" ,  1);
+  AddElementByAtomCount("O" ,  2);
 
   AddMaterial("G4_NITROUS_OXIDE", 0.00183094, 0, 84.9, 2, kStateGas);
-  AddElementByWeightFraction( 7, 0.636483);
-  AddElementByWeightFraction( 8, 0.363517);
+  AddElementByAtomCount("N" ,  2);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_NYLON-8062", 1.08, 0, 64.3, 4);
   AddElementByWeightFraction( 1, 0.103509);
@@ -1433,10 +1448,10 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 8, 0.148539);
 
   AddMaterial("G4_NYLON-6-6", 1.14, 0, 63.9, 4);
-  AddElementByWeightFraction( 1, 0.097976);
-  AddElementByWeightFraction( 6, 0.636856);
-  AddElementByWeightFraction( 7, 0.123779);
-  AddElementByWeightFraction( 8, 0.141389);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" , 11);
+  AddElementByAtomCount("N" ,  1);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_NYLON-6-10", 1.14, 0, 63.2, 4);
   AddElementByWeightFraction( 1, 0.107062);
@@ -1451,16 +1466,16 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 8, 0.087289);
 
   AddMaterial("G4_OCTANE", 0.7026, 0, 54.7, 2);
-  AddElementByWeightFraction( 1, 0.158821);
-  AddElementByWeightFraction( 6, 0.841179);
+  AddElementByAtomCount("C" ,  8);
+  AddElementByAtomCount("H" , 18);
 
   AddMaterial("G4_PARAFFIN", 0.93, 0, 55.9, 2);
-  AddElementByWeightFraction( 1, 0.148605);
-  AddElementByWeightFraction( 6, 0.851395);
+  AddElementByAtomCount("C" , 25);
+  AddElementByAtomCount("H" , 52);
 
   AddMaterial("G4_N-PENTANE", 0.6262, 0, 53.6, 2);
-  AddElementByWeightFraction( 1, 0.167635);
-  AddElementByWeightFraction (6, 0.832365);
+  AddElementByAtomCount("C" ,  5);
+  AddElementByAtomCount("H" , 12);
 
   AddMaterial("G4_PHOTO_EMULSION", 3.815, 0, 331., 8);
   AddElementByWeightFraction( 1, 0.0141  );
@@ -1471,130 +1486,150 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(35, 0.349103);
   AddElementByWeightFraction(47, 0.474105);
   AddElementByWeightFraction(53, 0.00312 );
+  // chFormulas[nMaterials-1] = "Photo_Emulsion";
 
   AddMaterial("G4_PLASTIC_SC_VINYLTOLUENE", 1.032, 0, 64.7, 2);
-  AddElementByWeightFraction( 1, 0.085);
-  AddElementByWeightFraction( 6, 0.915);
+  // AddElementByWeightFraction( 1, 0.085);
+  // AddElementByWeightFraction( 6, 0.915);
+  // Watch out! These weight fractions do not correspond to pure PVT 
+  // (PolyVinylToluene, C_9H_10) but to an unknown mixture...
+  // M.Trocme & S.Seltzer
+  AddElementByAtomCount("C" ,  9);
+  AddElementByAtomCount("H" , 10);
 
   AddMaterial("G4_PLUTONIUM_DIOXIDE", 11.46, 0, 746.5, 2);
-  AddElementByWeightFraction( 8, 0.118055);
-  AddElementByWeightFraction(94, 0.881945);
+  AddElementByAtomCount("Pu",  1);
+  AddElementByAtomCount("O" ,  2);
 
   AddMaterial("G4_POLYACRYLONITRILE", 1.17, 0, 69.6, 3);
-  AddElementByWeightFraction( 1, 0.056983);
-  AddElementByWeightFraction( 6, 0.679056);
-  AddElementByWeightFraction( 7, 0.263962);
+  AddElementByAtomCount("C" ,  3);
+  AddElementByAtomCount("H" ,  3);
+  AddElementByAtomCount("N" ,  1);
 
   AddMaterial("G4_POLYCARBONATE", 1.2, 0, 73.1, 3);
-  AddElementByWeightFraction( 1, 0.055491);
-  AddElementByWeightFraction( 6, 0.755751);
-  AddElementByWeightFraction( 8, 0.188758);
+  AddElementByAtomCount("C" , 16);
+  AddElementByAtomCount("H" , 14);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_POLYCHLOROSTYRENE", 1.3, 0, 81.7, 3);
-  AddElementByWeightFraction( 1, 0.061869);
-  AddElementByWeightFraction( 6, 0.696325);
-  AddElementByWeightFraction(17, 0.241806);
+  //  AddElementByWeightFraction( 1, 0.061869);
+  //  AddElementByWeightFraction( 6, 0.696325);
+  //  AddElementByWeightFraction(17, 0.241806);
+  //  These weight fractions correspond to C_17H_18Cl_2 which is not 
+  //  POLYCHLOROSTYRENE. POLYCHLOROSTYRENE is C_8H_7Cl!
+  //  M.Trocme & S.Seltzer
+  AddElementByAtomCount("C" ,  8);
+  AddElementByAtomCount("H" ,  7);
+  AddElementByAtomCount("Cl",  1);
 
   AddMaterial("G4_POLYETHYLENE", 0.94, 0, 57.4, 2);
-  AddElementByWeightFraction( 1, 0.143711);
-  AddElementByWeightFraction( 6, 0.856289);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("H" ,  2);
   chFormulas[nMaterials-1] = "(C_2H_4)_N-Polyethylene";
 
   AddMaterial("G4_MYLAR", 1.4, 0, 78.7, 3);
-  AddElementByWeightFraction( 1, 0.041959);
-  AddElementByWeightFraction( 6, 0.625017);
-  AddElementByWeightFraction( 8, 0.333025);
+  AddElementByAtomCount("C" , 10);
+  AddElementByAtomCount("H" ,  8);
+  AddElementByAtomCount("O" ,  4);
 
   AddMaterial("G4_PLEXIGLASS", 1.19, 0, 74., 3);
-  AddElementByWeightFraction( 1, 0.080538);
-  AddElementByWeightFraction( 6, 0.599848);
-  AddElementByWeightFraction( 8, 0.319614);
+  AddElementByAtomCount("C" ,  5);
+  AddElementByAtomCount("H" ,  8);
+  AddElementByAtomCount("O" ,  2);
 
   AddMaterial("G4_POLYOXYMETHYLENE", 1.425 ,0, 77.4, 3);
-  AddElementByWeightFraction( 1, 0.067135);
-  AddElementByWeightFraction( 6, 0.400017);
-  AddElementByWeightFraction( 8, 0.532848);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("H" ,  2);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_POLYPROPYLENE", 0.9, 0, 56.5, 2);
-  AddElementByWeightFraction( 1, 0.143711);
-  AddElementByWeightFraction( 6, 0.856289);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  4);
   chFormulas[nMaterials-1] = "(C_2H_4)_N-Polypropylene";
 
   AddMaterial("G4_POLYSTYRENE", 1.06, 0, 68.7, 2);
-  AddElementByWeightFraction( 1, 0.077418);
-  AddElementByWeightFraction( 6, 0.922582);
+  AddElementByAtomCount("C" ,  8);
+  AddElementByAtomCount("H" ,  8);
 
   AddMaterial("G4_TEFLON", 2.2, 0, 99.1, 2);
-  AddElementByWeightFraction( 6, 0.240183);
-  AddElementByWeightFraction( 9, 0.759817);
+  ///AddElementByWeightFraction( 6, 0.240183);
+  ///AddElementByWeightFraction( 9, 0.759817);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("F" ,  4);
 
   AddMaterial("G4_POLYTRIFLUOROCHLOROETHYLENE", 2.1, 0, 120.7, 3);
   // correct chemical name Polychlorotrifluoroethylene [CF2CClF]n, IvantchenkoA.
-  AddElementByWeightFraction( 6, 0.20625 );
-  AddElementByWeightFraction( 9, 0.489354);
-  AddElementByWeightFraction(17, 0.304395);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("F" ,  3);
+  AddElementByAtomCount("Cl",  1);
 
   AddMaterial("G4_POLYVINYL_ACETATE", 1.19, 0, 73.7, 3);
-  AddElementByWeightFraction( 1, 0.070245);
-  AddElementByWeightFraction( 6, 0.558066);
-  AddElementByWeightFraction( 8, 0.371689);
+  AddElementByAtomCount("C" ,  4);
+  AddElementByAtomCount("H" ,  6);
+  AddElementByAtomCount("O" ,  2);
 
   AddMaterial("G4_POLYVINYL_ALCOHOL", 1.3, 0, 69.7, 3);
-  AddElementByWeightFraction( 1, 0.091517);
-  AddElementByWeightFraction( 6, 0.545298);
-  AddElementByWeightFraction( 8, 0.363185);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  4);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_POLYVINYL_BUTYRAL", 1.12, 0, 67.2, 3);
-  AddElementByWeightFraction( 1, 0.092802);
-  AddElementByWeightFraction( 6, 0.680561);
-  AddElementByWeightFraction( 8, 0.226637);
+  //  AddElementByWeightFraction( 1, 0.092802);
+  //  AddElementByWeightFraction( 6, 0.680561);
+  //  AddElementByWeightFraction( 8, 0.226637);
+  //  These weight fractions correspond to C_8H_13O_2 which is not 
+  //  POLYVINYL_BUTYRAL. POLYVINYL_BUTYRAL is C_8H_14O_2!
+  //  M.Trocme & S.Seltzer
+  AddElementByAtomCount("C" ,  8);
+  AddElementByAtomCount("H" , 14);
+  AddElementByAtomCount("O" ,  2);
 
   AddMaterial("G4_POLYVINYL_CHLORIDE", 1.3, 0, 108.2, 3);
-  AddElementByWeightFraction( 1, 0.04838);
-  AddElementByWeightFraction( 6, 0.38436);
-  AddElementByWeightFraction(17, 0.56726);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  3);
+  AddElementByAtomCount("Cl",  1);
 
   AddMaterial("G4_POLYVINYLIDENE_CHLORIDE", 1.7, 0, 134.3, 3);
-  AddElementByWeightFraction( 1, 0.020793);
-  AddElementByWeightFraction( 6, 0.247793);
-  AddElementByWeightFraction(17, 0.731413);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  2);
+  AddElementByAtomCount("Cl",  2);
 
   AddMaterial("G4_POLYVINYLIDENE_FLUORIDE", 1.76, 0, 88.8, 3);
-  AddElementByWeightFraction( 1, 0.03148 );
-  AddElementByWeightFraction( 6, 0.375141);
-  AddElementByWeightFraction( 9, 0.593379);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  2);
+  AddElementByAtomCount("F" ,  2);
 
   AddMaterial("G4_POLYVINYL_PYRROLIDONE", 1.25, 0, 67.7, 4);
-  AddElementByWeightFraction( 1, 0.081616);
-  AddElementByWeightFraction( 6, 0.648407);
-  AddElementByWeightFraction( 7, 0.126024);
-  AddElementByWeightFraction( 8, 0.143953);
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" ,  9);
+  AddElementByAtomCount("N" ,  1);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_POTASSIUM_IODIDE", 3.13, 0, 431.9, 2);
-  AddElementByWeightFraction(19, 0.235528);
-  AddElementByWeightFraction(53, 0.764472);
+  AddElementByAtomCount("K" ,  1);
+  AddElementByAtomCount("I" ,  1);
 
   AddMaterial("G4_POTASSIUM_OXIDE", 2.32, 0, 189.9, 2);
-  AddElementByWeightFraction( 8, 0.169852);
-  AddElementByWeightFraction(19, 0.830148);
+  AddElementByAtomCount("K" ,  2);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_PROPANE", 0.00187939, 0, 47.1, 2, kStateGas);
-  AddElementByWeightFraction( 1, 0.182855);
-  AddElementByWeightFraction( 6, 0.817145);
+  AddElementByAtomCount("C" ,  3);
+  AddElementByAtomCount("H" ,  8);
 
   AddMaterial("G4_lPROPANE", 0.43, 0, 52., 2);
-  AddElementByWeightFraction( 1, 0.182855);
-  AddElementByWeightFraction( 6, 0.817145);
+  AddElementByAtomCount("C" ,  3);
+  AddElementByAtomCount("H" ,  8);
 
   AddMaterial("G4_N-PROPYL_ALCOHOL", 0.8035, 0, 61.1, 3);
-  AddElementByWeightFraction( 1, 0.134173);
-  AddElementByWeightFraction( 6, 0.599595);
-  AddElementByWeightFraction( 8, 0.266232);
+  AddElementByAtomCount("C" ,  3);
+  AddElementByAtomCount("H" ,  8);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_PYRIDINE", 0.9819, 0, 66.2, 3);
-  AddElementByWeightFraction( 1, 0.06371 );
-  AddElementByWeightFraction( 6, 0.759217);
-  AddElementByWeightFraction( 7, 0.177073);
+  AddElementByAtomCount("C" ,  5);
+  AddElementByAtomCount("H" ,  5);
+  AddElementByAtomCount("N" ,  1);
 
   AddMaterial("G4_RUBBER_BUTYL", 0.92, 0, 56.5, 2);
   AddElementByWeightFraction( 1, 0.143711);
@@ -1610,17 +1645,17 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(17, 0.400434);
 
   AddMaterial("G4_SILICON_DIOXIDE", 2.32, 0, 139.2, 2);
-  AddElementByWeightFraction( 8, 0.532565);
-  AddElementByWeightFraction(14, 0.467435);
+  AddElementByAtomCount("Si",  1);
+  AddElementByAtomCount("O" ,  2);
   chFormulas[nMaterials-1] = "SiO_2";
 
   AddMaterial("G4_SILVER_BROMIDE", 6.473, 0, 486.6, 2);
-  AddElementByWeightFraction(35, 0.425537);
-  AddElementByWeightFraction(47, 0.574463);
+  AddElementByAtomCount("Ag",  1);
+  AddElementByAtomCount("Br",  1);
 
   AddMaterial("G4_SILVER_CHLORIDE", 5.56, 0, 398.4, 2);
-  AddElementByWeightFraction(17, 0.247368);
-  AddElementByWeightFraction(47, 0.752632);
+  AddElementByAtomCount("Ag",  1);
+  AddElementByAtomCount("Cl",  1);
 
   AddMaterial("G4_SILVER_HALIDES", 6.47, 0, 487.1, 3);
   AddElementByWeightFraction(35, 0.422895);
@@ -1628,8 +1663,8 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(53, 0.003357);
 
   AddMaterial("G4_SILVER_IODIDE", 6.01, 0, 543.5, 2);
-  AddElementByWeightFraction(47, 0.459458);
-  AddElementByWeightFraction(53, 0.540542);
+  AddElementByAtomCount("Ag",  1);
+  AddElementByAtomCount("I" ,  1);
 
   AddMaterial("G4_SKIN_ICRP", 1.09, 0, 72.7, 9);
   AddElementByWeightFraction( 1, 0.100);
@@ -1643,35 +1678,40 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(19, 0.001);
 
   AddMaterial("G4_SODIUM_CARBONATE", 2.532, 0, 125., 3);
-  AddElementByWeightFraction( 6, 0.113323);
-  AddElementByWeightFraction( 8, 0.452861);
-  AddElementByWeightFraction(11, 0.433815);
+  AddElementByAtomCount("Na",  2);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_SODIUM_IODIDE", 3.667, 0, 452., 2);
-  AddElementByWeightFraction(11, 0.153373);
-  AddElementByWeightFraction(53, 0.846627);
+  AddElementByAtomCount("Na",  1);
+  AddElementByAtomCount("I" ,  1);
 
   AddMaterial("G4_SODIUM_MONOXIDE", 2.27, 0, 148.8, 2);
-  AddElementByWeightFraction( 8, 0.258143);
-  AddElementByWeightFraction(11, 0.741857);
+  AddElementByAtomCount("Na",  2);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_SODIUM_NITRATE", 2.261, 0, 114.6, 3);
-  AddElementByWeightFraction( 7, 0.164795);
-  AddElementByWeightFraction( 8, 0.56472 );
-  AddElementByWeightFraction(11, 0.270485);
+  AddElementByAtomCount("Na",  1);
+  AddElementByAtomCount("N" ,  1);
+  AddElementByAtomCount("O" ,  3);
 
   AddMaterial("G4_STILBENE", 0.9707, 0, 67.7, 2);
-  AddElementByWeightFraction( 1, 0.067101);
-  AddElementByWeightFraction( 6, 0.932899);
+  AddElementByAtomCount("C" , 14);
+  AddElementByAtomCount("H" , 12);
 
   AddMaterial("G4_SUCROSE", 1.5805, 0, 77.5, 3);
-  AddElementByWeightFraction( 1, 0.064779);
-  AddElementByWeightFraction( 6, 0.42107);
-  AddElementByWeightFraction( 8, 0.514151);
+  AddElementByAtomCount("C" , 12);
+  AddElementByAtomCount("H" , 22);
+  AddElementByAtomCount("O" , 11);
 
-  AddMaterial("G4_TERPHENYL", 1.234, 0, 71.7, 2);
-  AddElementByWeightFraction( 1, 0.044543);
-  AddElementByWeightFraction( 6, 0.955457);
+  AddMaterial("G4_TERPHENYL", 1.24 /*1.234*/, 0, 71.7, 2);
+  //  AddElementByWeightFraction( 1, 0.044543);
+  //  AddElementByWeightFraction( 6, 0.955457);
+  //  These weight fractions correspond to C_18H_10 which is not TERPHENYL. 
+  //  TERPHENYL is C_18H_14! The current density is 1.24 g/cm3
+  //  M.Trocme & S.Seltzer
+  AddElementByAtomCount("C" , 18);
+  AddElementByAtomCount("H" , 14);
 
   AddMaterial("G4_TESTIS_ICRP", 1.04, 0, 75., 9);
   AddElementByWeightFraction( 1, 0.106);
@@ -1685,12 +1725,12 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(19, 0.002);
 
   AddMaterial("G4_TETRACHLOROETHYLENE", 1.625, 0, 159.2, 2);
-  AddElementByWeightFraction( 6, 0.144856);
-  AddElementByWeightFraction(17, 0.855144);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("Cl",  4);
 
   AddMaterial("G4_THALLIUM_CHLORIDE", 7.004, 0, 690.3, 2);
-  AddElementByWeightFraction(17, 0.147822);
-  AddElementByWeightFraction(81, 0.852178);
+  AddElementByAtomCount("Tl",  1);
+  AddElementByAtomCount("Cl",  1);
 
   // TISSUE_SOFT_MALE ICRU-44/46 (1989)
   AddMaterial("G4_TISSUE_SOFT_ICRP", 1.03, 0, 72.3, 9);
@@ -1724,51 +1764,51 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 8, 0.293366);
 
   AddMaterial("G4_TITANIUM_DIOXIDE", 4.26, 0, 179.5, 2);
-  AddElementByWeightFraction( 8, 0.400592);
-  AddElementByWeightFraction(22, 0.599408);
+  AddElementByAtomCount("Ti",  1);
+  AddElementByAtomCount("O" ,  2);
 
   AddMaterial("G4_TOLUENE", 0.8669, 0, 62.5, 2);
-  AddElementByWeightFraction( 1, 0.08751);
-  AddElementByWeightFraction( 6, 0.91249);
+  AddElementByAtomCount("C" ,  7);
+  AddElementByAtomCount("H" ,  8);
 
   AddMaterial("G4_TRICHLOROETHYLENE", 1.46, 0, 148.1, 3);
-  AddElementByWeightFraction( 1, 0.007671);
-  AddElementByWeightFraction( 6, 0.182831);
-  AddElementByWeightFraction(17, 0.809498);
+  AddElementByAtomCount("C" ,  2);
+  AddElementByAtomCount("H" ,  1);
+  AddElementByAtomCount("Cl",  3);
 
   AddMaterial("G4_TRIETHYL_PHOSPHATE", 1.07, 0, 81.2, 4);
-  AddElementByWeightFraction( 1, 0.082998);
-  AddElementByWeightFraction( 6, 0.395628);
-  AddElementByWeightFraction( 8, 0.351334);
-  AddElementByWeightFraction(15, 0.17004 );
+  AddElementByAtomCount("C" ,  6);
+  AddElementByAtomCount("H" , 15);
+  AddElementByAtomCount("O" ,  4);
+  AddElementByAtomCount("P" ,  1);
 
   AddMaterial("G4_TUNGSTEN_HEXAFLUORIDE", 2.4, 0, 354.4, 2);
-  AddElementByWeightFraction( 9, 0.382723);
-  AddElementByWeightFraction(74, 0.617277);
+  AddElementByAtomCount("W" ,  1);
+  AddElementByAtomCount("F" ,  6);
 
   AddMaterial("G4_URANIUM_DICARBIDE", 11.28, 0, 752., 2);
-  AddElementByWeightFraction( 6, 0.091669);
-  AddElementByWeightFraction(92, 0.908331);
+  AddElementByAtomCount("U" ,  1);
+  AddElementByAtomCount("C" ,  2);
 
   AddMaterial("G4_URANIUM_MONOCARBIDE", 13.63, 0, 862., 2);
-  AddElementByWeightFraction( 6, 0.048036);
-  AddElementByWeightFraction(92, 0.951964);
+  AddElementByAtomCount("U" ,  1);
+  AddElementByAtomCount("C" ,  1);
 
   AddMaterial("G4_URANIUM_OXIDE", 10.96, 0, 720.6, 2);
-  AddElementByWeightFraction( 8, 0.118502);
-  AddElementByWeightFraction(92, 0.881498);
+  AddElementByAtomCount("U" ,  1);
+  AddElementByAtomCount("O" ,  2);
 
   AddMaterial("G4_UREA", 1.323, 0, 72.8, 4);
-  AddElementByWeightFraction( 1, 0.067131);
-  AddElementByWeightFraction( 6, 0.199999);
-  AddElementByWeightFraction( 7, 0.466459);
-  AddElementByWeightFraction( 8, 0.266411);
+  AddElementByAtomCount("C" ,  1);
+  AddElementByAtomCount("H" ,  4);
+  AddElementByAtomCount("N" ,  2);
+  AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_VALINE", 1.23, 0, 67.7, 4);
-  AddElementByWeightFraction( 1, 0.094641);
-  AddElementByWeightFraction( 6, 0.512645);
-  AddElementByWeightFraction( 7, 0.119565);
-  AddElementByWeightFraction( 8, 0.27315 );
+  AddElementByAtomCount("C" ,  5);
+  AddElementByAtomCount("H" , 11);
+  AddElementByAtomCount("N" ,  1);
+  AddElementByAtomCount("O" ,  2);
 
   AddMaterial("G4_VITON", 1.8, 0, 98.6, 3);
   AddElementByWeightFraction( 1, 0.009417);
@@ -1776,18 +1816,18 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 9, 0.710028);
 
   AddMaterial("G4_WATER", 1.0,0, 78., 2);
-  AddElementByAtomCount("H", 2);
-  AddElementByAtomCount("O", 1);
+  AddElementByAtomCount("H" ,  2);
+  AddElementByAtomCount("O" ,  1);
   chFormulas[nMaterials-1] = "H_2O";
 
   AddMaterial("G4_WATER_VAPOR", 0.000756182, 0, 71.6, 2, kStateGas);
-  AddElementByAtomCount("H", 2);
-  AddElementByAtomCount("O", 1);
+  AddElementByAtomCount("H" ,  2);
+  AddElementByAtomCount("O" ,  1);
   chFormulas[nMaterials-1] = "H_2O-Gas";
 
   AddMaterial("G4_XYLENE", 0.87, 0, 61.8, 2);
-  AddElementByWeightFraction( 1, 0.094935);
-  AddElementByWeightFraction( 6, 0.905065);
+  AddElementByAtomCount("C" ,  8);
+  AddElementByAtomCount("H" , 10);
 
   AddMaterial("G4_GRAPHITE", 2.21, 6, 78.);
   chFormulas[nMaterials-1] = "Graphite";

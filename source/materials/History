@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-05-13 V.Ivanchenko (materials-V09-06-11)
+- G4NistMaterialBuilder, G4IonisParamMat - updated NIST material 
+  parameters according to the review of  M.Trocme & S.Seltzer:
+   - replaced AddElementByWeightFraction() by AddElementByAtomCount() 
+     as much as possible;
+   - comment out ill-defined material G4_GLUCOSE; 
+   - Fixed density and atom composition of G4_POLYCHLOROSTYRENE, 
+     G4_POLYVINYL_BUTYRAL, G4_TERPHENYL
+- G4SandiaTable - only removed some lines which are commented
+
+25-04-13 V.Ivanchenko (materials-V09-06-10)
+- G4SandiaTable - moved all inline methods to .cc file
+
 22-03-13 V.Ivanchenko (materials-V09-06-09)
 - G4Element, G4Material, G4IonisParamElm, G4IonisParamMat, 
   G4SandiaTable - use "static const G4double" for const parameters 
