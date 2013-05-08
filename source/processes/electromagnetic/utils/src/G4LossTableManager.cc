@@ -820,8 +820,8 @@ G4VEnergyLossProcess* G4LossTableManager::SlaveBuildTables(
   //	   << aParticle->GetParticleName() << G4endl;
   //    return 0;
   //  }
-  G4int nSubRegions = 0;
-  if(em) { em->NumberOfSubCutoffRegions(); }
+  //G4int nSubRegions = 0;
+  //if(em) { em->NumberOfSubCutoffRegions(); }
 
   //  if (1 < verbose) {
   //    G4cout << "G4LossTableManager::BuildTables() start to build range tables"
@@ -868,13 +868,14 @@ G4VEnergyLossProcess* G4LossTableManager::SlaveBuildTables(
     p = loss_list[i];
     p->SetIonisation(false);
     //    p->SetLambdaTable(p->BuildLambdaTable(fRestricted));
-    if (0 < nSubRegions) {
+
+    //if (0 < nSubRegions) {
       //      dedx = p->BuildDEDXTable(fSubRestricted);
       //      p->SetDEDXTable(dedx,fSubRestricted);
       //      listSub.push_back(dedx);
       //      p->SetSubLambdaTable(p->BuildLambdaTable(fSubRestricted));
-      if(p != em) em->AddCollaborativeProcess(p);
-    }
+    //  if(p != em) em->AddCollaborativeProcess(p);
+    //}
     //    if(buildCSDARange) { 
     //      dedx = p->BuildDEDXTable(fTotal);
     //      p->SetDEDXTable(dedx,fTotal);

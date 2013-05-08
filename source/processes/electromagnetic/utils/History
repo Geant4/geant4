@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 April 13: V.Ivant (emutils-V09-06-10)
+- G4ElectronIonPair - fixed typo
+
+30 April 13: V.Ivant (emutils-V09-06-09)
+- G4ElectronIonPair - CLHEP::RandGamma substituted by G4RandGamma
+- G4LossTableManager - fixed Coverity report (disable sub-cutoff
+    for MT temporary)
+
 04 April 13: V.Ivant (emutils-V09-06-08)
 - G4VEnergyLossProcess, G4VEmProcess - clean up filling of 
     secondary particles to particle change, use AddSecondary
