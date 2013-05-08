@@ -23,35 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: $
 // Author:  Dennis Wright (SLAC)
-// Date:    28 January 2013
+// Date:    19 March 2013
 //
-// Description: pure virtual base class for two-body final state angular
-//              distributions in Bertini-style cascade
+// Description: class containing numerically integrated angular distributions
+//              in the CM for the n p -> n p reaction
 //
-// 20130221  M. Kelsey -- Bug fix: theName should not be a reference,
-//		but a local copy.
-// 20130308  M. Kelsey -- Add access to name string for diagnostic utilities
 
-#ifndef G4VTwoBodyAngDst_h
-#define G4VTwoBodyAngDst_h 1
+#ifndef G4NP2NPAngDst_h
+#define G4NP2NPAngDst_h 1
 
-#include "globals.hh"
+#include "G4NumIntTwoBodyAngDst.hh"
 
-class G4VTwoBodyAngDst {
+
+class G4NP2NPAngDst : public G4NumIntTwoBodyAngDst<11,19> {
 public:
-  G4VTwoBodyAngDst(const G4String& name, G4int verbose=0);
-  virtual ~G4VTwoBodyAngDst() {;}
-  
-  virtual G4double GetCosTheta(const G4double& ekin, const G4double& pcm) const = 0;
-  
-  virtual void setVerboseLevel(G4int verbose = 0) { verboseLevel = verbose; }
-  virtual const G4String& GetName() const { return theName; }
+  G4NP2NPAngDst(G4int verbose = 0);
+  virtual ~G4NP2NPAngDst() {;}
+};
 
-protected:
-  G4String theName;
-  G4int verboseLevel;
-};        
-
-#endif	/* G4VTwoBodyAngDst_h */
+#endif

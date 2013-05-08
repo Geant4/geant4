@@ -40,6 +40,7 @@
 class G4VTwoBodyAngDst;
 class G4GamP2NPipAngDst;
 class G4GamP2PPi0AngDst;
+class G4NP2NPAngDst;
 class G4NuclNuclAngDst;
 class G4PiNInelasticAngDst;
 class G4HadNElastic1AngDst;
@@ -73,6 +74,7 @@ private:
   // Generators for various initial/final state combinations
   G4GamP2NPipAngDst* gp_npip;		// gamma p -> n pi+
   G4GamP2PPi0AngDst* gp_ppi0;		// gamma p -> p pi0
+  G4NP2NPAngDst* npAngDst;              // np and pn elastic
   G4NuclNuclAngDst* nnAngDst;		// N N and Y N elastic and inelastic
   G4PiNInelasticAngDst* qxAngDst;	// pi N charge/strangeness exchange
   G4HadNElastic1AngDst* hn1AngDst;	// pi+p and related elastic scattering

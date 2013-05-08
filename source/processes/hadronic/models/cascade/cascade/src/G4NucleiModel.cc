@@ -839,145 +839,146 @@ generateParticleFate(G4CascadParticle& cparticle,
     outgoing_cparticles.push_back(cparticle);
 
     if (verboseLevel > 2) G4cout << " next zone \n" << cparticle << G4endl;
-  } else {			// there are possible interactions
-    if (verboseLevel > 1)
-      G4cout << " processing " << npart-1 << " possible interactions" << G4endl;
+    return;
+  }	// if (npart == 1)
 
-    G4ThreeVector old_position = cparticle.getPosition();
-    G4InuclElementaryParticle& bullet = cparticle.getParticle();
-    G4bool no_interaction = true;
-    G4int zone = cparticle.getCurrentZone();
+  if (verboseLevel > 1)
+    G4cout << " processing " << npart-1 << " possible interactions" << G4endl;
+  
+  G4ThreeVector old_position = cparticle.getPosition();
+  G4InuclElementaryParticle& bullet = cparticle.getParticle();
+  G4bool no_interaction = true;
+  G4int zone = cparticle.getCurrentZone();
+  
+  for (G4int i=0; i<npart-1; i++) {	// Last item is a total-path placeholder
+    if (i > 0) cparticle.updatePosition(old_position); 
     
-    for (G4int i=0; i<npart-1; i++) {	// Last item is a total-path placeholder
-      if (i > 0) cparticle.updatePosition(old_position); 
-      
-      G4InuclElementaryParticle& target = thePartners[i].first; 
-
-      if (verboseLevel > 3) {
-	if (target.quasi_deutron()) G4cout << " try absorption: ";
-	G4cout << " target " << target.type() << " bullet " << bullet.type()
-	       << G4endl;
-      }
-
-      EPCoutput.reset();
-      theEPCollider->collide(&bullet, &target, EPCoutput);
-
-      // If collision failed, exit loop over partners
-      if (EPCoutput.numberOfOutgoingParticles() == 0) break;
-
-      if (verboseLevel > 2) {
-	EPCoutput.printCollisionOutput();
+    G4InuclElementaryParticle& target = thePartners[i].first; 
+    
+    if (verboseLevel > 3) {
+      if (target.quasi_deutron()) G4cout << " try absorption: ";
+      G4cout << " target " << target.type() << " bullet " << bullet.type()
+	     << G4endl;
+    }
+    
+    EPCoutput.reset();
+    theEPCollider->collide(&bullet, &target, EPCoutput);
+    
+    // If collision failed, exit loop over partners
+    if (EPCoutput.numberOfOutgoingParticles() == 0) break;
+    
+    if (verboseLevel > 2) {
+      EPCoutput.printCollisionOutput();
 #ifdef G4CASCADE_CHECK_ECONS
-	balance.collide(&bullet, &target, EPCoutput);
-	balance.okay();		// Do checks, but ignore result
+      balance.collide(&bullet, &target, EPCoutput);
+      balance.okay();		// Do checks, but ignore result
 #endif
-      }
-
-      // Get list of outgoing particles for evaluation
-      std::vector<G4InuclElementaryParticle>& outgoing_particles = 
-	EPCoutput.getOutgoingParticles();
-      
-      if (!passFermi(outgoing_particles, zone)) continue; // Interaction fails
-
-      // Trailing effect: reject interaction at previously hit nucleon
-      cparticle.propagateAlongThePath(thePartners[i].second);
-      G4ThreeVector new_position = cparticle.getPosition();
-
-      if (!passTrailing(new_position)) continue;
-      collisionPts.push_back(new_position);
-
-      // Sort particles according to beta (fastest first)
-      std::sort(outgoing_particles.begin(), outgoing_particles.end(),
-                G4ParticleLargerBeta() );
-
-      if (verboseLevel > 2)
-	G4cout << " adding " << outgoing_particles.size()
-	       << " output particles" << G4endl;
-
-      // NOTE:  Embedded temporary is optimized away (no copying gets done)
-      G4int nextGen = cparticle.getGeneration()+1;
-      for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
-	outgoing_cparticles.push_back(G4CascadParticle(outgoing_particles[ip],
-						       new_position, zone,
-						       0.0, nextGen));
-      }
-      
-      no_interaction = false;
-      current_nucl1 = 0;
-      current_nucl2 = 0;
-      
+    }
+    
+    // Get list of outgoing particles for evaluation
+    std::vector<G4InuclElementaryParticle>& outgoing_particles = 
+      EPCoutput.getOutgoingParticles();
+    
+    if (!passFermi(outgoing_particles, zone)) continue; // Interaction fails
+    
+    // Trailing effect: reject interaction at previously hit nucleon
+    cparticle.propagateAlongThePath(thePartners[i].second);
+    const G4ThreeVector& new_position = cparticle.getPosition();
+    
+    if (!passTrailing(new_position)) continue;
+    collisionPts.push_back(new_position);
+    
+    // Sort particles according to beta (fastest first)
+    std::sort(outgoing_particles.begin(), outgoing_particles.end(),
+	      G4ParticleLargerBeta() );
+    
+    if (verboseLevel > 2)
+      G4cout << " adding " << outgoing_particles.size()
+	     << " output particles" << G4endl;
+    
+    // NOTE:  Embedded temporary is optimized away (no copying gets done)
+    G4int nextGen = cparticle.getGeneration()+1;
+    for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) { 
+      outgoing_cparticles.push_back(G4CascadParticle(outgoing_particles[ip],
+						     new_position, zone,
+						     0.0, nextGen));
+    }
+    
+    no_interaction = false;
+    current_nucl1 = 0;
+    current_nucl2 = 0;
+    
 #ifdef G4CASCADE_DEBUG_CHARGE
-      {
-	G4double out_charge = 0.0;
-	
-	for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
-	  out_charge += outgoing_particles[ip].getCharge();
-	
-	G4cout << " multiplicity " << outgoing_particles.size()
-	       << " bul type " << bullet.type()
-	       << " targ type " << target.type()
-	       << "\n initial charge "
-	       << bullet.getCharge() + target.getCharge() 
-	       << " out charge " << out_charge << G4endl;  
-      }
+    {
+      G4double out_charge = 0.0;
+      
+      for (G4int ip = 0; ip < G4int(outgoing_particles.size()); ip++) 
+	out_charge += outgoing_particles[ip].getCharge();
+      
+      G4cout << " multiplicity " << outgoing_particles.size()
+	     << " bul type " << bullet.type()
+	     << " targ type " << target.type()
+	     << "\n initial charge "
+	     << bullet.getCharge() + target.getCharge() 
+	     << " out charge " << out_charge << G4endl;  
+    }
 #endif
-      
-      if (verboseLevel > 2)
-	G4cout << " partner type " << target.type() << G4endl;
-      
-      if (target.nucleon()) {
-	current_nucl1 = target.type();
-      } else {
-	if (verboseLevel > 2) G4cout << " good absorption " << G4endl;
-	current_nucl1 = (target.type() - 100) / 10;
-	current_nucl2 = target.type() - 100 - 10 * current_nucl1;
-      }   
-      
-      if (current_nucl1 == 1) {
-	if (verboseLevel > 3) G4cout << " decrement proton count" << G4endl;
-	protonNumberCurrent--;
-      } else {
-	if (verboseLevel > 3) G4cout << " decrement neutron count" << G4endl;
-	neutronNumberCurrent--;
-      } 
-      
-      if (current_nucl2 == 1) {
-	if (verboseLevel > 3) G4cout << " decrement proton count" << G4endl;
-	protonNumberCurrent--;
-      } else if (current_nucl2 == 2) {
-	if (verboseLevel > 3) G4cout << " decrement neutron count" << G4endl;
-	neutronNumberCurrent--;
-      }
-      
-      break;
-    }		// loop over partners
     
-    if (no_interaction) { 		// still no interactions
-      if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
-
-      // For conservation checking (below), get particle before updating
-      static G4ThreadLocal G4InuclElementaryParticle *prescatCP_G4MT_TLS_ = 0;
-      if (!prescatCP_G4MT_TLS_)
-	prescatCP_G4MT_TLS_ = new G4InuclElementaryParticle;
-      G4InuclElementaryParticle &prescatCP = *prescatCP_G4MT_TLS_;	// Avoid memory churn
-      prescatCP = cparticle.getParticle();
-
-      // Last "partner" is just a total-path placeholder
-      cparticle.updatePosition(old_position); 
-      cparticle.propagateAlongThePath(thePartners[npart-1].second);
-      cparticle.incrementCurrentPath(thePartners[npart-1].second);
-      boundaryTransition(cparticle);
-      outgoing_cparticles.push_back(cparticle);
-
-      // Check conservation for simple scattering (ignore target nucleus!)
+    if (verboseLevel > 2)
+      G4cout << " partner type " << target.type() << G4endl;
+    
+    if (target.nucleon()) {
+      current_nucl1 = target.type();
+    } else {
+      if (verboseLevel > 2) G4cout << " good absorption " << G4endl;
+      current_nucl1 = (target.type() - 100) / 10;
+      current_nucl2 = target.type() - 100 - 10 * current_nucl1;
+    }   
+    
+    if (current_nucl1 == 1) {
+      if (verboseLevel > 3) G4cout << " decrement proton count" << G4endl;
+      protonNumberCurrent--;
+    } else {
+      if (verboseLevel > 3) G4cout << " decrement neutron count" << G4endl;
+      neutronNumberCurrent--;
+    } 
+    
+    if (current_nucl2 == 1) {
+      if (verboseLevel > 3) G4cout << " decrement proton count" << G4endl;
+      protonNumberCurrent--;
+    } else if (current_nucl2 == 2) {
+      if (verboseLevel > 3) G4cout << " decrement neutron count" << G4endl;
+      neutronNumberCurrent--;
+    }
+    
+    break;
+  }		// loop over partners
+  
+  if (no_interaction) { 		// still no interactions
+    if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
+    
+    // For conservation checking (below), get particle before updating
+    static G4ThreadLocal G4InuclElementaryParticle *prescatCP_G4MT_TLS_ = 0;
+    if (!prescatCP_G4MT_TLS_)
+      prescatCP_G4MT_TLS_ = new G4InuclElementaryParticle;
+    G4InuclElementaryParticle &prescatCP = *prescatCP_G4MT_TLS_;	// Avoid memory churn
+    prescatCP = cparticle.getParticle();
+    
+    // Last "partner" is just a total-path placeholder
+    cparticle.updatePosition(old_position); 
+    cparticle.propagateAlongThePath(thePartners[npart-1].second);
+    cparticle.incrementCurrentPath(thePartners[npart-1].second);
+    boundaryTransition(cparticle);
+    outgoing_cparticles.push_back(cparticle);
+    
+    // Check conservation for simple scattering (ignore target nucleus!)
 #ifdef G4CASCADE_CHECK_ECONS
-      if (verboseLevel > 2) {
-	balance.collide(&prescatCP, 0, outgoing_cparticles);
-	balance.okay();		// Report violations, but don't act on them
-      }
+    if (verboseLevel > 2) {
+      balance.collide(&prescatCP, 0, outgoing_cparticles);
+      balance.okay();		// Report violations, but don't act on them
+    }
 #endif
-    }	// if (no_interaction)
-  }	// if (npart == 1) [else]
+  }	// if (no_interaction)
 
   return;
 }

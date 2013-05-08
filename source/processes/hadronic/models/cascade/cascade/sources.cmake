@@ -159,6 +159,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4KaonHypSampler.hh
         G4LorentzConvertor.hh
         G4MultiBodyMomentumDist.hh
+	G4NP2NPAngDst.hh
         G4NonEquilibriumEvaporator.hh
         G4NuclNucl3BodyMomDst.hh
         G4NuclNucl4BodyMomDst.hh
@@ -254,6 +255,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4KaonHypSampler.cc
         G4LorentzConvertor.cc
         G4MultiBodyMomentumDist.cc
+	G4NP2NPAngDst.cc
         G4NonEquilibriumEvaporator.cc
         G4NuclNucl3BodyMomDst.cc
         G4NuclNucl4BodyMomDst.cc

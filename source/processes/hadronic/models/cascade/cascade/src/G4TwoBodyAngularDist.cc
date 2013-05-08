@@ -36,6 +36,7 @@
 #include "G4GamP2NPipAngDst.hh"
 #include "G4GamP2PPi0AngDst.hh"
 #include "G4GammaNuclAngDst.hh"
+#include "G4NP2NPAngDst.hh"
 #include "G4HadNElastic1AngDst.hh"
 #include "G4HadNElastic2AngDst.hh"
 #include "G4InuclParticleNames.hh"
@@ -50,9 +51,10 @@ const G4TwoBodyAngularDist G4TwoBodyAngularDist::theInstance;
 
 G4TwoBodyAngularDist::G4TwoBodyAngularDist()
   : gp_npip(new G4GamP2NPipAngDst), gp_ppi0(new G4GamP2PPi0AngDst),
-    nnAngDst(new G4NuclNuclAngDst), qxAngDst(new G4PiNInelasticAngDst),
-    hn1AngDst(new G4HadNElastic1AngDst), hn2AngDst(new G4HadNElastic2AngDst),
-    gnAngDst(new G4GammaNuclAngDst) {;}
+    npAngDst(new G4NP2NPAngDst), nnAngDst(new G4NuclNuclAngDst),
+    qxAngDst(new G4PiNInelasticAngDst), hn1AngDst(new G4HadNElastic1AngDst),
+    hn2AngDst(new G4HadNElastic2AngDst), gnAngDst(new G4GammaNuclAngDst)
+{;}
 
 G4TwoBodyAngularDist::~G4TwoBodyAngularDist() {
   delete gp_npip;
@@ -62,6 +64,7 @@ G4TwoBodyAngularDist::~G4TwoBodyAngularDist() {
   delete hn1AngDst;
   delete hn2AngDst;
   delete gnAngDst;
+  delete npAngDst;
 }
 
 
@@ -79,6 +82,7 @@ void G4TwoBodyAngularDist::passVerbose(G4int verbose) {
   if (hn1AngDst) hn1AngDst->setVerboseLevel(verbose);
   if (hn2AngDst) hn2AngDst->setVerboseLevel(verbose);
   if (gnAngDst)  gnAngDst->setVerboseLevel(verbose);
+  if (npAngDst) npAngDst->setVerboseLevel(verbose);
 }
 
 
@@ -98,8 +102,11 @@ G4TwoBodyAngularDist::ChooseDist(G4int is, G4int fs, G4int kw) const {
     return gp_npip;
   } 
 
+  // np and pn elastic
+  if (is == pro*neu) return npAngDst;
+
     // nucleon-nucleon or hyperon-nucleon
-  if (is == pro*pro || is == pro*neu || is == neu*neu ||
+  if (is == pro*pro || is == neu*neu ||
       is == pro*lam || is == pro*sp  || is == pro*s0  ||
       is == pro*sm  || is == pro*xi0 || is == pro*xim ||
       is == pro*om  ||
