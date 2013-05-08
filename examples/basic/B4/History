@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24/04/13 M. Asai (exampleB4-V09-06-04)
+- Recover GNUmakefiles.
+
 23/04/13 I. Hrivnacova (exampleB4-V09-06-03)
 - Use G4Random::setTheEngine instead of CLHEP::HepRandom in main 
   (needed for MT)
