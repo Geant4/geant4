@@ -39,6 +39,8 @@
 #include "G4Text.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void UVA_VisAction::Draw() {
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
   if (pVisManager) {
@@ -59,3 +61,6 @@ void UVA_VisAction::Draw() {
 
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

@@ -38,6 +38,8 @@
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 PerspectiveVisActionMessenger::PerspectiveVisActionMessenger
 (PerspectiveVisAction* PVA):
   G4UImessenger(),
@@ -45,7 +47,6 @@ PerspectiveVisActionMessenger::PerspectiveVisActionMessenger
   fpDirectory(0),
   fpCommandOS(0),
   fpCommandScene(0)
-  
 {
   G4bool omitable;
 
@@ -68,12 +69,16 @@ PerspectiveVisActionMessenger::PerspectiveVisActionMessenger
   fpCommandScene -> SetCandidates("room-and-chair");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 PerspectiveVisActionMessenger::~PerspectiveVisActionMessenger ()
 {
   delete fpCommandScene;
   delete fpCommandOS;
   delete fpDirectory;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PerspectiveVisActionMessenger::SetNewValue
 (G4UIcommand* command, G4String newValue)
@@ -90,3 +95,6 @@ void PerspectiveVisActionMessenger::SetNewValue
 
   G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/rebuild");
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

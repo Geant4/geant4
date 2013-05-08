@@ -16,6 +16,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24th April 2013  Gabriele Cosmo (exVisualization-V09-06-01)
+- Retagged. No change in contents...
+
+27th March 2013  John Allison (exVisualization-V09-06-00)
+- Incorporated exam-ext-vis-persp-V09-06-02,
+  exam-ext-vis-standalone-V09-06-01 and exam-ext-vis-UVA-V09-06-01.
+  o Added separators between functions.
+  o Replaced physics list QGSP_BIC_EMY with FTFP_BERT.
+
 17th November 2012  Ivana Hrivnacova (exVisualization-V09-05-01)
 - Improved .README
      

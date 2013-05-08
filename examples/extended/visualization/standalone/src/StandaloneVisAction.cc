@@ -38,6 +38,8 @@
 #include "G4SubtractionSolid.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void StandaloneVisAction::Draw() {
   G4VVisManager* pVisManager = G4VVisManager::GetConcreteInstance();
   if (pVisManager) {
@@ -68,3 +70,5 @@ void StandaloneVisAction::Draw() {
     delete pSubtracted;
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

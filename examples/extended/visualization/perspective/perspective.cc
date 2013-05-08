@@ -28,6 +28,10 @@
 //
 //
 // $Id$
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
 #include "G4VisExecutive.hh"
@@ -37,6 +41,8 @@
 #include "G4SystemOfUnits.hh"
 
 #include "PerspectiveVisAction.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -59,3 +65,6 @@ int main(int argc,char** argv) {
   delete ui;
   delete visManager;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
