@@ -23,30 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE03/include/RE03WorkerInitialization.hh
-/// \brief Definition of the RE03WorkerInitialization class
+/// \file runAndEvent/RE03/src/RE03ActionInitialization.cc
+/// \brief Implementation of the RE03ActionInitialization class
 //
 //
-// $Id: RE03WorkerInitialization.hh 66780 2013-01-12 14:56:35Z gcosmo $
+// $Id: RE03ActionInitialization.cc 66780 2013-01-12 14:56:35Z gcosmo $
 //
 
-#ifndef RE03WorkerInitialization_h
-#define RE03WorkerInitialization_h 1
+#include "RE03ActionInitialization.hh"
+#include "RE03PrimaryGeneratorAction.hh"
 
-#include "G4UserWorkerInitialization.hh"
-#include "globals.hh"
+RE03ActionInitialization::RE03ActionInitialization()
+{;} 
 
-class RE03WorkerInitialization : public G4UserWorkerInitialization
+RE03ActionInitialization::~RE03ActionInitialization()
+{;}
+
+void RE03ActionInitialization::Build() const
 {
-  public:
-    RE03WorkerInitialization();    
-    virtual ~RE03WorkerInitialization();
-
-  public:
-    virtual void WorkerStart() const;
+  SetUserAction(new RE03PrimaryGeneratorAction);
+}
  
-};
-
-#endif
-
-

@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 02, 2013 M. Asai (exampleRE03-V09-06-03)
+- Migrate to G4VUserActionInitalization so that it works
+  for both sequential and multi-threaded modes.
+
+May 01, 2013 M. Asai (exampleRE03-V09-06-02)
+- Fully migrated to the latest API.
+
 Apr 17, 2013 M. Asai (exampleRE03-V09-06-01)
 - Preparation for ref-04 API
 
