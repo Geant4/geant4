@@ -51,22 +51,22 @@ class F05Field : public G4ElectroMagneticField
 public:
 
   F05Field();
-  ~F05Field();
+  virtual ~F05Field();
 
   /// DoesFieldChangeEnergy() returns true.
-  G4bool DoesFieldChangeEnergy() const { return true; };
+  virtual G4bool DoesFieldChangeEnergy() const { return true; };
 
   /// GetFieldValue() returns the field value at a given point[].
   /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
   /// point[] is in global coordinates: x,y,z,t.
-  void GetFieldValue( const G4double Point[4],  G4double* Bfield ) const;
+  virtual void GetFieldValue(const G4double Point[4], G4double* Bfield) const;
 
 private:
 
   G4EqEMFieldWithSpin*    fEquation;
   G4MagIntegratorStepper* fStepper;
   G4ChordFinder*          fChordFinder;
-  G4PropagatorInField*    fieldPropagator;
+  G4PropagatorInField*    fFieldPropagator;
 
 };
 

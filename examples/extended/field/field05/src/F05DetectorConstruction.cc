@@ -59,20 +59,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05DetectorConstruction::F05DetectorConstruction()
- : Vacuum(0), field(0)
+ : fVacuum(0), fWorldSizeXY(0), fWorldSizeZ(0), 
+   fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0), fField(0)
 {
   // materials
   DefineMaterials();
 
   // ensure the global field is initialized
-  field = new F05Field();
+  fField = new F05Field();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05DetectorConstruction::~F05DetectorConstruction()
 {
-  delete field;
+  delete fField;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -81,7 +82,7 @@ void F05DetectorConstruction::DefineMaterials()
 {
   G4NistManager* nistMan = G4NistManager::Instance();
 
-  Vacuum = nistMan->FindOrBuildMaterial("G4_Galactic");
+  fVacuum = nistMan->FindOrBuildMaterial("G4_Galactic");
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
@@ -90,42 +91,42 @@ void F05DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* F05DetectorConstruction::Construct()
 {
-  //     
+  //
   // World
   //
 
-  WorldSizeXY = 20.0*m;
-  WorldSizeZ  =  1.0*mm;
+  fWorldSizeXY = 20.0*m;
+  fWorldSizeZ  =  1.0*mm;
 
-  solidWorld = new G4Box("World",                            //its name
-                   WorldSizeXY/2,WorldSizeXY/2,WorldSizeZ/2);//its size
-                         
-  logicWorld = new G4LogicalVolume(solidWorld,          //its solid
-                                   Vacuum,              //its material
-                                   "World");            //its name
-                                   
-  physiWorld = new G4PVPlacement(0,                     //no rotation
-                                 G4ThreeVector(),       //at (0,0,0)
-                                 logicWorld,            //its logical volume
-                                 "World",               //its name
-                                 0,                     //its mother  volume
-                                 false,                 //no boolean operation
-                                 0);                    //copy number
+  fSolidWorld = new G4Box("World",                               //its name
+                   fWorldSizeXY/2,fWorldSizeXY/2,fWorldSizeZ/2); //its size
+ 
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,        //its solid
+                                    fVacuum,            //its material
+                                    "World");           //its name
+ 
+  fPhysiWorld = new G4PVPlacement(0,                    //no rotation
+                                  G4ThreeVector(),      //at (0,0,0)
+                                  fLogicWorld,          //its logical volume
+                                  "World",              //its name
+                                  0,                    //its mother  volume
+                                  false,                //no boolean operation
+                                  0);                   //copy number
   
   G4UserLimits* stepLimit;
-  stepLimit = new  G4UserLimits(5*mm);
+  stepLimit = new G4UserLimits(5*mm);
 
-  logicWorld->SetUserLimits(stepLimit);
+  fLogicWorld->SetUserLimits(stepLimit);
  
-  //                                        
+  //
   // Visualization attributes
   //
-  // logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
+  // fLogicWorld->SetVisAttributes (G4VisAttributes::Invisible);
 
   //
   //always return the physical World
   //
-  return physiWorld;
+  return fPhysiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

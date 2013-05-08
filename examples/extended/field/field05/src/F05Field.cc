@@ -75,13 +75,13 @@ F05Field::F05Field() : G4ElectroMagneticField()
   G4TransportationManager* fTransportManager =
          G4TransportationManager::GetTransportationManager();
 
-  fieldPropagator = fTransportManager->GetPropagatorInField();
+  fFieldPropagator = fTransportManager->GetPropagatorInField();
 
   G4double epsMin            = 2.5e-7*mm;
   G4double epsMax            = 0.05*mm;
  
-  fieldPropagator->SetMinimumEpsilonStep(epsMin);
-  fieldPropagator->SetMaximumEpsilonStep(epsMax);
+  fFieldPropagator->SetMinimumEpsilonStep(epsMin);
+  fFieldPropagator->SetMaximumEpsilonStep(epsMax);
  
   fieldMgr->SetChordFinder(fChordFinder);
 }

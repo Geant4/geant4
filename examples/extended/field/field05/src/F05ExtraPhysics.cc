@@ -28,7 +28,7 @@
 /// \file field/field05/src/F05ExtraPhysics.cc
 /// \brief Implementation of the F05ExtraPhysics class
 //
-
+//
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -39,12 +39,20 @@
 
 #include "F05ExtraPhysics.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F05ExtraPhysics::F05ExtraPhysics() 
     : G4VPhysicsConstructor("Extra") {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F05ExtraPhysics::~F05ExtraPhysics() {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F05ExtraPhysics::ConstructParticle() {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05ExtraPhysics::ConstructProcess()
 {

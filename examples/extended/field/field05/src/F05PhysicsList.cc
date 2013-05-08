@@ -28,7 +28,7 @@
 /// \file field/field05/src/F05PhysicsList.cc
 /// \brief Implementation of the F05PhysicsList class
 //
-
+//
 #include "F05PhysicsList.hh"
 
 #include "F05ExtraPhysics.hh"
@@ -47,14 +47,19 @@
 #include "G4MuonDecayChannelWithSpin.hh"
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F05PhysicsList::F05PhysicsList() : G4VModularPhysicsList() 
 {
     RegisterPhysics(new G4DecayPhysics());
     RegisterPhysics(new F05ExtraPhysics());
 }
 
-F05PhysicsList::~F05PhysicsList()
-{;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F05PhysicsList::~F05PhysicsList() {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05PhysicsList::ConstructParticle()
 {
@@ -74,6 +79,8 @@ void F05PhysicsList::ConstructParticle()
                             G4MuonRadiativeDecayChannelWithSpin("mu-",0.014));
     G4MuonMinus::MuonMinusDefinition() -> SetDecayTable(MuonMinusDecayTable);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05PhysicsList::ConstructProcess()
 {
@@ -136,6 +143,8 @@ void F05PhysicsList::ConstructProcess()
     }
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F05PhysicsList::SetCuts()
 {

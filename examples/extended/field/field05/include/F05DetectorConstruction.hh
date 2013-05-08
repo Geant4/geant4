@@ -53,24 +53,24 @@ class F05DetectorConstruction : public G4VUserDetectorConstruction
   public:
  
     F05DetectorConstruction();
-   ~F05DetectorConstruction();
+    virtual ~F05DetectorConstruction();
 
   public:
  
-     G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
 
   private:
  
-     G4Material*        Vacuum;
+     G4Material*        fVacuum;
 
-     G4double           WorldSizeXY;
-     G4double           WorldSizeZ;
+     G4double           fWorldSizeXY;
+     G4double           fWorldSizeZ;
 
-     G4Box*             solidWorld;    //pointer to the solid World
-     G4LogicalVolume*   logicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* physiWorld;    //pointer to the physical World
+     G4Box*             fSolidWorld;    //pointer to the solid World
+     G4LogicalVolume*   fLogicWorld;    //pointer to the logical World
+     G4VPhysicalVolume* fPhysiWorld;    //pointer to the physical World
 
-     F05Field* field;
+     F05Field* fField;
 
   private:
  

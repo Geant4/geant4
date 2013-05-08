@@ -47,7 +47,7 @@ public:
   F05SteppingAction(void);
   virtual ~F05SteppingAction();
 
-  void UserSteppingAction(const G4Step*);
+  virtual void UserSteppingAction(const G4Step*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

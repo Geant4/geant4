@@ -55,11 +55,11 @@ class F05SteppingVerbose : public G4SteppingVerbose
   public:   
 
     F05SteppingVerbose();
-   ~F05SteppingVerbose();
+    virtual ~F05SteppingVerbose();
       // Constructor/Destructor
 
-    void StepInfo();
-    void TrackingStarted();
+    virtual void StepInfo();
+    virtual void TrackingStarted();
 
 };
 
