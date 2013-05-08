@@ -44,7 +44,7 @@ class G4QMDNucleus : public G4QMDSystem
 {
    public:
       G4QMDNucleus();
-      ~G4QMDNucleus();
+      //virtual ~G4QMDNucleus();
 
       G4LorentzVector Get4Momentum();
 
@@ -74,9 +74,9 @@ class G4QMDNucleus : public G4QMDSystem
 
       G4double potentialEnergy;
       G4double excitationEnergy;
-      G4double bindingEnergy;
+      //G4double bindingEnergy;
 
-      G4double kineticEnergyPerNucleon;
+      //G4double kineticEnergyPerNucleon;
       //G4double bindingEnergyPerNucleon;
       //G4double potentialEnergyPerNucleon;
 };

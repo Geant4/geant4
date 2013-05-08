@@ -46,7 +46,7 @@ class G4QMDSystem
 {
    public:
       G4QMDSystem();
-      ~G4QMDSystem();
+      virtual ~G4QMDSystem();
 
       void SetParticipant( G4QMDParticipant* particle ) { participants.push_back ( particle ); };
       void SetSystem ( G4QMDSystem* , G4ThreeVector , G4ThreeVector );

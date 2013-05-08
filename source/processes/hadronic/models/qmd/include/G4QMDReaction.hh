@@ -78,6 +78,9 @@ class G4QMDReaction : public G4HadronicInteraction
       void SetEF( G4double x ){ envelopF = x; };
 
    private:
+      //copy is unexpeced
+      void operator =( const G4QMDReaction& ){};
+      G4QMDReaction( const G4QMDReaction& ):G4HadronicInteraction("QMDModel"){};
 
       void setEvaporationCh();
       void setHighEnergyModel();
@@ -118,7 +121,7 @@ class G4QMDReaction : public G4HadronicInteraction
 
 //090331
       G4IonsShenCrossSection* shenXS;
-      G4GeneralSpaceNNCrossSection* genspaXS;
+      //G4GeneralSpaceNNCrossSection* genspaXS;
 
       G4PiNuclearCrossSection* piNucXS;
 

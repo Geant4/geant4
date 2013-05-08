@@ -89,9 +89,11 @@ class G4QMDMeanField
 
       G4double cpc;
 
-      G4int icoul, irelcr;
+      //G4int icoul, irelcr;
+      G4int irelcr;
       G4double gamm, c0, c3, cs, cl, wl; 
-      G4double c0w, c3w, clw, c0sw;
+      //G4double c0w, c3w, clw, c0sw;
+      G4double c0w, clw, c0sw;
 
       G4double c0g,c3g,csg,pag; 
 

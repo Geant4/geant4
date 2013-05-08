@@ -81,6 +81,7 @@ void G4QMDSystem::ShowParticipants()
    G4ThreeVector p_sum( 0.0 );
    std::vector< G4QMDParticipant* >::iterator it; 
    G4cout << "Momentum and Position of each participant " << G4endl; 
+   G4int orginal = G4cout.precision();
    G4int i = 0; 
    for ( it = participants.begin() ; it != participants.end() ; it++ ) 
    { 
@@ -96,7 +97,9 @@ void G4QMDSystem::ShowParticipants()
       p_sum += (*it)->GetMomentum();
       i++;
    }
-   G4cout << "Sum upped Momentum and mag " << p_sum << " " << p_sum.mag() << G4endl;
+   G4cout << "Sum upped Momentum and its mag " << p_sum << " " << p_sum.mag() << G4endl;
+   //restore orginal precision
+   G4cout << std::setprecision( orginal );
 }
 
 

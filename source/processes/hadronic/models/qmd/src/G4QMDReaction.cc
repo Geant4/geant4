@@ -452,19 +452,19 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    {
 
 /*
-      std::cout << "G4QMDRESULT "
-                << (*it)->GetAtomicNumber() 
-                << " " 
-                << (*it)->GetMassNumber() 
-                << " " 
-                << (*it)->Get4Momentum() 
-                << " " 
-                << (*it)->Get4Momentum().vect() 
-                << " " 
-                << (*it)->Get4Momentum().restMass() 
-                << " " 
-                << (*it)->GetNuclearMass()/GeV 
-                << std::endl;
+      G4cout << "G4QMDRESULT "
+             << (*it)->GetAtomicNumber() 
+             << " " 
+             << (*it)->GetMassNumber() 
+             << " " 
+             << (*it)->Get4Momentum() 
+             << " " 
+             << (*it)->Get4Momentum().vect() 
+             << " " 
+             << (*it)->Get4Momentum().restMass() 
+             << " " 
+             << (*it)->GetNuclearMass()/GeV 
+             << G4endl;
 */
 
       meanField->SetNucleus ( *it );
@@ -543,7 +543,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 //090122
 
 /*
-          std::cout
+          G4cout
                 << "Regist Secondary "
                 << (*itt)->GetDefinition()->GetParticleName()
                 << " "
@@ -565,7 +565,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
                 << p4_CM
                 << " "
                 << p4_LAB
-                << std::endl;
+                << G4endl;
 */
 
       }
