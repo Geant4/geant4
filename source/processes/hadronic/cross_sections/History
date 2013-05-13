@@ -13,10 +13,18 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+07 May 2013 T. Koi (hadr-cross-V09-06-20)
+-----------------------------------------------------
+- Making Get and Set method of verbose level in G4VCrossSectionDataSet
+  into virtual function
+
 03 May 2013 A. Dotti (hadr-cross-V09-06-19)
+-----------------------------------------------------
 - Protecting against crash ad exit in G4ElectroNuclear 
 
 02 May 2013 A. Dotti (hadr-cross-V09-06-18)
+-----------------------------------------------------
 - Clean up ElectroNuclear cross-section for MT and optimize code.
   Code is now 40% faster in simple setups.
 
