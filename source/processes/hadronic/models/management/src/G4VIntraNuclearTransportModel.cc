@@ -34,6 +34,8 @@
 //                  F.W.Jones, 06-JUL-99
 //      V.Ivanchenko 03.01.2012
 //          Added G4VPreCompoundModel pointer to the constructor and cleanup
+//      V. Uzhinsky Nov. 2012
+//          Added method PropagateNuclNucl for simulation of nucleus-nucleus inter. 
 // -----------------------------------------------------------------------------
 
 #include "G4VIntraNuclearTransportModel.hh"

@@ -25,6 +25,8 @@
 //
 //
 // $Id$
+//      V. Uzhinsky Nov. 2012
+//          Added method GetProjectileNucleus for simulation of nucleus-nucleus inter.
 //
 // G4VHighEnergyGenerator
 #include "G4VHighEnergyGenerator.hh"
@@ -70,5 +72,4 @@ G4V3DNucleus * G4VHighEnergyGenerator::GetProjectileNucleus() const   // Uzhi No
   G4Exception("G4VHighEnergyGenerator::GetProjectileNucleus ", "G4had_mod_man",
                 FatalException, ed); 
   return 0;
-   return 0;                                                          // Uzhi Nov. 2012
-}                                                                     // Uzhi Niv. 2012
+}                                                                     // Uzhi Nov. 2012

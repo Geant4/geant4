@@ -25,6 +25,8 @@
 //
 //
 // $Id$
+//      V. Uzhinsky Nov. 2012
+//          Added method GetProjectileNucleus for simulation of nucleus-nucleus inter. 
 //
 #ifndef G4VHighEnergyGenerator_h
 #define G4VHighEnergyGenerator_h 1

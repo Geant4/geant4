@@ -110,10 +110,10 @@ public: // With description
   inline const G4HadronicInteraction* GetMyPointer() const
   { return this; }
 
-  inline G4int GetVerboseLevel() const
+  virtual G4int GetVerboseLevel() const
   { return verboseLevel; }
 
-  inline void SetVerboseLevel( G4int value )
+  virtual void SetVerboseLevel( G4int value )
   { verboseLevel = value; }
 
   inline const G4String& GetModelName() const

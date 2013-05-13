@@ -36,6 +36,8 @@
 //	    Add data member and Set method to store original projectile
 //      V.Ivanchenko 03.01.2012
 //          Added G4VPreCompoundModel pointer to the constructor and cleanup
+//      V. Uzhinsky Nov. 2012
+//          Added method PropagateNuclNucl for simulation of nucleus-nucleus inter. 
 // -----------------------------------------------------------------------------
 
 #ifndef G4VIntraNuclearTransportModel_h
