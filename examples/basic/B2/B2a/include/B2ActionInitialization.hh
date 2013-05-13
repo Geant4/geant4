@@ -23,47 +23,31 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2TrackerSD.hh 66536 2012-12-19 14:32:36Z ihrivnac $
+// $Id: B2ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B2TrackerSD.hh
-/// \brief Definition of the B2TrackerSD class
+/// \file B2ActionInitialization.hh
+/// \brief Definition of the B2ActionInitialization class
 
-#ifndef B2TrackerSD_h
-#define B2TrackerSD_h 1
+#ifndef B2ActionInitialization_h
+#define B2ActionInitialization_h 1
 
-#include "G4VSensitiveDetector.hh"
+#include "G4VUserActionInitialization.hh"
 
-#include "B2TrackerHit.hh"
+class B4DetectorConstruction;
 
-#include <vector>
-
-class G4Step;
-class G4HCofThisEvent;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-/// B2Tracker sensitive detector class
+/// Action initialization class.
 ///
-/// The hits are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step. A hit is created with each step with non zero 
-/// energy deposit.
 
-class B2TrackerSD : public G4VSensitiveDetector
+class B2ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    B2TrackerSD(const G4String& name, 
-                const G4String& hitsCollectionName);
-    virtual ~B2TrackerSD();
-  
-    // methods from base class
-    virtual void   Initialize(G4HCofThisEvent* hitCollection);
-    virtual G4bool ProcessHits(G4Step* step, G4TouchableHistory* history);
-    virtual void   EndOfEvent(G4HCofThisEvent* hitCollection);
+    B2ActionInitialization();
+    virtual ~B2ActionInitialization();
 
-  private:
-    B2TrackerHitsCollection* fHitsCollection;
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
+
+    

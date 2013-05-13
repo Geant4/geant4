@@ -41,8 +41,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
-#include "G4SDManager.hh"
-
 #include "G4GeometryTolerance.hh"
 #include "G4GeometryManager.hh"
 
@@ -57,8 +55,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
+G4ThreadLocal B2MagneticField* B2aDetectorConstruction::fMagField=0;
+
 B2aDetectorConstruction::B2aDetectorConstruction()
-: 
+:G4VUserDetectorConstruction(), 
  fNbOfChambers(0),
  fLogicTarget(NULL), fLogicChamber(NULL), 
  fTargetMaterial(NULL), fChamberMaterial(NULL), 
@@ -66,7 +66,6 @@ B2aDetectorConstruction::B2aDetectorConstruction()
  fCheckOverlaps(true)
 {
   fMessenger = new B2aDetectorMessenger(this);
-  fMagField  = new B2MagneticField();
 
   fNbOfChambers = 5;
   fLogicChamber = new G4LogicalVolume*[fNbOfChambers];
@@ -77,7 +76,6 @@ B2aDetectorConstruction::B2aDetectorConstruction()
 B2aDetectorConstruction::~B2aDetectorConstruction()
 {
   delete [] fLogicChamber; 
-  delete fMagField;
   delete fStepLimit;
   delete fMessenger;
 }
@@ -213,13 +211,6 @@ G4VPhysicalVolume* B2aDetectorConstruction::DefineVolumes()
   fLogicTarget ->SetVisAttributes(boxVisAtt);
   trackerLV    ->SetVisAttributes(boxVisAtt);
 
-  // Sensitive detectors
-
-  G4String trackerChamberSDname = "B2/TrackerChamberSD";
-  B2TrackerSD* aTrackerSD = new B2TrackerSD(trackerChamberSDname,
-                                            "TrackerHitsCollection");
-  G4SDManager::GetSDMpointer()->AddNewDetector( aTrackerSD );
-
   // Tracker segments
 
   G4cout << "There are " << fNbOfChambers << " chambers in the tracker region. "
@@ -250,18 +241,17 @@ G4VPhysicalVolume* B2aDetectorConstruction::DefineVolumes()
       G4double rmax =  rmaxFirst + copyNo * rmaxIncr;
 
       G4Tubs* chamberS
-        = new G4Tubs("chamber", 0, rmax, halfWidth, 0.*deg, 360.*deg);
+        = new G4Tubs("Chamber_solid", 0, rmax, halfWidth, 0.*deg, 360.*deg);
 
       fLogicChamber[copyNo] =
-               new G4LogicalVolume(chamberS,fChamberMaterial,"Chamber",0,0,0);
+              new G4LogicalVolume(chamberS,fChamberMaterial,"Chamber_LV",0,0,0);
 
-      fLogicChamber[copyNo]->SetSensitiveDetector( aTrackerSD );
       fLogicChamber[copyNo]->SetVisAttributes(chamberVisAtt);
 
       new G4PVPlacement(0,                            // no rotation
                         G4ThreeVector(0,0,Zposition), // at (x,y,z)
                         fLogicChamber[copyNo],        // its logical volume
-                        "Chamber",                    // its name
+                        "Chamber_PV",                 // its name
                         trackerLV,                    // its mother  volume
                         false,                        // no boolean operations
                         copyNo,                       // copy number
@@ -291,6 +281,23 @@ G4VPhysicalVolume* B2aDetectorConstruction::DefineVolumes()
   // Always return the physical world
 
   return worldPV;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+void B2aDetectorConstruction::ConstructSDandField()
+{
+  // Sensitive detectors
+
+  G4String trackerChamberSDname = "B2/TrackerChamberSD";
+  B2TrackerSD* aTrackerSD = new B2TrackerSD(trackerChamberSDname,
+                                            "TrackerHitsCollection");
+  // Setting aTrackerSD to all logical volumes with the same name 
+  // of "Chamber_LV".
+  SetSensitiveDetector("Chamber_LV", aTrackerSD, true);
+
+  // Magnetic field
+  fMagField = new B2MagneticField();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -336,13 +343,6 @@ void B2aDetectorConstruction::SetChamberMaterial(G4String materialName)
                << materialName << " not found" << G4endl;
      }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
-void B2aDetectorConstruction::SetMagField(G4double fieldValue)
-{
-  fMagField->SetMagFieldValue(fieldValue);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -35,6 +35,7 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
+#include "tls.hh"
 
 /// Tracker hit class
 ///
@@ -84,22 +85,22 @@ class B2TrackerHit : public G4VHit
 
 typedef G4THitsCollection<B2TrackerHit> B2TrackerHitsCollection;
 
-extern G4Allocator<B2TrackerHit> B2TrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<B2TrackerHit>* B2TrackerHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void* B2TrackerHit::operator new(size_t)
 {
-  void *hit;
-  hit = (void *) B2TrackerHitAllocator.MallocSingle();
-  return hit;
+  if(!B2TrackerHitAllocator)
+      B2TrackerHitAllocator = new G4Allocator<B2TrackerHit>;
+  return (void *) B2TrackerHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void B2TrackerHit::operator delete(void *hit)
 {
-  B2TrackerHitAllocator.FreeSingle((B2TrackerHit*) hit);
+  B2TrackerHitAllocator->FreeSingle((B2TrackerHit*) hit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

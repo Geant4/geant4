@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B2EventAction.cc 66536 2012-12-19 14:32:36Z ihrivnac $
 //
 /// \file B2EventAction.cc
 /// \brief Implementation of the B2EventAction class
@@ -84,7 +84,8 @@ void B2EventAction::EndOfEventAction(const G4Event* event)
              << " trajectories stored in this event." << G4endl;
     }
     G4VHitsCollection* hc = event->GetHCofThisEvent()->GetHC(0);
-    G4cout << "    "  << hc->GetSize() << " hits stored in this event" << G4endl;
+    G4cout << "    "  
+           << hc->GetSize() << " hits stored in this event" << G4endl;
   }
 }  
 

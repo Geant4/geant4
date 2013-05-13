@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B2TrackerHit.cc 69505 2013-05-07 01:57:27Z asaim $
 //
 /// \file B2TrackerHit.cc
 /// \brief Implementation of the B2TrackerHit class
@@ -37,7 +37,7 @@
 
 #include <iomanip>
 
-G4Allocator<B2TrackerHit> B2TrackerHitAllocator;
+G4ThreadLocal G4Allocator<B2TrackerHit>* B2TrackerHitAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

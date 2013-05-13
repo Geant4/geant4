@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B2MagneticField.hh 69503 2013-05-07 01:11:20Z asaim $
 //
 /// \file B2MagneticField.hh
 /// \brief Definition of the B2MagneticField class
@@ -34,6 +34,7 @@
 #include "G4UniformMagField.hh"
 
 class G4FieldManager;
+class B2FieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,6 +55,8 @@ class B2MagneticField : public G4UniformMagField
   protected:
     // Find the global Field Manager
     G4FieldManager* GetGlobalFieldManager(); // static 
+
+    B2FieldMessenger* fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

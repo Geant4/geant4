@@ -46,7 +46,6 @@ class G4UIcmdWithADoubleAndUnit;
 /// It implements commands:
 /// - /B2/det/setTargetMaterial name
 /// - /B2/det/setChamberMaterial name
-/// - /B2/det/setField value unit
 /// - /B2/det/stepMax value unit
 
 class B2aDetectorMessenger: public G4UImessenger
@@ -66,7 +65,6 @@ class B2aDetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*      fTargMatCmd;
     G4UIcmdWithAString*      fChamMatCmd;
 
-    G4UIcmdWithADoubleAndUnit* fSetFieldCmd;
     G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };
 

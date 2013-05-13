@@ -23,70 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2MagneticField.cc 69504 2013-05-07 01:23:23Z asaim $
+// $Id: B2ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B2MagneticField.cc
-/// \brief Implementation of the B2MagneticField class
+/// \file B2ActionInitialization.cc
+/// \brief Implementation of the B2ActionInitialization class
 
-#include "B2MagneticField.hh"
-#include "B2FieldMessenger.hh"
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B2MagneticField::B2MagneticField()
-  : G4UniformMagField(G4ThreeVector())
-{
-  GetGlobalFieldManager()->SetDetectorField(NULL);
-  fMessenger = new B2FieldMessenger(this);
-}
+#include "B2ActionInitialization.hh"
+#include "B2PrimaryGeneratorAction.hh"
+#include "B2RunAction.hh"
+#include "B2EventAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B2MagneticField::B2MagneticField(G4ThreeVector fieldVector)
-  : G4UniformMagField(fieldVector)
-{
-  GetGlobalFieldManager()->SetDetectorField(this);    
-  GetGlobalFieldManager()->CreateChordFinder(this);
-  fMessenger = new B2FieldMessenger(this);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B2MagneticField::~B2MagneticField()
+B2ActionInitialization::B2ActionInitialization()
+ : G4VUserActionInitialization()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Set the value of the Global Field to fieldValue along X
+B2ActionInitialization::~B2ActionInitialization()
+{}
 
-void B2MagneticField::SetMagFieldValue(G4double fieldValue)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B2ActionInitialization::BuildForMaster() const
 {
-   SetMagFieldValue(G4ThreeVector(fieldValue,0,0));
+  SetUserAction(new B2RunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Set the value of the Global Field
-
-void B2MagneticField::SetMagFieldValue(G4ThreeVector fieldVector)
+void B2ActionInitialization::Build() const
 {
-  if( fieldVector != G4ThreeVector(0.,0.,0.) )
-  {
-    SetFieldValue(fieldVector);
-    GetGlobalFieldManager()->SetDetectorField(this);
-    GetGlobalFieldManager()->CreateChordFinder(this);
-  } else
-    GetGlobalFieldManager()->SetDetectorField(NULL);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4FieldManager*  B2MagneticField::GetGlobalFieldManager()
-{
-  return G4TransportationManager::GetTransportationManager()->GetFieldManager();
-}
+  SetUserAction(new B2PrimaryGeneratorAction);
+  SetUserAction(new B2RunAction);
+  SetUserAction(new B2EventAction);
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

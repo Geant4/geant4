@@ -44,6 +44,7 @@ B2bChamberParameterisation::B2bChamberParameterisation(
         G4double widthChamber, 
         G4double lengthInitial, 
         G4double lengthFinal )
+ : G4VPVParameterisation()
 {
    fNoChambers =  noChambers; 
    fStartZ     =  startZ; 

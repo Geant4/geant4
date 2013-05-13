@@ -23,70 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B2MagneticField.cc 69504 2013-05-07 01:23:23Z asaim $
+// $Id: B2FieldMessenger.hh 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-/// \file B2MagneticField.cc
-/// \brief Implementation of the B2MagneticField class
+/// \file B2FieldMessenger.hh
+/// \brief Definition of the B2FieldMessenger class
 
-#include "B2MagneticField.hh"
-#include "B2FieldMessenger.hh"
+#ifndef B2FieldMessenger_h
+#define B2FieldMessenger_h 1
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class B2MagneticField;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B2MagneticField::B2MagneticField()
-  : G4UniformMagField(G4ThreeVector())
+/// Messenger class that defines commands for B2MagneticField;
+///
+/// It implements commands:
+/// - /B2/det/setField value unit
+
+class B2FieldMessenger: public G4UImessenger
 {
-  GetGlobalFieldManager()->SetDetectorField(NULL);
-  fMessenger = new B2FieldMessenger(this);
-}
+  public:
+    B2FieldMessenger(B2MagneticField* );
+    virtual ~B2FieldMessenger();
+    
+    virtual void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    B2MagneticField*  fField;
+
+    G4UIcmdWithADoubleAndUnit* fSetFieldCmd;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B2MagneticField::B2MagneticField(G4ThreeVector fieldVector)
-  : G4UniformMagField(fieldVector)
-{
-  GetGlobalFieldManager()->SetDetectorField(this);    
-  GetGlobalFieldManager()->CreateChordFinder(this);
-  fMessenger = new B2FieldMessenger(this);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B2MagneticField::~B2MagneticField()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// Set the value of the Global Field to fieldValue along X
-
-void B2MagneticField::SetMagFieldValue(G4double fieldValue)
-{
-   SetMagFieldValue(G4ThreeVector(fieldValue,0,0));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// Set the value of the Global Field
-
-void B2MagneticField::SetMagFieldValue(G4ThreeVector fieldVector)
-{
-  if( fieldVector != G4ThreeVector(0.,0.,0.) )
-  {
-    SetFieldValue(fieldVector);
-    GetGlobalFieldManager()->SetDetectorField(this);
-    GetGlobalFieldManager()->CreateChordFinder(this);
-  } else
-    GetGlobalFieldManager()->SetDetectorField(NULL);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4FieldManager*  B2MagneticField::GetGlobalFieldManager()
-{
-  return G4TransportationManager::GetTransportationManager()->GetFieldManager();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif

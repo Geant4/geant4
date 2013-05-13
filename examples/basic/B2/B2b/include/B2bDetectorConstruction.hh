@@ -33,6 +33,7 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
+#include "tls.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -56,9 +57,9 @@ class B2bDetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
     // Set methods
-    void SetMagField(G4double );
     void SetTargetMaterial (G4String );
     void SetChamberMaterial(G4String );
     void SetMaxStep (G4double );
@@ -79,7 +80,7 @@ class B2bDetectorConstruction : public G4VUserDetectorConstruction
     G4UserLimits* fStepLimit;            // pointer to user step limits
 
     B2bDetectorMessenger*  fMessenger;   // messenger
-    B2MagneticField*      fMagField;     // magnetic field
+    static G4ThreadLocal B2MagneticField*      fMagField;     // magnetic field
     
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps 
 };

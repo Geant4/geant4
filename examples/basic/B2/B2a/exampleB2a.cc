@@ -29,15 +29,17 @@
 /// \brief Main program of the B2a example
 
 #include "B2aDetectorConstruction.hh"
-#include "B2PrimaryGeneratorAction.hh"
-#include "B2RunAction.hh"
-#include "B2EventAction.hh"
+#include "B2ActionInitialization.hh"
 
-#include "G4StepLimiterPhysics.hh"
-
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
+#include "G4StepLimiterPhysics.hh"
 
 #include "Randomize.hh"
 
@@ -55,11 +57,16 @@ int main(int argc,char** argv)
 {
   // Choose the Random engine
 
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
   // Construct the default run manager
-  
+
+#ifdef G4MULTITHREADED  
+  G4MTRunManager * runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else
   G4RunManager * runManager = new G4RunManager;
+#endif
 
   // Set mandatory initialization classes
 
@@ -69,11 +76,7 @@ int main(int argc,char** argv)
   physicsList->RegisterPhysics(new G4StepLimiterPhysics());
   runManager->SetUserInitialization(physicsList);
     
-  // Set user action classes
-
-  runManager->SetUserAction(new B2PrimaryGeneratorAction());
-  runManager->SetUserAction(new B2RunAction());
-  runManager->SetUserAction(new B2EventAction());
+  runManager->SetUserInitialization(new B2ActionInitialization());
   
   // Initialize G4 kernel
 

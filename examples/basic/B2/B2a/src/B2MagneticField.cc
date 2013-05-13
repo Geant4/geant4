@@ -29,6 +29,7 @@
 /// \brief Implementation of the B2MagneticField class
 
 #include "B2MagneticField.hh"
+#include "B2FieldMessenger.hh"
 
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
@@ -39,6 +40,7 @@ B2MagneticField::B2MagneticField()
   : G4UniformMagField(G4ThreeVector())
 {
   GetGlobalFieldManager()->SetDetectorField(NULL);
+  fMessenger = new B2FieldMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,6 +50,7 @@ B2MagneticField::B2MagneticField(G4ThreeVector fieldVector)
 {
   GetGlobalFieldManager()->SetDetectorField(this);    
   GetGlobalFieldManager()->CreateChordFinder(this);
+  fMessenger = new B2FieldMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

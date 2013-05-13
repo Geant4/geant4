@@ -17,8 +17,8 @@ This example simulates a simplified fixed target experiment.
    (in B2bDetectorConstruction), see also B2bChamberParameterisation class.
 
    In addition, a global, uniform, and transverse magnetic field can be 
-   applied (see B2MagneticField and B2aDetectorMessenger, 
-   B2bDetectorMessenger classes) and set via interactive commands. 
+   applied (see B2MagneticField and B2FieldMessenger classes) and set via 
+   interactive commands. 
    For example:
 \verbatim
 /B2/det/setField 0.2 tesla

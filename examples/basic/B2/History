@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10/05/13 I. Hrivnacova (exampleB2-V09-06-01)
+- Minor fixes in documentation
+- Added initialization of base class in constructors where missing
+  
+09/05/13 M. Asai
+- Migration to multi-threading
+
 28/02/13 I. Hrivnacova
 - When building materials with NistManager
   do not set fromIsotopes argument (which was set to false), 
