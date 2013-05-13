@@ -267,7 +267,7 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 void PhysicsList::SetCutForProton(G4double cut)
 {
-  fCutForPositron = cut;
+  fCutForProton = cut;
   SetParticleCuts(fCutForProton, G4Proton::Proton());
 }
 
