@@ -90,6 +90,7 @@
 #include "G4HadronElasticProcess.hh"
 
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
 #include "G4AntiProton.hh"
@@ -106,7 +107,7 @@
 #include "G4He3.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
-#include "G4IonTable.hh"
+#include "G4GenericIon.hh"
 #include "G4DecayPhysics.hh"
 
 #include "G4ForceCondition.hh"
@@ -284,13 +285,18 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* he3 = G4He3::He3Definition();
   const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
   //const G4ParticleDefinition* ion = 
-  G4GenericIon::GenericIon();
+  G4GenericIon* gion = G4GenericIon::GenericIon();
+  gion->SetProcessManager(new G4ProcessManager(gion));
 
   G4DecayPhysics decays;
   decays.ConstructParticle();  
 
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
+  G4IonTable* ions = partTable->GetIonTable();
+
   partTable->SetReadiness();
+  ions->CreateAllIon();
+  ions->CreateAllIsomer();
 
   //--------- Geometry definition
 
