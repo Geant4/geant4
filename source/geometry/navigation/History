@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Apr 16th, 2013 - J.Apostolakis  (geomnav-V09-06-05)
+					  geomnav-V09-06-07 retag
+May 7th, 2013 - P.Gumplinger (tag by JA) (geomnav-V09-06-06)
+----------------------------
+- G4PropagatorInField: deleted SetChargeMomentumMass method.
+
+May 7th, 2013 - J.Apostolakis  (geomnav-V09-06-05)
 ------------------------------
 - G4Navigator: Added new helper object G4VoxelSafety.
     A helper object is owned by a Navigator instance.

@@ -87,11 +87,6 @@ class G4PropagatorInField
    inline void      SetEpsilonStep(G4double newEps);
      // The ratio DeltaOneStep()/h_current_step
 
-   inline void SetChargeMomentumMass( G4double charge,     // in e+ units
-                                      G4double momentum,   // in Geant4 units
-                                      G4double pMass );  
-     // Inform this and all associated classes of q, p, m 
-
    G4FieldManager*  FindAndSetFieldManager(G4VPhysicalVolume* pCurrentPhysVol);
      // Set (and return) the correct field manager (global or local), 
      //    if it exists.
@@ -252,7 +247,6 @@ class G4PropagatorInField
    G4bool         fSetFieldMgr;  // Has it been set for the current step
 
    // Parameters of current step
-   G4double       fCharge, fInitialMomentumModulus, fMass;
    G4double       fEpsilonStep;        // Relative accuracy of current Step
    G4FieldTrack   End_PointAndTangent; // End point storage
    G4bool         fParticleIsLooping;
