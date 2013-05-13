@@ -12,8 +12,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+ 9 May 2013 John Apostolakis	 had-binary-V09-06-06  Retag
+ 8 May 2013 John Apostolakis	 had-binary-V09-06-05 
+- Revised signature of SetChargeMomentumMass for fields (G4KM_NucleonEqRhs,
+    G4KM_OpticalEqRhs).  Made these virtual methods non-inline.
+
 26 Feb 2013 Andrea Dotti	 had-binary-V09-06-04
-- Adding clonging of Dummy Field (required by multi-threadeing)
+- Adding cloning of Dummy Field (required by multi-threading)
   
 22 Feb 2013 Gunter Folger        had-binary-V09-06-03
 -  Checking for changes made for transition to MT

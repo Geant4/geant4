@@ -55,7 +55,7 @@ public:
 
   virtual void EvaluateRhsGivenB(const G4double y[], const G4double B[3],
 				 G4double dydx[]) const;
-  virtual void SetChargeMomentumMass(G4double particleCharge,
+  virtual void SetChargeMomentumMass(G4ChargeState particleCharge,
 				     G4double MomentumXc,
 				     G4double MassXc2);
   void SetFactor(G4double mass, G4double opticalParameter);
@@ -66,16 +66,9 @@ private:
   G4double theMass;
 };
 
-
-
-
 inline G4KM_OpticalEqRhs::~G4KM_OpticalEqRhs()
 { }
 
-
-// Here by design, but it is unnecessary for nuclear fields
-inline void G4KM_OpticalEqRhs::SetChargeMomentumMass(G4double ,G4double ,G4double )
-{ }
 
 #endif
 

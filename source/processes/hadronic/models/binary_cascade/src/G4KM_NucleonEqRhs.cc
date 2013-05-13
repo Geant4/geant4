@@ -107,6 +107,7 @@ void G4KM_NucleonEqRhs::EvaluateRhsGivenB(const G4double y[],
  */
 }
 
-
-
-
+// Here by design, but it is unnecessary for nuclear fields
+void G4KM_NucleonEqRhs::SetChargeMomentumMass(G4ChargeState,G4double ,G4double )
+{ 
+}
