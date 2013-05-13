@@ -123,9 +123,11 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+#include "G4AutoLock.hh"
+namespace { G4Mutex SeltzerBergerModelMutex = G4MUTEX_INITIALIZER; }
 void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
 {
+  G4AutoLock l(&SeltzerBergerModelMutex);
   //  G4cout << "ReadData Z= " << Z << G4endl;
   // G4cout << "Status for Z= " << dataSB[Z] << G4endl;
   //if(path) { G4cout << path << G4endl; }

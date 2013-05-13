@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+10 May 13: M.Asai (emstand-V09-06-34)
+- Added Mutex lock to G4SeltzerBergerModel::ReadData().
+
 08 May 13: V.Ivanchenko (emstand-V09-06-33)
 - removed debug printpout at initialisation from previous tag
 - G4SeltzerBergerModel - reduce limit on number of warning printouts
