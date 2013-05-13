@@ -17,23 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 9th, 2013, J.Apostolakis                transport-V09-06-05
+May 13th, 2013, G.Cosmo transport-V09-06-06
+-----------------------
+- Removed left-over assert() calls in G4CoupledTransportation.
+
+May 9th, 2013, J.Apostolakis transport-V09-06-05
 ----------------------------
-- Add protection to revised G4CoupledTransportation for
-   case that chord finder (or field manager) is not defined. 
+- Added protection to revised G4CoupledTransportation for case that chord
+  finder (or field manager) is not defined.
 
 May 8th, 2013, P.Gumplinger, J.Apostolakis transport-V09-06-04
 ------------------------------------------
-- Adapted G4Transportation and G4CoupledTransportation to use
-   G4ChargeState for charge/spin/magnetic moment,
-   and to message the equation of motion directly with it.
-
-************************************************************************
-   The tag(s) above co-work with and requires the following tags:
-	had-binary-V09-06-05
-	geomnav-V09-06-06
-	field-V09-06-04
-************************************************************************
+- Adapted G4Transportation and G4CoupledTransportation to use G4ChargeState
+  for charge/spin/magnetic moment, and to message the equation of motion
+  directly with it.
+  The tag(s) above co-work with and requires the following tags:
+  had-binary-V09-06-05, geomnav-V09-06-06 and field-V09-06-04.
 
 Mar. 22nd, 2013, G. Cosmo transport-V09-06-03
 -------------------------

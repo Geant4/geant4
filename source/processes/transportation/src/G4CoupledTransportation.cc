@@ -260,12 +260,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
         G4MagInt_Driver*  pIntDriver= 0; 
 
         pIntDriver= pChordFinder->GetIntegrationDriver(); 
-        assert( pIntDriver );
-        if( pIntDriver ){
+        if( pIntDriver )
+        {
            pStepper= pIntDriver->GetStepper(); 
         }
-        assert( pStepper );
-        if( pStepper ) {
+        if( pStepper )
+        {
            equationOfMotion= pStepper->GetEquationOfMotion();
         }
      }
@@ -275,11 +275,12 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                magneticMoment); 
 
      // End of proto GetEquationOfMotion() 
-     assert( equationOfMotion );
      if( equationOfMotion )
+     {
         equationOfMotion->SetChargeMomentumMass( chargeState,
                                                  momentumMagnitude,
                                                  restMass );
+     }
   }
   G4ThreeVector spin        = track.GetPolarization() ;
   G4FieldTrack  theFieldTrack = G4FieldTrack( startPosition, 
