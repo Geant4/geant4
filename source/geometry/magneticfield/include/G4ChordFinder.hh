@@ -89,11 +89,6 @@ class G4ChordFinder
       inline G4double  GetDeltaChord() const;
       inline void      SetDeltaChord(G4double newval);
 
-      inline void SetChargeMomentumMass(G4double pCharge,  // in e+ units
-                                        G4double pMomentum,
-                                        G4double pMass );
-        // Function to inform integration driver of charge, speed.
-
       inline void SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver);
       inline G4MagInt_Driver* GetIntegrationDriver();
         // Access and set Driver.

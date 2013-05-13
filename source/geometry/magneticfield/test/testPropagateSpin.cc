@@ -239,12 +239,13 @@ G4VPhysicalVolume* BuildGeometry()
 
 G4UniformMagField myMagField(10.*tesla, 0., 0.); 
 
+G4Mag_SpinEqRhs *fEquation;
 
 G4FieldManager* SetupField(G4int type)
 {
     G4FieldManager   *pFieldMgr;
     G4ChordFinder    *pChordFinder;
-    G4Mag_SpinEqRhs *fEquation = new G4Mag_SpinEqRhs(&myMagField); 
+    fEquation = new G4Mag_SpinEqRhs(&myMagField); 
     G4MagIntegratorStepper *pStepper;
 
     const int ncompspin=12;
@@ -293,6 +294,7 @@ G4PropagatorInField*  SetupPropagator( G4int type)
     return thePropagator;
 }
 
+/*
 //  This is Done only for this test program ... the transportation does it.
 //  The method is now obsolete -- as propagator in Field has this method,
 //    in order to message the correct field manager's chord finder.
@@ -309,6 +311,7 @@ void  ObsoleteSetChargeMomentumMass(G4double charge, G4double MomentumXc, G4doub
 		      MomentumXc,   // Momentum in Mev/c ?
                       Mass );
 }
+*/
 
 G4PropagatorInField *pMagFieldPropagator;
 //
@@ -354,7 +357,19 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
 	   << G4endl;
 
 
-    pMagFieldPropagator->SetChargeMomentumMass(  
+    G4double particleCharge= +1.0;  // in e+ units
+    G4double spin=0.0;              // ignore the spin
+    G4double magneticMoment= 0.0;   // ignore the magnetic moment
+
+    G4ChargeState chargeState(particleCharge,             // The charge can change (dynamic)
+                              spin=0.0,
+                              magneticMoment=0.0);  
+
+    G4EquationOfMotion* equationOfMotion = 
+        ( pMagFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
+        ->GetEquationOfMotion();
+   
+    equationOfMotion->SetChargeMomentumMass(  
 			    +1.,                    // charge in e+ units
 			    0.1*GeV,                // Momentum in Mev/c ?
 			    0.105658387*GeV );
@@ -401,7 +416,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume*,     // *pTopNode,
                   ( std::sqrt( momentum_sq + rest_mass * rest_mass ) 
 		    + rest_mass );
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
-       pMagFieldPropagator->SetChargeMomentumMass(
+       equationOfMotion->SetChargeMomentumMass(
 		      +1,                    // charge in e+ units
                       momentum_val, 
                       rest_mass);

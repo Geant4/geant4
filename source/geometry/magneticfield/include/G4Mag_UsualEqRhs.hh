@@ -44,6 +44,7 @@
 #define G4MAG_USUAL_EQRHS
 
 #include "G4Mag_EqRhs.hh"
+#include "G4ChargeState.hh"
 
 class G4MagneticField;
 
@@ -61,7 +62,7 @@ class G4Mag_UsualEqRhs : public G4Mag_EqRhs
        // Given the value of the magnetic field B, this function 
        // calculates the value of the derivative dydx.
 
-     virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
+     virtual void SetChargeMomentumMass( G4ChargeState particleCharge,
                                          G4double MomentumXc,
                                          G4double mass);
 };

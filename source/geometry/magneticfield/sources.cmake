@@ -31,6 +31,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
     HEADERS
         G4CachedMagneticField.hh
         G4CashKarpRKF45.hh
+        G4ChargeState.hh
         G4ChordFinder.hh
         G4ChordFinder.icc
         G4ChordFinderSaf.hh
@@ -89,6 +90,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
     SOURCES
         G4CachedMagneticField.cc
         G4CashKarpRKF45.cc
+        G4ChargeState.cc
         G4ChordFinder.cc
         G4ChordFinderSaf.cc
         G4ClassicalRK4.cc

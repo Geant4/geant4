@@ -49,14 +49,6 @@ G4bool G4ChordFinder::AcceptableMissDist(G4double dChordStep) const
 }
 
 inline
-void G4ChordFinder::SetChargeMomentumMass(G4double pCharge, // in e+ units
-                                          G4double pMomentum,
-                                          G4double pMass)
-{
-  fIntgrDriver-> SetChargeMomentumMass(pCharge, pMomentum, pMass);
-}
-
-inline
 G4double G4ChordFinder::GetDeltaChord() const
 {
   return fDeltaChord;

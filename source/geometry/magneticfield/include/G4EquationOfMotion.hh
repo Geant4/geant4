@@ -44,6 +44,8 @@
 #include "G4Types.hh"      // "globals.hh"
 #include "G4Field.hh"   // required in inline method implementations
 
+#include "G4ChargeState.hh"
+
 class G4EquationOfMotion 
 {
   public:  // with description
@@ -61,7 +63,7 @@ class G4EquationOfMotion
        // This is the _only_ function a subclass must define.
        // The other two functions use Rhs_givenB.
 
-     virtual void SetChargeMomentumMass(G4double particleCharge, // in e+ units
+     virtual void SetChargeMomentumMass(G4ChargeState particleCharge,
                                         G4double MomentumXc,
                                         G4double MassXc2) = 0;
        // Set the charge, momentum and mass of the current particle

@@ -67,7 +67,7 @@ G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],
 
 void
 G4Mag_UsualEqRhs::
- SetChargeMomentumMass( G4double particleCharge, // in e+ units
+ SetChargeMomentumMass( G4ChargeState particleCharge,
                         G4double MomentumXc,
 			G4double mass)
 

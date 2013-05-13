@@ -43,6 +43,7 @@
 #ifndef G4EQGRAVITYFIELD_hh
 #define G4EQGRAVITYFIELD_hh
 
+#include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
 #include "G4UniformGravityField.hh"
 
@@ -55,7 +56,7 @@ class G4EqGravityField : public G4EquationOfMotion
 
     ~G4EqGravityField() {;}
 
-    void SetChargeMomentumMass(G4double particleCharge, // in e+ units
+    void SetChargeMomentumMass(G4ChargeState particleCharge, // in e+ units
                                G4double MomentumXc,
                                G4double mass);
 

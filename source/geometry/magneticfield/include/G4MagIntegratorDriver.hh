@@ -113,12 +113,8 @@ class G4MagInt_Driver
 
      inline G4double ComputeAndSetErrcon();
 
-     inline void SetChargeMomentumMass( G4double particleCharge,
-                                        G4double MomentumXc,
-                                        G4double Mass );
-        // Change them in Equation. particleCharge is in e+ units.
-
      inline const G4MagIntegratorStepper* GetStepper() const;
+     inline G4MagIntegratorStepper* GetStepper();
 
      void  OneGoodStep(       G4double  ystart[], // Like old RKF45step()
                         const G4double  dydx[],

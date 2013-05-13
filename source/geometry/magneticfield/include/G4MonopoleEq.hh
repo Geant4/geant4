@@ -42,6 +42,7 @@
 #ifndef G4EQMAGELECTRICFIELD_hh
 #define G4EQMAGELECTRICFIELD_hh
 
+#include "G4ChargeState.hh"
 #include "G4EquationOfMotion.hh"
 #include "G4ElectroMagneticField.hh"
 
@@ -54,7 +55,7 @@ class G4MonopoleEq : public G4EquationOfMotion
 
     ~G4MonopoleEq() {;} 
 
-    void  SetChargeMomentumMass(G4double particleCharge, // in e+ units
+    void  SetChargeMomentumMass(G4ChargeState particleCharge,
                                 G4double MomentumXc,
                                 G4double mass);
 

@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 10th, 2013 P.Gumplinger - field-V09-06-06
+---------------------------
+- prevent divided by zero and shortcut spin tracking for spin == 0
+  particles: G4Mag_SpinEqRhs.cc, G4EqEMFieldWithSpin.cc and
+  G4EqEMFieldWithEDM.cc
+                                            field-V09-06-05 - same 
+May 8th,  2013 P.Gumplinger/J.Apostolakis - field-V09-06-04
+-----------------------------------------
+- Introduced new class G4ChargeState to hold charge, spin, magnetic moment
+     (promoted from internal class of G4FieldTrack).
+- Changed the signature of EquationOfMotion::SetChargeMomentumMass to
+ take G4ChargeState in place of G4double (charge) as first argument.
+- Deleted SetChargeMomentumMass from G4ChordFinder, G4PropagatorInField,
+   G4MagInt_Driver
+
+- Migrated testPropagateMagField and testPropagateSpin.
+
 March 19th, 2013 G.Cosmo - field-V09-06-03, field-V09-06-02
 -------------------------
 - Cleanup of MT changes in G4FieldManagerStore.
