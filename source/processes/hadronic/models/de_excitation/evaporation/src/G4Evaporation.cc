@@ -45,6 +45,8 @@
 // V.Ivanchenko (22 April 2011) added check if a fragment can be deexcited 
 //                              by the FermiBreakUp model
 // V.Ivanchenko (23 January 2012) added pointer of G4VPhotonEvaporation 
+// V.Ivanchenko (6 May 2013)    added check of existence of residual ion
+//                              in the ion table
 
 #include "G4Evaporation.hh"
 #include "G4SystemOfUnits.hh"
@@ -56,6 +58,9 @@
 #include "G4FermiFragmentsPool.hh"
 #include "G4PhotonEvaporation.hh"
 
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
+
 G4Evaporation::G4Evaporation()  
   : theChannels(0),nChannels(0)
 {
@@ -63,6 +68,7 @@ G4Evaporation::G4Evaporation()
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
   SetParameters();
   InitialiseEvaporation();
+  theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
 }
 
 G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)  
@@ -75,26 +81,6 @@ G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)
   SetParameters();
   InitialiseEvaporation();
 }
-
-/*
-G4Evaporation::G4Evaporation(std::vector<G4VEvaporationChannel*>* channels) 
-  : theChannels(channels),theChannelFactory(0),nChannels(0)
-{
-  // are input relible?
-  G4bool accepted = true;
-  if(!theChannels) { accepted = false; }
-  else if(0 == theChannels->size()) { accepted = false; }
-
-  if(accepted) {
-    SetPhotonEvaporation((*channels)[0]); 
-  } else {
-    SetPhotonEvaporation(new G4PhotonEvaporation());
-    theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation); 
-  }
-  SetParameters();
-  InitialiseEvaporation();
-}
-*/
 
 G4Evaporation::~G4Evaporation()
 {
@@ -251,16 +237,19 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // stable fragnent - evaporation is finished
     if(0.0 == totprob) {
 
-      // if fragment is exotic, then try to decay it
-      if(0.0 == abun && Z < 20) {
-        //G4cout << "$$$ Decay exotic fragment" << G4endl;
-	theTempResult = unstableBreakUp.BreakUpFragment(theResidualNucleus);
-	if(theTempResult) {
-	  size_t nsec = theTempResult->size();
-	  for(size_t j=0; j<nsec; ++j) {
-	    theResult->push_back((*theTempResult)[j]);
+      // if fragment is exotic, then force its decay 
+      if(0.0 == abun) {
+        G4int level = 0;
+	if(Z < 20 || !theTableOfIons->FindIon(Z,A,level)) {
+	  //G4cout << "$$$ Decay exotic fragment" << G4endl;
+	  theTempResult = unstableBreakUp.BreakUpFragment(theResidualNucleus);
+	  if(theTempResult) {
+	    size_t nsec = theTempResult->size();
+	    for(size_t j=0; j<nsec; ++j) {
+	      theResult->push_back((*theTempResult)[j]);
+	    }
+	    delete theTempResult;
 	  }
-	  delete theTempResult;
 	}
       }
 
@@ -268,7 +257,6 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
       theResult->push_back(theResidualNucleus);
       return theResult;
     }
-
 
     // select channel
     totprob *= G4UniformRand();

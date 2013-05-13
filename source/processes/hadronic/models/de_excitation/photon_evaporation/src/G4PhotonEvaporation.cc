@@ -79,7 +79,7 @@ G4PhotonEvaporation::G4PhotonEvaporation(const G4String & aName,
 
   G4double timeLimit = DBL_MAX;
   char* env = getenv("G4AddTimeLimitToPhotonEvaporation"); 
-  if(env) { timeLimit = 1.e-16*second; }
+  if(env) { timeLimit = 1.e+3*ns; }
 
   G4DiscreteGammaDeexcitation* p = new G4DiscreteGammaDeexcitation();
   p->SetICM(false);

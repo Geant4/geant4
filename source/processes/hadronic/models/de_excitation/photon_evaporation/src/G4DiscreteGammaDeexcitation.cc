@@ -69,6 +69,7 @@ G4DiscreteGammaDeexcitation::G4DiscreteGammaDeexcitation():
   _rdm(false), _levelManager(0)
 {
   _tolerance = CLHEP::keV;
+  G4NuclearLevelStore::GetInstance();
 }
 
 G4DiscreteGammaDeexcitation::~G4DiscreteGammaDeexcitation() 

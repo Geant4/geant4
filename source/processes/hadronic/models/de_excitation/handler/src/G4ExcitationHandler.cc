@@ -70,6 +70,7 @@
 #include "G4NistManager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleTypes.hh"
+#include "G4Ions.hh"
 
 #include "G4VMultiFragmentation.hh"
 #include "G4VFermiBreakUp.hh"
@@ -83,6 +84,7 @@
 #include "G4PhotonEvaporation.hh"
 #include "G4FermiBreakUp.hh"
 #include "G4FermiFragmentsPool.hh"
+#include "G4Pow.hh"
 
 G4ExcitationHandler::G4ExcitationHandler():
   maxZForFermiBreakUp(9),maxAForFermiBreakUp(17),minEForMultiFrag(4*GeV),
@@ -96,6 +98,7 @@ G4ExcitationHandler::G4ExcitationHandler():
   theEvaporation = new G4Evaporation(thePhotonEvaporation);
   thePool = G4FermiFragmentsPool::Instance();
   SetParameters();
+  G4Pow::GetInstance();
 }
 
 G4ExcitationHandler::~G4ExcitationHandler()
@@ -375,19 +378,62 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
       } else if (theFragmentA == 4 && theFragmentZ == 2) { // alpha
 	theKindOfFragment = G4Alpha::AlphaDefinition();;
       } else {
-        G4double excitation = 0.0;
-        G4double eexc = (*i)->GetExcitationEnergy();
 
+	// ground state by default
+        G4double eexc = (*i)->GetExcitationEnergy();
+        G4double excitation = eexc;
+
+	G4int level = 0;
+	theKindOfFragment = 
+	  theTableOfIons->FindIon(theFragmentZ,theFragmentA,level);
+	/*
+	G4cout << "### Find ion Z= " << theFragmentZ << " A= " << theFragmentA
+	       << " Eexc(MeV)= " << excitation/MeV << "  " 
+	       << theKindOfFragment << G4endl;
+	*/ 
+        if(!theKindOfFragment) { 
+	  theKindOfFragment = 
+	    theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
+	}
 	// production of an isomer
         if(eexc > minExcitation) {
-	  excitation = eexc;
-
-	  // correction of total energy for ground state isotopes
-	} else if(0.0 != eexc) {
-          etot -= eexc;
+          G4double elevel1 = 0.0;
+          G4double elevel2 = 0.0;
+	  G4ParticleDefinition* ion = 0; 
+          for(level=1; level<10; ++level) {
+            //G4cout << j << G4endl;
+	    ion = theTableOfIons->FindIon(theFragmentZ,theFragmentA,level);
+            //G4cout << level << "  " << ion << G4endl;
+            if(ion) {
+	      G4Ions* ip = dynamic_cast<G4Ions*>(ion);
+	      if(ip) {
+		elevel2 = ip->GetExcitationEnergy();
+		//G4cout<<"   Level "<<level<<" E(MeV)= "<<elevel2/MeV<<G4endl;
+		// close level
+		if(fabs(eexc - elevel2) < minExcitation) {
+		  excitation = eexc - elevel2;
+		  theKindOfFragment = ion;
+		  break;
+		  // previous level was closer
+		} else if(elevel2 - eexc >= eexc - elevel1) {
+		  excitation = eexc - elevel1;
+		  break;
+		  // will check next level
+		} else {
+		  theKindOfFragment = ion;
+		  excitation = eexc - elevel2;
+		  elevel1 = elevel2;
+		}
+	      }
+	    } else {
+	      break;
+	    }
+	  }
 	}
-	theKindOfFragment = 
-	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,excitation);
+	// correction of total energy for ground state isotopes
+	etot += excitation;
+        G4double ionmass = theKindOfFragment->GetPDGMass();
+        if(etot < ionmass) { etot = ionmass; }
       }
       if (theKindOfFragment != 0) 
 	{
