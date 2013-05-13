@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 May 2013: V.Ivant (emmuons-V09-06-08)
+- G4MuPairProductionModel - A.Bogdanov provides improved algorithm
+    for sampling of final state
+
 22 March 2013: V.Ivant (emmuons-V09-06-07)
 - G4MuPairProductionModel, G4MuBremsstrahlungModel - correctly use 
     "static const G4double" for const parameters

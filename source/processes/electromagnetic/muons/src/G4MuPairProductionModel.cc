@@ -555,6 +555,8 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     if(p <= p2) { break; }
   }
   */
+/*
+//###  
   //G4double p0;
   G4int lb = iymin+1;
   G4int rb = iymax;
@@ -577,6 +579,8 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     {
       p2 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy+1);
     } 
+//###  
+*/    
   /*        
   if(p < p0)
     {
@@ -588,8 +592,29 @@ G4MuPairProductionModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   */
   // G4cout << "iy= " << iy << " iymin= " << iymin << " iymax= " 
   //        << iymax << " Z= " << currentZ << G4endl;
-  G4double y = ya[iy] + dy*(p - p1)/(p2 - p1);
+//###  G4double y = ya[iy] + dy*(p - p1)/(p2 - p1);
 
+//###
+  G4int lb = iymin;
+  G4int rb = iymax;
+  G4int iy = (lb+rb)/2; 
+
+  while( rb-lb > 1 )
+  {
+    p2 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy);
+    if( p <= p2 )
+      { rb = iy; }
+    else
+      { lb = iy; }
+    iy = (lb+rb)/2;
+  }
+  iy = iy + 1;
+  p1 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy-1);
+  p2 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy);
+  
+  G4double y = ya[iy-1] + dy*(p - p1)/(p2 - p1);   
+//###
+  
   G4double PairEnergy = minPairEnergy*exp( exp(y)*logmaxmin );
 		       
   if(PairEnergy < minEnergy) { PairEnergy = minEnergy; }
