@@ -117,8 +117,6 @@ G4Material::G4Material(const G4String& name, G4double z,
   fMassFractionVector[0] = 1. ;
   fMassOfMolecule        = a/Avogadro;
   
-  //  (*theElementVector)[0] -> increaseCountUse();
-  
   if (fState == kStateUndefined)
     {
       if (fDensity > kGasThreshold) { fState = kStateSolid; }
@@ -304,8 +302,6 @@ void G4Material::ComputeDerivedQuantities()
   fIonisation  = new G4IonisParamMat(this);
   if (fSandiaTable) { delete fSandiaTable; }
   fSandiaTable = new G4SandiaTable(this);
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -352,7 +348,6 @@ void G4Material::AddElement(G4Element* element, G4int nAtoms)
      theElementVector->push_back(element);     
      fAtomsVector[fNumberOfElements] = nAtoms;
      fNumberOfComponents = ++fNumberOfElements;
-     //     element->increaseCountUse();
   } else {
     G4cout << "G4Material::AddElement ERROR for " << fName << " nElement= " 
 	   <<  fNumberOfElements << G4endl;
@@ -450,7 +445,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
   if(fraction < 0.0 || fraction > 1.0) {
     G4cout << "G4Material::AddMaterial ERROR for " << fName << " and " 
 	   << material->GetName() << "  mass fraction= " << fraction 
-	   << " is wrong " << G4endl;
+	   << " is wrong ";
     G4Exception ("G4Material::AddMaterial()", "mat034", FatalException, 	   
                  "Attempt to add material with wrong mass fraction");	   
   }
@@ -604,8 +599,8 @@ G4Material::G4Material(const G4Material& right)
 G4double G4Material::GetZ() const
 { 
   if (fNumberOfElements > 1) {
-     G4cout << "G4Material ERROR in GetZ. The material: " << fName << " is a mixture."
-            << G4endl;
+     G4cout << "G4Material ERROR in GetZ. The material: " << fName 
+	    << " is a mixture.";
      G4Exception ("G4Material::GetZ()", "mat036", FatalException, 
                   "the Atomic number is not well defined." );
   } 
@@ -617,8 +612,8 @@ G4double G4Material::GetZ() const
 G4double G4Material::GetA() const
 { 
   if (fNumberOfElements > 1) { 
-     G4cout << "G4Material ERROR in GetA. The material: " << fName << " is a mixture."
-            << G4endl;
+     G4cout << "G4Material ERROR in GetA. The material: " << fName 
+	    << " is a mixture.";
      G4Exception ("G4Material::GetA()", "mat037", FatalException,  
                   "the Atomic mass is not well defined." );
   } 

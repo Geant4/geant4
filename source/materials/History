@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-05-13 V.Ivanchenko (materials-V09-06-12)
+- G4NistMaterialBuilder, G4IonisParamMat - minor cleanup of 
+    chemical formula names, removed old commented lines,
+    this is proposed by M.Trocme;
+- G4Element - do not recompute Aeff and Neff (effective
+    material parameters will not be changed); removed old
+    commented lines, remove G4endl from exception description
+- G4Material - removed old commented lines, remove G4endl from 
+    exception description
+
 01-05-13 V.Ivanchenko (materials-V09-06-11)
 - G4NistMaterialBuilder, G4IonisParamMat - updated NIST material 
   parameters according to the review of  M.Trocme & S.Seltzer:

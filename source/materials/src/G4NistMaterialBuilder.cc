@@ -826,7 +826,6 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction( 8, 0.052316);
   AddElementByWeightFraction( 9, 0.017422);
   AddElementByWeightFraction(20, 0.018378);
-  //chFormulas[nMaterials-1] = "A-150-tissue";
 
   AddMaterial("G4_ACETONE", 0.7899, 0, 64.2, 3);
   AddElementByAtomCount("C" ,  3);
@@ -876,7 +875,6 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddMaterial("G4_AMMONIA", 0.000826019, 0, 53.7, 2, kStateGas);
   AddElementByAtomCount("N" ,  1);
   AddElementByAtomCount("H" ,  3);
-  ///chFormulas[nMaterials-1] = "NH_3   ";
 
   AddMaterial("G4_ANILINE", 1.0235, 0, 66.2, 3);
   AddElementByAtomCount("C" ,  6);
@@ -918,9 +916,6 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByAtomCount("O" ,  1);
 
   AddMaterial("G4_BGO", 7.13, 0, 534.1, 3);
-  ///AddElementByWeightFraction( 8, 0.154126);
-  ///AddElementByWeightFraction(32, 0.17482 );
-  ///AddElementByWeightFraction(83, 0.671054);
   AddElementByAtomCount("Bi",  4);
   AddElementByAtomCount("Ge",  3);
   AddElementByAtomCount("O" , 12);
@@ -960,8 +955,6 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(20, 0.225);
 
   AddMaterial("G4_BORON_CARBIDE", 2.52, 0, 84.7, 2);
-  ///AddElementByWeightFraction( 5, 0.78261);
-  ///AddElementByWeightFraction( 6, 0.21739);
   AddElementByAtomCount("B" ,  4);
   AddElementByAtomCount("C" ,  1);
 
@@ -1486,7 +1479,6 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByWeightFraction(35, 0.349103);
   AddElementByWeightFraction(47, 0.474105);
   AddElementByWeightFraction(53, 0.00312 );
-  // chFormulas[nMaterials-1] = "Photo_Emulsion";
 
   AddMaterial("G4_PLASTIC_SC_VINYLTOLUENE", 1.032, 0, 64.7, 2);
   // AddElementByWeightFraction( 1, 0.085);
@@ -1552,8 +1544,6 @@ void G4NistMaterialBuilder::NistCompoundMaterials()
   AddElementByAtomCount("H" ,  8);
 
   AddMaterial("G4_TEFLON", 2.2, 0, 99.1, 2);
-  ///AddElementByWeightFraction( 6, 0.240183);
-  ///AddElementByWeightFraction( 9, 0.759817);
   AddElementByAtomCount("C" ,  2);
   AddElementByAtomCount("F" ,  4);
 

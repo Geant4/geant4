@@ -184,18 +184,6 @@ public:  // with description
   //
   static
   G4Element* GetElement(G4String name, G4bool warning=true);
-
-  /*  
-  //count number of materials which use this element
-  //
-  inline G4int GetCountUse() const {return fCountUse;}
-  inline void  increaseCountUse()  {fCountUse++;}
-  inline void  decreaseCountUse()  {fCountUse--;}
-  
-  //count elements with same Z
-  //
-  inline G4int GetIndexZ() const {return fIndexZ;}
-  */    
     
   //Coulomb correction factor:
   //
@@ -258,9 +246,7 @@ private:
   G4IsotopeVector* theIsotopeVector;
   G4double* fRelativeAbundanceVector;     // Fraction nb of atomes per volume
                                           // for each constituent
-  //  G4int fCountUse;          // nb of materials which use this element
-  // G4int fIndexZ;            // index for elements with same Z
-    
+
   // Set up the static Table of Elements
   static G4ElementTable theElementTable;
   size_t fIndexInTable;

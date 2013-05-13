@@ -418,11 +418,11 @@ G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
   size_t numberOfMolecula = 54; 
   static const G4String name[54] = {
     // gas 0 - 12
-    "NH_3",       "C_4H_10",    "CO_2",       "C_2H_6",      "C_7H_16",      
+    "NH_3",       "C_4H_10",     "CO_2",      "C_2H_6",      "C_7H_16-Gas",
     // "G4_AMMONIA", "G4_BUTANE","G4_CARBON_DIOXIDE","G4_ETHANE", "G4_N-HEPTANE"
-    "C_6H_14",    "CH_4",       "NO",         "N_2O",        "C_8H_18",      
+    "C_6H_14-Gas",   "CH_4",     "NO",        "N_2O",        "C_8H_18-Gas",      
     // "G4_N-HEXANE" , "G4_METHANE", "x", "G4_NITROUS_OXIDE", "G4_OCTANE"
-    "C_5H_12",    "C_3H_8",     "H_2O-Gas",                        
+    "C_5H_12-Gas",   "C_3H_8",   "H_2O-Gas",                        
     // "G4_N-PENTANE", "G4_PROPANE", "G4_WATER_VAPOR"
 
     // liquid 13 - 39
