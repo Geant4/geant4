@@ -13,6 +13,12 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-May-2013, Makoto Asai                (phys-ctor-limiters-V09-06-03)
+- In G4StepLimiterPhysics, objects of G4StepLimiter and G4UserSpecialCuts
+  are now instantiated in ConstructProcess() method so that these process
+  objects are thread-local.
+
 29-Mar-2013, Andrea Dotti		(phys-ctor-limiters-V09-06-02)
 - Changes needed for MT: now G4VUserPhysicsList is a split class
 
