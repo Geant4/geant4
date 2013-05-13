@@ -82,7 +82,7 @@ class G4NeutronHPElasticData : public G4VCrossSectionDataSet
       void EnableOnFlightDopplerBroadening(){ onFlightDB = true; };
 
       void SetVerboseLevel( G4int );
-      G4int GetVerboseLevel();
+      G4int GetVerboseLevel() const;
    
    private:
    

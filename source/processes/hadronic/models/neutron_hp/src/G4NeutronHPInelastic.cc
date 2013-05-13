@@ -325,7 +325,7 @@ void G4NeutronHPInelastic::addChannelForNewElement()
    numEle = (G4int)G4Element::GetNumberOfElements();
 }
 
-G4int G4NeutronHPInelastic::GetVerboseLevel() 
+G4int G4NeutronHPInelastic::GetVerboseLevel() const
 {
    return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
 }

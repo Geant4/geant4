@@ -154,7 +154,7 @@ void G4NeutronHPCapture::addChannelForNewElement()
    numEle = (G4int)G4Element::GetNumberOfElements();
 }
 
-G4int G4NeutronHPCapture::GetVerboseLevel() 
+G4int G4NeutronHPCapture::GetVerboseLevel() const
 {
    return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
 }

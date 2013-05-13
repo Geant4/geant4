@@ -239,7 +239,7 @@ if ( ( ( *theCrossSections )( index ) )->GetVectorLength() == 0 ) return result;
   return result;
 }
 
-G4int G4NeutronHPFissionData::GetVerboseLevel() 
+G4int G4NeutronHPFissionData::GetVerboseLevel() const 
 {
    return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
 }

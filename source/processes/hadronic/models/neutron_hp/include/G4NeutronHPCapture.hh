@@ -57,7 +57,7 @@ class G4NeutronHPCapture : public G4HadronicInteraction
   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
    public:
-      G4int GetVerboseLevel();
+      G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
   
   private:

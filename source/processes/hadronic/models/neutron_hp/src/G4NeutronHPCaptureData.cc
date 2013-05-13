@@ -269,7 +269,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   return result;
 }
 
-G4int G4NeutronHPCaptureData::GetVerboseLevel() 
+G4int G4NeutronHPCaptureData::GetVerboseLevel() const 
 {
    return G4NeutronHPManager::GetInstance()->GetVerboseLevel();
 }
