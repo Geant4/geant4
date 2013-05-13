@@ -70,7 +70,7 @@ G4MonopoleTransportation::G4MonopoleTransportation( const G4Monopole* mpl,
     fThreshold_Warning_Energy( 100 * MeV ),  
     fThreshold_Important_Energy( 250 * MeV ), 
     fThresholdTrials( 10 ), 
-    fUnimportant_Energy( 1 * MeV ), 
+    // fUnimportant_Energy( 1 * MeV ), 
     fNoLooperTrials(0),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
     fShortStepOptimisation(false),    // Old default: true (=fast short steps)
@@ -268,18 +268,25 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
   }
   else   //  A field exerts force
   {
-     // G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
+     G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
      G4ThreeVector  EndUnitMomentum ;
      G4double       lengthAlongCurve ;
      G4double       restMass = fParticleDef->GetPDGMass() ;
- 
-     fFieldPropagator->SetChargeMomentumMass( particleMagneticCharge,    // in Mev/c 
-                                              particleElectricCharge,    // in e+ units
-                                              restMass           ) ;  
-     
-     // SetChargeMomentumMass is _not_ used here as it would in everywhere else, 
-     // it's just a workaround to pass the electric charge as well.
-     
+
+     G4ChargeState chargeState(particleElectricCharge,             // The charge can change (dynamic)
+                               fParticleDef->GetPDGSpin(),
+                               0,   //  Magnetic moment:  pParticleDef->GetMagneticMoment(),
+                               0,   //  Electric Dipole moment - not in Particle Definition 
+                               particleMagneticCharge );   // in Mev/c 
+
+     G4EquationOfMotion* equationOfMotion = 
+     (fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
+     ->GetEquationOfMotion();
+
+     equationOfMotion->SetChargeMomentumMass( chargeState,       //  Was particleMagneticCharge - in Mev/c 
+                                              momentumMagnitude, //  Was particleElectricCharge 
+                                              restMass ) ;  
+     // SetChargeMomentumMass now passes both the electric and magnetic charge - in chargeState
 
      G4ThreeVector spin        = track.GetPolarization() ;
      G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 

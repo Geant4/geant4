@@ -15,9 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19 February 13: V.Ivant (monopole-V09-06-04)
+10 May 13: J.Apostolakis (monopole-V09-06-05)
+- G4MonopoleTransportation and G4MonopoleEquation: 
+      Adapted to use G4ChargeState to pass Magnetic & Electric Charge, 
+          and to changed signature of SetChargeMomentumMass. 
+
+19 February 13: V.Ivantchenko (monopole-V09-06-04)
 - G4MonopoleTransportation - removed local variable fVerboseLevel
-    and Get/Set methods; use insead verboseLevel variable from 
+    and Get/Set methods; use instead verboseLevel variable from 
     the base class
 
 13 February 13: I.Hrivnacova (monopole-V09-06-03)

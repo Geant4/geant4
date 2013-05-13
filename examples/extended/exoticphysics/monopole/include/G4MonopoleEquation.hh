@@ -59,9 +59,9 @@ public:  // with description
 
   ~G4MonopoleEquation();
 
-  virtual void  SetChargeMomentumMass(G4double particleMagneticCharge,
-                              G4double particleElectricCharge,
-                              G4double mass);
+  virtual void  SetChargeMomentumMass( G4ChargeState particleChargeState,
+                                       G4double      momentum, 
+                                       G4double      mass);
   // magnetic charge in e+ units
                                  
   virtual void EvaluateRhsGivenB(const G4double y[],
