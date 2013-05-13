@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # export G4INSTALL=/home-cluck/syjun/g4p/work/g4.9.6.b01/geant4.9.6.b01
-export G4INSTALL=/home-cluck/yarba_j/work/test-geant4.9.6-ref02/geant4
+export G4INSTALL=/home/yarba_j/work/test-geant4.9.6-ref03/geant4-09-06-ref-03
 export G4SYSTEM=Linux-g++
 export G4SRC=${G4INSTALL}/source
 export G4LIB=${G4INSTALL}/lib64
@@ -11,7 +11,7 @@ export G4LIB_BUILD_SHARED=1
 export GLOBALLIBS=1
 
 # export G4DATA=${G4INSTALL}/data
-export G4DATA=/home-cluck/g4p/pbs/g4.9.6/geant4.9.6/data
+export G4DATA=/home/g4p/pbs/download/g4data
 export G4LEDATA=${G4DATA}/G4EMLOW6.32
 export G4LEVELGAMMADATA=${G4DATA}/PhotonEvaporation2.3
 export G4NEUTRONHPDATA=${G4DATA}/G4NDL4.3

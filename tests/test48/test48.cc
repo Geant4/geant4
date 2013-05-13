@@ -55,6 +55,7 @@
 #include "G4AntiNeutron.hh"
 #include "G4PionMinus.hh"
 #include "G4KaonMinus.hh"
+#include "G4GenericIon.hh"
 #include "G4ForceCondition.hh"
 
 #include "G4Box.hh"
@@ -150,8 +151,15 @@ int main(int argc, char** argv) {
   TestStoppingPhysics*   phys = new TestStoppingPhysics(verbose); // leak?
   // we need to get verbose from the inp file...
 
+  G4GenericIon* gion = G4GenericIon::GenericIon();
+  gion->SetProcessManager(new G4ProcessManager(gion));
+
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
+
+  G4IonTable* ions = partTable->GetIonTable();
+  ions->CreateAllIon();
+  ions->CreateAllIsomer();
 
   // Geometry
   //

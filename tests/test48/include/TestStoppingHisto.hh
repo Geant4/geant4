@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 #ifndef TestStoppingHisto_h
-#define TestStoppingHisto_n
+#define TestStoppingHisto_h
 
 #include <string>
 #include <vector>

@@ -24,6 +24,6 @@ else
   LDFLAGS  += $(shell $(ROOTSYS)/bin/root-config --glibs)
 endif
 
-#include $(G4INSTALL)/config/binmake.gmk
-include binmake.gmk
+include $(G4INSTALL)/config/binmake.gmk
+#include binmake.gmk
 
