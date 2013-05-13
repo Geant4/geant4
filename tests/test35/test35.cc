@@ -166,8 +166,15 @@ int main(int argc, char** argv)
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
   const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
 
+  G4GenericIon* gion = G4GenericIon::GenericIon();
+  gion->SetProcessManager(new G4ProcessManager(gion));
+
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
+
+  G4IonTable* ions = partTable->GetIonTable();
+  ions->CreateAllIon();
+  ions->CreateAllIsomer();
 
   G4double ang[20] = {0.0};
   G4double angpi[20] = {0.0};
@@ -314,14 +321,12 @@ int main(int argc, char** argv)
         hFile = nameGen;
         if(nameGen == "binary")       { hFile = "bic"; }
 
-	// Bertini and LHEP always active
+	// Bertini and FTFP always active
         else if(nameGen == "bertini") { 
 	  hFile = "bert"; 
           break;
 	}
-        else if(nameGen == "lepar")   { 
-	  nameGen = "lhep";  
-	  hFile = "lhep"; 
+        else if(nameGen == "ftfp")   { 
           break;
 	}
 	// Elastic always active
