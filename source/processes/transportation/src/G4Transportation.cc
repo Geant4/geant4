@@ -63,8 +63,10 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
-#include "G4ChordFinder.hh"
-#include "G4SafetyHelper.hh"
+
+#include "G4ChargeState.hh"
+#include "G4EquationOfMotion.hh"
+
 #include "G4FieldManagerStore.hh"
 
 class G4VSensitiveDetector;
@@ -86,7 +88,7 @@ G4Transportation::G4Transportation( G4int verbosity )
     fGeometryLimitedStep(true),
     fPreviousSftOrigin( 0.,0.,0. ),
     fPreviousSafety( 0.0 ),
-    // fParticleChange(), 
+    // fParticleChange(),
     fEndPointDistance( -1.0 ), 
     fThreshold_Warning_Energy( 100 * MeV ),  
     fThreshold_Important_Energy( 250 * MeV ), 
@@ -301,11 +303,20 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      G4double       momentumMagnitude = pParticle->GetTotalMomentum() ;
      G4ThreeVector  EndUnitMomentum ;
      G4double       lengthAlongCurve ;
- 
-     fFieldPropagator->SetChargeMomentumMass( particleCharge,    // in e+ units
-                                              momentumMagnitude, // in Mev/c 
-                                              restMass           ) ;  
 
+     G4ChargeState chargeState(particleCharge,             // The charge can change (dynamic)
+                               pParticleDef->GetPDGSpin(),
+                               magneticMoment); 
+
+     G4EquationOfMotion* equationOfMotion = 
+     (fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
+     ->GetEquationOfMotion();
+
+//     equationOfMotion->SetChargeMomentumMass( particleCharge,
+     equationOfMotion->SetChargeMomentumMass( chargeState,
+                                              momentumMagnitude,
+                                              restMass);
+      
      G4ThreeVector spin        = track.GetPolarization() ;
      G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
                                                track.GetMomentumDirection(),

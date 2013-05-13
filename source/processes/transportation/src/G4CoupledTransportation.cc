@@ -242,12 +242,45 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      }
   }
   G4double momentumMagnitude = pParticle->GetTotalMomentum() ;
- 
-  fFieldPropagator->SetChargeMomentumMass( particleCharge,    // in e+ units
-                                           momentumMagnitude, // in Mev/c 
-                                           restMass           ) ;  
-  // This should be obsolete - the call to SetChargeAndMoments below should do the work
 
+  if( fieldExertsForce )
+  {
+     G4EquationOfMotion*    equationOfMotion = 0; 
+
+     // equationOfMotion = 
+     //     (fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
+     //      ->GetEquationOfMotion();
+
+     // Consolidate into auxiliary method G4EquationOfMotion* GetEquationOfMotion() 
+     G4MagIntegratorStepper*  pStepper= 0;
+
+     G4ChordFinder*    pChordFinder= fFieldPropagator->GetChordFinder();
+     if( pChordFinder ) 
+     {
+        G4MagInt_Driver*  pIntDriver= 0; 
+
+        pIntDriver= pChordFinder->GetIntegrationDriver(); 
+        assert( pIntDriver );
+        if( pIntDriver ){
+           pStepper= pIntDriver->GetStepper(); 
+        }
+        assert( pStepper );
+        if( pStepper ) {
+           equationOfMotion= pStepper->GetEquationOfMotion();
+        }
+     }
+
+     G4ChargeState chargeState(particleCharge,             // The charge can change (dynamic)
+                               pParticleDef->GetPDGSpin(),
+                               magneticMoment); 
+
+     // End of proto GetEquationOfMotion() 
+     assert( equationOfMotion );
+     if( equationOfMotion )
+        equationOfMotion->SetChargeMomentumMass( chargeState,
+                                                 momentumMagnitude,
+                                                 restMass );
+  }
   G4ThreeVector spin        = track.GetPolarization() ;
   G4FieldTrack  theFieldTrack = G4FieldTrack( startPosition, 
                                             track.GetMomentumDirection(),
@@ -258,7 +291,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                             track.GetGlobalTime(), // Lab.
                                             track.GetProperTime(), // Part.
                                             &spin                  ) ;
-  theFieldTrack.SetChargeAndMoments( particleCharge ); // EM moments -- future extension 
 
   G4int stepNo= track.GetCurrentStepNumber(); 
 
