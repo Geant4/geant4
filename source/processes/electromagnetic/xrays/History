@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 May 13: P. Gumplinger (xrays-V09-06-02)
+- G4Scintillation.cc give the YieldRatio priority in cases when the
+  ExcitationRatio is both 0.0 or 1.0; necessary because the defaults in
+  G4Scintillation.cc (1.0) and G4OpticalPhysics.cc (0.0) are inconsistent 
+
 21  Feb 13: V.Ivanchenko (xrays-V09-06-01)
 - G4VXTRenergyLoss, G4StrawTubeXTRadiator - use const declaration to
     array of G4SandiaTable values

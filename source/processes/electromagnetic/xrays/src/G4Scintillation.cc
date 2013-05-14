@@ -385,7 +385,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                else {
                  G4double YieldRatio = aMaterialPropertiesTable->
                                           GetConstProperty("YIELDRATIO");
-                 if ( ExcitationRatio == 1.0 ) {
+                 if ( ExcitationRatio == 1.0 || ExcitationRatio == 0.0) {
                     Num = G4int (std::min(YieldRatio,1.0) * NumPhotons);
                  }
                  else {
