@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 May 2013, Davide Mancusi (test69-V09-06-00)
+- Migration to MT.
+- Suppress unused user stepping action.
+
 11 October 2012, Gabriele Cosmo (test69-V09-05-02)
 - Explicit inclusion of units and constants headers.
 

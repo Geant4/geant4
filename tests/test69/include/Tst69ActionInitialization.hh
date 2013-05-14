@@ -23,21 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// $Id$
+//
 
-#ifndef Tst69SteppingAction_H
-#define Tst69SteppingAction_H 1
+#ifndef Tst69ActionInitialization_h
+#define Tst69ActionInitialization_h 1
 
-#include "globals.hh"
-#include "G4UserSteppingAction.hh"
+#include "G4VUserActionInitialization.hh"
 
-class Tst69SteppingAction : public G4UserSteppingAction
+class Tst69ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    Tst69SteppingAction();
-    virtual ~Tst69SteppingAction();
+    Tst69ActionInitialization();
+    virtual ~Tst69ActionInitialization();
 
-    virtual void UserSteppingAction(const G4Step*);
+  public:
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
+
 };
 
 #endif
+
 

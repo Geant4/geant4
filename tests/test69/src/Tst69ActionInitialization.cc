@@ -24,62 +24,29 @@
 // ********************************************************************
 //
 //
+// $Id$
 //
 
-#include "Tst69DetectorConstruction.hh"
 #include "Tst69ActionInitialization.hh"
 
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+#include "Tst69RunAction.hh"
+#include "Tst69PrimaryGeneratorAction.hh"
+#include "Tst69StackingAction.hh"
 
-#include "G4ios.hh"
+Tst69ActionInitialization::Tst69ActionInitialization()
+{
+}
 
-#include "G4PhysListFactory.hh"
+Tst69ActionInitialization::~Tst69ActionInitialization()
+{
+}
 
-int main(int argc,char** argv) {
+void Tst69ActionInitialization::Build() const {
+  SetUserAction(new Tst69PrimaryGeneratorAction);
+  SetUserAction(new Tst69StackingAction);
+}
 
-  // Set the default random engine to RanecuEngine
-  CLHEP::RanecuEngine defaultEngine;
-  G4Random::setTheEngine(&defaultEngine);
-
-  // Run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
-
-  // UserInitialization classes
-  runManager->SetUserInitialization(new Tst69DetectorConstruction);
-
-  G4PhysListFactory factory;
-  G4VModularPhysicsList* phys = factory.GetReferencePhysList("QGSP_INCLXX");
-  runManager->SetUserInitialization(phys);
-
-  // UserAction classes
-  runManager->SetUserInitialization(new Tst69ActionInitialization);
-
-  if(argc==1)
-  {
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession* session = new G4UIterminal;
-    session->SessionStart();
-    delete session;
-  }
-  else
-  {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
-
-  delete runManager;
-  return 0;
+void Tst69ActionInitialization::BuildForMaster() const {
+  SetUserAction(new Tst69RunAction);
 }
 
