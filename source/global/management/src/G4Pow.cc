@@ -45,7 +45,7 @@
 
 #include "G4Pow.hh"
 
-G4ThreadLocal G4Pow* G4Pow::fpInstance = 0;
+G4Pow* G4Pow::fpInstance = 0;
 
 // -------------------------------------------------------------------
 

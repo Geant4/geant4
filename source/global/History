@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 13, 2013 M.Asai (global-V09-06-27)
+- Roll back G4Physics2DVector class to global-V09-06-24 to avoid
+  G4Physics2DVectorCache thread-local.
+- G4Pow - removed G4ThreadLocal declaration; fixed compillation warning 
+    in logA method at gcc47
+
+May 11, 2013 M.Asai (global-V09-06-26)
+- Fixed Windows runtime error of the previous tag.
+
+May 10, 2013 M.Asai (global-V09-06-25)
+- Make G4Physics2DVectorCache used in G4Physics2DVector class thread-local.
+
 May 8, 2013 G.Cosmo (global-V09-06-24)
 - Improved accuracy for log10A() and powA() in G4Pow (V.Ivantchenko).
 - Get rid of thread-local specifications for constant variables and data

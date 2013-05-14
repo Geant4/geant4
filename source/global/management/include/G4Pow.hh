@@ -101,7 +101,7 @@ class G4Pow
 
   private:
 
-    static G4ThreadLocal G4Pow* fpInstance;
+    static G4Pow* fpInstance;
 
     const G4double onethird;
     const G4int    max2;
@@ -192,7 +192,7 @@ inline G4double G4Pow::logA(G4double A) const
 
 inline G4double G4Pow::logX(G4double x) const
 {
-  G4double res;
+  G4double res = 0.0;
   G4double a = x;
   if(1.0 > x) { a = 1.0/x; }
 
