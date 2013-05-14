@@ -1,0 +1,12 @@
+# Definition of the radiation field
+# by means of the General Particle Source
+# http://reat.space.qinetiq.com/gps/
+/gps/particle ion 
+/gps/ion 53 125 53 0.
+/gps/energy 0. keV
+/gps/pos/type Volume
+/gps/pos/shape Cylinder
+/gps/pos/radius 0.30 mm
+/gps/pos/halfz 1.75 mm
+/gps/pos/centre 0. 0. 0. mm 
+

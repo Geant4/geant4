@@ -24,34 +24,36 @@
 // ********************************************************************
 //
 //
-
 #ifndef BrachyUserScoreWriter_h
 #define BrachyUserScoreWriter_h 1
 
 #include "globals.hh"
 #include "G4VScoreWriter.hh"
+#include "BrachyAnalysisManager.hh"
 /*
 // Code developed by:
 // S.Guatelli, susanna@uow.edu.au
 //
-Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
+Original code from geant4/examples/extended/runAndEvent/RE03, 
+// by M. Asai
 */
-
+//
 // class description:
 //
-//  This class represents storing the scored quantity into a file.
+//This class represents storing the scored quantity into a file.
 //
-class BrachyUserScoreWriter : public G4VScoreWriter {
-
+class BrachyUserScoreWriter:public G4VScoreWriter
+{
 public:
-  BrachyUserScoreWriter();
+  BrachyUserScoreWriter(BrachyAnalysisManager* analysis);
   virtual ~BrachyUserScoreWriter();
-
-public:
   // store a quantity into a file
-  void DumpQuantityToFile(const G4String & psName, const G4String & fileName, const G4String & option);
+  void DumpQuantityToFile(const G4String & psName, 
+                          const G4String & fileName, 
+                          const G4String & option);
+
+private:
+  BrachyAnalysisManager* analysis;
 };
-
 #endif
-
 

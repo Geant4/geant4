@@ -23,39 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// -------------------------------------------------------------------
+// $Id: SteppingAction.hh,v 1.2 2010/10/06 14:39:41 sincerti Exp $
+// -------------------------------------------------------------------
+// Code by Susanna Guatelli
 //
-//    ************************************************
-//    *                                              *
-//    *      BrachyPrimaryGeneratorMessenger.hh      *
-//    *                                              *
-//    ***********************************************
 //
-// $Id$
-//
-// 
-#ifndef BrachyPrimaryGeneratorMessenger_h
-#define BrachyPrimaryGeneratorMessenger_h 1
+#ifndef BrachySteppingAction_h
+#define BrachySteppingAction_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "G4UserSteppingAction.hh"
 
-class BrachyPrimaryGeneratorAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
+class BrachyAnalysisManager;
 
-class BrachyPrimaryGeneratorMessenger: public G4UImessenger
+class BrachySteppingAction: public G4UserSteppingAction
 {
 public:
-  BrachyPrimaryGeneratorMessenger(BrachyPrimaryGeneratorAction* );
-  ~BrachyPrimaryGeneratorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
+
+  BrachySteppingAction(BrachyAnalysisManager* analysis);
+  ~BrachySteppingAction();
+  
+  void UserSteppingAction(const G4Step*);
   
 private:
-
-  BrachyPrimaryGeneratorAction*  primaryAction;
-  G4UIdirectory*                 primaryDir; 
-  G4UIcmdWithAString*            primaryParticleEnergySpectrumCmd;
+  BrachyAnalysisManager* analysis;
 };
 #endif
-

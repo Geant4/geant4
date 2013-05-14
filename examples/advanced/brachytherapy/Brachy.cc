@@ -43,7 +43,9 @@
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "BrachyFactoryIr.hh"
-#include "BrachyAnalysis.hh"
+
+#include "BrachyAnalysisManager.hh"
+
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
@@ -67,6 +69,7 @@
 
 #include "G4ScoringManager.hh"
 #include "BrachyUserScoreWriter.hh"
+#include "BrachySteppingAction.hh"
 
 int main(int argc ,char ** argv)
 
@@ -78,8 +81,16 @@ int main(int argc ,char ** argv)
   // Access to the Scoring Manager pointer
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
 
+// Instantiate the analysis manager
+  BrachyAnalysisManager* analysis = new BrachyAnalysisManager();
+
+#ifdef ANALYSIS_USE
+  // Create ROOT file, histograms and ntuple
+  analysis -> book();
+#endif
+
   // Overwrite the default output file with user-defined one 
-  scoringManager->SetScoreWriter(new BrachyUserScoreWriter());
+  scoringManager->SetScoreWriter(new BrachyUserScoreWriter(analysis));
 
   // Initialize the physics component
   pRunManager -> SetUserInitialization(new BrachyPhysicsList);
@@ -92,19 +103,22 @@ int main(int argc ,char ** argv)
   BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction();
   pRunManager -> SetUserAction(primary);
 
+  BrachySteppingAction* stepping = new BrachySteppingAction(analysis);
+  pRunManager -> SetUserAction(stepping);
+
   BrachyRunAction *pRunAction = new BrachyRunAction();
   pRunManager -> SetUserAction(pRunAction);
-
-  //// Initialize the Visualization component 
+ 
+  //Initialize G4 kernel
+  pRunManager -> Initialize();
+ 
+//// Initialize the Visualization component 
 #ifdef G4VIS_USE
   // Visualization manager
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-  
-  //Initialize G4 kernel
-  pRunManager -> Initialize();
-
+ 
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  
   if (argc == 1)   // Define UI session for interactive mode.
@@ -128,6 +142,13 @@ int main(int argc ,char ** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
+
+#ifdef ANALYSIS_USE
+// Close the output ROOT file with the results
+   analysis -> save(); 
+#endif
+
+   delete analysis;
 
   delete pRunManager;
 

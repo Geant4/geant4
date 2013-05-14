@@ -23,45 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
-//
-// Code review: MGP, 5 November 2006 (still to be completed)
-//
 //    **********************************
 //    *                                *
-//    *      BrachyPhysicsList.hh      *
+//    *   BrachyPhysicsList.hh         *
 //    *                                *
 //    **********************************
-
+/*
+Author: Susanna Guatelli
+*/
 #ifndef BrachyPhysicsList_h
 #define BrachyPhysicsList_h 1
 
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
+#include "G4EmConfigurator.hh"
 #include "globals.hh"
 
-class BrachyPhysicsList: public G4VUserPhysicsList
+// Modular physics used in this application
+class BrachyPhysicsList: public G4VModularPhysicsList
 {
 public:
   BrachyPhysicsList();
   ~BrachyPhysicsList();
+  void ConstructParticle(); 
+ // void AddPhysicsList(const G4String& name);
+  void ConstructProcess();
 
 protected:
-  // Construct particle and physics
-  void ConstructParticle();
-  void ConstructProcess();
-  void ConstructBosons();
-  void ConstructLeptons();
-
   void SetCuts();
 
 private:
-
-  // These methods construct physics processes and register them
-  void ConstructEM();
+  G4VPhysicsConstructor* emPhysicsList;
+  G4VPhysicsConstructor* decPhysicsList;
+  G4VPhysicsConstructor* radDecayPhysicsList;
 };
-
 #endif
-
-
-

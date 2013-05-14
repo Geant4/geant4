@@ -37,7 +37,6 @@
 
 #include "globals.hh"
 #include "BrachyFactoryLeipzig.hh"
-#include"BrachyPrimaryGeneratorActionIr.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"
@@ -51,17 +50,11 @@
 BrachyFactoryLeipzig:: BrachyFactoryLeipzig()
 {
  leipzigSource = new  BrachyDetectorConstructionLeipzig();
- iridiumPrimaryParticle = new BrachyPrimaryGeneratorActionIr();
 }
 
 BrachyFactoryLeipzig:: ~BrachyFactoryLeipzig()
 {
   delete leipzigSource;
-}
-
-void BrachyFactoryLeipzig::CreatePrimaryGeneratorAction(G4Event* anEvent)
-{
- iridiumPrimaryParticle -> GeneratePrimaries(anEvent);                                 
 }
 
 void BrachyFactoryLeipzig::CreateSource(G4VPhysicalVolume* mother)
@@ -71,5 +64,6 @@ void BrachyFactoryLeipzig::CreateSource(G4VPhysicalVolume* mother)
 
 void BrachyFactoryLeipzig::CleanSource()
 {
-  ;
+  leipzigSource -> CleanLeipzigApplicator();
+  leipzigSource = 0; 
 }

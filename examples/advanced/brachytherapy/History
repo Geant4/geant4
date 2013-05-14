@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.35 2010-11-29 10:56:53 cirrone Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,13 @@ $Id: History,v 1.35 2010-11-29 10:56:53 cirrone Exp $
 
                       Category History file
                       ---------------------
+09.05.2013 -  S. Guatelli; tag brachy-V09-06-00
+              Modular Physics List introduced
+              Analysis class introduced using g4tools
+              GeneralParticleSource substitutes G4ParticleGun
+              Radioactive Decay introduced
+              Energy spectrum of gamma deriving from radioactive decay.
+              Now it is possible to switch among brachy sources with freedom.
 
 12.10.2012 -  L. Pandola; tag brachy-V09-05-01
 	      Added a CMakeLists.txt file

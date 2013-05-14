@@ -31,20 +31,15 @@
 //    *      BrachyPrimaryGeneratorAction.hh     *
 //    *                                          *
 //    ********************************************
-
-// This class must be implemented because it is mandatory
+// 
+// code developed by Susanna Guatelli
 
 #ifndef BrachyPrimaryGeneratorAction_h
 #define BrachyPrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-class G4ParticleGun;
-class G4Run;
-class G4Event;
-class BrachyAnalysisManager;
-class BrachyFactory;
-class  BrachyPrimaryGeneratorMessenger;
+class G4GeneralParticleSource;
 
 class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -54,13 +49,8 @@ class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
  public:
   void GeneratePrimaries(G4Event* anEvent);
-  void SwitchEnergy(G4String);
 
-private:
-  BrachyFactory* factory;
-  BrachyPrimaryGeneratorMessenger* primaryMessenger;
+ private:
+  G4GeneralParticleSource* gun;
 };
-
 #endif
-
-

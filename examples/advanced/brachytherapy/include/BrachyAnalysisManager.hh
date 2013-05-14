@@ -23,49 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
-//
-//
-//
-//    ********************************************
-//    *                                          *
-//    *      BrachyPrimaryGeneratorActionI.hh     *
-//    *                                          *
-//    ********************************************
-//Primary particles of the Iodium source. They are delivered from a random
-//point of the radionuclide  with random direction. The energy spectrum
-// of the gamma delivered is activated
 
-#ifndef BrachyPrimaryGeneratorActionI_h
-#define BrachyPrimaryGeneratorActionI_h 1
+#ifndef BrachyAnalysisManager_HH
+#define BrachyAnalysisManager_HH
 
 #include "globals.hh"
-#include <vector>
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "BrachyPrimaryGeneratorAction.hh"
+#include "g4root.hh"
 
-class G4ParticleGun;
-class G4Run;
-class G4Event;
-class BrachyAnalysisManager;
-class BrachyPrimaryGeneratorAction;
+/*
+Author: Susanna Guatelli
 
-class BrachyPrimaryGeneratorActionI : public  G4VUserPrimaryGeneratorAction
+The class BrachyAnalysisManager creates and manages histograms and ntuples
+
+This class was developed following the extended Geant4 example analysis/AnaEx01
+
+1 ntuple is created.
+*/
+// Define the total number of histograms
+
+// Define the total number of columns in the ntuple
+const G4int MaxHisto = 1;
+const G4int MaxNtCol = 4;
+
+class BrachyAnalysisManager
 {
- public:
-      BrachyPrimaryGeneratorActionI();
-      ~BrachyPrimaryGeneratorActionI();
 
- public:
-      void GeneratePrimaries(G4Event* anEvent);
-      G4double GetEnergy();
+public:
+  BrachyAnalysisManager();
+  ~BrachyAnalysisManager();
+  
 
- private:
-      G4ParticleGun* particleGun;
-      G4double primaryParticleEnergy;
-      std::vector<G4double> energySpectrum;
+  void book();
+  // Create the output ROOT file 
+  // Create the ntuple and histograms
+
+  void FillNtupleWithEnergyDeposition(G4double,G4double,G4double,G4double);
+  // Method to fill the ntuple with the energy deposition, integrated over a run, in each voxel
+  // of the scoring mesh
+
+  void FillPrimaryParticleHistogram(G4double);
+  // Energy spectrum of primary particles
+
+  void save();
+ // This method if called at the end of the run to store the 
+ // results in the ROOT file
+
+private:
+    G4bool factoryOn; 
+    G4int         fHistId[MaxHisto];
+    G4int         fNtColId[MaxNtCol];
+    G4AnaH1*      primaryParticleSpectrum;
 };
-
 #endif
+
+
 
