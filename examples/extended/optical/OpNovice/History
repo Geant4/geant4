@@ -1,4 +1,4 @@
-$Id: History 66435 2012-12-18 11:08:04Z ihrivnac $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13 May 2013 P. Gumplinger (OpNovice-V09-06-02)
+- Add .README file
 
 06 May 2013 P. Gumplinger (OpNovice-V09-06-01)
 - Apply all Examples Coding Guidelines
