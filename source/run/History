@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 13th, 2013, A. Dotti (run-V09-06-33)
+- Chaned G4WorkerRunManager to use new methods. All thread-control
+  method in G4UserWorkerInitialization are now public.
+
+May 13th, 2013, M.Asai (run-V09-06-32)
+- Introducing two new protected virtual methods in G4UserWorkerInitialization
+  as additional user hooks.
+
 May 7th, 2013, A. Dotti (run-V09-06-31)
 - Add explicit initialization of all ions and isomers needed, for MT
   coworking with particles-V09-06-26

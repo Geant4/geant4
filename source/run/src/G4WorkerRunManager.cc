@@ -96,6 +96,9 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     //Signal this thread can start event loop.
     //Note this will return only when all threads reach this point
     G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
+    const G4UserWorkerInitialization* uwi =G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
+    //Call a user hook: this is guaranteed all threads are "synchronized"
+    uwi->WorkerRunStart();
     // Event loop
     for ( G4int i_event = workerContext->GetThreadId(); i_event<n_event; i_event += workerContext->GetNumberThreads() )
     {
@@ -103,6 +106,10 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
         TerminateOneEvent();
         if(runAborted) break;
     }
+    //Call a user hook: note this is before the next barrier
+    //so threads execute this method asyncrhonouzly
+    //(TerminateRun allows for synch via G4RunAction::EndOfRun)
+    uwi->WorkerRunEnd();
     //Signal this thread has finished envent-loop.
     //Note this will return only whan all threads reach this point
     G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();

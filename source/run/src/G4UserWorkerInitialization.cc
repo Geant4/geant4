@@ -74,6 +74,7 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager(); 
     const CLHEP::HepRandomEngine* masterEngine = masterRM->getMasterRandomEngine();
     masterRM->GetUserWorkerInitialization()->SetupRNGEngine(masterEngine);
+    masterRM->GetUserWorkerInitialization()->WorkerInitialize();
     
     //Now initialize worker part of shared objects (geometry/physics)
     wThreadContext->BuildGeometryAndPhysicsVector();
@@ -132,7 +133,16 @@ G4UserWorkerInitialization::G4UserWorkerInitialization()
 G4UserWorkerInitialization::~G4UserWorkerInitialization()
 {;}
 
+void G4UserWorkerInitialization::WorkerInitialize() const
+{;}
+
 void G4UserWorkerInitialization::WorkerStart() const
+{;}
+
+void G4UserWorkerInitialization::WorkerRunStart() const
+{;}
+
+void G4UserWorkerInitialization::WorkerRunEnd() const
 {;}
 
 void G4UserWorkerInitialization::WorkerStop() const

@@ -71,11 +71,36 @@ public: // with description
     G4UserWorkerInitialization();
     virtual ~G4UserWorkerInitialization();
 
+    virtual void WorkerInitialize() const;
+    // This method is called after the tread is created but before the
+    // G4WorkerRunManager is instantiated.
+
+    virtual void WorkerStart() const;
+    // This method is called once at the beginning of simulation job
+    // when kernel classes and user action classes have already instantiated
+    // but geometry and physics have not been yet initialized. This situation
+    // is identical to "PreInit" state in the sequential mode.
+
+    virtual void WorkerRunStart() const;
+    // This method is called before an event loop. Geometry and physics have
+    // already been set up for the thread. All threads are synchronized and
+    // ready to start the local event loop. This situation is identical to
+    // "Idle" state in the sequential mode.
+
+    virtual void WorkerRunEnd() const;
+    // This method is called for each thread, when the local event loop has
+    // finished but before the synchronization over threads.
+
+    virtual void WorkerStop() const;
+    // This method is called once at the end of simulation job. 
+    // Implement here a clean up action.
+ 
     virtual G4Thread* CreateAndStartWorker(G4WorkerThread* workerThreadContext);
     //  Called by the kernel to create a new thread/worker
     //  and start work.
     // Usere should not re-implement this function (in derived class), except only if he/she
     // wants to verwrite the default threading model (see StartThread function)
+
     virtual void SetupRNGEngine(const CLHEP::HepRandomEngine* aRNGEngine) const;
     // Called by worker threads to set the Random Number Generator Engine
     // The default implementation "clones" the engine from the master thread
@@ -84,15 +109,8 @@ public: // with description
     // version supported by G4.
     // Important: this method is called by all threads at the same time
     //   if is user responsibilitiy to make it thread-safe
-protected: // with description
-    virtual void WorkerStart() const;
-    // This method is called once at the beginning of simulation job
-    // Implement here a setting-up action.
 
-    virtual void WorkerStop() const;
-    // This method is called once at the end of simulation job
-    // Implement here a clean up action.
-    
+protected:   
     static G4ThreadLocal G4WorkerThread* wThreadContext;
     
 protected: // with description
