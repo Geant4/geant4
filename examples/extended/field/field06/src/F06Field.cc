@@ -51,11 +51,12 @@ F06Field::F06Field() : G4UniformGravityField()
 {
   fEquation = new G4EqGravityField(this);
 
-  G4FieldManager* fFieldManager
+  G4FieldManager* fieldManager
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  fFieldManager->SetDetectorField(this);
+  fieldManager->SetDetectorField(this);
 
+//  fStepper = new G4ClassicalRK4(fEquation,12);
   fStepper = new G4ClassicalRK4(fEquation,8);
 
   G4double minStep           = 0.01*mm;
@@ -66,24 +67,24 @@ F06Field::F06Field() : G4UniformGravityField()
   G4double deltaChord        = 3.0*mm;
   fChordFinder->SetDeltaChord( deltaChord );
 
-  G4double deltaOneStep      = 0.01*mm; 
-  fFieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
+  G4double deltaOneStep      = 0.01*mm;
+  fieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
 
-  G4double deltaIntersection = 0.1*mm; 
-  fFieldManager->SetDeltaIntersection(deltaIntersection);
+  G4double deltaIntersection = 0.1*mm;
+  fieldManager->SetDeltaIntersection(deltaIntersection);
 
-  G4TransportationManager* fTransportManager =
+  G4TransportationManager* transportManager =
          G4TransportationManager::GetTransportationManager();
 
-  fieldPropagator = fTransportManager->GetPropagatorInField();
+  fFieldPropagator = transportManager->GetPropagatorInField();
 
   G4double epsMin            = 2.5e-7*mm;
   G4double epsMax            = 0.05*mm;
  
-  fieldPropagator->SetMinimumEpsilonStep(epsMin);
-  fieldPropagator->SetMaximumEpsilonStep(epsMax);
+  fFieldPropagator->SetMinimumEpsilonStep(epsMin);
+  fFieldPropagator->SetMaximumEpsilonStep(epsMax);
  
-  fFieldManager->SetChordFinder(fChordFinder);
+  fieldManager->SetChordFinder(fChordFinder);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

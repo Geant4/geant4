@@ -47,8 +47,8 @@ public:
     F06PhysicsList();
     virtual ~F06PhysicsList();
 
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
 
     void SetCuts();
 

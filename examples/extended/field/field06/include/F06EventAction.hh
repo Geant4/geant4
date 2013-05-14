@@ -45,7 +45,7 @@ class F06EventAction : public G4UserEventAction
   public:
 
     F06EventAction();
-    ~F06EventAction();
+    virtual ~F06EventAction();
 
   public:
 
@@ -54,18 +54,18 @@ class F06EventAction : public G4UserEventAction
 
     G4int GetEventNo();
     void SetEventVerbose(G4int);
-    
-    void SetDrawFlag(G4String val)  { drawFlag = val; };
-    void SetPrintModulo(G4int val)  { printModulo = val; };
-        
+
+    void SetDrawFlag(G4String val)  { fDrawFlag = val; };
+    void SetPrintModulo(G4int val)  { fPrintModulo = val; };
+
   private:
 
-    F06EventActionMessenger* eventMessenger;
+    F06EventActionMessenger* fEventMessenger;
 
-    G4int verboselevel;
-    G4int printModulo;   
+    G4int fVerboseLevel;
+    G4int fPrintModulo;
 
-    G4String drawFlag;
+    G4String fDrawFlag;
 
 };
 

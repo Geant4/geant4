@@ -28,7 +28,7 @@
 /// \file field/field06/src/F06EventAction.cc
 /// \brief Implementation of the F06EventAction class
 //
-
+//
 #include "F06EventAction.hh"
 
 #include "F06EventActionMessenger.hh"
@@ -40,26 +40,34 @@
 #include "G4VVisManager.hh"
 #include "Randomize.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F06EventAction::F06EventAction()
- : verboselevel(0), printModulo(10), drawFlag("all")
+ : fVerboseLevel(0), fPrintModulo(10), fDrawFlag("all")
 {
-  eventMessenger = new F06EventActionMessenger(this);
+  fEventMessenger = new F06EventActionMessenger(this);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F06EventAction::~F06EventAction()
 {
-  delete eventMessenger;
+  delete fEventMessenger;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F06EventAction::BeginOfEventAction(const G4Event* evt)
 {
  G4int evtNb = evt->GetEventID();
- if (evtNb%printModulo == 0) 
+ if (evtNb%fPrintModulo == 0)
     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-     
- if(verboselevel>0)
+
+ if(fVerboseLevel>0)
     G4cout << "<<< Event  " << evtNb << " started." << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F06EventAction::EndOfEventAction(const G4Event* evt)
 {
@@ -71,26 +79,30 @@ void F06EventAction::EndOfEventAction(const G4Event* evt)
 
    G4int n_trajectories = 0;
 
-   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  
-   for(G4int i=0; i<n_trajectories; i++) 
-      { G4Trajectory* trj = (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
-        if(trj->GetParticleDefinition()->GetParticleName() != "neutron") continue;
-        if (drawFlag == "all") trj->DrawTrajectory();
+   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+   for(G4int i=0; i<n_trajectories; i++)
+      { G4Trajectory* trj = 
+                      (G4Trajectory *)((*(evt->GetTrajectoryContainer()))[i]);
+        if(trj->GetParticleDefinition()->GetParticleName()!="neutron") continue;
+        if (fDrawFlag == "all") trj->DrawTrajectory();
       }
-  }  
+  }
 
-  if (verboselevel>0)
+  if (fVerboseLevel>0)
      G4cout << "<<< Event  " << evt->GetEventID() << " ended." << G4endl;
-  
+
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int F06EventAction::GetEventNo()
 {
-  G4int evno = fpEventManager->GetConstCurrentEvent()->GetEventID();
-  return evno ;
+  return fpEventManager->GetConstCurrentEvent()->GetEventID();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F06EventAction::SetEventVerbose(G4int level)
 {
-  verboselevel = level ;
+  fVerboseLevel = level;
 }

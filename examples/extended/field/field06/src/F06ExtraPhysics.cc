@@ -28,7 +28,7 @@
 /// \file field/field06/src/F06ExtraPhysics.cc
 /// \brief Implementation of the F06ExtraPhysics class
 //
-
+//
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -44,12 +44,20 @@
 
 #include "F06ExtraPhysics.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F06ExtraPhysics::F06ExtraPhysics() 
     : G4VPhysicsConstructor("Extra") {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F06ExtraPhysics::~F06ExtraPhysics() {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F06ExtraPhysics::ConstructParticle() {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F06ExtraPhysics::ConstructProcess()
 {
@@ -74,6 +82,8 @@ void F06ExtraPhysics::ConstructProcess()
     AddBetaDecay();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F06ExtraPhysics::AddBetaDecay()
 {
     aParticleIterator->reset();
@@ -89,7 +99,8 @@ void F06ExtraPhysics::AddBetaDecay()
            particle->SetPDGStable(false);
 
            G4DecayTable * table = new G4DecayTable();
-           G4VDecayChannel* mode = new G4NeutronBetaDecayChannel("neutron",1.00);
+           G4VDecayChannel* mode = 
+                                new G4NeutronBetaDecayChannel("neutron",1.00);
            table->Insert(mode);
            particle->SetDecayTable(table);
 

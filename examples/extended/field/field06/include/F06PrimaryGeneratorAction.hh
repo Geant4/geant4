@@ -50,11 +50,11 @@ public:
   F06PrimaryGeneratorAction(void);    
   virtual ~F06PrimaryGeneratorAction();
 
-  void GeneratePrimaries(G4Event*);
+  virtual void GeneratePrimaries(G4Event*);
 
 private:
 
-  G4ParticleGun* particleGun;
+  G4ParticleGun* fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

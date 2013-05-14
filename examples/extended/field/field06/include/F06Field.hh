@@ -51,14 +51,14 @@ class F06Field : public G4UniformGravityField
 public:
 
   F06Field();
-  ~F06Field();
+  virtual ~F06Field();
 
 private:
 
   G4EqGravityField*       fEquation;
   G4MagIntegratorStepper* fStepper;
   G4ChordFinder*          fChordFinder;
-  G4PropagatorInField*    fieldPropagator;
+  G4PropagatorInField*    fFieldPropagator;
 
 };
 

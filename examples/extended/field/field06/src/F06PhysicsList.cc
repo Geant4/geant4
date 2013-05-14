@@ -28,7 +28,7 @@
 /// \file field/field06/src/F06PhysicsList.cc
 /// \brief Implementation of the F06PhysicsList class
 //
-
+//
 #include "F06PhysicsList.hh"
 
 #include "F06ExtraPhysics.hh"
@@ -47,14 +47,19 @@
 #include "G4MuonDecayChannelWithSpin.hh"
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 F06PhysicsList::F06PhysicsList() : G4VModularPhysicsList() 
 {
     RegisterPhysics(new G4DecayPhysics());
     RegisterPhysics(new F06ExtraPhysics());
 }
 
-F06PhysicsList::~F06PhysicsList()
-{;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F06PhysicsList::~F06PhysicsList() {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F06PhysicsList::ConstructParticle()
 {
@@ -62,12 +67,18 @@ void F06PhysicsList::ConstructParticle()
     G4Proton::ProtonDefinition();
     G4Electron::ElectronDefinition();
     G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+    G4MuonPlus::MuonPlusDefinition();
+    G4MuonMinus::MuonMinusDefinition();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F06PhysicsList::ConstructProcess()
 {
     G4VModularPhysicsList::ConstructProcess();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F06PhysicsList::SetCuts()
 {

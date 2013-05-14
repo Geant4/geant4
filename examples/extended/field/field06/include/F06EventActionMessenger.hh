@@ -48,17 +48,17 @@ class F06EventActionMessenger: public G4UImessenger
   public:
 
     F06EventActionMessenger(F06EventAction*);
-   ~F06EventActionMessenger();
+    virtual ~F06EventActionMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
 
-    F06EventAction* eventAction;   
+    F06EventAction* fEventAction;   
 
-    G4UIcmdWithAnInteger* setVerboseCmd;
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;
+    G4UIcmdWithAnInteger* fSetVerboseCmd;
+    G4UIcmdWithAString*   fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;
 };
 
 #endif
