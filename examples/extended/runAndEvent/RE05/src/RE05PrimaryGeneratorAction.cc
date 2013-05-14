@@ -39,10 +39,15 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 
+G4VPrimaryGenerator* RE05PrimaryGeneratorAction::HEPEvt = 0;
+
 RE05PrimaryGeneratorAction::RE05PrimaryGeneratorAction()
 {
-  const char* filename = "pythia_event.data";
-  HEPEvt = new G4HEPEvtInterface(filename);
+  if(!HEPEvt)
+  {
+    const char* filename = "pythia_event.data";
+    HEPEvt = new G4HEPEvtInterface(filename);
+  }
 
   G4int n_particle = 1;
   G4ParticleGun* fParticleGun = new G4ParticleGun(n_particle);
@@ -62,15 +67,21 @@ RE05PrimaryGeneratorAction::RE05PrimaryGeneratorAction()
 
 RE05PrimaryGeneratorAction::~RE05PrimaryGeneratorAction()
 {
-  delete HEPEvt;
+  if(HEPEvt) { delete HEPEvt; HEPEvt=0; }
   delete particleGun;
   delete messenger;
 }
 
+#include "G4AutoLock.hh"
+namespace { G4Mutex RE05PrimGenMutex = G4MUTEX_INITIALIZER; }
+
 void RE05PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   if(useHEPEvt)
-  { HEPEvt->GeneratePrimaryVertex(anEvent); }
+  {
+    G4AutoLock lock(&RE05PrimGenMutex);
+    HEPEvt->GeneratePrimaryVertex(anEvent);
+  }
   else
   { particleGun->GeneratePrimaryVertex(anEvent); }
 }

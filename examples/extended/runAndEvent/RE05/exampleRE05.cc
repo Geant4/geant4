@@ -32,18 +32,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#include "RE05WorkerInitialization.hh"
+#else
 #include "G4RunManager.hh"
+#include "RE05SteppingVerbose.hh"
+#endif
+
 #include "G4UImanager.hh"
 
 #include "RE05DetectorConstruction.hh"
-#include "QGSP_BERT.hh"
-#include "RE05PrimaryGeneratorAction.hh"
-#include "RE05RunAction.hh"
-#include "RE05EventAction.hh"
-#include "RE05StackingAction.hh"
-#include "RE05TrackingAction.hh"
-#include "RE05SteppingAction.hh"
-#include "RE05SteppingVerbose.hh"
+#include "FTFP_BERT.hh"
+#include "RE05ActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -55,45 +56,30 @@
 
 int main(int argc,char** argv)
 {
-  // User Verbose output class
-  //
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  G4int number_of_threads = 4; // default number of threads
+  runManager->SetNumberOfThreads(number_of_threads);
+  runManager->SetUserInitialization(new RE05WorkerInitialization);
+#else
   G4VSteppingVerbose* verbosity = new RE05SteppingVerbose;
   G4VSteppingVerbose::SetInstance(verbosity);
-  
-  // Run manager
-  //
   G4RunManager* runManager = new G4RunManager;
+#endif
 
   // User Initialization classes (mandatory)
   //
   G4VUserDetectorConstruction* detector = new RE05DetectorConstruction;
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new QGSP_BERT();
+  G4VUserPhysicsList* physics = new FTFP_BERT();
   runManager->SetUserInitialization(physics);
+  //
+  G4VUserActionInitialization* actions = new RE05ActionInitialization;
+  runManager->SetUserInitialization(actions);
 
   runManager->Initialize();
 
-  // User Action classes
-  //
-  G4VUserPrimaryGeneratorAction* gen_action = new RE05PrimaryGeneratorAction;
-  runManager->SetUserAction(gen_action);
-  //
-  G4UserRunAction* run_action = new RE05RunAction;
-  runManager->SetUserAction(run_action);
-  //
-  G4UserEventAction* event_action = new RE05EventAction;
-  runManager->SetUserAction(event_action);
-  //
-  G4UserStackingAction* stacking_action = new RE05StackingAction;
-  runManager->SetUserAction(stacking_action);
-  //
-  G4UserTrackingAction* tracking_action = new RE05TrackingAction;
-  runManager->SetUserAction(tracking_action);
-  //
-  G4UserSteppingAction* stepping_action = new RE05SteppingAction;
-  runManager->SetUserAction(stepping_action);
-  
 #ifdef G4VIS_USE
       G4VisManager* visManager = new G4VisExecutive;
       visManager->Initialize();
@@ -129,7 +115,6 @@ int main(int argc,char** argv)
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
   delete runManager;
-  delete verbosity;
 
   return 0;
 }

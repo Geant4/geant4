@@ -35,6 +35,7 @@
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Transform3D.hh"
@@ -99,18 +100,18 @@ class RE05CalorimeterHit : public G4VHit
 
 typedef G4THitsCollection<RE05CalorimeterHit> RE05CalorimeterHitsCollection;
 
-extern G4Allocator<RE05CalorimeterHit> RE05CalorimeterHitAllocator;
+extern G4ThreadLocal G4Allocator<RE05CalorimeterHit>* RE05CalorimeterHitAllocator;
 
 inline void* RE05CalorimeterHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) RE05CalorimeterHitAllocator.MallocSingle();
-  return aHit;
+  if(!RE05CalorimeterHitAllocator)
+    RE05CalorimeterHitAllocator = new G4Allocator<RE05CalorimeterHit>;
+  return (void*) RE05CalorimeterHitAllocator->MallocSingle();
 }
 
 inline void RE05CalorimeterHit::operator delete(void *aHit)
 {
-  RE05CalorimeterHitAllocator.FreeSingle((RE05CalorimeterHit*) aHit);
+  RE05CalorimeterHitAllocator->FreeSingle((RE05CalorimeterHit*) aHit);
 }
 
 #endif

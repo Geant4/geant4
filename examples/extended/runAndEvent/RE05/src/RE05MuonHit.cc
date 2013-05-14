@@ -39,7 +39,7 @@
 #include "G4AttDef.hh"
 #include "G4AttCheck.hh"
 
-G4Allocator<RE05MuonHit> RE05MuonHitAllocator;
+G4ThreadLocal G4Allocator<RE05MuonHit>* RE05MuonHitAllocator=0;
 
 RE05MuonHit::RE05MuonHit()
 {;}

@@ -32,7 +32,6 @@
 #include "RE05DetectorConstruction.hh"
 #include "RE05TrackerSD.hh"
 #include "RE05CalorimeterSD.hh"
-#include "RE05CalorimeterROGeometry.hh"
 #include "RE05MuonSD.hh"
 #include "RE05TrackerParametrisation.hh"
 #include "RE05CalorimeterParametrisation.hh"
@@ -61,7 +60,6 @@ RE05DetectorConstruction::RE05DetectorConstruction()
 {
 
 #include "RE05DetectorParameterDef.icc"
-  DefineMaterials();
 
 }
 
@@ -113,22 +111,7 @@ void RE05DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* RE05DetectorConstruction::Construct()
 {
-  //-------------------------------------------------------------------------
-  // Magnetic field
-  //-------------------------------------------------------------------------
-
-  static G4bool fieldIsInitialized = false;
-  if(!fieldIsInitialized)
-  {
-    RE05Field* myField = new RE05Field;
-    G4FieldManager* fieldMgr
-      = G4TransportationManager::GetTransportationManager()
-        ->GetFieldManager();
-    fieldMgr->SetDetectorField(myField);
-    fieldMgr->CreateChordFinder(myField);
-    fieldIsInitialized = true;
-  }
-
+  DefineMaterials();
 
   //-------------------------------------------------------------------------
   // Detector geometry
@@ -233,36 +216,33 @@ G4VPhysicalVolume* RE05DetectorConstruction::Construct()
   muoncounter_logVisAtt->SetForceWireframe(true);
   muoncounter_log->SetVisAttributes(muoncounter_logVisAtt);
 
-  //------------------------------------------------------------------
-  // Sensitive Detector
-  //------------------------------------------------------------------
+  return experimentalHall_phys;
+}
 
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+void RE05DetectorConstruction::ConstructSDandField()
+{
+  //-------------------------------------------------------------------------
+  // Magnetic field
+  //-------------------------------------------------------------------------
+  RE05Field* myField = new RE05Field;
+  G4FieldManager* fieldMgr
+    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  fieldMgr->SetDetectorField(myField);
+  fieldMgr->CreateChordFinder(myField);
 
+  //------------------------------------------------------------------
+  // Sensitive Detectors
+  //------------------------------------------------------------------
   G4String trackerSDname = "/mydet/tracker";
   RE05TrackerSD * trackerSD = new RE05TrackerSD(trackerSDname);
-  SDman->AddNewDetector(trackerSD);
-  trackerLayer_log->SetSensitiveDetector(trackerSD);
+  SetSensitiveDetector("trackerB_L",trackerSD);
 
   G4String calorimeterSDname = "/mydet/calorimeter";
   RE05CalorimeterSD * calorimeterSD = new RE05CalorimeterSD(calorimeterSDname);
-  G4String ROgeometryName = "CalorimeterROGeom";
-  G4VReadOutGeometry* calRO = new RE05CalorimeterROGeometry(ROgeometryName);
-  calRO->BuildROGeometry();
-  calRO->SetName(ROgeometryName);
-  calorimeterSD->SetROgeometry(calRO);
-  SDman->AddNewDetector(calorimeterSD);
-  calorimeter_log->SetSensitiveDetector(calorimeterSD);
+  SetSensitiveDetector("caloT_L",calorimeterSD);
 
   G4String muonSDname = "/mydet/muon";
   RE05MuonSD * muonSD = new RE05MuonSD(muonSDname);
-  SDman->AddNewDetector(muonSD);
-  muoncounter_log->SetSensitiveDetector(muonSD);
-
-  //------------------------------------------------------------------
-  // Digitizer modules
-  //------------------------------------------------------------------
-
-  return experimentalHall_phys;
+  SetSensitiveDetector("mucounter_L",muonSD);
 }
 

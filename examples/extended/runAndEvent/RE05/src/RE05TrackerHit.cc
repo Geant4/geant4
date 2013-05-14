@@ -39,7 +39,7 @@
 #include "G4AttDef.hh"
 #include "G4AttCheck.hh"
 
-G4Allocator<RE05TrackerHit> RE05TrackerHitAllocator;
+G4ThreadLocal G4Allocator<RE05TrackerHit>* RE05TrackerHitAllocator=0;
 
 RE05TrackerHit::RE05TrackerHit()
 {;}

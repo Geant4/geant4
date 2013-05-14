@@ -35,6 +35,7 @@
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
 class G4AttDef;
@@ -79,18 +80,17 @@ class RE05MuonHit : public G4VHit
 
 typedef G4THitsCollection<RE05MuonHit> RE05MuonHitsCollection;
 
-extern G4Allocator<RE05MuonHit> RE05MuonHitAllocator;
+extern G4ThreadLocal G4Allocator<RE05MuonHit>* RE05MuonHitAllocator;
 
 inline void* RE05MuonHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) RE05MuonHitAllocator.MallocSingle();
-  return aHit;
+  if(!RE05MuonHitAllocator) RE05MuonHitAllocator = new G4Allocator<RE05MuonHit>;
+  return (void *) RE05MuonHitAllocator->MallocSingle();
 }
 
 inline void RE05MuonHit::operator delete(void *aHit)
 {
-  RE05MuonHitAllocator.FreeSingle((RE05MuonHit*) aHit);
+  RE05MuonHitAllocator->FreeSingle((RE05MuonHit*) aHit);
 }
 
 #endif

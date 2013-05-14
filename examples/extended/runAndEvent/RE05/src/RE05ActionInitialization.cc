@@ -23,32 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: RE05ActionInitialization.cc 66522 2012-12-19 12:26:04Z ihrivnac $
 //
-/// \file RE05/include/RE05CalorimeterROGeometry.hh
-/// \brief Definition of the RE05CalorimeterROGeometry class
+/// \file RE05/src/RE05ActionInitialization.cc
+/// \brief Implementation of the RE05ActionInitialization class
 //
 
-#ifndef RE05CalorimeterROGeometry_h
-#define RE05CalorimeterROGeometry_h 1
+#include "RE05ActionInitialization.hh"
+#include "RE05PrimaryGeneratorAction.hh"
+#include "RE05RunAction.hh"
+#include "RE05EventAction.hh"
+#include "RE05StackingAction.hh"
+#include "RE05TrackingAction.hh"
+#include "RE05SteppingAction.hh"
 
-#include "G4VReadOutGeometry.hh"
+RE05ActionInitialization::RE05ActionInitialization()
+{;}
 
-class G4Material;
+RE05ActionInitialization::~RE05ActionInitialization()
+{;}
 
-class RE05CalorimeterROGeometry : public G4VReadOutGeometry
+void RE05ActionInitialization::Build() const
 {
-public:
-  RE05CalorimeterROGeometry();
-  RE05CalorimeterROGeometry(G4String);
-  virtual ~RE05CalorimeterROGeometry();
+  G4VUserPrimaryGeneratorAction* gen_action = new RE05PrimaryGeneratorAction;
+  SetUserAction(gen_action);
+  //
+  G4UserRunAction* run_action = new RE05RunAction;
+  SetUserAction(run_action);
+  //
+  G4UserEventAction* event_action = new RE05EventAction;
+  SetUserAction(event_action);
+  //
+  G4UserStackingAction* stacking_action = new RE05StackingAction;
+  SetUserAction(stacking_action);
+  //
+  G4UserTrackingAction* tracking_action = new RE05TrackingAction;
+  SetUserAction(tracking_action);
+  //
+  G4UserSteppingAction* stepping_action = new RE05SteppingAction;
+  SetUserAction(stepping_action);
+}
 
-private:
-  virtual G4VPhysicalVolume* Build();
-  G4Material* dummyMat;
+void RE05ActionInitialization::BuildForMaster() const
+{
+  //
+  G4UserRunAction* run_action = new RE05RunAction;
+  SetUserAction(run_action);
+}
 
-#include "RE05DetectorParameterDef.hh"
-
-};
-
-#endif

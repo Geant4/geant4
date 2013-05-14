@@ -49,7 +49,7 @@ class RE05PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
-    G4VPrimaryGenerator* HEPEvt;
+    static G4VPrimaryGenerator* HEPEvt;
     G4VPrimaryGenerator* particleGun;
     RE05PrimaryGeneratorMessenger* messenger;
     G4bool useHEPEvt;

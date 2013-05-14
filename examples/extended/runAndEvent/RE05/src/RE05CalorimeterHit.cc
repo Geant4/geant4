@@ -41,7 +41,7 @@
 #include "G4AttDef.hh"
 #include "G4AttCheck.hh"
 
-G4Allocator<RE05CalorimeterHit> RE05CalorimeterHitAllocator;
+G4ThreadLocal G4Allocator<RE05CalorimeterHit>* RE05CalorimeterHitAllocator=0;
 
 RE05CalorimeterHit::RE05CalorimeterHit()
 {pLogV=0;}

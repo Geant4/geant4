@@ -17,6 +17,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-05-13 M.Asai (exampleRE05-V09-06-02)
+- Migrated to multi-thread.
+- Readout geometry is disabled, as it won't be supported by Geant4
+  version 10.
+
 10-05-13 K.Murakami  (exampleRE05-V09-06-01)
 - update pythia_main.f and data file. # of events in event data is 100.
   increase digits for PDG code of HEPEVT.

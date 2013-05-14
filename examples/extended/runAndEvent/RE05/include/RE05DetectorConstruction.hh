@@ -47,6 +47,7 @@ class RE05DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      virtual G4VPhysicalVolume* Construct();
+     virtual void ConstructSDandField();
 
   private:
      void DefineMaterials();
@@ -63,6 +64,7 @@ class RE05DetectorConstruction : public G4VUserDetectorConstruction
   G4Element* C;
   G4Element* N;
   G4Element* O;
+
 };
 
 #endif

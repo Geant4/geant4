@@ -23,40 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: RE05ActionInitialization.hh 66522 2012-12-19 12:26:04Z ihrivnac $
 //
-/// \file RE05/src/RE05RunAction.cc
-/// \brief Implementation of the RE05RunAction class
+/// \file RE05/include/RE05ActionInitialization.hh
+/// \brief Definition of the RE05ActionInitialization class
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#ifndef RE05ActionInitialization_H
+#define RE05ActionInitialization_H 1
 
-#include "RE05RunAction.hh"
+#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-#include "G4Run.hh"
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
-#include "G4ios.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RE05RunAction::RE05RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-RE05RunAction::~RE05RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RE05RunAction::BeginOfRunAction(const G4Run* aRun)
+class RE05ActionInitialization : public G4VUserActionInitialization
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
-//  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-}
+  public:
+    RE05ActionInitialization();
+    virtual ~RE05ActionInitialization();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
+};
+
+#endif
+

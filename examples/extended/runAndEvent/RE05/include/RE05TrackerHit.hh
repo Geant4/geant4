@@ -35,6 +35,7 @@
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4Types.hh"
 #include "G4ThreeVector.hh"
 
 class G4AttDef;
@@ -76,18 +77,17 @@ class RE05TrackerHit : public G4VHit
 
 typedef G4THitsCollection<RE05TrackerHit> RE05TrackerHitsCollection;
 
-extern G4Allocator<RE05TrackerHit> RE05TrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<RE05TrackerHit>* RE05TrackerHitAllocator;
 
 inline void* RE05TrackerHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) RE05TrackerHitAllocator.MallocSingle();
-  return aHit;
+  if(!RE05TrackerHitAllocator) RE05TrackerHitAllocator = new G4Allocator<RE05TrackerHit>;
+  return (void *) RE05TrackerHitAllocator->MallocSingle();
 }
 
 inline void RE05TrackerHit::operator delete(void *aHit)
 {
-  RE05TrackerHitAllocator.FreeSingle((RE05TrackerHit*) aHit);
+  RE05TrackerHitAllocator->FreeSingle((RE05TrackerHit*) aHit);
 }
 
 #endif
