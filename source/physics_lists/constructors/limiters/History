@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-May-2013, Gabriele Cosmo             (phys-ctor-limiters-V09-06-05)
+- Fixed GNUmakefile: added dependency on processes/scoring.
+
 14-May-2013, Makoto Asai                (phys-ctor-limiters-V09-06-04)
 - Introducing G4ParallelWorldPhysics.
 

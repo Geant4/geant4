@@ -41,6 +41,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/physics_lists/util/include \
 	    -I$(G4BASE)/physics_lists/constructors/factory/include \
             -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/scoring/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
 	    -I$(G4BASE)/processes/electromagnetic/utils/include \
