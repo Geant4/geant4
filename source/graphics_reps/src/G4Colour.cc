@@ -79,19 +79,22 @@ G4bool G4Colour::operator != (const G4Colour& c) const {
   return false;
 }
 
-G4ThreadLocal std::map<G4String, G4Colour> *G4Colour::fColourMap_G4MT_TLS_ = 0;
+G4ThreadLocal std::map<G4String, G4Colour> *G4Colour::fColourMap = 0;
 G4ThreadLocal bool G4Colour::fInitColourMap = false;
 
 void
 G4Colour::AddToMap(const G4String& key, const G4Colour& colour) 
-{  ;;;   if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ; std::map<G4String, G4Colour> &fColourMap = *fColourMap_G4MT_TLS_;  ;;;  
+{
+  if (!fColourMap)
+    fColourMap = new std::map<G4String, G4Colour>;
+
   // Convert to lower case since colour map is case insensitive
   G4String myKey(key);
   myKey.toLower();
 
-  std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
+  std::map<G4String, G4Colour>::iterator iter = fColourMap->find(myKey);
   
-  if (iter == fColourMap.end()) fColourMap[myKey] = colour;  
+  if (iter == fColourMap->end()) (*fColourMap)[myKey] = colour;  
   else {
     G4ExceptionDescription ed; 
     ed << "G4Colour with key "<<myKey<<" already exists."<<G4endl;
@@ -104,7 +107,7 @@ G4Colour::AddToMap(const G4String& key, const G4Colour& colour)
 
 void
 G4Colour::InitialiseColourMap() 
-{ if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ;
+{
   // Standard colours
   AddToMap("white",   G4Colour::White());
   AddToMap("grey",    G4Colour::Grey());
@@ -121,7 +124,7 @@ G4Colour::InitialiseColourMap()
 
 bool
 G4Colour::GetColour(const G4String& key, G4Colour& result) 
-{  ;;;   if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ; std::map<G4String, G4Colour> &fColourMap = *fColourMap_G4MT_TLS_;  ;;;  
+{
   if (false == fInitColourMap) {
     fInitColourMap = true;
     // Add standard colours to map
@@ -131,10 +134,10 @@ G4Colour::GetColour(const G4String& key, G4Colour& result)
   G4String myKey(key);
   myKey.toLower();
  
-  std::map<G4String, G4Colour>::iterator iter = fColourMap.find(myKey);
+  std::map<G4String, G4Colour>::iterator iter = fColourMap->find(myKey);
 
   // Don't modify "result" if colour was not found in map
-  if (iter == fColourMap.end()) return false;
+  if (iter == fColourMap->end()) return false;
   
   result = iter->second;
 
@@ -142,12 +145,12 @@ G4Colour::GetColour(const G4String& key, G4Colour& result)
 }
 
 const std::map<G4String, G4Colour>& G4Colour::GetMap()
-{  ;;;   if (!fColourMap_G4MT_TLS_) fColourMap_G4MT_TLS_ = new std::map<G4String, G4Colour>  ; std::map<G4String, G4Colour> &fColourMap = *fColourMap_G4MT_TLS_;  ;;;  
+{
   if (false == fInitColourMap) {
     fInitColourMap = true;
     // Add standard colours to map
     InitialiseColourMap();
   }
  
-  return fColourMap;
+  return *fColourMap;
 }

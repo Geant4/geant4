@@ -65,7 +65,9 @@ public:
 protected:
 
   Key NextKey() const {
-    static G4ThreadLocal Key *nKey_G4MT_TLS_ = 0 ; if (!nKey_G4MT_TLS_) {nKey_G4MT_TLS_ = new  Key  ; *nKey_G4MT_TLS_= 0 ; }  Key &nKey = *nKey_G4MT_TLS_;
+    static G4ThreadLocal Key *npKey = 0 ;
+    if (!npKey) { npKey = new Key; *npKey = 0; }
+    Key &nKey = *npKey;
     return ++nKey;
   }
 

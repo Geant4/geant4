@@ -446,7 +446,7 @@ void HepPolyhedron::RotateAroundZ(G4int nstep, G4double phi, G4double dphi,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4ThreadLocal G4double wholeCircle   = twopi;
+  static const G4double wholeCircle   = twopi;
     
   //   S E T   R O T A T I O N   P A R A M E T E R S
 
@@ -1512,7 +1512,7 @@ HepPolyhedronParaboloid::HepPolyhedronParaboloid(G4double r1,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4ThreadLocal G4double wholeCircle=twopi;
+  static const G4double wholeCircle=twopi;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 
@@ -1616,7 +1616,7 @@ HepPolyhedronHype::HepPolyhedronHype(G4double r1,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4ThreadLocal G4double wholeCircle=twopi;
+  static const G4double wholeCircle=twopi;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 
@@ -1708,7 +1708,7 @@ HepPolyhedronCons::HepPolyhedronCons(G4double Rmn1,
  *                                                                     *
  ***********************************************************************/
 {
-  static G4ThreadLocal G4double wholeCircle=twopi;
+  static const G4double wholeCircle=twopi;
 
   //   C H E C K   I N P U T   P A R A M E T E R S
 

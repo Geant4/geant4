@@ -1990,7 +1990,7 @@ HepPolyhedron BooleanProcessor::execute(int op,
 {
   //static int ishift = 0; //G.Barrand
   //static double shift[8][3] = {
-  static G4ThreadLocal double shift[NUM_SHIFT][3] = { //G.Barrand
+  static const double shift[NUM_SHIFT][3] = { //G.Barrand
     {  31,  23,  17},
     { -31, -23, -17},
     { -23,  17,  31},

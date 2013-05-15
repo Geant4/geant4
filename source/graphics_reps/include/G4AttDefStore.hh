@@ -49,7 +49,8 @@ namespace G4AttDefStore {
   // Returns true and assigns key if definitions are amongst those
   // maintained in the store.
 
-  extern G4ThreadLocal std::map<G4String,std::map<G4String,G4AttDef>*> *m_defsmaps_G4MT_TLS_;
+  extern G4ThreadLocal
+  std::map<G4String,std::map<G4String,G4AttDef>*> *m_defsmaps;
 
 }
 

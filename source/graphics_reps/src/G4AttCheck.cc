@@ -38,76 +38,90 @@
 
 G4ThreadLocal G4bool G4AttCheck::fFirst = true;
 
-G4ThreadLocal std::set<G4String> *G4AttCheck::fUnitCategories_G4MT_TLS_ = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fUnitCategories = 0;
 
-G4ThreadLocal std::map<G4String,G4String> *G4AttCheck::fStandardUnits_G4MT_TLS_ = 0;
+G4ThreadLocal std::map<G4String,G4String> *G4AttCheck::fStandardUnits = 0;
 
-G4ThreadLocal std::set<G4String> *G4AttCheck::fCategories_G4MT_TLS_ = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fCategories = 0;
 
-G4ThreadLocal std::set<G4String> *G4AttCheck::fUnits_G4MT_TLS_ = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fUnits = 0;
 
-G4ThreadLocal std::set<G4String> *G4AttCheck::fValueTypes_G4MT_TLS_ = 0;
+G4ThreadLocal std::set<G4String> *G4AttCheck::fValueTypes = 0;
 
 G4AttCheck::G4AttCheck
 (const std::vector<G4AttValue>* values,
  const std::map<G4String,G4AttDef>* definitions):
   fpValues(values),
   fpDefinitions(definitions)
-{  ;;;   if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fValueTypes = *fValueTypes_G4MT_TLS_;  ;;;    ;;;   if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnits = *fUnits_G4MT_TLS_;  ;;;    ;;;   if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fCategories = *fCategories_G4MT_TLS_;  ;;;    ;;;   if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; std::map<G4String,G4String> &fStandardUnits = *fStandardUnits_G4MT_TLS_;  ;;;    ;;;   if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnitCategories = *fUnitCategories_G4MT_TLS_;  ;;;  
+{
+  Init();
+
   if (fFirst) {  // Initialise static containers.
     fFirst = false;
 
     // Legal Unit Category Types...
-    fUnitCategories.insert("Length");
-    fUnitCategories.insert("Energy");
-    fUnitCategories.insert("Time");
-    fUnitCategories.insert("Electric charge");
-    fUnitCategories.insert("Volumic Mass");  // (Density)
+    fUnitCategories->insert("Length");
+    fUnitCategories->insert("Energy");
+    fUnitCategories->insert("Time");
+    fUnitCategories->insert("Electric charge");
+    fUnitCategories->insert("Volumic Mass");  // (Density)
 
     // Corresponding Standard Units...
-    fStandardUnits["Length"] = "m";
-    fStandardUnits["Energy"] = "MeV";
-    fStandardUnits["Time"] = "ns";
-    fStandardUnits["Electric charge"] = "e+";
-    fStandardUnits["Volumic Mass"] = "kg/m3";
+    (*fStandardUnits)["Length"] = "m";
+    (*fStandardUnits)["Energy"] = "MeV";
+    (*fStandardUnits)["Time"] = "ns";
+    (*fStandardUnits)["Electric charge"] = "e+";
+    (*fStandardUnits)["Volumic Mass"] = "kg/m3";
 
     // Legal Categories...
-    fCategories.insert("Bookkeeping");
-    fCategories.insert("Draw");
-    fCategories.insert("Physics");
-    fCategories.insert("PickAction");
-    fCategories.insert("Association");
+    fCategories->insert("Bookkeeping");
+    fCategories->insert("Draw");
+    fCategories->insert("Physics");
+    fCategories->insert("PickAction");
+    fCategories->insert("Association");
 
     // Legal units...
-    fUnits.insert("");
-    fUnits.insert("G4BestUnit");
+    fUnits->insert("");
+    fUnits->insert("G4BestUnit");
     // ...plus any legal unit symbol ("MeV", "km", etc.)...
     G4UnitsTable& units = G4UnitDefinition::GetUnitsTable();
     for (size_t i = 0; i < units.size(); ++i) {
-      if (fUnitCategories.find(units[i]->GetName()) !=
-	  fUnitCategories.end()) {
+      if (fUnitCategories->find(units[i]->GetName()) !=
+	  fUnitCategories->end()) {
 	//G4cout << units[i]->GetName() << G4endl;
 	G4UnitsContainer& container = units[i]->GetUnitsList();
 	for (size_t j = 0; j < container.size(); ++j) {
 	  //G4cout << container[j]->GetName() << ' '
 	  //       << container[j]->GetSymbol() << G4endl;
-	  fUnits.insert(container[j]->GetSymbol());
+	  fUnits->insert(container[j]->GetSymbol());
 	}
       }
     }
 
     // Legal Value Types...
-    fValueTypes.insert("G4String");
-    fValueTypes.insert("G4int");
-    fValueTypes.insert("G4double");
-    fValueTypes.insert("G4ThreeVector");
-    fValueTypes.insert("G4bool");
+    fValueTypes->insert("G4String");
+    fValueTypes->insert("G4int");
+    fValueTypes->insert("G4double");
+    fValueTypes->insert("G4ThreeVector");
+    fValueTypes->insert("G4bool");
   }
 }
 
-G4AttCheck::~G4AttCheck() { if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ;}
+G4AttCheck::~G4AttCheck()
+{
+}
 
-G4bool G4AttCheck::Check(const G4String& leader) const {  ;;;   if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fValueTypes = *fValueTypes_G4MT_TLS_;  ;;;    ;;;   if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnits = *fUnits_G4MT_TLS_;  ;;;    ;;;   if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fCategories = *fCategories_G4MT_TLS_;  ;;;   if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ;
+void G4AttCheck::Init()
+{
+  if (!fValueTypes) fValueTypes = new std::set<G4String>;
+  if (!fUnits) fUnits = new std::set<G4String>;
+  if (!fCategories) fCategories = new std::set<G4String>;
+  if (!fStandardUnits) fStandardUnits = new std::map<G4String,G4String>;
+  if (!fUnitCategories) fUnitCategories = new std::set<G4String>;
+}
+
+G4bool G4AttCheck::Check(const G4String& leader) const
+{
   // Check only.  Silent unless error - then G4cerr.  Returns error.
   G4bool error = false;
   static G4ThreadLocal G4int iError = 0;
@@ -158,7 +172,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {  ;;;   if (!fValueTypes
       const G4String& category = iDef->second.GetCategory();
       const G4String& extra = iDef->second.GetExtra();
       const G4String& valueType = iDef->second.GetValueType();
-      if (fCategories.find(category) == fCategories.end()) {
+      if (fCategories->find(category) == fCategories->end()) {
 	++iError;
 	error = true;
 	if (print) {
@@ -173,7 +187,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {  ;;;   if (!fValueTypes
 		 << valueName << "\": " << value <<
 	    "\n  Possible Categories:";
 	  set<G4String>::iterator i;
-	  for (i = fCategories.begin(); i != fCategories.end(); ++i) {
+	  for (i = fCategories->begin(); i != fCategories->end(); ++i) {
 	    G4cerr << ' ' << *i;
 	  }
 	  G4cerr <<
@@ -181,7 +195,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {  ;;;   if (!fValueTypes
 		 << G4endl;
 	}
       }
-      if(category == "Physics" && fUnits.find(extra) == fUnits.end()) {
+      if(category == "Physics" && fUnits->find(extra) == fUnits->end()) {
 	++iError;
 	error = true;
 	if (print) {
@@ -196,7 +210,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {  ;;;   if (!fValueTypes
 		 << valueName << "\": " << value <<
 	    "\n  Possible Extra fields if Category==\"Physics\":\n    ";
 	  set<G4String>::iterator i;
-	  for (i = fUnits.begin(); i != fUnits.end(); ++i) {
+	  for (i = fUnits->begin(); i != fUnits->end(); ++i) {
 	    G4cerr << ' ' << *i;
 	  }
 	  G4cerr <<
@@ -204,7 +218,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {  ;;;   if (!fValueTypes
 		 << G4endl;
 	}
       }
-      if (fValueTypes.find(valueType) == fValueTypes.end()) {
+      if (fValueTypes->find(valueType) == fValueTypes->end()) {
 	++iError;
 	error = true;
 	if (print) {
@@ -219,7 +233,7 @@ G4bool G4AttCheck::Check(const G4String& leader) const {  ;;;   if (!fValueTypes
 		 << valueName << "\": " << value <<
 	    "\n  Possible Value Types:";
 	  set<G4String>::iterator i;
-	  for (i = fValueTypes.begin(); i != fValueTypes.end(); ++i) {
+	  for (i = fValueTypes->begin(); i != fValueTypes->end(); ++i) {
 	    G4cerr << ' ' << *i;
 	  }
 	  G4cerr <<
@@ -263,38 +277,38 @@ std::ostream& operator<< (std::ostream& os, const G4AttCheck& ac)
       const G4String& category = iDef->second.GetCategory();
       const G4String& extra = iDef->second.GetExtra();
       const G4String& valueType = iDef->second.GetValueType();
-      if ((*ac.fCategories_G4MT_TLS_).find(category) == (*ac.fCategories_G4MT_TLS_).end()) {
+      if (ac.fCategories->find(category) == ac.fCategories->end()) {
 	error = true;
 	os <<
 	  "G4AttCheck: ERROR: Illegal Category Field \"" << category
 	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
 	  "\n  Possible Categories:";
 	set<G4String>::iterator i;
-	for (i = (*ac.fCategories_G4MT_TLS_).begin(); i != (*ac.fCategories_G4MT_TLS_).end(); ++i) {
+	for (i = ac.fCategories->begin(); i != ac.fCategories->end(); ++i) {
 	  os << ' ' << *i;
 	}
 	os << endl;
       }
-      if(category == "Physics" && (*ac.fUnits_G4MT_TLS_).find(extra) == (*ac.fUnits_G4MT_TLS_).end()) {
+      if(category == "Physics" && ac.fUnits->find(extra) == ac.fUnits->end()) {
 	error = true;
 	os <<
 	  "G4AttCheck: ERROR: Illegal Extra field \""<< extra
 	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
 	  "\n  Possible Extra fields if Category==\"Physics\":\n    ";
 	set<G4String>::iterator i;
-	for (i = (*ac.fUnits_G4MT_TLS_).begin(); i != (*ac.fUnits_G4MT_TLS_).end(); ++i) {
+	for (i = ac.fUnits->begin(); i != ac.fUnits->end(); ++i) {
 	  os << ' ' << *i;
 	}
 	os << endl;
       }
-      if ((*ac.fValueTypes_G4MT_TLS_).find(valueType) == (*ac.fValueTypes_G4MT_TLS_).end()) {
+      if (ac.fValueTypes->find(valueType) == ac.fValueTypes->end()) {
 	error = true;
 	os <<
 	  "G4AttCheck: ERROR: Illegal Value Type field \"" << valueType
 	   << "\" for G4AttValue \"" << valueName << "\": " << value <<
 	  "\n  Possible Value Types:";
 	set<G4String>::iterator i;
-	for (i = (*ac.fValueTypes_G4MT_TLS_).begin(); i != (*ac.fValueTypes_G4MT_TLS_).end(); ++i) {
+	for (i = ac.fValueTypes->begin(); i != ac.fValueTypes->end(); ++i) {
 	  os << ' ' << *i;
 	}
 	os << endl;
@@ -321,7 +335,8 @@ void G4AttCheck::AddValuesAndDefs
  const G4String& name,
  const G4String& value,
  const G4String& extra,
- const G4String& description) const { if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ;
+ const G4String& description) const
+{
   // Add new G4AttDeff...
   standardValues->push_back(G4AttValue(name,value,""));
   // Copy original G4AttDef...
@@ -334,7 +349,8 @@ void G4AttCheck::AddValuesAndDefs
 
 G4bool G4AttCheck::Standard
 (std::vector<G4AttValue>* standardValues,
- std::map<G4String,G4AttDef>* standardDefinitions) const {  ;;;   if (!fValueTypes_G4MT_TLS_) fValueTypes_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fValueTypes = *fValueTypes_G4MT_TLS_;  ;;;    ;;;   if (!fUnits_G4MT_TLS_) fUnits_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnits = *fUnits_G4MT_TLS_;  ;;;    ;;;   if (!fCategories_G4MT_TLS_) fCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fCategories = *fCategories_G4MT_TLS_;  ;;;    ;;;   if (!fStandardUnits_G4MT_TLS_) fStandardUnits_G4MT_TLS_ = new std::map<G4String,G4String>  ; std::map<G4String,G4String> &fStandardUnits = *fStandardUnits_G4MT_TLS_;  ;;;    ;;;   if (!fUnitCategories_G4MT_TLS_) fUnitCategories_G4MT_TLS_ = new std::set<G4String>  ; std::set<G4String> &fUnitCategories = *fUnitCategories_G4MT_TLS_;  ;;;  
+ std::map<G4String,G4AttDef>* standardDefinitions) const
+{
   // Places standard versions in provided vector and map and returns error.
   // Assumes valid input.  Use Check to check.
   using namespace std;
@@ -351,9 +367,9 @@ G4bool G4AttCheck::Standard
       const G4String& category = iDef->second.GetCategory();
       const G4String& extra = iDef->second.GetExtra();
       const G4String& valueType = iDef->second.GetValueType();
-      if (fCategories.find(category) == fCategories.end() ||
-	  (category == "Physics" && fUnits.find(extra) == fUnits.end()) ||
-	  fValueTypes.find(valueType) == fValueTypes.end()) {
+      if (fCategories->find(category) == fCategories->end() ||
+	  (category == "Physics" && fUnits->find(extra) == fUnits->end()) ||
+	  fValueTypes->find(valueType) == fValueTypes->end()) {
 	error = true;
       } else {
 	if (category != "Physics") {  // Simply copy...
@@ -398,8 +414,8 @@ G4bool G4AttCheck::Standard
 	      unit = extra;
 	    }
 	    G4String unitCategory = G4UnitDefinition::GetCategory(unit);
-	    if (fUnitCategories.find(unitCategory) != fUnitCategories.end()) {
-	      G4String standardUnit = fStandardUnits[unitCategory];
+	    if (fUnitCategories->find(unitCategory) != fUnitCategories->end()) {
+	      G4String standardUnit = (*fStandardUnits)[unitCategory];
 	      G4double valueOfStandardUnit =
 		G4UnitDefinition::GetValueOf(standardUnit);
 //	      G4String exstr = iDef->second.GetExtra();

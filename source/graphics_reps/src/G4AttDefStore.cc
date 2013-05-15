@@ -32,23 +32,27 @@
 
 namespace G4AttDefStore {
 
-G4ThreadLocal std::map<G4String,std::map<G4String,G4AttDef>*> *m_defsmaps_G4MT_TLS_ = 0;
+G4ThreadLocal
+std::map<G4String,std::map<G4String,G4AttDef>*> *m_defsmaps = 0;
 
 std::map<G4String,G4AttDef>*
 GetInstance(G4String storeKey, G4bool& isNew)
-{  ;;;   if (!m_defsmaps_G4MT_TLS_) m_defsmaps_G4MT_TLS_ = new std::map<G4String,std::map<G4String,G4AttDef>*>  ; std::map<G4String,std::map<G4String,G4AttDef>*> &m_defsmaps = *m_defsmaps_G4MT_TLS_;  ;;;  
+{
+  if (!m_defsmaps)
+    m_defsmaps = new std::map<G4String,std::map<G4String,G4AttDef>*>;
+
   // Allocate the new map if not existing already
   // and return it to the caller
   //
   std::map<G4String,G4AttDef>* definitions;
   std::map<G4String,std::map<G4String,G4AttDef>*>::iterator iDefinitions =
-    m_defsmaps.find(storeKey);
+    m_defsmaps->find(storeKey);
 
-  if (iDefinitions == m_defsmaps.end())
+  if (iDefinitions == m_defsmaps->end())
   {
     isNew = true;
     definitions = new std::map<G4String,G4AttDef>;
-    m_defsmaps[storeKey] = definitions;
+    (*m_defsmaps)[storeKey] = definitions;
   }
   else
   {
@@ -60,9 +64,11 @@ GetInstance(G4String storeKey, G4bool& isNew)
 
 G4bool GetStoreKey
 (const std::map<G4String,G4AttDef>* definitions, G4String& key)
-{  ;;;   if (!m_defsmaps_G4MT_TLS_) m_defsmaps_G4MT_TLS_ = new std::map<G4String,std::map<G4String,G4AttDef>*>  ; std::map<G4String,std::map<G4String,G4AttDef>*> &m_defsmaps = *m_defsmaps_G4MT_TLS_;  ;;;  
+{
+  if (!m_defsmaps)
+    m_defsmaps = new std::map<G4String,std::map<G4String,G4AttDef>*>;
   std::map<G4String,std::map<G4String,G4AttDef>*>::const_iterator i;
-  for (i = m_defsmaps.begin(); i != m_defsmaps.end(); ++i)
+  for (i = m_defsmaps->begin(); i != m_defsmaps->end(); ++i)
     {
       if (i->second == definitions)
 	{

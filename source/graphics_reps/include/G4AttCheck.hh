@@ -95,15 +95,17 @@ private:
    const G4String& extra,
    const G4String& description = "") const;   // Utility function for Standard.
 
+  void Init();   // Initialises maps and sets
+
   const std::vector<G4AttValue>* fpValues;
   const std::map<G4String,G4AttDef>* fpDefinitions;
 
   static G4ThreadLocal G4bool fFirst;  // Flag for initialising the following containers.
-  static G4ThreadLocal std::set<G4String> *fUnitCategories_G4MT_TLS_;  // Set of legal unit categories.
-  static G4ThreadLocal std::map<G4String,G4String> *fStandardUnits_G4MT_TLS_;  // Standard units.
-  static G4ThreadLocal std::set<G4String> *fCategories_G4MT_TLS_;      // Set of legal categories.
-  static G4ThreadLocal std::set<G4String> *fUnits_G4MT_TLS_;           // Set of legal units.
-  static G4ThreadLocal std::set<G4String> *fValueTypes_G4MT_TLS_;      // Set of legal value types.
+  static G4ThreadLocal std::set<G4String> *fUnitCategories;  // Set of legal unit categories.
+  static G4ThreadLocal std::map<G4String,G4String> *fStandardUnits;  // Standard units.
+  static G4ThreadLocal std::set<G4String> *fCategories;      // Set of legal categories.
+  static G4ThreadLocal std::set<G4String> *fUnits;           // Set of legal units.
+  static G4ThreadLocal std::set<G4String> *fValueTypes;      // Set of legal value types.
 };
 
 #endif //G4ATTCHECK_HH
