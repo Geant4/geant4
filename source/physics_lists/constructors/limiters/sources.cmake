@@ -45,6 +45,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/stopping/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
@@ -93,16 +94,19 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_limiters
         G4NeutronTrackingCut.hh
         G4SpecialCuts.hh
         G4StepLimiterPhysics.hh
+        G4ParallelWorldPhysics.hh
     SOURCES
         G4MaxTimeCuts.cc
         G4MinEkineCuts.cc
         G4NeutronTrackingCut.cc
         G4SpecialCuts.cc
         G4StepLimiterPhysics.cc
+        G4ParallelWorldPhysics.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
         G4cuts
+        G4scoring
         G4decay
         G4digits
         G4emdna
