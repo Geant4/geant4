@@ -36,8 +36,8 @@
 //                      On simple setups this algo should be 40%
 //                      faster
 
-#define debug
-#define edebug
+//#define debug
+//#define edebug
 //#define pdebug
 //#define ppdebug
 //#define tdebug
