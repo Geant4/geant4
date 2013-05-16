@@ -40,10 +40,10 @@
 #include "G4HEPEvtParticle.hh"
 #include "G4Event.hh"
 
-G4HEPEvtInterface::G4HEPEvtInterface(char* evfile)
+G4HEPEvtInterface::G4HEPEvtInterface(const char* evfile)
 {
-  inputFile.open(evfile);
-  if (inputFile) {
+  inputFile.open((char*)evfile);
+  if (inputFile.is_open()) {
     fileName = evfile;
   }
   else {
@@ -55,12 +55,12 @@ G4HEPEvtInterface::G4HEPEvtInterface(char* evfile)
   particle_time = 0.0;
 
 }
-
+/*************************************
 G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
 {
   const char* fn = evfile.data();
   inputFile.open((char*)fn);
-  if (inputFile) {
+  if (inputFile.is_open()) {
     fileName = evfile;
   }
   else {
@@ -71,7 +71,7 @@ G4HEPEvtInterface::G4HEPEvtInterface(G4String evfile)
   particle_position = zero;
   particle_time = 0.0;
 }
-
+**************************************/
 G4HEPEvtInterface::~G4HEPEvtInterface()
 {;}
 

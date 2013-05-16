@@ -52,7 +52,7 @@
 //       WRITE(6,10) 
 //     >  ISTHEP(IHEP),IDHEP(IHEP),JDAHEP(1,IHEP),JDAHEP(2,IHEP),
 //     >  PHEP(1,IHEP),PHEP(2,IHEP),PHEP(3,IHEP),PHEP(5,IHEP)
-//10    FORMAT(4I5,4(1X,D15.8))
+//10    FORMAT(I4,I10,I5,I5,4(1X,D15.8))
 //      ENDDO
 //*
 //      RETURN
@@ -78,8 +78,8 @@ class G4Event;
 class G4HEPEvtInterface:public G4VPrimaryGenerator
 {
   public: // with description
-    G4HEPEvtInterface(char* evfile);
-    G4HEPEvtInterface(G4String evfile);
+    G4HEPEvtInterface(const char* evfile);
+//    G4HEPEvtInterface(G4String evfile);
     // Constructors, "evfile" is the file name (with directory path).
   
   public:

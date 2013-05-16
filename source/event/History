@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 15th, 2013, M.Asai (event-V09-06-04)
+- Change the type of the argument of the constructor of G4HEPEvtInterface
+  from char* to const char*.
+
 Apr. 10th, 2013, G.Cosmo (event-V09-06-03)
 - Cleanup of automatic changes for MT in classes: G4Event, G4HEPEvtParticle,
   G4TrajectoryContainer, G4AdjointPosOnPhysVolGenerator and G4EventManager.
