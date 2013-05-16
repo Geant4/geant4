@@ -29,7 +29,7 @@
 //
 // ClassName:   G4ParallelWorldPhysics
 //
-// Author:      V.Ivanchenko 24.11.2004
+// Author:      M. Asai (May.15.2013)
 //
 // Modified:
 //
@@ -44,6 +44,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4TransportationManager.hh"
 #include "G4ParallelWorldProcess.hh"
 
 // factory
@@ -71,6 +72,10 @@ void G4ParallelWorldPhysics::ConstructParticle()
 
 void G4ParallelWorldPhysics::ConstructProcess()
 {
+  // Make sure the parallel world registered
+  G4TransportationManager::GetTransportationManager()
+   ->GetParallelWorld(namePhysics);
+
   // Add parallel world process
   G4ParallelWorldProcess* theParallelWorldProcess
       = new G4ParallelWorldProcess(namePhysics);
