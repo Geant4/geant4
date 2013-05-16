@@ -222,7 +222,11 @@ G4int G4ErrorPropagator::PropagateOneStep( G4ErrorTrajState* currentTS )
 
   //----- If it is the first step, create a track
   //
-  if( theStepN == 0 ) { theG4Track = InitG4Track( *currentTS ); }
+  if( theStepN == 0 )
+  {
+    if( theG4Track != 0 ) { delete theG4Track; }
+    theG4Track = InitG4Track( *currentTS );
+  }
     // set to 0 by the initialization in G4ErrorPropagatorManager
   theStepN++;
 
