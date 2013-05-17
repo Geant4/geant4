@@ -222,8 +222,8 @@ G4RunManager::~G4RunManager()
   // set the application state to the quite state
   if(pStateManager->GetCurrentState()!=G4State_Quit)
   {
-    if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << G4endl;
-    pStateManager->SetNewState(G4State_Quit);
+     if(verboseLevel>0) G4cout << "G4 kernel has come to Quit state." << G4endl;
+     pStateManager->SetNewState(G4State_Quit);
   }
 
   if(currentRun) delete currentRun;
@@ -233,22 +233,12 @@ G4RunManager::~G4RunManager()
   G4ProcessTable::GetProcessTable()->DeleteMessenger();
   delete previousEvents;
 
-    //Andrea Dotti: 28 Jan 2013: this is refactored in DeleteUserDetector
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread destroys the user detector.
-  //if((!isSlave) && userDetector)
-  //{
-  //  delete userDetector;
-  //  userDetector = 0;
-  //  if(verboseLevel>1) G4cout << "UserDetectorConstruction deleted." << G4endl;
-  //}
-    DeleteUserDetector();
-  if(physicsList)
-  {
-    delete physicsList;
-    physicsList = 0;
-    if(verboseLevel>1) G4cout << "UserPhysicsList deleted." << G4endl;
-  }
+  //The following will work for all RunManager types
+  //if derived class does the correct thing in derived
+  //destructor that is set to zero pointers of
+  //user initialization objects for which does not have
+  //ownership
+  DeleteUserInitializations();
   if(userRunAction)
   {
     delete userRunAction;
@@ -262,13 +252,14 @@ G4RunManager::~G4RunManager()
     if(verboseLevel>1) G4cout << "UserPrimaryGenerator deleted." << G4endl;
   }
 
+
   delete kernel;
 
   if(verboseLevel>1) G4cout << "RunManager is deleted." << G4endl;
   fRunManager = 0;
 }
 
-void G4RunManager::DeleteUserDetector()
+void G4RunManager::DeleteUserInitializations()
 {
     if( userDetector )
     {
@@ -276,6 +267,25 @@ void G4RunManager::DeleteUserDetector()
         userDetector = 0;
         if(verboseLevel>1) G4cout << "UserDetectorConstruction deleted." << G4endl;
     }
+    if(physicsList)
+    {
+        delete physicsList;
+        physicsList = 0;
+        if(verboseLevel>1) G4cout << "UserPhysicsList deleted." << G4endl;
+    }
+    if(userActionInitialization)
+    {
+        delete userActionInitialization;
+        userActionInitialization = 0;
+        if(verboseLevel>1) G4cout <<"UserActionInitialization deleted." << G4endl;
+    }
+    if(userWorkerInitialization)
+    {
+        delete userWorkerInitialization;
+        userWorkerInitialization = 0;
+        if(verboseLevel>1) G4cout <<"UserWorkerInitialization deleted." << G4endl;
+    }
+
 }
 
 void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
@@ -341,7 +351,8 @@ void G4RunManager::RunInitialization()
   { currentRun->SetHCtable(fSDM->GetHCtable()); }
   
   std::ostringstream oss;
-  HepRandom::saveFullState(oss);
+    G4Random::saveFullState(oss);
+  //HepRandom::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
   
@@ -353,7 +364,7 @@ void G4RunManager::RunInitialization()
 
   if(storeRandomNumberStatus) {
     G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
-    HepRandom::saveEngineStatus(fileN);
+    G4Random::saveEngineStatus(fileN);
   }
 
   runAborted = false;

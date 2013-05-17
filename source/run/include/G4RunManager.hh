@@ -527,7 +527,7 @@ public: // with description
     virtual void ConstructScoringWorlds();
   protected:
     void UpdateScoring();
-    virtual void DeleteUserDetector();
+    virtual void DeleteUserInitializations();
     //Called by destructor to delete user detector. Note: the userdetector is shared by threads
     //Thus this should be re-implemented to empty in derived classes that implement the worker model
 };

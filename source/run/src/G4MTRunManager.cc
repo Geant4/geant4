@@ -37,6 +37,7 @@
 #include "G4AutoLock.hh"
 #include "G4WorkerRunManager.hh"
 #include "G4UserRunAction.hh"
+#include "G4Timer.hh"
 
 long* G4MTRunManager::seeds = 0;
 G4int G4MTRunManager::seedsnum = 0;
@@ -106,7 +107,7 @@ G4MTRunManager::~G4MTRunManager()
     //TODO: Currently does not work due to concurrent deletion of something that is shared:
     //G4ProcessTable::DeleteMessenger from ~G4RunManager
     //G4cout<<"Destroy MTRunManager"<<G4endl;//ANDREA
-    //DestroyWorkers();
+    TerminateWorkers();
     delete[] seeds;
     seeds = 0;
 }
@@ -173,7 +174,7 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     {
         InitializeSeedsQueue(n_events*2);
         for ( G4int ne = 0 ; ne < n_events*2 ; ++ne)
-            AddOneSeed( (long) (100000000L * CLHEP::HepRandom::getTheGenerator()->flat()) );
+            AddOneSeed( (long) (100000000L * G4Random::getTheGenerator()->flat()) );
     }
     
     //Now initialize workers. Check if user defined a WorkerInitialization
@@ -188,6 +189,10 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     PrepareCommandsStack();
     //Now loop on requested number of workers
     //This will also start the workers
+    //Currently we do not allow to change the
+    //number of threads: threads area created once
+    //and that's all
+    if ( threads.size() == 0 ) {
     for ( G4int nw = 0 ; nw<nworkers; ++nw) {
         //Create a new worker and remember it
         G4WorkerThread* context = new G4WorkerThread;
@@ -195,34 +200,18 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
         context->SetNumberEvents(n_events);
         context->SetThreadId(nw);
         G4Thread* thread = userWorkerInitialization->CreateAndStartWorker(context);
+        context->pid = thread; //AAADEBUG
         threads.push_back(thread);
     }
+    }
+    //Signal to threads they can start a new run
+    NewActionRequest(NEXTITERATION);
+    
     // We need a barrier here: if work to be done is really short, they can already finish.
     WaitForReadyWorkers();
     
     // Wait now for all threads to finish event-loop
     WaitForEndEventLoopWorkers();
-    
-    //TODO: Currently when a run is over we simply destroy threads (Joining them)
-    //      We need to implement a way to re-use threads in case multiple beamOn are issued
-    //      (optimization for MedicalPhysics where many small runs are made with moving
-    //       geometry between runs).
-
-    //Now join threads.
-    //TODO: I don't like this since this should go in the thread-model part of the code
-    //something like: worker->join or something like this...
-#ifdef G4MULTITHREADED //protect here to prevent warning in compilation
-    for ( G4ThreadsList::iterator tit = threads.begin() ; tit != threads.end() ; ++tit ){
-        G4Thread* t = *tit;
-        G4THREADJOIN(*t);
-    }
-#endif
-    //while ( ! threads.empty() ) {
-    //    G4Thread* it = * (threads.begin());
-    //    threads.pop_back();
-    //    delete it;
-    //}
-    threads.clear();
 
 }
 
@@ -243,6 +232,7 @@ void G4MTRunManager::InitializeSeedsQueue( G4int ns )
         delete[] seeds;
     }
     seeds = new long[ns];
+    seedsnum = 0;
 }
 void G4MTRunManager::ConstructScoringWorlds()
 {
@@ -352,19 +342,34 @@ void G4MTRunManager::MergeRun(const G4Run* localRun)
 }
 
 
-namespace  {
-//predicate implemented as a function
-static bool DestroyWorkerRunManager( G4WorkerRunManager* rm ) {
-    delete rm;
-    return true;
-}
-}
-
-void G4MTRunManager::DestroyWorkers()
+void G4MTRunManager::TerminateWorkers()
 {
-    //This operation should be mutexed
+    NewActionRequest( ENDWORKER );
+    //G4cout<<"ENDWORKER sent"<<G4endl;//AAAADEBUG
+    //Now join threads.
+    //TODO: I don't like this since this should go in the thread-model part of the code
+    //something like: worker->join or something like this...
+#ifdef G4MULTITHREADED //protect here to prevent warning in compilation
+    
+    //Andrea : We have observed deadlocks here. Under-investigation
+    //For the time being we simply comment out everything and we do not
+    // join threads: we arrive here at exit of application
+    
+    //while ( ! threads.empty() )
+    //{
+        //G4Thread* t = * ( threads.begin() );
+        //threads.pop_front();
+        
+        //G4cout<<"In G4MTRunManager::TeraminteWorkers for "<<t<<G4endl;///AAADEBUG
+        //G4THREADJOIN(*t);
+        //G4cout<<t<<" Join done"<<G4endl;///AAADEBUG
+        //delete t;
+    //}
+#endif
+    threads.clear();
+
     G4AutoLock l(&workesRMMutex);
-    workersRM.remove_if(DestroyWorkerRunManager);
+    workersRM.clear();
 }
 
 void G4MTRunManager::AddWorkerRunManager(G4WorkerRunManager* wrm)
@@ -381,7 +386,7 @@ void G4MTRunManager::AddWorkerRunManager(G4WorkerRunManager* wrm)
 void G4MTRunManager::InitializePhysics()
 {
     G4RunManager::InitializePhysics();
-    G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIon();
+    //G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIon();
     G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
     //BERTINI, this is needed to create pseudo-particles, to be removed
     //G4InuclElementaryParticle::Initialize();
@@ -419,6 +424,9 @@ namespace {
     G4Condition numWorkersEndEventLoopChangedCondition = G4CONDITION_INITIALIZER;
     //pthread_cond_t numWorkersEndEventLoopChangedCondition = PTHREAD_COND_INITIALIZER;
     //Counter/mutex for workers ready to begin event loop
+    //
+    // This condition is to handle more than one run w/o killing threads
+    G4Condition requestChangeActionForThread = G4CONDITION_INITIALIZER;
 #endif
     G4Mutex numberOfReadyWorkersMutex = G4MUTEX_INITIALIZER;
     //G4Mutex numberOfReadyWorkersMutex = G4MUTEX_INITIALIZER;
@@ -427,9 +435,13 @@ namespace {
     G4Mutex numberOfEndOfEventLoopWorkersMutex = G4MUTEX_INITIALIZER;
     //G4Mutex numberOfEndOfEventLoopWorkersMutex = G4MUTEX_INITIALIZER;
     G4int numberOfEndOfEventLoopWorkers = 0;
+    //
+    //More than one 
+    G4Mutex changeActionForWorkerMutex = G4MUTEX_INITIALIZER;
 #ifdef WIN32
     CRITICAL_SECTION cs1;
     CRITICAL_SECTION cs2;
+    CRITICAL_SECTION cs3;
     //Note we need to use two separate counters because
     //we can get a situation in which a thread is much faster then the others
     //(for example if last thread has less events to process.
@@ -442,16 +454,18 @@ namespace {
 		InitializeConditionVariable( &endEventLoopCondition );
 		InitializeConditionVariable( &numWorkersBeginEventLoopChangeCondition );
 		InitializeConditionVariable( &numWorkersEndEventLoopChangedCondition );
+        InitializeConditionVariable( &requestChangeStatusForThread );
 	#endif
 		InitializeCriticalSection( &cs1 );
 		InitializeCriticalSection( &cs2 );
+        InitializeCriticalSection( &cs3 );
 	}
 #endif
 }
 
 void G4MTRunManager::WaitForReadyWorkers()
 {
-    while (1) //begin barrier
+    while (true) //begin barrier
     {
 #ifndef WIN32
         G4AutoLock lockLoop(&numberOfReadyWorkersMutex);
@@ -503,7 +517,7 @@ void G4MTRunManager::ThisWorkerReady()
 
 void G4MTRunManager::WaitForEndEventLoopWorkers()
 {
-    while (1)
+    while (true)
     {
 #ifndef WIN32
         G4AutoLock l(&numberOfEndOfEventLoopWorkersMutex);
@@ -545,3 +559,59 @@ void G4MTRunManager::ThisWorkerEndEventLoop()
     LeaveCriticalSection( &cs2 );
 #endif
 }
+
+void G4MTRunManager::NewActionRequest(G4MTRunManager::WorkerActionRequest newRequest)
+{
+    //Master thread requests workers to do something new
+    //First acquire lock on shared resource
+#ifndef WIN32
+    G4AutoLock l(&changeActionForWorkerMutex);
+#else
+    EnterCriticalSection( &cs3 );
+#endif
+    nextActionRequest = newRequest;
+
+    //Broadcast signal that a new request is available
+    G4CONDTIONBROADCAST(&requestChangeActionForThread);
+#ifdef WIN32
+    LeaveCriticalSection( &cs3 );
+#endif
+}
+
+namespace  {
+    static G4ThreadLocal G4bool processrequest = true;
+}
+
+G4MTRunManager::WorkerActionRequest G4MTRunManager::ThisWorkerWaitForNextAction()
+{
+    WorkerActionRequest result;
+    while ( true )
+    {
+#ifndef WIN32
+        G4AutoLock l(&changeActionForWorkerMutex);
+#else
+        EnterCriticalSection( &cs3 );
+#endif
+        //The very first time I arrive here,
+        //I need to execute the nextRequest whatever it is.
+        //The next time I come here I will execute this
+        //block only if there is something to do
+        if ( processrequest )
+        {
+            result = nextActionRequest;
+            processrequest = false;
+            break;
+        }
+        //Wait for condition from Master thread that a new action is requested.
+        //This will block here until the condition is met
+        G4CONDITIONWAIT(&requestChangeActionForThread,&changeActionForWorkerMutex);
+        //If now I am here it means that the nextaction has changed, so I reset the
+        //processrequest flag (that is TLS), so in the next loop I will execute it
+        processrequest = true;
+#ifdef WIN32
+        LeaveCriticalSection( &cs3 );
+#endif
+    }
+    return result;
+}
+

@@ -31,6 +31,8 @@
 #define G4VUserParallelWorld_h 1
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
+class G4VSensitiveDetector;
 
 #include "globals.hh"
 
@@ -62,6 +64,11 @@ class G4VUserParallelWorld
   public:
     inline G4String GetName() { return fWorldName; }
 
+  protected:
+    void SetSensitiveDetector(const G4String& logVolName,
+                G4VSensitiveDetector* aSD,G4bool multi=false);
+    void SetSensitiveDetector(G4LogicalVolume* logVol,
+                G4VSensitiveDetector* aSD);
 };
 
 #endif

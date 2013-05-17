@@ -16,8 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 16th, 2013, A. Dotti (run-V09-06-36)
+- Another WIN32 typo fixed
+
+May 16th, 2013, A. Dotti (run-V09-06-35)
+- Fixing compilation error on WIN
+- Commenting out joining of threads at exit (some instabilities have
+  been observed at exit time, this tag is trying to fix this)
+  NEED TO FIX THIS 
+
+May 15th, 2013, M. Asai (run-V09-06-34)
+- Enabling more than one runs.
+- Fixing the handling of user-defined parallel worlds.
+
+May 14th, 2013, M. Asai
+- Introducing SetSensitiveDetector() method to G4VUserParallelWorld.
+
 May 13th, 2013, A. Dotti (run-V09-06-33)
-- Chaned G4WorkerRunManager to use new methods. All thread-control
+- Changed G4WorkerRunManager to use new methods. All thread-control
   method in G4UserWorkerInitialization are now public.
 
 May 13th, 2013, M.Asai (run-V09-06-32)

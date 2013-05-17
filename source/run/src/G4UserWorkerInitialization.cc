@@ -101,22 +101,40 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     wrm->Initialize();
     //G4RunManager::GetRunManager()->Initialize();
     
-    //5- Execute all stacked UI commands
-    std::vector<G4String> cmds = masterRM->GetCommandStack();
-    G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance
-    
-    for ( std::vector<G4String>::const_iterator it = cmds.begin()
-         ; it != cmds.end() ; ++it )
+    //Now enter a loop to execute requests from Master Thread: get next action
+    G4MTRunManager::WorkerActionRequest nextAction = masterRM->ThisWorkerWaitForNextAction();
+    while ( nextAction != G4MTRunManager::ENDWORKER )
+    {
+        if ( nextAction == G4MTRunManager::NEXTITERATION )
         {
-            std::cout<<"AAA"<<*it<<std::endl;
-            uimgr->ApplyCommand(*it);
+            //5- Execute all stacked UI commands
+            std::vector<G4String> cmds = masterRM->GetCommandStack();
+            G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance
+            
+            for ( std::vector<G4String>::const_iterator it = cmds.begin()
+                 ; it != cmds.end() ; ++it )
+            {
+                std::cout<<"AAA"<<*it<<std::endl;
+                uimgr->ApplyCommand(*it);
+            }
+            //TODO: when /run/beamOn is not passed, do it here!
+            // wrm->BeamOn( wThreadContext->GetNumberEvents() , .... );
+            //wrm->BeamOn(1); //AND <-Simulate a second call to /run/beamOn
+            //TODO: move this stuff away since it will be allowed to have always the same threads for more runs
+            //in interactive mode
+            
         }
+        else
+        {
+            G4ExceptionDescription d;
+            d<<"Cannot continue, this worker has been requested an unknwon action: "<<nextAction<<" expecting: ENDWORKER(=)"
+            <<G4MTRunManager::ENDWORKER<<") or NEXTITERATION(="<<G4MTRunManager::NEXTITERATION<<")";
+            G4Exception("G4WorkerInitialization::WorkerStart","Run0035",FatalException,d);
+        }
+        //Now wait for master thread to signal new action to be performed
+        nextAction = masterRM->ThisWorkerWaitForNextAction();
+    }
     
-    //TODO: when /run/beamOn is not passed, do it here!
-    // wrm->BeamOn( .... );
-    //wrm->BeamOn(1); //AND <-Simulate a second call to /run/beamOn
-    //TODO: move this stuff away since it will be allowed to have always the same threads for more runs
-    //in interactive mode
     //6- Ok, now the event loop is finished, called user defined stuff
     //Problem: how to be sure that the UserInitialization has correct context?
     masterRM->GetUserWorkerInitialization()->WorkerStop();
@@ -124,6 +142,10 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //7- Call destroy … should this be done at the end of each run? What if multiple
     //runs are present?
     wThreadContext->DestroyGeometryAndPhysicsVector();
+    
+    //8- Delete worker run manager
+    //G4cout<<"Thread ID:"<<wThreadContext->GetThreadId()<<" WorkerRunManager Pointer: "<<wrm<<" PID:"<<wThreadContext->pid<<G4endl;///AAADEBUG
+    delete wrm;
     return static_cast<void*>(0);
 }
 

@@ -97,7 +97,7 @@ private:
     typedef std::list<G4WorkerRunManager*> G4WorkerRunManagerList;
     G4WorkerRunManagerList workersRM;
     //List of all workers run managers
-    void DestroyWorkers();
+    void TerminateWorkers();
     //Empty the workersList
     std::vector<G4String> uiCmdsForWorkers;
     //List of UI commands for workers.
@@ -164,6 +164,24 @@ public:
     // To be invoked solely from G4WorkerRunManager to merge the results
     void MergeScores(const G4ScoringManager* localScoringManager);
     void MergeRun(const G4Run* localRun);
+    
+public:
+    //Handling of more than one run per thread
+    enum WorkerActionRequest {
+        UNDEFINED ,
+        NEXTITERATION ,    // There is another set of UI commands to be executed
+        ENDWORKER          // Terminate thread, work finished
+    };
+        
+    WorkerActionRequest ThisWorkerWaitForNextAction();
+    //Worker thread barrier
+    //This method should be used by workers' run manager to wait,
+    //after an event loop for the next action to be performed
+    // (for example execute a new run)
+    //This returns the action to be performed
+private:
+    WorkerActionRequest nextActionRequest;
+    void NewActionRequest( WorkerActionRequest newRequest );
 };
 
 #endif //G4MTRunManager_h

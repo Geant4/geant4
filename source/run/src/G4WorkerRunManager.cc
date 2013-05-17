@@ -55,13 +55,14 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(true) {
 }
 
 G4WorkerRunManager::~G4WorkerRunManager() {
-    G4cout<<"Destroying WorkerRunManager"<<G4endl;
-}
-
-void G4WorkerRunManager::DeleteUserDetector()
-{
-    //Nothing to do: userDetecotr pointer is owned by master thread
+    //Put these pointers to zero: owned by master thread
+    //If not to zero, the base class destructo will attempt to
+    //delete them
     userDetector = 0;
+    userWorkerInitialization = 0;
+    userActionInitialization = 0;
+    physicsList = 0;
+    G4cout<<"Destroying WorkerRunManager ("<<this<<")"<<G4endl;
 }
 
 
@@ -83,8 +84,8 @@ void G4WorkerRunManager::InitializeGeometry() {
     //Step3:, Call a new "SlaveDefineWorldVolume( pointer from 2-, false); //TODO: Change name
     kernel->SlaveDefineWorldVolume(worldVol,false);
     
-    nParallelWorlds = userDetector->ConstructParallelGeometries();
-    kernel->SetNumberOfParallelWorld(nParallelWorlds);
+    //nParallelWorlds = userDetector->ConstructParallelGeometries();
+    kernel->SetNumberOfParallelWorld(masterKernel->GetNumberOfParallelWorld());
     geometryInitialized = true;
 }
 
@@ -147,7 +148,7 @@ void G4WorkerRunManager::ConstructScoringWorlds()
     
     G4ParticleTable::G4PTblDicIterator* particleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
     
-    G4int counter = 0;
+/////////    G4int counter = 0;
     for(G4int iw=0;iw<nPar;iw++)
     {
         G4VScoringMesh* mesh = ScM->GetMesh(iw);
@@ -159,8 +160,9 @@ void G4WorkerRunManager::ConstructScoringWorlds()
 *************************************************************************/
         mesh->SetMeshElementLogical(masterMesh->GetMeshElementLogical());
         
+/************************************************************************
         G4VPhysicalVolume* pWorld = G4TransportationManager::GetTransportationManager()->IsWorldExisting(ScM->GetWorldName(iw));
-        if(pWorld)
+        if(!pWorld)
         {
             //Retrieve from master thread parallel world pointer
             G4MTRunManager::masterWorlds_t::const_iterator it = G4MTRunManager::GetMasterWorlds().find(counter++);
@@ -186,6 +188,27 @@ void G4WorkerRunManager::ConstructScoringWorlds()
                 } //if(pmanager)
             }//while
         }//if(!pWorld)
+*************************************************************************/
+        G4VPhysicalVolume* pWorld
+          = G4TransportationManager::GetTransportationManager()
+            ->GetParallelWorld(ScM->GetWorldName(iw));
+        G4ParallelWorldProcess* theParallelWorldProcess
+          = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
+        theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
+
+        particleIterator->reset();
+        while( (*particleIterator)() ){
+          G4ParticleDefinition* particle = particleIterator->value();
+          G4ProcessManager* pmanager = particle->GetProcessManager();
+          if(pmanager)
+          {
+            pmanager->AddProcess(theParallelWorldProcess);
+            if(theParallelWorldProcess->IsAtRestRequired(particle))
+            { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
+            pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
+            pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+          } //if(pmanager)
+        }//while
         mesh->WorkerConstruct(pWorld);
     }
 }

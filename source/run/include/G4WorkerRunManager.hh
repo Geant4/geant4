@@ -59,7 +59,6 @@ public:
     //In case of error currentCmd is set to the command that gave the problem
 protected:
     virtual void ConstructScoringWorlds();
-    virtual void DeleteUserDetector();
 /***********************************************************************************
 private:
     //Used to copy mesh from master to worker, useful stuff to check at compile time that objects are of correct type

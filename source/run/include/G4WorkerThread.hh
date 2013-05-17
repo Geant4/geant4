@@ -39,6 +39,7 @@
 class G4MTRunManager;
 class G4WorkerRunManager;
 //class G4VUserWorkerInitialization;
+#include "G4Threading.hh"///AAADEBUG
 
 class G4WorkerThread {
 public:
@@ -69,6 +70,8 @@ private:
     G4int threadId;
     G4int numThreads;
     G4int totalNumEvents;
+public:
+    G4Thread * pid; //AAADEBUG
 };
 #endif //G4WorkerThread_hh
 
