@@ -74,6 +74,7 @@
         pthread_attr_t attr; \
         pthread_attr_init(&attr); \
         pthread_attr_setstacksize(&attr,16*1024*1024); \
+        pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_JOINABLE); \
         pthread_create( worker, &attr, func , arg ); \
     }
 

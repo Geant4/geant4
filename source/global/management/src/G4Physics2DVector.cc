@@ -47,9 +47,7 @@ G4Physics2DVector::G4Physics2DVector()
  : type(T_G4PhysicsFreeVector),
    numberOfXNodes(0), numberOfYNodes(0),
    verboseLevel(0), useBicubic(false)
-{
-  cache = new G4Physics2DVectorCache();
-}
+{}
 
 // --------------------------------------------------------------
 
@@ -58,7 +56,6 @@ G4Physics2DVector::G4Physics2DVector(size_t nx, size_t ny)
    numberOfXNodes(nx), numberOfYNodes(ny),
    verboseLevel(0), useBicubic(false)
 {
-  cache = new G4Physics2DVectorCache();
   PrepareVectors();
 }
 
@@ -66,7 +63,6 @@ G4Physics2DVector::G4Physics2DVector(size_t nx, size_t ny)
 
 G4Physics2DVector::~G4Physics2DVector() 
 {
-  delete cache;
   ClearVectors();
 }
 
@@ -85,7 +81,6 @@ G4Physics2DVector::G4Physics2DVector(const G4Physics2DVector& right)
   xVector      = right.xVector;
   yVector      = right.yVector;
 
-  cache = new G4Physics2DVectorCache();
   PrepareVectors();
   CopyData(right);
 }
@@ -105,7 +100,6 @@ G4Physics2DVector& G4Physics2DVector::operator=(const G4Physics2DVector& right)
   verboseLevel = right.verboseLevel;
   useBicubic   = right.useBicubic;
 
-  cache->Clear();
   PrepareVectors();
   CopyData(right);
 
@@ -153,56 +147,50 @@ void G4Physics2DVector::CopyData(const G4Physics2DVector &right)
 
 // --------------------------------------------------------------
 
-void G4Physics2DVector::ComputeValue(G4double xx, G4double yy)
+G4double G4Physics2DVector::Value(G4double xx, G4double yy, 
+				  size_t& idx, size_t& idy) const
 {
-  if(xx != cache->lastBinX) {
-    if(xx <= xVector[0]) {
-      cache->lastX = xVector[0];
-      cache->lastBinX = 0;
-    } else if(xx >= xVector[numberOfXNodes-1]) {
-      cache->lastX = xVector[numberOfXNodes-1];
-      cache->lastBinX = numberOfXNodes-2;
-    } else {
-      cache->lastX = xx;
-      FindBinLocationX(xx);
-    }
+  G4double x = xx;
+  G4double y = yy;
+
+  // no interpolation outside the table
+  if(x < xVector[0]) { 
+    x = xVector[0]; 
+  } else if(x > xVector[numberOfXNodes - 1]) { 
+    x = xVector[numberOfXNodes - 1]; 
   }
-  if(yy != cache->lastBinY) {
-    if(yy <= yVector[0]) {
-      cache->lastY = yVector[0];
-      cache->lastBinY = 0;
-    } else if(yy >= yVector[numberOfYNodes-1]) {
-      cache->lastY = yVector[numberOfYNodes-1];
-      cache->lastBinY = numberOfYNodes-2;
-    } else {
-      cache->lastY = yy;
-      FindBinLocationY(yy);
-    }
+  if(y < yVector[0]) { 
+    y = yVector[0]; 
+  } else if(y > yVector[numberOfYNodes - 1]) { 
+    y = yVector[numberOfYNodes - 1]; 
   }
-  size_t idx  = cache->lastBinX;
-  size_t idy  = cache->lastBinY;
+
+  // find bins
+  idx = FindBinLocationX(x, idx);
+  idy = FindBinLocationY(y, idy);
+
+  // interpolate
   if(useBicubic) {
-    BicubicInterpolation(idx, idy);
+    return BicubicInterpolation(x, y, idx, idy);
   } else {
     G4double x1 = xVector[idx];
     G4double x2 = xVector[idx+1];
     G4double y1 = yVector[idy];
     G4double y2 = yVector[idy+1];
-    G4double x  = cache->lastX;
-    G4double y  = cache->lastY;
     G4double v11= GetValue(idx,   idy);
     G4double v12= GetValue(idx+1, idy);
     G4double v21= GetValue(idx,   idy+1);
     G4double v22= GetValue(idx+1, idy+1);
-    cache->lastValue = 
-      ((y2 - y)*(v11*(x2 - x) + v12*(x - x1)) + 
-       ((y - y1)*(v21*(x2 - x) + v22*(x - x1))))/((x2 - x1)*(y2 - y1)); 
+    return ((y2 - y)*(v11*(x2 - x) + v12*(x - x1)) + 
+	    ((y - y1)*(v21*(x2 - x) + v22*(x - x1))))/((x2 - x1)*(y2 - y1)); 
   }
 }
 
 // --------------------------------------------------------------
 
-void G4Physics2DVector::BicubicInterpolation(size_t idx, size_t idy)
+G4double 
+G4Physics2DVector::BicubicInterpolation(G4double x, G4double y,
+					size_t idx, size_t idy) const
 {
     // Bicubic interpolation according to 
     // 1. H.M. Antia, "Numerical Methods for Scientists and Engineers",
@@ -213,8 +201,6 @@ void G4Physics2DVector::BicubicInterpolation(size_t idx, size_t idy)
     G4double x2 = xVector[idx+1];
     G4double y1 = yVector[idy];
     G4double y2 = yVector[idy+1];
-    G4double x  = cache->lastX;
-    G4double y  = cache->lastY;
     G4double f1 = GetValue(idx,   idy);
     G4double f2 = GetValue(idx+1, idy);
     G4double f3 = GetValue(idx+1, idy+1);
@@ -251,7 +237,7 @@ void G4Physics2DVector::BicubicInterpolation(size_t idx, size_t idy)
     G4double f3xy = DerivativeXY(idx+1, idy+1, dxy);
     G4double f4xy = DerivativeXY(idx, idy+1, dxy);
 
-    cache->lastValue = 
+    return 
       f1 + f1y*h2 + (3*(f4-f1) - 2*f1y - f4y)*h22 + (2*(f1 - f4) + f1y + f4y)*h23
       + f1x*h1 + f1xy*h1*h2 +(3*(f4x - f1x) - 2*f1xy - f4xy)*h1*h22
       + (2*(f1x - f4x) + f1xy + f4xy)*h1*h23
@@ -277,8 +263,6 @@ G4Physics2DVector::PutVectors(const std::vector<G4double>& vecX,
   numberOfXNodes = vecX.size();
   numberOfYNodes = vecY.size();
   PrepareVectors();
-  if(!cache) { cache = new G4Physics2DVectorCache(); }
-  cache->Clear();
   for(size_t i = 0; i<numberOfXNodes; ++i) {
     xVector[i] = vecX[i];
   }
@@ -321,7 +305,6 @@ void G4Physics2DVector::Store(std::ofstream& out)
 G4bool G4Physics2DVector::Retrieve(std::ifstream& in)
 {
   // initialisation
-  cache->Clear();
   ClearVectors();
 
   // binning
@@ -370,7 +353,7 @@ G4Physics2DVector::ScaleVector(G4double factor)
 
 size_t 
 G4Physics2DVector::FindBinLocation(G4double z, 
-				   const G4PV2DDataVector& v)
+				   const G4PV2DDataVector& v) const
 {
   size_t lowerBound = 0;
   size_t upperBound = v.size() - 2;

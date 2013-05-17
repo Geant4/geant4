@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 16, 2013 V.Ivanchenko (global-V09-06-30)
+- G4Physics2DVector - removed cache; changed signature of 
+    several methods; all run time methods become const;
+    the class become read only in run time
+
+May 16, 2013 A.Dotti (global-V09-06-29)
+- Adding explicit creation of worker threads as "joinable"
+
 May 14, 2013 G.Cosmo (global-V09-06-28)
 - Restored thread-local instance pointer in G4Pow...
 
