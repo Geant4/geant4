@@ -27,6 +27,7 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (*)  Fixes included in release 9.6.p01
+(o)  Fixes included in release 9.6.p02
 
 Summarised, the list of changes is the following:
 
@@ -51,30 +52,32 @@ digits_hits                                      digits_hits-V09-06-01
 
 error_propagation                                error-propagation-V09-06-02
 -----------------
-- Corrected composed printout in G4ErrorPropagator. Removed unused data member.
+- Corrected composed printout in G4ErrorPropagator.                          (o)
+  Removed unused data member.
 - Cleanup of MT changes in G4ErrorSymMatrix.
 
 event                                            event-V09-06-02
 -----
-- Removed unused variables in G4AdjointPosOnPhysVolGenerator,
+- Removed unused variables in G4AdjointPosOnPhysVolGenerator,                (o)
   G4AdjointPosOnPhysVolGenerator, G4GeneralParticleSource,
   G4SPSEneDistribution, and G4SPSRandomGenerator.
 
-g3tog4                                           g3tog4-V09-06-00
+g3tog4                                           g3tog4-V09-06-00            (o)
 ------
 - Fixed missing inclusion of <assert.h> in G3Division source.
 
 geometry/divisions                               geomdiv-V09-06-00
 ------------------
 - Cleanup of changes for multi-threading in G4PVDivisionFactory.
-- Corrected composed cout in exceptions for G4ParameterisationBox and
+- Corrected G4PVDivisionFactory instance accessor.                           (o)
+- Corrected composed cout in exceptions for G4ParameterisationBox and        (o)
   G4ParameterisationTrd.
 
 geometry/magneticfield                           field-V09-06-01
 ----------------------
 - Cleanup of unnecessary changes for multi-threading in G4QuadrupoleMagField.
 - First implementation of cloning mechanism, needed for multi-threaded mode.
-- Removed unused private data-members in G4Mag_UsualEqRhs and G4RKG3_Stepper.
+- Removed unused private data-members in G4Mag_UsualEqRhs and G4RKG3_Stepper.(o)
 
 geometry/management                              geommng-V09-06-06
 -------------------
@@ -95,7 +98,7 @@ geometry/solids/specific                         geom-specific-V09-06-08
   Added public accessors for MT data to G4PolyconeSide and G4PolyhedraSide.
 - Adopt G4GeomSplitter instead of G4MTTransitory in G4PolyconeSide and
   G4PolyhedraSide. Fixed import/export of static symbols for WIN32 DLLs build.
-- Removed unused private data member in G4TwistTrapParallelSide.
+- Removed unused private data member in G4TwistTrapParallelSide.             (o)
 
 geometry/volumes                                geomvol-V09-06-05
 ----------------
@@ -119,14 +122,14 @@ global                                          global-V09-06-12
   particles categories respectively.
 - Simplified setup for import/export flags on Windows in G4Types.hh.
   Replacing G4DLLIMPORT/G4DLLEXPORT flags with G4GLOB_DLL.
-- Minor changes to G4ConvergenceTester: output can now optionally be
+- Minor changes to G4ConvergenceTester: output can now optionally be         (o)
   redirected a different stream (defaults is cout).
   Accessors are made public and check if data has been added.
-- Removed unused private members in G4JTPolynomialSolver.
+- Removed unused private members in G4JTPolynomialSolver.                    (o)
 
 graphics_reps                                    greps-V09-06-04
 -------------
-- HepPolyhedron: introduced 'spatialTolerance' constant, equal to 0.01*nm,
+- HepPolyhedron: introduced 'spatialTolerance' constant, equal to 0.01*nm,   (o)
   allowing for creation of nm-sized objects.
   Addresses problem report #1452.
 
@@ -148,7 +151,7 @@ materials                                        materials-V09-06-07
   becoming thread safe
 - G4Isotope, G4Element, G4Material: commented out counters.
 
-parameterisations/gflash                         gflash-V09-06-00
+parameterisations/gflash                         gflash-V09-06-00            (o)
 ------------------------
 - Fixed compilation warning in clang for unused data member in
   GFlashShowerModelMessenger.
@@ -165,22 +168,23 @@ particles                                        particles-V09-06-07
   G4VDecayChannel.
   Simplified implementation for IsIon() and IsAntiIon() in G4IonTable.
   Use workaround for local thread-local pointers.
-- Remove unused variable of thePDGiSpin from G4PDGCodeChecker.
+- Removed unused variable of thePDGiSpin from G4PDGCodeChecker.              (o)
 
 persistency/ascii                                ascii-V09-06-01
 -----------------
-- Removed unused data member in G4tgbRotationMatrix.
-- Corrected composed text in exception in G4tgrSolidBoolean.
+- Removed unused data member in G4tgbRotationMatrix.                         (o)
+- Corrected composed text in exception in G4tgrSolidBoolean.                 (o)
 - Cleanup of MT changes in several classes.
 
 persistency/gdml                                 gdml-V09-06-01
 ----------------
-- Removed unused data member in G4STRead.
+- Removed unused data member in G4STRead.                                    (o)
 - Cleanup of MT changes in G4GDMLWrite.
 
 persistency/mctruth                              mctruth-V09-06-00
 -------------------
-- Removed unused data member in G4PersistencyCenter. Cleanup of MT changes.
+- Removed unused data member in G4PersistencyCenter.                         (o)
+- Cleanup of MT changes.
 
 physics_lists                                    physics_lists-V09-06-00
 -------------
@@ -194,11 +198,11 @@ physics_lists                                    physics_lists-V09-06-00
 
 processes/electromagnetic/adjoint                emadjoint-V09-06-04
 ---------------------------------
-- G4AdjointhMultipleScattering: use msc95 instead of msc90.
+- G4AdjointhMultipleScattering: use msc95 instead of msc90.                  (o)
 - G4AdjointPhotoElectricModel: define current G4MaterialCutsCouple
   for the direct model.
 - G4AdjointeIonisationModel: removed unused obsolete header.
-- Removed unused variables detected with clang compilation warnings.
+- Removed unused variables detected with clang compilation warnings.         (o)
 
 processes/electromagnetic/lowenergy              emlowen-V09-06-10
 -----------------------------------
@@ -218,7 +222,7 @@ processes/electromagnetic/muons                  emmuons-V09-06-06
 - G4MuMultipleScattering: G4UrbanMscModel become default.
 - G4MuBetheBlochModel: removed thread-local declaration.
 
-processes/electromagnetic/polarisation           empolar-V09-06-00
+processes/electromagnetic/polarisation           empolar-V09-06-00           (o)
 --------------------------------------
 - G4PolarizedComptonCrossSection: removed unused class members.
 
@@ -375,7 +379,7 @@ processes/hadronic
     Added protection for sequential build.
   o Fixed MacOS clang compiler warnings for unused private variables in
     G4DiscreteGammaTransition.
-- models/im_r_matrix (hadr-im_r-V09-06-01)
+- models/im_r_matrix (hadr-im_r-V09-06-01)                                   (o)
   o Bug fix in G4MesonAbsorption for loss of optimisation shortcut.
     Addressing problem report #1416.
   o Bug fix in G4CollisionMesonBaryonElastic::IsInCharge(): method always
@@ -387,11 +391,11 @@ processes/hadronic
     only for incident nucleons
   o Adapted some of the MT modifications  and some code refactoring.
   o Fixed MacOS Clang compiler warnings for unused private variables.
-- models/lll_fission (hadr-lllfis-V09-06-00)
+- models/lll_fission (hadr-lllfis-V09-06-00)                                 (o)
   o Fixed MacOS Clang compiler warning for appending int to string
     in G4SmpWatt.
 - models/neutron_hp (hadr-hpn-V09-06-04)
-  o Fixed MacOS clang compiler warnings for unused private variables.
+  o Fixed MacOS clang compiler warnings for unused private variables.        (o)
 - parton_string/diffraction (hadr-string-diff-V09-06-10)
   o Improved interface for manipulation of nucleus-nucleus interactions.
     Lowered low energy limit of FTF model. Expected no problem with high
@@ -401,6 +405,8 @@ processes/hadronic
   o Improved annihilation at rest simulation.
   o Fixed bug in Reggeon cascading.
   o Fixed cases of division by zero in G4FTFAnnihilation and G4FTFParameters.
+  o Fix in G4FTFModel::PutOnMassShell() for K^+ Fe interactions              (o)
+    at T=4.6748 GeV.
 - models/parton_string/management (had-partonstring-mgt-V09-06-04)
   o Added interface for manipulation of nucleus-nucleus interactions.
   o Added implementation of nucl-nucl interaction simulation.
@@ -409,7 +415,7 @@ processes/hadronic
     integer Z and A.
   o G4PreCompoundParameters: make it as a normal class not singleton.
     Removed thread-local definitions.
-- models/qmd (had-qmd-V09-06-02)
+- models/qmd (had-qmd-V09-06-02)                                             (o)
   o Fixed MacOS Clang compiler warnings for unused private variables in
     G4QMDCollision.
 - models/radioactive_decay (radioactive_decay-V09-06-02)
@@ -418,14 +424,14 @@ processes/hadronic
   o Added interface for manipulation of nucleus-nucleus interactions.
 - models/util (hadr-mod-util-V09-06-02)
   o Protect LorentzContraction for at Rest nucleus.
-  o G4NuclearFermiDensity: removed unused data member.
+  o G4NuclearFermiDensity: removed unused data member.                       (o)
   o Fixed use of internal MT data in G4GeneralPhaseSpaceDecay.
 - stopping (hadr-stopping-V09-06-02)
   o Removed thread-local definitions from G4StopElementSelector,
     G4MuMinusCaptureCascade and G4MuonMinusBoundDecay; replaced with static
     const as those arrays are not mutable.
 
-processes/parameterisation                       param-V09-06-00
+processes/parameterisation                       param-V09-06-00             (o)
 --------------------------
 - Fixed MacOS Clang compiler warning for unused private variable in
   G4FastSimulationManagerProcess.
@@ -434,12 +440,12 @@ processes/transportation                         transport-V09-06-01
 ------------------------
 - G4Transportation, G4CoupledTransportation: corrected condition for         (*)
   warning message in AlongStepDoIt().
-- Removed unused data members causing compilation warnings in MacOS clang.
+- Removed unused data members causing compilation warnings in MacOS clang.   (o)
 - Code cleanup on MT changes.
 
 tracking                                         tracking-V09-06-01
 --------
-- Fix in G4SteppingManager to allow for proper handling of multiple AtRest
+- Fix in G4SteppingManager to allow for proper handling of multiple AtRest   (o)
   processes. Addressing problem report #1397.
 
 visualization                                    vis-V09-06-09
@@ -458,7 +464,7 @@ examples                                         examples-V09-06-03
 - advanced/iort_therapy (iort_therapy-V09-06-01)
   o IORTPhysicsList: updated for renamed physics builders.
 - advanced/lAr_calorimeter (lAr_calorimeter-V09-06-01)
-  o Fixed bug in the primary generator, causing event abortion.
+  o Fixed bug in the primary generator, causing event abortion.              (o)
   o Migrated analysis to g4tools (removed AIDA dependency) and other cosmetics.
 - advanced/radioprotection (radioprotection-V09-06-01)
   o RemSimPhysicsList: update for renamed physics builders.
@@ -543,7 +549,7 @@ examples                                         examples-V09-06-03
 - extended/runAndEvent (exRunAndEvent-V09-06-01)
 - extended/visualization/perspective (exam-ext-vis-persp-V09-06-00)
   o Applied coding guidelines (virtual keyword, data members initialization).
-- novice/N02 (exampleN02-V09-06-00)
+- novice/N02 (exampleN02-V09-06-00)                                          (o)
   o ExN02PhysicsList: added ions. Addressing problem report #1444.
 
 tests                                            tests-V09-06-03

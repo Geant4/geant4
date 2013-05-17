@@ -20,6 +20,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 9.6.p02
 
 Summarised, the list of changes is the following:
 
@@ -64,7 +65,7 @@ digits_hits                                      digits_hits-V09-06-05
 
 error_propagation                                error-propagation-V09-06-05
 -----------------
-- Introduced fixes for problem reports #1435, #1447, #1448 and #1453.
+- Introduced fixes for problem reports #1435, #1447, #1448 and #1453.        (o)
 - Adapted code to implemented changes for split-class mechanism of base class
   G4VUserPhysicsList (needed for G4MT). Fixed compilation error for TLS
   variables.
@@ -94,19 +95,19 @@ geometry/navigation                              geomnav-V09-06-04
   and G4TransportationManager.
 
 geometry/solids/CSG                              geom-csg-V09-06-02
---------
-- Fix in G4Cons::DistanceToIn(p,v) for initialisation of 'dRmax' for the
+-------------------
+- Fix in G4Cons::DistanceToIn(p,v) for initialisation of 'dRmax' for the     (o)
   case of shape with Rmin1=Rmax1=0.
 
 geometry/solids/specific                         geom-specific-V09-06-10
 ------------------------
-- Fix in calculation of normal in G4Tet::DistanceToOut(p,v,..) and
+- Fix in calculation of normal in G4Tet::DistanceToOut(p,v,..) and           (o)
   SurfaceNormal(p).
-- Fix in G4Polycone::GetPointOnCone() for cases of shape with decreasing Z.
+- Fix in G4Polycone::GetPointOnCone() for cases of shape with decreasing Z.  (o)
   Fixes cases of false report for overlaps detection. Problem report #1462.
   Added check with exception in constructor for polycone with rInner > rOuter
   for the same Z.
-- G4TessellatedSolid: fixed problem with navigation in tessellated solids
+- G4TessellatedSolid: fixed problem with navigation in tessellated solids    (o)
   with concave surfaces. Addresses problem report #1456.
 - More cleanup from MT changes in G4VTwistSurface and G4Tet.
 
@@ -153,9 +154,9 @@ particles                                        particles-V09-06-17
   causing issues for event reproducibility and fixed a bug for light ions.
 - Added G4ParticleDefinition::SetMasterProcessManager() method needed for MT.
 
-persistency/ascii                                ascii-V09-06-01
+persistency/ascii                                ascii-V09-06-03
 -----------------
-- Corrected problem in placement of an assembly in G4tgbVolume.
+- Corrected problem in placement of an assembly in G4tgbVolume.              (o)
   Addressing problem report #1433.
 
 persistency/gdml                                 gdml-V09-06-02
@@ -200,9 +201,9 @@ processes/electromagnetic/muons                  emmuons-V09-06-07
 
 processes/electromagnetic/standard               emstand-V09-06-29
 ----------------------------------
-- G4UrbanMscModel: random first step/ random first step in volume
-  instead of sampling z (geometrical step length).
-  Fixes issue of zero step length for eIoni, eBrem and annihilation in flight.
+- G4UrbanMscModel: random first step in volume instead of sampling z         (o)
+  (geometrical step length).
+- Fixes issue of zero step length for eIoni, eBrem and annihilation in flight.
   Added new geometrical limit 0.01 nm to allow scattering in very small steps.
   Use G4Pow in compute transport cross section.
 - G4UrbanMscModel, G4UrbanMscModel93, G4UrbanMscModel95,
@@ -210,12 +211,12 @@ processes/electromagnetic/standard               emstand-V09-06-29
 - G4UrbanMscModel96: added warning for obsolete class.
 - G4WentzelVIModel: minor optimisation of the code (no effect on
   physics results).
-- G4WentzelOKandVIxSection: added different screening parameter formula
+- G4WentzelOKandVIxSection: added different screening parameter formula      (o)
   for e+- and heavy particles in order to return back width of electron
   scattering.
 - G4eplusAnnihilation: use G4VParticleChange interface to add
   secondary track for more clean weight update; cleanup headers
-- Correctly use "static const" for const parameters.
+- Correctly use "static const" for const parameters.                         (o)
 
 processes/electromagnetic/utils                  emutils-V09-06-08
 -------------------------------
@@ -239,7 +240,7 @@ processes/hadronic
     specification for all data which is "static const".
     Corrected definition of static data also in other classes.
     'correctInelasticNearZero' set to be always false.
-  o G4HadronFissionDataSet: always return zero (only HP may simulate
+  o G4HadronFissionDataSet: always return zero (only HP may simulate         (o)
     fission as a separate process).
   o G4CrossSectionDataStore, G4NeutronInelasticXS: fixed Coverity defects.
 - management (hadr-man-V09-06-02)
@@ -293,7 +294,7 @@ processes/hadronic
 - stopping (hadr-stopping-V09-06-03)
   o Fixed Coverity defects.
 
-processes/scoring                                procscore-V09-06-00
+processes/scoring                                procscore-V09-06-00         (o)
 -----------------
 - Set verbosity to false in G4ParallelWorldProcess for navigation in the
   parallel world, reducing warning messages. 
@@ -301,8 +302,8 @@ processes/scoring                                procscore-V09-06-00
 processes/transportation                         transport-V09-06-03
 ------------------------
 - Corrected initialisation of thread-local pointers in G4Transportation
-  and G4CoupledTransportation for MT. Removed unnecessary static local
-  variables.
+  and G4CoupledTransportation for MT.
+- G4[Coupled]Transportation: removed unnecessary static local variables.     (o)
 
 run                                              run-V09-06-26
 ---
@@ -331,16 +332,15 @@ run                                              run-V09-06-26
 
 track                                            track-V09-06-01
 -----
-- G4ParticleChange: addressing problem report #1451; neutron doed not change
+- G4ParticleChange: addressing problem report #1451; neutron doed not change (o)
   velocity after elastic scattering. Cleanup from MT changes.
-- G4ParticleChangeForEloss, G4ParticleChangeForGamma: clean up
+- G4ParticleChangeForEloss, G4ParticleChangeForGamma: clean up               (o)
   computation of velocity (expected little performance improvement).
 - Cleanup of automatic changes for MT in classes in G4Track.
 - Moved constructor and destructor of G4VelocityTable singleton to private.
 
 tracking                                         tracking-V09-06-03
 --------
-- Fix for the problem report #1397. More than two AtRest processes are allowed.
 - Cleanup of automatic changes for MT in classes: G4RichTrajectory,
   G4RichTrajectoryPoint, G4SmoothTrajectory, G4SmoothTrajectoryPoint,
   G4Trajectory, G4TrajectoryPoint.
