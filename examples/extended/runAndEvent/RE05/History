@@ -16,6 +16,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+15-05-13 M.Asai (exampleRE05-V09-06-03)
+- Migrated to parallel world that descibes the readout geometry.
 
 13-05-13 M.Asai (exampleRE05-V09-06-02)
 - Migrated to multi-thread.

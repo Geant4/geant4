@@ -6,6 +6,6 @@
 /run/numberOfThreads 4
 /control/verbose  1
 /tracking/verbose 0
-/run/beamOn 40
+/run/beamOn 80
 #
 

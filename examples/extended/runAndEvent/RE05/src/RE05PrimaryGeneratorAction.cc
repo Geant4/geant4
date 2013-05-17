@@ -41,6 +41,8 @@
 
 G4VPrimaryGenerator* RE05PrimaryGeneratorAction::HEPEvt = 0;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05PrimaryGeneratorAction::RE05PrimaryGeneratorAction()
 {
   if(!HEPEvt)
@@ -65,15 +67,22 @@ RE05PrimaryGeneratorAction::RE05PrimaryGeneratorAction()
   useHEPEvt = true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4AutoLock.hh"
+namespace {
+ G4Mutex RE05PrimGenDestrMutex = G4MUTEX_INITIALIZER; 
+ G4Mutex RE05PrimGenMutex = G4MUTEX_INITIALIZER; 
+}
 RE05PrimaryGeneratorAction::~RE05PrimaryGeneratorAction()
 {
+  G4AutoLock lock(&RE05PrimGenDestrMutex);
   if(HEPEvt) { delete HEPEvt; HEPEvt=0; }
   delete particleGun;
   delete messenger;
 }
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex RE05PrimGenMutex = G4MUTEX_INITIALIZER; }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {

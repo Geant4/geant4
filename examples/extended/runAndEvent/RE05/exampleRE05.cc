@@ -43,7 +43,9 @@
 #include "G4UImanager.hh"
 
 #include "RE05DetectorConstruction.hh"
-#include "FTFP_BERT.hh"
+#include "RE05CalorimeterROGeometry.hh"
+#include "QBBC.hh"
+#include "G4ParallelWorldPhysics.hh"
 #include "RE05ActionInitialization.hh"
 
 #ifdef G4VIS_USE
@@ -67,13 +69,18 @@ int main(int argc,char** argv)
   G4RunManager* runManager = new G4RunManager;
 #endif
 
+  G4String parallelWorldName = "ReadoutWorld";
   // User Initialization classes (mandatory)
   //
-  G4VUserDetectorConstruction* detector = new RE05DetectorConstruction;
+  G4VUserDetectorConstruction* detector = new RE05DetectorConstruction();
+  detector->RegisterParallelWorld
+       (new RE05CalorimeterROGeometry(parallelWorldName));
   runManager->SetUserInitialization(detector);
   //
-  G4VUserPhysicsList* physics = new FTFP_BERT();
-  runManager->SetUserInitialization(physics);
+  G4VModularPhysicsList* physicsList = new QBBC;
+  physicsList
+   ->RegisterPhysics(new G4ParallelWorldPhysics(parallelWorldName));
+  runManager->SetUserInitialization(physicsList);
   //
   G4VUserActionInitialization* actions = new RE05ActionInitialization;
   runManager->SetUserInitialization(actions);
@@ -81,8 +88,8 @@ int main(int argc,char** argv)
   runManager->Initialize();
 
 #ifdef G4VIS_USE
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
 #endif    
      
   //get the pointer to the User Interface manager   

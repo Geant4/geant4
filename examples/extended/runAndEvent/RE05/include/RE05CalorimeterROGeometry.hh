@@ -23,27 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05WorkerInitialization.hh 66522 2012-12-19 12:26:04Z ihrivnac $
+// $Id: RE05CalorimeterROGeometry.hh 68698 2013-04-05 08:41:22Z gcosmo $
 //
-/// \file RE05/include/RE05WorkerInitialization.hh
-/// \brief Definition of the RE05WorkerInitialization class
+/// \file RE05/include/RE05CalorimeterROGeometry.hh
+/// \brief Definition of the RE05CalorimeterROGeometry class
 //
 
-#ifndef RE05WorkerInitialization_H
-#define RE05WorkerInitialization_H 1
+#ifndef RE05CalorimeterROGeometry_h
+#define RE05CalorimeterROGeometry_h 1
 
-#include "globals.hh"
-#include "G4UserWorkerInitialization.hh"
+#include "G4VUserParallelWorld.hh"
 
-class RE05WorkerInitialization : public G4UserWorkerInitialization
+class RE05CalorimeterROGeometry : public G4VUserParallelWorld
 {
-  public:
-    RE05WorkerInitialization();
-    virtual ~RE05WorkerInitialization();
+public:
+  RE05CalorimeterROGeometry(G4String& parallelWorldName);
+  virtual ~RE05CalorimeterROGeometry();
 
-  public:
-    virtual void WorkerInitialize() const;
+public:
+  virtual void Construct();
+  virtual void ConstructSD();
+
+private:
+#include "RE05DetectorParameterDef.hh"
+
 };
 
 #endif
-

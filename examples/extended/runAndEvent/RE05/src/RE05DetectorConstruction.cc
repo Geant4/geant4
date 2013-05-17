@@ -56,12 +56,16 @@
 #include "G4Colour.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05DetectorConstruction::RE05DetectorConstruction()
 {
 
 #include "RE05DetectorParameterDef.icc"
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05DetectorConstruction::~RE05DetectorConstruction()
 {
@@ -76,6 +80,8 @@ RE05DetectorConstruction::~RE05DetectorConstruction()
   delete C;
   delete H;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05DetectorConstruction::DefineMaterials()
 {
@@ -108,6 +114,8 @@ void RE05DetectorConstruction::DefineMaterials()
   Scinti->AddElement(C, 9);
   Scinti->AddElement(H, 10);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* RE05DetectorConstruction::Construct()
 {
@@ -219,6 +227,8 @@ G4VPhysicalVolume* RE05DetectorConstruction::Construct()
   return experimentalHall_phys;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05DetectorConstruction::ConstructSDandField()
 {
   //-------------------------------------------------------------------------
@@ -236,10 +246,6 @@ void RE05DetectorConstruction::ConstructSDandField()
   G4String trackerSDname = "/mydet/tracker";
   RE05TrackerSD * trackerSD = new RE05TrackerSD(trackerSDname);
   SetSensitiveDetector("trackerB_L",trackerSD);
-
-  G4String calorimeterSDname = "/mydet/calorimeter";
-  RE05CalorimeterSD * calorimeterSD = new RE05CalorimeterSD(calorimeterSDname);
-  SetSensitiveDetector("caloT_L",calorimeterSD);
 
   G4String muonSDname = "/mydet/muon";
   RE05MuonSD * muonSD = new RE05MuonSD(muonSDname);

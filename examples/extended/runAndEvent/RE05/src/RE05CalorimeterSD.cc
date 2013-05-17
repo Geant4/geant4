@@ -41,6 +41,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05CalorimeterSD::RE05CalorimeterSD(G4String name)
 :G4VSensitiveDetector(name),
  numberOfCellsInZ(20),numberOfCellsInPhi(48)
@@ -48,6 +50,8 @@ RE05CalorimeterSD::RE05CalorimeterSD(G4String name)
   G4String HCname;
   collectionName.insert(HCname="calCollection");
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05CalorimeterSD::~RE05CalorimeterSD()
 {;}
@@ -64,26 +68,30 @@ void RE05CalorimeterSD::Initialize(G4HCofThisEvent*)
   verboseLevel = 0;
 }
 
-G4bool RE05CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool RE05CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
 {
-  if(!ROhist) return false;
+//***** RE05CalorimeterSD has been migrated to Geant4 version 10 that does not
+//***** support Readout Geometry in multi-threaded mode. Now RE05CalorimeterSD
+//***** is assigned to a dedicaed parallel world. The pointer "aStep" points to
+//***** a G4Step object for the parallel world.
+
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(verboseLevel>1) G4cout << "Next step edep(MeV) = " << edep/MeV << G4endl;
   if(edep==0.) return false;
 
-  G4VPhysicalVolume* physVol = ROhist->GetVolume();
-  //ROhist->MoveUpHistory();
-  //G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
-  G4int copyIDinZ = ROhist->GetReplicaNumber();
-  G4int copyIDinPhi = ROhist->GetReplicaNumber(1);
+  const G4VTouchable* touchable = aStep->GetPreStepPoint()->GetTouchable();
+  G4int copyIDinZ = touchable->GetReplicaNumber(0);
+  G4int copyIDinPhi = touchable->GetReplicaNumber(1);
 
   if(CellID[copyIDinZ][copyIDinPhi]==-1)
   {
     RE05CalorimeterHit* calHit
       = new RE05CalorimeterHit
-            (physVol->GetLogicalVolume(),copyIDinZ,copyIDinPhi);
+          (touchable->GetVolume()->GetLogicalVolume(),copyIDinZ,copyIDinPhi);
     calHit->SetEdep( edep );
-    G4AffineTransform aTrans = ROhist->GetHistory()->GetTopTransform();
+    G4AffineTransform aTrans = touchable->GetHistory()->GetTopTransform();
     aTrans.Invert();
     calHit->SetPos(aTrans.NetTranslation());
     calHit->SetRot(aTrans.NetRotation());
@@ -103,6 +111,8 @@ G4bool RE05CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
 
   return true;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05CalorimeterSD::EndOfEvent(G4HCofThisEvent*HCE)
 {
