@@ -82,6 +82,7 @@ G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
   SetLowEnergyLimit(0.0);
   SetLPMFlag(false);
   nwarn = 0;
+  idx = idy = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -123,6 +124,7 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #include "G4AutoLock.hh"
 namespace { G4Mutex SeltzerBergerModelMutex = G4MUTEX_INITIALIZER; }
 void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
@@ -160,7 +162,7 @@ void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
   if(v->Retrieve(fin)) { 
     if(useBicubicInterpolation) { v->SetBicubicInterpolation(true); }
     dataSB[Z] = v; 
-    ylimit[Z] = v->Value(0.97, emaxlog);
+    ylimit[Z] = v->Value(0.97, emaxlog, idx, idy);
   } else {
     G4ExceptionDescription ed;
     ed << "Bremsstrahlung data file <" << ost.str().c_str()
@@ -186,8 +188,18 @@ G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
   //G4cout << "G4SeltzerBergerModel::ComputeDXSectionPerAtom Z= " << Z
   //	 << " x= " << x << " y= " << y << " " << dataSB[Z] << G4endl;
   if(!dataSB[Z]) { ReadData(Z); }
-  G4double invb2 = totalEnergy*totalEnergy/(kinEnergy*(kinEnergy + 2*particleMass));
-  G4double cross = dataSB[Z]->Value(x,y)*invb2*millibarn/bremFactor;
+  /*
+    G4ExceptionDescription ed;
+    ed << "Bremsstrahlung data for Z= " << Z
+       << " are not initialized!";
+    G4Exception("G4SeltzerBergerModel::ComputeDXSectionPerAtom()","em0005",
+		FatalException, ed,
+		"G4LEDATA version should be G4EMLOW6.23 or later.");
+  }
+  */
+  G4double invb2 = 
+    totalEnergy*totalEnergy/(kinEnergy*(kinEnergy + 2*particleMass));
+  G4double cross = dataSB[Z]->Value(x,y,idx,idy)*invb2*millibarn/bremFactor;
   
   if(!isElectron) {
     G4double invbeta1 = sqrt(invb2);
@@ -243,7 +255,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   // majoranta
   G4double x0 = cut/kineticEnergy;
-  G4double vmax = dataSB[Z]->Value(x0, y)*1.02;
+  G4double vmax = dataSB[Z]->Value(x0, y, idx, idy)*1.02;
   //  G4double invbeta1 = 0;
 
   static const G4double epeaklimit= 300*MeV; 
@@ -252,7 +264,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   // majoranta corrected for e-
   if(isElectron && x0 < 0.97 && 
      ((kineticEnergy > epeaklimit) || (kineticEnergy < elowlimit))) {
-    G4double ylim = std::min(ylimit[Z],1.1*dataSB[Z]->Value(0.97, y)); 
+    G4double ylim = std::min(ylimit[Z],1.1*dataSB[Z]->Value(0.97, y, idx, idy)); 
     if(ylim > vmax) { vmax = ylim; }
   }
   if(x0 < 0.05) { vmax *= 1.2; }
@@ -265,7 +277,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     if(x < 0.0) { x = 0.0; }
     gammaEnergy = sqrt(x);
     G4double x1 = gammaEnergy/kineticEnergy;
-    v = dataSB[Z]->Value(x1, y);
+    v = dataSB[Z]->Value(x1, y, idx, idy);
 
     // correction for positrons        
     if(!isElectron) {

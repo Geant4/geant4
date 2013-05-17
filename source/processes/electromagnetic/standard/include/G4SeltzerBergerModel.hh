@@ -94,6 +94,8 @@ private:
   static G4double ylimit[101];
   static G4double expnumlim;
   G4int  nwarn;
+  size_t idx;
+  size_t idy;
   G4bool useBicubicInterpolation;
 };
 

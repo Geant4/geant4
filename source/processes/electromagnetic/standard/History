@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+16 May 13: V.Ivanchenko (emstand-V09-06-35)
+- G4SeltzerBergerModel - changed interface to G4Physics2DVector
+
 10 May 13: M.Asai (emstand-V09-06-34)
 - Added Mutex lock to G4SeltzerBergerModel::ReadData().
 
