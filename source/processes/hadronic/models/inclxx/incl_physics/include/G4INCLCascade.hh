@@ -82,8 +82,6 @@ namespace G4INCL {
       void finalizeGlobalInfo();
       const GlobalInfo &getGlobalInfo() const { return theGlobalInfo; }
 
-      std::string configToString() { return theConfig->echo(); }
-
     private:
       IPropagationModel *propagationModel;
       G4int theA, theZ;
@@ -121,6 +119,12 @@ namespace G4INCL {
                 particleMomenta.push_back((*p)->getMomentum());
                 particleKineticEnergies.push_back((*p)->getKineticEnergy());
               }
+              ProjectileRemnant * const aPR = n->getProjectileRemnant();
+              if(aPR && aPR->getA()>0) {
+                particleMomenta.push_back(aPR->getMomentum());
+                particleKineticEnergies.push_back(aPR->getKineticEnergy());
+                outgoingParticles.push_back(aPR);
+              }
             }
           virtual ~RecoilFunctor() {}
 
@@ -144,7 +148,7 @@ namespace G4INCL {
           /// \brief Pointer to the nucleus
           Nucleus *nucleus;
           /// \brief List of final-state particles.
-          ParticleList const &outgoingParticles;
+          ParticleList outgoingParticles;
           // \brief Reference to the EventInfo object
           EventInfo const &theEventInfo;
           /// \brief Initial momenta of the outgoing particles
@@ -200,6 +204,12 @@ namespace G4INCL {
                 (*p)->boost(thePTBoostVector);
                 particleCMMomenta.push_back((*p)->getMomentum());
               }
+              ProjectileRemnant * const aPR = n->getProjectileRemnant();
+              if(aPR && aPR->getA()>0) {
+                aPR->boost(thePTBoostVector);
+                particleCMMomenta.push_back(aPR->getMomentum());
+                outgoingParticles.push_back(aPR);
+              }
             }
           virtual ~RecoilCMFunctor() {}
 
@@ -227,7 +237,7 @@ namespace G4INCL {
           /// \brief Incoming momentum
           ThreeVector theIncomingMomentum;
           /// \brief List of final-state particles.
-          ParticleList const &outgoingParticles;
+          ParticleList outgoingParticles;
           // \brief Reference to the EventInfo object
           EventInfo const &theEventInfo;
           /// \brief Initial CM momenta of the outgoing particles

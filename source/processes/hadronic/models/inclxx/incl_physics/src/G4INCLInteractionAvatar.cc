@@ -129,6 +129,9 @@ namespace G4INCL {
   }
 
   G4bool InteractionAvatar::bringParticleInside(Particle * const p) {
+    if(!theNucleus)
+      return false;
+
     ThreeVector pos = p->getPosition();
     G4double pos2 = pos.mag2();
     const G4double r = theNucleus->getSurfaceRadius(p);
@@ -354,15 +357,16 @@ namespace G4INCL {
       // correctly. A similar condition exists in INCL4.6.
       if(p->getMass() < ParticleTable::effectiveDeltaDecayThreshold)
         return false;
-      violationEFunctor = new ViolationEEnergyFunctor(theNucleus, fs);
+      violationEFunctor = new ViolationEEnergyFunctor(theNucleus, fs, shouldUseLocalEnergy());
     }
 
     // Apply the root-finding algorithm
     const RootFinder::Solution theSolution = RootFinder::solve(violationEFunctor, 1.0);
     if(theSolution.success) { // Apply the solution
       (*violationEFunctor)(theSolution.x);
-    } else {
-      WARN("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
+    } else if(theNucleus){
+      DEBUG("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
+      theNucleus->getStore()->getBook()->incrementEnergyViolationInteraction();
     }
     delete violationEFunctor;
     violationEFunctor = NULL;
@@ -445,16 +449,16 @@ namespace G4INCL {
    * *** InteractionAvatar::ViolationEEnergyFunctor methods ***
    * ***                                                    ***/
 
-  InteractionAvatar::ViolationEEnergyFunctor::ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState) :
+  InteractionAvatar::ViolationEEnergyFunctor::ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState, const G4bool localE) :
     RootFunctor(0., 1E6),
     initialEnergy(finalState->getTotalEnergyBeforeInteraction()),
     theNucleus(nucleus),
     theParticle(finalState->getModifiedParticles().front()),
     theEnergy(theParticle->getEnergy()),
     theMomentum(theParticle->getMomentum()),
-    energyThreshold(KinematicsUtils::energy(theMomentum,ParticleTable::effectiveDeltaDecayThreshold))
+    energyThreshold(KinematicsUtils::energy(theMomentum,ParticleTable::effectiveDeltaDecayThreshold)),
+    shouldUseLocalEnergy(localE)
   {
-// assert(theNucleus);
 // assert(finalState->getModifiedParticles().size()==1);
 // assert(theParticle->isDelta());
   }
@@ -466,7 +470,12 @@ namespace G4INCL {
 
   void InteractionAvatar::ViolationEEnergyFunctor::setParticleEnergy(const G4double alpha) const {
 
-    G4double locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // Initial value of local energy
+    G4double locE;
+    if(shouldUseLocalEnergy) {
+// assert(theNucleus); // Local energy without a nucleus doesn't make sense
+      locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // Initial value of local energy
+    } else
+      locE = 0.;
     G4double locEOld;
     G4double deltaLocE = InteractionAvatar::locEAccuracy + 1E3;
     for(G4int iterLocE=0;
@@ -478,8 +487,12 @@ namespace G4INCL {
       theParticle->setMass(theMass);
       theParticle->setEnergy(particleEnergy + locE); // Update the energy of the particle...
       theParticle->adjustMomentumFromEnergy();
-      theNucleus->updatePotentialEnergy(theParticle); // ...update its potential energy...
-      locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // ...and recompute locE.
+      if(theNucleus)
+        theNucleus->updatePotentialEnergy(theParticle); // ...update its potential energy...
+      if(shouldUseLocalEnergy)
+        locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // ...and recompute locE.
+      else
+        locE = 0.;
       deltaLocE = std::abs(locE-locEOld);
     }
 

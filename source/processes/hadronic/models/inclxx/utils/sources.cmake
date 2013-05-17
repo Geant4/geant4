@@ -68,7 +68,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLRandom.hh
         G4INCLEventInfo.hh
         G4INCLRootFinder.hh
-        G4INCLDeExcitation.hh
         G4INCLVersion.hh
         G4INCLGeant4Compat.hh
         G4INCLParticleSpecies.hh

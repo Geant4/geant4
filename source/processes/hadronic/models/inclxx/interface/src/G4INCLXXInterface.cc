@@ -251,9 +251,6 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     // The INCL model will be created at the first use
     theINCLModel = G4INCLXXInterfaceStore::GetInstance()->GetINCLModel();
 
-    if(theInterfaceStore->GetDumpInput()) {
-      G4cout << theINCLModel->configToString() << G4endl;
-    }
     const G4INCL::EventInfo eventInfo = theINCLModel->processEvent(theSpecies, kineticEnergy, theTargetNucleus->GetA_asInt(), theTargetNucleus->GetZ_asInt());
     //    eventIsOK = !eventInfo.transparent && nTries < maxTries;
     eventIsOK = !eventInfo.transparent;

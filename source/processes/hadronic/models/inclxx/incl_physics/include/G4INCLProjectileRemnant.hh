@@ -57,11 +57,12 @@ namespace G4INCL {
   G4int shuffleComponentsHelper(G4int range);
 
   class ProjectileRemnant : public Cluster {
+    public:
+
     // typedefs for the calculation of the projectile excitation energy
     typedef std::vector<G4double> EnergyLevels;
     typedef std::map<long, G4double> EnergyLevelMap;
 
-    public:
     ProjectileRemnant(ParticleSpecies const species, const G4double kineticEnergy)
       : Cluster(species.theZ, species.theA) {
 
@@ -95,6 +96,8 @@ namespace G4INCL {
 
     ~ProjectileRemnant() {
       deleteStoredComponents();
+      // The ProjectileRemnant owns its particles
+      deleteParticles();
       clearEnergyLevels();
     }
 
@@ -202,6 +205,10 @@ namespace G4INCL {
       std::partial_sum(energies.begin(), energies.end(), theGroundStateEnergies.begin());
     }
 
+    EnergyLevels const &getGroundStateEnergies() const {
+      return theGroundStateEnergies;
+    }
+
     private:
 
     /** \brief Compute the excitation energy for a given configuration
@@ -263,7 +270,10 @@ namespace G4INCL {
           }
           }*/
 
-    /// \brief Stored projectile components
+    /** \brief Stored projectile components
+     *
+     * These particles are owned by the ProjectileRemnant.
+     */
     std::map<long, Particle*> storedComponents;
 
     /// \brief Initial energy levels of the projectile

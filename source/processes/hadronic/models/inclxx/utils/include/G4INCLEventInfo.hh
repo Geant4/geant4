@@ -100,7 +100,8 @@ namespace G4INCL {
         nReflectionAvatars(0),
         nCollisionAvatars(0),
         nDecayAvatars(0),
-        nUnmergedSpectators(0)
+        nUnmergedSpectators(0),
+        nEnergyViolationInteraction(0)
 #ifdef INCL_INVERSE_KINEMATICS
 
 #endif
@@ -284,6 +285,8 @@ namespace G4INCL {
       Int_t nDecayAvatars;
       /** \brief Number of dynamical spectators that were merged back into the projectile remnant */
       Int_t nUnmergedSpectators;
+      /** \brief Number of attempted collisions/decays for which the energy-conservation algorithm failed to find a solution. */
+      Int_t nEnergyViolationInteraction;
 
 #ifdef INCL_INVERSE_KINEMATICS
       /** \brief Particle kinetic energy, in inverse kinematics [MeV] */
@@ -332,12 +335,17 @@ namespace G4INCL {
         nCollisionAvatars = 0;
         nDecayAvatars = 0;
         nUnmergedSpectators = 0;
+        nEnergyViolationInteraction = 0;
 #ifdef INCL_INVERSE_KINEMATICS
 
 #endif
       }
 
+      /// \brief Move a remnant to the particle array
+      void remnantToParticle(const G4int remnantIndex);
+
 #ifdef INCL_INVERSE_KINEMATICS
+      /// \brief Fill the variables describing the reaction in inverse kinematics
       void fillInverseKinematics(const Double_t gamma);
 #endif // INCL_INVERSE_KINEMATICS
     };

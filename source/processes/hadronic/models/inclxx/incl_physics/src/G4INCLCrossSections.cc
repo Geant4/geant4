@@ -366,34 +366,6 @@ sel100: return sel;
       return 0.0; // Should never reach this point
     }
 
-    G4double interactionDistanceNN(const G4double projectileKineticEnergy) {
-      ThreeVector nullVector;
-      ThreeVector unitVector(0., 0., 1.);
-
-      Particle protonProjectile(Proton, unitVector, nullVector);
-      protonProjectile.setEnergy(protonProjectile.getMass()+projectileKineticEnergy);
-      protonProjectile.adjustMomentumFromEnergy();
-      Particle neutronProjectile(Neutron, unitVector, nullVector);
-      neutronProjectile.setEnergy(neutronProjectile.getMass()+projectileKineticEnergy);
-      neutronProjectile.adjustMomentumFromEnergy();
-
-      Particle protonTarget(Proton, nullVector, nullVector);
-      Particle neutronTarget(Neutron, nullVector, nullVector);
-      const G4double sigmapp = total(&protonProjectile, &protonTarget);
-      const G4double sigmapn = total(&protonProjectile, &neutronTarget);
-      const G4double sigmanp = total(&neutronProjectile, &protonTarget);
-      const G4double sigmann = total(&neutronProjectile, &neutronTarget);
-      /* We compute the interaction distance from the largest of the NN cross
-       * sections. Note that this is different from INCL4.6, which just takes the
-       * average of the four, and will in general lead to a different geometrical
-       * cross section.
-       */
-      const G4double largestSigma = std::max(sigmapp, std::max(sigmapn, std::max(sigmanp,sigmann)));
-      const G4double interactionDistance = std::sqrt(largestSigma/Math::tenPi);
-
-      return interactionDistance;
-    }
-
     G4double interactionDistancePiN(const G4double projectileKineticEnergy) {
       ThreeVector nullVector;
       ThreeVector unitVector(0., 0., 1.);
@@ -434,35 +406,16 @@ sel100: return sel;
       ThreeVector unitVector(0.,0.,1.);
 
       const G4double kineticEnergyPerNucleon = kineticEnergy / aSpecies.theA;
-      const G4double nucleonMass = ParticleTable::getINCLMass(Proton);
-
-      // s_NN averaged over the Fermi sphere of the target
-
-      // relativistic formula
-      /*
-         const G4double totalEnergy = nucleonMass + kineticEnergyPerNucleon;
-         const G4double averageS = 2.*nucleonMass*nucleonMass
-         + 0.75 * totalEnergy * (
-         PhysicalConstants::Pf
-       * std::sqrt(nucleonMass*nucleonMass + PhysicalConstants::PfSquared)
-       * (nucleonMass*nucleonMass + 2.*PhysicalConstants::PfSquared)
-       - std::pow(nucleonMass,4.) * Math::aSinH(PhysicalConstants::Pf/nucleonMass)
-       )
-       / PhysicalConstants::PfCubed;
-       energyCM = 0.5 * std::sqrt(averageS);
-       */
-
-      // semi-relativistic formula
-      const G4double energyCM = 0.25 * kineticEnergyPerNucleon + (3. * PhysicalConstants::PfSquared) / (40. * nucleonMass)
-        + nucleonMass;
 
       Particle protonProjectile(Proton, unitVector, nullVector);
-      protonProjectile.setEnergy(energyCM);
+      protonProjectile.setEnergy(protonProjectile.getMass()+kineticEnergyPerNucleon);
       protonProjectile.adjustMomentumFromEnergy();
-      Particle neutronProjectile(Neutron, protonProjectile.getMomentum(), nullVector);
-      Particle protonTarget(Proton, -protonProjectile.getMomentum(), nullVector);
-      Particle neutronTarget(Neutron, -protonProjectile.getMomentum(), nullVector);
+      Particle neutronProjectile(Neutron, unitVector, nullVector);
+      neutronProjectile.setEnergy(neutronProjectile.getMass()+kineticEnergyPerNucleon);
+      neutronProjectile.adjustMomentumFromEnergy();
 
+      Particle protonTarget(Proton, nullVector, nullVector);
+      Particle neutronTarget(Neutron, nullVector, nullVector);
       const G4double sigmapp = total(&protonProjectile, &protonTarget);
       const G4double sigmapn = total(&protonProjectile, &neutronTarget);
       const G4double sigmanp = total(&neutronProjectile, &protonTarget);

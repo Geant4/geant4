@@ -176,7 +176,7 @@ namespace G4INCL {
            *
            * The constructor sets the private class members.
            */
-          ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState);
+          ViolationEEnergyFunctor(Nucleus * const nucleus, FinalState const * const finalState, const G4bool localE);
           virtual ~ViolationEEnergyFunctor() {}
 
           /** \brief Compute the energy-conservation violation.
@@ -211,6 +211,8 @@ namespace G4INCL {
            * The particle (a delta) cannot have less than this energy.
            */
           G4double energyThreshold;
+          /// \brief Whether we should use local energy
+          const G4bool shouldUseLocalEnergy;
       };
 
       RootFunctor *violationEFunctor;

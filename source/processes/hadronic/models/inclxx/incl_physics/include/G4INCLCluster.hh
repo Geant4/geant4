@@ -95,12 +95,16 @@ namespace G4INCL {
     /// \brief Copy constructor
     Cluster(const Cluster &rhs) :
       Particle(rhs),
-      theExcitationEnergy(rhs.theExcitationEnergy)
+      theExcitationEnergy(rhs.theExcitationEnergy),
+      theSpin(rhs.theSpin)
     {
-      deleteParticles();
       for(ParticleIter p=rhs.particles.begin(); p!=rhs.particles.end(); ++p) {
         particles.push_back(new Particle(**p));
       }
+      if(rhs.theParticleSampler)
+        theParticleSampler = NuclearDensityFactory::createParticleSampler(rhs.theA,rhs.theZ);
+      else
+        theParticleSampler = NULL;
     }
 
     /// \brief Assignment operator
@@ -282,9 +286,9 @@ namespace G4INCL {
         // and momentum-conservation laws
         (*p)->setEnergy(energy);
         (*p)->setMass(std::sqrt(energy*energy - momentum.mag2()));
-        DEBUG("Cluster components are now off shell:" << std::endl
-            << print());
       }
+      DEBUG("Cluster components are now off shell:" << std::endl
+            << print());
     }
 
     /** \brief Set the position of the cluster

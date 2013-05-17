@@ -44,6 +44,16 @@
 #include <string>
 #include <sstream>
 
+#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
+#include <boost/program_options/options_description.hpp>
+#include <boost/program_options/parsers.hpp>
+#include <boost/program_options/variables_map.hpp>
+#include <fstream>
+#include <cstdlib>
+
+namespace po = boost::program_options;
+#endif
+
 namespace G4INCL {
 
   /**
@@ -190,6 +200,9 @@ namespace G4INCL {
     /// \brief Get the de-excitation model.
     DeExcitationType getDeExcitationType() const { return deExcitationType; }
 
+    /// \brief Get the de-excitation string.
+    std::string getDeExcitationString() const { return deExcitationString; }
+
     /// \brief Get the clustering algorithm.
     ClusterAlgorithmType getClusterAlgorithm() const { return clusterAlgorithmType; }
 
@@ -207,9 +220,6 @@ namespace G4INCL {
 
     /// \brief Set whether to use real masses
     void setUseRealMasses(G4bool use) { useRealMasses = use; }
-
-    /// \brief Echo the input options.
-    std::string const echo() const;
 
     std::string const &getINCLXXDataFilePath() const {
       return INCLXXDataFilePath;
@@ -245,7 +255,35 @@ namespace G4INCL {
 
     G4double getCutNN() const { return cutNN; }
 
+#ifdef INCL_ROOT_USE
+    std::string const &getROOTSelectionString() const {
+      return rootSelectionString;
+    }
+#endif
+
+#ifdef INCL_DEEXCITATION_FERMI_BREAKUP
+    G4int getMaxMassFermiBreakUp() const {
+      return maxMassFermiBreakUp;
+    }
+#endif
+
+#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
+    /// \brief Echo the input options.
+    std::string const echo() const;
+#endif
+
   private:
+
+#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
+    std::string echoOptionsDescription(const po::options_description &aDesc) const;
+
+    po::options_description runOptDesc;
+    po::options_description hiddenOptDesc;
+    po::options_description genericOptDesc;
+    po::options_description physicsOptDesc;
+    po::variables_map variablesMap;
+#endif
+
     G4int verbosity;
     std::string inputFileName;
     std::string title;
@@ -318,6 +356,13 @@ namespace G4INCL {
 
     G4double cutNN;
 
+#ifdef INCL_ROOT_USE
+    std::string rootSelectionString; 
+#endif
+
+#ifdef INCL_DEEXCITATION_FERMI_BREAKUP
+    G4int maxMassFermiBreakUp;
+#endif
   };
 
 }

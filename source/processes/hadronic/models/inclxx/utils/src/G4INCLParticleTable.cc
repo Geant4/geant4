@@ -271,7 +271,8 @@ namespace G4INCL {
         // Open the file stream
         std::ifstream massTableIn(fileName.c_str());
         if(!massTableIn.good()) {
-          FATAL("Cannot open " << fileName << " data file." << std::endl);
+          std::cerr << "Cannot open " << fileName << " data file." << std::endl;
+          std::abort();
           return;
         }
 
@@ -351,6 +352,8 @@ namespace G4INCL {
         getSeparationEnergy = getSeparationEnergyRealForLight;
       else {
         FATAL("Unrecognized separation-energy type in ParticleTable initialization: " << theConfig->getSeparationEnergyType() << std::endl);
+        std::abort();
+        return;
       }
 
       // Initialise the Fermi-momentum function
@@ -363,6 +366,7 @@ namespace G4INCL {
       else {
         FATAL("Unrecognized Fermi-momentum type in ParticleTable initialization: " << theConfig->getFermiMomentumType() << std::endl);
         std::abort();
+        return;
       }
 
     }

@@ -46,7 +46,6 @@
 G4ThreadLocal G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL;
 
 G4INCLXXInterfaceStore::G4INCLXXInterfaceStore() :
-  dumpInput(false),
   accurateProjectile(true),
   theMaxClusterMassDefault(8),
   theMaxClusterMass(theMaxClusterMassDefault),

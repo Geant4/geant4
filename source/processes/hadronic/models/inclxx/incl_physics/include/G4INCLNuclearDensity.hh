@@ -105,7 +105,8 @@ namespace G4INCL {
     /// \brief Get the charge number.
     G4int getZ() const { return theZ; }
 
-    G4double getNuclearRadius() { return theNuclearRadius; }
+    G4double getNuclearRadius() const { return theNuclearRadius; }
+    void setNuclearRadius(const G4double r) { theNuclearRadius = r; }
 
   private:
 

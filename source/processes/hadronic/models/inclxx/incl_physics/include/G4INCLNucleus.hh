@@ -277,7 +277,6 @@ namespace G4INCL {
     /**
      * Fill the event info which contains INCL output data
      */
-    //    void fillEventInfo(Results::EventInfo *eventInfo);
     void fillEventInfo(EventInfo *eventInfo);
 
     G4bool getTryCompoundNucleus() { return tryCN; }
@@ -366,12 +365,6 @@ namespace G4INCL {
       theProjectileRemnant = NULL;
     }
 
-    /// \brief Move the components of the projectile remnant to the outgoing list
-    void moveProjectileRemnantComponentsToOutgoing() {
-      theStore->addToOutgoing(theProjectileRemnant->getParticles());
-      theProjectileRemnant->clearParticles();
-    }
-
     /** \brief Finalise the projectile remnant
      *
      * Complete the treatment of the projectile remnant. If it contains
@@ -386,6 +379,13 @@ namespace G4INCL {
     inline void updatePotentialEnergy(Particle *p) const {
       p->setPotentialEnergy(thePotential->computePotentialEnergy(p));
     }
+
+    /// \brief Setter for theDensity
+    void setDensity(NuclearDensity * const d) {
+      theDensity=d;
+      if(theParticleSampler)
+        theParticleSampler->setDensity(theDensity);
+    };
 
     /// \brief Getter for theDensity
     NuclearDensity* getDensity() const { return theDensity; };
@@ -433,7 +433,10 @@ namespace G4INCL {
      */
     G4bool isNucleusNucleus;
 
-    /// \brief Pointer to the quasi-projectile
+    /** \brief Pointer to the quasi-projectile
+     *
+     * Owned by the Nucleus object.
+     */
     ProjectileRemnant *theProjectileRemnant;
 
     /// \brief Pointer to the NuclearDensity object

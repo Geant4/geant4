@@ -65,6 +65,7 @@ namespace G4INCL {
       nAvatars[ParticleEntryAvatarType] = 0;
       nCascading = 0;
       nEmittedClusters = 0;
+      nEnergyViolationInteraction = 0;
     };
 
     void incrementAcceptedCollisions() { nAcceptedCollisions++; };
@@ -75,6 +76,7 @@ namespace G4INCL {
     void incrementCascading() { nCascading++; }
     void decrementCascading() { nCascading--; }
     void incrementEmittedClusters() { nEmittedClusters++; }
+    void incrementEnergyViolationInteraction() { nEnergyViolationInteraction++; }
 
     void setFirstCollisionTime(const G4double t) { firstCollisionTime = t; };
     G4double getFirstCollisionTime() const { return firstCollisionTime; };
@@ -101,6 +103,7 @@ namespace G4INCL {
     G4int getAvatars(AvatarType type) const { return nAvatars.find(type)->second; };
     G4int getCascading() const { return nCascading; };
     G4int getEmittedClusters() const { return nEmittedClusters; };
+    G4int getEnergyViolationInteraction() const { return nEnergyViolationInteraction; };
 
   private:
     G4int nAcceptedCollisions;
@@ -116,6 +119,7 @@ namespace G4INCL {
     std::map<AvatarType,G4int> nAvatars;
     G4int nCascading;
     G4int nEmittedClusters;
+    G4int nEnergyViolationInteraction;
   };
 }
 

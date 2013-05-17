@@ -129,6 +129,7 @@ namespace G4INCL {
   Nucleus::~Nucleus() {
     delete theStore;
     delete thePotential;
+    deleteProjectileRemnant();
     /* We don't delete the density here any more -- the Factory is caching them
     delete theDensity;*/
   }
@@ -274,10 +275,13 @@ namespace G4INCL {
     theSpin = incomingAngularMomentum;
 
     ParticleList outgoing = theStore->getOutgoingParticles();
-    for(ParticleIter p=outgoing.begin(); p!=outgoing.end(); ++p)
-    {
+    for(ParticleIter p=outgoing.begin(); p!=outgoing.end(); ++p) {
       theMomentum -= (*p)->getMomentum();
       theSpin -= (*p)->getAngularMomentum();
+    }
+    if(theProjectileRemnant) {
+      theMomentum -= theProjectileRemnant->getMomentum();
+      theSpin -= theProjectileRemnant->getAngularMomentum();
     }
 
     // Subtract orbital angular momentum
@@ -413,9 +417,12 @@ namespace G4INCL {
       // up energy conservation and CDPP by passing a NULL pointer for the
       // nucleus.
       IAvatar *decay;
-      if(unphysicalRemnant)
+      if(unphysicalRemnant) {
+        WARN("Forcing delta decay inside an unphysical remnant (A=" << theA
+             << ", Z=" << theZ << "). Might lead to energy-violation warnings."
+             << std::endl);
         decay = new DecayAvatar((*i), 0.0, NULL, true);
-      else
+      } else
         decay = new DecayAvatar((*i), 0.0, this, true);
       FinalState *fs = decay->getFinalState();
 
@@ -432,7 +439,7 @@ namespace G4INCL {
 
     // If the remnant is unphysical, emit all the pions
     if(unphysicalRemnant) {
-      DEBUG("Remnant is unphysical: Z=" << theZ << ", A=" << theA << std::endl);
+      DEBUG("Remnant is unphysical: Z=" << theZ << ", A=" << theA << ", emitting all the pions" << std::endl);
       emitInsidePions();
     }
 
@@ -708,46 +715,6 @@ namespace G4INCL {
     eventInfo->history.clear();
 
     for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i ) {
-      // If the particle is a cluster and has excitation energy, treat it as a cluster
-      if((*i)->isCluster()) {
-        Cluster const * const c = dynamic_cast<Cluster *>(*i);
-// assert(c);
-#ifdef INCLXX_IN_GEANT4_MODE
-        if(!c)
-          continue;
-#endif
-        const G4double eStar = c->getExcitationEnergy();
-        if(std::abs(eStar)>1E-10) {
-          if(eStar<0.) {
-            WARN("Negative excitation energy in outgoing cluster! EStar = " << eStar << std::endl);
-          }
-          eventInfo->ARem[eventInfo->nRemnants] = c->getA();
-          eventInfo->ZRem[eventInfo->nRemnants] = c->getZ();
-          eventInfo->EStarRem[eventInfo->nRemnants] = eStar;
-          ThreeVector remnantSpin = c->getSpin();
-          Float_t remnantSpinMag;
-          if(eventInfo->ARem[eventInfo->nRemnants]%2==0) { // even-A nucleus
-            remnantSpinMag = (G4int) (remnantSpin.mag()/PhysicalConstants::hc + 0.5);
-          } else { // odd-A nucleus
-            remnantSpinMag = ((G4int) (remnantSpin.mag()/PhysicalConstants::hc)) + 0.5;
-          }
-          remnantSpin *= remnantSpinMag/remnantSpin.mag();
-          eventInfo->JRem[eventInfo->nRemnants] = remnantSpinMag;
-          eventInfo->jxRem[eventInfo->nRemnants] = remnantSpin.getX();
-          eventInfo->jyRem[eventInfo->nRemnants] = remnantSpin.getY();
-          eventInfo->jzRem[eventInfo->nRemnants] = remnantSpin.getZ();
-          eventInfo->EKinRem[eventInfo->nRemnants] = c->getKineticEnergy();
-          ThreeVector mom = c->getMomentum();
-          eventInfo->pxRem[eventInfo->nRemnants] = mom.getX();
-          eventInfo->pyRem[eventInfo->nRemnants] = mom.getY();
-          eventInfo->pzRem[eventInfo->nRemnants] = mom.getZ();
-          eventInfo->thetaRem[eventInfo->nRemnants] = Math::toDegrees(mom.theta());
-          eventInfo->phiRem[eventInfo->nRemnants] = Math::toDegrees(mom.phi());
-          eventInfo->nRemnants++;
-          continue; // don't add it as a particle
-        }
-      }
-
       // We have a pion absorption event only if the projectile is
       // pion and there are no ejected pions.
       if(isPionAbsorption) {
@@ -755,6 +722,7 @@ namespace G4INCL {
           isPionAbsorption = false;
         }
       }
+
       eventInfo->A[eventInfo->nParticles] = (*i)->getA();
       eventInfo->Z[eventInfo->nParticles] = (*i)->getZ();
       eventInfo->emissionTime[eventInfo->nParticles] = (*i)->getEmissionTime();
@@ -773,13 +741,43 @@ namespace G4INCL {
     eventInfo->pionAbsorption = isPionAbsorption;
     eventInfo->nCascadeParticles = eventInfo->nParticles;
 
-    // Remnant characteristics
+    // Projectile-like remnant characteristics
+    if(theProjectileRemnant && theProjectileRemnant->getA()>0) {
+      eventInfo->ARem[eventInfo->nRemnants] = theProjectileRemnant->getA();
+      eventInfo->ZRem[eventInfo->nRemnants] = theProjectileRemnant->getZ();
+      G4double eStar = theProjectileRemnant->getExcitationEnergy();
+      if(std::abs(eStar)<1E-10)
+        eStar = 0.0; // blame rounding and set the excitation energy to zero
+      eventInfo->EStarRem[eventInfo->nRemnants] = eStar;
+      if(eventInfo->EStarRem[eventInfo->nRemnants]<0.) {
+	WARN("Negative excitation energy in projectile-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << std::endl);
+      }
+      if(eventInfo->ARem[eventInfo->nRemnants]%2==0) { // even-A nucleus
+	eventInfo->JRem[eventInfo->nRemnants] = (G4int) (theProjectileRemnant->getSpin().mag()/PhysicalConstants::hc + 0.5);
+      } else { // odd-A nucleus
+	eventInfo->JRem[eventInfo->nRemnants] = ((G4int) (theProjectileRemnant->getSpin().mag()/PhysicalConstants::hc)) + 0.5;
+      }
+      eventInfo->EKinRem[eventInfo->nRemnants] = theProjectileRemnant->getKineticEnergy();
+      ThreeVector mom = theProjectileRemnant->getMomentum();
+      eventInfo->pxRem[eventInfo->nRemnants] = mom.getX();
+      eventInfo->pyRem[eventInfo->nRemnants] = mom.getY();
+      eventInfo->pzRem[eventInfo->nRemnants] = mom.getZ();
+      ThreeVector spin = theProjectileRemnant->getSpin();
+      eventInfo->jxRem[eventInfo->nRemnants] = spin.getX();
+      eventInfo->jyRem[eventInfo->nRemnants] = spin.getY();
+      eventInfo->jzRem[eventInfo->nRemnants] = spin.getZ();
+      eventInfo->thetaRem[eventInfo->nRemnants] = Math::toDegrees(mom.theta());
+      eventInfo->phiRem[eventInfo->nRemnants] = Math::toDegrees(mom.phi());
+      eventInfo->nRemnants++;
+    }
+
+    // Target-like remnant characteristics
     if(hasRemnant()) {
       eventInfo->ARem[eventInfo->nRemnants] = getA();
       eventInfo->ZRem[eventInfo->nRemnants] = getZ();
       eventInfo->EStarRem[eventInfo->nRemnants] = getExcitationEnergy();
       if(eventInfo->EStarRem[eventInfo->nRemnants]<0.) {
-	WARN("Negative excitation energy! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << std::endl);
+	WARN("Negative excitation energy in target-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << std::endl);
       }
       if(eventInfo->ARem[eventInfo->nRemnants]%2==0) { // even-A nucleus
 	eventInfo->JRem[eventInfo->nRemnants] = (G4int) (getSpin().mag()/PhysicalConstants::hc + 0.5);
@@ -791,6 +789,10 @@ namespace G4INCL {
       eventInfo->pxRem[eventInfo->nRemnants] = mom.getX();
       eventInfo->pyRem[eventInfo->nRemnants] = mom.getY();
       eventInfo->pzRem[eventInfo->nRemnants] = mom.getZ();
+      ThreeVector spin = getSpin();
+      eventInfo->jxRem[eventInfo->nRemnants] = spin.getX();
+      eventInfo->jyRem[eventInfo->nRemnants] = spin.getY();
+      eventInfo->jzRem[eventInfo->nRemnants] = spin.getZ();
       eventInfo->thetaRem[eventInfo->nRemnants] = Math::toDegrees(mom.theta());
       eventInfo->phiRem[eventInfo->nRemnants] = Math::toDegrees(mom.phi());
       eventInfo->nRemnants++;
@@ -809,6 +811,7 @@ namespace G4INCL {
     eventInfo->nReflectionAvatars = getStore()->getBook()->getAvatars(SurfaceAvatarType);
     eventInfo->nCollisionAvatars = getStore()->getBook()->getAvatars(CollisionAvatarType);
     eventInfo->nDecayAvatars = getStore()->getBook()->getAvatars(DecayAvatarType);
+    eventInfo->nEnergyViolationInteraction = getStore()->getBook()->getEnergyViolationInteraction();
   }
 
   Nucleus::ConservationBalance Nucleus::getConservationBalance(const EventInfo &theEventInfo, const G4bool afterRecoil) const {
@@ -831,7 +834,17 @@ namespace G4INCL {
       theBalance.momentum -= (*i)->getMomentum();
     }
 
-    // Remnant contribution, if present
+    // Projectile-like remnant contribution, if present
+    if(theProjectileRemnant && theProjectileRemnant->getA()>0) {
+      theBalance.Z -= theProjectileRemnant->getZ();
+      theBalance.A -= theProjectileRemnant->getA();
+      theBalance.energy -= ParticleTable::getTableMass(theProjectileRemnant->getA(),theProjectileRemnant->getZ()) +
+        theProjectileRemnant->getExcitationEnergy();
+      theBalance.energy -= theProjectileRemnant->getKineticEnergy();
+      theBalance.momentum -= theProjectileRemnant->getMomentum();
+    }
+
+    // Target-like remnant contribution, if present
     if(hasRemnant()) {
       theBalance.Z -= getZ();
       theBalance.A -= getA();
@@ -855,37 +868,28 @@ namespace G4INCL {
 
   void Nucleus::finalizeProjectileRemnant(const G4double anEmissionTime) {
     // Deal with the projectile remnant
-    if(theProjectileRemnant->getA()>1) {
+    const G4int prA = theProjectileRemnant->getA();
+    if(prA>=1) {
       // Set the mass
       const G4double aMass = theProjectileRemnant->getInvariantMass();
       theProjectileRemnant->setMass(aMass);
 
       // Compute the excitation energy from the invariant mass
       const G4double anExcitationEnergy = aMass
-        - ParticleTable::getTableMass(theProjectileRemnant->getA(), theProjectileRemnant->getZ());
+        - ParticleTable::getTableMass(prA, theProjectileRemnant->getZ());
 
       // Set the excitation energy
       theProjectileRemnant->setExcitationEnergy(anExcitationEnergy);
 
-      // Set the spin
-      theProjectileRemnant->setSpin(DeJongSpin::shoot(theProjectileRemnant->getNumberStoredComponents(), theProjectileRemnant->getA()));
+      if(prA>1) {
+        // Set the spin
+        theProjectileRemnant->setSpin(DeJongSpin::shoot(theProjectileRemnant->getNumberStoredComponents(), prA));
+      } else
+        theProjectileRemnant->setSpin(ThreeVector());
 
       // Set the emission time
       theProjectileRemnant->setEmissionTime(anEmissionTime);
-
-      // Put it in the outgoing list
-      theStore->addToOutgoing(theProjectileRemnant);
-
-      // NULL theProjectileRemnant
-      theProjectileRemnant = NULL;
-    } else if(theProjectileRemnant->getA()==1) {
-      // Put the nucleon in the outgoing list
-      Particle *theNucleon = theProjectileRemnant->getParticles().front();
-      theStore->addToOutgoing(theNucleon);
-      // Delete the remnant
-      deleteProjectileRemnant();
-    } else
-      deleteProjectileRemnant();
+    }
   }
 
 }

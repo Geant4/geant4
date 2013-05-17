@@ -16,6 +16,20 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+17 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-13)
+-----------------------------------------------------------
+- INCL++ v5.1.12.3
+  o Fix a crash for light targets.
+
+16 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-11)
+-----------------------------------------------------------
+- Fix clang compiler warning about unused functions.
+
+15 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-10)
+-----------------------------------------------------------
+- INCL++ v5.1.12.1
+  o More adjustments in the nucleus-nucleus sector.
+
 26 March 2013 - Davide Mancusi (hadr-inclxx-V09-06-09)
 -----------------------------------------------------------
 - Fix another compilation error for G4-MT.

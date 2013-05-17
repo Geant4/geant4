@@ -154,7 +154,11 @@ namespace G4INCL {
   }
 
   G4double invariantMass(const G4double E, const ThreeVector & p) {
-    return std::sqrt(E*E - p.mag2());
+    return std::sqrt(squareInvariantMass(E, p));
+  }
+
+  G4double squareInvariantMass(const G4double E, const ThreeVector & p) {
+    return E*E - p.mag2();
   }
 
   G4double gammaFromKineticEnergy(const ParticleSpecies &p, const G4double EKin) {

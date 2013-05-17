@@ -179,9 +179,6 @@ class G4INCLXXInterfaceStore {
     /// \brief Getter for theMaxProjMassINCL
     G4int GetMaxProjMassINCL() const { return theMaxProjMassINCL; }
 
-    /// \brief Getter for dumpInput
-    G4bool GetDumpInput() const { return dumpInput; }
-
 
 
 
@@ -221,7 +218,6 @@ class G4INCLXXInterfaceStore {
 
     static G4ThreadLocal G4INCLXXInterfaceStore *theInstance;
 
-    G4bool dumpInput;
     G4bool accurateProjectile;
     const G4int theMaxClusterMassDefault;
     G4int theMaxClusterMass;

@@ -115,15 +115,13 @@ namespace G4INCL {
 
       // Fix the correction in such a way that the quasi-projectile excitation
       // energy is given by A. Boudard's INCL4.2-HI model (model 3. above).
-      /*
       const G4double theProjectileExcitationEnergy =
         (projectileRemnant->getA()-theParticle->getA()>1) ?
         (projectileRemnant->computeExcitationEnergyExcept(theParticle->getID())) :
         0.;
-      */
       // Set the projectile excitation energy to zero (cold quasi-projectile,
       // model 4. above).
-      const G4double theProjectileExcitationEnergy = 0.;
+      // const G4double theProjectileExcitationEnergy = 0.;
       // The part that follows is common to model 3. and 4.
       const G4double theProjectileEffectiveMass =
         ParticleTable::getTableMass(projectileRemnant->getA() - theParticle->getA(), projectileRemnant->getZ() - theParticle->getZ())

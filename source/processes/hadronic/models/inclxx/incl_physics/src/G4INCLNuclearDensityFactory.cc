@@ -215,6 +215,32 @@ namespace G4INCL {
       }
     }
 
+    void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InverseInterpolationTable * const table) {
+// assert(t==Proton || t==Neutron);
+
+      if(!rpCorrelationTableCache)
+        rpCorrelationTableCache = new std::map<G4int,InverseInterpolationTable*>;
+
+      const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
+      const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache->find(nuclideID);
+      if(mapEntry != rpCorrelationTableCache->end())
+        delete mapEntry->second;
+
+      (*rpCorrelationTableCache)[nuclideID] = table;
+    }
+
+    void addDensityToCache(const G4int A, const G4int Z, NuclearDensity * const density) {
+      if(!nuclearDensityCache)
+        nuclearDensityCache = new std::map<G4int,NuclearDensity*>;
+
+      const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
+      const std::map<G4int,NuclearDensity*>::const_iterator mapEntry = nuclearDensityCache->find(nuclideID);
+      if(mapEntry != nuclearDensityCache->end())
+        delete mapEntry->second;
+
+      (*nuclearDensityCache)[nuclideID] = density;
+    }
+
     void clearCache() {
 
       if(nuclearDensityCache) {

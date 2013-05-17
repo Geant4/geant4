@@ -181,7 +181,6 @@ namespace G4INCL {
       // parameter larger than the maximum impact parameter, taking into
       // account Coulomb distortion.
       if(impactParameter>CoulombDistortion::maxImpactParameter(pr,theNucleus)) {
-        pr->deleteParticles();
         DEBUG("impactParameter>CoulombDistortion::maxImpactParameter" << std::endl);
         delete pr;
         return -1.;
@@ -208,7 +207,6 @@ namespace G4INCL {
 
       if(theAvatarList.empty()) {
         DEBUG("No ParticleEntryAvatar found, transparent event" << std::endl);
-        pr->deleteParticles();
         delete pr;
         return -1.;
       }

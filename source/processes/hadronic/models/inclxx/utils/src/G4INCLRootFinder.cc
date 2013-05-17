@@ -133,7 +133,7 @@ namespace G4INCL {
           f->cleanUp(true);
           return Solution(0.,y_at_zero);
         } else {
-          WARN("Root-finding algorithm could not bracket the root." << std::endl);
+          DEBUG("Root-finding algorithm could not bracket the root." << std::endl);
           f->cleanUp(false);
           return Solution();
         }
@@ -154,7 +154,7 @@ namespace G4INCL {
       for(G4int iterations=0; std::abs(y) > toleranceY; iterations++) {
 
         if(iterations > maxIterations) {
-          WARN("Root-finding algorithm did not converge." << std::endl);
+          DEBUG("Root-finding algorithm did not converge." << std::endl);
           f->cleanUp(false);
           return Solution();
         }

@@ -155,7 +155,10 @@ namespace G4INCL {
     avatarAction = new AvatarAction();
 
     theGlobalInfo.cascadeModel = theConfig->getVersionString();
-    theGlobalInfo.deexcitationModel = "none";
+    theGlobalInfo.deexcitationModel = theConfig->getDeExcitationString();
+#ifdef INCL_ROOT_USE
+    theGlobalInfo.rootSelection = theConfig->getROOTSelectionString();
+#endif
 
 #ifndef INCLXX_IN_GEANT4_MODE
     // Fill in the global information
@@ -374,12 +377,10 @@ namespace G4INCL {
     if(theEventInfo.transparent) {
       ProjectileRemnant * const projectileRemnant = nucleus->getProjectileRemnant();
       if(projectileRemnant) {
-        // Delete the projectile remnant and the particles it contains
-        projectileRemnant->deleteParticles();
-        nucleus->deleteProjectileRemnant();
+        // Clear the incoming list (particles will be deleted by the ProjectileRemnant)
         nucleus->getStore()->clearIncoming();
       } else {
-        // Clean up the incoming list and force a transparent gracefully
+        // Delete particles in the incoming list
         nucleus->getStore()->deleteIncoming();
       }
     } else {
@@ -400,13 +401,12 @@ namespace G4INCL {
       // If the normal cascade predicted complete fusion, use the tabulated
       // masses to compute the excitation energy, the recoil, etc.
       if(nucleus->getStore()->getOutgoingParticles().size()==0
-          && nucleus->getProjectileRemnant()
-          && nucleus->getProjectileRemnant()->getParticles().size()==0) {
+         && (!nucleus->getProjectileRemnant()
+             || nucleus->getProjectileRemnant()->getParticles().size()==0)) {
 
         DEBUG("Cascade resulted in complete fusion, using realistic fusion kinematics" << std::endl);
 
         nucleus->useFusionKinematics();
-        nucleus->deleteProjectileRemnant();
 
         if(nucleus->getExcitationEnergy()<0.) {
           // Complete fusion is energetically impossible, return a transparent
@@ -513,8 +513,6 @@ namespace G4INCL {
     if(!success || !atLeastOneNucleonEntering) {
       DEBUG("No nucleon entering in forced CN, forcing a transparent" << std::endl);
       forceTransparent = true;
-      nucleus->getProjectileRemnant()->deleteParticles();
-      nucleus->deleteProjectileRemnant();
       return;
     }
 
@@ -691,11 +689,11 @@ namespace G4INCL {
       ((G4double) theGlobalInfo.nCompleteFusion);
     theGlobalInfo.errorCompleteFusionCrossSection = normalisationFactor *
       std::sqrt((G4double) (theGlobalInfo.nCompleteFusion));
+    theGlobalInfo.energyViolationInteractionCrossSection = normalisationFactor *
+      ((G4double) theGlobalInfo.nEnergyViolationInteraction);
   }
 
   G4int INCL::makeProjectileRemnant() {
-    G4int nUnmergedSpectators = 0;
-
     // Do nothing if this is not a nucleus-nucleus reaction
     if(!nucleus->getProjectileRemnant())
       return 0;
@@ -704,25 +702,15 @@ namespace G4INCL {
     ParticleList geomSpectators(nucleus->getProjectileRemnant()->getParticles());
     ParticleList dynSpectators(nucleus->getStore()->extractDynamicalSpectators());
 
+    G4int nUnmergedSpectators = 0;
+
     // If there are no spectators, do nothing
     if(dynSpectators.empty() && geomSpectators.empty()) {
-      nucleus->deleteProjectileRemnant();
       return 0;
-    } else if(geomSpectators.size()+dynSpectators.size()==1) {
-      if(dynSpectators.empty()) {
-        // No dynamical spectators, one geometrical spectator
-        // It should already be on shell.
-#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
-        Particle *theSpectator = geomSpectators.front();
-#endif
-// assert(std::abs(theSpectator->getTableMass()-theSpectator->getInvariantMass())<1.e-3);
-        nucleus->moveProjectileRemnantComponentsToOutgoing();
-      } else {
-        // No geometrical spectators, one dynamical spectator
-        // Just put it back in the outgoing list
-        nucleus->getStore()->addToOutgoing(dynSpectators.front());
-      }
-      nucleus->deleteProjectileRemnant();
+    } else if(dynSpectators.size()==1 && geomSpectators.empty()) {
+      // No geometrical spectators, one dynamical spectator
+      // Just put it back in the outgoing list
+      nucleus->getStore()->addToOutgoing(dynSpectators.front());
     } else {
       // Make a cluster out of the geometrical spectators
       ProjectileRemnant *theProjectileRemnant = nucleus->getProjectileRemnant();
@@ -824,5 +812,9 @@ namespace G4INCL {
 
     if(nucleus->getTryCompoundNucleus())
       theGlobalInfo.nForcedCompoundNucleus++;
+
+    // Counters for the number of violations of energy conservation in
+    // collisions
+    theGlobalInfo.nEnergyViolationInteraction += theEventInfo.nEnergyViolationInteraction;
   }
 }

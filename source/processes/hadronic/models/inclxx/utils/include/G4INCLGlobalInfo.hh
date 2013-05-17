@@ -61,6 +61,9 @@ namespace G4INCL {
 
     struct GlobalInfo {
       GlobalInfo() :
+#ifdef INCL_ROOT_USE
+
+#endif
         Ap(0),
         Zp(0),
         At(0),
@@ -81,10 +84,19 @@ namespace G4INCL {
         errorForcedCNCrossSection((Float_t)0.0),
         nCompleteFusion(0),
         completeFusionCrossSection((Float_t)0.0),
-        errorCompleteFusionCrossSection((Float_t)0.0)
+        errorCompleteFusionCrossSection((Float_t)0.0),
+        nEnergyViolationInteraction(0),
+        energyViolationInteractionCrossSection((Float_t)0.0)
       {
+#ifdef INCL_ROOT_USE
+
+#endif
 
       }
+#ifdef INCL_ROOT_USE
+      /** \brief Selection string for an abridged version of the ROOT tree */
+      std::string rootSelection;
+#endif
       /** \brief Name of the cascade model */
       std::string cascadeModel;
       /** \brief Name of the de-excitation model */
@@ -131,6 +143,10 @@ namespace G4INCL {
       Float_t completeFusionCrossSection;
       /** \brief Error on the calculated complete-fusion cross section (nParticles==0) */
       Float_t errorCompleteFusionCrossSection;
+      /** \brief Number of attempted collisions/decays for which the energy-conservation algorithm failed to find a solution. */
+      Int_t nEnergyViolationInteraction;
+      /** \brief Cross section for attempted collisions/decays for which the energy-conservation algorithm failed to find a solution. */
+      Float_t energyViolationInteractionCrossSection;
     };
 }
 

@@ -87,6 +87,7 @@ namespace G4INCL {
     ThreeVector sumMomenta(const ParticleList &);
     G4double energy(const ThreeVector &p, const G4double m);
     G4double invariantMass(const G4double E, const ThreeVector & p);
+    G4double squareInvariantMass(const G4double E, const ThreeVector & p);
     G4double gammaFromKineticEnergy(const ParticleSpecies &p, const G4double EKin);
   }
 }
