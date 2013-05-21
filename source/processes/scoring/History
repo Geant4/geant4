@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 17, 2013, M.Asai (procscore-V09-06-01)
+- G4ParallelWorldProcess now sets G4Navigator::SetPushVerbosity(false)
+  for the navigator of the mass world to reduce the warning message
+  GeomNav1002.
+
 March 27, 2013, M.Asai (procscore-V09-06-00)
 - G4ParallelWorldProcess now sets G4Navigator::SetPushVerbosity(false) 
   for the navigator of the parallel world to reduce the warning message
