@@ -45,9 +45,9 @@ class G04SensitiveDetector : public G4VSensitiveDetector
       G04SensitiveDetector(const G4String&);
      ~G04SensitiveDetector();
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
+      virtual void Initialize(G4HCofThisEvent*);
+      virtual G4bool ProcessHits(G4Step*, G4TouchableHistory*);
+      virtual void EndOfEvent(G4HCofThisEvent*);
 
   private:
 

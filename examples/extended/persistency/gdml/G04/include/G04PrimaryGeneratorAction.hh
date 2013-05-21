@@ -50,7 +50,7 @@ class G04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G04PrimaryGeneratorAction();
    ~G04PrimaryGeneratorAction();
 
-   void GeneratePrimaries(G4Event* anEvent);
+   virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
 
