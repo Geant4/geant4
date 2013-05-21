@@ -30,6 +30,7 @@ List of fixes included in this public patch since the public release 9.6.p01:
       o Corrected composed cout in exceptions for G4ParameterisationBox
         and G4ParameterisationTrd.
     + magneticfield:
+      o Updated numerical value of the neutron anomaly in G4Mag_SpinEqRhs.
       o Removed unused private data-members in G4Mag_UsualEqRhs and
         G4RKG3_Stepper.
     + solids/CSG:
@@ -90,7 +91,7 @@ List of fixes included in this public patch since the public release 9.6.p01:
         G4FastSimulationManagerProcess.
     + Scoring:
       o Set verbosity to false in G4ParallelWorldProcess for navigation
-        in the parallel world, reducing warning messages. 
+        in parallel and mass world, reducing warning messages. 
     + Transportation:
       o G4CoupledTransportation: corrected condition for warning message
         in AlongStepDoIt().
@@ -128,6 +129,10 @@ List of fixes included in this public patch since the public release 9.6.p01:
       o G4NuclearFermiDensity: removed unused data member.
     + stopping:
       o G4EmCaptureCascade: fixed array initialisation.
+      o G4MuonMinusBoundDecay: improved muon capture rate data/lookup and
+        calculation of bound muon decay rate.
+        Corrected calculations and lookup of MuonCaptureRate in
+        G4StopElementSelector.
 
   o Parameterisations/gflash
     ------------------------
@@ -154,6 +159,9 @@ List of fixes included in this public patch since the public release 9.6.p01:
     -------------
     + Increased low limit from 10 eV to 100 eV in G4EmStandardPhysics_option4,
       to fix range of electrons at low energy.
+    + G4EmLivermorePhysics: increased low limit to 100 eV and number of bins
+      for tables to 220 to avoid problems in Livermore ionisation for
+      electron stopping powers and ranges.
 
   o Track:
     -----
