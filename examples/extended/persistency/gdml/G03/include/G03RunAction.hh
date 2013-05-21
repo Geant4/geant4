@@ -54,8 +54,8 @@ class G03RunAction : public G4UserRunAction
     G03RunAction();
    ~G03RunAction();
 
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
       
 };
 

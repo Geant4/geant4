@@ -57,7 +57,7 @@ class G03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     // Used by Geant4 to generate the primary particles of the event
     //
-    void GeneratePrimaries(G4Event* anEvent);
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
 

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May  17th, 2013  Witek Pokorski G03-V09-06-00
+- changes to comply to coding rule 2.1
+
 July  27th, 2012  Witek Pokorski G03-V09-05-00
 - Adding cmake and cosmetic changes to comply to coding conventions
 

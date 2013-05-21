@@ -60,7 +60,7 @@ class G03ColorReader : public G4GDMLReadStructure
 
  protected:
 
-   void VolumeRead(const xercesc::DOMElement* const);
+   virtual void VolumeRead(const xercesc::DOMElement* const);
 
  private:
 

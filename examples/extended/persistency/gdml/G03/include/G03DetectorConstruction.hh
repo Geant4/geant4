@@ -58,7 +58,7 @@ class G03DetectorConstruction : public G4VUserDetectorConstruction
 
     // Construction of Detector
     //
-    G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
 
     // Make List of materials
     //
