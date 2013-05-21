@@ -70,7 +70,6 @@ void G4NeutronHPManager::GetDataStream( G4String filename , std::istringstream& 
    if ( in->good() )
    {
 // Use the compressed file 
-/* TK130416 Temporally disable reading zlibed files 
       G4int file_size = in->tellg();
       in->seekg( 0 , std::ios::beg );
       Bytef* compdata = new Bytef[ file_size ];
@@ -92,8 +91,6 @@ void G4NeutronHPManager::GetDataStream( G4String filename , std::istringstream& 
       //                                 Now "complen" has uncomplessed size
       data = new G4String ( (char*)uncompdata , (G4long)complen );
       delete [] uncompdata;
-*/
-      throw G4HadronicException(__FILE__, __LINE__, "Capability of reading zlibed G4NEUTRONHPDATA library is deactivated, please use regular library.");
    }
    else {
 // Use regular text file 
