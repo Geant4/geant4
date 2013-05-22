@@ -4,9 +4,9 @@
 /run/initialize
 /gun/direction 1 0 0
 #
-# pi+ at 1 GeV in Si
+# neutron at 1 GeV in H
 #
-/gun/particle pi+
+/gun/particle neutron
 /gun/energy 1 GeV
-/mydet/SelectMaterial Si
-/run/beamOn 20
+/mydet/SelectMaterial H
+/run/beamOn 500

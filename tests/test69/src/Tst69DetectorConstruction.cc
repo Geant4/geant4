@@ -44,7 +44,7 @@
 #include "G4ios.hh"
 
 Tst69DetectorConstruction::Tst69DetectorConstruction()
-  :simpleBoxLog(0),selectedMaterial(0),theH(0),theC(0),theSi(0),theCu(0),thePb(0),theU(0),theTh(0)
+  :simpleBoxLog(0),selectedMaterial(0),theH(0),theLi(0),theC(0),theSi(0),theCu(0),thePb(0),theU(0),theTh(0)
 {
   detectorMessenger = new Tst69DetectorMessenger(this);
   materialChoice = "Pb";
@@ -77,6 +77,13 @@ void Tst69DetectorConstruction::SelectMaterialPointer()
     density = 1.29e-03*g/cm3;
     theH = new G4Material(name="H", density, nel=1);
     theH->AddElement(elH, 1.0);
+  }
+
+  if(!theLi)
+  {
+    a = 7.*g/mole;
+    density = 0.53*g/cm3;
+    theLi = new G4Material(name="Lithium", z=3., a, density);
   }
 
   if(!theC)
@@ -124,6 +131,8 @@ void Tst69DetectorConstruction::SelectMaterialPointer()
 
   if(materialChoice=="H")
   { selectedMaterial = theH; }
+  else if(materialChoice=="Li")
+  { selectedMaterial = theLi; }
   else if(materialChoice=="C")
   { selectedMaterial = theC; }
   else if(materialChoice=="Si")

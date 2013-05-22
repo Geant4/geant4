@@ -35,21 +35,14 @@
 
 class Tst69StackingAction : public G4UserStackingAction
 {
-      virtual G4ClassificationOfNewTrack
-        ClassifyNewTrack(const G4Track* aTrack)
-	{
-	  G4ClassificationOfNewTrack result(fUrgent);
-	  if(aTrack->GetDefinition()->GetPDGCharge() == 0 && 
-	    aTrack->GetDefinition()->GetPDGMass()<200*CLHEP::MeV)
-	  {
-	    result = fKill;
-	  }
-	  if(aTrack->GetKineticEnergy()<1*CLHEP::GeV)
-	  {
-	    result = fKill;
-	  }
-	  return result;
-	}
+  virtual G4ClassificationOfNewTrack
+    ClassifyNewTrack(const G4Track* aTrack)
+    {
+      if(aTrack->GetParentID()==0)
+        return fUrgent;
+      else
+        return fKill;
+    }
 };
 
 #endif

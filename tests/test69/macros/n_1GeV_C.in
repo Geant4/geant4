@@ -9,4 +9,4 @@
 /gun/particle neutron
 /gun/energy 1 GeV
 /mydet/SelectMaterial C
-/run/beamOn 20
+/run/beamOn 500

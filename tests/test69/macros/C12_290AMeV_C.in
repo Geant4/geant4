@@ -10,4 +10,4 @@
 /gun/ion 6 12
 /gun/energy 3840 MeV
 /mydet/SelectMaterial C
-/run/beamOn 20
+/run/beamOn 500

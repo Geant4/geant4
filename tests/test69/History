@@ -12,6 +12,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 May 2013, Davide Mancusi (test69-V09-06-01,test69-V09-06-02)
+- Fix: test69 was actually NOT testing the reactions due to particles being
+  prematurely killed.
+- Add definition for Li detector material.
+- Revise macros.
+
 13 May 2013, Davide Mancusi (test69-V09-06-00)
 - Migration to MT.
 - Suppress unused user stepping action.

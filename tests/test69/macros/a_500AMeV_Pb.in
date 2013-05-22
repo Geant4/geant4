@@ -9,4 +9,4 @@
 /gun/particle alpha
 /gun/energy 2 GeV
 /mydet/SelectMaterial Pb
-/run/beamOn 20
+/run/beamOn 500

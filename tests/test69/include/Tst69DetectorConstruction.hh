@@ -54,6 +54,7 @@ class Tst69DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   simpleBoxLog;
      G4Material* selectedMaterial;
      G4Material* theH;
+     G4Material* theLi;
      G4Material* theC;
      G4Material* theSi;
      G4Material* theCu;

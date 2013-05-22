@@ -9,4 +9,4 @@
 /gun/particle ion
 /gun/ion 6 12
 /mydet/SelectMaterial Pb
-/run/beamOn 20
+/run/beamOn 500

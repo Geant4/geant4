@@ -4,9 +4,9 @@
 /run/initialize
 /gun/direction 1 0 0
 #
-# proton at 1 GeV in Th
+# proton at 1 GeV in H
 #
 /gun/particle proton
 /gun/energy 1 GeV
-/mydet/SelectMaterial Th
-/run/beamOn 20
+/mydet/SelectMaterial H
+/run/beamOn 500
