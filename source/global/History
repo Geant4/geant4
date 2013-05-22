@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 18, 2013 A.Dotti (global-V09-06-32)
+- Fix for sequentual compilation error introduced in latest tag.
+
+May 17, 2013 A.Dotti (global-V09-06-31)
+- Adding new cout streaming for MT: on file and with header 
+  at each line (with optional buffering) 
+- Adding G4GetNumberOfCores and G4GetThreadId global helper functions
 
 May 16, 2013 V.Ivanchenko (global-V09-06-30)
 - G4Physics2DVector - removed cache; changed signature of 

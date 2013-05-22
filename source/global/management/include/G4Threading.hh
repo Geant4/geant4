@@ -160,6 +160,8 @@
   #define G4CONDTIONBROADCAST( cond ) ;;
 #endif //G4MULTITHREADING
 
-G4Pid_t G4GetPidId();
-
+  G4Pid_t G4GetPidId();
+  G4int G4GetNumberOfCores();
+  G4int G4GetThreadId();
+  void G4SetThreadId( G4int aNewValue );
 #endif //G4Threading_hh

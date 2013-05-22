@@ -21,56 +21,53 @@
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************
+// ********************************************************************//
+//
+// $Id: G4coutDestination.hh 66241 2014-05-16 00:00:42Z adotti $
 //
 //
-// $Id$
+// ---------------------------------------------------------------
+// GEANT 4 class header file
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
+// Prepends to G4cout and G4cerr an id
+// Used by default for Geant4MT
+// Optionally it buffers all output and sends it to
+// output on request.
+// By default streaming is on std::cout and std::cerr
+// but this can be changed.
+// Warning: this option stores streams in memory.
 //
-// G4ios.cc
-//
-// History 1998 Nov. 3 Masayasu Nagamatu
+// Example:
+//  #include "G4coutIdDestination.hh"
+//  #include "G4ios.hh"
+//  int main(int,char**) {
+//      G4UImanager::GetUIpointer();
+//      G4iosInitialization();
+//      G4int id = 1;
+//      G4coutIdDestination myout(id);
+#ifndef G4COUTIDDESTINATION_HH
+#define G4COUTIDDESTINATION_HH
 
-#include "G4ios.hh"
-#include "G4strstreambuf.hh"
+#include "G4coutDestination.hh"
+#include <iostream>
+#include <sstream>
 
-#ifdef G4MULTITHREADED
-  G4ThreadLocal G4strstreambuf *G4coutbuf_p = 0;
-  G4ThreadLocal G4strstreambuf *G4cerrbuf_p = 0;
-  G4ThreadLocal std::ostream *G4cout_p = 0;
-  G4ThreadLocal std::ostream *G4cerr_p = 0;
-  #define G4coutbuf (*G4coutbuf_p)
-  #define G4cerrbuf (*G4cerrbuf_p)
-  #define G4cout (*G4cout_p)
-  #define G4cerr (*G4cerr_p)
+class G4coutIdDestination : public G4coutDestination
+{
+public:
+    G4coutIdDestination( const G4int& id, std::ostream& cout=std::cout, std::ostream&  cerr=std::cerr );
+    virtual ~G4coutIdDestination();
+    virtual G4int ReceiveG4cout(const G4String&);
+    virtual G4int ReceiveG4cerr(const G4String&);
+    void EnableBuffering(G4bool flag=true);
+    void DumpBuffer();
+private:
+    std::ostream& finalcout;
+    std::ostream& finalcerr;
+    const G4int id;
+    G4bool useBuffer;
+    std::ostringstream cout_buffer;
+    std::ostringstream cerr_buffer;
+};
 
-  void G4iosInitialization()
-  {
-    if (G4coutbuf_p == 0) G4coutbuf_p = new G4strstreambuf;
-    if (G4cerrbuf_p == 0) G4cerrbuf_p = new G4strstreambuf;
-    if (G4cout_p == 0) G4cout_p = new std::ostream(G4coutbuf_p);
-    if (G4cerr_p == 0) G4cerr_p = new std::ostream(G4cerrbuf_p);
-  }
-
-  void G4iosFinalization()
-  {
-    delete G4cout_p;
-    delete G4cerr_p; 
-    delete G4coutbuf_p;
-    delete G4cerrbuf_p;
-  }
-
-#else  // Sequential
-
-  G4strstreambuf G4coutbuf;
-  G4strstreambuf G4cerrbuf;
-  std::ostream G4cout(&G4coutbuf);
-  std::ostream G4cerr(&G4cerrbuf);
-
-  void G4iosInitialization() {}
-  void G4iosFinalization() {}
-
-#endif
+#endif // G4COUTIDDESTINATION_HH

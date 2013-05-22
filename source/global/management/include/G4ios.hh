@@ -47,15 +47,15 @@
   #define G4cout (*G4cout_p)
   #define G4cerr (*G4cerr_p)
 
-  void G4iosInitialization();
-  void G4iosFinalization();
-
 #else  // Sequential
 
   extern G4GLOB_DLL std::ostream G4cout;
   extern G4GLOB_DLL std::ostream G4cerr;
 
 #endif
+
+void G4iosInitialization();
+void G4iosFinalization();
 
 #define G4cin std::cin
 #define G4endl std::endl
