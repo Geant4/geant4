@@ -36,7 +36,7 @@
 
 #include "G4Threading.hh"
 #if defined (WIN32)
-   #include "Windows.h"
+   #include <Windows.h>
 #else
    #include <unistd.h>
    #include <sys/types.h>
@@ -45,50 +45,50 @@
 
 #if defined(G4MULTITHREADED)
 
+#include <map>
+
+static G4ThreadLocal G4int G4ThreadID = -1;
+
 G4Pid_t G4GetPidId()
 { // In multithreaded mode return Thread ID
-      #if defined(__MACH__)
-        return syscall(SYS_thread_selfid);
-      #elif defined(WIN32)
-        return GetCurrentThreadId();
-      #else
-        return syscall(SYS_gettid);
-      #endif
+   #if defined(__MACH__)
+     return syscall(SYS_thread_selfid);
+   #elif defined(WIN32)
+     return GetCurrentThreadId();
+   #else
+     return syscall(SYS_gettid);
+   #endif
 }
 
 G4int G4GetNumberOfCores()
 {
-#   if defined(WIN32)
-    SYSTEM_INFO sysinfo;
-    GetSystemInfo( &sysinfo );
-    return static_cast<G4int>( sysinfo.dwNumberOfProcessors );
-#   else
-    return static_cast<G4int>(sysconf( _SC_NPROCESSORS_ONLN ));
-#   endif
+   #if defined(WIN32)
+     SYSTEM_INFO sysinfo;
+     GetSystemInfo( &sysinfo );
+     return static_cast<G4int>( sysinfo.dwNumberOfProcessors );
+   #else
+     return static_cast<G4int>(sysconf( _SC_NPROCESSORS_ONLN ));
+   #endif
 }
 
-#include <map>
-namespace {
-    static G4ThreadLocal G4int thisThreadID = -1;
-}
-void G4SetThreadId(G4int value ) { thisThreadID = value; }
-G4int G4GetThreadId()
-{
-    return thisThreadID;
-}
+void G4SetThreadId(G4int value ) { G4ThreadID = value; }
+G4int G4GetThreadId() { return G4ThreadID; }
 
 #if defined(WIN32)  // WIN32 stuff needed for MT
-DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m ) { return WaitForSingleObject( m , INFINITE); }
-BOOL G4ReleaseMutex( __in G4Mutex m) { return ReleaseMutex(m); }
+DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m )
+ { return WaitForSingleObject( m , INFINITE); }
+BOOL G4ReleaseMutex( __in G4Mutex m)
+ { return ReleaseMutex(m); }
 #endif
 
 #else  // Sequential mode
 
 #include "globals.hh"
+
 G4int fake_mutex_lock_unlock( G4Mutex* ) { return 0; }
 
-G4Pid_t G4GetPidId()
-{  // In sequential mode return Process ID and not Thread ID
+G4Pid_t G4GetPidId()  // In sequential mode return Process ID and not Thread ID
+{
     #if defined(WIN32)
     return GetCurrentProcessId();
     #else
@@ -96,14 +96,9 @@ G4Pid_t G4GetPidId()
     #endif
 }
 
-G4int GetNumberOfCores()
-{
-    G4Exception("GetNumberOfCores()","Run0035",JustWarning,"This function returns 1 in sequential mode");
-    return 1;
-}
+G4int G4GetNumberOfCores() { return 1; }
+G4int G4GetThreadId() { return 0; }
 
-G4int G4GetThreadId()
-{ return 0; }
 #endif
 
 

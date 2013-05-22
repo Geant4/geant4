@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 22, 2013 G.Cosmo (global-V09-06-33)
+- Fix in G4Threading for sequential mode in definition of G4GetNumberOfCores().
+- Some code cleanup.
+
 May 18, 2013 A.Dotti (global-V09-06-32)
 - Fix for sequentual compilation error introduced in latest tag.
 

@@ -51,9 +51,8 @@
     // Multi-threaded build: for POSIX systems
     //
     #include <pthread.h>
-    #if defined(__MACH__)
-       //needed only for MacOSX for definition of pid_t
-       #include <sys/types.h>
+    #if defined(__MACH__)  // needed only for MacOSX for definition of pid_t
+      #include <sys/types.h>
     #endif
 
     typedef pthread_mutex_t G4Mutex;
@@ -91,10 +90,13 @@
 
     typedef pid_t G4Pid_t;
 
-    //Conditions
-    //See G4MTRunManager for example on how to use these
-    //This complication is needed to be portable with WIN32
-    //Note that WIN32 requires an additional initialization step. See example code
+    // Conditions
+    //
+    // See G4MTRunManager for example on how to use these
+    // This complication is needed to be portable with WIN32
+    // Note that WIN32 requires an additional initialization step.
+    // See example code
+    //
     typedef pthread_cond_t G4Condition;
     #define G4CONDITION_INITIALIZER PTHREAD_COND_INITIALIZER
 
@@ -111,11 +113,14 @@
     typedef HANDLE G4Thread;
 
     #define G4MUTEX_INITIALIZER CreateMutex(NULL,FALSE,NULL)
-    DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m );// { return WaitForSingleObject( m , INFINITE); }
+    DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m );
     #define G4MUTEXLOCK G4WaitForSingleObjectInf
-    //Don't ask me why I need the following two lines...
-    BOOL G4ReleaseMutex( __in G4Mutex m);// { return ReleaseMutex(m); }
+
+    // Not clear why following two lines are needed...
+    //
+    BOOL G4ReleaseMutex( __in G4Mutex m);
     #define G4MUTEXUNLOCK G4ReleaseMutex
+
     #define G4THREADCREATE( worker, func, arg ) { *worker = CreateThread( NULL, 16*1024*1024 , func , arg , 0 , NULL ); }
     #define G4THREADJOIN( worker ) WaitForSingleObject( worker , INFINITE);
     #define G4ThreadFunReturnType DWORD WINAPI
@@ -124,7 +129,8 @@
     typedef BOOL (*thread_unlock)(G4Mutex);
     typedef DWORD G4Pid_t;
 
-    //Conditions
+    // Conditions
+    //
     typedef CONDITION_VARIABLE G4Condition;
     #define G4CONDITION_INITIALIZER CONDITION_VARIABLE_INIT
 
@@ -158,10 +164,12 @@
   #define G4CONDITION_INITIALIZER 1
   #define G4CONDITIONWAIT( cond, mutex ) ;;
   #define G4CONDTIONBROADCAST( cond ) ;;
+
 #endif //G4MULTITHREADING
 
   G4Pid_t G4GetPidId();
   G4int G4GetNumberOfCores();
   G4int G4GetThreadId();
   void G4SetThreadId( G4int aNewValue );
+
 #endif //G4Threading_hh
