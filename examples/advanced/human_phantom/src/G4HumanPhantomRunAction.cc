@@ -33,21 +33,20 @@
 //
 
 #include "G4HumanPhantomRunAction.hh"
-#include "G4HumanPhantomAnalysis.hh"
+#include "G4HumanPhantomAnalysisManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 #include "G4Run.hh"
 
-G4HumanPhantomRunAction::G4HumanPhantomRunAction()
+G4HumanPhantomRunAction::G4HumanPhantomRunAction(G4HumanPhantomAnalysisManager* analysis):
+analysisMan(analysis)
 {
- // Create analysis manager
- G4AnalysisManager::Instance();
+
 }
 
 G4HumanPhantomRunAction::~G4HumanPhantomRunAction()
 {
-delete G4AnalysisManager::Instance();
 }
 
 void G4HumanPhantomRunAction::BeginOfRunAction(const G4Run* aRun)
@@ -88,36 +87,12 @@ void G4HumanPhantomRunAction::BeginOfRunAction(const G4Run* aRun)
  energyTotal["logicalRightScapula"]=0.; 
  energyTotal["logicalLeftAdrenal"]=0.; 
  energyTotal["logicalRightAdrenal"]=0.; 
-
-// Create ROOT output file with ntuple containing the
-// energy deposition in the organs.
-
-// Get analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
-  // Open a ROOT output file
-  //
-  G4String fileName = "g4humanphantom.root";
-  analysisManager -> OpenFile(fileName);
- 
-  // Create the ntuple
-  analysisManager -> CreateNtuple("ntuple1", "Edep (MeV) in the organs");
-  analysisManager -> CreateNtupleDColumn("ID"); // Integer identifying the organ
-  analysisManager -> CreateNtupleDColumn("Edep"); // Energy deposition expressed in MeV
-  analysisManager -> FinishNtuple();
 }
 
 void G4HumanPhantomRunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4cout << "Number of events = " << aRun->GetNumberOfEvent() << G4endl;
   totalRunEnergyDeposit();
-
-  // Get analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
-  // Save the ntuple and histograms and close the ROOT file
-  analysisManager -> Write();
-  analysisManager -> CloseFile();
 }
 
 
@@ -142,27 +117,22 @@ void G4HumanPhantomRunAction::totalRunEnergyDeposit()
       //  if(energyDep != 0.)
       //	{
      
-      G4cout << "Energy Total in Run" <<bodypart << " = "  
-	     << G4BestUnit(energyDep,"Energy") 
+      G4cout << "Energy Total in Run:" << bodypart << ", ID: "  << k 
+             << ", Energy Deposition (MeV): "  
+	     << energyDep/MeV
 	     << G4endl;
 
-  // Get analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
-  // Fill ntuple
-  analysisManager -> FillNtupleDColumn(0, k);
-  analysisManager -> FillNtupleDColumn(1, energyDep/MeV);
-  analysisManager -> AddNtupleRow();  
-  //	}
-      i++;
-      k++;
-      totalEnergyDepositInPhantom += energyDep;
+#ifdef ANALYSIS_USE
+     // Fill Ntuple
+     analysisMan -> FillNtupleWithEnergyDeposition(k, energyDep/MeV);
+#endif 
+     i++;
+     k++;
+
+     totalEnergyDepositInPhantom += energyDep;
     }
   
  
  G4cout << "Total Energy deposit in the body is: " 
 	<< totalEnergyDepositInPhantom/MeV << " MeV" <<G4endl; 
 }
-
-
-

@@ -25,11 +25,6 @@
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
 // 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
 //
 
 #include <map>
@@ -210,7 +205,7 @@ G4VPhysicalVolume* G4HumanPhantomConstruction::ConstructWorld()
 
   // World Volume
   // G4double worldSize = 1.*m ;
- G4double worldSize = 1. *m ;
+ G4double worldSize = 1.5 *m ;
   G4Box* world = new G4Box("world", worldSize, worldSize, worldSize);
 
   G4LogicalVolume* logicWorld = new G4LogicalVolume(world, 

@@ -55,6 +55,7 @@
 #include "G4HumanPhantomSteppingAction.hh"
 #include "G4HumanPhantomEventAction.hh"
 #include "G4HumanPhantomRunAction.hh"
+#include "G4HumanPhantomAnalysisManager.hh"
 
 int main(int argc,char** argv)
 {
@@ -72,8 +73,16 @@ int main(int argc,char** argv)
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
+ 
+// Instantiate the analysis manager
+  G4HumanPhantomAnalysisManager* analysis = new G4HumanPhantomAnalysisManager();
+
+#ifdef ANALYSIS_USE
+  // Create ROOT file, histograms and ntuple
+  analysis -> book();
+#endif  
   
-  runManager->SetUserAction(new G4HumanPhantomRunAction);
+  runManager->SetUserAction(new G4HumanPhantomRunAction(analysis));
 
   
   G4HumanPhantomEventAction* eventAction = new G4HumanPhantomEventAction();
@@ -105,6 +114,14 @@ int main(int argc,char** argv)
   delete visManager;
 #endif
 
-  delete runManager;
-  return 0;
+#ifdef ANALYSIS_USE
+// Close the output ROOT file with the results
+   analysis -> save(); 
+#endif
+
+delete analysis;
+
+delete runManager;
+
+return 0;
 }

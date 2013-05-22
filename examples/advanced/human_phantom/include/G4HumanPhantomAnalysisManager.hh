@@ -23,42 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
-// 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
-// 
 
-#include "G4HumanPhantomPrimaryGeneratorMessenger.hh"
-#include "G4HumanPhantomPrimaryGeneratorAction.hh"
+#ifndef G4HumanPhantomAnalysisManager_HH
+#define G4HumanPhantomAnalysisManager_HH
 
-#include "G4UIcmdWithAString.hh"
+#include "globals.hh"
+#include "g4root.hh"
 
+/*
+Author: Susanna Guatelli
 
-G4HumanPhantomPrimaryGeneratorMessenger::G4HumanPhantomPrimaryGeneratorMessenger(G4HumanPhantomPrimaryGeneratorAction* primaryGun)
-  :primary(primaryGun)
-{ 
-  beamCmd = new G4UIcmdWithAString("/gun/setBeam",this);
-  beamCmd->SetGuidance("Choose the type of beam");
-  beamCmd->SetGuidance("Choice : beamAlongX, beamAlongY, beamAlongZ, isotropicFlux ");
-  beamCmd->SetParameterName("choice",true);
-  beamCmd->SetCandidates("beamAlongX beamAlongY beamAlongZ isotropicFlux");
-  beamCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-}
+The class G4HumanPhantomAnalysisManager creates and manages ntuples
 
-G4HumanPhantomPrimaryGeneratorMessenger::~G4HumanPhantomPrimaryGeneratorMessenger()
+This class was developed following the extended Geant4 example analysis/AnaEx01
+
+1 ntuple is created.
+*/
+
+// Define the total number of columns in the ntuple
+const G4int MaxNtCol = 2;
+
+class G4HumanPhantomAnalysisManager
 {
-  delete beamCmd;
-}
 
-void G4HumanPhantomPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{ 
-  if( command == beamCmd )
-   { primary->SetBeam(newValue);
-   }
-}
+public:
+  G4HumanPhantomAnalysisManager();
+  ~G4HumanPhantomAnalysisManager();
+  
+
+  void book();
+  // Create the output ROOT file 
+  // Create the ntuple and histograms
+
+  void FillNtupleWithEnergyDeposition(G4int,G4double);
+  // Method to fill the ntuple with the energy deposition, integrated over a run, 
+  // in each organ identified with an integer
+
+  void save();
+ // This method if called at the end of the run to store the 
+ // results in the ROOT file
+
+private:
+    G4bool factoryOn; 
+    G4int         fNtColId[MaxNtCol];
+};
+#endif
+
 
 

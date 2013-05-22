@@ -1,0 +1,14 @@
+#
+### Radiation field defined
+### by means of GPS 
+/gps/verbose 0
+/gps/particle e-
+/gps/energy 1 MeV
+#
+/gps/pos/type Plane
+#
+# the incident surface is a disc of 100 cm
+/gps/pos/shape Circle 
+/gps/pos/centre 0. 0. 30. cm
+/gps/pos/radius 100. cm
+/gps/direction 0 0 -1 

@@ -25,19 +25,14 @@
 //
 // Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
 // 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
-//
+
 #include "G4VoxelRightBreastSD.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4Step.hh"
 #include "G4ThreeVector.hh"
 #include "G4SDManager.hh"
 #include "G4ios.hh"
-#include "G4HumanPhantomAnalysis.hh"
+#include "G4SystemOfUnits.hh"
 
 G4VoxelRightBreastSD::G4VoxelRightBreastSD(G4String name)
 :G4VSensitiveDetector(name)
@@ -65,17 +60,13 @@ G4bool G4VoxelRightBreastSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
 
  if(edep != 0)                       
 	    { 
-// Get analysis manager
- // G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-             
-/// if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
-//	  GetName() == "RightBreast")
- //  {
- //    G4int sector = ROhist -> GetReplicaNumber();
-  //   G4int slice = ROhist -> GetReplicaNumber(1); 
-     //analysisManager -> FillH2(2, slice,sector,edep/MeV);    
-     //G4cout << "RightBreast:" << "slice: " << slice << ",sector: "<< sector << " "<< edep/MeV << G4endl;  
-  // }
+         
+ if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() == "RightBreast")
+  {
+    G4int sector = ROhist -> GetReplicaNumber();
+     G4int slice = ROhist -> GetReplicaNumber(1);  
+     G4cout << "RightBreast:" << "slice: " << slice << ",sector: "<< sector << " "<< edep/MeV << G4endl;  
+   }
 
     }
   return true;
