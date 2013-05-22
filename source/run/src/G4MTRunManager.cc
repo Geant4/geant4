@@ -73,7 +73,11 @@ G4RunManagerKernel* G4MTRunManager::GetMasterRunManagerKernel()
 
 G4MTRunManager::G4MTRunManager() : G4RunManager(false) ,
     nworkers(2),
-    masterRNGEngine(0)
+    masterRNGEngine(0),
+    workerG4coutFileName(""),
+    workerG4cerrFileName(""),
+    workerG4coutAppendFlag(false),
+    workerG4cerrAppendFlag(false)
 {
     if ( masterRM )
     {
@@ -112,6 +116,24 @@ G4MTRunManager::~G4MTRunManager()
     seeds = 0;
 }
 
+void G4MTRunManager::StoreRNGStatus(const G4String& fn )
+{
+    std::ostringstream os;
+    os << randomNumberStatusDir << "G4Master_"<<fn <<".rndm";
+    G4Random::saveEngineStatus(os.str().c_str());
+}
+
+void G4MTRunManager::SetNumberOfThreads(G4int n )
+{
+    if ( threads.size() != 0 )
+    {
+        G4Exception("G4MTRunManager::SetNumberOfThreads(G4int)","Run0035",JustWarning,"Limitation: Number of threads cannot be changed at this moment (old threads are still alive).");
+    }
+    else
+    {
+        nworkers = n;
+    }
+}
 
 void G4MTRunManager::TerminateEventLoop()
 {
@@ -199,20 +221,37 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
         context->SetNumberThreads(nworkers);
         context->SetNumberEvents(n_events);
         context->SetThreadId(nw);
+        if (! workerG4coutFileName.empty() )
+        {
+            context->SetOutputFileName(workerG4coutFileName,workerG4coutAppendFlag);
+        }
+        if (! workerG4cerrFileName.empty() )
+        {
+            context->SetOutputErrFileName(workerG4cerrFileName,workerG4cerrAppendFlag);
+        }
+        context->SetOutputUseBuffer( workerG4coutcerrBufferFlag );
         G4Thread* thread = userWorkerInitialization->CreateAndStartWorker(context);
-        context->pid = thread; //AAADEBUG
         threads.push_back(thread);
     }
     }
     //Signal to threads they can start a new run
     NewActionRequest(NEXTITERATION);
     
-    // We need a barrier here: if work to be done is really short, they can already finish.
+    // We need a barrier here. Wait for workers to start event loop.
+    //This will return only when all workers have started processing events.
     WaitForReadyWorkers();
-    
+}
+
+void G4MTRunManager::RunTermination()
+{
+    //Wait for all worker threads to have finished the run
+    //i.e. wait for them to return from RunTermination()
+    //This guarantee that userrunaction for workers has been called
+
     // Wait now for all threads to finish event-loop
     WaitForEndEventLoopWorkers();
-
+    //Now call base-class methof
+    G4RunManager::RunTermination();
 }
 
 void G4MTRunManager::AddOneSeed( long seed )

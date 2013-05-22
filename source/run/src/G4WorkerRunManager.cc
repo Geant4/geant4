@@ -38,6 +38,7 @@
 #include "G4VUserActionInitialization.hh"
 #include "G4UserWorkerInitialization.hh"
 #include "G4UserRunAction.hh"
+#include <sstream>
 
 G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(true) {
     //This constructor should never be called in non-multithreaded mode
@@ -111,16 +112,9 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     //so threads execute this method asyncrhonouzly
     //(TerminateRun allows for synch via G4RunAction::EndOfRun)
     uwi->WorkerRunEnd();
-    //Signal this thread has finished envent-loop.
-    //Note this will return only whan all threads reach this point
-    G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
-    
+     
     TerminateEventLoop();
 
-    G4MTRunManager* mtRM = G4MTRunManager::GetMasterRunManager();
-    G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
-    if(ScM) mtRM->MergeScores(ScM);
-    mtRM->MergeRun(currentRun);
 }
 
 void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
@@ -133,6 +127,21 @@ void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
     AnalyzeEvent(currentEvent);
     UpdateScoring();
     if(i_event<n_select_msg) G4UImanager::GetUIpointer()->ApplyCommand(msgText);
+}
+
+void G4WorkerRunManager::RunTermination()
+{
+    //Merge partial results into global run
+    G4MTRunManager* mtRM = G4MTRunManager::GetMasterRunManager();
+    G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
+    if(ScM) mtRM->MergeScores(ScM);
+    mtRM->MergeRun(currentRun);
+
+    G4RunManager::RunTermination();
+    //Signal this thread has finished envent-loop.
+    //Note this will return only whan all threads reach this point
+    G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
+
 }
 
 void G4WorkerRunManager::ConstructScoringWorlds()
@@ -276,4 +285,11 @@ void G4WorkerRunManager::SetUserAction(G4UserTrackingAction* ua)
 void G4WorkerRunManager::SetUserAction(G4UserSteppingAction* ua)
 {
     G4RunManager::SetUserAction(ua);
+}
+
+void G4WorkerRunManager::StoreRNGStatus(const G4String& fn )
+{
+    std::ostringstream os;
+    os << randomNumberStatusDir << "G4Worker"<<workerContext->GetThreadId()<<"_"<<fn <<".rndm";
+    G4Random::saveEngineStatus(os.str().c_str());    
 }

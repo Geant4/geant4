@@ -85,7 +85,7 @@ G4RunManager::G4RunManager()
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
- storeRandomNumberStatusToG4Event(0),
+ storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
  currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
  numberOfEventProcessed(0)
 {
@@ -106,7 +106,7 @@ G4RunManager::G4RunManager()
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
   std::ostringstream oss;
-  HepRandom::saveFullState(oss);
+  G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
   runManagerType = sequentialRM;
@@ -122,7 +122,7 @@ runAborted(false),initializedAtLeastOnce(false),
 geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
 currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
 numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
-storeRandomNumberStatusToG4Event(0),
+storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
 currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
 numberOfEventProcessed(0)
 {
@@ -160,7 +160,7 @@ numberOfEventProcessed(0)
   G4ProcessTable::GetProcessTable()->CreateMessenger();
   randomNumberStatusDir = "./";
   std::ostringstream oss;
-  HepRandom::saveFullState(oss);
+  G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
 }
@@ -179,7 +179,7 @@ G4RunManager::G4RunManager(int isSlaveFlag)
    geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
    currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
    numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
-   storeRandomNumberStatusToG4Event(0),
+   storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
    currentWorld(0),nParallelWorlds(0)
 {
 
@@ -210,7 +210,7 @@ G4RunManager::G4RunManager(int isSlaveFlag)
 
   randomNumberStatusDir = "./";
   std::ostringstream oss;
-  HepRandom::saveFullState(oss);
+  G4Random::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
 }
@@ -363,8 +363,15 @@ void G4RunManager::RunInitialization()
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
 
   if(storeRandomNumberStatus) {
-    G4String fileN = randomNumberStatusDir + "currentRun.rndm"; 
-    G4Random::saveEngineStatus(fileN);
+      G4String fileN = "currentRun";
+      if ( rngStatusEventsFlag ) {
+          std::ostringstream os;
+          os << "run" << currentRun->GetRunID();
+          fileN = os.str();
+      }
+      StoreRNGStatus(fileN);
+    //G4String fileN = randomNumberStatusDir + "currentRun.rndm";
+    //G4Random::saveEngineStatus(fileN);
   }
 
   runAborted = false;
@@ -448,18 +455,32 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
   if(storeRandomNumberStatusToG4Event==1 || storeRandomNumberStatusToG4Event==3)
   {
     std::ostringstream oss;
-    HepRandom::saveFullState(oss);
+    G4Random::saveFullState(oss);
     randomNumberStatusForThisEvent = oss.str();
     anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
   }
 
   if(storeRandomNumberStatus) {
-    G4String fileN = randomNumberStatusDir + "currentEvent.rndm"; 
-    HepRandom::saveEngineStatus(fileN);
+      G4String fileN = "currentEvent";
+      if ( rngStatusEventsFlag ) {
+          std::ostringstream os;
+          os << "run" << currentRun->GetRunID() << "evt" << anEvent->GetEventID();
+          fileN = os.str();
+      }
+      StoreRNGStatus(fileN);
+    //G4String fileN = randomNumberStatusDir + "currentEvent.rndm";
+    //  G4String fileN = os.str();
+    //HepRandom::saveEngineStatus(fileN);
   }  
     
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
+}
+
+void G4RunManager::StoreRNGStatus(const G4String& fnpref)
+{
+    G4String fileN = randomNumberStatusDir + fnpref+".rndm";
+    G4Random::saveEngineStatus(fileN);
 }
 
 void G4RunManager::AnalyzeEvent(G4Event* anEvent)
@@ -655,10 +676,10 @@ void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
   else
   { fileNameWithDirectory = fileN; }
   
-  HepRandom::restoreEngineStatus(fileNameWithDirectory);
+  G4Random::restoreEngineStatus(fileNameWithDirectory);
   if(verboseLevel>0) G4cout << "RandomNumberEngineStatus restored from file: "
          << fileNameWithDirectory << G4endl;
-  HepRandom::showEngineStatus();	 
+  G4Random::showEngineStatus();
 }
 
 void G4RunManager::DumpRegion(const G4String& rname) const

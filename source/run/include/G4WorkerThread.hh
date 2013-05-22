@@ -35,6 +35,7 @@
 #ifndef G4WorkerThread_hh
 #define G4WorkerThread_hh
 #include "G4Types.hh"
+#include "G4String.hh"
 
 class G4MTRunManager;
 class G4WorkerRunManager;
@@ -63,6 +64,16 @@ public:
     //Build geometry for workers
     static void BuildGeometryAndPhysicsVector();
     static void DestroyGeometryAndPhysicsVector();
+
+    void SetOutputFileName( const G4String& fileName , G4bool append = true);
+    G4String GetOutputFileName() const;
+    void SetOutputErrFileName( const G4String& fileName , G4bool append = true);
+    G4String GetOutputErrFileName() const;
+    G4bool GetOutputFileAppendFlag() const;
+    G4bool GetOutputErrFileAppendFlag() const;
+    void SetOutputUseBuffer( G4bool flag = true );
+    G4bool GetOutputUseBuffer() const;
+    
 private:
     //G4MTRunManager* masterRunManager;
     //G4WorkerRunManager* workerRunManager;
@@ -70,8 +81,12 @@ private:
     G4int threadId;
     G4int numThreads;
     G4int totalNumEvents;
-public:
-    G4Thread * pid; //AAADEBUG
+    G4String outputFileName;
+    G4bool outputFileAppend;
+    G4String outputErrFileName;
+    G4bool outputErrFileAppend;
+    G4bool outputUseBuffer;
+    
 };
 #endif //G4WorkerThread_hh
 

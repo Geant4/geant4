@@ -68,6 +68,50 @@ G4int G4WorkerThread::GetNumberThreads() const
     return numThreads;
 }
 
+void G4WorkerThread::SetOutputFileName(const G4String& filename , G4bool append )
+{
+    outputFileName = filename;
+    outputFileAppend = append;
+}
+
+G4String G4WorkerThread::GetOutputFileName() const
+{
+    return outputFileName;
+}
+
+G4bool G4WorkerThread::GetOutputFileAppendFlag() const
+{
+    return outputFileAppend;
+}
+
+void G4WorkerThread::SetOutputErrFileName(const G4String& filename , G4bool append )
+{
+    outputErrFileName = filename;
+    outputErrFileAppend = append;
+}
+
+G4String G4WorkerThread::GetOutputErrFileName() const
+{
+    return outputErrFileName;
+}
+
+G4bool G4WorkerThread::GetOutputErrFileAppendFlag() const
+{
+    return outputErrFileAppend;
+}
+
+void G4WorkerThread::SetOutputUseBuffer( G4bool flag )
+{
+    outputUseBuffer = flag;
+}
+
+G4bool G4WorkerThread::GetOutputUseBuffer() const
+{
+    G4cout<<"Some test line \n" \
+            "Continue"<<G4endl;
+    return outputUseBuffer;
+}
+
 //TODO: refactorize? Parts of these delegated to correct classes?
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"

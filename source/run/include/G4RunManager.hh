@@ -311,7 +311,9 @@ public: // with description
     G4String randomNumberStatusDir;
     G4String randomNumberStatusForThisRun;
     G4String randomNumberStatusForThisEvent;
-
+    G4bool rngStatusEventsFlag;
+    virtual void StoreRNGStatus(const G4String& filenamePrefix );
+    
     G4VPhysicalVolume* currentWorld;
 
     G4int nParallelWorlds;
@@ -422,7 +424,10 @@ public: // with description
                     "Random number status is not available for this event."); }
       return randomNumberStatusForThisEvent;
     }
-
+    inline void SetRandomNumberStorePerEvent( G4bool flag )
+    { rngStatusEventsFlag = flag; }
+    inline G4bool GetRandomNumberStorePerEvent() const
+    { return rngStatusEventsFlag; }
   public: // with description
     inline void GeometryHasBeenModified()
     { kernel->GeometryHasBeenModified(); }

@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 21th, 2013, A. Dotti (run-V09-06-38)
+- New UI command /random/saveEachEventFlag if true save random
+  seed for each event in a file with unique name: runXXXevtYYY.rndm
+- Workers write out random files in files with G4WorkerXX postfix
+- Moving "end-of-event-loop" barrier to RunTermination to guarantee
+  end of run user action in master thread is executed after corresponding
+  one is executed by workers 
+
+May 16th, 2013, A. Dotti (run-V09-06-37)
+- Threads now use new cout streaming, controllable by UI commands in /run/cout
+  directory
+- Disable G4MTRunManager::SetNumberOfThreads is threads are still alive
+- Coworking with global-V09-06-31
+
 May 16th, 2013, A. Dotti (run-V09-06-36)
 - Another WIN32 typo fixed
 

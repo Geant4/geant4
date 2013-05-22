@@ -537,7 +537,9 @@ void G4RunManagerKernel::SetupPhysics()
     G4ParticleTable::GetParticleTable()->SetReadiness();
     physicsList->ConstructParticle();
     //Andrea: Temporary for MT
+#ifdef G4MULTITHREADED
     G4ParticleTable::GetParticleTable()->GetIonTable()->InitializeLightIons();
+#endif
 }
 
 void G4RunManagerKernel::InitializePhysics()

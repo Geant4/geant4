@@ -208,6 +208,12 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandCmd->SetParameterName("fileName",true);
   restoreRandCmd->SetDefaultValue("currentRun.rndm");
   restoreRandCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
+    
+  saveEachEventCmd = new G4UIcmdWithABool("/random/saveEachEventFlag",this);
+  saveEachEventCmd->SetGuidance("Save random number status at beginning of each event.");
+  saveEachEventCmd->SetGuidance("File name contains run and event numbers: runXXXevtYYY.rndm");
+  saveEachEventCmd->SetParameterName("flag",true);
+  saveEachEventCmd->SetDefaultValue(true);
   
   randEvtCmd = new G4UIcmdWithAnInteger("/run/storeRndmStatToEvent",this);
   randEvtCmd->SetGuidance("Flag to store rndm status to G4Event object.");
@@ -221,6 +227,39 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   randEvtCmd->SetDefaultValue(0);
   randEvtCmd->SetRange("flag>=0 && flag<3");
   randEvtCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+    
+  coutDir = new G4UIdirectory("/run/cout/");
+  coutDir->SetGuidance("cout/cerr manipulation commands.");
+    
+  coutFileNameCmd = new G4UIcommand("/run/cout/setCoutFile",this);
+  coutFileNameCmd->SetGuidance("Send G4cout stream to a file. If append flag is true output is appended to file, otherwise file output is overwritten.");
+  coutFileNameCmd->SetToBeBroadcasted(false);
+  coutFileNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  G4UIparameter* pp = new G4UIparameter("fileName",'s',true);
+  pp->SetDefaultValue("Geant4-cout.txt");
+  coutFileNameCmd->SetParameter(pp);
+  pp= new G4UIparameter("append",'b',true);
+  pp->SetDefaultValue(true);
+  coutFileNameCmd->SetParameter(pp);
+    
+  cerrFileNameCmd = new G4UIcommand("/run/cout/setCerrFile",this);
+  cerrFileNameCmd->SetGuidance("Send G4cerr stream to a file. If append flag is true output is appended to file, otherwise file output is overwritten.");
+  cerrFileNameCmd->SetToBeBroadcasted(false);
+  cerrFileNameCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  pp = new G4UIparameter("fileName",'s',true);
+  pp->SetDefaultValue("Geant4-cerr.txt");
+  cerrFileNameCmd->SetParameter(pp);
+  pp= new G4UIparameter("append",'b',true);
+  pp->SetDefaultValue(true);
+  cerrFileNameCmd->SetParameter(pp);
+    
+  bufferCoutCmd = new G4UIcmdWithABool("/run/cout/useBuffer",this);
+  bufferCoutCmd->SetGuidance("Send cout and cerr stream to buffer. The buffered will be printed at the end of the job.");
+  bufferCoutCmd->SetToBeBroadcasted(false);
+  bufferCoutCmd->SetParameterName("flag",true);
+  bufferCoutCmd->SetDefaultValue(true);
+  bufferCoutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+    
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -250,6 +289,12 @@ G4RunMessenger::~G4RunMessenger()
   delete saveThisEventCmd;
   delete restoreRandCmd;
   delete randomDirectory;
+  delete saveEachEventCmd;
+    
+  delete coutDir;
+  delete coutFileNameCmd;
+  delete cerrFileNameCmd;
+  delete bufferCoutCmd;
 }
 
 void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
@@ -343,8 +388,90 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->RestoreRandomNumberStatus(newValue); }
   else if( command==randEvtCmd )
   { runManager->StoreRandomNumberStatusToG4Event(randEvtCmd->GetNewIntValue(newValue)); }
+  else if( command==saveEachEventCmd)
+  { runManager->SetRandomNumberStorePerEvent(saveEachEventCmd->GetNewBoolValue(newValue)); }
   else if( command==constScoreCmd )
   { runManager->ConstructScoringWorlds(); }
+  else if( command==coutFileNameCmd )
+  {
+      G4RunManager::RMType rmType = runManager->GetRunManagerType();
+      if( rmType==G4RunManager::masterRM )
+      {
+          G4String filename;
+          G4String appendFlagStr;
+          const char* nv = (const char*)newValue;
+          std::istringstream is(nv);
+          is >> filename >> appendFlagStr;
+          G4bool appendFlag;
+          appendFlagStr.toUpper();
+          if ( appendFlagStr == "Y" || appendFlagStr == "YES" || appendFlagStr =="1" || appendFlagStr=="T" || appendFlagStr =="TRUE" )
+              appendFlag = true;
+          else
+              appendFlag = false;
+          static_cast<G4MTRunManager*>(runManager)->SetWorkerG4coutFileName(filename);
+          static_cast<G4MTRunManager*>(runManager)->SetWorkerG4coutAppendFlag(appendFlag);
+      }
+      else if ( rmType==G4RunManager::sequentialRM )
+      {
+          G4cout<<"*** /run/cout/SetCoutFile command is issued in sequential mode."
+          <<"\nCommand is ignored.";
+      }
+      else
+      {
+          G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
+                      "/run/setCoutFile command is issued to local thread.");
+      }
+  }
+  else if( command==cerrFileNameCmd )
+  {
+      G4RunManager::RMType rmType = runManager->GetRunManagerType();
+      if( rmType==G4RunManager::masterRM )
+      {
+          G4String filename;
+          G4String appendFlagStr;
+          const char* nv = (const char*)newValue;
+          std::istringstream is(nv);
+          is >> filename >> appendFlagStr;
+          G4bool appendFlag;
+          appendFlagStr.toUpper();
+          if ( appendFlagStr == "Y" || appendFlagStr == "YES" || appendFlagStr =="1" || appendFlagStr=="T" || appendFlagStr =="TRUE" )
+              appendFlag = true;
+          else
+              appendFlag = false;
+          static_cast<G4MTRunManager*>(runManager)->SetWorkerG4cerrFileName(filename);
+          static_cast<G4MTRunManager*>(runManager)->SetWorkerG4cerrAppendFlag(appendFlag);
+      }
+      else if ( rmType==G4RunManager::sequentialRM )
+      {
+          G4cout<<"*** /run/cout/SetCerrFile command is issued in sequential mode."
+          <<"\nCommand is ignored.";
+      }
+      else
+      {
+          G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
+                      "/run/setCerrFile command is issued to local thread.");
+      }
+  }
+  else if ( command == bufferCoutCmd )
+  {
+      G4RunManager::RMType rmType = runManager->GetRunManagerType();
+      if( rmType==G4RunManager::masterRM )
+      {
+          static_cast<G4MTRunManager*>(runManager)->SetWorkerG4coutcerrBuffer(bufferCoutCmd->GetNewBoolValue(newValue));
+      }
+      else if ( rmType==G4RunManager::sequentialRM )
+      {
+          G4cout<<"*** /run/cout/useBuffer command is issued in sequential mode."
+          <<"\nCommand is ignored.";
+      }
+      else
+      {
+          G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
+                      "/run/useBuffer command is issued to local thread.");
+      }
+
+  }
+
 
 }
 

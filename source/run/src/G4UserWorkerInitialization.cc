@@ -28,6 +28,9 @@
 #include "G4UImanager.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4AutoLock.hh"
+#include "G4ofstreamDestination.hh"
+#include "G4coutIdDestination.hh"
+#include <sstream>
 
 G4ThreadLocal G4WorkerThread* G4UserWorkerInitialization::wThreadContext = 0;
 
@@ -67,9 +70,47 @@ void* G4UserWorkerInitialization::StartThread( void* context )
 
     //wThreadContext is a G4ThreadLocal variable, so this will work!
     wThreadContext = (G4WorkerThread*)context;
+
+    //================
+    //Step-0:
+    //================
+    //Initliazie per-thread stream-output
+    //The following line is needed before we actually do IO initialization
+    //becasue the constructor of UI manager resets the io destination.
+    G4UImanager::GetUIpointer();
+    //This creaetes the per-thread instances of cout and cerr buffe3rs
+    G4iosInitialization();
+    //This creates the output on file
+    G4coutDestination *threadcout = 0;
+    G4coutDestination *threadcerr = 0;
+    if (! wThreadContext->GetOutputFileName().empty() )
+    {
+        threadcout = new G4CoutToFile;
+        std::stringstream fn;
+        fn << "G4Worker" <<wThreadContext->GetThreadId()<<"_"<< wThreadContext->GetOutputFileName();
+        static_cast<G4CoutToFile*>(threadcout)->SetFileName(fn.str() , wThreadContext->GetOutputFileAppendFlag() );
+    }
+    else
+    {
+        //G4coutIdDestination gets both cout/cerr
+        threadcout = new G4coutIdDestination( wThreadContext->GetThreadId() );
+        static_cast<G4coutIdDestination*>(threadcout)->EnableBuffering( wThreadContext->GetOutputUseBuffer() );
+    }
+    if (! wThreadContext->GetOutputErrFileName().empty() )
+    {
+        //If this is created, it will overwrite what was set before for cout
+        threadcerr = new G4CerrToFile;
+        std::stringstream fn;
+        fn << "G4Worker" <<wThreadContext->GetThreadId()<<"_"<< wThreadContext->GetOutputErrFileName();
+        static_cast<G4CerrToFile*>(threadcerr)->SetFileName(fn.str() , wThreadContext->GetOutputErrFileAppendFlag() );
+        //Force open of file: so the file always exists even if no message is sent there
+        static_cast<G4CerrToFile*>(threadcerr)->Open();
+    }
     
-        
-    //0- RNG Engine need to be initialized "cloning" the master one.
+    //================
+    //Step-1:
+    //================
+    //RNG Engine need to be initialized "cloning" the master one.
     //Since the
     G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager(); 
     const CLHEP::HepRandomEngine* masterEngine = masterRM->getMasterRandomEngine();
@@ -79,35 +120,45 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //Now initialize worker part of shared objects (geometry/physics)
     wThreadContext->BuildGeometryAndPhysicsVector();
     
-    //1- Create a G4WorkerRunManager
+    //================
+    //Step-2:
+    //================
+    //Create a G4WorkerRunManager
     G4WorkerRunManager* wrm = new G4WorkerRunManager;
-        
+
     wrm->SetWorkerThread(wThreadContext);
     
-    //2- Set the detector and physics list to the worker thread. Share with master
+    //================
+    //Step-3:
+    //================
+    // Set the detector and physics list to the worker thread. Share with master
     const G4VUserDetectorConstruction* detector = masterRM->GetUserDetectorConstruction();
     wrm->G4RunManager::SetUserInitialization(const_cast<G4VUserDetectorConstruction*>(detector));
     const G4VUserPhysicsList* physicslist = masterRM->GetUserPhysicsList();
     wrm->SetUserInitialization(const_cast<G4VUserPhysicsList*>(physicslist));
     
-    //3- Call user method to define user actions and all other stuff
+    //================
+    //Step-4:
+    //================
+    //Call user method to define user actions and all other stuff
     //Note: Even if thiscontext is per-thread object, the UserWorkerInitialization
     // object is shared
     if(masterRM->GetUserActionInitialization())
     { masterRM->GetUserActionInitialization()->Build(); }
     masterRM->GetUserWorkerInitialization()->WorkerStart();
-    
-    //4- Now initialize run manager
+    //Now initialize run manager
     wrm->Initialize();
-    //G4RunManager::GetRunManager()->Initialize();
     
+    //================
+    //Step-5:
+    //================
     //Now enter a loop to execute requests from Master Thread: get next action
     G4MTRunManager::WorkerActionRequest nextAction = masterRM->ThisWorkerWaitForNextAction();
     while ( nextAction != G4MTRunManager::ENDWORKER )
     {
         if ( nextAction == G4MTRunManager::NEXTITERATION )
         {
-            //5- Execute all stacked UI commands
+            //Execute all stacked commands
             std::vector<G4String> cmds = masterRM->GetCommandStack();
             G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance
             
@@ -133,19 +184,22 @@ void* G4UserWorkerInitialization::StartThread( void* context )
         }
         //Now wait for master thread to signal new action to be performed
         nextAction = masterRM->ThisWorkerWaitForNextAction();
-    }
+    } //No more actions to perform
     
-    //6- Ok, now the event loop is finished, called user defined stuff
-    //Problem: how to be sure that the UserInitialization has correct context?
+    //================
+    //Step-6:
+    //================
+    //Ok, now there is nothing else to do , called user defined stuff
     masterRM->GetUserWorkerInitialization()->WorkerStop();
-    
-    //7- Call destroy … should this be done at the end of each run? What if multiple
-    //runs are present?
     wThreadContext->DestroyGeometryAndPhysicsVector();
-    
-    //8- Delete worker run manager
+
+    // Delete worker run manager
     //G4cout<<"Thread ID:"<<wThreadContext->GetThreadId()<<" WorkerRunManager Pointer: "<<wrm<<" PID:"<<wThreadContext->pid<<G4endl;///AAADEBUG
     delete wrm;
+
+    if ( threadcout ) delete threadcout;
+    if ( threadcerr ) delete threadcerr;
+    G4iosFinalization();
     return static_cast<void*>(0);
 }
 

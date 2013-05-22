@@ -55,7 +55,7 @@ public:
     G4MTRunManager();
     virtual ~G4MTRunManager();
     //New method
-    void SetNumberOfThreads( G4int n ) { nworkers = n; }
+    void SetNumberOfThreads( G4int n );
     G4int GetNumberOfThreads() const { return nworkers; }
     //Returns i-th seed
     static long GetSeed( G4int i );
@@ -70,6 +70,7 @@ public:
     virtual void TerminateEventLoop();
     virtual void ConstructScoringWorlds();
     virtual void InitializePhysics();
+    virtual void RunTermination();
     //Method called by Initialize() method
 protected:
     //Initialize the seeds list, if derived class does not implement this method
@@ -80,6 +81,7 @@ protected:
     void AddOneSeed( long seed );
     void InitializeSeedsQueue( G4int ns );
     virtual void PrepareCommandsStack();
+    virtual void StoreRNGStatus(const G4String& filenamePrefix );
 public:
     std::vector<G4String> GetCommandStack();
     //This method is invoked just before spawning the threads to
@@ -182,6 +184,19 @@ public:
 private:
     WorkerActionRequest nextActionRequest;
     void NewActionRequest( WorkerActionRequest newRequest );
+private:
+    //Handling of cout/cerr from threads
+    G4String workerG4coutFileName;
+    G4String workerG4cerrFileName;
+    G4bool workerG4coutAppendFlag;
+    G4bool workerG4cerrAppendFlag;
+    G4bool workerG4coutcerrBufferFlag;
+public:
+    void SetWorkerG4coutFileName(const G4String& fn) { workerG4coutFileName = fn; }
+    void SetWorkerG4cerrFileName(const G4String& fn) { workerG4cerrFileName = fn; }
+    void SetWorkerG4coutAppendFlag(const G4bool& flag ) { workerG4coutAppendFlag = flag; }
+    void SetWorkerG4cerrAppendFlag(const G4bool& flag ) { workerG4cerrAppendFlag = flag; }
+    void SetWorkerG4coutcerrBuffer( const G4bool& flag ) { workerG4coutcerrBufferFlag = flag; }
 };
 
 #endif //G4MTRunManager_h

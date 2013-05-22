@@ -57,6 +57,7 @@ public:
     //It is not assumed method is not thread-safe: i.e. should be called sequentially
     //Returns 0 if commands are executed corrected, otherwise returns error code (see G4UImanager::ApplyCommand)
     //In case of error currentCmd is set to the command that gave the problem
+    virtual void RunTermination();
 protected:
     virtual void ConstructScoringWorlds();
 /***********************************************************************************
@@ -70,6 +71,7 @@ private:
         if (psrc!=0 && pdst!=0 ) pdst->fMeshElementLogical = psrc->fMeshElementLogical;
     }
 *************************************************************************************/
+    virtual void StoreRNGStatus(const G4String& filenamePrefix );
 public:
     //! Sets the worker context
         void SetWorkerThread( G4WorkerThread* wc ) { workerContext = wc; }
