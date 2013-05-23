@@ -185,6 +185,10 @@ List of fixes included in this public patch since the public release 9.6.p01:
   o Examples:
     --------
     + Updated reference outputs.
+    + advanced/composite_calorimeter:
+      o Fixed compilation error in main() for missing inclusion of
+        G4UImanager header. Fixed compilation warnings for
+        variables/parameters shadowing.
     + advanced/lAr_calorimeter:
       o Fixed bug in the primary generator, causing event abortion.
     + novice/N02:
