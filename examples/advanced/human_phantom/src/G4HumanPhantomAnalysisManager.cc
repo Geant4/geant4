@@ -66,7 +66,7 @@ void G4HumanPhantomAnalysisManager::book()
   G4bool fileOpen = AnalysisManager->OpenFile(fileName);
   if (!fileOpen) {
     G4cout << "\n---> HistoManager::book(): cannot open " 
-           << fileName[1] 
+           << fileName
            << G4endl;
     return;
   }

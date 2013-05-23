@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 23, 2013, G. Cosmo, tag human_phantom-V09-06-02
+- Corrected typo in G4HumanPhantomAnalysisManager for printout of file name.
+
 May 17, 2013, S. Guatelli, tag human_phantom-V09-06-01
 - G4HumanPhantomPhysicsList is derived from G4VModularPhysics.
 - G4 analysis component introduced
@@ -25,7 +28,6 @@ May 17, 2013, S. Guatelli, tag human_phantom-V09-06-01
 - General cleaning in macro files
 - macro.C added to print the content of the ntuple generated 
   in the simulation.
-
 
 December 12, 2012, V.Ivanchenko tag human_phantom-V09-06-00
 - G4HumanPhantomPhysicsList: substitute SetModel by SetEmModel
