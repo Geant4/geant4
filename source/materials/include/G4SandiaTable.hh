@@ -61,6 +61,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 class G4Material;
+// class G4MaterialCutsCouple;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -138,7 +139,14 @@ private:
 
 public:  // without description
 
-  G4SandiaTable(G4int);	         
+  G4SandiaTable(G4int);	 
+        
+  G4SandiaTable();
+
+  void Initialize(G4Material*);	         
+  // void Initialize(G4MaterialCutsCouple*);	         
+  void Initialize(G4int);	         
+
 
   void SandiaSwap(G4double** da, G4int i, G4int j);
 

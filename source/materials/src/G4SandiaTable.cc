@@ -46,6 +46,7 @@
 #include "G4StaticSandiaData.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
+// #include "G4MaterialCutsCouple.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -108,11 +109,13 @@ G4SandiaTable::G4SandiaTable(__void__&)
 
 G4SandiaTable::~G4SandiaTable()
 { 
-  if(fMatSandiaMatrix) {
+  if(fMatSandiaMatrix) 
+  {
     fMatSandiaMatrix->clearAndDestroy();
     delete fMatSandiaMatrix;
   }
-  if(fMatSandiaMatrixPAI) {
+  if(fMatSandiaMatrixPAI) 
+  {
     fMatSandiaMatrixPAI->clearAndDestroy();
     delete fMatSandiaMatrixPAI;
   }
@@ -269,6 +272,8 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   delete [] tmp1;
   delete [] tmp2;
 
+  //  fMaxInterval = fMatNbOfIntervals; // vmg 16.02.11
+
   if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
   {
     G4cout<<"mma, G4SandiaTable::ComputeMatSandiaMatrix(), mat = "
@@ -285,7 +290,9 @@ void G4SandiaTable::ComputeMatSandiaMatrix()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+///////////////////////////////////////////////////////////////////////////////////////
+//
+// Sandia matrix for PAI models based on vectors ...
 
 void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 {  
@@ -293,8 +300,9 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
   G4int elm, c, i, j, jj, k, k1, k2, c1, n1;    
 
   const G4int noElm = fMaterial->GetNumberOfElements();
-  const G4ElementVector* ElementVector = fMaterial->GetElementVector();  
-  G4int* Z = new G4int[noElm];               //Atomic number
+  const G4ElementVector* ElementVector = fMaterial->GetElementVector();
+  
+  std::vector<G4int> Z(noElm);               //Atomic number
 
   for ( elm = 0; elm < noElm; elm++ )
   { 
@@ -302,16 +310,19 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
     MaxIntervals += fNbOfIntervals[Z[elm]];
   }  
   fMaxInterval = MaxIntervals + 2;
+  // fMaxInterval = MaxIntervals + 1;
+  // fMaxInterval = MaxIntervals;
 
   if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
   {
     G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl;
   } 
-  G4double* fPhotoAbsorptionCof0 = new G4double[fMaxInterval];
-  G4double* fPhotoAbsorptionCof1 = new G4double[fMaxInterval];
-  G4double* fPhotoAbsorptionCof2 = new G4double[fMaxInterval];
-  G4double* fPhotoAbsorptionCof3 = new G4double[fMaxInterval];
-  G4double* fPhotoAbsorptionCof4 = new G4double[fMaxInterval];
+
+  G4DataVector fPhotoAbsorptionCof0(fMaxInterval);
+  G4DataVector fPhotoAbsorptionCof1(fMaxInterval);
+  G4DataVector fPhotoAbsorptionCof2(fMaxInterval);
+  G4DataVector fPhotoAbsorptionCof3(fMaxInterval);
+  G4DataVector fPhotoAbsorptionCof4(fMaxInterval);
 
   for( c = 0; c < fMaxInterval; c++ )   // just in case
   {
@@ -473,17 +484,20 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
       fPhotoAbsorptionCof4[jj-1] = fPhotoAbsorptionCof4[jj];
     }
     fMaxInterval--;
-    c--;
+    // c--;
   }
-  while( c < fMaxInterval - 1 );
+  while( c < fMaxInterval - 1 ); // was <
   	
   // create the sandia matrix for this material
-    
+  // fMaxInterval--; 
+  
   fMatSandiaMatrixPAI = new G4OrderedTable();
+
   G4double density = fMaterial->GetDensity();
  
-  for (i = 0; i < fMaxInterval; i++) {
-    fMatSandiaMatrixPAI->push_back(new G4DataVector(5,0.));
+  for (i = 0; i < fMaxInterval; i++) 
+  {
+    fMatSandiaMatrixPAI->push_back( new G4DataVector(5,0.) );
   } 	         	
   for (i = 0; i < fMaxInterval; i++)
   {
@@ -493,9 +507,11 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
     (*(*fMatSandiaMatrixPAI)[i])[3] = fPhotoAbsorptionCof3[i+1]*density;
     (*(*fMatSandiaMatrixPAI)[i])[4] = fPhotoAbsorptionCof4[i+1]*density;
   }
+  // fMaxInterval--; // to avoid duplicate at 500 keV or extra zeros in last interval
+
   if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
   {
-    G4cout<<"mma, G4SandiaTable::ComputeMatSandiaMatrixPAI(), mat = "
+    G4cout<<"vmg, G4SandiaTable::ComputeMatSandiaMatrixPAI(), mat = "
 	  <<fMaterial->GetName()<<G4endl;
 
     for( i = 0; i < fMaxInterval; i++)
@@ -507,17 +523,11 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 	    <<"\t"<<this->GetSandiaMatTablePAI(i,4)<<G4endl;
     }   
   }
-	         	    
-  delete [] Z;
-  delete [] fPhotoAbsorptionCof0;
-  delete [] fPhotoAbsorptionCof1;
-  delete [] fPhotoAbsorptionCof2;
-  delete [] fPhotoAbsorptionCof3;
-  delete [] fPhotoAbsorptionCof4;
   return;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Methods for PAI model only
 //
@@ -541,7 +551,7 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
   if ( matIndex >= 0 && matIndex < numberOfMat)
     {
       fMaterial = (*theMaterialTable)[matIndex];
-      ComputeMatTable();
+      // ComputeMatTable();
     }
   else
     {
@@ -550,13 +560,66 @@ G4SandiaTable::G4SandiaTable(G4int matIndex)
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////
+        
+G4SandiaTable::G4SandiaTable()
+{ 
+  fMaterial           = 0;
+  fMatNbOfIntervals   = 0;
+  fMatSandiaMatrix    = 0; 
+  fMatSandiaMatrixPAI = 0;
+  fPhotoAbsorptionCof = 0;
+ 
+  fMaxInterval        = 0;
+  fVerbose            = 0;  
+
+  fSandiaCofPerAtom.resize(4,0.0);
+}
+
+////////////////////////////////////////////////////////////////////
+  
+void G4SandiaTable::Initialize(G4Material* mat)
+{
+  fMaterial = mat;
+  ComputeMatSandiaMatrixPAI();
+}
+
+/////////////////////////////////////////////////////////////////////
+
+/*
+void G4SandiaTable::Initialize(G4MaterialCutsCouple* matcc)
+{
+  fMaterial = matcc->GetMaterial();
+  ComputeMatSandiaMatrixPAI();
+}
+*/
+
+///////////////////////////////////////////////////////////////////////
+
+void G4SandiaTable::Initialize(G4int matIndex)
+{
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int numberOfMat = G4Material::GetNumberOfMaterials();
+
+  if ( matIndex >= 0 && matIndex < numberOfMat )
+  {
+    fMaterial = (*theMaterialTable)[matIndex];
+    ComputeMatTable();
+  }
+  else
+  {
+    G4Exception("G4SandiaTable::Initialize(G4int matIndex)", "mat401",
+    FatalException, "wrong matIndex");
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////..
 
 G4int G4SandiaTable::GetMaxInterval() const { 
   return fMaxInterval;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////..
 
 G4double** G4SandiaTable::GetPointerToCof() 
 { 
@@ -564,7 +627,7 @@ G4double** G4SandiaTable::GetPointerToCof()
   return fPhotoAbsorptionCof;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////..
 
 inline void
 G4SandiaTable::SandiaSwap( G4double** da ,
@@ -576,14 +639,14 @@ G4SandiaTable::SandiaSwap( G4double** da ,
   da[j][0] = tmp ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////..
 
 G4double G4SandiaTable::GetPhotoAbsorpCof(G4int i, G4int j) const
 {
   return  fPhotoAbsorptionCof[i][j]*funitc[j];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////////..
 //
 // Bubble sorting of left energy interval in SandiaTable in ascening order
 //
@@ -600,7 +663,7 @@ G4SandiaTable::SandiaSort(G4double** da, G4int sz)
    }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+///////////////////////////////////////////////////////////////////////////////////////..
 //
 //  SandiaIntervals 
 //
@@ -695,7 +758,7 @@ G4int G4SandiaTable::SandiaIntervals(G4int Z[], G4int el )
   return c;
 }   
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+////////////////////////////////////////////////////////////////////////////..
 //
 //  SandiaMixing
 //
@@ -782,14 +845,14 @@ G4SandiaTable::SandiaMixing(         G4int Z[],
   return mi;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+////////////////////////////////////////////////////////////////////////////..
 
 G4int G4SandiaTable::GetMatNbOfIntervals()  
 {
   return fMatNbOfIntervals;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////..
 
 G4int G4SandiaTable::GetNbOfIntervals(G4int Z)
 {
@@ -797,7 +860,7 @@ G4int G4SandiaTable::GetNbOfIntervals(G4int Z)
   return fNbOfIntervals[Z];
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////..
 
 G4double
 G4SandiaTable::GetSandiaPerAtom(G4int Z, G4int interval, G4int j)
@@ -813,7 +876,7 @@ G4SandiaTable::GetSandiaPerAtom(G4int Z, G4int interval, G4int j)
   return x;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////..
 
 G4double  
 G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)    
@@ -822,7 +885,7 @@ G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j)
   return ((*(*fMatSandiaMatrix)[interval])[j]); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////..
 
 const G4double* 
 G4SandiaTable::GetSandiaCofForMaterial(G4double energy)
@@ -838,7 +901,7 @@ G4SandiaTable::GetSandiaCofForMaterial(G4double energy)
   return x;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////..
 
 G4double  
 G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j) 
@@ -847,7 +910,7 @@ G4SandiaTable::GetSandiaMatTable(G4int interval, G4int j)
   return ((*(*fMatSandiaMatrix)[interval])[j])*funitc[j]; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////////..
 
 G4double  
 G4SandiaTable::GetSandiaCofForMaterialPAI(G4int interval, G4int j)    
@@ -857,7 +920,7 @@ G4SandiaTable::GetSandiaCofForMaterialPAI(G4int interval, G4int j)
   return ((*(*fMatSandiaMatrixPAI)[interval])[j]); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+////////////////////////////////////////////////////////////////////////////////..
 
 const G4double* 
 G4SandiaTable::GetSandiaCofForMaterialPAI(G4double energy)
@@ -874,7 +937,7 @@ G4SandiaTable::GetSandiaCofForMaterialPAI(G4double energy)
   return x;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////..
 
 G4double  
 G4SandiaTable::GetSandiaMatTablePAI(G4int interval, G4int j) 
@@ -884,7 +947,7 @@ G4SandiaTable::GetSandiaMatTablePAI(G4int interval, G4int j)
   return ((*(*fMatSandiaMatrixPAI)[interval])[j])*funitc[j]; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+////////////////////////////////////////////////////////////////////////////////////..
 
 G4double
 G4SandiaTable::GetIonizationPot(G4int Z)
@@ -893,7 +956,7 @@ G4SandiaTable::GetIonizationPot(G4int Z)
   return fIonizationPotentials[Z]*CLHEP::eV;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+/////////////////////////////////////////////////////////////////////////////////..
 
 G4OrderedTable*  
 G4SandiaTable::GetSandiaMatrixPAI()
@@ -902,7 +965,7 @@ G4SandiaTable::GetSandiaMatrixPAI()
   return fMatSandiaMatrixPAI;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//////////////////////////////////////////////////////////////////////////////////..
 //
 //  Sandia interval and mixing calculations for materialCutsCouple constructor 
 //
@@ -1064,7 +1127,7 @@ void G4SandiaTable::ComputeMatTable()
     fMaxInterval--;
     c--;
   }
-  while(c < fMaxInterval - 1);
+  while( c < fMaxInterval - 1 );
   	
   // create the sandia matrix for this material
 
@@ -1109,4 +1172,6 @@ void G4SandiaTable::ComputeMatTable()
   return;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+//
+//
+////////////////////////////////////////////////////////////////////////////////////////..

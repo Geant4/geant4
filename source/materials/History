@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+22-05-13 V.Ivanchenko (materials-V09-06-13)
+22-05-13 V.Grichine: G4SandiaTable.hh/.cc were updated to prepare 
+    a material Sandia coefficients without dynamically created arrays.
+
 10-05-13 V.Ivanchenko (materials-V09-06-12)
 - G4NistMaterialBuilder, G4IonisParamMat - minor cleanup of 
     chemical formula names, removed old commented lines,
