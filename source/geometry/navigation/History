@@ -17,8 +17,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-					  geomnav-V09-06-07 retag
-May 7th, 2013 - P.Gumplinger (tag by JA) (geomnav-V09-06-06)
+May 23rd, 2013 - G.Cosmo (geomnav-V09-06-08)
+------------------------
+- Archived GeomTest* classes for overlaps checking through grid/cylinder
+  lines. UI commands are replaced with calls to built-in overlaps checking
+  based on random points located in surface. Defined commands are:
+    /geometry/test/tolerance [double] [unit]
+       -- to define tolerance by which overlaps should not be reported.
+          Default is '0'.
+    /geometry/test/verbosity [bool]
+       -- to set verbosity mode. Default is 'true'.
+    /geometry/test/resolution [int]
+       -- to establish the number of points on surface to be generated
+          and checked for each volume. Default is '10000'.
+    /geometry/test/recursion_start [int]
+       -- to set the starting depth level in the volumes tree from where
+          checking overlaps. Default is level '0'.
+    /geometry/test/recursion_depth [int]
+       -- to set the total depth in the volume tree for checking overlaps.
+          Default is '-1', which means checking the whole tree.
+    /geometry/test/run
+       -- to start the overlaps checking recursively through the volumes tree.
+
+May 7th, 2013 - P.Gumplinger (geomnav-V09-06-07, geomnav-V09-06-06)
 ----------------------------
 - G4PropagatorInField: deleted SetChargeMomentumMass method.
 

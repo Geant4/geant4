@@ -40,14 +40,6 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4BrentLocator.hh
         G4DrawVoxels.hh
         G4ErrorPropagationNavigator.hh
-        G4GeomTestErrorList.hh
-        G4GeomTestLogger.hh
-        G4GeomTestOverlapList.hh
-        G4GeomTestOvershootList.hh
-        G4GeomTestPoint.hh
-        G4GeomTestSegment.hh
-        G4GeomTestStreamLogger.hh
-        G4GeomTestVolPoint.hh
         G4GeomTestVolume.hh
         G4GeometryMessenger.hh
         G4MultiLevelLocator.hh
@@ -83,13 +75,6 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4BrentLocator.cc
         G4DrawVoxels.cc
         G4ErrorPropagationNavigator.cc
-        G4GeomTestErrorList.cc
-        G4GeomTestOverlapList.cc
-        G4GeomTestOvershootList.cc
-        G4GeomTestPoint.cc
-        G4GeomTestSegment.cc
-        G4GeomTestStreamLogger.cc
-        G4GeomTestVolPoint.cc
         G4GeomTestVolume.cc
         G4GeometryMessenger.cc
         G4MultiLevelLocator.cc
