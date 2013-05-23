@@ -853,6 +853,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete maxphiCmd1;
   delete angsigmarCmd1;
   delete angsigmaxCmd1;
+  delete angsigmayCmd1;
   delete angfocusCmd;
   delete useuserangaxisCmd1;
   delete surfnormCmd1;

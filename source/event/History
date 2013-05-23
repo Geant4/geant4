@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 22nd, 2013, B.Morgan (event-V09-06-05)
+- Ensure deletion of "angsigmayCmd1" G4UIcommand instance in destructor of
+  G4GeneralParticleSourceMessenger, fixing minor memory leak.
+
 May 15th, 2013, M.Asai (event-V09-06-04)
 - Change the type of the argument of the constructor of G4HEPEvtInterface
   from char* to const char*.
