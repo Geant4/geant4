@@ -390,7 +390,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	G4cout << "### Find ion Z= " << theFragmentZ << " A= " << theFragmentA
 	       << " Eexc(MeV)= " << excitation/MeV << "  " 
 	       << theKindOfFragment << G4endl;
-	*/ 
+	*/
         if(!theKindOfFragment) { 
 	  theKindOfFragment = 
 	    theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
@@ -401,9 +401,8 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
           G4double elevel2 = 0.0;
 	  G4ParticleDefinition* ion = 0; 
           for(level=1; level<10; ++level) {
-            //G4cout << j << G4endl;
-	    ion = theTableOfIons->FindIon(theFragmentZ,theFragmentA,level);
-            //G4cout << level << "  " << ion << G4endl;
+	    ion = theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
+            G4cout << level << "  " << ion << G4endl;
             if(ion) {
 	      G4Ions* ip = dynamic_cast<G4Ions*>(ion);
 	      if(ip) {
