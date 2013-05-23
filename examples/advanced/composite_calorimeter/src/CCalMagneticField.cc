@@ -98,24 +98,24 @@ void CCalMagneticField::MagneticField(const double x[3], double B[3]) const {
     B[i]   = 0*kilogauss;
   }
 
-  G4double m=0, c=0;
+  G4double m1=0, c1=0;
   G4double xnew = x[0]/mm + xoff;
   if (npts > 0) {
     for (i=0; i<npts; i++) {
       if (xnew > pos[i]*mm) {
-	m = slope[i];
-        c = intercept[i];
+	m1 = slope[i];
+        c1 = intercept[i];
       }
     }
   }
-  G4double scor = c + m*xnew;
+  G4double scor = c1 + m*xnew;
   if (scor < 0.) scor = 0.;
   if (scor > 1.) scor = 1.0;
 
   B[2] = scor*fval*kilogauss;
 #ifdef ddebug
   G4cout << "Field at x: " << x[0]/mm << "mm (" << xnew << ") = " << B[2]/tesla
-	 << "T (m = " << m << ", c = " << c << ", scale = " << scor << ")"
+	 << "T (m = " << m1 << ", c = " << c1 << ", scale = " << scor << ")"
 	 << G4endl;
 #endif
 }

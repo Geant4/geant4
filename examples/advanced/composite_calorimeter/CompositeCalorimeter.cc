@@ -36,6 +36,7 @@
 #include "G4PhysListFactory.hh"
 
 #include "G4RunManager.hh"
+#include "G4UImanager.hh"
 
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"

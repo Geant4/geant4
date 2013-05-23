@@ -61,7 +61,7 @@ CCalAMaterial::CCalAMaterial(G4String mat, G4double dens, int nconst,
   closeMaterial();
 }
 
-CCalAMaterial::CCalAMaterial(G4String elemat, double Aeff, double dens) {
+CCalAMaterial::CCalAMaterial(G4String elemat, double eff, double dens) {
   name=elemat;
   density=dens;
   nElem=1;
@@ -71,7 +71,7 @@ CCalAMaterial::CCalAMaterial(G4String elemat, double Aeff, double dens) {
   theElements[0] = elemat;
   theWeights[0]  = 1;
 
-  aEff=Aeff;
+  aEff=eff;
 }
 
 CCalAMaterial::~CCalAMaterial() {
