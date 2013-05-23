@@ -15,6 +15,8 @@ List of fixes included in this public patch since the public release 9.6.p01:
 
   o Event:
     -----
+    + Ensure deletion of "angsigmayCmd1" G4UIcommand instance in destructor
+      of G4GeneralParticleSourceMessenger, fixing minor memory leak.
     + Removed unused variables in G4AdjointPosOnPhysVolGenerator,
       G4AdjointPosOnPhysVolGenerator, G4GeneralParticleSource,
       G4SPSEneDistribution, and G4SPSRandomGenerator.
@@ -74,6 +76,10 @@ List of fixes included in this public patch since the public release 9.6.p01:
     + Adjoint:
       o G4AdjointhMultipleScattering: use msc95 instead of obsolete msc90.
       o Removed unused variables detected with clang compilation warnings.
+    + Muons:
+      o G4MuPairProductionModel, G4MuBremsstrahlungModel: fixed rare case
+        of division by zero in cross-section computation.
+        Addressing problem report #1471.
     + Polarisation
       o G4PolarizedComptonCrossSection: removed unused class members.
     + Standard:
