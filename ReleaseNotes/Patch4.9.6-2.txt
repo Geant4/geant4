@@ -83,12 +83,16 @@ List of fixes included in this public patch since the public release 9.6.p01:
     + Polarisation
       o G4PolarizedComptonCrossSection: removed unused class members.
     + Standard:
-      o G4UrbanMscModel93/95/96: disable sampleZ option (true step length
-        sampling) to remove zero step length..
-        Correctly use "static const" for const parameters.
+      o G4UrbanMscModel93/95/96: disabled 'sampleZ' option by default (this
+        option enables/disables sampling of true step length); helps in
+        removing rare cases of e+- interactions/decay on geometry boundary
+        and observed zero step length; a minor (~0.1%) change in sampling
+        calorimeter response is expected.
+        Correctly use "static const" for const parameters (minor CPU
+        speedup).
       o G4WentzelOKandVIxSection: use different screening parameter formula
-        for e+- and heavy particles, improving agreement with data both for
-        e+- and muons.
+        for e+- and other charged particles, improving agreement with data
+        both for e+- and muons.
 
   o Generic Processes:
     -----------------
