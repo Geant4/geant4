@@ -63,10 +63,10 @@ public:
   void SetSensitive();
 
 private:
-  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
   std::vector< G4LogicalVolume * > fLogicalVolumeVector;
+  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
 
-  G4VPhysicalVolume* pWorldVolume;
+  G4VPhysicalVolume* fWorldVolume;
 
 };
 

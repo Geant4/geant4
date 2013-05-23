@@ -45,7 +45,7 @@ class B01PhysicsList: public G4VUserPhysicsList
 
   public: 
     void AddParallelWorldName(G4String& pname)
-         {paraWorldName.push_back(pname);}
+         {fParaWorldName.push_back(pname);}
 
   protected:
     // Construct particle and physics
@@ -71,7 +71,7 @@ class B01PhysicsList: public G4VUserPhysicsList
     void  ConstructAllShortLiveds();
 
   private:
-    std::vector<G4String>  paraWorldName;
+    std::vector<G4String>  fParaWorldName;
 
 };
 

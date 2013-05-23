@@ -63,12 +63,21 @@
 // for weight window technique
 #include "G4WeightWindowStore.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B01DetectorConstruction::B01DetectorConstruction() :
-  fPhysicalVolumeVector(),fLogicalVolumeVector()
+  fLogicalVolumeVector(),fPhysicalVolumeVector()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B01DetectorConstruction::~B01DetectorConstruction()
-{;}
+{
+  fLogicalVolumeVector.clear();
+  fPhysicalVolumeVector.clear();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* B01DetectorConstruction::Construct()
 {
@@ -160,12 +169,12 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   fLogicalVolumeVector.push_back(worldCylinder_log); 
 
   name = "shieldWorld";
-  pWorldVolume = new 
+  fWorldVolume = new 
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
                   name, 0, false, 0);
 
 
-  fPhysicalVolumeVector.push_back(pWorldVolume);
+  fPhysicalVolumeVector.push_back(fWorldVolume);
 
   // creating 18 slabs of 10 cm thick concrete
 
@@ -250,31 +259,34 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   fPhysicalVolumeVector.push_back(pvol_rest);
 
   SetSensitive();
-  return pWorldVolume;
+  return fWorldVolume;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VIStore *B01DetectorConstruction::CreateImportanceStore()
 {
   if (!fPhysicalVolumeVector.size())
   {
-    G4Exception("B01DetectorConstruction::CreateImportanceStore","exampleB01_0001",RunMustBeAborted,"no physical volumes created yet!");
+    G4Exception("B01DetectorConstruction::CreateImportanceStore"
+               ,"exampleB01_0001",RunMustBeAborted
+               ,"no physical volumes created yet!");
   }
 
-  pWorldVolume = fPhysicalVolumeVector[0];
+  fWorldVolume = fPhysicalVolumeVector[0];
 
   // creating and filling the importance store
   
-  G4IStore *istore = new G4IStore(*pWorldVolume);
+  G4IStore *istore = new G4IStore(*fWorldVolume);
 
   G4int n = 0;
   G4double imp =1;
-  istore->AddImportanceGeometryCell(1,  *pWorldVolume);
+  istore->AddImportanceGeometryCell(1,  *fWorldVolume);
   for (std::vector<G4VPhysicalVolume *>::iterator
        it =  fPhysicalVolumeVector.begin();
        it != fPhysicalVolumeVector.end() - 1; it++)
   {
-    if (*it != pWorldVolume)
+    if (*it != fWorldVolume)
     {
       imp = std::pow(2., n++);
       G4cout << "Going to assign importance: " << imp << ", to volume: " 
@@ -287,23 +299,27 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore()
   // importance as the last conrete cell
   //
   istore->AddImportanceGeometryCell(imp, 
-                                    *(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]),++n);
+          *(fPhysicalVolumeVector[fPhysicalVolumeVector.size()-1]),++n);
   
   return istore;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
 {
   if (!fPhysicalVolumeVector.size())
   {
-    G4Exception("B01DetectorConstruction::CreateWeightWindowStore","exampleB01_0002",RunMustBeAborted,"no physical volumes created yet!");
+    G4Exception("B01DetectorConstruction::CreateWeightWindowStore"
+               ,"exampleB01_0002",RunMustBeAborted
+               ,"no physical volumes created yet!");
   }
 
-  pWorldVolume = fPhysicalVolumeVector[0];
+  fWorldVolume = fPhysicalVolumeVector[0];
 
   // creating and filling the weight window store
   
-  G4WeightWindowStore *wwstore = new G4WeightWindowStore(*pWorldVolume);
+  G4WeightWindowStore *wwstore = new G4WeightWindowStore(*fWorldVolume);
   
   // create one energy region covering the energies of the problem
   //
@@ -316,14 +332,14 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
   std::vector<G4double> lowerWeights;
 
   lowerWeights.push_back(1);
-  G4GeometryCell gWorldCell(*pWorldVolume,0);
+  G4GeometryCell gWorldCell(*fWorldVolume,0);
   wwstore->AddLowerWeights(gWorldCell, lowerWeights);
 
   for (std::vector<G4VPhysicalVolume *>::iterator
        it =  fPhysicalVolumeVector.begin();
        it != fPhysicalVolumeVector.end() - 1; it++)
   {
-    if (*it != pWorldVolume)
+    if (*it != fWorldVolume)
     {
       lowerWeight = 1./std::pow(2., n++);
       G4cout << "Going to assign lower weight: " << lowerWeight 
@@ -346,6 +362,8 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
   return wwstore;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4String B01DetectorConstruction::GetCellName(G4int i)
 {
   std::ostringstream os;
@@ -360,8 +378,10 @@ G4String B01DetectorConstruction::GetCellName(G4int i)
 }
 
 G4VPhysicalVolume *B01DetectorConstruction::GetWorldVolume() {
-   return pWorldVolume;
+   return fWorldVolume;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B01DetectorConstruction::SetSensitive(){
 
@@ -394,7 +414,8 @@ void B01DetectorConstruction::SetSensitive(){
   //------------------------
   //
   // Define MultiFunctionalDetector with name.
-  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(concreteSDname);
+  G4MultiFunctionalDetector* MFDet = 
+                         new G4MultiFunctionalDetector(concreteSDname);
   SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
 
 
@@ -405,7 +426,8 @@ void B01DetectorConstruction::SetSensitive(){
   MFDet->SetFilter(neutronFilter);
 
 
-  for (std::vector<G4LogicalVolume *>::iterator it =  fLogicalVolumeVector.begin();
+  for (std::vector<G4LogicalVolume *>::iterator it = 
+                                                fLogicalVolumeVector.begin();
        it != fLogicalVolumeVector.end(); it++){
       (*it)->SetSensitiveDetector(MFDet);
   }
@@ -423,7 +445,8 @@ void B01DetectorConstruction::SetSensitive(){
   G4PSPopulation*   scorer2 = new G4PSPopulation(psName="Population");  
   MFDet->RegisterPrimitive(scorer2);
 
-  G4PSTrackCounter* scorer3 = new G4PSTrackCounter(psName="TrackEnter",fCurrent_In);  
+  G4PSTrackCounter* scorer3 = new G4PSTrackCounter(psName="TrackEnter"
+                                                  ,fCurrent_In);  
   MFDet->RegisterPrimitive(scorer3);
 
   G4PSTrackLength* scorer4 = new G4PSTrackLength(psName="SL");  
@@ -450,3 +473,5 @@ void B01DetectorConstruction::SetSensitive(){
   MFDet->RegisterPrimitive(scorer8);
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

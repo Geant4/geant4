@@ -51,17 +51,23 @@
 #include "G4MaterialTable.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B01PhysicsList::B01PhysicsList():  G4VUserPhysicsList()
 {
-  paraWorldName.clear();
+  fParaWorldName.clear();
   SetVerboseLevel(1);
   
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B01PhysicsList::~B01PhysicsList()
 {
-  paraWorldName.clear();
+  fParaWorldName.clear();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B01PhysicsList::ConstructParticle()
 {
@@ -78,12 +84,16 @@ void B01PhysicsList::ConstructParticle()
   ConstructAllShortLiveds();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void B01PhysicsList::ConstructAllBosons()
 {
   // Construct all bosons
   G4BosonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B01PhysicsList::ConstructAllLeptons()
 {
@@ -92,12 +102,16 @@ void B01PhysicsList::ConstructAllLeptons()
   pConstructor.ConstructParticle();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void B01PhysicsList::ConstructAllMesons()
 {
   //  Construct all mesons
   G4MesonConstructor pConstructor;
   pConstructor.ConstructParticle();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B01PhysicsList::ConstructAllBaryons()
 {
@@ -106,6 +120,8 @@ void B01PhysicsList::ConstructAllBaryons()
   pConstructor.ConstructParticle();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void B01PhysicsList::ConstructAllIons()
 {
   //  Construct light ions
@@ -113,12 +129,16 @@ void B01PhysicsList::ConstructAllIons()
   pConstructor.ConstructParticle();  
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void B01PhysicsList::ConstructAllShortLiveds()
 {
   //  Construct  resonaces and quarks
   G4ShortLivedConstructor pConstructor;
   pConstructor.ConstructParticle();  
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B01PhysicsList::ConstructProcess()
 {
@@ -129,6 +149,8 @@ void B01PhysicsList::ConstructProcess()
   ConstructHad();
   ConstructGeneral();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -202,6 +224,8 @@ void B01PhysicsList::ConstructEM()
     }
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Hadron Processes
 
@@ -317,11 +341,13 @@ void B01PhysicsList::ConstructHad()
 
     
     // a no-cascade generator-precompound interaface
-    G4GeneratorPrecompoundInterface * theCascade = new G4GeneratorPrecompoundInterface;
+    G4GeneratorPrecompoundInterface * theCascade = 
+                                  new G4GeneratorPrecompoundInterface;
             theCascade->SetDeExcitation(thePreEquilib);  
         
     // here come the high energy parts
-    // the string model; still not quite according to design - Explicite use of the forseen interfaces 
+    // the string model; still not quite according to design - 
+    // Explicit use of the forseen interfaces 
     // will be tested and documented in this program by beta-02 at latest.
     G4VPartonStringModel * theStringModel;
     theStringModel = new G4FTFModel;
@@ -331,10 +357,12 @@ void B01PhysicsList::ConstructHad()
     theTheoModel->SetMaxEnergy(100*TeV);
 
       G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
-      G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
+      G4ExcitedStringDecay * theStringDecay = 
+                         new G4ExcitedStringDecay(theFragmentation);
       theStringModel->SetFragmentationModel(theStringDecay);
 
-// done with the generator model (most of the above is also available as default)
+// done with the generator model (most of the above is also available as 
+// default)
    G4HadronElasticProcess* theElasticProcess = 
                                     new G4HadronElasticProcess;
    G4LElastic* theElasticModel = new G4LElastic;
@@ -613,8 +641,12 @@ void B01PhysicsList::ConstructHad()
    }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void B01PhysicsList::ConstructLeptHad()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
 void B01PhysicsList::ConstructGeneral()
@@ -632,6 +664,8 @@ void B01PhysicsList::ConstructGeneral()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void B01PhysicsList::SetCuts()
 {
   if (verboseLevel >0)
@@ -644,14 +678,16 @@ void B01PhysicsList::SetCuts()
   SetCutsWithDefault();   
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4ParallelWorldScoringProcess.hh"
 void B01PhysicsList::AddScoringProcess(){
 
-  G4int npw = paraWorldName.size();
+  G4int npw = fParaWorldName.size();
   for ( G4int i = 0; i < npw; i++){
     G4ParallelWorldScoringProcess* theParallelWorldScoringProcess
       = new G4ParallelWorldScoringProcess("ParaWorldScoringProc");
-    theParallelWorldScoringProcess->SetParallelWorld(paraWorldName[i]);
+    theParallelWorldScoringProcess->SetParallelWorld(fParaWorldName[i]);
 
     theParticleIterator->reset();
     while( (*theParticleIterator)() ){
@@ -659,11 +695,16 @@ void B01PhysicsList::AddScoringProcess(){
       if ( !particle->IsShortLived() ){
         G4ProcessManager* pmanager = particle->GetProcessManager();
         pmanager->AddProcess(theParallelWorldScoringProcess);
-        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxAtRest);
-        pmanager->SetProcessOrdering(theParallelWorldScoringProcess,idxAlongStep,1);
-        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess,idxPostStep);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess
+                                          ,idxAtRest);
+        pmanager->SetProcessOrdering(theParallelWorldScoringProcess
+                                    ,idxAlongStep,1);
+        pmanager->SetProcessOrderingToLast(theParallelWorldScoringProcess
+                                          ,idxPostStep);
       }
     }
   }
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
