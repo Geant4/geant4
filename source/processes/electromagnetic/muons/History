@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 May 2013: V.Ivant (emmuons-V09-06-09)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel - fixed rare bug
+    in cross section computation - division by zero (bug report #1471)
+
 08 May 2013: V.Ivant (emmuons-V09-06-08)
 - G4MuPairProductionModel - A.Bogdanov provides improved algorithm
     for sampling of final state

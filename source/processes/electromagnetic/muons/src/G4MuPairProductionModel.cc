@@ -234,8 +234,11 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
   G4double ak2=1.0;
   G4double aaa = log(minPairEnergy);
   G4double bbb = log(cut);
+
   G4int    kkk = (G4int)((bbb-aaa)/ak1+ak2);
-  if (kkk > 8) kkk = 8;
+  if (kkk > 8)      { kkk = 8; }
+  else if (kkk < 1) { kkk = 1; }
+
   G4double hhh = (bbb-aaa)/(G4double)kkk;
   G4double x = aaa;
 

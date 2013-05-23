@@ -233,9 +233,11 @@ G4double G4MuBremsstrahlungModel::ComputMuBremLoss(G4double Z,
 
   G4double aaa = 0.;
   G4double bbb = vcut;
-  if(vcut>vmax) bbb=vmax ;
-  G4int kkk = (G4int)((bbb-aaa)/ak1)+k2 ;
-  G4double hhh=(bbb-aaa)/float(kkk) ;
+  if(vcut>vmax) { bbb = vmax; }
+  G4int kkk = (G4int)((bbb-aaa)/ak1)+k2;
+  if(kkk < 1) { kkk = 1; }
+
+  G4double hhh=(bbb-aaa)/G4double(kkk);
 
   G4double aa = aaa;
   for(G4int l=0; l<kkk; l++)
