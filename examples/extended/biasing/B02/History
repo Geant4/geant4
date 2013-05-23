@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 22nd, 2013 A.Howard - B02-V09-06-02
+- Applied coding guidelines for extended examples
+
 Dec 17th, 2012 A.Howard - B02-V09-06-01
 - Correctly removed reference to obsolete G4CellScorer classes
 

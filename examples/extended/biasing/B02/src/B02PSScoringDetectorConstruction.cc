@@ -53,6 +53,7 @@
 #include "G4PSTrackLength.hh"
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B02PSScoringDetectorConstruction::B02PSScoringDetectorConstruction(G4String worldName)
   :G4VUserParallelWorld(worldName),fLogicalVolumeVector()
@@ -60,10 +61,14 @@ B02PSScoringDetectorConstruction::B02PSScoringDetectorConstruction(G4String worl
   //  Construct();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B02PSScoringDetectorConstruction::~B02PSScoringDetectorConstruction()
 {
   fLogicalVolumeVector.clear();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B02PSScoringDetectorConstruction::Construct()
 {  
@@ -72,8 +77,8 @@ void B02PSScoringDetectorConstruction::Construct()
 
   //GetWorld methods create a clone of the mass world to the parallel world (!)
   // via the transportation manager
-  ghostWorld = GetWorld();
-  G4LogicalVolume* worldLogical = ghostWorld->GetLogicalVolume();
+  fGhostWorld = GetWorld();
+  G4LogicalVolume* worldLogical = fGhostWorld->GetLogicalVolume();
   fLogicalVolumeVector.push_back(worldLogical);
 
   G4String name("none");
@@ -89,7 +94,7 @@ void B02PSScoringDetectorConstruction::Construct()
                    kStateGas,temperature,pressure);
 
 
-  //fPVolumeStore.AddPVolume(G4GeometryCell(*ghostWorld, 0));
+  //fPVolumeStore.AddPVolume(G4GeometryCell(*fGhostWorld, 0));
 
 
 
@@ -175,6 +180,8 @@ void B02PSScoringDetectorConstruction::Construct()
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4String B02PSScoringDetectorConstruction::GetCellName(G4int i) {
   std::ostringstream os;
   os << "cell_";
@@ -186,14 +193,19 @@ G4String B02PSScoringDetectorConstruction::GetCellName(G4int i) {
   return name;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4VPhysicalVolume *B02PSScoringDetectorConstruction::GetWorldVolume() {
-   return ghostWorld;
+   return fGhostWorld;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume &B02PSScoringDetectorConstruction::GetWorldVolumeAddress() const{
-  return *ghostWorld;
+  return *fGhostWorld;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B02PSScoringDetectorConstruction::SetSensitive(){
 
@@ -282,3 +294,5 @@ void B02PSScoringDetectorConstruction::SetSensitive(){
   MFDet->RegisterPrimitive(scorer8);
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

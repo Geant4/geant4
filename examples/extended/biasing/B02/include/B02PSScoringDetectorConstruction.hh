@@ -67,7 +67,7 @@ private:
   //B02PVolumeStore fPVolumeStore;
   G4VPhysicalVolume *fWorldVolume;
 
-  G4VPhysicalVolume* ghostWorld;
+  G4VPhysicalVolume* fGhostWorld;
 
   std::vector< G4LogicalVolume* > fLogicalVolumeVector;
 

@@ -42,6 +42,9 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
 {  
   /////////////////////////////
@@ -174,3 +177,5 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   
   return score_worldCylinder_phys;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

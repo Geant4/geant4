@@ -63,11 +63,11 @@ public:
   // Access methods for scoring information.
   // - Number of HitsMap for this RUN. 
   //   This is equal to number of collections.
-  G4int GetNumberOfHitsMap() const {return theRunMap.size();}
+  G4int GetNumberOfHitsMap() const {return fRunMap.size();}
   // - Get HitsMap of this RUN.
   //   by sequential number, by multifucntional name and collection name,
   //   and by collection name with full path.
-  G4THitsMap<G4double>* GetHitsMap(G4int i){return theRunMap[i];}
+  G4THitsMap<G4double>* GetHitsMap(G4int i){return fRunMap[i];}
   G4THitsMap<G4double>* GetHitsMap(const G4String& detName, 
                                   const G4String& colName);
   G4THitsMap<G4double>* GetHitsMap(const G4String& fullName);
@@ -76,9 +76,9 @@ public:
   void DumpAllScorer();
 
 private:
-  std::vector<G4String> theCollName;
-  std::vector<G4int> theCollID;
-  std::vector<G4THitsMap<G4double>*> theRunMap;
+  std::vector<G4String> fCollName;
+  std::vector<G4int> fCollID;
+  std::vector<G4THitsMap<G4double>*> fRunMap;
 };
 
 //

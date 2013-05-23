@@ -57,12 +57,17 @@
 #include "G4PSTrackCounter.hh"
 #include "G4PSTrackLength.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B02DetectorConstruction::B02DetectorConstruction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B02DetectorConstruction::~B02DetectorConstruction()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* B02DetectorConstruction::Construct()
 {
@@ -168,9 +173,8 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
     new G4LogicalVolume(worldCylinder, Galactic, "worldCylinder_log");
 
   name = "shieldWorld";
-  G4VPhysicalVolume *pWorldVolume = new 
-    G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
-                  name, 0, false, 0);
+  fWorldVolume = new G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log
+                                  ,name, 0, false, 0);
 
 
   // creating 18 slobs of 10 cm thick concrete
@@ -215,15 +219,19 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
                     0);
   
 
-  return pWorldVolume;
+  return fWorldVolume;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume *B02DetectorConstruction::GetWorldVolume() {
-   return pWorldVolume;
+   return fWorldVolume;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume &B02DetectorConstruction::GetWorldVolumeAddress() const{
-  return *pWorldVolume;
+  return *fWorldVolume;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

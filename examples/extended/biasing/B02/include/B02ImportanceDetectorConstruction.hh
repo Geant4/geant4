@@ -71,7 +71,7 @@ private:
 
   //  G4VPhysicalVolume *fWorldVolume;
 
-  G4VPhysicalVolume* ghostWorld;
+  G4VPhysicalVolume* fGhostWorld;
 
 };
 

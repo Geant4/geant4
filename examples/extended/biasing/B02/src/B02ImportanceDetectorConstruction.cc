@@ -53,6 +53,7 @@
 #include "G4PSTrackLength.hh"
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B02ImportanceDetectorConstruction::B02ImportanceDetectorConstruction(G4String worldName) 
 :G4VUserParallelWorld(worldName),fLogicalVolumeVector()
@@ -60,10 +61,14 @@ B02ImportanceDetectorConstruction::B02ImportanceDetectorConstruction(G4String wo
   //  Construct();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B02ImportanceDetectorConstruction::~B02ImportanceDetectorConstruction()
 {
   fLogicalVolumeVector.clear();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B02ImportanceDetectorConstruction::Construct()
 {  
@@ -71,8 +76,8 @@ void B02ImportanceDetectorConstruction::Construct()
 
   //GetWorld methods create a clone of the mass world to the parallel world (!)
   // via the transportation manager
-  ghostWorld = GetWorld();
-  G4LogicalVolume* worldLogical = ghostWorld->GetLogicalVolume();
+  fGhostWorld = GetWorld();
+  G4LogicalVolume* worldLogical = fGhostWorld->GetLogicalVolume();
   fLogicalVolumeVector.push_back(worldLogical);
 
   G4String name("none");
@@ -89,7 +94,7 @@ void B02ImportanceDetectorConstruction::Construct()
 
 
   //  fPVolumeStore.AddPVolume(G4GeometryCell(*pWorldVolume, 0));
-  fPVolumeStore.AddPVolume(G4GeometryCell(*ghostWorld, 0));
+  fPVolumeStore.AddPVolume(G4GeometryCell(*fGhostWorld, 0));
 
 
 
@@ -187,17 +192,21 @@ void B02ImportanceDetectorConstruction::Construct()
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 const G4VPhysicalVolume &B02ImportanceDetectorConstruction::
 GetPhysicalVolumeByName(const G4String& name) const {
   return *fPVolumeStore.GetPVolume(name);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String B02ImportanceDetectorConstruction::ListPhysNamesAsG4String(){
   G4String names(fPVolumeStore.GetPNames());
   return names;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String B02ImportanceDetectorConstruction::GetCellName(G4int i) {
   std::ostringstream os;
@@ -210,6 +219,8 @@ G4String B02ImportanceDetectorConstruction::GetCellName(G4int i) {
   return name;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4GeometryCell B02ImportanceDetectorConstruction::GetGeometryCell(G4int i){
   G4String name(GetCellName(i));
   const G4VPhysicalVolume *p=0;
@@ -218,20 +229,25 @@ G4GeometryCell B02ImportanceDetectorConstruction::GetGeometryCell(G4int i){
     return G4GeometryCell(*p,0);
   }
   else {
-    G4cout << "B02ImportanceDetectorConstruction::GetGeometryCell: couldn't get G4GeometryCell" << G4endl;
-    return G4GeometryCell(*ghostWorld,-2);
+    G4cout << "B02ImportanceDetectorConstruction::GetGeometryCell: " << G4endl
+           << " couldn't get G4GeometryCell" << G4endl;
+    return G4GeometryCell(*fGhostWorld,-2);
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume &B02ImportanceDetectorConstruction::GetWorldVolumeAddress() const{
-   return *ghostWorld;
+   return *fGhostWorld;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume *B02ImportanceDetectorConstruction::GetWorldVolume() {
-  return ghostWorld;
+  return fGhostWorld;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B02ImportanceDetectorConstruction::SetSensitive(){
 
@@ -276,7 +292,8 @@ void B02ImportanceDetectorConstruction::SetSensitive(){
   MFDet->SetFilter(neutronFilter);
 
 
-  for (std::vector<G4LogicalVolume *>::iterator it =  fLogicalVolumeVector.begin();
+  for (std::vector<G4LogicalVolume *>::iterator it =  
+                                                fLogicalVolumeVector.begin();
        it != fLogicalVolumeVector.end(); it++){
       (*it)->SetSensitiveDetector(MFDet);
   }
@@ -294,7 +311,8 @@ void B02ImportanceDetectorConstruction::SetSensitive(){
   G4PSPopulation*   scorer2 = new G4PSPopulation(psName="Population");  
   MFDet->RegisterPrimitive(scorer2);
 
-  G4PSTrackCounter* scorer3 = new G4PSTrackCounter(psName="TrackEnter",fCurrent_In);  
+  G4PSTrackCounter* scorer3 = 
+                new G4PSTrackCounter(psName="TrackEnter",fCurrent_In);  
   MFDet->RegisterPrimitive(scorer3);
 
   G4PSTrackLength* scorer4 = new G4PSTrackLength(psName="SL");  
@@ -321,3 +339,5 @@ void B02ImportanceDetectorConstruction::SetSensitive(){
   MFDet->RegisterPrimitive(scorer8);
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

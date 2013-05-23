@@ -56,7 +56,7 @@ public:
 
 private:
 
-  G4VPhysicalVolume* pWorldVolume;
+  G4VPhysicalVolume* fWorldVolume;
 
 
 };
