@@ -62,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITTransportation.icc
         G4ITTransportationManager.hh
         G4ITType.hh
+	G4KDMap.hh
         G4KDNode.hh
         G4KDTree.hh
         G4KDTreeResult.hh
@@ -97,6 +98,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITTransportation.cc
         G4ITTransportationManager.cc
         G4ITType.cc
+	G4KDMap.cc
         G4KDNode.cc
         G4KDTree.cc
         G4KDTreeResult.cc

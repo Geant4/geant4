@@ -42,6 +42,8 @@
 #include <vector>
 #include "G4KDTreeResult.hh"
 
+class G4KDMap;
+
 //__________________________________
 // Methods to act on kdnode
 // Methods defined in G4KDNode.cc :
@@ -64,6 +66,7 @@ class G4KDTree
     struct HyperRect *fRect;
     void (*fDestr)(void*);
     int fNbNodes;
+    G4KDMap* fKDMap;
 
 protected :
     G4KDNode *fRoot;
@@ -79,6 +82,10 @@ public :
 
     int GetNbNodes()    { return fNbNodes;  }
     G4KDNode* GetRoot() { return fRoot ;    }
+
+    G4KDNode* InsertMap(const double& x, const double& y, const double& z, void *data);
+    G4KDNode* InsertMap(const double *pos, void *data);
+    void Build();
 
     // Insert and attache the data to a node at the specified position
     // In return, it gives you the corresponding node

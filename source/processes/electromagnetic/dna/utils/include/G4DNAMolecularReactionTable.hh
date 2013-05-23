@@ -112,7 +112,8 @@ class G4DNAMolecularReactionTable : public G4ITReactionTable
 {
 protected:
     G4DNAMolecularReactionTable();
-    static G4ThreadLocal G4DNAMolecularReactionTable* fInstance;
+    static G4DNAMolecularReactionTable* fInstance;
+//    static G4ThreadLocal G4DNAMolecularReactionTable* fInstance;
 
 public :
     static G4DNAMolecularReactionTable* GetReactionTable();

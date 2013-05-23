@@ -130,7 +130,11 @@ inline
 void G4ITNavigator::ResetStackAndState()
 {
     G4cerr << "G4ITNavigator::ResetStackAndState not supported" << G4endl;
-    exit(-1);
+
+    G4ExceptionDescription exceptionDescription;
+    exceptionDescription << "G4ITNavigator::ResetStackAndState not supported";
+    G4Exception((G4String("G4Navigator")+G4String(__FUNCTION__)).c_str(),"ITNavigator001,FatalException,exceptionDescription);
+
     fpNavigatorState->fHistory.Reset();
     ResetState();
     //  fpNavigatorState->Reset();
