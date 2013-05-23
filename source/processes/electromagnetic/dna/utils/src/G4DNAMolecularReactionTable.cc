@@ -47,8 +47,7 @@
 
 using namespace std;
 
-G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::fInstance(0);
-//G4ThreadLocal G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::fInstance(0);
+G4ThreadLocal G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::fInstance(0);
 
 G4DNAMolecularReactionData::G4DNAMolecularReactionData():
     fReactive1(),fReactive2(),

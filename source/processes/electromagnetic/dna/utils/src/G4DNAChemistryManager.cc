@@ -315,11 +315,3 @@ void G4DNAChemistryManager::PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecu
         molecule = 0;
     }
 }
-
-void G4DNAChemistryManager::AddEmptyLineInOuputFile()
-{
-    if(fWriteFile)
-    {
-        fOutput << G4endl;
-    }
-}

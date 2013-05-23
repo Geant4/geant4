@@ -53,8 +53,6 @@ public:
     G4ITTrackingInteractivity(){;}
     virtual ~G4ITTrackingInteractivity(){;}
 
-    virtual void Initialize(){;}
-
     virtual void StartTracking(G4Track*){;}
     virtual void AppendStep(G4Track* /*track*/, G4Step* /*step*/){;}
     virtual void EndTracking(G4Track*){;}

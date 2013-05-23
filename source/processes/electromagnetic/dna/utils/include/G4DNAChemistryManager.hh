@@ -135,10 +135,6 @@ public:
       */
     void PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecule,
                                           const G4Track* /*theIncomingTrack*/);
-
-
-    void AddEmptyLineInOuputFile();
-
 protected :
     G4DNAWaterExcitationStructure* GetExcitationLevel();
     G4DNAWaterIonisationStructure* GetIonisationLevel();

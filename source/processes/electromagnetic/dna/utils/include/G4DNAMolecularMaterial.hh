@@ -63,8 +63,7 @@ public:
     const std::vector<double>* GetNumMolPerVolTableFor(const G4Material*) const;
 
 protected :
-    static G4DNAMolecularMaterial* fInstance;
-//    static G4ThreadLocal G4DNAMolecularMaterial* fInstance;
+    static G4ThreadLocal G4DNAMolecularMaterial* fInstance;
     G4DNAMolecularMaterial();
     G4DNAMolecularMaterial(const G4DNAMolecularMaterial& right);
     G4DNAMolecularMaterial& operator=(const G4DNAMolecularMaterial&);

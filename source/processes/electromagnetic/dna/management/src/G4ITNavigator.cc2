@@ -658,6 +658,7 @@ void G4ITNavigator::CheckNavigatorState() const
 
         G4Exception("G4ITNavigator::CheckNavigatorStateIsValid",
                     "NavigatorStateNotValid",FatalException,exceptionDescription);
+        exit(-1);
         return;
     }
 }
@@ -683,6 +684,7 @@ void G4ITNavigator::NewNavigatorState()
 
         G4Exception("G4ITNavigator::NewNavigatorState",
                     "NoWorldVolume",FatalException,exceptionDescription);
+        exit(-1);
         return;
     }
 
@@ -702,6 +704,7 @@ G4VPhysicalVolume* G4ITNavigator::NewNavigatorStateAndLocate(const G4ThreeVector
 
         G4Exception("G4ITNavigator::NewNavigatorStateAndLocate",
                     "NoWorldVolume",FatalException,exceptionDescription);
+        exit(-1);
         return 0;
     }
 
