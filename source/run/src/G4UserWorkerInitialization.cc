@@ -28,8 +28,6 @@
 #include "G4UImanager.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4AutoLock.hh"
-#include "G4ofstreamDestination.hh"
-#include "G4coutIdDestination.hh"
 #include <sstream>
 
 G4ThreadLocal G4WorkerThread* G4UserWorkerInitialization::wThreadContext = 0;
@@ -77,35 +75,7 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //Initliazie per-thread stream-output
     //The following line is needed before we actually do IO initialization
     //becasue the constructor of UI manager resets the io destination.
-    G4UImanager::GetUIpointer();
-    //This creaetes the per-thread instances of cout and cerr buffe3rs
-    G4iosInitialization();
-    //This creates the output on file
-    G4coutDestination *threadcout = 0;
-    G4coutDestination *threadcerr = 0;
-    if (! wThreadContext->GetOutputFileName().empty() )
-    {
-        threadcout = new G4CoutToFile;
-        std::stringstream fn;
-        fn << "G4Worker" <<wThreadContext->GetThreadId()<<"_"<< wThreadContext->GetOutputFileName();
-        static_cast<G4CoutToFile*>(threadcout)->SetFileName(fn.str() , wThreadContext->GetOutputFileAppendFlag() );
-    }
-    else
-    {
-        //G4coutIdDestination gets both cout/cerr
-        threadcout = new G4coutIdDestination( wThreadContext->GetThreadId() );
-        static_cast<G4coutIdDestination*>(threadcout)->EnableBuffering( wThreadContext->GetOutputUseBuffer() );
-    }
-    if (! wThreadContext->GetOutputErrFileName().empty() )
-    {
-        //If this is created, it will overwrite what was set before for cout
-        threadcerr = new G4CerrToFile;
-        std::stringstream fn;
-        fn << "G4Worker" <<wThreadContext->GetThreadId()<<"_"<< wThreadContext->GetOutputErrFileName();
-        static_cast<G4CerrToFile*>(threadcerr)->SetFileName(fn.str() , wThreadContext->GetOutputErrFileAppendFlag() );
-        //Force open of file: so the file always exists even if no message is sent there
-        static_cast<G4CerrToFile*>(threadcerr)->Open();
-    }
+    G4UImanager::GetUIpointer()->SetUpForAThread(wThreadContext->GetThreadId());
     
     //================
     //Step-1:
@@ -141,12 +111,12 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //Step-4:
     //================
     //Call user method to define user actions and all other stuff
-    //Note: Even if thiscontext is per-thread object, the UserWorkerInitialization
+    //Note: Even if this context is per-thread object, the UserWorkerInitialization
     // object is shared
     if(masterRM->GetUserActionInitialization())
     { masterRM->GetUserActionInitialization()->Build(); }
     masterRM->GetUserWorkerInitialization()->WorkerStart();
-    //Now initialize run manager
+    //Now initialize worker run manager
     wrm->Initialize();
     
     //================
@@ -165,7 +135,7 @@ void* G4UserWorkerInitialization::StartThread( void* context )
             for ( std::vector<G4String>::const_iterator it = cmds.begin()
                  ; it != cmds.end() ; ++it )
             {
-                std::cout<<"AAA"<<*it<<std::endl;
+/////////                std::cout<<"AAA"<<*it<<std::endl;
                 uimgr->ApplyCommand(*it);
             }
             //TODO: when /run/beamOn is not passed, do it here!
@@ -178,8 +148,9 @@ void* G4UserWorkerInitialization::StartThread( void* context )
         else
         {
             G4ExceptionDescription d;
-            d<<"Cannot continue, this worker has been requested an unknwon action: "<<nextAction<<" expecting: ENDWORKER(=)"
-            <<G4MTRunManager::ENDWORKER<<") or NEXTITERATION(="<<G4MTRunManager::NEXTITERATION<<")";
+            d<<"Cannot continue, this worker has been requested an unknwon action: "
+             <<nextAction<<" expecting: ENDWORKER(=)"
+             <<G4MTRunManager::ENDWORKER<<") or NEXTITERATION(="<<G4MTRunManager::NEXTITERATION<<")";
             G4Exception("G4WorkerInitialization::WorkerStart","Run0035",FatalException,d);
         }
         //Now wait for master thread to signal new action to be performed
@@ -197,9 +168,6 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //G4cout<<"Thread ID:"<<wThreadContext->GetThreadId()<<" WorkerRunManager Pointer: "<<wrm<<" PID:"<<wThreadContext->pid<<G4endl;///AAADEBUG
     delete wrm;
 
-    if ( threadcout ) delete threadcout;
-    if ( threadcerr ) delete threadcerr;
-    G4iosFinalization();
     return static_cast<void*>(0);
 }
 

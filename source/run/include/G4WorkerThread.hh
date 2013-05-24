@@ -65,15 +65,6 @@ public:
     static void BuildGeometryAndPhysicsVector();
     static void DestroyGeometryAndPhysicsVector();
 
-    void SetOutputFileName( const G4String& fileName , G4bool append = true);
-    G4String GetOutputFileName() const;
-    void SetOutputErrFileName( const G4String& fileName , G4bool append = true);
-    G4String GetOutputErrFileName() const;
-    G4bool GetOutputFileAppendFlag() const;
-    G4bool GetOutputErrFileAppendFlag() const;
-    void SetOutputUseBuffer( G4bool flag = true );
-    G4bool GetOutputUseBuffer() const;
-    
 private:
     //G4MTRunManager* masterRunManager;
     //G4WorkerRunManager* workerRunManager;
@@ -81,11 +72,6 @@ private:
     G4int threadId;
     G4int numThreads;
     G4int totalNumEvents;
-    G4String outputFileName;
-    G4bool outputFileAppend;
-    G4String outputErrFileName;
-    G4bool outputErrFileAppend;
-    G4bool outputUseBuffer;
     
 };
 #endif //G4WorkerThread_hh

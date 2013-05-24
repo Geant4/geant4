@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 23rd, 2013, M. Asai (run-V09-06-39)
+- Move thread-local cout/cerr handling to intercoms category.
+- UI commands in /run/cout/ directory are moved to /control/cout/.
+ 
 May 21th, 2013, A. Dotti (run-V09-06-38)
 - New UI command /random/saveEachEventFlag if true save random
   seed for each event in a file with unique name: runXXXevtYYY.rndm

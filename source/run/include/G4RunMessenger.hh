@@ -108,11 +108,6 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   constScoreCmd;
 
     G4MaterialScanner *         materialScanner;
-    
-    G4UIdirectory*              coutDir;
-    G4UIcommand*                coutFileNameCmd;
-    G4UIcommand*                cerrFileNameCmd;
-    G4UIcmdWithABool*           bufferCoutCmd;
 };
 
 #endif

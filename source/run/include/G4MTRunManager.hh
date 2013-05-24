@@ -184,19 +184,6 @@ public:
 private:
     WorkerActionRequest nextActionRequest;
     void NewActionRequest( WorkerActionRequest newRequest );
-private:
-    //Handling of cout/cerr from threads
-    G4String workerG4coutFileName;
-    G4String workerG4cerrFileName;
-    G4bool workerG4coutAppendFlag;
-    G4bool workerG4cerrAppendFlag;
-    G4bool workerG4coutcerrBufferFlag;
-public:
-    void SetWorkerG4coutFileName(const G4String& fn) { workerG4coutFileName = fn; }
-    void SetWorkerG4cerrFileName(const G4String& fn) { workerG4cerrFileName = fn; }
-    void SetWorkerG4coutAppendFlag(const G4bool& flag ) { workerG4coutAppendFlag = flag; }
-    void SetWorkerG4cerrAppendFlag(const G4bool& flag ) { workerG4cerrAppendFlag = flag; }
-    void SetWorkerG4coutcerrBuffer( const G4bool& flag ) { workerG4coutcerrBufferFlag = flag; }
 };
 
 #endif //G4MTRunManager_h

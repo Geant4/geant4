@@ -73,11 +73,7 @@ G4RunManagerKernel* G4MTRunManager::GetMasterRunManagerKernel()
 
 G4MTRunManager::G4MTRunManager() : G4RunManager(false) ,
     nworkers(2),
-    masterRNGEngine(0),
-    workerG4coutFileName(""),
-    workerG4cerrFileName(""),
-    workerG4coutAppendFlag(false),
-    workerG4cerrAppendFlag(false)
+    masterRNGEngine(0)
 {
     if ( masterRM )
     {
@@ -188,7 +184,6 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     else
     { n_select_msg = -1; }
 
-    //G4UImanager::GetUIpointer()->IgnoreCmdNotFound(false);
     //User initialize seeds
     
     //If user did not implement InitializeSeeds, use default: 2 seeds per event number
@@ -201,11 +196,7 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     
     //Now initialize workers. Check if user defined a WorkerInitialization
     if ( userWorkerInitialization == 0 )
-    {
-////        G4Exception("G4MTRunManager::InitializeEventLoop(G4int,const char*,G4int)",
-////                    "Run0035",FatalException,"No G4VUserWorkerInitialization found");
-      userWorkerInitialization = new G4UserWorkerInitialization();
-    }
+    { userWorkerInitialization = new G4UserWorkerInitialization(); }
     
     //Prepare UI commands for threads
     PrepareCommandsStack();
@@ -215,24 +206,15 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     //number of threads: threads area created once
     //and that's all
     if ( threads.size() == 0 ) {
-    for ( G4int nw = 0 ; nw<nworkers; ++nw) {
+      for ( G4int nw = 0 ; nw<nworkers; ++nw) {
         //Create a new worker and remember it
         G4WorkerThread* context = new G4WorkerThread;
         context->SetNumberThreads(nworkers);
         context->SetNumberEvents(n_events);
         context->SetThreadId(nw);
-        if (! workerG4coutFileName.empty() )
-        {
-            context->SetOutputFileName(workerG4coutFileName,workerG4coutAppendFlag);
-        }
-        if (! workerG4cerrFileName.empty() )
-        {
-            context->SetOutputErrFileName(workerG4cerrFileName,workerG4cerrAppendFlag);
-        }
-        context->SetOutputUseBuffer( workerG4coutcerrBufferFlag );
         G4Thread* thread = userWorkerInitialization->CreateAndStartWorker(context);
         threads.push_back(thread);
-    }
+      }
     }
     //Signal to threads they can start a new run
     NewActionRequest(NEXTITERATION);
@@ -273,34 +255,13 @@ void G4MTRunManager::InitializeSeedsQueue( G4int ns )
     seeds = new long[ns];
     seedsnum = 0;
 }
+
 void G4MTRunManager::ConstructScoringWorlds()
 {
     masterScM = G4ScoringManager::GetScoringManagerIfExist();
     //Call base class stuff...
     G4RunManager::ConstructScoringWorlds();
     
-/*************************************************************************************
-
-    //TODO: Understand with Makoto if mapping index<->Pworld is really needed here
-    //Now need to remember the master scoring manager, to give access
-    //to it to Workers
-    masterWorlds.clear();
-    if ( masterScM ) {
-        G4int counter = 0;
-        G4int nPar = masterScM->GetNumberOfMesh();
-        for ( G4int iw = 0 ; iw<nPar ; ++iw)
-        {
-            G4VPhysicalVolume* pWorld = G4TransportationManager::GetTransportationManager()
-                ->IsWorldExisting(masterScM->GetWorldName(iw));
-            if (!pWorld)
-            {
-                addWorld(counter++,pWorld);
-            }
-        }
-    }
-
-****************************************************************************************/
-
     masterWorlds.clear();
     size_t nWorlds = G4TransportationManager::GetTransportationManager()->GetNoWorlds();
     std::vector<G4VPhysicalVolume*>::iterator itrW
