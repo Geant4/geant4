@@ -38,45 +38,9 @@
 #include "G4INCLConfig.hh"
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLParticleTable.hh"
+#include "G4INCLGlobals.hh"
 
 namespace G4INCL {
-
-#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
-  namespace {
-    void wrap(std::string &str, const size_t lineLength=78, const std::string separators=" \t") {
-      const size_t len = str.size();
-      size_t startPos = 0;
-      while(len-startPos > lineLength) {
-        const size_t nextNewline = str.find('\n', startPos);
-        if(nextNewline!=std::string::npos && nextNewline-startPos<=lineLength)
-          startPos = nextNewline+1;
-        else {
-          size_t lastSeparator = str.find_last_of(separators, startPos+lineLength);
-          if(lastSeparator!=std::string::npos)
-            str[lastSeparator] = '\n';
-          startPos = lastSeparator+1;
-        }
-      }
-    }
-
-    void replaceAll(std::string &str, const std::string &from, const std::string &to) {
-      if(from.empty())
-        return;
-      size_t start_pos = 0;
-      while((start_pos = str.find(from, start_pos)) != std::string::npos) {
-        str.replace(start_pos, from.length(), to);
-        start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
-      }
-    }
-
-    void replace(std::string &str, const std::string &from, const std::string &to) {
-      size_t start_pos = str.find(from);
-      if(start_pos == std::string::npos)
-        return;
-      str.replace(start_pos, from.length(), to);
-    }
-  }
-#endif // defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
 
   Config::Config()
   {
@@ -248,6 +212,9 @@ namespace G4INCL {
         ("separation-energies", po::value<std::string>(&separationEnergyString)->default_value("INCL"), "how to assign the separation energies of the INCL nucleus:\n  \tINCL (default)\n  \treal\n  \treal-light")
         ("fermi-momentum", po::value<std::string>(&fermiMomentumString)->default_value("constant"), "how to assign the Fermi momentum of the INCL nucleus:\n  \tconstant (default)\n  \tconstant-light\n  \tmass-dependent")
         ("cutNN", po::value<G4double>(&cutNN)->default_value(1910.), "minimum CM energy for nucleon-nucleon collisions, in MeV. Default: 1910.")
+        ("rp-correlation", po::value<G4double>(&rpCorrelationCoefficient)->default_value(1.), "correlation coefficient for the r-p correlation. Default: 1 (full correlation).")
+        ("neutron-skin-thickness", po::value<G4double>(&neutronSkinThickness)->default_value(0.), "thickness of the neutron skin, in fm. Default: 0.")
+        ("neutron-skin-additional-diffuseness", po::value<G4double>(&neutronSkinAdditionalDiffuseness)->default_value(0.), "additional diffuseness of the neutron density distribution (with respect to the proton diffuseness), in fm. Default: 0.")
         ;
 
       // Select options allowed on the command line
@@ -673,6 +640,7 @@ namespace G4INCL {
             ParticleTable::getShortName(projectileSpecies) << "_" <<
             ParticleTable::getShortName(targetSpecies) << "_" <<
             projectileKineticEnergy;
+          outputFileRootStream.precision(2);
 
           // Append suffixes to the output file root for each explicitly specified CLI option
           typedef po::variables_map::const_iterator BPOVMIter;
@@ -686,6 +654,7 @@ namespace G4INCL {
                && name!="random-seed-1"
                && name!="random-seed-2"
                && name!="verbosity"
+               && name!="verbose-event"
                && name!="suffix"
 #ifdef INCL_ROOT_USE
                && name!="root-selection"
@@ -791,6 +760,12 @@ namespace G4INCL {
       fermiMomentumString = "constant";
       fermiMomentumType = ConstantFermiMomentum;
       cutNN = 1910.;
+#ifdef INCL_DEEXCITATION_FERMI_BREAKUP
+      maxMassFermiBreakUp = 18;
+#endif
+      rpCorrelationCoefficient = 1.;
+      neutronSkinThickness = 0.;
+      neutronSkinAdditionalDiffuseness = 0.;
   }
 
   std::string Config::summary() {
@@ -842,8 +817,8 @@ namespace G4INCL {
     OptVector const &anOptVect = aDesc.options();
     for(OptIter opt=anOptVect.begin(); opt!=anOptVect.end(); ++opt) {
       std::string description = (*opt)->description();
-      wrap(description);
-      replaceAll(description, "\n", "\n# ");
+      String::wrap(description);
+      String::replaceAll(description, "\n", "\n# ");
       ss << "\n# " << description << std::endl;
       const std::string &name = (*opt)->long_name();
       ss << name << " = ";

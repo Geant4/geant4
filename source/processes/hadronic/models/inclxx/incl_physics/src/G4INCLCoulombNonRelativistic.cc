@@ -125,7 +125,7 @@ namespace G4INCL {
     const G4double theMinimumDistance = minimumDistance(p, kinE, n);
     G4double rMax = n->getUniverseRadius();
     if(p.theType == Composite)
-      rMax +=  2.*ParticleTable::getNuclearRadius(p.theA, p.theZ);
+      rMax +=  2.*ParticleTable::getLargestNuclearRadius(p.theA, p.theZ);
     const G4double theMaxImpactParameterSquared = rMax*(rMax-theMinimumDistance);
     if(theMaxImpactParameterSquared<=0.)
       return 0.;
@@ -217,7 +217,7 @@ namespace G4INCL {
         radius = PhysicalConstants::eSquared*Zp*Zt/theShenBarrier;
       }
       if(radius<=0.) {
-        radius = ParticleTable::getNuclearRadius(Ap,Zp) + ParticleTable::getNuclearRadius(At, Zt);
+        radius = ParticleTable::getLargestNuclearRadius(Ap,Zp) + ParticleTable::getLargestNuclearRadius(At, Zt);
         ERROR("Negative Coulomb radius! Using the sum of nuclear radii = " << radius << std::endl);
       }
       DEBUG("Coulomb radius for particle "

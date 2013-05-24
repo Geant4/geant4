@@ -45,7 +45,7 @@ namespace G4INCL {
     theA(A),
     theZ(Z),
     theMaximumRadius(std::min((*rpCorrelationTableProton)(1.), (*rpCorrelationTableProton)(1.))),
-    theNuclearRadius(ParticleTable::getNuclearRadius(theA,theZ))
+    theProtonNuclearRadius(ParticleTable::getNuclearRadius(Proton,theA,theZ))
   {
     std::fill(rFromP, rFromP + UnknownParticle, static_cast<InverseInterpolationTable*>(NULL));
     rFromP[Proton] = rpCorrelationTableProton;
@@ -105,7 +105,7 @@ namespace G4INCL {
     theA(rhs.theA),
     theZ(rhs.theZ),
     theMaximumRadius(rhs.theMaximumRadius),
-    theNuclearRadius(rhs.theNuclearRadius)
+    theProtonNuclearRadius(rhs.theProtonNuclearRadius)
   {
     // rFromP is owned by NuclearDensityFactory, so shallow copy is sufficient
     std::fill(rFromP, rFromP + UnknownParticle, static_cast<InverseInterpolationTable*>(NULL));
@@ -136,7 +136,7 @@ namespace G4INCL {
     std::swap(theA, rhs.theA);
     std::swap(theZ, rhs.theZ);
     std::swap(theMaximumRadius, rhs.theMaximumRadius);
-    std::swap(theNuclearRadius, rhs.theNuclearRadius);
+    std::swap(theProtonNuclearRadius, rhs.theProtonNuclearRadius);
     std::swap_ranges(transmissionRadius, transmissionRadius+UnknownParticle, rhs.transmissionRadius);
     std::swap(rFromP[Proton], rhs.rFromP[Proton]);
     std::swap(rFromP[Neutron], rhs.rFromP[Neutron]);
@@ -154,15 +154,15 @@ namespace G4INCL {
 
   void NuclearDensity::initializeTransmissionRadii() {
     const G4double theProtonRadius = 0.88; // fm
-    const G4double theProtonTransmissionRadius = theNuclearRadius + theProtonRadius;
+    const G4double theProtonTransmissionRadius = theProtonNuclearRadius + theProtonRadius;
 
     transmissionRadius[Proton] = theProtonTransmissionRadius;
-    transmissionRadius[PiPlus] = theNuclearRadius;
-    transmissionRadius[PiMinus] = theNuclearRadius;
+    transmissionRadius[PiPlus] = theProtonNuclearRadius;
+    transmissionRadius[PiMinus] = theProtonNuclearRadius;
     transmissionRadius[DeltaPlusPlus] = theProtonTransmissionRadius;
     transmissionRadius[DeltaPlus] = theProtonTransmissionRadius;
     transmissionRadius[DeltaMinus] = theProtonTransmissionRadius;
-    transmissionRadius[Composite] = theNuclearRadius;
+    transmissionRadius[Composite] = theProtonNuclearRadius;
     // transmission radii for neutral particles intentionally left uninitialised
   }
 

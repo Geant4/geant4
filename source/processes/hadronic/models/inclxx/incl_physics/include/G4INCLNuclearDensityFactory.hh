@@ -54,8 +54,6 @@ namespace G4INCL {
 
     NuclearDensity *createDensity(const G4int A, const G4int Z);
 
-    ParticleSampler *createParticleSampler(const G4int A, const G4int Z);
-
     void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InverseInterpolationTable * const table);
 
     void addDensityToCache(const G4int A, const G4int Z, NuclearDensity * const density);

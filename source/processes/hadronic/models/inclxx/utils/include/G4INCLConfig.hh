@@ -39,7 +39,7 @@
 
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLConfigEnums.hh"
-#include "G4INCLIRandomGenerator.hh"
+#include "G4INCLRandomSeedVector.hh"
 #include <iostream>
 #include <string>
 #include <sstream>
@@ -154,8 +154,8 @@ namespace G4INCL {
     }
 
     /// \brief Get the seeds for the random-number generator.
-    SeedVector const getRandomSeeds() const {
-      SeedVector s;
+    Random::SeedVector getRandomSeeds() const {
+      Random::SeedVector s;
       s.push_back(randomSeed1);
       s.push_back(randomSeed2);
       return s;
@@ -267,6 +267,24 @@ namespace G4INCL {
     }
 #endif
 
+    /// \brief Get the r-p correlation coefficient
+    G4double getRPCorrelationCoefficient() const { return rpCorrelationCoefficient; }
+
+    /// \brief Set the r-p correlation coefficient
+    void setRPCorrelationCoefficient(const G4double corrCoeff) { rpCorrelationCoefficient=corrCoeff; }
+
+    /// \brief Get the neutron-skin thickness
+    G4double getNeutronSkinThickness() const { return neutronSkinThickness; }
+
+    /// \brief Set the neutron-skin thickness
+    void setNeutronSkinThickness(const G4double d) { neutronSkinThickness=d; }
+
+    /// \brief Get the neutron-skin additional diffuseness
+    G4double getNeutronSkinAdditionalDiffuseness() const { return neutronSkinAdditionalDiffuseness; }
+
+    /// \brief Set the neutron-skin additional diffuseness
+    void setNeutronSkinAdditionalDiffuseness(const G4double d) { neutronSkinAdditionalDiffuseness=d; }
+
 #if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
     /// \brief Echo the input options.
     std::string const echo() const;
@@ -363,6 +381,11 @@ namespace G4INCL {
 #ifdef INCL_DEEXCITATION_FERMI_BREAKUP
     G4int maxMassFermiBreakUp;
 #endif
+
+    G4double rpCorrelationCoefficient;
+
+    G4double neutronSkinThickness;
+    G4double neutronSkinAdditionalDiffuseness;
   };
 
 }

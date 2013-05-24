@@ -85,7 +85,7 @@ namespace G4INCL {
 // assert(t!=Neutron && t!=PiZero && t!=DeltaZero); // no neutral particles here
       if(t==Composite) {
         return transmissionRadius[t] +
-          ParticleTable::getNuclearRadius(p->getA(), p->getZ());
+          ParticleTable::getNuclearRadius(t, p->getA(), p->getZ());
       } else
         return transmissionRadius[t];
     };
@@ -105,8 +105,8 @@ namespace G4INCL {
     /// \brief Get the charge number.
     G4int getZ() const { return theZ; }
 
-    G4double getNuclearRadius() const { return theNuclearRadius; }
-    void setNuclearRadius(const G4double r) { theNuclearRadius = r; }
+    G4double getProtonNuclearRadius() const { return theProtonNuclearRadius; }
+    void setProtonNuclearRadius(const G4double r) { theProtonNuclearRadius = r; }
 
   private:
 
@@ -116,7 +116,7 @@ namespace G4INCL {
     G4int theA, theZ;
     G4double theMaximumRadius;
     /// \brief Represents INCL4.5's R0 variable
-    G4double theNuclearRadius;
+    G4double theProtonNuclearRadius;
 
     /* \brief map of transmission radii per particle type */
     G4double transmissionRadius[UnknownParticle];

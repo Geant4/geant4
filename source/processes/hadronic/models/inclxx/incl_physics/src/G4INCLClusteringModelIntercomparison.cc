@@ -96,7 +96,7 @@ namespace G4INCL {
     const G4double rmaxws = theNucleus->getUniverseRadius();
 
     // Radius of the sphere where the leading particle is positioned.
-    const G4double Rprime = theNucleus->getDensity()->getNuclearRadius() + transp;
+    const G4double Rprime = theNucleus->getDensity()->getProtonNuclearRadius() + transp;
 
     // Bring the leading particle back to the coalescence sphere
     const G4double pk = theLeadingParticle->getMomentum().mag();
@@ -306,7 +306,7 @@ namespace G4INCL {
       // 0.5*barrier and the remaining available energy from cascading nucleons
       // will not bring it above, reject the cluster.
       const G4double halfB = 0.72 * newZ *
-        theNucleus->getZ()/(theNucleus->getDensity()->getNuclearRadius()+1.7);
+        theNucleus->getZ()/(theNucleus->getDensity()->getProtonNuclearRadius()+1.7);
       const G4double tout = runningEnergies[newA] - runningPotentials[newA] -
         931.3*newA;
       if(tout<=halfB && tout+cascadingEnergyPool<=halfB) {

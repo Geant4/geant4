@@ -69,7 +69,7 @@ namespace G4INCL {
             decayParticle = new Particle(Neutron, mom, pos);
             break;
           case AlphaDecay:
-            decayParticle = new Cluster(2,4);
+            decayParticle = new Cluster(2,4,false);
             break;
           default:
             ERROR("Unrecognized cluster-decay mode in two-body decay: " << theDecayMode << std::endl

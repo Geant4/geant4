@@ -40,7 +40,6 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLIPropagationModel.hh"
-#include "G4INCLEventAction.hh"
 #include "G4INCLPropagationAction.hh"
 #include "G4INCLAvatarAction.hh"
 #include "G4INCLEventInfo.hh"
@@ -90,7 +89,6 @@ namespace G4INCL {
       G4double maxUniverseRadius;
       G4double maxInteractionDistance;
       G4double fixedImpactParameter;
-      EventAction *eventAction;
       PropagationAction *propagationAction;
       AvatarAction *avatarAction;
       Config const * const theConfig;

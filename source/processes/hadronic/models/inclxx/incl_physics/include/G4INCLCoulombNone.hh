@@ -86,7 +86,7 @@ namespace G4INCL {
     G4double maxImpactParameter(ParticleSpecies const &p, const G4double /*kinE*/, Nucleus const *
         const n) const {
       if(p.theType == Composite)
-        return 2.*ParticleTable::getNuclearRadius(p.theA, p.theZ)
+        return 2.*ParticleTable::getLargestNuclearRadius(p.theA, p.theZ)
           + n->getUniverseRadius();
       else
         return n->getUniverseRadius();

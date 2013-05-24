@@ -82,10 +82,10 @@ namespace G4INCL {
     std::string getShortName(const ParticleType t);
 
     /// \brief Get the native INCL name of the particle
-    std::string getName(const ParticleSpecies s);
+    std::string getName(const ParticleSpecies &s);
 
     /// \brief Get the short INCL name of the particle
-    std::string getShortName(const ParticleSpecies s);
+    std::string getShortName(const ParticleSpecies &s);
 
     /// \brief Get the native INCL name of the ion
     std::string getName(const G4int A, const G4int Z);
@@ -144,14 +144,11 @@ namespace G4INCL {
     /// \brief Get charge number from particle type
     G4int getChargeNumber(const ParticleType t);
 
-    G4double getNuclearRadius(const G4int A, const G4int Z);
-    G4double getRadiusParameter(const G4int A, const G4int Z);
-    G4double getMaximumNuclearRadius(const G4int A, const G4int Z);
-#ifdef INCLXX_IN_GEANT4_MODE
-    G4double getSurfaceDiffuseness(const G4int A, const G4int /*Z*/ );
-#else
-    G4double getSurfaceDiffuseness(const G4int A, const G4int Z);
-#endif // INCLXX_IN_GEANT4_MODE
+    G4double getNuclearRadius(const ParticleType t, const G4int A, const G4int Z);
+    G4double getLargestNuclearRadius(const G4int A, const G4int Z);
+    G4double getRadiusParameter(const ParticleType t, const G4int A, const G4int Z);
+    G4double getMaximumNuclearRadius(const ParticleType t, const G4int A, const G4int Z);
+    G4double getSurfaceDiffuseness(const ParticleType t, const G4int A, const G4int Z);
 
     /// \brief Return the RMS of the momentum distribution (light clusters)
     G4double getMomentumRMS(const G4int A, const G4int Z);
@@ -245,6 +242,15 @@ namespace G4INCL {
      * \param A mass number
      */
     G4double getFermiMomentumMassDependent(const G4int A, const G4int /*Z*/);
+
+    /// \brief Get the value of the r-p correlation coefficient
+    G4double getRPCorrelationCoefficient();
+
+    /// \brief Get the value of the neutron skin thickness
+    G4double getNeutronSkinThickness();
+
+    /// \brief Get the value of the additional neutron skin diffuseness
+    G4double getNeutronSkinAdditionalDiffuseness();
 
   }
 }

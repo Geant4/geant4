@@ -43,6 +43,7 @@
 
 #include "G4INCLRandom.hh"
 #include "G4INCLGlobals.hh"
+// #include <cassert>
 
 namespace G4INCL {
 
@@ -132,6 +133,21 @@ namespace G4INCL {
     ThreeVector gaussVector(G4double sigma) {
       const G4double sigmax = sigma * Math::oneOverSqrtThree;
       return ThreeVector(gauss(sigmax), gauss(sigmax), gauss(sigmax));
+    }
+
+    std::pair<G4double,G4double> correlatedGaussian(const G4double corrCoeff, const G4double x0, const G4double sigma) {
+// assert(corrCoeff<=1. && corrCoeff>=-1.);
+      G4double factor = 1.-corrCoeff*corrCoeff;
+      if(factor<=0.)
+        factor=0.;
+      const G4double x = gauss(sigma) + x0;
+      const G4double y = corrCoeff * x + gauss(sigma*std::sqrt(factor)) + x0;
+      return std::make_pair(x, y);
+    }
+
+    std::pair<G4double,G4double> correlatedUniform(const G4double corrCoeff) {
+      std::pair<G4double,G4double> gaussians = correlatedGaussian(corrCoeff);
+      return std::make_pair(Math::gaussianCDF(gaussians.first), Math::gaussianCDF(gaussians.second));
     }
 
     void deleteGenerator() {

@@ -60,7 +60,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLNDFGaussian.hh
         G4INCLKinematicsUtils.hh
         G4INCLPionNucleonChannel.hh
-        G4INCLEventAction.hh
         G4INCLClustering.hh
         G4INCLNuclearDensityFactory.hh
         G4INCLSurfaceAvatar.hh
@@ -137,7 +136,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLElasticChannel.cc
         G4INCLDecayAvatar.cc
         G4INCLPropagationAction.cc
-        G4INCLEventAction.cc
         G4INCLNuclearDensity.cc
         G4INCLClusterDecay.cc
         G4INCLCoulombNonRelativistic.cc

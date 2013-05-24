@@ -44,19 +44,17 @@
 #ifndef G4INCLIRANDOMGENERATOR_HH_
 #define G4INCLIRANDOMGENERATOR_HH_
 
-#include <vector>
+#include "G4INCLRandomSeedVector.hh"
 
 namespace G4INCL {
-
-  typedef std::vector<long> SeedVector;
 
   class IRandomGenerator {
   public:
     IRandomGenerator() {}
     virtual ~IRandomGenerator() {}
 
-    virtual SeedVector getSeeds() const = 0;
-    virtual void setSeeds(const SeedVector &) = 0;
+    virtual Random::SeedVector getSeeds() = 0;
+    virtual void setSeeds(const Random::SeedVector &) = 0;
     virtual G4double flat() = 0;
   };
 

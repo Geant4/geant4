@@ -16,6 +16,19 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+22 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-15)
+-----------------------------------------------------------
+- INCL++ v5.1.13.1
+  o Fixes a bug that caused very long CPU times in benchmarks.
+
+21 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-14)
+-----------------------------------------------------------
+- INCL++ v5.1.13
+  o Experimental support for neutron skins.
+  o Experimental support for fuzzy r-p correlations.
+  o Debug output controlled by G4INCL_DEBUG_VERBOSITY envvar.
+  o Rely on BIC for pion-nucleon and nucleon-nucleon reactions.
+
 17 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-13)
 -----------------------------------------------------------
 - INCL++ v5.1.12.3

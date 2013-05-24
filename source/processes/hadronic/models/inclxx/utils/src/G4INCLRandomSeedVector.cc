@@ -34,19 +34,32 @@
 
 #include "globals.hh"
 
-#ifndef G4INCLEventAction_hh
-#define G4INCLEventAction_hh 1
+/*
+ * \file G4INCLRandomSeedVector.cc
+ *
+ * \date 17 May 2013
+ * \author Davide Mancusi
+ */
+
+#include "G4INCLRandomSeedVector.hh"
 
 namespace G4INCL {
+  namespace Random {
 
-  class EventAction {
-  public:
-    EventAction();
-    ~EventAction();
-    void beforeEventAction();
-    void afterEventAction();
-  };
+    long SeedVector::at(const size_t i) const { return theSeeds.at(i); }
+    long &SeedVector::operator[](const size_t i) { return theSeeds[i]; }
+    size_t SeedVector::size() const { return theSeeds.size(); }
+    void SeedVector::resize(const size_t n) { theSeeds.resize(n); }
+    void SeedVector::push_back(const long val) { theSeeds.push_back(val); }
 
+    std::ostream &operator<<(std::ostream &out, SeedVector const &sv) {
+      if(sv.size()<=0)
+        return out;
+      for(size_t i=0; i<sv.size()-1; ++i)
+        out << sv.at(i) << '\t';
+      out << sv.at(sv.size()-1) << std::endl;
+      return out;
+    }
+
+  }
 }
-
-#endif

@@ -46,6 +46,7 @@
 
 #include <iostream>
 #include <cmath>
+#include <utility>
 #include "G4INCLIRandomGenerator.hh"
 #include "G4INCLThreeVector.hh"
 #include "G4INCLGlobals.hh"
@@ -115,6 +116,12 @@ namespace G4INCL {
      * Gaussian of the given sigma.
      */
     ThreeVector gaussVector(G4double sigma=1.);
+
+    /// \brief Generate pairs of correlated Gaussian random numbers
+    std::pair<G4double,G4double> correlatedGaussian(const G4double corrCoeff, const G4double x0=0., const G4double sigma=1.);
+
+    /// \brief Generate pairs of correlated uniform random numbers
+    std::pair<G4double,G4double> correlatedUniform(const G4double corrCoeff);
 
     /**
      * Delete the generator

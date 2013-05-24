@@ -327,7 +327,7 @@ namespace G4INCL {
         return getUniverseRadius();
         //return 0.5*(theDensity->getTransmissionRadius(particle)+getUniverseRadius());
       else {
-        const G4double pr = particle->getMomentum().mag()/thePotential->getFermiMomentum(particle);
+        const G4double pr = particle->getReflectionMomentum()/thePotential->getFermiMomentum(particle);
         if(pr>=1.)
           return getUniverseRadius();
         else

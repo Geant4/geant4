@@ -85,18 +85,18 @@ namespace G4INCL {
 
         IFunction1D *rpCorrelationFunction;
         if(A > 19) {
-          const G4double radius = ParticleTable::getRadiusParameter(A, Z);
-          const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-          const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
+          G4double diffuseness = ParticleTable::getSurfaceDiffuseness(t, A, Z);
+          const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rpCorrelationFunction = new NuclearDensityFunctions::WoodsSaxonRP(radius, maximumRadius, diffuseness);
         } else if(A <= 19 && A > 6) {
-          const G4double radius = ParticleTable::getRadiusParameter(A, Z);
-          const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-          const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          const G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
+          const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(t, A, Z);
+          const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rpCorrelationFunction = new NuclearDensityFunctions::ModifiedHarmonicOscillatorRP(radius, maximumRadius, diffuseness);
         } else if(A <= 6 && A > 1) { // Gaussian distribution for light nuclei
-          const G4double radius = ParticleTable::getRadiusParameter(A, Z);
-          const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          const G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
+          const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rpCorrelationFunction = new NuclearDensityFunctions::GaussianRP(maximumRadius, Math::oneOverSqrtThree * radius);
         } else {
           ERROR("No r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A = "
@@ -146,18 +146,18 @@ namespace G4INCL {
 
         IFunction1D *rDensityFunction;
         if(A > 19) {
-          G4double radius = ParticleTable::getRadiusParameter(A, Z);
-          G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-          G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
+          G4double diffuseness = ParticleTable::getSurfaceDiffuseness(t, A, Z);
+          G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rDensityFunction = new NuclearDensityFunctions::WoodsSaxon(radius, maximumRadius, diffuseness);
         } else if(A <= 19 && A > 6) {
-          G4double radius = ParticleTable::getRadiusParameter(A, Z);
-          G4double diffuseness = ParticleTable::getSurfaceDiffuseness(A, Z);
-          G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
+          G4double diffuseness = ParticleTable::getSurfaceDiffuseness(t, A, Z);
+          G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rDensityFunction = new NuclearDensityFunctions::ModifiedHarmonicOscillator(radius, maximumRadius, diffuseness);
         } else if(A <= 6 && A > 2) { // Gaussian distribution for light nuclei
-          G4double radius = ParticleTable::getRadiusParameter(A, Z);
-          G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(A, Z);
+          G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
+          G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rDensityFunction = new NuclearDensityFunctions::Gaussian(maximumRadius, Math::oneOverSqrtThree * radius);
         } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
           rDensityFunction = new NuclearDensityFunctions::ParisR();
@@ -274,14 +274,6 @@ namespace G4INCL {
         delete pCDFTableCache;
         pCDFTableCache = NULL;
       }
-    }
-
-    ParticleSampler *createParticleSampler(const G4int A, const G4int Z) {
-      InverseInterpolationTable *rCDFTableProton = createRCDFTable(Proton, A, Z);
-      InverseInterpolationTable *pCDFTableProton = createPCDFTable(Proton, A, Z);
-      InverseInterpolationTable *rCDFTableNeutron = createRCDFTable(Neutron, A, Z);
-      InverseInterpolationTable *pCDFTableNeutron = createPCDFTable(Neutron, A, Z);
-      return new ParticleSampler(A, Z, rCDFTableProton, pCDFTableProton, rCDFTableNeutron, pCDFTableNeutron);
     }
 
   } // namespace NuclearDensityFactory

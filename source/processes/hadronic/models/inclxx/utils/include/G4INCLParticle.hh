@@ -85,6 +85,7 @@ namespace G4INCL {
       nCollisions(rhs.nCollisions),
       nDecays(rhs.nDecays),
       thePotentialEnergy(rhs.thePotentialEnergy),
+      reflectionMomentum(rhs.reflectionMomentum),
       theHelicity(rhs.theHelicity),
       emissionTime(rhs.emissionTime),
       outOfWell(rhs.outOfWell),
@@ -132,6 +133,7 @@ namespace G4INCL {
       std::swap(outOfWell, rhs.outOfWell);
 
       std::swap(theMass, rhs.theMass);
+      std::swap(reflectionMomentum, rhs.reflectionMomentum);
     }
 
   public:
@@ -721,6 +723,20 @@ namespace G4INCL {
       return 0;
     }
 
+    /** \brief Return the reflection momentum
+     *
+     * The reflection momentum is used by calls to getSurfaceRadius to compute
+     * the radius of the sphere where the nucleon moves. It is necessary to
+     * introduce fuzzy r-p correlations.
+     */
+    G4double getReflectionMomentum() const { return reflectionMomentum; }
+
+    /// \brief Set the reflection momentum
+    void setReflectionMomentum(const G4double p) { reflectionMomentum = p; }
+
+    /// \brief Set the reflection momentum from the particle momentum
+    void updateReflectionMomentum() { reflectionMomentum = theMomentum.mag(); }
+
   protected:
     G4int theZ, theA;
     ParticipantType theParticipantType;
@@ -736,6 +752,8 @@ namespace G4INCL {
     G4int nDecays;
     G4double thePotentialEnergy;
     long ID;
+
+    G4double reflectionMomentum;
 
   private:
     G4double theHelicity;

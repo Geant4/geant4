@@ -36,6 +36,7 @@
 
 #include "G4INCLAvatarAction.hh"
 #include "G4INCLLogger.hh"
+#include "G4INCLRandom.hh"
 
 namespace G4INCL {
 
@@ -49,10 +50,15 @@ namespace G4INCL {
 
   void AvatarAction::beforeAvatarAction(IAvatar *a, Nucleus *n) {
     n->getStore()->getBook()->incrementAvatars(a->getType());
+    DEBUG("Random seeds before avatar " << a->getID() << ": "
+          << G4INCL::Random::getSeeds() << std::endl);
     DEBUG("Next avatar:" << std::endl << a->dump() << std::endl);
   }
 
   void AvatarAction::afterAvatarAction(IAvatar *a, Nucleus * /*n*/, FinalState *fs) {
+
+    DEBUG("Random seeds after avatar " << a->getID() << ": "
+          << G4INCL::Random::getSeeds() << std::endl);
 
     ParticleList modified = fs->getModifiedParticles();
     for( ParticleIter p = modified.begin(); p != modified.end(); ++p )

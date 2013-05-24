@@ -59,7 +59,7 @@ namespace G4INCL {
   }
 
   G4double PauliStandard::getBlockingProbability(Particle const * const particle, Nucleus const * const nucleus) const {
-    const G4double r0 = nucleus->getDensity()->getNuclearRadius();
+    const G4double r0 = ParticleTable::getNuclearRadius(particle->getType(), nucleus->getA(), nucleus->getZ());
     const G4double pFermi = nucleus->getPotential()->getFermiMomentum(particle);
 
     const G4double pbl = cellSize * std::sqrt(pFermi/r0);

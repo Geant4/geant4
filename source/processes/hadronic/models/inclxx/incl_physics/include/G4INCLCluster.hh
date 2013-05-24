@@ -66,7 +66,7 @@ namespace G4INCL {
       theA = A;
       setINCLMass();
       if(createParticleSampler)
-        theParticleSampler = NuclearDensityFactory::createParticleSampler(A,Z);
+        theParticleSampler = new ParticleSampler(A,Z);
     }
 
     /**
@@ -102,7 +102,7 @@ namespace G4INCL {
         particles.push_back(new Particle(**p));
       }
       if(rhs.theParticleSampler)
-        theParticleSampler = NuclearDensityFactory::createParticleSampler(rhs.theA,rhs.theZ);
+        theParticleSampler = new ParticleSampler(rhs.theA,rhs.theZ);
       else
         theParticleSampler = NULL;
     }
@@ -318,6 +318,7 @@ namespace G4INCL {
         (*p)->boost(aBoostVector);
         // Apply Lorentz contraction to the particle position
         (*p)->lorentzContract(aBoostVector,thePosition);
+        (*p)->updateReflectionMomentum();
       }
 
       DEBUG("Cluster was boosted with (bx,by,bz)=("

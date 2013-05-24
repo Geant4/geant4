@@ -64,6 +64,7 @@ namespace G4INCL {
   }
 
   FinalState* ParticleEntryAvatar::postInteraction(FinalState *fs) {
+    theParticle->updateReflectionMomentum();
     return fs;
   }
 

@@ -45,26 +45,28 @@
 #define G4INCLRANECU_HH_
 
 #include "G4INCLIRandomGenerator.hh"
+// #include <cassert>
 
 namespace G4INCL {
 
   class Ranecu: public G4INCL::IRandomGenerator {
   public:
     Ranecu();
-    Ranecu(const SeedVector &sv);
+    Ranecu(const Random::SeedVector &sv);
     virtual ~Ranecu();
 
-    SeedVector getSeeds() const {
-      SeedVector sv;
+    Random::SeedVector getSeeds() {
+      Random::SeedVector sv;
       sv.push_back(iseed1);
       sv.push_back(iseed2);
       return sv;
-    };
+    }
 
-    void setSeeds(const SeedVector &sv) {
-      iseed1 = sv[0];
-      iseed2 = sv[1];
-    };
+    void setSeeds(const Random::SeedVector &sv) {
+// assert(sv.size()>=2);
+      iseed1 = sv.at(0);
+      iseed2 = sv.at(1);
+    }
 
     G4double flat();
 

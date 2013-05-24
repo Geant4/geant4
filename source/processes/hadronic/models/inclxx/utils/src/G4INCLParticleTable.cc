@@ -238,6 +238,11 @@ namespace G4INCL {
       G4ThreadLocal G4double protonSeparationEnergy = theINCLProtonSeparationEnergy;
       G4ThreadLocal G4double neutronSeparationEnergy = theINCLNeutronSeparationEnergy;
 
+      G4ThreadLocal G4double rpCorrelationCoefficient = 1.0;
+
+      G4ThreadLocal G4double neutronSkinThickness = 0.0;
+      G4ThreadLocal G4double neutronSkinAdditionalDiffuseness = 0.0;
+
 #ifdef INCLXX_IN_GEANT4_MODE
       G4ThreadLocal G4IonTable *theG4IonTable;
 #else
@@ -369,6 +374,10 @@ namespace G4INCL {
         return;
       }
 
+      // Initialise the r-p correlation coefficient
+      if(theConfig)
+        rpCorrelationCoefficient = theConfig->getRPCorrelationCoefficient();
+
     }
 
     G4int getIsospin(const ParticleType t) {
@@ -397,14 +406,14 @@ namespace G4INCL {
       return -10; // Unknown
     }
 
-    std::string getShortName(const ParticleSpecies s) {
+    std::string getShortName(const ParticleSpecies &s) {
       if(s.theType==Composite)
         return getShortName(s.theA,s.theZ);
       else
         return getShortName(s.theType);
     }
 
-    std::string getName(const ParticleSpecies s) {
+    std::string getName(const ParticleSpecies &s) {
       if(s.theType==Composite)
         return getName(s.theA,s.theZ);
       else
@@ -643,12 +652,12 @@ namespace G4INCL {
       }
     }
 
-    G4double getNuclearRadius(const G4int A, const G4int Z) {
+    G4double getNuclearRadius(const ParticleType t, const G4int A, const G4int Z) {
 // assert(A>0 && Z>=0 && Z<=A);
       if(A >= 19 || (A < 6 && A >= 2)) {
         // For large (Woods-Saxon or Modified Harmonic Oscillator) or small
         // (Gaussian) nuclei, the radius parameter is just the nuclear radius
-        return getRadiusParameter(A,Z);
+        return getRadiusParameter(t,A,Z);
       } else if(A < clusterTableASize && Z < clusterTableZSize && A >= 6) {
         const G4double thisRMS = positionRMS[Z][A];
         if(thisRMS>0.0)
@@ -658,8 +667,8 @@ namespace G4INCL {
           return 0.0;
         }
       } else if(A < 19) {
-        const G4double theRadiusParameter = getRadiusParameter(A, Z);
-        const G4double theDiffusenessParameter = getSurfaceDiffuseness(A, Z);
+        const G4double theRadiusParameter = getRadiusParameter(t, A, Z);
+        const G4double theDiffusenessParameter = getSurfaceDiffuseness(t, A, Z);
         // The formula yields the nuclear RMS radius based on the parameters of
         // the nuclear-density function
         return 1.581*theDiffusenessParameter*
@@ -670,11 +679,18 @@ namespace G4INCL {
       }
     }
 
-    G4double getRadiusParameter(const G4int A, const G4int Z) {
+    G4double getLargestNuclearRadius(const G4int A, const G4int Z) {
+      return Math::max(getNuclearRadius(Proton, A, Z), getNuclearRadius(Neutron, A, Z));
+    }
+
+    G4double getRadiusParameter(const ParticleType t, const G4int A, const G4int Z) {
 // assert(A>0 && Z>=0 && Z<=A);
       if(A >= 28) {
         // phenomenological radius fit
-        return (2.745e-4 * A + 1.063) * std::pow(A, 1.0/3.0);
+        G4double r0 = (2.745e-4 * A + 1.063) * std::pow(A, 1.0/3.0);
+        if(t==Neutron)
+          r0 += neutronSkinThickness;
+        return r0;
       } else if(A < 6 && A >= 2) {
         if(Z<clusterTableZSize) {
           const G4double thisRMS = positionRMS[Z][A];
@@ -697,29 +713,26 @@ namespace G4INCL {
       }
     }
 
-    G4double getMaximumNuclearRadius(const G4int A, const G4int Z) {
+    G4double getMaximumNuclearRadius(const ParticleType t, const G4int A, const G4int Z) {
       const G4double XFOISA = 8.0;
       if(A >= 19) {
-        return getNuclearRadius(A,Z) + XFOISA * getSurfaceDiffuseness(A,Z);
+        return getNuclearRadius(t,A,Z) + XFOISA * getSurfaceDiffuseness(t,A,Z);
       } else if(A < 19 && A >= 6) {
         return 5.5 + 0.3 * (G4double(A) - 6.0)/12.0;
       } else if(A >= 2) {
-        return getNuclearRadius(A, Z) + 4.5;
+        return getNuclearRadius(t, A, Z) + 4.5;
       } else {
         ERROR("getMaximumNuclearRadius : No maximum radius for nucleus A = " << A << " Z = " << Z << std::endl);
         return 0.0;
       }
     }
 
-#ifdef INCLXX_IN_GEANT4_MODE
-    G4double getSurfaceDiffuseness(const G4int A, const G4int /*Z*/ )
-#else
-    G4double getSurfaceDiffuseness(const G4int A, const G4int Z)
-#endif // INCLXX_IN_GEANT4_MODE
-    {
-
+    G4double getSurfaceDiffuseness(const ParticleType t, const G4int A, const G4int Z) {
       if(A >= 28) {
-        return 1.63e-4 * A + 0.510;
+        G4double a = 1.63e-4 * A + 0.510;
+        if(t==Neutron)
+          a += neutronSkinAdditionalDiffuseness;
+        return a;
       } else if(A < 28 && A >= 19) {
         return mediumDiffuseness[A-1];
       } else if(A < 19 && A >= 6) {
@@ -849,6 +862,12 @@ namespace G4INCL {
       static const G4double gammaParam = 9.5157E-2;
       return alphaParam - betaParam*std::exp(-gammaParam*((G4double)A));
     }
+
+    G4double getRPCorrelationCoefficient() { return rpCorrelationCoefficient; }
+
+    G4double getNeutronSkinThickness() { return neutronSkinThickness; }
+
+    G4double getNeutronSkinAdditionalDiffuseness() { return neutronSkinAdditionalDiffuseness; }
 
     G4ThreadLocal G4double effectiveDeltaDecayThreshold = 0.;
     G4ThreadLocal NuclearMassFn getTableMass = NULL;

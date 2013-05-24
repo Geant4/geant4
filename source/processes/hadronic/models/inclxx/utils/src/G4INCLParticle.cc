@@ -62,6 +62,7 @@ namespace G4INCL {
     nCollisions(0),
     nDecays(0),
     thePotentialEnergy(0.0),
+    reflectionMomentum(0.),
     theHelicity(0.0),
     emissionTime(0.0),
     outOfWell(false),
@@ -81,7 +82,9 @@ namespace G4INCL {
     theFrozenMomentum(theMomentum),
     thePosition(position),
     nCollisions(0), nDecays(0),
-      thePotentialEnergy(0.), theHelicity(0.0),
+      thePotentialEnergy(0.),
+      reflectionMomentum(theMomentum.mag()),
+      theHelicity(0.0),
       emissionTime(0.0), outOfWell(false)
   {
     theParticipantType = TargetSpectator;
@@ -102,7 +105,9 @@ namespace G4INCL {
     theFrozenMomentum(theMomentum),
     thePosition(position),
     nCollisions(0), nDecays(0),
-      thePotentialEnergy(0.), theHelicity(0.0),
+      thePotentialEnergy(0.),
+      reflectionMomentum(theMomentum.mag()),
+      theHelicity(0.0),
       emissionTime(0.0), outOfWell(false)
   {
     theParticipantType = TargetSpectator;

@@ -42,26 +42,25 @@
  */
 
 #include "G4INCLParticleSampler.hh"
+#include "G4INCLParticleTable.hh"
+#include "G4INCLNuclearDensityFactory.hh"
 
 namespace G4INCL {
 
-  ParticleSampler::ParticleSampler(const G4int A, const G4int Z,
-                                   InverseInterpolationTable const * const rCDFTableProton,
-                                   InverseInterpolationTable const * const pCDFTableProton,
-                                   InverseInterpolationTable const * const rCDFTableNeutron,
-                                   InverseInterpolationTable const * const pCDFTableNeutron) :
+  ParticleSampler::ParticleSampler(const G4int A, const G4int Z) :
     sampleOneParticle(&ParticleSampler::sampleOneParticleWithoutRPCorrelation),
     theA(A),
     theZ(Z),
     theDensity(NULL),
-    thePotential(NULL)
+    thePotential(NULL),
+    rpCorrelationCoefficient(ParticleTable::getRPCorrelationCoefficient())
   {
     std::fill(theRCDFTable, theRCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
     std::fill(thePCDFTable, thePCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
-    theRCDFTable[Proton] = rCDFTableProton;
-    thePCDFTable[Proton] = pCDFTableProton;
-    theRCDFTable[Neutron] = rCDFTableNeutron;
-    thePCDFTable[Neutron] = pCDFTableNeutron;
+    theRCDFTable[Proton] = NuclearDensityFactory::createRCDFTable(Proton, A, Z);
+    thePCDFTable[Proton] = NuclearDensityFactory::createPCDFTable(Proton, A, Z);
+    theRCDFTable[Neutron] = NuclearDensityFactory::createRCDFTable(Neutron, A, Z);
+    thePCDFTable[Neutron] = NuclearDensityFactory::createPCDFTable(Neutron, A, Z);
   }
 
   ParticleSampler::~ParticleSampler() {
@@ -78,9 +77,15 @@ namespace G4INCL {
   }
 
   void ParticleSampler::updateSampleOneParticleMethod() {
-    if(theDensity && thePotential)
-      sampleOneParticle = &ParticleSampler::sampleOneParticleWithRPCorrelation;
-    else
+    if(theDensity && thePotential) {
+      if(rpCorrelationCoefficient>0.99999) {
+        sampleOneParticle = &ParticleSampler::sampleOneParticleWithRPCorrelation;
+      } else if(std::fabs(rpCorrelationCoefficient)<0.00001) {
+        sampleOneParticle = &ParticleSampler::sampleOneParticleWithoutRPCorrelation;
+      } else {
+        sampleOneParticle = &ParticleSampler::sampleOneParticleWithFuzzyRPCorrelation;
+      }
+    } else
       sampleOneParticle = &ParticleSampler::sampleOneParticleWithoutRPCorrelation;
   }
 
@@ -114,9 +119,12 @@ namespace G4INCL {
 // assert(theDensity && thePotential);
     const G4double theFermiMomentum = thePotential->getFermiMomentum(t);
     const ThreeVector momentumVector = Random::sphereVector(theFermiMomentum);
-    const G4double momentumRatio = momentumVector.mag()/theFermiMomentum;
+    const G4double momentumAbs = momentumVector.mag();
+    const G4double momentumRatio = momentumAbs/theFermiMomentum;
     const ThreeVector positionVector = Random::sphereVector(theDensity->getMaxRFromP(t, momentumRatio));
-    return new Particle(t, momentumVector, positionVector);
+    Particle *aParticle = new Particle(t, momentumVector, positionVector);
+    aParticle->setReflectionMomentum(momentumAbs);
+    return aParticle;
   }
 
   Particle *ParticleSampler::sampleOneParticleWithoutRPCorrelation(const ParticleType t) const {
@@ -125,6 +133,19 @@ namespace G4INCL {
     ThreeVector positionVector = Random::normVector(position);
     ThreeVector momentumVector = Random::normVector(momentum);
     return new Particle(t, momentumVector, positionVector);
+  }
+
+  Particle *ParticleSampler::sampleOneParticleWithFuzzyRPCorrelation(const ParticleType t) const {
+// assert(theDensity && thePotential);
+    std::pair<G4double,G4double> ranNumbers = Random::correlatedUniform(rpCorrelationCoefficient);
+    const G4double x = Math::pow13(ranNumbers.first);
+    const G4double y = Math::pow13(ranNumbers.second);
+    const G4double theFermiMomentum = thePotential->getFermiMomentum(t);
+    const ThreeVector momentumVector = Random::normVector(y*theFermiMomentum);
+    const ThreeVector positionVector = Random::sphereVector(theDensity->getMaxRFromP(t, x));
+    Particle *aParticle = new Particle(t, momentumVector, positionVector);
+    aParticle->setReflectionMomentum(x*theFermiMomentum);
+    return aParticle;
   }
 
 }

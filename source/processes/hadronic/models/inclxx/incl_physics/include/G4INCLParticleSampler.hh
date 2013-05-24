@@ -56,16 +56,8 @@ namespace G4INCL {
        *
        * \param A the mass number
        * \param Z the charge number
-       * \param rCDFTableProton the interpolation table for the inverse CDF in r-space (protons)
-       * \param pCDFTableProton the interpolation table for the inverse CDF in p-space (protons)
-       * \param rCDFTableNeutron the interpolation table for the inverse CDF in r-space (neutrons)
-       * \param pCDFTableNeutron the interpolation table for the inverse CDF in p-space (neutrons)
        */
-      ParticleSampler(const G4int A, const G4int Z,
-                      InverseInterpolationTable const * const rCDFTableProton,
-                      InverseInterpolationTable const * const pCDFTableProton,
-                      InverseInterpolationTable const * const rCDFTableNeutron,
-                      InverseInterpolationTable const * const pCDFTableNeutron);
+      ParticleSampler(const G4int A, const G4int Z);
 
       /// \brief Destructor
       ~ParticleSampler();
@@ -76,11 +68,17 @@ namespace G4INCL {
       /// \brief Getter for thePotential
       NuclearPotential::INuclearPotential const *getPotential() const { return thePotential; }
 
+      /// \brief Getter for rpCorrelationCoefficient
+      G4double getRPCorrelationCoefficient() const { return rpCorrelationCoefficient; }
+
       /// \brief Setter for theDensity
       void setDensity(NuclearDensity const * const d);
 
       /// \brief Setter for thePotential
       void setPotential(NuclearPotential::INuclearPotential const * const p);
+
+      /// \brief Setter for rpCorrelationCoefficient
+      void setRPCorrelationCoefficient(const G4double corrCoeff) { rpCorrelationCoefficient = corrCoeff; }
 
       ParticleList sampleParticles(ThreeVector const &position) const;
 
@@ -101,6 +99,9 @@ namespace G4INCL {
       /// \brief Sample one particle not taking into account the rp-correlation
       Particle *sampleOneParticleWithoutRPCorrelation(const ParticleType t) const;
 
+      /// \brief Sample one particle with a fuzzy rp-correlation
+      Particle *sampleOneParticleWithFuzzyRPCorrelation(const ParticleType t) const;
+
       /// \brief Mass number
       const G4int theA;
 
@@ -118,6 +119,9 @@ namespace G4INCL {
 
       /// \brief Pointer to the Cluster's NuclearPotential
       NuclearPotential::INuclearPotential const *thePotential;
+
+      /// \brief Correlation coefficient for the r-p correlation
+      G4double rpCorrelationCoefficient;
   };
 
 }

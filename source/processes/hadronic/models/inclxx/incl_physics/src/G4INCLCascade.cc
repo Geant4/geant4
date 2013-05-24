@@ -92,15 +92,19 @@ namespace G4INCL {
     minRemnantSize(4)
   {
     // Set the logger object.
+#ifdef INCLXX_IN_GEANT4_MODE
+    G4INCL::Logger::initVerbosityLevelFromEnvvar();
+#else // INCLXX_IN_GEANT4_MODE
     G4INCL::Logger::setLoggerSlave(new G4INCL::LoggerSlave(theConfig->getLogFileName()));
     G4INCL::Logger::setVerbosityLevel(theConfig->getVerbosity());
+#endif // INCLXX_IN_GEANT4_MODE
 
     // Set the random number generator algorithm. The system can support
     // multiple different generator algorithms in a completely
     // transparent way.
 #ifdef INCLXX_IN_GEANT4_MODE
     G4INCL::Random::setGenerator(new G4INCL::Geant4RandomGenerator());
-#else
+#else // INCLXX_IN_GEANT4_MODE
     G4INCL::Random::setGenerator(new G4INCL::Ranecu(theConfig->getRandomSeeds()));
 #endif // INCLXX_IN_GEANT4_MODE
 
@@ -150,7 +154,6 @@ namespace G4INCL {
     // finding schemes and even to support things like curved
     // trajectories in the future.
     propagationModel = new G4INCL::StandardPropagationModel(theConfig->getLocalEnergyBBType(),theConfig->getLocalEnergyPiType());
-    eventAction = new EventAction();
     propagationAction = new PropagationAction();
     avatarAction = new AvatarAction();
 
@@ -180,11 +183,12 @@ namespace G4INCL {
     G4INCL::CoulombDistortion::deleteCoulomb();
     G4INCL::Random::deleteGenerator();
     G4INCL::Clustering::deleteClusteringModel();
+#ifndef INCLXX_IN_GEANT4_MODE
     G4INCL::Logger::deleteLoggerSlave();
+#endif
     G4INCL::NuclearDensityFactory::clearCache();
     delete avatarAction;
     delete propagationAction;
-    delete eventAction;
     delete propagationModel;
     delete theConfig;
   }
@@ -735,7 +739,8 @@ namespace G4INCL {
       return;
     }
 
-    const G4double r0 = NuclearDensityFactory::createDensity(theA, theZ)->getNuclearRadius();
+    const G4double r0 = std::max(ParticleTable::getNuclearRadius(Proton, theA, theZ),
+                               ParticleTable::getNuclearRadius(Neutron, theA, theZ));
 
     const G4double theNNDistance = CrossSections::interactionDistanceNN(projectileSpecies, kineticEnergy);
     maxInteractionDistance = r0 + theNNDistance;

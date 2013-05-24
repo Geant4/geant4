@@ -66,7 +66,7 @@
 namespace G4INCL {
 
   Nucleus::Nucleus(G4int mass, G4int charge, Config const * const conf, const G4double universeRadius)
-    : Cluster(charge,mass),
+    : Cluster(charge,mass,true),
      theInitialZ(charge), theInitialA(mass),
      theNpInitial(0), theNnInitial(0),
      initialInternalEnergy(0.),

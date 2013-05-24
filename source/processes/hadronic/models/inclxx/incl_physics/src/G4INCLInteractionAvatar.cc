@@ -133,6 +133,7 @@ namespace G4INCL {
       return false;
 
     ThreeVector pos = p->getPosition();
+    p->updateReflectionMomentum();
     G4double pos2 = pos.mag2();
     const G4double r = theNucleus->getSurfaceRadius(p);
     short iterations=0;
@@ -157,6 +158,7 @@ namespace G4INCL {
   }
 
   FinalState *InteractionAvatar::postInteraction(FinalState *fs) {
+    DEBUG("postInteraction: final state: " << std::endl << fs->print() << std::endl);
     ParticleList modified = fs->getModifiedParticles();
     ParticleList modifiedAndCreated = modified;
     ParticleList created = fs->getCreatedParticles();
@@ -206,6 +208,8 @@ namespace G4INCL {
     }
     DEBUG("Enforcing energy conservation: success!" << std::endl);
 
+    DEBUG("postInteraction after energy conservation: final state: " << std::endl << fs->print() << std::endl);
+
     // Check that outgoing delta resonances can decay to pi-N
     for( ParticleIter i = modified.begin(); i != modified.end(); ++i )
       if((*i)->isDelta() &&
@@ -228,6 +232,7 @@ namespace G4INCL {
         return fsBlocked; // Interaction is blocked. Return an empty final state.
       }
 
+    DEBUG("Random seeds before Pauli blocking: " << Random::getSeeds() << std::endl);
     // Test Pauli blocking
     G4bool isBlocked = Pauli::isBlocked(modifiedAndCreated, theNucleus);
 

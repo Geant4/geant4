@@ -168,7 +168,7 @@ namespace G4INCL {
       maximumTime = 29.8 * std::pow(theNucleus->getA(), 0.16);
 
       // If the incoming cluster is slow, use a larger stopping time
-      const G4double rms = ParticleTable::getNuclearRadius(pr->getA(), pr->getZ());
+      const G4double rms = ParticleTable::getLargestNuclearRadius(pr->getA(), pr->getZ());
       const G4double rMax = theNucleus->getUniverseRadius();
       const G4double distance = 2.*rMax + 2.725*rms;
       const G4double projectileVelocity = pr->boostVector().mag();

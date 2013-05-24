@@ -74,11 +74,13 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
   }
 
   theBackupModel = new G4BinaryLightIonReaction;
+  theBackupModelNucleon = new G4BinaryCascade;
 }
 
 G4INCLXXInterface::~G4INCLXXInterface()
 {
   delete theBackupModel;
+  delete theBackupModelNucleon;
   delete theExcitationHandler;
 }
 
@@ -129,6 +131,11 @@ G4bool G4INCLXXInterface::AccurateProjectile(const G4HadProjectile &aTrack, cons
 
 G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
+  // For reactions on nucleons, use the backup model (without complaining)
+  if(aTrack.GetDefinition()->GetAtomicMass()<=1 && theNucleus.GetA_asInt()<=1) {
+    return theBackupModelNucleon->ApplyYourself(aTrack, theNucleus);
+  }
+
   // For systems heavier than theMaxProjMassINCL, use another model (typically
   // BIC)
   const G4int theMaxProjMassINCL = theInterfaceStore->GetMaxProjMassINCL();

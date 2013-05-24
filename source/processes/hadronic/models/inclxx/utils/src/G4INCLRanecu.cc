@@ -50,7 +50,7 @@ namespace G4INCL {
     iseed2 = 777;
   }
 
-  Ranecu::Ranecu(const SeedVector &sv) {
+  Ranecu::Ranecu(const Random::SeedVector &sv) {
     setSeeds(sv);
   }
 

@@ -55,6 +55,7 @@
 #include "G4ExcitationHandler.hh"
 
 // Binary cascade
+#include "G4BinaryCascade.hh"
 #include "G4BinaryLightIonReaction.hh"
 
 // PreCompound
@@ -158,6 +159,7 @@ private:
   G4ExcitationHandler *theExcitationHandler;
 
   G4HadronicInteraction *theBackupModel;
+  G4HadronicInteraction *theBackupModelNucleon;
 
   G4INCLXXInterfaceStore * const theInterfaceStore;
 

@@ -154,6 +154,7 @@ namespace G4INCL {
     if(!outgoing.empty()) { // Transmission
 // assert(outgoing.size()==1);
       Particle *out = outgoing.front();
+      out->updateReflectionMomentum();
       if(out->isCluster()) {
 	Cluster *clusterOut = dynamic_cast<Cluster*>(out);
         ParticleList const components = clusterOut->getParticles();

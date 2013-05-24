@@ -58,6 +58,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLLogger.hh
         G4INCLGlobalInfo.hh
         G4INCLGlobals.hh
+        G4INCLRandomSeedVector.hh
         G4INCLParticleType.hh
         G4INCLBook.hh
         G4INCLIRandomGenerator.hh
@@ -88,6 +89,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLConfig.cc
         G4INCLRootFinder.cc
         G4INCLRanecu.cc
+        G4INCLRandomSeedVector.cc
         G4INCLInverseInterpolationTable.cc
         G4INCLRandom.cc
         G4INCLFinalState.cc

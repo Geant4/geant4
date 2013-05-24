@@ -43,6 +43,10 @@
 #include <string>
 #include <cstdlib>
 
+#ifdef INCLXX_IN_GEANT4_MODE
+#include "G4ios.hh"
+#endif
+
 namespace G4INCL {
 
   /**
@@ -187,36 +191,45 @@ namespace G4INCL {
     G4INCL::Logger::dataBlock(x,__FILE__,__LINE__);\
   } else (void)0
 
-#else
-  // Empty logger for normal (production) use:
-  class LoggerSlave {
-  public:
-    LoggerSlave(std::string const &) {};
-    LoggerSlave() {};
-    ~LoggerSlave() {};
-    void setVerbosityLevel(G4int) {};
-  };
-
+#else // defined(INCL_DEBUG_LOG) && !defined(INCLXX_IN_GEANT4_MODE)
   namespace Logger {
-    void setVerbosityLevel(G4int);
-    void setLoggerSlave(LoggerSlave * const slave);
-    void deleteLoggerSlave();
+    void initVerbosityLevelFromEnvvar();
+    G4int getVerbosityLevel();
   }
 
 #define FATAL(x) \
   if(true) {\
-    std::stringstream ss;\
-    ss << x;\
-    std::stringstream location;\
-    location << __FILE__ << ":" << __LINE__;\
-    G4Exception(location.str().c_str(), "INCLXX0000", FatalException, ss.str().c_str());\
+    std::stringstream ss_;\
+    ss_ << x;\
+    std::stringstream location_;\
+    std::string fileName_(__FILE__);\
+    location_ << fileName_.substr(fileName_.find_last_of("/")+1) << ":" << __LINE__;\
+    G4Exception(location_.str().c_str(), "INCLXX0000", FatalException, ss_.str().c_str());\
   } else (void)0
-#define ERROR(x);
-#define WARN(x);
+#define ERROR(x) \
+  if(G4INCL::ErrorMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    std::string fileName_(__FILE__);\
+    std::stringstream ss_;\
+    ss_ << "INCL++ error [" << fileName_.substr(fileName_.find_last_of("/")+1) << ":" << __LINE__ << "] " << x;\
+    G4cout << ss_.str() << std::endl;\
+  } else (void)0
+#define WARN(x) \
+  if(G4INCL::WarningMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    std::string fileName_(__FILE__);\
+    std::stringstream ss_;\
+    ss_ << "INCL++ warning [" << fileName_.substr(fileName_.find_last_of("/")+1) << ":" << __LINE__ << "] " << x;\
+    G4cout << ss_.str() << std::endl;\
+  } else (void)0
 #define INFO(x);
-#define DEBUG(x);
+#define DEBUG(x) \
+  if(G4INCL::DebugMsg <= G4INCL::Logger::getVerbosityLevel()) {\
+    std::string fileName_(__FILE__);\
+    std::stringstream ss_;\
+    ss_ << "INCL++ debug [" << fileName_.substr(fileName_.find_last_of("/")+1) << ":" << __LINE__ << "] " << x;\
+    G4cout << ss_.str() << std::endl;\
+  } else (void)0
 #define DATABLOCK(x);
 
-#endif
+#endif // defined(INCL_DEBUG_LOG) && !defined(INCLXX_IN_GEANT4_MODE)
 }
 #endif
