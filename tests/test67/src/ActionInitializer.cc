@@ -23,56 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ActionInitializer.cc 66241 2012-12-13 18:34:42Z gunter $
 // GEANT4 tag $Name:  $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#include "ActionInitializer.hh"
 
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "SteppingAction.hh"
+#include "StackingAction.hh"
 #include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
 
-#include "G4UserRunAction.hh"
-#include "G4ThreeVector.hh"
-#include "globals.hh"
-
-#include <vector>
-#include <fstream>
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction;
-class RunActionMessenger;
-
-class G4Run;
+ActionInitializer::ActionInitializer() : 
+  G4VUserActionInitialization()
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
+void ActionInitializer::Build() const 
 {
-public:
+  //G4cout << "Sono in ActionInitializer::Build()" << G4endl;
 
-  RunAction();
-  ~RunAction();
+  const DetectorConstruction* detector = 
+    static_cast<const DetectorConstruction*>
+    (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
+  //  G4cout << "RunManagerType: " << G4RunManager::GetRunManager()->GetRunManagerType() << G4endl;
+  
+  // primary generator
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+  SetUserAction(primary);
+    
 
-  void SetRandomSeed(G4int rs){fRandomSeed = rs;};
-  G4int GetRandomSeed(){return fRandomSeed;};
+  //Thread-local RunAction: same class, but code controlled by IsMaster()
+  SetUserAction(new RunAction());
+  SetUserAction(new EventAction());
+  SetUserAction(new SteppingAction());
+  SetUserAction(new StackingAction());
 
-  G4Run* GenerateRun();
-
-private:
-  std::ofstream *outFile;
-
-  G4int fRandomSeed;
-
-};
+ 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void ActionInitializer::BuildForMaster() const
+{ 
+  //Thread-local RunAction: same class, but code controlled by IsMaster()
+  RunAction* runAction = new RunAction();
+  SetUserAction(runAction);
+ 
+ //G4cout << "Sono in ActionInitializer::BuildForMaster()" << G4endl;
+}
 

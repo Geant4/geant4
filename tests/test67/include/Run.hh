@@ -23,19 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: Run.hh 66241 2012-12-13 18:34:42Z gunter $
 // GEANT4 tag $Name:  $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef Run_h
+#define Run_h 1
 
-#include "DetectorConstruction.hh"
+#include "G4Run.hh"
 
-#include "G4UserRunAction.hh"
-#include "G4ThreeVector.hh"
 #include "globals.hh"
 
 #include <vector>
@@ -43,32 +41,32 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction;
-class RunActionMessenger;
-
 class G4Run;
+class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
+class Run : public G4Run
 {
 public:
 
-  RunAction();
-  ~RunAction();
+  Run();
+  virtual ~Run();
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
+  virtual void RecordEvent(const G4Event* evt);
+  virtual void Merge(const G4Run* run);
 
-  void SetRandomSeed(G4int rs){fRandomSeed = rs;};
-  G4int GetRandomSeed(){return fRandomSeed;};
-
-  G4Run* GenerateRun();
+  G4int GetCounter() const {return counter;};
+  G4int GetCounterTot() const {return counterTot;};
+  G4double GetPrimaryEnergy() const;
+  
 
 private:
-  std::ofstream *outFile;
+  G4int counter; //peak efficiency
+  G4int counterTot; //total efficiency
+  G4double fPrimaryEnergy; 
 
-  G4int fRandomSeed;
+  G4int hcID;
 
 };
 

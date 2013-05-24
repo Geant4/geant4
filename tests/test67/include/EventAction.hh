@@ -46,7 +46,7 @@ class RunAction;
 class EventAction : public G4UserEventAction
 {
   public:  
-  EventAction(RunAction*);
+  EventAction();
   ~EventAction();
 
   void BeginOfEventAction(const G4Event*);
@@ -59,7 +59,6 @@ private:
   G4int ScintillID;
 
   EventActionMessenger* eventMessenger;
-  RunAction* theRunAction;
 
 };
 

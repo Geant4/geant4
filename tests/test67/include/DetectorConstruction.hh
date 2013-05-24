@@ -52,12 +52,13 @@ public:
 
 public:     
   G4VPhysicalVolume* Construct();
-  G4double GetCasingHeight(){return casingHeight;};
-  G4int GetGeometryType(){return geometryType;};
+  void ConstructSDandField();
+  G4double GetCasingHeight() const {return casingHeight;};
+  G4int GetGeometryType() const {return geometryType;};
   void SetGeometryType(G4int gt);
-  G4double GetWaterDiameter(){return waterDiameter;};
-  G4double GetWaterHeight(){return waterHeight;};
-  G4double GetWaterZPosition(){return waterZPosition;};
+  G4double GetWaterDiameter() const {return waterDiameter;};
+  G4double GetWaterHeight()const {return waterHeight;};
+  G4double GetWaterZPosition() const {return waterZPosition;};
 
 
 private:
@@ -68,6 +69,8 @@ private:
   G4double waterDiameter;
   G4double waterHeight;
   G4double waterZPosition;
+
+  G4LogicalVolume* fGeSensLog;
 
   DetectorMessenger* theDeteMessenger;
 };

@@ -60,6 +60,9 @@ public:
   static ROOTAnalysis* getInstance();
   void SetListName(G4String listName);
 
+  G4bool AreHistoCreated(){return fHistosCreated;};
+  void ResetHistoForNewRun(){fHistosCreated = false;};
+
 private:
    //private constructor in order to create a singleton
   ROOTAnalysis();
@@ -84,6 +87,8 @@ private:
   Double_t fPrimaryEnergy;
   Double_t fEfficiencyFull;
   Double_t fEfficiencyFullErr;
+
+  Bool_t fHistosCreated;
 
 };
 

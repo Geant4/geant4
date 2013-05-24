@@ -60,7 +60,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorConstruction::DetectorConstruction()
+DetectorConstruction::DetectorConstruction() : 
+  fGeSensLog(0)
 {
   //Initialization
   casingHeight=70.0*mm;
@@ -164,15 +165,15 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4double sensHeight = geHeight - 1.0*DLThickness;
   G4Tubs* geSensTube = new G4Tubs("geSensTube",0,sensDiameter/2.,sensHeight/2.,
 					   0,twopi);
-  G4LogicalVolume* geSensLog = new G4LogicalVolume(geSensTube,
-						   G4Material::GetMaterial("Germanium"),
-						   "geSensLog",0,0,0);
+  fGeSensLog = new G4LogicalVolume(geSensTube,
+				   G4Material::GetMaterial("Germanium"),
+				   "geSensLog",0,0,0);
   G4double tolerance = 0.1*micrometer;
   G4double zshift = -0.5*DLThickness+tolerance;
   new G4PVPlacement(0,G4ThreeVector(0,0,zshift),
-		    geSensLog,"SensitiveGe",
+		    fGeSensLog,"SensitiveGe",
 		    geLog,false,0);
-  geSensLog->SetVisAttributes(new G4VisAttributes(red));
+  fGeSensLog->SetVisAttributes(new G4VisAttributes(red));
   
   //************************************************************************
   // Inner hole
@@ -187,7 +188,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 						 "holeLog",0,0,0);
   zshift = -sensHeight/2. + holeHeight/2. + tolerance;
   new G4PVPlacement(0,G4ThreeVector(0,0,zshift),
-		    holeLog,"InnerBoreHole",geSensLog,false,0);
+		    holeLog,"InnerBoreHole",fGeSensLog,false,0);
   holeLog->SetVisAttributes(new G4VisAttributes(magenta));
 
   //************************************************************************
@@ -210,15 +211,21 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     G4cout << "Using geometry#2" << G4endl;
 
 
+  return world_phys;
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::ConstructSDandField()
+{
   //definisco lo scintillatore come un materiale sensibile
-  G4SDManager* SDmanager=G4SDManager::GetSDMpointer();
   G4String nomescint = "scintillator";
   SensitiveDetector *pointerscint = new SensitiveDetector(nomescint);
-  SDmanager->AddNewDetector(pointerscint);
-  geSensLog->SetSensitiveDetector(pointerscint);
+  SetSensitiveDetector(fGeSensLog,pointerscint);
   
-
-  return world_phys;
+  return;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

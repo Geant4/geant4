@@ -23,52 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ActionInitializer.hh 66241 2012-12-13 18:34:42Z gunter $
 // GEANT4 tag $Name:  $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef ActionInitializer_h
+#define ActionInitializer_h 1
 
-#include "DetectorConstruction.hh"
+#include "G4VUserActionInitialization.hh"
 
-#include "G4UserRunAction.hh"
-#include "G4ThreeVector.hh"
-#include "globals.hh"
-
-#include <vector>
-#include <fstream>
+class StepMax;
+class PhysicsListMessenger;
+class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction;
-class RunActionMessenger;
-
-class G4Run;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class RunAction : public G4UserRunAction
+class ActionInitializer : public G4VUserActionInitialization
 {
 public:
 
-  RunAction();
-  ~RunAction();
-
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
-
-  void SetRandomSeed(G4int rs){fRandomSeed = rs;};
-  G4int GetRandomSeed(){return fRandomSeed;};
-
-  G4Run* GenerateRun();
-
-private:
-  std::ofstream *outFile;
-
-  G4int fRandomSeed;
+  ActionInitializer();
+  ~ActionInitializer(){;};
+  
+  void Build() const;
+  void BuildForMaster() const;
 
 };
 

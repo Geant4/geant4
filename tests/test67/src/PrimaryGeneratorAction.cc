@@ -46,7 +46,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* theDete) : 
+PrimaryGeneratorAction::PrimaryGeneratorAction(const DetectorConstruction* theDete) : 
   theDetector(theDete)
 {
   G4int n_particle = 1;
@@ -62,7 +62,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* theDete) :
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double PrimaryGeneratorAction::GetPrimaryEnergy()
+G4double PrimaryGeneratorAction::GetPrimaryEnergy() const
 {
   return particleGun->GetParticleEnergy();
 }

@@ -45,17 +45,17 @@ class PrimaryGeneratorMessenger;
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-  PrimaryGeneratorAction(DetectorConstruction*);
+  PrimaryGeneratorAction(const DetectorConstruction*);
    ~PrimaryGeneratorAction(){;};
 
   public:
     void GeneratePrimaries(G4Event*);
     G4ParticleGun* GetParticleGun() {return particleGun;};
-    G4double GetPrimaryEnergy();   
+    G4double GetPrimaryEnergy() const;   
  
   private:
     G4ParticleGun*         particleGun;
-    DetectorConstruction* theDetector;
+    const DetectorConstruction* theDetector;
 
     PrimaryGeneratorMessenger* gunMessenger; 
 };

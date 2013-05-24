@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-May-2013 L.Pandola (test67-V09-06-10)
+        Protect the inclusion of ROOTAnalysis.hh with an 
+         #ifdef block in Run.cc (caused the rejection of 
+         test67-V09-06-09)
+
+22-May-2013 L.Pandola (test67-V09-06-09)
+        Protect the static analysis class with G4Mutex
+        Two instances of the same RunAction class used for 
+         master and slave.
+        Works in MT and sequential mode
+
+15-May-2013 L.Pandola (test67-V09-06-08)
+	First attempt of migration to MT (internal tag)
+
 03-Apr-2013 A.Dotti (test67-V09-06-07)
 	Migrating to new G4VPhysicsConstructor API needed for G4MT
 

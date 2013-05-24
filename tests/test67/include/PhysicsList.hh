@@ -59,7 +59,7 @@ public:
   void SetCutForElectron(G4double);
   void SetCutForPositron(G4double);
 
-  G4String GetEmName(){return emName;};
+  G4String GetEmName() const {return emName;};
 
 private:
 

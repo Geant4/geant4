@@ -32,12 +32,17 @@
 #ifdef G4_USE_ROOT
 
 #include "ROOTAnalysis.hh"
+#include "G4AutoLock.hh"
 #include "TError.h"
 #include "G4Version.hh"
 #include "G4SystemOfUnits.hh"
 
 
 ROOTAnalysis* ROOTAnalysis::instance = 0;
+
+namespace { //l'uso di questo anonym-namespace è solo buona prassi
+  G4Mutex instanceMutex = G4MUTEX_INITIALIZER;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 ROOTAnalysis::ROOTAnalysis() : 
@@ -53,6 +58,7 @@ ROOTAnalysis::ROOTAnalysis() :
   fEfficiencyFull = 0;
   fEfficiencyFullErr = 0;
   fPrimaryEnergy = 0;
+  fHistosCreated = false;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -85,7 +91,9 @@ ROOTAnalysis::~ROOTAnalysis()
 
 ROOTAnalysis* ROOTAnalysis::getInstance()
 {
-  if (instance == 0) instance = new ROOTAnalysis();
+  G4AutoLock l(&instanceMutex);
+  if (instance == 0) 
+    instance = new ROOTAnalysis();
   return instance;
 }
 
@@ -133,7 +141,7 @@ void ROOTAnalysis::BookNewHistogram(G4int runID, G4double primaryEnergy)
   if (!(fHistograms->count(runID)))
     {
       TString id = "h";
-      id += runID;
+      id += runID;      
       TString title = "Histo ";
       title += primaryEnergy/keV; 
       title += " keV";
@@ -147,6 +155,8 @@ void ROOTAnalysis::BookNewHistogram(G4int runID, G4double primaryEnergy)
   fPE = 0;
   fIon = 0;
   fComp = 0;
+  //set flag to true
+  fHistosCreated = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -30,7 +30,7 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
-
+#include "tls.hh"
 
 
 class Hits : public G4VHit
@@ -75,20 +75,24 @@ typedef G4THitsCollection<Hits> HitsCollection;
 //HitsCollection rappresenta un nome convenzionale per indicare il template
 //G4THitsCollection applicato alla classe <Hits> !!
 
-extern G4Allocator<Hits> HitAllocator;
+extern G4ThreadLocal G4Allocator<Hits> *HitAllocator;
 
 
 inline void* Hits::operator new(size_t)
 {
+  if (!HitAllocator)
+    HitAllocator = new G4Allocator<Hits>;
   void *aHit;
-  aHit = (void *) HitAllocator.MallocSingle();
+  aHit = (void *) HitAllocator->MallocSingle();
   return aHit;
 }
 
 
 inline void Hits::operator delete(void *aHit)
 {
-  HitAllocator.FreeSingle((Hits*) aHit);
+  if (!HitAllocator)
+    HitAllocator = new G4Allocator<Hits>;
+  HitAllocator->FreeSingle((Hits*) aHit);
 }
 
 

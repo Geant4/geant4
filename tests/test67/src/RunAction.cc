@@ -38,23 +38,22 @@
 #endif
 
 #include "G4SystemOfUnits.hh"
-#include "PrimaryGeneratorAction.hh"
 
+#include "PrimaryGeneratorAction.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4Version.hh"
 
 #include "PhysicsList.hh"
 #include "Randomize.hh"
+#include "Run.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(PhysicsList* pl) : 
-  outFile(0),fPL(pl)
+RunAction::RunAction() : 
+  outFile(0)
 {
-  primaryEnergy = 1.0*keV;
-  runID = -1;
   fRandomSeed = -1;
 }
 
@@ -71,13 +70,41 @@ RunAction::~RunAction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4Run* RunAction::GenerateRun()
+{
+  //this is needed for master and slaves.
+  return new Run();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  runID = aRun->GetRunID();
+  const Run* theRun = static_cast<const Run*> (aRun);
+  G4int runID = theRun->GetRunID();
 
-  //For Run=0, check the random seed
+#ifdef G4_USE_ROOT 
+  //If it is a slave OR the sequential, book histo
+  if (!IsMaster() || 
+      G4RunManager::GetRunManager()->GetRunManagerType()==G4RunManager::sequentialRM)
+    {      
+      //create histos, if there are not already there for this run
+      if (!(ROOTAnalysis::getInstance()->AreHistoCreated()))
+	ROOTAnalysis::getInstance()->BookNewHistogram(theRun->GetRunID(),
+						      theRun->GetPrimaryEnergy());
+    }
+#endif
+
+  //Master or sequential
+  if (IsMaster()) 
+    G4cout << "ooo Run " << theRun->GetRunID() << " starts (global)." << G4endl;
+  else //it is a slave, do nothing else
+    {
+      G4cout << "ooo Run " << theRun->GetRunID() << " starts on slave." << G4endl;
+      return;
+    }
+    
+  //For Run=0, check the random seed in the master
   if (!runID)
     {
       if (fRandomSeed < 0) // not set by anyone!
@@ -88,13 +115,18 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
       else
 	G4cout << "Constant random seed: " << fRandomSeed << G4endl;
 
-      CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-      CLHEP::HepRandom::setTheSeed(fRandomSeed);  
-      CLHEP::HepRandom::showEngineStatus();      
+      G4Random::setTheEngine(new CLHEP::RanecuEngine);
+      G4Random::setTheSeed(fRandomSeed);  
+      G4Random::showEngineStatus();      
     }
 
   if (!outFile)
     {
+      //Master RunAction needs the physics list info
+      const PhysicsList* physicsList =
+	dynamic_cast<const PhysicsList*>
+	(G4RunManager::GetRunManager()->GetUserPhysicsList());
+      
       outFile = new std::ofstream();
       //Use the version name for the dat file
       G4String filename;
@@ -108,25 +140,15 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 	  filename = vs.substr(5,vs.size()-5);
 	}
       filename += "_";
-      filename += fPL->GetEmName();
+      filename += physicsList->GetEmName();
       filename += ".dat";
       outFile->open(filename.c_str());
     }
 
-  PrimaryGeneratorAction* primGen = (PrimaryGeneratorAction*) 
-    G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction();
-
-  primaryEnergy = primGen->GetPrimaryEnergy();
-  
-  G4cout << "Primary energy: " << primaryEnergy/keV << " keV " << G4endl;
-
 #ifdef G4_USE_ROOT
-  ROOTAnalysis::getInstance()->BookNewHistogram(aRun->GetRunID(),primaryEnergy);
+  ROOTAnalysis::getInstance()->ResetHistoForNewRun(); //histo created by the first worker
 #endif
- 
-  counter = 0;
-  counterTot = 0;
-  
+   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,13 +156,29 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  G4double nEvents = (G4double) (aRun->GetNumberOfEvent());
+  const Run* theRun = static_cast<const Run*> (aRun);
+  
+  //Master or sequential
+  if (IsMaster() || 
+      G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM)
+    G4cout << "Global results with " << theRun->GetNumberOfEvent() << 
+      " events : " << theRun->GetCounter() << G4endl;
+  else //it is a slave, do nothing
+    {
+      G4cout << "Local results with " << theRun->GetNumberOfEvent() << 
+	" events : " << theRun->GetCounter() << G4endl;
+      return;
+    }
+
+  G4double nEvents = (G4double) (theRun->GetNumberOfEvent());
+
   if (nEvents)
     {           
       if (outFile->is_open())
 	{
-	  G4double dCounter = (G4double) counter;
-	  (*outFile) << primaryEnergy/keV << " " << counter/nEvents << " " << 
+	  G4double dCounter = (G4double) theRun->GetCounter();
+	  (*outFile) << theRun->GetPrimaryEnergy()/keV << " " << theRun->GetCounter()/nEvents 
+		     << " " << 
 	    std::sqrt(dCounter)/nEvents << G4endl;
 	}
       else
@@ -151,26 +189,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	}
 
 #ifdef G4_USE_ROOT
-      ROOTAnalysis::getInstance()->EndOfRun(runID,primaryEnergy,
+      ROOTAnalysis::getInstance()->EndOfRun(theRun->GetRunID(),
+					    theRun->GetPrimaryEnergy(),
 					    (G4int) nEvents,
-					    counter,counterTot);
+					    theRun->GetCounter(),
+					    theRun->GetCounterTot());
 #endif
     }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::EventEnergy(G4double ene)
-{
-  if (ene < 0.1*eV) 
-    return;
-  counterTot++;
-
-#ifdef G4_USE_ROOT
-  ROOTAnalysis::getInstance()->AddEventEnergy(runID,ene);
-#endif
-  if (std::fabs(primaryEnergy - ene) < 0.001*primaryEnergy) //within 0.1%
-    counter++;
-}
-
-

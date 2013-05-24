@@ -28,8 +28,12 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
@@ -37,11 +41,7 @@
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "SteppingAction.hh"
-#include "StackingAction.hh"
+#include "ActionInitializer.hh"
 
 #ifdef G4_USE_ROOT
 #include "ROOTAnalysis.hh"
@@ -59,8 +59,15 @@ int main(int argc,char** argv) {
 
   theTimer->Start();
 
+#ifdef G4MULTITHREADED
   // Construct the default run manager
+  G4MTRunManager* runManager = new G4MTRunManager();
+  //runManager->SetNumberOfThreads(10);
+  G4cout << "Using the MT Run Manager (G4MULTITHREADED=ON)" << G4endl; 
+#else
   G4RunManager * runManager = new G4RunManager;
+  G4cout << "Using the sequential Run Manager" << G4endl;
+#endif 
 
   // set mandatory initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
@@ -68,6 +75,9 @@ int main(int argc,char** argv) {
   PhysicsList* physicsList = new PhysicsList();
   runManager->SetUserInitialization(physicsList);
   
+  runManager->SetUserInitialization(new ActionInitializer());
+
+  /*
   // primary generator
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
@@ -81,6 +91,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(evtAct);
   runManager->SetUserAction(stpAct);
   runManager->SetUserAction(new StackingAction());
+  */
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  

@@ -30,12 +30,14 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-G4Allocator<Hits> HitAllocator;
+G4ThreadLocal G4Allocator<Hits> *HitAllocator=0;
 
 //Funzioni che gestiscono le informazioni contenute in ogni hit
 
 
-Hits::Hits() {}
+Hits::Hits() : 
+ G4VHit() 
+{;}
 
 
 Hits::~Hits() {}

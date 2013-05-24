@@ -30,22 +30,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
-
-#include "RunAction.hh"
 #include "EventActionMessenger.hh"
 
 #include "G4Event.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-#include "G4VVisManager.hh"
-#include "SensitiveDetector.hh"
-#include "Hits.hh"
-#include "G4SDManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* theRun) : 
-  ScintillID(-1),theRunAction(theRun)
+EventAction::EventAction() 
 {
   printModulo = 10000;
   eventMessenger = new EventActionMessenger(this);
@@ -62,13 +53,7 @@ EventAction::~EventAction()
 
 void EventAction::BeginOfEventAction(const G4Event* evt)
 {   
-  G4int evtNb = evt->GetEventID();
-  
-  if (ScintillID<0)
-    {
-      G4SDManager *SDman = G4SDManager::GetSDMpointer();
-      ScintillID = SDman->GetCollectionID("HitsCollection");      
-    }
+  G4int evtNb = evt->GetEventID(); 
 
   //survey printing
   if (evtNb%printModulo == 0)
@@ -77,28 +62,9 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event* evt)
+void EventAction::EndOfEventAction(const G4Event*)
 {
-  //G4int event_id = evt->GetEventID();
-  
-  G4HCofThisEvent *HCE=evt->GetHCofThisEvent(); 
-
-  HitsCollection *CHC = 0; 
-  size_t n_hit = 0;
-  G4double etot = 0.;
- 
-  if (HCE) 
-    CHC=(HitsCollection*) (HCE->GetHC(ScintillID));
-
-  if (CHC) 
-    {
-      n_hit=CHC->entries();
-      for (size_t i=0;i<n_hit;i++)	
-	etot += (*CHC)[i]->GetEdep(); //le entries sono indicizzate
-         
-    }
-  theRunAction->EventEnergy(etot);
-
+  //Computation of energy is done via Run::RecordEvent();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
