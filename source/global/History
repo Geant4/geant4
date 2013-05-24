@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 23, 2013 M.Asai (global-V09-06-34)
+- Replace G4coutIdDestination class to G4MTcoutDestination class for cleaner 
+  handling of thread-local cout/cerr.
+
 May 22, 2013 G.Cosmo (global-V09-06-33)
 - Fix in G4Threading for sequential mode in definition of G4GetNumberOfCores().
 - Some code cleanup.

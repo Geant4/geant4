@@ -21,53 +21,63 @@
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************//
-//
-// $Id: G4coutDestination.hh 66241 2014-05-16 00:00:42Z adotti $
+// ********************************************************************
 //
 //
+// $Id: G4MTcoutDestination.hh 66241 2012-12-13 18:34:42Z gunter $
+//
+// 
 // ---------------------------------------------------------------
 // GEANT 4 class header file
 //
-// Prepends to G4cout and G4cerr an id
-// Used by default for Geant4MT
-// Optionally it buffers all output and sends it to
-// output on request.
-// By default streaming is on std::cout and std::cerr
-// but this can be changed.
-// Warning: this option stores streams in memory.
+// G4MTcoutDestination.hh
 //
-// Example:
-//  #include "G4coutIdDestination.hh"
-//  #include "G4ios.hh"
-//  int main(int,char**) {
-//      G4UImanager::GetUIpointer();
-//      G4iosInitialization();
-//      G4int id = 1;
-//      G4coutIdDestination myout(id);
-#ifndef G4COUTIDDESTINATION_HH
-#define G4COUTIDDESTINATION_HH
+// ---------------------------------------------------------------
+#ifndef G4MTcoutDestination_H
+#define G4MTcoutDestination_H
 
+#include "globals.hh"
 #include "G4coutDestination.hh"
 #include <iostream>
 #include <sstream>
+#include <fstream>
 
-class G4coutIdDestination : public G4coutDestination
+class G4MTcoutDestination : public G4coutDestination
 {
-public:
-    G4coutIdDestination( const G4int& id, std::ostream& cout=std::cout, std::ostream&  cerr=std::cerr );
-    virtual ~G4coutIdDestination();
+  public:
+
+    G4MTcoutDestination(const G4int& threadId,
+       std::ostream& co=std::cout, std::ostream&  ce=std::cerr);
+    virtual ~G4MTcoutDestination();
+
     virtual G4int ReceiveG4cout(const G4String&);
     virtual G4int ReceiveG4cerr(const G4String&);
+
+    void SetCoutFileName(const G4String& fileN = "G4cout.txt", G4bool ifAppend = true);
+    void SetCerrFileName(const G4String& fileN = "G4cerr.txt", G4bool ifAppend = true);
     void EnableBuffering(G4bool flag=true);
+    void SetPrefixString(const G4String& wd = "G4WT");
+
+  private:
+
+    void CloseCoutFile();
+    void CloseCerrFile();
     void DumpBuffer();
-private:
+  
+  private:
+
     std::ostream& finalcout;
     std::ostream& finalcerr;
     const G4int id;
     G4bool useBuffer;
+    G4bool threadCoutToFile;
+    G4bool threadCerrToFile;
+
     std::ostringstream cout_buffer;
     std::ostringstream cerr_buffer;
+    std::ofstream coutFile;
+    std::ofstream cerrFile;
+    G4String prefix;
 };
 
-#endif // G4COUTIDDESTINATION_HH
+#endif
