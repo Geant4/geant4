@@ -5,8 +5,11 @@
                        Package History file
                        --------------------
 
+22 Mai 2013 - tag dnaphysics-V09-06-02 - M. Karamitros 
+- Migrated to MT
+
 13 April 2013 - tag dnaphysics-V09-06-01 - S. Incerti
-- Removed unused electron cpture process
+- Removed unused electron capture process
 - Changed process naming scheme as in the "microdosimetry" 
 advanced example 
 

@@ -22,6 +22,13 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
@@ -34,8 +41,6 @@ class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithAString;
 class G4UIcmdWithoutParameter;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorMessenger: public G4UImessenger
 {
@@ -53,8 +58,6 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        fMaterCmd;
     G4UIcmdWithoutParameter*   fUpdateCmd;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

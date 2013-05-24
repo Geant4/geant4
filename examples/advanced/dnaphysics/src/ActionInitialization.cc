@@ -29,91 +29,42 @@
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifdef G4MULTITHREADED
-  #include "G4MTRunManager.hh"
-#else
-  #include "G4RunManager.hh"
-#endif
-
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-
-#ifdef G4VIS_USE
-  #include "G4VisExecutive.hh"
-#endif
 
 #include "ActionInitialization.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-int main(int argc,char** argv) 
+ActionInitialization::ActionInitialization(DetectorConstruction* detConstruction)
+ : G4VUserActionInitialization(),
+   fDetectorConstruction(detConstruction)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  // Choose the Random engine
-  
-  G4Random::setTheEngine(new CLHEP::RanecuEngine);
-
-  // Construct the default run manager
-
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(2);
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
-
-  // Set mandatory user initialization classes
-  
-  DetectorConstruction* detector = new DetectorConstruction;
-  runManager->SetUserInitialization(detector);
-  
-  runManager->SetUserInitialization(new PhysicsList);
-
-  // User action initialization
-  
-  runManager->SetUserInitialization(new ActionInitialization(detector));
-  
-  // Initialize G4 kernel
-  
-  runManager->Initialize();
-
-#ifdef G4VIS_USE
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
-    
-  // Get the pointer to the User Interface manager 
-  
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-
-  if (argc==1)   // Define UI session for interactive mode.
-  { 
-#ifdef _WIN32
-    G4UIsession * session = new G4UIterminal();
-#else
-    G4UIsession * session = new G4UIterminal(new G4UItcsh);
-#endif
-    UI->ApplyCommand("/control/execute dna.mac");    
-    session->SessionStart();
-    delete session;
-  }
-  else           // Batch mode
-  { 
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
-  }
-
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-
-  delete runManager;
-
-  return 0;
+  SetUserAction(new RunAction(fDetectorConstruction));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::Build() const
+{
+  SetUserAction(new PrimaryGeneratorAction);
+  
+  RunAction* runAction= new RunAction(fDetectorConstruction);
+  SetUserAction(runAction);
+  
+  SetUserAction(new SteppingAction(runAction,fDetectorConstruction,fPrimaryGeneratorAction));
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

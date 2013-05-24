@@ -22,38 +22,36 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "globals.hh"
-#include "g4root.hh"
+#include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class DetectorConstruction;
+class PrimaryGeneratorAction;
 
-class HistoManager
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
+    ActionInitialization(DetectorConstruction*);
+    virtual ~ActionInitialization();
 
-    HistoManager();
-   ~HistoManager();
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-    void SetFileName   (const G4String& name) { fileName[0] = name;};
-    void book();
-    void save();
-    void FillNtuple(G4int id, G4int col, G4double e, G4double weight = 1.0);
-    void FillNtupleIColumn(G4int icol, G4int ival);
-    void FillNtupleFColumn(G4int icol, G4float ival);
-    void FillNtupleDColumn(G4int icol, G4double ival);
-    void AddNtupleRow();
-    
   private:
-
-    G4String         fileName[2];
-    G4bool           factoryOn;       
+    DetectorConstruction* fDetectorConstruction;
+    PrimaryGeneratorAction* fPrimaryGeneratorAction;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    
