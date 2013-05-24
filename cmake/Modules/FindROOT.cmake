@@ -80,10 +80,15 @@ function(ROOT_GENERATE_DICTIONARY dictionary)
     endif()
   endforeach()
   #---Get the list of include directories------------------
+  # Filter out UNIX system directory to workaround bug in
+  # rootcint (info from Andrea Dotti, and info from post:
+  # http://root.cern.ch/phpBB3/viewtopic.php?f=3&t=15086
   get_directory_property(incdirs INCLUDE_DIRECTORIES)
   set(includedirs) 
-  foreach( d ${incdirs})    
-   set(includedirs ${includedirs} -I${d})
+  foreach( d ${incdirs})
+    if(NOT ${d} STREQUAL "/usr/include")
+     set(includedirs ${includedirs} -I${d})
+    endif()
   endforeach()
   #---Get LinkDef.h file------------------------------------
   set(linkdefs)

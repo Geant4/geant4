@@ -29,6 +29,12 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+22nd May 2013 - Ben Morgan (cmake-V09-06-12)
+- Modules/FindROOT.cmake : Remove "/usr/include" from list of
+  include directories passed to rootcint in root_generate_dictionary
+  function. Needed to workaround bug in rootcint reported by Andrea
+  Dotti.
+
 7th May 2013 - Ben Morgan (cmake-V09-06-11)
 - Modules/Geant4OptionalComponents.cmake : Set variables 
   GEANT4_USE_BUILTIN_{CLHEP,EXPAT,ZLIB} when the builtin versions
