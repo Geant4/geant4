@@ -518,7 +518,6 @@ if(fpNavigatorState == 0) \
     exceptionDescription << "Either NewNavigatorStateAndLocate was not called "; \
     exceptionDescription << "or the provided navigator state was already NULL."; \
     G4Exception((G4String("G4Navigator")+G4String(__FUNCTION__)).c_str(),"NavigatorStateNotValid",FatalException,exceptionDescription); \
-    exit(-1); \
 }
 
 

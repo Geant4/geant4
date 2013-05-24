@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DNAGenericIonsManager.hh 70118 2013-05-23 14:03:14Z gcosmo $
+// $Id$
 
 #ifndef   G4DNAGENERICIONSMANAGER_HH
  #define  G4DNAGENERICIONSMANAGER_HH 1
@@ -40,7 +40,7 @@
  {
   public:
    static G4DNAGenericIonsManager *      Instance(void);
-   G4ParticleDefinition *                GetIon(const G4String & name);
+   G4ParticleDefinition *                GetIon(const G4String & name) const;
 
   private:
                                          G4DNAGenericIonsManager();
@@ -49,7 +49,7 @@
                                          G4DNAGenericIonsManager(const G4DNAGenericIonsManager &);
    const G4DNAGenericIonsManager        &operator=(const G4DNAGenericIonsManager &);
 
-   static G4ThreadLocal G4DNAGenericIonsManager *      theInstance;
+   static /*G4ThreadLocal*/ G4DNAGenericIonsManager *      theInstance;
    
    typedef std::map<G4String, G4ParticleDefinition *> IonsMap;
 
