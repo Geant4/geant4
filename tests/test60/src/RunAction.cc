@@ -28,13 +28,15 @@
 // -------------------------------------------------------------------
 
 #include "RunAction.hh"
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-:Detector(det), Primary(prim), ProcCounter(0)
+RunAction::RunAction() : ProcCounter(0)
 {  
+  Detector = (DetectorConstruction*) G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+  Primary = (PrimaryGeneratorAction*) G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction();
   ProcCounter = new ProcessesCount;
   totalCount = 0;
   eTransfer = 0.;

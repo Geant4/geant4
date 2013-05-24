@@ -34,15 +34,19 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 
+#include "G4RunManager.hh"
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,PrimaryGeneratorAction* pri)
-:Run(run),Detector(det),Primary(pri)
-{}
+SteppingAction::SteppingAction(RunAction* run)
+{
+	Run= run;
+	Detector = (DetectorConstruction*) G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+	Primary = (PrimaryGeneratorAction*) G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

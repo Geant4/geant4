@@ -23,54 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+#include "ActionInitialization.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "G4SystemOfUnits.hh"
+#include "RunAction.hh"
+#include "SteppingAction.hh"
+#include "DetectorConstruction.hh"
+#include "G4RunManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction()
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  SetUserAction(new RunAction());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::~PrimaryGeneratorAction()
+void ActionInitialization::Build() const
 {
-  delete particleGun;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4float var;
-
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-{
-  primaryParticleName = particleGun->GetParticleDefinition()->GetParticleName() ;
-
-  G4double x0,y0,z0,theta,phi,xMom0,yMom0,zMom0;
-
-  x0 = 0;
-  y0 = 0;
-  z0 = 0*micrometer;
-  theta = 0;
-  phi = 0;
-
-  xMom0 = std::sin(theta);
-  yMom0 = std::sin(phi);
-  zMom0 = std::sqrt(1.-xMom0*xMom0-yMom0*yMom0);  
-
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(xMom0,yMom0,zMom0));
-
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  SetUserAction(new PrimaryGeneratorAction);
   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  RunAction* runAction= new RunAction();
+  SetUserAction(runAction);
+  
+  SetUserAction(new SteppingAction(runAction));
+}  
 
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

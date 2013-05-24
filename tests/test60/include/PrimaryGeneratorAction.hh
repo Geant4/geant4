@@ -44,7 +44,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
 
-  PrimaryGeneratorAction(DetectorConstruction*);    
+  PrimaryGeneratorAction();
   ~PrimaryGeneratorAction();
   
   void GeneratePrimaries(G4Event*);
@@ -54,6 +54,5 @@ private:
 
   G4String primaryParticleName ;
   G4ParticleGun*           particleGun;
-  DetectorConstruction*    Detector;
 };
 #endif

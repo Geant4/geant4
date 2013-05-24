@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 Mai 2013   M.Karamitros tag test60-V09-06-02
+            - Migration to MT frame
+
 07 Dec 2012   V.Ivanchenko tag test60-V09-06-01
             - PhysicsList - substituted obsolete SetModel method
               by SetEmModel

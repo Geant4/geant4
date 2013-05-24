@@ -30,12 +30,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 
 #ifdef G4VIS_USE
-  #include "G4VisExecutive.hh"
+#include "G4VisExecutive.hh"
 #endif
 
 #include "DetectorConstruction.hh"
@@ -45,68 +46,79 @@
 #include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "ActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-int main(int argc,char** argv) 
+int main(int argc,char** argv)
 {
-  // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+	// Choose the Random engine
 
-  // Set mandatory user initialization classes
-  DetectorConstruction* detector = new DetectorConstruction;
-  runManager->SetUserInitialization(detector);
-  PhysicsList * pl;
-  runManager->SetUserInitialization(pl = new PhysicsList);
-  pl->DisableCheckParticleList();
- 
-  // Set mandatory user action classes
-  PrimaryGeneratorAction* primary;
-  runManager->SetUserAction(primary = new PrimaryGeneratorAction(detector));
+	G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
-  // Set optional user action classes
-  RunAction* RunAct = new RunAction(detector,primary);
-  runManager->SetUserAction(RunAct);
- 
-  runManager->SetUserAction(new EventAction(RunAct));
+	// Construct the default run manager
 
-  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary));
-  
-#ifdef G4VIS_USE
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
-   
-  // Initialize G4 kernel
-  runManager->Initialize();
-    
-  // Get the pointer to the User Interface manager 
-  G4UImanager* UI = G4UImanager::GetUIpointer();  
-
-  if (argc==1)   // Define UI session for interactive mode.
-  { 
-#ifdef _WIN32
-    G4UIsession * session = new G4UIterminal();
+#ifdef G4MULTITHREADED
+	G4MTRunManager* runManager = new G4MTRunManager;
+	runManager->SetNumberOfThreads(2);
 #else
-    G4UIsession * session = new G4UIterminal(new G4UItcsh);
+	G4RunManager* runManager = new G4RunManager;
 #endif
-    UI->ApplyCommand("/control/execute test60.mac");    
-    session->SessionStart();
-    delete session;
-  }
-  else           // Batch mode
-  { 
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
-  }
+
+	// Set mandatory user initialization classes
+	//
+	DetectorConstruction* detector = new DetectorConstruction;
+	runManager->SetUserInitialization(detector);
+
+	PhysicsList * pl;
+	runManager->SetUserInitialization(pl = new PhysicsList);
+	pl->DisableCheckParticleList();
+
+	PrimaryGeneratorAction* primary;
+	runManager->SetUserAction(primary = new PrimaryGeneratorAction());
+
+	// User action initialization
+	//
+	runManager->SetUserInitialization(new ActionInitialization());
+
+	// Initialize G4 kernel
+	//
+	runManager->Initialize();
 
 #ifdef G4VIS_USE
-  delete visManager;
+	G4VisManager* visManager = new G4VisExecutive;
+	visManager->Initialize();
 #endif
 
-  delete runManager;
+	// Get the pointer to the User Interface manager
+	//
+	G4UImanager* UI = G4UImanager::GetUIpointer();
 
-  return 0;
+	if (argc==1)   // Define UI session for interactive mode.
+	{
+#ifdef _WIN32
+		G4UIsession * session = new G4UIterminal();
+#else
+		G4UIsession * session = new G4UIterminal(new G4UItcsh);
+#endif
+		UI->ApplyCommand("/control/execute test60.mac");
+		session->SessionStart();
+		delete session;
+	}
+	else           // Batch mode
+	{
+		G4String command = "/control/execute ";
+		G4String fileName = argv[1];
+		UI->ApplyCommand(command+fileName);
+	}
+
+#ifdef G4VIS_USE
+	delete visManager;
+#endif
+
+	delete runManager;
+
+	return 0;
 }
+
 
