@@ -3,9 +3,9 @@
 /mydet/reqmuon 1
 /mydet/isomuon 1
 #
-/run/numberOfThreads 4
+/run/numberOfThreads 1
 /control/verbose  1
 /tracking/verbose 0
-/run/beamOn 80
+/run/beamOn 3
 #
 
