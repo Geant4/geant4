@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23 May, 2013 M. Asai (intercoms-V09-06-05)
+- Introducing /control/cout/ command category for handling thread-local cout/cerr.
+
 14 March, 2013 A. Dotti (intercoms-V09-06-04)
 - Changing signature for GetCommandStack() 
 

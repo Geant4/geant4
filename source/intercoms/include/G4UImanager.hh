@@ -41,7 +41,9 @@ class G4UIcommand;
 class G4UIsession;
 class G4UIcontrolMessenger;
 class G4UnitsMessenger;
+class G4LocalThreadCoutMessenger;
 class G4UIaliasList;
+class G4MTcoutDestination;
 
 // class description:
 //
@@ -145,6 +147,7 @@ class G4UImanager : public G4VStateDependent
       G4UIsession * g4UIWindow;
       G4UIcontrolMessenger * UImessenger;
       G4UnitsMessenger * UnitsMessenger;
+      G4LocalThreadCoutMessenger * CoutMessenger;
       G4String savedParameters;
       G4UIcommand * savedCommand;
       G4int verboseLevel;
@@ -250,6 +253,19 @@ class G4UImanager : public G4VStateDependent
         stackCommandsForBroadcast = val;
       }
       std::vector<G4String>* GetCommandStack();
+
+  public: 
+      void SetUpForAThread(G4int tId);
+
+  private:
+      G4int threadID;
+      G4MTcoutDestination* threadCout;
+
+  public:
+      void SetCoutFileName(const G4String& fileN = "G4cout.txt", G4bool ifAppend = true);
+      void SetCerrFileName(const G4String& fileN = "G4cerr.txt", G4bool ifAppend = true);
+      void SetThreadPrefixString(const G4String& s = "W");
+      void SetThreadUseBuffer(G4bool flg = true);
 };
 
 #endif

@@ -36,11 +36,13 @@
 #include "G4UIbatch.hh"
 #include "G4UIcontrolMessenger.hh"
 #include "G4UnitsMessenger.hh"
+#include "G4LocalThreadCoutMessenger.hh"
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"
 #include "G4StateManager.hh"
 #include "G4UIaliasList.hh"
 #include "G4Tokenizer.hh"
+#include "G4MTcoutDestination.hh"
 
 #include <sstream>
 #include <fstream>
@@ -63,8 +65,9 @@ G4UImanager * G4UImanager::GetUIpointer()
 
 G4UImanager::G4UImanager()
   : G4VStateDependent(true),
-    UImessenger(0), UnitsMessenger(0),
-    ignoreCmdNotFound(false), stackCommandsForBroadcast(false)
+    UImessenger(0), UnitsMessenger(0), CoutMessenger(0),
+    ignoreCmdNotFound(false), stackCommandsForBroadcast(false),
+    threadID(-1), threadCout(0) 
 {
   savedCommand = 0;
   treeTop = new G4UIcommandTree("/");
@@ -87,6 +90,7 @@ void G4UImanager::CreateMessenger()
 {
   UImessenger = new G4UIcontrolMessenger;
   UnitsMessenger = new G4UnitsMessenger;
+  CoutMessenger = new G4LocalThreadCoutMessenger;
 }
 
 G4UImanager::~G4UImanager()
@@ -94,8 +98,9 @@ G4UImanager::~G4UImanager()
   SetCoutDestination(NULL);
   histVec.clear();
   if(saveHistory) historyFile.close();
-  delete UImessenger;
+  delete CoutMessenger;
   delete UnitsMessenger;
+  delete UImessenger;
   delete treeTop;
   delete aliasList;
   fUImanagerHasBeenKilled = true;
@@ -104,6 +109,12 @@ G4UImanager::~G4UImanager()
   {
     commandStack->clear();
     delete commandStack;
+  }
+  if(threadID >= 0) 
+  {
+    if(threadCout) delete threadCout;
+    G4iosFinalization();
+    threadID = -1;
   }
 }
 
@@ -631,4 +642,57 @@ std::vector<G4String>* G4UImanager::GetCommandStack()
   commandStack = new std::vector<G4String>;
   return returnValue;
 }
+
+void G4UImanager::SetUpForAThread(G4int tId)
+{
+  threadID = tId;
+  G4iosInitialization();
+  threadCout = new G4MTcoutDestination(threadID);
+}
+
+void G4UImanager::SetCoutFileName(const G4String& fileN, G4bool ifAppend)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0) return;
+
+  if(fileN == "**Screen**")
+  { threadCout->SetCoutFileName(fileN,ifAppend); }
+  else
+  {
+    std::stringstream fn;
+    fn<<"G4W_"<<threadID<<"_"<<fileN;
+    threadCout->SetCoutFileName(fn.str(),ifAppend);
+  }
+}
+
+void G4UImanager::SetCerrFileName(const G4String& fileN, G4bool ifAppend)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0) return;
+
+  if(fileN == "**Screen**")
+  { threadCout->SetCerrFileName(fileN,ifAppend); }
+  else
+  {
+    std::stringstream fn;
+    fn<<"G4W_"<<threadID<<"_"<<fileN;
+    threadCout->SetCerrFileName(fn.str(),ifAppend);
+  }
+}
+
+void G4UImanager::SetThreadPrefixString(const G4String& s)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0) return;
+  threadCout->SetPrefixString(s);
+}
+
+void G4UImanager::SetThreadUseBuffer(G4bool flg)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0) return;
+  threadCout->EnableBuffering(flg);
+}
+
+
 
