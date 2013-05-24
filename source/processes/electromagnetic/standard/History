@@ -18,6 +18,12 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+23 May 13: V.Ivanchenko (emstand-V09-06-36)
+- G4PAIModel - G4SandiaTable is added as a class member
+- G4PAIModel, G4PAIySection - V.Grichine modified initialisation
+    call G4SandiaTable over memory crash free method; G4PAIySection 
+    was modified: arrays->G4DataVectors
+
 16 May 13: V.Ivanchenko (emstand-V09-06-35)
 - G4SeltzerBergerModel - changed interface to G4Physics2DVector
 

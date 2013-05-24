@@ -58,9 +58,8 @@ public:
   ~G4PAIySection();
 
   void Initialize(const G4Material* material, 
-		  G4double maxEnergyTransfer, 
-		  G4double betaGammaSq, G4double** sandiaCofs, G4int sandiaNumber);
-	            
+  		  G4double maxEnergyTransfer, G4double betaGammaSq, G4SandiaTable*);
+
   void     ComputeLowEnergyCof(const G4Material* material);
 
   void InitPAI();
@@ -169,27 +168,27 @@ private :
 
   G4SandiaTable*  fSandia;
 
-  G4double* fEnergyInterval;
-  G4double* fA1; 
-  G4double* fA2;
-  G4double* fA3; 
-  G4double* fA4;
+  G4DataVector fEnergyInterval;
+  G4DataVector fA1; 
+  G4DataVector fA2;
+  G4DataVector fA3; 
+  G4DataVector fA4;
 
   static
   const G4int   fMaxSplineSize ;          // Max size of output splain arrays = 500
 
-  G4double          fSplineEnergy[500];   // energy points of splain
-  G4double fRePartDielectricConst[500];   // Real part of dielectric const
-  G4double fImPartDielectricConst[500];   // Imaginary part of dielectric const
-  G4double          fIntegralTerm[500];   // Integral term in PAI cross section
-  G4double        fDifPAIySection[500];   // Differential PAI cross section
-  G4double          fdNdxCerenkov[500];   // dNdx of Cerenkov collisions
-  G4double          fdNdxPlasmon[500];    // dNdx of Plasmon collisions
+  G4DataVector          fSplineEnergy;   // energy points of splain
+  G4DataVector   fRePartDielectricConst;   // Real part of dielectric const
+  G4DataVector   fImPartDielectricConst;   // Imaginary part of dielectric const
+  G4DataVector            fIntegralTerm;   // Integral term in PAI cross section
+  G4DataVector          fDifPAIySection;   // Differential PAI cross section
+  G4DataVector            fdNdxCerenkov;   // dNdx of Cerenkov collisions
+  G4DataVector            fdNdxPlasmon;    // dNdx of Plasmon collisions
 
-  G4double   fIntegralPAIySection[500];   // Integral PAI cross section  ?
-  G4double   fIntegralPAIdEdx[500];       // Integral PAI dEdx  ?
-  G4double   fIntegralCerenkov[500];      // Integral Cerenkov N>omega  ?
-  G4double   fIntegralPlasmon[500];       // Integral Plasmon N>omega  ?
+  G4DataVector     fIntegralPAIySection;   // Integral PAI cross section  ?
+  G4DataVector     fIntegralPAIdEdx;       // Integral PAI dEdx  ?
+  G4DataVector     fIntegralCerenkov;      // Integral Cerenkov N>omega  ?
+  G4DataVector     fIntegralPlasmon;       // Integral Plasmon N>omega  ?
 
   G4double   fPAItable[500][112];         // Output array
 

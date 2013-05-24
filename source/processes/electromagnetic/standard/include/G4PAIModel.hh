@@ -57,6 +57,7 @@
 #include "globals.hh"
 #include "G4VEmFluctuationModel.hh"
 #include "G4PAIySection.hh"
+#include "G4SandiaTable.hh"
 
 class G4PhysicsLogVector;
 class G4PhysicsTable;
@@ -142,6 +143,7 @@ private:
   G4int                fMeanNumber;
   G4PhysicsLogVector*  fParticleEnergyVector ;
   G4PAIySection        fPAIySection;
+  G4SandiaTable        fSandia;
 
   // vectors
 

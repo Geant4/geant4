@@ -204,8 +204,12 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
 	fDeltaCutInKinEnergy = cuts[fCutCouple->GetIndex()];
 	//(*theCoupleTable->GetEnergyCutsVector(1))[fCutCouple->GetIndex()];
      
-	ComputeSandiaPhotoAbsCof();
+	// ComputeSandiaPhotoAbsCof();
+
+        fSandia.Initialize(mat);
 	BuildPAIonisationTable();
+
+	/*
         if(fSandiaPhotoAbsCof)
         {
           for(G4int i=0;i<fSandiaIntervalNumber;i++)
@@ -215,6 +219,7 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
           delete[] fSandiaPhotoAbsCof;
 	  fSandiaPhotoAbsCof = 0;
         }
+	*/
 	fPAIxscBank.push_back(fPAItransferTable);
 	fPAIdEdxBank.push_back(fPAIdEdxTable);
 	fdEdxTable.push_back(fdEdxVector);
@@ -291,7 +296,8 @@ void G4PAIModel::BuildPAIonisationTable()
 					fHighestKineticEnergy,
 					fTotBin);
 
-  Tmin     = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
+  // Tmin     = fSandiaPhotoAbsCof[0][0];      // low energy Sandia interval
+  Tmin = fSandia.GetSandiaMatTablePAI(0,0);      // low energy Sandia interval
   deltaLow = 100.*eV; // 0.5*eV ;
 
   for (G4int i = 0 ; i <= fTotBin ; i++)  //The loop for the kinetic energy
@@ -309,7 +315,8 @@ void G4PAIModel::BuildPAIonisationTable()
       Tkin = Tmin + deltaLow ;
 
     fPAIySection.Initialize(fMaterial, Tkin, bg2, 
-			    fSandiaPhotoAbsCof, fSandiaIntervalNumber);
+			    &fSandia);
+    // fSandiaPhotoAbsCof, fSandiaIntervalNumber);
 
     // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl ;
     // G4cout<<"n1 = "<<protonPAI.GetIntegralPAIxSection(1)*cm<<" 1/cm"<<endl ;
@@ -331,7 +338,8 @@ void G4PAIModel::BuildPAIonisationTable()
     }
     ionloss = fPAIySection.GetMeanEnergyLoss() ;   //  total <dE/dx>
 
-    if ( ionloss < DBL_MIN) { ionloss = 0.0; }
+    if ( ionloss < DBL_MIN) ionloss = 0.0; 
+
     fdEdxVector->PutValue(i,ionloss) ;
 
     fPAItransferTable->insertAt(i,transferVector) ;
