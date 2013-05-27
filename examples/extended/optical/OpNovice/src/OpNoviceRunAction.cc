@@ -38,6 +38,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNoviceRunAction::OpNoviceRunAction()
+ : G4UserRunAction(),
+   fTimer(0)
 {
   fTimer = new G4Timer;
 }

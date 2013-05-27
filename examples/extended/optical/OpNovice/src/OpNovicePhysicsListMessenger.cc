@@ -39,7 +39,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNovicePhysicsListMessenger::
-  OpNovicePhysicsListMessenger(OpNovicePhysicsList* pPhys) : fPhysicsList(pPhys)
+  OpNovicePhysicsListMessenger(OpNovicePhysicsList* pPhys) 
+  : G4UImessenger(),
+    fPhysicsList(pPhys)
 {
   fOpNoviceDir = new G4UIdirectory("/OpNovice/");
   fOpNoviceDir->SetGuidance("UI commands of this example");

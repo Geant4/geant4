@@ -50,15 +50,16 @@
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNovicePhysicsList::OpNovicePhysicsList() :  G4VUserPhysicsList()
+OpNovicePhysicsList::OpNovicePhysicsList() 
+ : G4VUserPhysicsList(),
+   fCerenkovProcess(NULL),
+   fScintillationProcess(NULL),
+   fAbsorptionProcess(NULL),
+   fRayleighScatteringProcess(NULL),
+   fMieHGScatteringProcess(NULL),
+   fBoundaryProcess(NULL),
+   fMessenger(0) 
 {
-  fCerenkovProcess           = NULL;
-  fScintillationProcess      = NULL;
-  fAbsorptionProcess         = NULL;
-  fRayleighScatteringProcess = NULL;
-  fMieHGScatteringProcess    = NULL;
-  fBoundaryProcess           = NULL;
-
   fMessenger = new OpNovicePhysicsListMessenger(this);
   SetVerboseLevel(0);
 }

@@ -44,6 +44,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 OpNoviceDetectorConstruction::OpNoviceDetectorConstruction()
+ : G4VUserDetectorConstruction()
 {
   fExpHall_x = fExpHall_y = fExpHall_z = 10.0*m;
   fTank_x    = fTank_y    = fTank_z    =  5.0*m;

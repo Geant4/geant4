@@ -41,7 +41,8 @@
 
 OpNovicePrimaryGeneratorMessenger::
   OpNovicePrimaryGeneratorMessenger(OpNovicePrimaryGeneratorAction* OpNoviceGun)
-  : fOpNoviceAction(OpNoviceGun)
+  : G4UImessenger(),
+    fOpNoviceAction(OpNoviceGun)
 {
   fGunDir = new G4UIdirectory("/OpNovice/gun/");
   fGunDir->SetGuidance("PrimaryGenerator control");
