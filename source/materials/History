@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-05-13 V.Ivanchenko (materials-V09-06-14)
+- G4SandiaTable - fixed typo in previous tag
 
 22-05-13 V.Ivanchenko (materials-V09-06-13)
 22-05-13 V.Grichine: G4SandiaTable.hh/.cc were updated to prepare 

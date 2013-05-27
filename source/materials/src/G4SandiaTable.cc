@@ -38,6 +38,7 @@
 // 03.02.04 Update distructor V.Ivanchenko
 // 05.03.04 New methods for old sorting algorithm for PAI model. V.Grichine
 // 26.10.11 new scheme for G4Exception  (mma) 
+// 22.05.13 preparation of material table without dynamical arrays. V. Grichine 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -313,7 +314,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
   // fMaxInterval = MaxIntervals + 1;
   // fMaxInterval = MaxIntervals;
 
-  if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+  if ( fVerbose > 0 )
   {
     G4cout<<"fMaxInterval = "<<fMaxInterval<<G4endl;
   } 
@@ -409,9 +410,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 
   if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
   {
-    for( i = 0; i < noElm; i++ ) {
-      G4cout<<i<<" = elN, fraction = "<<fractionW[i]<<G4endl;
-    }
+    for( i = 0; i < noElm; i++ )  G4cout<<i<<" = elN, fraction = "<<fractionW[i]<<G4endl;
   }      
    
   for( i = 0; i < noElm; i++ )
@@ -433,14 +432,14 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
 	G4double E1 = fPhotoAbsorptionCof0[q];
 	G4double E2 = fPhotoAbsorptionCof0[q+1];
 
-        if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+        if ( fVerbose > 0  )
         {
           G4cout<<"k = "<<k<<", q = "<<q<<", B1 = "<<B1<<", B2 = "<<B2
 		<<", E1 = "<<E1<<", E2 = "<<E2<<G4endl;
         }      
 	if( B1 > E1 || B2 < E2 || E1 < I1 )  
 	{
-          if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+          if ( fVerbose > 0  )
           {
             G4cout<<"continue for: B1 = "<<B1<<", B2 = "<<B2<<", E1 = "
 		  <<E1<<", E2 = "<<E2<<G4endl;
@@ -471,7 +470,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
         fPhotoAbsorptionCof3[c] != 0.0 || 
 	fPhotoAbsorptionCof4[c] != 0.0     )  continue;
 
-    if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+    if ( fVerbose > 0 )
     {
       G4cout<<c<<" = number with zero cofs"<<G4endl;
     }      
@@ -487,9 +486,10 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
     // c--;
   }
   while( c < fMaxInterval - 1 ); // was <
+
+  if( fPhotoAbsorptionCof0[fMaxInterval-1] == 0.0 ) fMaxInterval--; 
   	
   // create the sandia matrix for this material
-  // fMaxInterval--; 
   
   fMatSandiaMatrixPAI = new G4OrderedTable();
 
@@ -509,7 +509,7 @@ void G4SandiaTable::ComputeMatSandiaMatrixPAI()
   }
   // fMaxInterval--; // to avoid duplicate at 500 keV or extra zeros in last interval
 
-  if ( fVerbose > 0 && fMaterial->GetName() == "G4_Ar" )
+  if ( fVerbose > 0  )
   {
     G4cout<<"vmg, G4SandiaTable::ComputeMatSandiaMatrixPAI(), mat = "
 	  <<fMaterial->GetName()<<G4endl;
@@ -629,10 +629,9 @@ G4double** G4SandiaTable::GetPointerToCof()
 
 //////////////////////////////////////////////////////////////////////////////..
 
-inline void
-G4SandiaTable::SandiaSwap( G4double** da ,
-                           G4int i,
-                           G4int j )
+void G4SandiaTable::SandiaSwap( G4double** da ,
+				G4int i,
+				G4int j )
 {
   G4double tmp = da[i][0] ;
   da[i][0] = da[j][0] ;
