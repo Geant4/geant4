@@ -27,6 +27,9 @@
 # 20130221  M. Kelsey -- Add factory for two-body angular dist. classes
 # 20130304  M. Kelsey -- Add G4CascadeHistory
 # 20130307  M. Kelsey -- Add factory and classes for n-body momentum dists.
+# 20130419  M. Kelsey -- Add multi-body generator and supporting classes
+# 20130508  M. Kelsey -- Add new classes for muon capture
+# 20130521  M. Kelsey -- Add new PP (including NN) angular distribution
 #------------------------------------------------------------------------------
 
 # List external includes needed.
@@ -84,6 +87,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeData.hh
         G4CascadeData.icc
         G4CascadeDeexcitation.hh
+	G4CascadeFinalStateAlgorithm.hh
+	G4CascadeFinalStateGenerator.hh
         G4CascadeFunctions.hh
         G4CascadeFunctions.icc
         G4CascadeGamNChannel.hh
@@ -102,6 +107,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeKzeroPChannel.hh
         G4CascadeLambdaNChannel.hh
         G4CascadeLambdaPChannel.hh
+	G4CascadeMuMinusPChannel.hh
         G4CascadeNNChannel.hh
         G4CascadeNPChannel.hh
         G4CascadeOmegaMinusNChannel.hh
@@ -142,8 +148,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4GamP2NPipAngDst.hh
         G4GamP2PPi0AngDst.hh
         G4GammaNuclAngDst.hh
+	G4GDecay3.hh
         G4HadNElastic1AngDst.hh
         G4HadNElastic2AngDst.hh
+        G4HadNucl3BodyAngDst.hh
         G4HadNucl3BodyMomDst.hh
         G4HadNucl4BodyMomDst.hh
         G4InteractionCase.hh
@@ -152,6 +160,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4InuclElementaryParticle.hh
         G4InuclEvaporation.hh
         G4InuclNuclei.hh
+        G4InuclParamAngDst.hh
         G4InuclParamMomDst.hh
         G4InuclParticle.hh
         G4InuclParticleNames.hh
@@ -161,6 +170,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4MultiBodyMomentumDist.hh
 	G4NP2NPAngDst.hh
         G4NonEquilibriumEvaporator.hh
+        G4NuclNucl3BodyAngDst.hh
         G4NuclNucl3BodyMomDst.hh
         G4NuclNucl4BodyMomDst.hh
         G4NuclNuclAngDst.hh
@@ -174,12 +184,14 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4ParticleLargerEkin.hh
         G4PiNInelasticAngDst.hh
         G4PionNucSampler.hh
+	G4PP2PPAngDst.hh
         G4PreCompoundDeexcitation.hh
         G4TwoBodyAngularDist.hh
         G4UnboundPN.hh
         G4VCascadeCollider.hh
         G4VCascadeDeexcitation.hh
         G4VMultiBodyMomDst.hh
+        G4VThreeBodyAngDst.hh
         G4VTwoBodyAngDst.hh
         G4WatcherGun.hh
     SOURCES
@@ -192,6 +204,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeCoalescence.cc
         G4CascadeColliderBase.cc
         G4CascadeDeexcitation.cc
+	G4CascadeFinalStateAlgorithm.cc
+	G4CascadeFinalStateGenerator.cc
         G4CascadeHistory.cc
         G4CascadeInterface.cc
         G4CascadeKminusNChannel.cc
@@ -204,6 +218,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeKzeroPChannel.cc
         G4CascadeLambdaNChannel.cc
         G4CascadeLambdaPChannel.cc
+	G4CascadeMuMinusPChannel.cc
         G4CascadeNNChannel.cc
         G4CascadeNPChannel.cc
         G4CascadeOmegaMinusNChannel.cc
@@ -239,8 +254,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4GamP2NPipAngDst.cc
         G4GamP2PPi0AngDst.cc
         G4GammaNuclAngDst.cc
+	G4GDecay3.cc
         G4HadNElastic1AngDst.cc
         G4HadNElastic2AngDst.cc
+        G4HadNucl3BodyAngDst.cc
         G4HadNucl3BodyMomDst.cc
         G4HadNucl4BodyMomDst.cc
         G4InteractionCase.cc
@@ -249,6 +266,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4InuclElementaryParticle.cc
         G4InuclEvaporation.cc
         G4InuclNuclei.cc
+        G4InuclParamAngDst.cc
         G4InuclParamMomDst.cc
         G4InuclParticle.cc
         G4InuclSpecialFunctions.cc
@@ -257,6 +275,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4MultiBodyMomentumDist.cc
 	G4NP2NPAngDst.cc
         G4NonEquilibriumEvaporator.cc
+        G4NuclNucl3BodyAngDst.cc
         G4NuclNucl3BodyMomDst.cc
         G4NuclNucl4BodyMomDst.cc
         G4NuclNuclAngDst.cc
@@ -264,6 +283,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4NucleiModel.cc
         G4PiNInelasticAngDst.cc
         G4PionNucSampler.cc
+	G4PP2PPAngDst.cc
         G4PreCompoundDeexcitation.cc
         G4TwoBodyAngularDist.cc
         G4UnboundPN.cc

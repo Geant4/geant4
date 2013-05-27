@@ -23,37 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: $
 //
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
+// File:    G4GDecay3.hh
+// Author:  Dennis Wright (SLAC)
+// Date:    19 April 2013
 //
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
+// Description: three-body phase space momentum generator based on 
+//              GDECA3 of Geant3
+//
+#ifndef G4GDecay3_h
+#define G4GDecay3_h 1
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#include "globals.hh"
+#include "G4ThreeVector.hh"
+#include <vector>
 
-#include "G4VShortLivedParticle.hh"
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
+class G4GDecay3 {
 
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
+  public:
+    G4GDecay3() {;}
+    G4GDecay3(const G4double& pMass, const G4double& dMass0,
+              const G4double& dMass1, const G4double& dMass2);
+    ~G4GDecay3() {;}
   
-public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
-};
+    std::vector<G4ThreeVector> GetThreeBodyMomenta();
 
-#endif	/* G4DIPROTON_HH */
+  private:
+    G4bool CalculateMomentumMagnitudes();
+
+    G4int loopMax;
+
+    G4double parentMass;
+    G4double mDaughter0;
+    G4double mDaughter1;
+    G4double mDaughter2;
+
+    G4double pDaughter0;
+    G4double pDaughter1;
+    G4double pDaughter2;
+};        
+
+#endif
+

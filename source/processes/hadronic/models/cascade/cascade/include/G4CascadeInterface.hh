@@ -54,6 +54,7 @@
 //		version which takes G4ParticleDefintion, a la G4VProcess.
 // 20120822  M. Kelsey -- Add function to dump user configuration settings.
 //		Remove local verboseLevel; shadows base class data member.
+// 20130501  M. Kelsey -- Add static initializer to created shared objects.
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
@@ -100,6 +101,9 @@ public:
 		      G4Nucleus& theNucleus);
 
   G4bool IsApplicable(const G4ParticleDefinition* aPD) const;
+
+  // Used with multithreaded applications to preload shared objects
+  static void Initialize();
 
   // Select betweeen different post-cascade de-excitation models
   void useCascadeDeexcitation();

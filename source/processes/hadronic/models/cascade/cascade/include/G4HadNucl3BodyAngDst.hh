@@ -24,36 +24,22 @@
 // ********************************************************************
 //
 // $Id$
+// Author:  Michael Kelsey (SLAC)
+// Date:    22 April 2013
 //
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
+// Description: class containing parametrized angular distributions
+//              in the CM for hadron/nucleon 3-body final states
 //
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#ifndef G4HadNucl3BodyAngDst_h
+#define G4HadNucl3BodyAngDst_h 1
 
-#include "G4VShortLivedParticle.hh"
+#include "G4InuclParamAngDst.hh"
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
-
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
-  
+class G4HadNucl3BodyAngDst : public G4InuclParamAngDst {
 public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
+  G4HadNucl3BodyAngDst(G4int verbose = 0);
+  virtual ~G4HadNucl3BodyAngDst() {;}
 };
 
-#endif	/* G4DIPROTON_HH */
+#endif

@@ -38,6 +38,7 @@
 //		pass through.
 // 20111007  M. Kelsey -- Add new gamma-n and gamma-p tables.
 // 20130129  M. Kelsey -- Drop load-on-demand interfaces, fill in ctor
+// 20130429  M. Kelsey -- Change instance to thread-local pointer.
 
 #include "G4CascadeChannelTables.hh"
 #include "G4CascadeChannel.hh"
@@ -74,6 +75,7 @@
 #include "G4CascadeXiZeroPChannel.hh"
 #include "G4CascadeOmegaMinusNChannel.hh"
 #include "G4CascadeOmegaMinusPChannel.hh"
+#include "G4CascadeMuMinusPChannel.hh"
 #include "G4InuclParticleNames.hh"
 #include <iostream>
 #include <map>
@@ -82,10 +84,11 @@ using namespace G4InuclParticleNames;
 
 // Singleton is created at first invocation
 
-const G4CascadeChannelTables G4CascadeChannelTables::theInstance;
+G4ThreadLocal G4CascadeChannelTables* G4CascadeChannelTables::theInstance = 0;
 
 const G4CascadeChannelTables& G4CascadeChannelTables::instance() {
-  return theInstance;
+  if (!theInstance) theInstance = new G4CascadeChannelTables;
+  return *theInstance;
 }
 
 
@@ -126,6 +129,7 @@ G4CascadeChannelTables::G4CascadeChannelTables() {
   tables[xim*pro] = new G4CascadeXiMinusPChannel;
   tables[om*neu]  = new G4CascadeOmegaMinusNChannel;
   tables[om*pro]  = new G4CascadeOmegaMinusPChannel;
+  tables[mum*pro] = new G4CascadeMuMinusPChannel;
 }
 
 G4CascadeChannelTables::~G4CascadeChannelTables() {

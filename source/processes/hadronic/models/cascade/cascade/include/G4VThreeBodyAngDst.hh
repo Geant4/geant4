@@ -24,36 +24,32 @@
 // ********************************************************************
 //
 // $Id$
+// Author:  Michael Kelsey (SLAC)
+// Date:    22 April 2013
 //
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
+// Description: pure virtual base class for three-body final state angular
+//              distributions in Bertini-style cascade, subclassed from
+//		G4VTwoBodyAngDst (c.f. ROOT's TH1 -> TH2 -> TH3)
 //
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#ifndef G4VThreeBodyAngDst_h
+#define G4VThreeBodyAngDst_h 1
 
-#include "G4VShortLivedParticle.hh"
+#include "G4VTwoBodyAngDst.hh"
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
-
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
-  
+class G4VThreeBodyAngDst : public G4VTwoBodyAngDst {
 public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
-};
+  G4VThreeBodyAngDst(const G4String& name, G4int verbose=0)
+    : G4VTwoBodyAngDst(name, verbose) {;}
+  virtual ~G4VThreeBodyAngDst() {;}
 
-#endif	/* G4DIPROTON_HH */
+  // Three-body mode needs particle type and bullet energy
+  virtual G4double GetCosTheta(G4int ptype, G4double ekin) const = 0;
+
+  // Implement base-class interface to re-interpret 'pcm' as ptype
+  virtual G4double GetCosTheta(const G4double& ekin, const G4double& pcm) const {
+    return this->GetCosTheta((G4int)pcm, ekin);
+  }
+};        
+
+#endif	/* G4VThreeBodyAngDst_h */

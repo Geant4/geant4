@@ -102,8 +102,27 @@ public:
 
   static G4int type(const G4ParticleDefinition* pd);
 
+  // Ensure that type code refers to a known particle
+  inline static G4bool valid(G4int ityp) { return ityp!=0; }
+  G4bool valid() const { return valid(type()); }
+
   G4bool isPhoton() const { return (type() == G4InuclParticleNames::photon); }
 
+  G4bool isMuon() const { return (type() == G4InuclParticleNames::muonMinus ||
+				  type() == G4InuclParticleNames::muonPlus); }
+
+  G4bool isElectron() const { return (type() == G4InuclParticleNames::electron ||
+				      type() == G4InuclParticleNames::positron); }
+
+  G4bool isNeutrino() const {
+    return (type() == G4InuclParticleNames::electronNu ||
+	    type() == G4InuclParticleNames::muonNu ||
+	    type() == G4InuclParticleNames::tauNu ||
+	    type() == G4InuclParticleNames::antiElectronNu ||
+	    type() == G4InuclParticleNames::antiMuonNu ||
+	    type() == G4InuclParticleNames::antiTauNu);
+  }
+  
   G4bool pion() const { return (type()==G4InuclParticleNames::pionPlus ||
 				type()==G4InuclParticleNames::pionMinus ||
 				type()==G4InuclParticleNames::pionZero); }
@@ -126,8 +145,6 @@ public:
   G4bool quasi_deutron() const { return (type() > 100); }
 
   G4int getStrangeness() const { return getStrangeness(type()); }
-
-  G4bool valid() const { return type()>0; }
 
   virtual void print(std::ostream& os) const;
 

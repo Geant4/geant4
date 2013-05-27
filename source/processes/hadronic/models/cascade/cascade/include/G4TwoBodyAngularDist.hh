@@ -31,6 +31,7 @@
 //		functions based on intial/final state codes.
 //
 // 20130307  M. Kelsey -- Add verbosity interface for contained objects
+// 20130422  M. Kelsey -- Add three-body distributions, for temporary use
 
 #ifndef G4TwoBodyAngularDist_h
 #define G4TwoBodyAngularDist_h 1
@@ -40,12 +41,16 @@
 class G4VTwoBodyAngDst;
 class G4GamP2NPipAngDst;
 class G4GamP2PPi0AngDst;
+class G4PP2PPAngDst;
 class G4NP2NPAngDst;
 class G4NuclNuclAngDst;
 class G4PiNInelasticAngDst;
 class G4HadNElastic1AngDst;
 class G4HadNElastic2AngDst;
 class G4GammaNuclAngDst;
+
+class G4HadNucl3BodyAngDst;	// TEMPORARY, until migration to GENBOD
+class G4NuclNucl3BodyAngDst;
 
 
 class G4TwoBodyAngularDist {
@@ -57,6 +62,10 @@ public:
   // Return appropriate generator for initial, final state, and kw flag
   static const G4VTwoBodyAngDst* GetDist(G4int is, G4int fs, G4int kw) {
     return theInstance.ChooseDist(is,fs,kw);
+  }
+
+  static const G4VTwoBodyAngDst* GetDist(G4int is) {
+    return theInstance.ChooseDist(is,0,0);
   }
 
   // Pass verbosity through to owned objects
@@ -74,12 +83,17 @@ private:
   // Generators for various initial/final state combinations
   G4GamP2NPipAngDst* gp_npip;		// gamma p -> n pi+
   G4GamP2PPi0AngDst* gp_ppi0;		// gamma p -> p pi0
+  G4PP2PPAngDst* ppAngDst;              // pp, nn elastic
   G4NP2NPAngDst* npAngDst;              // np and pn elastic
-  G4NuclNuclAngDst* nnAngDst;		// N N and Y N elastic and inelastic
+  G4NuclNuclAngDst* nnAngDst;		// Y N elastic and inelastic
   G4PiNInelasticAngDst* qxAngDst;	// pi N charge/strangeness exchange
   G4HadNElastic1AngDst* hn1AngDst;	// pi+p and related elastic scattering
   G4HadNElastic2AngDst* hn2AngDst;	// pi-p and related elastic scattering
   G4GammaNuclAngDst* gnAngDst;		// gamma N inelastic
+
+  // TEMPORARY generators for three-body final states
+  G4HadNucl3BodyAngDst* hn3BodyDst;	// (pi,K,Y,g) N -> XYZ scattering
+  G4NuclNucl3BodyAngDst* nn3BodyDst;	// N N -> XYZ scattering
 };
 
 #endif	/* G4TwoBodyAngularDist_h */

@@ -37,6 +37,7 @@
 // 20110923  M. Kelsey -- Add optional stream& argument to printTable().
 // 20130129  M. Kelsey -- Drop load-on-demand interfaces, fill in ctor
 // 20130306  M. Kelsey -- Add inclusive printing of all tables here
+// 20130429  M. Kelsey -- Change instance to thread-local pointer.
 
 #ifndef G4_CASCADE_CHANNEL_TABLES_HH
 #define G4_CASCADE_CHANNEL_TABLES_HH
@@ -61,8 +62,8 @@ public:
   static void PrintTable(G4int initialState, std::ostream& os=G4cout);
 
 private:
-  static const G4CascadeChannelTables& instance();	// Singleton
-  static const G4CascadeChannelTables theInstance;
+  static const G4CascadeChannelTables& instance();		// Singleton
+  static G4ThreadLocal G4CascadeChannelTables* theInstance;	// per thread
 
   G4CascadeChannelTables();
   ~G4CascadeChannelTables();

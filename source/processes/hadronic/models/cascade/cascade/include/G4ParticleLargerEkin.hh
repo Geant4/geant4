@@ -30,6 +30,7 @@
 //
 // 20091125  M. Kelsey -- Add additional operator() which uses pointers
 // 20110415  M. Kelsey -- Add additional operator() for G4CascadParticle
+// 20130522  M. Kelsey -- Long-standing error: should be ">", not ">="
 
 #ifndef G4PARTICLE_LARGER_EKIN_HH
 #define G4PARTICLE_LARGER_EKIN_HH
@@ -46,13 +47,11 @@ public:
   G4bool operator() (const G4InuclElementaryParticle& part1,
 		     const G4InuclElementaryParticle& part2) {
 #ifdef G4CASCADE_DEBUG_SORT
-    G4cout << "part1 @ " << &part1 << ": ";
-    part1.printParticle();
-    G4cout << "part2 @ " << &part2 << ": ";
-    part2.printParticle();
-    G4cout << G4endl;
+    G4cout << "part1 @ " << &part1 << ": " << part1
+	   << "part2 @ " << &part2 << ": " << part2
+	   << G4endl;
 #endif
-    return (part1.getKineticEnergy() >= part2.getKineticEnergy());
+    return (part1.getKineticEnergy() > part2.getKineticEnergy());
   }
  
   G4bool operator() (const G4InuclElementaryParticle* part1,

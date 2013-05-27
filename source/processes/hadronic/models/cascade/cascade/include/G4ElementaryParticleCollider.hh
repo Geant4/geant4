@@ -50,20 +50,21 @@
 // 20130221  M. Kelsey -- Move two-body angular dist classes to factory
 // 20130306  M. Kelsey -- Move printFinalStateTables() to table factory
 // 20130307  M. Kelsey -- Reverse order of dimensions for rmn array
+// 20130422  M. Kelsey -- Move kinematics to G4CascadeFinalStateAlgorithm
+// 20130508  D. Wright -- Add muon capture, with absorption on quasideuterons
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
 
 #include "G4CascadeColliderBase.hh"
+#include "G4CascadeFinalStateGenerator.hh"
 #include "G4CascadeInterpolator.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4LorentzVector.hh"
 #include <iosfwd>
 #include <vector>
 
-class G4LorentzConvertor;
 class G4CollisionOutput;
-class G4TwoBodyAngularDist;
 
 
 class G4ElementaryParticleCollider : public G4CascadeColliderBase {
@@ -75,50 +76,34 @@ public:
 	       G4CollisionOutput& output);
 
 private:
-  void initializeArrays();
-
   G4int generateMultiplicity(G4int is, G4double ekin) const;
 
   void generateOutgoingPartTypes(G4int is, G4int mult, G4double ekin);
 
-  void generateSCMfinalState(G4double ekin, G4double etot_scm, G4double pscm,
+  void generateSCMfinalState(G4double ekin, G4double etot_scm,
 			     G4InuclElementaryParticle* particle1,
-			     G4InuclElementaryParticle* particle2, 
-			     G4LorentzConvertor* toSCM); 
+			     G4InuclElementaryParticle* particle2); 
 
   void generateSCMpionAbsorption(G4double etot_scm,
 				 G4InuclElementaryParticle* particle1,
 				 G4InuclElementaryParticle* particle2); 
 
-  void generateMomModules(G4int mult, G4int is, G4double ekin,
-			  G4double etot_cm); 
+  void generateSCMmuonAbsorption(G4double etot_scm,
+				 G4InuclElementaryParticle* particle1,
+				 G4InuclElementaryParticle* particle2); 
 
-  // Samples the CM momentum for elastic and charge exchange scattering
-  //
-  G4LorentzVector
-  sampleCMmomentumFor2to2(G4int is, G4int fs, G4int kw, G4double ekin,
-			  G4double pscm) const; 
+  void fillOutgoingMasses();		// Fill mass arrays from particle types
 
-  G4double getMomModuleFor2toMany(G4int is, G4int mult, G4int knd, 
-				  G4double ekin) const; 
-
-
-  G4bool satisfyTriangle(const std::vector<G4double>& modules) const; 
-	
-  G4LorentzVector
-  particleSCMmomentumFor2to3(G4int is, G4int knd, G4double ekin, 
-			     G4double pmod) const; 
+  // Utility class to generate final-state kinematics
+  G4CascadeFinalStateGenerator fsGenerator;
 
   // Internal buffers for lists of secondaries
   std::vector<G4InuclElementaryParticle> particles;
   std::vector<G4LorentzVector> scm_momentums;
   std::vector<G4double> modules;
+  std::vector<G4double> masses;
   std::vector<G4double> masses2;
   std::vector<G4int> particle_kinds;
-
-  // Parameter arrays for momentum distributions
-  static const G4double rmn[2][10][14];    
-  static const G4double abn[4][4][4];
 };
 
 #endif	/* G4ELEMENTARY_PARTICLE_COLLIDER_HH */

@@ -15,6 +15,144 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 May 2013  Michael Kelsey (hadr-casc-V09-06-29)
+-------------------------------------------------
+- G4NucleiModel:  Continue trying to resolve FPE errors with inf and NaN.
+  Improve bounds checking on zone value passed to inverseMFP; move "large"
+  and "small" cutoffs to static const, set globally.
+
+23 May 2013  Michael Kelsey (hadr-casc-V09-06-28)
+-------------------------------------------------
+- G4NucleiModel.cc:  Fix initialization of dummy_convertor after setting
+  bullet and target momenta.  For stopped particle outside nucleus, reset
+  "zone" value to outermost zone (avoid out-of-bounds accesses).
+
+22 May 2013  Michael Kelsey (hadr-casc-V09-06-27)
+-------------------------------------------------
+- G4ElementaryParticleCollider.cc:  Add protection if N-body generator fails
+  after too many retries.  On Windows, out-of-bounds error was (correctly)
+  thrown.
+
+- G4ParticleLargerEkin.hh, G4ParticleLargerBeta.hh:  Change ">=" to ">" in
+  both cases, to avoid error in (extremely rare) case that both inputs are
+  identical.  With floats, this is a ~2^-64 probability, but a Windows test
+  job managed to catch it.
+
+21 May 2013  Michael Kelsey (hadr-casc-V09-06-26)
+-------------------------------------------------
+- sources.cmake:  Added G4PP2PPAngDst.
+
+20 May 2013  Dennis Wright
+--------------------------
+- added class G4PP2PPAngDst, which contains elastic pp and nn angular
+  distributions generated from numerically integrated SAID cross sections
+  and pp scattering data.  Below 2.75 GeV SAID calculations were used with
+  Coulomb interactions turned off.  Above 2.75 GeV pp scattering data is used.
+
+  Files modified: G4TwoBodyAngularDist.hh, .cc
+
+11 May 2013  Michael Kelsey (hadr-casc-V09-06-25)
+-------------------------------------------------
+- G4NucleiModel.cc: Protections for at-rest particles (muon capture):  In
+  choosePointAlongTraj() set phat=(0,0,1); in generateInteractionPartners()
+  apply zero-path exit only for finite momentum.  Move choosePointAlongTraj
+  up to initializeCascad(), rather than waiting for propagation.  Change
+  tests on "spath < path" to <= so that at-rest particles still interact (in
+  these cases, spath and path will both be zero).  Hide "zone 0 transition"
+  message behind verbosity.
+
+- G4ElementaryParticleCollider.cc: Skip neutrinos silently in ::collide().
+
+10 May 2013  Michael Kelsey
+---------------------------
+- G4NucleiModel.hh:  Protect getPotential() from leptons, by checking for
+  ityp<0.
+
+9 May 2013  Michael Kelsey (hadr-casc-V09-06-24)
+------------------------------------------------
+- G4CascadeFinalStateAlgorithm.cc: Fix bugs where two-body and three-body
+  momentum vectors were not properly rotated before return; caused energy
+  and momentum violations in hydrogen target cases.  Improvided diagnostic
+  messages to match output from old G4EPCollider version.
+
+8 May 2013  Dennis Wright/Michael Kelsey
+----------------------------------------
+Introduce muon-capture handling, with new particle types and three-body
+muon-dibaryon interactions.
+
+Modified files:	G4InuclElementaryParticle.hh,.cc
+		G4InuclParticleNames.hh
+		G4CascadeChannelTables.cc
+		G4CascadeInterface.cc
+		G4ElementaryParticleCollider.hh,.cc
+		G4NucleiModel.hh,.cc
+		sources.cmake
+
+New files:	G4CascadeMuMinusPChannel.hh,.cc
+		G4GDecay3.hh,.cc
+
+1 May 2013  Michael Kelsey (hadr-casc-V09-06-23)
+------------------------------------------------
+- G4CascadeInterface:  Add static function Initialize() to create shared
+  objects in master thread, to avoid cross-thread collisions.  Currently the
+  final-state lookup tables and quasideuteron particles are created.
+
+- G4Dineutron, G4Diproton, G4UnboundPN:  Remove "G4ThreadLocal" from static
+  pointer, to make it shared across threads.  Modify initialization to get
+  G4ParticleTable "readiness" flag, and restore saved value.
+
+22 April 2013  Michael Kelsey (hadr-casc-V09-06-22)
+---------------------------------------------------
+- G4CascadeChannelTables:  Convert to thread-local singletons, to avoid
+  thread collisions inside "fillSigmaBuffer()" calls within tables (since
+  that mutable vector is shared across all threads).
+
+22 April 2013  Michael Kelsey (hadr-casc-V09-06-21)
+---------------------------------------------------
+NOTE:  Requires hadr-mod-util-V09-06-04.
+
+- G4ElementaryParticleCollider:  Replace all kinematics generation, except
+  for pion-dibaryon absorption, with G4CascadeFinalStateGenerator.  Simplify
+  ::collide(), eliminating nested if-blocks, moving replicated code outside
+  of if-blocks, adding returns on failure tests.
+
+22 April 2013  Michael Kelsey (hadr-casc-V09-06-20)
+---------------------------------------------------
+NOTE:  Requires hadr-mod-util-V09-06-04.
+
+New interface for momentum and angular distribution generators, subclasses
+of (new) models/util/G4VHadDecayAlgorithm.  These are intended to be
+"temporary" implementations, reproducing G4ElementaryParticleCollider
+behaviour.  G4EPCollider will be migrated to use GENBOD or another true
+phase-space generator.
+
+- G4CascadeFinalStateGenerator: Subclass of G4HadDecayGenerator, which
+  provides a "Configure" function to take Bertini-specific inputs (bullet,
+  target, and list of particle types) to set up distributions.
+
+- G4CascadeFinalStateAlgorithm: Subclass of G4VHadDecayAlgorithm, used by
+  G4CascadeFSGenerator to reproduce G4EPCollider kinematics.  Momentum
+  moduli are generated separately from angular distributions, then merged
+  together and tested for consistency.
+
+- G4VThreeBodyAngDst.hh:  Subclass of G4VTwoBodyAngDst, which provides
+  interface to generate polar angle for hN -> XYZ or NN -> XYZ states,
+  currently handled internally to G4EPCollider.
+
+- G4InuclParamAngDst:  Subclass of G4VThreeBodyAngDst which implements the
+  parametrized "abn[2][4][4]" arrays in G4EPCollider.  This is exactly
+  analogous to the recently introduced G4InuclParamMomDst.
+
+- G4HadNucl3BodyAngDst:  Instance of G4InuclParamAngDst for (h,Y,g)N -> XYZ
+  interactions.
+
+- G4NuclNucl3BodyAngDst:  Instance of G4InuclParamAngDst for N N -> XYZ
+  interactions.
+
+- G4TwoBodyAngularDist:  Add interface to access three-body distributions.
+
+- sources.cmake:  Add all new source files to lists.
+
 22 April 2013  Michael Kelsey (hadr-casc-V09-06-19)
 ---------------------------------------------------
 Minor code cleanup before deploying some major revisions.

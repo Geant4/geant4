@@ -32,6 +32,7 @@
 //      17 Nov 2009:  Michael Kelsey
 //	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
 //	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
+//	01 May 2013:  Remove G4ThreadLocal from static pointer.
 // ----------------------------------------------------------------
 
 #ifndef G4DINEUTRON_HH
@@ -45,7 +46,7 @@
 
 class G4Dineutron : public G4VShortLivedParticle {
 private:
-  static G4ThreadLocal G4Dineutron* theInstance;
+  static G4Dineutron* theInstance;
   G4Dineutron();
   virtual ~G4Dineutron() { theInstance = 0; }
   

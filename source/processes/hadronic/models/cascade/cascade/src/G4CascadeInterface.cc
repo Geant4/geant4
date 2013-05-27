@@ -95,6 +95,7 @@
 // 20120525  M. Kelsey -- In NoInteraction, check for Ekin<0., set to zero;
 //		use SetEnergyChange(0.) explicitly for good final states.
 // 20120822  M. Kelsey -- Move envvars to G4CascadeParameters.
+// 20130508  D. Wright -- Add support for muon capture
 
 #include <cmath>
 #include <iostream>
@@ -123,6 +124,9 @@
 #include "G4ReactionProductVector.hh"
 #include "G4Track.hh"
 #include "G4V3DNucleus.hh"
+#include "G4UnboundPN.hh"
+#include "G4Dineutron.hh"
+#include "G4Diproton.hh"
 
 using namespace G4InuclParticleNames;
 
@@ -153,7 +157,6 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
   if (G4CascadeParameters::usePreCompound()) usePreCompoundDeexcitation();
 }
 
-
 G4CascadeInterface::~G4CascadeInterface() {
   clear();
   delete collider; collider=0;
@@ -179,10 +182,21 @@ void G4CascadeInterface::DumpConfiguration(std::ostream& outFile) const {
   G4CascadeParameters::DumpConfiguration(outFile);
 }
 
-
 void G4CascadeInterface::clear() {
   bullet=0;
   target=0;
+}
+
+
+// Initialize shared objects for use across multiple threads
+
+void G4CascadeInterface::Initialize() {
+  G4ParticleDefinition* pd = 0;
+  pd = G4UnboundPN::Definition();
+  pd = G4Dineutron::Definition();
+  pd = G4Diproton::Definition();
+  const G4CascadeChannel* ch = G4CascadeChannelTables::GetTable(0);
+  if (!ch || !pd) return;	// Dummy action to avoid "unused variables"
 }
 
 
@@ -220,7 +234,7 @@ G4bool G4CascadeInterface::IsApplicable(const G4ParticleDefinition* aPD) const {
 
   // Valid particle and have interactions available
   G4int type = G4InuclElementaryParticle::type(aPD);
-  return (type>0 && G4CascadeChannelTables::GetTable(type));
+  return (G4CascadeChannelTables::GetTable(type));
 }
 
 
@@ -316,6 +330,16 @@ G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   // Clean up and return final result;
   clear();
+/*
+  G4int nSec = theParticleChange.GetNumberOfSecondaries();
+  for (G4int i = 0; i < nSec; i++) {
+    G4HadSecondary* sec = theParticleChange.GetSecondary(i);
+    G4DynamicParticle* dp = sec->GetParticle();
+    if (dp->GetDefinition()->GetParticleName() == "neutron") 
+      G4cout << dp->GetDefinition()->GetParticleName() << " has "
+             << dp->GetKineticEnergy()/MeV << " MeV " << G4endl;
+  }
+*/
   return &theParticleChange;
 }
 
@@ -414,7 +438,6 @@ G4CascadeInterface::NoInteraction(const G4HadProjectile& aTrack,
 
 G4bool G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
   const G4ParticleDefinition* trkDef = aTrack.GetDefinition();
-
   G4int bulletType = 0;			// For elementary particles
   G4int bulletA = 0, bulletZ = 0;	// For nucleus projectile
 
@@ -442,11 +465,11 @@ G4bool G4CascadeInterface::createBullet(const G4HadProjectile& aTrack) {
   bulletInLabFrame.rotateZ(-projectileMomentum.phi());
   bulletInLabFrame.rotateY(-projectileMomentum.theta());
   bulletInLabFrame.invert();
-  
+
   G4LorentzVector momentumBullet(0., 0., projectileMomentum.rho(),
 				 projectileMomentum.e());
-
-  if (bulletType > 0) {
+  
+  if (G4InuclElementaryParticle::valid(bulletType)) {
     hadronBullet.fill(momentumBullet, bulletType);
     bullet = &hadronBullet;
   } else {

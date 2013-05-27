@@ -24,36 +24,37 @@
 // ********************************************************************
 //
 // $Id$
+// Author:  Michael Kelsey (SLAC)
+// Date:    15 April 2013
 //
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
+// Description: Subclass of models/util G4HadDecayGenerator to support
+//		production of two-body and three-body final state momenta,
+//		using interaction-specific distributions.
 //
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#include "G4CascadeFinalStateGenerator.hh"
+#include "G4CascadeFinalStateAlgorithm.hh"
+#include "G4InuclElementaryParticle.hh"
 
-#include "G4VShortLivedParticle.hh"
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
+// Constructor and destructor
 
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
-  
-public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
-};
+G4CascadeFinalStateGenerator::G4CascadeFinalStateGenerator()
+  : G4HadDecayGenerator(new G4CascadeFinalStateAlgorithm) {;}
 
-#endif	/* G4DIPROTON_HH */
+G4CascadeFinalStateGenerator::~G4CascadeFinalStateGenerator() {;}
+
+
+// Configure base class with correct algorithm for interaction
+void 
+G4CascadeFinalStateGenerator::Configure(G4InuclElementaryParticle* bullet,
+					G4InuclElementaryParticle* target,
+				const std::vector<G4int>& particle_kinds) {
+  if (verboseLevel>1)
+    G4cout << " >>> G4CascadeFinalStateGenerator::Configure" << G4endl;
+
+  // Casting is safe, based on constructor implementation
+  G4CascadeFinalStateAlgorithm* cascAlg = 
+    dynamic_cast<G4CascadeFinalStateAlgorithm*>(theAlgorithm);
+  cascAlg->Configure(bullet, target, particle_kinds);
+}

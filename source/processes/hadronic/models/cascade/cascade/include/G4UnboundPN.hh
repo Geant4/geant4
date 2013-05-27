@@ -32,6 +32,7 @@
 //      17 Nov 2009:  Michael Kelsey
 //	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
 //	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
+//	01 May 2013:  Remove G4ThreadLocal from static pointer.
 // ----------------------------------------------------------------
 
 #ifndef G4UNBOUNDPN_HH
@@ -40,12 +41,12 @@
 #include "G4VShortLivedParticle.hh"
 
 // ######################################################################
-// ###                        UNBOUNDPN                                ###
+// ###                        UNBOUNDPN                               ###
 // ######################################################################
 
 class G4UnboundPN : public G4VShortLivedParticle {
 private:
-  static G4ThreadLocal G4UnboundPN* theInstance;
+  static G4UnboundPN* theInstance;
   G4UnboundPN();
   ~G4UnboundPN() { theInstance = 0; }
   

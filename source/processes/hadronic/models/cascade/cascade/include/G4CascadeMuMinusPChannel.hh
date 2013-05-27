@@ -23,37 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
-//
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
-//
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
+// $Id: $
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#ifndef G4_CASCADE_MUMINUSP_CHANNEL_HH
+#define G4_CASCADE_MUMINUSP_CHANNEL_HH
 
-#include "G4VShortLivedParticle.hh"
+#include "G4CascadeData.hh"
+#include "G4CascadeFunctions.hh"
+#include "G4PionNucSampler.hh"
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
-
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
-  
-public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
+struct G4CascadeMuMinusPChannelData {
+  typedef G4CascadeData<30,1,1,1,1,1,1,1,1> data_t;
+  static const data_t data;
 };
 
-#endif	/* G4DIPROTON_HH */
+typedef G4CascadeFunctions<G4CascadeMuMinusPChannelData,G4PionNucSampler> G4CascadeMuMinusPChannel;
+
+#endif
+

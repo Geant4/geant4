@@ -24,36 +24,29 @@
 // ********************************************************************
 //
 // $Id$
+// Author:  Michael Kelsey (SLAC)
+// Date:    22 April 2013
 //
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
-//
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
+// Description: class containing parametrized angular distributions
+//              in the CM for nucleon/nucleon 3-body final states
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#include "G4NuclNucl3BodyAngDst.hh"
 
-#include "G4VShortLivedParticle.hh"
+namespace {
+  // Powers of Ekin^0..3, blocks of S^0..3 for AB
+  static const G4double abC[2][4][4] = {
+    // -------- Initial state nucleon-nucleon, outgoing N --------
+    { { 0.0856, 0.0543,-0.0511, 0.0075 }, {  5.039,-9.2324, 4.6003,-0.6253 },
+      {-13.782, 36.397,-20.534, 2.9159 }, { 14.661,-42.962, 27.731,-4.1101 } 
+    },
+    // -------- Initial state nucleon-nucleon, outgoing h,K,Y --------
+    { { 0.0716, 0.0926,-0.0515, 0.0058 }, {  3.096,-3.2186, 0.8989,-0.0017 },
+      {-11.125, 20.273,-7.5084, 0.7022 }, {  18.13,-33.245, 13.188,-1.4854 } 
+    }
+  };
+}
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
+// Constructor passes arrays to templated base class
 
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
-  
-public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
-};
-
-#endif	/* G4DIPROTON_HH */
+G4NuclNucl3BodyAngDst::G4NuclNucl3BodyAngDst(G4int verbose)
+  : G4InuclParamAngDst("G4NuclNucl3BodyAngDist", abC, verbose) {;}

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 // $Id$
-// Geant4 tag: $Name:  $
 //
 // Defines enums to map G4InuclElementaryParticle type codes to human
 // readable names.  Meant to replace similar local enums scattered through
@@ -32,6 +31,7 @@
 //
 // 20101029  M. Kelsey -- Move antinucleons to 50-series, add deuteron
 // 20111007  M. Kelsey -- Change photon code to 9, for use in initial states
+// 20130508  D. Wright -- Add leptons and electroweak bosons
 
 #ifndef G4INUCL_PARTICLE_NAMES_HH
 #define G4INUCL_PARTICLE_NAMES_HH
@@ -45,7 +45,12 @@ namespace G4InuclParticleNames {
 	      deuteron=41, triton=43, He3=45, alpha=47,
 	      antiProton=51, antiNeutron=53,
 	      antiDeuteron=61, antiTriton=63, antiHe3=65, antiAlpha=67,
-	      diproton=111, unboundPN=112, dineutron=122 };
+	      diproton=111, unboundPN=112, dineutron=122,
+              electronNu=-1, muonNu=-3, tauNu=-5,
+              antiElectronNu=-7, antiMuonNu=-9, antiTauNu=-11,
+              WMinus=-13, WPlus=-15, Zzero=-17,
+              electron=-21, muonMinus=-23, tauMinus=-25,
+              positron=-27, muonPlus=-29, tauPlus=-31};
 
   // NOTE:  "km" cannot be used as conflicts with "kilometers" unit!
   enum Short { nuc=nuclei, pro=proton, neu=neutron,
@@ -55,7 +60,12 @@ namespace G4InuclParticleNames {
 	       xi0=xiZero, xim=xiMinus, om=omegaMinus, deu=deuteron,
 	       ap=antiProton, an=antiNeutron, 
 	       ade=antiDeuteron, atr=antiTriton, ahe=antiHe3, aal=antiAlpha,
-	       pp=diproton, pn=unboundPN, nn=dineutron };
+	       pp=diproton, pn=unboundPN, nn=dineutron,
+               enu=electronNu, mnu=muonNu, tnu=tauNu,
+               aenu=antiElectronNu, amnu=antiMuonNu, atnu=antiTauNu,
+               wm=WMinus, wp=WPlus, z0=Zzero,
+               ele=electron, mum=muonMinus, tm=tauMinus,
+               pos=positron, mup=muonPlus, tp=tauPlus};
 }
 
 #endif	/* G4INUCL_PARTICLE_NAMES_HH */

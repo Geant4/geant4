@@ -24,36 +24,34 @@
 // ********************************************************************
 //
 // $Id$
+// Author:  Michael Kelsey (SLAC)
+// Date:    15 April 2013
 //
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
+// Description: Subclass of models/util G4HadDecayGenerator to support
+//		production of two-body and three-body final state momenta,
+//		using interaction-specific distributions.
 //
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#ifndef G4CascadeFinalStateGenerator_hh
+#define G4CascadeFinalStateGenerator_hh 1
 
-#include "G4VShortLivedParticle.hh"
+#include "globals.hh"
+#include "G4HadDecayGenerator.hh"
+#include <vector>
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
+class G4InuclElementaryParticle;
+class G4CascadeFinalStateAlgorithm;
 
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
-  
+
+class G4CascadeFinalStateGenerator : public G4HadDecayGenerator {
 public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
+  G4CascadeFinalStateGenerator();
+  virtual ~G4CascadeFinalStateGenerator();
+
+  // Configure algorithm (distributions) based on interaction
+  void Configure(G4InuclElementaryParticle* bullet,
+		 G4InuclElementaryParticle* target,
+		 const std::vector<G4int>& particle_kinds);
 };
 
-#endif	/* G4DIPROTON_HH */
+#endif	/* G4CascadeFinalStateGenerator_hh */

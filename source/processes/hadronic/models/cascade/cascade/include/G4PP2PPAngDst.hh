@@ -23,37 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: $
+// Author:  Dennis Wright (SLAC)
+// Date:    19 May 2013
 //
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
+// Description: class containing numerically integrated angular distributions
+//              in the CM for pp and nn elastic reactions.  Below 2.75 GeV
+//              distributions are taken from SAID phase shift calculations
+//              with Coulomb interactions turned off.  Above 2.75 GeV, pp 
+//              elastic scattering data are used.
 //
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#ifndef G4PP2PPAngDst_h
+#define G4PP2PPAngDst_h 1
 
-#include "G4VShortLivedParticle.hh"
+#include "G4NumIntTwoBodyAngDst.hh"
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
 
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
-  
+class G4PP2PPAngDst : public G4NumIntTwoBodyAngDst<11,19> {
 public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
+  G4PP2PPAngDst(G4int verbose = 0);
+  virtual ~G4PP2PPAngDst() {;}
 };
 
-#endif	/* G4DIPROTON_HH */
+#endif

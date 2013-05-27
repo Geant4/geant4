@@ -121,6 +121,16 @@
 // 20130302  M. Kelsey -- Replace "isProjectile()" with "forceFirst()" in
 //		path-length calculation.
 // 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
+// 20130508  D. Wright -- Support muon-nuclear interactions.
+// 20130510  M. Kelsey -- Check for zero-momentum in choosePointAlongTraj().
+// 20130511  M. Kelsey -- Move choosePointAlongTraj() to initializeCascad(),
+//		instead of after generateIP().  Change "spath<path" to <= to
+//		handle at-rest particles.  Skip mu-/neutron interactions.
+//		Hide "zone 0 transition" error message behind verbosity.
+// 20130523  M. Kelsey -- Bug fix: Initialize dummy_convertor in inverseMFP.
+//		For capture-at-rest, replace exterior nucleus with outer zone.
+// 20130524  M. Kelsey -- Move "large" and "small" cutoffs to static const.
+//		Check zone argument to inverseMFP() to ensure within range.
 
 #include "G4NucleiModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -199,6 +209,11 @@ const G4double G4NucleiModel::kaon_vp       = 0.015;
 const G4double G4NucleiModel::hyperon_vp    = 0.030;
 
 const G4double G4NucleiModel::piTimes4thirds = pi*4./3.;
+
+// Cut-off limits for extreme values in calculations
+
+const G4double G4NucleiModel::small = 1.0e-9;
+const G4double G4NucleiModel::large = 1000.;
 
 
 // Constructors
@@ -635,8 +650,6 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     G4cout << " >>> G4NucleiModel::generateInteractionPartners" << G4endl;
   }
 
-  const G4double small = 1.0e-10;	// Cutoff for identifying 0.
-
   thePartners.clear();		// Reset buffer for next cycle
 
   G4int ptype = cparticle.getParticle().type();
@@ -670,16 +683,18 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     return;
   }
 
-  if (std::fabs(path) < small) { 	// just on the boundary
-    if (verboseLevel > 3)
-      G4cout << " generateInteractionPartners-> zero path" << G4endl;
+  if (std::fabs(path) < small) {	// Not moving, or just at boundary
+    if (cparticle.getMomentum().vect().mag() > small) {
+      if (verboseLevel > 3)
+	G4cout << " generateInteractionPartners-> zero path" << G4endl;
+      
+      thePartners.push_back(partner());	// Dummy list terminator with zero path
+      return;
+    }
 
-    thePartners.push_back(partner());	// Dummy list terminator with zero path
-    return;
+    if (zone >= number_of_zones)	// Place captured-at-rest in nucleus
+      zone = number_of_zones-1;
   }
-
-  // Initialize frame-transformations for current particle
-  dummy_convertor.setBullet(cparticle.getParticle());
 
   G4double invmfp = 0.;			// Buffers for interaction probability
   G4double spath  = 0.;
@@ -687,13 +702,14 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     // Only process nucleons which remain active in target
     if (ip==proton  && protonNumberCurrent < 1) continue;
     if (ip==neutron && neutronNumberCurrent < 1) continue;
+    if (ip==neutron && ptype==muonMinus) continue;	// mu-/n forbidden
 
     // All nucleons are assumed to be at rest when colliding
     G4InuclElementaryParticle particle = generateNucleon(ip, zone);
     invmfp = inverseMeanFreePath(cparticle, particle);
     spath  = generateInteractionLength(cparticle, path, invmfp);
 
-    if (spath < path) {
+    if (spath <= path) {
       if (verboseLevel > 3) {
 	G4cout << " adding partner[" << thePartners.size() << "]: "
 	       << particle << G4endl;
@@ -707,7 +723,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }
 
   // Absorption possible for pions or photons interacting with dibaryons
-  if (cparticle.getParticle().pion() || cparticle.getParticle().isPhoton()) {
+  if (useQuasiDeutron(cparticle.getParticle().type())) {
     if (verboseLevel > 2) {
       G4cout << " trying quasi-deuterons with bullet: "
 	     << cparticle.getParticle() << G4endl;
@@ -719,7 +735,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   
     G4double tot_invmfp = 0.0;		// Total inv. mean-free-path for all QDs
 
-    // Proton-proton state interacts with pi- or neutrals
+    // Proton-proton state interacts with pi-, mu- or neutrals
     if (protonNumberCurrent >= 2 && ptype != pip) {
       G4InuclElementaryParticle ppd = generateQuasiDeutron(pro, pro, zone);
       if (verboseLevel > 2)
@@ -744,7 +760,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     }
     
     // Neutron-neutron state interacts with pi+ or neutrals
-    if (neutronNumberCurrent >= 2 && ptype != pim) {
+    if (neutronNumberCurrent >= 2 && ptype != pim && ptype != mum) {
       G4InuclElementaryParticle nnd = generateQuasiDeutron(neu, neu, zone);
       if (verboseLevel > 2)
 	G4cout << " ptype=" << ptype << " using nn target\n" << nnd << G4endl;
@@ -767,7 +783,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     if (tot_invmfp > small) {		// Must have absorption cross-section
       G4double apath = generateInteractionLength(cparticle, path, tot_invmfp);
       
-      if (apath < path) {		// choose the qdeutron
+      if (apath <= path) {		// choose the qdeutron
 	G4double sl = inuclRndm() * tot_invmfp;
 	G4double as = 0.0;
 	
@@ -781,7 +797,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 	}	// for (qdeutrons...
       }		// if (apath < path)
     }		// if (tot_invmfp > small)
-  }		// pion or photon
+  }		// if (useQuasiDeutron) [pion, muon or photon]
   
   if (verboseLevel > 2) {
     G4cout << " after deuterons " << thePartners.size() << " partners"
@@ -825,17 +841,12 @@ generateParticleFate(G4CascadParticle& cparticle,
   G4int npart = thePartners.size();	// Last item is a total-path placeholder
 
   if (npart == 1) { 		// cparticle is on the next zone entry
-    // SPECIAL CASE:  Inbound photons are emplanted along through-path
-    if (forceFirst(cparticle)) choosePointAlongTraj(cparticle);
-    else {
-      if (verboseLevel > 1) 
-	G4cout << " no interactions; moving to next zone" << G4endl;
-
-      cparticle.propagateAlongThePath(thePartners[0].second);
-      cparticle.incrementCurrentPath(thePartners[0].second);
-      boundaryTransition(cparticle);
-    }
-
+    if (verboseLevel > 1) 
+      G4cout << " no interactions; moving to next zone" << G4endl;
+    
+    cparticle.propagateAlongThePath(thePartners[0].second);
+    cparticle.incrementCurrentPath(thePartners[0].second);
+    boundaryTransition(cparticle);
     outgoing_cparticles.push_back(cparticle);
 
     if (verboseLevel > 2) G4cout << " next zone \n" << cparticle << G4endl;
@@ -983,6 +994,14 @@ generateParticleFate(G4CascadParticle& cparticle,
   return;
 }
 
+// Test if particle is suitable for absorption with dibaryons
+
+G4bool G4NucleiModel::useQuasiDeutron(G4int ptype) {
+  return (ptype == pi0 || ptype == pip || ptype == pim ||
+	  ptype == gam || ptype == mum);
+}
+
+
 G4bool G4NucleiModel::passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
 				G4int zone) {
   if (verboseLevel > 1) {
@@ -1037,7 +1056,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   G4int zone = cparticle.getCurrentZone();
 
   if (cparticle.movingInsideNuclei() && zone == 0) {
-    G4cerr << " boundaryTransition-> in zone 0 " << G4endl;
+    if (verboseLevel) G4cerr << " boundaryTransition-> in zone 0 " << G4endl;
     return;
   }
 
@@ -1103,8 +1122,10 @@ void G4NucleiModel::choosePointAlongTraj(G4CascadParticle& cparticle) {
 
   // FIXME:  These need to be reusable (static) buffers
   G4ThreeVector pos  = cparticle.getPosition();
-  G4ThreeVector phat = cparticle.getMomentum().vect().unit();
   G4ThreeVector rhat = pos.unit();
+
+  G4ThreeVector phat = cparticle.getMomentum().vect().unit();
+  if (cparticle.getMomentum().vect().mag() < small) phat.set(0.,0.,1.);
 
   if (verboseLevel > 3)
     G4cout << " pos " << pos << " phat " << phat << " rhat " << rhat << G4endl;
@@ -1220,7 +1241,10 @@ void G4NucleiModel::choosePointAlongTraj(G4CascadParticle& cparticle) {
 
 // Returns true if particle should interact immediately
 G4bool G4NucleiModel::forceFirst(const G4CascadParticle& cparticle) const {
-  return (isProjectile(cparticle) && cparticle.getParticle().isPhoton());
+  return (isProjectile(cparticle) && 
+	  (cparticle.getParticle().isPhoton() ||
+	   cparticle.getParticle().isMuon())
+	  );
 }
 
 G4bool G4NucleiModel::isProjectile(const G4CascadParticle& cparticle) const {
@@ -1308,15 +1332,20 @@ G4NucleiModel::initializeCascad(G4InuclElementaryParticle* particle) {
     G4cout << " >>> G4NucleiModel::initializeCascad(particle)" << G4endl;
   }
 
-  const G4double large = 1000.0;
-
   // FIXME:  Previous version generated random sin(theta), then used -cos(theta)
   //         Using generateWithRandomAngles changes result!
   // G4ThreeVector pos = generateWithRandomAngles(nuclei_radius).vect();
   G4double costh = std::sqrt(1.0 - inuclRndm());
   G4ThreeVector pos = generateWithFixedTheta(-costh, nuclei_radius);
 
-  G4CascadParticle cpart(*particle, pos, number_of_zones, large, 0);
+  // Start particle outside nucleus, unless capture-at-rest
+  G4int zone = number_of_zones;
+  if (particle->getKineticEnergy() < small) zone--;
+
+  G4CascadParticle cpart(*particle, pos, zone, large, 0);
+
+  // SPECIAL CASE:  Inbound photons are emplanted along through-path
+  if (forceFirst(cpart)) choosePointAlongTraj(cpart);
 
   if (verboseLevel > 2) G4cout << cpart << G4endl;
 
@@ -1331,7 +1360,6 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	   << G4endl;
   }
 
-  const G4double large = 1000.0;
   const G4double max_a_for_cascad = 5.0;
   const G4double ekin_cut = 2.0;
   const G4double small_ekin = 1.0e-6;
@@ -1729,11 +1757,19 @@ G4NucleiModel::inverseMeanFreePath(const G4CascadParticle& cparticle,
 				   G4int zone) {
   G4int ptype = cparticle.getParticle().type();
   G4int ip = target.type();
+
+  // Ensure that zone specified is within nucleus, for array lookups
   if (zone<0) zone = cparticle.getCurrentZone();
+  if (zone>=number_of_zones) zone = number_of_zones-1;
+
+  // Special cases: neutrinos, and muon-on-neutron, have infinite path
+  if (cparticle.getParticle().isNeutrino()) return 0.;
+  if (ptype == muonMinus && ip == neutron) return 0.;
 
   // Configure frame transformation to get kinetic energy for lookups
   dummy_convertor.setBullet(cparticle.getParticle());
   dummy_convertor.setTarget(&target);
+  dummy_convertor.toTheCenterOfMass();		// Fill internal kinematics
   G4double ekin = dummy_convertor.getKinEnergyInTheTRS();
 
   // Get cross section for interacting with target (dibaryons are absorptive)
@@ -1760,7 +1796,6 @@ G4NucleiModel::generateInteractionLength(const G4CascadParticle& cparticle,
   // Delay interactions of newly formed secondaries (minimum int. length)
   const G4double young_cut = std::sqrt(10.0) * 0.25;
   const G4double huge_num = 50.0;	// Argument to exponential
-  const G4double small = 1.0e-10;
 
   if (invmfp < small) return path;	// No interaction, avoid unnecessary work
 
@@ -1789,8 +1824,7 @@ G4NucleiModel::generateInteractionLength(const G4CascadParticle& cparticle,
 // Parametrized cross section for pion and photon absorption
 
 G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
-  if (type != pionPlus && type != pionMinus && type != pionZero &&
-      type != photon) {
+  if (!useQuasiDeutron(type)) {
     G4cerr << " absorptionCrossSection only valid for incident pions" << G4endl;
     return 0.;
   }
@@ -1798,7 +1832,9 @@ G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
   G4double csec = 0.;
 
   // Pion absorption is parametrized for low vs. medium energy
-  if (type == pionPlus || type == pionMinus || type == pionZero) {
+  // ... use for muon capture as well
+  if (type == pionPlus || type == pionMinus || type == pionZero ||
+      type == muonMinus) {
     if (ke < 0.3) csec = (0.1106 / std::sqrt(ke) - 0.8
 			  + 0.08 / ((ke-0.123)*(ke-0.123) + 0.0056) );
     else if (ke < 1.0) csec = 3.6735 * (1.0-ke)*(1.0-ke);     

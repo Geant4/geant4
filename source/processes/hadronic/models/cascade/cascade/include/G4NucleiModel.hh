@@ -113,7 +113,7 @@ public:
   G4double getFermiKinetic(G4int ip, G4int izone) const;
 
   G4double getPotential(G4int ip, G4int izone) const {
-    if (ip == 9) return 0.0;		// Special case for photons
+    if (ip == 9 || ip < 0) return 0.0;		// Photons and leptons
     G4int ip0 = ip < 3 ? ip - 1 : 2;
     if (ip > 10 && ip < 18) ip0 = 3;
     if (ip > 20) ip0 = 4;
@@ -177,6 +177,9 @@ public:
 
   G4double absorptionCrossSection(G4double e, G4int type) const;
   G4double totalCrossSection(G4double ke, G4int rtype) const;
+
+  // Identify whether given particle can interact with dibaryons
+  static G4bool useQuasiDeutron(G4int ptype);
 
 protected:
   G4bool passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
@@ -283,6 +286,10 @@ private:
 
   // Symbolic names for nuclear potentials
   enum PotentialType { WoodsSaxon=0, Gaussian=1 };
+
+  // Cutoffs for extreme values
+  static const G4double small;
+  static const G4double large;
 
   // Parameters for nuclear structure
   static const G4double skinDepth;

@@ -24,36 +24,41 @@
 // ********************************************************************
 //
 // $Id$
+// Author:  Michael Kelsey (SLAC)
+// Date:    22 April 2013
 //
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
+// Description: intermediate base class for INUCL parametrizations of
+//		three-body angular distributions in Bertini-style cascade
 //
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
+// NOTE:  Coefficient arrays have fixed dimensions, validated by compiler
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#ifndef G4InuclParamAngDst_h
+#define G4InuclParamAngDst_h 1
 
-#include "G4VShortLivedParticle.hh"
+#include "globals.hh"
+#include "G4VThreeBodyAngDst.hh"
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
 
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
-  
+class G4InuclParamAngDst : public G4VThreeBodyAngDst {
 public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
-};
+  // NOTE:  Array arguments must be STATIC, GLOBAL declarations
+  G4InuclParamAngDst(const G4String& name, 
+		     const G4double (&abnC)[2][4][4],
+		     G4int verbose=0)
+    : G4VThreeBodyAngDst(name, verbose), coeffAB(abnC) {;}
 
-#endif	/* G4DIPROTON_HH */
+  virtual ~G4InuclParamAngDst() {;}
+  
+  virtual G4double GetCosTheta(G4int ptype, G4double ekin) const;
+
+  // FIXME: Must re-declare base class interface with call-through
+  //	    to avoid "hidden function" compiler warnings
+  virtual G4double GetCosTheta(const G4double& ekin, const G4double& pcm) const {
+    return G4VThreeBodyAngDst::GetCosTheta(ekin, pcm);
+  }
+
+protected:
+  const G4double (&coeffAB)[2][4][4];	// (coeffs Ekin^0..3) * S^0..3
+};        
+
+#endif	/* G4InuclParamAngDst_h */

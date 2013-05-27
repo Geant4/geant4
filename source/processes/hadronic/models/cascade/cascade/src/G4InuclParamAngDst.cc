@@ -24,36 +24,49 @@
 // ********************************************************************
 //
 // $Id$
+// Author:  Michael Kelsey (SLAC)
+// Date:    22 April 2013
 //
-// ------------------------------------------------------------
-//      Bertini Cascade diproton class header file
+// Description: intermediate base class for INUCL parametrizations of
+//		three-body angular distributions in Bertini-style cascade
 //
-//      History: first implementation, inspired by G4Proton
-//      17 Nov 2009:  Michael Kelsey
-//	06 Apr 2010:  Reset theInstance in dtor, implement ctor in .cc.
-//	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
-//	01 May 2013:  Remove G4ThreadLocal from static pointer.
-// ----------------------------------------------------------------
+// 20130308  M. Kelsey -- Move PQ,PR calculation to G4InuclSpecialFunctions.
 
-#ifndef G4DIPROTON_HH
-#define G4DIPROTON_HH
+#include "G4InuclParamAngDst.hh"
+#include "G4InuclSpecialFunctions.hh"
+#include "G4InuclParticleNames.hh"
+using namespace G4InuclSpecialFunctions;
+using namespace G4InuclParticleNames;
 
-#include "G4VShortLivedParticle.hh"
 
-// ######################################################################
-// ###                        DIPROTON                                ###
-// ######################################################################
+// Use coefficients in power expansion of random fraction
 
-class G4Diproton : public G4VShortLivedParticle {
-private:
-  static G4Diproton* theInstance;
-  G4Diproton();
-  ~G4Diproton() { theInstance = 0; }
-  
-public:
-  static G4Diproton* Definition();
-  static G4Diproton* DiprotonDefinition();
-  static G4Diproton* Diproton();
-};
+G4double G4InuclParamAngDst::GetCosTheta(G4int ptype, G4double ekin) const {
+  if (verboseLevel>3) {
+    G4cout << theName << "::GetCosTheta: ptype " << ptype << " ekin " << ekin
+	   << G4endl;
+  }
 
-#endif	/* G4DIPROTON_HH */
+  G4int J = (ptype==pro || ptype==neu) ? 0 : 1;		// nucleon vs. other
+  if (verboseLevel > 3) G4cout << " J " << J << G4endl;
+
+  const G4int itry_max = 100;	// Parametrizations aren't properly bounded
+
+  G4double Spow = -999.;
+  G4int itry = 0;
+  while ((Spow < 0. || Spow > 1.) && itry < itry_max) {
+    itry++;
+    Spow = randomInuclPowers(ekin, coeffAB[J]);
+  }
+
+  if (itry == itry_max) {	// No success, just throw flat distribution
+    if (verboseLevel > 2) {
+      G4cout << theName << "::GetCosTheta -> itry = itry_max " << itry
+	     << G4endl;
+    }
+
+    Spow = inuclRndm();
+  }
+
+  return 2.0*Spow - 1.0;	// Convert generated [0..1] to [-1..1]
+}

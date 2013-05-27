@@ -34,6 +34,7 @@
 //	13 Apr 2010:  Per Kurashige, inherit from G4VShortLivedParticle.
 //	06 May 2010:  Remove created particle from master table.
 //      25 May 2012:  Add flags to suppress particle-table error message.
+//	01 May 2013:  Remove G4ThreadLocal from static pointer.
 // ----------------------------------------------------------------
 
 #include "G4UnboundPN.hh"
@@ -47,7 +48,7 @@
 // ######################################################################
 // ###                          UNBOUNDPN                             ###
 // ######################################################################
-G4ThreadLocal G4UnboundPN* G4UnboundPN::theInstance = 0;
+G4UnboundPN* G4UnboundPN::theInstance = 0;
 
 //    Arguments for constructor are as follows
 //               name             mass          width         charge
@@ -68,9 +69,10 @@ G4UnboundPN* G4UnboundPN::Definition() {
     theInstance = new G4UnboundPN;	// There can be only one
 
     G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+    G4bool tableReady = pTable->GetReadiness();
     pTable->SetReadiness(false);        // Suppress error message
     pTable->Remove(theInstance);        // Make invisible to GEANT4
-    pTable->SetReadiness(true);         // Set back 'ready to use' flag
+    pTable->SetReadiness(tableReady);   // Set back 'ready to use' flag
   }
 
   return theInstance;
