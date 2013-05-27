@@ -168,12 +168,16 @@ G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
   return modelManager->GetModel(idx, ver);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //Worker threads share physics tables with the master thread for
 //this kind of process. This member function is used by worker
 //threads to achieve the partial effect of the master thread when
 //it builds physcis tables.
-void G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
+
+void 
+G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
 {
   if(!firstParticle) { firstParticle = &part; }
   if(part.GetParticleType() == "nucleus") {
@@ -186,6 +190,15 @@ void G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition&
 
   emManager->SlavePreparePhysicsTable(&part, this);
   currParticle = 0;
+
+  if(1 < verboseLevel) {
+    G4cout << "### G4VMultipleScattering::SlavePrepearPhysicsTable() for "
+           << GetProcessName()
+           << " and particle " << part.GetParticleName()
+           << " local particle " << firstParticle->GetParticleName()
+	   << " isIon= " << isIon 
+           << G4endl;
+  }
 
   if(firstParticle == &part) {
 
@@ -223,7 +236,7 @@ void G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition&
       safetyHelper->InitialiseHelper();
     }
   }
-}//From 182
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -287,7 +300,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
       safetyHelper->InitialiseHelper();
     }
   }
-}//From 257
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -296,10 +309,48 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 //this kind of process. This member function is used by worker
 //threads to achieve the partial effect of the master thread when
 //it prepares physcis tables.
-void G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& /*part*/, G4VMultipleScattering *firstProcess)
+
+void 
+G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, 
+					      G4VMultipleScattering *)
 {
-  emManager->SlaveBuildPhysicsTable(firstParticle,firstProcess);
-}//from 337
+  G4String num = part.GetParticleName();
+  if(1 < verboseLevel) {
+    G4cout << "### G4VMultipleScattering::SlaveBuildPhysicsTable() for "
+           << GetProcessName()
+           << " and particle " << num
+           << G4endl;
+  }
+  if(firstParticle == &part) { 
+    emManager->BuildPhysicsTable(firstParticle);
+  }
+
+  // explicitly defined printout by particle name
+  if(1 < verboseLevel && (num == "e-" || 
+			  num == "e+"    || num == "mu+" || 
+			  num == "mu-"   || num == "proton"|| 
+			  num == "pi+"   || num == "pi-" || 
+			  num == "kaon+" || num == "kaon-" || 
+			  num == "alpha" || num == "anti_proton" || 
+			  num == "GenericIon"))
+    { 
+      G4cout << G4endl << GetProcessName() 
+	     << ":   for " << num
+	     << "    SubType= " << GetProcessSubType() 
+	     << G4endl;
+      PrintInfo();
+      modelManager->DumpModelList(verboseLevel);
+    }
+
+  if(1 < verboseLevel) {
+    G4cout << "### G4VMultipleScattering::SlaveBuildPhysicsTable() done for "
+           << GetProcessName()
+           << " and particle " << num
+           << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
@@ -311,7 +362,9 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << G4endl;
   }
 
-  emManager->BuildPhysicsTable(firstParticle);
+  if(firstParticle == &part) { 
+    emManager->BuildPhysicsTable(firstParticle);
+  }
 
   // explicitly defined printout by particle name
   if(1 < verboseLevel || 
@@ -337,7 +390,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << " and particle " << num
            << G4endl;
   }
-}//from 402
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

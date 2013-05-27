@@ -17,6 +17,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 May 13: V.Ivant (emutils-V09-06-14)
+- G4EmCalculator - fixed typo
+
+27 May 13: V.Ivant (emutils-V09-06-13)
+- G4EmCalculator - fixed compillation warning at gcc 4.1
+
+27 May 13: V.Ivant (emutils-V09-06-12)
+- G4EmMessenger is renamed to G4EmManagerMessenger to avoid a clash
+    with name of already existing file
+
+26 May 13: V.Ivant (emutils-V09-06-11)
+- G4VEmModel - added extra methods needed for MT: InitialiseLocal,
+    InitialiseForMaterial, InitialiseForElement, GetElementSelectors
+- G4VMultipleScattering, G4VEnegryLossProcess - more accurate 
+    initialisation for MT (some part of initialisation for worker 
+    thread was commented out in the first implementation).
+- G4LossTableManager - added new method SlavePhysicsTable which
+    provides a correct copy and setup process parameters in MT mode  
+- G4EmCalculator - added call to InitialiseForMaterial to give a 
+    possibility to a model to read data in any thread
+- G4EmElementSelector - make it be thread safe
+- G4EmManager, G4EmMessenger - new classes 
+
 30 April 13: V.Ivant (emutils-V09-06-10)
 - G4ElectronIonPair - fixed typo
 

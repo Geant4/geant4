@@ -121,6 +121,23 @@ public:
 				 G4double tmax = DBL_MAX) = 0;
 
   //------------------------------------------------------------------------
+  // Methods for initialisation of MT; may be overwritten if needed
+  //------------------------------------------------------------------------
+
+  // initilisation in local thread
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       const G4DataVector&,
+			       const G4VEmModel* masterModel);
+
+  // initilisation of a new material at run time
+  virtual void InitialiseForMaterial(const G4ParticleDefinition*,
+				     const G4Material*);
+
+  // initilisation of a new element at run time
+  virtual void InitialiseForElement(const G4ParticleDefinition*,
+				    G4int Z);
+
+  //------------------------------------------------------------------------
   // Methods with standard implementation; may be overwritten if needed 
   //------------------------------------------------------------------------
 
@@ -206,6 +223,9 @@ public:
   // should be called at initialisation to build element selectors
   void InitialiseElementSelectors(const G4ParticleDefinition*, 
 				  const G4DataVector&);
+
+  // should be called at initialisation to access element selectors
+  inline std::vector<G4EmElementSelector*>* GetElementSelectors();
 
   // dEdx per unit length
   inline G4double ComputeDEDX(const G4MaterialCutsCouple*,
@@ -343,8 +363,9 @@ private:
   G4bool          flagDeexcitation;
   G4bool          flagForceBuildTable;
 
+  G4bool          localElmSelectors;
   G4int           nSelectors;
-  std::vector<G4EmElementSelector*> elmSelectors;
+  std::vector<G4EmElementSelector*>* elmSelectors;
 
 protected:
 
@@ -465,7 +486,7 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
   fCurrentCouple = couple;
   if(nSelectors > 0) {
     fCurrentElement = 
-      elmSelectors[couple->GetIndex()]->SelectRandomAtom(kinEnergy);
+      ((*elmSelectors)[couple->GetIndex()])->SelectRandomAtom(kinEnergy);
   } else {
     fCurrentElement = SelectRandomAtom(couple->GetMaterial(),p,kinEnergy,
 				       cutEnergy,maxEnergy);
@@ -655,6 +676,11 @@ inline void G4VEmModel::ForceBuildTable(G4bool val)
 inline const G4String& G4VEmModel::GetName() const 
 {
   return name;
+}
+
+inline std::vector<G4EmElementSelector*>* G4VEmModel::GetElementSelectors()
+{
+  return elmSelectors;
 }
 
 inline G4PhysicsTable* G4VEmModel::GetCrossSectionTable()

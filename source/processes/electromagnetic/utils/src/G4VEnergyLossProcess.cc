@@ -384,6 +384,7 @@ G4int G4VEnergyLossProcess::NumberOfModels()
 //threads to achieve the partial effect of the master thread when
 //it prepares physcis tables.
 //idxDERegions is added
+
 void 
 G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
 {
@@ -410,13 +411,16 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
 
   if(part.GetParticleType() == "nucleus") {
 
-    // if generic ion or nucleus with Z>=2 
-    if(part.GetPDGCharge() > 1.5*eplus || 
-       part.GetParticleName() == "GenericIon") { 
+    G4String pname = part.GetParticleName();
+    if(pname != "deuteron" && pname != "triton" &&
+       pname != "alpha+"   && pname != "helium" &&
+       pname != "hydrogen") {
+
       theGenericIon = G4GenericIon::GenericIon();
       isIon = true; 
       // process is shared between all ions inheriting G4GenericIon
-      if(part.GetPDGCharge() > 2.5*eplus) { particle = theGenericIon; }
+      // for all excluding He3 and alpha
+      if(pname != "He3" && pname != "alpha") { particle = theGenericIon; }
     }
   }
 
@@ -427,7 +431,8 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
       lManager->RegisterExtraParticle(&part, this);
     }
     if(1 < verboseLevel) {
-      G4cout << "### G4VEnergyLossProcess::PreparePhysicsTable() interrupted for "
+      G4cout << "### G4VEnergyLossProcess::SlavePreparePhysicsTable() "
+	     << "interrupted for "
 	     << part.GetParticleName() << "  isIon= " << isIon 
 	     << "  particle " << particle << "  GenericIon " << theGenericIon 
 	     << G4endl;
@@ -450,43 +455,6 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
   theRangeAtMaxEnergy.resize(n, 0.0);
   theEnergyOfCrossSectionMax.resize(n, 0.0);
   theCrossSectionMax.resize(n, DBL_MAX);
-
-  // Tables preparation
-  //  if (!baseParticle) {
-    
-  //    theDEDXTable = G4PhysicsTableHelper::PreparePhysicsTable(theDEDXTable);
-  //    bld->InitialiseBaseMaterials(theDEDXTable);
-
-  //    if (lManager->BuildCSDARange()) {
-  //      theDEDXunRestrictedTable = 
-  //	G4PhysicsTableHelper::PreparePhysicsTable(theDEDXunRestrictedTable);
-  //      theCSDARangeTable = 
-  //	G4PhysicsTableHelper::PreparePhysicsTable(theCSDARangeTable);
-      //bld->InitialiseBaseMaterials(theDEDXunRestrictedTable);
-      //bld->InitialiseBaseMaterials(theCSDARangeTable);
-  //    }
-
-  //    theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
-  //    bld->InitialiseBaseMaterials(theLambdaTable);  
-
-  //    if(isIonisation) {
-  //      theRangeTableForLoss = 
-  //	G4PhysicsTableHelper::PreparePhysicsTable(theRangeTableForLoss);
-  //      theInverseRangeTable = 
-  //	G4PhysicsTableHelper::PreparePhysicsTable(theInverseRangeTable);  
-      //bld->InitialiseBaseMaterials(theRangeTableForLoss);
-      //bld->InitialiseBaseMaterials(theInverseRangeTable);
-  //    }
-
-  //    if (nSCoffRegions) {
-  //      theDEDXSubTable = 
-  //	G4PhysicsTableHelper::PreparePhysicsTable(theDEDXSubTable);
-  //      theSubLambdaTable = 
-  //	G4PhysicsTableHelper::PreparePhysicsTable(theSubLambdaTable);
-      //bld->InitialiseBaseMaterials(theDEDXSubTable);  
-      //bld->InitialiseBaseMaterials(theSubLambdaTable);  
-  //    }
-  //  }
 
   theDensityFactor = bld->GetDensityFactors();
   theDensityIdx = bld->GetCoupleIndexes();
@@ -541,7 +509,7 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
   }
 
   if(1 < verboseLevel) {
-    G4cout << "G4VEnergyLossProcess::Initialise() is done "
+    G4cout << "G4VEnergyLossProcess::SlavePrepearPhysicsTable() is done "
            << " for local " << particle->GetParticleName()
 	   << " isIon= " << isIon;
     if(baseParticle) { G4cout << "; base: " << baseParticle->GetParticleName(); }
@@ -557,6 +525,8 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
     }
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void 
 G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
@@ -712,7 +682,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
 
   if(1 < verboseLevel) {
-    G4cout << "G4VEnergyLossProcess::Initialise() is done "
+    G4cout << "G4VEnergyLossProcess::PrepearPhysicsTable() is done "
            << " for local " << particle->GetParticleName()
 	   << " isIon= " << isIon;
     if(baseParticle) { G4cout << "; base: " << baseParticle->GetParticleName(); }
@@ -730,12 +700,16 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //Worker threads share physics tables with the master thread for
 //this kind of process. This member function is used by worker
 //threads to achieve the partial effect of the master thread when
 //it builds physcis tables.
-void G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, G4VEnergyLossProcess *firstProcess)
+
+void 
+G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, 
+					     G4VEnergyLossProcess* firstProcess)
 {
   theDEDXTable = firstProcess->theDEDXTable;
   theDEDXSubTable = firstProcess->theDEDXSubTable;
@@ -753,25 +727,27 @@ void G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& pa
   theRangeAtMaxEnergy = firstProcess->theRangeAtMaxEnergy;
   theEnergyOfCrossSectionMax = firstProcess->theEnergyOfCrossSectionMax;
   theCrossSectionMax = firstProcess->theCrossSectionMax;
-  
+
+  isIonisation = firstProcess->IsIonisationProcess();
+
+  tablesAreBuilt = true;  
+
   if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::SlaveBuildPhysicsTable() for "
 	   << GetProcessName()
 	   << " and particle " << part.GetParticleName()
 	   << "; local: " << particle->GetParticleName();
-    if(baseParticle) { G4cout << "; base: " << baseParticle->GetParticleName(); }
+    if(baseParticle) { 
+      G4cout << "; base: " << baseParticle->GetParticleName(); 
+    }
     G4cout << " TablesAreBuilt= " << tablesAreBuilt
 	   << " isIon= " << isIon << "  " << this << G4endl;
   }
 
   if(&part == particle) {
-    if(!tablesAreBuilt) {
-      G4LossTableManager::Instance()->SlaveBuildPhysicsTable(particle, this);
-      //G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
-    }
     if(!baseParticle) {
-      //Xin Dong 10022011 to facilitate verbose
-      if(0 < verboseLevel) PrintInfoDefinition();
+      G4LossTableManager::Instance()->SlavePhysicsTable(particle, this);
+      if(1 < verboseLevel) { PrintInfoDefinition(); }
     
       // needs to be done only once
       safetyHelper->InitialiseHelper();
@@ -789,13 +765,15 @@ void G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& pa
   }
 
   if(1 < verboseLevel) {
-    G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
+    G4cout << "### G4VEnergyLossProcess::SlaveBuildPhysicsTable() done for "
 	   << GetProcessName()
 	   << " and particle " << part.GetParticleName();
-    if(isIonisation) G4cout << "  isIonisation  flag = 1";
+    if(isIonisation) { G4cout << "  isIonisation  flag = 1"; }
     G4cout << G4endl;
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
@@ -851,7 +829,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(isIonisation) { G4cout << "  isIonisation  flag = 1"; }
     G4cout << G4endl;
   }
-}//from 801
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -1891,7 +1869,8 @@ G4VEnergyLossProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
         {res = false;}
 
       if(!fpi) yes = false;
-      if(!RetrieveTable(part,theIonisationSubTable,ascii,directory,"SubIonisation",yes))
+      if(!RetrieveTable(part,theIonisationSubTable,ascii,directory,"SubIonisation",
+			yes))
         {res = false;}
     }
   }
@@ -2127,7 +2106,8 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
     }
     theIonisationTable = p;
   } else if(fIsSubIonisation == tType && theIonisationSubTable != p) {    
-    if(theIonisationSubTable && theIonisationSubTable != theDEDXSubTable && !baseParticle) {
+    if(theIonisationSubTable && theIonisationSubTable != theDEDXSubTable 
+       && !baseParticle) {
       theIonisationSubTable->clearAndDestroy();
       delete theIonisationSubTable;
     }

@@ -130,6 +130,9 @@ public:
 
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle, 
 			 G4VEnergyLossProcess* p);
+
+  void SlavePhysicsTable(const G4ParticleDefinition* aParticle, 
+			 G4VEnergyLossProcess* p);
   
   //-------------------------------------------------
   // Run time access to DEDX, range, energy for a given particle, 
@@ -207,9 +210,9 @@ public:
   //threads to achieve the partial effect of the master thread when
   //it builds physcis tables.
   void SlaveBuildPhysicsTable(const G4ParticleDefinition* aParticle, 
-			 G4VEnergyLossProcess* p);
+			      G4VEnergyLossProcess* p);
   void SlaveBuildPhysicsTable(const G4ParticleDefinition* aParticle, 
-			 G4VMultipleScattering* p);
+			      G4VMultipleScattering* p);
 
   void SetLossFluctuations(G4bool val);
 
@@ -305,23 +308,24 @@ private:
 
   G4VEnergyLossProcess* BuildTables(const G4ParticleDefinition* aParticle);
 
+  void CopyTables(const G4ParticleDefinition* aParticle, 
+		  G4VEnergyLossProcess*);
+
+
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //Worker threads share physics tables with the master thread for
   //energy loss processes. This member function is used by worker
   //threads to achieve the partial effect of the master thread when
   //it builds physcis tables.
-  G4VEnergyLossProcess* SlaveBuildTables(const G4ParticleDefinition* aParticle);
-
-  void CopyTables(const G4ParticleDefinition* aParticle, 
-		  G4VEnergyLossProcess*);
+  //G4VEnergyLossProcess* SlaveBuildTables(const G4ParticleDefinition* aParticle);
 
   //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //Worker threads share physics tables with the master thread for
   //energy loss processes. This member function is used by worker
   //threads to achieve the partial effect of the master thread when
   //it copies physcis tables.
-  void SlaveCopyTables(const G4ParticleDefinition* aParticle, 
-		  G4VEnergyLossProcess*);
+  //void SlaveCopyTables(const G4ParticleDefinition* aParticle, 
+  //		       G4VEnergyLossProcess*);
 
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 

@@ -52,6 +52,8 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmConfigurator.hh
         G4EmCorrections.hh
         G4EmElementSelector.hh
+        G4EmManager.hh
+        G4EmManagerMessenger.hh
         G4EmModelManager.hh
         G4EmMultiModel.hh
         G4EmProcessOptions.hh
@@ -80,7 +82,9 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmCalculator.cc
         G4EmConfigurator.cc
         G4EmCorrections.cc
-        G4EmElementSelector.cc
+        G4EmElementSelector.cc 
+        G4EmManager.cc
+        G4EmManagerMessenger.cc
         G4EmModelManager.cc
         G4EmMultiModel.cc
         G4EmProcessOptions.cc

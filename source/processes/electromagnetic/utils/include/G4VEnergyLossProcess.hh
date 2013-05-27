@@ -177,7 +177,8 @@ public:
   //this kind of process. This member function is used by worker
   //threads to achieve the partial effect of the master thread when
   //it builds physcis tables.
-  void SlaveBuildPhysicsTable(const G4ParticleDefinition& part, G4VEnergyLossProcess *firstProcess);
+  void SlaveBuildPhysicsTable(const G4ParticleDefinition& part, 
+			      G4VEnergyLossProcess *firstProcess);
 
   // build a table
   G4PhysicsTable* BuildDEDXTable(G4EmTableType tType = fRestricted);

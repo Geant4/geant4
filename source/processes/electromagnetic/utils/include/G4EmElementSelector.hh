@@ -87,7 +87,6 @@ private:
 
   G4VEmModel*       model;
   const G4Material* material;
-  const G4Element*  element;
   const G4ElementVector* theElementVector;
 
   G4int    nElmMinusOne;
@@ -106,9 +105,9 @@ private:
 
 inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e)
 {
+  const G4Element* element = (*theElementVector)[nElmMinusOne];
   if (nElmMinusOne > 0) {
     G4double x = G4UniformRand();
-    element = (*theElementVector)[nElmMinusOne];
     for(G4int i=0; i<nElmMinusOne; ++i) {
       if (x <= (xSections[i])->Value(e)) {
 	element = (*theElementVector)[i];

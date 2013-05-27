@@ -64,11 +64,13 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
   pParticleChange(0),xSectionTable(0),theDensityFactor(0),theDensityIdx(0),
-  fCurrentCouple(0),fCurrentElement(0),
-  nsec(5) 
+  fCurrentCouple(0),fCurrentElement(0),nsec(5) 
 {
   xsec.resize(nsec);
   nSelectors = 0;
+  elmSelectors = 0;
+  localElmSelectors = true;
+
   G4LossTableManager::Instance()->Register(this);
 }
 
@@ -77,11 +79,13 @@ G4VEmModel::G4VEmModel(const G4String& nam):
 G4VEmModel::~G4VEmModel()
 {
   G4LossTableManager::Instance()->DeRegister(this);
-  G4int n = elmSelectors.size();
-  if(n > 0) {
-    for(G4int i=0; i<n; ++i) { 
-      delete elmSelectors[i]; 
+  if(localElmSelectors) { 
+    if(nSelectors > 0) {
+      for(G4int i=0; i<nSelectors; ++i) { 
+	delete (*elmSelectors)[i]; 
+      }
     }
+    delete elmSelectors; 
   }
   delete anglModel;
   if(xSectionTable) { 
@@ -146,8 +150,11 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
   G4int numOfCouples = theCoupleTable->GetTableSize();
 
   // prepare vector
+  if(!elmSelectors) {
+    elmSelectors = new std::vector<G4EmElementSelector*>;
+  }
   if(numOfCouples > nSelectors) { 
-    elmSelectors.resize(numOfCouples,0); 
+    elmSelectors->resize(numOfCouples,0); 
     nSelectors = numOfCouples;
   }
 
@@ -159,18 +166,49 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 
     // selector already exist check if should be deleted
     G4bool create = true;
-    if(elmSelectors[i]) {
-      if(material == elmSelectors[i]->GetMaterial()) { create = false; }
-      else { delete elmSelectors[i]; }
+    if((*elmSelectors)[i]) {
+      if(material == ((*elmSelectors)[i])->GetMaterial()) { create = false; }
+      else { delete (*elmSelectors)[i]; }
     }
     if(create) {
-      elmSelectors[i] = new G4EmElementSelector(this,material,nbins,
-						lowLimit,highLimit,spline);
+      (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
+						   lowLimit,highLimit,spline);
     }
-    elmSelectors[i]->Initialise(p, cuts[idx]);
-    //elmSelectors[i]->Dump(p);
+    ((*elmSelectors)[i])->Initialise(p, cuts[idx]);
+    //((*elmSelectors)[i])->Dump(p);
   } 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4VEmModel::InitialiseLocal(const G4ParticleDefinition*, 
+				 const G4DataVector&,
+				 const G4VEmModel*)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4VEmModel::InitialiseForMaterial(const G4ParticleDefinition* part,
+				       const G4Material* material)
+{
+  if(material) {
+    const G4ElementVector* theElementVector = material->GetElementVector();
+    G4int n = material->GetNumberOfElements();
+    for(G4int i=0; i<n; ++i) {
+      G4int Z = G4lrint(((*theElementVector)[i])->GetZ());
+      InitialiseForElement(part, Z);
+    }
+  } else {
+    //G4cout << "G4VEmModel::InitialiseForMaterial for " << GetName();
+    //if(part) { G4cout << " and  " << part->GetParticleName(); }
+    //G4cout << " with no material" << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4VEmModel::InitialiseForElement(const G4ParticleDefinition*, G4int)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

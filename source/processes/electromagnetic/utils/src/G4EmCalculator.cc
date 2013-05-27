@@ -702,9 +702,11 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(
       G4double e = kinEnergy;
       if(baseParticle) {
 	e *= kinEnergy*massRatio;
+        currentModel->InitialiseForElement(baseParticle, G4lrint(Z));
 	res = currentModel->ComputeCrossSectionPerAtom(
 	      baseParticle, e, Z, A, cut) * chargeSquare;
       } else {
+        currentModel->InitialiseForElement(p, G4lrint(Z));
 	res = currentModel->ComputeCrossSectionPerAtom(p, e, Z, A, cut);
       }
       if(verbose>0) {
@@ -907,7 +909,7 @@ const G4ParticleDefinition* G4EmCalculator::FindParticle(const G4String& name)
 const G4ParticleDefinition* G4EmCalculator::FindIon(G4int Z, G4int A)
 {
   const G4ParticleDefinition* p = 
-    G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
+    G4ParticleTable::GetParticleTable()->FindIon(Z,A,0);
   return p;
 }
 
@@ -1115,6 +1117,10 @@ G4bool G4EmCalculator::FindEmModel(const G4ParticleDefinition* p,
   if(currentModel) {
     if(loweModel == currentModel) { loweModel = 0; }
     isApplicable = true;
+    currentModel->InitialiseForMaterial(part, currentMaterial);
+    if(loweModel) {
+      loweModel->InitialiseForMaterial(part, currentMaterial);
+    }
     if(verbose > 1) {
       G4cout << "   Model <" << currentModel->GetName() 
 	     << "> Emin(MeV)= " << currentModel->LowEnergyLimit()/MeV

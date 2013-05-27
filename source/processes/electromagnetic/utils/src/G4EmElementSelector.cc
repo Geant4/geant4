@@ -63,7 +63,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
   G4int n = material->GetNumberOfElements();
   nElmMinusOne = n - 1;
   theElementVector = material->GetElementVector();
-  element = (*theElementVector)[0];
+  //  element = (*theElementVector)[0];
   if(nElmMinusOne > 0) {
     xSections.reserve(n);
     G4PhysicsLogVector* v0 = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins);
