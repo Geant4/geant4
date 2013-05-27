@@ -221,6 +221,8 @@ protected:
     void CheckRegularGeometry();
     G4bool ConfirmCoupledTransportation();
     void SetScoreSplitter();
+
+    G4bool isWorker;
 };
 
 #endif

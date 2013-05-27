@@ -96,11 +96,11 @@ void G4VUserDetectorConstruction::ConstructSDandField()
    if(rmtype != G4RunManager::sequentialRM)
    {
     G4cout 
-    << "User-derived class does not implement ConstructSDandFiled method:\n"
-    << "workers will not have SD and fields!\n"
-    << "If user defined SD and Field classes implement cloning, you can\n"
-    << "re-implement this method as:\n"
-    << "void UserDerivedClass::ConstructSDandField() { CloneSD(); CloneF(); }\n"
+    << "User-derived detector construction class does not implement \n"
+    << "ConstructSDandFiled method: i.e. workers will not have SD and fields!\n"
+//    << "If user defined SD and Field classes implement cloning, you can\n"
+//    << "re-implement this method as:\n"
+//    << "void UserDerivedClass::ConstructSDandField() { CloneSD(); CloneF(); }\n"
     << "The user can safely ignore this message if (s)he has no sensitive\n"
     << "detector or field in her/his application." << G4endl;
    }

@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 24th, 2013, M. Asai (run-V09-06-41)
+- G4Run: protect deletion of thread-local objects from masther thread.
+
+May 24th, 2013, M. Asai (run-V09-06-40)
+- Fix seg-fault with /run/verbose 2 in multi-threaded mode.
+
 May 23rd, 2013, M. Asai (run-V09-06-39)
 - Move thread-local cout/cerr handling to intercoms category.
 - UI commands in /run/cout/ directory are moved to /control/cout/.

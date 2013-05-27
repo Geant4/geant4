@@ -252,10 +252,10 @@ G4RunManager::~G4RunManager()
     if(verboseLevel>1) G4cout << "UserPrimaryGenerator deleted." << G4endl;
   }
 
+  if(verboseLevel>1) G4cout << "RunManager is deleted." << G4endl;
 
   delete kernel;
 
-  if(verboseLevel>1) G4cout << "RunManager is deleted." << G4endl;
   fRunManager = 0;
 }
 

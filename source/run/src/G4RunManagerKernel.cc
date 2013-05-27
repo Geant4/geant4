@@ -79,7 +79,7 @@ G4RunManagerKernel::G4RunManagerKernel()
  geometryInitialized(false),physicsInitialized(false),
  geometryToBeOptimized(true),
  physicsNeedsToBeReBuilt(true),verboseLevel(0),
- numberOfParallelWorld(0),geometryNeedsToBeClosed(true)
+ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(false)
 {
 #ifdef G4FPE_DEBUG
   InvalidOperationDetection();
@@ -159,7 +159,7 @@ G4RunManagerKernel::G4RunManagerKernel(G4bool isWorkerRMK)
 geometryInitialized(false),physicsInitialized(false),
 geometryToBeOptimized(true),
 physicsNeedsToBeReBuilt(true),verboseLevel(0),
-numberOfParallelWorld(0),geometryNeedsToBeClosed(true)
+numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(isWorkerRMK)
 {
 //This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -209,17 +209,12 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true)
     // version banner
     G4String vs = G4Version;
     vs = vs.substr(1,vs.size()-2);
-    versionString = " Geant4 version ";
+    versionString = " Local-thread RunManager ";
     versionString += vs;
-    versionString += "   ";
-    versionString += G4Date;
     G4cout << G4endl
-    << "*************************************************************" << G4endl
+    << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
     << versionString << G4endl
-    << "                      Copyright : Geant4 Collaboration" << G4endl
-    << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
-    << "                            WWW : http://cern.ch/geant4" << G4endl
-    << "*************************************************************" << G4endl
+    << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
     << G4endl;
 }
 
@@ -229,7 +224,7 @@ G4RunManagerKernel::G4RunManagerKernel(int isSlaveFlag)
  geometryInitialized(false),physicsInitialized(false),
 geometryToBeOptimized(true), 
  physicsNeedsToBeReBuilt(true),verboseLevel(0),
- numberOfParallelWorld(0),geometryNeedsToBeClosed(true)
+ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(false)
 {
 
   isSlave = isSlaveFlag;
@@ -239,11 +234,11 @@ geometryToBeOptimized(true),
 #endif
 
   defaultExceptionHandler = new G4ExceptionHandler();
-  if(fRunManagerKernel)
-  {
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0001",
-                FatalException,"More than one G4RunManagerKernel is constructed.");
-  }
+/////  if(fRunManagerKernel)
+/////  {
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","RunXXX1",
+                FatalException,"This constructor should not be used!!!!");
+/////  }
   fRunManagerKernel = this;
   
   // construction of Geant4 kernel classes
@@ -336,6 +331,13 @@ G4RunManagerKernel::~G4RunManagerKernel()
   if(verboseLevel>1) G4cout << "EventManager deleted." << G4endl;
   G4UImanager* pUImanager = G4UImanager::GetUIpointer();
   {
+    if(isWorker && (verboseLevel>1))
+    {
+      G4cout << "Thread-local UImanager is to be deleted." << G4endl 
+             << "There should not be any thread-local G4cout/G4cerr hereafter."
+             << G4endl;
+      verboseLevel = 0;
+    }
     if(pUImanager) delete pUImanager;
     if(verboseLevel>1) G4cout << "UImanager deleted." << G4endl;
   }
