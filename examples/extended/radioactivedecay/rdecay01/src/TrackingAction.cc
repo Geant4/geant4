@@ -30,7 +30,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 #include "RunAction.hh"
@@ -73,7 +73,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4double Ekin = track->GetKineticEnergy();
   G4int ID      = track->GetTrackID();
   
-  G4bool condition = false;  
+  G4bool condition = false;
 
   //count particles
   //

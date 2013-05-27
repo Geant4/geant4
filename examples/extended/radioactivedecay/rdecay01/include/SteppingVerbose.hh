@@ -30,7 +30,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SteppingVerbose_h
 #define SteppingVerbose_h 1
@@ -45,10 +45,9 @@ public:
 
   SteppingVerbose();
  ~SteppingVerbose();
-
-  virtual void StepInfo();
+ 
   virtual void TrackingStarted();
-
+  virtual void StepInfo();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
