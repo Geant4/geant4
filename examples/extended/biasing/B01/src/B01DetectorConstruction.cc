@@ -66,6 +66,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B01DetectorConstruction::B01DetectorConstruction() :
+  G4VUserDetectorConstruction(),
   fLogicalVolumeVector(),fPhysicalVolumeVector()
 {;}
 

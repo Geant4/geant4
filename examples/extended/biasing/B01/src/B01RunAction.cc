@@ -48,7 +48,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Constructor
-B01RunAction::B01RunAction():
+B01RunAction::B01RunAction(): 
+  G4UserRunAction(),
   fFieldName(15),
   fFieldValue(14)
 {

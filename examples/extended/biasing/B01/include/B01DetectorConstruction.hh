@@ -47,7 +47,7 @@ public:
   B01DetectorConstruction();
   ~B01DetectorConstruction();
   
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
   G4VIStore* CreateImportanceStore();
     // create an importance store, caller is responsible for deleting it
