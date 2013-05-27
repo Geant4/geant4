@@ -14,7 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Nvember 14th, 2012 P. Mato (exampleP01-V09-05-08)
+
+May 27th, 2013 I. Hrivnacova
+- Fixed handling required packages/options in CMake files
+
+November 14th, 2012 P. Mato (exampleP01-V09-05-08)
 - Fixed compilation warning
 
 October 11th, 2012 A. Dotti (exampleP01-V09-05-07)

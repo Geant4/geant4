@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 27th, 2013 I. Hrivnacova (exPersistency-V09-06-01)
+- Fixed handling required packages/options in CMake files
+
 February 15th, 2013 I. Hrivnacova (exPersistency-V09-06-00)
 - Applied coding guidelines in gdml (virtual keyword, data members
   initialization)
