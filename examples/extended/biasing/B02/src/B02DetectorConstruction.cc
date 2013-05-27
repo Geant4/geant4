@@ -60,6 +60,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B02DetectorConstruction::B02DetectorConstruction()
+ : G4VUserDetectorConstruction()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

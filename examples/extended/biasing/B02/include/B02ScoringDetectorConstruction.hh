@@ -43,7 +43,7 @@ public:
   B02ScoringDetectorConstruction(){}
   ~B02ScoringDetectorConstruction(){}
 
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
   
 };
 

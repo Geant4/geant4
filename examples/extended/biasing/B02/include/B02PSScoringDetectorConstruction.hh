@@ -63,7 +63,7 @@ public:
   void SetSensitive();
 
 private:
-  void Construct();
+  virtual void Construct();
   //B02PVolumeStore fPVolumeStore;
   G4VPhysicalVolume *fWorldVolume;
 

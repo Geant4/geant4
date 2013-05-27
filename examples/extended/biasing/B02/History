@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 27th, 2013 I.Hrivnacova - B02-V09-06-03
+- Applied coding guidelines (virtual keyword, base class initialization)
+
 May 22nd, 2013 A.Howard - B02-V09-06-02
 - Applied coding guidelines for extended examples
 

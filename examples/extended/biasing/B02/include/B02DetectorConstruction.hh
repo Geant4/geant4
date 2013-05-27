@@ -45,7 +45,7 @@ public:
   B02DetectorConstruction();
   ~B02DetectorConstruction();
   
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
   G4VPhysicalVolume* GetWorldVolume();
   G4VPhysicalVolume& GetWorldVolumeAddress() const;
