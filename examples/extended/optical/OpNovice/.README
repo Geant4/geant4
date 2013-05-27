@@ -13,41 +13,42 @@ examples/extended/optical/LXe and wls
 
 \section ExampleOpNovice_s1 main()
 
- ==> define Random Number Engine and initial seed
+ Define Random Number Engine and initial seed
 
 \section ExampleOpNovice_s2 G4VUserPhysicsList
 
- ==> define particles; including *** G4OpticalPhoton     ***
-     define processes; including *** G4Cerenkov          ***
-                                 *** G4Scintillation     ***
-                                 *** G4OpAbsorption      ***
-                                 *** G4OpRayleigh        ***
-                                 *** G4OpBoundaryProcess ***
+ - Define particles; including - *** G4OpticalPhoton     ***
+ - Define processes; including 
+   - *** G4Cerenkov          ***
+   - *** G4Scintillation     ***
+   - *** G4OpAbsorption      ***
+   - *** G4OpRayleigh        ***
+   - *** G4OpBoundaryProcess ***
 
 \section ExampleOpNovice_s3 G4VUserDetectorConstruction 
 
- ==> define material: Air and Water
-     define simple G4box geometry
-     *** add G4MaterialPropertiesTable to G4Material       ***
-     *** define G4LogicalSurface(s)                        ***
-     *** define G4OpticalSurface                           ***
-     *** add G4MaterialPropertiesTable to G4OpticalSurface ***
+ - Define material: Air and Water
+ - Define simple G4box geometry
+   - *** add G4MaterialPropertiesTable to G4Material       ***
+   - *** define G4LogicalSurface(s)                        ***
+   - *** define G4OpticalSurface                           ***
+   - *** add G4MaterialPropertiesTable to G4OpticalSurface ***
 
 \section ExampleOpNovice_s4 G4VUserPrimaryGeneratorAction
 
- ==> Use G4ParticleGun to shoot a charge particle into a Cerenkov radiator
+ Use G4ParticleGun to shoot a charge particle into a Cerenkov radiator
  
- ==> A messenger command allows to define interactivly the polarization of an
-     primary optical photon (see for instance optPhoton.mac)
+ A messenger command allows to define interactivly the polarization of an
+ primary optical photon (see for instance optPhoton.mac)
      
 \section ExampleOpNovice_s5 G4UserRunAction
 
-==> define G4Timer (start/stop)
-    set verbose levels
+ - Define G4Timer (start/stop)
+ - Set verbose levels
 
 \section ExampleOpNovice_s6 G4UserStackingAction
 
-==> show how to count the number of secondary particles in an event
+ Show how to count the number of secondary particles in an event
 
 \section ExampleOpNovice_s7 Visualisation
  
@@ -61,19 +62,12 @@ examples/extended/optical/LXe and wls
  
 \section ExampleOpNovice_s8 How to start
  
- - compile and link to generate an executable
-\verbatim
-% cd OpNovice
-% gmake
-\endverbatim
- 
  - execute OpNovice in 'batch' mode from macro files
 \verbatim
 %  OpNovice   OpNovice.in
 \endverbatim
 
  - execute OpNovice in 'interactive mode' with visualization
-
 \verbatim
 % OpNovice
 ....

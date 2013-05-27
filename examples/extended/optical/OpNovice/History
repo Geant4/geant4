@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 May 2013, I.Hrivnacova (OpNovice-V09-06-04)
+- Updated .README file 
+
 27 May 2013, I.Hrivnacova (OpNovice-V09-06-03)
 - Apply Examples Coding Guidelines 
   (data members/base class initialization)
