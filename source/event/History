@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 26th, 2013, M.Asai (event-V09-06-06)
+- Adding additional checks on file I/O and verbosity to G4HEPEvtInterface.
+
 May 22nd, 2013, B.Morgan (event-V09-06-05)
 - Ensure deletion of "angsigmayCmd1" G4UIcommand instance in destructor of
   G4GeneralParticleSourceMessenger, fixing minor memory leak.

@@ -78,7 +78,7 @@ class G4Event;
 class G4HEPEvtInterface:public G4VPrimaryGenerator
 {
   public: // with description
-    G4HEPEvtInterface(const char* evfile);
+    G4HEPEvtInterface(const char* evfile, G4int vl=0);
 //    G4HEPEvtInterface(G4String evfile);
     // Constructors, "evfile" is the file name (with directory path).
   
@@ -88,6 +88,7 @@ class G4HEPEvtInterface:public G4VPrimaryGenerator
     void GeneratePrimaryVertex(G4Event* evt);
 
   private:
+    G4int vLevel;
     G4String fileName;
     std::ifstream inputFile;
     std::vector<G4HEPEvtParticle*> HPlist;
