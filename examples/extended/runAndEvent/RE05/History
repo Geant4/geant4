@@ -17,6 +17,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-05-13 M.Asai (exampleRE05-V09-06-06)
+- Additional verbosity to HEPEvtInterface. Co-working with
+  event-V09-06-06 tag.
+
+26-05-13 M.Asai (exampleRE05-V09-06-05)
+- Pythia data now has 100 events.
+
 23-05-13 M.Asai (exampleRE05-V09-06-04)
 - Roll back to old pythia data file to see if it goes with Windows.
 
