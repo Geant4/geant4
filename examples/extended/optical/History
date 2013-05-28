@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 May 2013 Peter Gumplinger (exOptical-V09-06-02)
+- Collect all coding guideline changes, also those from Ivana Hrivnacova
+
 1 April 2013 Andrea Dotti (exOptical-V09-06-01)
 - Grouping changes in examples for new API physics list classes needed for MT
 
