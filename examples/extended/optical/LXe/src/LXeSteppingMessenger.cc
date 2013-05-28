@@ -41,7 +41,8 @@ LXeSteppingMessenger::LXeSteppingMessenger(LXeSteppingAction* step)
  : fStepping(step)
 {
   fOneStepPrimariesCmd = new G4UIcmdWithABool("/LXe/oneStepPrimaries",this);
-  fOneStepPrimariesCmd->SetGuidance("Only allows primaries to go one step in the scintillator volume before being killed.");
+  fOneStepPrimariesCmd->
+      SetGuidance("Only allows primaries to go one step before being killed.");
 
 }
 
