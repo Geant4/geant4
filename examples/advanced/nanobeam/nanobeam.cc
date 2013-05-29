@@ -43,7 +43,6 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 int main(int argc,char** argv) {
 
@@ -64,15 +63,14 @@ int main(int argc,char** argv) {
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
     
-  HistoManager*  histo = new HistoManager();
 
   // Set user action classes
-  RunAction* RunAct = new RunAction(detector,primary,histo);
+  RunAction* RunAct = new RunAction(detector,primary);
 
   runManager->SetUserAction(RunAct);
   runManager->SetUserAction(new EventAction(RunAct));
   runManager->SetUserAction(new TrackingAction(RunAct)); 
-  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary,histo));
+  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary));
   
   // Initialize G4 kernel
   runManager->Initialize();

@@ -9,6 +9,11 @@ $Id$
                        Package History file
                        --------------------
 
+29 May 2013 - tag nanobeam-V09-06-03  -L. Pandola
+- Migrate analysis from AIDA (in a singleton class) to the 
+g4analysis tools. AIDA dependency is removed. Output file is 
+unchanged (still a ROOT file named nanobeam.root)
+
 7 May 2013 - tag nanobeam-V09-06-02 - S. Incerti, B. Morgan
 - Updated CMakeLists.txt thanks to Ben (example requires external CLHEP)
 

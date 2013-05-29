@@ -67,7 +67,7 @@ void DetectorConstruction::DefineMaterials()
   // Vacuum standard definition...
   density = universe_mean_density;
   G4Material* vacuum = new G4Material(name="Vacuum", z=1., a=1.01*g/mole,
-        density);
+	density);
 
   // NIST
   G4NistManager *man=G4NistManager::Instance();
@@ -96,8 +96,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
       
       pEquation = new G4Mag_UsualEqRhs (Field);
       pStepper = new G4ClassicalRK4 (pEquation);
-      pFieldMgr=G4TransportationManager::GetTransportationManager()
-               ->GetFieldManager();
+      pFieldMgr=G4TransportationManager::GetTransportationManager()->GetFieldManager();
       
       G4ChordFinder *pChordFinder = new G4ChordFinder(Field,1e-9*m,pStepper);
       pFieldMgr->SetChordFinder( pChordFinder );
@@ -112,8 +111,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
       pFieldMgr->SetDeltaOneStep(1.e-9*m);     
 
       G4PropagatorInField *propInField;
-      propInField = G4TransportationManager::GetTransportationManager()
-                  ->GetPropagatorInField();
+      propInField =
+       G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
       propInField->SetMinimumEpsilonStep(1e-11);
       propInField->SetMaximumEpsilonStep(1e-10);
 
@@ -121,40 +120,40 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  solidWorld = new G4Box("World",                    //its name
-                         12*m/2,12*m/2,22*m/2);      //its size
+  solidWorld = new G4Box("World",		   	//its name
+			   12*m/2,12*m/2,22*m/2);  	//its size
   
 
-  logicWorld = new G4LogicalVolume(solidWorld,       //its solid
-                                   defaultMaterial,  //its material
-                                   "World");         //its name
+  logicWorld = new G4LogicalVolume(solidWorld,	        //its solid
+				   defaultMaterial,	//its material
+				   "World");		//its name
   
-  physiWorld = new G4PVPlacement(0,                  //no rotation
-                                 G4ThreeVector(),    //at (0,0,0)
-                                 "World",            //its name
-                                 logicWorld,         //its logical volume
-                                 NULL,               //its mother  volume
-                                 false,              //no boolean operation
-                                 0);                 //copy number
+  physiWorld = new G4PVPlacement(0,			//no rotation
+  				 G4ThreeVector(),	//at (0,0,0)
+                                 "World",		//its name
+                                 logicWorld,		//its logical volume
+                                 NULL,			//its mother  volume
+                                 false,			//no boolean operation
+                                 0);			//copy number
 
 
   // MAGNET VOLUME 
 
-  solidVol = new G4Box("Vol",                        //its name
-                       10*m/2,10*m/2,9.120*m/2);     //its size
+  solidVol = new G4Box("Vol",				//its name
+			   10*m/2,10*m/2,9.120*m/2);  	//its size
   
 
-  logicVol = new G4LogicalVolume(solidVol,           //its solid
-                                 defaultMaterial,    //its material
-                                 "Vol");             //its name
+  logicVol = new G4LogicalVolume(solidVol,	        //its solid
+				   defaultMaterial,	//its material
+				   "Vol");		//its name
   
-  physiVol = new G4PVPlacement(0,                           //no rotation
-                               G4ThreeVector(0,0,-4310*mm), //at (0,0,0)
-                               "Vol",                       //its name
-                               logicVol,                 //its logical volume
-                               physiWorld,               //its mother  volume
-                               false,                    //no boolean operation
-                               0);                       //copy number
+  physiVol = new G4PVPlacement(0,			//no rotation
+  				 G4ThreeVector(0,0,-4310*mm),	//at (0,0,0)
+                                 "Vol",			//its name
+                                 logicVol,		//its logical volume
+                                 physiWorld,		//its mother  volume
+                                 false,			//no boolean operation
+                                 0);			//copy number
 
   // GRID
   
@@ -169,26 +168,26 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4double x_grid=5.0*mm;    
   G4double y_grid=5.0*mm;
-  G4double grid_Zpos=(250+200)*mm;  // 250+10 mm for object size of 50µm diam
+  G4double grid_Zpos=(250+200)*mm;      // 250+10 mm for object size of 50µm diam
 
   //G4double thickness_grid=10*micrometer;
   G4double thickness_grid=100*micrometer;
 
   G4double z_grid=thickness_grid/2.0; 
 
-  solidGridVol= new G4Box("GridVolume",x_grid,y_grid,z_grid);    //its size
+  solidGridVol= new G4Box("GridVolume",x_grid,y_grid,z_grid);   //its size
   
-  logicGridVol = new G4LogicalVolume(solidGridVol,               //its solid
-                                     gridMaterial,               //its material
-                                     "GridVolume");              //its name
+  logicGridVol = new G4LogicalVolume(solidGridVol,  		//its solid
+				   gridMaterial,               	//its material
+				   "GridVolume");		//its name
   
-  physiGridVol = new G4PVPlacement(0,                            //no rotation
-                                   G4ThreeVector(0,0,grid_Zpos), //origin
-                                   logicGridVol,          //its logical volume
-                                   "GridVolume",          //its name
-                                   logicWorld,            //its mother volume
-                                   false,                 //no boolean operation
-                                   0);        
+  physiGridVol = new G4PVPlacement(0,				//no rotation
+  				 G4ThreeVector(0,0,grid_Zpos),	// origin
+                                 logicGridVol,			//its logical volume
+                                 "GridVolume",			//its name
+                                 logicWorld,	        	//its mother  volume
+                                 false,				//no boolean operation
+                                 0);	
 
   // Holes in grid
   
@@ -196,35 +195,35 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4double pix_grid=1.3e-2*mm;
   G4int    num_half_grid=100;
 
-  solidGridVol_Hole= new G4Box("GridHole",holeSize/2,holeSize/2,z_grid);
+  solidGridVol_Hole= new G4Box("GridHole",holeSize/2,holeSize/2,z_grid);   //its size
   
-  logicGridVol_Hole = new G4LogicalVolume(solidGridVol_Hole,  //its solid
-                                   defaultMaterial,           //its material
-                                   "GridHole");               //its name
+  logicGridVol_Hole = new G4LogicalVolume(solidGridVol_Hole,  	    //its solid
+				   defaultMaterial,                 //its material
+				   "GridHole");		            //its name
 
  
   for(int i=-num_half_grid;i<num_half_grid;i++)
   {
-            for (int j=-num_half_grid;j<num_half_grid;j++)
-        {
+    	for (int j=-num_half_grid;j<num_half_grid;j++)
+	{
 
-                    G4double  x0_grid,y0_grid,z0_grid;
-                    G4int  number_index_grid;
+    		G4double  x0_grid,y0_grid,z0_grid;
+    		G4int  number_index_grid;
 
-                    x0_grid=pix_grid*i;
-                    y0_grid=pix_grid*j;
-                    z0_grid=0.0*mm;
+    		x0_grid=pix_grid*i;
+    		y0_grid=pix_grid*j;
+    		z0_grid=0.0*mm;
 
-                number_index_grid=(i+num_half_grid)*1000+(j+num_half_grid);
+		number_index_grid=(i+num_half_grid)*1000+(j+num_half_grid);
 
-                   physiGridVol_Hole  = new G4PVPlacement(0,    //no rotation
-                                 G4ThreeVector(x0_grid,y0_grid,z0_grid), //orig
-                                 logicGridVol_Hole,      //its logical volume
-                                 "GridHole",             //its name
-                                 logicGridVol,           //its mother  volume
-                                 false,                  //no boolean operation
+   		physiGridVol_Hole  = new G4PVPlacement(0,		//no rotation
+			  	 G4ThreeVector(x0_grid,y0_grid,z0_grid),//origin
+                                 logicGridVol_Hole,			//its logical volume
+  			         "GridHole",				//its name
+                                 logicGridVol,	        		//its mother  volume
+                                 false,					//no boolean operation
                                  number_index_grid);
-        }        
+	}	
   }
 
   // Grid imaging plane
@@ -234,8 +233,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
  
   solidControlVol_GridShadow =
     new G4Box
-    ("ControlVol_GridShadow", ContVolSizeXY/2,
-      ContVolSizeXY/2 , ImPlaneWidth/2);
+    ("ControlVol_GridShadow", ContVolSizeXY/2, ContVolSizeXY/2 , ImPlaneWidth/2);
  
   logicControlVol_GridShadow = 
     new G4LogicalVolume
@@ -243,8 +241,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   
   physiControlVol_GridShadow = 
     new G4PVPlacement 
-    ( 0, G4ThreeVector(0,0,(250+300)*mm), logicControlVol_GridShadow,
-      "ControlVol_GridShadow",logicWorld, false, 0);
+    ( 0, G4ThreeVector(0,0,(250+300)*mm), logicControlVol_GridShadow, "ControlVol_GridShadow",logicWorld, false, 0);
      
  
   } // end GRID

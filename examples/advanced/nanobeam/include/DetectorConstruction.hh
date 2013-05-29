@@ -97,11 +97,11 @@ private:
   
   G4VPhysicalVolume* physiGridVol;
   G4LogicalVolume*   logicGridVol;  
-  G4Box*             solidGridVol;
+  G4Box*	     solidGridVol;
 
   G4VPhysicalVolume* physiGridVol_Hole;
   G4LogicalVolume*   logicGridVol_Hole;  
-  G4Box*             solidGridVol_Hole;
+  G4Box*	     solidGridVol_Hole;
 
   G4VPhysicalVolume* physiControlVol_GridShadow;
   G4LogicalVolume*   logicControlVol_GridShadow;  

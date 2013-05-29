@@ -65,7 +65,7 @@ public:
  
 private:
   
-  G4double XYofAngle(G4double);
+  G4double XYofAngle(G4double);	
   
   G4ParticleGun* particleGun;
   DetectorConstruction* detector;
@@ -74,7 +74,7 @@ private:
   G4bool shoot;
   
    // Matrix
-  CLHEP::HepMatrix beamMatrix;
+  CLHEP::HepMatrix beamMatrix;	
 };
 
 #endif

@@ -55,7 +55,7 @@ class EventAction : public G4UserEventAction
     
   private:
   
-    RunAction* Run;
+    RunAction*        	     Run;
 };
 
 #endif

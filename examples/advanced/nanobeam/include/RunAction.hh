@@ -38,7 +38,6 @@
 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -48,7 +47,7 @@ class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
   ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
@@ -66,7 +65,6 @@ private:
 
   DetectorConstruction* detector;    
   PrimaryGeneratorAction* primary;   
-  HistoManager* hist;
     
   // Matrix handling 
   

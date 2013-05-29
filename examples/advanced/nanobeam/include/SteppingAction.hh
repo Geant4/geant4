@@ -36,7 +36,6 @@
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
 #include "G4Proton.hh"
 
 
@@ -45,7 +44,7 @@
 class SteppingAction : public G4UserSteppingAction
 {
 public:
-  SteppingAction(RunAction*,DetectorConstruction*,PrimaryGeneratorAction*,HistoManager*);
+  SteppingAction(RunAction*,DetectorConstruction*,PrimaryGeneratorAction*);
   ~SteppingAction();
   
   void UserSteppingAction(const G4Step*);
@@ -54,7 +53,6 @@ private:
   RunAction*            Run;
   DetectorConstruction* Detector; 
   PrimaryGeneratorAction* Primary;
-  HistoManager* Histo;
   
   G4double xIn,x0;
   G4double yIn,y0;

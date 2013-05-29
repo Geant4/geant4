@@ -28,13 +28,14 @@
 // -------------------------------------------------------------------
 
 #include "SteppingAction.hh"
+#include "HistoManager.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,
- PrimaryGeneratorAction* pri, HistoManager* his)
-:Run(run),Detector(det),Primary(pri),Histo(his)
+			       PrimaryGeneratorAction* pri)
+  :Run(run),Detector(det),Primary(pri)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -47,6 +48,8 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* step)
   
 { 
+
+G4AnalysisManager* man = G4AnalysisManager::Instance();
 
 if (Detector->GetCoef()==1) 
 {
@@ -96,12 +99,12 @@ if (Detector->GetCoef()==1)
          Run->AddToThetaVector(thetaIn/mrad);
          Run->AddToPhiVector(phiIn/mrad);
 
-         Histo->FillNtuple(2, 0, xIn/um);
-         Histo->FillNtuple(2, 1, yIn/um);
-         Histo->FillNtuple(2, 2, thetaIn/mrad);
-         Histo->FillNtuple(2, 3, phiIn/mrad);
-         Histo->AddRowNtuple(2);      
-
+	 //Fill ntuple 3
+	 man->FillNtupleDColumn(3,0,xIn/um);
+	 man->FillNtupleDColumn(3,1,yIn/um);
+	 man->FillNtupleDColumn(3,2,thetaIn/mrad);
+	 man->FillNtupleDColumn(3,3,phiIn/mrad);
+	 man->AddNtupleRow(3);
      }
 }
 
@@ -119,11 +122,12 @@ if (Detector->GetProfile()==1)
          xIn = step->GetPostStepPoint()->GetPosition().x();
          yIn = step->GetPostStepPoint()->GetPosition().y();
          zIn = step->GetPostStepPoint()->GetPosition().z();
-         
-         Histo->FillNtuple(0, 0, xIn/um);
-         Histo->FillNtuple(0, 1, yIn/um);
-         Histo->FillNtuple(0, 2, zIn/mm);
-         Histo->AddRowNtuple(0);      
+
+         //Fill ntuple 1
+	 man->FillNtupleDColumn(1,0,xIn/um);
+	 man->FillNtupleDColumn(1,1,yIn/um);
+	 man->FillNtupleDColumn(1,2,zIn/um);
+	 man->AddNtupleRow(1);
    }
 }
    
@@ -142,12 +146,13 @@ if (Detector->GetGrid()==1)
          yIn = step->GetPostStepPoint()->GetPosition().y();
          E   = step->GetTrack()->GetKineticEnergy();
 
-         Histo->FillNtuple(1, 0, xIn/um);
-         Histo->FillNtuple(1, 1, yIn/um);
-         Histo->FillNtuple(1, 2, E/MeV);
-         Histo->AddRowNtuple(1);
+	 //Fill ntuple 2
+	 man->FillNtupleDColumn(2,0,xIn/um);
+	 man->FillNtupleDColumn(2,1,yIn/um);
+	 man->FillNtupleDColumn(2,2,E/MeV);
+	 man->AddNtupleRow(2);
    }
-}
+ }
 
 // end
 }     
