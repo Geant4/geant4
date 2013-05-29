@@ -40,25 +40,20 @@
 #include "UltraRunAction.hh"
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
-#include "G4ios.hh"
 #include "UltraRunActionMessenger.hh"
 #include "Randomize.hh"
-#ifdef G4ANALYSIS_USE
 #include "UltraAnalysisManager.hh"
-#endif
 
 #include "Randomize.hh"
-#include "G4ios.hh"
+
 
 // //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 UltraRunAction::UltraRunAction()
 {
 
-   G4int seed = 1;                                         // RANLUX seed
-   G4int luxury = 3;                                       // RANLUX luxury level (3 is default)
+   G4int seed = 1;      // RANLUX seed
+   G4int luxury = 3;    // RANLUX luxury level (3 is default)
    CLHEP::HepRandom::setTheSeed(seed,luxury);
    CLHEP::HepRandom::showEngineStatus();
 
@@ -77,16 +72,25 @@ UltraRunAction::~UltraRunAction()
 void UltraRunAction::BeginOfRunAction(const G4Run* aRun)
 {
 
-#ifdef G4ANALYSIS_USE
-  UltraAnalysisManager* analysis = UltraAnalysisManager::getInstance();
-  analysis->book();
-#endif
+  // Get/create analysis manager
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+
+  // Open an output file
+  man->OpenFile("ultra");
+  man->SetFirstHistoId(1);
+
+  // Create histogram(s)
+  man->CreateH1("1","Optical photons energy (eV)", //histoID,histo name 
+		500,0.,5.); //bins' number, xmin, xmax
+  man->CreateH1("2","Number of Detected Photons", 
+		10,0.,10.); //bins' number, xmin, xmax
 
   G4cout << "### Run " << aRun->GetRunID() << " start..." << G4endl;
 
   // save Rndm status
   if (saveRndm > 0)
-    { CLHEP::HepRandom::showEngineStatus();
+    { 
+      CLHEP::HepRandom::showEngineStatus();
       CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
     }
 
@@ -107,16 +111,18 @@ void UltraRunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "Close and Save Histograms" << G4endl;
   G4cout << "### Run " << aRun->GetRunID() << " ended." << G4endl;
 
-#ifdef G4ANALYSIS_USE
-  UltraAnalysisManager* analysis = UltraAnalysisManager::getInstance();
-  analysis->finish();
-#endif
+  // Save histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+  // Complete clean-up
+  delete G4AnalysisManager::Instance();
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-    void UltraRunAction::MySetRunID(G4int myrun)
+void UltraRunAction::MySetRunID(G4int myrun)
 {
      runID = myrun ;
 }
