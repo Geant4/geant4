@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/include/A01EmCalorimeter.hh
 /// \brief Definition of the A01EmCalorimeter class
-//
-// $Id$
-// --------------------------------------------------------------
-//
+
 #ifndef A01EmCalorimeter_h
 #define A01EmCalorimeter_h 1
 
@@ -38,24 +37,22 @@ class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class A01EmCalorimeter : public G4VSensitiveDetector
 {
-
-  public:
-      A01EmCalorimeter(G4String name);
-      virtual ~A01EmCalorimeter();
-
-      virtual void Initialize(G4HCofThisEvent*HCE);
-      virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
-      virtual void EndOfEvent(G4HCofThisEvent*HCE);
-
-  private:
-      A01EmCalorimeterHitsCollection* fHitsCollection;
-      G4int fHCID;
+    
+public:
+    A01EmCalorimeter(G4String name);
+    virtual ~A01EmCalorimeter();
+    
+    virtual void Initialize(G4HCofThisEvent*HCE);
+    virtual G4bool ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist);
+    
+private:
+    A01EmCalorimeterHitsCollection* fHitsCollection;
+    G4int fHCID;
 };
 
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif
-

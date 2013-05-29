@@ -23,44 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/src/A01MagneticFieldMessenger.cc
 /// \brief Implementation of the A01MagneticFieldMessenger class
-//
-// $Id$
-// --------------------------------------------------------------
-//
+
 #include "A01MagneticFieldMessenger.hh"
 #include "A01MagneticField.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 A01MagneticFieldMessenger::A01MagneticFieldMessenger(A01MagneticField * mpga)
 :fTarget(mpga)
 {
-  fFieldCmd = new G4UIcmdWithADoubleAndUnit("/mydet/fieldValue",this);
-  fFieldCmd->SetGuidance("Field strength");
-  fFieldCmd->SetParameterName("field",true);
-  fFieldCmd->SetDefaultValue(1.);
-  fFieldCmd->SetDefaultUnit("tesla");
+    fFieldCmd = new G4UIcmdWithADoubleAndUnit("/mydet/fieldValue",this);
+    fFieldCmd->SetGuidance("Field strength");
+    fFieldCmd->SetParameterName("field",true);
+    fFieldCmd->SetDefaultValue(1.);
+    fFieldCmd->SetDefaultUnit("tesla");
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01MagneticFieldMessenger::~A01MagneticFieldMessenger()
 {
-  delete fFieldCmd;
+    delete fFieldCmd;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void A01MagneticFieldMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if( command==fFieldCmd )
-  { fTarget->SetField(fFieldCmd->GetNewDoubleValue(newValue)); }
+    if( command==fFieldCmd )
+    { fTarget->SetField(fFieldCmd->GetNewDoubleValue(newValue)); }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String A01MagneticFieldMessenger::GetCurrentValue(G4UIcommand * command)
 {
-  G4String cv;
-  if( command==fFieldCmd )
-  { cv = fFieldCmd->ConvertToString(fTarget->GetField(),"tesla"); }
-
-  return cv;
+    G4String cv;
+    if( command==fFieldCmd )
+    { cv = fFieldCmd->ConvertToString(fTarget->GetField(),"tesla"); }
+    
+    return cv;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

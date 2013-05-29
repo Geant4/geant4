@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/src/A01Hodoscope.cc
 /// \brief Implementation of the A01Hodoscope class
-//
-// $Id$
-// --------------------------------------------------------------
-//
+
 #include "A01Hodoscope.hh"
 #include "A01HodoscopeHit.hh"
 #include "G4HCofThisEvent.hh"
@@ -38,69 +37,72 @@
 #include "G4SDManager.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 A01Hodoscope::A01Hodoscope(G4String name)
-:G4VSensitiveDetector(name)
+:G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
 {
-  G4String HCname;
-  collectionName.insert(HCname="hodoscopeColl");
-  fHCID = -1;
+    G4String HCname = "hodoscopeColl";
+    collectionName.insert(HCname);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01Hodoscope::~A01Hodoscope(){;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void A01Hodoscope::Initialize(G4HCofThisEvent*HCE)
 {
-  fHitsCollection = new A01HodoscopeHitsCollection
-                   (SensitiveDetectorName,collectionName[0]);
-  if(fHCID<0)
-  { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
-  HCE->AddHitsCollection(fHCID,fHitsCollection);
+    fHitsCollection = new A01HodoscopeHitsCollection
+    (SensitiveDetectorName,collectionName[0]);
+    if(fHCID<0)
+    { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
+    HCE->AddHitsCollection(fHCID,fHitsCollection);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool A01Hodoscope::ProcessHits(G4Step*aStep,G4TouchableHistory* /*ROhist*/)
 {
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep==0.) return true;
-
-  G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
-  G4TouchableHistory* theTouchable
+    G4double edep = aStep->GetTotalEnergyDeposit();
+    if(edep==0.) return true;
+    
+    G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
+    G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(preStepPoint->GetTouchable());
-  G4int copyNo = theTouchable->GetVolume()->GetCopyNo();
-  G4double hitTime = preStepPoint->GetGlobalTime();
-
-  // check if this finger already has a hit
-  G4int ix = -1;
-  for(G4int i=0;i<fHitsCollection->entries();i++)
-  {
-    if((*fHitsCollection)[i]->GetID()==copyNo)
+    G4int copyNo = theTouchable->GetVolume()->GetCopyNo();
+    G4double hitTime = preStepPoint->GetGlobalTime();
+    
+    // check if this finger already has a hit
+    G4int ix = -1;
+    for(G4int i=0;i<fHitsCollection->entries();i++)
     {
-      ix = i;
-      break;
+        if((*fHitsCollection)[i]->GetID()==copyNo)
+        {
+            ix = i;
+            break;
+        }
     }
-  }
-  // if it has, then take the earlier time
-  if(ix>=0)
-  {
-    if((*fHitsCollection)[ix]->GetTime()>hitTime)
-    { (*fHitsCollection)[ix]->SetTime(hitTime); }
-  }
-  else
-  // if not, create a new hit and set it to the collection
-  {
-    A01HodoscopeHit* aHit = new A01HodoscopeHit(copyNo,hitTime);
-    G4VPhysicalVolume* thePhysical = theTouchable->GetVolume();
-    aHit->SetLogV(thePhysical->GetLogicalVolume());
-    G4AffineTransform aTrans = theTouchable->GetHistory()->GetTopTransform();
-    aTrans.Invert();
-    aHit->SetRot(aTrans.NetRotation());
-    aHit->SetPos(aTrans.NetTranslation());
-    fHitsCollection->insert( aHit );
-  }
-
-  return true;
+    // if it has, then take the earlier time
+    if(ix>=0)
+    {
+        if((*fHitsCollection)[ix]->GetTime()>hitTime)
+        { (*fHitsCollection)[ix]->SetTime(hitTime); }
+    }
+    else
+        // if not, create a new hit and set it to the collection
+    {
+        A01HodoscopeHit* aHit = new A01HodoscopeHit(copyNo,hitTime);
+        G4VPhysicalVolume* thePhysical = theTouchable->GetVolume();
+        aHit->SetLogV(thePhysical->GetLogicalVolume());
+        G4AffineTransform aTrans = theTouchable->GetHistory()->GetTopTransform();
+        aTrans.Invert();
+        aHit->SetRot(aTrans.NetRotation());
+        aHit->SetPos(aTrans.NetTranslation());
+        fHitsCollection->insert( aHit );
+    }    
+    return true;
 }
 
-void A01Hodoscope::EndOfEvent(G4HCofThisEvent* /*HCE*/)
-{;}
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

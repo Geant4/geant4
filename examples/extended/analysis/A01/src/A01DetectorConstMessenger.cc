@@ -23,50 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/src/A01DetectorConstMessenger.cc
 /// \brief Implementation of the A01DetectorConstMessenger class
-//
-// $Id$
-// --------------------------------------------------------------
-//
+
 #include "A01DetectorConstMessenger.hh"
 #include "A01DetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 A01DetectorConstMessenger::A01DetectorConstMessenger(A01DetectorConstruction* mpga)
 :fTarget(mpga)
 {
-  fMydetDirectory = new G4UIdirectory("/mydet/");
-  fMydetDirectory->SetGuidance("A01 detector setup control commands.");
-
-  fArmCmd = new G4UIcmdWithADoubleAndUnit("/mydet/armAngle",this);
-  fArmCmd->SetGuidance("Rotation angle of the second arm.");
-  fArmCmd->SetParameterName("angle",true);
-  fArmCmd->SetRange("angle>=0. && angle<180.");
-  fArmCmd->SetDefaultValue(30.);
-  fArmCmd->SetDefaultUnit("deg");
+    fMydetDirectory = new G4UIdirectory("/mydet/");
+    fMydetDirectory->SetGuidance("A01 detector setup control commands.");
+    
+    fArmCmd = new G4UIcmdWithADoubleAndUnit("/mydet/armAngle",this);
+    fArmCmd->SetGuidance("Rotation angle of the second arm.");
+    fArmCmd->SetParameterName("angle",true);
+    fArmCmd->SetRange("angle>=0. && angle<180.");
+    fArmCmd->SetDefaultValue(30.);
+    fArmCmd->SetDefaultUnit("deg");
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01DetectorConstMessenger::~A01DetectorConstMessenger()
 {
-  delete fArmCmd;
-  delete fMydetDirectory;
+    delete fArmCmd;
+    delete fMydetDirectory;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void A01DetectorConstMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if( command==fArmCmd )
-  { fTarget->SetArmAngle(fArmCmd->GetNewDoubleValue(newValue)); }
+    if( command==fArmCmd )
+    { fTarget->SetArmAngle(fArmCmd->GetNewDoubleValue(newValue)); }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String A01DetectorConstMessenger::GetCurrentValue(G4UIcommand * command)
 {
-  G4String cv;
-  if( command==fArmCmd )
-  { cv = fArmCmd->ConvertToString(fTarget->GetArmAngle(),"deg"); }
-
-  return cv;
+    G4String cv;
+    if( command==fArmCmd )
+    { cv = fArmCmd->ConvertToString(fTarget->GetArmAngle(),"deg"); }
+    
+    return cv;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

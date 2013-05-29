@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/include/A01EventActionMessenger.hh
 /// \brief Definition of the A01EventActionMessenger class
-//
-// $Id$
-// --------------------------------------------------------------
-//
+
 #ifndef A01EventActionMessenger_h
 #define A01EventActionMessenger_h 1
 
@@ -38,21 +37,23 @@ class G4UIcmdWithAnInteger;
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class A01EventActionMessenger: public G4UImessenger
 {
-  public:
+public:
     A01EventActionMessenger(A01EventAction* mpga);
     virtual ~A01EventActionMessenger();
-
+    
     virtual void SetNewValue(G4UIcommand * command,G4String newValues);
     virtual G4String GetCurrentValue(G4UIcommand * command);
-
-  private:
+    
+private:
     A01EventAction* fTarget;
-
+    
     G4UIcmdWithAnInteger* fVerboseCmd;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-

@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/include/A01EventAction.hh
 /// \brief Definition of the A01EventAction class
-//
-// $Id$
-// --------------------------------------------------------------
-//
+
 #ifndef A01EventAction_h
 #define A01EventAction_h 1
 
@@ -43,26 +42,27 @@ using namespace AIDA;
 
 class A01EventActionMessenger;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class A01EventAction : public G4UserEventAction
 {
-  public:
+public:
     A01EventAction();
     virtual ~A01EventAction();
-
-    virtual void BeginOfEventAction(const G4Event*);
+    
     virtual void EndOfEventAction(const G4Event*);
-
-  private:
+    
+private:
     G4int fHHC1ID;
     G4int fHHC2ID;
     G4int fDHC1ID;
     G4int fDHC2ID;
     G4int fECHCID;
     G4int fHCHCID;
-
+    
     A01EventActionMessenger* fMessenger;
     G4int fVerboseLevel;
-
+    
 #ifdef G4ANALYSIS_USE
     IHistogram1D* fDc1Hits;
     IHistogram1D* fDc2Hits;
@@ -72,10 +72,12 @@ class A01EventAction : public G4UserEventAction
     ITuple* fTuple;
     IPlotter* fPlotter;
 #endif // G4ANALYSIS_USE
-
-  public:
+    
+public:
     inline void SetVerbose(G4int val) { fVerboseLevel = val; }
     inline G4int GetVerbose() const { return fVerboseLevel; }
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

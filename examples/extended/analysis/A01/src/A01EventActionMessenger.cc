@@ -23,45 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/src/A01EventActionMessenger.cc
 /// \brief Implementation of the A01EventActionMessenger class
-//
-// $Id$
-// --------------------------------------------------------------
-//
 
 #include "A01EventActionMessenger.hh"
 #include "A01EventAction.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 A01EventActionMessenger::A01EventActionMessenger(A01EventAction * mpga)
-:fTarget (mpga)
+:fTarget(mpga)
 {
-  fVerboseCmd = new G4UIcmdWithAnInteger("/mydet/verbose",this);
-  fVerboseCmd->SetGuidance("Verbose level for each event.");
-  fVerboseCmd->SetGuidance(" Event summary will be displayed for every 'level' events.");
-  fVerboseCmd->SetParameterName("level",true);
-  fVerboseCmd->SetRange("level>=0");
-  fVerboseCmd->SetDefaultValue(1);
+    fVerboseCmd = new G4UIcmdWithAnInteger("/mydet/verbose",this);
+    fVerboseCmd->SetGuidance("Verbose level for each event.");
+    fVerboseCmd->SetGuidance(
+                " Event summary will be displayed for every 'level' events.");
+    fVerboseCmd->SetParameterName("level",true);
+    fVerboseCmd->SetRange("level>=0");
+    fVerboseCmd->SetDefaultValue(1);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01EventActionMessenger::~A01EventActionMessenger()
 {
-  delete fVerboseCmd;
+    delete fVerboseCmd;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void A01EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
 {
-  if( command==fVerboseCmd )
-  { fTarget ->SetVerbose(fVerboseCmd->GetNewIntValue(newValue)); }
+    if( command==fVerboseCmd )
+    { fTarget ->SetVerbose(fVerboseCmd->GetNewIntValue(newValue)); }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4String A01EventActionMessenger::GetCurrentValue(G4UIcommand * command)
 {
-  G4String cv;
-  if( command==fVerboseCmd )
-  { cv = fVerboseCmd->ConvertToString(fTarget ->GetVerbose()); }
-
-  return cv;
+    G4String cv;
+    if( command==fVerboseCmd )
+    { cv = fVerboseCmd->ConvertToString(fTarget ->GetVerbose()); }
+    
+    return cv;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

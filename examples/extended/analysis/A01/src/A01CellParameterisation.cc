@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/src/A01CellParameterisation.cc
 /// \brief Implementation of the A01CellParameterisation class
-//
-// $Id$
-// --------------------------------------------------------------
-//
 
 #include "A01CellParameterisation.hh"
 
@@ -36,23 +34,30 @@
 #include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 A01CellParameterisation::A01CellParameterisation()
 {
-  for(int copyNo=0;copyNo<80;copyNo++)
-  {
-    G4int column = copyNo / 4;
-    G4int row = copyNo % 4;
-    fXCell[copyNo] = (column-9)*15.*cm - 7.5*cm;
-    fYCell[copyNo] = (row-1)*15*cm - 7.5*cm;
-  }
+    for(int copyNo=0;copyNo<80;copyNo++)
+    {
+        G4int column = copyNo / 4;
+        G4int row = copyNo % 4;
+        fXCell[copyNo] = (column-9)*15.*cm - 7.5*cm;
+        fYCell[copyNo] = (row-1)*15*cm - 7.5*cm;
+    }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01CellParameterisation::~A01CellParameterisation()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void A01CellParameterisation::ComputeTransformation
 (const G4int copyNo,G4VPhysicalVolume *physVol) const
 {
-  physVol->SetTranslation(G4ThreeVector(fXCell[copyNo],fYCell[copyNo],0.));
+    physVol->SetTranslation(G4ThreeVector(fXCell[copyNo],fYCell[copyNo],0.));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/include/A01DetectorConstruction.hh
 /// \brief Definition of the A01DetectorConstruction class
-//
-// $Id$
-// --------------------------------------------------------------
-//
 
 #ifndef A01DetectorConstruction_h
 #define A01DetectorConstruction_h 1
@@ -45,31 +43,33 @@ class G4VisAttributes;
 class A01DetectorConstMessenger;
 class A01MagneticField;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class A01DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
     A01DetectorConstruction();
     virtual ~A01DetectorConstruction();
-
+    
     virtual G4VPhysicalVolume* Construct();
     void SetArmAngle(G4double val);
     inline G4double GetArmAngle() { return fArmAngle; }
-
+    
     void ConstructMaterials();
     void DestroyMaterials();
     void DumpGeometricalTree(G4VPhysicalVolume* aVolume,G4int depth=0);
-
-  private:
+    
+private:
     A01DetectorConstMessenger* fMessenger;
     A01MagneticField* fMagneticField;
     G4FieldManager* fFieldMgr;
-
+    
     G4Material* fAir;
     G4Material* fArgonGas;
     G4Material* fScintillator;
     G4Material* fCsI;
     G4Material* fLead;
-
+    
     G4VisAttributes* fWorldVisAtt;
     G4VisAttributes* fMagneticVisAtt;
     G4VisAttributes* fArmVisAtt;
@@ -80,11 +80,12 @@ class A01DetectorConstruction : public G4VUserDetectorConstruction
     G4VisAttributes* fCellVisAtt;
     G4VisAttributes* fHadCalorimeterVisAtt;
     G4VisAttributes* fHadCalorimeterCellVisAtt;
-
+    
     G4double fArmAngle;
     G4RotationMatrix* fArmRotation;
     G4VPhysicalVolume* fSecondArmPhys;
 };
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#endif

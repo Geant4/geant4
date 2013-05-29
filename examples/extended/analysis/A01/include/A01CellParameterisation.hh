@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/include/A01CellParameterisation.hh
 /// \brief Definition of the A01CellParameterisation class
-//
-// $Id$
-// --------------------------------------------------------------
-//
 
 #ifndef A01CellParameterisation_H
 #define A01CellParameterisation_H 1
@@ -37,19 +35,21 @@
 #include "G4VPVParameterisation.hh"
 class G4VPhysicalVolume;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class A01CellParameterisation : public G4VPVParameterisation
 {
-  public:
+public:
     A01CellParameterisation();
     virtual ~A01CellParameterisation();
     virtual void ComputeTransformation
-                   (const G4int copyNo,G4VPhysicalVolume *physVol) const;
-
-  private:
+    (const G4int copyNo,G4VPhysicalVolume *physVol) const;
+    
+private:
     G4double fXCell[80];
     G4double fYCell[80];
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-

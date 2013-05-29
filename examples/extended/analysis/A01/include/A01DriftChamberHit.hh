@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file analysis/A01/include/A01DriftChamberHit.hh
 /// \brief Definition of the A01DriftChamberHit class
-//
-// $Id$
-// --------------------------------------------------------------
-//
+
 #ifndef A01DriftChamberHit_h
 #define A01DriftChamberHit_h 1
 
@@ -43,42 +42,44 @@
 class G4AttDef;
 class G4AttValue;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class A01DriftChamberHit : public G4VHit
 {
-  public:
-      A01DriftChamberHit();
-      A01DriftChamberHit(G4int z);
-      virtual ~A01DriftChamberHit();
-      A01DriftChamberHit(const A01DriftChamberHit &right);
-      const A01DriftChamberHit& operator=(const A01DriftChamberHit &right);
-      int operator==(const A01DriftChamberHit &right) const;
-
-      inline void *operator new(size_t);
-      inline void operator delete(void *aHit);
-
-      inline float x();
-      inline float y();
-
-      virtual void Draw();
-      virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
-      virtual std::vector<G4AttValue>* CreateAttValues() const;
-      virtual void Print();
-
-  private:
-      G4int fLayerID;
-      G4double fTime;
-      G4ThreeVector fLocalPos;
-      G4ThreeVector fWorldPos;
-
-  public:
-      inline void SetLayerID(G4int z) { fLayerID = z; }
-      inline G4int GetLayerID() const { return fLayerID; }
-      inline void SetTime(G4double t) { fTime = t; }
-      inline G4double GetTime() const { return fTime; }
-      inline void SetLocalPos(G4ThreeVector xyz) { fLocalPos = xyz; }
-      inline G4ThreeVector GetLocalPos() const { return fLocalPos; }
-      inline void SetWorldPos(G4ThreeVector xyz) { fWorldPos = xyz; }
-      inline G4ThreeVector GetWorldPos() const { return fWorldPos; }
+public:
+    A01DriftChamberHit();
+    A01DriftChamberHit(G4int z);
+    virtual ~A01DriftChamberHit();
+    A01DriftChamberHit(const A01DriftChamberHit &right);
+    const A01DriftChamberHit& operator=(const A01DriftChamberHit &right);
+    int operator==(const A01DriftChamberHit &right) const;
+    
+    inline void *operator new(size_t);
+    inline void operator delete(void *aHit);
+    
+    inline float x();
+    inline float y();
+    
+    virtual void Draw();
+    virtual const std::map<G4String,G4AttDef>* GetAttDefs() const;
+    virtual std::vector<G4AttValue>* CreateAttValues() const;
+    virtual void Print();
+    
+private:
+    G4int fLayerID;
+    G4double fTime;
+    G4ThreeVector fLocalPos;
+    G4ThreeVector fWorldPos;
+    
+public:
+    inline void SetLayerID(G4int z) { fLayerID = z; }
+    inline G4int GetLayerID() const { return fLayerID; }
+    inline void SetTime(G4double t) { fTime = t; }
+    inline G4double GetTime() const { return fTime; }
+    inline void SetLocalPos(G4ThreeVector xyz) { fLocalPos = xyz; }
+    inline G4ThreeVector GetLocalPos() const { return fLocalPos; }
+    inline void SetWorldPos(G4ThreeVector xyz) { fWorldPos = xyz; }
+    inline G4ThreeVector GetWorldPos() const { return fWorldPos; }
 };
 
 typedef G4THitsCollection<A01DriftChamberHit> A01DriftChamberHitsCollection;
@@ -87,16 +88,16 @@ extern G4Allocator<A01DriftChamberHit> A01DriftChamberHitAllocator;
 
 inline void* A01DriftChamberHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*)A01DriftChamberHitAllocator.MallocSingle();
-  return aHit;
+    void* aHit;
+    aHit = (void*)A01DriftChamberHitAllocator.MallocSingle();
+    return aHit;
 }
 
 inline void A01DriftChamberHit::operator delete(void* aHit)
 {
-  A01DriftChamberHitAllocator.FreeSingle((A01DriftChamberHit*) aHit);
+    A01DriftChamberHitAllocator.FreeSingle((A01DriftChamberHit*) aHit);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-

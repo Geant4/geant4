@@ -45,27 +45,29 @@ class AIDA::IPlotter;
 
 class G4Track;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class A01AnalysisManager {
 public:
-
   virtual ~A01AnalysisManager();
-  static A01AnalysisManager* getInstance();
-  static void dispose();
+  static A01AnalysisManager* GetInstance();
+  static void Dispose();
 
-  IHistogramFactory* getHistogramFactory();
-  ITupleFactory* getTupleFactory();
-  IPlotter* getPlotter();
+  IHistogramFactory* GetHistogramFactory();
+  ITupleFactory* GetTupleFactory();
+  IPlotter* GetPlotter();
 
 private:
   A01AnalysisManager();
   static A01AnalysisManager* fInstance;
 
   IAnalysisFactory* fAnalysisFactory;
-  IHistogramFactory* fFactory;
-  ITupleFactory* tFactory;
+  IHistogramFactory* fHisfTupleFactory;
+  ITupleFactory* fTupleFactory;
   IPlotter* fPlotter;
   ITree* fTree;
 };
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#endif

@@ -10,6 +10,13 @@ $Id$
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+
+28 May 2013  Joseph Perl (exampleA01-V09-06-03)
+- Update README
+
+28 May 2013  Joseph Perl (exampleA01-V09-06-02)
+- Apply coding guidelines
+
 01 April 2013 Andrea Dotti (exampleA01-V09-06-01)
 - New G4VUserPhysicsList interface 
 
