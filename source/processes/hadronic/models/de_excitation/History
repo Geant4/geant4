@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28 May 2013 Vladimir Ivanchenko (hadr-deex-V09-06-16)
+----------------------------------------------------------
+- G4Evaporation - return back old algorithm to decay light exotic
+    fragments to fix non-reproducibility
+- G4ExcitationHandler - improved comments
+
 22 May 2013 Vladimir Ivanchenko (hadr-deex-V09-06-15)
 ----------------------------------------------------------
 - G4PhotonEvaporation - correctly propagate time limit to discrete

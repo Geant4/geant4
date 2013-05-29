@@ -238,18 +238,15 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     if(0.0 == totprob) {
 
       // if fragment is exotic, then force its decay 
-      if(0.0 == abun) {
-        G4int level = 0;
-	if(Z < 20 || !theTableOfIons->FindIon(Z,A,level)) {
-	  //G4cout << "$$$ Decay exotic fragment" << G4endl;
-	  theTempResult = unstableBreakUp.BreakUpFragment(theResidualNucleus);
-	  if(theTempResult) {
-	    size_t nsec = theTempResult->size();
-	    for(size_t j=0; j<nsec; ++j) {
-	      theResult->push_back((*theTempResult)[j]);
-	    }
-	    delete theTempResult;
+      if(0.0 == abun && Z < 20) {
+	//G4cout << "$$$ Decay exotic fragment" << G4endl;
+	theTempResult = unstableBreakUp.BreakUpFragment(theResidualNucleus);
+	if(theTempResult) {
+	  size_t nsec = theTempResult->size();
+	  for(size_t j=0; j<nsec; ++j) {
+	    theResult->push_back((*theTempResult)[j]);
 	  }
+	  delete theTempResult;
 	}
       }
 

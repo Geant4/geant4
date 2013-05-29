@@ -125,10 +125,17 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
   // Variables existing until end of method
   G4Fragment * theInitialStatePtr = new G4Fragment(theInitialState);
 
-  G4FragmentVector * theTempResult = 0;      // pointer which receives temporal results
-  std::list<G4Fragment*> theEvapList;        // list to apply Evaporation or Fermi Break-Up
-  std::list<G4Fragment*> thePhotoEvapList;   // list to apply PhotonEvaporation
-  std::list<G4Fragment*> theResults;         // list to store final result
+  // pointer to fragment vector which receives temporal results
+  G4FragmentVector * theTempResult = 0;     
+ 
+  // list of fragments to apply Evaporation or Fermi Break-Up
+  std::list<G4Fragment*> theEvapList;        
+
+  // list of fragments to apply PhotonEvaporation 
+  std::list<G4Fragment*> thePhotoEvapList;
+
+  // list of fragments to store final result   
+  std::list<G4Fragment*> theResults;
   //
   //G4cout << theInitialState << G4endl;  
   
@@ -348,7 +355,8 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
   //	 << thePhotoEvapList.size() << " was photo-evap; " 
   //	 << theResults.size() << " results. " << G4endl; 
     
-  G4ReactionProductVector * theReactionProductVector = new G4ReactionProductVector;
+  G4ReactionProductVector * theReactionProductVector = 
+    new G4ReactionProductVector();
 
   // MAC (24/07/08)
   // To optimise the storing speed, we reserve space in memory for the vector
@@ -402,7 +410,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	  G4ParticleDefinition* ion = 0; 
           for(level=1; level<10; ++level) {
 	    ion = theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
-            G4cout << level << "  " << ion << G4endl;
+            //G4cout << level << "  " << ion << G4endl;
             if(ion) {
 	      G4Ions* ip = dynamic_cast<G4Ions*>(ion);
 	      if(ip) {
@@ -417,7 +425,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 		} else if(elevel2 - eexc >= eexc - elevel1) {
 		  excitation = eexc - elevel1;
 		  break;
-		  // will check next level
+		  // will check next level and save current
 		} else {
 		  theKindOfFragment = ion;
 		  excitation = eexc - elevel2;
