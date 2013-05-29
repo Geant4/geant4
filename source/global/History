@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 29, 2013 G.Cosmo (global-V09-06-36)
+- Fix for allowing compilation on Windows in G4Threading: disable definition
+  of min()/max() and 'pascal' from inclusion of <windows.h>.
+
 May 29, 2013 G.Cosmo (global-V09-06-35)
 - Removed unnecessary thread-local specifications in G4GeometryTolerance
   singleton, as it is initialised and configured only once by master thread
