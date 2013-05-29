@@ -140,6 +140,12 @@ public:
         G4VParticleChange* AtRestDoIt (const G4Track& aTrack,
                                        const G4Step& aStep);
 
+        G4double GetScintillationYieldByParticleType(const G4Track &aTrack,
+						     const G4Step &aStep);
+        // Returns the number of scintillation photons calculated when
+        // scintillation depends on the particle type and energy
+        // deposited (includes nonlinear dependendency)
+
         // These are the methods implementing the scintillation process.
 
 	void SetTrackSecondariesFirst(const G4bool state);
@@ -223,6 +229,10 @@ protected:
 
         G4bool scintillationByParticleType;
 
+#ifdef G4DEBUG_SCINTILLATION
+        G4double ScintTrackEDep, ScintTrackYield;
+#endif
+
 private:
 
         G4double single_exp(G4double t, G4double tau2);
@@ -232,6 +242,12 @@ private:
         G4double sample_time(G4double tau1, G4double tau2);
 
         G4EmSaturation* emSaturation;
+
+
+public:
+
+
+private:
 
 };
 

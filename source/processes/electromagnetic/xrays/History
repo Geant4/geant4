@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 May 13: P.Gumplinger (xrays-V09-06-03)
+- G4Scintillation.cc: Fixed bug in G4Scintillation 
+  "ScintillationYieldByParticleType" mode to correctly produce photons for
+  nonlinear scintillators, accounting for variable particle step size in the
+  scintillator (dependent on G4 tracking and production cuts) and attempting
+  to best simulate photon density along the particle track. See, for example:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/opticalphotons/418.html
+  Thanks to Zach Hartwig (Department of Nuclear Science and Engineeering - MIT)
+
 13 May 13: P. Gumplinger (xrays-V09-06-02)
 - G4Scintillation.cc give the YieldRatio priority in cases when the
   ExcitationRatio is both 0.0 or 1.0; necessary because the defaults in
