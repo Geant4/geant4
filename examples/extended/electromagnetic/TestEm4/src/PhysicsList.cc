@@ -64,9 +64,9 @@ void PhysicsList::ConstructParticle()
   // for all particles which you want to use.
   // This ensures that objects of these particle types will be
   // created in the program. 
-
   ConstructBosons();
   ConstructLeptons();
+  G4GenericIon::GenericIonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

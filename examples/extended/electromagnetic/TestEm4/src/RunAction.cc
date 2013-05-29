@@ -44,16 +44,36 @@
 RunAction::RunAction()
  : G4UserRunAction()
 {
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::~RunAction()
+{
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+void RunAction::BeginOfRunAction(const G4Run* aRun)
+{
+  G4cout << "\n ### Run " << aRun->GetRunID() << " start." << G4endl;
+
+  // save Rndm status
+  //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  CLHEP::HepRandom::showEngineStatus();
+
   // Create analysis manager
   // The choice of analysis technology is done via selection of a namespace
   //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isMaster);
+
   
   // Open an output file
   //
   G4String fileName = "testem4";
   analysisManager->OpenFile(fileName);    
-  analysisManager->SetVerboseLevel(1);
   G4String extension = analysisManager->GetFileType();
   fileName = fileName + "." + extension;
     
@@ -67,36 +87,19 @@ RunAction::RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  
-  analysisManager->Write();
-  analysisManager->CloseFile();
-
-  delete G4AnalysisManager::Instance();    
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-void RunAction::BeginOfRunAction(const G4Run* aRun)
-{
-  G4cout << "\n ### Run " << aRun->GetRunID() << " start." << G4endl;
-
-  // save Rndm status
-  //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  CLHEP::HepRandom::showEngineStatus();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
   G4cout << "\n ### Run " << aRun->GetRunID() << " ended." << G4endl;
   
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();         
+
+  //save histograms      
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->Write();
+  analysisManager->CloseFile();
+  // Complete clean-up
+  delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

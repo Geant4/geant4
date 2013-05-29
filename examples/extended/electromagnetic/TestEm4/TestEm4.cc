@@ -32,16 +32,23 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
 
+
+
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
+
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "SteppingAction.hh"
+#include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
@@ -63,20 +70,19 @@ int main(int argc,char** argv) {
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  #ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+    runManager->SetNumberOfThreads(1);
+  #else
+    G4RunManager* runManager = new G4RunManager;
+  #endif
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList);
     
   // set user action classes
-  runManager->SetUserAction(new PrimaryGeneratorAction);
-  RunAction* RunAct     = new RunAction;
-  runManager->SetUserAction(RunAct);
-  EventAction* EvAct    = new EventAction(RunAct);  
-  runManager->SetUserAction(EvAct);
-  runManager->SetUserAction(new SteppingAction(EvAct));
-  
+  runManager->SetUserInitialization(new ActionInitialization());
   //Initialize G4 kernel
   runManager->Initialize();
     

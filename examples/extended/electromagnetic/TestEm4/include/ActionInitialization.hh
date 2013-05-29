@@ -23,52 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm4/include/EventAction.hh
-/// \brief Definition of the EventAction class
-//
-//
 // $Id$
 //
-// 
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#ifndef EventAction_h
-#define EventAction_h 1
+#include "G4VUserActionInitialization.hh"
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
+/// Action initialization class.
+///
 
-//class RunAction;
-class EventActionMessenger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class EventAction : public G4UserEventAction
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-//    EventAction(RunAction*);
-    EventAction();
-   ~EventAction();
+    ActionInitialization();
+    virtual ~ActionInitialization();
 
-  public:
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
-    
-    void addEdep(G4double Edep)     {fTotalEnergyDeposit += Edep;};      
-    G4double GetEnergyDeposit()     {return fTotalEnergyDeposit;};    
-    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
-    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
-        
-  private:
-    G4double fTotalEnergyDeposit;   // Energy deposited in c6f6
-    G4String fDrawFlag;             // control the drawing of event
-    G4int                     fPrintModulo;          
-    EventActionMessenger*     fEventMessenger;
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

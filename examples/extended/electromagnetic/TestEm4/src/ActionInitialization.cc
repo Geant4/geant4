@@ -23,67 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm4/src/EventAction.cc
-/// \brief Implementation of the EventAction class
-//
 // $Id$
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
+#include "ActionInitialization.hh"
+#include "RunAction.hh"
 #include "EventAction.hh"
-
-#include "EventActionMessenger.hh"
-
-#include "G4Event.hh"
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
-
-#include "g4root.hh"
+#include "SteppingAction.hh"
+#include "PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
-:G4UserEventAction(),
- fTotalEnergyDeposit(0.),fDrawFlag("none"),fPrintModulo(10000),
- fEventMessenger(NULL)
+ActionInitialization::ActionInitialization()
+ : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  fEventMessenger = new EventActionMessenger(this);
+ SetUserAction(new RunAction());
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::~EventAction()
+void ActionInitialization::Build() const
 {
-  delete fEventMessenger;
-}
+  SetUserAction(new RunAction());
+  SetUserAction(new PrimaryGeneratorAction);
+  EventAction* eventAction = new EventAction;
+  SetUserAction(eventAction);
+  SetUserAction(new SteppingAction(eventAction));
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::BeginOfEventAction( const G4Event* evt)
-{
- G4int evtNb = evt->GetEventID();
-
- //printing survey
- if (evtNb%fPrintModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;  
- 
- //additional initializations   
- fTotalEnergyDeposit = 0.;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::EndOfEventAction( const G4Event*)
-{                          
-  if (fDrawFlag != "none") 
-    G4cout << " Energy deposit: " 
-           << G4BestUnit(fTotalEnergyDeposit,"Energy") << G4endl;
-
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->FillH1(1, fTotalEnergyDeposit/MeV);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
