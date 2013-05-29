@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/electronScattering2/include/PhysicsList.hh
-/// \brief Definition of the PhysicsList class
-//
 // $Id$
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file medical/electronScattering2/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
 
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
@@ -76,4 +73,3 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

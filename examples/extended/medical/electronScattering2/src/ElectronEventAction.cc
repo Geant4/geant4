@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/electronScattering2/src/ElectronEventAction.cc
-/// \brief Implementation of the ElectronEventAction class
-//
 // $Id$
 //
+/// \file medical/electronScattering2/src/ElectronEventAction.cc
+/// \brief Implementation of the ElectronEventAction class
 
 #include "ElectronEventAction.hh"
 
@@ -36,15 +35,22 @@
 #include "G4EventManager.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ElectronEventAction::ElectronEventAction()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronEventAction::~ElectronEventAction()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void ElectronEventAction::BeginOfEventAction(const G4Event* event)
 {
-  if (std::fmod(event->GetEventID(), 100000.)==0)
-	G4cout << "Event Number:" <<  event->GetEventID() << G4endl;
+    if (std::fmod(event->GetEventID(), 100000.)==0)
+        G4cout << "Event Number:" <<  event->GetEventID() << G4endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

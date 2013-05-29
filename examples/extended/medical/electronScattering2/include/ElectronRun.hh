@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/electronScattering2/include/ElectronRun.hh
-/// \brief Definition of the ElectronRun class
-//
 // $Id$
 //
+/// \file medical/electronScattering2/include/ElectronRun.hh
+/// \brief Definition of the ElectronRun class
 
 #ifndef ELECTRONRUN_HH
 #define ELECTRONRUN_HH
@@ -39,21 +38,25 @@
 
 class G4Event;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class ElectronRun : public G4Run {
-
+    
 public:
-  ElectronRun(const G4String& detectorName);
-  virtual ~ElectronRun();
-
-  virtual void RecordEvent(const G4Event*);
-  void DumpData(G4String&) const;
+    ElectronRun(const G4String& detectorName);
+    virtual ~ElectronRun();
+    
+    virtual void RecordEvent(const G4Event*);
+    void DumpData(G4String&) const;
 
 private:
-  void Print(const std::vector<G4String>& title,
-			 const std::map< G4int, std::vector<G4double> >&out,
-			 G4String&) const;  
-
-  std::map<G4int, G4THitsMap<G4double>* > fMap;
+    void Print(const std::vector<G4String>& title,
+               const std::map< G4int, std::vector<G4double> >&out,
+               G4String&) const;
+    
+    std::map<G4int, G4THitsMap<G4double>* > fMap;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

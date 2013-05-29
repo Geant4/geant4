@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/electronScattering2/include/PhysicsListMessenger.hh
-/// \brief Definition of the PhysicsListMessenger class
-//
 // $Id$
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file medical/electronScattering2/include/PhysicsListMessenger.hh
+/// \brief Definition of the PhysicsListMessenger class
 
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
@@ -66,4 +63,3 @@ class PhysicsListMessenger: public G4UImessenger
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -23,13 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/electronScattering2/include/PhysListEmStandard.hh
-/// \brief Definition of the PhysListEmStandard class
-//
 // $Id$
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file medical/electronScattering2/include/PhysListEmStandard.hh
+/// \brief Definition of the PhysListEmStandard class
 
 #ifndef PhysListEmStandard_h
 #define PhysListEmStandard_h 1
@@ -57,11 +54,3 @@ public:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
-

@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/electronScattering2/include/ElectronBenchmarkDetector.hh
-/// \brief Definition of the ElectronBenchmarkDetector class
-//
 // $Id$
 //
+/// \file medical/electronScattering2/include/ElectronBenchmarkDetector.hh
+/// \brief Definition of the ElectronBenchmarkDetector class
 
 #ifndef ElectronBenchmarkDetector_h
 #define ElectronBenchmarkDetector_h 1
@@ -42,18 +41,20 @@ class G4Material;
 class G4VisAttributes;
 class ElectronBenchmarkDetectorMessenger;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
 {
-  public:
-  
+public:
+    
     ElectronBenchmarkDetector();
     virtual ~ElectronBenchmarkDetector();
-
+    
     virtual G4VPhysicalVolume* Construct();
-
+    
     // Material Definition
     void DefineMaterials();
-
+    
     // Geometry Definition
     G4VPhysicalVolume* CreateWorld();
     void CreateExitWindow(G4LogicalVolume* logicWorld);
@@ -63,15 +64,15 @@ class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
     void CreateScorer(G4LogicalVolume* logicWorld);
     G4VPhysicalVolume* CreateGeometry();
     void UpdateGeometry();
-
+    
     // Scorer Activation
     void ActivateScorer();
-
+    
     // Command Interface
     void SetPrimFoilMaterial(G4String matname);
     void SetPrimFoilThickness(G4double thicknessPrimFoil);
-
-  private:	
+    
+private:
     // Exit Window
     G4double fPosWindow0;
     G4double fPosWindow1;
@@ -107,7 +108,7 @@ class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
     G4double fRadDelta;
     
     // World volume
-    G4LogicalVolume* fLogWorld;    
+    G4LogicalVolume* fLogWorld;
     
     // Messenger
     ElectronBenchmarkDetectorMessenger* fMessenger;
@@ -122,5 +123,7 @@ class ElectronBenchmarkDetector : public G4VUserDetectorConstruction
     G4VisAttributes* fRingVisAtt;
     G4VisAttributes* fScorerVisAtt;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
