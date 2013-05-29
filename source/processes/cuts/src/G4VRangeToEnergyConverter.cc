@@ -41,17 +41,21 @@
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"
 
-// energy range
-G4ThreadLocal G4double  G4VRangeToEnergyConverter::LowestEnergy = 0.99e-3*MeV;
-G4ThreadLocal G4double  G4VRangeToEnergyConverter::HighestEnergy = 100.0e6*MeV;
-
-// max energy cut
-G4ThreadLocal G4double  G4VRangeToEnergyConverter::MaxEnergyCut = 10.0*GeV;
+G4ThreadLocal G4double  G4VRangeToEnergyConverter::LowestEnergy = 0.0;
+G4ThreadLocal G4double  G4VRangeToEnergyConverter::HighestEnergy = 0.0;
+G4ThreadLocal G4double  G4VRangeToEnergyConverter::MaxEnergyCut = 0.0;
 
 G4VRangeToEnergyConverter::G4VRangeToEnergyConverter():
   theParticle(0), theLossTable(0), NumberOfElements(0), TotBin(300),
   verboseLevel(1)
 {
+  // energy range
+  LowestEnergy = 0.99e-3*MeV;
+  HighestEnergy = 100.0e6*MeV;
+
+  // max energy cut
+  MaxEnergyCut = 10.0*GeV;
+
   fMaxEnergyCut = 0.;
 }
 
@@ -70,6 +74,10 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
     theLossTable=0;
  }
 
+  LowestEnergy = right.LowestEnergy;
+  HighestEnergy = right.HighestEnergy;
+  MaxEnergyCut = right.MaxEnergyCut;
+  fMaxEnergyCut = right.fMaxEnergyCut;
   NumberOfElements = right.NumberOfElements;
   theParticle = right.theParticle;
   verboseLevel = right.verboseLevel;

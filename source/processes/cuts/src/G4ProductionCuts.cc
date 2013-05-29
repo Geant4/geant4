@@ -87,10 +87,10 @@ G4int G4ProductionCuts::operator!=(const G4ProductionCuts &right) const
 
 G4int  G4ProductionCuts::GetIndex(const G4String& name)
 {
-  static G4ThreadLocal G4String *gamma_G4MT_TLS_ = 0 ; if (!gamma_G4MT_TLS_) gamma_G4MT_TLS_ = new  G4String ("gamma") ;  G4String &gamma = *gamma_G4MT_TLS_;
-  static G4ThreadLocal G4String *electron_G4MT_TLS_ = 0 ; if (!electron_G4MT_TLS_) electron_G4MT_TLS_ = new  G4String ("e-") ;  G4String &electron = *electron_G4MT_TLS_;
-  static G4ThreadLocal G4String *positron_G4MT_TLS_ = 0 ; if (!positron_G4MT_TLS_) positron_G4MT_TLS_ = new  G4String ("e+") ;  G4String &positron = *positron_G4MT_TLS_;
-  static G4ThreadLocal G4String *proton_G4MT_TLS_ = 0 ; if (!proton_G4MT_TLS_) proton_G4MT_TLS_ = new  G4String ("proton") ;  G4String &proton = *proton_G4MT_TLS_;
+  static const G4String gamma ("gamma");
+  static const G4String electron("e-");
+  static const G4String positron("e+");
+  static const G4String proton("proton");
   
   G4int index;
   if       ( name == gamma )        { index =  0; }

@@ -72,7 +72,7 @@ G4double G4RToEConvForElectron::ComputeLoss(G4double AtomicNumber,
   const  G4double Tlow=10.*keV, Thigh=1.*GeV;
   static G4ThreadLocal G4double bremfactor= 0.1 ;
 
-  static G4ThreadLocal G4double *Mass_G4MT_TLS_ = 0 ; if (!Mass_G4MT_TLS_) {Mass_G4MT_TLS_ = new  G4double  ; *Mass_G4MT_TLS_= theParticle->GetPDGMass() ; }  G4double &Mass = *Mass_G4MT_TLS_;
+  G4double Mass = theParticle->GetPDGMass();
 
   //  calculate dE/dx for electrons
   if( std::fabs(AtomicNumber-Z)>0.1 ) {
