@@ -65,6 +65,7 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4Proton.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
@@ -84,8 +85,8 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
 {
   fParticleChange = 0;
   fNistManager = G4NistManager::Instance();
-  theParticleTable = G4ParticleTable::GetParticleTable();
-  theProton   = G4Proton::Proton();
+  theIonTable  = G4ParticleTable::GetParticleTable()->GetIonTable();
+  theProton    = G4Proton::Proton();
   currentMaterial = 0; 
 
   pCuts = 0;
@@ -235,9 +236,11 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   // recoil sampling assuming a small recoil
   // and first order correction to primary 4-momentum
   G4double mom2 = wokvi->GetMomentumSquare();
-  G4double trec = mom2*(1.0 - cost)/(targetMass + (mass + kinEnergy)*(1.0 - cost));
+  G4double trec = mom2*(1.0 - cost)
+    /(targetMass + (mass + kinEnergy)*(1.0 - cost));
   G4double finalT = kinEnergy - trec; 
-  //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "<<trec<<G4endl;
+  //G4cout<<"G4eCoulombScatteringModel: finalT= "
+  // <<finalT<<" Trec= "<<trec<<G4endl;
   if(finalT <= lowEnergyThreshold) { 
     trec = kinEnergy;  
     finalT = 0.0;
@@ -248,7 +251,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
 
   if(trec > tcut) {
-    G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
+    G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
     G4ThreeVector dir = (direction*sqrt(mom2) - 
 			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
     G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);

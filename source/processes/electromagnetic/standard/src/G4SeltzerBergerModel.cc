@@ -259,7 +259,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   //  G4double invbeta1 = 0;
 
   static const G4double epeaklimit= 300*MeV; 
-  static const G4double elowlimit = 10*keV; 
+  static const G4double elowlimit = 20*keV; 
 
   // majoranta corrected for e-
   if(isElectron && x0 < 0.97 && 

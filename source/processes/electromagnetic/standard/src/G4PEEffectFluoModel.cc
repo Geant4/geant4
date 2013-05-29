@@ -174,22 +174,8 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   if (i < nShells) { 
   
     G4double bindingEnergy  = anElement->GetAtomicShell(i);
-    G4double elecKineEnergy = energy - bindingEnergy;
-
-    // create photo electron
-    //
-    if (elecKineEnergy > fminimalEnergy) {
-      edep = bindingEnergy;
-      G4ThreeVector elecDirection =
-	GetAngularDistribution()->SampleDirection(aDynamicPhoton, 
-						  elecKineEnergy,
-						  i, 
-						  couple->GetMaterial());
-   
-      G4DynamicParticle* aParticle = 
-	new G4DynamicParticle(theElectron, elecDirection, elecKineEnergy);
-      fvect->push_back(aParticle);
-    } 
+    edep = bindingEnergy;
+    G4double esec = 0.0;
 
     // sample deexcitation
     //
@@ -199,15 +185,53 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 	G4int Z = G4lrint(anElement->GetZ());
 	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
 	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
+        bindingEnergy = shell->BindingEnergy();
+	edep = bindingEnergy;
 	size_t nbefore = fvect->size();
 	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
 	size_t nafter = fvect->size();
 	if(nafter > nbefore) {
 	  for (size_t j=nbefore; j<nafter; ++j) {
-	    edep -= ((*fvect)[j])->GetKineticEnergy();
+	    esec += ((*fvect)[j])->GetKineticEnergy();
 	  } 
 	}
+        edep -= esec;
+	if(edep < 0.0) {
+	  G4cout << "### G4PEffectFluoModel Edep(eV)= " << edep/eV 
+		 << " Z= " << Z << " shell= " << i 
+		 << "  Ebind(keV)= " << bindingEnergy/keV 
+		 << "  Eshell(keV)= " << shell->BindingEnergy()/keV 
+		 << G4endl;
+	}
       }
+    }
+    // create photo electron
+    //
+    G4double elecKineEnergy = energy - bindingEnergy;
+    if (elecKineEnergy > fminimalEnergy) {
+      G4ThreeVector elecDirection =
+	GetAngularDistribution()->SampleDirection(aDynamicPhoton, 
+						  elecKineEnergy,
+						  i, 
+						  couple->GetMaterial());
+   
+      G4DynamicParticle* aParticle = 
+	new G4DynamicParticle(theElectron, elecDirection, elecKineEnergy);
+      fvect->push_back(aParticle);
+    } else {
+      edep += elecKineEnergy;
+      elecKineEnergy = 0.0;
+    }
+    if(fabs(energy - elecKineEnergy - esec - edep) > eV) {
+      G4cout << "### G4PEffectFluoModel dE(eV)= " 
+	     << (energy - elecKineEnergy - esec - edep)/eV 
+	     << " shell= " << i 
+	     << "  E(keV)= " << energy/keV 
+	     << "  Ebind(keV)= " << bindingEnergy/keV 
+	     << "  Ee(keV)= " << elecKineEnergy/keV 
+	     << "  Esec(keV)= " << esec/keV 
+	     << "  Edep(keV)= " << edep/keV 
+	     << G4endl;
     }
   }
 

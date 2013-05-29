@@ -39,10 +39,11 @@
 //	Suitable for high energy electrons and low scattering angles.
 //
 //
-//	 Reference:
-//	M.J. Boschini et al.
-//	"Non Ionizing Energy Loss induced by Electrons in the Space Environment"
-//	Proc. of the 13th International Conference on Particle Physics and Advanced Technology 
+// Reference:
+//      M.J. Boschini et al. "Non Ionizing Energy Loss induced by Electrons 
+//      in the Space Environment" Proc. of the 13th International Conference 
+//      on Particle Physics and Advanced Technology 
+//
 //	(13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
 //	Available at: http://arxiv.org/abs/1111.4042v4
 //
@@ -59,6 +60,9 @@
 #include "G4Proton.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4NucleiProperties.hh"
+#include "G4NistManager.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 #include "G4UnitsTable.hh"
 
@@ -74,7 +78,7 @@ G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String&
     isInitialised(false)
 {
   	fNistManager = G4NistManager::Instance();
-  	theParticleTable = G4ParticleTable::GetParticleTable();
+  	theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
 	fParticleChange = 0;
 
 	pCuts=0;
@@ -91,7 +95,6 @@ G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String&
   	Mottcross = new G4ScreeningMottCrossSection(); 
 
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -156,15 +159,15 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
   	G4double kinEnergy = dp->GetKineticEnergy();
 	//cout<<"--- kinEnergy "<<kinEnergy<<endl;
 
-
   	if(kinEnergy < lowEnergyLimit) return;
 	
   	DefineMaterial(couple);
   	SetupParticle(dp->GetDefinition());
 
 	// Choose nucleus
+	//last two :cutEnergy= min e kinEnergy=max
   	currentElement = SelectRandomAtom(couple,particle,
-                                    kinEnergy,cutEnergy,kinEnergy);//last two :cutEnergy= min e kinEnergy=max
+					  kinEnergy,cutEnergy,kinEnergy);
 
 	G4double Z  = currentElement->GetZ();
   	G4int iz    = G4int(Z);
@@ -204,7 +207,7 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
   	if(trec > tcut) {
 
 		//cout<<"Trec "<<trec/eV<<endl;
-    		G4ParticleDefinition* ion = theParticleTable->GetIon(iz, ia, 0.0);
+    		G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
 
 		//incident before scattering
 		G4double ptot=sqrt(Mottcross->GetMom2Lab());

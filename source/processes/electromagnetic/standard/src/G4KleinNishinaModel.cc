@@ -299,6 +299,7 @@ void G4KleinNishinaModel::SampleSecondaries(
   } else { eKinEnergy = 0.0; }
 
   G4double edep = energy - gamEnergy1 - eKinEnergy;
+  G4double esec = 0.0;
   
   // sample deexcitation
   //
@@ -313,14 +314,30 @@ void G4KleinNishinaModel::SampleSecondaries(
       size_t nafter = fvect->size();
       if(nafter > nbefore) {
 	for (size_t j=nbefore; j<nafter; ++j) {
-	  edep -= ((*fvect)[j])->GetKineticEnergy();
+	  esec += ((*fvect)[j])->GetKineticEnergy();
 	} 
       }
+      edep -= esec;
     }
   }
+  if(fabs(energy - gamEnergy1 - eKinEnergy - esec - edep) > eV) {
+    G4cout << "### G4KleinNishinaModel dE(eV)= " 
+	   << (energy - gamEnergy1 - eKinEnergy - esec - edep)/eV 
+	   << " shell= " << i 
+	   << "  E(keV)= " << energy/keV 
+	   << "  Ebind(keV)= " << bindingEnergy/keV 
+	   << "  Eg(keV)= " << gamEnergy1/keV 
+	   << "  Ee(keV)= " << eKinEnergy/keV 
+	   << "  Esec(keV)= " << esec/keV 
+	   << "  Edep(keV)= " << edep/keV 
+	   << G4endl;
+  }
   // energy balance
-  if(edep < 0.0) { edep = 0.0; }
-  fParticleChange->ProposeLocalEnergyDeposit(edep);
+  if(edep < 0.0) { 
+    G4cout << "### G4KleinNishinaModel Edep(eV)= " << edep/eV << G4endl;
+  } else {
+    fParticleChange->ProposeLocalEnergyDeposit(edep);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

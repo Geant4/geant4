@@ -18,6 +18,21 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+29 May 13: V.Ivanchenko (emstand-V09-06-37)
+- G4eCoulombScatteringModel, G4hCoulombScatteringModel,
+  G4eSingleCoulombScatteringModel - use G4IonTable::GetIon instead
+    of G4ParticleTable interface to create a recoil ion
+- G4KleinNishinaModel - added protection and warning against
+    possible energy non-conservation due to inconsistency in 
+    shell energies
+- G4PEEffectFluoModel - use binding energy from G4LEDATA and not
+    from G4AtomicShell class in the case when fluoresence is enabled
+    in order to provide energy balance
+- G4SeltzerBergerModel - increased elowlimit in the method
+    SamplingSecondaries() from 10 to 20 keV in order to removed 
+    problem of majoranta exceeded in heavy media (annoing warnings
+    messages should not appear anymore)
+
 23 May 13: V.Ivanchenko (emstand-V09-06-36)
 - G4PAIModel - G4SandiaTable is added as a class member
 - G4PAIModel, G4PAIySection - V.Grichine modified initialisation
