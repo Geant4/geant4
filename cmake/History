@@ -29,6 +29,13 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+28th May 2013 - Ben Morgan (cmake-V09-06-13)
+- Modules/Geant4LibraryBuildOptions.cmake : Add option 
+  GEANT4_BUILD_TPMALLOC. It defaults to OFF, and is set to OFF if
+  GEANT4_BUILD_MULTITHREADED is OFF or the platform is WIN32.
+  When set, this adds a global compiler definition G4TPMALLOC.
+  Feature requested by Andrea Dotti.
+
 22nd May 2013 - Ben Morgan (cmake-V09-06-12)
 - Modules/FindROOT.cmake : Remove "/usr/include" from list of
   include directories passed to rootcint in root_generate_dictionary
