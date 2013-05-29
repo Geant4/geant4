@@ -83,11 +83,11 @@ class G4GeometryTolerance
 
   private:
 
-    static G4ThreadLocal G4GeometryTolerance* fpInstance;
-    static G4ThreadLocal G4double fCarTolerance;
-    static G4ThreadLocal G4double fAngTolerance;
-    static G4ThreadLocal G4double fRadTolerance;
-    static G4ThreadLocal G4bool fInitialised;
+    static G4GeometryTolerance* fpInstance;
+    static G4double fCarTolerance;
+    static G4double fAngTolerance;
+    static G4double fRadTolerance;
+    static G4bool fInitialised;
  };
 
 #endif // G4GeometryTolerance_hh

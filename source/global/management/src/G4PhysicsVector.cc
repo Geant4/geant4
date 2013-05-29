@@ -53,8 +53,9 @@
 //    16 Aug. 2011  H.Kurashige  : Add dBin, baseBin and verboseLevel
 // --------------------------------------------------------------
 
-#include "G4PhysicsVector.hh"
 #include <iomanip>
+#include "G4Threading.hh"
+#include "G4PhysicsVector.hh"
 
 G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator = 0;
 
@@ -107,7 +108,7 @@ G4PVCache* G4PVSplitter<G4PVCache>::offset = 0;
 G4PVecManager G4PhysicsVector::subInstanceManager;
 
 #ifdef G4MULTITHREADED
-pthread_mutex_t mutexPhysicsVector = PTHREAD_MUTEX_INITIALIZER;
+G4Mutex mutexPhysicsVector = G4MUTEX_INITIALIZER;
 #endif
 
 // --------------------------------------------------------------

@@ -17,8 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 29, 2013 G.Cosmo (global-V09-06-35)
+- Removed unnecessary thread-local specifications in G4GeometryTolerance
+  singleton, as it is initialised and configured only once by master thread
+  before the event loop.
+- Consistently use wrappers and typedefs from G4Threading for pthreads
+  functions and types in G4MTHepRandom, G4PVSplitter and G4PhysicsVector,
+  to allow for porting on Windows.
+
 May 23, 2013 M.Asai (global-V09-06-34)
-- Replace G4coutIdDestination class to G4MTcoutDestination class for cleaner 
+- Replaced G4coutIdDestination class to G4MTcoutDestination class for cleaner 
   handling of thread-local cout/cerr.
 
 May 22, 2013 G.Cosmo (global-V09-06-33)

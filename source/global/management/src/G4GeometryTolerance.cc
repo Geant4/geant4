@@ -43,11 +43,11 @@
 // Static class data
 // ***************************************************************************
 //
-G4ThreadLocal G4GeometryTolerance* G4GeometryTolerance::fpInstance = 0;
-G4ThreadLocal G4bool G4GeometryTolerance::fInitialised = false;
-G4ThreadLocal G4double G4GeometryTolerance::fCarTolerance = 1E-9*mm;
-G4ThreadLocal G4double G4GeometryTolerance::fAngTolerance = 1E-9*rad;
-G4ThreadLocal G4double G4GeometryTolerance::fRadTolerance = 1E-9*mm;
+G4GeometryTolerance* G4GeometryTolerance::fpInstance = 0;
+G4bool G4GeometryTolerance::fInitialised = false;
+G4double G4GeometryTolerance::fCarTolerance = 1E-9*mm;
+G4double G4GeometryTolerance::fAngTolerance = 1E-9*rad;
+G4double G4GeometryTolerance::fRadTolerance = 1E-9*mm;
 
 // ***************************************************************************
 // Constructor.

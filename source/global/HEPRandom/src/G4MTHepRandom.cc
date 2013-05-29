@@ -193,19 +193,19 @@ G4int G4MTHepRandom::createInstance()
   return 0;
 }
 
-pthread_mutex_t jamesrandom = PTHREAD_MUTEX_INITIALIZER;
+G4Mutex jamesrandom = G4MUTEX_INITIALIZER;
 
 G4int G4MTHepRandom::createInstanceOnce()
 {
   if (isActive) return isActive;
   isActive = 1;
 
-  pthread_mutex_lock(&jamesrandom);
+  G4MUTEXLOCK(&jamesrandom);
 
   static G4ThreadLocal CLHEP::HepJamesRandom *defaultEngine = 0;
   if (!defaultEngine)  { defaultEngine = new CLHEP::HepJamesRandom; }
  
-  pthread_mutex_unlock(&jamesrandom);
+  G4MUTEXUNLOCK(&jamesrandom);
 
   if ( !theEngine )  { theEngine = defaultEngine; }
   if ( !theGenerator )  { theGenerator = new G4MTHepRandom( theEngine ); }

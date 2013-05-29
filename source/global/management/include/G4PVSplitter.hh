@@ -46,10 +46,11 @@
 #include <stdlib.h>
 
 #include "G4Types.hh"
+#include "G4Threading.hh"
 
 #ifdef G4MULTITHREADED
-extern pthread_mutex_t mutexPhysicsVector;
-// pthread_mutex_t mutexPhysicsVector = PTHREAD_MUTEX_INITIALIZER;
+extern G4Mutex mutexPhysicsVector;
+// G4Mutex mutexPhysicsVector = G4MUTEX_INITIALIZER;
 #endif
 
 template <class T>  // T is the private data from the PV to be split
@@ -64,7 +65,7 @@ class G4PVSplitter
       // whenever a new split class instance is created.
     {
 #ifdef G4MULTITHREADED
-      pthread_mutex_lock(&mutexPhysicsVector);
+      G4MUTEXLOCK(&mutexPhysicsVector);
 #endif
 
       totalobj++;
@@ -79,7 +80,7 @@ class G4PVSplitter
       G4int totalobjlocal = totalobj;
 
 #ifdef G4MULTITHREADED
-      pthread_mutex_unlock(&mutexPhysicsVector);
+      G4MUTEXUNLOCK(&mutexPhysicsVector);
 #endif
 
       return (totalobjlocal - 1);
@@ -91,7 +92,7 @@ class G4PVSplitter
       // the subclass.
     {
 #ifdef G4MULTITHREADED
-      pthread_mutex_lock(&mutexPhysicsVector);
+      G4MUTEXLOCK(&mutexPhysicsVector);
 #endif
 
       phaseshadow = 1;
@@ -112,7 +113,7 @@ class G4PVSplitter
       }
 
 #ifdef G4MULTITHREADED
-      pthread_mutex_unlock(&mutexPhysicsVector);
+      G4MUTEXUNLOCK(&mutexPhysicsVector);
 #endif
     }
 
