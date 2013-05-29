@@ -107,6 +107,7 @@ public:
 //080721
    protected:
       void adjust_final_state ( G4LorentzVector );
+      G4bool DoNotAdjustFinalState(){ return adjustResult; };
       G4int theNDLDataZ;
       G4int theNDLDataA;
       G4int theNDLDataM;

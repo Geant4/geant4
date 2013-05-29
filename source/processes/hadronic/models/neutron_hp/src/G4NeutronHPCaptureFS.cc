@@ -131,18 +131,13 @@
       delete products;
     }
 
-
-
 // add them to the final state
 
     G4int nPhotons = 0;
     if(thePhotons!=0) nPhotons=thePhotons->size();
 
-
-    //110527TKDB  Unused codes, Detected by gcc4.6 compiler 
-    //G4int nParticles = nPhotons;
-    //if(1==nPhotons) nParticles = 2;
-
+///*
+   if ( DoNotAdjustFinalState() ) {
 //Make at least one photon  
 //101203 TK
     if ( nPhotons == 0 )
@@ -168,6 +163,7 @@
        thePhotons->operator[](0)->SetMomentum( Q*direction );
     } 
 //
+    }
 
     // back to lab system
     for(i=0; i<nPhotons; i++)
