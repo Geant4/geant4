@@ -822,7 +822,7 @@ void G4EmCorrections::BuildCorrectionVector()
   const G4ParticleDefinition* ion = curParticle;
   G4int Z = Zion[idx];
   if(currentZ != Z) {
-    ion = G4ParticleTable::GetParticleTable()->FindIon(Z, Aion[idx], 0, Z);
+    ion = ionTable->GetIon(Z, Aion[idx], 0);
   }
   //G4cout << "BuildCorrectionVector: idx= " << idx << " Z= " << Z 
   //	 << " curZ= " << currentZ << G4endl;

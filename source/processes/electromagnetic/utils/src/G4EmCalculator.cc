@@ -72,6 +72,7 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4PhysicsTable.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ProcessManager.hh"
@@ -111,6 +112,7 @@ G4EmCalculator::G4EmCalculator()
   lambdaName         = "";
   theGenericIon      = G4GenericIon::GenericIon();
   ionEffCharge       = new G4ionEffectiveCharge();
+  ionTable           = G4ParticleTable::GetParticleTable()->GetIonTable();
   isIon              = false;
   isApplicable       = false;
 }
@@ -908,8 +910,7 @@ const G4ParticleDefinition* G4EmCalculator::FindParticle(const G4String& name)
 
 const G4ParticleDefinition* G4EmCalculator::FindIon(G4int Z, G4int A)
 {
-  const G4ParticleDefinition* p = 
-    G4ParticleTable::GetParticleTable()->FindIon(Z,A,0);
+  const G4ParticleDefinition* p = ionTable->GetIon(Z,A,0);
   return p;
 }
 

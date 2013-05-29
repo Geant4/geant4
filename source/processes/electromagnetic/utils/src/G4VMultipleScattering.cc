@@ -188,7 +188,7 @@ G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition& part
     isIon = true; 
   }
 
-  emManager->SlavePreparePhysicsTable(&part, this);
+  emManager->PreparePhysicsTable(&part, this, false);
   currParticle = 0;
 
   if(1 < verboseLevel) {
@@ -252,7 +252,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
     isIon = true; 
   }
 
-  emManager->PreparePhysicsTable(&part, this);
+  emManager->PreparePhysicsTable(&part, this, true);
   currParticle = 0;
 
   if(1 < verboseLevel) {

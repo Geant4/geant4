@@ -267,7 +267,7 @@ private:
   G4ionEffectiveCharge  effCharge;
 
   G4NistManager*        nist;
-  const G4IonTable*     ionTable;
+  G4IonTable*           ionTable;
   G4VEmModel*           ionLEModel;
   G4VEmModel*           ionHEModel;
 

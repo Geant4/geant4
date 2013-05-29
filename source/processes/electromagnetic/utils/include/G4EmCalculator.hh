@@ -75,6 +75,7 @@ class G4ionEffectiveCharge;
 class G4Region;
 class G4Element;
 class G4EmCorrections;
+class G4IonTable;
 
 class G4EmCalculator
 {
@@ -278,6 +279,7 @@ private:
   std::vector<const G4MaterialCutsCouple*>  localCouples;
 
   G4LossTableManager*          manager;
+  G4IonTable*                  ionTable;
   G4EmCorrections*             corr; 
   G4DataVector                 localCuts;
   G4int                        nLocalMaterials;

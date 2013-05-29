@@ -121,10 +121,7 @@ public:
 			   G4VEmProcess* p);
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-			   G4VMultipleScattering* p);
-
-  void SlavePreparePhysicsTable(const G4ParticleDefinition* aParticle,
-				G4VMultipleScattering* p);
+			   G4VMultipleScattering* p, G4bool isMaster);
 
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
 
@@ -203,16 +200,6 @@ public:
 
   void RegisterExtraParticle(const G4ParticleDefinition* aParticle, 
 			     G4VEnergyLossProcess* p);
-
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Worker threads share physics tables with the master thread for
-  //energy loss processes. This member function is used by worker
-  //threads to achieve the partial effect of the master thread when
-  //it builds physcis tables.
-  void SlaveBuildPhysicsTable(const G4ParticleDefinition* aParticle, 
-			      G4VEnergyLossProcess* p);
-  void SlaveBuildPhysicsTable(const G4ParticleDefinition* aParticle, 
-			      G4VMultipleScattering* p);
 
   void SetLossFluctuations(G4bool val);
 
@@ -310,22 +297,6 @@ private:
 
   void CopyTables(const G4ParticleDefinition* aParticle, 
 		  G4VEnergyLossProcess*);
-
-
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Worker threads share physics tables with the master thread for
-  //energy loss processes. This member function is used by worker
-  //threads to achieve the partial effect of the master thread when
-  //it builds physcis tables.
-  //G4VEnergyLossProcess* SlaveBuildTables(const G4ParticleDefinition* aParticle);
-
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Worker threads share physics tables with the master thread for
-  //energy loss processes. This member function is used by worker
-  //threads to achieve the partial effect of the master thread when
-  //it copies physcis tables.
-  //void SlaveCopyTables(const G4ParticleDefinition* aParticle, 
-  //		       G4VEnergyLossProcess*);
 
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
