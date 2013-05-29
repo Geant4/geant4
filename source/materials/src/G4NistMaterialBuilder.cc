@@ -1843,7 +1843,7 @@ void G4NistMaterialBuilder::HepAndNuclearMaterials()
 
   G4double density = universe_mean_density*cm3/g;
   AddMaterial("G4_Galactic", density, 1, 21.8, 1, kStateGas);
-  AddGas("G4_Galactic",2.73*kelvin, 3.e-18*pascal);
+  AddGas("G4_Galactic",2.73*kelvin, 3.e-18*hep_pascal);
 
   AddMaterial("G4_GRAPHITE_POROUS", 1.7, 6, 78.);
   chFormulas[nMaterials-1] = "Graphite";
