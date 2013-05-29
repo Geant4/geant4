@@ -132,9 +132,6 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="helium_G4DNAIonisation")	flagProcess =31;
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="helium_G4DNAChargeIncrease")	flagProcess =32;
 
- if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="hIoni")			flagProcess =33;
- if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()=="eIoni")			flagProcess =34;
-
  if (step->GetPostStepPoint()->GetProcessDefinedStep()->GetProcessName()!="Transportation")
  {  
    x=step->GetPreStepPoint()->GetPosition().x()/nanometer;

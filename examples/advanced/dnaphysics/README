@@ -7,7 +7,7 @@
 
                            CORRESPONDING AUTHOR 
 
-S. Incerti (a, *)
+S. Incerti, M. Karamitros (a, *)
 a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
@@ -63,13 +63,15 @@ The output results consists in a dna.root file, containing for each simulation s
 - the type of process for the current step
 - the track position of the current step (in nanometers)
 - the energy deposit along the current step (in eV)
+- the step length (in nm)
 - the total enery loss along the current step (in eV)
 
 This file can be easily analyzed using for example the provided ROOT macro 
 file plot.C; to do so :
 * be sure to have ROOT installed on your machine
-* be sure to be in the dnaphysics directory
-* launch ROOT by typing root
+* be sure to be in the directory containing the ROOT files created by dnaphysics
+* copy plot.C into this directory
+* from there, launch ROOT by typing root
 * under your ROOT session, type in : .X plot.C to execute the macro file
 * alternatively you can type directly under your session : root plot.C
 
