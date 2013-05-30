@@ -50,11 +50,11 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter():
   verboseLevel(1)
 {
   // energy range
-  LowestEnergy = 0.99e-3*MeV;
-  HighestEnergy = 100.0e6*MeV;
+  if (LowestEnergy == 0.0)  { LowestEnergy = 0.99e-3*MeV; }
+  if (HighestEnergy == 0.0) { HighestEnergy = 100.0e6*MeV; }
 
   // max energy cut
-  MaxEnergyCut = 10.0*GeV;
+  if (MaxEnergyCut == 0.0)  { MaxEnergyCut = 10.0*GeV; }
 
   fMaxEnergyCut = 0.;
 }

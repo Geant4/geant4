@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May. 30th, 2013   - G.Cosmo (procuts-V09-06-02)
+- Added protection to initialisation of static data in
+  G4VRangeToEnergyConverter constructor.
+  NOTE: static data in G4VRangeToEnergyConverter should eventually NOT be
+        thread-local, as related modifiers should be called -only- at
+        initialisation phase (by physics-lists). This needs to be verified
+        so that thread-local specifications can be safely removed!
+        Is it also -bad- practice to have a -base- class like
+        G4VRangeToEnergyConverter containing static data that can be modified
+        through static methods, as these can be modified before the actual
+        constructor is called (as it is not a singleton)!!  Needs to review
+        this as well!
+
 May. 29th, 2013   - G.Cosmo (procuts-V09-06-01, procuts-V09-06-00)
 - Cleanup from automatic MT changes in G4VRangeToEnergyConverter,
   G4ProductionCuts and G4RToEConvForElectron.
