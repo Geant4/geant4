@@ -47,8 +47,8 @@
 //      RW PtrHashedDictionary           28 ct., 99  H.Kurashige
 
 
-#include "G4ios.hh"
 #include "globals.hh"
+#include "G4ios.hh"
 #include "G4ParticleTable.hh"
 #include "G4UImessenger.hh"
 #include "G4ParticleMessenger.hh"
@@ -96,7 +96,7 @@ G4ParticleTable* G4ParticleTable::fgParticleTable =0;
 #ifdef G4MULTITHREADED
 // Lock for particle table accesses.
 //
-pthread_mutex_t G4ParticleTable::particleTableMutex = PTHREAD_MUTEX_INITIALIZER;
+G4Mutex G4ParticleTable::particleTableMutex = G4MUTEX_INITIALIZER;
 G4int G4ParticleTable::lockCount = 0;
 #endif 
 
@@ -175,7 +175,7 @@ void G4ParticleTable::SlaveG4ParticleTable()
   // The iterator for the shadow particle table is not sharable.
   //
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
 
@@ -205,7 +205,7 @@ void G4ParticleTable::SlaveG4ParticleTable()
   }       
 
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
 #endif
 
   fIonTable->SlaveG4IonTable();

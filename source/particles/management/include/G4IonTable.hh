@@ -280,9 +280,8 @@ class G4IonTable
    enum { numberOfElements = 118};
    static const G4String       elementName[numberOfElements];
     
+    //needed for MT
     void InitializeLightIons();
-    //Initializer used to setup some helpers
-    //Optimization required for MT
 
 };
 

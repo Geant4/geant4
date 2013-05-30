@@ -48,12 +48,12 @@
 #ifndef G4ParticleTable_h
 #define G4ParticleTable_h 1
 
+#include <map>
+
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4Threading.hh"
 #include "G4ParticleDefinition.hh"
-
-
-#include <map>
 #include "G4ParticleTableIterator.hh"
 
 class G4UImessenger;
@@ -261,8 +261,8 @@ class G4ParticleTable
 #ifdef G4MULTITHREADED
 public:
      //Andrea Dotti January 16. Shared instance of a mutex
-     static pthread_mutex_t particleTableMutex;
-     static int lockCount;
+     static G4Mutex particleTableMutex;
+     static G4int lockCount;
 #endif
 };
 #include "G4ParticleTable.icc"

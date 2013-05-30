@@ -16,11 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-- 07. May 2013 Andrea Dotti (particles-V09-06-26)
-- Adding G4IonTable::InitializeLightIon() method to create (anti-)lightions
-  at initialization time (needed by MT).
 
-- 05. May  2013 Hisaya Kurashige (particles-V09-06-25)
+- 29. May  2013 Gabriele Cosmo, Andrea Dotti (particles-V09-06-28)
+- Revert back changes done by V.I. in G4IonTable::FindIon(), which turned
+  out to be wrong.
+- Consistently use wrappers and typedefs from G4Threading for pthreads
+  functions and types in G4ParticleTable and G4IonTable, to allow for porting
+  on Windows.
+- Add back initialization of light (anti-)ions static variables. Now
+  enabled only for MT and introduced initialization method called by 
+  MTRunManager. Should also solve performance loss observed in global
+  tag ref-04c.
+
+- 23. May  2013 Vladimir Ivantchenko
+- G4IonTable: modified FindIon(), when find an ion use continue instead
+  of break.
+
+- 05. May  2013 Hisaya Kurashige (particles-V09-06-25i, -27)
+  (-26 tag is removed and reverted back as -27 tag)
 - Add G4IsomerTable to create isomers (including ground state)
 - Modify GetIon methods with isomer level 
   - the ion name has isomer level in the bracket (only for excited state)	

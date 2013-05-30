@@ -45,6 +45,13 @@
 //      Remove test of cuts in SetCuts   16 Jan  03 V.Ivanchenko
 //      Add G4IsomerTable                        5 May. 2013  H.Kurashige
 
+#include <iostream>               
+#include <iomanip>               
+#include <sstream>
+
+#include "G4ios.hh"
+#include "G4Threading.hh"
+
 #include "G4IonTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -58,12 +65,6 @@
 #include "G4IsotopeProperty.hh"
 #include "G4VIsotopeTable.hh"
 #include "G4IsomerTable.hh"
-
-#include "G4ios.hh"
-#include <iostream>               
-#include <iomanip>               
-
-#include <sstream>
 
 // It is very important for multithreaded Geant4 to keep only one copy of the
 // particle table pointer and the ion table pointer. However, we try to let 
@@ -84,6 +85,7 @@ namespace lightions {
     static const G4ParticleDefinition* p_alpha=0;
     static const G4ParticleDefinition* p_He3=0;
     void Init() {
+        if ( p_proton ) return;
         p_proton   = G4ParticleTable::GetParticleTable()-> FindParticle("proton"); // proton
         p_deuteron = G4ParticleTable::GetParticleTable()-> FindParticle("deuteron"); // deuteron
         p_triton   = G4ParticleTable::GetParticleTable()-> FindParticle("triton"); // tritoon
@@ -99,6 +101,7 @@ namespace antilightions {
     static const G4ParticleDefinition* p_alpha=0;
     static const G4ParticleDefinition* p_He3=0;
     void Init() {
+        if ( p_proton ) return;
         p_proton   = G4ParticleTable::GetParticleTable()-> FindParticle("anti_proton"); // proton
         p_deuteron = G4ParticleTable::GetParticleTable()-> FindParticle("anti_deuteron"); // deuteron
         p_triton   = G4ParticleTable::GetParticleTable()-> FindParticle("anti_triton"); // tritoon
@@ -261,7 +264,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
   // this critical region.
   //
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
 
@@ -276,7 +279,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
   // Release lock for particle table accesses.
   //
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
 #endif
 
   ion->SetPDGMagneticMoment(mu);
@@ -359,7 +362,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4double 
   // this critical region.
   //
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
 
@@ -374,7 +377,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4double 
   // Release lock for particle table accesses.
   //
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
 #endif
 
  
@@ -471,7 +474,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int lvl)
   // this critical region.
   //
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
 
@@ -486,7 +489,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int lvl)
   // Release lock for particle table accesses.
   //
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
 #endif
 
   ion->SetPDGMagneticMoment(mu);
@@ -576,7 +579,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4int lvl
   // this critical region.
   //
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
 
@@ -591,7 +594,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4int lvl
   // Release lock for particle table accesses.
   //
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
 #endif
 
  
@@ -1215,10 +1218,13 @@ G4bool G4IonTable::IsLightAntiIon(const G4ParticleDefinition* particle) const
 /////////////////
 G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
 {
-    lightions::Init();
-  // returns pointer to pre-defined ions 
+  // returns pointer to pre-defined ions
   const G4ParticleDefinition* ion=0;
   if ( (Z<=2) ) {
+#ifndef G4MULTITHREADED
+      //In sequential use lazy-initialization
+      lightions::Init();
+#endif
     if ( (Z==1)&&(A==1) ) {
       ion = lightions::p_proton;
     } else if ( (Z==1)&&(A==2) ) {
@@ -1240,6 +1246,10 @@ G4ParticleDefinition* G4IonTable::GetLightAntiIon(G4int Z, G4int A) const
   // returns pointer to pre-defined ions 
   const G4ParticleDefinition* ion=0;
   if ( (Z<=2) ) {
+#ifndef G4MULTITHREADED
+      //In sequential use lazy-initialization
+    antilightions::Init();
+#endif
     if ( (Z==1)&&(A==1) ) {
       ion = antilightions::p_proton;
     } else if ( (Z==1)&&(A==2) ) {
