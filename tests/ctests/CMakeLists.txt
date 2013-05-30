@@ -288,7 +288,7 @@ if(GEANT4_USE_GDML)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/gdml/G04
                   BUILD gdml_det PROJECT G04)
 endif()
-if(ROOT_FOUND AND BUILD_SHARED_LIBS)
+if(ROOT_FOUND AND GCCXML AND Geant4_shared_FOUND)
   GEANT4_ADD_TEST(example-ext-persistency-p01-write 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/persistency/P01/exampleP01
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/P01/run.mac
@@ -468,12 +468,6 @@ GEANT4_ADD_TEST(example-adv-purging_magnet
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/purging_magnet
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/purging_magnet
                 BUILD PurgMag PROJECT purging_magnet ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-adv-radioprotection
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/radioprotection/remsim vehicle1.mac
-                WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/examples/advanced/radioprotection
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/radioprotection
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/radioprotection
-                BUILD remsim PROJECT radioprotection ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-xray_fluorescence
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/xray_fluorescence/XrayFluo livermore.mac 1
                 WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR}/examples/advanced/xray_fluorescence

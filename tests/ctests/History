@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ctests-V09-06-11 30 May 2013 Gunter Folger
+- remove advanced example radioprotection 
+
+ctests-V09-06-10 29th May 2013 Ivana Hrivnacova
+- Added test for GCCXML, and changed test for BUILD_SHARED_LIBS with
+  Geant4_shared_FOUND for example-ext-persistency-p01-read/write tests
+
 ctests-V09-06-09 14th March 2013 Andrea Dotti
 - Adding tests example-adv-underground_physics and
   example-adv-lArCal
