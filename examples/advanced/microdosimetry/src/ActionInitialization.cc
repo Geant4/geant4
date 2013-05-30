@@ -22,38 +22,57 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
-
-#include "globals.hh"
-#include "g4root.hh"
+#include "ActionInitialization.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "SteppingAction.hh"
+#include "DetectorConstruction.hh"
+#include "TrackingAction.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManager
+ActionInitialization::ActionInitialization(DetectorConstruction* detConstruction)
+: G4VUserActionInitialization(),
+  fDetectorConstruction(detConstruction)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  public:
-
-    HistoManager();
-   ~HistoManager();
-
-    void SetFileName   (const G4String& name) { fileName[0] = name;};
-    void book();
-    void save();
-    void FillNtuple(G4int id, G4int col, G4double e, G4double weight = 1.0);
-    void FillNtupleIColumn(G4int icol, G4int ival);
-    void FillNtupleFColumn(G4int icol, G4float ival);
-    void FillNtupleDColumn(G4int icol, G4double ival);
-    void AddNtupleRow();
-    
-  private:
-
-    G4String         fileName[2];
-    G4bool           factoryOn;       
-};
+	RunAction* runAction= new RunAction(fDetectorConstruction);
+	SetUserAction(runAction);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void ActionInitialization::Build() const
+{
+	G4cout << "Build for = "<< G4RunManager::GetRunManager()->GetRunManagerType() << G4endl;
 
+	SetUserAction(new PrimaryGeneratorAction);
+
+	TrackingAction* trackingAction = new TrackingAction(fDetectorConstruction);
+	SetUserAction(trackingAction);
+
+	RunAction* runAction= new RunAction(fDetectorConstruction);
+	SetUserAction(runAction);
+
+	SetUserAction(new SteppingAction());
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
