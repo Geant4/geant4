@@ -269,11 +269,8 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
   // add the process manager
   newParticle->SetProcessManager(newManager);
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //record the process manager for each particle in master thread
   if( newParticle->GetMasterProcessManager() == 0 ) newParticle->SetMasterProcessManager(newManager);
-  //if (newParticle->theProcessManagerShadow == 0 || newParticle->theProcessManagerShadow == NULL )
-  //  newParticle->theProcessManagerShadow = newManager;
 
 #ifdef G4VERBOSE
  if (verboseLevel >2){
@@ -294,7 +291,6 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::InitializeProcessManager()
 {
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
@@ -314,13 +310,11 @@ void G4VUserPhysicsList::InitializeProcessManager()
       pmanager = new G4ProcessManager(particle);
       particle->SetProcessManager(pmanager);
 
-      //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
       if( particle->GetMasterProcessManager() == 0 ) particle->SetMasterProcessManager(pmanager);
     }
       
   }
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
   pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
@@ -332,7 +326,6 @@ void G4VUserPhysicsList::InitializeProcessManager()
 /////////////////////////////////////////////////////////
 void G4VUserPhysicsList::RemoveProcessManager()
 {
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
@@ -346,7 +339,6 @@ void G4VUserPhysicsList::RemoveProcessManager()
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
 
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
     if (particle->GetInstanceID() < G4ParticleDefinitionSubInstanceManager::slavetotalspace)
     {
 
@@ -364,7 +356,6 @@ void G4VUserPhysicsList::RemoveProcessManager()
     }
   }
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
   pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
@@ -619,7 +610,6 @@ void G4VUserPhysicsList::BuildPhysicsTable()
 
 }
 ///////////////////////////////////////////////////////////////
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
 //Change in order to share physics tables for two kind of process.
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
@@ -675,7 +665,6 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       return;
     }
 
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
     //Get processes from master thread;
     G4ProcessManager* pManagerShadow = particle->GetMasterProcessManager();
     G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
@@ -696,14 +685,12 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
     }
     for (G4int j=0; j < pVector->size(); ++j) {
 
-      //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
       G4VMultipleScattering *currentProcess = dynamic_cast<G4VMultipleScattering *>((*pVector)[j]);
       if (currentProcess != NULL)
       {
         if (pManagerShadow != pManager)
         {
           G4VMultipleScattering *firstProcess = dynamic_cast<G4VMultipleScattering *>((*pVectorShadow)[j]);
-          //Xin Dong 10022011 to facilitate verbose
           currentProcess->SlaveBuildPhysicsTable(*particle, firstProcess);
         }
         else
@@ -719,7 +706,6 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
         if (pManagerShadow != pManager)
         {
           G4VEnergyLossProcess *firstProcess2 = dynamic_cast<G4VEnergyLossProcess *>((*pVectorShadow)[j]);
-          //Xin Dong 10022011 to facilitate verbose
           currentProcess2->SlaveBuildPhysicsTable(*particle, firstProcess2);
         }
         else
@@ -757,7 +743,6 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       return;
     }
     
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
     //Get processes from master thread
     G4ProcessManager* pManagerShadow = particle->GetMasterProcessManager();
     //Andrea Dotti 15 Jan 2013: Change of interface of MSC
@@ -779,8 +764,6 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
     }
     for (G4int j=0; j < pVector->size(); ++j) {
 
-
-      //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
       G4VMultipleScattering *currentProcess = dynamic_cast<G4VMultipleScattering *>((*pVector)[j]);
       if (currentProcess != NULL)
       {
@@ -788,7 +771,6 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
         {
 	  //Andrea Dotti 14 Jan 2013: Change to interface
           //G4VMultipleScattering *firstProcess = dynamic_cast<G4VMultipleScattering *>((*pVectorShadow)[j]);
-          //Xin Dong 10022011 to facilitate verbose
           currentProcess->SlavePreparePhysicsTable(*particle);
         }
         else
@@ -805,7 +787,6 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
         {
 	  //Andrea Dotti 14 Jan 2013: Change to interface
           //G4VEnergyLossProcess *firstProcess2 = dynamic_cast<G4VEnergyLossProcess *>((*pVectorShadow)[j]);
-          //Xin Dong 10022011 to facilitate verbose
           currentProcess2->SlavePreparePhysicsTable(*particle);
         }
         else
@@ -820,8 +801,7 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
   }
 }
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//Should we change this function?
+//TODO Should we change this function?
 ///////////////////////////////////////////////////////////////
 void  G4VUserPhysicsList::BuildIntegralPhysicsTable(G4VProcess* process,
 						    G4ParticleDefinition* particle)

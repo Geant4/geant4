@@ -67,10 +67,6 @@ G4ThreadLocal G4RunManager* G4RunManager::fRunManager = 0;
 #ifdef theParticleIterator
 #undef theParticleIterator
 #endif
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//To share data, the master thread is different from worker threads.
-//This variable points out it is the master thread or not.
-G4ThreadLocal int G4RunManager::isSlave = 0;
 
 G4RunManager* G4RunManager::GetRunManager()
 { return fRunManager; }
@@ -164,57 +160,6 @@ numberOfEventProcessed(0)
   randomNumberStatusForThisRun = oss.str();
   randomNumberStatusForThisEvent = oss.str();
 }
-
-
-
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//The constructor is used by worker threads.
-G4RunManager::G4RunManager(int isSlaveFlag)
-  :userDetector(0),physicsList(0),
- userActionInitialization(0),userWorkerInitialization(0),
-   userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
-   userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
-   geometryInitialized(false),physicsInitialized(false),
-   runAborted(false),initializedAtLeastOnce(false),
-   geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
-   currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
-   numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
-   storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
-   currentWorld(0),nParallelWorlds(0)
-{
-
-  isSlave = isSlaveFlag; 
-
-  if(fRunManager)
-  {
-    G4Exception("G4RunManager::G4RunManager()", "Run0031",
-                FatalException, "G4RunManager constructed twice.");
-  }
-  fRunManager = this;
-
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Use the constructor for worker threads.
-  kernel = new G4RunManagerKernel(isSlaveFlag);
-  eventManager = kernel->GetEventManager();
-
-  timer = new G4Timer();
-  runMessenger = new G4RunMessenger(this);
-  previousEvents = new std::vector<G4Event*>;
-  G4ParticleTable::GetParticleTable()->CreateMessenger();
-  G4ProcessTable::GetProcessTable()->CreateMessenger();
-
-  //Andrea Dotti: 28 Jan 2013: This call will be only in the G4WorkerRunManager
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Worker threads initialize the particle table.
-  if (isSlave) G4ParticleTable::GetParticleTable()->SlaveG4ParticleTable();
-
-  randomNumberStatusDir = "./";
-  std::ostringstream oss;
-  G4Random::saveFullState(oss);
-  randomNumberStatusForThisRun = oss.str();
-  randomNumberStatusForThisEvent = oss.str();
-}
-
 
 G4RunManager::~G4RunManager()
 {
@@ -352,7 +297,6 @@ void G4RunManager::RunInitialization()
   
   std::ostringstream oss;
     G4Random::saveFullState(oss);
-  //HepRandom::saveFullState(oss);
   randomNumberStatusForThisRun = oss.str();
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
   
@@ -370,8 +314,6 @@ void G4RunManager::RunInitialization()
           fileN = os.str();
       }
       StoreRNGStatus(fileN);
-    //G4String fileN = randomNumberStatusDir + "currentRun.rndm";
-    //G4Random::saveEngineStatus(fileN);
   }
 
   runAborted = false;
@@ -468,9 +410,6 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
           fileN = os.str();
       }
       StoreRNGStatus(fileN);
-    //G4String fileN = randomNumberStatusDir + "currentEvent.rndm";
-    //  G4String fileN = os.str();
-    //HepRandom::saveEngineStatus(fileN);
   }  
     
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
@@ -552,14 +491,7 @@ void G4RunManager::InitializeGeometry()
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Worker threads construct the detector.
-  if (isSlave)
-    kernel->SlaveDefineWorldVolume(userDetector->ConstructSlave(),false);
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread construct the detector.
-  else
-    kernel->DefineWorldVolume(userDetector->Construct(),false);
+  kernel->DefineWorldVolume(userDetector->Construct(),false);
   if(runManagerType == sequentialRM) userDetector->ConstructSDandField();
   nParallelWorlds = userDetector->ConstructParallelGeometries();
   if(runManagerType == sequentialRM) userDetector->ConstructParallelSD();
@@ -684,13 +616,11 @@ void G4RunManager::RestoreRandomNumberStatus(const G4String& fileN)
 
 void G4RunManager::DumpRegion(const G4String& rname) const
 {
-//  kernel->UpdateRegion();
   kernel->DumpRegion(rname);
 }
 
 void G4RunManager::DumpRegion(G4Region* region) const
 {
-//  kernel->UpdateRegion();
   kernel->DumpRegion(region);
 }
 
@@ -711,12 +641,6 @@ void G4RunManager::ConstructScoringWorlds()
 {
   G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
   if(!ScM) return;
-/*******************************************************************
-  //Xin Dong 09302011 for Scorers, should not be privatized
-  static G4ScoringManager* masterScM = 0;
-  //Xin Dong 09302011 for Scorers
-  if (isSlave == 0) masterScM = ScM;
-*******************************************************************/
 
   G4int nPar = ScM->GetNumberOfMesh();
   if(nPar<1) return;
@@ -727,71 +651,12 @@ void G4RunManager::ConstructScoringWorlds()
   {
     G4VScoringMesh* mesh = ScM->GetMesh(iw);
 
-/******************************************************************
-    //Xin Dong 09302011 for Scorers
-    G4VScoringMesh* mastermesh = masterScM->GetMesh(iw);
-    if (isSlave)
-    {
-      G4ScoringBox* meshbox =  dynamic_cast<G4ScoringBox*>(mesh);
-      G4ScoringBox* mastermeshbox =  dynamic_cast<G4ScoringBox*>(mastermesh);
-      if (meshbox != NULL && mastermeshbox != NULL)
-      {
-        //printf("master mesh box: %p, mesh box: %p\n", mastermeshbox, meshbox);
-	//        meshbox->fSegmentDirection = mastermeshbox->fSegmentDirection;
-        meshbox->fMeshElementLogical = mastermeshbox->fMeshElementLogical;
-      }
-
-      G4ScoringCylinder* meshcylinder =  dynamic_cast<G4ScoringCylinder*>(mesh);
-      G4ScoringCylinder* mastermeshcylinder =  dynamic_cast<G4ScoringCylinder*>(mastermesh);
-      if (meshcylinder != NULL && mastermeshcylinder != NULL)
-      {
-        //printf("master mesh cylinder: %p, mesh cylinder: %p\n", mastermeshcylinder, meshcylinder);
-        //      meshbox->fSegmentDirection = mastermeshbox->fSegmentDirection;
-        meshcylinder->fMeshElementLogical = mastermeshcylinder->fMeshElementLogical;
-      }
-    }
-**********************************************************************/
-
     G4VPhysicalVolume* pWorld
        = G4TransportationManager::GetTransportationManager()
          ->IsWorldExisting(ScM->GetWorldName(iw));
 
-/***********************************************************************
-    //Xin Dong 09302011 for Scorers, workers should not change the geometry
-    //Worker threads should also do it
-**********************************************************************/
     if(!pWorld)
     {
-
-/***********************************************************************
-      //Xin Dong 09302011 for Scorers
-      printf("Add more processes, isSlave: %d\n", isSlave);
-
-      //Should not be privatized
-      static G4VPhysicalVolume* pWorldarray[1024];//maximal number of
-						  //scorers 1024
-      //Should not be privatized
-      static int masterNumPWorld = 0;
-
-      //Should be privatized
-      static G4ThreadLocal int workerCurrentPWorld = 0;
-
-      if (isSlave == 0)  //master thread
-      {
-        pWorld = G4TransportationManager::GetTransportationManager()
-           ->GetParallelWorld(ScM->GetWorldName(iw));
-        pWorldarray[masterNumPWorld++] = pWorld;
-      }
-      else //worker threads
-      {
-        G4TransportationManager::GetTransportationManager()->RegisterWorld(pWorldarray[workerCurrentPWorld++]);
-      }
-
-      //Xin Dong 09302011 for Scorers
-      if (isSlave == 0)
-        pWorld->SetName(ScM->GetWorldName(iw));
-**************************************************************************/
-
       pWorld = G4TransportationManager::GetTransportationManager()
            ->GetParallelWorld(ScM->GetWorldName(iw));
       pWorld->SetName(ScM->GetWorldName(iw));
@@ -815,23 +680,8 @@ void G4RunManager::ConstructScoringWorlds()
       }
     }
 
-/***********************************************************************
-    //Xin Dong 09302011 for Scorers, workers should not change the geometry
-    //Worker meshes should relate to the corresponding logic volumes
-    //Any reverse relationship?
-    if (isSlave == 0)
-      mesh->Construct(pWorld);
-    else
-      mesh->WorkerConstruct(mastermesh, pWorld);
-**************************************************************************/
-
     mesh->Construct(pWorld);
   }
-
-/**************************************************************************
-  //Xin Dong 09302011 for Scorers, workers should not change the geometry? or should 
-  if (isSlave == 0)
-**************************************************************************/
 
   GeometryHasBeenModified();
 }

@@ -60,17 +60,6 @@ public:
     virtual void RunTermination();
 protected:
     virtual void ConstructScoringWorlds();
-/***********************************************************************************
-private:
-    //Used to copy mesh from master to worker, useful stuff to check at compile time that objects are of correct type
-    //i.e. mesh should have fMeshElementLogical data member
-    template<class T>
-    static void meshcopy( G4VScoringMesh* src , G4VScoringMesh* dst )  {
-        T* psrc = dynamic_cast<T*>(src);
-        T* pdst = dynamic_cast<T*>(dst);
-        if (psrc!=0 && pdst!=0 ) pdst->fMeshElementLogical = psrc->fMeshElementLogical;
-    }
-*************************************************************************************/
     virtual void StoreRNGStatus(const G4String& filenamePrefix );
 public:
     //! Sets the worker context

@@ -148,15 +148,8 @@ class G4RunManager
     //Per-thread static instance of the run manager singleton
  
 public: // with description
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    //To share data, the master thread is different from worker threads.
-    //This variable points out it is the master thread or not.    
-    static G4ThreadLocal int isSlave;
     G4RunManager();
 
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    //The constructor is used by worker threads.
-    G4RunManager(int isSlaveFlag);
     virtual ~G4RunManager();
     //  The constructor and the destructor. The user must construct this class
     // object at the beginning of his/her main() and must delete it at the 
@@ -164,13 +157,13 @@ public: // with description
 
   public: // with description
     virtual void BeamOn(G4int n_event,const char* macroFile=0,G4int n_select=-1);
-    //  This method starts an event loof of "n_event" events. The condition of Geant4
+    //  This method starts an event loop of "n_event" events. The condition of Geant4
     // is examined before starting the event loop. This method must be invoked at
     // Idle state. The state will be changed to GeomClosed during the event loop and
     // will go back to Idle when the loop is over or aborted.
     //  In case a string "macroFile" which represents the name of a macro file is given,
     // this macro file will be executed AT THE END of each event processing. In case
-    // "n_select" is greater than zero, at the ond of first "n_select" events the macro
+    // "n_select" is greater than zero, at the end of first "n_select" events the macro
     // file is executed.
     virtual void Initialize();
     //  This method invokes all the necessary initialization procedures for an event

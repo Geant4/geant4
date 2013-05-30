@@ -74,18 +74,15 @@ void G4WorkerRunManager::InitializeGeometry() {
                     FatalException, "G4VUserDetectorConstruction is not defined!");
         return;
     }
-    //TODO: add new revised way of doing this after Boston, that is:
     //Step1: Call user's ConstructSDandField()
     userDetector->ConstructSDandField();
     userDetector->ConstructParallelSD();
     //Step2: Get pointer to the physiWorld (note: needs to get the "super pointer, i.e. the one shared by all threads"
-    //G4RunManager* masterRM = G4MTRunManager::GetMasterRunManager();
     G4RunManagerKernel* masterKernel = G4MTRunManager::GetMasterRunManagerKernel();
     G4VPhysicalVolume* worldVol = masterKernel->GetCurrentWorld();
-    //Step3:, Call a new "SlaveDefineWorldVolume( pointer from 2-, false); //TODO: Change name
-    kernel->SlaveDefineWorldVolume(worldVol,false);
+    //Step3:, Call a new "WorkerDefineWorldVolume( pointer from 2-, false); 
+    kernel->WorkerDefineWorldVolume(worldVol,false);
     
-    //nParallelWorlds = userDetector->ConstructParallelGeometries();
     kernel->SetNumberOfParallelWorld(masterKernel->GetNumberOfParallelWorld());
     geometryInitialized = true;
 }
@@ -157,47 +154,12 @@ void G4WorkerRunManager::ConstructScoringWorlds()
     
     G4ParticleTable::G4PTblDicIterator* particleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
     
-/////////    G4int counter = 0;
     for(G4int iw=0;iw<nPar;iw++)
     {
         G4VScoringMesh* mesh = ScM->GetMesh(iw);
         G4VScoringMesh* masterMesh = masterScM->GetMesh(iw);
-/************************************************************************
-        //Try copy the original mesh to the worker mesh. Only few mesh types are supported, only the correct one will work down here
-        meshcopy<G4ScoringBox>(masterMesh,mesh);
-        meshcopy<G4ScoringCylinder>(masterMesh,mesh );
-*************************************************************************/
         mesh->SetMeshElementLogical(masterMesh->GetMeshElementLogical());
         
-/************************************************************************
-        G4VPhysicalVolume* pWorld = G4TransportationManager::GetTransportationManager()->IsWorldExisting(ScM->GetWorldName(iw));
-        if(!pWorld)
-        {
-            //Retrieve from master thread parallel world pointer
-            G4MTRunManager::masterWorlds_t::const_iterator it = G4MTRunManager::GetMasterWorlds().find(counter++);
-            assert( it != G4MTRunManager::GetMasterWorlds().end() );
-            
-            G4TransportationManager::GetTransportationManager()->RegisterWorld( (*it).second );
-            
-            G4ParallelWorldProcess* theParallelWorldProcess
-            = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
-            theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
-            
-            particleIterator->reset();
-            while( (*particleIterator)() ){
-                G4ParticleDefinition* particle = particleIterator->value();
-                G4ProcessManager* pmanager = particle->GetProcessManager();
-                if(pmanager)
-                {
-                    pmanager->AddProcess(theParallelWorldProcess);
-                    if(theParallelWorldProcess->IsAtRestRequired(particle))
-                    { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
-                    pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
-                    pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
-                } //if(pmanager)
-            }//while
-        }//if(!pWorld)
-*************************************************************************/
         G4VPhysicalVolume* pWorld
           = G4TransportationManager::GetTransportationManager()
             ->GetParallelWorld(ScM->GetWorldName(iw));

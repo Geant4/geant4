@@ -67,10 +67,6 @@
 
 G4ThreadLocal G4RunManagerKernel* G4RunManagerKernel::fRunManagerKernel = 0;
 
-G4ThreadLocal int G4RunManagerKernel::isSlave = 0;
-
-//pthread_mutex_t regionsVector = PTHREAD_MUTEX_INITIALIZER;
-
 G4RunManagerKernel* G4RunManagerKernel::GetRunManagerKernel()
 { return fRunManagerKernel; }
 
@@ -112,28 +108,13 @@ G4RunManagerKernel::G4RunManagerKernel()
   // construction of Geant4 kernel classes
   eventManager = new G4EventManager();
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread creates the default region.
-  if (!isSlave)
-  {
-    defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
-    defaultRegionForParallelWorld = new G4Region("DefaultRegionForParallelWorld"); // deleted by store
-    defaultRegion->SetProductionCuts(
-                                     G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
-    defaultRegionForParallelWorld->SetProductionCuts(
-                        G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
-  }
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Worker threads share all regions including the default region.
-  else
-  {
-    defaultRegion = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld", true);
-    defaultRegionForParallelWorld = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForParallelWorld", true);
+  defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
+  defaultRegionForParallelWorld = new G4Region("DefaultRegionForParallelWorld"); // deleted by store
+  defaultRegion->SetProductionCuts(
+       G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+   defaultRegionForParallelWorld->SetProductionCuts(
+       G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 
-  }
-
-  // Following line is tentatively moved from SetPhysics method
-  // Commented out for introduction of non-static particle definition // G4ParticleTable::GetParticleTable()->SetReadiness();
   // set the initial application state
   G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
@@ -201,8 +182,6 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(isWorkerRMK)
         
     }
     
-    // Following line is tentatively moved from SetPhysics method
-    // Commented out for introduction of non-static particle definition // G4ParticleTable::GetParticleTable()->SetReadiness();
     // set the initial application state
     G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
     
@@ -215,74 +194,6 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(isWorkerRMK)
     << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
     << versionString << G4endl
     << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
-    << G4endl;
-}
-
-
-G4RunManagerKernel::G4RunManagerKernel(int isSlaveFlag)
-:physicsList(0),currentWorld(0),
- geometryInitialized(false),physicsInitialized(false),
-geometryToBeOptimized(true), 
- physicsNeedsToBeReBuilt(true),verboseLevel(0),
- numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(false)
-{
-
-  isSlave = isSlaveFlag;
-
-#ifdef G4FPE_DEBUG
-  InvalidOperationDetection();
-#endif
-
-  defaultExceptionHandler = new G4ExceptionHandler();
-/////  if(fRunManagerKernel)
-/////  {
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","RunXXX1",
-                FatalException,"This constructor should not be used!!!!");
-/////  }
-  fRunManagerKernel = this;
-  
-  // construction of Geant4 kernel classes
-  eventManager = new G4EventManager();
-
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread creates the default region.
-  if (!isSlave)
-  {
-      defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
-      defaultRegionForParallelWorld = new G4Region("DefaultRegionForParallelWorld"); // deleted by store
-      defaultRegion->SetProductionCuts(
-                                       G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
-      defaultRegionForParallelWorld->SetProductionCuts(
-                                                       G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
-  }
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //Worker threads share all regions including the default region.
-  else
-  {
-    defaultRegion = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld", true);
-    defaultRegionForParallelWorld = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForParallelWorld", true);
-
-  }
-
-  // Following line is tentatively moved from SetPhysics method
-  // Commented out for introduction of non-static particle definition // G4ParticleTable::GetParticleTable()->SetReadiness();
-  // set the initial application state
-  G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
-
-  // version banner
-  G4String vs = G4Version;
-  vs = vs.substr(1,vs.size()-2);
-  versionString = " Geant4 version ";
-  versionString += vs;
-  versionString += "   ";
-  versionString += G4Date;
-  G4cout << G4endl
-    << "*************************************************************" << G4endl
-    << versionString << G4endl
-    << "                      Copyright : Geant4 Collaboration" << G4endl
-    << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
-    << "                            WWW : http://cern.ch/geant4" << G4endl
-    << "*************************************************************" << G4endl
     << G4endl;
 }
 
@@ -350,7 +261,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   fRunManagerKernel = 0;
 }
 
-void G4RunManagerKernel::SlaveDefineWorldVolume(G4VPhysicalVolume* worldVol,
+void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
                                      G4bool topologyIsChanged)
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
@@ -365,32 +276,6 @@ void G4RunManagerKernel::SlaveDefineWorldVolume(G4VPhysicalVolume* worldVol,
       << stateManager->GetStateString(currentState) << G4endl;
     return;
   }
-
-/**********************************************************************************
-  // The world volume MUST NOT have a region defined by the user                                                  
-  if(worldVol->GetLogicalVolume()->GetRegion())
-  {
-    if(worldVol->GetLogicalVolume()->GetRegion()!=defaultRegion)
-    {
-      G4cerr << "The world volume has a user-defined region <"
-	     << worldVol->GetLogicalVolume()->GetRegion()->GetName()
-	     << ">." << G4endl;
-      G4Exception("G4RunManager::DefineWorldVolume",
-		  "RUN:WorldHasUserDefinedRegion",
-		  FatalException,
-		  "World would have a default region assigned by RunManagerKernel.");
-    }
-  }
-
-  currentWorld = worldVol;
-
-  G4LogicalVolume* worldLog = currentWorld->GetLogicalVolume();
-  worldLog->SetRegion(defaultRegion);
-
-  G4TransportationManager::GetTransportationManager()
-    ->SetWorldForTracking(currentWorld);
-
-*******************************************************************************/
 
   currentWorld = worldVol;
   G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager();
@@ -423,8 +308,6 @@ void G4RunManagerKernel::SlaveDefineWorldVolume(G4VPhysicalVolume* worldVol,
   geometryInitialized = true;
   if(physicsInitialized && currentState!=G4State_Idle)
     { stateManager->SetNewState(G4State_Idle); }
-
-
 }
 
 void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
@@ -457,27 +340,7 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
     }
   }
 
-    //Andrea Dotti, 28 Jan 2013: This part is now delegated to SetupDefaultRegions method
-    
-  // Remove old world logical volume from the default region, if exist
-  /*
-   if(defaultRegion->GetNumberOfRootVolumes())
-  {
-    if(defaultRegion->GetNumberOfRootVolumes()>size_t(1))
-    {
-      G4Exception("G4RunManager::DefineWorldVolume",
-                "Run0005",
-                FatalException,
-                "Default world region should have a unique logical volume.");
-    }
-    std::vector<G4LogicalVolume*>::iterator lvItr
-     = defaultRegion->GetRootLogicalVolumeIterator();
-    defaultRegion->RemoveRootLogicalVolume(*lvItr,false);
-    if(verboseLevel>1) G4cout 
-     << "Obsolete world logical volume is removed from the default region." << G4endl;
-  }
-  */
-    SetupDefaultRegion();
+  SetupDefaultRegion();
     
   // Accept the world volume
   currentWorld = worldVol; 
@@ -508,16 +371,7 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
 
-  // Andrea Dotti: 28 Jan 2013: refactor code in separate method
-    SetupPhysics();
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread handles shared data.
-  //if (!isSlave)
-  //  G4ParticleTable::GetParticleTable()->SetReadiness();
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread handles shared data.
-  //if (!isSlave)
-  //  physicsList->ConstructParticle();
+  SetupPhysics();
   if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
   if(verboseLevel>1)
   {
@@ -610,12 +464,6 @@ G4bool G4RunManagerKernel::RunInitialization()
     return false;
   }
 
-  //if(numberOfParallelWorld>0)
-  //{ // Confirm G4CoupledTransportation is used 
-  //  if(!ConfirmCoupledTransportation())
-  //  { G4Exception("G4CoupledTransportation must be used for parallel world."); }
-  //}
-    
   UpdateRegion();
   BuildPhysicsTables();
 
@@ -637,8 +485,6 @@ G4bool G4RunManagerKernel::RunInitialization()
 void G4RunManagerKernel::RunTermination()
 { G4StateManager::GetStateManager()->SetNewState(G4State_Idle); }
 
-//pthread_mutex_t geomAccessmut = PTHREAD_MUTEX_INITIALIZER;
-
 void G4RunManagerKernel::ResetNavigator()
 {
   // We have to tweak the navigator's state in case a geometry has been
@@ -649,21 +495,9 @@ void G4RunManagerKernel::ResetNavigator()
   G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
   if(verboseLevel>1) G4cout << "Start closing geometry." << G4endl;
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread handles shared data.
-  if (!isSlave)
-  {
-    geomManager->OpenGeometry();
-    geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
-  }
+  geomManager->OpenGeometry();
+  geomManager->CloseGeometry(geometryToBeOptimized, verboseLevel>1);
  
-  // Reseting Navigator has been moved to G4Eventmanager, so that resetting
-  // is now done for every event.  
-  // G4ThreeVector center(0,0,0);
-  // G4Navigator* navigator =
-  //     G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  // navigator->LocateGlobalPointAndSetup(center,0,false);
-
   geometryNeedsToBeClosed = false;
 }
 
@@ -680,19 +514,11 @@ void G4RunManagerKernel::UpdateRegion()
     return;
   }
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread handles shared data.
-  if (!isSlave) CheckRegions();
+  CheckRegions();
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread handles shared data.
-  if (!isSlave)
-    G4RegionStore::GetInstance()->UpdateMaterialList(currentWorld);
+  G4RegionStore::GetInstance()->UpdateMaterialList(currentWorld);
 
-  //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-  //The master thread handles shared data.
-  if (!isSlave)
-    G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(currentWorld);
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(currentWorld);
 }
 
 void G4RunManagerKernel::BuildPhysicsTables()
@@ -763,15 +589,6 @@ void G4RunManagerKernel::CheckRegions()
   // If a parallel world has no region, set default region for parallel world
   //
 
-//DumpRegion();
-//
-//  while(defaultRegionForParallelWorld->GetNumberOfRootVolumes()>0)
-//  {
-//    std::vector<G4LogicalVolume*>::iterator lvItr
-//      = defaultRegionForParallelWorld->GetRootLogicalVolumeIterator();
-//    defaultRegionForParallelWorld->RemoveRootLogicalVolume(*lvItr,false);
-//  }
-
   wItr = transM->GetWorldsIterator();
   for(size_t iw=0;iw<nWorlds;iw++)
   {
@@ -834,11 +651,6 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
            << "], G4FastSimulationManager[" << region->GetFastSimulationManager()
            << "], G4UserSteppingAction[" << region->GetRegionalSteppingAction() << "]" << G4endl;
     
-//    if(region->GetWorldPhysical()!=currentWorld)
-//    {
-//      G4cout << G4endl;
-//      return;
-//    }
     G4cout << " Materials : ";
     std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
     size_t nMaterial = region->GetNumberOfMaterials();

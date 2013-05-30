@@ -48,6 +48,19 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 # Check also granula dependency
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade/cascade/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/bosons/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/barions/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/ions/include)
+
+#Will need this when we'll enable tpmalloc
+#if(GEANT4_BUILD_MULTITHREADED)
+#include_directories(${CMAKE_SOURCE_DIR}/source/externals/tpmalloc/include)
+#endif()
 
 #
 # Define the Geant4 Module.

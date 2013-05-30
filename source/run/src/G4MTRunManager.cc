@@ -382,14 +382,15 @@ void G4MTRunManager::AddWorkerRunManager(G4WorkerRunManager* wrm)
 
 #include "G4IonTable.hh"
 #include "G4ParticleTable.hh"
-//#include "G4InuclElementaryParticle.hh"
+#include "G4CascadeInterface.hh"
+
 void G4MTRunManager::InitializePhysics()
 {
     G4RunManager::InitializePhysics();
     //G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIon();
     G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
     //BERTINI, this is needed to create pseudo-particles, to be removed
-    //G4InuclElementaryParticle::Initialize();
+    G4CascadeInterface::Initialize();
 }
 
 //Barriers mechanism

@@ -26,7 +26,6 @@
 //
 //  25 Feb 2013: Andrea Dotti, first implementation
 //
-//TODO: Finalize description and example
 // class description:
 //
 //      This class is used for multi-threaded Geant4

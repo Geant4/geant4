@@ -56,13 +56,10 @@ class G4VUserDetectorConstruction
   public:
     virtual G4VPhysicalVolume* Construct() = 0;
 
-    //01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-    //The member function is used by worker threads.
-    virtual G4VPhysicalVolume* ConstructSlave(){ return NULL; }
-    
     virtual void ConstructSDandField();
     //This method is used in multi-threaded applications to build
     //per-worker non-shared objects: SensitiveDetectors and Field managers
+
     virtual void CloneSD();
     virtual void CloneF();
 

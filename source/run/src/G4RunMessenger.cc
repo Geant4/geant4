@@ -208,6 +208,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandCmd->SetParameterName("fileName",true);
   restoreRandCmd->SetDefaultValue("currentRun.rndm");
   restoreRandCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
+  restoreRandCmd->SetToBeBroadcasted(false);
     
   saveEachEventCmd = new G4UIcmdWithABool("/random/saveEachEventFlag",this);
   saveEachEventCmd->SetGuidance("Save random number status at beginning of each event.");

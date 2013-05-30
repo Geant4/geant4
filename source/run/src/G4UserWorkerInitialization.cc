@@ -30,6 +30,12 @@
 #include "G4AutoLock.hh"
 #include <sstream>
 
+//Will need this for TPMalloc
+//#ifdef G4MULTITHREADED
+//#define TPMALLOCDEFINESTUB
+//#include "tpmalloc/tpmallocstub.h"
+//#endif
+
 G4ThreadLocal G4WorkerThread* G4UserWorkerInitialization::wThreadContext = 0;
 
 #ifdef G4MULTITHREADED
@@ -62,7 +68,9 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     // unless they are invariant ("read-only") and can be safely shared. All the rest that is not
     // invariant should be incapsualted into the context (or, as for wThreadContext be G4ThreadLocal)
     //!!!!!!!!!!!!!!!!!!!!!!!!!!
-
+//#ifdef G4MULTITHREADED
+//    turnontpmalloc();
+//#endif
     //Note: context is of type G4WorkerThread. It is passed by CreateAndStartWorker,
     //that was originally created by G4MTRunManager.
 
@@ -168,6 +176,10 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //G4cout<<"Thread ID:"<<wThreadContext->GetThreadId()<<" WorkerRunManager Pointer: "<<wrm<<" PID:"<<wThreadContext->pid<<G4endl;///AAADEBUG
     delete wrm;
 
+
+//#ifdef G4MULTITHREADED
+//    turnofftpmalloc();
+//#endif
     return static_cast<void*>(0);
 }
 

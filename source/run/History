@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 30th, 2013, A. Dotti (run-V09-06-44)
+- Bug fixing for GNUMakefile builds
+
+May 29th, 2013, M. Asai (run-V09-06-43)
+- Code clean-up.
+
+May 29th, 2013, A. Dotti (run-V09-06-42)
+- Add temporal Bertini initialization in MT: needed to initialize pseud-particles
+  before event-loop (will be removed when a general way to initialize
+  processes for MT will be implemented). Needs hadr-casc-V09-06-29
+- Prepare for TPmalloc (currently comment out relevant code)
+- Initialize ions and isomers for MT (in MTRunManager) before event-loop. 
+- Initialize light-ions in MT in kernel. Needs particles-V09-06-28
 
 May 24th, 2013, M. Asai (run-V09-06-41)
 - G4Run: protect deletion of thread-local objects from masther thread.
