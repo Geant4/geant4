@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29/05/13 I. Hrivnacova (exampleB4-V09-06-05)
+- Fixed detector construction classes:
+  Moving creating setMagField command from the constructor in 
+  ConstructSDandField(), as the command has to be created per thread,
+  and declaring fMagField and fMessenger data members as static 
+  G4ThreadLocal
+
 24/04/13 M. Asai (exampleB4-V09-06-04)
 - Recover GNUmakefiles.
 

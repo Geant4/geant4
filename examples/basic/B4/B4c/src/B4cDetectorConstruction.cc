@@ -55,32 +55,27 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ThreadLocal G4GenericMessenger* B4cDetectorConstruction::fMessenger = 0; 
+G4ThreadLocal G4UniformMagField*  B4cDetectorConstruction::fMagField = 0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B4cDetectorConstruction::B4cDetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fMessenger(0),
-   fMagField(0),
    fCheckOverlaps(true),
-   nofLayers(-1)
+   fNofLayers(-1)
 {
-  // Define /B4/det commands using generic messenger class
-  fMessenger 
-    = new G4GenericMessenger(this, "/B4/det/", "Detector construction control");
-
-  // Define /B4/det/setMagField command
-  G4GenericMessenger::Command& setMagFieldCmd
-    = fMessenger->DeclareMethod("setMagField", 
-                                &B4cDetectorConstruction::SetMagField, 
-                                "Define magnetic field value (in X direction");
-  setMagFieldCmd.SetUnitCategory("Magnetic flux density");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4cDetectorConstruction::~B4cDetectorConstruction()
 { 
-  delete fMagField;
   delete fMessenger;
-}
+  delete fMagField;
+  fMessenger = 0;
+  fMagField = 0; 
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -91,7 +86,6 @@ G4VPhysicalVolume* B4cDetectorConstruction::Construct()
   
   // Define volumes
   return DefineVolumes();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,13 +116,13 @@ void B4cDetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
 {
   // Geometry parameters
-  nofLayers = 10;
+  fNofLayers = 10;
   G4double absoThickness = 10.*mm;
   G4double gapThickness =  5.*mm;
   G4double calorSizeXY  = 10.*cm;
 
   G4double layerThickness = absoThickness + gapThickness;
-  G4double calorThickness = nofLayers * layerThickness;
+  G4double calorThickness = fNofLayers * layerThickness;
   G4double worldSizeXY = 1.2 * calorSizeXY;
   G4double worldSizeZ  = 1.2 * calorThickness; 
   
@@ -208,7 +202,7 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
                  layerLV,          // its logical volume
                  calorLV,          // its mother
                  kZAxis,           // axis of replication
-                 nofLayers,        // number of replica
+                 fNofLayers,        // number of replica
                  layerThickness);  // witdth of replica
   
   //                               
@@ -261,7 +255,7 @@ G4VPhysicalVolume* B4cDetectorConstruction::DefineVolumes()
   // print parameters
   //
   G4cout << "\n------------------------------------------------------------"
-         << "\n---> The calorimeter is " << nofLayers << " layers of: [ "
+         << "\n---> The calorimeter is " << fNofLayers << " layers of: [ "
          << absoThickness/mm << "mm of " << absorberMaterial->GetName() 
          << " + "
          << gapThickness/mm << "mm of " << gapMaterial->GetName() << " ] " 
@@ -292,14 +286,33 @@ void B4cDetectorConstruction::ConstructSDandField()
   // Sensitive detectors
   //
   B4cCalorimeterSD* absoSD 
-    = new B4cCalorimeterSD("AbsorberSD", "AbsorberHitsCollection", nofLayers);
+    = new B4cCalorimeterSD("AbsorberSD", "AbsorberHitsCollection", fNofLayers);
   SetSensitiveDetector("AbsoLV",absoSD);
 
   B4cCalorimeterSD* gapSD 
-    = new B4cCalorimeterSD("GapSD", "GapHitsCollection", nofLayers);
+    = new B4cCalorimeterSD("GapSD", "GapHitsCollection", fNofLayers);
   SetSensitiveDetector("GapLV",gapSD);
 
+  // 
+  // Magnetic field
+  //
+
+  // No field is defined by default
+  // (It can be activated via UI command)
   SetMagField(0.);
+
+  // Define /B4/det/setMagField command using generic messenger class
+  if ( ! fMessenger ) {
+    fMessenger 
+      = new G4GenericMessenger(this, "/B4/det/", "Detector construction control");
+
+    // Define /B4/det/setMagField command
+    G4GenericMessenger::Command& setMagFieldCmd
+      = fMessenger->DeclareMethod("setMagField", 
+                                  &B4cDetectorConstruction::SetMagField, 
+                                  "Define magnetic field value (in X direction");
+    setMagFieldCmd.SetUnitCategory("Magnetic flux density"); 
+  }                                 
 }
 
 void B4cDetectorConstruction::SetMagField(G4double fieldValue)

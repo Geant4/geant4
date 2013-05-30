@@ -60,30 +60,25 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ThreadLocal G4GenericMessenger* B4dDetectorConstruction::fMessenger = 0; 
+G4ThreadLocal G4UniformMagField*  B4dDetectorConstruction::fMagField = 0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B4dDetectorConstruction::B4dDetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fMessenger(0),
-   fMagField(0),
    fCheckOverlaps(true)
 {
-  // Define /B4/det commands using generic messenger class
-  fMessenger 
-    = new G4GenericMessenger(this, "/B4/det/", "Detector construction control");
-
-  // Define /B4/det/setMagField command
-  G4GenericMessenger::Command& setMagFieldCmd
-    = fMessenger->DeclareMethod("setMagField", 
-                                &B4dDetectorConstruction::SetMagField, 
-                                "Define magnetic field value (in X direction");
-  setMagFieldCmd.SetUnitCategory("Magnetic flux density");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4dDetectorConstruction::~B4dDetectorConstruction()
 { 
-  delete fMagField;
   delete fMessenger;
+  delete fMagField;
+  fMessenger = 0;
+  fMagField = 0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,7 +90,6 @@ G4VPhysicalVolume* B4dDetectorConstruction::Construct()
   
   // Define volumes
   return DefineVolumes();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -329,7 +323,20 @@ void B4dDetectorConstruction::ConstructSDandField()
   // Magnetic field
   //
 
+  // No field is defined by default
+  // (It can be activated via UI command)
   SetMagField(0.);
+
+  // Define /B4/det commands using generic messenger class
+  fMessenger 
+    = new G4GenericMessenger(this, "/B4/det/", "Detector construction control");
+
+  // Define /B4/det/setMagField command
+  G4GenericMessenger::Command& setMagFieldCmd
+    = fMessenger->DeclareMethod("setMagField", 
+                                &B4dDetectorConstruction::SetMagField, 
+                                "Define magnetic field value (in X direction");
+  setMagFieldCmd.SetUnitCategory("Magnetic flux density");                                
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

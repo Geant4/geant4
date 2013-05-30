@@ -82,8 +82,8 @@ class B4dDetectorConstruction : public G4VUserDetectorConstruction
   
     // data members
     //
-    G4GenericMessenger*  fMessenger; // messenger 
-    G4UniformMagField*   fMagField;  // magnetic field
+    static G4ThreadLocal G4GenericMessenger* fMessenger; // messenger 
+    static G4ThreadLocal G4UniformMagField*  fMagField;  // magnetic field
 
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps
 };
