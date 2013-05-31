@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -37,19 +37,6 @@ Shower parameterization
   - GFlashHomoShowerParameterisation::Constructor -  
 /********************************************/ 
 end shower parameterization
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
 Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 FastSimulationManagerProcess
@@ -298,7 +285,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 
 ******************************************
-Internal Real Elapsed Time is: 0
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -324,7 +311,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -337,7 +324,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -363,7 +350,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -378,7 +365,7 @@ Internal GetUserElapsed Time: 0
 ******************************************
 Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
   5323 hits are stored in Tst34HitsCollection 
@@ -402,7 +389,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -415,7 +402,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -427,7 +414,7 @@ Particle table is held by G4VUserPhysicsList::InitializeProcessManager
 Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 
 ******************************************
-Total Real Elapsed Time is: 3.03
+Total Real Elapsed Time is: 1
 Total System Elapsed Time: 0
 Total GetUserElapsed Time: 0.99
 ******************************************

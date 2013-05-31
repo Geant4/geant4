@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -87,19 +87,6 @@
 ---> The Absorber is 20 cm  of G4_Al
 
 ---------------------------------------------------------
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
 Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -557,7 +544,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.94s Real=4.96s Sys=0s
+  User=1.97s Real=1.97s Sys=0s
 
  The run consists of 1000 C12 of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
@@ -863,15 +850,15 @@ Run Summary
  Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.841 cm 
                        Imean:  79.600 eV 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  69.11 %  ElmAbundance  56.41 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
 
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -905,7 +892,7 @@ Run Summary
  Projected Range= 70.14 um    rms= 0 fm 
  Mean number of primary steps = 73
  Total energy deposit= 8.26514 MeV
- NIEL energy deposit = 4.58026 keV
+ NIEL energy deposit = 4.58302 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -996,15 +983,15 @@ Run Summary
  Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.841 cm 
                        Imean:  79.600 eV 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  69.11 %  ElmAbundance  56.41 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
 
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -1021,15 +1008,15 @@ Run Summary
  Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.407 cm 
                        Imean:  73.100 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  75.57 %  ElmAbundance  48.48 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   5.55 %  ElmAbundance  42.42 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  75.58 %  ElmAbundance  48.49 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1058,7 +1045,7 @@ Run Summary
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
  Total energy deposit= 2.82941 MeV
- NIEL energy deposit = 1.61486 keV
+ NIEL energy deposit = 1.6129 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1149,15 +1136,15 @@ Run Summary
  Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.841 cm 
                        Imean:  79.600 eV 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  69.11 %  ElmAbundance  56.41 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
 
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -1174,15 +1161,15 @@ Run Summary
  Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.407 cm 
                        Imean:  73.100 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  75.57 %  ElmAbundance  48.48 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   5.55 %  ElmAbundance  42.42 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  75.58 %  ElmAbundance  48.49 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1194,15 +1181,15 @@ Run Summary
  Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
                        Imean:  78.700 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  62.50 %  ElmAbundance  45.45 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  62.50 %  ElmAbundance  45.46 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1231,7 +1218,7 @@ Run Summary
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
  Total energy deposit= 2.53049 MeV
- NIEL energy deposit = 1.41769 keV
+ NIEL energy deposit = 1.41735 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1322,15 +1309,15 @@ Run Summary
  Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.841 cm 
                        Imean:  79.600 eV 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  69.11 %  ElmAbundance  56.41 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
 
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -1347,15 +1334,15 @@ Run Summary
  Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.407 cm 
                        Imean:  73.100 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  75.57 %  ElmAbundance  48.48 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   5.55 %  ElmAbundance  42.42 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  75.58 %  ElmAbundance  48.49 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1367,15 +1354,15 @@ Run Summary
  Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
                        Imean:  78.700 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  62.50 %  ElmAbundance  45.45 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  62.50 %  ElmAbundance  45.46 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1404,7 +1391,7 @@ Run Summary
  Projected Range= 70.14 um    rms= 0 fm 
  Mean number of primary steps = 73.002
  Total energy deposit= 23.7159 MeV
- NIEL energy deposit = 11.7219 keV
+ NIEL energy deposit = 11.7274 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1495,15 +1482,15 @@ Run Summary
  Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.841 cm 
                        Imean:  79.600 eV 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  69.11 %  ElmAbundance  56.41 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
 
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -1520,15 +1507,15 @@ Run Summary
  Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.407 cm 
                        Imean:  73.100 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  75.57 %  ElmAbundance  48.48 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   5.55 %  ElmAbundance  42.42 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  75.58 %  ElmAbundance  48.49 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1540,15 +1527,15 @@ Run Summary
  Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
                        Imean:  78.700 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  62.50 %  ElmAbundance  45.45 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  62.50 %  ElmAbundance  45.46 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1576,8 +1563,8 @@ Run Summary
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 8.03336 MeV
- NIEL energy deposit = 4.06402 keV
+ Total energy deposit= 8.03335 MeV
+ NIEL energy deposit = 4.06366 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1668,15 +1655,15 @@ Run Summary
  Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.841 cm 
                        Imean:  79.600 eV 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  69.11 %  ElmAbundance  56.41 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
 
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -1693,15 +1680,15 @@ Run Summary
  Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.407 cm 
                        Imean:  73.100 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  75.57 %  ElmAbundance  48.48 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   5.55 %  ElmAbundance  42.42 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  75.58 %  ElmAbundance  48.49 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1713,15 +1700,15 @@ Run Summary
  Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
                        Imean:  78.700 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  62.50 %  ElmAbundance  45.45 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  62.50 %  ElmAbundance  45.46 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1750,7 +1737,7 @@ Run Summary
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
  Total energy deposit= 9.21565 MeV
- NIEL energy deposit = 4.80631 keV
+ NIEL energy deposit = 4.81351 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1841,15 +1828,15 @@ Run Summary
  Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.841 cm 
                        Imean:  79.600 eV 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  69.11 %  ElmAbundance  56.41 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
 
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -1866,15 +1853,15 @@ Run Summary
  Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.407 cm 
                        Imean:  73.100 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  75.57 %  ElmAbundance  48.48 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   5.55 %  ElmAbundance  42.42 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  75.58 %  ElmAbundance  48.49 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1886,15 +1873,15 @@ Run Summary
  Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
                        Imean:  78.700 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  62.50 %  ElmAbundance  45.45 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  62.50 %  ElmAbundance  45.46 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -1923,7 +1910,7 @@ Run Summary
  Projected Range= 46.7 um    rms= 0 fm 
  Mean number of primary steps = 49
  Total energy deposit= 36.416 MeV
- NIEL energy deposit = 19.4879 keV
+ NIEL energy deposit = 19.5163 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -2014,15 +2001,15 @@ Run Summary
  Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.841 cm 
                        Imean:  79.600 eV 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  69.11 %  ElmAbundance  56.41 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
 
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -2039,15 +2026,15 @@ Run Summary
  Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.407 cm 
                        Imean:  73.100 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  75.57 %  ElmAbundance  48.48 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   5.55 %  ElmAbundance  42.42 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  75.58 %  ElmAbundance  48.49 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -2059,15 +2046,15 @@ Run Summary
  Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
                        Imean:  78.700 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  62.50 %  ElmAbundance  45.45 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  62.50 %  ElmAbundance  45.46 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -2096,7 +2083,7 @@ Run Summary
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
  Total energy deposit= 18.4315 MeV
- NIEL energy deposit = 9.85708 keV
+ NIEL energy deposit = 9.85449 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -2187,15 +2174,15 @@ Run Summary
  Material: G4_KAPTON    density:  1.420 g/cm3   RadL:  28.575 cm   Nucl.Int.Length:  55.841 cm 
                        Imean:  79.600 eV 
 
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
-          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
-
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
          --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction:  69.11 %  ElmAbundance  56.41 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   2.64 %  ElmAbundance  25.64 % 
 
    --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
@@ -2212,15 +2199,15 @@ Run Summary
  Material: G4_POLYCARBONATE    density:  1.200 g/cm3   RadL:  34.587 cm   Nucl.Int.Length:  63.407 cm 
                        Imean:  73.100 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  75.57 %  ElmAbundance  48.48 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   5.55 %  ElmAbundance  42.42 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  75.58 %  ElmAbundance  48.49 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -2232,15 +2219,15 @@ Run Summary
  Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.961 cm 
                        Imean:  78.700 eV 
 
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  62.50 %  ElmAbundance  45.45 % 
+
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
-          ElmMassFraction:  62.50 %  ElmAbundance  45.46 % 
 
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
@@ -2269,7 +2256,7 @@ Run Summary
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
  Total energy deposit= 16.4437 MeV
- NIEL energy deposit = 8.61023 keV
+ NIEL energy deposit = 8.61232 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -2310,7 +2297,7 @@ Particle table is released by G4VUserPhysicsList::InitializeProcessManager
        Li7  G4_POLYCAR...        29.8      2.93 MeV  5.0  2.82941 MeV   3.4   P
        Li7       G4_MYLAR        29.8      2.61 MeV  5.0  2.53049 MeV   3.0   P
        C12      G4_KAPTON        79.1     23.17 MeV  5.0  23.7159 MeV  -2.4   P
-       C12  G4_POLYCAR...        79.1      7.34 MeV  5.0  8.03336 MeV  -9.4   F
+       C12  G4_POLYCAR...        79.1      7.34 MeV  5.0  8.03335 MeV  -9.4   F
        C12       G4_MYLAR        59.0      9.39 MeV  5.0  9.21565 MeV   1.9   P
        O16      G4_KAPTON        78.2     35.47 MeV  5.0   36.416 MeV  -2.7   P
        O16  G4_POLYCAR...        78.2     18.18 MeV  5.0  18.4315 MeV  -1.4   P

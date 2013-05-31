@@ -4,12 +4,15 @@
         ############################################
 
 *************************************************************
- Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+PhysicsList::SetCuts:CutLength : 1 nm 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -50,7 +53,6 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-PhysicsList::SetCuts:CutLength : 1 nm 
 /run/verbose 1
 /run/initialize
 /tracking/verbose 0
@@ -144,12 +146,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.31s Real=0.3s Sys=0s
+  User=0s Real=0s Sys=0s
 
- The run consists of 1 e- of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
+ The run consists of 1 geantino of 1 GeV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
- Process calls frequency --->	DNAElastic = 20868	DNAIonisation = 460	DNAExcitation = 65	DNAVibrationalExcitation = 1618	DNAAttachment = 4
- Total transfered energy (keV)=10
+ Process calls frequency --->	Transportation = 1
+
+ Nb of incident particles surviving after 1 m   of G4_WATER : 1
+
+ Total transfered energy (keV)=0
 
 #
 /gun/particle proton
@@ -171,12 +176,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.32s Real=0.32s Sys=0s
+  User=0s Real=0s Sys=0s
 
- The run consists of 1 proton of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
+ The run consists of 1 geantino of 1 GeV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
- Process calls frequency --->	DNAChargeDecrease = 203	DNAChargeIncrease = 202	DNAElastic = 3425	DNAIonisation = 408	DNAVibrationalExcitation = 236	DNAExcitation = 63	DNAAttachment = 1
- Total transfered energy (keV)=10.01
+ Process calls frequency --->	Transportation = 1
+
+ Nb of incident particles surviving after 1 m   of G4_WATER : 1
+
+ Total transfered energy (keV)=0
 
 #
 /gun/particle hydrogen
@@ -198,12 +206,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.32s Real=0.32s Sys=0s
+  User=0s Real=0s Sys=0s
 
- The run consists of 1 hydrogen of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
+ The run consists of 1 geantino of 1 GeV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
- Process calls frequency --->	DNAChargeIncrease = 220	DNAElastic = 3154	DNAChargeDecrease = 220	DNAExcitation = 45	DNAIonisation = 392	DNAVibrationalExcitation = 198	DNAAttachment = 2
- Total transfered energy (keV)=10.002
+ Process calls frequency --->	Transportation = 1
+
+ Nb of incident particles surviving after 1 m   of G4_WATER : 1
+
+ Total transfered energy (keV)=0
 
 #
 /gun/particle alpha
@@ -225,12 +236,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.78s Real=0.78s Sys=0s
+  User=0s Real=0s Sys=0s
 
- The run consists of 1 alpha of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
+ The run consists of 1 geantino of 1 GeV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
- Process calls frequency --->	DNAIonisation = 562	DNAChargeDecrease = 2	DNAExcitation = 58	DNAElastic = 561
- Total transfered energy (keV)=10.076
+ Process calls frequency --->	Transportation = 1
+
+ Nb of incident particles surviving after 1 m   of G4_WATER : 1
+
+ Total transfered energy (keV)=0
 
 #
 /gun/particle alpha+
@@ -252,12 +266,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.79s Real=0.79s Sys=0s
+  User=0s Real=0s Sys=0s
 
- The run consists of 1 alpha+ of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
+ The run consists of 1 geantino of 1 GeV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
- Process calls frequency --->	DNAIonisation = 570	DNAChargeDecrease = 2	DNAExcitation = 45	DNAChargeIncrease = 1	DNAElastic = 570
- Total transfered energy (keV)=10.023
+ Process calls frequency --->	Transportation = 1
+
+ Nb of incident particles surviving after 1 m   of G4_WATER : 1
+
+ Total transfered energy (keV)=0
 
 #
 /gun/particle helium
@@ -279,14 +296,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.77s Real=0.8s Sys=0s
+  User=0s Real=0s Sys=0s
 
- The run consists of 1 helium of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
+ The run consists of 1 geantino of 1 GeV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
- Process calls frequency --->	DNAIonisation = 562	DNAExcitation = 56	DNAElastic = 561
- Total transfered energy (keV)=10
+ Process calls frequency --->	Transportation = 1
+
+ Nb of incident particles surviving after 1 m   of G4_WATER : 1
+
+ Total transfered energy (keV)=0
 
 #
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
+Particle table is held by G4VUserPhysicsList::InitializeProcessManager
+Particle table is released by G4VUserPhysicsList::InitializeProcessManager

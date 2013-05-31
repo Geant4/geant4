@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -49,19 +49,6 @@ End of Run User Vis Actions: none
 Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
 
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
 Particle table is released by G4VUserPhysicsList::InitializeProcessManager
@@ -142,7 +129,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.54s Real=0.94s Sys=0s
+  User=0.53s Real=0.54s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -170,7 +157,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=26.9s Real=67.45s Sys=0.01s
+  User=26.55s Real=26.77s Sys=0.03s
 
  The run consists of 1 Ca48 of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 

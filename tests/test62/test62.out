@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -28,19 +28,6 @@ SimpleBox is now made of Pb
 /run/initialize
 userDetector->Construct() start.
 SLog is registered to the default region.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 physicsList->Construct() start.
 physicsList->Construct() start.
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
@@ -617,7 +604,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.47s Real=1.48s Sys=0.01s
+  User=0.57s Real=0.57s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -655,7 +642,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.7s Real=2.1s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 # pi+ at 1 GeV in Th
 #
@@ -693,7 +680,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.6s Real=1.8s Sys=0s
+  User=0.42s Real=0.42s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -731,7 +718,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.53s Real=1.54s Sys=0s
+  User=0.55s Real=0.58s Sys=0.01s
 #
 # proton at 1 GeV in U
 #
@@ -1090,7 +1077,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.53s Real=1.53s Sys=0s
+  User=0.45s Real=0.49s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -1133,7 +1120,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.57s Real=1.39s Sys=0s
+  User=0.51s Real=0.61s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1176,7 +1163,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.49s Real=1.55s Sys=0s
+  User=0.51s Real=0.51s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -1219,7 +1206,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.4s Real=0.81s Sys=0s
+  User=0.54s Real=0.54s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1583,7 +1570,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.34s Real=0.66s Sys=0s
+  User=0.29s Real=0.3s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1631,7 +1618,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.49s Real=0.99s Sys=0.01s
+  User=0.47s Real=0.47s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1679,7 +1666,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.39s Real=0.79s Sys=0s
+  User=0.46s Real=0.46s Sys=0.01s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1727,7 +1714,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.41s Real=0.81s Sys=0s
+  User=0.45s Real=0.45s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -2096,7 +2083,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.15s Real=0.25s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -2149,7 +2136,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.22s Sys=0s
+  User=0.14s Real=0.15s Sys=0s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -2202,7 +2189,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.17s Real=0.24s Sys=0s
+  User=0.1s Real=0.1s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -2255,7 +2242,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.3s Sys=0.01s
+  User=0.12s Real=0.12s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -2629,7 +2616,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.15s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -2687,7 +2674,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.03s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2745,7 +2732,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.14s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -3245,7 +3232,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.12s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # pi+ at 1 GeV in C
 #
@@ -3308,7 +3295,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -3434,7 +3421,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.68s Real=1.38s Sys=0s
+  User=0.99s Real=0.99s Sys=0.01s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3497,7 +3484,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.49s Real=1.59s Sys=0s
+  User=0.37s Real=0.37s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3558,10 +3545,16 @@ Index : 5     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
+[INCL++] Warning: momentum scaling = 1.01004
+                Lorentz vector = (-202.858,-2.65175,896.2033039.44))
+                A = 3, Z = 0
+                E* = 19.8308, nuclearMass = 2897.22
+                remnant i=0, nRemnants=2
+                Reaction was: 709.892-MeV C12 + C12, in inverse kinematics.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.12s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -3624,7 +3617,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.24s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
@@ -3632,9 +3625,9 @@ Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+RunManager is deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleted.

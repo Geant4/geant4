@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -47,19 +47,6 @@ userDetector->Construct() start.
  The ABSORBER is made of 100 um  of G4_Si. The transverse size (YZ) is 1 cm 
  X position of the middle of the absorber 0 fm 
 World is registered to the default region.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 physicsList->Construct() start.
 physicsList->Construct() start.
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
@@ -345,7 +332,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.5s Real=4.62s Sys=0s
+  User=1.21s Real=1.21s Sys=0s
 
  ======================== run summary ======================
 
@@ -446,7 +433,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.08s Real=11.08s Sys=0.01s
+  User=2.87s Real=2.89s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -548,7 +535,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=78.83s Real=231.7s Sys=0.03s
+  User=49.61s Real=50.28s Sys=0.02s
 
  ======================== run summary ======================
 
@@ -650,7 +637,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=74.12s Real=217.7s Sys=0.03s
+  User=46.55s Real=48.73s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -752,7 +739,7 @@ TrackingAction: vx - 1 = 8.882e-16
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.45s Real=10.36s Sys=0s
+  User=3.31s Real=3.39s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -813,9 +800,9 @@ Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+RunManager is deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleted.

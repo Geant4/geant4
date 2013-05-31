@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -18,19 +18,6 @@ Tst24PhysicsList::SetCuts:CutLength : 1000 (mm)
 userDetector->Construct() start.
  material Pb not found, using default material 
 SLog is registered to the default region.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 physicsList->Construct() start.
 physicsList->Construct() start.
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
@@ -468,7 +455,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.65s Real=8.1s Sys=0s
+  User=2.65s Real=3.08s Sys=0.01s
 #
 # neutron at 10 GeV in U
 #
@@ -506,7 +493,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.16s Real=5.16s Sys=0.01s
+  User=2.18s Real=2.28s Sys=0.01s
 #
 # pi+ at 10 GeV in U
 #
@@ -544,7 +531,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.8s Real=4.72s Sys=0s
+  User=1.93s Real=2.01s Sys=0s
 #
 # pi- at 10 GeV in U
 #
@@ -582,7 +569,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.9s Real=7.54s Sys=0s
+  User=2.23s Real=2.49s Sys=0.05s
 #
 # proton at 10 GeV in Cu
 #
@@ -842,7 +829,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.53s Real=4.15s Sys=0.01s
+  User=0.63s Real=0.73s Sys=0s
 #
 # neutron at 10 GeV in Cu
 #
@@ -885,7 +872,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=1.43s Sys=0s
+  User=0.6s Real=0.63s Sys=0s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -928,7 +915,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.54s Real=1.96s Sys=0s
+  User=0.64s Real=0.68s Sys=0.01s
 #
 # pi- at 10 GeV in Cu
 #
@@ -971,7 +958,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.6s Real=2.87s Sys=0s
+  User=0.58s Real=0.59s Sys=0s
 #
 # proton at 10 GeV in Si
 #
@@ -1236,7 +1223,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.54s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 #
 # neutron at 10 GeV in Si
 #
@@ -1284,7 +1271,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.45s Sys=0s
+  User=0.23s Real=0.24s Sys=0s
 #
 # pi+ at 10 GeV in Si
 #
@@ -1332,7 +1319,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.42s Sys=0s
+  User=0.21s Real=0.22s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -1380,7 +1367,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.64s Sys=0s
+  User=0.24s Real=0.23s Sys=0s
 #
 # proton at 10 GeV in Carbon
 #
@@ -1651,7 +1638,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.55s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 # neutron at 10 GeV in Carbon
 #
@@ -1705,7 +1692,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.48s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 #
 # pi+ at 10 GeV in Carbon
 #
@@ -1759,7 +1746,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.33s Sys=0s
+  User=0.16s Real=0.19s Sys=0.01s
 #
 # pi- at 10 GeV in Carbon
 #
@@ -1813,7 +1800,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.75s Sys=0s
+  User=0.15s Real=0.45s Sys=0s
 #
 # proton at 10 GeV in Beryllium
 #
@@ -2089,7 +2076,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.29s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 # neutron at 10 GeV in Beryllium
 #
@@ -2148,7 +2135,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.53s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 #
 # pi+ at 10 GeV in Beryllium
 #
@@ -2207,7 +2194,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.35s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 #
 # pi- at 10 GeV in Beryllium
 #
@@ -2266,7 +2253,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.55s Sys=0s
+  User=0.12s Real=0.12s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -2609,7 +2596,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # pi+ at 10 GeV in H
 #
@@ -2735,7 +2722,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
@@ -2743,9 +2730,9 @@ Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+RunManager is deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleted.

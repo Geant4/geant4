@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -17,19 +17,6 @@ Tst27PhysicsList::SetCuts:CutLength : 1000 (mm)
 /run/initialize
 userDetector->Construct() start.
 SLog is registered to the default region.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 physicsList->Construct() start.
 physicsList->Construct() start.
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
@@ -480,7 +467,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=59.16s Real=153.7s Sys=0.3s
+  User=58.83s Real=75.08s Sys=0.11s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -514,7 +501,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.23s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -813,7 +800,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.17s Real=0.57s Sys=0s
+  User=0.17s Real=0.2s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon
 #
@@ -1078,7 +1065,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=15.92s Real=41.6s Sys=0s
+  User=15.49s Real=21.47s Sys=0.02s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -1122,7 +1109,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.25s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -1171,7 +1158,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.85s Real=5.46s Sys=0s
+  User=1.64s Real=1.67s Sys=0s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -1215,7 +1202,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.22s Sys=0s
+  User=0.02s Real=0.09s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1263,7 +1250,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.03s Real=0.03s Sys=0s
+  User=0.04s Real=0.2s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon
 #
@@ -1311,7 +1298,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.06s Real=2.22s Sys=0s
+  User=1.11s Real=1.94s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -1361,7 +1348,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=24.81s Real=60.25s Sys=0.39s
+  User=22.73s Real=34.45s Sys=0.11s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1409,7 +1396,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.03s Real=0.03s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon
 #
@@ -1457,7 +1444,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=8.77s Real=25.5s Sys=0s
+  User=8.24s Real=10.54s Sys=0.01s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1505,7 +1492,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.16s Real=0.26s Sys=0s
+  User=0.16s Real=0.18s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H
 #
@@ -1553,7 +1540,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.04s Real=0.14s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -1601,7 +1588,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.2s Real=0.92s Sys=0s
+  User=0.18s Real=0.18s Sys=0s
 #
 #  .....end alpha............
 #
@@ -1652,7 +1639,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.79s Real=4.18s Sys=0s
+  User=2.23s Real=3.78s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1701,7 +1688,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.11s Real=0.22s Sys=0s
+  User=0.1s Real=0.09s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1750,7 +1737,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.91s Real=1.99s Sys=0s
+  User=0.91s Real=1.04s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -2021,7 +2008,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.7s Real=1.52s Sys=0s
+  User=0.7s Real=1.07s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -2076,7 +2063,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.03s Real=0.04s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -2130,7 +2117,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.37s Real=0.75s Sys=0s
+  User=0.37s Real=0.43s Sys=0.01s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -2184,7 +2171,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.07s Real=0.06s Sys=0s
+  User=0.07s Real=0.08s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -2471,9 +2458,9 @@ Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+RunManager is deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleted.
