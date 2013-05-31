@@ -18,6 +18,14 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+30 May 13: V.Ivanchenko (emstand-V09-06-39)
+- G4SeltzerBergerModel, G4eBremsstrahlungRelModel - implemented
+    copy of element selectors from master to worker threads
+
+29 May 13: V.Ivanchenko (emstand-V09-06-38)
+- G4SeltzerBergerModel - increased elowlimit in the method
+    SamplingSecondaries() from 10 to 20 keV in order to removed 
+
 29 May 13: V.Ivanchenko (emstand-V09-06-37)
 - G4eCoulombScatteringModel, G4hCoulombScatteringModel,
   G4eSingleCoulombScatteringModel - use G4IonTable::GetIon instead

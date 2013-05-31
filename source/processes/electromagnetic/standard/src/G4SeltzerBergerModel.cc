@@ -89,11 +89,13 @@ G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
 
 G4SeltzerBergerModel::~G4SeltzerBergerModel()
 {
-  for(size_t i=0; i<101; ++i) { 
-    if(dataSB[i]) {
-      delete dataSB[i]; 
-      dataSB[i] = 0;
-    } 
+  if(G4LossTableManager::Instance()->IsMaster()) {
+    for(size_t i=0; i<101; ++i) { 
+      if(dataSB[i]) {
+	delete dataSB[i]; 
+	dataSB[i] = 0;
+      } 
+    }
   }
 }
 
@@ -107,16 +109,18 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
   char* path = getenv("G4LEDATA");
 
   // Access to elements
-  const G4ElementTable* theElmTable = G4Element::GetElementTable();
-  size_t numOfElm = G4Element::GetNumberOfElements();
-  if(numOfElm > 0) {
-    for(size_t i=0; i<numOfElm; ++i) {
-      G4int Z = G4int(((*theElmTable)[i])->GetZ());
-      if(Z < 1)        { Z = 1; }
-      else if(Z > 100) { Z = 100; }
-      //G4cout << "Z= " << Z << G4endl;
-      // Initialisation
-      if(!dataSB[Z]) { ReadData(Z, path); }
+  if(G4LossTableManager::Instance()->IsMaster()) {
+    const G4ElementTable* theElmTable = G4Element::GetElementTable();
+    size_t numOfElm = G4Element::GetNumberOfElements();
+    if(numOfElm > 0) {
+      for(size_t i=0; i<numOfElm; ++i) {
+	G4int Z = G4int(((*theElmTable)[i])->GetZ());
+	if(Z < 1)        { Z = 1; }
+	else if(Z > 100) { Z = 100; }
+	//G4cout << "Z= " << Z << G4endl;
+	// Initialisation
+	if(!dataSB[Z]) { ReadData(Z, path); }
+      }
     }
   }
 
@@ -125,11 +129,8 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex SeltzerBergerModelMutex = G4MUTEX_INITIALIZER; }
-void G4SeltzerBergerModel::ReadData(size_t Z, const char* path)
+void G4SeltzerBergerModel::ReadData(G4int Z, const char* path)
 {
-  G4AutoLock l(&SeltzerBergerModelMutex);
   //  G4cout << "ReadData Z= " << Z << G4endl;
   // G4cout << "Status for Z= " << dataSB[Z] << G4endl;
   //if(path) { G4cout << path << G4endl; }
@@ -350,6 +351,18 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     fParticleChange->SetProposedMomentumDirection(direction);
     fParticleChange->SetProposedKineticEnergy(finalE);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4AutoLock.hh"
+namespace { G4Mutex SeltzerBergerModelMutex = G4MUTEX_INITIALIZER; }
+void G4SeltzerBergerModel::InitialiseForElement(const G4ParticleDefinition*, 
+						G4int Z)
+{
+  G4AutoLock l(&SeltzerBergerModelMutex);
+  //  G4cout << "G4SeltzerBergerModel::InitialiseForElement Z= " << Z << G4endl;
+  if(!dataSB[Z]) { ReadData(Z); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

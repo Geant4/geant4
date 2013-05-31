@@ -70,6 +70,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
@@ -84,7 +86,7 @@ protected:
 
 private:
 
-  void ReadData(size_t Z, const char* path = 0);
+  void ReadData(G4int Z, const char* path = 0);
 
   // hide assignment operator
   G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right);

@@ -69,6 +69,9 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+			       G4VEmModel* masterModel);
+
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,

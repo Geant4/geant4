@@ -174,15 +174,25 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p) { SetParticle(p); }
 
-  lowKinEnergy  = LowEnergyLimit();
+  lowKinEnergy = LowEnergyLimit();
 
   currentZ = 0.;
 
-  InitialiseElementSelectors(p, cuts);
+  if(G4LossTableManager::Instance()->IsMaster()) {
+    InitialiseElementSelectors(p, cuts);
+  }
 
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForLoss();
   isInitialised = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eBremsstrahlungRelModel::InitialiseLocal(const G4ParticleDefinition*,
+						G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
