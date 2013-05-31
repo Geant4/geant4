@@ -126,8 +126,7 @@ public:
 
   // initilisation in local thread
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       const G4DataVector&,
-			       const G4VEmModel* masterModel);
+			       G4VEmModel* masterModel);
 
   // initilisation of a new material at run time
   virtual void InitialiseForMaterial(const G4ParticleDefinition*,
@@ -227,6 +226,9 @@ public:
   // should be called at initialisation to access element selectors
   inline std::vector<G4EmElementSelector*>* GetElementSelectors();
 
+  // should be called at initialisation to set element selectors
+  inline void SetElementSelectors(std::vector<G4EmElementSelector*>*);
+
   // dEdx per unit length
   inline G4double ComputeDEDX(const G4MaterialCutsCouple*,
 			      const G4ParticleDefinition*,
@@ -277,7 +279,7 @@ public:
 
   void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel* f=0);
 
-  void SetCrossSectionTable(G4PhysicsTable*);
+  void SetCrossSectionTable(G4PhysicsTable*, G4bool isLocal);
 
   inline G4PhysicsTable* GetCrossSectionTable();
 
@@ -323,7 +325,7 @@ public:
 
   inline void SetDeexcitationFlag(G4bool val);
 
-  inline void ForceBuildTable(G4bool val);
+  inline void SetForceBuildTable(G4bool val);
 
   inline G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
 
@@ -362,7 +364,9 @@ private:
   G4bool          theLPMflag;
   G4bool          flagDeexcitation;
   G4bool          flagForceBuildTable;
+  G4bool          isMaster;
 
+  G4bool          localTable;
   G4bool          localElmSelectors;
   G4int           nSelectors;
   std::vector<G4EmElementSelector*>* elmSelectors;
@@ -666,7 +670,7 @@ inline void G4VEmModel::SetDeexcitationFlag(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEmModel::ForceBuildTable(G4bool val)
+inline void G4VEmModel::SetForceBuildTable(G4bool val)
 {
   flagForceBuildTable = val;
 }
@@ -681,6 +685,13 @@ inline const G4String& G4VEmModel::GetName() const
 inline std::vector<G4EmElementSelector*>* G4VEmModel::GetElementSelectors()
 {
   return elmSelectors;
+}
+
+inline void G4VEmModel::SetElementSelectors(std::vector<G4EmElementSelector*>* p)
+{
+  elmSelectors = p;
+  nSelectors = elmSelectors->size();
+  localElmSelectors = false;
 }
 
 inline G4PhysicsTable* G4VEmModel::GetCrossSectionTable()

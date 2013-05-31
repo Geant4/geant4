@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 May 13: V.Ivant (emutils-V09-06-18)
+- G4LossTableManager, G4VEnergyLossProcess, G4VMultipleScattering,
+    G4VEmModel, G4VMscModel - implemented copy of transport cross 
+    sections tables from master to worker threads; implemented 
+    a possibility to copy element selectors from master to worker
+    threads (model may use or not this feature)
+
 29 May 13: V.Ivant (emutils-V09-06-17)
 - G4EmCorrections - fixed typo
 

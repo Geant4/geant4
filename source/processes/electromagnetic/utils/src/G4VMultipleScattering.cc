@@ -312,7 +312,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void 
 G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, 
-					      G4VMultipleScattering *)
+					      G4VMultipleScattering* master)
 {
   G4String num = part.GetParticleName();
   if(1 < verboseLevel) {
@@ -323,6 +323,15 @@ G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
   }
   if(firstParticle == &part) { 
     emManager->BuildPhysicsTable(firstParticle);
+
+    // initialisation of models
+    G4bool printing = true;
+    numberOfModels = modelManager->NumberOfModels();
+    for(G4int i=0; i<numberOfModels; ++i) {
+      G4VMscModel* msc = static_cast<G4VMscModel*>(GetModelByIndex(i, printing));
+      G4VMscModel* msc0= static_cast<G4VMscModel*>(master->GetModelByIndex(i,printing));
+      msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
+    }
   }
 
   // explicitly defined printout by particle name
@@ -424,12 +433,12 @@ void G4VMultipleScattering::StartTracking(G4Track* track)
     // many models
   } else { 
     for(G4int i=0; i<numberOfModels; ++i) {
-      G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
+      G4VMscModel* msc = static_cast<G4VMscModel*>(GetModelByIndex(i,true));
       msc->StartTracking(track);
       if(eloss) { msc->SetIonisation(fIonisation, currParticle); }
     }
   }
-} //from 382
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -540,7 +549,8 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	postSafety = currentModel->ComputeSafety(fNewPosition,0.0); 
       } 
       G4ThreeVector displacement = 
-	currentModel->SampleScattering(step.GetPostStepPoint()->GetMomentumDirection(),postSafety);
+	currentModel->SampleScattering(step.GetPostStepPoint()->GetMomentumDirection(),
+				       postSafety);
 
       G4double r2 = displacement.mag2();
 
@@ -675,7 +685,7 @@ G4VMultipleScattering::RetrievePhysicsTable(const G4ParticleDefinition*,
 void G4VMultipleScattering::SetIonisation(G4VEnergyLossProcess* p)
 {
   for(G4int i=0; i<numberOfModels; ++i) {
-    G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
+    G4VMscModel* msc = static_cast<G4VMscModel*>(GetModelByIndex(i, true));
     msc->SetIonisation(p, firstParticle);
   }
 }

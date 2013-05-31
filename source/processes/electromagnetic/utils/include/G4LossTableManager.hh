@@ -121,7 +121,7 @@ public:
 			   G4VEmProcess* p);
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-			   G4VMultipleScattering* p, G4bool isMaster);
+			   G4VMultipleScattering* p, G4bool theMaster);
 
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle);
 
@@ -255,6 +255,8 @@ public:
 
   G4bool SplineFlag() const;
 
+  G4bool IsMaster() const;
+
   G4double BremsstrahlungTh() const;
 
   G4double FactorForAngleLimit() const;
@@ -351,6 +353,7 @@ private:
   G4bool stepFunctionActive;
   G4bool flagLPM;
   G4bool splineFlag;
+  G4bool isMaster;
 
   G4double minSubRange;
   G4double maxRangeVariation;

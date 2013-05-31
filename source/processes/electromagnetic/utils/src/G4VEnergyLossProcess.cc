@@ -250,7 +250,7 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
   }
   Clean();
 
-  if ( !baseParticle ) {
+  if ( !baseParticle && G4LossTableManager::Instance()->IsMaster() ) {
     if(theDEDXTable) {
       if(theIonisationTable == theDEDXTable) { theIonisationTable = 0; }
       theDEDXTable->clearAndDestroy();
@@ -745,6 +745,17 @@ G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
   }
 
   if(&part == particle) {
+
+    // local initialisation of models
+    G4bool printing = true;
+    G4int numberOfModels = modelManager->NumberOfModels();
+    for(G4int i=0; i<numberOfModels; ++i) {
+      G4VEmModel* mod = GetModelByIndex(i, printing);
+      G4VEmModel* mod0= firstProcess->GetModelByIndex(i,printing);
+      mod->InitialiseLocal(particle, mod0);
+    }
+
+    // copy table from master thread
     if(!baseParticle) {
       G4LossTableManager::Instance()->SlavePhysicsTable(particle, this);
       if(1 < verboseLevel) { PrintInfoDefinition(); }

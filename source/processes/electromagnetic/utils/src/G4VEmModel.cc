@@ -63,13 +63,14 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   highLimit(100.0*CLHEP::TeV),eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
-  pParticleChange(0),xSectionTable(0),theDensityFactor(0),theDensityIdx(0),
-  fCurrentCouple(0),fCurrentElement(0),nsec(5) 
+  pParticleChange(0),xSectionTable(0),theDensityFactor(0),
+  theDensityIdx(0),fCurrentCouple(0),fCurrentElement(0),nsec(5) 
 {
   xsec.resize(nsec);
   nSelectors = 0;
   elmSelectors = 0;
   localElmSelectors = true;
+  localTable = true;
 
   G4LossTableManager::Instance()->Register(this);
 }
@@ -88,7 +89,7 @@ G4VEmModel::~G4VEmModel()
     delete elmSelectors; 
   }
   delete anglModel;
-  if(xSectionTable) { 
+  if(localTable && xSectionTable) { 
     xSectionTable->clearAndDestroy(); 
     delete xSectionTable;
   }
@@ -181,9 +182,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VEmModel::InitialiseLocal(const G4ParticleDefinition*, 
-				 const G4DataVector&,
-				 const G4VEmModel*)
+void G4VEmModel::InitialiseLocal(const G4ParticleDefinition*, G4VEmModel*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -361,7 +360,7 @@ G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p)
+void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p, G4bool isLocal)
 {
   if(p != xSectionTable) {
     if(xSectionTable) { 
@@ -369,6 +368,7 @@ void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p)
       delete xSectionTable;
     }
     xSectionTable = p;
+    localTable = isLocal;
   }
 }
 

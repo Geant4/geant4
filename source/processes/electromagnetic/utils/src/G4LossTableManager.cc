@@ -179,6 +179,7 @@ G4LossTableManager::G4LossTableManager()
   stepFunctionActive = false;
   flagLPM = true;
   splineFlag = true;
+  isMaster = true;
   bremsTh = DBL_MAX;
   factorForAngleLimit = 1.0;
   verbose = 1;
@@ -452,7 +453,7 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 void 
 G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 					G4VMultipleScattering* p,
-					G4bool isMaster)
+					G4bool theMaster)
 {
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
@@ -472,6 +473,7 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
     emConfigurator->PrepareModels(particle, p);
   } 
   startInitialisation = true;
+  isMaster = theMaster;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -496,6 +498,8 @@ void G4LossTableManager::SlavePhysicsTable(
   	   << " and process " << p->GetProcessName()
 	   << G4endl;
   }
+
+  isMaster = false;
 
   if(0 == run && startInitialisation) {
     emConfigurator->Clear();
@@ -1139,6 +1143,13 @@ void G4LossTableManager::SetSplineFlag(G4bool val)
 G4bool G4LossTableManager::SplineFlag() const
 {
   return splineFlag;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4bool G4LossTableManager::IsMaster() const
+{
+  return isMaster;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

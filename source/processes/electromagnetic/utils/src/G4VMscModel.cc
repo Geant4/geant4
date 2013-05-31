@@ -111,13 +111,16 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
 
       // table is always built for low mass particles 
     } else if(p->GetPDGMass() < 4.5*GeV || ForceBuildTableFlag()) {
-      G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
-      G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
-      emin = std::max(emin, man->MinKinEnergy());
-      emax = std::min(emax, man->MaxKinEnergy());
+
       G4LossTableBuilder* builder = man->GetTableBuilder();
-      xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
-						  emin, emax, true);
+      if(man->IsMaster()) {
+	G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());
+	G4double emax = std::min(HighEnergyLimit(), HighEnergyActivationLimit());
+	emin = std::max(emin, man->MinKinEnergy());
+	emax = std::min(emax, man->MaxKinEnergy());
+	xSectionTable = builder->BuildTableForModel(xSectionTable, this, p, 
+						    emin, emax, true);
+      }
       theDensityFactor = builder->GetDensityFactors();
       theDensityIdx = builder->GetCoupleIndexes();
     }
