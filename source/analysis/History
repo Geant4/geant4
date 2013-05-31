@@ -17,6 +17,9 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 31, 2013 I.Hrivnacova (analysis-V09-06-08)
+- Fix in G4RootAnalysisManager::WriteOnAscii() - bug report #1473
+
 April 18, 2013 I.Hrivnacova (analysis-V09-06-07)
 - Manager classes updated for MT:
   Added fgMasterInstance, fIsMaster data members and functions for 
