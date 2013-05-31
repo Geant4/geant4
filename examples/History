@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31st May 2013  Gabriele Cosmo (examples-V09-06-05)
+- Updated reference outputs according to reference tag geant4-09-06-ref-05.
+- Archived advanced example radioprotection.
+- Includes tags: air_shower-V09-06-00, brachy-V09-06-00, ccal-V09-06-00,
+                 dnaphysics-V09-06-03, human_phantom-V09-06-02,
+                 nanobeam-V09-06-03, exampleB1-V09-06-01, exampleB2-V09-06-01,
+                 exampleB4-V09-06-05, exampleA01-V09-06-03, B01-V09-06-03,
+                 B02-V09-06-03, testem4-V09-06-02, testem8-V09-06-02,
+                 monopole-V09-06-05, fieldex05-V09-06-02, fieldex06-V09-06-03,
+                 exhadr03-V09-06-16, exampleES2-V09-06-02, exOptical-V09-06-02,
+                 LXe-V09-06-05, OpNovice-V09-06-04, exPersistency-V09-06-01,
+                 WLS-V09-06-03, G03-V09-06-00, G04-V09-06-00,
+                 rdecay01-V09-06-02, exampleRE03-V09-06-03,
+                 exampleRE05-V09-06-06, exVisualization-V09-06-01.
+
 24th April 2013  Gabriele Cosmo (examples-V09-06-04)
 - Updated reference outputs according to reference tag geant4-09-06-ref-04.
 - Includes tags: amsEcal-V09-06-00, dnaphysics-V09-06-01,
