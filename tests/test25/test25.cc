@@ -23,8 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-//
+// $Id$
 
 #include "Tst25DetectorConstruction.hh"
 #include "Tst25RunAction.hh"
@@ -35,7 +34,13 @@
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "Randomize.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
 
 #include "G4ios.hh"
 
@@ -43,10 +48,16 @@ int main(int argc,char** argv) {
 
   // Set the default random engine to RanecuEngine
   CLHEP::RanecuEngine defaultEngine;
-  CLHEP::HepRandom::setTheEngine(&defaultEngine);
+  G4Random::setTheEngine(&defaultEngine);
 
   // Run manager
-  G4RunManager * runManager = new G4RunManager;
+  G4RunManager* runManager = 0;
+#ifdef G4MULTITHREADED
+  runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(number_of_threads);
+#else
+  runManager = new G4RunManager;
+#endif
 
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst25DetectorConstruction);

@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 May 2013  Michael Kelsey (test25-V09-06-00)
+- Migrate test25.cc to MT compatibility (G4MTRunManager)
+
 9th October 2012  Gabriele Cosmo (test25-V09-05-00)
 - Explicit inclusion of units and constants headers.
 
