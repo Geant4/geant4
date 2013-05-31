@@ -178,7 +178,7 @@ List of fixes included in this public patch since the public release 9.6.p01:
     + Fix in G4ParticleChange for velocity of neutrons and recoil in elastic
       scattering; correspondingly, fixed time of neutron hits in calorimeters.
       Addressing problem report #1451.
-    + G4ParticleChangeForEloss, G4ParticleChangeForGamma: clean up               (o)
+    + G4ParticleChangeForEloss, G4ParticleChangeForGamma: clean up
       computation of velocity (expected little performance improvement).
 
   o Tracking:
