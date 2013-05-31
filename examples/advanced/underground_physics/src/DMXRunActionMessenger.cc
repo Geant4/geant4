@@ -74,17 +74,6 @@ DMXRunActionMessenger::DMXRunActionMessenger(DMXRunAction* run)
   SaveHistFileCmd->SetParameterName("histFile", false);
   SaveHistFileCmd->SetDefaultValue("dmx.his");
 
-  PlotEventCmd = new G4UIcmdWithABool("/dmx/PlotDuringRun",this);
-  PlotEventCmd->SetGuidance("Flag for Interactive plotting during run");
-  PlotEventCmd->SetGuidance("Default = false");
-  PlotEventCmd->SetParameterName("plotevent", false);
-  PlotEventCmd->SetDefaultValue(false);
-
-  InteractPlotCmd = new G4UIcmdWithABool("/dmx/PlotAtEnd",this);
-  InteractPlotCmd->SetGuidance("Flag for Interactive plotting at end of run");
-  InteractPlotCmd->SetGuidance("Default = false");
-  InteractPlotCmd->SetParameterName("interactplot", false);
-  InteractPlotCmd->SetDefaultValue(false);
 
   //  FileCmd->AvailableForStates(G4State_Idle);
 }
@@ -96,8 +85,6 @@ DMXRunActionMessenger::~DMXRunActionMessenger()
   delete SaveHitsCmd;  
   delete SavePmtCmd;  
   delete SaveHistFileCmd;  
-  delete PlotEventCmd;
-  delete InteractPlotCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -113,21 +100,6 @@ void DMXRunActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   if(command == SaveHistFileCmd)
     DMXRun->SetsavehistFile(newValue);
 
-  if(command == PlotEventCmd) {
-    G4int vl;
-    const char* t = newValue;
-    std::istringstream is(t);
-    is >> vl;
-    DMXRun->Setplotevent(vl!=0);
-  }
-
-  if(command == InteractPlotCmd) {
-    G4int vl;
-    const char* t = newValue;
-    std::istringstream is(t);
-    is >> vl;
-    DMXRun->Setinteractplot(vl!=0);
-  }
 
 }
 

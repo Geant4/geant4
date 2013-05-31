@@ -20,18 +20,6 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
-#----------------------------------------------------------------------------
-# Find AIDA (optional package)
-#
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-find_package(AIDA)
-if(AIDA_FOUND)
-  message(STATUS "G4 Examples: AIDA found. --> underground_physics example with AIDA enabled.") 
-  add_definitions(-DG4ANALYSIS_USE)  
-else()
-  message(STATUS "G4 Example: AIDA not found --> underground_physics example with AIDA disabled.")
-endif()
-
 #Check here for DMXENV_GPS_USE
 #Use GPS if the environment variable is set, and the user has *not* supplied the CMake 
 #command line argument. Otherwise, the argument of the command line has the priority.
@@ -53,8 +41,7 @@ endif()
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-                    ${AIDA_INCLUDE_DIR})
+                    ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -62,7 +49,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(DMX DMX.cc ${sources} ${headers})
-target_link_libraries(DMX ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
+target_link_libraries(DMX ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

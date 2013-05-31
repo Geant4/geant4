@@ -45,7 +45,7 @@
 # 
 /dmx/hitsfile gamma_low.out
 /dmx/pmtfile gamma_low_pmt.out
-/dmx/histogramfile gamma_low.his
+/dmx/histogramfile gamma_low
 #
 /run/beamOn 1
 

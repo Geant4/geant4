@@ -52,7 +52,7 @@
 #
 /dmx/hitsfile neutron.out
 /dmx/pmtfile neutron_pmt.out
-/dmx/histogramfile neutron.his
+/dmx/histogramfile neutron
 #
 /run/beamOn 1
 

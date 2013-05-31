@@ -48,9 +48,7 @@
 #include "DMXParticleSource.hh"
 #endif
 
-#ifdef G4ANALYSIS_USE
 #include "DMXAnalysisManager.hh"
-#endif
 
 #include "G4Event.hh"
 
@@ -74,12 +72,14 @@ DMXPrimaryGeneratorAction::DMXPrimaryGeneratorAction() {
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXPrimaryGeneratorAction::~DMXPrimaryGeneratorAction() {
 
   delete particleGun;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DMXPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
@@ -93,11 +93,11 @@ void DMXPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
   particleGun->GeneratePrimaryVertex(anEvent);
 
   energy_pri = particleGun->GetParticleEnergy();
-#ifdef G4ANALYSIS_USE 
-  DMXAnalysisManager* analysis =  DMXAnalysisManager::getInstance();
-  analysis->analysePrimaryGenerator(energy_pri);
-#endif
 
+  //Fill ntuple #1
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->FillNtupleDColumn(1,0,energy_pri);
+  man->AddNtupleRow(1);
 }
 
 

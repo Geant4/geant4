@@ -46,10 +46,8 @@
 #include "DMXSteppingActionMessenger.hh"
 
 #include "DMXEventAction.hh"
-
-#ifdef G4ANALYSIS_USE
 #include "DMXAnalysisManager.hh"
-#endif
+
 
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -102,17 +100,25 @@ void DMXSteppingAction::UserSteppingAction(const G4Step* fStep)
   //  G4int StepNo = fStep->GetTrack()->GetCurrentStepNumber();
   //  if(StepNo >= MaxNoSteps) fStep->GetTrack()->SetTrackStatus(fStopAndKill);
 
-#ifdef G4ANALYSIS_USE 
   G4int StepNo = fStep->GetTrack()->GetCurrentStepNumber();
   if(StepNo == 1) 
     { 
       G4double partEnergy = fStep->GetPreStepPoint()->GetKineticEnergy();
       G4ParticleDefinition* particleType = fStep->GetTrack()->GetDefinition();
-      G4String particleName = particleType->GetParticleName();
-      DMXAnalysisManager* analysis =  DMXAnalysisManager::getInstance();
-      analysis->analyseParticleSource(partEnergy, particleName);
+      //G4String particleName = particleType->GetParticleName();
+      G4AnalysisManager* man = G4AnalysisManager::Instance();
+      if (particleType == G4Gamma::Definition())
+	man->FillH1(8,partEnergy);
+      else if (particleType == G4Neutron::Definition())
+	man->FillH1(9,partEnergy);
+      else if (particleType == G4Electron::Definition())
+	man->FillH1(10,partEnergy);
+      else if (particleType == G4Positron::Definition())
+	man->FillH1(11,partEnergy);
+      else
+	man->FillH1(12,partEnergy);
     }
-#endif
+
 
   // check what is to be drawn from EventAction/EventActionMessenger
   G4String drawColsFlag = evtAction->GetDrawColsFlag();

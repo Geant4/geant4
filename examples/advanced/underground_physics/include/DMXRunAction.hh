@@ -65,21 +65,18 @@ class DMXRunAction : public G4UserRunAction
     void SetsavehitsFile   (G4String val)        { savehitsFile   = val;};
     void SetsavepmtFile    (G4String val)        { savepmtFile    = val;};
     void SetsavehistFile   (G4String val)        { savehistFile   = val;};
-    void Setplotevent      (G4bool valb)         { plotevent      = valb;};
-    void Setinteractplot   (G4bool valb)         { interactplot   = valb;};
+    void Finish();	
 
     G4String GetsavehitsFile()                   {return savehitsFile;};
     G4String GetsavepmtFile()                    {return savepmtFile;};
-    G4bool   Getplotevent()                      {return plotevent;};
 
   private:
-  
+    void Book();
+
   //messenger
     G4String savehitsFile;
     G4String savepmtFile;
     G4String savehistFile;
-    G4bool   plotevent;
-    G4bool   interactplot;
 
   DMXRunActionMessenger* runMessenger;
 

@@ -8,6 +8,12 @@ $Id$
 
                       Category History file
                       ---------------------
+
+31.05.2013 - L. Pandola (DMX-V09-06-06)
+	     Migrate analysis from the AIDA-based local singleton 
+	     class to the g4analysis tools (no AIDA dependency 
+	     any longer). Clean-up of README and CMakeLists.txt.
+	     Some cosmetics in the code.
  
 18.04.2013 - L. Pandola (DMX-V09-06-05)
 	     In DMXMinEkineCuts.cc, migrate calculation of the range 

@@ -49,7 +49,7 @@
 /dmx/gun/confine americium_phys
 #
 /dmx/hitsfile gamma_2000.out
-/dmx/histogramfile gamma_2000.his
+/dmx/histogramfile gamma_2000
 /dmx/pmtfile gamma_pmt_2000.out
 
 /run/beamOn 2000
