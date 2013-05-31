@@ -84,14 +84,12 @@ int main(int argc,char** argv) {
   MicrobeamPrimaryGeneratorAction* KinAct = new MicrobeamPrimaryGeneratorAction(detector);
   runManager->SetUserAction(KinAct);
  
-  MicrobeamHistoManager*  histo = new MicrobeamHistoManager();
-
-  MicrobeamRunAction* RunAct = new MicrobeamRunAction(detector,histo);
+  MicrobeamRunAction* RunAct = new MicrobeamRunAction(detector);
   
   runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new MicrobeamEventAction(RunAct,histo));
+  runManager->SetUserAction(new MicrobeamEventAction(RunAct));
   runManager->SetUserAction(new MicrobeamTrackingAction(RunAct)); 
-  runManager->SetUserAction(new MicrobeamSteppingAction(RunAct,detector,histo));
+  runManager->SetUserAction(new MicrobeamSteppingAction(RunAct,detector));
   
   // initialize G4 kernel
   // runManager->Initialize();

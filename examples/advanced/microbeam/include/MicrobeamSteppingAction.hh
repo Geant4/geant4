@@ -34,15 +34,13 @@
 
 #include "MicrobeamRunAction.hh"
 #include "MicrobeamDetectorConstruction.hh"
-#include "MicrobeamHistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class MicrobeamSteppingAction : public G4UserSteppingAction
 {
 public:
-  MicrobeamSteppingAction(MicrobeamRunAction* ,MicrobeamDetectorConstruction*,
-  MicrobeamHistoManager *);
+  MicrobeamSteppingAction(MicrobeamRunAction* ,MicrobeamDetectorConstruction*);
   ~MicrobeamSteppingAction();
   
   void UserSteppingAction(const G4Step*);
@@ -50,7 +48,6 @@ public:
 private:
   MicrobeamRunAction*            Run;
   MicrobeamDetectorConstruction* Detector;
-  MicrobeamHistoManager* 	 Histo;
   G4float massPhantom;
 
 };

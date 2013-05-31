@@ -126,11 +126,6 @@ microbeam.mac:
 #/control/execute vis.mac
 
 ---->4. HOW TO RUN THE EXAMPLE                                         
-
-The variable G4ANALYSIS_USE must be set to 1.
-
-In order to generate histograms, at least one of the AIDA implementations should be 
- available.
   
 The code should be compiled with gmake and run with :
 

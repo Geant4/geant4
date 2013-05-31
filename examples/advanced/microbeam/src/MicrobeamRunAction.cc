@@ -31,12 +31,12 @@
 #include "Randomize.hh"
 
 #include "MicrobeamRunAction.hh"
+#include "MicrobeamHistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MicrobeamRunAction::MicrobeamRunAction(MicrobeamDetectorConstruction* det,
-MicrobeamHistoManager * his)
-:Detector(det),Histo(his)
+MicrobeamRunAction::MicrobeamRunAction(MicrobeamDetectorConstruction* det) 
+:Detector(det)
 {   
   saveRndm = 0;  
 }
@@ -55,7 +55,63 @@ void MicrobeamRunAction::BeginOfRunAction(const G4Run* /*aRun*/)
 {  
  
   // Histograms
-  Histo->book();
+  // Get/create analysis manager
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  
+  // Open an output file
+  man->OpenFile("microbeam");
+  man->SetFirstNtupleId(1);
+
+  //Declare ntuples
+  //
+  // Create 1st ntuple (id = 1)
+  //
+  man->CreateNtuple("ntuple0", "Stopping power");
+  man->CreateNtupleDColumn("e");
+  man->CreateNtupleDColumn("sp");
+  man->FinishNtuple();
+  //G4cout << "Ntuple-1 created" << G4endl;
+
+  //
+  // Create 2nd ntuple (id = 2)
+  //
+  man->CreateNtuple("ntuple1", "Beam position");
+  man->CreateNtupleDColumn("x");
+  man->CreateNtupleDColumn("y");
+  man->FinishNtuple();
+  //G4cout << "Ntuple-2 created" << G4endl;
+
+  //
+  // Create 3rd ntuple (id = 3)
+  //
+  man->CreateNtuple("ntuple2", "Range");
+  man->CreateNtupleDColumn("x");
+  man->CreateNtupleDColumn("y");
+  man->CreateNtupleDColumn("z");
+  man->FinishNtuple();
+  //G4cout << "Ntuple-3 created" << G4endl;
+
+  //
+  // Create 4th ntuple (id = 4)
+  //
+  man->CreateNtuple("ntuple3", "Doses");
+  man->CreateNtupleDColumn("doseN");
+  man->CreateNtupleDColumn("doseC");
+  man->FinishNtuple();
+  //G4cout << "Ntuple-4 created" << G4endl;
+
+  //
+  // Create 5th ntuple (id = 5)
+  //
+  man->CreateNtuple("ntuple4", "3D");
+  man->CreateNtupleDColumn("x");
+  man->CreateNtupleDColumn("y");
+  man->CreateNtupleDColumn("z");
+  man->CreateNtupleDColumn("doseV");
+  man->FinishNtuple();
+  //G4cout << "Ntuple-3 created" << G4endl;
+
+  G4cout << "All Ntuples have been created " << G4endl;
 
   // save Rndm status
   if (saveRndm > 0)
@@ -91,6 +147,7 @@ void MicrobeamRunAction::BeginOfRunAction(const G4Run* /*aRun*/)
 
 void MicrobeamRunAction::EndOfRunAction(const G4Run* /*aRun*/)
 {     
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
   // save Rndm status
   if (saveRndm == 1)
   { 
@@ -104,11 +161,12 @@ void MicrobeamRunAction::EndOfRunAction(const G4Run* /*aRun*/)
     v = mapVoxels[i];
     if ( (GetNumEvent()+1) !=0) 
       {
-	  Histo->FillNtuple(4,0,v.x());
-	  Histo->FillNtuple(4,1,v.y());
-	  Histo->FillNtuple(4,2,v.z());
-	  Histo->FillNtuple(4,3,dose3DDose[i]/(GetNumEvent()+1));
-	  Histo->AddRowNtuple(4);			     
+	//Fill ntuple #5
+	man->FillNtupleDColumn(5,0,v.x());
+	man->FillNtupleDColumn(5,1,v.y());
+	man->FillNtupleDColumn(5,2,v.z());
+	man->FillNtupleDColumn(5,3,dose3DDose[i]/(GetNumEvent()+1));
+	man->AddNtupleRow(5);
       }
   }
    
@@ -116,6 +174,9 @@ void MicrobeamRunAction::EndOfRunAction(const G4Run* /*aRun*/)
   G4cout << G4endl;    
   
   //save histograms      
-  Histo->save();
+  man->Write();
+  man->CloseFile();
+  // Complete clean-up
+  delete G4AnalysisManager::Instance();
 
 }

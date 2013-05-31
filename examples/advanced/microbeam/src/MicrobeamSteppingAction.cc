@@ -33,14 +33,14 @@
 #include "MicrobeamSteppingAction.hh"
 #include "MicrobeamRunAction.hh"
 #include "MicrobeamDetectorConstruction.hh"
+#include "MicrobeamHistoManager.hh"
 
 #include "G4Alpha.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-MicrobeamSteppingAction::MicrobeamSteppingAction(MicrobeamRunAction* run,MicrobeamDetectorConstruction* det,
-MicrobeamHistoManager* his)
-:Run(run),Detector(det),Histo(his)
+MicrobeamSteppingAction::MicrobeamSteppingAction(MicrobeamRunAction* run,MicrobeamDetectorConstruction* det)
+:Run(run),Detector(det)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,6 +53,7 @@ MicrobeamSteppingAction::~MicrobeamSteppingAction()
 void MicrobeamSteppingAction::UserSteppingAction(const G4Step* aStep)
   
 { 
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
 
 // COUNT GAS DETECTOR HITS
 
@@ -91,11 +92,13 @@ if (       ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLog
 	
 	 if( (aStep->GetPreStepPoint()->GetKineticEnergy() - aStep->GetPostStepPoint()->GetKineticEnergy() ) >0) 
 	 {
-          Histo->FillNtuple(0,0,aStep->GetPreStepPoint()->GetKineticEnergy()/keV);
-          Histo->FillNtuple(0,1,
-	    (aStep->GetPreStepPoint()->GetKineticEnergy() -
-	     aStep->GetPostStepPoint()->GetKineticEnergy())/ keV/(aStep->GetStepLength()/micrometer));
-          Histo->AddRowNtuple(0);
+	   //Fill ntupleid=1 
+	   man->FillNtupleDColumn(1,0,aStep->GetPreStepPoint()->GetKineticEnergy()/keV);
+	   man->FillNtupleDColumn(1,1,
+				  (aStep->GetPreStepPoint()->GetKineticEnergy() -
+				   aStep->GetPostStepPoint()->GetKineticEnergy())/
+				  keV/(aStep->GetStepLength()/micrometer));
+	   man->AddNtupleRow(1);
 	 }
 
          // Average dE over step suggested by Michel Maire
@@ -113,11 +116,10 @@ if (       ((aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLog
          G4ThreeVector localPosition = localPosition1 + G4UniformRand()*(localPosition2-localPosition1);
 	 
 	 // end
-
-	 Histo->FillNtuple(1,0,localPosition.x()/micrometer);
-	 Histo->FillNtuple(1,1,localPosition.y()/micrometer);
-         Histo->AddRowNtuple(1);			
-
+	 //Fill ntupleid=2
+	 man->FillNtupleDColumn(2,0,localPosition.x()/micrometer);
+	 man->FillNtupleDColumn(2,1,localPosition.y()/micrometer);
+	 man->AddNtupleRow(2);
 	}
 
 // ALPHA RANGE
@@ -138,11 +140,15 @@ if (
 		
    )
 	
-	{		
-	 Histo->FillNtuple(2,0,aStep->GetPostStepPoint()->GetPosition().x()/micrometer);
-	 Histo->FillNtuple(2,1,aStep->GetPostStepPoint()->GetPosition().y()/micrometer);
-	 Histo->FillNtuple(2,2,aStep->GetPostStepPoint()->GetPosition().z()/micrometer);
-         Histo->AddRowNtuple(2);			
+	{
+	   //Fill ntupleid=3
+	  man->FillNtupleDColumn(3,0,
+				 aStep->GetPostStepPoint()->GetPosition().x()/micrometer);
+	  man->FillNtupleDColumn(3,1,
+				 aStep->GetPostStepPoint()->GetPosition().y()/micrometer);
+	  man->FillNtupleDColumn(3,2,
+				 aStep->GetPostStepPoint()->GetPosition().z()/micrometer);
+	  man->AddNtupleRow(3);
  	}
 
 // TOTAL DOSE DEPOSIT AND DOSE DEPOSIT WITHIN A PHANTOM VOXEL

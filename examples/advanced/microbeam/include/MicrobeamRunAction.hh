@@ -34,7 +34,6 @@
 #include "G4ThreeVector.hh"
 
 #include "MicrobeamDetectorConstruction.hh"
-#include "MicrobeamHistoManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -44,7 +43,7 @@ class MicrobeamRunAction : public G4UserRunAction
 {
 public:
   
-  MicrobeamRunAction(MicrobeamDetectorConstruction*, MicrobeamHistoManager*);
+  MicrobeamRunAction(MicrobeamDetectorConstruction*);
   ~MicrobeamRunAction();
 
   void BeginOfRunAction(const G4Run*);
@@ -81,7 +80,6 @@ public:
 private:
 
   MicrobeamDetectorConstruction* Detector;    
-  MicrobeamHistoManager* Histo;
   MicrobeamPhantomConfiguration myMicrobeamPhantomConfiguration;  
 
   G4int saveRndm;

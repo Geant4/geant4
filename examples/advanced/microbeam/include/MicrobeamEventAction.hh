@@ -34,7 +34,6 @@
 #include "globals.hh"
 
 class MicrobeamRunAction;
-class MicrobeamHistoManager;
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,7 +42,7 @@ class MicrobeamEventAction : public G4UserEventAction
 {
   public:
   
-    MicrobeamEventAction(MicrobeamRunAction*, MicrobeamHistoManager *);
+    MicrobeamEventAction(MicrobeamRunAction*);
    ~MicrobeamEventAction();
 
     void BeginOfEventAction(const G4Event*);
@@ -55,7 +54,6 @@ class MicrobeamEventAction : public G4UserEventAction
   private:
   
     MicrobeamRunAction*      Run;
-    MicrobeamHistoManager*   Histo;	
     G4String                 drawFlag;
     G4int                    printModulo;         
 };

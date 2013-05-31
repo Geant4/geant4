@@ -30,50 +30,8 @@
 #ifndef MicrobeamHistoManager_h
 #define MicrobeamHistoManager_h 1
 
-#include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class ITuple;
-}
-
-const G4int MaxNtupl = 5;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class MicrobeamHistoManager
-{
-  public:
-
-    MicrobeamHistoManager();
-   ~MicrobeamHistoManager();
-
-    void book();
-    void save();   
-    void FillNtuple(G4int id, G4int column, G4double value);
-    void AddRowNtuple(G4int id);
-
-  private:
-
-    G4String                 fileName[2];
-    G4String                 fileType;
-    G4String                 fileOption;    
-    AIDA::IAnalysisFactory*  af;
-    AIDA::ITree*             tree;
-    AIDA::ITuple*      	     ntupl0; // MicrobeamSteppingAction   
-    AIDA::ITuple*      	     ntupl1; // MicrobeamSteppingAction   
-    AIDA::ITuple*      	     ntupl2; // MicrobeamSteppingAction   
-    AIDA::ITuple*      	     ntupl3; // MicrobeamEventAction   
-    AIDA::ITuple*      	     ntupl4; // MicrobeamRunAction   
- 
-    G4bool                   factoryOn;
-    
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "g4root.hh"
+//#include "g4xml.hh"
+//#include "g4csv.hh"   // can be used only with ntuples
 
 #endif
-
