@@ -142,7 +142,7 @@ List of fixes included in this public patch since the public release 9.6.p01:
       o G4MuonMinusBoundDecay: improved muon capture rate data/lookup and
         calculation of bound muon decay rate.
         Corrected calculations and lookup of MuonCaptureRate in
-        G4StopElementSelector.
+        G4StopElementSelector. Addresses problem report #1457.
 
   o Parameterisations/gflash
     ------------------------
