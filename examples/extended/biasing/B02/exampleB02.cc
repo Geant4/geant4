@@ -53,8 +53,7 @@
 // the last slab. 
 // 
 // 
-
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include <iostream>
 
@@ -80,15 +79,8 @@
 
 
 
-// AIDA stuff
 
-#include "AIDA/IAnalysisFactory.h"
-#include "AIDA/ITree.h"
-#include "AIDA/ITreeFactory.h"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogramFactory.h"
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int , char **)
 {  
@@ -141,20 +133,13 @@ int main(int , char **)
   G4int cell(1);
   for (cell=1; cell<=18; cell++) {
     G4GeometryCell gCell = pdet->GetGeometryCell(cell);
-    G4cout << " adding cell: " << cell << " replica: " << gCell.GetReplicaNumber() << " name: " << gCell.GetPhysicalVolume().GetName() << G4endl;
+    G4cout << " adding cell: " << cell 
+           << " replica: " << gCell.GetReplicaNumber() 
+           << " name: " << gCell.GetPhysicalVolume().GetName() << G4endl;
     G4double imp = std::pow(2.0,cell-1);
     //x    aIstore.AddImportanceGeometryCell(imp, gCell);
     aIstore.AddImportanceGeometryCell(imp, gCell.GetPhysicalVolume(), cell);
   }
-
-  // create a histogram for a special scorer for the last cell 
-  AIDA::IAnalysisFactory *af = AIDA_createAnalysisFactory();
-  AIDA::ITreeFactory *tf = af->createTreeFactory();
-  AIDA::ITree *tree = tf->create("b02.hbook", "hbook",false,true);
-  AIDA::IHistogramFactory *hf = af->createHistogramFactory( *tree );
-  AIDA::IHistogram1D *h = 
-    hf->createHistogram1D("10","w*sl vs. e", 30, 0., 20*MeV);
-  
 
 
 
@@ -186,14 +171,6 @@ int main(int , char **)
 
   runManager->BeamOn(numberOfEvents);
 
- 
-  tree->commit();
-  tree->close();
-
-  delete tree;
-  delete tf;
-  delete af;
-
   pgs.ClearSampling();
 
   delete runManager;
@@ -201,5 +178,4 @@ int main(int , char **)
   return 0;
 }
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

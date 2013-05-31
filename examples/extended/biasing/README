@@ -83,8 +83,8 @@ Example B02
 ===========
 
 This example uses a parallel geometry to define G4GeometryCell objects
-for scoring and importance sampling. In addition it customizes
-the scoring. In this example one scorer creates a histogram.
+for scoring and importance sampling. The output should be equivalent to B01.
+
 
 Compiling and running
 ---------------------

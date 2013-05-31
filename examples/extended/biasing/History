@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2009-11-20 17:48:26 gcosmo Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 15, 2012 A. Howard - exbiasing-V09-06-01
+- Changed README and .README to reflect the B02 correctly.
 
 Nov 15, 2012 I.Hrivnacova - exbiasing-V09-05-04
 - Minor fixes in .README

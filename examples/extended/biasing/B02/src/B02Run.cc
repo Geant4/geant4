@@ -86,22 +86,25 @@ B02Run::B02Run(const std::vector<G4String> mfdName): G4Run()
         for (G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); icol++){
             // Get Primitive Scorer object.
             G4VPrimitiveScorer* scorer=mfd->GetPrimitive(icol);
-            // collection name and collectionID for HitsCollection,
-            // where type of HitsCollection is G4THitsMap in case of primitive scorer.
-            // The collection name is given by <MFD name>/<Primitive Scorer name>.
+      // collection name and collectionID for HitsCollection,
+      // where type of HitsCollection is G4THitsMap in case of primitive scorer.
+      // The collection name is given by <MFD name>/<Primitive Scorer name>.
             G4String collectionName = scorer->GetName();
             G4String fullCollectionName = detName+"/"+collectionName;
             G4int    collectionID = SDman->GetCollectionID(fullCollectionName);
             //
             if ( collectionID >= 0 ){
-                G4cout << "++ "<<fullCollectionName<< " id " << collectionID << G4endl;
-                // Store obtained HitsCollection information into data members.
-                // And, creates new G4THitsMap for accumulating quantities during RUN.
+                G4cout << "++ "<<fullCollectionName<< " id " 
+                       << collectionID << G4endl;
+          // Store obtained HitsCollection information into data members.
+          // And, creates new G4THitsMap for accumulating quantities during RUN.
                 fCollName.push_back(fullCollectionName);
                 fCollID.push_back(collectionID);
-                fRunMap.push_back(new G4THitsMap<G4double>(detName,collectionName));
+                fRunMap.push_back(new G4THitsMap<G4double>(detName
+                                                          ,collectionName));
             }else{
-                G4cout << "** collection " << fullCollectionName << " not found. "<<G4endl;
+                G4cout << "** collection " << fullCollectionName 
+                       << " not found. "<<G4endl;
             }
         }
     }

@@ -90,9 +90,9 @@ void B02RunAction::EndOfRunAction(const G4Run* aRun)
 {
     G4cout << " ###### EndOfRunAction  " <<G4endl;
   //- B02Run object.
-  B02Run* re02Run = (B02Run*)aRun;
+  B02Run* b02Run = (B02Run*)aRun;
   //--- Dump all socred quantities involved in B02Run.
-  // re02Run->DumpAllScorer();
+  // b02Run->DumpAllScorer();
   //---
   G4RunManager* mgr = G4RunManager::GetRunManager();
   //
@@ -119,23 +119,23 @@ void B02RunAction::EndOfRunAction(const G4Run* aRun)
     //      8       ConcreteSD/SLWE_V
     //---------------------------------------------
     G4THitsMap<G4double>* Collisions = 
-                          re02Run->GetHitsMap(fSDName[i]+"/Collisions");
+                          b02Run->GetHitsMap(fSDName[i]+"/Collisions");
     G4THitsMap<G4double>* CollWeight = 
-                          re02Run->GetHitsMap(fSDName[i]+"/CollWeight");
+                          b02Run->GetHitsMap(fSDName[i]+"/CollWeight");
     G4THitsMap<G4double>* Population = 
-                          re02Run->GetHitsMap(fSDName[i]+"/Population");
+                          b02Run->GetHitsMap(fSDName[i]+"/Population");
     G4THitsMap<G4double>* TrackEnter = 
-                          re02Run->GetHitsMap(fSDName[i]+"/TrackEnter");
+                          b02Run->GetHitsMap(fSDName[i]+"/TrackEnter");
     G4THitsMap<G4double>* SL = 
-                          re02Run->GetHitsMap(fSDName[i]+"/SL");
+                          b02Run->GetHitsMap(fSDName[i]+"/SL");
     G4THitsMap<G4double>* SLW = 
-                          re02Run->GetHitsMap(fSDName[i]+"/SLW");
+                          b02Run->GetHitsMap(fSDName[i]+"/SLW");
     G4THitsMap<G4double>* SLWE = 
-                          re02Run->GetHitsMap(fSDName[i]+"/SLWE");
+                          b02Run->GetHitsMap(fSDName[i]+"/SLWE");
     G4THitsMap<G4double>* SLW_V = 
-                          re02Run->GetHitsMap(fSDName[i]+"/SLW_V");
+                          b02Run->GetHitsMap(fSDName[i]+"/SLW_V");
     G4THitsMap<G4double>* SLWE_V = 
-                          re02Run->GetHitsMap(fSDName[i]+"/SLWE_V");
+                          b02Run->GetHitsMap(fSDName[i]+"/SLWE_V");
 
 
     G4cout << "=============================================================" 

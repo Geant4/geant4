@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 30th, 2013 A.Howard - B02-V09-06-05
+- Removed redundant setupPI.csh script (remnant of old analysis)
+
+May 30th, 2013 A.Howard - B02-V09-06-04
+- Removed redundant analysis code from exampleB02.cc. Cleaned up line-lenghts,
+  tabs and changed local name of b02Run object.
+
 May 27th, 2013 I.Hrivnacova - B02-V09-06-03
 - Applied coding guidelines (virtual keyword, base class initialization)
 
