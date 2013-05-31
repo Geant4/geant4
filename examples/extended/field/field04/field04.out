@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -116,7 +116,7 @@ Accuracy Parameters: MinStep=10 DeltaChord=3 DeltaOneStep=0.01
 #
 /run/initialize
 G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
-G4NistMaterialBuilder: BuildMaterial #286
+G4NistMaterialBuilder: BuildMaterial #285
 New material nComponents= 1
 G4NistElementBuilder: Build Element <H>  Z= 1  Aeff= 1.00794  with natural isotope composition
 G4Material: Mean excitation energy is changed for G4_Galactic Iold= 19.2eV Inew= 21.8 eV
@@ -128,8 +128,8 @@ G4NistElementBuilder: Build Element <Be>  Z= 4  Aeff= 9.01218  with natural isot
 G4Material: Mean excitation energy is changed for G4_BERYLLIUM_OXIDE Iold= 83.15eV Inew= 93.2 eV
 G4NistMaterialBuilder::FindOrBuildMaterial Scintillator
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Scintillator> is not found out
-New material Scintillator is prepeared  nMaterials= 317 nComponents= 818 nCurrent= 2
-G4NistMaterialBuilder: BuildMaterial #316
+New material Scintillator is prepeared  nMaterials= 316 nComponents= 815 nCurrent= 2
+G4NistMaterialBuilder: BuildMaterial #315
 New material nComponents= 2
 
 The materials defined are: 
@@ -228,19 +228,6 @@ G4NistMaterialBuilder::FindOrBuildMaterial G4_Galactic
 G4NistMaterialBuilder::FindOrBuildMaterial G4_AIR
 G4NistMaterialBuilder::FindOrBuildMaterial G4_Pb
 G4NistMaterialBuilder::FindOrBuildMaterial G4_W
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
 Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0

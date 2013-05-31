@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -125,19 +125,6 @@ userDetector->Construct() start.
 
  The Box is 1 m   of Iron
 Iron is registered to the default region.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 physicsList->Construct() start.
 physicsList->Construct() start.
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
@@ -314,18 +301,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.3s Real=7.65s Sys=0s
+  User=2.18s Real=2.52s Sys=0s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 464170	muPairProd : 63813	muBrems : 622
+ Number of process calls --->	muIoni : 462991	muPairProd : 63893	muBrems : 647
 
- Simulation: total CrossSection = 0.5286 /cm	 MeanFreePath = 1.8918 cm 	 massicCrossSection = 0.067167 cm2/g
+ Simulation: total CrossSection = 0.52753 /cm	 MeanFreePath = 1.8956 cm 	 massicCrossSection = 0.067031 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 583200395, 982817119
+ Current couple of seeds = 1783091211, 617365115
 ----------------------------------------
 #
 /gun/particle pi+
@@ -359,7 +346,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 583200395, 982817119
+ Current couple of seeds = 1783091211, 617365115
 ----------------------------------------
 Start Run processing.
 
@@ -385,17 +372,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.21s Real=5.34s Sys=0.01s
+  User=2.1s Real=2.21s Sys=0s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 434400	hPairProd : 59591	hBrems : 365
+ Number of process calls --->	hIoni : 433975	hPairProd : 59698	hBrems : 353
 
- Simulation: total CrossSection = 0.49436 /cm	 MeanFreePath = 2.0228 cm 	 massicCrossSection = 0.062815 cm2/g
+ Simulation: total CrossSection = 0.49403 /cm	 MeanFreePath = 2.0242 cm 	 massicCrossSection = 0.062773 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 674389869, 1591001335
+ Current couple of seeds = 759122171, 619493205
 ----------------------------------------
 #
 /gun/particle proton
@@ -429,7 +416,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 674389869, 1591001335
+ Current couple of seeds = 759122171, 619493205
 ----------------------------------------
 Start Run processing.
 
@@ -455,17 +442,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.09s Real=4.8s Sys=0s
+  User=1.98s Real=2.03s Sys=0.01s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 434874	hPairProd : 34047	hBrems : 8
+ Number of process calls --->	hIoni : 434995	hPairProd : 34062	hBrems : 9
 
- Simulation: total CrossSection = 0.46893 /cm	 MeanFreePath = 2.1325 cm 	 massicCrossSection = 0.059584 cm2/g
+ Simulation: total CrossSection = 0.46907 /cm	 MeanFreePath = 2.1319 cm 	 massicCrossSection = 0.059602 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1404623050, 1955910136
+ Current couple of seeds = 1671530062, 1223717994
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
@@ -475,9 +462,9 @@ Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+RunManager is deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleted.

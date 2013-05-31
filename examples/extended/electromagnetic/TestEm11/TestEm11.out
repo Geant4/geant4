@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -28,19 +28,6 @@ userDetector->Construct() start.
 -------------------------------------------------------------
 
 World is registered to the default region.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 physicsList->Construct() start.
 physicsList->Construct() start.
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
@@ -461,7 +448,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=3.3s Real=9.05s Sys=0s
+  User=3.41s Real=3.71s Sys=0s
 
  ======================== run summary ======================
 
@@ -470,20 +457,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 452.820 keV +- 101.383 keV
+ Total Energy deposited        = 452.889 keV +- 101.252 keV
 
- Track length of primary track = 887.324 um  +- 189.353 um 
+ Track length of primary track = 887.345 um  +- 189.067 um 
  Range from EmCalculator = 942.765 um  (from full dE/dx)
 
- Projected range               = 317.896 um  +- 204.176 um 
+ Projected range               = 317.651 um  +- 204.137 um 
 
- Nb of steps of primary track  = 21.36 +- 4.79	 Step size= 42.050 um  +- 7.275 um 
+ Nb of steps of primary track  = 21.36 +- 4.79	 Step size= 42.049 um  +- 7.267 um 
 
- absorbed = 80.08 %   transmit = 4.03 %   reflected = 15.89 %
+ absorbed = 80.08 %   transmit = 4.04 %   reflected = 15.87 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 231008573, 702274557
+ Current couple of seeds = 1597467389, 693136907
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -492,9 +479,9 @@ Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
+RunManager is deleted.
 EventManager deleted.
 UImanager deleted.
 Units table cleared.
 StateManager deleted.
 RunManagerKernel is deleted.
-RunManager is deleted.

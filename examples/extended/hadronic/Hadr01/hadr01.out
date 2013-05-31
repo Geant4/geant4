@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-03    (15-March-2013)
+ Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,19 +46,6 @@ PhysicsList::AddPhysicsList: <emstandard_opt0>
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Run0052
-      issued by : G4VUserDetectorConstruction::ConstructSDandField
-User-derived class does not implement ConstructSDandFiled method:
-workers will not have SD and fields!
-If user defined SD and Field classes implement cloning, you can
-re-implement this method as:
-void UserDerivedClass::ConstructSDandField() { CloneSD() CloneF() }
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
 
 Particle table is held by G4VUserPhysicsList::InitializeProcessManager
 Particle table is released by G4VUserPhysicsList::InitializeProcessManager
@@ -288,33 +275,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.24s Real=0.63s Sys=0.01s
+  User=0.24s Real=0.24s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         74.86   RMS(MeV) 69.07
-Average number of steps              251.5
-Average number of gamma              1.94
-Average number of e-                 4.09
-Average number of e+                 0.03
-Average number of neutrons           1.64
-Average number of protons            1.43
+Average energy deposit (MeV)         63.79   RMS(MeV) 54.01
+Average number of steps              250.1
+Average number of gamma              2.14
+Average number of e-                 3.96
+Average number of e+                 0.02
+Average number of neutrons           1.21
+Average number of protons            1.18
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.46
-Average number of pi0                0.12
+Average number of pi+ & pi-          0.38
+Average number of pi0                0.16
 Average number of kaons              0
-Average number of muons              0.02
-Average number of deuterons+tritons  0.14
-Average number of He3+alpha          0.18
+Average number of muons              0
+Average number of deuterons+tritons  0.11
+Average number of He3+alpha          0.14
 Average number of ions               0.54
-Average number of forward neutrons   0.16
-Average number of reflected neutrons 1.34
-Average number of leaked neutrons    0.1
-Average number of proton leak        0.59
-Average number of pion leak          0.43
+Average number of forward neutrons   0.08
+Average number of reflected neutrons 1.04
+Average number of leaked neutrons    0.03
+Average number of proton leak        0.49
+Average number of pion leak          0.37
 ========================================================
 
 #
