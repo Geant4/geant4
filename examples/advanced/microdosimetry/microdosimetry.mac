@@ -1,0 +1,6 @@
+#/control/execute vis.mac
+/tracking/verbose 0 
+/gun/particle proton
+/gun/energy 5 MeV
+/run/initialize
+/run/beamOn 1
