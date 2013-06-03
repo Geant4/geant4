@@ -23,40 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm4/include/RunAction.hh
-/// \brief Definition of the RunAction class
+// $Id: Analysis.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file electromagnetic/TestEm4/include/Analysis.hh
+/// \brief Selection of the analysis technology
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef Analysis_h
+#define Analysis_h 1
 
-#include "Analysis.hh"
-
-#include "G4UserRunAction.hh"
-#include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class G4Run;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class RunAction : public G4UserRunAction
-{
-  public:
-    RunAction();
-   ~RunAction();
-
-  public:
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//#include "g4root.hh"
+#include "g4xml.hh"
+////#include "g4hbook.hh"
 
 #endif
-

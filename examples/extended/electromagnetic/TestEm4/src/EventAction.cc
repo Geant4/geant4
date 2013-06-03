@@ -34,12 +34,11 @@
 #include "EventAction.hh"
 
 #include "EventActionMessenger.hh"
+#include "Analysis.hh"
 
 #include "G4Event.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-
-#include "g4root.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
