@@ -50,10 +50,10 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
     virtual G4VPhysicalVolume* Construct();
-           
+    virtual void ConstructSDandField();
+               
   private:
     void DefineMaterials();
-    void CreateScorers();
 
     G4LogicalVolume*  fLogicCryst;
     G4LogicalVolume*  fLogicPatient;       

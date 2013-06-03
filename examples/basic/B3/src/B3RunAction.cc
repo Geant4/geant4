@@ -30,6 +30,7 @@
 
 #include "B3RunAction.hh"
 #include "B3PrimaryGeneratorAction.hh"
+#include "B3Run.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -39,9 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B3RunAction::B3RunAction()
- : G4UserRunAction(),
-   fGoodEvents(0),
-   fSumDose(0.)  
+ : G4UserRunAction()
 {  
   //add new units for dose
   // 
@@ -59,16 +58,18 @@ B3RunAction::B3RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B3RunAction::~B3RunAction()
-{}
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Run* B3RunAction::GenerateRun()
+{ return new B3Run; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B3RunAction::BeginOfRunAction(const G4Run* run)
 { 
   G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-  
-  fGoodEvents = 0;
-  fSumDose = 0.;
   
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
@@ -88,15 +89,30 @@ void B3RunAction::EndOfRunAction(const G4Run* run)
         G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
   G4ParticleDefinition* particle 
     = kinematic->GetParticleGun()->GetParticleDefinition();
-  G4String partName = particle->GetParticleName();                       
+  G4String partName = particle->GetParticleName();
+  
+  //results
+  //
+  const B3Run* b3Run = static_cast<const B3Run*>(run);
+  G4int nbGoodEvents = b3Run->GetNbGoodEvents();
+  G4double sumDose   = b3Run->GetSumDose();                           
         
   //print
-  //  
+  //
+  if (IsMaster())
+  {
+    G4cout
+     << "\n--------------------End of Global Run-----------------------";
+  }
+  else
+  {
+    G4cout
+     << "\n--------------------End of Local Run------------------------";
+  }      
   G4cout
-     << "\n--------------------End of Run------------------------------\n"
-     << " The run was " << NbOfEvents << " "<< partName
-     << "; Nb of 'good' e+ annihilations: " << fGoodEvents
-     << "\n Total dose in patient : " << G4BestUnit(fSumDose,"Dose")   
+     << " \n The run was " << NbOfEvents << " "<< partName
+     << "; Nb of 'good' e+ annihilations: " << nbGoodEvents
+     << "\n Total dose in patient : " << G4BestUnit(sumDose,"Dose")   
      << "\n------------------------------------------------------------\n"
      << G4endl;
 }

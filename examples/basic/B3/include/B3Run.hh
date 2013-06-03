@@ -23,33 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B3Run.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B3RunAction.hh
-/// \brief Definition of the B3RunAction class
+/// \file B3Run.hh
+/// \brief Definition of the B3Run class
 
-#ifndef B3RunAction_h
-#define B3RunAction_h 1
+#ifndef B3Run_h
+#define B3Run_h 1
 
-#include "G4UserRunAction.hh"
+#include "G4Run.hh"
 #include "globals.hh"
 
-class G4Run;
+/// Run class
+///
+/// In RecordEvent() there is collected information event per event 
+/// from Hits Collections, and accumulated statistic for the run 
 
-/// Run action class
-
-class B3RunAction : public G4UserRunAction
+class B3Run : public G4Run
 {
   public:
-    B3RunAction();
-    virtual ~B3RunAction();
+    B3Run();
+    virtual ~B3Run();
+
+    virtual void RecordEvent(const G4Event*);
+    virtual void Merge(const G4Run*);
     
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+  public:
+    G4int GetNbGoodEvents() const { return fGoodEvents; }
+    G4double GetSumDose()   const { return fSumDose; }    
+    
+  private:
+    G4int fCollID_cryst;
+    G4int fCollID_patient;   
+    G4int fPrintModulo;
+    G4int fGoodEvents;
+    G4double fSumDose;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    

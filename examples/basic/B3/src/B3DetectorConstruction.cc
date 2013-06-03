@@ -243,11 +243,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
   // Print materials
   G4cout << *(G4Material::GetMaterialTable()) << G4endl; 
-    
-  //
-  CreateScorers();
-                                                                                
-  //
+
   //always return the physical World
   //
   return physWorld;
@@ -255,7 +251,7 @@ G4VPhysicalVolume* B3DetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B3DetectorConstruction::CreateScorers()
+void B3DetectorConstruction::ConstructSDandField()
 {
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   SDman->SetVerboseLevel(2);

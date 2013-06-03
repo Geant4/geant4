@@ -23,43 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B3ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B3EventAction.hh
-/// \brief Definition of the B3EventAction class
+/// \file B3ActionInitialization.cc
+/// \brief Implementation of the B3ActionInitialization class
 
-#ifndef B3EventAction_h
-#define B3EventAction_h 1
-
-#include "G4UserEventAction.hh"
-#include "globals.hh"
-
-class B3RunAction;
-
-/// Event action class
-///
-/// In EndOfEventAction() there is collected information event per event 
-/// from Hits Collections, and accumulated statistic for 
-/// B3RunAction::EndOfRunAction().
-
-class B3EventAction : public G4UserEventAction
-{
-  public:
-    B3EventAction(B3RunAction* runAction);
-    virtual ~B3EventAction();
-
-    virtual void  BeginOfEventAction(const G4Event*);
-    virtual void    EndOfEventAction(const G4Event*);
-    
-  private:
-    B3RunAction*  fRunAct;
-    G4int fCollID_cryst;
-    G4int fCollID_patient;   
-    G4int fPrintModulo;   
-};
+#include "B3ActionInitialization.hh"
+#include "B3PrimaryGeneratorAction.hh"
+#include "B3RunAction.hh"
+#include "B3StackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B3ActionInitialization::B3ActionInitialization()
+ : G4VUserActionInitialization()
+{}
 
-    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B3ActionInitialization::~B3ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B3ActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new B3RunAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B3ActionInitialization::Build() const
+{
+  SetUserAction(new B3PrimaryGeneratorAction);
+  SetUserAction(new B3RunAction);
+  SetUserAction(new B3StackingAction);
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

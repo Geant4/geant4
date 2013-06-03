@@ -28,17 +28,19 @@
 /// \file exampleB3.cc
 /// \brief Main program of the B3 example
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 
 #include "Randomize.hh"
 
 #include "B3DetectorConstruction.hh"
 #include "B3PhysicsList.hh"
-#include "B3PrimaryGeneratorAction.hh"
-#include "B3RunAction.hh"
-#include "B3EventAction.hh"
-#include "B3StackingAction.hh"
+#include "B3ActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -54,11 +56,16 @@ int main(int argc,char** argv)
 {
   // Choose the Random engine
   //
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
      
   // Construct the default run manager
   //
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(2);
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif  
 
   // Set mandatory initialization classes
   //
@@ -66,16 +73,9 @@ int main(int argc,char** argv)
   //
   runManager->SetUserInitialization(new B3PhysicsList);
     
-  // Set user action classes
+  // Set user action initialization
   //
-  runManager->SetUserAction(new B3PrimaryGeneratorAction);
-  //
-  B3RunAction* runAction = new B3RunAction();
-  runManager->SetUserAction(runAction);
-  //
-  runManager->SetUserAction(new B3EventAction(runAction));
-  //
-  runManager->SetUserAction(new B3StackingAction);  
+  runManager->SetUserInitialization(new B3ActionInitialization());  
   
   // Initialize G4 kernel
   //

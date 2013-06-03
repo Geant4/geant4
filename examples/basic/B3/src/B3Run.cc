@@ -23,14 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B3Run.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B3EventAction.cc
-/// \brief Implementation of the B3EventAction class
+/// \file B3Run.cc
+/// \brief Implementation of the B3Run class
 
-#include "B3EventAction.hh"
-
-#include "B3RunAction.hh"
+#include "B3Run.hh"
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
@@ -38,29 +36,35 @@
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4THitsMap.hh"
-#include "G4UnitsTable.hh"
+////#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B3EventAction::B3EventAction(B3RunAction* runAction)
- : G4UserEventAction(), 
-   fRunAct(runAction),
+B3Run::B3Run()
+ : G4Run(), 
    fCollID_cryst(0),
    fCollID_patient(0),  
-   fPrintModulo(10000)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-B3EventAction::~B3EventAction()
+   fPrintModulo(10000),
+   fGoodEvents(0),
+   fSumDose(0.)
+   
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B3EventAction::BeginOfEventAction(const G4Event* evt )
+B3Run::~B3Run()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B3Run::RecordEvent(const G4Event* event)
 {
-  G4int evtNb = evt->GetEventID();
+  G4int evtNb = event->GetEventID();
+  
+  if (evtNb%fPrintModulo == 0) { 
+    G4cout << "\n---> end of event: " << evtNb << G4endl;
+  }      
   
   if (evtNb == 0) {
     G4SDManager* SDMan = G4SDManager::GetSDMpointer();  
@@ -68,18 +72,9 @@ void B3EventAction::BeginOfEventAction(const G4Event* evt )
     fCollID_patient = SDMan->GetCollectionID("patient/dose");    
   }
 
-  if (evtNb%fPrintModulo == 0) { 
-    G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-  }    
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B3EventAction::EndOfEventAction(const G4Event* evt )
-{
-   //Hits collections
+  //Hits collections
   //  
-  G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+  G4HCofThisEvent* HCE = event->GetHCofThisEvent();
   if(!HCE) return;
                
   //Energy in crystals : identify 'good events'
@@ -97,7 +92,7 @@ void B3EventAction::EndOfEventAction(const G4Event* evt )
     if (edep > eThreshold) nbOfFired++;
     ///G4cout << "\n  cryst" << copyNb << ": " << edep/keV << " keV ";
   }  
-  if (nbOfFired == 2) fRunAct->CountEvents();
+  if (nbOfFired == 2) fGoodEvents++;
   
   //Dose deposit in patient
   //
@@ -109,7 +104,20 @@ void B3EventAction::EndOfEventAction(const G4Event* evt )
     ///G4int copyNb  = (itr->first);
     dose = *(itr->second);
   }
-  if (dose > 0.) fRunAct->SumDose(dose);    
+  fSumDose += dose;
+  
+  G4Run::RecordEvent(event);      
 }  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B3Run::Merge(const G4Run* aRun)
+{
+  const B3Run* localRun = static_cast<const B3Run*>(aRun);
+  fGoodEvents += localRun->fGoodEvents;
+  fSumDose    += localRun->fSumDose;
+
+  G4Run::Merge(aRun); 
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

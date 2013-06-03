@@ -14,7 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+01/06/13 mma  (exampleB3-V09-06-02)
+- Migration for MT:
+  forgotten to add B3Run
+     
+31/05/13 mma  (exampleB3-V09-06-01)
+- Migration for MT:
+  Added B3ActionInitialization, B3Run
+  Removed B3EventAction
+  and updated actions classes accordingly.
+  README files still need to be updated.
+  
 28/02/13 I. Hrivnacova
 - When building materials with NistManager
   do not set fromIsotopes argument (which was set to false), 

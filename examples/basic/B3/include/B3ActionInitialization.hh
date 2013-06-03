@@ -23,33 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B3ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B3RunAction.hh
-/// \brief Definition of the B3RunAction class
+/// \file B3ActionInitialization.hh
+/// \brief Definition of the B3ActionInitialization class
 
-#ifndef B3RunAction_h
-#define B3RunAction_h 1
+#ifndef B3ActionInitialization_h
+#define B3ActionInitialization_h 1
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class G4Run;
+/// Action initialization class.
+///
 
-/// Run action class
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class B3RunAction : public G4UserRunAction
+class B3ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    B3RunAction();
-    virtual ~B3RunAction();
-    
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    B3ActionInitialization();
+    virtual ~B3ActionInitialization();
+
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    
