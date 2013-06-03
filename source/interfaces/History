@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd June 2013  John Allison (interfaces-V09-06-01)
+- G4Xt.hh: Coverity fix:
+  o Made copy constructor and assignment operator private.
+
+13th May 2013 - Laurent Garnier
+- G4UIQt :
+  o Add some tooltips
+
+1st May 2013 - Laurent Garnier
+- Improvments about Wt driver configuration
+
+25th April 2013  Laurent Garnier
+- Add cmake configuration for Wt and Qt5 in "common" and "basic",
+  check in the code : "!!! ONLY QT4 to be comment with QT5"
+
+7th December 2012  Laurent Garnier
+- Set fix size font in output.
 
 7th December 2012  John Allison (interfaces-V09-06-00)
 - Removed G4UIXaw.

@@ -189,6 +189,7 @@ G4UIQt::G4UIQt (
 
   fCommandArea->setFocusPolicy ( Qt::StrongFocus );
   fCommandArea->setFocus(Qt::TabFocusReason);
+  fCommandArea->setToolTip("Apply command");
 
   commandLineWidget->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
 
@@ -384,10 +385,17 @@ void G4UIQt::CreateCoutTBWidget(
   QVBoxLayout *layoutCoutTB = new QVBoxLayout();
 
   fCoutTBTextArea = new QTextEdit(fCoutTBWidget);
+
+  // set font familly and size
+  fCoutTBTextArea->setFontFamily("Courier");
+  fCoutTBTextArea->setFontPointSize(12);
+
   fCoutFilter = new QLineEdit(fCoutTBWidget);
   QLabel* coutFilterLabel = new QLabel("Filter : ",fCoutTBWidget);
+  coutFilterLabel->setToolTip("filter output by...");
 
-  QPushButton *coutTBClearButton = new QPushButton("clear",fCoutTBWidget);
+  QPushButton *coutTBClearButton = new QPushButton("clear output",fCoutTBWidget);
+  coutTBClearButton->setToolTip("clear output");
   connect(coutTBClearButton, SIGNAL(clicked()), SLOT(ClearButtonCallback()));
   connect(fCoutFilter, SIGNAL(textEdited ( const QString &)), SLOT(CoutFilterCallback( const QString &)));
 
@@ -715,15 +723,19 @@ G4int G4UIQt::ReceiveG4cout (
   QStringList newStr;
   
   // Add to stringList
-  newStr = QStringList(QString((char*)aString.data()).trimmed());
+  newStr = QStringList(QString((char*)aString.data()));
   fG4cout += newStr;
- 
+
   QStringList result = newStr.filter(fCoutFilter->text());
 
-  if (result.join("\n").isEmpty()) {
+//  if (result.join("\n").isEmpty()) {
+  if (result.join("").isEmpty()) {
     return 0;
   }
-  fCoutTBTextArea->append(result.join("\n"));
+  QString txt = QString((char*)aString.data());
+//fCoutTBTextArea->append(result.join("\n"));
+  fCoutTBTextArea->setPlainText(fCoutTBTextArea->toPlainText ().append(result.join("")));
+//fCoutTBTextArea->append(txt);
   fCoutTBTextArea->repaint();
 
   fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());

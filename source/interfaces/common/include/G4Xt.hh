@@ -58,7 +58,9 @@ public:
   void FlushAndWaitExecution();
   virtual ~G4Xt();                     
 private:
-  G4Xt (int,char**,char*);                     
+  G4Xt (const G4Xt&);
+  G4Xt (int,char**,char*);
+  G4Xt& operator= (const G4Xt&);
   static G4Xt* instance; // Pointer to single instance.
 };
 
