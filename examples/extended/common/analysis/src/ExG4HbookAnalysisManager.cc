@@ -45,6 +45,16 @@ const G4int ExG4HbookAnalysisManager::fgkDefaultH2HbookIdOffset = 100;
 const G4String ExG4HbookAnalysisManager::fgkDefaultNtupleDirectoryName = "ntuple";
 
 //_____________________________________________________________________________
+ExG4HbookAnalysisManager* ExG4HbookAnalysisManager::Create(G4bool /*isMaster*/)
+{
+  if ( fgInstance == 0 ) {
+    fgInstance = new ExG4HbookAnalysisManager();
+  }
+  
+  return fgInstance;
+}    
+
+//_____________________________________________________________________________
 ExG4HbookAnalysisManager* ExG4HbookAnalysisManager::Instance()
 {
   if ( fgInstance == 0 ) {
@@ -56,7 +66,7 @@ ExG4HbookAnalysisManager* ExG4HbookAnalysisManager::Instance()
 
 //_____________________________________________________________________________
 ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
- : G4VAnalysisManager("Hbook"),
+ : G4VAnalysisManager(true, "Hbook"),
    fH1HbookIdOffset(-1),
    fH2HbookIdOffset(-1),
    fNtupleHbookIdOffset(-1),
@@ -69,6 +79,15 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
    fH2NameIdMap(),  
    fNtupleVector()
 {
+  if ( G4VAnalysisManager::IsMT() ) {
+    // Hbook output is not supported in MT mode
+    G4ExceptionDescription description;
+    description << "      " 
+      << "G4HbookAnalysisManager is not supported in multi-threading mode."; 
+    G4Exception("ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()",
+                "Analysis_F001", FatalException, description);
+  }              
+
   if ( fgInstance ) {
     G4ExceptionDescription description;
     description << "      " 
@@ -618,14 +637,8 @@ G4bool ExG4HbookAnalysisManager::OpenFile(const G4String& fileName)
 {
   // Keep file name
   fFileName =  fileName;
+  G4String name = GetFullFileName();
 
-  // Add file extension .hbook if no extension is given
-  G4String name(fileName);
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }  
-  
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
     fpVerboseL4->Message("open", "analysis file", name);

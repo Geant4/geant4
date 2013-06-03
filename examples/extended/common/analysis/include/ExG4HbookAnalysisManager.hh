@@ -103,6 +103,7 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     virtual ~ExG4HbookAnalysisManager();
     
     // static methods
+    static ExG4HbookAnalysisManager* Create(G4bool isMaster = true);
     static ExG4HbookAnalysisManager* Instance();
   
     // Methods to manipulate files
@@ -143,13 +144,13 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     // Create columns in the last created ntuple
     virtual G4int CreateNtupleIColumn(const G4String& name);
     virtual G4int CreateNtupleFColumn(const G4String& name);
-    virtual G4int CreateNtupleDColumn(const G4String& name);     
+    virtual G4int CreateNtupleDColumn(const G4String& name);
     virtual void  FinishNtuple();   
      // Create columns in the ntuple with given id
     virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name);
     virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name);
     virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name);   
-    virtual void  FinishNtuple(G4int ntupleId);   
+    virtual void  FinishNtuple(G4int ntupleId);
  
     // Methods to fill histogrammes, ntuples
     virtual G4bool FillH1(G4int id, G4double value, G4double weight = 1.0);
@@ -160,16 +161,19 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     virtual G4bool FillNtupleFColumn(G4int columnId, G4float value);
     virtual G4bool FillNtupleDColumn(G4int columnId, G4double value);
     virtual G4bool AddNtupleRow();
-    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
-    virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value);
-    virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value);
-    virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value);
+    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)
+    virtual G4bool FillNtupleIColumn(
+                       G4int ntupleId, G4int columnId, G4int value);
+    virtual G4bool FillNtupleFColumn(
+                       G4int ntupleId, G4int columnId, G4float value);
+    virtual G4bool FillNtupleDColumn(
+                       G4int ntupleId, G4int columnId, G4double value);
     virtual G4bool AddNtupleRow(G4int ntupleId);
     
     // Access methods
     virtual tools::hbook::h1*  GetH1(G4int id, G4bool warn = true,
                                       G4bool onlyIfActive = true) const;
-    virtual tools::hbook::h2*  GetH2(G4int id, G4bool warn = true,
+    virtual tools::hboo;k::h2*  GetH2(G4int id, G4bool warn = true,
                                       G4bool onlyIfActive = true) const;
     
     // Access methods via names
@@ -223,7 +227,8 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     G4bool SetH1HbookIdOffset(G4int offset);
     //
     // Set the offset of HBOOK ID for H2
-    // ( default value = firstHistoID + 100 if firstHistoID > 0; otherwise = 101 )
+    // ( default value = firstHistoID + 100 if firstHistoID > 0; 
+    //   otherwise = 101 )
     G4bool SetH2HbookIdOffset(G4int offset);
     //
     // Set the offset of NTUPLE ID for ntuples
@@ -277,7 +282,7 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
                                            G4bool onlyIfActive = true) const;
                                            
     void UpdateTitle(G4String& title, 
-                     const G4String& unitName, const G4String& fcnName) const;                                      
+                     const G4String& unitName, const G4String& fcnName) const;
 
     // data members
     //
