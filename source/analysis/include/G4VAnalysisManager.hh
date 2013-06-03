@@ -46,7 +46,7 @@ class G4VAnalysisManager
     enum ObjectType { kH1, kH2, kNtuple };
 
   public:
-    G4VAnalysisManager(const G4String& type = "");
+    G4VAnalysisManager(G4bool isMaster, const G4String& type = "");
     virtual ~G4VAnalysisManager();
    
     // Methods to manipulate files
@@ -61,6 +61,7 @@ class G4VAnalysisManager
     virtual G4bool SetNtupleDirectoryName(const G4String& dirName);
     virtual G4String GetFileName() const;
     virtual G4String GetFullFileName() const;
+    virtual G4String GetNtupleFileName(const G4String& ntupleName) const;
     virtual G4String GetHistoDirectoryName() const;
     virtual G4String GetNtupleDirectoryName() const;
     
@@ -214,7 +215,10 @@ class G4VAnalysisManager
     G4String GetFileType() const;                 
     
   protected:
-    // methods to manipulate additional information
+    // Utility method to detect MT mode
+    static G4bool IsMT();
+
+    // Methods to manipulate additional information
     void   AddH1Information(const G4String& name, 
                             const G4String& unitName,
                             const G4String& fcnName,
@@ -247,6 +251,7 @@ class G4VAnalysisManager
     G4Fcn    GetFunction(const G4String& fcnName) const;
     
     // data members
+    G4bool   fIsMaster;
     G4int    fVerboseLevel;
     G4bool   fActivation;
     G4int    fFirstHistoId;

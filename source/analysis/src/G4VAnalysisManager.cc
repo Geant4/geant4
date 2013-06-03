@@ -29,13 +29,15 @@
 
 #include "G4VAnalysisManager.hh"
 #include "G4AnalysisMessenger.hh"
+#include "G4Threading.hh"
 #include "G4UnitsTable.hh"
 
 #include <iostream>
 
 //_____________________________________________________________________________
-G4VAnalysisManager::G4VAnalysisManager(const G4String& type)
-  : fVerboseLevel(0),
+G4VAnalysisManager::G4VAnalysisManager(G4bool isMaster, const G4String& type)
+  : fIsMaster(isMaster),
+    fVerboseLevel(0),
     fActivation(false),
     fFirstHistoId(0),
     fFirstNtupleId(0),
@@ -76,6 +78,17 @@ G4VAnalysisManager::~G4VAnalysisManager()
 // 
 // protected methods
 //
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::IsMT()
+{
+  G4bool isMT = false;
+#ifdef G4MULTITHREADED
+  isMT = true;
+#endif  
+
+  return isMT;
+}  
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::AddH1Information(const G4String& name,
@@ -331,11 +344,41 @@ G4bool G4VAnalysisManager::SetNtupleDirectoryName(const G4String& dirName)
 G4String G4VAnalysisManager::GetFullFileName() const 
 {  
   G4String name(fFileName);
+  // Add thread Id to a file name if MT processing
+  if ( ! fIsMaster ) {
+    std::ostringstream os;
+    os << G4GetPidId();
+    name.append("_t");
+    name.append(os.str());
+  }  
+  // Add file extension .root if no extension is given
   if ( name.find(".") == std::string::npos ) { 
     name.append(".");
     name.append(GetFileType());
   }  
 
+  return name;
+}  
+
+//_____________________________________________________________________________
+G4String G4VAnalysisManager::GetNtupleFileName(const G4String& ntupleName) const 
+{  
+  G4String name(fFileName);
+  // Add ntupleName
+  name.append("_");
+  name.append(ntupleName);
+  // Add thread Id to a file name if MT processing
+  if ( ! fIsMaster ) {
+    std::ostringstream os;
+    os << G4GetPidId();
+    name.append("_t");
+    name.append(os.str());
+  }  
+  // Add file extension .xml if no extension is given
+  if ( name.find(".") == std::string::npos ) { 
+    name.append(".");
+    name.append(GetFileType());
+  }
   return name;
 }  
 

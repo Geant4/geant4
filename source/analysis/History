@@ -17,6 +17,11 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 03, 2013 I.Hrivnacova (analysis-V09-06-09)
+- Improved handling files: empty files are now removed in CloseFile()
+- Moved generation of file name in G4VAnalysisManager
+- Forced setting fIsMaster=true in sequential mode
+
 May 31, 2013 I.Hrivnacova (analysis-V09-06-08)
 - Fix in G4RootAnalysisManager::WriteOnAscii() - bug report #1473
 

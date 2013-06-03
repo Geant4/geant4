@@ -171,13 +171,11 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
 
     // methods
     //
-    G4String GetHnFileName() const;
-    G4bool CloseHnFile(); 
-
-    G4String GetNtupleFileName(G4XmlNtupleDescription* ntupleDescription) const;
     G4bool CreateHnFile();
+    G4bool CloseHnFile(); 
     G4bool CreateNtupleFile(G4XmlNtupleDescription* ntupleDescription);
     G4bool CloseNtupleFile(G4XmlNtupleDescription* ntupleDescription); 
+
     void AddH1Vector(std::vector<tools::histo::h1d*>& h1Vector);
     void AddH2Vector(std::vector<tools::histo::h2d*>& h2Vector);
 
@@ -207,8 +205,6 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     
     // data members
     //
-    G4bool  fIsMaster;
-    
     std::ofstream* fHnFile;
     std::vector<tools::histo::h1d*>  fH1Vector;            
     std::vector<tools::histo::h2d*>  fH2Vector;            

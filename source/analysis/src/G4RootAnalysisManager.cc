@@ -29,12 +29,12 @@
 
 #include "G4RootAnalysisManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
 #include <tools/gzip_buffer>
 
 #include <iostream>
+#include <cstdio>
 
 // mutex in a file scope
 
@@ -52,6 +52,9 @@ G4ThreadLocal G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = 0;
 G4RootAnalysisManager* G4RootAnalysisManager::Create(G4bool isMaster)
 {
   if ( fgInstance == 0 ) {
+    // In sequential mode create always master manager
+    if ( ! G4VAnalysisManager::IsMT() ) isMaster = true;
+
     fgInstance = new G4RootAnalysisManager(isMaster);
   }
   
@@ -70,8 +73,7 @@ G4RootAnalysisManager* G4RootAnalysisManager::Instance()
 
 //_____________________________________________________________________________
 G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
- : G4VAnalysisManager("Root"),
-   fIsMaster(isMaster),
+ : G4VAnalysisManager(isMaster, "Root"),
    fFile(0),
    fHistoDirectory(0),
    fNtupleDirectory(0),
@@ -515,20 +517,7 @@ G4bool G4RootAnalysisManager::OpenFile(const G4String& fileName)
 {
   // Keep file name
   fFileName =  fileName;
-
-  G4String name(fileName);
-  // Add thread Id to a file name if MT processing
-  if ( ! fIsMaster ) {
-    std::ostringstream os;
-    os << G4GetPidId();
-    name.append("_t");
-    name.append(os.str());
-  }  
- // Add file extension .root if no extension is given
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }  
+  G4String name = GetFullFileName();
   
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
@@ -688,10 +677,21 @@ G4bool G4RootAnalysisManager::CloseFile()
   fFile->close();  
   fLockFileName = false;
 
+  // delete files if empty
+  if ( ( IsMT() && fIsMaster && ( ! fH1Vector.size() && ! fH2Vector.size() ) ) || 
+       ( ( ! fIsMaster ) && ( ! fNtupleVector.size() ) ) ) {
+    std::remove(GetFullFileName());
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("close", "file", GetFullFileName());
+    if ( fpVerboseL1 ) 
+      fpVerboseL1->Message("delete", "empty file", GetFullFileName());
 #endif
+  }
+  else {
+#ifdef G4VERBOSE
+    if ( fpVerboseL1 ) 
+      fpVerboseL1->Message("close", "file", GetFullFileName());
+#endif
+  }
 
   return result;
 } 

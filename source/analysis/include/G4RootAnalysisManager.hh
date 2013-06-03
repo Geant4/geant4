@@ -203,8 +203,6 @@ class G4RootAnalysisManager : public G4VAnalysisManager
 
     // data members
     //
-    G4bool  fIsMaster;
-    
     tools::wroot::file*       fFile;
     tools::wroot::directory*  fHistoDirectory;
     tools::wroot::directory*  fNtupleDirectory;

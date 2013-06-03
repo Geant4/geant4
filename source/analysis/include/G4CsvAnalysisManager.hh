@@ -161,7 +161,6 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
 
     // methods
     //
-    G4String GetNtupleFileName(G4CsvNtupleDescription* ntupleDescription) const;
     G4bool CreateNtupleFile(G4CsvNtupleDescription* ntupleDescription);
     G4bool CloseNtupleFile(G4CsvNtupleDescription* ntupleDescription); 
 
@@ -182,7 +181,6 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
  
     // data members
     //
-    G4bool  fIsMaster;
     std::vector<G4CsvNtupleDescription*> fNtupleVector;
 };
 

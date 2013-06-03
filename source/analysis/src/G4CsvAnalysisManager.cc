@@ -29,7 +29,6 @@
 
 #include "G4CsvAnalysisManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4Threading.hh"
 
 #include <iostream>
 
@@ -40,6 +39,9 @@ G4ThreadLocal G4CsvAnalysisManager* G4CsvAnalysisManager::fgInstance = 0;
 G4CsvAnalysisManager* G4CsvAnalysisManager::Create(G4bool isMaster)
 {
   if ( fgInstance == 0 ) {
+    // In sequential mode create always master manager
+    if ( ! G4VAnalysisManager::IsMT() ) isMaster = true;
+
     fgInstance = new G4CsvAnalysisManager(isMaster);
   }
   
@@ -58,8 +60,7 @@ G4CsvAnalysisManager* G4CsvAnalysisManager::Instance()
 
 //_____________________________________________________________________________
 G4CsvAnalysisManager::G4CsvAnalysisManager(G4bool isMaster)
- : G4VAnalysisManager("Csv"),
-   fIsMaster(isMaster),
+ : G4VAnalysisManager(isMaster, "Csv"),
    fNtupleVector()
 {
   if ( ( isMaster && fgMasterInstance ) ||
@@ -93,42 +94,22 @@ G4CsvAnalysisManager::~G4CsvAnalysisManager()
 //
 
 //_____________________________________________________________________________
-G4String G4CsvAnalysisManager::GetNtupleFileName(
-                                  G4CsvNtupleDescription* ntupleDescription) const
-{                                  
-  G4String name(fFileName);
-  name.append("_");
-  name.append(ntupleDescription->fNtupleBooking->m_name);
-  // Add thread Id to a file name if MT processing
-  if ( ! fIsMaster ) {
-    std::ostringstream os;
-    os << G4GetPidId();
-    name.append("_t");
-    name.append(os.str());
-  }  
-  // Add file extension .csv if no extension is given
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }
-  return name;
-}      
-
-//_____________________________________________________________________________
 G4bool G4CsvAnalysisManager::CreateNtupleFile(
                                   G4CsvNtupleDescription* ntupleDescription)
 {
+  G4String ntupleName = ntupleDescription->fNtupleBooking->m_name;
+
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "file", GetNtupleFileName(ntupleDescription));
+    fpVerboseL4->Message("create", "file", GetNtupleFileName(ntupleName));
 #endif
 
   std::ofstream* ntupleFile 
-    = new std::ofstream(GetNtupleFileName(ntupleDescription));
+    = new std::ofstream(GetNtupleFileName(ntupleName));
   if ( ntupleFile->fail() ) {
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " 
-                << GetNtupleFileName(ntupleDescription);
+                << GetNtupleFileName(ntupleName);
     G4Exception("G4CsvAnalysisManager::CreateNtupleFile()",
                 "Analysis_W001", JustWarning, description);
     return false;
@@ -136,7 +117,7 @@ G4bool G4CsvAnalysisManager::CreateNtupleFile(
   
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "file", GetNtupleFileName(ntupleDescription));
+    fpVerboseL1->Message("create", "file", GetNtupleFileName(ntupleName));
 #endif
 
   ntupleDescription->fFile = ntupleFile;
@@ -147,9 +128,11 @@ G4bool G4CsvAnalysisManager::CreateNtupleFile(
 G4bool G4CsvAnalysisManager::CloseNtupleFile(
                                   G4CsvNtupleDescription* ntupleDescription)
 {
+  G4String ntupleName = ntupleDescription->fNtupleBooking->m_name;
+
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("close", "file", GetNtupleFileName(ntupleDescription));
+    fpVerboseL4->Message("close", "file", GetNtupleFileName(ntupleName));
 #endif
 
   // close file
@@ -157,7 +140,7 @@ G4bool G4CsvAnalysisManager::CloseNtupleFile(
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("close", "file", GetNtupleFileName(ntupleDescription));
+    fpVerboseL1->Message("close", "file", GetNtupleFileName(ntupleName));
 #endif
 
   return true; 
@@ -168,7 +151,8 @@ void G4CsvAnalysisManager::CreateNtuplesFromBooking()
 {
 // Create ntuple from ntuple_booking.
 
-  if ( ! fNtupleVector.size() ) return;     
+  // Do not create ntuples on master thread 
+  if ( IsMT() && fIsMaster ) return;     
   
   std::vector<G4CsvNtupleDescription*>::iterator itn;  
   for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {

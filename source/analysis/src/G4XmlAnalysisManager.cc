@@ -29,13 +29,13 @@
 
 #include "G4XmlAnalysisManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
 #include "tools/waxml/begend"
 #include "tools/waxml/histos"
 
 #include <iostream>
+#include <cstdio>
 
 // mutex in a file scope
 
@@ -53,6 +53,9 @@ G4ThreadLocal G4XmlAnalysisManager* G4XmlAnalysisManager::fgInstance = 0;
 G4XmlAnalysisManager* G4XmlAnalysisManager::Create(G4bool isMaster)
 {
   if ( fgInstance == 0 ) {
+    // In sequential mode create always master manager
+    if ( ! G4VAnalysisManager::IsMT() ) isMaster = true;
+
     fgInstance = new G4XmlAnalysisManager(isMaster);
   }
   
@@ -71,8 +74,7 @@ G4XmlAnalysisManager* G4XmlAnalysisManager::Instance()
 
 //_____________________________________________________________________________
 G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
- : G4VAnalysisManager("Xml"),
-   fIsMaster(isMaster),
+ : G4VAnalysisManager(isMaster, "Xml"),
    fHnFile(0),
    fH1Vector(),   
    fH2Vector(),   
@@ -123,40 +125,21 @@ G4XmlAnalysisManager::~G4XmlAnalysisManager()
 //
 
 //_____________________________________________________________________________
-G4String G4XmlAnalysisManager::GetHnFileName() const
-{                                  
-  G4String name(fFileName);
-  // Add thread Id to a file name if MT processing
-  if ( ! fIsMaster ) {
-    std::ostringstream os;
-    os << G4GetPidId();
-    name.append("_t");
-    name.append(os.str());
-  }  
-  // Add file extension .xml if no extension is given
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }
-  return name;
-}      
-
-//_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::CreateHnFile()
 {
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "file", GetHnFileName());
+    fpVerboseL4->Message("create", "file", GetFullFileName());
 #endif
   
   // delete a previous file if it exists
   if ( fHnFile ) delete fHnFile; 
   
-  fHnFile = new std::ofstream(GetHnFileName());
+  fHnFile = new std::ofstream(GetFullFileName());
   if ( fHnFile->fail() ) {
     G4ExceptionDescription description;
-    description << "      " << "Cannot open file " << GetHnFileName();
-    G4Exception("G4XmlAnalysisManager::OpenFile()",
+    description << "      " << "Cannot open file " << GetFullFileName();
+    G4Exception("G4XmlAnalysisManager::CreateHnFile()",
               "Analysis_W001", JustWarning, description);
     return false;
   }
@@ -164,7 +147,7 @@ G4bool G4XmlAnalysisManager::CreateHnFile()
   tools::waxml::begin(*fHnFile);
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "file", GetHnFileName());
+    fpVerboseL1->Message("create", "file", GetFullFileName());
 #endif
 
   return true;
@@ -179,58 +162,48 @@ G4bool G4XmlAnalysisManager::CloseHnFile()
 
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("close", "file", GetHnFileName());
+    fpVerboseL4->Message("close", "file", GetFullFileName());
 #endif
 
   // close file
   tools::waxml::end(*fHnFile);
   fHnFile->close(); 
 
+  // delete file if empty
+  if ( fHnFile && ( ! fH1Vector.size() ) && ( ! fH2Vector.size() ) ) {
+    std::remove(GetFullFileName());
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("close", "file", GetHnFileName());
+    if ( fpVerboseL1 ) 
+      fpVerboseL1->Message("delete", "empty file", GetFullFileName());
 #endif
+  }
+  else {
+#ifdef G4VERBOSE
+    if ( fpVerboseL1 ) 
+      fpVerboseL1->Message("close", "file", GetFullFileName());
+#endif
+  }
 
   return true; 
 } 
    
 //_____________________________________________________________________________
-G4String G4XmlAnalysisManager::GetNtupleFileName(
-                                    G4XmlNtupleDescription* ntupleDescription) const
-{                                  
-  G4String name(fFileName);
-  name.append("_");
-  name.append(ntupleDescription->fNtupleBooking->m_name);
-  // Add thread Id to a file name if MT processing
-  if ( ! fIsMaster ) {
-    std::ostringstream os;
-    os << G4GetPidId();
-    name.append("_t");
-    name.append(os.str());
-  }  
-  // Add file extension .xml if no extension is given
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }
-  return name;
-}      
-
-//_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::CreateNtupleFile(
                                     G4XmlNtupleDescription* ntupleDescription)
 {
+  G4String ntupleName = ntupleDescription->fNtupleBooking->m_name;
+
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "file", GetNtupleFileName(ntupleDescription));
+    fpVerboseL4->Message("create", "file", GetNtupleFileName(ntupleName));
 #endif
 
   std::ofstream* ntupleFile 
-    = new std::ofstream(GetNtupleFileName(ntupleDescription));
+    = new std::ofstream(GetNtupleFileName(ntupleName));
   if ( ntupleFile->fail() ) {
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " 
-                << GetNtupleFileName(ntupleDescription);
+                << GetNtupleFileName(ntupleName);
     G4Exception("G4XmlAnalysisManager::CreateNtupleFile()",
                 "Analysis_W001", JustWarning, description);
     return false;
@@ -241,7 +214,7 @@ G4bool G4XmlAnalysisManager::CreateNtupleFile(
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "file", GetNtupleFileName(ntupleDescription));
+    fpVerboseL1->Message("create", "file", GetNtupleFileName(ntupleName));
 #endif
 
   return true;
@@ -251,9 +224,11 @@ G4bool G4XmlAnalysisManager::CreateNtupleFile(
 G4bool G4XmlAnalysisManager::CloseNtupleFile(
                                     G4XmlNtupleDescription* ntupleDescription)
 {
+  G4String ntupleName = ntupleDescription->fNtupleBooking->m_name;
+
 #ifdef G4VERBOSE
   if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("close", "file", GetNtupleFileName(ntupleDescription));
+    fpVerboseL4->Message("close", "file", GetNtupleFileName(ntupleName));
 #endif
 
   // close file
@@ -262,7 +237,7 @@ G4bool G4XmlAnalysisManager::CloseNtupleFile(
 
 #ifdef G4VERBOSE
   if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("close", "file", GetNtupleFileName(ntupleDescription));
+    fpVerboseL1->Message("close", "file", GetNtupleFileName(ntupleName));
 #endif
 
   return true; 
@@ -273,7 +248,8 @@ void G4XmlAnalysisManager::CreateNtuplesFromBooking()
 {
 // Create ntuple from ntuple_booking.
 
-  if ( ! fNtupleVector.size() ) return;     
+  // Do not create ntuples on master thread 
+  if ( IsMT() && fIsMaster ) return;     
   
   std::vector<G4XmlNtupleDescription*>::iterator itn;  
   for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {
@@ -625,10 +601,10 @@ G4bool G4XmlAnalysisManager::Write()
 
       G4ExceptionDescription description;
       description 
-        << "      " << "No master G4RootAnalysisManager instance exists." 
+        << "      " << "No master G4XmlAnalysisManager instance exists." 
         << G4endl 
         << "      " << "Histogram data will not be merged.";
-        G4Exception("G4RootAnalysisManager::Write()",
+        G4Exception("G4XmlAnalysisManager::Write()",
                   "Analysis_W014", JustWarning, description);
                   
       // Create Hn file per thread
@@ -1165,12 +1141,15 @@ void G4XmlAnalysisManager::FinishNtuple(G4int ntupleId)
   }  
 #endif
 
-  G4String path = "/";
-  path.append(fNtupleDirectoryName);
-  ntupleDescription->fNtuple
-    ->write_header(path, ntupleBooking->m_name, ntupleBooking->m_title);  
+  // Finish ntuple if ntuple already exists
+  if ( ntupleDescription->fNtuple ) {
+    G4String path = "/";
+    path.append(fNtupleDirectoryName);
+    ntupleDescription->fNtuple
+      ->write_header(path, ntupleBooking->m_name, ntupleBooking->m_title);  
 
-  fLockNtupleDirectoryName = true;
+    fLockNtupleDirectoryName = true;
+  }  
 
 #ifdef G4VERBOSE
   if ( fpVerboseL2 ) {
