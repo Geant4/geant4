@@ -1182,8 +1182,9 @@ void G4VisManager::RegisterEndOfRunUserVisAction
  G4VUserVisAction* pVisAction,
  const G4VisExtent& extent) {
   fEndOfRunUserVisActions.push_back(UserVisAction(name,pVisAction));
-  fUserVisActionExtents[pVisAction] = extent;
-  if (extent.GetExtentRadius() <= 0.) {
+  if (extent.GetExtentRadius() > 0.) {
+    fUserVisActionExtents[pVisAction] = extent;
+  } else {
     if (fVerbosity >= warnings) {
       G4cout << 
 	"WARNING: No extent set for user vis action \"" << name << "\"."

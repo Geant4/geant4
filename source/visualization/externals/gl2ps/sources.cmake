@@ -19,6 +19,9 @@
 include_directories(${CLHEP_INCLUDE_DIRS})
 include_directories(${ZLIB_INCLUDE_DIRS})
 
+# List internal includes needed.
+include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
+
 # Must have GL headers available
 include_directories(${OPENGL_INCLUDE_DIR})
 

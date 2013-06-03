@@ -57,8 +57,8 @@ protected:
  const char * fFileName;
  FILE* fFile;
  GLint fViewport[4];
- int fBufferSize;
- int fBufferSizeLimit;
+ GLint fBufferSize;
+ GLint fBufferSizeLimit;
 };
 
 #endif

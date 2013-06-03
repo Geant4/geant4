@@ -230,14 +230,21 @@ if(GEANT4_USE_QT)
 
 
     # Include the UseQt file to build the moc wrappers
+    #  !!! ONLY QT4 to be comment with QT5
     include(${QT_USE_FILE})
 
     # Add the moc sources - must use absolute path to the files
+    #  !!! ONLY QT4 to be comment with QT5
     QT4_WRAP_CPP(G4OPENGL_MOC_SOURCES
         ${CMAKE_SOURCE_DIR}/source/visualization/OpenGL/include/G4OpenGLQtExportDialog.hh
         ${CMAKE_SOURCE_DIR}/source/visualization/OpenGL/include/G4OpenGLQtMovieDialog.hh
         ${CMAKE_SOURCE_DIR}/source/visualization/OpenGL/include/G4OpenGLQtViewer.hh
          OPTIONS -DG4VIS_BUILD_OPENGLQT_DRIVER)
+#    QT5_WRAP_CPP(G4OPENGL_MOC_SOURCES
+#        ${CMAKE_SOURCE_DIR}/source/visualization/OpenGL/include/G4OpenGLQtExportDialog.hh
+#        ${CMAKE_SOURCE_DIR}/source/visualization/OpenGL/include/G4OpenGLQtMovieDialog.hh
+#        ${CMAKE_SOURCE_DIR}/source/visualization/OpenGL/include/G4OpenGLQtViewer.hh
+#         OPTIONS -DG4VIS_BUILD_OPENGLQT_DRIVER)
 
     list(APPEND G4VIS_MODULE_OPENGL_SOURCES ${G4OPENGL_MOC_SOURCES})
 
@@ -248,6 +255,36 @@ if(GEANT4_USE_QT)
 
     # Add in Qt libraries
     list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${QT_LIBRARIES})
+endif()
+
+
+#----------------------------------------------------------------------------
+# Add Wt OpenGL support if requested
+#
+if(GEANT4_USE_WT)
+    #
+    # Add in the extra Wt GL sources
+    #
+    list(APPEND G4VIS_MODULE_OPENGL_HEADERS
+        G4OpenGLImmediateWt.hh
+        G4OpenGLImmediateWtViewer.hh
+        G4OpenGLWtViewer.hh)
+
+    list(APPEND G4VIS_MODULE_OPENGL_SOURCES
+        G4OpenGLImmediateWt.cc
+        G4OpenGLImmediateWtViewer.cc
+        G4OpenGLWtViewer.cc)
+
+    # Must have Wt includes...
+    include_directories(${Wt_INCLUDE_DIR})
+
+    # Add the definitions - these will also be used to compile the moc sources
+    # Argh.. Have to remember about INTY and UI because of their use...
+    add_definitions(-DG4VIS_BUILD_OPENGLWT_DRIVER -DG4INTY_BUILD_WT
+        -DG4UI_BUILD_WT_SESSION)
+
+    # Add in Wt libraries
+    list(APPEND G4VIS_MODULE_OPENGL_LINK_LIBRARIES ${WT_LIBRARY})
 endif()
 
 

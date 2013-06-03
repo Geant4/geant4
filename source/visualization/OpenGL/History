@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st May 2013 - Laurent Garnier
+- Improvments about Wt driver configuration
+
+25th April 2013  Laurent Garnier
+- Add cmake configuration for Wt and Qt5, 
+  check in the code : "!!! ONLY QT4 to be comment with QT5" 
+- G4OpenGLQtViewer.cc : Add Qt5 support
+
 26th March 2013  John Allison  (opengl-V09-06-04)
 - G4OpenGLStoredQtSceneHandler.cc:
   o Commented out unused typedefs that give warnings with gcc-4.8.0.

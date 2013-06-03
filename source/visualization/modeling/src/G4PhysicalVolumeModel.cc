@@ -579,6 +579,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (copyForVAM) {
     delete pModifiedVisAtts;
     pVisAttribs = pUnmodifiedVisAtts;
+    copyForVAM = false;
   }
   
   // Vis atts for this volume no longer needed if created...

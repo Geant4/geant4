@@ -17,6 +17,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3rd June 2013  John Allison (visexternal-V09-06-04)
+- G4OpenGL2PSAction.cc: One more try at compiling on Windows…
+  o Added brackets to prevent possible macro expansion of "max":
+      fBufferSizeLimit = (std::numeric_limits<GLint>::max)();
+
+2nd June 2013  John Allison (visexternal-V09-06-03)
+- G4OpenGL2PSAction.cc: Added #include <cstdlib> and <cstring>.
+
+30th May 2013  John Allison (visexternal-V09-06-02)
+- G4OpenGL2PSAction.cc: Added #include <limits>.
+
+22nd May 2013  Laurent Garnier
+- sources.cmake: Add missing include for "global/management"
+- G4OpenGL2PSAction.cc :
+  o Fix another memory leak for aFileName, perhaps the same as 
+    bugzilla #1469 ? It happens on big scenes when extendBufferSize was called. 
+  o replace the use of INT_MAX by std::numeric_limits<GLint>::max()
+
+21st May 2013  Laurent Garnier
+- G4OpenGL2PSAction.cc : Replace "limits.h" by "global.hh"
+
+17th May 2013  Laurent Garnier
+- G4OpenGL2PSAction.cc : Try to fix bugzilla #1469
+   replace the flushing output by a immediate I/O File :
+   setvbuf ( fFile , NULL , _IONBF , 2048 );
+
 26th March 2013  Ben Morgan (visexternal-V09-06-01)
 - source.cmake : Update include paths/library links to use new ZLIB
   variables for transparent use of internal/external zlib.

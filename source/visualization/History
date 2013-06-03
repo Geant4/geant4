@@ -24,6 +24,21 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+3rd June 2013  John Allison  (vis-V09-06-15)
+- visexternal-V09-06-04: One more try at compiling on Windows!
+
+2nd June 2013  John Allison  (vis-V09-06-14)
+- visexternal-V09-06-03:
+  o G4OpenGL2PSAction.cc: Added #include <cstdlib> and <cstring>.
+
+30th May 2013  John Allison  (vis-V09-06-13)
+- visexternal-V09-06-02: G4OpenGL2PSAction.cc: Added #include <limits>.
+
+29th May 2013  John Allison  (vis-V09-06-12)
+- modeling-V09-06-05: Bug fix for vis attribute modifying (VAM).
+- visman-V09-06-05: Improved safety, spelling and guidance.
+- openinventor-V09-06-04: SoCounterAction.cc: Coverity fix.
+
 26th March 2013  John Allison  (vis-V09-06-11)
 - modeling-V09-06-04: Improved G4Exception messages.
 - visXXX-V09-06-01, opengl-V09-06-04:

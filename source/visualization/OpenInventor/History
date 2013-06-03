@@ -20,6 +20,15 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+29th May 2013  John Allison  (openinventor-V09-06-04)
+- SoCounterAction.cc:
+  o Completed initialisation list in constructor (Coverity warning).
+
+09 April 2013  Frederick Jones
+- G4OpenInventorXtExaminerViewer.hh:
+  o Removed unneeded assignment operator in struct sceneElement.
+    (Coverity warning)
+
 15th March 2013  John Allison  (openinventor-V09-06-03)
 - G4OpenInventorXtExaminerViewer.cc:
   o Changed strlcpy back to strncpy.  Fixes SLC5 compilation error.

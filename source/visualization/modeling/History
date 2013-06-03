@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+29th May 2013  John Allison  (modeling-V09-06-05)
+- G4PhysicalVolumeModel.cc: Bug fix for vis attribute modifying (VAM).
+  (The boolean copyForVAM was not being reset after use.)
+
 26th March 2013  John Allison  (modeling-V09-06-04)
 - G4TrajectoryDrawByAttribute.cc: Improved G4Exception messages.
 

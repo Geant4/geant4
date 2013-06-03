@@ -249,24 +249,14 @@ private:
 	  CameraType camType;
 	  float	height;
   };
-  
-  struct sceneElement {
-	  std::string name;
-	  SoFullPath * path;
-	  SbVec3f center;
-	  float closestPointZCoord;
 
-	  sceneElement operator=(sceneElement const &rhs) const {
-                  if (&rhs == this) return *this;
-                  sceneElement el;
-		  el.name = rhs.name;
-		  el.path = rhs.path;
-		  el.center = rhs.center;
-		  el.closestPointZCoord = rhs.closestPointZCoord;
-
-		  return el;
-	  }
-  };
+   // FWJ removed unneeded assignment operator
+   struct sceneElement {
+      std::string name;
+      SoFullPath* path;
+      SbVec3f center;
+      float closestPointZCoord;
+   };
 
    struct elementForSorting {
       float closestPointZCoord;

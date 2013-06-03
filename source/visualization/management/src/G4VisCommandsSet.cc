@@ -279,7 +279,9 @@ G4VisCommandSetTouchable::G4VisCommandSetTouchable ()
   fpCommand->SetGuidance
   ("Please provide a list of space-separated physical volume names and"
    "\ncopy number pairs starting at the world volume, e.g:"
-   "\n/vis/set/touchable World 0 Envelope 0 Shape1 0");
+   "\n  /vis/set/touchable World 0 Envelope 0 Shape1 0"
+   "\n(To get list of touchables, use \"/vis/drawTree\")"
+   "\n(To save, use \"/vis/viewer/save\")");
   parameter = new G4UIparameter ("list", 's', omitable = false);
   parameter->SetGuidance
   ("List of physical volume names and copy number pairs");
