@@ -40,15 +40,20 @@
 //     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#include "OpNoviceWorkerInitialization.hh"
+#else
 #include "G4RunManager.hh"
+#include "OpNoviceSteppingVerbose.hh"
+#endif
+
 #include "G4UImanager.hh"
 
 #include "OpNovicePhysicsList.hh"
-#include "OpNovicePrimaryGeneratorAction.hh"
 #include "OpNoviceDetectorConstruction.hh"
-#include "OpNoviceRunAction.hh"
-#include "OpNoviceStackingAction.hh"
-#include "OpNoviceSteppingVerbose.hh"
+
+#include "OpNoviceActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -62,51 +67,43 @@
 
 int main(int argc,char** argv)
 {
-  // Seed the random number generator manually
-  //
-  G4long myseed = 345354;
-  CLHEP::HepRandom::setTheSeed(myseed);
-
-  // User Verbose output class
-  //
-  G4VSteppingVerbose* verbosity = new OpNoviceSteppingVerbose;
-  G4VSteppingVerbose::SetInstance(verbosity);
-  
   // Run manager
   //
-  G4RunManager* runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else
+  // User Verbose output class
+  //
+  G4VSteppingVerbose::SetInstance(new OpNoviceSteppingVerbose());
+
+  // Seed the random number generator manually
+  G4long myseed = 345354;
+  G4Random::setTheSeed(myseed);
+
+  G4RunManager * runManager = new G4RunManager;
+#endif
 
   // UserInitialization classes - mandatory
   //
-  G4VUserPhysicsList* physics = new OpNovicePhysicsList;
-  runManager-> SetUserInitialization(physics);
-  //
-  G4VUserPrimaryGeneratorAction* gen_action = 
-                                           new OpNovicePrimaryGeneratorAction;
-  runManager->SetUserAction(gen_action);
-  //
-  G4VUserDetectorConstruction* detector = new OpNoviceDetectorConstruction;
-  runManager-> SetUserInitialization(detector);
-  
-#ifdef G4VIS_USE
-  // visualization manager
-  //
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
+  runManager-> SetUserInitialization(new OpNoviceDetectorConstruction());
+  runManager-> SetUserInitialization(new OpNovicePhysicsList());
 
-  // UserAction classes
-  //
-  G4UserRunAction* run_action = new OpNoviceRunAction;
-  runManager->SetUserAction(run_action);
-  //
-  G4UserStackingAction* stacking_action = new OpNoviceStackingAction;
-  runManager->SetUserAction(stacking_action);
-  
+  runManager->SetUserInitialization(new OpNoviceActionInitialization());
+
   // Initialize G4 kernel
   //
   runManager->Initialize();
-    
+
+#ifdef G4VIS_USE
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  visManager->Initialize();
+#endif
+
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
@@ -116,8 +113,12 @@ int main(int argc,char** argv)
 #ifdef G4UI_USE
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");     
+      UImanager->ApplyCommand("/control/execute vis.mac");
+#else
+      UImanager->ApplyCommand("/control/execute OpNovice.in");
 #endif
+      if (ui->IsGUI())
+         UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
       delete ui;
 #endif
@@ -138,7 +139,6 @@ int main(int argc,char** argv)
   delete visManager;
 #endif
   delete runManager;
-  delete verbosity;
 
   return 0;
 }
