@@ -76,7 +76,7 @@ class G4GeometryMessenger : public G4UImessenger
     void RecursiveOverlapTest();
 
     G4UIdirectory             *geodir, *navdir, *testdir;
-    G4UIcmdWithABool          *chkCmd, *pchkCmd, *verCmd, *runCmd;
+    G4UIcmdWithABool          *chkCmd, *pchkCmd, *verCmd;
     G4UIcmdWithoutParameter   *recCmd, *resCmd;
     G4UIcmdWithADoubleAndUnit *tolCmd;
     G4UIcmdWithAnInteger      *verbCmd, *rslCmd, *rcsCmd, *rcdCmd;

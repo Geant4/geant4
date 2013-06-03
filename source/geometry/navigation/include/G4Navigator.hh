@@ -333,6 +333,10 @@ class G4Navigator
 
  private:
 
+  G4Navigator(const G4Navigator&);
+  G4Navigator& operator=(const G4Navigator&);
+    // Private copy-constructor and assignment operator.
+
   void ComputeStepLog(const G4ThreeVector& pGlobalpoint,
                             G4double moveLenSq) const;
     // Log and checks for steps larger than the tolerance

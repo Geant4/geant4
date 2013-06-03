@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jun 3rd, 2013 - G.Cosmo (geomnav-V09-06-09)
+-----------------------
+- Corrected deletion of commands in destructor and removed unused pointer.
+- Made copy-ctor and assignment operator private in G4Navigator, as not
+  supposed to be copied or cloned.
+
 May 23rd, 2013 - G.Cosmo (geomnav-V09-06-08)
 ------------------------
 - Archived GeomTest* classes for overlaps checking through grid/cylinder

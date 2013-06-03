@@ -170,10 +170,10 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
 //
 G4GeometryMessenger::~G4GeometryMessenger()
 {
-  delete verCmd; delete recCmd;
+  delete verCmd; delete recCmd; delete rslCmd;
   delete resCmd; delete rcsCmd; delete rcdCmd;
   delete tolCmd;
-  delete resCmd; delete verbCmd; delete pchkCmd; delete chkCmd;
+  delete verbCmd; delete pchkCmd; delete chkCmd;
   delete geodir; delete navdir; delete testdir;
   delete tvolume;
 }
