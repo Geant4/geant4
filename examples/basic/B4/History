@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03/06/13 I. Hrivnacova (exampleB4-V09-06-06)
+- Moved creating analysis manager and booking histograms & ntuples
+  in run action constructor; this makes available /analysis commands
+
 29/05/13 I. Hrivnacova (exampleB4-V09-06-05)
 - Fixed detector construction classes:
   Moving creating setMagField command from the constructor in 
