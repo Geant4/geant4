@@ -23,29 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
-class SteppingVerbose;
+#ifndef Analysis_h
+#define Analysis_h 1
 
-#ifndef SteppingVerbose_h
-#define SteppingVerbose_h 1
+#include "g4root.hh"
 
-#include "G4SteppingVerbose.hh"
-#include "G4UnitsTable.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class SteppingVerbose : public G4SteppingVerbose 
-{
-public:   
-  
-  SteppingVerbose();
-  ~SteppingVerbose();
-  
-  void StepInfo();
-  void TrackingStarted();
-
-};
 #endif

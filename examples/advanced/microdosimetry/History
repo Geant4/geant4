@@ -9,6 +9,12 @@ $Id$
                        Package History file
                        --------------------
 
+3 June 2013 - M. Karamitros - microdosimetry-V09-06-02
+- Fix initialization of sequential run
+
+10 Apr 2013 - M. Karamitros - microdosimetry-V09-06-01
+- Migration to MT
+
 10 Apr 2013 - S. Incerti - microdosimetry-V09-06-00
 - Updated msc model
 

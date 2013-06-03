@@ -23,12 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
+//
 
-#ifndef TRACKINGACTION_HH
-#define TRACKINGACTION_HH
+#ifndef TrackingAction_h
+#define TrackingAction_h
 
 #include "G4UserTrackingAction.hh"
 #include <map>
@@ -68,4 +71,4 @@ private:
 };
 
 
-#endif // TRACKINGACTION_HH
+#endif

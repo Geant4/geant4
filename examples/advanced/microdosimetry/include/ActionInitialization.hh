@@ -30,25 +30,26 @@
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
+#include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class DetectorConstruction;
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class ActionInitialization : public G4VUserActionInitialization
 {
-public:
+  public:
+    ActionInitialization(DetectorConstruction*);
+    virtual ~ActionInitialization();
 
-  PrimaryGeneratorAction();    
-  ~PrimaryGeneratorAction();
-  
-  void GeneratePrimaries(G4Event*);
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-private:
-
-  G4ParticleGun*           fParticleGun;
+  private:
+    DetectorConstruction* fDetectorConstruction;
 };
+
 #endif
+
+    
