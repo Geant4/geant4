@@ -317,7 +317,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 G4PolyhedraSide::G4PolyhedraSide( __void__&)
   : numSide(0), startPhi(0.), deltaPhi(0.), endPhi(0.),
     phiIsOpen(false), allBehind(false), cone(0), vecs(0), edges(0),
-    lenRZ(0.), edgeNorm(0.), kCarTolerance(0.), fSurfaceArea(0.)
+    lenRZ(0.), edgeNorm(0.), kCarTolerance(0.), fSurfaceArea(0.), instanceID(0)
 {
   r[0] = r[1] = 0.;
   z[0] = z[1] = 0.;

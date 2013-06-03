@@ -181,7 +181,7 @@ G4PolyconeSide::G4PolyconeSide( __void__& )
   : startPhi(0.), deltaPhi(0.), phiIsOpen(false), allBehind(false),
     cone(0), rNorm(0.), zNorm(0.), rS(0.), zS(0.), length(0.),
     prevRS(0.), prevZS(0.), nextRS(0.), nextZS(0.), ncorners(0), corners(0),
-    kCarTolerance(0.), fSurfaceArea(0.)
+    kCarTolerance(0.), fSurfaceArea(0.), instanceID(0)
 {
   r[0] = r[1] = 0.;
   z[0] = z[1] = 0.;

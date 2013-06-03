@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-Jun-2013  G.Cosmo (geom-specific-V09-06-12)
+- Fixed minor Coverity defect in G4PolyhedraSide and G4PolyconeSide.
 
 22-Apr-2013  J.Apostolakis (geom-specific-V09-06-11)
 - Revised G4ExtrudedSolid::IsSameLine to use the perpendicular
