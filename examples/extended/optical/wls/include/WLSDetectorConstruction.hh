@@ -66,6 +66,8 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
     G4VPhysicalVolume* ConstructDetector();
 
+    virtual void ConstructSDandField();
+
     void UpdateGeometry();
  
     // Set Material Commands for World and WLSfiber
@@ -198,8 +200,6 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
     G4double fHoleLength;
     G4double fCoatingThickness;
     G4double fCoatingRadius;
-
-    static WLSPhotonDetSD* fMPPCSD;
 
   private:
 

@@ -64,8 +64,6 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-WLSPhotonDetSD* WLSDetectorConstruction::fMPPCSD = NULL;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 WLSDetectorConstruction::WLSDetectorConstruction()
@@ -634,7 +632,7 @@ void WLSDetectorConstruction::ConstructFiber()
   G4LogicalVolume*   logicPhotonDet =
                                     new G4LogicalVolume(solidPhotonDet,
                                                         FindMaterial("G4_Al"),
-                                                        "PhotonDet");
+                                                        "PhotonDet_LV");
 
   new G4PVPlacement(0,
                     G4ThreeVector(0.0,0.0,0.0),
@@ -665,20 +663,18 @@ void WLSDetectorConstruction::ConstructFiber()
 
  
   new G4LogicalSkinSurface("PhotonDetSurface",logicPhotonDet,photonDetSurface); 
-
-  if (!fMPPCSD) {
-     G4String mppcSDName = "WLS/PhotonDet";
-     fMPPCSD = new WLSPhotonDetSD(mppcSDName);
-
-     G4SDManager* SDman = G4SDManager::GetSDMpointer();
-     SDman->AddNewDetector(fMPPCSD);
-  }
-
-  // Setting the detector to be sensitive
-  logicPhotonDet->SetSensitiveDetector(fMPPCSD);
-
 }
 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void WLSDetectorConstruction::ConstructSDandField()
+{
+  G4String mppcSDName = "WLS/PhotonDet";
+  WLSPhotonDetSD* mppcSD = new WLSPhotonDetSD(mppcSDName);
+
+  SetSensitiveDetector("PhotonDet_LV", mppcSD, true);
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSDetectorConstruction::UpdateGeometry()

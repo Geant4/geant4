@@ -23,64 +23,54 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: WLSActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file optical/wls/src/WLSPhotonDetHit.cc
-/// \brief Implementation of the WLSPhotonDetHit class
-//
-//
-#include "WLSPhotonDetHit.hh"
+/// \file WLSActionInitialization.cc
+/// \brief Implementation of the WLSActionInitialization class
 
-G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator=0;
+#include "WLSActionInitialization.hh"
+#include "WLSDetectorConstruction.hh"
+
+#include "WLSPrimaryGeneratorAction.hh"
+
+#include "WLSRunAction.hh"
+#include "WLSEventAction.hh"
+#include "WLSTrackingAction.hh"
+#include "WLSSteppingAction.hh"
+#include "WLSStackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPhotonDetHit::WLSPhotonDetHit()
+WLSActionInitialization::WLSActionInitialization(WLSDetectorConstruction* det)
+ : G4VUserActionInitialization(), fDetector(det)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+WLSActionInitialization::~WLSActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void WLSActionInitialization::BuildForMaster() const
 {
-  fArrivalTime = 0.;
-  fPosArrive   = G4ThreeVector(0., 0., 0.);
-  fPosExit     = G4ThreeVector(0., 0., 0.);
+  SetUserAction(new WLSRunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-WLSPhotonDetHit::WLSPhotonDetHit(G4ThreeVector pExit,
-                                 G4ThreeVector pArrive,
-                                 G4double pTime)
+void WLSActionInitialization::Build() const
 {
-  fPosExit     = pExit;
-  fPosArrive   = pArrive;
-  fArrivalTime = pTime;
-}
+  SetUserAction(new WLSPrimaryGeneratorAction(fDetector));
+
+  WLSRunAction* runAction = new WLSRunAction();
+  WLSEventAction* eventAction = new WLSEventAction(runAction);
+
+  SetUserAction(runAction);
+  SetUserAction(eventAction);
+  SetUserAction(new WLSTrackingAction());
+  SetUserAction(new WLSSteppingAction(fDetector));
+  SetUserAction(new WLSStackingAction());
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-WLSPhotonDetHit::~WLSPhotonDetHit() { }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-WLSPhotonDetHit::WLSPhotonDetHit(const WLSPhotonDetHit &right)
-  : G4VHit()
-{
-  *this = right;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-const WLSPhotonDetHit& WLSPhotonDetHit::operator=(const WLSPhotonDetHit &right)
-{
-  fPosExit     = right.fPosExit;
-  fPosArrive   = right.fPosArrive;
-  fArrivalTime = right.fArrivalTime;
-
-  return *this;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4int WLSPhotonDetHit::operator==(const WLSPhotonDetHit& right) const
-{
-  return fPosExit     == right.fPosExit    &&
-         fPosArrive   == right.fPosArrive  &&
-         fArrivalTime == right.fArrivalTime;  
-}

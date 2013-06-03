@@ -127,12 +127,12 @@ void WLSEventAction::EndOfEventAction(const G4Event* evt)
   // Save the Random Engine Status at the of event
   if (fRunAction->GetRndmFreq() == 2)
   {
-     CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");
+     G4Random::saveEngineStatus("endOfEvent.rndm");
      G4int evtNb = evt->GetEventID();
      if (evtNb%fPrintModulo == 0)
      {
         G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        CLHEP::HepRandom::showEngineStatus();
+        G4Random::showEngineStatus();
      }
   }
 

@@ -16,6 +16,9 @@ track of all tags.
  
      ----------------------------------------------------------
 
+Jun2 02, 2013 P. Gumplinger (WLS-V09-06-04)
+  migration to MultiThread (MT) capable
+
 May 06, 2013 P. Gumplinger (WLS-V09-06-03)
   Apply all Examples Coding Guidelines
 

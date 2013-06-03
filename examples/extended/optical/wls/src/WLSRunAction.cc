@@ -75,13 +75,13 @@ void WLSRunAction::BeginOfRunAction(const G4Run* aRun)
      time_t systime = time(NULL);
      seeds[0] = (long) systime;
      seeds[1] = (long) (systime*G4UniformRand());
-     CLHEP::HepRandom::setTheSeeds(seeds);
-     CLHEP::HepRandom::showEngineStatus();
+     G4Random::setTheSeeds(seeds);
+     G4Random::showEngineStatus();
   } else {
-     CLHEP::HepRandom::showEngineStatus();
+     G4Random::showEngineStatus();
   }
 
-  if (fSaveRndm > 0) CLHEP::HepRandom::saveEngineStatus("BeginOfRun.rndm");
+  if (fSaveRndm > 0) G4Random::saveEngineStatus("BeginOfRun.rndm");
 
 }
 
@@ -91,7 +91,7 @@ void WLSRunAction::EndOfRunAction(const G4Run* )
 {
   if (fSaveRndm == 1)
   {
-     CLHEP::HepRandom::showEngineStatus();
-     CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
+     G4Random::showEngineStatus();
+     G4Random::saveEngineStatus("endOfRun.rndm");
   }
 }

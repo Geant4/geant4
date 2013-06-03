@@ -46,6 +46,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 
+#include "tls.hh"
+
 class G4VTouchable;
 
 //--------------------------------------------------
@@ -94,7 +96,7 @@ class WLSPhotonDetHit : public G4VHit
 
 typedef G4THitsCollection<WLSPhotonDetHit> WLSPhotonDetHitsCollection;
 
-extern G4Allocator<WLSPhotonDetHit> WLSPhotonDetHitAllocator;
+extern G4ThreadLocal G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator;
 
 //--------------------------------------------------
 // Operator Overloads
@@ -102,14 +104,14 @@ extern G4Allocator<WLSPhotonDetHit> WLSPhotonDetHitAllocator;
 
 inline void* WLSPhotonDetHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) WLSPhotonDetHitAllocator.MallocSingle();
-  return aHit;
+  if(!WLSPhotonDetHitAllocator)
+      WLSPhotonDetHitAllocator = new G4Allocator<WLSPhotonDetHit>;
+  return (void *) WLSPhotonDetHitAllocator->MallocSingle();
 }
 
 inline void WLSPhotonDetHit::operator delete(void *aHit)
 {
-  WLSPhotonDetHitAllocator.FreeSingle((WLSPhotonDetHit*) aHit);
+  WLSPhotonDetHitAllocator->FreeSingle((WLSPhotonDetHit*) aHit);
 }
 
 #endif

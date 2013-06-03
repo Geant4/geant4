@@ -44,21 +44,22 @@
 #include <unistd.h>
 #endif
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#include "WLSWorkerInitialization.hh"
+#else
 #include "G4RunManager.hh"
+#include "WLSSteppingVerbose.hh"
+#endif
+
 #include "G4UImanager.hh"
 
 #include "Randomize.hh"
 
 #include "WLSPhysicsList.hh"
 #include "WLSDetectorConstruction.hh"
-#include "WLSPrimaryGeneratorAction.hh"
 
-#include "WLSRunAction.hh"
-#include "WLSEventAction.hh"
-#include "WLSTrackingAction.hh"
-#include "WLSSteppingAction.hh"
-#include "WLSStackingAction.hh"
-#include "WLSSteppingVerbose.hh"
+#include "WLSActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -75,15 +76,26 @@
 
 int main(int argc,char** argv) 
 {
-  G4String physName = "QGSP_BERT_EMV";
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else
+  // User Verbose output class
+  //
+  G4VSteppingVerbose::SetInstance(new WLSSteppingVerbose());
 
   G4int seed = 123;
   if (argc  > 2) seed = atoi(argv[argc-1]);
 
-  // Choose the Random engine
+  // Choose the Random engine and set the seed
 
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  CLHEP::HepRandom::setTheSeed(seed);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheSeed(seed);
+
+  G4RunManager * runManager = new G4RunManager;
+#endif
+
+  G4String physName = "QGSP_BERT_EMV";
 
 #ifndef WIN32
   G4int c = 0;
@@ -106,14 +118,6 @@ int main(int argc,char** argv)
   }
 #endif
 
-  // My Verbose output class
-
-  G4VSteppingVerbose::SetInstance(new WLSSteppingVerbose);
-  
-  // Construct the default run manager
-
-  G4RunManager * runManager = new G4RunManager;
-
   // Set mandatory initialization classes
 
   WLSDetectorConstruction* detector = new WLSDetectorConstruction();
@@ -122,27 +126,18 @@ int main(int argc,char** argv)
 
   runManager->SetUserInitialization(new WLSPhysicsList(physName));
 
+  // Set mandatory user action class
+
+  runManager->SetUserInitialization(new WLSActionInitialization(detector));
+
 #ifdef G4VIS_USE
-
-  // visualization manager
-
-  G4VisManager* visManager = new G4VisExecutive();
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-
 #endif
-
-  // Set mandatory user action class 
-
-  runManager->SetUserAction( new WLSPrimaryGeneratorAction(detector) );
-
-  WLSRunAction* runAction = new WLSRunAction();
-  WLSEventAction* eventAction = new WLSEventAction(runAction);
-
-  runManager->SetUserAction(runAction);
-  runManager->SetUserAction(eventAction);
-  runManager->SetUserAction( new WLSTrackingAction() );
-  runManager->SetUserAction( new WLSSteppingAction(detector) );
-  runManager->SetUserAction( new WLSStackingAction() );
 
   // Get the pointer to the User Interface manager
 
