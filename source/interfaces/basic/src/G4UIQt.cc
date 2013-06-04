@@ -113,7 +113,10 @@ G4UIQt::G4UIQt (
 ,fCommandArea(NULL)
 ,fCoutTBTextArea(NULL)
 ,fHelpArea(NULL)
+,fUITabWidget(NULL)
 ,fG4cout("")
+,fCoutFilter(NULL)
+,fHistoryTBTableList(NULL)
 ,fHelpTreeWidget(NULL)
 ,fHelpTBWidget(NULL)
 ,fHistoryTBWidget(NULL)
@@ -122,6 +125,10 @@ G4UIQt::G4UIQt (
 ,fHelpLine(NULL)
 ,fViewerTabWidget(NULL)
 ,fCoutText("Output")
+,fEmptyViewerTabLabel(NULL)
+,fMainSplitterWidget(NULL)
+,fRightSplitterWidget(NULL)
+,fHelpVSplitter(NULL)
 ,fLastQTabSizeX(0)
 ,fLastQTabSizeY(0)
 ,fToolbarApp(NULL)
@@ -851,8 +858,11 @@ void G4UIQt::AddButton (
 void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCommand, const char* aFileName){
   if(aLabel==NULL) return; // TO KEEP
   // special case, aCommand could be NULL if aIconFile is not user_icon
-  if ((aCommand==NULL) && (std::string(aIconFile) == "user_icon")) return; // TO KEEP
-
+  if (aCommand==NULL) {
+    if (std::string(aIconFile) == "user_icon") {
+      return; // TO KEEP
+    }
+  }
   QPixmap pix;
   bool userToolBar = false;
 

@@ -60,7 +60,9 @@ public:
   bool IsExternalApp();
 
 private:
+  G4Qt (const G4Qt&);
   G4Qt (int,char**,char*);                     
+  G4Qt& operator= (const G4Qt&);
   static G4Qt* instance; // Pointer to single instance.
   int    argn;
   char** args;
