@@ -45,6 +45,7 @@
 #include "G4Nucleus.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
+#include "G4IonTable.hh"
 
 // factory
 #include "G4CrossSectionFactory.hh"
@@ -842,7 +843,7 @@ G4double G4ChipsPionMinusElasticXS::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
   G4double pP2=pP*pP;                                 // squared momentum of the projectile
   if(tgZ || tgN>-1)                                   // ---> pipA
   {
-    G4double mt=G4ParticleTable::GetParticleTable()->FindIon(tgZ,tgZ+tgN,0,tgZ)->GetPDGMass()*.001; // Target mass in GeV
+    G4double mt=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(tgZ,tgZ+tgN,0)->GetPDGMass()*.001; // Target mass in GeV
 
     G4double dmt=mt+mt;
     G4double mds=dmt*std::sqrt(pP2+mPi2)+mPi2+mt*mt;    // Mondelstam mds
