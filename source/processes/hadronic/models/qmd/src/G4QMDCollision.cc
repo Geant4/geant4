@@ -74,6 +74,34 @@ G4QMDCollision::G4QMDCollision( const G4QMDCollision& obj )
    *theScatterer = *obj.theScatterer;
 }
 
+G4QMDCollision & G4QMDCollision::operator= ( const G4QMDCollision& obj)
+{
+   fdeltar = obj.fdeltar;
+   fbcmax0 = obj.fbcmax1;
+   fepse = obj.fepse;
+
+   if ( obj.theSystem != NULL ) {
+      delete theSystem;
+      theSystem = new G4QMDSystem;
+      *theSystem = *obj.theSystem;
+   } else {
+      theSystem = NULL;
+   }
+   if ( obj.theMeanField != NULL ) {
+      delete theMeanField;
+      theMeanField = new G4QMDMeanField;
+      *theMeanField = *obj.theMeanField;
+   } else {
+      theMeanField = NULL;
+   }
+   delete theScatterer;
+   theScatterer = new G4Scatterer();
+   *theScatterer = *obj.theScatterer;
+
+   return *this;
+}
+
+
 G4QMDCollision::~G4QMDCollision()
 {
    if ( theSystem != NULL ) delete theSystem;
