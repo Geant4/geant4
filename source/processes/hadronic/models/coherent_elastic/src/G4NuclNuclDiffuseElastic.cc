@@ -217,7 +217,7 @@ G4NuclNuclDiffuseElastic::GetInvElasticXsc( const G4ParticleDefinition* particle
   else if (iZ == 1 && iA == 3) theDef = G4Triton::Triton();
   else if (iZ == 2 && iA == 3) theDef = G4He3::He3();
   else if (iZ == 2 && iA == 4) theDef = theAlpha;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(iZ,iA,0,iZ);
+  else theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(iZ,iA,0);
  
   G4double tmass = theDef->GetPDGMass();
 
@@ -304,7 +304,7 @@ G4NuclNuclDiffuseElastic::GetInvElasticSumXsc( const G4ParticleDefinition* parti
   else if (iZ == 1 && iA == 3) theDef = G4Triton::Triton();
   else if (iZ == 2 && iA == 3) theDef = G4He3::He3();
   else if (iZ == 2 && iA == 4) theDef = theAlpha;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(iZ,iA,0,iZ);
+  else theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(iZ,iA,0);
  
   G4double tmass = theDef->GetPDGMass();
 
@@ -354,7 +354,7 @@ G4NuclNuclDiffuseElastic::GetInvCoulombElasticXsc( const G4ParticleDefinition* p
   else if (iZ == 1 && iA == 3) theDef = G4Triton::Triton();
   else if (iZ == 2 && iA == 3) theDef = G4He3::He3();
   else if (iZ == 2 && iA == 4) theDef = theAlpha;
-  else theDef = G4ParticleTable::GetParticleTable()->FindIon(iZ,iA,0,iZ);
+  else theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(iZ,iA,0);
  
   G4double tmass = theDef->GetPDGMass();
 
