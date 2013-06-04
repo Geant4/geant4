@@ -13,6 +13,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+04-June-2013   A. Ribon       had-theo-HE-V09-06-04
+-  Fix access to ions via the IonTable class and GetIon method
+   in G4QuasiElasticChannel.cc
+
 29-January-2013   V. Uzhinsky had-theo-HE-V09-06-03
 -  A new attempt to implement NuclNucl interactions
 
