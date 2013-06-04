@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
@@ -44,7 +43,6 @@ class Tst16RunAction : public G4UserRunAction
   public:
     void BeginOfRunAction(const G4Run* aRun);
     void EndOfRunAction(const G4Run* aRun);
-
 };
 
 #endif

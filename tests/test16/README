@@ -24,22 +24,51 @@ Usage:        auto-generated file provides input for neutron and proton runs
               Verbose atepping action available but not currently 
               used.
 
+Building:     This test has a special CMakeLists.txt to be used only by system
+              testing.  It will not work when you run the test in stand-alone
+              mode.  To do that you must:
 
-Running:      Build both test16 and test16_hadronic_exerciser.
-              Then generate the input file:
+              1. copy the test directory from geant4/tests to your working
+                 directory
 
-              ../bin/$G4SYSTEM/test16_hadronic_exerciser >& test16.in &
+              2. replace the existing version of CMakeLists.txt with a
+                 stand-alone one:
 
-              and run the test:
+                 mv CMakeLists.txt CMakeLists.txtorig
+                 mv CMakeLists_Standalone.txt CMakeLists.txt
+
+              3. Clean up (if necessary) and re-configure, assuming a 64 bit machine
+                 and Geant4 version 9.6:
+
+                 rm test16
+                 rm test16_hadronic_exerciser
+                 setenv G4INSTALL /location_of_geant4/geant4-install/
+                 cmake -DGeant4_DIR=$G4INSTALL/lib64/Geant4-9.6.0/ 
+
+              4. Build both test16 and test16_hadronic_exerciser:
+
+                 make -jN -f Makefile 
+                 
+Running:      First generate the input file:
+
+                 ./test16_hadronic_exerciser >& test16.in &
+
+              Set the environment variables G4LEDATA and G4LEVELGAMMADATA to
+              point to the EM and nuclear data files:
+
+                 setenv G4LEDATA /path_to_file/G4EMLOW6.32
+                 setenv G4LEVELGAMMADATA /path_to_file/PhotonEvaporation2.3
+
+              where G4EMLOW6.32 and PhotonEvaporation2.3 are the latest versions
+              of the data files at this release.
+ 
+              Finally, run the test:
   
-              ../bin/$G4SYSTEM/test16 test16.in >& test16.out &
+                 ./test16 test16.in >& test16.out &
  
 
 Type of test: run to completion
 
 
 Output:       run log
-
-
-
 

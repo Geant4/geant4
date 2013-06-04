@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
@@ -34,17 +33,14 @@
 #include "G4ios.hh"
 
 Tst16RunAction::Tst16RunAction()
-{
-}
+{}
 
 Tst16RunAction::~Tst16RunAction()
-{
-}
+{}
 
 void Tst16RunAction::BeginOfRunAction(const G4Run*)
-{
-}
+{}
 
 void Tst16RunAction::EndOfRunAction(const G4Run*)
-{
-}
+{}
+

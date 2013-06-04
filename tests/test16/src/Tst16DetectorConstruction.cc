@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
@@ -44,7 +43,7 @@
 #include "G4ios.hh"
 
 Tst16DetectorConstruction::Tst16DetectorConstruction()
-:simpleBoxLog(0),selectedMaterial(0),Air(0),Al(0),Pb(0),elN(0),elO(0)
+ :simpleBoxLog(0), selectedMaterial(0), Air(0), Al(0), Pb(0), elN(0), elO(0)
 {
   detectorMessenger = new Tst16DetectorMessenger(this);
   materialChoice = "Pb";
@@ -53,8 +52,11 @@ Tst16DetectorConstruction::Tst16DetectorConstruction()
 Tst16DetectorConstruction::~Tst16DetectorConstruction()
 {
   delete detectorMessenger;
-  delete Pb;  delete Al;  delete Air;
-  delete elO;  delete elN;
+  delete Pb;
+  delete Al;
+  delete Air;
+  delete elO;
+  delete elN;
 }
 
 void Tst16DetectorConstruction::SelectMaterial(G4String val)
@@ -66,14 +68,13 @@ void Tst16DetectorConstruction::SelectMaterial(G4String val)
 
 void Tst16DetectorConstruction::SelectMaterialPointer()
 {
-//--------- Material definition ---------
+  // Material definition
 
   G4double a, iz, z, density;
   G4String name, symbol;
   G4int nel;
 
-  if(!Air)
-  {
+  if (!Air) {
     a = 14.01*g/mole;
     elN = new G4Element(name="Nitrogen", symbol="N", iz=7., a);
     a = 16.00*g/mole;
@@ -84,29 +85,29 @@ void Tst16DetectorConstruction::SelectMaterialPointer()
     Air->AddElement(elO, .3);
   }
 
-  if(!Al)
-  {
+  if (!Al) {
     a = 26.98*g/mole;
     density = 2.7*g/cm3;
     Al = new G4Material(name="Aluminium", z=13., a, density);
   }
 
-  if(!Pb)
-  {
+  if (!Pb) {
     a = 207.19*g/mole;
     density = 11.35*g/cm3;
     Pb = new G4Material(name="Lead", z=82., a, density);
   }
 
-  if(materialChoice=="Air")
-  { selectedMaterial = Air; }
-  else if(materialChoice=="Al")
-  { selectedMaterial = Al; }
-  else
-  { selectedMaterial = Pb; }
+  if (materialChoice=="Air") {
+    selectedMaterial = Air;
+  } else if(materialChoice=="Al") {
+    selectedMaterial = Al;
+  } else {
+    selectedMaterial = Pb;
+  }
 
-  if(simpleBoxLog)
-  { simpleBoxLog->SetMaterial(selectedMaterial); }
+  if (simpleBoxLog) {
+    simpleBoxLog->SetMaterial(selectedMaterial);
+  }
 }
 
 G4VPhysicalVolume* Tst16DetectorConstruction::Construct()
@@ -121,4 +122,7 @@ G4VPhysicalVolume* Tst16DetectorConstruction::Construct()
 
   return simpleBoxDetector;
 }
+
+void Tst16DetectorConstruction::ConstructSDandField()
+{}
 

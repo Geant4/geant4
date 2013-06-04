@@ -48,6 +48,7 @@ class Tst16DetectorConstruction : public G4VUserDetectorConstruction
   public:
      G4VPhysicalVolume* Construct();
      void SelectMaterial(G4String val);
+     void ConstructSDandField();
 
   private:
      void SelectMaterialPointer();

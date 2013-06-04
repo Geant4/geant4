@@ -15,6 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3 June 2013  Dennis Wright  (test16-V09-06-01)
+----------------------------------------------
+- Migrate to multi-threaded:
+    added option to use G4MTRunManager in test16.cc
+    created class Tst16ActionInitialization and moved some user init methods
+      there
+    implemented empty method Tst16DetectorConstruction::ConstructSDandField()
+
+- added CMakeLists_Standalone.txt to be used for stand-alone running 
+  (developed by Makoto Asai)
+
+- updated README for cmake build  
+
 13 Dec 2012  Michael Kelsey (test16-V09-06-00)
 ----------------------------------------------
 - Replace LHEP-style pi/K stopping processes with Bertini-based.  This also
