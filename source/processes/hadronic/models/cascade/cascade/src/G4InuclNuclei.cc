@@ -201,7 +201,7 @@ G4ParticleDefinition* G4InuclNuclei::makeDefinition(G4int a, G4int z) {
   if (0 == a && 0 == z) return 0;
 
   G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition *pd = pTable->GetIon(z, a, 0.);
+  G4ParticleDefinition *pd = pTable->GetIonTable()->GetIon(z, a, 0);
 
   // SPECIAL CASE:  Non-physical nuclear fragment, for final-state return
   if (!pd) pd = makeNuclearFragment(a,z);
