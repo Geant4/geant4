@@ -264,7 +264,7 @@ G4ReactionProductVector* G4MuonMinusCaptureAtRest::DoMuCapture()
         } else if(ia == 4) {
           pd = G4Triton::Triton();
         } else { 
-	  pd = G4ParticleTable::GetParticleTable()->FindIon(1,ia-1,0,1);
+	  pd = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(1,ia-1,0);
         }
 
 	//	G4cout << "Extra " << pd->GetParticleName() << G4endl;
