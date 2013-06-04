@@ -211,7 +211,7 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
    if(G4UniformRand()<atno2-A) A++;
    //G4cout << " ion info "<<atno2 << " "<<A<<" "<<Z<<" "<<zTarget<<G4endl;
    G4double mass2 =
-     G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z)->GetPDGMass();
+     G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0)->GetPDGMass();
 
    // non relativistic approximation
    G4double a = 1 + mass2/mass1;
@@ -293,7 +293,7 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
        std::cerr << "GHADException originating from components of G4LElastic"<<std::cout;
        throw;
      }
-     G4ParticleDefinition * theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
+     G4ParticleDefinition * theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0);
      G4ThreeVector it(pxre*GeV, pyre*GeV, pzre*GeV);
      G4DynamicParticle * aSec = 
        new G4DynamicParticle(theDef, it.unit(), it.mag2()/(2.*mass2));
