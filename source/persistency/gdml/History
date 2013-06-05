@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 June 2013 Gabriele Cosmo (gdml-V09-06-03)
+- Replaced use of 'pascal' with 'hep_pascal' to avoid conflicts on Windows.
+
 10 April 2013 Gabriele Cosmo (gdml-V09-06-02)
 - Removed TLS changes in G4GDMLWrite as not necessary.
 

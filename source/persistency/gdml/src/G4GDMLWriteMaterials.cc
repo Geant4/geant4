@@ -74,7 +74,7 @@ PWrite(xercesc::DOMElement* element,const G4double& P)
 {
    xercesc::DOMElement* PElement = NewElement("P");
    PElement->setAttributeNode(NewAttribute("unit","pascal"));
-   PElement->setAttributeNode(NewAttribute("value",P/pascal));
+   PElement->setAttributeNode(NewAttribute("value",P/hep_pascal));
    element->appendChild(PElement);
 }
 

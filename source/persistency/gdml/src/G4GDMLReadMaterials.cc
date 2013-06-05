@@ -159,7 +159,7 @@ G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const DElement)
 G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const PElement)
 {
    G4double value = STP_Pressure;
-   G4double unit = pascal;
+   G4double unit = hep_pascal;
 
    const xercesc::DOMNamedNodeMap* const attributes = PElement->getAttributes();
    XMLSize_t attributeCount = attributes->getLength();
