@@ -50,6 +50,9 @@
 //           To initialize thread specific data
 // ------------------------------------------------------------
 
+#include <iomanip>
+#include <fstream>
+
 #include "G4PhysicsListHelper.hh"
 #include "G4VUserPhysicsList.hh"
 
@@ -60,6 +63,7 @@
 
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4ios.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTable.hh"
@@ -73,10 +77,6 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ProductionCuts.hh"
 #include "G4MaterialCutsCouple.hh"
-
-#include "G4ios.hh"
-#include <iomanip>
-#include <fstream>
 
 // This static member is thread local. For each thread, it holds the array
 // size of G4VUPLData instances.
@@ -294,7 +294,7 @@ void G4VUserPhysicsList::InitializeProcessManager()
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
   G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
@@ -317,7 +317,7 @@ void G4VUserPhysicsList::InitializeProcessManager()
 
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
 #endif
   G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
@@ -329,7 +329,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
   //Request lock for particle table accesses. Some changes are inside
   //this critical region.
 #ifdef G4MULTITHREADED
-  pthread_mutex_lock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
   G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
@@ -358,7 +358,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
 
   //release lock for particle table accesses.
 #ifdef G4MULTITHREADED
-  pthread_mutex_unlock(&G4ParticleTable::particleTableMutex);
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
 #endif
   G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 

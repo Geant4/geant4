@@ -83,8 +83,9 @@ G4MTRunManager::G4MTRunManager() : G4RunManager(false) ,
     masterRM = this;
 #ifndef G4MULTITHREADED
     G4ExceptionDescription msg;
-    msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
-    msg<<" This type of RunManager can only be used in mult-threaded applications.";
+    msg << "Geant4 code is compiled without multi-threading support"
+        << "(-DG4MULTITHREADED is set to off).\n";
+    msg << "G4MTRunManager can only be used in multi-threaded applications.";
     G4Exception("G4MTRunManager::G4MTRunManager","Run0035",FatalException,msg);
 #endif
 
@@ -104,7 +105,8 @@ G4MTRunManager::G4MTRunManager() : G4RunManager(false) ,
 
 G4MTRunManager::~G4MTRunManager()
 {
-    //TODO: Currently does not work due to concurrent deletion of something that is shared:
+    //TODO: Currently does not work due to concurrent deletion of something
+    //      that is shared:
     //G4ProcessTable::DeleteMessenger from ~G4RunManager
     //G4cout<<"Destroy MTRunManager"<<G4endl;//ANDREA
     TerminateWorkers();
@@ -123,11 +125,15 @@ void G4MTRunManager::SetNumberOfThreads(G4int n )
 {
     if ( threads.size() != 0 )
     {
-        G4Exception("G4MTRunManager::SetNumberOfThreads(G4int)","Run0035",JustWarning,"Limitation: Number of threads cannot be changed at this moment (old threads are still alive).");
+      G4ExceptionDescription msg;
+      msg << "Limitation: Number of threads cannot be changed at this moment \n"
+          << "(old threads are still alive).";
+      G4Exception("G4MTRunManager::SetNumberOfThreads(G4int)",
+                  "Run0035", JustWarning, msg);
     }
     else
     {
-        nworkers = n;
+      nworkers = n;
     }
 }
 
@@ -404,37 +410,29 @@ void G4MTRunManager::InitializePhysics()
 // TODO: If this mechanism is needed in other parts of the code we can provide
 // the barrier mechanism as a utility class/functions to the kernel.
 // Note: we need a special treatment for WIN32
-#ifdef WIN32
-#include <windows.h> //For CRITICAL_SECTION objects
-#endif
 namespace {
-    //Acoid compilation warning if squenetial for unused variables
+    //Avoid compilation warning if squenetial for unused variables
 #ifdef G4MULTITHREADED
     //Conditions
     // Condition to signal green light for start of event loop
     G4Condition beginEventLoopCondition = G4CONDITION_INITIALIZER;
-    //pthread_cond_t beginEventLoopCondition = PTHREAD_COND_INITIALIZER;
-    // Condition to signal green light to finish event loop (actuallyt exit function
-    //performing event loop)
+    // Condition to signal green light to finish event loop
+    // (actuallyt exit function performing event loop)
     G4Condition endEventLoopCondition = G4CONDITION_INITIALIZER;
-    //pthread_cond_t endEventLoopCondition = PTHREAD_COND_INITIALIZER;
     // Condition to signal the num of workers ready for event loop has changed
     G4Condition numWorkersBeginEventLoopChangeCondition = G4CONDITION_INITIALIZER;
-    //pthread_cond_t numWorkersBeginEventLoopChangeCondition = PTHREAD_COND_INITIALIZER;
-    // Condition to signal the num of workers that terminated event loop has changed
+    // Condition to signal the num of workers that terminated event loop
+    // has changed
     G4Condition numWorkersEndEventLoopChangedCondition = G4CONDITION_INITIALIZER;
-    //pthread_cond_t numWorkersEndEventLoopChangedCondition = PTHREAD_COND_INITIALIZER;
-    //Counter/mutex for workers ready to begin event loop
+    // Counter/mutex for workers ready to begin event loop
     //
     // This condition is to handle more than one run w/o killing threads
     G4Condition requestChangeActionForThread = G4CONDITION_INITIALIZER;
 #endif
     G4Mutex numberOfReadyWorkersMutex = G4MUTEX_INITIALIZER;
-    //G4Mutex numberOfReadyWorkersMutex = G4MUTEX_INITIALIZER;
     G4int numberOfReadyWorkers = 0;
     //Counter/mutex for workers with end of event loop
     G4Mutex numberOfEndOfEventLoopWorkersMutex = G4MUTEX_INITIALIZER;
-    //G4Mutex numberOfEndOfEventLoopWorkersMutex = G4MUTEX_INITIALIZER;
     G4int numberOfEndOfEventLoopWorkers = 0;
     //
     //More than one 
@@ -451,15 +449,15 @@ namespace {
 	void InitializeWindowsConditions()
 	{
 	#ifdef G4MULTITHREADED
-		InitializeConditionVariable( &beginEventLoopCondition );
-		InitializeConditionVariable( &endEventLoopCondition );
-		InitializeConditionVariable( &numWorkersBeginEventLoopChangeCondition );
-		InitializeConditionVariable( &numWorkersEndEventLoopChangedCondition );
-        InitializeConditionVariable( &requestChangeStatusForThread );
+           InitializeConditionVariable( &beginEventLoopCondition );
+           InitializeConditionVariable( &endEventLoopCondition );
+           InitializeConditionVariable( &numWorkersBeginEventLoopChangeCondition );
+           InitializeConditionVariable( &numWorkersEndEventLoopChangedCondition );
+           InitializeConditionVariable( &requestChangeActionForThread );
 	#endif
-		InitializeCriticalSection( &cs1 );
-		InitializeCriticalSection( &cs2 );
-        InitializeCriticalSection( &cs3 );
+           InitializeCriticalSection( &cs1 );
+           InitializeCriticalSection( &cs2 );
+           InitializeCriticalSection( &cs3 );
 	}
 #endif
 }
