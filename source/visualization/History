@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+4th June 2013  John Allison  (vis-V09-06-16)
+- gMocren-V09-06-04 (Akinori Kimura): Fixed Coverity warnings.
+
 3rd June 2013  John Allison  (vis-V09-06-15)
 - visexternal-V09-06-04: One more try at compiling on Windows!
 

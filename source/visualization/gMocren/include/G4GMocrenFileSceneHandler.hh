@@ -177,6 +177,10 @@ private:
     ~Index3D(){;}
     G4bool operator < (const Index3D & _right) const;
     G4bool operator == (const Index3D & _right) const;
+  private:
+    // Private assigment operator -
+    // assignment not allowed.  Keeps Coverity happy.
+    Index3D& operator = (const Index3D&);
   };
 
   std::map<Index3D, float> kNestedModality;

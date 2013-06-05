@@ -52,5 +52,11 @@ protected:
   G4int kCTMinMax[2];
   G4double * kDensity;
   G4int kSize;
+
+private:
+  // Private copy constructor and assigment operator - copying and
+  // assignment not allowed.  Keeps Coverity happy.
+  G4GMocrenFileCTtoDensityMap (const G4GMocrenFileCTtoDensityMap&);
+  G4GMocrenFileCTtoDensityMap& operator = (const G4GMocrenFileCTtoDensityMap&);
 };
 #endif

@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+4th June 2013  Akinori Kimura (gMocren-V09-06-04)
+- G4GMocrenIO: Fixed an inconsistency of the length check of the unit string.
+
 24th February 2013  John Allison (gMocren-V09-06-03)
 - G4GMocrenFileViewer, G4GMocrenMessenger:
   o Removed unused fields as warned by new clang compiler.

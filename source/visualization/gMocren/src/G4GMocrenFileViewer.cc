@@ -65,7 +65,7 @@ G4GMocrenFileViewer::G4GMocrenFileViewer (G4GMocrenFileSceneHandler& sceneHandle
     kSceneHandler (sceneHandler)
 {
   // Set a g4.gdd-file viewer 
-  std::strncpy( kG4GddViewer, "gMocren", 7); 
+  std::strncpy( kG4GddViewer, "gMocren", 8);
   if( getenv( "G4GMocrenFile_VIEWER" ) != NULL ) {
     char * env = getenv( "G4GMocrenFile_VIEWER" );
     std::strncpy( kG4GddViewer, env, std::strlen(env));

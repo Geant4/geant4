@@ -72,6 +72,7 @@ GMocrenDataPrimitive<T>::~GMocrenDataPrimitive () {
 
 template <typename T> GMocrenDataPrimitive<T> & 
 GMocrenDataPrimitive<T>::operator = (const GMocrenDataPrimitive<T> & _right) {
+  if (this == &_right) return *this;
   for(int i = 0; i < 3; i++) {
     kSize[i] = _right.kSize[i];
     kCenter[i] = _right.kCenter[i];
@@ -739,7 +740,7 @@ bool G4GMocrenIO::storeData4() {
       for(int i = 0; i < 13; i++) cdunit[i] = '\0';
       const char * cu = kDoseUnit.c_str();
       size_t lcu = std::strlen(cu);
-      if(lcu > 1024) lcu = 1024;
+      if(lcu > 12) lcu = 12;
       std::strncpy(cdunit, cu, lcu);
       ofile.write((char *)cdunit, 12);
       if(DEBUG || kVerbose > 0) {
