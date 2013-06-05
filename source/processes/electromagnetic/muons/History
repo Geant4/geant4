@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 June 2013: V.Ivant (emmuons-V09-06-12)
+- G4EnergyLossForExtrapolator - use cut DBL_MAX to avoid creation
+    of G4EmSelectors in lazy initialisation
+- G4MuPairProductionModel,G4MuBremsstrahlungModel - fixed usage of 
+    element selectors 
+
+31 May 2013: V.Ivant (emmuons-V09-06-11)
+- G4MuPairProductionModel - provides different 
+    initialisation for master and worker threads sharing element
+    selectors
+- G4MuBremsstrahlungModel - removed partialSubSigma data structure,
+    use instead G4ElementSelectors; provides different 
+    initialisation for master and worker threads sharing element
+    selectors
+
 29 May 2013: V.Ivant (emmuons-V09-06-10)
 - G4MuPairProductionModel, G4MuBremsstrahlungModel - fixed rare bug
     in cross section computation - division by zero (bug report #1471)

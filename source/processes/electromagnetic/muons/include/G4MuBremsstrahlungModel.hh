@@ -47,6 +47,7 @@
 // 11-10-07 Add ignoreCut flag (V.Ivanchenko) 
 // 28-02-08 Reorganized protected methods and members (V.Ivanchenko) 
 // 06-03-08 Remove obsolete methods and members (V.Ivanchenko) 
+// 31-05-13 Use element selectors instead of local data (V.Ivanchenko)
 //
 
 //
@@ -79,6 +80,9 @@ public:
   virtual ~G4MuBremsstrahlungModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+			       G4VEmModel* masterModel);
 
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
 				const G4MaterialCutsCouple*);
@@ -119,11 +123,6 @@ protected:
 
 private:
 
-  G4DataVector* ComputePartialSumSigma(const G4Material* material,
-				       G4double tkin, G4double cut);
-
-  const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
-
   // hide assignment operator
   G4MuBremsstrahlungModel & operator=(const  G4MuBremsstrahlungModel &right);
   G4MuBremsstrahlungModel(const  G4MuBremsstrahlungModel&);
@@ -154,8 +153,6 @@ private:
   static const G4double wgi[6];
 
   static G4double fDN[93];
-
-  std::vector<G4DataVector*> partialSumSigma;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

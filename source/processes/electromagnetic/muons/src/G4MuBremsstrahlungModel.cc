@@ -50,6 +50,7 @@
 // 21-03-06 Fix problem of initialisation in case when cuts are not defined (VI)
 // 07-11-07 Improve sampling of final state (A.Bogdanov)
 // 28-02-08 Use precomputed Z^1/3 and Log(A) (V.Ivanchenko)
+// 31-05-13 Use element selectors instead of local data structure (V.Ivanchenko)
 //
 
 //
@@ -73,6 +74,7 @@
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,14 +121,7 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel()
-{
-  size_t n = partialSumSigma.size();
-  if(n > 0) {
-    for(size_t i=0; i<n; i++) {
-      delete partialSumSigma[i];
-    }
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -143,47 +138,18 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p) { SetParticle(p); }
 
-  // partial cross section is computed for fixed energy
-  G4double fixedEnergy = 0.5*HighEnergyLimit();
-
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  if(theCoupleTable) {
-    G4int numOfCouples = theCoupleTable->GetTableSize();
-
-    G4int nn = partialSumSigma.size();
-    G4int nc = cuts.size();
-
-    // do we need to perform initialisation?
-    if(nn == numOfCouples) { return; }
-
-    // clear old data    
-    if(nn > 0) {
-      for (G4int ii=0; ii<nn; ii++){
-	G4DataVector* a = partialSumSigma[ii];
-	if ( a ) { delete a; }
-      } 
-      partialSumSigma.clear();
-    }
-    // fill new data
-    if (numOfCouples>0) {
-      for (G4int i=0; i<numOfCouples; i++) {
-        G4double cute = DBL_MAX;
-
-	// protection for usage with extrapolator
-        if(i < nc) { cute = cuts[i]; }
-
-        const G4MaterialCutsCouple* couple = 
-	  theCoupleTable->GetMaterialCutsCouple(i);
-	const G4Material* material = couple->GetMaterial();
-	G4DataVector* dv = ComputePartialSumSigma(material,fixedEnergy,cute);
-	partialSumSigma.push_back(dv);
-      }
-    }
-  }
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
 
   // define pointer to G4ParticleChange
   if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4MuBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition*,
+					      G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -378,35 +344,6 @@ G4double G4MuBremsstrahlungModel::ComputeCrossSectionPerAtom(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4DataVector* G4MuBremsstrahlungModel::ComputePartialSumSigma(
-                                       const G4Material* material,
-				       G4double kineticEnergy,
-				       G4double cut)
-
-// Build the table of cross section per element. 
-// The table is built for material 
-// This table is used to select randomly an element in the material.
-{
-  G4int nElements = material->GetNumberOfElements();
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = 
-    material->GetAtomicNumDensityVector();
-
-  G4DataVector* dv = new G4DataVector();
-
-  G4double cross = 0.0;
-
-  for (G4int i=0; i<nElements; i++ ) {
-    cross += theAtomNumDensityVector[i] 
-      * ComputeMicroscopicCrossSection(kineticEnergy, 
-				       (*theElementVector)[i]->GetZ(), cut);
-    dv->push_back(cross);
-  }
-  return dv;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void G4MuBremsstrahlungModel::SampleSecondaries(
                               std::vector<G4DynamicParticle*>* vdp,
 			      const G4MaterialCutsCouple* couple,
@@ -426,7 +363,7 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
   G4ParticleMomentum partDirection = dp->GetMomentumDirection();
 
   // select randomly one element constituing the material
-  const G4Element* anElement = SelectRandomAtom(couple);
+  const G4Element* anElement = SelectRandomAtom(couple,particle,kineticEnergy);
   G4double Z = anElement->GetZ();
 
   G4double totalEnergy   = kineticEnergy + mass;
@@ -478,27 +415,6 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
   G4DynamicParticle* aGamma = 
     new G4DynamicParticle(theGamma,gDirection,gEnergy);
   vdp->push_back(aGamma);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-const G4Element* G4MuBremsstrahlungModel::SelectRandomAtom(
-           const G4MaterialCutsCouple* couple) const
-{
-  // select randomly 1 element within the material
-
-  const G4Material* material = couple->GetMaterial();
-  G4int nElements = material->GetNumberOfElements();
-  const G4ElementVector* theElementVector = material->GetElementVector();
-  if(1 == nElements) { return (*theElementVector)[0]; }
-  else if(1 > nElements) { return 0; }
-
-  G4DataVector* dv = partialSumSigma[couple->GetIndex()];
-  G4double rval = G4UniformRand()*((*dv)[nElements-1]);
-  for (G4int i=0; i<nElements; i++) {
-    if (rval <= (*dv)[i]) { return (*theElementVector)[i]; }
-  }
-  return (*theElementVector)[nElements-1];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

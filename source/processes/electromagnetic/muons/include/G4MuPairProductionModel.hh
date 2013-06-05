@@ -78,6 +78,9 @@ public:
   virtual ~G4MuPairProductionModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+			       G4VEmModel* masterModel);
 			
   virtual G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
@@ -127,12 +130,6 @@ protected:
   inline void SetCurrentElement(G4double Z);
 
 private:
-
-  const G4Element* SelectRandomAtom(G4double kinEnergy, 
-				    G4double dt, 
-				    G4int it,
-				    const G4MaterialCutsCouple* couple, 
-				    G4double tmin);
 
   void MakeSamplingTables();
 

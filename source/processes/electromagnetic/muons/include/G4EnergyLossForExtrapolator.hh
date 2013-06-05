@@ -55,6 +55,7 @@
 
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
+#include "G4DataVector.hh"
 
 class G4ParticleDefinition;
 class G4Material;
@@ -66,6 +67,7 @@ class G4ProductionCuts;
 class G4EnergyLossForExtrapolator 
 {
 public:
+
   G4EnergyLossForExtrapolator(G4int verb = 1);
 
   ~G4EnergyLossForExtrapolator();
@@ -148,7 +150,9 @@ private:
   const G4ParticleDefinition* muonMinus;
   const G4ParticleDefinition* proton;
 
-  G4ProductionCuts*        cuts;
+  G4DataVector             cuts;
+
+  G4ProductionCuts*        pcuts;
   std::vector<const G4MaterialCutsCouple*> couples;
 
   G4String currentParticleName;
