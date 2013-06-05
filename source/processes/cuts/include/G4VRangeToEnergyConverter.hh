@@ -106,8 +106,9 @@ class G4VRangeToEnergyConverter
   virtual void Reset();
     
  protected:
-    static G4ThreadLocal G4double               LowestEnergy, HighestEnergy;
-    static G4ThreadLocal G4double               MaxEnergyCut; 
+
+    static G4double               LowestEnergy, HighestEnergy;
+    static G4double               MaxEnergyCut; 
     G4double                      fMaxEnergyCut;
    
     const G4ParticleDefinition*   theParticle;
@@ -123,7 +124,7 @@ class G4VRangeToEnergyConverter
 
     virtual G4double ComputeLoss(G4double AtomicNumber,
                                  G4double KineticEnergy
-			       ) const = 0;
+			       ) =0;
 
   //-------------- Range Table ------------------------------------------
   protected:

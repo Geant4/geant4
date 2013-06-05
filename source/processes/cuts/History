@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 5th, 2013   - V.Ivanchenko (procuts-V09-06-04)
+  G4VRangeToEnergyConverter: members LowestEnergy, HighestEnergy,
+    MaxEnergyCut become static and not G4ThreadLocal - this
+    is needed to fix FPE crash in MT mode; fixed all loops for
+    G4PhysicsLogVector - upper index is nbins+1
+
+June 4th, 2013   - H.Kurashige (procuts-V09-06-03)
+- Modify G4RToEConvForXXX to remove unnecessary static declaration
+  (Some static variables are moved to simple member of the class)
+  
 May. 30th, 2013   - G.Cosmo (procuts-V09-06-02)
 - Added protection to initialisation of static data in
   G4VRangeToEnergyConverter constructor.

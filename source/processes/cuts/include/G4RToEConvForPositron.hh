@@ -61,8 +61,15 @@ class G4RToEConvForPositron : public G4VRangeToEnergyConverter
   protected:
     virtual G4double ComputeLoss(G4double AtomicNumber,
                                  G4double KineticEnergy
-                                ) const;
+                                ) ;
 
+  protected:
+    G4double Mass;
+    G4double Z;  
+    G4double taul;
+    G4double ionpot;
+    G4double ionpotlog;
+    G4double bremfactor;
 };
 
 

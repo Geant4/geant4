@@ -66,8 +66,18 @@ class G4RToEConvForProton : public G4VRangeToEnergyConverter
   protected:
     virtual G4double ComputeLoss(G4double AtomicNumber,
                                  G4double KineticEnergy
-                                ) const;
+                                ) ;
 
+  protected:
+    G4double Mass;
+    G4double Z;  
+    G4double tau0;
+    G4double taul;
+    G4double taum;
+    G4double ionpot;
+    G4double ca;
+    G4double cba;
+    G4double cc;  
 };
 
 
