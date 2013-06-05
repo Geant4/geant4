@@ -49,7 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-  : fDetector(det), fPrimary(prim), fHistoManager(0)
+  : G4UserRunAction(),
+    fDetector(det), fPrimary(prim), fHistoManager(0)
 {
  fHistoManager = new HistoManager(); 
 }
@@ -185,7 +186,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << "\n CrossSection:\t"     << CrossSection*cm << " cm^-1 "
          << "\t\tmassic: "           << G4BestUnit(massicCS, "Surface/Mass")
          << G4endl;
-	 
+         
   //cross section per atom (only for single material)
   //
   if (material->GetNumberOfElements() == 1) {
@@ -206,8 +207,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
       const G4VProcess* process = it->first;
       G4double xs1 =
-      store->GetCrossSectionPerVolume(particle,energy,process,material);                   
-      G4double massSigma = xs1/density;                                                  
+      store->GetCrossSectionPerVolume(particle,energy,process,material);
+      G4double massSigma = xs1/density;
       sumc1 += massSigma;      
       G4double xs2 =
       store->GetCrossSectionPerAtom(particle,energy,process,element,material);
@@ -225,8 +226,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
       const G4VProcess* process = it->first;
       G4double xs =
-      store->GetCrossSectionPerVolume(particle,energy,process,material);                   
-      G4double massSigma = xs/density;                                                  
+      store->GetCrossSectionPerVolume(particle,energy,process,material);
+      G4double massSigma = xs/density;
       sumc1 += massSigma;
       G4String procName = process->GetProcessName();    
       G4cout << "\n" << std::setw(20)  << procName << "= " 

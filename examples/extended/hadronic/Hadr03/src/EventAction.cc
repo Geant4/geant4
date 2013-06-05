@@ -41,7 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:fPrintModulo(10000),fEventMessenger(0)
+:G4UserEventAction(),
+ fPrintModulo(10000),fEventMessenger(0)
 {
   fEventMessenger = new EventActionMessenger(this);
 }

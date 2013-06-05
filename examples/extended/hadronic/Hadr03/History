@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-06-13 I. Hrivnacova (exhadr03-V09-06-17)
+- applied coding guidelines (adding base class initialization in constructors, 
+  removed tabulations, fixed long lines)
      
 28-05-13 mma (exhadr03-V09-06-16)
 - cosmetic in SteppingVerbose
