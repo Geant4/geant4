@@ -71,12 +71,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01DetectorConstruction::A01DetectorConstruction()
-: fAir(0), fArgonGas(0), fScintillator(0), fCsI(0), fLead(0),
+: G4VUserDetectorConstruction(), 
+fMessenger(0), fMagneticField(0), fFieldMgr(0),
+fAir(0), fArgonGas(0), fScintillator(0), fCsI(0), fLead(0),
 fWorldVisAtt(0), fMagneticVisAtt(0),
 fArmVisAtt(0), fHodoscopeVisAtt(0), fChamberVisAtt(0),
 fWirePlaneVisAtt(0), fEMcalorimeterVisAtt(0), fCellVisAtt(0),
 fHadCalorimeterVisAtt(0), fHadCalorimeterCellVisAtt(0),
-fArmAngle(30.*deg), fSecondArmPhys(0)
+fArmAngle(30.*deg), fArmRotation(0), fSecondArmPhys(0)
 
 {
     fMessenger = new A01DetectorConstMessenger(this);

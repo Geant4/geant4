@@ -36,9 +36,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01MagneticField::A01MagneticField()
+: G4MagneticField(), fMessenger(0), fBy(1.0*tesla)
 {
     fMessenger = new A01MagneticFieldMessenger(this);
-    fBy = 1.0*tesla;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

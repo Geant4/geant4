@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01MagneticFieldMessenger::A01MagneticFieldMessenger(A01MagneticField * mpga)
-:fTarget(mpga)
+: G4UImessenger(), fTarget(mpga), fFieldCmd(0)
 {
     fFieldCmd = new G4UIcmdWithADoubleAndUnit("/mydet/fieldValue",this);
     fFieldCmd->SetGuidance("Field strength");

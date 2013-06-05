@@ -47,7 +47,7 @@ G4Allocator<A01DriftChamberHit> A01DriftChamberHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01DriftChamberHit::A01DriftChamberHit():
-fLayerID(-1), fTime(0.), fLocalPos(0), fWorldPos(0)
+G4VHit(), fLayerID(-1), fTime(0.), fLocalPos(0), fWorldPos(0)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

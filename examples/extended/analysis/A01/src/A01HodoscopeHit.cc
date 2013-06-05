@@ -46,7 +46,7 @@ G4Allocator<A01HodoscopeHit> A01HodoscopeHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01HodoscopeHit::A01HodoscopeHit(G4int i,G4double t):
-fId(i), fTime(t), fPos(0), fPLogV(0)
+G4VHit(), fId(i), fTime(t), fPos(0), fPLogV(0)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

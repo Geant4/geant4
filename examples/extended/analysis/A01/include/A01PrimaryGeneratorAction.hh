@@ -49,14 +49,14 @@ public:
     
     virtual void GeneratePrimaries(G4Event*);
     
-    inline void SetMomentum(G4double val) { fMomentum = val; }
-    inline G4double GetMomentum() const { return fMomentum; }
-    inline void SetSigmaMomentum(G4double val) { fSigmaMomentum = val; }
-    inline G4double GetSigmaMomentum() const { return fSigmaMomentum; }
-    inline void SetSigmaAngle(G4double val) { fSigmaAngle = val; }
-    inline G4double GetSigmaAngle() const { return fSigmaAngle; }
-    inline void SetRandomize(G4bool val) { fRandomizePrimary = val; }
-    inline G4bool GetRandomize() const { return fRandomizePrimary; }
+    void SetMomentum(G4double val) { fMomentum = val; }
+    G4double GetMomentum() const { return fMomentum; }
+    void SetSigmaMomentum(G4double val) { fSigmaMomentum = val; }
+    G4double GetSigmaMomentum() const { return fSigmaMomentum; }
+    void SetSigmaAngle(G4double val) { fSigmaAngle = val; }
+    G4double GetSigmaAngle() const { return fSigmaAngle; }
+    void SetRandomize(G4bool val) { fRandomizePrimary = val; }
+    G4bool GetRandomize() const { return fRandomizePrimary; }
     
 private:
     G4ParticleGun* fParticleGun;

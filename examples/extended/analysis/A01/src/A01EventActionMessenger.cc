@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01EventActionMessenger::A01EventActionMessenger(A01EventAction * mpga)
-:fTarget(mpga)
+: G4UImessenger(), fTarget(mpga), fVerboseCmd(0)
 {
     fVerboseCmd = new G4UIcmdWithAnInteger("/mydet/verbose",this);
     fVerboseCmd->SetGuidance("Verbose level for each event.");

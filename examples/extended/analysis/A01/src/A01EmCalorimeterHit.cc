@@ -46,7 +46,7 @@ G4Allocator<A01EmCalorimeterHit> A01EmCalorimeterHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01EmCalorimeterHit::A01EmCalorimeterHit():
-fCellID(-1), fEdep(0.), fPos(0), fPLogV(0)
+G4VHit(), fCellID(-1), fEdep(0.), fPos(0), fPLogV(0)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

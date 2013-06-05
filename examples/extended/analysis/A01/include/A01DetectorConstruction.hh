@@ -53,7 +53,7 @@ public:
     
     virtual G4VPhysicalVolume* Construct();
     void SetArmAngle(G4double val);
-    inline G4double GetArmAngle() { return fArmAngle; }
+    G4double GetArmAngle() { return fArmAngle; }
     
     void ConstructMaterials();
     void DestroyMaterials();

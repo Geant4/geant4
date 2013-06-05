@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01DetectorConstMessenger::A01DetectorConstMessenger(A01DetectorConstruction* mpga)
-:fTarget(mpga)
+: G4UImessenger(), fTarget(mpga), fMydetDirectory(0), fArmCmd(0)
 {
     fMydetDirectory = new G4UIdirectory("/mydet/");
     fMydetDirectory->SetGuidance("A01 detector setup control commands.");

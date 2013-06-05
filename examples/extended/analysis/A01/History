@@ -11,6 +11,12 @@ $Id$
 
 ---------------------------------------------------------------------------  
 
+05 June 2013  Ivana Hrivnacova (exampleA01-V09-06-04)
+- Updated .README for changes in README
+- Applied coding guidelines (data members initialization)
+- Removed unnecessary inline keyword
+- Fixed compilation with G4ANALYSIS_USE
+
 28 May 2013  Joseph Perl (exampleA01-V09-06-03)
 - Update README
 

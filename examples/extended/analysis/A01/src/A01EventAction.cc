@@ -54,7 +54,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-A01EventAction::A01EventAction():fVerboseLevel(1)
+A01EventAction::A01EventAction()
+: G4UserEventAction(), fVerboseLevel(1)
+#ifdef G4ANALYSIS_USE
+  , fDc1Hits(0), fDc2Hits(0), fDc1XY(0), fDc2XY(0), fEvstof(0),
+  fTuple(0), fPlotter(0)
+#endif // G4ANALYSIS_USE
 {
     G4String colName;
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
@@ -67,11 +72,6 @@ A01EventAction::A01EventAction():fVerboseLevel(1)
     fMessenger = new A01EventActionMessenger(this);
     
 #ifdef G4ANALYSIS_USE
-    fPlotter = 0;
-    fTuple = 0;
-    fDc1Hits = fDc2Hits = 0;
-    fDc1XY = fDc2XY = fEvstof = 0;
-    
     // Do some analysis
     
     A01AnalysisManager* analysisManager = A01AnalysisManager::GetInstance();
@@ -117,7 +117,7 @@ A01EventAction::A01EventAction():fVerboseLevel(1)
 A01EventAction::~A01EventAction()
 {
 #ifdef G4ANALYSIS_USE
-    A01AnalysisManager::dispose();
+    A01AnalysisManager::Dispose();
 #endif // G4ANALYSIS_USE
     delete fMessenger;
 }

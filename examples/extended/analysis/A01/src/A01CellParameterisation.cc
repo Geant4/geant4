@@ -37,6 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01CellParameterisation::A01CellParameterisation()
+: G4VPVParameterisation()
 {
     for(int copyNo=0;copyNo<80;copyNo++)
     {

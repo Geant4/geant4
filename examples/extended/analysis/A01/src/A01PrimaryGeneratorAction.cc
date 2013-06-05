@@ -41,12 +41,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01PrimaryGeneratorAction::A01PrimaryGeneratorAction()
+: G4VUserPrimaryGeneratorAction(),     
+  fParticleGun(0), fGunMessenger(0), 
+  fPositron(0), fMuon(0), fPion(0), fKaon(0), fProton(0),
+  fMomentum(1000.*MeV),
+  fSigmaMomentum(50.*MeV),
+  fSigmaAngle(2.*deg),
+  fRandomizePrimary(true)
 {
-    fMomentum = 1000.*MeV;
-    fSigmaMomentum = 50.*MeV;
-    fSigmaAngle = 2.*deg;
-    fRandomizePrimary = true;
-    
     G4int n_particle = 1;
     fParticleGun  = new G4ParticleGun(n_particle);
     

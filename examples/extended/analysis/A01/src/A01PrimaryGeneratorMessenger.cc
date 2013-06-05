@@ -37,7 +37,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01PrimaryGeneratorMessenger::A01PrimaryGeneratorMessenger(
-            A01PrimaryGeneratorAction * mpga):fTarget(mpga)
+                                 A01PrimaryGeneratorAction * mpga)
+: G4UImessenger(), fTarget(mpga),
+  fMomentumCmd(0), fSigmaMomCmd(0), fSigmaAngCmd(0), fRandomCmd(0)
 {
     fMomentumCmd = new G4UIcmdWithADoubleAndUnit("/mydet/momentum",this);
     fMomentumCmd->SetGuidance("Mean momentum of primaries");

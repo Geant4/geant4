@@ -50,13 +50,13 @@ G4Allocator<A01HadCalorimeterHit> A01HadCalorimeterHitAllocator;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01HadCalorimeterHit::A01HadCalorimeterHit():
-fColumnID(-1), fRowID(-1), fEdep(0.), fPos(0)
+G4VHit(), fColumnID(-1), fRowID(-1), fEdep(0.), fPos(0)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01HadCalorimeterHit::A01HadCalorimeterHit(G4int iCol,G4int iRow):
-fColumnID(iCol), fRowID(iRow), fEdep(0.), fPos(0)
+G4VHit(), fColumnID(iCol), fRowID(iRow), fEdep(0.), fPos(0)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

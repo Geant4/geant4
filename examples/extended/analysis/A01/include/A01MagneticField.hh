@@ -45,8 +45,8 @@ public:
     
     virtual void GetFieldValue(const G4double Point[4],double *Bfield ) const;
     
-    inline void SetField(G4double val) { fBy = val; }
-    inline G4double GetField() const { return fBy; }
+    void SetField(G4double val) { fBy = val; }
+    G4double GetField() const { return fBy; }
     
 private:
     A01MagneticFieldMessenger* fMessenger;

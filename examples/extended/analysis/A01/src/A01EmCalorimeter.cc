@@ -40,11 +40,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 A01EmCalorimeter::A01EmCalorimeter(G4String name)
-:G4VSensitiveDetector(name), fHitsCollection(0)
+:G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
 {
     G4String HCname;
     collectionName.insert(HCname="EMcalorimeterColl");
-    fHCID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

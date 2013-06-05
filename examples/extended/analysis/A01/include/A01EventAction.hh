@@ -74,8 +74,8 @@ private:
 #endif // G4ANALYSIS_USE
     
 public:
-    inline void SetVerbose(G4int val) { fVerboseLevel = val; }
-    inline G4int GetVerbose() const { return fVerboseLevel; }
+    void SetVerbose(G4int val) { fVerboseLevel = val; }
+    G4int GetVerbose() const { return fVerboseLevel; }
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

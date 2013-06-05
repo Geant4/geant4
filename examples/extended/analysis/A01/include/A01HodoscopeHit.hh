@@ -62,15 +62,15 @@ public:
     virtual std::vector<G4AttValue>* CreateAttValues() const;
     void Print();
     
-    inline G4int GetID() const { return fId; }
-    inline G4double GetTime() const { return fTime; }
-    inline void SetTime(G4double val) { fTime = val; }
-    inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
-    inline G4ThreeVector GetPos() const { return fPos; }
-    inline void SetRot(G4RotationMatrix rmat) { fRot = rmat; }
-    inline G4RotationMatrix GetRot() const { return fRot; }
-    inline void SetLogV(G4LogicalVolume* val) { fPLogV = val; }
-    inline const G4LogicalVolume* GetLogV() const { return fPLogV; }
+    G4int GetID() const { return fId; }
+    G4double GetTime() const { return fTime; }
+    void SetTime(G4double val) { fTime = val; }
+    void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+    G4ThreeVector GetPos() const { return fPos; }
+    void SetRot(G4RotationMatrix rmat) { fRot = rmat; }
+    G4RotationMatrix GetRot() const { return fRot; }
+    void SetLogV(G4LogicalVolume* val) { fPLogV = val; }
+    const G4LogicalVolume* GetLogV() const { return fPLogV; }
     
 private:
     G4int fId;

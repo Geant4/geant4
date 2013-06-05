@@ -62,17 +62,17 @@ public:
     virtual std::vector<G4AttValue>* CreateAttValues() const;
     virtual void Print();
     
-    inline void SetColumnID(G4int z) { fColumnID = z; }
-    inline G4int GetColumnID() const { return fColumnID; }
-    inline void SetRowID(G4int z) { fRowID = z; }
-    inline G4int GetRowID() const { return fRowID; }
-    inline void SetEdep(G4double de) { fEdep = de; }
-    inline void AddEdep(G4double de) { fEdep += de; }
-    inline G4double GetEdep() const { return fEdep; }
-    inline void SetPos(G4ThreeVector xyz) { fPos = xyz; }
-    inline G4ThreeVector GetPos() const { return fPos; }
-    inline void SetRot(G4RotationMatrix rmat) { fRot = rmat; }
-    inline G4RotationMatrix GetRot() const { return fRot; }
+    void SetColumnID(G4int z) { fColumnID = z; }
+    G4int GetColumnID() const { return fColumnID; }
+    void SetRowID(G4int z) { fRowID = z; }
+    G4int GetRowID() const { return fRowID; }
+    void SetEdep(G4double de) { fEdep = de; }
+    void AddEdep(G4double de) { fEdep += de; }
+    G4double GetEdep() const { return fEdep; }
+    void SetPos(G4ThreeVector xyz) { fPos = xyz; }
+    G4ThreeVector GetPos() const { return fPos; }
+    void SetRot(G4RotationMatrix rmat) { fRot = rmat; }
+    G4RotationMatrix GetRot() const { return fRot; }
     
 private:
     G4int fColumnID;

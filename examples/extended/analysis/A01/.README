@@ -42,25 +42,8 @@
 
 \section A01_s2 PHYSICS
 
-   This example uses the following physics processes:
-     - electromagnetic:
-         - photo-electric effect
-         - Compton scattering
-         - pair production
-         - bremsstrahlung
-         - ionization
-         - multiple scattering
-         - annihilation
-     - decay
-     - transportation in a field
-
-   and defines the following particles:
-    -  geantino, charged geantino, gamma, all leptons, 
-       pions, charged kaons
-
-   Note that even though hadrons are defined, no hadronic processes 
-   are invoked in this example.
-
+   This example uses the reference hadronic physics list, FTFP_BERT,
+   and also adds the StepLimiter process.
 
 \section A01_s3 EVENT
 
