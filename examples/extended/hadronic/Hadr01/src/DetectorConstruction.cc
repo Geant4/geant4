@@ -73,10 +73,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
+ : G4VUserDetectorConstruction(),
+   fTargetMaterial(0),
+   fWorldMaterial(0),
+   fCheckSD(0),
+   fTargetSD(0),
+   fLogicTarget(0),
+   fLogicCheck(0),
+   fLogicWorld(0),
+   fDetectorMessenger(0)
 {
-  fLogicTarget = 0;
-  fLogicCheck  = 0;
-  fLogicWorld  = 0;
   fDetectorMessenger = new DetectorMessenger(this);
 
   fRadius = 10.*cm;
@@ -131,7 +137,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   G4Tubs* solidC = new G4Tubs("Check",0.,checkR,checkZ,0.,twopi);
   fLogicCheck = new G4LogicalVolume( solidC,fWorldMaterial,"Check"); 
   new G4PVPlacement(0,G4ThreeVector(),fLogicCheck,"Check",
-		    fLogicWorld,false,0);
+                    fLogicWorld,false,0);
   fLogicCheck->SetSensitiveDetector(fCheckSD);
 
   //
@@ -146,7 +152,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   for(G4int i=0; i<nSlices; i++) {
     // physC = 
     new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),fLogicTarget,"Target",
-		      fLogicCheck,false,i);
+                      fLogicCheck,false,i);
     z += 2.0*sliceZ;
   }
   G4cout << "### Target consist of " << nSlices

@@ -51,6 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StackingAction::StackingAction()
+ : G4UserStackingAction(),
+   fHistoManager(0), fStackMessenger(0), fParticle(0) 
 {
   fStackMessenger = new StackingMessenger(this);
   fHistoManager   = HistoManager::GetPointer();

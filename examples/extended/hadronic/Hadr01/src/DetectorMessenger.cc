@@ -56,7 +56,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:fDetector(Det)
+: G4UImessenger(), fDetector(Det),
+  fTestDir(0),
+  fMatCmd(0),
+  fMat1Cmd(0),
+  fRCmd(0),
+  fLCmd(0),
+  fEdepCmd(0),
+  fBinCmd(0),
+  fNOfAbsCmd(0),
+  fVerbCmd(0),
+  fBeamCmd(0),
+  fUpdateCmd(0)
 {
   fTestDir = new G4UIdirectory("/testhadr/");
   fTestDir->SetGuidance(" Hadronic Extended Example.");

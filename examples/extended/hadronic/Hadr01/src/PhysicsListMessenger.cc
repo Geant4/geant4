@@ -54,7 +54,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:fPhysicsList(pPhys)
+:G4UImessenger(), fPhysicsList(pPhys),
+ fGammaCutCmd(0), fElectCutCmd(0), fPosCutCmd(0), fCutCmd(0), fAllCutCmd(0),
+ fPListCmd(0), fListCmd(0) 
 {   
   fGammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/CutGamma",this);  
   fGammaCutCmd->SetGuidance("Set gamma cut.");
@@ -130,7 +132,7 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   } else if( command == fElectCutCmd ) {
     if(fPhysicsList) {
       fPhysicsList->SetCutForElectron(
-	fElectCutCmd->GetNewDoubleValue(newValue));
+        fElectCutCmd->GetNewDoubleValue(newValue));
     } else {
       UI->ApplyCommand("/run/setCutForAGivenParticle e- " + newValue);
     }

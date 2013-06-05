@@ -62,7 +62,7 @@ public:
   virtual void ConstructProcess();
 
 private:
-  G4int  verbose;
+  G4int  fVerbose;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

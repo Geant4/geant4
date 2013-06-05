@@ -54,7 +54,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmUserPhysics::G4EmUserPhysics(G4int ver)
-  : G4VPhysicsConstructor("User EM Options"), verbose(ver)
+  : G4VPhysicsConstructor("User EM Options"), fVerbose(ver)
 {
   G4LossTableManager::Instance();
 }
@@ -93,7 +93,7 @@ void G4EmUserPhysics::ConstructProcess()
   }
 
   G4EmProcessOptions opt;
-  opt.SetVerbose(verbose);
+  opt.SetVerbose(fVerbose);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

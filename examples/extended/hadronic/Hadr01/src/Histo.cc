@@ -38,33 +38,33 @@
 //----------------------------------------------------------------------------
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Histo.hh"
 #include "HistoMessenger.hh"
 #include "G4RootAnalysisManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Histo::Histo()
+: fManager(0),
+  fMessenger(0),
+  fHistName("test"),
+  fHistType("root"),
+  fTupleName("tuple"),
+  fTupleTitle("test"),
+  fNHisto(0),
+  fVerbose(0),
+  fDefaultAct(true),
+  fHistoActive(false),
+  fNtupleActive(false)
 {
-  fManager   = 0;
   fMessenger = new HistoMessenger(this);
- 
-  fHistName   = "test";
-  fHistType   = "root";
-  fTupleName  = "tuple";
-  fTupleTitle = "test";
-  fNHisto     = 0;
-  fVerbose    = 0;
-  fDefaultAct = true;
-  fHistoActive= false;
-  fNtupleActive= false;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Histo::~Histo()
 {
@@ -72,7 +72,7 @@ Histo::~Histo()
   delete fManager;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::Book()
 {
@@ -99,7 +99,7 @@ void Histo::Book()
     if(fActive[i]) {
       G4String ss = "h" + fIds[i];
       fHisto[i] = 
-	fManager->CreateH1(ss, fTitles[i], fBins[i], fXmin[i], fXmax[i]);
+        fManager->CreateH1(ss, fTitles[i], fBins[i], fXmin[i], fXmax[i]);
       if(fVerbose > 0) {
         G4cout << "Created histogram #" << i << "  id= " << fHisto[i]
                << "  "  << ss << "  " << fTitles[i] << G4endl;
@@ -113,25 +113,25 @@ void Histo::Book()
     G4int n = fNtupleI.size();
     for(i=0; i<n; ++i) { 
       if(fTupleI[i] == -1) {  
-	fTupleI[i] = fManager->CreateNtupleIColumn(fNtupleI[i]); 
+        fTupleI[i] = fManager->CreateNtupleIColumn(fNtupleI[i]); 
       }
     }
     n = fNtupleF.size();
     for(i=0; i<n; ++i) { 
       if(fTupleF[i] == -1) {  
-	fTupleF[i] = fManager->CreateNtupleFColumn(fNtupleF[i]); 
+        fTupleF[i] = fManager->CreateNtupleFColumn(fNtupleF[i]); 
       }
     }
     n = fNtupleD.size();
     for(i=0; i<n; ++i) { 
       if(fTupleD[i] == -1) {  
-	fTupleD[i] = fManager->CreateNtupleDColumn(fNtupleD[i]); 
+        fTupleD[i] = fManager->CreateNtupleDColumn(fNtupleD[i]); 
       }
     }
   }
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::Save()
 {
@@ -155,14 +155,14 @@ void Histo::Save()
   fManager = 0;
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::Add1D(const G4String& id, const G4String& name, G4int nb, 
                   G4double x1, G4double x2, G4double u)
 {
   if(fVerbose > 0) {
     G4cout << "Histo::Add1D: New histogram will be booked: #" 
-	   << id << "  <" << name 
+           << id << "  <" << name 
            << "  " << nb << "  " << x1 << "  " << x2 << "  " << u 
            << G4endl;
   }
@@ -179,7 +179,7 @@ void Histo::Add1D(const G4String& id, const G4String& name, G4int nb,
   fHisto.push_back(-1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void 
 Histo::SetHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4double u)
@@ -198,11 +198,11 @@ Histo::SetHisto1D(G4int i, G4int nb, G4double x1, G4double x2, G4double u)
     fHistoActive = true;
   } else {
     G4cout << "Histo::SetHisto1D: WARNING! wrong histogram index " 
-	   << i << G4endl;
+           << i << G4endl;
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::Activate(G4int i, G4bool val)
 {
@@ -216,7 +216,7 @@ void Histo::Activate(G4int i, G4bool val)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::Fill(G4int i, G4double x, G4double w)
 {
@@ -233,14 +233,14 @@ void Histo::Fill(G4int i, G4double x, G4double w)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::ScaleH1(G4int i, G4double x)
 {
   if(!fHistoActive) { return; }
   if(fVerbose > 0) {
     G4cout << "Histo::Scale: Histogram: #" << i 
-	   << " by factor " << x << G4endl;   
+           << " by factor " << x << G4endl;   
   }
   if(i>=0 && i<fNHisto) {
     if(fActive[i]) { fManager->GetH1(fHisto[i])->scale(x); }
@@ -249,14 +249,14 @@ void Histo::ScaleH1(G4int i, G4double x)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddTuple(const G4String& w1)
 {
   fTupleTitle = w1;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddTupleI(const G4String& w1)
 {
@@ -265,7 +265,7 @@ void Histo::AddTupleI(const G4String& w1)
   fTupleI.push_back(-1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddTupleF(const G4String& w1)
 {
@@ -274,7 +274,7 @@ void Histo::AddTupleF(const G4String& w1)
   fTupleF.push_back(-1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddTupleD(const G4String& w1)
 {
@@ -283,7 +283,7 @@ void Histo::AddTupleD(const G4String& w1)
   fTupleD.push_back(-1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::FillTupleI(G4int i, G4int x)
 {
@@ -297,11 +297,11 @@ void Histo::FillTupleI(G4int i, G4int x)
     fManager->FillNtupleIColumn(fTupleI[i], x); 
   } else {
     G4cout << "Histo::FillTupleI: WARNING! wrong ntuple index " 
-	   << i << G4endl;
+           << i << G4endl;
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::FillTupleF(G4int i, G4float x)
 {
@@ -315,11 +315,11 @@ void Histo::FillTupleF(G4int i, G4float x)
     fManager->FillNtupleFColumn(fTupleF[i], x); 
   } else {
     G4cout << "Histo::FillTupleF: WARNING! wrong ntuple index " 
-	   << i << G4endl;
+           << i << G4endl;
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::FillTupleD(G4int i, G4double x)
 {
@@ -333,11 +333,11 @@ void Histo::FillTupleD(G4int i, G4double x)
     fManager->FillNtupleDColumn(fTupleD[i], x); 
   } else {
     G4cout << "Histo::FillTupleD: WARNING! wrong ntuple index " 
-	   << i << G4endl;
+           << i << G4endl;
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::AddRow()
 {
@@ -345,7 +345,7 @@ void Histo::AddRow()
   fManager->AddNtupleRow();
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::SetFileName(const G4String& nam) 
 {
@@ -353,7 +353,7 @@ void Histo::SetFileName(const G4String& nam)
   fHistoActive = true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Histo::SetFileType(const G4String& nam) 
 {
@@ -364,5 +364,5 @@ void Histo::SetFileType(const G4String& nam)
     { fHistType = "ascii"; }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

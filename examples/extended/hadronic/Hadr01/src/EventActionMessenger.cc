@@ -49,7 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventActionMessenger::EventActionMessenger(EventAction* evAct)
-  : fEventAction(evAct)
+  : G4UImessenger(), fEventAction(evAct),
+    fPrintCmd(0), fCmd(0)
 {   
   fPrintCmd = new G4UIcmdWithAnInteger("/testhadr/PrintModulo",this);
   fPrintCmd->SetGuidance("Print events modulo n");

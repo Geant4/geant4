@@ -49,6 +49,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0), fHisto(0)
 {
   fParticleGun  = new G4ParticleGun(1);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
