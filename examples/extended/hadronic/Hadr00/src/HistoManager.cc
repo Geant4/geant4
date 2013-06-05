@@ -41,8 +41,8 @@
 //----------------------------------------------------------------------------
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
@@ -61,11 +61,11 @@
 
 #include "Histo.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager* HistoManager::fManager = 0;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager* HistoManager::GetPointer()
 {
@@ -76,9 +76,10 @@ HistoManager* HistoManager::GetPointer()
   return fManager;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
+ : fHisto(0), fNeutron(0)
 {
   fHisto     = new Histo();
   fNeutron   = G4Neutron::Neutron();
@@ -100,14 +101,14 @@ HistoManager::HistoManager()
   fIsInitialised = false;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::~HistoManager()
 {
   delete fHisto;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::BeginOfRun()
 {
@@ -131,35 +132,35 @@ void HistoManager::BeginOfRun()
   } else {
     fHisto->Add1D("h1",
      "Elastic cross section (barn,1.0) as a functions of log10(p/GeV)",
-		  fBinsP,p1,p2,1.0);
+                  fBinsP,p1,p2,1.0);
     fHisto->Add1D("h2",
      "Elastic cross section (barn) as a functions of log10(E/MeV)",
-		  fBinsE,e1,e2,1.0);
+                  fBinsE,e1,e2,1.0);
     fHisto->Add1D("h3",
      "Inelastic cross section (barn) as a functions of log10(p/GeV)",
-		  fBinsP,p1,p2,1.0);
+                  fBinsP,p1,p2,1.0);
     fHisto->Add1D("h4",
      "Inelastic cross section (barn) as a functions of log10(E/MeV)",
-		  fBinsE,e1,e2,1.0);
+                  fBinsE,e1,e2,1.0);
     fHisto->Add1D("h5",
      "Capture cross section (barn) as a functions of log10(E/MeV)",
-		  fBinsE,e1,e2,1.0);
+                  fBinsE,e1,e2,1.0);
     fHisto->Add1D("h6",
      "Fission cross section (barn) as a functions of log10(E/MeV)",
-		  fBinsE,e1,e2,1.0);
+                  fBinsE,e1,e2,1.0);
     fHisto->Add1D("h7",
      "Charge exchange cross section (barn) as a functions of log10(E/MeV)",
-		  fBinsE,e1,e2,1.0);
+                  fBinsE,e1,e2,1.0);
     fHisto->Add1D("h8",
      "Total cross section (barn) as a functions of log10(E/MeV)",
-		  fBinsE,e1,e2,1.0);
+                  fBinsE,e1,e2,1.0);
   }
 
   fIsInitialised = true;
   fHisto->Book();  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::EndOfRun()
 {
@@ -255,7 +256,7 @@ void HistoManager::EndOfRun()
   fHisto->Save();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::SetVerbose(G4int val)        
 {
@@ -263,5 +264,5 @@ void HistoManager::SetVerbose(G4int val)
   fHisto->SetVerbose(val);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

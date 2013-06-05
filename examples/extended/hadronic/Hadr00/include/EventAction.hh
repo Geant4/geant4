@@ -71,7 +71,7 @@ private:
   EventAction(const EventAction&);
 
   EventActionMessenger* fEventMessenger;
-  G4UImanager*          UI;
+  G4UImanager*          fUI;
   std::vector<G4int>    fSelectedEvents;
 
   G4int        fPrintModulo;

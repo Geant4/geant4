@@ -67,9 +67,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
+: G4VUserDetectorConstruction(),
+  fTargetMaterial(0), fWorldMaterial(0),
+  fLogicTarget(0), fLogicWorld(0),
+  fDetectorMessenger(0)
 {
-  fLogicTarget = 0;
-  fLogicWorld  = 0;
   fDetectorMessenger = new DetectorMessenger(this);
 
   fRadius = 5.*cm;
