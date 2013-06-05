@@ -248,6 +248,7 @@ private:
   //------------------------------------------------------------------------
 
 public:
+
   // access to dispersion of restricted energy loss
   G4double GetDEDXDispersion(const G4MaterialCutsCouple *couple,
 			     const G4DynamicParticle* dp,
@@ -288,8 +289,6 @@ protected:
 				       G4double cut);
 
   inline size_t CurrentMaterialCutsCoupleIndex() const;
-
-  inline G4double GetCurrentRange() const;
 
   //------------------------------------------------------------------------
   // Specific methods to set, access, modify models
@@ -437,6 +436,7 @@ public:
   inline G4PhysicsTable* IonisationTable() const;
   inline G4PhysicsTable* IonisationTableForSubsec() const;
   inline G4PhysicsTable* CSDARangeTable() const;
+  inline G4PhysicsTable* SecondaryRangeTable() const;
   inline G4PhysicsTable* RangeTableForLoss() const;
   inline G4PhysicsTable* InverseRangeTable() const;
   inline G4PhysicsTable* LambdaTable();
@@ -562,7 +562,7 @@ protected:
 
   G4ParticleChangeForLoss          fParticleChange;
 
-  // ======== Cashed values - may be state dependent ================
+  // ======== Cached values - may be state dependent ================
 
 private:
 
@@ -576,6 +576,7 @@ private:
   const G4MaterialCutsCouple* currentCouple;
   size_t                      currentCoupleIndex;
   size_t                      basedCoupleIndex;
+  size_t                      lastIdx;
 
   G4int    nWarnings;
 
@@ -586,8 +587,10 @@ private:
 
   G4double preStepLambda;
   G4double fRange;
+  G4double computedRange;
   G4double preStepKinEnergy;
   G4double preStepScaledEnergy;
+  G4double preStepRangeEnergy;
   G4double mfpKinEnergy;
 
   G4GPILSelection  aGPILSelection;
@@ -599,13 +602,6 @@ private:
 inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const 
 {
   return currentCoupleIndex;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-inline G4double G4VEnergyLossProcess::GetCurrentRange() const
-{
-  return fRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -646,7 +642,7 @@ inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
                                                        G4double charge2ratio)
 {
   massRatio     = massratio;
-  fFactor      *= charge2ratio/chargeSqRatio;
+  fFactor       = charge2ratio*biasFactor*(*theDensityFactor)[currentCoupleIndex];
   chargeSqRatio = charge2ratio;
   reduceFactor  = 1.0/(fFactor*massRatio);
 }
@@ -694,11 +690,20 @@ G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
 {
-  //G4cout << "G4VEnergyLossProcess::GetRange: Idx= " 
-  //	 << basedCoupleIndex << " E(MeV)= " << e << G4endl; 
-  G4double x = ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e);
-  if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
-  return x;
+  //G4cout << "G4VEnergyLossProcess::GetScaledRange: Idx= " 
+  //	 << basedCoupleIndex << " E(MeV)= " << e 
+  //	 << " lastIdx= " << lastIdx << "  " << theRangeTableForLoss << G4endl; 
+  if(basedCoupleIndex != lastIdx || preStepRangeEnergy != e) {
+    lastIdx = basedCoupleIndex;
+    preStepRangeEnergy = e;
+    computedRange = ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e);
+    if(e < minKinEnergy) { computedRange *= std::sqrt(e/minKinEnergy); }
+  }
+  //G4cout << "G4VEnergyLossProcess::GetScaledRange: Idx= " 
+  //	 << basedCoupleIndex << " E(MeV)= " << e 
+  //	 << " R=  " << fRange << "  " << theRangeTableForLoss << G4endl; 
+
+  return computedRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -722,7 +727,8 @@ G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e)
 inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
 {
   //G4cout << "G4VEnergyLossProcess::GetEnergy: Idx= " 
-  //	 << basedCoupleIndex << " R(mm)= " << r << G4endl; 
+  //	 << basedCoupleIndex << " R(mm)= " << r << "  " 
+  //	 << theInverseRangeTable << G4endl; 
   G4PhysicsVector* v = (*theInverseRangeTable)[basedCoupleIndex];
   G4double rmin = v->Energy(0);
   G4double e = 0.0; 
@@ -768,14 +774,12 @@ G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
 			       const G4MaterialCutsCouple* couple)
 {
   G4double x = fRange;
-  if(couple != currentCouple || kineticEnergy != preStepKinEnergy) { 
-    DefineMaterial(couple);
-    if(theCSDARangeTable) {
-      x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
-	* reduceFactor;
-    } else if(theRangeTableForLoss) {
-      x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
-    }
+  DefineMaterial(couple);
+  if(theCSDARangeTable) {
+    x = GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)
+      * reduceFactor;
+  } else if(theRangeTableForLoss) {
+    x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
   }
   return x;
 }
@@ -800,12 +804,11 @@ inline G4double
 G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
 				      const G4MaterialCutsCouple* couple)
 {
-  G4double x = fRange;
-  if(couple != currentCouple || kineticEnergy != preStepKinEnergy) {
-    DefineMaterial(couple);
-    x = GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
-  }
-  //  G4cout << "Range from " << GetProcessName() 
+  //  G4cout << "GetRangeForLoss: Range from " << GetProcessName() << G4endl;
+  DefineMaterial(couple);
+  G4double x = 
+    GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
+  //G4cout << "GetRangeForLoss: Range from " << GetProcessName() 
   //         << "  e= " << kineticEnergy << " r= " << x << G4endl;
   return x;
 }
@@ -1116,6 +1119,13 @@ inline G4PhysicsTable* G4VEnergyLossProcess::IonisationTableForSubsec() const
 inline G4PhysicsTable* G4VEnergyLossProcess::CSDARangeTable() const
 {
   return theCSDARangeTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4PhysicsTable* G4VEnergyLossProcess::SecondaryRangeTable() const
+{
+  return theSecondaryRangeTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -159,7 +159,7 @@ G4EmManager::G4EmManager()
   emConfigurator = 0;
   emElectronIonPair = 0;
   //theMessenger = new G4EmManagerMessenger(this);
-  //theElectron  = G4Electron::Electron();
+  theElectron  = G4Electron::Electron();
   //tableBuilder = new G4LossTableBuilder();
   //emSaturation = new G4EmSaturation();
   //emConfigurator = new G4EmConfigurator(verbose);

@@ -60,6 +60,7 @@
 // 12-02-07 Add SetSkin, SetLinearLossLimit (V.Ivanchenko)
 // 18-06-07 Move definition of msc parameters to G4EmProcessOptions (V.Ivanchenko)
 // 12-04-10 Added PreparePhsyicsTables and BuildPhysicsTables entries (V.Ivanchenko)
+// 04-06-13 Adaptation for MT mode, new method LocalPhysicsTables (V.Ivanchenko)  
 //
 // Class Description:
 //
@@ -115,7 +116,7 @@ public:
   //-------------------------------------------------
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-			   G4VEnergyLossProcess* p);
+			   G4VEnergyLossProcess* p, G4bool theMaster);
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
 			   G4VEmProcess* p);
@@ -128,8 +129,8 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition* aParticle, 
 			 G4VEnergyLossProcess* p);
 
-  void SlavePhysicsTable(const G4ParticleDefinition* aParticle, 
-			 G4VEnergyLossProcess* p);
+  void LocalPhysicsTables(const G4ParticleDefinition* aParticle, 
+			  G4VEnergyLossProcess* p);
   
   //-------------------------------------------------
   // Run time access to DEDX, range, energy for a given particle, 
@@ -194,9 +195,6 @@ public:
   void Register(G4VEmFluctuationModel* p);
 
   void DeRegister(G4VEmFluctuationModel* p);
-
-  void RegisterIon(const G4ParticleDefinition* aParticle, 
-		   G4VEnergyLossProcess* p);
 
   void RegisterExtraParticle(const G4ParticleDefinition* aParticle, 
 			     G4VEnergyLossProcess* p);
@@ -307,6 +305,10 @@ private:
 
   void CopyDEDXTables();
 
+  void SetIon(const G4ParticleDefinition *aParticle,
+	      const G4MaterialCutsCouple *couple,
+	      G4double kineticEnergy);
+
   G4LossTableManager(G4LossTableManager &);
   G4LossTableManager & operator=(const G4LossTableManager &right);
 
@@ -333,6 +335,7 @@ private:
   G4VEnergyLossProcess* currentLoss;
   PD                    currentParticle;
   PD                    theElectron;
+  PD                    theGenericIon;
   PD                    firstParticle;
 
   G4int n_loss;

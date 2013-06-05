@@ -55,6 +55,7 @@
 // 27-10-07 Virtual functions moved to source (V.Ivanchenko)
 // 11-03-08 Set skin value does not effect step limit type (V.Ivanchenko)
 // 24-06-09 Removed hidden bin in G4PhysicsVector (V.Ivanchenko)
+// 04-06-13 Adoptation to MT mode (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -179,6 +180,7 @@ G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
 void 
 G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
 {
+  if(emManager->IsMaster()) { return; }
   if(!firstParticle) { firstParticle = &part; }
   if(part.GetParticleType() == "nucleus") {
     SetStepLimitType(fMinimal);
@@ -209,6 +211,8 @@ G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition& part
     for(G4int i=0; i<numberOfModels; ++i) {
       G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
       msc->SetIonisation(0, firstParticle);
+      msc->SetMasterThread(false);
+
       if(0 == i) { currentModel = msc; }
       if(isIon) {
 	msc->SetStepLimitType(fMinimal);
@@ -314,6 +318,7 @@ void
 G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, 
 					      G4VMultipleScattering* master)
 {
+  //if(emManager->IsMaster()) { return; }
   G4String num = part.GetParticleName();
   if(1 < verboseLevel) {
     G4cout << "### G4VMultipleScattering::SlaveBuildPhysicsTable() for "
@@ -322,6 +327,13 @@ G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
            << G4endl;
   }
   if(firstParticle == &part) { 
+    /*
+    G4cout << "### G4VMultipleScattering::SlaveBuildPhysicsTable() for "
+           << GetProcessName()
+           << " and particle " << num
+	   << "  " << G4LossTableManager::Instance()
+           << G4endl;
+    */
     emManager->BuildPhysicsTable(firstParticle);
 
     // initialisation of models
@@ -335,7 +347,7 @@ G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
   }
 
   // explicitly defined printout by particle name
-  if(1 < verboseLevel && (num == "e-" || 
+  if(0 < verboseLevel && (num == "e-" || 
 			  num == "e+"    || num == "mu+" || 
 			  num == "mu-"   || num == "proton"|| 
 			  num == "pi+"   || num == "pi-" || 
@@ -368,10 +380,19 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << num
+	   << " IsMaster= " << G4LossTableManager::Instance()->IsMaster()
            << G4endl;
   }
 
   if(firstParticle == &part) { 
+    /*
+    G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
+           << GetProcessName()
+           << " and particle " << num
+	   << " IsMaster= " << G4LossTableManager::Instance()->IsMaster()
+	   << "  " << G4LossTableManager::Instance()
+           << G4endl;
+    */
     emManager->BuildPhysicsTable(firstParticle);
   }
 
@@ -425,6 +446,14 @@ void G4VMultipleScattering::StartTracking(G4Track* track)
     fIonisation = emManager->GetEnergyLossProcess(currParticle);
     eloss = fIonisation;
   }
+  /*
+  G4cout << "G4VMultipleScattering::StartTracking Nmod= " << numberOfModels
+	 << "  " << currParticle->GetParticleName() 
+	 << " E(MeV)= " << track->GetKineticEnergy()
+	 << "  Ion= " << eloss << "  " << fIonisation << " IsMaster= " 
+	 << G4LossTableManager::Instance()->IsMaster() 
+	 << G4endl;
+  */
   // one model
   if(1 == numberOfModels) {
     currentModel->StartTracking(track);
@@ -454,6 +483,8 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   physStepLimit = gPathLength = tPathLength = currentMinimalStep;
 
   G4double ekin = track.GetKineticEnergy();
+  //G4cout << "MSC::AlongStepGPIL: Ekin= " << ekin
+  //       << "  " << currParticle->GetParticleName() << G4endl;
   // isIon flag is used only to select a model
   if(isIon) { 
     ekin *= proton_mass_c2/track.GetParticleDefinition()->GetPDGMass(); 
@@ -474,9 +505,11 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
       *selection = CandidateForSelection; 
     }
   } else { isActive = false; }
-  /*  
+  
+  /*
   if(currParticle->GetPDGMass() > GeV)    
   G4cout << "MSC::AlongStepGPIL: Ekin= " << ekin
+         << "  " << currParticle->GetParticleName()
 	 << " gPathLength= " << gPathLength
 	 << " tPathLength= " << tPathLength
 	 << " currentMinimalStep= " << currentMinimalStep

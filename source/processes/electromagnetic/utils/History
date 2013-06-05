@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 June 13: V.Ivant (emutils-V09-06-19)
+- G4LossTableManager - optimisation for MT mode: do not insert 
+    concrete ions into particle/energy loss process map, only
+    G4GenericIon is inserted; added LocalPhysicsTables methods
+    to copy pointers of G4PhysicsTables from master to local threads;
+    SetIon method is added to define ion state
+- G4VEnergyLossProcess - optimisation for MT mode, added local 
+    cache inside GetRangeForLoss method, cleanup
+- G4VMultipleScattering, G4VMscModel - adaptation to MT mode
+
 30 May 13: V.Ivant (emutils-V09-06-18)
 - G4LossTableManager, G4VEnergyLossProcess, G4VMultipleScattering,
     G4VEmModel, G4VMscModel - implemented copy of transport cross 

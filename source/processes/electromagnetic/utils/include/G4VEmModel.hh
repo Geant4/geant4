@@ -327,6 +327,10 @@ public:
 
   inline void SetForceBuildTable(G4bool val);
 
+  inline void SetMasterThread(G4bool val);
+
+  inline G4bool IsMaster() const;
+
   inline G4double MaxSecondaryKinEnergy(const G4DynamicParticle* dynParticle);
 
   inline const G4String& GetName() const;
@@ -603,6 +607,20 @@ inline G4bool G4VEmModel::DeexcitationFlag() const
 inline G4bool G4VEmModel::ForceBuildTableFlag() const 
 {
   return flagForceBuildTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void G4VEmModel::SetMasterThread(G4bool val)
+{
+  isMaster = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4bool G4VEmModel::IsMaster() const
+{
+  return isMaster;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

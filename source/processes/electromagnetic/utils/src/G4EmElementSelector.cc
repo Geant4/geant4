@@ -47,6 +47,7 @@
 
 #include "G4EmElementSelector.hh"
 #include "G4VEmModel.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,7 +75,11 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
       xSections.push_back(v);
     }
   }
-  //G4cout << "G4EmElementSelector for " << mat->GetName() << " n= " << n << G4endl;
+  /*
+  G4cout << "G4EmElementSelector for " << mat->GetName() << " n= " << n
+	 << " nbins= " << nbins << "  Emin= " << lowEnergy 
+	 << " Emax= " << highEnergy << G4endl;
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,7 +98,7 @@ G4EmElementSelector::~G4EmElementSelector()
 void G4EmElementSelector::Initialise(const G4ParticleDefinition* part, 
 				     G4double cut)
 {
-  //G4cout << "G4EmElementSelector initialise for " << material->GetName() << G4endl;
+  //G4cout << "G4EmElementSelector initialise for " << material->GetName()<< G4endl;
   if(0 == nElmMinusOne || cut == cutEnergy) { return; }
 
   cutEnergy = cut;

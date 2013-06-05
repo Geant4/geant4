@@ -54,6 +54,7 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,7 +64,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   highLimit(100.0*CLHEP::TeV),eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
-  pParticleChange(0),xSectionTable(0),theDensityFactor(0),
+  isMaster(true),pParticleChange(0),xSectionTable(0),theDensityFactor(0),
   theDensityIdx(0),fCurrentCouple(0),fCurrentElement(0),nsec(5) 
 {
   xsec.resize(nsec);
@@ -142,6 +143,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth
+  if(highLimit <= lowLimit) { return; }
   G4int nbins = G4int(man->GetNumberOfBinsPerDecade()
 		      * std::log10(highLimit/lowLimit) / 6.0);
   if(nbins < 5) { nbins = 5; }
@@ -155,34 +157,42 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
     elmSelectors = new std::vector<G4EmElementSelector*>;
   }
   if(numOfCouples > nSelectors) { 
-    elmSelectors->resize(numOfCouples,0); 
+    for(G4int i=nSelectors; i<numOfCouples; ++i) { 
+      elmSelectors->push_back(0); 
+    }
     nSelectors = numOfCouples;
   }
 
   // initialise vector
   for(G4int i=0; i<numOfCouples; ++i) {
-    fCurrentCouple = theCoupleTable->GetMaterialCutsCouple(i);
-    const G4Material* material = fCurrentCouple->GetMaterial();
-    G4int idx = fCurrentCouple->GetIndex();
+    if(cuts[i] < highLimit) {
+      fCurrentCouple = theCoupleTable->GetMaterialCutsCouple(i);
+      const G4Material* material = fCurrentCouple->GetMaterial();
+      G4int idx = fCurrentCouple->GetIndex();
 
-    // selector already exist check if should be deleted
-    G4bool create = true;
-    if((*elmSelectors)[i]) {
-      if(material == ((*elmSelectors)[i])->GetMaterial()) { create = false; }
-      else { delete (*elmSelectors)[i]; }
+      // selector already exist check if should be deleted
+      G4bool create = true;
+      if((*elmSelectors)[i]) {
+	if(material == ((*elmSelectors)[i])->GetMaterial()) { create = false; }
+	else { delete (*elmSelectors)[i]; }
+      }
+      if(create) {
+	(*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
+						     lowLimit,highLimit,spline);
+      }
+      //G4cout << "G4VEmModel::InitialiseElmSelectors i= " << i
+      //	   << " idx= " << idx << "  "  << p->GetParticleName() 
+      //	   << "  " << (*elmSelectors)[i] << G4endl;
+      ((*elmSelectors)[i])->Initialise(p, cuts[idx]);
+      //((*elmSelectors)[i])->Dump(p);
     }
-    if(create) {
-      (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
-						   lowLimit,highLimit,spline);
-    }
-    ((*elmSelectors)[i])->Initialise(p, cuts[idx]);
-    //((*elmSelectors)[i])->Dump(p);
   } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VEmModel::InitialiseLocal(const G4ParticleDefinition*, G4VEmModel*)
+void G4VEmModel::InitialiseLocal(const G4ParticleDefinition*, 
+				 G4VEmModel*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
