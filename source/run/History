@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 5th, 2013, G. Cosmo (run-V09-06-45)
+June 5th, 2013, G. Cosmo (run-V09-06-47, run-V09-06-46, run-V09-06-45)
 - Use wrappers for calls to pthreads to allow for porting on Windows.
   Updated files: G4VUserPhysicsList.cc and G4MTRunManager.cc.
 

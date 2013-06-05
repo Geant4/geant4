@@ -410,6 +410,9 @@ void G4MTRunManager::InitializePhysics()
 // TODO: If this mechanism is needed in other parts of the code we can provide
 // the barrier mechanism as a utility class/functions to the kernel.
 // Note: we need a special treatment for WIN32
+#ifdef WIN32
+#include <windows.h> //For CRITICAL_SECTION objects
+#endif
 namespace {
     //Avoid compilation warning if squenetial for unused variables
 #ifdef G4MULTITHREADED
