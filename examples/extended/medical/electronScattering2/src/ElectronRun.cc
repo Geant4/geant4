@@ -38,6 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronRun::ElectronRun(const G4String& detectorName)
+: G4Run(), fMap()
 {
     // Get the sensitive detector manager
     G4SDManager* manager = G4SDManager::GetSDMpointer();

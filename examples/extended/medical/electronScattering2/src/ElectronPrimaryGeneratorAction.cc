@@ -35,6 +35,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronPrimaryGeneratorAction::ElectronPrimaryGeneratorAction()
+: G4VUserPrimaryGeneratorAction(), fParticleGun(0)
 {
     fParticleGun  = new G4GeneralParticleSource();
 }

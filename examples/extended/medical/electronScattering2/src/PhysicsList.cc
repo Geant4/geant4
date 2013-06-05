@@ -72,7 +72,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList()
+PhysicsList::PhysicsList() 
+: G4VModularPhysicsList(), fMessenger(0), fEmPhysicsList(0)
 {
     fMessenger = new PhysicsListMessenger(this);
     

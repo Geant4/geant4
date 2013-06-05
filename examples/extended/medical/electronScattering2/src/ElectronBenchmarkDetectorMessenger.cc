@@ -43,7 +43,8 @@
 
 ElectronBenchmarkDetectorMessenger::ElectronBenchmarkDetectorMessenger(
                                 ElectronBenchmarkDetector* det)
-:fDetector(det)
+: G4UImessenger(), fDetector(det),
+  fListDir(0), fPrimFoilMatCmd(0), fPrimFoilThickCmd(0)
 {
     fListDir = new G4UIdirectory("/primFoil/");
     fListDir->SetGuidance("Primary foil commands");

@@ -34,7 +34,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
-: G4VDiscreteProcess(processName),fMaxChargedStep(DBL_MAX)
+: G4VDiscreteProcess(processName), fMaxChargedStep(DBL_MAX), fMess(0)
 {
     fMess = new StepMaxMessenger(this);
 }

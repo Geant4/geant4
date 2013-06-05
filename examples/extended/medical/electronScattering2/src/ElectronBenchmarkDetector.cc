@@ -57,7 +57,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronBenchmarkDetector::ElectronBenchmarkDetector()
-:fLogWorld(NULL),
+:G4VUserDetectorConstruction(),
+fMaterialPrimFoil(0),
+fScorerRingLog(0),
+fLogWorld(NULL),
+fMessenger(0),
 fWorldVisAtt(0),
 fWindowVisAtt(0),
 fPrimFoilVisAtt(0),

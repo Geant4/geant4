@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 June 2013  Ivana Hrivnacova (exampleES2-V09-06-03)
+- Apply coding guidelines (initialization of data members)
+
 28 May 2013  Joseph Perl (exampleES2-V09-06-02)
 - Apply coding guidelines
 

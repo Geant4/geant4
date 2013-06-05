@@ -36,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronRunAction::ElectronRunAction(G4String &outputFile):
-fOutputFileSpec(outputFile)
+G4UserRunAction(), fOutputFileSpec(outputFile)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
