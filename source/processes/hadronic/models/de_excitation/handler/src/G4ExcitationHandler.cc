@@ -393,16 +393,12 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 
 	G4int level = 0;
 	theKindOfFragment = 
-	  theTableOfIons->FindIon(theFragmentZ,theFragmentA,level);
+	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
 	/*
 	G4cout << "### Find ion Z= " << theFragmentZ << " A= " << theFragmentA
 	       << " Eexc(MeV)= " << excitation/MeV << "  " 
 	       << theKindOfFragment << G4endl;
 	*/
-        if(!theKindOfFragment) { 
-	  theKindOfFragment = 
-	    theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
-	}
 	// production of an isomer
         if(eexc > minExcitation) {
           G4double elevel1 = 0.0;

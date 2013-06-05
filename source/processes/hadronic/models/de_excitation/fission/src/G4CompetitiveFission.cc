@@ -444,7 +444,7 @@ G4double G4CompetitiveFission::AsymmetricRatio(G4int A, G4double A11)
 G4double G4CompetitiveFission::SymmetricRatio(G4int A, G4double A11)
 {
   static const G4double B1 = 5.32;
-  static const G4double A00 = A/2.0;
+  const G4double A00 = A/2.0;
   return Ratio(G4double(A),A11,B1,A00);
 }
 
