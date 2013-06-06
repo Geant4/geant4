@@ -16,6 +16,28 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5th June 2013 P.Gumplinger (op-V09-06-02)
+- fix compilation error in G4OpWLS
+
+5th June 2013 P.Gumplinger (op-V09-06-01)
+- Require that WLS photons have a longer wavelength than the photon that
+  is being absorbed/shifted. Please, see bug report on the Forum:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/opticalphotons/509.html
+  Thanks to Ben Loer (FNAL)
+- Add the capability of simulating the transmission of a dichronic filter;
+
+  In this first implementation, the photon is either reflected or transmitted
+  without changing direction. Surface->SetType(dielectric_dichroic);
+  You must also supply a 2D data file with the format:
+  4     #ofWavelength-bins     #ofIncidentAngle-bins
+  List of Wavelength-bin values in nm (i)
+  List of IncidentAngle-bin values in deg (j) - angle from the normal
+  Transmittance[1,1],..,Transmittance[i,1],..,Transmittance[n,1]
+  .....................,Transmittance[i,j],.....................
+  Transmittance[1,m],..,Transmittance[i,m],..,Transmittance[n,m] in %
+
+  and: setenv G4DICHROICDATA dichroic.data
+
 30th Apr.2013 P.Gumplinger (op-V09-06-00)
               replace CLHEP::Rand*::shoot.. with G4Rand*::shoot...
               in G4OpBoundaryProcess

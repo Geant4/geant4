@@ -63,6 +63,8 @@
 //                           optical reflectance for a variety of surface
 //                           treatments - Thanks to Martin Janecek and
 //                           William Moses (Lawrence Berkeley National Lab.)
+//              2013-06-01 - add the capability of simulating the transmission
+//                           of a dichronic filter
 //
 // Author:      Peter Gumplinger
 // 		adopted from work by Werner Keil - April 2/96
@@ -76,6 +78,8 @@
 
 #include "G4OpBoundaryProcess.hh"
 #include "G4GeometryTolerance.hh"
+
+#include "G4SystemOfUnits.hh"
 
 /////////////////////////
 // Class Implementation
@@ -129,6 +133,9 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         iTE = iTM = 0;
         thePhotonMomentum = 0.;
         Rindex1 = Rindex2 = cost1 = cost2 = sint1 = sint2 = 0.;
+
+        idx = idy = 0;
+        DichroicVector = NULL;
 }
 
 // G4OpBoundaryProcess::G4OpBoundaryProcess(const G4OpBoundaryProcess &right)
@@ -451,6 +458,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
           DielectricLUT();
 
         }
+        else if (type == dielectric_dichroic) {
+
+          DielectricDichroic();
+
+        }
 	else if (type == dielectric_dielectric) {
 
           if ( theFinish == polishedbackpainted ||
@@ -582,6 +594,8 @@ void G4OpBoundaryProcess::BoundaryProcessVerbose() const
                 G4cout << " *** StepTooSmall *** " << G4endl;
         if ( theStatus == NoRINDEX )
                 G4cout << " *** NoRINDEX *** " << G4endl;
+        if ( theStatus == Dichroic )
+                G4cout << " *** Dichroic Transmission *** " << G4endl;
 }
 
 G4ThreeVector
@@ -806,6 +820,45 @@ void G4OpBoundaryProcess::DielectricLUT()
               NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;
            }
         } while (NewMomentum * theGlobalNormal <= 0.0);
+}
+
+void G4OpBoundaryProcess::DielectricDichroic()
+{
+        theStatus = Dichroic;
+
+        // Calculate Angle between Normal and Photon Momentum
+        G4double anglePhotonToNormal = OldMomentum.angle(-theGlobalNormal);
+
+        // Round it to closest integer
+        G4double angleIncident = std::floor(180/pi*anglePhotonToNormal+0.5);
+
+        if (!DichroicVector) {
+           if (OpticalSurface) DichroicVector = OpticalSurface->GetDichroicVector();
+        }
+
+        if (!DichroicVector) {
+           G4ExceptionDescription ed;
+           ed << " G4OpBoundaryProcess/DielectricDichroic(): "
+              << " The dichroic surface has no G4Physics2DVector"
+              << G4endl;
+          G4Exception("G4OpBoundaryProcess::DielectricDichroic", "OpBoun03",
+                      FatalException,ed,
+                      "A dichroic surface must have an associated G4Physics2DVector");
+        }
+
+        G4double wavelength = h_Planck*c_light/thePhotonMomentum;
+        G4cout << "wavelength: " << std::floor(wavelength/nm) << "nm" << G4endl;
+        G4cout << "Incident angle: " << angleIncident << "deg" << G4endl;
+        theTransmittance =
+            DichroicVector->Value(wavelength/nm,angleIncident,idx,idy)*perCent;
+        G4cout << "Transmittance: " << std::floor(theTransmittance/perCent) << "%" << G4endl;
+
+        if ( !G4BooleanRand(theTransmittance) ) // Not transmitted, so reflect
+           DoReflection();
+        else {
+           NewMomentum = OldMomentum;
+           NewPolarization = OldPolarization;
+        }
 }
 
 void G4OpBoundaryProcess::DielectricDielectric()
