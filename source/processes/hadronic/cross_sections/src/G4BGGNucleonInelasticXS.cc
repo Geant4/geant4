@@ -46,7 +46,6 @@
 #include "G4GlauberGribovCrossSection.hh"
 #include "G4NucleonNuclearCrossSection.hh"
 #include "G4HadronNucleonXsc.hh"
-//#include "G4HadronInelasticDataSet.hh"
 #include "G4ComponentSAIDTotalXS.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
@@ -54,6 +53,7 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4Isotope.hh"
+#include "G4Pow.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
 
@@ -75,8 +75,10 @@ G4BGGNucleonInelasticXS::G4BGGNucleonInelasticXS(const G4ParticleDefinition* p)
   fNucleon = 0;
   fGlauber = 0;
   fHadron  = 0;
-  //  fGHEISHA = 0;
   fSAID    = 0;
+
+  fG4pow   = G4Pow::GetInstance();
+
   particle = p;
   theProton= G4Proton::Proton();
   isProton = false;
@@ -303,7 +305,7 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
   if(kinEnergy <= 0.0) { return res; }
   else if (Z <= 1) { return kinEnergy*kinEnergy; }
   
-  G4double elog = std::log10(kinEnergy/GeV);
+  G4double elog = fG4pow->log10A(kinEnergy/GeV);
   G4double aa = theA[Z];
 
   // from G4ProtonInelasticCrossSection
@@ -312,11 +314,11 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
     G4double ff1 = 5.6  - 0.016*aa;           // slope of the drop at medium energies.
     G4double ff2 = 1.37 + 1.37/aa;            // start of the slope.
     G4double ff3 = 0.8  + 18./aa - 0.002*aa;   // stephight
-    res = 1.0 + ff3*(1.0 - (1.0/(1+std::exp(-ff1*(elog + ff2)))));
+    res = 1.0 + ff3*(1.0 - (1.0/(1+fG4pow->expA(-ff1*(elog + ff2)))));
 
     ff1 = 8.   - 8./aa  - 0.008*aa; // slope of the rise
     ff2 = 2.34 - 5.4/aa - 0.0028*aa; // start of the rise
-    res /= (1 + std::exp(-ff1*(elog + ff2)));
+    res /= (1 + fG4pow->expA(-ff1*(elog + ff2)));
 
   } else {
 
@@ -327,8 +329,8 @@ G4double G4BGGNucleonInelasticXS::CoulombFactor(G4double kinEnergy, G4int Z)
     G4double p6 = 1. + 200./aa + 0.02*aa;
     G4double p7 = 3.0 - (aa-70.)*(aa-200.)/11000.;
 
-    G4double firstexp  = std::exp(-p4*(elog + p5));
-    G4double secondexp = std::exp(-p6*(elog + p7));
+    G4double firstexp  = fG4pow->expA(-p4*(elog + p5));
+    G4double secondexp = fG4pow->expA(-p6*(elog + p7));
 
     res = (1.+p3*firstexp/(1. + firstexp))/(1. + secondexp);
 
