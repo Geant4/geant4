@@ -590,7 +590,7 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   fPAItransferTable = fPAIxscBank[jMat];
   fdNdxCutVector    = fdNdxCutTable[jMat];
 
-  G4double tmax = std::min(MaxSecondaryKinEnergy(dp), maxEnergy);
+  G4double tmax = std::min(MaxSecondaryEnergy(dp->GetDefinition(),dp->GetKineticEnergy()), maxEnergy);
   if( tmin >= tmax && fVerbose > 0)
   {
     G4cout<<"G4PAIModel::SampleSecondary: tmin >= tmax "<<G4endl;

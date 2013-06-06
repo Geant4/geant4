@@ -57,7 +57,6 @@
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
-#include "G4LossTableManager.hh"
 #include "G4ModifiedTsai.hh"
 
 #include "G4Physics2DVector.hh"
@@ -89,7 +88,7 @@ G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
 
 G4SeltzerBergerModel::~G4SeltzerBergerModel()
 {
-  if(G4LossTableManager::Instance()->IsMaster()) {
+  if(IsMaster()) {
     for(size_t i=0; i<101; ++i) { 
       if(dataSB[i]) {
 	delete dataSB[i]; 
@@ -104,12 +103,13 @@ G4SeltzerBergerModel::~G4SeltzerBergerModel()
 void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
 				      const G4DataVector& cuts)
 {
-  // check environment variable
-  // Build the complete string identifying the file with the data set
-  char* path = getenv("G4LEDATA");
-
   // Access to elements
-  if(G4LossTableManager::Instance()->IsMaster()) {
+  if(IsMaster()) {
+
+    // check environment variable
+    // Build the complete string identifying the file with the data set
+    char* path = getenv("G4LEDATA");
+
     const G4ElementTable* theElmTable = G4Element::GetElementTable();
     size_t numOfElm = G4Element::GetNumberOfElements();
     if(numOfElm > 0) {

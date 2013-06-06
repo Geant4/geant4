@@ -173,7 +173,7 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
   // Normally one shell is available 
   if (i < nShells) { 
   
-    G4double bindingEnergy  = anElement->GetAtomicShell(i);
+    G4double bindingEnergy = anElement->GetAtomicShell(i);
     edep = bindingEnergy;
     G4double esec = 0.0;
 
@@ -185,23 +185,32 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 	G4int Z = G4lrint(anElement->GetZ());
 	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
 	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
-        bindingEnergy = shell->BindingEnergy();
-	edep = bindingEnergy;
 	size_t nbefore = fvect->size();
 	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
 	size_t nafter = fvect->size();
 	if(nafter > nbefore) {
 	  for (size_t j=nbefore; j<nafter; ++j) {
-	    esec += ((*fvect)[j])->GetKineticEnergy();
+            G4double e = ((*fvect)[j])->GetKineticEnergy();
+            if(esec + e > edep) {
+	      /*
+	      G4cout << "### G4PEffectFluoModel Edep(eV)= " << edep/eV 
+		     << " Esec(eV)= " << esec/eV 
+		     << " E["<< j << "](eV)= " << e/eV
+		     << " N= " << nafter
+		     << " Z= " << Z << " shell= " << i 
+		     << "  Ebind(keV)= " << bindingEnergy/keV 
+		     << "  Eshell(keV)= " << shell->BindingEnergy()/keV 
+		     << G4endl;
+	      */
+              for (size_t jj=j; jj<nafter; ++jj) { delete (*fvect)[jj]; }
+              for (size_t jj=j; jj<nafter; ++jj) { fvect->pop_back(); }
+	      break;	      
+	    }
+	    esec += e;
 	  } 
 	}
         edep -= esec;
 	if(edep < 0.0) {
-	  G4cout << "### G4PEffectFluoModel Edep(eV)= " << edep/eV 
-		 << " Z= " << Z << " shell= " << i 
-		 << "  Ebind(keV)= " << bindingEnergy/keV 
-		 << "  Eshell(keV)= " << shell->BindingEnergy()/keV 
-		 << G4endl;
 	}
       }
     }

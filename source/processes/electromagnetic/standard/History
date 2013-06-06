@@ -18,6 +18,16 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+05 May 13: V.Ivanchenko (emstand-V09-06-40)
+- G4PAIPhotonModel - (V.Grichine) added extra methods
+- G4SeltzerBergerModel, G4eBremsstrahlungRelModel - use IsMaster() 
+    method at initialisation
+03 June 13: L. Urban
+- G4PEEffectFluoModel - correction to ensure energy conservation
+  when fluo is on` 
+- G4KleinNishinaModel - correction to ensure energy conservation
+  when fluo is on` 
+
 30 May 13: V.Ivanchenko (emstand-V09-06-39)
 - G4SeltzerBergerModel, G4eBremsstrahlungRelModel - implemented
     copy of element selectors from master to worker threads

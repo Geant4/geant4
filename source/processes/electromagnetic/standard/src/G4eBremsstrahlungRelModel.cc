@@ -178,9 +178,7 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 
   currentZ = 0.;
 
-  if(G4LossTableManager::Instance()->IsMaster()) {
-    InitialiseElementSelectors(p, cuts);
-  }
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
 
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForLoss();

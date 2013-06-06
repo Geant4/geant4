@@ -60,7 +60,9 @@
 class G4PhysicsLogVector;
 class G4PhysicsTable;
 class G4Region;
+class G4Material;
 class G4MaterialCutsCouple;
+class G4ProductionCuts;
 class G4ParticleChangeForLoss;
 
 class G4PAIPhotonModel : public G4VEmModel, public G4VEmFluctuationModel
@@ -74,7 +76,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
   
-  virtual void InitialiseMe(const G4ParticleDefinition*);
+  virtual void InitialiseMe(const G4ParticleDefinition*){};
+  virtual void InitTest(const G4ParticleDefinition*,G4MaterialCutsCouple*,G4double,G4double);
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
@@ -87,11 +90,21 @@ public:
 					 G4double cutEnergy,
 					 G4double maxEnergy);
 
+  G4double GetXscPerVolume(const G4Material*,
+					 const G4ParticleDefinition*,
+					 G4double kineticEnergy,
+					 G4double photonCut,
+					 G4double cutEnergy,
+					 G4double maxEnergy);
+
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
 				 G4double maxEnergy);
+
+  G4double TestSecondaries( G4MaterialCutsCouple*, G4DynamicParticle*,
+			    G4double tmin, G4double maxEnergy);
 
   virtual G4double SampleFluctuations(const G4Material*,
 				      const G4DynamicParticle*,
@@ -108,6 +121,7 @@ public:
   void     ComputeSandiaPhotoAbsCof();
   void     BuildPAIonisationTable();
   void     BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple);
+  void     BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple,G4double,G4double);
 
   G4double GetdNdxCut( G4int iPlace, G4double transferCut);
   G4double GetdNdxPhotonCut( G4int iPlace, G4double transferCut);
@@ -182,6 +196,7 @@ private:
 
 
   const G4ParticleDefinition* fParticle;
+  const G4ParticleDefinition* fGamma;
   const G4ParticleDefinition* fElectron;
   const G4ParticleDefinition* fPositron;
   G4ParticleChangeForLoss*    fParticleChange;

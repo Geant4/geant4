@@ -314,7 +314,23 @@ void G4KleinNishinaModel::SampleSecondaries(
       size_t nafter = fvect->size();
       if(nafter > nbefore) {
 	for (size_t j=nbefore; j<nafter; ++j) {
-	  esec += ((*fvect)[j])->GetKineticEnergy();
+	  G4double e = ((*fvect)[j])->GetKineticEnergy();
+	  if(esec + e > edep) {
+	    /*   
+	    G4cout << "### G4KleinNishinaModel Edep(eV)= " << edep/eV 
+		   << " Esec(eV)= " << esec/eV 
+		   << " E["<< j << "](eV)= " << e/eV
+		   << " N= " << nafter
+		   << " Z= " << Z << " shell= " << i 
+		   << "  Ebind(keV)= " << bindingEnergy/keV 
+		   << "  Eshell(keV)= " << shell->BindingEnergy()/keV 
+		   << G4endl;
+	    */
+	    for (size_t jj=j; jj<nafter; ++jj) { delete (*fvect)[jj]; }
+	    for (size_t jj=j; jj<nafter; ++jj) { fvect->pop_back(); }
+	    break;	      
+	  }
+	  esec += e;
 	} 
       }
       edep -= esec;
@@ -333,9 +349,7 @@ void G4KleinNishinaModel::SampleSecondaries(
 	   << G4endl;
   }
   // energy balance
-  if(edep < 0.0) { 
-    G4cout << "### G4KleinNishinaModel Edep(eV)= " << edep/eV << G4endl;
-  } else {
+  if(edep > 0.0) { 
     fParticleChange->ProposeLocalEnergyDeposit(edep);
   }
 }

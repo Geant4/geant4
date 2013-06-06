@@ -182,7 +182,8 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   G4StepStatus stepStatus = sp->GetStepStatus();
   singleScatteringMode = false;
   //G4cout << "G4WentzelVIModel::ComputeTruePathLengthLimit stepStatus= " 
-  //	 << stepStatus << G4endl;
+  //	 << stepStatus << "  " << track.GetDefinition()->GetParticleName() 
+  //	 << G4endl;
 
   // initialisation for each step, lambda may be computed from scratch
   preKinEnergy  = dp->GetKineticEnergy();
@@ -220,7 +221,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
       return ConvertTrueToGeom(tlimit, currentMinimalStep);
     }
   }
-  /*
+  /* 
   G4cout << "e(MeV)= " << preKinEnergy/MeV
 	 << "  " << particle->GetParticleName() 
 	 << " CurLimit(mm)= " << tlimit/mm <<" safety(mm)= " << presafety/mm
@@ -260,7 +261,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
     tlimit = std::min(tlimit, geomlimit/facgeom);
   } 
 
-  /*  
+  /*    
   G4cout << particle->GetParticleName() << " e= " << preKinEnergy
 	 << " L0= " << lambdaeff << " R= " << currentRange
 	 << "tlimit= " << tlimit  
