@@ -24,59 +24,21 @@
 // ********************************************************************
 //
 // $Id$
-// 20130605  M. Kelsey -- Migrate to MT compatibility
+// For compatbility with multithreading, encapsulate UserAction registration
+// This replaces G4RunManager::SetUserAction() calls in main() for G4 10.0.
 
-#include "Tst25DetectorConstruction.hh"
-#include "Tst25ActionInitialization.hh"
-#include "Tst25PhysicsList.hh"
+#ifndef Tst25ActionInitialization_h
+#define Tst25ActionInitialization_h 1
 
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "Randomize.hh"
+#include "G4VUserActionInitialization.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+class Tst25ActionInitialization : public G4VUserActionInitialization {
+public:
+  Tst25ActionInitialization() : G4VUserActionInitialization() {;}
+  virtual ~Tst25ActionInitialization() {;}
+  
+  virtual void BuildForMaster() const;
+  virtual void Build() const;
+};
 
-#include "G4ios.hh"
-
-int main(int argc,char** argv) {
-
-  // Set the default random engine to RanecuEngine
-  CLHEP::RanecuEngine defaultEngine;
-  G4Random::setTheEngine(&defaultEngine);
-
-  // Run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
-
-  // UserInitialization classes
-  runManager->SetUserInitialization(new Tst25DetectorConstruction);
-  runManager->SetUserInitialization(new Tst25PhysicsList);
-  runManager->SetUserInitialization(new Tst25ActionInitialization);
-
-  if(argc==1)
-  {
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession* session = new G4UIterminal;
-    session->SessionStart();
-    delete session;
-  }
-  else
-  {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
-
-  delete runManager;
-  return 0;
-}
-
+#endif	/* Tst25ActionInitialization_h */

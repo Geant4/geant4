@@ -24,59 +24,24 @@
 // ********************************************************************
 //
 // $Id$
-// 20130605  M. Kelsey -- Migrate to MT compatibility
 
-#include "Tst25DetectorConstruction.hh"
 #include "Tst25ActionInitialization.hh"
-#include "Tst25PhysicsList.hh"
+#include "Tst25RunAction.hh"
+#include "Tst25PrimaryGeneratorAction.hh"
+#include "Tst25SteppingAction.hh"
+#include "Tst25StackingAction.hh"
 
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "Randomize.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+// Master thread needs control of BeginOfRun and EndOfRun
 
-#include "G4ios.hh"
-
-int main(int argc,char** argv) {
-
-  // Set the default random engine to RanecuEngine
-  CLHEP::RanecuEngine defaultEngine;
-  G4Random::setTheEngine(&defaultEngine);
-
-  // Run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
-
-  // UserInitialization classes
-  runManager->SetUserInitialization(new Tst25DetectorConstruction);
-  runManager->SetUserInitialization(new Tst25PhysicsList);
-  runManager->SetUserInitialization(new Tst25ActionInitialization);
-
-  if(argc==1)
-  {
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession* session = new G4UIterminal;
-    session->SessionStart();
-    delete session;
-  }
-  else
-  {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
-
-  delete runManager;
-  return 0;
+void Tst25ActionInitialization::BuildForMaster() const {
+  SetUserAction(new Tst25RunAction);
 }
 
+// Individual worker threads need all event-by-event actions
+
+void Tst25ActionInitialization::Build() const {
+  SetUserAction(new Tst25RunAction);
+  SetUserAction(new Tst25PrimaryGeneratorAction);
+  SetUserAction(new Tst25StackingAction);
+}

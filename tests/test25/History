@@ -12,6 +12,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 June 2013  Michael Kelsey (test25-V09-06-02)
+-  Continue MT compatibility migrations, per Gunter.  Add new
+   Tst25ActionInitialization to replace runManager->SetUserAction() calls.
+
+5 June 2013  Gunter Folger
+-  correct test25.cc to compile in MT mode
+
+4 June 2013  Gunter Folger  (test25-V09-06-01)
+-  add needed static_cast in test25.cc
+
 30 May 2013  Michael Kelsey (test25-V09-06-00)
 - Migrate test25.cc to MT compatibility (G4MTRunManager)
 
