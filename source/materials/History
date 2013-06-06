@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-06-13 P.Gumplinger (materials-V09-06-16)
+- Add dichroic filter surface
+
 29-05-13 G.Cosmo (materials-V09-06-15)
 - Replace 'pascal' with 'hep_pascal' in G4NistMaterialBuilder to avoid
   conflicts on Windows.
