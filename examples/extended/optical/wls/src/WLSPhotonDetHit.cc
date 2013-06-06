@@ -31,7 +31,7 @@
 //
 #include "WLSPhotonDetHit.hh"
 
-G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator=0;
+G4ThreadLocal G4Allocator<WLSPhotonDetHit>* WLSPhotonDetHitAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

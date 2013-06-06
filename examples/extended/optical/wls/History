@@ -16,7 +16,10 @@ track of all tags.
  
      ----------------------------------------------------------
 
-Jun2 02, 2013 P. Gumplinger (WLS-V09-06-04)
+June 05, 2013 P. Gumplinger (WLS-V09-06-05) and (WLS-V09-06-06)
+  fix compilation error when G4MULTITHREADED
+
+June 02, 2013 P. Gumplinger (WLS-V09-06-04)
   migration to MultiThread (MT) capable
 
 May 06, 2013 P. Gumplinger (WLS-V09-06-03)
