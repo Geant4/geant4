@@ -787,8 +787,7 @@ G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
 			   num == "alpha" || num == "anti_proton" || 
 			   num == "GenericIon")))
     { 
-      particle = &part;
-      PrintInfoDefinition(); 
+      PrintInfoDefinition(part); 
     }
  
   // Added tracking cut to avoid tracking artifacts
@@ -844,8 +843,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 			   num == "alpha" || num == "anti_proton" || 
 			   num == "GenericIon")))
     { 
-      particle = &part;
-      PrintInfoDefinition(); 
+      PrintInfoDefinition(part); 
     }
 
   // Added tracking cut to avoid tracking artifacts
@@ -1030,11 +1028,12 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::PrintInfoDefinition()
+void 
+G4VEnergyLossProcess::PrintInfoDefinition(const G4ParticleDefinition& part)
 {
   if(0 < verboseLevel) {
     G4cout << G4endl << GetProcessName() << ":   for  "
-           << particle->GetParticleName()
+           << part.GetParticleName()
 	   << "    SubType= " << GetProcessSubType() 
            << G4endl
            << "      dE/dx and range tables from "

@@ -187,7 +187,7 @@ public:
   G4PhysicsTable* BuildLambdaTable(G4EmTableType tType = fRestricted);
 
   // summary printout after initialisation
-  void PrintInfoDefinition();
+  void PrintInfoDefinition(const G4ParticleDefinition& part);
 
   // Called before tracking of each new G4Track
   void StartTracking(G4Track*);
