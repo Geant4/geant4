@@ -14,6 +14,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+06-06-2013  S.I.            tag emdna-V09-06-06
+            Updated G4DNABornIonisationModel for speedup option
+	    Requires G4EMLOW version 6.33
+
 25-05-2013  M.K.            tag emdna-V09-06-05
             *Fix warning compilation in G4KDMap for specific gcc version
 
