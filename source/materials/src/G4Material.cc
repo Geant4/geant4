@@ -93,7 +93,7 @@ G4Material::G4Material(const G4String& name, G4double z,
     
   if (density < universe_mean_density)
     { 
-      G4cout << "--- Warning from G4Material::G4Material()"
+      G4cout << " G4Material WARNING:"
 	     << " define a material with density=0 is not allowed. \n"
 	     << " The material " << name << " will be constructed with the"
 	     << " default minimal density: " << universe_mean_density/(g/cm3) 
@@ -270,8 +270,15 @@ void G4Material::InitializePointers()
   fSandiaTable = 0;
 
   // Store in the static Table of Materials
+  fIndexInTable = theMaterialTable.size();
+  for(size_t i=0; i<fIndexInTable; ++i) {
+    if(theMaterialTable[i]->GetName() == fName) {
+      G4cout << "G4Material WARNING: doublicate name of the new material "
+	     << fName << G4endl;
+      break;
+    }
+  }
   theMaterialTable.push_back(this);
-  fIndexInTable = theMaterialTable.size() - 1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

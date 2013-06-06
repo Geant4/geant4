@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-06-13 V.Ivanchenko (materials-V09-06-17)
+- G4Material - added warning if new material has doublicate name
+
 05-06-13 P.Gumplinger (materials-V09-06-16)
 - Add dichroic filter surface
 
