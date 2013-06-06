@@ -460,7 +460,6 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
 
   Clean();
   lManager->PreparePhysicsTable(&part, this, false);
-  G4LossTableBuilder* bld = lManager->GetTableBuilder();
 
   // Base particle and set of models can be defined here
   InitialiseEnergyLossProcess(particle, baseParticle);
@@ -473,9 +472,6 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
   theRangeAtMaxEnergy.resize(n, 0.0);
   theEnergyOfCrossSectionMax.resize(n, 0.0);
   theCrossSectionMax.resize(n, DBL_MAX);
-
-  theDensityFactor = bld->GetDensityFactors();
-  theDensityIdx = bld->GetCoupleIndexes();
 
   // forced biasing
   if(biasManager) { 
@@ -655,9 +651,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     }
   }
 
-  theDensityFactor = bld->GetDensityFactors();
-  theDensityIdx = bld->GetCoupleIndexes();
-
   // forced biasing
   if(biasManager) { 
     biasManager->Initialise(part,GetProcessName(),verboseLevel); 
@@ -745,6 +738,13 @@ G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
 
   if(&part == particle) {
 
+    // define density factors for worker thread
+    G4LossTableManager* lManager = G4LossTableManager::Instance();
+    G4LossTableBuilder* bld = lManager->GetTableBuilder();
+    bld->InitialiseBaseMaterials(firstProcess->DEDXTable());
+    theDensityFactor = bld->GetDensityFactors();
+    theDensityIdx = bld->GetCoupleIndexes();
+
     // copy table pointers from master thread
     SetDEDXTable(firstProcess->DEDXTable(),fRestricted);
     SetDEDXTable(firstProcess->DEDXTableForSubsec(),fSubRestricted);
@@ -824,6 +824,13 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
 
   if(&part == particle) {
+
+    // define density factors for worker thread
+    G4LossTableManager* lManager = G4LossTableManager::Instance();
+    G4LossTableBuilder* bld = lManager->GetTableBuilder();
+    theDensityFactor = bld->GetDensityFactors();
+    theDensityIdx = bld->GetCoupleIndexes();
+
     if(!tablesAreBuilt) {
       G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
     }
@@ -2101,9 +2108,10 @@ void G4VEnergyLossProcess::AddCollaborativeProcess(
 
 void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 {
+  G4LossTableManager* lManager = G4LossTableManager::Instance();
   if(fTotal == tType) {
     if(theDEDXunRestrictedTable != p && !baseParticle) {
-      if(theDEDXunRestrictedTable) {
+      if(theDEDXunRestrictedTable && lManager->IsMaster()) {
 	theDEDXunRestrictedTable->clearAndDestroy();
 	delete theDEDXunRestrictedTable;
       } 
@@ -2139,8 +2147,10 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
       */
       if(theDEDXTable && !baseParticle) {
 	if(theDEDXTable == theIonisationTable) { theIonisationTable = 0; }
-	theDEDXTable->clearAndDestroy();
-	delete theDEDXTable;
+	if(lManager->IsMaster()) {
+	  theDEDXTable->clearAndDestroy();
+	  delete theDEDXTable;
+	}
       }
       theDEDXTable = p;
     }
@@ -2148,15 +2158,17 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
     if(theDEDXSubTable != p) {    
       if(theDEDXSubTable && !baseParticle) {
 	if(theDEDXSubTable == theIonisationSubTable) { theIonisationSubTable = 0; }
-	theDEDXSubTable->clearAndDestroy();
-	delete theDEDXSubTable;
+	if(lManager->IsMaster()) {
+	  theDEDXSubTable->clearAndDestroy();
+	  delete theDEDXSubTable;
+	}
       }
       theDEDXSubTable = p;
     }
   } else if(fIsIonisation == tType) {
     if(theIonisationTable != p) {    
       if(theIonisationTable && theIonisationTable != theDEDXTable 
-	 && !baseParticle) {
+	 && !baseParticle && lManager->IsMaster()) {
 	theIonisationTable->clearAndDestroy();
 	delete theIonisationTable;
       }
@@ -2165,7 +2177,7 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
   } else if(fIsSubIonisation == tType) {
     if(theIonisationSubTable != p) {    
       if(theIonisationSubTable && theIonisationSubTable != theDEDXSubTable 
-	 && !baseParticle) {
+	 && !baseParticle && lManager->IsMaster()) {
 	theIonisationSubTable->clearAndDestroy();
 	delete theIonisationSubTable;
       }

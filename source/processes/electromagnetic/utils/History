@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 June 13: V.Ivant (emutils-V09-06-25)
+- G4VEnergyLossProcess - do not destroy old tables in worker thread
+    for the new run
+
+06 June 13: V.Ivant (emutils-V09-06-24)
+- G4VEnergyLossProcess, G4VEmProcess - density factor correction
+    array is assined to a process in BuildPhysicsTable instead of 
+    PreparePhysicsTable in order to get correct pointers in worker 
+    threads
+
 06 June 13: V.Ivant (emutils-V09-06-23)
 - G4VEnergyLossProcess - an attempt to fix extra problem seen 
     in CDASH by changing PrintInfoDefinition method signature

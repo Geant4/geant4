@@ -299,8 +299,6 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       biasFlag = false; 
     }
   }
-  theDensityFactor = bld->GetDensityFactors();
-  theDensityIdx = bld->GetCoupleIndexes();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -321,6 +319,11 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if(buildLambdaTable || minKinEnergyPrim < maxKinEnergy) {
     BuildLambdaTable();
   }
+
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  G4LossTableBuilder* bld = man->GetTableBuilder();
+  theDensityFactor = bld->GetDensityFactors();
+  theDensityIdx = bld->GetCoupleIndexes();
 
   // explicitly defined printout by particle name
   if(1 < verboseLevel || 
