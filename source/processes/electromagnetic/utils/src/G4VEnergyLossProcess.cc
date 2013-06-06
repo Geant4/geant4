@@ -745,6 +745,7 @@ G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
 
   if(&part == particle) {
 
+    // copy table pointers from master thread
     SetDEDXTable(firstProcess->DEDXTable(),fRestricted);
     SetDEDXTable(firstProcess->DEDXTableForSubsec(),fSubRestricted);
     SetDEDXTable(firstProcess->DEDXunRestrictedTable(),fTotal);
@@ -769,35 +770,34 @@ G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
       mod->InitialiseLocal(particle, mod0);
     }
 
-    // copy table from master thread
     if(!baseParticle) {
       G4LossTableManager::Instance()->LocalPhysicsTables(particle, this);
-      if(1 < verboseLevel) { PrintInfoDefinition(); }
-    
-      // needs to be done only once
-      safetyHelper->InitialiseHelper();
-
-      // explicitly defined printout by particle name
-      G4String num = part.GetParticleName();
-      if(1 < verboseLevel || 
-	 (0 < verboseLevel && (num == "e-" || 
-			       num == "e+"    || num == "mu+" || 
-			       num == "mu-"   || num == "proton"|| 
-			       num == "pi+"   || num == "pi-" || 
-			       num == "kaon+" || num == "kaon-" || 
-			       num == "alpha" || num == "anti_proton" || 
-			       num == "GenericIon")))
-	{ PrintInfoDefinition(); }
+    }    
+    // needs to be done only once
+    safetyHelper->InitialiseHelper();
+  }
+  // explicitly defined printout by particle name
+  G4String num = part.GetParticleName();
+  if(1 < verboseLevel || 
+     (0 < verboseLevel && (num == "e-" || 
+			   num == "e+"    || num == "mu+" || 
+			   num == "mu-"   || num == "proton"|| 
+			   num == "pi+"   || num == "pi-" || 
+			   num == "kaon+" || num == "kaon-" || 
+			   num == "alpha" || num == "anti_proton" || 
+			   num == "GenericIon")))
+    { 
+      particle = &part;
+      PrintInfoDefinition(); 
     }
-
-    // Added tracking cut to avoid tracking artifacts
-    // identify deexcitation flag
-    if(isIonisation) { 
-      fParticleChange.SetLowEnergyLimit(lowestKinEnergy); 
-      atomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-      if(atomDeexcitation) { 
-	if(atomDeexcitation->IsPIXEActive()) { useDeexcitation = true; } 
-      }
+ 
+  // Added tracking cut to avoid tracking artifacts
+  // identify deexcitation flag
+  if(isIonisation) { 
+    fParticleChange.SetLowEnergyLimit(lowestKinEnergy); 
+    atomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+    if(atomDeexcitation) { 
+      if(atomDeexcitation->IsPIXEActive()) { useDeexcitation = true; } 
     }
   }
 
@@ -828,23 +828,25 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(!tablesAreBuilt) {
       G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
     }
-    if(!baseParticle) {
-      // needs to be done only once
-      safetyHelper->InitialiseHelper();
+    //if(!baseParticle) {
+    // needs to be done only once
+    safetyHelper->InitialiseHelper();
+    //}
+  }   
+  // explicitly defined printout by particle name
+  G4String num = part.GetParticleName();
+  if(1 < verboseLevel || 
+     (0 < verboseLevel && (num == "e-" || 
+			   num == "e+"    || num == "mu+" || 
+			   num == "mu-"   || num == "proton"|| 
+			   num == "pi+"   || num == "pi-" || 
+			   num == "kaon+" || num == "kaon-" || 
+			   num == "alpha" || num == "anti_proton" || 
+			   num == "GenericIon")))
+    { 
+      particle = &part;
+      PrintInfoDefinition(); 
     }
-   
-    // explicitly defined printout by particle name
-    G4String num = part.GetParticleName();
-    if(1 < verboseLevel || 
-       (0 < verboseLevel && (num == "e-" || 
-			     num == "e+"    || num == "mu+" || 
-			     num == "mu-"   || num == "proton"|| 
-			     num == "pi+"   || num == "pi-" || 
-			     num == "kaon+" || num == "kaon-" || 
-			     num == "alpha" || num == "anti_proton" || 
-			     num == "GenericIon")))
-      { PrintInfoDefinition(); }
-  }
 
   // Added tracking cut to avoid tracking artifacts
   // identify deexcitation flag

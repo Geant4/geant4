@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 June 13: V.Ivant (emutils-V09-06-22)
+- G4VEnergyLossProcess - restore correct printout at initialisation 
+    of protons and anti_protons
+
 05 June 13: V.Ivant (emutils-V09-06-21)
 - G4VEmModel - fixed crash in copy of element selectors from 
     master to worker threads
