@@ -185,11 +185,13 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
 	G4int Z = G4lrint(anElement->GetZ());
 	G4AtomicShellEnumerator as = G4AtomicShellEnumerator(i);
 	const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
+	/*
         G4double eshell = shell->BindingEnergy();
         if(eshell > bindingEnergy && eshell <= energy) {
           bindingEnergy = eshell;
           edep = eshell;
 	}
+	*/
 	size_t nbefore = fvect->size();
 	fAtomDeexcitation->GenerateParticles(fvect, shell, Z, index);
 	size_t nafter = fvect->size();

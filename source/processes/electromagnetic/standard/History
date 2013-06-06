@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+06 May 13: V.Ivanchenko (emstand-V09-06-42)
+- G4PEEffectFluoModel - revert back previous tag -40 in order
+    to fix non-reproducibility
+
 06 May 13: V.Ivanchenko (emstand-V09-06-41)
 - G4PEEffectFluoModel - more safe computation of secondary 
     electron energy and energy concervation
