@@ -961,7 +961,7 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
             	  //Still needed to be implemented
             	  //G4cout<<"Sp fission channel"<<a<<'\t'<<b<<'\t'<<c<<std::endl;
             	  break;
-              case ERROR:
+              case RDM_ERROR:
 
               default:
                 G4Exception("G4RadioactiveDecay::LoadDecayTable()", "HAD_RDM_000",

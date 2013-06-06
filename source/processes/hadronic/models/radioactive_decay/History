@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+6 June 2013  Gabriele Cosmo  radioactive_decay-V09-06-03
+--------------------------------------------------------
+- Replaced keyword 'ERROR' with 'RDM_ERROR' to avoid clashes with
+  specific macros defined in Windows system.
+
 8 March 2013  Gabriele Cosmo  radioactive_decay-V09-06-02
 ---------------------------------------------------------
 - Fixed use of internal MT data in G4NuclearDecayChannel.

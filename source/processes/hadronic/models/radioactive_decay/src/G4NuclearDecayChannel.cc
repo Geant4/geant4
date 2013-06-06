@@ -416,7 +416,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
             eShell = G4int(G4UniformRand()*3)+4;
           }
           break;
-        case ERROR:
+        case RDM_ERROR:
         default:
         G4Exception("G4NuclearDecayChannel::DecayIt()", "HAD_RDM_009",
                     FatalException, "Incorrect decay mode selection");
