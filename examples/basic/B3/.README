@@ -42,10 +42,26 @@
      the G4RADIOACTIVEDATA envirnoment variable.
  	 
    See more on installation of the datasets in
-   <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html">
+   <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides
+                                         /InstallationGuide/html/ch03s03.html">
    Geant4 Installation Guide, Chapter 3.3: Note On Geant4 Datasets </a>.
+   
+\section B3_s3  ACTION INITALIZATION
 
-\section B3_s3 PRIMARY GENERATOR
+   A newly (June 2013) introduced class, B3ActionInitialization,
+   instantiates and registers to Geant4 kernel all user action classes
+   which are defined thread-local and a run action class (if present)
+   which is defined both thread-local and global.
+
+   The thread-local action classes are defined in
+     B3ActionInitialization::Build()
+   Note that B3ActionInitialization::Build() is also used to
+   instantiate user action classes in sequential mode.
+        
+   The global run action class is defined in
+     B3ActionInitialization::BuildForMaster().
+    	 
+\section B3_s4 PRIMARY GENERATOR
 
    The default particle beam is an ion (F18), at rest, randomly distributed 
    within a zone inside a patient and is defined in 
@@ -53,22 +69,22 @@
    The type of a primary particle can be changed with G4ParticleGun commands 
    (see run2.mac).
    
-\section B3_s4 DETECTOR RESPONSE : scorers
+\section B3_s5 DETECTOR RESPONSE : scorers
 
    A 'good' event is an event in which an identical energy of 511 keV is 
    deposited in two separate Crystals. A count of the number of such events 
    corresponds to a measure of the efficiency of the PET system. 
    The total dose deposited in a patient during a run is also computed. 
    
-   Scorers are defined in DetectorConstruction::CreateScorers(). There are
+   Scorers are defined in DetectorConstruction::ConstructSDandField(). There are
    two G4MultiFunctionalDetector objects: one for the Crystal (EnergyDeposit), 
    and one for the Patient (DoseDeposit)
 	
-   EventAction::EndOfEventAction() collects informations event per event
+   B3Run::RecordEvent() collects informations event per event
    from the hits collections, and accumulates statistic for 
    RunAction::EndOfRunAction().	
    	
-\section B3_s5 STACKING ACTION
+\section B3_s6 STACKING ACTION
 
    Beta decay of Fluor generates a neutrino. One wishes not to track this
    neutrino; therefore one kills it immediately, before created particles

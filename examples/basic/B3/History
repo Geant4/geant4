@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+05/06/13 mma (exampleB3-V09-06-03)
+- add section about ACTION INITALIZATION to README and .README
+     
 01/06/13 mma  (exampleB3-V09-06-02)
 - Migration for MT:
   forgotten to add B3Run

@@ -36,20 +36,21 @@
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4THitsMap.hh"
-////#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B3Run::B3Run()
  : G4Run(), 
-   fCollID_cryst(0),
-   fCollID_patient(0),  
    fPrintModulo(10000),
    fGoodEvents(0),
    fSumDose(0.)
-   
-{ }
+{   
+   G4SDManager* SDMan = G4SDManager::GetSDMpointer();  
+   fCollID_cryst   = SDMan->GetCollectionID("crystal/edep");
+   fCollID_patient = SDMan->GetCollectionID("patient/dose");    
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,12 +67,6 @@ void B3Run::RecordEvent(const G4Event* event)
     G4cout << "\n---> end of event: " << evtNb << G4endl;
   }      
   
-  if (evtNb == 0) {
-    G4SDManager* SDMan = G4SDManager::GetSDMpointer();  
-    fCollID_cryst   = SDMan->GetCollectionID("crystal/edep");
-    fCollID_patient = SDMan->GetCollectionID("patient/dose");    
-  }
-
   //Hits collections
   //  
   G4HCofThisEvent* HCE = event->GetHCofThisEvent();
