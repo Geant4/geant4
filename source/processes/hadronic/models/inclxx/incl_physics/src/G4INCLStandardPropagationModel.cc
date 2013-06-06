@@ -111,13 +111,13 @@ namespace G4INCL {
       const G4double traversalTime = distance / projectileVelocity;
       if(maximumTime < traversalTime)
         maximumTime = traversalTime;
-      DEBUG("Cascade stopping time is " << maximumTime << std::endl);
+      INCL_DEBUG("Cascade stopping time is " << maximumTime << std::endl);
 
       // If Coulomb is activated, do not process events with impact
       // parameter larger than the maximum impact parameter, taking into
       // account Coulomb distortion.
       if(impactParameter>CoulombDistortion::maxImpactParameter(p->getSpecies(), kineticEnergy, theNucleus)) {
-        DEBUG("impactParameter>CoulombDistortion::maxImpactParameter" << std::endl);
+        INCL_DEBUG("impactParameter>CoulombDistortion::maxImpactParameter" << std::endl);
         delete p;
         return -1.;
       }
@@ -175,13 +175,13 @@ namespace G4INCL {
       const G4double traversalTime = distance / projectileVelocity;
       if(maximumTime < traversalTime)
         maximumTime = traversalTime;
-      DEBUG("Cascade stopping time is " << maximumTime << std::endl);
+      INCL_DEBUG("Cascade stopping time is " << maximumTime << std::endl);
 
       // If Coulomb is activated, do not process events with impact
       // parameter larger than the maximum impact parameter, taking into
       // account Coulomb distortion.
       if(impactParameter>CoulombDistortion::maxImpactParameter(pr,theNucleus)) {
-        DEBUG("impactParameter>CoulombDistortion::maxImpactParameter" << std::endl);
+        INCL_DEBUG("impactParameter>CoulombDistortion::maxImpactParameter" << std::endl);
         delete pr;
         return -1.;
       }
@@ -206,7 +206,7 @@ namespace G4INCL {
         = CoulombDistortion::bringToSurface(pr, theNucleus);
 
       if(theAvatarList.empty()) {
-        DEBUG("No ParticleEntryAvatar found, transparent event" << std::endl);
+        INCL_DEBUG("No ParticleEntryAvatar found, transparent event" << std::endl);
         delete pr;
         return -1.;
       }
@@ -344,7 +344,7 @@ namespace G4INCL {
       if(theIntersection.exists) {
         time = currentTime + theIntersection.time;
       } else {
-        ERROR("Imaginary reflection time for particle: " << std::endl
+        INCL_ERROR("Imaginary reflection time for particle: " << std::endl
           << aParticle->print());
         time = 10000.0;
       }
@@ -423,7 +423,7 @@ namespace G4INCL {
 
     void StandardPropagationModel::generateAllAvatars(G4bool excludeUpdated) {
       ParticleList particles = theNucleus->getStore()->getParticles();
-      if(particles.empty()) { ERROR("No particles inside the nucleus!" << std::endl); }
+      if(particles.empty()) { INCL_ERROR("No particles inside the nucleus!" << std::endl); }
       for(ParticleIter i = particles.begin(); i != particles.end(); ++i) {
         G4double time = this->getReflectionTime(*i);
         if(time <= maximumTime) registerAvatar(new SurfaceAvatar(*i, time, theNucleus));
@@ -480,7 +480,7 @@ namespace G4INCL {
       //      theAvatar->dispose();
 
       if(theAvatar->getTime() < currentTime) {
-        ERROR("Avatar time = " << theAvatar->getTime() << ", currentTime = " << currentTime << std::endl);
+        INCL_ERROR("Avatar time = " << theAvatar->getTime() << ", currentTime = " << currentTime << std::endl);
         return 0;
       } else if(theAvatar->getTime() > currentTime) {
         theNucleus->getStore()->timeStep(theAvatar->getTime() - currentTime);

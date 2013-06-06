@@ -80,7 +80,7 @@ namespace G4INCL {
     } else if(ParticleConfig::isPair(particle1, particle2, Neutron, PiMinus)) {
       deltaType = DeltaMinus;
     } else {
-      ERROR("Unknown particle pair in Pi-N collision." << std::endl);
+      INCL_ERROR("Unknown particle pair in Pi-N collision." << std::endl);
     }
 
     G4double deltaEnergy = nucleon->getEnergy() - nucleon->getPotentialEnergy()

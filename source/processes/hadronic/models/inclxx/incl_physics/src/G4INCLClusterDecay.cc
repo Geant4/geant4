@@ -72,7 +72,7 @@ namespace G4INCL {
             decayParticle = new Cluster(2,4,false);
             break;
           default:
-            ERROR("Unrecognized cluster-decay mode in two-body decay: " << theDecayMode << std::endl
+            INCL_ERROR("Unrecognized cluster-decay mode in two-body decay: " << theDecayMode << std::endl
                   << c->print());
             return;
         }
@@ -135,7 +135,7 @@ namespace G4INCL {
             decayParticle2 = new Particle(Neutron, mom, pos);
             break;
           default:
-            ERROR("Unrecognized cluster-decay mode in three-body decay: " << theDecayMode << std::endl
+            INCL_ERROR("Unrecognized cluster-decay mode in three-body decay: " << theDecayMode << std::endl
                   << c->print());
             return;
         }
@@ -243,7 +243,7 @@ namespace G4INCL {
             theEjectileType = Neutron;
             break;
           default:
-            ERROR("Unrecognized cluster-decay mode in phase-space decay: " << theDecayMode << std::endl
+            INCL_ERROR("Unrecognized cluster-decay mode in phase-space decay: " << theDecayMode << std::endl
                   << c->print());
             return;
         }
@@ -306,7 +306,7 @@ namespace G4INCL {
           maxTries=1000;
         do {
           if(nTries++>maxTries) {
-            WARN("Phase-space decay exceeded the maximum number of rejections (" << maxTries
+            INCL_WARN("Phase-space decay exceeded the maximum number of rejections (" << maxTries
                  << "). Z=" << theZ << ", A=" << theA << ", E*=" << c->getExcitationEnergy()
                  << ", availableEnergy=" << availableEnergy
                  << ", nSplits=" << nSplits
@@ -390,7 +390,7 @@ namespace G4INCL {
 
           switch(theDecayMode) {
             default:
-              ERROR("Unrecognized cluster-decay mode: " << theDecayMode << std::endl
+              INCL_ERROR("Unrecognized cluster-decay mode: " << theDecayMode << std::endl
                     << c->print());
             case StableCluster:
               // For stable clusters, just return
@@ -421,12 +421,12 @@ namespace G4INCL {
         } else {
           // The cluster is too large for our decay-mode table. Decompose it only
           // if Z==0 || Z==A.
-          DEBUG("Cluster is outside the decay-mode table." << c->print() << std::endl);
+          INCL_DEBUG("Cluster is outside the decay-mode table." << c->print() << std::endl);
           if(Z==A) {
-            DEBUG("Z==A, will decompose it in free protons." << std::endl);
+            INCL_DEBUG("Z==A, will decompose it in free protons." << std::endl);
             phaseSpaceDecay(c, ProtonUnbound, decayProducts);
           } else if(Z==0) {
-            DEBUG("Z==0, will decompose it in free neutrons." << std::endl);
+            INCL_DEBUG("Z==0, will decompose it in free neutrons." << std::endl);
             phaseSpaceDecay(c, NeutronUnbound, decayProducts);
           }
         }

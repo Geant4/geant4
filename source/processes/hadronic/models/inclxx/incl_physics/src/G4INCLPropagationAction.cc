@@ -58,7 +58,7 @@ namespace G4INCL {
     ++stepCounter; // Increment the step counter
 
 #ifdef INCL_DEBUG_LOG
-    //   DATABLOCK(pm->getNucleus()->getStore()->printParticleConfiguration());
+    //   INCL_DATABLOCK(pm->getNucleus()->getStore()->printParticleConfiguration());
 #endif
   }
 }

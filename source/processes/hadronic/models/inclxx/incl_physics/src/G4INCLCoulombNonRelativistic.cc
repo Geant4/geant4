@@ -218,9 +218,9 @@ namespace G4INCL {
       }
       if(radius<=0.) {
         radius = ParticleTable::getLargestNuclearRadius(Ap,Zp) + ParticleTable::getLargestNuclearRadius(At, Zt);
-        ERROR("Negative Coulomb radius! Using the sum of nuclear radii = " << radius << std::endl);
+        INCL_ERROR("Negative Coulomb radius! Using the sum of nuclear radii = " << radius << std::endl);
       }
-      DEBUG("Coulomb radius for particle "
+      INCL_DEBUG("Coulomb radius for particle "
             << ParticleTable::getShortName(p) << " in nucleus A=" << At <<
             ", Z=" << Zt << ": " << radius << std::endl);
       return radius;

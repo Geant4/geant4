@@ -57,7 +57,7 @@ namespace G4INCL {
 
     void setGenerator(G4INCL::IRandomGenerator *aGenerator) {
       if(isInitialized()) {
-        ERROR("INCL random number generator already initialized." << std::endl);
+        INCL_ERROR("INCL random number generator already initialized." << std::endl);
       } else {
         theGenerator = aGenerator;
       }

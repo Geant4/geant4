@@ -265,7 +265,7 @@ namespace G4INCL {
       theMomentum.setZ(0.0);
       theEnergy = getMass();
 
-      DEBUG("Cluster boosted to internal CM:" << std::endl << print());
+      INCL_DEBUG("Cluster boosted to internal CM:" << std::endl << print());
 
     }
 
@@ -277,7 +277,7 @@ namespace G4INCL {
     void putParticlesOffShell() {
       // Compute the dynamical potential
       const G4double theDynamicalPotential = computeDynamicalPotential();
-      DEBUG("The dynamical potential is " << theDynamicalPotential << " MeV" << std::endl);
+      INCL_DEBUG("The dynamical potential is " << theDynamicalPotential << " MeV" << std::endl);
 
       for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
         const G4double energy = (*p)->getEnergy() - theDynamicalPotential;
@@ -287,7 +287,7 @@ namespace G4INCL {
         (*p)->setEnergy(energy);
         (*p)->setMass(std::sqrt(energy*energy - momentum.mag2()));
       }
-      DEBUG("Cluster components are now off shell:" << std::endl
+      INCL_DEBUG("Cluster components are now off shell:" << std::endl
             << print());
     }
 
@@ -321,7 +321,7 @@ namespace G4INCL {
         (*p)->updateReflectionMomentum();
       }
 
-      DEBUG("Cluster was boosted with (bx,by,bz)=("
+      INCL_DEBUG("Cluster was boosted with (bx,by,bz)=("
           << aBoostVector.getX() << ", " << aBoostVector.getY() << ", " << aBoostVector.getZ() << "):"
           << std::endl << print());
 

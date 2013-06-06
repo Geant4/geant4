@@ -149,7 +149,7 @@ namespace G4INCL {
     }
     if( iterations < maxIterations)
     {
-      DEBUG("Particle position vector length was : " << p->getPosition().mag() << ", rescaled to: " << pos.mag() << std::endl);
+      INCL_DEBUG("Particle position vector length was : " << p->getPosition().mag() << ", rescaled to: " << pos.mag() << std::endl);
       p->setPosition(pos);
       return true;
     }
@@ -158,7 +158,7 @@ namespace G4INCL {
   }
 
   FinalState *InteractionAvatar::postInteraction(FinalState *fs) {
-    DEBUG("postInteraction: final state: " << std::endl << fs->print() << std::endl);
+    INCL_DEBUG("postInteraction: final state: " << std::endl << fs->print() << std::endl);
     ParticleList modified = fs->getModifiedParticles();
     ParticleList modifiedAndCreated = modified;
     ParticleList created = fs->getCreatedParticles();
@@ -180,7 +180,7 @@ namespace G4INCL {
         (*i)->makeParticipant();
         (*i)->setOutOfWell();
         fs->addOutgoingParticle(*i);
-        DEBUG("Pion was created outside its potential well." << std::endl
+        INCL_DEBUG("Pion was created outside its potential well." << std::endl
             << (*i)->print());
       }
 
@@ -190,7 +190,7 @@ namespace G4INCL {
     if(!isPiN || shouldUseLocalEnergy())
       success = enforceEnergyConservation(fs);
     if(!success) {
-      DEBUG("Enforcing energy conservation: failed!" << std::endl);
+      INCL_DEBUG("Enforcing energy conservation: failed!" << std::endl);
 
       // Restore the state of the initial particles
       restoreParticles();
@@ -206,15 +206,15 @@ namespace G4INCL {
 
       return fsBlocked; // Interaction is blocked. Return an empty final state.
     }
-    DEBUG("Enforcing energy conservation: success!" << std::endl);
+    INCL_DEBUG("Enforcing energy conservation: success!" << std::endl);
 
-    DEBUG("postInteraction after energy conservation: final state: " << std::endl << fs->print() << std::endl);
+    INCL_DEBUG("postInteraction after energy conservation: final state: " << std::endl << fs->print() << std::endl);
 
     // Check that outgoing delta resonances can decay to pi-N
     for( ParticleIter i = modified.begin(); i != modified.end(); ++i )
       if((*i)->isDelta() &&
           (*i)->getMass() < ParticleTable::effectiveDeltaDecayThreshold) {
-        DEBUG("Mass of the produced delta below decay threshold; forbidding collision. deltaMass=" <<
+        INCL_DEBUG("Mass of the produced delta below decay threshold; forbidding collision. deltaMass=" <<
             (*i)->getMass() << std::endl);
 
         // Restore the state of the initial particles
@@ -232,12 +232,12 @@ namespace G4INCL {
         return fsBlocked; // Interaction is blocked. Return an empty final state.
       }
 
-    DEBUG("Random seeds before Pauli blocking: " << Random::getSeeds() << std::endl);
+    INCL_DEBUG("Random seeds before Pauli blocking: " << Random::getSeeds() << std::endl);
     // Test Pauli blocking
     G4bool isBlocked = Pauli::isBlocked(modifiedAndCreated, theNucleus);
 
     if(isBlocked) {
-      DEBUG("Pauli: Blocked!" << std::endl);
+      INCL_DEBUG("Pauli: Blocked!" << std::endl);
 
       // Restore the state of the initial particles
       restoreParticles();
@@ -253,13 +253,13 @@ namespace G4INCL {
 
       return fsBlocked; // Interaction is blocked. Return an empty final state.
     }
-    DEBUG("Pauli: Allowed!" << std::endl);
+    INCL_DEBUG("Pauli: Allowed!" << std::endl);
 
     // Test CDPP blocking
     G4bool isCDPPBlocked = Pauli::isCDPPBlocked(created, theNucleus);
 
     if(isCDPPBlocked) {
-      DEBUG("CDPP: Blocked!" << std::endl);
+      INCL_DEBUG("CDPP: Blocked!" << std::endl);
 
       // Restore the state of the initial particles
       restoreParticles();
@@ -275,7 +275,7 @@ namespace G4INCL {
 
       return fsBlocked; // Interaction is blocked. Return an empty final state.
     }
-    DEBUG("CDPP: Allowed!" << std::endl);
+    INCL_DEBUG("CDPP: Allowed!" << std::endl);
 
     // If all went well, try to bring particles inside the nucleus...
     for( ParticleIter i = modifiedAndCreated.begin(); i != modifiedAndCreated.end(); ++i )
@@ -285,7 +285,7 @@ namespace G4INCL {
 
       const G4bool successBringParticlesInside = bringParticleInside(*i);
       if( !successBringParticlesInside ) {
-        ERROR("Failed to bring particle inside the nucleus!" << std::endl);
+        INCL_ERROR("Failed to bring particle inside the nucleus!" << std::endl);
       }
     }
 
@@ -308,7 +308,7 @@ namespace G4INCL {
 
         // Increment or decrement the participant counters
         if(goesBackToSpectator) {
-          DEBUG("The following particle goes back to spectator:" << std::endl
+          INCL_DEBUG("The following particle goes back to spectator:" << std::endl
               << (*i)->print() << std::endl);
           if(!(*i)->isTargetSpectator()) {
             theNucleus->getStore()->getBook()->decrementCascading();
@@ -370,7 +370,7 @@ namespace G4INCL {
     if(theSolution.success) { // Apply the solution
       (*violationEFunctor)(theSolution.x);
     } else if(theNucleus){
-      DEBUG("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
+      INCL_DEBUG("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
       theNucleus->getStore()->getBook()->incrementEnergyViolationInteraction();
     }
     delete violationEFunctor;

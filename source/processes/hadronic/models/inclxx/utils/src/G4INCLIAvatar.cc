@@ -87,16 +87,16 @@ namespace G4INCL {
 
   G4INCL::FinalState* IAvatar::getFinalState()
   {
-    DEBUG("Random seeds before preInteraction: " << Random::getSeeds() << std::endl);
+    INCL_DEBUG("Random seeds before preInteraction: " << Random::getSeeds() << std::endl);
     preInteraction();
-    DEBUG("Random seeds before getChannel: " << Random::getSeeds() << std::endl);
+    INCL_DEBUG("Random seeds before getChannel: " << Random::getSeeds() << std::endl);
     IChannel *c = getChannel();
     if( !c ) {
       return new FinalState;
     }
-    DEBUG("Random seeds before getFinalState: " << Random::getSeeds() << std::endl);
+    INCL_DEBUG("Random seeds before getFinalState: " << Random::getSeeds() << std::endl);
     FinalState *fs = c->getFinalState();
-    DEBUG("Random seeds before postInteraction: " << Random::getSeeds() << std::endl);
+    INCL_DEBUG("Random seeds before postInteraction: " << Random::getSeeds() << std::endl);
     fs = postInteraction(fs);
     delete c;
     return fs;

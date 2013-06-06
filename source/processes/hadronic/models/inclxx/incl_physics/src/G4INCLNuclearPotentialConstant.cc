@@ -96,7 +96,7 @@ namespace G4INCL {
       separationEnergy[PiZero] = 0.;
       separationEnergy[PiMinus] = 0.;
 
-      DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
+      INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
             << "  proton:  " << separationEnergy[Proton] << std::endl
             << "  neutron: " << separationEnergy[Neutron] << std::endl
             << "  delta++: " << separationEnergy[DeltaPlusPlus] << std::endl
@@ -108,7 +108,7 @@ namespace G4INCL {
             << "  pi-:     " << separationEnergy[PiMinus] << std::endl
             );
 
-      DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
+      INCL_DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
             << "  proton:  " << fermiEnergy[Proton] << std::endl
             << "  neutron: " << fermiEnergy[Neutron] << std::endl
             << "  delta++: " << fermiEnergy[DeltaPlusPlus] << std::endl
@@ -117,7 +117,7 @@ namespace G4INCL {
             << "  delta-:  " << fermiEnergy[DeltaMinus] << std::endl
             );
 
-      DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << std::endl
+      INCL_DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << std::endl
             << "  proton:  " << fermiMomentum[Proton] << std::endl
             << "  neutron: " << fermiMomentum[Neutron] << std::endl
             );
@@ -145,11 +145,11 @@ namespace G4INCL {
           return vDelta;
           break;
         case UnknownParticle:
-          ERROR("Trying to compute potential energy of an unknown particle.");
+          INCL_ERROR("Trying to compute potential energy of an unknown particle.");
           return 0.0;
           break;
         default:
-          ERROR("Trying to compute potential energy of a malformed particle.");
+          INCL_ERROR("Trying to compute potential energy of a malformed particle.");
           return 0.0;
           break;
       }

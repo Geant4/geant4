@@ -157,7 +157,7 @@ namespace G4INCL {
         pionType = PiMinus;
         break;
       default:
-        FATAL("Unrecognized delta type; type=" << theParticle->getType() << std::endl);
+        INCL_FATAL("Unrecognized delta type; type=" << theParticle->getType() << std::endl);
         pionType = UnknownParticle;
         break;
     }

@@ -143,7 +143,7 @@ namespace G4INCL {
       const G4int ZCN = theNucleus->getZ() + theParticle->getZ();
       // Correction to the Q-value of the entering particle
       theCorrection = theParticle->getEmissionQValueCorrection(ACN,ZCN);
-      DEBUG("The following Particle enters with correction " << theCorrection
+      INCL_DEBUG("The following Particle enters with correction " << theCorrection
           << theParticle->print() << std::endl);
     }
 
@@ -207,14 +207,14 @@ namespace G4INCL {
 
     G4double v = theNucleus->getPotential()->computePotentialEnergy(theParticle);
     if(theParticle->getKineticEnergy()+v-theQValueCorrection<0.) { // Particle entering below 0. Die gracefully
-      DEBUG("Particle " << theParticle->getID() << " is trying to enter below 0" << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " is trying to enter below 0" << std::endl);
       return false;
     }
     const RootFinder::Solution theSolution = RootFinder::solve(&theIncomingEFunctor, v);
     if(theSolution.success) { // Apply the solution
       theIncomingEFunctor(theSolution.x);
     } else {
-      WARN("Couldn't compute the potential for incoming particle, root-finding algorithm failed." << std::endl);
+      INCL_WARN("Couldn't compute the potential for incoming particle, root-finding algorithm failed." << std::endl);
     }
     return theSolution.success;
   }

@@ -63,7 +63,7 @@ namespace G4INCL {
     tFromR[DeltaPlus] = new InverseInterpolationTable(rFromP[DeltaPlus]->getNodeValues(), rFromP[DeltaPlus]->getNodeAbscissae());
     tFromR[DeltaZero] = new InverseInterpolationTable(rFromP[DeltaZero]->getNodeValues(), rFromP[DeltaZero]->getNodeAbscissae());
     tFromR[DeltaMinus] = new InverseInterpolationTable(rFromP[DeltaMinus]->getNodeValues(), rFromP[DeltaMinus]->getNodeAbscissae());
-    DEBUG("Interpolation table for proton local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
+    INCL_DEBUG("Interpolation table for proton local energy (A=" << theA << ", Z=" << theZ << ") initialised:"
           << std::endl
           << tFromR[Proton]->print()
           << std::endl

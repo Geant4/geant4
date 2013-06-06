@@ -86,7 +86,7 @@ namespace G4INCL {
                   (p1->getType() == Neutron && p2->getType() == Proton)) {
           return CrossSections::elasticProtonNeutron(momentum);
         } else {
-          ERROR("G4INCL::CrossSections::elasticNN: Bad input!" << std::endl
+          INCL_ERROR("G4INCL::CrossSections::elasticNN: Bad input!" << std::endl
                 << p1->print() << p2->print() << std::endl);
         }
         return 0.0;
@@ -279,7 +279,7 @@ sel100: return sel;
           spnResult=CrossSections::spnPiMinusPHE(x);
         else if(ipit3 == 0) spnResult = (CrossSections::spnPiPlusPHE(x) + CrossSections::spnPiMinusPHE(x))/2.0; // (spnpipphe(x)+spnpimphe(x))/2.0
         else {
-          ERROR("Unknown configuration!" << std::endl);
+          INCL_ERROR("Unknown configuration!" << std::endl);
         }
       }
 

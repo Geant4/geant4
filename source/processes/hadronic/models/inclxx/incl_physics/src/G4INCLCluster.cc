@@ -52,7 +52,7 @@ namespace G4INCL {
     addParticles(theParticles); // add the particles to the `particles' list
     thePosition = oldPosition;
 // assert(theMassNumber==theA && theChargeNumber==theZ);
-    DEBUG("Cluster initialized:" << std::endl << print());
+    INCL_DEBUG("Cluster initialized:" << std::endl << print());
   }
 
 }

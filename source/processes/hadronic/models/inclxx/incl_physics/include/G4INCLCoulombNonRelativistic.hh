@@ -101,7 +101,7 @@ namespace G4INCL {
         const G4double kineticEnergyInCM = kineticEnergy * reducedMass / particleMass;
         const G4double theMinimumDistance = PhysicalConstants::eSquared * p.theZ * n->getZ() * particleMass
           / (kineticEnergyInCM * reducedMass);
-        DEBUG("Minimum distance of approach due to Coulomb = " << theMinimumDistance << std::endl);
+        INCL_DEBUG("Minimum distance of approach due to Coulomb = " << theMinimumDistance << std::endl);
         return theMinimumDistance;
       }
 

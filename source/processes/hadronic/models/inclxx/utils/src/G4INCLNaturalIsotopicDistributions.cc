@@ -87,7 +87,7 @@ namespace G4INCL {
     if(i!=theDistributions.end())
       return i->second;
     else {
-      FATAL("Requested natural isotopic distribution for synthetic element Z = " << Z << std::endl);
+      INCL_FATAL("Requested natural isotopic distribution for synthetic element Z = " << Z << std::endl);
       return theDistributions.begin()->second;
     }
   }

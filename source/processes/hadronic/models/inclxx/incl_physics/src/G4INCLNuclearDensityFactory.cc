@@ -99,7 +99,7 @@ namespace G4INCL {
           const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rpCorrelationFunction = new NuclearDensityFunctions::GaussianRP(maximumRadius, Math::oneOverSqrtThree * radius);
         } else {
-          ERROR("No r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A = "
+          INCL_ERROR("No r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A = "
                 << A << " Z = " << Z << std::endl);
           return NULL;
 
@@ -124,7 +124,7 @@ namespace G4INCL {
         InverseInterpolationTable *theTable = new InverseInterpolationTable(*theInverseCDFOneThird);
         delete theInverseCDFOneThird;
         delete rpCorrelationFunction;
-        DEBUG("Creating r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A=" << A << ", Z=" << Z << ":"
+        INCL_DEBUG("Creating r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A=" << A << ", Z=" << Z << ":"
               << std::endl << theTable->print() << std::endl);
 
         (*rpCorrelationTableCache)[nuclideID] = theTable;
@@ -162,14 +162,14 @@ namespace G4INCL {
         } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
           rDensityFunction = new NuclearDensityFunctions::ParisR();
         } else {
-          ERROR("No nuclear density function for target A = "
+          INCL_ERROR("No nuclear density function for target A = "
                 << A << " Z = " << Z << std::endl);
           return NULL;
         }
 
         InverseInterpolationTable *theTable = rDensityFunction->inverseCDFTable();
         delete rDensityFunction;
-        DEBUG("Creating inverse position CDF for A=" << A << ", Z=" << Z << ":" <<
+        INCL_DEBUG("Creating inverse position CDF for A=" << A << ", Z=" << Z << ":" <<
               std::endl << theTable->print() << std::endl);
 
         (*rCDFTableCache)[nuclideID] = theTable;
@@ -198,14 +198,14 @@ namespace G4INCL {
         } else if(A == 2 && Z == 1) { // density from the Paris potential for deuterons
           pDensityFunction = new NuclearDensityFunctions::ParisP();
         } else {
-          ERROR("No nuclear density function for target A = "
+          INCL_ERROR("No nuclear density function for target A = "
                 << A << " Z = " << Z << std::endl);
           return NULL;
         }
 
         InverseInterpolationTable *theTable = pDensityFunction->inverseCDFTable();
         delete pDensityFunction;
-        DEBUG("Creating inverse momentum CDF for A=" << A << ", Z=" << Z << ":" <<
+        INCL_DEBUG("Creating inverse momentum CDF for A=" << A << ", Z=" << Z << ":" <<
               std::endl << theTable->print() << std::endl);
 
         (*pCDFTableCache)[nuclideID] = theTable;

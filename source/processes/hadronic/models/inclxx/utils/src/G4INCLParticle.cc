@@ -91,7 +91,7 @@ namespace G4INCL {
     ID = nextID;
     nextID++;
     if(theEnergy <= 0.0) {
-      WARN("Particle with energy " << theEnergy << " created." << std::endl);
+      INCL_WARN("Particle with energy " << theEnergy << " created." << std::endl);
     }
     setType(t);
     setMass(getInvariantMass());
@@ -115,7 +115,7 @@ namespace G4INCL {
     nextID++;
     setType(t);
     if( isResonance() ) {
-      ERROR("Cannot create resonance without specifying its momentum four-vector." << std::endl);
+      INCL_ERROR("Cannot create resonance without specifying its momentum four-vector." << std::endl);
     }
     G4double energy = std::sqrt(theMomentum.mag2() + theMass*theMass);
     theEnergy = energy;
@@ -126,7 +126,7 @@ namespace G4INCL {
     const G4double p2 = theMomentum.mag2();
     G4double newp2 = theEnergy*theEnergy - theMass*theMass;
     if( newp2<0.0 ) {
-      ERROR("Particle has E^2 < m^2." << std::endl << print());
+      INCL_ERROR("Particle has E^2 < m^2." << std::endl << print());
       newp2 = 0.0;
       theEnergy = theMass;
     }

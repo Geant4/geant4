@@ -75,7 +75,7 @@ namespace G4INCL {
     rndm = Random::shoot();
     if (rndm > f3/f3max && (nTries < maxTries)) goto deltaProd101;
     if(nTries >= maxTries) {
-      WARN("DeltaProductionChannel::sampleDeltaMass loop was stopped because maximum number of tries was reached. Delta mass " << x << " MeV with CM energy " << ecm << " MeV may be unphysical." << std::endl);
+      INCL_WARN("DeltaProductionChannel::sampleDeltaMass loop was stopped because maximum number of tries was reached. Delta mass " << x << " MeV with CM energy " << ecm << " MeV may be unphysical." << std::endl);
     }
     return x;
   }

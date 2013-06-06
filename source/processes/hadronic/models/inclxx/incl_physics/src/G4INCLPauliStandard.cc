@@ -45,7 +45,7 @@ namespace G4INCL {
   PauliStandard::PauliStandard() :
     cellSize(std::pow(2.38*4.5*Math::pi,1./6.)*std::sqrt(PhysicalConstants::hc))
   {
-    DEBUG("Initialising PauliStandard. cellSize=" << cellSize << std::endl);
+    INCL_DEBUG("Initialising PauliStandard. cellSize=" << cellSize << std::endl);
   }
 
   PauliStandard::~PauliStandard() {}

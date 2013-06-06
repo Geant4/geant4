@@ -16,6 +16,16 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+6 June 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-16)
+-----------------------------------------------------------
+- Replaced defines in G4INCLLogger by adding prefix "INCL_" to avoid
+  clashes with specific macros defined in Windows system:
+  INCL_FATAL(x), INCL_ERROR(x), INCL_WARN(x), INCL_INFO(x),
+  INCL_DEBUG(x), INCL_DATABLOCK(x).
+  Adapted code accordingly.
+- Avoid dynamic initialisation of thread-local variables for porting
+  on Windows in G4INCLParticleTable.cc.
+
 22 May 2013 - Davide Mancusi (hadr-inclxx-V09-06-15)
 -----------------------------------------------------------
 - INCL++ v5.1.13.1

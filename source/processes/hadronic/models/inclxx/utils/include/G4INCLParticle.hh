@@ -196,14 +196,14 @@ namespace G4INCL {
           theZ = -1;
           break;
         case Composite:
-         // ERROR("Trying to set particle type to Composite! Construct a Cluster object instead" << std::endl);
+         // INCL_ERROR("Trying to set particle type to Composite! Construct a Cluster object instead" << std::endl);
           theA = 0;
           theZ = 0;
           break;
         case UnknownParticle:
           theA = 0;
           theZ = 0;
-          ERROR("Trying to set particle type to Unknown!" << std::endl);
+          INCL_ERROR("Trying to set particle type to Unknown!" << std::endl);
           break;
       }
 
@@ -346,7 +346,7 @@ namespace G4INCL {
           break;
 
         default:
-          ERROR("Particle::getINCLMass: Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getINCLMass: Unknown particle type." << std::endl);
           return 0.0;
           break;
       }
@@ -375,7 +375,7 @@ namespace G4INCL {
           break;
 
         default:
-          ERROR("Particle::getTableMass: Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getTableMass: Unknown particle type." << std::endl);
           return 0.0;
           break;
       }
@@ -404,7 +404,7 @@ namespace G4INCL {
           break;
 
         default:
-          ERROR("Particle::getRealMass: Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getRealMass: Unknown particle type." << std::endl);
           return 0.0;
           break;
       }
@@ -496,7 +496,7 @@ namespace G4INCL {
     G4double getInvariantMass() const {
       const G4double mass = std::pow(theEnergy, 2) - theMomentum.dot(theMomentum);
       if(mass < 0.0) {
-        ERROR("E*E - p*p is negative." << std::endl);
+        INCL_ERROR("E*E - p*p is negative." << std::endl);
         return 0.0;
       } else {
         return std::sqrt(mass);
@@ -719,7 +719,7 @@ namespace G4INCL {
      * Return a NULL pointer
      */
     ParticleList const *getParticles() const {
-      WARN("Particle::getParticles() method was called on a Particle object" << std::endl);
+      INCL_WARN("Particle::getParticles() method was called on a Particle object" << std::endl);
       return 0;
     }
 

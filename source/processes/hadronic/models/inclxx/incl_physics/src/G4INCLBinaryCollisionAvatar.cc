@@ -88,7 +88,7 @@ namespace G4INCL {
       const G4double energyCM2 = KinematicsUtils::squareTotalEnergyInCM(particle1, particle2);
       // Below a certain cut value we don't do anything:
       if(energyCM2 < cutNNSquared) {
-        DEBUG("CM energy = sqrt(" << energyCM2 << ") MeV < sqrt(" << cutNNSquared
+        INCL_DEBUG("CM energy = sqrt(" << energyCM2 << ") MeV < sqrt(" << cutNNSquared
             << ") MeV = cutNN" << "; returning a NULL channel" << std::endl);
         InteractionAvatar::restoreParticles();
         return NULL;
@@ -119,7 +119,7 @@ namespace G4INCL {
     const G4double betaDotX = boostVector.dot(minimumDistance);
     const G4double minDist = Math::tenPi*(minimumDistance.mag2() + betaDotX*betaDotX / (1.-boostVector.mag2()));
     if(minDist > theCrossSection) {
-      DEBUG("CM distance of approach is too small: " << minDist << ">" <<
+      INCL_DEBUG("CM distance of approach is too small: " << minDist << ">" <<
         theCrossSection <<"; returning a NULL channel" << std::endl);
       InteractionAvatar::restoreParticles();
       return NULL;
@@ -138,11 +138,11 @@ namespace G4INCL {
         isElastic = true;
 
       if(isElastic) { // Elastic NN channel
-        DEBUG("NN interaction: elastic channel chosen" << std::endl);
+        INCL_DEBUG("NN interaction: elastic channel chosen" << std::endl);
         return new ElasticChannel(particle1, particle2);
       } else { // Delta production
         // Inelastic NN channel
-        DEBUG("NN interaction: inelastic channel chosen" << std::endl);
+        INCL_DEBUG("NN interaction: inelastic channel chosen" << std::endl);
         return new DeltaProductionChannel(particle1, particle2);
       }
     } else if((particle1->isNucleon() && particle2->isDelta()) ||
@@ -159,22 +159,22 @@ namespace G4INCL {
         isElastic = true;
 
       if(isElastic) { // Elastic N Delta channel
-        DEBUG("NDelta interaction: elastic channel chosen" << std::endl);
+        INCL_DEBUG("NDelta interaction: elastic channel chosen" << std::endl);
         return new ElasticChannel(particle1, particle2);
       } else { // Recombination
-        DEBUG("NDelta interaction: recombination channel chosen" << std::endl);
+        INCL_DEBUG("NDelta interaction: recombination channel chosen" << std::endl);
         return new RecombinationChannel(particle1, particle2);
       }
     } else if(particle1->isDelta() && particle2->isDelta()) {
       isElastic = true;
-      DEBUG("DeltaDelta interaction: elastic channel chosen" << std::endl);
+      INCL_DEBUG("DeltaDelta interaction: elastic channel chosen" << std::endl);
       return new ElasticChannel(particle1, particle2);
     } else if((particle1->isNucleon() && particle2->isPion()) ||
 	      (particle1->isPion() && particle2->isNucleon())) {
       isElastic = false;
       return new PionNucleonChannel(particle1, particle2, theNucleus);
     } else {
-      DEBUG("BinaryCollisionAvatar can only handle nucleons (for the moment)."
+      INCL_DEBUG("BinaryCollisionAvatar can only handle nucleons (for the moment)."
 	      << std::endl
 	      << particle1->print()
 	      << std::endl
@@ -215,7 +215,7 @@ namespace G4INCL {
           // Store position and momentum of the spectator on the first
           // collision
           if((isParticle1Spectator && isParticle2Spectator) || (!isParticle1Spectator && !isParticle2Spectator)) {
-            ERROR("First collision must be within a target spectator and a non-target spectator");
+            INCL_ERROR("First collision must be within a target spectator and a non-target spectator");
           }
           if(isParticle1Spectator) {
             theNucleus->getStore()->getBook()->setFirstCollisionSpectatorPosition(oldParticle1Position.mag());

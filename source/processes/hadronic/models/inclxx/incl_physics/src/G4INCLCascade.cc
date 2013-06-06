@@ -195,8 +195,8 @@ namespace G4INCL {
 
   G4bool INCL::prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z) {
     if(A < 0 || A > 300 || Z < 1 || Z > 200) {
-      ERROR("Unsupported target: A = " << A << " Z = " << Z << std::endl);
-      ERROR("Target configuration rejected." << std::endl);
+      INCL_ERROR("Unsupported target: A = " << A << " Z = " << Z << std::endl);
+      INCL_ERROR("Target configuration rejected." << std::endl);
       return false;
     }
 
@@ -216,7 +216,7 @@ namespace G4INCL {
 
     // Set the maximum impact parameter
     maxImpactParameter = CoulombDistortion::maxImpactParameter(projectileSpecies, kineticEnergy, nucleus);
-    DEBUG("Maximum impact parameter initialised: " << maxImpactParameter << std::endl);
+    INCL_DEBUG("Maximum impact parameter initialised: " << maxImpactParameter << std::endl);
 
     // For forced CN events
     initMaxInteractionDistance(projectileSpecies, kineticEnergy);
@@ -255,7 +255,7 @@ namespace G4INCL {
     targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
 
     if(!targetInitSuccess) {
-      WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << std::endl);
+      INCL_WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << std::endl);
       theEventInfo.transparent=true;
       return theEventInfo;
     }
@@ -301,7 +301,7 @@ namespace G4INCL {
       impactParameter = fixedImpactParameter;
       phi = 0.;
     }
-    DEBUG("Selected impact parameter: " << impactParameter << std::endl);
+    INCL_DEBUG("Selected impact parameter: " << impactParameter << std::endl);
 
     // Fill in the event information
     theEventInfo.impactParameter = impactParameter;
@@ -366,7 +366,7 @@ namespace G4INCL {
 
     // Forced CN?
     if(nucleus->getTryCompoundNucleus()) {
-      DEBUG("Trying compound nucleus" << std::endl);
+      INCL_DEBUG("Trying compound nucleus" << std::endl);
       makeCompoundNucleus();
       theEventInfo.transparent = forceTransparent;
       // Global checks of conservation laws
@@ -408,13 +408,13 @@ namespace G4INCL {
          && (!nucleus->getProjectileRemnant()
              || nucleus->getProjectileRemnant()->getParticles().size()==0)) {
 
-        DEBUG("Cascade resulted in complete fusion, using realistic fusion kinematics" << std::endl);
+        INCL_DEBUG("Cascade resulted in complete fusion, using realistic fusion kinematics" << std::endl);
 
         nucleus->useFusionKinematics();
 
         if(nucleus->getExcitationEnergy()<0.) {
           // Complete fusion is energetically impossible, return a transparent
-          WARN("Complete-fusion kinematics yields negative excitation energy, returning a transparent!" << std::endl);
+          INCL_WARN("Complete-fusion kinematics yields negative excitation energy, returning a transparent!" << std::endl);
           theEventInfo.transparent = true;
           return;
         }
@@ -515,7 +515,7 @@ namespace G4INCL {
     }
 
     if(!success || !atLeastOneNucleonEntering) {
-      DEBUG("No nucleon entering in forced CN, forcing a transparent" << std::endl);
+      INCL_DEBUG("No nucleon entering in forced CN, forcing a transparent" << std::endl);
       forceTransparent = true;
       return;
     }
@@ -549,7 +549,7 @@ namespace G4INCL {
     const G4double theCNExcitationEnergy = std::sqrt(theCNInvariantMassSquared) - theCNMass;
     if(theCNExcitationEnergy<0.) {
       // Negative excitation energy, return a transparent
-      DEBUG("CN excitation energy is negative, forcing a transparent" << std::endl
+      INCL_DEBUG("CN excitation energy is negative, forcing a transparent" << std::endl
             << "  theCNA = " << theCNA << std::endl
             << "  theCNZ = " << theCNZ << std::endl
             << "  theCNEnergy = " << theCNEnergy << std::endl
@@ -561,7 +561,7 @@ namespace G4INCL {
       return;
     } else {
       // Positive excitation energy, can make a CN
-      DEBUG("CN excitation energy is positive, forcing a CN" << std::endl
+      INCL_DEBUG("CN excitation energy is positive, forcing a CN" << std::endl
             << "  theCNA = " << theCNA << std::endl
             << "  theCNZ = " << theCNZ << std::endl
             << "  theCNEnergy = " << theCNEnergy << std::endl
@@ -596,7 +596,7 @@ namespace G4INCL {
     if(theSolution.success) {
       theRecoilFunctor(theSolution.x); // Apply the solution
     } else {
-      WARN("Couldn't accommodate remnant recoil while satisfying energy conservation, root-finding algorithm failed." << std::endl);
+      INCL_WARN("Couldn't accommodate remnant recoil while satisfying energy conservation, root-finding algorithm failed." << std::endl);
     }
 
   }
@@ -609,10 +609,10 @@ namespace G4INCL {
     const G4double pLongBalance = theBalance.momentum.getZ();
     const G4double pTransBalance = theBalance.momentum.perp();
     if(theBalance.Z != 0) {
-      ERROR("Violation of charge conservation! ZBalance = " << theBalance.Z << std::endl);
+      INCL_ERROR("Violation of charge conservation! ZBalance = " << theBalance.Z << std::endl);
     }
     if(theBalance.A != 0) {
-      ERROR("Violation of baryon-number conservation! ABalance = " << theBalance.A << std::endl);
+      INCL_ERROR("Violation of baryon-number conservation! ABalance = " << theBalance.A << std::endl);
     }
     G4double EThreshold, pLongThreshold, pTransThreshold;
     if(afterRecoil) {
@@ -627,13 +627,13 @@ namespace G4INCL {
       pTransThreshold = 0.1; // MeV/c
     }
     if(std::abs(theBalance.energy)>EThreshold) {
-      WARN("Violation of energy conservation > " << EThreshold << " MeV. EBalance = " << theBalance.energy << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
+      INCL_WARN("Violation of energy conservation > " << EThreshold << " MeV. EBalance = " << theBalance.energy << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
     }
     if(std::abs(pLongBalance)>pLongThreshold) {
-      WARN("Violation of longitudinal momentum conservation > " << pLongThreshold << " MeV/c. pLongBalance = " << pLongBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
+      INCL_WARN("Violation of longitudinal momentum conservation > " << pLongThreshold << " MeV/c. pLongBalance = " << pLongBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
     }
     if(std::abs(pTransBalance)>pTransThreshold) {
-      WARN("Violation of transverse momentum conservation > " << pTransThreshold << " MeV/c. pTransBalance = " << pTransBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
+      INCL_WARN("Violation of transverse momentum conservation > " << pTransThreshold << " MeV/c. pTransBalance = " << pTransBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << std::endl);
     }
 
     // Feed the EventInfo variables
@@ -646,7 +646,7 @@ namespace G4INCL {
   G4bool INCL::continueCascade() {
     // Stop if we have passed the stopping time
     if(propagationModel->getCurrentTime() > propagationModel->getStoppingTime()) {
-      DEBUG("Cascade time (" << propagationModel->getCurrentTime()
+      INCL_DEBUG("Cascade time (" << propagationModel->getCurrentTime()
           << ") exceeded stopping time (" << propagationModel->getStoppingTime()
           << "), stopping cascade" << std::endl);
       return false;
@@ -654,12 +654,12 @@ namespace G4INCL {
     // Stop if there are no participants and no pions inside the nucleus
     if(nucleus->getStore()->getBook()->getCascading()==0 &&
         nucleus->getStore()->getIncomingParticles().empty()) {
-      DEBUG("No participants in the nucleus and no incoming particles left, stopping cascade" << std::endl);
+      INCL_DEBUG("No participants in the nucleus and no incoming particles left, stopping cascade" << std::endl);
       return false;
     }
     // Stop if the remnant is smaller than minRemnantSize
     if(nucleus->getA() <= minRemnantSize) {
-      DEBUG("Remnant size (" << nucleus->getA()
+      INCL_DEBUG("Remnant size (" << nucleus->getA()
           << ") smaller than or equal to minimum (" << minRemnantSize
           << "), stopping cascade" << std::endl);
       return false;
@@ -667,7 +667,7 @@ namespace G4INCL {
     // Stop if we have to try and make a compound nucleus or if we have to
     // force a transparent
     if(nucleus->getTryCompoundNucleus()) {
-      DEBUG("Trying to make a compound nucleus, stopping cascade" << std::endl);
+      INCL_DEBUG("Trying to make a compound nucleus, stopping cascade" << std::endl);
       return false;
     }
 
@@ -744,7 +744,7 @@ namespace G4INCL {
 
     const G4double theNNDistance = CrossSections::interactionDistanceNN(projectileSpecies, kineticEnergy);
     maxInteractionDistance = r0 + theNNDistance;
-    DEBUG("Initialised interaction distance: r0 = " << r0 << std::endl
+    INCL_DEBUG("Initialised interaction distance: r0 = " << r0 << std::endl
           << "    theNNDistance = " << theNNDistance << std::endl
           << "    maxInteractionDistance = " << maxInteractionDistance << std::endl);
   }
@@ -758,7 +758,7 @@ namespace G4INCL {
       for(IsotopeIter i=theIsotopes.begin(); i!=theIsotopes.end(); ++i) {
         NuclearDensity *theDensity = NuclearDensityFactory::createDensity(i->theA,Z);
         if(!theDensity) {
-          FATAL("NULL density in initUniverseRadius. "
+          INCL_FATAL("NULL density in initUniverseRadius. "
                 << "Projectile type=" << p.theType
                 << ", A=" << p.theA
                 << ", Z=" << p.theZ
@@ -772,7 +772,7 @@ namespace G4INCL {
     } else {
       NuclearDensity *theDensity = NuclearDensityFactory::createDensity(A,Z);
       if(!theDensity) {
-        FATAL("NULL density in initUniverseRadius. "
+        INCL_FATAL("NULL density in initUniverseRadius. "
               << "Projectile type=" << p.theType
               << ", A=" << p.theA
               << ", Z=" << p.theZ
@@ -792,7 +792,7 @@ namespace G4INCL {
       const G4double interactionDistancePiN = CrossSections::interactionDistancePiN(kineticEnergy);
       maxUniverseRadius = rMax + interactionDistancePiN;
     }
-    DEBUG("Initialised universe radius: " << maxUniverseRadius << std::endl);
+    INCL_DEBUG("Initialised universe radius: " << maxUniverseRadius << std::endl);
   }
 
   void INCL::updateGlobalInfo() {

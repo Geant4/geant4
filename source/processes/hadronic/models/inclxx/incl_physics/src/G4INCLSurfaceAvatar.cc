@@ -63,7 +63,7 @@ namespace G4INCL {
 
   G4INCL::IChannel* SurfaceAvatar::getChannel() {
     if(theParticle->isTargetSpectator()) {
-      DEBUG("Particle " << theParticle->getID() << " is a spectator, reflection" << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " is a spectator, reflection" << std::endl);
       return new ReflectionChannel(theNucleus, theParticle);
     }
 
@@ -73,7 +73,7 @@ namespace G4INCL {
     if(theParticle->isResonance()) {
       const G4double theFermiEnergy = theNucleus->getPotential()->getFermiEnergy(theParticle);
       if(theParticle->getKineticEnergy()<theFermiEnergy) {
-        DEBUG("Particle " << theParticle->getID() << " is a resonance below Tf, reflection" << std::endl
+        INCL_DEBUG("Particle " << theParticle->getID() << " is a resonance below Tf, reflection" << std::endl
             << "  Tf=" << theFermiEnergy << ", EKin=" << theParticle->getKineticEnergy() << std::endl);
         return new ReflectionChannel(theNucleus, theParticle);
       }
@@ -82,7 +82,7 @@ namespace G4INCL {
     // Don't try to make a cluster if the leading particle is too slow
     const G4double transmissionProbability = getTransmissionProbability(theParticle);
 
-    DEBUG("Transmission probability for particle " << theParticle->getID() << " = " << transmissionProbability << std::endl);
+    INCL_DEBUG("Transmission probability for particle " << theParticle->getID() << " = " << transmissionProbability << std::endl);
     /* Don't attempt to construct clusters when a projectile spectator is
      * trying to escape during a nucleus-nucleus collision. The idea behind
      * this is that projectile spectators will later be collected in the
@@ -100,20 +100,20 @@ namespace G4INCL {
       if(candidateCluster != 0 &&
           Clustering::clusterCanEscape(theNucleus, candidateCluster)) {
 
-        DEBUG("Cluster algorithm succeded. Candidate cluster:" << std::endl << candidateCluster->print() << std::endl);
+        INCL_DEBUG("Cluster algorithm succeded. Candidate cluster:" << std::endl << candidateCluster->print() << std::endl);
 
         // Check if the cluster can penetrate the Coulomb barrier
         const G4double clusterTransmissionProbability = getTransmissionProbability(candidateCluster);
         const G4double x = Random::shoot();
 
-        DEBUG("Transmission probability for cluster " << candidateCluster->getID() << " = " << clusterTransmissionProbability << std::endl);
+        INCL_DEBUG("Transmission probability for cluster " << candidateCluster->getID() << " = " << clusterTransmissionProbability << std::endl);
 
         if (x <= clusterTransmissionProbability) {
           theNucleus->getStore()->getBook()->incrementEmittedClusters();
-          DEBUG("Cluster " << candidateCluster->getID() << " passes the Coulomb barrier, transmitting." << std::endl);
+          INCL_DEBUG("Cluster " << candidateCluster->getID() << " passes the Coulomb barrier, transmitting." << std::endl);
           return new TransmissionChannel(theNucleus, candidateCluster);
         } else {
-          DEBUG("Cluster " << candidateCluster->getID() << " does not pass the Coulomb barrier. Falling back to transmission of the leading particle." << std::endl);
+          INCL_DEBUG("Cluster " << candidateCluster->getID() << " does not pass the Coulomb barrier. Falling back to transmission of the leading particle." << std::endl);
           delete candidateCluster;
         }
       } else {
@@ -127,7 +127,7 @@ namespace G4INCL {
     // Always transmit projectile spectators if no cluster was formed and if
     // transmission is energetically allowed
     if(theParticle->isProjectileSpectator() && transmissionProbability>0.) {
-      DEBUG("Particle " << theParticle->getID() << " is a projectile spectator, transmission" << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " is a projectile spectator, transmission" << std::endl);
       return new TransmissionChannel(theNucleus, theParticle);
     }
 
@@ -135,10 +135,10 @@ namespace G4INCL {
     const G4double x = Random::shoot();
 
     if(x <= transmissionProbability) { // Transmission
-      DEBUG("Particle " << theParticle->getID() << " passes the Coulomb barrier, transmitting." << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " passes the Coulomb barrier, transmitting." << std::endl);
       return new TransmissionChannel(theNucleus, theParticle);
     } else { // Reflection
-      DEBUG("Particle " << theParticle->getID() << " does not pass the Coulomb barrier, reflection." << std::endl);
+      INCL_DEBUG("Particle " << theParticle->getID() << " does not pass the Coulomb barrier, reflection." << std::endl);
       return new ReflectionChannel(theNucleus, theParticle);
     }
   }

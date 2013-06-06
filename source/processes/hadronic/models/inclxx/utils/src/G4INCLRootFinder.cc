@@ -91,7 +91,7 @@ namespace G4INCL {
         G4int iterations=0;
         do {
           if(iterations > maxIterations) {
-            DEBUG("Could not bracket the root." << std::endl);
+            INCL_DEBUG("Could not bracket the root." << std::endl);
             return std::make_pair((G4double) 1.,(G4double) -1.);
           }
 
@@ -133,7 +133,7 @@ namespace G4INCL {
           f->cleanUp(true);
           return Solution(0.,y_at_zero);
         } else {
-          DEBUG("Root-finding algorithm could not bracket the root." << std::endl);
+          INCL_DEBUG("Root-finding algorithm could not bracket the root." << std::endl);
           f->cleanUp(false);
           return Solution();
         }
@@ -154,7 +154,7 @@ namespace G4INCL {
       for(G4int iterations=0; std::abs(y) > toleranceY; iterations++) {
 
         if(iterations > maxIterations) {
-          DEBUG("Root-finding algorithm did not converge." << std::endl);
+          INCL_DEBUG("Root-finding algorithm did not converge." << std::endl);
           f->cleanUp(false);
           return Solution();
         }

@@ -57,7 +57,7 @@ namespace G4INCL {
 
   G4INCL::IChannel* DecayAvatar::getChannel() {
     if(particle1->isDelta()) {
-      DEBUG("DeltaDecayChannel chosen." << std::endl);
+      INCL_DEBUG("DeltaDecayChannel chosen." << std::endl);
       return new DeltaDecayChannel(particle1, incidentDirection);
     }
     else
@@ -97,7 +97,7 @@ namespace G4INCL {
       fs->setTotalEnergyBeforeInteraction(oldTotalEnergy);
       const G4bool success = enforceEnergyConservation(fs);
       if(!success) {
-        DEBUG("Enforcing energy conservation: failed!" << std::endl);
+        INCL_DEBUG("Enforcing energy conservation: failed!" << std::endl);
 
         if(theNucleus) {
           // Restore the state of the initial particles
@@ -117,10 +117,10 @@ namespace G4INCL {
           // If there is no nucleus we have to continue anyway, even if energy
           // conservation failed. We cannot afford producing unphysical
           // remnants.
-          DEBUG("No nucleus, continuing anyway." << std::endl);
+          INCL_DEBUG("No nucleus, continuing anyway." << std::endl);
         }
       } else {
-        DEBUG("Enforcing energy conservation: success!" << std::endl);
+        INCL_DEBUG("Enforcing energy conservation: success!" << std::endl);
       }
 
       if(theNucleus) {
@@ -136,7 +136,7 @@ namespace G4INCL {
         G4bool isCDPPBlocked = Pauli::isCDPPBlocked(created, theNucleus);
 
         if(isCDPPBlocked) {
-          DEBUG("CDPP: Blocked!" << std::endl);
+          INCL_DEBUG("CDPP: Blocked!" << std::endl);
 
           // Restore the state of both particles
           restoreParticles();
@@ -154,7 +154,7 @@ namespace G4INCL {
 
           return fsBlocked; // Interaction is blocked. Return an empty final state.
         }
-        DEBUG("CDPP: Allowed!" << std::endl);
+        INCL_DEBUG("CDPP: Allowed!" << std::endl);
 
         // If all went well (energy conservation enforced and CDPP satisfied),
         // delete the auxiliary final state

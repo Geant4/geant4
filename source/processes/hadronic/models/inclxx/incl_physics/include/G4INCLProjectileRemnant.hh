@@ -244,7 +244,7 @@ namespace G4INCL {
     ThreeVector const &getStoredMomentum(Particle const * const p) const {
       std::map<long,Particle*>::const_iterator i = storedComponents.find(p->getID());
       if(i==storedComponents.end()) {
-        ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
+        INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
         return p->getMomentum();
       } else {
         return i->second->getMomentum();
@@ -263,7 +263,7 @@ namespace G4INCL {
     /*    G4double getStoredEnergy(Particle const * const p) {
           std::map<long,Particle*>::const_iterator i = initialProjectileComponents.find(p->getID());
           if(i==initialProjectileComponents.end()) {
-          ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
+          INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
           return 0.;
           } else {
           return i->second->getEnergy();

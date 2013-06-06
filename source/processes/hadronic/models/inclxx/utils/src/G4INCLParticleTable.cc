@@ -234,9 +234,9 @@ namespace G4INCL {
       const std::string elementIUPACDigits = "nubtqphsoe";
 
       const G4double theINCLProtonSeparationEnergy = 6.83;
-      const G4double theINCLNeutronSeparationEnergy = theINCLProtonSeparationEnergy;
-      G4ThreadLocal G4double protonSeparationEnergy = theINCLProtonSeparationEnergy;
-      G4ThreadLocal G4double neutronSeparationEnergy = theINCLNeutronSeparationEnergy;
+      const G4double theINCLNeutronSeparationEnergy = 6.83;
+      G4ThreadLocal G4double protonSeparationEnergy = 6.83;
+      G4ThreadLocal G4double neutronSeparationEnergy = 6.83;
 
       G4ThreadLocal G4double rpCorrelationCoefficient = 1.0;
 
@@ -271,7 +271,7 @@ namespace G4INCL {
 
         // File name
         std::string fileName(path + "/walletlifetime.dat");
-        DEBUG("Reading real nuclear masses from file " << fileName << std::endl);
+        INCL_DEBUG("Reading real nuclear masses from file " << fileName << std::endl);
 
         // Open the file stream
         std::ifstream massTableIn(fileName.c_str());
@@ -356,7 +356,7 @@ namespace G4INCL {
       else if(theConfig->getSeparationEnergyType()==RealForLightSeparationEnergy)
         getSeparationEnergy = getSeparationEnergyRealForLight;
       else {
-        FATAL("Unrecognized separation-energy type in ParticleTable initialization: " << theConfig->getSeparationEnergyType() << std::endl);
+        INCL_FATAL("Unrecognized separation-energy type in ParticleTable initialization: " << theConfig->getSeparationEnergyType() << std::endl);
         std::abort();
         return;
       }
@@ -369,7 +369,7 @@ namespace G4INCL {
       else if(theConfig->getFermiMomentumType()==MassDependentFermiMomentum)
         getFermiMomentum = ParticleTable::getFermiMomentumMassDependent;
       else {
-        FATAL("Unrecognized Fermi-momentum type in ParticleTable initialization: " << theConfig->getFermiMomentumType() << std::endl);
+        INCL_FATAL("Unrecognized Fermi-momentum type in ParticleTable initialization: " << theConfig->getFermiMomentumType() << std::endl);
         std::abort();
         return;
       }
@@ -402,7 +402,7 @@ namespace G4INCL {
         return -3;
       }
 
-      ERROR("Requested isospin of an unknown particle!");
+      INCL_ERROR("Requested isospin of an unknown particle!");
       return -10; // Unknown
     }
 
@@ -496,7 +496,7 @@ namespace G4INCL {
       } else if(pt == PiZero) {
         return piZeroMass;
       } else {
-        ERROR("getMass : Unknown particle type." << std::endl);
+        INCL_ERROR("getMass : Unknown particle type." << std::endl);
         return 0.0;
       }
     }
@@ -517,7 +517,7 @@ namespace G4INCL {
           return theRealPiZeroMass;
           break;
         default:
-          ERROR("Particle::getRealMass : Unknown particle type." << std::endl);
+          INCL_ERROR("Particle::getRealMass : Unknown particle type." << std::endl);
           return 0.0;
           break;
       }
@@ -539,7 +539,7 @@ namespace G4INCL {
         if(hasMassTable(A,Z))
           return massTable.at(Z).at(A);
         else {
-          DEBUG("Real mass unavailable for isotope A=" << A << ", Z=" << Z
+          INCL_DEBUG("Real mass unavailable for isotope A=" << A << ", Z=" << Z
                 << ", using Weizsaecker's formula"
                 << std::endl);
           return getWeizsaeckerMass(A,Z);
@@ -663,7 +663,7 @@ namespace G4INCL {
         if(thisRMS>0.0)
           return thisRMS;
         else {
-          ERROR("getNuclearRadius: Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
+          INCL_ERROR("getNuclearRadius: Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
           return 0.0;
         }
       } else if(A < 19) {
@@ -674,7 +674,7 @@ namespace G4INCL {
         return 1.581*theDiffusenessParameter*
           (2.+5.*theRadiusParameter)/(2.+3.*theRadiusParameter);
       } else {
-        ERROR("getNuclearRadius: No radius for nucleus A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getNuclearRadius: No radius for nucleus A = " << A << " Z = " << Z << std::endl);
         return 0.0;
       }
     }
@@ -697,18 +697,18 @@ namespace G4INCL {
           if(thisRMS>0.0)
             return thisRMS;
           else {
-            ERROR("getRadiusParameter : Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
+            INCL_ERROR("getRadiusParameter : Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
             return 0.0;
           }
         } else {
-          ERROR("getRadiusParameter : No radius for nucleus A = " << A << " Z = " << Z << std::endl);
+          INCL_ERROR("getRadiusParameter : No radius for nucleus A = " << A << " Z = " << Z << std::endl);
           return 0.0;
         }
       } else if(A < 28 && A >= 6) {
         return mediumRadius[A-1];
         //      return 1.581*mediumDiffuseness[A-1]*(2.+5.*mediumRadius[A-1])/(2.+3.*mediumRadius[A-1]);
       } else {
-        ERROR("getRadiusParameter: No radius for nucleus A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getRadiusParameter: No radius for nucleus A = " << A << " Z = " << Z << std::endl);
         return 0.0;
       }
     }
@@ -722,7 +722,7 @@ namespace G4INCL {
       } else if(A >= 2) {
         return getNuclearRadius(t, A, Z) + 4.5;
       } else {
-        ERROR("getMaximumNuclearRadius : No maximum radius for nucleus A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getMaximumNuclearRadius : No maximum radius for nucleus A = " << A << " Z = " << Z << std::endl);
         return 0.0;
       }
     }
@@ -738,10 +738,10 @@ namespace G4INCL {
       } else if(A < 19 && A >= 6) {
         return mediumDiffuseness[A-1];
       } else if(A < 6 && A >= 2) {
-        ERROR("getSurfaceDiffuseness: was called for A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getSurfaceDiffuseness: was called for A = " << A << " Z = " << Z << std::endl);
         return 0.0;
       } else {
-        ERROR("getSurfaceDiffuseness: No diffuseness for nucleus A = " << A << " Z = " << Z << std::endl);
+        INCL_ERROR("getSurfaceDiffuseness: No diffuseness for nucleus A = " << A << " Z = " << Z << std::endl);
         return 0.0;
       }
     }
@@ -757,7 +757,7 @@ namespace G4INCL {
       else if(t==Neutron)
         return theINCLNeutronSeparationEnergy;
       else {
-        ERROR("ParticleTable::getSeparationEnergyINCL : Unknown particle type." << std::endl);
+        INCL_ERROR("ParticleTable::getSeparationEnergyINCL : Unknown particle type." << std::endl);
         return 0.0;
       }
     }
@@ -769,7 +769,7 @@ namespace G4INCL {
       else if(t==Neutron)
         return (*getTableParticleMass)(Neutron) + (*getTableMass)(A-1,Z) - (*getTableMass)(A,Z);
       else {
-        ERROR("ParticleTable::getSeparationEnergyReal : Unknown particle type." << std::endl);
+        INCL_ERROR("ParticleTable::getSeparationEnergyReal : Unknown particle type." << std::endl);
         return 0.0;
       }
     }
@@ -792,7 +792,7 @@ namespace G4INCL {
 
     std::string getElementName(const G4int Z) {
       if(Z<1) {
-        WARN("getElementName called with Z<1" << std::endl);
+        INCL_WARN("getElementName called with Z<1" << std::endl);
         return elementTable[0];
       } else if(Z<elementTableSize)
         return elementTable[Z];

@@ -105,7 +105,7 @@ namespace G4INCL {
       fermiEnergy[DeltaZero] = vDeltaZero - separationEnergy[DeltaZero];
       fermiEnergy[DeltaMinus] = vDeltaMinus - separationEnergy[DeltaMinus];
 
-      DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
+      INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
             << "  proton:  " << separationEnergy[Proton] << std::endl
             << "  neutron: " << separationEnergy[Neutron] << std::endl
             << "  delta++: " << separationEnergy[DeltaPlusPlus] << std::endl
@@ -117,7 +117,7 @@ namespace G4INCL {
             << "  pi-:     " << separationEnergy[PiMinus] << std::endl
             );
 
-      DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
+      INCL_DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << std::endl
             << "  proton:  " << fermiEnergy[Proton] << std::endl
             << "  neutron: " << fermiEnergy[Neutron] << std::endl
             << "  delta++: " << fermiEnergy[DeltaPlusPlus] << std::endl
@@ -126,7 +126,7 @@ namespace G4INCL {
             << "  delta-:  " << fermiEnergy[DeltaMinus] << std::endl
             );
 
-      DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << std::endl
+      INCL_DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << std::endl
             << "  proton:  " << fermiMomentum[Proton] << std::endl
             << "  neutron: " << fermiMomentum[Neutron] << std::endl
             );
@@ -162,16 +162,16 @@ namespace G4INCL {
           return vDeltaMinus;
           break;
       case Composite:
-	ERROR("No potential computed for particle of type Cluster.");
+	INCL_ERROR("No potential computed for particle of type Cluster.");
 	return 0.0;
 	break;
       case UnknownParticle:
-	ERROR("Trying to compute potential energy for an unknown particle.");
+	INCL_ERROR("Trying to compute potential energy for an unknown particle.");
 	return 0.0;
 	break;
       }
 
-      ERROR("There is no potential for this type of particle.");
+      INCL_ERROR("There is no potential for this type of particle.");
       return 0.0;
     }
 

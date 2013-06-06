@@ -53,13 +53,13 @@ namespace G4INCL {
     virtual ~Geant4RandomGenerator() {};
 
     Random::SeedVector getSeeds() {
-      WARN("getSeeds not supported.");
+      INCL_WARN("getSeeds not supported.");
       Random::SeedVector sv;
       return sv;
     }
 
     void setSeeds(const Random::SeedVector &) {
-      WARN("setSeeds not supported.");
+      INCL_WARN("setSeeds not supported.");
     }
 
     G4double flat() {

@@ -72,13 +72,13 @@ namespace G4INCL {
     }
     thePosition /= theA;
     setTableMass();
-    DEBUG("ProjectileRemnant object was reset:" << std::endl << print());
+    INCL_DEBUG("ProjectileRemnant object was reset:" << std::endl << print());
   }
 
   void ProjectileRemnant::removeParticle(Particle * const p, const G4double theProjectileCorrection) {
 // assert(p->isNucleon());
 
-    DEBUG("The following Particle is about to be removed from the ProjectileRemnant:"
+    INCL_DEBUG("The following Particle is about to be removed from the ProjectileRemnant:"
         << std::endl << p->print()
         << "theProjectileCorrection=" << theProjectileCorrection << std::endl);
     // Update A, Z, momentum and energy of the projectile remnant
@@ -116,7 +116,7 @@ namespace G4INCL {
 
 // assert(std::abs((theTotalMomentum-theMomentum).mag())<theThreshold);
 // assert(std::abs(theTotalEnergy-theEnergy)<theThreshold);
-    DEBUG("After Particle removal, the ProjectileRemnant looks like this:"
+    INCL_DEBUG("After Particle removal, the ProjectileRemnant looks like this:"
         << std::endl << print());
   }
 
@@ -163,7 +163,7 @@ namespace G4INCL {
     // If this condition is satisfied, there is no solution. Fall back on the
     // "most" method
     if(theNewEnergy<theNewEffectiveMass) {
-      WARN("Could not add all the dynamical spectators back into the projectile remnant."
+      INCL_WARN("Could not add all the dynamical spectators back into the projectile remnant."
            << " Falling back to the \"most\" method." << std::endl);
       return addMostDynamicalSpectators(pL);
     }
@@ -177,7 +177,7 @@ namespace G4INCL {
     // correct value
     const G4double scalingFactorSquared = (theNewEnergy*theNewEnergy-theNewEffectiveMass*theNewEffectiveMass)/theNewMomentum.mag2();
     const G4double scalingFactor = std::sqrt(scalingFactorSquared);
-    DEBUG("Scaling factor for the projectile-remnant momentum = " << scalingFactor << std::endl);
+    INCL_DEBUG("Scaling factor for the projectile-remnant momentum = " << scalingFactor << std::endl);
 
     theA = theNewA;
     theZ = theNewZ;

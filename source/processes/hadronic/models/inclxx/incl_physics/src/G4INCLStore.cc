@@ -98,7 +98,7 @@ namespace G4INCL {
       // hand, if this happens, it's probably a symptom of a bug
       // somewhere...
       if(particles.find((*i)->getID()) == particles.end()) {
-       ERROR("Avatar was added before related particles. This is probably a bug." << std::endl);
+       INCL_ERROR("Avatar was added before related particles. This is probably a bug." << std::endl);
         add((*i));
       }
       // Connect each particle to the avatar
@@ -290,7 +290,7 @@ namespace G4INCL {
   }
 
   ParticleList Store::getParticipants() {
-    WARN("Store::getParticipants is probably slow..." << std::endl);
+    INCL_WARN("Store::getParticipants is probably slow..." << std::endl);
     ParticleList result;
     for(std::map<long, Particle*>::iterator iter = particles.begin();
 	iter != particles.end(); ++iter) {
@@ -302,7 +302,7 @@ namespace G4INCL {
   }
 
   ParticleList Store::getSpectators() {
-    WARN("Store::getSpectators is probably slow..." << std::endl);
+    INCL_WARN("Store::getSpectators is probably slow..." << std::endl);
     ParticleList result;
     for(std::map<long, Particle*>::iterator iter = particles.begin();
 	iter != particles.end(); ++iter) {
@@ -350,7 +350,7 @@ namespace G4INCL {
     clearOutgoing();
 
     if( incoming.size() != 0 ) {
-      WARN("Incoming list is not empty when Store::clear() is called" << std::endl);
+      INCL_WARN("Incoming list is not empty when Store::clear() is called" << std::endl);
     }
     incoming.clear();
 
@@ -406,7 +406,7 @@ namespace G4INCL {
 	readA++;
       }
       else {
-        FATAL("Unrecognized particle type while loading particles; type=" << type << std::endl);
+        INCL_FATAL("Unrecognized particle type while loading particles; type=" << type << std::endl);
         t = UnknownParticle;
       }
 
