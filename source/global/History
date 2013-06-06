@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 5, 2013 G.Folger (global-V09-06-37)
+- In management/G4FPEDetection.hh add first version of stack backtrace 
+   when FPE exception is detected. Linux only.
+    
 May 29, 2013 G.Cosmo (global-V09-06-36)
 - Fix for allowing compilation on Windows in G4Threading: disable definition
   of min()/max() and 'pascal' from inclusion of <windows.h>.
