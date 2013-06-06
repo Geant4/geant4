@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 June 2013: G. Cosmo (phononExample-V09-06-02)
+- Fixed printout in XLogicalLattice.cc.
+
 19 February 2013: I. Hrivnacova (phononExample-V09-06-01)
 - Applied coding guidelines (separators)
 

@@ -33,7 +33,10 @@
 #include "Randomize.hh"
 #include <cmath>
 
-XLogicalLattice::XLogicalLattice(){
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+XLogicalLattice::XLogicalLattice()
+{
   fVresTheta=0;
   fVresPhi=0;
   fDresTheta=0;
@@ -54,8 +57,11 @@ XLogicalLattice::XLogicalLattice(){
 
 XLogicalLattice::~XLogicalLattice(){;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XLogicalLattice::SetDynamicalConstants(double Beta,double Gamma, double Lambda, double Mu)
+
+void XLogicalLattice::SetDynamicalConstants(double Beta,double Gamma,
+                                            double Lambda, double Mu)
 {
   fBeta=Beta;
   fGamma=Gamma;
@@ -188,10 +194,12 @@ double XLogicalLattice::GetFTDOS()
 ///////////////////////////////////////////
 //Load map of group velocity scalars (m/s)
 ////////////////////////////////////////////
-bool XLogicalLattice::LoadMap(int tRes, int pRes, int polarizationState, string m)
+bool XLogicalLattice::LoadMap(int tRes, int pRes,
+                              int polarizationState, string m)
 {
   if((tRes>MAXRES)||(pRes>MAXRES)){
-    G4cout<<"\nk-V fMap exceeds maximum resolution of "<<MAXRES<<" by "<<MAXRES<<". terminating."<<endl;
+    G4cout<<"\nk-V fMap exceeds maximum resolution of "
+          <<MAXRES<<" by "<<MAXRES<<". terminating.\n";
     return false; //terminate if resolution out of bounds.
   }
 
@@ -206,11 +214,10 @@ bool XLogicalLattice::LoadMap(int tRes, int pRes, int polarizationState, string 
   for(int theta = 0; theta<fThetaRes; theta++){
     for(int phi = 0; phi<fPhiRes; phi++){
         fMapFile>>fMap[polarizationState][theta][phi];        
-        //G4cout<<"\nXLogicalLattice::LoadMap:loading map "<<m<<" theta: "<<theta<<" phi: "<<phi<<" map: "<<fMap[polarizationState][theta][phi];
     }
   }
   fMapFile.close();
-  G4cout<<"\nXLogicalLattice::LoadMap() sucessful (Vg scalars)."<<endl;
+  G4cout<<"\nXLogicalLattice::LoadMap() successful (Vg scalars).\n";
   fVresTheta=tRes; //store map dimensions
   fVresPhi=pRes;
   return true;
@@ -222,10 +229,12 @@ bool XLogicalLattice::LoadMap(int tRes, int pRes, int polarizationState, string 
 ////////////////////////////////////
 //Load map of group velocity unit vectors
 ///////////////////////////////////
-bool XLogicalLattice::Load_NMap(int tRes, int pRes, int polarizationState, string m)
+bool XLogicalLattice::Load_NMap(int tRes, int pRes,
+                                int polarizationState, string m)
 {
   if((tRes>MAXRES)||(pRes>MAXRES)){
-    G4cout<<"\nk-V map exceeds maximum resolution of "<<MAXRES<<" by "<<MAXRES<<" terminating."<<endl;
+    G4cout<<"\nk-V map exceeds maximum resolution of "<<MAXRES
+          <<" by "<<MAXRES<<" terminating.\n";
     return false; //terminate if resolution out of bounds.
   }
 
@@ -242,13 +251,12 @@ bool XLogicalLattice::Load_NMap(int tRes, int pRes, int polarizationState, strin
       for(int coord = 0; coord<3; coord++){
         fMapFile>>fN_map[polarizationState][theta][phi][coord];
       }
-      //G4cout<<"\n theta: " <<theta<<" phi: "<<phi<<" [xyz]: "<<fN_map[polarizationState][theta][phi][0]<<" "<<fN_map[polarizationState][theta][phi][1]<<" "<<fN_map[polarizationState][theta][phi][2];
     }
   }
   G4cout<<"\n";
   fMapFile.close();
-  G4cout<<"\nXLogicalLattice::Load_NMap() sucessful"<<endl;
-  fDresTheta=tRes; //store map dimesnions
+  G4cout<<"\nXLogicalLattice::Load_NMap() successful\n";
+  fDresTheta=tRes; //store map dimensions
   fDresPhi=pRes;
   return true;
 }
@@ -276,12 +284,11 @@ double XLogicalLattice::MapKtoV(int polarizationState,G4ThreeVector k)
   if(theta>pi) theta=theta-pi;
   //phi=[0 to 2 pi] in accordance with DMC //if(phi>pi/2) phi=phi-pi/2;
   if(fMap[polarizationState][int(theta/tRes)][int(phi/pRes)]==0){
-      G4cout<<"\nFound v=0 for polarization "<<polarizationState<<" theta "<<theta<<" phi "<<phi<< " translating to map coords " << "theta "<< int(theta/tRes) << " phi " << int(phi/pRes)<<endl;
+      G4cout<<"\nFound v=0 for polarization "<<polarizationState
+            <<" theta "<<theta<<" phi "<<phi<< " translating to map coords "
+            <<"theta "<< int(theta/tRes) << " phi " << int(phi/pRes)<<G4endl;
   }
-
-  //  G4cout<<"\nTheta: "<<theta<<" theta index: "<<int(theta/tRes)<<" tRes: "<<tRes;
-  return fMap[polarizationState][int(theta/tRes)][int(phi/pRes)];
-  
+  return fMap[polarizationState][int(theta/tRes)][int(phi/pRes)];  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -323,4 +330,3 @@ G4ThreeVector XLogicalLattice::MapKtoVDir(int polarizationState,G4ThreeVector k)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
