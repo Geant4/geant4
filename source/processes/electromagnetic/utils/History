@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 June 13: V.Ivant (emutils-V09-06-21)
+- G4VEmModel - fixed crash in copy of element selectors from 
+    master to worker threads
+- G4VEnergyLossProcess - restore printout at initialisation 
+    of worker thread
+
+05 June 13: V.Ivant (emutils-V09-06-20)
+- G4LossTableManager - SetIon method from previous is removed, old
+    code to Get dedx, range, inverse range is restored 
+- G4VEnergyLossProcess - removed debug printout
+
 04 June 13: V.Ivant (emutils-V09-06-19)
 - G4LossTableManager - optimisation for MT mode: do not insert 
     concrete ions into particle/energy loss process map, only

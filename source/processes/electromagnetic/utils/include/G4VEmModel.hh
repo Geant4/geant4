@@ -708,7 +708,7 @@ inline std::vector<G4EmElementSelector*>* G4VEmModel::GetElementSelectors()
 inline void G4VEmModel::SetElementSelectors(std::vector<G4EmElementSelector*>* p)
 {
   elmSelectors = p;
-  nSelectors = elmSelectors->size();
+  if(elmSelectors) { nSelectors = elmSelectors->size(); }
   localElmSelectors = false;
 }
 

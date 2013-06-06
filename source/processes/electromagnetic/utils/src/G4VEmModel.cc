@@ -126,7 +126,7 @@ G4ParticleChangeForGamma* G4VEmModel::GetParticleChangeForGamma()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p, 
+void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition*, 
 					    const G4DataVector& cuts)
 {
   // initialise before run
@@ -168,7 +168,6 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
     if(cuts[i] < highLimit) {
       fCurrentCouple = theCoupleTable->GetMaterialCutsCouple(i);
       const G4Material* material = fCurrentCouple->GetMaterial();
-      G4int idx = fCurrentCouple->GetIndex();
 
       // selector already exist check if should be deleted
       G4bool create = true;
@@ -180,10 +179,14 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* p,
 	(*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
 						     lowLimit,highLimit,spline);
       }
-      //G4cout << "G4VEmModel::InitialiseElmSelectors i= " << i
-      //	   << " idx= " << idx << "  "  << p->GetParticleName() 
-      //	   << "  " << (*elmSelectors)[i] << G4endl;
-      ((*elmSelectors)[i])->Initialise(p, cuts[idx]);
+      /*
+      G4cout << "G4VEmModel::InitialiseElmSelectors i= " << i
+	     << " idx= " << fCurrentCouple->GetIndex() 
+	     << "  "  << p->GetParticleName() 
+	     << " for " << GetName() << "  cut= " << cuts[i] 
+	     << "  " << (*elmSelectors)[i] << G4endl;
+      ((*elmSelectors)[i])->Initialise(p, cuts[i]);
+      */
       //((*elmSelectors)[i])->Dump(p);
     }
   } 
@@ -271,7 +274,7 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
   fCurrentElement = (*theElementVector)[n];
   if (n > 0) {
     G4double x = G4UniformRand()*
-                 G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
+      G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
     for(G4int i=0; i<n; ++i) {
       if (x <= xsec[i]) {
 	fCurrentElement = (*theElementVector)[i];

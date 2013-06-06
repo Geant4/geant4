@@ -305,10 +305,6 @@ private:
 
   void CopyDEDXTables();
 
-  void SetIon(const G4ParticleDefinition *aParticle,
-	      const G4MaterialCutsCouple *couple,
-	      G4double kineticEnergy);
-
   G4LossTableManager(G4LossTableManager &);
   G4LossTableManager & operator=(const G4LossTableManager &right);
 

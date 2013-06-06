@@ -1280,7 +1280,6 @@ G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
     } else {
       currentLoss = 0;
       if(aParticle->GetParticleType() == "nucleus") {
-        currentParticle = theGenericIon;
 	if ((pos = loss_map.find(theGenericIon)) != loss_map.end()) {
 	  currentLoss = (*pos).second;
 	}
@@ -1298,12 +1297,7 @@ G4double G4LossTableManager::GetDEDX(const G4ParticleDefinition *aParticle,
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = 0.0;
-  if(currentLoss) { 
-    if(currentParticle == theGenericIon) { 
-      SetIon(aParticle, couple, kineticEnergy);
-    }
-    x = currentLoss->GetDEDX(kineticEnergy, couple); 
-  }
+  if(currentLoss) { x = currentLoss->GetDEDX(kineticEnergy, couple); }
   return x;
 }
 
@@ -1315,12 +1309,7 @@ G4double G4LossTableManager::GetSubDEDX(const G4ParticleDefinition *aParticle,
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = 0.0;
-  if(currentLoss) { 
-    if(currentParticle == theGenericIon) { 
-      SetIon(aParticle, couple, kineticEnergy);
-    }
-    x = currentLoss->GetDEDXForSubsec(kineticEnergy, couple); 
-  }
+  if(currentLoss) { x = currentLoss->GetDEDXForSubsec(kineticEnergy, couple); }
   return x;
 }
 
@@ -1332,12 +1321,7 @@ G4double G4LossTableManager::GetCSDARange(const G4ParticleDefinition *aParticle,
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = DBL_MAX;
-  if(currentLoss) { 
-    if(currentParticle == theGenericIon) { 
-      SetIon(aParticle, couple, kineticEnergy);
-    }
-    x = currentLoss->GetCSDARange(kineticEnergy, couple); 
-  }
+  if(currentLoss) { x = currentLoss->GetCSDARange(kineticEnergy, couple); }
   return x;
 }
 
@@ -1350,12 +1334,7 @@ G4LossTableManager::GetRangeFromRestricteDEDX(const G4ParticleDefinition *aParti
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = DBL_MAX;
-  if(currentLoss) { 
-    if(currentParticle == theGenericIon) { 
-      SetIon(aParticle, couple, kineticEnergy);
-    }
-    x = currentLoss->GetRangeForLoss(kineticEnergy, couple); 
-  }
+  if(currentLoss) { x = currentLoss->GetRangeForLoss(kineticEnergy, couple); }
   return x;
 }
 
@@ -1367,12 +1346,7 @@ G4double G4LossTableManager::GetRange(const G4ParticleDefinition *aParticle,
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = DBL_MAX;
-  if(currentLoss) { 
-    if(currentParticle == theGenericIon) { 
-      SetIon(aParticle, couple, kineticEnergy);
-    }
-    x = currentLoss->GetRange(kineticEnergy, couple); 
-  }
+  if(currentLoss) { x = currentLoss->GetRange(kineticEnergy, couple); }
   return x;
 }
 
@@ -1384,9 +1358,7 @@ G4double G4LossTableManager::GetEnergy(const G4ParticleDefinition *aParticle,
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = 0;
-  if(currentLoss) { 
-    x = currentLoss->GetKineticEnergy(range, couple); 
-  }
+  if(currentLoss) { x = currentLoss->GetKineticEnergy(range, couple); }
   return x;
 }
 
@@ -1399,23 +1371,8 @@ G4double G4LossTableManager::GetDEDXDispersion(const G4MaterialCutsCouple *coupl
   const G4ParticleDefinition* aParticle = dp->GetParticleDefinition();
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = 0.0;
-  if(currentLoss) { 
-    currentLoss->GetDEDXDispersion(couple, dp, length); 
-  }
+  if(currentLoss) { currentLoss->GetDEDXDispersion(couple, dp, length); }
   return x;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void G4LossTableManager::SetIon(const G4ParticleDefinition *aParticle,
-				const G4MaterialCutsCouple *couple,
-				G4double kineticEnergy)
-{
-  G4double massratio = proton_mass_c2/aParticle->GetPDGMass();
-  G4double q2 = emCorrections->EffectiveChargeSquareRatio(aParticle, 
-							  couple->GetMaterial(), 
-							  kineticEnergy);
-  currentLoss->SetDynamicMassCharge(massratio, q2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

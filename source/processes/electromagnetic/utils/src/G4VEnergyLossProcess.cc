@@ -745,12 +745,6 @@ G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
 
   if(&part == particle) {
 
-    G4cout << "### G4VEnergyLossProcess::SlaveBuildPhysicsTable() for "
-	   << GetProcessName()
-	   << " and particle " << part.GetParticleName() 
-	   << "  " << firstProcess->GetProcessName() << "  " 
-	   << firstProcess->Particle()->GetParticleName() << G4endl;
-
     SetDEDXTable(firstProcess->DEDXTable(),fRestricted);
     SetDEDXTable(firstProcess->DEDXTableForSubsec(),fSubRestricted);
     SetDEDXTable(firstProcess->DEDXunRestrictedTable(),fTotal);
@@ -782,6 +776,18 @@ G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
     
       // needs to be done only once
       safetyHelper->InitialiseHelper();
+
+      // explicitly defined printout by particle name
+      G4String num = part.GetParticleName();
+      if(1 < verboseLevel || 
+	 (0 < verboseLevel && (num == "e-" || 
+			       num == "e+"    || num == "mu+" || 
+			       num == "mu-"   || num == "proton"|| 
+			       num == "pi+"   || num == "pi-" || 
+			       num == "kaon+" || num == "kaon-" || 
+			       num == "alpha" || num == "anti_proton" || 
+			       num == "GenericIon")))
+	{ PrintInfoDefinition(); }
     }
 
     // Added tracking cut to avoid tracking artifacts
@@ -826,22 +832,19 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
       // needs to be done only once
       safetyHelper->InitialiseHelper();
     }
-  }
    
-  // explicitly defined printout by particle name
-  G4String num = part.GetParticleName();
-  if(1 < verboseLevel || 
-     (0 < verboseLevel && (num == "e-" || 
-			   num == "e+"    || num == "mu+" || 
-			   num == "mu-"   || num == "proton"|| 
-			   num == "pi+"   || num == "pi-" || 
-			   num == "kaon+" || num == "kaon-" || 
-			   num == "alpha" || num == "anti_proton" || 
-			   num == "GenericIon")))
-    { 
-      particle = &part;
-      PrintInfoDefinition(); 
-    }
+    // explicitly defined printout by particle name
+    G4String num = part.GetParticleName();
+    if(1 < verboseLevel || 
+       (0 < verboseLevel && (num == "e-" || 
+			     num == "e+"    || num == "mu+" || 
+			     num == "mu-"   || num == "proton"|| 
+			     num == "pi+"   || num == "pi-" || 
+			     num == "kaon+" || num == "kaon-" || 
+			     num == "alpha" || num == "anti_proton" || 
+			     num == "GenericIon")))
+      { PrintInfoDefinition(); }
+  }
 
   // Added tracking cut to avoid tracking artifacts
   // identify deexcitation flag
