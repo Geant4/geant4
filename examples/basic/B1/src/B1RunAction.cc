@@ -110,7 +110,7 @@ void B1RunAction::EndOfRunAction(const G4Run* aRun)
   if (generatorAction)
   {
     const G4ParticleGun* particleGun = generatorAction->GetParticleGun();
-    runCondition += particleGun->GetParticleDefinition()->GetParticleName();                       
+    runCondition += particleGun->GetParticleDefinition()->GetParticleName();
     runCondition += " of ";
     G4double particleEnergy = particleGun->GetParticleEnergy();
     runCondition += G4BestUnit(particleEnergy,"Energy");

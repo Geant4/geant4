@@ -34,15 +34,31 @@ $Id$
    requires data files for electromagnetic and hadronic processes.
    See more on installation of the datasets in Geant4 Installation Guide,
    Chapter 3.3: Note On Geant4 Datasets:
-   http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch03s03.html
+   http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides
+                                           /InstallationGuide/html/ch03s03.html
    The following datasets: G4LEDATA, G4LEVELGAMMADATA, G4NEUTRONXSDATA and 
    G4SAIDXSDATA are mandatory for this example.
 
    In addition the build-in interactive command:
                /process/(in)activate processName
    allows to activate/inactivate the processes one by one.
- 	 
- 3- PRIMARY GENERATOR
+   
+ 3- ACTION INITALIZATION
+
+   A newly (June 2013) introduced class, B1ActionInitialization,
+   instantiates and registers to Geant4 kernel all user action classes
+   which are defined thread-local and a run action class (if present)
+   which is defined both thread-local and global.
+
+   The thread-local action classes are defined in
+     B1ActionInitialization::Build()
+   Note that B1ActionInitialization::Build() is also used to
+   instantiate user action classes in sequential mode.
+        
+   The global run action class is defined in
+     B3ActionInitialization::BuildForMaster().
+  	 
+ 4- PRIMARY GENERATOR
   
    The primary generator is defined in the B1PrimaryGeneratorAction class.
    The default kinematics is a 6 MeV gamma, randomly distributed in front
@@ -50,17 +66,22 @@ $Id$
    This default setting can be changed via the Geant4 built-in commands 
    of the G4ParticleGun class.
      
- 4- DETECTOR RESPONSE
+ 5- DETECTOR RESPONSE
 
    This example demonstrates a simple scoring implemented directly
    in the user action classes. Alternative ways of scoring via
    Geant4 classes can be found in the other examples.
    
-   It is in B1SteppingAction that the energy deposition is collected 
-   for a selected volume step by step and the statistical event by event 
-   accumulation of energy deposition is done within B1EventAction. 
-   Information about the primary particle is printed in the
-   B1RunAction::EndOfRunAction() along with the computation of the dose. 
+   The energy deposited is collected step by step for a selected volume
+   in B1SteppingAction and accumulated event by event in B1EventInformation
+   which is created at BeginOfEventAction().
+   
+   At end of event, this EnergyDeposited is collected in B1Run::RecordEvent()
+   and summed over the whole run.
+   
+   Total dose deposited is computed at B1RunAction::EndOfRunAction(), 
+   and printed together with informations about the primary particle.
+
    An example of creating and computing new units (e.g., dose) is also shown 
    in the class constructor. 
 
