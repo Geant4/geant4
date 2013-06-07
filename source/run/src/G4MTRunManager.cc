@@ -538,7 +538,7 @@ void G4MTRunManager::WaitForEndEventLoopWorkers()
     }
     //Now number of workers that reached end of event loop is as expected
     //Reset number of workers in ready for work state so a new run can start
-    G4AutoLock l(&numberOfEndOfEventLoopWorkersMutex);
+    G4AutoLock l(&numberOfReadyWorkersMutex);
     numberOfReadyWorkers = 0;
     //Signal workers they can end event-loop
     G4CONDTIONBROADCAST(&endEventLoopCondition);
