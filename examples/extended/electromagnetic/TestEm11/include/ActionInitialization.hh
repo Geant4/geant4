@@ -23,65 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/EventAction.cc
-/// \brief Implementation of the EventAction class
+// $Id:
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#include "EventAction.hh"
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "RunAction.hh"
-#include "EventActionMessenger.hh"
-#include "HistoManager.hh"
+#include "G4VUserActionInitialization.hh"
 
-#include "G4Event.hh"
+class DetectorConstruction;
+class PhysicsList;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-EventAction::EventAction(RunAction* run)
-:G4UserEventAction(),fRunAct(run), fDrawFlag("none"), fPrintModulo(10000),
- fEventMessenger(0)
+class ActionInitialization : public G4VUserActionInitialization
 {
-  fEventMessenger = new EventActionMessenger(this);
-}
+  public:
+    ActionInitialization(DetectorConstruction*, PhysicsList*);
+    virtual ~ActionInitialization();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+  private:
+    DetectorConstruction* fDet;
+    PhysicsList*          fPhys;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+};
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
-{
- G4int evtNb = evt->GetEventID();
+#endif
 
- //printing survey
- if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
     
- //energy deposited per event
- fTotalEdep = 0.;   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::EndOfEventAction(const G4Event*)
-{
-  //plot energy deposited per event
-  //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if (fTotalEdep > 0.) {
-    fRunAct->AddEdep(fTotalEdep);
-    analysisManager->FillH1(2,fTotalEdep);
-  }  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

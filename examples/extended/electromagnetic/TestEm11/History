@@ -15,6 +15,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-06-13 V. Ivanchenko (testem11-V09-06-10)
+- TestEm11, RunAction, HistoManager - fixed compillation problems
+    in sequential mode
+
+30-05-13 D. Sawkey (testem11-V09-06-09)
+- Still migrating to multithreaded. Essentially seems to work. Known bugs are
+  1. stepMax not correctly set
+  2. steppingVerbose not implemented for multithreaded
+  3. output file name always testem11
+  4. values not calculated for Master EndOfRunAction
+
+28-05-13 D. Sawkey( testem11-V09-06-08)
+- Beginning to migrate to multithreaded. Works with macro TestEm11.in but 
+  otherwise lacks features (see README)
+
 15-04-13 I.Hrivnacova (testem11-V09-06-07)
 - Removed ExG4HbookAnalysisManager and related files and updated CMake/GNUmake
   files to use it from extended/common 

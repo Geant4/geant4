@@ -23,65 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/EventAction.cc
-/// \brief Implementation of the EventAction class
+// $Id: 
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
-#include "EventAction.hh"
-
+#include "ActionInitialization.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventActionMessenger.hh"
-#include "HistoManager.hh"
-
-#include "G4Event.hh"
+#include "EventAction.hh"
+#include "SteppingAction.hh"
+#include "TrackingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run)
-:G4UserEventAction(),fRunAct(run), fDrawFlag("none"), fPrintModulo(10000),
- fEventMessenger(0)
-{
-  fEventMessenger = new EventActionMessenger(this);
+ActionInitialization::ActionInitialization(DetectorConstruction* det,
+    PhysicsList* phys)
+ : G4VUserActionInitialization(),
+    fDet(det),fPhys(phys)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
+{ 
+  G4cout << "ActionInitialization::BuildForMaster()" << G4endl;
+  SetUserAction(new RunAction(fDet,fPhys,true));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::~EventAction()
+void ActionInitialization::Build() const
 {
-  delete fEventMessenger;
-}
+  RunAction*              run;
+  EventAction*            event;
+  PrimaryGeneratorAction* kin;
+  SetUserAction(kin   = new PrimaryGeneratorAction(fDet));
+  //SetUserAction(run   = new RunAction(fDet,fPhys,kin));
+  G4cout << "ActionInitialization::Build()" << G4endl;
+  SetUserAction(run   = new RunAction(fDet,fPhys,false));
+  SetUserAction(event = new EventAction(run));
+  SetUserAction(new TrackingAction(fDet,run));
+  SetUserAction(new SteppingAction(fDet,run,event));
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::BeginOfEventAction(const G4Event* evt)
-{
- G4int evtNb = evt->GetEventID();
-
- //printing survey
- if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-    
- //energy deposited per event
- fTotalEdep = 0.;   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::EndOfEventAction(const G4Event*)
-{
-  //plot energy deposited per event
-  //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if (fTotalEdep > 0.) {
-    fRunAct->AddEdep(fTotalEdep);
-    analysisManager->FillH1(2,fTotalEdep);
-  }  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

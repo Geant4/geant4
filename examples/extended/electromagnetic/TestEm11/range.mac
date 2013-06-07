@@ -29,7 +29,7 @@
 /gun/energy 600 keV
 #
 /analysis/setFileName range
-/analysis/h1/se 3 200 0 4 mm	# csda range
+/analysis/h1/set 3 200 0 4 mm	# csda range
 #	 
 /testem/event/printModulo 2000
 #

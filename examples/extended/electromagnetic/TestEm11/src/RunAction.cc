@@ -32,10 +32,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+//#include "Run.hh"
 #include "PhysicsList.hh"
 #include "StepMax.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
+#include "G4AnalysisMessenger.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -46,17 +48,42 @@
 #include "G4SystemOfUnits.hh"
 #include <iomanip>
 
+#include "G4Electron.hh"
+#include "G4NistManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
-                     PrimaryGeneratorAction* kin)
-:G4UserRunAction(),fDetector(det),fPhysics(phys),fKinematic(kin),
+//RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
+//                     PrimaryGeneratorAction* kin)
+//:G4UserRunAction(),fDetector(det),fPhysics(phys),fKinematic(kin),
+// fHistoManager(0)
+//{
+//  // Book predefined histograms
+//  //fHistoManager = new HistoManager(IsMaster());
+//  fHistoManager = new HistoManager();
+//}
+
+RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys)
+//                     PrimaryGeneratorAction* kin)
+:G4UserRunAction(),fDetector(det),fPhysics(phys),
  fHistoManager(0)
 {
   // Book predefined histograms
-  fHistoManager = new HistoManager();
+  // this is now in BeginOfRunAction
+  //fHistoManager = new HistoManager();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
+            G4bool reallyIsMaster)
+//                     PrimaryGeneratorAction* kin)
+:G4UserRunAction(),fDetector(det),fPhysics(phys),
+ fHistoManager(0)
+{
+  // Book predefined histograms
+  fHistoManager = new HistoManager(reallyIsMaster);
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
@@ -66,10 +93,15 @@ RunAction::~RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
+//G4Run* RunAction::GenerateRun()
+//{ return new Run; }
+
+void RunAction::BeginOfRunAction(const G4Run*)
 {  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  G4cout << "analysisManager: " << analysisManager << G4endl;
+  G4cout << " type: " << analysisManager->GetType() << G4endl;
+
   // save Rndm status
   ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
@@ -102,177 +134,238 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
     
   //histograms
   //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if ( analysisManager->IsActive() ) {
-    analysisManager->OpenFile();
-  } 
-    
+   
   //set StepMax from histos 1 and 8
   //e
   G4double stepMax = DBL_MAX;
   G4int ih = 1;
-  if (analysisManager->GetH1Activation(ih))
-                                    stepMax = analysisManager->GetH1Width(ih);
-  //
+  if (analysisManager->GetH1Activation(ih)) {
+    stepMax = analysisManager->GetH1Width(ih);
+  }
+  
   ih = 8;
-  G4ParticleDefinition* particle = fKinematic->GetParticleGun()
-                                          ->GetParticleDefinition();
-  if (particle->GetPDGCharge() != 0.) {
-    G4double width = analysisManager->GetH1Width(ih);
-    if (width == 0.) width = 1.;                                               
-    G4EmCalculator emCalculator;
-    G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
-    G4int NbOfAbsor = fDetector->GetNbOfAbsor();
-    for (G4int i=1; i<= NbOfAbsor; i++) {
-      G4Material* material = fDetector->GetAbsorMaterial(i);  
-      fCsdaRange[i] = emCalculator.GetCSDARange(energy,particle,material);
-      if (analysisManager->GetH1Activation(ih))
-        stepMax = std::min(stepMax, width*fCsdaRange[i]);
-      if (i>1) {
-        G4double thickness = fDetector->GetAbsorThickness(i-1);
-        fXfrontNorm[i] = fXfrontNorm[i-1] + thickness/fCsdaRange[i-1];
-      }                              
-    }        
-  }     
-  fPhysics->GetStepMaxProcess()->SetMaxStep2(stepMax);           
+
+  // need to get parameters from local, send to master physics list
+  //if (!isMaster) {
+  if (0) {
+    G4RunManager* runMan = G4RunManager::GetRunManager();
+    const PrimaryGeneratorAction* primGen = 
+          dynamic_cast<const PrimaryGeneratorAction*> 
+            (runMan->GetUserPrimaryGeneratorAction());
+    PrimaryGeneratorAction* pg1 = const_cast<PrimaryGeneratorAction*>(primGen);
+    G4ParticleGun* partGun = 
+          pg1->GetParticleGun();
+    G4ParticleDefinition* particle = partGun->GetParticleDefinition();
+   
+    if (particle->GetPDGCharge() != 0.) {
+      G4double width = analysisManager->GetH1Width(ih);
+      if (width == 0.) width = 1.;  
+      G4EmCalculator emCalculator;
+      G4double energy = partGun->GetParticleEnergy();
+      G4int NbOfAbsor = fDetector->GetNbOfAbsor();
+      for (G4int i=1; i<= NbOfAbsor; i++) {
+        G4Material* material = fDetector->GetAbsorMaterial(i);  
+            G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
+        fCsdaRange[i] = emCalculator.GetCSDARange(energy,particle,material);
+        if (analysisManager->GetH1Activation(ih)) {
+          stepMax = std::min(stepMax, width*fCsdaRange[i]);
+        }
+        if (i>1) {
+          G4double thickness = fDetector->GetAbsorThickness(i-1);
+          fXfrontNorm[i] = fXfrontNorm[i-1] + thickness/fCsdaRange[i-1];
+        }                              
+      }        
+    }
+  }
+  //TODO why doesn't this work?
+  //if (isMaster) {
+  if (0) {
+    G4cout << "setting master stepMax [mm]: " << stepMax/mm << G4endl;
+    fPhysics->GetStepMaxProcess()->SetMaxStep2(stepMax);           
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  std::ios::fmtflags mode = G4cout.flags();
-  G4cout.setf(std::ios::fixed,std::ios::floatfield);
-  
-  G4int NbofEvents = aRun->GetNumberOfEvent();
-  if (NbofEvents == 0) return;
-  G4double fNbofEvents = double(NbofEvents);
+  G4cout << "This is EndOfRunAction." << G4endl;
+  //const Run* theRun = static_cast<const Run*>(aRun);
+  //G4cout << "isMaster  : " << isMaster   << G4endl;
+  //if (!isMaster) {
 
-  //run conditions
-  //     
-  G4ParticleDefinition* particle = fKinematic->GetParticleGun()
-                                          ->GetParticleDefinition();
-  G4String partName = particle->GetParticleName();                             
-  G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
-  
-  G4int NbOfAbsor = fDetector->GetNbOfAbsor();
-  
-  G4cout << "\n ======================== run summary ======================\n";
-  
-  G4int prec = G4cout.precision(2);
-  
-  G4cout 
-    << "\n The run consists of " << NbofEvents << " "<< partName << " of "
-    << G4BestUnit(energy,"Energy") 
-    << " through "  << NbOfAbsor << " absorbers: \n";
-  for (G4int i=1; i<= NbOfAbsor; i++) {
-     G4Material* material = fDetector->GetAbsorMaterial(i);
-     G4double thickness = fDetector->GetAbsorThickness(i);
-     G4double density = material->GetDensity();    
-     G4cout << std::setw(20) << G4BestUnit(thickness,"Length") << " of "
-            << material->GetName() << " (density: " 
-            << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-  }         
-  G4cout << "\n ============================================================\n";
-  
-  //compute total energy deposit
-  //
-  fEdeposit /= NbofEvents; fEdeposit2 /= NbofEvents;
-  G4double rms = fEdeposit2 - fEdeposit*fEdeposit;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
-
-  G4cout.precision(3);       
-  G4cout 
-    << "\n Total Energy deposited        = " << G4BestUnit(fEdeposit,"Energy")
-    << " +- "                                << G4BestUnit( rms,"Energy")
-    << G4endl;
-              
-  //compute track length of primary track
-  //
-  fTrackLen /= NbofEvents; fTrackLen2 /= NbofEvents;
-  rms = fTrackLen2 - fTrackLen*fTrackLen;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
-
-  G4cout.precision(3);       
-  G4cout 
-    << "\n Track length of primary track = " << G4BestUnit(fTrackLen,"Length")
-    << " +- "                                << G4BestUnit( rms,"Length");
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager ) {
+  //if ( analysisManager->GetH1(1) ) {
+    G4cout << "\n ----> print histograms statistic ";
+    if(isMaster) {
+      G4cout << "for the entire run \n" << G4endl;
+    }
+    else {
+      G4cout << "for the local thread \n" << G4endl;
+    }
+                   
+    std::ios::fmtflags mode = G4cout.flags();
+    G4cout.setf(std::ios::fixed,std::ios::floatfield);
     
-  //compare with csda range
-  //
-  if (NbOfAbsor == 1) {
-    G4cout 
-     << "\n Range from EmCalculator = " << G4BestUnit(fCsdaRange[1],"Length")
-     << " (from full dE/dx)" << G4endl;
-  }
-                     
-  //compute projected range of primary track
-  //
-  fProjRange /= NbofEvents; fProjRange2 /= NbofEvents;
-  rms = fProjRange2 - fProjRange*fProjRange;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
-   
-  G4cout 
-    << "\n Projected range               = " << G4BestUnit(fProjRange,"Length")
-    << " +- "                                << G4BestUnit( rms,"Length")    
-    << G4endl;
-    
-  //nb of steps and step size of primary track
-  //
-  G4double fNbSteps = fNbOfSteps/fNbofEvents, fNbSteps2 = fNbOfSteps2/fNbofEvents;
-  rms = fNbSteps2 - fNbSteps*fNbSteps;       
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+    G4int NbofEvents = aRun->GetNumberOfEvent();
+    if (NbofEvents == 0) return;
+    G4double fNbofEvents = double(NbofEvents);
 
-  G4cout.precision(2);       
-  G4cout << "\n Nb of steps of primary track  = " << fNbSteps << " +- " << rms;
+    //run conditions
+    //     
+    // G4ParticleDefinition* particle;
+    G4String partName = "";
+    G4double energy = 0.0;
+    if (!isMaster) {
+      G4RunManager* runMan = G4RunManager::GetRunManager();
+      const PrimaryGeneratorAction* primGen = 
+            dynamic_cast<const PrimaryGeneratorAction*> 
+              (runMan->GetUserPrimaryGeneratorAction());
+      PrimaryGeneratorAction* pg1 = 
+            const_cast<PrimaryGeneratorAction*>(primGen);
+      G4ParticleGun* partGun = 
+            pg1->GetParticleGun();
+      //particle = partGun->GetParticleDefinition();
+      energy   = partGun->GetParticleEnergy();
+    } 
     
-  fStepSize /= NbofEvents; fStepSize2 /= NbofEvents;
-  rms = fStepSize2 - fStepSize*fStepSize;        
-  if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
-
-  G4cout.precision(3);       
-  G4cout 
-    << "\t Step size= " << G4BestUnit(fStepSize,"Length")
-    << " +- "           << G4BestUnit( rms,"Length")
-    << G4endl;
+    G4int NbOfAbsor = fDetector->GetNbOfAbsor();
+    //G4int NbOfAbsor = 1.;
     
-  //transmission coefficients
-  //
-  G4double absorbed  = 100.*fStatus[0]/fNbofEvents;
-  G4double transmit  = 100.*fStatus[1]/fNbofEvents;
-  G4double reflected = 100.*fStatus[2]/fNbofEvents;  
-
-  G4cout.precision(2);       
-  G4cout 
-    << "\n absorbed = "  << absorbed  << " %"
-    << "   transmit = "  << transmit  << " %"
-    << "   reflected = " << reflected << " %" << G4endl;
-     
-  // normalize histograms of longitudinal energy profile
-  //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  G4int ih = 1;
-  G4double binWidth = analysisManager->GetH1Width(ih);
-  G4double fac = (1./(NbofEvents*binWidth))*(mm/MeV);
-  analysisManager->ScaleH1(ih,fac);
-    
-  ih = 8;
-  binWidth = analysisManager->GetH1Width(ih);
-  fac = (1./(NbofEvents*binWidth))*(g/(MeV*cm2));
-  analysisManager->ScaleH1(ih,fac);
+    G4int prec = G4cout.precision(2);
+    if (!isMaster) { 
+      G4cout << 
+        "\n ======================== run summary ======================\n";
       
-   // reset default formats
-  G4cout.setf(mode,std::ios::floatfield);
-  G4cout.precision(prec);
-  
-  // save histograms
-  if ( analysisManager->IsActive() ) {  
-    analysisManager->Write();
-    analysisManager->CloseFile();
-  }    
- 
-  // show Rndm status
-  CLHEP::HepRandom::showEngineStatus();
+      G4cout 
+        << "\n The run consists of " << NbofEvents << " "<< partName << " of "
+        << G4BestUnit(energy,"Energy") 
+        << " through "  << NbOfAbsor << " absorbers: \n";
+      for (G4int i=1; i<= NbOfAbsor; i++) {
+         G4Material* material = fDetector->GetAbsorMaterial(i);
+         G4double thickness = fDetector->GetAbsorThickness(i);
+         G4double density = material->GetDensity();    
+         G4cout << std::setw(20) << G4BestUnit(thickness,"Length") << " of "
+                << material->GetName() << " (density: " 
+                << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+      }         
+      G4cout << 
+        "\n ============================================================\n";
+    } 
+    //compute total energy deposit
+    //
+    fEdeposit /= NbofEvents; fEdeposit2 /= NbofEvents;
+    G4double rms = fEdeposit2 - fEdeposit*fEdeposit;        
+    if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+
+    G4cout.precision(3);       
+    G4cout 
+      << "\n Total Energy deposited        = " 
+      << G4BestUnit(fEdeposit,"Energy")
+      << " +- "                                
+      << G4BestUnit( rms,"Energy")
+      << G4endl;
+                
+    //compute track length of primary track
+    //
+    fTrackLen /= NbofEvents; fTrackLen2 /= NbofEvents;
+    rms = fTrackLen2 - fTrackLen*fTrackLen;        
+    if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+
+    G4cout.precision(3);       
+    G4cout 
+      << "\n Track length of primary track = " 
+      << G4BestUnit(fTrackLen,"Length")
+      << " +- "                                
+      << G4BestUnit( rms,"Length");
+      
+    //compare with csda range
+    //
+    if (NbOfAbsor == 1) {
+      G4cout 
+       << "\n Range from EmCalculator = " 
+       << G4BestUnit(fCsdaRange[1],"Length")
+       << " (from full dE/dx)" << G4endl;
+    }
+                       
+    //compute projected range of primary track
+    //
+    fProjRange /= NbofEvents; fProjRange2 /= NbofEvents;
+    rms = fProjRange2 - fProjRange*fProjRange;        
+    if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+     
+    G4cout 
+      << "\n Projected range               = " 
+      << G4BestUnit(fProjRange,"Length")
+      << " +- "                                
+      << G4BestUnit( rms,"Length")    
+      << G4endl;
+      
+    //nb of steps and step size of primary track
+    //
+    G4double fNbSteps = fNbOfSteps/fNbofEvents, 
+            fNbSteps2 = fNbOfSteps2/fNbofEvents;
+    rms = fNbSteps2 - fNbSteps*fNbSteps;       
+    if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+
+    G4cout.precision(2);       
+    G4cout << "\n Nb of steps of primary track  = " 
+        << fNbSteps << " +- " << rms;
+      
+    fStepSize /= NbofEvents; fStepSize2 /= NbofEvents;
+    rms = fStepSize2 - fStepSize*fStepSize;        
+    if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
+
+    G4cout.precision(3);       
+    G4cout 
+      << "\t Step size= " << G4BestUnit(fStepSize,"Length")
+      << " +- "           << G4BestUnit( rms,"Length")
+      << G4endl;
+      
+    //transmission coefficients
+    //
+    G4double absorbed  = 100.*fStatus[0]/fNbofEvents;
+    G4double transmit  = 100.*fStatus[1]/fNbofEvents;
+    G4double reflected = 100.*fStatus[2]/fNbofEvents;  
+
+    G4cout.precision(2);       
+    G4cout 
+      << "\n absorbed = "  << absorbed  << " %"
+      << "   transmit = "  << transmit  << " %"
+      << "   reflected = " << reflected << " %" << G4endl;
+       
+    // normalize histograms of longitudinal energy profile
+    //
+    G4int ih = 1;
+    G4double binWidth = analysisManager->GetH1Width(ih);
+    G4double fac = (1./(NbofEvents*binWidth))*(mm/MeV);
+    analysisManager->ScaleH1(ih,fac);
+      
+    ih = 8;
+    binWidth = analysisManager->GetH1Width(ih);
+    fac = (1./(NbofEvents*binWidth))*(g/(MeV*cm2));
+    analysisManager->ScaleH1(ih,fac);
+        
+     // reset default formats
+    G4cout.setf(mode,std::ios::floatfield);
+    G4cout.precision(prec);
+    
+    // save histograms
+    G4cout << "analysisManager->IsActive: "<<analysisManager->IsActive()
+           << G4endl;
+    //if ( analysisManager->IsActive() ) {  
+    G4cout <<"AnalysisManager: "<<analysisManager<<G4endl;
+    //if (0) {  
+    if (analysisManager) {  
+      analysisManager->Write();
+      analysisManager->CloseFile();
+    }    
+   
+    // show Rndm status
+    CLHEP::HepRandom::showEngineStatus();
+  }
+  G4cout << "We have made it to end of EndOfRunAction()" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -40,7 +40,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4UniformMagField.hh"
+//#include "G4UniformMagField.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -51,12 +51,21 @@
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+
+#include "Field.hh"
+#include "G4Types.hh"
+
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ThreadLocal Field* DetectorConstruction::fMagFieldMT=0;
+
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),fDefaultMaterial(0),fPhysiWorld(0),fMagField(0),
+:G4VUserDetectorConstruction(),fDefaultMaterial(0),fPhysiWorld(0),
  fDetectorMessenger(0)
 {
   // default parameter values of the absorbers
@@ -81,6 +90,7 @@ DetectorConstruction::DetectorConstruction()
 
 DetectorConstruction::~DetectorConstruction()
 {
+  //delete fMagField;
   delete fDetectorMessenger;
 }
 
@@ -89,6 +99,11 @@ DetectorConstruction::~DetectorConstruction()
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
   return ConstructVolumes();
+}
+
+void DetectorConstruction::ConstructSDandField()
+{
+  if (!fMagFieldMT) fMagFieldMT = new Field();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -334,30 +349,6 @@ void DetectorConstruction::SetNbOfDivisions(G4int iabs, G4int ival)
       return;
     }
   fNbOfDivisions[iabs] = ival;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
-void DetectorConstruction::SetMagField(G4double fieldValue)
-{
-  //apply a global uniform magnetic field along Z axis
-  //
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if(fMagField) delete fMagField;                //delete the existing magn field
-
-  if(fieldValue!=0.)                        // create a new one if non nul
-  { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(fMagField);
-    fieldMgr->CreateChordFinder(fMagField);
-  } else {
-    fMagField = 0;
-    fieldMgr->SetDetectorField(fMagField);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

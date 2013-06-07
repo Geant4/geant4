@@ -23,65 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/EventAction.cc
-/// \brief Implementation of the EventAction class
+/// \file electromagnetic/TestEm11/src/Field.cc
+/// \brief Implementation of the Field class
 //
-// $Id$
+// $Id: Field.cc 
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "EventAction.hh"
 
-#include "RunAction.hh"
-#include "EventActionMessenger.hh"
-#include "HistoManager.hh"
 
-#include "G4Event.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "Field.hh"
+#include "FieldMessenger.hh"
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+//#include "G4UniformMagField.hh"
 
-EventAction::EventAction(RunAction* run)
-:G4UserEventAction(),fRunAct(run), fDrawFlag("none"), fPrintModulo(10000),
- fEventMessenger(0)
+//#include "globals.hh"
+#include "G4SystemOfUnits.hh"
+
+Field::Field()
+  : G4UniformMagField(G4ThreeVector())
 {
-  fEventMessenger = new EventActionMessenger(this);
+  fFieldMessenger = new FieldMessenger(this);
+  SetMagFieldValue(0);
+  G4cout << "Constructor Field() called" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
+Field::Field(G4double val)
+  : G4UniformMagField(G4ThreeVector())
 {
-  delete fEventMessenger;
+  fFieldMessenger = new FieldMessenger(this);
+  SetMagFieldValue(val);
+  G4cout << "Constructor Field(G4double) called" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::BeginOfEventAction(const G4Event* evt)
+Field::~Field()
 {
- G4int evtNb = evt->GetEventID();
-
- //printing survey
- if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-    
- //energy deposited per event
- fTotalEdep = 0.;   
+  delete fFieldMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//void Field::GetFieldValue(const double*, double* BF) 
+//{ BF[0]=fieldVal.x(); BF[1]=fieldVal.y(); BF[2]=fieldVal.z(); }
 
-void EventAction::EndOfEventAction(const G4Event*)
+void Field::SetMagFieldValue(G4double val)
 {
-  //plot energy deposited per event
-  //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if (fTotalEdep > 0.) {
-    fRunAct->AddEdep(fTotalEdep);
-    analysisManager->FillH1(2,fTotalEdep);
-  }  
+  G4cout << "Setting field to [T]: " << val/tesla << G4endl;
+  //fFieldVal = val;
+  G4FieldManager* fieldMan
+    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  if (val) {
+    SetFieldValue(G4ThreeVector(0.,0.,val));
+    fieldMan->SetDetectorField(this);
+    fieldMan->CreateChordFinder(this);
+  }
+  else {
+    fieldMan->SetDetectorField(NULL);
+  }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

@@ -23,65 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/EventAction.cc
-/// \brief Implementation of the EventAction class
+/// \file electromagnetic/TestEm11/src/FieldMessenger.cc
+/// \brief Implementation of the FieldMessenger class
 //
-// $Id$
+// $Id: FieldMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "EventAction.hh"
+#include "FieldMessenger.hh"
 
-#include "RunAction.hh"
-#include "EventActionMessenger.hh"
-#include "HistoManager.hh"
-
-#include "G4Event.hh"
+#include "Field.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction* run)
-:G4UserEventAction(),fRunAct(run), fDrawFlag("none"), fPrintModulo(10000),
- fEventMessenger(0)
+FieldMessenger::FieldMessenger(Field* field)
+ : G4UImessenger(),
+   fField(field)
 {
-  fEventMessenger = new EventActionMessenger(this);
+  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
+  fMagFieldCmd->SetGuidance("Set transverse magnetic field (along z axis).");
+  fMagFieldCmd->SetParameterName("fMagField",false);
+  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
+  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::~EventAction()
+FieldMessenger::~FieldMessenger()
 {
-  delete fEventMessenger;
+  delete fMagFieldCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
-{
- G4int evtNb = evt->GetEventID();
-
- //printing survey
- if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-    
- //energy deposited per event
- fTotalEdep = 0.;   
+void FieldMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
+{       
+  G4cout << "SetNewValue: " << newValue << G4endl;
+  if( command == fMagFieldCmd )
+    {
+      G4double field = fMagFieldCmd->GetNewDoubleValue(newValue);
+      fField->SetMagFieldValue(field);
+      G4cout << "set magnetic field to [T]: " << field/tesla<< G4endl;
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::EndOfEventAction(const G4Event*)
-{
-  //plot energy deposited per event
-  //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if (fTotalEdep > 0.) {
-    fRunAct->AddEdep(fTotalEdep);
-    analysisManager->FillH1(2,fTotalEdep);
-  }  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

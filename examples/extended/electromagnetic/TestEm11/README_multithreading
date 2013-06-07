@@ -1,0 +1,12 @@
+May 30, 2013  Daren Sawkey
+
+known bugs.
+
+- file name is always "testem11". If you try to set it with macro command it will be ignored, with a warning. This is because the master HistoManager is created before the macro file is read.
+
+- stepping verbose not implemented for multithreaded
+
+- stepMax not automatically calculated and set. 
+
+- calculated values not written to G4cout for master. Need Run::Merge
+ 
