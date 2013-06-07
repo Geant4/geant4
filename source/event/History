@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 7, 2013, L.Desorgher (event-V09-06-07)
+- Remove the call of aSolid->SurfaceNormal() in  G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary that was 
+  generating warnings. Suggested by G. Cosmo
+
 May 26th, 2013, M.Asai (event-V09-06-06)
 - Adding additional checks on file I/O and verbosity to G4HEPEvtInterface.
 

@@ -218,10 +218,7 @@ void G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary(G4VSolid*
     G4double dist_to_in = aSolid->DistanceToIn(p,direction);
     if (dist_to_in<kInfinity/2.) {
       find_pos =true;
-      G4ThreeVector p1=p+ 0.99999*direction*dist_to_in;
-      G4ThreeVector norm =aSolid->SurfaceNormal(p1);
       p+= 0.999999*direction*dist_to_in;
-      CosThDirComparedToNormal=direction.dot(-norm);
     }
   }
 }
