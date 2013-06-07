@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+07-June, 2013  L.Desorgher     (ReverseMC01-V09-06-01)
+- Finish modification for coding guide lines.
 
 24-January, 2013 V.Ivanchenko (ReverseMC01-V09-06-00)
 - G4AdjointPhysicsList - removed unused obsolete headers

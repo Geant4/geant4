@@ -47,10 +47,8 @@
 
 #ifndef G4AdjointPhysicsMessenger_h
 #define G4AdjointPhysicsMessenger_h 1
-
 #include "globals.hh"
 #include "G4UImessenger.hh"
-
 class G4AdjointPhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithAString;
@@ -65,30 +63,25 @@ class G4UIcmdWithADouble;
 
 class G4AdjointPhysicsMessenger: public G4UImessenger
 {
-  public:
-    G4AdjointPhysicsMessenger(G4AdjointPhysicsList* );
-    virtual ~G4AdjointPhysicsMessenger();
+ public:
+  G4AdjointPhysicsMessenger(G4AdjointPhysicsList* );
+  virtual ~G4AdjointPhysicsMessenger();
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+ private:
+  G4AdjointPhysicsList* fPhysicsList;
+  G4UIdirectory*             fPhysicsDir;
     
-  private:
-    G4AdjointPhysicsList* fPhysicsList;
-    
-
-    G4UIdirectory*             fPhysicsDir;
-    
-    //Physics Model
-
-    G4UIcmdWithABool*  fUsepIonisationCmd;
-    G4UIcmdWithABool*  fUseBremCmd;
-    G4UIcmdWithABool*  fUseComptonCmd;
-    G4UIcmdWithABool*  fUseMSCmd;
-    G4UIcmdWithABool*  fUsePEEffectCmd;
-    G4UIcmdWithABool*  fUseGammaConversionCmd;
-    G4UIcmdWithABool*  fUseEgainFluctuationCmd;
-  
-    G4UIcmdWithADoubleAndUnit* fSetEminAdjModelsCmd;
-    G4UIcmdWithADoubleAndUnit* fSetEmaxAdjModelsCmd;
+  //Physics Model
+  G4UIcmdWithABool*  fUsepIonisationCmd;
+  G4UIcmdWithABool*  fUseBremCmd;
+  G4UIcmdWithABool*  fUseComptonCmd;
+  G4UIcmdWithABool*  fUseMSCmd;
+  G4UIcmdWithABool*  fUsePEEffectCmd;
+  G4UIcmdWithABool*  fUseGammaConversionCmd;
+  G4UIcmdWithABool*  fUseEgainFluctuationCmd;
+  G4UIcmdWithADoubleAndUnit* fSetEminAdjModelsCmd;
+  G4UIcmdWithADoubleAndUnit* fSetEmaxAdjModelsCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

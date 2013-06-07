@@ -89,14 +89,15 @@ public:
    void EndOfEvent(const G4Event*); 
    
    void SetPrimaryExpSpectrumForAdjointSim(
-                                       const G4String& particle_name, G4double fluence,
-                                              G4double E0, G4double Emin,G4double Emax);
+                                  const G4String& particle_name,
+                                  G4double fluence,
+                                  G4double E0, G4double Emin,G4double Emax);
    void SetPrimaryPowerLawSpectrumForAdjointSim(
-                                      const  G4String& particle_name,G4double fluence,
-                                            G4double alpha, G4double Emin,G4double Emax);
+                            const  G4String& particle_name,G4double fluence,
+                            G4double alpha, G4double Emin,G4double Emax);
    //precision of the simulation results is given in % by the user
    inline void SetPrecision(G4double precision){
-                                         fPrecision_to_reach =precision/100.;};
+                                   fPrecision_to_reach =precision/100.;};
 
 private:
 
@@ -111,12 +112,12 @@ private:
   void EndOfEventForAdjointSimulation(const G4Event* anEvent);
   G4double PrimDiffAndDirFluxForAdjointSim(G4double prim_energy);
   void WriteHisto(Histo1DVar* anHisto, G4double scaling_factor,
-                                              G4String fileName, G4String header_lines);
+                                G4String fileName, G4String header_lines);
   void WriteHisto(Histo2DVar* anHisto, G4double scaling_factor,
-                                              G4String fileName, G4String header_lines);
+                                G4String fileName, G4String header_lines);
   void ResetHistograms();
   void ComputeMeanEdepAndError(const G4Event* anEvent,
-                                                        G4double& mean,G4double& error);
+                                G4double& mean,G4double& error);
   
 private:
   
@@ -164,7 +165,8 @@ RMC01AnalysisManagerMessenger*  fMsg;
   
   
   //Prim spectrum to which the adjoint simulation will be normalised
-  //Answer matrices will be also registered for post processing normalisation
+  //Answer matrices will be also registered for post processing
+  //normalisation
   //--------------------------------------------------------
   PRIM_SPECTRUM_TYPE fPrimSpectrumType;
   G4int fPrimPDG_ID;

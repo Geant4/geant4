@@ -47,7 +47,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01AnalysisManagerMessenger::RMC01AnalysisManagerMessenger(
-                                                 RMC01AnalysisManager* analysisManager)
+                                    RMC01AnalysisManager* analysisManager)
 :fAnalysisManager(analysisManager)
 { 
   fAnalysisDir = new G4UIdirectory("/RMC01/analysis/");
@@ -80,7 +80,8 @@ RMC01AnalysisManagerMessenger::RMC01AnalysisManagerMessenger(
   fSetPowerLawSpectrumToNormaliseAdjResCmd =
    new G4UIcommand("/RMC01/analysis/SetPowerLawPrimSpectrumForAdjointSim",this);
   fSetPowerLawSpectrumToNormaliseAdjResCmd
-          ->SetGuidance("Set the primary spectrum to which adjoint simulation results will be normalised as a power law (Ekin^-alpha).");
+     ->SetGuidance("Set the primary spectrum to which adjoint simulation "
+                  "results will be normalised as a power law (Ekin^-alpha).");
   fSetPowerLawSpectrumToNormaliseAdjResCmd->SetParameter(part_name_par);
   fSetPowerLawSpectrumToNormaliseAdjResCmd->SetParameter(fluence_par);
   fSetPowerLawSpectrumToNormaliseAdjResCmd->SetParameter(fluence_unit_par);
@@ -92,9 +93,11 @@ RMC01AnalysisManagerMessenger::RMC01AnalysisManagerMessenger(
                              ->AvailableForStates(G4State_PreInit,G4State_Idle);
   
 
-  fSetExpSpectrumToNormaliseAdjResCmd = new G4UIcommand("/RMC01/analysis/SetExponentialSpectrumForAdjointSim",this);
+  fSetExpSpectrumToNormaliseAdjResCmd = new G4UIcommand("/RMC01/analysis/"
+                                  "SetExponentialSpectrumForAdjointSim",this);
   fSetExpSpectrumToNormaliseAdjResCmd
-          ->SetGuidance("Set the primary spectrum to which adjoint simulation results will be normalised as exponential (exp(-Ekin/E0)).");
+    ->SetGuidance("Set the primary spectrum to which adjoint simulation results"
+                          "will be normalised as exponential (exp(-Ekin/E0)).");
   fSetExpSpectrumToNormaliseAdjResCmd
                              ->SetParameter(new G4UIparameter(*part_name_par));
   fSetExpSpectrumToNormaliseAdjResCmd
@@ -113,9 +116,13 @@ RMC01AnalysisManagerMessenger::RMC01AnalysisManagerMessenger(
                              ->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   
-  fSetPrecisionForConvergenceTestCmd = new G4UIcmdWithADouble("/RMC01/analysis/SetExpectedPrecisionOfResults",this);
+  fSetPrecisionForConvergenceTestCmd = new G4UIcmdWithADouble("/RMC01/analysis/"
+                                         "SetExpectedPrecisionOfResults",this);
   fSetPrecisionForConvergenceTestCmd
-     ->SetGuidance("Set the precision in % that the computed energy deposited in the sensitive volume should reached. If this precision is reached before the end of the run, the run is aborted and the results are registered.");
+    ->SetGuidance("Set the precision in % that the computed energy deposited "
+          "in the sensitive volume should reached. If this precision is reached"
+          " before the end of the run, the run is aborted and the results are "
+          "registered.");
   fSetPrecisionForConvergenceTestCmd->SetParameterName("Precision",true); 
   fSetPrecisionForConvergenceTestCmd
                              ->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -131,7 +138,7 @@ RMC01AnalysisManagerMessenger::~RMC01AnalysisManagerMessenger()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01AnalysisManagerMessenger::SetNewValue(
-                                                 G4UIcommand* command,G4String newValue)
+                                      G4UIcommand* command,G4String newValue)
 {
   if( command == fSetPowerLawSpectrumToNormaliseAdjResCmd){
     G4double  alpha,e1,e2,fluence;
@@ -146,7 +153,7 @@ void RMC01AnalysisManagerMessenger::SetNewValue(
     e1*= G4UnitDefinition::GetValueOf(e_unit);
     e2*= G4UnitDefinition::GetValueOf(e_unit);
     fAnalysisManager->SetPrimaryPowerLawSpectrumForAdjointSim(
-                                                         part_name, fluence, alpha, e1, e2);
+                                            part_name, fluence, alpha, e1, e2);
   }
   else if( command == fSetExpSpectrumToNormaliseAdjResCmd){
           G4double  e0,e1,e2,fluence;
@@ -164,12 +171,12 @@ void RMC01AnalysisManagerMessenger::SetNewValue(
     e2*= G4UnitDefinition::GetValueOf(e_unit);
         
     fAnalysisManager->SetPrimaryExpSpectrumForAdjointSim(part_name,
-                                                                       fluence, e0, e1, e2);
+                                                          fluence, e0, e1, e2);
           
   }
   else if( command == fSetPrecisionForConvergenceTestCmd){ 
           fAnalysisManager->SetPrecision(
-                             fSetPrecisionForConvergenceTestCmd->GetNewDoubleValue(newValue));
+             fSetPrecisionForConvergenceTestCmd->GetNewDoubleValue(newValue));
   }
 }
 
