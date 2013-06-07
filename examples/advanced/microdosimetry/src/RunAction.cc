@@ -59,7 +59,15 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run* run)
 {
-	if(isMaster)
+	// In this example, we considered that the same class was
+	// used for both master and worker threads.
+	// However, in case the run action is long,
+	// for better code review, this practice is not recommanded.
+	//
+	// Please note, in the example provided with the Geant4 X beta version,
+	// this RunAction class were not used by the master thread.
+
+	if(isMaster) // WARNING : in sequential mode, isMaster == true
 	{
 		BeginMaster(run);
 	}
@@ -96,6 +104,8 @@ void RunAction::BeginMaster(const G4Run* run)
 	if(sequential)
 	{
 		if(fInitialized == false)	InitializeWorker(run);
+		// Note: fpTrackingAction could be used as a flag for initialization instead
+
 		CreateHistogram();
 	}
 }
@@ -125,13 +135,18 @@ void RunAction::EndMaster(const G4Run* run)
 
 void RunAction::EndWorker(const G4Run* run)
 {
-	PrintRunInfo(run);
+	if(fDebug)
+	{
+		PrintRunInfo(run);
+	}
 
 	G4int nofEvents = run->GetNumberOfEvent();
 	if ( nofEvents == 0 )
 	{
 		if(fDebug)
+		{
 			G4cout << "°°°°°°°°°°°°°°°° NO EVENTS TREATED IN THIS RUN ==> LEAVING RunAction::EndOfRunAction "<< G4endl;
+		}
 		return;
 	}
 

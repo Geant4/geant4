@@ -11,9 +11,10 @@ $Id$
 
                            CORRESPONDING AUTHOR 
 
-S. Incerti (a, *), V. Ivanchenko.
+S. Incerti (a, *), V. Ivanchenko (b), M. Karamitros (a)
 a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
+b. G4AI Ltd, UK
 * e-mail:incerti@cenbg.in2p3.fr
 
 ---->0. INTRODUCTION.                                                    
@@ -33,16 +34,11 @@ Make sure G4LEDATA points to the low energy electromagnetic libraries.
 
 The variable G4ANALYSIS_USE must be set to 1.
 
-In order to generate histograms, at least one of the AIDA implementations should be 
- available.
-  
-The code should be compiled with gmake.
-
 ---->3. HOW TO RUN THE EXAMPLE                                         
 
 In interactive mode, run:
 
-> $G4WORDIR/bin/$G4SYSTEM/Microdosimetry
+> $G4WORDIR/bin/$G4SYSTEM/microdosimetry
 
 The macro microdosimetry.mac is executed by default. 
 

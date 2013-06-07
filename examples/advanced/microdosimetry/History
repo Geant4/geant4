@@ -9,6 +9,12 @@ $Id$
                        Package History file
                        --------------------
 
+7 June 2013 - M. Karamitros - microdosimetry-V09-06-04
+- Remove unnecessary output
+
+7 June 2013 - M. Karamitros - microdosimetry-V09-06-03
+- Code clean up and comments added for beta release
+
 3 June 2013 - M. Karamitros - microdosimetry-V09-06-02
 - Fix initialization of sequential run
 
