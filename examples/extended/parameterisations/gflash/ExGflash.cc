@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file parameterisations/gflash/ExGflash.cc
 /// \brief Main program of the parameterisations/gflash example
 //
@@ -89,6 +91,7 @@ int main(int argc,char** argv)
   G4cout<<"# GFlash Example: User Action Classes"<<G4endl;
   runManager->SetUserAction(new ExGflashEventAction);
   runManager->SetUserAction(new ExGflashRunAction);
+
   
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;

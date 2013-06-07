@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file parameterisations/gflash/include/ExGflashPhysicsList.hh
 /// \brief Definition of the ExGflashPhysicsList class
 //

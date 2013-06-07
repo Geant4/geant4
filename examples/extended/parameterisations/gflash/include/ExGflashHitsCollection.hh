@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file parameterisations/gflash/include/ExGflashHitsCollection.hh
 /// \brief Definition of the ExGflashHitsCollection class
 //

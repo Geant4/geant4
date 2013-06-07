@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file parameterisations/gflash/src/ExGflashPrimaryGeneratorAction.cc
 /// \brief Implementation of the ExGflashPrimaryGeneratorAction class
 //
@@ -35,15 +37,15 @@
 
 ExGflashPrimaryGeneratorAction::ExGflashPrimaryGeneratorAction()
 {
-  particleGun=new G4GeneralParticleSource;
+  fParticleGun=new G4GeneralParticleSource;
 }
 
 ExGflashPrimaryGeneratorAction::~ExGflashPrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fParticleGun;
 }
 
 void ExGflashPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }

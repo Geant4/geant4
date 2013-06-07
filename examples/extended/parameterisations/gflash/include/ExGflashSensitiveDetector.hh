@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file parameterisations/gflash/include/ExGflashSensitiveDetector.hh
 /// \brief Definition of the ExGflashSensitiveDetector class
 //
@@ -48,8 +50,8 @@ class ExGflashSensitiveDetector: public G4VSensitiveDetector ,public G4VGFlashSe
     G4bool ProcessHits(G4GFlashSpot*aSpot,G4TouchableHistory*); 
     void EndOfEvent(G4HCofThisEvent*);
   private:
-    ExGflashHitsCollection* caloHitsCollection;
-    G4double edep;
-    ExGflashDetectorConstruction* Detector;
+    ExGflashHitsCollection* fCaloHitsCollection;
+    G4double fEdep;
+    ExGflashDetectorConstruction* fDetector;
 };
 #endif
