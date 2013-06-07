@@ -28,8 +28,8 @@
 //
 
 #include "globals.hh"
-#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
 #include <vector>
 
 static void OutputCases
@@ -48,13 +48,13 @@ static void OutputCases
 	   iParticle < particleNameList.size ();
 	   iParticle++) {
 
-	G4cout
+	std::cout
 	  << "\n#\n# " << particleNameList [iParticle]
 	  << " at " << G4BestUnit (energyList [iEnergy], "Energy")
 	  << " in " << materialNameList [iMaterial]
 	  << "\n#";
 
-	G4cout
+	std::cout
 	  << "\n/gun/particle " << particleNameList [iParticle]
 	  << "\n/gun/energy " <<  G4BestUnit (energyList [iEnergy], "Energy")
 	  << "\n/mydet/SelectMaterial " << materialNameList [iMaterial]
@@ -64,7 +64,6 @@ static void OutputCases
     }
   }
 }
-
 
 int main (int argc, char** argv) {
 
@@ -77,7 +76,7 @@ int main (int argc, char** argv) {
 
   G4UnitDefinition::BuildUnitsTable();
 
-  G4cout <<
+  std::cout <<
     "#"
     "\n# Auto-generated test input file for test16 hadronics."
     "\n#"
@@ -103,5 +102,5 @@ int main (int argc, char** argv) {
 
   OutputCases (N, particleNameList, energyList, materialNameList);
 
-  G4cout << G4endl;
+  std::cout << std::endl;
 }
