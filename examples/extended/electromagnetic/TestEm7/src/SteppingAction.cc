@@ -78,8 +78,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   G4double x2 = postPoint->GetPosition().x();  
   G4double x  = x1 + G4UniformRand()*(x2-x1) + 0.5*(fDetector->GetAbsorSizeX());
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->FillH1(1, x, edep);
-  analysisManager->FillH1(2, x, edep);    
+  analysisManager->FillH1(1, x, edep);  
+  analysisManager->FillH1(2, x, edep);
 
   //fill tallies
   //

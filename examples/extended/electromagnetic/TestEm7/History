@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-06-13 mma (testem7-V09-06-09)
+- Cosmetic in SteppingAction.     
+     
 01-04-13 A.Dotti (testem7-V09-06-07,testem7-V09-06-08)
 - New G4VUserPhysicsList interface needed for MT
      
