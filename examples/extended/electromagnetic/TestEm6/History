@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-06-13 mma (testem6-V09-06-01)
+- Cosmetic in SteppingAction.
 
 13-02-13 I.Hrivnacova (testem6-V09-06-00) 
 - Applied coding guidelines (virtual keyword, data members initialization)
