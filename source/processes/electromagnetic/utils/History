@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 June 13: G.Cosmo (emutils-V09-06-26)
+- Cleanup from automatic MT changes in G4LossTableManager
+  and G4EnergyLossTables.cc.
+
 06 June 13: V.Ivant (emutils-V09-06-25)
 - G4VEnergyLossProcess - do not destroy old tables in worker thread
     for the new run

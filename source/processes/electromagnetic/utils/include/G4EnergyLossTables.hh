@@ -205,15 +205,16 @@ public:
 private:
 
   static void CPRWarning();
-  static void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle, const G4String&);
+  static void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle,
+                                 const G4String&);
 
   typedef std::map<K,G4EnergyLossTablesHelper,std::less<K> > helper_map;
-  static G4ThreadLocal helper_map *dict_G4MT_TLS_;
+  static G4ThreadLocal helper_map *dict;
 
   static G4EnergyLossTablesHelper GetTables(const G4ParticleDefinition* p);
 
-  static G4ThreadLocal G4EnergyLossTablesHelper *t_G4MT_TLS_;
-  static G4ThreadLocal G4EnergyLossTablesHelper *null_loss_G4MT_TLS_;
+  static G4ThreadLocal G4EnergyLossTablesHelper *t;
+  static G4ThreadLocal G4EnergyLossTablesHelper *null_loss;
   static G4ThreadLocal G4ParticleDefinition* lastParticle ;
   static G4ThreadLocal G4double QQPositron ;
   static G4ThreadLocal G4double Chargesquare ;
