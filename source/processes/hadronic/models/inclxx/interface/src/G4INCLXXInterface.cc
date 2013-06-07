@@ -79,8 +79,6 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
 
 G4INCLXXInterface::~G4INCLXXInterface()
 {
-  delete theBackupModel;
-  delete theBackupModelNucleon;
   delete theExcitationHandler;
 }
 

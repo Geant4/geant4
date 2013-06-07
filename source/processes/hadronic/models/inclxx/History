@@ -16,6 +16,12 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+7 June 2013 - V. Ivanchenko (hadr-inclxx-V09-06-17)
+-----------------------------------------------------------
+- G4INCLXXInterface - do not delete Binarycascade objects, because 
+    all hadronic models are deleted by model store. This is a fix 
+    of outstanding problem for Geant4 MT
+
 6 June 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-16)
 -----------------------------------------------------------
 - Replaced defines in G4INCLLogger by adding prefix "INCL_" to avoid
