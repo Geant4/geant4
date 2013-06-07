@@ -41,16 +41,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
+RunAction::RunAction(G4bool isOnMaster)
  : G4UserRunAction()
 {
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isOnMaster);
+  analysisManager->SetFirstHistoId(1);  
+  // Creating histograms
+  //
+  analysisManager->CreateH1("1","energy (MeV) deposited in C6F6",100,0.,10.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
-
+   delete G4AnalysisManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,12 +69,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
 
-  // Create analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isMaster);
-
   
+   // Get analysis manager
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
   // Open an output file
   //
   G4String fileName = "testem4";
@@ -77,10 +80,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4String extension = analysisManager->GetFileType();
   fileName = fileName + "." + extension;
     
-  // Creating histograms
-  //
-  analysisManager->SetFirstHistoId(1);  
-  analysisManager->CreateH1("1","energy (MeV) deposited in C6F6",100,0.,10.);
   
   G4cout << "\n----> Histogram file is opened in " << fileName << G4endl;
 }
@@ -98,8 +97,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->Write();
   analysisManager->CloseFile();
-  // Complete clean-up
-  delete G4AnalysisManager::Instance();
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

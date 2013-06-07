@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-06-13 J.Jacquemier (testem4-V09-06-06)
+  -creation of analysis manager and booking histograms & ntuple
+   is moved from BeginOfRunAction to the constructor .
+
 -3-06-13 I.Hrivnacova (testem4-V09-06-05)
 - Make back Root default analysis output (changed by accident 
   in previous update)
