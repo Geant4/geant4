@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-06-13 mma (testem3-V09-06-06)
+- Cosmetic in SteppingAction.
 
 14-04-13 I.Hrivnacova (testem3-V09-06-05)
 - Removed ExG4HbookAnalysisManager and related files and updated CMake/GNUmake
