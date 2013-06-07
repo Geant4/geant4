@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+06 May 13: V.Ivanchenko (emstand-V09-06-43)
+- G4PEEffectFluoModel - revert back previous tag -41, because 
+    tag -42 does not help to resolve non-reproducibility at Windows
+
 06 May 13: V.Ivanchenko (emstand-V09-06-42)
 - G4PEEffectFluoModel - revert back previous tag -40 in order
     to fix non-reproducibility
