@@ -91,6 +91,8 @@ void PhysicsList::ConstructBarions()
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
 
+  G4GenericIon::Definition();
+
   // Geant4 DNA new particles
   G4DNAGenericIonsManager * genericIonsManager;
   genericIonsManager=G4DNAGenericIonsManager::Instance();

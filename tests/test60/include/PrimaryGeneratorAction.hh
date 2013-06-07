@@ -48,11 +48,15 @@ public:
   ~PrimaryGeneratorAction();
   
   void GeneratePrimaries(G4Event*);
-  G4ParticleGun* GetParticleGun() {return particleGun;};
+  G4ParticleGun* GetParticleGun() {return fpParticleGun;};
+  const G4String& GetParticleName()
+  {
+	  return fPrimaryParticleName;
+  }
 
 private:
 
-  G4String primaryParticleName ;
-  G4ParticleGun*           particleGun;
+  G4String fPrimaryParticleName ;
+  G4ParticleGun*           fpParticleGun;
 };
 #endif

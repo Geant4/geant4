@@ -52,22 +52,27 @@ public:
   RunAction();
   ~RunAction();
 
-  void Initialize();
-
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
 
   void CountProcesses(G4String);
-  void SumeTransf (G4double energy) 
-         {eTransfer += energy;};	 
+  inline void SumeTransf (G4double energy)
+  {
+	  fE_Transfered += energy;
+  }
 
 private:
 
-  DetectorConstruction* Detector;
-  PrimaryGeneratorAction* Primary;
-  ProcessesCount*         ProcCounter;
-  G4int totalCount;      //all processes counter
-  G4double eTransfer;    //energy transfered to charged secondaries
+  void Initialize();
+  void ResetCounter();
+
+  bool fInitialized;
+
+  DetectorConstruction* fpDetector;
+  PrimaryGeneratorAction* fpPrimary;
+  ProcessesCount*         fpProcCounter;
+  G4int fTotalCount;      //all processes counter
+  G4double fE_Transfered;    //energy transfered to charged secondaries
     
 };
 #endif

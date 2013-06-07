@@ -74,9 +74,6 @@ int main(int argc,char** argv)
 	runManager->SetUserInitialization(pl = new PhysicsList);
 	pl->DisableCheckParticleList();
 
-	PrimaryGeneratorAction* primary;
-	runManager->SetUserAction(primary = new PrimaryGeneratorAction());
-
 	// User action initialization
 	//
 	runManager->SetUserInitialization(new ActionInitialization());

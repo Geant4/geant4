@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 June 2013   M.Karamitros tag test60-V09-06-03
+            - Fix bugs after migration to MT 
+
 23 Mai 2013   M.Karamitros tag test60-V09-06-02
             - Migration to MT frame
 
