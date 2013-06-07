@@ -38,7 +38,7 @@
 #include "G4SystemOfUnits.hh"
 
 exGPSAnalysisManager* exGPSAnalysisManager::fInstance = 0;
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exGPSAnalysisManager::exGPSAnalysisManager(): 
 fIleName("exgps.aida"),fIleType("xml"),fAnalysisFactory(0),
@@ -50,13 +50,13 @@ fEnerHisto(0),fPosiXY(0),fPosiXZ(0),fPosiYZ(0),fAnglCTP(0),fAnglTP(0),fTuple(0)
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exGPSAnalysisManager::~exGPSAnalysisManager() {
   delete fAnalysisMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exGPSAnalysisManager* exGPSAnalysisManager::GetInstance ()
 {
@@ -64,7 +64,7 @@ exGPSAnalysisManager* exGPSAnalysisManager::GetInstance ()
   return fInstance;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exGPSAnalysisManager::Dispose()
 {
@@ -75,7 +75,7 @@ void exGPSAnalysisManager::Dispose()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exGPSAnalysisManager::Fill(G4String pname, G4double e, 
                                 G4double x, G4double y, G4double z,
@@ -107,7 +107,7 @@ void exGPSAnalysisManager::Fill(G4String pname, G4double e,
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 /* 
    This member reset the histograms and it is called at the begin
    of each run; here we put the initialization so that the histograms have
@@ -148,7 +148,7 @@ void exGPSAnalysisManager::BeginOfRun()
   {
     // Create the energy histogram
     fEnerHisto = hFactory->createHistogram1D("Source Energy Spectrum",100,
-                                                                                                                      fMineng,fMaxeng);
+                                                              fMineng,fMaxeng);
 
     // Create some 2d histos 
     fPosiXY = hFactory->createHistogram2D("Source X-Y distribution",100,
@@ -157,7 +157,8 @@ void exGPSAnalysisManager::BeginOfRun()
                               fMinpos/cm,fMaxpos/cm,100,fMinpos/cm,fMaxpos/cm);
     fPosiYZ = hFactory->createHistogram2D("Source Y-Z distribution",100,
                               fMinpos/cm,fMaxpos/cm,100,fMinpos/cm,fMaxpos/cm);
-    fAnglCTP = hFactory->createHistogram2D("Source phi-std::cos(theta) distribution",
+    fAnglCTP = hFactory->createHistogram2D(
+                  "Source phi-std::cos(theta) distribution",
                               360,0,360,100, -1, 1);
     fAnglTP = hFactory->createHistogram2D("Source phi-theta distribution",
                               360,0,360,180,0,180);
@@ -170,7 +171,8 @@ void exGPSAnalysisManager::BeginOfRun()
   if (tFactory)
   {
      fTuple = tFactory->create("MyTuple","MyTuple",
-                     "string Pname, double Energy, X, Y, Z, Theta, Phi, Weight","");
+                     "string Pname, double Energy, X, Y, Z, Theta, Phi, Weight",
+                     "");
      delete tFactory;
   }
   
@@ -193,8 +195,7 @@ void exGPSAnalysisManager::BeginOfRun()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 /* 
    This member is called at the end of each run 
 */
@@ -203,7 +204,7 @@ void exGPSAnalysisManager::EndOfRun()
   if (fAnalysisFactory)
   {
     if (!fTree->commit()) G4cout << "Commit failed: no AIDA file produced!"
-                                                                                                                                    << G4endl;
+                                                                   << G4endl;
     delete fTree;
     fTree = 0;
 
@@ -222,3 +223,4 @@ void exGPSAnalysisManager::EndOfRun()
 
 
 #endif // G4ANALYSIS_USE
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -29,8 +29,8 @@
 /// \brief Implementation of the exGPSEventActionMessenger class
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "exGPSEventActionMessenger.hh"
 #include "exGPSEventAction.hh"
@@ -39,10 +39,10 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exGPSEventActionMessenger::exGPSEventActionMessenger(
-                                                                                                                exGPSEventAction* EvAct)
+                                                    exGPSEventAction* EvAct)
 :G4UImessenger(),
  fEventAction(EvAct),
  fDrawCmd(0),
@@ -63,7 +63,7 @@ exGPSEventActionMessenger::exGPSEventActionMessenger(
   fPrintCmd->AvailableForStates(G4State_Idle);     
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 exGPSEventActionMessenger::~exGPSEventActionMessenger()
 {
@@ -71,16 +71,16 @@ exGPSEventActionMessenger::~exGPSEventActionMessenger()
   delete fPrintCmd;   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exGPSEventActionMessenger::SetNewValue(G4UIcommand * command,
-                                                                                                                        G4String newValue)
+                                                           G4String newValue)
 { 
   if(command == fDrawCmd)
     {fEventAction->SetDrawFlag(newValue);}
        
   if(command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}              
+    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

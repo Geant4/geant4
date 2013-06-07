@@ -74,7 +74,7 @@ public:
   void SetEngMin(G4double emin) {fMineng = emin;};
   
   void Fill(G4String, G4double, G4double, G4double, G4double, G4double,
-                                                                                                                                          G4double, G4double);
+                                                          G4double, G4double);
 
 private:
 

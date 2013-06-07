@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06/06/2013  L.Desorgher (exgps-V09-06-01)
+- Applied coding guidelines (tabs and long lines)
+
 13/02/2013  I.Hrivnacova (exgps-V09-06-00)
 - Applied coding guidelines (data member initialization)
 

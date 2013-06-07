@@ -38,9 +38,10 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-exGPSAnalysisMessenger::exGPSAnalysisMessenger(exGPSAnalysisManager* analysisManager)
+exGPSAnalysisMessenger::exGPSAnalysisMessenger
+                (exGPSAnalysisManager* analysisManager)
   :G4UImessenger(),
    fExGPSAnalysis(analysisManager),
    fFileNameCmd(0),
@@ -60,7 +61,8 @@ exGPSAnalysisMessenger::exGPSAnalysisMessenger(exGPSAnalysisManager* analysisMan
   fFileNameCmd->SetDefaultValue("exgps.aida");
 
   fFileTypeCmd = new G4UIcmdWithAString("/analysis/filetype",this);
-  fFileTypeCmd->SetGuidance("Input the type (xml/hbook/root) for the AIDA output file.");
+  fFileTypeCmd->SetGuidance(
+            "Input the type (xml/hbook/root) for the AIDA output file.");
   fFileTypeCmd->SetParameterName("filetype",true,true);
   fFileTypeCmd->SetDefaultValue("xml");
 
@@ -102,10 +104,10 @@ exGPSAnalysisMessenger::~exGPSAnalysisMessenger()
   delete fMinPosCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void exGPSAnalysisMessenger::SetNewValue(G4UIcommand* command,
-                                                                                                                        G4String newValue)
+                                                          G4String newValue)
 { 
 
   // 1D Histograms
@@ -136,7 +138,7 @@ void exGPSAnalysisMessenger::SetNewValue(G4UIcommand* command,
     }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 #endif // G4ANALYSIS_USE
