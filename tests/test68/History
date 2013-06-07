@@ -12,7 +12,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-9 Apr 2013 Pere Mato                     test68-V09-06-02
+
+07 Jun 2013 Alberto Ribon                 test68-V09-06-03
+- Increased the timeout for the reproducibility test (now 1 hour).
+
+09 Apr 2013 Pere Mato                     test68-V09-06-02
 - Increased the timeout for the reproducibility test.
 
 26 Feb 2013 Alberto Ribon                test68-V09-06-01

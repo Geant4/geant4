@@ -22,7 +22,7 @@ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/start.rndm ${CMAKE_CURRENT_BINARY_DI
 
 GEANT4_ADD_TEST( test68-reproducibility 
 		 COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/reproducibility.py $<CONFIGURATION> 
-     TIMEOUT 2000
+                 TIMEOUT 3600
 		 DEPENDS test68-build
 		 LABELS Nightly Continuous
 		 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
