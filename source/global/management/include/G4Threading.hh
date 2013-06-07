@@ -107,10 +107,8 @@
     //
     // Multi-threaded build: for Windows systems
     //
-    #define NOMINMAX      // avoid redefinition of min() and max()
-    #include <windows.h>
-    #undef pascal         // trick to overcome redefinition of 'pascal'
-
+    #include "windefs.hh"  // Include 'safe...' <windows.h>
+	
     typedef HANDLE G4Mutex;
     typedef HANDLE G4Thread;
 

@@ -45,7 +45,7 @@ inline
     G4PhysCollection::pop_back();
     if ( a )  { delete a; }
   } 
-
+  G4PhysCollection::clear();
   vecFlag.clear();
 }
 

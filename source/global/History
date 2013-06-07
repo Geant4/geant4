@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 7, 2013 G.Cosmo (global-V09-06-38)
+- Added call to clear() in G4PhysicsTable::clearAndDestroy().
+- Added 'safe' inclusion of <windows.h> from G4Threading.hh, in new
+  header windefs.hh.
+- Updated date and tag for 10.0-Beta.
+
 June 5, 2013 G.Folger (global-V09-06-37)
 - In management/G4FPEDetection.hh add first version of stack backtrace 
    when FPE exception is detected. Linux only.

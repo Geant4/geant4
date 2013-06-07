@@ -23,41 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
-// GEANT4 tag $Name:$
 //
-// Version information
+// ---------------------------------------------------------------
+// GEANT 4 class header file
 //
-// History:
-// 26.09.05 K.Murakami  - Created
+// Class Description:
 //
+// This file includes Windows declarations from <windows.h> protecting
+// those defines that may cause troubles within the Geant4 code.
 
-#ifndef G4VERSION_HH
-#define G4VERSION_HH
+// ---------------------------------------------------------------
+#ifndef windefs_hh
+#define windefs_hh
 
-// Numbering rule for "G4VERSION_NUMBER":
-// - The number is consecutive (i.e. 711) as an integer.
-// - The meaning of each digit is as follows;
-//
-//   711
-//   |--> major version number 
-//    |--> minor version number
-//     |--> patch number
+#if defined(WIN32)
+    //
+    #define NOMINMAX      // avoid redefinition of min() and max()
+    #include <windows.h>
+    #undef pascal         // trick to overcome redefinition of 'pascal'
+    #undef scr1
+    #undef scr2
+    #undef small
+    #undef ABSOLUTE
+    #undef RELATIVE
+#endif // WIN32
 
-#ifndef G4VERSION_NUMBER
-#define G4VERSION_NUMBER  000
-#endif
-
-#ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-10-00-beta-01 $"
-#endif
-
-// as variables
-
-#include "G4String.hh"
-
-static const G4String G4Version = "$Name: geant4-10-00-beta-01 $";
-static const G4String G4Date    = "(28-June-2013)";
-
-#endif
+#endif //windefs_hh

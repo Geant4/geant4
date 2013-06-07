@@ -29,6 +29,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         globals.hh
         templates.hh
         tls.hh
+        windefs.hh
         G4Allocator.hh
         G4strstreambuf.icc
         G4AllocatorPool.hh
