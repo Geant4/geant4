@@ -399,17 +399,41 @@ void G4MTRunManager::InitializePhysics()
     G4CascadeInterface::Initialize();
 }
 
-//Barriers mechanism
-// We want to implement two barriers.
+// =====================================
+// Barriers mechanism
+// =====================================
+// We want to implement barriers.
 // We define a barrier has a point in which threads synchronize.
 // When workers threads reach a barrier they wait for the master thread a
 // signal that they can continue. The master thread broadcast this signal
 // only when all worker threads have reached this point.
-// Currently only two points require this sync:
+// Currently only three points require this sync in the life-time of a G4 applicattion:
 // Just before and just after the for-loop controlling the thread event-loop.
+// Between runs.
 // TODO: If this mechanism is needed in other parts of the code we can provide
 // the barrier mechanism as a utility class/functions to the kernel.
 // Note: we need a special treatment for WIN32
+//
+// The basic algorith of each barrier works like this:
+// In the master:
+//   WaitWorkers()  {
+//    while (true) 
+//    {
+//     G4AutoLock l(&counterMutex);
+//     if ( counter == nworkers ) break;
+//     G4CONDITIONWAIT( &conditionOnCounter, &counterMutex);
+//    }
+//    G4CONDITIONBROADCAST( &doSomethingCanStart );
+//   }
+// In the workers:
+//   WaitSignalFromMaster() {
+//    G4AutoLock l(&counterMutex);
+//    ++counter;
+//    G4CONDITIONBROADCAST(&conditionOnCounter);
+//    G4CONDITIONWAIT( &doSomethingCanStart , &counterMutex);
+//   }
+// Each barriers requires 2 conditions and one mutex, and a counter.
+
 #ifdef WIN32
 #include <windows.h> //For CRITICAL_SECTION objects
 #endif
@@ -427,19 +451,21 @@ namespace {
     // Condition to signal the num of workers that terminated event loop
     // has changed
     G4Condition numWorkersEndEventLoopChangedCondition = G4CONDITION_INITIALIZER;
-    // Counter/mutex for workers ready to begin event loop
-    //
     // This condition is to handle more than one run w/o killing threads
-    G4Condition requestChangeActionForThread = G4CONDITION_INITIALIZER;
+    G4Condition requestChangeActionForWorker = G4CONDITION_INITIALIZER;
+    G4Condition numberOfReadyWorkersForNewActionChangedCondition = G4CONDITION_INITIALIZER;
 #endif
+    // Counter/mutex for workers ready to begin event loop
     G4Mutex numberOfReadyWorkersMutex = G4MUTEX_INITIALIZER;
     G4int numberOfReadyWorkers = 0;
     //Counter/mutex for workers with end of event loop
     G4Mutex numberOfEndOfEventLoopWorkersMutex = G4MUTEX_INITIALIZER;
     G4int numberOfEndOfEventLoopWorkers = 0;
     //
-    //More than one 
-    G4Mutex changeActionForWorkerMutex = G4MUTEX_INITIALIZER;
+    //Action handling
+    G4Mutex nextActionRequestMutex = G4MUTEX_INITIALIZER;
+    G4int numberOfReadyWorkersForNewAction = 0;
+    G4Mutex numberOfReadyWorkersForNewActionMutex = G4MUTEX_INITIALIZER;
 #ifdef WIN32
     CRITICAL_SECTION cs1;
     CRITICAL_SECTION cs2;
@@ -456,7 +482,8 @@ namespace {
            InitializeConditionVariable( &endEventLoopCondition );
            InitializeConditionVariable( &numWorkersBeginEventLoopChangeCondition );
            InitializeConditionVariable( &numWorkersEndEventLoopChangedCondition );
-           InitializeConditionVariable( &requestChangeActionForThread );
+           InitializeConditionVariable( &requestChangeActionForWorker);
+	   InitializeConditionVariable( &numberOfReadyWorkersForNewActionChangedCondition );
 	#endif
            InitializeCriticalSection( &cs1 );
            InitializeCriticalSection( &cs2 );
@@ -564,56 +591,59 @@ void G4MTRunManager::ThisWorkerEndEventLoop()
 
 void G4MTRunManager::NewActionRequest(G4MTRunManager::WorkerActionRequest newRequest)
 {
-    //Master thread requests workers to do something new
-    //First acquire lock on shared resource
+  //Wait for all workers to be ready to accept a new action request
+  while (true)
+  {
 #ifndef WIN32
-    G4AutoLock l(&changeActionForWorkerMutex);
+    G4AutoLock l(&numberOfReadyWorkersForNewActionMutex);
 #else
     EnterCriticalSection( &cs3 );
 #endif
-    nextActionRequest = newRequest;
-
-    //Broadcast signal that a new request is available
-    G4CONDTIONBROADCAST(&requestChangeActionForThread);
+    //Check the number of workers that are ready for next action
+    if ( numberOfReadyWorkersForNewAction == nworkers )
+    {
+	//Ok, exit the loop
+	break;
+    }
+    //Wait for the number of workers ready for new action to change
+    G4CONDITIONWAIT(&numberOfReadyWorkersForNewActionChangedCondition,
+		    &numberOfReadyWorkersForNewActionMutex);
 #ifdef WIN32
     LeaveCriticalSection( &cs3 );
-#endif
-}
-
-namespace  {
-    static G4ThreadLocal G4bool processrequest = true;
+#endif 
+  }
+  //Now set the new action to the shared resource
+  G4AutoLock l(&nextActionRequestMutex);
+  nextActionRequest = newRequest;
+  l.unlock();
+  //Reset counter of workers ready-for-new-action in preparation of next call
+  G4AutoLock l2(&numberOfReadyWorkersForNewActionMutex);
+  numberOfReadyWorkersForNewAction = 0;
+  l2.unlock();
+  //Now wignal all workers that there is a new action to be performed
+  G4CONDTIONBROADCAST(&requestChangeActionForWorker);
 }
 
 G4MTRunManager::WorkerActionRequest G4MTRunManager::ThisWorkerWaitForNextAction()
 {
-    WorkerActionRequest result;
-    while ( true )
-    {
-#ifndef WIN32
-        G4AutoLock l(&changeActionForWorkerMutex);
+  //This worker is ready to receive a new action request, 
+  //increment counter by 1
+ #ifndef WIN32
+  G4AutoLock l(&numberOfReadyWorkersForNewActionMutex);
 #else
-        EnterCriticalSection( &cs3 );
+  EnterCriticalSection( &cs3 );
 #endif
-        //The very first time I arrive here,
-        //I need to execute the nextRequest whatever it is.
-        //The next time I come here I will execute this
-        //block only if there is something to do
-        if ( processrequest )
-        {
-            result = nextActionRequest;
-            processrequest = false;
-            break;
-        }
-        //Wait for condition from Master thread that a new action is requested.
-        //This will block here until the condition is met
-        G4CONDITIONWAIT(&requestChangeActionForThread,&changeActionForWorkerMutex);
-        //If now I am here it means that the nextaction has changed, so I reset the
-        //processrequest flag (that is TLS), so in the next loop I will execute it
-        processrequest = true;
+  ++numberOfReadyWorkersForNewAction;
+  //Singal the sahred resource has changed to the master
+  G4CONDTIONBROADCAST(&numberOfReadyWorkersForNewActionChangedCondition);
+  //Wait for condition that a new aciton is ready
+  G4CONDITIONWAIT(&requestChangeActionForWorker,&numberOfReadyWorkersForNewActionMutex);
 #ifdef WIN32
-        LeaveCriticalSection( &cs3 );
-#endif
-    }
-    return result;
+  LeaveCriticalSection( &cs3 );
+#endif 
+  //Ok, if I am here it means that a new action has been requested by the master
+  //reads it value that is now read-only, so no mutex is needed, but you never know...
+  G4AutoLock l2(&nextActionRequestMutex);
+  WorkerActionRequest result = nextActionRequest;
+  return result;
 }
-

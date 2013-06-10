@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 9th, 2013, A. Dotti  (run-V09-06-49)
+- In G4MTRunManager rewritten logic of "nextIteration" to solve deadlocks.
+  Now logic is very similar to the other barriers 
+
 June 6th, 2013, G. Folger (run-V09-06-48)
 - In G4MTRunManager::WaitForEndEventLoopWorkers protect numberOfReadyWorkers
     by its Mutex.
