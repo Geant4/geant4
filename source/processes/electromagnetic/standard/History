@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+07 May 13: V.Ivanchenko (emstand-V09-06-44)
+- G4hIonisation - add special treatment for ions
+
 06 May 13: V.Ivanchenko (emstand-V09-06-43)
 - G4PEEffectFluoModel - revert back previous tag -41, because 
     tag -42 does not help to resolve non-reproducibility at Windows
