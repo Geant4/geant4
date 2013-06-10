@@ -12,6 +12,9 @@ summarize all major modifications introduced in the code and keep
 track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
+07-06-13 mma (particleGunExample-V09-06-05)
+- Cosmetic in SteppingAction.     
      
 28-03-13 mma (particleGunExample-V09-06-04)
 - simplify histos management
