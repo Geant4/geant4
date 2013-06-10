@@ -68,7 +68,7 @@ private:
   G4HadronHElasticPhysics & operator=(const G4HadronHElasticPhysics &right);
 
   G4int    verbose;
-  G4bool   wasActivated;
+  static G4ThreadLocal G4bool   wasActivated;
 };
 
 

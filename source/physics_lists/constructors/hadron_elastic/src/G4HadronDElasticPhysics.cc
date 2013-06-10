@@ -86,9 +86,9 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronDElasticPhysics);
 
+G4ThreadLocal G4bool G4HadronDElasticPhysics::wasActivated = false;
 G4HadronDElasticPhysics::G4HadronDElasticPhysics(G4int ver)
-  : G4VPhysicsConstructor("hElasticDIFFUSE"), verbose(ver), 
-    wasActivated(false)
+  : G4VPhysicsConstructor("hElasticDIFFUSE"), verbose(ver)
 {
   if(verbose > 1) { 
     G4cout << "### G4HadronDElasticPhysics: " << GetPhysicsName() 

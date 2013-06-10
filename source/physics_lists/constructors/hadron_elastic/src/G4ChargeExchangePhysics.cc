@@ -53,17 +53,16 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4ChargeExchangePhysics);
 
+G4ThreadLocal G4bool G4ChargeExchangePhysics::wasActivated = false;
+
 G4ChargeExchangePhysics::G4ChargeExchangePhysics(G4int ver)
-  : G4VPhysicsConstructor("chargeExchange"), verbose(ver),
-    wasActivated(false)
+  : G4VPhysicsConstructor("chargeExchange"), verbose(ver)
 {
   if(verbose > 1) G4cout << "### ChargeExchangePhysics" << G4endl;
-  model = 0;
 }
 
 G4ChargeExchangePhysics::~G4ChargeExchangePhysics()
 {
-  delete model;
 }
 
 void G4ChargeExchangePhysics::ConstructParticle()
@@ -81,7 +80,7 @@ void G4ChargeExchangePhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  model = new G4ChargeExchange();
+  G4ChargeExchange* model = new G4ChargeExchange();
 
   if(verbose > 1) {
     G4cout << "### ChargeExchangePhysics Construct Processes with the model <" 

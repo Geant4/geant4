@@ -55,10 +55,11 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsLEND);
 
+G4ThreadLocal G4bool G4HadronElasticPhysicsLEND::wasActivated = false;
+G4ThreadLocal G4HadronElasticPhysics* G4HadronElasticPhysicsLEND::mainElasticBuilder = 0;
 
 G4HadronElasticPhysicsLEND::G4HadronElasticPhysicsLEND(G4int ver,G4String eva)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS_LEND"), verbose(ver), 
-    wasActivated(false),
     evaluation(eva)
 {
   if(verbose > 1) { 
@@ -83,7 +84,8 @@ void G4HadronElasticPhysicsLEND::ConstructProcess()
 {
   if(wasActivated) return;
   wasActivated = true;
-
+  //Needed because this is a TLS object and this method is called by all threads
+  if ( ! mainElasticBuilder )  mainElasticBuilder = new G4HadronElasticPhysics(verbose);
   mainElasticBuilder->ConstructProcess();
 
   mainElasticBuilder->GetNeutronModel()->SetMinEnergy(19.5*MeV);

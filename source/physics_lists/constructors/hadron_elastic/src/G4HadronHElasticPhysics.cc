@@ -75,10 +75,11 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronHElasticPhysics);
 
+G4ThreadLocal G4bool G4HadronHElasticPhysics::wasActivated = false;
+
 
 G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver)
-  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver), 
-    wasActivated(false)
+  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver)
 {
   //  if(verbose > 1) { 
   G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() 
@@ -87,8 +88,7 @@ G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver)
 
 G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver, G4bool,
 						 const G4String&)
-  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver), 
-    wasActivated(false)
+  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver)
 {
   if(verbose > 1) { 
     G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() 

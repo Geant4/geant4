@@ -67,8 +67,8 @@ private:
   G4HadronElasticPhysicsLEND & operator=(const G4HadronElasticPhysicsLEND &right);
 
   G4int    verbose;
-  G4bool   wasActivated;
-  G4HadronElasticPhysics* mainElasticBuilder;
+  static G4ThreadLocal G4bool   wasActivated;
+  static G4ThreadLocal G4HadronElasticPhysics* mainElasticBuilder;
   G4String evaluation;
 };
 

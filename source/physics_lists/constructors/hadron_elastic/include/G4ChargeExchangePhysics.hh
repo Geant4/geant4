@@ -61,10 +61,8 @@ public:
   virtual void ConstructProcess();
 private:
 
-  G4ChargeExchange* model;
-
   G4int    verbose;
-  G4bool   wasActivated;
+  static G4ThreadLocal G4bool   wasActivated;
 };
 
 

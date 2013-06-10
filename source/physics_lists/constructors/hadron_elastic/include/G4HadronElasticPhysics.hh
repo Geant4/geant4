@@ -82,10 +82,10 @@ private:
   G4HadronElasticPhysics & operator=(const G4HadronElasticPhysics &right);
 
   G4int    verbose;
-  G4bool   wasActivated;
+  static G4ThreadLocal G4bool   wasActivated;
 
-  G4HadronElastic*   neutronModel;
-  G4HadronicProcess* neutronProcess;
+  static G4ThreadLocal G4HadronElastic*   neutronModel;
+  static G4ThreadLocal G4HadronicProcess* neutronProcess;
 
 };
 
