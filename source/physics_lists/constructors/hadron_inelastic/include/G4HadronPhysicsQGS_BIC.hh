@@ -85,33 +85,35 @@ class G4HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
   private:
     void CreateModels();
 
-    G4NeutronBuilder * theNeutrons;
-    G4LEPNeutronBuilder * theLEPNeutron;
-    G4FTFBinaryNeutronBuilder * theFTFBinaryNeutron;
-    G4QGSBinaryNeutronBuilder * theQGSBinaryNeutron;
-    G4BinaryNeutronBuilder * theBinaryNeutron;
+    struct ThreadPrivate {
+      G4NeutronBuilder * theNeutrons;
+      G4LEPNeutronBuilder * theLEPNeutron;
+      G4FTFBinaryNeutronBuilder * theFTFBinaryNeutron;
+      G4QGSBinaryNeutronBuilder * theQGSBinaryNeutron;
+      G4BinaryNeutronBuilder * theBinaryNeutron;
 
-    G4PionBuilder * thePion;
-    G4BinaryPionBuilder * theBinaryPion;
-    G4BertiniPionBuilder * theBertiniPion;
-    G4FTFBinaryPionBuilder * theFTFBinaryPion;
-    G4QGSBinaryPionBuilder * theQGSBinaryPion;
+      G4PionBuilder * thePion;
+      G4BinaryPionBuilder * theBinaryPion;
+      G4BertiniPionBuilder * theBertiniPion;
+      G4FTFBinaryPionBuilder * theFTFBinaryPion;
+      G4QGSBinaryPionBuilder * theQGSBinaryPion;
 
-    G4KaonBuilder * theKaon;
-    G4BertiniKaonBuilder * theBertiniKaon;
-    G4FTFBinaryKaonBuilder * theFTFBinaryKaon;
-    G4QGSBinaryKaonBuilder * theQGSBinaryKaon;
+      G4KaonBuilder * theKaon;
+      G4BertiniKaonBuilder * theBertiniKaon;
+      G4FTFBinaryKaonBuilder * theFTFBinaryKaon;
+      G4QGSBinaryKaonBuilder * theQGSBinaryKaon;
 
-    G4ProtonBuilder * thePro;
-    G4FTFBinaryProtonBuilder * theFTFBinaryPro;
-    G4QGSBinaryProtonBuilder * theQGSBinaryPro;
-    G4BinaryProtonBuilder * theBinaryPro;
+      G4ProtonBuilder * thePro;
+      G4FTFBinaryProtonBuilder * theFTFBinaryPro;
+      G4QGSBinaryProtonBuilder * theQGSBinaryPro;
+      G4BinaryProtonBuilder * theBinaryPro;
 
-    G4HyperonFTFPBuilder * theHyperon;
+      G4HyperonFTFPBuilder * theHyperon;
 
-    G4AntiBarionBuilder * theAntiBaryon;
-    G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-    
+      G4AntiBarionBuilder * theAntiBaryon;
+      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+    };
+    static G4ThreadLocal ThreadPrivate* tpdata;
     G4bool QuasiElastic;
 };
 

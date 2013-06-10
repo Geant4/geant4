@@ -13,6 +13,9 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+09-Jun-2013, Andrea Dotti		(phys-ctor-hinelastic-V09-06-10)
+- Fix for MT, make private data members TLS. 
+
 29-Mar-2013, Andrea Dotti		(phys-ctor-hinelastic-V09-06-09)
 - Changes needed for MT: now G4VUserPhysicsList is a split class
 

@@ -97,31 +97,33 @@ class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
   private:
     void CreateModels();
 
-    G4NeutronBuilder * theNeutrons;
-    G4LEPNeutronBuilder * theLEPNeutron;
-    G4QGSPNeutronBuilder * theQGSPNeutron;
-    G4FTFPNeutronBuilder * theFTFPNeutron;
-    G4BertiniNeutronBuilder * theBertiniNeutron;
-    G4INCLXXNeutronBuilder * theINCLXXNeutron;
-    G4NeutronHPBuilder * theNeutronHP;
+    struct ThreadPrivate {
+      G4NeutronBuilder * theNeutrons;
+      G4LEPNeutronBuilder * theLEPNeutron;
+      G4QGSPNeutronBuilder * theQGSPNeutron;
+      G4FTFPNeutronBuilder * theFTFPNeutron;
+      G4BertiniNeutronBuilder * theBertiniNeutron;
+      G4INCLXXNeutronBuilder * theINCLXXNeutron;
+      G4NeutronHPBuilder * theNeutronHP;
     
-    G4PiKBuilder * thePiK;
-    G4QGSPPiKBuilder * theQGSPPiK;
-    G4FTFPPiKBuilder * theFTFPPiK;
-    G4BertiniPiKBuilder * theBertiniPiK;
-    G4INCLXXPiKBuilder * theINCLXXPiK;
+      G4PiKBuilder * thePiK;
+      G4QGSPPiKBuilder * theQGSPPiK;
+      G4FTFPPiKBuilder * theFTFPPiK;
+      G4BertiniPiKBuilder * theBertiniPiK;
+      G4INCLXXPiKBuilder * theINCLXXPiK;
     
-    G4ProtonBuilder * thePro;
-    G4QGSPProtonBuilder * theQGSPPro;
-    G4FTFPProtonBuilder * theFTFPPro;
-    G4BertiniProtonBuilder * theBertiniPro;
-    G4INCLXXProtonBuilder * theINCLXXPro;
+      G4ProtonBuilder * thePro;
+      G4QGSPProtonBuilder * theQGSPPro;
+      G4FTFPProtonBuilder * theFTFPPro;
+      G4BertiniProtonBuilder * theBertiniPro;
+      G4INCLXXProtonBuilder * theINCLXXPro;
     
-    G4HyperonFTFPBuilder * theHyperon;
+      G4HyperonFTFPBuilder * theHyperon;
     
-    G4AntiBarionBuilder * theAntiBaryon;
-    G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
- 
+      G4AntiBarionBuilder * theAntiBaryon;
+      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+    };
+    static G4ThreadLocal ThreadPrivate *tpdata;
     G4bool QuasiElastic;
     G4bool withNeutronHP;
     G4bool withFTFP;

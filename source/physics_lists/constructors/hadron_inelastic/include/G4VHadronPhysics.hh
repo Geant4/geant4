@@ -103,7 +103,7 @@ private:
   G4VHadronPhysics(G4VHadronPhysics &);
   G4VHadronPhysics & operator=(const G4VHadronPhysics &right);
 
-  std::vector<G4VHadronModelBuilder*> builders;
+  static G4ThreadLocal std::vector<G4VHadronModelBuilder*>* builders;
 
 };
 

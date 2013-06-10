@@ -80,32 +80,35 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
   private:
     void CreateModels();
     
-    G4NeutronBuilder * theNeutrons;
-    //G4NeutronHPBuilder * theHPNeutron;
-    G4VNeutronBuilder * theLENeutron;
-    G4BertiniNeutronBuilder * theBertiniNeutron;
-    G4FTFPNeutronBuilder * theFTFPNeutron;
-    G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
+    struct ThreadPrivate { 
+      G4NeutronBuilder * theNeutrons;
+      //G4NeutronHPBuilder * theHPNeutron;
+      G4VNeutronBuilder * theLENeutron;
+      G4BertiniNeutronBuilder * theBertiniNeutron;
+      G4FTFPNeutronBuilder * theFTFPNeutron;
+      G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
  
-    G4PiKBuilder * thePiK;
-    G4BertiniPiKBuilder * theBertiniPiK;
-    G4FTFPPiKBuilder * theFTFPPiK;
+      G4PiKBuilder * thePiK;
+      G4BertiniPiKBuilder * theBertiniPiK;
+      G4FTFPPiKBuilder * theFTFPPiK;
     
-    G4ProtonBuilder * thePro;
-    G4BertiniProtonBuilder * theBertiniPro;
-    G4FTFPProtonBuilder * theFTFPPro;    
+      G4ProtonBuilder * thePro;
+      G4BertiniProtonBuilder * theBertiniPro;
+      G4FTFPProtonBuilder * theFTFPPro;    
 
-    G4HyperonFTFPBuilder * theHyperon;
+      G4HyperonFTFPBuilder * theHyperon;
     
-    G4AntiBarionBuilder * theAntiBaryon;
-    G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+      G4AntiBarionBuilder * theAntiBaryon;
+      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+
+      G4VCrossSectionDataSet * theCHIPSInelastic;
+      G4VCrossSectionDataSet * theBGGxsNeutron;
+      G4VCrossSectionDataSet * theNeutronHPJENDLHEInelastic;
+      G4VCrossSectionDataSet * theBGGxsProton;
+    };
+    static G4ThreadLocal ThreadPrivate* tpdata;
 
     G4bool QuasiElastic;
-    G4VCrossSectionDataSet * theCHIPSInelastic;
-    G4VCrossSectionDataSet * BGGxsNeutron;
-    G4VCrossSectionDataSet * NeutronHPJENDLHEInelastic;
-    G4VCrossSectionDataSet * BGGxsProton;
-
     G4bool useLEND;
     G4String evaluation;
 };

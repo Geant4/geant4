@@ -62,9 +62,12 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGSP_BERT_HP);
 
+G4ThreadLocal G4HadronPhysicsQGSP_BERT_HP::ThreadPrivate* 
+G4HadronPhysicsQGSP_BERT_HP::tpdata = 0;
+
 G4HadronPhysicsQGSP_BERT_HP::G4HadronPhysicsQGSP_BERT_HP(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BERT_HP")
-    , theNeutrons(0)
+/*    , theNeutrons(0)
     , theLEPNeutron(0)
     , theFTFPNeutron(0)
     , theQGSPNeutron(0)
@@ -80,13 +83,13 @@ G4HadronPhysicsQGSP_BERT_HP::G4HadronPhysicsQGSP_BERT_HP(G4int)
     , theBertiniPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0) 
+    , theFTFPAntiBaryon(0) */
     , QuasiElastic(true)
 {}
 
 G4HadronPhysicsQGSP_BERT_HP::G4HadronPhysicsQGSP_BERT_HP(const G4String& name, G4bool quasiElastic)
     :  G4VPhysicsConstructor(name)
-    , theNeutrons(0)
+/*    , theNeutrons(0)
     , theLEPNeutron(0)
     , theFTFPNeutron(0)
     , theQGSPNeutron(0)
@@ -102,7 +105,7 @@ G4HadronPhysicsQGSP_BERT_HP::G4HadronPhysicsQGSP_BERT_HP(const G4String& name, G
     , theBertiniPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)
+    , theFTFPAntiBaryon(0)*/
     , QuasiElastic(quasiElastic)
 {}
 
@@ -117,68 +120,69 @@ void G4HadronPhysicsQGSP_BERT_HP::CreateModels()
   const G4double maxBERT =  9.9*GeV;
   const G4double maxHP   = 19.9*MeV;
 
-  theNeutrons=new G4NeutronBuilder;
-  theNeutrons->RegisterMe(theQGSPNeutron=new G4QGSPNeutronBuilder(quasiElasticQGS));
-  theQGSPNeutron->SetMinEnergy(minQGSP);   
-  theNeutrons->RegisterMe(theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF));
-  theFTFPNeutron->SetMinEnergy(minFTFP);
-  theFTFPNeutron->SetMaxEnergy(maxFTFP);
+  tpdata->theNeutrons=new G4NeutronBuilder;
+  tpdata->theNeutrons->RegisterMe(tpdata->theQGSPNeutron=new G4QGSPNeutronBuilder(quasiElasticQGS));
+  tpdata->theQGSPNeutron->SetMinEnergy(minQGSP);   
+  tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF));
+  tpdata->theFTFPNeutron->SetMinEnergy(minFTFP);
+  tpdata->theFTFPNeutron->SetMaxEnergy(maxFTFP);
   // Exclude LEP only from Inelastic 
-  //  -- Register it for other processes: Capture, Elastic
-  theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
-  theLEPNeutron->SetMinEnergy(maxHP);
-  theLEPNeutron->SetMinInelasticEnergy(0.0*GeV);
-  theLEPNeutron->SetMaxInelasticEnergy(0.0*GeV);
+  //  -- Register it for otpdata->ther processes: Capture, Elastic
+  tpdata->theNeutrons->RegisterMe(tpdata->theLEPNeutron=new G4LEPNeutronBuilder);
+  tpdata->theLEPNeutron->SetMinEnergy(maxHP);
+  tpdata->theLEPNeutron->SetMinInelasticEnergy(0.0*GeV);
+  tpdata->theLEPNeutron->SetMaxInelasticEnergy(0.0*GeV);
 
-  theNeutrons->RegisterMe(theBertiniNeutron=new G4BertiniNeutronBuilder);
-  theBertiniNeutron->SetMinEnergy(maxHP);
-  theBertiniNeutron->SetMaxEnergy(maxBERT);
+  tpdata->theNeutrons->RegisterMe(tpdata->theBertiniNeutron=new G4BertiniNeutronBuilder);
+  tpdata->theBertiniNeutron->SetMinEnergy(maxHP);
+  tpdata->theBertiniNeutron->SetMaxEnergy(maxBERT);
 
-  theNeutrons->RegisterMe(theHPNeutron=new G4NeutronHPBuilder);
+  tpdata->theNeutrons->RegisterMe(tpdata->theHPNeutron=new G4NeutronHPBuilder);
 
-  thePro=new G4ProtonBuilder;
-  thePro->RegisterMe(theQGSPPro=new G4QGSPProtonBuilder(quasiElasticQGS));
-  theQGSPPro->SetMinEnergy(minQGSP);   
-  thePro->RegisterMe(theFTFPPro=new G4FTFPProtonBuilder(quasiElasticFTF));
-  theFTFPPro->SetMinEnergy(minFTFP);
-  theFTFPPro->SetMaxEnergy(maxFTFP);
-  thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
-  theBertiniPro->SetMaxEnergy(maxBERT);
+  tpdata->thePro=new G4ProtonBuilder;
+  tpdata->thePro->RegisterMe(tpdata->theQGSPPro=new G4QGSPProtonBuilder(quasiElasticQGS));
+  tpdata->theQGSPPro->SetMinEnergy(minQGSP);   
+  tpdata->thePro->RegisterMe(tpdata->theFTFPPro=new G4FTFPProtonBuilder(quasiElasticFTF));
+  tpdata->theFTFPPro->SetMinEnergy(minFTFP);
+  tpdata->theFTFPPro->SetMaxEnergy(maxFTFP);
+  tpdata->thePro->RegisterMe(tpdata->theBertiniPro=new G4BertiniProtonBuilder);
+  tpdata->theBertiniPro->SetMaxEnergy(maxBERT);
 
-  thePiK=new G4PiKBuilder;
-  thePiK->RegisterMe(theQGSPPiK=new G4QGSPPiKBuilder(quasiElasticQGS));
-  theQGSPPiK->SetMinEnergy(minQGSP);
-  thePiK->RegisterMe(theFTFPPiK=new G4FTFPPiKBuilder(quasiElasticFTF));
-  theFTFPPiK->SetMinEnergy(minFTFP);
-  theFTFPPiK->SetMaxEnergy(maxFTFP);
-  thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
-  theBertiniPiK->SetMaxEnergy(maxBERT);
+  tpdata->thePiK=new G4PiKBuilder;
+  tpdata->thePiK->RegisterMe(tpdata->theQGSPPiK=new G4QGSPPiKBuilder(quasiElasticQGS));
+  tpdata->theQGSPPiK->SetMinEnergy(minQGSP);
+  tpdata->thePiK->RegisterMe(tpdata->theFTFPPiK=new G4FTFPPiKBuilder(quasiElasticFTF));
+  tpdata->theFTFPPiK->SetMinEnergy(minFTFP);
+  tpdata->theFTFPPiK->SetMaxEnergy(maxFTFP);
+  tpdata->thePiK->RegisterMe(tpdata->theBertiniPiK=new G4BertiniPiKBuilder);
+  tpdata->theBertiniPiK->SetMaxEnergy(maxBERT);
 
-  theHyperon=new G4HyperonFTFPBuilder;
+  tpdata->theHyperon=new G4HyperonFTFPBuilder;
 
-  theAntiBaryon=new G4AntiBarionBuilder;
-  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasticFTF));
+  tpdata->theAntiBaryon=new G4AntiBarionBuilder;
+  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasticFTF));
 }
 
 G4HadronPhysicsQGSP_BERT_HP::~G4HadronPhysicsQGSP_BERT_HP() 
 {
-   delete theHPNeutron;
-   delete theBertiniNeutron;
-   delete theQGSPNeutron;
-   delete theFTFPNeutron;
-   delete theLEPNeutron;
-   delete theNeutrons;
-   delete theBertiniPiK;
-   delete theQGSPPiK;
-   delete theFTFPPiK;
-   delete thePiK;
-   delete theBertiniPro;
-   delete theQGSPPro;
-   delete theFTFPPro;
-   delete thePro;
-   delete theFTFPAntiBaryon;
-   delete theAntiBaryon;
-   delete theHyperon;
+   delete tpdata->theHPNeutron;
+   delete tpdata->theBertiniNeutron;
+   delete tpdata->theQGSPNeutron;
+   delete tpdata->theFTFPNeutron;
+   delete tpdata->theLEPNeutron;
+   delete tpdata->theNeutrons;
+   delete tpdata->theBertiniPiK;
+   delete tpdata->theQGSPPiK;
+   delete tpdata->theFTFPPiK;
+   delete tpdata->thePiK;
+   delete tpdata->theBertiniPro;
+   delete tpdata->theQGSPPro;
+   delete tpdata->theFTFPPro;
+   delete tpdata->thePro;
+   delete tpdata->theFTFPAntiBaryon;
+   delete tpdata->theAntiBaryon;
+   delete tpdata->theHyperon;
+   delete tpdata; tpdata = 0;
 }
 
 void G4HadronPhysicsQGSP_BERT_HP::ConstructParticle()
@@ -199,11 +203,12 @@ void G4HadronPhysicsQGSP_BERT_HP::ConstructParticle()
 #include "G4ProcessManager.hh"
 void G4HadronPhysicsQGSP_BERT_HP::ConstructProcess()
 {
+  if ( tpdata == 0 ) tpdata = new ThreadPrivate;
   CreateModels();
-  theNeutrons->Build();
-  thePro->Build();
-  thePiK->Build();
-  theHyperon->Build(); 
-  theAntiBaryon->Build();
+  tpdata->theNeutrons->Build();
+  tpdata->thePro->Build();
+  tpdata->thePiK->Build();
+  tpdata->theHyperon->Build(); 
+  tpdata->theAntiBaryon->Build();
 }
 

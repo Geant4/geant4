@@ -56,9 +56,12 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsQGS_BIC);
 
+G4ThreadLocal G4HadronPhysicsQGS_BIC::ThreadPrivate*
+G4HadronPhysicsQGS_BIC::tpdata = 0;
+
 G4HadronPhysicsQGS_BIC::G4HadronPhysicsQGS_BIC(G4int)
     :  G4VPhysicsConstructor("hInelastic QGS_BIC")
-    , theNeutrons(0)
+/*    , theNeutrons(0)
     , theLEPNeutron(0)
     , theFTFBinaryNeutron(0)
     , theQGSBinaryNeutron(0)
@@ -78,13 +81,13 @@ G4HadronPhysicsQGS_BIC::G4HadronPhysicsQGS_BIC(G4int)
     , theBinaryPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)
+    , theFTFPAntiBaryon(0)*/
     , QuasiElastic(true)
 {}
 
 G4HadronPhysicsQGS_BIC::G4HadronPhysicsQGS_BIC(const G4String& name, G4bool quasiElastic)
     :  G4VPhysicsConstructor(name) 
-    , theNeutrons(0)
+/*    , theNeutrons(0)
     , theLEPNeutron(0)
     , theFTFBinaryNeutron(0)
     , theQGSBinaryNeutron(0)
@@ -104,7 +107,7 @@ G4HadronPhysicsQGS_BIC::G4HadronPhysicsQGS_BIC(const G4String& name, G4bool quas
     , theBinaryPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)
+    , theFTFPAntiBaryon(0)*/
     , QuasiElastic(quasiElastic)
 {}
 
@@ -121,75 +124,75 @@ void G4HadronPhysicsQGS_BIC::CreateModels()
   const G4double minPionBERT =  1.2*GeV;
   const G4double maxKaonBERT =  5.0*GeV;
 
-  theNeutrons=new G4NeutronBuilder;
-  theNeutrons->RegisterMe(theQGSBinaryNeutron=new G4QGSBinaryNeutronBuilder(quasiElasticQGS));
-  theNeutrons->RegisterMe(theFTFBinaryNeutron=new G4FTFBinaryNeutronBuilder(quasiElasticFTF));
-  theFTFBinaryNeutron->SetMinEnergy(minFTFP);
-  theFTFBinaryNeutron->SetMaxEnergy(maxFTFP);
+  tpdata->theNeutrons=new G4NeutronBuilder;
+  tpdata->theNeutrons->RegisterMe(tpdata->theQGSBinaryNeutron=new G4QGSBinaryNeutronBuilder(quasiElasticQGS));
+  tpdata->theNeutrons->RegisterMe(tpdata->theFTFBinaryNeutron=new G4FTFBinaryNeutronBuilder(quasiElasticFTF));
+  tpdata->theFTFBinaryNeutron->SetMinEnergy(minFTFP);
+  tpdata->theFTFBinaryNeutron->SetMaxEnergy(maxFTFP);
   // Exclude LEP only from Inelastic 
-  //  -- Register it for other processes: Capture, Elastic
-  theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
-  theLEPNeutron->SetMinInelasticEnergy(0.0*GeV);
-  theLEPNeutron->SetMaxInelasticEnergy(0.0*GeV);
+  //  -- Register it for otpdata->ther processes: Capture, Elastic
+  tpdata->theNeutrons->RegisterMe(tpdata->theLEPNeutron=new G4LEPNeutronBuilder);
+  tpdata->theLEPNeutron->SetMinInelasticEnergy(0.0*GeV);
+  tpdata->theLEPNeutron->SetMaxInelasticEnergy(0.0*GeV);
 
-  theNeutrons->RegisterMe(theBinaryNeutron=new G4BinaryNeutronBuilder);
-  theBinaryNeutron->SetMaxEnergy(maxBIC);
+  tpdata->theNeutrons->RegisterMe(tpdata->theBinaryNeutron=new G4BinaryNeutronBuilder);
+  tpdata->theBinaryNeutron->SetMaxEnergy(maxBIC);
 
-  thePro=new G4ProtonBuilder;
-  thePro->RegisterMe(theQGSBinaryPro=new G4QGSBinaryProtonBuilder(quasiElasticQGS));
-  thePro->RegisterMe(theFTFBinaryPro=new G4FTFBinaryProtonBuilder(quasiElasticFTF));
-  theFTFBinaryPro->SetMinEnergy(minFTFP);
-  theFTFBinaryPro->SetMaxEnergy(maxFTFP);
+  tpdata->thePro=new G4ProtonBuilder;
+  tpdata->thePro->RegisterMe(tpdata->theQGSBinaryPro=new G4QGSBinaryProtonBuilder(quasiElasticQGS));
+  tpdata->thePro->RegisterMe(tpdata->theFTFBinaryPro=new G4FTFBinaryProtonBuilder(quasiElasticFTF));
+  tpdata->theFTFBinaryPro->SetMinEnergy(minFTFP);
+  tpdata->theFTFBinaryPro->SetMaxEnergy(maxFTFP);
 
-  thePro->RegisterMe(theBinaryPro=new G4BinaryProtonBuilder);
-  theBinaryPro->SetMaxEnergy(maxBIC);
+  tpdata->thePro->RegisterMe(tpdata->theBinaryPro=new G4BinaryProtonBuilder);
+  tpdata->theBinaryPro->SetMaxEnergy(maxBIC);
 
-  thePion=new G4PionBuilder;
-  thePion->RegisterMe(theQGSBinaryPion=new G4QGSBinaryPionBuilder(quasiElasticQGS));
-  thePion->RegisterMe(theFTFBinaryPion=new G4FTFBinaryPionBuilder(quasiElasticFTF));
-  theFTFBinaryPion->SetMaxEnergy(maxFTFP);
-  thePion->RegisterMe(theBertiniPion=new G4BertiniPionBuilder);
-  theBertiniPion->SetMinEnergy(minPionBERT);
-  theBertiniPion->SetMaxEnergy(maxPionBERT);
-  thePion->RegisterMe(theBinaryPion = new G4BinaryPionBuilder);
-  theBinaryPion->SetMaxEnergy(maxPionBIC);
+  tpdata->thePion=new G4PionBuilder;
+  tpdata->thePion->RegisterMe(tpdata->theQGSBinaryPion=new G4QGSBinaryPionBuilder(quasiElasticQGS));
+  tpdata->thePion->RegisterMe(tpdata->theFTFBinaryPion=new G4FTFBinaryPionBuilder(quasiElasticFTF));
+  tpdata->theFTFBinaryPion->SetMaxEnergy(maxFTFP);
+  tpdata->thePion->RegisterMe(tpdata->theBertiniPion=new G4BertiniPionBuilder);
+  tpdata->theBertiniPion->SetMinEnergy(minPionBERT);
+  tpdata->theBertiniPion->SetMaxEnergy(maxPionBERT);
+  tpdata->thePion->RegisterMe(tpdata->theBinaryPion = new G4BinaryPionBuilder);
+  tpdata->theBinaryPion->SetMaxEnergy(maxPionBIC);
 
-  theKaon=new G4KaonBuilder;
-  theKaon->RegisterMe(theQGSBinaryKaon=new G4QGSBinaryKaonBuilder(quasiElasticQGS));
-  theKaon->RegisterMe(theFTFBinaryKaon=new G4FTFBinaryKaonBuilder(quasiElasticFTF));
-  theFTFBinaryKaon->SetMaxEnergy(maxFTFP);
-  theKaon->RegisterMe(theBertiniKaon=new G4BertiniKaonBuilder);
-  theBertiniKaon->SetMaxEnergy(maxKaonBERT);
+  tpdata->theKaon=new G4KaonBuilder;
+  tpdata->theKaon->RegisterMe(tpdata->theQGSBinaryKaon=new G4QGSBinaryKaonBuilder(quasiElasticQGS));
+  tpdata->theKaon->RegisterMe(tpdata->theFTFBinaryKaon=new G4FTFBinaryKaonBuilder(quasiElasticFTF));
+  tpdata->theFTFBinaryKaon->SetMaxEnergy(maxFTFP);
+  tpdata->theKaon->RegisterMe(tpdata->theBertiniKaon=new G4BertiniKaonBuilder);
+  tpdata->theBertiniKaon->SetMaxEnergy(maxKaonBERT);
 
-  theHyperon=new G4HyperonFTFPBuilder;
+  tpdata->theHyperon=new G4HyperonFTFPBuilder;
 
-  theAntiBaryon=new G4AntiBarionBuilder;
-  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasticFTF));
+  tpdata->theAntiBaryon=new G4AntiBarionBuilder;
+  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasticFTF));
 }
 
 G4HadronPhysicsQGS_BIC::~G4HadronPhysicsQGS_BIC() 
 {
-   delete theBinaryNeutron;
-   delete theQGSBinaryNeutron;
-   delete theFTFBinaryNeutron;
-   delete theLEPNeutron;
-   delete theNeutrons;
-   delete theQGSBinaryPion;
-   delete theFTFBinaryPion;
-   delete theBertiniPion;
-   delete theBinaryPion;
-   delete thePion;
-   delete theQGSBinaryKaon;
-   delete theFTFBinaryKaon;
-   delete theBertiniKaon;
-   delete theKaon;
-   delete theBinaryPro;
-   delete theQGSBinaryPro;
-   delete theFTFBinaryPro;
-   delete thePro;
-   delete theFTFPAntiBaryon;
-   delete theAntiBaryon;
-   delete theHyperon;
+   delete tpdata->theBinaryNeutron;
+   delete tpdata->theQGSBinaryNeutron;
+   delete tpdata->theFTFBinaryNeutron;
+   delete tpdata->theLEPNeutron;
+   delete tpdata->theNeutrons;
+   delete tpdata->theQGSBinaryPion;
+   delete tpdata->theFTFBinaryPion;
+   delete tpdata->theBertiniPion;
+   delete tpdata->theBinaryPion;
+   delete tpdata->thePion;
+   delete tpdata->theQGSBinaryKaon;
+   delete tpdata->theFTFBinaryKaon;
+   delete tpdata->theBertiniKaon;
+   delete tpdata->theKaon;
+   delete tpdata->theBinaryPro;
+   delete tpdata->theQGSBinaryPro;
+   delete tpdata->theFTFBinaryPro;
+   delete tpdata->thePro;
+   delete tpdata->theFTFPAntiBaryon;
+   delete tpdata->theAntiBaryon;
+   delete tpdata->theHyperon;
 }
 
 void G4HadronPhysicsQGS_BIC::ConstructParticle()
@@ -210,12 +213,13 @@ void G4HadronPhysicsQGS_BIC::ConstructParticle()
 #include "G4ProcessManager.hh"
 void G4HadronPhysicsQGS_BIC::ConstructProcess()
 {
+  if ( tpdata == 0 ) tpdata = new ThreadPrivate;
   CreateModels();
-  theNeutrons->Build();
-  thePro->Build();
-  thePion->Build();
-  theKaon->Build();
-  theHyperon->Build();
-  theAntiBaryon->Build();
+  tpdata->theNeutrons->Build();
+  tpdata->thePro->Build();
+  tpdata->thePion->Build();
+  tpdata->theKaon->Build();
+  tpdata->theHyperon->Build();
+  tpdata->theAntiBaryon->Build();
 }
 

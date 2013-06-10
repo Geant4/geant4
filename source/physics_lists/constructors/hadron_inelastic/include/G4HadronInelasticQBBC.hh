@@ -69,11 +69,11 @@ private:
   G4HadronInelasticQBBC(G4HadronInelasticQBBC &);
   G4HadronInelasticQBBC & operator=(const G4HadronInelasticQBBC &right);
 
-  G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
+  static G4ThreadLocal G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
 
   G4String htype;
   G4int    verbose;
-  G4bool   wasActivated;
+  static G4ThreadLocal G4bool   wasActivated;
 };
 
 #endif

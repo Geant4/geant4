@@ -67,9 +67,12 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronPhysicsShielding);
 
+G4ThreadLocal G4HadronPhysicsShielding::ThreadPrivate* 
+G4HadronPhysicsShielding::tpdata = 0;
+
 G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
     :  G4VPhysicsConstructor("hInelastic Shielding")
-    , theNeutrons(0)
+/*    , theNeutrons(0)
     , theLENeutron(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
@@ -82,19 +85,19 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
     , theFTFPPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)
+    , theFTFPAntiBaryon(0) */
     , QuasiElastic(false)
-    , theCHIPSInelastic(0)
-    , BGGxsNeutron(0)
-    , NeutronHPJENDLHEInelastic(0)
-    , BGGxsProton(0)
+  /*    , theCHIPSInelastic(0)
+    , theBGGxsNeutron(0)
+    , theNeutronHPJENDLHEInelastic(0)
+    , theBGGxsProton(0) */
     , useLEND(false)
     , evaluation()
 {}
 
 G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool quasiElastic)
     :  G4VPhysicsConstructor(name) 
-    , theNeutrons(0)
+/*    , theNeutrons(0)
     , theLENeutron(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
@@ -107,12 +110,12 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool 
     , theFTFPPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)
+    , theFTFPAntiBaryon(0) */
     , QuasiElastic(quasiElastic)
-    , theCHIPSInelastic(0)
-    , BGGxsNeutron(0)
-    , NeutronHPJENDLHEInelastic(0)
-    , BGGxsProton(0)
+  /*    , theCHIPSInelastic(0)
+    , theBGGxsNeutron(0)
+    , theNeutronHPJENDLHEInelastic(0)
+    , theBGGxsProton(0) */
     , useLEND(false)
     , evaluation()
 {}
@@ -122,67 +125,69 @@ void G4HadronPhysicsShielding::CreateModels()
 {
   G4bool quasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
 
-  theNeutrons=new G4NeutronBuilder;
-  theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF);
-  theNeutrons->RegisterMe(theFTFPNeutron);
-  theNeutrons->RegisterMe(theBertiniNeutron=new G4BertiniNeutronBuilder);
-  theBertiniNeutron->SetMinEnergy(19.9*MeV);
-  theBertiniNeutron->SetMaxEnergy(5*GeV);
-  theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
-  theLEPNeutron->SetMinEnergy(19.9*MeV);
-  theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
-  theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
-  //theNeutrons->RegisterMe(theHPNeutron=new G4NeutronHPBuilder);
+  tpdata->theNeutrons=new G4NeutronBuilder;
+  tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF);
+  tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron);
+  tpdata->theNeutrons->RegisterMe(tpdata->theBertiniNeutron=new G4BertiniNeutronBuilder);
+  tpdata->theBertiniNeutron->SetMinEnergy(19.9*MeV);
+  tpdata->theBertiniNeutron->SetMaxEnergy(5*GeV);
+  tpdata->theNeutrons->RegisterMe(tpdata->theLEPNeutron=new G4LEPNeutronBuilder);
+  tpdata->theLEPNeutron->SetMinEnergy(19.9*MeV);
+  tpdata->theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
+  tpdata->theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
+  //tpdata->theNeutrons->RegisterMe(tpdata->theHPNeutron=new G4NeutronHPBuilder);
 
     if ( useLEND != true )
-     theNeutrons->RegisterMe(theLENeutron=new G4NeutronHPBuilder);
+     tpdata->theNeutrons->RegisterMe(tpdata->theLENeutron=new G4NeutronHPBuilder);
   else
   {
-     theNeutrons->RegisterMe(theLENeutron=new G4NeutronLENDBuilder(evaluation));
+     tpdata->theNeutrons->RegisterMe(tpdata->theLENeutron=new G4NeutronLENDBuilder(evaluation));
   }
 
-  thePro=new G4ProtonBuilder;
-  theFTFPPro=new G4FTFPProtonBuilder(quasiElasticFTF);
-  thePro->RegisterMe(theFTFPPro);
-  thePro->RegisterMe(theBertiniPro=new G4BertiniProtonBuilder);
-  theBertiniPro->SetMaxEnergy(5*GeV);
+  tpdata->thePro=new G4ProtonBuilder;
+  tpdata->theFTFPPro=new G4FTFPProtonBuilder(quasiElasticFTF);
+  tpdata->thePro->RegisterMe(tpdata->theFTFPPro);
+  tpdata->thePro->RegisterMe(tpdata->theBertiniPro=new G4BertiniProtonBuilder);
+  tpdata->theBertiniPro->SetMaxEnergy(5*GeV);
 
-  thePiK=new G4PiKBuilder;
-  theFTFPPiK=new G4FTFPPiKBuilder(quasiElasticFTF);
-  thePiK->RegisterMe(theFTFPPiK);
-  thePiK->RegisterMe(theBertiniPiK=new G4BertiniPiKBuilder);
-  theBertiniPiK->SetMaxEnergy(5*GeV);
+  tpdata->thePiK=new G4PiKBuilder;
+  tpdata->theFTFPPiK=new G4FTFPPiKBuilder(quasiElasticFTF);
+  tpdata->thePiK->RegisterMe(tpdata->theFTFPPiK);
+  tpdata->thePiK->RegisterMe(tpdata->theBertiniPiK=new G4BertiniPiKBuilder);
+  tpdata->theBertiniPiK->SetMaxEnergy(5*GeV);
 
-  theHyperon=new G4HyperonFTFPBuilder;
+  tpdata->theHyperon=new G4HyperonFTFPBuilder;
     
-  theAntiBaryon=new G4AntiBarionBuilder;
-  theAntiBaryon->RegisterMe(theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasticFTF));
+  tpdata->theAntiBaryon=new G4AntiBarionBuilder;
+  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(quasiElasticFTF));
 }
 
 G4HadronPhysicsShielding::~G4HadronPhysicsShielding()
 {
-  delete theNeutrons;
-  delete theBertiniNeutron;
-  delete theFTFPNeutron;
-  //delete theHPNeutron;
-  delete theLENeutron;
+  delete tpdata->theNeutrons;
+  delete tpdata->theBertiniNeutron;
+  delete tpdata->theFTFPNeutron;
+  //delete tpdata->theHPNeutron;
+  delete tpdata->theLENeutron;
     
-  delete thePiK;
-  delete theBertiniPiK;
-  delete theFTFPPiK;
+  delete tpdata->thePiK;
+  delete tpdata->theBertiniPiK;
+  delete tpdata->theFTFPPiK;
     
-  delete thePro;
-  delete theBertiniPro;
-  delete theFTFPPro;    
+  delete tpdata->thePro;
+  delete tpdata->theBertiniPro;
+  delete tpdata->theFTFPPro;    
     
-  delete theHyperon;
-  delete theAntiBaryon;
-  delete theFTFPAntiBaryon;
+  delete tpdata->theHyperon;
+  delete tpdata->theAntiBaryon;
+  delete tpdata->theFTFPAntiBaryon;
 
-  delete theCHIPSInelastic;
-  delete BGGxsNeutron;
-  delete NeutronHPJENDLHEInelastic;
-  delete BGGxsProton;
+  delete tpdata->theCHIPSInelastic;
+  delete tpdata->theBGGxsNeutron;
+  delete tpdata->theNeutronHPJENDLHEInelastic;
+  delete tpdata->theBGGxsProton;
+
+  delete tpdata; tpdata=0;
 }
 
 void G4HadronPhysicsShielding::ConstructParticle()
@@ -203,25 +208,28 @@ void G4HadronPhysicsShielding::ConstructParticle()
 #include "G4ProcessManager.hh"
 void G4HadronPhysicsShielding::ConstructProcess()
 {
+  if ( tpdata == 0 ) tpdata = new ThreadPrivate;
   CreateModels();
 
-  //BGGxsNeutron=new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()); 
-  thePro->Build();
-  theNeutrons->Build();
+  //tpdata->theBGGxsNeutron=new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()); 
+  tpdata->thePro->Build();
+  tpdata->theNeutrons->Build();
     
-//  BGGxsNeutron=new  G4NeutronHPBGGNucleonInelasticXS(G4Neutron::Neutron());
-//  FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(BGGxsNeutron);
+  tpdata->theBGGxsNeutron = 0; //set explictly to zero or destructor may fail
+//  tpdata->theBGGxsNeutron=new  G4NeutronHPBGGNucleonInelasticXS(G4Neutron::Neutron());
+//  FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->theBGGxsNeutron);
 //
 
   G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
-  NeutronHPJENDLHEInelastic=new G4NeutronHPJENDLHEInelasticData;
-  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(NeutronHPJENDLHEInelastic);
+  tpdata->theNeutronHPJENDLHEInelastic=new G4NeutronHPJENDLHEInelasticData;
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->theNeutronHPJENDLHEInelastic);
   G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new G4NeutronHPInelasticData);
     
-//  BGGxsProton=new G4BGGNucleonInelasticXS(G4Proton::Proton());
-//  G4PhysListUtil::FindInelasticProcess(G4Proton::Proton())->AddDataSet(BGGxsProton);
+  tpdata->theBGGxsProton=0;
+//  tpdata->theBGGxsProton=new G4BGGNucleonInelasticXS(G4Proton::Proton());
+//  G4PhysListUtil::FindInelasticProcess(G4Proton::Proton())->AddDataSet(tpdata->theBGGxsProton);
 
-  thePiK->Build();
+  tpdata->thePiK->Build();
   // use CHIPS cross sections also for Kaons
   
   G4CrossSectionDataSetRegistry* registry = G4CrossSectionDataSetRegistry::Instance();
@@ -231,6 +239,6 @@ void G4HadronPhysicsShielding::ConstructProcess()
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
 
-  theHyperon->Build();
-  theAntiBaryon->Build();
+  tpdata->theHyperon->Build();
+  tpdata->theAntiBaryon->Build();
 }

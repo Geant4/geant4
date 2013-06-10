@@ -1,4 +1,3 @@
-//
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -78,27 +77,29 @@ class G4HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
 
   private:
     void CreateModels();
-    G4NeutronBuilder * theNeutrons;
-    G4LEPNeutronBuilder * theLEPNeutron;
-    G4FTFBinaryNeutronBuilder * theFTFBinaryNeutron;
-    G4BinaryNeutronBuilder * theBinaryNeutron;
+    struct ThreadPrivate {
+      G4NeutronBuilder * theNeutrons;
+      G4LEPNeutronBuilder * theLEPNeutron;
+      G4FTFBinaryNeutronBuilder * theFTFBinaryNeutron;
+      G4BinaryNeutronBuilder * theBinaryNeutron;
     
-    G4PionBuilder * thePion;
-    G4KaonBuilder * theKaon;
-    G4BinaryPionBuilder * theBICPion;
-    G4BertiniKaonBuilder * theBertiniKaon;
-    G4FTFBinaryPionBuilder * theFTFBinaryPion;
-    G4FTFBinaryKaonBuilder * theFTFBinaryKaon;
+      G4PionBuilder * thePion;
+      G4KaonBuilder * theKaon;
+      G4BinaryPionBuilder * theBICPion;
+      G4BertiniKaonBuilder * theBertiniKaon;
+      G4FTFBinaryPionBuilder * theFTFBinaryPion;
+      G4FTFBinaryKaonBuilder * theFTFBinaryKaon;
     
-    G4ProtonBuilder * thePro;
-    G4FTFBinaryProtonBuilder * theFTFBinaryPro; 
-    G4BinaryProtonBuilder * theBinaryPro;
+      G4ProtonBuilder * thePro;
+      G4FTFBinaryProtonBuilder * theFTFBinaryPro; 
+      G4BinaryProtonBuilder * theBinaryPro;
     
-    G4HyperonFTFPBuilder * theHyperon;
+      G4HyperonFTFPBuilder * theHyperon;
     
-    G4AntiBarionBuilder * theAntiBaryon;
-    G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
+      G4AntiBarionBuilder * theAntiBaryon;
+      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+    };
+    static G4ThreadLocal ThreadPrivate* tpdata;
     G4bool QuasiElastic;
 };
 

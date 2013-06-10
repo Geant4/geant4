@@ -83,8 +83,11 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronInelasticQBBC);
 
+G4ThreadLocal G4ComponentAntiNuclNuclearXS* G4HadronInelasticQBBC::theAntiNuclXS = 0;
+G4ThreadLocal G4bool G4HadronInelasticQBBC::wasActivated=false;
+
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
-  : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
+  : G4VHadronPhysics("hInelastic"),verbose(ver)
 {
   htype = "QBBC";
   theAntiNuclXS = 0;
@@ -92,7 +95,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver)
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, G4int ver, 
     G4bool, G4bool,G4bool, G4bool, G4bool)
-  : G4VHadronPhysics("hInelastic"),verbose(ver),wasActivated(false)
+  : G4VHadronPhysics("hInelastic"),verbose(ver)
 {
   htype = name;
   theAntiNuclXS = 0;

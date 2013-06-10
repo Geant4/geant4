@@ -54,6 +54,8 @@
 #include "G4ProcessVector.hh"
 #include "G4ProcessManager.hh"
 
+G4ThreadLocal std::vector<G4VHadronModelBuilder*>* G4VHadronPhysics::builders = 0;
+
 G4VHadronPhysics::G4VHadronPhysics(const G4String& aName, G4int verb)
   : G4VPhysicsConstructor(aName)
 {
@@ -66,10 +68,11 @@ G4VHadronPhysics::G4VHadronPhysics(const G4String& aName, G4int verb)
 
 G4VHadronPhysics::~G4VHadronPhysics() 
 {
-  G4int n = builders.size();
+  G4int n = builders->size();
   if(n > 0) {
-    for(G4int i=0; i<n; i++) {delete builders[i];}
-  }                           
+    for(G4int i=0; i<n; i++) {delete (*builders)[i];}
+  }
+  delete builders;
 }                                     
 
 void G4VHadronPhysics::ConstructParticle()
@@ -92,7 +95,8 @@ G4VHadronPhysics::BuildModel(G4VHadronModelBuilder* mBuilder,
 			     G4double emin, 
 			     G4double emax)
 {
-  builders.push_back(mBuilder);                           
+  if ( builders == 0 ) builders = new std::vector<G4VHadronModelBuilder*>;
+  builders->push_back(mBuilder);                           
   G4HadronicInteraction* model = mBuilder->GetModel();
   model->SetMinEnergy(emin);
   model->SetMaxEnergy(emax);
