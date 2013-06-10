@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-06-13 mma (testem15-V09-06-04)
+- Cosmetic in SteppingAction.     
+     
 01-04-13 A. Dotti (testem15-V09-06-01,testem15-V09-06-02,testem15-V09-06-03)
 - theParticleIterator becomes aParticleIterator (needed for MT) 
      
