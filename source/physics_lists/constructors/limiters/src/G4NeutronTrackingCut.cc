@@ -49,27 +49,28 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4NeutronTrackingCut);
 //
+G4ThreadLocal G4bool   G4NeutronTrackingCut::wasActivated = false;
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
   :  G4VPhysicsConstructor("neutronTrackingCut")
-   , verbose(ver), wasActivated(false)
+   , verbose(ver)
 {
   timeLimit          = 10.*microsecond;
   kineticEnergyLimit = 0.0;
-  pNeutronKiller     = 0;
+  //pNeutronKiller     = 0;
 }
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor(name), verbose(ver)
 {
   timeLimit          = 10.*microsecond;
   kineticEnergyLimit = 0.0;
-  pNeutronKiller     = 0;
+  //pNeutronKiller     = 0;
 }
 
 G4NeutronTrackingCut::~G4NeutronTrackingCut()
 {
-  delete pNeutronKiller;
+  //delete pNeutronKiller;
 }
 
 void G4NeutronTrackingCut::ConstructParticle()
@@ -84,7 +85,7 @@ void G4NeutronTrackingCut::ConstructProcess()
 
   // Add Process
 
-  pNeutronKiller = new G4NeutronKiller();
+  G4NeutronKiller* pNeutronKiller = new G4NeutronKiller();
   G4ParticleDefinition * particle = G4Neutron::Neutron();
   G4ProcessManager * pmanager = particle->GetProcessManager();
 

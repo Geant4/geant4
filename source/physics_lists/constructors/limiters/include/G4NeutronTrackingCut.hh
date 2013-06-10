@@ -64,13 +64,13 @@ class G4NeutronTrackingCut : public G4VPhysicsConstructor
 
 private:
 
-  G4NeutronKiller* pNeutronKiller;
+  //G4NeutronKiller* pNeutronKiller;
 
   G4double timeLimit;
   G4double kineticEnergyLimit;
   
   G4int    verbose;
-  G4bool   wasActivated;
+  static G4ThreadLocal G4bool   wasActivated;
 };
 
 inline void G4NeutronTrackingCut::SetTimeLimit(G4double val)
