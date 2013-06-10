@@ -47,6 +47,7 @@ class G4EvManMessenger;
 #include "G4VTrajectory.hh"
 #include "G4TrackStatus.hh"
 class G4SDManager;
+class G4StateManager;
 #include "globals.hh"
 class G4VUserEventInformation;
 
@@ -117,6 +118,8 @@ class G4EventManager
 
       G4int storetRandomNumberStatusToG4Event;
       G4String randomNumberStatusToG4Event;
+
+      G4StateManager* stateManager;
 
   public: // with description
       inline const G4Event* GetConstCurrentEvent()

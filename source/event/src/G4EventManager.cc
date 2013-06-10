@@ -63,6 +63,7 @@ G4EventManager::G4EventManager()
   trackContainer = new G4StackManager;
   theMessenger = new G4EvManMessenger(this);
   sdManager = G4SDManager::GetSDMpointerIfExist();
+  stateManager = G4StateManager::GetStateManager();
   fpEventManager = this;
   userEventAction = 0;
   userStackingAction = 0;
@@ -98,7 +99,6 @@ G4int G4EventManager::operator!=(const G4EventManager &right) const { }
 void G4EventManager::DoProcessing(G4Event* anEvent)
 {
   abortRequested = false;
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_GeomClosed)
   {
@@ -361,7 +361,6 @@ void G4EventManager::ProcessOneEvent(G4TrackVector* trackVector,G4Event* anEvent
 
 void G4EventManager::SetUserInformation(G4VUserEventInformation* anInfo)
 { 
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_EventProc || currentEvent==0)
   {
@@ -376,7 +375,6 @@ void G4EventManager::SetUserInformation(G4VUserEventInformation* anInfo)
 
 G4VUserEventInformation* G4EventManager::GetUserInformation()
 { 
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_EventProc || currentEvent==0)
   { return 0; }
