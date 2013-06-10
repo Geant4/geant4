@@ -49,8 +49,8 @@ B4cEventAction::B4cEventAction()
  : G4UserEventAction(),
    fMessenger(0),
    fPrintModulo(1),
-   absHCID(-1),
-   gapHCID(-1)
+   fAbsHCID(-1),
+   fGapHCID(-1)
 {
   // Define /B4/event commands using generic messenger class
   fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
@@ -125,18 +125,19 @@ void B4cEventAction::BeginOfEventAction(const G4Event* event)
 void B4cEventAction::EndOfEventAction(const G4Event* event)
 {  
   // Get hits collections
-  if(absHCID==-1) {
-    absHCID = G4SDManager::GetSDMpointer()
-            ->GetCollectionID("AbsorberHitsCollection");
+  if ( fAbsHCID == -1 ) {
+    fAbsHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("AbsorberHitsCollection");
   }
   B4cCalorHitsCollection* absoHC
-    = GetHitsCollection(absHCID, event);
-  if(gapHCID==-1) {
-    gapHCID = G4SDManager::GetSDMpointer()
-            ->GetCollectionID("GapHitsCollection");
+    = GetHitsCollection(fAbsHCID, event);
+  
+  if ( fGapHCID == -1 ) {
+    fGapHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("GapHitsCollection");
   }
   B4cCalorHitsCollection* gapHC
-    = GetHitsCollection(gapHCID, event);
+    = GetHitsCollection(fGapHCID, event);
 
   // Get hit with total values
   B4cCalorHit* absoHit = (*absoHC)[absoHC->entries()-1];

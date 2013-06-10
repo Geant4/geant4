@@ -72,8 +72,8 @@ private:
   // data members                   
   G4GenericMessenger*  fMessenger;
   G4int  fPrintModulo;
-  G4int  absHCID;
-  G4int  gapHCID;
+  G4int  fAbsHCID;
+  G4int  fGapHCID;
 };
 
 // inline functions

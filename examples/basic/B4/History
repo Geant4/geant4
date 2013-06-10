@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10/06/13 I. Hrivnacova (exampleB4-V09-06-08)
+- Fixed names for newly added data members (in B4cEventAction)
+
 03/06/13 I. Hrivnacova (exampleB4-V09-06-07)
 - Updated README files for changes for MT
 
