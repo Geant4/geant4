@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+08-06-13 mma (fano-V09-06-05)
+- Cosmetic in SteppingAction.
+          
 11-04-13 mma (fano-V09-06-04)
 - HistoManager functionalities transfered to G4Analysis and its messenger.
     - userAction classes and all macros affected
