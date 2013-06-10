@@ -76,8 +76,8 @@ $Id$
    in B1SteppingAction and accumulated event by event in B1EventInformation
    which is created at BeginOfEventAction().
    
-   At end of event, this EnergyDeposited is collected in B1Run::RecordEvent()
-   and summed over the whole run.
+   At end of event, this EdepEvent is collected in B1Run::RecordEvent()
+   and summed over the whole run (EdepRun).
    
    Total dose deposited is computed at B1RunAction::EndOfRunAction(), 
    and printed together with informations about the primary particle.

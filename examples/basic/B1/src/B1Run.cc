@@ -38,7 +38,7 @@
 
 B1Run::B1Run()
 : G4Run(),
-  fEnergySum(0.), fEnergy2Sum(0.)
+  fEdepRun(0.), fEdep2Run(0.)
 { ; } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,9 +52,9 @@ void B1Run::RecordEvent(const G4Event* event)
 {  
   B1EventInformation* evInfo
     = static_cast<B1EventInformation*>(event->GetUserInformation());
-  G4double eDep = evInfo->GetEnergySum();
-  fEnergySum += eDep;
-  fEnergy2Sum += eDep*eDep;
+  G4double EdepEvent = evInfo->GetEdepEvent();
+  fEdepRun  += EdepEvent;
+  fEdep2Run += EdepEvent*EdepEvent;
 
   G4Run::RecordEvent(event);
 }
@@ -64,8 +64,8 @@ void B1Run::RecordEvent(const G4Event* event)
 void B1Run::Merge(const G4Run* aRun)
 {
   const B1Run* localRun = static_cast<const B1Run*>(aRun);
-  fEnergySum += localRun->fEnergySum;
-  fEnergy2Sum += localRun->fEnergy2Sum;
+  fEdepRun  += localRun->fEdepRun;
+  fEdep2Run += localRun->fEdep2Run;
 
   G4Run::Merge(aRun); 
 } 

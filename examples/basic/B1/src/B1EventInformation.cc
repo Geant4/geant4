@@ -36,7 +36,7 @@
 
 B1EventInformation::B1EventInformation()
 : G4VUserEventInformation(),
-  fEnergySum(0.)
+  fEdepEvent(0.)
 { ; } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@ B1EventInformation::~B1EventInformation()
 
 void B1EventInformation::Print() const
 {  
-  G4cout << "Stored energy deposition : " << fEnergySum/MeV << " [MeV]" 
+  G4cout << "Stored energy deposited per event : " << fEdepEvent/MeV << " MeV" 
          << G4endl;
 }
  

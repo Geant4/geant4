@@ -88,16 +88,16 @@ void B1RunAction::EndOfRunAction(const G4Run* aRun)
 
   // Compute dose
   //
-  G4double energySum  = b1Run->GetEnergySum();
-  G4double energy2Sum = b1Run->GetEnergy2Sum();
-  G4double rms = energy2Sum - energySum*energySum/nofEvents;
+  G4double edepRun  = b1Run->GetEdepRun();
+  G4double edep2Run = b1Run->GetEdep2Run();
+  G4double rms = edep2Run - edepRun*edepRun/nofEvents;
   if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
 
   const B1DetectorConstruction* detectorConstruction
    = static_cast<const B1DetectorConstruction*>
      (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   G4double mass = detectorConstruction->GetScoringVolume()->GetMass();
-  G4double dose = energySum/mass;
+  G4double dose = edepRun/mass;
   G4double rmsDose = rms/mass;
 
   // Run conditions

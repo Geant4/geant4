@@ -50,12 +50,12 @@ class B1Run : public G4Run
 
   public:
     // get methods
-    G4double GetEnergySum() const { return fEnergySum; }
-    G4double GetEnergy2Sum() const { return fEnergy2Sum; }
+    G4double GetEdepRun()  const { return fEdepRun; }
+    G4double GetEdep2Run() const { return fEdep2Run; }
 
   private:
-    G4double  fEnergySum;
-    G4double  fEnergy2Sum;
+    G4double  fEdepRun;
+    G4double  fEdep2Run;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

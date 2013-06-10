@@ -70,12 +70,12 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
   // check if we are in scoring volume
   if (volume != fScoringVolume) return;
 
-  // collect energy and track length step by step
-  G4double eDep = step->GetTotalEnergyDeposit();
+  // collect energy deposited in this step
+  G4double edepStep = step->GetTotalEnergyDeposit();
   B1EventInformation* evInfo
     = static_cast<B1EventInformation*>(G4RunManager::GetRunManager()
                ->GetCurrentEvent()->GetUserInformation());
-  evInfo->AddEDep(eDep);  
+  evInfo->AddEdep(edepStep);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

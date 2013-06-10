@@ -48,11 +48,11 @@ class B1EventInformation : public G4VUserEventInformation
     
     virtual void Print() const;
     
-    G4double GetEnergySum() const { return fEnergySum; }
-    void AddEDep(G4double eDep) { fEnergySum += eDep; }
+    G4double GetEdepEvent() const { return fEdepEvent; }
+    void AddEdep(G4double de) { fEdepEvent += de; }
      
   private:
-    G4double  fEnergySum;
+    G4double  fEdepEvent;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
