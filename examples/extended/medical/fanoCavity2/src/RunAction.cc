@@ -49,7 +49,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:fDetector(det),fKinematic(kin),fProcCounter(0)
+:fDetector(det),fKinematic(kin),fProcCounter(0),fHistoManager(0)
 {
  fHistoManager = new HistoManager();
 }
