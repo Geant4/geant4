@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Jun. 9, 13 M.Asai (decay-V09-06-00)
+- Modify G4Decay::IsApplicable() to make it return false for all ions in the IonTable.
+
 - Jul. 5, 12 G.Cosmo (decay-V09-05-00)
 - Explicitly use inclusion of headers for system of units and physical
   constants, in plan to remove implicit inclusion from globals.hh.

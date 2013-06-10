@@ -93,6 +93,8 @@ G4bool G4Decay::IsApplicable(const G4ParticleDefinition& aParticleType)
      return false;
    } else if (aParticleType.GetPDGMass() <= 0.0*MeV) {
      return false;
+   } else if (aParticleType.GetParticleSubType() == "generic") {
+     return false;
    } else {
      return true; 
    }
