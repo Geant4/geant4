@@ -74,14 +74,21 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonQMDPhysics);
 
+G4ThreadLocal std::vector<G4HadronInelasticProcess*>* G4IonQMDPhysics::p_list = 0;
+G4ThreadLocal std::vector<G4HadronicInteraction*>* G4IonQMDPhysics::model_list = 0;
+
+G4ThreadLocal G4VCrossSectionDataSet* G4IonQMDPhysics::theNuclNuclData = 0; 
+G4ThreadLocal G4VComponentCrossSection* G4IonQMDPhysics::theGGNuclNuclXS = 0;
+
+G4ThreadLocal G4BinaryLightIonReaction* G4IonQMDPhysics::theIonBC = 0;
+G4ThreadLocal G4HadronicInteraction* G4IonQMDPhysics::theFTFP = 0;
+G4ThreadLocal G4FTFBuilder* G4IonQMDPhysics::theBuilder = 0;
+G4ThreadLocal  G4QMDReaction* G4IonQMDPhysics::theQMD = 0;
+G4ThreadLocal G4bool G4IonQMDPhysics::wasActivated = false;
+
 G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
-  :  G4VPhysicsConstructor("IonQMD"), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor("IonQMD"), verbose(ver)
 {
-  theNuclNuclData = 0; 
-  theGGNuclNuclXS = 0;
-  theIonBC = 0;
-  theFTFP = 0;
-  theBuilder = 0;
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
   emaxQMD  = 10.*GeV;
@@ -93,13 +100,8 @@ G4IonQMDPhysics::G4IonQMDPhysics(G4int ver)
 
 G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name, 
 						     G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor(name), verbose(ver)
 {
-  theNuclNuclData = 0; 
-  theGGNuclNuclXS = 0;
-  theIonBC = 0;
-  theFTFP = 0;
-  theBuilder = 0;
   eminBIC  = 0.*MeV;
   eminQMD  = 100.*MeV;
   emaxQMD  = 10.*GeV;
@@ -112,14 +114,20 @@ G4IonQMDPhysics::G4IonQMDPhysics(const G4String& name,
 G4IonQMDPhysics::~G4IonQMDPhysics()
 {
   if(wasActivated) {
-    delete theBuilder;
-    delete theGGNuclNuclXS;
-    delete theNuclNuclData;
+    delete theBuilder; theBuilder = 0;
+    delete theGGNuclNuclXS; theGGNuclNuclXS = 0; 
+    delete theNuclNuclData; theNuclNuclData = 0;
     G4int i;
-    G4int n = p_list.size();
-    for(i=0; i<n; i++) {delete p_list[i];}
-    n = model_list.size();
-    for(i=0; i<n; i++) {delete model_list[i];}
+    if ( p_list ) {
+      G4int n = p_list->size();
+      for(i=0; i<n; i++) {delete (*p_list)[i];}
+      delete p_list; p_list = 0;
+    }
+    if ( model_list ) {
+      G4int n = model_list->size();
+      for(i=0; i<n; i++) {delete (*model_list)[i];}
+      delete model_list; model_list = 0;
+    }
   }
 }
 
@@ -132,14 +140,15 @@ void G4IonQMDPhysics::ConstructProcess()
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
 
   theIonBC = new G4BinaryLightIonReaction(thePreCompound);
-  model_list.push_back(theIonBC);
+  if ( model_list == 0 ) model_list = new std::vector<G4HadronicInteraction*>;
+  model_list->push_back(theIonBC);
 
   theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
   theFTFP = theBuilder->GetModel();
-  model_list.push_back(theFTFP);
+  model_list->push_back(theFTFP);
 
   theQMD= new G4QMDReaction();
-  model_list.push_back(theQMD);
+  model_list->push_back(theQMD);
 
   theNuclNuclData = new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
 
@@ -158,7 +167,8 @@ void G4IonQMDPhysics::AddProcess(const G4String& name,
 				 G4HadronicInteraction* FTFP)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, p);
-  p_list.push_back(hadi);
+  if ( p_list == 0 ) p_list = new  std::vector<G4HadronInelasticProcess*>;
+  p_list->push_back(hadi);
   G4ProcessManager* pManager = p->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
 

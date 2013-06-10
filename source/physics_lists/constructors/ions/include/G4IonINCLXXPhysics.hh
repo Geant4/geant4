@@ -74,15 +74,15 @@ private:
 		  G4HadronicInteraction*,
 		  G4HadronicInteraction*,
 		  const G4double);
-  std::vector<G4HadronInelasticProcess*> p_list;
-  std::vector<G4HadronicInteraction*> model_list;
+  static G4ThreadLocal std::vector<G4HadronInelasticProcess*>* p_list;
+  static G4ThreadLocal std::vector<G4HadronicInteraction*>* model_list;
 
-  G4VCrossSectionDataSet* theNuclNuclData; 
-  G4VComponentCrossSection* theGGNuclNuclXS;
+  static G4ThreadLocal G4VCrossSectionDataSet* theNuclNuclData; 
+  static G4ThreadLocal G4VComponentCrossSection* theGGNuclNuclXS;
 
-  G4INCLXXInterface* theINCLXXIons;
-  G4HadronicInteraction* theFTFP;
-  G4FTFBuilder* theBuilder;
+  static G4ThreadLocal G4INCLXXInterface* theINCLXXIons;
+  static G4ThreadLocal G4HadronicInteraction* theFTFP;
+  static G4ThreadLocal G4FTFBuilder* theBuilder;
 
   G4double emin;
   G4double emax_d, emax_t, emax_he3, emax_alpha;
@@ -90,7 +90,7 @@ private:
   G4double emaxFTFP;
 
   G4int  verbose;
-  G4bool wasActivated;
+  static G4ThreadLocal G4bool wasActivated;
 };
 
 

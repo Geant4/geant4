@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-Jun-2013, Andrea Dotti		(phys-ctor-ions-V09-06-04)
+- MT fixes: make private data members TLS since constructors is 
+ shared instance, but processes not
+
 19-Apr-2013, Alberto Ribon              (phys-ctor-ions-V09-06-03)
 - Use G4ComponentGGNuclNuclXsc in all ion constructors.
   (Before, G4GGNuclNuclCrossSection was used in G4IonPhysics,

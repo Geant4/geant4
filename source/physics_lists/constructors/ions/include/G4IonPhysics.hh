@@ -68,15 +68,15 @@ private:
 
   void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
 
-  G4VCrossSectionDataSet* theNuclNuclData; 
-  G4VComponentCrossSection* theGGNuclNuclXS;
+  static G4ThreadLocal G4VCrossSectionDataSet* theNuclNuclData; 
+  static G4ThreadLocal G4VComponentCrossSection* theGGNuclNuclXS;
 
-  G4BinaryLightIonReaction* theIonBC;
-  G4HadronicInteraction*    theFTFP;
-  G4FTFBuilder*             theBuilder;
+  static G4ThreadLocal G4BinaryLightIonReaction* theIonBC;
+  static G4ThreadLocal G4HadronicInteraction*    theFTFP;
+  static G4ThreadLocal G4FTFBuilder*             theBuilder;
 
   G4int  verbose;
-  G4bool wasActivated;
+  static G4ThreadLocal G4bool wasActivated;
 };
 
 

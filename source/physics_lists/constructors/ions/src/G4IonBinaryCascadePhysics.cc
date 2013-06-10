@@ -67,9 +67,18 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonBinaryCascadePhysics);
 
+G4ThreadLocal G4bool G4IonBinaryCascadePhysics::wasActivated = false;
+G4ThreadLocal std::vector<G4HadronInelasticProcess*>* G4IonBinaryCascadePhysics::G4MT_p_list = 0;
+G4ThreadLocal std::vector<G4HadronicInteraction*>* G4IonBinaryCascadePhysics::G4MT_model_list = 0;
+
+G4ThreadLocal G4VCrossSectionDataSet* G4IonBinaryCascadePhysics::theNuclNuclData = 0; 
+G4ThreadLocal G4VComponentCrossSection* G4IonBinaryCascadePhysics::theGGNuclNuclXS = 0;
+G4ThreadLocal G4BinaryLightIonReaction* G4IonBinaryCascadePhysics::theIonBC = 0;
+G4ThreadLocal G4HadronicInteraction* G4IonBinaryCascadePhysics::theFTFP = 0;
+G4ThreadLocal G4FTFBuilder* G4IonBinaryCascadePhysics::theBuilder = 0;
 
 G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(G4int ver)
-  :  G4VPhysicsConstructor("IonBinaryCascade"), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor("IonBinaryCascade"), verbose(ver)
 {
   theNuclNuclData = 0; 
   theGGNuclNuclXS = 0;
@@ -83,7 +92,7 @@ G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(G4int ver)
 
 G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(const G4String& name, 
 						     G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor(name), verbose(ver)
 {
   theNuclNuclData = 0; 
   theGGNuclNuclXS = 0;
@@ -97,15 +106,26 @@ G4IonBinaryCascadePhysics::G4IonBinaryCascadePhysics(const G4String& name,
 
 G4IonBinaryCascadePhysics::~G4IonBinaryCascadePhysics()
 {
+  //Explicitly setting pointers TLS to 0 is 
+  //needed, in case I create a new thread
+  //this variable is static!
   if(wasActivated) {
-    delete theBuilder;
-    delete theGGNuclNuclXS;
-    delete theNuclNuclData; 
+    delete theBuilder; theBuilder = 0;
+    delete theGGNuclNuclXS; theGGNuclNuclXS = 0;
+    delete theNuclNuclData;  theNuclNuclData = 0;
     G4int i;
-    G4int n = p_list.size();
-    for(i=0; i<n; i++) {delete p_list[i];}
-    n = model_list.size();
-    for(i=0; i<n; i++) {delete model_list[i];}
+    if ( G4MT_p_list ) {
+      G4int n = G4MT_p_list->size();
+      for(i=0; i<n; i++) {delete (*G4MT_p_list)[i];}
+      delete G4MT_p_list;
+      G4MT_p_list = 0; 
+    }
+    if ( G4MT_model_list ) {
+      G4int n = G4MT_model_list->size();
+      for(i=0; i<n; i++) {delete (*G4MT_model_list)[i];}
+      delete G4MT_model_list;
+      G4MT_model_list = 0;
+    }
   }
 }
 
@@ -114,20 +134,21 @@ void G4IonBinaryCascadePhysics::ConstructProcess()
 {
   if(wasActivated) { return; }
   wasActivated = true;
-
+  
   G4ExcitationHandler* handler = new G4ExcitationHandler();
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
 
   theIonBC = new G4BinaryLightIonReaction(thePreCompound);
   theIonBC->SetMinEnergy(0.0);
   theIonBC->SetMaxEnergy(4.0*GeV);
-  model_list.push_back(theIonBC);
+  if ( G4MT_model_list == 0 ) G4MT_model_list = new std::vector<G4HadronicInteraction*>;
+  G4MT_model_list->push_back(theIonBC);
 
   theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
   theFTFP = theBuilder->GetModel();
   theFTFP->SetMinEnergy(2.0*GeV);
   theFTFP->SetMaxEnergy(100.0*TeV);
-  model_list.push_back(theFTFP);
+  G4MT_model_list->push_back(theFTFP);
 
   theNuclNuclData = new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
 
@@ -142,8 +163,9 @@ void G4IonBinaryCascadePhysics::ConstructProcess()
 void G4IonBinaryCascadePhysics::AddProcess(const G4String& name, 
                                            G4ParticleDefinition* part)
 {
+  if ( G4MT_p_list == 0 ) G4MT_p_list = new std::vector<G4HadronInelasticProcess*>;
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
-  p_list.push_back(hadi);
+  G4MT_p_list->push_back(hadi);
   G4ProcessManager* pManager = part->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
 

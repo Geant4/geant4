@@ -64,15 +64,18 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonINCLXXPhysics);
 
+G4ThreadLocal std::vector<G4HadronInelasticProcess*>* G4IonINCLXXPhysics::p_list = 0;
+G4ThreadLocal std::vector<G4HadronicInteraction*>* G4IonINCLXXPhysics::model_list = 0;
+G4ThreadLocal G4VCrossSectionDataSet* G4IonINCLXXPhysics::theNuclNuclData = 0; 
+G4ThreadLocal G4VComponentCrossSection* G4IonINCLXXPhysics::theGGNuclNuclXS = 0;
+G4ThreadLocal G4INCLXXInterface* G4IonINCLXXPhysics::theINCLXXIons = 0;
+G4ThreadLocal G4HadronicInteraction* G4IonINCLXXPhysics::theFTFP = 0;
+G4ThreadLocal G4FTFBuilder* G4IonINCLXXPhysics::theBuilder = 0;
+G4ThreadLocal G4bool G4IonINCLXXPhysics::wasActivated = false;
 
 G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver) :
   G4VPhysicsConstructor("IonINCLXX"),
-  theNuclNuclData(NULL), 
-  theGGNuclNuclXS(NULL),
-  theINCLXXIons(NULL),
-  theFTFP(NULL),
-  theBuilder(NULL),
-  verbose(ver), wasActivated(false)
+  verbose(ver)
 {
   // INCLXX light ion maximum energy is 3.0 GeV/nucleon
   emax_d     = 2 * 3.0 * GeV;
@@ -89,12 +92,7 @@ G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver) :
 G4IonINCLXXPhysics::G4IonINCLXXPhysics(const G4String& name, 
 						     G4int ver)
   :  G4VPhysicsConstructor(name),
-  theNuclNuclData(NULL), 
-  theGGNuclNuclXS(NULL),
-  theINCLXXIons(NULL),
-  theFTFP(NULL),
-  theBuilder(NULL),
-  verbose(ver), wasActivated(false)
+  verbose(ver)
 {
   // INCLXX light ion maximum energy is 3.0 GeV/nucleon
   emax_d     = 2 * 3.0 * GeV;
@@ -110,13 +108,24 @@ G4IonINCLXXPhysics::G4IonINCLXXPhysics(const G4String& name,
 
 G4IonINCLXXPhysics::~G4IonINCLXXPhysics()
 {
+  //For MT need to explicitly set back pointers to zero:
+  //variables are static and if new threads are created we can have problems
+  //since variable is still pointing old value
   if(wasActivated) {
-    delete theBuilder;
-    delete theGGNuclNuclXS;
-    delete theNuclNuclData; 
+    delete theBuilder; theBuilder=0;
+    delete theGGNuclNuclXS; theGGNuclNuclXS=0;
+    delete theNuclNuclData; theGGNuclNuclXS=0;
     G4int i;
-    G4int n = p_list.size();
-    for(i=0; i<n; i++) {delete p_list[i];}
+    if ( p_list ) {
+      G4int n = p_list->size();
+      for(i=0; i<n; i++) {delete (*p_list)[i];}
+      delete p_list; p_list = 0;
+    }
+    if ( model_list) { 
+      G4int n = model_list->size();
+      for(i=0; i<n; i++) { delete (*model_list)[i];}
+      delete model_list; model_list = 0;
+    }
   }
 }
 
@@ -126,14 +135,15 @@ void G4IonINCLXXPhysics::ConstructProcess()
   wasActivated = true;
 
   theINCLXXIons= new G4INCLXXInterface();
-  model_list.push_back(theINCLXXIons);
+  if ( model_list == 0 ) model_list = new std::vector<G4HadronicInteraction*>;
+  model_list->push_back(theINCLXXIons);
 
   G4ExcitationHandler* handler = new G4ExcitationHandler();
   G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
 
   theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
   theFTFP = theBuilder->GetModel();
-  model_list.push_back(theFTFP);
+  model_list->push_back(theFTFP);
 
   theNuclNuclData = new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
 
@@ -151,7 +161,8 @@ void G4IonINCLXXPhysics::AddProcess(const G4String& name,
 				    const G4double inclxxEnergyUpperLimit = 3.0 * GeV)
 {
   G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, p);
-  p_list.push_back(hadi);
+  if ( p_list == 0 ) p_list = new  std::vector<G4HadronInelasticProcess*>;
+  p_list->push_back(hadi);
   G4ProcessManager* pManager = p->GetProcessManager();
   pManager->AddDiscreteProcess(hadi);
   hadi->AddDataSet(theNuclNuclData);    

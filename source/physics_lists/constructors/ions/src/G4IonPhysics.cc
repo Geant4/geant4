@@ -66,18 +66,18 @@ using namespace std;
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4IonPhysics);
 
+G4ThreadLocal G4bool G4IonPhysics::wasActivated = false;
+G4ThreadLocal G4BinaryLightIonReaction* G4IonPhysics::theIonBC = 0;
+G4ThreadLocal G4HadronicInteraction*  G4IonPhysics::theFTFP = 0;
+G4ThreadLocal G4VCrossSectionDataSet* G4IonPhysics::theNuclNuclData = 0; 
+G4ThreadLocal G4VComponentCrossSection*  G4IonPhysics::theGGNuclNuclXS = 0;
+G4ThreadLocal G4FTFBuilder* G4IonPhysics::theBuilder;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4IonPhysics::G4IonPhysics(G4int ver)
-  : G4VPhysicsConstructor("ionInelasticFTFP_BIC"),verbose(ver),
-    wasActivated(false)
+  : G4VPhysicsConstructor("ionInelasticFTFP_BIC"),verbose(ver)
 {
-  theNuclNuclData = 0; 
-  theGGNuclNuclXS = 0;
-  theIonBC = 0;
-  theFTFP = 0;
-  theBuilder = 0;
   SetPhysicsType(bIons);
   if(verbose > 1) { G4cout << "### G4IonPhysics" << G4endl; }
 }
@@ -85,14 +85,8 @@ G4IonPhysics::G4IonPhysics(G4int ver)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4IonPhysics::G4IonPhysics(const G4String& nname)
-  : G4VPhysicsConstructor(nname),verbose(1),
-    wasActivated(false)
+  : G4VPhysicsConstructor(nname),verbose(1)
 {
-  theNuclNuclData = 0; 
-  theGGNuclNuclXS = 0;
-  theIonBC = 0;
-  theFTFP = 0;
-  theBuilder = 0;
   SetPhysicsType(bIons);
   if(verbose > 1) { G4cout << "### G4IonPhysics" << G4endl; }
 }
@@ -101,9 +95,13 @@ G4IonPhysics::G4IonPhysics(const G4String& nname)
 
 G4IonPhysics::~G4IonPhysics()
 {
-  delete theBuilder;
-  delete theGGNuclNuclXS;
-  delete theNuclNuclData; 
+  //Explictly setting pointers to zero is actually needed.
+  //These are static variables, in case we restart threads we need to re-create objects
+  delete theBuilder; theBuilder = 0;
+  delete theGGNuclNuclXS; theGGNuclNuclXS = 0;
+  delete theNuclNuclData; theNuclNuclData = 0;
+  delete theIonBC; theIonBC = 0;
+  delete theFTFP; theFTFP = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
