@@ -52,7 +52,21 @@ $Id$
 	         /process/(in)activate processName
      allows the user to activate/inactivate the processes one by one.
 
- 3- PRIMARY GENERATOR
+ 3- ACTION INITALIZATION
+
+   A newly introduced class, B2ActionInitialization,
+   instantiates and registers to Geant4 kernel all user action classes
+   which are defined thread-local and a run action class (if present)
+   which is defined both thread-local and global.
+
+   The thread-local action classes are defined in
+     B2ActionInitialization::Build()
+   and the global run action class is defined in
+     B2ActionInitialization::BuildForMaster().
+   Note that B2[a,b]ActionInitialization::Build() is also used to
+   instatiate user action clasess in sequential mode.
+
+ 4- PRIMARY GENERATOR
 
      The primary generator action class employs the G4ParticleGun. 
      The primary kinematics consists of a single particle which hits the target 
@@ -60,7 +74,7 @@ $Id$
      and its energy can be changed via the G4 built-in commands of 
      the G4ParticleGun class. 
   
- 4- RUNS and EVENTS
+ 5- RUNS and EVENTS
  
      A run is a set of events.
  
@@ -81,7 +95,7 @@ $Id$
      G4RunManager is also informed how to SetRandomNumberStore for storing 
      initial random number seeds per run or per event.         
 
- 5- USER LIMITS
+ 6- USER LIMITS
  
     This example also illustrates how to introduce tracking constraints
     like maximum step length, minimum kinetic energy etc. via the G4UserLimits
@@ -94,7 +108,7 @@ $Id$
 
     /B2/det/stepMax 1.0 mm
 
- 6- DETECTOR RESPONSE
+ 7- DETECTOR RESPONSE
  
      A HIT is a step per step record of all the information needed to
      simulate and analyse the detector response.

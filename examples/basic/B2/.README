@@ -52,7 +52,21 @@ This example simulates a simplified fixed target experiment.
 \endverbatim
    allows the user to activate/inactivate the processes one by one.
 
-\section B2_s3 PRIMARY GENERATOR
+\section B2_s3 ACTION INITALIZATION
+
+   A newly introduced class, B2ActionInitialization,
+   instantiates and registers to Geant4 kernel all user action classes
+   which are defined thread-local and a run action class (if present)
+   which is defined both thread-local and global.
+
+   The thread-local action classes are defined in
+     B2ActionInitialization::Build()
+   and the global run action class is defined in
+     B2ActionInitialization::BuildForMaster().
+   Note that B2ActionInitialization::Build() is also used to instatiate
+   user action clasess in sequential mode.
+
+\section B2_s4 PRIMARY GENERATOR
 
    The primary generator action class employs the G4ParticleGun. 
    The primary kinematics consists of a single particle which hits the target 
@@ -60,7 +74,7 @@ This example simulates a simplified fixed target experiment.
    and its energy can be changed via the G4 built-in commands of 
    the G4ParticleGun class. 
   
-\section B2_s4 RUNS and EVENTS
+\section B2_s5 RUNS and EVENTS
  
    A run is a set of events.
  
@@ -81,7 +95,7 @@ This example simulates a simplified fixed target experiment.
    G4RunManager is also informed how to SetRandomNumberStore for storing 
    initial random number seeds per run or per event.         
 
- \section B2_s5 USER LIMITS
+ \section B2_s6 USER LIMITS
  
    This example also illustrates how to introduce tracking constraints
    like maximum step length, minimum kinetic energy etc. via the G4UserLimits
@@ -96,7 +110,7 @@ This example simulates a simplified fixed target experiment.
 /B2/det/stepMax 1.0 mm
 \endverbatim
 
-\section B2_s6 DETECTOR RESPONSE
+\section B2_s7 DETECTOR RESPONSE
  
    A HIT is a step per step record of all the information needed to
    simulate and analyse the detector response.
