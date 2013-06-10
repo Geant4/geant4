@@ -52,7 +52,7 @@ public:
   virtual void ConstructProcess();
 
 private:
-  G4RadioactiveDecay*  theRadioactiveDecay;
+  //G4RadioactiveDecay*  theRadioactiveDecay;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -66,9 +66,9 @@ class G4DecayPhysics : public G4VPhysicsConstructor
   virtual G4Decay* GetDecayProcess() { return fDecayProcess; }
 
 private:
-  G4Decay* fDecayProcess;
+  static G4ThreadLocal G4Decay* fDecayProcess;
   G4int    verbose;
-  G4bool   wasActivated;
+  static G4ThreadLocal G4bool   wasActivated;
 };
 
 #endif

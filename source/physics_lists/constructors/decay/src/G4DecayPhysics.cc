@@ -57,21 +57,21 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4DecayPhysics);
 
+G4ThreadLocal G4Decay* G4DecayPhysics::fDecayProcess = 0;
+G4ThreadLocal G4bool G4DecayPhysics::wasActivated = false;
+
 G4DecayPhysics::G4DecayPhysics(G4int ver)
-  :  G4VPhysicsConstructor("Decay"), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor("Decay"), verbose(ver)
 {
-  fDecayProcess = 0;
 }
 
 G4DecayPhysics::G4DecayPhysics(const G4String& name, G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver), wasActivated(false)
+  :  G4VPhysicsConstructor(name), verbose(ver)
 {
-  fDecayProcess = 0;
 }
 
 G4DecayPhysics::~G4DecayPhysics()
 {
-  delete fDecayProcess;
 }
 
 void G4DecayPhysics::ConstructParticle()

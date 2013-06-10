@@ -42,18 +42,18 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
-  :  G4VPhysicsConstructor("G4RadioactiveDecay"), theRadioactiveDecay(0)
+:  G4VPhysicsConstructor("G4RadioactiveDecay")//, theRadioactiveDecay(0)
 {}
 
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String& name)
-  :  G4VPhysicsConstructor(name), theRadioactiveDecay(0)
+:  G4VPhysicsConstructor(name)//, theRadioactiveDecay(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4RadioactiveDecayPhysics::~G4RadioactiveDecayPhysics()
 {
-  delete theRadioactiveDecay;
+  //delete theRadioactiveDecay;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

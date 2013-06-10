@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-Jun-2013, Andrea Dotti 		(phys-ctor-decay-V09-06-02)
+- Bug fixes for MT: wasActivated flag becomes TLS
+
 29-Mar-2013, Andrea Dotti		(phys-ctor-decay-V09-06-01)
 - Changes needed for MT: now G4VUserPhysicsList is a split class
 
