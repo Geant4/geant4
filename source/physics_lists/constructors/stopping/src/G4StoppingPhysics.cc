@@ -61,11 +61,13 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4StoppingPhysics);
 
+G4ThreadLocal G4bool G4StoppingPhysics::wasActivated = false;
+
 G4StoppingPhysics::
 G4StoppingPhysics( G4int ver ) :  
   G4VPhysicsConstructor( "stopping" ),
-  muProcess( 0 ), hBertiniProcess( 0 ), hFritiofProcess( 0 ),
-  verbose( ver ), wasActivated( false ) , 
+//muProcess( 0 ), hBertiniProcess( 0 ), hFritiofProcess( 0 ),
+  verbose( ver ),
   useMuonMinusCapture( true ) 
 {
   if ( verbose > 1 ) G4cout << "### G4StoppingPhysics" << G4endl;
@@ -76,8 +78,8 @@ G4StoppingPhysics::
 G4StoppingPhysics( const G4String& name, G4int ver, 
                                     G4bool UseMuonMinusCapture ) :
   G4VPhysicsConstructor( name ),
-  muProcess( 0 ), hBertiniProcess( 0 ), hFritiofProcess( 0 ),
-  verbose( ver ), wasActivated( false ) ,
+  // muProcess( 0 ), hBertiniProcess( 0 ), hFritiofProcess( 0 ),
+  verbose( ver ), 
   useMuonMinusCapture( UseMuonMinusCapture ) 
 {
   if ( verbose > 1 ) G4cout << "### G4StoppingPhysics" << G4endl;
@@ -105,6 +107,10 @@ void G4StoppingPhysics::ConstructProcess() {
 		   	    << wasActivated << G4endl;
   if ( wasActivated ) return;
   wasActivated = true;
+
+  G4MuonMinusCapture* muProcess;
+  G4HadronicAbsorptionBertini* hBertiniProcess;
+  G4HadronicAbsorptionFritiof* hFritiofProcess;
 
   if ( useMuonMinusCapture ) {
     muProcess = new G4MuonMinusCapture();

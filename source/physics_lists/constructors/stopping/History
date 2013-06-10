@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+08-Jun-2013, Andrea Dotti 		(phys-ctor-stopping-V09-06-02)
+- Bug fixing for MT: make wasActivated flag TLS and remove private
+  data member making them local variables in ConstructProcess
+
 29-Mar-2013, Andrea Dotti		(phys-ctor-stopping-V09-06-01)
 - Changes needed for MT: now G4VUserPhysicsList is a split class
 

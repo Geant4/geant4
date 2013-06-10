@@ -85,12 +85,12 @@ public:
 
 private:
 
-  G4MuonMinusCapture* muProcess;
-  G4HadronicAbsorptionBertini* hBertiniProcess;
-  G4HadronicAbsorptionFritiof* hFritiofProcess;
+  //G4MuonMinusCapture* muProcess;
+  //G4HadronicAbsorptionBertini* hBertiniProcess;
+  //G4HadronicAbsorptionFritiof* hFritiofProcess;
   
   G4int  verbose;
-  G4bool wasActivated;
+  static G4ThreadLocal G4bool wasActivated;
   G4bool useMuonMinusCapture;
 };
 
