@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+10 June 2013 - tag dnaphysics-V09-06-04 - S. Incerti 
+- Withdraw RunAction from ActionInitialization
+
 28 May 2013 - tag dnaphysics-V09-06-03 - S. Incerti 
 - changed modified density
 - removed standard process tagging in SteppingAction
