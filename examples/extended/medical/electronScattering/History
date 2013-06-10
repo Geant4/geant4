@@ -14,8 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-06-13 mma (electronScattering-V09-06-07)
+- Cosmetic in SteppingAction.     
      
-10-04-13 mma (electronScatterin-V09-06-06)
+10-04-13 mma (electronScattering-V09-06-06)
 - HistoManager functionalities transfered to G4Analysis and its messenger.
     - userAction classes and all macros affected
          
