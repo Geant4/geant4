@@ -41,6 +41,14 @@
 #include "G4EmMessenger.hh"
 #include "G4EmExtraPhysics.hh"
 
+
+//A. Dotti (8Jun2013): This class does not need changes for MT
+// Note that in general "physics" realated commands should not 
+// be executed by threads, but this is a special case. Actually the command
+// executes a building of processes if it was not build before, thus we need 
+// all threads to process commands.
+// The logic of thread-private objects is in G4EmExtraPhysics class
+
 G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
 {
   theB = ab;

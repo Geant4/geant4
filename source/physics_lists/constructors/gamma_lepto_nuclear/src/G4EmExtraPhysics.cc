@@ -59,11 +59,17 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmExtraPhysics);
 
+G4ThreadLocal G4bool G4EmExtraPhysics::wasBuilt     = false;
+G4ThreadLocal G4bool G4EmExtraPhysics::munActivated = false;
+G4ThreadLocal G4bool G4EmExtraPhysics::gnActivated  = false;
+G4ThreadLocal G4bool G4EmExtraPhysics::synActivated = false;
+G4ThreadLocal G4bool G4EmExtraPhysics::synchOn      = false;
+G4ThreadLocal G4bool G4EmExtraPhysics::gammNucOn    = true;
+G4ThreadLocal G4bool G4EmExtraPhysics::muNucOn      = false;
+
 
 G4EmExtraPhysics::G4EmExtraPhysics(G4int ver): 
-  G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
-  munActivated(false), synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 
-  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), muNucProcess(0), muNucModel(0),
+  G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"),
   verbose(ver)
 {
   theMessenger = new G4EmMessenger(this);
@@ -72,9 +78,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(G4int ver):
 }
 
 G4EmExtraPhysics::G4EmExtraPhysics(const G4String&): 
-  G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"), wasBuilt(false), gnActivated(false), 
-  munActivated(false), synActivated(false), synchOn(false), gammNucOn(true), muNucOn(false), 
-  theElectronSynch(0), thePositronSynch(0), theGNPhysics(0), muNucProcess(0), muNucModel(0),
+  G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"),
   verbose(1)
 {
   theMessenger = new G4EmMessenger(this);
@@ -85,11 +89,6 @@ G4EmExtraPhysics::G4EmExtraPhysics(const G4String&):
 G4EmExtraPhysics::~G4EmExtraPhysics()
 {
   delete theMessenger;
-  delete theElectronSynch;
-  delete thePositronSynch;
-  delete theGNPhysics;
-  delete muNucProcess;
-  delete muNucModel;
 }
 
 void G4EmExtraPhysics::Synch(G4String & newState)
@@ -141,8 +140,8 @@ void G4EmExtraPhysics::BuildMuonNuclear()
   munActivated = true;
   G4ProcessManager * pManager = 0;
 
-  muNucProcess = new G4MuonNuclearProcess();
-  muNucModel = new G4MuonVDNuclearModel();
+  G4MuonNuclearProcess* muNucProcess = new G4MuonNuclearProcess();
+  G4MuonVDNuclearModel* muNucModel = new G4MuonVDNuclearModel();
   muNucProcess->RegisterMe(muNucModel);
 
   pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
@@ -157,7 +156,7 @@ void G4EmExtraPhysics::BuildGammaNuclear()
   if(gnActivated) return;
   gnActivated = true;
 
-  theGNPhysics = new G4BertiniElectroNuclearBuilder();
+  G4BertiniElectroNuclearBuilder* theGNPhysics = new G4BertiniElectroNuclearBuilder();
   theGNPhysics->Build();
 }
 
@@ -168,10 +167,10 @@ void G4EmExtraPhysics::BuildSynch()
   G4ProcessManager * pManager = 0;
 
   pManager = G4Electron::Electron()->GetProcessManager();
-  theElectronSynch = new G4SynchrotronRadiation();
+  G4SynchrotronRadiation* theElectronSynch = new G4SynchrotronRadiation();
   pManager->AddDiscreteProcess(theElectronSynch);
 
   pManager = G4Positron::Positron()->GetProcessManager();
-  thePositronSynch = new G4SynchrotronRadiation();
+  G4SynchrotronRadiation* thePositronSynch = new G4SynchrotronRadiation();
   pManager->AddDiscreteProcess(thePositronSynch);
 }

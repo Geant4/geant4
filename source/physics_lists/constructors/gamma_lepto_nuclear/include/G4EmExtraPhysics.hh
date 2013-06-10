@@ -76,21 +76,15 @@ private:
   void BuildGammaNuclear();
   void BuildMuonNuclear();
 
-  G4bool wasBuilt;
-  G4bool gnActivated;
-  G4bool munActivated;
-  G4bool synActivated;
-  G4bool synchOn;
-  G4bool gammNucOn;
-  G4bool muNucOn;
+  static G4ThreadLocal G4bool wasBuilt;
+  static G4ThreadLocal G4bool gnActivated;
+  static G4ThreadLocal G4bool munActivated;
+  static G4ThreadLocal G4bool synActivated;
+  static G4ThreadLocal G4bool synchOn;
+  static G4ThreadLocal G4bool gammNucOn;
+  static G4ThreadLocal G4bool muNucOn;
 
   G4EmMessenger*           theMessenger;
-  G4SynchrotronRadiation*  theElectronSynch;
-  G4SynchrotronRadiation*  thePositronSynch;
-  G4BertiniElectroNuclearBuilder* theGNPhysics;
-  G4MuonNuclearProcess* muNucProcess;
-  G4MuonVDNuclearModel* muNucModel;
-
   G4int verbose;
 };
 

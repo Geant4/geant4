@@ -43,6 +43,9 @@
 #include "G4ElectronNuclearProcess.hh"
 #include "G4PositronNuclearProcess.hh"
 
+//A. Dotti (June2013): No need to change this class for MT
+// Since each thread owns its own instance (created by G4EmExtraPhysics)
+
 class G4BertiniElectroNuclearBuilder 
 {
   public: 
