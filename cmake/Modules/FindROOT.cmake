@@ -8,7 +8,7 @@
 
 
 find_program(ROOT_CONFIG_EXECUTABLE root-config
-  PATHS $ENV{ROOTSYS}/bin)
+  PATHS ${ROOTSYS}/bin $ENV{ROOTSYS}/bin)
 
 if(NOT ROOT_CONFIG_EXECUTABLE)
   set(ROOT_FOUND FALSE)
@@ -146,12 +146,13 @@ function(REFLEX_GENERATE_DICTIONARY dictionary)
   foreach( d ${defs})    
    set(definitions ${definitions} -D${d})
   endforeach()
-  #---Nanes and others---------------------------------------
+  #---Names and others---------------------------------------
   set(gensrcdict ${dictionary}.cpp)
   if(MSVC)
     set(gccxmlopts "--gccxmlopt=\"--gccxml-compiler cl\"")
+  elseif(APPLE)
+    set(gccxmlopts "--gccxmlopt=--gccxml-compiler g++ ")
   else()
-    #set(gccxmlopts "--gccxmlopt=\'--gccxml-cxxflags -m64 \'")
     set(gccxmlopts)
   endif()  
   #set(rootmapname ${dictionary}Dict.rootmap)

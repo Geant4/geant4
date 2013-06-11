@@ -29,6 +29,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+11th June 2013 - Pere Mato (cmake-V09-06-14)
+- Modules/FindROOT.cmake : Minor changes for gccxml dictionary generation. 
+
 28th May 2013 - Ben Morgan (cmake-V09-06-13)
 - Modules/Geant4LibraryBuildOptions.cmake : Add option 
   GEANT4_BUILD_TPMALLOC. It defaults to OFF, and is set to OFF if
