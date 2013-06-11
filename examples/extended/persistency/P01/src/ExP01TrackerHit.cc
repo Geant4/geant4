@@ -43,7 +43,7 @@ G4Allocator<ExP01TrackerHit> ExP01TrackerHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ExP01TrackerHit::ExP01TrackerHit() {}
+ExP01TrackerHit::ExP01TrackerHit(): trackID(0), chamberNb(0), edep(0), pos(0,0,0) {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

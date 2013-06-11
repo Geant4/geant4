@@ -44,11 +44,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP01TrackerSD::ExP01TrackerSD(G4String name)
-:G4VSensitiveDetector(name)
+  :G4VSensitiveDetector(name), fTrackerCollection(0), fHCID(0)
 {
   G4String HCname = name + "_HC";
   collectionName.insert(HCname);
-  G4cout << collectionName.size() << "   CalorimeterSD name:  " << name << " collection Name: " << HCname << G4endl;
+  G4cout << collectionName.size() << "   CalorimeterSD name:  " << name << " collection Name: " 
+         << HCname << G4endl;
   fHCID = -1;
 }
 
@@ -66,7 +67,8 @@ void ExP01TrackerSD::Initialize(G4HCofThisEvent* HCE)
   fTrackerCollection = new ExP01TrackerHitsCollection
                           (SensitiveDetectorName,collectionName[0]); 
   if (fHCID < 0) {
-    G4cout << "CalorimeterSD::Initialize:  " << SensitiveDetectorName << "   " << collectionName[0] << G4endl;
+    G4cout << "CalorimeterSD::Initialize:  " << SensitiveDetectorName << "   " 
+           << collectionName[0] << G4endl;
     fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
     
   }

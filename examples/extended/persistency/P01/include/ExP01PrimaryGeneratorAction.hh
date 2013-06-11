@@ -52,7 +52,7 @@ class ExP01PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~ExP01PrimaryGeneratorAction();
 
   public:
-    void GeneratePrimaries(G4Event*);
+    virtual void GeneratePrimaries(G4Event*);
 
   private:
     G4ParticleGun* particleGun;

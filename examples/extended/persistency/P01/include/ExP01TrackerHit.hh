@@ -57,8 +57,8 @@ class ExP01TrackerHit : public G4VHit
       inline void* operator new(size_t);
       inline void  operator delete(void*);
 
-      void Draw();
-      void Print();
+      virtual void Draw();
+      virtual void Print();
 
   public:
   

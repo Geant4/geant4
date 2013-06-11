@@ -54,6 +54,7 @@ ExP01ChamberParameterisation::ExP01ChamberParameterisation(
    fSpacing    =  spacingZ;
    fHalfLengthFirst = 0.5 * lengthInitial; 
    // fHalfLengthLast = lengthFinal;
+   fHalfLengthIncr = 0;
    if( NoChambers > 0 ){
       fHalfLengthIncr =  0.5 * (lengthFinal-lengthInitial)/NoChambers;
       if (spacingZ < widthChamber) {

@@ -53,7 +53,7 @@ class ExP01DetectorMessenger: public G4UImessenger
     ExP01DetectorMessenger(ExP01DetectorConstruction*);
    ~ExP01DetectorMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
     ExP01DetectorConstruction* myDetector;

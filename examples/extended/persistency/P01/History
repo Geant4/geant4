@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 10th, 2013 W. Pokorski (exampleP01-V09-06-00)
+- changes to comply to coding rules
+
 May 27th, 2013 I. Hrivnacova
 - Fixed handling required packages/options in CMake files
 

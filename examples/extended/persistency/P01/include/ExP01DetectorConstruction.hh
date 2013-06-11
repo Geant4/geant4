@@ -58,7 +58,7 @@ class ExP01DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
   
-     G4VPhysicalVolume* Construct();
+     virtual G4VPhysicalVolume* Construct();
      
      const 
      G4VPhysicalVolume* GetTracker() {return physiTracker;};

@@ -47,7 +47,7 @@ class ExP01SteppingAction : public G4UserSteppingAction
     ExP01SteppingAction();
    ~ExP01SteppingAction(){};
 
-    void UserSteppingAction(const G4Step*);
+    virtual void UserSteppingAction(const G4Step*);
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
