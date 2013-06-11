@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+10 May 13: V.Ivanchenko (emstand-V09-06-45)
+- G4hIonisation - removed debug printout
+
 07 May 13: V.Ivanchenko (emstand-V09-06-44)
 - G4hIonisation - add special treatment for ions
 

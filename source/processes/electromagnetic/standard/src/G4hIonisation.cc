@@ -154,8 +154,8 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     G4String pname = part->GetParticleName();
     G4double q = part->GetPDGCharge();
 
-    G4cout << " G4hIonisation::InitialiseEnergyLossProcess " << pname 
-	   << "  " << bpart << G4endl;
+    //G4cout << " G4hIonisation::InitialiseEnergyLossProcess " << pname 
+    //   << "  " << bpart << G4endl;
 
     // standard base particles
     if(part == bpart || pname == "proton" ||
