@@ -68,13 +68,10 @@
 // 30 June 1999, P R Truscott, DERA UK
 // Version number update 0.b.2 -> 0.b.3, but no functional change.
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-////////////////////////////////////////////////////////////////////////////////
-//
+
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-////////////////////////////////////////////////////////////////////////////////
-//
+
 class Tst18GeometryConstruction : public G4VUserDetectorConstruction
 {
   public:
@@ -82,7 +79,8 @@ class Tst18GeometryConstruction : public G4VUserDetectorConstruction
     ~Tst18GeometryConstruction ();
 
   public:
-     G4VPhysicalVolume *Construct ();
+     G4VPhysicalVolume* Construct();
+     void ConstructSDandField();
 
   private:
      G4int nel;
@@ -94,6 +92,5 @@ class Tst18GeometryConstruction : public G4VUserDetectorConstruction
      G4double aSphere_r1;
      G4double aSphere_r2;
 };
-////////////////////////////////////////////////////////////////////////////////
 #endif
 

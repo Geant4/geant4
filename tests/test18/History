@@ -15,12 +15,27 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 June 2013  Dennis Wright (test18-V09-06-01)
+----------------------------------------------
+- Migrate to multi-threaded:
+    added option to use G4MTRunManager in test18.cc
+    created class Tst18ActionInitialization and moved some user init methods
+      there
+    added empty method Tst18GeometryConstruction::ConstructSDandField()
+
+- added CMakeLists_Standalone.txt to be used for stand-alone running 
+  (developed by Makoto Asai)
+
+- updated README for cmake build  
+
 Dec 13, 2012  Michael Kelsey (test18-V09-06-00)
+-----------------------------------------------
 - Replace LHEP-style pi/K stopping processes with Bertini-based.  This also
   eliminates the "TRIUMPH_STOP_KMINUS" and "TRIUMPH_STOP_PIMINUS"
   preprocessor macros.
 
 Oct 9, 2012  Gabriele Cosmo (test18-V09-05-00)
+----------------------------------------------
 - Explicit inclusion of units and constants headers.
 
 Sep 10, 2011  Pere Mato (test18-V09-04-02)

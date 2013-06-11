@@ -23,29 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
-// 
 // --------------------------------------------------------------
 //      GEANT 4 - test18.cc
-//
-// --------------------------------------------------------------
-// Comments
-//
-// 
 // --------------------------------------------------------------
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 
+#include "Tst18ActionInitialization.hh"
 #include "Tst18GeometryConstruction.hh"
 #include "Tst18PhysicsList.hh"
-#include "Tst18EventAction.hh"
-#include "Tst18RunAction.hh"
-#include "Tst18SteppingAction.hh"
-#include "Tst18PrimaryGeneratorAction.hh"
 #include "Randomize.hh"
 
 #include <vector>
@@ -57,22 +52,20 @@ std::vector<G4double> Times;
 
 int main(int argc,char** argv)
 {
-
-  // Construct the default run manager
+  // Run manager
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else
   G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
 
-  Tst18GeometryConstruction* Geometry = new Tst18GeometryConstruction;
-  runManager->SetUserInitialization(Geometry);
+  runManager->SetUserInitialization(new Tst18GeometryConstruction);
   runManager->SetUserInitialization(new Tst18PhysicsList);
+  runManager->SetUserInitialization(new Tst18ActionInitialization);
 
-  // set mandatory user action class
-  runManager->SetUserAction(new Tst18PrimaryGeneratorAction);
-  runManager->SetUserAction(new Tst18RunAction);
-  runManager->SetUserAction(new Tst18EventAction);
-  runManager->SetUserAction(new Tst18SteppingAction);
-  // Initialize G4 kernel
   runManager->Initialize();
 
   // get the pointer to the User Interface manager 
@@ -90,7 +83,6 @@ int main(int argc,char** argv)
   else {
  
     // Create a pointer to the user interface manager.
-    //
     G4String command = "/control/execute ";
     for (int i=2; i<=argc; i++) {
        G4String macroFileName = argv[i-1];
@@ -99,8 +91,6 @@ int main(int argc,char** argv)
   }                                  
 
   // job termination
-
   delete runManager;
-
   return 0;
 }
