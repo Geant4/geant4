@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 June 2013  M.Karamitros tag test60-V09-06-04
+            - Convert RunAction::fProcCounter into an object rather than a pointer
+
 6 June 2013   M.Karamitros tag test60-V09-06-03
             - Fix bugs after migration to MT 
 

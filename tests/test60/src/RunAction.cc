@@ -34,7 +34,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction() : fpProcCounter(0)
+RunAction::RunAction()
 {  
 	fpPrimary = 0;
 	fTotalCount = 0;
@@ -45,15 +45,12 @@ RunAction::RunAction() : fpProcCounter(0)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 RunAction::~RunAction()
-{
-	delete fpProcCounter;
-}
+{}
 
 void RunAction::Initialize()
 {
 	fpDetector = (DetectorConstruction*) G4RunManager::GetRunManager()->GetUserDetectorConstruction();
 	fpPrimary = (PrimaryGeneratorAction*) G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction();
-	fpProcCounter = new ProcessesCount;
 	fInitialized = true;
 }
 
@@ -62,7 +59,7 @@ void RunAction::Initialize()
 void RunAction::BeginOfRunAction(const G4Run*)
 {  
 	if(fInitialized == false) Initialize();
-	else fpProcCounter->clear();
+	else fProcCounter.clear();
 
 	fE_Transfered = 0.;
 }
@@ -72,20 +69,20 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::CountProcesses(G4String procName)
 {
 	//does the process  already encounted ?
-	size_t nbProc = fpProcCounter->size();
+	size_t nbProc = fProcCounter.size();
 	size_t i = 0;
-	while ((i<nbProc)&&((*fpProcCounter)[i]->GetName()!=procName)) i++;
-	if (i == nbProc) fpProcCounter->push_back( new OneProcessCount(procName));
+	while ((i<nbProc)&&(fProcCounter[i]->GetName()!=procName)) i++;
+	if (i == nbProc) fProcCounter.push_back( new OneProcessCount(procName));
 
-	(*fpProcCounter)[i]->Count();
+	fProcCounter[i]->Count();
 }
 
 void RunAction::ResetCounter()
 {
 	// delete and remove all contents in ProcCounter
-	while (fpProcCounter->size()>0){
-		OneProcessCount* aProcCount=fpProcCounter->back();
-		fpProcCounter->pop_back();
+	while (fProcCounter.size()>0){
+		OneProcessCount* aProcCount=fProcCounter.back();
+		fProcCounter.pop_back();
 		delete aProcCount;
 	}
 	// delete ProcCounter;
@@ -117,10 +114,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 	//frequency of processes
 	G4cout << "\n Process calls frequency --->";
 
-	for (size_t i=0; i< fpProcCounter->size();i++)
+	for (size_t i=0; i< fProcCounter.size();i++)
 	{
-		G4String procName = (*fpProcCounter)[i]->GetName();
-		G4int    count    = (*fpProcCounter)[i]->GetCounter();
+		G4String procName = (fProcCounter)[i]->GetName();
+		G4int    count    = (fProcCounter)[i]->GetCounter();
 		G4cout << "\t" << procName << " = " << count;
 		if (procName == "Transportation") survive = count;
 	}

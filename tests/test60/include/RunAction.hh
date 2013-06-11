@@ -70,7 +70,7 @@ private:
 
   DetectorConstruction* fpDetector;
   PrimaryGeneratorAction* fpPrimary;
-  ProcessesCount*         fpProcCounter;
+  ProcessesCount         fProcCounter;
   G4int fTotalCount;      //all processes counter
   G4double fE_Transfered;    //energy transfered to charged secondaries
     
