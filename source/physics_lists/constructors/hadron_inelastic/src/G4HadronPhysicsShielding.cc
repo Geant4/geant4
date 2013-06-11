@@ -87,7 +87,9 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0) */
     , QuasiElastic(false)
-  /*    , theCHIPSInelastic(0)
+  /*    , theChipsKaonMinus(0)
+    , theChipsKaonPlus(0)
+    , theChipsKaonZero(0)
     , theBGGxsNeutron(0)
     , theNeutronHPJENDLHEInelastic(0)
     , theBGGxsProton(0) */
@@ -112,7 +114,9 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool 
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0) */
     , QuasiElastic(quasiElastic)
-  /*    , theCHIPSInelastic(0)
+  /*    , theChipsKaonMinus(0)
+    , theChipsKaonPlus(0)
+    , theChipsKaonZero(0)
     , theBGGxsNeutron(0)
     , theNeutronHPJENDLHEInelastic(0)
     , theBGGxsProton(0) */
@@ -182,7 +186,6 @@ G4HadronPhysicsShielding::~G4HadronPhysicsShielding()
   delete tpdata->theAntiBaryon;
   delete tpdata->theFTFPAntiBaryon;
 
-  delete tpdata->theCHIPSInelastic;
   delete tpdata->theBGGxsNeutron;
   delete tpdata->theNeutronHPJENDLHEInelastic;
   delete tpdata->theBGGxsProton;
@@ -231,13 +234,15 @@ void G4HadronPhysicsShielding::ConstructProcess()
 
   tpdata->thePiK->Build();
   // use CHIPS cross sections also for Kaons
-  
-  G4CrossSectionDataSetRegistry* registry = G4CrossSectionDataSetRegistry::Instance();
+
+  tpdata->theChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
+  tpdata->theChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
+  tpdata->theChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
     
-  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name()));
-  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name()));
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
-  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(registry->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name()));
+  G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(tpdata->theChipsKaonMinus);
+  G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(tpdata->theChipsKaonPlus);
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroShort::KaonZeroShort())->AddDataSet(tpdata->theChipsKaonZero );
+  G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(tpdata->theChipsKaonZero );
 
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();

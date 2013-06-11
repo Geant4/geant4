@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-Jun-2013, Alberto Ribon		(phys-ctor-hinelastic-V09-06-11)
+- Improved use of kaon cross sections in G4HadronPhysicsShielding. 
+
 09-Jun-2013, Andrea Dotti		(phys-ctor-hinelastic-V09-06-10)
 - Fix for MT, make private data members TLS. 
 

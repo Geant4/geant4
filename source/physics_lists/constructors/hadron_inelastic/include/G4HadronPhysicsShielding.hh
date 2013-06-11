@@ -101,7 +101,10 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
-      G4VCrossSectionDataSet * theCHIPSInelastic;
+      G4VCrossSectionDataSet * theChipsKaonMinus;
+      G4VCrossSectionDataSet * theChipsKaonPlus;
+      G4VCrossSectionDataSet * theChipsKaonZero;
+ 
       G4VCrossSectionDataSet * theBGGxsNeutron;
       G4VCrossSectionDataSet * theNeutronHPJENDLHEInelastic;
       G4VCrossSectionDataSet * theBGGxsProton;
