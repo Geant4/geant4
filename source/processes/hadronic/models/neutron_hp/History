@@ -14,6 +14,36 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10 Jun 2013 Tatsumi Koi (hadr-hpn-V09-06-15)
+-Fix "UNINIT", "FORWARD_NULL"
+	src/G4NeutronHPThermalScattering.cc
+-Replace "abs" to "fabs"
+	src/G4NeutronHPThermalScatteringData.cc
+
+
+7 Jun 2013 Tatsumi Koi (hadr-hpn-V09-06-14)
+-Fix for hadr-hpn-V09-06-13
+	src/G4NeutronHPThermalScattering.cc
+-Fix for "INVALIDATE_ITERATOR"
+-Enable to use single temperature data file
+	src/G4NeutronHPThermalScatteringData.cc
+-Fix for extrapolation problem reported by CIEMAT group
+	src/G4NeutronHPThermalScattering.cc
+-Add trick for fixing problem in dynamically generated materials
+	include/G4NeutronHPThermalScattering.hh
+	src/G4NeutronHPThermalScattering.cc
+
+
+29 May 2013 Tatsumi Koi (hadr-hpn-V09-06-13)
+-Adding a capability register user prepared thermal scattering file
+	include/G4NeutronHPThermalScatteringNames.hh
+	include/G4NeutronHPThermalScatteringData.hh
+	include/G4NeutronHPThermalScattering.hh
+	src/G4NeutronHPThermalScatteringData.cc
+	src/G4NeutronHPThermalScattering.cc
+	src/G4NeutronHPThermalScatteringNames.cc
+
+
 28 May 2013 Tatsumi Koi (hadr-hpn-V09-06-12)
 -Adding a capability to disable adjustment of final state photons in capture 
 Fix for Bugzilla #1279

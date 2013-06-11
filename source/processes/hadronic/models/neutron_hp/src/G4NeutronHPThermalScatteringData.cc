@@ -482,25 +482,37 @@ G4int G4NeutronHPThermalScatteringData::getTS_ID ( const G4Material* material , 
 
 G4double G4NeutronHPThermalScatteringData::GetX ( const G4DynamicParticle* aP, G4double aT , std::map < G4double , G4NeutronHPVector* >* amapTemp_EnergyCross )
 {
+
    G4double result = 0;
    if ( amapTemp_EnergyCross->size() == 0 ) return result;
 
-   std::map< G4double , G4NeutronHPVector* >::iterator it; 
-   for ( it = amapTemp_EnergyCross->begin() ; it != amapTemp_EnergyCross->end() ; it++ )
-   {
-       if ( aT < it->first ) break;
-   } 
-   if ( it == amapTemp_EnergyCross->begin() ) it++;  // lower than first
-      else if ( it == amapTemp_EnergyCross->end() ) it--;  // upper than last
 
    G4double eKinetic = aP->GetKineticEnergy();
+
+   if ( amapTemp_EnergyCross->size() == 1 ) { 
+      if ( fabs ( aT - amapTemp_EnergyCross->begin()->first ) / amapTemp_EnergyCross->begin()->first > 0.1 ) {
+         G4cout << "G4NeutronHPThermalScatteringData:: The temperature of material (" 
+                << aT/kelvin << "K) is different more than 10% from temperature of thermal scattering file expected (" 
+                << amapTemp_EnergyCross->begin()->first << "K). Result may not be reliable."
+         << G4endl;
+      }
+      result = amapTemp_EnergyCross->begin()->second->GetXsec ( eKinetic ); 
+      return result;
+   }
+
+   std::map< G4double , G4NeutronHPVector* >::iterator it; 
+   for ( it = amapTemp_EnergyCross->begin() ; it != amapTemp_EnergyCross->end() ; it++ ) {
+       if ( aT < it->first ) break;
+   } 
+   if ( it == amapTemp_EnergyCross->begin() && it != amapTemp_EnergyCross->end() ) it++;  // lower than the first
+   if ( it != amapTemp_EnergyCross->begin() && it == amapTemp_EnergyCross->end() ) it--;  // upper than the last
 
    G4double TH = it->first;
    G4double XH = it->second->GetXsec ( eKinetic ); 
 
    //G4cout << "G4NeutronHPThermalScatteringData::GetX TH " << TH << " E " << eKinetic <<  " XH " << XH << G4endl;
 
-   it--;
+   if ( it != amapTemp_EnergyCross->begin() ) it--;
    G4double TL = it->first;
    G4double XL = it->second->GetXsec ( eKinetic ); 
 
@@ -517,3 +529,7 @@ G4double G4NeutronHPThermalScatteringData::GetX ( const G4DynamicParticle* aP, G
 }
 
 
+void G4NeutronHPThermalScatteringData::AddUserThermalScatteringFile( G4String nameG4Element , G4String filename )
+{
+   names->AddThermalElement( nameG4Element , filename );
+}
