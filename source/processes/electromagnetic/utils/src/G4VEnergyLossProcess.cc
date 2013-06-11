@@ -147,7 +147,6 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-//#include "G4Proton.hh"
 #include "G4ProcessManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4ProductionCutsTable.hh"
@@ -256,10 +255,12 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
 G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
+  /*
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess destruct " << GetProcessName()
 	   << "  " << this << "  " << baseParticle << G4endl;
   }
+  */
   Clean();
 
   if ( !baseParticle && G4LossTableManager::Instance()->IsMaster() ) {
@@ -317,10 +318,12 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
 
 void G4VEnergyLossProcess::Clean()
 {
+  /*
   if(1 < verboseLevel) { 
     G4cout << "G4VEnergyLossProcess::Clear() for " << GetProcessName() 
 	   << G4endl;
   }
+  */
   delete [] idxSCoffRegions;
 
   tablesAreBuilt = false;
@@ -401,6 +404,12 @@ void
 G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
 {
   G4LossTableManager* lManager = G4LossTableManager::Instance();
+  /*
+  G4bool verb = ( part.GetParticleName() == "GenericIon" 
+  ||  part.GetParticleName() == "Ca44" ||  part.GetParticleName() == "Cu62"
+	||  part.GetParticleName() == "e-");
+  if(1 < verboseLevel || verb) {
+  */
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::SlavePreparePhysicsTable for "
 	   << GetProcessName() << " for " << part.GetParticleName() 
@@ -434,11 +443,22 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
 	  G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
       }
       isIon = true; 
+      if(theGenericIon && particle != theGenericIon) {
+	G4ProcessManager* pm =  theGenericIon->GetProcessManager();
+	G4ProcessVector* v = pm->GetAlongStepProcessVector();
+	size_t n = v->size();
+	for(size_t j=0; j<n; ++j) {
+	  if((*v)[j] == this) {
+	    particle = theGenericIon;
+	    break;
+	  } 
+	}
+      }
       // process is shared between all ions inheriting G4GenericIon
       // for all excluding He3 and alpha
-      if(theGenericIon && pname != "He3" && pname != "alpha") { 
-	particle = theGenericIon; 
-      }
+	//      if(theGenericIon && pname != "He3" && pname != "alpha") { 
+	//	particle = theGenericIon; 
+	// }
     }
   }
 
@@ -523,6 +543,7 @@ G4VEnergyLossProcess::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
     }
   }
 
+  //if(1 < verboseLevel || verb) {
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::SlavePrepearPhysicsTable() is done "
            << " for local " << particle->GetParticleName()
@@ -581,11 +602,22 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 	  G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
       }
       isIon = true; 
+      if(theGenericIon && particle != theGenericIon) {
+	G4ProcessManager* pm =  theGenericIon->GetProcessManager();
+	G4ProcessVector* v = pm->GetAlongStepProcessVector();
+        size_t n = v->size();
+        for(size_t j=0; j<n; ++j) {
+          if((*v)[j] == this) {
+	    particle = theGenericIon;
+	    break;
+	  } 
+	}
+      }
       // process is shared between all ions inheriting G4GenericIon
       // for all excluding He3 and alpha
-      if(theGenericIon && pname != "He3" && pname != "alpha") { 
-	particle = theGenericIon; 
-      }
+	// if(theGenericIon && pname != "He3" && pname != "alpha") { 
+	//	particle = theGenericIon; 
+	// }
     }
   }
 
@@ -724,6 +756,13 @@ void
 G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, 
 					     G4VEnergyLossProcess* firstProcess)
 {
+  /*
+  G4bool verb = ( part.GetParticleName() == "GenericIon" 
+		  ||  part.GetParticleName() == "Ca44"
+		  ||  part.GetParticleName() == "Cu62"
+		  ||  part.GetParticleName() == "e-");
+  if(1 < verboseLevel || verb) {
+  */
   if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::SlaveBuildPhysicsTable() for "
 	   << GetProcessName()
@@ -776,6 +815,14 @@ G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
     // needs to be done only once
     safetyHelper->InitialiseHelper();
   }
+  /*
+    if(verb) {
+      G4cout << "G4VEnergyLossProcess::SlaveBuildPhysicsTable ions "
+	     <<  theDensityFactor << "  " << theDensityIdx << " dedx " << theDEDXTable
+	     << " proc " << this << " isIonisation " << isIonisation 
+	     << G4endl;
+    }
+  */
   // explicitly defined printout by particle name
   G4String num = part.GetParticleName();
   if(1 < verboseLevel || 
@@ -813,6 +860,13 @@ G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
 
 void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
+  /*
+  G4bool verb = ( part.GetParticleName() == "GenericIon" 
+		  ||  part.GetParticleName() == "Ca44"
+		  ||  part.GetParticleName() == "Cu62" 
+		  ||  part.GetParticleName() == "e-");
+  if(1 < verboseLevel || verb) {
+  */
   if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
            << GetProcessName()
@@ -834,6 +888,13 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(!tablesAreBuilt) {
       G4LossTableManager::Instance()->BuildPhysicsTable(particle, this);
     }
+    /*
+    if(verb) {
+      G4cout << "G4VEnergyLossProcess: ions "
+	     <<  theDensityFactor << "  " << theDensityIdx << " dedx " << theDEDXTable
+	     << G4endl;
+    }
+    */
     //if(!baseParticle) {
     // needs to be done only once
     safetyHelper->InitialiseHelper();
@@ -863,6 +924,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     }
   }
 
+  //if(1 < verboseLevel || verb) {
   if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
            << GetProcessName()
@@ -927,8 +989,9 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   for(size_t i=0; i<numOfCouples; ++i) {
 
     if(1 < verboseLevel) {
-      G4cout << "G4VEnergyLossProcess::BuildDEDXVector flagTable=  " 
-	     << table->GetFlag(i) << " Flag= " << bld->GetFlag(i) << G4endl;
+      G4cout << "G4VEnergyLossProcess::BuildDEDXVector Idx= " << i 
+	     << "  flagTable=  " << table->GetFlag(i) 
+	     << " Flag= " << bld->GetFlag(i) << G4endl;
     }
     if(bld->GetFlag(i)) {
 
@@ -957,7 +1020,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
            << particle->GetParticleName()
            << " and process " << GetProcessName()
            << G4endl;
-    //    if(2 < verboseLevel) G4cout << (*table) << G4endl;
+    //if(2 < verboseLevel) G4cout << (*table) << G4endl;
   }
 
   return table;
@@ -1042,8 +1105,8 @@ G4VEnergyLossProcess::PrintInfoDefinition(const G4ParticleDefinition& part)
     G4cout << G4endl << GetProcessName() << ":   for  "
            << part.GetParticleName()
 	   << "    SubType= " << GetProcessSubType() 
-           << G4endl
-           << "      dE/dx and range tables from "
+           << G4endl;
+    G4cout << "      dE/dx and range tables from "
  	   << G4BestUnit(minKinEnergy,"Energy")
            << " to " << G4BestUnit(maxKinEnergy,"Energy")
            << " in " << nBins << " bins" << G4endl
@@ -1140,10 +1203,38 @@ void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
 
 void G4VEnergyLossProcess::StartTracking(G4Track* track)
 {
+  /*
+    G4cout << track->GetDefinition()->GetParticleName() 
+	   << " e(MeV)= " << track->GetKineticEnergy()
+	   << "  baseParticle " << baseParticle << " proc " << this;
+    if(particle) G4cout << "  " << particle->GetParticleName();
+    G4cout << " isIon= " << isIon << " dedx " << theDEDXTable <<G4endl;
+  */
   // reset parameters for the new track
   theNumberOfInteractionLengthLeft = -1.0;
   mfpKinEnergy = DBL_MAX; 
   preStepRangeEnergy = 0.0;
+
+  /*
+  if(!theDensityFactor || !theDensityIdx) {
+    G4cout << "G4VEnergyLossProcess::StartTracking: "
+	   <<  theDensityFactor << "  " << theDensityIdx
+	   << G4endl;
+    G4cout << track->GetDefinition()->GetParticleName() 
+	   << " e(MeV)= " << track->GetKineticEnergy()
+	   << "  baseParticle " << baseParticle
+	   << G4endl;
+    // define density factors for worker thread
+    G4LossTableManager* lManager = G4LossTableManager::Instance();
+    G4LossTableBuilder* bld = lManager->GetTableBuilder();
+    theDensityFactor = bld->GetDensityFactors();
+    theDensityIdx = bld->GetCoupleIndexes();
+    G4cout << "New: "
+	   <<  theDensityFactor << "  " << theDensityIdx
+	   << G4endl;
+    //for(G4int i=0; i<50; ++i) { G4cout << "%%%%%%%%" << G4endl; } 
+  }
+  */
 
   // reset ion
   if(isIon) {
@@ -1213,21 +1304,12 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   G4double x = DBL_MAX;
 
   // initialisation of material, mass, charge, model at the beginning of the step
-  /*
-  if(!theDensityFactor || !theDensityIdx) {
-    G4cout << "G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength 1: "
-	   <<  theDensityFactor << "  " << theDensityIdx
-	   << G4endl;
-    G4cout << track.GetDefinition()->GetParticleName() 
-	   << " e(MeV)= " << track.GetKineticEnergy()
-	   << " mat " << track.GetMaterialCutsCouple()->GetMaterial()->GetName()
-	   << G4endl;
-  }
-  */
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy    = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
+  //G4cout << "#2 " << GetProcessName() << G4endl; 
   SelectModel(preStepScaledEnergy);
+  //G4cout << "#3 " << currentModel << G4endl; 
 
   if(!currentModel->IsActive(preStepScaledEnergy)) { return x; }
 
@@ -1323,8 +1405,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if(length <= 0.0) { return &fParticleChange; }
   G4double eloss  = 0.0;
  
-  /*
-  if(1 < verboseLevel) {
+  /*  
+  if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetParticleDefinition();
     G4cout << "AlongStepDoIt for "
            << GetProcessName() << " and particle "
@@ -1362,9 +1444,16 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     fParticleChange.ProposeLocalEnergyDeposit(eloss);
     return &fParticleChange;
   }
-
+  //G4cout << theDEDXTable << "  idx= " << basedCoupleIndex << G4endl;
+  /*
+  if(track.GetParticleDefinition()->GetParticleName() == "e-") {
+    G4cout << (*theDEDXTable) << G4endl;
+  }
+  */
   // Short step
   eloss = GetDEDXForScaledEnergy(preStepScaledEnergy)*length;
+
+  //G4cout << "eloss= " << eloss << G4endl;
 
   // Long step
   if(eloss > preStepKinEnergy*linLossLimit) {
@@ -1372,6 +1461,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     //G4double x = GetScaledRangeForScaledEnergy(preStepScaledEnergy) 
     //  - length/reduceFactor;
     G4double x = (fRange - length)/reduceFactor;
+    //G4cout << "x= " << x << "  " << theInverseRangeTable << G4endl;
     eloss = preStepKinEnergy - ScaledKinEnergyForLoss(x)/massRatio;
    
     /*
@@ -1388,7 +1478,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     */
   }
 
-  /*   
+  /*     
   G4double eloss0 = eloss;
   if(-1 < verboseLevel ) {
     G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
@@ -1542,8 +1632,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   if(eloss < 0.0) { eloss = 0.0; }
   fParticleChange.SetProposedKineticEnergy(finalT);
   fParticleChange.ProposeLocalEnergyDeposit(eloss);
-  /*
-  if(1 < verboseLevel) {
+  /*  
+  if(-1 < verboseLevel) {
     G4double del = finalT + eloss + esec - preStepKinEnergy;
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
@@ -2139,11 +2229,11 @@ void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 
   } else if(fRestricted == tType) {
     if(theDEDXTable != p) {
-      /*
+      /*      
       G4cout<<"G4VEnergyLossProcess::SetDEDXTable "<<particle->GetParticleName()
             << " old table " << theDEDXTable << " new table " << p 
             << " ion " << theIonisationTable 
-	    << " bp " << baseParticle << G4endl;
+	    << " bp " << baseParticle << " proc " << this << G4endl;
       */
       if(theDEDXTable && !baseParticle) {
 	if(theDEDXTable == theIonisationTable) { theIonisationTable = 0; }

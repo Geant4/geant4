@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 June 13: V.Ivant (emutils-V09-06-27)
+- G4VEmModel - fixed SetCrossSectionTable method
+- G4VEnergyLossProcess - make ion initialisation assuming that each ion 
+    may have an individual process
+
 07 June 13: G.Cosmo (emutils-V09-06-26)
 - Cleanup from automatic MT changes in G4LossTableManager
   and G4EnergyLossTables.cc.

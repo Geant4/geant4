@@ -376,13 +376,13 @@ G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
 void G4VEmModel::SetCrossSectionTable(G4PhysicsTable* p, G4bool isLocal)
 {
   if(p != xSectionTable) {
-    if(xSectionTable) { 
+    if(xSectionTable && localTable) { 
       xSectionTable->clearAndDestroy(); 
       delete xSectionTable;
     }
     xSectionTable = p;
-    localTable = isLocal;
   }
+  localTable = isLocal;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
