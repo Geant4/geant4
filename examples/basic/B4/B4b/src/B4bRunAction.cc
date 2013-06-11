@@ -108,12 +108,17 @@ void B4bRunAction::BeginOfRunAction(const G4Run* run)
 
 void B4bRunAction::EndOfRunAction(const G4Run* aRun)
 {
+  // save histograms & ntuple
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->Write();
+  analysisManager->CloseFile();
+
   G4int nofEvents = aRun->GetNumberOfEvent();
   if ( nofEvents == 0 ) return;
   
   // print histogram statistics
   //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->GetH1(1) ) {
     G4cout << "\n ----> print histograms statistic ";
     if(isMaster) {
@@ -143,11 +148,6 @@ void B4bRunAction::EndOfRunAction(const G4Run* aRun)
       << " rms = " 
       << G4BestUnit(analysisManager->GetH1(4)->rms(),  "Length") << G4endl;
   }
-  
-  // save histograms & ntuple
-  //
-  analysisManager->Write();
-  analysisManager->CloseFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

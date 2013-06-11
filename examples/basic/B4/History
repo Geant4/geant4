@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11/06/13 I. Hrivnacova (exampleB4-V09-06-09)
+- Fixed B4[b]RunAction::EndOfRunAction(): to get the analysis file
+  closed also when no events are processed
+- Fixed names for newly added data members (in B4dEventAction)
+
 10/06/13 I. Hrivnacova (exampleB4-V09-06-08)
 - Fixed names for newly added data members (in B4cEventAction)
 

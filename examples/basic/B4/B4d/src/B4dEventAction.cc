@@ -47,10 +47,10 @@ B4dEventAction::B4dEventAction()
  : G4UserEventAction(),
    fMessenger(0),
    fPrintModulo(1),
-   absEdepHCID(-1),
-   gapEdepHCID(-1),
-   absTLenHCID(-1),
-   gapTLenHCID(-1)
+   fAbsoEdepHCID(-1),
+   fGapEdepHCID(-1),
+   fAbsoTrackLengthHCID(-1),
+   fGapTrackLengthHCID(-1)
 {
   // Define /B4/event commands using generic messenger class
   fMessenger = new G4GenericMessenger(this, "/B4/event/", "Event control");
@@ -137,33 +137,33 @@ void B4dEventAction::EndOfEventAction(const G4Event* event)
 {  
   // Get sum value from hits collections
   //
-  if(absEdepHCID==-1) {
-    absEdepHCID = G4SDManager::GetSDMpointer()
-            ->GetCollectionID("Absorber/Edep");
+  if ( fAbsoEdepHCID == -1 ) {
+    fAbsoEdepHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("Absorber/Edep");
   }
   G4double absoEdep 
-    = GetSum(GetHitsCollection(absEdepHCID, event));
+    = GetSum(GetHitsCollection(fAbsoEdepHCID, event));
 
-  if(gapEdepHCID==-1) {
-    gapEdepHCID = G4SDManager::GetSDMpointer()
-            ->GetCollectionID("Gap/Edep");
+  if ( fGapEdepHCID == -1 ) {
+    fGapEdepHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("Gap/Edep");
   }
   G4double gapEdep 
-    = GetSum(GetHitsCollection(gapEdepHCID, event));
+    = GetSum(GetHitsCollection(fGapEdepHCID, event));
 
-  if(absTLenHCID==-1) {
-    absTLenHCID = G4SDManager::GetSDMpointer()
-            ->GetCollectionID("Absorber/TrackLength");
+  if ( fAbsoTrackLengthHCID == -1 ) {
+    fAbsoTrackLengthHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("Absorber/TrackLength");
   }
   G4double absoTrackLength 
-    = GetSum(GetHitsCollection(absTLenHCID, event));
+    = GetSum(GetHitsCollection(fAbsoTrackLengthHCID, event));
 
-  if(gapTLenHCID==-1) {
-    gapTLenHCID = G4SDManager::GetSDMpointer()
-            ->GetCollectionID("Gap/TrackLength");
+  if ( fGapTrackLengthHCID == -1 ) {
+    fGapTrackLengthHCID 
+      = G4SDManager::GetSDMpointer()->GetCollectionID("Gap/TrackLength");
   }
   G4double gapTrackLength 
-    = GetSum(GetHitsCollection(gapTLenHCID, event));
+    = GetSum(GetHitsCollection(fGapTrackLengthHCID, event));
 
   // get analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
