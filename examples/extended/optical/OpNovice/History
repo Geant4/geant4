@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 June 2013, V.Ivanchenko (OpNovice-V09-06-06)
+- OpNovicePhysicsList - construct all particles to avoid exception
+    in execution of ConstructParticle() method; removed unnecessary
+    methods to construct individual particle types
+
 02 June 2013, P.Gumplinger (OpNovice-V09-06-05)
 - make MultiThread (MT) capable
 

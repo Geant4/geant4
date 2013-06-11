@@ -36,6 +36,13 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 
+#include "G4BosonConstructor.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4ShortLivedConstructor.hh"
+
 #include "G4ProcessManager.hh"
 
 #include "G4Cerenkov.hh"
@@ -77,68 +84,20 @@ void OpNovicePhysicsList::ConstructParticle()
   // This ensures that objects of these particle types will be
   // created in the program.
 
-  ConstructBosons();
-  ConstructLeptons();
-  ConstructMesons();
-  ConstructBaryons();
+  G4BosonConstructor bConstructor;
+  bConstructor.ConstructParticle();
 
-  G4GenericIon::GenericIonDefinition();
-}
+  G4LeptonConstructor lConstructor;
+  lConstructor.ConstructParticle();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  G4MesonConstructor mConstructor;
+  mConstructor.ConstructParticle();
 
-void OpNovicePhysicsList::ConstructBosons()
-{
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
+  G4BaryonConstructor rConstructor;
+  rConstructor.ConstructParticle();
 
-  // gamma
-  G4Gamma::GammaDefinition();
-
-  // optical photon
-  G4OpticalPhoton::OpticalPhotonDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void OpNovicePhysicsList::ConstructLeptons()
-{
-  // leptons
-  //  e+/-
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  // mu+/-
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-  // nu_e
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  // nu_mu
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void OpNovicePhysicsList::ConstructMesons()
-{
-  //  mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void OpNovicePhysicsList::ConstructBaryons()
-{
-  //  barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
+  G4IonConstructor iConstructor;
+  iConstructor.ConstructParticle(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -146,7 +105,7 @@ void OpNovicePhysicsList::ConstructBaryons()
 void OpNovicePhysicsList::ConstructProcess()
 {
   AddTransportation();
-  ConstructGeneral();
+  ConstructDecay();
   ConstructEM();
   ConstructOp();
 }
@@ -157,7 +116,7 @@ void OpNovicePhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void OpNovicePhysicsList::ConstructGeneral()
+void OpNovicePhysicsList::ConstructDecay()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
@@ -237,7 +196,8 @@ void OpNovicePhysicsList::ConstructEM()
 
     } else {
       if ((particle->GetPDGCharge() != 0.0) &&
-          (particle->GetParticleName() != "chargedgeantino")) {
+          (particle->GetParticleName() != "chargedgeantino") &&
+          !particle->IsShortLived()) {
        // all others charged particles except geantino
        pmanager->AddProcess(new G4hMultipleScattering(),-1,1,1);
        pmanager->AddProcess(new G4hIonisation(),       -1,2,2);

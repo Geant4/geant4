@@ -57,14 +57,8 @@ class OpNovicePhysicsList : public G4VUserPhysicsList
 
     virtual void SetCuts();
 
-    //these methods Construct particles
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
-
     //these methods Construct physics processes and register them
-    void ConstructGeneral();
+    void ConstructDecay();
     void ConstructEM();
     void ConstructOp();
 
