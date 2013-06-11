@@ -163,11 +163,13 @@ protected:  // with description
     G4bool fProposesTimeStep;
 
 private :
-  //Andrea Dotti: Due to G4MT transformation, this cannot be "const"
-  /*const*/ size_t fProcessID; // During all the simulation will identify a
-    // process, so if two identical process are created using a copy constructor
-    // they will have the same fProcessID
-    static G4ThreadLocal size_t *fNbProcess_G4MT_TLS_;
+
+    size_t fProcessID;
+    // During all the simulation will identify a process, so if two identical
+    // processes are created using a copy constructor they will have the same
+    // fProcessID. NOTE: due to MT, this cannot be "const".
+
+    static G4ThreadLocal size_t *fNbProcess;
 
     G4bool fInstantiateProcessState;
     //_________________________________________________
@@ -206,7 +208,8 @@ inline G4bool G4VITProcess::ProposesTimeStep() const
 }
 
 inline const size_t& G4VITProcess::GetMaxProcessIndex()
-{;;;   if (!fNbProcess_G4MT_TLS_) fNbProcess_G4MT_TLS_ = new size_t ( 0) ; size_t &fNbProcess = *fNbProcess_G4MT_TLS_;  ;;;  
-    return fNbProcess ;
+{
+    if (!fNbProcess) fNbProcess = new size_t ( 0);
+    return *fNbProcess ;
 }
 #endif // G4VITProcess_H

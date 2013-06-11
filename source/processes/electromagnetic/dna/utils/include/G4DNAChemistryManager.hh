@@ -145,7 +145,7 @@ protected :
 
 private:
     G4DNAChemistryManager();
-    static G4ThreadLocal std::auto_ptr<G4DNAChemistryManager> *fInstance_G4MT_TLS_;
+    static G4ThreadLocal std::auto_ptr<G4DNAChemistryManager> *fInstance;
     bool fActiveChemistry;
 
     std::ofstream  fOutput;

@@ -65,7 +65,7 @@ protected :
     G4VMolecularDecayDisplacer();
     G4int fVerbose ;
     static DisplacementType AddDisplacement();
-    static G4ThreadLocal DisplacementType *Last_G4MT_TLS_;
+    static G4ThreadLocal DisplacementType *Last;
 };
 
 void G4VMolecularDecayDisplacer :: SetVerbose(G4int verbose)

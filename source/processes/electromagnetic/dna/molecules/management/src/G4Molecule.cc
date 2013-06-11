@@ -57,37 +57,37 @@
 
 using namespace std;
 
-G4ThreadLocal double G4Molecule::fgTemperature = 310*kelvin;
+G4ThreadLocal G4double G4Molecule::fgTemperature = 310;  // 310*kelvin;
 // 37°C, used to shoot an energy
 
 ITImp(G4Molecule)
 
-G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator_G4MT_TLS_ = 0;
+G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator = 0;
 
 G4Molecule* GetMolecule(const G4Track& track)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return (G4Molecule*)(GetIT(track));
 }
 
 G4Molecule* GetMolecule(const G4Track* track)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return (G4Molecule*)(GetIT(track));
 }
 
 void G4Molecule::Print() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     G4cout<<"The user track information is a molecule"<<G4endl;
 }
 
 G4Molecule::G4Molecule(const G4Molecule& right) :
     G4VUserTrackInformation("G4Molecule"), G4IT(right)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     Init();
     fMolecularConfiguration = right . fMolecularConfiguration;
 }
 
 G4Molecule& G4Molecule::operator=(const G4Molecule& right)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     if (&right==this) return *this;
     Init();
     fMolecularConfiguration = right . fMolecularConfiguration;
@@ -95,7 +95,7 @@ G4Molecule& G4Molecule::operator=(const G4Molecule& right)
 }
 
 G4bool G4Molecule::operator==(const G4Molecule& right) const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     if(fMolecularConfiguration==right.fMolecularConfiguration)
     {
         return true;
@@ -104,7 +104,7 @@ G4bool G4Molecule::operator==(const G4Molecule& right) const
 }
 
 G4bool G4Molecule::operator!=(const G4Molecule& right) const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return !(*this == right);
 }
 
@@ -114,12 +114,13 @@ G4bool G4Molecule::operator!=(const G4Molecule& right) const
 ///	the InteractionTable
 
 G4bool G4Molecule::operator<(const G4Molecule& right) const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration < right.fMolecularConfiguration ;
 }
 ////////////////////////////////////////////////////////////////////////
 void G4Molecule::Init()
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
+    if (!aMoleculeAllocator) aMoleculeAllocator = new G4Allocator<G4Molecule>;
     fMolecularConfiguration = 0 ;
     fDynamicParticle = 0;
 }
@@ -130,14 +131,14 @@ void G4Molecule::Init()
 //////////////////////////
 G4Molecule::G4Molecule() : G4VUserTrackInformation("G4Molecule"), G4IT()
   //////////////////////////
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     Init();
 }
 
 //////////////////////////
 G4Molecule::~G4Molecule()
 //////////////////////////
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     if(fpTrack!=NULL)
     {
         if(G4MoleculeCounter::GetMoleculeCounter()->InUse())
@@ -160,7 +161,7 @@ G4Molecule::~G4Molecule()
 G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
     G4VUserTrackInformation("G4Molecule"), G4IT()
   //////////////////////////
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     Init();
     fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(moleculeDefinition);
 }
@@ -173,7 +174,7 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
 G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalToFree, G4int OrbitalToFill):
     G4VUserTrackInformation("G4Molecule"), G4IT()
   //////////////////////////
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     Init();
 
     G4ElectronOccupancy dynElectronOccupancy (*moleculeDefinition->GetGroundStateElectronOccupancy());
@@ -201,7 +202,7 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalT
 
 G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int Level, G4bool Excitation):
     G4VUserTrackInformation("G4Molecule"), G4IT()
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     Init();
 
     G4ElectronOccupancy dynElectronOccupancy (*moleculeDefinition->GetGroundStateElectronOccupancy());
@@ -223,61 +224,61 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int Level, G
 }
 
 void G4Molecule::SetElectronOccupancy(const G4ElectronOccupancy* occ)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration = G4MolecularConfiguration::GetMolecularConfiguration(fMolecularConfiguration->GetDefinition(), *occ);
 }
 
 /** Method used in Geant4-DNA to excite water molecules
  */
 void G4Molecule::ExciteMolecule(G4int ExcitedLevel)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration = fMolecularConfiguration->ExciteMolecule(ExcitedLevel);
 }
 
 /** Method used in Geant4-DNA to ionize water molecules
  */
 void G4Molecule::IonizeMolecule(G4int IonizedLevel)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration = fMolecularConfiguration->IonizeMolecule(IonizedLevel);
 }
 
 void G4Molecule::AddElectron(G4int orbit, G4int number)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration = fMolecularConfiguration->AddElectron(orbit,number);
 }
 
 void G4Molecule::RemoveElectron(G4int orbit,G4int number)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration = fMolecularConfiguration->RemoveElectron(orbit,number);
 }
 
 void G4Molecule::MoveOneElectron(G4int orbitToFree,G4int orbitToFill)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration = fMolecularConfiguration->MoveOneElectron(orbitToFree,orbitToFill);
 }
 
 const G4String& G4Molecule::GetName() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetName();
 }
 
 G4int G4Molecule::GetAtomsNumber() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetAtomsNumber();
 }
 
 G4double G4Molecule::GetNbElectrons() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetNbElectrons();
 }
 
 void G4Molecule::PrintState() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration->PrintState();
 }
 
 G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Position)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     if(fpTrack != 0)
     {
         G4Exception("G4Molecule::BuildTrack","Molecule001",
@@ -312,7 +313,7 @@ G4Track * G4Molecule::BuildTrack(G4double globalTime, const G4ThreeVector& Posit
 }
 
 G4double G4Molecule::GetKineticEnergy() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     ////
     // Ideal Gaz case
     double v = GetDiffusionVelocity();
@@ -322,7 +323,7 @@ G4double G4Molecule::GetKineticEnergy() const
 }
 
 G4double G4Molecule::GetDiffusionVelocity() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     double moleculeMass = fMolecularConfiguration->GetMass()/(c_squared);
 
     ////
@@ -343,66 +344,81 @@ G4double G4Molecule::GetDiffusionVelocity() const
 
 // added - to be transformed in a "Decay method"
 const vector <const G4MolecularDecayChannel*>* G4Molecule::GetDecayChannel() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetDecayChannel();
 }
 
 G4int G4Molecule::GetMoleculeID() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetMoleculeID();
 }
 
 void G4Molecule::SetDecayTime(G4double dynDecayTime)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration->SetDecayTime(dynDecayTime);
 }
 
 G4double G4Molecule::GetDecayTime() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetDecayTime();
 }
 
 void G4Molecule::SetVanDerVaalsRadius(G4double dynVanDerVaalsRadius)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration->SetVanDerVaalsRadius(dynVanDerVaalsRadius);
 }
 
 G4double G4Molecule::GetVanDerVaalsRadius() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetVanDerVaalsRadius();
 }
 
 G4int G4Molecule::GetCharge() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetCharge() ;
 }
 
 void G4Molecule::SetMass(G4double aMass)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration->SetMass(aMass);
 }
 
 G4double G4Molecule::GetMass() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetMass();
 }
 
 const G4ElectronOccupancy* G4Molecule::GetElectronOccupancy() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetElectronOccupancy();
 }
 
 const G4MoleculeDefinition* G4Molecule::GetDefinition() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetDefinition();
 }
 
 void G4Molecule::SetDiffusionCoefficient(G4double dynDiffusionCoefficient)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     fMolecularConfiguration->SetDiffusionCoefficient(dynDiffusionCoefficient);
 }
 
 G4double G4Molecule::GetDiffusionCoefficient() const
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
+{
     return fMolecularConfiguration->GetDiffusionCoefficient();
+}
+
+G4MolecularConfiguration* G4Molecule::GetMolecularConfiguration() const
+{
+    return fMolecularConfiguration ;
+}
+
+void G4Molecule::SetGlobalTemperature(G4double temperature)
+{
+    fgTemperature = temperature;
+}
+
+G4double G4Molecule::GetGlobalTemperature()
+{
+    return fgTemperature;
 }

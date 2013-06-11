@@ -172,8 +172,9 @@ G4ITTransportation::G4ITTransportationState::G4ITTransportationState() : G4Proce
     fEndGlobalTimeComputed = false;
     fCandidateEndGlobalTime = -1;
     fParticleIsLooping = false;
-    static G4ThreadLocal G4TouchableHandle *nullTouchableHandle_G4MT_TLS_ = 0 ; if (!nullTouchableHandle_G4MT_TLS_) nullTouchableHandle_G4MT_TLS_ = new  G4TouchableHandle  ;  G4TouchableHandle &nullTouchableHandle = *nullTouchableHandle_G4MT_TLS_; // Points to (G4VTouchable*) 0
-    fCurrentTouchableHandle = nullTouchableHandle;
+    static G4ThreadLocal G4TouchableHandle *nullTouchableHandle = 0;
+    if (!nullTouchableHandle) nullTouchableHandle = new  G4TouchableHandle; // Points to (G4VTouchable*) 0
+    fCurrentTouchableHandle = *nullTouchableHandle;
     fGeometryLimitedStep = false;
     fPreviousSftOrigin = G4ThreeVector(0,0,0);
     fPreviousSafety = 0.0;

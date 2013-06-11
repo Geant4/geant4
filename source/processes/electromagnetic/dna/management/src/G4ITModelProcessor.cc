@@ -37,11 +37,12 @@
 #include "G4VITTimeStepper.hh"
 #include "G4VITReactionProcess.hh"
 
-G4ThreadLocal std::map<const G4Track*, G4bool> *G4ITModelProcessor::fHasReacted_G4MT_TLS_ = 0;
+G4ThreadLocal std::map<const G4Track*, G4bool> *G4ITModelProcessor::fHasReacted = 0;
 
 G4ITModelProcessor::G4ITModelProcessor()
-{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
+{
     //ctor
+    if (!fHasReacted) fHasReacted = new std::map<const G4Track*, G4bool>;
     fpTrack = 0;
     fpModelHandler = 0;
     fpModel = 0;
@@ -57,7 +58,7 @@ G4ITModelProcessor::G4ITModelProcessor()
 }
 
 G4ITModelProcessor::~G4ITModelProcessor()
-{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
+{
     //dtor
 //    if(fpModelHandler) delete fpModelHandler; deleted by G4ITStepManager
     fCurrentModel.clear();
@@ -78,14 +79,14 @@ G4ITModelProcessor::G4ITModelProcessor(const G4ITModelProcessor& /*other*/)
 
 // Should not be used
 G4ITModelProcessor& G4ITModelProcessor::operator=(const G4ITModelProcessor& rhs)
-{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
+{
     if (this == &rhs) return *this; // handle self assignment
     //assignment operator
     return *this;
 }
 //______________________________________________________________________________
 void G4ITModelProcessor::Initialize()
-{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
+{
     fpModelHandler->Initialize();
     fInitialized = true;
 }
@@ -93,7 +94,7 @@ void G4ITModelProcessor::Initialize()
 //______________________________________________________________________________
 void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
                                            const G4double& userMinTime)
-{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
+{
     // G4cout << "G4ITModelProcessor::InitializeStepper" << G4endl;
     if(fpModelHandler==0)
     {
@@ -154,7 +155,7 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
 
 //______________________________________________________________________________
 void G4ITModelProcessor::CalculateTimeStep(const G4Track* track, const G4double userMinTimeStep)
-{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
+{
     // G4cout  << "G4ITModelProcessor::CalculateStep" << G4endl;
     CleanProcessor();
     if(track == 0)
@@ -172,7 +173,7 @@ void G4ITModelProcessor::CalculateTimeStep(const G4Track* track, const G4double 
 
 //______________________________________________________________________________
 void G4ITModelProcessor::DoCalculateStep()
-{ if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ;
+{
     if(fpModel) // ie only one model has been declared and will be used
     {
         fpModel -> GetTimeStepper()->CalculateStep(*fpTrack, fUserMinTimeStep);
@@ -194,7 +195,7 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
                                       const double currentStepTime,
                                       const double previousStepTime,
                                       const bool reachedUserStepTimeLimit)
-{  ;;;   if (!fHasReacted_G4MT_TLS_) fHasReacted_G4MT_TLS_ = new std::map<const G4Track*, G4bool>  ; std::map<const G4Track*, G4bool> &fHasReacted = *fHasReacted_G4MT_TLS_;  ;;;  
+{
     // DEBUG
     //    G4cout << "G4ITReactionManager::FindReaction" << G4endl;
     if(tracks == 0)       return ;
@@ -210,8 +211,8 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
 
         if(trackA == 0)         continue;
 
-        std::map<const G4Track*, G4bool>::iterator it_hasReacted = fHasReacted.find(trackA);
-        if(it_hasReacted != fHasReacted.end()) continue;
+        std::map<const G4Track*, G4bool>::iterator it_hasReacted = fHasReacted->find(trackA);
+        if(it_hasReacted != fHasReacted->end()) continue;
         if(trackA->GetTrackStatus() == fStopAndKill) continue;
 
         G4IT* ITA = GetIT(trackA);
@@ -232,8 +233,8 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
             trackB = *trackB_i;
 
             if(trackB == 0)         continue;
-            it_hasReacted = fHasReacted.find(trackB);
-            if(it_hasReacted != fHasReacted.end()) continue;
+            it_hasReacted = fHasReacted->find(trackB);
+            if(it_hasReacted != fHasReacted->end()) continue;
             if(trackB->GetTrackStatus() == fStopAndKill) continue;
 
             // DEBUG
@@ -272,8 +273,8 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
 
             if(changes)
             {
-                fHasReacted[trackA] = true;
-                fHasReacted[trackB] = true;
+                (*fHasReacted)[trackA] = true;
+                (*fHasReacted)[trackB] = true;
                 changes -> GetTrackA();
                 changes -> GetTrackB();
 
@@ -287,5 +288,5 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
         }
     }
 
-    fHasReacted.clear();
+    fHasReacted->clear();
 }

@@ -14,6 +14,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+11-06-2013  G.Cosmo         tag emdna-V09-06-07
+            Cleanup from automatic changes for MT in classes G4Molecule,
+            G4VMolecularDecayDisplacer, G4IT, G4ITModelProcessor, G4VITProcess,
+            G4ITTransportation, G4DNAChemistryManager, and porting MT
+            compilation on Windows.
+
 06-06-2013  S.I.            tag emdna-V09-06-06
             Updated G4DNABornIonisationModel for speedup option
 	    Requires G4EMLOW version 6.33

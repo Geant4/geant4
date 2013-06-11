@@ -81,6 +81,6 @@ public :
     inline bool operator<(const G4MoleculeID & rhs) const { return fValue < rhs.fValue; }
 };
 
-extern G4ThreadLocal G4MoleculeID *gStartCounter_G4MT_TLS_;
+extern G4MoleculeID gStartCounter;
 
 #endif

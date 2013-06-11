@@ -146,7 +146,7 @@ protected:
 
     // Atribute for reactions
     std::vector<G4ITReactionChange*> fReactionInfo ;
-    static G4ThreadLocal std::map<const G4Track*, G4bool> *fHasReacted_G4MT_TLS_;
+    static G4ThreadLocal std::map<const G4Track*, G4bool> *fHasReacted;
 };
 
 ///

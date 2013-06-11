@@ -226,10 +226,10 @@ public:
     G4double GetMass() const;
 ////////////////////////////////////////////////////////////////////////
 
-    inline G4MolecularConfiguration* GetMolecularConfiguration() ;
+    G4MolecularConfiguration* GetMolecularConfiguration() const;
 
-    inline static void SetGlobalTemperature(double);
-    inline static double GetGlobalTemperature();
+    static void SetGlobalTemperature(G4double);
+    static G4double GetGlobalTemperature();
 
 private:
     /** Default molecule builder
@@ -246,43 +246,25 @@ private:
 
 
 #if defined G4EM_ALLOC_EXPORT
-extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator_G4MT_TLS_;
+extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator;
 #else
-extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator_G4MT_TLS_;
+extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator;
 #endif
 
 
 //////////////////////////
 inline void * G4Molecule::operator new(size_t)
 //////////////////////////
-{  ;;;   if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ; G4Allocator<G4Molecule> &aMoleculeAllocator = *aMoleculeAllocator_G4MT_TLS_;  ;;;  
-    void * aMolecule;
-    aMolecule = (void *) aMoleculeAllocator.MallocSingle();
-    return aMolecule;
+{
+    if (!aMoleculeAllocator)  aMoleculeAllocator = new G4Allocator<G4Molecule>;
+    return (void *) aMoleculeAllocator->MallocSingle();
 }
 
 //////////////////////////
 inline void G4Molecule::operator delete(void * aMolecule)
 //////////////////////////
-{  ;;;   if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ; G4Allocator<G4Molecule> &aMoleculeAllocator = *aMoleculeAllocator_G4MT_TLS_;  ;;;  
-    // DEBUG
-    // G4cout<<"G4Molecule::operator delete(void * aMolecule) called"<<G4endl;
-    aMoleculeAllocator.FreeSingle((G4Molecule *) aMolecule);
-}
-
-inline G4MolecularConfiguration* G4Molecule::GetMolecularConfiguration()
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
-    return fMolecularConfiguration ;
-}
-
-inline void G4Molecule::SetGlobalTemperature(double temperature)
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
-    fgTemperature = temperature;
-}
-
-inline double G4Molecule::GetGlobalTemperature()
-{ if (!aMoleculeAllocator_G4MT_TLS_) aMoleculeAllocator_G4MT_TLS_ = new G4Allocator<G4Molecule>  ;
-    return fgTemperature;
+{
+    aMoleculeAllocator->FreeSingle((G4Molecule *) aMolecule);
 }
 
 #endif
