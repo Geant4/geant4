@@ -8,21 +8,21 @@
 # - NDL
 geant4_add_dataset(
   NAME      G4NDL
-  VERSION   4.2
+  VERSION   4.3
   FILENAME  G4NDL
   EXTENSION tar.gz
   ENVVAR    G4NEUTRONHPDATA
-  MD5SUM    2302d7ffeef1a450955302f027ee1cf4
+  MD5SUM    928a6181b822d5f35da6c830fb10619e
   )
 
 # - Low energy electromagnetics
 geant4_add_dataset(
   NAME      G4EMLOW
-  VERSION   6.32
+  VERSION   6.33
   FILENAME  G4EMLOW
   EXTENSION tar.gz
   ENVVAR    G4LEDATA
-  MD5SUM    9d3302072ba694b1d4505c330ed89d89
+  MD5SUM    0002a1c16c9b1fb5e8d49dfbce12a576
   )
 
 # - Photon evaporation
@@ -38,11 +38,11 @@ geant4_add_dataset(
 # - Radioisotopes
 geant4_add_dataset(
   NAME      RadioactiveDecay
-  VERSION   3.6
+  VERSION   3.7
   FILENAME  G4RadioactiveDecay
   EXTENSION tar.gz
   ENVVAR    G4RADIOACTIVEDATA
-  MD5SUM    9566ff1614bea7455343328cb66abd6f
+  MD5SUM    039e5f64b0e451eb5c095bf81552cb42
   )
 
 # - Neutron XS
