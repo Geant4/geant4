@@ -47,8 +47,9 @@ struct G4RootNtupleDescription
        fNtupleDColumnMap() {}
 
   ~G4RootNtupleDescription()
-      { delete fNtuple;
+      { 
         delete fNtupleBooking;
+          // fNtuple is owned by the file
       }
 
   tools::wroot::ntuple* fNtuple; 
