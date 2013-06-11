@@ -14,6 +14,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+11-06-2013  G.Cosmo         tag emdna-V09-06-08
+            Corrected static initialisation in G4VMolecularDecayDisplacer
+            for problem accidentally introduced in previous tag.
+
 11-06-2013  G.Cosmo         tag emdna-V09-06-07
             Cleanup from automatic changes for MT in classes G4Molecule,
             G4VMolecularDecayDisplacer, G4IT, G4ITModelProcessor, G4VITProcess,

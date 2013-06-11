@@ -44,6 +44,7 @@ G4VMolecularDecayDisplacer::~G4VMolecularDecayDisplacer()
 
 DisplacementType G4VMolecularDecayDisplacer::AddDisplacement()
 {
+    if (!Last) Last = new DisplacementType ( 0) ;
     DisplacementType output = *Last;
     (*Last)++;
     return output;
