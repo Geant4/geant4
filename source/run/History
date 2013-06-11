@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 10th, 2013, A. Dotti (run-V09-06-50)
+- Bug fix for MT in G4MTRunManger to solve deadlocks in case of /run/beamOn 0
+  Use number-of-active-threads instead of requested-workers
+  for barriers check.
+
 June 9th, 2013, A. Dotti  (run-V09-06-49)
 - In G4MTRunManager rewritten logic of "nextIteration" to solve deadlocks.
   Now logic is very similar to the other barriers 

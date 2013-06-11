@@ -54,8 +54,6 @@ G4Thread* G4UserWorkerInitialization::CreateAndStartWorker(G4WorkerThread*)
 }
 #endif
 
-
-
 void* G4UserWorkerInitialization::StartThread( void* context )
 {
     
@@ -172,8 +170,7 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     masterRM->GetUserWorkerInitialization()->WorkerStop();
     wThreadContext->DestroyGeometryAndPhysicsVector();
 
-    // Delete worker run manager
-    //G4cout<<"Thread ID:"<<wThreadContext->GetThreadId()<<" WorkerRunManager Pointer: "<<wrm<<" PID:"<<wThreadContext->pid<<G4endl;///AAADEBUG
+    //G4cout<<"Thread ID:"<<wThreadContext->GetThreadId()<<" WorkerRunManager Pointer: "<<wrm<<G4endl;///AAADEBUG
     delete wrm;
 
 

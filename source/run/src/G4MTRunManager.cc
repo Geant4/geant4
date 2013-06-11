@@ -420,7 +420,7 @@ void G4MTRunManager::InitializePhysics()
 //    while (true) 
 //    {
 //     G4AutoLock l(&counterMutex);
-//     if ( counter == nworkers ) break;
+//     if ( counter == nActiveThreads ) break;
 //     G4CONDITIONWAIT( &conditionOnCounter, &counterMutex);
 //    }
 //    G4CONDITIONBROADCAST( &doSomethingCanStart );
@@ -501,9 +501,9 @@ void G4MTRunManager::WaitForReadyWorkers()
 #else
         EnterCriticalSection( &cs1 );
 #endif
-        
         //Check number of workers ready to begin
-        if (numberOfReadyWorkers == nworkers )
+	G4int activethreads = threads.size();
+        if (numberOfReadyWorkers == activethreads )
         {
             //Ok, interrupt the loop
             break;
@@ -553,7 +553,8 @@ void G4MTRunManager::WaitForEndEventLoopWorkers()
 #else
         EnterCriticalSection( &cs2 );
 #endif
-        if ( numberOfEndOfEventLoopWorkers == nworkers )
+	G4int activethreads = threads.size();
+        if ( numberOfEndOfEventLoopWorkers == activethreads )
         {
             break;
         }
@@ -600,7 +601,8 @@ void G4MTRunManager::NewActionRequest(G4MTRunManager::WorkerActionRequest newReq
     EnterCriticalSection( &cs3 );
 #endif
     //Check the number of workers that are ready for next action
-    if ( numberOfReadyWorkersForNewAction == nworkers )
+    G4int activethreads = threads.size();
+    if ( numberOfReadyWorkersForNewAction == activethreads )
     {
 	//Ok, exit the loop
 	break;
