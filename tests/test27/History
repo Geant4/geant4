@@ -12,22 +12,41 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 June 2013  Dennis Wright                      (test27-V09-06-01)
+-------------------------------------------------------------------
+- Migrate to multi-threaded:
+    added option to use G4MTRunManager in test27.cc
+    created class Tst27ActionInitialization and moved some user init methods
+      there
+    added empty method Tst27GeometryConstruction::ConstructSDandField()
+
+- added CMakeLists_Standalone.txt to be used for stand-alone running 
+  (developed by Makoto Asai)
+
+- updated README for cmake build 
+
 04-Feb-2013, Gunter Folger                       (test27-V09-06-00)
+-------------------------------------------------------------------
 -  Do not create customised de-excitation and precompound, these get reused 
     in binary creating energy non-conservation
 
 09-Oct-2012, Gabriele Cosmo                      (test27-V09-05-01)
+-------------------------------------------------------------------
 - Explicit inclusion of units and constants headers.
 
 27-Jul-2012, Vladimir Ivanchenko                 (test27-V09-05-00)
+-------------------------------------------------------------------
 - Fixed hadron elastic.
 
 18-Mar-2010, Gunter Folger                       (test27-V09-03-00)
+-------------------------------------------------------------------
 - Adapt to new multiple scattering classes.
 - Fix mac file for SetCut.
 
 06-Dec-2005, Gabriele Cosmo
+---------------------------
 - Trivial changes for support of CLHEP-2.0.X series.
 
 04-Nov-2003, Gunter Folger
+--------------------------
 - Created the test.

@@ -23,59 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
 //
 
 #include "Tst27ActionInitialization.hh"
-#include "Tst27DetectorConstruction.hh"
-#include "Tst27PhysicsList.hh"
-//#include "Tst27SteppingAction.hh"
 
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
+#include "Tst27RunAction.hh"
+#include "Tst27StackingAction.hh"
+#include "Tst27PrimaryGeneratorAction.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+Tst27ActionInitialization::Tst27ActionInitialization()
+{}
 
-#include "G4ios.hh"
+Tst27ActionInitialization::~Tst27ActionInitialization()
+{}
 
-int main(int argc,char** argv) {
+void Tst27ActionInitialization::Build() const {
+  SetUserAction(new Tst27PrimaryGeneratorAction);
+  SetUserAction(new Tst27RunAction);
+  SetUserAction(new Tst27StackingAction);
+}
 
-  // Set the default random engine to RanecuEngine
-  CLHEP::RanecuEngine defaultEngine;
-  CLHEP::HepRandom::setTheEngine(&defaultEngine);
-
-  // Run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
-
-  // UserInitialization classes
-  runManager->SetUserInitialization(new Tst27DetectorConstruction);
-  runManager->SetUserInitialization(new Tst27PhysicsList);
-  runManager->SetUserInitialization(new Tst27ActionInitialization);
-
-  if(argc==1)
-  {
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession* session = new G4UIterminal;
-    session->SessionStart();
-    delete session;
-  }
-  else
-  {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
-
-  delete runManager;
-  return 0;
+void Tst27ActionInitialization::BuildForMaster() const {
 }
 

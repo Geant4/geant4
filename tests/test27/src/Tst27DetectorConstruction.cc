@@ -28,7 +28,6 @@
 //
 
 #include "Tst27DetectorConstruction.hh"
-
 #include "Tst27DetectorMessenger.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -165,7 +164,9 @@ G4VPhysicalVolume* Tst27DetectorConstruction::Construct()
                                       selectedMaterial,"SLog",0,0,0);
   G4VPhysicalVolume* simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
                                         "SPhys",simpleBoxLog,0,false,0);
-
   return simpleBoxDetector;
 }
+
+void Tst27DetectorConstruction::ConstructSDandField()
+{}
 
