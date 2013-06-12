@@ -96,7 +96,7 @@
 #include "G4AntiBMesonZero.hh"
 #include "G4BsMesonZero.hh"
 #include "G4AntiBsMesonZero.hh"
-#include "G4Upsiron.hh"
+#include "G4Upsilon.hh"
 
 
 // Barions
