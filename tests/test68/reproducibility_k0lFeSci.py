@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------------
-# Last update: 26-Feb-2013
+# Last update: 12-Jun-2013
 #
 # This python script, which has at most one input parameter
 # (the configuration in which Geant4 has been built: this is needed only
@@ -55,7 +55,7 @@ import string
 import subprocess
 import platform
 
-print '  ========== START reproducibility.py ========== '
+print '  ========== START reproducibility_k0lFeSci.py ========== '
 
 # beamParticle_type: pi-, pi+, kaon-, kaon+, kaon0L, neutron, proton,
 #                    anti_proton, anti_neutron, deuteron, triton, alpha
@@ -69,42 +69,12 @@ dictionary_1stCase = {
                       'active_material': 'Scintillator'
                      }
 
-dictionary_2ndCase = { 
-                      'beamParticle_type': 'pi-',
-	              'beamParticle_kineticEnergy': '20 GeV',
-                      'absorber_material': 'Copper',
-                      'active_material': 'LiquidArgon'
-                     }
-
-dictionary_3rdCase = { 
-                      'beamParticle_type': 'neutron',
-	              'beamParticle_kineticEnergy': '20 GeV',
-                      'absorber_material': 'Lead',
-                      'active_material': 'Scintillator'
-                     }
-
-
-dictionary_4thCase = { 
-                      'beamParticle_type': 'proton',
-	              'beamParticle_kineticEnergy': '20 GeV',
-                      'absorber_material': 'Tungsten',
-                      'active_material': 'LiquidArgon'
-                     }
-
-dictionary_5thCase = { 
-                      'beamParticle_type': 'kaon-',
-	              'beamParticle_kineticEnergy': '20 GeV',
-                      'absorber_material': 'PbWO4',
-                      'active_material': 'PbWO4'
-                     }
-
-# Add as many  dictionary_xxxCase  as you want.
-
-listCases = [ dictionary_1stCase,
-              dictionary_2ndCase,
-              dictionary_3rdCase,
-              dictionary_4thCase,
-              dictionary_5thCase,
+listCases = [ 
+              dictionary_1stCase,
+#              dictionary_2ndCase,
+#              dictionary_3rdCase,
+#              dictionary_4thCase,
+#              dictionary_5thCase,
 #              dictionary_6thCase,
 #              dictionary_7thCase,
 #              dictionary_8thCase,
@@ -117,8 +87,8 @@ BfieldValue = "4 tesla"
 # Choose the number of events for the first loop, 
 # the number of single event checks, and
 # the gap between successive extra single event checks.
-NumEvents = "1"
-NumSingleEventChecks = 80;
+NumEvents = "50"
+NumSingleEventChecks = 100;
 GapBetweenExtraSingleEventChecks = 0;
 
 if ( NumEvents < 0 ) :
@@ -261,4 +231,4 @@ for iCase in listCases :
             print '  *** REPRODUCIBILITY ?  NO  *** '
         print '  ******************************'
 
-print '  ========== END reproducibility.py ========== '
+print '  ========== END reproducibility_k0lFeSci.py ========== '

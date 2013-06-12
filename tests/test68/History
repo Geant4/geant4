@@ -13,6 +13,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 Jun 2013 Alberto Ribon                 test68-V09-06-04
+- Split the 5 configurations that are tested for reproducibility
+  in 5 independent tests, each with 100 events.
+
 07 Jun 2013 Alberto Ribon                 test68-V09-06-03
 - Increased the timeout for the reproducibility test (now 1 hour).
 
