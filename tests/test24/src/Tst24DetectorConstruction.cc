@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
 #include "Tst24DetectorConstruction.hh"
-
 #include "Tst24DetectorMessenger.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -132,4 +130,7 @@ G4VPhysicalVolume* Tst24DetectorConstruction::Construct()
 
   return simpleBoxDetector;
 }
+
+void Tst24DetectorConstruction::ConstructSDandField()
+{}
 

@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
@@ -47,6 +46,7 @@ class Tst24DetectorConstruction : public G4VUserDetectorConstruction
   public:
      G4VPhysicalVolume* Construct();
      void SelectMaterial(G4String val);
+     void ConstructSDandField();
 
   private:
      void SelectMaterialPointer();

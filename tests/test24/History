@@ -12,24 +12,44 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 June 2013  Dennis Wright (test24-V09-06-00)
+----------------------------------------------
+- Migrate to multi-threaded:
+    added option to use G4MTRunManager in test24.cc
+    created class Tst24ActionInitialization and moved some user init methods
+      there
+    added empty method Tst24GeometryConstruction::ConstructSDandField()
+
+- added CMakeLists_Standalone.txt to be used for stand-alone running 
+  (developed by Makoto Asai)
+
+- updated README for cmake build  
+
 9th October 2012  Gabriele Cosmo (test24-V09-05-01)
+---------------------------------------------------
 - Explicit inclusion of units and constants headers.
 
 8th October 2012  Gunter Folger (test24-V09-05-00)
+--------------------------------------------------
 - Do not create Precompound with local setting for deexcitation models
   this would now be re-used by binary, and create energy non-conservation.
 - Extend testing to Be and C.
      
 18th March 2010  Gunter Folger (test24-V09-03-00)
+-------------------------------------------------
 - Adapt to new multiple scattering classes.
 - Fix mac file for SetCut.
 
 6th December 2005  Gabriele Cosmo
+---------------------------------
 - Trivial changes for support of CLHEP-2.0.X series.
 
 16th March 2004  Gabriele Cosmo
+-------------------------------
 - Fixed compilation warnings.
 - Replaced usage of NULL with 0.
 
 4th November 2002  Hans-Peter Wellisch
+--------------------------------------
 - Created the test.
+
