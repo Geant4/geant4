@@ -23,57 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id$
-//
-// 080901 Add defineTKMaterials() 
+// $Id: $
 //
 
-#ifndef Tst11DetectorConstruction_h
-#define Tst11DetectorConstruction_h 1
+#ifndef Tst11ActionInitialization_h
+#define Tst11ActionInitialization_h 1
 
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-class G4Isotope;
-class G4Element;
-class G4Material;
-class Tst11DetectorMessenger;
+#include "G4VUserActionInitialization.hh"
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-
-class Tst11DetectorConstruction : public G4VUserDetectorConstruction
+class Tst11ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    Tst11DetectorConstruction();
-    ~Tst11DetectorConstruction();
+    Tst11ActionInitialization();
+    virtual ~Tst11ActionInitialization();
 
-  public:
-     G4VPhysicalVolume* Construct();
-     void SelectMaterial(G4String val);
-     void SetMaterial(G4String materialChoice);
-     void ConstructSDandField();
-
-  private:
-     //                          Z       A       name       temparature           m
-     void createIsotopeMaterial( G4int , G4int , G4String , G4double temp = 0.0 , G4int = 0 );
-     void defineNISTMaterials();
-     void defineTKMaterials();
-     void defineENDFVIIMaterials();
-     void SelectMaterialPointer();
-
-     G4LogicalVolume* simpleBoxLog;
-     G4Material* selectedMaterial;
-     G4Material* Air;
-     G4Material* Al;
-     G4Material* Pb;
-     G4Material* U;
-     G4Element* elN;
-     G4Element* elO;
-     G4Element* elU;
-     G4Isotope* isoU;
-     G4String materialChoice;
-     Tst11DetectorMessenger* detectorMessenger;
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
 };
 
 #endif

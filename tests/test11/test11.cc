@@ -23,19 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
 #include "Tst11DetectorConstruction.hh"
-#include "Tst11RunAction.hh"
-#include "Tst11PrimaryGeneratorAction.hh"
+#include "Tst11ActionInitialization.hh"
 #include "Tst11PhysicsList.hh"
-#include "Tst11SteppingAction.hh"
+// #include "Tst11SteppingAction.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
 
 #include "G4ios.hh"
 
@@ -46,16 +49,17 @@ int main(int argc,char** argv) {
   G4Random::setTheEngine(&defaultEngine);
 
   // Run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst11DetectorConstruction);
   runManager->SetUserInitialization(new Tst11PhysicsList);
-
-  // UserAction classes
-  runManager->SetUserAction(new Tst11RunAction);
-  runManager->SetUserAction(new Tst11PrimaryGeneratorAction);
-  //runManager->SetUserAction(new Tst11SteppingAction);
+  runManager->SetUserInitialization(new Tst11ActionInitialization);
 
   if(argc==1)
   {

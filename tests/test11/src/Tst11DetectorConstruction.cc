@@ -425,3 +425,7 @@ void Tst11DetectorConstruction::defineENDFVIIMaterials()
    //createIsotopeMaterial ( 95 , 244 , "95Am244m1" , 0.0 , 1 );
 
 }
+
+void Tst11DetectorConstruction::ConstructSDandField()
+{}
+

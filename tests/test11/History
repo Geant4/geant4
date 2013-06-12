@@ -15,7 +15,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 June 2013  Dennis Wright  (test11-V09-06-02)
+-----------------------------------------------
+- Migrate to multi-threaded:
+    added option to use G4MTRunManager in test11.cc
+    created class Tst11ActionInitialization and moved some user init methods
+      there
+    implemented empty method Tst11DetectorConstruction::ConstructSDandField()
+
+- added CMakeLists_Standalone.txt to be used for stand-alone running 
+  (developed by Makoto Asai)
+
+- updated README for cmake build  
+
 29 April 2013  Tatsumi Koi            (test11-V09-06-01)
+--------------------------------------------------------
 - Replace CLHEP::HepRandom to G4Random
 
 18 April 2013  Tatsumi Koi            (test11-V09-06-00)
