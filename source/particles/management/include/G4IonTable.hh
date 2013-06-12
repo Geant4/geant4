@@ -79,6 +79,7 @@ class G4IonTable
    G4IonTable();
 
    void SlaveG4IonTable();
+   void WorkerG4IonTable();
    // Method is used by each worker thread to copy the content from the master
    // thread.
 

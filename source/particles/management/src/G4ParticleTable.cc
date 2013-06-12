@@ -110,7 +110,8 @@ G4ParticleTable* G4ParticleTable::GetParticleTable()
 
     // Here we initialize all thread private data members.
     //
-    if (fDictionary == 0) fgParticleTable->SlaveG4ParticleTable();
+    ////if (fDictionary == 0) fgParticleTable->SlaveG4ParticleTable();
+    if (fDictionary == 0) fgParticleTable->WorkerG4ParticleTable();
 
     return fgParticleTable;
 }
@@ -170,6 +171,8 @@ G4ParticleTable::G4ParticleTable()
 //
 void G4ParticleTable::SlaveG4ParticleTable()
 {
+G4Exception("G4ParticleTable::SlaveG4ParticleTable()","G4MT0000",FatalException,"Obsolete");
+/********************************************************
   if (fDictionary != 0) return;
 
   // The iterator for the shadow particle table is not sharable.
@@ -216,6 +219,61 @@ void G4ParticleTable::SlaveG4ParticleTable()
   for (G4int i = 0; i < numOfShortLived ; i++)
   {
     fShortLivedTable->Insert(fShortLivedTableShadow->GetParticle(i));
+  }
+***************************/
+}
+
+void G4ParticleTable::WorkerG4ParticleTable()
+{
+  // The iterator for the shadow particle table is not sharable.
+  //
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
+  G4ParticleTable::lockCount++;
+#endif
+
+  if(fDictionary == 0) 
+  { fDictionary = new G4PTblDictionary(); }
+  else
+  { fDictionary->clear(); }
+
+  fIteratorShadow->reset();
+  while( (*fIteratorShadow)() )
+  {
+    G4ParticleDefinition* particle = fIteratorShadow->value();
+    fDictionary->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) );
+  }       
+
+  fIterator =  new G4PTblDicIterator( *fDictionary);
+
+  if(fEncodingDictionary == 0)
+  { fEncodingDictionary = new G4PTblEncodingDictionary(); }
+  else
+  { fEncodingDictionary->clear(); }
+
+  fIteratorShadow->reset();
+  while( (*fIteratorShadow)() )
+  {
+    G4ParticleDefinition* particle = fIteratorShadow->value();
+    G4int code = particle->GetPDGEncoding();
+    if (code !=0 )
+    {
+      fEncodingDictionary->insert( std::pair<G4int, G4ParticleDefinition*>(code ,particle) );
+    }
+  }       
+
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+#endif
+
+  fIonTable->WorkerG4IonTable();
+
+  if( fShortLivedTable == 0 )
+  {
+    fShortLivedTable = new G4ShortLivedTable(); 
+    G4int numOfShortLived = fShortLivedTableShadow->size();
+    for (G4int i = 0; i < numOfShortLived ; i++)
+    { fShortLivedTable->Insert(fShortLivedTableShadow->GetParticle(i)); }
   }
 }
 

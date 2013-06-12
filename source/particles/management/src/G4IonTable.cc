@@ -139,6 +139,8 @@ G4IonTable::G4IonTable()
 //
 void G4IonTable::SlaveG4IonTable()
 {
+G4Exception("G4ParticleTable::SlaveG4ParticleTable()","G4MT0000",FatalException,"Obsolete");
+/*****************************
   fIonList = new G4IonList();
   fIsotopeTableList = new std::vector<G4VIsotopeTable*>;
 
@@ -151,6 +153,30 @@ void G4IonTable::SlaveG4IonTable()
   for (size_t i = 0; i < fIsotopeTableListShadow->size(); i++)
   {
     fIsotopeTableList->push_back((*fIsotopeTableListShadow)[i]);
+  }
+**********************************/
+}
+void G4IonTable::WorkerG4IonTable()
+{
+  if( fIonList == 0 )
+  { fIonList = new G4IonList(); }
+  else
+  { fIonList->clear(); }
+
+  G4IonListIterator it;
+  for (it = fIonListShadow->begin() ; it != fIonListShadow->end(); it++ )
+  {
+    const G4ParticleDefinition* ion = it->second;
+//G4cout << "G4IonTable::WorkerG4IonTable() " << ion->GetParticleName() << G4endl;
+    AddProcessManager(ion->GetParticleName()); 
+    fIonList->insert(*it);
+  }
+
+  if( fIsotopeTableList == 0 )
+  {
+    fIsotopeTableList = new std::vector<G4VIsotopeTable*>; 
+    for (size_t i = 0; i < fIsotopeTableListShadow->size(); i++)
+    { fIsotopeTableList->push_back((*fIsotopeTableListShadow)[i]); }
   }
 }
 
@@ -1442,7 +1468,7 @@ void  G4IonTable::AddProcessManager(const G4String& name)
   std::ostringstream osAdd;
   osAdd << "/run/particle/addProcManager "<< name;
   G4String cmdAdd = osAdd.str();
-
+//G4cout << "G4IonTable::AddProcessManager " << cmdAdd << G4endl;
   // set /control/verbose 0
   G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
   G4UImanager::GetUIpointer()->SetVerboseLevel(0);

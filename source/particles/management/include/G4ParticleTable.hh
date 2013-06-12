@@ -88,6 +88,7 @@ class G4ParticleTable
  public:
 
    void SlaveG4ParticleTable();
+   void WorkerG4ParticleTable();
    // This method is similar to the constructor. It is used by each worker
    // thread to achieve the partial effect as that of the master thread.
 
