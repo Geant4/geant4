@@ -60,8 +60,8 @@ public:
   static ROOTAnalysis* getInstance();
   void SetListName(G4String listName);
 
-  G4bool AreHistoCreated(){return fHistosCreated;};
-  void ResetHistoForNewRun(){fHistosCreated = false;};
+  G4bool AreHistoCreated() const;
+  void ResetHistoForNewRun();
 
 private:
    //private constructor in order to create a singleton

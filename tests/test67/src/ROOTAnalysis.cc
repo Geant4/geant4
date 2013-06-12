@@ -40,8 +40,13 @@
 
 ROOTAnalysis* ROOTAnalysis::instance = 0;
 
-namespace { //l'uso di questo anonym-namespace è solo buona prassi
+namespace { 
+  //Mutex to acquire access to singleton instance check/creation
   G4Mutex instanceMutex = G4MUTEX_INITIALIZER;
+  //Mutex to acquire accss to histograms creation/access
+  //It is also used to control all operations related to histos 
+  //File writing and check analysis
+  G4Mutex dataManipulationMutex = G4MUTEX_INITIALIZER;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,6 +70,7 @@ ROOTAnalysis::ROOTAnalysis() :
 
 ROOTAnalysis::~ROOTAnalysis()
 {
+  //No need to mutex, this is a real singleton.
   //loop over all histograms
   std::map<G4int,TH1D*>::iterator i;
   if (fHistograms)
@@ -98,9 +104,27 @@ ROOTAnalysis* ROOTAnalysis::getInstance()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4bool ROOTAnalysis::AreHistoCreated() const {
+  G4AutoLock l(&dataManipulationMutex);
+  return fHistosCreated;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void ROOTAnalysis::ResetHistoForNewRun() {
+  G4AutoLock l(&dataManipulationMutex);
+  fHistosCreated = false;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void ROOTAnalysis::BookNewHistogram(G4int runID, G4double primaryEnergy)
 {
+  //Booking of histograms has to be protected.
+  //In addition there are issues with ROOT that is 
+  //heavily non thread-safe. In particular I/O related operations
+  //are not thread safe. To avoid problems let's mutex everything
+  //here
+  G4AutoLock l(&dataManipulationMutex);
   if (!fFile)
     {
       //Use the version name for the ROOT file
@@ -163,6 +187,7 @@ void ROOTAnalysis::BookNewHistogram(G4int runID, G4double primaryEnergy)
 
 void ROOTAnalysis::AddEventEnergy(G4int runID,G4double val)
 {
+  G4AutoLock l(&dataManipulationMutex);
   if (!(fHistograms->count(runID)))
     {
       G4ExceptionDescription ed;
@@ -180,6 +205,7 @@ void ROOTAnalysis::AddEventEnergy(G4int runID,G4double val)
 
 void ROOTAnalysis::AddSecondary(G4String name)
 {
+  G4AutoLock l(&dataManipulationMutex);
   if (name == "compt")
     fComp += 1.0;
   else if (name == "eIoni")
@@ -194,6 +220,7 @@ void ROOTAnalysis::AddSecondary(G4String name)
 
 void ROOTAnalysis::CloseFile()
 {
+  G4AutoLock l(&dataManipulationMutex);
   if (!fFile) //file not created at all: e.g. for a vis-only execution
     return;
   if (!fFile->IsOpen())
@@ -230,6 +257,7 @@ void ROOTAnalysis::CloseFile()
 
 void ROOTAnalysis::SetListName(G4String name)
 {
+  G4AutoLock l(&dataManipulationMutex);
   if (!fPhysicsListName)
     {
       G4Exception("ROOTAnalysis::SetListName()","tst67_03",FatalException,
@@ -245,6 +273,7 @@ void ROOTAnalysis::SetListName(G4String name)
 void ROOTAnalysis::EndOfRun(G4int runID,G4double energy,G4int nEventsTotal,
 			    G4int nEventsGood,G4int nEventsFull)
 {
+  G4AutoLock l(&dataManipulationMutex);
   if (!fGraph || !fGraph2 || !nEventsTotal)
     {
       G4Exception("ROOTAnalysis::EndOfRun()","tst67_04",FatalException,
@@ -279,6 +308,7 @@ void ROOTAnalysis::EndOfRun(G4int runID,G4double energy,G4int nEventsTotal,
 
 int ROOTAnalysis::CheckPhysicalResults()
 {
+  G4AutoLock l(&dataManipulationMutex);
   TString filename = "Ref_";
   filename += fPhysicsListName->GetString();     
   filename += ".root";

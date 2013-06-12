@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-Jun-2013 A. Dotti  (test67-V09-06-11)
+        Add Mutex to access shared resources in all methods of 
+        singleton ROOTAnalysis class.
+
 24-May-2013 L.Pandola (test67-V09-06-10)
         Protect the inclusion of ROOTAnalysis.hh with an 
          #ifdef block in Run.cc (caused the rejection of 
