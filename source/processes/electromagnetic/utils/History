@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19 June 13: V.Ivant (emutils-V09-06-27)
+11 June 13: V.Ivant (emutils-V09-06-28)
+- G4VEnergyLossProcess, G4LossTableManager - cleanup table management 
+    for case of many runs in one session, improved printouts
+
+10 June 13: V.Ivant (emutils-V09-06-27)
 - G4VEmModel - fixed SetCrossSectionTable method
 - G4VEnergyLossProcess - make ion initialisation assuming that each ion 
     may have an individual process

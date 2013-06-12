@@ -1100,18 +1100,14 @@ inline G4PhysicsTable* G4VEnergyLossProcess::DEDXunRestrictedTable() const
 
 inline G4PhysicsTable* G4VEnergyLossProcess::IonisationTable() const
 {
-  G4PhysicsTable* t = theDEDXTable;
-  if(theIonisationTable) { t = theIonisationTable; } 
-  return t;
+  return theIonisationTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4PhysicsTable* G4VEnergyLossProcess::IonisationTableForSubsec() const
 {
-  G4PhysicsTable* t = theDEDXSubTable;
-  if(theIonisationSubTable) { t = theIonisationSubTable; } 
-  return t;
+  return theIonisationSubTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
