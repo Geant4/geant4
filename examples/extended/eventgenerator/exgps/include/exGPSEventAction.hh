@@ -45,7 +45,6 @@ class exGPSEventAction : public G4UserEventAction
     exGPSEventAction() ;
     virtual ~exGPSEventAction();
 
-  public:
     virtual void   BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     

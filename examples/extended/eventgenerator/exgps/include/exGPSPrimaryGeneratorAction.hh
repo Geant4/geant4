@@ -43,11 +43,9 @@ class exGPSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     exGPSPrimaryGeneratorAction();
     virtual ~exGPSPrimaryGeneratorAction();
 
-  public:
     virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
-
     G4GeneralParticleSource* fParticleGun;
 };
 

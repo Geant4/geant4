@@ -47,19 +47,14 @@ class exGPSPhysicsList: public G4VUserPhysicsList
     // Construct particle and physics
     virtual void ConstructParticle();
     virtual void ConstructProcess();
-    void SetCuts();
+    virtual void SetCuts();
 
-  public:
-     
-  protected:
     // these methods Construct particles 
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
     void ConstructBaryons();
     void ConstructNuclei();
-
-  private:
 };
 
 #endif

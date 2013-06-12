@@ -54,14 +54,14 @@ public:
   
 private:
   exGPSAnalysisManager* fExGPSAnalysis;
-  G4UIdirectory*              fExGPSAnalysisDir;
+  G4UIdirectory*        fExGPSAnalysisDir;
   
-  G4UIcmdWithAString*               fFileNameCmd;
-  G4UIcmdWithAString*               fFileTypeCmd;
-  G4UIcmdWithADoubleAndUnit*        fMaxEngCmd;
-  G4UIcmdWithADoubleAndUnit*        fMinEngCmd;
-  G4UIcmdWithADoubleAndUnit*        fMaxPosCmd;
-  G4UIcmdWithADoubleAndUnit*        fMinPosCmd;
+  G4UIcmdWithAString*         fFileNameCmd;
+  G4UIcmdWithAString*         fFileTypeCmd;
+  G4UIcmdWithADoubleAndUnit*  fMaxEngCmd;
+  G4UIcmdWithADoubleAndUnit*  fMinEngCmd;
+  G4UIcmdWithADoubleAndUnit*  fMaxPosCmd;
+  G4UIcmdWithADoubleAndUnit*  fMinPosCmd;
 };
 
 #endif // G4ANALYSIS_USE

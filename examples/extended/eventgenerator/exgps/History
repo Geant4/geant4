@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12/06/2013  I.Hrivnacova (exgps-V09-06-02)
+- Code clean-up: indention, redundant public/protected/private keywords
+
 06/06/2013  L.Desorgher (exgps-V09-06-01)
 - Applied coding guidelines (tabs and long lines)
 
