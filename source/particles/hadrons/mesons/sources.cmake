@@ -59,7 +59,7 @@ GEANT4_DEFINE_MODULE(NAME G4mesons
         G4PionMinus.hh
         G4PionPlus.hh
         G4PionZero.hh
-	G4Upsiron.hh
+	G4Upsilon.hh
     SOURCES
         G4AntiBMesonZero.cc
         G4AntiBsMesonZero.cc
@@ -89,7 +89,7 @@ GEANT4_DEFINE_MODULE(NAME G4mesons
         G4PionMinus.cc
         G4PionPlus.cc
         G4PionZero.cc
-	G4Upsiron.cc
+	G4Upsilon.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4materials

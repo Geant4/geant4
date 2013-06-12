@@ -66,7 +66,7 @@
 #include "G4AntiBsMesonZero.hh"
 #include "G4BcMesonPlus.hh"
 #include "G4BcMesonMinus.hh"
-#include "G4Upsiron.hh"
+#include "G4Upsilon.hh"
 
 G4MesonConstructor::G4MesonConstructor()
 {
@@ -119,5 +119,5 @@ void G4MesonConstructor::ConstructBottomMesons()
   G4AntiBsMesonZero::AntiBsMesonZeroDefinition();
   G4BcMesonPlus::BcMesonPlusDefinition();
   G4BcMesonMinus::BcMesonMinusDefinition();
-  G4Upsiron::UpsironDefinition();
+  G4Upsilon::UpsilonDefinition();
 }

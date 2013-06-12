@@ -24,65 +24,40 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Upsilon.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // 
-// ----------------------------------------------------------------------
-//      GEANT 4 class implementation file
+// ------------------------------------------------------------
+//      GEANT 4 class header file
 //
-//      Created                 Hisaya Kurashige, 16 June 1997
+//
+//      Created,             Hisaya Kurashige, 11, Aug. 2011
 // **********************************************************************
-// 
+//
 
-#include "G4Upsiron.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
+#ifndef G4Upsilon_h
+#define G4Upsilon_h 1
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4ParticleDefinition.hh"
 
 // ######################################################################
-// ###                             Upsiron                            ###
+// ###                            Upsilon                             ###
 // ######################################################################
 
-G4Upsiron* G4Upsiron::theInstance = 0;
-
-G4Upsiron* G4Upsiron::Definition()
+class G4Upsilon : public G4ParticleDefinition
 {
-  if (theInstance !=0) return theInstance;
-  const G4String name = "Upsiron";
-  // search in particle table]
-  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-  if (anInstance ==0)
-  {
-  // create particle
-  //
-  //    Arguments for constructor are as follows
-  //               name             mass          width         charge
-  //             2*spin           parity  C-conjugation
-  //          2*Isospin       2*Isospin3       G-parity
-  //               type    lepton number  baryon number   PDG encoding
-  //             stable         lifetime    decay table
-  //             shortlived      subType    anti_encoding
+ private:
+   static G4Upsilon* theInstance;
+   G4Upsilon(){}
+   ~G4Upsilon(){}
 
-   anInstance = new G4ParticleDefinition(
-                 name,     9.46030*GeV,     54.02*keV,          0.,
-                    2,              -1,            -1,
-                    0,               0,            -1,
-              "meson",               0,             0,         553,
-                false,          0.0*ns,          NULL,
-                false,       "Upsiron",           553);
-  }
-  theInstance = reinterpret_cast<G4Upsiron*>(anInstance);
-  return theInstance;
-}
+ public:
+   static G4Upsilon* Definition();
+   static G4Upsilon* UpsilonDefinition();
+   static G4Upsilon* Upsilon();
+};
 
-G4Upsiron*  G4Upsiron::UpsironDefinition()
-{
-  return Definition();
-}
-
-G4Upsiron*  G4Upsiron::Upsiron()
-{
-  return Definition();
-}
-
+#endif
 

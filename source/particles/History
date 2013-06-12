@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 8. June  2013 Gabriele Cosmo, Andrea Dotti (particles-V09-06-29)
+- Fix the name of Upsilon meson
+
 - 29. May  2013 Gabriele Cosmo, Andrea Dotti (particles-V09-06-28)
 - Revert back changes done by V.I. in G4IonTable::FindIon(), which turned
   out to be wrong.
