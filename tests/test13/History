@@ -15,7 +15,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 June 2013  Dennis Wright  (test13-V09-06-00)
+-----------------------------------------------
+- Migrate to multi-threaded:
+    added option to use G4MTRunManager in test13.cc
+    created class Tst13ActionInitialization and moved some user init methods
+      there
+    implemented empty method Tst13DetectorConstruction::ConstructSDandField()
+
+- added CMakeLists_Standalone.txt to be used for stand-alone running 
+  (developed by Makoto Asai)
+
+- updated README for cmake build  
+
 18 Nov 2012,  Pere Mato                 (test13-V09-05-03)
+----------------------------------------------------------
 - To avoid intermittent build problems on Windows added an
   artificial dependency between targets to serialize building them.
 

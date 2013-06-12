@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
@@ -48,11 +47,12 @@ class Tst13DetectorConstruction : public G4VUserDetectorConstruction
   public:
      G4VPhysicalVolume* Construct();
      void SelectMaterial(G4String val);
+     void ConstructSDandField();
 
   private:
      void SelectMaterialPointer();
 
-     G4LogicalVolume*   simpleBoxLog;
+     G4LogicalVolume* simpleBoxLog;
      G4Material* selectedMaterial;
      G4Material* Air;
      G4Material* Al;
@@ -60,7 +60,7 @@ class Tst13DetectorConstruction : public G4VUserDetectorConstruction
      G4Element* elN;
      G4Element* elO;
      G4String materialChoice;
-     Tst13DetectorMessenger * detectorMessenger;
+     Tst13DetectorMessenger* detectorMessenger;
 };
 
 #endif

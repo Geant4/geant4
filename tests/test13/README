@@ -14,4 +14,40 @@ Description:    test of QGS string model with precompound model.
 
 Type of test:   run to completion
 
-Output:         run log
+Building:     This test has a special CMakeLists.txt to be used only by system
+              testing.  It will not work when you run the test in stand-alone
+              mode.  To do that you must:
+
+              1. copy the test directory from geant4/tests to your working
+                 directory
+
+              2. replace the existing version of CMakeLists.txt with a
+                 stand-alone one:
+
+                 mv CMakeLists.txt CMakeLists.txtorig
+                 mv CMakeLists_Standalone.txt CMakeLists.txt
+
+              3. Clean up (if necessary) and re-configure, assuming a 64 bit machine
+                 and Geant4 version 9.6:
+
+                 rm test13
+                 rm test13_hadronic_exerciser
+                 cmake . 
+
+              4. Build both test13 and test13_hadronic_exerciser:
+
+                 make -f Makefile 
+ 
+Running:      First generate the input file:
+
+                 ./test13_hadronic_exerciser large_N >& test13.largeN.in &
+
+              which sets the number of events per run to 2000.  Without the 
+              large_N argument there will be 100 events per run.
+
+              Finally, run the test:
+  
+                 ./test13 test13.largeN.in >& test13.out &
+ 
+Output:       run log
+
