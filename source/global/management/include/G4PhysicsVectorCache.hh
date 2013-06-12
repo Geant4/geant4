@@ -70,15 +70,12 @@ extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4PhysicsVectorCache> *fpPVCacheAllo
 inline void* G4PhysicsVectorCache::operator new(size_t)
 { 
   if (!fpPVCacheAllocator) { fpPVCacheAllocator = new G4Allocator<G4PhysicsVectorCache>; }
-  G4Allocator<G4PhysicsVectorCache> &aPVCacheAllocator = *fpPVCacheAllocator;
-  return (void*)aPVCacheAllocator.MallocSingle();
+  return (void*)fpPVCacheAllocator->MallocSingle();
 }
 
 inline void G4PhysicsVectorCache::operator delete(void* aCache)
 { 
-  if (!fpPVCacheAllocator) { fpPVCacheAllocator = new G4Allocator<G4PhysicsVectorCache>; }
-  G4Allocator<G4PhysicsVectorCache> &aPVCacheAllocator = *fpPVCacheAllocator;
-  aPVCacheAllocator.FreeSingle((G4PhysicsVectorCache*)aCache);
+  fpPVCacheAllocator->FreeSingle((G4PhysicsVectorCache*)aCache);
 }
 
 #endif

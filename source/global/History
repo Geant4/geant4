@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 12, 2013 G.Cosmo (global-V09-06-39)
+- Simplified implementation of new/delete operators for G4PhysicsVector
+  and G4PhysicsVectorCache and avoid deletion of allocator global pointers
+  in respective destructors.
+
 June 7, 2013 G.Cosmo (global-V09-06-38)
 - Added call to clear() in G4PhysicsTable::clearAndDestroy().
 - Added 'safe' inclusion of <windows.h> from G4Threading.hh, in new

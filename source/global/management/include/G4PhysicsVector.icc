@@ -47,16 +47,13 @@ inline
  void* G4PhysicsVector::operator new(size_t)
 { 
   if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
-  G4Allocator<G4PhysicsVector> &aPVAllocator = *fpPVAllocator;
-  return (void*)aPVAllocator.MallocSingle();
+  return (void*)fpPVAllocator->MallocSingle();
 }
 
 inline
  void G4PhysicsVector::operator delete(void* aVector)
 {
-  if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
-  G4Allocator<G4PhysicsVector> &aPVAllocator = *fpPVAllocator;
-  aPVAllocator.FreeSingle((G4PhysicsVector*)aVector);
+  fpPVAllocator->FreeSingle((G4PhysicsVector*)aVector);
 }
 
 inline

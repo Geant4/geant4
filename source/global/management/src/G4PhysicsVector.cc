@@ -129,7 +129,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
 
 G4PhysicsVector::~G4PhysicsVector() 
 {
-  if (!fpPVAllocator) { delete fpPVAllocator; fpPVAllocator = 0; }
+//  if (!fpPVAllocator) { delete fpPVAllocator; fpPVAllocator = 0; }
   delete G4MT_pvcache; G4MT_pvcache = 0;
 }
 

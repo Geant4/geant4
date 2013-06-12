@@ -46,5 +46,5 @@ G4PhysicsVectorCache::G4PhysicsVectorCache()
 
 G4PhysicsVectorCache::~G4PhysicsVectorCache()
 { 
-  if (!fpPVCacheAllocator) { delete fpPVCacheAllocator; fpPVCacheAllocator = 0; }
+//  if (!fpPVCacheAllocator) { delete fpPVCacheAllocator; fpPVCacheAllocator = 0; }
 }
