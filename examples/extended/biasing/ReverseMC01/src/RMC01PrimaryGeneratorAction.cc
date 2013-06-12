@@ -45,6 +45,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01PrimaryGeneratorAction::RMC01PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleSource(0)
 {fParticleSource = new G4GeneralParticleSource();
 }
 

@@ -31,9 +31,9 @@
 //////////////////////////////////////////////////////////////
 //  Class Name:        G4AdjointPhysicsMessenger
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -70,7 +70,7 @@ class G4AdjointPhysicsMessenger: public G4UImessenger
     
  private:
   G4AdjointPhysicsList* fPhysicsList;
-  G4UIdirectory*             fPhysicsDir;
+  G4UIdirectory*        fPhysicsDir;
     
   //Physics Model
   G4UIcmdWithABool*  fUsepIonisationCmd;

@@ -45,6 +45,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01RunAction::RMC01RunAction() 
+ : G4UserRunAction(),
+   fAnalysisManager(0)
 { fAnalysisManager = RMC01AnalysisManager::GetInstance();  
 }
 

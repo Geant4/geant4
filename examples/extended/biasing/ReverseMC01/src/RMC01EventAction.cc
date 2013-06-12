@@ -46,6 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01EventAction::RMC01EventAction()
+ : G4UserEventAction()
 {;
 }
 

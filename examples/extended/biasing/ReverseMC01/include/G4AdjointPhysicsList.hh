@@ -29,11 +29,11 @@
 // $Id$
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        G4AdjointPhysicsList
+//  Class Name:             G4AdjointPhysicsList
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -78,9 +78,8 @@ class G4AdjointPhysicsList: public G4VUserPhysicsList
     // Construct particle and physics
    virtual void ConstructParticle();
    virtual void ConstructProcess();
-   void SetCuts();
+   virtual void SetCuts();
 
-  protected:
     // these methods Construct particles 
    void ConstructBosons();
    void ConstructLeptons();
@@ -88,7 +87,6 @@ class G4AdjointPhysicsList: public G4VUserPhysicsList
    void ConstructBaryons();
    void ConstructAdjointParticles();
 
-  protected:
     // these methods Construct physics processes and register them
    void ConstructGeneral();
    void ConstructEM();

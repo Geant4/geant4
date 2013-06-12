@@ -50,7 +50,13 @@
 
 RMC01DetectorMessenger::RMC01DetectorMessenger(
                                          RMC01DetectorConstruction* GeneralDet)
-:fTheDetector(GeneralDet)
+: G4UImessenger(),
+  fTheDetector(GeneralDet),
+  fGeneralDir(0),
+  fDetDir(0),
+  fSetSensitiveVolumeHeightCmd(0),
+  fSetSensitiveVolumeRadiusCmd(0),
+  fSetShieldingThicknessCmd(0)
 { 
   
   fGeneralDir= new G4UIdirectory("/RMC01/");

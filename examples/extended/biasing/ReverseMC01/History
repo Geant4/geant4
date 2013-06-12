@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-June, 2013  I.Hrivnacova    (ReverseMC01-V09-06-02)
+- Applied coding guidelines (virtual keyword, data members initialization)
+- Code clean-up: indention, redundant public/protected/private keywords
+
 07-June, 2013  L.Desorgher     (ReverseMC01-V09-06-01)
 - Finish modification for coding guide lines.
 

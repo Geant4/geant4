@@ -29,22 +29,22 @@
 // $Id$
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        RMC01AnalysisManager
+//  Class Name:            RMC01AnalysisManager
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
 //      ChangeHistory:
-//                 17-11-2009 creation by L. Desorgher
-//                24-11-2009 L.Desorgher,
-//                   -registering in  Conv* ASCII files every 5000 events the computed
-//                        edep with  precision.
-//                   -Correction of the adjoint computed current and answer matrices
-//                        by a factor n_asked/n_processed for the case where a run is aborted
-//                        because the user expected precision on e_dep has been reached.
+//        17-11-2009 creation by L. Desorgher
+//        24-11-2009 L.Desorgher,
+//           -registering in  Conv* ASCII files every 5000 events the computed
+//                edep with  precision.
+//           -Correction of the adjoint computed current and answer matrices
+//                by a factor n_asked/n_processed for the case where a run is aborted
+//                because the user expected precision on e_dep has been reached.
 //
 //-------------------------------------------------------------
 
@@ -81,8 +81,6 @@ public:
   ~RMC01AnalysisManager();
   static RMC01AnalysisManager* GetInstance();
   
-  public:
-   
    void BeginOfRun(const G4Run*); 
    void EndOfRun(const G4Run*); 
    void BeginOfEvent(const G4Event*); 
@@ -103,10 +101,7 @@ private:
 
   static RMC01AnalysisManager* fInstance;
 
-private:
-
   RMC01AnalysisManager(); 
-private:
   
   void EndOfEventForForwardSimulation(const G4Event* anEvent);
   void EndOfEventForAdjointSimulation(const G4Event* anEvent);
@@ -119,9 +114,7 @@ private:
   void ComputeMeanEdepAndError(const G4Event* anEvent,
                                 G4double& mean,G4double& error);
   
-private:
-  
-RMC01AnalysisManagerMessenger*  fMsg;
+  RMC01AnalysisManagerMessenger*  fMsg;
   
   //Histos for  fwd simulation
   //--------------
@@ -181,7 +174,6 @@ RMC01AnalysisManagerMessenger*  fMsg;
   //------
   G4Timer* fTimer;
   std::fstream fConvergenceFileOutput;
- 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

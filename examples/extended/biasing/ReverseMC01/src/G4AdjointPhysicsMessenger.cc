@@ -55,7 +55,18 @@
 
 G4AdjointPhysicsMessenger::G4AdjointPhysicsMessenger(
                                            G4AdjointPhysicsList* pPhysicsList)
-:fPhysicsList(pPhysicsList)
+: G4UImessenger(),
+  fPhysicsList(pPhysicsList),
+  fPhysicsDir(0),
+  fUsepIonisationCmd(0),
+  fUseBremCmd(0),
+  fUseComptonCmd(0),
+  fUseMSCmd(0),
+  fUsePEEffectCmd(0),
+  fUseGammaConversionCmd(0),
+  fUseEgainFluctuationCmd(0),
+  fSetEminAdjModelsCmd(0),
+  fSetEmaxAdjModelsCmd(0)
 { 
   fPhysicsDir = new G4UIdirectory("/adjoint_physics/");
 

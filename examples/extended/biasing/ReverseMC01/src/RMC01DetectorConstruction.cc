@@ -64,7 +64,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01DetectorConstruction::RMC01DetectorConstruction()
- : fShield_Thickness(5.*mm),
+ : G4VUserDetectorConstruction(),
+   fDetectorMessenger(0),
+   fShield_Thickness(5.*mm),
    fSensitive_cylinder_H (1.*mm),
    fSensitive_cylinder_Rout (1.*mm)
 { 

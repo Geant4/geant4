@@ -63,6 +63,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01AdjointEventAction::RMC01AdjointEventAction()
+ : G4UserEventAction()
 {;
 }
         

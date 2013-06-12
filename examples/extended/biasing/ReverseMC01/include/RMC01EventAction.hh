@@ -29,11 +29,11 @@
 // $Id$
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        RMC01EventAction
+//  Class Name:            RMC01EventAction
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -57,10 +57,8 @@ class RMC01EventAction : public G4UserEventAction
    RMC01EventAction();
    virtual ~RMC01EventAction();
 
- public:
    virtual void  BeginOfEventAction(const G4Event*);
    virtual void  EndOfEventAction(const G4Event*);
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

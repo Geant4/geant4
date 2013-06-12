@@ -48,7 +48,12 @@
 
 RMC01AnalysisManagerMessenger::RMC01AnalysisManagerMessenger(
                                     RMC01AnalysisManager* analysisManager)
-:fAnalysisManager(analysisManager)
+: G4UImessenger(),
+  fAnalysisManager(analysisManager),
+  fAnalysisDir(0),
+  fSetPrecisionForConvergenceTestCmd(0),
+  fSetExpSpectrumToNormaliseAdjResCmd(0),
+  fSetPowerLawSpectrumToNormaliseAdjResCmd(0)
 { 
   fAnalysisDir = new G4UIdirectory("/RMC01/analysis/");
   fAnalysisDir->SetGuidance("Analysis commands");

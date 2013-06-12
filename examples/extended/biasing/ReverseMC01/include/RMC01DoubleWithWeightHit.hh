@@ -29,11 +29,11 @@
 // $Id$
 //
 //////////////////////////////////////////////////////////////
-//  Class Name:        RMC01DoubleWithWeightHit
+//  Class Name:           RMC01DoubleWithWeightHit
 //        Author:               L. Desorgher
-//         Organisation:         SpaceIT GmbH
+//        Organisation:         SpaceIT GmbH
 //        Contract:        ESA contract 21435/08/NL/AT
-//         Customer:             ESA/ESTEC
+//        Customer:             ESA/ESTEC
 //////////////////////////////////////////////////////////////
 // CHANGE HISTORY
 //--------------
@@ -62,20 +62,13 @@ public:
  
   RMC01DoubleWithWeightHit(const RMC01DoubleWithWeightHit &right);
  
-  const RMC01DoubleWithWeightHit& operator = (
-                                                const RMC01DoubleWithWeightHit &right);
+  const RMC01DoubleWithWeightHit& operator = (const RMC01DoubleWithWeightHit &right);
  
   int operator == (const RMC01DoubleWithWeightHit &right) const;
 
   inline void *operator new(size_t);
   inline void operator delete(void *aHit);
 
-private:
- 
-  G4double fValue; // It can be anything
-  G4double fWeight; 
-
-public:
   // Methods to get the information - energy deposit and associated
   // position in the phantom - of the hits stored in the hits collection  
  
@@ -83,6 +76,10 @@ public:
   
   inline G4double GetWeight() {return fWeight;}
 
+private:
+ 
+  G4double fValue; // It can be anything
+  G4double fWeight; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
