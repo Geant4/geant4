@@ -394,7 +394,7 @@ void G4MTRunManager::InitializePhysics()
 {
     G4RunManager::InitializePhysics();
     //G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIon();
-    G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+    //G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
     //BERTINI, this is needed to create pseudo-particles, to be removed
     G4CascadeInterface::Initialize();
 }
@@ -516,6 +516,13 @@ void G4MTRunManager::WaitForReadyWorkers()
 #endif
     }
     //Now number of workers is as expected.
+    static G4bool createIsomerOnlyOnce = false;
+    if(!createIsomerOnlyOnce)
+    {
+      createIsomerOnlyOnce = true;
+      G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+    }
+
     //Prepare to wait for workers to end eventloop
     //Reset number of workers in "EndOfEventLoop"
     G4AutoLock l(&numberOfEndOfEventLoopWorkersMutex);
@@ -541,6 +548,8 @@ void G4MTRunManager::ThisWorkerReady()
 #ifdef WIN32
     LeaveCriticalSection( &cs1 );
 #endif
+    const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).NewSubInstances();
+    G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
 }
 
 

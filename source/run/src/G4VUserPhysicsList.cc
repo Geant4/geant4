@@ -224,7 +224,8 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
     if (verboseLevel >1){
       G4cout << "G4VUserPhysicsList::AddProcessManager: "
 	     << newParticle->GetParticleName()
-	     << " already has ProcessManager " << G4endl;
+	     << " already has ProcessManager " << newParticle->GetProcessManager() 
+             << G4endl;
     }
 #endif
     return;
@@ -280,11 +281,11 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
     newManager->DumpInfo();
   }
 #endif
-  if ( fIsPhysicsTableBuilt
-       && (newParticle->GetParticleType() == "nucleus")) {
-    PreparePhysicsTable(newParticle);
-    BuildPhysicsTable(newParticle);
-  }
+////////////  if ( fIsPhysicsTableBuilt
+////////////       && (newParticle->GetParticleType() == "nucleus")) {
+////////////    PreparePhysicsTable(newParticle);
+////////////    BuildPhysicsTable(newParticle);
+////////////  }
 }
 
 
@@ -297,7 +298,7 @@ void G4VUserPhysicsList::InitializeProcessManager()
   G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
-  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+//  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
@@ -319,7 +320,7 @@ void G4VUserPhysicsList::InitializeProcessManager()
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
 #endif
-  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+//  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
 }
 
@@ -332,7 +333,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
   G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
-  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+//  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
@@ -360,7 +361,7 @@ void G4VUserPhysicsList::RemoveProcessManager()
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
 #endif
-  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+//  G4cout << "Particle table is released by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
 
 }
 
@@ -683,6 +684,11 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 		  "No process Vector");
       return;
     }
+//G4cout << "G4VUserPhysicsList::BuildPhysicsTable %%%%%% " << particle->GetParticleName() << G4endl;
+//for(G4int iv1=0;iv1<pVector->size();iv1++)
+//{ G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName() << G4endl; }
+//for(G4int iv2=0;iv2<pVectorShadow->size();iv2++)
+//{ G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName() << G4endl; }
     for (G4int j=0; j < pVector->size(); ++j) {
 
       G4VMultipleScattering *currentProcess = dynamic_cast<G4VMultipleScattering *>((*pVector)[j]);
@@ -691,6 +697,8 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
         if (pManagerShadow != pManager)
         {
           G4VMultipleScattering *firstProcess = dynamic_cast<G4VMultipleScattering *>((*pVectorShadow)[j]);
+//G4cout << "G4VUserPhysicsList::BuildPhysicsTable +++++ " << currentProcess->GetProcessName() << " : " << (*pVectorShadow)[j]->GetProcessName() << G4endl;
+//G4cout << "G4VUserPhysicsList::BuildPhysicsTable +++++ " << currentProcess << " : " << (*pVectorShadow)[j] << G4endl;
           currentProcess->SlaveBuildPhysicsTable(*particle, firstProcess);
         }
         else

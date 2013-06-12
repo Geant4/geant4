@@ -48,7 +48,7 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(true) {
     msg<<" This type of RunManager can only be used in mult-threaded applications.";
     G4Exception("G4WorkerRunManager::G4WorkerRunManager()","Run0035",FatalException,msg);
 #endif
-    G4ParticleTable::GetParticleTable()->SlaveG4ParticleTable();
+    G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
     //Add this worker to the list of workers
     G4MTRunManager::GetMasterRunManager()->AddWorkerRunManager(this);
     G4ScoringManager* masterScM = G4MTRunManager::GetMasterScoringManager();
