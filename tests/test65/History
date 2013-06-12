@@ -1,0 +1,28 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 65 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+12 June 2013 Tatsumi Koi (test65-V09-06-00)
+Migration to v9.6
+	CMakeLists.txt
+	test65_hadronic_exerciser.cc
+	src/Tst65DetectorConstruction.cc
+	src/Tst65PhysicsList.cc
+	src/Tst65PrimaryGeneratorAction.cc
+	src/Tst65SteppingAction.cc
+
+24 November 2010 Tatsumi Koi (test65-V09-03-00)
+    new test for LEND (Low Energy Nucler Data)
