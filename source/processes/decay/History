@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Jun. 11, 13 M.Asai (decay-V09-06-01)
+- Remove the modification in the previous tag, as it is no longer needed as all ions
+  are generated after GenericIon gets the collect process manager.
+
 - Jun. 9, 13 M.Asai (decay-V09-06-00)
 - Modify G4Decay::IsApplicable() to make it return false for all ions in the IonTable.
 
