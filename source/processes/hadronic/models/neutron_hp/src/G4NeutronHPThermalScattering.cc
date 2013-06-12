@@ -417,7 +417,7 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
          G4double sE;
          sE = get_linear_interpolated ( aTemp , std::pair < G4double , G4double > ( tempLH.first , TL.first ) , std::pair < G4double , G4double > ( tempLH.second , TH.first ) );  
 
-         G4double mu;
+         G4double mu=1.0;
          E_isoAng anE_isoAng; 
          if ( TL.second.n == TH.second.n ) 
          {
@@ -591,7 +591,7 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
          } 
         
          // E_isoAng for aTemp and aTrack.GetKineticEnergy() 
-         G4double mu;
+         G4double mu=1.0;
          E_isoAng anEPM_T_E;  
 
          if ( anEPM_TL_E.n == anEPM_TH_E.n ) 
