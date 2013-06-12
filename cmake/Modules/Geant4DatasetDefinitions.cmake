@@ -12,7 +12,7 @@ geant4_add_dataset(
   FILENAME  G4NDL
   EXTENSION tar.gz
   ENVVAR    G4NEUTRONHPDATA
-  MD5SUM    928a6181b822d5f35da6c830fb10619e
+  MD5SUM    55493e74cba90e6cb167a5008e138cd7
   )
 
 # - Low energy electromagnetics
