@@ -14,7 +14,26 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 June 2013  Dennis Wright             (test12-V09-06-00)
+----------------------------------------------------------
+- Migrate to multi-threaded:
+    added option to use G4MTRunManager in test12.cc
+    created class Tst12ActionInitialization and moved some user init methods
+      there
+    implemented empty method Tst12DetectorConstruction::ConstructSDandField()
+
+- added CMakeLists_Standalone.txt to be used for stand-alone running 
+  (developed by Makoto Asai)
+
+- updated README for cmake build  
+
+ 1 Feb 2013,  V. Uzhinsky               (test12-V09-05-08)
+----------------------------------------------------------
+- Input file for testing Ion-Ion interactions was introduced.
+
 18 Nov 2012,  Pere Mato                 (test12-V09-05-07)
+----------------------------------------------------------
 - To avoid intermittent build problems on Windows added an
   artificial dependency between targets to serialize building them.
 

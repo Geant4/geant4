@@ -24,13 +24,10 @@
 // ********************************************************************
 //
 //
-//
 
+#include "Tst12ActionInitialization.hh"
 #include "Tst12DetectorConstruction.hh"
-#include "Tst12RunAction.hh"
-#include "Tst12PrimaryGeneratorAction.hh"
-#include "Tst12SteppingAction.hh"
-#include "Tst12StackingAction.hh"
+//#include "Tst12SteppingAction.hh"
 
 #include "FTFP_BERT.hh"
 #include "FTF_BIC.hh"
@@ -40,7 +37,12 @@
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
 
 #include "G4HadronicProcessStore.hh"
 
@@ -58,8 +60,14 @@ int main(int argc,char** argv) {
   CLHEP::HepRandom::setTheEngine(&defaultEngine);
 
   // Run manager
-  G4RunManager * runManager = new G4RunManager;
-  G4VUserPhysicsList * thePL(0);
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
+
+  G4VUserPhysicsList* thePL(0);
   G4String inputFileName="-";
   if (argc > 2) { // second arg is PhysicsList
      G4String opt = argv[2];
@@ -83,11 +91,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new Tst12DetectorConstruction);
   //  runManager->SetUserInitialization(new Tst12PhysicsList);
   runManager->SetUserInitialization(thePL);
-
-  // UserAction classes
-  runManager->SetUserAction(new Tst12RunAction);
-  runManager->SetUserAction(new Tst12PrimaryGeneratorAction);
-  runManager->SetUserAction(new Tst12StackingAction);
+  runManager->SetUserInitialization(new Tst12ActionInitialization);
 
   if(inputFileName == "-")
   {

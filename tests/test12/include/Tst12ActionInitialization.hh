@@ -23,45 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: $
 //
-// $Id$
-//
 
-#ifndef Tst12DetectorConstruction_h
-#define Tst12DetectorConstruction_h 1
+#ifndef Tst12ActionInitialization_h
+#define Tst12ActionInitialization_h 1
 
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-class G4Element;
-class G4Material;
-class Tst12DetectorMessenger;
+#include "G4VUserActionInitialization.hh"
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-
-class Tst12DetectorConstruction : public G4VUserDetectorConstruction
+class Tst12ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    Tst12DetectorConstruction();
-    ~Tst12DetectorConstruction();
+    Tst12ActionInitialization();
+    virtual ~Tst12ActionInitialization();
 
-  public:
-     G4VPhysicalVolume* Construct();
-     void SelectMaterial(G4String val);
-     void ConstructSDandField();
-
-  private:
-     void SelectMaterialPointer();
-
-     G4LogicalVolume* simpleBoxLog;
-     G4Material* selectedMaterial;
-     G4Material* Air;
-     G4Material* Al;
-     G4Material* Pb;
-     G4Element* elN;
-     G4Element* elO;
-     G4String materialChoice;
-     Tst12DetectorMessenger* detectorMessenger;
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
 };
 
 #endif

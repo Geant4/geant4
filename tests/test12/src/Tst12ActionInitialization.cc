@@ -23,46 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
-#ifndef Tst12DetectorConstruction_h
-#define Tst12DetectorConstruction_h 1
+#include "Tst12ActionInitialization.hh"
 
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-class G4Element;
-class G4Material;
-class Tst12DetectorMessenger;
+#include "Tst12RunAction.hh"
+#include "Tst12PrimaryGeneratorAction.hh"
+#include "Tst12StackingAction.hh"
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+Tst12ActionInitialization::Tst12ActionInitialization()
+{}
 
-class Tst12DetectorConstruction : public G4VUserDetectorConstruction
-{
-  public:
-    Tst12DetectorConstruction();
-    ~Tst12DetectorConstruction();
+Tst12ActionInitialization::~Tst12ActionInitialization()
+{}
 
-  public:
-     G4VPhysicalVolume* Construct();
-     void SelectMaterial(G4String val);
-     void ConstructSDandField();
+void Tst12ActionInitialization::Build() const {
+  SetUserAction(new Tst12PrimaryGeneratorAction);
+  SetUserAction(new Tst12RunAction);
+  SetUserAction(new Tst12StackingAction);
+}
 
-  private:
-     void SelectMaterialPointer();
-
-     G4LogicalVolume* simpleBoxLog;
-     G4Material* selectedMaterial;
-     G4Material* Air;
-     G4Material* Al;
-     G4Material* Pb;
-     G4Element* elN;
-     G4Element* elO;
-     G4String materialChoice;
-     Tst12DetectorMessenger* detectorMessenger;
-};
-
-#endif
+void Tst12ActionInitialization::BuildForMaster() const {
+}
 

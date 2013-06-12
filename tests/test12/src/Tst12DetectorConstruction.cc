@@ -131,3 +131,6 @@ G4VPhysicalVolume* Tst12DetectorConstruction::Construct()
   return simpleBoxDetector;
 }
 
+void Tst12DetectorConstruction::ConstructSDandField()
+{}
+

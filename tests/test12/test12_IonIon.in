@@ -1,0 +1,358 @@
+#
+# Hand-generated test input file for test12 hadronics.
+#
+/control/verbose 2
+/run/verbose 2
+/run/setCut 1 m
+/run/initialize
+/gun/direction 1 0 0
+#
+# deuteron at 3 GeV/nucleon in U
+#
+/gun/particle deuteron
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# deuteron at 3 GeV/nucleon on H 
+#
+/gun/particle deuteron
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# deuteron at 3 GeV/nucleon on Silicon 
+#
+/gun/particle deuteron
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+#
+# deuteron at 10 GeV/nucleon in U
+#
+/gun/particle deuteron
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# deuteron at 10 GeV/nucleon on H 
+#
+/gun/particle deuteron
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# deuteron at 10 GeV/nucleon on Silicon 
+#
+/gun/particle deuteron
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# deuteron at 100 GeV/nucleon in U
+#
+/gun/particle deuteron
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# deuteron at 100 GeV/nucleon on H 
+#
+/gun/particle deuteron
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# deuteron at 100 GeV/nucleon on Silicon 
+#
+/gun/particle deuteron
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+#  .....end deuteron.............
+#
+# alpha at 3 GeV/nucleon in U
+#
+/gun/particle alpha
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# alpha at 3 GeV/nucleon on H 
+#
+/gun/particle alpha
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# alpha at 3 GeV/nucleon on Silicon 
+#
+/gun/particle alpha
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# alpha at 10 GeV/nucleon in U
+#
+/gun/particle alpha
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# alpha at 10 GeV/nucleon on H 
+#
+/gun/particle alpha
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# alpha at 10 GeV/nucleon on Silicon 
+#
+/gun/particle alpha
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# alpha at 100 GeV/nucleon in U
+#
+/gun/particle alpha
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# alpha at 100 GeV/nucleon on H 
+#
+/gun/particle alpha
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# alpha at 100 GeV/nucleon on Silicon 
+#
+/gun/particle alpha
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+#  .....end alpha............
+#
+# C(12,6)++ at 3 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# C(12,6)++ at 3 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# C(12,6)++ at 3 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# C(12,6)++ at 10 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# C(12,6)++ at 10 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# C(12,6)++ at 10 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# C(12,6)++ at 100 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# C(12,6)++ at 100 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# C(12,6)++ at 100 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 6 12 6
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# Fe(56,26)++ at 3 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# Fe(56,26)++ at 3 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# Fe(56,26)++ at 3 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# Fe(56,26)++ at 10 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# Fe(56,26)++ at 10 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# Fe(56,26)++ at 10 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# Fe(56,26)++ at 100 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# Fe(56,26)++ at 100 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# Fe(56,26)++ at 100 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 26 56 26
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#  .....end Fe(56,26)++............
+#
+# Pb(208,82)++ at 3 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 82 208 82
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# Pb(208,82)++ at 3 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 82 208 82
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# Pb(208,82)++ at 3 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 82 208 82
+/gun/energy 3.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# Pb(208,82)++ at 10 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 82 208 82
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# Pb(208,82)++ at 10 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 82 208 82
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# Pb(208,82)++ at 10 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 82 208 82
+/gun/energy 10.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# Pb(208,82)++ at 100 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 82 208 82
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# Pb(208,82)++ at 100 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 82 208 82
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# Pb(208,82)++ at 100 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 82 208 82
+/gun/energy 100.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+exit
