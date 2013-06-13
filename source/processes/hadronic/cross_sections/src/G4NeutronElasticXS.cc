@@ -37,7 +37,6 @@
 // Modifications:
 //
 
-#include "G4HadronicException.hh"
 #include "G4NeutronElasticXS.hh"
 #include "G4Neutron.hh"
 #include "G4DynamicParticle.hh"
@@ -106,9 +105,10 @@ G4NeutronElasticXS::GetElementCrossSection(const G4DynamicParticle* aParticle,
 
   if(Z < 1 || Z > maxZ) { return xs; }
 
-  G4int Amean = G4int(G4NistManager::Instance()->GetAtomicMassAmu(Z)+0.5);
+  G4int Amean = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
   G4PhysicsVector* pv = data[Z];
-  //  G4cout  << "G4NeutronElasticXS::GetCrossSection e= " << ekin << " Z= " << Z << G4endl;
+  //  G4cout  << "G4NeutronElasticXS::GetCrossSection e= " << ekin 
+  // << " Z= " << Z << G4endl;
 
   // element was not initialised
   if(!pv) {
@@ -148,7 +148,11 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 	   << p.GetParticleName() << G4endl;
   }
   if(p.GetParticleName() != "neutron") { 
-    throw G4HadronicException(__FILE__, __LINE__,"Wrong particle type");
+    G4ExceptionDescription ed;
+    ed << p.GetParticleName() << " is a wrong particle type -"
+       << " only neutron is allowed";
+    G4Exception("G4NeutronElasticXS::BuildPhysicsTable(..)","had012",
+		FatalException, ed, "");
     return; 
   }
   isInitialized = true;
@@ -156,11 +160,6 @@ G4NeutronElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   // check environment variable 
   // Build the complete string identifying the file with the data set
   char* path = getenv("G4NEUTRONXSDATA");
-  if (!path){
-    throw G4HadronicException(__FILE__, __LINE__, 
-			      "G4NEUTRONXSDATA environment variable not defined");
-    return;
-  }
 
   G4DynamicParticle* dynParticle = 
     new G4DynamicParticle(G4Neutron::Neutron(),G4ThreeVector(1,0,0),1);
@@ -192,8 +191,9 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
     // Build the complete string identifying the file with the data set
     path = getenv("G4NEUTRONXSDATA");
     if (!path) {
-      throw G4HadronicException(__FILE__, __LINE__, 
-				"G4NEUTRONXSDATA environment variable not defined");
+      G4Exception("G4NeutronElasticXS::Initialise(..)","had013",
+		  FatalException,
+                  "Environment variable G4NEUTRONXSDATA is not defined");
       return;
     }
   }
@@ -203,7 +203,7 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
       new G4DynamicParticle(G4Neutron::Neutron(),G4ThreeVector(1,0,0),1);
   }
 
-  G4int Amean = G4int(G4NistManager::Instance()->GetAtomicMassAmu(Z)+0.5);
+  G4int Amean = G4lrint(G4NistManager::Instance()->GetAtomicMassAmu(Z));
 
   // upload data from file
   data[Z] = new G4PhysicsLogVector();
@@ -212,9 +212,11 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   ost << path << "/elast" << Z ;
   std::ifstream filein(ost.str().c_str());
   if (!(filein)) {
-    G4cout << ost.str() 
-	   << "  is not opened by G4NeutronElasticXS" << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__,"NO data sets opened");
+    G4ExceptionDescription ed;
+    ed << "Data file <" << ost.str().c_str()
+       << "> is not opened!";
+    G4Exception("G4NeutronElasticXS::Initialise(..)","had014",
+                FatalException, ed, "Check G4NEUTRONXSDATA");
     return;
   }else{
     if(verboseLevel > 1) {
@@ -223,7 +225,14 @@ G4NeutronElasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
     }
     
     // retrieve data from DB
-    data[Z]->Retrieve(filein, true);
+    if(!data[Z]->Retrieve(filein, true)) {
+      G4ExceptionDescription ed;
+      ed << "Data file <" << ost.str().c_str()
+	 << "> is not retrieved!";
+      G4Exception("G4NeutronElasticXS::Initialise(..)","had015",
+		  FatalException, ed, "Check G4NEUTRONXSDATA");
+      return;
+    }
     
     // smooth transition 
     size_t n      = data[Z]->GetVectorLength() - 1;

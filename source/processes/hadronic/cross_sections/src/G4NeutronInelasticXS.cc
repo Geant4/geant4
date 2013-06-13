@@ -37,7 +37,6 @@
 // Modifications:
 //
 
-#include "G4HadronicException.hh"
 #include "G4NeutronInelasticXS.hh"
 #include "G4Neutron.hh"
 #include "G4DynamicParticle.hh"
@@ -259,7 +258,11 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
 	   << p.GetParticleName() << G4endl;
   }
   if(p.GetParticleName() != "neutron") { 
-    throw G4HadronicException(__FILE__, __LINE__,"Wrong particle type");
+    G4ExceptionDescription ed;
+    ed << p.GetParticleName() << " is a wrong particle type -"
+       << " only neutron is allowed";
+    G4Exception("G4NeutronInelasticXS::BuildPhysicsTable(..)","had012",
+		FatalException, ed, "");
     return; 
   }
   isInitialized = true;
@@ -267,11 +270,6 @@ G4NeutronInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   // check environment variable 
   // Build the complete string identifying the file with the data set
   char* path = getenv("G4NEUTRONXSDATA");
-  if (!path){
-    throw G4HadronicException(__FILE__, __LINE__, 
-			      "G4NEUTRONXSDATA environment variable not defined");
-    return;
-  }
 
   G4DynamicParticle* dynParticle = 
     new G4DynamicParticle(G4Neutron::Neutron(),G4ThreeVector(1,0,0),1);
@@ -303,8 +301,9 @@ G4NeutronInelasticXS::Initialise(G4int Z, G4DynamicParticle* dp,
   // Build the complete string identifying the file with the data set
     path = getenv("G4NEUTRONXSDATA");
     if (!path) {
-      throw G4HadronicException(__FILE__, __LINE__, 
-				"G4NEUTRONXSDATA environment variable not defined");
+      G4Exception("G4NeutronInelasticXS::Initialise(..)","had013",
+		  FatalException,
+                  "Environment variable G4NEUTRONXSDATA is not defined");
       return;
     }
   }
@@ -365,8 +364,11 @@ G4NeutronInelasticXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
   std::ifstream filein(ost.str().c_str());
   if (!(filein)) {
     if(!warn) { return v; }
-    G4cout << ost.str() << "  is not opened by G4NeutronInelasticXS" << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__,"NO data sets opened");
+    G4ExceptionDescription ed;
+    ed << "Data file <" << ost.str().c_str()
+       << "> is not opened!";
+    G4Exception("G4NeutronElasticXS::RetrieveVector(..)","had014",
+                FatalException, ed, "Check G4NEUTRONXSDATA");
   }else{
     if(verboseLevel > 1) {
       G4cout << "File " << ost.str() 
@@ -375,8 +377,11 @@ G4NeutronInelasticXS::RetrieveVector(std::ostringstream& ost, G4bool warn)
     // retrieve data from DB
     v = new G4PhysicsLogVector();
     if(!v->Retrieve(filein, true)) {
-      G4cout << ost.str() << " is not retrieved in G4NeutronInelasticXS" << G4endl;
-      throw G4HadronicException(__FILE__, __LINE__,"ERROR: retrieve data fail");
+      G4ExceptionDescription ed;
+      ed << "Data file <" << ost.str().c_str()
+	 << "> is not retrieved!";
+      G4Exception("G4NeutronInelasticXS::RetrieveVector(..)","had015",
+		  FatalException, ed, "Check G4NEUTRONXSDATA");
     }
   }
   return v;
