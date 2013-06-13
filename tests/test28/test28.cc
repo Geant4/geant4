@@ -24,16 +24,20 @@
 // ********************************************************************
 //
 
+#include "Tst28ActionInitialization.hh"
 #include "Tst28DetectorConstruction.hh"
 #include "Tst28RunAction.hh"
-#include "Tst28PrimaryGeneratorAction.hh"
 #include "Tst28PhysicsList.hh"
-#include "Tst28SteppingAction.hh"
-#include "Tst28StackingAction.hh"
+//#include "Tst28SteppingAction.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
 
 #include "G4ios.hh"
 
@@ -44,16 +48,17 @@ int main(int argc,char** argv) {
   CLHEP::HepRandom::setTheEngine(&defaultEngine);
 
   // Run manager
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else
   G4RunManager * runManager = new G4RunManager;
+#endif
 
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst28DetectorConstruction);
   runManager->SetUserInitialization(new Tst28PhysicsList);
-
-  // UserAction classes
-  runManager->SetUserAction(new Tst28RunAction);
-  runManager->SetUserAction(new Tst28PrimaryGeneratorAction);
-  runManager->SetUserAction(new Tst28StackingAction);
+  runManager->SetUserInitialization(new Tst28ActionInitialization);
 
   if(argc==1)
   {

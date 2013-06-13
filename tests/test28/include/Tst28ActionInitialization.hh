@@ -23,21 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "Tst28RunAction.hh"
+// $Id: $
+//
 
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
+#ifndef Tst28ActionInitialization_h
+#define Tst28ActionInitialization_h 1
 
-Tst28RunAction::Tst28RunAction()
-{}
+#include "G4VUserActionInitialization.hh"
 
-Tst28RunAction::~Tst28RunAction()
-{}
+class Tst28ActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    Tst28ActionInitialization();
+    virtual ~Tst28ActionInitialization();
 
-void Tst28RunAction::BeginOfRunAction(const G4Run* )
-{}
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
+};
 
-void Tst28RunAction::EndOfRunAction(const G4Run*)
-{}
+#endif
 

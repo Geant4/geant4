@@ -37,33 +37,31 @@ class Tst28DetectorMessenger;
 class Tst28DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-
     Tst28DetectorConstruction();
     ~Tst28DetectorConstruction();
 
   public:
-
-     G4VPhysicalVolume* Construct();
-     void SelectMaterial(G4String val);
+    G4VPhysicalVolume* Construct();
+    void SelectMaterial(G4String val);
+    void ConstructSDandField();
 
   private:
+    void SelectMaterialPointer();
 
-     void SelectMaterialPointer();
+    G4LogicalVolume* simpleBoxLog;
+    G4VPhysicalVolume* simpleBoxDetector;
 
-     G4LogicalVolume*   simpleBoxLog;
-     G4VPhysicalVolume* simpleBoxDetector;
-
-     G4Material* theH;
-     G4Material* theSi;
-     G4Material* theCu;
-     G4Material* thePb;
-     G4Material* theU;
-     G4Material* theH2O;
+    G4Material* theH;
+    G4Material* theSi;
+    G4Material* theCu;
+    G4Material* thePb;
+    G4Material* theU;
+    G4Material* theH2O;
      
-     G4Material* selectedMaterial;
-     G4String materialChoice;
+    G4Material* selectedMaterial;
+    G4String materialChoice;
 
-     Tst28DetectorMessenger* detectorMessenger;
+    Tst28DetectorMessenger* detectorMessenger;
 };
 
 #endif

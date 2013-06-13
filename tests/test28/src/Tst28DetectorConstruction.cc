@@ -41,9 +41,8 @@
 #include "G4ios.hh"
 
 Tst28DetectorConstruction::Tst28DetectorConstruction()
-  : simpleBoxLog(0), simpleBoxDetector(0),
-    theH(0),theSi(0),theCu(0),thePb(0),theU(0),theH2O(0),
-    selectedMaterial(0)
+ : simpleBoxLog(0), simpleBoxDetector(0), theH(0), theSi(0), theCu(0), thePb(0),
+   theU(0), theH2O(0), selectedMaterial(0)
 {
   detectorMessenger = new Tst28DetectorMessenger(this);
   materialChoice = "Pb";
@@ -63,8 +62,7 @@ void Tst28DetectorConstruction::SelectMaterial(G4String val)
 
 void Tst28DetectorConstruction::SelectMaterialPointer()
 {
-//--------- Material definition ---------
-
+  //--------- Material definition ---------
   G4double a, iz, z, density;
   G4String name, symbol;
   G4int nel;
@@ -110,26 +108,24 @@ void Tst28DetectorConstruction::SelectMaterialPointer()
     {
     G4int ncomponents, Z, N;
     G4double abundance;
-    //Oxygen
-    //   G4Isotope This class describes the properties of atoms: atomic number, number of nucleons, mass per mole, etc.*/
+
+    // Oxygen
     G4Isotope* O16 = new G4Isotope(name="O16", Z=8, N=16, a = 15.994*g/mole);
     G4Isotope* O17 = new G4Isotope(name="O17", Z=8, N=17, a = 16.999*g/mole);
     G4Isotope* O18 = new G4Isotope(name="O18", Z=8, N=18, a = 17.999*g/mole);
-  /*G4Element
-    This class describes the properties of atoms: effective atomic number, effective number of nucleons, effective mass per mole, number of isotopes, shell energy, and quantities like cross section per atom, etc.*/
     G4Element* elO  = new G4Element(name="Oxygen", symbol="O", ncomponents=3);
     elO->AddIsotope(O16, abundance= 99.762*perCent);
     elO->AddIsotope(O17, abundance= 0.038*perCent);
     elO->AddIsotope(O18, abundance= 0.200*perCent);
 
-  //Hydrogen
+    // Hydrogen
     G4Isotope* H1 = new G4Isotope(name="H1", Z=1, N=1, a = 1.008*g/mole);
     G4Isotope* H2 = new G4Isotope(name="H2", Z=1, N=2, a = 2.014*g/mole);
     G4Element* elH  = new G4Element(name="Hydrogen", symbol="H", ncomponents=2);
     elH->AddIsotope(H1, abundance= 99.985*perCent);
     elH->AddIsotope(H2, abundance= 0.015*perCent);
 
-  /*H2O*/
+    // H2O
     theH2O = new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
     theH2O->AddElement(elH, 2);
     theH2O->AddElement(elO, 1);
@@ -169,4 +165,7 @@ G4VPhysicalVolume* Tst28DetectorConstruction::Construct()
   }
   return simpleBoxDetector;
 }
+
+void Tst28DetectorConstruction::ConstructSDandField()
+{}
 

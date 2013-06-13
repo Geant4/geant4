@@ -23,21 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
+
+#include "Tst28ActionInitialization.hh"
+
 #include "Tst28RunAction.hh"
+#include "Tst28StackingAction.hh"
+#include "Tst28PrimaryGeneratorAction.hh"
 
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
-
-Tst28RunAction::Tst28RunAction()
+Tst28ActionInitialization::Tst28ActionInitialization()
 {}
 
-Tst28RunAction::~Tst28RunAction()
+Tst28ActionInitialization::~Tst28ActionInitialization()
 {}
 
-void Tst28RunAction::BeginOfRunAction(const G4Run* )
-{}
+void Tst28ActionInitialization::Build() const {
+  SetUserAction(new Tst28PrimaryGeneratorAction);
+  SetUserAction(new Tst28StackingAction);
+  SetUserAction(new Tst28RunAction);
+}
 
-void Tst28RunAction::EndOfRunAction(const G4Run*)
-{}
+void Tst28ActionInitialization::BuildForMaster() const {
+}
 
