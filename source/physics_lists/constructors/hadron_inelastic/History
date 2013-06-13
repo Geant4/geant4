@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-Jun-2013, Gunter Folger              (phys-ctor-hinelastic-V09-06-12)
+- in G4HadronPhysicsINCLXX.cc initialise pointers to optinal parts of 
+   physics to 0 to protect deletion of uninitialised pointer.
+   
 11-Jun-2013, Alberto Ribon		(phys-ctor-hinelastic-V09-06-11)
 - Improved use of kaon cross sections in G4HadronPhysicsShielding. 
 

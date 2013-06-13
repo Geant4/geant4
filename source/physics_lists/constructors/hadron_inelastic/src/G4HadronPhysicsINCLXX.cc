@@ -126,6 +126,13 @@ void G4HadronPhysicsINCLXX::CreateModels()
   G4bool quasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
   G4bool quasiElasticQGS= true;    // For QGS, it must use it.
 
+// initialise fields in tpdata where assignment is optional below.
+  tpdata->theQGSPNeutron=0;
+  tpdata->theNeutronHP=0;
+  tpdata->theQGSPPro=0;
+  tpdata->theQGSPPiK=0;
+  
+
   tpdata->theNeutrons=new G4NeutronBuilder;
   tpdata->theNeutrons->RegisterMe(tpdata->theLEPNeutron=new G4LEPNeutronBuilder);
   tpdata->theLEPNeutron->SetMinInelasticEnergy(0.*eV);
