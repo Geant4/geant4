@@ -1,14 +1,47 @@
 $Id$
 -------------------------------------------------------------------
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+          =========================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+          =========================================================
 
-                            Test61
-                            ------
+                                 Test61
+                                 ------
 
-Testing the G4QMD
-in a simple setup.
-Target materials include H, H2O,  Si, U
+Description:   test of the G4QMD model in a simple setup.
+               Target materials include H, H2O,  Si, U.  Projectiles are C or Fe
+               ions with energies 2.4, 12 and 56 GeV. 
+
+Type of test:  run to completion
+
+Building:      This test has a special CMakeLists.txt to be used only by system
+               testing.  It will not work when you run the test in stand-alone
+               mode.  To do that you must:
+
+               1. copy the test directory from geant4/tests to your working
+                  directory
+
+               2. replace the existing version of CMakeLists.txt with a
+                  stand-alone one:
+
+                  mv CMakeLists.txt CMakeLists.txtorig
+                  mv CMakeLists_Standalone.txt CMakeLists.txt
+
+               3. Clean up (if necessary) and re-configure, assuming a 64 bit machine
+                  and Geant4 version 9.6:
+
+                  rm test61
+                  cmake .
+
+              4. Build test61:
+
+                 make -f Makefile 
+
+Running:      Do
+
+                 ./test61 test61.in >& test61.out &
+
+              This throws either 4 or 16 events per run.
+
+Output:       run log
 

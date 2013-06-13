@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
@@ -168,4 +167,7 @@ G4VPhysicalVolume* Tst61DetectorConstruction::Construct()
 
   return simpleBoxDetector;
 }
+
+void Tst61DetectorConstruction::ConstructSDandField() 
+{}
 
