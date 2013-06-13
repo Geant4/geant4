@@ -356,21 +356,16 @@ void G4MTRunManager::TerminateWorkers()
     //TODO: I don't like this since this should go in the thread-model part of the code
     //something like: worker->join or something like this...
 #ifdef G4MULTITHREADED //protect here to prevent warning in compilation
-    
-    //Andrea : We have observed deadlocks here. Under-investigation
-    //For the time being we simply comment out everything and we do not
-    // join threads: we arrive here at exit of application
-    
-    //while ( ! threads.empty() )
-    //{
-        //G4Thread* t = * ( threads.begin() );
-        //threads.pop_front();
+    while ( ! threads.empty() )
+    {
+        G4Thread* t = * ( threads.begin() );
+        threads.pop_front();
         
         //G4cout<<"In G4MTRunManager::TeraminteWorkers for "<<t<<G4endl;///AAADEBUG
-        //G4THREADJOIN(*t);
+        G4THREADJOIN(*t);
         //G4cout<<t<<" Join done"<<G4endl;///AAADEBUG
-        //delete t;
-    //}
+        delete t;
+    }
 #endif
     threads.clear();
 

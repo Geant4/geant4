@@ -155,9 +155,9 @@ void* G4UserWorkerInitialization::StartThread( void* context )
         {
             G4ExceptionDescription d;
             d<<"Cannot continue, this worker has been requested an unknwon action: "
-             <<nextAction<<" expecting: ENDWORKER(=)"
+             <<nextAction<<" expecting: ENDWORKER(="
              <<G4MTRunManager::ENDWORKER<<") or NEXTITERATION(="<<G4MTRunManager::NEXTITERATION<<")";
-            G4Exception("G4WorkerInitialization::WorkerStart","Run0035",FatalException,d);
+            G4Exception("G4UserWorkerInitialization::StartThread","Run0035",FatalException,d);
         }
         //Now wait for master thread to signal new action to be performed
         nextAction = masterRM->ThisWorkerWaitForNextAction();

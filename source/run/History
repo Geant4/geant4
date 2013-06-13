@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 12th, 2013, A. Dotti (run-V09-06-52)
+- Typo correction in exception from G4UserWorkerInitialization::StartThread
+- Re-enabling joining of threads: run-V09-06-50 fixed deadlocks responsible
+  for problems at exit 
+
 June 11th, 2013, M. Asai (run-V09-06-51)
 - Change ions and isomers to be created after BuildPhysics.
 
