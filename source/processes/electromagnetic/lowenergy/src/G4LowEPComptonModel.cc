@@ -77,7 +77,7 @@
 #include "G4CompositeEMDataSet.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4Gamma.hh"
-#include "G4HadTmpUtil.hh"
+
 //****************************************************************************
 
 using namespace std;

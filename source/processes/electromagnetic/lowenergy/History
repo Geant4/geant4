@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13.06.2013  M.Karamitros, tag emlowen-V09-06-13
+	    - GNUmakefile: Dependency on hadronic package withdrawn
+
+13.06.2013  M.Karamitros, tag emlowen-V09-06-12
+	    - G4LowEPComptonModel.cc : Dependency on G4HadTmpUtil withdrawn
+	    
 29.03.2013  L.Pandola, tag emlowen-V09-06-11
 	    - replaced "static G4ThreadLocal" with "static const" 
 	      when applicable
