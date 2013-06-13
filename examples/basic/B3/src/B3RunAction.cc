@@ -79,17 +79,22 @@ void B3RunAction::BeginOfRunAction(const G4Run* run)
 
 void B3RunAction::EndOfRunAction(const G4Run* run)
 {
-  G4int NbOfEvents = run->GetNumberOfEvent();
-  if (NbOfEvents == 0) return;
+  G4int nofEvents = run->GetNumberOfEvent();
+  if (nofEvents == 0) return;
   
-  //run conditions
-  //
-  const B3PrimaryGeneratorAction* kinematic 
+  // Run conditions
+  //  note: There is no primary generator action object for "master"
+  //        run manager for multi-threaded mode.
+  const B3PrimaryGeneratorAction* generatorAction
     = static_cast<const B3PrimaryGeneratorAction*>(
         G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction());
-  G4ParticleDefinition* particle 
-    = kinematic->GetParticleGun()->GetParticleDefinition();
-  G4String partName = particle->GetParticleName();
+  G4String partName;
+  if (generatorAction) 
+  {
+    G4ParticleDefinition* particle 
+      = generatorAction->GetParticleGun()->GetParticleDefinition();
+    partName = particle->GetParticleName();
+  }  
   
   //results
   //
@@ -102,15 +107,16 @@ void B3RunAction::EndOfRunAction(const G4Run* run)
   if (IsMaster())
   {
     G4cout
-     << "\n--------------------End of Global Run-----------------------";
+     << "\n--------------------End of Global Run-----------------------"
+     << " \n The run was " << nofEvents << " events ";
   }
   else
   {
     G4cout
-     << "\n--------------------End of Local Run------------------------";
+     << "\n--------------------End of Local Run------------------------"
+     << " \n The run was " << nofEvents << " "<< partName;
   }      
   G4cout
-     << " \n The run was " << NbOfEvents << " "<< partName
      << "; Nb of 'good' e+ annihilations: " << nbGoodEvents
      << "\n Total dose in patient : " << G4BestUnit(sumDose,"Dose")   
      << "\n------------------------------------------------------------\n"

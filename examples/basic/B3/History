@@ -14,7 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+13/06/13 mma (exampleB3-V09-06-04)
+ Fixes for MT:
+- Set sensitive detector via SetSensitiveDetector(..)
+- Get hits collection IDs in B3Run::RecordEvent (and not B3Run constructor)
+- Add a test for primary generator action in B3RunAction::EndOfRunAction()
+  as it does not exist on master
+    
 05/06/13 mma (exampleB3-V09-06-03)
 - add section about ACTION INITALIZATION to README and .README
      

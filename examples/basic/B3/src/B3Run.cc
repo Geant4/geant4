@@ -42,14 +42,12 @@
 
 B3Run::B3Run()
  : G4Run(), 
+   fCollID_cryst(-1),
+   fCollID_patient(-1),
    fPrintModulo(10000),
    fGoodEvents(0),
    fSumDose(0.)
-{   
-   G4SDManager* SDMan = G4SDManager::GetSDMpointer();  
-   fCollID_cryst   = SDMan->GetCollectionID("crystal/edep");
-   fCollID_patient = SDMan->GetCollectionID("patient/dose");    
-}
+{ }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,6 +59,18 @@ B3Run::~B3Run()
 
 void B3Run::RecordEvent(const G4Event* event)
 {
+  if ( fCollID_cryst < 0 ) {
+   fCollID_cryst 
+     = G4SDManager::GetSDMpointer()->GetCollectionID("crystal/edep");
+   //G4cout << " fCollID_cryst: " << fCollID_cryst << G4endl;   
+  }
+
+  if ( fCollID_patient < 0 ) {
+   fCollID_patient 
+     = G4SDManager::GetSDMpointer()->GetCollectionID("patient/dose");
+   //G4cout << " fCollID_patient: " << fCollID_patient << G4endl;   
+  }
+
   G4int evtNb = event->GetEventID();
   
   if (evtNb%fPrintModulo == 0) { 
@@ -78,13 +88,13 @@ void B3Run::RecordEvent(const G4Event* event)
   G4int nbOfFired = 0;
    
   G4THitsMap<G4double>* evtMap = 
-                     (G4THitsMap<G4double>*)(HCE->GetHC(fCollID_cryst));
+    static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID_cryst));
                
   std::map<G4int,G4double*>::iterator itr;
   for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
-    ///G4int copyNb  = (itr->first);
     G4double edep = *(itr->second);
     if (edep > eThreshold) nbOfFired++;
+    ///G4int copyNb  = (itr->first);
     ///G4cout << "\n  cryst" << copyNb << ": " << edep/keV << " keV ";
   }  
   if (nbOfFired == 2) fGoodEvents++;
@@ -93,7 +103,7 @@ void B3Run::RecordEvent(const G4Event* event)
   //
   G4double dose = 0.;
      
-  evtMap = (G4THitsMap<G4double>*)(HCE->GetHC(fCollID_patient));
+  evtMap = static_cast<G4THitsMap<G4double>*>(HCE->GetHC(fCollID_patient));
                
   for (itr = evtMap->GetMap()->begin(); itr != evtMap->GetMap()->end(); itr++) {
     ///G4int copyNb  = (itr->first);

@@ -55,9 +55,6 @@ class B3DetectorConstruction : public G4VUserDetectorConstruction
   private:
     void DefineMaterials();
 
-    G4LogicalVolume*  fLogicCryst;
-    G4LogicalVolume*  fLogicPatient;       
-    
     G4bool  fCheckOverlaps;
 };
 
