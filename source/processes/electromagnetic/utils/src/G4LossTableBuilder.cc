@@ -107,7 +107,11 @@ G4LossTableBuilder::BuildDEDXTable(G4PhysicsTable* dedxTable,
     if(pv0) {
       size_t npoints = pv0->GetVectorLength();
       G4PhysicsLogVector* pv = new G4PhysicsLogVector(*pv0);
-      //    pv = new G4PhysicsLogVector(elow, ehigh, npoints-1);
+      /*
+      G4PhysicsLogVector* pv = new G4PhysicsLogVector(pv0->Energy(0), 
+						      pv0->GetMaxEnergy(), 
+						      npoints-1);
+      */
       pv->SetSpline(splineFlag);
       for (size_t j=0; j<npoints; ++j) {
 	G4double dedx = 0.0;

@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 June 13: V.Ivant (emutils-V09-06-32)
+- G4VEmProcess - fixed CrossSectionPerVolume method - use tablePrim for
+    high energy if this table is defined
+
+13 June 13: V.Ivant (emutils-V09-06-31)
+- G4VEnergyLossProcess,  G4LossTableManager - cleanup comments
+
+12 June 13: V.Ivant (emutils-V09-06-30)
+- G4VEnergyLossProcess - removed parasitic printout
+
+12 June 13: V.Ivant (emutils-V09-06-29)
+- G4VEnergyLossProcess, G4LossTableManager, G4lossTableBuilder - cleanup 
+    table management 
+
 11 June 13: V.Ivant (emutils-V09-06-28)
 - G4VEnergyLossProcess, G4LossTableManager - cleanup table management 
     for case of many runs in one session, improved printouts

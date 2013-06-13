@@ -651,8 +651,11 @@ inline void G4VEnergyLossProcess::SetDynamicMassCharge(G4double massratio,
 
 inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 {
-  //G4cout << "G4VEnergyLossProcess::GetDEDX: Idx= " 
-  //	 << basedCoupleIndex << " E(MeV)= " << e << G4endl; 
+  /*
+  G4cout << "G4VEnergyLossProcess::GetDEDX: Idx= " 
+  	 << basedCoupleIndex << " E(MeV)= " << e 
+	 << " Emin= " << minKinEnergy << "  Factor= " << fFactor 
+	 << "  " << theDEDXTable << G4endl; */
   G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->Value(e);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
