@@ -13,6 +13,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 Jun 2013 Alberto Ribon                 test68-V09-06-05
+- Fixed problem of conflicting currentEvent.rndm between the 5 tests.
+
 12 Jun 2013 Alberto Ribon                 test68-V09-06-04
 - Split the 5 configurations that are tested for reproducibility
   in 5 independent tests, each with 100 events.

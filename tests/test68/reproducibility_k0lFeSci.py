@@ -116,11 +116,13 @@ if ( len( sys.argv ) > 1 ) :
 executable_path = "."
 executable_name = "test68"
 rename_command = "mv"
+rndmBasename = "/currentEvent.rndm"
 if ( platform.system() == 'Windows' ) :
   executable_path = configuration
   executable_name += ".exe"
   rename_command = "rename"
-  print ' executable_path=', executable_path, ' ; executable_name=', executable_name, ' ; rename_command=', rename_command
+  rndmBasename = "\currentEvent.rndm"
+  print ' executable_path=', executable_path, ' ; executable_name=', executable_name, ' ; rename_command=', rename_command, ' ; rndmBasename=', rndmBasename 
 
 for iCase in listCases :
 
@@ -147,6 +149,7 @@ for iCase in listCases :
 
     # --- Write Geant4 command files ---
     suffix = '-' + iParticle  + '-' + iAbsorber + '-' + iActive
+    randomEventFilename = 'Dir' + suffix + rndmBasename
     if ( NumEvents > 0  and  NumSingleEventChecks > 0 ) :
         for i in range( NumSingleEventChecks+1 ) :
             g4file = open( "reproducibility_" + str( i ) + ".g4" + suffix, "w" )
@@ -154,7 +157,8 @@ for iCase in listCases :
                 g4file.write( "/random/resetEngineFrom start.rndm \n" )
             else :
                 g4file.write( "/random/resetEngineFrom event_" + str( i-1 ) + ".rndm" + suffix + " \n" )
-            g4file.write( "/random/setSavingFlag 1 \n" )		
+            g4file.write( "/random/setSavingFlag 1 \n" )	
+            g4file.write( "/random/setDirectoryName Dir" + suffix + " \n")	
             g4file.write( "/run/verbose 1 \n" )			
             g4file.write( "/event/verbose 0 \n" ) 			
             g4file.write( "/tracking/verbose 0 \n" )
@@ -176,10 +180,10 @@ for iCase in listCases :
             g4file.write( "/mydet/update \n" )
             if ( i == 0 ) :
                 g4file.write( "/run/beamOn " + NumEvents + " \n" )
-                g4file.write( "/control/shell %s currentEvent.rndm event_0.rndm%s \n" %( rename_command, suffix ) )
+                g4file.write( "/control/shell %s %s event_0.rndm%s \n" %( rename_command, randomEventFilename, suffix ) )
                 for j in range( NumSingleEventChecks-1 ) :
                     g4file.write( "/run/beamOn " + str( GapBetweenExtraSingleEventChecks+1 ) + " \n" )
-                    g4file.write( "/control/shell %s currentEvent.rndm event_%d.rndm%s \n" %( rename_command, j+1, suffix ) )
+                    g4file.write( "/control/shell %s %s event_%d.rndm%s \n" %( rename_command, randomEventFilename, j+1, suffix ) )
             else :
                 g4file.write( "/run/beamOn 1 \n" )
             g4file.close()
