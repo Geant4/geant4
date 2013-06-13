@@ -29,6 +29,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+13th June 2013 - Ben Morgan (cmake-V09-06-17)
+- Templates/geant4-config.in : BUGFIX #1477 : Correct output of 
+  --has-feature for clhep feature.
+
 11th June 2013 - Gunter Folger (cmake-V09-06-16)
 - Update md5sum for NDL after removal of data for Z>92
 
