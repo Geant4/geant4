@@ -15,6 +15,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 June 2013  Michael Kelsey (hadr-casc-V09-06-31)
+--------------------------------------------------
+Bug fix for validation problems seen leading up to 10.0-beta release.
+
+- G4NucleiModel.cc: Undo change to test "spath<=path" (V09-06-25); this
+  caused all tested nucleons to be accepted for interaction, incorrectly.
+  Replace with explicit test on "spath==0." to address at-rest particles.
+
+- G4CascadeFinalStateAlgorithm:  Split FillDirections() into separate
+  functions for three- and many-body states, to restore old algorithm.
+  Three body throws the _last_ particle's direction, then computes recoils,
+  while many-body throws the first N-2 directions.
+
 04 June 2013  Alberto Ribon (hadr-casc-V09-06-30)
 -------------------------------------------------
 - G4InuclNuclei.cc: Fix access to ions via the IonTable class.

@@ -87,6 +87,14 @@ protected:
 		      const std::vector<G4double>& masses,
 		      std::vector<G4LorentzVector>& finalState);
 
+  void FillDirThreeBody(G4double initialMass,
+			const std::vector<G4double>& masses,
+			std::vector<G4LorentzVector>& finalState);
+
+  void FillDirManyBody(G4double initialMass,
+		       const std::vector<G4double>& masses,
+		       std::vector<G4LorentzVector>& finalState);
+
   G4double GenerateCosTheta(G4int ptype, G4double pmod) const;
 
 

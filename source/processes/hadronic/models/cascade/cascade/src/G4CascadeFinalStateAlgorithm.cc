@@ -35,6 +35,9 @@
 //		collision axis; three-body "final" vector needs to be rotated
 //		into axis of rest of system.  Tweak some diagnostic messages
 //		to match old G4EPCollider version.
+// 20130612  BUG FIX:  Create separate FillDirThreeBody(), FillDirManyBody()
+//		in order to reporoduce old method: N-body states are filled
+//		from first to last, while three-body starts with the last.
 
 #include "G4CascadeFinalStateAlgorithm.hh"
 #include "G4InuclElementaryParticle.hh"
@@ -211,7 +214,7 @@ GenerateMultiBody(G4double initialMass, const std::vector<G4double>& masses,
 void G4CascadeFinalStateAlgorithm::
 FillMagnitudes(G4double initialMass, const std::vector<G4double>& masses) {
   if (GetVerboseLevel()>1) 
-    G4cout << " >>> " << GetName() << "::FillMomentum" << G4endl;
+    G4cout << " >>> " << GetName() << "::FillMagnitudes" << G4endl;
 
   modules.clear();		// Initialization and sanity checks
   if (!momDist) return;
@@ -241,13 +244,13 @@ FillMagnitudes(G4double initialMass, const std::vector<G4double>& masses) {
       if (pmod < small) break;
       eleft -= std::sqrt(pmod*pmod + masses[i]*masses[i]);
 
-      if (eleft <= mass_last) break;
-
       if (GetVerboseLevel() > 3) {
 	G4cout << " kp " << kinds[i] << " pmod " << pmod
 	       << " mass2 " << masses[i]*masses[i] << " eleft " << eleft
 	       << "\n x1 " << eleft - mass_last << G4endl;
       }
+
+      if (eleft <= mass_last) break;
 
       modules[i] = pmod;
     }
@@ -302,24 +305,72 @@ FillDirections(G4double initialMass, const std::vector<G4double>& masses,
   finalState.clear();			// Initialization and sanity check
   if ((G4int)modules.size() != multiplicity) return;
 
-  // Fill all but the first two particles randomly
+  // Different order of processing for three vs. N body
+  if (multiplicity == 3)
+    FillDirThreeBody(initialMass, masses, finalState);
+  else
+    FillDirManyBody(initialMass, masses, finalState);
+}
+
+void G4CascadeFinalStateAlgorithm::
+FillDirThreeBody(G4double initialMass, const std::vector<G4double>& masses,
+		 std::vector<G4LorentzVector>& finalState) {
+  if (GetVerboseLevel()>1) 
+    G4cout << " >>> " << GetName() << "::FillDirThreeBody" << G4endl;
+
+  finalState.resize(3);
+
+  G4double costh = GenerateCosTheta(kinds[2], modules[2]);
+  finalState[2] = generateWithFixedTheta(costh, modules[2], masses[2]);
+  finalState[2] = toSCM.rotate(finalState[2]);	// Align target axis
+
+  // Generate direction of first particle
+  costh = -0.5 * (modules[2]*modules[2] + modules[0]*modules[0] -
+		  modules[1]*modules[1]) / modules[2] / modules[0];
+
+  if (std::fabs(costh) >= maxCosTheta) {  // Bad kinematics; abort generation
+    finalState.clear();
+    return;
+  }
+
+  // Report success
+  if (GetVerboseLevel()>2) G4cout << " ok for mult 3" << G4endl;
+
+  // First particle is at fixed angle to recoil system
+  finalState[0] = generateWithFixedTheta(costh, modules[0], masses[0]);
+  finalState[0] = toSCM.rotate(finalState[2], finalState[0]);
+
+  // Remaining particle is constrained to recoil from entire rest of system
+  finalState[1].set(0.,0.,0.,initialMass);
+  finalState[1] -= finalState[0] + finalState[2];
+}
+
+void G4CascadeFinalStateAlgorithm::
+FillDirManyBody(G4double initialMass, const std::vector<G4double>& masses,
+		std::vector<G4LorentzVector>& finalState) {
+  if (GetVerboseLevel()>1) 
+    G4cout << " >>> " << GetName() << "::FillDirManyBody" << G4endl;
+
+  // Fill all but the last two particles randomly
   G4double costh = 0.;
 
   finalState.resize(multiplicity);
 
-  for (G4int i=2; i<multiplicity; i++) {
+  for (G4int i=0; i<multiplicity-2; i++) {
     costh = GenerateCosTheta(kinds[i], modules[i]);
     finalState[i] = generateWithFixedTheta(costh, modules[i], masses[i]);
     finalState[i] = toSCM.rotate(finalState[i]);	// Align target axis
   }
 
-  // Total momentum so far, to compute recoil of first two particles
+  // Total momentum so far, to compute recoil of last two particles
   G4LorentzVector psum =
-    std::accumulate(finalState.begin()+2, finalState.end(), G4LorentzVector());
+    std::accumulate(finalState.begin(), finalState.end()-2, G4LorentzVector());
   G4double pmod = psum.rho();
 
-  costh = -0.5 * (pmod*pmod + modules[0]*modules[0] -
-		  modules[1]*modules[1]) / pmod / modules[0];
+  costh = -0.5 * (pmod*pmod +
+		  modules[multiplicity-2]*modules[multiplicity-2] -
+		  modules[multiplicity-1]*modules[multiplicity-1])
+    / pmod / modules[multiplicity-2];
 
   if (GetVerboseLevel() > 2) G4cout << " ct last " << costh << G4endl;
 
@@ -332,19 +383,21 @@ FillDirections(G4double initialMass, const std::vector<G4double>& masses,
   if (GetVerboseLevel()>2) G4cout << " ok for mult " << multiplicity << G4endl;
 
   // First particle is at fixed angle to recoil system
-  finalState[0] = generateWithFixedTheta(costh, modules[0], masses[0]);
-  finalState[0] = toSCM.rotate(psum, finalState[0]);
+  finalState[multiplicity-2] =
+    generateWithFixedTheta(costh, modules[multiplicity-2],
+			   masses[multiplicity-2]);
+  finalState[multiplicity-2] = toSCM.rotate(psum, finalState[multiplicity-2]);
 
   // Remaining particle is constrained to recoil from entire rest of system
-  finalState[1].set(0.,0.,0.,initialMass);
-  finalState[1] -= psum + finalState[0];
+  finalState[multiplicity-1].set(0.,0.,0.,initialMass);
+  finalState[multiplicity-1] -= psum + finalState[multiplicity-2];
 }
 
 
 // Generate polar angle for three- and multi-body systems
 
 G4double G4CascadeFinalStateAlgorithm::
-  GenerateCosTheta(G4int ptype, G4double pmod) const {
+GenerateCosTheta(G4int ptype, G4double pmod) const {
   if (GetVerboseLevel() > 2) {
     G4cout << " >>> " << GetName() << "::GenerateCosTheta " << ptype
 	   << " " << pmod << G4endl;

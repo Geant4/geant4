@@ -131,6 +131,8 @@
 //		For capture-at-rest, replace exterior nucleus with outer zone.
 // 20130524  M. Kelsey -- Move "large" and "small" cutoffs to static const.
 //		Check zone argument to inverseMFP() to ensure within range.
+// 20130611  M. Kelsey -- Undo "spath<=path" change (20130511), replace with
+//		explicit check on spath==0.
 
 #include "G4NucleiModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -709,7 +711,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     invmfp = inverseMeanFreePath(cparticle, particle);
     spath  = generateInteractionLength(cparticle, path, invmfp);
 
-    if (spath <= path) {
+    if (spath==0. || spath < path) {
       if (verboseLevel > 3) {
 	G4cout << " adding partner[" << thePartners.size() << "]: "
 	       << particle << G4endl;
@@ -783,7 +785,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     if (tot_invmfp > small) {		// Must have absorption cross-section
       G4double apath = generateInteractionLength(cparticle, path, tot_invmfp);
       
-      if (apath <= path) {		// choose the qdeutron
+      if (apath==0. || apath < path) {		// choose the qdeutron
 	G4double sl = inuclRndm() * tot_invmfp;
 	G4double as = 0.0;
 	
