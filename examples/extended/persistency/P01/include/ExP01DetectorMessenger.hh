@@ -58,11 +58,11 @@ class ExP01DetectorMessenger: public G4UImessenger
   private:
     ExP01DetectorConstruction* myDetector;
     
-    G4UIdirectory*             N02Dir;
-    G4UIdirectory*             detDir;
-    G4UIcmdWithAString*        TargMatCmd;
-    G4UIcmdWithAString*        ChamMatCmd;    
-    G4UIcmdWithADoubleAndUnit* FieldCmd;
+    G4UIdirectory*             fN02Dir;
+    G4UIdirectory*             fDetDir;
+    G4UIcmdWithAString*        fTargMatCmd;
+    G4UIcmdWithAString*        fChamMatCmd;    
+    G4UIcmdWithADoubleAndUnit* fFieldCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
