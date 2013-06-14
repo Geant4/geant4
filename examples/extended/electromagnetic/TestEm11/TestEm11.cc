@@ -28,31 +28,25 @@
 //
 // $Id$
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
 #include "G4RunManager.hh"
-#include "SteppingVerbose.hh"
-#endif
-
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-//#include "PrimaryGeneratorAction.hh"
+#include "PrimaryGeneratorAction.hh"
 
-//#include "RunAction.hh"
-//#include "EventAction.hh"
-//#include "TrackingAction.hh"
-//#include "SteppingAction.hh"
-#include "ActionInitialization.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "TrackingAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
+ #include "G4VisExecutive.hh"
 #endif
 
 #ifdef G4UI_USE
@@ -67,37 +61,27 @@ int main(int argc,char** argv) {
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
-#ifndef G4MULTITHREADED
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-#endif
     
   //Construct the default run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(2);
-#else
   G4RunManager * runManager = new G4RunManager;
-#endif
 
   //set mandatory initialization classes
-  DetectorConstruction* det;
-  PhysicsList* phys;
+   DetectorConstruction* det;
+   PhysicsList* phys;
+   PrimaryGeneratorAction* kin;
   runManager->SetUserInitialization(det  = new DetectorConstruction);
   runManager->SetUserInitialization(phys = new PhysicsList);
-
-  //PrimaryGeneratorAction* kin;
-  //runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
+  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
     
   //set user action classes
-  //RunAction*   run;
-  //EventAction* event;
+  RunAction*   run;
+  EventAction* event;
   
-  //runManager->SetUserAction(run   = new RunAction(det,phys,kin)); 
-  //runManager->SetUserAction(event = new EventAction(run));
-  //runManager->SetUserAction(new TrackingAction(det,run));  
-  //runManager->SetUserAction(new SteppingAction(det,run,event));
-
-  runManager->SetUserInitialization(new ActionInitialization(det,phys));
+  runManager->SetUserAction(run   = new RunAction(det,phys,kin)); 
+  runManager->SetUserAction(event = new EventAction(run));
+  runManager->SetUserAction(new TrackingAction(det,run));  
+  runManager->SetUserAction(new SteppingAction(det,run,event));
 
   //get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();

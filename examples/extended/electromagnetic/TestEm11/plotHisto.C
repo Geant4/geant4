@@ -3,11 +3,14 @@
   
   // Draw histos filled by Geant4 simulation 
   //   
-  TFile f = TFile("C12.root");
+  TFile f = TFile("tetem11.root");
   TCanvas* c1 = new TCanvas("c1", "  ");
   
   TH1D* hist1 = (TH1D*)f.Get("1");
   hist1->Draw("HIST");
+  
+  TH1D* hist8 = (TH1D*)f.Get("8");
+  hist8->Draw("HIST");  
 /*  
   TH1D* hist3 = (TH1D*)f.Get("3");
   hist3->Draw("HIST");

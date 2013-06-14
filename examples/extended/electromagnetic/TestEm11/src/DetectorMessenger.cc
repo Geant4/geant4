@@ -53,6 +53,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
  fAbsorCmd(0),
  fNdivCmd(0),    
  fSizeYZCmd(0),    
+ fMagFieldCmd(0),    
  fUpdateCmd(0)
 { 
   fTestemDir = new G4UIdirectory("/testem/");
@@ -119,12 +120,12 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSizeYZCmd->SetUnitCategory("Length");
   fSizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
             
-  //fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
-  //fMagFieldCmd->SetGuidance("Define magnetic field.");
-  //fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  //fMagFieldCmd->SetParameterName("Bz",false);
-  //fMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  //fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
+  fMagFieldCmd->SetGuidance("Define magnetic field.");
+  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fMagFieldCmd->SetParameterName("Bz",false);
+  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
+  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
       
   fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
   fUpdateCmd->SetGuidance("Update calorimeter geometry.");
@@ -141,6 +142,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fAbsorCmd;
   delete fNdivCmd;    
   delete fSizeYZCmd;       
+  delete fMagFieldCmd;
   delete fUpdateCmd;
   delete fDetDir;  
   delete fTestemDir;
@@ -176,8 +178,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fSizeYZCmd )
    { fDetector->SetAbsorSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));}   
                
-  //if( command == fMagFieldCmd )
-  // { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
+  if( command == fMagFieldCmd )
+   { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
               
   if( command == fUpdateCmd )
    { fDetector->UpdateGeometry();}

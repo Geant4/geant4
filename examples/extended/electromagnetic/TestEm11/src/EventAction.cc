@@ -75,10 +75,9 @@ void EventAction::EndOfEventAction(const G4Event*)
 {
   //plot energy deposited per event
   //
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if (fTotalEdep > 0.) {
     fRunAct->AddEdep(fTotalEdep);
-    analysisManager->FillH1(2,fTotalEdep);
+    G4AnalysisManager::Instance()->FillH1(2,fTotalEdep);
   }  
 }
 

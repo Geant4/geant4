@@ -46,14 +46,12 @@
 class HistoManager
 {
   public:
-    //HistoManager();
-    HistoManager(G4bool);
+    HistoManager();
    ~HistoManager();
 
   private:
     void Book();
     G4String fFileName;
-    G4bool fIsMaster;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

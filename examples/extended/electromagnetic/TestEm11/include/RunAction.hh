@@ -39,7 +39,6 @@
 #include "DetectorConstruction.hh"
 
 class G4Run;
-//class Run;
 class PhysicsList;
 class PrimaryGeneratorAction;
 class HistoManager;
@@ -49,16 +48,12 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PhysicsList*);
-    RunAction(DetectorConstruction*, PhysicsList*, G4bool);
-    //RunAction(DetectorConstruction*, PhysicsList*,PrimaryGeneratorAction*);
+    RunAction(DetectorConstruction*, PhysicsList*,PrimaryGeneratorAction*);
    ~RunAction();
 
   public:
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-
-    //G4Run* GenerateRun();
     
     void AddEdep (G4double e)        { fEdeposit  += e; fEdeposit2  += e*e;};
     void AddTrackLength (G4double t) { fTrackLen  += t; fTrackLen2  += t*t;};

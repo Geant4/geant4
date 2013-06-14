@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+13-06-13 mma (testem11-V09-06-11)
+- back to testem11-V09-06-07
+- MT version in new directory TestEm11_MT
 
 06-06-13 V. Ivanchenko (testem11-V09-06-10)
 - TestEm11, RunAction, HistoManager - fixed compillation problems

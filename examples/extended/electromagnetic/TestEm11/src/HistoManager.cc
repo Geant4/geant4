@@ -37,24 +37,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//HistoManager::HistoManager()
-//  : fFileName("testem11")
-//{
-//  Book();
-//}
-
-HistoManager::HistoManager(G4bool isMaster)
-  : fIsMaster(isMaster)
+HistoManager::HistoManager()
+  : fFileName("testem11")
 {
   Book();
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::~HistoManager()
 {
-  //TODO: figure out why
   delete G4AnalysisManager::Instance();
 }
 
@@ -65,18 +57,8 @@ void HistoManager::Book()
   // Create or get analysis manager
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
-  //G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  G4cout << "Creating analysisManager in HistoManager" << G4endl;
-  G4cout << "fIsMaster: " << fIsMaster << G4endl;
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(fIsMaster);
-  G4cout << "analysisManager: " << analysisManager << G4endl;
-  G4String fileName = "testem11";
-  //if (fIsMaster) fileName = "thisisatest";
-  // TODO messenger doesn't work for setting file name. Hasn't been read yet
-  // when creating master
-  analysisManager->SetFileName(fileName);
-  analysisManager->OpenFile(fileName);
-  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetActivation(true);
       // enable inactivation of histograms
@@ -105,6 +87,7 @@ void HistoManager::Book()
   // Create all histograms as inactivated 
   // as we have not yet set nbins, vmin, vmax
   for (G4int k=0; k<kMaxHisto; k++) {
-    analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
+    G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
+    analysisManager->SetActivation(G4VAnalysisManager::kH1, ih, false);
   }
 }
