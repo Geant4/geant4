@@ -41,6 +41,7 @@ class Tst64DetectorConstruction : public G4VUserDetectorConstruction {
 
   public:
     virtual G4VPhysicalVolume* Construct();
+    void ConstructSDandField();
 };
 
 

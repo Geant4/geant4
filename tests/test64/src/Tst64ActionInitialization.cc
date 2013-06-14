@@ -23,41 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: $
+// $Id$
 //
 
-#include "Tst64DetectorConstruction.hh"
+#include "Tst64ActionInitialization.hh"
+#include "Tst64PrimaryGeneratorAction.hh"
 
-#include "G4SystemOfUnits.hh"
-#include "G4VSolid.hh"
-#include "G4Box.hh"
-#include "G4Material.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
+Tst64ActionInitialization::Tst64ActionInitialization()
+{}
 
+Tst64ActionInitialization::~Tst64ActionInitialization()
+{}
 
-Tst64DetectorConstruction::Tst64DetectorConstruction() {}
-
-
-Tst64DetectorConstruction::~Tst64DetectorConstruction() {}
-
-
-G4VPhysicalVolume* Tst64DetectorConstruction::Construct() {  
-  G4Material* h2gas = 
-    new G4Material("hydrogen", 1.0, 1.01*g/mole, 71.0*mg/cm3 );
-
-  // experimental hall (world volume)
-  G4VSolid* worldSolid = new G4Box( "worldBox", 10.0*m, 3.0*m, 10.0*m );
-  G4LogicalVolume* worldLogical = 
-    new G4LogicalVolume( worldSolid, h2gas, "worldLogical", 0, 0, 0 );
-  G4VPhysicalVolume* worldPhysical
-    = new G4PVPlacement( 0, G4ThreeVector(), worldLogical, 
-                         "worldPhysical", 0, 0, 0);
-
-  return worldPhysical;
+void Tst64ActionInitialization::Build() const {
+  SetUserAction(new Tst64PrimaryGeneratorAction);
 }
 
-void Tst64DetectorConstruction::ConstructSDandField()
-{}
+void Tst64ActionInitialization::BuildForMaster() const {
+}
 

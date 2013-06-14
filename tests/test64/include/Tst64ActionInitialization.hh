@@ -26,38 +26,20 @@
 // $Id: $
 //
 
-#include "Tst64DetectorConstruction.hh"
+#ifndef Tst64ActionInitialization_h
+#define Tst64ActionInitialization_h 1
 
-#include "G4SystemOfUnits.hh"
-#include "G4VSolid.hh"
-#include "G4Box.hh"
-#include "G4Material.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
+#include "G4VUserActionInitialization.hh"
 
+class Tst64ActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    Tst64ActionInitialization();
+    virtual ~Tst64ActionInitialization();
 
-Tst64DetectorConstruction::Tst64DetectorConstruction() {}
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
+};
 
-
-Tst64DetectorConstruction::~Tst64DetectorConstruction() {}
-
-
-G4VPhysicalVolume* Tst64DetectorConstruction::Construct() {  
-  G4Material* h2gas = 
-    new G4Material("hydrogen", 1.0, 1.01*g/mole, 71.0*mg/cm3 );
-
-  // experimental hall (world volume)
-  G4VSolid* worldSolid = new G4Box( "worldBox", 10.0*m, 3.0*m, 10.0*m );
-  G4LogicalVolume* worldLogical = 
-    new G4LogicalVolume( worldSolid, h2gas, "worldLogical", 0, 0, 0 );
-  G4VPhysicalVolume* worldPhysical
-    = new G4PVPlacement( 0, G4ThreeVector(), worldLogical, 
-                         "worldPhysical", 0, 0, 0);
-
-  return worldPhysical;
-}
-
-void Tst64DetectorConstruction::ConstructSDandField()
-{}
+#endif
 

@@ -49,13 +49,18 @@
 #include <string>
 #include <sstream>
 #include <ctime>
-#include <CLHEP/Random/Ranlux64Engine.h>
-
+#include "Randomize.hh"
 #include "Tst64DetectorConstruction.hh"
 #include "Tst64PhysicsList.hh"
-#include "Tst64PrimaryGeneratorAction.hh"
+#include "Tst64ActionInitialization.hh"
 #include "G4SystemOfUnits.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4DecayPhysics.hh"
 #include "G4ParticleTable.hh"
 #include "G4Step.hh"
@@ -92,17 +97,23 @@ int main( int argc, char** argv ) {
   // Initialization
 
   CLHEP::Ranlux64Engine defaultEngine( 1234567, 4 ); 
-  CLHEP::HepRandom::setTheEngine( &defaultEngine ); 
+  G4Random::setTheEngine(&defaultEngine);
   G4int seed = std::time( NULL ); 
-  CLHEP::HepRandom::setTheSeed( seed ); 
+  G4Random::setTheSeed(seed);
   G4cout << " Initial seed = " << seed << G4endl; 
-  //CLHEP::HepRandom::getTheEngine()->restoreStatus( "start.rndm" );
- 
+  //G4Random::getTheEngine()->restoreStatus( "start.rndm" );
+
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else 
   G4RunManager* runManager = new G4RunManager;
+#endif
+
   runManager->SetUserInitialization( new Tst64DetectorConstruction );
   runManager->SetUserInitialization( new Tst64PhysicsList );
+  runManager->SetUserInitialization(new Tst64ActionInitialization);
   runManager->Initialize();
-  runManager->SetUserAction( new Tst64PrimaryGeneratorAction );
 
   G4DecayPhysics decays;
   decays.ConstructParticle();
@@ -258,7 +269,7 @@ int main( int argc, char** argv ) {
         std::stringstream out;
         out << "currentEvent_" << loop << ".rndm";
         std::string nameFile( out.str() );
-        CLHEP::HepRandom::getTheEngine()->saveStatus( nameFile.c_str() );
+        G4Random::getTheEngine()->saveStatus( nameFile.c_str() );
       }
 
       if ( processNew )  {
@@ -345,7 +356,7 @@ int main( int argc, char** argv ) {
 
     G4cout << "\t End event loop." << G4endl;
 
-    G4double r = CLHEP::HepRandom::getTheEngine()->flat();
+    G4double r = G4Random::getTheEngine()->flat();
     G4cout << "\t Final random number = " << r << G4endl;
 
     // Print some information at the end of the Run

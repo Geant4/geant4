@@ -13,10 +13,29 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 June 2013  Dennis Wright              test64-V09-06-01
+---------------------------------------------------------
+- test64.cc : migrated CLHEP::HepRandom to G4Random
+
+13 June 2013  Dennis Wright              test64-V09-06-00
+---------------------------------------------------------
+- Migrate to multi-threaded:
+    added option to use G4MTRunManager in test64.cc
+    created class Tst64ActionInitialization and moved user init method
+      there
+    added empty method Tst64GeometryConstruction::ConstructSDandField()
+
+- added CMakeLists_Standalone.txt to be used for stand-alone running 
+  (developed by Makoto Asai)
+
+- updated README for cmake build  
+
 11 Oct 2012 Gabriele Cosmo               test64-V09-05-06
+---------------------------------------------------------
 - Explicit inclusion of units and constants headers.
 
 11 Oct 2012 Alberto Ribon                test64-V09-05-05
+---------------------------------------------------------
 - Fixed compilation warning in Windows (<ctime>, std::time).
 
 08 Oct 2012 Alberto Ribon                test64-V09-05-04
