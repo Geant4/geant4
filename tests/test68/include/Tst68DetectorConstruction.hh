@@ -45,6 +45,7 @@ public:
   ~Tst68DetectorConstruction();
   
   G4VPhysicalVolume* Construct();
+  void ConstructSDandField();
 
   void SetMagField( const G4double fieldValue );
   void SetAbsorberMaterial( const G4String name );

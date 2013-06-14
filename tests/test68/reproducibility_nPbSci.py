@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 #-------------------------------------------------------------------------
-# Last update: 12-Jun-2013
+# Last update: 14-Jun-2013
 #
 # This python script, which has at most one input parameter
 # (the configuration in which Geant4 has been built: this is needed only
@@ -108,21 +108,17 @@ if ( len( sys.argv ) > 1 ) :
   configuration = sys.argv[1]
   print ' configuration=', configuration
 
-# For Windows platform, set the proper path and add ".exe" to the
-# executable name.
-# 13-Nov-2012: the Unix command "mv" must be replaced by "rename" in Windows.
-
-
+# Windows platform needs a special treatment.
 executable_path = "."
 executable_name = "test68"
-rename_command = "mv"
+copy_command = "cp"
 rndmBasename = "/currentEvent.rndm"
 if ( platform.system() == 'Windows' ) :
   executable_path = configuration
   executable_name += ".exe"
-  rename_command = "rename"
+  copy_command = "copy"
   rndmBasename = "\currentEvent.rndm"
-  print ' executable_path=', executable_path, ' ; executable_name=', executable_name, ' ; rename_command=', rename_command, ' ; rndmBasename=', rndmBasename 
+  print ' executable_path=', executable_path, ' ; executable_name=', executable_name, ' ; copy_command=', copy_command, ' ; rndmBasename=', rndmBasename 
 
 for iCase in listCases :
 
@@ -180,10 +176,10 @@ for iCase in listCases :
             g4file.write( "/mydet/update \n" )
             if ( i == 0 ) :
                 g4file.write( "/run/beamOn " + NumEvents + " \n" )
-                g4file.write( "/control/shell %s %s event_0.rndm%s \n" %( rename_command, randomEventFilename, suffix ) )
+                g4file.write( "/control/shell %s %s event_0.rndm%s \n" %( copy_command, randomEventFilename, suffix ) )
                 for j in range( NumSingleEventChecks-1 ) :
                     g4file.write( "/run/beamOn " + str( GapBetweenExtraSingleEventChecks+1 ) + " \n" )
-                    g4file.write( "/control/shell %s %s event_%d.rndm%s \n" %( rename_command, randomEventFilename, j+1, suffix ) )
+                    g4file.write( "/control/shell %s %s event_%d.rndm%s \n" %( copy_command, randomEventFilename, j+1, suffix ) )
             else :
                 g4file.write( "/run/beamOn 1 \n" )
             g4file.close()

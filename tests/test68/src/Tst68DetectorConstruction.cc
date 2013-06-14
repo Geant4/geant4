@@ -101,6 +101,8 @@ G4VPhysicalVolume* Tst68DetectorConstruction::Construct() {
   return ConstructCalorimeter();
 }
 
+void Tst68DetectorConstruction::ConstructSDandField()
+{}
 
 void Tst68DetectorConstruction::DefineMaterials() { 
 

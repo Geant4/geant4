@@ -23,58 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
+// $Id: $
+//
+
+#ifndef Tst68ActionInitialization_h
+#define Tst68ActionInitialization_h 1
+
+#include "G4VUserActionInitialization.hh"
+
+class Tst68ActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    Tst68ActionInitialization();
+    virtual ~Tst68ActionInitialization();
+
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
+};
+
 #endif
- 
-#include "G4UImanager.hh" 
-#include "Tst68DetectorConstruction.hh"
-#include "Tst68ActionInitialization.hh"
-#include "FTFP_BERT.hh"
-#include "Randomize.hh" 
-#include <ctime>
 
-
-int main(int argc,char** argv) { 
-
-  CLHEP::Ranlux64Engine defaultEngine( 1234567, 4 ); 
- 
-  G4Random::setTheEngine( &defaultEngine ); 
-  G4int seed = std::time( NULL ); 
-  G4Random::setTheSeed( seed ); 
-  G4cout << G4endl 
-         << " ===================================================== " << G4endl 
-         << " Initial seed = " << seed << G4endl 
-	 << " ===================================================== " << G4endl 
-	 << G4endl;
-
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(1);
-#else  
-  G4RunManager* runManager = new G4RunManager;
-#endif
- 
-  runManager->SetUserInitialization( new Tst68DetectorConstruction ); 
-
-  FTFP_BERT *thePL = new FTFP_BERT;
-
-  //thePL->SetDefaultCutValue( 0.020 *mm ); // 20 microns 
-  runManager->SetUserInitialization( thePL );
-  runManager->SetUserInitialization(new Tst68ActionInitialization);
-  runManager->Initialize(); 
-
-  G4UImanager* UI = G4UImanager::GetUIpointer(); 
-  if ( argc==1 ) {   // Define UI session for interactive mode. 
-  } else {   // Batch mode 
-    G4String command = "/control/execute "; 
-    G4String fileName = argv[1]; 
-    UI->ApplyCommand(command+fileName); 
-  } 
-
-  // job termination 
-  delete runManager; 
-  return 0; 
-} 
