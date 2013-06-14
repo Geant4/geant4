@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 June 1202: A. Dotti (phononExample-V09-06-03)
+- Adding reference files for MT mode, adding CTestDefinitions.txt 
+  file containing new ctest with OS/Mode reference files
+
 6 June 2013: G. Cosmo (phononExample-V09-06-02)
 - Fixed printout in XLogicalLattice.cc.
 
