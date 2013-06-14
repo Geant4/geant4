@@ -166,18 +166,9 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
                         ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/monopole/monopole.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/monopole
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/monopole
-                BUILD monopole ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} )
-GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon/XGeBox
-                        ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/run.in
-                POSTCMD ${CMAKE_COMMAND} -E compare_files timing.ssv ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/timing.out
-                POSTCMD ${CMAKE_COMMAND} -E compare_files caustic.ssv ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/caustic.out
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
-                BUILD XGeBox PROJECT dmc
-                ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-                            CRYSTALMAPS=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps
+                BUILD monopole ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
 		)
+include( ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CTestDefinitions.txt)
 foreach(_i 01 02 03 04 05 06)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/field/field${_i}/field${_i} 
