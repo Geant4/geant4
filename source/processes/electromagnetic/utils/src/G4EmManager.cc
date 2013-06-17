@@ -72,7 +72,7 @@ G4EmManager* G4EmManager::theInstance = 0;
 G4EmManager* G4EmManager::Instance()
 {
   if(0 == theInstance) {
-    G4EmManager manager;
+    static G4EmManager manager;
     theInstance = &manager;
   }
   return theInstance;
