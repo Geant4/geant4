@@ -67,59 +67,9 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4Allocator.hh"
-#include "G4PhysicsVectorCache.hh"
 #include "G4PhysicsVectorType.hh"
-#include "G4PVSplitter.hh"
 
 typedef std::vector<G4double> G4PVDataVector;
-
-class G4PVCache
-{
-  // Encapsulates the fields associated to the class
-  // G4PhysicsVector that may not be read-only.
-
-  public:  // without description
-
-    void initialize()
-    {
-      cache = new G4PhysicsVectorCache();
-    }
-
-    G4PhysicsVectorCache*  cache;
-};
-
-// The type G4PVecManager is introduced to encapsulate the methods used by
-// both the master thread and worker threads to allocate memory space for
-// the fields encapsulated by the class G4PVCache. When each thread
-// initializes the value for these fields, it refers to them using a macro
-// definition defined below. For every G4PhysicsVectorCache instance, there
-// is a corresponding G4PVCache instance. All G4PVCache instances are organized
-// by the class G4PVecManager as an array.
-// The field "int instanceID" is added to the class G4PhysicsVector.
-// The value of this field in each G4PhysicsVectorCache instance is the
-// subscript of the corresponding G4PVCache instance.
-// In order to use the class G4PVecManager, we add a static member in the class
-// G4PhysicsVector as follows: "static G4PVecManager subInstanceManager".
-// Both the master and worker threads change the length of the array because
-// threads do not share all physics vectors. For the master thread, the array
-// for G4PVCache instances grows dynamically along with the G4PhysicsVector
-// instances are created. For each worker thread, it copies the array of
-// G4PVCache instances from the master thread first. For some physics vectors,
-// worker threads share them and each thread just uses the array copied to hold
-// thread private data. However, each thread will still create some physics
-// vectors which extend the array to hold thread private data although these
-// physics vectors are not shared. It makes some elements in the thread
-// private array useless and consumes more memory space. We determine however
-// to share almost all large physics vectors. Even if we ignore some small
-// physics vectors, the waste due to replication of these small physics
-// vectors is neglectable.
-//
-typedef G4PVSplitter<G4PVCache> G4PVecManager;
-
-// This macro changes the references to fields that are now encapsulated
-// in the class G4PVCache.
-//
-#define G4MT_pvcache ((subInstanceManager.offset[instanceID]).cache)
 
 class G4PhysicsVector 
 {
@@ -226,23 +176,9 @@ class G4PhysicsVector
 
     friend std::ostream& operator<<(std::ostream&, const G4PhysicsVector&);
 
-    
-    inline G4double GetLastEnergy() const;
-    inline G4double GetLastValue() const;
-    inline size_t GetLastBin() const;
-         // Get cache values 
-
     inline void SetVerboseLevel(G4int value);
     inline G4int GetVerboseLevel(G4int);
          // Set/Get Verbose level
-
-  public:  // without description
-
-    inline G4int GetInstanceID() const;
-      // Returns the instance ID.
-
-    static const G4PVecManager& GetSubInstanceManager();
-      // Returns the private data instance manager.
 
   protected:
 
@@ -268,16 +204,16 @@ class G4PhysicsVector
 
   private:
 
-    void ComputeValue(G4double theEnergy);
+    G4double ComputeValue(G4double theEnergy);
 
     G4bool SplinePossible();
 
-    inline G4double LinearInterpolation(G4int lastBin);
+    inline G4double LinearInterpolation(G4int lastBin, G4double lastE);
          // Linear interpolation function
-    inline G4double SplineInterpolation(G4int lastBin);
+    inline G4double SplineInterpolation(G4int lastBin, G4double lastE);
          // Spline interpolation function
 
-    inline void Interpolation(G4int lastBin);
+    inline G4double Interpolation(G4int lastBin, G4double lastE);
 
     G4bool     useSpline;
 
@@ -287,13 +223,6 @@ class G4PhysicsVector
     G4double baseBin;       // Set this in constructor for performance
 
     G4int verboseLevel;
-
-  private:
-
-    G4int instanceID;
-      // This field is used as instance ID.
-    static G4GLOB_DLL G4PVecManager subInstanceManager;
-      // This field helps to use the class G4PVecManager introduced above.
 };
 
 #include "G4PhysicsVector.icc"

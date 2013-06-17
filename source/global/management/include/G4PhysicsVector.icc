@@ -57,39 +57,11 @@ inline
 }
 
 inline
- G4int G4PhysicsVector::GetInstanceID() const
-{
-  return instanceID;
-}
-
-inline
  G4double G4PhysicsVector::Value(G4double theEnergy) 
 {
-  // Use cache for speed up - check if the value 'theEnergy' is same as the 
-  // last call. If it is same, then use the last value, if not - recompute
-
-  if( theEnergy != G4MT_pvcache->lastEnergy ) { ComputeValue(theEnergy); }
-  return G4MT_pvcache->lastValue;
+  return ComputeValue(theEnergy);
 }
 
-inline
- G4double G4PhysicsVector::GetLastEnergy() const
-{
-  return G4MT_pvcache->lastEnergy;	
-}
-
-inline
- G4double G4PhysicsVector::GetLastValue() const
-{
-   return G4MT_pvcache->lastValue;
-}
-
-inline 
- size_t G4PhysicsVector::GetLastBin() const
-{
-   return G4MT_pvcache->lastBin;
-}
- 
 inline
  G4double G4PhysicsVector::operator[](const size_t binNumber) const
 {
@@ -139,7 +111,7 @@ inline
 //------------------------------------------------
 
 inline
- G4double G4PhysicsVector::LinearInterpolation(G4int lastBin)
+ G4double G4PhysicsVector::LinearInterpolation(G4int lastBin, G4double lastE)
 {
   // Linear interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
@@ -147,7 +119,7 @@ inline
   // the following interpolation is valid even the current locBin=
   // numberOfBin-1. 
 
-  G4double intplFactor = (G4MT_pvcache->lastEnergy-binVector[lastBin]) 
+  G4double intplFactor = (lastE-binVector[lastBin]) 
      / (binVector[lastBin + 1]-binVector[lastBin]); // Interpol. factor
 
   return dataVector[lastBin] +
@@ -157,7 +129,7 @@ inline
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::SplineInterpolation(G4int lastBin)
+ G4double G4PhysicsVector::SplineInterpolation(G4int lastBin, G4double lastE)
 {
   // Spline interpolation is used to get the value. If the give energy
   // is in the highest bin, no interpolation will be Done. Because 
@@ -172,8 +144,8 @@ inline
   G4double x2 = binVector[lastBin + 1];
   G4double delta = x2 - x1;
 
-  G4double a = (x2 - G4MT_pvcache->lastEnergy)/delta;
-  G4double b = (G4MT_pvcache->lastEnergy - x1)/delta;
+  G4double a = (x2 - lastE)/delta;
+  G4double b = (lastE - x1)/delta;
    
   // Final evaluation of cubic spline polynomial for return   
   G4double y1 = dataVector[lastBin];
@@ -189,10 +161,10 @@ inline
 //---------------------------------------------------------------
 
 inline 
- void G4PhysicsVector::Interpolation(G4int lastBin)
+ G4double G4PhysicsVector::Interpolation(G4int lastBin, G4double lastE)
 {
-  if(useSpline) { G4MT_pvcache->lastValue = SplineInterpolation(lastBin); }
-  else          { G4MT_pvcache->lastValue = LinearInterpolation(lastBin); }
+  if(useSpline) { return SplineInterpolation(lastBin,lastE); }
+  else          { return LinearInterpolation(lastBin,lastE); }
 }
 
 //---------------------------------------------------------------

@@ -49,14 +49,12 @@
 #ifndef G4Physics2DVector_h
 #define G4Physics2DVector_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
-
 #include <iostream>
 #include <fstream>
 #include <vector>
 
-//#include "G4Physics2DVectorCache.hh"
+#include "globals.hh"
+#include "G4ios.hh"
 #include "G4PhysicsVectorType.hh"
 
 typedef std::vector<G4double> G4PV2DDataVector;

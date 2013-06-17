@@ -46,7 +46,7 @@
 //     |--> patch number
 
 #ifndef G4VERSION_NUMBER
-#define G4VERSION_NUMBER  000
+#define G4VERSION_NUMBER  1000
 #endif
 
 #ifndef G4VERSION_TAG

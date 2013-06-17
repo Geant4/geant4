@@ -54,62 +54,9 @@
 // --------------------------------------------------------------
 
 #include <iomanip>
-#include "G4Threading.hh"
 #include "G4PhysicsVector.hh"
 
 G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator = 0;
-
-// Each thread must know it is master or not to initialize physics vectors. 
-// This variable is used to remember the phase: master initialization 
-// or worker initialization.
-//
-template <class G4PVCache>
-G4int G4PVSplitter<G4PVCache>::phaseshadow = 0;
-  //0: master initialization, 1: worker initialization
-
-// All worker threads continue to create more physics vectors in addition to 
-// physics vectors created by the master thread. Some physics vectors created 
-// by the master thread are shared among all threads. This variable is used to 
-// remember the number of physics vectors created by the master thread.
-//
-template <class G4PVCache>
-G4int G4PVSplitter<G4PVCache>::totalobjshadow = 0;
-
-// All worker threads continue to create more physics vectors in addition to 
-// physics vectors created by the master thread. Some physics vectors created 
-// by the master thread are shared among all threads. This variable is used to 
-// remember the space to hold physics vectors for allocated by the master 
-// thread.
-//
-template <class G4PVCache>
-G4PVCache* G4PVSplitter<G4PVCache>::offsetshadow = 0;
-
-// This static member is thread local. For each thread, it holds the array 
-// size of G4PVCache instances.
-//
-template <class G4PVCache> G4ThreadLocal
-G4int G4PVSplitter<G4PVCache>::totalobj= 0;
-
-// This static member is thread local. For each thread, it holds the space 
-// size preallocated to hold G4PVCache instances.
-//
-template <class G4PVCache> G4ThreadLocal
-G4int G4PVSplitter<G4PVCache>::totalspace = 0;
-
-// This static member is thread local. For each thread, it points to the 
-// array of G4PVCache instances.
-//
-template <class G4PVCache> G4ThreadLocal
-G4PVCache* G4PVSplitter<G4PVCache>::offset = 0;
-
-// This new field helps to use the class G4PVecManager 
-// introduced in the "G4PhysicsVectorCache.hh" file.
-//
-G4PVecManager G4PhysicsVector::subInstanceManager;
-
-#ifdef G4MULTITHREADED
-G4Mutex mutexPhysicsVector = G4MUTEX_INITIALIZER;
-#endif
 
 // --------------------------------------------------------------
 
@@ -121,26 +68,18 @@ G4PhysicsVector::G4PhysicsVector(G4bool spline)
    verboseLevel(0)
 {
   if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
-  instanceID = subInstanceManager.CreateSubInstance();
-  G4MT_pvcache    = new G4PhysicsVectorCache();
 }
 
 // --------------------------------------------------------------
 
 G4PhysicsVector::~G4PhysicsVector() 
 {
-//  if (!fpPVAllocator) { delete fpPVAllocator; fpPVAllocator = 0; }
-  delete G4MT_pvcache; G4MT_pvcache = 0;
 }
 
 // --------------------------------------------------------------
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
-  instanceID = subInstanceManager.CreateSubInstance();
-
-  G4MT_pvcache      = new G4PhysicsVectorCache();
-
   dBin         = right.dBin;
   baseBin      = right.baseBin;
   verboseLevel = right.verboseLevel;
@@ -179,13 +118,6 @@ G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 
 // --------------------------------------------------------------
 
-const G4PVecManager& G4PhysicsVector::GetSubInstanceManager()
-{
-  return subInstanceManager;
-}
-
-// --------------------------------------------------------------
-
 void G4PhysicsVector::DeleteData()
 {
   secDerivative.clear();
@@ -199,9 +131,6 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
   edgeMin = vec.edgeMin;
   edgeMax = vec.edgeMax;
   numberOfNodes = vec.numberOfNodes;
-  G4MT_pvcache->lastEnergy = vec.GetLastEnergy();
-  G4MT_pvcache->lastValue = vec.GetLastValue();
-  G4MT_pvcache->lastBin = vec.GetLastBin();
   useSpline = vec.useSpline;
 
   size_t i;
@@ -264,9 +193,6 @@ G4bool G4PhysicsVector::Store(std::ofstream& fOut, G4bool ascii)
 G4bool G4PhysicsVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   // clear properties;
-  G4MT_pvcache->lastEnergy=-DBL_MAX;
-  G4MT_pvcache->lastValue =0.;
-  G4MT_pvcache->lastBin   =0;
   dataVector.clear();
   binVector.clear();
   secDerivative.clear();
@@ -364,8 +290,6 @@ G4PhysicsVector::ScaleVector(G4double factorE, G4double factorV)
 
   edgeMin *= factorE;
   edgeMax *= factorE;
-  G4MT_pvcache->lastEnergy = factorE*(G4MT_pvcache->lastEnergy);
-  G4MT_pvcache->lastValue  = factorV*(G4MT_pvcache->lastValue);
 }
 
 // --------------------------------------------------------------
@@ -569,30 +493,18 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 
 //---------------------------------------------------------------
 
-void G4PhysicsVector::ComputeValue(G4double theEnergy) 
+G4double G4PhysicsVector::ComputeValue(G4double theEnergy) 
 {
   // Use cache for speed up - check if the value 'theEnergy' lies 
   // between the last energy and low edge of of the 
   // bin of last call, then the last bin location is used.
 
-  if( theEnergy < G4MT_pvcache->lastEnergy
-        &&   theEnergy >= binVector[G4MT_pvcache->lastBin]) {
-     G4MT_pvcache->lastEnergy = theEnergy;
-     Interpolation(G4MT_pvcache->lastBin);
-
-  } else if( theEnergy <= edgeMin ) {
-     G4MT_pvcache->lastBin = 0;
-     G4MT_pvcache->lastEnergy = edgeMin;
-     G4MT_pvcache->lastValue  = dataVector[0];
-
+  if ( theEnergy <= edgeMin ) {
+    return dataVector[0];
   } else if( theEnergy >= edgeMax ) {
-     G4MT_pvcache->lastBin = numberOfNodes-1;
-     G4MT_pvcache->lastEnergy = edgeMax;
-     G4MT_pvcache->lastValue  = dataVector[G4MT_pvcache->lastBin];
-
+    return dataVector[numberOfNodes-1];
   } else {
-    G4MT_pvcache->lastBin = FindBinLocation(theEnergy);
-    G4MT_pvcache->lastEnergy = theEnergy;
-    Interpolation(G4MT_pvcache->lastBin);
+    G4int bin = FindBinLocation(theEnergy);
+    return Interpolation( bin, theEnergy );
   }
 }

@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 14, 2013 G.Cosmo (global-V09-06-40)
+- Removed split mechanism from G4PhysicsVector; removed G4PhysicsVectorCache
+  class; removed G4PVSplitter. Made G4PhysicsVector a read-only class.
+- Removed G4Physics2DVectorCache class, no longer used.
+- Updated tag-id in G4Version.hh to "1000".
+
 June 12, 2013 G.Cosmo (global-V09-06-39)
 - Simplified implementation of new/delete operators for G4PhysicsVector
   and G4PhysicsVectorCache and avoid deletion of allocator global pointers
