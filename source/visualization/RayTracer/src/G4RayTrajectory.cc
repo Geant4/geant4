@@ -43,7 +43,7 @@
 #include "G4TransportationManager.hh"
 #include "G4ios.hh"
 
-G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
+G4ThreadLocal G4Allocator<G4RayTrajectory>* rayTrajectoryAllocator = 0;
 
 G4RayTrajectory :: G4RayTrajectory()
 {

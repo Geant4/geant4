@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+16th June 2013  Makoto Asai (raytracer-V09-06-01)
+- Make G4RayTrajectory and G4RayTrajectoryPoint classes thread safe.
+
 2nd December 2012  John Allison  (raytracer-V09-06-00)
 - Removed NURBS and references to i_mode.
 

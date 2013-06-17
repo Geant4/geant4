@@ -96,21 +96,21 @@ class G4RayTrajectory : public G4VTrajectory
 };
 
 #if defined G4VIS_ALLOC_EXPORT
-  extern G4DLLEXPORT G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
+  extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4RayTrajectory>* rayTrajectoryAllocator;
 #else
-  extern G4DLLIMPORT G4Allocator<G4RayTrajectory> G4RayTrajectoryAllocator;
+  extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4RayTrajectory>* rayTrajectoryAllocator;
 #endif
 
 inline void* G4RayTrajectory::operator new(size_t)
 {
-   void* aTrajectory;
-   aTrajectory = (void*)G4RayTrajectoryAllocator.MallocSingle();
-   return aTrajectory;
+   if(!rayTrajectoryAllocator)
+   { rayTrajectoryAllocator = new G4Allocator<G4RayTrajectory>; }
+   return (void*)rayTrajectoryAllocator->MallocSingle();
 }
 
 inline void G4RayTrajectory::operator delete(void* aTrajectory)
 {
-   G4RayTrajectoryAllocator.FreeSingle((G4RayTrajectory*)aTrajectory);
+   rayTrajectoryAllocator->FreeSingle((G4RayTrajectory*)aTrajectory);
 }
 
 
