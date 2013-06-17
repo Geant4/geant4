@@ -18,6 +18,23 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+15 June 13: V.Ivanchenko (emstand-V09-06-49)
+- Return PAI modifications to the vesrsion of emstand-V09-06-45
+- G4eCoulombScatteringModel - do not use ElementSelectors for ions
+- G4ScreeningMottCrossSection - fixed Coverity report; fixed numerical
+    problem for very small scattering angles
+
+13 June 13: V.Ivanchenko (emstand-V09-06-48)
+ G4PAIxSection - fixed compillation warning
+
+13 June 13: V.Ivanchenko (emstand-V09-06-47)
+ G4PAIxSection - V.Grichine fix compillation warning
+
+13 June 13: V.Ivanchenko (emstand-V09-06-46)
+12 June 13 -  V.Grichine, G4PAIPhotonModel, G4PAIxSection - modified 
+    initialisation call G4SandiaTable over memory crash free method; 
+    G4PAIxSection was modified: arrays->G4DataVectors
+
 10 May 13: V.Ivanchenko (emstand-V09-06-45)
 - G4hIonisation - removed debug printout
 

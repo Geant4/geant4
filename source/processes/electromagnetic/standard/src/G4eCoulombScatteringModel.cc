@@ -115,13 +115,13 @@ G4eCoulombScatteringModel::~G4eCoulombScatteringModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
+void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
 					   const G4DataVector& cuts)
 {
-  SetupParticle(p);
+  SetupParticle(part);
   currentCouple = 0;
   cosThetaMin = cos(PolarAngleLimit());
-  wokvi->Initialise(p, cosThetaMin);
+  wokvi->Initialise(part, cosThetaMin);
   /*      
   G4cout << "G4eCoulombScatteringModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
@@ -131,7 +131,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   /*
   G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
-  	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
+  	 << part->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
   	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
   G4cout << "cut= " << pCuts[0] << "  cut1= " << pCuts[1] << G4endl;
   */
@@ -139,8 +139,8 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
     isInitialised = true;
     fParticleChange = GetParticleChangeForGamma();
   }
-  if(mass < GeV) {
-    InitialiseElementSelectors(p,cuts);
+  if(mass < GeV && part->GetParticleName() != "GenericIon") {
+    InitialiseElementSelectors(part,cuts);
   }
 }
 
@@ -239,8 +239,8 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double trec = mom2*(1.0 - cost)
     /(targetMass + (mass + kinEnergy)*(1.0 - cost));
   G4double finalT = kinEnergy - trec; 
-  //G4cout<<"G4eCoulombScatteringModel: finalT= "
-  // <<finalT<<" Trec= "<<trec<<G4endl;
+  //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "
+  //	<<trec << " Z= " << iz << " A= " << ia<<G4endl;
   if(finalT <= lowEnergyThreshold) { 
     trec = kinEnergy;  
     finalT = 0.0;
