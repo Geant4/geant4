@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 16th, 2013, M. Asai (run-V09-06-54)
+- Delete all G4Allocator objects from the destructor of G4RunManagerKernel.
+
 June 14th, 2013, A. Dotti (run-V09-06-53)
 - G4PhysicsVector is not anymore a split-classes, remove thread initialization
   for split mechanism in G4WorkerThread

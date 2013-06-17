@@ -55,6 +55,7 @@
 #include "G4ios.hh"
 
 #include "G4MTRunManager.hh"
+#include "G4AllocatorList.hh"
 
 #ifdef G4FPE_DEBUG
   #include "G4FPEDetection.hh"
@@ -254,6 +255,12 @@ G4RunManagerKernel::~G4RunManagerKernel()
   }
   G4UnitDefinition::ClearUnitsTable();
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
+  G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
+  if(allocList)
+  {
+    delete allocList;
+    if(verboseLevel>1) G4cout << "G4Allocator objects are deleted." << G4endl;
+  }
   delete pStateManager; 
   if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   delete defaultExceptionHandler;
