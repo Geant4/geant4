@@ -60,7 +60,7 @@ void G4AllocatorList::Destroy()
   std::vector<G4AllocatorBase*>::iterator itr=fList.begin();
   for(;itr!=fList.end();itr++)
   {  
-    (*itr)->ResetStorage();
+    // (*itr)->ResetStorage();
     delete *itr;
   }
   fList.clear();

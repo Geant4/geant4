@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 17, 2013 G.Cosmo (global-V09-06-44)
+- Temporarly avoid resetting storage in G4AllocatorList::Destroy().
+
 June 16, 2013 M.Asai (global-V09-06-43)
 - Introducing G4AllocatorList class which stores pointers of all
   G4Allocator objects for each thread so that they all are cleanly
@@ -24,15 +27,15 @@ June 16, 2013 M.Asai (global-V09-06-43)
 - Adding G4AllocatorBase base class to define virtual destructor
   and virtual method for G4Allocator.
 
-June 15, 2013 V.Ivanchenko (global-V09-06-42)
-- G4PhysicsVector - added protection to avoid check energy value
-    outside vector when bin location is performed
+June 15, 2013 V.Ivantchenko (global-V09-06-42)
+- G4PhysicsVector: added protection to avoid check energy value
+  outside vector when bin location is performed/
 
-June 14, 2013 V.Ivanchenko (global-V09-06-41)
-- G4PhysicsVector - make class read-only in run time, access to
-    value only via const methods; to enable spline, SetSpline command
-    should be applied after vector is filled, or equivalently
-    direct call to fill second derivatives should be done. 
+June 14, 2013 V.Ivantchenko (global-V09-06-41)
+- G4PhysicsVector: make class read-only in run time, access to
+  value only via const methods; to enable Spline, SetSpline command
+  should be applied after vector is filled, or equivalently
+  direct call to fill second derivatives should be done.
 
 June 14, 2013 G.Cosmo (global-V09-06-40)
 - Removed split mechanism from G4PhysicsVector; removed G4PhysicsVectorCache
