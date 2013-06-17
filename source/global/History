@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 14, 2013 V.Ivanchenko (global-V09-06-41)
+- G4PhysicsVector - make class read-only in run time, access to
+    value only via const methods; to enable spline, SetSpline command
+    should be applied after vector is filled, or equivalently
+    direct call to fill second derivatives should be done. 
+
 June 14, 2013 G.Cosmo (global-V09-06-40)
 - Removed split mechanism from G4PhysicsVector; removed G4PhysicsVectorCache
   class; removed G4PVSplitter. Made G4PhysicsVector a read-only class.

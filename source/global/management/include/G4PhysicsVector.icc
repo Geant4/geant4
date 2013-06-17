@@ -43,6 +43,8 @@
 
 extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator;
 
+//---------------------------------------------------------------
+
 inline
  void* G4PhysicsVector::operator new(size_t)
 { 
@@ -50,17 +52,24 @@ inline
   return (void*)fpPVAllocator->MallocSingle();
 }
 
+//---------------------------------------------------------------
+
 inline
  void G4PhysicsVector::operator delete(void* aVector)
 {
   fpPVAllocator->FreeSingle((G4PhysicsVector*)aVector);
 }
 
+//---------------------------------------------------------------
+
 inline
- G4double G4PhysicsVector::Value(G4double theEnergy) 
+ G4double G4PhysicsVector::Value(G4double theEnergy) const
 {
-  return ComputeValue(theEnergy);
+  size_t idx=0;
+  return Value(theEnergy, idx);
 }
+
+//---------------------------------------------------------------
 
 inline
  G4double G4PhysicsVector::operator[](const size_t binNumber) const
@@ -103,57 +112,65 @@ inline
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) 
+ G4double G4PhysicsVector::GetValue(G4double theEnergy, G4bool&) const 
 {
-  return Value(theEnergy);
+  size_t idx=0;
+  return Value(theEnergy, idx);
+}
+
+//---------------------------------------------------------------
+
+inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
+{
+  size_t id = idx;
+  if(e < binVector[1]) { 
+    id = 0; 
+  } else if(e >= binVector[numberOfNodes-2]) { 
+    id = numberOfNodes - 2; 
+  } else if(e < binVector[idx] || e > binVector[idx+1]) { 
+    id = FindBinLocation(e); 
+  }
+  return id;
 }
 
 //------------------------------------------------
 
 inline
- G4double G4PhysicsVector::LinearInterpolation(G4int lastBin, G4double lastE)
+ G4double G4PhysicsVector::LinearInterpolation(size_t idx, G4double e) const
 {
-  // Linear interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
-  // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-
-  G4double intplFactor = (lastE-binVector[lastBin]) 
-     / (binVector[lastBin + 1]-binVector[lastBin]); // Interpol. factor
-
-  return dataVector[lastBin] +
-         ( dataVector[lastBin + 1]-dataVector[lastBin] ) * intplFactor;
+  // Linear interpolation is used to get the value. Before this method
+  // is called it is ensured that the energy is inside the bin
+  // 0 < idx < numberOfNodes-1
+  
+  return dataVector[idx] +
+         ( dataVector[idx + 1]-dataVector[idx] ) * (e - binVector[idx])
+         /( binVector[idx + 1]-binVector[idx] );
 }
 
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::SplineInterpolation(G4int lastBin, G4double lastE)
+ G4double G4PhysicsVector::SplineInterpolation(size_t idx, G4double e) const
 {
-  // Spline interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
-  // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-
-  if(0 == secDerivative.size() ) { FillSecondDerivatives(); }
+  // Spline interpolation is used to get the value. Before this method
+  // is called it is ensured that the energy is inside the bin
+  // 0 < idx < numberOfNodes-1
 
   // check bin value
-  G4double x1 = binVector[lastBin];
-  G4double x2 = binVector[lastBin + 1];
+  G4double x1 = binVector[idx];
+  G4double x2 = binVector[idx + 1];
   G4double delta = x2 - x1;
 
-  G4double a = (x2 - lastE)/delta;
-  G4double b = (lastE - x1)/delta;
+  G4double a = (x2 - e)/delta;
+  G4double b = (e - x1)/delta;
    
   // Final evaluation of cubic spline polynomial for return   
-  G4double y1 = dataVector[lastBin];
-  G4double y2 = dataVector[lastBin + 1];
+  G4double y1 = dataVector[idx];
+  G4double y2 = dataVector[idx + 1];
 
   G4double res = a*y1 + b*y2 + 
-        ( (a*a*a - a)*secDerivative[lastBin] +
-          (b*b*b - b)*secDerivative[lastBin + 1] )*delta*delta/6.0;
+        ( (a*a*a - a)*secDerivative[idx] +
+          (b*b*b - b)*secDerivative[idx + 1] )*delta*delta/6.0;
 
   return res;
 }
@@ -161,10 +178,12 @@ inline
 //---------------------------------------------------------------
 
 inline 
- G4double G4PhysicsVector::Interpolation(G4int lastBin, G4double lastE)
+ G4double G4PhysicsVector::Interpolation(size_t idx, G4double e) const
 {
-  if(useSpline) { return SplineInterpolation(lastBin,lastE); }
-  else          { return LinearInterpolation(lastBin,lastE); }
+  G4double res;
+  if(useSpline) { res = SplineInterpolation(idx, e); }
+  else          { res = LinearInterpolation(idx, e); }
+  return res;
 }
 
 //---------------------------------------------------------------
@@ -196,10 +215,18 @@ inline
 
 //---------------------------------------------------------------
 
+// Flag useSpline is "true" only if second derivatives are filled 
 inline 
  void G4PhysicsVector::SetSpline(G4bool val)
 {
-  useSpline = val;
+  if(val) {
+    if(0 == secDerivative.size() && 0 < dataVector.size()) { 
+      FillSecondDerivatives(); 
+    }
+  } else {
+    useSpline = false;
+    secDerivative.clear();
+  }
 }
 
 //---------------------------------------------------------------
@@ -217,3 +244,5 @@ G4int G4PhysicsVector::GetVerboseLevel(G4int)
 {
    return verboseLevel;
 }
+
+//---------------------------------------------------------------

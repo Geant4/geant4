@@ -91,13 +91,18 @@ class G4PhysicsVector
     inline void* operator new(size_t);
     inline void  operator delete(void*);
 
-    inline G4double Value(G4double theEnergy);
+    G4double Value(G4double theEnergy, size_t& lastidx) const; 
          // Get the cross-section/energy-loss value corresponding to the
          // given energy. An appropriate interpolation is used to calculate
-         // the value. 
+         // the value. User may keep last index to save CPU for bin location. 
 
-    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange);
-         // Obolete method to get value, isOutRange is not used anymore. 
+    inline G4double Value(G4double theEnergy) const; 
+         // Get the cross-section/energy-loss value corresponding to the
+         // given energy. An appropriate interpolation is used to calculate
+         // the value. This method is kept for backward compatibility reason.
+
+    inline G4double GetValue(G4double theEnergy, G4bool& isOutRange) const;
+         // Obsolete method to get value, isOutRange is not used anymore. 
          // This method is kept for the compatibility reason.
 
     G4int operator==(const G4PhysicsVector &right) const ;
@@ -204,16 +209,17 @@ class G4PhysicsVector
 
   private:
 
-    G4double ComputeValue(G4double theEnergy);
 
     G4bool SplinePossible();
 
-    inline G4double LinearInterpolation(G4int lastBin, G4double lastE);
+    inline size_t FindBin(G4double energy, size_t idx) const;
+
+    inline G4double LinearInterpolation(size_t idx, G4double energy) const;
          // Linear interpolation function
-    inline G4double SplineInterpolation(G4int lastBin, G4double lastE);
+    inline G4double SplineInterpolation(size_t idx, G4double energy) const;
          // Spline interpolation function
 
-    inline G4double Interpolation(G4int lastBin, G4double lastE);
+    inline G4double Interpolation(size_t idx, G4double energy) const;
 
     G4bool     useSpline;
 

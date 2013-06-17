@@ -60,10 +60,10 @@ G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator = 0;
 
 // --------------------------------------------------------------
 
-G4PhysicsVector::G4PhysicsVector(G4bool spline)
+G4PhysicsVector::G4PhysicsVector(G4bool)
  : type(T_G4PhysicsVector),
    edgeMin(0.), edgeMax(0.), numberOfNodes(0),
-   useSpline(spline), 
+   useSpline(false), 
    dBin(0.), baseBin(0.),
    verboseLevel(0)
 {
@@ -120,6 +120,7 @@ G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 
 void G4PhysicsVector::DeleteData()
 {
+  useSpline = false;
   secDerivative.clear();
 }
 
@@ -310,6 +311,8 @@ G4PhysicsVector::ComputeSecondDerivatives(G4double firstPointDerivative,
 
   if(!SplinePossible()) { return; }
 
+  useSpline = true;
+
   G4int n = numberOfNodes-1;
 
   G4double* u = new G4double [n];
@@ -370,6 +373,8 @@ void G4PhysicsVector::FillSecondDerivatives()
   }
 
   if(!SplinePossible()) { return; }
+
+  useSpline = true;
  
   G4int n = numberOfNodes-1;
 
@@ -431,13 +436,15 @@ void
 G4PhysicsVector::ComputeSecDerivatives()
   //  A simplified method of computation of second derivatives 
 {
-  if(!SplinePossible())  { return; }
-
   if(3 > numberOfNodes)  // cannot compute derivatives for less than 4 bins
   {
     useSpline = false;
     return;
   }
+
+  if(!SplinePossible())  { return; }
+
+  useSpline = true;
 
   size_t n = numberOfNodes-1;
 
@@ -458,18 +465,22 @@ G4bool G4PhysicsVector::SplinePossible()
   // Initialise second derivative array. If neighbor energy coincide 
   // or not ordered than spline cannot be applied
 {
+  G4bool result = true;
   secDerivative.clear();
-  if(!useSpline)  { return useSpline; }
   secDerivative.reserve(numberOfNodes);
   for(size_t j=0; j<numberOfNodes; ++j)
   {
     secDerivative.push_back(0.0);
     if(j > 0)
     {
-      if(binVector[j]-binVector[j-1] <= 0.)  { useSpline = false; }
+      if(binVector[j]-binVector[j-1] <= 0.)  { 
+	result = false; 
+	secDerivative.clear();
+	break;
+      }
     }
   }  
-  return useSpline;
+  return result;
 }
    
 // --------------------------------------------------------------
@@ -493,18 +504,21 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
 
 //---------------------------------------------------------------
 
-G4double G4PhysicsVector::ComputeValue(G4double theEnergy) 
+G4double 
+G4PhysicsVector::Value(G4double theEnergy, size_t& lastIdx) const
 {
-  // Use cache for speed up - check if the value 'theEnergy' lies 
-  // between the last energy and low edge of of the 
-  // bin of last call, then the last bin location is used.
-
-  if ( theEnergy <= edgeMin ) {
-    return dataVector[0];
-  } else if( theEnergy >= edgeMax ) {
-    return dataVector[numberOfNodes-1];
+  G4double y;
+  if(theEnergy <= edgeMin) {
+    lastIdx = 0; 
+    y = dataVector[0]; 
+  } else if(theEnergy >= edgeMax) { 
+    lastIdx = numberOfNodes-1; 
+    y = dataVector[lastIdx]; 
   } else {
-    G4int bin = FindBinLocation(theEnergy);
-    return Interpolation( bin, theEnergy );
+    lastIdx = FindBin(theEnergy, lastIdx);
+    y = Interpolation(lastIdx, theEnergy);
   }
+  return y;
 }
+
+//---------------------------------------------------------------
