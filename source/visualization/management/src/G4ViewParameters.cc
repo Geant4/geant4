@@ -480,14 +480,18 @@ G4String G4ViewParameters::TouchableCommands() const
   for (iModifier = vams.begin();
        iModifier != vams.end();
        ++iModifier) {
-    oss << "\n/vis/set/touchable";
+    static G4ModelingParameters::PVNameCopyNoPath lastPath;
     const G4ModelingParameters::PVNameCopyNoPath& vamPath =
       iModifier->GetPVNameCopyNoPath();
-    G4ModelingParameters::PVNameCopyNoPathConstIterator iVAM;
-    for (iVAM = vamPath.begin();
-         iVAM != vamPath.end();
-         ++iVAM) {
-      oss << ' ' << iVAM->GetName() << ' ' << iVAM->GetCopyNo();
+    if (vamPath != lastPath) {
+      lastPath = vamPath;
+      oss << "\n/vis/set/touchable";
+      G4ModelingParameters::PVNameCopyNoPathConstIterator iVAM;
+      for (iVAM = vamPath.begin();
+           iVAM != vamPath.end();
+           ++iVAM) {
+        oss << ' ' << iVAM->GetName() << ' ' << iVAM->GetCopyNo();
+      }
     }
     const G4VisAttributes& vamVisAtts = iModifier->GetVisAttributes();
     const G4Colour& c = vamVisAtts.GetColour();
@@ -871,17 +875,14 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       ((fExplodeFactor != v.fExplodeFactor) ||
        (fExplodeCentre != v.fExplodeCentre))) return true;
 
-  if (G4ModelingParameters::VAMSNotEqual
-      (fVisAttributesModifiers, v.fVisAttributesModifiers))
-    return true;
+  if (fVisAttributesModifiers != v.fVisAttributesModifiers) return true;
 
   return false;
 }
 
 
-void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg) {
-
-
+void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg)
+{
   G4int x,y = 0;
   unsigned int w,h = 0;
   G4String geomString = geomStringArg;

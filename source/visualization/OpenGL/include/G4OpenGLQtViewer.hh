@@ -144,6 +144,12 @@ protected:
   void updateKeyModifierState(const Qt::KeyboardModifiers&);
   void displaySceneTreeComponent();
   G4Colour getColorForPoIndex(int poIndex);
+  
+  // So that privately accumulated vis attributes modifiers may be
+  // concatenated with the standard vis attributes modifiers for commands
+  // such as /vis/viewer/set/all and /vis/viewer/save...
+  const std::vector<G4ModelingParameters::VisAttributesModifier>*
+  GetPrivateVisAttributesModifiers() const;
 
 protected:
   QGLWidget* fWindow;

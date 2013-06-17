@@ -63,6 +63,11 @@ inline const G4ViewParameters& G4VViewer::GetDefaultViewParameters () const {
   return fDefaultVP;
 }
 
+inline const std::vector<G4ModelingParameters::VisAttributesModifier>*
+  G4VViewer::GetPrivateVisAttributesModifiers() const {
+    return 0;
+}
+
 inline void G4VViewer::SetDefaultViewParameters (const G4ViewParameters& vp) {
   fDefaultVP = vp;
 }

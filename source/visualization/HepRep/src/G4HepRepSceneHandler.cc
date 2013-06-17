@@ -40,6 +40,7 @@
 #include <iomanip>
 #include <fstream>
 #include <cmath>
+#include <cassert>
 
 //HepRep
 #include "HEPREP/HepRep.h"
@@ -1435,6 +1436,7 @@ HepRepInstance* G4HepRepSceneHandler::getGeometryOrEventInstance(HepRepType* typ
     } else {
       G4PhysicalVolumeModel* pPVModel =
 	dynamic_cast<G4PhysicalVolumeModel*>(fpModel);
+      assert(pPVModel);  // To keep Coverity happy.
       G4LogicalVolume* pCurrentLV = pPVModel->GetCurrentLV();
       G4int currentDepth = pPVModel->GetCurrentDepth();
       G4Material* pCurrentMaterial = pPVModel->GetCurrentMaterial();

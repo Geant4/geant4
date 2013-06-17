@@ -532,6 +532,15 @@ void G4VisCommandsViewerSet::SetNewValue
       currentViewer->GetViewParameters().IsAutoRefresh();
     vp = fromViewer->GetViewParameters();
     vp.SetAutoRefresh(currentAutoRefresh);
+    // Concatenate any private vis attributes modifiers...
+    const std::vector<G4ModelingParameters::VisAttributesModifier>*
+      privateVAMs = fromViewer->GetPrivateVisAttributesModifiers();
+    if (privateVAMs) {
+      std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator i;
+      for (i = privateVAMs->begin(); i != privateVAMs->end(); ++i) {
+        vp.AddVisAttributesModifier(*i);
+      }
+    }
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "View parameters of viewer \"" << currentViewer->GetName()
 	     << "\"\n  set to those of viewer \"" << fromViewer->GetName()

@@ -2980,30 +2980,6 @@ void G4OpenGLQtViewer::sceneTreeComponentItemChanged(QTreeWidgetItem* item, int)
     setCheckComponent(item,checked);
     updateQWidget();
 
-    // change vis attributes to set new visibility
-    G4int iPO = item->data(0,Qt::UserRole).toInt();
-    if (iPO >= 0 && fTreeItemModels.find(iPO) != fTreeItemModels.end()) {
-      const PVPath& fullPath = fTreeItemModels[iPO];
-      // If a physical volume
-      if (fullPath.size()) {
-
-        // Instantiate a working copy of a G4VisAttributes object...
-        G4VisAttributes workingVisAtts;
-        // and set the visibility.
-        workingVisAtts.SetVisibility(checked);
-
-        // Add a vis atts modifier to the view parameters...
-        fVP.AddVisAttributesModifier
-        (G4ModelingParameters::VisAttributesModifier
-         (workingVisAtts,
-          G4ModelingParameters::VASVisibility,
-          fullPath));
-        // G4ModelingParameters::VASVisibility tells G4PhysicalVolumeModel that
-        // it is the visibility that should be picked out and merged with the
-        // touchable's normal vis attributes.
-      }
-    }
-
     fCheckSceneTreeComponentSignalLock = false;
   }
 }
@@ -3082,35 +3058,6 @@ void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem* item,int) {
 #endif
   
   if (color.isValid()) {
-
-    // change vis attributes to set new colour
-    G4int iPO = item->data(0,Qt::UserRole).toInt();
-    if (iPO >= 0 && fTreeItemModels.find(iPO) != fTreeItemModels.end()) {
-      const PVPath& fullPath = fTreeItemModels[iPO];
-      // If a physical volume
-      if (fullPath.size()) {
-      
-        // Instantiate a working copy of a G4VisAttributes object...
-        G4VisAttributes workingVisAtts;
-        // and set the colour.
-        G4Colour g4c(((G4double)color.red())/255,
-                     ((G4double)color.green())/255,
-                     ((G4double)color.blue())/255,
-                     ((G4double)color.alpha())/255);
-        workingVisAtts.SetColour(g4c);
-        
-        // Add a vis atts modifier to the view parameters...
-        fVP.AddVisAttributesModifier
-        (G4ModelingParameters::VisAttributesModifier
-         (workingVisAtts,
-          G4ModelingParameters::VASColour,
-          fullPath));
-        // G4ModelingParameters::VASColour tells G4PhysicalVolumeModel that it is
-        // the colour that should be picked out and merged with the touchable's
-        // normal vis attributes.
-      }
-    }
-    
     // set scene tree parameters
     changeQColorForTreeWidgetItem(item,color);
   }
@@ -3132,6 +3079,68 @@ G4Colour G4OpenGLQtViewer::getColorForPoIndex(int poIndex) {
     return g4c;
   }
   return G4Colour();
+}
+
+
+const std::vector<G4ModelingParameters::VisAttributesModifier>*
+G4OpenGLQtViewer::GetPrivateVisAttributesModifiers() const
+{
+  static std::vector<G4ModelingParameters::VisAttributesModifier>
+  privateVisAttributesModifiers;
+
+  privateVisAttributesModifiers.clear();
+
+//  // For each modified touchable...
+//  std::map<int,PVPath>::const_iterator i;
+//  for (i = fTreeItemModels.begin();
+//       i != fTreeItemModels.end();
+//       ++i) {
+//
+//    // How do I know if it's been modified or not?
+//
+//    int iPO = i->first;
+//    const PVPath& fullPath = i->second;
+//
+//    // If a physical volume
+//    if (fullPath.size()) {
+//
+//      //    const G4bool& visibilityChanged = ???
+//      //    const G4bool& visibility = ???
+//      //    const G4bool& colourChanged = ???
+//      //    const QColor& colour = ???
+//      //    G4Colour g4colour(((G4double)colour.red())/255,
+//      //                      ((G4double)colour.green())/255,
+//      //                      ((G4double)colour.blue())/255,
+//      //                      ((G4double)colour.alpha())/255);
+//      // Next 4 lines are for testing, to be replaced by the above...
+//      G4bool visibilityChanged = true;
+//      G4bool visibility = true;
+//      G4bool colourChanged = true;
+//      G4Colour g4colour(G4Colour::Red());
+//
+//      // Instantiate a working copy of a G4VisAttributes object...
+//      G4VisAttributes workingVisAtts;
+//      // ...and use it to create vis attribute modifiers...
+//      if (visibilityChanged) {
+//        workingVisAtts.SetVisibility(visibility);
+//        privateVisAttributesModifiers.push_back
+//        (G4ModelingParameters::VisAttributesModifier
+//         (workingVisAtts,
+//          G4ModelingParameters::VASVisibility,
+//          fullPath));
+//      }
+//      if (colourChanged) {
+//        workingVisAtts.SetColour(g4colour);
+//        privateVisAttributesModifiers.push_back
+//        (G4ModelingParameters::VisAttributesModifier
+//         (workingVisAtts,
+//          G4ModelingParameters::VASColour,
+//          fullPath));
+//      }
+//    }
+//  }
+
+  return &privateVisAttributesModifiers;
 }
 
 

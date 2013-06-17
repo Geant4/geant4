@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th June 2013  John Allison  (opengl-V09-06-06)
+- G4OpenGLQtViewer: Commented out skeleton code below.
+
+10th June 2013  John Allison  (opengl-V09-06-05)
+- G4OpenGLQtViewer: Skeleton implementation of
+    const std::vector<G4ModelingParameters::VisAttributesModifier>*
+    G4OpenGLQtViewer::GetPrivateVisAttributesModifiers() const
+
 1st May 2013 - Laurent Garnier
 - Improvments about Wt driver configuration
 

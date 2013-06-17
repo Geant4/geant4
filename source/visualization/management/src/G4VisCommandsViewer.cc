@@ -1394,7 +1394,18 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
   
-  const G4ViewParameters& vp = currentViewer->GetViewParameters();
+  G4ViewParameters vp = currentViewer->GetViewParameters();
+  // Concatenate any private vis attributes modifiers...
+  const std::vector<G4ModelingParameters::VisAttributesModifier>
+    currentVAMs = vp.GetVisAttributesModifiers();
+  const std::vector<G4ModelingParameters::VisAttributesModifier>*
+    privateVAMs = currentViewer->GetPrivateVisAttributesModifiers();
+  if (privateVAMs) {
+    std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator i;
+    for (i = privateVAMs->begin(); i != privateVAMs->end(); ++i) {
+      vp.AddVisAttributesModifier(*i);
+    }
+  }
   const G4Point3D& stp = currentScene->GetStandardTargetPoint();
   
   if (newValue == "G4cout") {

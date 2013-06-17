@@ -24,6 +24,38 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+17th June 2013  John Allison  (vis-V09-06-17)
+- opengl-V09-06-06:
+  o Improvements for Wt and Qt5.
+  o Skeleton (null effect) implementation of GetPrivateVisAttributesModifiers.
+
+16th June 2013  Makoto Asai
+- raytracer-V09-06-01:
+  o Make G4RayTrajectory and G4RayTrajectoryPoint classes thread safe.
+
+16th June 2013  John Allison
+- modeling-V09-06-07: Small bug fix.
+- vis-HepRep-V09-06-06: Keep Coverity happy.
+
+15th June 2013  Akinori Kimura
+- gMocren-V09-06-05: Fixed warnings of Coverity.
+
+10th June 2013  John Allison
+- modeling-V09-06-06: G4ModelingParameters:
+  o Replaced PVNameCopyNoPathNotEqual by appropriate operator!=.
+  o Replaced VAMSNotEqual by appropriate operator!=.
+- visman-V09-06-07: G4ViewParameters.cc:
+  o Migrated to modeling-V09-06-06.
+
+10th June 2013  John Allison
+- visman-V09-06-06: G4VViewer:
+  o Added new virtual function:
+    virtual const std::vector<G4ModelingParameters::VisAttributesModifier>*
+    GetPrivateVisAttributesModifiers() const;
+    // So that privately accumulated vis attributes modifiers may be
+    // concatenated with the standard vis attributes modifiers for commands
+    // such as /vis/viewer/set/all and /vis/viewer/save.
+
 4th June 2013  John Allison  (vis-V09-06-16)
 - gMocren-V09-06-04 (Akinori Kimura): Fixed Coverity warnings.
 

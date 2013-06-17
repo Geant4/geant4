@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/HepRep sub-category
 --------------------------------------------------
 
+16th June 2013  John Allison  (vis-HepRep-V09-06-06)
+  o G4HepRepSceneHandler.cc: Added an assert to keep Coverity happy.
+
 26th March 2013  Ben Morgan  (vis-HepRep-V09-06-05)
 - sources.cmake:
   o BUGFIX #1322 : Update include paths/library linking to use new 

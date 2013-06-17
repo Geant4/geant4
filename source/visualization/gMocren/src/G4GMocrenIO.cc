@@ -3591,6 +3591,7 @@ void G4GMocrenIO::getShortDoseDist(short * _data, int _z, int _num) {
     G4Exception("G4GMocrenIO::getShortDoseDist()",
                 "gMocren2002", FatalException,
                 "Error.");
+    return;
   }
 
   int size[3];

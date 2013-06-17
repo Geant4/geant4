@@ -107,6 +107,13 @@ public: // With description
   G4VSceneHandler*        GetSceneHandler   () const;
   const G4ViewParameters& GetViewParameters        () const;
   const G4ViewParameters& GetDefaultViewParameters () const;
+
+  virtual const std::vector<G4ModelingParameters::VisAttributesModifier>*
+  GetPrivateVisAttributesModifiers() const;
+  // So that privately accumulated vis attributes modifiers may be
+  // concatenated with the standard vis attributes modifiers for commands
+  // such as /vis/viewer/set/all and /vis/viewer/save.
+
   void SetViewParameters         (const G4ViewParameters& vp);
   void SetDefaultViewParameters  (const G4ViewParameters& vp);
 

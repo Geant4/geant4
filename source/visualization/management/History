@@ -26,6 +26,29 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+10th June 2013  John Allison  (visman-V09-06-07)
+- G4ViewParameters.cc: Migrated to modeling-V09-06-06:
+  o Replaced PVNameCopyNoPathNotEqual by appropriate operator!=.
+  o Replaced VAMSNotEqual by appropriate operator!=.
+
+10th June 2013  John Allison  (visman-V09-06-06)
+- G4VViewer:
+  o Added new virtual function:
+    virtual const std::vector<G4ModelingParameters::VisAttributesModifier>*
+    GetPrivateVisAttributesModifiers() const;
+    // So that privately accumulated vis attributes modifiers may be
+    // concatenated with the standard vis attributes modifiers for commands
+    // such as /vis/viewer/set/all and /vis/viewer/save.
+    This returns zero by default, but if implemented in a subclass can be
+    used to return vis attribute modifiers - e.g., see G4OpenGLQtViewer.
+- /vis/viewer/save, /vis/viewer/set/all:
+  o Temporarily concatenate the above private vis attribute modifiers for
+    saving to standard output or file or copying to a viewer.  Does not
+    modify the standard vis attribute modifiers of the current view.
+- G4ViewParameters::TouchableCommands:
+  o Improve writing of touchable commands for /vis/viewer/save.  If
+    successive paths are equal, avoid repeating /vis/set/touchable.
+
 29th May 2013  John Allison  (visman-V09-06-05)
 - G4VisManager::RegisterEndOfRunUserVisAction:
   o Prevent storing of vis extent is radius <= 0.
