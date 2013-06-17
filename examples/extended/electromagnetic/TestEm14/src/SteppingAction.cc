@@ -82,7 +82,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   //secondaries
   //
-  const G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+  const std::vector<const G4Track*>* secondary 
+                                    = aStep->GetSecondaryInCurrentStep();    
   for (size_t lp=0; lp<(*secondary).size(); lp++) {
     G4double charge = (*secondary)[lp]->GetDefinition()->GetPDGCharge();
     if (charge != 0.) { id = 3; } else { id = 5; }
