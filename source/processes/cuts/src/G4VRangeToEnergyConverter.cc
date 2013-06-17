@@ -114,7 +114,7 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
 
 G4VRangeToEnergyConverter::~G4VRangeToEnergyConverter()
 { 
-  Reset(); 
+//  Reset(); 
 }
 
 G4int G4VRangeToEnergyConverter::operator==(const G4VRangeToEnergyConverter &right) const

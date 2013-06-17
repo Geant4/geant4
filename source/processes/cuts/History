@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 16th, 2013  - M.Asai (procuts-V09-06-05)
+- G4VRangeToEnergyConverter: stop calling Reset() from its destructor.
+
 June 5th, 2013   - V.Ivanchenko (procuts-V09-06-04)
   G4VRangeToEnergyConverter: members LowestEnergy, HighestEnergy,
     MaxEnergyCut become static and not G4ThreadLocal - this
