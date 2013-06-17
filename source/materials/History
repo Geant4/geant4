@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-06-13 P.Gumplinger (materials-V09-06-18)
+- Partially fix for coverity errors in G4OpticalSurface.cc
+
 06-06-13 V.Ivanchenko (materials-V09-06-17)
 - G4Material - added warning if new material has doublicate name
 

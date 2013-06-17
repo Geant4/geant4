@@ -65,6 +65,8 @@ G4OpticalSurface& G4OpticalSurface::operator=(const G4OpticalSurface& right)
       AngularDistribution        = right.AngularDistribution;
       readLUTFileHandle          = right.readLUTFileHandle;
       DichroicVector             = right.DichroicVector;
+
+      theSurfacePropertyTable    = right.theSurfacePropertyTable;
      } 
   return *this;
 }
