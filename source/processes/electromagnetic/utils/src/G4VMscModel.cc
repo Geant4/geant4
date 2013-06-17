@@ -88,6 +88,7 @@ G4VMscModel::~G4VMscModel()
 G4ParticleChangeForMSC* 
 G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
 {
+  // recomputed for each new run
   if(!safetyHelper) {
     safetyHelper = G4TransportationManager::GetTransportationManager()
       ->GetSafetyHelper();
@@ -112,6 +113,7 @@ G4VMscModel::GetParticleChangeForMSC(const G4ParticleDefinition* p)
       // table is always built for low mass particles 
     } else if(p->GetPDGMass() < 4.5*GeV || ForceBuildTableFlag()) {
 
+      idxTable = 0;
       G4LossTableBuilder* builder = man->GetTableBuilder();
       if(IsMaster()) {
 	G4double emin = std::max(LowEnergyLimit(), LowEnergyActivationLimit());

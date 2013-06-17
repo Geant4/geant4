@@ -519,6 +519,18 @@ private:
   G4PhysicsTable*             theLambdaTable;
   G4PhysicsTable*             theSubLambdaTable;
 
+  size_t                      idxDEDX;
+  size_t                      idxDEDXSub;
+  size_t                      idxDEDXunRestricted;
+  size_t                      idxIonisation;
+  size_t                      idxIonisationSub;
+  size_t                      idxRange;
+  size_t                      idxCSDA;
+  size_t                      idxSecRange;
+  size_t                      idxInverseRange;
+  size_t                      idxLambda;
+  size_t                      idxSubLambda;
+
   std::vector<G4double>       theDEDXAtMaxEnergy;
   std::vector<G4double>       theRangeAtMaxEnergy;
   std::vector<G4double>       theEnergyOfCrossSectionMax;
@@ -633,6 +645,7 @@ G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
     fFactor = chargeSqRatio*biasFactor*(*theDensityFactor)[currentCoupleIndex];
     reduceFactor = 1.0/(fFactor*massRatio);
     mfpKinEnergy = DBL_MAX;
+    idxLambda = idxSubLambda = 0;
   }
 }
 
@@ -656,7 +669,7 @@ inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
   	 << basedCoupleIndex << " E(MeV)= " << e 
 	 << " Emin= " << minKinEnergy << "  Factor= " << fFactor 
 	 << "  " << theDEDXTable << G4endl; */
-  G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->Value(e);
+  G4double x = fFactor*(*theDEDXTable)[basedCoupleIndex]->Value(e, idxDEDX);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -665,7 +678,8 @@ inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
 {
-  G4double x = fFactor*(*theDEDXSubTable)[basedCoupleIndex]->Value(e);
+  G4double x = 
+    fFactor*(*theDEDXSubTable)[basedCoupleIndex]->Value(e, idxDEDXSub);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -674,7 +688,8 @@ inline G4double G4VEnergyLossProcess::GetSubDEDXForScaledEnergy(G4double e)
 
 inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
 {
-  G4double x = fFactor*(*theIonisationTable)[basedCoupleIndex]->Value(e);
+  G4double x = 
+    fFactor*(*theIonisationTable)[basedCoupleIndex]->Value(e, idxIonisation);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -684,7 +699,8 @@ inline G4double G4VEnergyLossProcess::GetIonisationForScaledEnergy(G4double e)
 inline 
 G4double G4VEnergyLossProcess::GetSubIonisationForScaledEnergy(G4double e)
 {
-  G4double x = fFactor*(*theIonisationSubTable)[basedCoupleIndex]->Value(e);
+  G4double x = fFactor*
+    (*theIonisationSubTable)[basedCoupleIndex]->Value(e, idxIonisationSub);
   if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   return x;
 }
@@ -699,7 +715,8 @@ inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
   if(basedCoupleIndex != lastIdx || preStepRangeEnergy != e) {
     lastIdx = basedCoupleIndex;
     preStepRangeEnergy = e;
-    computedRange = ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e);
+    computedRange = 
+      ((*theRangeTableForLoss)[basedCoupleIndex])->Value(e, idxRange);
     if(e < minKinEnergy) { computedRange *= std::sqrt(e/minKinEnergy); }
   }
   //G4cout << "G4VEnergyLossProcess::GetScaledRange: Idx= " 
@@ -716,7 +733,7 @@ G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4double e)
 {
   G4double x;
   if (e < maxKinEnergyCSDA) {
-    x = ((*theCSDARangeTable)[basedCoupleIndex])->Value(e);
+    x = ((*theCSDARangeTable)[basedCoupleIndex])->Value(e, idxCSDA);
     if(e < minKinEnergy) { x *= std::sqrt(e/minKinEnergy); }
   } else {
     x = theRangeAtMaxEnergy[basedCoupleIndex] +
@@ -735,7 +752,7 @@ inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
   G4PhysicsVector* v = (*theInverseRangeTable)[basedCoupleIndex];
   G4double rmin = v->Energy(0);
   G4double e = 0.0; 
-  if(r >= rmin) { e = v->Value(r); }
+  if(r >= rmin) { e = v->Value(r, idxInverseRange); }
   else if(r > 0.0) {
     G4double x = r/rmin;
     e = minKinEnergy*x*x;
@@ -747,7 +764,7 @@ inline G4double G4VEnergyLossProcess::ScaledKinEnergyForLoss(G4double r)
 
 inline G4double G4VEnergyLossProcess::GetLambdaForScaledEnergy(G4double e)
 {
-  return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e);
+  return fFactor*((*theLambdaTable)[basedCoupleIndex])->Value(e, idxLambda);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

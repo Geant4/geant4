@@ -348,7 +348,7 @@ G4VMscModel::GetTransportMeanFreePath(const G4ParticleDefinition* part,
   G4double x;
   if(xSectionTable) {
     G4int idx = CurrentCouple()->GetIndex();
-    x = (*xSectionTable)[(*theDensityIdx)[idx]]->Value(ekin)
+    x = (*xSectionTable)[(*theDensityIdx)[idx]]->Value(ekin, idxTable)
       *(*theDensityFactor)[idx]/(ekin*ekin);
   } else { 
     x = CrossSectionPerVolume(CurrentCouple()->GetMaterial(), part, ekin, 

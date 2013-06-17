@@ -57,7 +57,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
 					 G4int bins, 
 					 G4double emin, 
 					 G4double emax,
-					 G4bool spline):
+					 G4bool):
   model(mod), material(mat), nbins(bins), cutEnergy(-1.0), 
   lowEnergy(emin), highEnergy(emax)
 {
@@ -69,7 +69,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
     xSections.reserve(n);
     G4PhysicsLogVector* v0 = new G4PhysicsLogVector(lowEnergy,highEnergy,nbins);
     xSections.push_back(v0);
-    v0->SetSpline(spline);
+    v0->SetSpline(false);
     for(G4int i=1; i<n; ++i) {
       G4PhysicsLogVector* v = new G4PhysicsLogVector(*v0);
       xSections.push_back(v);

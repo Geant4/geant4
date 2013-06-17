@@ -381,6 +381,7 @@ protected:
   G4PhysicsTable*              xSectionTable;
   const std::vector<G4double>* theDensityFactor;
   const std::vector<G4int>*    theDensityIdx;
+  size_t                       idxTable;
 
   // ======== Cashed values - may be state dependent ================
 

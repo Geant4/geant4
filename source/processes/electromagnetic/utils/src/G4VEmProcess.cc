@@ -131,6 +131,8 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
 
+  idxLambda = idxLambdaPrim = 0;
+
   modelManager = new G4EmModelManager();
   biasManager  = 0;
   biasFlag     = false; 
@@ -168,6 +170,7 @@ void G4VEmProcess::Clear()
   currentCouple = 0;
   preStepLambda = 0.0;
   mfpKinEnergy  = DBL_MAX;
+  idxLambda = idxLambdaPrim = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -284,7 +287,8 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
     // prepare tables
     if(buildLambdaTable){
-      theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
+      theLambdaTable = 
+	G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
       bld->InitialiseBaseMaterials(theLambdaTable);
     }
     // high energy table
@@ -671,7 +675,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 				  track.GetDynamicParticle(),
 				  (*theCuts)[currentCoupleIndex]);
 
-  // bremsstrahlung splitting or Russian roulette
+  // splitting or Russian roulette
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
       G4double eloss = 0.0;
@@ -777,7 +781,8 @@ G4bool G4VEmProcess::StorePhysicsTable(const G4ParticleDefinition* part,
     yes = theLambdaTablePrim->StorePhysicsTable(name,ascii);
 
     if ( yes ) {
-      G4cout << "Physics table prim is stored for " << particle->GetParticleName()
+      G4cout << "Physics table prim is stored for " 
+	     << particle->GetParticleName()
              << " and process " << GetProcessName()
 	     << " in the directory <" << directory
 	     << "> " << G4endl;

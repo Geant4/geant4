@@ -72,6 +72,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   elmSelectors = 0;
   localElmSelectors = true;
   localTable = true;
+  idxTable = 0;
 
   G4LossTableManager::Instance()->Register(this);
 }
@@ -126,7 +127,7 @@ G4ParticleChangeForGamma* G4VEmModel::GetParticleChangeForGamma()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition*, 
+void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part, 
 					    const G4DataVector& cuts)
 {
   // initialise before run
@@ -144,9 +145,6 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition*,
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth
   if(highLimit <= lowLimit) { return; }
-  G4int nbins = G4int(man->GetNumberOfBinsPerDecade()
-		      * std::log10(highLimit/lowLimit) / 6.0);
-  if(nbins < 5) { nbins = 5; }
 
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
@@ -176,18 +174,25 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition*,
 	else { delete (*elmSelectors)[i]; }
       }
       if(create) {
-	(*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
-						     lowLimit,highLimit,spline);
+        G4double emin = std::max(lowLimit, MinPrimaryEnergy(material, part));
+        if(emin < highLimit) {
+	  G4int nbins = G4int(man->GetNumberOfBinsPerDecade()
+			      * std::log10(highLimit/emin) / 6.0);
+	  if(nbins < 3) { nbins = 3; }
+
+	  (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
+						       emin,highLimit,spline);
+	}
       }
-      /*
+      ((*elmSelectors)[i])->Initialise(part, cuts[i]);
+      /*     
       G4cout << "G4VEmModel::InitialiseElmSelectors i= " << i
 	     << " idx= " << fCurrentCouple->GetIndex() 
-	     << "  "  << p->GetParticleName() 
+	     << "  "  << part->GetParticleName() 
 	     << " for " << GetName() << "  cut= " << cuts[i] 
-	     << "  " << (*elmSelectors)[i] << G4endl;
-      ((*elmSelectors)[i])->Initialise(p, cuts[i]);
+	     << "  " << (*elmSelectors)[i] << G4endl;      
+      ((*elmSelectors)[i])->Dump(part);
       */
-      //((*elmSelectors)[i])->Dump(p);
     }
   } 
 }

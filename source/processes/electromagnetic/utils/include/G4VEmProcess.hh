@@ -340,6 +340,9 @@ private:
   std::vector<G4double>        theEnergyOfCrossSectionMax;
   std::vector<G4double>        theCrossSectionMax;
 
+  size_t                       idxLambda;
+  size_t                       idxLambdaPrim;
+
   const std::vector<G4double>* theCuts;
   const std::vector<G4double>* theCutsGamma;
   const std::vector<G4double>* theCutsElectron;
@@ -427,6 +430,7 @@ inline void G4VEmProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
     fFactor = biasFactor*(*theDensityFactor)[currentCoupleIndex];
     if(!baseMaterial) { baseMaterial = currentMaterial; }
     mfpKinEnergy = DBL_MAX;
+    idxLambda = idxLambdaPrim = 0;
   }
 }
 
@@ -455,14 +459,14 @@ G4VEmModel* G4VEmProcess::SelectModelForMaterial(G4double kinEnergy,
 
 inline G4double G4VEmProcess::GetLambdaFromTable(G4double e)
 {
-  return ((*theLambdaTable)[basedCoupleIndex])->Value(e);
+  return ((*theLambdaTable)[basedCoupleIndex])->Value(e, idxLambda);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmProcess::GetLambdaFromTablePrim(G4double e)
 {
-  return ((*theLambdaTablePrim)[basedCoupleIndex])->Value(e)/e;
+  return ((*theLambdaTablePrim)[basedCoupleIndex])->Value(e, idxLambdaPrim)/e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

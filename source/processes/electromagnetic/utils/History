@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 June 13: V.Ivant (emutils-V09-06-35)
+- G4VEnergyLossProcess, G4VEmProcess, G4VEmModel, G4VMscModel 
+    introduced cache for indexes in tables, CPU performance
+    restored without any effect on results
+
+14 June 13: V.Ivant (emutils-V09-06-34)
+- G4LossTableBuilder - optimized number of bins for tables
+    built for models
+
+14 June 13: V.Ivant (emutils-V09-06-33)
+- G4VEnergyLossProcess - fixed CrossSectionPerVolume method
+- G4VEmModel - take into account reaction threshold when initialise
+    G4EmElementSelectors; set smallest number of bins to 3 (was 5);
+    fixed initialisation
+- G4LossTableBuilder - do not use copy constructor when a new 
+    G4PhysicsLogVector for a model 
+
 13 June 13: V.Ivant (emutils-V09-06-32)
 - G4VEmProcess - fixed CrossSectionPerVolume method - use tablePrim for
     high energy if this table is defined

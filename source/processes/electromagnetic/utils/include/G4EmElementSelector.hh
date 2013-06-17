@@ -75,7 +75,7 @@ public:
 
   void Dump(const G4ParticleDefinition* p = 0);
 
-  inline const G4Element* SelectRandomAtom(G4double kineticEnergy);
+  inline const G4Element* SelectRandomAtom(G4double kineticEnergy) const;
 
   inline const G4Material* GetMaterial() const;
 
@@ -103,7 +103,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e)
+inline const G4Element* G4EmElementSelector::SelectRandomAtom(G4double e) const
 {
   const G4Element* element = (*theElementVector)[nElmMinusOne];
   if (nElmMinusOne > 0) {
