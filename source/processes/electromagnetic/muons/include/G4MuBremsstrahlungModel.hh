@@ -107,6 +107,9 @@ public:
 
   inline void SetLowestKineticEnergy(G4double e);
 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+                                    const G4ParticleDefinition*);
+
 protected:
 
   G4double ComputMuBremLoss(G4double Z, G4double tkin, G4double cut);

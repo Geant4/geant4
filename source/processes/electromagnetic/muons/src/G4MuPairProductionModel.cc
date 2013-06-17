@@ -160,6 +160,14 @@ G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4MuPairProductionModel::MinPrimaryEnergy(const G4Material*,
+						   const G4ParticleDefinition*)
+{
+  return lowestKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4MuPairProductionModel::MaxSecondaryEnergy(const G4ParticleDefinition*,
 						     G4double kineticEnergy)
 {
@@ -510,7 +518,7 @@ void G4MuPairProductionModel::SampleSecondaries(
   G4int it;
   for(it=1; it<ntdat; ++it) { if(kineticEnergy <= tdat[it]) { break; } }
   if(it == ntdat) { --it; }
-  G4double dt = log(kineticEnergy/(MeV*tdat[it-1]))/log(tdat[it]/tdat[it-1]);
+  G4double dt = log(kineticEnergy/tdat[it-1])/log(tdat[it]/tdat[it-1]);
 
   // select randomly one element constituing the material
   const G4Element* anElement = SelectRandomAtom(couple,particle,kineticEnergy);
@@ -577,8 +585,15 @@ void G4MuPairProductionModel::SampleSecondaries(
   p1 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy-1);
   p2 = InterpolatedIntegralCrossSection(dt, dz, iz, it, iy);
   
-  G4double y = ya[iy-1] + dy*(p - p1)/(p2 - p1);   
-//###
+  G4double y = ya[iy-1];
+  if(p2 <= p1) {
+    G4cout << "###G4MuPairProductionModel::SampleSecondaries WARNING: "
+	   << "for Z= " << Z << " iz= " << iz << " it= " << it 
+	   << " iy= " << iy << " p1= " << p1 << " p2-p1= " << p2 - p1 
+	   << G4endl;
+  } else { 
+    y += dy*(p - p1)/(p2 - p1);
+  }
   
   G4double PairEnergy = minPairEnergy*exp( exp(y)*logmaxmin );
 		       

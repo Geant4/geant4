@@ -100,6 +100,9 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+                                    const G4ParticleDefinition*);
+
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
 			       const G4MaterialCutsCouple*);
 

@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 June 2013: V.Ivant (emmuons-V09-06-14)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel - added 
+    MinPrimaryEnergy method implementation (all cross section tables
+    will start from the reaction threshold
+
+17 June 2013: V.Ivant (emmuons-V09-06-13)
+- G4MuPairProductionModel - added protection and warning message
+    if p1=p2 in the SampleSecodaries method
+
 04 June 2013: V.Ivant (emmuons-V09-06-12)
 - G4EnergyLossForExtrapolator - use cut DBL_MAX to avoid creation
     of G4EmSelectors in lazy initialisation
