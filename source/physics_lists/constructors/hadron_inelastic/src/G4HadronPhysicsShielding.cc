@@ -86,7 +86,7 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0) */
-    , QuasiElastic(false)
+//    , QuasiElastic(false)
   /*    , theChipsKaonMinus(0)
     , theChipsKaonPlus(0)
     , theChipsKaonZero(0)
@@ -97,7 +97,7 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
     , evaluation()
 {}
 
-G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool quasiElastic)
+G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool /* quasiElastic */)
     :  G4VPhysicsConstructor(name) 
 /*    , theNeutrons(0)
     , theLENeutron(0)
@@ -113,7 +113,7 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool 
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0) */
-    , QuasiElastic(quasiElastic)
+//    , QuasiElastic(quasiElastic)
   /*    , theChipsKaonMinus(0)
     , theChipsKaonPlus(0)
     , theChipsKaonZero(0)

@@ -81,10 +81,10 @@ G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(G4int)
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)*/
-    , QuasiElastic(true)
+//    , QuasiElastic(true)
 {}
 
-G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(const G4String& name, G4bool quasiElastic)
+G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(const G4String& name, G4bool /* quasiElastic */)
     :  G4VPhysicsConstructor(name)
 /*    , theNeutrons(0)
     , theLEPNeutron(0)
@@ -102,7 +102,7 @@ G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(const G4String& name, G4bool qu
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)*/
-    , QuasiElastic(quasiElastic)
+//    , QuasiElastic(quasiElastic)
 {}
 
 void G4HadronPhysicsQGSP_BIC::CreateModels()

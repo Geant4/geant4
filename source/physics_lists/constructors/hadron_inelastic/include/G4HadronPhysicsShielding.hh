@@ -68,7 +68,7 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
   public: 
     //G4HadronPhysicsShielding(G4int verbose =1,G4bool blend=false);
     G4HadronPhysicsShielding(G4int verbose =1);
-    G4HadronPhysicsShielding(const G4String& name, G4bool quasiElastic=false);
+    G4HadronPhysicsShielding(const G4String& name, G4bool /* quasiElastic=false */);
     virtual ~G4HadronPhysicsShielding();
 
   public: 
@@ -111,7 +111,7 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
     };
     static G4ThreadLocal ThreadPrivate* tpdata;
 
-    G4bool QuasiElastic;
+    // G4bool QuasiElastic;
     G4bool useLEND;
     G4String evaluation;
 };
