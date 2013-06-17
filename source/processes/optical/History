@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14th June 2014 P. Gumplinger (op-V09-06-05)
+- fix coverity errors in G4OpBoundaryProcess
+
+13th June 2013 P.Gumplinger (op-V09-06-04)
+- G4OpWLS and G4OpRayleigh -  added BuildPhysicsTable method which is doing
+  as before but at the moment when material list is fully defined.
+
+6th June 2013 P.Gumplinger (op-V09-06-03)
+- comment out G4cout in G4OpBoundaryProcess::DielectricDichroic()
+
 5th June 2013 P.Gumplinger (op-V09-06-02)
 - fix compilation error in G4OpWLS
 

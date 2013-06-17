@@ -836,22 +836,25 @@ void G4OpBoundaryProcess::DielectricDichroic()
            if (OpticalSurface) DichroicVector = OpticalSurface->GetDichroicVector();
         }
 
-        if (!DichroicVector) {
+
+        if (DichroicVector) {
+           G4double wavelength = h_Planck*c_light/thePhotonMomentum;
+           theTransmittance =
+             DichroicVector->Value(wavelength/nm,angleIncident,idx,idy)*perCent;
+//            G4cout << "wavelength: " << std::floor(wavelength/nm) 
+//                                     << "nm" << G4endl;
+//            G4cout << "Incident angle: " << angleIncident << "deg" << G4endl;
+//            G4cout << "Transmittance: " 
+//                   << std::floor(theTransmittance/perCent) << "%" << G4endl;
+        } else {
            G4ExceptionDescription ed;
            ed << " G4OpBoundaryProcess/DielectricDichroic(): "
               << " The dichroic surface has no G4Physics2DVector"
               << G4endl;
-          G4Exception("G4OpBoundaryProcess::DielectricDichroic", "OpBoun03",
-                      FatalException,ed,
-                      "A dichroic surface must have an associated G4Physics2DVector");
+           G4Exception("G4OpBoundaryProcess::DielectricDichroic", "OpBoun03",
+                       FatalException,ed,
+                       "A dichroic surface must have an associated G4Physics2DVector");
         }
-
-        G4double wavelength = h_Planck*c_light/thePhotonMomentum;
-        G4cout << "wavelength: " << std::floor(wavelength/nm) << "nm" << G4endl;
-        G4cout << "Incident angle: " << angleIncident << "deg" << G4endl;
-        theTransmittance =
-            DichroicVector->Value(wavelength/nm,angleIncident,idx,idy)*perCent;
-        G4cout << "Transmittance: " << std::floor(theTransmittance/perCent) << "%" << G4endl;
 
         if ( !G4BooleanRand(theTransmittance) ) // Not transmitted, so reflect
            DoReflection();

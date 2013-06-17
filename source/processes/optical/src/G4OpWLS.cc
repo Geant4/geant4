@@ -66,7 +66,7 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
 {
   SetProcessSubType(fOpWLS);
 
-  theIntegralTable = 0;
+  theIntegralTable = NULL;
  
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created " << G4endl;
@@ -75,7 +75,6 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
   WLSTimeGeneratorProfile = 
        new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
 
-  BuildThePhysicsTable();
 }
 
 ////////////////
@@ -94,6 +93,11 @@ G4OpWLS::~G4OpWLS()
 ////////////
 // Methods
 ////////////
+
+void G4OpWLS::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+    if (!theIntegralTable) BuildThePhysicsTable();
+}
 
 // PostStepDoIt
 // -------------
