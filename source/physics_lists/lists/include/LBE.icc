@@ -512,7 +512,6 @@ template<class T> TLBE<T>::~TLBE()
     if ( theScintProcessNucNeverUsed ) delete theScintProcessNuc;
     if ( theBoundaryProcessNeverUsed ) delete theBoundaryProcess;
     if ( theAbsorptionProcessNeverUsed ) delete theAbsorptionProcess;
-    if ( theBoundaryProcessNeverUsed ) delete theBoundaryProcess;
 }
 
 

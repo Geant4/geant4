@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-Jun-2013, Peter Gumplinger           (phys-lists-V09-06-11)
+- fix coverity error in LBE.inc
+
 27-Mar-2013, Andrea Dotti		(phys-lists-V09-06-10)
 - Adding mechanism for splitting class of base class G4VUserPhysicsList
   for LBE physics list (needed for G4MT). 
