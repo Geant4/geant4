@@ -14,7 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12-11-12  V.Ivanchenko (test41-V09-06-01)
+14-06-13  V.Ivanchenko (test41-V09-06-03)
+- Cleanup scripts and PhysicsList class
+
+14-06-13  V.Ivanchenko (test41-V09-06-02)
+- Update PhysList for 10.0beta
+
+12-11-13  V.Ivanchenko (test41-V09-06-01)
 - Added Xi2 analysis
 
 03-04-13  A.Dotti (test41-V09-06-00)

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -19,8 +19,6 @@ PhysicsList::AddPhysicsList: <standardIG>
 /testem/phys/setCuts 0.7 mm
 /run/initialize
 ### Absorber width(mm)= 116.24 made of G4_lH2
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### G4EmConfigurator::AddModels n= 0
 PhysicsList::SetCuts:CutLength : 1 mm 
 /run/beamOn 1000
@@ -44,7 +42,7 @@ conv:   for  gamma    SubType= 14
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -64,7 +62,7 @@ eBrem:   for  e-    SubType= 3
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -88,7 +86,7 @@ annihil:   for  e+    SubType= 5
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -101,7 +99,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -115,7 +113,7 @@ ionIoni:   for  GenericIon    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
 
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -128,7 +126,7 @@ ionIoni:   for  alpha    SubType= 2
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -141,7 +139,7 @@ hIoni:   for  anti_proton    SubType= 2
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -154,7 +152,7 @@ hIoni:   for  kaon+    SubType= 2
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -231,7 +229,7 @@ CoulombScat:   for  mu-    SubType= 1
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -244,7 +242,7 @@ hIoni:   for  pi+    SubType= 2
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 11.4592
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 GeV  Table with 56 bins Emin=    100 eV    Emax=     10 GeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 GeV in 56 bins
@@ -10094,12 +10092,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.09s Real=0.2s Sys=0.02s
+  User=0.09s Real=0.12s Sys=0.02s
 ###  1000  events of mu+  with p(MeV/c)= 172 scattered off 116.24 mm of G4_lH2
 ###    Beam momentum spread 1 MeV/c
 /testem/setFileName test41_al.log
 /testem/det/setAbsorberMat G4_Al
 /testem/det/setWidth 1.5 mm
 G4 kernel has come to Quit state.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager

@@ -34,6 +34,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 
 #include "StepMax.hh"
 #include "G4DecayPhysics.hh"
@@ -114,7 +115,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics();
 
-  } else if (name == "emstandard_msc90") {
+  } else if (name == "emstandard_msc96") {
 
     emName = name;
     delete emPhysicsList;
@@ -138,19 +139,25 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
 
+  } else if (name == "emstandard_opt4") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new G4EmStandardPhysics_option3();
+
   } else if (name == "emstandard_msc93") {
 
-    AddPhysicsList("emstandard_msc90");
+    AddPhysicsList("emstandard_msc96");
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
     G4UrbanMscModel93* mscm = new G4UrbanMscModel93();
-    conf->SetExtraEmModel("mu+","muMsc",mscm);
+    conf->SetExtraEmModel("mu+","msc",mscm);
 
   } else if (name == "emstandard_msc95") {
 
-    AddPhysicsList("emstandard_msc90");
+    AddPhysicsList("emstandard_msc96");
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
     G4UrbanMscModel95* mscm = new G4UrbanMscModel95();
-    conf->SetExtraEmModel("mu+","muMsc",mscm);
+    conf->SetExtraEmModel("mu+","msc",mscm);
 
   } else if (name == "standardSS") {
 

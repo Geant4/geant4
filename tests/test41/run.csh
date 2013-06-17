@@ -14,19 +14,19 @@ source ${dir}run_single.csh ${phys} ${work} ${dir} >& res0.out
 
 setenv PHYSLIST    emstandard_msc95
 set    phys = "msc95"
-source ${dir}run_single.csh ${phys} ${work} ${dir} >& res2.out
+source ${dir}run_single.csh ${phys} ${work} ${dir} >& res95.out
 
 setenv PHYSLIST    emstandard_msc93
 set    phys = "msc93"
 source ${dir}run_single.csh ${phys} ${work} ${dir} >& res93.out
 
-setenv PHYSLIST    emstandard_opt3
-set    phys = "opt3"
-source ${dir}run_single.csh ${phys} ${work} ${dir} >& res3.out
+setenv PHYSLIST    emstandard_msc96
+set    phys = "msc96"
+source ${dir}run_single.csh ${phys} ${work} ${dir} >& res96.out
 
 setenv PHYSLIST    standardSS
 set    phys = "optSS"
-source ${dir}run_single.csh ${phys} ${work} ${dir} >& resS.out
+source ${dir}run_single.csh ${phys} ${work} ${dir} >& resSS.out
 
 source ${dir}plot.csh $1 >& p.out
 $G4MY/reader_test41 $1 >& p1.out
