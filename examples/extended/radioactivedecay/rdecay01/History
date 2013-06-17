@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-06-13 mma (rdecay01-V09-06-03)
+- TrackingAction: use G4Step::GetSecondaryInCurrentStep()
      
 25-05-13 mma (rdecay01-V09-06-02)
 - cosmetic in SteppingVerbose

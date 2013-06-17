@@ -124,7 +124,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
       
   //energy and momentum balance (from secondaries)
   //
-  G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();
+  const std::vector<const G4Track*>* secondaries 
+                              = track->GetStep()->GetSecondaryInCurrentStep();
   size_t nbtrk = (*secondaries).size();
   if (nbtrk) {
     //there are secondaries --> it is a decay
@@ -133,7 +134,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
     G4double EkinTot = 0.;
     G4ThreeVector Pbalance = - track->GetMomentum();
     for (size_t itr=0; itr<nbtrk; itr++) {
-       G4Track* trk = (*secondaries)[itr];
+       const G4Track* trk = (*secondaries)[itr];
        EkinTot += trk->GetKineticEnergy();
        //exclude gamma desexcitation from momentum balance
        if (trk->GetDefinition() != G4Gamma::Gamma())         
