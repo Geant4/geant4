@@ -111,10 +111,7 @@ G4ThreadLocal G4LossTableManager* G4LossTableManager::theInstance = 0;
 G4LossTableManager* G4LossTableManager::Instance()
 {
   if(!theInstance) {
-    static G4ThreadLocal G4LossTableManager *manager_G4MT_TLS_ = 0; 
-    if (!manager_G4MT_TLS_) { manager_G4MT_TLS_ = new G4LossTableManager; }  
-    G4LossTableManager &manager = *manager_G4MT_TLS_;
-    theInstance = &manager;
+    theInstance = new G4LossTableManager;
   }
   return theInstance;
 }

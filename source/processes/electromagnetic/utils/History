@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 June 13: V.Ivant (emutils-V09-06-38)
+- G4LossTableManager - return back ThreadLocal partern for the 
+    singleton (it was correct)
+- G4VMultipleScattering - fixed list models per msc process for ions 
+
 15 June 13: V.Ivant (emutils-V09-06-37)
 - G4VEnergyLossProcess - avoid unnecessary deletion of tables 
     between runs
