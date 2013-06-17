@@ -49,8 +49,16 @@
 
 #include "G4AllocatorPool.hh"
 
+class G4AllocatorBase
+{
+  public:
+    G4AllocatorBase(); 
+    virtual ~G4AllocatorBase() {;}
+    virtual void ResetStorage() {;}
+};
+
 template <class Type>
-class G4Allocator
+class G4Allocator : public G4AllocatorBase
 {
   public:  // with description
 

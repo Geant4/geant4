@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 16, 2013 M.Asai (global-V09-06-43)
+- Introducing G4AllocatorList class which stores pointers of all
+  G4Allocator objects for each thread so that they all are cleanly
+  deleted at the program termination.
+- Adding G4AllocatorBase base class to define virtual destructor
+  and virtual method for G4Allocator.
+
 June 15, 2013 V.Ivanchenko (global-V09-06-42)
 - G4PhysicsVector - added protection to avoid check energy value
     outside vector when bin location is performed

@@ -33,6 +33,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4Allocator.hh
         G4strstreambuf.icc
         G4AllocatorPool.hh
+        G4AllocatorList.hh
         G4ApplicationState.hh
         G4AutoLock.hh
         G4DataVector.hh
@@ -93,7 +94,9 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4ofstreamDestination.hh
         G4MTcoutDestination.hh
     SOURCES
+        G4Allocator.cc
         G4AllocatorPool.cc
+        G4AllocatorList.cc
         G4DataVector.cc
         G4ErrorPropagatorData.cc
         G4Exception.cc
