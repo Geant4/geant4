@@ -101,8 +101,9 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysicsChemistry);
 
 using namespace std;
 
-G4EmDNAPhysicsChemistry::G4EmDNAPhysicsChemistry(G4int ver)
-    : G4VPhysicsConstructor("G4EmDNAPhysicsChemistry"), verbose(ver)
+G4EmDNAPhysicsChemistry::G4EmDNAPhysicsChemistry(G4int /* ver */)
+    : G4VPhysicsConstructor("G4EmDNAPhysicsChemistry")
+      //, verbose(ver)
 {
     SetPhysicsType(bElectromagnetic);
 }

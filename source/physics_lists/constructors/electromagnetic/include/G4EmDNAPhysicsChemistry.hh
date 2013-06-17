@@ -47,7 +47,7 @@ protected :
     void ConstructReactionTable() ;
 
 private:
-  G4int  verbose;
+  // G4int  verbose;
 };
 
 #endif
