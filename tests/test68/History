@@ -13,6 +13,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 Jun 2013 Alberto Ribon                 test68-V09-06-08
+----------------------------------------------------------
+- Disabled temporarily G4MTRunManager until a good solution
+  is found to deal with G4MT.
+
 14 Jun 2013 Alberto Ribon                 test68-V09-06-07
 ----------------------------------------------------------
 - Set the number of threads to 1 (instead of 4) otherwise the 

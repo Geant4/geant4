@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
+// #ifdef G4MULTITHREADED
+// #include "G4MTRunManager.hh"
+// #else
 #include "G4RunManager.hh"
-#endif
+// #endif
  
 #include "G4UImanager.hh" 
 #include "Tst68DetectorConstruction.hh"
@@ -50,12 +50,12 @@ int main(int argc,char** argv) {
 	 << " ===================================================== " << G4endl 
 	 << G4endl;
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(1);
-#else  
+// #ifdef G4MULTITHREADED
+//   G4MTRunManager* runManager = new G4MTRunManager;
+//   runManager->SetNumberOfThreads(1);
+// #else  
   G4RunManager* runManager = new G4RunManager;
-#endif
+// #endif
  
   runManager->SetUserInitialization( new Tst68DetectorConstruction ); 
 
