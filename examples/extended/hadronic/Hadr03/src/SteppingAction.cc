@@ -105,7 +105,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   //secondaries
   //
-  const G4TrackVector* secondary = fpSteppingManager->GetSecondary();
+  const std::vector<const G4Track*>* secondary 
+                                    = aStep->GetSecondaryInCurrentStep();  
   for (size_t lp=0; lp<(*secondary).size(); lp++) {
     particle = (*secondary)[lp]->GetDefinition(); 
     G4String name   = particle->GetParticleName();
