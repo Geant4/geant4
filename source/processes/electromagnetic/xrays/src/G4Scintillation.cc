@@ -119,8 +119,6 @@ G4Scintillation::G4Scintillation(const G4String& processName,
            G4cout << GetProcessName() << " is created " << G4endl;
         }
 
-        BuildThePhysicsTable();
-
         emSaturation = NULL;
 }
 
@@ -143,6 +141,12 @@ G4Scintillation::~G4Scintillation()
         ////////////
         // Methods
         ////////////
+
+void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+   if (!theFastIntegralTable || !theSlowIntegralTable) BuildThePhysicsTable();
+}
+
 
 // AtRestDoIt
 // ----------

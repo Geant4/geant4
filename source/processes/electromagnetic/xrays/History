@@ -17,13 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 June 13: P.Gumplinger (xrays-V09-06-05)
+- G4Scintillation - added BuildPhysicsTable method which is doing initialisation
+  as before but at the moment when material list is fully defined.
+
 10 June 13: V.Ivanchenko (xrays-V09-06-04)
-- G4Cerenkov - added BuldPhysicsTable method which is doing initialisation
-    as before but in the moment when material list is fully defined;
+- G4Cerenkov - added BuildPhysicsTable method which is doing initialisation
+    as before but at the moment when material list is fully defined;
     it is assumed that the list of materials is not changed for the next runs;
     internal table has NULL pointer to PhysicsVector if material properties 
     are not defined for a given material, this pointer is check in when step
-    limitation is computed 
+    limitation is computed. 
 
 28 May 13: P.Gumplinger (xrays-V09-06-03)
 - G4Scintillation.cc: Fixed bug in G4Scintillation 

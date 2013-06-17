@@ -103,8 +103,6 @@ G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
 	if (verboseLevel>0) {
            G4cout << GetProcessName() << " is created " << G4endl;
 	}
-	thePhysicsTable = 0;
-
 }
 
 // G4Cerenkov::G4Cerenkov(const G4Cerenkov &right)
@@ -140,7 +138,7 @@ G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
 
 void G4Cerenkov::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-    if(!thePhysicsTable) { BuildThePhysicsTable(); } 
+    if (!thePhysicsTable) BuildThePhysicsTable();
 }
 
 // PostStepDoIt

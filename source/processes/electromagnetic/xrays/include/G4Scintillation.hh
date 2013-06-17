@@ -122,6 +122,9 @@ public:
         // Returns true -> 'is applicable', for any particle type except
         // for an 'opticalphoton' and for short-lived particles
 
+        void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
+        // Build table at the right time
+
 	G4double GetMeanFreePath(const G4Track& aTrack,
 				       G4double ,
                                        G4ForceCondition* );
