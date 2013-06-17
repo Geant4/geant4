@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 15, 2013 V.Ivanchenko (global-V09-06-42)
+- G4PhysicsVector - added protection to avoid check energy value
+    outside vector when bin location is performed
+
 June 14, 2013 V.Ivanchenko (global-V09-06-41)
 - G4PhysicsVector - make class read-only in run time, access to
     value only via const methods; to enable spline, SetSpline command

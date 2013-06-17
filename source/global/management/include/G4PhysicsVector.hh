@@ -94,12 +94,14 @@ class G4PhysicsVector
     G4double Value(G4double theEnergy, size_t& lastidx) const; 
          // Get the cross-section/energy-loss value corresponding to the
          // given energy. An appropriate interpolation is used to calculate
-         // the value. User may keep last index to save CPU for bin location. 
+         // the value. Consumer code got changed index and may reuse it
+         // for the next call to save CPU for bin location. 
 
     inline G4double Value(G4double theEnergy) const; 
          // Get the cross-section/energy-loss value corresponding to the
          // given energy. An appropriate interpolation is used to calculate
-         // the value. This method is kept for backward compatibility reason.
+         // the value. This method is kept for backward compatibility reason,
+         // it should be used is bin location cannot be kept thread safe
 
     inline G4double GetValue(G4double theEnergy, G4bool& isOutRange) const;
          // Obsolete method to get value, isOutRange is not used anymore. 
