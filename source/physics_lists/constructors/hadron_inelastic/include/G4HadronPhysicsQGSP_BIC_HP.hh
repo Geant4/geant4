@@ -75,7 +75,7 @@ class G4HadronPhysicsQGSP_BIC_HP : public G4VPhysicsConstructor
 {
   public: 
     G4HadronPhysicsQGSP_BIC_HP(G4int verbose =1);
-    G4HadronPhysicsQGSP_BIC_HP(const G4String& name, G4bool /* quasiElastic=true */);
+    G4HadronPhysicsQGSP_BIC_HP(const G4String& name, G4bool quasiElastic=true);
     virtual ~G4HadronPhysicsQGSP_BIC_HP();
 
   public: 
