@@ -224,11 +224,9 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
 
     // re-determine file name as G4GMocrenFile_DEST_DIR/g4_XX.gdd 
     if( i >=  0 && i <= 9 ) { 
-      std::snprintf( kGddFileName, 256, "%s%s%s%d.gdd" , kGddDestDir,
-		     GDD_FILE_HEADER, "0", i );
+      std::sprintf( kGddFileName, "%s%s%s%d.gdd" , kGddDestDir,  GDD_FILE_HEADER, "0", i );
     } else {
-      std::snprintf( kGddFileName, 256, "%s%s%d.gdd" , kGddDestDir,
-		     GDD_FILE_HEADER, i );
+      std::sprintf( kGddFileName, "%s%s%d.gdd" , kGddDestDir,  GDD_FILE_HEADER, i );
     }
 
     // check validity of the file name

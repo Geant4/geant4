@@ -20,6 +20,11 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+17th June 2013  John Allison (gMocren-V09-06-06)
+- G4GMocrenFileSceneHandler.cc: Reverted snprintf to sprintf.
+  o snprintf not in cstdlib on Windows.
+  o Mark as "intentional" on next Coverity analysis.
+
 15th June 2013  Akinori Kimura (gMocren-V09-06-05)
 - G4GMocrenIO.cc and G4GMocrenFileSceneHandler.{cc,hh}: Fixed warnings of 
   Coverity.

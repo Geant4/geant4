@@ -24,6 +24,11 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+17th June 2013  John Allison  (vis-V09-06-18)
+- gMocren-V09-06-06: Reverted snprintf to sprintf.
+  o snprintf not in cstdlib on Windows.
+  o Mark as "intentional" on next Coverity analysis.
+
 17th June 2013  John Allison  (vis-V09-06-17)
 - opengl-V09-06-06:
   o Improvements for Wt and Qt5.
