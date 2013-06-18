@@ -259,7 +259,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   G4UnitDefinition::ClearUnitsTable();
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
-  if(allocList)
+  if(!isWorker && allocList)
   {
     allocList->Destroy(numberOfStaticAllocators);
     delete allocList; 

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 18th, 2013, G. Cosmo (run-V09-06-57)
+- Allow deletion of allocators only from master thread.
+
 June 18th, 2013, G. Cosmo (run-V09-06-56)
 - Cleared printout in G4RunManagerKernel for deletion of allocators.
 
