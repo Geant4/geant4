@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+18 June 2013 V. Ivanchenko  radioactive_decay-V09-06-05
+--------------------------------------------------------
+- G4RadioactiveDecay - initialise Isotope table only for master
+
 18 June 2013 V. Ivanchenko  radioactive_decay-V09-06-04
 --------------------------------------------------------
 - G4RadioactiveDecay - moved initialisation of Isotope table from

@@ -158,9 +158,8 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   pParticleChange              = &fParticleChangeForRadDecay;
 
   // Now register the Isotope table with G4IonTable.
-  theIsotopeTable = 0;
-  /*
   theIsotopeTable              = new G4RIsotopeTable();
+  /*
   G4IonTable *theIonTable =
     (G4IonTable *)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4VIsotopeTable *aVirtualTable = theIsotopeTable;
@@ -674,13 +673,13 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
   if(!isInitialised) {
     isInitialised = true;
 
-    theIsotopeTable              = new G4RIsotopeTable();
-    G4IonTable *theIonTable =
-      (G4IonTable *)(G4ParticleTable::GetParticleTable()->GetIonTable());
-    G4VIsotopeTable *aVirtualTable = theIsotopeTable;
-    theIonTable->RegisterIsotopeTable(aVirtualTable);
-
-    G4VAtomDeexcitation* p = G4LossTableManager::Instance()->AtomDeexcitation();
+    G4LossTableManager* theManager = G4LossTableManager::Instance();
+    if(theManager->IsMaster()) {
+      G4IonTable *theIonTable =
+	G4ParticleTable::GetParticleTable()->GetIonTable();
+      theIonTable->RegisterIsotopeTable(theIsotopeTable);
+    }
+    G4VAtomDeexcitation* p = theManager->AtomDeexcitation();
     if(p) { p->InitialiseAtomicDeexcitation(); }
   }
 }
@@ -1039,8 +1038,10 @@ void G4RadioactiveDecay::AddUserDecayDataFile(G4int Z, G4int A,G4String filename
 	G4cout<<"Z and A not valid!"<<G4endl;
   }
 
+  G4LossTableManager* theManager = G4LossTableManager::Instance();
+
   std::ifstream DecaySchemeFile(filename);
-  if (DecaySchemeFile){
+  if (DecaySchemeFile && theManager->IsMaster()){
 	G4int ID_ion=A*1000+Z;
 	theUserRadioactiveDataFiles[ID_ion]=filename;
 	theIsotopeTable->AddUserDecayDataFile(Z,A,filename);
