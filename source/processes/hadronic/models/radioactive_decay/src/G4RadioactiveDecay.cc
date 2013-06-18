@@ -155,15 +155,17 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   SetProcessSubType(fRadioactiveDecay);
 
   theRadioactiveDecaymessenger = new G4RadioactiveDecaymessenger(this);
-  theIsotopeTable              = new G4RIsotopeTable();
   pParticleChange              = &fParticleChangeForRadDecay;
 
   // Now register the Isotope table with G4IonTable.
+  theIsotopeTable = 0;
+  /*
+  theIsotopeTable              = new G4RIsotopeTable();
   G4IonTable *theIonTable =
     (G4IonTable *)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4VIsotopeTable *aVirtualTable = theIsotopeTable;
   theIonTable->RegisterIsotopeTable(aVirtualTable);
-
+  */
   // Reset the contents of the list of nuclei for which decay scheme data
   // have been loaded.
   LoadedNuclei.clear();
@@ -671,6 +673,13 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
 {
   if(!isInitialised) {
     isInitialised = true;
+
+    theIsotopeTable              = new G4RIsotopeTable();
+    G4IonTable *theIonTable =
+      (G4IonTable *)(G4ParticleTable::GetParticleTable()->GetIonTable());
+    G4VIsotopeTable *aVirtualTable = theIsotopeTable;
+    theIonTable->RegisterIsotopeTable(aVirtualTable);
+
     G4VAtomDeexcitation* p = G4LossTableManager::Instance()->AtomDeexcitation();
     if(p) { p->InitialiseAtomicDeexcitation(); }
   }
