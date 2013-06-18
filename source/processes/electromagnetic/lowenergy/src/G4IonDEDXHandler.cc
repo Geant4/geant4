@@ -285,7 +285,6 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
                     new G4LPhysicsFreeVector(nmbdEdxBins,
                                              lowerEdge,
                                              upperEdge);
-        dEdxBragg -> SetSpline(useSplines);
 
         const G4double* massFractionVector = material -> GetFractionVector();
 
@@ -303,6 +302,7 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 
             dEdxBragg -> PutValues(j, edge, value); 
 	}
+        dEdxBragg -> SetSpline(useSplines);
 
 #ifdef PRINT_DEBUG
         G4cout << "G4IonDEDXHandler::BuildPhysicsVector() for ion with Z="

@@ -197,9 +197,7 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
       for (j=0;j<NumberofKPoints;j++)
 	{
 	  G4PhysicsFreeVector* QQ1vector = new G4PhysicsFreeVector(NumberofZPoints);
-	  QQ1vector->SetSpline(true);
 	  G4PhysicsFreeVector* QQ2vector = new G4PhysicsFreeVector(NumberofZPoints);
-	  QQ2vector->SetSpline(true);
 
 	  //fill vectors
 	  for (k=0;k<NumberofZPoints;k++)
@@ -207,6 +205,9 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
 	      QQ1vector->PutValue(k,pZ[k],std::log(QQ1[k][i][j]));
 	      QQ2vector->PutValue(k,pZ[k],QQ2[k][i][j]);
 	    }
+
+	  QQ1vector->SetSpline(true);
+	  QQ2vector->SetSpline(true);
 	  
 	  Q1[i][j]= std::exp(QQ1vector->Value(Zmat));	  
 	  Q2[i][j]=QQ2vector->Value(Zmat);
@@ -267,10 +268,8 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
   for (j=0;j<reducedEnergyGrid;j++)   
     {
       G4PhysicsFreeVector* thevec = new G4PhysicsFreeVector(NumberofEPoints);
-      thevec->SetSpline(true);
       theTable1->push_back(thevec);
       G4PhysicsFreeVector* thevec2 = new G4PhysicsFreeVector(NumberofEPoints);
-      thevec2->SetSpline(true);
       theTable2->push_back(thevec2);
     }  
 
@@ -283,6 +282,8 @@ void G4PenelopeBremsstrahlungAngular::PrepareInterpolationTables(G4double Zmat)
 	  thevec->PutValue(i,betas[i],Q1E[i][j]);
 	  thevec2->PutValue(i,betas[i],Q2E[i][j]);
 	}
+      thevec->SetSpline(true);
+      thevec2->SetSpline(true);
     }
 
   if (theLorentzTables1 && theLorentzTables2)

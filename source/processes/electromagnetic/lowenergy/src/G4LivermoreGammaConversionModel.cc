@@ -145,8 +145,6 @@ void G4LivermoreGammaConversionModel::ReadData(size_t Z, const char* path)
   
   data[Z] = new G4LPhysicsFreeVector();
   
-  // Activation of spline interpolation
-  data[Z] ->SetSpline(true);
   //
   
   std::ostringstream ost;
@@ -172,7 +170,8 @@ void G4LivermoreGammaConversionModel::ReadData(size_t Z, const char* path)
     
     data[Z]->Retrieve(fin, true);
   } 
-  
+  // Activation of spline interpolation
+  data[Z] ->SetSpline(true);  
   
 }
 

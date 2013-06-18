@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15.02.2013  V.Ivanchenko, tag emlowen-V09-06-14
+            - G4IonDEDXHandler, G4IonParametrisedLossModel,
+              G4LivermoreGammaConversionModel,
+              G4PenelopeBremsstrahlungAngular - moved call
+              SetSpline(true) to be always after the vector is 
+              filled - only in that case spline interpolation
+              is enabled in the most recent version of G4PhysicsVector
+
 13.06.2013  M.Karamitros, tag emlowen-V09-06-13
 	    - GNUmakefile: Dependency on hadronic package withdrawn
 
