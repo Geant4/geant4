@@ -27,7 +27,7 @@
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
@@ -144,7 +144,7 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hPairProduction(), particle);            
      
     } else if( particleName == "alpha" || 
-	       particleName == "He3"    ) {
+               particleName == "He3"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);           
       G4ionIonisation* ionIoni = new G4ionIonisation();
@@ -162,9 +162,9 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4NuclearStopping(), particle);                   
       
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
-	       (particle->GetParticleName() != "chargedgeantino")) {
-	       
+               (particle->GetPDGCharge() != 0.0) && 
+               (particle->GetParticleName() != "chargedgeantino")) {
+               
       //all others charged particles except geantino
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
