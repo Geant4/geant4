@@ -76,12 +76,14 @@ G4RunManagerKernel::G4RunManagerKernel()
  geometryInitialized(false),physicsInitialized(false),
  geometryToBeOptimized(true),
  physicsNeedsToBeReBuilt(true),verboseLevel(0),
- numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(false)
+ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(false),
+ numberOfStaticAllocators(0)
 {
 #ifdef G4FPE_DEBUG
   InvalidOperationDetection();
 #endif
-
+  G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
+  if(allocList) numberOfStaticAllocators = allocList->Size();
   defaultExceptionHandler = new G4ExceptionHandler();
   if(fRunManagerKernel)
   {
@@ -141,7 +143,8 @@ G4RunManagerKernel::G4RunManagerKernel(G4bool isWorkerRMK)
 geometryInitialized(false),physicsInitialized(false),
 geometryToBeOptimized(true),
 physicsNeedsToBeReBuilt(true),verboseLevel(0),
-numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(isWorkerRMK)
+numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(isWorkerRMK),
+ numberOfStaticAllocators(0)
 {
 //This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -258,7 +261,10 @@ G4RunManagerKernel::~G4RunManagerKernel()
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
   if(allocList)
   {
-    delete allocList;
+    allocList->Destroy(numberOfStaticAllocators);
+    delete allocList; 
+    if(numberOfStaticAllocators>0 && !isWorker)
+    { G4cout << "****** " << numberOfStaticAllocators << " static G4Allocators left." << G4endl; }
     if(verboseLevel>1) G4cout << "G4Allocator objects are deleted." << G4endl;
   }
   delete pStateManager; 

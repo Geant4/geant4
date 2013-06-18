@@ -211,6 +211,7 @@ protected:
     void SetScoreSplitter();
 
     G4bool isWorker;
+    G4int numberOfStaticAllocators;
 };
 
 #endif

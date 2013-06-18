@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 17th, 2013, M. Asai (run-V09-06-55)
+- Limit the deletion of G4Allocator objects only to dynamically instantiated ones.
+
 June 16th, 2013, M. Asai (run-V09-06-54)
 - Delete all G4Allocator objects from the destructor of G4RunManagerKernel.
 
