@@ -263,8 +263,6 @@ G4RunManagerKernel::~G4RunManagerKernel()
   {
     allocList->Destroy(numberOfStaticAllocators);
     delete allocList; 
-    if(numberOfStaticAllocators>0 && !isWorker)
-    { G4cout << "****** " << numberOfStaticAllocators << " static G4Allocators left." << G4endl; }
     if(verboseLevel>1) G4cout << "G4Allocator objects are deleted." << G4endl;
   }
   delete pStateManager; 
