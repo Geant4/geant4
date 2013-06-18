@@ -53,8 +53,8 @@ class G4AllocatorBase
 {
   public:
     G4AllocatorBase(); 
-    virtual ~G4AllocatorBase() {;}
-    virtual void ResetStorage() {;}
+    virtual ~G4AllocatorBase();
+    virtual void ResetStorage();
 };
 
 template <class Type>

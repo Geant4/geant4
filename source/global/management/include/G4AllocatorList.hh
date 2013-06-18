@@ -48,21 +48,24 @@ class G4AllocatorBase;
 class G4AllocatorList
 {
   public:  // with description
+
     static G4AllocatorList* GetAllocatorList();
     static G4AllocatorList* GetAllocatorListIfExist();
 
+  public:
+
+    ~G4AllocatorList();
+    void Register(G4AllocatorBase*);
+    void Destroy(G4int nStat=0);
+    G4int Size() const;
+
   private:
-    static G4ThreadLocal G4AllocatorList* fAllocatorList;
 
     G4AllocatorList();
-  public:
-    ~G4AllocatorList();
-
-    void Register(G4AllocatorBase*);
-    void Destroy();
-    G4int Size();
 
   private:
+
+    static G4ThreadLocal G4AllocatorList* fAllocatorList;
     std::vector<G4AllocatorBase*> fList;
 };
 

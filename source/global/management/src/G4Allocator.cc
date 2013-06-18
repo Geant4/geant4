@@ -30,6 +30,12 @@
 
 #include "G4Allocator.hh"
 #include "G4AllocatorList.hh"
-G4AllocatorBase::G4AllocatorBase()
-{ G4AllocatorList::GetAllocatorList()->Register(this); }
 
+G4AllocatorBase::G4AllocatorBase()
+{
+  G4AllocatorList::GetAllocatorList()->Register(this);
+}
+
+G4AllocatorBase::~G4AllocatorBase() {;}
+
+void G4AllocatorBase::ResetStorage() {;}

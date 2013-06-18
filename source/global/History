@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 17, 2013 M.Asai (global-V09-06-45)
+- Split destructor and Destroy() method in G4AllocatorList.
+  They should be invoked separately. Destroy() now may take
+  an integer argument that is the number of static G4Allocator
+  objects. Such static G4Allocator objects are not deleted.
+
+June 17, 2013 G.Cosmo
+- Move virtual destructor of G4AllocatorBase to source, to avoid
+  misalignments on deletion on exit through the base-class pointer.
+- Comment out deletion of allocators pointers for testing and reset
+  storage.
+
 June 17, 2013 G.Cosmo (global-V09-06-44)
 - Temporarly avoid resetting storage in G4AllocatorList::Destroy().
 

@@ -36,35 +36,47 @@ G4ThreadLocal G4AllocatorList* G4AllocatorList::fAllocatorList=0;
 G4AllocatorList* G4AllocatorList::GetAllocatorList()
 {
   if(!fAllocatorList)
-  { fAllocatorList = new G4AllocatorList; }
+  {
+    fAllocatorList = new G4AllocatorList;
+  }
   return fAllocatorList;
 }
 
 G4AllocatorList* G4AllocatorList::GetAllocatorListIfExist()
-{ return fAllocatorList; }
+{
+  return fAllocatorList;
+}
 
 G4AllocatorList::G4AllocatorList()
-{;}
+{
+}
 
 G4AllocatorList::~G4AllocatorList()
 {
-  Destroy(); 
+  // Destroy(); 
   fAllocatorList = 0;
 }
 
 void G4AllocatorList::Register(G4AllocatorBase* alloc)
-{ fList.push_back(alloc); }
+{
+  fList.push_back(alloc);
+}
 
-void G4AllocatorList::Destroy()
+void G4AllocatorList::Destroy(G4int nStat)
 {
   std::vector<G4AllocatorBase*>::iterator itr=fList.begin();
-  for(;itr!=fList.end();itr++)
-  {  
-    // (*itr)->ResetStorage();
-    delete *itr;
+  G4int i=0;
+  for(; itr!=fList.end();++itr)
+  {
+    if(i<nStat) continue;
+    i++;
+    (*itr)->ResetStorage();
+    delete *itr; 
   }
   fList.clear();
 }
 
-G4int G4AllocatorList::Size()
-{ return fList.size(); }
+G4int G4AllocatorList::Size() const
+{
+  return fList.size();
+}
