@@ -30,6 +30,7 @@
 
 #include "G4AllocatorList.hh"
 #include "G4Allocator.hh"
+#include "G4ios.hh"
 
 G4ThreadLocal G4AllocatorList* G4AllocatorList::fAllocatorList=0;
 
@@ -53,7 +54,6 @@ G4AllocatorList::G4AllocatorList()
 
 G4AllocatorList::~G4AllocatorList()
 {
-  // Destroy(); 
   fAllocatorList = 0;
 }
 
@@ -65,14 +65,26 @@ void G4AllocatorList::Register(G4AllocatorBase* alloc)
 void G4AllocatorList::Destroy(G4int nStat)
 {
   std::vector<G4AllocatorBase*>::iterator itr=fList.begin();
-  G4int i=0;
+  G4int i=0, j=0;
+  size_t mem=0;
   for(; itr!=fList.end();++itr)
   {
-    if(i<nStat) continue;
-    i++;
+    if(i<nStat)
+    {
+      i++;
+      mem += (*itr)->GetAllocatedSize();
+      (*itr)->ResetStorage();
+      continue;
+    }
+    j++;
+    mem += (*itr)->GetAllocatedSize();
     (*itr)->ResetStorage();
     delete *itr; 
   }
+  G4cout << "Number of memory pools allocated: " << Size()
+         << "; of which, static: " << i
+         << "; dynamic pools deleted: " << j << G4endl;
+  G4cout << "Total memory freed: " << mem/1048576 << " Mb" << G4endl;
   fList.clear();
 }
 

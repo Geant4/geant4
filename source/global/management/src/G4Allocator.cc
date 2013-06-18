@@ -37,5 +37,3 @@ G4AllocatorBase::G4AllocatorBase()
 }
 
 G4AllocatorBase::~G4AllocatorBase() {;}
-
-void G4AllocatorBase::ResetStorage() {;}

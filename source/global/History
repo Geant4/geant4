@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 18, 2013 G.Cosmo (global-V09-06-46)
+- Made pure virtual utility methods in G4AllocatorBase, so statistics
+  are accessible from allocator's base class pointer.
+- Corrected logic in G4AllocatorList::Destroy() to effectively delete
+  allocated pools and release memory.
+  Added statistics on pools and amount of memory released.
+
 June 17, 2013 M.Asai (global-V09-06-45)
 - Split destructor and Destroy() method in G4AllocatorList.
   They should be invoked separately. Destroy() now may take
