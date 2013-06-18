@@ -50,7 +50,7 @@ class ExP02DetConstrReader : public G4VUserDetectorConstruction
 
   public:
   
-     G4VPhysicalVolume* Construct();     
+     virtual G4VPhysicalVolume* Construct();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

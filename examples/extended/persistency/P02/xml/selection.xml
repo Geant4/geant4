@@ -26,6 +26,7 @@
     <field name="fMassFractionVector" comment="[fNumberOfElements]" />
     <field name="fAtomsVector" comment="[fNumberOfElements]" />
     <field name="VecNbOfAtomsPerVolume" comment="[fNumberOfElements]" />
+    <field name="fSandiaTable" transient="true"/>
 </class>
 
 <class name="G4IonisParamElm">
@@ -38,9 +39,11 @@
       <field name="fShellCorrectionVector" transient="true"/>
 </class>
 
+<!--
 <class name="G4SandiaTable"> 
     <field name="fPhotoAbsorptionCof" transient="true"/>
 </class>
+-->
 
 <class name="G4MaterialPropertyVector"/>
 <class name="G4MaterialPropertiesTable"/>

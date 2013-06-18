@@ -46,7 +46,7 @@ class ExP02DetectorConstruction : public G4VUserDetectorConstruction
     ExP02DetectorConstruction();
     ~ExP02DetectorConstruction();
 
-    G4VPhysicalVolume* Construct();
+    virtual G4VPhysicalVolume* Construct();
 
   private:
     

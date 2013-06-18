@@ -74,10 +74,10 @@
 #include "G4VUserRegionInformation.hh"
 #include "G4UserLimits.hh"
 //
-std::vector<CLHEP::Hep3Vector> a;
-std::vector<G4VCSGface*> b;
-std::vector<G4PolyconeSideRZ> c;
-std::vector<G4PolyPhiFaceEdge> d;
-std::vector<G4PolyPhiFaceVertex> e;
+std::vector<CLHEP::Hep3Vector> g4a;
+std::vector<G4VCSGface*> g4b;
+std::vector<G4PolyconeSideRZ> g4c;
+std::vector<G4PolyPhiFaceEdge> g4d;
+std::vector<G4PolyPhiFaceVertex> g4e;
 //
 #undef __G4String

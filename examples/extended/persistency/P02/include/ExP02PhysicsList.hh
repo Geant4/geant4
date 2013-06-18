@@ -49,10 +49,10 @@ class ExP02PhysicsList: public G4VUserPhysicsList
 
   protected:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
  
-    void SetCuts();
+    virtual void SetCuts();
 
    
   protected:
