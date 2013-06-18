@@ -88,7 +88,6 @@ Tst202DetectorConstruction::Tst202DetectorConstruction():
   volumeSelection["displaced_box"]                   = true;
   volumeSelection["Boolean_solids"]                  = true;
   volumeSelection["Tubes_etc"]                       = true;
-  volumeSelection["Extra_placements"]                = true;
   volumeSelection["Sphere"]                          = true;
   volumeSelection["Polyhedra"]                       = true;
   volumeSelection["Polycone"]                        = true;
@@ -105,6 +104,10 @@ Tst202DetectorConstruction::Tst202DetectorConstruction():
   volumeSelection["Twisted_Box"]                     = true;
   volumeSelection["Twisted_Trd"]                     = true;
   volumeSelection["Another_Twisted_Trd"]             = true;
+  volumeSelection["G4Paraboloid"]                    = true;
+  volumeSelection["G4GenericTrap"]                   = true;
+  volumeSelection["Simple_tessellated"]              = true;
+  volumeSelection["Simple_union"]                    = true;
 
   G4cout <<
     "Selectable volume items (with default value):"
@@ -498,12 +501,10 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
     new G4PVPlacement(0,G4ThreeVector(40*cm,0.,0.),
 		      daughter_box_log,"daughter_box_phys",
 		      sub_divided_tube_log,false,0);
-  }
 
   //------------------------------------------------ Extra placements
   // For good measure, as a test of drawn volume path, place in one of
   // the earlier volumes...
-  if (volumeSelection["Extra_placements"]) {
     new G4PVPlacement(0,G4ThreeVector(),
 		      "divided_tube_inset_phys",divided_tube_inset_log,
 		      calo_phys,false,0);  // Place in PV.
@@ -574,6 +575,7 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
   }
 
   if (volumeSelection["Polycone"]) {
+
     const G4int numRZ1 = 10;
     G4double polycone_r[] = {1,5,3,4,9,9,3,3,2,1};
     G4double polycone_z[] = {0,1,2,3,0,5,4,3,2,1};
@@ -599,8 +601,65 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
     G4RotationMatrix rm;
 
     new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(400.*cm,120.*cm,0)),
-		      "Polycone_Test", polycone_log,
-		      experimentalHall_phys,false,0);
+                      "Polycone_Test", polycone_log,
+                      experimentalHall_phys,false,0);
+
+    std::vector<G4double> tempZ, tempInner,tempOuter;
+
+    const double rplanet = 25*cm;
+    
+    for(int j=0; j<9;j++){
+      tempZ.push_back((2-0.1*j)*rplanet);
+      tempInner.push_back((2.5-sqrt(1-((1.9-0.1*j)*(1.9-0.1*j))/4)*2.5)*rplanet);
+      tempOuter.push_back((2.5+sqrt(1-((1.9-0.1*j)*(1.9-0.1*j))/4)*2.5)*rplanet);
+    }
+    for(int j=0;j<23;j++){
+      tempZ.push_back((1.1-0.1*j)*rplanet);
+      tempInner.push_back((sqrt(1-((1.1-0.1*j)*(1.1-0.1*j))/(1.2*1.2))*1.2)*rplanet);
+      tempOuter.push_back((2.5+sqrt(1-((1.1-0.1*j)*(1.1-0.1*j))/4)*2.5)*rplanet);
+    }
+    for(int j=0; j<9;j++){
+      tempZ.push_back((-1.1-0.1*j)*rplanet);
+      tempInner.push_back((2.5-sqrt(1-((1.1+0.1*j)*(1.1+0.1*j))/4)*2.5)*rplanet);
+      tempOuter.push_back((2.5+sqrt(1-((1.1+0.1*j)*(1.1+0.1*j))/4)*2.5)*rplanet);
+    }
+    G4double rInner[41],rOuter[41],zPlane[41];
+    for(int i=0;i<41;i++){
+      rInner[i]=tempInner[i];
+      rOuter[i]=tempOuter[i];
+      zPlane[i]=-tempZ[i];
+      if (verbosity) G4cout << i << ' ' << zPlane[i] << ' ' << rInner[i] << ' ' << rOuter[i] << G4endl;
+    }
+    G4double R[82], Z[82];
+    for(int i=0;i<41;i++){
+      Z[i] = tempZ[i];
+      Z[81-i] = Z[i];
+      R[i] = tempInner[i];
+      R[81-i] = tempOuter[i];
+    }
+    for(int i=0;i<82;i++){
+      if (verbosity) G4cout << i << ' ' << Z[i] << ' ' << R[i] << G4endl;
+    }
+
+    G4Polycone* VanAllenBelt = new
+    G4Polycone("VanAllenBelt",0,2*pi,41,zPlane,rInner,rOuter);
+//    G4Polycone("VanAllenBelt",0,twopi,82,R,Z);
+    G4LogicalVolume* logicVanAllenBelt = new
+//    G4LogicalVolume(VanAllenBelt,Vacuum,"VanAllenBelt",0,0,0);
+    G4LogicalVolume(VanAllenBelt,Ar,"VanAllenBelt",0,0,0);
+
+    //logicVanAllenBelt->SetVisAttributes(VisAttInvisible);
+    //logicVanAllenBelt->SetUserLimits(theMagnetosphereUserLimits);
+    logicVanAllenBelt->SetVisAttributes(polycone_atts);
+
+//    G4VPhysicalVolume* physiVanAllenBelt= new
+//    G4PVPlacement(0,G4ThreeVector(),"VanAllenBeltPV",logicVanAllenBelt,physiMagnetosphere,false,0);
+//    G4PVPlacement(0,G4ThreeVector(600.*cm,400.*cm,0),"VanAllenBeltPV",logicVanAllenBelt,experimentalHall_phys,false,0);
+    new G4PVPlacement(G4Transform3D(rm,G4ThreeVector(600.*cm,400.*cm,0)),
+                      "Polycone_Test", logicVanAllenBelt,
+                      experimentalHall_phys,false,0);
+
+
   }
 
   //-------------------------------------------- Orb
@@ -887,92 +946,119 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
        "anotherTwistedTrd-phys", aLog, experimentalHall_phys,false,0);
   }
 
-  aSolid = new G4Paraboloid("paraboloid",20.*cm,5.*cm,35.*cm);
-  aLog = new G4LogicalVolume(aSolid,Ar,"paraboloid-log");
-  new G4PVPlacement
+  if (volumeSelection["G4Paraboloid"]) {
+    aSolid = new G4Paraboloid("paraboloid",20.*cm,5.*cm,35.*cm);
+    aLog = new G4LogicalVolume(aSolid,Ar,"paraboloid-log");
+    new G4PVPlacement
     (G4Translate3D(G4ThreeVector(-200.*cm,-400.*cm,0.)),
-       "paraboloid-phys", aLog, experimentalHall_phys,false,0);
+     "paraboloid-phys", aLog, experimentalHall_phys,false,0);
+  }
 
-  //--- Create a simple box using G4GenericTrap and make a Boolean operation
-  std::vector<G4TwoVector> vertices2; 
-  vertices2.push_back( G4TwoVector( 50.*cm, 50.*cm) );
-  vertices2.push_back( G4TwoVector( 50.*cm,-50.*cm) );
-  vertices2.push_back( G4TwoVector(-50.*cm,-50.*cm) );
-  vertices2.push_back( G4TwoVector(-50.*cm, 50.*cm) );
-  vertices2.push_back( G4TwoVector( 50.*cm, 50.*cm) );
-  vertices2.push_back( G4TwoVector( 50.*cm,-50.*cm) );
-  vertices2.push_back( G4TwoVector(-50.*cm,-50.*cm) );
-  vertices2.push_back( G4TwoVector(-50.*cm, 50.*cm) );
-  G4VSolid* testTrap = new G4GenericTrap( "TestTrap", 100.*cm, vertices2 );
-  G4LogicalVolume* testTrap_log =
+  if (volumeSelection["G4GenericTrap"]) {
+    //--- Create a simple box using G4GenericTrap and make a Boolean operation
+    std::vector<G4TwoVector> vertices2;
+    vertices2.push_back( G4TwoVector( 50.*cm, 50.*cm) );
+    vertices2.push_back( G4TwoVector( 50.*cm,-50.*cm) );
+    vertices2.push_back( G4TwoVector(-50.*cm,-50.*cm) );
+    vertices2.push_back( G4TwoVector(-50.*cm, 50.*cm) );
+    vertices2.push_back( G4TwoVector( 50.*cm, 50.*cm) );
+    vertices2.push_back( G4TwoVector( 50.*cm,-50.*cm) );
+    vertices2.push_back( G4TwoVector(-50.*cm,-50.*cm) );
+    vertices2.push_back( G4TwoVector(-50.*cm, 50.*cm) );
+    G4VSolid* testTrap = new G4GenericTrap( "TestTrap", 100.*cm, vertices2 );
+    G4LogicalVolume* testTrap_log =
     new G4LogicalVolume( testTrap, Ar, "TestTrap-log" );
-  new G4PVPlacement
+    new G4PVPlacement
     (G4Translate3D(G4ThreeVector(600.*cm,-300.*cm,0.)),
-       "TestTrapCut-phys", testTrap_log, experimentalHall_phys, false, 0 );
+     "TestTrapCut-phys", testTrap_log, experimentalHall_phys, false, 0 );
 
-  // Boolean subtraction
-  G4VSolid* testCut = new G4Box( "TestCut", 10.*cm, 10.*cm, 10.*cm);
-  G4VSolid* testTrapCut
+    // Boolean subtraction
+    G4VSolid* testCut = new G4Box( "TestCut", 10.*cm, 10.*cm, 10.*cm);
+    G4VSolid* testTrapCut
     = new G4SubtractionSolid( "TestTrapCut", testTrap, testCut,
-			      G4Translate3D(50.*cm, 50.*cm, 100.*cm) );
-  G4LogicalVolume* testTrapCut_log =
+                             G4Translate3D(50.*cm, 50.*cm, 100.*cm) );
+    G4LogicalVolume* testTrapCut_log =
     new G4LogicalVolume( testTrapCut, Ar, "TestTrapCut-log" );
-  new G4PVPlacement
+    new G4PVPlacement
     (G4Translate3D(G4ThreeVector(800.*cm,-300.*cm,0.)),
-       "TestTrapCut-phys", testTrapCut_log, experimentalHall_phys, false, 0 );
+     "TestTrapCut-phys", testTrapCut_log, experimentalHall_phys, false, 0 );
+  }
 
-  //--- Create a simple tessellated solid
-  G4double targetSize = 100*cm ;
-  G4TriangularFacet *facet1 = new
-  G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
-                     G4ThreeVector(+targetSize,-targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,+targetSize),
-                     ABSOLUTE);
-  G4TriangularFacet *facet2 = new
-  G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
-                     G4ThreeVector(+targetSize,+targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,+targetSize),
-                     ABSOLUTE);
-  G4TriangularFacet *facet3 = new
-  G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
-                     G4ThreeVector(-targetSize,+targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,+targetSize),
-                     ABSOLUTE);
-  G4TriangularFacet *facet4 = new
-  G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
-                     G4ThreeVector(-targetSize,-targetSize,        0.0),
-                     G4ThreeVector(        0.0,        0.0,+targetSize),
-                     ABSOLUTE);
-  G4QuadrangularFacet *facet5 = new
-  G4QuadrangularFacet (G4ThreeVector(-targetSize,-targetSize,      0.0),
-                       G4ThreeVector(-targetSize,+targetSize,      0.0),
-                       G4ThreeVector(+targetSize,+targetSize,      0.0),
-                       G4ThreeVector(+targetSize,-targetSize,      0.0),
+  if (volumeSelection["Simple_tessellated"]) {
+    //--- Create a simple tessellated solid
+    G4double targetSize = 100*cm ;
+    G4TriangularFacet *facet1 = new
+    G4TriangularFacet (G4ThreeVector(-targetSize,-targetSize,        0.0),
+                       G4ThreeVector(+targetSize,-targetSize,        0.0),
+                       G4ThreeVector(        0.0,        0.0,+targetSize),
                        ABSOLUTE);
-  G4TessellatedSolid* testTess = new G4TessellatedSolid("TestTess");
-  testTess->AddFacet(facet1);
-  testTess->AddFacet(facet2);
-  testTess->AddFacet(facet3);
-  testTess->AddFacet(facet4);
-  testTess->AddFacet(facet5);
-  testTess->SetSolidClosed(true);
-  G4LogicalVolume* testTess_log =
+    G4TriangularFacet *facet2 = new
+    G4TriangularFacet (G4ThreeVector(+targetSize,-targetSize,        0.0),
+                       G4ThreeVector(+targetSize,+targetSize,        0.0),
+                       G4ThreeVector(        0.0,        0.0,+targetSize),
+                       ABSOLUTE);
+    G4TriangularFacet *facet3 = new
+    G4TriangularFacet (G4ThreeVector(+targetSize,+targetSize,        0.0),
+                       G4ThreeVector(-targetSize,+targetSize,        0.0),
+                       G4ThreeVector(        0.0,        0.0,+targetSize),
+                       ABSOLUTE);
+    G4TriangularFacet *facet4 = new
+    G4TriangularFacet (G4ThreeVector(-targetSize,+targetSize,        0.0),
+                       G4ThreeVector(-targetSize,-targetSize,        0.0),
+                       G4ThreeVector(        0.0,        0.0,+targetSize),
+                       ABSOLUTE);
+    G4QuadrangularFacet *facet5 = new
+    G4QuadrangularFacet (G4ThreeVector(-targetSize,-targetSize,      0.0),
+                         G4ThreeVector(-targetSize,+targetSize,      0.0),
+                         G4ThreeVector(+targetSize,+targetSize,      0.0),
+                         G4ThreeVector(+targetSize,-targetSize,      0.0),
+                         ABSOLUTE);
+    G4TessellatedSolid* testTess = new G4TessellatedSolid("TestTess");
+    testTess->AddFacet(facet1);
+    testTess->AddFacet(facet2);
+    testTess->AddFacet(facet3);
+    testTess->AddFacet(facet4);
+    testTess->AddFacet(facet5);
+    testTess->SetSolidClosed(true);
+    G4LogicalVolume* testTess_log =
     new G4LogicalVolume( testTess, Ar, "TestTess-log" );
-  new G4PVPlacement
+    new G4PVPlacement
     (G4Translate3D(G4ThreeVector(1000.*cm,-300.*cm,0.)),
-       "TestTessCut-phys", testTess_log, experimentalHall_phys, false, 0 );
+     "TestTessCut-phys", testTess_log, experimentalHall_phys, false, 0 );
 
-  // Boolean subtraction
-  G4VSolid* testCut1 = new G4Box( "TestCut", 100.*cm, 100.*cm, 100.*cm);
-  G4VSolid* testTessCut
+    // Boolean subtraction
+    G4VSolid* testCut1 = new G4Box( "TestCut", 100.*cm, 100.*cm, 100.*cm);
+    G4VSolid* testTessCut
     = new G4SubtractionSolid( "TestTessCut", testTess, testCut1,
-			      G4Translate3D(0., 0., 150.*cm) );
-  G4LogicalVolume* testTessCut_log =
+                             G4Translate3D(0., 0., 150.*cm) );
+    G4LogicalVolume* testTessCut_log =
     new G4LogicalVolume( testTessCut, Ar, "TestTessCut-log" );
-  new G4PVPlacement
+    new G4PVPlacement
     (G4Translate3D(G4ThreeVector(1300.*cm,-300.*cm,0.)),
-       "TestTessCut-phys", testTessCut_log, experimentalHall_phys, false, 0 );
+     "TestTessCut-phys", testTessCut_log, experimentalHall_phys, false, 0 );
+  }
 
+  if (volumeSelection["Simple_union"]) {
+    G4Box *target1Box= new G4Box("Target1_solid",7.*cm, 5.*cm, 10.*cm);
+    G4VSolid* cylinder = new G4Tubs("Cylinder", // Name
+                                    0.*cm,
+                                    20.*cm,
+                                    6.5*cm,
+                                    0.*deg,
+                                    360.*deg);
+    G4UnionSolid* volume1 =
+      new G4UnionSolid("Target1_solid_and_Cylinder ",target1Box,cylinder);
+    G4LogicalVolume *volume1Logical =
+      new G4LogicalVolume(volume1,Ar, "Target1_solid_and_Cylinder", 0, 0, 0);
+    new G4PVPlacement(0,
+                      G4ThreeVector(1100.*cm,200.*cm,0.*cm),
+                      volume1Logical,
+                      "Target1_solid_and_Cylinder",
+                      experimentalHall_log,
+                      false,
+                      0);
+  }
+  
   //-------------------------------------------- return
   return experimentalHall_phys;
 }

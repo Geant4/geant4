@@ -1,0 +1,135 @@
+# ______CHECK VIS/SCENE/ADD COMMANDS___________
+# /vis/scene/add/arrow
+# /vis/scene/add/arrow2D
+# /vis/scene/add/axes
+# /vis/scene/add/date
+# /vis/scene/add/digis
+# /vis/scene/add/eventID
+# /vis/scene/add/frame
+# /vis/scene/add/ghosts
+# /vis/scene/add/hits
+# /vis/scene/add/line
+# /vis/scene/add/line2D
+# /vis/scene/add/logicalVolume
+# /vis/scene/add/logo
+# /vis/scene/add/logo2D
+# /vis/scene/add/psHits
+# /vis/scene/add/scale
+# /vis/scene/add/text
+# /vis/scene/add/text2D
+# /vis/scene/add/trajectories
+# /vis/scene/add/userAction
+# /vis/scene/add/volume
+
+# add arrow
+/vis/set/colour .8 .6 .1
+/vis/scene/add/arrow 0 0 0 10 10 10
+
+# add arrow2d
+/vis/set/colour .8 .6 10
+/vis/scene/add/arrow2D -.5 -.5 .9 .9
+
+# add arrow2d + change color
+/vis/set/colour .1 .9 .1
+/vis/scene/add/arrow2D -.2 -.5 .5 .9
+
+# add axes
+/vis/scene/add/axes 5 0 0 9 m auto
+
+# add date + left
+#/vis/scene/add/date 10 -.7 -.9 left
+
+# add date + right + change color
+#/vis/set/textColour .8 .1 .1
+#/vis/scene/add/date 10 -.7 -.9 right
+
+# add digis
+/vis/scene/add/digis
+
+# add eventID
+/vis/scene/add/eventID
+
+# add frame
+/vis/scene/add/frame 0.9
+
+# add frame + change color
+/vis/set/textColour .7 .1 .7
+/vis/scene/add/frame 0.85
+
+# add frame + change color
+# /vis/scene/add/ghosts
+
+# add frame + change color
+/vis/scene/add/hits
+
+# add line + change line color
+/vis/set/colour .9 0 0
+/vis/scene/add/line 14 0 20 10 0 20
+
+# add line2D
+/vis/scene/add/line2D .2 .2 .6 .8
+
+# addlogicalVolume
+# /vis/scene/add/addlogicalVolume
+
+# add logo auto
+/vis/scene/add/logo 13 m z .1 .4 .5 auto
+
+# add logo manual
+/vis/scene/add/logo 13 m y .4 .0 .5 manual 1 1 0.8 m
+
+# add logo 2d left + change text color
+/vis/set/textColour .1 .9 .1
+/vis/scene/add/logo2D 10 -.5 -.5 left
+
+# add logo 2d left + change text color + layout
+/vis/set/textColour .1 .8 .1
+/vis/set/textLayout right
+/vis/scene/add/logo2D 12 -.5 -.5 left
+
+# add psHits
+/vis/scene/add/psHits
+
+# add scale auto
+/vis/scene/add/scale 4 m z .8 .6 .1 auto 
+
+# add scale manual
+/vis/scene/add/scale 10 m y .9 .4 .1 manual -4 1 5
+
+# add text center
+/vis/set/textLayout center
+/vis/scene/add/text 1 0.5 3 m 20 1 0 c at(1,0.5,3)
+
+# add text left
+/vis/set/textLayout left
+/vis/scene/add/text 1 0.5 3 m 22 1 0 c 2d-left
+
+# add text right
+/vis/set/textLayout right
+/vis/scene/add/text 1 0.5 3 m 24 1 0 c 2d-right
+
+# change text color
+/vis/set/textColour 0 1 0.2
+/vis/scene/add/text 1 0.6 3 m 24 1 0 c light-blue
+
+# add text2d center
+/vis/set/textLayout center
+/vis/scene/add/text2D 0.2 0.5 16 1 0 c at(0.2,0.5)
+
+# add text2d left
+/vis/set/textLayout left
+/vis/scene/add/text2D 0.2 0.5 18 1 0 c 2d-left
+
+# add text2d right
+/vis/set/textLayout right
+/vis/scene/add/text2D 0.2 0.5 14 1 0 c 2d-right
+
+# add trajectories
+# /vis/scene/add/trajectories
+
+# add userAction
+/vis/scene/add/userAction
+
+# add volume
+/vis/scene/add/volume
+/vis/ogl/printEPS

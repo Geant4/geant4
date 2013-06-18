@@ -34,7 +34,7 @@
 
 #include "globals.hh"
 
-#include "QGSP_BERT.hh"
+#include "QBBC.hh"
 #include "Tst202DetectorConstruction.hh"
 #include "Tst202PrimaryGeneratorAction.hh"
 
@@ -57,7 +57,7 @@ int main (int argc, char** argv) {
 
   // mandatory initialization classes
   runManager -> SetUserInitialization (new Tst202DetectorConstruction);
-  runManager -> SetUserInitialization (new QGSP_BERT);
+  runManager -> SetUserInitialization (new QBBC);
 
   // User Action classes.
   runManager -> SetUserAction (new Tst202PrimaryGeneratorAction);

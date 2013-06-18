@@ -1,0 +1,34 @@
+# ______CHECK VIS/SET COMMANDS___________
+# /vis/set/colour
+# /vis/set/lineWidth
+# /vis/set/textColour
+# /vis/set/textLayout
+# /vis/set/touchable
+
+# add arrow2d + change color
+/vis/set/colour .1 .9 .1
+/vis/scene/add/arrow2D -.2 -.5 .5 .9
+
+# add arrow2d + change lineWidth
+/vis/set/lineWidth 4
+/vis/scene/add/arrow2D -.2 -.5 .4 .8
+
+# change text color
+/vis/set/textColour 0 1 0.2
+/vis/scene/add/text 1 0.6 3 m 24 1 0 c light-blue
+
+# add logo 2d left + change text layout
+/vis/set/textLayout right
+/vis/scene/add/logo2D 12 -.5 -.5 left
+
+# add text left
+/vis/set/textLayout left
+/vis/scene/add/text 1 0.5 3 m 22 1 0 c 2d-left
+
+# add text right
+/vis/set/textLayout center
+/vis/scene/add/text 1 0.5 3 m 24 1 0 c 2d-right
+
+# set touchables
+/vis/set/touchable World 0 Envelope 0 Shape1 0
+/vis/ogl/printEPS

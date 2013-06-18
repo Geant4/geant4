@@ -4,6 +4,31 @@ $Id:$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+28th May 2013  John Allison (test202-V09-06-03)
+- CMakeLists.txt: Curtailed to prevent, for now, launching into the test system.
+
+28th May 2013  John Allison (test202-V09-06-02)
+- test202.cc: Changed "QGSP_BERT" to "QBBC" (following B1).
+  o Note: For vis testing, the physics list is irrelevant, but we need
+    to be sure we are not using a deprecated physics list so that we 
+    can compile and test safely.
+- Tst202DetectorConstruction.cc:
+  o Incorporated "Extra_placements" in "Tubes_etc".
+  o Added "G4Paraboloid", "G4GenericTrap", "Simple_tessellated",
+    "Simple_union".
+  o Revamped "Polycone".
+  o Brought new volumes, "G4Paraboloid", "G4GenericTrap" (including a
+    boolean subtraction), "Simple_tessellated" and "Simple_union", under
+    control of /test202/select.
+- vis.mac: Took account of changes in Tst202DetectorConstruction.cc.
+- CMakeLists.txt: Added run0.mac to files copied to test location.
+
+15th February 2013 Garnier Laurent
+- Add xvfb file to control generation of images without graphic card
+
+5th February 2013 Garnier Laurent (test202-V09-06-01)
+- New tests without any graphical card with xvfb-run. Will be removed if it failed
+
 29th November 2012  Gabriele Cosmo (test202-V09-05-08)
 - Exclude changes introduced in tags -05 and -06 which fail in testing!
 

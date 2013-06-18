@@ -1,0 +1,13 @@
+/control/verbose 2
+/vis/verbose warnings
+
+/vis/open OGLIXm
+
+/vis/drawVolume
+/vis/ogl/set/printFilename OGLIXm-output/visSceneAdd
+/control/execute testVisSceneAdd.mac
+
+/vis/open OGLIXm
+/vis/drawVolume
+/vis/ogl/set/printFilename OGLIXm-output/visSet
+/control/execute testVisSet.mac
