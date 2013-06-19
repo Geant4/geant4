@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+19 June 13: V.Ivanchenko (emstand-V09-06-51)
+- correct branch tag
+
 18 June 13: V.Ivanchenko (emstand-V09-06-50)
 - G4WaterStopping - enable spline after vector with data is filled -
     needed after G4PhysicsVector modification
