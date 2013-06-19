@@ -41,6 +41,7 @@
 // 08.04.05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 26.07.09 Fixed logic to work with several materials (V.Ivantchenko)
 // 21.11.10 V. Grichine verbose flag for protons and G4PAYySection to check sandia table 
+// 12.06.13 V. Grichine Bug fixed in SampleSecondaries for scaled Tkin (fMass -> proton_mass_c2)
 //
 
 #include "G4PAIModel.hh"
@@ -486,7 +487,7 @@ G4double G4PAIModel::ComputeDEDXPerVolume(const G4Material*,
   //G4double cut = std::min(MaxSecondaryEnergy(p, kineticEnergy), cutEnergy);
   G4double cut = cutEnergy;
 
-  G4double massRatio  = fMass/p->GetPDGMass();
+  G4double massRatio  = proton_mass_c2/p->GetPDGMass(); //
   G4double scaledTkin = kineticEnergy*massRatio;
   G4double charge     = p->GetPDGCharge();
   G4double charge2    = charge*charge;
@@ -531,7 +532,7 @@ G4double G4PAIModel::CrossSectionPerVolume( const G4Material*,
   G4int iTkin,iPlace;
   G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   if(tmax <= cutEnergy) return 0.0;
-  G4double massRatio  = fMass/p->GetPDGMass();
+  G4double massRatio  = proton_mass_c2/p->GetPDGMass();
   G4double scaledTkin = kineticEnergy*massRatio;
   G4double charge     = p->GetPDGCharge();
   G4double charge2    = charge*charge, cross, cross1, cross2;
@@ -599,7 +600,7 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4double particleMass  = dp->GetMass();
   G4double kineticEnergy = dp->GetKineticEnergy();
 
-  G4double massRatio     = fMass/particleMass;
+  G4double massRatio     = proton_mass_c2/particleMass;
   G4double scaledTkin    = kineticEnergy*massRatio;
   G4double totalEnergy   = kineticEnergy + particleMass;
   G4double pSquare       = kineticEnergy*(totalEnergy+particleMass);
@@ -790,7 +791,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   size_t jMat = 0;
   for(;jMat < fMaterialCutsCoupleVector.size(); ++jMat )
   {
-    if( material == fMaterialCutsCoupleVector[jMat]->GetMaterial() ) break;
+    if( material->GetName() == fMaterialCutsCoupleVector[jMat]->GetMaterial()->GetName() ) break;
   }
   if(jMat == fMaterialCutsCoupleVector.size()) return 0.0;
 
@@ -807,7 +808,7 @@ G4double G4PAIModel::SampleFluctuations( const G4Material* material,
   G4double position, E1, E2, W1, W2, W, dNdxCut1, dNdxCut2, meanNumber;
   G4bool numb = true;
   G4double Tkin       = aParticle->GetKineticEnergy() ;
-  G4double MassRatio  = fMass/aParticle->GetDefinition()->GetPDGMass() ;
+  G4double MassRatio  = proton_mass_c2/aParticle->GetDefinition()->GetPDGMass() ;
   G4double charge     = aParticle->GetDefinition()->GetPDGCharge() ;
   charge2             = charge*charge ;
   G4double TkinScaled = Tkin*MassRatio ;

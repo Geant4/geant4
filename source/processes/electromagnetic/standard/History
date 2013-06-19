@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+18 June 13: V.Ivanchenko (emstand-V09-06-50)
+- G4WaterStopping - enable spline after vector with data is filled -
+    needed after G4PhysicsVector modification
+
 15 June 13: V.Ivanchenko (emstand-V09-06-49)
 - Return PAI modifications to the vesrsion of emstand-V09-06-45
 - G4eCoulombScatteringModel - do not use ElementSelectors for ions

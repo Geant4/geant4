@@ -87,11 +87,11 @@ void G4WaterStopping::AddData(G4double* energy, G4double* stoppower,
 			      G4double factor)
 {
   G4LPhysicsFreeVector* pv = new G4LPhysicsFreeVector(53,energy[0]*MeV,energy[52]*MeV);
-  pv->SetSpline(spline);
   dedx.push_back(pv);
   for(G4int i=0; i<53; ++i) {
     pv->PutValues(i,energy[i]*MeV,stoppower[i]*factor);
   }
+  pv->SetSpline(spline);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
