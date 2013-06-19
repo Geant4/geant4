@@ -238,8 +238,6 @@ private:
 
   
   G4double           ThetaHPGe;
-  G4double           ThetaDia1;
-  G4double           ThetaDia3;
   
   G4double           DistDe;
   G4double           distScreen;

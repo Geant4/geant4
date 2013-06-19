@@ -88,7 +88,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 
   // chosing Geometry setup
 
-  G4int geometryNumber; 
+  G4int geometryNumber = 0; 
 
   if (argc == 3){
     geometryNumber =  atoi(argv[2]);
