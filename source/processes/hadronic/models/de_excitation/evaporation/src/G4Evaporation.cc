@@ -80,6 +80,7 @@ G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
   SetParameters();
   InitialiseEvaporation();
+  theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
 }
 
 G4Evaporation::~G4Evaporation()
