@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 June 13: V.Ivant (emutils-V09-06-40)
+- G4LossTableManager - attempt to fix Coverity report
+
+19 June 13: V.Ivant (emutils-V09-06-39)
+- G4VEnergyLossProcess - fixed Coverity report
+
 17 June 13: V.Ivant (emutils-V09-06-38)
 - G4LossTableManager - return back ThreadLocal partern for the 
     singleton (it was correct)

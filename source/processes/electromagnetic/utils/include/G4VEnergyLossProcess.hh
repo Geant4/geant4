@@ -1006,8 +1006,6 @@ void G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2)
   dRoverRange = v1;
   finalRange = v2;
   if (dRoverRange > 0.999) { dRoverRange = 1.0; }
-  currentCouple = 0;
-  mfpKinEnergy  = DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

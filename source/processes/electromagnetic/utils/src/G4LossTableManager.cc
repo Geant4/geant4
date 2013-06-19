@@ -942,9 +942,9 @@ void G4LossTableManager::SetIntegral(G4bool val)
 {
   integral = val;
   integralActive = true;
-  for(G4int i=0; i<n_loss; ++i) {
-    if(loss_vector[i]) { loss_vector[i]->SetIntegral(val); }
-  }
+  //for(G4int i=0; i<n_loss; ++i) {
+  //  if(loss_vector[i]) { loss_vector[i]->SetIntegral(val); }
+  //}
   size_t emp = emp_vector.size();
   for (size_t k=0; k<emp; ++k) {
     if(emp_vector[k]) { emp_vector[k]->SetIntegral(val); }
@@ -977,9 +977,9 @@ void G4LossTableManager::SetMinEnergy(G4double val)
 {
   minEnergyActive = true;
   minKinEnergy = val;
-  for(G4int i=0; i<n_loss; ++i) {
-    if(loss_vector[i]) { loss_vector[i]->SetMinKinEnergy(val); }
-  }
+  //for(G4int i=0; i<n_loss; ++i) {
+  //  if(loss_vector[i]) { loss_vector[i]->SetMinKinEnergy(val); }
+  // }
   size_t emp = emp_vector.size();
   for (size_t k=0; k<emp; ++k) {
     if(emp_vector[k]) { emp_vector[k]->SetMinKinEnergy(val); }
@@ -992,9 +992,9 @@ void G4LossTableManager::SetMaxEnergy(G4double val)
 {
   maxEnergyActive = true;
   maxKinEnergy = val;
-  for(G4int i=0; i<n_loss; ++i) {
-    if(loss_vector[i]) { loss_vector[i]->SetMaxKinEnergy(val); }
-  }
+  //for(G4int i=0; i<n_loss; ++i) {
+  //  if(loss_vector[i]) { loss_vector[i]->SetMaxKinEnergy(val); }
+  //}
   size_t emp = emp_vector.size();
   for (size_t k=0; k<emp; ++k) {
     if(emp_vector[k]) { emp_vector[k]->SetMaxKinEnergy(val); }
@@ -1067,9 +1067,9 @@ G4int G4LossTableManager::GetNumberOfBinsPerDecade() const
 void G4LossTableManager::SetVerbose(G4int val)
 {
   verbose = val;
-  for(G4int i=0; i<n_loss; ++i) {
-    if(loss_vector[i]) { loss_vector[i]->SetVerboseLevel(val); }
-  }
+  //for(G4int i=0; i<n_loss; ++i) {
+  //  if(loss_vector[i]) { loss_vector[i]->SetVerboseLevel(val); }
+  //}
   size_t msc = msc_vector.size();
   for (size_t j=0; j<msc; ++j) {
     if(msc_vector[j]) { msc_vector[j]->SetVerboseLevel(val); }
@@ -1093,9 +1093,9 @@ void G4LossTableManager::SetStepFunction(G4double v1, G4double v2)
   stepFunctionActive = true;
   maxRangeVariation = v1;
   maxFinalStep = v2;
-  for(G4int i=0; i<n_loss; ++i) {
-    if(loss_vector[i]) { loss_vector[i]->SetStepFunction(v1, v2); }
-  }
+  //for(G4int i=0; i<n_loss; ++i) {
+  //  if(loss_vector[i]) { loss_vector[i]->SetStepFunction(v1, v2); }
+  //}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
