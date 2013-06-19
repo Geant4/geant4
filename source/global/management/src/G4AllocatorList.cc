@@ -81,10 +81,12 @@ void G4AllocatorList::Destroy(G4int nStat)
     (*itr)->ResetStorage();
     delete *itr; 
   }
+#if (defined(G4VERBOSE) && !defined(G4MULTITHREADED))
   G4cout << "Number of memory pools allocated: " << Size()
          << "; of which, static: " << i
          << "; dynamic pools deleted: " << j << G4endl;
   G4cout << "Total memory freed: " << mem/1048576 << " Mb" << G4endl;
+#endif
   fList.clear();
 }
 
