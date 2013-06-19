@@ -133,6 +133,8 @@
 //		Check zone argument to inverseMFP() to ensure within range.
 // 20130611  M. Kelsey -- Undo "spath<=path" change (20130511), replace with
 //		explicit check on spath==0.
+// 20130619  A. Ribon -- Fixed reproducibility problem in the method
+//              generateParticleFate
 
 #include "G4NucleiModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -852,6 +854,11 @@ generateParticleFate(G4CascadParticle& cparticle,
     outgoing_cparticles.push_back(cparticle);
 
     if (verboseLevel > 2) G4cout << " next zone \n" << cparticle << G4endl;
+
+    //A.R. 19-Jun-2013: Fixed rare cases of non-reproducibility.
+    current_nucl1 = 0;
+    current_nucl2 = 0;
+
     return;
   }	// if (npart == 1)
 
