@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+18-06-13 mma (testem4-V09-06-07)
+- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep() .
 
 07-06-13 J.Jacquemier (testem4-V09-06-06)
   -creation of analysis manager and booking histograms & ntuple
