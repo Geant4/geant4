@@ -45,6 +45,7 @@
 #include "G4INCLParticleTable.hh"
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLRandom.hh"
+#include "G4INCLPhaseSpaceDecay.hh"
 // #include <cassert>
 #include <algorithm>
 
@@ -80,7 +81,7 @@ namespace G4INCL {
         decayParticle->setNumberOfDecays(1);
         decayParticle->setPosition(c->getPosition());
         decayParticle->setEmissionTime(c->getEmissionTime());
-        decayParticle->setTableMass();
+        decayParticle->setRealMass();
 
         // Save some variables of the mother cluster
         G4double motherMass = c->getMass();
@@ -143,8 +144,8 @@ namespace G4INCL {
         decayParticle2->makeParticipant();
         decayParticle1->setNumberOfDecays(1);
         decayParticle2->setNumberOfDecays(1);
-        decayParticle1->setTableMass();
-        decayParticle2->setTableMass();
+        decayParticle1->setRealMass();
+        decayParticle2->setRealMass();
 
         // Save some variables of the mother cluster
         const G4double motherMass = c->getMass();
@@ -225,7 +226,7 @@ namespace G4INCL {
        *
        * http://root.cern.ch/root/html/TGenPhaseSpace.html#TGenPhaseSpace
        */
-      void phaseSpaceDecay(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts) {
+      void phaseSpaceDecayLegacy(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts) {
         const G4int theA = c->getA();
         const G4int theZ = c->getZ();
         const ThreeVector mom(0.0, 0.0, 0.0);
@@ -352,7 +353,7 @@ namespace G4INCL {
           c->setMass(invariantMasses.at(nSplits-iSplit-1));
 
           Particle *ejectile = new Particle(theEjectileType, mom, pos);
-          ejectile->setTableMass();
+          ejectile->setRealMass();
 
 // assert(motherMass-c->getMass()-ejectileMass>-1.e-5);
           ThreeVector momentum;
@@ -370,6 +371,85 @@ namespace G4INCL {
           decayProducts->push_back(ejectile);
         }
 // assert(std::abs(c->getRealMass()-c->getMass())<1.e-3);
+        c->setExcitationEnergy(0.);
+      }
+
+      /** \brief Disassembles unbound nuclei using the phase-space model
+       *
+       * This implementation uses the Kopylov algorithm, defined in namespace
+       * PhaseSpaceDecay.
+       */
+      void phaseSpaceDecay(Cluster * const c, ClusterDecayType theDecayMode, ParticleList *decayProducts) {
+        const G4int theA = c->getA();
+        const G4int theZ = c->getZ();
+        const ThreeVector mom(0.0, 0.0, 0.0);
+        const ThreeVector pos = c->getPosition();
+
+        G4int theZStep;
+        ParticleType theEjectileType;
+        switch(theDecayMode) {
+          case ProtonUnbound:
+            theZStep = 1;
+            theEjectileType = Proton;
+            break;
+          case NeutronUnbound:
+            theZStep = 0;
+            theEjectileType = Neutron;
+            break;
+          default:
+            INCL_ERROR("Unrecognized cluster-decay mode in phase-space decay: " << theDecayMode << std::endl
+                  << c->print());
+            return;
+        }
+
+        // Find the daughter cluster (first cluster which is not
+        // proton/neutron-unbound, in the sense of the table)
+        G4int finalDaughterZ, finalDaughterA;
+        if(theZ<ParticleTable::clusterTableZSize && theA<ParticleTable::clusterTableASize) {
+          finalDaughterZ=theZ;
+          finalDaughterA=theA;
+          while(clusterDecayMode[finalDaughterZ][finalDaughterA]==theDecayMode) {
+            finalDaughterA--;
+            finalDaughterZ -= theZStep;
+          }
+        } else {
+          finalDaughterA = 1;
+          if(theDecayMode==ProtonUnbound)
+            finalDaughterZ = 1;
+          else
+            finalDaughterZ = 0;
+        }
+// assert(finalDaughterZ<=theZ && finalDaughterA<theA && finalDaughterA>0 && finalDaughterZ>=0);
+
+        // Compute the available decay energy
+        const G4int nSplits = theA-finalDaughterA;
+        // c->getMass() can possibly contain some excitation energy, too
+        const G4double availableEnergy = c->getMass();
+
+        // Save the boost vector for the cluster
+        const ThreeVector boostVector = - c->boostVector();
+
+        // Create a list of decay products
+        ParticleList products;
+        c->setA(finalDaughterA);
+        c->setZ(finalDaughterZ);
+        c->setRealMass();
+        c->setMomentum(ThreeVector());
+        c->adjustEnergyFromMomentum();
+        products.push_back(c);
+        for(G4int i=0; i<nSplits; ++i) {
+          Particle *ejectile = new Particle(theEjectileType, mom, pos);
+          ejectile->setRealMass();
+          products.push_back(ejectile);
+        }
+
+        G4INCL::PhaseSpaceDecay::decay(availableEnergy, boostVector, products);
+
+        // Copy decay products in the output list (but skip the residue)
+        ParticleList::iterator productsIter = products.begin();
+        std::advance(productsIter, 1);
+        decayProducts->insert(decayProducts->end(), productsIter, products.end());
+
         c->setExcitationEnergy(0.);
       }
 
@@ -392,6 +472,8 @@ namespace G4INCL {
             default:
               INCL_ERROR("Unrecognized cluster-decay mode: " << theDecayMode << std::endl
                     << c->print());
+              return;
+              break;
             case StableCluster:
               // For stable clusters, just return
               return;
@@ -434,52 +516,52 @@ namespace G4INCL {
 
     } // namespace
 
-      G4bool isStable(Cluster const * const c) {
-        const G4int Z = c->getZ();
-        const G4int A = c->getA();
-        return (clusterDecayMode[Z][A]==StableCluster);
-      }
-
-  /** \brief Table for cluster decays
-   *
-   * Definition of "Stable": halflife > 1 ms
-   *
-   * These table includes decay data for clusters that INCL presently does
-   * not produce. It can't hurt.
-   *
-   * Unphysical nuclides (A<Z) are marked as stable, but should never be
-   * produced by INCL. If you find them in the output, something is fishy.
-   */
-  const ClusterDecayType clusterDecayMode[ParticleTable::clusterTableZSize][ParticleTable::clusterTableASize] =
-  {
-    /*                       A = 0              1               2               3               4                5               6                7               8               9             10             11             12 */
-    /* Z =  0 */    {StableCluster, StableCluster,   NeutronDecay, NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound, NeutronUnbound},
-    /* Z =  1 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,   NeutronDecay, TwoNeutronDecay,   NeutronDecay, TwoNeutronDecay, NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound, NeutronUnbound},
-    /* Z =  2 */    {StableCluster, StableCluster,    ProtonDecay,  StableCluster,  StableCluster,    NeutronDecay,  StableCluster,    NeutronDecay,  StableCluster,   NeutronDecay, TwoNeutronDecay, NeutronUnbound, NeutronUnbound},
-    /* Z =  3 */    {StableCluster, StableCluster,  StableCluster,  ProtonUnbound,    ProtonDecay,     ProtonDecay,  StableCluster,   StableCluster,  StableCluster,  StableCluster,    NeutronDecay,  StableCluster,   NeutronDecay},
-    /* Z =  4 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  ProtonUnbound,     ProtonDecay, TwoProtonDecay,   StableCluster,     AlphaDecay,  StableCluster,   StableCluster,  StableCluster,  StableCluster},
-    /* Z =  5 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   ProtonUnbound, TwoProtonDecay,     ProtonDecay,  StableCluster,    ProtonDecay,   StableCluster,  StableCluster,  StableCluster},
-    /* Z =  6 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   StableCluster,  ProtonUnbound,   ProtonUnbound, TwoProtonDecay,  StableCluster,   StableCluster,  StableCluster,  StableCluster},
-    /* Z =  7 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   StableCluster,  StableCluster,   ProtonUnbound,  ProtonUnbound,  ProtonUnbound,     ProtonDecay,    ProtonDecay,  StableCluster},
-    /* Z =  8 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   StableCluster,  StableCluster,   StableCluster,  ProtonUnbound,  ProtonUnbound,   ProtonUnbound,  ProtonUnbound,    ProtonDecay}
-  };
-
-  ParticleList decay(Cluster * const c) {
-    ParticleList decayProducts;
-    recursiveDecay(c, &decayProducts);
-
-    // Correctly update the particle type
-    if(c->getA()==1) {
-// assert(c->getZ()==1 || c->getZ()==0);
-      if(c->getZ()==1)
-        c->setType(Proton);
-      else
-        c->setType(Neutron);
-      c->setTableMass();
+    G4bool isStable(Cluster const * const c) {
+      const G4int Z = c->getZ();
+      const G4int A = c->getA();
+      return (clusterDecayMode[Z][A]==StableCluster);
     }
 
-    return decayProducts;
-  }
+    /** \brief Table for cluster decays
+     *
+     * Definition of "Stable": halflife > 1 ms
+     *
+     * These table includes decay data for clusters that INCL presently does
+     * not produce. It can't hurt.
+     *
+     * Unphysical nuclides (A<Z) are marked as stable, but should never be
+     * produced by INCL. If you find them in the output, something is fishy.
+     */
+    G4ThreadLocal ClusterDecayType clusterDecayMode[ParticleTable::clusterTableZSize][ParticleTable::clusterTableASize] =
+    {
+      /*                       A = 0              1               2               3               4                5               6                7               8               9             10             11             12 */
+      /* Z =  0 */    {StableCluster, StableCluster,   NeutronDecay, NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound, NeutronUnbound},
+      /* Z =  1 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,   NeutronDecay, TwoNeutronDecay,   NeutronDecay, TwoNeutronDecay, NeutronUnbound, NeutronUnbound,  NeutronUnbound, NeutronUnbound, NeutronUnbound},
+      /* Z =  2 */    {StableCluster, StableCluster,    ProtonDecay,  StableCluster,  StableCluster,    NeutronDecay,  StableCluster,    NeutronDecay,  StableCluster,   NeutronDecay, TwoNeutronDecay, NeutronUnbound, NeutronUnbound},
+      /* Z =  3 */    {StableCluster, StableCluster,  StableCluster,  ProtonUnbound,    ProtonDecay,     ProtonDecay,  StableCluster,   StableCluster,  StableCluster,  StableCluster,    NeutronDecay,  StableCluster,   NeutronDecay},
+      /* Z =  4 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  ProtonUnbound,     ProtonDecay, TwoProtonDecay,   StableCluster,     AlphaDecay,  StableCluster,   StableCluster,  StableCluster,  StableCluster},
+      /* Z =  5 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   ProtonUnbound, TwoProtonDecay,     ProtonDecay,  StableCluster,    ProtonDecay,   StableCluster,  StableCluster,  StableCluster},
+      /* Z =  6 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   StableCluster,  ProtonUnbound,   ProtonUnbound, TwoProtonDecay,  StableCluster,   StableCluster,  StableCluster,  StableCluster},
+      /* Z =  7 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   StableCluster,  StableCluster,   ProtonUnbound,  ProtonUnbound,  ProtonUnbound,     ProtonDecay,    ProtonDecay,  StableCluster},
+      /* Z =  8 */    {StableCluster, StableCluster,  StableCluster,  StableCluster,  StableCluster,   StableCluster,  StableCluster,   StableCluster,  ProtonUnbound,  ProtonUnbound,   ProtonUnbound,  ProtonUnbound,    ProtonDecay}
+    };
+
+    ParticleList decay(Cluster * const c) {
+      ParticleList decayProducts;
+      recursiveDecay(c, &decayProducts);
+
+      // Correctly update the particle type
+      if(c->getA()==1) {
+// assert(c->getZ()==1 || c->getZ()==0);
+        if(c->getZ()==1)
+          c->setType(Proton);
+        else
+          c->setType(Neutron);
+        c->setRealMass();
+      }
+
+      return decayProducts;
+    }
 
   } // namespace ClusterDecay
 } // namespace G4INCL

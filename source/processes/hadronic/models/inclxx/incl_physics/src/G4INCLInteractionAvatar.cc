@@ -492,11 +492,13 @@ namespace G4INCL {
       theParticle->setMass(theMass);
       theParticle->setEnergy(particleEnergy + locE); // Update the energy of the particle...
       theParticle->adjustMomentumFromEnergy();
-      if(theNucleus)
+      if(theNucleus) {
         theNucleus->updatePotentialEnergy(theParticle); // ...update its potential energy...
-      if(shouldUseLocalEnergy)
-        locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // ...and recompute locE.
-      else
+        if(shouldUseLocalEnergy)
+          locE = KinematicsUtils::getLocalEnergy(theNucleus, theParticle); // ...and recompute locE.
+        else
+          locE = 0.;
+      } else
         locE = 0.;
       deltaLocE = std::abs(locE-locEOld);
     }

@@ -93,6 +93,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLNuclearPotentialConstant.hh
         G4INCLNDFModifiedHarmonicOscillator.hh
         G4INCLPauliStrict.hh
+        G4INCLPhaseSpaceDecay.hh
         G4INCLNuclearPotentialIsospin.hh
         G4INCLICoulomb.hh
         G4INCLCrossSections.hh
@@ -138,6 +139,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLPropagationAction.cc
         G4INCLNuclearDensity.cc
         G4INCLClusterDecay.cc
+        G4INCLPhaseSpaceDecay.cc
         G4INCLCoulombNonRelativistic.cc
         G4INCLTransmissionChannel.cc
         G4INCLPauliStrict.cc

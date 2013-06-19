@@ -881,11 +881,8 @@ namespace G4INCL {
       // Set the excitation energy
       theProjectileRemnant->setExcitationEnergy(anExcitationEnergy);
 
-      if(prA>1) {
-        // Set the spin
-        theProjectileRemnant->setSpin(DeJongSpin::shoot(theProjectileRemnant->getNumberStoredComponents(), prA));
-      } else
-        theProjectileRemnant->setSpin(ThreeVector());
+      // No spin!
+      theProjectileRemnant->setSpin(ThreeVector());
 
       // Set the emission time
       theProjectileRemnant->setEmissionTime(anEmissionTime);

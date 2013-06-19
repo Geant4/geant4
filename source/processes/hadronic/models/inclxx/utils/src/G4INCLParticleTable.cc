@@ -233,12 +233,14 @@ namespace G4INCL {
       /// \brief Digit names to compose IUPAC element names
       const std::string elementIUPACDigits = "nubtqphsoe";
 
-      const G4double theINCLProtonSeparationEnergy = 6.83;
-      const G4double theINCLNeutronSeparationEnergy = 6.83;
-      G4ThreadLocal G4double protonSeparationEnergy = 6.83;
-      G4ThreadLocal G4double neutronSeparationEnergy = 6.83;
+#define INCL_DEFAULT_SEPARATION_ENERGY 6.83
+      const G4double theINCLProtonSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
+      const G4double theINCLNeutronSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
+      G4ThreadLocal G4double protonSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
+      G4ThreadLocal G4double neutronSeparationEnergy = INCL_DEFAULT_SEPARATION_ENERGY;
+#undef INCL_DEFAULT_SEPARATION_ENERGY
 
-      G4ThreadLocal G4double rpCorrelationCoefficient = 1.0;
+      G4ThreadLocal G4double rpCorrelationCoefficient[UnknownParticle];
 
       G4ThreadLocal G4double neutronSkinThickness = 0.0;
       G4ThreadLocal G4double neutronSkinAdditionalDiffuseness = 0.0;
@@ -374,9 +376,18 @@ namespace G4INCL {
         return;
       }
 
-      // Initialise the r-p correlation coefficient
-      if(theConfig)
-        rpCorrelationCoefficient = theConfig->getRPCorrelationCoefficient();
+      // Initialise the r-p correlation coefficients
+      std::fill(rpCorrelationCoefficient, rpCorrelationCoefficient + UnknownParticle, 1.);
+      if(theConfig) {
+        rpCorrelationCoefficient[Proton] = theConfig->getRPCorrelationCoefficient(Proton);
+        rpCorrelationCoefficient[Neutron] = theConfig->getRPCorrelationCoefficient(Neutron);
+      }
+
+      // Initialise the neutron-skin parameters
+      if(theConfig) {
+        neutronSkinThickness = theConfig->getNeutronSkinThickness();
+        neutronSkinAdditionalDiffuseness = theConfig->getNeutronSkinAdditionalDiffuseness();
+      }
 
     }
 
@@ -863,7 +874,10 @@ namespace G4INCL {
       return alphaParam - betaParam*std::exp(-gammaParam*((G4double)A));
     }
 
-    G4double getRPCorrelationCoefficient() { return rpCorrelationCoefficient; }
+    G4double getRPCorrelationCoefficient(const ParticleType t) {
+// assert(t==Proton || t==Neutron);
+      return rpCorrelationCoefficient[t];
+    }
 
     G4double getNeutronSkinThickness() { return neutronSkinThickness; }
 

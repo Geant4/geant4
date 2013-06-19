@@ -268,10 +268,25 @@ namespace G4INCL {
 #endif
 
     /// \brief Get the r-p correlation coefficient
-    G4double getRPCorrelationCoefficient() const { return rpCorrelationCoefficient; }
+    G4double getRPCorrelationCoefficient(const ParticleType t) const {
+// assert(t==Proton || t==Neutron);
+      return ((t==Proton) ? rpCorrelationCoefficientProton : rpCorrelationCoefficientNeutron);
+    }
 
     /// \brief Set the r-p correlation coefficient
-    void setRPCorrelationCoefficient(const G4double corrCoeff) { rpCorrelationCoefficient=corrCoeff; }
+    void setRPCorrelationCoefficient(const ParticleType t, const G4double corrCoeff) {
+// assert(t==Proton || t==Neutron);
+      if(t==Proton)
+        rpCorrelationCoefficientProton=corrCoeff;
+      else
+        rpCorrelationCoefficientNeutron=corrCoeff;
+    }
+
+    /// \brief Set the r-p correlation coefficient
+    void setRPCorrelationCoefficient(const G4double corrCoeff) {
+      setRPCorrelationCoefficient(Proton,corrCoeff);
+      setRPCorrelationCoefficient(Neutron,corrCoeff);
+    }
 
     /// \brief Get the neutron-skin thickness
     G4double getNeutronSkinThickness() const { return neutronSkinThickness; }
@@ -383,6 +398,8 @@ namespace G4INCL {
 #endif
 
     G4double rpCorrelationCoefficient;
+    G4double rpCorrelationCoefficientProton;
+    G4double rpCorrelationCoefficientNeutron;
 
     G4double neutronSkinThickness;
     G4double neutronSkinAdditionalDiffuseness;

@@ -243,8 +243,12 @@ namespace G4INCL {
      */
     G4double getFermiMomentumMassDependent(const G4int A, const G4int /*Z*/);
 
-    /// \brief Get the value of the r-p correlation coefficient
-    G4double getRPCorrelationCoefficient();
+    /** \brief Get the value of the r-p correlation coefficient
+     *
+     * \param t the type of the particle (Proton or Neutron)
+     * \return the value of the r-p correlation coefficient
+     */
+    G4double getRPCorrelationCoefficient(const ParticleType t);
 
     /// \brief Get the value of the neutron skin thickness
     G4double getNeutronSkinThickness();

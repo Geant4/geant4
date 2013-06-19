@@ -213,6 +213,8 @@ namespace G4INCL {
         ("fermi-momentum", po::value<std::string>(&fermiMomentumString)->default_value("constant"), "how to assign the Fermi momentum of the INCL nucleus:\n  \tconstant (default)\n  \tconstant-light\n  \tmass-dependent")
         ("cutNN", po::value<G4double>(&cutNN)->default_value(1910.), "minimum CM energy for nucleon-nucleon collisions, in MeV. Default: 1910.")
         ("rp-correlation", po::value<G4double>(&rpCorrelationCoefficient)->default_value(1.), "correlation coefficient for the r-p correlation. Default: 1 (full correlation).")
+        ("rp-correlation-p", po::value<G4double>(&rpCorrelationCoefficientProton)->default_value(1.), "correlation coefficient for the proton r-p correlation. Overrides the value specified using the rp-correlation option. Default: 1 (full correlation).")
+        ("rp-correlation-n", po::value<G4double>(&rpCorrelationCoefficientNeutron)->default_value(1.), "correlation coefficient for the neutron r-p correlation. Overrides the value specified using the rp-correlation option. Default: 1 (full correlation).")
         ("neutron-skin-thickness", po::value<G4double>(&neutronSkinThickness)->default_value(0.), "thickness of the neutron skin, in fm. Default: 0.")
         ("neutron-skin-additional-diffuseness", po::value<G4double>(&neutronSkinAdditionalDiffuseness)->default_value(0.), "additional diffuseness of the neutron density distribution (with respect to the proton diffuseness), in fm. Default: 0.")
         ;
@@ -621,6 +623,14 @@ namespace G4INCL {
         fermiMomentumType = ConstantFermiMomentum;
       }
 
+      // --rp-correlation / --rp-correlation-p / --rp-correlation-n
+      if(variablesMap.count("rp-correlation")) {
+        if(!variablesMap.count("rp-correlation-p") || variablesMap.find("rp-correlation-p")->second.defaulted())
+          rpCorrelationCoefficientProton = rpCorrelationCoefficient;
+        if(!variablesMap.count("rp-correlation-n") || variablesMap.find("rp-correlation-n")->second.defaulted())
+          rpCorrelationCoefficientNeutron = rpCorrelationCoefficient;
+      }
+
       // -s/--suffix
       if(!variablesMap.count("suffix")) {
         // update the value in the variables_map
@@ -764,6 +774,8 @@ namespace G4INCL {
       maxMassFermiBreakUp = 18;
 #endif
       rpCorrelationCoefficient = 1.;
+      rpCorrelationCoefficientProton = 1.;
+      rpCorrelationCoefficientNeutron = 1.;
       neutronSkinThickness = 0.;
       neutronSkinAdditionalDiffuseness = 0.;
   }

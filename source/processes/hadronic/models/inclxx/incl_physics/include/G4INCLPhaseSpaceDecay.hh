@@ -34,5 +34,28 @@
 
 #include "globals.hh"
 
-#define G4INCL_VERSION_ID "v5.1.13.2-clean"
-#define G4INCL_GIT_HASH "395118d76aaa6fc3fb8f6d8172eb3978fd8cc9a7"
+#ifndef G4INCLPHASESPACEDECAY_HH_
+#define G4INCLPHASESPACEDECAY_HH_
+
+#include "G4INCLThreeVector.hh"
+#include "G4INCLParticle.hh"
+#include <vector>
+
+namespace G4INCL {
+  namespace PhaseSpaceDecay {
+
+    /** \brief Generate decay momenta according to a uniform phase-space model
+     *
+     * This function will assign momenta to the particles in the list that is
+     * passed as an argument.
+     *
+     * \param initialMass mass of the decaying system
+     * \param theBoostVector boost vector of the decaying system
+     * \param particles list of decay particles
+     */
+    void decay(G4double initialMass, const ThreeVector &theBoostVector, ParticleList &particles);
+
+  }
+}
+
+#endif // G4INCLPHASESPACEDECAY_HH_

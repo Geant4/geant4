@@ -48,19 +48,22 @@
 namespace G4INCL {
 
   ParticleSampler::ParticleSampler(const G4int A, const G4int Z) :
-    sampleOneParticle(&ParticleSampler::sampleOneParticleWithoutRPCorrelation),
+    sampleOneProton(&ParticleSampler::sampleOneParticleWithoutRPCorrelation),
+    sampleOneNeutron(&ParticleSampler::sampleOneParticleWithoutRPCorrelation),
     theA(A),
     theZ(Z),
     theDensity(NULL),
-    thePotential(NULL),
-    rpCorrelationCoefficient(ParticleTable::getRPCorrelationCoefficient())
+    thePotential(NULL)
   {
     std::fill(theRCDFTable, theRCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
     std::fill(thePCDFTable, thePCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
+    std::fill(rpCorrelationCoefficient, rpCorrelationCoefficient + UnknownParticle, 1.);
     theRCDFTable[Proton] = NuclearDensityFactory::createRCDFTable(Proton, A, Z);
     thePCDFTable[Proton] = NuclearDensityFactory::createPCDFTable(Proton, A, Z);
     theRCDFTable[Neutron] = NuclearDensityFactory::createRCDFTable(Neutron, A, Z);
     thePCDFTable[Neutron] = NuclearDensityFactory::createPCDFTable(Neutron, A, Z);
+    rpCorrelationCoefficient[Proton] = ParticleTable::getRPCorrelationCoefficient(Proton);
+    rpCorrelationCoefficient[Neutron] = ParticleTable::getRPCorrelationCoefficient(Neutron);
   }
 
   ParticleSampler::~ParticleSampler() {
@@ -68,35 +71,43 @@ namespace G4INCL {
 
   void ParticleSampler::setDensity(NuclearDensity const * const d) {
     theDensity = d;
-    updateSampleOneParticleMethod();
+    updateSampleOneParticleMethods();
   }
 
   void ParticleSampler::setPotential(NuclearPotential::INuclearPotential const * const p) {
     thePotential = p;
-    updateSampleOneParticleMethod();
+    updateSampleOneParticleMethods();
   }
 
-  void ParticleSampler::updateSampleOneParticleMethod() {
+  void ParticleSampler::updateSampleOneParticleMethods() {
     if(theDensity && thePotential) {
-      if(rpCorrelationCoefficient>0.99999) {
-        sampleOneParticle = &ParticleSampler::sampleOneParticleWithRPCorrelation;
-      } else if(std::fabs(rpCorrelationCoefficient)<0.00001) {
-        sampleOneParticle = &ParticleSampler::sampleOneParticleWithoutRPCorrelation;
+      if(rpCorrelationCoefficient[Proton]>0.99999) {
+        sampleOneProton = &ParticleSampler::sampleOneParticleWithRPCorrelation;
       } else {
-        sampleOneParticle = &ParticleSampler::sampleOneParticleWithFuzzyRPCorrelation;
+        sampleOneProton = &ParticleSampler::sampleOneParticleWithFuzzyRPCorrelation;
       }
-    } else
-      sampleOneParticle = &ParticleSampler::sampleOneParticleWithoutRPCorrelation;
+      if(rpCorrelationCoefficient[Neutron]>0.99999) {
+        sampleOneNeutron = &ParticleSampler::sampleOneParticleWithRPCorrelation;
+      } else {
+        sampleOneNeutron = &ParticleSampler::sampleOneParticleWithFuzzyRPCorrelation;
+      }
+    } else {
+      sampleOneProton = &ParticleSampler::sampleOneParticleWithoutRPCorrelation;
+      sampleOneNeutron = &ParticleSampler::sampleOneParticleWithoutRPCorrelation;
+    }
   }
 
   ParticleList ParticleSampler::sampleParticles(const ThreeVector &position) const {
     ParticleList theList;
     if(theA > 2) {
       ParticleType type = Proton;
+      ParticleSamplerMethod sampleOneParticle = sampleOneProton;
       for(G4int i = 1; i <= theA; ++i) {
-        if(i == (theZ + 1)) // Nucleons [Z+1..A] are neutrons
+        if(i == (theZ + 1)) { // Nucleons [Z+1..A] are neutrons
           type = Neutron;
-        Particle *p = (this->*(this->sampleOneParticle))(type);
+          sampleOneParticle = sampleOneNeutron;
+        }
+        Particle *p = (this->*sampleOneParticle)(type);
         p->setPosition(position + p->getPosition());
         theList.push_back(p);
       }
@@ -105,7 +116,7 @@ namespace G4INCL {
       // neutron position and momenta are determined by the conditions of
       // vanishing CM position and total momentum.
 // assert(theZ==1);
-      Particle *aProton = (this->*(this->sampleOneParticle))(Proton);
+      Particle *aProton = (this->*(this->sampleOneProton))(Proton);
       Particle *aNeutron = new Particle(Neutron, -aProton->getMomentum(), position - aProton->getPosition());
       aProton->setPosition(position + aProton->getPosition());
       theList.push_back(aProton);
@@ -137,7 +148,7 @@ namespace G4INCL {
 
   Particle *ParticleSampler::sampleOneParticleWithFuzzyRPCorrelation(const ParticleType t) const {
 // assert(theDensity && thePotential);
-    std::pair<G4double,G4double> ranNumbers = Random::correlatedUniform(rpCorrelationCoefficient);
+    std::pair<G4double,G4double> ranNumbers = Random::correlatedUniform(rpCorrelationCoefficient[t]);
     const G4double x = Math::pow13(ranNumbers.first);
     const G4double y = Math::pow13(ranNumbers.second);
     const G4double theFermiMomentum = thePotential->getFermiMomentum(t);

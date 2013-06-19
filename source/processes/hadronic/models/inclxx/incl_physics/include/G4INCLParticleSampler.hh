@@ -69,7 +69,10 @@ namespace G4INCL {
       NuclearPotential::INuclearPotential const *getPotential() const { return thePotential; }
 
       /// \brief Getter for rpCorrelationCoefficient
-      G4double getRPCorrelationCoefficient() const { return rpCorrelationCoefficient; }
+      G4double getRPCorrelationCoefficient(const ParticleType t) const {
+// assert(t==Proton || t==Neutron);
+        return rpCorrelationCoefficient[t];
+      }
 
       /// \brief Setter for theDensity
       void setDensity(NuclearDensity const * const d);
@@ -78,20 +81,30 @@ namespace G4INCL {
       void setPotential(NuclearPotential::INuclearPotential const * const p);
 
       /// \brief Setter for rpCorrelationCoefficient
-      void setRPCorrelationCoefficient(const G4double corrCoeff) { rpCorrelationCoefficient = corrCoeff; }
+      void setRPCorrelationCoefficient(const ParticleType t, const G4double corrCoeff) {
+// assert(t==Proton || t==Neutron);
+        rpCorrelationCoefficient[t] = corrCoeff;
+      }
 
       ParticleList sampleParticles(ThreeVector const &position) const;
 
     private:
 
-      void updateSampleOneParticleMethod();
+      void updateSampleOneParticleMethods();
 
       typedef Particle *(ParticleSampler::*ParticleSamplerMethod)(const ParticleType t) const;
+
       /** \brief Sample a list of particles.
        *
-       * This method is a pointer to the method that does the real work.
+       * This method is a pointer to the method that does the real work for protons.
        */
-      ParticleSamplerMethod sampleOneParticle;
+      ParticleSamplerMethod sampleOneProton;
+
+      /** \brief Sample a list of particles.
+       *
+       * This method is a pointer to the method that does the real work for neutrons.
+       */
+      ParticleSamplerMethod sampleOneNeutron;
 
       /// \brief Sample one particle taking into account the rp-correlation
       Particle *sampleOneParticleWithRPCorrelation(const ParticleType t) const;
@@ -120,8 +133,8 @@ namespace G4INCL {
       /// \brief Pointer to the Cluster's NuclearPotential
       NuclearPotential::INuclearPotential const *thePotential;
 
-      /// \brief Correlation coefficient for the r-p correlation
-      G4double rpCorrelationCoefficient;
+      /// \brief Correlation coefficients for the r-p correlation
+      G4double rpCorrelationCoefficient[UnknownParticle];
   };
 
 }

@@ -172,7 +172,7 @@ namespace G4INCL {
     theGlobalInfo.Zp = theSpecies.theZ;
     theGlobalInfo.Ep = theConfig->getProjectileKineticEnergy();
     // Echo the input parameters to the log file
-    INFO(theConfig->echo() << std::endl);
+    INCL_INFO(theConfig->echo() << std::endl);
 #endif
 
     fixedImpactParameter = theConfig->getImpactParameter();

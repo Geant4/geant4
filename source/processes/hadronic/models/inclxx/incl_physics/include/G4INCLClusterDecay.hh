@@ -83,7 +83,7 @@ namespace G4INCL {
        * Unphysical nuclides (A<Z) are marked as stable, but should never be
        * produced by INCL. If you find them in the output, something is fishy.
        */
-      extern const ClusterDecayType clusterDecayMode[ParticleTable::clusterTableZSize][ParticleTable::clusterTableASize];
+      extern G4ThreadLocal ClusterDecayType clusterDecayMode[ParticleTable::clusterTableZSize][ParticleTable::clusterTableASize];
 
   }
 
