@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 19th, 2013, G. Cosmo (run-V09-06-58)
+- Restored deletion of allocators as in "run-V09-06-56".
+  Withdraw change made in last tag.
+
 June 18th, 2013, G. Cosmo (run-V09-06-57)
 - Allow deletion of allocators only from master thread.
 
