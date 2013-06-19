@@ -34,8 +34,7 @@
 #include "G4ParticleTable.hh"
 #include "G4GeneralPhaseSpaceDecay.hh"
 #include "G4RadioactiveDecayMode.hh"
-
-#include <CLHEP/Random/RandGeneral.h>
+#include "Randomize.hh"
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -69,18 +68,20 @@ public: // with description
 			const G4String theDaughterName1);
   // constructor decay channel with two decay products
   //
+  
   G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode, G4int Verbose,
                         const G4ParticleDefinition* theParentNucleus,
-                        G4double theBR, G4double /* theFFN */,
-                        G4bool /* betaS */, CLHEP::RandGeneral* randBeta,
+                        G4double theBR, G4double theFFN,
+                        G4bool betaS, G4RandGeneral* randBeta,
                         G4double theQtransition, G4int A, G4int Z,
                         G4double theDaughterExcitation,
                         const G4String theDaughterName1,
                         const G4String theDaughterName2);
+
   // constructor decay channel with three decay product
   //
 
-  ~G4NuclearDecayChannel(){;} 
+  virtual ~G4NuclearDecayChannel(); 
 
   // destructor
   //
@@ -145,7 +146,7 @@ protected:
   G4double               halflifethreshold;
   G4bool                 applyICM;
   G4bool                 applyARM;
-  CLHEP::RandGeneral* RandomEnergy;    
+  G4RandGeneral*         RandomEnergy;    
 };
 #endif
 

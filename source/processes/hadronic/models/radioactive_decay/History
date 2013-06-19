@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+18 June 2013 V. Ivanchenko  radioactive_decay-V09-06-06
+--------------------------------------------------------
+- G4RadioactiveDecay, G4NuclearDecayChannel, 
+  G4BetaMinusDecayChannel, G4BetaPlusDecayChannel - use
+    typedefs from Randomize.hh instead of CLHEP
+
 18 June 2013 V. Ivanchenko  radioactive_decay-V09-06-05
 --------------------------------------------------------
 - G4RadioactiveDecay - initialise Isotope table only for master

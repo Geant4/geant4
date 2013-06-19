@@ -164,7 +164,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode &theMode,
                       G4double theBR,
                       G4double /* theFFN */,
 		      G4bool /* betaS */, 
-		      CLHEP::RandGeneral* randBeta,
+		      G4RandGeneral* randBeta,
                       G4double theQtransition,
                       G4int A,
                       G4int Z,
@@ -192,6 +192,8 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode &theMode,
   applyARM = true;
 }
 
+G4NuclearDecayChannel::~G4NuclearDecayChannel()
+{} 
 
 void G4NuclearDecayChannel::FillDaughterNucleus(G4int index, G4int A, G4int Z,
                                                 G4double theDaughterExcitation)

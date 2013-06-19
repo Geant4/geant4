@@ -51,6 +51,7 @@
 #include <CLHEP/Units/SystemOfUnits.h>
 
 #include "globals.hh"
+#include "Randomize.hh"
 #include "G4NuclearDecayChannel.hh"
 #include "G4RadioactiveDecayMode.hh"
 
@@ -74,7 +75,7 @@ class G4BetaPlusDecayChannel : public G4NuclearDecayChannel
                             G4double theDaughterExcitation=0.0,
                             G4double theFFN=0.0,
 			    G4bool   theBetaSimple = false,
-			    CLHEP::RandGeneral* theRandEnergy = 0) :
+			    G4RandGeneral* theRandEnergy = 0) :
       G4NuclearDecayChannel (BetaPlus, 
 			     Verbose, 
 			     theParentNucleus, 

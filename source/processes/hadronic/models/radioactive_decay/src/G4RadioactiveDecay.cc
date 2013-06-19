@@ -832,7 +832,7 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
                       pdf[ptn] = f;
                     }
 
-                    RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
+                    G4RandGeneral* aRandomEnergy = new G4RandGeneral( pdf, npti);  
                     G4BetaMinusDecayChannel *aBetaMinusChannel = new
                     G4BetaMinusDecayChannel(GetVerboseLevel(), &theParentNucleus,
                                             b, c*MeV, a*MeV, 0, FBeta, aRandomEnergy);
@@ -879,7 +879,7 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
                       f *= corrections.ShapeFactor(betaType, p, e0-e+1.);
                       pdf[ptn] = f;
 		    }
-		    RandGeneral* aRandomEnergy = new RandGeneral( pdf, npti);  
+		    G4RandGeneral* aRandomEnergy = new G4RandGeneral( pdf, npti);  
 		    G4BetaPlusDecayChannel *aBetaPlusChannel = new 
 		    G4BetaPlusDecayChannel(GetVerboseLevel(), &theParentNucleus,
                                            b, c*MeV, a*MeV, 0, FBeta, aRandomEnergy);
@@ -1038,10 +1038,8 @@ void G4RadioactiveDecay::AddUserDecayDataFile(G4int Z, G4int A,G4String filename
 	G4cout<<"Z and A not valid!"<<G4endl;
   }
 
-  G4LossTableManager* theManager = G4LossTableManager::Instance();
-
   std::ifstream DecaySchemeFile(filename);
-  if (DecaySchemeFile && theManager->IsMaster()){
+  if (DecaySchemeFile){
 	G4int ID_ion=A*1000+Z;
 	theUserRadioactiveDataFiles[ID_ion]=filename;
 	theIsotopeTable->AddUserDecayDataFile(Z,A,filename);
