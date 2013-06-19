@@ -64,7 +64,7 @@ G4ComponentAntiNuclNuclearXS::G4ComponentAntiNuclNuclearXS()
  b2       = 0.3036;               // GeV^(-2)
  SqrtS0   = 20.74;                // GeV
  S0       = 33.0625;              // GeV^2
-
+ R0       = 1.0;                  // default value (V.Ivanchenko)
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////
