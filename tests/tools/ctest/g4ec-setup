@@ -3,16 +3,18 @@
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
+echo "starting on ${HOSTNAME} at " `date`
+
 #---Set Kerberos --------------------------------------------------
-if [ `uname` == "Linux" ]; then
-  kinit stesting@CERN.CH -5 -V -k -t /ec/conf/ec.keytab
+if grep -q  -e "Scientific Linux"  /etc/issue ; then 
+    kinit sftnight@CERN.CH -5 -V -k -t /ec/conf/sftnight.keytab
 else
-echo "This is a Mac. No kinit done"
+  echo "No kinit done"
 fi
 
 THIS=$(dirname $0)
 #---Update Scripts-------------------------------------------------
-lockfile -l 60 ${THIS}/svn_update.lock
+[ -r /usr/bin/lockfile ] &&lockfile -l 60 ${THIS}/svn_update.lock
 svn update ${THIS}
-rm -f ${THIS}/svn_update.lock
+[ -r  ${THIS}/svn_update.lock ] && rm -f ${THIS}/svn_update.lock
 

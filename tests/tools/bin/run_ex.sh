@@ -37,7 +37,7 @@ for var in `echo $test_env | sed -e 's/-DENV=//' | sed -e 's/#/ /g'`; do
 done
 
 env | grep G4
-#echo $cmd
+echo "====>>> cmd=$cmd"
 cmdargs=`echo $cmd | sed -e 's/#/ /' | awk '{print $2}' | sed -e 's/#/ /g'`
 cmd=`echo $cmd | sed -e's/#/ /' | awk '{print $1}' | sed -e 's/-DCMD=//'`
 
@@ -47,22 +47,15 @@ echo dir=$cmddir
 
 if test -d $cmddir ; then 
    cd $cmddir || exit
-   #echo cmd=$cmd
-   #echo args=$cmdargs
-   ./$cmd $cmdargs 
-   echo "Was run in directory $cmddir"
-   echo "Command used:        $cmd"
-   echo "Arguments:           $args"
+   echo "Run in directory  $cmddir"
+   echo "Command used:     $cmd"
+   echo "Arguments:        $cmdargs"
+   if test -z "$debug" ; then 
+      ./$cmd $cmdargs
+   else
+      echo starting bash, exit when done.
+      /bin/bash   
+   fi
 else
    echo "Directory for test $cmddir not found"
 fi   
-echo cmd=$cmd
-echo args=$cmdargs
-
-
-if test -z "$debug" ; then 
-   ./$cmd $cmdargs
-else
-   echo starting bash, exit when done.
-   /bin/bash   
-fi

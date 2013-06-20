@@ -27,8 +27,14 @@ fi
 
 export CONFIG=slc5-gcc43-gmake
 
-export SOURCE=${WORKDIR}/${MODE}/${VERSION}
-export BINARY=${WORKDIR}/${MODE}/${CONFIG}
+if [ x$BUILDTYPE = x ]; then
+   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}
+else
+   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
+fi
+
+export SOURCE=${PLATFORM}/${VERSION}
+export BINARY=${PLATFORM}/build
 
 #---Environment from http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides/InstallationGuide/html/ch06.html
 export G4SYSTEM=Linux-g++
@@ -60,5 +66,7 @@ if [ ! -d "${SOURCE}" ]; then
   ${THIS}/g4tagsvn.py checkout -c ${VERSION} -d ${SOURCE} -q
 fi
 
-rm -r ${BINARY}
-ctest -D CTEST_SITE=${CTEST_SITE} -V -S ${THIS}/g4gnumake.cmake 
+test -d "${BINARY}"  && rm -r ${BINARY}
+
+#ctest -D CTEST_SITE=${CTEST_SITE} -V -S ${THIS}/g4gnumake.cmake 
+ctest  -V -S ${THIS}/g4gnumake.cmake 

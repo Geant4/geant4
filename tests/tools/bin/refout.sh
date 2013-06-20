@@ -7,34 +7,31 @@
 #
 #  use tagrefout script to commit and tag changed files
 
+# to add new outputs:
+# in bash do:
+# for f in `svn st | grep ? | awk '{ print $2 }'`; do svn add $f;done
+#
 # tag :
-tag=geant4-09-05-ref-10
+tag=geant4-09-06-ref-05
 svn_branch="`echo $tag | sed -e 's/geant4-//'`_branch"
 
 # Patch/release  branch...
-$svn_branch=geant4-09-05-patches_branch
+#svn_branch=geant4-09-06-patches_branch
+#tag=geant4-09-06-patch-02_cand-01
 #tag="`echo $svn_branch | sed -e 's/patches_branch/patch-02/'`"
 
-# use outputs from slc5 / gcc43 /opt ...
-testlogName=stdout_x86_64-slc5-gcc43-opt
-
+slot=nightly
 slot=release
-platform=slc5-gcc43
+platform=slc5-gcc43-RelWithDebInfo
 
 #  use outputs from build with tag.... or ref tag see below
 #g4_test=/build/cdash/....
 #g4_test=/build/cdash/G4/$slot/$platform/
 
-#g4_test=/build/electric_commander/build/$slot/$platform/
-g4_test=/ec/build/$slot/$platform/
+g4_test=/ec/G4-builds/$slot/$platform/build
 
-
-# since 9.5.ref05 from pcgeant06
-# since 9.5.ref01 from pcgeant07
-# since 9.4.ref06 from pcgeant08 
-# on pcgeant05 since 9.4ref0  #be4 pcgeant04 since 92-ref09    #be4 on pcgeant06
-#  depends on priority & acrontab, check acrontab for slc5 machines.
-g4_src=/build/stesting/refout/$tag/geant4
+#using refout in ~stesting:
+g4_src=~/refout/$tag/geant4
 
 
 
@@ -48,7 +45,7 @@ function update() {
 	dest=$g4_src/$1/$3
 	#echo "		To  = $dest"
 	if test -r $new ; then 
-	   echo "copy $new $dest"  
+	   echo "            copy $new $dest"  
 	   cp $new $dest
 	else  
            echo "File $new not found"
@@ -78,7 +75,8 @@ echo "will copy reference ouputs from"
 echo "  $g4_test"
 echo " to"
 echo "  $g4_src"
-
+echo " please check date of one test01 logfile:"
+ls  -l $g4_test/tests/test01/test01.out
 echo "hit return to continue"
 read ok
 
@@ -134,14 +132,6 @@ update  tests/test67  test67      test67.out
 update  tests/test70  test70      test70.out
 update  tests/test74  test74      test74.out
 
-update  examples/novice/N01	 example-nov-n01	    exampleN01.out
-update  examples/novice/N02	 example-nov-n02	    exampleN02.out
-update  examples/novice/N03	 example-nov-n03	    exampleN03.out
-#update  examples/novice/N04	 exam-nov-n04-EMtest        exampleN04.EMtest.out
-update  examples/novice/N04	 example-nov-n04	    exampleN04.out
-update  examples/novice/N05	 example-nov-n05	    exampleN05.out
-update  examples/novice/N06	 example-nov-n06	    exampleN06.out  
-update  examples/novice/N07	 example-nov-n07	    exampleN07.out
 
 update  examples/extended/analysis/A01     	example-ext-analysis-*	   test.out
 update  examples/extended/analysis/N03Con     	example-ext-analysis-*	   exampleN03Con.out

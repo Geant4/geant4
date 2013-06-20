@@ -44,7 +44,7 @@ fi
 
 
 #---Run the CTest script-------------------------------------------
-echo "Starting CTest script for configutation ${CONFIG} at `date`" 
+echo "Starting CTest script for configuration ${CONFIG} at `date`" 
 ctest -V -S ${THIS}/g4${MODE}.cmake 
 
 

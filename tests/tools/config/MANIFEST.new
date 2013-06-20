@@ -1,7 +1,0 @@
-config/scripts/GNUmakefile		Some GNUmakefile  file.
-config/scripts/binmake.gmk		Some binmakefile.gmk  file.
-config/scripts/install.sh.SH		Some .sh  file.
-config/scripts/move.sh.SH		Some .sh  file.
-config/scripts/env.sh.SH		Some .sh  file.
-config/scripts/env.csh.SH		Some .csh file.
-Configure				Portability tool

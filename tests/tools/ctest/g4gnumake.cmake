@@ -8,7 +8,14 @@ GET_NCPUS(ncpu)
 GET_CONFIGURATION_TAG(tag)
 
 set(MODEL $ENV{MODE})
-set(CTEST_SITE "${host}")
+#---Set the CTEST SITE according to the environment-------------------------
+if("$ENV{CTEST_SITE}" STREQUAL "")
+  set(CTEST_SITE "${host}")
+else()
+  set(CTEST_SITE "$ENV{CTEST_SITE}")
+  message( "Running build and test on ${host}" )
+endif()
+
 set(CTEST_BUILD_NAME ${tag}-gnumake)
 if(NOT $ENV{VERSION} STREQUAL "g4tags-dev")
   set(CTEST_BUILD_NAME $ENV{VERSION}-${CTEST_BUILD_NAME})

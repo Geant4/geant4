@@ -88,7 +88,8 @@ if(WIN32)
 else()
   set(CTEST_CUSTOM_WARNING_EXCEPTION ${CTEST_CUSTOM_WARNING_EXCEPTION}
         "warning: ignoring return value of"
-        "clang: warning: argument unused" )
+        "clang: warning: argument unused" 
+	"warning: declaration of 'tokType' shadows a member of")
 endif()
 
 set(CTEST_TEST_TIMEOUT 1500)

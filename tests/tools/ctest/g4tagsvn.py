@@ -29,18 +29,22 @@ def g4svn_update(devline, destdir, quiet, proposed):
   if(quiet) : options += ' --quiet'    
   
   #---In case the development line is a branch...---------------------------------------------------
-  if devline.endswith("_branch") :
+  if devline.endswith("_branch") or devline.startswith("geant4-"):
+    svnbranch="tags"
+    if devline.endswith("_branch"):
+       svnbranch="branches"
     if not os.path.exists('.svn'):
-      command = "svn co %s %s/geant4/branches/geant4/_symbols/%s ." % (options, cern_svn_repos, devline)
+      command = "svn co %s %s/geant4/%s/geant4/_symbols/%s ." % (options, cern_svn_repos, svnbranch, devline)
     else:
-      command = "svn switch %s %s/geant4/branches/geant4/_symbols/%s ." % (options, cern_svn_repos, devline)
+      command = "svn switch %s %s/geant4/%s/geant4/_symbols/%s ." % (options, cern_svn_repos, svnbranch, devline)
     print '# ', command
     sys.stdout.flush()
     os.system(command)
     #---Get now the benchmarks
-    if 'geant4_benchmarks' in os.environ:
-      benchmarks_tag = os.environ['geant4_benchmarks']
-    else:
+    benchmarks_tag=""
+    if 'VERSION_BENCHMARKS' in os.environ:
+      benchmarks_tag = os.environ['VERSION_BENCHMARKS']
+    if len(benchmarks_tag) == 0:
       benchmarks_tag= os.popen('svn ls %s/g4tests/tags/benchmarks/_symbols' % cern_svn_repos).readlines()[-1].strip()
     if os.path.exists('benchmarks') :
       command="svn switch %s %s/g4tests/tags/benchmarks/_symbols/%s benchmarks" % (options, cern_svn_repos, benchmarks_tag)

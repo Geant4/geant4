@@ -1,47 +1,22 @@
 #!/usr/bin/env bash
-#------------------------------------------------------------------
-export LC_CTYPE=en_US.UTF-8
-export LC_ALL=en_US.UTF-8
 
-#---Xerces-C-------------------------------------------------------
-export XERCESC_ROOT_DIR=/afs/cern.ch/sw/lcg/external/XercesC/3.1.1p2/x86_64-slc5-gcc43-opt
-export LD_LIBRARY_PATH=${XERCESC_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
-
-#---CMake----------------------------------------------------------
-export PATH=${PATH}:/afs/cern.ch/sw/lcg/external/CMake/2.8.6/x86_64-slc5-gcc43-opt/bin
-
-#-----------------------------------------------------------------
 THIS=$(dirname $0)
-
-if [ x$MODE = x ]; then
-  export MODE=nightly
-fi
-if [ x$WORKDIR = x ]; then
-  WORKDIR=/build/cdash/G4 
-fi
-if [ x$VERSION = x ]; then 
-  export VERSION=g4tags-dev
-fi
 
 #---Enable FPE -----------------------------------------------------
 export CXXFLAGS=-DG4FPE_DEBUG
 
 CONFIG=slc5-gcc41
 
-export SOURCE=${WORKDIR}/${MODE}/${VERSION}
-if [ x$BUILDTYPE = x ]; then
-  export BINARY=${WORKDIR}/${MODE}/${CONFIG}
-else
-  export BINARY=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
-fi
+#----exceptions to common setup----
+#do not switch compiler
+CXX=g++
 
+# use XercesC from gcc43
+export XERCESC_ROOT_DIR=/afs/cern.ch/sw/lcg/external/XercesC/3.1.1p2/x86_64-slc5-gcc43-opt
 
-if [ ! -d "${SOURCE}" ]; then
-  ${THIS}/g4tagsvn.py update -c ${VERSION} -d ${SOURCE} -q
-fi
+#CMake - use gcc43 binaries
+export PATH=/afs/cern.ch/sw/lcg/external/CMake/2.8.6/x86_64-slc5-gcc43-opt/bin:${PATH}
 
+#----------------------------------
 
-#---Run the CTest script-------------------------------------------
-echo "Starting CTest script for configutation ${CONFIG} at `date`" 
-ctest -V -S ${THIS}/g4${MODE}.cmake 
-
+. ${THIS}/g4ec-slc-common x86_64-slc5 4.1

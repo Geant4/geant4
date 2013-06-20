@@ -5,6 +5,10 @@
 export XERCESC_ROOT_DIR=/ec/externals/xerces-c-3.1.1/x86_64-mac107-gcc42-opt
 export DYLD_LIBRARY_PATH=${XERCESC_ROOT_DIR}/lib:${DYLD_LIBRARY_PATH}
 
+#---GNU Compiler---------------------------------------------------
+export CC=gcc
+export CXX=g++
+
 #-----------------------------------------------------------------
 THIS=$(dirname $0)
 
