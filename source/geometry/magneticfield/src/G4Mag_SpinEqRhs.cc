@@ -43,7 +43,8 @@
 #include "G4ThreeVector.hh"
 
 G4Mag_SpinEqRhs::G4Mag_SpinEqRhs( G4MagneticField* MagField )
-  : G4Mag_EqRhs( MagField ), charge(0.), anomaly(0.0011659208)
+  : G4Mag_EqRhs( MagField ), charge(0.), mass(0.), magMoment(0.),
+    spin(0.), omegac(0.), anomaly(0.0011659208), beta(0.), gamma(0.)
 {
 }
 

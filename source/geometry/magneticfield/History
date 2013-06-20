@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 10th, 2013 P.Gumplinger/J.Apostolakis - field-V09-06-07
+-----------------------------------------
+- Revised number of field components (to allow up to 24).
+   18 are required for new applications (B, E, Gravity, B-gradients)
+- Fixes for initialisation errors found by Coverity.
+
 May 10th, 2013 P.Gumplinger - field-V09-06-06
 ---------------------------
 - prevent divided by zero and shortcut spin tracking for spin == 0

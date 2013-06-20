@@ -43,8 +43,9 @@
 #include "G4SystemOfUnits.hh"
 
 G4EqEMFieldWithSpin::G4EqEMFieldWithSpin(G4ElectroMagneticField *emField )
-  : G4EquationOfMotion( emField ), charge(0.), 
-    fElectroMagCof(0.), fMassCof(0.), omegac(0.), anomaly(0.0011659208)
+  : G4EquationOfMotion( emField ), charge(0.), mass(0.), magMoment(0.),
+    spin(0.), fElectroMagCof(0.), fMassCof(0.), omegac(0.), 
+    anomaly(0.0011659208), beta(0.), gamma(0.)
 {
 }
 

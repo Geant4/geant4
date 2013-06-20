@@ -92,8 +92,8 @@ class G4EquationOfMotion
      void           SetFieldObj(G4Field* pField);
 
   private:
-     // static const int G4maximum_number_of_field_components = 16;
-     enum { G4maximum_number_of_field_components = 16 } ;
+     // const int G4maximum_number_of_field_components = 24;
+     enum { G4maximum_number_of_field_components = 24 } ;
 
      G4Field *itsField;
 
