@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+20 June 2013 - Davide Mancusi (hadr-inclxx-V09-06-19)
+-----------------------------------------------------------
+- Fix compilation warning.
+
 19 June 2013 - Davide Mancusi (hadr-inclxx-V09-06-18)
 -----------------------------------------------------------
 - INCL++ v5.1.13.2

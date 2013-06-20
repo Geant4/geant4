@@ -214,6 +214,7 @@ namespace G4INCL {
         decayProducts->push_back(decayParticle2);
       }
 
+#ifndef INCLXX_IN_GEANT4_MODE
       /** \brief Disassembles unbound nuclei using a simple phase-space model
        *
        * The decay products are assumed to uniformly populate the momentum space
@@ -373,6 +374,7 @@ namespace G4INCL {
 // assert(std::abs(c->getRealMass()-c->getMass())<1.e-3);
         c->setExcitationEnergy(0.);
       }
+#endif // INCLXX_IN_GEANT4_MODE
 
       /** \brief Disassembles unbound nuclei using the phase-space model
        *
