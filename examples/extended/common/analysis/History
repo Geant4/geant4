@@ -16,6 +16,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20/06/2013 I. Hrivnacova (excommon-analysis-V09-06-02)
+- Fixed a typo in ExG4HbookAnalysisManager.hh which caused compilation
+  error
+
 03/06/2013 I. Hrivnacova (excommon-analysis-V09-06-01)
 - Implemented ExG4HbookAnalysisManager::Create() required with
   update for MT migration; returns an exception in case of MT mode

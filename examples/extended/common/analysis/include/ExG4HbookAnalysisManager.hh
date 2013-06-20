@@ -173,7 +173,7 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     // Access methods
     virtual tools::hbook::h1*  GetH1(G4int id, G4bool warn = true,
                                       G4bool onlyIfActive = true) const;
-    virtual tools::hboo;k::h2*  GetH2(G4int id, G4bool warn = true,
+    virtual tools::hbook::h2*  GetH2(G4int id, G4bool warn = true,
                                       G4bool onlyIfActive = true) const;
     
     // Access methods via names
