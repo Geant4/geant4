@@ -32,6 +32,7 @@
 //
 // 20130307  M. Kelsey -- Add verbosity interface
 // 20130422  M. Kelsey -- Add three-body distributions, for temporary use
+// 20130619  Change singleton instance to be thread-local, to avoid collisions.
 
 #include "G4TwoBodyAngularDist.hh"
 #include "G4GamP2NPipAngDst.hh"
@@ -49,9 +50,16 @@
 #include "G4InuclParticleNames.hh"
 using namespace G4InuclParticleNames;
 
-// Constructor and destructor
+// Singleton is created at first invocation
 
-const G4TwoBodyAngularDist G4TwoBodyAngularDist::theInstance;
+G4ThreadLocal G4TwoBodyAngularDist* G4TwoBodyAngularDist::theInstance = 0;
+
+const G4TwoBodyAngularDist* G4TwoBodyAngularDist::GetInstance() {
+  if (!theInstance) theInstance = new G4TwoBodyAngularDist;
+  return theInstance;
+}
+
+// Constructor and destructor
 
 G4TwoBodyAngularDist::G4TwoBodyAngularDist()
   : gp_npip(new G4GamP2NPipAngDst), gp_ppi0(new G4GamP2PPi0AngDst),
@@ -80,7 +88,7 @@ G4TwoBodyAngularDist::~G4TwoBodyAngularDist() {
 // Set verbosity for all generators (const-cast required)
 
 void G4TwoBodyAngularDist::setVerboseLevel(G4int verbose) {
-  const_cast<G4TwoBodyAngularDist&>(theInstance).passVerbose(verbose);
+  const_cast<G4TwoBodyAngularDist*>(GetInstance())->passVerbose(verbose);
 }
 
 void G4TwoBodyAngularDist::passVerbose(G4int verbose) {

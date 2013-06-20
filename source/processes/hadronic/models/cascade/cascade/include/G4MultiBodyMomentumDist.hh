@@ -31,6 +31,8 @@
 //		functions based on intial state codes and multiplicity.
 //
 // NOTE:  Separate multiplicity-3 generators are not used, per V.Uzhinsky
+//
+// 20130619  Change singleton instance to be thread-local, to avoid collisions.
 
 #ifndef G4MultiBodyMomentumDist_h
 #define G4MultiBodyMomentumDist_h 1
@@ -48,11 +50,11 @@ class G4MultiBodyMomentumDist {
 public:
   ~G4MultiBodyMomentumDist();
 
-  static const G4MultiBodyMomentumDist* GetInstance() { return &theInstance; }
+  static const G4MultiBodyMomentumDist* GetInstance();
 
   // Return appropriate generator for initial state and multiplicity
   static const G4VMultiBodyMomDst* GetDist(G4int is, G4int mult) {
-    return theInstance.ChooseDist(is, mult);
+    return GetInstance()->ChooseDist(is, mult);
   }
 
   // Pass verbosity through to owned objects
@@ -65,7 +67,7 @@ private:
 
   void passVerbose(G4int verbose);	// Pass verbosity through instance
 
-  static const G4MultiBodyMomentumDist theInstance;
+  static G4ThreadLocal G4MultiBodyMomentumDist* theInstance;	// Per thread
 
   // Generators for various initial/final state combinations
   G4NuclNucl3BodyMomDst* nn3BodyDst;	// N N to X Y Z

@@ -32,6 +32,7 @@
 //
 // 20130307  M. Kelsey -- Add verbosity interface for contained objects
 // 20130422  M. Kelsey -- Add three-body distributions, for temporary use
+// 20130619  Change singleton instance to be thread-local, to avoid collisions.
 
 #ifndef G4TwoBodyAngularDist_h
 #define G4TwoBodyAngularDist_h 1
@@ -57,15 +58,15 @@ class G4TwoBodyAngularDist {
 public:
   ~G4TwoBodyAngularDist();
 
-  static const G4TwoBodyAngularDist* GetInstance() { return &theInstance; }
+  static const G4TwoBodyAngularDist* GetInstance();
 
   // Return appropriate generator for initial, final state, and kw flag
   static const G4VTwoBodyAngDst* GetDist(G4int is, G4int fs, G4int kw) {
-    return theInstance.ChooseDist(is,fs,kw);
+    return GetInstance()->ChooseDist(is,fs,kw);
   }
 
   static const G4VTwoBodyAngDst* GetDist(G4int is) {
-    return theInstance.ChooseDist(is,0,0);
+    return GetInstance()->ChooseDist(is,0,0);
   }
 
   // Pass verbosity through to owned objects
@@ -78,7 +79,7 @@ private:
 
   void passVerbose(G4int verbose);
 
-  static const G4TwoBodyAngularDist theInstance;
+  static G4ThreadLocal G4TwoBodyAngularDist* theInstance;	// Per thread
 
   // Generators for various initial/final state combinations
   G4GamP2NPipAngDst* gp_npip;		// gamma p -> n pi+

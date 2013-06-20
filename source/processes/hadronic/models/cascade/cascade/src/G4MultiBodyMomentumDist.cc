@@ -31,6 +31,7 @@
 //		functions based on intial state codes and multiplicity.
 //
 // 20130308  Use envvar to enable/disable use of 3-body generators.
+// 20130619  Change singleton instance to be thread-local, to avoid collisions.
 
 #include "G4MultiBodyMomentumDist.hh"
 #include "G4CascadeParameters.hh"
@@ -41,9 +42,17 @@
 #include "G4InuclParticleNames.hh"
 using namespace G4InuclParticleNames;
 
-// Constructor and destructor
 
-const G4MultiBodyMomentumDist G4MultiBodyMomentumDist::theInstance;
+// Singleton is created at first invocation
+
+G4ThreadLocal G4MultiBodyMomentumDist* G4MultiBodyMomentumDist::theInstance = 0;
+
+const G4MultiBodyMomentumDist* G4MultiBodyMomentumDist::GetInstance() {
+  if (!theInstance) theInstance = new G4MultiBodyMomentumDist;
+  return theInstance;
+}
+
+// Constructor and destructor
 
 G4MultiBodyMomentumDist::G4MultiBodyMomentumDist()
   : nn3BodyDst(new G4NuclNucl3BodyMomDst),
@@ -62,7 +71,7 @@ G4MultiBodyMomentumDist::~G4MultiBodyMomentumDist() {
 // Set verbosity for all generators (const-cast required)
 
 void G4MultiBodyMomentumDist::setVerboseLevel(G4int verbose) {
-  const_cast<G4MultiBodyMomentumDist&>(theInstance).passVerbose(verbose);
+  const_cast<G4MultiBodyMomentumDist*>(GetInstance())->passVerbose(verbose);
 }
 
 void G4MultiBodyMomentumDist::passVerbose(G4int verbose) {

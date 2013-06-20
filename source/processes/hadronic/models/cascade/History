@@ -15,6 +15,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 June 2013  Micahel Kelsey (hadr-casc-V09-06-34)
+--------------------------------------------------
+- G4TwoBodyAngularDist.hh, G4MultiBodyMomentumDist.hh:  Replace use of
+  "theInstance" with calls to "GetInstance()" to ensure instantiation in MT
+  environment.
+
+19 June 2013  Micahel Kelsey (hadr-casc-V09-06-33)
+--------------------------------------------------
+- G4TwoBodyAngularDist, G4MultiBodyMomentumDist:  Fix thread collisions
+  in MT operation by changing singleton instances from "static const" to
+  "static G4ThreadLocal" pointers.  GetInstance() instantiates the pointer
+  on first call (per thread).  C.f. G4CascadeChannelTables.
+
 19 June 2013  Alberto Ribon  (hadr-casc-V09-06-32)
 --------------------------------------------------
 - G4NucleiModel.cc: fixed rare cases of non-reproducibility in the
