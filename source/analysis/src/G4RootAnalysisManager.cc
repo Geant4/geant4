@@ -43,8 +43,11 @@ namespace {
   G4Mutex mergeH1Mutex = G4MUTEX_INITIALIZER;
   //Mutex to lock master manager when merging H1 histograms 
   G4Mutex mergeH2Mutex = G4MUTEX_INITIALIZER;
+  //Mutex to lock instances counter
+  G4Mutex counterMutex = G4MUTEX_INITIALIZER;
 }  
 
+G4int G4RootAnalysisManager::fgCounter = 0;
 G4RootAnalysisManager* G4RootAnalysisManager::fgMasterInstance = 0;
 G4ThreadLocal G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = 0;
 
@@ -95,6 +98,10 @@ G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
   }
   if ( isMaster ) fgMasterInstance = this;
   fgInstance = this;
+
+  G4AutoLock lCounter(&counterMutex);
+  fgCounter++;
+  lCounter.unlock();
 }
 
 //_____________________________________________________________________________
@@ -119,6 +126,10 @@ G4RootAnalysisManager::~G4RootAnalysisManager()
 
   if ( fIsMaster ) fgMasterInstance = 0;
   fgInstance = 0;
+ 
+  G4AutoLock lCounter(&counterMutex);
+  fgCounter--;
+  lCounter.unlock();
 }
 
 // 
@@ -678,7 +689,7 @@ G4bool G4RootAnalysisManager::CloseFile()
   fLockFileName = false;
 
   // delete files if empty
-  if ( ( IsMT() && fIsMaster && ( ! fH1Vector.size() && ! fH2Vector.size() ) ) || 
+  if ( ( ( fgCounter > 1 ) && fIsMaster && ( ! fH1Vector.size() && ! fH2Vector.size() ) ) || 
        ( ( ! fIsMaster ) && ( ! fNtupleVector.size() ) ) ) {
     std::remove(GetFullFileName());
 #ifdef G4VERBOSE

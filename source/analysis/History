@@ -17,6 +17,13 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 20, 2013 I.Hrivnacova (analysis-V09-06-11)
+- Fixed the problem in Root files clean-up (manifested in 
+  examples/advanced/microbeam):
+  non-empty Root file was deleted when only ntuples and no histograms 
+  were booked and the application was built against MT Geant4 but run 
+  in sequential mode. 
+
 June 11, 2013 I.Hrivnacova (analysis-V09-06-10)
 - Fixed deleting fNtuple in G4RootNtupleDescription
   (the ntuple is deleted with root file)
