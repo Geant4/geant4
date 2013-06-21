@@ -37,6 +37,7 @@
 #include "G4AutoLock.hh"
 #include "G4WorkerRunManager.hh"
 #include "G4UserRunAction.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4Timer.hh"
 
 long* G4MTRunManager::seeds = 0;
@@ -166,6 +167,7 @@ void G4MTRunManager::PrepareCommandsStack() {
     for ( std::vector<G4String>::const_iterator it = cmdCopy->begin() ;
          it != cmdCopy->end(); ++it )
         uiCmdsForWorkers.push_back(*it);
+    cmdCopy->clear();
     delete cmdCopy;
 }
 

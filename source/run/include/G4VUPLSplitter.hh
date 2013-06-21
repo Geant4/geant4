@@ -73,7 +73,7 @@ class G4VUPLSplitter
 {
   public:
 
-    G4VUPLSplitter() : totalobj(0) {}
+    G4VUPLSplitter() : totalobj(0),totalspace(0),sharedOffset(0) {}
 
     G4int CreateSubInstance()
       // Invoked by the master thread to create a new subinstance

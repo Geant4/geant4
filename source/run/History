@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 20th, 2013, M. Asai  (run-V09-06-60)
+- Moving G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated() call
+  from G4RunManagerKernel::BuildPhysicsTables() to
+  G4RunManager::TerminateEventLoop(): in combination with previous TEMPORARY
+  modification allows changing material between runs 
+
+June 20th, 2013, A. Dotti (run-V09-06-59)
+- Fix coverity warnings in G4VUPLSplitter and G4VUserPhysicsList
+- Adding TEMPORARY re-initialization of geometry in G4UserWorkerInitialization
+  to allow threads to re-copy shared geometry data in case gemotry has changed
+  This is only temporary and needs revision after 10.0-beta, but this hack is
+  currently the only solution that does not require API changes 
+
 June 19th, 2013, G. Cosmo (run-V09-06-58)
 - Restored deletion of allocators as in "run-V09-06-56".
   Withdraw change made in last tag.

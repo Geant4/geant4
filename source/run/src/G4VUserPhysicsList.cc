@@ -697,8 +697,15 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
         if (pManagerShadow != pManager)
         {
           G4VMultipleScattering *firstProcess = dynamic_cast<G4VMultipleScattering *>((*pVectorShadow)[j]);
-//G4cout << "G4VUserPhysicsList::BuildPhysicsTable +++++ " << currentProcess->GetProcessName() << " : " << (*pVectorShadow)[j]->GetProcessName() << G4endl;
-//G4cout << "G4VUserPhysicsList::BuildPhysicsTable +++++ " << currentProcess << " : " << (*pVectorShadow)[j] << G4endl;
+          if ( firstProcess == NULL )
+          {
+              G4ExceptionDescription msg;
+              msg<<"Process in process vector for particle "<<particle->GetParticleName()<<" at position "<<j;
+              msg<<" does not match master-thread process-vector (G4VMultipleScattering)";
+              G4Exception("G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition*)",
+                             "Run0035", FatalException,msg);
+              return;
+          }
           currentProcess->SlaveBuildPhysicsTable(*particle, firstProcess);
         }
         else
@@ -714,6 +721,15 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
         if (pManagerShadow != pManager)
         {
           G4VEnergyLossProcess *firstProcess2 = dynamic_cast<G4VEnergyLossProcess *>((*pVectorShadow)[j]);
+          if ( firstProcess2 == NULL )
+          {
+            G4ExceptionDescription msg;
+            msg<<"Process in process vector for particle "<<particle->GetParticleName()<<" at position "<<j;
+            msg<<" does not match master-thread process-vector (G4VEnergyLossProcess)";
+            G4Exception("G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition*)",
+                        "Run0035", FatalException,msg);
+            return;
+          }
           currentProcess2->SlaveBuildPhysicsTable(*particle, firstProcess2);
         }
         else

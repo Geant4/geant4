@@ -54,6 +54,31 @@ G4Thread* G4UserWorkerInitialization::CreateAndStartWorker(G4WorkerThread*)
 }
 #endif
 
+
+
+
+#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVReplica.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Region.hh"
+#include "G4Material.hh"
+#include "G4PhysicsVector.hh"
+#include "G4VDecayChannel.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4MaterialTable.hh"
+#include "G4PolyconeSide.hh"
+#include "G4PolyhedraSide.hh"
+#include "G4PVParameterised.hh"
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+#include "G4VUserPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "G4VModularPhysicsList.hh"
+
+
+
+
 void* G4UserWorkerInitialization::StartThread( void* context )
 {
     
@@ -134,6 +159,84 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     {
         if ( nextAction == G4MTRunManager::NEXTITERATION )
         {
+            /**************** TEMPORARY start ***********************
+                            A.Dotti 20Jun2013
+             The following code is a temporary solution to allow multiple runs changing
+             material between runs for 10.0-beta version
+             We re-do here for every run except the first the re-initialization of 
+             geometry for worker threads. To be put in correct place and re-viewed.
+             */
+            static G4ThreadLocal G4bool skip = true;
+            if ( !skip ) {
+                //First delete stuff
+                const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).FreeSlave();
+                const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).FreeSlave();
+                const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).FreeSlave();
+                //const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).FreeSlave();
+                const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).FreeSlave();
+                //const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).FreeSlave();
+                const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).FreeSlave();
+                const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).FreeSlave();
+                //Now-re-create
+                const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+                const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+                const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+                const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).SlaveInitializeSubInstance();
+                //G4Material::g4materialSubInstanceManager.SlaveCopySubInstanceArray(); //< Not anymore splitted class
+                const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
+                const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
+            
+                G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
+                for(size_t ip=0; ip<physVolStore->size(); ip++)
+                {
+                G4VPhysicalVolume* physVol = (*physVolStore)[ip];
+                G4LogicalVolume *g4LogicalVolume = physVol->GetLogicalVolume();
+                //use shadow pointer
+                G4VSolid *g4VSolid = g4LogicalVolume->GetMasterSolid();
+                G4PVReplica *g4PVReplica = 0;
+                g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
+                if (g4PVReplica)
+                {
+                    //g4PVReplica->SlaveG4PVReplica(g4PVReplica);
+                    g4PVReplica->InitialiseWorker(g4PVReplica);
+                    G4PVParameterised *g4PVParameterised = 0;
+                    g4PVParameterised =  dynamic_cast<G4PVParameterised*>(physVol);
+                    if (g4PVParameterised)
+                    {
+                        //01.25.2009 Xin Dong: For a G4PVParameterised instance, assoicated a
+                        //cloned solid for each worker thread. If all solids support this clone
+                        //method, we do not need to dynamically cast to solids that support this
+                        //clone method. Before all solids support this clone method, we do similar
+                        //thing here to dynamically cast and then get the clone method.
+                        
+                        //Threads may clone some solids simultaneously. Those cloned solids will be
+                        //Registered into a shared solid store (C++ container). Need a lock to
+                        //guarantee thread safety
+                        //G4AutoLock aLock(&solidclone);
+                        G4VSolid *slaveg4VSolid = g4VSolid->Clone();
+                        //aLock.unlock();
+                        //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, slaveg4VSolid, 0);
+                        g4LogicalVolume->InitialiseWorker(g4LogicalVolume,slaveg4VSolid,0);
+                    }
+                    else
+                    {
+                        //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, g4VSolid, 0);
+                        g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0);
+                    }
+                }
+                else
+                {
+                    //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, g4VSolid, 0);
+                    g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0);
+                }
+            }
+            
+            } else {
+                skip = false;
+            }
+            /**************** TEMPORARY end ***********************
+             */
+            
             //Execute all stacked commands
             std::vector<G4String> cmds = masterRM->GetCommandStack();
             G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance

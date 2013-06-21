@@ -538,7 +538,7 @@ void G4RunManagerKernel::BuildPhysicsTables()
   || physicsNeedsToBeReBuilt)
   {
     physicsList->BuildPhysicsTable();
-    G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+    ////G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
     physicsNeedsToBeReBuilt = false;
   }
 

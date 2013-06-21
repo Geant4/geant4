@@ -184,6 +184,7 @@ public:
 private:
     WorkerActionRequest nextActionRequest;
     void NewActionRequest( WorkerActionRequest newRequest );
+
 };
 
 #endif //G4MTRunManager_h

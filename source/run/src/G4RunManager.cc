@@ -55,6 +55,7 @@
 #include "G4Material.hh"
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4ios.hh"
 #include <sstream>
 
@@ -381,6 +382,7 @@ void G4RunManager::TerminateEventLoop()
     { G4cout << "  Number of events processed : " << numberOfEventProcessed << G4endl; }
     G4cout << "  "  << *timer << G4endl;
   }
+    G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
 }
 
 G4Event* G4RunManager::GenerateEvent(G4int i_event)
