@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 20, 2013 A.Dotti			   geommng-V09-06-07
+- Bug fix for MT: set static TLS pointer G4GeomSplitter::offset to 0 after
+  delete in split-class mechanism G4GeomSplitter::FreeSlave
+
 March 12, 2013 G.Cosmo                     geommng-V09-06-06
 - Removed thread-locality in obsolete G4VPhysicalVolume::GetObjectRotation()
   implementation.

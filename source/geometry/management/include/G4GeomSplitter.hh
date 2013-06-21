@@ -111,6 +111,7 @@ class G4GeomSplitter
     {
       if (!offset)  { return; }
       delete offset;
+      offset = 0;
     }
 
   public:
