@@ -28,6 +28,8 @@
 //
 // 
 
+#include <iomanip>
+
 #include "G4AllocatorList.hh"
 #include "G4Allocator.hh"
 #include "G4ios.hh"
@@ -66,7 +68,7 @@ void G4AllocatorList::Destroy(G4int nStat)
 {
   std::vector<G4AllocatorBase*>::iterator itr=fList.begin();
   G4int i=0, j=0;
-  size_t mem=0;
+  G4double mem=0;
   for(; itr!=fList.end();++itr)
   {
     if(i<nStat)
@@ -83,9 +85,10 @@ void G4AllocatorList::Destroy(G4int nStat)
   }
 #if (defined(G4VERBOSE) && !defined(G4MULTITHREADED))
   G4cout << "Number of memory pools allocated: " << Size()
-         << "; of which, static: " << i
-         << "; dynamic pools deleted: " << j << G4endl;
-  G4cout << "Total memory freed: " << mem/1048576 << " Mb" << G4endl;
+         << "; of which, static: " << i << G4endl
+         << "Dynamic pools deleted: " << j << G4endl;
+  G4cout << "Total memory freed: " << std::setprecision(2)
+         << mem/1048576 << " Mb" << G4endl;
 #endif
   fList.clear();
 }

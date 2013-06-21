@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 21, 2013 G.Cosmo (global-V09-06-48)
+- Refined printout of statistics in G4AllocatorList::Destroy().
+
 June 19, 2013 G.Cosmo (global-V09-06-47)
 - Protected printout of statistics in G4AllocatorList::Destroy() within
   G4VERBOSE and avoid it in MT-mode.
