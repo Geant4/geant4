@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 20. Jun. 2013 Andrea Dotti (particles-V09-06-31)
+- Bug fix for MT: set static TLS pointer G4PDefSplitter::offset to 0 after
+  delete in split-class mechanism G4PDefSplitter::FreeSlave
+
 - 11. Jun. 2013 Makoto Asai (particles-V09-06-30)
 - Fix for MT: change ions and isomers to be created after BuildPhysics()
   so that they properly inherit the process manager of GenericIon.

@@ -92,6 +92,7 @@ class G4PDefSplitter
     {
       if (!offset)  { return; }
       delete offset;
+      offset = 0;
     }
 
   public:
