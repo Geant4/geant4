@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 Jun 2013 A.Dotti        (hadr-cross-V09-06-26)
+-----------------------------------------------------
+- G4ElectroNuclearCrossSection - fixed Coverity defect
+
 19 Jun 2013 V.Ivanchenko   (hadr-cross-V09-06-25)
 -----------------------------------------------------
 - G4ComponentAntiNuclNuclearXS - fixed trial Coverity defect

@@ -74,7 +74,7 @@ namespace {
 
 
 G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection(const G4String& nam)
- : G4VCrossSectionDataSet(nam)
+ : G4VCrossSectionDataSet(nam) , currentN(0), currentZ(0)
 {}
 
 G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
