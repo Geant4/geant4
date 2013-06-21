@@ -158,7 +158,7 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   pParticleChange              = &fParticleChangeForRadDecay;
 
   // Now register the Isotope table with G4IonTable.
-  theIsotopeTable              = new G4RIsotopeTable();
+  theIsotopeTable = new G4RIsotopeTable();
   /*
   G4IonTable *theIonTable =
     (G4IonTable *)(G4ParticleTable::GetParticleTable()->GetIonTable());
@@ -208,6 +208,7 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
 G4RadioactiveDecay::~G4RadioactiveDecay()
 {
   delete theRadioactiveDecaymessenger;
+  delete theIsotopeTable;
 }
 
 

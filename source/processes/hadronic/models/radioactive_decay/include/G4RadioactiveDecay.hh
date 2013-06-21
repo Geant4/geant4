@@ -163,8 +163,6 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     // by its own data file for a given isotope
 
 
-
-
     inline void  SetVerboseLevel(G4int value) {verboseLevel = value;}
     // Sets the VerboseLevel which controls duggering display
 

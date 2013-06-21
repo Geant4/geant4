@@ -14,6 +14,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+20 June 2013  Andrea Dotti   radioactive_decay-V09-06-08
+--------------------------------------------------------
+- G4RIsotopeTable.cc : fix bug in checking if DB files have 
+  been loaded (accessing map without protection)
+
+20 June 2013  Dennis Wright  radioactive_decay-V09-06-07
+--------------------------------------------------------
+- G4RadioactiveDecay.cc : fix memory leak by adding  
+  delete theIsotopeTable;
+  to dtor
+
 18 June 2013 V. Ivanchenko  radioactive_decay-V09-06-06
 --------------------------------------------------------
 - G4RadioactiveDecay, G4NuclearDecayChannel, 
