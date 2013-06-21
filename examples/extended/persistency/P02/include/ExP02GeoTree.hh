@@ -45,7 +45,8 @@ class ExP02GeoTree {
 public: 
 
   ExP02GeoTree( ); 
-  ExP02GeoTree(G4VPhysicalVolume* vol, const G4ElementTable* et, const G4MaterialTable* mt);
+  ExP02GeoTree(G4VPhysicalVolume* vol, const G4ElementTable* et, 
+               const G4MaterialTable* mt);
   
   virtual ~ExP02GeoTree( );
 

@@ -51,7 +51,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP02DetectorConstruction::ExP02DetectorConstruction()
- :  fExperimentalHall_log(0), fTracker_log(0),
+  :  G4VUserDetectorConstruction(),
+    fExperimentalHall_log(0), fTracker_log(0),
     fCalorimeterBlock_log(0), fCalorimeterLayer_log(0),
     fExperimentalHall_phys(0), fCalorimeterLayer_phys(0),
     fCalorimeterBlock_phys(0), fTracker_phys(0)

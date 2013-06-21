@@ -43,7 +43,7 @@
 ExP02PhysicsList::ExP02PhysicsList():  G4VUserPhysicsList()
 {
   defaultCutValue = 1.0*cm;
-   SetVerboseLevel(1);
+  SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

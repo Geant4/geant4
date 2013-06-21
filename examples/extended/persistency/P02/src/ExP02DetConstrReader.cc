@@ -45,6 +45,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP02DetConstrReader::ExP02DetConstrReader()
+ : G4VUserDetectorConstruction()
 {  
   // initialize ROOT
   TSystem ts;

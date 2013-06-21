@@ -50,12 +50,10 @@ class ExP02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     ExP02PrimaryGeneratorAction();    
    ~ExP02PrimaryGeneratorAction();
 
-  public:
     virtual void GeneratePrimaries(G4Event*);
 
   private:
     G4ParticleGun* fParticleGun;
-  //    ExP02DetectorConstruction* fMyDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
