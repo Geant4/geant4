@@ -52,6 +52,7 @@
 // 20130307  M. Kelsey -- Reverse order of dimensions for rmn array
 // 20130422  M. Kelsey -- Move kinematics to G4CascadeFinalStateAlgorithm
 // 20130508  D. Wright -- Add muon capture, with absorption on quasideuterons
+// 20130620  Address Coverity complaint about missing copy actions
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
@@ -104,6 +105,11 @@ private:
   std::vector<G4double> masses;
   std::vector<G4double> masses2;
   std::vector<G4int> particle_kinds;
+
+private:
+  // Copying of modules is forbidden
+  G4ElementaryParticleCollider(const G4ElementaryParticleCollider&);
+  G4ElementaryParticleCollider& operator=(const G4ElementaryParticleCollider&);
 };
 
 #endif	/* G4ELEMENTARY_PARTICLE_COLLIDER_HH */

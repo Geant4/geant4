@@ -29,6 +29,7 @@
 // 20110721  M. Kelsey -- Add model ID as optional ctor argument (so subclasses
 //		don't have to call SetModel()).
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
+// 20130620  M. Kelsey -- Address Coverity #37504, check self in op=()
 
 #include <cmath>
 
@@ -48,8 +49,10 @@ G4InuclParticle::G4InuclParticle(G4ParticleDefinition* pd,
 
 // Assignment operator for use with std::sort()
 G4InuclParticle& G4InuclParticle::operator=(const G4InuclParticle& right) {
-  pDP = right.pDP;
-  modelId = right.modelId;
+  if (this != &right) {
+    pDP = right.pDP;
+    modelId = right.modelId;
+  }
 
   return *this;
 }

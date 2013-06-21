@@ -31,6 +31,7 @@
 //		simple data members
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20110728  M. Kelsey -- Fix Coverity #23843, add destructor.
+// 20130620  Address Coverity complaint about missing copy actions
 
 #ifndef G4EVAPORATIONINUCL_COLLIDER_HH
 #define G4EVAPORATIONINUCL_COLLIDER_HH
@@ -52,6 +53,11 @@ public:
   
 private: 
   G4EquilibriumEvaporator* theEquilibriumEvaporator;
+
+private:
+  // Copying of modules is forbidden
+  G4EvaporationInuclCollider(const G4EvaporationInuclCollider&);
+  G4EvaporationInuclCollider& operator=(const G4EvaporationInuclCollider&);
 };        
 
 #endif /* G4EVAPORATIONINUCL_COLLIDER_HH */

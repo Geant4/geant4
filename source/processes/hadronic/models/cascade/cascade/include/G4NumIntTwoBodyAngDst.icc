@@ -31,12 +31,12 @@
 //              final state angular distributions in Bertini-style cascade
 //
 // 20130219	M. Kelsey: Move to .icc file, required for templated classes
+// 20130620  Fix Coverity #50295, recursive #include.
 
 #ifndef G4NumIntTwoBodyAngDst_icc
 #define G4NumIntTwoBodyAngDst_icc 1
 
 #include "Randomize.hh"
-#include "G4NumIntTwoBodyAngDst.hh"
 
 
 template <G4int NKEBINS, G4int NANGLES> G4double

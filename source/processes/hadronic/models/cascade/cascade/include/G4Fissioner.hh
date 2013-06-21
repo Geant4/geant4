@@ -33,6 +33,7 @@
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20110801  M. Kelsey -- Pass C arrays to ::potentialMinimization()
 // 20130129  M. Kelsey -- Put buffer for output nuclei here for thread-safety
+// 20130620  Address Coverity complaint about missing copy actions
 
 #ifndef G4FISSIONER_HH
 #define G4FISSIONER_HH
@@ -81,6 +82,11 @@ private:
 			     G4double AL1[2], 
 			     G4double BET1[2], 
 			     G4double& R12) const; 
+
+private:
+  // Copying of modules is forbidden
+  G4Fissioner(const G4Fissioner&);
+  G4Fissioner& operator=(const G4Fissioner&);
 };        
 
 #endif /* G4FISSIONER_HH */

@@ -62,6 +62,7 @@
 //		memory leak.
 // 20110919  M. Kelsey -- Add optional final-state clustering
 // 20130304  M. Kelsey -- Add new G4CascadeHistory for cacasde structure reporting
+// 20130620  Address Coverity complaint about missing copy actions
 
 #ifndef G4INTRA_NUCLEI_CASCADER_HH
 #define G4INTRA_NUCLEI_CASCADER_HH
@@ -156,6 +157,11 @@ private:
   G4ExitonConfiguration theExitonConfiguration;
 
   std::vector<G4ThreeVector> hitNucleons;	// Nucleons hit before rescatter
+
+private:
+  // Copying of modules is forbidden
+  G4IntraNucleiCascader(const G4IntraNucleiCascader&);
+  G4IntraNucleiCascader& operator=(const G4IntraNucleiCascader&);
 };        
 
 #endif /* G4INTRA_NUCLEI_CASCADER_HH */

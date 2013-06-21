@@ -15,6 +15,24 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 June 2013  Micahel Kelsey (hadr-casc-V09-06-35)
+--------------------------------------------------
+Address numerous Coverity warnings which have build up since November 2011.
+No modifications to working code were required.
+
+	G4BigBanger.hh			G4InuclCollider.hh		
+	G4CascadeCheckBalance.hh	G4InuclNuclei.cc		
+	G4CascadeColliderBase.hh	G4InuclParticle.cc		
+	G4CascadeDeexcitation.hh	G4MultiBodyMomentumDist.hh	
+	G4CascadeInterface.cc		G4NonEquilibriumEvaporator.hh	
+	G4CascadeRecoilMaker.hh		G4NumIntTwoBodyAngDst.hh,.icc	
+	G4ElementaryParticleCollider.hh	G4ParamExpTwoBodyAngDst.icc	
+	G4EquilibriumEvaporator.hh	G4PreCompoundDeexcitation.hh	
+	G4EvaporationInuclCollider.hh	G4TwoBodyAngularDist.hh		
+	G4Fissioner.hh			G4VCascadeCollider.hh		
+	G4GDecay3.cc			G4VCascadeDeexcitation.hh
+	G4IntraNucleiCascader.hh
+
 19 June 2013  Micahel Kelsey (hadr-casc-V09-06-34)
 --------------------------------------------------
 - G4TwoBodyAngularDist.hh, G4MultiBodyMomentumDist.hh:  Replace use of
@@ -3826,4 +3844,3 @@ All changes below within "cascade/" subdirectory:
    elastic scattering interface added:
    G4ElasticCascadeInterface.hh, .cc added
    G4CascadeInterface.hh modified
-

@@ -30,6 +30,7 @@
 // 20100517  M. Kelsey -- Inherit from common base class
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100914  M. Kelsey -- Migrate to integer A and Z
+// 20130620  Address Coverity complaint about missing copy actions
 
 #ifndef G4NON_EQUILIBRIUM_EVAPORATOR_HH
 #define G4NON_EQUILIBRIUM_EVAPORATOR_HH
@@ -51,6 +52,11 @@ private:
   G4double getMatrixElement(G4int A) const;
   G4double getE0(G4int A) const; 
   G4double getParLev(G4int A, G4int Z) const;
+
+private:
+  // Copying of modules is forbidden
+  G4NonEquilibriumEvaporator(const G4NonEquilibriumEvaporator&);
+  G4NonEquilibriumEvaporator& operator=(const G4NonEquilibriumEvaporator&);
 };
 
 #endif /* G4NON_EQUILIBRIUM_EVAPORATOR_HH */

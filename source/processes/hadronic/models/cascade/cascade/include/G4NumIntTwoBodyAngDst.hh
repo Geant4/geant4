@@ -32,12 +32,13 @@
 //
 // 20130219	M. Kelsey: Rewrite with C-arrays, using template args for
 //		dimensions (c.f. G4CascadeSampler)
+// 20130620	Address Coverity #51342; initialize angDist[] buffer in ctor
 
 #ifndef G4NumIntTwoBodyAngDst_h
 #define G4NumIntTwoBodyAngDst_h 1
 
 #include "G4VTwoBodyAngDst.hh"
-
+#include <algorithm>
 
 template <G4int NKEBINS, G4int NANGLES>
 class G4NumIntTwoBodyAngDst : public G4VTwoBodyAngDst {
@@ -50,7 +51,10 @@ public:
 			const G4double (&dists)[nDists][nAngles],
 			const G4double highKEscale, G4int verbose = 0)
     : G4VTwoBodyAngDst(name, verbose), tcoeff(highKEscale),
-      labKE(kebins), cosBins(angles), angDists(dists) {;}
+      labKE(kebins), cosBins(angles), angDists(dists) {
+    std::fill(angDist, angDist+nDists, 0.);	// Initialize working buffer
+  }
+
   virtual ~G4NumIntTwoBodyAngDst() {;}
   
   virtual G4double GetCosTheta(const G4double& ekin, const G4double& pcm) const;

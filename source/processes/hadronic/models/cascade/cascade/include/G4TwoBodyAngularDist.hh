@@ -33,6 +33,7 @@
 // 20130307  M. Kelsey -- Add verbosity interface for contained objects
 // 20130422  M. Kelsey -- Add three-body distributions, for temporary use
 // 20130619  Change singleton instance to be thread-local, to avoid collisions.
+// 20130620  Address Coverity warnings about missing copy actions
 
 #ifndef G4TwoBodyAngularDist_h
 #define G4TwoBodyAngularDist_h 1
@@ -95,6 +96,11 @@ private:
   // TEMPORARY generators for three-body final states
   G4HadNucl3BodyAngDst* hn3BodyDst;	// (pi,K,Y,g) N -> XYZ scattering
   G4NuclNucl3BodyAngDst* nn3BodyDst;	// N N -> XYZ scattering
+
+private:
+  // Copying of modules is forbidden
+  G4TwoBodyAngularDist(const G4TwoBodyAngularDist&);
+  G4TwoBodyAngularDist& operator=(const G4TwoBodyAngularDist&);
 };
 
 #endif	/* G4TwoBodyAngularDist_h */

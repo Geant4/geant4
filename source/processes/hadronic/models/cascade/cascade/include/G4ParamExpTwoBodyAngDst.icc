@@ -31,11 +31,11 @@
 //               two-body angular distributions in Bertini-style cascade
 //
 // 20130227  Renamed from "Barashenkov" to "ParamExp" to fix misattribution.
+// 20130620  Fix Coverity #50296, recursive #include.
 
 #ifndef G4ParamExpTwoBodyAngDst_icc
 #define G4ParamExpTwoBodyAngDst_icc 1
 
-#include "G4ParamExpTwoBodyAngDst.hh"
 #include "Randomize.hh"
 #include <cfloat>
 

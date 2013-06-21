@@ -191,12 +191,11 @@ void G4CascadeInterface::clear() {
 // Initialize shared objects for use across multiple threads
 
 void G4CascadeInterface::Initialize() {
-  G4ParticleDefinition* pd = 0;
-  pd = G4UnboundPN::Definition();
-  pd = G4Dineutron::Definition();
-  pd = G4Diproton::Definition();
+  G4ParticleDefinition* pn = G4UnboundPN::Definition();
+  G4ParticleDefinition* nn = G4Dineutron::Definition();
+  G4ParticleDefinition* pp = G4Diproton::Definition();
   const G4CascadeChannel* ch = G4CascadeChannelTables::GetTable(0);
-  if (!ch || !pd) return;	// Dummy action to avoid "unused variables"
+  if (!ch || !pn || !nn || !pp) return;		// Avoid "unused variables"
 }
 
 

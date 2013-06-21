@@ -33,6 +33,7 @@
 // NOTE:  Separate multiplicity-3 generators are not used, per V.Uzhinsky
 //
 // 20130619  Change singleton instance to be thread-local, to avoid collisions.
+// 20130620  Address Coverity warnings about missing copy actions
 
 #ifndef G4MultiBodyMomentumDist_h
 #define G4MultiBodyMomentumDist_h 1
@@ -74,6 +75,11 @@ private:
   G4NuclNucl4BodyMomDst* nn4BodyDst;    // N N to X Y Z W ...
   G4HadNucl3BodyMomDst*  hn3BodyDst;	// pi,K,Y,gamma N to X Y Z
   G4HadNucl4BodyMomDst*  hn4BodyDst;	// pi,K,Y,gamma N to X Y Z W ...
+
+private:
+  // Copying of modules is forbidden
+  G4MultiBodyMomentumDist(const G4MultiBodyMomentumDist&);
+  G4MultiBodyMomentumDist& operator=(const G4MultiBodyMomentumDist&);
 };
 
 #endif	/* G4MultiBodyMomentumDist_h */

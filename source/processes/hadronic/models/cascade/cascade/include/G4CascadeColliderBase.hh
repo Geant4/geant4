@@ -38,6 +38,7 @@
 //		consistency in subclass colliders.
 // 20110321  M. Kelsey -- Hide names of arguments to rescatter(), to avoid
 //		compiler warnings on some GCC versions.
+// 20130620  Address Coverity complaint about missing copy actions
 
 #include "G4VCascadeCollider.hh"
 
@@ -107,6 +108,11 @@ protected:
   virtual G4bool validateOutput(G4InuclParticle* bullet,
 				G4InuclParticle* target,
 		const std::vector<G4InuclNuclei>& fragments);
+
+private:
+  // Copying of modules is forbidden
+  G4CascadeColliderBase(const G4CascadeColliderBase&);
+  G4CascadeColliderBase& operator=(const G4CascadeColliderBase&);
 };        
 
 #endif	/* G4CASCADE_COLLIDER_BASE_HH */

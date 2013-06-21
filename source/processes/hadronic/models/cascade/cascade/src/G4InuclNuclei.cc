@@ -51,6 +51,7 @@
 // 20121009  M. Kelsey -- Add report of excitons if non-empty
 // 20130314  M. Kelsey -- Use G4IonList typedef for fragment map, encapsulate
 //		it in a static function with mutexes.
+// 20130620  M. Kelsey -- Address Coverity #37503, check self in op=()
 
 #include "G4InuclNuclei.hh"
 #include "G4AutoLock.hh"
@@ -277,8 +278,10 @@ G4double G4InuclNuclei::getNucleiMass(G4int a, G4int z, G4double exc) {
 
 // Assignment operator for use with std::sort()
 G4InuclNuclei& G4InuclNuclei::operator=(const G4InuclNuclei& right) {
-  theExitonConfiguration = right.theExitonConfiguration;
-  G4InuclParticle::operator=(right);
+  if (this != &right) {
+    theExitonConfiguration = right.theExitonConfiguration;
+    G4InuclParticle::operator=(right);
+  }
   return *this;
 }
 

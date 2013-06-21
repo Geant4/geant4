@@ -31,6 +31,7 @@
 // a final state with evaporated particles and (possibly) a stable nucleus.
 //
 // 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
+// 20130620  Address Coverity complaint about missing copy actions
 
 #include "G4VCascadeDeexcitation.hh"
 #include "globals.hh"
@@ -58,6 +59,11 @@ private:
   G4BigBanger* theBigBanger;
   G4NonEquilibriumEvaporator* theNonEquilibriumEvaporator;
   G4EquilibriumEvaporator* theEquilibriumEvaporator;
+
+private:
+  // Copying of modules is forbidden
+  G4CascadeDeexcitation(const G4CascadeDeexcitation&);
+  G4CascadeDeexcitation& operator=(const G4CascadeDeexcitation&);
 };
 
 #endif	/* G4CASCADE_DEEXCITATION_HH */

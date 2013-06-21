@@ -33,6 +33,7 @@
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
 // 20100928  M. Kelsey -- Migrate to integer A and Z
+// 20130620  Address Coverity complaint about missing copy actions
 
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
@@ -54,19 +55,20 @@ public:
 
 private: 
   void generateBangInSCM(G4double etot, G4int a, G4int z);
-
   void generateMomentumModules(G4double etot, G4int a, G4int z); 
-
   G4double xProbability(G4double x, G4int a) const; 
-
   G4double maxProbability(G4int a) const;
-
   G4double generateX(G4int ia, G4double promax) const; 
 
   // Buffers for big-bang results
   std::vector<G4InuclElementaryParticle> particles;
   std::vector<G4double> momModules;
   std::vector<G4LorentzVector> scm_momentums;
+
+private:
+  // Copying of modules is forbidden
+  G4BigBanger(const G4BigBanger&);
+  G4BigBanger& operator=(const G4BigBanger&);
 };        
 
 #endif /* G4BIG_BANGER_HH */

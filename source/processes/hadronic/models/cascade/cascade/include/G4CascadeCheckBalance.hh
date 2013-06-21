@@ -46,6 +46,7 @@
 // 20110328  M. Kelsey -- Add default ctor and explicit limit setting
 // 20110722  M. Kelsey -- For IntraNucleiCascader, take G4CollOut as argument
 // 20121002  M. Kelsey -- Add strangeness check (useful for Omega- beam)
+// 20130620  Address Coverity complaint about missing copy actions
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -160,6 +161,11 @@ private:
   G4int finalStrange;
 
   G4CollisionOutput tempOutput;		// Buffer for direct-list interfaces
+
+private:
+  // Copying of modules is forbidden
+  G4CascadeCheckBalance(const G4CascadeCheckBalance&);
+  G4CascadeCheckBalance& operator=(const G4CascadeCheckBalance&);
 };
 
 #endif	/* G4CASCADE_CHECK_BALANCE_HH */

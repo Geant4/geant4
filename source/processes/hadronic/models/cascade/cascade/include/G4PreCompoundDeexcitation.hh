@@ -33,6 +33,7 @@
 // 20100922  M. Kelsey -- Remove convertFragment() function, pass buffer
 //		instead of copying
 // 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
+// 20130620  Address Coverity complaint about missing copy actions
 
 #include "G4VCascadeDeexcitation.hh"
 #include "globals.hh"
@@ -60,6 +61,11 @@ public:
 private:
   G4ExcitationHandler* theExcitationHandler;
   G4VPreCompoundModel* theDeExcitation;
+
+private:
+  // Copying of modules is forbidden
+  G4PreCompoundDeexcitation(const G4PreCompoundDeexcitation&);
+  G4PreCompoundDeexcitation& operator=(const G4PreCompoundDeexcitation&);
 };
 
 #endif	/* G4PRECOMPOUND_DEEXCITATION_HH */

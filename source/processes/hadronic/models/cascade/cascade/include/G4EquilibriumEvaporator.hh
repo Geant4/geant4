@@ -37,6 +37,7 @@
 // 20110809  M. Kelsey -- Move "foutput" buffer to data member
 // 20130129  M. Kelsey -- Move QF interpolation to global statics for
 //		multi-threaded shared memory.
+// 20130620  Address Coverity complaint about missing copy actions
 
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
@@ -86,6 +87,11 @@ private:
 
   G4Fissioner theFissioner;
   G4BigBanger theBigBanger;
+
+private:
+  // Copying of modules is forbidden
+  G4EquilibriumEvaporator(const G4EquilibriumEvaporator&);
+  G4EquilibriumEvaporator& operator=(const G4EquilibriumEvaporator&);
 };        
 
 #endif /* G4EQUILIBRIUM_EVAPORATOR_HH */

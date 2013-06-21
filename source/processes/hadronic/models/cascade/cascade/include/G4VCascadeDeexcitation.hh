@@ -28,6 +28,8 @@
 // $Id$
 //
 // Base class to define a common interface for post-cascade processing.
+//
+// 20130620  Address Coverity complaint about missing copy actions
 
 #include "G4CascadeColliderBase.hh"
 #include "globals.hh"
@@ -52,6 +54,11 @@ public:
 
 protected:
   G4CollisionOutput output;	// Local buffer for de-excitation stages
+
+private:
+  // Copying of modules is forbidden
+  G4VCascadeDeexcitation(const G4VCascadeDeexcitation&);
+  G4VCascadeDeexcitation& operator=(const G4VCascadeDeexcitation&);
 };
 
 #endif	/* G4CASCADE_DEEXCITATION_HH */
