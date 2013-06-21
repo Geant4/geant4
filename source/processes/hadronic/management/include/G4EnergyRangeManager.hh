@@ -36,21 +36,21 @@
  
 #include "G4HadronicInteraction.hh"
  
- class G4EnergyRangeManager 
- {
+
+class G4EnergyRangeManager 
+{
      
- public:
+  public:
     
     G4EnergyRangeManager();
  
-    ~G4EnergyRangeManager()
-    { }
+    ~G4EnergyRangeManager() {}
     
     G4EnergyRangeManager(const G4EnergyRangeManager& right);
     
     G4EnergyRangeManager& operator=( const G4EnergyRangeManager &right );
     
- public:
+  public:
     
     inline G4bool operator==( const G4EnergyRangeManager &right ) const
     { return ( this == (G4EnergyRangeManager *) &right ); }
@@ -72,15 +72,12 @@
 
     void Dump( G4int verbose = 0 ); 
     
- private:
+  private:
      
     enum { MAX_NUMBER_OF_MODELS = 100 };
-    
-    G4HadronicInteraction *
-     theHadronicInteraction[ MAX_NUMBER_OF_MODELS ];
-    
+
     G4int theHadronicInteractionCounter;
-    
+    G4HadronicInteraction* theHadronicInteraction[ MAX_NUMBER_OF_MODELS ];
  };
 
 #endif
