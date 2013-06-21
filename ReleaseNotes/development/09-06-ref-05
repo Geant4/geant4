@@ -371,7 +371,7 @@ processes/hadronic
     model-specific redundancies. G4HadDecayGenerator provides a simple
     interface, with algorithm selection handled via constructor argument.
   o Replaced uses of CLHEP::Rand* with G4Rand*, required for MT.
-- stopping (hadr-stopping-V09-06-03)
+- stopping (hadr-stopping-V09-06-07)
   o G4EmCaptureCascade: fixed array initialisation.                          (o)
   o G4MuonMinusBoundDecay: improved muon capture rate data/lookup and        (o)
     calculation of bound muon decay rate.

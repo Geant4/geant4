@@ -1,0 +1,572 @@
+
+                       geant4-09-06-ref-06
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Restored deletion of memory pools for allocators at job termination.
+ o Revised number of magnetic field components (to allow up to 24).
+ o Removed split mechanism from G4PhysicsVector; made G4PhysicsVector
+   a read-only class, simplifying memory management in MT-mode.
+ o G4Material: issue warning if new added material has duplicate name.
+ o Fixes for MT mode, to allow for changing of geometry and materials
+   between runs. Corrections for initialisation of physics-tables and
+   handling of ions.
+ o Added capability of simulating the transmission of a dichronic filter
+   for optical processes.
+ o Fix in Bertini Cascade to restore physics performance lost from changes
+   in previous reference tag.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-06-17
+-----
+- Corrected output of "--has-feature" for CLHEP feature.
+  Addressing problem report #1477.
+- Updated datasets for G4NDL, G4EMLOW, and G4RadioactiveDecay.
+- FindROOT.cmake: Minor changes for gccxml dictionary generation.
+
+analysis                                         analysis-V09-06-10
+--------
+- Fix in G4RootAnalysisManager::WriteOnAscii().
+  Addressing problem report #1473.
+- Improved handling of files: empty files are now removed in CloseFile().
+  Moved generation of file name in G4VAnalysisManager.
+- Fixed deleting fNtuple in G4RootNtupleDescription (the ntuple is deleted
+  with root file). Fixed the problem in Root files clean-up: non-empty Root
+  file was deleted when only ntuples and no histograms were booked and the
+  application was built against MT Geant4 but run in sequential mode.
+- Forced setting of 'fIsMaster' to 'true' in sequential mode.
+
+event                                            event-V09-06-08
+-----
+- Moved the access method of G4StateManager::GetStateManager() to the
+  constructor of G4EventManager to reduce use of TLS pointer.
+- Removed unnecessary call to aSolid->SurfaceNormal() in
+  G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary()
+  responsible for generating warnings at run-time.
+
+geometry/magneticfield                           field-V09-06-07
+----------------------
+- Revised number of field components (to allow up to 24).
+  18 are required for new applications (B, E, Gravity, B-gradients).
+- Fixes for minor initialisation defects found by Coverity.
+
+geometry/management                              geommng-V09-06-07
+-------------------
+- Fix for MT in G4GeomSplitter to set static thread-local pointer 'offset'
+  to 0 after delete in FreeSlave().
+
+geometry/navigation                              geomnav-V09-06-10
+-------------------
+- G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().  
+  Issue identified by Coverity.
+- Corrected deletion of commands in destructor and removed unused pointer
+  in G4GeometryMessenger.
+- Made copy-ctor and assignment operator private in G4Navigator, as not
+  supposed to be copied or cloned.
+
+geometry/solids/specific                         geom-specific-V09-06-12
+------------------------
+- Fixed minor Coverity defect in G4PolyhedraSide and G4PolyconeSide.
+
+global                                           global-V09-06-48
+------
+- Removed split mechanism from G4PhysicsVector; removed G4PhysicsVectorCache
+  class; removed G4PVSplitter. Made G4PhysicsVector a read-only class.
+  Access to value only via const methods; to enable Spline, SetSpline()
+  should be applied after vector is filled, or equivalently direct call to
+  fill second derivatives should be done.
+  Simplified implementation of new/delete operators for G4PhysicsVector
+  and avoid deletion of allocator global pointers in destructor.
+- Removed G4Physics2DVectorCache class, no longer used.
+- Introduced G4AllocatorList class to store pointers of all G4Allocator
+  objects for each thread so that they can all be cleanly deleted at
+  program termination. Added G4AllocatorBase base class defining virtual
+  destructor and virtual utility methods for G4Allocator.
+- Added call to clear() in G4PhysicsTable::clearAndDestroy().
+- Added 'safe' inclusion of <windows.h> from G4Threading.hh, in new
+  header windefs.hh.
+- Added first version of stack backtrace in G4FPEDetection when FPE
+  exception is detected. Linux only.
+- Updated date and tag for 10.0-Beta.
+
+interfaces                                       interfaces-V09-06-04
+----------
+- G4UIQt: added some tooltips. Set fix size font in output.
+- Coverity fixes to G4UIQt, G4Qt, G4Xt.
+- Improvements to Wt driver configuration.
+- Added cmake configuration for Wt and Qt5 in "common" and "basic" modules.
+
+materials                                        materials-V09-06-18
+---------
+- G4Material: issue warning if new added material has duplicate name.
+- Partially fix for coverity errors in G4OpticalSurface.
+  Added dichroic filter surface.
+
+particles                                        particles-V09-06-31
+---------
+- Fixes for MT: change ions and isomers to be created after BuildPhysics()
+  so that they properly inherit the process manager of GenericIon.
+  Set static thread-local pointer 'offset' in G4PDefSplitter to 0 after
+  delete in FreeSlave().
+- Fixed name and class name for Upsilon meson.
+
+persistency/gdml                                 gdml-V09-06-03
+----------------
+- Replaced use of 'pascal' with 'hep_pascal' to avoid conflicts on Windows.
+
+physics_lists
+-------------
+- constructors/decay (phys-ctor-decay-V09-06-02):
+  + Bug fixes for MT: made 'wasActivated' flag thread-local.
+- constructors/electromagnetic (phys-ctor-em-V09-06-08):
+  + Fixed compilation warning in G4EmDNAPhysicsChemistry.
+- constructors/gamma_lepto_nuclear (phys-ctor-glnuclear-V09-06-03):
+  + Fix for MT: made data members thread-local.
+- constructors/hadron_elastic (phys-ctor-helastic-V09-06-04):
+  + Bug fixes for MT: made 'wasActivated' flag thread-local.
+    All private data members are now thread-local if in doubt or
+    transformed to local variables.
+- constructors/hadron_inelastic (phys-ctor-hinelastic-V09-06-14):
+  + Improved use of kaon cross-sections in G4HadronPhysicsShielding.
+  + In G4HadronPhysicsINCLXX initialise pointers to optional parts of 
+    physics to 0 to protect from deletion of uninitialised pointer.
+  + Fix for MT: made data members thread-local.
+  + Fixed compilation warnings with latest clang compiler version.
+- constructors/ions (phys-ctor-ions-V09-06-04):
+  + MT fixes: made private data members thread-local (constructors are
+    shared instances, but processes not).
+- constructors/limiters (phys-ctor-limiters-V09-06-07):
+  + MT fix: made 'wasActivated' flag thread-local in G4NeutronTrackingCut.
+- constructors/stopping (phys-ctor-stopping-V09-06-02):
+  + Bug fixes for MT: made 'wasActivated' flag thread-local and changed
+    private data members to local variables in ConstructProcess().
+- lists (phys-lists-V09-06-11):
+  + Coverity fix in LBE list.
+
+processes/cuts                                   procuts-V09-06-05
+--------------
+- Modifies G4RToEConvFor* classes removing unnecessary static declarations
+  for local variables and moved to be simple members of the class.
+- Remove thread-local specification for static members 'LowestEnergy',
+  'HighestEnergy' and 'MaxEnergyCut', fixing FPE ceash in MT mode.
+  Fixed all loops for G4PhysicsLogVector: upper index is nbins+1.
+  Stop calling Reset() from its destructor (now controlled in run-manager).
+
+processes/decay                                  decay-V09-06-01
+---------------
+- Retagged. No functional changes.
+
+processes/electromagnetic/adjoint                emadjoint-V09-06-05
+---------------------------------
+- Cleanup from automatic changes for MT in G4AdjointInterpolator.
+
+processes/electromagnetic/dna                    emdna-V09-06-08
+-----------------------------
+- Updated G4DNABornIonisationModel for speedup option.
+  Requires new data-set G4EMLOW version 6.33.
+- Cleanup from automatic changes for MT and porting MT compilation on Windows.
+
+processes/electromagnetic/lowenergy              emlowen-V09-06-14
+-----------------------------------
+- G4IonDEDXHandler, G4IonParametrisedLossModel, G4LivermoreGammaConversionModel,
+  G4PenelopeBremsstrahlungAngular: moved call to SetSpline(true) to be always
+  after vector is filled; only in that case Spline interpolation is enabled,
+  according to the most recent version of G4PhysicsVector.
+- G4LowEPComptonModel: withdrawn dependency on G4HadTmpUtil.
+
+processes/electromagnetic/muons                  emmuons-V09-06-14
+-------------------------------
+- G4MuPairProductionModel: providing different initialisation for master and
+  worker threads, sharing element selectors.
+  Added protection and warning message if 'p1=p2' in SampleSecondaries().
+- G4MuBremsstrahlungModel: removed 'partialSubSigma' data structure, use
+  instead G4ElementSelectors; providing different initialisation for master
+  and worker threads sharing element selectors.
+- G4MuPairProductionModel, G4MuBremsstrahlungModel: added MinPrimaryEnergy()
+  method implementation (all cross-section tables will start from the reaction
+  threshold).
+- G4EnergyLossForExtrapolator: use cut DBL_MAX to avoid creation of
+  G4EmSelectors in lazy initialisation.
+
+processes/electromagnetic/pii                    empii-V09-06-00
+-----------------------------
+- Cleanup from automatic MT changes in G4hRDEnergyLoss.
+
+processes/electromagnetic/standard               emstand-V09-06-51
+----------------------------------
+- G4WaterStopping: enable Spline after vector with data is filled, according
+  to last G4PhysicsVector modifications.
+- G4eCoulombScatteringModel: do not use ElementSelectors for ions.
+- G4hIonisation: added special treatment for ions.
+- G4PEEffectFluoModel, G4KleinNishinaModel: correction to ensure energy
+  conservation when fluorescence is on.
+- G4SeltzerBergerModel, G4eBremsstrahlungRelModel: implemented copy of
+  element selectors from master to worker threads.
+  Use IsMaster() method at initialisation.
+- G4SeltzerBergerModel: increased 'elowlimit' in SamplingSecondaries()
+  from 10 to 20 keV.
+- G4ScreeningMottCrossSection: fixed numerical problem for very small
+  scattering angles.
+- G4PAIPhotonModel: added extra methods.
+
+processes/electromagnetic/utils                  emutils-V09-06-40
+-------------------------------
+- G4VMultipleScattering: fixed list models per multiple-scattering process
+  for ions.
+- G4VEnergyLossProcess: avoid unnecessary deletion of tables between runs.
+  Fixed CrossSectionPerVolume() method.
+- G4VEmModel: take into account reaction threshold when initialising
+  G4EmElementSelectors; set smallest number of bins to 3 (was 5) and fixed
+  initialisation. Fixed SetCrossSectionTable() method.
+- G4VEmProcess: fixed CrossSectionPerVolume() method, use 'tablePrim' for
+  high energy if this table is defined.
+- G4VEnergyLossProcess: make ion initialisation assuming that each ion 
+  may have an individual process. Do not destroy old tables in worker thread
+  for the new run. Added local cache inside GetRangeForLoss() method.
+- G4VEnergyLossProcess, G4VEmProcess: density factor correction array is
+  assigned to a process in BuildPhysicsTable() instead of PreparePhysicsTable()
+  in order to get correct pointers in worker threads.
+- G4VEnergyLossProcess, G4VEmProcess, G4VEmModel, G4VMscModel: introduced
+  cache for indexes in tables to restore CPU performance after change made
+  to G4PhysicsVector, now read-only.
+- G4VEnergyLossProcess, G4LossTableManager, G4lossTableBuilder: cleanup 
+  table management.
+- G4VMultipleScattering, G4VMscModel: adaptation to MT mode.
+- G4LossTableBuilder: optimized number of bins for tables built for models.
+  Do not use copy constructor for a new G4PhysicsLogVector for a model.
+- G4LossTableManager: optimisation for MT mode; do not insert concrete ions
+  into particle/energy loss process map, only G4GenericIon is inserted; added
+  LocalPhysicsTables() methods to copy pointers of G4PhysicsTables from
+  master to local threads.
+- G4LossTableManager, G4VEnergyLossProcess, G4VMultipleScattering,
+  G4VEmModel, G4VMscModel: implemented copy of transport cross-sections
+  tables from master to worker threads; implemented a possibility to copy
+  element selectors from master to worker threads (model may use or not this
+  feature).
+- Cleanup from automatic MT changes in G4LossTableManager
+  and G4EnergyLossTables.
+
+processes/electromagnetic/xrays                   xrays-V09-06-05
+-------------------------------
+- G4Cerenkov, G4Scintillation: added BuildPhysicsTable() method which is
+  doing initialisation as before but at the moment when material list is fully
+  defined; it is assumed that the list of materials is not changed for the
+  next runs; internal table has NULL pointer to PhysicsVector if material
+  properties are not defined for a given material, this pointer is check in
+  when step limitation is computed.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-06-26)
+  o Fixed access to ions via the G4IonTable class and GetIon() method.
+  o G4BGGPionInelasticXS, G4BGGNucleonInelasticXS: use G4Pow to compute
+    Coulomb correction factor (some CPU improvement).
+  o Use G4Exception instead of G4HadronicException for flagging incorrect
+    use/setting of SAID data set.
+  o Fixed Coverity defects in G4ComponentAntiNuclNuclearXS and
+    G4ElectroNuclearCrossSection.
+- management (hadr-man-V09-06-03)
+  o G4EnergyRangeManager: re-order initialization of data in copy constructor
+    and assignment operator.
+- models/cascade (hadr-casc-V09-06-35)
+  o Fix in G4NucleiModel, where all tested nucleons were uncorrectly
+    accepted for interaction (problem was introduced in last tag).
+  o G4CascadeFinalStateAlgorithm: split FillDirections() into separate
+    functions for three- and many-body states, to restore old algorithm.
+    Three body throws the last particle's direction, then computes recoils,
+    while many-body throws the first N-2 directions.
+  o Fixed several defects reported by Coverity.
+  o Fix for MT in G4TwoBodyAngularDist and G4MultiBodyMomentumDist, to
+    properly adopt calls to GetInstance().
+    Fixed case of thread collisions by making singleton instances thread-local.
+  o G4InuclNuclei: fixed access to ions via the G4IonTable class.
+  o G4NucleiModel: fixed rare cases of non-reproducibility in method
+    generateParticleFate().
+- models/coherent_elastic (hadr-cohe-V09-06-03)
+  o Fixed access to ions via the G4IonTable class and GetIon() method
+    in G4DiffuseElastic and G4NuclNuclDiffuseElastic.
+- models/de_excitation (hadr-deex-V09-06-18)
+  o G4CompetitiveFission: removed wrong use of static which caused
+    reproducibility violations.
+  o G4Evaporation: fixed trivial Coverity report.
+- models/em_dissociation (hadr-emd-V09-06-00)
+  o Fixed memory leak of products from G4ExcitationHandler.
+- models/inclxx (hadr-inclxx-V09-06-19)
+  o Updated to INCL++ v5.1.13.2: 
+    + G4INCLXXInterface: avoid deletion of BinaryCascade objects, as 
+      hadronic models are deleted by models store. Fixing issue observed
+      when running in MT mode.
+    + Replaced defines in G4INCLLogger by adding prefix "INCL_" to avoid
+      clashes with specific macros defined in Windows system:
+      INCL_FATAL(x), INCL_ERROR(x), INCL_WARN(x), INCL_INFO(x),
+      INCL_DEBUG(x), INCL_DATABLOCK(x).
+      Adapted code accordingly.
+    + Avoid dynamic initialisation of thread-local variables for porting
+      on Windows in G4INCLParticleTable.
+    + Minor fixes.
+- models/low_energy (hadr-lep-V09-06-01)
+  o Fixed access to ions via the G4IonTable class and GetIon() method
+    in G4LElastic.
+- models/management (hadr-modman-V09-06-05)
+  o Reduced limit for "fatal" energy non-conservation from (10% && 5 GeV)
+    to (2% && 1 GeV).
+- models/neutron_hp (hadr-hpn-V09-06-16)
+  o Added capability to register user prepared thermal scattering file.
+  o Enable use of single temperature data file.
+  o Fix for extrapolation problem reported by CIEMAT group.
+  o Added trick for fixing problem in dynamically generated materials for MT.
+  o Fixed few Coverity defects.
+- models/qmd (hadr-qmd-V09-06-08)
+  o Fixed Coverity defect in G4QMDCollision.
+- models/radioactive_decay (radioactive_decay-V09-06-08)
+  o G4RIsotopeTable.cc: fix in checking if DB files have been loaded
+    (accessing map without protection).
+  o G4RadioactiveDecay: moved initialisation of Isotope table from
+    constructor to BuildPhysicsTable() method.
+    Initialise Isotope table only for master.
+    Fixed memory leak by adding deletion of the IsotopeTable to destructor.
+  o Consistently use defined G4 typedefs for Random types instead of
+    native CLHEP types in G4RadioactiveDecay, G4NuclearDecayChannel, 
+    G4BetaMinusDecayChannel and G4BetaPlusDecayChannel.
+  o Replaced keyword 'ERROR' with 'RDM_ERROR' to avoid clashes with
+    specific macros defined in Windows system.
+- theo_high_energy (had-theo-HE-V09-06-04)
+  o Fixed access to ions via the G4IonTable class and GetIon() method
+    in G4QuasiElasticChannel.
+- stopping (hadr-stopping-V09-06-08)
+  o G4MuonMinusCaptureAtRest: fix to access ions via G4IonTable class
+    and GetIon() method.
+
+processes/management                             procman-V09-06-00
+--------------------
+- Corrected name for G4Upsilon meson.
+
+processes/optical                                op-V09-06-05
+-----------------
+- Added capability of simulating the transmission of a dichronic filter;
+  in this first implementation, the photon is either reflected or transmitted
+  without changing direction. Surface->SetType(dielectric_dichroic);
+  also requierd to supply a 2D data file with the format and properly
+  set the environment variable G4DICHROICDATA to point to the dichroic.data
+  file.
+- Fix for WLS photons to have a longer wavelength than the photon being
+  absorbed/shifted. Addressing report from G4Hypernews Forum #509.
+- G4OpWLS and G4OpRayleigh: added BuildPhysicsTable() method which is doing
+  as before but at the moment when material list is fully defined.
+- Fixed Coverity defects in G4OpBoundaryProcess.
+
+run                                              run-V09-06-60
+---
+- Delete all G4Allocator objects from the destructor of G4RunManagerKernel.
+- Removed thread initialization for split mechanism in G4WorkerThread for
+  G4PhysicsVector, which is not anymore a split-class.
+- Change ions and isomers to be created after BuildPhysics().
+- G4UserWorkerInitialization: temporarly, adding re-initialization of geometry
+  to allow threads to re-copy shared geometry data in case geometry changes
+  between runs. Accordingly, moved call to PhysicsTableUpdated() for
+  G4ProductionCutsTable from G4RunManagerKernel::BuildPhysicsTables() to
+  G4RunManager::TerminateEventLoop().
+- G4MTRunManager: protect 'numberOfReadyWorkers' by its Mutex.
+  Rewritten logic of "nextIteration" to solve deadlocks; fix to solve
+  deadlocks when '/run/beamOn 0' is issued. Re-enabling joining of threads.
+- Fix coverity warnings in G4VUPLSplitter and G4VUserPhysicsList.
+- Use wrappers for calls to pthreads to allow for first porting of
+  compilation of MT on Windows.
+
+visualization                                    vis-V09-06-18
+-------------
+- externals:
+  o G4OpenGL2PSAction: added missing system headers.
+- management:
+  o G4VViewer: added new virtual function GetPrivateVisAttributesModifiers()
+    so that privately accumulated vis attributes modifiers may be
+    concatenated with the standard vis attributes modifiers for commands
+    such as /vis/viewer/set/all and /vis/viewer/save.
+  o Improved safety, spelling and guidance.
+- modeling:
+  o G4ModelingParameters: replaced PVNameCopyNoPathNotEqual and VAMSNotEqual
+    by appropriate operator!=. Bug fix for vis attribute modifying (VAM).
+- gMocren, HepRep:
+  o Fixed Coverity defects.
+- OpenGL:
+  o Improvements for Wt and Qt5.
+- OpenInventor:
+  o Coverity fix in SoCounterAction.
+- RayTracer:
+  o Make G4RayTrajectory and G4RayTrajectoryPoint classes thread safe.
+
+data sets
+---------
+- G4EMLOW.6.33:
+  o Added cumulated diff cross-section files for Born ionisation.
+  o Corrected UNIX file permissions.
+- G4NDL.4.3:
+  o Providing compressed data for Elastic, Inelastic, Capture, Fission
+    and ThermalScattering.
+  o Thermal-neutron data is distributed together with standard data.
+- G4RadioactiveDecay.3.7:
+  o Fixed files with duplicate entries for nuclear level and lifetime.
+  o Added missing decay information for excited states to: z47.a100, z60.a133.
+  o Corrected half-life and added missing decay information to: z20.a48.
+  o Correct BetaMinus level 73.92 to 78.92 for z90.a234.
+  o Recomputed from latest ENSDF: z41.a100.
+  o Removed BetaPlus and added Alpha decays in z100.a250.
+
+examples                                         examples-V09-06-06
+--------
+- Updated reference outputs.
+- Archived 'novice' examples module.
+- advanced/dnaphysics (dnaphysics-V09-06-04)
+  o Withdraw RunAction from ActionInitialization.
+- advanced/microbeam (microbeam-V09-06-01)
+  o Migrated analysis to g4tools.
+- advanced/microdosimetry (microdosimetry-V09-06-04)
+  o Migrated example to MT and code cleanup.
+- advanced/underground_physics (DMX-V09-06-06)
+  o Migrated analysis to g4tools. Code cleanup.
+- advanced/xray_fluorescence (XrayFluo-V09-06-00)
+  o Fixed compilation warnings with most recent clang compiler.
+- basic/B1 (exampleB1-V09-06-03)
+  o Updated README. Clarify local names in user actions.
+- basic/B2 (exampleB2-V09-06-03)
+  o Updated README.
+- basic/B3 (exampleB2-V09-06-04)
+  o Migrated example to MT. Added B3ActionInitialization, B3Run
+    Removed B3EventAction and updated actions classes accordingly.
+  o Updated README.
+- basic/B4 (exampleB4-V09-06-09)
+  o Moved creating analysis manager and booking histograms & ntuples
+    in run action constructor; this makes available /analysis commands
+  o Fixed names for newly added data members in RunAction classes.
+  o Updated README.
+- extended/analysis/A01 (exampleA01-V09-06-04)
+  o Applied coding guidelines (data members initialization).
+  o Fixed compilation with G4ANALYSIS_USE.
+  o Updated .README for changes in README.
+- extended/biasing (exbiasing-V09-06-01)
+  o Updated README and .README.
+- extended/biasing/B02 (B02-V09-06-05)
+  o Removed redundant analysis code from main. Removed old analysis script.
+    Cleaned up line-lenghts, tabs and changed local name of b02Run object.
+- extended/electromagnetic/TestEm1 (testem1-V09-06-06)
+- extended/electromagnetic/TestEm2 (testem2-V09-06-05)
+- extended/electromagnetic/TestEm3 (testem3-V09-06-07)
+  o SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().
+    Cosmetics in SteppingAction.
+- extended/electromagnetic/TestEm4 (testem4-V09-06-07)
+  o SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().
+    Cosmetics in SteppingAction.
+  o Updates to analysis code.
+- extended/electromagnetic/TestEm5 (testem5-V09-06-06)
+- extended/electromagnetic/TestEm6 (testem6-V09-06-02)
+- extended/electromagnetic/TestEm7 (testem7-V09-06-10)
+  o SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().
+    Cosmetics in SteppingAction.
+- extended/electromagnetic/TestEm11 (testem11-V09-06-11)
+  o Retagged. No functional changes.
+- extended/electromagnetic/TestEm12 (testem12-V09-06-08)
+- extended/electromagnetic/TestEm13 (testem13-V09-06-04)
+- extended/electromagnetic/TestEm14 (testem14-V09-06-07)
+  o SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().
+    Cosmetics in SteppingAction.
+- extended/electromagnetic/TestEm15 (testem15-V09-06-04)
+- extended/electromagnetic/TestEm16 (testem16-V09-06-02)
+- extended/electromagnetic/TestEm17 (testem17-V09-06-06)
+- extended/electromagnetic/TestEm18 (testem18-V09-06-03)
+  o Cosmetics in SteppingAction.
+- extended/eventgenerator/exgps (exgps-V09-06-02)
+  o Applied coding guidelines.
+- examples/extended/eventgenerator/particleGun (particleGunExample-V09-06-05)
+  o Cosmetics in SteppingAction.
+- examples/extended/exoticphysics/phonon (phononExample-V09-06-03)
+  o Added reference files for MT mode, added CTestDefinitions.txt 
+    file containing new ctest with OS/Mode reference files.
+  o Fixed printout in XLogicalLattice.
+- extended/geometry/transforms (exTransforms-V09-06-04)
+  o Cosmetics in SteppingAction.
+- extended/hadronic/Hadr00 (exhadr00-V09-06-01)
+- extended/hadronic/Hadr01 (exhadr01-V09-06-04)
+  o Applied coding guidelines (data members names and initialization, 
+    tabulations, separators).
+- extended/hadronic/Hadr03 (exhadr03-V09-06-19)
+  o Applied coding guidelines (data members names and initialization, 
+    tabulations, separators).
+  o SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().
+- extended/medical/electronScattering (electronScattering-V09-06-07)
+  o Cosmetics in SteppingAction.
+- extended/medical/electronScattering2 (exampleES2-V09-06-03)
+  o Applied coding guidelines (initialization of data members).
+- extended/medical/fanoCavity (fano-V09-06-05)
+- extended/medical/fanoCavity2 (fano2-V09-06-04)
+  o Cosmetics in SteppingAction.
+- extended/optical/OpNovice (OpNovice-V09-06-06)
+  o Migrated example to MT.
+- extended/optical/wls (WLS-V09-06-06)
+  o Migrated example to MT.
+- extended/parameterisations/gflash (exgflash-V09-06-00)
+  o Removed ExGflashMaterialManager class; now using NIST manager.
+  o Aplied coding guidelines.
+- extended/parameterisations/Par01 (expar01-V09-06-00)
+  o Aplied coding guidelines.
+- extended/persistency/P01 (exampleP01-V09-06-01)
+- extended/persistency/P02 (exampleP02-V09-06-02)
+  o Fixed handling required packages/options in CMake files
+  o Aplied coding guidelines.
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-06-04)
+  o SteppingVerbose, TrackingAction: use G4Step::GetSecondaryInCurrentStep().
+    Cosmetics in SteppingVerbose.
+
+tests                                            tests-V09-06-06
+-----
+- Updated reference outputs and tools.
+- tests/test11 (test11-V09-06-02)
+- tests/test12 (test12-V09-06-00)
+- tests/test13 (test13-V09-06-00)
+  o Migrated to MT.
+  o Added CMakeLists_Standalone.txt to be used for stand-alone running.
+  o Updated README for cmake build.
+- tests/test16 (test16-V09-06-02)
+  o Migrated to MT.
+  o Fix in test16_hadronic_exerciser.
+- tests/test18 (test18-V09-06-01)
+- tests/test24 (test24-V09-06-00)
+  o Migrated to MT.
+  o Added CMakeLists_Standalone.txt to be used for stand-alone running.
+  o Updated README for cmake build.
+- tests/test25 (test25-V09-06-02)
+  o Migrated to MT.
+- tests/test27 (test27-V09-06-01)
+- tests/test28 (test28-V09-06-00)
+  o Migrated to MT.
+  o Added CMakeLists_Standalone.txt to be used for stand-alone running.
+  o Updated README for cmake build.
+- tests/test37 (test37-V09-06-02)
+  o Fixed TaAl.in macro.
+- tests/test41 (test41-V09-06-03)
+  o Cleanup scripts and PhysicsList class.
+- tests/test60 (test60-V09-06-04)
+  o Convert RunAction::fProcCounter into an object rather than a pointer.
+    Fixed problems after recent MT migration.
+- tests/test61 (test61-V09-06-02)
+- tests/test64 (test64-V09-06-01)
+  o Migrated to MT.
+  o Added CMakeLists_Standalone.txt to be used for stand-alone running.
+  o Updated README for cmake build.
+- tests/test65 (test65-V09-06-00)
+  o New test for LEND (Low Energy Nucler Data).
+- tests/test67 (test67-V09-06-11)
+  o Added Mutex to access shared resources in all methods of 
+    singleton ROOTAnalysis class.
+- tests/test68 (test68-V09-06-08)
+  o Migrated code to MT (MT-mode currently disabled).
+  o Added CMakeLists_Standalone.txt to be used for stand-alone running.
+  o Updated README for cmake build.
+- tests/test202 (test202-V09-06-03)
+  o Changed "QGSP_BERT" to "QBBC" (following B1).
+  o Tst202DetectorConstruction: added "G4Paraboloid", "G4GenericTrap",
+    "Simple_tessellated", "Simple_union".
