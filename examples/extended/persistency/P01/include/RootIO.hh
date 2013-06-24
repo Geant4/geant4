@@ -60,8 +60,8 @@ protected:
   
 private:
 
-  TFile* fo;
-  int Nevents;
+  TFile* fFile;
+  int fNevents;
   
 };
 #endif // INCLUDE_ROOTIO_HH

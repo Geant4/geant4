@@ -56,11 +56,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 ExP01DetectorConstruction::ExP01DetectorConstruction()
-:fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
+:G4VUserDetectorConstruction(),
+ fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
  fSolidTarget(0), fLogicTarget(0), fPhysiTarget(0), 
  fSolidTracker(0), fLogicTracker(0), fPhysiTracker(0), 
  fSolidChamber(0), fLogicChamber(0), fPhysiChamber(0), 
- fTargetMater(0), fChamberMater(0), fPMagField(0),
+ fTargetMater(0), fChamberMater(0), fPMagField(0), fDetectorMessenger(0),
  fWorldLength(0.), fTargetLength(0.), fTrackerLength(0.),
  fNbOfChambers(0), fChamberWidth(0.), fChamberSpacing(0.)
 {

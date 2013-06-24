@@ -46,7 +46,8 @@
 
 ExP01PrimaryGeneratorAction::ExP01PrimaryGeneratorAction(
                                                ExP01DetectorConstruction* myDC)
-:fMyDetector(myDC)
+:G4VUserPrimaryGeneratorAction(),
+ fParticleGun(0), fMyDetector(myDC)
 {
   G4int n_particle = 1;
   fParticleGun = new G4ParticleGun(n_particle);

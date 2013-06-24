@@ -54,8 +54,8 @@ class ExP01SteppingVerbose : public G4SteppingVerbose
   ExP01SteppingVerbose();
  ~ExP01SteppingVerbose();
 
-  void StepInfo();
-  void TrackingStarted();
+  virtual void StepInfo();
+  virtual void TrackingStarted();
 
 };
 

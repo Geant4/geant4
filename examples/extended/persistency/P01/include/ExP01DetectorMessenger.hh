@@ -56,7 +56,7 @@ class ExP01DetectorMessenger: public G4UImessenger
     virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    ExP01DetectorConstruction* myDetector;
+    ExP01DetectorConstruction* fDetector;
     
     G4UIdirectory*             fN02Dir;
     G4UIdirectory*             fDetDir;

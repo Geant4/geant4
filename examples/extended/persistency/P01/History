@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 17th, 2013 I. Hrivnacova (exampleP01-V09-06-02)
+- Applied coding guidelines (data members names, intialization, separators)
+
 June 14th, 2013 W. Pokorski (exampleP01-V09-06-01)
 - changing the names of the members according to coding convention
 

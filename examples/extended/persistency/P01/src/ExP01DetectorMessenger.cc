@@ -43,7 +43,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExP01DetectorMessenger::ExP01DetectorMessenger(ExP01DetectorConstruction* myDet)
-:myDetector(myDet)
+: G4UImessenger(),
+  fDetector(myDet),
+  fN02Dir(0),
+  fDetDir(0),
+  fTargMatCmd(0),
+  fChamMatCmd(0),    
+  fFieldCmd(0)
 { 
   fN02Dir = new G4UIdirectory("/P01/");
   fN02Dir->SetGuidance("UI commands specific to this example.");
@@ -85,13 +91,13 @@ ExP01DetectorMessenger::~ExP01DetectorMessenger()
 void ExP01DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == fTargMatCmd )
-   { myDetector->setTargetMaterial(newValue);}
+   { fDetector->setTargetMaterial(newValue);}
    
   if( command == fChamMatCmd )
-   { myDetector->setChamberMaterial(newValue);}  
+   { fDetector->setChamberMaterial(newValue);}  
   
   if( command == fFieldCmd )
-   { myDetector->SetMagField(fFieldCmd->GetNewDoubleValue(newValue));}
+   { fDetector->SetMagField(fFieldCmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -47,6 +47,7 @@ ExP01ChamberParameterisation::ExP01ChamberParameterisation(
         G4double widthChamber, 
         G4double lengthInitial, 
         G4double lengthFinal )
+ : G4VPVParameterisation()        
 {
    fNoChambers =  NoChambers; 
    fStartZ     =  startZ; 
