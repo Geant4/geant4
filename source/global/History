@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 24, 2013 G.Cosmo (global-V09-06-50)
+- Added tag ID specific for MT mode in G4Version.hh.
+
+June 21, 2013 M.Asai (global-V09-06-49)
+- G4AllocatorList::Destroy() takes the verbosity. Also, due to the revised
+  order of deletion of kernel classes, G4cout is available for this method
+  for worker thread as well.
+
 June 21, 2013 G.Cosmo (global-V09-06-48)
 - Refined printout of statistics in G4AllocatorList::Destroy().
 

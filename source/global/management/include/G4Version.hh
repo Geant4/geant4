@@ -57,7 +57,11 @@
 
 #include "G4String.hh"
 
+#ifdef G4MULTITHREADED
+static const G4String G4Version = "$Name: geant4-10-00-beta-01 [MT]$";
+#else
 static const G4String G4Version = "$Name: geant4-10-00-beta-01 $";
+#endif
 static const G4String G4Date    = "(28-June-2013)";
 
 #endif

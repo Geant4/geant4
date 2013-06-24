@@ -56,7 +56,7 @@ class G4AllocatorList
 
     ~G4AllocatorList();
     void Register(G4AllocatorBase*);
-    void Destroy(G4int nStat=0);
+    void Destroy(G4int nStat=0, G4int verboseLevel=0);
     G4int Size() const;
 
   private:

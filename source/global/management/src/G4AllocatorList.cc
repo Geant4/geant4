@@ -64,7 +64,7 @@ void G4AllocatorList::Register(G4AllocatorBase* alloc)
   fList.push_back(alloc);
 }
 
-void G4AllocatorList::Destroy(G4int nStat)
+void G4AllocatorList::Destroy(G4int nStat, G4int verboseLevel)
 {
   std::vector<G4AllocatorBase*>::iterator itr=fList.begin();
   G4int i=0, j=0;
@@ -83,13 +83,18 @@ void G4AllocatorList::Destroy(G4int nStat)
     (*itr)->ResetStorage();
     delete *itr; 
   }
-#if (defined(G4VERBOSE) && !defined(G4MULTITHREADED))
-  G4cout << "Number of memory pools allocated: " << Size()
-         << "; of which, static: " << i << G4endl
-         << "Dynamic pools deleted: " << j << G4endl;
-  G4cout << "Total memory freed: " << std::setprecision(2)
-         << mem/1048576 << " Mb" << G4endl;
-#endif
+  if(verboseLevel>0)
+  {
+    G4cout << "================== Deleting memory pools ==================="
+           << G4endl;
+    G4cout << "Number of memory pools allocated: " << Size()
+           << "; of which, static: " << i << G4endl;
+    G4cout << "Dynamic pools deleted: " << j 
+           << " / Total memory freed: " << std::setprecision(2)
+           << mem/1048576 << " Mb" << G4endl;
+    G4cout << "============================================================"
+           << G4endl;
+  }
   fList.clear();
 }
 
