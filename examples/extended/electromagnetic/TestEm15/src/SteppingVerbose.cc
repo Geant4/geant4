@@ -127,30 +127,27 @@ void SteppingVerbose::StepInfo()
     G4cout << "   " << std::setw(10) << procName;
     G4cout << G4endl;
 
-    if( verboseLevel == 2 ){
-      G4int tN2ndariesTot = fN2ndariesAtRestDoIt +
-                            fN2ndariesAlongStepDoIt +
-                            fN2ndariesPostStepDoIt;
-      if(tN2ndariesTot>0){
-        G4cout << "\n    :----- List of secondaries ----------------"
-               << G4endl;
+    if (verboseLevel == 2) {
+      const std::vector<const G4Track*>* secondary 
+                                    = fStep->GetSecondaryInCurrentStep();
+      size_t nbtrk = (*secondary).size();
+      if (nbtrk) {
+        G4cout << "\n    :----- List of secondaries ----------------" << G4endl;
         G4cout.precision(4);
-        for(size_t lp1=(*fSecondary).size()-tN2ndariesTot; 
-                        lp1<(*fSecondary).size(); lp1++){
+        for (size_t lp=0; lp<(*secondary).size(); lp++) {
           G4cout << "   "
                  << std::setw(13)                 
-                 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName()
+                 << (*secondary)[lp]->GetDefinition()->GetParticleName()
                  << ":  energy ="
                  << std::setw(6)
-                 << G4BestUnit((*fSecondary)[lp1]->GetKineticEnergy(),"Energy")
+                 << G4BestUnit((*secondary)[lp]->GetKineticEnergy(),"Energy")
                  << "  time ="
                  << std::setw(6)
-                 << G4BestUnit((*fSecondary)[lp1]->GetGlobalTime(),"Time");
+                 << G4BestUnit((*secondary)[lp]->GetGlobalTime(),"Time");
           G4cout << G4endl;
         }
               
-        G4cout << "    :------------------------------------------\n"
-               << G4endl;
+        G4cout << "    :------------------------------------------\n" << G4endl;
       }
     }
     
