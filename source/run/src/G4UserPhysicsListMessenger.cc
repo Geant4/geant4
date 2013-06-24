@@ -124,7 +124,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
 
   // /run/particle/addProcManager command
   addProcManCmd = new G4UIcmdWithAString("/run/particle/addProcManager", this);
-  ///////  addProcManCmd->SetToBeBroadcasted(false);
+  addProcManCmd->SetToBeBroadcasted(false);
   addProcManCmd->SetGuidance("add process manager to specified particle type");
   addProcManCmd->SetParameterName("particleType", true);
   addProcManCmd->SetDefaultValue("");

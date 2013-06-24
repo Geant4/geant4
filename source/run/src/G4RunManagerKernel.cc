@@ -192,12 +192,12 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(isWorkerRMK),
     // version banner
     G4String vs = G4Version;
     vs = vs.substr(1,vs.size()-2);
-    versionString = " Local-thread RunManager ";
+    versionString = " Local-thread RunManager - version ";
     versionString += vs;
     G4cout << G4endl
-    << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
+    << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
     << versionString << G4endl
-    << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
+    << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
     << G4endl;
 }
 
@@ -244,27 +244,28 @@ G4RunManagerKernel::~G4RunManagerKernel()
   }
   delete eventManager;
   if(verboseLevel>1) G4cout << "EventManager deleted." << G4endl;
-  G4UImanager* pUImanager = G4UImanager::GetUIpointer();
-  {
-    if(isWorker && (verboseLevel>1))
-    {
-      G4cout << "Thread-local UImanager is to be deleted." << G4endl 
-             << "There should not be any thread-local G4cout/G4cerr hereafter."
-             << G4endl;
-      verboseLevel = 0;
-    }
-    if(pUImanager) delete pUImanager;
-    if(verboseLevel>1) G4cout << "UImanager deleted." << G4endl;
-  }
+
   G4UnitDefinition::ClearUnitsTable();
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
   if(allocList)
   {
-    allocList->Destroy(numberOfStaticAllocators);
+    allocList->Destroy(numberOfStaticAllocators,verboseLevel);
     delete allocList; 
     if(verboseLevel>1) G4cout << "G4Allocator objects are deleted." << G4endl;
   }
+
+  G4UImanager* pUImanager = G4UImanager::GetUIpointer();
+  if(isWorker && (verboseLevel>1))
+  {
+    G4cout << "Thread-local UImanager is to be deleted." << G4endl 
+           << "There should not be any thread-local G4cout/G4cerr hereafter."
+           << G4endl;
+    verboseLevel = 0;
+  }
+  if(pUImanager) delete pUImanager;
+  if(verboseLevel>1) G4cout << "UImanager deleted." << G4endl;
+  
   delete pStateManager; 
   if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   delete defaultExceptionHandler;

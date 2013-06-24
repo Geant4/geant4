@@ -168,6 +168,21 @@ void* G4UserWorkerInitialization::StartThread( void* context )
              */
             static G4ThreadLocal G4bool skip = true;
             if ( !skip ) {
+                //I need to rememeber SD and Filed Associated with worker, so to re-use it
+                // (note that all the stuff after this will reset SD and Field
+                typedef std::map<G4LogicalVolume*,std::pair<G4VSensitiveDetector*,G4FieldManager*> > LV2SDFM;
+                LV2SDFM lvmap;
+                G4PhysicalVolumeStore* mphysVolStore = G4PhysicalVolumeStore::GetInstance();
+                for(size_t ip=0; ip<mphysVolStore->size(); ip++)
+                {
+                    G4VPhysicalVolume* pv = (*mphysVolStore)[ip];
+                    G4LogicalVolume *lv = pv->GetLogicalVolume();
+                    G4VSensitiveDetector* sd = lv->GetSensitiveDetector();
+                    G4FieldManager* fm = lv->GetFieldManager();
+                    if ( sd || fm )
+                        lvmap[lv] = std::make_pair(lv->GetSensitiveDetector(),lv->GetFieldManager());
+                }
+                
                 //First delete stuff
                 const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).FreeSlave();
                 const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).FreeSlave();
@@ -189,34 +204,40 @@ void* G4UserWorkerInitialization::StartThread( void* context )
                 G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
                 for(size_t ip=0; ip<physVolStore->size(); ip++)
                 {
-                G4VPhysicalVolume* physVol = (*physVolStore)[ip];
-                G4LogicalVolume *g4LogicalVolume = physVol->GetLogicalVolume();
-                //use shadow pointer
-                G4VSolid *g4VSolid = g4LogicalVolume->GetMasterSolid();
-                G4PVReplica *g4PVReplica = 0;
-                g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
-                if (g4PVReplica)
-                {
-                    //g4PVReplica->SlaveG4PVReplica(g4PVReplica);
-                    g4PVReplica->InitialiseWorker(g4PVReplica);
-                    G4PVParameterised *g4PVParameterised = 0;
-                    g4PVParameterised =  dynamic_cast<G4PVParameterised*>(physVol);
-                    if (g4PVParameterised)
+                    G4VPhysicalVolume* physVol = (*physVolStore)[ip];
+                    G4LogicalVolume *g4LogicalVolume = physVol->GetLogicalVolume();
+                    //use shadow pointer
+                    G4VSolid *g4VSolid = g4LogicalVolume->GetMasterSolid();
+                    G4PVReplica *g4PVReplica = 0;
+                    g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
+                    if (g4PVReplica)
                     {
-                        //01.25.2009 Xin Dong: For a G4PVParameterised instance, assoicated a
-                        //cloned solid for each worker thread. If all solids support this clone
-                        //method, we do not need to dynamically cast to solids that support this
-                        //clone method. Before all solids support this clone method, we do similar
-                        //thing here to dynamically cast and then get the clone method.
+                        //g4PVReplica->SlaveG4PVReplica(g4PVReplica);
+                        g4PVReplica->InitialiseWorker(g4PVReplica);
+                        G4PVParameterised *g4PVParameterised = 0;
+                        g4PVParameterised =  dynamic_cast<G4PVParameterised*>(physVol);
+                        if (g4PVParameterised)
+                        {
+                            //01.25.2009 Xin Dong: For a G4PVParameterised instance, assoicated a
+                            //cloned solid for each worker thread. If all solids support this clone
+                            //method, we do not need to dynamically cast to solids that support this
+                            //clone method. Before all solids support this clone method, we do similar
+                            //thing here to dynamically cast and then get the clone method.
                         
-                        //Threads may clone some solids simultaneously. Those cloned solids will be
-                        //Registered into a shared solid store (C++ container). Need a lock to
-                        //guarantee thread safety
-                        //G4AutoLock aLock(&solidclone);
-                        G4VSolid *slaveg4VSolid = g4VSolid->Clone();
-                        //aLock.unlock();
-                        //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, slaveg4VSolid, 0);
-                        g4LogicalVolume->InitialiseWorker(g4LogicalVolume,slaveg4VSolid,0);
+                            //Threads may clone some solids simultaneously. Those cloned solids will be
+                            //Registered into a shared solid store (C++ container). Need a lock to
+                            //guarantee thread safety
+                            //G4AutoLock aLock(&solidclone);
+                            G4VSolid *slaveg4VSolid = g4VSolid->Clone();
+                            //aLock.unlock();
+                            //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, slaveg4VSolid, 0);
+                            g4LogicalVolume->InitialiseWorker(g4LogicalVolume,slaveg4VSolid,0);
+                        }
+                        else
+                        {
+                            //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, g4VSolid, 0);
+                            g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0);
+                        }
                     }
                     else
                     {
@@ -224,13 +245,15 @@ void* G4UserWorkerInitialization::StartThread( void* context )
                         g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0);
                     }
                 }
-                else
+                // Now set back SD and FM pointers to logical volumes
+                for ( LV2SDFM::const_iterator it = lvmap.begin() ; it != lvmap.end() ; ++it )
                 {
-                    //g4LogicalVolume->SlaveG4LogicalVolume(g4LogicalVolume, g4VSolid, 0);
-                    g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0);
+                    G4LogicalVolume* lv      = it->first;
+                    G4VSensitiveDetector* sd = (it->second).first;
+                    G4FieldManager* fm       = (it->second).second;
+                    lv->SetFieldManager(fm, false); //What should be the second parameter? We use always false for MT mode
+                    lv->SetSensitiveDetector(sd);
                 }
-            }
-            
             } else {
                 skip = false;
             }

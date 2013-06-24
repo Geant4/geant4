@@ -57,13 +57,13 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(true) {
 
 G4WorkerRunManager::~G4WorkerRunManager() {
     //Put these pointers to zero: owned by master thread
-    //If not to zero, the base class destructo will attempt to
+    //If not to zero, the base class destructor will attempt to
     //delete them
     userDetector = 0;
     userWorkerInitialization = 0;
     userActionInitialization = 0;
     physicsList = 0;
-    G4cout<<"Destroying WorkerRunManager ("<<this<<")"<<G4endl;
+    if(verboseLevel>0) G4cout<<"Destroying WorkerRunManager ("<<this<<")"<<G4endl;
 }
 
 

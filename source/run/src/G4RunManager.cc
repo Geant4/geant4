@@ -198,7 +198,7 @@ G4RunManager::~G4RunManager()
     if(verboseLevel>1) G4cout << "UserPrimaryGenerator deleted." << G4endl;
   }
 
-  if(verboseLevel>1) G4cout << "RunManager is deleted." << G4endl;
+  if(verboseLevel>1) G4cout << "RunManager is deleting RunManagerKernel." << G4endl;
 
   delete kernel;
 
@@ -505,7 +505,6 @@ void G4RunManager::InitializePhysics()
 {
   if(physicsList)
   {
-    if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
     kernel->InitializePhysics();
   }
   else

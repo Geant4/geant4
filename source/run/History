@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 22nd, 2013, A. Dotti (run-V09-06-63)
+- Copy SensitiveDetector and FieldManagers pointers between 
+  runs. Bug fix to solve issue introduced with tag -59
+  (G4UserWorkerInitialization::StartThread)
+
+June 21st, 2013, M. Asai  (run-V09-06-62)
+- Changing the oder of deleting kernel classes in the destructor of
+  G4RunManagerKernel so that G4cout for worker thread is available
+  as long as possible. This enables the printout of G4Allocator
+  statistics for worker thread.
+
+June 21st, 2013, M. Asai  (run-V09-06-61)
+- Clean up G4cout messages for the beta release.
+
 June 20th, 2013, M. Asai  (run-V09-06-60)
 - Moving G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated() call
   from G4RunManagerKernel::BuildPhysicsTables() to
