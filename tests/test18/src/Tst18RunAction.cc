@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Tst18RunActionMessenger.hh"
 #include "Tst18RunAction.hh"
@@ -42,27 +37,18 @@
 #include <iomanip>
 #include <vector>
 
-extern std::vector<G4String> Particles;
-extern std::vector<G4double> Energies;
-extern std::vector<G4double> Weights;
-extern std::vector<G4double> Times;
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 Tst18RunAction::Tst18RunAction()
-  : fileName("rdmex2.log")
+ : fileName("rdmex2.log")
 {
   runMessenger = new Tst18RunActionMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18RunAction::~Tst18RunAction()
 {
   delete runMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst18RunAction::BeginOfRunAction(const G4Run* aRun)
 {
@@ -77,7 +63,6 @@ void Tst18RunAction::BeginOfRunAction(const G4Run* aRun)
   Times.clear();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst18RunAction::EndOfRunAction(const G4Run* )
 {
@@ -104,4 +89,23 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
   G4cout<< G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void Tst18RunAction::FillParticleName(G4String name)
+{
+  Particles.push_back(name);
+}
+
+void Tst18RunAction::FillEnergy(G4double energy)
+{
+  Energies.push_back(energy);
+}
+
+void Tst18RunAction::FillWeight(G4double weight)
+{
+  Weights.push_back(weight);
+}
+
+void Tst18RunAction::FillTime(G4double time)
+{
+  Times.push_back(time);
+}
+

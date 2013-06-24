@@ -23,21 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst18RunAction_h
 #define Tst18RunAction_h 1
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include <vector>
 
 class Tst18RunActionMessenger;
 class G4Run;
@@ -54,11 +48,19 @@ class Tst18RunAction : public G4UserRunAction
   
     void SetFilename(G4String val) {fileName = val;};
 
-  private:
-  
-  G4String fileName;  // log file name for the run
-  Tst18RunActionMessenger* runMessenger;
+    void FillParticleName(G4String);
+    void FillEnergy(G4double);
+    void FillWeight(G4double);
+    void FillTime(G4double);
 
+  private:
+    G4String fileName;  // log file name for the run
+    Tst18RunActionMessenger* runMessenger;
+
+    std::vector<G4String> Particles;
+    std::vector<G4double> Energies;
+    std::vector<G4double> Weights;
+    std::vector<G4double> Times;
 };
 
 #endif

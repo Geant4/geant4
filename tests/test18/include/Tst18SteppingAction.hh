@@ -23,28 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst18SteppingAction_h
 #define Tst18SteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class Tst18RunAction;
 
 class Tst18SteppingAction : public G4UserSteppingAction
 {
   public:
-    Tst18SteppingAction();
+    Tst18SteppingAction(Tst18RunAction*);
     virtual ~Tst18SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
+
+  private:
+    Tst18RunAction* runAction;
 };
 
 #endif

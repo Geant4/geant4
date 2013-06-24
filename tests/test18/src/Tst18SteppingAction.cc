@@ -23,48 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+
 #include <vector>
 
 #include "Tst18SteppingAction.hh"
+#include "Tst18RunAction.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "globals.hh"
 #include "G4SteppingManager.hh"
 
-extern std::vector<G4String> Particles;
-extern std::vector<G4double> Energies;
-extern std::vector<G4double> Weights;
-extern std::vector<G4double> Times;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+Tst18SteppingAction::Tst18SteppingAction(Tst18RunAction* rA)
+ : runAction(rA)
+{}
 
-Tst18SteppingAction::Tst18SteppingAction()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18SteppingAction::~Tst18SteppingAction()
-{ }
+{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst18SteppingAction::UserSteppingAction(const G4Step* fStep) 
 {
   const G4SteppingManager* pSM = fpSteppingManager;
   G4Track* fTrack = pSM->GetTrack();
-  //G4Step* fStep = pSM->GetStep();
-  //G4int TrackID = fTrack->GetTrackID();
   G4int StepNo = fTrack->GetCurrentStepNumber();
   if(StepNo >= 10000) fTrack->SetTrackStatus(fStopAndKill);
-  
+
   if (StepNo == 1) {
-    if (Particles.size() < 100) {
-      Particles.push_back ( fTrack->GetDefinition()->GetParticleName() );
-      Energies.push_back ( fStep->GetPreStepPoint()->GetKineticEnergy()/keV );
-      Weights.push_back ( fStep->GetPreStepPoint()->GetWeight() );
-      Times.push_back((fStep->GetPreStepPoint()->GetGlobalTime() - fStep->GetPreStepPoint()->GetLocalTime()) / s );
-    }
+    G4StepPoint* prePoint = fStep->GetPreStepPoint();
+
+    runAction->FillParticleName(fTrack->GetDefinition()->GetParticleName() );
+    runAction->FillEnergy(prePoint->GetKineticEnergy()/keV);
+    runAction->FillWeight(prePoint->GetWeight() ); 
+    runAction->FillTime((prePoint->GetGlobalTime() - prePoint->GetLocalTime() )/s);
   } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

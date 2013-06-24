@@ -41,11 +41,13 @@ Tst18ActionInitialization::~Tst18ActionInitialization()
 
 void Tst18ActionInitialization::Build() const {
   SetUserAction(new Tst18PrimaryGeneratorAction);
-  SetUserAction(new Tst18RunAction);
+  Tst18RunAction* runAction = new Tst18RunAction;
+  SetUserAction(runAction);
   SetUserAction(new Tst18EventAction);
-  SetUserAction(new Tst18SteppingAction);
+  SetUserAction(new Tst18SteppingAction(runAction) );
 }
 
 void Tst18ActionInitialization::BuildForMaster() const {
+  SetUserAction(new Tst18RunAction);
 }
 

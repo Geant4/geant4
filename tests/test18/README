@@ -1,19 +1,33 @@
 $Id$
 -------------------------------------------------------------------
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+            ==================================================
+            Geant4 - an Object-Oriented Toolkit for Simulation
+            ==================================================
 
-                            Test18
-                            ------
+                                   Test18
+                                   ------
 
-Description:   test of radioactive decay for 1 MeV incident ions.
-               Decay of ions Na24, Ne24, F9, Al24, Cr46 and Po215
+Description:   generates the nuclei 24Na (ground state), 24Ne, 24F, 24Al,
+               24Na (metastable), 46Cr and 215Po, and decays them.  For 215Po
+               the nuclear limits are restricted so that daughters are not
+               decayed.
+
+               The geometry consists of a solid sphere of aluminum with radius
+               250 km, inside of which is placed a solid sphere of quartz (SiO2)
+               with radius 125 km.  These reside within a mother volume which is
+               a box of vacuum, 1000 km on a side.  All volumes are centered on
+               the origin of the coordinate system.  Particles start off from
+               the origin with an energy of 1 MeV.
+
+               Beta+, beta-, isomeric transition and alpha decays are tested.
+               Along with radioactive decay, standard EM physics processes are
+               assigned.  For hadrons the Bertini cascade model is used.  For 
+               light ions G4BinaryLightIon is used.
 
 Type of test:  run to completion
 
-Building:      This test has a special CMakeLists.txt to be used only by system
+Building:      this test has a special CMakeLists.txt to be used only by system
                testing.  It will not work when you run the test in stand-alone
                mode.  To do that you must:
 
@@ -36,9 +50,7 @@ Building:      This test has a special CMakeLists.txt to be used only by system
 
                  make -f Makefile 
                  
-Running:
-
-              Finally, run the short test:
+Running:      To run the short test,
 
                  ./test18 test18.in >& test18.out &
 
@@ -48,3 +60,4 @@ Running:
                  ./test18 test18.large_N.in >& test18.out &
 
 Output:       run log (verbosity 1)
+

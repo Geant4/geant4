@@ -23,13 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifndef Tst18PhysicsList_h
 #define Tst18PhysicsList_h 1
@@ -37,40 +32,33 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst18PhysicsList: public G4VUserPhysicsList
 {
   public:
     Tst18PhysicsList();
-   ~Tst18PhysicsList();
+    ~Tst18PhysicsList();
 
   protected:
-    // Construct particle and physics
     virtual void ConstructParticle();
     virtual void ConstructProcess();
  
     virtual void SetCuts();
 
   protected:
-    // these methods Construct particles 
+    // these methods Construct physics processes and register them
+    virtual void ConstructGeneral();
+    virtual void ConstructEM();
+    virtual void ConstructHad();
 
-  // these methods Construct physics processes and register them
-  virtual void ConstructGeneral();
-  virtual void ConstructEM();
-  virtual void ConstructHad();
-
-  // these methods Construct all particles in each category
-  virtual void ConstructAllBosons();
-  virtual void ConstructAllLeptons();
-  virtual void ConstructAllMesons();
-  virtual void ConstructAllBaryons();
-  virtual void ConstructAllIons();
-  virtual void ConstructAllShortLiveds();
-
+    // these methods Construct all particles in each category
+    virtual void ConstructAllBosons();
+    virtual void ConstructAllLeptons();
+    virtual void ConstructAllMesons();
+    virtual void ConstructAllBaryons();
+    virtual void ConstructAllIons();
+    virtual void ConstructAllShortLiveds();
 };
 
 #endif
-
-
 

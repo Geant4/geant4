@@ -1,20 +1,19 @@
 ################################################################################
 #                                                                              #
-# ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                     #
-# VALIDATION TEST NUMBER 01                                                    #
+#  ESA-CERN GEANT4 RADIOACTIVE DECAY MODULE                                    #
+#  VALIDATION TEST NUMBER 01                                                   #
 #                                                                              #
-# THIS TEST GENERATES NUCLEI OF NA-24 (GND-STATE), NE-24, F-24, AL-24          #
-# NA-24 (METASTABLE), CR-46, AND PO-215 AND DECAYS THEM.  THE NUCLEAR LIMITS   #
-# ARE RESTRICTED SO THAT DAUGHTERS ARE NOT DECAYED.  THE GEOMETRY COMPRISES    #
-# A SPHERE OF RADIUS 125,000. KM, WITHIN A BOX OF SIDE 500,000. KM WITHIN A    #
-# BOX OF SIDE 10,000,000. KM.  ALL VOLUMES ARE CENTRED ON THE COORDINATE       #
-# ORIGIN AND CONTAIN A VACUUM.  PARTICLES ARE STARTED OFF FROM THE ORIGIN WITH #
-# AN ENERGY OF 1 EV.                                                           #
+#  This test generates the nuclei NA-24 (GND-STATE), NE-24, F-24, AL-24        #
+#  NA-24 (metastable), CR-46 and PO-215, and decays them.  The nuclear limits  #
+#  are RESTRICTED SO THAT DAUGHTERS ARE NOT DECAYED.  The geometry comprises   #
+#  a sphere of radius 125,000 km, within a box of side 500,000 km, within a    #
+#  box of side 10,000,000 km.  All volumes are centered on the coordinate      #
+#  origin and contain a vacuum.  Particles start off from the origin with an   #
+#  energy of 1 MeV.                                                            #
 #                                                                              #
-# F LEI, DERA FARNBOROUGH, 8 MARCH 2000                                        #
+#  F LEI, DERA FARNBOROUGH, 8 MARCH 2000                                       #
 #                                                                              #
 ################################################################################
-#
 #
 /control/verbose 2
 /run/verbose 1
@@ -23,57 +22,47 @@
 /process/verbose 1
 /grdm/verbose 0
 #
-#
-# FIRST ION IS NA-24 (GND-STATE) BY BETA-DECAY.  THE RANGE OF NUCLEI DOES NOT
-# NEED TO BE RESTRICTED SINCE MG-24 IS THE ONLY PRODUCT AND IS STABLE.
+# First ion is NA-24 (ground state) which beta decays.  The range of the nucleus
+# does not need to be restricted since MG-24 is the only product and is stable.
 # 
 /gun/particle ion
 /gun/ion 11 24 11 0
 /gun/energy 1 MeV
 /run/beamOn 1
 #
-#
-# NE-24 BETA- DECAY.
+# NE-24 beta- decay
 #
 #/grdm/nucleusLimits 24 24 10 10
 /gun/ion 10 24 10 0
 /run/beamOn 1
 #
-#
-# F-9 BETA- DECAY.
+# F-9 beta- decay
 #
 #/grdm/nucleusLimits 24 24 9 9
 /gun/ion 9 24 9 0
 /run/beamOn 1
 #
-#
-# AL-24 (GND-STATE) BETA+ DECAY.
+# AL-24 ground state beta+ decay
 #
 #/grdm/nucleusLimits 24 24 13 13
 /gun/ion 13 24 13 0
 /run/beamOn 1
 #
-#
-# NA-24 (472 KEV METASTABLE STATE) BETA+ DECAY AND IT.
+# NA-24 (472 keV metastable state) beta+ decay and IT
 #
 #/grdm/nucleusLimits 24 24 11 11
 /gun/ion 11 24 11 472
 /run/beamOn 1
 #
-#
-# CR-46 BETA+ DECAY.
+# CR-46 beta+ decay
 #
 #/grdm/nucleusLimits 46 46 24 24
 /gun/ion 24 46 24 0
 /run/beamOn 1
 #
-#
-# PO-215 ALPHA DECAY.
+# PO-215 alpha decay
 #
 /grdm/nucleusLimits 215 215 84 84
 /gun/ion 84 215 84 0
 /run/beamOn 1
-
-
-
 

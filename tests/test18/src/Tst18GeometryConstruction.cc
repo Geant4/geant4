@@ -68,13 +68,12 @@ Tst18GeometryConstruction::Tst18GeometryConstruction ()
   aSphere_r2 = 125.0*km;
 }
 
-Tst18GeometryConstruction::~Tst18GeometryConstruction ()
-{;}
+Tst18GeometryConstruction::~Tst18GeometryConstruction()
+{}
 
-G4VPhysicalVolume* Tst18GeometryConstruction::Construct ()
+G4VPhysicalVolume* Tst18GeometryConstruction::Construct()
 {
   // Define materials.
-
   G4double a, iz, z, density,pressure, temperature;
   G4String name, symbol;
 
@@ -104,31 +103,29 @@ G4VPhysicalVolume* Tst18GeometryConstruction::Construct ()
   // Define bodies, logical volumes and physical volumes.
   // First define the experimental hall.
 
-  G4Box * universe_box
+  G4Box* universe_box
     = new G4Box("universe_b",universe_x,universe_y,universe_z);
-  G4LogicalVolume * universe_log
+  G4LogicalVolume* universe_log
     = new G4LogicalVolume(universe_box,Vacuum,"universe_L",0,0,0);
-  G4VPhysicalVolume * universe_phys
-    = new G4PVPlacement(0,G4ThreeVector(),"universe_P",
-                        universe_log,0,false,0);
+  G4VPhysicalVolume* universe_phys =
+    new G4PVPlacement(0, G4ThreeVector(), universe_log, "universe_P", 0,
+                      false, 0);
 
   // Define outer sphere
+  G4Sphere* aSphere_sph1
+    = new G4Sphere("aSphere1", 0, aSphere_r1, 0.*deg, 360.*deg, 0.*deg, 180.*deg);
+  G4LogicalVolume* aSphere_log1
+    = new G4LogicalVolume(aSphere_sph1, Aluminium, "aSphere_L1", 0,0,0);
+  new G4PVPlacement(0, G4ThreeVector(), aSphere_log1, "aSphere_P1",
+                    universe_log, false, 0);
 
-  G4Sphere * aSphere_sph1
-    = new G4Sphere("aSphere1",0,aSphere_r1,0.*deg,360.*deg,0.*deg,180.*deg);
-  G4LogicalVolume * aSphere_log1
-    = new G4LogicalVolume(aSphere_sph1,Aluminium,"aSphere_L1",0,0,0);
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),"aSphere_P1",
-                    aSphere_log1,universe_phys,false,0);
-
-  // Define middle sphere.
-
+  // Define middle sphere
   G4Sphere* aSphere_sph2
-    = new G4Sphere("aSphere2",0,aSphere_r2,0.*deg,360.*deg,0.*deg,180.*deg);
-  G4LogicalVolume * aSphere_log2
-    = new G4LogicalVolume(aSphere_sph2,SiliconDioxide,"aSphere_L2",0,0,0);
-  new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),"aSphere_P2",aSphere_log2,
-                    universe_phys,false,0);
+    = new G4Sphere("aSphere2", 0, aSphere_r2, 0.*deg, 360.*deg, 0.*deg, 180.*deg);
+  G4LogicalVolume* aSphere_log2
+    = new G4LogicalVolume(aSphere_sph2, SiliconDioxide, "aSphere_L2", 0,0,0);
+  new G4PVPlacement(0, G4ThreeVector(), aSphere_log2, "aSphere_P2",
+                    aSphere_log1, false, 0);
 
   return universe_phys;
 }
