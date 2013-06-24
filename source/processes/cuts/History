@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 21st, 2013  - M.Asai (procuts-V09-06-06)
+- G4ProductionCutstable: print out energy thresholds regardless of
+  G4MaterialCutsCouple::IsReCalcNeeded(). 
+
 June 16th, 2013  - M.Asai (procuts-V09-06-05)
 - G4VRangeToEnergyConverter: stop calling Reset() from its destructor.
 
