@@ -276,11 +276,11 @@ void G4ParticleGunMessenger::IonCommand(G4String newValues)
       }
     }
 
-    G4ParticleDefinition* ion;
+    G4ParticleDefinition* ion = 0;
     ion =  particleTable->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
     if (ion==0) {
     G4cout << "Ion with Z=" << fAtomicNumber;
-    G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;    
+    G4cout << " A=" << fAtomicMass << "is not defined" << G4endl;    
     } else {
       fParticleGun->SetParticleDefinition(ion);
       fParticleGun->SetParticleCharge(fIonCharge*eplus);

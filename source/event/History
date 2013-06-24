@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 21, 2013, M.Asai (event-V09-06-09)
+- Clean up G4cout messages for beta release.
+
 June 7, 2013, M.Asai (event-V09-06-08)
 - Move the access method of G4StateManager::GetStateManager() to the
   constructor of G4EventManager to reduce the use of TLS pointer.
