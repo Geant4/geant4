@@ -4,13 +4,13 @@
 /testem/det/setThick1 50.89 um
 #/testem/det/setThick1 50 um
 #/testem/det/setThick1 119 um
-/testem/det/setNbOfLayers1 10 
+/testem/det/setNbOfLayers1 25
 /testem/det/setMat2 G4_Al
 #/testem/det/setThick2 558.34013 um
 #/testem/det/setThick2 650.24 um
-/testem/det/setThick2  330.7 mm
-#/testem/det/setThick2  521 um
-/testem/det/setNbOfLayers2 90 
+#/testem/det/setThick2  330.7 um
+/testem/det/setThick2  521 um
+/testem/det/setNbOfLayers2 75
 
 /testem/phys/addPhysics  PHYSLIST
 
@@ -23,13 +23,13 @@
 
 /gun/particle e- 
 
-#/gun/energy 0.521 MeV
+/gun/energy 0.521 MeV
 #/gun/energy 0.314 MeV
-/gun/energy 1.033 MeV
+#/gun/energy 1.033 MeV
 
 /gun/direction 1.0  0.0  0.0 
 
-/testem/phys/setCuts 0.01 mm
+/testem/phys/setCuts 0.005 mm
 
 /run/initialize
 /run/beamOn 100000

@@ -143,7 +143,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardIG(name);
 
-  } else if (name == "standardGS") {
+  } else if (name == "emstandardGS") {
 
     AddPhysicsList("emstandard_opt3");
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
