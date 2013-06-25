@@ -1,8 +1,8 @@
 @echo off  
 rem ---Compiler------------------------------------------------------
-call "%VS110COMNTOOLS%\..\..\vc\vcvarsall"
+call "%VS100COMNTOOLS%vsvars32.bat"
 rem ---Xerces-C------------------------------------------------------
-set XERCESC_ROOT_DIR=D:\sw\lcg\external\XercesC\3.1.1\x86_64-windows-vc10
+set XERCESC_ROOT_DIR=D:\sw\lcg\external\XercesC\3.1.0\i686-winxp-vc9-opt
 set PATH=%XERCESC_ROOT_DIR%\bin;%PATH%
 
 rem ---Define basic config parameters--------------------------------
@@ -10,16 +10,14 @@ set THIS=%~d0%~p0
 if NOT DEFINED MODE    set MODE=nightly
 if NOT DEFINED WORKDIR set WORKDIR=D:/build/cdash
 if NOT DEFINED VERSION set VERSION=g4tags-dev
-set CONFIG=x86-win7-vc11
+set CONFIG=winxp-vc10
 set SOURCE=%WORKDIR%/%MODE%/%VERSION%
 set BINARY=%WORKDIR%/%MODE%/%CONFIG%
 
-rem ---Extra Options--------------------------------------------------
-set G4_XOPTS="-DGEANT4_USE_OPENGL_WIN32=ON"
-
+rem rmdir /q/s "%SOURCE%"
 rem ---Checkout Geant4 sources ---------------------------------------
-if NOT EXIST %SOURCE% (
-  python %THIS%g4tagsvn.py checkout -c %VERSION% -d %SOURCE% -q
-)
+if NOT EXIST %SOURCE% python %THIS%g4tagsvn.py update -c %VERSION% -d %SOURCE% --quiet
+
 rem ---Run the CTest script-------------------------------------------
 ctest -V -S %THIS%g4%MODE%.cmake 
+
