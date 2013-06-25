@@ -29,6 +29,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th June 2013 - John Apostolakis (cmake-V09-06-18)
+- Added FindTBB.cmake module for Intel Threading-Building-Blocks library.
+
 13th June 2013 - Ben Morgan (cmake-V09-06-17)
 - Templates/geant4-config.in : BUGFIX #1477 : Correct output of 
   --has-feature for clhep feature.
@@ -133,10 +137,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
   of MT builds without interfering with other work.
 
 21st February 2013 - Gunter Folger (cmake-V09-06-04)
-- updated dataset G4NEUTRONXS 1.3 ( previous was not yet released)
+- Updated dataset G4NEUTRONXS 1.3 ( previous was not yet released)
 
 13th February 2013 - Gunter Folger (cmake-V09-06-03)
-- switch to G4NEUTRONXS 1.3
+- Switch to G4NEUTRONXS 1.3
 
 12th February 2013 - Ben Morgan (cmake-V09-06-02)
 - Modules/Geant4MakeRules_cxx.cmake : Revert default CXX flags for GNU
@@ -176,11 +180,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
   variable names.
 - INSTALL.g4cmake : Remove this now obsolete file
 
-
 27th November 2012 -  Ben Morgan       (cmake-V09-05-79)
 - Templates/geant4-config.in : Correct listing of G3toG4 library,
   replacing "-lG3ToG4" with "-lG3toG4"
-
 
 27th November 2012 -  Gabriele Cosmo   (cmake-V09-05-78)
 - Added "-Wno-variadic-macros -Wshadow" compilation options g++ and clang.
