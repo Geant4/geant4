@@ -509,6 +509,7 @@ examples                                         examples-V09-06-06
   o Migrated example to MT.
 - extended/optical/wls (WLS-V09-06-06)
   o Migrated example to MT.
+- extended/parallel (exparallel-V09-06-00)
 - extended/parallel/ParN02tbb (TBB-V09-06-00)
   o New example derived from original novice/N02 demonstrating how to
     interface a simple application with the Intel Threading Building Blocks
