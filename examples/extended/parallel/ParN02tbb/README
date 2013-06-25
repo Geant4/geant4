@@ -1,0 +1,26 @@
+01.25.2009 Xin Dong: This example is inspired by the ParGeant4 for
+distributed memory. The Geant4MT follows the core idea of ParGeant4
+and replaces processes with threads to take advantage of many-core 
+computers in a memory-efficient and scalable manner.
+
+All events are assigned to each worker thread in a round robin fashion.
+All threads share most detector data including physics table and 
+physics vector for some physics processes. The master process 
+initializes the data in a regular way. However, worker threads 
+initialize thread private data only.
+
+We use the same trick as ParGeant4 to introduce parallelism by 
+implementating a new G4RunaManager subclass. However, lots of effort are
+taken to change Geant4 kernel in order to guarantee thread safety 
+concerning accesses to those shared static data and dynamically 
+allocated memory. The original README for ParGeant4 is attached as a
+comparison. Geant4MT is more user friendly so that one just compiles 
+this example in the same way as the original N02. The executable file 
+is named as ParN02. One more argument is needed to give the number of
+workers. For example, once built the example, use:
+
+ParN02 run1.mac 8
+
+to run this program. The third argument "8" is the number of worker
+threads that will be created. So the total number of threads for this
+execution is 9.
