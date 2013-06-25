@@ -41,7 +41,7 @@ analysis                                         analysis-V09-06-10
   application was built against MT Geant4 but run in sequential mode.
 - Forced setting of 'fIsMaster' to 'true' in sequential mode.
 
-event                                            event-V09-06-08
+event                                            event-V09-06-09
 -----
 - Moved the access method of G4StateManager::GetStateManager() to the
   constructor of G4EventManager to reduce use of TLS pointer.
@@ -73,7 +73,7 @@ geometry/solids/specific                         geom-specific-V09-06-12
 ------------------------
 - Fixed minor Coverity defect in G4PolyhedraSide and G4PolyconeSide.
 
-global                                           global-V09-06-48
+global                                           global-V09-06-50
 ------
 - Removed split mechanism from G4PhysicsVector; removed G4PhysicsVectorCache
   class; removed G4PVSplitter. Made G4PhysicsVector a read-only class.
@@ -104,7 +104,7 @@ interfaces                                       interfaces-V09-06-04
 materials                                        materials-V09-06-18
 ---------
 - G4Material: issue warning if new added material has duplicate name.
-- Partially fix for coverity errors in G4OpticalSurface.
+- Partially fix for Coverity errors in G4OpticalSurface.
   Added dichroic filter surface.
 
 particles                                        particles-V09-06-31
@@ -148,14 +148,16 @@ physics_lists
 - lists (phys-lists-V09-06-11):
   + Coverity fix in LBE list.
 
-processes/cuts                                   procuts-V09-06-05
+processes/cuts                                   procuts-V09-06-06
 --------------
-- Modifies G4RToEConvFor* classes removing unnecessary static declarations
+- Modified G4RToEConvFor* classes removing unnecessary static declarations
   for local variables and moved to be simple members of the class.
 - Remove thread-local specification for static members 'LowestEnergy',
   'HighestEnergy' and 'MaxEnergyCut', fixing FPE ceash in MT mode.
   Fixed all loops for G4PhysicsLogVector: upper index is nbins+1.
   Stop calling Reset() from its destructor (now controlled in run-manager).
+- G4ProductionCutstable: print out energy thresholds regardless of
+  G4MaterialCutsCouple::IsReCalcNeeded().
 
 processes/decay                                  decay-V09-06-01
 ---------------
@@ -208,8 +210,6 @@ processes/electromagnetic/standard               emstand-V09-06-51
 - G4SeltzerBergerModel, G4eBremsstrahlungRelModel: implemented copy of
   element selectors from master to worker threads.
   Use IsMaster() method at initialisation.
-- G4SeltzerBergerModel: increased 'elowlimit' in SamplingSecondaries()
-  from 10 to 20 keV.
 - G4ScreeningMottCrossSection: fixed numerical problem for very small
   scattering angles.
 - G4PAIPhotonModel: added extra methods.
@@ -324,7 +324,7 @@ processes/hadronic
 - models/qmd (hadr-qmd-V09-06-08)
   o Fixed Coverity defect in G4QMDCollision.
 - models/radioactive_decay (radioactive_decay-V09-06-08)
-  o G4RIsotopeTable.cc: fix in checking if DB files have been loaded
+  o G4RIsotopeTable: fix in checking if DB files have been loaded
     (accessing map without protection).
   o G4RadioactiveDecay: moved initialisation of Isotope table from
     constructor to BuildPhysicsTable() method.
@@ -413,7 +413,7 @@ data sets
   o Fixed files with duplicate entries for nuclear level and lifetime.
   o Added missing decay information for excited states to: z47.a100, z60.a133.
   o Corrected half-life and added missing decay information to: z20.a48.
-  o Correct BetaMinus level 73.92 to 78.92 for z90.a234.
+  o Corrected BetaMinus level 73.92 to 78.92 for z90.a234.
   o Recomputed from latest ENSDF: z41.a100.
   o Removed BetaPlus and added Alpha decays in z100.a250.
 
@@ -472,13 +472,12 @@ examples                                         examples-V09-06-06
 - extended/electromagnetic/TestEm12 (testem12-V09-06-08)
 - extended/electromagnetic/TestEm13 (testem13-V09-06-04)
 - extended/electromagnetic/TestEm14 (testem14-V09-06-07)
+- extended/electromagnetic/TestEm15 (testem15-V09-06-05)
+- extended/electromagnetic/TestEm16 (testem16-V09-06-03)
+- extended/electromagnetic/TestEm17 (testem17-V09-06-07)
+- extended/electromagnetic/TestEm18 (testem18-V09-06-04)
   o SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().
     Cosmetics in SteppingAction.
-- extended/electromagnetic/TestEm15 (testem15-V09-06-04)
-- extended/electromagnetic/TestEm16 (testem16-V09-06-02)
-- extended/electromagnetic/TestEm17 (testem17-V09-06-06)
-- extended/electromagnetic/TestEm18 (testem18-V09-06-03)
-  o Cosmetics in SteppingAction.
 - extended/eventgenerator/exgps (exgps-V09-06-02)
   o Applied coding guidelines.
 - examples/extended/eventgenerator/particleGun (particleGunExample-V09-06-05)
@@ -513,7 +512,7 @@ examples                                         examples-V09-06-06
   o Aplied coding guidelines.
 - extended/parameterisations/Par01 (expar01-V09-06-00)
   o Aplied coding guidelines.
-- extended/persistency/P01 (exampleP01-V09-06-01)
+- extended/persistency/P01 (exampleP01-V09-06-02)
 - extended/persistency/P02 (exampleP02-V09-06-02)
   o Fixed handling required packages/options in CMake files
   o Aplied coding guidelines.
@@ -533,7 +532,7 @@ tests                                            tests-V09-06-06
 - tests/test16 (test16-V09-06-02)
   o Migrated to MT.
   o Fix in test16_hadronic_exerciser.
-- tests/test18 (test18-V09-06-01)
+- tests/test18 (test18-V09-06-03)
 - tests/test24 (test24-V09-06-00)
   o Migrated to MT.
   o Added CMakeLists_Standalone.txt to be used for stand-alone running.
@@ -545,8 +544,9 @@ tests                                            tests-V09-06-06
   o Migrated to MT.
   o Added CMakeLists_Standalone.txt to be used for stand-alone running.
   o Updated README for cmake build.
-- tests/test37 (test37-V09-06-02)
+- tests/test37 (test37-V09-06-03)
   o Fixed TaAl.in macro.
+  o Updated Physics List and run script.
 - tests/test41 (test41-V09-06-03)
   o Cleanup scripts and PhysicsList class.
 - tests/test60 (test60-V09-06-04)
