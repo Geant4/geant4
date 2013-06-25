@@ -22,11 +22,12 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V09-06-17
+cmake                                            cmake-V09-06-18
 -----
 - Corrected output of "--has-feature" for CLHEP feature.
   Addressing problem report #1477.
 - Updated datasets for G4NDL, G4EMLOW, and G4RadioactiveDecay.
+- Added FindTBB.cmake module for Intel Threading-Building-Blocks library.
 - FindROOT.cmake: Minor changes for gccxml dictionary generation.
 
 analysis                                         analysis-V09-06-10
@@ -167,18 +168,19 @@ processes/electromagnetic/adjoint                emadjoint-V09-06-05
 ---------------------------------
 - Cleanup from automatic changes for MT in G4AdjointInterpolator.
 
-processes/electromagnetic/dna                    emdna-V09-06-08
+processes/electromagnetic/dna                    emdna-V09-06-09
 -----------------------------
 - Updated G4DNABornIonisationModel for speedup option.
   Requires new data-set G4EMLOW version 6.33.
 - Cleanup from automatic changes for MT and porting MT compilation on Windows.
 
-processes/electromagnetic/lowenergy              emlowen-V09-06-14
+processes/electromagnetic/lowenergy              emlowen-V09-06-15
 -----------------------------------
 - G4IonDEDXHandler, G4IonParametrisedLossModel, G4LivermoreGammaConversionModel,
   G4PenelopeBremsstrahlungAngular: moved call to SetSpline(true) to be always
   after vector is filled; only in that case Spline interpolation is enabled,
   according to the most recent version of G4PhysicsVector.
+- Fixed Mi shell cross-section computation in G4teoCrossSection.
 - G4LowEPComptonModel: withdrawn dependency on G4HadTmpUtil.
 
 processes/electromagnetic/muons                  emmuons-V09-06-14
@@ -507,6 +509,10 @@ examples                                         examples-V09-06-06
   o Migrated example to MT.
 - extended/optical/wls (WLS-V09-06-06)
   o Migrated example to MT.
+- extended/parallel/ParN02tbb (TBB-V09-06-00)
+  o New example derived from original novice/N02 demonstrating how to
+    interface a simple application with the Intel Threading Building Blocks
+    library (TBB), and organise MT event-level parallelism as TBB tasks.
 - extended/parameterisations/gflash (exgflash-V09-06-00)
   o Removed ExGflashMaterialManager class; now using NIST manager.
   o Aplied coding guidelines.

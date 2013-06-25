@@ -12,7 +12,8 @@
     + Migrated examples, demonstrating use of multi-threading:
       advanced/dnaphysics; advanced/microdosimetry; basic/B1,2,3,4;
       extended/electromagnetic/TestEm4; extended/optical/OpNovice;
-      extended/optical/WLS; extended/runAndEvent/RE03, RE05.
+      extended/optical/WLS; extended/runAndEvent/RE03, RE05;
+      extended/parallel/ParN02tbb.
   o !!!!!!!!!!!!! ADD-TEXT-HERE !!!!!!!!!!!
   o Archived GeomTest* classes for overlaps checking through grid/cylinder
     lines. UI commands are replaced with calls to built-in overlaps checking
@@ -74,6 +75,7 @@ List of features and fixes included in this Beta release since 9.6.p02:
         Modality currently disabled.
       o Corrected output of "--has-feature" for CLHEP feature.
         Addressing problem report #1477.
+      o Added FindTBB.cmake module for Intel Threading-Building-Blocks library.
       o Fix in FindROOT.cmake script to remove "/usr/include" from list of
         include directories passed to rootcint when generating dictionaries.
         Workaround for a bug experienced in rootcint.
@@ -352,7 +354,6 @@ List of features and fixes included in this Beta release since 9.6.p02:
 
   o Electromagnetic Processes:
     -------------------------
-    + 
     + Adjoint:
       o G4AdjointPhotoElectricModel: use G4PEEffectFluoModel instead of
         obsolete G4PEEffectModel.
@@ -374,6 +375,7 @@ List of features and fixes included in this Beta release since 9.6.p02:
         recent version of G4PhysicsVector.
       o G4LowEPComptonModel: fixed numerical problem detected with FPE.
         Withdrawn dependency on G4HadTmpUtil.
+      o Fixed Mi shell cross-section computation in G4teoCrossSection.
       o G4AtomicDeexcitation is cloned from G4UAtomicDeexcitation.
     + Muons:
       o G4MuPairProductionModel: extended grid of differential cross-section
@@ -988,6 +990,10 @@ List of features and fixes included in this Beta release since 9.6.p02:
       o Migrated to enable use of multi-threading.
     + extended/optical/WLS
       o Migrated to enable use of multi-threading.
+    + extended/parallel/ParN02tbb
+      o New example derived from original novice/N02 demonstrating how to
+        interface a simple application with the Intel Threading Building Blocks
+        library (TBB), and organise MT event-level parallelism as TBB tasks.
     + extended/parameterisations/gflash
       o Removed ExGflashMaterialManager class; now using NIST manager.
     + extended/parameterisations/Par01
