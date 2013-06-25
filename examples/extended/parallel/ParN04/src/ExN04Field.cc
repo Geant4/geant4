@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file parallel/ParN04/src/ExN04Field.cc
 /// \brief Implementation of the ExN04Field class
 //

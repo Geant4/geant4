@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 /// @file exMPI02.cc
+// $Id$
+//
 /// @brief A MPI example code
 
 #include "G4RunManager.hh"

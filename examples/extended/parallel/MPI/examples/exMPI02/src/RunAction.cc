@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+// $Id$
+//
 /// @file RunAction.cc
 /// @brief Describe run actions
 

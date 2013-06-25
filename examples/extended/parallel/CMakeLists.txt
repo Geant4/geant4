@@ -9,3 +9,10 @@ else()
   message(STATUS "G4 Examples: MPI not installed --> MPI examples disabled")  
 endif()
 
+find_package(TBB QUIET)
+if(TBB_FOUND)
+  add_subdirectory(ParN02tbb)
+else()  
+  message(STATUS "G4 Examples: TBB not installed --> ParN02tbb example disabled")  
+endif()
+
