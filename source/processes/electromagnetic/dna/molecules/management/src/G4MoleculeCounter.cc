@@ -255,7 +255,7 @@ void G4MoleculeCounter::RemoveAMoleculeAtTime(const G4Molecule& molecule, G4doub
     }
 }
 
-std::auto_ptr<vector<G4Molecule> > G4MoleculeCounter::GetRecordedMolecules()
+G4MoleculeCounter::RecordedMolecules G4MoleculeCounter::GetRecordedMolecules()
 {
     if(fVerbose > 1)
     {
@@ -263,7 +263,7 @@ std::auto_ptr<vector<G4Molecule> > G4MoleculeCounter::GetRecordedMolecules()
     }
 
     CounterMapType::iterator it;
-    std::auto_ptr< vector<G4Molecule> > output (new vector<G4Molecule>) ;
+    RecordedMolecules output (new vector<G4Molecule>) ;
 
     for(it = fCounterMap.begin() ; it != fCounterMap.end() ; it++)
     {

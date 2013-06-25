@@ -36,5 +36,4 @@
 
 #include "G4MoleculeID.hh"
 
-G4ThreadLocal int G4MoleculeID::fLastValue(0);
-G4MoleculeID gStartCounter(G4MoleculeID::Initialize(999666999));
+G4ThreadLocal int G4MoleculeID::fLastValue(999666999);

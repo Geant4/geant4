@@ -101,7 +101,7 @@ public :
 
 private :
     G4AllITManager();
-    static G4ThreadLocal std::auto_ptr<G4AllITManager> *fpInstance;
+    static G4ThreadLocal G4AllITManager* fpInstance;
     std::map<G4ITType, G4VITManager*> fITSubManager ;
 
     int fVerbose ;

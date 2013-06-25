@@ -68,11 +68,19 @@ protected:
     G4int fVerbose ;
 
 public:
+#if __cplusplus > 199711L
+    typedef std::unique_ptr<vector<G4Molecule> > RecordedMolecules;
+#else
+    typedef std::auto_ptr<vector<G4Molecule> > RecordedMolecules;
+#endif
+
     static void DeleteInstance();
 
     static  G4MoleculeCounter* GetMoleculeCounter();
     inline const NbMoleculeAgainstTime& GetNbMoleculeAgainstTime(const G4Molecule &molecule);
-    std::auto_ptr<vector<G4Molecule> > GetRecordedMolecules();
+
+    RecordedMolecules GetRecordedMolecules();
+
     virtual void AddAMoleculeAtTime(const G4Molecule&, G4double);
     virtual void RemoveAMoleculeAtTime(const G4Molecule&, G4double);
 

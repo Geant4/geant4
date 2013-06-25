@@ -14,6 +14,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+25-06-2013  M.K.         tag emdna-V09-06-09
+	    G4MoleculeID: Rectify initialization
+	    G4MoleculeCounter: Automatic switch between unique_ptr or 
+	    auto_ptr according to c++ std version
+
 11-06-2013  G.Cosmo         tag emdna-V09-06-08
             Corrected static initialisation in G4VMolecularDecayDisplacer
             for problem accidentally introduced in previous tag.

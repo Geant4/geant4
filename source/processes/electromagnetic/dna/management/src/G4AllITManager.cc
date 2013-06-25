@@ -37,25 +37,22 @@
 
 using namespace std;
 
-G4ThreadLocal auto_ptr<G4AllITManager> *G4AllITManager::fpInstance = 0;
+G4ThreadLocal G4AllITManager* G4AllITManager::fpInstance = 0;
 
 G4AllITManager::G4AllITManager()
 {
-    if (!fpInstance) fpInstance = new auto_ptr<G4AllITManager> (0) ;
     fVerbose = 0 ;
 }
 
 G4AllITManager* G4AllITManager::Instance()
 {  
-    if (!fpInstance) fpInstance = new auto_ptr<G4AllITManager> (0);
-    auto_ptr<G4AllITManager> &fInstance = *fpInstance;
-    if(fInstance.get() == 0) fInstance = auto_ptr<G4AllITManager>(new G4AllITManager());
-    return fInstance.get() ;
+    if (!fpInstance) fpInstance = new G4AllITManager();
+    return fpInstance ;
 }
 
 void G4AllITManager::DeleteInstance()
 {
-    fpInstance->reset();
+    if(fpInstance) delete fpInstance;
 }
 
 G4AllITManager::~G4AllITManager()
@@ -70,7 +67,7 @@ G4AllITManager::~G4AllITManager()
         it++;
         fITSubManager.erase(it_tmp);
     }
-    fpInstance->release();
+    fpInstance = 0;
 }
 
 void  G4AllITManager::UpdatePositionMap()
