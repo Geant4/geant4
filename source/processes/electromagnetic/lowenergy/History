@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-15.02.2013  V.Ivanchenko, tag emlowen-V09-06-14
+25.06.2013  S.Incerti, B. Bouguelmouna, tag emlowen-V09-06-15
+            - Fix Mi shell cross section computation in G4teoCrossSection
+
+17.06.2013  V.Ivanchenko, tag emlowen-V09-06-14
             - G4IonDEDXHandler, G4IonParametrisedLossModel,
               G4LivermoreGammaConversionModel,
               G4PenelopeBremsstrahlungAngular - moved call
