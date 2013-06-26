@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 25th, 2013, A. Dotti (run-V09-06-64)
+- Bug fix for compilation with C++11 standard in G4MTRunManager.hh in
+  use of std::make_pair 
+ 
 June 22nd, 2013, A. Dotti (run-V09-06-63)
 - Copy SensitiveDetector and FieldManagers pointers between 
   runs. Bug fix to solve issue introduced with tag -59

@@ -135,7 +135,7 @@ public:
     typedef std::map<G4int,G4VPhysicalVolume*> masterWorlds_t;
     static G4ScoringManager* GetMasterScoringManager() { return masterScM; }
     static masterWorlds_t& GetMasterWorlds() { return masterWorlds; }
-    static void addWorld( G4int counter, G4VPhysicalVolume* w) { masterWorlds.insert( std::make_pair<G4int,G4VPhysicalVolume*>(counter,w) ); }
+    static void addWorld( G4int counter, G4VPhysicalVolume* w) { masterWorlds.insert( std::make_pair(counter,w) ); }
     void AddWorkerRunManager( G4WorkerRunManager* workerRM );
     //Should be called by Workers
     const CLHEP::HepRandomEngine* getMasterRandomEngine() const { return masterRNGEngine; }
