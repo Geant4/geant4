@@ -8,12 +8,13 @@
                  -----------------------------------
 
   o Multi-threading:
-    + !!!!!!!!!!!!! ADD-TEXT-HERE !!!!!!!!!!!
-    + Migrated examples, demonstrating use of multi-threading:
+    + A guide for beta-testers to migrate applications to multi-threading is 
+      available at this TWiki page:
+      https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
+    + Migrated examples for demonstrating use of multi-threading are:
       advanced/dnaphysics; advanced/microdosimetry; basic/B1,2,3,4;
       extended/electromagnetic/TestEm4; extended/optical/OpNovice;
-      extended/optical/WLS; extended/runAndEvent/RE03, RE05;
-      extended/parallel/ParN02tbb.
+      extended/optical/WLS; extended/runAndEvent/RE03, RE05.
   o !!!!!!!!!!!!! ADD-TEXT-HERE !!!!!!!!!!!
   o Archived GeomTest* classes for overlaps checking through grid/cylinder
     lines. UI commands are replaced with calls to built-in overlaps checking
@@ -37,7 +38,9 @@
       Versions of Geant4 have also been compiled successfully on other
       Linux distributions, Debian, Suse or other RedHat systems.
     + MacOSX 10.8, gcc-4.2.1, clang-4.2
+       * For multi-threading on MacOSX, -clang- has to be used.
     + Windows/7 with Visual C++ 10.0 (Visual Studio 2010)
+       * Multi-threading mode currently -not- supported on Windows.
 
   o More verified configurations:
     + Linux, gcc-4.8.1
@@ -87,7 +90,7 @@ List of features and fixes included in this Beta release since 9.6.p02:
         and G4RadioactiveDecay-3.7.
         Updated tags for 10.0-beta.
     + GNUMake:
-      o No longer supported, only for development use.
+      o No longer supported, only for development/testing use.
 
   o Analysis:
     --------
@@ -112,8 +115,7 @@ List of features and fixes included in this Beta release since 9.6.p02:
     -------------
     + Added Merge() methods to G4ScoringManager and G4VScoringMesh, needed
       for multi-threading. Added Merge() for scoring meshes to be used in
-      multi-threaded mode to reduce the score after the run.
-     Changed method names in G4VScoringMesh and derived classes.
+    + Changed method names in G4VScoringMesh and derived classes.
     + Added missing options in command-based scorers in G4ScoreQuantityMessenger
       and G4ScoreQuantityMessengerQCmd.
     + Added protoype cloning mechanism for sensitive-detectors, needed for
@@ -744,17 +746,17 @@ List of features and fixes included in this Beta release since 9.6.p02:
 
   o Run
     ---
-    + Finalized API for examples migration: implemented changes in class
+    + Introducing G4MTRunManager and G4WorkerRunManager for multi-threading
+      mode. Enabled MT mode for multiple runs in a job.
+    + Updated APIs for users: implemented changes in class
       G4UserWorkerInitialization; introduced and enabled class
       G4VUserActionInitialization.
-      Make G4VUserDetectorConstruction::ConstructSDandField() be invoked from
-      G4RunManager for sequential mode.
-      Enabled MT mode for multiple runs in a job.
-      Set default number of threads to 2 in MT mode.
-    + Revised G4MTRunManager and related classes for the handling of parallel
-      worlds. Added Get/SetNumberOfThreads() methods.
+    + Make G4VUserDetectorConstruction::ConstructSDandField() be invoked from
+      G4WorkerRunManager for multi-threaded mode and from G4RunManager for
+      sequential mode. Introduced SetSensitiveDetector() method.
+    + Set default number of threads to 2 in MT mode.
+      Added Get/SetNumberOfThreads()  methods.
       Introduced new UI command /run/numberOfThreads.
-      UI command 'run/particle/AddProcManager' can be used in Pre_Init state.
     + Threads now use new cout streaming, controllable by UI commands in
       /control/cout commands set.
     + Delete all G4Allocator objects from the destructor of G4RunManagerKernel.
@@ -773,11 +775,10 @@ List of features and fixes included in this Beta release since 9.6.p02:
       Workers write out random files in files with G4WorkerXX postfix
     + G4VUSerPhysicsList is now shared between threads and is a split-class.
     + Added 'isMaster' Boolean flag to G4UserRunAction. It is set to true
-      for the user action object assigned to G4MTRunManager.
+      for the user run action object assigned to G4MTRunManager.
     + Added G4VUserParallelWorld::ConstructSD() for the use-case of defining
       sensitive detector in a parallel world.
       G4RunManager and G4WorkerRunManager are modified accordingly.
-      Introduced SetSensitiveDetector() method.
       Fixed handling of user-defined parallel worlds.
     + Fixed bug in PhysicsListHelper for DNABrownianTransportation.
     + Removed obsolete UI commands, including obsolete UI commands for
