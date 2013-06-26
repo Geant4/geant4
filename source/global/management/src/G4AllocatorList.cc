@@ -91,7 +91,7 @@ void G4AllocatorList::Destroy(G4int nStat, G4int verboseLevel)
            << "; of which, static: " << i << G4endl;
     G4cout << "Dynamic pools deleted: " << j 
            << " / Total memory freed: " << std::setprecision(2)
-           << mem/1048576 << " Mb" << G4endl;
+           << mem/1048576 << std::setprecision(6) << " Mb" << G4endl;
     G4cout << "============================================================"
            << G4endl;
   }

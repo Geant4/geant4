@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 26, 2013 G.Cosmo (global-V09-06-51)
+- Restore default precision in cout in G4AllocatorList.
+
 June 24, 2013 G.Cosmo (global-V09-06-50)
 - Added tag ID specific for MT mode in G4Version.hh.
 
