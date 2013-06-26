@@ -30,7 +30,7 @@ cmake                                            cmake-V09-06-18
 - Added FindTBB.cmake module for Intel Threading-Building-Blocks library.
 - FindROOT.cmake: Minor changes for gccxml dictionary generation.
 
-analysis                                         analysis-V09-06-10
+analysis                                         analysis-V09-06-11
 --------
 - Fix in G4RootAnalysisManager::WriteOnAscii().
   Addressing problem report #1473.
@@ -74,7 +74,7 @@ geometry/solids/specific                         geom-specific-V09-06-12
 ------------------------
 - Fixed minor Coverity defect in G4PolyhedraSide and G4PolyconeSide.
 
-global                                           global-V09-06-50
+global                                           global-V09-06-51
 ------
 - Removed split mechanism from G4PhysicsVector; removed G4PhysicsVectorCache
   class; removed G4PVSplitter. Made G4PhysicsVector a read-only class.
@@ -362,7 +362,7 @@ processes/optical                                op-V09-06-05
   as before but at the moment when material list is fully defined.
 - Fixed Coverity defects in G4OpBoundaryProcess.
 
-run                                              run-V09-06-60
+run                                              run-V09-06-64
 ---
 - Delete all G4Allocator objects from the destructor of G4RunManagerKernel.
 - Removed thread initialization for split mechanism in G4WorkerThread for
@@ -455,6 +455,13 @@ examples                                         examples-V09-06-06
 - extended/biasing/B02 (B02-V09-06-05)
   o Removed redundant analysis code from main. Removed old analysis script.
     Cleaned up line-lenghts, tabs and changed local name of b02Run object.
+- extended/biasing/ReverseMC01 (ReverseMC01-V09-06-02)
+  o Applied coding guidelines (virtual keyword, data members initialization).
+  o Code cleanup.
+- extended/common/analysis (excommon-analysis-V09-06-02)
+  o Implemented ExG4HbookAnalysisManager::Create() required with
+    update for MT migration; returns an exception in case of MT mode
+    (as Hbook is not supported with MT)
 - extended/electromagnetic/TestEm1 (testem1-V09-06-06)
 - extended/electromagnetic/TestEm2 (testem2-V09-06-05)
 - extended/electromagnetic/TestEm3 (testem3-V09-06-07)
