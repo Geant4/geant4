@@ -57,7 +57,7 @@ int main(int argc,char** argv)
 {
   // Choose the Random engine
 
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
   // Construct the default run manager
   

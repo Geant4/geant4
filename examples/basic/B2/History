@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26/06/13 G. Cosmo (exampleB2-V09-06-04)
+- Fixed use of G4Random instead of HepRandom in B2b.
+
 04/06/13 I. Hrivnacova (exampleB2-V09-06-03)
 - Fixed reference to B2ActionInitialization in README and .README
 
