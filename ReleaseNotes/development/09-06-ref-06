@@ -435,7 +435,8 @@ examples                                         examples-V09-06-06
   o Fixed compilation warnings with most recent clang compiler.
 - basic/B1 (exampleB1-V09-06-03)
   o Updated README. Clarify local names in user actions.
-- basic/B2 (exampleB2-V09-06-03)
+- basic/B2 (exampleB2-V09-06-04)
+  o Corrected use of G4Random instead of HepRandom in B2b.
   o Updated README.
 - basic/B3 (exampleB2-V09-06-04)
   o Migrated example to MT. Added B3ActionInitialization, B3Run
