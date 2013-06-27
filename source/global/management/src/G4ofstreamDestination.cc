@@ -21,7 +21,8 @@
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
-// ********************************************************************//
+// ********************************************************************
+//
 //
 // $Id: G4coutDestination.hh 66241 2014-05-16 00:00:42Z adotti $
 //
