@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -37,8 +37,6 @@ Shower parameterization
   - GFlashHomoShowerParameterisation::Constructor -  
 /********************************************/ 
 end shower parameterization
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 FastSimulationManagerProcess
 AddParameterisation
 Physics List constructor
@@ -134,6 +132,7 @@ msc:   for GenericIon    SubType= 10
 hIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
@@ -262,14 +261,14 @@ msc:   for pi-    SubType= 10
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : PbWO4
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  89.3347 keV    e-  1.12535 MeV    e+  1.05931 MeV proton 100 keV
@@ -363,7 +362,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -378,7 +377,7 @@ Internal GetUserElapsed Time: 0
 ******************************************
 Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
   5322 hits are stored in Tst34HitsCollection 
@@ -404,17 +403,15 @@ Internal GetUserElapsed Time: 0
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 9  -----
   5321 hits are stored in Tst34HitsCollection 
  #### Tst34EventAction::Test: Total energy deposited in the calorimeter: 19.9511 (GeV)
 number of events = 10
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 
 ******************************************
-Total Real Elapsed Time is: 1
-Total System Elapsed Time: 0
-Total GetUserElapsed Time: 0.99
+Total Real Elapsed Time is: 1.74
+Total System Elapsed Time: 0.01
+Total GetUserElapsed Time: 1.04
 ******************************************

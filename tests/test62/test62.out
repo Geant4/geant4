@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -29,9 +29,6 @@ SimpleBox is now made of Pb
 userDetector->Construct() start.
 SLog is registered to the default region.
 physicsList->Construct() start.
-physicsList->Construct() start.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
@@ -586,7 +583,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -604,7 +601,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.57s Real=0.57s Sys=0s
+  User=0.51s Real=1.01s Sys=0.01s
 #
 # neutron at 1 GeV in Th
 #
@@ -629,7 +626,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -642,7 +639,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.49s Real=0.49s Sys=0s
+  User=0.53s Real=1.04s Sys=0s
 #
 # pi+ at 1 GeV in Th
 #
@@ -667,7 +664,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -680,7 +677,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.42s Real=0.42s Sys=0s
+  User=0.46s Real=0.96s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -705,7 +702,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -718,7 +715,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.55s Real=0.58s Sys=0.01s
+  User=0.45s Real=0.95s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -1059,12 +1056,12 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -1077,7 +1074,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.45s Real=0.49s Sys=0s
+  User=0.41s Real=1.17s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -1102,12 +1099,12 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -1120,7 +1117,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=0.61s Sys=0s
+  User=0.57s Real=1.19s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1145,12 +1142,12 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -1163,7 +1160,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=0.51s Sys=0s
+  User=0.5s Real=1s Sys=0.01s
 #
 # pi- at 1 GeV in U
 #
@@ -1188,12 +1185,12 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -1206,7 +1203,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.54s Real=0.54s Sys=0s
+  User=0.42s Real=0.82s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1547,17 +1544,17 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -1570,7 +1567,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.29s Real=0.3s Sys=0s
+  User=0.71s Real=1.9s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1595,17 +1592,17 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -1618,7 +1615,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.47s Real=0.47s Sys=0s
+  User=0.81s Real=1.14s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1643,17 +1640,17 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -1666,7 +1663,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.46s Real=0.46s Sys=0.01s
+  User=0.45s Real=0.46s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1691,17 +1688,17 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -1714,7 +1711,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.45s Real=0.45s Sys=0s
+  User=0.5s Real=1.21s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -2055,22 +2052,22 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -2083,7 +2080,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.13s Sys=0s
+  User=0.14s Real=0.27s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -2108,22 +2105,22 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -2136,7 +2133,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.15s Sys=0s
+  User=0.08s Real=0.28s Sys=0s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -2161,22 +2158,22 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -2189,7 +2186,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.1s Sys=0s
+  User=0.15s Real=0.29s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -2214,22 +2211,22 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
@@ -2242,7 +2239,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.12s Sys=0s
+  User=0.09s Real=0.33s Sys=0.01s
 #
 # proton at 1 GeV in Si
 #
@@ -2583,27 +2580,27 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : Yes     recalculation needed : No 
+Index : 4     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
@@ -2616,7 +2613,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.05s Sys=0s
+  User=0.05s Real=0.15s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -2641,27 +2638,27 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : Yes     recalculation needed : No 
+Index : 4     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
@@ -2674,7 +2671,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2699,27 +2696,27 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : Yes     recalculation needed : No 
+Index : 4     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
@@ -2732,7 +2729,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -2757,27 +2754,27 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : Yes     recalculation needed : No 
+Index : 4     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
@@ -2790,7 +2787,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.13s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -3131,32 +3128,32 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : No      recalculation needed : No 
+Index : 4     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
-Index : 5     used in the geometry : Yes     recalculation needed : No 
+Index : 5     used in the geometry : Yes
  Material : Carbon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  3.59905 MeV    e-  698.682 MeV    e+  671.072 MeV proton 100 MeV
@@ -3169,7 +3166,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -3194,32 +3191,32 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : No      recalculation needed : No 
+Index : 4     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
-Index : 5     used in the geometry : Yes     recalculation needed : No 
+Index : 5     used in the geometry : Yes
  Material : Carbon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  3.59905 MeV    e-  698.682 MeV    e+  671.072 MeV proton 100 MeV
@@ -3232,7 +3229,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # pi+ at 1 GeV in C
 #
@@ -3257,32 +3254,32 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : No      recalculation needed : No 
+Index : 4     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
-Index : 5     used in the geometry : Yes     recalculation needed : No 
+Index : 5     used in the geometry : Yes
  Material : Carbon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  3.59905 MeV    e-  698.682 MeV    e+  671.072 MeV proton 100 MeV
@@ -3295,7 +3292,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.11s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -3320,32 +3317,32 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : No      recalculation needed : No 
+Index : 4     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
-Index : 5     used in the geometry : Yes     recalculation needed : No 
+Index : 5     used in the geometry : Yes
  Material : Carbon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  3.59905 MeV    e-  698.682 MeV    e+  671.072 MeV proton 100 MeV
@@ -3358,7 +3355,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # Deuteron at 1 GeV/nucleon on Pb
 #
@@ -3383,34 +3380,34 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : No      recalculation needed : No 
+Index : 4     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
-Index : 5     used in the geometry : No      recalculation needed : No 
+Index : 5     used in the geometry : No 
  Material : Carbon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  3.59905 MeV    e-  698.682 MeV    e+  671.072 MeV proton 100 MeV
@@ -3421,7 +3418,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.99s Real=0.99s Sys=0.01s
+  User=0.84s Real=1.63s Sys=0s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3446,34 +3443,34 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : No      recalculation needed : No 
+Index : 4     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
-Index : 5     used in the geometry : No      recalculation needed : No 
+Index : 5     used in the geometry : No 
  Material : Carbon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  3.59905 MeV    e-  698.682 MeV    e+  671.072 MeV proton 100 MeV
@@ -3484,7 +3481,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.37s Real=0.37s Sys=0s
+  User=1.04s Real=1.48s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3510,32 +3507,32 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : No      recalculation needed : No 
+Index : 4     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
-Index : 5     used in the geometry : Yes     recalculation needed : No 
+Index : 5     used in the geometry : Yes
  Material : Carbon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  3.59905 MeV    e-  698.682 MeV    e+  671.072 MeV proton 100 MeV
@@ -3545,16 +3542,10 @@ Index : 5     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 Start Run processing.
-[INCL++] Warning: momentum scaling = 1.01004
-                Lorentz vector = (-202.858,-2.65175,896.2033039.44))
-                A = 3, Z = 0
-                E* = 19.8308, nuclearMass = 2897.22
-                remnant i=0, nRemnants=2
-                Reaction was: 709.892-MeV C12 + C12, in inverse kinematics.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -3579,34 +3570,34 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Thorium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Copper
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 4     used in the geometry : No      recalculation needed : No 
+Index : 4     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
-Index : 5     used in the geometry : No      recalculation needed : No 
+Index : 5     used in the geometry : No 
  Material : Carbon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  3.59905 MeV    e-  698.682 MeV    e+  671.072 MeV proton 100 MeV
@@ -3617,17 +3608,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.19s Sys=0s
+  User=0.62s Real=1.18s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-RunManager is deleted.
+RunManager is deleting RunManagerKernel.
 EventManager deleted.
-UImanager deleted.
 Units table cleared.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 1.7 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.

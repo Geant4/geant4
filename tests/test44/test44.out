@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,8 +46,6 @@
 
 
 
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 PhysicsList::SetCuts:CutLength : 700 um 
 /process/eLoss/subsec true
 /run/physicsModified
@@ -56,16 +54,28 @@ PhysicsList::SetCuts:CutLength : 700 um
 /gun/energy 100. MeV
 /run/beamOn 1
 
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : G4_Al
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  5.85564 keV    e-  460.395 keV    e+  442.201 keV proton 70 keV
@@ -135,7 +145,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
@@ -148,5 +158,7 @@ Average number of steps of primary   47
 
 #
 G4 kernel has come to Quit state.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+================== Deleting memory pools ===================
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.27 Mb
+============================================================

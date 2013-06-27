@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,8 +13,6 @@
 SimpleBox is now made of Pb
 # /run/verbose 2
 /run/initialize
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 Tst09PhysicsList::SetCuts:Default CutLength : 1 (mm)
 /gun/direction 1 0 0
 #
@@ -124,6 +122,7 @@ msc:   for alpha    SubType= 10
 hIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
@@ -473,5 +472,3 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 #
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager

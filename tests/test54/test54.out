@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -50,9 +50,6 @@ userDetector->Construct() start.
  X position of the middle of the absorber 0 fm 
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->Construct() start.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -424,14 +421,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  21.4886 keV    e+  20.8954 keV proton 100 keV
@@ -475,7 +472,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=3.8s Real=3.96s Sys=0s
+  User=3.71s Real=8.99s Sys=0s
 
  ======================== run summary ======================
 
@@ -904,19 +901,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  21.4886 keV    e+  20.8954 keV proton 100 keV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Gold
  Range cuts        :  gamma  7 um     e-  7 um     e+  7 um  proton 1 mm 
  Energy thresholds :  gamma  6.54229 keV    e-  65.1406 keV    e+  63.8405 keV proton 100 keV
@@ -960,7 +957,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.75s Real=4.75s Sys=0s
+  User=4.73s Real=11.93s Sys=0s
 
  ======================== run summary ======================
 
@@ -1005,14 +1002,17 @@ Run Summary
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-RunManager is deleted.
+RunManager is deleting RunManagerKernel.
 EventManager deleted.
-UImanager deleted.
 Units table cleared.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.3 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.

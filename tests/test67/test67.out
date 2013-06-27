@@ -4,16 +4,20 @@
         ############################################
 
 *************************************************************
- Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+Using the sequential Run Manager
+List name in the ROOT file set to: empenelope
 
 ***** Table : Nb of materials = 4 *****
 
- Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.334 cm   Imean: 350.000 eV 
+ Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.412 cm 
+                       Imean: 350.000 eV 
+
    --->  Element: Ge (Ge)   Z = 32.0   N =  72.7   A =  72.61 g/mole
          --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance:  20.84 %
          --->  Isotope:  Ge72   Z = 32   N =  72   A =  71.92 g/mole   abundance:  27.54 %
@@ -23,13 +27,17 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Aluminum    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.862 cm   Imean: 166.000 eV 
+ Material: Aluminum    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.862 cm 
+                       Imean: 166.000 eV 
+
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: HeavyWater    density:  3.000 g/cm3   RadL:  12.028 cm   Nucl.Int.Length:  25.172 cm   Imean:  68.998 eV 
+ Material: HeavyWater    density:  3.000 g/cm3   RadL:  12.028 cm   Nucl.Int.Length:  25.168 cm 
+                       Imean:  68.998 eV 
+
    --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
          --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
@@ -42,7 +50,9 @@
           ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 114334693.470 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.973 pc 
+                       Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -79,7 +89,7 @@ Rayl:   for  gamma    SubType= 11
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
 
 CoulombScat:   for  e-    SubType= 1
@@ -110,7 +120,7 @@ eBrem:   for  e-    SubType= 3
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 2, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 120 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
 
 CoulombScat:   for  e+    SubType= 1
@@ -172,7 +182,7 @@ nuclearStopping:   for  proton    SubType= 8
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -189,7 +199,7 @@ nuclearStopping:   for  GenericIon    SubType= 8
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
@@ -398,28 +408,28 @@ hPairProd:   for  pi-    SubType= 4
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 1 mm 
  Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminum
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 1 mm 
  Energy thresholds :  gamma  250 eV     e-  34.1077 keV    e+  33.8598 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Germanium
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 1 mm 
  Energy thresholds :  gamma  1.72088 keV    e-  44.0266 keV    e+  43.7067 keV proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : HeavyWater
  Range cuts        :  gamma  10 um     e-  10 um     e+  10 um  proton 1 mm 
  Energy thresholds :  gamma  250 eV     e-  42.7607 keV    e+  42.1415 keV proton 100 keV
@@ -428,14 +438,13 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-### Run 0 start.
+ooo Run 0 starts (global).
 Choosing random seed according to time(0) 
 
 --------- Ranecu engine status ---------
- Initial seed (index) = 93
- Current couple of seeds = 1022674707, 1801502460
+ Initial seed (index) = 95
+ Current couple of seeds = 1319097951, 1574250676
 ----------------------------------------
-Primary energy: 45 keV 
 
 ---> Begin Of Event: 0
 
@@ -636,8 +645,8 @@ Primary energy: 45 keV
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-### Run 1 start.
-Primary energy: 60 keV 
+Global results with 100000 events : 122
+ooo Run 1 starts (global).
 
 ---> Begin Of Event: 0
 
@@ -838,8 +847,8 @@ Primary energy: 60 keV
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-### Run 2 start.
-Primary energy: 120 keV 
+Global results with 100000 events : 759
+ooo Run 2 starts (global).
 
 ---> Begin Of Event: 0
 
@@ -1040,8 +1049,8 @@ Primary energy: 120 keV
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-### Run 3 start.
-Primary energy: 200 keV 
+Global results with 100000 events : 2530
+ooo Run 3 starts (global).
 
 ---> Begin Of Event: 0
 
@@ -1242,8 +1251,8 @@ Primary energy: 200 keV
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-### Run 4 start.
-Primary energy: 500 keV 
+Global results with 100000 events : 2477
+ooo Run 4 starts (global).
 
 ---> Begin Of Event: 0
 
@@ -1444,8 +1453,8 @@ Primary energy: 500 keV
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-### Run 5 start.
-Primary energy: 2000 keV 
+Global results with 100000 events : 1398
+ooo Run 5 starts (global).
 
 ---> Begin Of Event: 0
 
@@ -1646,5 +1655,8 @@ Primary energy: 2000 keV
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
+Global results with 100000 events : 548
+TEST PASSED
+Going to close the ROOT file....done
 Execution terminated
-User=27.03s Real=27.18s Sys=0.02s
+User=25.41s Real=76.36s Sys=0.15s

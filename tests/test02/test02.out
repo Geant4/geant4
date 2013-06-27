@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,8 +15,6 @@ SimpleBox is now made of Pb
 
 /run/verbose 1
 /run/initialize
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /gun/direction 1 0 0
 #
@@ -531,7 +529,7 @@ hPairProd:   for  pi-    SubType= 4
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  5.87535 keV    e-  460.395 keV    e+  442.201 keV proton 70 keV
@@ -544,7 +542,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 # electron 500 MeV in Air
 #
@@ -872,12 +870,12 @@ hPairProd:   for  pi-    SubType= 4
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No      recalculation needed : No 
+Index : 0     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  5.87535 keV    e-  460.395 keV    e+  442.201 keV proton 70 keV
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
@@ -893,5 +891,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 #
 G4 kernel has come to Quit state.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+================== Deleting memory pools ===================
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.42 Mb
+============================================================

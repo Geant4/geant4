@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -87,8 +87,6 @@
 ---> The Absorber is 20 cm  of G4_Al
 
 ---------------------------------------------------------
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 PhysicsList::SetCuts:CutLength : 1 mm 
 /testem/gun/rndm 3 mm
 /testem/event/printModulo 1000
@@ -516,14 +514,14 @@ hPairProd:   for  pi-    SubType= 4
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : G4_Al
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  6.90363 keV    e-  598.345 keV    e+  570.85 keV proton 100 keV
@@ -544,7 +542,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.97s Real=1.97s Sys=0s
+  User=1.95s Real=4.96s Sys=0s
 
  The run consists of 1000 C12 of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
@@ -637,6 +635,18 @@ Run Summary
 ---> The Absorber is 20 cm  of G4_Be
 
 ---------------------------------------------------------
+
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=       10 TeV
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
@@ -2262,8 +2272,6 @@ Run Summary
  Initial seed (index) = 0
  Current couple of seeds = 1459915226, 928642178
 ----------------------------------------
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 
 ===============================================================================
                         TEST SUMMARY for  range

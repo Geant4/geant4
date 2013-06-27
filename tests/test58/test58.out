@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -48,9 +48,6 @@ userDetector->Construct() start.
  X position of the middle of the absorber 0 fm 
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->Construct() start.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
@@ -299,14 +296,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.6438 keV    e-  4.00759 MeV    e+  3.79783 MeV proton 0.1 eV 
@@ -332,7 +329,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.21s Real=1.21s Sys=0s
+  User=1.27s Real=3.91s Sys=0s
 
  ======================== run summary ======================
 
@@ -405,14 +402,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
@@ -433,7 +430,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.87s Real=2.89s Sys=0.01s
+  User=2.9s Real=8.71s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -507,14 +504,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
@@ -535,7 +532,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=49.61s Real=50.28s Sys=0.02s
+  User=49.78s Real=147.4s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -609,14 +606,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
@@ -637,7 +634,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=46.55s Real=48.73s Sys=0.01s
+  User=47.25s Real=141.2s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -710,14 +707,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
@@ -735,11 +732,10 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 Start Run processing.
 
 ---> Begin of Event: 0
-TrackingAction: vx - 1 = 8.882e-16
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.31s Real=3.39s Sys=0.01s
+  User=3.3s Real=9.87s Sys=0s
 
  ======================== run summary ======================
 
@@ -764,7 +760,7 @@ Run Summary
  4.189e+05 barn   +/- 2870 barn  
 
  Mean scattering angle :
- 0.001095 mrad +/- 8.303e-05 mrad
+ 0.001105 mrad +/- 8.244e-05 mrad
 
  Total energy deposit in absorber:
  64.65 keV +/- 30.75 keV
@@ -775,14 +771,14 @@ Run Summary
 -----> dE/dx  nucl = 3.107 MeV/cm	(1.333 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 7.786e-10 eV  +/- 0 eV 
------> NIEL = 7.825e-14 MeV/cm	(3.358e-14 MeV*cm2/g)
+ 7.896e-10 eV  +/- 0 eV 
+-----> NIEL = 7.935e-14 MeV/cm	(3.406e-14 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 18656
- Mean Kinetic Energy of PKA = 0.02161 eV  +/- 0.002492 eV 
- Total Frenkel-pairs Concentration: FP = 1.49e-07 #/cm3
+ Total Number of primary knock-on atoms: PKA = 19745
+ Mean Kinetic Energy of PKA = 0.02056 eV  +/- 0.002354 eV 
+ Total Frenkel-pairs Concentration: FP = 1.511e-07 #/cm3
 
 ----------------------------------------------------------------
 
@@ -795,14 +791,17 @@ Run Summary
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-RunManager is deleted.
+RunManager is deleting RunManagerKernel.
 EventManager deleted.
-UImanager deleted.
 Units table cleared.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 28 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.

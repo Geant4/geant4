@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -228,8 +228,6 @@
 #
 /run/initialize
 Absorber is 17.848 cm  of PbWO4
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 PhysicsList::SetCuts:CutLength : 1 mm 
 #
 #/run/particle/applyCuts
@@ -564,14 +562,14 @@ hPairProd:   for  pi-    SubType= 4
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : PbWO4
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  89.3347 keV    e-  1.12535 MeV    e+  1.05931 MeV proton 100 keV
@@ -592,7 +590,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=21.47s Real=25.66s Sys=0.02s
+  User=21.11s Real=58.43s Sys=0.01s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
@@ -664,14 +662,14 @@ Edep: 0.954794  delEdep= 0.00339213 nrms= 4.13674
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : PbWO4
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  89.3347 keV    e-  1.12535 MeV    e+  1.05931 MeV proton 100 keV
@@ -692,7 +690,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=28.53s Real=32.36s Sys=0.01s
+  User=28.23s Real=70.13s Sys=0.07s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
@@ -760,5 +758,7 @@ Edep: 0.95435851020044  delEdep= 0.0029564902004358 nrms= 3.6054758541899
 <<<<<END>>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+================== Deleting memory pools ===================
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.59 Mb
+============================================================

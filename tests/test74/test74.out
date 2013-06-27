@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -50,8 +50,6 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 PhysicsList::SetCuts:CutLength : 1 nm 
 /run/verbose 1
 /run/initialize
@@ -89,7 +87,7 @@ MuElecInelasticModel :  Emin=        0 eV    Emax=      100 GeV
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -102,7 +100,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.22s Real=0.22s Sys=0s
+  User=0.22s Real=0.23s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -116,7 +114,7 @@ Run Summary
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -129,7 +127,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.53s Real=0.54s Sys=0s
+  User=0.53s Real=0.9s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -144,7 +142,7 @@ Run Summary
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -157,7 +155,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=26.55s Real=26.77s Sys=0.03s
+  User=26.49s Real=70.12s Sys=0.04s
 
  The run consists of 1 Ca48 of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -168,5 +166,7 @@ Run Summary
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+================== Deleting memory pools ===================
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 33 Mb
+============================================================

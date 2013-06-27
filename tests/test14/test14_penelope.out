@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -140,9 +140,6 @@ userDetector->Construct() start.
 
 World is registered to the default region.
 physicsList->Construct() start.
-physicsList->Construct() start.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### G4GoudsmitSaundersonTable loading PDF data
 ### G4GoudsmitSaundersonMscModel loading ELSEPA data
 physicsList->CheckParticleList() start.
@@ -297,14 +294,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -466,7 +463,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -485,14 +482,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -505,7 +502,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.53s Real=0.58s Sys=0s
+  User=0.54s Real=0.73s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -526,14 +523,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -581,14 +578,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -622,14 +619,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -677,14 +674,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -718,14 +715,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -773,14 +770,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -816,14 +813,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1015,7 +1012,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1034,14 +1031,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1054,7 +1051,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.59s Real=0.65s Sys=0.01s
+  User=0.59s Real=0.6s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1075,14 +1072,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1147,7 +1144,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1166,14 +1163,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1186,7 +1183,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.14s Real=0.15s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1207,14 +1204,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1264,14 +1261,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1305,14 +1302,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1353,14 +1350,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1494,19 +1491,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1747,19 +1744,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1772,7 +1769,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.45s Real=0.53s Sys=0.01s
+  User=0.46s Real=0.54s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1793,19 +1790,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1880,19 +1877,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1905,7 +1902,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.12s Real=0.13s Sys=0s
+  User=0.13s Real=0.26s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1926,19 +1923,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -1996,19 +1993,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2021,7 +2018,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.05s Real=0.07000000000000001s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2042,19 +2039,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2103,19 +2100,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2151,19 +2148,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2464,7 +2461,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2483,19 +2480,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2508,7 +2505,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.52s Real=0.58s Sys=0s
+  User=0.53s Real=0.95s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2529,19 +2526,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2622,7 +2619,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2641,19 +2638,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2666,7 +2663,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.2s Real=0.22s Sys=0.01s
+  User=0.2s Real=1.15s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2687,19 +2684,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2760,19 +2757,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2785,7 +2782,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.05s Real=0.15s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2806,19 +2803,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -2867,19 +2864,19 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3014,24 +3011,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3164,24 +3161,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3194,7 +3191,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.21s Real=0.24s Sys=0s
+  User=0.22s Real=0.45s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -3215,24 +3212,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3281,24 +3278,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3311,7 +3308,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.05s Real=0.16s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -3332,24 +3329,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3397,24 +3394,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3448,24 +3445,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3513,24 +3510,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3566,24 +3563,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3687,7 +3684,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -3706,24 +3703,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3736,7 +3733,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.27s Sys=0s
+  User=0.27s Real=0.9s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -3757,24 +3754,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3824,24 +3821,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3854,7 +3851,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.44s Sys=0.02s
+  User=0.06s Real=0.1s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -3875,24 +3872,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3933,24 +3930,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -3984,24 +3981,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -4041,24 +4038,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -4071,7 +4068,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.75s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/particle gamma
 #------------------
@@ -4148,6 +4145,7 @@ msc:   for e-    SubType= 10
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PenIoni :  Emin=        0 eV    Emax=        1 GeV
         MollerBhabha :  Emin=        1 GeV   Emax=       10 TeV
@@ -4155,7 +4153,6 @@ eIoni:   for  e-    SubType= 2
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PenBrem :  Emin=        0 eV    Emax=        1 GeV
@@ -4169,6 +4166,7 @@ msc:   for e+    SubType= 10
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PenIoni :  Emin=        0 eV    Emax=        1 GeV
         MollerBhabha :  Emin=        1 GeV   Emax=       10 TeV
@@ -4176,7 +4174,6 @@ eIoni:   for  e+    SubType= 2
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PenBrem :  Emin=        0 eV    Emax=        1 GeV
@@ -4202,26 +4199,26 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -4251,26 +4248,26 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -4281,7 +4278,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -4308,26 +4305,26 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -4338,7 +4335,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.04s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 100
 
@@ -4357,26 +4354,26 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 3     used in the geometry : No      recalculation needed : No 
+Index : 3     used in the geometry : No 
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -4387,7 +4384,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /calor/setAbsMat Water
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -4414,24 +4411,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -4463,24 +4460,24 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : No      recalculation needed : No 
+Index : 1     used in the geometry : No 
  Material : Aluminium
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 2     used in the geometry : No      recalculation needed : No 
+Index : 2     used in the geometry : No 
  Material : Lead
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
 
-Index : 3     used in the geometry : Yes     recalculation needed : No 
+Index : 3     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
  Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton -1 MeV
@@ -4493,15 +4490,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-RunManager is deleted.
+RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 Rayl for gamma in Air : 1 calls
 Rayl for gamma in Aluminium : 19 calls
@@ -4538,7 +4533,12 @@ phot for gamma in Aluminium : 4009 calls
 phot for gamma in Lead : 4015 calls
 phot for gamma in Water : 3998 calls
 EventManager deleted.
-UImanager deleted.
 Units table cleared.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 13 of which, static: 1
+Dynamic pools deleted: 12 / Total memory freed: 0.11 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
 StateManager deleted.
 RunManagerKernel is deleted.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -177,8 +177,6 @@
 
 
  The calorimeter is made of 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 T07PhysicsList::SetCuts:CutLength : 2 (mm)
 /control/saveHistory
 # /run/verbose 2
@@ -383,21 +381,21 @@ hIoni:   for  pi-    SubType= 2
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 2 mm 
  Energy thresholds :  gamma  990 eV     e-  1.17296 keV    e+  1.16215 keV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Lead
  Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 2 mm 
  Energy thresholds :  gamma  120.879 keV    e-  2.64203 MeV    e+  2.43733 MeV proton 200 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : liquidArgon
  Range cuts        :  gamma  2 mm     e-  2 mm     e+  2 mm  proton 2 mm 
  Energy thresholds :  gamma  8.73423 keV    e-  567.027 keV    e+  540.972 keV proton 200 keV
@@ -622,5 +620,3 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 ### Run 1 start.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
