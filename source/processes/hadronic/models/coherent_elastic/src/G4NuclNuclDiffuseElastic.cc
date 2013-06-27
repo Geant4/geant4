@@ -1486,8 +1486,8 @@ G4complex G4NuclNuclDiffuseElastic::GetErfInt(G4complex z) // , G4int nMax)
   outRe = integral.Legendre96(this,&G4NuclNuclDiffuseElastic::GetExpSin, 0., y );
   outIm = integral.Legendre96(this,&G4NuclNuclDiffuseElastic::GetExpCos, 0., y );
 
-  outRe *= 2./sqrt(CLHEP::pi);
-  outIm *= 2./sqrt(CLHEP::pi);
+  outRe *= 2./std::sqrt(CLHEP::pi);
+  outIm *= 2./std::sqrt(CLHEP::pi);
 
   outRe += GetErf(x);
 
@@ -1983,7 +1983,7 @@ G4double G4NuclNuclDiffuseElastic::BesselJzero(G4double value)
 {
   G4double modvalue, value2, fact1, fact2, arg, shift, bessel;
 
-  modvalue = fabs(value);
+  modvalue = std::fabs(value);
 
   if ( value < 8.0 && value > -8.0 )
   {
@@ -2021,7 +2021,7 @@ G4double G4NuclNuclDiffuseElastic::BesselJzero(G4double value)
                               + value2*(0.7621095161e-6
                               - value2*0.934945152e-7    ) ) );
 
-    bessel = sqrt(0.636619772/modvalue)*(cos(shift)*fact1 - arg*sin(shift)*fact2 );
+    bessel = std::sqrt(0.636619772/modvalue)*(std::cos(shift)*fact1 - arg*std::sin(shift)*fact2 );
   }
   return bessel;
 }
@@ -2035,7 +2035,7 @@ G4double G4NuclNuclDiffuseElastic::BesselJone(G4double value)
 {
   G4double modvalue, value2, fact1, fact2, arg, shift, bessel;
 
-  modvalue = fabs(value);
+  modvalue = std::fabs(value);
 
   if ( modvalue < 8.0 ) 
   {
@@ -2072,7 +2072,7 @@ G4double G4NuclNuclDiffuseElastic::BesselJone(G4double value)
                           + value2*(-0.88228987e-6
                           + value2*0.105787412e-6       ) ) );
 
-    bessel = sqrt( 0.636619772/modvalue)*(cos(shift)*fact1 - arg*sin(shift)*fact2);
+    bessel = std::sqrt( 0.636619772/modvalue)*(std::cos(shift)*fact1 - arg*std::sin(shift)*fact2);
 
     if (value < 0.0) bessel = -bessel;
   }

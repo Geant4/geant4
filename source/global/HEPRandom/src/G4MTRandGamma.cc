@@ -120,13 +120,13 @@ G4double v1,v2,v12;
        p = b * anEngine->flat();
        if (p <= 1.0)
           {                            // Step 2. Case gds <= 1
-           gds = exp(log(p) / a);
-           if (log(anEngine->flat()) <= -gds) return(gds/lambda);
+           gds = std::exp(std::log(p) / a);
+           if (std::log(anEngine->flat()) <= -gds) return(gds/lambda);
           }
        else
           {                            // Step 3. Case gds > 1
-           gds = - log ((b - p) / a);
-           if (log(anEngine->flat()) <= ((a - 1.0) * log(gds))) return(gds/lambda);
+           gds = - std::log ((b - p) / a);
+           if (std::log(anEngine->flat()) <= ((a - 1.0) * std::log(gds))) return(gds/lambda);
           }
       }
    }
@@ -136,7 +136,7 @@ G4double v1,v2,v12;
        {                               // Step 1. Preparations
         aa = a;
         ss = a - 0.5;
-        s = sqrt(ss);
+        s = std::sqrt(ss);
         d = 5.656854249 - 12.0 * s;
        }
                                               // Step 2. Normal deviate
@@ -145,7 +145,7 @@ G4double v1,v2,v12;
       v2 = 2.0 * anEngine->flat() - 1.0;
       v12 = v1*v1 + v2*v2;
     } while ( v12 > 1.0 );
-    t = v1*sqrt(-2.0*log(v12)/v12);
+    t = v1*std::sqrt(-2.0*std::log(v12)/v12);
     x = s + 0.5 * t;
     gds = x * x;
     if (t >= 0.0) return(gds/lambda);         // Immediate acceptance
@@ -184,23 +184,23 @@ G4double v1,v2,v12;
     if (x > 0.0)                       // Step 5. Calculation of q
        {
         v = t / (s + s);               // Step 6.
-        if (fabs(v) > 0.25)
+        if (std::fabs(v) > 0.25)
            {
-            q = q0 - s * t + 0.25 * t * t + (ss + ss) * log(1.0 + v);
+            q = q0 - s * t + 0.25 * t * t + (ss + ss) * std::log(1.0 + v);
            }
         else
            {
             q = q0 + 0.5 * t * t * ((((((((a9 * v + a8) * v + a7) * v + a6) *
                             v + a5) * v + a4) * v + a3) * v + a2) * v + a1) * v;
            }                // Step 7. Quotient acceptance
-        if (log(1.0 - u) <= q) return(gds/lambda);
+        if (std::log(1.0 - u) <= q) return(gds/lambda);
        }
 
     for(;;)
        {                    // Step 8. Double exponential deviate t
         do
         {
-         e = -log(anEngine->flat());
+         e = -std::log(anEngine->flat());
          u = anEngine->flat();
          u = u + u - 1.0;
          sign_u = (u > 0)? 1.0 : -1.0;
@@ -208,9 +208,9 @@ G4double v1,v2,v12;
         }
         while (t <= -0.71874483771719);   // Step 9. Rejection of t
         v = t / (s + s);                  // Step 10. New q(t)
-        if (fabs(v) > 0.25)
+        if (std::fabs(v) > 0.25)
            {
-            q = q0 - s * t + 0.25 * t * t + (ss + ss) * log(1.0 + v);
+            q = q0 - s * t + 0.25 * t * t + (ss + ss) * std::log(1.0 + v);
            }
         else
            {
@@ -220,14 +220,14 @@ G4double v1,v2,v12;
         if (q <= 0.0) continue;           // Step 11.
         if (q > 0.5)
            {
-            w = exp(q) - 1.0;
+            w = std::exp(q) - 1.0;
            }
         else
            {
             w = ((((((e7 * q + e6) * q + e5) * q + e4) * q + e3) * q + e2) *
                                      q + e1) * q;
            }                    // Step 12. Hat acceptance
-        if ( c * u * sign_u <= w * exp(e - 0.5 * t * t))
+        if ( c * u * sign_u <= w * std::exp(e - 0.5 * t * t))
            {
             x = s + 0.5 * t;
             return(x*x/lambda);

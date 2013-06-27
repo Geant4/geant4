@@ -60,7 +60,7 @@ namespace G4INCL {
 
       // A&S formula 7.1.26
       G4double t = 1.0/(1.0 + gcdfp*z);
-      G4double y = 1.0 - (((((gcdfa5*t + gcdfa4)*t) + gcdfa3)*t + gcdfa2)*t + gcdfa1)*t*exp(-z*z);
+      G4double y = 1.0 - (((((gcdfa5*t + gcdfa4)*t) + gcdfa3)*t + gcdfa2)*t + gcdfa1)*t*std::exp(-z*z);
 
       return 0.5*(1.0 + sgn*y);
     }

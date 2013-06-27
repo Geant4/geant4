@@ -333,7 +333,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
     if( iverbose >= 2 ) {
       G4cout << " G4EP: gam " << gam << " alphaSqr " << alphaSqr
              << " diffHSqr " << diffHSqr << G4endl;
-      G4cout << " alpha= " << sqrt(alphaSqr) << G4endl;
+      G4cout << " alpha= " << std::sqrt(alphaSqr) << G4endl;
     }
 #endif
     if( diffHSqr * alphaSqr > delhp6Sqr ) return 3;

@@ -73,7 +73,7 @@ G4double G4MTRandGauss::shoot()
     r = v1*v1 + v2*v2;
   } while ( r > 1.0 );
 
-  fac = sqrt(-2.0*log(r)/r);
+  fac = std::sqrt(-2.0*std::log(r)/r);
   val = v1*fac;
   setVal(val);
   setFlag(true);
@@ -106,7 +106,7 @@ G4double G4MTRandGauss::shoot( CLHEP::HepRandomEngine* anEngine )
     r = v1*v1 + v2*v2;
   } while ( r > 1.0 );
 
-  fac = sqrt( -2.0*log(r)/r);
+  fac = std::sqrt( -2.0*std::log(r)/r);
   val = v1*fac;
   setVal(val);
   setFlag(true);
@@ -140,7 +140,7 @@ G4double G4MTRandGauss::normal()
     r = v1*v1 + v2*v2;
   } while ( r > 1.0 );
 
-  fac = sqrt(-2.0*log(r)/r);
+  fac = std::sqrt(-2.0*std::log(r)/r);
   val = v1*fac;
   nextGauss = val;
   set = true;

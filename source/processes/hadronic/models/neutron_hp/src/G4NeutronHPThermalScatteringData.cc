@@ -490,7 +490,7 @@ G4double G4NeutronHPThermalScatteringData::GetX ( const G4DynamicParticle* aP, G
    G4double eKinetic = aP->GetKineticEnergy();
 
    if ( amapTemp_EnergyCross->size() == 1 ) { 
-      if ( fabs ( aT - amapTemp_EnergyCross->begin()->first ) / amapTemp_EnergyCross->begin()->first > 0.1 ) {
+      if ( std::fabs ( aT - amapTemp_EnergyCross->begin()->first ) / amapTemp_EnergyCross->begin()->first > 0.1 ) {
          G4cout << "G4NeutronHPThermalScatteringData:: The temperature of material (" 
                 << aT/kelvin << "K) is different more than 10% from temperature of thermal scattering file expected (" 
                 << amapTemp_EnergyCross->begin()->first << "K). Result may not be reliable."

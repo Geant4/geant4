@@ -47,12 +47,12 @@ G4double G4MTRandExponential::operator()( G4double mean )
 
 G4double G4MTRandExponential::shoot()
 {
-  return -log(G4MTHepRandom::getTheEngine()->flat());
+  return -std::log(G4MTHepRandom::getTheEngine()->flat());
 }
 
 G4double G4MTRandExponential::shoot(G4double mean)
 {
-  return -log(G4MTHepRandom::getTheEngine()->flat())*mean;
+  return -std::log(G4MTHepRandom::getTheEngine()->flat())*mean;
 }
 
 void G4MTRandExponential::shootArray( const G4int size, G4double* vect,

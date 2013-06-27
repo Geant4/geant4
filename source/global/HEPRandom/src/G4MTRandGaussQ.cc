@@ -175,8 +175,8 @@ G4double G4MTRandGaussQ::transformSmall (G4double r)
              s +=         7*5*3 * vn2*vn2*vn2*vn2;
              s +=          -5*3 * vn2*vn2*vn2;
              s +=             3 * vn2*vn2    - vn2  +    1.0;
-    v = sqrt ( 2.0 * log ( s / (r*guess*sqrt(CLHEP::twopi)) ) );
-    if ( fabs(v-guess) < eps ) break;
+    v = std::sqrt ( 2.0 * std::log ( s / (r*guess*std::sqrt(CLHEP::twopi)) ) );
+    if ( std::fabs(v-guess) < eps ) break;
     guess = v;
   }
   return -v;

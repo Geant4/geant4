@@ -413,7 +413,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 		elevel2 = ip->GetExcitationEnergy();
 		//G4cout<<"   Level "<<level<<" E(MeV)= "<<elevel2/MeV<<G4endl;
 		// close level
-		if(fabs(eexc - elevel2) < minExcitation) {
+		if(std::fabs(eexc - elevel2) < minExcitation) {
 		  excitation = eexc - elevel2;
 		  theKindOfFragment = ion;
 		  break;

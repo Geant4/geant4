@@ -40,23 +40,23 @@ G4MTRandExponential(CLHEP::HepRandomEngine * anEngine, G4double mean )
 
 inline G4double G4MTRandExponential::shoot(CLHEP::HepRandomEngine* anEngine)
 {
-  return -log(anEngine->flat());
+  return -std::log(anEngine->flat());
 }
 
 inline G4double G4MTRandExponential::shoot(CLHEP::HepRandomEngine* anEngine,
                                            G4double mean)
 {
-  return -log(anEngine->flat())*mean;
+  return -std::log(anEngine->flat())*mean;
 }
 
 //-------------
 
 inline G4double G4MTRandExponential::fire()
 {
-  return -log(localEngine->flat())*defaultMean;
+  return -std::log(localEngine->flat())*defaultMean;
 }
 
 inline G4double G4MTRandExponential::fire(G4double mean)
 {
-  return -log(localEngine->flat())*mean;
+  return -std::log(localEngine->flat())*mean;
 }
