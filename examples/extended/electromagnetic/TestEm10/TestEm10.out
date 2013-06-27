@@ -4,12 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+G4Material WARNING: doublicate name of the new material CO2
  hist file = g4.p11
  Nb of bins in Edep plot = 65
  Elow  in the  Edep plot = 0
@@ -29,8 +30,6 @@ fFoilNumber = 220
 fRadiatorMat = radiatorMat
 WorldMaterial = Air
 
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 XTR model = transpM
 ### G4VXTRenergyLoss: the number of TR radiator plates = 220
 total radiator thickness = 5.94 cm
@@ -360,21 +359,21 @@ hIoni:   for  pi-    SubType= 2
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : radiatorMat
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
  Energy thresholds :  gamma  1.07314 keV    e-  83.5287 keV    e+  82.4135 keV proton 0 eV 
  Region(s) which use this couple : 
     XTRradiator
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Xe15CO2
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
  Energy thresholds :  gamma  990 eV     e-  2.08861 keV    e+  2.0697 keV proton 0 eV 
@@ -395,7 +394,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.63s Real=0.64s Sys=0s
+  User=0.64s Real=1.39s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=44.3893 +- 0.563225  mm  
@@ -492,21 +491,21 @@ Run Summary
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 100 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : radiatorMat
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
  Energy thresholds :  gamma  1.07314 keV    e-  83.5287 keV    e+  82.4135 keV proton 0 eV 
  Region(s) which use this couple : 
     XTRradiator
 
-Index : 2     used in the geometry : Yes     recalculation needed : No 
+Index : 2     used in the geometry : Yes
  Material : Xe15CO2
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 0 fm 
  Energy thresholds :  gamma  990 eV     e-  2.08861 keV    e+  2.0697 keV proton 0 eV 
@@ -516,5 +515,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 G4 kernel has come to Quit state.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
+================== Deleting memory pools ===================
+Number of memory pools allocated: 13 of which, static: 1
+Dynamic pools deleted: 12 / Total memory freed: 0.64 Mb
+============================================================

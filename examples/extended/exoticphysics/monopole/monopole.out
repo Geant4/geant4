@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-05    (31-May-2013)
+ Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -19,7 +19,7 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 /monopole/setup 
 Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
-/control/execute /ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-05_branch/examples/extended/exoticphysics/monopole/monopole.in
+/control/execute /ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-06_branch/examples/extended/exoticphysics/monopole/monopole.in
 /control/verbose 1
 /run/verbose 0
 /testex/run/verbose 1
@@ -36,8 +36,6 @@ Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
 ---> The Absorber is 10 cm  of G4_Si
 
 ---------------------------------------------------------
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /process/em/verbose 1
 /particle/select monopole
@@ -704,5 +702,3 @@ Range table for G4_Si
  carry = 5.96046e-08, count24 = 5
  luxury = 3 nskip = 199
 ----------------------------------------
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
