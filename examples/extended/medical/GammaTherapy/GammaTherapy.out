@@ -156,18 +156,6 @@ Absorber R= 200 dz= 2.5 posZ= -77.5
 ### PhysicsList Construte Processes
 /run/beamOn 10000
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 90 bins
-      Lambda tables from threshold to 10 TeV in 90 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 90 bins
-      Lambda tables from threshold to 10 TeV in 90 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
@@ -224,21 +212,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.22s Real=15.91s Sys=0s
+  User=7.1s Real=8.28s Sys=0.05s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.02
-Average number of gamma                      19.67
-Average number of e+                         0.7608
-Average number of steps in the phantom       11.79
-Average number of e- steps in the target     18.14
-Average number of g  produced in the target  18.85
-Average number of e- produced in the target  20.98
-Average number of g produced in the phantom  0.4766
-Average number of e- produced in the phantom 5.913
-Total fGamma fluence in front of the phantom 7.944 MeV 
+Average number of e-                         33.09
+Average number of gamma                      19.52
+Average number of e+                         0.7577
+Average number of steps in the phantom       11.76
+Average number of e- steps in the target     18.03
+Average number of g  produced in the target  18.67
+Average number of e- produced in the target  20.79
+Average number of g produced in the phantom  0.4959
+Average number of e- produced in the phantom 5.973
+Total fGamma fluence in front of the phantom 8.127 MeV 
 ========================================================
 
 

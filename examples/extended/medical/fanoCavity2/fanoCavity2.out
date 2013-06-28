@@ -176,7 +176,7 @@ eIoni:   for  e-    SubType= 2
       Lambda tables from threshold to 10 GeV in 160 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+      myMollerBhabha :  Emin=        0 eV    Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
 msc:   for e+    SubType= 10
@@ -189,7 +189,7 @@ eIoni:   for  e+    SubType= 2
       Lambda tables from threshold to 10 GeV in 160 bins, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-      myMollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+      myMollerBhabha :  Emin=        0 eV    Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
 annihil:   for  e+    SubType= 5
@@ -207,7 +207,7 @@ hIoni:   for  proton    SubType= 2
       finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Wall> world volume
@@ -275,7 +275,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=7.93s Real=21.77s Sys=0s
+  User=8.03s Real=10.24s Sys=0.01s
 
  Process calls frequency --->  msc= 584910  eIoni= 608696  Transportation= 23183
 

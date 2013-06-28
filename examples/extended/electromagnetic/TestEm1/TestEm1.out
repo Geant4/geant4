@@ -271,18 +271,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /testem/phys/setCuts 1 mm
 /run/beamOn 2000
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 Region <DefaultRegionForTheWorld> --  -- appears in <Aluminium> world volume
  This region is in the mass world.
  Root logical volume(s) : Aluminium 
@@ -324,7 +312,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=2.57s Real=4.22s Sys=0.09s
+  User=2.71s Real=2.81s Sys=0s
 
  ======================== run summary ======================
 

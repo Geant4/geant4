@@ -403,7 +403,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
 #  Set verbosity with "/vis/ASCIITree/verbose <verbosity>":
 #    <  10: - does not print daughters of repeated placements, does not repeat replicas.

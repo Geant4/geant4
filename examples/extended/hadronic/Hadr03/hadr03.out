@@ -253,7 +253,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.71s Real=1.63s Sys=0s
+  User=0.71s Real=0.72s Sys=0.01s
 
  The run consists of 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 

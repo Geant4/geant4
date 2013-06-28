@@ -2325,7 +2325,7 @@ Number of digits in this event =  11
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.47s Real=0.95s Sys=0.01s
+  User=0.47s Real=0.49s Sys=0s
 End of Run 
 File Tracks_0.dat
 /gun/particle gamma
@@ -3434,7 +3434,7 @@ Number of digits in this event =  1
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.79s Real=8.29s Sys=0s
+  User=2.82s Real=2.89s Sys=0.01s
 End of Run 
 File Tracks_1.dat
 /gun/particle e-
@@ -5800,7 +5800,7 @@ Number of digits in this event =  17
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.99s Real=6.12s Sys=0.01s
+  User=3.09s Real=4.48s Sys=0.01s
 End of Run 
 File Tracks_2.dat
 Graphics systems deleted.

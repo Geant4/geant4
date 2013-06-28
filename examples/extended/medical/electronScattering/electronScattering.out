@@ -193,18 +193,6 @@ Set file name: eScattering
 #
 /run/beamOn 100000
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
  Root logical volume(s) : World 
@@ -312,7 +300,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=12.8s Real=26.86s Sys=0s
+  User=12.67s Real=16.49s Sys=0.11s
 
  ======================== run summary ======================
 

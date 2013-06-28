@@ -189,7 +189,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=16.92s Real=54.51s Sys=0.59s
+  User=17.22s Real=29.81s Sys=0.46s
 
 -------------------------------------------------------------
  ---> The calorimeter is 9 Modules
@@ -212,34 +212,34 @@ Run Summary
 
              visible Energy          (rms/mean)        total Energy           (rms/mean)
 
-   layer 0:  796.5 keV +- 1.359 MeV  (1.7e+02 %)     9.3076 MeV +- 6.047 MeV  ( 65 %)
-   layer 1: 769.85 keV +- 1.271 MeV  (1.7e+02 %)     8.0683 MeV +- 5.242 MeV  ( 65 %)
-   layer 2: 812.94 keV +-  2.07 MeV  (2.5e+02 %)     8.5547 MeV +- 5.795 MeV  ( 68 %)
-   layer 3: 786.75 keV +- 1.614 MeV  (2.1e+02 %)     8.1796 MeV +- 5.737 MeV  ( 70 %)
-   layer 4: 792.29 keV +- 1.412 MeV  (1.8e+02 %)     8.4821 MeV +- 5.101 MeV  ( 60 %)
-   layer 5: 802.51 keV +- 1.681 MeV  (2.1e+02 %)     8.1047 MeV +- 4.919 MeV  ( 61 %)
-   layer 6:  813.1 keV +- 2.024 MeV  (2.5e+02 %)     8.4973 MeV +- 5.296 MeV  ( 62 %)
-   layer 7: 789.44 keV +- 1.885 MeV  (2.4e+02 %)     8.1277 MeV +- 5.196 MeV  ( 64 %)
-   layer 8: 776.68 keV +-   1.3 MeV  (1.7e+02 %)     8.4406 MeV +- 4.967 MeV  ( 59 %)
-   layer 9: 808.06 keV +- 1.904 MeV  (2.4e+02 %)     8.1933 MeV +- 5.288 MeV  ( 65 %)
-   layer 10: 776.57 keV +- 1.302 MeV  (1.7e+02 %)     8.4128 MeV +- 4.932 MeV  ( 59 %)
-   layer 11: 797.84 keV +- 1.671 MeV  (2.1e+02 %)     8.0796 MeV +-  4.97 MeV  ( 62 %)
-   layer 12: 793.86 keV +- 1.507 MeV  (1.9e+02 %)     8.3751 MeV +- 4.645 MeV  ( 55 %)
-   layer 13: 804.61 keV +- 1.786 MeV  (2.2e+02 %)     8.0888 MeV +- 4.917 MeV  ( 61 %)
-   layer 14:  789.5 keV +- 1.396 MeV  (1.8e+02 %)     7.5504 MeV +- 4.728 MeV  ( 63 %)
-   layer 15: 809.32 keV +-  1.76 MeV  (2.2e+02 %)     9.0375 MeV +-  5.28 MeV  ( 58 %)
-   layer 16: 795.94 keV +- 1.616 MeV  (2e+02 %)     8.4019 MeV +- 4.725 MeV  ( 56 %)
-   layer 17: 761.44 keV +- 1.347 MeV  (1.8e+02 %)     7.3537 MeV +- 4.503 MeV  ( 61 %)
+   layer 0: 786.59 keV +- 1.481 MeV  (1.9e+02 %)     9.1574 MeV +- 6.082 MeV  ( 66 %)
+   layer 1: 804.57 keV +- 1.675 MeV  (2.1e+02 %)     8.1897 MeV +- 5.468 MeV  ( 67 %)
+   layer 2: 780.55 keV +- 1.276 MeV  (1.6e+02 %)     8.5849 MeV +- 5.923 MeV  ( 69 %)
+   layer 3: 794.27 keV +- 1.531 MeV  (1.9e+02 %)     8.1624 MeV +- 5.279 MeV  ( 65 %)
+   layer 4: 775.07 keV +- 1.353 MeV  (1.7e+02 %)     8.4393 MeV +-  5.01 MeV  ( 59 %)
+   layer 5: 777.05 keV +- 1.359 MeV  (1.7e+02 %)     8.1921 MeV +- 5.492 MeV  ( 67 %)
+   layer 6: 797.81 keV +- 1.552 MeV  (1.9e+02 %)     8.4022 MeV +- 4.566 MeV  ( 54 %)
+   layer 7: 801.03 keV +- 1.655 MeV  (2.1e+02 %)     8.1306 MeV +- 5.231 MeV  ( 64 %)
+   layer 8:  812.5 keV +-   1.9 MeV  (2.3e+02 %)     8.5918 MeV +- 5.731 MeV  ( 67 %)
+   layer 9: 810.27 keV +- 1.789 MeV  (2.2e+02 %)     8.1576 MeV +- 5.242 MeV  ( 64 %)
+   layer 10: 785.79 keV +- 1.473 MeV  (1.9e+02 %)     8.5541 MeV +- 5.375 MeV  ( 63 %)
+   layer 11: 772.25 keV +- 1.448 MeV  (1.9e+02 %)     8.1154 MeV +- 5.026 MeV  ( 62 %)
+   layer 12: 789.18 keV +- 1.678 MeV  (2.1e+02 %)     8.5056 MeV +- 5.204 MeV  ( 61 %)
+   layer 13: 788.18 keV +- 1.685 MeV  (2.1e+02 %)     8.1485 MeV +- 5.053 MeV  ( 62 %)
+   layer 14: 771.23 keV +- 1.193 MeV  (1.5e+02 %)     7.5714 MeV +- 4.541 MeV  ( 60 %)
+   layer 15: 775.45 keV +- 1.324 MeV  (1.7e+02 %)       8.96 MeV +- 5.083 MeV  ( 57 %)
+   layer 16: 761.37 keV +- 997.5 keV  (1.3e+02 %)     8.4142 MeV +- 4.719 MeV  ( 56 %)
+   layer 17: 776.17 keV +- 1.248 MeV  (1.6e+02 %)     7.3806 MeV +-  4.65 MeV  ( 63 %)
 
-   total calor : 14.277 MeV +- 6.928 MeV  ( 49 %)     149.26 MeV +-  21.2 MeV  ( 14 %)
+   total calor : 14.159 MeV +- 6.376 MeV  ( 45 %)     149.66 MeV +- 21.87 MeV  ( 15 %)
 ------------------------------------------------------------
 
-   Leakage : 850.74 MeV +-  21.2 MeV
-   Eleak/Ebeam =85.1 %  ( forward =85.1 %   backward =   0 %   lateral =   0 %)
+   Leakage : 850.34 MeV +- 21.87 MeV
+   Eleak/Ebeam =  85 %  ( forward =  85 %   backward =   0 %   lateral =   0 %)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1294609797, 321680237
+ Current couple of seeds = 885492806, 1222498800
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

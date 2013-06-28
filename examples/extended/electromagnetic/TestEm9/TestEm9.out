@@ -422,7 +422,7 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.76s Real=2.96s Sys=0.01s
+  User=1.76s Real=1.82s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
@@ -542,7 +542,7 @@ EventAction: Event # 900 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.96s Real=5.65s Sys=0s
+  User=3.01s Real=3.64s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
@@ -976,7 +976,7 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.28s Real=2.8s Sys=0s
+  User=1.29s Real=2.48s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
@@ -1410,7 +1410,7 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.5s Real=4.17s Sys=0.01s
+  User=1.49s Real=1.58s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================

@@ -217,14 +217,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-##### Create analysis manager 1  0xddc6660
+##### Create analysis manager 1  0xe1b1660
 Using Root analysis manager
 ... open Root analysis file : dna.root - done
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=9.41s Real=34.32s Sys=0.07s
+  User=9.34s Real=19.73s Sys=0.07s
 ... write Root file : dna.root - done
 ... close Root file : dna.root - done
 Graphics systems deleted.

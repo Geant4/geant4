@@ -588,7 +588,7 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.25s Real=0.66s Sys=0.01s
+  User=0.23s Real=1.16s Sys=0.03s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

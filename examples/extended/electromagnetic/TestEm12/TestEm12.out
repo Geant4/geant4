@@ -64,18 +64,6 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /run/beamOn 10000
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 Region <DefaultRegionForTheWorld> --  -- appears in <Absorber> world volume
  This region is in the mass world.
  Root logical volume(s) : Absorber 
@@ -137,7 +125,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.42s Real=3.49s Sys=0s
+  User=2.39s Real=4.64s Sys=0s
 
  ======================== run summary ======================
 

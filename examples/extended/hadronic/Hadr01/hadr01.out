@@ -54,18 +54,6 @@ PhysicsList::SetCuts:CutLength : 700 um
 /gun/energy 3. GeV
 /run/beamOn 100
 
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 
@@ -285,7 +273,7 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.21s Real=0.71s Sys=0s
+  User=0.21s Real=0.22s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
