@@ -27,20 +27,27 @@
 #define PARN02JOB_HH
 #include "G4VtbbJob.hh"
 
-class G4tbbRunManager;
+class G4tbbWorkerRunManager;
 class ExN02DetectorConstruction;
 
 class ParN02Job : public G4VtbbJob {
 public:
-  ParN02Job(const G4String& macroFile);
+   ParN02Job(const G4String& macroFile);
   ~ParN02Job();
-  //Interface implementation, from base class
-  void CreateDetector(G4tbbRunManager* rm);
-  void UserActions(G4tbbRunManager* rm);
-  void InitSetup(G4tbbRunManager* rm );
-  void JobPrepare(G4tbbRunManager* rm );
+   //Interface implementation, from base class
+
+   // Work in master 
+   void CreateDetector(G4tbbRunManager* rm=0); // G4tbbWorkerRunManager* rm);
+
+   // Initialise worker - or 'master' (as worker)
+   void JobPrepare(G4RunManager* rm=0);
+   void UserActions(G4RunManager* rm=0);
+
+   // Initialisation of worker
+   void InitWorkerSetup(G4tbbWorkerRunManager* rm);
+
 private:
-  ExN02DetectorConstruction* detector;
+   ExN02DetectorConstruction* detector;
 };
 
 #endif

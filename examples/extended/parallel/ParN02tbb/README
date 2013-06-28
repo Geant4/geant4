@@ -1,26 +1,25 @@
-01.25.2009 Xin Dong: This example is inspired by the ParGeant4 for
-distributed memory. The Geant4MT follows the core idea of ParGeant4
-and replaces processes with threads to take advantage of many-core 
-computers in a memory-efficient and scalable manner.
 
-All events are assigned to each worker thread in a round robin fashion.
-All threads share most detector data including physics table and 
-physics vector for some physics processes. The master process 
-initializes the data in a regular way. However, worker threads 
-initialize thread private data only.
 
-We use the same trick as ParGeant4 to introduce parallelism by 
-implementating a new G4RunaManager subclass. However, lots of effort are
-taken to change Geant4 kernel in order to guarantee thread safety 
-concerning accesses to those shared static data and dynamically 
-allocated memory. The original README for ParGeant4 is attached as a
-comparison. Geant4MT is more user friendly so that one just compiles 
-this example in the same way as the original N02. The executable file 
-is named as ParN02. One more argument is needed to give the number of
-workers. For example, once built the example, use:
+This example is an adaptation of Geant4-MultiThreading to Intel Thread 
+Building Blocks (TBB).
 
-ParN02 run1.mac 8
+An event could be simulated by any worker. The TBB runtime system 
+determines which task/thread is used during a run.
 
-to run this program. The third argument "8" is the number of worker
-threads that will be created. So the total number of threads for this
-execution is 9.
+In this first version, a fixed number of tasks is created (in the 
+main program) and used to run all events.  The application (main) is 
+responsible for deciding the number of parallel tasks.
+
+Each thread which is used by this application owns a workspace.  
+It uses this workspace for the state of the simulation.  Objects 
+which are stored in this workspace include all the physics processes
+used by this worker (thread) and a partial state of the geometry 
+which depends on the worker/thread.
+
+This implementation shares all the remaining features of 
+Geant4-MT: threads share most detector data including physics table 
+and physics vectors for EM physics processes. The master process 
+initializes the data, as in sequential and Geant4-MT runs. Each 
+worker thread initializes its thread private data, when it is 
+first used to carry out a task.
+

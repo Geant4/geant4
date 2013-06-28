@@ -25,18 +25,18 @@
 //
 #include "G4tbbTask.hh"
 #include "G4tbbRunManager.hh"
-//#define AUTOLOCKDEBUG
 #include "G4AutoLock.hh"
 #include "G4VtbbJob.hh"
+#include "G4tbbWorkerRunManager.hh"
 #include "tbbhelper.hh"
 
 G4tbbTask::G4tbbTask(G4VtbbJob* j , G4int ev, G4int l) :
 event(ev), job(j)
 
 { 
-  //Note reprorducibility is guaranteed if G4tbbTask are created
-  //sequentially, in this case the event number event will "pop"
-  //always the same seeds.
+  //Note: reproducibility is guaranteed if tasks (G4tbbTask) are created
+  //sequentially. 
+  // In this case a event with a particular number will "pop" the same seed.
   //The seeds is a zero terminated array.
   seeds = new long[l + 1];
   for ( int i = 0 ; i<l ; ++i )
@@ -61,11 +61,14 @@ InitType isInitialized;
 InitType canGo;
 #include <tbb/compat/thread>
 
-tbb::task* G4tbbTask::execute() {
+tbb::task* G4tbbTask::execute() 
+{
   G4RunManager* runmanager = G4RunManager::GetRunManager();
-  G4tbbRunManager* rm = 0;
+
+  G4tbbWorkerRunManager* workerRM = 0;
   TBBMSG("Starting execute. Event number: "<<event
          <<" RunManager pointer:"<<runmanager);
+
   if ( runmanager == NULL ) {
     //wasting some time (or the fast thread will use all events)
     //std::this_thread::sleep_for( tbb::tick_count::interval_t(0.05) );
@@ -80,26 +83,27 @@ tbb::task* G4tbbTask::execute() {
 
        //Step 1- Copy geometry and physics tables
        tbbSlaveBuildGeometryAndPhysicsVector();
+       // -> done already by G4WorkerThread 
+       //    ... It does not hurt to redo, 
+       //        and it will find some issues in Parameterised Volumes
 
        //Step 2- Create a new (worker) run manager
-       G4int isSlave = 1;
+       // G4int isSlave = 1;
        G4iosInitialization();//This is needed or next line will crash!
-       rm = new G4tbbRunManager( isSlave );
+       workerRM = new G4tbbWorkerRunManager();
        TBBMSG("End of creation of slave runmanager");
        // lock.explicit_unlock();
     }
     //Step 3- Perform initialization
     TBBMSG("Calling threadsafeinitsetup");
-    job->ThreadSafeInitSetup( rm );
-    //return NULL;////AAAAA
+    job->ThreadSafeInitSetup( workerRM );
   } else { 
-    rm = static_cast<G4tbbRunManager*>( runmanager );
+    workerRM = static_cast<G4tbbWorkerRunManager*>( runmanager );
   }
-  assert(rm!=NULL);
+  assert(workerRM!=NULL);
   //First thing to do: set the seeds, for next event
-  //G4cout<<"In Execute the random engine pointer is: "
-  //      <<CLHEP::HepRandom::getTheEngine()<<G4endl;
-  CLHEP::HepRandom::setTheSeeds( seeds , -1 );
+  //
+  G4Random::setTheSeeds( seeds , -1 );
   //Now do what is done in BeamOn to initialize the run...
   InitType::reference myInit = isInitialized.local();
   InitType::reference myCanGo= canGo.local();
@@ -107,10 +111,15 @@ tbb::task* G4tbbTask::execute() {
     myCanGo = true;
     TBBMSG("This only once");
     //Need to do stuff...
-    G4bool cond = rm->ConfirmBeamOnCondition();
+    G4bool cond = workerRM->ConfirmBeamOnCondition();
     if ( cond ) {
-      rm->ConstructScoringWorlds();
-      rm->RunInitialization();//From now on ConfirmBeamOnCondition == false
+       // workerRM->ConstructScoringWorlds(); 
+       // As it is protected, we call it using a base class pointer
+       G4RunManager* wrmBC= workerRM;
+       wrmBC->ConstructScoringWorlds();
+     
+       workerRM->RunInitialization(); 
+       //From now on ConfirmBeamOnCondition == false
     }
     else {
       myCanGo = false;
@@ -119,8 +128,12 @@ tbb::task* G4tbbTask::execute() {
   }
   G4bool abortrun = false;
   if ( myCanGo ) // Check that initialization has been done correctly
-    abortrun = rm->DoOneEvent( event);
-  
+  {
+     abortrun = workerRM->DoOneEvent(event);
+     // workerRM->ProcessOneEvent( event);
+     // abortrun= false; // How to figure out if it worked ?  JA
+  }
+
   if ( abortrun == true ) {
     G4cout<<"ERROR:: ABORTRUN REQUEST!!!!"<<G4endl;
   }

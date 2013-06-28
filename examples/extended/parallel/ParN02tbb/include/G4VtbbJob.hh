@@ -27,20 +27,31 @@
 #define G4VTBBJOB_HH
 
 #include "G4String.hh"
+class G4RunManager;
+class G4tbbWorkerRunManager;
 class G4tbbRunManager;
 
-class G4VtbbJob {
+class G4VtbbJob 
+{
   friend class G4tbbTask;
 public:
   G4VtbbJob(const G4String& macro="");
   virtual ~G4VtbbJob();
   virtual void InitRun( G4tbbRunManager* rm );
 protected:
-  virtual void UserActions(G4tbbRunManager* rm=0 ) =0;
-  virtual void InitSetup(G4tbbRunManager* rm=0 ) =0;
-  virtual void JobPrepare(G4tbbRunManager* rm=0 ) =0;
+
+   // Work in master 
+  virtual void CreateDetector(G4tbbRunManager* rm=0 ) =0;
+
+   // Initialise worker - or 'master' (as worker)
+  virtual void JobPrepare(G4RunManager* rm=0) =0;
+  virtual void UserActions(G4RunManager* rm=0 ) =0;
+
+   // Initialisation of worker
+  virtual void InitWorkerSetup(G4tbbWorkerRunManager* rm=0 ) =0;
+
 private:
-  void ThreadSafeInitSetup(G4tbbRunManager* rm);
+  void ThreadSafeInitSetup(G4tbbWorkerRunManager* rm);
   G4String macroFile;
 };
 

@@ -48,8 +48,7 @@ target_link_libraries(ParN02tbb ${Geant4_LIBRARIES} ${TBB_LIBRARIES} ${TBB_MALLO
 # directory.
 #
 set(PARN02TBB_SCRIPTS
-  run1debug.mac
-  run1.mac
+  run0.mac
   )
 
 foreach(_script ${PARN02TBB_SCRIPTS})

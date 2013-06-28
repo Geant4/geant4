@@ -71,11 +71,12 @@ void tbbSlaveBuildGeometryAndPhysicsVector()
        SlaveInitializeSubInstance();
 
     //Physics related
-    const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).
-       SlaveInitializeSubInstance();
     const_cast<G4DecayChannelManager&>(G4VDecayChannel::
-                                       GetSubInstanceManager()).
-       NewSubInstances();
+                                       GetSubInstanceManager())
+                                      .NewSubInstances();
+    // const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).
+       // SlaveInitializeSubInstance();
+
      // Particle definition - has pointer to the process manager
     const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).
        NewSubInstances();
@@ -189,19 +190,12 @@ void tbbSlaveBuildGeometryAndPhysicsVector()
                               "TBB-Build-Geometry001",
                               FatalException, ed);
                 }
-            }
+               }
         }
     }
-    //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    
-    //size_t nmat = theMaterialTable->size();
-    //size_t i;
-    //for(i=0; i<nmat; i++) {
-    //    ((*theMaterialTable)[i])->SlaveG4Material();
-    //}
 
     TBBMSG("Copying geometry end physics vector. Done!"); 
-}
+  }
 }
 
 void tbbSlaveDestroyGeometryAndPhysicsVector()
@@ -240,14 +234,6 @@ void tbbSlaveDestroyGeometryAndPhysicsVector()
         }
     }
     
-    //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    
-    //size_t nmat = theMaterialTable->size();
-    //size_t i;
-    //for(i=0; i<nmat; i++) {
-    //    ((*theMaterialTable)[i])->DestroySlaveG4Material();
-    //}
-    
     const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).
        FreeSlave();
     const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).
@@ -259,9 +245,8 @@ void tbbSlaveDestroyGeometryAndPhysicsVector()
        FreeSlave();
     const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).
        FreeSlave();
-    const_cast<G4PVecManager&>(G4PhysicsVector::
-                               GetSubInstanceManager()).
-       FreeSlave();
+    // const_cast<G4PVecManager&>(G4PhysicsVector::
+                               // GetSubInstanceManager()).FreeSlave();
     const_cast<G4DecayChannelManager&>(G4VDecayChannel::
                                        GetSubInstanceManager()).
        FreeSlave();
@@ -299,6 +284,5 @@ void tbbdebugmsg( const char* file, int where, const char* msg) {
 pid_t gettid()
 {
   pid_t mytid = syscall(SYS_thread_selfid);
-  //pid_t mytid = syscall(SYS_gettid);
   return mytid;
 }

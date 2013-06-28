@@ -23,37 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//  Run Manager adapted for use with TBB.
+//
+//   This Run Manager will be used on the 'master' - which
+//  initialises the key ingredients (needed by all)
+//  and configures the separate elements as 'tasks', run by
+//  workers as 'G4VtbbJob' tasks.
+//
 #ifndef G4TBBRUNMANAGER_HH
 #define G4TBBRUNMANAGER_HH
 
 #include "G4RunManager.hh"
+#include "G4WorkerRunManager.hh"
 
 class G4tbbTask;
 class G4VtbbJob;
 
-//A queue of Seeds. A global concurrent queue
-//Ranecu Engine
 #include <tbb/task.h>
 #include <tbb/concurrent_queue.h>
 
 //Implement TLS for RunManager
 #include <tbb/enumerable_thread_specific.h>
 
-class G4tbbRunManager : public G4RunManager {
+class G4tbbRunManager : public G4RunManager 
+{ 
   friend class G4tbbTask;
 public:
   G4tbbRunManager();
-  G4tbbRunManager( int isSlaveFlag );
+
   virtual ~G4tbbRunManager();
   static void AddSeed( const long& seed );
   void SetSeedsSequenceLength( int l ) { seedsSequenceLength = l; }
   void SetTaskList( tbb::task_list* tlist ) { tasklist = tlist; }
 
-  typedef tbb::concurrent_queue<G4tbbRunManager*> G4tbbRunManagerInstancesType;
-  static G4tbbRunManagerInstancesType& GetInstancesList(); 
             //This should be "clear" with delete
 
   void SetJob( G4VtbbJob* j ) { job=j; }
+
+  unsigned int GetNumberOfWorkers();
+
 protected:
   //Create tasks (1task = 1event)
   virtual void DoEventLoop(G4int n_event,
@@ -63,9 +71,6 @@ private:
   //Process one event. Each task. Returns false if runAborted flag is true
   G4int n_select;
   G4String msg;
-
-  //Returns runAborted status
-  G4bool DoOneEvent(G4int i_event);
 
   //Returns false if seed queue is empty
   static G4bool GetNextSeed( long& seed );
@@ -83,18 +88,8 @@ private:
   //Pointer to the list of tasks in which add the new created tasks
   tbb::task_list* tasklist;
 
-  //Global static instance of a queue containing all instances of this objects
-  static G4tbbRunManagerInstancesType instancesList;
-
   //The job configuration object
   G4VtbbJob* job;
-public:
-  //A global instance of the TLS. Every call to ::local() will create 
-  // a TLS instance
-  //Of a G4tbbRunManager
-  //typedef tbb::enumerable_thread_specific< G4tbbRunManager > 
-  //   G4tbbRunManagerTLSType;
-  //static G4tbbRunManagerTLSType G4tbbRunManagerTLS;
  };
 
 

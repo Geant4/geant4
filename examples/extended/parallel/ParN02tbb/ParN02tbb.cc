@@ -25,7 +25,6 @@
 //
 //
 // $Id$
-// GEANT4 tag $Name: geant4-09-00 $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,40 +42,20 @@
 
 #include "G4tbbRunManager.hh"
 
-//#include "G4RunManager.hh"
-//#include "G4UImanager.hh"
-
-//#ifdef G4VIS_USE
-//#include "G4VisExecutive.hh"
-//#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//01.25.2009 Xin Dong: This example came from the original sequential
-//program FullCMS. The original program is changed here to support parallel
-//computing with multiple threads. All events are assigned to each worker
-//thread in a round robin fashion. All threads share most detector data 
-//including physics table and physics vector for some physics processes.
-//The master process initializes the data in a regular way. However, worker
-//threads initialize thread private data only.
-//#include "G4MTParTopC.icc"
 void my_slave_thread(void*) {} 
-//01.25.2009 Xin Dong: Threads share this object.
-//ExN02DetectorConstruction* detector = 0;
 
-#include <CLHEP/Random/RanluxEngine.h>
+#include "Randomize.hh"
 
 //TBB includes
 #include <tbb/task_scheduler_init.h>
 #include <tbb/task.h>
-// #include "/Users/japost/Software/TBB/4.1/include/tbb/task_scheduler_init.h"
-// #include "/Users/japost/Software/TBB/4.1/include/tbb/task.h"
 
 #include "G4MTGetTid.hh"
 
 int main(int argc,char** argv)
 {
-  assert( G4RunManager::GetRunManager() == NULL );
   //Number of events
   int nevents = 10;
   //Macro file
@@ -90,17 +69,8 @@ int main(int argc,char** argv)
   }
   //Random engine
   CLHEP::RanluxEngine defaultEngine( 1234567, 4 ); 
-  CLHEP::HepRandom::setTheEngine( &defaultEngine ); 
-  G4int seed = time( NULL ); 
-  //  CLHEP::HepRandom::setTheSeed( seed ); 
-  CLHEP::HepRandom::setTheSeed( 1220515164 );
-  G4cout << G4endl 
-         << " ===================================================== " << G4endl 
-         << " Initial seed = " << seed << G4endl 
-         << " ===================================================== " << G4endl 
-         << G4endl; 
-  G4cout<<"Random Engine: "<<CLHEP::HepRandom::getTheEngine()<<G4endl;
-  //A G4 stuff...
+  G4Random::setTheEngine( &defaultEngine ); 
+
   G4VSteppingVerbose* verbosity = new ExN02SteppingVerbose;
   G4VSteppingVerbose::SetInstance(verbosity);
 
@@ -114,9 +84,10 @@ int main(int argc,char** argv)
   //Set the list of seeds. Depending on the engine type, set the correct 
   // number of seeds per event. In this case 1 seed / evt.
   G4cout<<"Adding random seeds to the runManager"<<G4endl;
-  unsigned int aseed;
-  for ( int i = 0 ; i < nevents ; ++i ) {
-    aseed = static_cast<unsigned int>(*CLHEP::HepRandom::getTheEngine());
+  unsigned long aseed;
+
+  for ( int i = 0 ; i < 2*nevents ; ++i ) {
+    aseed = (unsigned long) (100000000L * G4Random::getTheGenerator()->flat());
     G4cout<<"Seed number "<<i<<" : "<<aseed<<G4endl;
     runManager->AddSeed( aseed );
   }
@@ -133,6 +104,7 @@ int main(int argc,char** argv)
 
   //Now start....
   G4cout<<"Calling G4VtbbJob::InitRun"<<G4endl;
+
   aJob->InitRun( runManager );
   G4cout<<"Now calling beamOn"<<G4endl;
   runManager->BeamOn(nevents);
@@ -151,13 +123,14 @@ int main(int argc,char** argv)
 
   G4cout<<G4endl<<"End of job, deleting stuff"<<G4endl;
   delete aJob;
-  //delete runManager;
-  //Delete all instances of runManger
-  G4tbbRunManager::G4tbbRunManagerInstancesType queue = 
-     G4tbbRunManager::GetInstancesList();
-  G4cout<<"Number of G4tbbRunManager instances: "<<queue.unsafe_size()<<G4endl;
-  G4tbbRunManager* ist = 0;
-  //while ( queue.try_pop( ist ) ) { delete ist;}
+
+  G4cout<< "Number of Tbb Worker instances used: : "
+        <<  runManager->GetNumberOfWorkers() <<G4endl;
+  // The TBB runManager 'controls' all its worker Run Managers - it will delete them
+  delete runManager;
+
+  // G4tbbRunManager* ist = 0;
+  // while ( queue.try_pop( ist ) ) { delete ist;}
   delete verbosity;
 
   return 0;

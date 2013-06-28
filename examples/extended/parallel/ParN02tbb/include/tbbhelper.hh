@@ -35,7 +35,7 @@ void tbbdebugmsg( const char* file, int where, const char* msg);
 #define TBBMSG( msg ) { \
   std::ostringstream os; \
   os << msg; \
-  tbbdebugmsg(__FILE__,__LINE__,os.str().c_str());
+  tbbdebugmsg(__FILE__,__LINE__,os.str().c_str()); \
   }
 #else
 #define TBBMSG( msg )

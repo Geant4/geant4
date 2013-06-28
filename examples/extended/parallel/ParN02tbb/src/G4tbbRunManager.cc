@@ -30,64 +30,37 @@
 #include "G4VtbbJob.hh"
 #include "tbbhelper.hh"
 
+#include "G4tbbWorkerRunManager.hh"
+
 //Global instance of seeds queue
 G4tbbRunManager::G4tbbSeedsQueueType 
   G4tbbRunManager::seedsQueue = G4tbbRunManager::G4tbbSeedsQueueType();
 
-G4tbbRunManager::G4tbbRunManagerInstancesType 
- G4tbbRunManager::instancesList=G4tbbRunManager::G4tbbRunManagerInstancesType();
-
-G4tbbRunManager::G4tbbRunManagerInstancesType& 
-  G4tbbRunManager::GetInstancesList()
-{
-  return instancesList; 
-}
-
-// Static TLS member if needs to perform intialization of "slave thread" 
-//  in the sense of G4MT i.e. content of my_slave_thread
-//tbb::enumerable_thread_specific< G4bool > G4tbbRunManager::isSlaveInitialized 
-//  = false;
-
-
 G4tbbRunManager::G4tbbRunManager() : G4RunManager() ,
   seedsSequenceLength(1)
 {
-  instancesList.push(this);
-  //if ( isSlave !=0 && isSlaveInitialized == false ){
-  //  InitSlave();
-  //}
-}
-
-G4tbbRunManager::G4tbbRunManager( int isSlaveFlag ) : G4RunManager(isSlaveFlag),
-  seedsSequenceLength(1)
-{
-  instancesList.push(this);
-  //if ( isSlave !=0 && isSlaveInitialized == false ){
-  //  InitSlave();
-  //}
+   // instancesList.push(this);
 }
 
 G4tbbRunManager::~G4tbbRunManager()
 {
-  //if ( isSlave != 0 ) 
-  //  tbbSlaveDestroyGeometryAndPhysicsVector(); 
-  //    ^^^^ How to call this on each thread???
+  // Should try to destroy the Worker run managers created in each thread .. 
+
+  //  These should call the cleanup methods on each worker (thread) used
+  //    tbbSlaveDestroyGeometryAndPhysicsVector(); 
+
+  G4tbbWorkerRunManager::DestroyWorkersAndCleanup(); 
 }
 
-//void G4tbbRunManager::InitSlave(){
-  //Here do what is done in my_slave_thread, namely:
-  //tbbSlaveBuildGeometryAndPhysicsVector();
-  //G4_main() <<<---- Ah Ah!
-//}
 void G4tbbRunManager::DoEventLoop( G4int n_event,
                                    const char* macroFile,
                                    G4int n_sel) {
 
   //Implementation of G4 event loop
-  //Problem : this should be done only once. This means that the BeamOn 
-  // command should be applied only once, 
+  //Problem : this must be done only once (per run). 
+  //  This means that the BeamOn command must be applied only once, 
   //   ie by the "master thread" (in the sense of G4MT)
-  if ( isSlave != 0 ) return;
+  //  if ( isSlave != 0 ) return;
   
   n_select = n_sel;
   //Copy from standard RunManager
@@ -139,6 +112,12 @@ G4bool G4tbbRunManager::GetNextSeed( long& seed ) {
   return seedsQueue.try_pop( seed );
 }
 
+unsigned int G4tbbRunManager::GetNumberOfWorkers()
+{
+  return G4tbbWorkerRunManager::NumberOfWorkers();
+}
+
+/******
 G4bool G4tbbRunManager::DoOneEvent( G4int i_event)
        //, G4int n_select, const G4String& msg)
 {
@@ -154,3 +133,4 @@ G4bool G4tbbRunManager::DoOneEvent( G4int i_event)
   //G4cout<<"runAborted is:"<<runAborted<<G4endl;
   return runAborted;
 }
+ ******/ 

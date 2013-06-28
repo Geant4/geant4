@@ -9,7 +9,26 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26 June 2013, J. Apostolakis (TBB-V09-06-00)
+27  June 2013, J. Apostolakis (TBB-V09-06-04)
+  Separated worker functionality from G4tbbRunManager 
+    into new class G4tbbWorkerRunManager. 
+  Prepared for introduction of new features of run category
+    for 'Multi-threading'.
+
+27 June 2013, J. Apostolakis (TBB-V09-06-03)
+   tbbhelper: Fix for revision of Physics Vector. As it is
+               no longer a split class, it has no per thread 
+               variables. As such it has no 'manager' for them.
+
+27 June 2013, J. Apostolakis (TBB-V09-06-02)
+  Revised README
+  First cleanup of main program.
+  Corrected use of RNG engine in main program.
+
+25 June 2013, J. Apostolakis (TBB-V09-06-01)
+  Fixed CMakeLists.txt
+
+25 June 2013, J. Apostolakis (TBB-V09-06-00)
   First version of TBB based example.
     Based on prototype created by Andrea Dotti (Nov/Dec 2012)
     Adaptation to revised G4MT - J.Apostolakis (May/Jun 2013)
