@@ -17,6 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28th June 2013  Gabriele Cosmo (examples-V09-06-06)
+- Updated reference outputs according to reference tag geant4-09-06-ref-06.
+- Archived novice examples module.
+- Includes tags: dnaphysics-V09-06-04, microbeam-V09-06-01
+                 microdosimetry-V09-06-04, DMX-V09-06-06, XrayFluo-V09-06-00,
+                 exampleB1-V09-06-03, exampleB2-V09-06-04, exampleB3-V09-06-04,
+                 exampleB4-V09-06-09, exampleA01-V09-06-04, exbiasing-V09-06-01,
+                 ReverseMC01-V09-06-02, excommon-analysis-V09-06-02,
+                 testem1-V09-06-06, testem2-V09-06-05, testem3-V09-06-07,
+                 testem4-V09-06-07, testem5-V09-06-06, testem6-V09-06-02,
+                 testem7-V09-06-10, testem11-V09-06-11, testem12-V09-06-08,
+                 testem13-V09-06-04, testem14-V09-06-07, testem15-V09-06-05,
+                 testem16-V09-06-03, testem17-V09-06-07, testem18-V09-06-04,
+                 exgps-V09-06-02, particleGunExample-V09-06-05, TBB-V09-06-04,
+                 phononExample-V09-06-03, exTransforms-V09-06-04, WLS-V09-06-06,
+                 exhadr00-V09-06-01, exhadr01-V09-06-04, exhadr03-V09-06-19,
+                 electronScattering-V09-06-07, fano-V09-06-05, fano2-V09-06-04,
+                 exampleES2-V09-06-03, OpNovice-V09-06-06, exparallel-V09-06-00,
+                 exgflash-V09-06-00, expar01-V09-06-00, exampleP01-V09-06-02,
+                 exampleP02-V09-06-02, rdecay01-V09-06-04.
+
 31st May 2013  Gabriele Cosmo (examples-V09-06-05)
 - Updated reference outputs according to reference tag geant4-09-06-ref-05.
 - Archived advanced example radioprotection.
