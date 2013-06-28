@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 June 13: V.Ivant (emutils-V09-06-41)
+- G4LossTableManager - return back to tag-39, because setup of min/max
+    energies inside EM tables in some tables is done incorrectly,
+    also order of EM printout is not optimal
+
 20 June 13: V.Ivant (emutils-V09-06-40)
 - G4LossTableManager - attempt to fix Coverity report
 
