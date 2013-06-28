@@ -171,7 +171,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.31s Real=1.45s Sys=0s
+  User=0.32s Real=0.32s Sys=0s
 
  The run consists of 1 proton of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -198,7 +198,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.3s Real=0.58s Sys=0s
+  User=0.32s Real=0.33s Sys=0s
 
  The run consists of 1 hydrogen of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -225,7 +225,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.74s Real=0.86s Sys=0s
+  User=0.77s Real=1.09s Sys=0s
 
  The run consists of 1 alpha of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -252,7 +252,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.75s Real=1.87s Sys=0s
+  User=0.76s Real=0.79s Sys=0s
 
  The run consists of 1 alpha+ of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -279,7 +279,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.73s Real=1.52s Sys=0.01s
+  User=0.76s Real=0.83s Sys=0s
 
  The run consists of 1 helium of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 

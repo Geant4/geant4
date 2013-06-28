@@ -542,7 +542,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.95s Real=4.96s Sys=0s
+  User=1.99s Real=2.49s Sys=0s
 
  The run consists of 1000 C12 of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
@@ -635,18 +635,6 @@ Run Summary
 ---> The Absorber is 20 cm  of G4_Be
 
 ---------------------------------------------------------
-
-hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
-
-hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
-      Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
 ### Run 1 start.
 
 --------- Ranecu engine status ---------

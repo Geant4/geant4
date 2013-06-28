@@ -453,7 +453,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.64s Real=9.37s Sys=0.01s
+  User=2.63s Real=5.54s Sys=0.01s
 #
 # neutron at 10 GeV in U
 #
@@ -491,7 +491,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.39s Real=8.01s Sys=0s
+  User=2.4s Real=4.33s Sys=0.01s
 #
 # pi+ at 10 GeV in U
 #
@@ -529,7 +529,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.15s Real=7.66s Sys=0.01s
+  User=2.16s Real=4.66s Sys=0s
 #
 # pi- at 10 GeV in U
 #
@@ -567,7 +567,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.56s Real=9.15s Sys=0s
+  User=2.58s Real=6.83s Sys=0.01s
 #
 # proton at 10 GeV in Cu
 #
@@ -827,7 +827,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.58s Real=2.97s Sys=0.01s
+  User=0.59s Real=1.22s Sys=0s
 #
 # neutron at 10 GeV in Cu
 #
@@ -870,7 +870,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=1.51s Sys=0s
+  User=0.52s Real=1.02s Sys=0s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -913,7 +913,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.64s Real=2.63s Sys=0s
+  User=0.66s Real=1.36s Sys=0.01s
 #
 # pi- at 10 GeV in Cu
 #
@@ -956,7 +956,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.62s Real=1.38s Sys=0s
+  User=0.63s Real=1.31s Sys=0s
 #
 # proton at 10 GeV in Si
 #
@@ -1221,7 +1221,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.4s Sys=0s
+  User=0.21s Real=0.23s Sys=0s
 #
 # neutron at 10 GeV in Si
 #
@@ -1269,7 +1269,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.24s Real=0.55s Sys=0s
+  User=0.24s Real=0.35s Sys=0s
 #
 # pi+ at 10 GeV in Si
 #
@@ -1317,7 +1317,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.21s Real=0.69s Sys=0s
+  User=0.21s Real=0.44s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -1365,7 +1365,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.21s Real=0.48s Sys=0s
+  User=0.21s Real=0.41s Sys=0s
 #
 # proton at 10 GeV in Carbon
 #
@@ -1636,7 +1636,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.27s Sys=0s
+  User=0.13s Real=0.34s Sys=0s
 #
 # neutron at 10 GeV in Carbon
 #
@@ -1690,7 +1690,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.35s Sys=0s
+  User=0.12s Real=0.23s Sys=0s
 #
 # pi+ at 10 GeV in Carbon
 #
@@ -1744,7 +1744,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.33s Sys=0.01s
+  User=0.12s Real=0.23s Sys=0s
 #
 # pi- at 10 GeV in Carbon
 #
@@ -2074,7 +2074,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.72s Sys=0s
+  User=0.12s Real=0.22s Sys=0s
 #
 # neutron at 10 GeV in Beryllium
 #
@@ -2133,7 +2133,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.32s Sys=0s
+  User=0.13s Real=0.23s Sys=0s
 #
 # pi+ at 10 GeV in Beryllium
 #
@@ -2192,7 +2192,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.3s Sys=0s
+  User=0.1s Real=0.2s Sys=0s
 #
 # pi- at 10 GeV in Beryllium
 #
@@ -2251,7 +2251,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.33s Sys=0s
+  User=0.13s Real=0.23s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -2531,7 +2531,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.21s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 #
 # neutron at 10 GeV in H
 #
@@ -2720,7 +2720,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -285,7 +285,7 @@ Index : 1     used in the geometry : Yes
 
 ******************************************
 Internal Real Elapsed Time is: 0.01
-Internal System Elapsed Time: 0
+Internal System Elapsed Time: 0.01
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 0  -----
@@ -364,7 +364,7 @@ Internal GetUserElapsed Time: 0
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ Tst34EventAction::End of event nr. 6  -----
   5323 hits are stored in Tst34HitsCollection 
@@ -377,7 +377,7 @@ Internal GetUserElapsed Time: 0
 ******************************************
 Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ Tst34EventAction::End of event nr. 7  -----
   5322 hits are stored in Tst34HitsCollection 
@@ -401,7 +401,7 @@ Internal GetUserElapsed Time: 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0
 ******************************************
@@ -411,7 +411,7 @@ Internal GetUserElapsed Time: 0
 number of events = 10
 
 ******************************************
-Total Real Elapsed Time is: 1.74
+Total Real Elapsed Time is: 1.44
 Total System Elapsed Time: 0.01
-Total GetUserElapsed Time: 1.04
+Total GetUserElapsed Time: 1.03
 ******************************************

@@ -342,7 +342,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
     1000.000           1           0     Na24
 
 #
@@ -382,7 +382,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
        1e+03           1           0     Ne24
          764           1       651.6     e-
     1.23e+03           1       651.6     anti_nu_e
@@ -528,7 +528,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
        1e+03           1           0     Na24[472.2]
            0           1     0.01001     Na24
          472           1     0.01001     gamma
@@ -620,7 +620,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
        1e+03           1           0     Po215
     7.39e+03           1    0.004755     alpha
          140           1    0.004755     Pb211

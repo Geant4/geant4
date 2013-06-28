@@ -501,7 +501,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.1s Real=0.29s Sys=0s
+  User=0.1s Real=0.11s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 

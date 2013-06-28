@@ -1012,7 +1012,7 @@ test31EventAction: Event # 100 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.11s Real=3.13s Sys=0s
+  User=1.11s Real=1.23s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1125,7 +1125,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.85s Real=2.41s Sys=0s
+  User=0.84s Real=0.91s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1238,7 +1238,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.81s Real=2.42s Sys=0s
+  User=0.81s Real=0.82s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1351,7 +1351,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.64s Real=1.75s Sys=0s
+  User=0.64s Real=1.38s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1464,7 +1464,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.8s Real=2.4s Sys=0.01s
+  User=0.8s Real=1.06s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1577,7 +1577,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.67s Real=1.87s Sys=0s
+  User=0.68s Real=0.94s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1690,7 +1690,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.64s Real=1.84s Sys=0s
+  User=0.63s Real=0.72s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1750,7 +1750,7 @@ Average number of pi+pi-       0
 
 =========   End of tets31Histo  ============================
 #
-  User=7.76s Real=22.3s Sys=0.01s
+  User=7.75s Real=9.48s Sys=0.02s
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0

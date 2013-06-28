@@ -442,8 +442,8 @@ ooo Run 0 starts (global).
 Choosing random seed according to time(0) 
 
 --------- Ranecu engine status ---------
- Initial seed (index) = 95
- Current couple of seeds = 1319097951, 1574250676
+ Initial seed (index) = 53
+ Current couple of seeds = 1164478895, 1970575094
 ----------------------------------------
 
 ---> Begin Of Event: 0
@@ -645,7 +645,7 @@ Choosing random seed according to time(0)
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 122
+Global results with 100000 events : 130
 ooo Run 1 starts (global).
 
 ---> Begin Of Event: 0
@@ -847,7 +847,7 @@ ooo Run 1 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 759
+Global results with 100000 events : 710
 ooo Run 2 starts (global).
 
 ---> Begin Of Event: 0
@@ -1049,7 +1049,7 @@ ooo Run 2 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 2530
+Global results with 100000 events : 2548
 ooo Run 3 starts (global).
 
 ---> Begin Of Event: 0
@@ -1251,7 +1251,7 @@ ooo Run 3 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 2477
+Global results with 100000 events : 2424
 ooo Run 4 starts (global).
 
 ---> Begin Of Event: 0
@@ -1453,7 +1453,7 @@ ooo Run 4 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 1398
+Global results with 100000 events : 1346
 ooo Run 5 starts (global).
 
 ---> Begin Of Event: 0
@@ -1655,8 +1655,8 @@ ooo Run 5 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 548
+Global results with 100000 events : 579
 TEST PASSED
 Going to close the ROOT file....done
 Execution terminated
-User=25.41s Real=76.36s Sys=0.15s
+User=25.37s Real=55.3s Sys=0.03s

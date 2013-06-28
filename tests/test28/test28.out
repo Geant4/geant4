@@ -483,7 +483,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.79s Real=1.63s Sys=0s
+  User=0.8s Real=1.77s Sys=0.01s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -1018,7 +1018,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.6s Sys=0s
+  User=0.27s Real=0.78s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -1178,7 +1178,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -1233,7 +1233,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1339,7 +1339,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1445,7 +1445,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -1686,7 +1686,7 @@ Warning: Bad energy non-conservation detected, will re-sample the interaction
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.16s Sys=0s
+  User=0.06s Real=0.17s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1962,7 +1962,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -2081,7 +2081,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -2140,7 +2140,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 #  .....end C(12,6)++............
 #

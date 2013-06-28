@@ -413,7 +413,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=33.2s Real=56.8s Sys=0.03s
+  User=34.12s Real=63.44s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -674,7 +674,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -940,7 +940,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=5s Real=9.93s Sys=0.01s
+  User=5.02s Real=12.91s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1211,7 +1211,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=1.78s Real=3.33s Sys=0.01s
+  User=1.78s Real=4.22s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1266,7 +1266,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -1320,7 +1320,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1374,7 +1374,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.42s Real=0.91s Sys=0s
+  User=0.41s Real=0.9s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1653,7 +1653,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=36.9s Real=81.04s Sys=0.29s
+  User=36.56s Real=64.12s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

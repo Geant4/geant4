@@ -531,7 +531,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
-   time(s) spent user  time: 21.21s, wall time: 91.94s
+   time(s) spent user  time: 21.26s, wall time: 41.16s
 #
 # neutron at 100 GeV in Pb
 #
@@ -541,7 +541,7 @@ hPairProd:   for  pi-    SubType= 4
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 19.48s, wall time: 77.81s
+   time(s) spent user  time: 19.21s, wall time: 37.2s
 #
 # pi+ at 100 GeV in Pb
 #
@@ -551,7 +551,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.77s, wall time: 60.88s
+   time(s) spent user  time: 17.74s, wall time: 35.52s
 #
 # pi- at 100 GeV in Pb
 #
@@ -561,7 +561,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 15.88s, wall time: 51.85s
+   time(s) spent user  time: 15.85s, wall time: 32.84s
 #
 # kaon+ at 100 GeV in Pb
 #
@@ -571,7 +571,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 18.26s, wall time: 60.6s
+   time(s) spent user  time: 18.12s, wall time: 34.71s
 #
 # kaon- at 100 GeV in Pb
 #
@@ -581,7 +581,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 16.94s, wall time: 54.08s
+   time(s) spent user  time: 16.75s, wall time: 32.54s
 #
 # kaon0S at 100 GeV in Pb
 #
@@ -591,7 +591,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 16.78s, wall time: 56.64s
+   time(s) spent user  time: 16.61s, wall time: 32.98s
 #
 # kaon0L at 100 GeV in Pb
 #
@@ -601,7 +601,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 16.98s, wall time: 50.3s
+   time(s) spent user  time: 16.85s, wall time: 33.65s
 #
 # proton at 100 GeV in Al
 #
@@ -926,7 +926,7 @@ hPairProd:   for  pi-    SubType= 4
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-   time(s) spent user  time: 2.33s, wall time: 6.76s
+   time(s) spent user  time: 2.32s, wall time: 4.65s
 #
 # neutron at 100 GeV in Al
 #
@@ -935,7 +935,7 @@ hPairProd:   for  pi-    SubType= 4
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.66s, wall time: 4.9s
+   time(s) spent user  time: 1.65s, wall time: 3.24s
 #
 # pi+ at 100 GeV in Al
 #
@@ -944,7 +944,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.3s, wall time: 3.83s
+   time(s) spent user  time: 1.29s, wall time: 2.6s
 #
 # pi- at 100 GeV in Al
 #
@@ -953,7 +953,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.42s, wall time: 4.21s
+   time(s) spent user  time: 1.41s, wall time: 2.81s
 #
 # kaon+ at 100 GeV in Al
 #
@@ -962,7 +962,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.33s, wall time: 3.62s
+   time(s) spent user  time: 1.32s, wall time: 2.73s
 #
 # kaon- at 100 GeV in Al
 #
@@ -971,7 +971,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.36s, wall time: 3.89s
+   time(s) spent user  time: 1.35s, wall time: 2.64s
 #
 # kaon0S at 100 GeV in Al
 #
@@ -980,7 +980,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.18s, wall time: 3.69s
+   time(s) spent user  time: 1.18s, wall time: 2.38s
 #
 # kaon0L at 100 GeV in Al
 #
@@ -989,7 +989,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.3s, wall time: 3.88s
+   time(s) spent user  time: 1.29s, wall time: 2.59s
 #
 # proton at 100 GeV in Air
 #
@@ -1323,7 +1323,7 @@ hPairProd:   for  pi-    SubType= 4
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0.01s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0s
 #
 # pi+ at 100 GeV in Air
 #
@@ -1341,7 +1341,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0.01s, wall time: 0s
 #
 # kaon+ at 100 GeV in Air
 #
@@ -1359,7 +1359,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0s, wall time: 0.01s
+   time(s) spent user  time: 0s, wall time: 0s
 #
 # kaon0S at 100 GeV in Air
 #
@@ -1387,7 +1387,7 @@ SimpleBox is now made of Air
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.11s, wall time: 0.2s
+   time(s) spent user  time: 0.11s, wall time: 0.21s
 #
 # anti_neutron at 10 GeV in Pb
 #
@@ -1397,7 +1397,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.25s, wall time: 0.8s
+   time(s) spent user  time: 0.25s, wall time: 0.55s
 #
 # anti_deuteron at 10 GeV in Pb
 #
@@ -1407,7 +1407,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.21s, wall time: 0.6s
+   time(s) spent user  time: 0.21s, wall time: 0.41s
 #
 # anti_triton at 10 GeV in Pb
 #
@@ -1427,7 +1427,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.03s, wall time: 0.22s
+   time(s) spent user  time: 0.02s, wall time: 0.15s
 #
 # anti_alpha at 10 GeV in Pb
 #
@@ -1446,7 +1446,7 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.01s, wall time: 0.01s
+   time(s) spent user  time: 0.02s, wall time: 0.02s
 #
 # anti_neutron at 10 GeV in Al
 #
@@ -1455,7 +1455,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.02s
+   time(s) spent user  time: 0.02s, wall time: 0.12s
 #
 # anti_deuteron at 10 GeV in Al
 #
@@ -1464,7 +1464,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.22s
+   time(s) spent user  time: 0.02s, wall time: 0.02s
 #
 # anti_triton at 10 GeV in Al
 #
@@ -1482,7 +1482,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.01s
+   time(s) spent user  time: 0.01s, wall time: 0.01s
 #
 # anti_alpha at 10 GeV in Al
 #
@@ -1491,7 +1491,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.01s, wall time: 0.02s
+   time(s) spent user  time: 0.01s, wall time: 0.01s
 #
 # anti_proton at 10 GeV in Air
 #
