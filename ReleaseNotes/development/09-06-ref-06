@@ -216,7 +216,7 @@ processes/electromagnetic/standard               emstand-V09-06-51
   scattering angles.
 - G4PAIPhotonModel: added extra methods.
 
-processes/electromagnetic/utils                  emutils-V09-06-40
+processes/electromagnetic/utils                  emutils-V09-06-41
 -------------------------------
 - G4VMultipleScattering: fixed list models per multiple-scattering process
   for ions.
@@ -518,10 +518,11 @@ examples                                         examples-V09-06-06
 - extended/optical/wls (WLS-V09-06-06)
   o Migrated example to MT.
 - extended/parallel (exparallel-V09-06-00)
-- extended/parallel/ParN02tbb (TBB-V09-06-00)
-  o New example derived from original novice/N02 demonstrating how to
-    interface a simple application with the Intel Threading Building Blocks
-    library (TBB), and organise MT event-level parallelism as TBB tasks.
+- extended/parallel/ParN02tbb (TBB-V09-06-04)
+  o -Alpha= version of a new example derived from original novice/N02
+    demonstrating how to interface a simple application with the Intel
+    Threading Building Blocks library (TBB), and organise MT event-level
+    parallelism as TBB tasks.
 - extended/parameterisations/gflash (exgflash-V09-06-00)
   o Removed ExGflashMaterialManager class; now using NIST manager.
   o Aplied coding guidelines.
