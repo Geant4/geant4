@@ -91,16 +91,16 @@ public:
 				 G4double maxEnergy);
 
 
-  virtual G4double SampleFluctuations(const G4Material*,
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
                                       const G4DynamicParticle*,
-                                      G4double& tmax,
-                                      G4double& length,
-                                      G4double& meanLoss);
+                                      G4double tmax,
+                                      G4double length,
+                                      G4double meanLoss);
 
   virtual G4double Dispersion(const G4Material*,
                               const G4DynamicParticle*,
-                              G4double& tmax,
-                              G4double& length);
+                              G4double tmax,
+                              G4double length);
 
   void SetParticle(const G4ParticleDefinition* p);
 

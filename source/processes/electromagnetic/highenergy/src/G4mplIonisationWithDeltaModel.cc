@@ -292,13 +292,13 @@ G4mplIonisationWithDeltaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4mplIonisationWithDeltaModel::SampleFluctuations(
-				       const G4Material* material,
+				       const G4MaterialCutsCouple* couple,
 				       const G4DynamicParticle* dp,
-				       G4double& tmax,
-				       G4double& length,
-				       G4double& meanLoss)
+				       G4double tmax,
+				       G4double length,
+				       G4double meanLoss)
 {
-  G4double siga = Dispersion(material,dp,tmax,length);
+  G4double siga = Dispersion(couple->GetMaterial(),dp,tmax,length);
   G4double loss = meanLoss;
   siga = sqrt(siga);
   G4double twomeanLoss = meanLoss + meanLoss;
@@ -322,8 +322,8 @@ G4double G4mplIonisationWithDeltaModel::SampleFluctuations(
 G4double 
 G4mplIonisationWithDeltaModel::Dispersion(const G4Material* material,
 					  const G4DynamicParticle* dp,
-					  G4double& tmax,
-					  G4double& length)
+					  G4double tmax,
+					  G4double length)
 {
   G4double siga = 0.0;
   G4double tau   = dp->GetKineticEnergy()/mass;
