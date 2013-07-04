@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2 July 2013  Dennis Wright                       (test27-V09-06-02)
+-------------------------------------------------------------------
+- Tst27PhysicsList: replace LEP models with Bertini, FTFP
+
 11 June 2013  Dennis Wright                      (test27-V09-06-01)
 -------------------------------------------------------------------
 - Migrate to multi-threaded:
