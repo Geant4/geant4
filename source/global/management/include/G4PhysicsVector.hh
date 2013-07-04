@@ -68,6 +68,7 @@
 #include "G4ios.hh"
 #include "G4Allocator.hh"
 #include "G4PhysicsVectorType.hh"
+#include "G4Pow.hh"
 
 typedef std::vector<G4double> G4PVDataVector;
 
@@ -139,7 +140,7 @@ class G4PhysicsVector
          // Use this function when you fill physis vector by PutValue().
 
     inline G4double GetMaxEnergy() const;
-         // Returns the energy of last point
+         // Returns the energy of the last point of the vector
 
     virtual G4double GetLowEdgeEnergy(size_t binNumber) const;
          // Obsolete method
@@ -149,7 +150,12 @@ class G4PhysicsVector
          // The boundary check will not be done.
 
     inline size_t GetVectorLength() const;
-         // Get the toal length (bin number) of the vector. 
+         // Get the total length of the vector. 
+
+    inline size_t FindBin(G4double energy, size_t idx) const;
+         // find low edge index of a bin for given energy
+         // min value 0, max value VectorLength-1
+         // idx is suggested bin number from user code
 
     void FillSecondDerivatives();
         // Initialise second derivatives for spline keeping 
@@ -167,6 +173,11 @@ class G4PhysicsVector
          // user defined 1st derivatives at edge points
          // Warning: this method should be called when the vector 
          // is already filled
+
+    G4double FindLinearEnergy(G4double rand) const;
+         // Find energy using linear interpolation for vector
+         // filled by cumulative probability function 
+         // value of rand should be between 0 and 1
 
     inline G4bool IsFilledVectorExist() const;
          // Is non-empty physics vector already exist?
@@ -209,12 +220,12 @@ class G4PhysicsVector
     G4PVDataVector  binVector;     // Vector to keep energy
     G4PVDataVector  secDerivative; // Vector to keep second derivatives 
 
+    G4Pow*          g4pow;
+
   private:
 
 
     G4bool SplinePossible();
-
-    inline size_t FindBin(G4double energy, size_t idx) const;
 
     inline G4double LinearInterpolation(size_t idx, G4double energy) const;
          // Linear interpolation function

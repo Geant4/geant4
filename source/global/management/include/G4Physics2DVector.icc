@@ -34,6 +34,14 @@
 
 //---------------------------------------------------------------
 
+inline
+ G4double G4Physics2DVector::Value(G4double x, G4double y) const
+{
+  size_t idx = 0;
+  size_t idy = 0;
+  return Value(x, y, idx, idy);
+}
+
 inline void G4Physics2DVector::PutX(size_t idx, G4double val)
 {
   xVector[idx] = val;
@@ -64,6 +72,13 @@ inline
  G4double G4Physics2DVector::GetValue(size_t idx, size_t idy) const
 {
   return (*(value[idy]))[idx];
+}
+
+inline 
+ G4double G4Physics2DVector::FindLinearX(G4double rand, G4double y) const
+{
+  size_t idy = 0;
+  return FindLinearX(rand, y, idy);
 }
 
 inline size_t G4Physics2DVector::GetLengthX() const

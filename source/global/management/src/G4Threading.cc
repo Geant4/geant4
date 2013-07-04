@@ -98,6 +98,7 @@ G4Pid_t G4GetPidId()  // In sequential mode return Process ID and not Thread ID
 
 G4int G4GetNumberOfCores() { return 1; }
 G4int G4GetThreadId() { return 0; }
+void G4SetThreadId(G4int) {}
 
 #endif
 

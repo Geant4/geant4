@@ -134,6 +134,9 @@ size_t G4PhysicsLogVector::FindBinLocation(G4double theEnergy) const
   // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
   //G4cout << "G4PhysicsLogVector::FindBinLocation: e= " << theEnergy
 
-  return size_t( std::log10(theEnergy)/dBin - baseBin );
+  size_t idx = size_t(g4pow->log10A(theEnergy)/dBin - baseBin);
+  if(idx+1 >= numberOfNodes && numberOfNodes > 1) { idx = numberOfNodes - 2; }
+
+  return idx;
 }
 

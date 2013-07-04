@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+July 3, 2013 A.Dotti (global-V09-06-55)
+- Previous tag was broken.
+
+July 3, 2013 A.Dotti (global-V09-06-54)
+- Adding missing implementation of fucntion G4SetThreadId for sequential builds
+
+July 3, 2013 V.Ivantchenko (global-V09-06-53)
+- G4PhysicsVector: added pointer to G4Pow in order to speedup
+    bin location for logarithmic vectors (result are identical)
+- G4PhysicsLogVector - use in FindBinLocation G4Pow::log10A instead
+    of std::log
+- G4PhysicsLnVector - use in FindBinLocation G4Pow::logX instead
+    of std::log
+
+July 1, 2013 V.Ivantchenko (global-V09-06-52)
+- G4PhysicsVector: make FindBin method public, added method
+    FindLinearEnergy for sampling of energy for vectors
+    with cumulative probability function 
+- G4Physics2DVector: make FindBinLocationX and FindBinLocationY  
+    methods public, add method FindLinearX for sampling of energy
+    for 2D cumulative probability functions, added new inlined 
+    method Value with different signature
 
 June 26, 2013 G.Cosmo (global-V09-06-51)
 - Restore default precision in cout in G4AllocatorList.

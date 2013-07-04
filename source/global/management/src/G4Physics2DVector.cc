@@ -311,7 +311,9 @@ G4bool G4Physics2DVector::Retrieve(std::ifstream& in)
   // binning
   G4int k;
   in >> k >> numberOfXNodes >> numberOfYNodes;
-  if (in.fail())  { return false; }
+  if (in.fail() || 0 >= numberOfXNodes || 0 >= numberOfYNodes) { 
+    return false; 
+  }
   PrepareVectors();
   type = G4PhysicsVectorType(k); 
 
@@ -367,6 +369,60 @@ G4Physics2DVector::FindBinLocation(G4double z,
   }
 
   return upperBound;
+}
+
+// --------------------------------------------------------------
+
+G4double G4Physics2DVector::FindLinearX(G4double rand, G4double yy, 
+					size_t& idy) const
+{
+  G4double y = yy;
+
+  // no interpolation outside the table
+  if(y < yVector[0]) { 
+    y = yVector[0]; 
+  } else if(y > yVector[numberOfYNodes - 1]) { 
+    y = yVector[numberOfYNodes - 1]; 
+  }
+
+  // find bins
+  idy = FindBinLocationY(y, idy);
+
+  G4double x1 = InterpolateLinearX(*(value[idy]), rand);
+  G4double x2 = InterpolateLinearX(*(value[idy+1]), rand);
+  G4double res = x1;
+  G4double del = yVector[idy+1] - yVector[idy];
+  if(del != 0.0) {
+    res += (x2 - x1)*(y - yVector[idy])/del;
+  }
+  return res;
+}
+
+// --------------------------------------------------------------
+
+G4double G4Physics2DVector::InterpolateLinearX(G4PV2DDataVector& v, 
+					       G4double rand) const
+{
+  size_t nn = v.size();
+  if(1 >= nn) { return 0.0; }
+  size_t n1 = 0;
+  size_t n2 = nn/2;
+  size_t n3 = nn - 1;
+  G4double y = rand*v[n3];
+  while (n1 + 1 != n3)
+    {
+      if (y > v[n2])
+	{ n1 = n2; }
+      else
+	{ n3 = n2; }
+      n2 = (n3 + n1 + 1)/2;
+    }
+  G4double res = xVector[n1];
+  G4double del = v[n3] - v[n1];
+  if(del > 0.0) {
+    res += (y - v[n1])*(xVector[n3] - res)/del;
+  }
+  return res;
 }
 
 // --------------------------------------------------------------

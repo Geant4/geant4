@@ -73,10 +73,10 @@ public:  // with description
 
   ~G4Physics2DVector();
   // destructor
-
-  //inline 
+ 
   G4double Value(G4double x, G4double y, 
 		 size_t& lastidx, size_t& lastidy) const;
+  G4double Value(G4double x, G4double y) const;
   // Main method to interpolate 2D vector
   // Consumer class should provide initial values 
   // lastidx and lastidy,  
@@ -95,11 +95,23 @@ public:  // with description
   // for example after Retrieve a vector from an external file to 
   // convert values into Geant4 units
 
+  G4double 
+  FindLinearX(G4double rand, G4double y, size_t& lastidy) const;
+  inline G4double FindLinearX(G4double rand, G4double y) const;
+  // Find Y using linear interpolation for Y-vector
+  // filled by cumulative probability function 
+  // value of rand should be between 0 and 1
+
   inline G4double GetX(size_t index) const;
   inline G4double GetY(size_t index) const;
   inline G4double GetValue(size_t idx, size_t idy) const;
   // Returns simply the values of the vector by index
   // of the energy vector. The boundary check will not be done. 
+
+  inline size_t FindBinLocationX(G4double x, size_t lastidx) const;
+  inline size_t FindBinLocationY(G4double y, size_t lastidy) const;
+  // Find the bin# in which theEnergy belongs
+  // Starting from 0 
 
   inline size_t GetLengthX() const;
   inline size_t GetLengthY() const;
@@ -140,12 +152,10 @@ protected:
 
   inline size_t FindBin(G4double z, const G4PV2DDataVector&, 
                         size_t idz, size_t idzmax) const;
-  inline size_t FindBinLocationX(G4double x, size_t lastidx) const;
-  inline size_t FindBinLocationY(G4double y, size_t lastidy) const;
-  // Find the bin# in which theEnergy belongs
-  // Starting from 0 
 
 private:
+
+  G4double InterpolateLinearX(G4PV2DDataVector& v, G4double rand) const;
 
   inline G4double DerivativeX(size_t idx, size_t idy, G4double fac) const;
   inline G4double DerivativeY(size_t idx, size_t idy, G4double fac) const;

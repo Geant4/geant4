@@ -123,5 +123,8 @@ size_t G4PhysicsLnVector::FindBinLocation(G4double theEnergy) const
   // not through pointers or references. In this case, the 'inline' will
   // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
 
-  return size_t( std::log(theEnergy)/dBin - baseBin );
+  size_t idx = size_t(g4pow->logX(theEnergy)/dBin - baseBin);
+  if(idx+1 >= numberOfNodes && numberOfNodes > 1) { idx = numberOfNodes - 2; }
+
+  return idx;
 }

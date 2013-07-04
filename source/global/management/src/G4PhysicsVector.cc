@@ -68,6 +68,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool)
    verboseLevel(0)
 {
   if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
+  g4pow = G4Pow::GetInstance();
 }
 
 // --------------------------------------------------------------
@@ -80,6 +81,8 @@ G4PhysicsVector::~G4PhysicsVector()
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
+  g4pow = G4Pow::GetInstance();
+
   dBin         = right.dBin;
   baseBin      = right.baseBin;
   verboseLevel = right.verboseLevel;
@@ -519,6 +522,31 @@ G4PhysicsVector::Value(G4double theEnergy, size_t& lastIdx) const
     y = Interpolation(lastIdx, theEnergy);
   }
   return y;
+}
+
+//---------------------------------------------------------------
+
+G4double G4PhysicsVector::FindLinearEnergy(G4double rand) const
+{
+  if(1 >= numberOfNodes) { return 0.0; }
+  size_t n1 = 0;
+  size_t n2 = numberOfNodes/2;
+  size_t n3 = numberOfNodes - 1;
+  G4double y = rand*dataVector[n3];
+  while (n1 + 1 != n3)
+    {
+      if (y > dataVector[n2])
+	{ n1 = n2; }
+      else
+	{ n3 = n2; }
+      n2 = (n3 + n1 + 1)/2;
+    }
+  G4double res = binVector[n1];
+  G4double del = dataVector[n3] - dataVector[n1];
+  if(del > 0.0) { 
+    res += (y - dataVector[n1])*(binVector[n3] - res)/del;  
+  }
+  return res;
 }
 
 //---------------------------------------------------------------
