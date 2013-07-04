@@ -252,12 +252,16 @@ class G4ParticleTable
    G4String               noName;
 
    G4bool  readyToUse;
+   G4ParticleDefinition* genericIon;
  
  public:
    void SetReadiness(G4bool val=true);
    G4bool GetReadiness() const;
+   G4ParticleDefinition* GetGenericIon() const;
+   void SetGenericIon(G4ParticleDefinition*);
  private:
    void CheckReadiness();
+
 
 #ifdef G4MULTITHREADED
 public:

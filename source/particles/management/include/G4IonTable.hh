@@ -252,6 +252,7 @@ class G4IonTable
    G4bool                IsLightAntiIon(const G4ParticleDefinition*) const;
    // return true if the particle is pre-defined ion
  
+   void                  AddProcessManager(G4ParticleDefinition*);
    void                  AddProcessManager(const G4String& ionName);
    // Add process manager to ions with name of 'ionName'
 

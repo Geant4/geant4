@@ -120,7 +120,8 @@ G4ParticleTable* G4ParticleTable::GetParticleTable()
 G4ParticleTable::G4ParticleTable()
      :verboseLevel(1),
       noName(" "),
-      readyToUse(false)
+      readyToUse(false),
+      genericIon(NULL)
 {
   fDictionary = new G4PTblDictionary();
 

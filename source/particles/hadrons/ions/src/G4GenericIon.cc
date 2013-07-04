@@ -81,6 +81,7 @@ G4GenericIon* G4GenericIon::Definition()
   }
 
   theInstance = reinterpret_cast<G4GenericIon*>(anInstance);
+  pTable->SetGenericIon(theInstance);
   return theInstance;
 }
 

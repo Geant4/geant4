@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 01. Jul. 2013 Makoto Asai (particles-V09-06-32)
+- Generic ions except GenericIon itself no longer use /run/particle/addProcessManager
+  UI command to make the shallow copy of process manager.
+
 - 20. Jun. 2013 Andrea Dotti (particles-V09-06-31)
 - Bug fix for MT: set static TLS pointer G4PDefSplitter::offset to 0 after
   delete in split-class mechanism G4PDefSplitter::FreeSlave

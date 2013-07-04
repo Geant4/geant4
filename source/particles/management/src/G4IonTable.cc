@@ -166,9 +166,8 @@ void G4IonTable::WorkerG4IonTable()
   G4IonListIterator it;
   for (it = fIonListShadow->begin() ; it != fIonListShadow->end(); it++ )
   {
-    const G4ParticleDefinition* ion = it->second;
-//G4cout << "G4IonTable::WorkerG4IonTable() " << ion->GetParticleName() << G4endl;
-    AddProcessManager(ion->GetParticleName()); 
+    G4ParticleDefinition* ion = const_cast<G4ParticleDefinition*>(it->second);
+    AddProcessManager(ion); 
     fIonList->insert(*it);
   }
 
@@ -223,7 +222,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
 
   // check whether GenericIon has processes
   G4ParticleDefinition* genericIon = 
-    (G4ParticleTable::GetParticleTable())->FindParticle("GenericIon");
+    G4ParticleTable::GetParticleTable()->GetGenericIon();
   G4ProcessManager* pman=0;
   if (genericIon!=0) pman = genericIon->GetProcessManager();
   if ((genericIon ==0) || (pman==0)){
@@ -327,7 +326,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
 #endif
   
   // Add process manager to the ion
-  AddProcessManager(name);
+  AddProcessManager(ion);
  
   return ion;
 }
@@ -343,7 +342,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4double 
 
   // check whether GenericIon has processes
   G4ParticleDefinition* genericIon = 
-    (G4ParticleTable::GetParticleTable())->FindParticle("GenericIon");
+    G4ParticleTable::GetParticleTable()->GetGenericIon();
   G4ProcessManager* pman=0;
   if (genericIon!=0) pman = genericIon->GetProcessManager();
   if ((genericIon ==0) || (pman==0)){
@@ -354,8 +353,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4double 
              << "  because GenericIon is not ready !!" <<   G4endl;
     }
 #endif
-    G4Exception( "G4IonTable::CreateIon()","PART105",
-		 JustWarning, 
+    G4Exception( "G4IonTable::CreateIon()","PART105", JustWarning, 
 		 "Can not create ions because GenericIon is not ready");
     return 0;
   }
@@ -427,7 +425,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4double 
 #endif
   
   // Add process manager to the ion
-  AddProcessManager(name);
+  AddProcessManager(ion);
       
   return ion;
 }
@@ -439,7 +437,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int lvl)
 
   // check whether GenericIon has processes
   G4ParticleDefinition* genericIon = 
-    (G4ParticleTable::GetParticleTable())->FindParticle("GenericIon");
+    G4ParticleTable::GetParticleTable()->GetGenericIon();
   G4ProcessManager* pman=0;
   if (genericIon!=0) pman = genericIon->GetProcessManager();
   if ((genericIon ==0) || (pman==0)){
@@ -537,7 +535,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int lvl)
 #endif
   
   // Add process manager to the ion
-  AddProcessManager(name);
+  AddProcessManager(ion);
  
   return ion;
 }
@@ -553,7 +551,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4int lvl
 
   // check whether GenericIon has processes
   G4ParticleDefinition* genericIon = 
-    (G4ParticleTable::GetParticleTable())->FindParticle("GenericIon");
+    G4ParticleTable::GetParticleTable()->GetGenericIon();
   G4ProcessManager* pman=0;
   if (genericIon!=0) pman = genericIon->GetProcessManager();
   if ((genericIon ==0) || (pman==0)){
@@ -644,7 +642,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4int lvl
 #endif
   
   // Add process manager to the ion
-  AddProcessManager(name);
+  AddProcessManager(ion);
       
   return ion;
 }
@@ -1462,6 +1460,32 @@ G4int G4IonTable::GetVerboseLevel() const
 }
 
 /////////////////
+void  G4IonTable::AddProcessManager(G4ParticleDefinition* ion)
+{
+  if(ion->GetParticleSubType()!="generic")
+  { AddProcessManager(ion->GetParticleName()); return; }
+  if(ion->GetParticleName()=="GenericIon")
+  { AddProcessManager(ion->GetParticleName()); return; }
+  
+  // check whether GenericIon has processes
+  G4ParticleDefinition* genericIon = 
+    G4ParticleTable::GetParticleTable()->GetGenericIon();
+  G4ProcessManager* pman=0;
+  if (genericIon!=0) pman = genericIon->GetProcessManager();
+  if ((genericIon ==0) || (pman==0)){
+    G4cout << "G4IonTable::AddProcessManager() : can not create ion of  " 
+           << ion->GetParticleName()
+           << "  because GenericIon is not ready !!" <<   G4endl;
+    G4Exception( "G4IonTable::AddProcessManager()","PART105", FatalException, 
+		 "Can not create ions because GenericIon is not ready");
+    return;
+  }
+ 
+  ion->SetProcessManager(pman);
+////  G4cout << "G4IonTable::AddProcessManager() : " << ion->GetParticleName() << G4endl;
+
+}
+
 void  G4IonTable::AddProcessManager(const G4String& name)
 {
   // create command string for addProcManager

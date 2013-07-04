@@ -89,3 +89,14 @@ inline
   return readyToUse;
 }
 
+inline
+ G4ParticleDefinition* G4ParticleTable::GetGenericIon() const
+{
+  return genericIon;
+}
+
+inline 
+ void G4ParticleTable::SetGenericIon(G4ParticleDefinition* gi)
+{
+  genericIon = gi;
+}
