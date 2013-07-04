@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3 July 2013  Dennis Wright  (test61-V09-06-03)
+----------------------------------------------
+- Tst61PhysicsList: complete the removal of LEP models and clean up
+
 12 June 2013  Dennis Wright (test61-V09-06-02)
 ----------------------------------------------
 - Migrate to multi-threaded:
