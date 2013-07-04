@@ -201,8 +201,8 @@ G4VParticleChange* G4ContinuousGainOfEnergy::AlongStepDoIt(const G4Track& track,
   	
 	G4double deltaE =0.;
   	if (lossFluctuationFlag ) {
-      		deltaE = currentModel->GetModelOfFluctuations()->
-      						SampleFluctuations(currentMaterial,dynParticle,tmax,dlength,degain)-degain;
+      	  deltaE = currentModel->GetModelOfFluctuations()->
+      	    SampleFluctuations(currentCouple,dynParticle,tmax,dlength,degain)-degain;
   	}
 	
 	G4double egain=degain+deltaE;

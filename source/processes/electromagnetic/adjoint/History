@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03 Jul 2013: V.Ivanchenko (emadjoint-V09-06-06)
+- G4ContinuousGainOfEnergy - changed interface to G4VEmFluctuation
+
 17 Jun 2013: G.Cosmo (emadjoint-V09-06-05)
 - Cleanup from automatica changes for MT in G4AdjointInterpolator.
 
