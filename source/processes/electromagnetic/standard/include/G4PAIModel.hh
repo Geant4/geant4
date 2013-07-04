@@ -95,16 +95,16 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
-  virtual G4double SampleFluctuations(const G4Material*,
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
 				      const G4DynamicParticle*,
-				      G4double&,
-				      G4double&,
-				      G4double&);
+				      G4double,
+				      G4double,
+				      G4double);
 
   virtual G4double Dispersion(    const G4Material*,
 				  const G4DynamicParticle*,
-				  G4double&,
-				  G4double&);
+				  G4double,
+				  G4double);
 
   void     DefineForRegion(const G4Region* r) ;
   void     ComputeSandiaPhotoAbsCof();

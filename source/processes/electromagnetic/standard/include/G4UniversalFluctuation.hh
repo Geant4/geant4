@@ -68,16 +68,16 @@ public:
 
   virtual ~G4UniversalFluctuation();
 
-  virtual G4double SampleFluctuations(const G4Material*,
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
 				      const G4DynamicParticle*,
-				      G4double&,
-				      G4double&,
-				      G4double&);
+				      G4double,
+				      G4double,
+				      G4double);
 
   virtual G4double Dispersion(    const G4Material*,
 				  const G4DynamicParticle*,
-				  G4double&,
-				  G4double&);
+				  G4double,
+				  G4double);
 
   virtual void InitialiseMe(const G4ParticleDefinition*);
 

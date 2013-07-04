@@ -64,16 +64,16 @@ public:
 
   virtual ~G4BohrFluctuations();
 
-  G4double SampleFluctuations(const G4Material*,
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
                               const G4DynamicParticle*,
- 				    G4double&,
-                                    G4double&,
-                                    G4double&);
+ 				    G4double,
+                                    G4double,
+                                    G4double);
 
   G4double Dispersion(    const G4Material*,
                           const G4DynamicParticle*,
- 				G4double&,
-                                G4double&);
+ 				G4double,
+                                G4double);
 
   void InitialiseMe(const G4ParticleDefinition*);
 

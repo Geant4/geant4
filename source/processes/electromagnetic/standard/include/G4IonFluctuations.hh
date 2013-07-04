@@ -66,17 +66,17 @@ public:
   virtual ~G4IonFluctuations();
 
   // Sample fluctuations
-  G4double SampleFluctuations(const G4Material*,
+  G4double SampleFluctuations(const G4MaterialCutsCouple*,
                               const G4DynamicParticle*,
-			      G4double& tmax,
-			      G4double& length,
-			      G4double& meanLoss);
+			      G4double tmax,
+			      G4double length,
+			      G4double meanLoss);
 
   // Compute dispertion 
   G4double Dispersion(const G4Material*,
 		      const G4DynamicParticle*,
-		      G4double& tmax,
-		      G4double& length);
+		      G4double tmax,
+		      G4double length);
 
   // Initialisation prerun
   void InitialiseMe(const G4ParticleDefinition*);

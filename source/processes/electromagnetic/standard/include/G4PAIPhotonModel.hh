@@ -56,6 +56,7 @@
 #include "G4VEmModel.hh"
 #include "globals.hh"
 #include "G4VEmFluctuationModel.hh"
+#include "G4PAIxSection.hh"
 
 class G4PhysicsLogVector;
 class G4PhysicsTable;
@@ -106,16 +107,16 @@ public:
   G4double TestSecondaries( G4MaterialCutsCouple*, G4DynamicParticle*,
 			    G4double tmin, G4double maxEnergy);
 
-  virtual G4double SampleFluctuations(const G4Material*,
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
 				      const G4DynamicParticle*,
-				      G4double&,
-				      G4double&,
-				      G4double&);
+				      G4double,
+				      G4double,
+				      G4double);
 
   virtual G4double Dispersion(    const G4Material*,
 				  const G4DynamicParticle*,
-				  G4double&,
-				  G4double&);
+				  G4double,
+				  G4double);
 
   void     DefineForRegion(const G4Region* r) ;
   void     ComputeSandiaPhotoAbsCof();
@@ -157,6 +158,8 @@ private:
   G4int                fMeanNumber;
   G4int                fVerbose; 
   G4PhysicsLogVector*  fProtonEnergyVector ;
+  G4PAIxSection        fPAIxSection;
+  G4SandiaTable        fSandia;
 
   // vectors
 
@@ -178,6 +181,8 @@ private:
   size_t                             fMatIndex ;  
   G4double**                         fSandiaPhotoAbsCof ;
   G4int                              fSandiaIntervalNumber ;
+  const G4MaterialCutsCouple*        fCutCouple;
+  const G4Material*                  fMaterial;
 
   G4PhysicsLogVector*              fdEdxVector ;
   std::vector<G4PhysicsLogVector*> fdEdxTable ;

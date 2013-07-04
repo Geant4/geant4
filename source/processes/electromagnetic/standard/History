@@ -18,6 +18,15 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+03 July 13: V.Ivanchenko (emstand-V09-06-53)
+- G4BohrFluctuations, G4IonFluctuations, G4PAIModel, G4PAIPhotonModel,
+  G4UniversalFluctuation - changed interface to G4VEmFluctuation -
+    in SampleFluctuations G4material pointer is substituted 
+    by G4MaterialCutsCouple pointer 
+
+01 July 13: V.Ivanchenko (emstand-V09-06-52)
+- G4PAIModel - correct usage of indexes 
+
 19 June 13: V.Ivanchenko (emstand-V09-06-51)
 - correct branch tag
 

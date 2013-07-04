@@ -60,6 +60,7 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Poisson.hh"
+#include "G4MaterialCutsCouple.hh"
 #include "G4Material.hh"
 #include "G4DynamicParticle.hh"
 
@@ -104,11 +105,12 @@ void G4IonFluctuations::InitialiseMe(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
-                                               const G4DynamicParticle* dp,
-					       G4double& tmax,
-					       G4double& length,
-					       G4double& meanLoss)
+G4double 
+G4IonFluctuations::SampleFluctuations(const G4MaterialCutsCouple* couple,
+				      const G4DynamicParticle* dp,
+				      G4double tmax,
+				      G4double length,
+				      G4double meanLoss)
 {
   //  G4cout << "### meanLoss= " << meanLoss << G4endl;
   if(meanLoss <= minLoss) return meanLoss;
@@ -118,9 +120,10 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
 
   // Vavilov fluctuations
   if(dp->GetKineticEnergy() > parameter*charge*particleMass) {
-    return uniFluct.SampleFluctuations(material,dp,tmax,length,meanLoss);
+    return uniFluct.SampleFluctuations(couple,dp,tmax,length,meanLoss);
   }
 
+  const G4Material* material = couple->GetMaterial();
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
   
@@ -169,8 +172,8 @@ G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
 
 G4double G4IonFluctuations::Dispersion(const G4Material* material,
 				       const G4DynamicParticle* dp,
-				       G4double& tmax,
-				       G4double& length)
+				       G4double tmax,
+				       G4double length)
 {
   kineticEnergy = dp->GetKineticEnergy();
   G4double etot = kineticEnergy + particleMass;
@@ -202,7 +205,8 @@ G4double G4IonFluctuations::Dispersion(const G4Material* material,
 //  fac *= (1.0 + f1);
 
   // taking into account the cut
-  G4double fac_cut = 1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2/(tmax*(1.0 - beta2));
+  G4double fac_cut = 1.0 + (fac - 1.0)*2.0*electron_mass_c2*beta2
+    /(tmax*(1.0 - beta2));
   if(fac_cut > 0.01 && fac > 0.01) {
     siga *= fac_cut;
   }

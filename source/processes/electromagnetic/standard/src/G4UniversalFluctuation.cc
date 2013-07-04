@@ -73,6 +73,7 @@
 #include "G4Poisson.hh"
 #include "G4Step.hh"
 #include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 
@@ -115,11 +116,12 @@ void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
-						    const G4DynamicParticle* dp,
-						    G4double& tmax,
-						    G4double& length,
-						    G4double& averageLoss)
+G4double 
+G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
+					   const G4DynamicParticle* dp,
+					   G4double tmax,
+					   G4double length,
+					   G4double averageLoss)
 {
   // Calculate actual loss from the mean loss.
   // The model used to get the fluctuations is essentially the same
@@ -142,6 +144,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   G4double beta2 = tau*(tau + 2.0)/gam2;
 
   G4double loss(0.), siga(0.);
+
+  const G4Material* material = couple->GetMaterial();
   
   // Gaussian regime
   // for heavy particles only and conditions
@@ -348,8 +352,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
 G4double G4UniversalFluctuation::Dispersion(
                           const G4Material* material,
                           const G4DynamicParticle* dp,
- 				G4double& tmax,
-			        G4double& length)
+ 				G4double tmax,
+			        G4double length)
 {
   if(!particle) { InitialiseMe(dp->GetDefinition()); }
 
