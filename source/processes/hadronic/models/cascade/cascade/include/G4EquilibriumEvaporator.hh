@@ -38,37 +38,36 @@
 // 20130129  M. Kelsey -- Move QF interpolation to global statics for
 //		multi-threaded shared memory.
 // 20130620  Address Coverity complaint about missing copy actions
+// 20130621  Follow base class change to explosion() reference interface
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
 
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
 
-#include "G4CascadeColliderBase.hh"
+#include "G4CascadeDeexciteBase.hh"
 #include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4Fissioner.hh"
 #include "G4BigBanger.hh"
 
-class G4InuclParticle;
 
-class G4EquilibriumEvaporator : public G4CascadeColliderBase {
+class G4EquilibriumEvaporator : public G4CascadeDeexciteBase {
 public:
   G4EquilibriumEvaporator();
   virtual ~G4EquilibriumEvaporator();
 
-  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       G4CollisionOutput& output);
+  virtual void setVerboseLevel(G4int verbose);
+
+  virtual void deExcite(const G4Fragment& target, G4CollisionOutput& output);
 
 private: 
-  // Replace base class verision
+  // Replace base class verision with more complex conditions
   virtual G4bool explosion(G4int a, G4int z, G4double e) const;
 
-  // FIXME:  Need to redeclare and call through base-class polymorphisms
-  virtual G4bool explosion(G4InuclNuclei* target) const {
-    return G4CascadeColliderBase::explosion(target);
-  }
-
-  virtual G4bool explosion(G4Fragment* target) const {
-    return G4CascadeColliderBase::explosion(target);
+  // NOTE:  Must redeclare base-class polymorphisms
+  virtual G4bool explosion(const G4Fragment& target) const {
+    return G4CascadeDeexciteBase::explosion(target);
   }
 
   G4bool goodRemnant(G4int a, G4int z) const; 

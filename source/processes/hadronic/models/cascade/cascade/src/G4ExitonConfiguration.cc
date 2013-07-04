@@ -25,10 +25,24 @@
 //
 // 20110922  M. Kelsey -- Created to hold implementation of stream operator<<.
 // 20121009  M. Kelsey -- Reduce output to single line, with no EOL.
+// 20130622  M. Kelsey -- Add initialization from G4Fragment
 
 #include "G4ExitonConfiguration.hh"
+#include "G4Fragment.hh"
 #include "G4ios.hh"
 
+
+// Get information from G4Fragment
+
+void G4ExitonConfiguration::fill(const G4Fragment& frag) {
+  protonQuasiParticles  = frag.GetNumberOfCharged();
+  neutronQuasiParticles = frag.GetNumberOfParticles() - protonQuasiParticles;
+  protonHoles  = frag.GetNumberOfChargedHoles();
+  neutronHoles = frag.GetNumberOfHoles() - protonHoles;
+}
+
+
+// Write information to output
 
 std::ostream& operator<<(std::ostream& os, const G4ExitonConfiguration& ex) {
   os << " Exitons: protons " << ex.protonQuasiParticles << " holes " 

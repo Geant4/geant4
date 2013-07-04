@@ -32,24 +32,25 @@
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20110728  M. Kelsey -- Fix Coverity #23843, add destructor.
 // 20130620  Address Coverity complaint about missing copy actions
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
 
 #ifndef G4EVAPORATIONINUCL_COLLIDER_HH
 #define G4EVAPORATIONINUCL_COLLIDER_HH
  
-#include "G4CascadeColliderBase.hh"
+#include "G4CascadeDeexciteBase.hh"
 
 class G4InuclParticle;
 class G4CollisionOutput;
 class G4EquilibriumEvaporator;
 class G4BigBanger;
 
-class G4EvaporationInuclCollider : public G4CascadeColliderBase {
+class G4EvaporationInuclCollider : public G4CascadeDeexciteBase {
 public:
   G4EvaporationInuclCollider();
   ~G4EvaporationInuclCollider();
 
-  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       G4CollisionOutput& output);
+  virtual void deExcite(const G4Fragment& target, G4CollisionOutput& output);
   
 private: 
   G4EquilibriumEvaporator* theEquilibriumEvaporator;

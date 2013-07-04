@@ -6,6 +6,7 @@
 #
 # 20100922 J. Yarba -- Add include directories for pre-compound model
 # 20110919 M. Kelsey -- Add flag for final-state clustering
+# 20130621 M. Kelsey -- Move CHECK_ECONS flag to runtime parameters
 # -----------------------------------------------------------
 
 name := G4hadronic_bert_cascade
@@ -36,10 +37,6 @@ endif
 
 ifdef G4CASCADE_SKIP_ECONS
   CPPFLAGS += -DG4CASCADE_SKIP_ECONS=1
-endif
-
-ifdef G4CASCADE_CHECK_ECONS
-  CPPFLAGS += -DG4CASCADE_CHECK_ECONS=1
 endif
 
 ifdef G4CASCADE_DO_COALESCENCE

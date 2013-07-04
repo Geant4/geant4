@@ -23,51 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4CASCADE_DEEXCITATION_HH
-#define G4CASCADE_DEEXCITATION_HH
 // $Id$
 //
-// Takes an arbitrary excited or unphysical nuclear state and produces
-// a final state with evaporated particles and (possibly) a stable nucleus.
+// Base class to define a common interface for post-cascade processing.
 //
-// 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
-// 20130620  Address Coverity complaint about missing copy actions
-// 20130621  Drop collide() interface (base class will throw exception);
-//		follow base change to deExcite() with reference;
-//		add reusable G4InuclNuclei buffer, verbosity handler
-// 20130622  Inherit from G4CascadeDeexciteBase
+// 20130621  Add implementation of ::collide() to throw exception
 
-#include "G4CascadeDeexciteBase.hh"
-#include "globals.hh"
-
-class G4InuclParticle;
-class G4BigBanger;
-class G4NonEquilibriumEvaporator;
-class G4EquilibriumEvaporator;
+#include "G4VCascadeDeexcitation.hh"
+#include "G4HadronicException.hh"
 
 
-class G4CascadeDeexcitation : public G4CascadeDeexciteBase {
-public:
-  G4CascadeDeexcitation();
-  virtual ~G4CascadeDeexcitation();
+// Standard Collider interface must not be used, only G4Fragment
 
-  virtual void setVerboseLevel(G4int verbose);
+void G4VCascadeDeexcitation::collide(G4InuclParticle* /*bullet*/,
+				     G4InuclParticle* /*target*/,
+				     G4CollisionOutput& /*globalOutput*/) {
+  if (verboseLevel) {
+    G4cout << " >>> G4VCascadeDeexcitation[" << theName << "]::collide "
+	   << " *** SHOULD NOT BE CALLED ***" << G4endl;
+  }
 
-  // Interface specific to pre-compound (post-cascade) processing
-  virtual void deExcite(const G4Fragment& fragment,
-			G4CollisionOutput& globalOutput);
-
-private:
-  G4BigBanger* theBigBanger;
-  G4NonEquilibriumEvaporator* theNonEquilibriumEvaporator;
-  G4EquilibriumEvaporator* theEquilibriumEvaporator;
-
-  G4CollisionOutput tempOutput;	// Local buffer for de-excitation stages
-
-private:
-  // Copying of modules is forbidden
-  G4CascadeDeexcitation(const G4CascadeDeexcitation&);
-  G4CascadeDeexcitation& operator=(const G4CascadeDeexcitation&);
-};
-
-#endif	/* G4CASCADE_DEEXCITATION_HH */
+  throw G4HadronicException(__FILE__, __LINE__, 
+    "G4VCascadeDeexcitation::collide() invalid, must use ::deExcite(G4Fagment*)");
+}

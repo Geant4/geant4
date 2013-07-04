@@ -67,6 +67,8 @@
 // 20130221  M. Kelsey -- Add function to emplant particle along trajectory
 // 20130226  M. Kelsey -- Allow forcing zone selection in MFP calculation.
 // 20130302  M. Kelsey -- Add forceFirst() wrapper function (allows configuring)
+// 20130628  M. Kelsey -- Extend useQuasiDeuteron() to check good absorption,
+//		fix spelling of "Deutron" -> "Deuteron"
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -179,7 +181,7 @@ public:
   G4double totalCrossSection(G4double ke, G4int rtype) const;
 
   // Identify whether given particle can interact with dibaryons
-  static G4bool useQuasiDeutron(G4int ptype);
+  static G4bool useQuasiDeuteron(G4int ptype, G4int qdtype=0);
 
 protected:
   G4bool passFermi(const std::vector<G4InuclElementaryParticle>& particles, 
@@ -191,9 +193,9 @@ protected:
 
   void choosePointAlongTraj(G4CascadParticle& cparticle);
 
-  G4InuclElementaryParticle generateQuasiDeutron(G4int type1, 
-						 G4int type2,
-						 G4int zone) const;
+  G4InuclElementaryParticle generateQuasiDeuteron(G4int type1, 
+						  G4int type2,
+						  G4int zone) const;
 
   typedef std::pair<G4InuclElementaryParticle, G4double> partner;
 

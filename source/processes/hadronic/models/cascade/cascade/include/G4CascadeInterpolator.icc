@@ -114,8 +114,8 @@ template <int NBINS>
 void G4CascadeInterpolator<NBINS>::printBins(std::ostream& os) const {
   os << " G4CascadeInterpolator<" << NBINS << "> : " << G4endl;
   for (G4int k=0; k<NBINS; k++) {
-    os << " " << std::setw(5) << xBins[k];
-    if ((k+1)%12 == 0) os << G4endl;
+    os << " " << std::setw(6) << xBins[k];
+    if ((k+1)%10 == 0) os << G4endl;
   }
   os << G4endl;
 }

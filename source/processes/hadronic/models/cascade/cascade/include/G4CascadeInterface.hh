@@ -55,6 +55,7 @@
 // 20120822  M. Kelsey -- Add function to dump user configuration settings.
 //		Remove local verboseLevel; shadows base class data member.
 // 20130501  M. Kelsey -- Add static initializer to created shared objects.
+// 20130628  M. Kelsey -- Address Coverity warnings about copy operations.
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
@@ -176,6 +177,11 @@ private:
   G4InuclNuclei             nucleusTarget;
 
   G4LorentzRotation bulletInLabFrame;
+
+private:
+  // Copying of modules is forbidden
+  G4CascadeInterface(const G4CascadeInterface&);
+  G4CascadeInterface& operator=(const G4CascadeInterface&);
 };
 
 #endif // G4CASCADEINTERFACE_H

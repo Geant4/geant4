@@ -53,6 +53,7 @@
 // 20130422  M. Kelsey -- Move kinematics to G4CascadeFinalStateAlgorithm
 // 20130508  D. Wright -- Add muon capture, with absorption on quasideuterons
 // 20130620  Address Coverity complaint about missing copy actions
+// 20130628  Add function to split dibaryon into particle_kinds list
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
@@ -92,6 +93,8 @@ private:
   void generateSCMmuonAbsorption(G4double etot_scm,
 				 G4InuclElementaryParticle* particle1,
 				 G4InuclElementaryParticle* particle2); 
+
+  G4bool splitQuasiDeuteron(G4int qdtype); 	// Fill kinds with NN components
 
   void fillOutgoingMasses();		// Fill mass arrays from particle types
 

@@ -38,19 +38,23 @@
 // 20130612  BUG FIX:  Create separate FillDirThreeBody(), FillDirManyBody()
 //		in order to reporoduce old method: N-body states are filled
 //		from first to last, while three-body starts with the last.
+// 20130702  M. Kelsey: Copy phase-space algorithm from Kopylov; use if
+//		runtime envvar G4CASCADE_USE_PHASESPACE is set
 
 #include "G4CascadeFinalStateAlgorithm.hh"
+#include "G4CascadeParameters.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
 #include "G4MultiBodyMomentumDist.hh"
+#include "G4Pow.hh"
 #include "G4TwoBodyAngularDist.hh"
 #include "G4VMultiBodyMomDst.hh"
 #include "G4VTwoBodyAngDst.hh"
 #include "Randomize.hh"
 #include <vector>
 #include <numeric>
-#include <algorithm>
+#include <cmath>
 
 using namespace G4InuclSpecialFunctions;
 
@@ -132,7 +136,8 @@ void G4CascadeFinalStateAlgorithm::ChooseGenerators(G4int is, G4int fs) {
 	   << " is " << is << " fs " << fs << G4endl;
 
   // Get generators for momentum and angle
-  momDist = G4MultiBodyMomentumDist::GetDist(is, multiplicity);
+  if (G4CascadeParameters::usePhaseSpace()) momDist = 0;
+  else momDist = G4MultiBodyMomentumDist::GetDist(is, multiplicity);
 
   if (fs > 0 && multiplicity == 2) {
     G4int kw = (fs==is) ? 1 : 2;
@@ -198,6 +203,11 @@ GenerateMultiBody(G4double initialMass, const std::vector<G4double>& masses,
 		  std::vector<G4LorentzVector>& finalState) {
   if (GetVerboseLevel()>1) 
     G4cout << " >>> " << GetName() << "::GenerateMultiBody" << G4endl;
+
+  if (G4CascadeParameters::usePhaseSpace()) {
+    FillUsingKopylov(initialMass, masses, finalState);
+    return;
+  }
 
   finalState.clear();		// Initialization and sanity checks
   if (multiplicity < 3) return;
@@ -441,4 +451,67 @@ GenerateCosTheta(G4int ptype, G4double pmod) const {
   if (inuclRndm() > 0.5) costh = -costh;
 
   return costh;
+}
+
+
+// SPECIAL:  Generate N-body phase space using Kopylov algorithm
+//	     ==> Code is copied verbatim from G4HadPhaseSpaceKopylov
+
+void G4CascadeFinalStateAlgorithm::
+FillUsingKopylov(G4double initialMass,
+		 const std::vector<G4double>& masses,
+		 std::vector<G4LorentzVector>& finalState) {
+  if (GetVerboseLevel()>2)
+    G4cout << " >>> " << GetName() << "::FillUsingKopylov" << G4endl;
+
+  finalState.clear();
+
+  size_t N = masses.size();
+  finalState.resize(N);
+
+  G4double mtot = std::accumulate(masses.begin(), masses.end(), 0.0);
+  G4double mu = mtot;
+  G4double Mass = initialMass;
+  G4double T = Mass-mtot;
+  G4double recoilMass = 0.0;
+  G4ThreeVector momV, boostV;		// Buffers to reduce memory churn
+  G4LorentzVector recoil(0.0,0.0,0.0,Mass);
+
+  for (size_t k=N-1; k>0; --k) {
+    mu -= masses[k];
+    T *= (k>1) ? BetaKopylov(k) : 0.;
+    
+    recoilMass = mu + T;
+
+    boostV = recoil.boostVector();	// Previous system's rest frame
+    
+    // Create momentum with a random direction isotropically distributed
+    // FIXME:  Should theta distribution should use Bertini fit function?
+    momV.setRThetaPhi(TwoBodyMomentum(Mass,masses[k],recoilMass),
+		      UniformTheta(), UniformPhi());
+    
+    finalState[k].setVectM(momV,masses[k]);
+    recoil.setVectM(-momV,recoilMass);
+
+    finalState[k].boost(boostV);
+    recoil.boost(boostV);
+    Mass = recoilMass;
+  }
+  
+  finalState[0] = recoil;
+}
+
+G4double G4CascadeFinalStateAlgorithm::BetaKopylov(G4int K) const {
+  G4Pow* g4pow = G4Pow::GetInstance();
+
+  G4int N = 3*K - 5;
+  G4double xN = G4double(N);
+  G4double Fmax = std::sqrt(g4pow->powN(xN/(xN+1.),N)/(xN+1.)); 
+
+  G4double F, chi;
+  do {
+    chi = G4UniformRand();
+    F = std::sqrt(g4pow->powN(chi,N)*(1.-chi));      
+  } while ( Fmax*G4UniformRand() > F);  
+  return chi;
 }

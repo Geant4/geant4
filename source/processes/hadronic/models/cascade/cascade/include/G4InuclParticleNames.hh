@@ -32,9 +32,12 @@
 // 20101029  M. Kelsey -- Move antinucleons to 50-series, add deuteron
 // 20111007  M. Kelsey -- Change photon code to 9, for use in initial states
 // 20130508  D. Wright -- Add leptons and electroweak bosons
+// 20130627  M. Kelsey -- Add functions to convert enum to strings for printing
 
 #ifndef G4INUCL_PARTICLE_NAMES_HH
 #define G4INUCL_PARTICLE_NAMES_HH
+
+#include "globals.hh"
 
 namespace G4InuclParticleNames {
   enum Long { nuclei=0, proton=1, neutron=2,
@@ -66,6 +69,11 @@ namespace G4InuclParticleNames {
                wm=WMinus, wp=WPlus, z0=Zzero,
                ele=electron, mum=muonMinus, tm=tauMinus,
                pos=positron, mup=muonPlus, tp=tauPlus};
+
+  // Convert enum value to enum strings above for printing
+  const char* nameLong(G4int ptype);
+  const char* nameShort(G4int ptype);
+  inline const char* name(G4int ptype) { return nameLong(ptype); }
 }
 
 #endif	/* G4INUCL_PARTICLE_NAMES_HH */

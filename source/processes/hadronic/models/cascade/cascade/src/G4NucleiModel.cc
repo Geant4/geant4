@@ -135,6 +135,11 @@
 //		explicit check on spath==0.
 // 20130619  A. Ribon -- Fixed reproducibility problem in the method
 //              generateParticleFate
+// 20130627  M. Kelsey -- Check "path==0.", rather than spath.
+// 20130628  M. Kelsey -- Print deuteron type code, rather than array index,
+//		Extend useQuasiDeuteron() to check good absorption
+// 20130701  M. Kelsey -- Don't average 1/MFP for total interaction; just sum;
+//		inverseMFP() returns "large" value instead of input path.
 
 #include "G4NucleiModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -623,10 +628,10 @@ G4NucleiModel::generateNucleon(G4int type, G4int zone) const {
 
 
 G4InuclElementaryParticle
-G4NucleiModel::generateQuasiDeutron(G4int type1, G4int type2,
+G4NucleiModel::generateQuasiDeuteron(G4int type1, G4int type2,
 				    G4int zone) const {
   if (verboseLevel > 1) {
-    G4cout << " >>> G4NucleiModel::generateQuasiDeutron" << G4endl;
+    G4cout << " >>> G4NucleiModel::generateQuasiDeuteron" << G4endl;
   }
 
   // Quasideuteron consists of an unbound but associated nucleon pair
@@ -713,7 +718,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     invmfp = inverseMeanFreePath(cparticle, particle);
     spath  = generateInteractionLength(cparticle, path, invmfp);
 
-    if (spath==0. || spath < path) {
+    if (path<small || spath < path) {
       if (verboseLevel > 3) {
 	G4cout << " adding partner[" << thePartners.size() << "]: "
 	       << particle << G4endl;
@@ -727,7 +732,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }
 
   // Absorption possible for pions or photons interacting with dibaryons
-  if (useQuasiDeutron(cparticle.getParticle().type())) {
+  if (useQuasiDeuteron(cparticle.getParticle().type())) {
     if (verboseLevel > 2) {
       G4cout << " trying quasi-deuterons with bullet: "
 	     << cparticle.getParticle() << G4endl;
@@ -741,7 +746,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 
     // Proton-proton state interacts with pi-, mu- or neutrals
     if (protonNumberCurrent >= 2 && ptype != pip) {
-      G4InuclElementaryParticle ppd = generateQuasiDeutron(pro, pro, zone);
+      G4InuclElementaryParticle ppd = generateQuasiDeuteron(pro, pro, zone);
       if (verboseLevel > 2)
 	G4cout << " ptype=" << ptype << " using pp target\n" << ppd << G4endl;
       
@@ -753,7 +758,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     
     // Proton-neutron state interacts with any pion type or photon
     if (protonNumberCurrent >= 1 && neutronNumberCurrent >= 1) {
-      G4InuclElementaryParticle npd = generateQuasiDeutron(pro, neu, zone);
+      G4InuclElementaryParticle npd = generateQuasiDeuteron(pro, neu, zone);
       if (verboseLevel > 2) 
 	G4cout << " ptype=" << ptype << " using np target\n" << npd << G4endl;
       
@@ -765,7 +770,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     
     // Neutron-neutron state interacts with pi+ or neutrals
     if (neutronNumberCurrent >= 2 && ptype != pim && ptype != mum) {
-      G4InuclElementaryParticle nnd = generateQuasiDeutron(neu, neu, zone);
+      G4InuclElementaryParticle nnd = generateQuasiDeuteron(neu, neu, zone);
       if (verboseLevel > 2)
 	G4cout << " ptype=" << ptype << " using nn target\n" << nnd << G4endl;
       
@@ -787,21 +792,23 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     if (tot_invmfp > small) {		// Must have absorption cross-section
       G4double apath = generateInteractionLength(cparticle, path, tot_invmfp);
       
-      if (apath==0. || apath < path) {		// choose the qdeutron
+      if (path<small || apath < path) {		// choose the qdeutron
 	G4double sl = inuclRndm() * tot_invmfp;
 	G4double as = 0.0;
 	
 	for (size_t i = 0; i < qdeutrons.size(); i++) {
 	  as += acsecs[i];
 	  if (sl < as) { 
-	    if (verboseLevel > 2) G4cout << " deut type " << i << G4endl; 
+	    if (verboseLevel > 2)
+	      G4cout << " deut type " << qdeutrons[i] << G4endl; 
+
 	    thePartners.push_back(partner(qdeutrons[i], apath));
 	    break;
 	  }
 	}	// for (qdeutrons...
       }		// if (apath < path)
     }		// if (tot_invmfp > small)
-  }		// if (useQuasiDeutron) [pion, muon or photon]
+  }		// if (useQuasiDeuteron) [pion, muon or photon]
   
   if (verboseLevel > 2) {
     G4cout << " after deuterons " << thePartners.size() << " partners"
@@ -1005,9 +1012,15 @@ generateParticleFate(G4CascadParticle& cparticle,
 
 // Test if particle is suitable for absorption with dibaryons
 
-G4bool G4NucleiModel::useQuasiDeutron(G4int ptype) {
-  return (ptype == pi0 || ptype == pip || ptype == pim ||
-	  ptype == gam || ptype == mum);
+G4bool G4NucleiModel::useQuasiDeuteron(G4int ptype, G4int qdtype) {
+  if (qdtype==pn || qdtype==0)		// All absorptive particles
+    return (ptype==pi0 || ptype==pip || ptype==pim || ptype==gam || ptype==mum);
+  else if (qdtype==pp)			// Negative or neutral only
+    return (ptype==pi0 || ptype==pim || ptype==gam || ptype==mum);
+  else if (qdtype==nn)			// Positive or neutral only
+    return (ptype==pi0 || ptype==pip || ptype==gam);
+
+  return false;		// Not a quasideuteron target
 }
 
 
@@ -1200,7 +1213,7 @@ void G4NucleiModel::choosePointAlongTraj(G4CascadParticle& cparticle) {
     static const G4InuclElementaryParticle neutronEP(neutron);
     static const G4InuclElementaryParticle protonEP(proton);
     G4double invmfp = (inverseMeanFreePath(cparticle, neutronEP, iz)
-		       + inverseMeanFreePath(cparticle, protonEP, iz)) / 2.;
+		       + inverseMeanFreePath(cparticle, protonEP, iz));
 
     // Integral of exp(-len/mfp) from start of zone to end
     G4double wt = (std::exp(-len[i-1]*invmfp)-std::exp(-len[i]*invmfp)) / invmfp;
@@ -1208,8 +1221,9 @@ void G4NucleiModel::choosePointAlongTraj(G4CascadParticle& cparticle) {
     wtlen[i] = wtlen[i-1] + wt;
 
     if (verboseLevel > 3) {
-      G4cout << " i " << i << " iz " << iz << " dlen " << dlen
-	     << " wt " << wt << " wtlen " << wtlen[i] << G4endl;
+      G4cout << " i " << i << " iz " << iz << " avg.mfp " << 1./invmfp
+	     << " dlen " << dlen  << " wt " << wt << " wtlen " << wtlen[i]
+	     << G4endl;
     }
   }
 
@@ -1292,7 +1306,7 @@ G4bool G4NucleiModel::worthToPropagate(const G4CascadParticle& cparticle) const 
 
 
 G4double G4NucleiModel::getRatio(G4int ip) const {
-  if (verboseLevel > 3) {
+  if (verboseLevel > 4) {
     G4cout << " >>> G4NucleiModel::getRatio " << ip << G4endl;
   }
 
@@ -1791,7 +1805,7 @@ G4NucleiModel::inverseMeanFreePath(const G4CascadParticle& cparticle,
 	   << " csec " << csec << G4endl;
   }
 
-  if (csec <= 0.) return 0.;		// No interaction, avoid unnecessary work
+  if (csec <= 0.) return 0.;	// No interaction, avoid unnecessary work
 
   // Get nuclear density and compute mean free path
   return csec * getCurrentDensity(ip, zone);
@@ -1806,21 +1820,21 @@ G4NucleiModel::generateInteractionLength(const G4CascadParticle& cparticle,
   const G4double young_cut = std::sqrt(10.0) * 0.25;
   const G4double huge_num = 50.0;	// Argument to exponential
 
-  if (invmfp < small) return path;	// No interaction, avoid unnecessary work
+  G4double spath = large;		// Buffer for return value
 
-  G4double pw = -path * invmfp;
+  if (invmfp < small) return spath;	// No interaction, avoid unnecessary work
+
+  G4double pw = -path * invmfp;		// Ratio of path in zone to MFP
   if (pw < -huge_num) pw = -huge_num;
   pw = 1.0 - std::exp(pw);
     
   if (verboseLevel > 2) 
     G4cout << " mfp " << 1./invmfp << " pw " << pw << G4endl;
     
-  G4double spath = path;		// Buffer for return value
-
   // Primary particle(s) should always interact at least once
   if (forceFirst(cparticle) || (inuclRndm() < pw)) {
     spath = -std::log(1.0 - pw * inuclRndm()) / invmfp;
-    if (cparticle.young(young_cut, spath)) spath = path;
+    if (cparticle.young(young_cut, spath)) spath = large;
     
     if (verboseLevel > 2) 
       G4cout << " spath " << spath << " path " << path << G4endl;
@@ -1833,7 +1847,7 @@ G4NucleiModel::generateInteractionLength(const G4CascadParticle& cparticle,
 // Parametrized cross section for pion and photon absorption
 
 G4double G4NucleiModel::absorptionCrossSection(G4double ke, G4int type) const {
-  if (!useQuasiDeutron(type)) {
+  if (!useQuasiDeuteron(type)) {
     G4cerr << " absorptionCrossSection only valid for incident pions" << G4endl;
     return 0.;
   }

@@ -97,6 +97,12 @@ protected:
 
   G4double GenerateCosTheta(G4int ptype, G4double pmod) const;
 
+  // SPECIAL:  Generate N-body phase space using Kopylov algorithm
+  void FillUsingKopylov(G4double initialMass,
+			const std::vector<G4double>& masses,
+			std::vector<G4LorentzVector>& finalState);
+
+  G4double BetaKopylov(G4int K) const;	// Copied from G4HadPhaseSpaceKopylov
 
 private:
   const G4VMultiBodyMomDst* momDist;	// Buffers for selected distributions

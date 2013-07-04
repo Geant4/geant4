@@ -65,6 +65,10 @@
 // 20121009  M. Kelsey -- Improve debugging output
 // 20130129  M. Kelsey -- Move QF interpolation to global statics for
 //		multi-threaded shared memory.
+// 20130621  M. Kelsey -- Remove turning off conservation checks after fission
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
+// 20130628  Fissioner produces G4Fragment output directly in G4CollisionOutput
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4SystemOfUnits.hh"
@@ -72,6 +76,7 @@
 #include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
 #include "G4Fissioner.hh"
+#include "G4Fragment.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4InuclParticleNames.hh"
@@ -84,32 +89,29 @@ using namespace G4InuclSpecialFunctions;
 
 
 G4EquilibriumEvaporator::G4EquilibriumEvaporator()
-  : G4CascadeColliderBase("G4EquilibriumEvaporator") {
+  : G4CascadeDeexciteBase("G4EquilibriumEvaporator") {
   parms.first.resize(6,0.);
   parms.second.resize(6,0.);
 }
 
 G4EquilibriumEvaporator::~G4EquilibriumEvaporator() {}
 
+void G4EquilibriumEvaporator::setVerboseLevel(G4int verbose) {
+  G4CascadeDeexciteBase::setVerboseLevel(verbose);
+  theFissioner.setVerboseLevel(verbose);
+  theBigBanger.setVerboseLevel(verbose);
+}
 
-void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
-				      G4InuclParticle* target,
-				      G4CollisionOutput& output) {
+
+// Main operation
+
+void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
+				       G4CollisionOutput& output) {
   if (verboseLevel) {
-    G4cout << " >>> G4EquilibriumEvaporator::collide" << G4endl;
+    G4cout << " >>> G4EquilibriumEvaporator::deExcite" << G4endl;
   }
 
-  // Sanity check
-  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
-  if (!nuclei_target) {
-    G4cerr << " EquilibriumEvaporator -> target is not nuclei " << G4endl;    
-    return;
-  }
-
-  if (verboseLevel>1) G4cout << " evaporating target: \n" << *target << G4endl;
-
-  theFissioner.setVerboseLevel(verboseLevel);
-  theBigBanger.setVerboseLevel(verboseLevel);
+  if (verboseLevel>1) G4cout << " evaporating target: \n" << target << G4endl;
 
   // simple implementation of the equilibium evaporation a la Dostrowski
   const G4double huge_num = 50.0;
@@ -132,11 +134,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   G4double W[8], u[6], V[6], TM[6];
   G4int A1[6], Z1[6];
 
-  G4int A = nuclei_target->getA();
-  G4int Z = nuclei_target->getZ();
-  G4LorentzVector PEX = nuclei_target->getMomentum();
-  G4double EEXS = nuclei_target->getExitationEnergy();
-  
+  getTargetData(target);
   if (verboseLevel > 3) G4cout << " after noeq: eexs " << EEXS << G4endl;
 
   G4InuclElementaryParticle dummy(small_ekin, proton);
@@ -149,18 +147,18 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   // See if fragment should just be dispersed
   if (explosion(A, Z, EEXS)) {
     if (verboseLevel > 1) G4cout << " big bang in eql start " << G4endl;
-    theBigBanger.collide(0, target, output);
+    theBigBanger.deExcite(target, output);
 
-    validateOutput(0, target, output);		// Check energy conservation
+    validateOutput(target, output);		// Check energy conservation
     return;
   }
 
   // If nucleus is in ground state, no evaporation
   if (EEXS < cut_off_energy) {
     if (verboseLevel > 1) G4cout << " no energy for evaporation" << G4endl;
-    output.addOutgoingNucleus(*nuclei_target);
+    output.addRecoilFragment(target);
 
-    validateOutput(0, target, output);		// Check energy conservation
+    validateOutput(target, output);		// Check energy conservation
     return;
   }
 
@@ -190,10 +188,9 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
       if (verboseLevel > 2) 
 	G4cout << " big bang in eql step " << itry_global << G4endl;
 
-      G4InuclNuclei nuclei(PEX, A, Z, EEXS, G4InuclParticle::Equilib);        
-      theBigBanger.collide(0, &nuclei, output);
+      theBigBanger.deExcite(makeFragment(PEX,A,Z,EEXS), output);
 
-      validateOutput(0, target, output);	// Check energy conservation
+      validateOutput(target, output);	// Check energy conservation
       return;	
     } 
 
@@ -522,8 +519,6 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	if (itry1 == itry_max || bad) try_again = false;
       } else { 	// if (icase < 6)
-	G4InuclNuclei nuclei(A, Z, EEXS, G4InuclParticle::Equilib);        
-
 	if (verboseLevel > 2) {
 	  G4cout << " fission: A " << A << " Z " << Z << " eexs " << EEXS
 		 << " Wn " << W[0] << " Wf " << W[6] << G4endl;
@@ -531,24 +526,19 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
 
 	// Catch fission output separately for verification
 	fission_output.reset();
-	theFissioner.collide(0, &nuclei, fission_output);
+	theFissioner.deExcite(makeFragment(A,Z,EEXS), fission_output);
 
-	std::vector<G4InuclNuclei>& nuclea = fission_output.getOutgoingNuclei();
-	if (nuclea.size() == 2) { 		// fission ok
+	if (fission_output.numberOfFragments() == 2) { 		// fission ok
 	  if (verboseLevel > 2) G4cout << " fission done in eql" << G4endl;
 
 	  // Move fission fragments to lab frame for processing
 	  fission_output.boostToLabFrame(toTheNucleiSystemRestFrame);
 
 	  // Now evaporate the fission fragments individually
-	  G4bool prevDoChecks = doConservationChecks;	// Turn off checking
-	  setConservationChecks(false);
+	  this->deExcite(fission_output.getRecoilFragment(0), output);
+	  this->deExcite(fission_output.getRecoilFragment(1), output);
 
-	  this->collide(0, &nuclea[0], output);
-	  this->collide(0, &nuclea[1], output);
-
-	  setConservationChecks(prevDoChecks);	// Restore previous flag value
-	  validateOutput(0, target, output);	// Check energy conservation
+	  validateOutput(target, output);	// Check energy conservation
 	  return;
 	} else { // fission forbidden now
 	  fission_open = false;
@@ -568,7 +558,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   G4LorentzVector pnuc = pin - ppout;
 
   // NOTE:  In-situ constructor will be optimized away (no copying)
-  output.addOutgoingNucleus(G4InuclNuclei(pnuc, A, Z, EEXS,
+  output.addOutgoingNucleus(G4InuclNuclei(pnuc, A, Z, 0.,
 					  G4InuclParticle::Equilib));
 
   if (verboseLevel > 3) {
@@ -577,7 +567,7 @@ void G4EquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   }
 
 
-  validateOutput(0, target, output);		// Check energy conservation
+  validateOutput(target, output);		// Check energy conservation
   return;
 }		     
 

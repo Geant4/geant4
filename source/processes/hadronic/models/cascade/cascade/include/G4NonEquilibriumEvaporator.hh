@@ -31,22 +31,21 @@
 // 20100714  M. Kelsey -- Switch to new G4CascadeColliderBase class
 // 20100914  M. Kelsey -- Migrate to integer A and Z
 // 20130620  Address Coverity complaint about missing copy actions
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
 
 #ifndef G4NON_EQUILIBRIUM_EVAPORATOR_HH
 #define G4NON_EQUILIBRIUM_EVAPORATOR_HH
 
-#include "G4CascadeColliderBase.hh"
+#include "G4CascadeDeexciteBase.hh"
 
-class G4CollisionOutput;
-class G4InuclParticle;
 
-class G4NonEquilibriumEvaporator : public G4CascadeColliderBase {
+class G4NonEquilibriumEvaporator : public G4CascadeDeexciteBase {
 public:
   G4NonEquilibriumEvaporator();
   virtual ~G4NonEquilibriumEvaporator() {}
 
-  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       G4CollisionOutput& output);
+  virtual void deExcite(const G4Fragment& target, G4CollisionOutput& output);
 
 private: 
   G4double getMatrixElement(G4int A) const;

@@ -30,6 +30,9 @@
 # 20130419  M. Kelsey -- Add multi-body generator and supporting classes
 # 20130508  M. Kelsey -- Add new classes for muon capture
 # 20130521  M. Kelsey -- Add new PP (including NN) angular distribution
+# 20130621  M. Kelsey -- Add G4VCascadeDeexcitation.cc
+# 20130627  M. Kelsey -- Add G4InuclParticleNames.cc with enum/string fns
+# 20130630  M. Kelsey -- Add G4CascadeDeexciteBase
 #------------------------------------------------------------------------------
 
 # List external includes needed.
@@ -84,6 +87,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeCheckBalance.hh
         G4CascadeCoalescence.hh
         G4CascadeColliderBase.hh
+        G4CascadeDeexciteBase.hh
         G4CascadeData.hh
         G4CascadeData.icc
         G4CascadeDeexcitation.hh
@@ -203,6 +207,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4CascadeCheckBalance.cc
         G4CascadeCoalescence.cc
         G4CascadeColliderBase.cc
+        G4CascadeDeexciteBase.cc
         G4CascadeDeexcitation.cc
 	G4CascadeFinalStateAlgorithm.cc
 	G4CascadeFinalStateGenerator.cc
@@ -269,6 +274,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4InuclParamAngDst.cc
         G4InuclParamMomDst.cc
         G4InuclParticle.cc
+        G4InuclParticleNames.cc
         G4InuclSpecialFunctions.cc
         G4KaonHypSampler.cc
         G4LorentzConvertor.cc
@@ -288,6 +294,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4TwoBodyAngularDist.cc
         G4UnboundPN.cc
         G4VCascadeCollider.cc
+        G4VCascadeDeexcitation.cc
         G4VMultiBodyMomDst.cc
         G4VTwoBodyAngDst.cc
         G4WatcherGun.cc

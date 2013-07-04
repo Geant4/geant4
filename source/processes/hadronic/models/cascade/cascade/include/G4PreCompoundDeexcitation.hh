@@ -34,8 +34,12 @@
 //		instead of copying
 // 20100926  M. Kelsey -- Move to new G4VCascadeDeexcitation base class.
 // 20130620  Address Coverity complaint about missing copy actions
+// 20130621  Drop collide() interface (base class will throw exception);
+//		follow base change to deExcite() with reference.
+// 20130622  Inherit from G4CascadeDeexciteBase, add verbosity interface
+//		to pass to PreCompound
 
-#include "G4VCascadeDeexcitation.hh"
+#include "G4CascadeDeexciteBase.hh"
 #include "globals.hh"
 
 class G4InuclNuclei;
@@ -44,18 +48,16 @@ class G4ExcitationHandler;
 class G4VPreCompoundModel;
 
 
-class G4PreCompoundDeexcitation : public G4VCascadeDeexcitation {
+class G4PreCompoundDeexcitation : public G4CascadeDeexciteBase {
 
 public:
   G4PreCompoundDeexcitation();
   virtual ~G4PreCompoundDeexcitation();
 
-  // Standard Collider interface (bullet is not used in this case)
-  void collide(G4InuclParticle* /*bullet*/, G4InuclParticle* target,
-	       G4CollisionOutput& globalOutput);
+  virtual void setVerboseLevel(G4int verbose);
 
   // Interface specific to pre-compound (post-cascade) processing
-  virtual void deExcite(G4Fragment* fragment,
+  virtual void deExcite(const G4Fragment& fragment,
 			G4CollisionOutput& globalOutput);
 
 private:

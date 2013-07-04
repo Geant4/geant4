@@ -201,8 +201,8 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 
   // Generate pion or photon collision with quasi-deuteron
   if (particle1->quasi_deutron() || particle2->quasi_deutron()) {
-    if ( !(G4NucleiModel::useQuasiDeutron(particle1->type()) ||	     // Sanity check
-	   G4NucleiModel::useQuasiDeutron(particle2->type())) ) {
+    if (!G4NucleiModel::useQuasiDeuteron(particle1->type(),particle2->type()) &&
+	!G4NucleiModel::useQuasiDeuteron(particle2->type(),particle1->type())) {
       G4cerr << " ElementaryParticleCollider -> can only collide pi,mu,gamma with"
 	     << " dibaryons " << G4endl;
       return;
@@ -212,7 +212,7 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
 
     if (particle1->isMuon() || particle2->isMuon()) {
       generateSCMmuonAbsorption(etot_scm, particle1, particle2);
-    } else {
+    } else {		// Currently, pion absoprtion also handles gammas
       generateSCMpionAbsorption(etot_scm, particle1, particle2);
     }
   }    
@@ -400,42 +400,16 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
   G4int type1 = particle1->type();
   G4int type2 = particle2->type();
 
-  // generate kinds
-
-  if (type1 == pionPlus) {
-    if (type2 == diproton) {		// pi+ + PP -> ? 
-      G4cerr << " pion absorption: pi+ + PP -> ? " << G4endl;
-      return;
-    } else if (type2 == unboundPN) { 	// pi+ + PN -> PP
-      particle_kinds.push_back(proton);
-      particle_kinds.push_back(proton);
-    } else if (type2 == dineutron) { 	// pi+ + NN -> PN
-      particle_kinds.push_back(proton);
-      particle_kinds.push_back(neutron);
-    }
-  } else if (type1 == pionMinus) { 
-    if (type2 == diproton) {		// pi- + PP -> PN 
-      particle_kinds.push_back(proton);
-      particle_kinds.push_back(neutron);
-    } else if (type2 == unboundPN) {	 // pi- + PN -> NN
-      particle_kinds.push_back(neutron);
-      particle_kinds.push_back(neutron);
-    } else if (type2 == dineutron) {	// pi- + NN -> ?
-      G4cerr << " pion absorption: pi- + NN -> ? " << G4endl;
-      return;
-    }
-  } else if (type1 == pionZero || type1 == photon) {
-    if (type2 == diproton) {		// pi0/gamma + PP -> PP 
-      particle_kinds.push_back(proton);
-      particle_kinds.push_back(proton);
-    } else if (type2 == unboundPN) {	// pi0/gamma + PN -> PN
-      particle_kinds.push_back(proton);
-      particle_kinds.push_back(neutron);
-    } else if (type2 == dineutron) {	// pi0/gamma + NN -> ?
-      particle_kinds.push_back(neutron);
-      particle_kinds.push_back(neutron);
-    }
+  // Ensure that absportion is valid (charge conservable)
+  if (!G4NucleiModel::useQuasiDeuteron(type1, type2)) {
+    G4cerr << " pion absorption: "
+	   << particle1->getDefinition()->GetParticleName() << " + "
+	   << particle2->getDefinition()->GetParticleName() << " -> ?"
+	   << G4endl;
+    return;
   }
+
+  if (!splitQuasiDeuteron(type2)) return;	// Get constituents of [NN]
 
   fillOutgoingMasses();
 
@@ -449,8 +423,6 @@ G4ElementaryParticleCollider::generateSCMpionAbsorption(G4double etot_scm,
 
   particles[0].fill(mom1, particle_kinds[0], G4InuclParticle::EPCollider);
   particles[1].fill(mom2, particle_kinds[1], G4InuclParticle::EPCollider);
-
-  return;
 }
 
 
@@ -481,20 +453,18 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
 
   if (type1 != muonMinus) return;	// Sanity check, only mu- absorption
 
-  // Generate final state particle types
-  if (type2 == diproton) {            // mu- + PP -> P N nu_mu
-    particle_kinds.push_back(mnu);
-    particle_kinds.push_back(proton);
-    particle_kinds.push_back(neutron);
-  } else if (type2 == unboundPN) {    // mu- + PN -> N N nu_mu
-    particle_kinds.push_back(mnu);
-    particle_kinds.push_back(neutron);
-    particle_kinds.push_back(neutron);
-  } else if (type2 == dineutron) {
-    G4cerr << " mu- absorption: mu- + NN -> ? " << G4endl;
+  // Ensure that absportion is valid (charge conservable)
+  if (!G4NucleiModel::useQuasiDeuteron(type1, type2)) {
+    G4cerr << " mu- absorption: "
+	   << particle1->getDefinition()->GetParticleName() << " + "
+	   << particle2->getDefinition()->GetParticleName() << " -> ?"
+	   << G4endl;
     return;
   }
 
+  if (!splitQuasiDeuteron(type2)) return;	// Get constituents of [NN]
+  particle_kinds.push_back(mnu);
+  
   fillOutgoingMasses();
 
   G4GDecay3 breakup(etot_scm, masses[0], masses[1], masses[2]);
@@ -504,6 +474,22 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
     scm_momentums[i].setVectM(theMomenta[i], masses[i]);
     particles[i].fill(scm_momentums[i], particle_kinds[i], G4InuclParticle::EPCollider);
   }
-
-  return;
 } 
+
+
+// generate constituents of dibaryon for "explosion"
+
+G4bool G4ElementaryParticleCollider::splitQuasiDeuteron(G4int qdtype) {
+  if (qdtype != diproton && qdtype != unboundPN && qdtype != dineutron) {
+    G4cerr << " type " << qdtype << " not dibaryon!" << G4endl;
+    return false;
+  }
+
+  G4int b2 = qdtype % 10;	// Dibaryon codes are 1ab (a=1,2; b=1,2)
+  G4int b1 = (qdtype/10) % 10;
+
+  particle_kinds.push_back(b1);
+  particle_kinds.push_back(b2);
+
+  return true;
+}

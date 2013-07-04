@@ -34,30 +34,28 @@
 // 20110801  M. Kelsey -- Pass C arrays to ::potentialMinimization()
 // 20130129  M. Kelsey -- Put buffer for output nuclei here for thread-safety
 // 20130620  Address Coverity complaint about missing copy actions
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
+// 20130628  Drop local list of fragments; add directly to output
 
 #ifndef G4FISSIONER_HH
 #define G4FISSIONER_HH
 
-#include "G4CascadeColliderBase.hh"
+#include "G4CascadeDeexciteBase.hh"
 #include "G4FissionStore.hh"
 #include "G4InuclNuclei.hh"
 #include <vector>
 
-class G4CollisionOutput;
-class G4InuclParticle;
 
-
-class G4Fissioner : public G4CascadeColliderBase {
+class G4Fissioner : public G4CascadeDeexciteBase {
 public:
-  G4Fissioner() : G4CascadeColliderBase("G4Fissioner"), frags(2) {;}
+  G4Fissioner() : G4CascadeDeexciteBase("G4Fissioner") {;}
   virtual ~G4Fissioner() {;}
 
-  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       G4CollisionOutput& output);
+  virtual void deExcite(const G4Fragment& target, G4CollisionOutput& output);
 
 private: 
   G4FissionStore fissionStore;
-  std::vector<G4InuclNuclei> frags;
 
   G4double getC2(G4int A1, 
 		 G4int A2, 

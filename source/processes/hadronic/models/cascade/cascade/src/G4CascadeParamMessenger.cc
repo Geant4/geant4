@@ -27,6 +27,9 @@
 // Define simple UI commands as alternative to environment variables
 //
 // 20130304  M. Kelsey -- Add flag to collect and display cascade structure
+// 20130621  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's; add
+//		flag to use three-body momentum parametrizations
+// 20130703  M. Kelsey -- Add flag for USE_PHASESPACE
 
 #include "G4CascadeParamMessenger.hh"
 #include "G4CascadeParameters.hh"
@@ -50,6 +53,8 @@ G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
 
   verboseCmd = CreateCommand<G4UIcmdWithAnInteger>("verbose",
 			"Enable information messages");
+  balanceCmd = CreateCommand<G4UIcmdWithABool>("checkBalance",
+			"Enable internal conservation checking");
   reportCmd = CreateCommand<G4UIcmdWithoutParameter>("report",
 			"Dump all non-default parameter settings");
   usePreCoCmd = CreateCommand<G4UIcmdWithABool>("usePreCompound",
@@ -58,6 +63,10 @@ G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
 			"Apply final-state nucleon clustering");
   historyCmd = CreateCommand<G4UIcmdWithABool>("showHistory",
 		        "Collect and report full structure of cascade");
+  use3BodyCmd = CreateCommand<G4UIcmdWithABool>("use3BodyMom",
+			"Use three-body momentum parametrizations");
+  usePSCmd = CreateCommand<G4UIcmdWithABool>("usePhaseSpace",
+			"Use Kopylov N-body momentum generator");
   randomFileCmd = CreateCommand<G4UIcmdWithAString>("randomFile",
 			"Save random-engine to file at each interaction");
   nucUseBestCmd = CreateCommand<G4UIcmdWithABool>("useBestNuclearModel",
@@ -88,10 +97,13 @@ G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
 
 G4CascadeParamMessenger::~G4CascadeParamMessenger() {
   delete verboseCmd;
+  delete balanceCmd;
   delete reportCmd;
   delete usePreCoCmd;
   delete doCoalCmd;
   delete historyCmd;
+  delete use3BodyCmd;
+  delete usePSCmd;
   delete randomFileCmd;
   delete nucUseBestCmd;
   delete nucRad2parCmd;
@@ -141,6 +153,9 @@ void G4CascadeParamMessenger::SetNewValue(G4UIcommand* cmd, G4String arg) {
   if (cmd == verboseCmd) 
     theParams->G4CASCADE_VERBOSE = strdup(arg.c_str());
 
+  if (cmd == balanceCmd) 
+    theParams->G4CASCADE_CHECK_ECONS = StoB(arg) ? strdup(arg.c_str()) : 0;
+
   if (cmd == usePreCoCmd) 
     theParams->G4CASCADE_USE_PRECOMPOUND = StoB(arg) ? strdup(arg.c_str()) : 0;
 
@@ -149,6 +164,12 @@ void G4CascadeParamMessenger::SetNewValue(G4UIcommand* cmd, G4String arg) {
 
   if (cmd == historyCmd) 
     theParams->G4CASCADE_SHOW_HISTORY = StoB(arg) ? strdup(arg.c_str()) : 0;
+
+  if (cmd == use3BodyCmd)
+    theParams->G4CASCADE_USE_3BODYMOM = StoB(arg) ? strdup(arg.c_str()) : 0;
+
+  if (cmd == usePSCmd)
+    theParams->G4CASCADE_USE_PHASESPACE = StoB(arg) ? strdup(arg.c_str()) : 0;
 
   if (cmd == randomFileCmd)
     theParams->G4CASCADE_RANDOM_FILE = arg.empty() ? 0 : strdup(arg.c_str());

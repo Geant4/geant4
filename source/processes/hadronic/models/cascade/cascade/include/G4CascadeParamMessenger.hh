@@ -27,6 +27,9 @@
 // Define simple UI commands as alternative to environment variables
 //
 // 20130304  M. Kelsey -- Add flag to collect and display cascade structure
+// 20130621  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's; add
+//		flag to use three-body momentum parametrizations
+// 20130703  M. Kelsey -- Add flag for USE_PHASESPACE
 
 #ifndef G4CascadeParamMessenger_hh
 #define G4CascadeParamMessenger_hh
@@ -65,9 +68,12 @@ private:
 
   G4UIcmdWithAnInteger* verboseCmd;
   G4UIcmdWithoutParameter* reportCmd;
+  G4UIcmdWithABool*	balanceCmd;
   G4UIcmdWithABool*     usePreCoCmd;
   G4UIcmdWithABool*     doCoalCmd;
   G4UIcmdWithABool*     historyCmd;
+  G4UIcmdWithABool*     use3BodyCmd;
+  G4UIcmdWithABool*     usePSCmd;
   G4UIcmdWithAString*   randomFileCmd;
   G4UIcmdWithABool*     nucUseBestCmd;
   G4UIcmdWithADouble*   nucRad2parCmd;

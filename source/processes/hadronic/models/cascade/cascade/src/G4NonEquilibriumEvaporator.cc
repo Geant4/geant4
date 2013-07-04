@@ -45,12 +45,15 @@
 // 20110922  M. Kelsey -- Follow G4InuclParticle::print(ostream&) migration
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 // 20121009  M. Kelsey -- Add some high-verbosity debugging output
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
 
 #include <cmath>
 
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4CollisionOutput.hh"
+#include "G4Fragment.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
@@ -60,25 +63,16 @@ using namespace G4InuclSpecialFunctions;
 
 
 G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
-  : G4CascadeColliderBase("G4NonEquilibriumEvaporator") {}
+  : G4CascadeDeexciteBase("G4NonEquilibriumEvaporator") {}
 
 
-void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
-					 G4InuclParticle* target,
-					 G4CollisionOutput& output) {
-
+void G4NonEquilibriumEvaporator::deExcite(const G4Fragment& target,
+					  G4CollisionOutput& output) {
   if (verboseLevel) {
-    G4cout << " >>> G4NonEquilibriumEvaporator::collide" << G4endl;
+    G4cout << " >>> G4NonEquilibriumEvaporator::deExcite" << G4endl;
   }
 
-  // Sanity check
-  G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target);
-  if (!nuclei_target) {
-    G4cerr << " NonEquilibriumEvaporator -> target is not nuclei " << G4endl;    
-    return;
-  }
-
-  if (verboseLevel > 2) G4cout << " evaporating target:\n" << *target << G4endl;
+  if (verboseLevel>1) G4cout << " evaporating target:\n" << target << G4endl;
   
   const G4int a_cut = 5;
   const G4int z_cut = 3;
@@ -90,16 +84,10 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
   const G4double small_ekin = 1.0e-6;
   const G4double width_cut = 0.005;
 
-  G4int A = nuclei_target->getA();
-  G4int Z = nuclei_target->getZ();
-  
-  G4LorentzVector PEX = nuclei_target->getMomentum();
+  getTargetData(target);
   G4LorentzVector pin = PEX;		// Save original four-vector for later
   
-  G4double EEXS = nuclei_target->getExitationEnergy();
-  
-  G4ExitonConfiguration config = nuclei_target->getExitonConfiguration();  
-
+  G4ExitonConfiguration config(target);  
   G4int QPP = config.protonQuasiParticles;
   G4int QNP = config.neutronQuasiParticles; 
   G4int QPH = config.protonHoles;
@@ -446,32 +434,31 @@ void G4NonEquilibriumEvaporator::collide(G4InuclParticle* /*bullet*/,
     } else try_again = false;		// if (A > a_cut ...
   }		// while (try_again)
   
-  // everything finished, set output nuclei
+  // everything finished, set output fragment
 
   if (output.numberOfOutgoingParticles() == 0) {
-    output.addOutgoingNucleus(*nuclei_target);
+    output.addRecoilFragment(target);
   } else {
     G4LorentzVector pnuc = pin - ppout;
-    G4InuclNuclei nuclei(pnuc, A, Z, EEXS, G4InuclParticle::NonEquilib);
+    output.addRecoilFragment(makeFragment(pnuc, A, Z, EEXS));
     
-    if (verboseLevel > 3) G4cout << " remaining nucleus\n" << nuclei << G4endl;
-    output.addOutgoingNucleus(nuclei);
+    if (verboseLevel>3) 
+      G4cout << " remaining nucleus\n" << output.getRecoilFragment() << G4endl;
   }
 
-  validateOutput(0, target, output);	// Check energy conservation, etc.
+  validateOutput(target, output);	// Check energy conservation, etc.
   return;
 }
 
-G4double G4NonEquilibriumEvaporator::getMatrixElement(G4int A) const {
-
+G4double G4NonEquilibriumEvaporator::getMatrixElement(G4int a) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getMatrixElement" << G4endl;
   }
 
   G4double me;
 
-  if (A > 150) me = 100.0;
-  else if (A > 20) me = 140.0;
+  if (a > 150) me = 100.0;
+  else if (a > 20) me = 140.0;
   else me = 70.0;
  
   return me;
@@ -487,15 +474,13 @@ G4double G4NonEquilibriumEvaporator::getE0(G4int ) const {
   return e0;   
 }
 
-G4double G4NonEquilibriumEvaporator::getParLev(G4int A, 
-					       G4int ) const {
-
+G4double G4NonEquilibriumEvaporator::getParLev(G4int a, G4int ) const {
   if (verboseLevel > 3) {
     G4cout << " >>> G4NonEquilibriumEvaporator::getParLev" << G4endl;
   }
 
   //  const G4double par = 0.125;
-  G4double pl = 0.125 * A;
+  G4double pl = 0.125 * a;
 
   return pl; 
 }

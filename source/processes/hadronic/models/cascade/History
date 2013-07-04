@@ -15,7 +15,157 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-20 June 2013  Micahel Kelsey (hadr-casc-V09-06-35)
+3 July 2013  Michael Kelsey (hadr-casc-V09-06-43)
+-------------------------------------------------
+- G4CascadeFinalStateAlgorithm:  Add Kopylov N-body phase space generation,
+  with function code copied from G4HadPhaseSpaceKopylov.  Use with runtime
+  envvar flag (G4CASCADE_USE_PHASESPACE) in place of multi-parameter 3-body
+  and 4-body generators.  Two-body distributions are not changed.
+
+- G4CascadeParameters, G4CascadeParamMessenger: Add new envvar,
+  G4CASCADE_USE_PHASESPACE, and associated functions, to switch between
+  multiparameter and Kopylov N-body generators.
+
+2 July 2013  Michael Kelsey
+---------------------------
+- G4NucleiModel.cc:  Minor tweaks:  generateInteractionLength() now returns
+  "large" (1000.) instead of input path length when calculations fail; this
+  eliminates the effect of "spath < path" vs. "spath <= path" comparisons.
+  For dibaryon absorption, use sum of invMFPs, not average.  Small
+  improvements to some diagnostic messages.
+
+28 June 2013  Michael Kelsey (hadr-casc-V09-06-42)
+--------------------------------------------------
+PROBLEM:  Code committed below did not include last round of changes to
+support multiple G4Fragments from G4Fissioner.  Those were lost accidentally
+during directory manipulation on my local disk.
+
+- G4CascadeDeexciteBase:  Add makeFragment() without momentum for at-rest
+  nuclei.
+
+- G4Fissioner:  Remove local G4InuclNuclei vector; create fission fragments as
+  G4Fragments directly into output buffer.
+
+- G4CollisionOutput:  Replace single recoil fragment with list; apply
+  associated changes throughout support functions.
+
+- G4EquilibriumEvaporator.cc: Use G4Fragments output from G4Fissioner.
+
+- G4CascadeDeexcitation.cc: Add printing of intermediate outputs from each
+  de-excitation stage.
+
+28 June 2013  Michael Kelsey (hadr-casc-V09-06-41)
+--------------------------------------------------
+Reorganize de-excitation modules to use G4Fragment throughout process.  Only
+final ground-state nucleus will be instantiated as a G4InuclNuclei object.
+This should substantially reduce the load on G4IonTable in MT operations.
+
+- G4CascadeCheckBalance: Replace interface for "G4Fissioner" with version
+  which takes G4Fragments for target and output.
+
+- G4CascadeColliderBase: Move explosion() functions and G4Fragment-related
+  valiateOutput() functions to new G4CascadeDeexciteBase.
+
+- G4CascadeDeexciteBase: NEW concrete subclass of G4VCascadeDeexcitation.
+  Takes over "operational" support from G4CascadeColliderBase, including
+  explosion() functions, local copy of G4CascadeCheckBalance, and
+  conservation checking functions.  Provides utilities to extract common
+  data from input G4Fragment for all modules, and to construct a G4Fragment.
+
+- G4CascadeDeexcitation: Inherit from G4CascadeDeexciteBase.
+
+- G4PreCompoundDeexcitation: Inherit from G4CascadeDeexciteBase.
+
+- G4VCascadeDeexcitation: Inherit directly from G4VCascadeCollider.
+
+- G4ExitonConfiguration:  Add interface to copy from G4Fragment.
+
+- G4EvaporationInuclCollider, G4NonEquilibriumEvaporator,
+  G4BigBanger, G4Fissioner, G4EquilibriumEvaporator: Move all to inherit
+  from G4CascadeDeexciteBase, replace collide() with deExcite(), use
+  G4Fragment in place of G4InuclNuclei everywhere except final ground-state
+  output.
+
+- sources.cmake:  Add G4CascadeDeexciteBase.hh and .cc.
+
+28 June 2013  Michael Kelsey (hadr-casc-V09-06-40)
+--------------------------------------------------
+Improve encapsulation of pion and muon absorption through dibaryons.
+
+- G4NucleiModel:  Add optional argument to useQuasiDeuteron() (fixed spelling)
+  to take dibaryon code, validate charge-exchange interactions.
+
+- G4ElementaryParticleCollider:  Add function to split dibaryon into
+  component particle types; use G4NM::useQuasiDeuteron() for sanity checks
+  instead of nested if-blocks.
+
+28 June 2013  Michael Kelsey (hadr-casc-V09-06-39)
+--------------------------------------------------
+Address Coverity 37230 and 37385.
+
+- G4CascadeInterface.hh:  Add unimplemented declarations for copy operations.
+
+27 June 2013  Michael Kelsey (hadr-casc-V09-06-38)
+--------------------------------------------------
+- G4NucleiModel.cc:  Minor tweak: change "spath==0." test to "path==0.", to
+  check actual path length (equivalent to zero-momentum), rather than
+  generated random value.
+
+- G4InuclParticleNames:  Add functions to convert enum values to strings,
+  for diagnostic messages.  New .cc file required for implementation.
+
+- G4CascadeData.icc:  For diagnostics, use new enum-to-string function, add
+  explicit space between xsec values, and print only 10 values per line.
+
+- G4CascadeInterpolator.icc:  For diagnostics, change output to setw(6), and
+  print only 10 values per line.
+
+- sources.cmake:  Add G4InuclParticleNames.cc.
+
+21 June 2013  Michael Kelsey (hadr-casc-V09-06-37)
+--------------------------------------------------
+- G4VCascadeDeexcitation: Disable collide() interface, with implementation
+  which throws exception when called.  Subclasses will use deExcite()
+  interface, with a const-reference, directly (creating a G4InuclNuclei only
+  if necessary).
+
+- G4CascadeDeexcitation:  Remove collide() interface.  Move code into
+  deExcite(), and create temporary G4InucleNuclei (with reusable buffer) as
+  needed.  Add verbosity setting function.
+
+- G4PreCompoundDeexcitation:  Remove collide() interface; code uses
+  G4Fragment directly via deExcite().
+
+- G4CascadeCheckBalance:  Add interface to take G4Fragment initial state.
+
+- G4CascadeColliderBase:  Change explosion() to take const-ref G4Fragment.
+  Use new CheckBalance(G4Fragment) interface in validateOutput().
+
+- G4EquilibriumEvaporator.hh:  Change explosion() call-through to take
+  const-ref G4Fragment.
+
+- G4InuclCollider.cc:  Use G4Fragment interface to de-excitation modules and
+  validateOutput().
+
+21 June 2013  Michael Kelsey (hadr-casc-V09-06-36)
+--------------------------------------------------
+- G4CascadeParameters:  Add new flag to perform internal conservation checks,
+  replacing compile-time G4CASCADE_CHECK_ECONS preprocessor directive.
+
+- G4CascadeParamMessenger:  Add macro commands for USE_3BODYMOM and CHECK_ECONS
+  parameter flags.
+
+- G4CascadeColliderBase:  Remove doConservationChecks flag.  Use run-time
+  flag (above) to conditionally instantiate CheckBalance, test pointer
+  before use.
+
+- G4EquilibriumEvaporator:  Remove turning-off of conservation checks after
+  fission.  Follows removal of flag from G4CascadeColliderBase.
+
+- GNUmakefile:  Remove G4CASCADE_CHECK_ECONS preprocessor directive.  Envvar
+  will be mapped to run-time parameter (above).
+
+20 June 2013  Michael Kelsey (hadr-casc-V09-06-35)
 --------------------------------------------------
 Address numerous Coverity warnings which have build up since November 2011.
 No modifications to working code were required.
@@ -33,13 +183,13 @@ No modifications to working code were required.
 	G4GDecay3.cc			G4VCascadeDeexcitation.hh
 	G4IntraNucleiCascader.hh
 
-19 June 2013  Micahel Kelsey (hadr-casc-V09-06-34)
+19 June 2013  Michael Kelsey (hadr-casc-V09-06-34)
 --------------------------------------------------
 - G4TwoBodyAngularDist.hh, G4MultiBodyMomentumDist.hh:  Replace use of
   "theInstance" with calls to "GetInstance()" to ensure instantiation in MT
   environment.
 
-19 June 2013  Micahel Kelsey (hadr-casc-V09-06-33)
+19 June 2013  Michael Kelsey (hadr-casc-V09-06-33)
 --------------------------------------------------
 - G4TwoBodyAngularDist, G4MultiBodyMomentumDist:  Fix thread collisions
   in MT operation by changing singleton instances from "static const" to

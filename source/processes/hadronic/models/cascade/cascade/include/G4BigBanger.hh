@@ -34,24 +34,23 @@
 // 20100726  M. Kelsey -- Move std::vector<> buffer to .hh file
 // 20100928  M. Kelsey -- Migrate to integer A and Z
 // 20130620  Address Coverity complaint about missing copy actions
+// 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
+//		with G4Fragment
 
 #ifndef G4BIG_BANGER_HH
 #define G4BIG_BANGER_HH
 
-#include "G4CascadeColliderBase.hh"
+#include "G4CascadeDeexciteBase.hh"
 #include "G4InuclElementaryParticle.hh"
 #include <vector>
 
-class G4CollisionOutput;
 
-
-class G4BigBanger : public G4CascadeColliderBase {
+class G4BigBanger : public G4CascadeDeexciteBase {
 public:
   G4BigBanger();
   virtual ~G4BigBanger() {};
 
-  void collide(G4InuclParticle* bullet, G4InuclParticle* target,
-	       G4CollisionOutput& output);
+  virtual void deExcite(const G4Fragment& target, G4CollisionOutput& output);
 
 private: 
   void generateBangInSCM(G4double etot, G4int a, G4int z);
