@@ -75,6 +75,7 @@
 #include "G4Element.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -503,13 +504,13 @@ void G4NistMaterialBuilder::SetVerbose(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::ListMaterials(const G4String& mnam)
+void G4NistMaterialBuilder::ListMaterials(const G4String& mnam) const
 {
   if (mnam == "simple")           { ListNistSimpleMaterials(); }
   else if (mnam == "compound")    { ListNistCompoundMaterials(); }
   else if (mnam == "hep")         { ListHepMaterials(); }
   else if (mnam == "space")       { ListSpaceMaterials(); }
-  else if (mnam == "biochemical") { ListBioChemicalMaterials(); }
+  else if (mnam == "bio")         { ListBioChemicalMaterials(); }
 
   else if (mnam == "all") {
     ListNistSimpleMaterials();
@@ -526,90 +527,92 @@ void G4NistMaterialBuilder::ListMaterials(const G4String& mnam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::ListNistSimpleMaterials()
+void G4NistMaterialBuilder::ListNistSimpleMaterials() const
 {
   G4cout << "=======================================================" << G4endl;
-  G4cout << "###   Simple Materials from the NIST Data Base   ###" << G4endl;
+  G4cout << "###   Simple Materials from the NIST Data Base      ###" << G4endl;
   G4cout << "=======================================================" << G4endl;
-  G4cout << " Z Name  ChFormula        density(g/cm^3)  I(eV)       " << G4endl;
+  G4cout << " Z   Name   density(g/cm^3)  I(eV)                     " << G4endl;
   G4cout << "=======================================================" << G4endl;
   for (G4int i=0; i<nElementary; ++i) {DumpElm(i);}
-  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::ListNistCompoundMaterials()
+void G4NistMaterialBuilder::ListNistCompoundMaterials() const
 {
-  G4cout << "###    Compound Materials from the NIST Data Base    ##" << G4endl;
-  G4cout << "=======================================================" << G4endl;
-  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
-  G4cout << "=======================================================" << G4endl;
+  G4cout << "=============================================================" << G4endl;
+  G4cout << "###    Compound Materials from the NIST Data Base          ##" << G4endl;
+  G4cout << "=============================================================" << G4endl;
+  G4cout << " Ncomp             Name      density(g/cm^3)  I(eV) ChFormula" << G4endl;
+  G4cout << "=============================================================" << G4endl;
   for (G4int i=nElementary; i<nNIST; ++i) {DumpMix(i);}
-  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::ListHepMaterials()
+void G4NistMaterialBuilder::ListHepMaterials() const
 {
-  G4cout << "=======================================================" << G4endl;
-  G4cout << "###           HEP & Nuclear Materials                ##" << G4endl;
-  G4cout << "=======================================================" << G4endl;
-  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
-  G4cout << "=======================================================" << G4endl;
+  G4cout << "=============================================================" << G4endl;
+  G4cout << "###           HEP & Nuclear Materials                      ##" << G4endl;
+  G4cout << "=============================================================" << G4endl;
+  G4cout << " Ncomp             Name      density(g/cm^3)  I(eV) ChFormula" << G4endl;
+  G4cout << "=============================================================" << G4endl;
   for (G4int i=nNIST; i<nHEP; ++i) {DumpMix(i);}
-  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::ListSpaceMaterials()
+void G4NistMaterialBuilder::ListSpaceMaterials() const
 {
-  G4cout << "=======================================================" << G4endl;
-  G4cout << "###           Space ISS Materials                    ##" << G4endl;
-  G4cout << "=======================================================" << G4endl;
-  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
-  G4cout << "=======================================================" << G4endl;
+  G4cout << "=============================================================" << G4endl;
+  G4cout << "###           Space ISS Materials                          ##" << G4endl;
+  G4cout << "=============================================================" << G4endl;
+  G4cout << " Ncomp             Name      density(g/cm^3)  I(eV) ChFormula" << G4endl;
+  G4cout << "=============================================================" << G4endl;
   for (G4int i=nHEP; i<nSpace; ++i) {DumpMix(i);}
-  G4cout << "=======================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::ListBioChemicalMaterials()
+void G4NistMaterialBuilder::ListBioChemicalMaterials() const
 {
-  G4cout << "=======================================================" << G4endl;
-  G4cout << "###          Bio-Chemical Materials                  ##" << G4endl;
-  G4cout << "=======================================================" << G4endl;
-  G4cout << " Ncomp Name  ChFormula        density(g/cm^3)  I(eV)   " << G4endl;
-  G4cout << "=======================================================" << G4endl;
+  G4cout << "=============================================================" << G4endl;
+  G4cout << "###          Bio-Chemical Materials                        ##" << G4endl;
+  G4cout << "=============================================================" << G4endl;
+  G4cout << " Ncomp             Name      density(g/cm^3)  I(eV) ChFormula" << G4endl;
+  G4cout << "=============================================================" << G4endl;
   for (G4int i=nSpace; i<nMaterials; ++i) {DumpMix(i);}
-  G4cout << "=======================================================" << G4endl;
+  G4cout << "=============================================================" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::DumpElm(G4int i)
+void G4NistMaterialBuilder::DumpElm(G4int i) const
 {
-  G4cout << i+1 << "  " << names[i] << "  " << chFormulas[i]
-         << densities[i]*cm3/g << "     " << ionPotentials[i]/eV
+  G4cout << std::setw(2) << i+1 << " " 
+	 << std::setw(6) << names[i] 
+         << std::setw(14) << densities[i]*cm3/g 
+	 << std::setw(11) << ionPotentials[i]/eV
 	 << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistMaterialBuilder::DumpMix(G4int i)
+void G4NistMaterialBuilder::DumpMix(G4int i) const
 {
   G4int nc = components[i];
-  G4cout << nc << "  " << names[i] << "  " << chFormulas[i]
-         << densities[i]*cm3/g << "     " << ionPotentials[i]/eV
+  G4cout << std::setw(2)  << nc << " "
+	 << std::setw(26) << names[i] << " " 
+         << std::setw(10) << densities[i]*cm3/g 
+	 << std::setw(10) << ionPotentials[i]/eV
+	 << "   " << chFormulas[i]
 	 << G4endl;
   if (nc > 1) {
     G4int imin = indexes[i];
     G4int imax = imin + nc;
     for (G4int j=imin; j<imax; ++j) {
-      G4cout << "              " << elements[j] << "     " << fractions[j] 
+      G4cout << std::setw(10) << elements[j] << std::setw(14) << fractions[j] 
              << G4endl;
     }
   }

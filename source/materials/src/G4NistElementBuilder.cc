@@ -80,7 +80,7 @@ G4NistElementBuilder::~G4NistElementBuilder()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int G4NistElementBuilder::GetZ(const G4String& name)
+G4int G4NistElementBuilder::GetZ(const G4String& name) const
 {
   G4int Z = maxNumElements;
   do {--Z;} while( Z>0 && elmSymbol[Z] != name);
@@ -89,7 +89,7 @@ G4int G4NistElementBuilder::GetZ(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4NistElementBuilder::GetAtomicMassAmu(const G4String& name)
+G4double G4NistElementBuilder::GetAtomicMassAmu(const G4String& name) const
 {
   G4int Z = maxNumElements;
   do {--Z;} while( Z>0 && elmSymbol[Z] != name);
@@ -185,7 +185,7 @@ G4Element* G4NistElementBuilder::BuildElement(G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistElementBuilder::PrintElement(G4int Z)
+void G4NistElementBuilder::PrintElement(G4int Z) const
 {
   G4int imin = Z;
   G4int imax = Z+1;

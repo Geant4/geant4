@@ -130,15 +130,15 @@ public:
   // "biochemical" - bio-chemical materials 
   // "all" - all
   //
-  void ListMaterials(const G4String&);
+  void ListMaterials(const G4String&) const;
 
   // cout lists of predefined materials
   //
-  void ListNistSimpleMaterials();
-  void ListNistCompoundMaterials();
-  void ListHepMaterials();
-  void ListSpaceMaterials();
-  void ListBioChemicalMaterials();
+  void ListNistSimpleMaterials() const;
+  void ListNistCompoundMaterials() const;
+  void ListHepMaterials() const;
+  void ListSpaceMaterials() const;
+  void ListBioChemicalMaterials() const;
 
   // access to the list of names of Geant4 predefined materials
   //
@@ -176,8 +176,8 @@ private:
   // build a G4Material from dataBase
   G4Material* BuildMaterial(G4int idx);
 
-  void DumpElm(G4int);
-  void DumpMix(G4int);
+  void DumpElm(G4int) const;
+  void DumpMix(G4int) const;
 
 private:
 

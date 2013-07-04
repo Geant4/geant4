@@ -240,6 +240,7 @@ public:
   // "simple" - only pure materials in basic state (Z = 1, ..., 98)
   // "compound" - NIST compounds
   // "hep" - HEP materials and compounds
+  // "bio" - bio-medical materials and compounds
   // "all" - all
   //
   inline void ListMaterials(const G4String&);

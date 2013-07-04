@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-07-13 V.Ivanchenko (materials-V09-06-19)
+- G4NistMaterialBuilder - make all access/print methods to be const;
+    added formatting of printout (bug #1423)
+- G4NistElementBuilder - make access/print methods to be const
+- G4ElementData - added array of 2D-tables 
+
 14-06-13 P.Gumplinger (materials-V09-06-18)
 - Partially fix for coverity errors in G4OpticalSurface.cc
 

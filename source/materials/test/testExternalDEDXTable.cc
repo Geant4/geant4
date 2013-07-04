@@ -65,11 +65,11 @@ void Test(const G4String& fileName) {
 
   G4LPhysicsFreeVector* physVecZ3MatH = 
                  new G4LPhysicsFreeVector(31, E[0] * MeV, E[30] * MeV);
-  physVecZ3MatH -> SetSpline(true);
 
   for(size_t i = 0; i < 31; i++) {
     physVecZ3MatH -> PutValues(i, E[i] * MeV, H_3[i] * factor);
   }
+  physVecZ3MatH -> SetSpline(true);
 
   // Lithium ions in tissue
   G4double A_3[31]={2.748,2.992,3.386,3.674,3.877,4.016,4.108,4.166,4.2,
@@ -79,11 +79,11 @@ void Test(const G4String& fileName) {
 
   G4LPhysicsFreeVector* physVecZ3MatTissue = 
                  new G4LPhysicsFreeVector(31, E[0] * MeV, E[30] * MeV);
-  physVecZ3MatTissue -> SetSpline(true);
 
   for(size_t i = 0; i < 31; i++) {
       physVecZ3MatTissue -> PutValues(i, E[i] * MeV, A_3[i] * factor);
   }
+  physVecZ3MatTissue -> SetSpline(true);
 
   // ########################################################################
   // # Test 1:

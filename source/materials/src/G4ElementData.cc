@@ -60,6 +60,7 @@ G4ElementData::~G4ElementData()
 {
   for(G4int i=0; i<maxNumElements; ++i) {
     delete elmData[i];
+    delete elm2Data[i];
     if(compLength[i] > 0) {
       for(size_t j=0; j<compLength[i]; ++j) {
         delete (compData[i])[j];
@@ -79,6 +80,19 @@ void G4ElementData::InitialiseForElement(G4int Z, G4PhysicsVector* v)
   } 
   if(elmData[Z]) { delete elmData[Z]; }
   elmData[Z] = v;
+}
+
+void G4ElementData::InitialiseForElement(G4int Z, G4Physics2DVector* v)
+{
+  if(Z < 1 || Z >= maxNumElements) {
+    G4cout << "G4ElementData::InitialiseForElement ERROR for " << name 
+	   << "  Z = " << Z << " is out of range!" << G4endl;
+    G4Exception("G4ElementData::InitialiseForElement()", "mat601", 
+                 FatalException, "Wrong data handling");
+    return;
+  } 
+  if(elm2Data[Z]) { delete elm2Data[Z]; }
+  elm2Data[Z] = v;
 }
 
 void G4ElementData::InitialiseForComponent(G4int Z, G4int nComponents)
