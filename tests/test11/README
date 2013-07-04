@@ -1,17 +1,17 @@
 $Id$
 -------------------------------------------------------------------
 
-     =========================================================
-     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
-     =========================================================
+            ==================================================
+            Geant4 - an Object-Oriented Toolkit for Simulation
+            ==================================================
 
-                            Test11
-                            ------
+                                 Test11
+                                 ------
 
-Description:  neutron transport test using LEP and 
-              the HP (High Precision including Thermal Scattering) models.
-              The detector is a simple box made up of air, aluminum, lead 
-              or uranium.
+Description:  neutron transport test using Bertini, FTFP and HP (High Precision
+              including Thermal Scattering) models.
+              The detector is a simple box made up of air, aluminum, lead or
+              uranium.
 
 Type of test: run to completion
 

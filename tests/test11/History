@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 June 2013  Dennis Wright  (test11-V09-06-03)
+-----------------------------------------------
+- update README to reflect previous change from LEP to Bertini/FTFP
+- clean up commented-out lines in physics list
+
 11 June 2013  Dennis Wright  (test11-V09-06-02)
 -----------------------------------------------
 - Migrate to multi-threaded:
