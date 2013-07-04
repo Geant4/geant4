@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+July 3rd, 2013, A.Dotti (run-V09-06-68)
+- Add call to G4SetThreadId global function in G4UserWorkerInitialization::StartThread function
+- Remove unused list of G4WorkerRunManager from G4MTRunManager
+- Moving joining of threads in G4UserWorkerInitialization class from G4MTRunManager, 
+  now G4MTRunManager does not cantain anymore thread model specific code and delegates
+  all model to G4UserWorkerInitialization
+- Bug fix for G4cout use in G4RunManagerKernel::~G4RunManagerKernel for worker threads
+  (report from cdash on failure test60)
+
+July 2nd, 2013, M.Asai (run-V09-06-67)
+- Fix null-pointer access in G4VUserPhysicsList::BuildPhysicsList() for
+  second run.
+
+July 1st, 2013, M.Asai (run-V09-06-66)
+- Fix compilation error in the previous tag for sequential mode.
+
+July 1st, 2013, M.Asai (run-V09-06-65)
+- Process manager objects of all threads are now cleanly deleted.
+- G4MTRunManager causes G4Exception if there is a static G4Allocator
+  object in a multi-threaded mode.
 
 June 25th, 2013, A. Dotti (run-V09-06-64)
 - Bug fix for compilation with C++11 standard in G4MTRunManager.hh in

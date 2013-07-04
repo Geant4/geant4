@@ -339,21 +339,21 @@ void G4VUserPhysicsList::RemoveProcessManager()
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-
     if (particle->GetInstanceID() < G4ParticleDefinitionSubInstanceManager::slavetotalspace)
     {
-
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      if  (pmanager!=0) delete pmanager;
-      particle->SetProcessManager(0);
+      if(particle->GetParticleSubType()!="generic" || particle->GetParticleName()=="GenericIon")
+      {
+        G4ProcessManager* pmanager = particle->GetProcessManager();
+        if  (pmanager!=0) delete pmanager;
 #ifdef G4VERBOSE
-      if (verboseLevel >2){
-        G4cout << "G4VUserPhysicsList::RemoveProcessManager: ";
-        G4cout  << "remove ProcessManager from ";
-        G4cout  << particle->GetParticleName() << G4endl;
-      }
+        if (verboseLevel >2){
+          G4cout << "G4VUserPhysicsList::RemoveProcessManager: ";
+          G4cout  << "remove ProcessManager from ";
+          G4cout  << particle->GetParticleName() << G4endl;
+        }
 #endif
-
+      }
+      particle->SetProcessManager(0);
     }
   }
 
@@ -594,7 +594,6 @@ void G4VUserPhysicsList::BuildPhysicsTable()
   G4ParticleDefinition* ProtonP = theParticleTable->FindParticle("proton");
   if(ProtonP) BuildPhysicsTable(ProtonP);
 
-
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -614,6 +613,11 @@ void G4VUserPhysicsList::BuildPhysicsTable()
 //Change in order to share physics tables for two kind of process.
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
+  if(!(particle->GetMasterProcessManager())) {
+////    G4cout << "#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(" 
+////           << particle->GetParticleName() << ") skipped..." << G4endl;
+    return;
+  }
   if (fRetrievePhysicsTable) {
     if ( !fIsRestoredCutValues){
       // fail to retreive cut tables
@@ -684,11 +688,17 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 		  "No process Vector");
       return;
     }
-//G4cout << "G4VUserPhysicsList::BuildPhysicsTable %%%%%% " << particle->GetParticleName() << G4endl;
-//for(G4int iv1=0;iv1<pVector->size();iv1++)
-//{ G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName() << G4endl; }
-//for(G4int iv2=0;iv2<pVectorShadow->size();iv2++)
-//{ G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName() << G4endl; }
+#ifdef G4VERBOSE
+    if (verboseLevel>1){
+      G4cout << "G4VUserPhysicsList::BuildPhysicsTable %%%%%% " << particle->GetParticleName() << G4endl;
+      G4cout << " ProcessManager : " << pManager << " ProcessManagerShadow : " << pManagerShadow << G4endl;
+      for(G4int iv1=0;iv1<pVector->size();iv1++)
+      { G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName() << G4endl; }
+      G4cout << "--------------------------------------------------------------" << G4endl;
+      for(G4int iv2=0;iv2<pVectorShadow->size();iv2++)
+      { G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName() << G4endl; }
+    }
+#endif
     for (G4int j=0; j < pVector->size(); ++j) {
 
       G4VMultipleScattering *currentProcess = dynamic_cast<G4VMultipleScattering *>((*pVector)[j]);
@@ -747,6 +757,11 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
 {
+  if(!(particle->GetMasterProcessManager())) {
+////    G4cout << "#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(" 
+////           << particle->GetParticleName() << ") skipped..." << G4endl;
+    return;
+  }
   // Prepare the physics tables for every process for this particle type
   // if particle is not ShortLived
   if(!particle->IsShortLived()) {

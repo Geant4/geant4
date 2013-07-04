@@ -49,13 +49,16 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(true) {
     G4Exception("G4WorkerRunManager::G4WorkerRunManager()","Run0035",FatalException,msg);
 #endif
     G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
-    //Add this worker to the list of workers
-    G4MTRunManager::GetMasterRunManager()->AddWorkerRunManager(this);
     G4ScoringManager* masterScM = G4MTRunManager::GetMasterScoringManager();
     if(masterScM) G4ScoringManager::GetScoringManager(); //TLS instance for a worker
 }
 
+#include "G4MTRunManager.hh"
+
 G4WorkerRunManager::~G4WorkerRunManager() {
+    // Delete thread-local process manager objects
+    physicsList->RemoveProcessManager();
+
     //Put these pointers to zero: owned by master thread
     //If not to zero, the base class destructor will attempt to
     //delete them

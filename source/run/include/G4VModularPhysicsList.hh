@@ -120,7 +120,7 @@ class G4VModularPhysicsList: public virtual G4VUserPhysicsList
     //  The existing physics constructor with same physics_type as one of
     //  the given physics constructor is replaced
     //  (existing physics will be deleted)
-    //  If any corresponding physics constructor is found, 
+    //  If a corresponding physics constructor is NOT found, 
     //  the given physics constructor is just added         
     void ReplacePhysics(G4VPhysicsConstructor* );
 

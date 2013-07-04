@@ -33,8 +33,7 @@
 // It extends G4RunManager re-implementing multi-threaded behavior in
 // key methods. See documentation for G4RunManager
 // Users initializes an instance of this class instead of G4RunManager
-// to start a multi-threaded simulation. This class will instantiate and
-// constrol one or more G4WorkerRunManager classes
+// to start a multi-threaded simulation.
 
 #ifndef G4MTRunManager_h
 #define G4MTRunManager_h 1
@@ -46,7 +45,6 @@
 
 class G4ScoringManager;
 class G4UserWorkerInitialization;
-class G4WorkerRunManager;
 
 //TODO: Split random number storage from this class
 
@@ -96,8 +94,6 @@ private:
     static long* seeds;
     static G4int seedsnum;
     //List of workers run managers
-    typedef std::list<G4WorkerRunManager*> G4WorkerRunManagerList;
-    G4WorkerRunManagerList workersRM;
     //List of all workers run managers
     void TerminateWorkers();
     //Empty the workersList
@@ -136,8 +132,6 @@ public:
     static G4ScoringManager* GetMasterScoringManager() { return masterScM; }
     static masterWorlds_t& GetMasterWorlds() { return masterWorlds; }
     static void addWorld( G4int counter, G4VPhysicalVolume* w) { masterWorlds.insert( std::make_pair(counter,w) ); }
-    void AddWorkerRunManager( G4WorkerRunManager* workerRM );
-    //Should be called by Workers
     const CLHEP::HepRandomEngine* getMasterRandomEngine() const { return masterRNGEngine; }
 private:
     //Handling of master thread scoring worlds, access to it is needed by workers

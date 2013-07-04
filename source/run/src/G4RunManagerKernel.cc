@@ -256,7 +256,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   }
 
   G4UImanager* pUImanager = G4UImanager::GetUIpointer();
-  if(isWorker && (verboseLevel>1))
+  if(isWorker && (verboseLevel>0))
   {
     G4cout << "Thread-local UImanager is to be deleted." << G4endl 
            << "There should not be any thread-local G4cout/G4cerr hereafter."
@@ -269,7 +269,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   delete pStateManager; 
   if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   delete defaultExceptionHandler;
-  if(verboseLevel>1) G4cout << "RunManagerKernel is deleted." << G4endl;
+  if(verboseLevel>0) G4cout << "RunManagerKernel is deleted. Good bye :)" << G4endl;
   fRunManagerKernel = 0;
 }
 

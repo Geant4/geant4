@@ -212,6 +212,10 @@ protected:
 
     G4bool isWorker;
     G4int numberOfStaticAllocators;
+
+  public:
+    inline G4int GetNumberOfStaticAllocators() const
+    { return numberOfStaticAllocators; }
 };
 
 #endif

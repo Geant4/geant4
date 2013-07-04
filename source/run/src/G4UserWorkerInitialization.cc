@@ -106,7 +106,11 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //Initliazie per-thread stream-output
     //The following line is needed before we actually do IO initialization
     //becasue the constructor of UI manager resets the io destination.
-    G4UImanager::GetUIpointer()->SetUpForAThread(wThreadContext->GetThreadId());
+    G4int thisID = wThreadContext->GetThreadId();
+    G4UImanager::GetUIpointer()->SetUpForAThread(thisID);
+    //Set the global thread-ID for this thread,
+    //using a global function
+    G4SetThreadId(thisID);
     
     //================
     //Step-1:
@@ -294,16 +298,21 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //================
     //Ok, now there is nothing else to do , called user defined stuff
     masterRM->GetUserWorkerInitialization()->WorkerStop();
+    delete wrm;
     wThreadContext->DestroyGeometryAndPhysicsVector();
 
     //G4cout<<"Thread ID:"<<wThreadContext->GetThreadId()<<" WorkerRunManager Pointer: "<<wrm<<G4endl;///AAADEBUG
-    delete wrm;
 
 
 //#ifdef G4MULTITHREADED
 //    turnofftpmalloc();
 //#endif
     return static_cast<void*>(0);
+}
+
+void G4UserWorkerInitialization::JoinWorker(G4Thread* aThread)
+{
+    G4THREADJOIN(*aThread);
 }
 
 G4UserWorkerInitialization::G4UserWorkerInitialization()

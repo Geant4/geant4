@@ -109,6 +109,12 @@ public: // with description
     // Important: this method is called by all threads at the same time
     //   if is user responsibilitiy to make it thread-safe
 
+    virtual void JoinWorker(G4Thread* aThread);
+    // Called by the kernel when threads need to be terminated. Implements logic of
+    // joining the aThread. Calling thread will wait for aThread to end.
+    // Usere should not re-implement this function (in derived class), except only if he/she
+    // wants to verwrite the default threading model (see StartThread function)
+
 protected:   
     static G4ThreadLocal G4WorkerThread* wThreadContext;
     

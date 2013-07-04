@@ -47,8 +47,6 @@ G4MTRunManager::masterWorlds_t G4MTRunManager::masterWorlds = G4MTRunManager::ma
 G4MTRunManager* G4MTRunManager::masterRM = 0;
 
 namespace {
- G4Mutex workesRMMutex = G4MUTEX_INITIALIZER;
- //Mutex to access/manipulate workersRM
  G4Mutex cmdHandlingMutex = G4MUTEX_INITIALIZER;
  //Mutex to access/manipulate uiCmdsForWorker command stack
  G4Mutex scorerMergerMutex = G4MUTEX_INITIALIZER;
@@ -64,7 +62,11 @@ namespace {
 
 G4MTRunManager* G4MTRunManager::GetMasterRunManager()
 {
+////////#ifdef G4MULTITHREADED
     return masterRM;
+////////#else
+////////    return G4RunManager::GetRunManager();
+////////#endif
 }
 
 G4RunManagerKernel* G4MTRunManager::GetMasterRunManagerKernel()
@@ -90,6 +92,15 @@ G4MTRunManager::G4MTRunManager() : G4RunManager(false) ,
     G4Exception("G4MTRunManager::G4MTRunManager","Run0035",FatalException,msg);
 #endif
 
+    G4int numberOfStaticAllocators = kernel->GetNumberOfStaticAllocators();
+    if(numberOfStaticAllocators>0)
+    {
+      G4ExceptionDescription msg1;
+      msg1 << "There are " << numberOfStaticAllocators
+           << " static G4Allocator objects detected.\n"
+           << "In multi-threaded mode, all G4Allocator objects must be dynamicly instantiated.";
+      G4Exception("G4MTRunManager::G4MTRunManager","Run1035",FatalException,msg1);
+    }
     G4UImanager::GetUIpointer()->SetMasterUIManager(true);
     masterScM = G4ScoringManager::GetScoringManagerIfExist();
 
@@ -353,33 +364,18 @@ void G4MTRunManager::MergeRun(const G4Run* localRun)
 void G4MTRunManager::TerminateWorkers()
 {
     NewActionRequest( ENDWORKER );
-    //G4cout<<"ENDWORKER sent"<<G4endl;//AAAADEBUG
     //Now join threads.
-    //TODO: I don't like this since this should go in the thread-model part of the code
-    //something like: worker->join or something like this...
 #ifdef G4MULTITHREADED //protect here to prevent warning in compilation
     while ( ! threads.empty() )
     {
         G4Thread* t = * ( threads.begin() );
         threads.pop_front();
-        
-        //G4cout<<"In G4MTRunManager::TeraminteWorkers for "<<t<<G4endl;///AAADEBUG
-        G4THREADJOIN(*t);
-        //G4cout<<t<<" Join done"<<G4endl;///AAADEBUG
+        userWorkerInitialization->JoinWorker(t);
+        //G4THREADJOIN(*t);
         delete t;
     }
 #endif
     threads.clear();
-
-    G4AutoLock l(&workesRMMutex);
-    workersRM.clear();
-}
-
-void G4MTRunManager::AddWorkerRunManager(G4WorkerRunManager* wrm)
-{
-    //This operation should be mutexed
-    G4AutoLock l(&workesRMMutex);
-    workersRM.push_back(wrm);
 }
 
 
