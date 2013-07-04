@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03 June 13: V.Ivant (emutils-V09-06-42)
+- G4LossTableManager - foxed Coverity report
+- G4VEmFluctuationModel changed interface in SampleFluctuations 
+    method - G4Material pointer is substituted by G4MaterialCutsCouple 
+    pointer - modification is needed to PAI model
+- G4VEnergyLossProcess - changed interface to G4VEmFluctuationModel 
+
 27 June 13: V.Ivant (emutils-V09-06-41)
 - G4LossTableManager - return back to tag-39, because setup of min/max
     energies inside EM tables in some tables is done incorrectly,

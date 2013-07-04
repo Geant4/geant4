@@ -132,10 +132,17 @@ G4LossTableManager::~G4LossTableManager()
     if( emp_vector[k] ) { delete emp_vector[k]; }
   }
   size_t mod = mod_vector.size();
-  for (size_t a=0; a<mod; ++a) {
-    if( mod_vector[a] ) { delete mod_vector[a]; }
-  }
   size_t fmod = fmod_vector.size();
+  for (size_t a=0; a<mod; ++a) {
+    if( mod_vector[a] ) { 
+      for (size_t b=0; b<fmod; ++b) {
+	if((G4VEmModel*)(fmod_vector[b]) == mod_vector[a]) {
+	  fmod_vector[b] = 0;
+	}
+      }
+      delete mod_vector[a]; 
+    }
+  }
   for (size_t b=0; b<fmod; ++b) {
     if( fmod_vector[b] ) { delete fmod_vector[b]; }
   }
@@ -541,18 +548,6 @@ void G4LossTableManager::LocalPhysicsTables(
       part_vector[i] = p->Particle(); 
       base_part_vector[i] = p->BaseParticle(); 
       dedx_vector[i] = p->DEDXTable();
-      /*
-      if(2==run && "e-" == part_vector[i]->GetParticleName()) {
-	G4cout << "### G4LossTableManager::SlavePhysicsTable for e- " 
-	       << dedx_vector[i] << G4endl;
-	G4cout << "%%%%% InstanceID " << (*(dedx_vector[i]))[0]->GetInstanceID() 
-	       << G4endl;
-        G4cout << (*(dedx_vector[i])) << G4endl;
-	G4cout << "%%%%% LastValue= " << (*(dedx_vector[i]))[0]->GetLastValue() 
-	       << G4endl;
-	G4cout << "%%%%% 1.2 " << (*(dedx_vector[i]))[0]->Value(1.2) << G4endl;
-      }
-      */
       range_vector[i] = p->RangeTableForLoss();
       inv_range_vector[i] = p->InverseRangeTable();
       if(0 == run && p->IsIonisationProcess()) {
@@ -688,7 +683,7 @@ void G4LossTableManager::BuildPhysicsTable(
     }
     if ( !tables_are_built[i] ) { all_tables_are_built = false; }
   }
-  if(p && 0 == run && p->IsIonisationProcess()) { loss_map[aParticle] = p; }
+  if(0 == run && p->IsIonisationProcess()) { loss_map[aParticle] = p; }
 
   if(1 < verbose) {
     G4cout << "### G4LossTableManager::BuildPhysicsTable end: "

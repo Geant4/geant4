@@ -1534,9 +1534,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
       G4double tmax = 
 	std::min(currentModel->MaxSecondaryKinEnergy(dynParticle),cut);
-      G4double emean = eloss;
-      eloss = fluc->SampleFluctuations(currentMaterial,dynParticle,
-				       tmax,length,emean);
+      eloss = fluc->SampleFluctuations(currentCouple,dynParticle,
+				       tmax,length,eloss);
       /*                            
       if(-1 < verboseLevel) 
       G4cout << "After fluct: eloss(MeV)= " << eloss/MeV

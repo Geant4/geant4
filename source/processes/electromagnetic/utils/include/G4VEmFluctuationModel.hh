@@ -62,6 +62,7 @@
 class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4Material;
+class G4MaterialCutsCouple;
 
 class G4VEmFluctuationModel 
 {
@@ -76,16 +77,16 @@ public:
   // Virtual methods to be implemented for the concrete model
   //------------------------------------------------------------------------
 
-  virtual G4double SampleFluctuations(const G4Material*,
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
 				      const G4DynamicParticle*,
-				      G4double& tmax,
-				      G4double& length,
-				      G4double& meanLoss) = 0;
+				      G4double tmax,
+				      G4double length,
+				      G4double meanLoss) = 0;
 
   virtual G4double Dispersion(const G4Material*,
                               const G4DynamicParticle*,
-			      G4double& tmax,
-			      G4double& length) = 0;
+			      G4double tmax,
+			      G4double length) = 0;
 
   //------------------------------------------------------------------------
   // Methods with standard implementation; may be overwritten if needed 
