@@ -89,7 +89,10 @@ G4IonDEDXScalingICRU73::G4IonDEDXScalingICRU73(
 // ###########################################################################
 
 G4IonDEDXScalingICRU73::~G4IonDEDXScalingICRU73() {
-
+ if(referenceFe)
+ { delete referenceFe; referenceFe=0; }
+ if(referenceAr)
+ { delete referenceAr; referenceAr=0; }
 }
 
 // ###########################################################################
@@ -104,7 +107,12 @@ void G4IonDEDXScalingICRU73::CreateReferenceParticles() {
                                         excitationEnergy); 
   referenceAr = particleTable -> GetIon(atomicNumberRefAr, massNumberRefAr, 
                                         excitationEnergy); 
-  
+  G4bool tableReady = particleTable->GetReadiness();
+  particleTable->SetReadiness(false);        // Suppress error message
+  particleTable->Remove(referenceFe);        // Make invisible to GEANT4
+  particleTable->Remove(referenceAr);
+  particleTable->SetReadiness(tableReady);   // Set back 'ready to use' flag
+
   massRefFe = referenceFe -> GetPDGMass();
   massRefAr = referenceAr -> GetPDGMass();
 
