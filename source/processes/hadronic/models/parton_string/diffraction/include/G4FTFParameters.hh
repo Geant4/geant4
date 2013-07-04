@@ -66,8 +66,10 @@ class G4FTFParameters
         void SetAvaragePt2ofElasticScattering(const G4double aPt2);
 
 // --------- Set parameters of excitations ---------------------------
-        void SetMagQuarkExchange(const G4double aValue);
-        void SetSlopeQuarkExchange(const G4double aValue);
+        void SetParams(                         const G4int ProcN,     // Uzhi 3.05.2013
+                       const G4double A1,const  G4double B1,const  G4double A2,const  G4double B2,
+                       const G4double A3,const  G4double Atop,const  G4double Ymin);
+
         void SetDeltaProbAtQuarkExchange(const G4double aValue);
         void SetProbOfSameQuarkExchange(const G4double aValue);
 
@@ -117,18 +119,16 @@ class G4FTFParameters
         G4double GetAvaragePt2ofElasticScattering();
 
 // --------- Get parameters of excitations ---------------------------
-        G4double GetMagQuarkExchange();
-        G4double GetSlopeQuarkExchange();
+        G4double GetProcProb(const G4int ProcN, const G4double y);    // Uzhi 3.05.2013
+
         G4double GetDeltaProbAtQuarkExchange();
         G4double GetProbOfSameQuarkExchange();
 
         G4double GetProjMinDiffMass();
         G4double GetProjMinNonDiffMass();
-        G4double GetProbabilityOfProjDiff();
 
         G4double GetTarMinDiffMass();
         G4double GetTarMinNonDiffMass();
-        G4double GetProbabilityOfTarDiff();
 
         G4double GetAveragePt2();
         G4double GetProbLogDistr();
@@ -172,18 +172,16 @@ class G4FTFParameters
         G4double FTFGamma0;
 
 // --------- Parameters of excitations -------------------------------
-        G4double MagQuarkExchange;
-        G4double SlopeQuarkExchange;
+        G4double ProcParams[4][7];                                    // Uzhi 3.05.2013
+
         G4double DeltaProbAtQuarkExchange;
         G4double ProbOfSameQuarkExchange;
 
         G4double ProjMinDiffMass;
         G4double ProjMinNonDiffMass;
-        G4double ProbabilityOfProjDiff;
 
         G4double TarMinDiffMass;  
         G4double TarMinNonDiffMass;
-        G4double ProbabilityOfTarDiff;
 
         G4double AveragePt2;
         G4double ProbLogDistr;
@@ -252,10 +250,16 @@ inline  void G4FTFParameters::SetAvaragePt2ofElasticScattering(const G4double aP
 AvaragePt2ofElasticScattering = aPt2;}
 
 // --------- Set parameters of excitations ----------------------------
-inline  void G4FTFParameters::SetMagQuarkExchange(const G4double aValue)
-             {MagQuarkExchange = aValue;}
-inline  void G4FTFParameters::SetSlopeQuarkExchange(const G4double aValue)
-             {SlopeQuarkExchange = aValue;}
+inline  void G4FTFParameters::SetParams(        const G4int ProcN,     // Uzhi 3.05.2013
+                       const G4double A1,const  G4double B1,const  G4double A2,const  G4double B2,
+                       const G4double A3,const  G4double Atop,const  G4double Ymin)
+             {
+              ProcParams[ProcN][0]=  A1; ProcParams[ProcN][1]=  B1;
+              ProcParams[ProcN][2]=  A2; ProcParams[ProcN][3]=  B2;
+              ProcParams[ProcN][4]=  A3;
+              ProcParams[ProcN][5]=Atop; ProcParams[ProcN][6]=Ymin;
+             }
+
 inline  void G4FTFParameters::SetDeltaProbAtQuarkExchange(const G4double aValue)
              {DeltaProbAtQuarkExchange = aValue;}
 inline void G4FTFParameters::SetProbOfSameQuarkExchange(const G4double aValue)
@@ -265,15 +269,11 @@ inline  void G4FTFParameters::SetProjMinDiffMass(const G4double aValue)
              {ProjMinDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetProjMinNonDiffMass(const G4double aValue)
              {ProjMinNonDiffMass = aValue*CLHEP::GeV;}
-inline  void G4FTFParameters::SetProbabilityOfProjDiff(const G4double aValue)
-             {ProbabilityOfProjDiff = aValue;}
 
 inline  void G4FTFParameters::SetTarMinDiffMass(const G4double aValue)
              {TarMinDiffMass = aValue*CLHEP::GeV;}
 inline  void G4FTFParameters::SetTarMinNonDiffMass(const G4double aValue)
              {TarMinNonDiffMass = aValue*CLHEP::GeV;}
-inline  void G4FTFParameters::SetProbabilityOfTarDiff(const G4double aValue)
-             {ProbabilityOfTarDiff = aValue;}
 
 inline  void G4FTFParameters::SetAveragePt2(const G4double aValue)
              {AveragePt2 = aValue*CLHEP::GeV*CLHEP::GeV;}
@@ -359,19 +359,15 @@ inline  G4double G4FTFParameters::GetAvaragePt2ofElasticScattering()
                  {return AvaragePt2ofElasticScattering;}
 
 // --------- Get parameters of excitations ---------------------------
-inline  G4double G4FTFParameters::GetMagQuarkExchange()       {return MagQuarkExchange;}
-inline  G4double G4FTFParameters::GetSlopeQuarkExchange()     {return SlopeQuarkExchange;}
 inline  G4double G4FTFParameters::GetDeltaProbAtQuarkExchange(){return
                                                                 DeltaProbAtQuarkExchange;}
 inline  G4double G4FTFParameters::GetProbOfSameQuarkExchange(){return ProbOfSameQuarkExchange;}
 
 inline  G4double G4FTFParameters::GetProjMinDiffMass()        {return ProjMinDiffMass;}
 inline  G4double G4FTFParameters::GetProjMinNonDiffMass()     {return ProjMinNonDiffMass;}
-inline  G4double G4FTFParameters::GetProbabilityOfProjDiff()  {return ProbabilityOfProjDiff;} 
 
 inline  G4double G4FTFParameters::GetTarMinDiffMass()         {return TarMinDiffMass;}
 inline  G4double G4FTFParameters::GetTarMinNonDiffMass()      {return TarMinNonDiffMass;}
-inline  G4double G4FTFParameters::GetProbabilityOfTarDiff()   {return ProbabilityOfTarDiff;}
 
 inline  G4double G4FTFParameters::GetAveragePt2()             {return AveragePt2;}
 inline  G4double G4FTFParameters::GetProbLogDistr()           {return ProbLogDistr;}

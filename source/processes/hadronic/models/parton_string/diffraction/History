@@ -15,6 +15,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02-Jul-2013 A. Ribon       (hadr-string-diff-V09-06-14)
+-  Replaced CLHEP::RandFlat with G4RandFlat in G4DiffractiveExcitation.cc.
+
+13-June-2012 V. Uzhinsky   (hadr-string-diff-V09-06-13)
+-  New parameterizations of FTF process cross sections are implemented.
+   25 % of Delta-isobar probability was returned.
+   A best description of exp. data on hP, hA interactions is reached.
+   Results of FTF become close to QGSM, especially for heavy targets.
+
 02-May-2013 A. Ribon       (hadr-string-diff-V09-06-12)
 -  For thread safety, replaced CLHEP::RandFlat with G4RandFlat in 
    G4DiffractiveExcitation.cc and G4FTFAnnihilation.cc.

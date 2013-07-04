@@ -163,12 +163,10 @@ void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
         G4double TargetResidualMass=G4ParticleTable::GetParticleTable()->GetIonTable()->
                  GetIonMass(TargetResidualCharge ,TargetResidualMassNumber);
         TargetResidual4Momentum.setE(TargetResidualMass);
-
 //-----------------------------------------------
       if(std::abs(theProjectile.GetDefinition()->GetBaryonNumber()) <= 1) 
       { // Projectile is a hadron - meson or baryon
          PlabPerParticle=theProjectile.GetMomentum().z();
-
          ProjectileResidualMassNumber=
                    std::abs(theProjectile.GetDefinition()->GetBaryonNumber());
          ProjectileResidualCharge=(G4int) theProjectile.GetDefinition()->GetPDGCharge();
@@ -237,6 +235,7 @@ void G4FTFModel::Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aPro
         ProjectileResidual4Momentum.setVect(theProjectile.GetMomentum());
         ProjectileResidual4Momentum.setE(theProjectile.GetTotalEnergy());
       } //---------------------------------------------------
+
 //-------------------- Init target nucleus --------------------------------
         theParticipants.Init(aNucleus.GetA_asInt(),aNucleus.GetZ_asInt());
 // ------------------------------------------------------------------------
@@ -659,14 +658,19 @@ G4bool G4FTFModel::PutOnMassShell()
 
 //-------------------------------------------------------------
 // Sampling of nucleons what can transfer to delta-isobars ----
+//G4cout<<"// Sampling of nucleons what can transfer to delta-isobars ----"<<G4endl;
+//G4cout<<SqrtS/GeV<<" "<<SumMasses/GeV<<G4endl;
+//G4cout<<"NumberOfInvolvedNucleonsOfTarget "<<NumberOfInvolvedNucleonsOfTarget<<G4endl;
         G4int MaxNumberOfDeltas = (int)((SqrtS - SumMasses)/(400.*MeV));
         G4int NumberOfDeltas(0);
 
         if(theNucleus->GetMassNumber() != 1)
         {
-          G4double ProbDeltaIsobar(0.05);                           // Uzhi 6.07.2012
+//          G4double ProbDeltaIsobar(0.05);                           // Uzhi 6.07.2012
+G4double ProbDeltaIsobar(0.25);
 	  for(G4int i=0; i < NumberOfInvolvedNucleonsOfTarget; i++ )
           {
+//G4cout<<"i MaxNumberOfDeltas ProbDeltaIsobar "<<i<<" "<<MaxNumberOfDeltas<<" "<<ProbDeltaIsobar<<G4endl;
             if((G4UniformRand() < ProbDeltaIsobar)&&(NumberOfDeltas < MaxNumberOfDeltas))
             {
               NumberOfDeltas++;
@@ -684,7 +688,7 @@ G4bool G4FTFModel::PutOnMassShell()
               targetSplitable->SetDefinition(ptr);
               G4double MassDel=std::sqrt(sqr(targetSplitable->GetDefinition()->GetPDGMass())
                                            + targetSplitable->Get4Momentum().perp2());
-
+//G4cout<<i<<" "<<SqrtS/GeV<<" "<<SumMasses/GeV<<" "<<MassDel/GeV<<" "<<MassNuc<<G4endl;
               if(SqrtS < SumMasses + MassDel - MassNuc)          // Uzhi 12.06.2012
               { // Change cannot be acsepted!
                targetSplitable->SetDefinition(Old_def);
@@ -696,7 +700,7 @@ G4bool G4FTFModel::PutOnMassShell()
             } 
           }   // end of for(G4int i=0; i < NumberOfInvolvedNucleonsOfTarget; i++ )
         }   // end of if(theNucleus.GetMassNumber() != 1)
-
+//G4cout<<"MaxNumberOfDeltas NumberOfDeltas "<<MaxNumberOfDeltas<<" "<<NumberOfDeltas<<G4endl;
 //-------------------------------------------------------------
 
         G4LorentzRotation toCms(-1*Psum.boostVector());
@@ -1173,8 +1177,8 @@ G4bool G4FTFModel::PutOnMassShell()
         G4int MaxNumberOfDeltas = (int)((SqrtS - SumMasses)/(400.*MeV));
         G4int NumberOfDeltas(0);
 
-        G4double ProbDeltaIsobar(0.05);                           // Uzhi 6.07.2012
-
+//        G4double ProbDeltaIsobar(0.05);                           // Uzhi 6.07.2012
+G4double ProbDeltaIsobar(0.25); 
         if(thePrNucleus->GetMassNumber() != 1)
         {
 	  for(G4int i=0; i < NumberOfInvolvedNucleonsOfProjectile; i++ )

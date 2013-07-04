@@ -54,15 +54,15 @@ G4FTFParameters::G4FTFParameters() :
   ProbabilityOfAnnihilation(0.0), ProbabilityOfElasticScatt(0.0),
   RadiusOfHNinteractions2(0.0), FTFSlope(0.0), 
   AvaragePt2ofElasticScattering(0.0), FTFGamma0(0.0),
-  MagQuarkExchange(0.0), SlopeQuarkExchange(0.0), DeltaProbAtQuarkExchange(0.0),
-  ProbOfSameQuarkExchange(0.0), ProjMinDiffMass(0.0), ProjMinNonDiffMass(0.0),
-  ProbabilityOfProjDiff(0.0), TarMinDiffMass(0.0), TarMinNonDiffMass(0.0),
-  ProbabilityOfTarDiff(0.0), AveragePt2(0.0), ProbLogDistr(0.0),
+  DeltaProbAtQuarkExchange(0.0), ProbOfSameQuarkExchange(0.0), 
+  ProjMinDiffMass(0.0), ProjMinNonDiffMass(0.0),
+  TarMinDiffMass(0.0), TarMinNonDiffMass(0.0),
+  AveragePt2(0.0), ProbLogDistr(0.0),
   Pt2kink(0.0),
   MaxNumberOfCollisions(0.0), ProbOfInelInteraction(0.0), CofNuclearDestruction(0.0),
   R2ofNuclearDestruction(0.0), ExcitationEnergyPerWoundedNucleon(0.0),
   DofNuclearDestruction(0.0), Pt2ofNuclearDestruction(0.0), MaxPt2ofNuclearDestruction(0.0) 
-{}
+{for(G4int i=0;i<4;i++){for(G4int j=0;j<7;j++){ProcParams[i][j]=0.;}}}
 
 //#define debugFTFparams
 
@@ -150,6 +150,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
     FTFxsManager = _instance;
 
     Plab/=GeV;
+    G4double Xftf=0.;                             // 27.04.2013
 //  G4double LogPlab    = std::log( Plab );
 //  G4double sqrLogPlab = LogPlab * LogPlab;
 
@@ -301,7 +302,7 @@ G4FTFParameters::G4FTFParameters(const G4ParticleDefinition * particle,
                       )/(AbsProjectileBaryonNumber*NumberOfTargetNucleons);
        }
 
-       G4double Xftf=0.;  
+//     G4double Xftf=0.;  
        MesonProdThreshold=ProjectileMass+TargetMass+(0.14+0.08); // Mpi +DeltaE
        if(SqrtS > MesonProdThreshold) {Xftf=36.*(1.-MesonProdThreshold/SqrtS);}
 
@@ -542,42 +543,71 @@ if(Xtotal-Xelastic != 0.)
 //G4cout<<"Param ProjectilePDGcode "<<ProjectilePDGcode<<G4endl;
            if( ProjectilePDGcode > 1000 )             //------Projectile is baryon --------
              {
-              SetMagQuarkExchange(1.84);//(3.63);
-              SetSlopeQuarkExchange(0.7);//(1.2);
+//                  Proc#     A1     B1           A2       B2    A3  Atop   Ymin
+              SetParams(0,    13.71, 1.75,       -214.4  , 4.25, 0., 0.632,   1.45); // Qexchange without Exc. 
+              SetParams(1,     0.2, 0.  ,         - 3.289, 2.0 , 0., 0.   ,   1.40); // Qexchange with    Exc.
+              SetParams(2, 6./Xinel, 0.  , -6./Xinel*8.48, 2.25, 0., 0.   ,   0.95); // Projectile diffraction
+              SetParams(3, 6./Xinel, 0.  , -6./Xinel*8.48, 2.25, 0., 0.   ,   0.95); // Target diffraction
+//
+/*
+              SetParams(0,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Qexchange without Exc. 
+              SetParams(1,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Qexchange with    Exc.
+              SetParams(2,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Projectile diffraction
+              SetParams(3,       0., 0.  ,           0.  , 0.0 , 0., 0.   , -100.); // Target diffraction
+
+SetParams(1,       1., 0.  ,           0.  , 0.  , 0., 0.   , -100.);
+*/
+              SetParams(1,     0.3, 0.5 ,         - 3.289, 2.0 , 0., 0.   ,   1.40); // Qexchange with    Exc.
+
+              if((AbsProjectileBaryonNumber > 1)||(NumberOfTargetNucleons > 1))
+              {
+               SetParams(2,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Projectile diffraction
+               SetParams(3,       0., 0.  ,           0.  , 0.0 , 0., 0.   , -100.); // Target diffraction
+              }
+
               SetDeltaProbAtQuarkExchange(0.);
               if(NumberOfTargetNucleons > 26) {SetProbOfSameQuarkExchange(1.);}
               else                            {SetProbOfSameQuarkExchange(0.);}
 
               SetProjMinDiffMass(1.16);                              // GeV 
               SetProjMinNonDiffMass(1.16);                           // GeV 
-//            SetProbabilityOfProjDiff(0.805*std::exp(-0.35*Ylab));  // Uzhi 21.05.2012
-              SetProbabilityOfProjDiff(6./Xinel+1.5/ECMSsqr);        // Uzhi 25.04.2012
 
               SetTarMinDiffMass(1.16);                               // GeV
               SetTarMinNonDiffMass(1.16);                            // GeV 
-//            SetProbabilityOfTarDiff(0.805*std::exp(-0.35*Ylab));   // Uzhi 21.05.2012
-              SetProbabilityOfTarDiff(6./Xinel+1.5/ECMSsqr);         // Uzhi 25.04.2012
-//            SetAveragePt2(0.15);                                   // 0.15 GeV^2
-              SetAveragePt2(0.3);                         // 0.30 GeV^2 Uzhi 21.05.2012
 
-              SetProbLogDistr(0.5);                                  // Uzhi 21.05.2012
+              SetAveragePt2(0.3);                                    // GeV^2
+
+              SetProbLogDistr(0.5);// (0.5); //(1.0);
              }
            else if( ProjectilePDGcode < -1000 )  //------Projectile is anti_baryon --------
              {
-              SetMagQuarkExchange(0.);
-              SetSlopeQuarkExchange(0.);
+//                  Proc#     A1     B1           A2       B2   A3  Atop   Ymin
+              SetParams(0,       0., 0.  ,        0.    ,   0., 0., 0.   , 1000. ); // Qexchange without Exc. 
+              SetParams(1,       0., 0.  ,        0.    ,   0., 0., 0.   , 1000. ); // Qexchange with    Exc.
+              if(Xftf > 0.)
+              {
+               SetParams(2, 6./Xftf, 0.  , -6./Xftf*8.48, 2.25, 0., 0.   ,   0.95); // Projectile diffraction
+               SetParams(3, 6./Xftf, 0.  , -6./Xftf*8.48, 2.25, 0., 0.   ,   0.95); // Target diffraction
+              } else
+              {
+               SetParams(2,     0.5, 0.  ,            0.,   0., 0., 0.5  , 1000. ); // Projectile diffraction
+               SetParams(3,     0.5, 0.  ,            0.,   0., 0., 0.5  , 1000. ); // Target diffraction
+              }
+
+              if((AbsProjectileBaryonNumber > 1)||(NumberOfTargetNucleons > 1))
+              {
+               SetParams(2,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Projectile diffraction
+               SetParams(3,       0., 0.  ,           0.  , 0.0 , 0., 0.   , -100.); // Target diffraction
+              }
+
               SetDeltaProbAtQuarkExchange(0.);
               SetProbOfSameQuarkExchange(0.);
 
               SetProjMinDiffMass(ProjectileMass+0.22);               // GeV 
               SetProjMinNonDiffMass(ProjectileMass+0.22);            // GeV
-//            SetProbabilityOfProjDiff(0.805*std::exp(-0.35*Ylab));  // Uzhi 21.05.2012
-              SetProbabilityOfProjDiff(6./Xinel+1.5/ECMSsqr);        // Uzhi 25.04.2012
 
               SetTarMinDiffMass(TargetMass+0.22);                  // GeV
               SetTarMinNonDiffMass(TargetMass+0.22);               // GeV
-//            SetProbabilityOfTarDiff(0.805*std::exp(-0.35*Ylab));   // Uzhi 21.05.2012
-              SetProbabilityOfTarDiff(6./Xinel+1.5/ECMSsqr);         // Uzhi 25.04.2012
 
               SetAveragePt2(0.3);                   // 0.15 GeV^2    // Uzhi 21.05.2012
 
@@ -586,24 +616,43 @@ if(Xtotal-Xelastic != 0.)
            else if( ProjectileabsPDGcode == 211 || 
                     ProjectilePDGcode ==  111)     //------Projectile is Pion -----------
              {
-              SetMagQuarkExchange(240.); 
-              SetSlopeQuarkExchange(2.);         
+//                  Proc#     A1     B1           A2       B2    A3  Atop   Ymin
+              SetParams(0,     568., 2.1 ,           0.  , 0.  , 0., 0.   , -100.); // Qexchange without Exc. 
+              SetParams(1,      6.0, 0.6 ,         -26.9 , 1.1 , 0., 0.   ,  3.  ); // Qexchange with    Exc.
+
+              G4double Wprd=0.;
+              if(Xinel > 0.) Wprd=0.64*(6.2-3.7*std::exp(-sqr(SqrtS-7.)/16.))/Xinel;
+ 
+              SetParams(2,     Wprd, 0.  ,          0.  ,  0.  , 0., 0.   , -100.); // Projectile diffraction
+
+              G4double Wtrd=0.;
+              if(Xinel > 0.) Wtrd=(2.+22./ECMSsqr)/Xinel;
+              SetParams(3,     Wtrd, 0.  ,          0.  ,  0.  , 0., 0.   , -100. ); // Target diffraction
+/*
+              SetParams(0,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Qexchange without Exc. 
+              SetParams(1,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Qexchange with    Exc.
+              SetParams(2,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Projectile diffraction
+              SetParams(3,       0., 0.  ,           0.  , 0.0 , 0., 0.   , -100.); // Target diffraction
+
+SetParams(3,       1., 0.  ,           0.  , 0.  , 0., 0.   , -100.);
+*/
+              if((AbsProjectileBaryonNumber > 1)||(NumberOfTargetNucleons > 1))
+              {
+               SetParams(2,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Projectile diffraction
+               SetParams(3,       0., 0.  ,           0.  , 0.0 , 0., 0.   , -100.); // Target diffraction
+              }
+
               SetDeltaProbAtQuarkExchange(0.56); //(0.35);
 
-              SetProjMinDiffMass(0.5);                               // GeV
-              SetProjMinNonDiffMass(0.5);                            // GeV 0.3
-//              SetProbabilityOfProjDiff(0.);                        // Uzhi 3.06.2012 
-              SetProbabilityOfProjDiff((6.2-3.7*std::exp(-sqr(SqrtS-7.)/16.))/Xinel);
-// Uzhi 8 Feb.
+              SetProjMinDiffMass(0.5);   //(0.5);                               // GeV
+              SetProjMinNonDiffMass(0.5);//(0.5);                            // GeV 
 
               SetTarMinDiffMass(1.16);                               // GeV
               SetTarMinNonDiffMass(1.16);                            // GeV
-//            SetProbabilityOfTarDiff(0.8*std::exp(-0.6*(Ylab-3.))); // Uzhi 3.06.2012
-              SetProbabilityOfTarDiff((2.+22./ECMSsqr)/Xinel);
 
-              SetAveragePt2(0.3);                                   // GeV^2 7 June 2011
-              SetProbLogDistr(0.);                                   // Uzhi 21.05.2012
+              SetAveragePt2(0.3);                                    // GeV^2 
 
+//            SetProbLogDistr(0.);                                 // Uzhi 21.05.2012
               SetProbLogDistr(1.);
              }
            else if( (ProjectileabsPDGcode == 321) || 
@@ -611,51 +660,61 @@ if(Xtotal-Xelastic != 0.)
                     (ProjectilePDGcode == 130)    || 
                     (ProjectilePDGcode == 310))        //Projectile is Kaon
              {
-              SetMagQuarkExchange(40.);
-              SetSlopeQuarkExchange(2.25);
+//                  Proc#     A1     B1           A2       B2    A3  Atop   Ymin
+//
+              SetParams(0,    70.  , 2.75,           0.  , 0.  , 0., 0.   ,  -100.); // Qexchange without Exc. 
+              SetParams(1,    30.  , 1.5 ,         -50.57, 1.83, 0., 0.   ,   1.70); // Qexchange with    Exc.
+              SetParams(2,     0.6 , 0.75,         -12.05, 3.25, 0., 0.   ,   1.20 ); // Projectile diffraction
+              SetParams(3,     6.0 , 1.  ,         -12.08, 1.5 ,0.1, 0.   ,   1.20); // Target diffraction
+//
+/*
+              SetParams(0,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Qexchange without Exc. 
+              SetParams(1,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Qexchange with    Exc.
+              SetParams(2,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Projectile diffraction
+              SetParams(3,       0., 0.  ,           0.  , 0.0 , 0., 0.   , -100.); // Target diffraction
+SetParams(2,       1., 0.  ,           0.  , 0.  , 0., 0.   , -100.);
+*/
+
+              if((AbsProjectileBaryonNumber > 1)||(NumberOfTargetNucleons > 1))
+              {
+               SetParams(2,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Projectile diffraction
+               SetParams(3,       0., 0.  ,           0.  , 0.0 , 0., 0.   , -100.); // Target diffraction
+              }
+
               SetDeltaProbAtQuarkExchange(0.6);
 
-              SetProjMinDiffMass(0.6);                               // GeV 0.7 0.6
-              SetProjMinNonDiffMass(0.6);                            // GeV 0.7 0.6
-//            SetProbabilityOfProjDiff(0.85*std::pow(s/GeV/GeV,-0.5)); // 40/32 X-dif/X-inel
-              SetProbabilityOfProjDiff(4.7/Xinel);                   // Uzhi 8 Feb.
+              SetProjMinDiffMass(0.7);//(1.4);   //(0.7);                           // GeV 
+              SetProjMinNonDiffMass(0.7);//(1.4);//(0.7);                           // GeV 
 
-              SetTarMinDiffMass(1.1);                                // GeV
-              SetTarMinNonDiffMass(1.1);                             // GeV
-//            SetProbabilityOfTarDiff(0.45*std::pow(s/GeV/GeV,-0.5));// 40/32 X-dif/X-inel
-              SetProbabilityOfTarDiff(1.5/Xinel);                    // Uzhi 5.06.2012
+              SetTarMinDiffMass(1.16);                                       // GeV
+              SetTarMinNonDiffMass(1.16);                                    // GeV
+
               SetAveragePt2(0.3);                                    // GeV^2 7 June 2011
               SetProbLogDistr(1.);                                   // Uzhi 5.06.2012
              }
            else                                           //------Projectile is undefined,
                                                           //------Nucleon assumed
              {
-/*                 // Uzhi 6.06.2012
-              SetMagQuarkExchange(1.85);       // 7 June 2011
-              SetSlopeQuarkExchange(0.7);      // 7 June 2011
+//                  Proc#     A1     B1           A2       B2    A3  Atop   Ymin
+              SetParams(0,    13.71, 1.75,       -214.4  , 4.25, 0., 0.632,   1.45); // Qexchange without Exc. 
+              SetParams(1,     0.2, 0.  ,         -16.445, 2.0 , 0., 0.   ,   1.40); // Qexchange with    Exc.
+              SetParams(2, 6./Xinel, 0.  , -6./Xinel*8.48, 2.25, 0., 0.   ,   0.95); // Projectile diffraction
+              SetParams(3, 6./Xinel, 0.  , -6./Xinel*8.48, 2.25, 0., 0.   ,   0.95); // Target diffraction
+
+              if((AbsProjectileBaryonNumber > 1)||(NumberOfTargetNucleons > 1))
+              {
+               SetParams(2,       0., 0.  ,           0.  , 0.  , 0., 0.   , -100.); // Projectile diffraction
+               SetParams(3,       0., 0.  ,           0.  , 0.0 , 0., 0.   , -100.); // Target diffraction
+              }
+
               SetDeltaProbAtQuarkExchange(0.); // 7 June 2011
-
-              SetProjMinDiffMass((940.+160.*MeV)/GeV);     // particle->GetPDGMass()
-              SetProjMinNonDiffMass((940.+160.*MeV)/GeV);  // particle->GetPDGMass()
-              SetProbabilityOfProjDiff(0.805*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
-
-              SetTarMinDiffMass(1.16);                     // GeV
-              SetTarMinNonDiffMass(1.16);                  // GeV
-              SetProbabilityOfTarDiff(0.805*std::pow(s/GeV/GeV,-0.35)); // 40/32 X-dif/X-inel
-*/
-
-              SetMagQuarkExchange(0.);
-              SetSlopeQuarkExchange(0.);
-              SetDeltaProbAtQuarkExchange(0.);
               SetProbOfSameQuarkExchange(0.);
 
               SetProjMinDiffMass(ProjectileMass+0.22);               // GeV 
               SetProjMinNonDiffMass(ProjectileMass+0.22);            // GeV
-              SetProbabilityOfProjDiff(6./Xinel+1.5/ECMSsqr);        // Uzhi 25.04.2012
 
               SetTarMinDiffMass(TargetMass+0.22);                    // GeV
               SetTarMinNonDiffMass(TargetMass+0.22);                 // GeV
-              SetProbabilityOfTarDiff(6./Xinel+1.5/ECMSsqr);         // Uzhi 25.04.2012
 
               SetAveragePt2(0.3);                         // 0.15 GeV^2 Uzhi 21.05.2012
               SetProbLogDistr(0.5);                                  // Uzhi 21.05.2012
@@ -762,3 +821,17 @@ if(Xtotal-Xelastic != 0.)
 //G4int Uzhi; G4cin>>Uzhi;
 } 
 //**********************************************************************************************
+
+G4double G4FTFParameters::GetProcProb(const G4int ProcN, const G4double y)    // Uzhi 3.05.2013
+{
+ G4double Prob(0.);
+ if(y < ProcParams[ProcN][6]) {Prob = ProcParams[ProcN][5]; return Prob;}
+
+ Prob=ProcParams[ProcN][0]*std::exp(-ProcParams[ProcN][1]*y)+
+      ProcParams[ProcN][2]*std::exp(-ProcParams[ProcN][3]*y)+
+      ProcParams[ProcN][4];
+
+ return Prob;
+}
+
+
