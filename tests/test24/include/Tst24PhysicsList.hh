@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 #ifndef Tst24PhysicsList_h
@@ -43,26 +42,22 @@ class Tst24PhysicsList: public G4VUserPhysicsList
     virtual void ConstructParticle();
     virtual void ConstructProcess();
 
-    // 
     virtual void SetCuts();
     
   protected:
-  // these methods Construct physics processes and register them
+    // these methods Construct physics processes and register them
     virtual void ConstructGeneral();
     virtual void ConstructEM();
     virtual void ConstructHad();
     virtual void ConstructLeptHad();
- //
+ 
     void  ConstructAllBosons();
     void  ConstructAllLeptons();
     void  ConstructAllMesons();
     void  ConstructAllBaryons();
     void  ConstructAllIons();
     void  ConstructAllShortLiveds();
-
 };
 
 #endif
-
-
 
