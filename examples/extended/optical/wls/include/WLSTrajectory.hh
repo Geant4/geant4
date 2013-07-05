@@ -127,15 +127,16 @@ class WLSTrajectory : public G4VTrajectory
 
 };
 
-extern G4Allocator<WLSTrajectory> WLSTrajectoryAllocator;
+extern G4ThreadLocal G4Allocator<WLSTrajectory>* WLSTrajectoryAllocator;
 
 inline void* WLSTrajectory::operator new(size_t) {
-    void* aTrajectory = (void*) WLSTrajectoryAllocator.MallocSingle();
-    return aTrajectory;
+    if(!WLSTrajectoryAllocator)
+      WLSTrajectoryAllocator = new G4Allocator<WLSTrajectory>;
+    return (void*) WLSTrajectoryAllocator->MallocSingle();
 }
 
 inline void WLSTrajectory::operator delete(void* aTrajectory) {
-    WLSTrajectoryAllocator.FreeSingle((WLSTrajectory*)aTrajectory);
+    WLSTrajectoryAllocator->FreeSingle((WLSTrajectory*)aTrajectory);
 }
 
 #endif

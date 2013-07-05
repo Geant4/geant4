@@ -16,6 +16,10 @@ track of all tags.
  
      ----------------------------------------------------------
 
+July 04, 2013 M. Asai (WLS-V09-06-07)
+  fix the use of G4Allocator in WLSTrajectory and WLSTrajectoryPoint
+  classes for multi-threaded mode
+
 June 05, 2013 P. Gumplinger (WLS-V09-06-05) and (WLS-V09-06-06)
   fix compilation error when G4MULTITHREADED
 

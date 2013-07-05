@@ -52,7 +52,7 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4Allocator<WLSTrajectory> WLSTrajectoryAllocator;
+G4ThreadLocal G4Allocator<WLSTrajectory>* WLSTrajectoryAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

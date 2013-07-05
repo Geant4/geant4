@@ -93,17 +93,18 @@ class WLSTrajectoryPoint : public G4TrajectoryPoint {
 
 };
 
-extern G4Allocator<WLSTrajectoryPoint> WLSTrajPointAllocator;
+extern G4ThreadLocal G4Allocator<WLSTrajectoryPoint>* WLSTrajPointAllocator;
 
 inline void* WLSTrajectoryPoint::operator new(size_t)
 {
-    void *aTrajectoryPoint = (void *) WLSTrajPointAllocator.MallocSingle();
-    return aTrajectoryPoint;
+    if(!WLSTrajPointAllocator)
+      WLSTrajPointAllocator = new G4Allocator<WLSTrajectoryPoint>;
+    return (void *) WLSTrajPointAllocator->MallocSingle();
 }
 
 inline void WLSTrajectoryPoint::operator delete(void *aTrajectoryPoint)
 {
-    WLSTrajPointAllocator.FreeSingle(
+    WLSTrajPointAllocator->FreeSingle(
         (WLSTrajectoryPoint *) aTrajectoryPoint);
 }
 
