@@ -40,7 +40,13 @@
 #include "G4UserRunAction.hh"
 #include <sstream>
 
-G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(true) {
+G4WorkerRunManager* G4WorkerRunManager::GetWorkerRunManager()
+{ return static_cast<G4WorkerRunManager*>(G4RunManager::GetRunManager()); }
+
+G4WorkerRunManagerKernel* G4WorkerRunManager::GetWorkerRunManagerKernel()
+{ return static_cast<G4WorkerRunManagerKernel*>(GetWorkerRunManager()->kernel); }
+
+G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     //This constructor should never be called in non-multithreaded mode
 #ifndef G4MULTITHREADED
     G4ExceptionDescription msg;

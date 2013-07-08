@@ -43,6 +43,7 @@
 #include <list>
 #include <map>
 
+class G4MTRunManagerKernel;
 class G4ScoringManager;
 class G4UserWorkerInitialization;
 
@@ -138,11 +139,14 @@ private:
     static G4ScoringManager* masterScM;
     static masterWorlds_t masterWorlds;
     //Singleton implementing master thread behavior
-    static G4MTRunManager* masterRM;
+    static G4MTRunManager* fMasterRM;
+    G4MTRunManagerKernel* MTkernel;
 public: // with description
     static G4MTRunManager* GetMasterRunManager();
-    // Returns the singleton instance of the run manager common to all threads implementing the master behavior
+    // Returns the singleton instance of the run manager common to all threads implementing 
+    // the master behavior
     static G4RunManagerKernel* GetMasterRunManagerKernel();
+    static G4MTRunManagerKernel* GetMTMasterRunManagerKernel();
     // Returns the singleton instance of the run manager kernel common to all threads
 
     virtual void SetUserInitialization(G4VUserPhysicsList* userPL);

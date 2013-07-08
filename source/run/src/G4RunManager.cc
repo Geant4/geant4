@@ -34,6 +34,7 @@
 
 #include "G4RunManager.hh"
 #include "G4RunManagerKernel.hh"
+#include "G4MTRunManagerKernel.hh"
 #include "G4WorkerRunManagerKernel.hh"
 
 #include "G4StateManager.hh"
@@ -109,7 +110,7 @@ G4RunManager::G4RunManager()
   runManagerType = sequentialRM;
 }
 
-G4RunManager::G4RunManager(G4bool workerFlag)
+G4RunManager::G4RunManager( RMType rmType )
 :userDetector(0),physicsList(0),
  userActionInitialization(0),userWorkerInitialization(0),
 userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
@@ -138,15 +139,20 @@ numberOfEventProcessed(0)
   }
   fRunManager = this;
     
-  //If we are creating a G4WorkerRunManager class, we need to skip this, since the equivalent
-  // for a WorkerThread is slightly different and will be executed by the derived class
-  if ( workerFlag ) {
+  switch(rmType)
+  {
+   case masterRM:
+    kernel = new G4MTRunManagerKernel();
+    break;
+   case workerRM:
     kernel = new G4WorkerRunManagerKernel();
-    runManagerType = workerRM;
-  } else {
-    kernel = new G4RunManagerKernel();
-    runManagerType = masterRM;
+    break;
+   default:
+    G4ExceptionDescription msgx;
+    msgx<<" This type of RunManager can only be used in mult-threaded applications.";
+    G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msgx);
   }
+  runManagerType = rmType;
 
   eventManager = kernel->GetEventManager();
         

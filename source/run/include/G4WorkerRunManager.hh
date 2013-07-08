@@ -43,9 +43,12 @@
 #include "G4VScoringMesh.hh"
 
 class G4WorkerThread;
+class G4WorkerRunManagerKernel;
 
 class G4WorkerRunManager : public G4RunManager {
 public:
+    static G4WorkerRunManager* GetWorkerRunManager();
+    static G4WorkerRunManagerKernel* GetWorkerRunManagerKernel();
     G4WorkerRunManager();
     ~G4WorkerRunManager();
     virtual void InitializeGeometry();

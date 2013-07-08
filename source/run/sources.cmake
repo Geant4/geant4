@@ -79,9 +79,10 @@ GEANT4_DEFINE_MODULE(NAME G4run
 	G4PhysicsListOrderingParameter.hh
         G4Run.hh
         G4RunManager.hh
-	G4WorkerRunManager.hh
 	G4MTRunManager.hh
+	G4WorkerRunManager.hh
         G4RunManagerKernel.hh
+        G4MTRunManagerKernel.hh
         G4WorkerRunManagerKernel.hh
         G4RunMessenger.hh
         G4UserPhysicsListMessenger.hh
@@ -110,9 +111,10 @@ GEANT4_DEFINE_MODULE(NAME G4run
 	G4PhysicsListOrderingParamater.cc
         G4Run.cc
         G4RunManager.cc
-	G4WorkerRunManager.cc
 	G4MTRunManager.cc
+	G4WorkerRunManager.cc
         G4RunManagerKernel.cc
+        G4MTRunManagerKernel.cc
         G4WorkerRunManagerKernel.cc
         G4RunMessenger.cc
         G4UserPhysicsListMessenger.cc

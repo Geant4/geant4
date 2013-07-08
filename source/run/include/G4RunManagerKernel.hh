@@ -82,14 +82,18 @@ class G4RunManagerKernel
     //  The constructor and the destructor. The user must construct this class
     // object at the beginning of his/her main() and must delete it at the 
     // bottom of the main(), unless he/she used G4RunManager.
-protected:
-    G4RunManagerKernel(G4bool isWorkerRunManagerKernel);
-    //Constructor to be used by derived classes if a kernel for workers is needed
+  public:
+    enum RMKType { sequentialRMK, masterRMK, workerRMK };
+  protected:
+    //Constructor to be used by derived classes 
+    G4RunManagerKernel(RMKType rmkType);
+    RMKType runManagerKernelType;
+
   public: // with description
-    virtual void DefineWorldVolume(G4VPhysicalVolume * worldVol,
+    void DefineWorldVolume(G4VPhysicalVolume * worldVol,
                            G4bool topologyIsChanged=true);
 
-    virtual void WorkerDefineWorldVolume(G4VPhysicalVolume * worldVol,
+    void WorkerDefineWorldVolume(G4VPhysicalVolume * worldVol,
                                 G4bool topologyIsChanged=true);
 
     //  This method must be invoked if the geometry setup has been changed between
@@ -98,7 +102,7 @@ protected:
     // set to false, so that the original optimisation and navigation history is
     // preserved. This method is invoked also at initialisation.
 
-    virtual void SetPhysics(G4VUserPhysicsList* uPhys);
+    void SetPhysics(G4VUserPhysicsList* uPhys);
     //  This method must be invoked at least once by the user with a valid
     // concrete implementation of user physics list. 
 
@@ -115,16 +119,16 @@ protected:
     // physics/geometry.
 
   protected:
-    virtual void SetupDefaultRegion();
+    void SetupDefaultRegion();
     //Called by DefineWorldVolume
-    virtual void SetupPhysics();
+    void SetupPhysics();
   private:
-    virtual void ResetNavigator();
+    void ResetNavigator();
     void BuildPhysicsTables();
     void CheckRegions();
 
   public: // with description
-    virtual void UpdateRegion();
+    void UpdateRegion();
     // Update region list. 
     // This method is mandatory before invoking following two dump methods.
     // At RunInitialization(), this method is automatically invoked, and thus
@@ -210,7 +214,6 @@ protected:
     G4bool ConfirmCoupledTransportation();
     void SetScoreSplitter();
 
-    G4bool isWorker;
     G4int numberOfStaticAllocators;
 
   public:

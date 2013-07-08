@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 5th, 2013, A.Dotti (run-V09-06-71)
+- Protect G4UserWorkerInitialization::JoinWorker for sequential build warning
+- Add virtual G4WorkerRunManager* G4UserWorkerInitialization::CreateWorkerRunManager method
+  to simplify instantiation of user-defined run manager (no more need to change StartThread 
+  function)
+
+July 3rd, 2013, M.Asai (run-V09-06-70)
+- Introducing access methods of concrete classes for G4MTRunManager and
+  G4WorkerRunManager.
+
+July 3rd, 2013, M.Asai (run-V09-06-69)
+- Introducing G4MTRunManagerKernel class for better symmetry of run manager and 
+  run manager kernel.
+- First cleaning up of kernel classes.
+
 July 3rd, 2013, A.Dotti (run-V09-06-68)
 - Add call to G4SetThreadId global function in G4UserWorkerInitialization::StartThread function
 - Remove unused list of G4WorkerRunManager from G4MTRunManager

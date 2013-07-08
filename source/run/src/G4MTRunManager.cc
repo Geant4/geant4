@@ -26,6 +26,7 @@
 //
 
 #include "G4MTRunManager.hh"
+#include "G4MTRunManagerKernel.hh"
 #include "G4Timer.hh"
 #include "G4ScoringManager.hh"
 #include "G4TransportationManager.hh"
@@ -44,7 +45,7 @@ long* G4MTRunManager::seeds = 0;
 G4int G4MTRunManager::seedsnum = 0;
 G4ScoringManager* G4MTRunManager::masterScM = 0;
 G4MTRunManager::masterWorlds_t G4MTRunManager::masterWorlds = G4MTRunManager::masterWorlds_t();
-G4MTRunManager* G4MTRunManager::masterRM = 0;
+G4MTRunManager* G4MTRunManager::fMasterRM = 0;
 
 namespace {
  G4Mutex cmdHandlingMutex = G4MUTEX_INITIALIZER;
@@ -63,7 +64,7 @@ namespace {
 G4MTRunManager* G4MTRunManager::GetMasterRunManager()
 {
 ////////#ifdef G4MULTITHREADED
-    return masterRM;
+    return fMasterRM;
 ////////#else
 ////////    return G4RunManager::GetRunManager();
 ////////#endif
@@ -71,19 +72,25 @@ G4MTRunManager* G4MTRunManager::GetMasterRunManager()
 
 G4RunManagerKernel* G4MTRunManager::GetMasterRunManagerKernel()
 {
-    return masterRM->kernel;
+    return fMasterRM->kernel;
 }
 
-G4MTRunManager::G4MTRunManager() : G4RunManager(false) ,
+G4MTRunManagerKernel* G4MTRunManager::GetMTMasterRunManagerKernel()
+{
+    return fMasterRM->MTkernel;
+}
+
+G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
     nworkers(2),
     masterRNGEngine(0)
 {
-    if ( masterRM )
+    if ( fMasterRM )
     {
         G4Exception("G4MTRunManager::G4MTRunManager", "Run0035",FatalException,
                     "Another instance of a G4MTRunManager already exists.");
     }
-    masterRM = this;
+    fMasterRM = this;
+    MTkernel = static_cast<G4MTRunManagerKernel*>(kernel);
 #ifndef G4MULTITHREADED
     G4ExceptionDescription msg;
     msg << "Geant4 code is compiled without multi-threading support"

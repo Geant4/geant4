@@ -261,9 +261,13 @@ public: // with description
   protected:
     void StackPreviousEvent(G4Event* anEvent);
 
+  public:
+    enum RMType { sequentialRM, masterRM, workerRM };
   protected:
     //This constructor is called in case of Geant4 Multi-threaded build
-    G4RunManager( G4bool workerFlag );
+    G4RunManager( RMType rmType );
+
+  protected:
     G4RunManagerKernel * kernel;
     G4EventManager * eventManager;
 
@@ -514,7 +518,6 @@ public: // with description
     { DCtable = DCtbl; }
 
   public:
-    enum RMType { sequentialRM, masterRM, workerRM };
     inline RMType GetRunManagerType() const
     { return runManagerType; }
 

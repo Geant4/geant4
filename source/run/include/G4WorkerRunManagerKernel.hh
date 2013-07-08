@@ -60,13 +60,6 @@ class G4WorkerRunManagerKernel : public G4RunManagerKernel {
 public:
     G4WorkerRunManagerKernel();
     virtual ~G4WorkerRunManagerKernel();
-protected:
-    void SetupDefaultRegion();
-    void SetupPhysics();
-public:
-    void UpdateRegion();
-private:
-    void ResetNavigator();
     
 };
 

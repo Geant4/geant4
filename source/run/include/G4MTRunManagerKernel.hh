@@ -23,22 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+////
+//
 
-#include "G4WorkerRunManagerKernel.hh"
+// class description:
+//
+//     This is a class for mandatory control of GEANT4 kernel.
+//     This class implements Worker behavior in a MT application.
+//
+//     This class is constructed by G4MTRunManager. If a user uses his/her own
+//     class instead of G4MTRunManager, this class must be instantiated by
+//     him/herself at the very beginning of the application and must be deleted
+//     at the very end of the application. Also, following methods must be
+//     invoked in the proper order.
+//       DefineWorldVolume
+//       InitializePhysics
+//       RunInitialization
+//       RunTermination
+//
+//     User must provide his/her own classes derived from the following
+//     abstract class and register it to the RunManagerKernel.
+//        G4VUserPhysicsList - Particle types, Processes and Cuts
+//
+//     G4MTRunManagerKernel does not have any eveny loop. Handling of events
+//     is managed by G4RunManager.
+//
+//     This class re-implements only the method that require special treatment
+//     to implement worker behavior
 
-G4WorkerRunManagerKernel::G4WorkerRunManagerKernel() : G4RunManagerKernel(workerRMK)
-{
-    //This version of the constructor should never be called in sequential mode!
-#ifndef G4MULTITHREADED
-    G4ExceptionDescription msg;
-    msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
-    msg<<" This type of RunManager can only be used in mult-threaded applications.";
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
-#endif
+#ifndef G4MTRunManagerKernel_h
+#define G4MTRunManagerKernel_h 1
 
-}
+#include "G4RunManagerKernel.hh"
 
-G4WorkerRunManagerKernel::~G4WorkerRunManagerKernel()
-{
-}
+class G4MTRunManagerKernel : public G4RunManagerKernel {
+public:
+    G4MTRunManagerKernel();
+    virtual ~G4MTRunManagerKernel();
+    
+};
 
+#endif //G4MTRunManagerKernel_h

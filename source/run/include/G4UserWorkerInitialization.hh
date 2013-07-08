@@ -114,6 +114,12 @@ public: // with description
     // joining the aThread. Calling thread will wait for aThread to end.
     // Usere should not re-implement this function (in derived class), except only if he/she
     // wants to verwrite the default threading model (see StartThread function)
+    
+    virtual G4WorkerRunManager* CreateWorkerRunManager() const;
+    // Called by StartThread function to create a run-manager implementing worker behvior.
+    // User should re-implemtn this function in derived class to instantiate his/her
+    // user-defined WorkerRunManager.
+    // By default this method instantiates G4WorkerRunManager object.
 
 protected:   
     static G4ThreadLocal G4WorkerThread* wThreadContext;

@@ -76,7 +76,7 @@ G4RunManagerKernel::G4RunManagerKernel()
  geometryInitialized(false),physicsInitialized(false),
  geometryToBeOptimized(true),
  physicsNeedsToBeReBuilt(true),verboseLevel(0),
- numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(false),
+ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
  numberOfStaticAllocators(0)
 {
 #ifdef G4FPE_DEBUG
@@ -115,9 +115,10 @@ G4RunManagerKernel::G4RunManagerKernel()
   defaultRegionForParallelWorld = new G4Region("DefaultRegionForParallelWorld"); // deleted by store
   defaultRegion->SetProductionCuts(
        G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
-   defaultRegionForParallelWorld->SetProductionCuts(
+  defaultRegionForParallelWorld->SetProductionCuts(
        G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
 
+  runManagerKernelType = sequentialRMK;
   // set the initial application state
   G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
 
@@ -138,12 +139,12 @@ G4RunManagerKernel::G4RunManagerKernel()
     << G4endl;
 }
 
-G4RunManagerKernel::G4RunManagerKernel(G4bool isWorkerRMK)
+G4RunManagerKernel::G4RunManagerKernel(RMKType rmkType)
 : physicsList(0),currentWorld(0),
 geometryInitialized(false),physicsInitialized(false),
 geometryToBeOptimized(true),
 physicsNeedsToBeReBuilt(true),verboseLevel(0),
-numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(isWorkerRMK),
+numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
  numberOfStaticAllocators(0)
 {
 //This version of the constructor should never be called in sequential mode!
@@ -168,23 +169,29 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(isWorkerRMK),
     // construction of Geant4 kernel classes
     eventManager = new G4EventManager();
     
-    if (!isWorkerRMK)
+    switch(rmkType)
     {
+     case masterRMK:
         //Master thread behvior
         defaultRegion = new G4Region("DefaultRegionForTheWorld"); // deleted by store
         defaultRegionForParallelWorld = new G4Region("DefaultRegionForParallelWorld"); // deleted by store
         defaultRegion->SetProductionCuts(
-                                         G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+               G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
         defaultRegionForParallelWorld->SetProductionCuts(
-                                                         G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
-    }
-    else
-    {
+               G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts());
+        break;
+     case workerRMK:
         //Worker thread behavior
         defaultRegion = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld", true);
-        defaultRegionForParallelWorld = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForParallelWorld", true);
-        
+        defaultRegionForParallelWorld
+            = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForParallelWorld", true);
+        break;
+     default:   
+        G4ExceptionDescription msgx;
+        msgx<<" This type of RunManagerKernel can only be used in mult-threaded applications.";
+        G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0035",FatalException,msgx);
     }
+    runManagerKernelType = rmkType;
     
     // set the initial application state
     G4StateManager::GetStateManager()->SetNewState(G4State_PreInit);
@@ -192,17 +199,38 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),isWorker(isWorkerRMK),
     // version banner
     G4String vs = G4Version;
     vs = vs.substr(1,vs.size()-2);
-    versionString = " Local-thread RunManager - version ";
-    versionString += vs;
-    G4cout << G4endl
-    << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
-    << versionString << G4endl
-    << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
-    << G4endl;
+    switch(rmkType)
+    {
+     case masterRMK:
+      versionString = " Geant4 version ";
+      versionString += vs;
+      versionString += "   ";
+      versionString += G4Date;
+      G4cout << G4endl
+       << "*************************************************************" << G4endl
+       << versionString << G4endl
+       << "  << in Multi-threaded mode >> " << G4endl
+       << "                      Copyright : Geant4 Collaboration" << G4endl
+       << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
+       << "                            WWW : http://cern.ch/geant4" << G4endl
+       << "*************************************************************" << G4endl
+       << G4endl;
+       break;
+     default:
+      versionString = " Local thread RunManagerKernel version ";
+      versionString += vs;
+      G4cout << G4endl
+       << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
+       << versionString << G4endl
+       << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
+       << G4endl;
+    }
 }
 
 void G4RunManagerKernel::SetupDefaultRegion()
 {
+    if(runManagerKernelType==workerRMK) return;
+
     // Remove old world logical volume from the default region, if exist
     if(defaultRegion->GetNumberOfRootVolumes())
     {
@@ -256,7 +284,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   }
 
   G4UImanager* pUImanager = G4UImanager::GetUIpointer();
-  if(isWorker && (verboseLevel>0))
+  if((runManagerKernelType==workerRMK) && (verboseLevel>0))
   {
     G4cout << "Thread-local UImanager is to be deleted." << G4endl 
            << "There should not be any thread-local G4cout/G4cerr hereafter."
@@ -402,6 +430,8 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 #include "G4IonTable.hh"
 void G4RunManagerKernel::SetupPhysics()
 {
+    if(runManagerKernelType==workerRMK) return;
+
     G4ParticleTable::GetParticleTable()->SetReadiness();
     physicsList->ConstructParticle();
     //Andrea: Temporary for MT
@@ -499,6 +529,9 @@ void G4RunManagerKernel::RunTermination()
 
 void G4RunManagerKernel::ResetNavigator()
 {
+  if(runManagerKernelType==workerRMK)
+  { geometryNeedsToBeClosed = false; return; }
+
   // We have to tweak the navigator's state in case a geometry has been
   // modified between runs. By the following calls we ensure that navigator's
   // state is reset properly. It is required the geometry to be closed
@@ -525,6 +558,8 @@ void G4RunManagerKernel::UpdateRegion()
                 "Geant4 kernel not in Idle state : method ignored.");
     return;
   }
+
+  if(runManagerKernelType==workerRMK) return;
 
   CheckRegions();
 

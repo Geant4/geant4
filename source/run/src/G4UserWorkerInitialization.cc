@@ -129,7 +129,7 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     //Step-2:
     //================
     //Create a G4WorkerRunManager
-    G4WorkerRunManager* wrm = new G4WorkerRunManager;
+    G4WorkerRunManager* wrm = masterRM->GetUserWorkerInitialization()->CreateWorkerRunManager();
 
     wrm->SetWorkerThread(wThreadContext);
     
@@ -310,10 +310,17 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     return static_cast<void*>(0);
 }
 
+//Avoid compilation warning in sequential
+#ifdef G4MULTITHREADED
 void G4UserWorkerInitialization::JoinWorker(G4Thread* aThread)
 {
     G4THREADJOIN(*aThread);
 }
+#else
+void G4UserWorkerInitialization::JoinWorker(G4Thread*)
+{
+}
+#endif
 
 G4UserWorkerInitialization::G4UserWorkerInitialization()
 {;}
@@ -370,3 +377,7 @@ void G4UserWorkerInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine* aN
     if ( dynamic_cast<const CLHEP::RanshiEngine*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::RanshiEngine); return; }
 }
 
+G4WorkerRunManager* G4UserWorkerInitialization::CreateWorkerRunManager() const
+{
+    return new G4WorkerRunManager();
+}

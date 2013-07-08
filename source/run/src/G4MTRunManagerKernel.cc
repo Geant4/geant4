@@ -24,9 +24,11 @@
 // ********************************************************************
 //
 
-#include "G4WorkerRunManagerKernel.hh"
+#include "G4MTRunManagerKernel.hh"
+#include "G4RegionStore.hh"
+#include "G4StateManager.hh"
 
-G4WorkerRunManagerKernel::G4WorkerRunManagerKernel() : G4RunManagerKernel(workerRMK)
+G4MTRunManagerKernel::G4MTRunManagerKernel() : G4RunManagerKernel(masterRMK)
 {
     //This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -38,7 +40,7 @@ G4WorkerRunManagerKernel::G4WorkerRunManagerKernel() : G4RunManagerKernel(worker
 
 }
 
-G4WorkerRunManagerKernel::~G4WorkerRunManagerKernel()
+G4MTRunManagerKernel::~G4MTRunManagerKernel()
 {
 }
 
