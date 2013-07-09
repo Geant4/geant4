@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-03 June 13: V.Ivant (emutils-V09-06-42)
+08 July 13: V.Ivant (emutils-V09-06-43)
+- G4VMultipleScattering - moved displacement AlongStep
+
+03 July 13: V.Ivant (emutils-V09-06-42)
 - G4LossTableManager - foxed Coverity report
 - G4VEmFluctuationModel changed interface in SampleFluctuations 
     method - G4Material pointer is substituted by G4MaterialCutsCouple 

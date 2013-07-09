@@ -357,7 +357,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 //it prepares physcis tables.
 
 void 
-G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, 
+G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
 					      G4VMultipleScattering* master)
 {
   G4String num = part.GetParticleName();
@@ -383,8 +383,10 @@ G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
            << G4endl;
     */
     for(G4int i=0; i<numberOfModels; ++i) {
-      G4VMscModel* msc = static_cast<G4VMscModel*>(GetModelByIndex(i, printing));
-      G4VMscModel* msc0= static_cast<G4VMscModel*>(master->GetModelByIndex(i,printing));
+      G4VMscModel* msc = 
+	static_cast<G4VMscModel*>(GetModelByIndex(i, printing));
+      G4VMscModel* msc0= 
+	static_cast<G4VMscModel*>(master->GetModelByIndex(i,printing));
       msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
     }
   }
@@ -570,8 +572,8 @@ G4double
 G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
               const G4Track&, G4double, G4ForceCondition* condition)
 {
-  *condition = Forced;
-  //*condition = NotForced;
+  //*condition = Forced;
+  *condition = NotForced;
   return DBL_MAX;
 }
 
@@ -627,9 +629,8 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	safetyRecomputed = true;
 	postSafety = currentModel->ComputeSafety(fNewPosition,0.0); 
       } 
-      G4ThreeVector displacement = 
-	currentModel->SampleScattering(step.GetPostStepPoint()->GetMomentumDirection(),
-				       postSafety);
+      G4ThreeVector displacement = currentModel->SampleScattering(
+        step.GetPostStepPoint()->GetMomentumDirection(), postSafety);
 
       G4double r2 = displacement.mag2();
 
@@ -647,16 +648,18 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	    postSafety = currentModel->ComputeSafety(fNewPosition, 0.0);
 	  } 
 	  // add a factor which ensure numerical stability
-	  if(r2 > postSafety*postSafety) { fac = 0.99*postSafety/std::sqrt(r2); }
+	  if(r2 > postSafety*postSafety) { 
+	    fac = 0.99*postSafety/std::sqrt(r2); 
+	  }
 	}
 	// compute new endpoint of the Step
 	fNewPosition += fac*displacement;
-	//safetyHelper->ReLocateWithinVolume(fNewPosition);
+	safetyHelper->ReLocateWithinVolume(fNewPosition);
       }
     }
   }
   fParticleChange.ProposeTrueStepLength(tPathLength);
-  //fParticleChange.ProposePosition(fNewPosition);
+  fParticleChange.ProposePosition(fNewPosition);
   return &fParticleChange;
 }
 
@@ -666,12 +669,12 @@ G4VParticleChange*
 G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step&)
 {
   fParticleChange.Initialize(track);  
-  
+  /*
   if(fPositionChanged) { 
     safetyHelper->ReLocateWithinVolume(fNewPosition);
     fParticleChange.ProposePosition(fNewPosition); 
   }
-  
+  */
   return &fParticleChange;
 }
 
