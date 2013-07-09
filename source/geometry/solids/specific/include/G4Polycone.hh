@@ -152,7 +152,7 @@ class G4Polycone : public G4VCSGfaceted
 
   // Generic initializer, called by all constructors
 
-  inline void SetOriginalParameters();
+  void SetOriginalParameters(G4ReduciblePolygon *rz);
 
   void Create( G4double phiStart,        // initial phi starting angle
                G4double phiTotal,        // total phi angle

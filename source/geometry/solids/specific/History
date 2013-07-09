@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-Jul-2013  T.Nikitina (geom-specific-V09-06-13)
+- Extended method SetOriginalParameters() in G4Polycone in order to handle
+  all possible cases of conversion of generic polycone to polycone with
+  (Rmin,Rmaz,Z) parameters.
+  Addressing problem report #1462.
+
 03-Jun-2013  G.Cosmo (geom-specific-V09-06-12)
 - Fixed minor Coverity defect in G4PolyhedraSide and G4PolyconeSide.
 
