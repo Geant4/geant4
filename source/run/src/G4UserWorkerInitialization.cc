@@ -381,3 +381,4 @@ G4WorkerRunManager* G4UserWorkerInitialization::CreateWorkerRunManager() const
 {
     return new G4WorkerRunManager();
 }
+

@@ -99,7 +99,8 @@ GEANT4_DEFINE_MODULE(NAME G4run
 	G4WorkerThread.hh
         G4VUPLSplitter.hh
         rundefs.hh
-    SOURCES
+        G4RNGHelper.hh 
+   SOURCES
         G4AdjointPrimaryGeneratorAction.cc
         G4AdjointSimManager.cc
         G4AdjointSimMessenger.cc
@@ -129,6 +130,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4VUserPhysicsList.cc
         G4VUserPrimaryGeneratorAction.cc
 	G4WorkerThread.cc
+        G4RNGHelper.cc
     GRANULAR_DEPENDENCIES
         G4cuts
         G4decay

@@ -38,6 +38,7 @@
 #include "G4VUserActionInitialization.hh"
 #include "G4UserWorkerInitialization.hh"
 #include "G4UserRunAction.hh"
+#include "G4RNGHelper.hh"
 #include <sstream>
 
 G4WorkerRunManager* G4WorkerRunManager::GetWorkerRunManager()
@@ -126,7 +127,8 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
 void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 {
     //Need to reseed random number generator
-    long seeds[3] = { G4MTRunManager::GetSeed(i_event*2) , G4MTRunManager::GetSeed(i_event*2+1), 0 };
+    G4RNGHelper* helper = G4RNGHelper::GetInstance();
+    long seeds[3] = { helper->GetSeed(i_event*2) , helper->GetSeed(i_event*2+1), 0 };
     G4Random::setTheSeeds(seeds);
     currentEvent = GenerateEvent(i_event);
     eventManager->ProcessOneEvent(currentEvent);

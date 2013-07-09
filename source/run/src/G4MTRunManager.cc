@@ -40,9 +40,8 @@
 #include "G4UserRunAction.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4Timer.hh"
+#include "G4RNGHelper.hh"
 
-long* G4MTRunManager::seeds = 0;
-G4int G4MTRunManager::seedsnum = 0;
 G4ScoringManager* G4MTRunManager::masterScM = 0;
 G4MTRunManager::masterWorlds_t G4MTRunManager::masterWorlds = G4MTRunManager::masterWorlds_t();
 G4MTRunManager* G4MTRunManager::fMasterRM = 0;
@@ -129,8 +128,6 @@ G4MTRunManager::~G4MTRunManager()
     //G4ProcessTable::DeleteMessenger from ~G4RunManager
     //G4cout<<"Destroy MTRunManager"<<G4endl;//ANDREA
     TerminateWorkers();
-    delete[] seeds;
-    seeds = 0;
 }
 
 void G4MTRunManager::StoreRNGStatus(const G4String& fn )
@@ -167,15 +164,6 @@ void G4MTRunManager::ProcessOneEvent(G4int)
 void G4MTRunManager::TerminateOneEvent()
 {
     //Nothing to do
-}
-
-long G4MTRunManager::GetSeed(G4int i)
-{
-    if ( i < seedsnum) return seeds[i];
-    G4ExceptionDescription msg;
-    msg << "Not enough random seeds, requested seed number "<<i<<" but "<<seedsnum<<" seeds available (i>=seedsnum)";
-    G4Exception("G4MTRunManager::GetSeed","Run0035", FatalException,msg);
-    return -LONG_MAX;
 }
 
 void G4MTRunManager::PrepareCommandsStack() {
@@ -215,9 +203,9 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     //If user did not implement InitializeSeeds, use default: 2 seeds per event number
     if ( InitializeSeeds(n_events) == false )
     {
-        InitializeSeedsQueue(n_events*2);
+        G4RNGHelper* helper = G4RNGHelper::GetInstance();
         for ( G4int ne = 0 ; ne < n_events*2 ; ++ne)
-            AddOneSeed( (long) (100000000L * G4Random::getTheGenerator()->flat()) );
+            helper->AddOneSeed( (long) (100000000L * G4Random::getTheGenerator()->flat()) );
     }
     
     //Now initialize workers. Check if user defined a WorkerInitialization
@@ -262,25 +250,6 @@ void G4MTRunManager::RunTermination()
     G4RunManager::RunTermination();
 }
 
-void G4MTRunManager::AddOneSeed( long seed )
-{
-    if ( !seeds )
-    {
-        G4ExceptionDescription msg;
-        msg << "Cannot add a new random seed, call InitializeSeedsQueue first";
-        G4Exception("G4MTRunManager::GetSeed","Run0035", FatalException,msg);
-    }
-    seeds[seedsnum++] = seed;
-}
-
-void G4MTRunManager::InitializeSeedsQueue( G4int ns )
-{
-    if ( seeds ) {
-        delete[] seeds;
-    }
-    seeds = new long[ns];
-    seedsnum = 0;
-}
 
 void G4MTRunManager::ConstructScoringWorlds()
 {

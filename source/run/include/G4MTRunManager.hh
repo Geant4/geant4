@@ -56,10 +56,6 @@ public:
     //New method
     void SetNumberOfThreads( G4int n );
     G4int GetNumberOfThreads() const { return nworkers; }
-    //Returns i-th seed
-    static long GetSeed( G4int i );
-    //Returns number of available seeds
-    static G4int NumberOfAvailableSeeds() { return seedsnum; }
 public:
     //Inherited methods to re-implement for MT case
     virtual void InitializeEventLoop(G4int n_event, const char* macroFile=0, G4int n_select=-1);
@@ -77,8 +73,6 @@ protected:
     //Return true if initialization is done.
     virtual G4bool InitializeSeeds( G4int /*nevts*/) { return false; };
     //Adds one seed to the list of seeds
-    void AddOneSeed( long seed );
-    void InitializeSeedsQueue( G4int ns );
     virtual void PrepareCommandsStack();
     virtual void StoreRNGStatus(const G4String& filenamePrefix );
 public:
@@ -91,9 +85,6 @@ private:
     //List of workers (i.e. thread)
     typedef std::list<G4Thread*> G4ThreadsList;
     G4ThreadsList threads;
-    //Array of random seeds number
-    static long* seeds;
-    static G4int seedsnum;
     //List of workers run managers
     //List of all workers run managers
     void TerminateWorkers();

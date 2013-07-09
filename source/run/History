@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+July 5th, 2013, A.Dotti (run-V09-06-72)
+- Introduced G4RNGHelper container class for RNG Engine seeds.
+- Bug fix for warning with gcc41
 
 July 5th, 2013, A.Dotti (run-V09-06-71)
 - Protect G4UserWorkerInitialization::JoinWorker for sequential build warning
