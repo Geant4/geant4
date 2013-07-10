@@ -84,7 +84,7 @@ G4double G4hPairProductionModel::ComputeDMicroscopicCrossSection(
   G4double massratio2   = massratio*massratio ;
   G4double cross = 0.;
 
-  SetCurrentElement(Z);
+  SetElement(G4lrint(Z));
 
   G4double c3 = 0.75*sqrte*particleMass;
   if (residEnergy <= c3*z13) return cross;

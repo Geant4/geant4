@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 July 2013: V.Ivant (emhighenergy-V09-06-04)
+- G4hPairProductionModel - substitute SetCurrentElement(G4double) 
+    by SetElement(G4int)
+
 03 July 2013: V.Ivant (emhighenergy-V09-06-03)
 - G4mplIonisationModel, G4mplIonisationWithDeltaModel - changed
     interface to G4VEmFluctuations
