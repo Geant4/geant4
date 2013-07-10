@@ -582,7 +582,8 @@ G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
 G4VParticleChange* 
 G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 {
-  fParticleChange.ProposeMomentumDirection(step.GetPostStepPoint()->GetMomentumDirection());
+  fParticleChange.ProposeMomentumDirection(
+    step.GetPostStepPoint()->GetMomentumDirection());
   fNewPosition = step.GetPostStepPoint()->GetPosition();
   fParticleChange.ProposePosition(fNewPosition);
   fPositionChanged = false;
@@ -623,7 +624,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
     if(tPathLength + geomMin < range && tPathLength > geomMin) {
 
       G4double preSafety = step.GetPreStepPoint()->GetSafety();
-      G4double postSafety= preSafety - geomLength; 
+      G4double postSafety= preSafety - step.GetDeltaPosition().mag(); 
       G4bool safetyRecomputed = false;
       if( postSafety < geomMin ) {
 	safetyRecomputed = true;

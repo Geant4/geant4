@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 July 13: V.Ivant (emutils-V09-06-44)
+- G4VEmModel - changed signature of the method MinPrimaryEnergy(..)
+    by addition "G4double cut"; return back virtual method MinEnergyCut;
+    more accurate usage of inlined methods
+- G4VMultipleScattering - more accurate postStepSafety
+
 08 July 13: V.Ivant (emutils-V09-06-43)
 - G4VMultipleScattering - moved displacement AlongStep
 

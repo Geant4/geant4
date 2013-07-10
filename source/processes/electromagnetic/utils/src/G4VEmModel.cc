@@ -341,14 +341,23 @@ void G4VEmModel::CorrectionsAlongStep(const G4MaterialCutsCouple*,
 G4double G4VEmModel::Value(const G4MaterialCutsCouple* couple,
 			   const G4ParticleDefinition* p, G4double e)
 {
-  fCurrentCouple = couple;
+  SetCurrentCouple(couple);
   return e*e*CrossSectionPerVolume(couple->GetMaterial(),p,e,0.0,DBL_MAX);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4VEmModel::MinPrimaryEnergy(const G4Material*,
-				      const G4ParticleDefinition*)
+				      const G4ParticleDefinition*,
+                                      G4double)
+{
+  return 0.0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VEmModel::MinEnergyCut(const G4ParticleDefinition*, 
+				  const G4MaterialCutsCouple*)
 {
   return 0.0;
 }
