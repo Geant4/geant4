@@ -1,0 +1,47 @@
+List of tests of HE muon interactions in Geant4
+(By RPK 20-21.05.00)
+
+Thin target (to continue the works started):
+
+10 TeV, 100 cm iron, 10^5 muons, 4 processes: delta, brems, pairs, photonuclear
+ (to compare with the expectation: X*?(T,?)*?*N?*?lg*log10)
+
+Remaining problems found at the moment:
+
+1) Knock-on electron production for high-energy muons has to be modified (including 
+contribution from electron bremsstrahlung diagrams and radiative corrections); now it 
+is not implemented properly;
+2) There is a hint for a peak near the edge of the distribution of energy lost by muon in 
+photonuclear interaction (similar to that which was found and eliminated earlier in the 
+bremsstrahlung); - problem has been solved! (L.U.,May 22nd)
+3) It is not clear whether the energy lost by muon is equal to the energy transferred to 
+secondary particles (kinetic energy of delta-electron, total energy of electron and 
+positron in pair production, etc.). There is a hint that they are different.
+4) With high statistics simulation, an error appears sometimes in 
+G4HEInelastic::GenerateNBodyEvent  (total mass >= total energy).
+
+After the general agreement is reached, to extend these calculations (with additional 
+energy/material):
+
+Muon energies: 100 GeV  and 10 TeV
+Materials: iron (100 cm, or 787 g/cm^2) and carbon (graphite, 500 cm x  2.265 g/cm^3)
+
+Again, after the agreement is reached, to perform calculations for iron and carbon target 
+at 10 TeV energy with increased statistics (about 10^6 muons), to compare with 
+expectation (also in terms of the ratio "simulated/expected"), to prepare beautiful pictures 
+for inclusion in EM Physics gallery and other presentations.
+
+Thick target (distribution of the total energy lost by muon in bulk matter, including 
+continuous energy loss and all 4 discrete processes), 3 m iron, 1 TeV muon energy, 
+statistics about 10^5, then 10^6 muons:
+
+- histograms of the residual muon energy (in linear scale, 2 GeV bin) and of the energy 
+lost by muon (in log scale, 0.10 bin in common logarithm); comparison is possible 
+with Van Ginneken's TRAMU (the figure given by Particle Data Group) and with 
+Geant 3.21** (A.Rybin); also simulation with original Geant 3.21 is of interest - to 
+show, where it was wrong;
+- cut variation: with cut = 1 - 100 MeV the distribution should be the same (in 
+particular, this is one of the tests of the consistency of continuous loss calculation);
+- histograms of the scattering angle and lateral displacement (nothing to compare? may 
+be, Geant 3.21 ?).
+

@@ -101,10 +101,11 @@ public:
 				 G4double maxEnergy);
 
   virtual G4double MinPrimaryEnergy(const G4Material*,
-                                    const G4ParticleDefinition*);
+                                    const G4ParticleDefinition*,
+                                    G4double);
 
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-			       const G4MaterialCutsCouple*);
+				const G4MaterialCutsCouple*);
 
   inline void SetLowestKineticEnergy(G4double e);
 
@@ -130,7 +131,7 @@ protected:
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
 				      G4double kineticEnergy);
 
-  inline void SetCurrentElement(G4double Z);
+  inline void SetElement(G4int Z);
 
 private:
 
@@ -152,10 +153,10 @@ protected:
   G4double factorForCross;
   G4double sqrte;
   G4double particleMass;
-  G4double currentZ;
   G4double z13;
   G4double z23;
   G4double lnZ;
+  G4int    currentZ;
 
   static const G4double xgi[8],wgi[8];
 
@@ -174,7 +175,8 @@ private:
   G4int nbiny;
   size_t nmaxElements;
 
-  static const G4double zdat[5], adat[5], tdat[41];
+  static const G4int zdat[5];
+  static const G4double adat[5], tdat[41];
   G4double ya[1001], proba[5][41][1001];
 
   G4double ymin;
@@ -205,14 +207,13 @@ void G4MuPairProductionModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4MuPairProductionModel::SetCurrentElement(G4double Z)
+inline void G4MuPairProductionModel::SetElement(G4int Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
-    G4int iz = G4int(Z);
-    z13 = nist->GetZ13(iz);
+    z13 = nist->GetZ13(Z);
     z23 = z13*z13;
-    lnZ = nist->GetLOGZ(iz);
+    lnZ = nist->GetLOGZ(Z);
   }
 }
 

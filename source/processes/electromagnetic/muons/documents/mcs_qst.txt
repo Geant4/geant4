@@ -1,0 +1,45 @@
+By R.P.Kokoulin, May 12th, 2000
+
+Multiple Coulomb Scattering – some questions and problems
+
+Apart from the problems of creation and development of convenient 
+procedure for fast simulation of the effect, some principal questions are to be 
+answered (possibly, most of them have already been investigated)
+
+General
+
+Is it possible to use cross section formulae without magnetic formfactor and spin effects:
+
+a) for nucleus (probably yes);
+b) for proton (possibly yes);
+c) for electron (probably no).
+
+Should the scattering on the screened nucleus and on atomic electrons be considered 
+separately? (likely, they should; they probably can be combined later, but…)
+
+Scattering on the nucleus:
+
+a) influence of the choice of the elastic atomic formfactor (TF, HF, hydrogen-like, …); 
+there is a hope that the difference is small (with a proper choice of the parameters) but 
+it should be estimated;
+b) influence of the nuclear size (it should influence RMS angle and distribution shape on 
+the tail);
+c) influence of the choice of nuclear formfactor (exponential, Gaussian, Fermi model, 
+etc.); probably, it is small (only RMS nucleus radius is crucial) but it is better to 
+compare directly;
+d) contribution of inelastic nucleus formfactor (incoherent scattering on protons of the 
+nucleus);
+e) necessity of taking into account proton formfactor (for incoherent scattering); last two 
+points are expected to give small effect but need evaluation.
+
+Scattering on atomic electrons:
+
+a) introduction and influence of the choice of inelastic atomic formfactor (TH, 
+hydrogen-like exponential, what else?) – it should be evaluated; more simple 
+approaches, such as Z(Z+1) substitutions, seem to be incorrect;
+b) problem of a double account for scattering on electrons if explicit simulation of the 
+elastic scattering of the projectile on electrons (possibly, above the cut Tcut) is 
+included (knock-on electron production with full kinematics) – the possible way is to 
+consider restricted multiple scattering (below Tcut).
+
+

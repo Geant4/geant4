@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 July 2013: V.Ivant (emmuons-V09-06-15)
+- G4MuPairProductionModel - fixed non-reproducibity due to currentZ
+    member of the class definition; changed signature of the method
+    MinPrimaryEnergy(..) - added "G4double cut"; substitute
+    SetCurrentElement(G4double) by SetElement(G4int); use more G4Pow
+- G4MuBremsstrahlung - changed signature of the method 
+    MinPrimaryEnergy(..) - added "G4double cut"
+
 17 June 2013: V.Ivant (emmuons-V09-06-14)
 - G4MuPairProductionModel, G4MuBremsstrahlungModel - added 
     MinPrimaryEnergy method implementation (all cross section tables

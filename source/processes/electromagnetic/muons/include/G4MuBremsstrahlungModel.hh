@@ -108,7 +108,7 @@ public:
   inline void SetLowestKineticEnergy(G4double e);
 
   virtual G4double MinPrimaryEnergy(const G4Material*,
-                                    const G4ParticleDefinition*);
+                                    const G4ParticleDefinition*, G4double);
 
 protected:
 

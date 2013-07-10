@@ -134,9 +134,10 @@ G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBremsstrahlungModel::MinPrimaryEnergy(const G4Material*,
-						   const G4ParticleDefinition*)
+						   const G4ParticleDefinition*,
+						   G4double cut)
 {
-  return lowestKinEnergy;
+  return std::max(lowestKinEnergy,cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
