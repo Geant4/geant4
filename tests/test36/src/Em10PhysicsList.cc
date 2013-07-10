@@ -96,33 +96,6 @@ Em10PhysicsList::Em10PhysicsList(Em10DetectorConstruction* p)
 /////////////////////////////////////////////////////////////
 //
 //
-/*
-Em10PhysicsList::Em10PhysicsList(ALICEDetectorConstruction* p)
-  :  G4VModularPhysicsList()  // G4VUserPhysicsList(),
-     MaxChargedStep(DBL_MAX),
-     thePhotoElectricEffect(0),      theComptonScattering(0),
-     theGammaConversion(0),
-     theeminusMultipleScattering(0), theeminusIonisation(0),
-     theeminusBremsstrahlung(0),
-     theeplusMultipleScattering(0),  theeplusIonisation(0),
-     theeplusBremsstrahlung(0),
-     theeplusAnnihilation(0),
-     theeminusStepCut(0),            theeplusStepCut(0),
-     fMinElectronEnergy(1.0*keV),fMinGammaEnergy(1.0*keV)
-{
-  apDet = p;
-
-  defaultCutValue = 1.000*mm ;
-  cutForGamma     = defaultCutValue ;
-  cutForElectron  = defaultCutValue ;
-
-  SetVerboseLevel(1);
-  physicsListMessenger = new Em10PhysicsListMessenger(this);
-}
-*/
-/////////////////////////////////////////////////////////////////////////
-//
-//
 
 Em10PhysicsList::~Em10PhysicsList()
 {
