@@ -44,18 +44,12 @@ inline void * G4DynamicParticle::operator new(size_t)
 {
   if (!pDynamicParticleAllocator) pDynamicParticleAllocator =
     new G4Allocator<G4DynamicParticle>;
-  G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *pDynamicParticleAllocator;
-  void * aDynamicParticle;
-  aDynamicParticle = (void *) aDynamicParticleAllocator.MallocSingle();
-  return aDynamicParticle;
+  return pDynamicParticleAllocator->MallocSingle();
 }
 
 inline void G4DynamicParticle::operator delete(void * aDynamicParticle)
 {
-  if (!pDynamicParticleAllocator) pDynamicParticleAllocator =
-    new G4Allocator<G4DynamicParticle>;
-  G4Allocator<G4DynamicParticle> &aDynamicParticleAllocator = *pDynamicParticleAllocator;
-  aDynamicParticleAllocator.FreeSingle((G4DynamicParticle *) aDynamicParticle);
+  pDynamicParticleAllocator->FreeSingle((G4DynamicParticle *) aDynamicParticle);
 }
 
 // ------------------------

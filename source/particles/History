@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 11. Jul. 2013 Gabriele Cosmo (particles-V09-06-33)
+- Simplified use of allocator for G4DynamicParticle.
+
 - 01. Jul. 2013 Makoto Asai (particles-V09-06-32)
 - Generic ions except GenericIon itself no longer use /run/particle/addProcessManager
   UI command to make the shallow copy of process manager.

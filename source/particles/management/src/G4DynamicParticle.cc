@@ -92,8 +92,6 @@ G4DynamicParticle::G4DynamicParticle():
 		   primaryParticle(0),
                    thePDGcode(0)
 {
-  if (!pDynamicParticleAllocator)
-    pDynamicParticleAllocator = new G4Allocator<G4DynamicParticle>;
 }
 
 ////////////////////
@@ -117,8 +115,6 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   primaryParticle(0),
                    thePDGcode(0)
 {
-  if (!pDynamicParticleAllocator)
-    pDynamicParticleAllocator = new G4Allocator<G4DynamicParticle>;
 }
 
 ////////////////////
@@ -138,8 +134,6 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   primaryParticle(0),
                    thePDGcode(0)
 {
-  if (!pDynamicParticleAllocator)
-    pDynamicParticleAllocator = new G4Allocator<G4DynamicParticle>  ;
   SetMomentum(aParticleMomentum);  // 3-dim momentum is given
 }
 
@@ -160,8 +154,6 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   primaryParticle(0),
                    thePDGcode(0)
 {
-  if (!pDynamicParticleAllocator)
-    pDynamicParticleAllocator = new G4Allocator<G4DynamicParticle>;
   Set4Momentum(aParticleMomentum);  // 4-momentum vector (Lorentz vector) is given
 }
 
@@ -182,8 +174,6 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   primaryParticle(0),
                    thePDGcode(0)
 {
-  if (!pDynamicParticleAllocator)
-    pDynamicParticleAllocator = new G4Allocator<G4DynamicParticle>  ;
   // total energy and 3-dim momentum are given
   G4double pModule2 = aParticleMomentum.mag2();
   if (pModule2>0.0) {
@@ -220,8 +210,6 @@ G4DynamicParticle::G4DynamicParticle(const G4DynamicParticle &right):
   primaryParticle(right.primaryParticle),
   thePDGcode(right.thePDGcode)
 {
-  if (!pDynamicParticleAllocator)
-      pDynamicParticleAllocator = new G4Allocator<G4DynamicParticle>;
   if (right.theElectronOccupancy != 0) {
       theElectronOccupancy =
 	new G4ElectronOccupancy(*right.theElectronOccupancy);
