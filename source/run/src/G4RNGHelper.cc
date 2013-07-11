@@ -32,3 +32,4 @@ G4TemplateRNGHelper<long>* G4TemplateRNGHelper<long>::instance = 0;
 
 template<>
 G4TemplateRNGHelper<G4String>* G4TemplateRNGHelper<G4String>::instance = 0;
+
