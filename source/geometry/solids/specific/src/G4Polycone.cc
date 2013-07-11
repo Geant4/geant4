@@ -1277,12 +1277,12 @@ void  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
   //
   Z.push_back(corners[0].z);
   G4double Zprev=Z[0];
-  if((Zprev == corners[1].z))
+  if (Zprev == corners[1].z)
   {
     Rmin.push_back(corners[0].r);  
     Rmax.push_back (corners[1].r);icurr=1; 
   }
-  else if(Zprev == corners[numPlanes-1].z)
+  else if (Zprev == corners[numPlanes-1].z)
   {
     Rmin.push_back(corners[numPlanes-1].r);  
     Rmax.push_back (corners[0].r);

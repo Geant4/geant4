@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-Jul-2013  G.Cosmo (geom-specific-V09-06-14)
+- Fixed compilation warning in G4Polycone on MacOS/clang.
+
 09-Jul-2013  T.Nikitina (geom-specific-V09-06-13)
 - Extended method SetOriginalParameters() in G4Polycone in order to handle
   all possible cases of conversion of generic polycone to polycone with
