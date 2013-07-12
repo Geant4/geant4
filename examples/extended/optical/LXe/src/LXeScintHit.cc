@@ -37,7 +37,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4Allocator<LXeScintHit> LXeScintHitAllocator;
+G4ThreadLocal G4Allocator<LXeScintHit>* LXeScintHitAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -23,64 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: LXeActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file optical/LXe/src/LXeGeneralPhysics.cc
-/// \brief Implementation of the LXeGeneralPhysics class
-//
-//
-#include "LXeGeneralPhysics.hh"
+/// \file LXeActionInitialization.hh
+/// \brief Definition of the LXeActionInitialization class
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include <iomanip>
+#ifndef LXeActionInitialization_h
+#define LXeActionInitialization_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4VUserActionInitialization.hh"
 
-LXeGeneralPhysics::LXeGeneralPhysics(const G4String& name)
-                     :  G4VPhysicsConstructor(name) {}
+class LXeRecorderBase;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class B4DetectorConstruction;
 
-LXeGeneralPhysics::~LXeGeneralPhysics() {
-  fDecayProcess = NULL;
-}
+/// Action initialization class.
+///
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-
-#include "G4Geantino.hh"
-#include "G4ChargedGeantino.hh"
-
-#include "G4GenericIon.hh"
-
-void LXeGeneralPhysics::ConstructParticle()
+class LXeActionInitialization : public G4VUserActionInitialization
 {
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
+  public:
+    LXeActionInitialization(LXeRecorderBase*);
+    virtual ~LXeActionInitialization();
 
-  G4GenericIon::GenericIonDefinition();
-}
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  private:
+    LXeRecorderBase* fRecorder;
+};
 
-void LXeGeneralPhysics::ConstructProcess()
-{
-  fDecayProcess = new G4Decay();
-
-  // Add Decay Process
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (fDecayProcess->IsApplicable(*particle)) {
-      pmanager ->AddProcess(fDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-    }
-  }
-}
+#endif

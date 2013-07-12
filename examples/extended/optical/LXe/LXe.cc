@@ -28,19 +28,22 @@
 /// \file optical/LXe/LXe.cc
 /// \brief Main program of the optical/LXe example
 //
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#include "LXeWorkerInitialization.hh"
+#else
 #include "G4RunManager.hh"
+#include "LXeSteppingVerbose.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "G4String.hh"
 
-#include "LXeDetectorConstruction.hh"
 #include "LXePhysicsList.hh"
-#include "LXePrimaryGeneratorAction.hh"
-#include "LXeEventAction.hh"
-#include "LXeStackingAction.hh"
-#include "LXeSteppingAction.hh"
-#include "LXeTrackingAction.hh"
-#include "LXeRunAction.hh"
-#include "LXeSteppingVerbose.hh"
+#include "LXeDetectorConstruction.hh"
+
+#include "LXeActionInitialization.hh"
 
 #include "LXeRecorderBase.hh"
 
@@ -54,27 +57,30 @@
 
 int main(int argc, char** argv)
 {
-  G4VSteppingVerbose::SetInstance(new LXeSteppingVerbose);
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+#else
+  // User Verbose output class
+  //
+  G4VSteppingVerbose::SetInstance(new LXeSteppingVerbose());
 
-  G4RunManager* runManager = new G4RunManager;
+  G4RunManager * runManager = new G4RunManager;
+#endif
 
-  runManager->SetUserInitialization(new LXeDetectorConstruction);
-  runManager->SetUserInitialization(new LXePhysicsList);
+  runManager->SetUserInitialization(new LXeDetectorConstruction());
+  runManager->SetUserInitialization(new LXePhysicsList());
+
+  LXeRecorderBase* recorder = NULL; //No recording is done in this example
+
+  runManager->SetUserInitialization(new LXeActionInitialization(recorder));
 
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 #endif
-
-  LXeRecorderBase* recorder = NULL;//No recording is done in this example
-
-  runManager->SetUserAction(new LXePrimaryGeneratorAction);
-  runManager->SetUserAction(new LXeStackingAction);
-
-  runManager->SetUserAction(new LXeRunAction(recorder));
-  runManager->SetUserAction(new LXeEventAction(recorder));
-  runManager->SetUserAction(new LXeTrackingAction(recorder));
-  runManager->SetUserAction(new LXeSteppingAction(recorder));
 
   // runManager->Initialize();
  
@@ -97,7 +103,7 @@ int main(int argc, char** argv)
     UImanager->ApplyCommand(command+filename);
   }
 
-  if(recorder)delete recorder;
+//  if(recorder)delete recorder;
 
 #ifdef G4VIS_USE
   delete visManager;

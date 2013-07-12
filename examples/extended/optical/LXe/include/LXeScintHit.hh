@@ -41,6 +41,8 @@
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
 
+#include "tls.hh"
+
 class LXeScintHit : public G4VHit
 {
   public:
@@ -76,18 +78,18 @@ class LXeScintHit : public G4VHit
 
 typedef G4THitsCollection<LXeScintHit> LXeScintHitsCollection;
 
-extern G4Allocator<LXeScintHit> LXeScintHitAllocator;
+extern G4ThreadLocal G4Allocator<LXeScintHit>* LXeScintHitAllocator;
 
 inline void* LXeScintHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) LXeScintHitAllocator.MallocSingle();
-  return aHit;
+  if(!LXeScintHitAllocator)
+      LXeScintHitAllocator = new G4Allocator<LXeScintHit>;
+  return (void *) LXeScintHitAllocator->MallocSingle();
 }
 
 inline void LXeScintHit::operator delete(void *aHit)
 {
-  LXeScintHitAllocator.FreeSingle((LXeScintHit*) aHit);
+  LXeScintHitAllocator->FreeSingle((LXeScintHit*) aHit);
 }
 
 #endif

@@ -23,64 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: LXeWorkerInitialization.hh 66522 2012-12-19 12:26:04Z ihrivnac $
 //
-/// \file optical/LXe/src/LXeGeneralPhysics.cc
-/// \brief Implementation of the LXeGeneralPhysics class
+/// \file LXe/include/LXeWorkerInitialization.hh
+/// \brief Definition of the LXeWorkerInitialization class
 //
-//
-#include "LXeGeneralPhysics.hh"
+
+#ifndef LXeWorkerInitialization_H
+#define LXeWorkerInitialization_H 1
 
 #include "globals.hh"
-#include "G4ios.hh"
-#include <iomanip>
+#include "G4UserWorkerInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXeGeneralPhysics::LXeGeneralPhysics(const G4String& name)
-                     :  G4VPhysicsConstructor(name) {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-LXeGeneralPhysics::~LXeGeneralPhysics() {
-  fDecayProcess = NULL;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-
-#include "G4Geantino.hh"
-#include "G4ChargedGeantino.hh"
-
-#include "G4GenericIon.hh"
-
-void LXeGeneralPhysics::ConstructParticle()
+class LXeWorkerInitialization : public G4UserWorkerInitialization
 {
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
+  public:
+    LXeWorkerInitialization();
+    virtual ~LXeWorkerInitialization();
 
-  G4GenericIon::GenericIonDefinition();
-}
+  public:
+    virtual void WorkerInitialize() const;
+};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void LXeGeneralPhysics::ConstructProcess()
-{
-  fDecayProcess = new G4Decay();
-
-  // Add Decay Process
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (fDecayProcess->IsApplicable(*particle)) {
-      pmanager ->AddProcess(fDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-    }
-  }
-}
+#endif

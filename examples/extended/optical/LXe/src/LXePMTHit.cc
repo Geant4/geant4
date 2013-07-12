@@ -37,7 +37,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4Allocator<LXePMTHit> LXePMTHitAllocator;
+G4ThreadLocal G4Allocator<LXePMTHit>* LXePMTHitAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

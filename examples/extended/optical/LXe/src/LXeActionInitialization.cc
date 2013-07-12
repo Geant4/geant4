@@ -23,64 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: LXeActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file optical/LXe/src/LXeGeneralPhysics.cc
-/// \brief Implementation of the LXeGeneralPhysics class
-//
-//
-#include "LXeGeneralPhysics.hh"
+/// \file LXeActionInitialization.cc
+/// \brief Implementation of the LXeActionInitialization class
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include <iomanip>
+#include "LXeActionInitialization.hh"
+
+#include "LXePrimaryGeneratorAction.hh"
+
+#include "LXeRunAction.hh"
+#include "LXeEventAction.hh"
+#include "LXeTrackingAction.hh"
+#include "LXeSteppingAction.hh"
+#include "LXeStackingAction.hh"
+
+#include "LXeRecorderBase.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeGeneralPhysics::LXeGeneralPhysics(const G4String& name)
-                     :  G4VPhysicsConstructor(name) {}
+LXeActionInitialization::LXeActionInitialization(LXeRecorderBase* recorder)
+ : G4VUserActionInitialization(), fRecorder(recorder)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-LXeGeneralPhysics::~LXeGeneralPhysics() {
-  fDecayProcess = NULL;
-}
+LXeActionInitialization::~LXeActionInitialization()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
-
-#include "G4Geantino.hh"
-#include "G4ChargedGeantino.hh"
-
-#include "G4GenericIon.hh"
-
-void LXeGeneralPhysics::ConstructParticle()
+void LXeActionInitialization::BuildForMaster() const
 {
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-
-  G4GenericIon::GenericIonDefinition();
+  SetUserAction(new LXeRunAction(fRecorder));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeGeneralPhysics::ConstructProcess()
+void LXeActionInitialization::Build() const
 {
-  fDecayProcess = new G4Decay();
+  SetUserAction(new LXePrimaryGeneratorAction());
 
-  // Add Decay Process
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (fDecayProcess->IsApplicable(*particle)) {
-      pmanager ->AddProcess(fDecayProcess);
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-    }
-  }
-}
+  SetUserAction(new LXeStackingAction());
+
+  SetUserAction(new LXeRunAction(fRecorder));
+  SetUserAction(new LXeEventAction(fRecorder));
+  SetUserAction(new LXeTrackingAction(fRecorder));
+  SetUserAction(new LXeSteppingAction(fRecorder));
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -290,6 +290,12 @@ G4VPhysicalVolume* LXeDetectorConstruction::ConstructDetector()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void LXeDetectorConstruction::ConstructSDandField()
+{
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void LXeDetectorConstruction::SetDimensions(G4ThreeVector dims){
   this->fScint_x=dims[0];
   this->fScint_y=dims[1];

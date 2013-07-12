@@ -54,6 +54,7 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
     virtual ~LXeDetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
     //Functions to modify the geometry
     void SetDimensions(G4ThreeVector );

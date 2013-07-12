@@ -41,6 +41,8 @@
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
 
+#include "tls.hh"
+
 class G4VTouchable;
 
 class LXePMTHit : public G4VHit
@@ -90,16 +92,16 @@ class LXePMTHit : public G4VHit
 
 typedef G4THitsCollection<LXePMTHit> LXePMTHitsCollection;
 
-extern G4Allocator<LXePMTHit> LXePMTHitAllocator;
+extern G4ThreadLocal G4Allocator<LXePMTHit>* LXePMTHitAllocator;
 
 inline void* LXePMTHit::operator new(size_t){
-  void *aHit;
-  aHit = (void *) LXePMTHitAllocator.MallocSingle();
-  return aHit;
+  if(!LXePMTHitAllocator)
+      LXePMTHitAllocator = new G4Allocator<LXePMTHit>;
+  return (void *) LXePMTHitAllocator->MallocSingle();
 }
 
 inline void LXePMTHit::operator delete(void *aHit){
-  LXePMTHitAllocator.FreeSingle((LXePMTHit*) aHit);
+  LXePMTHitAllocator->FreeSingle((LXePMTHit*) aHit);
 }
 
 #endif
