@@ -23,41 +23,49 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4H2Messenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
+// The messenger class for G4VH2Manager.
+// It implements commands in /analysis/h2 directory.
 //
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+#ifndef G4H2Messenger_h
+#define G4H2Messenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VAnalysisManager;
+class G4VH2Manager;
 class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
+class G4UIcommand;
 
-class G4AnalysisMessenger : public G4UImessenger
+class G4H2Messenger : public G4UImessenger
 {
   public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
+    G4H2Messenger(G4VH2Manager* manager);
+    virtual ~G4H2Messenger();
    
     // methods
     virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
-    G4VAnalysisManager*    fManager; ///< Associated class
     
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
+  private:
+    void CreateH2Cmd();
+    void SetH2Cmd();
+    void SetH2TitleCmd();
+    void SetH2XAxisCmd();
+    void SetH2YAxisCmd();
+    void SetH2ZAxisCmd();
+ 
+    G4VH2Manager*  fManager; ///< Associated class
+    
+    G4UIdirectory*         fH2Dir;   
+    G4UIcommand*           fCreateH2Cmd;
+    G4UIcommand*           fSetH2Cmd;
+    G4UIcommand*           fSetH2TitleCmd;   
+    G4UIcommand*           fSetH2XAxisCmd;   
+    G4UIcommand*           fSetH2YAxisCmd;   
+    G4UIcommand*           fSetH2ZAxisCmd;   
 };
   
 #endif
-

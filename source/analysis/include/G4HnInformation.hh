@@ -35,20 +35,6 @@
 
 struct G4HnInformation
 {
-  G4HnInformation() 
-    : fName(""), 
-      fXUnitName("none"), 
-      fYUnitName("none"), 
-      fXFcnName("none"),
-      fYFcnName("none"),
-      fXUnit(1.0), 
-      fYUnit(1.0), 
-      fXFcn(G4FcnIdentity),
-      fYFcn(G4FcnIdentity),
-      fActivation(true),
-      fAscii(false)
-       {}
-
   G4HnInformation(const G4String& name, 
                   const G4String& xunitName, const G4String& yunitName,
                   const G4String& fxName, const G4String& fyName,
@@ -77,7 +63,12 @@ struct G4HnInformation
   G4Fcn    fXFcn;
   G4Fcn    fYFcn;
   G4bool   fActivation;
-  G4bool   fAscii;
+  G4bool   fAscii;  
+  
+  // disable default constructor
+  private:
+    G4HnInformation(); 
+
 };
 
 #endif  

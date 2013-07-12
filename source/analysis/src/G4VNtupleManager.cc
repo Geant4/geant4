@@ -23,41 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4VNtupleManager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
-//
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 18/06/2013 (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+#include "G4VNtupleManager.hh"
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class G4VAnalysisManager;
-class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
-
-class G4AnalysisMessenger : public G4UImessenger
+//_____________________________________________________________________________
+G4VNtupleManager::G4VNtupleManager(const G4AnalysisManagerState& state)
+  : G4BaseAnalysisManager(state),
+    fFirstNtupleColumnId(0),
+    fLockFirstNtupleColumnId(false)
 {
-  public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
-   
-    // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
-    G4VAnalysisManager*    fManager; ///< Associated class
-    
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
-};
-  
-#endif
+}
+
+//_____________________________________________________________________________
+G4VNtupleManager::~G4VNtupleManager()
+{
+}
+
+//_____________________________________________________________________________
+G4bool G4VNtupleManager::SetFirstNtupleColumnId(G4int firstId) 
+{ 
+  if ( fLockFirstNtupleColumnId ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set FirstNtupleColumnId as its value was already used.";
+    G4Exception("G4VNtupleManager::SetFirstNtupleColumnId()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }              
+
+  fFirstNtupleColumnId = firstId; 
+  return true;
+}
 

@@ -23,41 +23,61 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4XmlFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
-//
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+#ifndef G4XmlFileManager_h
+#define G4XmlFileManager_h 1
 
-#include "G4UImessenger.hh"
+#include "G4VFileManager.hh"
+#include "G4XmlNtupleDescription.hh"
 #include "globals.hh"
 
-class G4VAnalysisManager;
-class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
+#include <fstream>
 
-class G4AnalysisMessenger : public G4UImessenger
+class G4AnalysisManagerState;
+
+class G4XmlFileManager : public G4VFileManager
 {
   public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
-   
-    // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
-    G4VAnalysisManager*    fManager; ///< Associated class
+    G4XmlFileManager(const G4AnalysisManagerState& state);
+    ~G4XmlFileManager();
+
+    // Methods to manipulate files
+    virtual G4bool OpenFile(const G4String& fileName);
+    virtual G4bool WriteFile();
+    virtual G4bool CloseFile(); 
+
+    // Specific methods for files per objects
+    G4bool CreateHnFile();
+    G4bool CloseHnFile(); 
+    G4bool CreateNtupleFile(G4XmlNtupleDescription* ntupleDescription);
+    G4bool CloseNtupleFile(G4XmlNtupleDescription* ntupleDescription); 
     
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
+    // Set methods
+    void LockHistoDirectoryName();
+    void LockNtupleDirectoryName();
+    
+    // Get methods
+    std::ofstream* GetHnFile() const;
+    
+   private:
+    // data members
+    //
+    std::ofstream* fHnFile;
 };
-  
+
+// inline functions
+
+inline void G4XmlFileManager::LockHistoDirectoryName()
+{ fLockHistoDirectoryName = true; }
+
+inline void G4XmlFileManager::LockNtupleDirectoryName()
+{ fLockNtupleDirectoryName = true; }
+
+inline std::ofstream* G4XmlFileManager::GetHnFile() const
+{ return fHnFile; }
+
 #endif
 

@@ -23,40 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4HnMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
+// The messenger class for G4HnManager.
+// It implements commands in /analysis/h1 directory.
 //
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+#ifndef G4HnMessenger_h
+#define G4HnMessenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VAnalysisManager;
-class G4UIdirectory;
+class G4HnManager;
+class G4UIcommand;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 
-class G4AnalysisMessenger : public G4UImessenger
+class G4HnMessenger : public G4UImessenger
 {
   public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
+    G4HnMessenger(G4HnManager* manager);
+    virtual ~G4HnMessenger();
    
     // methods
     virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
-    G4VAnalysisManager*    fManager; ///< Associated class
     
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
+  private:
+    G4String  GetCmdDirectoryName() const;
+    G4String  GetHnDescription() const;
+    void SetHnAsciiCmd();
+    void SetHnActivationCmd();
+    void SetHnActivationToAllCmd();
+ 
+    G4HnManager*  fManager; ///< Associated class
+    
+    G4UIcmdWithAnInteger*  fSetHnAsciiCmd;   
+    G4UIcommand*           fSetHnActivationCmd;   
+    G4UIcmdWithABool*      fSetHnActivationAllCmd;   
 };
   
 #endif

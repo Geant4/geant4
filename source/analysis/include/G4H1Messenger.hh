@@ -23,40 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4H1Messenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
+// The messenger class for G4VH1Manager.
+// It implements commands in /analysis/h1 directory.
+//
+// This messenger class is a generalization of the HistoMessenger class,
+// originally developed for the extended/electromagnetic examples
+// by Michel Maire (michel.maire@lapp.in2p3.fr)
 //
 // Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+#ifndef G4H1Messenger_h
+#define G4H1Messenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VAnalysisManager;
+class G4VH1Manager;
 class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
+class G4UIcommand;
 
-class G4AnalysisMessenger : public G4UImessenger
+class G4H1Messenger : public G4UImessenger
 {
   public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
+    G4H1Messenger(G4VH1Manager* manager);
+    virtual ~G4H1Messenger();
    
     // methods
     virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
-    G4VAnalysisManager*    fManager; ///< Associated class
     
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
+  private:
+    void CreateH1Cmd();
+    void SetH1Cmd();
+    void SetH1TitleCmd();
+    void SetH1XAxisCmd();
+    void SetH1YAxisCmd();
+ 
+    G4VH1Manager*  fManager; ///< Associated class
+    
+    G4UIdirectory*         fH1Dir;   
+    G4UIcommand*           fCreateH1Cmd;
+    G4UIcommand*           fSetH1Cmd;
+    G4UIcommand*           fSetH1TitleCmd;   
+    G4UIcommand*           fSetH1XAxisCmd;   
+    G4UIcommand*           fSetH1YAxisCmd;   
 };
   
 #endif

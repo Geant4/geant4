@@ -23,41 +23,69 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4VFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// Utility class for analysis category messages.
+// Base class for File manager.
+//
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
-// Author: Ivana Hrivnacova, 17/10/2011  (ivana@ipno.in2p3.fr)
+#ifndef G4VFileManager_h
+#define G4VFileManager_h 1
 
-#ifndef G4AnalysisVerbose_h
-#define G4AnalysisVerbose_h 1
-
+#include "G4BaseAnalysisManager.hh"
 #include "globals.hh"
 
-class G4AnalysisVerbose
+class G4FileMessenger;
+
+class G4VFileManager
 {
   public:
-    G4AnalysisVerbose(const G4String& type, G4int verboseLevel);
-    virtual ~G4AnalysisVerbose();
+    G4VFileManager(const G4AnalysisManagerState& state);
+    virtual ~G4VFileManager();
+   
+    // Methods to manipulate files
+    virtual G4bool OpenFile(const G4String& fileName) = 0;
+    virtual G4bool WriteFile() = 0;
+    virtual G4bool CloseFile() = 0; 
+    
+    // Methods for handling files and directories names
+    G4bool SetFileName(const G4String& fileName);
+    G4bool SetHistoDirectoryName(const G4String& dirName);
+    G4bool SetNtupleDirectoryName(const G4String& dirName);
+    G4String GetFileName() const;
+    G4String GetFullFileName() const;
+    G4String GetNtupleFileName(const G4String& ntupleName) const;
+    G4String GetHistoDirectoryName() const;
+    G4String GetNtupleDirectoryName() const;
 
-    void Message(const G4String& action, 
-                 const G4String& object, 
-                 const G4String& objectName,
-                 G4bool success = true) const;
+    // The manager file type (starts with a lowercase letter)
+    G4String GetFileType() const;                 
 
-    void Message(const G4String& action, 
-                 const G4String& object, 
-                 G4ExceptionDescription& description,
-                 G4bool success = true) const;
-        
-  private:
+  protected:
     // data members
-    //
-    G4String fType;
-    G4String fToBeDoneText;
-    G4String fDoneText;
-    G4String fFailureText;
+    G4FileMessenger* fMessenger;
+    const G4AnalysisManagerState& fState;
+    G4String fFileName;
+    G4String fHistoDirectoryName;
+    G4String fNtupleDirectoryName; 
+    G4bool   fLockFileName;     
+    G4bool   fLockHistoDirectoryName;     
+    G4bool   fLockNtupleDirectoryName;
 };
 
+// inline functions
+
+inline G4String G4VFileManager::GetFileName() const {
+  return fFileName;
+}  
+
+inline G4String G4VFileManager::GetHistoDirectoryName() const {
+  return fHistoDirectoryName;
+}  
+
+inline G4String G4VFileManager::GetNtupleDirectoryName() const {
+  return fNtupleDirectoryName;
+}  
+  
 #endif
 

@@ -17,6 +17,18 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 11, 2013 I.Hrivnacova (analysis-V09-06-12)
+- Refactoring manager classes:
+  - Introduced managers per object types (H1, H2, Ntuple, File)
+    and re-implemented G4VAnalysisManager as a composite of the objects
+    managers
+  - Removed enum G4VAnalysisManager::ObjectType and replaced related methods
+    with methods per object type; eg.
+      void  SetActivation(ObjectType type,  G4int id, G4bool activation);
+    with
+      void  SetH1Activation(G4int id, G4bool activation);
+      void  SetH2Activation(G4int id, G4bool activation);
+
 June 20, 2013 I.Hrivnacova (analysis-V09-06-11)
 - Fixed the problem in Root files clean-up (manifested in 
   examples/advanced/microbeam):

@@ -23,19 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HnInformation.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id$
 
+// Structure containing the information related to Root ntuple
+//
 // Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
 
 #ifndef G4RootNtupleDescription_h
 #define G4RootNtupleDescription_h 1
 
 #include "tools/wroot/ntuple"
-#include "tools/ntuple_booking"
 
 #include <map>
 
-// Structure containing the information related to one Root ntuple
+namespace tools { 
+class ntuple_booking;
+}
 
 struct G4RootNtupleDescription
 {

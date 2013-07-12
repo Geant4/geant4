@@ -23,40 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4FileMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
+// The messenger class for G4VFileManager
 //
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// It implements commands:
+// - /analysis/setFileName name
+// - /analysis/setHistoDirName name
+// - /analysis/setNtupleDirName name
+//
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+#ifndef G4FileMessenger_h
+#define G4FileMessenger_h 1
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VAnalysisManager;
-class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
+class G4VFileManager;
+class G4UIcmdWithAString;
 
-class G4AnalysisMessenger : public G4UImessenger
+class G4FileMessenger : public G4UImessenger
 {
   public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
+    G4FileMessenger(G4VFileManager* manager);
+    virtual ~G4FileMessenger();
    
     // methods
     virtual void SetNewValue(G4UIcommand* command, G4String value);
  
-    G4VAnalysisManager*    fManager; ///< Associated class
+    G4VFileManager*  fManager; ///< Associated class
     
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
+    G4UIcmdWithAString*  fSetFileNameCmd;
+    G4UIcmdWithAString*  fSetHistoDirNameCmd;
+    G4UIcmdWithAString*  fSetNtupleDirNameCmd;
 };
   
 #endif

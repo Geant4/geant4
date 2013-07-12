@@ -23,41 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4BaseAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
-//
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// Base class for the object managers.
+// It handles first object ID and its lock and provides common utility methods.
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
-#include "G4UImessenger.hh"
+#ifndef G4BaseAnalysisManager_h
+#define G4BaseAnalysisManager_h 1
+
+#include "G4Fcn.hh"
 #include "globals.hh"
 
-class G4VAnalysisManager;
-class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
+class G4AnalysisManagerState;
 
-class G4AnalysisMessenger : public G4UImessenger
+class G4BaseAnalysisManager
 {
   public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
-   
-    // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
-    G4VAnalysisManager*    fManager; ///< Associated class
+    G4BaseAnalysisManager(const G4AnalysisManagerState& state);
+    virtual ~G4BaseAnalysisManager();
+
+    // The ids of objects are generated automatically
+    // starting from 0; with the following function it is possible to
+    // change the first Id to start from other value
+    G4bool SetFirstId(G4int firstId);
     
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
+  protected:
+    // methods
+    G4double GetUnitValue(const G4String& unit) const;
+    G4Fcn    GetFunction(const G4String& fcnName) const;
+    
+    void UpdateTitle(G4String& title, 
+                     const G4String& unitName, const G4String& fcnName) const;
+                     
+    void ExceptionForHistograms(const G4String& functionName) const;                     
+
+    // data members
+    const G4AnalysisManagerState& fState;
+    G4int    fFirstId;
+    G4bool   fLockFirstId;     
 };
-  
+
+
 #endif
 

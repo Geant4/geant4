@@ -40,33 +40,75 @@ include_directories(${ZLIB_INCLUDE_DIRS})
 # will need to work out how to either locate them, or generate a list.
 # This isn't critical for building the analysis library.
 set(G4analysis_HEADERS
-  include/G4AnalysisMessenger.hh
   include/G4AnalysisVerbose.hh
+  include/G4AnalysisManagerState.hh
+  include/G4AnalysisMessenger.hh
+  include/G4BaseAnalysisManager.hh
   include/G4CsvAnalysisManager.hh
+  include/G4CsvFileManager.hh
   include/G4CsvNtupleDescription.hh
+  include/G4CsvNtupleManager.hh
   include/g4csv_defs.hh
   include/g4csv.hh
   include/G4Fcn.hh
+  include/G4FileMessenger.hh
   include/G4HnInformation.hh
+  include/G4HnManager.hh
+  include/G4HnMessenger.hh
+  include/G4H1Messenger.hh
+  include/G4H2Messenger.hh
+  include/G4H1DummyManager.hh
+  include/G4H1ToolsManager.hh
+  include/G4H1DummyManager.hh
+  include/G4H2ToolsManager.hh
   include/G4RootAnalysisManager.hh
+  include/G4RootFileManager.hh
   include/G4RootNtupleDescription.hh
+  include/G4RootNtupleManager.hh
   include/g4root_defs.hh
   include/g4root.hh
   include/G4VAnalysisManager.hh
+  include/G4VFileManager.hh
+  include/G4VH1Manager.hh
+  include/G4VH2Manager.hh
+  include/G4VNtupleManager.hh
   include/G4XmlAnalysisManager.hh
+  include/G4XmlFileManager.hh
   include/G4XmlNtupleDescription.hh
+  include/G4XmlNtupleManager.hh
   include/g4xml_defs.hh
   include/g4xml.hh
   )
 
 # - Sources
 set(G4analysis_SOURCES
-  src/G4AnalysisMessenger.cc
   src/G4AnalysisVerbose.cc
+  src/G4AnalysisManagerState.cc
+  src/G4AnalysisMessenger.cc
+  src/G4BaseAnalysisManager.cc
   src/G4CsvAnalysisManager.cc
+  src/G4CsvFileManager.cc
+  src/G4CsvNtupleManager.cc
+  src/G4FileMessenger.cc
+  src/G4HnManager.cc
+  src/G4HnMessenger.cc
+  src/G4H1Messenger.cc
+  src/G4H1DummyManager.cc
+  src/G4H1ToolsManager.cc
+  src/G4H2Messenger.cc
+  src/G4H2DummyManager.cc
+  src/G4H2ToolsManager.cc
   src/G4RootAnalysisManager.cc
+  src/G4RootFileManager.cc
+  src/G4RootNtupleManager.cc
   src/G4VAnalysisManager.cc
+  src/G4VFileManager.cc
+  src/G4VH1Manager.cc
+  src/G4VH2Manager.cc
+  src/G4VNtupleManager.cc
   src/G4XmlAnalysisManager.cc
+  src/G4XmlFileManager.cc
+  src/G4XmlNtupleManager.cc
   )
 
 #-----------------------------------------------------------------------

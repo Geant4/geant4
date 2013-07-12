@@ -25,17 +25,19 @@
 //
 // $Id$
 
-// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4XmlAnalysisManager.hh"
-#include "G4UnitsTable.hh"
+#include "G4XmlFileManager.hh"
+#include "G4H1ToolsManager.hh"
+#include "G4H2ToolsManager.hh"
+#include "G4XmlNtupleManager.hh"
 #include "G4AutoLock.hh"
 
-#include "tools/waxml/begend"
 #include "tools/waxml/histos"
 
-#include <iostream>
-#include <cstdio>
+//#include <fstream>
+//#include <cstdio>
 
 // mutex in a file scope
 
@@ -44,8 +46,11 @@ namespace {
   G4Mutex mergeH1Mutex = G4MUTEX_INITIALIZER;
   //Mutex to lock master manager when merging H1 histograms 
   G4Mutex mergeH2Mutex = G4MUTEX_INITIALIZER;
+  //Mutex to lock instances counter
+  G4Mutex counterMutex = G4MUTEX_INITIALIZER;
 }  
 
+G4int G4XmlAnalysisManager::fgCounter = 0;
 G4XmlAnalysisManager* G4XmlAnalysisManager::fgMasterInstance = 0;
 G4ThreadLocal G4XmlAnalysisManager* G4XmlAnalysisManager::fgInstance = 0;
 
@@ -54,7 +59,7 @@ G4XmlAnalysisManager* G4XmlAnalysisManager::Create(G4bool isMaster)
 {
   if ( fgInstance == 0 ) {
     // In sequential mode create always master manager
-    if ( ! G4VAnalysisManager::IsMT() ) isMaster = true;
+    if ( ! G4AnalysisManagerState::IsMT() ) isMaster = true;
 
     fgInstance = new G4XmlAnalysisManager(isMaster);
   }
@@ -74,13 +79,11 @@ G4XmlAnalysisManager* G4XmlAnalysisManager::Instance()
 
 //_____________________________________________________________________________
 G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
- : G4VAnalysisManager(isMaster, "Xml"),
-   fHnFile(0),
-   fH1Vector(),   
-   fH2Vector(),   
-   fH1NameIdMap(),  
-   fH2NameIdMap(),  
-   fNtupleVector()
+ : G4VAnalysisManager("Xml", isMaster),
+   fH1Manager(0),
+   fH2Manager(0),
+   fNtupleManager(0),
+   fFileManager(0)
 {
   if ( ( isMaster && fgMasterInstance ) ||
        ( (! isMaster ) && fgInstance ) ) {
@@ -94,30 +97,35 @@ G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
   }              
   if ( isMaster ) fgMasterInstance = this;
   fgInstance = this;
+  
+  // Create managers
+  fH1Manager = new G4H1ToolsManager(fState);
+  fH2Manager = new G4H2ToolsManager(fState);
+  fNtupleManager = new G4XmlNtupleManager(fState);
+  fFileManager = new G4XmlFileManager(fState);
+  fNtupleManager->SetFileManager(fFileManager);
+      // The managers will be deleted by the base class
+  
+  // Set managers to base class
+  SetH1Manager(fH1Manager);
+  SetH2Manager(fH2Manager);
+  SetNtupleManager(fNtupleManager);
+  SetFileManager(fFileManager);
+
+  G4AutoLock lCounter(&counterMutex);
+  fgCounter++;
+  lCounter.unlock();
 }
 
 //_____________________________________________________________________________
 G4XmlAnalysisManager::~G4XmlAnalysisManager()
 {  
-  std::vector<tools::histo::h1d*>::iterator it;
-  for ( it = fH1Vector.begin(); it != fH1Vector.end(); it++ ) {
-    delete *it;
-  } 
-   
-  std::vector<tools::histo::h2d*>::iterator it2;
-  for ( it2 = fH2Vector.begin(); it2 != fH2Vector.end(); it2++ ) {
-    delete *it2;
-  }
-  
-  std::vector<G4XmlNtupleDescription*>::iterator it3;  
-  for (it3 = fNtupleVector.begin(); it3 != fNtupleVector.end(); it3++ ) {
-    delete (*it3);
-  }   
-   
-  delete fHnFile;  
-
-  if ( fIsMaster ) fgMasterInstance = 0;
+  if ( fState.GetIsMaster() ) fgMasterInstance = 0;
   fgInstance = 0;
+ 
+  G4AutoLock lCounter(&counterMutex);
+  fgCounter--;
+  lCounter.unlock();
 }
 
 // 
@@ -125,296 +133,128 @@ G4XmlAnalysisManager::~G4XmlAnalysisManager()
 //
 
 //_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::CreateHnFile()
+G4bool G4XmlAnalysisManager::WriteH1()
 {
+  const std::vector<tools::histo::h1d*>& h1Vector
+    = fH1Manager->GetH1Vector();
+  const std::vector<G4HnInformation*>& hnVector
+    = fH1Manager->GetHnVector();
+
+  if ( fState.GetIsMaster() || ( ! fgMasterInstance ) )  {
+
+    for ( G4int i=0; i<G4int(h1Vector.size()); ++i ) {
+      G4HnInformation* info = hnVector[i];
+      G4bool activation = info->fActivation;
+      G4String name = info->fName;
+      // skip writing if activation is enabled and H1 is inactivated
+      if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
+      tools::histo::h1d* h1 = h1Vector[i];
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "file", GetFullFileName());
+      if ( fState.GetVerboseL3() ) 
+        fState.GetVerboseL3()->Message("write", "h1d", name);
 #endif
-  
-  // delete a previous file if it exists
-  if ( fHnFile ) delete fHnFile; 
-  
-  fHnFile = new std::ofstream(GetFullFileName());
-  if ( fHnFile->fail() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " << GetFullFileName();
-    G4Exception("G4XmlAnalysisManager::CreateHnFile()",
-              "Analysis_W001", JustWarning, description);
-    return false;
-  }
-
-  tools::waxml::begin(*fHnFile);
-#ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "file", GetFullFileName());
-#endif
-
-  return true;
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::CloseHnFile()
-{
-  // No file may be open if no master manager is instantiated
-  // and no histograms were booked
-  if ( ! fHnFile ) return true;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("close", "file", GetFullFileName());
-#endif
-
-  // close file
-  tools::waxml::end(*fHnFile);
-  fHnFile->close(); 
-
-  // delete file if empty
-  if ( fHnFile && ( ! fH1Vector.size() ) && ( ! fH2Vector.size() ) ) {
-    std::remove(GetFullFileName());
-#ifdef G4VERBOSE
-    if ( fpVerboseL1 ) 
-      fpVerboseL1->Message("delete", "empty file", GetFullFileName());
-#endif
-  }
-  else {
-#ifdef G4VERBOSE
-    if ( fpVerboseL1 ) 
-      fpVerboseL1->Message("close", "file", GetFullFileName());
-#endif
-  }
-
-  return true; 
-} 
-   
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::CreateNtupleFile(
-                                    G4XmlNtupleDescription* ntupleDescription)
-{
-  G4String ntupleName = ntupleDescription->fNtupleBooking->m_name;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "file", GetNtupleFileName(ntupleName));
-#endif
-
-  std::ofstream* ntupleFile 
-    = new std::ofstream(GetNtupleFileName(ntupleName));
-  if ( ntupleFile->fail() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " 
-                << GetNtupleFileName(ntupleName);
-    G4Exception("G4XmlAnalysisManager::CreateNtupleFile()",
-                "Analysis_W001", JustWarning, description);
-    return false;
-  }
-  
-  tools::waxml::begin(*ntupleFile);
-  ntupleDescription->fFile = ntupleFile;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("create", "file", GetNtupleFileName(ntupleName));
-#endif
-
-  return true;
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::CloseNtupleFile(
-                                    G4XmlNtupleDescription* ntupleDescription)
-{
-  G4String ntupleName = ntupleDescription->fNtupleBooking->m_name;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("close", "file", GetNtupleFileName(ntupleName));
-#endif
-
-  // close file
-  tools::waxml::end(*(ntupleDescription->fFile));
-  ntupleDescription->fFile->close(); 
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("close", "file", GetNtupleFileName(ntupleName));
-#endif
-
-  return true; 
-} 
-   
-//_____________________________________________________________________________
-void G4XmlAnalysisManager::CreateNtuplesFromBooking()
-{
-// Create ntuple from ntuple_booking.
-
-  // Do not create ntuples on master thread 
-  if ( IsMT() && fIsMaster ) return;     
-  
-  std::vector<G4XmlNtupleDescription*>::iterator itn;  
-  for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {
-
-    tools::ntuple_booking* ntupleBooking = (*itn)->fNtupleBooking;
-    if ( ! ntupleBooking ) continue;
-
-// Create ntuple from ntuple_booking.
-#ifdef G4VERBOSE
-    if ( fpVerboseL4 ) 
-      fpVerboseL4->Message("create from booking", "ntuple", ntupleBooking->m_name);
-#endif
-
-    // create a file for this ntuple
-    if ( ! CreateNtupleFile((*itn)) ) continue;
-
-    // create ntuple
-    (*itn)->fNtuple
-      = new tools::waxml::ntuple(*((*itn)->fFile), G4cerr, *ntupleBooking);
-
-    if ( ntupleBooking->m_columns.size() ) {
-      // store ntuple columns in local maps
-      const std::vector<tools::ntuple_booking::col_t>& columns 
-        = ntupleBooking->m_columns;
-      std::vector<tools::ntuple_booking::col_t>::const_iterator it;
-      G4int index = 0;
-      for ( it = columns.begin(); it!=columns.end(); ++it) {
-        if ( (*it).second == tools::_cid(int(0) ) ) {
-          (*itn)->fNtupleIColumnMap[index++] 
-            = (*itn)->fNtuple->find_column<int>((*it).first);
-        }
-        else if( (*it).second == tools::_cid(float(0) ) ) {
-          (*itn)->fNtupleFColumnMap[index++] 
-            = (*itn)->fNtuple->find_column<float>((*it).first);
-        } 
-        else if((*it).second== tools::_cid(double(0))) {
-          (*itn)->fNtupleDColumnMap[index++] 
-            = (*itn)->fNtuple->find_column<double>((*it).first);
-        }
-        else {
-          G4ExceptionDescription description;
-          description << "      " 
-                      << "Unsupported column type " << (*it).first;
-          G4Exception("G4XmlAnalysisManager::CreateNtuplesFromBooking()",
-                    "Analysis_W004", JustWarning, description);
-        }
-      }
+      G4String path = "/";
+      path.append(fFileManager->GetHistoDirectoryName());
+      std::ofstream* hnFile = fFileManager->GetHnFile();
+      G4bool result
+        = tools::waxml::write(*hnFile, *h1, path, name);
+      if ( ! result ) {
+        G4ExceptionDescription description;
+        description << "      " << "saving histogram " << name << " failed";
+        G4Exception("G4XmlAnalysisManager::Write()",
+                  "Analysis_W003", JustWarning, description);
+        return false;       
+      } 
+      fFileManager->LockHistoDirectoryName();
     }
-    FinishNtuple();
-#ifdef G4VERBOSE
-    if ( fpVerboseL3 ) 
-      fpVerboseL3->Message("create from booking", "ntuple", ntupleBooking->m_name);
-#endif
   }  
-}   
+  else {
+    // The worker manager just adds its histograms to the master
+    // This operation needs a lock
+    G4AutoLock lH1(&mergeH1Mutex);
+    fgMasterInstance->fH1Manager->AddH1Vector(h1Vector);
+    lH1.unlock();
+  }  
+  
+  return true;
+}
+ 
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::WriteH2()
+{
+  const std::vector<tools::histo::h2d*>& h2Vector
+    = fH2Manager->GetH2Vector();
+  const std::vector<G4HnInformation*>& hnVector
+    = fH2Manager->GetHnVector();
+
+  if ( fState.GetIsMaster() || ( ! fgMasterInstance ) )  {
+
+    // h2 histograms
+    for ( G4int i=0; i<G4int(h2Vector.size()); ++i ) {
+      G4HnInformation* info = hnVector[i];
+      G4bool activation = info->fActivation;
+      G4String name = info->fName;
+      // skip writing if inactivated
+      if ( fState.GetIsActivation() && ( ! activation ) ) continue;
+      tools::histo::h2d* h2 = h2Vector[i];
+#ifdef G4VERBOSE
+      if ( fState.GetVerboseL3() ) 
+        fState.GetVerboseL3()->Message("write", "h2d", name);
+#endif
+      G4String path = "/";
+      path.append(fFileManager->GetHistoDirectoryName());
+      std::ofstream* hnFile = fFileManager->GetHnFile();
+      G4bool result
+        = tools::waxml::write(*hnFile, *h2, path, name);
+      if ( ! result ) {
+        G4ExceptionDescription description;
+        description << "      " << "saving histogram " << name << " failed";
+        G4Exception("G4XmlAnalysisManager::Write()",
+                  "Analysis_W003", JustWarning, description);
+        return false;       
+      } 
+      fFileManager->LockHistoDirectoryName();
+    }
+  }  
+  else {
+    // The worker manager just adds its histograms to the master
+    // This operation needs a lock
+    G4AutoLock lH2(&mergeH2Mutex);
+    fgMasterInstance->fH2Manager->AddH2Vector(h2Vector);
+    lH2.unlock();
+  }  
+  
+  return true;
+}
 
 //_____________________________________________________________________________
-void G4XmlAnalysisManager::AddH1Vector(
-                               std::vector<tools::histo::h1d*>& h1Vector)
+G4bool G4XmlAnalysisManager::WriteNtuple()
 {
-#ifdef G4VERBOSE
-    if ( fpVerboseL4 ) 
-      fpVerboseL4->Message("merge", "all h1", "");
-#endif
-  std::vector<tools::histo::h1d*>::iterator itw = h1Vector.begin();
-  std::vector<tools::histo::h1d*>::iterator it;
-  for (it = fH1Vector.begin(); it != fH1Vector.end(); it++ ) {
-    (*it)->add(*(*itw++));
-  }  
-#ifdef G4VERBOSE
-    if ( fpVerboseL1 ) 
-      fpVerboseL1->Message("merge", "all h1", "");
-#endif
-}  
+  const std::vector<G4XmlNtupleDescription*>& ntupleVector
+    = fNtupleManager->GetNtupleVector();
 
-//_____________________________________________________________________________
-void G4XmlAnalysisManager::AddH2Vector(
-                               std::vector<tools::histo::h2d*>& h2Vector)
-{
-#ifdef G4VERBOSE
-    if ( fpVerboseL4 ) 
-      fpVerboseL4->Message("merge", "all h2", "");
-#endif
-  std::vector<tools::histo::h2d*>::iterator itw = h2Vector.begin();
-  std::vector<tools::histo::h2d*>::iterator it;
-  for (it = fH2Vector.begin(); it != fH2Vector.end(); it++ ) {
-    (*it)->add(*(*itw++));
-  }  
-#ifdef G4VERBOSE
-    if ( fpVerboseL1 ) 
-      fpVerboseL1->Message("merge", "all h2", "");
-#endif
-}  
-
-//_____________________________________________________________________________
-tools::waxml::ntuple::column<int>*    
-G4XmlAnalysisManager::GetNtupleIColumn(G4int ntupleId, G4int columnId) const
-{
-  G4XmlNtupleDescription* ntupleDecription
-    = GetNtupleInFunction(ntupleId, "GetNtupleIColumn");
-  if ( ! ntupleDecription ) return 0;
-
-  std::map<G4int, tools::waxml::ntuple::column<int>* >& ntupleIColumnMap
-    = ntupleDecription->fNtupleIColumnMap;
-  std::map<G4int, tools::waxml::ntuple::column<int>* >::const_iterator it
-    = ntupleIColumnMap.find(columnId);
-  if ( it == ntupleIColumnMap.end() ) {
-    G4ExceptionDescription description;
-    description << "      "  << "ntupleId " << ntupleId
-                << "column " << columnId << " does not exist.";
-    G4Exception("G4XmlAnalysisManager::GetNtupleIColumn()",
-                "Analysis_W009", JustWarning, description);
-    return 0;
+  for ( G4int i=0; i<G4int(ntupleVector.size()); ++i ) {
+    if ( ntupleVector[i]->fNtuple ) ntupleVector[i]->fNtuple->write_trailer();
   }
   
-  return it->second;
-}  
-    
-//_____________________________________________________________________________
-tools::waxml::ntuple::column<float>*  
-G4XmlAnalysisManager::GetNtupleFColumn(G4int ntupleId, G4int columnId) const
-{
-  G4XmlNtupleDescription* ntupleDecription
-    = GetNtupleInFunction(ntupleId, "GetNtupleFColumn");
-  if ( ! ntupleDecription ) return 0;
-
-  std::map<G4int, tools::waxml::ntuple::column<float>* >& ntupleFColumnMap
-    = ntupleDecription->fNtupleFColumnMap;
-  std::map<G4int, tools::waxml::ntuple::column<float>* >::const_iterator it
-    = ntupleFColumnMap.find(columnId);
-  if ( it == ntupleFColumnMap.end() ) {
-    G4ExceptionDescription description;
-    description << "      "  << "ntupleId " << ntupleId
-                << "column " << columnId << " does not exist.";
-    G4Exception("G4XmlAnalysisManager::GetNtupleFColumn()",
-                "Analysis_W009", JustWarning, description);
-    return 0;
-  }
-  
-  return it->second;
+  return true;
 }  
 
 //_____________________________________________________________________________
-tools::waxml::ntuple::column<double>* 
-G4XmlAnalysisManager::GetNtupleDColumn(G4int ntupleId, G4int columnId) const
+G4bool G4XmlAnalysisManager::CloseNtupleFiles()
 {
-  G4XmlNtupleDescription* ntupleDecription
-    = GetNtupleInFunction(ntupleId, "GetNtupleDColumn");
-  if ( ! ntupleDecription ) return 0;
+  const std::vector<G4XmlNtupleDescription*>& ntupleVector
+    = fNtupleManager->GetNtupleVector();
 
-  std::map<G4int, tools::waxml::ntuple::column<double>* >& ntupleDColumnMap
-    = ntupleDecription->fNtupleDColumnMap;
-  std::map<G4int, tools::waxml::ntuple::column<double>* >::const_iterator it
-    = ntupleDColumnMap.find(columnId);
-  if ( it == ntupleDColumnMap.end() ) {
-    G4ExceptionDescription description;
-    description << "      "  << "ntupleId " << ntupleId
-                << "column " << columnId << " does not exist.";
-    G4Exception("G4XmlAnalysisManager::GetNtupleFColumn()",
-                "Analysis_W009", JustWarning, description);
-    return 0;
+  // Close ntuple files
+  std::vector<G4XmlNtupleDescription*>::const_iterator it;  
+  for (it = ntupleVector.begin(); it != ntupleVector.end(); it++ ) {
+    fFileManager->CloseNtupleFile((*it));
   }
   
-  return it->second;
-}  
+  return true;
+}    
+
 
 //_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::Reset()
@@ -423,288 +263,134 @@ G4bool G4XmlAnalysisManager::Reset()
 
   G4bool finalResult = true;
 
-  std::vector<tools::histo::h1d*>::iterator it;
-  for (it = fH1Vector.begin(); it != fH1Vector.end(); it++ ) {
-    G4bool result = (*it)->reset();
-    if ( ! result ) finalResult = false;
-  }  
-  
-  std::vector<tools::histo::h2d*>::iterator it2;
-  for (it2 = fH2Vector.begin(); it2 != fH2Vector.end(); it2++ ) {
-    G4bool result = (*it2)->reset();
-    if ( ! result ) finalResult = false;
-  }  
+  G4bool result = fH1Manager->Reset();
+  finalResult = finalResult && result;
 
-  std::vector<G4XmlNtupleDescription*>::iterator it3;  
-  for (it3 = fNtupleVector.begin(); it3 != fNtupleVector.end(); it3++ ) {
-    delete (*it3)->fNtuple;
-    (*it3)->fNtuple = 0;
-  }  
+  result = fH2Manager->Reset();
+  finalResult = finalResult && result;
+  
+  result = fNtupleManager->Reset();
+  finalResult = finalResult && result;
   
   return finalResult;
 }  
  
-//_____________________________________________________________________________
-tools::histo::h1d*  G4XmlAnalysisManager::GetH1InFunction(G4int id, 
-                                      G4String functionName, G4bool warn,
-                                      G4bool onlyIfActive) const
-{
-  G4int index = id - fFirstHistoId;
-  if ( index < 0 || index >= G4int(fH1Vector.size()) ) {
-    if ( warn) {
-      G4String inFunction = "G4XmlAnalysisManager::";
-      inFunction += functionName;
-      G4ExceptionDescription description;
-      description << "      " << "histogram " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
-    }
-    return 0;         
-  }
-  
-  // Do not return histogram if inactive 
-  if ( fActivation && onlyIfActive && ( ! GetActivation(kH1, id) ) ) {
-    return 0; 
-  }  
-  
-  return fH1Vector[index];
-}  
-                                      
-//_____________________________________________________________________________
-tools::histo::h2d*  G4XmlAnalysisManager::GetH2InFunction(G4int id, 
-                                      G4String functionName, G4bool warn,
-                                      G4bool onlyIfActive) const
-{                                      
-  G4int index = id - fFirstHistoId;
-  if ( index < 0 || index >= G4int(fH2Vector.size()) ) {
-    if ( warn) {
-      G4String inFunction = "G4XmlAnalysisManager::";
-      inFunction += functionName;
-      G4ExceptionDescription description;
-      description << "      " << "histogram " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
-    }
-    return 0;         
-  }
-
-  // Do not return histogram if inactive 
-  if ( fActivation  && onlyIfActive && ( ! GetActivation(kH2, id) ) ) {
-    return 0; 
-  }  
-  
-  return fH2Vector[index];
-}
-  
-//_____________________________________________________________________________
-G4XmlNtupleDescription* G4XmlAnalysisManager::GetNtupleInFunction(G4int id, 
-                                      G4String functionName, G4bool warn,
-                                      G4bool /*onlyIfActive*/) const
-{                                      
-  G4int index = id - fFirstNtupleId;
-  if ( index < 0 || index >= G4int(fNtupleVector.size()) ) {
-    if ( warn) {
-      G4String inFunction = "G4XmlAnalysisManager::";
-      inFunction += functionName;
-      G4ExceptionDescription description;
-      description << "      " << "ntuple " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
-    }
-    return 0;         
-  }
-  
-  return fNtupleVector[index];
-}
-  
-//_____________________________________________________________________________
-void G4XmlAnalysisManager::UpdateTitle(G4String& title, 
-                                        const G4String& unitName, 
-                                        const G4String& fcnName) const
-{
-  if ( fcnName != "none" )  { title += " "; title += fcnName; title += "("; }
-  if ( unitName != "none" ) { title += " ["; title += unitName; title += "]";}
-  if ( fcnName != "none" )  { title += ")"; }
-}  
-                                                          
-//
+// 
 // protected methods
 //
 
 //_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::WriteOnAscii(std::ofstream& output)
+G4bool G4XmlAnalysisManager::OpenFileImpl(const G4String& fileName)
 {
-// Write selected objects on ASCII file
-// (Only H1 implemented by now)
-// According to the implementation by Michel Maire, originally in
-// extended examples.
-
-  // h1 histograms
-  for ( G4int i=0; i<G4int(fH1Vector.size()); ++i ) {
-    G4int id = i + fFirstHistoId;
-    G4HnInformation* info = GetH1Information(id); 
-    // skip writing if activation is enabled and H1 is inactivated
-    if ( ! info->fAscii ) continue; 
-    tools::histo::h1d* h1 = fH1Vector[i];
+  G4bool finalResult = true;
+  G4bool result = fFileManager->SetFileName(fileName);
+  finalResult = finalResult && result;
 
 #ifdef G4VERBOSE
-    if ( fpVerboseL3 ) 
-      fpVerboseL3->Message("write on ascii", "h1d", info->fName);
+  G4String name = fFileManager->GetFullFileName();
+  if ( fState.GetVerboseL4() ) {
+    fState.GetVerboseL4()->Message("open", "analysis file", name);
+  }  
 #endif
-  
-    output << "\n  1D histogram " << id << ": " << h1->title() 
-           << "\n \n \t     X \t\t     Y" << G4endl;
-    
-    for (G4int j=0; j< G4int(h1->axis().bins()); ++j) {
-       output << "  " << j << "\t" 
-              << h1->axis().bin_center(j) << "\t"
-              << h1->bin_height(j) << G4endl;
-    } 
-  }
-  
-  return true;
-}  
 
-// 
-// public methods
-//
+  // Only lock file name in file manager
+  result = fFileManager->OpenFile(fileName);
+  finalResult = finalResult && result;
 
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::OpenFile(const G4String& fileName)
-{
-  // Keep file name
-  fFileName =  fileName;
-
-  // Create file for histograms
-  G4bool result = true;
-  if ( fIsMaster ) 
-    result = CreateHnFile();
+  // Create histograms file (on master)
+  if ( fState.GetIsMaster() ) {
+    result = fFileManager->CreateHnFile();
+    finalResult = finalResult && result;
+  }  
 
   // Create ntuples if they are booked
-  if ( fNtupleVector.size() ) 
-    CreateNtuplesFromBooking();
+  // (The files will be created with creating ntuples)
+  fNtupleManager->CreateNtuplesFromBooking();
 
-  fLockFileName = true;
-
-  return result;
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL1() ) 
+    fState.GetVerboseL1()->Message("open", "analysis file", name);
+#endif
+  
+  return finalResult;
 }  
   
 //_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::Write() 
+G4bool G4XmlAnalysisManager::WriteImpl() 
 {
+  G4bool finalResult = true;
+
+#ifdef G4VERBOSE
+  G4String name = fFileManager->GetFullFileName();
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("write", "files", name);
+#endif
+
   // ntuples 
-  for ( G4int i=0; i<G4int(fNtupleVector.size()); ++i ) {
-    if ( fNtupleVector[i]->fNtuple ) fNtupleVector[i]->fNtuple->write_trailer();
+  WriteNtuple();
+
+  if ( ! fgMasterInstance && 
+       ( ( ! fH1Manager->IsEmpty() ) || ( ! fH2Manager->IsEmpty() ) ) ) {
+
+    G4ExceptionDescription description;
+    description 
+      << "      " << "No master G4XmlAnalysisManager instance exists." 
+      << G4endl 
+      << "      " << "Histogram data will not be merged.";
+      G4Exception("G4XmlAnalysisManager::Write()",
+                "Analysis_W014", JustWarning, description);
+                
+    // Create Hn file per thread
+    G4bool result = fFileManager->CreateHnFile();
+    if ( ! result ) return false;       
   }
 
-  if ( fIsMaster || ( ! fgMasterInstance ) )  {
+  // H1
+  G4bool result = WriteH1();
+  finalResult = finalResult && result;
 
-    if ( ! fgMasterInstance && 
-         ( fH1Vector.size() || fH2Vector.size() ) ) {
-
-      G4ExceptionDescription description;
-      description 
-        << "      " << "No master G4XmlAnalysisManager instance exists." 
-        << G4endl 
-        << "      " << "Histogram data will not be merged.";
-        G4Exception("G4XmlAnalysisManager::Write()",
-                  "Analysis_W014", JustWarning, description);
-                  
-      // Create Hn file per thread
-      G4bool result = CreateHnFile();
-      if ( ! result ) return false;       
-    }
-
-    // h1 histograms
-    for ( G4int i=0; i<G4int(fH1Vector.size()); ++i ) {
-      G4int id = i + fFirstHistoId;
-      G4HnInformation* info = GetH1Information(id); 
-      // skip writing if activation is enabled and H1 is inactivated
-      if ( fActivation && ( ! info->fActivation ) ) continue; 
-      tools::histo::h1d* h1 = fH1Vector[i];
-#ifdef G4VERBOSE
-      if ( fpVerboseL3 ) 
-        fpVerboseL3->Message("write", "h1d", info->fName);
-#endif
-      G4String path = "/";
-      path.append(fHistoDirectoryName);
-      G4bool result
-        = tools::waxml::write(*fHnFile, *h1, path, info->fName);
-      if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "saving histogram " << info->fName << " failed";
-        G4Exception("G4XmlAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
-        return false;       
-      } 
-      fLockHistoDirectoryName = true;
-    }
- 
-    // h2 histograms
-    for ( G4int i=0; i<G4int(fH2Vector.size()); ++i ) {
-      G4int id = i + fFirstHistoId;
-      G4HnInformation* info = GetH2Information(id); 
-      // skip writing if inactivated
-      if ( fActivation && ( ! info->fActivation ) ) continue;
-      tools::histo::h2d* h2 = fH2Vector[i];
- #ifdef G4VERBOSE
-      if ( fpVerboseL3 ) 
-        fpVerboseL3->Message("write", "h2d", info->fName);
-#endif
-      G4String path = "/";
-      path.append(fHistoDirectoryName);
-      G4bool result
-        = tools::waxml::write(*fHnFile, *h2, path, info->fName);
-      if ( ! result ) {
-        G4ExceptionDescription description;
-        description << "      " << "saving histogram " << info->fName << " failed";
-        G4Exception("G4XmlAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
-        return false;       
-      } 
-      fLockHistoDirectoryName = true;
-    }
-  }  
-  else {
-    // The worker manager just adds its histograms to the master
-    // This operation needs a lock
-    G4AutoLock lH1(&mergeH1Mutex);
-    fgMasterInstance->AddH1Vector(fH1Vector);
-    lH1.unlock();
-    
-    G4AutoLock lH2(&mergeH2Mutex);
-    fgMasterInstance->AddH2Vector(fH2Vector);
-    lH2.unlock();
-  }  
-  G4bool result = true;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("write", "file", GetFullFileName(), result);
-#endif
+  // H2
+  result = WriteH2();
+  finalResult = finalResult && result;
 
   // Write ASCII if activated
   if ( IsAscii() ) {
-    result = WriteAscii();
+    result = WriteAscii(fFileManager->GetFileName());
+    finalResult = finalResult && result;
   }   
 
-  return result;
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL1() ) 
+    fState.GetVerboseL1()
+      ->Message("write", "files", fFileManager->GetFullFileName(), finalResult);
+#endif
+
+  return finalResult;
 }
 
 //_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::CloseFile()
+G4bool G4XmlAnalysisManager::CloseFileImpl()
 {
-  G4bool result = true;
+  G4bool finalResult = true;
 
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("close", "files", "");
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("close", "files", "");
 #endif
 
-  // close histogram file
-  CloseHnFile();
+  // Unlock file name only
+  G4bool result = fFileManager->CloseFile();
+  finalResult = finalResult && result;
   
-  // close ntuple foles
-  std::vector<G4XmlNtupleDescription*>::iterator it;  
-  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
-    CloseNtupleFile((*it));
+  // Close Hn file
+  result = fFileManager->CloseHnFile();  
+  finalResult = finalResult && result;
+  
+  // Close ntuple files
+  if ( ( fgCounter == 1 ) || ( ! fState.GetIsMaster() ) ) {
+    // In sequential mode or in MT mode only on workers
+    result = CloseNtupleFiles();
+    finalResult = finalResult && result;
   }  
 
   // reset data
@@ -714,1028 +400,25 @@ G4bool G4XmlAnalysisManager::CloseFile()
       description << "      " << "Resetting data failed";
       G4Exception("G4XmlAnalysisManager::CloseFile()",
                 "Analysis_W002", JustWarning, description);
-      result = false;       
   } 
+  finalResult = finalResult && result;
 
-  fLockFileName = false;
-
+  // delete files if empty
+  if ( fFileManager->GetHnFile() && fH1Manager->IsEmpty() && fH2Manager->IsEmpty() ) {
+    std::remove(fFileManager->GetFullFileName());
 #ifdef G4VERBOSE
-  if ( fpVerboseL1 ) 
-    fpVerboseL1->Message("close", "files", "");
+    if ( fState.GetVerboseL1() ) 
+      fState.GetVerboseL1()
+        ->Message("delete", "empty file", fFileManager->GetFullFileName());
 #endif
-
-  return result; 
-} 
-   
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateH1(const G4String& name, const G4String& title, 
-                               G4int nbins, G4double xmin, G4double xmax,
-                               const G4String& unitName, const G4String& fcnName)
-{
+  }
+  else {
 #ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "H1", name);
+    if ( fState.GetVerboseL1() ) 
+      fState.GetVerboseL1()
+        ->Message("close", "files", fFileManager->GetFullFileName());
 #endif
-  G4int index = fH1Vector.size();
-  G4double unit = GetUnitValue(unitName);
-  G4Fcn fcn = GetFunction(fcnName);
-  tools::histo::h1d* h1 
-    = new tools::histo::h1d(title, nbins, fcn(xmin), fcn(xmax));
-            // h1 objects are deleted in destructor and reset when 
-            // closing a file.
+  }
 
-  G4String axisTitle;
-  UpdateTitle(axisTitle,unitName, fcnName);        
-  h1->add_annotation(tools::histo::key_axis_x_title(), axisTitle);
-             
-  fH1Vector.push_back(h1);
-  AddH1Information(name, unitName, fcnName, unit, fcn);
-
-  fLockFirstHistoId = true;
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "H1", name);
-#endif
-  fH1NameIdMap[name] = index + fFirstHistoId;
-  return index + fFirstHistoId;
-}                                         
-
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateH2(const G4String& name, const G4String& title, 
-                               G4int nxbins, G4double xmin, G4double xmax,
-                               G4int nybins, G4double ymin, G4double ymax,
-                               const G4String& xunitName, const G4String& yunitName,
-                               const G4String& xfcnName, const G4String& yfcnName)
-{
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "H2", name);
-#endif
-  G4int index = fH2Vector.size();
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  tools::histo::h2d* h2 
-    = new tools::histo::h2d(title, 
-                            nxbins, xfcn(xmin), xfcn(xmax), 
-                            nybins, yfcn(ymin), yfcn(ymax));
-            // h1 objects are deleted in destructor and reset when 
-            // closing a file.
-
-  G4String xaxisTitle;
-  G4String yaxisTitle;
-  UpdateTitle(xaxisTitle, xunitName, xfcnName);        
-  UpdateTitle(yaxisTitle, yunitName, yfcnName);        
-  h2->add_annotation(tools::histo::key_axis_x_title(), xaxisTitle);
-  h2->add_annotation(tools::histo::key_axis_y_title(), yaxisTitle);
-             
-  fH2Vector.push_back(h2);
-  AddH2Information(name, xunitName, yunitName, xfcnName, yfcnName, 
-                   xunit, yunit, xfcn, yfcn);
-
-  fLockFirstHistoId = true;
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) 
-    fpVerboseL2->Message("create", "H2", name);
-#endif
-  fH2NameIdMap[name] = index + fFirstHistoId;
-  return index + fFirstHistoId;
-}                                         
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::SetH1(G4int id,
-                                G4int nbins, G4double xmin, G4double xmax,
-                                const G4String& unitName, const G4String& fcnName)
-{                                
-
-  tools::histo::h1d* h1d = GetH1InFunction(id, "SetH1", false, false);
-  if ( ! h1d ) return false;
-
-  G4HnInformation* info = GetH1Information(id);
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("configure", "H1", info->fName);
-#endif
-
-  G4double unit = GetUnitValue(unitName);
-  G4Fcn fcn = GetFunction(fcnName);
-  h1d->configure(nbins, fcn(xmin), fcn(xmax));
-  info->fXUnitName = unitName;
-  info->fYUnitName = unitName;
-  info->fXFcnName = fcnName;
-  info->fYFcnName = fcnName;
-  info->fXUnit = unit;
-  info->fYUnit = unit;
-  info->fXFcn = fcn;
-  info->fYFcn = fcn;
-  SetActivation(kH1, id, true); 
-
-  G4String axisTitle;
-  UpdateTitle(axisTitle,unitName, fcnName);        
-  h1d->add_annotation(tools::histo::key_axis_x_title(), axisTitle);
-
-  return true;
+  return finalResult; 
 }
-  
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::SetH2(G4int id,
-                                G4int nxbins, G4double xmin, G4double xmax, 
-                                G4int nybins, G4double ymin, G4double ymax,
-                                const G4String& xunitName, const G4String& yunitName,
-                                const G4String& xfcnName, const G4String& yfcnName)
-{                                
-  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2", false, false);
-  if ( ! h2d ) return false;
-
-  G4HnInformation* info = GetH2Information(id);
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("configure", "H2", info->fName);
-#endif
-
-  G4double xunit = GetUnitValue(xunitName);
-  G4double yunit = GetUnitValue(yunitName);
-  G4Fcn xfcn = GetFunction(xfcnName);
-  G4Fcn yfcn = GetFunction(yfcnName);
-  h2d->configure(nxbins, xfcn(xmin), xfcn(xmax), 
-                 nybins, yfcn(ymin), yfcn(ymax));
-  info->fXUnitName = xunitName;
-  info->fYUnitName = yunitName;
-  info->fXFcnName = xfcnName;
-  info->fYFcnName = yfcnName;
-  info->fXUnit = xunit;
-  info->fYUnit = yunit;
-  info->fXFcn = xfcn;
-  info->fYFcn = yfcn;
-  SetActivation(kH2, id, true); 
-  
-  G4String xaxisTitle;
-  G4String yaxisTitle;
-  UpdateTitle(xaxisTitle, xunitName, xfcnName);        
-  UpdateTitle(yaxisTitle, yunitName, yfcnName);        
-  h2d->add_annotation(tools::histo::key_axis_x_title(), xaxisTitle);
-  h2d->add_annotation(tools::histo::key_axis_y_title(), yaxisTitle);
-  
-  return true;
-}
-                                  
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::ScaleH1(G4int id, G4double factor)
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "ScaleH1", false, false);
-  if ( ! h1d ) return false;
-
-  return h1d->scale(factor);
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::ScaleH2(G4int id, G4double factor)
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "ScaleH2", false, false);
-  if ( ! h2d ) return false;
-  
-  return h2d->scale(factor);
-}  
-                           
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateNtuple(const G4String& name, 
-                                         const G4String& title)
-{
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) 
-    fpVerboseL4->Message("create", "ntuple", name);
-#endif
-
-  // Create ntuple description
-  G4int index = fNtupleVector.size();
-  G4XmlNtupleDescription* ntupleDescription
-    = new G4XmlNtupleDescription();
-  fNtupleVector.push_back(ntupleDescription);  
-
-  // Create ntuple booking
-  ntupleDescription->fNtupleBooking = new tools::ntuple_booking();
-  ntupleDescription->fNtupleBooking->m_name = name;
-  ntupleDescription->fNtupleBooking->m_title = title;
-
-  // Create ntuple if the file is open (what means here that
-  // a filename was already set)
-  if ( fFileName.size() ) {
-    if ( CreateNtupleFile(ntupleDescription) ) {
-      ntupleDescription->fNtuple 
-        = new tools::waxml::ntuple(*(ntupleDescription->fFile));
-           // ntuple object is deleted when closing a file
-    }       
-  }
-
-  fLockFirstNtupleId = true;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << index + fFirstNtupleId;
-    fpVerboseL2->Message("create", "ntuple", description);
-  } 
-#endif
-
-  return index + fFirstNtupleId;
-}                                         
-
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateNtupleIColumn(const G4String& name)
-{
-  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
-  return CreateNtupleIColumn(ntupleId, name);
-}  
-
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateNtupleFColumn(const G4String& name)
-{
-  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
-  return CreateNtupleFColumn(ntupleId, name);
-}  
-
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateNtupleDColumn(const G4String& name)
-{
-  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
-  return CreateNtupleDColumn(ntupleId, name);
-}  
-
-//_____________________________________________________________________________
-void G4XmlAnalysisManager::FinishNtuple()
-{ 
-  G4int ntupleId = fNtupleVector.size() + fFirstNtupleId - 1;
-  FinishNtuple(ntupleId);
-}
-   
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateNtupleIColumn(G4int ntupleId, const G4String& name)
-{
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fpVerboseL4->Message("create", "ntuple I column", description);
-  }  
- #endif
-
-  G4XmlNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "CreateNtupleIColumn");
-  tools::ntuple_booking* ntupleBooking
-    = ntupleDescription->fNtupleBooking;  
-
-  if ( ! ntupleBooking ) {
-    G4ExceptionDescription description;
-    description << "      " 
-                << "Ntuple " << ntupleId << " has to be created first. ";
-    G4Exception("G4XmlAnalysisManager::CreateNtupleIColumn()",
-                "Analysis_W005", JustWarning, description);
-    return -1;       
-  }
-
-  // Save column info in booking
-  G4int index = ntupleBooking->m_columns.size();
-  ntupleBooking->add_column<int>(name);  
- 
-  // Create column if ntuple already exists
-  if ( ntupleDescription->fNtuple ) {
-    tools::waxml::ntuple::column<int>* column 
-      = ntupleDescription->fNtuple->create_column<int>(name);  
-    ntupleDescription->fNtupleIColumnMap[index] = column;
-  }
-    
-  fLockFirstNtupleColumnId = true;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fpVerboseL2->Message("create", "ntuple I column", description);
-  }  
-#endif
-
-  return index + fFirstNtupleColumnId;       
-}                                         
-
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateNtupleFColumn(G4int ntupleId, const G4String& name)
-{
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fpVerboseL4->Message("create", "ntuple F column", description);
-  } 
-#endif
-
-  G4XmlNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "CreateNtupleFColumn");
-  tools::ntuple_booking* ntupleBooking
-    = ntupleDescription->fNtupleBooking;  
-
-  if ( ! ntupleBooking ) {
-    G4ExceptionDescription description;
-    description << "      " 
-                << "Ntuple " << ntupleId << " has to be created first. ";
-    G4Exception("G4XmlAnalysisManager::CreateNtupleFColumn()",
-                "Analysis_W005", JustWarning, description);
-    return -1;       
-  }
-
-  // Save column info in booking
-  G4int index = ntupleBooking->m_columns.size();
-  ntupleBooking->add_column<float>(name);  
- 
-  // Create column if ntuple already exists
-  if ( ntupleDescription->fNtuple ) {
-    tools::waxml::ntuple::column<float>* column 
-      = ntupleDescription->fNtuple->create_column<float>(name);  
-    ntupleDescription->fNtupleFColumnMap[index] = column;
-  }
-    
-  fLockFirstNtupleColumnId = true;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fpVerboseL2->Message("create", "ntuple F column", description);
-  }  
-#endif
-
-  return index + fFirstNtupleColumnId;       
-}                                         
-
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::CreateNtupleDColumn(G4int ntupleId, const G4String& name)   
-{
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fpVerboseL4->Message("create", "ntuple D column", description);
-  }  
-#endif
-
-  G4XmlNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "CreateNtupleDColumn");
-  tools::ntuple_booking* ntupleBooking
-    = ntupleDescription->fNtupleBooking;  
-
-  if ( ! ntupleBooking ) {
-    G4ExceptionDescription description;
-    description << "      "
-                << "Ntuple " << ntupleId << " has to be created first. ";
-    G4Exception("G4XmlAnalysisManager::CreateNtupleDColumn()",
-                "Analysis_W005", JustWarning, description);
-    return -1;       
-  }
-
-  // Save column info in booking
-  G4int index = ntupleBooking->m_columns.size();
-  ntupleBooking->add_column<double>(name);  
- 
-  // Create column if ntuple already exists
-  if ( ntupleDescription->fNtuple ) {
-    tools::waxml::ntuple::column<double>* column 
-      = ntupleDescription->fNtuple->create_column<double>(name);  
-    ntupleDescription->fNtupleDColumnMap[index] = column;
-  }
-    
-  fLockFirstNtupleColumnId = true;
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
-    G4ExceptionDescription description;
-    description << name << " ntupleId " << ntupleId; 
-    fpVerboseL2->Message("create", "ntuple D column", description);
-  }  
- #endif
-
-  return index + fFirstNtupleColumnId;       
-}                                         
-
-//_____________________________________________________________________________
-void G4XmlAnalysisManager::FinishNtuple(G4int ntupleId)
-{ 
-  G4XmlNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "FinishNtuple");
-  tools::ntuple_booking* ntupleBooking
-    = ntupleDescription->fNtupleBooking;  
-
-  if ( ! ntupleBooking ) {
-    G4ExceptionDescription description;
-    description << "      " 
-                << "Ntuple " << ntupleId << " has to be created first. ";
-    G4Exception("G4XmlAnalysisManager::CreateNtupleDColumn()",
-                "Analysis_W005", JustWarning, description);
-    return;       
-  }
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << ntupleBooking->m_name << " ntupleId " << ntupleId; 
-    fpVerboseL4->Message("finish", "ntuple", description);
-  }  
-#endif
-
-  // Finish ntuple if ntuple already exists
-  if ( ntupleDescription->fNtuple ) {
-    G4String path = "/";
-    path.append(fNtupleDirectoryName);
-    ntupleDescription->fNtuple
-      ->write_header(path, ntupleBooking->m_name, ntupleBooking->m_title);  
-
-    fLockNtupleDirectoryName = true;
-  }  
-
-#ifdef G4VERBOSE
-  if ( fpVerboseL2 ) {
-    G4ExceptionDescription description;
-    description << ntupleBooking->m_name << " ntupleId " << ntupleId; 
-    fpVerboseL2->Message("finish", "ntuple", description);
-  }  
-#endif
-}
-   
-  
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillH1(G4int id, G4double value, G4double weight)
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "FillH1", true, false);
-  if ( ! h1d ) return false;
-
-  if ( fActivation && ( ! GetActivation(kH1, id) ) ) {
-    //G4cout << "Skipping FillH1 for " << id << G4endl; 
-    return false; 
-  }  
-
-  G4HnInformation* info = GetInformation(kH1, id);
-  h1d->fill(info->fXFcn(value/info->fXUnit), weight);
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << " id " << id << " value " << value/GetXUnit(kH1, id);
-    fpVerboseL4->Message("fill", "H1", description);
-  }  
-#endif
-  return true;
-}
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillH2(G4int id, 
-                                    G4double xvalue, G4double yvalue, 
-                                    G4double weight)
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "FillH2", true, false);
-  if ( ! h2d ) return false;
-
-  if ( fActivation && ( ! GetActivation(kH2, id) ) ) return false; 
-
-  G4HnInformation* info = GetInformation(kH2, id);
-  h2d->fill(info->fXFcn(xvalue/info->fXUnit), 
-            info->fYFcn(yvalue/info->fYUnit), weight);
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << " id " << id 
-                << " xvalue " << xvalue/GetXUnit(kH2, id) 
-                << " yvalue " << yvalue/GetYUnit(kH2, id);
-    fpVerboseL4->Message("fill", "H2", description);
-  }  
-#endif
-  return true;
-}
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int columnId, G4int value)
-{
-  return FillNtupleIColumn(fFirstNtupleId, columnId, value);
-}                                         
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int columnId, G4float value)
-{
-  return FillNtupleFColumn(fFirstNtupleId, columnId, value);
-}                                         
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int columnId, G4double value)
-{
-  return FillNtupleDColumn(fFirstNtupleId, columnId, value);
-}                                         
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillNtupleIColumn(G4int ntupleId, G4int columnId, 
-                                               G4int value)
-{
-  tools::waxml::ntuple::column<int>* column 
-    = GetNtupleIColumn(ntupleId, columnId);
-  if ( ! column ) {
-    G4ExceptionDescription description;
-    description << "      " << "column " << columnId << " does not exist.";
-    G4Exception("G4XmlAnalysisManager::FillNtupleIColumn()",
-                "Analysis_W009", JustWarning, description);
-    return false;
-  }  
-  
-  column->fill(value);
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId  
-                << " columnId " << columnId << " value " << value;
-    fpVerboseL4->Message("fill", "ntuple I column", description);
-  }  
-#endif
-  return true;       
-}                                         
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillNtupleFColumn(G4int ntupleId, G4int columnId, 
-                                               G4float value)
-{
-  tools::waxml::ntuple::column<float>* column 
-    = GetNtupleFColumn(ntupleId, columnId);
-  if ( ! column ) {
-    G4ExceptionDescription description;
-    description << "      " << "column " << columnId << " does not exist.";
-    G4Exception("G4XmlAnalysisManager::FillNtupleFColumn()",
-                "Analysis_W009", JustWarning, description);
-    return false;
-  }  
-  
-  column->fill(value);
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId  
-                << " columnId " << columnId << " value " << value;
-    fpVerboseL4->Message("fill", "ntuple F column", description);
-  }  
-#endif
-  return true;       
-}                                         
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::FillNtupleDColumn(G4int ntupleId, G4int columnId, 
-                                               G4double value)
-{
-  tools::waxml::ntuple::column<double>* column 
-    = GetNtupleDColumn(ntupleId, columnId);
-  if ( ! column ) {
-    G4ExceptionDescription description;
-    description << "      " << "column " << columnId << " does not exist.";
-    G4Exception("G4XmlAnalysisManager::FillNtupleDColumn()",
-                "Analysis_W009", JustWarning, description);
-    return false;
-  }  
-  
-  column->fill(value);
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId  
-                << " columnId " << columnId << " value " << value;
-    fpVerboseL4->Message("fill", "ntuple D column", description);
-  }  
-#endif
-  return true;       
-}                                         
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::AddNtupleRow()
-{ 
-  return AddNtupleRow(fFirstNtupleId);
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::AddNtupleRow(G4int ntupleId)
-{ 
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId;  
-    fpVerboseL4->Message("add", "ntuple row", description);
-  }  
-#endif
-
-  G4XmlNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "AddNtupleRow");
-
-  if ( ! ntupleDescription || ! ntupleDescription->fNtuple ) {
-    G4ExceptionDescription description;
-    description << "      " << "ntuple does not exist. ";
-    G4Exception("G4XmlAnalysisManager::AddNtupleRow()",
-                "Analysis_W008", JustWarning, description);
-    return false;
-  }  
-  
-  ntupleDescription->fNtuple->add_row();
-#ifdef G4VERBOSE
-  if ( fpVerboseL4 ) {
-    G4ExceptionDescription description;
-    description << " ntupleId " << ntupleId;  
-    fpVerboseL4->Message("add", "ntuple row", description);
-  }  
-#endif
-
-  return true;
-}
- 
-//_____________________________________________________________________________
-tools::histo::h1d*  G4XmlAnalysisManager::GetH1(G4int id, G4bool warn,
-                                                G4bool onlyIfActive) const 
-{
-  return GetH1InFunction(id, "GetH1", warn, onlyIfActive);
-}
-
-//_____________________________________________________________________________
-tools::histo::h2d*  G4XmlAnalysisManager::GetH2(G4int id, G4bool warn,
-                                                G4bool onlyIfActive) const 
-{
-  return GetH2InFunction(id, "GetH2", warn, onlyIfActive);
-}
-
-//_____________________________________________________________________________
-G4int  G4XmlAnalysisManager::GetH1Id(const G4String& name, G4bool warn) const
-{
-  std::map<G4String, G4int>::const_iterator it = fH1NameIdMap.find(name);
-  if ( it ==  fH1NameIdMap.end() ) {  
-    if ( warn) {
-      G4String inFunction = "G4XmlAnalysisManager::GetH1Id";
-      G4ExceptionDescription description;
-      description << "      " << "histogram " << name << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
-    }
-    return -1;         
-  }
-  return it->second;
-}  
-                                      
-//_____________________________________________________________________________
-G4int  G4XmlAnalysisManager::GetH2Id(const G4String& name, G4bool warn) const
-{
-  std::map<G4String, G4int>::const_iterator it = fH2NameIdMap.find(name);
-  if ( it ==  fH2NameIdMap.end() ) {  
-    if ( warn) {
-      G4String inFunction = "G4XmlAnalysisManager::GetH2Id";
-      G4ExceptionDescription description;
-      description << "      " << "histogram " << name << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
-    }
-    return -1;         
-  }
-  return it->second;
-}  
-                                      
-//_____________________________________________________________________________
-tools::waxml::ntuple* G4XmlAnalysisManager::GetNtuple() const
-{
-  return GetNtuple(fFirstNtupleId);
-}  
-
-//_____________________________________________________________________________
-tools::waxml::ntuple* G4XmlAnalysisManager::GetNtuple(G4int ntupleId) const
-{
-  G4XmlNtupleDescription* ntupleDescription
-    = GetNtupleInFunction(ntupleId, "GetNtuple");
-    
-  return ntupleDescription->fNtuple;
-}  
-
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::GetH1Nbins(G4int id) const
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Nbins");
-  if ( ! h1d ) return 0;
-  
-  return h1d->axis().bins();
-}  
-
-//_____________________________________________________________________________
-G4double G4XmlAnalysisManager::GetH1Xmin(G4int id) const
-{
-// Returns xmin value with applied unit and histogram function
-
-  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Xmin");
-  if ( ! h1d ) return 0;
-  
-  G4HnInformation* info = GetInformation(kH1, id);
-  return info->fXFcn(h1d->axis().lower_edge()*info->fXUnit);
-}  
-
-//_____________________________________________________________________________
-G4double G4XmlAnalysisManager::GetH1Xmax(G4int id) const
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Xmax");
-  if ( ! h1d ) return 0;
-  
-  G4HnInformation* info = GetInformation(kH1, id);
-  return info->fXFcn(h1d->axis().upper_edge()*info->fXUnit);
-}  
-
-//_____________________________________________________________________________
-G4double G4XmlAnalysisManager::GetH1Width(G4int id) const
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1XWidth", true, false);
-  if ( ! h1d ) return 0;
-  
-  G4int nbins = h1d->axis().bins();
-  if ( ! nbins ) {
-    G4ExceptionDescription description;
-    description << "    nbins = 0 (for h1 id = " << id << ").";
-    G4Exception("G4XmlAnalysisManager::GetH1Width",
-                "Analysis_W014", JustWarning, description);
-    return 0;
-  }              
-  
-  G4HnInformation* info = GetInformation(kH1, id);
-  return ( info->fXFcn(h1d->axis().upper_edge()) 
-           - info->fXFcn(h1d->axis().lower_edge()))*info->fXUnit/nbins;
-}  
-
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::GetH2Nxbins(G4int id) const
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2NXbins");
-  if ( ! h2d ) return 0;
-  
-  return h2d->axis_x().bins();
-}  
-
-//_____________________________________________________________________________
-G4double G4XmlAnalysisManager::GetH2Xmin(G4int id) const
-{
-// Returns xmin value with applied unit and histogram function
-
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Xmin");
-  if ( ! h2d ) return 0;
-  
-  G4HnInformation* info = GetInformation(kH2, id);
-  return info->fXFcn(h2d->axis_x().lower_edge()*info->fXUnit);
-}  
-
-//_____________________________________________________________________________
-G4double G4XmlAnalysisManager::GetH2Xmax(G4int id) const
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Xmax");
-  if ( ! h2d ) return 0;
-  
-  G4HnInformation* info = GetInformation(kH2, id);
-  return info->fXFcn(h2d->axis_x().upper_edge()*info->fXUnit);
-}  
-
-//_____________________________________________________________________________
-G4double G4XmlAnalysisManager::GetH2XWidth(G4int id) const
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2XWidth", true, false);
-  if ( ! h2d ) return 0;
-  
-  G4int nbins = h2d->axis_x().bins();
-  if ( ! nbins ) {
-    G4ExceptionDescription description;
-    description << "    nbins = 0 (for h1 id = " << id << ").";
-    G4Exception("G4XmlAnalysisManager::GetH2Width",
-                "Analysis_W014", JustWarning, description);
-    return 0;
-  }              
-  
-  G4HnInformation* info = GetInformation(kH2, id);
-  return ( info->fXFcn(h2d->axis_x().upper_edge()) 
-           - info->fXFcn(h2d->axis_x().lower_edge()))*info->fXUnit/nbins;
-}  
-
-//_____________________________________________________________________________
-G4int G4XmlAnalysisManager::GetH2Nybins(G4int id) const
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2NYbins");
-  if ( ! h2d ) return 0;
-  
-  return h2d->axis_y().bins();
-}  
-
-//_____________________________________________________________________________
-G4double G4XmlAnalysisManager::GetH2Ymin(G4int id) const
-{
-// Returns xmin value with applied unit and histogram function
-
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Ymin");
-  if ( ! h2d ) return 0;
-  
-  G4HnInformation* info = GetInformation(kH2, id);
-  return info->fYFcn(h2d->axis_y().lower_edge()*info->fYUnit);
-}  
-
-//_____________________________________________________________________________
-G4double G4XmlAnalysisManager::GetH2Ymax(G4int id) const
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Ymax");
-  if ( ! h2d ) return 0;
-  
-  G4HnInformation* info = GetInformation(kH2, id);
-  return info->fYFcn(h2d->axis_y().upper_edge()*info->fYUnit);
-}  
-
-//_____________________________________________________________________________
-G4double G4XmlAnalysisManager::GetH2YWidth(G4int id) const
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2YWidth", true, false);
-  if ( ! h2d ) return 0;
-  
-  G4int nbins = h2d->axis_y().bins();
-  if ( ! nbins ) {
-    G4ExceptionDescription description;
-    description << "    nbins = 0 (for h1 id = " << id << ").";
-    G4Exception("G4XmlAnalysisManager::GetH2Width",
-                "Analysis_W014", JustWarning, description);
-    return 0;
-  }              
-  
-  G4HnInformation* info = GetInformation(kH2, id);
-  return ( info->fYFcn(h2d->axis_y().upper_edge()) 
-           - info->fYFcn(h2d->axis_y().lower_edge()))*info->fYUnit/nbins;
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::SetH1Title(G4int id, const G4String& title)
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "SetH1Title");
-  if ( ! h1d ) return false;
-  
-  return h1d->set_title(title);
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::SetH1XAxisTitle(G4int id, const G4String& title)
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "SetH1XAxisTitle");
-  if ( ! h1d ) return false;
-  
-  h1d->add_annotation(tools::histo::key_axis_x_title(), title);
-  return true;
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::SetH1YAxisTitle(G4int id, const G4String& title)
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "SetH1YAxisTitle");
-  if ( ! h1d ) return false;
-  
-  h1d->add_annotation(tools::histo::key_axis_y_title(), title);
-  return true;
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::SetH2Title(G4int id, const G4String& title)
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2Title");
-  if ( ! h2d ) return false;
-  
-  return h2d->set_title(title);
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::SetH2XAxisTitle(G4int id, const G4String& title)
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2XAxisTitle");
-  if ( ! h2d ) return false;
-  
-  h2d->add_annotation(tools::histo::key_axis_x_title(), title);
-  return true;
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::SetH2YAxisTitle(G4int id, const G4String& title)
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2YAxisTitle");
-  if ( ! h2d ) return false;
-  
-  h2d->add_annotation(tools::histo::key_axis_x_title(), title);
-  return true;  
-}  
-
-//_____________________________________________________________________________
-G4bool G4XmlAnalysisManager::SetH2ZAxisTitle(G4int id, const G4String& title)
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2ZAxisTitle");
-  if ( ! h2d ) return false;
-  
-  h2d->add_annotation(tools::histo::key_axis_z_title(), title);
-  return true;  
-}  
-
-//_____________________________________________________________________________
-G4String G4XmlAnalysisManager::GetH1Title(G4int id) const
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Title");
-  if ( ! h1d ) return "";
-  
-  return h1d->title();
-}  
-
-//_____________________________________________________________________________
-G4String G4XmlAnalysisManager::GetH1XAxisTitle(G4int id) const 
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1XAxisTitle");
-  if ( ! h1d ) return "";
-  
-  G4String title;
-  G4bool result = h1d->annotation(tools::histo::key_axis_x_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get x_axis title for h1 id = " << id << ").";
-    G4Exception("G4XmlAnalysisManager::GetH1XAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
-}  
-
-//_____________________________________________________________________________
-G4String G4XmlAnalysisManager::GetH1YAxisTitle(G4int id) const 
-{
-  tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1YAxisTitle");
-  if ( ! h1d ) return "";
-  
-  G4String title;
-  G4bool result = h1d->annotation(tools::histo::key_axis_y_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get y_axis title for h1 id = " << id << ").";
-    G4Exception("G4XmlAnalysisManager::GetH1YAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
-}  
-
-//_____________________________________________________________________________
-G4String G4XmlAnalysisManager::GetH2Title(G4int id) const
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Title");
-  if ( ! h2d ) return "";
-  
-  return h2d->title();
-}  
-
-
-//_____________________________________________________________________________
-G4String G4XmlAnalysisManager::GetH2XAxisTitle(G4int id) const 
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2XAxisTitle");
-  if ( ! h2d ) return "";
-  
-  G4String title;
-  G4bool result = h2d->annotation(tools::histo::key_axis_x_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get x_axis title for h2 id = " << id << ").";
-    G4Exception("G4XmlAnalysisManager::GetH2XAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
-} 
-
-//_____________________________________________________________________________
-G4String G4XmlAnalysisManager::GetH2YAxisTitle(G4int id) const 
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2YAxisTitle");
-  if ( ! h2d ) return "";
-  
-  G4String title;
-  G4bool result = h2d->annotation(tools::histo::key_axis_y_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get y_axis title for h2 id = " << id << ").";
-    G4Exception("G4XmlAnalysisManager::GetH2YAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
-}  
-
-//_____________________________________________________________________________
-G4String G4XmlAnalysisManager::GetH2ZAxisTitle(G4int id) const 
-{
-  tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2ZAxisTitle");
-  if ( ! h2d ) return "";
-  
-  G4String title;
-  G4bool result = h2d->annotation(tools::histo::key_axis_z_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get z_axis title for h2 id = " << id << ").";
-    G4Exception("G4XmlAnalysisManager::GetH2ZAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
-}  

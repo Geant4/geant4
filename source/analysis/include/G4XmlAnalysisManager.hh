@@ -25,23 +25,26 @@
 //
 // $Id$
 
-// Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
+// The main manager for Xml analysis.
+// It delegates most of functions to the object specific managers. 
+
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #ifndef G4XmlAnalysisManager_h
 #define G4XmlAnalysisManager_h 1
 
 #include "G4VAnalysisManager.hh"
-#include "G4XmlNtupleDescription.hh"
 #include "globals.hh"
 
+#include "tools/histo/h1d" 
+#include "tools/histo/h2d" 
 #include "tools/waxml/ntuple"
-#include "tools/ntuple_booking"
-#include "tools/histo/h1d"
-#include "tools/histo/h2d"
 
-#include <fstream>
-#include <vector>
-#include <map>
+
+class G4XmlFileManager;
+class G4H1ToolsManager;
+class G4H2ToolsManager;
+class G4XmlNtupleManager;
 
 class G4XmlAnalysisManager : public G4VAnalysisManager
 {
@@ -53,67 +56,6 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     static G4XmlAnalysisManager* Create(G4bool isMaster = true);
     static G4XmlAnalysisManager* Instance();
 
-    // Methods to manipulate files
-    using G4VAnalysisManager::OpenFile;
-    virtual G4bool OpenFile(const G4String& fileName);
-    virtual G4bool Write();
-    virtual G4bool CloseFile(); 
-
-    // Methods for handling histogrammes, ntuples
-    virtual G4int CreateH1(const G4String& name, const G4String& title,
-                           G4int nbins, G4double xmin, G4double xmax,
-                           const G4String& unitName = "none",
-                           const G4String& fcnName = "none");
-    virtual G4int CreateH2(const G4String& name, const G4String& title,
-                           G4int nxbins, G4double xmin, G4double xmax, 
-                           G4int nybins, G4double ymin, G4double ymax,
-                           const G4String& xunitName = "none", 
-                           const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
-                           const G4String& yfcnName = "none");
-                           
-    virtual G4bool SetH1(G4int id,
-                           G4int nbins, G4double xmin, G4double xmax,
-                           const G4String& unitName = "none",
-                           const G4String& fcnName = "none");
-    virtual G4bool SetH2(G4int id,
-                           G4int nxbins, G4double xmin, G4double xmax, 
-                           G4int nybins, G4double ymin, G4double ymax,
-                           const G4String& xunitName = "none", 
-                           const G4String& yunitName = "none",
-                           const G4String& xfcnName = "none", 
-                           const G4String& yfcnName = "none");
-
-    virtual G4bool ScaleH1(G4int id, G4double factor);
-    virtual G4bool ScaleH2(G4int id, G4double factor);
-                           
-    virtual G4int CreateNtuple(const G4String& name, const G4String& title);
-    // Create columns in the last created ntuple
-    virtual G4int CreateNtupleIColumn(const G4String& name);
-    virtual G4int CreateNtupleFColumn(const G4String& name);
-    virtual G4int CreateNtupleDColumn(const G4String& name);   
-    virtual void  FinishNtuple();   
-    // Create columns in the ntuple with given id
-    virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name);
-    virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name);
-    virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name);   
-    virtual void  FinishNtuple(G4int ntupleId);   
-    
-    // Methods to fill histogrammes, ntuples
-    virtual G4bool FillH1(G4int id, G4double value, G4double weight = 1.0);
-    virtual G4bool FillH2(G4int id, G4double xvalue, G4double yvalue,
-                          G4double weight = 1.0);
-    // Methods for ntuple with id = FirstNtupleId                     
-    virtual G4bool FillNtupleIColumn(G4int columnId, G4int value);
-    virtual G4bool FillNtupleFColumn(G4int columnId, G4float value);
-    virtual G4bool FillNtupleDColumn(G4int columnId, G4double value);
-    virtual G4bool AddNtupleRow();
-    // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
-    virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value);
-    virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value);
-    virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value);
-    virtual G4bool AddNtupleRow(G4int ntupleId);
-   
     // Access methods
     virtual tools::histo::h1d* GetH1(G4int id, G4bool warn = true,
                                      G4bool onlyIfActive = true) const;
@@ -122,97 +64,34 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     virtual tools::waxml::ntuple* GetNtuple() const;
     virtual tools::waxml::ntuple* GetNtuple(G4int ntupleId) const;
 
-    // Access methods via names
-    virtual G4int  GetH1Id(const G4String& name, G4bool warn = true) const;
-    virtual G4int  GetH2Id(const G4String& name, G4bool warn = true) const;
-        
-    // Access to H1 parameters
-    virtual G4int    GetH1Nbins(G4int id) const;
-    virtual G4double GetH1Xmin(G4int id) const;
-    virtual G4double GetH1Xmax(G4int id) const;
-    virtual G4double GetH1Width(G4int id) const;
-
-    // Access to H2 parameters
-    virtual G4int    GetH2Nxbins(G4int id) const;
-    virtual G4double GetH2Xmin(G4int id) const;
-    virtual G4double GetH2Xmax(G4int id) const;
-    virtual G4double GetH2XWidth(G4int id) const;
-    virtual G4int    GetH2Nybins(G4int id) const;
-    virtual G4double GetH2Ymin(G4int id) const;
-    virtual G4double GetH2Ymax(G4int id) const;
-    virtual G4double GetH2YWidth(G4int id) const;
-        
-    // Setters for attributes for plotting
-    virtual G4bool SetH1Title(G4int id, const G4String& title);
-    virtual G4bool SetH1XAxisTitle(G4int id, const G4String& title);
-    virtual G4bool SetH1YAxisTitle(G4int id, const G4String& title);
-    virtual G4bool SetH2Title(G4int id, const G4String& title);
-    virtual G4bool SetH2XAxisTitle(G4int id, const G4String& title);
-    virtual G4bool SetH2YAxisTitle(G4int id, const G4String& title);
-    virtual G4bool SetH2ZAxisTitle(G4int id, const G4String& title);
-
-    // Access attributes for plotting
-    virtual G4String GetH1Title(G4int id) const;
-    virtual G4String GetH1XAxisTitle(G4int id) const;
-    virtual G4String GetH1YAxisTitle(G4int id) const;
-    virtual G4String GetH2Title(G4int id) const;
-    virtual G4String GetH2XAxisTitle(G4int id) const;
-    virtual G4String GetH2YAxisTitle(G4int id) const;
-    virtual G4String GetH2ZAxisTitle(G4int id) const;
-
   protected:
-    virtual G4bool WriteOnAscii(std::ofstream& output);
+    // virtual methods from base class
+    virtual G4bool OpenFileImpl(const G4String& fileName);
+    virtual G4bool WriteImpl();
+    virtual G4bool CloseFileImpl(); 
 
   private:
     // static data members
-    //
+    static G4int fgCounter;
     static G4XmlAnalysisManager* fgMasterInstance;
     static G4ThreadLocal G4XmlAnalysisManager* fgInstance;
 
     // methods
-    //
-    G4bool CreateHnFile();
-    G4bool CloseHnFile(); 
-    G4bool CreateNtupleFile(G4XmlNtupleDescription* ntupleDescription);
-    G4bool CloseNtupleFile(G4XmlNtupleDescription* ntupleDescription); 
+    G4bool WriteH1();
+    G4bool WriteH2();
+    G4bool WriteNtuple();
+    G4bool CloseNtupleFiles();
+    G4bool Reset();
 
-    void AddH1Vector(std::vector<tools::histo::h1d*>& h1Vector);
-    void AddH2Vector(std::vector<tools::histo::h2d*>& h2Vector);
-
-    void CreateNtuplesFromBooking();
-    tools::waxml::ntuple::column<int>*    
-      GetNtupleIColumn(G4int ntupleId, G4int columnId) const;
-    tools::waxml::ntuple::column<float>*  
-      GetNtupleFColumn(G4int ntupleId, G4int columnId) const;
-    tools::waxml::ntuple::column<double>* 
-      GetNtupleDColumn(G4int ntupleId, G4int columnId) const;
-      
-    virtual G4bool Reset();
-    virtual tools::histo::h1d*  GetH1InFunction(G4int id, G4String function,
-                                      G4bool warn = true,
-                                      G4bool onlyIfActive = true) const;
-    virtual tools::histo::h2d*  GetH2InFunction(G4int id, G4String function,
-                                      G4bool warn = true,
-                                      G4bool onlyIfActive = true) const;
-
-    virtual G4XmlNtupleDescription*  GetNtupleInFunction(G4int id, 
-                                        G4String function,
-                                        G4bool warn = true,
-                                        G4bool onlyIfActive = true) const;
-
-    void UpdateTitle(G4String& title, 
-                     const G4String& unitName, const G4String& fcnName) const;                                      
-    
     // data members
-    //
-    std::ofstream* fHnFile;
-    std::vector<tools::histo::h1d*>  fH1Vector;            
-    std::vector<tools::histo::h2d*>  fH2Vector;            
-    std::map<G4String, G4int>  fH1NameIdMap;            
-    std::map<G4String, G4int>  fH2NameIdMap;            
-    
-    std::vector<G4XmlNtupleDescription*> fNtupleVector;
+    G4H1ToolsManager*    fH1Manager;
+    G4H2ToolsManager*    fH2Manager;
+    G4XmlNtupleManager*  fNtupleManager;
+    G4XmlFileManager*    fFileManager;
+
 };
+
+#include "G4XmlAnalysisManager.icc"
 
 #endif
 

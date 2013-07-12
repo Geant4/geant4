@@ -23,41 +23,73 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4AnalysisManagerState.cc 66310 2012-12-17 11:56:35Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
-//
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 09/07/2013  (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+#include "G4AnalysisManagerState.hh"
+#include "G4UnitsTable.hh"
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
+#include <iostream>
 
-class G4VAnalysisManager;
-class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
-
-class G4AnalysisMessenger : public G4UImessenger
+//_____________________________________________________________________________
+G4AnalysisManagerState::G4AnalysisManagerState(
+                                         const G4String& type, G4bool isMaster)
+ : fType(type),
+   fIsMaster(isMaster),
+   fIsActivation(false),
+   fVerboseLevel(0),
+   fVerboseL1(type,1),
+   fVerboseL2(type,2),
+   fVerboseL3(type,3),
+   fVerboseL4(type,4),
+   fpVerboseL1(0),
+   fpVerboseL2(0),
+   fpVerboseL3(0),
+   fpVerboseL4(0)
 {
-  public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
-   
-    // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
-    G4VAnalysisManager*    fManager; ///< Associated class
-    
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
-};
+}
+
+//
+// private methods
+//
+
+//_____________________________________________________________________________
+void G4AnalysisManagerState::SetVerboseLevel(G4int verboseLevel) 
+{
+  if ( verboseLevel == fVerboseLevel || verboseLevel < 0 ) return;
   
-#endif
+  fVerboseLevel = verboseLevel;
+  
+  if ( verboseLevel == 0 ) {
+    fpVerboseL1 = 0;
+    fpVerboseL2 = 0;
+    fpVerboseL3 = 0;
+    fpVerboseL4 = 0;
+  }
+  else if ( verboseLevel == 1 ) {  
+    fpVerboseL1 = &fVerboseL1;
+    fpVerboseL2 = 0;
+    fpVerboseL3 = 0;
+    fpVerboseL4 = 0;
+  }
+  else if ( verboseLevel == 2 ) {  
+    fpVerboseL1 = &fVerboseL1;
+    fpVerboseL2 = &fVerboseL2;
+    fpVerboseL3 = 0;
+    fpVerboseL4 = 0;
+  }
+  else if ( verboseLevel == 3 ) {  
+    fpVerboseL1 = &fVerboseL1;
+    fpVerboseL2 = &fVerboseL2;
+    fpVerboseL3 = &fVerboseL3;
+    fpVerboseL4 = 0;
+  }
+  else {
+    fpVerboseL1 = &fVerboseL1;
+    fpVerboseL2 = &fVerboseL2;
+    fpVerboseL3 = &fVerboseL3;
+    fpVerboseL4 = &fVerboseL4;
+  }
+}  
 

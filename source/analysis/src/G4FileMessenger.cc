@@ -23,60 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.cc 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4FileMessenger.cc 66310 2012-12-17 11:56:35Z ihrivnac $
 
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 18/06/2013 (ivana@ipno.in2p3.fr)
 
-#include "G4AnalysisMessenger.hh"
-#include "G4VAnalysisManager.hh"
+#include "G4FileMessenger.hh"
+#include "G4VFileManager.hh"
 
-#include "G4UIcmdWithABool.hh"
-#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
 
 //_____________________________________________________________________________
-G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
+G4FileMessenger::G4FileMessenger(G4VFileManager* manager)
   : G4UImessenger(),
     fManager(manager),
-    fAnalysisDir(0),  
-    fSetActivationCmd(0),
-    fVerboseCmd(0)
+    fSetFileNameCmd(0),
+    fSetHistoDirNameCmd(0),
+    fSetNtupleDirNameCmd(0)
 {  
-  fAnalysisDir = new G4UIdirectory("/analysis/");
-  fAnalysisDir->SetGuidance("analysis control");
-
-  fSetActivationCmd = new G4UIcmdWithABool("/analysis/setActivation",this);
-  G4String guidance = "Set activation. \n";
-  guidance += "When this option is enabled, only the histograms marked as activated\n";
-  guidance += "are returned, filled or saved on file.\n";
-  guidance += "No warning is issued when Get or Fill is called on inactive histogram.";
-  fSetActivationCmd->SetGuidance(guidance);
-  fSetActivationCmd->SetParameterName("Activation",false);
-
-  fVerboseCmd = new G4UIcmdWithAnInteger("/analysis/verbose",this);
-  fVerboseCmd->SetGuidance("Set verbose level");
-  fVerboseCmd->SetParameterName("VerboseLevel",false);
-  fVerboseCmd->SetRange("VerboseLevel>=0 && VerboseLevel<=4");
+  fSetFileNameCmd = new G4UIcmdWithAString("/analysis/setFileName",this);
+  fSetFileNameCmd->SetGuidance("Set name for the histograms & ntuple file");
+  fSetFileNameCmd->SetParameterName("Filename", false);
+  fSetFileNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  
+  fSetHistoDirNameCmd = new G4UIcmdWithAString("/analysis/setHistoDirName",this);
+  fSetHistoDirNameCmd->SetGuidance("Set name for the histograms directory");
+  fSetHistoDirNameCmd->SetParameterName("HistoDirName", false);
+  fSetHistoDirNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+  
+  fSetNtupleDirNameCmd = new G4UIcmdWithAString("/analysis/setNtupleDirName",this);
+  fSetNtupleDirNameCmd->SetGuidance("Set name for the ntuple directory");
+  fSetNtupleDirNameCmd->SetParameterName("NtupleDirName", false);
+  fSetNtupleDirNameCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }
 
 //_____________________________________________________________________________
-G4AnalysisMessenger::~G4AnalysisMessenger()
+G4FileMessenger::~G4FileMessenger()
 {
-  delete fSetActivationCmd;
-  delete fVerboseCmd;
-  delete fAnalysisDir;
+  delete fSetFileNameCmd;
+  delete fSetHistoDirNameCmd;
+  delete fSetNtupleDirNameCmd;
 }
 
 //
 // public functions
-//
 
 //_____________________________________________________________________________
-void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
+void G4FileMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
-  if ( command == fSetActivationCmd ) {
-    fManager->SetActivation(fSetActivationCmd->GetNewBoolValue(newValues));
+  if ( command == fSetFileNameCmd ) {
+    G4cout << "Set file name: " << newValues << G4endl;
+    fManager->SetFileName(newValues);
   }  
-  else if ( command == fVerboseCmd ) {
-    fManager->SetVerboseLevel(fVerboseCmd->GetNewIntValue(newValues));
+  else if ( command == fSetHistoDirNameCmd ) {
+    fManager->SetHistoDirectoryName(newValues);
+  }  
+  else if ( command == fSetNtupleDirNameCmd ) {
+    fManager->SetNtupleDirectoryName(newValues);
   }  
 }  

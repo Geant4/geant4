@@ -23,41 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4VH1Manager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
-//
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+#include "G4VH1Manager.hh"
+#include "G4HnManager.hh"
+#include "G4H1Messenger.hh"
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class G4VAnalysisManager;
-class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
-
-class G4AnalysisMessenger : public G4UImessenger
+//_____________________________________________________________________________
+G4VH1Manager::G4VH1Manager(const G4AnalysisManagerState& state)
+  : G4BaseAnalysisManager(state),
+    fHnManager(0),
+    fMessenger(0)
 {
-  public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
-   
-    // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
-    G4VAnalysisManager*    fManager; ///< Associated class
-    
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
-};
-  
-#endif
+  fHnManager = new G4HnManager("H1", state);
+  fMessenger = new G4H1Messenger(this);
+}
+
+//_____________________________________________________________________________
+G4VH1Manager::~G4VH1Manager()
+{
+  delete fHnManager;
+  delete fMessenger;
+}
 

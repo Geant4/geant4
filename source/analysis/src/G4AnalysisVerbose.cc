@@ -59,7 +59,7 @@ G4AnalysisVerbose::~G4AnalysisVerbose()
 void G4AnalysisVerbose::Message(const G4String& action, 
                                 const G4String& object, 
                                 const G4String& objectName,
-                                G4bool success)
+                                G4bool success) const
 {
   G4cout << "... "
          << fToBeDoneText
@@ -84,7 +84,7 @@ void G4AnalysisVerbose::Message(const G4String& action,
 void G4AnalysisVerbose::Message(const G4String& action, 
                                 const G4String& object, 
                                 G4ExceptionDescription& description,
-                                G4bool success)
+                                G4bool success) const
 {
   G4cout << "... "
          << fToBeDoneText

@@ -23,41 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AnalysisMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id: G4RootFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// The messenger class for G4VAnalysisManager.
-// It implements commands:
-// - /analysis/setActivation
-// - /analysis/verbose
-//
-// Author: Ivana Hrivnacova, 24/06/2013  (ivana@ipno.in2p3.fr)
+// The manager for Root file operations.
 
-#ifndef G4AnalysisMessenger_h
-#define G4AnalysisMessenger_h 1
+// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
-#include "G4UImessenger.hh"
+#ifndef G4RootFileManager_h
+#define G4RootFileManager_h 1
+
+#include "G4VFileManager.hh"
 #include "globals.hh"
 
-class G4VAnalysisManager;
-class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAnInteger;
+namespace tools {
+namespace wroot { 
+class file; 
+class directory;
+}
+}  
 
-class G4AnalysisMessenger : public G4UImessenger
+class G4RootFileManager : public G4VFileManager
 {
   public:
-    G4AnalysisMessenger(G4VAnalysisManager* manager);
-    virtual ~G4AnalysisMessenger();
-   
-    // methods
-    virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
-    G4VAnalysisManager*    fManager; ///< Associated class
+    G4RootFileManager(const G4AnalysisManagerState& state);
+    virtual ~G4RootFileManager();
+
+    // Methods to manipulate files
+    virtual G4bool OpenFile(const G4String& fileName);
+    virtual G4bool WriteFile();
+    virtual G4bool CloseFile(); 
+
+    G4bool CreateHistoDirectory();
+    G4bool CreateNtupleDirectory();
     
-    G4UIdirectory*         fAnalysisDir;   
-    G4UIcmdWithABool*      fSetActivationCmd;   
-    G4UIcmdWithAnInteger*  fVerboseCmd;   
+    // Get methods
+    tools::wroot::file* GetFile() const;
+    tools::wroot::directory* GetHistoDirectory() const;
+    tools::wroot::directory* GetNtupleDirectory() const;
+
+  private:
+    // data members
+    //
+    tools::wroot::file*       fFile;
+    tools::wroot::directory*  fHistoDirectory;
+    tools::wroot::directory*  fNtupleDirectory;
 };
-  
+
+// inline functions
+
+inline tools::wroot::file* G4RootFileManager::GetFile() const
+{ return fFile; }
+
+inline tools::wroot::directory* G4RootFileManager::GetHistoDirectory() const
+{ return fHistoDirectory; }
+
+inline tools::wroot::directory* G4RootFileManager::GetNtupleDirectory() const
+{ return fNtupleDirectory; }
+
 #endif
 

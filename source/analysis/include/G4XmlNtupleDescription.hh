@@ -23,19 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HnInformation.hh 66310 2012-12-17 11:56:35Z ihrivnac $
+// $Id$
 
+// Structure containing the information related to Xml ntuple
+//
 // Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
 
 #ifndef G4XmlNtupleDescription_h
 #define G4XmlNtupleDescription_h 1
 
 #include "tools/waxml/ntuple"
-#include "tools/ntuple_booking"
 
+#include <fstream>
 #include <map>
 
-// Structure containing the information related to Xml ntuple
+namespace tools { 
+class ntuple_booking; 
+}  
 
 struct G4XmlNtupleDescription
 {
