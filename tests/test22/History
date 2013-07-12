@@ -1,0 +1,137 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 22 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+-------------------------------------------------------------------------
+
+
+11 July 2013 Alberto Ribon                         (test22-V09-06-07)
+---------------------------------------------------------------------
+Data, input (kind of "macro") files, Root macros, and shell scripts
+have all been migrated to verification/hadronic/test22 .
+Ready to be proposed.
+
+11 July 2013 Alberto Ribon                         (test22-V09-06-06)
+---------------------------------------------------------------------
+Last tag before migrating data, macros, and scripts to verification:
+- Added CMake build
+- Renamed all executables with test22_ prefix
+- Data files for PbarA_X/ still missing
+
+11 July 2013 Alberto Ribon                         (test22-V09-06-05)
+---------------------------------------------------------------------
+Last tag before migrating to CMake:
+- Fixed treatment of ions 
+- Renamed some files for consistency
+- Moved the .icc files from include/ to src/
+- Data files for PbarA_X/ still missing
+
+30 May 2013 Aida Galoyan                           (test22-V09-06-04)
+---------------------------------------------------------------------
+Directory hA is created for FTF validation for hadron-Nucleus interactions
+
+21 May 2013 Aida Galoyan                           (test22-V09-06-03)
+---------------------------------------------------------------------
+New directories are created for FTF validation:
+PbarA,  PiPinclusive, PPinclusive, PbarPinclusive. 
+
+2 April 2013 Aida Galoyan                          (test22-V09-06-02)
+---------------------------------------------------------------------
+- Macros in pbarA_X directory are improved
+
+27 March 2013 Aida Galoyan                         (test22-V09-06-01) 
+---------------------------------------------------------------------
+- FTF validation is included
+
+10 December 2012  Alberto Ribon                    (test22-V09-06-00)
+---------------------------------------------------------------------
+-  Removed the CHIPS test: the slot is now available.
+
+9 October 2012  Gabriele Cosmo (test22-V09-05-04)
+---------------------------------------------------------------------
+- Explicit inclusion of units and constants headers.
+
+27 July 2012  Vladimir Ivanchenko (test22-V09-05-03)
+---------------------------------------------------------------------
+- Tst22IonPhysics - fixed bugs in ion elastic.
+
+07 June 2012  John Apostolakis (test22-V09-05-02)
+---------------------------------------------------------------------
+- test22.cc: Do not include Tst22PhysicsList (deleted). 
+
+07 June 2012  John Apostolakis (test22-V09-05-01)
+---------------------------------------------------------------------
+- Moved to use new modular physics list Tst22ModularPhysicsList
+   which was derived from Tst22PhysicsList 
+- Tst22EMPhysics: Added biasing factor of 100 for Photo-nuclear,
+   and changed to 1,000,000 for electro-nuclear." 
+- Deleted Tst22PhysicsList - to avoid confusion.
+- New script  'process-GammaN.awk' to process output of short 
+   runs - to check whether the interactions under test do occur.
+- Revised input file to test all particles with all materials.
+
+07 June 2012  John Apostolakis (test22-V09-05-00)
+---------------------------------------------------------------------
+- Tst22PhysicsList: 
+   Took out parts referring to modular physics 
+     lists.  Now it is only a single-class physics list.
+   Improved moved the include of all physics processes from header to 
+     source file of Tst22PhysicsList.cc
+
+01 Jun 2010  Gunter Folger (test22-V09-03-02)
+---------------------------------------------------------------------
+-  retag to pick up changed header file from previous rejected tag.
+   No change other the test22.out to test22-V09-03-01
+
+01 Apr 2010  Dennis Wright (test22-V09-03-01)
+---------------------------------------------------------------------
+- remove #include G4MultipleScattering.hh" from Tst22PhysicsList.cc
+
+18 Mar 2010  Dennis Wright (test22-V09-03-00)
+---------------------------------------------------------------------
+- replace G4MultipleScattering with G4eMultipleScattering,
+  G4MuMultipleScattering and G4hMultipleScattering
+- add more information to README
+- includes M. Kossov's option (in comments) to use native CHIPS
+  model instead of interface 
+
+December 6, 2005  G.Cosmo
+---------------------------------------------------------------------
+- Trivial changes for support of CLHEP-2.0.X series.
+
+
+June 3, 2003  G.Cosmo (test22-V05-01-01)
+---------------------------------------------------------------------
+- Reduced statistics in input script.
+- Cleared compilation warnings...
+- Made largeN macro corresponding to standard macro with more statistics...
+
+May 31, 2003  G.Cosmo (test22-V05-01-00)
+---------------------------------------------------------------------
+- Made test more effective for scaling of the gamma-nuclear cross-sections.
+  Modified physics-list and input script. Will require update of the
+  reference output. (H.P.Wellisch)
+- Added description to README.
+
+
+November 22, 2001  H.P.Wellisch
+---------------------------------------------------------------------
+- Created the test to test gamma and electron nuclear reactions using
+  chiral invariant phase space decay for final state production.
+
+
+March 07 2001 H.Kurashige (test22-V03-00-03)
+---------------------------------------------------------------------
+- Created directories.
+

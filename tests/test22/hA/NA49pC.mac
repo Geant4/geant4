@@ -1,0 +1,42 @@
+//---------------------------------------
+//        Macro file for FTF test
+//--------------------------------------- 
+// verbose=0 no event listing, verbose#0 =1 event listing with stop after each event
+#verbose
+0
+//#initrand
+//initial.conf
+//#saverand
+//             what event to print?
+//#print
+//10
+//
+//             proton pi- pi+ kaon+ kaon- anti_proton anti_deuteron anti_alpha
+#particle
+proton
+//
+//#ion
+//208 82
+//
+//             Plab for proj. hadron, or per nucleon for AA-collisions
+//#Plab(GeV/c)
+//200.
+//
+#material
+G4_C
+#targetA
+12
+//
+//             ftfp ftfb qgsp qgsb bertini binary
+#generator
+ftfp
+//
+#events
+100000                               
+//
+//--------
+#Plab(GeV/c)
+158.0
+#run
+#exit
+

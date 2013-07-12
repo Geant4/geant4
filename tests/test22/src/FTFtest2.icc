@@ -1,0 +1,96 @@
+  // ------- Initialisation 
+  G4int     verbose  = 0;
+  G4bool    saverand = false;
+
+  G4String  namePart = "proton";
+  G4bool    ionParticle = false;
+  G4double  Plab     = 100.*GeV;   // VU
+  G4double  energy   = 100.*GeV;
+  G4double  sigmae   = 0.0;
+
+  G4int     ionZ(0), ionA(0);
+  G4int     targetA  = 0;
+  G4String  nameMat  = "G4_Al";
+
+  G4bool    Shen     = false;
+  G4String  nameGen  = "binary";
+
+  G4int     nevt     = 1000;
+  G4int     modu     = 1000;
+
+  G4double theStep   = 0.01*micrometer;
+  G4Material* material = 0;
+
+  G4bool xsbgg = true;
+
+  // Track
+  G4ThreeVector aPosition = G4ThreeVector(0.,0.,0.);
+  G4double      aTime     = 0. ;
+  G4ThreeVector aDirection      = G4ThreeVector(0.0,0.0,1.0);
+  G4double nx = 0.0, ny = 0.0, nz = 0.0;
+
+  G4cout.setf( std::ios::scientific, std::ios::floatfield );
+
+  // -------------------------------------------------------------------
+  //--------- Materials definition ---------
+  Test30Material*  mate = new Test30Material();
+  G4NistManager::Instance()->SetVerbose(0);
+
+  //--------- Particles definition ---------
+  Test30Physics*   phys = new Test30Physics();
+
+//  const G4ParticleDefinition* gamma = G4Gamma::Gamma();
+  const G4ParticleDefinition* electron = G4Electron::Electron();
+  const G4ParticleDefinition* proton = G4Proton::Proton();
+  const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+  const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
+  const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
+//  const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
+  const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
+  const G4ParticleDefinition* tri = G4Triton::TritonDefinition();
+  const G4ParticleDefinition* he3 = G4He3::He3Definition();
+  const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
+//const G4ParticleDefinition* ion = G4GenericIon::GenericIon();
+
+  const G4ParticleDefinition* anti_proton   = G4AntiProton::AntiProton();
+  const G4ParticleDefinition* anti_neutron  = G4AntiNeutron::AntiNeutron();
+  const G4ParticleDefinition* anti_deuteron = G4AntiDeuteron::AntiDeuteron();
+  const G4ParticleDefinition* anti_triton   = G4AntiTriton::AntiTriton();
+  const G4ParticleDefinition* anti_He3      = G4AntiHe3::AntiHe3();
+  const G4ParticleDefinition* anti_alpha    = G4AntiAlpha::AntiAlpha();
+
+  G4DecayPhysics decays;      
+  decays.ConstructParticle(); 
+
+  G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
+  partTable->SetReadiness();
+
+
+
+  //AR-05Jul2013
+  G4GenericIon* gion = G4GenericIon::GenericIon();
+  gion->SetProcessManager(new G4ProcessManager(gion));
+  G4IonTable* ions = partTable->GetIonTable();
+  ions->CreateAllIon();
+  ions->CreateAllIsomer();
+
+
+
+  //--------- Geometry definition
+
+//G4double dimX = 100.0*cm;
+//G4double dimY = 100.0*cm;
+//G4double dimZ = 100.0*cm;
+
+//G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
+//G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box",0,0,0);
+//G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",
+//                                            lFrame,0,false,0);
+
+  // construct pre-compound and deexcitation
+  G4ExcitationHandler* theDeExcitation = new G4ExcitationHandler();
+  G4Evaporation* theEvaporation = new G4Evaporation();
+  theDeExcitation->SetEvaporation(theEvaporation);
+  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(theDeExcitation);
+  phys->SetPreCompound(thePreCompound); 
+  phys->SetDeExcitation(theDeExcitation); 

@@ -1,0 +1,77 @@
+#include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4ElementVector.hh"
+#include "Test30Material.hh"
+#include "Test30Physics.hh"
+
+#include "G4ProcessManager.hh"
+#include "G4VParticleChange.hh"
+#include "G4ParticleChange.hh"
+#include "G4HadronCrossSections.hh"
+#include "G4HadronicProcess.hh"
+#include "G4ChargeExchangeProcess.hh"
+#include "G4VCrossSectionDataSet.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
+#include "G4HadronInelasticDataSet.hh"
+#include "G4HadronElasticDataSet.hh"
+#include "G4IonsShenCrossSection.hh"
+#include "G4TripathiCrossSection.hh"
+#include "G4TripathiLightCrossSection.hh"
+#include "G4HadronElasticDataSet.hh"
+#include "G4PiNuclearCrossSection.hh"
+#include "G4IonProtonCrossSection.hh"
+
+#include "G4BGGNucleonElasticXS.hh"
+#include "G4BGGPionElasticXS.hh"
+#include "G4BGGNucleonInelasticXS.hh"
+#include "G4BGGPionInelasticXS.hh"
+
+#include "G4HadronNucleonXsc.hh"             // Uzhi MK Cross-Sections
+#include "G4VComponentCrossSection.hh"       // Uzhi
+#include "G4ComponentAntiNuclNuclearXS.hh"   // Uzhi
+
+#include "G4ParticleTable.hh"
+#include "G4ParticleChange.hh"
+#include "G4DynamicParticle.hh"
+#include "G4AntiProton.hh"
+#include "G4Neutron.hh"
+#include "G4Proton.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4Gamma.hh"
+#include "G4PionZero.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4Alpha.hh"
+#include "G4He3.hh"
+#include "G4Deuteron.hh"
+#include "G4Triton.hh"
+#include "G4IonTable.hh"
+#include "G4DecayPhysics.hh"  
+
+#include "G4ForceCondition.hh"
+#include "G4Box.hh"
+#include "G4PVPlacement.hh"
+#include "G4Step.hh"
+#include "G4GRSVolume.hh"
+
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
+
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4Evaporation.hh"
+
+#include "G4StateManager.hh"
+#include "G4NistManager.hh"
+
+//#include "Histo.hh"
+#include "G4Timer.hh"
+
+#include "G4ForceCondition.hh"
+#include "G4TouchableHistory.hh"
+
+#include "G4NucleiProperties.hh"
+#include "G4ProductionCuts.hh"                    // Uzhi 1.02.13
+#include "G4ProductionCutsTable.hh"               // Uzhi 1.02.13

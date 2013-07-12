@@ -1,0 +1,140 @@
+    // ---- Read input file
+    do {
+      if( fin->eof() ) {
+        end = false;
+        break;
+      }
+      (*fin) >> line;
+      if(verbose > 0) G4cout << "Next line " << line << G4endl;
+      if(line == "#particle") {
+        (*fin) >> namePart;
+        ionParticle= false;                      // Uzhi 1.02.13
+      } else if(line == "#ion") {
+        ionParticle= true;
+	namePart="GenericIon";
+        (*fin) >> ionA >> ionZ;
+      } else if(line == "#Plab(GeV/c)") {
+        (*fin) >> Plab;
+        Plab *= GeV;
+      } else if(line == "#sigmae(GeV)") {
+        (*fin) >> sigmae;
+        sigmae *= GeV;
+      } else if(line == "#events") {
+        (*fin) >> nevt;
+      } else if(line == "#step(mm)") {
+        (*fin) >> theStep;
+        theStep *= mm;
+      } else if(line == "#print") {
+        (*fin) >> modu;
+      } else if(line == "#material") {
+        (*fin) >> nameMat;
+      } else if(line == "#targetA") {
+        (*fin) >> targetA;
+      } else if(line == "#Shen") {
+        Shen = true;
+      } else if(line == "#generator") {
+	nameGen = "";
+        (*fin) >> nameGen;
+	if (nameGen == "") {
+	  G4cout << "Generator name is empty! " << G4endl; 
+	  continue;
+	}
+
+        if(nameGen == "elastic" || nameGen == "HElastic" || 
+	   nameGen == "DElastic") { break; }
+	char* c = getenv(nameGen);
+        if(!c) {
+	  G4cout << "Generator <" << nameGen << "> is not included in the "
+		 << " list SetModels.csh, so is ignored!" 
+		 << G4endl; 
+	  G4cout << "Use #run command to overcome this limitation " << G4endl;
+	  continue;
+	}
+	G4String ss(c);
+	if(ss=="1") { break; }
+      } else if(line == "#run") { 
+	break; 
+      } else if(line == "#verbose") {
+        (*fin) >> verbose;
+	G4NistManager::Instance()->SetVerbose(verbose);
+      } else if(line == "#position(mm)") {
+        (*fin) >> nx >> ny >> nz;
+        aPosition = G4ThreeVector(nx*mm, ny*mm, nz*mm);
+      } else if(line == "#direction") {
+        (*fin) >> nx >> ny >> nz;
+        if(nx*nx + ny*ny + nz*nz > 0.0) {
+          aDirection = G4ThreeVector(nx, ny, nz);
+          aDirection = aDirection.unit();
+	}
+      } else if(line == "#time(ns)") {
+        (*fin) >> aTime;
+        aTime *= ns;
+      } else if(line == "#saverand") {
+        saverand = true;
+      } else if(line == "#initrand") {
+        G4String sss("");
+        (*fin) >> sss;
+        defaultEngine.restoreStatus(sss);
+        if(verbose>0) G4cout << "Random Engine restored from file <"
+                             << sss << ">" << G4endl;
+        CLHEP::HepRandom::showEngineStatus();
+      } else if(line == "#xs_ghad") {
+	xsbgg = false;
+      } else if(line == "#exit") {
+        end = false;
+        break;
+      } else if(line == "#GEMEvaporation") {
+        G4cout<<"### GEM evaporation is set"<<G4endl;
+        theEvaporation->SetGEMChannel();
+      } else if(line == "#DefGEMEvaporation") {
+        G4cout<<"### Combined Default+GEM evaporation is set"<<G4endl;
+        theEvaporation->SetCombinedChannel();
+      } else if(line == "#Evaporation") {
+        G4cout<<"### Default evaporation is set"<<G4endl;
+        theEvaporation->SetDefaultChannel();
+      } else if(line == "#XSoption") {
+        G4int OPTxs;
+        (*fin)>>OPTxs;
+	if (OPTxs< 0 || OPTxs >4  ){
+	  G4cout << "### WArning: BAD CROSS SECTION OPTION for PreCompound model " 
+		 << OPTxs << " ignored" << G4endl;
+	} else {
+     
+	  thePreCompound->SetOPTxs(OPTxs);
+	  theDeExcitation->SetOPTxs(OPTxs);
+	  G4cout<<" Option for inverse cross sections : OPTxs="<<OPTxs<<G4endl;
+	}
+      } else if(line == "#UseSuperImposedCoulombBarrier") {
+        G4cout<<" Coulomb Barrier has been overimposed to ALL inverse cross sections"
+	      <<G4endl;
+	thePreCompound->UseSICB();
+	theDeExcitation->UseSICB();
+
+      } else if(line == "#UseNeverGoBack") {
+        G4cout<<" Never Go Back hypothesis has been assumed at preequilibrium"
+	      <<G4endl;
+	thePreCompound->UseNGB();
+      } else if(line == "#UseSoftCutOff") {
+        G4cout<<" Soft Cut Off  hypothesis has been assumed at preequilibrium"
+	      <<G4endl;
+	thePreCompound->UseSCO();
+
+      } else if(line == "#UseCEMTransitions") {
+        G4cout<<" Transition probabilities at preequilibrium based on CEM model"
+	      <<G4endl;
+	thePreCompound->UseCEMtr();
+
+      } else if(line == "#MFenergy(MeV)") {
+        G4double tmin;
+        (*fin) >> tmin;
+        G4cout<<" Min energy for multi-fragmentation is set to " << tmin 
+	      << " MeV" << G4endl;
+	theDeExcitation->SetMinEForMultiFrag(tmin*MeV);
+      } else if(line == "#FermiBreakUp") {
+        G4cout<<"### Max A and Z energy for fermiBreakUp  are set to 17 and 9"
+              << G4endl;
+        theDeExcitation->SetMaxAandZForFermiBreakUp(17,9);
+      }      
+    } while(end);
+
+    if(!end) break;
