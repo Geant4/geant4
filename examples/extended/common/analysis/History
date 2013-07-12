@@ -16,6 +16,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 11, 2013 I.Hrivnacova (excommon-analysis-V09-06-03)
+- Refactoring ExG4Hnook manager class following changes
+  in analysis (analysis-V09-06-11)
+
 20/06/2013 I. Hrivnacova (excommon-analysis-V09-06-02)
 - Fixed a typo in ExG4HbookAnalysisManager.hh which caused compilation
   error
