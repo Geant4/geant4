@@ -92,7 +92,7 @@ G4double sigIn  = 0;
 std::ofstream PbarC06Mom("PbC06Mom.dat",std::ios::out);
 std::ofstream PbarC06Y("PbC06Y.dat",std::ios::out);
 
-G4double SqrtS;
+//G4double SqrtS;
 //G4double Ycms;
 
 G4double MomUzhi[100][2];                 // 0 / 1200 MeV/c momentum
@@ -162,7 +162,7 @@ for(G4int ii=0; ii<100; ii++){for(G4int j=0;j<2;j++) RapUzhi[ii][j]=0.;}
 
 //+++++++++++++++++++++++++++++++++ For each energy +++++++++++++++++++++
    G4double E=energy+part->GetPDGMass();
-   SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);       
+// SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);       
 // Ycms=0.5*std::log((E+Plab)/(E-Plab));
 
 //  G4int Ntotal=nevt;
@@ -173,7 +173,7 @@ for(G4int ii=0; ii<100; ii++){for(G4int j=0;j<2;j++) RapUzhi[ii][j]=0.;}
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, px, py, pz, pt, pt2, theta;
+    G4double e, px, py, pz, pt, /*pt2,*/ theta;
     G4VParticleChange* aChange = 0;
 
 //  G4double E=energy+part->GetPDGMass();                                  // Elab Proj
@@ -272,7 +272,7 @@ for(G4int ii=0; ii<100; ii++){for(G4int j=0;j<2;j++) RapUzhi[ii][j]=0.;}
         py = mom.y();
         pz = mom.z(); pz=pz;
         G4double Pmod=mom.mag();
-        pt = std::sqrt(px*px +py*py); pt2=sqr(pt/GeV);
+        pt = std::sqrt(px*px +py*py); //pt2=sqr(pt/GeV);
         e  = fm.e() - m;
         theta = mom.theta();
 

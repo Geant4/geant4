@@ -91,7 +91,7 @@ G4double sigIn  = 0;
 //-------------------------- Global histograms  -------------------------
 std::ofstream PbARest("PbA_Rest.dat",std::ios::out);
 
-G4double SqrtS;
+//G4double SqrtS;
 //G4double Ycms;
 
 G4double MomUzhi[50][2];                 // 0 / 1200 MeV/c momentum
@@ -158,7 +158,7 @@ for(G4int ii=0; ii<50; ii++){for(G4int j=0;j<2;j++) MomUzhi[ii][j]=0.;}
 
 //+++++++++++++++++++++++++++++++++ For each energy +++++++++++++++++++++
    G4double E=energy+part->GetPDGMass();
-   SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);       
+// SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);       
 // Ycms=0.5*std::log((E+Plab)/(E-Plab));
 
 //  G4int Ntotal=nevt;
@@ -249,8 +249,8 @@ for(G4int ii=0; ii<50; ii++){for(G4int j=0;j<2;j++) MomUzhi[ii][j]=0.;}
                              <<sec->Get4Momentum().mag()/GeV<<G4endl;
 
         fm  = sec->Get4Momentum();
-        G4double m = pd->GetPDGMass();
-        e  = fm.e() - m;
+        G4double aMass = pd->GetPDGMass();
+        e  = fm.e() - aMass;
 
         labv -= fm;   // For checking energy-momentum conservation
 
