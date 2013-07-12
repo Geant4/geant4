@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 12, 2013 I.Hrivnacova (analysis-V09-06-13)
+- Fixed warnings on clang:
+  Use struct keyword instead of class for forward declaration of structs.
+
 July 11, 2013 I.Hrivnacova (analysis-V09-06-12)
 - Refactoring manager classes:
   - Introduced managers per object types (H1, H2, Ntuple, File)

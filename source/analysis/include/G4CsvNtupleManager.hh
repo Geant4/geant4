@@ -41,7 +41,7 @@
 #include <vector>
 
 class G4CsvFileManager;
-class G4CsvNtupleDescription;
+struct G4CsvNtupleDescription;
 
 class G4CsvNtupleManager : public G4VNtupleManager
 {

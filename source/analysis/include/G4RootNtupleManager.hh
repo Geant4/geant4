@@ -40,7 +40,7 @@
 
 #include <vector>
 
-class G4RootNtupleDescription;
+struct G4RootNtupleDescription;
 
 namespace tools {
 namespace wroot {

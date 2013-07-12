@@ -40,7 +40,7 @@
 #include <vector>
 
 class G4XmlFileManager;
-class G4XmlNtupleDescription;
+struct G4XmlNtupleDescription;
 
 class G4XmlNtupleManager : public G4VNtupleManager
 {
