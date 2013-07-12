@@ -16,10 +16,15 @@ track of all tags.
 -------------------------------------------------------------------------
 
 
+12 July 2013 Alberto Ribon                         (test22-V09-06-09)
+---------------------------------------------------------------------
+Fixed another compilation warning in: PbA_Rest.cc, PbC_608.cc, and
+PbU_608.cc.
+
 12 July 2013 Alberto Ribon                         (test22-V09-06-08)
 ---------------------------------------------------------------------
 Fixed a few compilation warnings in: PbA_Rest.cc, PbC_608.cc, and
- PbU_608.cc.
+PbU_608.cc.
 
 11 July 2013 Alberto Ribon                         (test22-V09-06-07)
 ---------------------------------------------------------------------

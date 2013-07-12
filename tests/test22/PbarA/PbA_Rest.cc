@@ -157,7 +157,7 @@ for(G4int ii=0; ii<50; ii++){for(G4int j=0;j<2;j++) MomUzhi[ii][j]=0.;}
     }
 
 //+++++++++++++++++++++++++++++++++ For each energy +++++++++++++++++++++
-   G4double E=energy+part->GetPDGMass();
+// G4double E=energy+part->GetPDGMass();
 // SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);       
 // Ycms=0.5*std::log((E+Plab)/(E-Plab));
 
