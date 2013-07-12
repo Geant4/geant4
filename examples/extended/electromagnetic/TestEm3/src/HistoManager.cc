@@ -81,6 +81,6 @@ void HistoManager::Book()
     if (k == 2*MaxAbsor+1) title = "energy flow (MeV/event)";
     if (k == 2*MaxAbsor+2) title = "lateral energy leak (MeV/event)";
     G4int ih = analysisManager->CreateH1(id[k], title, nbins, vmin, vmax);
-    analysisManager->SetActivation(G4VAnalysisManager::kH1, ih, false);
+    analysisManager->SetH1Activation(ih, false);
   }
 }
