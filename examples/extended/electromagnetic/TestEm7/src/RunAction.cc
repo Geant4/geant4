@@ -220,7 +220,7 @@ void RunAction::BookHisto()
     G4int ih = fAnalysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
     G4bool activ = false;
     if (k == 1) activ = true;
-    fAnalysisManager->SetActivation(G4VAnalysisManager::kH1, ih, activ);
+    fAnalysisManager->SetH1Activation(ih, activ);
   }
 }
 
