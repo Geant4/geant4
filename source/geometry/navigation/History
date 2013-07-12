@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+July 12th, 2013 - J.Apostolakis  (geomnav-V09-06-11)
+------------------------------
+G4SafetyHelper
+  Protection against storing 'fake' safety, in case  maxLength is used ( not DBL_MAX )
+
 June 4th, 2013 - J.Apostolakis  (geomnav-V09-06-10)
 ------------------------------
 G4MultiNavigator.cc: Fix use of enum as boolean in GetGlobalExitNormal().  
