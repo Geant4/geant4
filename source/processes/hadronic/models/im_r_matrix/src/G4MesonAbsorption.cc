@@ -317,7 +317,7 @@ AbsorptionCrossSection(const G4KineticTrack & aT, const G4KineticTrack & bT)
     t = bT.Get4Momentum().t()-bT.Get4Momentum().mag()/MeV;
   }
 
-  static G4ThreadLocal G4double it [26] =
+  static const G4double it [26] =
         {0,4,50,5.5,75,8,95,10,120,11.5,140,12,160,11.5,180,10,190,8,210,6,235,4,260,3,300,2};
 
   G4double aCross(0);
