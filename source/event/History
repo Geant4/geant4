@@ -17,14 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 11th, 2013, M.Asai (evet-V09-06-10)
+- Remove unnecessary static G4ThreadLocal variables in G4PrimaryTransformer.
+
 June 21, 2013, M.Asai (event-V09-06-09)
 - Clean up G4cout messages for beta release.
 
-June 7, 2013, M.Asai (event-V09-06-08)
+June 7th, 2013, M.Asai (event-V09-06-08)
 - Move the access method of G4StateManager::GetStateManager() to the
   constructor of G4EventManager to reduce the use of TLS pointer.
 
-June 7, 2013, L.Desorgher (event-V09-06-07)
+June 7th, 2013, L.Desorgher (event-V09-06-07)
 - Remove the call of aSolid->SurfaceNormal() in  G4AdjointPosOnPhysVolGenerator::GenerateAPositionOnASolidBoundary that was 
   generating warnings. Suggested by G. Cosmo
 
