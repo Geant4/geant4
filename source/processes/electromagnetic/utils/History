@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 July 13: V.Ivant (emutils-V09-06-47)
+- G4VMultipleScattering - return back logic which was in 10.0beta (tag 
+    emutils-V09-06-42) 
+
+12 July 13: V.Ivant (emutils-V09-06-46)
+- G4VMultipleScattering - compute safety defining not only position but
+    also radius of possible displacement
+
 11 July 13: V.Ivant (emutils-V09-06-45)
 - G4VMultipleScattering - return back tag 43 with more strict control of 
     safety
