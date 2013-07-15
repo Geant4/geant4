@@ -1,0 +1,44 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_ntuple_booking
+#define tools_ntuple_booking
+
+// a little class to capture booking parameters
+// to create an ntuple.
+
+#include "cids"
+
+namespace tools {
+
+class ntuple_booking {
+public:
+  ntuple_booking(){}
+  virtual ~ntuple_booking(){}
+public:
+  ntuple_booking(const ntuple_booking& a_from)
+  :m_name(a_from.m_name)
+  ,m_title(a_from.m_title)
+  ,m_columns(a_from.m_columns)
+  {}
+  ntuple_booking& operator=(const ntuple_booking& a_from){
+    m_name = a_from.m_name;
+    m_title = a_from.m_title;
+    m_columns = a_from.m_columns;
+    return *this;
+  }
+public:
+  template <class T>
+  void add_column(const std::string& a_name) {
+    m_columns.push_back(col_t(a_name,_cid(T())));
+  }
+public:
+  std::string m_name;
+  std::string m_title;
+  typedef std::pair<std::string,cid> col_t;
+  std::vector<col_t> m_columns;
+};
+
+}
+
+#endif

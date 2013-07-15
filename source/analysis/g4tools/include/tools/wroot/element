@@ -1,0 +1,476 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_element
+#define tools_wroot_element
+
+#include "buffer"
+#include "named"
+#include "../snpf"
+
+namespace tools {
+namespace wroot {
+
+namespace streamer_info {
+
+  enum Type {              // sizeof :
+    BASE = 0,              //  x
+    ARRAY = 20,            //  ?
+    POINTER = 40,          //  4
+    POINTER_INT = 43,      //  4
+    POINTER_FLOAT = 45,    //  4
+    POINTER_DOUBLE = 48,   //  4
+    COUNTER =  6,          //  4
+    CHAR =  1,             //  1
+    SHORT =  2,            //  2
+    INT =  3,              //  4
+    FLOAT =  5,            //  4
+    DOUBLE =  8,           //  8
+    UNSIGNED_CHAR =  11,   //  1
+    UNSIGNED_SHORT =  12,  //  2
+    UNSIGNED_INT = 13,     //  4
+    BOOL = 18,             //  1 ?
+    OBJECT = 61,           //  ?
+    OBJECT_ANY = 62,       //  ?
+    OBJECT_ARROW = 63,     //  ?
+    OBJECT_POINTER = 64,   //  ?
+    TSTRING = 65,          //  8  
+    TOBJECT = 66,          // 12
+    TNAMED = 67            // 28
+  };
+}
+
+
+class streamer_element : public virtual ibo {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::streamer_element");
+    return s_v;
+  }
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerElement");
+    return s_v;
+  }
+  virtual bool stream(buffer& aBuffer) const {
+    unsigned int c;
+    if(!aBuffer.write_version(2,c)) return false;
+    if(!Named_stream(aBuffer,fName,fTitle)) return false;
+    if(!aBuffer.write(fType)) return false;
+    if(!aBuffer.write(fSize)) return false;
+    if(!aBuffer.write(fArrayLength)) return false;
+    if(!aBuffer.write(fArrayDim)) return false;
+    if(!aBuffer.write_fast_array<int>(fMaxIndex,5)) return false;
+    if(!aBuffer.write(fTypeName)) return false;
+    if(!aBuffer.set_byte_count(c)) return false;
+    return true;
+  }
+public:
+  virtual streamer_element* copy() const = 0;
+public:
+  virtual void out(std::ostream& aOut) const {
+    char s[128];
+    snpf(s,sizeof(s),"  %-14s%-15s offset=%3d type=%2d %-20s",
+      fTypeName.c_str(),fullName().c_str(),fOffset,fType,fTitle.c_str());
+    aOut << s << std::endl;
+  }
+public:
+  streamer_element(const std::string& aName,const std::string& aTitle,
+                  int aOffset,int aType,const std::string& aTypeName)
+  :fName(aName),fTitle(aTitle),fType(aType)
+  ,fSize(0),fArrayLength(0),fArrayDim(0),fOffset(aOffset)
+  ,fTypeName(aTypeName){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    for(int i=0;i<5;i++) fMaxIndex[i] = 0;
+  }
+  virtual ~streamer_element(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  streamer_element(const streamer_element& a_from)
+  :ibo(a_from)
+  ,fName(a_from.fName),fTitle(a_from.fTitle)
+  ,fType(a_from.fType),fSize(a_from.fSize)
+  ,fArrayLength(a_from.fArrayLength)
+  ,fArrayDim(a_from.fArrayDim),fOffset(a_from.fOffset)
+  ,fTypeName(a_from.fTypeName){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    for(int i=0;i<5;i++) fMaxIndex[i] = a_from.fMaxIndex[i];
+  }
+  streamer_element& operator=(const streamer_element& a_from){
+    fName = a_from.fName;
+    fTitle = a_from.fTitle;
+    fType = a_from.fType;
+    fSize = a_from.fSize;
+    fArrayLength = a_from.fArrayLength;
+    fArrayDim = a_from.fArrayDim;
+    fOffset = a_from.fOffset;
+    fTypeName = a_from.fTypeName;
+    for(int i=0;i<5;i++) fMaxIndex[i] = a_from.fMaxIndex[i];
+    return *this;
+  }
+public:
+  virtual void setArrayDimension(int aDimension){
+    fArrayDim = aDimension;
+    if(aDimension) fType += streamer_info::ARRAY;
+    //fNewType = fType;
+  }
+  virtual void setMaxIndex(int aDimension,int aMaximum){
+    //set maximum index for array with dimension dim
+    if (aDimension < 0 || aDimension > 4) return;
+    fMaxIndex[aDimension] = aMaximum;
+    if (fArrayLength == 0)  fArrayLength  = aMaximum;
+    else                    fArrayLength *= aMaximum;
+  }
+
+  virtual std::string fullName() const {
+    std::string s = fName;
+    for (int i=0;i<fArrayDim;i++) {
+      char cdim[32];
+      snpf(cdim,sizeof(cdim),"[%d]",fMaxIndex[i]);
+      s += cdim;
+    }
+    return s;
+  }
+protected: //Named
+  std::string fName;
+  std::string fTitle;  
+protected:
+  int fType;            //element type
+  int fSize;            //sizeof element
+  int fArrayLength;     //cumulative size of all array dims
+  int fArrayDim;        //number of array dimensions
+  int fMaxIndex[5];     //Maximum array index for array dimension "dim"
+  int fOffset;          //!element offset in class
+  //FIXME Int_t         fNewType;         //!new element type when reading
+  std::string fTypeName;        //Data type name of data member
+};
+
+class streamer_base : public streamer_element {
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerBase");
+    return s_v;
+  }
+  virtual bool stream(buffer& aBuffer) const {
+    unsigned int c;
+    if(!aBuffer.write_version(3,c)) return false;
+    if(!streamer_element::stream(aBuffer)) return false;
+    if(!aBuffer.write(fBaseVersion)) return false;
+    if(!aBuffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //streamer_element
+  virtual streamer_element* copy() const {return new streamer_base(*this);}
+public:
+  streamer_base(const std::string& aName,const std::string& aTitle,
+               int aOffset,int aBaseVersion)
+  :streamer_element(aName,aTitle,aOffset,streamer_info::BASE,"BASE")
+  ,fBaseVersion(aBaseVersion){
+    if (aName=="TObject") fType = streamer_info::TOBJECT;
+    if (aName=="TNamed") fType = streamer_info::TNAMED;
+  }
+  virtual ~streamer_base(){}
+public:
+  streamer_base(const streamer_base& a_from)
+  :ibo(a_from)
+  ,streamer_element(a_from)
+  ,fBaseVersion(a_from.fBaseVersion)
+  {}
+  streamer_base& operator=(const streamer_base& a_from){
+    streamer_element::operator=(a_from);
+    fBaseVersion = a_from.fBaseVersion;
+    return *this;
+  }
+protected:
+  int fBaseVersion;         //version number of the base class
+};
+
+class streamer_basic_type : public streamer_element {
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerBasicType");
+    return s_v;
+  }
+  virtual bool stream(buffer& aBuffer) const {
+    unsigned int c;
+    if(!aBuffer.write_version(2,c)) return false;
+    if(!streamer_element::stream(aBuffer)) return false;
+    if(!aBuffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //streamer_element
+  virtual streamer_element* copy() const {
+    return new streamer_basic_type(*this);
+  }
+public:
+  streamer_basic_type(const std::string& aName,const std::string& aTitle,
+                    int aOffset,int aType,const std::string& aTypeName)
+  :streamer_element(aName,aTitle,aOffset,aType,aTypeName)
+  {}
+  virtual ~streamer_basic_type(){}
+public:
+  streamer_basic_type(const streamer_basic_type& a_from)
+  :ibo(a_from),streamer_element(a_from)
+  {}
+  streamer_basic_type& operator=(const streamer_basic_type& a_from){ 
+    streamer_element::operator=(a_from);
+    return *this;
+  }
+};
+
+class streamer_basic_pointer : public streamer_element {
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerBasicPointer");
+    return s_v;
+  }
+  virtual bool stream(buffer& aBuffer) const {
+    unsigned int c;
+    if(!aBuffer.write_version(2,c)) return false;
+    if(!streamer_element::stream(aBuffer)) return false;
+    if(!aBuffer.write(fCountVersion)) return false;
+    if(!aBuffer.write(fCountName)) return false;
+    if(!aBuffer.write(fCountClass)) return false;
+    if(!aBuffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //streamer_element
+  virtual streamer_element* copy() const {
+    return new streamer_basic_pointer(*this);
+  }
+public:
+  streamer_basic_pointer(const std::string& aName,const std::string& aTitle,
+                       int aOffset,int aType,
+                       const std::string& aCountName,
+                       const std::string& aCountClass,
+                       int aCountVersion,
+                       const std::string& aTypeName)
+  :streamer_element(aName,aTitle,aOffset,
+                    aType+streamer_info::POINTER,aTypeName)
+  ,fCountVersion(aCountVersion)
+  ,fCountName(aCountName)
+  ,fCountClass(aCountClass)
+  {}
+  virtual ~streamer_basic_pointer(){}
+public:
+  streamer_basic_pointer(const streamer_basic_pointer& a_from)
+  :ibo(a_from),streamer_element(a_from)
+  ,fCountVersion(a_from.fCountVersion)
+  ,fCountName(a_from.fCountName)
+  ,fCountClass(a_from.fCountClass)
+  {}
+  streamer_basic_pointer& operator=(const streamer_basic_pointer& a_from){
+    streamer_element::operator=(a_from);
+    fCountVersion = a_from.fCountVersion;
+    fCountName    = a_from.fCountName;
+    fCountClass   = a_from.fCountClass;
+    return *this;
+  }
+protected:
+  int fCountVersion;       //version number of the class with the counter
+  std::string fCountName;  //name of data member holding the array count
+  std::string fCountClass; //name of the class with the counter
+};
+
+class streamer_string : public streamer_element {
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerString");
+    return s_v;
+  }
+  virtual bool stream(buffer& aBuffer) const {
+    unsigned int c;
+    if(!aBuffer.write_version(2,c)) return false;
+    if(!streamer_element::stream(aBuffer)) return false;
+    if(!aBuffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //streamer_element
+  virtual streamer_element* copy() const {
+    return new streamer_string(*this);
+  }
+public:
+  streamer_string(const std::string& aName,const std::string& aTitle,
+                 int aOffset)
+  :streamer_element(aName,aTitle,aOffset,streamer_info::TSTRING,"TString")
+  {}
+  virtual ~streamer_string(){}
+public:
+  streamer_string(const streamer_string& a_from)
+  :ibo(a_from),streamer_element(a_from)
+  {}
+  streamer_string& operator=(const streamer_string& a_from){
+    streamer_element::operator=(a_from);
+    return *this;
+  }
+};
+ 
+
+class streamer_object : public streamer_element {
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerObject");
+    return s_v;
+  }
+  virtual bool stream(buffer& aBuffer) const {
+    unsigned int c;
+    if(!aBuffer.write_version(2,c)) return false;
+    if(!streamer_element::stream(aBuffer)) return false;
+    if(!aBuffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //streamer_element
+  virtual streamer_element* copy() const {
+    return new streamer_object(*this);
+  }
+public:
+  streamer_object(const std::string& aName,const std::string& aTitle,
+                 int aOffset,const std::string& aTypeName)
+  :streamer_element(aName,aTitle,aOffset,0,aTypeName){
+    fType = streamer_info::OBJECT;
+    if (aName=="TObject") fType = streamer_info::TOBJECT;
+    if (aName=="TNamed") fType = streamer_info::TNAMED;
+  }
+  virtual ~streamer_object(){}
+public:
+  streamer_object(const streamer_object& a_from)
+  :ibo(a_from),streamer_element(a_from){}
+  streamer_object& operator=(const streamer_object& a_from){
+    streamer_element::operator=(a_from);
+    return *this;
+  }
+};
+
+class streamer_object_pointer : public streamer_element {
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerObjectPointer");
+    return s_v;
+  }
+  virtual bool stream(buffer& aBuffer) const {
+    unsigned int c;
+    if(!aBuffer.write_version(2,c)) return false;
+    if(!streamer_element::stream(aBuffer)) return false;
+    if(!aBuffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //streamer_element
+  virtual streamer_element* copy() const {
+    return new streamer_object_pointer(*this);
+  }
+public:
+  streamer_object_pointer(const std::string& aName,const std::string& aTitle,
+                        int aOffset,const std::string& aTypeName)
+  :streamer_element(aName,aTitle,aOffset,
+                   streamer_info::OBJECT_POINTER,aTypeName){
+    if(aTitle.substr(0,2)=="->") fType = streamer_info::OBJECT_ARROW;
+  }
+  virtual ~streamer_object_pointer(){}
+public:
+  streamer_object_pointer(const streamer_object_pointer& a_from)
+  :ibo(a_from),streamer_element(a_from){}
+  streamer_object_pointer& operator=(const streamer_object_pointer& a_from){
+    streamer_element::operator=(a_from);
+    return *this;
+  }
+};
+
+class streamer_object_any : public streamer_element {
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerObjectAny");
+    return s_v;
+  }
+  virtual bool stream(buffer& aBuffer) const {
+    unsigned int c;
+    if(!aBuffer.write_version(2,c)) return false;
+    if(!streamer_element::stream(aBuffer)) return false;
+    if(!aBuffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //streamer_element
+  virtual streamer_element* copy() const {
+    return new streamer_object_any(*this);
+  }
+public:
+  streamer_object_any(const std::string& aName,const std::string& aTitle,
+                    int aOffset,const std::string& aTypeName)
+  :streamer_element(aName,aTitle,aOffset,streamer_info::OBJECT_ANY,aTypeName)
+  {}
+  virtual ~streamer_object_any(){}
+public:
+  streamer_object_any(const streamer_object_any& a_from)
+  :ibo(a_from),streamer_element(a_from){}
+  streamer_object_any& operator=(const streamer_object_any& a_from){
+    streamer_element::operator=(a_from);
+    return *this;
+  }
+};
+
+
+class streamer_STL : public streamer_element {
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TStreamerSTL");
+    return s_v;
+  }
+  virtual bool stream(buffer& aBuffer) const {
+    unsigned int c;
+    if(!aBuffer.write_version(2,c)) return false;
+    if(!streamer_element::stream(aBuffer)) return false;
+    if(!aBuffer.write(fSTLtype)) return false;
+    if(!aBuffer.write(fCtype)) return false;
+    if(!aBuffer.set_byte_count(c)) return false;
+    return true;
+  }
+public: //streamer_element
+  virtual streamer_element* copy() const {
+    return new streamer_STL(*this);
+  }
+protected:
+  enum ESTLtype { kSTL       = 300, kSTLstring  =365,   kSTLvector = 1,
+                  kSTLlist   =  2,  kSTLdeque   =  3,   kSTLmap    = 4,
+                  kSTLset    =  5,  kSTLmultimap=6,     kSTLmultiset=7};
+
+  // Instead of EDataType, we use the Streamer_Info::Type.
+  //enum EDataType {
+  //   kChar_t  = 1, kUChar_t  = 11, kShort_t = 2,  kUShort_t = 12,
+  //   kInt_t   = 3, kUInt_t   = 13, kLong_t  = 4,  kULong_t  = 14,
+  //   kFloat_t = 5, kDouble_t = 8,  kchar  = 10, kOther_t  = -1
+  //};
+public:
+  streamer_STL(const std::string& aName,const std::string& aTitle,
+              int aOffset,
+              streamer_info::Type aType, //Must match TDataType/EDataType
+              const std::string& aTypeName)
+  :streamer_element(aName,aTitle,aOffset,kSTL,aTypeName){
+    fSTLtype = kSTLvector;
+    fCtype   = aType;
+  }
+  virtual ~streamer_STL(){}
+public:
+  streamer_STL(const streamer_STL& a_from)
+  :ibo(a_from),streamer_element(a_from)
+  ,fSTLtype(a_from.fSTLtype)
+  ,fCtype(a_from.fCtype)
+  {}
+  streamer_STL& operator=(const streamer_STL& a_from){
+    streamer_element::operator=(a_from);
+    fSTLtype = a_from.fSTLtype;
+    fCtype = a_from.fCtype;
+    return *this;
+  }
+protected:
+  int fSTLtype;       //type of STL vector
+  int fCtype;         //STL contained type
+};
+
+}}
+
+#endif

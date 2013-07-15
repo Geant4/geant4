@@ -1,0 +1,944 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hbook_CHBOOK
+#define tools_hbook_CHBOOK
+
+// A C interface to HBOOK.
+
+// It is done in way that limits the number of #define.
+// Only two remains for WIN32.
+
+#ifdef WIN32
+#include <cstring>
+#endif
+
+namespace tools {
+namespace hbook {
+
+#ifdef TOOLS_HBOOK_F2C_RET_DOUBLE
+typedef double rret;
+#else
+typedef float rret;
+#endif
+
+#ifdef TOOLS_HBOOK_F2C_ARG_DOUBLE
+typedef double rarg;
+#else
+typedef float rarg;
+#endif
+
+/////////////////////////////////////////////////////////////////
+/// functions with only a different name WIN32 versus UNIX //////
+/////////////////////////////////////////////////////////////////
+#ifdef WIN32
+extern "C" void __stdcall ZITOH(int*,int*,int*);
+extern "C" void __stdcall RZINK(int*,int*,const char *,int);
+extern "C" void __stdcall HLIMIT(int*);
+extern "C" void __stdcall HFILL(int*,rarg*,rarg*,rarg*);
+extern "C" void __stdcall HRIN(int*,int*,int*);
+extern "C" void __stdcall HNOENT(int*,int*);
+extern "C" void __stdcall HFNT(int*);
+extern "C" void __stdcall HGNPAR(int*,const char *,int);
+extern "C" void __stdcall HGNT(int*,int*,int*);
+extern "C" void __stdcall HDCOFL();
+extern "C" void __stdcall HDELET(int*);
+extern "C" void __stdcall HIJXY(int*,int*,int*,rarg*,rarg*);
+extern "C" rret __stdcall HIJE(int*,int*,int*);
+extern "C" rret __stdcall HIJ(int*,int*,int*);
+extern "C" rret __stdcall HIE(int*,int*);
+extern "C" void __stdcall HIX(int*,int*,rarg*);
+extern "C" void __stdcall HXI(int*,rarg*,int*);
+extern "C" rret __stdcall HI(int*,int*);
+extern "C" void __stdcall HXYIJ(int*,rarg*,rarg*,int*,int*);
+extern "C" rret __stdcall HMIN(int*);
+extern "C" rret __stdcall HMAX(int*);
+extern "C" int __stdcall HISID(int*);
+//extern "C" void __stdcall HGNF(int*,int*,rarg*,int*);
+//extern "C" void __stdcall HIDALL(int*,int*);
+//extern "C" void __stdcall HID1(int*,int*);
+//extern "C" void __stdcall HID2(int*,int*);
+//extern "C" int __stdcall HEXIST(int*);
+#else
+extern "C" void zitoh_(int*,int*,int*);
+extern "C" void rzink_(int*,int*,const char *,int);
+extern "C" void hlimit_(int*);
+extern "C" void hfill_(int*,rarg*,rarg*,rarg*);
+extern "C" void hrin_(int*,int*,int*);
+extern "C" void hnoent_(int*,int*);
+extern "C" void hfnt_(int*);
+extern "C" void hgnpar_(int*,const char *,int);
+extern "C" void hgnt_(int*,int*,int*);
+extern "C" void hdcofl_();
+extern "C" void hdelet_(int*);
+extern "C" void hijxy_(int*,int*,int*,rarg*,rarg*);
+extern "C" rret hije_(int*,int*,int*);
+extern "C" rret hij_(int*,int*,int*);
+extern "C" rret hie_(int*,int*);
+extern "C" void hix_(int*,int*,rarg*);
+extern "C" void hxi_(int*,rarg*,int*);
+extern "C" rret hi_(int*,int*);
+extern "C" void hxyij_(int*,rarg*,rarg*,int*,int*);
+extern "C" rret hmin_(int*);
+extern "C" rret hmax_(int*);
+extern "C" int hisid_(int*);
+//extern "C" void hgnf_(int*,int*,rarg*,int*);
+//extern "C" void hidall_(int*,int*);
+//extern "C" void hid1_(int*,int*);
+//extern "C" void hid2_(int*,int*);
+//extern "C" int hexist_(int*);
+#endif
+
+/////////////////////////////////////////////////////////////////
+/// functions with a different signature WIN32 versus UNIX //////
+/////////////////////////////////////////////////////////////////
+#ifdef WIN32
+#define DEFCHAR  const char*,const int
+
+extern "C" void __stdcall UHTOC(int*,int*,const char*,const int,int*);
+extern "C" void __stdcall HROPEN(int*,DEFCHAR,DEFCHAR,DEFCHAR,int*,int*);
+extern "C" void __stdcall HREND(DEFCHAR);
+extern "C" void __stdcall HROUT(int*,int*,DEFCHAR);
+extern "C" void __stdcall HGIVE(int*,DEFCHAR,int*,rarg*,rarg*,int*,rarg*,rarg*,int*,int*);
+extern "C" void __stdcall HGIVEN(int*,DEFCHAR,int*,DEFCHAR,rarg*,rarg*);
+extern "C" void __stdcall HNTVAR2(int*,int*,DEFCHAR,DEFCHAR,DEFCHAR,int*,int*,int*,int*);
+extern "C" void __stdcall HBNT(int*,DEFCHAR,DEFCHAR);
+extern "C" void __stdcall HBNAME(int*,DEFCHAR,int*,DEFCHAR);
+extern "C" void __stdcall HBNAM(int*,DEFCHAR,int*,DEFCHAR,int*);
+extern "C" void __stdcall HBOOK1(int*,DEFCHAR,int*,rarg*,rarg*,rarg*);
+extern "C" void __stdcall HBOOK2(int*,DEFCHAR,int*,rarg*,rarg*,int*,rarg*,rarg*,rarg*);
+extern "C" void __stdcall HBOOKB(int*,DEFCHAR,int*,rarg*,rarg*);
+extern "C" void __stdcall HBPROF(int*,DEFCHAR,int*,rarg*,rarg*,rarg*,rarg*,DEFCHAR);
+extern "C" void __stdcall HCDIR(DEFCHAR,DEFCHAR);
+extern "C" void __stdcall HLDIR(DEFCHAR,DEFCHAR);
+extern "C" void __stdcall HMDIR(DEFCHAR,DEFCHAR);
+extern "C" void __stdcall HDDIR(DEFCHAR);
+extern "C" rret __stdcall HSTATI(int*,int*,DEFCHAR,int*);
+extern "C" void __stdcall HRESET(int*,DEFCHAR);
+extern "C" void __stdcall HOPERA(int*,DEFCHAR,int*,int*,rarg*,rarg*);
+extern "C" void __stdcall HKIND(int*,int*,DEFCHAR);
+
+#undef DEFCHAR
+
+#define PASSCHAR(a_string) a_string,::strlen(a_string)
+#else
+typedef const char* DEFCHAR;
+
+extern "C" void uhtoc_(int*,int*,const char*,int*,int);
+extern "C" void hropen_(int*,DEFCHAR,DEFCHAR,DEFCHAR,int*,int*,int,int,int);
+extern "C" void hrend_(DEFCHAR,int);
+extern "C" void hrout_(int*,int*,DEFCHAR,int);
+extern "C" void hgive_(int*,DEFCHAR,int*,rarg*,rarg*,int*,rarg*,rarg*,int*,int*,int);
+extern "C" void hgiven_(int*,DEFCHAR,int*,DEFCHAR,rarg*,rarg*,int,int);
+extern "C" void hntvar2_(int*,int*,DEFCHAR,DEFCHAR,DEFCHAR,int*,int*,int*,int*,int,int,int);
+extern "C" void hbnt_(int*,DEFCHAR,DEFCHAR,int,int);
+extern "C" void hbname_(int*,DEFCHAR,int*,DEFCHAR,int,int);
+extern "C" void hbnam_(int*,DEFCHAR,int*,DEFCHAR,int*,int,int);
+extern "C" void hbook1_(int*,DEFCHAR,int*,rarg*,rarg*,rarg*,int);
+extern "C" void hbook2_(int*,DEFCHAR,int*,rarg*,rarg*,int*,rarg*,rarg*,rarg*,int);
+extern "C" void hbookb_(int*,DEFCHAR,int*,rarg*,rarg*,int);
+extern "C" void hbprof_(int*,DEFCHAR,int*,rarg*,rarg*,rarg*,rarg*,DEFCHAR,int,int);
+extern "C" void hcdir_(DEFCHAR,DEFCHAR ,int,int);
+extern "C" void hldir_(DEFCHAR,DEFCHAR ,int,int);
+extern "C" void hmdir_(DEFCHAR,DEFCHAR ,int,int);
+extern "C" void hddir_(DEFCHAR,int);
+extern "C" rret hstati_(int*,int*,DEFCHAR,int*,int);
+extern "C" void hreset_(int*,DEFCHAR,int);
+extern "C" void hopera_(int*,DEFCHAR,int*,int*,rarg*,rarg*,int);
+extern "C" void hkind_(int*,int*,DEFCHAR,int);
+#endif
+
+#ifdef WIN32
+extern "C" int PAWC[1];
+extern "C" int QUEST[100];
+extern "C" int HCBOOK[51];
+extern "C" int RZCL[11];
+//extern "C" int HCBITS[37];
+#else
+extern "C" int pawc_[1];
+extern "C" int quest_[100];
+extern "C" int hcbook_[51];
+extern "C" int rzcl_[11];
+//extern "C" int hcbits_[37];
+#endif
+
+}}
+
+//////////////////////////////////////////////////////////////////////////////
+/// our wrapping /////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+#include <string>
+#include <vector>
+#include <cstring> //memset
+
+namespace tools {
+namespace hbook {
+
+//////////////////////////////////////////////////////////////////////////////
+/// package //////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+inline void CHLIMIT(int a_num) {
+#ifdef WIN32
+  HLIMIT(&a_num);
+#else
+  hlimit_(&a_num);
+#endif
+}
+
+inline void CHDELET(int a_id){
+#ifdef WIN32
+  HDELET(&a_id);
+#else
+  hdelet_(&a_id);
+#endif
+}
+
+inline void CHDCOFL() {
+#ifdef WIN32
+  HDCOFL();
+#else
+  hdcofl_();
+#endif
+}
+
+inline void CRZINK(int a_key,int a_cycle,const std::string& a_opts) {
+#ifdef WIN32
+  RZINK(&a_key,&a_cycle,PASSCHAR(a_opts.c_str()));
+#else
+  rzink_(&a_key,&a_cycle,a_opts.c_str(),a_opts.size());
+#endif
+}
+
+inline void CZITOH(int* a1,int* a2,int* a3) {
+#ifdef WIN32
+  ZITOH(a1,a2,a3);
+#else
+  zitoh_(a1,a2,a3);
+#endif
+}
+
+/*
+inline std::vector<int> CHIDALL() {
+  // We should use first a function getting the number of ids only.
+  // See hids.f in this directory and hidall.F code.
+  int ids[100000];
+  int n;
+#ifdef WIN32
+  HIDALL(ids,&n);
+#else
+  hidall_(ids,&n);
+#endif
+  std::vector<int> r;
+  r.resize(n,0);
+  for(int i=0;i<n;i++) r[i] = ids[i];
+  return r;
+}
+inline std::vector<int> CHID1() {
+  // We should use first a function getting the number of 1D ids only.
+  // See hids.f in this directory and hid1.F code.
+  int ids[100000];
+  int n;
+#ifdef WIN32
+  HID1(ids,&n);
+#else
+  hid1_(ids,&n);
+#endif
+  std::vector<int> r;
+  r.resize(n,0);
+  for(int i=0;i<n;i++) r[i] = ids[i];
+  return r;
+}
+inline std::vector<int> CHID2() {
+  // We should use first a function getting the number of 2D ids only.
+  // See hids.f in this directory and hid1.F code.
+  int ids[100000];
+  int n;
+#ifdef WIN32
+  HID2(ids,&n);
+#else
+  hid2_(ids,&n);
+#endif
+  std::vector<int> r;
+  r.resize(n,0);
+  for(int i=0;i<n;i++) r[i] = ids[i];
+  return r;
+}
+inline bool CHEXIST(int a_id) {
+  int id = a_id;
+  // What is the mapping of F77 LOGICAL to C ?
+#ifdef WIN32
+  logical l = HEXIST(&id);
+#else
+  logical l = hexist_(&id);
+#endif
+}
+
+inline void CHCLR() {
+  // Clear //PAWC structure.
+  //CHCDIR("//PAWC"," ");
+  std::vector<std::string> drs;
+  CHDIRS(true,drs);
+ {std::vector<std::string>::iterator it;
+  for(it=drs.begin();it!=drs.end();++it){
+    std::string& dir = *it;
+    CHDDIR(dir);
+  }}
+  CHDELET(0);
+}
+*/
+
+inline int* get_pawc() {
+#ifdef WIN32
+  return PAWC;
+#else
+  return pawc_;
+#endif
+}
+inline int* get_quest() { 
+#ifdef WIN32
+  return QUEST;
+#else
+  return quest_;
+#endif
+}
+//inline int* get_hcbits() {
+//#ifdef WIN32
+//  return HCBITS;
+//#else
+//  return hcbits_;
+//#endif
+//}
+inline int* get_hcbook() {
+#ifdef WIN32
+  return HCBOOK;
+#else
+  return hcbook_;
+#endif
+}
+inline int* get_rzcl() {
+#ifdef WIN32
+  return RZCL;
+#else
+  return rzcl_;
+#endif
+}
+
+//////////////////////////////////////////////////////////////////////////////
+/// file /////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+inline int CHROPEN(int a1,const std::string& a2,const std::string& a3,const std::string& a4,int a5) {
+  int ier = 0;
+#ifdef WIN32
+  HROPEN(&a1,PASSCHAR(a2.c_str()),PASSCHAR(a3.c_str()),PASSCHAR(a4.c_str()),&a5,&ier);
+#else
+  hropen_(&a1,a2.c_str(),a3.c_str(),a4.c_str(),&a5,&ier,a2.size(),a3.size(),a4.size());
+#endif
+  return ier;
+}
+
+
+inline void CHRIN(int a_id,int a_cycle,int a_offset){
+#ifdef WIN32
+  HRIN(&a_id,&a_cycle,&a_offset);
+#else
+  hrin_(&a_id,&a_cycle,&a_offset);
+#endif
+}
+
+inline void CHROUT(int a1,int a2,const std::string& a3) {
+#ifdef WIN32
+  HROUT(&a1,&a2,PASSCHAR(a3.c_str()));
+#else
+  hrout_(&a1,&a2,a3.c_str(),a3.size());
+#endif
+}
+
+inline void CHREND(const std::string& a1) {
+#ifdef WIN32
+  HREND(PASSCHAR(a1.c_str()));
+#else
+  hrend_(a1.c_str(),a1.size());
+#endif
+}
+
+inline void CHCDIR(const std::string& a1,const std::string& a2) {
+#ifdef WIN32
+  HCDIR(PASSCHAR(a1.c_str()),PASSCHAR(a2.c_str()));
+#else
+  hcdir_(a1.c_str(),a2.c_str(),a1.size(),a2.size());
+#endif
+}
+
+inline void CHLDIR(const std::string& a1,const std::string& a2) {
+#ifdef WIN32
+  HLDIR(PASSCHAR(a1.c_str()),PASSCHAR(a2.c_str()));
+#else
+  hldir_(a1.c_str(),a2.c_str(),a1.size(),a2.size());
+#endif
+}
+
+inline void CHPWDF(char* a_pwd) { //must be 1024 allocated.
+  int l = 1024;
+ {for(int i=0;i<l;i++) a_pwd[i] = 0;}
+  static const char a2[] = "R";  
+#ifdef WIN32
+  HCDIR(a_pwd,l,a2,1);
+#else
+  hcdir_(a_pwd,a2,l,1);
+#endif
+  /*int len=0;*/
+ {for(int i=l-1;i>0;i--) {
+    if(a_pwd[i]==0) continue;
+    if(a_pwd[i]!=' ') {/*len=i;*/break;}
+    a_pwd[i] = 0;
+  }}
+}
+
+inline std::string CHPWD() {
+  char pwd[1024];
+  CHPWDF(pwd);
+  return pwd;
+}
+
+inline void CHMDIR(const std::string& a1,const std::string& a2) {
+#ifdef WIN32
+  HMDIR(PASSCHAR(a1.c_str()),PASSCHAR(a2.c_str()));
+#else
+  hmdir_(a1.c_str(),a2.c_str(),a1.size(),a2.size());
+#endif
+}
+
+inline void CHDDIR(const std::string& a1) {
+#ifdef WIN32
+  HDDIR(PASSCHAR(a1.c_str()));
+#else
+  hddir_(a1.c_str(),a1.size());
+#endif
+}
+
+inline bool CHISID(int a_id) {
+#ifdef WIN32
+  return (HISID(&a_id)==1?true:false);
+#else
+  return (hisid_(&a_id)==1?true:false);
+#endif
+}
+
+inline void CHDIRS(bool a_PAWC,std::vector<std::string>& a_dirs){
+  a_dirs.clear();
+
+  int* pawc = get_pawc();
+
+  if(a_PAWC) {
+
+    int* iq = &(pawc[17]);
+
+    int* lq = &(pawc[9]);
+    int lcdir = get_hcbook()[6];
+    int lf = lq[lcdir-1];
+    while(lf!=0) {
+
+      int ncw = 4;
+      //int ihdir[4];
+      //CZITOH(iq+lf+1,ihdir,&ncw);
+      int* ihdir = iq+lf+1;
+
+      char chdir[17];
+     {for(int i=0;i<17;i++) chdir[i] = 0;}
+      int nch=16;
+#ifdef WIN32
+      UHTOC(ihdir,&ncw,chdir,16,&nch);
+#else
+      uhtoc_(ihdir,&ncw,chdir,&nch,16);
+#endif
+     {for(int i=17-1;i>0;i--) {
+        if(chdir[i]==0) continue;
+        if(chdir[i]!=' ') break;
+        chdir[i] = 0;
+     }}
+
+      a_dirs.push_back(chdir);
+
+      lf = lq[lf];
+    }
+
+  } else { //On a UNIT.
+
+    int* iq = &(pawc[17]);
+
+    const int KLS = 26;
+    const int KNSD = 23;
+    int lcdir = get_rzcl()[2];
+    int ls = iq[lcdir+KLS];
+    int ndir = iq[lcdir+KNSD];
+    for (int k=0;k<ndir;k++) {
+      lcdir = get_rzcl()[2];
+      int ncw = 4;
+      int ihdir[4];
+      CZITOH(iq+(lcdir+ls+7*k),ihdir,&ncw);
+
+      char chdir[17];
+     {for(int i=0;i<17;i++) chdir[i] = 0;}
+      int nch=16;
+#ifdef WIN32
+      UHTOC(ihdir,&ncw,chdir,16,&nch);
+#else
+      uhtoc_(ihdir,&ncw,chdir,&nch,16);
+#endif
+     {for(int i=17-1;i>0;i--) {
+        if(chdir[i]==0) continue;
+        if(chdir[i]!=' ') break;
+        chdir[i] = 0;
+      }}
+
+      a_dirs.push_back(chdir);
+    }
+  }
+}
+
+inline std::vector<int> CHKEYS(){
+  // Apply on a //LUN<unit> directory.
+  std::vector<int> keys;
+  int* quest = get_quest();  
+  for (int key=1;key<1000000;key++) {
+    CRZINK(key,0,"S");
+    if(quest[0]) break;
+    if(quest[13] & 8) continue;
+    int id = quest[20];
+    keys.push_back(id);
+  }
+  return keys;
+}
+
+inline bool CHEDIR(const std::string& a_dir,bool a_PAWC){
+  std::vector<std::string> drs;
+  CHDIRS(a_PAWC,drs);
+  std::vector<std::string>::iterator it;
+  for(it=drs.begin();it!=drs.end();++it){
+    if(a_dir==(*it)) return true;
+  }
+  return false;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+/// histogram ////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+inline void CHBOOK1(int a_id,const std::string& a_title,int a_xnum,rarg a_xmin,rarg a_xmax,rarg a_vmx = 0) {
+#ifdef WIN32
+  HBOOK1(&a_id,PASSCHAR(a_title.c_str()),&a_xnum,&a_xmin,&a_xmax,&a_vmx);
+#else
+  hbook1_(&a_id,a_title.c_str(),&a_xnum,&a_xmin,&a_xmax,&a_vmx,a_title.size());
+#endif
+}
+
+inline void CHBOOK2(int a_id,const std::string& a_title,int a_xnum,rarg a_xmin,rarg a_xmax,int a_ynum,rarg a_ymin,rarg a_ymax,rarg a_vmx = 0) {
+#ifdef WIN32
+  HBOOK2(&a_id,PASSCHAR(a_title.c_str()),
+         &a_xnum,&a_xmin,&a_xmax,&a_ynum,&a_ymin,&a_ymax,&a_vmx);
+#else
+  hbook2_(&a_id,a_title.c_str(),
+         &a_xnum,&a_xmin,&a_xmax,&a_ynum,&a_ymin,&a_ymax,&a_vmx,
+         a_title.size());
+#endif
+}
+
+inline bool CHBOOKB(
+ int a_id
+,const std::string& a_title
+,const std::vector<rarg>& a_edges
+,rarg a_vmx = 0
+) {
+  if(!a_edges.size()) return false;
+
+  int edgen = (int)a_edges.size();
+  rarg* edges = new rarg[edgen];
+  for(int i=0;i<edgen;i++) edges[i] = a_edges[i];
+
+  int ncx = edgen-1;
+#ifdef WIN32
+  HBOOKB(&a_id,PASSCHAR(a_title.c_str()),&ncx,edges,&a_vmx);
+#else
+  hbookb_(&a_id,a_title.c_str(),&ncx,edges,&a_vmx,a_title.size());
+#endif
+  delete [] edges;
+  return true;
+}
+
+inline void CHBPROF(
+ int a_id
+,const std::string& a_title
+,int a_xnum,rarg a_xmin,rarg a_xmax
+,rarg a_ymin,rarg a_ymax
+,const std::string& a_opts
+) {
+#ifdef WIN32
+  HBPROF(&a_id,PASSCHAR(a_title.c_str()),
+         &a_xnum,&a_xmin,&a_xmax,&a_ymin,&a_ymax,
+         PASSCHAR(a_opts.c_str()));
+#else
+  hbprof_(&a_id,a_title.c_str(),
+         &a_xnum,&a_xmin,&a_xmax,&a_ymin,&a_ymax,
+         a_opts.c_str(),a_title.size(),a_opts.size());
+#endif
+}
+
+inline void CHGIVE(
+ int a_id
+,std::string& a_title
+,int& a_xnum
+,rarg& a_xmin
+,rarg& a_xmax
+,int& a_ynum
+,rarg& a_ymin
+,rarg& a_ymax
+){
+  char chtitl[128];
+  int ncx,ncy;
+  rarg xmin,xmax,ymin,ymax;
+  int nwt,idb;
+#ifdef WIN32
+  HGIVE(&a_id,chtitl,80,&ncx,&xmin,&xmax,&ncy,&ymin,&ymax,&nwt,&idb);
+#else
+  hgive_(&a_id,chtitl,&ncx,&xmin,&xmax,&ncy,&ymin,&ymax,&nwt,&idb,80);
+#endif
+  chtitl[4*nwt] = 0;
+  a_title = chtitl;
+  a_xnum = ncx;
+  a_xmin = xmin;
+  a_xmax = xmax;
+  a_ynum = ncy;
+  a_ymin = ymin;
+  a_ymax = ymax;
+}
+
+inline void CHGIVE( //without title.
+ int a_id
+,int& a_xnum
+,rarg& a_xmin
+,rarg& a_xmax
+,int& a_ynum
+,rarg& a_ymin
+,rarg& a_ymax
+){
+  char chtitl[128];
+  int ncx,ncy;
+  rarg xmin,xmax,ymin,ymax;
+  int nwt,idb;
+#ifdef WIN32
+  HGIVE(&a_id,chtitl,80,&ncx,&xmin,&xmax,&ncy,&ymin,&ymax,&nwt,&idb);
+#else
+  hgive_(&a_id,chtitl,&ncx,&xmin,&xmax,&ncy,&ymin,&ymax,&nwt,&idb,80);
+#endif
+  a_xnum = ncx;
+  a_xmin = xmin;
+  a_xmax = xmax;
+  a_ynum = ncy;
+  a_ymin = ymin;
+  a_ymax = ymax;
+}
+
+inline int CHNOENT(int a_id){
+  int nentries;
+#ifdef WIN32
+  HNOENT(&a_id,&nentries);
+#else
+  hnoent_(&a_id,&nentries);
+#endif
+  return nentries;
+}
+
+inline void CHFILL(int a_id,rarg a_x,rarg a_y,rarg a_w){
+#ifdef WIN32
+  HFILL(&a_id,&a_x,&a_y,&a_w);
+#else
+  hfill_(&a_id,&a_x,&a_y,&a_w);
+#endif
+}
+
+inline rret CHI(int a_id,int a_i){
+#ifdef WIN32
+  return HI(&a_id,&a_i);
+#else
+  return hi_(&a_id,&a_i);
+#endif
+}
+
+inline rret CHIE(int a_id,int a_i){
+#ifdef WIN32
+  return HIE(&a_id,&a_i);
+#else
+  return hie_(&a_id,&a_i);
+#endif
+}
+
+inline rret CHIJ(int a_id,int a_i,int a_j){
+#ifdef WIN32
+  return HIJ(&a_id,&a_i,&a_j);
+#else
+  return hij_(&a_id,&a_i,&a_j);
+#endif
+}
+
+inline rret CHIJE(int a_id,int a_i,int a_j){
+#ifdef WIN32
+  return HIJE(&a_id,&a_i,&a_j);
+#else
+  return hije_(&a_id,&a_i,&a_j);
+#endif
+}
+
+inline rret CHIX(int a_id,int a_i){
+  rarg x;
+#ifdef WIN32
+  HIX(&a_id,&a_i,&x);
+#else
+  hix_(&a_id,&a_i,&x);
+#endif
+  return x;
+}
+
+inline void CHIJXY(int a_id,int a_i,int a_j,rarg& aX,rarg& aY){
+  rarg x,y;
+#ifdef WIN32
+  HIJXY(&a_id,&a_i,&a_j,&x,&y);
+#else
+  hijxy_(&a_id,&a_i,&a_j,&x,&y);
+#endif
+  aX = x;
+  aY = y;
+}
+
+inline int CHXI(int a_id,rarg a_x){
+  int i;
+#ifdef WIN32
+  HXI(&a_id,&a_x,&i);
+#else
+  hxi_(&a_id,&a_x,&i);
+#endif
+  return i;
+}
+
+inline void CHXYIJ(int a_id,rarg a_x,rarg a_y,int& aI,int& aJ){
+  int i,j;
+#ifdef WIN32
+  HXYIJ(&a_id,&a_x,&a_y,&i,&j);
+#else
+  hxyij_(&a_id,&a_x,&a_y,&i,&j);
+#endif
+  aI = i;
+  aJ = j;
+}
+
+inline rret CHMIN(int a_id){
+#ifdef WIN32
+  return HMIN(&a_id);
+#else
+  return hmin_(&a_id);
+#endif
+}
+
+inline rret CHMAX(int a_id){
+#ifdef WIN32
+  return HMAX(&a_id);
+#else
+  return hmax_(&a_id);
+#endif
+}
+
+inline rret CHSTATI(int a_id,int a_what,const std::string& aChoice,int a_num){
+#ifdef WIN32
+  return HSTATI(&a_id,&a_what,PASSCHAR(aChoice.c_str()),&a_num);
+#else
+  return hstati_(&a_id,&a_what,aChoice.c_str(),&a_num,aChoice.size());
+#endif
+}
+
+inline void CHRESET(int a_id,const std::string& a_title){
+#ifdef WIN32
+  HRESET(&a_id,PASSCHAR(a_title.c_str()));
+#else
+  hreset_(&a_id,a_title.c_str(),a_title.size());
+#endif
+}
+
+//////////////////////////////////////////////////////////////////////////////
+/// Tuple ////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+inline void CHBNT(int a1,const std::string& a2,const std::string& a3) {
+#ifdef WIN32
+  HBNT(&a1,PASSCHAR(a2.c_str()),PASSCHAR(a3.c_str()));
+#else
+  hbnt_(&a1,a2.c_str(),a3.c_str(),a2.size(),a3.size());
+#endif
+}
+
+inline void CHBNAME(int a1,const std::string& a2,void* a3,const std::string& a4) {
+#ifdef WIN32
+  HBNAME(&a1,PASSCHAR(a2.c_str()),(int*)a3,PASSCHAR(a4.c_str()));
+#else
+  hbname_(&a1,a2.c_str(),(int*)a3,a4.c_str(),a2.size(),a4.size());
+#endif
+}
+
+inline void CHBNAM(int a1,const std::string& a2,void* a3,const std::string& a4,int a5) {
+#ifdef WIN32
+  HBNAM(&a1,PASSCHAR(a2.c_str()),(int*)a3,PASSCHAR(a4.c_str()),&a5);
+#else
+  hbnam_(&a1,a2.c_str(),(int*)a3,a4.c_str(),&a5,a2.size(),a4.size());
+#endif
+}
+
+inline void CHGNPAR(int a1,const std::string& a2) {
+#ifdef WIN32
+  HGNPAR(&a1,PASSCHAR(a2.c_str()));
+#else
+  hgnpar_(&a1,a2.c_str(),a2.size());
+#endif
+}
+
+inline void CHFNT(int a1) {
+#ifdef WIN32
+  HFNT(&a1);
+#else
+  hfnt_(&a1);
+#endif
+}
+
+inline void CHNTVAR2(
+ int a1,int a2
+,std::string& a3,std::string& a4,std::string& a5
+,int& a6,int& a7,int& a8,int& a9) {
+
+  char name[32];
+  ::memset(name,' ',sizeof(name));
+  name[sizeof(name)-1] = 0;
+
+  char block[32];
+  ::memset(block,' ',sizeof(block));
+  block[sizeof(block)-1] = 0;
+
+  char fullname[64];
+  ::memset(fullname,' ',sizeof(fullname));
+  fullname[sizeof(fullname)-1]=0;
+
+  int v6,v7,v8,v9;
+#ifdef WIN32
+  HNTVAR2(&a1,&a2,PASSCHAR(name),PASSCHAR(fullname),PASSCHAR(block),&v6,&v7,&v8,&v9);
+#else
+  hntvar2_(&a1,&a2,name,fullname,block,&v6,&v7,&v8,&v9,32,64,32);
+#endif
+
+  int j;
+  for (j=30;j>0;j--) {
+    if (name[j] == ' ') name[j] = 0;
+  }
+  for (j=62;j>0;j--) {
+    if (fullname[j] == ' ') fullname[j] = 0;
+  }
+  for (j=30;j>0;j--) {
+    if (block[j] == ' ') block[j] = 0;
+    else break;
+  }
+
+  a3 = name;
+  a4 = fullname;
+  a5 = block;
+
+  a6 = v6;
+  a7 = v7;
+  a8 = v8;
+  a9 = v9;
+}
+
+inline int CHGIVEN(
+ int a_id
+,std::string& a_title
+,std::vector<std::string>& aColumns
+){
+  // Get number of columns :
+  char chtitl[128];
+  int nvar = 0;
+  rarg rmin[1000],rmax[1000];
+#ifdef WIN32
+  HGIVEN(&a_id,chtitl,80,&nvar,PASSCHAR(""),rmin,rmax);
+#else
+  hgiven_(&a_id,chtitl,&nvar,"",rmin,rmax,80,0);
+#endif
+
+  // Get title and columns name :
+  const int Nchar = 9;
+  char* chtag_out = new char[nvar*Nchar+1];
+  chtag_out[nvar*Nchar]=0;
+  int i;
+  for (i=0;i<=80;i++)chtitl[i]=0;
+#ifdef WIN32
+  HGIVEN(&a_id,chtitl,80,&nvar,chtag_out,Nchar,rmin,rmax);
+#else
+  hgiven_(&a_id,chtitl,&nvar,chtag_out,rmin,rmax,80,Nchar);
+#endif
+  for (i=80;i>0;i--) {if (chtitl[i] == ' ') chtitl[i] = 0; }
+
+  a_title = chtitl;
+
+  aColumns.clear();
+  char* name = chtag_out;
+  for(i=0; i<nvar;i++) {
+    name[Nchar-1] = 0;
+    int first = 0;
+    int last = 0;
+    // suppress trailing blanks
+    int j;
+    for (j=Nchar-2;j>0;j--) {
+      if (name[j] == ' ' && last == 0) name[j] = 0;
+      else last = j;
+    }
+    // suppress heading blanks
+    for (j=0;j<Nchar;j++) {
+      if (name[j] != ' ') break;
+      first = j+1;
+    }
+    aColumns.push_back(name+first);
+    name += Nchar;
+  }
+
+  return nvar;
+}
+
+inline int CHGNT(int a_id,int a_row){
+  int ier = 0;
+#ifdef WIN32
+  HGNT(&a_id,&a_row,&ier);
+#else
+  hgnt_(&a_id,&a_row,&ier);
+#endif
+  return ier;
+}
+
+//inline int CHGNF(int a_id,int aRow,rarg* aBuffer){
+//  int id = a_id;
+//  int row = aRow;
+//  int ier = 0;
+//#ifdef WIN32
+//  HGNF(&id,&row,aBuffer,&ier);
+//#else
+//  hgnf_(&id,&row,aBuffer,&ier);
+//#endif
+//  return ier;
+//}
+
+inline void CHOPERA(int a_id1,const std::string& a_opts,int a_id2,int a_id3,rarg a_c1,rarg a_c2) {
+#ifdef WIN32
+  HOPERA(&a_id1,PASSCHAR(a_opts.c_str()),&a_id2,&a_id3,&a_c1,&a_c2);
+#else
+  hopera_(&a_id1,a_opts.c_str(),&a_id2,&a_id3,&a_c1,&a_c2,a_opts.size());
+#endif
+}
+
+}}
+
+#ifdef WIN32
+#undef PASSCHAR
+#endif
+
+#endif

@@ -1,0 +1,63 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_p1d
+#define tools_histo_p1d
+
+#include "p1"
+
+namespace tools {
+namespace histo {
+
+class p1d : public p1<double,unsigned int,double,double,double> {
+  typedef p1<double,unsigned int,double,double,double> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::p1d");
+    return s_v;
+  }
+public:
+  p1d(const std::string& a_title,
+      unsigned int aXnumber,double aXmin,double aXmax)
+  : parent(a_title,aXnumber,aXmin,aXmax)
+  {}
+
+  p1d(const std::string& a_title,
+      unsigned int aXnumber,double aXmin,double aXmax,
+      double aVmin,double aVmax)
+  : parent(a_title,aXnumber,aXmin,aXmax,aVmin,aVmax)
+  {}
+
+  p1d(const std::string& a_title,
+      const std::vector<double>& aEdges)
+  : parent(a_title,aEdges)
+  {}
+
+  p1d(const std::string& a_title,
+      const std::vector<double>& aEdges,
+      double aVmin,double aVmax)
+  : parent(a_title,aEdges,aVmin,aVmax) 
+  {}
+
+  virtual ~p1d(){}
+public:
+  p1d(const p1d& a_from): parent(a_from){}
+  p1d& operator=(const p1d& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+public:
+#ifdef __CINT__
+  bool fill(double aX,double aY,double aW = 1) {return parent::fill(aX,aY,aW);}
+#endif
+
+private:static void check_instantiation() {p1d p("",10,0,1);p.gather_bins(5);}
+};
+
+}}
+
+#endif
+
+
+
+

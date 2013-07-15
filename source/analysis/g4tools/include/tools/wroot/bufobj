@@ -1,0 +1,63 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_bufobj
+#define tools_wroot_bufobj
+
+// inheritance :
+#include "iobject"
+#include "buffer"
+
+namespace tools {
+namespace wroot {
+
+class bufobj : public virtual iobject,public buffer {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::bufobj");
+    return s_v;
+  }
+public:
+  virtual const std::string& name() const {return m_name;}
+  virtual const std::string& title() const {return m_title;}
+  virtual const std::string& store_class_name() const {
+    return m_store_cls;
+  }
+  virtual bool stream(buffer& a_buffer) const {
+    return a_buffer.write_fast_array(m_buffer,length());
+  }
+public:
+  bufobj(std::ostream& a_out,bool a_byte_swap,uint32 a_size,
+         const std::string& a_name,
+         const std::string& a_title,
+         const std::string& a_store_cls)
+  : buffer(a_out,a_byte_swap,a_size)  
+  ,m_name(a_name)
+  ,m_title(a_title)
+  ,m_store_cls(a_store_cls)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~bufobj(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  bufobj(const bufobj& a_from): iobject(a_from),buffer(a_from){  
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  bufobj& operator=(const bufobj &){return *this;}
+protected:
+  std::string m_name;
+  std::string m_title;
+  std::string m_store_cls;
+};
+
+}}
+
+#endif

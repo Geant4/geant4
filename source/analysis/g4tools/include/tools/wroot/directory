@@ -1,0 +1,583 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_directory
+#define tools_wroot_directory
+
+#include "idir"
+
+#include "date"
+#include "key"
+#include "ifile"
+#include "date"
+#include "buffer"
+#include "iobject"
+
+#include "../strip"
+#include "../vmanip"
+
+#include <vector>
+#include <list>
+
+namespace tools {
+namespace wroot {
+
+class directory : public virtual idir {
+  static uint32 class_version() {return 1;}
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::directory");
+    return s_v;
+  }
+public: //idir
+  virtual ifile& file() {return m_file;}
+  virtual seek seek_directory() const {return m_seek_directory;}
+  virtual void append_object(iobject* a_object) {
+    //take ownership of a_object
+    m_objs.push_back(a_object);
+  }
+public:
+  directory(ifile& a_file)
+  :m_file(a_file)  
+  ,m_parent(0)
+  ,m_is_valid(false)
+  ,m_date_C(0)
+  ,m_date_M(0)
+  ,m_nbytes_keys(0)
+  ,m_nbytes_name(0)
+  ,m_seek_directory(0)
+  ,m_seek_parent(0)
+  ,m_seek_keys(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  directory(ifile& a_file,
+            const std::string& a_name,
+            const std::string& a_title)
+  :m_file(a_file)  
+  ,m_parent(0)
+  ,m_is_valid(false)
+  ,m_name(a_name)
+  ,m_title(a_title)
+  ,m_nbytes_keys(0)
+  ,m_nbytes_name(0)
+  ,m_seek_directory(0)
+  ,m_seek_parent(0)
+  ,m_seek_keys(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_date_C = get_date();
+    m_date_M = get_date();
+
+    if(m_name.empty()) {
+      m_file.out() << "tools::wroot::directory::directory :"
+                   << " directory name cannot be \"\"."
+                   << std::endl;
+      return; //FIXME : throw
+    }
+    if(m_name.find('/')!=std::string::npos) {
+      m_file.out() << "tools::wroot::directory::directory :"
+                   << " directory name " << sout(m_name)
+                   << " cannot contain a slash."
+                   << std::endl;
+      return; //FIXME : throw
+    }
+    if(m_title.empty()) m_title = m_name;
+    m_is_valid = true;
+  }
+  directory(ifile& a_file,
+            directory* a_parent, //assume a_parent not nul.
+            const std::string& a_name,
+            const std::string& a_title)
+  :m_file(a_file)  
+  ,m_parent(a_parent)
+  ,m_is_valid(false)
+  ,m_name(a_name)
+  ,m_title(a_title)
+  ,m_nbytes_keys(0)
+  ,m_nbytes_name(0)
+  ,m_seek_directory(0)
+  ,m_seek_parent(0)
+  ,m_seek_keys(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_date_C = get_date();
+    m_date_M = get_date();
+
+    if(m_name.empty()) {
+      m_file.out() << "tools::wroot::directory::directory :"
+                   << " directory name cannot be \"\"."
+                   << std::endl;
+      return; //FIXME : throw
+    }
+    if(m_name.find('/')!=std::string::npos) {
+      m_file.out() << "tools::wroot::directory::directory :"
+                   << " directory name " << sout(m_name)
+                   << " cannot contain a slash."
+                   << std::endl; 
+      return; //FIXME : throw
+    }
+
+    if(m_title.empty()) m_title = m_name;
+
+    if(m_parent->find_key(m_name)) {
+      m_file.out() << "tools::wroot::directory::directory :"
+                   << " directory " << sout(m_name) << " exists already."
+                   << std::endl;
+      return; //FIXME : throw
+    }
+
+    m_seek_parent = m_parent->seek_directory();
+    uint32 nbytes = record_size();
+
+    wroot::key* key = 
+      new wroot::key(m_file,m_parent->seek_directory(),
+                     m_name,m_title,"TDirectory",nbytes); //set m_END
+    m_nbytes_name = key->key_length();
+    m_seek_directory = key->seek_key(); //at EOF
+    if(!m_seek_directory) {
+      m_file.out() << "tools::wroot::directory::directory :"
+                   << " bad key."
+                   << std::endl;
+      delete key;
+      return; //FIXME : throw
+    }
+   {char* buffer = key->data_buffer();
+    wbuf wb(m_file.out(),m_file.byte_swap(),key->eob(),buffer);
+    if(!to_buffer(wb)) {
+      m_file.out() << "tools::wroot::directory::directory :"
+                   << " directory name " << sout(m_name)
+                   << " cannot fill buffer."
+                   << std::endl;
+      delete key;
+      return; //FIXME : throw
+    }}
+    uint16 cycle = m_parent->append_key(key);
+    key->set_cycle(cycle);
+    if(!key->write_self()) {
+      m_file.out() << "tools::wroot::directory::directory :"
+                   << " key.write_self() failed."
+                   << std::endl;
+      return; //FIXME : throw
+    }  
+    uint32 n;
+    if(!key->write_file(n)) {
+      m_file.out() << "tools::wroot::directory::directory :"
+                   << " directory name " << sout(m_name)
+                   << " cannot write key to file."
+                   << std::endl;
+      return; //FIXME : throw
+    }  
+
+    m_is_valid = true;
+  }
+  virtual ~directory(){
+    clear_dirs();
+    clear_objs();
+    clear_keys();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  directory(const directory& a_from)
+  :idir(a_from)
+  ,m_file(a_from.m_file)
+  ,m_parent(0)
+  ,m_is_valid(false){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  directory& operator=(const directory &){
+    m_is_valid = false;
+    return *this;
+  }
+public:
+  bool is_valid() const {return m_is_valid;}
+  void set_seek_directory(seek a_seek) {m_seek_directory = a_seek;}
+
+  directory* mkdir(const std::string& a_name,
+                          const std::string& a_title = ""){
+    // Create a sub-directory and return a pointer to the created directory.
+    // Note that the directory name cannot contain slashes.
+    if(a_name.empty()) {
+      m_file.out() << "tools::wroot::directory::mkdir :" 
+                   << " directory name cannot be \"\"." 
+                   << std::endl;
+      return 0;
+    }
+    if(a_name.find('/')!=std::string::npos) {
+      m_file.out() << "tools::wroot::directory::mkdir :" 
+                   << " " << sout(a_name)
+                   << " cannot contain a slash."
+                   << std::endl;
+      return 0;
+    }
+    directory* dir = 
+      new directory(m_file,this,a_name,a_title.empty()?a_name:a_title);
+    if(!dir->is_valid()) {
+      m_file.out() << "tools::wroot::directory::mkdir :" 
+                   << " directory badly created."
+                   << std::endl;
+      delete dir;
+      return 0;
+    }
+    m_dirs.push_back(dir);
+    return dir;
+  }
+
+  //uint32 nbytes_name() const {return m_nbytes_name;}
+  void set_nbytes_name(uint32 a_n) {m_nbytes_name = a_n;}
+
+  uint32 record_size() const {
+    uint32 nbytes = sizeof(short);
+    nbytes += sizeof(date); //m_date_C.record_size();
+    nbytes += sizeof(date); //m_date_M.record_size();
+    nbytes += sizeof(m_nbytes_keys);
+    nbytes += sizeof(m_nbytes_name);
+    //ROOT version >= 40000:
+    nbytes += sizeof(seek);
+    nbytes += sizeof(seek);
+    nbytes += sizeof(seek);
+    return nbytes;
+  }
+
+  bool close() {
+    if(!save()) return false;
+    clear_dirs();
+    clear_objs();
+    clear_keys();
+    return true;
+  }
+
+  bool to_buffer(wbuf& a_wb){
+    // Decode input buffer.
+    // (Name, title) are stored in the (name, title) of the associated key.
+    short version = class_version();
+    version += 1000; //GB : enforce writing on seek (and not seek32).
+    if(!a_wb.write(version)) return false;
+    if(!a_wb.write(m_date_C)) return false;
+    if(!a_wb.write(m_date_M)) return false;
+    if(!a_wb.write(m_nbytes_keys)) return false;
+    if(!a_wb.write(m_nbytes_name)) return false;
+
+    if(!a_wb.write(m_seek_directory)) return false;
+    if(!a_wb.write(m_seek_parent)) return false;
+    if(!a_wb.write(m_seek_keys)) return false;
+
+    if(m_file.verbose()) {
+      m_file.out() << "tools::wroot::key::to_buffer :"
+          << " nbytes keys : " << m_nbytes_keys 
+          << ", pos keys : " << m_seek_keys 
+          << std::endl;
+    }
+    return true;
+  }
+
+  bool write(uint32& a_nbytes){
+    // Write all objects in memory to disk.
+    // Loop on all objects in memory (including subdirectories).
+    // A new key is created in the m_keys linked list for each object.
+    // For allowed options see TObject::Write().
+    // The directory header info is rewritten on the directory header record
+    a_nbytes = 0;
+    if(m_file.verbose()) {
+      m_file.out() << "tools::wroot::directory::write :"
+                   << " " << sout(m_name)
+                   << " : " << long2s(m_dirs.size())
+                   << " : " << long2s(m_objs.size())
+                   << " objects."
+                   << std::endl;
+    }
+
+    uint32 nbytes = 0;
+
+   {std::vector<directory*>::iterator it;
+    for(it=m_dirs.begin();it!=m_dirs.end();++it) {
+      uint32 n;
+      if(!(*it)->write(n)) return false;
+      nbytes += n;
+    }}
+
+   {std::vector<iobject*>::iterator it;
+    for(it=m_objs.begin();it!=m_objs.end();++it) {
+      uint32 n;
+      if(!write_object(*(*it),n)) {
+        m_file.out() << "tools::wroot::directory::write :"
+                     << " for directory " << sout(m_name)
+                     << ", write_object " << sout((*it)->name())
+                     << " failed."
+                     << std::endl;
+        return false;
+      }
+      nbytes += n;
+    }}
+
+    if(!save_self()) {
+      m_file.out() << "tools::wroot::directory::write :"
+                   << " for directory " << sout(m_name)
+                   << ", save_self failed."
+                   << std::endl;
+      return false; //it will write keys of objects.
+    }
+  
+    a_nbytes = nbytes;
+    return true;
+  }
+
+  void clear_dirs() {clear<directory>(m_dirs);}
+  void clear_objs() {clear<iobject>(m_objs);}
+
+protected:
+  void clear_keys() {
+    std::list<key*>::iterator it;
+    for(it=m_keys.begin();it!=m_keys.end();) {
+      key* k = *it;
+      it = m_keys.erase(it);
+      delete k;
+    }
+    m_keys.clear();
+  }
+
+  bool save(){
+    if(!save_self()) return false;
+   {std::vector<directory*>::iterator it;
+    for(it=m_dirs.begin();it!=m_dirs.end();++it) {
+      if(!(*it)->save()) return false;
+    }}
+    return true;
+  }
+
+  bool save_self() {
+    // Save Directory keys and header :
+    //  If the directory has been modified (fModified set), write the keys
+    //  and the directory header.
+    //if (fModified || aForce) {
+    //  if(!fFile.freeSegments().empty()) {
+    //    if(!writeKeys()) return false; // Write keys record.
+    //    if(!writeHeader()) return false; // Update directory record.
+    //  }
+    //}
+    if(!write_keys()) return false;
+    if(!write_header()) return false;
+    return true;
+  }
+
+  //const std::list<key*>& keys() const {return m_keys;}
+  //std::list<key*>& keys() {return m_keys;}
+
+  key* find_key(const std::string& a_name) {
+    if(m_file.verbose()) {
+      m_file.out() << "tools::wroot::directory::find_key :" 
+                   << " " << sout(a_name) << " ..."
+                   << std::endl;
+    }
+    std::list<key*>::const_iterator it;
+    for(it=m_keys.begin();it!=m_keys.end();++it) {
+      if((*it)->object_name()==a_name) return *it;
+    }
+
+    return 0;
+  }
+  seek seek_keys() const {return m_seek_keys;}
+
+  uint16 append_key(key* a_key){ //take ownership of a_key
+    std::list<key*>::iterator itk;
+    for(itk=m_keys.begin();itk!=m_keys.end();++itk) {
+      if((*itk)->object_name()==a_key->object_name()) {
+        m_keys.insert(itk,a_key); //a_key will be before *itk.
+        return ((*itk)->cycle() + 1);
+      }
+    }
+    // Not found :
+    m_keys.push_back(a_key);
+    return 1;
+  }
+
+  bool write_keys(){
+    // The list of keys (m_keys) is written as a single data record
+    // Delete the old keys structure if it exists
+
+    //if(fSeekKeys) {
+    //  if(!fFile.makeFreeSegment
+    //     (fSeekKeys, fSeekKeys + fNbytesKeys -1)) return false;
+    //}
+
+    // Write new keys record :
+    uint32 nkeys  = m_keys.size();
+
+    // Compute size of all keys
+    uint32 nbytes = sizeof(nkeys);
+
+   {std::list<key*>::iterator it;
+    for(it=m_keys.begin();it!=m_keys.end();++it) {
+      nbytes += (*it)->key_length();
+    }}
+
+    key headerkey(m_file,m_seek_directory,
+                  m_name,m_title,"TDirectory",nbytes);
+    if(!headerkey.seek_key()) return false;
+
+   {char* buffer = headerkey.data_buffer();
+    wbuf wb(m_file.out(),m_file.byte_swap(),headerkey.eob(),buffer);
+    if(!wb.write(nkeys)) return false;
+   {std::list<key*>::iterator it;
+    for(it=m_keys.begin();it!=m_keys.end();++it) {
+      if(!((*it)->to_buffer(wb))) return false;
+    }}}
+  
+    m_seek_keys = headerkey.seek_key();
+    m_nbytes_keys = headerkey.number_of_bytes();
+
+    if(m_file.verbose()) {
+      m_file.out() << "tools::wroot::directory::write_keys :" 
+                   << " write header key"
+                   << " " << sout(m_name)
+                   << " " << sout(m_title)
+                   << " (" << nkeys
+                   << ", " << nbytes
+                   << ", " << m_seek_keys
+                   << ", " << m_nbytes_keys
+                   << "):"
+                   << std::endl;
+    }
+
+    headerkey.set_cycle(1);
+    if(!headerkey.write_self()) {
+      m_file.out() << "tools::wroot::directory::write_keys :" 
+                   << " key.write_self() failed."
+                   << std::endl;
+      return false;
+    }  
+
+    uint32 n;
+    return headerkey.write_file(n);
+  }
+
+  bool write_header(){
+    // Overwrite the Directory header record.
+    uint32 nbytes = record_size();
+    char* header = new char[nbytes];
+    char* buffer = header;
+    m_date_M = get_date();
+    wbuf wb(m_file.out(),m_file.byte_swap(),header+nbytes,buffer);
+    if(!to_buffer(wb)) {
+      delete [] header;
+      return false;
+    }
+    // do not overwrite the name/title part
+    seek pointer = m_seek_directory + m_nbytes_name; 
+    //fModified = false;
+    if(!m_file.set_pos(pointer)) {
+      delete [] header;
+      return false;
+    }
+    if(!m_file.write_buffer(header,nbytes)) {
+      delete [] header;
+      return false;
+    }
+    if(!m_file.synchronize()) {
+      delete [] header;
+      return false;
+    }
+    delete [] header;
+    return true;
+  }
+
+  bool write_object(iobject& a_obj,uint32& a_nbytes){
+    buffer bref(m_file.out(),m_file.byte_swap(),256*128); //32768
+    if(!a_obj.stream(bref)) {
+      m_file.out() << "tools::wroot::directory::write_object :" 
+                   << " cannot stream object of store class name "
+                   << " " << sout(a_obj.store_class_name()) << "." 
+                   << std::endl;
+      a_nbytes = 0;
+      return false;
+    }
+
+    std::string name = a_obj.name();
+    strip(name);
+
+    //first create the key to get key_length();
+
+    wroot::key* key = new wroot::key(m_file,m_seek_directory,
+                                     name,
+                                     a_obj.title(),a_obj.store_class_name(),
+                                     bref.length()); //set m_END
+
+    if(!key->seek_key()) {
+      delete key;
+      return false;
+    }
+
+    if(!bref.displace_mapped(key->key_length())) { //done before compression.
+      delete key;
+      return false;
+    }
+
+    char* kbuf = 0;
+    uint32 klen = 0;
+    bool kdelete = false;
+    m_file.compress_buffer(bref,kbuf,klen,kdelete);
+
+    ::memcpy(key->data_buffer(),kbuf,klen);
+    if(kdelete) delete [] kbuf;
+
+   {uint32 nkey = key->key_length()+klen;
+    m_file.set_END(key->seek_key()+nkey);
+    key->set_number_of_bytes(nkey);}
+
+    uint16 cycle = append_key(key);
+    key->set_cycle(cycle);
+    
+    if(!key->write_self()) {
+      m_file.out() << "tools::wroot::directory::write_object :" 
+                   << " key.write_self() failed."
+                   << std::endl;
+      return false;
+    }  
+
+    //FIXME m_file.sumBuffer(key->object_size()); //uncompressed data size.
+  
+    if(m_file.verbose()) {
+      m_file.out() << "tools::wroot::directory::_write_buffer :" 
+                   << " " << sout(a_obj.name()) << "."
+                   << std::endl;
+    }
+    
+    return key->write_file(a_nbytes);
+  }
+
+protected:
+  static std::string sout(const std::string& a_string) {
+    return std::string("\"")+a_string+"\"";
+  }
+protected:
+  ifile& m_file;
+  directory* m_parent;
+  bool m_is_valid;
+  std::string m_name;
+  std::string m_title;
+  std::vector<directory*> m_dirs;
+  std::vector<iobject*> m_objs;
+  std::list<key*> m_keys;
+  // Record (stored in file):
+  date m_date_C;           //Date and time when directory is created
+  date m_date_M;           //Date and time of last modification
+  uint32 m_nbytes_keys;    //Number of bytes for the keys
+  uint32 m_nbytes_name;    //Number of bytes in TNamed at creation time
+  seek m_seek_directory;   //Location of directory on file
+  seek m_seek_parent;      //Location of parent directory on file
+  seek m_seek_keys;        //Location of Keys record on file
+};
+
+}}
+
+#endif

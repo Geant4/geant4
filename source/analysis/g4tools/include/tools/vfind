@@ -1,0 +1,37 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vfind
+#define tools_vfind
+
+#include <vector>
+#include <string>
+
+namespace tools {
+
+template <class T>
+inline T* find_named(const std::vector<T*>& a_vec,const std::string& a_name) {
+  typedef typename std::vector<T*>::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if((*it)->name()==a_name) return *it;
+  }
+  return 0;
+}
+
+/*
+template <class T>
+inline const T* find_named_(const std::vector<T>& a_vec,
+                            const std::string& a_name) {
+  typedef typename std::vector<T>::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if((*it).name()==a_name) return &(*it);
+  }
+  return 0;
+}
+*/
+
+}
+
+#endif

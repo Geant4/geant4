@@ -1,0 +1,13 @@
+
+if [ `uname` = Darwin ] ; then
+#  if [ -x /opt/local/bin/clang++-mp-2.9 ] ; then
+#    cc_compiler=/opt/local/bin/clang-mp-2.9
+#    cpp_compiler=/opt/local/bin/clang++-mp-2.9
+#  else
+    cc_compiler=clang
+    cpp_compiler=clang++
+#  fi
+else
+  cc_compiler=clang
+  cpp_compiler=clang++
+fi

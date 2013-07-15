@@ -1,0 +1,202 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hbook_h2
+#define tools_hbook_h2
+
+#include "base_histo"
+
+namespace tools {
+namespace hbook {
+
+class h2 : public base_histo {
+public:
+  h2(int aID,const std::string& aTitle,
+     int aXnumber,rarg aXmin,rarg aXmax,
+     int aYnumber,rarg aYmin,rarg aYmax)
+  :base_histo(aID)
+  ,m_axis_x(m_path,aID,2,true,true)
+  ,m_axis_y(m_path,aID,2,false,true)
+  {
+    //m_axis_x.copy(fHistogram.getAxis(0));
+    //m_axis_y.copy(fHistogram.getAxis(1));
+    cd_beg();
+    CHBOOK2(m_id,aTitle,aXnumber,aXmin,aXmax,
+                        aYnumber,aYmin,aYmax);
+    cd_end();
+  }
+  virtual ~h2(){
+    cd_beg();
+    CHDELET(m_id);
+    cd_end();
+  }
+private:
+  h2(const h2& a_from)
+  :base_histo(a_from)
+  ,m_axis_x(a_from.m_axis_x)
+  ,m_axis_y(a_from.m_axis_y)
+  {}
+  h2& operator=(const h2& a_from){
+    base_histo::operator=(a_from);
+    m_axis_x = a_from.m_axis_x;
+    m_axis_y = a_from.m_axis_y;
+    return *this;
+  }
+public:
+  bool configure(int aXnumber,rarg aXmin,rarg aXmax,
+                 int aYnumber,rarg aYmin,rarg aYmax){
+    cd_beg();
+    CHBOOK2(m_id,title(),aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax);
+    cd_end();
+    return true;
+  }
+public:
+  void fill(rarg aX,rarg aY,rarg aWeight = 1) { 
+    cd_beg();
+    CHFILL(m_id,aX,aY,aWeight);
+    cd_end();
+  }
+
+  // optimization :
+  void fill_beg() const {cd_beg();}
+  void fill_fast(rarg aX,rarg aY,rarg aWeight = 1) { 
+    CHFILL(m_id,aX,aY,aWeight);
+  }
+  void fill_end() const {cd_end();}
+
+  int dimension() const {return 2;}
+
+  rret mean_x() const {
+    cd_beg();
+    rret v = CHSTATI(m_id,1,"PROX",0);
+    cd_end();
+    return v;
+  }
+  rret mean_y() const{
+    cd_beg();
+    rret v = CHSTATI(m_id,1,"PROY",0);
+    cd_end();
+    return v;
+  }
+  rret rms_x() const { 
+    cd_beg();
+    rret v = CHSTATI(m_id,2,"PROX",0);
+    cd_end();
+    return v;
+  }
+  rret rms_y() const {
+    cd_beg();
+    rret v = CHSTATI(m_id,2,"PROY",0);
+    cd_end();
+    return v;
+  }
+  const hbook::axis& axis_x() const {return m_axis_x;}
+  hbook::axis& axis_x() {return m_axis_x;}
+  const hbook::axis& axis_y() const {return m_axis_y;}
+  hbook::axis& axis_y() {return m_axis_y;}
+  int coord_to_index_x(rarg aCoordX) const { 
+    return m_axis_x.coord_to_index(aCoordX);
+  }
+  int coord_to_index_y(rarg aCoordY) const { 
+    return m_axis_y.coord_to_index(aCoordY);
+  }
+  rret min_bin_height() const {
+    cd_beg();
+    rret v = CHMIN(m_id);
+    cd_end();
+    return v;
+  }
+  rret max_bin_height() const {
+    cd_beg();
+    rret v = CHMAX(m_id);
+    cd_end();
+    return v;
+  }
+  rret bin_height(int aIndexX,int aIndexY) const { 
+    cd_beg();
+    rret v = CHIJ(m_id,hindex(aIndexX,axis_x()),hindex(aIndexY,axis_y()));
+    cd_end();
+    return v;
+  }
+  rret sum_bin_heights() const {
+    int NX = axis_x().bins();
+    int NY = axis_y().bins();
+    rret w = 0;
+    cd_beg();
+    for(int i=1;i<=NX;i++) {
+      for(int j=1;j<=NY;j++) {
+        w += CHIJ(m_id,i,j);
+      }
+    }
+    cd_end();
+    return w;
+  }
+  rret sum_all_bin_heights() const {
+    int NX1 = axis_x().bins()+1;
+    int NY1 = axis_y().bins()+1;
+    rret w = 0;
+    cd_beg();
+    for(int i=0;i<=NX1;i++) {
+       for(int j=0;j<=NY1;j++) {
+        w += CHIJ(m_id,i,j);
+      }
+    }
+    cd_end();
+    return w;
+  }
+  rret sum_extra_bin_heights() const {
+    int NX = axis_x().bins();
+    int NY = axis_y().bins();
+    int NX1 = NX+1;
+    int NY1 = NY+1;
+    rret w = 0;
+    cd_beg();
+   {for(int j=0;j<=NY1;j++) {
+      w += CHIJ(m_id,0,j);
+    }}
+    for(int i=1;i<=NX;i++) {
+      w += CHIJ(m_id,i,0);
+      w += CHIJ(m_id,i,NY1);
+    }
+   {for(int j=0;j<=NY1;j++) {
+      w += CHIJ(m_id,NX1,j);
+    }}
+    cd_end();
+    return w;
+  }
+  rret bin_error(int aIndexX,int aIndexY) const { 
+    cd_beg();
+    rret v = CHIJE(m_id,aIndexX+1,aIndexY+1);
+    cd_end();
+    return v;
+  }
+  rret bin_height_x(int aIndexX) const { 
+    int i = hindex(aIndexX,axis_x());
+    int NY1 = axis_y().bins()+1;
+    rret w = 0;
+    cd_beg();
+    for(int j=0;j<=NY1;j++) {
+      w += CHIJ(m_id,i,j);
+    }
+    cd_end();
+    return w;
+  }
+  rret bin_height_y(int aIndexY) const { 
+    int j = hindex(aIndexY,axis_y());
+    int NX1 = axis_x().bins()+1;
+    rret w = 0;
+    cd_beg();
+    for(int i=0;i<=NX1;i++) {
+      w += CHIJ(m_id,i,j);
+    }
+    cd_end();
+    return w;
+  }
+protected:
+  hbook::axis m_axis_x;
+  hbook::axis m_axis_y;
+};
+
+}}
+
+#endif

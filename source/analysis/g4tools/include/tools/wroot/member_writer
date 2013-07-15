@@ -1,0 +1,123 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_member_writer
+#define tools_wroot_member_writer
+
+#include "../store/iobj_const_visitor"
+
+#include "buffer"
+
+namespace tools {
+namespace wroot {
+
+class member_writer : public virtual iobj_const_visitor {
+public:
+  virtual bool begin(const istorable&,
+                     const std::string&,
+                     local_func) {return true;}
+  virtual bool end(const istorable&){return true;}
+
+  virtual bool visit(const std::string&,bool a_v){return m_buf.write(a_v);}
+  virtual bool visit(const std::string&,char a_v){return m_buf.write(a_v);}
+  virtual bool visit(const std::string&,short a_v){return m_buf.write(a_v);}
+  virtual bool visit(const std::string&,int a_v){return m_buf.write(a_v);}
+
+  virtual bool visit(const std::string&,unsigned int a_v){
+    return m_buf.write(a_v);
+  }
+
+  virtual bool visit(const std::string&,int64){
+    m_buf.out() << "tools::wroot::member_writer::visit(int64) :"
+                << " dummy." << std::endl;
+    return false; //FIXME
+  }
+
+  virtual bool visit(const std::string&,uint64){
+    m_buf.out() << "tools::wroot::member_writer::visit(uint64) :"
+                << " dummy." << std::endl;
+    return false; //FIXME
+  }
+
+  virtual bool visit(const std::string&,float a_v){return m_buf.write(a_v);}
+  virtual bool visit(const std::string&,double a_v){return m_buf.write(a_v);}
+
+  virtual bool visit(const std::string&,const std::string& a_v){
+    return m_buf.write(a_v);
+  }
+  //virtual bool visit(const std::string&,const char* a_v){
+  //  return m_buf.write(std::string(a_v));
+  //}
+
+  virtual bool visit(const std::string&,const std::vector<bool>& a_v){
+    unsigned int number = a_v.size();
+    std::vector<unsigned char> data(number);
+    for(unsigned int index=0;index<number;index++) {
+      data[index] = (unsigned char)a_v[index];  
+    }
+    return m_buf.write_array<unsigned char>(data);
+  }
+
+  virtual bool visit(const std::string&,const std::vector<char>& a_v){
+    return m_buf.write_array(a_v);
+  }
+
+  virtual bool visit(const std::string&,const std::vector<short>& a_v){
+    return m_buf.write_array(a_v);
+  }
+
+  virtual bool visit(const std::string&,const std::vector<int>& a_v){
+    return m_buf.write_array(a_v);
+  }
+
+  virtual bool visit(const std::string&,
+                     const std::vector<int64>& /*a_v*/){
+    //FIXME return ::Rio::writeArray<Slash::int64>(fBuffer,a_v);
+    m_buf.out() << "tools::wroot::member_writer::visit(vector<int64>) :"
+                << " dummy." << std::endl;
+    return false;
+  }
+
+  virtual bool visit(const std::string&,const std::vector<float>& a_v){
+    return m_buf.write_array(a_v);
+  }
+
+  virtual bool visit(const std::string&,const std::vector<double>& a_v){
+    return m_buf.write_array(a_v);
+  }
+
+//virtual bool visit(const std::string&,const std::vector<unsigned char>& a_v){
+//  return m_buf.write_array(a_v);
+//}
+
+  virtual bool visit(const std::string&,const std::vector<std::string>& a_v){
+    return m_buf.write(a_v);
+  }
+
+  virtual bool visit(const std::string&,
+                     const std::vector< std::vector<double> >& a_v){
+    return m_buf.write_array2(a_v);
+  }
+
+  virtual bool visit(const std::string&,const istorable& a_v){ 
+    // WARNING : can't be called in a object.visit()
+    //   over a a_v being a "super" of "object" .
+    if(!a_v.visit(*this)) return false;
+    return true;  
+  }
+public:
+  member_writer(buffer& a_buf):m_buf(a_buf){}
+  virtual ~member_writer(){}
+private:
+  member_writer(const member_writer& a_from)
+  :iobj_const_visitor(a_from)
+  ,m_buf(a_from.m_buf)
+  {}
+  member_writer& operator=(const member_writer&){return *this;}
+protected:
+  buffer& m_buf;
+};
+
+}}
+
+#endif

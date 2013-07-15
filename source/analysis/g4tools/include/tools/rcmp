@@ -1,0 +1,76 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rcmp
+#define tools_rcmp
+
+// used in safe cast.
+
+#include <string>
+#include <cstring>
+
+namespace tools {
+
+inline bool rcmp(const char* a_1,const char* a_2) {
+  size_t l1 = ::strlen(a_1);
+  size_t l2 = ::strlen(a_2);
+  if(l1!=l2) return false;
+  if(!l1) return true;
+  const char* p1 = a_1+l1-1;
+  const char* p2 = a_2+l2-1;
+  //ab
+  //012
+  for(size_t index=0;index<l1;index++,p1--,p2--) {
+    if(*p1!=*p2) return false;
+  }
+  return true;
+}
+
+inline bool rcmp(const std::string& a_1,const char* a_2) {
+  std::string::size_type l1 = a_1.size();
+  size_t l2 = ::strlen(a_2);
+  if(size_t(l1)!=l2) return false;
+  if(!l1) return true;
+  const char* p1 = a_1.c_str()+l1-1;
+  const char* p2 = a_2+l2-1;
+  //ab
+  //012
+  for(std::string::size_type index=0;index<l1;index++,p1--,p2--) {
+    if(*p1!=*p2) return false;
+  }
+  return true;
+}
+
+inline bool rcmp(const char* a_1,const std::string& a_2) {
+  size_t l1 = ::strlen(a_1);
+  std::string::size_type l2 = a_2.size();
+  if(l1!=size_t(l2)) return false;
+  if(!l1) return true;
+  const char* p1 = a_1+l1-1;
+  const char* p2 = a_2.c_str()+l2-1;
+  //ab
+  //012
+  for(size_t index=0;index<l1;index++,p1--,p2--) {
+    if(*p1!=*p2) return false;
+  }
+  return true;
+}
+
+inline bool rcmp(const std::string& a_1,const std::string& a_2) {
+  std::string::size_type l1 = a_1.size();
+  std::string::size_type l2 = a_2.size();
+  if(l1!=l2) return false;
+  if(!l1) return true;
+  const char* p1 = a_1.c_str()+l1-1;
+  const char* p2 = a_2.c_str()+l2-1;
+  //ab
+  //012
+  for(std::string::size_type index=0;index<l1;index++,p1--,p2--) {
+    if(*p1!=*p2) return false;
+  }
+  return true;
+}
+
+}
+
+#endif

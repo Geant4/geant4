@@ -1,0 +1,94 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_typedefs
+#define tools_typedefs
+
+// Similar to AIDA/v3r3p0/Types.h
+
+//NOTE : we avoid to have std includes here to be sure
+//       that in the below ifdef things come only from the compiler.
+
+//NOTE : if adding new platform here, look at ./s2int64 too.
+
+namespace tools {
+
+#if defined(WIN32) && !defined(GNU_GCC)
+
+// WIN32 and NOT GNU_GCC
+typedef int int32;
+typedef __int64 int64;
+inline const char* int32_format() {static const char s[] = "%d";return s;}
+inline const char* int64_format() {static const char s[] = "%ld";return s;}
+
+typedef unsigned int uint32;
+typedef unsigned __int64 uint64;
+inline const char* uint32_format() {static const char s[] = "%u";return s;}
+inline const char* uint64_format() {static const char s[] = "%lu";return s;}
+
+#elif defined(_LP64) 
+
+// 64 Bit Platforms
+typedef int int32;
+typedef long int64;
+inline const char* int32_format() {static const char s[] = "%d";return s;}
+inline const char* int64_format() {static const char s[] = "%ld";return s;}
+
+typedef unsigned int uint32;
+typedef unsigned long uint64;
+inline const char* uint32_format() {static const char s[] = "%u";return s;}
+inline const char* uint64_format() {static const char s[] = "%lu";return s;}
+
+#else 
+
+// 32-Bit Platforms
+typedef int int32;
+typedef long long int64;
+inline const char* int32_format() {static const char s[] = "%d";return s;}
+inline const char* int64_format() {static const char s[] = "%lld";return s;}
+
+typedef unsigned int uint32;
+typedef unsigned long long uint64;
+inline const char* uint32_format() {static const char s[] = "%u";return s;}
+inline const char* uint64_format() {static const char s[] = "%llu";return s;}
+
+#endif
+
+inline uint32 uint32_mx() { //4 294 967 295
+  uint32 n = 0;
+  for(unsigned int i=0;i<32;i++)  n += 1<<i;  
+  return n;
+}
+inline uint64 uint64_mx() { //18 446 744 073 709 551 615
+  uint64 one = 1;
+  uint64 n = 0;
+  for(unsigned int i=0;i<64;i++)  n += one<<i;  
+  return n;
+}
+
+typedef unsigned char byte;
+
+//for ./io :
+typedef unsigned char uchar;
+typedef short int16;
+typedef unsigned short ushort;
+typedef unsigned short uint16;
+typedef uint32 ref;
+// sizeof(long)==sizeof(void*) on all platforms.
+typedef unsigned long diff_pointer_t;
+typedef char* cstr_t;
+typedef const char* const_cstr_t;
+
+class fits_bit {public:char m_c;}; //for exlib/cfitsio
+class csv_time {public:long m_l;}; //for inlib/rcsv_ntuple
+
+inline unsigned int size_char()   {return 1;}
+inline unsigned int size_short()  {return 2;}
+inline unsigned int size_int()    {return 4;}
+inline unsigned int size_int64()  {return 8;}
+inline unsigned int size_float()  {return 4;}
+inline unsigned int size_double() {return 8;}
+
+}
+
+#endif

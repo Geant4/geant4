@@ -1,0 +1,52 @@
+
+cc_compiler=cc_not_defined
+
+if [ ${build_icc} = "yes" ] ; then
+  cc_compiler=icc
+  cc_linker=icc
+else
+  if [ ${build_clang} = "yes" ] ; then
+    cc_compiler=clang
+    cc_linker=clang
+  else
+    if [ ${build_cl_exe} = "yes" ] ; then
+      cc_compiler=cl.exe
+
+      if [ "${MSVCDir}" != "" ] ;  then
+        # Visual Studio 2003
+        cc_linker="`cygpath \"${MSVCDir}\"/bin/link.exe`"
+      else
+        if [ "${VCINSTALLDIR}" != "" ] ;  then
+          # Visual Studio 9.0
+          cc_linker="`cygpath \"${VCINSTALLDIR}\"/bin/link.exe`"
+        else
+          echo "env variables MSVCDir and VCINSTALLDIR not defined. You have to setup Visual."
+          exit
+        fi  
+      fi  
+      #echo ${cc_linker}
+      cc_linker=`echo ${cc_linker} | sed -e 's: :\\\ :g'`
+
+    else
+      cc_compiler=cc
+      cc_linker=cc
+    fi
+  fi
+fi
+
+ccflags=
+if [ ${build_cl_exe} = "yes" ] ; then
+
+  ccflags="${ccflags} /nologo /DWIN32 /MD /O2 /W3" 
+
+else
+
+  if [ ${build_debug} = "yes" ] ; then
+    ccflags="${ccflags} -g"
+  else
+    ccflags="${ccflags} -O2"
+  fi
+
+fi
+
+ccflags0="${ccflags}"

@@ -1,0 +1,332 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_p1
+#define tools_histo_p1
+
+#include "b1"
+#include "profile_data"
+
+namespace tools {
+namespace histo {
+
+//TC is for a coordinate.
+//TW is for a weight.
+//TH is for a height. Should be the same as TV.
+//TV is for a value (in general same as TC).
+
+template <class TC,class TN,class TW,class TH,class TV>
+class p1 : public b1<TC,TN,TW,TH> {
+  typedef b1<TC,TN,TW,TH> parent;
+public:
+  typedef typename base_histo<TC,TN,TW,TH>::bn_t bn_t;
+protected:
+  virtual TH get_bin_height(int a_offset) const {
+    return (parent::m_bin_Sw[a_offset] ? (m_bin_Svw[a_offset]/parent::m_bin_Sw[a_offset]):0);
+  }
+public:
+
+  virtual TH bin_error(int aI) const { //TH should be the same as TV
+    if(parent::m_bin_number==0) return 0;
+    bn_t offset;
+    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+
+    //FIXME Is it correct ?
+    // TProfile::GetBinError with kERRORMEAN mode does :
+    //  Stat_t cont = fArray[bin];              //Svw (see TProfile::Fill)
+    //  Stat_t sum  = parent::m_bin_entries.fArray[bin];  //Sw
+    //  Stat_t err2 = fSumw2.fArray[bin];       //Sv2w
+    //  if (sum == 0) return 0;
+    //  Stat_t eprim;
+    //  Stat_t contsum = cont/sum;
+    //  Stat_t eprim2  = TMath::Abs(err2/sum - contsum*contsum);
+    //  eprim          = TMath::Sqrt(eprim2);
+    //  ... ??? 
+    //  if (fErrorMode == kERRORMEAN) return eprim/TMath::Sqrt(sum);
+  
+    TW sw = parent::m_bin_Sw[offset];      //ROOT sum
+    if(sw==0) return 0;
+    TV svw = m_bin_Svw[offset];    //ROOT cont
+    TV sv2w = m_bin_Sv2w[offset];  //ROOT err2
+    TV _mean = (svw / sw);        //ROOT contsum
+    TV _rms = ::sqrt(::fabs((sv2w/sw) - _mean * _mean)); //ROOT eprim
+    // rms = get_bin_rms_value.
+    return _rms/::sqrt(sw); //ROOT kERRORMEAN mode returned value
+  }
+
+public:
+  bool multiply(TW aFactor){
+    if(!parent::base_multiply(aFactor)) return false;
+    for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
+      m_bin_Svw[ibin] *= aFactor;
+    }
+    parent::update_fast_getters();
+    return true;
+  }
+  bool scale(TW aFactor) {return multiply(aFactor);}
+
+  TV bin_Svw(int aI) const {
+    if(parent::m_bin_number==0) return 0;
+    bn_t offset;
+    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    return m_bin_Svw[offset];
+  }
+  TV bin_Sv2w(int aI) const {
+    if(parent::m_bin_number==0) return 0;
+    bn_t offset;
+    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    return m_bin_Sv2w[offset];
+  }
+
+  bool reset() {
+    parent::base_reset();
+    for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
+      m_bin_Svw[ibin] = 0;
+      m_bin_Sv2w[ibin] = 0;
+    }
+    parent::update_fast_getters();
+    return true;
+  }
+
+  void copy_from_data(const profile_data<TC,TN,TW,TV>& a_from) {
+    parent::base_from_data(a_from);
+    m_bin_Svw = a_from.m_bin_Svw;
+    m_bin_Sv2w = a_from.m_bin_Sv2w;
+    m_cut_v = a_from.m_cut_v;
+    m_min_v = a_from.m_min_v;
+    m_max_v = a_from.m_max_v;
+  }
+  profile_data<TC,TN,TW,TV> get_histo_data() const {
+    profile_data<TC,TN,TW,TV> hd(parent::base_get_data());
+    hd.m_is_profile = true;
+    hd.m_bin_Svw = m_bin_Svw;
+    hd.m_bin_Sv2w = m_bin_Sv2w;
+    hd.m_cut_v = m_cut_v;
+    hd.m_min_v = m_min_v;
+    hd.m_max_v = m_max_v;
+    return hd;
+  }
+
+  bool fill(TC aX,TV aV,TW aWeight = 1) {
+    //m_coords[0] = aX;
+    //return fill_bin(m_coords,aV,aWeight);
+
+    if(!parent::m_dimension) return false;
+    if(m_cut_v) {
+      if( (aV<m_min_v) || (aV>=m_max_v) ) {
+        return true;
+      }
+    }
+
+    bn_t offset;
+    if(!parent::m_axes[0].coord_to_absolute_index(aX,offset)) return false;
+
+    parent::m_bin_entries[offset]++;
+    parent::m_bin_Sw[offset] += aWeight;
+    parent::m_bin_Sw2[offset] += aWeight * aWeight;
+  
+    TC xw = aX * aWeight;
+    TC x2w = aX * xw;
+    parent::m_bin_Sxw[offset][0] += xw;
+    parent::m_bin_Sx2w[offset][0] += x2w;
+
+    // Profile part :
+    TV vw = aV * aWeight;
+    m_bin_Svw[offset] += vw;
+    m_bin_Sv2w[offset] += aV * vw;
+
+    return true;
+  }
+
+  TV bin_rms_value(int aI) const {
+    if(parent::m_bin_number==0) return 0;
+    bn_t offset;
+    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+
+    TW sw = parent::m_bin_Sw[offset];
+    if(sw==0) return 0;
+    TV svw = m_bin_Svw[offset];
+    TV sv2w = m_bin_Sv2w[offset];
+    TV _mean = (svw / sw);
+    return ::sqrt(::fabs((sv2w / sw) - _mean * _mean));
+  }
+
+  bool add(const p1& a_histo){
+    parent::base_add(a_histo);
+    for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
+      m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];      
+      m_bin_Sv2w[ibin] += a_histo.m_bin_Sv2w[ibin];      
+    }
+    parent::update_fast_getters();
+    return true;
+  }
+  bool subtract(const p1& a_histo){
+    parent::base_subtract(a_histo);
+    for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
+      m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];      
+      m_bin_Sv2w[ibin] -= a_histo.m_bin_Sv2w[ibin];      
+    }
+    parent::update_fast_getters();
+    return true;
+  }
+
+  bool gather_bins(unsigned int a_factor) { //for exa 2,3.
+    if(!a_factor) return false;
+
+    // actual bin number must be a multiple of a_factor.
+    
+    const histo::axis<TC>& _axis = parent::axis();
+
+    bn_t n = _axis.bins();
+    if(!n) return false;
+
+    bn_t new_n = n/a_factor;
+    if(a_factor*new_n!=n) return false;
+
+    p1* new_h = 0;
+    if(_axis.is_fixed_binning()) {
+      new_h = new p1(parent::m_title,
+                     new_n,_axis.lower_edge(),_axis.upper_edge());
+    } else {
+      const std::vector<TC>& _edges = _axis.edges();
+      std::vector<TC> new_edges(new_n+1);
+      for(bn_t ibin=0;ibin<new_n;ibin++) {
+        new_edges[ibin] = _edges[ibin*a_factor];
+      }
+      new_edges[new_n] = _edges[n]; //upper edge.
+      new_h = new p1(parent::m_title,new_edges);
+    }
+    if(!new_h) return false;
+
+    new_h->m_cut_v = m_cut_v;
+    new_h->m_min_v = m_min_v;
+    new_h->m_max_v = m_max_v;
+
+    bn_t offset,new_offset,offac;
+    for(bn_t ibin=0;ibin<new_n;ibin++) {
+      new_offset = ibin+1;
+      offset = a_factor*ibin+1;
+      for(unsigned int ifac=0;ifac<a_factor;ifac++) {
+        offac = offset+ifac;
+        new_h->m_bin_entries[new_offset] += parent::m_bin_entries[offac];
+        new_h->m_bin_Sw[new_offset] += parent::m_bin_Sw[offac];
+        new_h->m_bin_Sw2[new_offset] += parent::m_bin_Sw2[offac];
+        new_h->m_bin_Sxw[new_offset][0] += parent::m_bin_Sxw[offac][0];
+        new_h->m_bin_Sx2w[new_offset][0] += parent::m_bin_Sx2w[offac][0];
+
+        new_h->m_bin_Svw[new_offset] += m_bin_Svw[offac];
+        new_h->m_bin_Sv2w[new_offset] += m_bin_Sv2w[offac];
+      }
+    }
+
+    //underflow :
+    new_offset = 0;
+    offac = 0;
+    new_h->m_bin_entries[new_offset] = parent::m_bin_entries[offac];
+    new_h->m_bin_Sw[new_offset] = parent::m_bin_Sw[offac];
+    new_h->m_bin_Sw2[new_offset] = parent::m_bin_Sw2[offac];
+    new_h->m_bin_Sxw[new_offset][0] = parent::m_bin_Sxw[offac][0];
+    new_h->m_bin_Sx2w[new_offset][0] = parent::m_bin_Sx2w[offac][0];
+    new_h->m_bin_Svw[new_offset] = m_bin_Svw[offac];
+    new_h->m_bin_Sv2w[new_offset] = m_bin_Sv2w[offac];
+
+    //overflow :
+    new_offset = new_n+1;
+    offac = n+1;
+    new_h->m_bin_entries[new_offset] = parent::m_bin_entries[offac];
+    new_h->m_bin_Sw[new_offset] = parent::m_bin_Sw[offac];
+    new_h->m_bin_Sw2[new_offset] = parent::m_bin_Sw2[offac];
+    new_h->m_bin_Sxw[new_offset][0] = parent::m_bin_Sxw[offac][0];
+    new_h->m_bin_Sx2w[new_offset][0] = parent::m_bin_Sx2w[offac][0];
+    new_h->m_bin_Svw[new_offset] = m_bin_Svw[offac];
+    new_h->m_bin_Sv2w[new_offset] = m_bin_Sv2w[offac];
+
+    *this = *new_h;
+    return true;
+  }
+
+  bool cut_v() const {return m_cut_v;}
+  TV min_v() const {return m_min_v;}
+  TV max_v() const {return m_max_v;}
+
+public:
+  p1(const std::string& a_title,
+                   bn_t aXnumber,TC aXmin,TC aXmax)
+  : parent(a_title,aXnumber,aXmin,aXmax)
+  ,m_cut_v(false)
+  ,m_min_v(0)
+  ,m_max_v(0)
+  {
+    m_bin_Svw.resize(parent::m_bin_number,0);
+    m_bin_Sv2w.resize(parent::m_bin_number,0);
+  }
+
+  p1(const std::string& a_title,
+                   bn_t aXnumber,TC aXmin,TC aXmax,
+                   TV aVmin,TV aVmax)
+  : parent(a_title,aXnumber,aXmin,aXmax)
+  ,m_cut_v(true)
+  ,m_min_v(aVmin)
+  ,m_max_v(aVmax)
+  {
+    m_bin_Svw.resize(parent::m_bin_number,0);
+    m_bin_Sv2w.resize(parent::m_bin_number,0);
+  }
+
+  p1(const std::string& a_title,
+                   const std::vector<TC>& aEdges)
+  : parent(a_title,aEdges)
+  ,m_cut_v(false)
+  ,m_min_v(0)
+  ,m_max_v(0)
+  {
+    m_bin_Svw.resize(parent::m_bin_number,0);
+    m_bin_Sv2w.resize(parent::m_bin_number,0);
+  }
+
+  p1(const std::string& a_title,
+                   const std::vector<TC>& aEdges,
+                   TV aVmin,TV aVmax)
+  : parent(a_title,aEdges) 
+  ,m_cut_v(true)
+  ,m_min_v(aVmin)
+  ,m_max_v(aVmax)
+  {
+    m_bin_Svw.resize(parent::m_bin_number,0);
+    m_bin_Sv2w.resize(parent::m_bin_number,0);
+  }
+
+  virtual ~p1(){}
+public:
+  p1(const p1& a_from)
+  : parent(a_from)
+  ,m_cut_v(a_from.m_cut_v)
+  ,m_min_v(a_from.m_min_v)
+  ,m_max_v(a_from.m_max_v)
+  ,m_bin_Svw(a_from.m_bin_Svw)
+  ,m_bin_Sv2w(a_from.m_bin_Sv2w)
+  {}
+  p1& operator=(const p1& a_from){
+    parent::operator=(a_from);
+    m_cut_v = a_from.m_cut_v;
+    m_min_v = a_from.m_min_v;
+    m_max_v = a_from.m_max_v;
+    m_bin_Svw = a_from.m_bin_Svw;
+    m_bin_Sv2w = a_from.m_bin_Sv2w;
+    return *this;
+  }
+public:
+  const std::vector<TV>& bins_sum_vw() const {return m_bin_Svw;}
+  const std::vector<TV>& bins_sum_v2w() const {return m_bin_Sv2w;}
+protected:
+  bool m_cut_v;
+  TV m_min_v;
+  TV m_max_v;
+  std::vector<TV> m_bin_Svw;
+  std::vector<TV> m_bin_Sv2w;
+};
+
+}}
+
+#endif
+

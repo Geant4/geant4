@@ -1,0 +1,83 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sto
+#define tools_sto
+
+#include <string>
+
+namespace tools {
+
+inline std::string to(bool a_value){return a_value?"true":"false";}
+
+inline bool to(const std::string& a_string,bool& a_value){
+  if(  (a_string=="1")
+     ||(a_string=="true")||(a_string=="TRUE")||(a_string=="True")
+     ||(a_string=="yes")||(a_string=="YES")||(a_string=="Yes")
+     ||(a_string=="on")||(a_string=="ON")||(a_string=="On")
+     ){
+    a_value = true;
+    return true;
+  } else if((a_string=="0")
+          ||(a_string=="false")||(a_string=="FALSE")||(a_string=="False")
+          ||(a_string=="no")||(a_string=="NO")||(a_string=="No")
+          ||(a_string=="off")||(a_string=="OFF")||(a_string=="Off")
+          ){
+    a_value = false;
+    return true;
+  } else {
+    a_value = false;
+    return false;
+  }
+}
+
+}
+
+#include <sstream>
+
+namespace tools {
+
+template <class T>
+inline bool to(const std::string& a_s,T& a_v) {
+  if(a_s.empty()) {a_v = T();return false;} //for TOOLS_STL istringstream.
+  std::istringstream strm(a_s.c_str());
+  strm >> a_v;
+  if(strm.fail()) {a_v = T();return false;}
+  return strm.eof();
+}
+
+template <class T>
+inline std::string to(const T& a_v) {
+  std::ostringstream strm;
+  strm << a_v;
+  return strm.str();
+}
+
+inline std::string d2s(double a_value){
+  std::ostringstream strm;
+  strm.precision(25);
+  strm << a_value;
+  return strm.str();
+}
+
+inline std::string soutd(double a_value) {
+  return std::string("\"")+d2s(a_value)+"\"";
+}
+
+// for BatchLab/XML
+template <class T>
+inline std::string sout(const T& a_value) {
+  return std::string("\"")+to<T>(a_value)+"\"";
+}
+
+template <class T>
+inline bool to(T& a_field,const std::string& a_s,bool& a_changed){
+  T old = a_field;
+  if(!tools::to(a_s,a_field)) {a_field = old;a_changed=false;return false;}
+  a_changed = a_field==old?false:true;
+  return true;
+}
+
+}
+
+#endif

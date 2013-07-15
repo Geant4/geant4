@@ -1,0 +1,33 @@
+#!/bin/sh -f
+
+if [ $# -ne 2 ] ; then
+  echo "check_app : two arguments expected"
+  exit 1
+fi
+
+if [ "$1" = "" ] ; then
+  echo "check_app : no application given."
+  exit 1
+fi
+
+if [ "$2" = "" ] ; then
+  echo "check_app : no comment given."
+  exit 1
+fi
+
+old_IFS="${IFS}"
+IFS=:
+for check_app_path in $PATH ; do
+  #echo Look ${check_app_path}
+  if [ -f "${check_app_path}/$1" ] ; then
+    #echo Found in ${check_app_path}
+    IFS="${old_IFS}"    
+    unset old_IFS
+    exit 0
+  fi
+done
+echo $2
+IFS="${old_IFS}"
+unset old_IFS
+exit 1
+

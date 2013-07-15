@@ -1,0 +1,61 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sprintf
+#define tools_sprintf
+
+#include <string>
+#include "snpf"
+
+namespace tools {
+
+inline bool vsprintf(std::string& a_string,int a_length,const char* a_format,va_list a_args){
+  a_string.clear();
+  if(a_length<0) return false;
+  if(!a_format) return false;
+  char* s = new char[a_length+1];
+  if(!s) return false;
+  s[a_length] = '\0';
+  int n = vsnpf(s,a_length+1,a_format,a_args);
+  if(n>a_length) {
+    delete [] s;
+    return false;
+  }
+  if(s[a_length]!='\0') {
+    delete [] s;
+    return false;
+  }
+  a_string = s;
+  delete [] s;
+  return true;
+}
+
+
+inline bool sprintf(std::string& a_string,int a_length,const char* a_format,...){
+  a_string.clear();
+  if(a_length<0) return false;
+  if(!a_format) return false;
+  char* s = new char[a_length+1];
+  if(!s) return false;
+  s[a_length] = '\0';
+  va_list args;
+  va_start(args,a_format);
+  int n = vsnpf(s,a_length+1,a_format,args);
+  va_end(args);
+  if(n>a_length) {
+    delete [] s;
+    return false;
+  }
+  if(s[a_length]!='\0') {
+    delete [] s;
+    return false;
+  }
+  a_string = s;
+  delete [] s;
+  return true;
+}
+
+
+}
+
+#endif

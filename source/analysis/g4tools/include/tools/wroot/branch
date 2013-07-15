@@ -1,0 +1,306 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_branch
+#define tools_wroot_branch
+
+#include "leaf"
+#include "basket"
+#include "itree"
+#include "idir"
+
+namespace tools {
+namespace wroot {
+
+class branch : public virtual ibo {
+  static uint32 START_BIG_FILE() {return 2000000000;}
+  //static uint32 kDoNotProcess() {return (1<<10);} // Active bit for branches
+#ifdef TOOLS_MEM
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wroot::branch");
+    return s_v;
+  }
+#endif
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TBranch");
+    return s_v;
+  }
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(8,c)) return false;
+    if(!Named_stream(a_buffer,m_name,m_title)) return false;
+
+    if(!AttFill_stream(a_buffer)) return false;
+
+    int fCompress = m_tree.dir().file().compression();
+    int fEntryOffsetLen = 1000;
+    int fOffset = 0;
+    int fSplitLevel = 0;
+
+    if(!a_buffer.write(fCompress)) return false;
+    if(!a_buffer.write(m_basket_size)) return false;
+    if(!a_buffer.write(fEntryOffsetLen)) return false;
+    if(!a_buffer.write(m_write_basket)) return false;
+    int fEntryNumber = (int)m_entry_number;
+    if(!a_buffer.write(fEntryNumber)) return false;
+    if(!a_buffer.write(fOffset)) return false;
+    if(!a_buffer.write(m_max_baskets)) return false;
+    if(!a_buffer.write(fSplitLevel)) return false;
+    double fEntries = (double)m_entries;
+    if(!a_buffer.write(fEntries)) return false;
+    double fTotBytes = (double)m_tot_bytes;
+    double fZipBytes = (double)m_zip_bytes;
+    if(!a_buffer.write(fTotBytes)) return false;
+    if(!a_buffer.write(fZipBytes)) return false;
+
+    if(!m_branches.stream(a_buffer)) return false;
+    if(!m_leaves.stream(a_buffer)) return false;
+    if(!m_baskets.stream(a_buffer)) return false;
+
+    // See TStreamerInfo::ReadBuffer::WriteBasicPointer
+    if(!a_buffer.write((char)1)) return false;
+    if(!a_buffer.write_fast_array(fBasketBytes,m_max_baskets)) return false;
+    if(!a_buffer.write((char)1)) return false;
+    if(!a_buffer.write_fast_array(fBasketEntry,m_max_baskets)) return false;
+
+    char isBigFile = 1;
+    //GB : begin
+    //if(fTree.directory().file().end()>RIO_START_BIG_FILE()) isBigFile = 2;
+   {for(uint32 i=0;i<m_max_baskets;i++) {
+      if(fBasketSeek[i]>START_BIG_FILE()) {
+        isBigFile = 2;
+        break;
+      }
+    }}
+    //GB : end
+   
+    if(!a_buffer.write(isBigFile)) return false;
+    if(isBigFile==2) {
+      if(!a_buffer.write_fast_array(fBasketSeek,m_max_baskets)) return false;
+    } else {
+      for(uint32 i=0;i<m_max_baskets;i++) {
+        if(fBasketSeek[i]>START_BIG_FILE()) { //G.Barrand : add this test.
+          m_out << "tools::wroot::branch::stream :"
+                << " attempt to write big Seek "
+                << fBasketSeek[i] << " on 32 bits."
+                << std::endl;
+          return false;
+        }
+
+        if(!a_buffer.write((seek32)fBasketSeek[i])) return false;
+      }
+    }
+
+    // fFileName
+    if(!a_buffer.write(std::string(""))) return false;
+
+    if(!a_buffer.set_byte_count(c)) return false;
+    return true;
+  }
+
+public:
+  branch(itree& a_tree,
+                const std::string& a_name,
+                const std::string& a_title)
+  :m_tree(a_tree)
+  ,m_out(a_tree.dir().file().out())
+  ,m_name(a_name)
+  ,m_title(a_title)
+  ,fAutoDelete(false)
+
+  //,m_branches(true)
+  //,m_leaves(true)
+  ,m_basket_size(32000)
+  ,m_write_basket(0)
+  ,m_entry_number(0)
+  ,m_entries(0)
+  ,m_tot_bytes(0)
+  ,m_zip_bytes(0)
+  ,m_max_baskets(10)
+  ,fBasketBytes(0)
+  ,fBasketEntry(0)
+  ,fBasketSeek(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    fBasketBytes = new uint32[m_max_baskets];
+    fBasketEntry = new uint32[m_max_baskets];
+    fBasketSeek = new seek[m_max_baskets];
+   {for(uint32 i=0;i<m_max_baskets;i++) {
+      fBasketBytes[i] = 0;
+      fBasketEntry[i] = 0;
+      fBasketSeek[i] = 0;
+    }}
+    m_baskets.push_back(new basket(m_tree.dir().file(),
+                                   m_tree.dir().seek_directory(),
+                                   m_name,m_title,"TBasket",
+                                   m_basket_size));
+  }
+  virtual ~branch(){
+    delete [] fBasketBytes;
+    delete [] fBasketEntry;
+    delete [] fBasketSeek;
+    fBasketBytes = 0;
+    fBasketEntry = 0;
+    fBasketSeek = 0;
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  branch(const branch& a_from)
+  : ibo(a_from)
+  ,m_tree(a_from.m_tree)
+  ,m_out(a_from.m_out)
+  {}
+  branch& operator=(const branch&){return *this;}
+public:
+  void set_basket_size(uint32 a_size) {m_basket_size = a_size;}
+
+  template <class T>
+  leaf<T>* create_leaf(const std::string& a_name,
+                              const std::string& a_title){
+    leaf<T>* lf = new leaf<T>(m_out,*this,a_name,a_title);
+    m_leaves.push_back(lf);
+    return lf;
+  }
+
+  const std::vector<base_leaf*>& leaves() const {return m_leaves;}
+
+  bool fill(uint32& a_nbytes) {
+    a_nbytes = 0;
+
+    //FIXME if (TestBit(kDoNotProcess)) return 0;
+
+    basket* bk = m_baskets[m_write_basket];
+    if(!bk) {
+      m_out << "tools::wroot::branch::fill :"
+            << " get_basket failed."
+            << std::endl;
+      return false;
+    }
+
+    buffer& buf = bk->datbuf();
+    
+    uint32 lold = buf.length();
+  
+    bk->update(bk->key_length()+lold);
+    m_entries++;
+    m_entry_number++;
+  
+    if(!fill_leaves(buf)) return false;
+  
+    uint32 lnew   = buf.length();
+    uint32 nbytes = lnew - lold;
+    uint32 nsize  = 0;
+
+    // Should we create a new basket?
+    // Compare expected next size with m_basket_size.
+    if((lnew+2*nsize+nbytes)>=m_basket_size) { 
+      uint32 nout;
+      if(!bk->write_on_file(m_write_basket,nout)) {
+        m_out << "tools::wroot::branch::fill :"
+              << " basket.write_buffer() failed."
+              << std::endl;
+        return false;
+      }
+      fBasketBytes[m_write_basket]  = bk->number_of_bytes();
+    //fBasketEntry[m_write_basket] //can't be set here.
+      fBasketSeek[m_write_basket]   = bk->seek_key();
+      uint32 add_bytes = bk->object_size() + bk->key_length();
+
+      delete bk;
+      m_baskets[m_write_basket] = 0;
+
+      m_tot_bytes += add_bytes;
+      m_zip_bytes += nout;
+
+      m_tree.add_tot_bytes(add_bytes);
+      m_tree.add_zip_bytes(nout);
+
+      bk = new basket(m_tree.dir().file(),m_tree.dir().seek_directory(),
+                      m_name,m_title,"TBasket",m_basket_size);
+
+      m_write_basket++;
+
+      if(m_write_basket>=m_baskets.size())  {
+        m_baskets.resize(2*m_write_basket,0);
+      }
+      m_baskets[m_write_basket] = bk;
+  
+      if(m_write_basket>=m_max_baskets) {
+        //Increase BasketEntry buffer of a minimum of 10 locations
+        // and a maximum of 50 per cent of current size
+        uint32 newsize = mx<uint32>(10,uint32(1.5*m_max_baskets));
+        if(newsize>=START_BIG_FILE()) {
+          //we are going to have pb with uint32[] indexing.
+          m_out << "tools::wroot::branch::fill :"
+                << " new size for fBasket[Bytes,Entry,Seek] arrays"
+                << " is too close of 32 bits limit."
+                << std::endl;
+          m_out << "tools::wroot::branch::fill :"
+                << " you have to work with larger basket size."
+                << std::endl;
+          return false;
+        }
+
+        if(!realloc<uint32>(fBasketBytes,newsize,m_max_baskets,true)) {
+          m_out << "tools::wroot::branch::fill : realloc failed." << std::endl;
+          return false;
+        }
+        if(!realloc<uint32>(fBasketEntry,newsize,m_max_baskets,true)){
+          m_out << "tools::wroot::branch::fill : realloc failed." << std::endl;
+          return false;
+        }
+        if(!realloc<seek>(fBasketSeek,newsize,m_max_baskets,true)){
+          m_out << "tools::wroot::branch::fill : realloc failed." << std::endl;
+          return false;
+        }
+        m_max_baskets = newsize;
+      }
+      fBasketBytes[m_write_basket] = 0;
+      fBasketEntry[m_write_basket] = (uint32)m_entry_number;
+      fBasketSeek[m_write_basket]  = 0;
+    }
+    a_nbytes = nbytes;
+    return true;
+  }
+protected:
+  bool fill_leaves(buffer& a_buffer) {
+    std::vector<base_leaf*>::iterator it;
+    for(it=m_leaves.begin();it!=m_leaves.end();++it) {
+      if(!(*it)->fill_basket(a_buffer)) return false;
+    }
+    return true;
+  }
+protected:
+  itree& m_tree;
+  std::ostream& m_out;
+  ObjArray<basket> m_baskets;
+protected:
+  //Object
+  //uint32 m_bits;
+  //Named
+  std::string m_name;
+  std::string m_title;
+
+  bool fAutoDelete;
+  ObjArray<branch> m_branches;
+  ObjArray<base_leaf> m_leaves;
+  uint32 m_basket_size;  //  Initial Size of Basket Buffer
+  uint32 m_write_basket; //  Last basket number written
+  uint64 m_entry_number; // Current entry number (last one filled in this branch)
+  uint64 m_entries;      //  Number of entries
+  uint64 m_tot_bytes;
+  uint64 m_zip_bytes;
+  uint32 m_max_baskets;
+  uint32* fBasketBytes;  //[m_max_baskets] Lenght of baskets on file
+  uint32* fBasketEntry;  //[m_max_baskets] Table of first entry in eack basket
+  seek* fBasketSeek;     //[m_max_baskets] Addresses of baskets on file
+};
+
+}}
+
+#endif

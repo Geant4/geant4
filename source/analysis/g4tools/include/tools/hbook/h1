@@ -1,0 +1,160 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hbook_h1
+#define tools_hbook_h1
+
+#include "base_histo"
+
+namespace tools {
+namespace hbook {
+
+class h1 : public base_histo {
+public:
+  h1(int aID,const std::string& a_title,
+     int aXnumber,rarg aXmin,rarg aXmax)
+  :base_histo(aID)
+  ,m_axis(m_path,aID,1,true,true)
+  {
+    //m_axis.copy(fHistogram.getAxis(0));
+    cd_beg();
+    CHBOOK1(m_id,a_title,aXnumber,aXmin,aXmax);
+    cd_end();
+  }
+  h1(int aID,const std::string& a_title,
+     const std::vector<rarg>& a_edges)
+  :base_histo(aID)
+  ,m_axis(m_path,aID,1,true,false)
+  {
+    cd_beg();
+    CHBOOKB(m_id,a_title,a_edges);
+    cd_end();
+  }
+  virtual ~h1(){
+    cd_beg();
+    CHDELET(m_id);
+    cd_end();
+  }
+private:
+  h1(const h1& a_from)
+  :base_histo(a_from)
+  ,m_axis(a_from.m_axis)
+  {}
+  h1& operator=(const h1& a_from){
+    base_histo::operator=(a_from);
+    m_axis = a_from.m_axis;
+    return *this;
+  }
+public:
+  bool configure(int aXnumber,rarg aXmin,rarg aXmax){
+    cd_beg();
+    CHBOOK1(m_id,title(),aXnumber,aXmin,aXmax);
+    cd_end();
+    return true;
+  }
+  bool configure(const std::vector<rarg>& a_edges){
+    cd_beg();
+    CHBOOKB(m_id,title(),a_edges);
+    cd_end();
+    return true;
+  }
+public:
+  //bool set_title(const std::string& a_title) {
+  //  return false;
+  //}
+  int dimension() const {return 1;}
+
+  rret sum_bin_heights() const {
+    int NX = axis().bins();
+    rret w = 0;
+    cd_beg();
+    for(int i=1;i<=NX;i++) {
+      w += CHI(m_id,i);
+    }
+    cd_end();
+    return w;
+  }
+  rret sum_all_bin_heights() const {
+    int NX1 = axis().bins()+1;
+    rret w = 0;
+    cd_beg();
+    for(int i=0;i<=NX1;i++) {
+      w += CHI(m_id,i);
+    }
+    cd_end();
+    return w;
+  }
+  rret sum_extra_bin_heights() const {
+    int NX1 = axis().bins()+1;
+    rret w = 0;
+    cd_beg();
+    w += CHI(m_id,0);
+    w += CHI(m_id,NX1);
+    cd_end();
+    return w;
+  }
+
+  rret min_bin_height() const {
+    cd_beg();
+    rret v = CHMIN(m_id);
+    cd_end();
+    return v;  
+  }
+  rret max_bin_height() const {
+    cd_beg();
+    rret v = CHMAX(m_id);
+    cd_end();
+    return v;
+  }
+
+  void fill(rarg aX,rarg aWeight = 1) {
+    cd_beg();
+    CHFILL(m_id,aX,0,aWeight);
+    cd_end();
+  }
+
+  // optimization :
+  void fill_beg() const {cd_beg();}
+  void fill_fast(rarg aX,rarg aWeight = 1) {
+    CHFILL(m_id,aX,0,aWeight);
+  }
+  void fill_end() const {cd_end();}
+
+  rret bin_height(int aIndex) const {
+    cd_beg();
+    rret v = CHI(m_id,hindex(aIndex,axis()));
+    cd_end();
+    return v;
+  }
+  rret bin_error(int aIndex) const {
+    cd_beg();
+    rret v = CHIE(m_id,aIndex+1);
+    cd_end();
+    return v;
+  }
+
+  rret mean() const {
+    cd_beg();
+    rret v = CHSTATI(m_id,1," ",0);
+    cd_end();
+    return v;
+  }
+  rret rms() const {
+    cd_beg();
+    rret v = CHSTATI(m_id,2," ",0);
+    cd_end();
+    return v;
+  }
+
+  hbook::axis& axis() {return m_axis;}
+  const hbook::axis& axis() const {return m_axis;}
+  int coord_to_index(rarg aCoord) const {
+    return m_axis.coord_to_index(aCoord);
+  }
+protected:
+  hbook::axis m_axis;
+};
+
+}}
+
+#endif

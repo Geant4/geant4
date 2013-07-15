@@ -1,0 +1,263 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hbook_wfile
+#define tools_hbook_wfile
+
+#include <sstream>
+#include <ostream>
+
+#include "CHBOOK"
+#include <tools/srep>
+#include <tools/sout>
+
+#ifdef WIN32
+extern "C" void __stdcall OCLOSE(int*);
+#else
+extern "C" void oclose_(int*);
+#endif
+
+namespace tools {
+namespace hbook {
+
+class wfile {
+public:
+  wfile(std::ostream& a_out,const std::string& a_file,
+               unsigned int a_unit = 1,bool a_verbose = false)
+  :m_out(a_out)
+  ,m_verbose(a_verbose)
+  ,m_file_name(a_file)
+  ,m_is_valid(false)
+  ,m_unit(0)
+  {
+    std::string opts("NQ");
+    // maximum number of records
+    get_quest()[9] = 65000;
+    int record_size = 1024;
+
+    m_dir = "LUN";
+   {std::ostringstream strm;
+    strm << a_unit;
+    m_dir += strm.str();}
+
+    //FIXME : we should check if m_dir already exists.
+  
+    int ier = CHROPEN(a_unit,m_dir,m_file_name,opts,record_size);
+    if(ier) {
+      m_out << "tools::hbook::wfile :"
+            << " error on hropen, code " << ier 
+            << std::endl;
+      return;
+    }
+
+    if(get_quest()[0]) {
+      m_out << "tools::hbook::wfile :"
+            << " error, cannot open file " << a_file
+            << std::endl;
+      return;
+    } 
+
+    if(m_verbose) {
+      m_out << "tools::hbook::wfile :"
+            << " file " << a_file << " opened."
+            << std::endl;
+    }
+
+    CHCDIR("//PAWC"," ");
+    if(CHEDIR(m_dir,true)) CHDDIR(m_dir);
+    CHMDIR(m_dir," ");
+ 
+    CHCDIR("//PAWC/"+m_dir," ");
+
+    m_unit = a_unit;
+    m_is_valid = true;
+  }
+  virtual ~wfile() {
+    if(m_verbose) {
+      m_out << "tools::hbook::wfile::~wfile : cleanup..." << std::endl;
+    }
+
+    //rootFolder().clear();
+  
+    if(m_is_valid) {
+
+      //CHDELET(0);
+      if(m_verbose) {
+        m_out << "tools::hbook::wfile::~wfile : hrend..." << std::endl;
+      }
+      CHREND(m_dir);
+#ifdef WIN32
+      OCLOSE(&m_unit);
+#else
+      oclose_(&m_unit);
+#endif
+      m_unit = 0;
+
+      CHCDIR("//PAWC"," ");
+      if(CHEDIR(m_dir,true)) CHDDIR(m_dir);
+
+    }  
+
+    if(m_verbose) {
+      m_out << "tools::hbook::wfile::~wfile : end." << std::endl;
+    }
+  }
+private:
+  wfile(const wfile& a_from):m_out(a_from.m_out){}
+  wfile& operator=(const wfile&){return *this;}
+public:
+  const std::string& store_name() const {return m_file_name;}
+  bool is_valid() const {return m_is_valid;}
+  bool write() {
+    if(!m_is_valid) return false;
+
+    std::string pwd = CHPWD();
+
+    CHCDIR("//PAWC/"+m_dir," ");
+    CHCDIR("//"+m_dir," ");
+    CHROUT(0,0,"T");
+
+    //CHLDIR("//PAWC/"+m_dir,"T");
+    //CHLDIR("//"+m_dir,"T");
+
+    CHCDIR(pwd," ");
+
+    return true;
+  }
+  bool close() {
+    if(!m_is_valid) return true; //done or not opened.
+    CHREND(m_dir);
+#ifdef WIN32
+    OCLOSE(&m_unit);
+#else
+    oclose_(&m_unit);
+#endif
+    m_unit = 0;
+    m_is_valid = false;
+    return true;
+  }
+
+  bool cd_home(){
+    if(!m_is_valid) return false;
+    CHCDIR("//PAWC/"+m_dir," ");
+    return true;
+  }
+  bool cd_up(){
+    if(!m_is_valid) return false;
+
+    std::string pwd = CHPWD();  // pwd should be //PAWC/LUN<unit>/<something>
+    if(pwd.substr(0,10)!="//PAWC/LUN") {
+      m_out << "tools::hbook::wfile::cd_up :"
+            << " current directory " << tools::sout(pwd)
+            << " is not under //PAWC/LUN."
+            << std::endl;
+      return false;
+    }
+
+    // look if not under //PAWC/LUN<unit> :
+   {std::string s = pwd;
+    tools::replace(s,"//PAWC/LUN",""); 
+    if(s.find('/')==std::string::npos) return true;} //Can't cd. But it is ok.
+
+    CHCDIR("\\"," "); //cd up under //PAWC/LUN<unit>/<something>
+    std::string pwd2 = CHPWD();
+
+    std::string s = pwd;
+    tools::replace(s,"//PAWC","/"); 
+    // s should be //LUN<unit>/<something>
+
+    CHCDIR(s," ");
+    CHCDIR("\\"," "); //cd up under //LUN<unit>/<something>
+
+    CHCDIR(pwd2," ");
+
+    return true;
+  }
+
+  bool mkdir(const std::string& a_name){
+    // create a directory under
+    //   //LUN<unit>/<something>
+    // and 
+    //   //PAWC/LUN<unit>/<something>
+
+    if(!m_is_valid) return false;
+
+    // a_name should not be a path.
+    if(a_name.find('/')!=std::string::npos) {
+      m_out << "tools::hbook::wfile::mkdir :"
+            << " " << tools::sout(a_name) << " should not be a path."
+            << std::endl;
+      return false;
+    }
+
+    if(a_name.find('.')!=std::string::npos) {
+      m_out << "tools::hbook::wfile::mkdir :"
+            << " " << tools::sout(a_name) << " should not be a path."
+            << std::endl;
+      return false;
+    }
+
+    if(a_name.empty()) return true;
+
+    std::string pwd = CHPWD();  // pwd should be //PAWC/LUN<unit>/<something>
+    if(pwd.substr(0,10)!="//PAWC/LUN") {
+      m_out << "tools::hbook::wfile::mkdir :"
+            << " current directory " << tools::sout(pwd)
+            << " is not under //PAWC/LUN."
+            << std::endl;
+      return false;
+    }
+
+    if(CHEDIR(a_name,true)) {
+      //we assume that a_name is also here under //LUN<unit>/<something>
+      return true;
+    }
+
+    CHMDIR(a_name," ");
+
+    std::string s = pwd;
+    tools::replace(s,"//PAWC","/"); 
+    // s should be //LUN<unit>/<something>
+
+    CHCDIR(s," ");
+    CHMDIR(a_name," ");
+
+    CHCDIR(pwd," ");
+
+    return true;
+  }
+  bool mkcd(const std::string& a_name){
+    if(!mkdir(a_name)) return false;
+    CHCDIR(a_name," ");
+    return true;
+  }
+  bool cd(const std::string& a_name){
+    CHCDIR(a_name," ");
+    return true;
+  }
+
+private:
+  std::ostream& m_out;
+  bool m_verbose;
+  std::string m_file_name;
+  bool m_is_valid;
+  std::string m_dir;
+  int m_unit;
+};
+
+}}
+
+#endif
+
+// NOTE :
+//   For doing RZ write : 
+//   - A //LUN<unit> has to be open.
+//   - We create a //PAWC/LUN<unit> under //PAWC.
+//   - The hierarchy is done in //PAWC/LUN<unit> and histos 
+//     are booked here. (A HBOOK1 books anyway in a directory under //PAWC).
+//   - The //PAWC/LUN<unit> structure has to be duplicated under //LUN<unit>.
+//   - Then a global CHROUT(0,0,"T") can be done after doing :
+//        CHCDIR("//PAWC/LUN<unit>"," ")
+//        CHCDIR("//LUN<unit>"," ")
+
+

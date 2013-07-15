@@ -1,0 +1,31 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_cmp
+#define tools_cmp
+
+#include <ostream>
+
+namespace tools {
+
+template <class T>
+inline bool cmp(std::ostream& a_out,
+                const T& a_what,
+                const T& a_ref,const T& a_error = T()) {
+  if(a_what>a_ref) {
+    if((a_what-a_ref)>a_error) {
+      a_out << a_ref << " expected. Got " << a_what << std::endl;
+      return false;
+    }
+  } else {
+    if((a_ref-a_what)>a_error) {
+      a_out << a_ref << " expected. Got " << a_what << std::endl;
+      return false;
+    }
+  }
+  return true;
+}
+
+}
+
+#endif

@@ -1,0 +1,183 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_h1
+#define tools_histo_h1
+
+#include "b1"
+
+namespace tools {
+namespace histo { //have that for h1 ?
+
+//TC is for a coordinate.
+//TN is for a number of entries.
+//TW is for a weight.
+//TH is for a height. Should be the same as TW.
+
+template <class TC,class TN,class TW,class TH>
+class h1 : public b1<TC,TN,TW,TH> {
+  typedef b1<TC,TN,TW,TH> parent;
+public:
+  typedef typename b1<TC,TN,TW,TH>::bn_t bn_t;
+protected:
+  virtual TH get_bin_height(int a_offset) const { //TH should be the same as TW
+    return parent::m_bin_Sw[a_offset];
+  }
+public:
+  virtual TH bin_error(int aI) const { //TH should be the same as TW
+    if(parent::m_bin_number==0) return 0;
+    bn_t offset;
+    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
+    return ::sqrt(parent::m_bin_Sw2[offset]);
+  }
+
+public:
+  bool multiply(TW aFactor){
+    if(!parent::base_multiply(aFactor)) return false;
+    parent::update_fast_getters();
+    return true;
+  }
+  bool scale(TW aFactor) {return multiply(aFactor);}
+
+  void copy_from_data(const histo_data<TC,TN,TW>& a_from) {
+    parent::base_from_data(a_from);
+  }
+  histo_data<TC,TN,TW> get_histo_data() const {
+    return parent::base_get_data();
+  }
+
+  bool reset() {
+    parent::base_reset();
+    parent::update_fast_getters();
+    return true;
+  }
+
+  bool fill(TC aX,TW aWeight = 1) {
+    //m_coords[0] = aX;
+    //return fill_bin(m_coords,aWeight);
+    if(parent::m_dimension<=0) return false;
+
+    bn_t offset;
+    if(!parent::m_axes[0].coord_to_absolute_index(aX,offset)) return false;
+
+    parent::m_bin_entries[offset]++;
+    parent::m_bin_Sw[offset] += aWeight;
+    parent::m_bin_Sw2[offset] += aWeight * aWeight;
+  
+    TC xw = aX * aWeight;
+    TC x2w = aX * xw;
+    parent::m_bin_Sxw[offset][0] += xw;
+    parent::m_bin_Sx2w[offset][0] += x2w;
+    return true;
+  }
+
+  bool add(const h1& a_histo){
+    parent::base_add(a_histo);
+    parent::update_fast_getters();
+    return true;
+  }
+  bool subtract(const h1& a_histo){
+    parent::base_subtract(a_histo);
+    parent::update_fast_getters();
+    return true;
+  }
+
+  bool multiply(const h1& a_histo) {  
+    if(!parent::base_multiply(a_histo)) return false;
+    parent::update_fast_getters();
+    return true;
+  }
+  
+  bool divide(const h1& a_histo) {
+    if(!parent::base_divide(a_histo)) return false;
+    parent::update_fast_getters();
+    return true;
+  }
+
+  bool gather_bins(unsigned int a_factor) { //for exa 2,3.
+    if(!a_factor) return false;
+
+    // actual bin number must be a multiple of a_factor.
+    
+    const histo::axis<TC>& _axis = parent::axis();
+
+    bn_t n = _axis.bins();
+    if(!n) return false;
+
+    bn_t new_n = n/a_factor;
+    if(a_factor*new_n!=n) return false;
+
+    h1* new_h = 0;
+    if(_axis.is_fixed_binning()) {
+      new_h = new h1(parent::m_title,
+                     new_n,_axis.lower_edge(),_axis.upper_edge());
+    } else {
+      const std::vector<TC>& _edges = _axis.edges();
+      std::vector<TC> new_edges(new_n+1);
+      for(bn_t ibin=0;ibin<new_n;ibin++) {
+        new_edges[ibin] = _edges[ibin*a_factor];
+      }
+      new_edges[new_n] = _edges[n]; //upper edge.
+      new_h = new h1(parent::m_title,new_edges);
+    }
+    if(!new_h) return false;
+
+    bn_t offset,new_offset,offac;
+    for(bn_t ibin=0;ibin<new_n;ibin++) {
+      new_offset = ibin+1;
+      offset = a_factor*ibin+1;
+      for(unsigned int ifac=0;ifac<a_factor;ifac++) {
+        offac = offset+ifac;
+        new_h->m_bin_entries[new_offset] += parent::m_bin_entries[offac];
+        new_h->m_bin_Sw[new_offset] += parent::m_bin_Sw[offac];
+        new_h->m_bin_Sw2[new_offset] += parent::m_bin_Sw2[offac];
+        new_h->m_bin_Sxw[new_offset][0] += parent::m_bin_Sxw[offac][0];
+        new_h->m_bin_Sx2w[new_offset][0] += parent::m_bin_Sx2w[offac][0];
+      }
+    }
+
+    //underflow :
+    new_offset = 0;
+    offac = 0;
+    new_h->m_bin_entries[new_offset] = parent::m_bin_entries[offac];
+    new_h->m_bin_Sw[new_offset] = parent::m_bin_Sw[offac];
+    new_h->m_bin_Sw2[new_offset] = parent::m_bin_Sw2[offac];
+    new_h->m_bin_Sxw[new_offset][0] = parent::m_bin_Sxw[offac][0];
+    new_h->m_bin_Sx2w[new_offset][0] = parent::m_bin_Sx2w[offac][0];
+
+    //overflow :
+    new_offset = new_n+1;
+    offac = n+1;
+    new_h->m_bin_entries[new_offset] = parent::m_bin_entries[offac];
+    new_h->m_bin_Sw[new_offset] = parent::m_bin_Sw[offac];
+    new_h->m_bin_Sw2[new_offset] = parent::m_bin_Sw2[offac];
+    new_h->m_bin_Sxw[new_offset][0] = parent::m_bin_Sxw[offac][0];
+    new_h->m_bin_Sx2w[new_offset][0] = parent::m_bin_Sx2w[offac][0];
+
+    *this = *new_h;
+    return true;
+  }
+
+public:
+  h1(const std::string& a_title,bn_t aXnumber,TC aXmin,TC aXmax)
+  :parent(a_title,aXnumber,aXmin,aXmax){}
+
+  h1(const std::string& a_title,const std::vector<TC>& aEdges)
+  :parent(a_title,aEdges){}
+
+  virtual ~h1(){}
+public:
+  h1(const h1& a_from): parent(a_from){}
+  h1& operator=(const h1& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif
+
+
+
+

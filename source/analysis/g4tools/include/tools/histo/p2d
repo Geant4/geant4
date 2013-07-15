@@ -1,0 +1,64 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_p2d
+#define tools_histo_p2d
+
+#include "p2"
+
+namespace tools {
+namespace histo {
+
+class p2d : public p2<double,unsigned int,double,double,double> {
+  typedef p2<double,unsigned int,double,double,double> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::p2d");
+    return s_v;
+  }
+public:
+  p2d(const std::string& a_title,
+      unsigned int aXnumber,double aXmin,double aXmax,
+      unsigned int aYnumber,double aYmin,double aYmax)
+  : parent(a_title,aXnumber,aXmin,aXmax,
+                   aYnumber,aYmin,aYmax)
+  {}
+
+  p2d(const std::string& a_title,
+      unsigned int aXnumber,double aXmin,double aXmax,
+      unsigned int aYnumber,double aYmin,double aYmax,
+      double aVmin,double aVmax)
+  : parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax,aVmin,aVmax)
+  {}
+
+  p2d(const std::string& a_title,
+      const std::vector<double>& aEdgesX,
+      const std::vector<double>& aEdgesY)
+  : parent(a_title,aEdgesX,aEdgesY)
+  {}
+
+  p2d(const std::string& a_title,
+      const std::vector<double>& aEdgesX,
+      const std::vector<double>& aEdgesY,
+      double aVmin,double aVmax)
+  : parent(a_title,aEdgesX,aEdgesY,aVmin,aVmax)
+  {}
+
+  virtual ~p2d(){}
+public:
+  p2d(const p2d& a_from): parent(a_from){}
+  p2d& operator=(const p2d& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+
+private: static void check_instantiation() {p2d dummy("",10,0,1,10,0,1);}
+};
+
+}}
+
+#endif
+
+
+
+

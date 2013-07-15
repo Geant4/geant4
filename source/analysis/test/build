@@ -1,0 +1,92 @@
+#!/bin/sh -f
+
+what=""
+
+build_debug=no
+build_verbose=no
+build_icc=no
+build_clang=no
+build_mem=no
+
+build_cl_exe=no
+if [ "`uname | grep CYGWIN`" != "" ] ; then build_cl_exe=yes; fi
+
+args=""
+while test $# -ge 1 ; do
+  case $1 in
+    -g) build_debug=yes
+        args="${args} $1"
+        ;;
+    -v) build_verbose=yes
+        args="${args} $1"
+        ;;
+    -icc) build_icc=yes
+        args="${args} $1"
+        ;;
+    -clang) build_clang=yes
+        args="${args} $1"
+        ;;
+    -mem) build_mem=yes
+        args="${args} $1"
+        ;;
+    -*) echo "unknwon option : $1" ; exit ;;
+     *) if [ $# = 1 ] ; then
+          what=$1
+        else         
+          echo "unknwon option : $1"
+        fi
+        ;;
+  esac
+  shift
+done
+
+if [ "${what}" = "" ] ; then
+  find . -maxdepth 1 -name '*.cpp' -exec ./build ${args} {} \;
+  exit
+fi
+
+if [ ${build_verbose} = "yes" ] ; then set -x;fi
+
+exa=`basename ${what}`
+
+exa=`echo ${exa} | sed -e 's:.cpp::g'`
+exa=`echo ${exa} | sed -e 's:./::g'`
+
+if [ ${exa} = "chbook" ] ; then exit;fi
+if [ ${exa} = "whbook" ] ; then exit;fi
+
+echo "build ${exa}..."
+
+. ./use_cpp
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  # rm painfull warnings about API strcpy, etc... deprecated.
+  cppflags="${cppflags} /wd4996"
+  ccflags0="${ccflags0} /wd4996"
+fi
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  cppflags="${cppflags} /I../.."
+  cppflags="${cppflags} /I../include" # if within G4.
+else
+  cppflags="${cppflags} -I../.."
+  cppflags="${cppflags} -I../include" # if within G4.
+fi
+
+if [ ${exa} = "wroot" ] ; then
+  if [ ${build_cl_exe} = "yes" ] ; then
+    cppflags="${cppflags} -DTOOLS_DONT_HAVE_ZLIB"  
+  else
+    libs="${libs} -lz"
+  fi
+fi
+
+# let the freedom to some application to not use G4_cppflags.
+cppflags="${G4_cppflags} ${cppflags}"
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  eval ${cpp_compiler} /c ${cppflags} /Fomain.o ${exa}.cpp
+  eval ${cpp_linker} /nologo /OPT:NOREF /out:tools_test_${exa}.exe main.o ${objs} ${libs}
+else
+  eval ${cpp_linker} -o tools_test_${exa} ${cppflags} ${exa}.cpp ${libs}
+fi

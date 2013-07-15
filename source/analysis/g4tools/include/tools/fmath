@@ -1,0 +1,44 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_fmath
+#define tools_fmath
+
+#include <cmath>
+
+namespace tools {
+
+//have : static const fpi = (float)3.1415926535897931160E0; ???
+
+inline float fpi()      {return (float)3.1415926535897931160E0;}
+inline float ftwo_pi()  {return (float)6.2831853071795862320E0;}
+inline float fhalf_pi() {return (float)1.5707963267948965580E0;}
+
+inline float fcos(float x) {return (float)::cos(double(x));}
+inline float fsin(float x) {return (float)::sin(double(x));}
+inline float facos(float x) {return (float)::acos(double(x));}
+inline float fasin(float x) {return (float)::asin(double(x));}
+inline float ftan(float x) {return (float)::tan(double(x));}
+inline float fatan(float x) {return (float)::atan(double(x));}
+inline float fatan2(float x,float y) {return (float)::atan2(double(x),double(y));}
+inline float fsqrt(float x) {return (float)::sqrt(double(x));}
+inline float fpow(float x,float y) {return (float)::pow(double(x),(double)(y));}
+inline float fexp(float x) {return (float)::exp(double(x));}
+inline float flog(float x) {return (float)::log(double(x));}
+inline float flog10(float x) {return (float)::log10(double(x));}
+inline float ffloor(float x) {return (float)::floor(double(x));}
+inline float ffabs(float x) {return (float)::fabs(double(x));}
+inline float fceil(float x) {return (float)::ceil(double(x));}
+  
+inline float fdeg2rad() {return fpi()/180.0f;} //0.0174f
+inline float frad2deg() {return 180.0f/fpi();}
+
+inline int fround(float a_x) {
+  // From CoinGL/src/base/SbViewportRegion.cpp.
+  if (a_x == (float) (int(a_x))) return int(a_x);
+  else return (a_x>0.0f) ? int(a_x+0.5f) : -int(0.5f-a_x);
+}
+
+}
+
+#endif

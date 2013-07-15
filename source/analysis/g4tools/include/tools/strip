@@ -1,0 +1,68 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_strip
+#define tools_strip
+
+#include <vector>
+#include <string>
+
+namespace tools {
+
+enum what { leading, trailing, both };
+
+inline bool strip(std::string& a_string,what a_type = both,char a_char = ' '){
+  //return true = some stripping had been done.
+
+  std::string::size_type l = a_string.length();
+  if(l==0) return false;
+
+  switch ( a_type ) {
+  case leading:{
+    char* pos = (char*)a_string.c_str();
+    for(std::string::size_type i=0;i<l;i++,pos++) {
+      if(*pos!=a_char) {
+        a_string = a_string.substr(i,l-i);
+        return (i?true:false); //i=0 : same string.
+      }
+    }
+    }break;
+  case trailing:{
+    char* pos = (char*)a_string.c_str();
+    pos += (l-1);
+    for(std::string::size_type i=l-1;;i--,pos--) {
+      if(*pos!=a_char) {
+        a_string = a_string.substr(0,i+1);
+        return (i==(l-1)?false:true); //i==l-1 : same string.
+      }
+    }
+    }break;
+  case both:{
+    bool stat_lead = strip(a_string,leading,a_char);
+    bool stat_trail = strip(a_string,trailing,a_char);
+    if(stat_lead) return true;
+    if(stat_trail) return true;
+    }break;
+  //default:break;
+  }
+  return false; //nothing done.
+}
+
+inline std::string strp(const std::string& a_string,what a_type = both,char a_char = ' '){
+  std::string s(a_string);
+  strip(s,a_type,a_char);
+  return s;
+}
+
+inline bool strip(std::vector<std::string>& a_strings,what a_type = both,char a_char = ' ') {
+  bool some_done = false;
+  std::vector<std::string>::iterator it;
+  for(it=a_strings.begin();it!=a_strings.end();++it) {
+    if(strip(*it,a_type,a_char)) some_done = true;
+  }
+  return some_done;
+}
+
+}
+
+#endif

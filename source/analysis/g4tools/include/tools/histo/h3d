@@ -1,0 +1,60 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_h3d
+#define tools_histo_h3d
+
+#include "h3"
+
+namespace tools {
+namespace histo {
+
+class h3d : public h3<double,unsigned int,double,double> {
+  typedef h3<double,unsigned int,double,double> parent;
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::h3d");
+    return s_v;
+  }
+public:
+  h3d(const std::string& a_title,
+      unsigned int aXnumber,double aXmin,double aXmax,
+      unsigned int aYnumber,double aYmin,double aYmax,
+      unsigned int aZnumber,double aZmin,double aZmax)
+  : parent(a_title,aXnumber,aXmin,aXmax,
+                  aYnumber,aYmin,aYmax,
+                  aZnumber,aZmin,aZmax)
+  {}
+
+  h3d(const std::string& a_title,
+      const std::vector<double>& aEdgesX,
+      const std::vector<double>& aEdgesY,
+      const std::vector<double>& aEdgesZ)
+  : parent(a_title,aEdgesX,aEdgesY,aEdgesZ)
+  {}
+
+  virtual ~h3d(){}
+public:
+  h3d(const h3d& a_from): parent(a_from){}
+  h3d& operator=(const h3d& a_from){
+    parent::operator=(a_from);
+    return *this;
+  }
+
+#ifdef __CINT__
+  bool fill(double aX,double aY,double aZ,double aW = 1) {
+    return parent::fill(aX,aY,aZ,aW);    
+  }
+  void hprint(std::ostream& a_out) {parent::hprint(a_out);}
+#endif
+
+private:static void check_instantiation() {h3d dummy("",10,0,1,10,0,1,10,0,1);}
+};
+
+}}
+
+#endif
+
+
+
+

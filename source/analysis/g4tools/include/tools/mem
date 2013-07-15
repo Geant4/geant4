@@ -1,0 +1,139 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_mem
+#define tools_mem
+
+#ifdef TOOLS_MEM
+// to count instances.
+
+// WARNING : it uses writable static data, then it is NOT thread safe.
+//           This class must be used for debugging only.
+
+#include <ostream>
+#include <list>
+#include <string>
+#include <cstring> //strcmp
+
+namespace tools {
+
+class mem {
+protected:
+  mem(){increment();}
+  virtual ~mem(){decrement();}
+  mem(const mem&){}
+  mem& operator=(const mem&){return *this;}
+public:
+  static void increment(){counter()++;}
+  static void decrement(){counter()--;}
+
+  static void increment(const char* a_class){
+    counter()++;
+    if(check_by_class()) {
+      mem_list::iterator it;
+      for(it=list().begin();it!=list().end();++it) {
+        if(!::strcmp((*it).first.c_str(),a_class)) {
+          (*it).second++;
+          return;
+        }
+      }
+      list().push_back(std::pair<std::string,int>(std::string(a_class),1));
+    }
+  }
+
+  static void decrement(const char* a_class){
+    counter()--;
+    if(check_by_class()) {
+      mem_list::iterator it;
+      for(it=list().begin();it!=list().end();++it) {
+        if(!::strcmp((*it).first.c_str(),a_class)) {
+          (*it).second--;
+          return;
+        }
+      }
+      list().push_back(std::pair<std::string,int>(std::string(a_class),-1));
+    }
+  }
+
+  static void set_check_by_class(bool a_value) {
+    check_by_class() = a_value;
+  }
+/*
+  static void reset();
+*/
+
+  static void balance(std::ostream& a_out){
+    if(counter()) {
+      a_out << "tools::mem::balance :"
+            << " bad global object balance : " << counter() 
+            << std::endl;
+      if(check_by_class()) {
+        a_out << "tools::mem::balance :"
+              << " check by class was enabled." 
+              << std::endl;
+      } else {
+        a_out << "tools::mem::balance :"
+              << " check by class was disabled." 
+              << std::endl;
+      }
+    }
+    mem_list::iterator it;
+    for(it=list().begin();it!=list().end();++it) {
+      if((*it).second) {
+        a_out << "tools::mem::balance :"
+              << " for class " << (*it).first 
+              << ", bad object balance : " << (*it).second
+              << std::endl;
+      }
+    }
+    list().clear();
+  }
+
+  static int& counter() {
+    static int s_count = 0;
+    return s_count;
+  }
+
+protected:
+  static bool& check_by_class() {
+    static bool s_check_by_class = false;
+    return s_check_by_class;
+  }
+
+  typedef std::list< std::pair<std::string,int> > mem_list;
+
+  static mem_list& list() {
+    static mem_list s_list;
+    return s_list;
+  }
+};
+
+inline const std::string& s_new() {
+  static const std::string s_v("new");
+  return s_v;
+}
+
+inline const std::string& s_malloc() {
+  static const std::string s_v("malloc");
+  return s_v;
+}
+
+inline const std::string& s_tex() {
+  static const std::string s_v("tex");
+  return s_v;
+}
+
+inline const std::string& s_vbo() {
+  static const std::string s_v("vbo");
+  return s_v;
+}
+
+}
+
+#endif
+
+#endif
+
+
+
+

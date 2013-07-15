@@ -1,0 +1,15 @@
+*
+* To read and plot with CERN-PAW some columns
+* of the ntuple produced with wcsv.cpp
+*
+
+MACRO RCSV
+ntuple/create 10 'ntu' 3 ' ' 3500 index rgauss rbw
+ntuple/read 10 out.csv
+ntuple/print 10
+zone 1 2
+ntuple/plot 10.rgauss
+ntuple/plot 10.rbw
+hi/de 10
+RETURN
+

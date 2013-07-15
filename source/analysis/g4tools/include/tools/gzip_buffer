@@ -1,0 +1,105 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_gzip_buffer
+#define tools_gzip_buffer
+
+// what is needed for root file compression with zlib.
+
+// The gzip library is libz.
+// Someone must not confuse zlib with zip.
+// In particular to use zip someone has to
+// link to -lz that contains inflate, deflate.
+
+#include <zlib.h>
+
+#include <ostream>
+
+namespace tools {
+
+inline bool gzip_buffer(std::ostream& a_out,
+                        unsigned int a_level,
+                        unsigned int a_srcsize,const char* a_src,
+                        unsigned int a_tgtsize,char* a_tgt,
+                        unsigned int& a_irep) {
+
+  z_stream stream; // decompression stream
+
+  stream.next_in   = (Bytef*)(a_src);
+  stream.avail_in  = (uInt)(a_srcsize);
+  stream.next_out  = (Bytef*)a_tgt;
+  stream.avail_out = (uInt)(a_tgtsize);
+  stream.zalloc    = (alloc_func)0;
+  stream.zfree     = (free_func)0;
+  stream.opaque    = (voidpf)0;
+  
+  int err = deflateInit(&stream,a_level);
+  if(err!=Z_OK) {
+    a_out << "tools::wroot::zip :"
+          << " error in zlib/deflateInit." << std::endl;
+    a_irep = 0;
+    return false;
+  }
+  
+  err = deflate(&stream, Z_FINISH);
+  if(err!=Z_STREAM_END) {
+    deflateEnd(&stream);
+    a_out << "tools::wroot::zip :"
+          << " error in zlib/deflate." << std::endl;
+    a_irep = 0;
+    return false;
+  }
+  
+  deflateEnd(&stream);
+   
+  //a_out << "tools::gzip_buffer : ok "
+  //      << stream.total_out << std::endl;
+
+  a_irep = stream.total_out;
+
+  return true;
+}
+
+inline bool gunzip_buffer(std::ostream& a_out,
+                          unsigned int a_srcsize,const char* a_src,
+                          unsigned int a_tgtsize,char* a_tgt,
+                          unsigned int& a_irep) {
+
+  z_stream stream; // decompression stream
+
+  stream.next_in   = (Bytef*)(a_src);
+  stream.avail_in  = (uInt)(a_srcsize);
+  stream.next_out  = (Bytef*)a_tgt;
+  stream.avail_out = (uInt)(a_tgtsize);
+  stream.zalloc    = (alloc_func)0;
+  stream.zfree     = (free_func)0;
+  stream.opaque    = (voidpf)0;
+  
+  int err = inflateInit(&stream);
+  if (err != Z_OK) {
+    a_out << "tools::gunzip_buffer :"
+          << " error " << err << " in zlib/inflateInit." << std::endl;
+    return false;
+  }
+  
+  err = inflate(&stream, Z_FINISH);
+  if (err != Z_STREAM_END) {
+    inflateEnd(&stream);
+    a_out << "tools::gunzip_buffer :"
+          << " error " << err << " in zlib/inflate." << std::endl;
+    return false;
+  }
+  
+  inflateEnd(&stream);
+   
+  //a_out << "tools::gunzip_buffer : zlib : ok "
+  //      << stream.total_out << std::endl;
+
+  a_irep = stream.total_out;
+
+  return true;
+}
+
+}
+
+#endif

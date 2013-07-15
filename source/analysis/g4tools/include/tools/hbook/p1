@@ -1,0 +1,80 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_hbook_p1
+#define tools_hbook_p1
+
+#include "base_histo"
+
+namespace tools {
+namespace hbook {
+
+class p1 : public base_histo {
+public:
+  p1(int aID,const std::string& aTitle,
+     int aXnumber,rarg aXmin,rarg aXmax,
+     rarg aVmin,rarg aVmax)
+  :base_histo(aID)
+  ,m_axis(m_path,aID,1,true,true)
+  {
+    cd_beg();
+    CHBPROF(m_id,aTitle,
+            aXnumber,aXmin,aXmax,
+            aVmin,aVmax,
+            ""); //FIXME : or "S" or "T" ?
+    cd_end();
+  }
+  virtual ~p1(){
+    cd_beg();
+    CHDELET(m_id);
+    cd_end();
+  }
+private:
+  p1(const p1& a_from)
+  :base_histo(a_from)
+  ,m_axis(a_from.m_axis)
+  {}
+  p1& operator=(const p1& a_from){
+    base_histo::operator=(a_from);
+    m_axis = a_from.m_axis;
+    return *this;
+  }
+public:
+  bool configure(int aXnumber,rarg aXmin,rarg aXmax,rarg aVmin,rarg aVmax){
+    cd_beg();
+    CHBPROF(m_id,title(),
+            aXnumber,aXmin,aXmax,
+            aVmin,aVmax,
+            ""); //FIXME : or "S" or "T" ?
+    cd_end();
+    return true;
+  }
+public:
+  void fill(rarg aX,rarg aY,rarg aWeight = 1) {
+    cd_beg();
+    CHFILL(m_id,aX,aY,aWeight);
+    cd_end();
+  }
+
+  // optimization :
+  void fill_beg() const {cd_beg();}
+  void fill_fast(rarg aX,rarg aY,rarg aWeight = 1) {
+    CHFILL(m_id,aX,aY,aWeight);
+  }
+  void fill_end() const {cd_end();}
+
+  int dimension() const {return 1;}
+
+  const hbook::axis& axis() const {return m_axis;}
+  hbook::axis& axis() {return m_axis;}
+
+  int coord_to_index(rarg aCoord) const {
+    return m_axis.coord_to_index(aCoord);
+  }
+protected:
+  hbook::axis m_axis;
+};
+
+}}
+
+#endif

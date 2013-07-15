@@ -1,0 +1,111 @@
+
+# beurk, beurk, beurk
+
+# NOTE : g2c is needed if linking with a mix of something (cernlib?)
+#        compiled with g77 and something compiled with gfortran.
+
+if [ "${use_cernlib}" = "yes" ] ; then
+
+  on_lxplus=no
+  if [ "`uname -n | grep lxplus`" != "" ] ; then on_lxplus=yes;  fi
+  on_lal_lx=no
+  if [ "`uname -n | grep lal.in2p3.fr | grep lx`" != "" ] ; then
+    on_lal_lx=yes
+  fi
+  if [ "`uname -n | grep lal.in2p3.fr | grep nemo`" != "" ] ; then
+    on_lal_lx=yes
+  fi
+  on_lal_pc_pano=no
+  if [ "`uname -n`" = pc-89182.lal.in2p3.fr ] ; then on_lal_pc_pano=yes;fi
+  on_lal_ubuntu_VirtualBox=no
+  if [ "`uname -n`" = ubuntu-VirtualBox ] ; then
+    on_lal_ubuntu_VirtualBox=yes
+  fi
+
+  cernlib_home=
+  no_shift=_noshift
+
+  if [ "`uname | grep CYGWIN`" != "" ] ; then
+
+    f77_libs="${f77_libs} /libpath:'C:\cern\pro\lib' packlib.lib advapi32.lib ws2_32.lib"
+
+  elif [ `uname` = Darwin ] ; then
+
+    no_shift=
+
+    if [ "`sysctl hw.optional.x86_64 | grep 1`" != "" ] ; then
+      # May 2011 : we don't have cernlib on 64 bits intel machines.
+      echo " We don't have cernlib on Mac 64 bits machines."
+      echo " We try to use ourex/hbook/hdummy.c."
+
+      # gfortran is 32 bits !
+      cernlib_cflags="-m32"
+      obj="hdummy.o"
+      eval ${cc_compiler} -c ${ccflags0} ${cernlib_cflags} -o ${obj} ${tools_mgr}/../../tools/hbook/hdummy.c
+
+      objs="${objs} ${obj}"
+      f77_objs="${f77_objs} ${obj}"
+
+    else
+      if [ ! -d /cern/pro/lib ] ; then
+        echo " You don't have cernlib under /cern/pro/lib."
+        echo " If you have them elsewhere, change exlib/mgr/use_cernlib."
+        exit
+      else
+        cernlib_home=/cern/pro
+      fi
+    fi
+    f77_for_C_libs="-lgfortran -lg2c"
+
+  elif [ ${on_lxplus} = "yes" ] ; then
+    cernlib_home=/afs/cern.ch/sw/lcg/external/cernlib/2006a/x86_64-slc5-gcc43-opt
+    f77_for_C_libs="-lcrypt /usr/lib64/libg2c.so.0.0.0"
+    f77_end_libs="/usr/lib64/libgfortran.so.3.0.0"
+
+  elif [ ${on_lal_lx} = "yes" ] ; then
+    # for exlib/hbook/CHBOOK :
+    cppflags="${cppflags} -DTOOLS_HBOOK_F2C_RET_DOUBLE"
+    cppflags="${cppflags} -DTOOLS_F2C_RET_DOUBLE"
+    cernlib_home=/cern/pro/lib64
+    f77_for_C_libs="-lcrypt /usr/lib64/libg2c.so.0.0.0"    
+
+  elif [ ${on_lal_pc_pano} = "yes" ] ; then
+    cernlib_home=/cern/pro
+    f77_end_libs="-lg2c"
+
+  elif [ ${on_lal_ubuntu_VirtualBox} = "yes" ] ; then
+    cernlib_home=/cern/pro
+    #f77_for_C_libs="-lcrypt /usr/lib64/libg2c.so.0.0.0"
+    f77_for_C_libs="-lcrypt /usr/lib/i386-linux-gnu/libgfortran.so.3.0.0"
+    #f77_end_libs="/usr/lib/i386-linux-gnu/libgfortran.so.3.0.0"
+
+  else
+
+    if [ -d /cern/pro/lib ] ; then
+      cernlib_home=/cern/pro
+    elif [ "${CERNLIB}" != "" ] ; then
+      cernlib_home=${CERNLIB}
+    else
+      echo " You don't have cernlib under /cern/pro/lib"
+      echo " and you don't have defined CERNLIB envirnment variable."
+      echo " If you have them elsewhere, change exlib/mgr/use_cernlib."
+      exit
+    fi
+
+    if [ "${f77_compiler}" = "gfortran" ] ; then
+      f77_for_C_libs="-lcrypt -lgfortran"    
+    fi
+
+  fi
+
+  if [ "${cernlib_home}" != "" ] ; then
+    f77_libs="${f77_libs} -L${cernlib_home}/lib -lmathlib -lpacklib${no_shift}"
+  fi
+
+  f77_libs="${f77_libs} ${f77_end_libs}"
+ 
+  # if linking from c/c++ :
+  libs="${libs} ${f77_libs}"
+  libs="${libs} ${f77_for_C_libs}"
+
+fi

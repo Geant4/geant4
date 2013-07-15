@@ -1,0 +1,71 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_base_cloud
+#define tools_histo_base_cloud
+
+#include <string>
+#include <vector>
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace histo {
+
+class base_cloud {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::histo::base_cloud");
+    return s_v;
+  }
+protected:
+  base_cloud(int aLimit)
+  :m_limit(aLimit)
+  ,m_Sw(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~base_cloud(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  base_cloud(const base_cloud& a_from)
+  :m_title(a_from.m_title)
+  ,m_limit(a_from.m_limit)
+  ,m_Sw(a_from.m_Sw)
+  ,m_ws(a_from.m_ws)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  base_cloud& operator=(const base_cloud& a_from){
+    m_title = a_from.m_title;
+    m_limit = a_from.m_limit;
+    m_Sw = a_from.m_Sw;
+    m_ws = a_from.m_ws;
+    return *this;
+  }
+public:
+  const std::string& title() const {return m_title;}
+  std::string title() {return m_title;}
+  int max_entries() const {return m_limit;}
+protected:
+  static int UNLIMITED() {return -1;}
+  static unsigned int BINS() {return 100;}
+protected:
+  std::string m_title;
+  int m_limit;
+  double m_Sw;
+  std::vector<double> m_ws;
+};
+
+}}
+
+#endif

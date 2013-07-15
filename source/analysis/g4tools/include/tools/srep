@@ -1,0 +1,67 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_srep
+#define tools_srep
+
+#include <string>
+#include <vector>
+
+namespace tools {
+
+inline void replace(std::string& a_string,char a_old,char a_new){
+  for(std::string::iterator it=a_string.begin();it!=a_string.end();++it) {
+    if((*it)==a_old) *it = a_new;
+  }
+}
+
+inline bool replace(std::string& a_string,const std::string& a_old,const std::string& a_new){
+  // return true : some replacement done.
+  // return false : nothing replaced.
+  if(a_old.empty()) return false;
+  std::string snew;
+  std::string::size_type lold = a_old.length();
+  bool status = false;
+  std::string stmp = a_string;
+  while(true) {
+    std::string::size_type pos = stmp.find(a_old);
+    if(pos==std::string::npos){
+      snew += stmp;
+      break;
+    } else {
+      snew += stmp.substr(0,pos);
+      snew += a_new;
+      stmp = stmp.substr(pos+lold,stmp.length()-(pos+lold));
+      status = true;
+    }
+  }
+  a_string = snew;
+  return status;
+}
+
+inline bool replace(std::vector<std::string>& a_strings,const std::string& a_old,const std::string& a_new){
+  std::vector<std::string>::iterator it;
+  for(it=a_strings.begin();it!=a_strings.end();++it) {
+    if(!replace(*it,a_old,a_new)) return false;
+  }
+  return true;
+}
+
+inline std::string to_xml(const std::string& a_string){
+  // > : &lt;
+  // < : &gt;
+  // & : &amp;
+  // " : &quot;
+  // ' : &apos;
+  std::string s = a_string;
+  replace(s,"<","&lt;");
+  replace(s,">","&gt;");
+  replace(s,"&","&amp;");
+  replace(s,"\"","&quot;");
+  replace(s,"'","&apos;");
+  return s;
+}
+
+}
+
+#endif

@@ -1,0 +1,317 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_vmanip
+#define tools_vmanip
+
+#include <vector>
+
+namespace tools {
+
+//////////////////////////////////////////////////////////
+/// manipulations that induces no intermediate vector : //
+//////////////////////////////////////////////////////////
+
+template <class T>
+inline void clear(std::vector<T*>& a_vec){
+  // the below takes into account the case in
+  // which "delete entry" could modify a_vec.
+  typedef typename std::vector<T*>::iterator it_t;
+  while(!a_vec.empty()) {
+    it_t it = a_vec.begin();
+    T* entry  = *it;
+    a_vec.erase(it);
+    delete entry;    
+  }
+}
+
+template <class T>
+inline void raw_clear(std::vector<T*>& a_vec){
+  typedef typename std::vector<T*>::iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) delete *it;
+  a_vec.clear();
+}
+
+template <class T>
+inline void copy(std::vector<T*>& a_to,const std::vector<T*>& a_from){
+  raw_clear<T>(a_to);
+  typedef typename std::vector<T*>::const_iterator it_t;
+  for(it_t it = a_from.begin();it!=a_from.end();++it) {
+    a_to.push_back((*it)->copy());
+  }
+}
+
+template <class T>
+inline void append(std::vector<T>& a_vec,const std::vector<T>& a_from) {
+  typedef typename std::vector<T>::size_type sz_t;
+  sz_t vsize = a_vec.size();
+  sz_t number = a_from.size();
+  a_vec.resize(vsize+number);
+  sz_t offset = vsize; 
+  for(sz_t index=0;index<number;index++,offset++) {
+    a_vec[offset] = a_from[index];
+  }
+}
+
+template <class T>
+inline void append(std::vector<T>& a_vec,unsigned int a_num,const T* a_from) {
+  typedef typename std::vector<T>::size_type sz_t;
+  sz_t vsize = a_vec.size();
+  a_vec.resize(vsize+a_num);
+  sz_t offset = vsize; 
+  for(sz_t index=0;index<a_num;index++,offset++) {
+    a_vec[offset] = a_from[index];
+  }
+}
+
+template <class T>
+inline void removep(std::vector<T*>& a_vec,T* a_elem) {
+  typedef typename std::vector<T*>::iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();) {
+    if(*it==a_elem) {
+      it = a_vec.erase(it);
+    } else { 
+      ++it;
+    }
+  }
+}
+
+template <class T>
+inline void push_back_unique(std::vector<T>& a_vec,const T& a_v) {
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) {if(*it==a_v) return;}
+  a_vec.push_back(a_v);
+}
+
+template <class T>
+inline bool remove(std::vector<T>& a_vals,const T& a_elem){
+  bool found_some = false;
+  //std::vector<T>::iterator it;
+  //for(it=a_vals.begin();it!=a_vals.end();) {
+  //  if(*it==a_elem) {
+  //    it = a_vals.erase(it);
+  //    found_some = true;
+  //  } else {
+  //    ++it;
+  //  }
+  //}
+  //TOOLS_STL : brut force avoiding erase() :
+  std::vector<T> vs;
+  typedef typename std::vector<T>::iterator it_t;
+  for(it_t it=a_vals.begin();it!=a_vals.end();++it) {
+    if(*it==a_elem) {
+      found_some = true;
+    } else {
+      vs.push_back(*it);
+    }
+  }
+  a_vals = vs;
+  return found_some;
+}
+
+template <class T>
+inline void unique(std::vector<T>& a_vec) {
+  typedef typename std::vector<T>::iterator it_t;
+  it_t it,it2;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    it2 = it;it2++; //TOOLS_STL : it2=it+1 does not compile.
+    for(;it2!=a_vec.end();) {
+      if(*it2==*it) {
+        it2 = a_vec.erase(it2);
+      } else { 
+        ++it2;
+      }
+    }
+  }
+}
+
+template <class T>
+inline bool item_index(const std::vector<T>& a_vec,const T& a_item,unsigned int& a_index){
+  a_index = 0;
+  typedef typename std::vector<T>::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it,a_index++) {
+    if(*it==a_item) return true;
+  }
+  a_index = 0;
+  return false;
+}
+
+template <class T>
+inline bool belong(const std::vector<T>& a_vec,const T& a_item){
+  typedef typename std::vector<T>::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    if(*it==a_item) return true;
+  }
+  return false;
+}
+
+template <class T>  
+inline bool minimum(const std::vector<T>& a_vec,T& a_value) {
+  if(a_vec.empty()) {a_value = T();return false;}
+  a_value = a_vec[0];
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    a_value = (a_value<(*it)?a_value:(*it));
+  }
+  return true;
+}
+
+template <class T>  
+inline bool maximum(const std::vector<T>& a_vec,T& a_value) {
+  if(a_vec.empty()) {a_value = T();return false;}
+  a_value = a_vec[0];
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    a_value = (a_value>(*it)?a_value:(*it));
+  }
+  return true;
+}
+
+template <class T>  
+inline T sum(const std::vector<T>& a_vec) {
+  T sum = T();
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) sum += *it;
+  return sum;
+}
+
+template <class T>  
+inline void filter(std::vector<T>& a_vec,
+                   unsigned int a_mn,unsigned int a_mx){
+  unsigned int imx = a_vec.size()-1;
+  unsigned int mx = a_mx<imx?a_mx:imx;
+  unsigned int i = 0;
+  for(unsigned int index=a_mn;index<=mx;index++) {
+    a_vec[i] = a_vec[index];i++;
+  }
+  a_vec.resize(i);
+}
+
+template <class T>
+inline void steps(std::vector<T>& a_vec,unsigned int a_number){
+  a_vec.resize(a_number);
+  for(unsigned int index=0;index<a_number;index++) a_vec[index] = T(index);
+}
+
+template <class T>
+inline bool add(std::vector<T>& a_vec,const std::vector<T>& a_v){
+  if(a_vec.size()!=a_v.size()) return false;
+  typedef typename std::vector<T>::iterator it_t;
+  typedef typename std::vector<T>::const_iterator cit_t;
+  it_t it = a_vec.begin();
+  cit_t vit = a_v.begin();
+  for(;it!=a_vec.end();++it,++vit) *it += *vit;
+  return true;
+}
+
+template <class T>
+inline bool sub(std::vector<T>& a_vec,const std::vector<T>& a_v){
+  if(a_vec.size()!=a_v.size()) return false;
+  typedef typename std::vector<T>::iterator it_t;
+  typedef typename std::vector<T>::const_iterator cit_t;
+  it_t it = a_vec.begin();
+  cit_t vit = a_v.begin();
+  for(;it!=a_vec.end();++it,++vit) *it -= *vit;
+  return true;
+}
+
+template <class T>
+inline bool div(std::vector<T>& a_vec,const std::vector<T>& a_v){
+  if(a_vec.size()!=a_v.size()) return false;
+  typedef typename std::vector<T>::iterator it_t;
+  typedef typename std::vector<T>::const_iterator cit_t;
+  it_t it = a_vec.begin();
+  cit_t vit = a_v.begin();
+  bool errors = false;
+  for(;it!=a_vec.end();++it,++vit) {
+    if(*vit==T()) {
+      errors = true;
+    } else {
+      *it /= *vit;
+    }
+  }
+  return errors;
+}
+
+template <class T>
+inline void add(std::vector<T>& a_vec,const T& a_v){
+  typedef typename std::vector<T>::iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) *it += a_v;
+}
+
+template <class T>
+inline void sub(std::vector<T>& a_vec,const T& a_v){
+  typedef typename std::vector<T>::iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) *it -= a_v;
+}
+
+template <class T>
+inline void mul(std::vector<T>& a_vec,const T& a_v){
+  typedef typename std::vector<T>::iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) *it *= a_v;
+}
+
+template <class T>
+inline void div(std::vector<T>& a_vec,const T& a_v){
+  typedef typename std::vector<T>::iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) *it /= a_v;
+}
+
+template <class FROM,class TO>
+inline std::vector<TO> convert(const std::vector<FROM>& a_from){
+  typedef typename std::vector<FROM>::const_iterator const_it_t;
+  typedef typename std::vector<TO>::iterator it_t;
+  std::vector<TO> to(a_from.size());
+  const_it_t ait = a_from.begin();
+  it_t toit = to.begin();
+  for(;ait!=a_from.end();++ait,++toit) {*toit = (TO)*ait;}
+  return to;
+}
+
+}
+
+///////////////////////////////////////////////////////////
+/// manipulations that induces other includes : ///////////
+///////////////////////////////////////////////////////////
+#include <ostream>
+
+namespace tools {
+
+//NOTE : print is a Python keyword.
+template <class T>
+inline void dump(const std::vector<T>& a_vec,std::ostream& a_out){
+  typedef typename std::vector<T>::const_iterator it_t;
+  it_t it;
+  for(it=a_vec.begin();it!=a_vec.end();++it) {
+    a_out << *it << std::endl;
+  }
+}
+
+}
+
+#include <cmath>
+
+namespace tools {
+
+template <class T>  
+inline bool mean_rms(const std::vector<T>& a_vec,T& a_mean,T& a_rms) {
+  if(a_vec.empty()) {a_mean=T();a_rms=T();return false;}
+  T S = T();
+  T S2 = T();
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    S += *it;
+    S2 += (*it) * (*it);
+  }
+  a_mean = S/T(a_vec.size());
+  //NOTE : should use a templated sqrt and fabs.
+  a_rms = ::sqrt(::fabs(S2/T(a_vec.size()) - a_mean * a_mean));
+  return true;
+}
+
+}
+
+#endif

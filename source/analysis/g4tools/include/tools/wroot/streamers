@@ -1,0 +1,322 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_streamers
+#define tools_wroot_streamers
+
+#include "named"
+#include "date"
+#include "directory"
+#include "file"
+#include "../vmanip" //convert
+
+#include "../histo/h1d"
+#include "../histo/h2d"
+//#include "../histo/h3d"
+#include "../histo/p1d"
+//#include "../histo/p2d"
+
+namespace tools {
+namespace wroot {
+
+typedef histo::histo_data<double,unsigned int,double> hd_data;
+typedef histo::profile_data<double,unsigned int,double,double> pd_data;
+
+inline bool AttAxis_stream(buffer& a_buffer) {
+  int fNdivisions = 510;   //Number of divisions(10000*n3 + 100*n2 + n1)
+  short fAxisColor = 1;    //color of the line axis
+  short fLabelColor = 1;   //color of labels
+  short fLabelFont = 62;    //font for labels
+  float fLabelOffset = 0.005F;  //offset of labels
+  float fLabelSize = 0.04F;    //size of labels
+  float fTickLength = 0.03F;   //length of tick marks
+  float fTitleOffset = 1;  //offset of axis title
+  float fTitleSize = 0.04F;    //size of axis title
+  short fTitleColor = 1;   //color of axis title
+  short fTitleFont = 62;    //font for axis title
+
+  // Version 4 streaming (ROOT/v3-00-6).
+  unsigned int beg;
+  if(!a_buffer.write_version(4,beg)) return false;
+
+  if(!a_buffer.write(fNdivisions)) return false;
+  if(!a_buffer.write(fAxisColor)) return false;
+  if(!a_buffer.write(fLabelColor)) return false;
+  if(!a_buffer.write(fLabelFont)) return false;
+  if(!a_buffer.write(fLabelOffset)) return false;
+  if(!a_buffer.write(fLabelSize)) return false;
+  if(!a_buffer.write(fTickLength)) return false;
+  if(!a_buffer.write(fTitleOffset)) return false;
+  if(!a_buffer.write(fTitleSize)) return false;
+  if(!a_buffer.write(fTitleColor)) return false;
+  if(!a_buffer.write(fTitleFont)) return false;
+
+  if(!a_buffer.set_byte_count(beg)) return false;
+  return true;
+}
+
+inline bool axis_stream(buffer& a_buffer,
+                        const histo::axis<double>& a_axis,
+                        const std::string& a_name,
+                        const std::string& a_title) {
+    // Version 6 streaming (ROOT/v3-00-6).
+
+    unsigned int beg;
+    if(!a_buffer.write_version(6,beg)) return false;
+
+    if(!Named_stream(a_buffer,a_name,a_title)) return false;
+
+    if(!AttAxis_stream(a_buffer)) return false;
+
+    if(!a_buffer.write(a_axis.bins())) return false;
+    if(!a_buffer.write(a_axis.lower_edge())) return false;
+    if(!a_buffer.write(a_axis.upper_edge())) return false;
+
+    // fXbins 
+    //if(a_axis.m_fixed) {
+    //  std::vector<double> v;
+    //  ArrayT<double> dummy(v);
+    //  if(!dummy.stream(a_buffer)) return false; //TArrayD
+    //} else {
+      if(!a_buffer.write_array(a_axis.edges())) return false; //TArrayD
+    //}
+
+    if(!a_buffer.write((int)0)) return false; //fFirst
+    if(!a_buffer.write((int)0)) return false; //fLast
+
+    //Bool_t
+    if(!a_buffer.write((unsigned char)0)) return false;  //TimeDisplay
+
+    //TString
+    if(!a_buffer.write(std::string())) return false; //TimeFormat
+
+    if(!a_buffer.set_byte_count(beg)) return false;
+
+    return true;
+}
+
+inline bool List_empty_stream(buffer& a_buffer) {
+  unsigned int beg;
+  if(!a_buffer.write_version(4,beg)) return false;
+  if(!Object_stream(a_buffer)) return false;
+  std::string name;
+  if(!a_buffer.write(name)) return false;
+  int nobjects = 0;
+  if(!a_buffer.write(nobjects)) return false;
+  if(!a_buffer.set_byte_count(beg)) return false;
+  return true;
+}
+
+inline std::string axis_title(const hd_data& a_data,
+                              const std::string& a_key) {
+  typedef std::map<std::string,std::string> annotations_t;
+  annotations_t::const_iterator it = a_data.m_annotations.find(a_key);
+  if(it==a_data.m_annotations.end()) return std::string();
+  return (*it).second;
+}
+
+inline bool TH_write_1D(buffer& a_buffer,
+                        const hd_data& a_data,
+                        const std::string& a_name) {
+
+    if(!a_buffer.write_version(3)) return false;
+
+    if(!Named_stream(a_buffer,a_name,a_data.m_title)) return false;
+
+    if(!AttLine_stream(a_buffer)) return false;
+    if(!AttFill_stream(a_buffer)) return false;
+    if(!AttMarker_stream(a_buffer)) return false;
+
+    if(!a_buffer.write((int)a_data.m_bin_number)) return false;
+
+    //fXAxis
+    if(a_data.m_dimension==2) {
+
+     {histo::axis<double> haxis(a_data.m_axes[0]);
+      if(!axis_stream(a_buffer,haxis,"xaxis",
+            axis_title(a_data,histo::key_axis_x_title())))
+        return false;}
+
+     {histo::axis<double> haxis(a_data.m_axes[1]);
+      if(!axis_stream(a_buffer,haxis,"yaxis",
+            axis_title(a_data,histo::key_axis_y_title())))
+        return false;}
+
+     {histo::axis<double> dummy;
+      dummy.configure(1,0,1);
+      if(!axis_stream(a_buffer,dummy,"zaxis",
+            axis_title(a_data,histo::key_axis_z_title())))
+        return false;}
+
+    } else if(a_data.m_dimension==1) {
+
+     {histo::axis<double> haxis(a_data.m_axes[0]);
+      if(!axis_stream(a_buffer,haxis,"xaxis",
+            axis_title(a_data,histo::key_axis_x_title())))
+        return false;}
+
+     {histo::axis<double> dummy;
+      dummy.configure(1,0,1);
+      if(!axis_stream(a_buffer,dummy,"yaxis",
+            axis_title(a_data,histo::key_axis_y_title())))
+        return false;}
+
+     {histo::axis<double> dummy;
+      dummy.configure(1,0,1);
+      if(!axis_stream(a_buffer,dummy,"zaxis",
+            axis_title(a_data,histo::key_axis_z_title())))
+        return false;}
+
+    } else {
+      return false;
+    }
+
+    if(!a_buffer.write((short)(1000 * 0.25))) return false; //fBarOffset
+    if(!a_buffer.write((short)(1000 * 0.5))) return false; //fBarWidth
+
+    if(!a_buffer.write((double)a_data.get_entries())) return false;
+    if(!a_buffer.write(a_data.get_Sw())) return false;
+    if(!a_buffer.write(a_data.get_Sw2())) return false;
+
+   {double value;
+    a_data.get_ith_axis_Sxw(0,value);  
+    if(!a_buffer.write(value)) return false;}
+
+   {double value;
+    a_data.get_ith_axis_Sx2w(0,value);  
+    if(!a_buffer.write(value)) return false;}
+
+    if(!a_buffer.write((double)-1111)) return false; //fMaximum
+    if(!a_buffer.write((double)-1111)) return false; //fMinimum
+    if(!a_buffer.write((double)0)) return false; //NormFactor
+
+    if(!a_buffer.write_array(std::vector<double>()))
+      return false; //fContour TArrayD
+
+    if(!a_buffer.write_array(a_data.m_bin_Sw2)) return false; //fSumw2 TArrayD
+
+    // store annotation on fOption    
+    // but try to fool ROOT in order that it does not
+    // understand fOption as.. ROOT options !
+   //{std::string opt = " "+fAnnotation;   
+   // opt[0] = 0; //awfull trick
+   // if(!a_buffer.write(opt)) return false;} //TString fOption
+   {std::string opt;   
+    if(!a_buffer.write(opt)) return false;} //TString fOption
+
+    if(!List_empty_stream(a_buffer)) return false; //Functions
+
+    return true;
+}
+
+inline bool TH_write_2D(buffer& a_buffer,
+                        const hd_data& a_data,
+                        const std::string& a_name) {
+  if(!a_buffer.write_version(3)) return false;
+  if(!TH_write_1D(a_buffer,a_data,a_name)) return false;
+  if(!a_buffer.write((double)1)) return false; //ScaleFactor
+
+ {double value;
+  a_data.get_ith_axis_Sxw(1,value);  
+  if(!a_buffer.write(value)) return false;}
+
+ {double value;
+  a_data.get_ith_axis_Sx2w(1,value);  
+  if(!a_buffer.write(value)) return false;}
+
+  if(!a_buffer.write((double)0)) return false; //Tsumwxy //FIXME.
+
+  return true;
+}
+
+inline bool TH1F_stream(buffer& a_buffer,
+                        const histo::h1d& a_h,
+                        const std::string& a_name) {
+  if(!a_buffer.write_version(1)) return false;
+  hd_data data = a_h.get_histo_data();
+  if(!TH_write_1D(a_buffer,data,a_name)) return false;
+  if(!a_buffer.write_array(convert<double,float>(data.m_bin_Sw)))
+    return false; //TH1D::TArrayD::fArray
+  return true;
+}
+
+inline bool TH1D_stream(buffer& a_buffer,
+                        const histo::h1d& a_h,
+                        const std::string& a_name) {
+  if(!a_buffer.write_version(1)) return false;
+  hd_data data = a_h.get_histo_data();
+  if(!TH_write_1D(a_buffer,data,a_name)) return false;
+  if(!a_buffer.write_array(data.m_bin_Sw)) return false; //fArray TArrayD
+  return true;
+}
+
+inline bool TH2F_stream(buffer& a_buffer,
+                        const histo::h2d& a_h,
+                        const std::string& a_name){
+  if(!a_buffer.write_version(3)) return false;
+  hd_data data = a_h.get_histo_data();
+  if(!TH_write_2D(a_buffer,data,a_name)) return false;
+  if(!a_buffer.write_array(convert<double,float>(data.m_bin_Sw)))
+    return false; //fArray TArrayD
+  return true;
+}
+
+inline bool TH2D_stream(buffer& a_buffer,
+                        const histo::h2d& a_h,
+                        const std::string& a_name){
+  if(!a_buffer.write_version(3)) return false;
+  hd_data data = a_h.get_histo_data();
+  if(!TH_write_2D(a_buffer,data,a_name)) return false;
+  if(!a_buffer.write_array(data.m_bin_Sw)) return false; //fArray TArrayD
+  return true;
+}
+
+inline bool TProfile_stream(buffer& a_buffer,
+                            const histo::p1d& a_p,
+                            const std::string& a_name){
+    if(!a_buffer.write_version(3)) return false;
+
+    //WARNING : the mapping histo::p1d / TProfile is not obvious.
+    //HCL::m_bin_Svw  <---> TProfile::fArray
+    //HCL::m_bin_Sv2w <---> TProfile::fSumw2
+    //HCL::m_bin_Sw   <---> TProfile::fBinEntries
+
+    pd_data data = a_p.get_histo_data();
+    //NOTE : histo.m_bin_Sw <---> TH1D::TArrayD::fArray
+    //       then have to copy histo.m_bin_Svw on histo.m_bin_Sw
+    //       before streaming.
+
+    //save histo.m_bin_Sw on a ::Rio::Array_double :
+    std::vector<double> vbins;
+   {unsigned int binn = data.m_bin_number;
+    vbins.resize(binn);
+    for(unsigned int index=0;index<binn;index++){
+      vbins[index] = data.m_bin_Sw[index];
+    }}
+
+    // copy histo.m_bin_Svw on histo.m_bin_Sw :
+    data.m_bin_Sw = data.m_bin_Svw;    
+
+    //WARNING : should create a valid Rio::TH1D::fHistogram
+    //          being a histo::h1d.
+    //          But the histo::p1d does not inherit histo::h1d.
+
+    histo::h1d h("",10,0,1);
+    h.copy_from_data(data);
+    h.update_fast_getters();
+    if(!TH1D_stream(a_buffer,h,a_name)) return false;
+
+    //TProfile specific :
+    if(!a_buffer.write_array(vbins)) return false; //fBinEntries TArrayD
+
+    int errorMode = 0;
+    if(!a_buffer.write(errorMode)) return false;
+    if(!a_buffer.write(data.m_min_v)) return false;
+    if(!a_buffer.write(data.m_max_v)) return false;
+
+    return true;
+}
+
+}}
+
+#endif

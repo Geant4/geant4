@@ -1,0 +1,169 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_named
+#define tools_wroot_named
+
+#include "buffer"
+#include "../vmanip"
+//#include "../vdata"
+
+namespace tools {
+namespace wroot {
+
+inline bool Object_stream(buffer& a_buffer) {
+  short v = 1;
+  if(!a_buffer.write_version(v)) return false;
+  if(!a_buffer.write((unsigned int)0)) return false;
+  static const unsigned int kNotDeleted = 0x02000000;
+  if(!a_buffer.write(kNotDeleted)) return false;
+  return true;
+}
+
+inline bool Named_stream(buffer& a_buffer,
+                         const std::string& a_name,
+                         const std::string& a_title) {
+  unsigned int beg;
+  if(!a_buffer.write_version(1,beg)) return false;
+  if(!Object_stream(a_buffer)) return false;
+  if(!a_buffer.write(a_name)) return false;
+  if(!a_buffer.write(a_title)) return false;
+  if(!a_buffer.set_byte_count(beg)) return false;
+  return true;
+}
+
+template <class T>
+class ObjArray : public virtual ibo, public std::vector<T*> {
+  static unsigned int kNullTag() {return 0;}
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TObjArray");
+    return s_v;
+  }
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(3,c)) return false;
+    if(!Object_stream(a_buffer)) return false;
+    if(!a_buffer.write(std::string(""))) return false;
+    int nobjects = std::vector<T*>::size();
+    if(!a_buffer.write(nobjects)) return false;
+    int lowerBound = 0;
+    if(!a_buffer.write(lowerBound)) return false;
+    
+    typedef typename std::vector<T*>::const_iterator it_t;
+    it_t it;
+    for(it=std::vector<T*>::begin();it!=std::vector<T*>::end();++it) {
+      if(*it) {
+        if(!a_buffer.write_object(*(*it))) return false;
+      } else { //Could happen with branch::m_baskets.
+        if(!a_buffer.write(kNullTag())) return false;
+      }
+    }
+    if(!a_buffer.set_byte_count(c)) return false;
+    return true;
+  }
+public:
+  ObjArray(){}
+  virtual ~ObjArray(){tools::clear<T>(*this);} //WIN32 wants inlib::
+public:
+  ObjArray(const ObjArray& a_from): ibo(a_from),std::vector<T*>() {
+    typedef typename std::vector<T*>::const_iterator it_t;
+    it_t it;
+    for(it=a_from.begin();it!=a_from.end();++it) {
+      std::vector<T*>::push_back((*it)->copy());
+    }
+  }
+  ObjArray& operator=(const ObjArray& a_from){
+    tools::clear<T>(*this);
+
+    typedef typename std::vector<T*>::const_iterator it_t;
+    it_t it;
+    for(it=a_from.begin();it!=a_from.end();++it) {
+      std::vector<T*>::push_back((*it)->copy());
+    }
+    return *this;
+  }
+};
+
+template <class T>
+class List : public virtual ibo, public std::vector<T*> {
+public: //ibo
+  virtual const std::string& store_cls() const {
+    static const std::string s_v("TList");
+    return s_v;
+  }
+  virtual bool stream(buffer& a_buffer) const {
+    unsigned int c;
+    if(!a_buffer.write_version(4,c)) return false;
+    if(!Object_stream(a_buffer)) return false;
+    if(!a_buffer.write(std::string(""))) return false; //fName
+    int nobjects = std::vector<T*>::size();
+    if(!a_buffer.write(nobjects)) return false;
+    
+    typedef typename std::vector<T*>::const_iterator it_t;
+    it_t it;
+    for(it=std::vector<T*>::begin();it!=std::vector<T*>::end();++it) {
+      if(!a_buffer.write_object(*(*it))) return false;
+      std::string opt;
+      unsigned char nch = opt.size();
+      if(!a_buffer.write(nch)) return false;
+      if(!a_buffer.write_fast_array<char>(opt.c_str(),nch)) return false;
+    }
+    if(!a_buffer.set_byte_count(c)) return false;
+    return true;
+  }
+public:
+  List(){}
+  virtual ~List(){tools::clear<T>(*this);} //WIN32 wants inlib::
+protected:
+  List(const List& a_from): ibo(a_from),std::vector<T*>(){}
+  List& operator=(const List&){return *this;}
+};
+
+inline bool AttLine_stream(buffer& a_buffer){
+  short fLineColor = 1;
+  short fLineStyle = 1;
+  short fLineWidth = 1;
+  unsigned int c;
+  if(!a_buffer.write_version(1,c)) return false;
+  if(!a_buffer.write(fLineColor)) return false;
+  if(!a_buffer.write(fLineStyle)) return false;
+  if(!a_buffer.write(fLineWidth)) return false;
+  if(!a_buffer.set_byte_count(c)) return false;
+  return true;
+}
+
+inline bool AttFill_stream(buffer& a_buffer){
+  short fFillColor = 0;
+  short fFillStyle = 101;
+  unsigned int c;
+  if(!a_buffer.write_version(1,c)) return false;
+  if(!a_buffer.write(fFillColor)) return false;
+  if(!a_buffer.write(fFillStyle)) return false;
+  if(!a_buffer.set_byte_count(c)) return false;
+  return true;
+}
+
+inline bool AttMarker_stream(buffer& a_buffer) {
+  short fMarkerColor = 1;
+  short fMarkerStyle = 1;
+  float fMarkerWidth = 1;
+  unsigned int c;
+  if(!a_buffer.write_version(1,c)) return false;
+  if(!a_buffer.write(fMarkerColor)) return false;
+  if(!a_buffer.write(fMarkerStyle)) return false;
+  if(!a_buffer.write(fMarkerWidth)) return false;
+  if(!a_buffer.set_byte_count(c)) return false;
+  return true;
+}
+
+//template <class T>
+//inline bool Array_stream(buffer& a_buffer,const std::vector<T>& a_v) {
+//  if(!a_buffer.write((int)a_v.size())) return false;
+//  if(!a_buffer.write_fast_array(vec_data(a_v),a_v.size())) return false;
+//  return true;
+//}
+
+}}
+
+#endif

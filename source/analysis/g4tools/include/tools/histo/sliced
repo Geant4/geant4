@@ -1,0 +1,101 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_sliced
+#define tools_histo_sliced
+
+#include "slice"
+#include "h1d"
+#include "h2d"
+#include "h3d"
+
+namespace tools {
+namespace histo {
+
+inline h1d* slice_x(const h2d& a_from,
+                    int aJbeg,int aJend,
+                    const std::string& a_title) {
+  h1d* slice_x = new h1d(a_title,
+                                   a_from.axis_x().bins(),
+                                   a_from.axis_x().lower_edge(),
+                                   a_from.axis_x().upper_edge());
+  if(!fill_slice_x(a_from,aJbeg,aJend,*slice_x)) {delete slice_x;return 0;}
+  return slice_x;
+}
+
+inline h1d* projection_x(const h2d& a_from,const std::string& a_title) {
+  return slice_x(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+}
+
+inline h1d* slice_y(const h2d& a_from,
+                             int aIbeg,int aIend,
+                             const std::string& a_title) {
+  h1d* slice_y = new h1d(a_title,
+                                   a_from.axis_y().bins(),
+                                   a_from.axis_y().lower_edge(),
+                                   a_from.axis_y().upper_edge());
+  if(!fill_slice_y(a_from,aIbeg,aIend,*slice_y)) {delete slice_y;return 0;}
+  return slice_y;
+}
+
+inline h1d* projection_y(const h2d& a_from,const std::string& a_title) {
+  return slice_y(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+}
+
+inline h2d* slice_xy(const h3d& a_from,
+                             int aKbeg,int aKend,
+                             const std::string& a_title) {
+  h2d* slice = new h2d(a_title,
+                                              a_from.axis_x().bins(),
+                                              a_from.axis_x().lower_edge(),
+                                              a_from.axis_x().upper_edge(),
+                                              a_from.axis_y().bins(),
+                                              a_from.axis_y().lower_edge(),
+                                              a_from.axis_y().upper_edge());
+  if(!fill_slice_xy(a_from,aKbeg,aKend,*slice)) {delete slice;return 0;}
+  return slice;
+}
+
+inline h2d* projection_xy(const h3d& a_from,const std::string& a_title) {
+  return slice_xy(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+}
+
+inline h2d* slice_yz(const h3d& a_from,
+                             int aIbeg,int aIend,
+                             const std::string& a_title) {
+  h2d* slice = new h2d(a_title,
+                                              a_from.axis_y().bins(),
+                                              a_from.axis_y().lower_edge(),
+                                              a_from.axis_y().upper_edge(),
+                                              a_from.axis_z().bins(),
+                                              a_from.axis_z().lower_edge(),
+                                              a_from.axis_z().upper_edge());
+  if(!fill_slice_yz(a_from,aIbeg,aIend,*slice)) {delete slice;return 0;}
+  return slice;
+}
+
+inline h2d* projection_yz(const h3d& a_from,const std::string& a_title) {
+  return slice_yz(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+}
+
+inline h2d* slice_xz(const h3d& a_from,
+                             int aJbeg,int aJend,
+                             const std::string& a_title) {
+  h2d* slice = new h2d(a_title,
+                                              a_from.axis_x().bins(),
+                                              a_from.axis_x().lower_edge(),
+                                              a_from.axis_x().upper_edge(),
+                                              a_from.axis_z().bins(),
+                                              a_from.axis_z().lower_edge(),
+                                              a_from.axis_z().upper_edge());
+  if(!fill_slice_xz(a_from,aJbeg,aJend,*slice)) {delete slice;return 0;}
+  return slice;
+}
+
+inline h2d* projection_xz(const h3d& a_from,const std::string& a_title) {
+  return slice_xz(a_from,axis<double>::UNDERFLOW_BIN,axis<double>::OVERFLOW_BIN,a_title);
+}
+
+}}
+
+#endif

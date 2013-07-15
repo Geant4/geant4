@@ -1,0 +1,191 @@
+#!/bin/sh -f
+
+# to build FORTRAN and CERNLIB related programs.
+
+#set -x
+
+build_debug=no
+build_verbose=no
+build_icc=no
+build_clang=no
+build_cl_exe=no
+build_mem=no
+
+build_cl_exe=no
+if [ "`uname | grep CYGWIN`" != "" ] ; then build_cl_exe=yes; fi
+
+use_from=sys
+
+tools_mgr=.
+
+args=""
+while test $# -ge 1 ; do
+  case $1 in
+    -g) build_debug=yes
+        args="${args} $1"
+        ;;
+    -v) build_verbose=yes
+        args="${args} $1"
+        ;;
+    -*) echo "unknwon option : $1" ; exit ;;
+     *) echo "unknwon option : $1"
+        ;;
+  esac
+  shift
+done
+
+#////////////////////////////////////
+#/// C/C++ //////////////////////////
+#////////////////////////////////////
+. ${tools_mgr}/use_sys
+. ${tools_mgr}/use_cc
+. ${tools_mgr}/use_cpp
+. ${tools_mgr}/use_f77
+
+if [ `uname` = Darwin ] ; then
+  if [ "`sysctl hw.optional.x86_64 | grep 1`" != "" ] ; then
+    # gfortran is 32 bits !
+    cppflags="${cppflags} -m32"
+  fi
+fi
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  # rm /MD
+  cppflags=`echo ${cppflags} | sed -e 's:/MD::g'`
+  ccflags=`echo ${ccflags} | sed -e 's:/MD::g'`
+  cppflags0=`echo ${cppflags0} | sed -e 's:/MD::g'`
+  ccflags0=`echo ${ccflags0} | sed -e 's:/MD::g'`
+fi
+
+#////////////////////////////////////
+#////////////////////////////////////
+#////////////////////////////////////
+
+if [ ${build_verbose} = "yes" ] ; then set -x; fi
+
+objs=""
+libs=""
+
+f77_objs=""
+f77_libs=""
+
+use_cernlib=yes
+. ${tools_mgr}/use_cernlib
+
+# ////////////////////////////////////
+# /// hello_f77.f ////////////////////
+# ////////////////////////////////////
+
+echo "build hello_f77.f ..."
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  ${f77_compiler} ${f77flags} /object=hello_f77.o hello_f77.f
+  eval ${link_cmd} /nologo /entry:mainCRTStartup /out:tools_test_hello_f77.exe hello_f77.o
+else
+  ${f77_compiler} ${f77flags} -c -o hello_f77.o hello_f77.f
+  ${f77_compiler} ${f77flags} -o ./tools_test_hello_f77 hello_f77.o
+fi
+
+# ////////////////////////////////////
+# /// hbook.f ////////////////////////
+# ////////////////////////////////////
+echo "build hbook.f ..."
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  ${f77_compiler} ${f77flags} /object=hbook.o hbook.f
+  eval ${link_cmd} /nologo /entry:mainCRTStartup /out:tools_test_hbook.exe hbook.o ${f77_objs} ${f77_libs}
+else
+  ${f77_compiler} ${f77flags} -c -o hbook.o hbook.f
+  ${f77_compiler} ${f77flags} -o ./tools_test_hbook hbook.o ${f77_objs} ${f77_libs}
+fi
+# ////////////////////////////////////
+# /// minuit.f ///////////////////////
+# ////////////////////////////////////
+echo "build minuit.f ..."
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  ${f77_compiler} ${f77flags} /object=minuit.o minuit.f
+  eval ${link_cmd} /nologo /entry:mainCRTStartup /out:tools_test_minuit.exe minuit.o ${f77_objs} ${f77_libs}
+else
+  ${f77_compiler} ${f77flags} -c -o minuit.o minuit.f
+  ${f77_compiler} ${f77flags} -o ./tools_test_minuit minuit.o ${f77_objs} ${f77_libs}
+fi
+
+# ////////////////////////////////////
+# /// hbooknt.f //////////////////////
+# ////////////////////////////////////
+
+echo "build hbooknt.f ..."
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  ${f77_compiler} ${f77flags} /object=hbooknt.o hbooknt.f
+  eval ${link_cmd} /nologo /entry:mainCRTStartup /out:tools_test_hbooknt.exe hbooknt.o ${f77_objs} ${f77_libs}
+else
+  ${f77_compiler} ${f77flags} -c -o hbooknt.o hbooknt.f
+  ${f77_compiler} ${f77flags} -o ./tools_test_hbooknt hbooknt.o ${f77_objs} ${f77_libs}
+fi
+
+# ////////////////////////////////////
+# /// chbook.cpp /////////////////////
+# ////////////////////////////////////
+echo "build chbook.cpp ..."
+
+if [ -d ../include/tools/hbook ] ; then   # if within G4.
+  if [ ${build_cl_exe} = "yes" ] ; then
+    hbook_dir='..\include\tools\hbook'
+  else
+    hbook_dir='../include/tools/hbook'
+  fi
+else
+  if [ ${build_cl_exe} = "yes" ] ; then
+    hbook_dir='..\..\tools\hbook'
+  else
+    hbook_dir='../../tools/hbook'
+  fi
+fi
+
+cppflags="${cppflags} -I../.."
+cppflags="${cppflags} -I../../../tools"
+
+cppflags="${cppflags} -I../include" # if within G4.
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  ${f77_compiler} ${f77flags} /object=close.o "${hbook_dir}\close.f"
+  ${f77_compiler} ${f77flags} /object=setpawc.o "${hbook_dir}\setpawc.f"
+
+  ${cpp_compiler} /c ${cppflags} /Fochbook.o chbook.cpp
+
+  eval ${link_cmd} /nologo /out:tools_test_chbook.exe chbook.o close.o setpawc.o ${objs} ${libs}
+else
+  ${f77_compiler} ${f77flags} -c -o close.o ${hbook_dir}/close.f
+  ${f77_compiler} ${f77flags} -c -o setpawc.o ${hbook_dir}/setpawc.f
+
+  cppflags="${cppflags} ${G4_cppflags}"
+
+  ${cpp_compiler} -c ${cppflags} -o chbook.o chbook.cpp
+  ${cpp_compiler} ${cppflags} -o ./tools_test_chbook chbook.o close.o setpawc.o ${objs} ${libs}
+fi
+
+# ////////////////////////////////////
+# /// whbook.cpp /////////////////////
+# ////////////////////////////////////
+echo "build whbook.cpp ..."
+
+if [ ${build_cl_exe} = "yes" ] ; then
+  ${f77_compiler} ${f77flags} /object=setntuc.o "${hbook_dir}\setntuc.f"
+
+  ${cpp_compiler} /c ${cppflags} /Fowhbook.o whbook.cpp
+
+  eval ${link_cmd} /nologo /out:tools_test_whbook.exe whbook.o setntuc.o setpawc.o close.o ${objs} ${libs}
+
+else
+  ${f77_compiler} ${f77flags} -c -o setntuc.o ${hbook_dir}/setntuc.f
+  ${cpp_compiler} -c ${cppflags} -o whbook.o whbook.cpp
+  ${cpp_compiler} ${cppflags} -o ./tools_test_whbook whbook.o setntuc.o setpawc.o close.o ${objs} ${libs}
+fi
+
+# ////////////////////////////////////
+# ////////////////////////////////////
+# ////////////////////////////////////
+
+find . -name "*.o" -exec /bin/rm -f {} \;

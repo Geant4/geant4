@@ -1,0 +1,167 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_ntuple
+#define tools_wroot_ntuple
+
+// An ntuple class to write at the ROOT format.
+// It inherits wroot::tree and each column is mapped
+// on a wroot::branch. Each add_row() does a tree::fill().
+
+#include "tree"
+
+#include "../vfind"
+#include "../vmanip"
+#include "../ntuple_booking"
+#include "../sout"
+#include "../scast"
+
+namespace tools {
+namespace wroot {
+
+class ntuple : public tree {
+protected:
+  class icol {
+  public:
+    virtual ~icol(){}
+  public:
+    virtual void* cast(cid) const = 0;
+    virtual cid id_cls() const = 0;
+  public:
+    virtual void add() = 0;
+    virtual const std::string& name() const = 0;
+    virtual void set_basket_size(uint32) = 0;
+  };
+  
+public:
+  template <class T>
+  class column : public virtual icol {
+  public:
+    static cid id_class() {
+      static const T s_v = T(); //do that for T = std::string.
+      return _cid(s_v);
+    }
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void add() {m_leaf->fill(m_tmp);m_tmp = m_def;}
+    virtual const std::string& name() const {return m_leaf->name();}
+    virtual void set_basket_size(uint32 a_size) {
+      m_leaf->branch().set_basket_size(a_size);
+    }
+  public:
+    column(tree& a_tree,const std::string& a_name,const T& a_def)
+    :m_tree(a_tree),m_leaf(0)
+    ,m_def(a_def),m_tmp(a_def)
+    {
+      branch* br = m_tree.create_branch(a_name);
+      m_leaf = br->create_leaf<T>(a_name,a_name);
+    }
+    virtual ~column(){}
+  protected:
+    column(const column& a_from)
+    :icol(a_from)
+    ,m_tree(a_from.m_tree) 
+    ,m_leaf(0)
+    ,m_def(a_from.m_def)
+    ,m_tmp(a_from.m_tmp)    
+    {}
+    column& operator=(const column& a_from){
+      m_leaf = 0;
+      m_def = a_from.m_def;
+      m_tmp = a_from.m_tmp;
+      return *this;
+    }
+  public:
+    bool fill(const T& a_value) {m_tmp = a_value;return true;}
+  protected:
+    tree& m_tree;
+    leaf<T>* m_leaf;
+    T m_def;
+    T m_tmp;
+  };
+
+public:
+  ntuple(idir& a_dir,const std::string& a_name,const std::string& a_title)
+  :tree(a_dir,a_name,a_title){}
+
+  ntuple(idir& a_dir,const ntuple_booking& a_bkg)
+  :tree(a_dir,a_bkg.m_name,a_bkg.m_title){
+    const std::vector<ntuple_booking::col_t>& cols = a_bkg.m_columns;
+    std::vector<ntuple_booking::col_t>::const_iterator it;
+    for(it=cols.begin();it!=cols.end();++it){
+
+      if((*it).second==_cid(char(0))) {
+        create_column<char>((*it).first);
+      } else if((*it).second==_cid(short(0))) {
+        create_column<short>((*it).first);
+      } else if((*it).second==_cid(int(0))) {
+        create_column<int>((*it).first);
+      } else if((*it).second==_cid(float(0))) {
+        create_column<float>((*it).first);
+      } else if((*it).second==_cid(double(0))) {
+        create_column<double>((*it).first);
+
+      // no leaf_store_class() defined for the other types.
+
+      } else {
+        m_out << "tools::wroot::ntuple :"
+              << " for column " << sout((*it).first)
+              << ", type with cid " << (*it).second << " not yet handled."
+              << std::endl;
+        //throw
+        tools::clear<icol>(m_cols);
+        tools::clear<branch>(m_branches);
+        return;
+      }      
+    }
+  }
+
+  virtual ~ntuple() {}
+protected:
+  ntuple(const ntuple& a_from)
+  :iobject(a_from),itree(a_from),tree(a_from)
+  {}
+  ntuple& operator=(const ntuple&){return *this;}
+public:
+  const std::vector<icol*>& columns() const {return m_cols;}
+
+  template <class T>
+  column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    column<T>* col = new column<T>(*this,a_name,a_def);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  column<T>* find_column(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column<T> >(*col);
+  }
+
+  bool add_row() {
+    if(m_cols.empty()) return false;
+   {std::vector<icol*>::iterator it;
+    for(it=m_cols.begin();it!=m_cols.end();++it) (*it)->add();}
+    uint32 n;
+    return tree::fill(n);
+  }
+  void set_basket_size(uint32 a_size) {
+    std::vector<icol*>::iterator it;
+    for(it=m_cols.begin();it!=m_cols.end();++it) {
+      (*it)->set_basket_size(a_size);
+    }
+  }
+protected:
+  std::vector<icol*> m_cols;
+};
+
+}}
+
+#endif

@@ -1,0 +1,93 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_words
+#define tools_words
+
+#include <string>
+#include <vector>
+
+namespace tools {
+
+inline void words(const std::string& a_string,const std::string& a_sep,bool a_take_empty,std::vector<std::string>& a_words){
+  //  If a_sep is for exa "|" and for "xxx||xxx" :
+  //  - a_take_empty false : {"xxx","xxx"} will be created 
+  //    (and NOT {"xxx","","xxx"}).
+  //  - a_take_empty true : {"xxx","","xxx"} will be created.
+  a_words.clear();
+  if(a_string.empty()) return;
+  std::string::size_type lim = (a_take_empty?0:1);
+  if(a_sep.empty()) {
+    a_words.push_back(a_string);
+  } else {
+    std::string::size_type l = a_string.length();
+    std::string::size_type llimiter = a_sep.length();
+    std::string::size_type pos = 0;
+    while(true) {
+      std::string::size_type index = a_string.find(a_sep,pos);
+      if(index==std::string::npos){ // Last word.
+        if((l-pos)>=lim) a_words.push_back(a_string.substr(pos,l-pos));
+        break;
+      } else {
+        //     abcxxxef
+        //     0  3  67
+        if((index-pos)>=lim) a_words.push_back(a_string.substr(pos,index-pos));
+        pos = index + llimiter;
+      }
+    }
+  }
+}
+
+inline std::vector<std::string> words(const std::string& a_string,const std::string& a_limiter,bool a_take_empty = false){
+  std::vector<std::string> v;
+  words(a_string,a_limiter,a_take_empty,v);
+  return v;
+}
+
+inline void words(const std::string& a_string,
+                  const std::string& a_sep,bool a_take_empty,
+                  //output :
+                  unsigned int& a_wn,
+                  std::string::size_type* a_wps,
+                  std::string::size_type* a_wls){
+  //used to optimize inlib::match().
+  a_wn = 0;
+  if(a_string.empty()) return;
+  std::string::size_type lim = (a_take_empty?0:1);
+  if(a_sep.empty()) {
+    //a_words.push_back(a_string);
+    a_wps[a_wn] = 0;
+    a_wls[a_wn] = a_string.length();
+    a_wn++;
+  } else {
+    std::string::size_type l = a_string.length();
+    std::string::size_type llimiter = a_sep.length();
+    std::string::size_type pos = 0;
+    while(true) {
+      std::string::size_type index = a_string.find(a_sep,pos);
+      if(index==std::string::npos){ // Last word.
+        if((l-pos)>=lim) {
+          //a_words.push_back(a_string.substr(pos,l-pos));
+          a_wps[a_wn] = pos;
+          a_wls[a_wn] = l-pos;
+          a_wn++;
+        }
+        break;
+      } else {
+        //     abcxxxef
+        //     0  3  67
+        if((index-pos)>=lim) {
+          //a_words.push_back(a_string.substr(pos,index-pos));
+          a_wps[a_wn] = pos;
+          a_wls[a_wn] = index-pos;
+          a_wn++;
+        }
+        pos = index + llimiter;
+      }
+    }
+  }
+}
+
+}
+
+#endif

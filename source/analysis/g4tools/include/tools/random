@@ -1,0 +1,101 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_random
+#define tools_random
+
+#include <cstdlib>   //::rand, RAND_MAX
+#include <cmath>     //::sqrt, ::log
+
+#include "math"
+
+namespace tools {
+namespace random {
+
+class flat {
+public:
+  double shoot() const {
+    // Shoot random numbers in [0,1] according a flat distribution.
+    double value  = (double)::rand();
+    value /= (double)RAND_MAX;
+    return value;
+  }
+};
+
+class gauss {
+public:
+  gauss(double a_mean = 0,double a_std_dev = 1)
+  :m_mean(a_mean),m_std_dev(a_std_dev){}
+public:
+  gauss(const gauss& a_from)
+  :m_mean(a_from.m_mean),m_std_dev(a_from.m_std_dev){}
+  gauss& operator=(const gauss& a_from) {
+    m_mean = a_from.m_mean;
+    m_std_dev = a_from.m_std_dev;
+    return *this;
+  }
+public:
+  double shoot() const {
+    //  Shoot random numbers according a 
+    // gaussian distribution of mean 0 and sigma 1.
+    double v1,v2,r,fac;
+    do {
+      v1 = 2.0 * m_flat.shoot() - 1.0;
+      v2 = 2.0 * m_flat.shoot() - 1.0;
+      r = v1*v1 + v2*v2;
+    }   while ( r > 1.0 );
+    fac = ::sqrt(-2.0*::log(r)/r);
+    return (v2 * fac) * m_std_dev + m_mean;
+  }
+protected:
+  flat m_flat;
+  double m_mean;
+  double m_std_dev;
+};
+
+class bw {
+public:
+  bw(double a_mean = 0,double a_gamma = 1)
+  :m_mean(a_mean),m_gamma(a_gamma){}
+public:
+  bw(const bw& a_from)
+  :m_mean(a_from.m_mean),m_gamma(a_from.m_gamma){}
+  bw& operator=(const bw& a_from) {
+    m_mean = a_from.m_mean;
+    m_gamma = a_from.m_gamma;
+    return *this;
+  }
+public:
+  double shoot() const {
+    double rval = 2.0 * m_flat.shoot() - 1.0;
+    double displ = 0.5 * m_gamma * ::tan(rval * half_pi());
+    return m_mean + displ;
+  }
+protected:
+  flat m_flat;
+  double m_mean;
+  double m_gamma;
+};
+
+class exp {
+public:
+  exp(double a_rate = 1):m_rate(a_rate){}
+public:
+  exp(const exp& a_from):m_rate(a_from.m_rate){}
+  exp& operator=(const exp& a_from) {m_rate = a_from.m_rate;return *this;}
+public:
+  double shoot() const {
+    double v;
+    do {
+      v = m_flat.shoot();
+    } while(v<=0);
+    return -::log(v)/m_rate;
+  }
+protected:
+  flat m_flat;
+  double m_rate;
+};
+
+}}
+
+#endif

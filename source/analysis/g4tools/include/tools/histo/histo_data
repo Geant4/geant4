@@ -1,0 +1,206 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_histo_histo_data
+#define tools_histo_histo_data
+
+#include <vector>
+#include <map> //for annotations
+
+#include "axis"
+
+namespace tools {
+namespace histo {
+
+//TC is for a coordinate.
+//TN is for a number of entries.
+//TW is for a weight.
+
+template <class TC,class TN,class TW>
+class histo_data {
+public:
+  typedef typename axis<TC>::bn_t bn_t;
+  typedef unsigned int dim_t;
+public:
+  histo_data()
+  :m_dimension(0)
+  ,m_bin_number(0)
+  //,m_mode(0)
+  {}
+public:
+  histo_data(const histo_data& a_from)
+  :m_title(a_from.m_title)
+  ,m_dimension(a_from.m_dimension)
+  ,m_bin_number(a_from.m_bin_number)
+  //,m_mode(a_from.m_mode)
+  // Arrays :
+  ,m_bin_entries(a_from.m_bin_entries)
+  ,m_bin_Sw(a_from.m_bin_Sw)
+  ,m_bin_Sw2(a_from.m_bin_Sw2)
+  ,m_bin_Sxw(a_from.m_bin_Sxw)
+  ,m_bin_Sx2w(a_from.m_bin_Sx2w)
+  ,m_axes(a_from.m_axes)
+  ,m_annotations(a_from.m_annotations)
+  {}
+
+  histo_data& operator=(const histo_data& a_from) {
+    m_title = a_from.m_title;
+    m_dimension = a_from.m_dimension;
+    m_bin_number = a_from.m_bin_number;
+    //m_mode = a_from.m_mode;
+    // Arrays :
+    m_bin_entries = a_from.m_bin_entries;
+    m_bin_Sw = a_from.m_bin_Sw;
+    m_bin_Sw2 = a_from.m_bin_Sw2;
+    m_bin_Sxw = a_from.m_bin_Sxw;
+    m_bin_Sx2w = a_from.m_bin_Sx2w;
+    m_axes = a_from.m_axes;
+    //
+    m_annotations = a_from.m_annotations;
+    return *this;
+  }
+
+  virtual ~histo_data(){}
+public: 
+  void base_reset() { //used in multiply,divide.
+    // Reset content (different of clear that deallocate all internal things).
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      m_bin_entries[ibin] = 0;
+      m_bin_Sw[ibin] = 0;
+      m_bin_Sw2[ibin] = 0;
+      for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+        m_bin_Sxw[ibin][iaxis] = 0;
+        m_bin_Sx2w[ibin][iaxis] = 0;
+      }
+    }
+  }
+
+public:
+  // for BatchLab::Rio::TH::streamTH1 :
+  TN get_entries() const {
+    TN number = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        number += m_bin_entries[ibin];
+      }
+    }
+    return number;
+  }
+  TW get_Sw() const {
+    TW sw = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        sw += m_bin_Sw[ibin];
+      }
+    }
+    return sw;
+  }
+
+  TW get_Sw2() const {
+    TW sw2 = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        sw2 += m_bin_Sw2[ibin];
+      }
+    }
+    return sw2;
+  }
+
+  bool get_ith_axis_Sxw(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=m_dimension) return false;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        a_value += m_bin_Sxw[ibin][a_axis];
+      }
+    }
+    return true;
+  }
+
+  bool get_ith_axis_Sx2w(dim_t a_axis,TC& a_value) const {
+    a_value = 0;
+    if(a_axis>=m_dimension) return false;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      if(!is_out(ibin)) {
+        a_value += m_bin_Sx2w[ibin][a_axis];
+      }
+    }
+    return true;
+  }
+
+  TN get_all_entries() const {
+    TN number = 0;
+    for(bn_t ibin=0;ibin<m_bin_number;ibin++) {
+      number += m_bin_entries[ibin];
+    }
+    return number;
+  }
+
+  bool is_out(bn_t aOffset) const {
+    int offset = aOffset;
+    int index;
+    for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
+      index = offset/m_axes[iaxis].m_offset;
+      if(index==0) return true;
+      if(index==(int(m_axes[iaxis].m_number_of_bins)+1)) return true;
+      offset -= index * m_axes[iaxis].m_offset;
+    }
+    return false;
+  }
+
+  void get_indices(bn_t aOffset,std::vector<int>& aIs) const {
+    int offset = aOffset;
+   {for(int iaxis=m_dimension-1;iaxis>=0;iaxis--) { 
+      aIs[iaxis] = offset/m_axes[iaxis].m_offset;
+      offset -= aIs[iaxis] * m_axes[iaxis].m_offset;
+    }}
+    for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+      if(aIs[iaxis]==0) {
+        aIs[iaxis] = axis<TC>::UNDERFLOW_BIN;
+      } else if(aIs[iaxis]==int(m_axes[iaxis].m_number_of_bins)+1) {
+        aIs[iaxis] = axis<TC>::OVERFLOW_BIN;
+      } else {
+        aIs[iaxis]--;
+      }
+    }
+  }
+
+  // for raxml :
+  bool get_offset(const std::vector<int>& aIs,bn_t& a_offset) const {
+    // aIs[iaxis] is given in in-range indexing :
+    //  - [0,n[iaxis]-1] for in-range bins
+    //  - UNDERFLOW_BIN for the iaxis underflow bin
+    //  - OVERFLOW_BIN for the iaxis overflow bin
+    a_offset = 0;
+    if(!m_dimension) return false;
+    bn_t ibin;
+    for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) { 
+      if(!m_axes[iaxis].in_range_to_absolute_index(aIs[iaxis],ibin)) {
+        a_offset = 0;
+        return false;
+      }
+      a_offset += ibin * m_axes[iaxis].m_offset;
+    }
+    return true;
+  }
+
+public:
+  // General :
+  std::string m_title;
+  dim_t m_dimension;
+  // Bins :
+  bn_t m_bin_number;
+  std::vector<TN> m_bin_entries;
+  std::vector<TW> m_bin_Sw;
+  std::vector<TW> m_bin_Sw2;
+  std::vector< std::vector<TC> > m_bin_Sxw;
+  std::vector< std::vector<TC> > m_bin_Sx2w;
+  // Axes :
+  std::vector< axis<TC> > m_axes;
+  // etc :
+  std::map<std::string,std::string> m_annotations;
+};
+
+}}
+
+#endif

@@ -1,0 +1,718 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_waxml_histos
+#define tools_waxml_histos
+
+#include "../histo/h1d"
+#include "../histo/h2d"
+#include "../histo/h3d"
+#include "../histo/p1d"
+#include "../histo/p2d"
+
+#include "../sout"
+#include "../sto"
+
+namespace tools {
+namespace waxml {
+
+  inline std::string bin_to_string(int a_index) {
+    if(a_index==histo::axis<double>::UNDERFLOW_BIN) {
+      return "UNDERFLOW";
+    } else if(a_index==histo::axis<double>::OVERFLOW_BIN) {
+      return "OVERFLOW";
+    } else {
+      std::ostringstream strm;
+      strm << a_index;
+      return strm.str();
+    }
+  }
+  
+  typedef std::map<std::string,std::string> annotations_t;
+
+  inline void write_annotations(
+   const annotations_t& a_annotations
+  ,std::ostream& a_writer
+  ,int aShift
+  ){
+    if(a_annotations.empty()) return;
+
+    std::string spaces;
+    for(int i=0;i<aShift;i++) spaces += " ";
+  
+    a_writer << spaces << "    <annotation>" << std::endl;
+
+    annotations_t::const_iterator it;
+    for(it=a_annotations.begin();it!=a_annotations.end();++it){
+      a_writer << spaces << "      <item"
+           << " key=" << sout((*it).first)
+           << " value=" << sout((*it).second)
+           << "/>" << std::endl;
+    }
+    a_writer << spaces << "    </annotation>" << std::endl;
+  }
+  
+  inline void write_axis(
+   const histo::axis<double>& aAxis
+  ,const std::string& aDirection
+  ,std::ostream& a_writer
+  ,int aShift
+  ){
+    typedef histo::axis<double>::bn_t bn_t;
+
+    std::string spaces;
+    for(int i=0;i<aShift;i++) spaces += " ";
+  
+    if(aAxis.is_fixed_binning()) {
+      a_writer << spaces << "    <axis"
+           << " direction=" << sout(aDirection) 
+           << " numberOfBins=" << sout<bn_t>(aAxis.bins())
+           << " min=" << soutd(aAxis.lower_edge())
+           << " max=" << soutd(aAxis.upper_edge())
+           << "/>" << std::endl;
+    } else {
+      a_writer << spaces << "    <axis"
+           << " direction=" << sout(aDirection) 
+           << " numberOfBins=" << sout<bn_t>(aAxis.bins())
+           << " min=" << soutd(aAxis.lower_edge())
+           << " max=" << soutd(aAxis.upper_edge())
+           << ">" << std::endl;
+      bn_t number = aAxis.bins()-1;
+      for(bn_t index=0;index<number;index++) {
+        a_writer << spaces << "      <binBorder"
+             << " value=" << soutd(aAxis.bin_upper_edge(index))
+             << "/>" << std::endl;
+      }
+      a_writer << spaces << "    </axis>" << std::endl;
+    }
+  }
+  
+  inline void write_bin(
+   std::ostream& a_writer
+  ,const histo::h1d& aObject
+  ,const std::string& aSpaces
+  ,int aIndex
+  ){
+    unsigned int entries = aObject.bin_entries(aIndex);
+    if(entries) {
+      a_writer << aSpaces << "      <bin1d"
+           << " binNum=" << sout(bin_to_string(aIndex))
+           << " entries=" << sout<unsigned int>(entries)
+           << " height=" << soutd(aObject.bin_height(aIndex))
+           << " error=" << soutd(aObject.bin_error(aIndex));
+  
+      double mean = aObject.bin_mean(aIndex);
+      if(mean!=0) {
+        a_writer << " weightedMean=" << soutd(mean);
+      }
+  
+      double stddev = aObject.bin_rms(aIndex);
+      if(stddev!=0) {
+        a_writer << " weightedRms=" << soutd(stddev);
+      }
+  
+      a_writer << "/>" << std::endl;
+    }
+  }
+  
+  inline void write_bin(
+   std::ostream& a_writer
+  ,const histo::h2d& aObject
+  ,const std::string& aSpaces
+  ,int aIndexX
+  ,int aIndexY
+  ){
+    unsigned int entries = aObject.bin_entries(aIndexX,aIndexY);
+    if(entries) {
+      a_writer << aSpaces << "      <bin2d"
+           << " binNumX=" << sout(bin_to_string(aIndexX))
+           << " binNumY=" << sout(bin_to_string(aIndexY))
+           << " entries=" << sout<unsigned int>(entries)
+           << " height=" << soutd(aObject.bin_height(aIndexX,aIndexY))
+           << " error=" << soutd(aObject.bin_error(aIndexX,aIndexY));
+  
+      double mean_x = aObject.bin_mean_x(aIndexX,aIndexY);
+      if(mean_x!=0) {
+        a_writer << " weightedMeanX=" << soutd(mean_x);
+      }
+      double mean_y = aObject.bin_mean_y(aIndexX,aIndexY);
+      if(mean_y!=0) {
+        a_writer << " weightedMeanY=" << soutd(mean_y);
+      }
+  
+      double stddevX = aObject.bin_rms_x(aIndexX,aIndexY);
+      if(stddevX!=0) {
+        a_writer << " weightedRmsX=" << soutd(stddevX);
+      }
+      double stddevY = aObject.bin_rms_y(aIndexX,aIndexY);
+      if(stddevY!=0) {
+        a_writer << " weightedRmsY=" << soutd(stddevY);
+      }
+  
+      a_writer << "/>" << std::endl;
+    }
+  }
+  
+  inline void write_bin(
+   std::ostream& a_writer
+  ,const histo::h3d& aObject
+  ,const std::string& aSpaces
+  ,int aIndexX
+  ,int aIndexY
+  ,int aIndexZ
+  ){
+    unsigned int entries = aObject.bin_entries(aIndexX,aIndexY,aIndexZ);
+    if(entries) {
+      a_writer << aSpaces << "      <bin3d"
+           << " binNumX=" << sout(bin_to_string(aIndexX))
+           << " binNumY=" << sout(bin_to_string(aIndexY))
+           << " binNumZ=" << sout(bin_to_string(aIndexZ))
+           << " entries=" << sout<unsigned int>(entries)
+           << " height=" << soutd(aObject.bin_height(aIndexX,aIndexY,aIndexZ))
+           << " error=" << soutd(aObject.bin_error(aIndexX,aIndexY,aIndexZ));
+  
+  
+      double mean_x = aObject.bin_mean_x(aIndexX,aIndexY,aIndexZ);
+      if(mean_x!=0) {
+        a_writer << " weightedMeanX=" << soutd(mean_x);
+      }
+      double mean_y = aObject.bin_mean_y(aIndexX,aIndexY,aIndexZ);
+      if(mean_y!=0) {
+        a_writer << " weightedMeanY=" << soutd(mean_y);
+      }
+      double mean_z = aObject.bin_mean_z(aIndexX,aIndexY,aIndexZ);
+      if(mean_y!=0) {
+        a_writer << " weightedMeanZ=" << soutd(mean_z);
+      }
+  
+      double stddevX = aObject.bin_rms_x(aIndexX,aIndexY,aIndexZ);
+      if(stddevX!=0) {
+        a_writer << " weightedRmsX=" << soutd(stddevX);
+      }
+      double stddevY = aObject.bin_rms_y(aIndexX,aIndexY,aIndexZ);
+      if(stddevY!=0) {
+        a_writer << " weightedRmsY=" << soutd(stddevY);
+      }
+      double stddevZ = aObject.bin_rms_z(aIndexX,aIndexY,aIndexZ);
+      if(stddevZ!=0) {
+        a_writer << " weightedRmsZ=" << soutd(stddevZ);
+      }
+  
+      a_writer << "/>" << std::endl;
+    }
+  }
+  
+  inline void write_bin(
+   std::ostream& a_writer
+  ,const histo::p1d& aObject
+  ,const std::string& aSpaces
+  ,int aIndex
+  ){
+    if(aObject.bin_entries(aIndex)) {
+      a_writer << aSpaces << "      <bin1d"
+           << " binNum=" << sout(bin_to_string(aIndex))
+           << " entries=" << sout<unsigned int>(aObject.bin_entries(aIndex))
+           << " height=" << soutd(aObject.bin_height(aIndex))
+           << " error=" << soutd(aObject.bin_error(aIndex))
+           << " weightedMean=" << soutd(aObject.bin_mean(aIndex));
+  
+      double stddev = aObject.bin_rms(aIndex);
+      if(stddev!=0) {
+        a_writer << " weightedRms=" << soutd(stddev);
+      }
+  
+      a_writer << " rms=" << soutd(aObject.bin_rms_value(aIndex));
+      a_writer << "/>" << std::endl;
+    }
+  }
+  
+  inline void write_bin(
+   std::ostream& a_writer
+  ,const histo::p2d& aObject
+  ,const std::string& aSpaces
+  ,int aIndexX
+  ,int aIndexY
+  ){
+    if(aObject.bin_entries(aIndexX,aIndexY)) {
+      a_writer << aSpaces << "      <bin2d"
+           << " binNumX=" << sout(bin_to_string(aIndexX))
+           << " binNumY=" << sout(bin_to_string(aIndexY))
+           << " entries=" << sout<unsigned int>(aObject.bin_entries(aIndexX,aIndexY))
+           << " height=" << soutd(aObject.bin_height(aIndexX,aIndexY))
+           << " error=" << soutd(aObject.bin_error(aIndexX,aIndexY))
+           << " weightedMeanX=" << soutd(aObject.bin_mean_x(aIndexX,aIndexY))
+           << " weightedMeanY=" << soutd(aObject.bin_mean_y(aIndexX,aIndexY));
+  
+      double stddevX = aObject.bin_rms_x(aIndexX,aIndexY);
+      if(stddevX!=0) {
+        a_writer << " weightedRmsX=" << soutd(stddevX);
+      }
+      double stddevY = aObject.bin_rms_y(aIndexX,aIndexY);
+      if(stddevY!=0) {
+        a_writer << " weightedRmsY=" << soutd(stddevY);
+      }
+  
+      a_writer << " rms=" << soutd(aObject.bin_rms_value(aIndexX,aIndexY));
+      a_writer << "/>" << std::endl;
+    }
+  }
+
+  inline bool write(
+   std::ostream& a_writer
+  ,const histo::h1d& aObject
+  ,const std::string& aPath
+  ,const std::string& aName
+  ,int aShift = 0
+  ){
+    typedef histo::axis<double>::bn_t bn_t;
+
+    std::ostream& writer = a_writer;
+  
+    std::string spaces;
+    for(int i=0;i<aShift;i++) spaces += " ";
+  
+    // <histogram1d> :
+    writer << spaces << "  <histogram1d"
+         << " path=" << sout(aPath)
+         << " name=" << sout(aName)
+         << " title=" << sout(aObject.title())
+         << ">" << std::endl;
+  
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
+  
+    // <axis> :
+    write_axis(aObject.axis(),"x",writer,aShift);
+  
+    // <statistics> : 
+    writer << spaces << "    <statistics"
+           << " entries=" << sout<unsigned int>(aObject.entries())
+           << ">" << std::endl;
+    writer << spaces << "      <statistic"
+         << " direction=" << sout("x") 
+         << " mean=" << soutd(aObject.mean()) 
+         << " rms=" << soutd(aObject.rms())
+         << "/>" << std::endl;
+    writer << spaces << "    </statistics>" << std::endl;
+    
+    // bins :
+    writer << spaces << "    <data1d>" << std::endl;
+  
+    bn_t xbins = aObject.axis().bins();
+    for(bn_t index=0;index<xbins;index++)
+      write_bin(writer,aObject,spaces,index);
+  
+    write_bin(writer,aObject,spaces,histo::axis<double>::UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,histo::axis<double>::OVERFLOW_BIN);
+  
+    writer << spaces << "    </data1d>" << std::endl;
+    writer << spaces << "  </histogram1d>" << std::endl;
+  
+    return true;  
+  }
+  
+  inline bool write(
+   std::ostream& a_writer
+  ,const histo::h2d& aObject
+  ,const std::string& aPath
+  ,const std::string& aName
+  ,int aShift = 0
+  ){
+    typedef histo::axis<double>::bn_t bn_t;
+
+    std::ostream& writer = a_writer;
+  
+    std::string spaces;
+    for(int i=0;i<aShift;i++) spaces += " ";
+
+    // <histogram2d> :
+    writer << spaces << "  <histogram2d"
+         << " path=" << sout(aPath)
+         << " name=" << sout(aName)
+         << " title=" << sout(aObject.title())
+         << ">" << std::endl;
+  
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
+  
+    // <axis> :
+    write_axis(aObject.axis_x(),"x",writer,aShift);
+    write_axis(aObject.axis_y(),"y",writer,aShift);
+  
+    // <statistics> : 
+    writer << spaces << "    <statistics"
+         << " entries=" << sout<unsigned int>(aObject.entries())
+         << ">" << std::endl;
+    writer << spaces << "      <statistic"
+         << " direction=" << sout("x")
+         << " mean=" << soutd(aObject.mean_x())
+         << " rms=" << soutd(aObject.rms_x()) 
+         << "/>" << std::endl;
+    writer << spaces << "      <statistic"
+         << " direction=" << sout("y")
+         << " mean=" << soutd(aObject.mean_y())
+         << " rms=" << soutd(aObject.rms_y()) 
+         << "/>" << std::endl;
+    writer << spaces << "    </statistics>" << std::endl;
+    
+    // bins :
+    writer << spaces << "    <data2d>" << std::endl;
+  
+    bn_t xbins = aObject.axis_x().bins();
+    bn_t ybins = aObject.axis_y().bins();
+    bn_t indexX,indexY;
+    for(indexX=0;indexX<xbins;indexX++) {
+      for(indexY=0;indexY<ybins;indexY++) {
+        write_bin(writer,aObject,spaces,indexX,indexY);
+      }
+    }
+    
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::UNDERFLOW_BIN,histo::axis<double>::UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::OVERFLOW_BIN,histo::axis<double>::UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::UNDERFLOW_BIN,histo::axis<double>::OVERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::OVERFLOW_BIN,histo::axis<double>::OVERFLOW_BIN);
+  
+    for(indexX=0;indexX<xbins;indexX++){
+      write_bin(writer,aObject,spaces,indexX,histo::axis<double>::UNDERFLOW_BIN);
+      write_bin(writer,aObject,spaces,indexX,histo::axis<double>::OVERFLOW_BIN);
+    }
+  
+    for(indexY=0;indexY<ybins;indexY++){
+      write_bin(writer,aObject,spaces,histo::axis<double>::UNDERFLOW_BIN,indexY);
+      write_bin(writer,aObject,spaces,histo::axis<double>::OVERFLOW_BIN,indexY);
+    }
+  
+    writer << spaces << "    </data2d>" << std::endl;
+    writer << spaces << "  </histogram2d>" << std::endl;
+  
+    return true;
+  }
+  
+  inline bool write(
+   std::ostream& a_writer
+  ,const histo::h3d& aObject
+  ,const std::string& aPath
+  ,const std::string& aName
+  ,int aShift = 0
+  ){
+    typedef histo::axis<double>::bn_t bn_t;
+    std::ostream& writer = a_writer;
+  
+    std::string spaces;
+    for(int i=0;i<aShift;i++) spaces += " ";
+  
+    // <histogram3d> :
+    writer << spaces << "  <histogram3d"
+         << " path=" << sout(aPath)
+         << " name=" << sout(aName)
+         << " title=" << sout(aObject.title())
+         << ">" << std::endl;
+  
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
+
+    // <axis> :
+    write_axis(aObject.axis_x(),"x",writer,aShift);
+    write_axis(aObject.axis_y(),"y",writer,aShift);
+    write_axis(aObject.axis_z(),"z",writer,aShift);
+  
+    // <statistics> : 
+    writer << spaces << "    <statistics"
+         << " entries=" << sout<unsigned int>(aObject.entries())
+         << ">" << std::endl;
+    writer << spaces << "      <statistic"
+         << " direction=" << sout("x")
+         << " mean=" << soutd(aObject.mean_x())
+         << " rms=" << soutd(aObject.rms_x())
+         << "/>" << std::endl;
+    writer << spaces << "      <statistic"
+         << " direction=" << sout("y")
+         << " mean=" << soutd(aObject.mean_y())
+         << " rms=" << soutd(aObject.rms_y())
+         << "/>" << std::endl;
+    writer << spaces << "      <statistic"
+         << " direction=" << sout("z")
+         << " mean=" << soutd(aObject.mean_z())
+         << " rms=" << soutd(aObject.rms_z())
+         << "/>" << std::endl;
+    writer << spaces << "    </statistics>" << std::endl;
+    
+    // bins :
+    writer << spaces << "    <data3d>" << std::endl;
+    bn_t xbins = aObject.axis_x().bins();
+    bn_t ybins = aObject.axis_y().bins();
+    bn_t zbins = aObject.axis_z().bins();
+    bn_t indexX,indexY,indexZ;
+    for(indexX=0;indexX<xbins;indexX++) {
+      for(indexY=0;indexY<ybins;indexY++) {
+        for(indexZ=0;indexZ<zbins;indexZ++) {
+          write_bin(writer,aObject,spaces,indexX,indexY,indexZ);
+        }
+      }
+    }
+  
+    // Corners :
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::UNDERFLOW_BIN,
+                      histo::axis<double>::UNDERFLOW_BIN,
+                      histo::axis<double>::UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::OVERFLOW_BIN,
+                      histo::axis<double>::UNDERFLOW_BIN,
+                      histo::axis<double>::UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::UNDERFLOW_BIN,
+                      histo::axis<double>::OVERFLOW_BIN,
+                      histo::axis<double>::UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::OVERFLOW_BIN,
+                      histo::axis<double>::OVERFLOW_BIN,
+                      histo::axis<double>::UNDERFLOW_BIN);
+    
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::UNDERFLOW_BIN,
+                      histo::axis<double>::UNDERFLOW_BIN,
+                      histo::axis<double>::OVERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::OVERFLOW_BIN,
+                      histo::axis<double>::UNDERFLOW_BIN,
+                      histo::axis<double>::OVERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::UNDERFLOW_BIN,
+                      histo::axis<double>::OVERFLOW_BIN,
+                      histo::axis<double>::OVERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::OVERFLOW_BIN,
+                      histo::axis<double>::OVERFLOW_BIN,
+                      histo::axis<double>::OVERFLOW_BIN);
+  
+  
+    // Edges :
+    for(indexX=0;indexX<xbins;indexX++){
+      write_bin(writer,aObject,spaces,
+                        indexX,
+                        histo::axis<double>::UNDERFLOW_BIN,
+                        histo::axis<double>::UNDERFLOW_BIN);
+      write_bin(writer,aObject,spaces,
+                        indexX,
+                        histo::axis<double>::OVERFLOW_BIN,
+                        histo::axis<double>::UNDERFLOW_BIN);
+      write_bin(writer,aObject,spaces,
+                        indexX,
+                        histo::axis<double>::UNDERFLOW_BIN,
+                        histo::axis<double>::OVERFLOW_BIN);
+      write_bin(writer,aObject,spaces,
+                        indexX,
+                        histo::axis<double>::OVERFLOW_BIN,
+                        histo::axis<double>::OVERFLOW_BIN);
+    }
+  
+    for(indexY=0;indexY<ybins;indexY++){
+      write_bin(writer,aObject,spaces,
+                        histo::axis<double>::UNDERFLOW_BIN,
+                        indexY,
+                        histo::axis<double>::UNDERFLOW_BIN);
+      write_bin(writer,aObject,spaces,
+                        histo::axis<double>::OVERFLOW_BIN,
+                        indexY,
+                        histo::axis<double>::UNDERFLOW_BIN);
+      write_bin(writer,aObject,spaces,
+                        histo::axis<double>::UNDERFLOW_BIN,
+                        indexY,
+                        histo::axis<double>::OVERFLOW_BIN);
+      write_bin(writer,aObject,spaces,
+                        histo::axis<double>::OVERFLOW_BIN,
+                        indexY,
+                        histo::axis<double>::OVERFLOW_BIN);
+    }
+  
+    for(indexZ=0;indexZ<zbins;indexZ++){
+      write_bin(writer,aObject,spaces,
+                        histo::axis<double>::UNDERFLOW_BIN,
+                        histo::axis<double>::UNDERFLOW_BIN,
+                        indexZ);
+      write_bin(writer,aObject,spaces,
+                        histo::axis<double>::OVERFLOW_BIN,
+                        histo::axis<double>::UNDERFLOW_BIN,
+                        indexZ);
+      write_bin(writer,aObject,spaces,
+                        histo::axis<double>::UNDERFLOW_BIN,
+                        histo::axis<double>::OVERFLOW_BIN,
+                        indexZ);
+      write_bin(writer,aObject,spaces,
+                        histo::axis<double>::OVERFLOW_BIN,
+                        histo::axis<double>::OVERFLOW_BIN,
+                        indexZ);
+    }
+  
+  
+    // Faces :
+    for(indexX=0;indexX<xbins;indexX++) {
+      for(indexY=0;indexY<ybins;indexY++) {
+        write_bin(writer,aObject,spaces,
+                          indexX,indexY,histo::axis<double>::UNDERFLOW_BIN);
+        write_bin(writer,aObject,spaces,
+                          indexX,indexY,histo::axis<double>::OVERFLOW_BIN);
+      }
+    }
+    for(indexY=0;indexY<ybins;indexY++) {
+      for(indexZ=0;indexZ<zbins;indexZ++) {
+        write_bin(writer,aObject,spaces,
+                          histo::axis<double>::UNDERFLOW_BIN,indexY,indexZ);
+        write_bin(writer,aObject,spaces,
+                          histo::axis<double>::OVERFLOW_BIN,indexY,indexZ);
+      }
+    }
+    for(indexX=0;indexX<xbins;indexX++) {
+      for(indexZ=0;indexZ<zbins;indexZ++) {
+        write_bin(writer,aObject,spaces,
+                          indexX,histo::axis<double>::UNDERFLOW_BIN,indexZ);
+        write_bin(writer,aObject,spaces,
+                          indexX,histo::axis<double>::OVERFLOW_BIN,indexZ);
+      }
+    }
+  
+    writer << spaces << "    </data3d>" << std::endl;
+    writer << spaces << "  </histogram3d>" << std::endl;
+  
+    return true;
+  }
+  
+  inline bool write(
+   std::ostream& a_writer
+  ,const histo::p1d& aObject
+  ,const std::string& aPath
+  ,const std::string& aName
+  ,int aShift = 0
+  ){
+    typedef histo::axis<double>::bn_t bn_t;
+    std::ostream& writer = a_writer;
+  
+    std::string spaces;
+    for(int i=0;i<aShift;i++) spaces += " ";
+  
+    // <profile1d> :
+    writer << spaces << "  <profile1d"
+         << " path=" << sout(aPath)
+         << " name=" << sout(aName)
+         << " title=" << sout(aObject.title())
+         << ">" << std::endl;
+  
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
+
+    // <axis> :
+    write_axis(aObject.axis(),"x",writer,aShift);
+  
+    // <statistics> : 
+    writer << spaces << "    <statistics"
+  	 << " entries=" << sout<unsigned int>(aObject.entries())
+           << ">" << std::endl;
+    writer << spaces << "      <statistic"
+         << " direction=" << sout("x") 
+         << " mean=" << soutd(aObject.mean())
+         << " rms=" << soutd(aObject.rms())
+         << "/>" << std::endl;
+    writer << spaces << "    </statistics>" << std::endl;
+          
+    // bins :
+    writer << spaces << "    <data1d>" << std::endl;
+    bn_t xbins = aObject.axis().bins();
+    for(bn_t index=0;index<xbins;index++) {
+      write_bin(writer,aObject,spaces,index);
+    }
+  
+    write_bin(writer,aObject,spaces,histo::axis<double>::UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,histo::axis<double>::OVERFLOW_BIN);
+    
+    writer << spaces << "    </data1d>" << std::endl;
+    writer << spaces << "  </profile1d>" << std::endl;
+  
+    return true;
+  }
+  
+  inline bool write(
+   std::ostream& a_writer
+  ,const histo::p2d& aObject
+  ,const std::string& aPath
+  ,const std::string& aName
+  ,int aShift = 0
+  ){
+    typedef histo::axis<double>::bn_t bn_t;
+    std::ostream& writer = a_writer;
+  
+    std::string spaces;
+    for(int i=0;i<aShift;i++) spaces += " ";
+  
+    // <profile2d> :
+    writer << spaces << "  <profile2d"
+         << " path=" << sout(aPath)
+         << " name=" << sout(aName)
+         << " title=" << sout(aObject.title())
+         << ">" << std::endl;
+  
+    // <annotations> :
+    write_annotations(aObject.annotations(),writer,aShift);
+
+    // <axis> :
+    write_axis(aObject.axis_x(),"x",writer,aShift);
+    write_axis(aObject.axis_y(),"y",writer,aShift);
+    
+    // <statistics> : 
+    writer << spaces << "    <statistics"
+  	 << " entries=" << sout<unsigned int>(aObject.entries())
+           << ">" << std::endl;
+    writer << spaces << "      <statistic"
+         << " direction=" << sout("x")
+         << " mean=" << soutd(aObject.mean_x())
+         << " rms=" << soutd(aObject.rms_x())
+         << "/>" << std::endl;
+    writer << spaces << "      <statistic"
+         << " direction=" << sout("y")
+         << " mean=" << soutd(aObject.mean_y())
+         << " rms=" << soutd(aObject.rms_y())
+         << "/>" << std::endl;
+    writer << spaces << "    </statistics>" << std::endl;
+    
+    // bins :
+    writer << spaces << "    <data2d>" << std::endl;
+   {bn_t xbins = aObject.axis_x().bins();
+    bn_t ybins = aObject.axis_y().bins();
+    for(bn_t indexX=0;indexX<xbins;indexX++) {
+      for(bn_t indexY=0;indexY<ybins;indexY++) {
+        write_bin(writer,aObject,spaces,indexX,indexY);
+      }
+    }}
+    
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::UNDERFLOW_BIN,histo::axis<double>::UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::OVERFLOW_BIN,histo::axis<double>::UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::UNDERFLOW_BIN,histo::axis<double>::OVERFLOW_BIN);
+    write_bin(writer,aObject,spaces,
+                      histo::axis<double>::OVERFLOW_BIN,histo::axis<double>::OVERFLOW_BIN);
+  
+    for(bn_t indexX=0;indexX<aObject.axis_x().bins();indexX++){
+      write_bin(writer,aObject,spaces,indexX,histo::axis<double>::UNDERFLOW_BIN);
+      write_bin(writer,aObject,spaces,indexX,histo::axis<double>::OVERFLOW_BIN);
+    }
+  
+    for(bn_t indexY=0;indexY<aObject.axis_y().bins();indexY++){
+      write_bin(writer,aObject,spaces,histo::axis<double>::UNDERFLOW_BIN,indexY);
+      write_bin(writer,aObject,spaces,histo::axis<double>::OVERFLOW_BIN,indexY);
+    }
+  
+    writer << spaces << "    </data2d>" << std::endl;
+    writer << spaces << "  </profile2d>" << std::endl;
+  
+    return true;
+  }
+    
+}}
+
+#endif

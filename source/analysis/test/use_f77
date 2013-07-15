@@ -1,0 +1,30 @@
+
+# really want to use that ? :-)
+
+f77flags=
+f77_compiler=gfortran
+
+if [ "`uname | grep CYGWIN`" != "" ] ; then
+  f77_compiler=F77.EXE
+  f77flags="/nologo /compile_only"
+fi
+
+if [ "`uname -n | grep lal.in2p3.fr | grep lx`" != "" ] ; then
+  f77_compiler=g77
+  # tools/examples/cpp/hbook.f does not compile with gfortran
+fi
+if [ "`uname -n | grep lal.in2p3.fr | grep nemo`" != "" ] ; then
+  f77_compiler=g77
+fi
+if [ "`uname -n`" = pc-89182.lal.in2p3.fr ] ; then
+  f77_compiler=g77
+fi
+
+if [ "${f77_compiler}" = "g77" ] ; then
+  ${tools_mgr}/check_app g77 'g77 not found.'
+  use_status=$?;if [ ${use_status} != 0 ] ; then exit ${use_status};fi
+fi
+if [ "${f77_compiler}" = "gfortran" ] ; then
+  ${tools_mgr}/check_app gfortran 'gfortran not found.'
+  use_status=$?;if [ ${use_status} != 0 ] ; then exit ${use_status};fi
+fi
