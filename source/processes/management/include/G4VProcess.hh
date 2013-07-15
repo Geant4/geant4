@@ -367,6 +367,20 @@ class G4VProcess
  protected:
    G4int verboseLevel;
    // controle flag for output message
+    
+private:
+    G4VProcess* masterProcessShadow;
+    //For multi-threaded: poitner to the instance of this process
+    // for the master thread
+public:
+    void SetMasterProcess( G4VProcess* masterP);
+    // Sets the master thread process instance
+    const G4VProcess* GetMasterProcess() const;
+    // Returns the master thread process instnace
+    // Can be used to initialize worker type processes
+    // instances from master one (e.g. to share a physics table)
+    // if ( this != GetMasterProcess() ) { /*worker*/ }
+    // else { /* master or sequential */ }
 
 };
 
@@ -505,4 +519,15 @@ inline
   return enablePostStepDoIt;
 }
 
+inline
+ void G4VProcess::SetMasterProcess( G4VProcess* masterP)
+{
+    masterProcessShadow = masterP;
+}
+
+inline
+const G4VProcess* G4VProcess::GetMasterProcess() const
+{
+    return masterProcessShadow;
+}
 #endif

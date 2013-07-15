@@ -61,7 +61,8 @@ G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
                     enableAtRestDoIt(true),
                     enableAlongStepDoIt(true),
                     enablePostStepDoIt(true),
-                    verboseLevel(0)
+                    verboseLevel(0),
+                    masterProcessShadow(0)
 
 {
   pParticleChange = &aParticleChange;
@@ -84,7 +85,8 @@ G4VProcess::G4VProcess(const G4VProcess& right)
             enableAtRestDoIt(right.enableAtRestDoIt),
             enableAlongStepDoIt(right.enableAlongStepDoIt),
             enablePostStepDoIt(right.enablePostStepDoIt),
-            verboseLevel(right.verboseLevel)
+            verboseLevel(right.verboseLevel),
+            masterProcessShadow(right.masterProcessShadow)
 {
 }
 
@@ -149,17 +151,17 @@ void G4VProcess::EndTracking()
 
 const G4String& G4VProcess::GetProcessTypeName(G4ProcessType aType ) 
 {
-  static G4ThreadLocal G4String *typeNotDefined_G4MT_TLS_ = 0 ; if (!typeNotDefined_G4MT_TLS_) {typeNotDefined_G4MT_TLS_ = new  G4String  ; *typeNotDefined_G4MT_TLS_= "NotDefined" ; }  G4String &typeNotDefined = *typeNotDefined_G4MT_TLS_;
-  static G4ThreadLocal G4String *typeTransportation_G4MT_TLS_ = 0 ; if (!typeTransportation_G4MT_TLS_) {typeTransportation_G4MT_TLS_ = new  G4String  ; *typeTransportation_G4MT_TLS_= "Transportation" ; }  G4String &typeTransportation = *typeTransportation_G4MT_TLS_;
-  static G4ThreadLocal G4String *typeElectromagnetic_G4MT_TLS_ = 0 ; if (!typeElectromagnetic_G4MT_TLS_) {typeElectromagnetic_G4MT_TLS_ = new  G4String  ; *typeElectromagnetic_G4MT_TLS_= "Electromagnetic" ; }  G4String &typeElectromagnetic = *typeElectromagnetic_G4MT_TLS_;
-  static G4ThreadLocal G4String *typeOptical_G4MT_TLS_ = 0 ; if (!typeOptical_G4MT_TLS_) {typeOptical_G4MT_TLS_ = new  G4String  ; *typeOptical_G4MT_TLS_= "Optical" ; }  G4String &typeOptical = *typeOptical_G4MT_TLS_;
-  static G4ThreadLocal G4String *typeHadronic_G4MT_TLS_ = 0 ; if (!typeHadronic_G4MT_TLS_) {typeHadronic_G4MT_TLS_ = new  G4String  ; *typeHadronic_G4MT_TLS_= "Hadronic" ; }  G4String &typeHadronic = *typeHadronic_G4MT_TLS_;
-  static G4ThreadLocal G4String *typePhotolepton_hadron_G4MT_TLS_ = 0 ; if (!typePhotolepton_hadron_G4MT_TLS_) {typePhotolepton_hadron_G4MT_TLS_ = new  G4String  ; *typePhotolepton_hadron_G4MT_TLS_= "Photolepton_hadron" ; }  G4String &typePhotolepton_hadron = *typePhotolepton_hadron_G4MT_TLS_;
-  static G4ThreadLocal G4String *typeDecay_G4MT_TLS_ = 0 ; if (!typeDecay_G4MT_TLS_) {typeDecay_G4MT_TLS_ = new  G4String  ; *typeDecay_G4MT_TLS_= "Decay" ; }  G4String &typeDecay = *typeDecay_G4MT_TLS_;
-  static G4ThreadLocal G4String *typeGeneral_G4MT_TLS_ = 0 ; if (!typeGeneral_G4MT_TLS_) {typeGeneral_G4MT_TLS_ = new  G4String  ; *typeGeneral_G4MT_TLS_= "General" ; }  G4String &typeGeneral = *typeGeneral_G4MT_TLS_;
-  static G4ThreadLocal G4String *typeParameterisation_G4MT_TLS_ = 0 ; if (!typeParameterisation_G4MT_TLS_) {typeParameterisation_G4MT_TLS_ = new  G4String  ; *typeParameterisation_G4MT_TLS_= "Parameterisation" ; }  G4String &typeParameterisation = *typeParameterisation_G4MT_TLS_;
-  static G4ThreadLocal G4String *typeUserDefined_G4MT_TLS_ = 0 ; if (!typeUserDefined_G4MT_TLS_) {typeUserDefined_G4MT_TLS_ = new  G4String  ; *typeUserDefined_G4MT_TLS_= "UserDefined" ; }  G4String &typeUserDefined = *typeUserDefined_G4MT_TLS_;
-  static G4ThreadLocal G4String *noType_G4MT_TLS_ = 0 ; if (!noType_G4MT_TLS_) {noType_G4MT_TLS_ = new  G4String  ; *noType_G4MT_TLS_= "------" ; }  G4String &noType = *noType_G4MT_TLS_;   // Do not modify this !!!!
+  static const G4String typeNotDefined = "NotDefined";
+  static const G4String typeTransportation = "Transportation";
+  static const G4String typeElectromagnetic = "Electromagnetic";
+  static const G4String typeOptical = "Optical";
+  static const G4String typeHadronic = "Hadronic";
+  static const G4String typePhotolepton_hadron = "Photolepton_hadron";
+  static const G4String typeDecay = "Decay";
+  static const G4String typeGeneral = "General";
+  static const G4String typeParameterisation = "Parameterisation";
+  static const G4String typeUserDefined = "UserDefined";
+  static const G4String noType = "------";
 
   if (aType ==   fNotDefined) {
     return  typeNotDefined;

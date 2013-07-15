@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Jul. 15th, 2013    A.Dotti (procman-V09-06-01)
+- Adding shadow master-thread pointer to G4VProcess and
+  setter and getter methods. Needed for a general design 
+  of sharing  of tables (EM & HAD) for MT
+
 - Jun. 12th, 2013    G.Cosmo (procman-V09-06-00)
 - Corrected name for G4Upsilon meson.
 
