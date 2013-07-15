@@ -53,7 +53,7 @@
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
-//
+
 #include <vector>
 #include <map>
 #include <CLHEP/Units/SystemOfUnits.h>
@@ -75,7 +75,7 @@ class G4RadioactiveDecaymessenger;
 
 typedef std::vector<G4RadioactiveDecayRateVector> G4RadioactiveDecayRateTable;
 typedef std::vector<G4RadioactiveDecayRate> G4RadioactiveDecayRates;
-
+typedef std::map<G4String, G4DecayTable*> DecayTableMap;
 
 class G4RadioactiveDecay : public G4VRestDiscreteProcess 
 {
@@ -94,40 +94,40 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4RadioactiveDecay(const G4String& processName="RadioactiveDecay");
     ~G4RadioactiveDecay();
 
-    G4bool IsApplicable(const G4ParticleDefinition&);
-    // Returns true if the specified isotope is
+    // Return true if the specified isotope is
     //  1) defined as "nucleus" and
     //  2) it is within theNucleusLimit
+    G4bool IsApplicable(const G4ParticleDefinition&);
 
-    G4bool IsLoaded(const G4ParticleDefinition &);
-    // Returns true if the decay table of the specified nucleus is ready
+    // Return decay table if it exists, if not, load it from file
+    G4DecayTable* GetDecayTable(G4ParticleDefinition*);
 
-    void SelectAVolume(const G4String aVolume);
     // Select a logical volume in which RDM applies
+    void SelectAVolume(const G4String aVolume);
 
+    // Remove a logical volume from the RDM applied list
     void DeselectAVolume(const G4String aVolume);
-    // remove a logical volume from the RDM applied list
 
-    void SelectAllVolumes();
     // Select all logical volumes for the application of RDM
+    void SelectAllVolumes();
 
-    void DeselectAllVolumes();
     // Remove all logical volumes from RDM applications
+    void DeselectAllVolumes();
 
-    void SetDecayBias (G4String filename);
-    // Sets the decay biasing scheme using the data in "filename"
+    // Set the decay biasing scheme using the data in "filename"
+    void SetDecayBias(G4String filename);
 
-    void SetHLThreshold (G4double hl) {halflifethreshold = hl;}
     // Set the half-life threshold for isomer production
+    void SetHLThreshold(G4double hl) {halflifethreshold = hl;}
 
-    void SetICM (G4bool icm) {applyICM = icm;}
-    // Enable/disable ICM 
+    // Enable/disable ICM
+    void SetICM(G4bool icm) {applyICM = icm;} 
 
-    void SetARM (G4bool arm) {applyARM = arm;}
     // Enable/disable ARM
+    void SetARM(G4bool arm) {applyARM = arm;}
 
-    void SetSourceTimeProfile (G4String filename) ;
-    // Sets source exposure function using histograms in "filename"
+    // Set source exposure function using histograms in "filename"
+    void SetSourceTimeProfile(G4String filename);
 
     G4bool IsRateTableReady(const G4ParticleDefinition &);
     // Returns true if the coefficient and decay time table for all the
@@ -155,11 +155,11 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
        {return theRadioactivityTables;}
     // Return vector of G4Radioactivity map - should be used in VR mode only
 
-    G4DecayTable *LoadDecayTable (G4ParticleDefinition & theParentNucleus);
+    G4DecayTable* LoadDecayTable(G4ParticleDefinition& theParentNucleus);
     // Load the decay data of isotope theParentNucleus
 
     void AddUserDecayDataFile(G4int Z, G4int A,G4String filename);
-    //Allow the user to replace the radio-active decay data provided in Geant4
+    // Allow the user to replace the radio-active decay data provided in Geant4
     // by its own data file for a given isotope
 
 
@@ -291,7 +291,6 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4double DBin[100];
     G4double DProfile[100];
 
-    std::vector<G4String> LoadedNuclei;
     std::vector<G4String> ValidVolumes;
     bool isAllVolumesMode;
 
@@ -308,6 +307,8 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     //User define radioactive decay data files replacing some files in the G4RADECAY database
     std::map<G4int, G4String> theUserRadioactiveDataFiles;
 
+    // Library of decay tables
+    DecayTableMap dkmap;
 
     // Remainder of life time at rest
     G4double fRemainderLifeTime;

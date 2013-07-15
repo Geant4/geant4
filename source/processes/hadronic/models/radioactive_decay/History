@@ -14,6 +14,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+12 July 2013  Dennis Wright  radioactive_decay-V09-06-09
+--------------------------------------------------------
+- G4RadioactiveDecay:
+    to accommodate multi-threading remove the setting of nuclear decay tables
+    to G4ParticleDefinition and replace with local decay table map
+    
+    remove IsLoaded() method and data member LoadedNuclei which are now
+    redundant due to above changes
+ 
 20 June 2013  Andrea Dotti   radioactive_decay-V09-06-08
 --------------------------------------------------------
 - G4RIsotopeTable.cc : fix bug in checking if DB files have 
