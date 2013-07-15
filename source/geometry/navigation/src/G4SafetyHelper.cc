@@ -44,8 +44,8 @@ G4SafetyHelper::G4SafetyHelper()
    fFirstCall(true),
    fVerbose(0), 
    fLastSafetyPosition(0.0,0.0,0.0),
-   fLastSafety(0.0),
-   fRecomputeFactor(0.0)
+   fLastSafety(0.0)
+   // fRecomputeFactor(0.0)
 {
   fpPathFinder= 0; //  Cannot initialise this yet - a loop results
 
@@ -119,34 +119,33 @@ G4double G4SafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double 
   // is  *not* the safety location and has moved 'significantly'
   //
   G4double moveLengthSq = (position-fLastSafetyPosition).mag2();
-  G4double safeDistance = fRecomputeFactor*fLastSafety; 
-  if(   (moveLengthSq > 0.0 )
-     && (moveLengthSq >= safeDistance*safeDistance))    
+  if(   (moveLengthSq > 0.0 ) )
   {
-    fLastSafetyPosition = position;
- 
     if( !fUseParallelGeometries )
     {
       // Safety for mass geometry
-      fLastSafety = fpMassNavigator->ComputeSafety(position, maxLength, true);
+      newSafety = fpMassNavigator->ComputeSafety(position, maxLength, true);
     }
     else
     {
       // Safety for all geometries
-      fLastSafety = fpPathFinder->ComputeSafety(position); 
+      newSafety = fpPathFinder->ComputeSafety(position); 
     } 
-    newSafety = fLastSafety;
+ 
+    // We can only store a 'true' safety - one that was not restricted by maxLength
+    if( newSafety < maxLength )
+    {
+       fLastSafety= newSafety;
+       fLastSafetyPosition = position;
+    }
   }
   else
   {
-    // return last value if position is not significantly changed
+    // return last value if position is not (significantly) changed
     //
-    G4double moveLength = 0;
-    if( moveLengthSq > 0.0 )
-    {
-      moveLength= std::sqrt(moveLengthSq); 
-    }
-    newSafety = fLastSafety-moveLength;
+    // G4double moveLength = 0;
+    // if( moveLengthSq > 0.0 ) { moveLength= std::sqrt(moveLengthSq); }
+    newSafety = fLastSafety; // -moveLength;
   } 
   return newSafety;
 }

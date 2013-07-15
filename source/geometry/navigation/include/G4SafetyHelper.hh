@@ -118,7 +118,7 @@ private:
   // State used during tracking -- for optimisation
   G4ThreeVector fLastSafetyPosition;
   G4double      fLastSafety;
-  const G4double  fRecomputeFactor;   
+  // const G4double  fRecomputeFactor;
        // parameter for further optimisation: 
        // if ( move < fact*safety )  do fast recomputation of safety
   // End State (tracking)
