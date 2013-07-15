@@ -64,7 +64,7 @@ G4ConcreteNNTwoBodyResonance::G4ConcreteNNTwoBodyResonance(const G4ParticleDefin
 
 G4ConcreteNNTwoBodyResonance::~G4ConcreteNNTwoBodyResonance()
 { 
-  delete crossSectionSource;
+  if (crossSectionSource) delete crossSectionSource;
 }
 
 G4bool G4ConcreteNNTwoBodyResonance::IsInCharge(const G4KineticTrack& trk1, 
@@ -75,7 +75,10 @@ G4bool G4ConcreteNNTwoBodyResonance::IsInCharge(const G4KineticTrack& trk1,
   return false;
 }
 
-G4ConcreteNNTwoBodyResonance::G4ConcreteNNTwoBodyResonance(void *, void *, void *, void *, void *, void *, void *){}
+G4ConcreteNNTwoBodyResonance::G4ConcreteNNTwoBodyResonance(void *, void *, void *, void *, void *, void *, void *)
+    : crossSectionSource(0), thePrimary1(0), thePrimary2(0)
+{}
+
 void G4ConcreteNNTwoBodyResonance::establish_G4MT_TLS_G4ConcreteNNTwoBodyResonance(const G4ParticleDefinition* aPrimary,
 					   const G4ParticleDefinition* bPrimary,
 					   const G4ParticleDefinition* aSecondary,

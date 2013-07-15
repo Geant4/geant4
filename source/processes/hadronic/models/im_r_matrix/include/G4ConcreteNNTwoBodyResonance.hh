@@ -51,7 +51,8 @@ void establish_G4MT_TLS_G4ConcreteNNTwoBodyResonance(const G4ParticleDefinition*
 		       const G4ParticleDefinition* aSecondary,
 		       const G4ParticleDefinition* bSecondary,
 		       const G4VXResonanceTable& sigmaTable);
-G4ConcreteNNTwoBodyResonance(void *s1, void *s2, void *s3, void *s4, void *s5, void *s6, void *s7);
+
+  G4ConcreteNNTwoBodyResonance(void *s1, void *s2, void *s3, void *s4, void *s5, void *s6, void *s7);
 
   virtual ~G4ConcreteNNTwoBodyResonance();
 
@@ -82,6 +83,10 @@ protected:
   {
     return theOutGoing;
   }
+
+private:
+  G4ConcreteNNTwoBodyResonance(const G4ConcreteNNTwoBodyResonance &);
+  G4ConcreteNNTwoBodyResonance & operator= (const G4ConcreteNNTwoBodyResonance &);
 
 private:  
 
