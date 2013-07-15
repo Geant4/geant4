@@ -60,7 +60,9 @@ class G4WorkerRunManagerKernel : public G4RunManagerKernel {
 public:
     G4WorkerRunManagerKernel();
     virtual ~G4WorkerRunManagerKernel();
-    
+protected:
+    //Overwrite default behavior
+    void SetupShadowProcess() const;
 };
 
 #endif //G4WorkerRunManagerKernel_h

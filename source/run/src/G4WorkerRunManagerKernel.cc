@@ -42,3 +42,33 @@ G4WorkerRunManagerKernel::~G4WorkerRunManagerKernel()
 {
 }
 
+void G4WorkerRunManagerKernel::SetupShadowProcess() const
+{
+    //Master thread has created processes and setup a pointer
+    //to the master process, get it and copy it in this instance
+    G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
+    G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
+    theParticleIterator->reset();
+    //loop on particles and get process manager from there list of processes
+    while((*theParticleIterator)())
+    {
+        G4ParticleDefinition* pd = theParticleIterator->value();
+        G4ProcessManager* pm = pd->GetProcessManager();
+        G4ProcessManager* pmM= pd->GetMasterProcessManager();
+        if ( !pm || !pmM )
+        {
+            G4Exception("G4WorkerRunManagerKernel::SetupShadowProcess()","Run0035",FatalException,"Process manager or process manager shadow to master are not set.");
+        }
+        G4ProcessVector& procs = *(pm->GetProcessList());
+        G4ProcessVector& procsM= *(pmM->GetProcessList());
+        assert( procs.size() == procsM.size() );
+        //To each process add the reference to the same
+        //process from master. Note that we rely on
+        //processes being in the correct order!
+        // We could use some checking using process name or type
+        for ( G4int idx = 0 ; idx < procs.size() ; ++idx )
+        {
+            procs[idx]->SetMasterProcess(procsM[idx]);
+        }
+    }
+}

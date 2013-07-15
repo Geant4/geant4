@@ -463,7 +463,8 @@ void G4RunManagerKernel::InitializePhysics()
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
   if(numberOfParallelWorld>0) physicsList->UseCoupledTransportation();
   physicsList->Construct();
-
+  SetupShadowProcess();
+    
   if(verboseLevel>1) G4cout << "physicsList->CheckParticleList() start." << G4endl;
   physicsList->CheckParticleList();
   if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
@@ -801,3 +802,29 @@ void G4RunManagerKernel::SetScoreSplitter()
   }
 }
 
+void G4RunManagerKernel::SetupShadowProcess() const
+{
+    G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
+    G4ParticleTable::G4PTblDicIterator* theParticleIterator = theParticleTable->GetIterator();
+    theParticleIterator->reset();
+    //loop on particles and get process manager from there list of processes
+    while((*theParticleIterator)())
+    {
+        G4ParticleDefinition* pd = theParticleIterator->value();
+        G4ProcessManager* pm = pd->GetProcessManager();
+        if(pm)
+        {
+            G4ProcessVector& procs = *(pm->GetProcessList());
+            for ( G4int idx = 0 ; idx<procs.size() ; ++idx)
+            {
+                const G4VProcess* masterP = procs[idx]->GetMasterProcess();
+                if ( ! masterP )
+                {
+                    //Process does not have an associated shadow master process
+                    //We are in master mode or sequential
+                    procs[idx]->SetMasterProcess(const_cast<G4VProcess*>(procs[idx]));
+                }
+            }
+        }
+    }
+}

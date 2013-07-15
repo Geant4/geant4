@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+July 15th, 2013, A.Dotti (run-V09-06-74)
+- Setting master process shadow pointer to G4VProcess in worker
+  threads. Co-working with procman-V09-06-01
+
 July 10th, 2013, A.Dotti (run-V09-06-73)
 - Bug fixing for compilation warning
 

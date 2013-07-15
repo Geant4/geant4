@@ -60,7 +60,9 @@ class G4MTRunManagerKernel : public G4RunManagerKernel {
 public:
     G4MTRunManagerKernel();
     virtual ~G4MTRunManagerKernel();
-    
+protected:
+    void SetupShadowProcess() const;
+
 };
 
 #endif //G4MTRunManagerKernel_h

@@ -44,3 +44,9 @@ G4MTRunManagerKernel::~G4MTRunManagerKernel()
 {
 }
 
+void G4MTRunManagerKernel::SetupShadowProcess() const
+{
+    //Behavior is the same as base class (sequential mode)
+    //ShadowProcess pointer == process poitner
+    G4RunManagerKernel::SetupShadowProcess();
+}

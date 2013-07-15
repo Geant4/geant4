@@ -219,6 +219,11 @@ class G4RunManagerKernel
   public:
     inline G4int GetNumberOfStaticAllocators() const
     { return numberOfStaticAllocators; }
+protected:
+    virtual void SetupShadowProcess() const;
+    // This method will setup the G4VProcesses
+    // instances to have a reference to the process instance
+    // created by the master thread. See G4VProcess::GetMasterProcess
 };
 
 #endif
