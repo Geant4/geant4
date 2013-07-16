@@ -17,6 +17,16 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 15, 2013 I.Hrivnacova (analysis-V09-06-17)
+- Added set_property(...GEANT4_BUILDTREE_INCLUDE_DIRS) in
+  g4tools/CMakeLists.txt  
+
+July 15, 2013 I.Hrivnacova (analysis-V09-06-16)
+- Added GLOBAL_DEPENDENCIES lists in sources.cmake files
+
+July 15, 2013 I.Hrivnacova (analysis-V09-06-15)
+- Fixed dependencies on zlib
+  (previous tag failed on linking error on Mac)
 
 July 15, 2013 I.Hrivnacova (analysis-V09-06-14)
 - Introduced subdirectories: 

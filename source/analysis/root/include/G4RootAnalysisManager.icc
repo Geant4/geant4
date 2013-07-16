@@ -29,8 +29,6 @@
 #include "G4H2ToolsManager.hh"
 #include "G4RootNtupleManager.hh"
 
-#include "tools/wroot/file"
-
 //_____________________________________________________________________________
 inline 
 tools::histo::h1d*  G4RootAnalysisManager::GetH1(G4int id, G4bool warn,

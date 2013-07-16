@@ -17,7 +17,6 @@
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
-include_directories(${ZLIB_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
@@ -47,6 +46,9 @@ GEANT4_DEFINE_MODULE(NAME G4xml
         G4intercoms
         G4analysismng
         G4hntools
+    GLOBAL_DEPENDENCIES
+        G4global
+        G4intercoms
     LINK_LIBRARIES
 )
 

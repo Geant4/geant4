@@ -16,8 +16,4 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/analysis/g4tools/include \
             -I$(G4BASE)/analysis/management/include
 
-ifdef G4LIB_BUILD_ZLIB
-  CPPFLAGS += -I$(G4BASE)/externals/zlib/include
-endif
-
 include $(G4INSTALL)/config/common.gmk

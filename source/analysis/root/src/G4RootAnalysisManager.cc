@@ -37,7 +37,6 @@
 
 #include "tools/wroot/to"
 #include "tools/wroot/file"
-#include "tools/gzip_buffer"
 
 #include <iostream>
 #include <cstdio>

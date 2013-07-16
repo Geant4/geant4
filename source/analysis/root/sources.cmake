@@ -47,7 +47,11 @@ GEANT4_DEFINE_MODULE(NAME G4root
         G4intercoms
         G4analysismng
         G4hntools
+    GLOBAL_DEPENDENCIES
+        G4global
+        G4intercoms
     LINK_LIBRARIES
+        ${ZLIB_LIBRARIES}
 )
 
 # List any source specific properties here
