@@ -378,10 +378,25 @@ public:
     const G4VProcess* GetMasterProcess() const;
     // Returns the master thread process instnace
     // Can be used to initialize worker type processes
-    // instances from master one (e.g. to share a physics table)
+    // instances from master one (e.g. to share a read-only table)
     // if ( this != GetMasterProcess() ) { /*worker*/ }
     // else { /* master or sequential */ }
 
+    virtual void BuildWorkerPhysicsTable(const G4ParticleDefinition& part);
+    // Messaged by the Particle definition (via the Process manager)
+    // in worker threads. See BuildWorkerBhyiscsTable method.
+    // Can be used to share among threads physics tables. Use GetMasterProcess
+    // to get pointer of master process from worker thread.
+    // By default this method makes a forward call to
+    // BuildPhysicsTable
+    
+    virtual void PrepareWorkerPhysicsTable(const G4ParticleDefinition&);
+    // Messaged by the Particle definition (via the Process manager)
+    // in worker threads. See PreparephysicsTable
+    // Can be used to share among threads physics tables. Use GetMasterProcess
+    // to get pointer of master process from worker thread
+    // By default this method makes a forward call
+    // to PreparePhysicsTable
 };
 
 // -----------------------------------------

@@ -228,3 +228,13 @@ const G4String&  G4VProcess::GetPhysicsTableFileName(const G4ParticleDefinition*
   
   return thePhysicsTableFileName;
 }
+
+void G4VProcess::BuildWorkerPhysicsTable(const G4ParticleDefinition& part)
+{
+    BuildPhysicsTable(part);
+}
+
+void G4VProcess::PrepareWorkerPhysicsTable(const G4ParticleDefinition& part)
+{
+    PreparePhysicsTable(part);
+}

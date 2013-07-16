@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Jul. 16th, 2013   A. Dotti (procman-V09-06-02)
+- Adding worker initialization virtual method for MT:
+  G4VProcess::{Build,Prepare}WorkerPhysicsTable(const G4ParticleDefinition&)
+  called by kernel to initialize worker threads. By default methods
+  forward call to {Build,Prepare}PhysicsTable methods
 
 - Jul. 15th, 2013    A.Dotti (procman-V09-06-01)
 - Adding shadow master-thread pointer to G4VProcess and
