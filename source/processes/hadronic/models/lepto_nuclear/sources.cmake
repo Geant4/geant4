@@ -90,8 +90,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_lept_nuclear
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
         G4hadronic_HE
-        G4hadronic_hetcpp_evaporation
-        G4hadronic_hetcpp_utils
         G4hadronic_LE
         G4hadronic_mgt
         G4hadronic_proc

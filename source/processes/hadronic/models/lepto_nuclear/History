@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 July 2013 G. Cosmo (hadr-lepnuc-V09-06-00)
+---------------------------------------------
+- Correction to CMake scripts for granular build.
+
 4 October 2012 J. Apostolakis (hadr-lepnuc-V09-05-02)
 -----------------------------------------------------
 - Fixed GNUmakefile.
