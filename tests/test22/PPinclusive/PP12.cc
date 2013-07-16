@@ -85,8 +85,8 @@ int main(int argc, char** argv)
 //-----------------------------------------------------------------------
   #include "FTFtest2.icc"   // Initialization
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   
-G4double sigTot = 0; 
-G4double sigEl  = 0;
+//G4double sigTot = 0; 
+//G4double sigEl  = 0;
 G4double sigIn  = 0;
 
 //-------------------------- Global histograms  -------------------------
@@ -162,11 +162,11 @@ for(G4int ii=0; ii<100; ii++)
              "Plab          Total        Elastic      Inelastic"   <<G4endl;
      G4cout<<" "<<Plab/GeV<<" "<< chipsTot<<" "<<chipsEl<<" "<<chipsIn <<G4endl<<G4endl;
 
-     sigTot=chipsTot; sigEl=chipsEl; sigIn=chipsIn;
+     /*sigTot=chipsTot; sigEl=chipsEl;*/ sigIn=chipsIn;
     } else
     {
-     sigTot = cross_sec; 
-     sigEl  = cross_secel;
+     //sigTot = cross_sec; 
+     //sigEl  = cross_secel;
      sigIn  = cross_inel;
 
      G4cout<<"Proposed Xs (mb) are used: Tot El In: "
@@ -407,7 +407,7 @@ G4cout<<"Plab "<<Plab/GeV<<" SigIn "<<sigIn<<G4endl;
 //std::ofstream PP12y("PP12y.dat",std::ios::out);
 //std::ofstream PP12x("PP12x.dat",std::ios::out);
 //std::ofstream PP12pt2("PP12pt2.dat",std::ios::out);
-sigTot=sigTot; sigEl=sigEl;
+//sigTot=sigTot; sigEl=sigEl;
 //----------------------------- Rapidity distributions------------------// Uzhi ++++
     G4cout<< "******** Rapidity ******* at Plab "<<Plab<<" Xin " << sigIn<< G4endl;
     PP12y<<G4Version<<G4endl;

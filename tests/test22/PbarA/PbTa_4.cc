@@ -84,14 +84,14 @@ int main(int argc, char** argv)
 //-----------------------------------------------------------------------
   #include "FTFtest2.icc"   // Initialization
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   
-G4double sigTot = 0; 
-G4double sigEl  = 0;
+//G4double sigTot = 0; 
+//G4double sigEl  = 0;
 G4double sigIn  = 0;
 
 //-------------------------- Global histograms  -------------------------
 std::ofstream PbTa_4("PbTa_4.dat",std::ios::out);
 
-G4double SqrtS;
+//G4double SqrtS;
 //G4double Ycms;
 
 G4double MultUzhi[30][5];                 // 0 / 1200 MeV/c momentum
@@ -145,11 +145,11 @@ for(G4int ii=0; ii<30; ii++){for(G4int j=0;j<5;j++) MultUzhi[ii][j]=0.;}
              "Plab          Total        Elastic      Inelastic"   <<G4endl;
      G4cout<<" "<<Plab/GeV<<" "<< chipsTot<<" "<<chipsEl<<" "<<chipsIn <<G4endl<<G4endl;
 
-     sigTot=chipsTot; sigEl=chipsEl; sigIn=chipsIn;
+     /* sigTot=chipsTot; sigEl=chipsEl; */ sigIn=chipsIn;
     } else
     {
-     sigTot = cross_sec; 
-     sigEl  = cross_secel;
+     //sigTot = cross_sec; 
+     //sigEl  = cross_secel;
      sigIn  = cross_inel;
 
      G4cout<<"Proposed Xs (mb) are used: Tot El In: "
@@ -157,8 +157,8 @@ for(G4int ii=0; ii<30; ii++){for(G4int j=0;j<5;j++) MultUzhi[ii][j]=0.;}
     }
 
 //+++++++++++++++++++++++++++++++++ For each energy +++++++++++++++++++++
-   G4double E=energy+part->GetPDGMass();
-   SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);  SqrtS=SqrtS;      
+   //G4double E=energy+part->GetPDGMass();
+   //SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);  SqrtS=SqrtS;      
 // Ycms=0.5*std::log((E+Plab)/(E-Plab));
 
 //  G4int Ntotal=nevt;
@@ -169,7 +169,7 @@ for(G4int ii=0; ii<30; ii++){for(G4int j=0;j<5;j++) MultUzhi[ii][j]=0.;}
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, px, py, pz, pt, pt2, theta;
+    G4double e; // px, py, pz, pt, pt2, theta;
     G4VParticleChange* aChange = 0;
 
 //  G4double E=energy+part->GetPDGMass();                                  // Elab Proj
@@ -269,17 +269,17 @@ for(G4int ii=0; ii<30; ii++){for(G4int j=0;j<5;j++) MultUzhi[ii][j]=0.;}
 	  labv += G4LorentzVector(0.0,0.0,0.0,electron_mass_c2); 
 	}
 
-        px = mom.x();
-        py = mom.y();
-        pz = mom.z(); pz=pz;
+        //px = mom.x();
+        //py = mom.y();
+        //pz = mom.z(); pz=pz;
         G4double Pmod=mom.mag();
-        pt = std::sqrt(px*px +py*py); pt2=sqr(pt/GeV); pt2=pt2;
+        //pt = std::sqrt(px*px +py*py); pt2=sqr(pt/GeV); pt2=pt2;
         e  = fm.e() - m;
-        theta = mom.theta();
+        //theta = mom.theta();
 
 //        G4double CosTheta=std::cos(theta);
 
-        theta=theta*180./pi;
+        //theta=theta*180./pi;
 
 //        G4double costcm = std::cos(fm.theta());
 
@@ -380,7 +380,7 @@ G4cout<<"Plab "<<Plab/GeV<<" SigIn "<<sigIn<<G4endl;
     }
 //++++++++++++++++++++++ After each energy run ++++++++++++++++++++++++++ Uzhi 
 
-sigTot=sigTot; sigEl=sigEl;
+//sigTot=sigTot; sigEl=sigEl;
 
 // ----------------------------- Momentum distributions----------------------
     G4cout<< "******** Multiplicity distr ******* at Plab "<<Plab<<" Xin " << sigIn<< G4endl;

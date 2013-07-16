@@ -84,14 +84,14 @@ int main(int argc, char** argv)
 //-----------------------------------------------------------------------
   #include "FTFtest2.icc"   // Initialization
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   
-G4double sigTot = 0; 
-G4double sigEl  = 0;
+//G4double sigTot = 0; 
+//G4double sigEl  = 0;
 G4double sigIn  = 0;
 
 //-------------------------- Global histograms  -------------------------
 std::ofstream hAy("hAy.dat",std::ios::out);
 
-G4double SqrtS;
+//G4double SqrtS;
 
 G4double YUzhi[100][9];                 // -2 -- 8 rapidity
 for(G4int ii=0; ii<100; ii++){for(G4int j=0;j<9;j++) YUzhi[ii][j]=0.;}
@@ -144,11 +144,11 @@ for(G4int ii=0; ii<100; ii++){for(G4int j=0;j<9;j++) YUzhi[ii][j]=0.;}
              "Plab          Total        Elastic      Inelastic"   <<G4endl;
      G4cout<<" "<<Plab/GeV<<" "<< chipsTot<<" "<<chipsEl<<" "<<chipsIn <<G4endl<<G4endl;
 
-     sigTot=chipsTot; sigEl=chipsEl; sigIn=chipsIn;
+     /*sigTot=chipsTot; sigEl=chipsEl;*/ sigIn=chipsIn;
     } else
     {
-     sigTot = cross_sec; 
-     sigEl  = cross_secel;
+     //sigTot = cross_sec; 
+     //sigEl  = cross_secel;
      sigIn  = cross_inel;
 
      G4cout<<"Proposed Xs (mb) are used: Tot El In: "
@@ -156,9 +156,9 @@ for(G4int ii=0; ii<100; ii++){for(G4int j=0;j<9;j++) YUzhi[ii][j]=0.;}
     }
 
 //+++++++++++++++++++++++++++++++++ For each energy +++++++++++++++++++++
-   G4double E=energy+part->GetPDGMass();
-   SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);       
-   SqrtS=SqrtS;
+   //G4double E=energy+part->GetPDGMass();
+   //SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);       
+   //SqrtS=SqrtS;
 
 //  G4int Ntotal=nevt;
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++       
@@ -168,7 +168,7 @@ for(G4int ii=0; ii<100; ii++){for(G4int j=0;j<9;j++) YUzhi[ii][j]=0.;}
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, px, py, pz, pt, pt2, theta;
+    G4double e; /* px, py, pz, pt, pt2, theta; */
     G4VParticleChange* aChange = 0;
 
 //  G4double E=energy+part->GetPDGMass();                                  // Elab Proj
@@ -261,16 +261,16 @@ for(G4int ii=0; ii<100; ii++){for(G4int j=0;j<9;j++) YUzhi[ii][j]=0.;}
 
         mom = fm.vect();
 
-        px = mom.x();
-        py = mom.y();
-        pz = mom.z(); pz=pz;
-        G4double Pmod=mom.mag(); Pmod=Pmod;
-        pt = std::sqrt(px*px +py*py); pt2=sqr(pt/GeV); pt2=pt2;
-        e  = fm.e(); e=e; // - m;
-        theta = mom.theta();
+        //px = mom.x();
+        //py = mom.y();
+        //pz = mom.z(); pz=pz;
+        //G4double Pmod=mom.mag(); Pmod=Pmod;
+        //pt = std::sqrt(px*px +py*py); pt2=sqr(pt/GeV); pt2=pt2;
+        e  = fm.e(); //e=e;
+        //theta = mom.theta();
 //      G4double CosTheta=std::cos(theta);
 
-        theta=theta*180./pi;
+        //theta=theta*180./pi;
 //      G4double costcm = std::cos(fm.theta());
 
 //      G4double xF=2.*pz/SqrtS;
@@ -362,7 +362,7 @@ G4cout<<"Plab "<<Plab/GeV<<" SigIn "<<sigIn<<G4endl;
     }
 //++++++++++++++++++++++ After each energy run ++++++++++++++++++++++++++ Uzhi 
 
-sigTot=sigTot; sigEl=sigEl;
+//sigTot=sigTot; sigEl=sigEl;
 
 //----------------------------- Rapidity distributions------------------// Uzhi ++++
     G4cout<< "******** Rapidity ******* at Plab "<<Plab<<" Xin " << sigIn<< G4endl;

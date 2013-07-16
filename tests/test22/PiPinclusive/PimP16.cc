@@ -85,8 +85,8 @@ int main(int argc, char** argv)
 //-----------------------------------------------------------------------
   #include "FTFtest2.icc"   // Initialization
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   
-G4double sigTot = 0; 
-G4double sigEl  = 0;
+//G4double sigTot = 0; 
+//G4double sigEl  = 0;
 G4double sigIn  = 0;
 
 //-------------------------- Global histograms  -------------------------
@@ -162,11 +162,11 @@ for(G4int ii=0; ii<100; ii++)
              "Plab          Total        Elastic      Inelastic"   <<G4endl;
      G4cout<<" "<<Plab/GeV<<" "<< chipsTot<<" "<<chipsEl<<" "<<chipsIn <<G4endl<<G4endl;
 
-     sigTot=chipsTot; sigEl=chipsEl; sigIn=chipsIn;
+     /*sigTot=chipsTot; sigEl=chipsEl;*/ sigIn=chipsIn;
     } else
     {
-     sigTot = cross_sec; 
-     sigEl  = cross_secel;
+     //sigTot = cross_sec; 
+     //sigEl  = cross_secel;
      sigIn  = cross_inel;
 
      G4cout<<"Proposed Xs (mb) are used: Tot El In: "
@@ -186,7 +186,7 @@ for(G4int ii=0; ii<100; ii++)
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, px, py, pz, pt, pt2, theta;
+    G4double e, px, py, /*pz,*/ pt, pt2, theta;
     G4VParticleChange* aChange = 0;
 
 //  G4double E=energy+part->GetPDGMass();                                  // Elab Proj
@@ -285,7 +285,7 @@ for(G4int ii=0; ii<100; ii++)
 
         px = mom.x();
         py = mom.y();
-        pz = mom.z();  pz=pz; 
+        //pz = mom.z();  pz=pz; 
         pt = std::sqrt(px*px +py*py); pt2=sqr(pt/GeV);
         e  = fm.e() - m;
         theta = mom.theta();
@@ -409,7 +409,7 @@ G4cout<<"Plab "<<Plab/GeV<<" SigIn "<<sigIn<<G4endl;
 //std::ofstream PimP16y("PimP16y.dat",std::ios::out);
 //std::ofstream PimP16x("PimP16x.dat",std::ios::out);
 //std::ofstream PimP16pt2("PimP16pt2.dat",std::ios::out);
-sigTot=sigTot; sigEl=sigEl;
+//sigTot=sigTot; sigEl=sigEl;
 /*
 //----------------------------- Rapidity distributions------------------// Uzhi ++++
     G4cout<< "******** Rapidity ******* at Plab "<<Plab<<" Xin " << sigIn<< G4endl;

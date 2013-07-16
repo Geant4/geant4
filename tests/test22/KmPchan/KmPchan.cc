@@ -578,7 +578,7 @@ if((Ncharged == 2) && (Nother == 0) && (Nproton == 1) && (NKm == 1))
     delete timer;
 
 //++++++++++++++++++++++ After each energy run ++++++++++++++++++++++++++
-sigTot=sigTot; sigEl=sigEl;
+//sigTot=sigTot; sigEl=sigEl;
 if(Ntotal != 0) 
 {
      for(G4int ii=1;ii<16;ii++)  {TopoUzhi[Uzhi_run][ii]*=sigTot/Ntotal;};  // sigIn->sigTot

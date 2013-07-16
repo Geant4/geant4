@@ -23,10 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
-// $Id: G4EventGenerator.hh,v 1.3 2006/06/29 20:55:13 gunter Exp $
-// GEANT4 tag $Name: geant4-08-01-ref-04 $
-//
 #ifndef UZHI_diffraction_h
 #define UZHI_diffraction_h 1
 

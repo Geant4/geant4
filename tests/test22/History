@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
 -------------------------------------------------------------------------
 
+16 July 2013 Alberto Ribon                         (test22-V09-06-11)
+---------------------------------------------------------------------
+Fixed a few mistakes in the previous tag, and some new warnings.
+
+16 July 2013 Alberto Ribon                         (test22-V09-06-10)
+---------------------------------------------------------------------
+Fixed compilations warnings, reported only by Clang, related to:
+SqrtS=SqrtS, pz=pz, Pmod=Pmod, pt2=pt2, e=e, Ybeam=Ybeam, sigEl=sigEl,
+and sigTot=sigTot.
 
 12 July 2013 Alberto Ribon                         (test22-V09-06-09)
 ---------------------------------------------------------------------

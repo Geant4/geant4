@@ -84,14 +84,14 @@ int main(int argc, char** argv)
 //-----------------------------------------------------------------------
   #include "FTFtest2.icc"   // Initialization
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   
-G4double sigTot = 0; 
-G4double sigEl  = 0;
+//G4double sigTot = 0; 
+//G4double sigEl  = 0;
 G4double sigIn  = 0;
 
 //-------------------------- Global histograms  -------------------------
 std::ofstream PbDNeRest("PbDNe_Rest.dat",std::ios::out);
 
-G4double SqrtS;
+//G4double SqrtS;
 //G4double Ycms;
 
 G4double EnerUzhi[110][2];                 // 0 / 1200 MeV/c momentum
@@ -145,11 +145,11 @@ for(G4int ii=0; ii<110; ii++){for(G4int j=0;j<2;j++) EnerUzhi[ii][j]=0.;}
              "Plab          Total        Elastic      Inelastic"   <<G4endl;
      G4cout<<" "<<Plab/GeV<<" "<< chipsTot<<" "<<chipsEl<<" "<<chipsIn <<G4endl<<G4endl;
 
-     sigTot=chipsTot; sigEl=chipsEl; sigIn=chipsIn;
+     /* sigTot=chipsTot; sigEl=chipsEl; */ sigIn=chipsIn;
     } else
     {
-     sigTot = cross_sec; 
-     sigEl  = cross_secel;
+     //sigTot = cross_sec; 
+     //sigEl  = cross_secel;
      sigIn  = cross_inel;
 
      G4cout<<"Proposed Xs (mb) are used: Tot El In: "
@@ -157,9 +157,9 @@ for(G4int ii=0; ii<110; ii++){for(G4int j=0;j<2;j++) EnerUzhi[ii][j]=0.;}
     }
 
 //+++++++++++++++++++++++++++++++++ For each energy +++++++++++++++++++++
-   G4double E=energy+part->GetPDGMass();
-   SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);
-   SqrtS=SqrtS;       
+   //G4double E=energy+part->GetPDGMass();
+   //SqrtS=std::sqrt(sqr(part->GetPDGMass())+sqr(938.)+2.*938.*E);
+   //SqrtS=SqrtS;       
 // Ycms=0.5*std::log((E+Plab)/(E-Plab));
 
 //  G4int Ntotal=nevt;
@@ -374,7 +374,7 @@ G4cout<<"Plab "<<Plab/GeV<<" SigIn "<<sigIn<<G4endl;
     }
 //++++++++++++++++++++++ After each energy run ++++++++++++++++++++++++++ Uzhi 
 
-sigTot=sigTot; sigEl=sigEl;
+//sigTot=sigTot; sigEl=sigEl;
 
 // ----------------------------- Momentum distributions----------------------
     G4cout<< "******** Energy distr ******* at Plab "<<Plab<<" Xin " << sigIn<< G4endl;

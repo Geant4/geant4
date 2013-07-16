@@ -22,9 +22,6 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// $Id: Histo.hh,v 1.3 2007/11/05 19:39:58 vnivanch Exp $
-// GEANT4 tag $Name: geant4-09-03-cand-05 $
 
 #ifndef Histo_h
 #define Histo_h 1
