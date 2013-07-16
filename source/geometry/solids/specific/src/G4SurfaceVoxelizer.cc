@@ -230,7 +230,7 @@ void G4SurfaceVoxelizer::BuildBoundaries()
       for(G4int i = 0 ; i < 2*numNodes; ++i)
       {
         G4double newBoundary = sortedBoundary[i];
-#ifdef G4SPECSDEBUG
+#ifdef G4SPECSDEBUG	
         if (j == 0) G4cout << "Examining " << newBoundary << "..." << G4endl;
 #endif
         G4int size = boundary.size();
@@ -238,10 +238,10 @@ void G4SurfaceVoxelizer::BuildBoundaries()
         {
           considered++;
           {
-#ifdef G4SPECSDEBUG    
+#ifdef G4SPECSDEBUG	    
             if (j == 0) G4cout << "Adding boundary " << newBoundary << "..."
                                << G4endl;
-#endif  
+#endif	  
             boundary.push_back(newBoundary);
             continue;
           }
@@ -371,7 +371,7 @@ void G4SurfaceVoxelizer::BuildBitmasks(std::vector<G4double> boundaries[],
 }
 
 //______________________________________________________________________________
-G4String G4SurfaceVoxelizer::GetCandidatesAsString(const G4SurfBits &bits)
+G4String G4SurfaceVoxelizer::GetCandidatesAsString(const G4SurfBits &bits) const
 {
   // Decodes the candidates in mask as G4String.
 
@@ -386,7 +386,7 @@ G4String G4SurfaceVoxelizer::GetCandidatesAsString(const G4SurfBits &bits)
 }
 
 //______________________________________________________________________________
-void G4SurfaceVoxelizer::DisplayListNodes()
+void G4SurfaceVoxelizer::DisplayListNodes() const
 {
   // Prints which solids are present in the slices previously elaborated.
 
@@ -994,7 +994,7 @@ G4SurfaceVoxelizer::DistanceToNext(const G4ThreeVector &point,
     G4int cur = curVoxel[i];
     if(direction[i] >= 1e-10)
     {
-        if (boundary[cur] - point[i] < fTolerance) // make sure shift would
+        if (boundary[++cur] - point[i] < fTolerance) // make sure shift would
         if (++cur >= (G4int) boundary.size())      // be non-zero
           continue;
     }
@@ -1099,4 +1099,4 @@ G4int G4SurfaceVoxelizer::AllocatedMemory()
 
   return size;
 }
-
+ 

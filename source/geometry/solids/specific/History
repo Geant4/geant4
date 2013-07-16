@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-Jul-2013  M.Gayer (geom-specific-V09-06-15)
+- Fix in G4SurfaceVoxelizer affecting tessellated-solid (and extruded-solid)
+  for wrong computation of DistanceToIn(p,v) for points outside, when
+  optimisation is active.
+
 11-Jul-2013  G.Cosmo (geom-specific-V09-06-14)
 - Fixed compilation warning in G4Polycone on MacOS/clang.
 

@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 // $Id$
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -77,7 +78,7 @@ class G4SurfaceVoxelizer
 
     void DisplayVoxelLimits();
     void DisplayBoundaries();
-    void DisplayListNodes();
+    void DisplayListNodes() const;
 
     G4SurfaceVoxelizer();
    ~G4SurfaceVoxelizer();
@@ -188,7 +189,7 @@ class G4SurfaceVoxelizer
 
     void BuildEmpty ();
 
-    G4String GetCandidatesAsString(const G4SurfBits &bits);
+    G4String GetCandidatesAsString(const G4SurfBits &bits) const;
 
     void CreateSortedBoundary(std::vector<G4double> &boundaryRaw, G4int axis);
 
