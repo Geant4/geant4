@@ -35,12 +35,12 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/binary_cascade/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/pre_equilibrium/exciton_model/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 
 #
 # Define the Geant4 Module.
@@ -102,9 +102,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4bosons
         G4geometrymng
         G4globman
-        G4hadronic_mgt
-        G4hadronic_util
-        G4hadronic_xsect
         G4ions
         G4leptons
         G4materials
@@ -114,7 +111,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4track
         G4volumes
         G4intercoms
+        G4had_mod_man
         G4had_preequ_exciton
+        G4hadronic_mgt
+        G4hadronic_util
+        G4hadronic_xsect
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
         G4hadronic_deex_handler
@@ -122,7 +123,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4hadronic_mgt
 
     GLOBAL_DEPENDENCIES
         G4geometry

@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+16 July 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-20)
+-----------------------------------------------------------
+-  Correction to CMake scripts for granular build.
+
 20 June 2013 - Davide Mancusi (hadr-inclxx-V09-06-19)
 -----------------------------------------------------------
 - Fix compilation warning.
@@ -25,7 +29,7 @@ code and to keep track of all tags.
 - INCL++ v5.1.13.2
   o Minor fixes.
 
-7 June 2013 - V. Ivanchenko (hadr-inclxx-V09-06-17)
+7 June 2013 - Vladimir Ivanchenko (hadr-inclxx-V09-06-17)
 -----------------------------------------------------------
 - G4INCLXXInterface - do not delete Binarycascade objects, because 
     all hadronic models are deleted by model store. This is a fix 
