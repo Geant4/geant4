@@ -107,9 +107,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4had_theo_max
         G4hadronic_HE
         G4hadronic_binary
-		G4hadronic_bert_cascade
-        G4hadronic_body_ci
-        G4hadronic_crosec_ci
+        G4hadronic_bert_cascade
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
         G4hadronic_deex_fission
