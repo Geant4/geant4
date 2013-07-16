@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 16, 2013 Ivana Hrivnacova (LXe-V09-06-07)
+- Make LXeTrajectoryAllocator thread local (required for MT)
+
 July 11, 2013 Ivana Hrivnacova (LXe-V09-06-06)
 - Added missing G4ThreadLocal keyword for the *HitAllocator definition
   in LXePMTHit.cc, LXeScintHit.cc

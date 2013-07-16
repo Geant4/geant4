@@ -42,7 +42,7 @@
 #include "G4VVisManager.hh"
 #include "G4Polymarker.hh"
 
-G4Allocator<LXeTrajectory> LXeTrajectoryAllocator;
+G4ThreadLocal G4Allocator<LXeTrajectory>* LXeTrajectoryAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

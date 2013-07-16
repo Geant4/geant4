@@ -70,18 +70,18 @@ class LXeTrajectory : public G4Trajectory
     G4ParticleDefinition* fParticleDefinition;
 };
 
-extern G4Allocator<LXeTrajectory> LXeTrajectoryAllocator;
+extern G4ThreadLocal G4Allocator<LXeTrajectory>* LXeTrajectoryAllocator;
 
 inline void* LXeTrajectory::operator new(size_t)
 {
-  void* aTrajectory;
-  aTrajectory = (void*)LXeTrajectoryAllocator.MallocSingle();
-  return aTrajectory;
+  if(!LXeTrajectoryAllocator)
+      LXeTrajectoryAllocator = new G4Allocator<LXeTrajectory>;
+  return (void*)LXeTrajectoryAllocator->MallocSingle();
 }
 
 inline void LXeTrajectory::operator delete(void* aTrajectory)
 {
-  LXeTrajectoryAllocator.FreeSingle((LXeTrajectory*)aTrajectory);
+  LXeTrajectoryAllocator->FreeSingle((LXeTrajectory*)aTrajectory);
 }
 
 #endif
