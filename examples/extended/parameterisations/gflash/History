@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-Jul-2013, Marc Verderi (exgflash-V09-06-01)
+- Migration to MT
+
 7-June-2013, Marc Verderi  (exgflash-V09-06-00)
 - Adopt coding guidelines
 - Remove ExGflashMaterialManager class, as using NIST manager

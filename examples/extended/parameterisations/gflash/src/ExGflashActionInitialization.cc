@@ -23,38 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ExGflashActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file parameterisations/gflash/include/ExGflashSensitiveDetector.hh
-/// \brief Definition of the ExGflashSensitiveDetector class
-//
-#ifndef TILE05SENSITIVEDETECTOR_H
-#define TILE05SENSITIVEDETECTOR_H
+/// \file ExGflashActionInitialization.cc
+/// \brief Implementation of the ExGflashActionInitialization class
 
-#include "G4VSensitiveDetector.hh"
-#include "G4VGFlashSensitiveDetector.hh"
-#include "G4GFlashSpot.hh"
-#include "ExGflashDetectorConstruction.hh"
-#include "ExGflashHitsCollection.hh"
-#include "globals.hh"
-class G4Step;
-class G4HCofThisEvent;
-class G4TouchableHistory;
+#include "ExGflashActionInitialization.hh"
+#include "ExGflashPrimaryGeneratorAction.hh"
+#include "ExGflashRunAction.hh"
+#include "ExGflashEventAction.hh"
 
-class ExGflashSensitiveDetector: public G4VSensitiveDetector, public G4VGFlashSensitiveDetector {
-public:
-  ExGflashSensitiveDetector(G4String, ExGflashDetectorConstruction* det);
-  ~ExGflashSensitiveDetector();
-  
-  void Initialize(G4HCofThisEvent*);
-  G4bool ProcessHits(G4Step*,G4TouchableHistory*);
-  G4bool ProcessHits(G4GFlashSpot*aSpot,G4TouchableHistory*); 
-  void EndOfEvent(G4HCofThisEvent*);
-private:
-  ExGflashHitsCollection* fCaloHitsCollection;
-  G4double fEdep;
-  ExGflashDetectorConstruction* fDetector;
-  G4int HCID;
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+ExGflashActionInitialization::ExGflashActionInitialization()
+ : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExGflashActionInitialization::~ExGflashActionInitialization()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExGflashActionInitialization::BuildForMaster() const
+{
+  //  SetUserAction(new ExGflashRunAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExGflashActionInitialization::Build() const
+{
+  SetUserAction(new ExGflashPrimaryGeneratorAction);
+  SetUserAction(new ExGflashRunAction);
+  SetUserAction(new ExGflashEventAction);
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

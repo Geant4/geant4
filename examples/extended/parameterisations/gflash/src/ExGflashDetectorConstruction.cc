@@ -51,6 +51,7 @@
 // User Classes
 #include "ExGflashDetectorConstruction.hh"
 #include "ExGflashSensitiveDetector.hh"
+
 //fast simulation
 #include "GFlashHomoShowerParameterisation.hh"
 #include "G4FastSimulationManager.hh"
@@ -61,10 +62,14 @@
 using namespace std;
 
 ExGflashDetectorConstruction::ExGflashDetectorConstruction()
- :fExperimentalHall_log(0), 
-  fCalo_log(0), 
-  fExperimentalHall_phys(0), 
-  fCalo_phys(0)
+  :fExperimentalHall_log(0), 
+   fCalo_log(0), 
+   fExperimentalHall_phys(0), 
+   fCalo_phys(0),
+   fTheParameterisation(0),
+   fTheHMaker(0),
+   fTheParticleBounds(0),
+   fTheFastShowerModel(0)
 {
   G4cout<<"ExGflashDetectorConstruction::Detector constructor"<<G4endl;
   
@@ -74,25 +79,29 @@ ExGflashDetectorConstruction::ExGflashDetectorConstruction()
   fCalo_zside=24*cm; 
   
   // GlashStuff
-  fTheParticleBounds  = new GFlashParticleBounds();   // Energy Cuts to kill particles
-  fTheHMaker          = new GFlashHitMaker();         // Makes the EnergieSpots  
+//  fTheParticleBounds  = new GFlashParticleBounds();   // Energy Cuts to kill particles
+//  fTheHMaker          = new GFlashHitMaker();         // Makes the EnergieSpots  
 }
 
 
 ExGflashDetectorConstruction::~ExGflashDetectorConstruction()
 { 
   //@@@ ExGflashDetectorConstruction::Soll ich alles dlete
-  delete fTheParameterisation;
-  delete fTheParticleBounds;
-  delete fTheHMaker;
-  delete fTheFastShowerModel;
+  
+  // -- !! this is not properly deleted in MT where
+  // -- !! as there is one parameterisation/thread
+  // -- !! and only the last one is remembered.
+  if ( fTheParameterisation ) delete fTheParameterisation;
+  if ( fTheParticleBounds )   delete fTheParticleBounds;
+  if ( fTheHMaker )           delete fTheHMaker;
+  if ( fTheFastShowerModel )  delete fTheFastShowerModel;
 }
 
 
 G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
 {
   //--------- Definitions of Solids, Logical Volumes, Physical Volumes ---------
-  G4cout<<"Defining the materials"<<G4endl;
+  G4cout << "Defining the materials" << G4endl;
   // Get nist material manager
   G4NistManager* nistManager = G4NistManager::Instance();
   // Build materials
@@ -197,11 +206,6 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
     "  cm and a lenght of  " <<  fCrystalLenght /cm
          <<" cm. The Material is "<< pbWO4 << G4endl;
   
-  // Sensitive Detector part
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  ExGflashSensitiveDetector* CaloSD=
-    new ExGflashSensitiveDetector("Calorimeter",this);
-  SDman->AddNewDetector(CaloSD);
   
   fExperimentalHall_log->SetVisAttributes(G4VisAttributes::Invisible);             
   G4VisAttributes* CaloVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
@@ -210,39 +214,47 @@ G4VPhysicalVolume* ExGflashDetectorConstruction::Construct()
   for (int i=0; i<100;i++)
     {
       fCrystal_log[i]->SetVisAttributes(CrystalVisAtt);
-      fCrystal_log[i]->SetSensitiveDetector(CaloSD);
     }
   // define the parameterisation region
   fRegion = new G4Region("crystals");
   fCalo_log->SetRegion(fRegion);
   fRegion->AddRootLogicalVolume(fCalo_log);
   
-  
-  /**********************************************
-   * Initializing shower modell
-   ***********************************************/  
-  G4cout<<"Shower parameterization"<<G4endl;
-  fTheFastShowerModel =  new GFlashShowerModel("fastShowerModel",fRegion);
-  fTheParameterisation = new GFlashHomoShowerParameterisation(pbWO4);
-  fTheFastShowerModel->SetParameterisation(*fTheParameterisation);
-  fTheFastShowerModel->SetParticleBounds(*fTheParticleBounds) ;
-  fTheFastShowerModel->SetHitMaker(*fTheHMaker);   
-  G4cout<<"end shower parameterization"<<G4endl;
-  /**********************************************/
-  
   return fExperimentalHall_phys;
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+void ExGflashDetectorConstruction::ConstructSDandField()
+{
+  // -- sensitive detectors:
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  ExGflashSensitiveDetector* CaloSD=
+    new ExGflashSensitiveDetector("Calorimeter",this);
+  SDman->AddNewDetector(CaloSD);
+  
+  for (int i=0; i<100;i++)
+    {
+      fCrystal_log[i]->SetSensitiveDetector(CaloSD);
+    }
+  
+  // Get nist material manager
+  G4NistManager* nistManager = G4NistManager::Instance();
+  G4Material*          pbWO4 = nistManager->FindOrBuildMaterial("G4_PbWO4");
+  // -- fast simulation models:
+  // **********************************************
+  // * Initializing shower modell
+  // ***********************************************
+  G4cout << "Creating shower parameterization models" << G4endl;
+  GFlashShowerModel* lTheFastShowerModel =  new GFlashShowerModel("fastShowerModel",fRegion);
+  GFlashHomoShowerParameterisation* lTheParameterisation =
+    new GFlashHomoShowerParameterisation(pbWO4);
+  lTheFastShowerModel->SetParameterisation(*lTheParameterisation);
+  // Energy Cuts to kill particles:
+  GFlashParticleBounds* lTheParticleBounds  = new GFlashParticleBounds();
+  lTheFastShowerModel->SetParticleBounds(*lTheParticleBounds) ;
+  // Makes the EnergieSpots  
+  GFlashHitMaker* lTheHMaker          = new GFlashHitMaker();
+  lTheFastShowerModel->SetHitMaker(*lTheHMaker);   
+  G4cout<<"end shower parameterization."<<G4endl;
+  // **********************************************
+}

@@ -46,47 +46,50 @@ class GFlashParticleBounds;
 
 class ExGflashDetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
-    ExGflashDetectorConstruction();
-    ~ExGflashDetectorConstruction();
-    G4VPhysicalVolume* Construct();
-    
-    const G4VPhysicalVolume* GetCristal(int num__crystal)
-                                {return fCrystal_phys[num__crystal];};
-
-
-  private:
-    G4LogicalVolume* fExperimentalHall_log;
-    G4LogicalVolume* fCalo_log;
-    
-    G4VPhysicalVolume* fExperimentalHall_phys;      
-    G4VPhysicalVolume* fCalo_phys;
-    
-    G4Box *fExperimentalHall_box;
-    
-    G4double fExperimentalHall_x;
-    G4double fExperimentalHall_y;
-    G4double fExperimentalHall_z;
-    
-    G4double fCalo_xside;
-    G4double fCalo_yside;
-    G4double fCalo_zside;    
-    
-    G4int    fNbOfCrystals;                // Nb of chambers in the tracker region
-    G4double fCrystalWidth;                // width of the chambers
-    G4double fCrystalWidht;
-    G4double fCrystalLenght;
-    //@@@  ExGflashDetectorConstruction : wie mache ich das am besten ?
-    G4Box *fCrystal[100];      
-    G4LogicalVolume* fCrystal_log[100];
-    G4VPhysicalVolume*  fCrystal_phys[100];
-    
-    // Gflash members    
-    GFlashHomoShowerParameterisation *fTheParameterisation;
-    GFlashHitMaker *fTheHMaker;
-    GFlashParticleBounds *fTheParticleBounds;
-    GFlashShowerModel* fTheFastShowerModel;     
-    G4Region* fRegion;
+public:
+  ExGflashDetectorConstruction();
+  ~ExGflashDetectorConstruction();
+  
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
+  
+  
+  const G4VPhysicalVolume* GetCristal(int num__crystal)
+  {return fCrystal_phys[num__crystal];};
+  
+  
+private:
+  G4LogicalVolume* fExperimentalHall_log;
+  G4LogicalVolume* fCalo_log;
+  
+  G4VPhysicalVolume* fExperimentalHall_phys;      
+  G4VPhysicalVolume* fCalo_phys;
+  
+  G4Box *fExperimentalHall_box;
+  
+  G4double fExperimentalHall_x;
+  G4double fExperimentalHall_y;
+  G4double fExperimentalHall_z;
+  
+  G4double fCalo_xside;
+  G4double fCalo_yside;
+  G4double fCalo_zside;    
+  
+  G4int    fNbOfCrystals;                // Nb of chambers in the tracker region
+  G4double fCrystalWidth;                // width of the chambers
+  G4double fCrystalWidht;
+  G4double fCrystalLenght;
+  //@@@  ExGflashDetectorConstruction : wie mache ich das am besten ?
+  G4Box *fCrystal[100];      
+  G4LogicalVolume* fCrystal_log[100];
+  G4VPhysicalVolume*  fCrystal_phys[100];
+  
+  // Gflash members    
+  GFlashHomoShowerParameterisation* fTheParameterisation;
+  GFlashHitMaker*                   fTheHMaker;
+  GFlashParticleBounds*             fTheParticleBounds;
+  GFlashShowerModel*                fTheFastShowerModel;     
+  G4Region*                         fRegion;
 };
 
 #endif

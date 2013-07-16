@@ -33,18 +33,22 @@
 
 #include "globals.hh"
 #include "G4UserEventAction.hh"
+#include "G4Timer.hh"
 
 
 class ExGflashEventAction: public G4UserEventAction {
-  public:
-    ExGflashEventAction();
-    ~ExGflashEventAction();
-    
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
-  private:
-    G4int fNevent;
-    G4double fDtime;
-    G4int fCalorimeterCollectionId;
+public:
+  ExGflashEventAction();
+  ~ExGflashEventAction();
+  
+  void BeginOfEventAction(const G4Event*);
+  void   EndOfEventAction(const G4Event*);
+  
+private:
+  G4int    fNevent;
+  G4double fDtime;
+  G4int    fCalorimeterCollectionId;
+  G4Timer  fTimerIntern;
+  
 };
 #endif

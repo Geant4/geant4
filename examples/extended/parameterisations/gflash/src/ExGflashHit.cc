@@ -37,7 +37,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4ios.hh"
 
-G4Allocator<ExGflashHit>ExGflashHitAllocator;
+G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator=0;
 
 ExGflashHit::ExGflashHit()
 {fLogV=NULL;}

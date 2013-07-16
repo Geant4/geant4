@@ -38,8 +38,14 @@
 #include "G4ios.hh"
 #include "G4GlobalFastSimulationManager.hh"
 #include "G4Timer.hh"
-#include "G4RunManager.hh"
 #include "G4UImanager.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
+#include "ExGflashActionInitialization.hh"
 
 // my project 
 #include "ExGflashDetectorConstruction.hh"
@@ -47,6 +53,9 @@
 #include "ExGflashPrimaryGeneratorAction.hh"
 #include "ExGflashEventAction.hh"
 #include "ExGflashRunAction.hh"
+
+#include "QBBC.hh"
+
 
 using namespace std;
 
@@ -63,14 +72,14 @@ using namespace std;
 #define G4_SOLVE_VIS_TEMPLATES
 #endif
 #endif
-G4Timer Timer;
-G4Timer Timerintern;
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {   
   // Timer to see GFlash performance
+  G4Timer Timer;
   Timer.Start();
   
   G4cout<<"+-------------------------------------------------------+"<<G4endl;
@@ -79,18 +88,29 @@ int main(int argc,char** argv)
   G4cout<<"|          Parameterization with GFLASH                 |"<<G4endl;
   G4cout<<"+-------------------------------------------------------+"<<G4endl;
   
-  G4RunManager* runManager = new G4RunManager;
+
+
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+  G4cout<<"|              Constructing MT run manager              |"<<G4endl;
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+#else
+  G4RunManager * runManager = new G4RunManager;
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+  G4cout<<"|        Constructing sequential run manager            |"<<G4endl;
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+#endif
   
   // UserInitialization classes (mandatory)
   G4cout<<"# GFlash Example: Detector Construction"<<G4endl;    
   runManager->SetUserInitialization(new ExGflashDetectorConstruction);
   G4cout<<"# GFlash Example: Physics list"<<G4endl;
   runManager->SetUserInitialization(new ExGflashPhysicsList);
-  G4cout<<"# GFlash Example: Primary Generator"<<G4endl;
-  runManager->SetUserAction(new ExGflashPrimaryGeneratorAction);
-  G4cout<<"# GFlash Example: User Action Classes"<<G4endl;
-  runManager->SetUserAction(new ExGflashEventAction);
-  runManager->SetUserAction(new ExGflashRunAction);
+  // runManager->SetUserInitialization(new QBBC);
+  // Action initialization:
+  runManager->SetUserInitialization(new ExGflashActionInitialization);
 
   
 #ifdef G4VIS_USE

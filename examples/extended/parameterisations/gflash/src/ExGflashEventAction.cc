@@ -45,11 +45,6 @@
 //Gflash
 using namespace std;
 
-#include "G4Timer.hh"
-extern G4Timer Timer;
-extern G4Timer Timerintern;
-
-
 
 ExGflashEventAction::ExGflashEventAction():
 fNevent(0),fDtime(0.0),fCalorimeterCollectionId(-1)
@@ -62,8 +57,9 @@ ExGflashEventAction::~ExGflashEventAction()
 }
 
 
-void ExGflashEventAction::BeginOfEventAction(const G4Event *evt){
-  Timerintern.Start();
+void ExGflashEventAction::BeginOfEventAction(const G4Event *evt)
+{
+  fTimerIntern.Start();
   G4cout<<" ------ Start ExGflashEventAction ----- "<<G4endl;
   fNevent=evt->GetEventID();
   G4cout<<" Start generating event Nr "<<fNevent<<G4endl<<G4endl;   
@@ -71,18 +67,18 @@ void ExGflashEventAction::BeginOfEventAction(const G4Event *evt){
 
 void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
 {  
-  Timerintern.Stop();
+  fTimerIntern.Stop();
   G4cout << G4endl;
   G4cout << "******************************************";
   G4cout << G4endl;
-  G4cout << "Internal Real Elapsed Time is: "<< Timerintern.GetRealElapsed();
+  G4cout << "Internal Real Elapsed Time is: "<< fTimerIntern.GetRealElapsed();
   G4cout << G4endl;
-  G4cout << "Internal System Elapsed Time: " << Timerintern.GetSystemElapsed();
+  G4cout << "Internal System Elapsed Time: " << fTimerIntern.GetSystemElapsed();
   G4cout << G4endl;
-  G4cout << "Internal GetUserElapsed Time: " << Timerintern.GetUserElapsed();
+  G4cout << "Internal GetUserElapsed Time: " << fTimerIntern.GetUserElapsed();
   G4cout << G4endl;
   G4cout << "******************************************"<< G4endl;
-  fDtime+=Timerintern.GetRealElapsed();
+  fDtime+=fTimerIntern.GetRealElapsed();
   G4cout<<" ------ ExGflashEventAction::End of event nr. "<<fNevent<<"  -----"<< G4endl;   
   
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -94,13 +90,14 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
   G4double totE = 0;
   // Read out of the crysta ECAL
   THC=(ExGflashHitsCollection *)(HCE->GetHC(fCalorimeterCollectionId));
-  if (THC) {
-    /// Hits in sensitive Detector
-    int n_hit = THC->entries();
-    G4cout<<"  " << n_hit<< " hits are stored in ExGflashHitsCollection "<<G4endl;
-    G4PrimaryVertex* pvertex=evt->GetPrimaryVertex();   
-    ///Computing (x,y,z) of vertex of initial particles  
-    G4ThreeVector vtx=pvertex->GetPosition();
+  if (THC)
+    {
+      /// Hits in sensitive Detector
+      int n_hit = THC->entries();
+      G4cout<<"  " << n_hit<< " hits are stored in ExGflashHitsCollection "<<G4endl;
+      G4PrimaryVertex* pvertex=evt->GetPrimaryVertex();   
+      ///Computing (x,y,z) of vertex of initial particles  
+      G4ThreeVector vtx=pvertex->GetPosition();
     G4PrimaryParticle* pparticle=pvertex->GetPrimary();
     // direction of the Shower
     G4ThreeVector mom=pparticle->GetMomentum()/pparticle->GetMomentum().mag();
@@ -133,10 +130,10 @@ void ExGflashEventAction::EndOfEventAction(const G4Event *evt)
             G4ThreeVector longitudinal  =  l;  
             // shower profiles (Radial)
             G4ThreeVector radial = vtx.cross(l);
+          }
       }
-      }
-    G4double max=0;
-    G4int index=0;
+    G4double   max = 0;
+    G4int    index = 0;
     //Find crystal with maximum energy
     for (int i=0;i<100;i++) 
       {

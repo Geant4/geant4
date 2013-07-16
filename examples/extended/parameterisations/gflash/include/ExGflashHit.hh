@@ -100,18 +100,17 @@ class ExGflashHit : public G4VHit
 
 typedef G4THitsCollection<ExGflashHit> ExGflashHitsCollection;
 
-extern G4Allocator<ExGflashHit> ExGflashHitAllocator;
+extern G4ThreadLocal G4Allocator<ExGflashHit>* ExGflashHitAllocator;
 
 inline void* ExGflashHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) ExGflashHitAllocator.MallocSingle();
-  return aHit;
+  if(!ExGflashHitAllocator) ExGflashHitAllocator = new G4Allocator<ExGflashHit>;
+  return (void *) ExGflashHitAllocator->MallocSingle();
 }
 
 inline void ExGflashHit::operator delete(void *aHit)
 {
-  ExGflashHitAllocator.FreeSingle((ExGflashHit*) aHit);
+  ExGflashHitAllocator->FreeSingle((ExGflashHit*) aHit);
 }
 
 #endif
