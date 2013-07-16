@@ -19,6 +19,7 @@
 include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
+include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 
 #
 # Define the Geant4 Module.

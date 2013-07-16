@@ -13,6 +13,6 @@
 
 if(GEANT4_BUILD_GRANULAR_LIBS)
     include(Geant4MacroLibraryTargets)
-    GEANT4_HEADER_MODULE_TARGET(COMPONENT sources.cmake)
+    GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
 endif()
 

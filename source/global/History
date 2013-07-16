@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 16, 2013 G.Cosmo (global-V09-06-56)
+- Correction to CMake scripts for granular build.
+- Updated date and tag-ID in G4Version.hh.
+
 July 3, 2013 A.Dotti (global-V09-06-55)
 - Previous tag was broken.
 
