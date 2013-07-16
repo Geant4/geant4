@@ -81,7 +81,8 @@ G4MTRunManagerKernel* G4MTRunManager::GetMTMasterRunManagerKernel()
 
 G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
     nworkers(2),
-    masterRNGEngine(0)
+    masterRNGEngine(0),
+    nextActionRequest(UNDEFINED)
 {
     if ( fMasterRM )
     {

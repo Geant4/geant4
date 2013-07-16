@@ -689,7 +689,7 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       return;
     }
 #ifdef G4VERBOSE
-    if (verboseLevel>1){
+    if (verboseLevel>2){
       G4cout << "G4VUserPhysicsList::BuildPhysicsTable %%%%%% " << particle->GetParticleName() << G4endl;
       G4cout << " ProcessManager : " << pManager << " ProcessManagerShadow : " << pManagerShadow << G4endl;
       for(G4int iv1=0;iv1<pVector->size();iv1++)
@@ -700,8 +700,22 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
     }
 #endif
     for (G4int j=0; j < pVector->size(); ++j) {
+        //Andrea July 16th 2013 : migration to new interface...
+        //Infer if we are in a worker thread or master thread
+        //Master thread is the one in which the process manager
+        // and process manager shadow pointers are the same
+//        if ( pManagerShadow == pManager )
+//        {
+//            (*pVector)[j]->BuildPhysicsTable(*particle);
+//        }
+//        else
+//        {
+//            (*pVector)[j]->BuildWorkerPhysicsTable(*particle);
+//        }
 
-      G4VMultipleScattering *currentProcess = dynamic_cast<G4VMultipleScattering *>((*pVector)[j]);
+        //=============================================================
+        // Andrea: START : prototype style initization, to be removed
+        G4VMultipleScattering *currentProcess = dynamic_cast<G4VMultipleScattering *>((*pVector)[j]);
       if (currentProcess != NULL)
       {
         if (pManagerShadow != pManager)
@@ -750,6 +764,8 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       }
 
       (*pVector)[j]->BuildPhysicsTable(*particle);
+        //=============================================================
+        //ANDREA : STOP : Prototype implementation
     }
   }
 }
@@ -803,6 +819,21 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
     }
     for (G4int j=0; j < pVector->size(); ++j) {
 
+        //Andrea July 16th 2013 : migration to new interface...
+        //Infer if we are in a worker thread or master thread
+        //Master thread is the one in which the process manager
+        // and process manager shadow pointers are the same
+//        if ( pManagerShadow == pManager )
+//        {
+//            (*pVector)[j]->PreparePhysicsTable(*particle);
+//        }
+//        else
+//        {
+//            (*pVector)[j]->PrepareWorkerPhysicsTable(*particle);
+//        }
+
+        //=============================================================
+      //ANDREA : START : protptype initialization
       G4VMultipleScattering *currentProcess = dynamic_cast<G4VMultipleScattering *>((*pVector)[j]);
       if (currentProcess != NULL)
       {
@@ -836,6 +867,10 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
       }
 
       (*pVector)[j]->PreparePhysicsTable(*particle);
+        
+        //=============================================================
+        //ANDREA : STOP : protptype initialization
+
     }
   }
 }
