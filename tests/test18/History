@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 July 2013  Dennis Wright (test18-V09-06-04)
+----------------------------------------------
+- set numberOfThreads to 1 in test18.large_N.in and test18.in.  This is a 
+  temporary measure until multi-threaded issues with G4RadioactiveDecay can 
+  be fixed.
+
 21 June 2013  Dennis Wright (test18-V09-06-03)
 ----------------------------------------------
 - Tst18GeometryConstruction : do proper nesting of material spheres
