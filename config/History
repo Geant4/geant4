@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th July 2013   Gabriele Cosmo   (config-V09-06-05)
+- binmake.gmk: added include paths for restructured analysis module.
+
 22nd April 2013   Gabriele Cosmo   (config-V09-06-04)
 - Added G4MULTITHREADED setup flags.
 
