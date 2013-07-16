@@ -123,7 +123,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4cuts
         G4decay
         G4digits
-        G4emdna
         G4emhighenergy
         G4emlowenergy
         G4emstandard
@@ -156,10 +155,9 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4hadronic_hetcpp_evaporation
-        G4hadronic_hetcpp_utils
-        G4had_inclxx
-        G4hadronic_iso
+        G4hadronic_inclxx_interface
+        G4hadronic_inclxx_physics
+        G4hadronic_inclxx_utils
         G4hadronic_mgt
         G4hadronic_proc
         G4hadronic_qgstring
@@ -179,6 +177,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4optical
         G4partman
         G4phys_builders
+        G4phys_ctor_factory
         G4procman
         G4run
         G4shortlived

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-07-2013, Gabriele Cosmo (physics_lists-V09-06-02)
+- Correction to CMake scripts for granular build.
+
 02-04-2013, Andrea Dotti (physics_lists-V09-06-01)
 - Adaptation for MT with new G4VUserPhysicsList API, needed to share
   physics-list objects between threads.

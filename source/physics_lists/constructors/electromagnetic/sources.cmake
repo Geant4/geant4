@@ -43,7 +43,12 @@ include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/constructors/factor
 include_directories(${CMAKE_SOURCE_DIR}/source/physics_lists/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/decay/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/utils/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/processes/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/models/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/dna/molecules/types/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/highenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/lowenergy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/muons/include)
@@ -97,7 +102,11 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
         G4cuts
         G4decay
         G4digits
-        G4emdna
+        G4emdna-utils
+        G4emdna-processes
+        G4emdna-molman
+        G4emdna-moltypes
+        G4emdna-models
         G4emhighenergy
         G4emlowenergy
         G4emstandard
@@ -117,7 +126,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
         G4optical
         G4partman
         G4phys_builders
-	G4phys_ctor_factory
+        G4phys_ctor_factory
         G4phys_util
         G4procman
         G4run

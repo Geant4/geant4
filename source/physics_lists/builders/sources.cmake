@@ -256,7 +256,9 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4had_inclxx
+        G4hadronic_inclxx_interface
+        G4hadronic_inclxx_physics
+        G4hadronic_inclxx_utils
         G4hadronic_mgt
         G4hadronic_proc
         G4hadronic_qgstring

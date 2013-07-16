@@ -100,7 +100,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 # Define the Geant4 Module.
 #
 include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4phys_lists
+GEANT4_DEFINE_MODULE(NAME G4physlist_util
     HEADERS
 	CompileTimeConstraints.hh
 	G4DataQuestionaire.hh
@@ -115,7 +115,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4cuts
         G4decay
         G4digits
-        G4emdna
         G4emhighenergy
         G4emlowenergy
         G4emstandard
@@ -148,10 +147,9 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4hadronic_hetcpp_evaporation
-        G4hadronic_hetcpp_utils
-        G4had_inclxx
-        G4hadronic_iso
+        G4hadronic_inclxx_interface
+        G4hadronic_inclxx_physics
+        G4hadronic_inclxx_utils
         G4hadronic_mgt
         G4hadronic_proc
         G4hadronic_qgstring
