@@ -191,9 +191,10 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 				G4cout << "Warning - G4BinaryLightIonReaction E/P correction for cascaders failed" << G4endl;
 			}
 			pFinalState=G4LorentzVector(0,0,0,0);
-		  	for(iter=cascaders->begin(); iter!=cascaders->end(); iter++)
+			unsigned int i;
+			for(i=0; i<cascaders->size(); i++)
 			{
-				pFinalState += G4LorentzVector( (*iter)->GetMomentum(), (*iter)->GetTotalEnergy() );
+				pFinalState += G4LorentzVector( (*cascaders)[i]->GetMomentum(), (*cascaders)[i]->GetTotalEnergy() );
 			}
 			momentum=pInitialState-pFinalState;
 			if (++loopcount > 10 )
@@ -215,16 +216,12 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 		   if ( momentum.vect().mag() - momentum.e()> 10*keV )
 		   {
 
-		      for (iter=spectators->begin();iter!=spectators->end();iter++)
+		      G4ReactionProductVector::iterator ispectator;
+		      for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
 		      {
-		         delete *iter;
+		         delete *ispectator;
 		      }
 		      delete spectators;
-		  	  for(iter=cascaders->begin(); iter!=cascaders->end(); iter++)
-		  	  {
-		  		 delete *iter;
-		  	  }
-		  	  delete cascaders;
 
 		      G4cout << "G4BinaryLightIonReaction.cc: mom check: " <<  momentum
 		            << " 3.mag "<< momentum.vect().mag() << G4endl
@@ -266,16 +263,15 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 	theResult.Clear();
 	theResult.SetStatusChange(stopAndKill);
 	G4double Etot(0);
-    G4ReactionProductVector::iterator iter;
-	for(iter=cascaders->begin(); iter!=cascaders->end(); iter++)
-	for(size_t i=0; i<cascaders->size(); i++)
+	size_t i=0;
+	for(i=0; i<cascaders->size(); i++)
 	{
-		if((*iter)->GetNewlyAdded())
+		if((*cascaders)[i]->GetNewlyAdded())
 		{
 			G4DynamicParticle * aNew =
-					new G4DynamicParticle((*iter)->GetDefinition(),
-							(*iter)->GetTotalEnergy(),
-							(*iter)->GetMomentum() );
+					new G4DynamicParticle((*cascaders)[i]->GetDefinition(),
+							(*cascaders)[i]->GetTotalEnergy(),
+							(*cascaders)[i]->GetMomentum() );
 			G4LorentzVector tmp = aNew->Get4Momentum();
 			if(swapped)
 			{
@@ -292,7 +288,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 			// 	      <<" "<<  aNew->GetTotalEnergy()
 			// 	      << G4endl;
 		}
-		delete *iter;
+		delete (*cascaders)[i];
 	}
 	delete cascaders;
 

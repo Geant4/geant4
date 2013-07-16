@@ -12,10 +12,6 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-
-12 Jul 2013 Gunter Folger      had-binary-V09-06-07
-- G4BinaryLightIonReaction: fix for coverity report on small leak 
-
  9 May 2013 John Apostolakis	 had-binary-V09-06-06  Retag
  8 May 2013 John Apostolakis	 had-binary-V09-06-05 
 - Revised signature of SetChargeMomentumMass for fields (G4KM_NucleonEqRhs,
