@@ -9,6 +9,10 @@ $Id$
                       Category History file
                       ---------------------
 
+17.07.2013 - Gabriele Cosmo (purmag-V09-06-01)
+- Explicitly use G4CsvAnalysisManager to be compliant with restructure of
+  analysis module.
+
 17.04.2013 - Luciano Pandola (purmag-V09-06-00)
 - Migrate analysis from AIDA to g4analysis (remove the 
   external AIDA dependency). Some clean-up in other 

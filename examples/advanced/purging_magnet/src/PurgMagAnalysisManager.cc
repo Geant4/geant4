@@ -66,7 +66,7 @@ PurgMagAnalysisManager* PurgMagAnalysisManager::getInstance()
 void PurgMagAnalysisManager::book() 
 {
   // Get/create analysis manager
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
  
   // Open an output file
   man->OpenFile("purgmag");
@@ -123,7 +123,7 @@ void PurgMagAnalysisManager::fill_Tuple_Electrons(G4double ex, G4double ey, G4do
 						  G4double epx, G4double epy, G4double epz)  // Momentum
 {
   // Get/create analysis manager
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
 
   // Fill 1st ntuple ( id = 1)
   man->FillNtupleDColumn(1,0, ex);
@@ -144,7 +144,7 @@ void PurgMagAnalysisManager::fill_Tuple_Gamma(G4double gx, G4double gy, G4double
        					      G4double gpx, G4double gpy, G4double gpz)  // Momentum
 { 
   // Get/create analysis manager
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
 
   // Fill 2nd ntuple ( id = 2)
   man->FillNtupleDColumn(2,0, gx);
@@ -166,7 +166,7 @@ void PurgMagAnalysisManager::fill_Tuple_Positrons(G4double px, G4double py, G4do
 					     G4double ppx, G4double ppy, G4double ppz)  // Momentum
 {
   // Get/create analysis manager
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
 
   // Fill 3rd ntuple ( id = 3)
   man->FillNtupleDColumn(3,0, px);
@@ -184,11 +184,11 @@ void PurgMagAnalysisManager::fill_Tuple_Positrons(G4double px, G4double py, G4do
 void PurgMagAnalysisManager::finish() 
 {  
   // Save histograms
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  G4CsvAnalysisManager* man = G4CsvAnalysisManager::Instance();
   man->Write();
   man->CloseFile();
   // Complete clean-up
-  delete G4AnalysisManager::Instance();
+  delete G4CsvAnalysisManager::Instance();
 }
 
 
