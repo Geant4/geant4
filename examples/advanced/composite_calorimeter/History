@@ -9,6 +9,9 @@ $Id$
                       Example History file
                       ---------------------
 
+17.07.2013 - A.Dotti Tag (ccal-V09-06-01)
+- Fixed correct search of AIDA
+
 23.05.2013 - G.Cosmo Tag (ccal-V09-06-00)
 - Fixed compilation error in main() for missing inclusion of of G4UImanager
   header. Fixed compilation warnings for variables/parameters shadowing.
