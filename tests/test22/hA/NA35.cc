@@ -168,7 +168,7 @@ for(G4int ii=0; ii<100; ii++){for(G4int j=0;j<9;j++) YUzhi[ii][j]=0.;}
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e; /* px, py, pz, pt, pt2, theta; */
+    G4double e; // px, py, pz, pt, pt2, theta;
     G4VParticleChange* aChange = 0;
 
 //  G4double E=energy+part->GetPDGMass();                                  // Elab Proj

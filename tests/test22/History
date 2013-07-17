@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
 -------------------------------------------------------------------------
 
+17 July 2013 Alberto Ribon                         (test22-V09-06-12)
+---------------------------------------------------------------------
+Fixed some extra Clang warnings related to pz=pz and pt=pt.
+
 16 July 2013 Alberto Ribon                         (test22-V09-06-11)
 ---------------------------------------------------------------------
 Fixed a few mistakes in the previous tag, and some new warnings.

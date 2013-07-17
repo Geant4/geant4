@@ -185,7 +185,7 @@ for(G4int ii=0; ii<100; ii++)
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, px, py, pz, pt, pt2, theta;
+    G4double e, px, py, /* pz, theta, */ pt, pt2;
     G4VParticleChange* aChange = 0;
 
 //  G4double E=energy+part->GetPDGMass();                                  // Elab Proj
@@ -282,14 +282,14 @@ for(G4int ii=0; ii<100; ii++)
 
         px = mom.x();
         py = mom.y();
-        pz = mom.z(); pz = pz;
+        //pz = mom.z(); pz = pz;
         pt = std::sqrt(px*px +py*py); pt2=sqr(pt/GeV);
         e  = fm.e() - m;
-        theta = mom.theta();
+        //theta = mom.theta();
 
 //        G4double CosTheta=std::cos(theta);
 
-        theta=theta*180./pi;
+        //theta=theta*180./pi;
 
 //        G4double costcm = std::cos(fm.theta());
 

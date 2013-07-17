@@ -181,7 +181,7 @@ std::ofstream PipPchan("PipPchan.dat",std::ios::out);
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, px, py, pz, pt, theta;
+    G4double e; //px, py, pz, pt, theta;
     G4VParticleChange* aChange = 0;
 
 //  G4double E=energy+part->GetPDGMass();                                  // Elab Proj
@@ -309,16 +309,16 @@ std::ofstream PipPchan("PipPchan.dat",std::ios::out);
 	  labv += G4LorentzVector(0.0,0.0,0.0,electron_mass_c2); 
 	}
 
-        px = mom.x();
-        py = mom.y();
-        pz = mom.z();    pz=pz;
-        pt = std::sqrt(px*px +py*py); pt=pt;
+        //px = mom.x();
+        //py = mom.y();
+        //pz = mom.z();    pz=pz;
+        //pt = std::sqrt(px*px +py*py); pt=pt;
         e  = fm.e() - m;
-        theta = mom.theta();
+        //theta = mom.theta();
 
 //        G4double CosTheta=std::cos(theta);
 
-        theta=theta*180./pi;
+        //theta=theta*180./pi;
 
         fm.boost(-bst);
 
