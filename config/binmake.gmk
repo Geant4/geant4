@@ -45,6 +45,7 @@ ifndef INCFLAGS
   INCFLAGS := -I$(G4INCLUDE)
  else
   INCFLAGS := \
+              -I$(G4BASE)/analysis/g4tools/include \
               -I$(G4BASE)/analysis/management/include \
               -I$(G4BASE)/analysis/hntools/include \
               -I$(G4BASE)/analysis/csv/include \

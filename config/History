@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th July 2013   Gabriele Cosmo   (config-V09-06-06)
+- binmake.gmk: added missing include path for analysis module.
+
 16th July 2013   Gabriele Cosmo   (config-V09-06-05)
 - binmake.gmk: added include paths for restructured analysis module.
 
