@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
+ Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -472,7 +472,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=3.69s Real=5.44s Sys=0s
+  User=3.69s Real=9.13s Sys=0s
 
  ======================== run summary ======================
 
@@ -957,45 +957,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.73s Real=5.02s Sys=0.01s
+  User=4.64s Real=9.17s Sys=0.01s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.59 keV +- 46.22 eV 
+ Total energy deposit in absorber per event = 18.57 keV +- 46.06 eV 
 
- -----> Mean dE/dx = 19.24 MeV/cm	(0.9961 MeV*cm2/g)
+ -----> Mean dE/dx = 19.23 MeV/cm	(0.9953 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 17.92 MeV/cm	(0.9276 MeV*cm2/g)
    full dEdx       = 60.88 MeV/cm	(3.151 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 1.46 keV   secondaries = 38.87 keV +- 1.455 keV
+ Leakage :  primary = 15.64 MeV +- 1.465 keV   secondaries = 38.88 keV +- 1.46 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.936 um  +- 8.547 nm 
- Total track length (neutral) in absorber per event = 128.1 nm  +- 3.297 nm 
+ Total track length (charged) in absorber per event = 9.934 um  +- 8.511 nm 
+ Total track length (neutral) in absorber per event = 128 nm  +- 3.297 nm 
 
- Number of steps (charged) in absorber per event = 6.202 +- 9.245e-06
- Number of steps (neutral) in absorber per event = 0.02832 +- 9.245e-06
+ Number of steps (charged) in absorber per event = 6.2 +- 9.225e-06
+ Number of steps (neutral) in absorber per event = 0.0283 +- 9.225e-06
 
- Number of secondaries per event : Gammas = 0.02815   electrons = 0.02269   positrons = 0
+ Number of secondaries per event : Gammas = 0.02813   electrons = 0.02256   positrons = 0
 
  Number of events with the primary particle transmitted = 99.99 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 99.99 %
 
  Number of events with the primary particle reflected = 0.013 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.308 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.304 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 35.44 mrad (central part only)
+  rms proj angle of transmit primary particle = 35.43 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad   Tail ratio = 2.926 %
+  central part defined as +- 105.3 mrad   Tail ratio = 2.925 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1384220689, 80515205
+ Current couple of seeds = 715096143, 1087994164
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um
@@ -1010,9 +1010,9 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.3 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.34 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
+RunManagerKernel is deleted. Good bye :)

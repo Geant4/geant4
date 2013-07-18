@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
+ Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -329,7 +329,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.27s Real=2.62s Sys=0.01s
+  User=1.27s Real=3.6s Sys=0s
 
  ======================== run summary ======================
 
@@ -430,7 +430,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.86s Real=5.17s Sys=0s
+  User=2.86s Real=6.79s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -532,7 +532,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=49.14s Real=89.65s Sys=0.01s
+  User=50.41s Real=138.1s Sys=0.04s
 
  ======================== run summary ======================
 
@@ -634,7 +634,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=46.6s Real=73.45s Sys=0.02s
+  User=47.87s Real=128.1s Sys=0.03s
 
  ======================== run summary ======================
 
@@ -735,7 +735,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.31s Real=6.73s Sys=0.01s
+  User=3.27s Real=10.19s Sys=0s
 
  ======================== run summary ======================
 
@@ -804,4 +804,4 @@ Dynamic pools deleted: 11 / Total memory freed: 28 Mb
 G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
+RunManagerKernel is deleted. Good bye :)
