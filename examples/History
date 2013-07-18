@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th July 2013  Gabriele Cosmo (examples-V09-06-07)
+- Updated reference outputs according to reference tag geant4-09-06-ref-07.
+- Includes tags: ccal-V09-06-01, purmag-V09-06-01, AnaEx01-V09-06-01,
+                 excommon-analysis-V09-06-03, testem1-V09-06-07,
+                 testem2-V09-06-06, testem3-V09-06-08, testem4-V09-06-08,
+                 testem5-V09-06-07, testem7-V09-06-11, testem11-V09-06-12,
+                 testem12-V09-06-09, testem14-V09-06-08, testem15-V09-06-06,
+                 testem16-V09-06-04, testem18-V09-06-05, p6decayer-V09-06-00,
+                 particleGunExample-V09-06-06, exhadr03-V09-06-20,
+                 electronScattering-V09-06-08, fano-V09-06-06, fano2-V09-06-05,
+                 LXe-V09-06-07, WLS-V09-06-07, exgflash-V09-06-01,
+                 rdecay01-V09-06-05
+
 28th June 2013  Gabriele Cosmo (examples-V09-06-06)
 - Updated reference outputs according to reference tag geant4-09-06-ref-06.
 - Archived novice examples module.
