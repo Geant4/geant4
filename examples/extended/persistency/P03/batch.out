@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
+ Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -446,9 +446,9 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 1
-Dynamic pools deleted: 13 / Total memory freed: 0.1 Mb
+Dynamic pools deleted: 13 / Total memory freed: 0.12 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
+RunManagerKernel is deleted. Good bye :)

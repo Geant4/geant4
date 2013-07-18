@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
+ Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -4934,8 +4934,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    26    -87.4 -1.3e+03     -434      5.61    0.013      100  1.83e+03     Tracker StepLimiter
    27    -70.3 -1.35e+03     -401       5.6  0.00617     57.8  1.88e+03     Tracker eIoni
    28      -42 -1.42e+03     -352      5.59    0.014     93.1  1.98e+03     Tracker eIoni
-   29    -39.6 -1.43e+03     -348      5.59 0.000919     7.63  1.98e+03     Tracker eIoni
-   30    -7.21 -1.5e+03     -294      5.57   0.0127      100  2.08e+03     Tracker StepLimiter
+   29    -39.7 -1.43e+03     -348      5.59 0.000919     7.63  1.98e+03     Tracker eIoni
+   30    -7.22 -1.5e+03     -294      5.57   0.0127      100  2.08e+03     Tracker StepLimiter
    31     15.9 -1.56e+03     -254      5.54  0.00865       70  2.15e+03     Tracker eIoni
    32     31.5 -1.6e+03     -224      5.53   0.0103     52.6  2.21e+03     Tracker eIoni
    33     53.9 -1.65e+03     -187      5.51  0.00759     69.2  2.28e+03     Tracker eIoni
@@ -5101,7 +5101,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     75.8 -1.7e+03     -153   0.00778        0        0         0     Tracker initStep
     1     74.8 -1.7e+03     -154   0.00334  0.00443     1.47      1.47     Tracker eIoni
-    2     74.9 -1.7e+03     -154         0  0.00334    0.379      1.84     Tracker eIoni
+    2     74.8 -1.7e+03     -154         0  0.00334    0.379      1.84     Tracker eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 109,   Parent ID = 22
@@ -5145,7 +5145,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -39.6 -1.43e+03     -348   0.00109        0        0         0     Tracker initStep
+    0    -39.7 -1.43e+03     -348   0.00109        0        0         0     Tracker initStep
     1    -39.7 -1.43e+03     -348         0  0.00109   0.0649    0.0649     Tracker eIoni
 
 *********************************************************************************************************
@@ -5424,9 +5424,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 9.26e-05 0.000233 -2.44e+03       4.7        0        0         0      Target initStep
-    1     0.68    0.435 -2.44e+03     0.996     2.59     2.12      2.12      Target eBrem
-    2    0.682    0.482 -2.44e+03         0    0.996    0.728      2.85      Target eIoni
+    0 9.26e-05 0.000233 -2.44e+03      4.64        0        0         0      Target initStep
+    1    0.691    0.426 -2.44e+03     0.957      2.6     2.13      2.13      Target eBrem
+    2    0.693    0.471 -2.44e+03         0    0.957    0.694      2.82      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
@@ -5678,16 +5678,16 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.68    0.435 -2.44e+03      1.12        0        0         0      Target initStep
-    1    0.157     1.59 -2.44e+03         0    0.088     1.53      1.53      Target phot
+    0    0.691    0.426 -2.44e+03      1.09        0        0         0      Target initStep
+    1    0.186     1.52 -2.44e+03         0    0.088     1.46      1.46      Target phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 157,   Parent ID = 136
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.157     1.59 -2.44e+03      1.03        0        0         0      Target initStep
-    1    0.153     1.65 -2.44e+03         0     1.03    0.756     0.756      Target eIoni
+    0    0.186     1.52 -2.44e+03         1        0        0         0      Target initStep
+    1    0.182     1.58 -2.44e+03         0        1    0.732     0.732      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 135,   Parent ID = 11
@@ -5712,8 +5712,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 9.26e-05 0.000233 -2.44e+03      13.4        0        0         0      Target initStep
-    1   0.0461  -0.0291 -2.44e+03         0    0.327    0.259     0.259      Target annihil
+    0 9.26e-05 0.000233 -2.44e+03      13.2        0        0         0      Target initStep
+    1   0.0458  -0.0289 -2.44e+03         0    0.323    0.257     0.257      Target annihil
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 159,   Parent ID = 135
@@ -5762,17 +5762,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0461  -0.0291 -2.44e+03      13.6        0        0         0      Target initStep
-    1     2.04     5.14 -2.41e+03         0        0     29.7      29.7      Target conv
+    0   0.0458  -0.0289 -2.44e+03      13.5        0        0         0      Target initStep
+    1     2.07     5.21 -2.41e+03         0        0     29.9      29.9      Target conv
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 163,   Parent ID = 10
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   0.0461  -0.0291 -2.44e+03     0.421        0        0         0      Target initStep
-    1   -0.607   -0.833 -2.44e+03     0.215        0     1.04      1.04      Target compt
-    2   -0.144    -1.06 -2.44e+03         0    0.088    0.584      1.62      Target phot
+    0   0.0458  -0.0289 -2.44e+03      0.42        0        0         0      Target initStep
+    1   -0.607   -0.832 -2.44e+03     0.215        0     1.04      1.04      Target compt
+    2   -0.145    -1.06 -2.44e+03         0    0.088    0.583      1.62      Target phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 162,   Parent ID = 160
@@ -5795,11 +5795,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.04     5.14 -2.41e+03      3.62        0        0         0      Target initStep
-    1     1.68     4.93 -2.41e+03      2.04    0.552    0.551     0.551      Target eBrem
-    2     1.06     4.81 -2.41e+03     0.908    0.979    0.953       1.5      Target eBrem
-    3     1.06     4.75 -2.41e+03         0    0.908    0.656      2.16      Target eIoni
-    4     1.06     4.75 -2.41e+03         0        0        0      2.16      Target annihil
+    0     2.07     5.21 -2.41e+03      3.58        0        0         0      Target initStep
+    1      1.7        5 -2.41e+03         2    0.554    0.554     0.554      Target eBrem
+    2     1.09     4.88 -2.41e+03     0.862    0.989    0.962      1.52      Target eBrem
+    3     1.08     4.82 -2.41e+03         0    0.862    0.616      2.13      Target eIoni
+    4     1.08     4.82 -2.41e+03         0        0        0      2.13      Target annihil
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 173,   Parent ID = 161
@@ -5822,168 +5822,213 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.144    -1.06 -2.44e+03     0.127        0        0         0      Target initStep
-    1   -0.143    -1.06 -2.44e+03         0    0.127   0.0403    0.0403      Target eIoni
+    0   -0.145    -1.06 -2.44e+03     0.127        0        0         0      Target initStep
+    1   -0.143    -1.06 -2.44e+03         0    0.127   0.0402    0.0402      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 170,   Parent ID = 163
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.607   -0.833 -2.44e+03     0.205        0        0         0      Target initStep
-    1   -0.612   -0.835 -2.44e+03         0    0.205   0.0847    0.0847      Target eIoni
+    0   -0.607   -0.832 -2.44e+03     0.205        0        0         0      Target initStep
+    1   -0.612   -0.835 -2.44e+03         0    0.205   0.0845    0.0845      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 168,   Parent ID = 164
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.04     5.14 -2.41e+03         9        0        0         0      Target initStep
-    1     2.24     5.19 -2.41e+03      7.84    0.701    0.653     0.653      Target eBrem
-    2     1.41     5.22 -2.41e+03      5.45     2.04     1.07      1.73      Target eBrem
-    3     1.13     5.35 -2.41e+03      3.63    0.431    0.368      2.09      Target eIoni
-    4    0.682     5.58 -2.41e+03      2.62     1.02    0.962      3.06      Target eBrem
-    5      1.2     4.42 -2.41e+03     0.306     2.31     1.64       4.7      Target eIoni
-    6     1.19     4.41 -2.41e+03         0    0.306    0.153      4.85      Target eIoni
+    0     2.07     5.21 -2.41e+03      8.88        0        0         0      Target initStep
+    1     2.27     5.26 -2.41e+03      7.72    0.703    0.656     0.656      Target eBrem
+    2     1.44     5.28 -2.41e+03      5.34     2.05     1.08      1.73      Target eBrem
+    3     1.29     5.25 -2.41e+03      3.53    0.432    0.369       2.1      Target eIoni
+    4     1.21     5.13 -2.41e+03      2.49     1.03    0.974      3.08      Target eBrem
+    5     1.66     4.04 -2.41e+03      0.24     2.25      1.6      4.68      Target eIoni
+    6     1.65     4.04 -2.41e+03         0     0.24    0.107      4.78      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 180,   Parent ID = 168
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.13     5.35 -2.41e+03      1.39        0        0         0      Target initStep
-    1     1.06     5.34 -2.41e+03         0     1.39     1.06      1.06      Target eIoni
+    0     1.29     5.25 -2.41e+03      1.38        0        0         0      Target initStep
+    1     1.21     5.21 -2.41e+03         0     1.38     1.06      1.06      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 179,   Parent ID = 168
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.41     5.22 -2.41e+03     0.344        0        0         0      Target initStep
-    1    0.283     6.14 -2.41e+03         0    0.088     1.45      1.45      Target phot
+    0     1.44     5.28 -2.41e+03     0.342        0        0         0      Target initStep
+    1    0.626     5.54 -2.41e+03         0    0.088     1.43      1.43      Target phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 181,   Parent ID = 179
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.283     6.14 -2.41e+03     0.256        0        0         0      Target initStep
-    1    0.283     6.14 -2.41e+03         0    0.256    0.118     0.118      Target eIoni
+    0    0.626     5.54 -2.41e+03     0.254        0        0         0      Target initStep
+    1    0.629     5.54 -2.41e+03         0    0.254    0.117     0.117      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 178,   Parent ID = 168
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.24     5.19 -2.41e+03     0.456        0        0         0      Target initStep
-    1     1.17     6.89 -2.41e+03     0.392        0      3.2       3.2      Target compt
-    2     2.94     9.95 -2.4e+03     0.392        0     6.86      10.1     Tracker Transportation
-    3 1.18e+03 2.04e+03  1.5e+03     0.392        0 4.55e+03  4.56e+03  Chamber_PV Transportation
-    4 1.19e+03 2.06e+03 1.53e+03     0.376        0     39.8   4.6e+03  Chamber_PV compt
-    5 1.22e+03 2.07e+03 1.63e+03     0.376        0     97.2   4.7e+03       World Transportation
-    6  1.6e+03 2.24e+03 2.94e+03     0.376        0 1.38e+03  6.08e+03  OutOfWorld Transportation
+    0     2.27     5.26 -2.41e+03     0.454        0        0         0      Target initStep
+    1     1.18     6.97 -2.41e+03      0.39        0      3.2       3.2      Target compt
+    2     2.88       10 -2.4e+03      0.39        0      6.7      9.89     Tracker Transportation
+    3 1.16e+03 2.07e+03  1.5e+03      0.39        0 4.56e+03  4.57e+03  Chamber_PV Transportation
+    4 1.17e+03 2.09e+03 1.54e+03      0.39        0     44.9  4.62e+03       World Transportation
+    5 1.45e+03 2.58e+03 2.47e+03     0.374        0 1.08e+03   5.7e+03       World compt
+    6 1.59e+03 2.65e+03 2.94e+03     0.374        0      499   6.2e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 183,   Parent ID = 178
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 1.19e+03 2.06e+03 1.53e+03    0.0159        0        0         0  Chamber_PV initStep
-    1 1.19e+03 2.06e+03 1.53e+03   0.00952  0.00641     1.85      1.85  Chamber_PV eIoni
-    2 1.19e+03 2.06e+03 1.53e+03   0.00632  0.00146     0.17      2.02  Chamber_PV eIoni
-    3 1.19e+03 2.06e+03 1.53e+03         0  0.00632    0.572      2.59  Chamber_PV eIoni
+    0 1.45e+03 2.58e+03 2.47e+03    0.0158        0        0         0       World initStep
+    1 1.45e+03 2.59e+03 2.47e+03    0.0109  0.00487     2.71      2.71       World eIoni
+    2 1.45e+03 2.59e+03 2.47e+03   0.00497  0.00498     1.82      4.52       World eIoni
+    3 1.45e+03 2.59e+03 2.47e+03         0  0.00497    0.758      5.28       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 184,   Parent ID = 183
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 1.19e+03 2.06e+03 1.53e+03   0.00174        0        0         0  Chamber_PV initStep
-    1 1.19e+03 2.06e+03 1.53e+03         0  0.00174    0.086     0.086  Chamber_PV eIoni
+    0 1.45e+03 2.59e+03 2.47e+03  0.000995        0        0         0       World initStep
+    1 1.45e+03 2.59e+03 2.47e+03         0 0.000995   0.0567    0.0567       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 182,   Parent ID = 178
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.17     6.89 -2.41e+03    0.0641        0        0         0      Target initStep
-    1     1.17     6.89 -2.41e+03         0   0.0641   0.0134    0.0134      Target eIoni
+    0     1.18     6.97 -2.41e+03    0.0636        0        0         0      Target initStep
+    1     1.18     6.97 -2.41e+03         0   0.0636   0.0132    0.0132      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 177,   Parent ID = 169
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.06     4.75 -2.41e+03     0.511        0        0         0      Target initStep
-    1     3.32     3.75 -2.41e+03         0    0.088     2.96      2.96      Target phot
+    0     1.08     4.82 -2.41e+03     0.511        0        0         0      Target initStep
+    1     4.03     3.52 -2.41e+03     0.503        0     3.86      3.86      Target compt
+    2     4.72     3.03 -2.41e+03     0.447        0    0.973      4.83      Target compt
+    3      5.5      1.2 -2.41e+03     0.276        0     2.16      6.99      Target compt
+    4      6.3     1.42 -2.4e+03         0    0.088     0.93      7.92      Target phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 188,   Parent ID = 177
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      6.3     1.42 -2.4e+03     0.188        0        0         0      Target initStep
+    1      6.3     1.42 -2.4e+03         0    0.188   0.0739    0.0739      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 187,   Parent ID = 177
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0      5.5      1.2 -2.41e+03     0.171        0        0         0      Target initStep
+    1      5.5      1.2 -2.41e+03         0    0.171   0.0641    0.0641      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 186,   Parent ID = 177
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0     4.72     3.03 -2.41e+03     0.056        0        0         0      Target initStep
+    1     4.72     3.03 -2.41e+03         0    0.056   0.0107    0.0107      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 185,   Parent ID = 177
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     3.32     3.75 -2.41e+03     0.423        0        0         0      Target initStep
-    1     3.33     3.75 -2.41e+03         0    0.423    0.243     0.243      Target eIoni
+    0     4.03     3.52 -2.41e+03    0.0081        0        0         0      Target initStep
+    1     4.03     3.52 -2.41e+03         0   0.0081 0.000515  0.000515      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 176,   Parent ID = 169
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.06     4.75 -2.41e+03     0.511        0        0         0      Target initStep
-    1    -3.15      6.6 -2.41e+03         0    0.088      5.5       5.5      Target phot
+    0     1.08     4.82 -2.41e+03     0.511        0        0         0      Target initStep
+    1 -0.00845      5.3 -2.41e+03     0.466        0     1.42      1.42      Target compt
+    2    -2.43     6.45 -2.41e+03     0.446        0     2.71      4.13      Target compt
+    3    -10.2     10.4 -2.41e+03         0    0.088     8.82        13      Target phot
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 186,   Parent ID = 176
+* G4Track Information:   Particle = e-,   Track ID = 191,   Parent ID = 176
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -3.15      6.6 -2.41e+03     0.423        0        0         0      Target initStep
-    1    -3.15     6.61 -2.41e+03         0    0.423    0.243     0.243      Target eIoni
+    0    -10.2     10.4 -2.41e+03     0.358        0        0         0      Target initStep
+    1    -10.2     10.4 -2.41e+03         0    0.358    0.192     0.192      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 190,   Parent ID = 176
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    -2.43     6.45 -2.41e+03    0.0199        0        0         0      Target initStep
+    1    -2.43     6.45 -2.41e+03         0   0.0199  0.00202   0.00202      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 189,   Parent ID = 176
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.00845      5.3 -2.41e+03    0.0453        0        0         0      Target initStep
+    1 -0.00839      5.3 -2.41e+03         0   0.0453   0.0076    0.0076      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 175,   Parent ID = 169
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.06     4.81 -2.41e+03     0.149        0        0         0      Target initStep
-    1     1.15      4.1 -2.41e+03         0    0.088    0.724     0.724      Target phot
+    0     1.09     4.88 -2.41e+03     0.148        0        0         0      Target initStep
+    1     1.14     4.43 -2.41e+03         0    0.088    0.454     0.454      Target phot
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 187,   Parent ID = 175
+* G4Track Information:   Particle = e-,   Track ID = 192,   Parent ID = 175
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.15      4.1 -2.41e+03    0.0612        0        0         0      Target initStep
-    1     1.15      4.1 -2.41e+03         0   0.0612   0.0124    0.0124      Target eIoni
+    0     1.14     4.43 -2.41e+03    0.0599        0        0         0      Target initStep
+    1     1.14     4.43 -2.41e+03         0   0.0599    0.012     0.012      Target eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 174,   Parent ID = 169
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.68     4.93 -2.41e+03      1.04        0        0         0      Target initStep
-    1     0.37     6.13 -2.41e+03     0.363        0     1.78      1.78      Target compt
-    2     0.17     6.13 -2.41e+03         0    0.088     3.37      5.15      Target phot
+    0      1.7        5 -2.41e+03      1.02        0        0         0      Target initStep
+    1    0.893     5.74 -2.41e+03     0.368        0      1.1       1.1      Target compt
+    2      1.3     6.34 -2.41e+03         0    0.088    0.785      1.89      Target phot
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 189,   Parent ID = 174
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.17     6.13 -2.41e+03     0.275        0        0         0      Target initStep
-    1     0.17     6.13 -2.41e+03         0    0.275    0.131     0.131      Target eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 188,   Parent ID = 174
+* G4Track Information:   Particle = e-,   Track ID = 194,   Parent ID = 174
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.37     6.13 -2.41e+03     0.672        0        0         0      Target initStep
-    1    0.348     6.15 -2.41e+03         0    0.672    0.448     0.448      Target eIoni
+    0      1.3     6.34 -2.41e+03      0.28        0        0         0      Target initStep
+    1      1.3     6.34 -2.41e+03         0     0.28    0.135     0.135      Target eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 193,   Parent ID = 174
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0    0.893     5.74 -2.41e+03     0.657        0        0         0      Target initStep
+    1    0.865     5.75 -2.41e+03         0    0.657    0.435     0.435      Target eIoni
 ---> End of event: 0
 >>> Event: 0
-    104 hits stored in this event
+    100 hits stored in this event
 ### Run 2 start.
 
 ---> Begin of event: 0
@@ -5991,7 +6036,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 0
     0 hits stored in this event
 >>> Event: 1
-    77 hits stored in this event
+    0 hits stored in this event
 >>> Event: 2
     0 hits stored in this event
 >>> Event: 3
@@ -5999,13 +6044,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 4
     0 hits stored in this event
 >>> Event: 5
-    6 hits stored in this event
+    0 hits stored in this event
 >>> Event: 6
     0 hits stored in this event
 >>> Event: 7
     0 hits stored in this event
 >>> Event: 8
-    0 hits stored in this event
+    49 hits stored in this event
 >>> Event: 9
     0 hits stored in this event
 >>> Event: 10
@@ -6019,19 +6064,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 14
     0 hits stored in this event
 >>> Event: 15
-    0 hits stored in this event
+    213 hits stored in this event
 >>> Event: 16
     0 hits stored in this event
 >>> Event: 17
-    145 hits stored in this event
+    0 hits stored in this event
 >>> Event: 18
     0 hits stored in this event
 >>> Event: 19
-    5 hits stored in this event
+    0 hits stored in this event
 >>> Event: 20
     0 hits stored in this event
 >>> Event: 21
-    0 hits stored in this event
+    8 hits stored in this event
 >>> Event: 22
     0 hits stored in this event
 >>> Event: 23
@@ -6039,7 +6084,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 24
     0 hits stored in this event
 >>> Event: 25
-    107 hits stored in this event
+    0 hits stored in this event
 >>> Event: 26
     0 hits stored in this event
 >>> Event: 27
@@ -6051,7 +6096,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 30
     0 hits stored in this event
 >>> Event: 31
-    0 hits stored in this event
+    64 hits stored in this event
 >>> Event: 32
     0 hits stored in this event
 >>> Event: 33
@@ -6063,7 +6108,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 36
     0 hits stored in this event
 >>> Event: 37
-    0 hits stored in this event
+    26 hits stored in this event
 >>> Event: 38
     0 hits stored in this event
 >>> Event: 39
@@ -6071,7 +6116,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 40
     0 hits stored in this event
 >>> Event: 41
-    0 hits stored in this event
+    22 hits stored in this event
 >>> Event: 42
     0 hits stored in this event
 >>> Event: 43
@@ -6085,13 +6130,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 47
     0 hits stored in this event
 >>> Event: 48
-    120 hits stored in this event
+    0 hits stored in this event
 >>> Event: 49
     0 hits stored in this event
 >>> Event: 50
     0 hits stored in this event
 >>> Event: 51
-    247 hits stored in this event
+    0 hits stored in this event
 >>> Event: 52
     0 hits stored in this event
 >>> Event: 53
@@ -6103,7 +6148,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 56
     0 hits stored in this event
 >>> Event: 57
-    0 hits stored in this event
+    23 hits stored in this event
 >>> Event: 58
     0 hits stored in this event
 >>> Event: 59
@@ -6111,19 +6156,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 60
     0 hits stored in this event
 >>> Event: 61
-    19 hits stored in this event
+    0 hits stored in this event
 >>> Event: 62
-    94 hits stored in this event
+    225 hits stored in this event
 >>> Event: 63
     0 hits stored in this event
 >>> Event: 64
     0 hits stored in this event
 >>> Event: 65
-    51 hits stored in this event
+    0 hits stored in this event
 >>> Event: 66
     0 hits stored in this event
 >>> Event: 67
-    112 hits stored in this event
+    0 hits stored in this event
 >>> Event: 68
     0 hits stored in this event
 >>> Event: 69
@@ -6131,15 +6176,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 70
     0 hits stored in this event
 >>> Event: 71
-    0 hits stored in this event
+    114 hits stored in this event
 >>> Event: 72
-    0 hits stored in this event
+    60 hits stored in this event
 >>> Event: 73
     0 hits stored in this event
 >>> Event: 74
     0 hits stored in this event
 >>> Event: 75
-    0 hits stored in this event
+    72 hits stored in this event
 >>> Event: 76
     0 hits stored in this event
 >>> Event: 77
@@ -6147,11 +6192,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 78
     0 hits stored in this event
 >>> Event: 79
-    0 hits stored in this event
+    88 hits stored in this event
 >>> Event: 80
-    347 hits stored in this event
+    0 hits stored in this event
 >>> Event: 81
-    42 hits stored in this event
+    0 hits stored in this event
 >>> Event: 82
     0 hits stored in this event
 >>> Event: 83
@@ -6161,25 +6206,25 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 85
     0 hits stored in this event
 >>> Event: 86
-    3 hits stored in this event
+    0 hits stored in this event
 >>> Event: 87
     0 hits stored in this event
 >>> Event: 88
-    0 hits stored in this event
+    93 hits stored in this event
 >>> Event: 89
     0 hits stored in this event
 >>> Event: 90
     0 hits stored in this event
 >>> Event: 91
-    36 hits stored in this event
+    73 hits stored in this event
 >>> Event: 92
-    0 hits stored in this event
+    191 hits stored in this event
 >>> Event: 93
-    0 hits stored in this event
+    3 hits stored in this event
 >>> Event: 94
-    35 hits stored in this event
->>> Event: 95
     0 hits stored in this event
+>>> Event: 95
+    113 hits stored in this event
 >>> Event: 96
     0 hits stored in this event
 >>> Event: 97
@@ -6193,204 +6238,204 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 ---> Begin of event: 0
 ---> End of event: 0
 >>> Event: 0
-    85 hits stored in this event
+    63 hits stored in this event
 >>> Event: 1
-    85 hits stored in this event
+    294 hits stored in this event
 >>> Event: 2
-    127 hits stored in this event
+    89 hits stored in this event
 >>> Event: 3
-    923 hits stored in this event
+    94 hits stored in this event
 >>> Event: 4
-    80 hits stored in this event
+    386 hits stored in this event
 >>> Event: 5
-    178 hits stored in this event
+    169 hits stored in this event
 >>> Event: 6
-    75 hits stored in this event
+    61 hits stored in this event
 >>> Event: 7
-    72 hits stored in this event
+    206 hits stored in this event
 >>> Event: 8
-    91 hits stored in this event
+    64 hits stored in this event
 >>> Event: 9
-    90 hits stored in this event
->>> Event: 10
-    85 hits stored in this event
->>> Event: 11
-    64 hits stored in this event
->>> Event: 12
-    59 hits stored in this event
->>> Event: 13
-    78 hits stored in this event
->>> Event: 14
-    86 hits stored in this event
->>> Event: 15
-    49 hits stored in this event
->>> Event: 16
-    738 hits stored in this event
->>> Event: 17
-    72 hits stored in this event
->>> Event: 18
-    113 hits stored in this event
->>> Event: 19
-    2335 hits stored in this event
->>> Event: 20
-    65 hits stored in this event
->>> Event: 21
-    66 hits stored in this event
->>> Event: 22
-    71 hits stored in this event
->>> Event: 23
-    80 hits stored in this event
->>> Event: 24
-    45 hits stored in this event
->>> Event: 25
-    660 hits stored in this event
->>> Event: 26
-    42 hits stored in this event
->>> Event: 27
-    60 hits stored in this event
->>> Event: 28
-    98 hits stored in this event
->>> Event: 29
-    90 hits stored in this event
->>> Event: 30
-    110 hits stored in this event
->>> Event: 31
-    75 hits stored in this event
->>> Event: 32
-    959 hits stored in this event
->>> Event: 33
-    78 hits stored in this event
->>> Event: 34
-    73 hits stored in this event
->>> Event: 35
-    108 hits stored in this event
->>> Event: 36
-    68 hits stored in this event
->>> Event: 37
-    115 hits stored in this event
->>> Event: 38
-    93 hits stored in this event
->>> Event: 39
-    52 hits stored in this event
->>> Event: 40
-    106 hits stored in this event
->>> Event: 41
-    64 hits stored in this event
->>> Event: 42
-    180 hits stored in this event
->>> Event: 43
-    211 hits stored in this event
->>> Event: 44
-    106 hits stored in this event
->>> Event: 45
-    65 hits stored in this event
->>> Event: 46
-    684 hits stored in this event
->>> Event: 47
-    68 hits stored in this event
->>> Event: 48
-    73 hits stored in this event
->>> Event: 49
-    60 hits stored in this event
->>> Event: 50
-    71 hits stored in this event
->>> Event: 51
-    93 hits stored in this event
->>> Event: 52
-    69 hits stored in this event
->>> Event: 53
-    90 hits stored in this event
->>> Event: 54
-    49 hits stored in this event
->>> Event: 55
-    88 hits stored in this event
->>> Event: 56
-    111 hits stored in this event
->>> Event: 57
-    47 hits stored in this event
->>> Event: 58
-    216 hits stored in this event
->>> Event: 59
-    99 hits stored in this event
->>> Event: 60
-    84 hits stored in this event
->>> Event: 61
-    118 hits stored in this event
->>> Event: 62
-    73 hits stored in this event
->>> Event: 63
-    447 hits stored in this event
->>> Event: 64
-    76 hits stored in this event
->>> Event: 65
-    989 hits stored in this event
->>> Event: 66
-    88 hits stored in this event
->>> Event: 67
-    157 hits stored in this event
->>> Event: 68
     58 hits stored in this event
+>>> Event: 10
+    77 hits stored in this event
+>>> Event: 11
+    107 hits stored in this event
+>>> Event: 12
+    566 hits stored in this event
+>>> Event: 13
+    74 hits stored in this event
+>>> Event: 14
+    61 hits stored in this event
+>>> Event: 15
+    103 hits stored in this event
+>>> Event: 16
+    116 hits stored in this event
+>>> Event: 17
+    73 hits stored in this event
+>>> Event: 18
+    116 hits stored in this event
+>>> Event: 19
+    528 hits stored in this event
+>>> Event: 20
+    68 hits stored in this event
+>>> Event: 21
+    50 hits stored in this event
+>>> Event: 22
+    61 hits stored in this event
+>>> Event: 23
+    98 hits stored in this event
+>>> Event: 24
+    166 hits stored in this event
+>>> Event: 25
+    204 hits stored in this event
+>>> Event: 26
+    78 hits stored in this event
+>>> Event: 27
+    67 hits stored in this event
+>>> Event: 28
+    91 hits stored in this event
+>>> Event: 29
+    116 hits stored in this event
+>>> Event: 30
+    60 hits stored in this event
+>>> Event: 31
+    275 hits stored in this event
+>>> Event: 32
+    131 hits stored in this event
+>>> Event: 33
+    171 hits stored in this event
+>>> Event: 34
+    94 hits stored in this event
+>>> Event: 35
+    130 hits stored in this event
+>>> Event: 36
+    66 hits stored in this event
+>>> Event: 37
+    100 hits stored in this event
+>>> Event: 38
+    81 hits stored in this event
+>>> Event: 39
+    87 hits stored in this event
+>>> Event: 40
+    581 hits stored in this event
+>>> Event: 41
+    93 hits stored in this event
+>>> Event: 42
+    205 hits stored in this event
+>>> Event: 43
+    75 hits stored in this event
+>>> Event: 44
+    49 hits stored in this event
+>>> Event: 45
+    60 hits stored in this event
+>>> Event: 46
+    105 hits stored in this event
+>>> Event: 47
+    92 hits stored in this event
+>>> Event: 48
+    92 hits stored in this event
+>>> Event: 49
+    81 hits stored in this event
+>>> Event: 50
+    50 hits stored in this event
+>>> Event: 51
+    62 hits stored in this event
+>>> Event: 52
+    128 hits stored in this event
+>>> Event: 53
+    45 hits stored in this event
+>>> Event: 54
+    128 hits stored in this event
+>>> Event: 55
+    333 hits stored in this event
+>>> Event: 56
+    420 hits stored in this event
+>>> Event: 57
+    57 hits stored in this event
+>>> Event: 58
+    88 hits stored in this event
+>>> Event: 59
+    129 hits stored in this event
+>>> Event: 60
+    95 hits stored in this event
+>>> Event: 61
+    464 hits stored in this event
+>>> Event: 62
+    69 hits stored in this event
+>>> Event: 63
+    45 hits stored in this event
+>>> Event: 64
+    167 hits stored in this event
+>>> Event: 65
+    60 hits stored in this event
+>>> Event: 66
+    68 hits stored in this event
+>>> Event: 67
+    1990 hits stored in this event
+>>> Event: 68
+    316 hits stored in this event
 >>> Event: 69
     93 hits stored in this event
 >>> Event: 70
-    35 hits stored in this event
->>> Event: 71
-    258 hits stored in this event
->>> Event: 72
     80 hits stored in this event
+>>> Event: 71
+    86 hits stored in this event
+>>> Event: 72
+    173 hits stored in this event
 >>> Event: 73
-    91 hits stored in this event
+    147 hits stored in this event
 >>> Event: 74
-    56 hits stored in this event
->>> Event: 75
-    488 hits stored in this event
->>> Event: 76
-    196 hits stored in this event
->>> Event: 77
-    111 hits stored in this event
->>> Event: 78
     82 hits stored in this event
+>>> Event: 75
+    50 hits stored in this event
+>>> Event: 76
+    79 hits stored in this event
+>>> Event: 77
+    172 hits stored in this event
+>>> Event: 78
+    69 hits stored in this event
 >>> Event: 79
-    175 hits stored in this event
->>> Event: 80
     58 hits stored in this event
+>>> Event: 80
+    195 hits stored in this event
 >>> Event: 81
-    179 hits stored in this event
+    71 hits stored in this event
 >>> Event: 82
-    117 hits stored in this event
+    73 hits stored in this event
 >>> Event: 83
-    62 hits stored in this event
+    92 hits stored in this event
 >>> Event: 84
-    115 hits stored in this event
+    91 hits stored in this event
 >>> Event: 85
-    171 hits stored in this event
+    99 hits stored in this event
 >>> Event: 86
-    83 hits stored in this event
+    115 hits stored in this event
 >>> Event: 87
-    730 hits stored in this event
+    1022 hits stored in this event
 >>> Event: 88
-    105 hits stored in this event
+    49 hits stored in this event
 >>> Event: 89
-    142 hits stored in this event
+    99 hits stored in this event
 >>> Event: 90
-    75 hits stored in this event
+    68 hits stored in this event
 >>> Event: 91
-    513 hits stored in this event
+    92 hits stored in this event
 >>> Event: 92
-    95 hits stored in this event
+    595 hits stored in this event
 >>> Event: 93
-    44 hits stored in this event
+    119 hits stored in this event
 >>> Event: 94
-    1261 hits stored in this event
+    63 hits stored in this event
 >>> Event: 95
-    227 hits stored in this event
+    74 hits stored in this event
 >>> Event: 96
-    83 hits stored in this event
+    6332 hits stored in this event
 >>> Event: 97
-    236 hits stored in this event
+    2242 hits stored in this event
 >>> Event: 98
-    214 hits stored in this event
+    76 hits stored in this event
 >>> Event: 99
-    110 hits stored in this event
+    118 hits stored in this event
 Graphics systems deleted.
 Visualization Manager deleting...

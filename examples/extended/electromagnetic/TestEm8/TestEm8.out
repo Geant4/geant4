@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
+ Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -807,35 +807,35 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.08s Real=0.11s Sys=0s
+  User=0.1s Real=0.1s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 0.7452 +- 0.11427 keV    RMS/Emean = 4.849
-   Mean number of steps in absorber= 1.25  mean number of ion-clusters = 788.13 MeanCluster= 787.96
+   Mean energy deposit in absorber = 0.73942 +- 0.11322 keV    RMS/Emean = 4.8422
+   Mean number of steps in absorber= 1.251  mean number of ion-clusters = 760.09 MeanCluster= 759.95
 
- ====== Energy deposit distribution   Noverflows= 0.01 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.005 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           7       0.007
-    2         6          98       0.098
-    3         9         265       0.265
-    4        12         249       0.249
-    5        15         149       0.149
-    6        18          94       0.094
-    7        21          52       0.052
-    8        24          23       0.023
-    9        27          11       0.011
-   10        30          10        0.01
-   11        33           7       0.007
-   12        36          10        0.01
-   13        39           3       0.003
-   14        42           5       0.005
-   15        45           1       0.001
-   16        48           3       0.003
-   17        51           1       0.001
+    1         3           4       0.004
+    2         6         108       0.108
+    3         9         282       0.282
+    4        12         255       0.255
+    5        15         140        0.14
+    6        18          74       0.074
+    7        21          38       0.038
+    8        24          40        0.04
+    9        27          17       0.017
+   10        30           8       0.008
+   11        33           6       0.006
+   12        36          11       0.011
+   13        39           2       0.002
+   14        42           3       0.003
+   15        45           2       0.002
+   16        48           1       0.001
+   17        51           2       0.002
    18        54           1       0.001
    19        57           1       0.001
  ================== run end ==========================
@@ -851,9 +851,9 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.67 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.78 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
+RunManagerKernel is deleted. Good bye :)

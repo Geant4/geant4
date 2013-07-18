@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
+ Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -217,15 +217,15 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-##### Create analysis manager 1  0x8979330
+##### Create analysis manager 1  0x2ea9310
 Using Root analysis manager
 ... open Root analysis file : microdosimetry.root - done
 ... write Root file : microdosimetry.root - done
 ... close Root file : microdosimetry.root - done
 Number and type of particles created outside region "Target" :
-N e- : 5011
+N e- : 5153
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 47202
+N e- : 48166
 Graphics systems deleted.
 Visualization Manager deleting...

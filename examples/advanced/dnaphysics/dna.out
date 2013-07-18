@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
+ Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -217,14 +217,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-##### Create analysis manager 1  0xe1b1660
+##### Create analysis manager 1  0x14e56650
 Using Root analysis manager
 ... open Root analysis file : dna.root - done
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=9.34s Real=19.73s Sys=0.07s
+  User=9.44s Real=12.97s Sys=0.08s
 ... write Root file : dna.root - done
 ... close Root file : dna.root - done
 Graphics systems deleted.
@@ -240,9 +240,9 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.034 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.036 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
+RunManagerKernel is deleted. Good bye :)

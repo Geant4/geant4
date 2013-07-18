@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-beta-01    (28-June-2013)
+ Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -162,7 +162,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.18s Real=0.18s Sys=0s
+  User=0.16s Real=0.16s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
@@ -206,9 +206,9 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.023 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.025 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
+RunManagerKernel is deleted. Good bye :)
