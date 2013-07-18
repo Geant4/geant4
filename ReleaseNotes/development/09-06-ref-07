@@ -1,0 +1,274 @@
+
+                       geant4-09-06-ref-07
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Refactored analysis manager classes, introducing managers per object types;
+   restructured module in sub-modules.
+ o Adopt approximated log() functions from G4Pow in G4PhysicsLogVector and
+   G4PhysicsLnVector instead of std::log(). Expected some speedup.
+ o Fix for tessellated-solid (and extruded-solid) for incorrect computation
+   of DistanceToIn(p,v) for points outside, when optimisation is active.
+ o Reorganised de-excitation modules in Bertini-like cascade to use G4Fragment.
+   Should reduce the load on G4IonTable in multi-thread operations.
+ o Introduced G4RNGHelper container class for random engine seeds.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+config                                           config-V09-06-06
+------
+- binmake.gmk: added include paths for restructured analysis module.
+
+analysis                                         analysis-V09-06-17
+--------
+- Refactoring manager classes: introduced managers per object types
+  (H1, H2, Ntuple, File) and re-implemented G4VAnalysisManager as a composite
+  of the objects managers; removed enum G4VAnalysisManager::ObjectType and
+  replaced related methods with methods per object type.
+- Introduced subdirectories: csv, g4tools, hntools, management, root, xml.
+  Updated build scripts accordingly.
+
+event                                            event-V09-06-10
+-----
+- Removed unnecessary thread-local variables in G4PrimaryTransformer.
+
+geometry/navigation                              geomnav-V09-06-12
+-------------------
+- G4SafetyHelper: added protection against storing 'fake' safety.
+
+geometry/solids/specific                         geom-specific-V09-06-15
+------------------------
+- Fix in G4SurfaceVoxelizer affecting tessellated-solid (and extruded-solid)
+  for incorerct computation of DistanceToIn(p,v) for points outside, when
+  optimisation is active.
+- Extended method SetOriginalParameters() in G4Polycone in order to handle
+  all possible cases of conversion of generic polycone to polycone with
+  (Rmin,Rmaz,Z) parameters. Addressing problem report #1462.
+
+global                                           global-V09-06-56
+------
+- G4PhysicsVector: make FindBin() method public, added method FindLinearEnergy()
+  for sampling of energy for vectors with cumulative probability function.
+  Added pointer to G4Pow in order to speedup bin location for logarithmic
+  vectors.
+- G4Physics2DVector: make FindBinLocationX() and FindBinLocationY()  
+  methods public, added method FindLinearX for() sampling of energy for 2D
+  cumulative probability functions; added new inline method Value() with
+  different signature.
+- Use G4Pow::log10A() in G4PhysicsLogVector::FindBinLocation() instead of
+  std::log(). Use in G4Pow::logX() in G4PhysicsLnVector::FindBinLocation()
+  instead of std::log(). Expected CPU speedup.
+- Added missing implementation of fucntion G4SetThreadId() in G4Threading
+  for sequential builds.
+- Correction to CMake scripts for granular build.
+- Updated date and tag for ref-07.
+
+materials                                        materials-V09-06-19
+---------
+- G4NistMaterialBuilder: added post-const qualifier to all access/print
+  methods. Added formatting of printout.
+  Addressing problem report #1423.
+- G4NistElementBuilder: added post-const qualifier to all access/print
+  methods.
+- G4ElementData: added array of 2D-tables.
+
+particles                                        particles-V09-06-33
+---------
+- Simplified use of allocator for G4DynamicParticle.
+- Generic ions except G4GenericIon itself no longer use
+  "/run/particle/addProcessManager" UI command to make the shallow copy
+  of process manager.
+
+physics_lists                                    physics_lists-V09-06-02
+-------------
+- Correction to CMake scripts for granular build.
+
+processes/electromagnetic/adjoint                emadjoint-V09-06-06
+---------------------------------
+- G4ContinuousGainOfEnergy: changed interface to G4VEmFluctuation.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-06-04
+------------------------------------
+- G4mplIonisationModel, G4mplIonisationWithDeltaModel: changed interface
+  to G4VEmFluctuations.
+- G4hPairProductionModel: substituted SetCurrentElement() by SetElement().
+
+processes/electromagnetic/lowenergy              emlowen-V09-06-16
+-----------------------------------
+- Fix in G4IonDEDXScalingICRU73 for multi-threading.
+
+processes/electromagnetic/muons                  emmuons-V09-06-15
+-------------------------------
+- G4MuPairProductionModel: fixed case of event non-reproducibity.
+  Changed signature of the method MinPrimaryEnergy().
+  Replace use of SetCurrentElement() with SetElement().
+  Replace calls to pow() with G4Pow.
+- G4MuBremsstrahlung: changed signature of method MinPrimaryEnergy().
+
+processes/electromagnetic/standard               emstand-V09-06-53
+----------------------------------
+- G4BohrFluctuations, G4IonFluctuations, G4PAIModel, G4PAIPhotonModel,
+  G4UniversalFluctuation: changed interface to G4VEmFluctuation; in
+  SampleFluctuations() G4material pointer is substituted by
+  G4MaterialCutsCouple pointer. 
+- G4PAIModel: corrected usage of indexes.
+
+processes/electromagnetic/utils                  emutils-V09-06-47
+-------------------------------
+- G4LossTableManager: fixed Coverity report.
+- G4VEmFluctuationModel changed interface in SampleFluctuations() method;
+  G4Material pointer is substituted by G4MaterialCutsCouple pointer.
+  Change required by PAI model
+  Changed interface to G4VEmFluctuationModel in G4VEnergyLossProcess.
+
+processes/hadronic
+------------------
+- models/cascade (hadr-casc-V09-06-43)
+  o Reorganised de-excitation modules to use G4Fragment throughout process.
+    Only final ground-state nucleus will be instantiated as a G4InuclNuclei
+    object. This should substantially reduce the load on G4IonTable in multi-
+    thread operations.
+  o G4CascadeDeexciteBase: new concrete subclass of G4VCascadeDeexcitation.
+    Takes over "operational" support from G4CascadeColliderBase, including
+    explosion() functions, local copy of G4CascadeCheckBalance, and
+    conservation checking functions.  Provides utilities to extract common
+    data from input G4Fragment for all modules, and to construct a G4Fragment.
+  o Improved encapsulation of pion and muon absorption through dibaryons.
+  o G4CascadeCheckBalance: added interface to take G4Fragment initial state.
+    G4InuclCollider: use G4Fragment interface to de-excitation modules.
+  o G4CascadeParameters: added new flag to perform internal conservation checks.
+    Use such run-time flag in G4CascadeColliderBase to conditionally instantiate
+    CheckBalance. G4EquilibriumEvaporator: removed turning-off of conservation
+    checks after fission.
+  o G4CascadeParameters, G4CascadeParamMessenger: added new environment
+    variable, G4CASCADE_USE_PHASESPACE, and associated functions, to switch
+    between multiparameter and Kopylov N-body generators.
+    G4CascadeFinalStateAlgorithm: added Kopylov N-body phase space generation,
+    with function code copied from G4HadPhaseSpaceKopylov.
+  o Fixes for coverity defects.
+- models/im_r_matrix (hadr-im_r-V09-06-04)
+  o Fixes for multi-threading: make static arrays const to avoid having
+    these thread-local.
+  o Fixes for coverity defects.
+- models/inclxx (hadr-inclxx-V09-06-20)
+  o Correction to CMake scripts for granular build.
+- models/lepto_nuclear (hadr-lepnuc-V09-06-00)
+  o Correction to CMake scripts for granular build.
+- models/parton_string/diffraction (hadr-string-diff-V09-06-14)
+  o New parameterizations of FTF process cross-sections.
+    Returning 25% of Delta-isobar probability.
+    Reaching better description of experimental data on hP, hA interactions.
+    Results of FTF become close to QGSM, especially for heavy targets.
+  o Replaced use of CLHEP::RandFlat with G4RandFlat in G4DiffractiveExcitation.
+- models/radioactive_decay (radioactive_decay-V09-06-09)
+  o G4RadioactiveDecay: removed setting of nuclear decay tables to
+    G4ParticleDefinition and replaced with local decay table map to
+    fix issues with multi-threading.
+    Remove IsLoaded() method and data member, now redundant.
+- theo_high_energy (had-theo-HE-V09-06-05)
+  o Correction to CMake scripts for granular build.
+- stopping (hadr-stopping-V09-06-09)
+  o Correction to CMake scripts for granular build.
+
+processes/management                             procman-V09-06-02
+--------------------
+- Added shadow master-thread pointer to G4VProcess and modifiers methods.
+  required for new design of sharing of tables (EM & HAD) for multi-threading.
+- Added worker initialization virtual method for multi-threading.
+
+run                                              run-V09-06-75
+---
+- Introduced G4RNGHelper container class for random engine seeds.
+- Process manager objects of all threads are now cleanly deleted.
+- G4MTRunManager causes G4Exception if there is a static G4Allocator
+  object in a multi-threaded mode.
+  Introducing access methods of concrete classes for G4MTRunManager and
+  G4WorkerRunManager.
+- Added call to G4SetThreadId() global function in G4UserWorkerInitialization.
+  Moving joining of threads in G4UserWorkerInitialization class from
+  G4MTRunManager; now G4MTRunManager does not contain anymore thread model
+  specific code and delegates all model to G4UserWorkerInitialization.
+  Setting master process shadow pointer to G4VProcess in worker threads.
+- Add virtual method CreateWorkerRunManager in G4UserWorkerInitialization
+  to simplify instantiation of user-defined run manager.
+- Introducing G4MTRunManagerKernel class for better symmetry of run manager
+  and run manager kernel.
+- Fixed null-pointer access in G4VUserPhysicsList::BuildPhysicsList() for
+  second run in multi-thread mode.
+
+examples                                         examples-V09-06-07
+--------
+- Updated reference outputs.
+- advanced/composite_calorimeter (ccal-V09-06-01)
+  o Corrected search of AIDA tools. Addressing problem report #1491.
+- advanced/purging_magnet (purmag-V09-06-01)
+  o Explicitly use G4CsvAnalysisManager to be compliant with restructure of
+    analysis module.
+- extended/analysis/AnaEx01 (AnaEx01-V09-06-01)
+  o Updated setup for added classes in Hbook analysis code.
+- extended/common/analysis (excommon-analysis-V09-06-03)
+  o Refactoring ExG4Hnook manager class following changes in analysis module.
+- extended/electromagnetic/TestEm1 (testem1-V09-06-07)
+- extended/electromagnetic/TestEm2 (testem2-V09-06-06)
+- extended/electromagnetic/TestEm3 (testem3-V09-06-08)
+- extended/electromagnetic/TestEm4 (testem4-V09-06-08)
+- extended/electromagnetic/TestEm5 (testem5-V09-06-07)
+  o In HistoManager: use new analysis manager method SetH1Activation().
+  o Updated setup for added classes in Hbook analysis code.
+- extended/electromagnetic/TestEm7 (testem7-V09-06-11)
+  o In RunAction: use new analysis manager method SetH1Activation().
+- extended/electromagnetic/TestEm11 (testem11-V09-06-12)
+- extended/electromagnetic/TestEm12 (testem12-V09-06-09)
+- extended/electromagnetic/TestEm14 (testem14-V09-06-08)
+- extended/electromagnetic/TestEm15 (testem15-V09-06-06)
+- extended/electromagnetic/TestEm16 (testem16-V09-06-04)
+- extended/electromagnetic/TestEm18 (testem18-V09-06-05)
+  o In HistoManager: use new analysis manager method SetH1Activation().
+  o Updated setup for added classes in Hbook analysis code.
+- examples/extended/eventgenerator/particleGun (particleGunExample-V09-06-05)
+  o In HistoManager: use new analysis manager method SetH1Activation().
+- extended/eventgenerator/pythia/decayer6 (p6decayer-V09-06-00)
+  o Fixed use of particle iterator in P6DExtDecayerPhysics.
+- extended/hadronic/Hadr03 (exhadr03-V09-06-20)
+- extended/medical/electronScattering (electronScattering-V09-06-08)
+- extended/medical/fanoCavity (fano-V09-06-06)
+- extended/medical/fanoCavity2 (fano2-V09-06-05)
+  o In HistoManager: use new analysis manager method SetH1Activation().
+- extended/optical/LXe (LXe-V09-06-07)
+  o Fixed use of allocators for hits and trajectory for multi-threading.
+- extended/optical/wls (WLS-V09-06-07)
+  o Fixed use of allocator for trajectory and trajectory-point for MT.
+- extended/parameterisations/gflash (exgflash-V09-06-01)
+  o Migrated test to multi-threading.
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-06-05)
+  o In HistoManager: use new analysis manager method SetH1Activation().
+
+tests                                            tests-V09-06-07
+-----
+- Updated reference outputs and tools.
+- tests/test11 (test11-V09-06-03)
+  o Updated README to reflect previous change from LEP to Bertini/FTFP
+  o Clean up commented-out lines in physics list.
+- tests/test13 (test13-V09-06-01)
+  o Replaced LHEP models with Bertini.
+- tests/test18 (test18-V09-06-04)
+  o Set numberOfThreads to 1 in test18.large_N.in and test18.in.
+    This is a temporary measure until multi-threaded issues with
+    G4RadioactiveDecay can be fixed.
+- tests/test22 (test22-V09-06-12)
+  o New test for FTF model and for comparison of FTF results with
+    corresponding experimental data.
+- tests/test24 (test24-V09-06-01)
+  o Replaced LHEP models with Bertini, FTF, QMD.
+- tests/test27 (test27-V09-06-02)
+- tests/test28 (test28-V09-06-01)
+  o Replaced LHEP models with Bertini, FTFP.
+- tests/test36 (test36-V09-06-04)
+  o PhysicsList: use G4PAIModel.
+  o SteppingAction: cleanup old code.
+- tests/test61 (test61-V09-06-03)
+  o Removed LHEP models and cleanup.
