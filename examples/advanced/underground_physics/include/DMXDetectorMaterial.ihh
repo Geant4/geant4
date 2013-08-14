@@ -60,5 +60,4 @@
   G4Material*    mirror_mat;
   G4Material*      grid_mat;
   G4Material*       pmt_mat;
-  G4Material*    window_mat;
   G4Material*    phcath_mat;

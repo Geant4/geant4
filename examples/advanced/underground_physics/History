@@ -9,6 +9,10 @@ $Id$
                       Category History file
                       ---------------------
 
+30.07.2013 - A. Dotti (DMX-V09-06-07)
+             Fixing compilation warnings for clang32:
+             unused private data members
+
 31.05.2013 - L. Pandola (DMX-V09-06-06)
 	     Migrate analysis from the AIDA-based local singleton 
 	     class to the g4analysis tools (no AIDA dependency 

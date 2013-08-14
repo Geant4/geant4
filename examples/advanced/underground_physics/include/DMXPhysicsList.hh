@@ -96,9 +96,6 @@ private:
   G4double cutForGamma;
   G4double cutForElectron;
   G4double cutForPositron;
-  G4double cutForProton;
-  G4double cutForAlpha;
-  G4double cutForGenericIon;
 
   // these methods Construct particles 
   void ConstructMyBosons();

@@ -991,13 +991,13 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
   G4String name="/DMXDet/LXeSD";
-  LXeSD = new DMXScintSD(name, this);
+  LXeSD = new DMXScintSD(name);
   SDman->AddNewDetector(LXeSD);
   LXe_log->SetSensitiveDetector(LXeSD);
 
   SDman = G4SDManager::GetSDMpointer();
   name="/DMXDet/pmtSD";
-  pmtSD = new DMXPmtSD(name, this);
+  pmtSD = new DMXPmtSD(name);
   SDman->AddNewDetector(pmtSD);
   phcath_log->SetSensitiveDetector(pmtSD);
 
