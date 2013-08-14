@@ -42,9 +42,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det,RunAction* run,
-                               EventAction* evt, HistoManager* hist)
-:detector(det), runAct(run), eventAct(evt), histoManager(hist)
+TrackingAction::TrackingAction(DetectorConstruction* det,RunAction* run)
+:detector(det), runAct(run)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

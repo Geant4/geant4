@@ -43,9 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det,
-                               HistoManager* hist)
-:Detector(det),histoManager(hist) 
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
+:Detector(det) 
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);

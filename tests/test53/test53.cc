@@ -66,13 +66,13 @@ int main(int argc,char** argv) {
   HistoManager* histo = new HistoManager();
   
   // primary generator
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector,histo);
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
         
   // set user action classes
   RunAction*      runAct = new RunAction(detector,primary,histo);
   EventAction*    evtAct = new EventAction(detector,runAct,histo);
-  TrackingAction* trkAct = new TrackingAction(detector,runAct,evtAct,histo);
+  TrackingAction* trkAct = new TrackingAction(detector,runAct);
   SteppingAction* stpAct = new SteppingAction(detector,runAct,evtAct,histo);
   
   runManager->SetUserAction(runAct);
