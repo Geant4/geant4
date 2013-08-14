@@ -31,13 +31,12 @@
 #include "globals.hh"
 
 class G4Event;
-class DetectorConstruction;
 class PrimaryGeneratorMessenger;
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction(DetectorConstruction*);    
+    PrimaryGeneratorAction();    
    ~PrimaryGeneratorAction();
 
   public:
@@ -47,7 +46,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
     G4ParticleGun*         particleGun;
-    DetectorConstruction*  Detector;
     
     PrimaryGeneratorMessenger* gunMessenger; 
 

@@ -33,9 +33,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(
-                                             DetectorConstruction* DC)
-:Detector(DC)
+PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);

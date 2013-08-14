@@ -132,7 +132,6 @@ private:
   G4double LayerThichness1 ; 
   G4double LayerThichness2 ;
   G4double LayerThichness3 ;
-  G4double thicknessShield ;
 
   G4int  NbOfLayersOfMedium1;
   G4int  NbOfLayersOfMedium2;

@@ -56,7 +56,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList);
   //
 
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction();
   runManager->SetUserAction(primary);
 
    
