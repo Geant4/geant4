@@ -107,9 +107,10 @@ class RunAction : public G4UserRunAction
     G4double NeutrTrLength;
     G4double sumNeutrTrLength;
     G4double sum2NeutrTrLength;
-
+#ifdef G4ANALYSIS_USE
     AIDA::ITree* tree;             // the tree should only be deleted at the end
     AIDA::IHistogram1D* histo[12];   // (after writing the histos to file)
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
