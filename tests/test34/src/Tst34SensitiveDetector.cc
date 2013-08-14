@@ -31,9 +31,8 @@
 #include "G4SDManager.hh"
 #include <iostream>
 
-Tst34SensitiveDetector::Tst34SensitiveDetector(G4String name,
-                                               Tst34DetectorConstruction* det)
-  : G4VSensitiveDetector(name), G4VGFlashSensitiveDetector(), Detector(det)
+Tst34SensitiveDetector::Tst34SensitiveDetector(G4String name)
+  : G4VSensitiveDetector(name), G4VGFlashSensitiveDetector()
 {
   G4String caloname="Tst34Collection";
   collectionName.insert(caloname);

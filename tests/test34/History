@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th July 2013, A.Dotti (test34-V09-06-00)
+- Bug fixing for unused variables clang32
+
 9th October 2012, G.Cosmo (test34-V09-05-00)
 - Explicit inclusion of units and constants headers.
 

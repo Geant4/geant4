@@ -140,7 +140,7 @@ G4VPhysicalVolume* Tst34DetectorConstruction::Construct()
   // Sensitive Detector part
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   Tst34SensitiveDetector* CaloSD=
-  new Tst34SensitiveDetector("Calorimeter",this);
+  new Tst34SensitiveDetector("Calorimeter");
   SDman->AddNewDetector(CaloSD);
  
   m_calo_log->SetSensitiveDetector(CaloSD);

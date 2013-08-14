@@ -29,7 +29,6 @@
 #include "G4VSensitiveDetector.hh"
 #include "G4VGFlashSensitiveDetector.hh"
 #include "G4GFlashSpot.hh"
-#include "Tst34DetectorConstruction.hh"
 #include "Tst34Hit.hh"
 #include "globals.hh"
 
@@ -42,7 +41,7 @@ class Tst34SensitiveDetector : public G4VSensitiveDetector,
 {
   public:
 
-    Tst34SensitiveDetector(G4String, Tst34DetectorConstruction* det);
+    Tst34SensitiveDetector(G4String);
     ~Tst34SensitiveDetector();
 
     void Initialize(G4HCofThisEvent*);
@@ -53,7 +52,5 @@ class Tst34SensitiveDetector : public G4VSensitiveDetector,
   private:
 
     Tst34HitsCollection* caloHitsCollection;
-    G4double edep;
-    Tst34DetectorConstruction* Detector;
 };
 #endif
