@@ -1,0 +1,123 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+#ifndef G4_CASCADE_FUNCTIONS_ICC
+#define G4_CASCADE_FUNCTIONS_ICC
+// $Id: G4CascadeFunctions.icc 67796 2013-03-08 06:18:39Z mkelsey $
+//
+// 20100512  M. Kelsey -- Pass std::vector<> buffer as argument to
+//		getOutgoingPartTypes().
+// 20100803  M. Kelsey -- Add printing function for debugging
+// 20100804  M. Kelsey -- Pretty up printing function
+// 20110725  M. Kelsey -- Use ctor to register table in lookup factory
+// 20110728  M. Kelsey -- Fix Coverity #22955, recursive #include; fix
+//		Coverity #20228, test (mult>maxMult), set to max if over
+// 20110916  M. Kelsey -- Drop self-registration due to platform inconsistencies
+//		Drop "inline" keyword on complex functions
+// 20110923  M. Kelsey -- Add optional ostream& argument to printTable(),
+//		pass through to SAMP and DATA
+
+#include "G4CascadeChannelTables.hh"
+#include "globals.hh"
+
+
+// Constructor registers table in lookup
+
+template <class DATA, class SAMP>
+G4CascadeFunctions<DATA,SAMP>::G4CascadeFunctions() : SAMP() {}
+
+
+// Compare summed partial cross section with total cross section
+// Truncate multiplicity at maximum if summed < total
+
+template <class DATA, class SAMP>
+G4int G4CascadeFunctions<DATA,SAMP>::getMultiplicity(G4double ke) const {
+  // Use pointer comparison to see whether tot is just a ref to sum)
+  if (&DATA::data.sum != &DATA::data.tot) {
+    G4double summed = this->findCrossSection(ke, DATA::data.sum); 
+    G4double total  = this->findCrossSection(ke, DATA::data.tot);
+    if (G4UniformRand() > summed/total) return DATA::data.maxMultiplicity();
+  }
+
+  return this->findMultiplicity(ke, DATA::data.multiplicities);
+}
+
+
+// Generate list of final state particles
+
+template <class DATA, class SAMP>
+void G4CascadeFunctions<DATA,SAMP>::
+getOutgoingParticleTypes(std::vector<G4int>& kinds, 
+			 G4int mult, G4double ke) const {
+  const G4int maxMult = DATA::data.maxMultiplicity();
+
+  if (mult > maxMult) {
+    G4cerr << " Illegal multiplicity " << mult << " > " << maxMult << G4endl;
+    mult = maxMult;
+  }
+
+  kinds.clear();
+  kinds.reserve(mult);
+
+  G4int channel = this->findFinalStateIndex(mult, ke, DATA::data.index,
+				            DATA::data.crossSections);
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " getOutgoingParticleTypes: mult=" << mult << " KE=" << ke
+	 << ": channel=" << channel << G4endl;
+#endif
+
+  // Identify final-state array to be copied
+  const G4int* chan = 0;
+  if (mult == 2) chan = DATA::data.x2bfs[channel];
+  if (mult == 3) chan = DATA::data.x3bfs[channel];
+  if (mult == 4) chan = DATA::data.x4bfs[channel];
+  if (mult == 5) chan = DATA::data.x5bfs[channel];
+  if (mult == 6) chan = DATA::data.x6bfs[channel];
+  if (mult == 7) chan = DATA::data.x7bfs[channel];
+  if (mult == 8) chan = DATA::data.x8bfs[channel];
+  if (mult == 9) chan = DATA::data.x9bfs[channel];
+
+  if (!chan) {
+    G4cerr << " getOutgoingParticleTypes: invalid multiplicity " << mult
+	   << G4endl;
+    return;
+  }
+
+  kinds.insert(kinds.begin(), chan, chan+mult);	// Transfer data into vector
+  return;
+}
+
+
+// Dump lookup tables, including interpolation bins, to log file
+
+template <class DATA, class SAMP>
+void G4CascadeFunctions<DATA,SAMP>::printTable(std::ostream& os) const {
+  os << " ---------- " << DATA::data.name << " ----------" << G4endl;
+  SAMP::print(os);
+  DATA::data.print(os);
+  os << " ------------------------------" << G4endl;
+}
+
+#endif	/* G4_CASCADE_FUNCTIONS_ICC */

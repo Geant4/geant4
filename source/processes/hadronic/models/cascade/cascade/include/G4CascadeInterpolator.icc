@@ -1,0 +1,123 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+#ifndef G4CASCADE_INTERPOLATOR_ICC
+#define G4CASCADE_INTERPOLATOR_ICC
+// $Id: G4CascadeInterpolator.icc 71890 2013-06-27 22:14:13Z mkelsey $
+//
+// Author:  Michael Kelsey <kelsey@slac.stanford.edu>
+//
+// Simple linear interpolation class, more lightweight than
+// G4PhysicsVector.  Templated on number of X-axis (usually energy)
+// bins, constructor takes a C-array of bin edges as input, and an
+// optional flag whether to truncate or extrapolate (the default) values
+// beyond the bin boundaries.
+//
+// The interpolation action returns a simple double: the integer part
+// is the bin index, and the fractional part is, obviously, the
+// fractional part.
+//
+// 20100517  M. Kelsey -- Bug fix in interpolate:  If bin position is _exactly_
+//		at upper edge (== last + 0.0), just return bin value.
+// 20100520  M. Kelsey -- Second bug fix:  Loop in bin search should start at
+//		i=1, not i=0 (since i-1 is the key).
+// 20100803  M. Kelsey -- Add printBins() function for debugging
+// 20101019  M. Kelsey -- CoVerity reports: recursive #include, index overrun
+// 20110728  M. Kelsey -- Fix Coverity #20238, recursive #include.
+// 20110923  M. Kelsey -- Add optional ostream& argument to printBins()
+
+#include <iomanip>
+
+
+// Find bin position (index and fraction) using input argument and array
+
+template <int NBINS>
+G4double G4CascadeInterpolator<NBINS>::getBin(const G4double x) const {
+  if (x == lastX) return lastVal;	// Avoid unnecessary work
+
+  G4double xindex, xdiff, xbin;
+
+  lastX = x;
+  if (x < xBins[0]) {			// Handle boundaries first
+    xindex = 0.;
+    xbin = xBins[1]-xBins[0];
+    xdiff = doExtrapolation ? x-xBins[0] : 0.;		// Less than zero
+  } else if (x >= xBins[last]) {
+    xindex = last;
+    xbin = xBins[last]-xBins[last-1];
+    xdiff = doExtrapolation ? x-xBins[last] : 0.;
+  } else {				// Assume nBins small; linear search
+    int i;
+    for (i=1; i<last && x>xBins[i]; i++) {;}	// Stops when x within bin i-1
+    xindex = i-1;
+    xbin = xBins[i] - xBins[i-1];
+    xdiff = x - xBins[i-1];
+  }
+
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " G4CascadeInterpolator<" << NBINS << ">: x=" << x
+	 << " index=" << xindex << " fraction=" << xdiff/xbin << G4endl;
+#endif
+
+  return (lastVal = xindex + xdiff/xbin);	// Save return value for later
+}
+
+
+// Apply interpolation of input argument to user array
+
+template <int NBINS>
+G4double G4CascadeInterpolator<NBINS>::
+interpolate(const G4double x, const G4double (&yb)[nBins]) const {
+  getBin(x);
+  return interpolate(yb);
+}
+
+// Apply last found interpolation to user array
+
+template <int NBINS>
+G4double G4CascadeInterpolator<NBINS>::
+interpolate(const G4double (&yb)[nBins]) const {
+  // Treat boundary extrapolations specially, otherwise just truncate
+  G4int i = (lastVal<0) ? 0 : (lastVal>last) ? last-1 : G4int(lastVal);
+  G4double frac = lastVal - G4double(i);	// May be <0 or >1 if extrapolating
+
+  // Special case:  if exactly on upper bin edge, just return value
+  return (i==last) ? yb[last] : (yb[i] + frac*(yb[i+1]-yb[i]));
+}
+
+
+// Print bin edges for debugging
+
+template <int NBINS>
+void G4CascadeInterpolator<NBINS>::printBins(std::ostream& os) const {
+  os << " G4CascadeInterpolator<" << NBINS << "> : " << G4endl;
+  for (G4int k=0; k<NBINS; k++) {
+    os << " " << std::setw(6) << xBins[k];
+    if ((k+1)%10 == 0) os << G4endl;
+  }
+  os << G4endl;
+}
+
+#endif	/* G4CASCADE_INTERPOLATOR_ICC */

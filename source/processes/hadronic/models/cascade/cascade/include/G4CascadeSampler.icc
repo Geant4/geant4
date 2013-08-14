@@ -1,0 +1,124 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+#ifndef G4CASCADE_SAMPLER_ICC
+#define G4CASCADE_SAMPLER_ICC
+// $Id: G4CascadeSampler.icc 66241 2012-12-13 18:34:42Z gunter $
+//
+// 20100506 M. Kelsey -- Move functionity of G4CascadeChannel here,
+//		use as base class to G4CascadeFunctions<T>.
+// 20100512 M. Kelsey -- Move implementation to .icc with templating
+// 20100803 M. Kelsey -- Add print function for debugging.
+// 20101019 M. Kelsey -- CoVerity report: recursive #include
+// 20110728 M. Kelsey -- Fix Coverity #20231, recursive #include
+// 20110923 M. Kelsey -- Add optional ostream& argument to print(), pass
+//		to interpolator.
+// 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
+
+#include "Randomize.hh"
+#include <iostream>
+#include <vector>
+
+
+template <int NBINS, int NMULT> inline
+G4double G4CascadeSampler<NBINS,NMULT>::
+findCrossSection(double ke,
+		 const G4double (&xsec)[energyBins]) const {
+  return interpolator.interpolate(ke, xsec);
+}
+
+template <int NBINS, int NMULT> inline
+G4int G4CascadeSampler<NBINS,NMULT>::
+findMultiplicity(G4double ke,
+		 const G4double xmult[][energyBins]) const {
+  fillSigmaBuffer(ke, xmult);
+  return sampleFlat() + 2;	// Convert array index to actual mult (2 to 7)
+}
+
+template <int NBINS, int NMULT> inline
+G4int G4CascadeSampler<NBINS,NMULT>::
+findFinalStateIndex(G4int mult, G4double ke, const G4int index[],
+		    const G4double xsec[][energyBins]) const {
+  G4int start = index[mult-2];
+  G4int stop = index[mult-1];
+  if (stop-start <= 1) return start;	// Avoid unnecessary work
+
+  fillSigmaBuffer(ke, xsec, start, stop);
+  return sampleFlat();
+}
+
+// Optional start/stop arguments default to multiplicity arrays
+template <int NBINS, int NMULT> inline
+void G4CascadeSampler<NBINS,NMULT>::
+fillSigmaBuffer(G4double ke, const G4double x[][energyBins],
+		G4int startBin, G4int stopBin) const {
+  sigmaBuf.clear();
+  if (stopBin-startBin <= 1) return;	// Avoid unnecessary work
+
+  // NOTE:  push_back() must be used to ensure that size() gets set!
+  sigmaBuf.reserve(stopBin-startBin);
+  for(G4int i = startBin; i < stopBin; i++)
+    sigmaBuf.push_back(interpolator.interpolate(ke, x[i]));
+}
+
+
+template <int NBINS, int NMULT> inline
+G4int G4CascadeSampler<NBINS,NMULT>::sampleFlat() const {
+  G4int nbins = sigmaBuf.size();
+  if (nbins <= 1) return 0;		// Avoid unnecessary work
+
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << "G4CascadeSampler::sampleFlat() has " << nbins << "bins:" << G4endl;
+  for (G4int sbi=0; sbi<nbins; sbi++) G4cout << " " << sigmaBuf[sbi];
+  G4cout << G4endl;
+#endif
+
+  G4int i;
+  G4double fsum = 0.;
+  for (i = 0; i < nbins; i++) fsum += sigmaBuf[i];
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " buffer total (fsum) " << fsum;
+#endif
+  fsum *= G4UniformRand();
+#ifdef G4CASCADE_DEBUG_SAMPLER
+  G4cout << " *random-scale " << fsum << G4endl;
+#endif
+
+  G4double partialSum = 0.0;
+  for (i = 0; i < nbins; i++) {
+    partialSum += sigmaBuf[i];
+    if (fsum < partialSum) return i;	// Breaks out of loop automatically
+  }
+
+  return 0;	// Is this right?  Shouldn't it return maximum, not minimum?
+}
+
+
+template <int NBINS, int NMULT> inline
+void G4CascadeSampler<NBINS,NMULT>::print(std::ostream& os) const {
+  interpolator.printBins(os);
+}
+
+#endif	/* G4CASCADE_SAMPLER_ICC */
