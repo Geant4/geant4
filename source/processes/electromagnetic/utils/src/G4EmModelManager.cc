@@ -137,7 +137,8 @@ G4EmModelManager::G4EmModelManager():
   fluoFlag = false;
   currRegionModel = 0;
   currModel = 0;
-  theCuts = 0;
+  theCuts    = 0;
+  theCutsNew = 0;
   theSubCuts = 0;
 }
 
@@ -147,6 +148,7 @@ G4EmModelManager::~G4EmModelManager()
 {
   verboseLevel = 0; // no verbosity at destruction
   Clear();
+  delete theCutsNew; 
   delete theSubCuts;
 }
 
@@ -439,13 +441,18 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     else if( secondaryParticle == G4Positron::Positron()) { idx = 2; }
   }
 
-  //theCuts = theCoupleTable->GetEnergyCutsVector(idx);
-  theCuts = static_cast<const G4DataVector*>(theCoupleTable->GetEnergyCutsVector(idx));
+  theCuts = 
+    static_cast<const G4DataVector*>(theCoupleTable->GetEnergyCutsVector(idx));
+
+  // for the second run the check on cuts should be repeated
+  if(theCutsNew) { *theCutsNew = *theCuts; }
 
   if(minSubRange < 1.0) {
     if( !theSubCuts ) { theSubCuts = new G4DataVector(); }
     theSubCuts->resize(numOfCouples,DBL_MAX);
   }
+
+  // define cut values
   for(size_t i=0; i<numOfCouples; ++i) {
 
     const G4MaterialCutsCouple* couple = 
@@ -480,8 +487,22 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 	if(tcutmax < subcut) { subcut = tcutmax; }
 	(*theSubCuts)[i] = subcut;
       }
+      // check cuts and introduce upper limits
+      for(G4int jj=0; jj<nEmModels; ++jj) {
+	if(1 == isUsed[jj]) {
+          G4double cutlim = models[jj]->MinEnergyCut(particle,couple);
+          if(cutlim > cut) {
+            if(!theCutsNew) { theCutsNew = new G4DataVector(*theCuts); }
+            (*theCutsNew)[i] = cutlim;
+            //G4cout << "### In " << material->GetName() 
+	    //	   << "  Cut was changed from " << cut/MeV << " MeV to "
+	    //	   << cutlim/MeV << " MeV " << G4endl;
+	  }
+	}
+      }
     }
   }
+  if(theCutsNew) { theCuts = theCutsNew; }
 
   // initialize models
   G4int nn = 0;
@@ -703,6 +724,10 @@ void G4EmModelManager::DumpModelList(G4int verb)
       }  
     }
     if(1 == nEmModels) { break; }
+  }
+  if(theCutsNew) {
+    G4cout << "      ===== Limit on energy threshold has been applied " 
+	   << G4endl;
   }
 }
 

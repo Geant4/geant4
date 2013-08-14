@@ -128,8 +128,6 @@ public:
   // Build physics table during initialisation
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
-  void PrintInfoDefinition();
-
   // Called before tracking of each new G4Track
   void StartTracking(G4Track*);
 
@@ -195,8 +193,9 @@ public:
   // Min kinetic energy for high energy table
   inline void SetMinKinEnergyPrim(G4double e);
 
-  // Cross section table pointer
-  inline const G4PhysicsTable* LambdaTable() const;
+  // Cross section table pointers
+  inline G4PhysicsTable* LambdaTable() const;
+  inline G4PhysicsTable* LambdaTablePrim() const;
 
   //------------------------------------------------------------------------
   // Define and access particle type 
@@ -223,7 +222,7 @@ public:
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
 
   // return the assigned model
-  G4VEmModel* EmModel(G4int index = 1);
+  G4VEmModel* EmModel(G4int index = 1) const;
 
   // Assign a model to a process
   void SetEmModel(G4VEmModel*, G4int index = 1);
@@ -232,7 +231,7 @@ public:
   void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Access to models
-  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
+  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
 
   // access atom on which interaction happens
   const G4Element* GetCurrentElement() const;
@@ -299,6 +298,8 @@ private:
   void Clear();
 
   void BuildLambdaTable();
+
+  void PrintInfoProcess(const G4ParticleDefinition&);
 
   void FindLambdaMax();
 
@@ -592,9 +593,16 @@ inline G4double G4VEmProcess::CrossSectionBiasingFactor() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline const G4PhysicsTable* G4VEmProcess::LambdaTable() const
+inline G4PhysicsTable* G4VEmProcess::LambdaTable() const
 {
   return theLambdaTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4PhysicsTable* G4VEmProcess::LambdaTablePrim() const
+{
+  return theLambdaTablePrim;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

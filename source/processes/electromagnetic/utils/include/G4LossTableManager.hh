@@ -119,7 +119,7 @@ public:
 			   G4VEnergyLossProcess* p, G4bool theMaster);
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
-			   G4VEmProcess* p);
+			   G4VEmProcess* p, G4bool theMaster);
 
   void PreparePhysicsTable(const G4ParticleDefinition* aParticle,
 			   G4VMultipleScattering* p, G4bool theMaster);

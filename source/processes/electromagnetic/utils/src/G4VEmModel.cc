@@ -64,8 +64,9 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   highLimit(100.0*CLHEP::TeV),eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
-  isMaster(true),pParticleChange(0),xSectionTable(0),theDensityFactor(0),
-  theDensityIdx(0),fCurrentCouple(0),fCurrentElement(0),nsec(5) 
+  isMaster(true),fElementData(0),pParticleChange(0),xSectionTable(0),
+  theDensityFactor(0),theDensityIdx(0),fCurrentCouple(0),fCurrentElement(0),
+  nsec(5) 
 {
   xsec.resize(nsec);
   nSelectors = 0;

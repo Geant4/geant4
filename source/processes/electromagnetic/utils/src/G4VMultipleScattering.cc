@@ -157,7 +157,7 @@ void G4VMultipleScattering::SetEmModel(G4VMscModel* p, G4int index)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VMscModel* G4VMultipleScattering::EmModel(G4int index)
+G4VMscModel* G4VMultipleScattering::EmModel(G4int index) const
 {
   G4VMscModel* p = 0;
   if(index >= 0 && index <  G4int(mscModels.size())) { p = mscModels[index]; }
@@ -269,6 +269,11 @@ G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition& part
 void 
 G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
+  if(GetMasterProcess() != this) {
+    SlavePreparePhysicsTable(part);
+    return;
+  }
+
   if(!firstParticle) { firstParticle = &part; }
   if(part.GetParticleType() == "nucleus") {
     SetStepLimitType(fMinimal);
@@ -358,7 +363,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void 
 G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
-					      G4VMultipleScattering* master)
+					      const G4VMultipleScattering* master)
 {
   G4String num = part.GetParticleName();
   if(1 < verboseLevel) {
@@ -427,6 +432,11 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << " and particle " << num
 	   << " IsMaster= " << G4LossTableManager::Instance()->IsMaster()
            << G4endl;
+  }
+  const G4VMultipleScattering* masterProcess = static_cast<const G4VMultipleScattering*>(GetMasterProcess()); 
+  if(masterProcess != this) {
+    SlaveBuildPhysicsTable(part, masterProcess);
+    return;
   }
 
   if(firstParticle == &part) { 

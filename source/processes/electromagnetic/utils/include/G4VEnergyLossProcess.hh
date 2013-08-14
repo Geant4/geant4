@@ -178,7 +178,7 @@ public:
   //threads to achieve the partial effect of the master thread when
   //it builds physcis tables.
   void SlaveBuildPhysicsTable(const G4ParticleDefinition& part, 
-			      G4VEnergyLossProcess *firstProcess);
+			      const G4VEnergyLossProcess *firstProcess);
 
   // build a table
   G4PhysicsTable* BuildDEDXTable(G4EmTableType tType = fRestricted);
@@ -316,12 +316,12 @@ public:
   void SetEmModel(G4VEmModel*, G4int index=1);
   
   // return the assigned model
-  G4VEmModel* EmModel(G4int index=1);
+  G4VEmModel* EmModel(G4int index=1) const;
   
   // Access to models
-  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false);
+  G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
 
-  G4int NumberOfModels();
+  G4int NumberOfModels() const;
 
   // Assign a fluctuation model to a process
   void SetFluctModel(G4VEmFluctuationModel*);
@@ -439,8 +439,8 @@ public:
   inline G4PhysicsTable* SecondaryRangeTable() const;
   inline G4PhysicsTable* RangeTableForLoss() const;
   inline G4PhysicsTable* InverseRangeTable() const;
-  inline G4PhysicsTable* LambdaTable();
-  inline G4PhysicsTable* SubLambdaTable();
+  inline G4PhysicsTable* LambdaTable() const;
+  inline G4PhysicsTable* SubLambdaTable() const;
 
   //------------------------------------------------------------------------
   // Run time method for simulation of ionisation
@@ -1158,14 +1158,14 @@ inline G4PhysicsTable* G4VEnergyLossProcess::InverseRangeTable() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4PhysicsTable* G4VEnergyLossProcess::LambdaTable()
+inline G4PhysicsTable* G4VEnergyLossProcess::LambdaTable() const
 {
   return theLambdaTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4PhysicsTable* G4VEnergyLossProcess::SubLambdaTable()
+inline G4PhysicsTable* G4VEnergyLossProcess::SubLambdaTable() const
 {
   return theSubLambdaTable;
 }

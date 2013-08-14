@@ -134,7 +134,8 @@ public:
   //threads to achieve the partial effect of the master thread when
   //it builds physcis tables.
   //Xin Dong 10022011 to facilitate verbose
-  void SlaveBuildPhysicsTable(const G4ParticleDefinition &part, G4VMultipleScattering* firstProcess);
+  void SlaveBuildPhysicsTable(const G4ParticleDefinition &part, 
+			      const G4VMultipleScattering* firstProcess);
 
   // Print out of generic class parameters
   void PrintInfoDefinition();
@@ -203,7 +204,7 @@ public:
   void SetEmModel(G4VMscModel*, G4int index = 1);
   
   // return the assigned model
-  G4VMscModel* EmModel(G4int index = 1);
+  G4VMscModel* EmModel(G4int index = 1) const;
 
   // Access to models by index
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;

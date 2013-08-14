@@ -372,7 +372,7 @@ void G4VEnergyLossProcess::SetEmModel(G4VEmModel* p, G4int index)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index)
+G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index) const
 {
   G4VEmModel* p = 0;
   if(index >= 0 && index <  G4int(emModels.size())) { p = emModels[index]; }
@@ -381,14 +381,14 @@ G4VEmModel* G4VEnergyLossProcess::EmModel(G4int index)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEmModel* G4VEnergyLossProcess::GetModelByIndex(G4int idx, G4bool ver)
+G4VEmModel* G4VEnergyLossProcess::GetModelByIndex(G4int idx, G4bool ver) const
 {
   return modelManager->GetModel(idx, ver);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4int G4VEnergyLossProcess::NumberOfModels()
+G4int G4VEnergyLossProcess::NumberOfModels() const
 {
   return modelManager->NumberOfModels();
 }
@@ -567,6 +567,11 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     G4cout << "G4VEnergyLossProcess::PreparePhysicsTable for "
            << GetProcessName() << " for " << part.GetParticleName() 
 	   << "  " << this << G4endl;
+  }
+
+  if(GetMasterProcess() != this) { 
+    SlavePreparePhysicsTable(part); 
+    return;
   }
 
   currentCouple = 0;
@@ -760,7 +765,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void 
 G4VEnergyLossProcess::SlaveBuildPhysicsTable(const G4ParticleDefinition& part, 
-					     G4VEnergyLossProcess* firstProcess)
+					     const G4VEnergyLossProcess* firstProcess)
 {
   G4bool verb = false;
   /*
@@ -877,6 +882,12 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(baseParticle) { G4cout << "; base: " << baseParticle->GetParticleName(); }
     G4cout << " TablesAreBuilt= " << tablesAreBuilt
            << " isIon= " << isIon << "  " << this << G4endl;
+  }
+
+  const G4VEnergyLossProcess* masterProcess = static_cast<const G4VEnergyLossProcess*>(GetMasterProcess());
+  if(masterProcess != this) {
+    SlaveBuildPhysicsTable(part, masterProcess);
+    return;
   }
 
   if(&part == particle) {

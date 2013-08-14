@@ -91,6 +91,7 @@
 #include "Randomize.hh"
 #include <vector>
 
+class G4ElementData;
 class G4PhysicsTable;
 class G4Region;
 class G4VParticleChange;
@@ -286,6 +287,8 @@ public:
 
   void SetCrossSectionTable(G4PhysicsTable*, G4bool isLocal);
 
+  inline G4ElementData* GetElementData();
+
   inline G4PhysicsTable* GetCrossSectionTable();
 
   inline G4VEmFluctuationModel* GetModelOfFluctuations();
@@ -382,6 +385,7 @@ private:
 
 protected:
 
+  G4ElementData*               fElementData;
   G4VParticleChange*           pParticleChange;
   G4PhysicsTable*              xSectionTable;
   const std::vector<G4double>* theDensityFactor;
@@ -407,28 +411,28 @@ inline void G4VEmModel::SetCurrentCouple(const G4MaterialCutsCouple* p)
   fCurrentCouple = p;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
 {
   return fCurrentCouple;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 {
   fCurrentElement = elm;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline const G4Element* G4VEmModel::GetCurrentElement() const
 {
   return fCurrentElement;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
 G4double G4VEmModel::MaxSecondaryKinEnergy(const G4DynamicParticle* dynPart)
@@ -437,7 +441,7 @@ G4double G4VEmModel::MaxSecondaryKinEnergy(const G4DynamicParticle* dynPart)
                             dynPart->GetKineticEnergy());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                         const G4ParticleDefinition* part,
@@ -448,7 +452,7 @@ inline G4double G4VEmModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
   return ComputeDEDXPerVolume(couple->GetMaterial(),part,kinEnergy,cutEnergy);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* couple,
                                          const G4ParticleDefinition* part,
@@ -461,7 +465,7 @@ inline G4double G4VEmModel::CrossSection(const G4MaterialCutsCouple* couple,
 			       cutEnergy,maxEnergy);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline 
 G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* part,
@@ -476,7 +480,7 @@ G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* part,
   return mfp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 		const G4ParticleDefinition* part,
@@ -490,7 +494,7 @@ inline G4double G4VEmModel::ComputeCrossSectionPerAtom(
 				    cutEnergy,maxEnergy);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline const G4Element* 
 G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
@@ -510,7 +514,7 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
   return fCurrentElement;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
 {
@@ -540,56 +544,56 @@ inline G4VEmFluctuationModel* G4VEmModel::GetModelOfFluctuations()
   return flucModel;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4VEmAngularDistribution* G4VEmModel::GetAngularDistribution()
 {
   return anglModel;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmModel::SetAngularDistribution(G4VEmAngularDistribution* p)
 {
   anglModel = p;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmModel::HighEnergyLimit() const
 {
   return highLimit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmModel::LowEnergyLimit() const
 {
   return lowLimit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmModel::HighEnergyActivationLimit() const
 {
   return eMaxActive;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmModel::LowEnergyActivationLimit() const
 {
   return eMinActive;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmModel::PolarAngleLimit() const
 {
   return polarAngleLimit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEmModel::SecondaryThreshold() const
 {
@@ -617,63 +621,63 @@ inline G4bool G4VEmModel::ForceBuildTableFlag() const
   return flagForceBuildTable;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmModel::SetMasterThread(G4bool val)
 {
   isMaster = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4bool G4VEmModel::IsMaster() const
 {
   return isMaster;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmModel::SetHighEnergyLimit(G4double val)
 {
   highLimit = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmModel::SetLowEnergyLimit(G4double val)
 {
   lowLimit = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmModel::SetActivationHighEnergyLimit(G4double val)
 {
   eMaxActive = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmModel::SetActivationLowEnergyLimit(G4double val)
 {
   eMinActive = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4bool G4VEmModel::IsActive(G4double kinEnergy)
 {
   return (kinEnergy >= eMinActive && kinEnergy <= eMaxActive);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmModel::SetPolarAngleLimit(G4double val)
 {
   polarAngleLimit = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmModel::SetSecondaryThreshold(G4double val) 
 {
@@ -701,31 +705,45 @@ inline void G4VEmModel::SetForceBuildTable(G4bool val)
   flagForceBuildTable = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline const G4String& G4VEmModel::GetName() const 
 {
   return name;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline std::vector<G4EmElementSelector*>* G4VEmModel::GetElementSelectors()
 {
   return elmSelectors;
 }
 
-inline void G4VEmModel::SetElementSelectors(std::vector<G4EmElementSelector*>* p)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void 
+G4VEmModel::SetElementSelectors(std::vector<G4EmElementSelector*>* p)
 {
   elmSelectors = p;
   if(elmSelectors) { nSelectors = elmSelectors->size(); }
   localElmSelectors = false;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4ElementData* G4VEmModel::GetElementData()
+{
+  return fElementData;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4PhysicsTable* G4VEmModel::GetCrossSectionTable()
 {
   return xSectionTable;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #endif
 

@@ -434,13 +434,15 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
 
 void 
 G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
-					G4VEmProcess* p)
+					G4VEmProcess* p, G4bool theMaster)
 {
   if (1 < verbose) {
     G4cout << "G4LossTableManager::PreparePhysicsTable for " 
 	   << particle->GetParticleName() 
 	   << " and " << p->GetProcessName() << G4endl;
   }
+  isMaster = theMaster;
+
   if(!startInitialisation) { 
     tableBuilder->SetInitialisationFlag(false); 
     if (1 < verbose) {
