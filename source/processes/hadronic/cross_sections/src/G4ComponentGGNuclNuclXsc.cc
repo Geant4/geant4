@@ -257,6 +257,9 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
 
     G4double npInXsc = hnXsc->GetInelasticHadronNucleonXsc();
 
+    delete dProton;
+    delete dNeutron;
+
     // G4cout<<"ppInXsc = "<<ppInXsc/millibarn<<"; npInXsc = "<<npInXsc/millibarn<<G4endl;
     // G4cout<<"npTotXsc = "<<hnXsc->GetTotalHadronNucleonXsc()/millibarn<<"; npElXsc = "
     //                      <<hnXsc->GetElasticHadronNucleonXsc()/millibarn<<G4endl;
