@@ -51,7 +51,7 @@
 // Constructor
 B02RunAction::B02RunAction():
   G4UserRunAction(),
-  fFieldName(15),
+  //  fFieldName(15),
   fFieldValue(14)
 {
   // - Prepare data member for B02Run.

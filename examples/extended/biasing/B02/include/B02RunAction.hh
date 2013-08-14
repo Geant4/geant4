@@ -61,13 +61,14 @@ public:
 
 public:
   void PrintHeader(std::ostream *out);
-  std::string FillString(const std::string &name, char c, G4int n, G4bool back=true);
+  std::string FillString(const std::string &name, char c, G4int n, 
+                         G4bool back=true);
 
 private:
   // Data member 
   // - vector of MultiFunctionalDetecor names.
   std::vector<G4String> fSDName;  
-  G4int fFieldName;
+  //  G4int fFieldName;
   G4int fFieldValue;
 
 
