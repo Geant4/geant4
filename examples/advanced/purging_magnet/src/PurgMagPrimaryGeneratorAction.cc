@@ -54,8 +54,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagPrimaryGeneratorAction::PurgMagPrimaryGeneratorAction(PurgMagDetectorConstruction* PurgMagDC)
-  :PurgMagDetector(PurgMagDC),rndmVertex(false)
+PurgMagPrimaryGeneratorAction::PurgMagPrimaryGeneratorAction()
+  :rndmVertex(false)
 {
   //default kinematic
   G4int n_particle = 1;

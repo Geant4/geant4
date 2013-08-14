@@ -50,8 +50,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagSteppingAction::PurgMagSteppingAction(PurgMagRunAction* run,PurgMagDetectorConstruction* det)
-:PurgMagRun(run),Detector(det)
+PurgMagSteppingAction::PurgMagSteppingAction(PurgMagDetectorConstruction* det)
+:Detector(det)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

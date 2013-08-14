@@ -9,6 +9,9 @@ $Id$
                       Category History file
                       ---------------------
 
+30.07.2013 - Andrea Dotti   (purmag-V09-06-02)
+- Bug fixing for unused variables (compilation warning clang32)
+
 17.07.2013 - Gabriele Cosmo (purmag-V09-06-01)
 - Explicitly use G4CsvAnalysisManager to be compliant with restructure of
   analysis module.

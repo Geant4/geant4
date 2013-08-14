@@ -45,8 +45,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagRunAction::PurgMagRunAction(PurgMagDetectorConstruction* det)
-:Detector(det)
+PurgMagRunAction::PurgMagRunAction()
 {   
   saveRndm = 1;  
 }

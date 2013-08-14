@@ -48,8 +48,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagEventAction::PurgMagEventAction(PurgMagRunAction* run)
-  :PurgMagRun(run),drawFlag("all"),printModulo(10000)
+PurgMagEventAction::PurgMagEventAction()
+  :drawFlag("all"),printModulo(10000)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

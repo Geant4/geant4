@@ -44,8 +44,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagTrackingAction::PurgMagTrackingAction(PurgMagRunAction* run)
-:PurgMagRun(run)
+PurgMagTrackingAction::PurgMagTrackingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

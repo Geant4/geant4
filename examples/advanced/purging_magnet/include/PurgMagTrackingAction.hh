@@ -40,7 +40,6 @@
 
 #include "G4UserTrackingAction.hh"
 
-class PurgMagRunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -48,13 +47,11 @@ class PurgMagTrackingAction : public G4UserTrackingAction
 {
 
   public:  
-    PurgMagTrackingAction(PurgMagRunAction*);
+    PurgMagTrackingAction();
    ~PurgMagTrackingAction() {};
    
     void PostUserTrackingAction(const G4Track*);
-    
-  private:
-    PurgMagRunAction* PurgMagRun;  
+
 };
 
 #endif

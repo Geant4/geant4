@@ -46,14 +46,13 @@
 
 class G4ParticleGun;
 class G4Event;
-class PurgMagDetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class PurgMagPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-  PurgMagPrimaryGeneratorAction(PurgMagDetectorConstruction*);    
+  PurgMagPrimaryGeneratorAction();    
   ~PurgMagPrimaryGeneratorAction();
   
 public:
@@ -62,8 +61,6 @@ public:
   
 private:
   G4ParticleGun*                  particleGun;
-  PurgMagDetectorConstruction*    PurgMagDetector;
-  
   G4bool                       rndmVertex;      
 };
 
