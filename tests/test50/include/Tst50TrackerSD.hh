@@ -48,7 +48,7 @@ class Tst50DetectorConstruction;
 class Tst50TrackerSD : public G4VSensitiveDetector
 {
 public:
-  Tst50TrackerSD(G4String, Tst50DetectorConstruction*);
+  Tst50TrackerSD(G4String);
   ~Tst50TrackerSD();
 
   void Initialize(G4HCofThisEvent*);
@@ -57,8 +57,6 @@ public:
 
 private:
   Tst50TrackerHitsCollection* tst50Collection;
-  G4int*                   hitID;
-  Tst50DetectorConstruction* Detector;
 };
 #endif
 

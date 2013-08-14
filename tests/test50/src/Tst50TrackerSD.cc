@@ -46,8 +46,8 @@
 #include "G4TouchableHistory.hh"
 #include "Tst50DetectorConstruction.hh"
 
-Tst50TrackerSD::Tst50TrackerSD(G4String name, Tst50DetectorConstruction* det)
-  :G4VSensitiveDetector(name),Detector(det)
+Tst50TrackerSD::Tst50TrackerSD(G4String name)
+  :G4VSensitiveDetector(name)
 { 
   G4String HCname;
   collectionName.insert(HCname="Tst50Collection");

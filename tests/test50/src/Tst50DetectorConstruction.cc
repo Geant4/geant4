@@ -70,8 +70,7 @@ Tst50DetectorConstruction::Tst50DetectorConstruction()
    lead(0),uranium(0), water(0), quartz(0), air(0),vacuum(0),nytrogen(0),
    targetMaterial(0),defaultMaterial(0),
    solidWorld(0),logicWorld(0),physiWorld(0),
-   solidTarget(0),logicTarget(0),physiTarget(0), 
-   targetSD(0)
+   solidTarget(0),logicTarget(0),physiTarget(0)
 {
   // default parameter values of the target
   targetThickness = 0.1*mm;

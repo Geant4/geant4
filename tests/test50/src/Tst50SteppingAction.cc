@@ -50,12 +50,18 @@
 #include "Tst50PrimaryGeneratorAction.hh"
 #include "Tst50RunAction.hh"
 
+#ifdef G4ANALYSIS_USE
 Tst50SteppingAction::Tst50SteppingAction(Tst50PrimaryGeneratorAction* primary, 
-					 Tst50RunAction* run, 
-					 Tst50DetectorConstruction* det):
+					 Tst50RunAction* run, Tst50DetectorConstruction* det):
   primaryAction(primary), 
-  runAction(run), 
-  detector(det) 
+  runAction(run),
+  detector(det)
+#else
+Tst50SteppingAction::Tst50SteppingAction(Tst50PrimaryGeneratorAction* primary,
+                                         Tst50RunAction* run, Tst50DetectorConstruction*):
+primaryAction(primary),
+runAction(run)
+#endif
 { }
 
 Tst50SteppingAction::~Tst50SteppingAction()
@@ -103,12 +109,15 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
 	}
     }
 
+  //SI
+  //G4double targetDensity = detector->GetDensity();
+  //END SI
+
 #ifdef G4ANALYSIS_USE
   G4int runID = runAction->GetRunID();
 
   // The user can select transmission test with this flag
   G4bool trasmissionTestFlag = runAction->GetFlag();
-  
 
   // Stopping Power and CSDA range tests ...
 
@@ -139,7 +148,11 @@ void Tst50SteppingAction::UserSteppingAction(const G4Step* aStep)
                           // calculation of Stopping Power 
                          // reference http://physics.nist.gov/PhysRefData/Star/Text/contents.html
 			  G4double totalStoppingPower = energyLost / stepLength;
-                          G4double targetDensity = detector->GetDensity();
+
+			  //SI
+			  //G4double targetDensity = detector->GetDensity();
+			  //END SI
+
 			  G4double nistStoppingPower = totalStoppingPower/targetDensity;
 			  analysis -> StoppingPower(runID,
                                                     primaryParticleEnergy/MeV,

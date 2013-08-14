@@ -49,12 +49,13 @@ class Tst50AnalysisManager;
 class Tst50RunAction;
 class Tst50PrimaryGeneratorAction;
 class Tst50DetectorConstruction;
+
 class Tst50SteppingAction : public G4UserSteppingAction
 {
 public:
 
   Tst50SteppingAction(Tst50PrimaryGeneratorAction*,
-		      Tst50RunAction*, 
+		      Tst50RunAction*,
 		      Tst50DetectorConstruction*);
 
   ~Tst50SteppingAction();
@@ -64,7 +65,9 @@ public:
 private:
 
   Tst50PrimaryGeneratorAction* primaryAction;
-  Tst50RunAction* runAction; 
-  Tst50DetectorConstruction* detector;     
+  Tst50RunAction* runAction;
+#ifdef G4ANALYSIS_USE
+  Tst50DetectorConstruction* detector;
+#endif
 };
 #endif

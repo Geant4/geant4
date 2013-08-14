@@ -46,7 +46,6 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4UserLimits;
-class Tst50TrackerSD;
 class Tst50DetectorMessenger;
 class G4NistManager;
 
@@ -125,7 +124,6 @@ private:
   G4Box*             solidTarget;
   G4LogicalVolume*   logicTarget;
   G4VPhysicalVolume* physiTarget;
-  Tst50TrackerSD* targetSD; 
   
   G4double           targetThickness;
   G4double targetX;
