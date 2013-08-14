@@ -55,8 +55,7 @@ class EventAction : public G4UserEventAction
   void SetPrintModulo(G4int pm){printModulo = pm;};
 
 private:
-  G4int                 printModulo;           
-  G4int ScintillID;
+  G4int                 printModulo;
 
   EventActionMessenger* eventMessenger;
 

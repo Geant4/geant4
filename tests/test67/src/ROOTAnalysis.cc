@@ -63,7 +63,6 @@ ROOTAnalysis::ROOTAnalysis() :
   fEfficiencyFull = 0;
   fEfficiencyFullErr = 0;
   fPrimaryEnergy = 0;
-  fHistosCreated = false;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,18 +100,6 @@ ROOTAnalysis* ROOTAnalysis::getInstance()
   if (instance == 0) 
     instance = new ROOTAnalysis();
   return instance;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-G4bool ROOTAnalysis::AreHistoCreated() const {
-  G4AutoLock l(&dataManipulationMutex);
-  return fHistosCreated;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void ROOTAnalysis::ResetHistoForNewRun() {
-  G4AutoLock l(&dataManipulationMutex);
-  fHistosCreated = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -161,7 +148,6 @@ void ROOTAnalysis::BookNewHistogram(G4int runID, G4double primaryEnergy)
       fTree->Branch("Ionisation",&fIon,"Ionisation/D");
       fTree->Branch("PhotoEl",&fPE,"PhotoEl/D");
     }
-
   if (!(fHistograms->count(runID)))
     {
       TString id = "h";
@@ -172,15 +158,13 @@ void ROOTAnalysis::BookNewHistogram(G4int runID, G4double primaryEnergy)
       Int_t nbins = (Int_t) ((primaryEnergy+10*keV)/(0.5*keV));
       TH1D* histo = new  TH1D(id,title,nbins,
 			      0,(primaryEnergy+10*keV)/keV);
-      fHistograms->insert(std::make_pair(runID,histo));
-					
+      fHistograms->insert(std::make_pair(runID,histo));					
     }
+
   //Zero counters
   fPE = 0;
   fIon = 0;
   fComp = 0;
-  //set flag to true
-  fHistosCreated = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

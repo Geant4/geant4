@@ -60,8 +60,7 @@ public:
   static ROOTAnalysis* getInstance();
   void SetListName(G4String listName);
 
-  G4bool AreHistoCreated() const;
-  void ResetHistoForNewRun();
+  ///void ResetHistoForNewRun();
 
 private:
    //private constructor in order to create a singleton
@@ -88,7 +87,6 @@ private:
   Double_t fEfficiencyFull;
   Double_t fEfficiencyFullErr;
 
-  Bool_t fHistosCreated;
 
 };
 

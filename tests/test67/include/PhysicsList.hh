@@ -35,7 +35,6 @@
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class StepMax;
 class PhysicsListMessenger;
 class G4VPhysicsConstructor;
 
@@ -71,8 +70,6 @@ private:
   G4VPhysicsConstructor*  emPhysicsList;
   G4VPhysicsConstructor*  decayPhysicsList;
   G4String emName;
-    
-  StepMax* stepMaxProcess;
     
   PhysicsListMessenger* pMessenger;
 };

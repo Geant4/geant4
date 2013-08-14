@@ -38,7 +38,6 @@
 
 class G4Event;
 class DetectorConstruction;
-class PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,7 +56,6 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun*         particleGun;
     const DetectorConstruction* theDetector;
 
-    PrimaryGeneratorMessenger* gunMessenger; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -87,9 +87,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //If it is a slave OR the sequential, book histo
   if (!IsMaster() || 
       G4RunManager::GetRunManager()->GetRunManagerType()==G4RunManager::sequentialRM)
-    {      
-      //create histos, if there are not already there for this run
-      if (!(ROOTAnalysis::getInstance()->AreHistoCreated()))
+    {         
 	ROOTAnalysis::getInstance()->BookNewHistogram(theRun->GetRunID(),
 						      theRun->GetPrimaryEnergy());
     }
@@ -144,11 +142,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
       filename += ".dat";
       outFile->open(filename.c_str());
     }
-
-#ifdef G4_USE_ROOT
-  ROOTAnalysis::getInstance()->ResetHistoForNewRun(); //histo created by the first worker
-#endif
-   
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

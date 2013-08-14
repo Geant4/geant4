@@ -37,7 +37,6 @@
 
 class EventAction;
 class G4UIdirectory;
-class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,8 +52,7 @@ public:
 private:
   EventAction*          eventAction;
   
-  G4UIdirectory*        eventDir;         
-  G4UIcmdWithAString*   DrawCmd;
+  G4UIdirectory*        eventDir;
   G4UIcmdWithAnInteger* PrintCmd;   
   G4UIcmdWithAnInteger* randomCmd;
   

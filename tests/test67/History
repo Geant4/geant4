@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-07-2013 A.Dotti   (test67-V09-06-13)
+  Bug fixing for compilation warnings for unused varialbes (clang32)
+
+19-Jul-2013 L. Pandola (test67-V09-06-12)
+        Remove obsolete private data member in ROOTAnalysis 
+        (slight change of logic for histogram booking)
+
 11-Jun-2013 A. Dotti  (test67-V09-06-11)
         Add Mutex to access shared resources in all methods of 
         singleton ROOTAnalysis class.
