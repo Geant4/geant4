@@ -32,6 +32,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4xml
     HEADERS
         G4XmlAnalysisManager.hh
+        G4XmlAnalysisManager.icc
         G4XmlFileManager.hh
         G4XmlNtupleDescription.hh
         G4XmlNtupleManager.hh

@@ -33,6 +33,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4root
     HEADERS
         G4RootAnalysisManager.hh
+        G4RootAnalysisManager.icc
         G4RootFileManager.hh
         G4RootNtupleDescription.hh
         G4RootNtupleManager.hh

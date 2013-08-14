@@ -32,6 +32,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4csv
     HEADERS
         G4CsvAnalysisManager.hh
+        G4CsvAnalysisManager.icc
         G4CsvFileManager.hh
         G4CsvNtupleDescription.hh
         G4CsvNtupleManager.hh

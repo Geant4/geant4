@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4HnManager.hh
         G4HnMessenger.hh
         G4VAnalysisManager.hh
+        G4VAnalysisManager.icc
         G4VFileManager.hh
         G4VH1Manager.hh
         G4VH2Manager.hh

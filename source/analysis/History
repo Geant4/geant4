@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 1, 2013 I.Hrivnacova (analysis-V09-06-18)
+- Fixed CMake build (added missing *.icc files in HEADERS);
+  thanks to Mike Kelsey for pointing at this.
+
 July 15, 2013 I.Hrivnacova (analysis-V09-06-17)
 - Added set_property(...GEANT4_BUILDTREE_INCLUDE_DIRS) in
   g4tools/CMakeLists.txt  
