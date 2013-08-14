@@ -35,25 +35,20 @@
 #include "globals.hh"
 
 class DetectorConstruction;
-class RunAction;
 class EventAction;
-class HistoManager;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-   SteppingAction(DetectorConstruction*,RunAction*,EventAction*,HistoManager* );
+   SteppingAction(DetectorConstruction*,EventAction*);
   ~SteppingAction();
 
    void UserSteppingAction(const G4Step*);
 
   private:
     DetectorConstruction* detector;
-    RunAction*            runaction;    
     EventAction*          eventaction;
-    HistoManager*         histoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

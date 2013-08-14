@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-07-2013 A.Dotti   (test54-V09-06-01)
+  Bug fixing for compilation warnings for unused varialbes (clang32)
+
 02-12-2012 J.Allison  (test54-V09-06-00)
   Migration to DrawTrajectory() (i_mode argument is no longer available):
   o EventAction.cc: Removed argument from DrawTrajectory().
