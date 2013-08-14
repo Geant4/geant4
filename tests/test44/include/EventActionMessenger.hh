@@ -44,7 +44,6 @@
 #include "G4UImessenger.hh"
 
 class EventAction;
-class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,8 +60,7 @@ public:
 private:
 
   EventAction*          eventAction;   
-  G4UIcmdWithAString*   drawCmd;
-  G4UIcmdWithAnInteger* printCmd;    
+  G4UIcmdWithAnInteger* printCmd;
   G4UIcmdWithAnInteger* dCmd;    
 
 };

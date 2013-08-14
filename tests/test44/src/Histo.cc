@@ -66,12 +66,12 @@ Histo::Histo()
   tupleName  = "tuple";
   tupleId    = "100";
   tupleList  = "";
-  ntup       = 0;
   m_ROOT_file= 0;
 
 #ifdef G4ANALYSIS_USE
   tree = 0;
-  af   = 0; 
+  ntup       = 0;
+  af   = 0;
 #endif
   
 #ifdef G4ANALYSIS_USE_ROOT

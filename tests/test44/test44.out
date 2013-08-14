@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -28,17 +28,13 @@
 
 ***** Table : Nb of materials = 2 *****
 
- Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm 
-                       Imean: 166.000 eV 
-
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm   Imean: 166.000 eV 
    --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114319208.901 pc 
-                       Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
-
+ Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114327973.206 pc   Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -56,14 +52,14 @@ PhysicsList::SetCuts:CutLength : 700 um
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Al
  Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
  Energy thresholds :  gamma  5.85564 keV    e-  460.395 keV    e+  442.201 keV proton 70 keV
@@ -133,7 +129,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
@@ -146,8 +142,3 @@ Average number of steps of primary   47
 
 #
 G4 kernel has come to Quit state.
-================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.31 Mb
-============================================================
-RunManagerKernel is deleted. Good bye :)

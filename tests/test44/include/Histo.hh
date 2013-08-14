@@ -118,10 +118,11 @@ private:
   G4int    defaultAct;
 
   std::vector<AIDA::IHistogram1D*> histo;
+#ifdef G4ANALYSIS_USE
   AIDA::IAnalysisFactory* af;  
   AIDA::ITuple*   ntup;
   AIDA::ITree*    tree;
-
+#endif
   TFile*                 m_ROOT_file;
   std::vector<TH1D*>     m_ROOT_histo;  
 

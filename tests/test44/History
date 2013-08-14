@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-07-13 A.Dotti  (test44-V09-06-02)
+- Fix compilation warnings for clang32: unused variables
+
 31-01-13  V.Ivant (test44-V09-06-01)
 - PhysicsList - add modifications to address reorganisation of PHysics List
 

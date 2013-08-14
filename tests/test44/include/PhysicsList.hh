@@ -84,7 +84,6 @@ private:
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
     
   PhysicsListMessenger* pMessenger;
-  G4bool dump;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
