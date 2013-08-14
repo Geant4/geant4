@@ -40,17 +40,19 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
+#ifdef G4ANALYSIS_USE
 :af(0),tree(0),factoryOn(false)
 {
-#ifdef G4ANALYSIS_USE
   // Creating the analysis factory
   af = AIDA_createAnalysisFactory();
   if(!af) {
     G4cout << " HistoManager::HistoManager() :" 
            << " problem creating the AIDA analysis factory."
            << G4endl;
-  }	     
-#endif 
+  }
+#else
+{
+#endif
  
   fileName[0] = "testem18";
   fileType    = "root";
