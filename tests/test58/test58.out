@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -24,18 +24,14 @@ PhysicsList::AddPhysicsList: <standardISS>
 /run/initialize
 userDetector->Construct() start.
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
-                       Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:    G4_Si    density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.635 cm 
-                       Imean: 173.000 eV 
-
+ Material:    G4_Si    density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.753 cm   Imean: 173.000 eV 
    --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
          --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
@@ -47,6 +43,7 @@ userDetector->Construct() start.
  The ABSORBER is made of 100 um  of G4_Si. The transverse size (YZ) is 1 cm 
  X position of the middle of the absorber 0 fm 
 World is registered to the default region.
+physicsList->Construct() start.
 physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
@@ -165,7 +162,7 @@ ionIoni:   for  alpha    SubType= 2
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -178,7 +175,7 @@ hIoni:   for  anti_proton    SubType= 2
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -191,7 +188,7 @@ hIoni:   for  kaon+    SubType= 2
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -258,7 +255,7 @@ CoulombScat:   for  mu-    SubType= 1
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -271,7 +268,7 @@ hIoni:   for  pi+    SubType= 2
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -296,14 +293,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.6438 keV    e-  4.00759 MeV    e+  3.79783 MeV proton 0.1 eV 
@@ -329,7 +326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.27s Real=3.6s Sys=0s
+  User=1.39s Real=1.43s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -402,14 +399,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
@@ -430,7 +427,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.86s Real=6.79s Sys=0.01s
+  User=3.07s Real=3.09s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -504,14 +501,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
@@ -532,11 +529,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=50.41s Real=138.1s Sys=0.04s
+  User=53.34s Real=53.47s Sys=0.01s
 
  ======================== run summary ======================
 
- The run was 100 Si28 of 560 MeV, through 100 um  of G4_Si
+ The run was 100 Si28[0.0] of 560 MeV, through 100 um  of G4_Si
  (density: 2.33 g/cm3 )
 
  Threshold Energy for displacement 
@@ -606,14 +603,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
@@ -634,11 +631,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=47.87s Real=128.1s Sys=0.03s
+  User=50.26s Real=50.27s Sys=0.01s
 
  ======================== run summary ======================
 
- The run was 100 Fe56 of 1.12 GeV, through 100 um  of G4_Si
+ The run was 100 Fe56[0.0] of 1.12 GeV, through 100 um  of G4_Si
  (density: 2.33 g/cm3 )
 
  Threshold Energy for displacement 
@@ -707,14 +704,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Galactic
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma  1 cm     e-  1 cm     e+  1 cm  proton 1 nm 
  Energy thresholds :  gamma  20.64 keV    e-  4.008 MeV    e+  3.798 MeV proton 0.1 eV 
@@ -732,10 +729,11 @@ Index : 1     used in the geometry : Yes
 Start Run processing.
 
 ---> Begin of Event: 0
+TrackingAction: vx - 1 = 8.882e-16
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.27s Real=10.19s Sys=0s
+  User=3.29s Real=3.29s Sys=0s
 
  ======================== run summary ======================
 
@@ -760,7 +758,7 @@ Run Summary
  4.189e+05 barn   +/- 2870 barn  
 
  Mean scattering angle :
- 0.001105 mrad +/- 8.244e-05 mrad
+ 0.001095 mrad +/- 8.303e-05 mrad
 
  Total energy deposit in absorber:
  64.65 keV +/- 30.75 keV
@@ -771,14 +769,14 @@ Run Summary
 -----> dE/dx  nucl = 3.107 MeV/cm	(1.333 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 7.896e-10 eV  +/- 0 eV 
------> NIEL = 7.935e-14 MeV/cm	(3.406e-14 MeV*cm2/g)
+ 7.786e-10 eV  +/- 0 eV 
+-----> NIEL = 7.825e-14 MeV/cm	(3.358e-14 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 19745
- Mean Kinetic Energy of PKA = 0.02056 eV  +/- 0.002354 eV 
- Total Frenkel-pairs Concentration: FP = 1.511e-07 #/cm3
+ Total Number of primary knock-on atoms: PKA = 18656
+ Mean Kinetic Energy of PKA = 0.02161 eV  +/- 0.002492 eV 
+ Total Frenkel-pairs Concentration: FP = 1.49e-07 #/cm3
 
 ----------------------------------------------------------------
 
@@ -794,14 +792,9 @@ UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
 EventManager deleted.
-Units table cleared.
-================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 28 Mb
-============================================================
-G4Allocator objects are deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
-RunManagerKernel is deleted. Good bye :)
+RunManagerKernel is deleted.
+RunManager is deleted.

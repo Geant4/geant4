@@ -92,7 +92,7 @@ int main(int argc,char** argv) {
 
 
   //stepAction
-  SteppingAction* steppingaction = new SteppingAction(detector, runaction,
+  SteppingAction* steppingaction = new SteppingAction(detector,
                                                       eventaction);
   runManager->SetUserAction(steppingaction);
   

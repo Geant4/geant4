@@ -42,9 +42,9 @@
 using namespace std; 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* DET, RunAction* RA,
+SteppingAction::SteppingAction(DetectorConstruction* DET,
                                EventAction* EA )
-:detector(DET), runaction(RA), eventaction(EA) 
+:detector(DET), eventaction(EA) 
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
