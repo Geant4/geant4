@@ -98,7 +98,7 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
     btf1(1429.),
     fParticleChange(0),
     lowestKinEnergy(1.0*GeV),
-    minThreshold(1.0*keV)
+    minThreshold(0.9*keV)
 {
   theGamma = G4Gamma::Gamma();
   nist = G4NistManager::Instance();
@@ -170,11 +170,11 @@ G4double G4MuBremsstrahlungModel::ComputeDEDXPerVolume(
                                                     G4double cutEnergy)
 {
   G4double dedx = 0.0;
-  if (kineticEnergy <= lowestKinEnergy) return dedx;
+  if (kineticEnergy <= lowestKinEnergy) { return dedx; }
 
   G4double tmax = kineticEnergy;
   G4double cut  = std::min(cutEnergy,tmax);
-  if(cut < minThreshold) cut = minThreshold;
+  if(cut < minThreshold) { cut = minThreshold; }
 
   const G4ElementVector* theElementVector = material->GetElementVector();
   const G4double* theAtomicNumDensityVector =
@@ -283,16 +283,16 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
 {
   G4double dxsection = 0.;
 
-  if( gammaEnergy > tkin) return dxsection ;
+  if(gammaEnergy > tkin) { return dxsection; }
 
   G4double E = tkin + mass ;
   G4double v = gammaEnergy/E ;
   G4double delta = 0.5*mass*mass*v/(E-gammaEnergy) ;
-  G4double rab0=delta*sqrte ;
+  G4double rab0  = delta*sqrte ;
 
-  G4int iz = G4int(Z);
-  if(iz < 1) iz = 1;
-  else if(iz > 92) iz = 92;
+  G4int iz = G4lrint(Z);
+  if(iz < 1) { iz = 1; }
+  else if(iz > 92) { iz = 92; }
 
   G4double z13 = 1.0/nist->GetZ13(iz);
   G4double dnstar = fDN[iz];
@@ -311,7 +311,7 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
   G4double rab1=b*z13;
   G4double fn=log(rab1/(dnstar*(electron_mass_c2+rab0*rab1))*
               (mass+delta*(dnstar*sqrte-2.))) ;
-  if(fn <0.) fn = 0. ;
+  if(fn <0.) { fn = 0.; }
   // electron contribution logarithm
   G4double epmax1=E/(1.+0.5*mass*rmass/E) ;
   G4double fe=0.;
@@ -320,7 +320,7 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
     G4double rab2=b1*z13*z13 ;
     fe=log(rab2*mass/((1.+delta*rmass/(electron_mass_c2*sqrte))*
                               (electron_mass_c2+rab0*rab2))) ;
-    if(fe<0.) fe=0. ;
+    if(fe<0.) { fe=0.; }
   }
 
   dxsection = coeff*(1.-v*(1. - 0.75*v))*Z*(fn*Z + fe)/gammaEnergy;

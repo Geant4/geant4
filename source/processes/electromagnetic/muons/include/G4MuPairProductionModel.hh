@@ -62,6 +62,8 @@
 
 #include "G4VEmModel.hh"
 #include "G4NistManager.hh"
+#include "G4ElementData.hh"
+#include "G4Physics2DVector.hh"
 #include <vector>
 
 class G4Element;
@@ -104,16 +106,9 @@ public:
                                     const G4ParticleDefinition*,
                                     G4double);
 
-  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple*);
-
   inline void SetLowestKineticEnergy(G4double e);
 
   inline void SetParticle(const G4ParticleDefinition*);
-
-  inline G4double GetSecondaryEnergy(G4int iy);
-
-  inline G4double GetDifferentialCrossSection(G4int iz, G4int it, G4int iy);
 
 protected:
 
@@ -137,9 +132,10 @@ private:
 
   void MakeSamplingTables();
 
-  inline G4double InterpolatedIntegralCrossSection(
-		     G4double dt, G4double dz, G4int iz,
-		     G4int it, G4int iy);
+  void DataCorrupted(G4int Z, G4double logTkin);
+
+  inline G4double FindScaledEnergy(G4int Z, G4double rand, G4double logTkin,
+				   G4double yymin, G4double yymax); 
 
   // hide assignment operator
   G4MuPairProductionModel & operator=(const  G4MuPairProductionModel &right);
@@ -169,22 +165,16 @@ private:
   G4double minPairEnergy;
   G4double lowestKinEnergy;
 
-  // tables for sampling
   G4int nzdat;
-  G4int ntdat;
-  G4int nbiny;
-  size_t nmaxElements;
 
-  static const G4int zdat[5];
-  static const G4double adat[5], tdat[41];
-  G4double ya[1001], proba[5][41][1001];
-
+  // gamma energy bins
+  G4int    nYBinPerDecade;
+  size_t   nbiny;
   G4double ymin;
-  G4double ymax;
   G4double dy;
 
-  G4bool  samplingTablesAreFilled;
-  std::vector<G4double> partialSum;
+  static const G4int zdat[5];
+  static const G4double adat[5];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -219,31 +209,23 @@ inline void G4MuPairProductionModel::SetElement(G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4MuPairProductionModel::InterpolatedIntegralCrossSection(
-	        G4double dt, G4double dz, G4int iz, G4int it, G4int iy)
-{
-  G4double fac =  1./(zdat[iz]  *(zdat[iz]  +1.));
-  G4double fac1 = 1./(zdat[iz-1]*(zdat[iz-1]+1.));
-  G4double f0 = fac1*proba[iz-1][it-1][iy] + 
-                (fac*proba[iz][it-1][iy]-fac1*proba[iz-1][it-1][iy])*dz;
-  G4double f1 = fac1*proba[iz-1][it  ][iy] + 
-                (fac*proba[iz][it  ][iy]-fac1*proba[iz-1][it  ][iy])*dz;
-  return (f0 + (f1-f0)*dt);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4MuPairProductionModel::GetSecondaryEnergy(G4int iy)
-{
-  return ya[iy];
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 inline G4double 
-G4MuPairProductionModel::GetDifferentialCrossSection(G4int iz, G4int it, G4int iy)
+G4MuPairProductionModel::FindScaledEnergy(G4int Z, G4double rand,
+					  G4double logTkin,
+					  G4double yymin, G4double yymax)
 {
-  return proba[iz][it][iy];
+  G4double x = rand;
+  G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
+  if(!pv) { 
+    DataCorrupted(Z, logTkin); 
+  } else if(yymin > ymin || yymax < 0.0) {
+    G4double pmin = pv->Value(yymin, logTkin);
+    G4double pmax = pv->Value(yymax, logTkin);
+    G4double p0   = pv->Value(0.0, logTkin);
+    if(p0 <= 0.0) { DataCorrupted(Z, logTkin); }
+    else { x = (pmin + rand*(pmax - pmin))/p0; }
+  }
+  return pv->FindLinearX(x, logTkin);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

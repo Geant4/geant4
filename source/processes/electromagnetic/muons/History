@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 August 2013: V.Ivant (emmuons-V09-06-17)
+- G4MuPairProduction - improved initialisation printout
+- G4MuPairProductionModel - fixed bining to 1000 for internal 
+    sampling table
+
+09 August 2013: V.Ivant (emmuons-V09-06-16)
+- G4MuBremsstrahlungModel - minThreshold is reduced from 1 keV to 
+    0.9 keV in order to avoid extra warning printout
+- G4MuBremsstrahlung - removed unused headers;
+- G4MuPairProduction - removed unused headers; lowestEnergy limit
+    should not be lower than 8*mass because the model is not
+    applicable
+- G4MuPairProductionModel - sampling table is re-implemented as 
+    G4ElementData with 2D-tables per atomic number; sampling
+    algorithm is rewritten, data fully shared between threads
+
 09 July 2013: V.Ivant (emmuons-V09-06-15)
 - G4MuPairProductionModel - fixed non-reproducibity due to currentZ
     member of the class definition; changed signature of the method
