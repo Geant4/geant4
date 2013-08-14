@@ -49,7 +49,6 @@ class ActionInitialization : public G4VUserActionInitialization
 
   private:
     DetectorConstruction* fDetectorConstruction;
-    PrimaryGeneratorAction* fPrimaryGeneratorAction;
 };
 
 #endif

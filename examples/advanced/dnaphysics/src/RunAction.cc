@@ -38,8 +38,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction(DetectorConstruction* det)
-:fDetectorConstruction(det)
+RunAction::RunAction(DetectorConstruction*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

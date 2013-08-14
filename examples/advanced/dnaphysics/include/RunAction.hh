@@ -51,9 +51,5 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);
 
-  private:
-
-    DetectorConstruction* fDetectorConstruction;    
-  
 };
 #endif
