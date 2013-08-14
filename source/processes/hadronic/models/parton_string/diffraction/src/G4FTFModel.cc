@@ -666,8 +666,9 @@ G4bool G4FTFModel::PutOnMassShell()
 
         if(theNucleus->GetMassNumber() != 1)
         {
-//          G4double ProbDeltaIsobar(0.05);                           // Uzhi 6.07.2012
-G4double ProbDeltaIsobar(0.25);
+          //G4double ProbDeltaIsobar(0.05);  // Uzhi 6.07.2012
+          //G4double ProbDeltaIsobar(0.25);  // Uzhi 13.06.2013
+          G4double ProbDeltaIsobar(0.10);  // A.R. 07.08.2013
 	  for(G4int i=0; i < NumberOfInvolvedNucleonsOfTarget; i++ )
           {
 //G4cout<<"i MaxNumberOfDeltas ProbDeltaIsobar "<<i<<" "<<MaxNumberOfDeltas<<" "<<ProbDeltaIsobar<<G4endl;
@@ -1177,8 +1178,9 @@ G4double ProbDeltaIsobar(0.25);
         G4int MaxNumberOfDeltas = (int)((SqrtS - SumMasses)/(400.*MeV));
         G4int NumberOfDeltas(0);
 
-//        G4double ProbDeltaIsobar(0.05);                           // Uzhi 6.07.2012
-G4double ProbDeltaIsobar(0.25); 
+        //G4double ProbDeltaIsobar(0.05);  // Uzhi 6.07.2012
+        //G4double ProbDeltaIsobar(0.25);  // Uzhi 13.06.2013
+        G4double ProbDeltaIsobar(0.10);  // A.R. 07.08.2013
         if(thePrNucleus->GetMassNumber() != 1)
         {
 	  for(G4int i=0; i < NumberOfInvolvedNucleonsOfProjectile; i++ )

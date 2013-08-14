@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+07-Aug-2013 A. Ribon       (hadr-string-diff-V09-06-15)
+-  Set Delta-isobar probability to 10%, as a compromise between better
+   agreement with thin-target data and smaller impact on hadronic shower
+   observables with respect to G4 9.6.ref06.
+
 02-Jul-2013 A. Ribon       (hadr-string-diff-V09-06-14)
 -  Replaced CLHEP::RandFlat with G4RandFlat in G4DiffractiveExcitation.cc.
 
