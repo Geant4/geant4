@@ -73,6 +73,8 @@ G4int RE02PSNofStep::GetIndex(G4Step* aStep)
   G4int ix = touchable->GetReplicaNumber(1);
   G4int iy = touchable->GetReplicaNumber(2);
   G4int iz = touchable->GetReplicaNumber(0);
-  
-  return iy*fNx*fNz+ix*fNz+iz;
+ 
+  G4int tmp = fNy;
+  if (tmp) return iy*fNx*fNz+ix*fNz+iz;
+  else return iy*fNx*fNz+ix*fNz+iz; 
 }
