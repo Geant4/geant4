@@ -14,10 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-07-13 A.Dotti      (test36-V09-06-05)
+- Removing unused variables: clang32 compilation warning
 
 09-07-13 V.Ivanchenko (test36-V09-06-04)
 - Em10SteppingAction - cleanup old code
-- Em10PhysicsList - use G4PAIModel instead of G4PAIModel
+- Em10PhysicsList - use G4PAIModel instead of G4PAIPhotonModel
 
 08-05-13 V.Ivanchenko (test36-V09-06-03)
 - Em10PhysicsList - use G4PAIPhotonModel instead of G4PAIModel

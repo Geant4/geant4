@@ -39,7 +39,6 @@
 
 class G4ParticleGun;
 class G4Event;
-class Em10DetectorConstruction;
 class Em10PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -47,7 +46,7 @@ class Em10PrimaryGeneratorMessenger;
 class Em10PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    Em10PrimaryGeneratorAction(Em10DetectorConstruction*);    
+    Em10PrimaryGeneratorAction();    
    ~Em10PrimaryGeneratorAction();
 
   public:
@@ -61,7 +60,6 @@ class Em10PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
     G4ParticleGun*                particleGun;	//pointer a to G4 service class
-    Em10DetectorConstruction*      Em10Detector; //pointer to the geometry
     
     Em10PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
     G4String                      rndmFlag;	//flag for a random impact point       

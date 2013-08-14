@@ -32,14 +32,12 @@
 
 #include "Em10SteppingMessenger.hh"
 
-#include "Em10SteppingAction.hh"
 #include "G4UIdirectory.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Em10SteppingMessenger::Em10SteppingMessenger(Em10SteppingAction* SA)
-:steppingAction (SA)
+Em10SteppingMessenger::Em10SteppingMessenger()
 {
   steppingDir = new G4UIdirectory("/stepping/");
   steppingDir->SetGuidance("stepping control");

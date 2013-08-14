@@ -59,8 +59,6 @@ class Em10PhysicsListMessenger: public G4UImessenger
 
     G4UIcmdWithADoubleAndUnit* cutGCmd;
     G4UIcmdWithADoubleAndUnit* cutECmd;
-    G4UIcmdWithADoubleAndUnit* cutPCmd;
-    G4UIcmdWithADoubleAndUnit* rCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
     G4UIcmdWithADoubleAndUnit* eMinEnergyCmd;
     G4UIcmdWithADoubleAndUnit* gMinEnergyCmd;

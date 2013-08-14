@@ -62,7 +62,7 @@
 Em10DetectorConstruction::Em10DetectorConstruction()
   :fWorldChanged(false), fAbsorberMaterial(0),  fGapMat(0),fSetUp("simpleALICE"),
    fWorldMaterial(0),  fSolidWorld(0),      fLogicWorld(0),      fPhysicsWorld(0),
-   fSolidRadSlice(0), fLogicRadSlice(0),  fPhysicRadSlice(0),
+   fLogicRadSlice(0),
    fSolidRadiator(0),  fLogicRadiator(0),   fPhysicsRadiator(0),
    fRadiatorMat(0), fPipe(false), fPipeField(false),
    fSolidAbsorber(0),  fLogicAbsorber(0),   fPhysicsAbsorber(0),

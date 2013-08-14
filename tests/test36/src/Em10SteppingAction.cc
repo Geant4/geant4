@@ -50,13 +50,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Em10SteppingAction::Em10SteppingAction(Em10DetectorConstruction* DET,
-                                     Em10EventAction* EA,
+Em10SteppingAction::Em10SteppingAction(Em10EventAction* EA,
                                      Em10RunAction* RA)
-:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(0),
- IDold(-1) ,evnoold(-1)
+:eventaction (EA),runaction (RA),steppingMessenger(0),
+ IDold(-1) 
 {
-  steppingMessenger = new Em10SteppingMessenger(this);
+  steppingMessenger = new Em10SteppingMessenger();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

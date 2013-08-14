@@ -155,13 +155,7 @@ private:
 
   // TR radiator volumes and dimensions
           
-  G4Box*             fSolidRadSlice;   // pointer to the solid  z-slice 
   G4LogicalVolume*   fLogicRadSlice;   // pointer to the logical z-slide
-  G4VPhysicalVolume* fPhysicRadSlice;  // pointer to the physical z-slide
-
-  G4Box*             fSolidRadRing;    // pointer to the solid  R-slice 
-  G4LogicalVolume*   fLogicRadRing;    // pointer to the logical R-slide
-  G4VPhysicalVolume* fPhysicRadRing;   // pointer to the physical R-slide
 
   G4Box*             fSolidRadiator;
   G4LogicalVolume*   fLogicRadiator; 

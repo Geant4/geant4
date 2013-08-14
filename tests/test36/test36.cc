@@ -78,7 +78,7 @@ int main(int argc,char** argv)
   
   // set user action classes
 
-  runManager->SetUserAction(new Em10PrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new Em10PrimaryGeneratorAction());
 
   Em10RunAction* runAction = new Em10RunAction;
 
@@ -88,8 +88,7 @@ int main(int argc,char** argv)
 
   runManager->SetUserAction(eventAction);
 
-  Em10SteppingAction* steppingAction = new Em10SteppingAction(detector,
-                                                            eventAction, 
+  Em10SteppingAction* steppingAction = new Em10SteppingAction(eventAction, 
                                                             runAction);
   runManager->SetUserAction(steppingAction);
   

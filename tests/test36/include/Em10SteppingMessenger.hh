@@ -38,8 +38,6 @@
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class Em10SteppingAction;
 class G4UIdirectory;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,15 +46,12 @@ class Em10SteppingMessenger: public G4UImessenger
 {
   public:
 
-   Em10SteppingMessenger(Em10SteppingAction* );
+   Em10SteppingMessenger();
   ~Em10SteppingMessenger();
 
    void SetNewValue(G4UIcommand* ,G4String );
 
   private:
-
-   Em10SteppingAction* steppingAction;
-
    G4UIdirectory*     steppingDir;
 
 };
