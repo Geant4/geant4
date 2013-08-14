@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+30-07-13  A.Dotti (test31-V09-06-03)
+- Bug fixing for unused variables clang32
 
 23-04-13  V.Ivant (test31-V09-06-02)
 - test31Histo - changed ion name convension in G4IonTable (for 

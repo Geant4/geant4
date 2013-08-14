@@ -70,7 +70,6 @@ public: // Without description
     test31DetectorConstruction* hDet;
     
     G4UIdirectory*             test31detDir;
-    G4UIdirectory*             test31detDir1;
     G4UIdirectory*             test31detDir2;
 
     G4UIcmdWithAnInteger*      NumOfAbsCmd;
@@ -84,9 +83,7 @@ public: // Without description
     G4UIcmdWithADoubleAndUnit* XMagFieldCmd;
     G4UIcmdWithADoubleAndUnit* YMagFieldCmd;
     G4UIcmdWithADoubleAndUnit* ZMagFieldCmd;
-    G4UIcmdWithAString*        HistoCmd;
     G4UIcmdWithABool*          ntupCmd;
-    G4UIcmdWithAnInteger*      NumOfEvt;
     G4UIcmdWithAnInteger*      verbCmd;
     G4UIcmdWithAnInteger*      intCmd;
     G4UIcmdWithAnInteger*      nhistCmd;
