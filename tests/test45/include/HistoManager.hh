@@ -99,13 +99,8 @@ private:
   const G4ParticleDefinition* primaryDef;
   const G4ParticleDefinition* neutron;
 
-  G4double edepEvt;
-  G4double edepSum;
-  G4double edepSum2;
-  G4double beamEnergy;
   G4double length;
   G4double primaryKineticEnergy;
-  G4double currentKinEnergy;
 
   G4double angle[6];
   G4double dangle;
@@ -116,7 +111,6 @@ private:
   G4int nbins, nbins1, nbins2;
 
   G4int n_evt;
-  G4int n_step;
   G4int nHisto;
 
   Histo* histo;

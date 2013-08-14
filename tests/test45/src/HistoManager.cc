@@ -180,36 +180,6 @@ void HistoManager::bookHisto()
 	       nbins2,emin2,emax2,1.0);
   histo->Add1D("12"," neutron yield at 90 degree in the target",
 	       nbins2,emin2,emax2,1.0);
- 
-  /*
-  //pn_cu, pn_fe
-  histo->Add1D("1"," low-energy neutron yield at 0 degree in the target",
-	       nbins1,emin1,emax1,1.0);
-  histo->Add1D("2"," low-energy neutron yield at 30 degree in the target",
-	       nbins1,emin1,emax1,1.0);
-  histo->Add1D("3"," low-energy neutron yield at 45 degree in the target",
-	       nbins1,emin1,emax1,1.0);
-  histo->Add1D("4"," low-energy neutron yield at 60 degree in the target",
-	       nbins1,emin1,emax1,1.0);
-  histo->Add1D("5"," low-energy neutron yield at 90 degree in the target",
-	       nbins1,emin1,emax1,1.0);
-  histo->Add1D("6"," low-energy neutron yield at 110 degree in the target",
-	       nbins1,emin1,emax1,1.0);
-
-  histo->Add1D("7"," neutron yield at 0 degree in the target",
-	       nbins2,emin2,emax2,1.0);
-  histo->Add1D("8"," neutron yield at 30 degree in the target",
-	       nbins2,emin2,emax2,1.0);
-  histo->Add1D("9"," neutron yield at 45 degree in the target",
-	       nbins2,emin2,emax2,1.0);
-  histo->Add1D("10"," neutron yield at 60 degree in the target",
-	       nbins2,emin2,emax2,1.0);
-  histo->Add1D("11"," neutron yield at 90 degree in the target",
-	       nbins2,emin2,emax2,1.0);
-  histo->Add1D("12"," neutron yield at 110 degree in the target",
-	       nbins2,emin2,emax2,1.0);
-  */
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

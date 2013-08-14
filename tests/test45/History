@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-Jul-13 A.Dotti   (test45-V09-06-01)
+- Fix compilation warning for unused variables (clang32)
+
 02-Dec-12 J.Allison (test45-V09-06-00)
 - Migration to DrawTrajectory() (i_mode argument is no longer available):
   o EventAction.cc: Removed argument from DrawTrajectory().
