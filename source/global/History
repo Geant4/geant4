@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 6, 2013 V.Ivantchenko (global-V09-06-59)
+- Fixed compillation
+August 6, 2013 V.Ivantchenko (global-V09-06-58)
+- G4PhysicsLogVector, G4PhysicsLnVector - more accurate check of 
+    bin inside FindBinLocation method to avoid non-reproducibility
+
+July 24, 2013 V.Ivantchenko (global-V09-06-57)
+- G4StatDouble: new method add(G4StatDouble*) to be used in MT mode
+
 July 16, 2013 G.Cosmo (global-V09-06-56)
 - Correction to CMake scripts for granular build.
 - Updated date and tag-ID in G4Version.hh.

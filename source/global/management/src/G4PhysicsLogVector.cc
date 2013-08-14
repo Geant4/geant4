@@ -135,7 +135,13 @@ size_t G4PhysicsLogVector::FindBinLocation(G4double theEnergy) const
   //G4cout << "G4PhysicsLogVector::FindBinLocation: e= " << theEnergy
 
   size_t idx = size_t(g4pow->log10A(theEnergy)/dBin - baseBin);
-  if(idx+1 >= numberOfNodes && numberOfNodes > 1) { idx = numberOfNodes - 2; }
+
+  // check nodes
+  if(theEnergy > binVector[idx+1])    { ++idx; }
+  else if(theEnergy < binVector[idx]) { --idx; }
+
+  // check boundary
+  if(idx+1 >= numberOfNodes) { idx = numberOfNodes - 2; }   
 
   return idx;
 }

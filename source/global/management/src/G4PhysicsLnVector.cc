@@ -124,7 +124,13 @@ size_t G4PhysicsLnVector::FindBinLocation(G4double theEnergy) const
   // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
 
   size_t idx = size_t(g4pow->logX(theEnergy)/dBin - baseBin);
-  if(idx+1 >= numberOfNodes && numberOfNodes > 1) { idx = numberOfNodes - 2; }
+
+  // check nodes
+  if(theEnergy > binVector[idx+1])    { ++idx; }
+  else if(theEnergy < binVector[idx]) { --idx; }
+
+  // check boundary
+  if(idx+1 >= numberOfNodes) { idx = numberOfNodes - 2; }   
 
   return idx;
 }
