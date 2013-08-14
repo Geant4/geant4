@@ -39,7 +39,6 @@
 
 class G4ParticleGun;
 class G4Event;
-class Test17DetectorConstruction;
 class Test17PrimaryGeneratorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -47,7 +46,7 @@ class Test17PrimaryGeneratorMessenger;
 class Test17PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    Test17PrimaryGeneratorAction(Test17DetectorConstruction*);    
+    Test17PrimaryGeneratorAction();    
    ~Test17PrimaryGeneratorAction();
 
   public:
@@ -57,8 +56,7 @@ class Test17PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   private:
     G4ParticleGun*                particleGun;
-    Test17DetectorConstruction*      Test17Detector;
-    
+
     static G4String thePrimaryParticleName;
     
     Test17PrimaryGeneratorMessenger* gunMessenger;     

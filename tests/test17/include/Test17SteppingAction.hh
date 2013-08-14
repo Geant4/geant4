@@ -41,7 +41,6 @@
 #include "G4ios.hh"
 #include "globals.hh"
 
-class Test17DetectorConstruction;
 class Test17RunAction;
 class Test17EventAction;
 
@@ -51,14 +50,13 @@ class Test17SteppingAction : public G4UserSteppingAction
 {
 public: // Without description
 
-    Test17SteppingAction(Test17DetectorConstruction*, Test17EventAction*,
+    Test17SteppingAction(Test17EventAction*,
                       Test17RunAction* );
    ~Test17SteppingAction();
 
     void UserSteppingAction(const G4Step*);
 
   private:
-    Test17DetectorConstruction* detector;
     Test17EventAction*          eventaction;
     Test17RunAction*            runaction;
 

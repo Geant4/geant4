@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+31 July 2013, Andrea Dotti (test17-V09-06-02)
+             Bug fixing for unused variables for clang32. Second round
+
+30 July 2013, Andrea Dotti (test17-V09-06-01)
+             Bug fixing for unused variables for clang32
+
 3 April 2013, Andrea Dotti (test17-V09-06-00)
 	     Migration to new API of G4VPhysicsConstructor needed
  	     for G4MT

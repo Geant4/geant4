@@ -40,10 +40,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Test17SteppingAction::Test17SteppingAction(Test17DetectorConstruction* DET,
-                                           Test17EventAction* EA,
+Test17SteppingAction::Test17SteppingAction(Test17EventAction* EA,
                                            Test17RunAction* RA)
-:detector(DET),eventaction (EA),runaction(RA),
+:eventaction (EA),runaction(RA),
  IDnow(-2),IDold(-1),prim(false)
 {}
 

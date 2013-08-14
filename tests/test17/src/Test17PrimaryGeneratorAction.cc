@@ -49,9 +49,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Test17PrimaryGeneratorAction::Test17PrimaryGeneratorAction(
-                              Test17DetectorConstruction* Test17DC)
-:Test17Detector(Test17DC)
+Test17PrimaryGeneratorAction::Test17PrimaryGeneratorAction()
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);

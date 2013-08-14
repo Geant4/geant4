@@ -64,15 +64,14 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList());
 
   // set user action classes
-  runManager->SetUserAction(new Test17PrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new Test17PrimaryGeneratorAction());
   Test17RunAction* runaction = new Test17RunAction;
   runManager->SetUserAction(runaction);
 
   Test17EventAction* eventaction = new Test17EventAction(runaction);
   runManager->SetUserAction(eventaction);
 
-  Test17SteppingAction* steppingaction = new Test17SteppingAction(detector,
-                                               eventaction, runaction);
+  Test17SteppingAction* steppingaction = new Test17SteppingAction(eventaction, runaction);
   runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel
