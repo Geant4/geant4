@@ -81,6 +81,9 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual G4double MinEnergyCut(const G4ParticleDefinition*,
+				const G4MaterialCutsCouple* couple);
+
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,

@@ -170,6 +170,14 @@ void G4BetheBlochModel::SetupParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
+					 const G4MaterialCutsCouple* couple)
+{
+  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double 
 G4BetheBlochModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
 						  G4double kineticEnergy,

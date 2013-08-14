@@ -130,6 +130,14 @@ void G4BraggIonModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4double G4BraggIonModel::MinEnergyCut(const G4ParticleDefinition*,
+				       const G4MaterialCutsCouple* couple)
+{
+  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double G4BraggIonModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 					       const G4Material* mat,
 					       G4double kineticEnergy)
