@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 29, 2013 T.Nikitina                   geommng-V09-06-08
+- Fix to G4VSolid::EstimateCubicVolume() to make proper use of specified
+  accuracy. Addressing problem report #1493.
+
 June 20, 2013 A.Dotti			   geommng-V09-06-07
 - Bug fix for MT: set static TLS pointer G4GeomSplitter::offset to 0 after
   delete in split-class mechanism G4GeomSplitter::FreeSlave
