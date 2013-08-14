@@ -194,8 +194,8 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
                                                 EValidate      validate)
 {
 
-  static const G4double ctol = 0.5 * kCarTolerance;
   static const G4double pihalf = pi/2 ;
+  const G4double ctol = 0.5 * kCarTolerance;
 
   G4bool IsParallel = false ;
   G4bool IsConverged =  false ;
@@ -659,7 +659,7 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
 {  
   // to do
 
-  static const G4double ctol = 0.5 * kCarTolerance;
+  const G4double ctol = 0.5 * kCarTolerance;
 
   fCurStat.ResetfDone(kDontValidate, &gp);
 
@@ -759,7 +759,7 @@ G4int G4TwistTrapParallelSide::GetAreaCode(const G4ThreeVector &xx,
    // We must use the function in local coordinate system.
    // See the description of DistanceToSurface(p,v).
    
-   static const G4double ctol = 0.5 * kCarTolerance;
+   const G4double ctol = 0.5 * kCarTolerance;
 
    G4double phi ;
    G4double yprime ;

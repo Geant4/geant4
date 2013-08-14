@@ -133,6 +133,7 @@ class G4Ellipsoid : public G4VSolid
   private:
 
     G4double kRadTolerance;
+    G4double halfCarTolerance, halfRadTolerance;
 
     G4double fCubicVolume;
     G4double fSurfaceArea;

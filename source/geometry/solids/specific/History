@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-Aug-2013  G.Cosmo (geom-specific-V09-06-16)
+- Move function-scoped 'static const' values for half-tolerances to private
+  data members of classes, to overcome false-positive race-conditions defects
+  reported by Valgrind in MT mode.
+- Fix in G4TessellatedSolid::DistanceToIn(p,v) for specific cases where points
+  are located near surface (T.Nikitina).
+
 16-Jul-2013  M.Gayer (geom-specific-V09-06-15)
 - Fix in G4SurfaceVoxelizer affecting tessellated-solid (and extruded-solid)
   for wrong computation of DistanceToIn(p,v) for points outside, when

@@ -419,7 +419,7 @@ G4ThreeVector G4Tet::SurfaceNormal( const G4ThreeVector& p) const
   G4double r142=std::fabs(p.dot(fNormal142)-fCdotN142);
   G4double r234=std::fabs(p.dot(fNormal234)-fCdotN234);
 
-  static const G4double delta = 0.5*kCarTolerance;
+  const G4double delta = 0.5*kCarTolerance;
   G4ThreeVector sumnorm(0., 0., 0.);
   G4int noSurfaces=0; 
 

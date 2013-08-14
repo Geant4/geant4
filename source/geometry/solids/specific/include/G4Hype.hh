@@ -196,6 +196,8 @@ class G4Hype : public G4VSolid
   G4double fCubicVolume;
   G4double fSurfaceArea;
 
+  G4double fHalfTol;
+
   mutable G4Polyhedron* fpPolyhedron;
 
 };

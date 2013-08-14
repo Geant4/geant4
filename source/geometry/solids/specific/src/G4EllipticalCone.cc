@@ -74,6 +74,9 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
 
+  halfRadTol = 0.5*kRadTolerance;
+  halfCarTol = 0.5*kCarTolerance;
+
   // Check Semi-Axis & Z-cut
   //
   if ( (pxSemiAxis <= 0.) || (pySemiAxis <= 0.) || (pzMax <= 0.) )
@@ -101,7 +104,8 @@ G4EllipticalCone::G4EllipticalCone(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4EllipticalCone::G4EllipticalCone( __void__& a )
-  : G4VSolid(a), fpPolyhedron(0), kRadTolerance(0.), fCubicVolume(0.),
+  : G4VSolid(a), fpPolyhedron(0), kRadTolerance(0.),
+    halfRadTol(0.), halfCarTol(0.), fCubicVolume(0.),
     fSurfaceArea(0.), xSemiAxis(0.), ySemiAxis(0.), zheight(0.),
     semiAxisMax(0.), zTopCut(0.)
 {
@@ -122,6 +126,7 @@ G4EllipticalCone::~G4EllipticalCone()
 G4EllipticalCone::G4EllipticalCone(const G4EllipticalCone& rhs)
   : G4VSolid(rhs),
     fpPolyhedron(0), kRadTolerance(rhs.kRadTolerance),
+    halfRadTol(rhs.halfRadTol), halfCarTol(rhs.halfCarTol), 
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     xSemiAxis(rhs.xSemiAxis), ySemiAxis(rhs.ySemiAxis), zheight(rhs.zheight),
     semiAxisMax(rhs.semiAxisMax), zTopCut(rhs.zTopCut)
@@ -145,6 +150,7 @@ G4EllipticalCone& G4EllipticalCone::operator = (const G4EllipticalCone& rhs)
    // Copy data
    //
    fpPolyhedron = 0; kRadTolerance = rhs.kRadTolerance;
+   halfRadTol = rhs.halfRadTol; halfCarTol = rhs.halfCarTol;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
    xSemiAxis = rhs.xSemiAxis; ySemiAxis = rhs.ySemiAxis;
    zheight = rhs.zheight; semiAxisMax = rhs.semiAxisMax; zTopCut = rhs.zTopCut;
@@ -282,9 +288,6 @@ EInside G4EllipticalCone::Inside(const G4ThreeVector& p) const
            rad2oi;  // outside surface inner tolerance
   
   EInside in;
-
-  static const G4double halfRadTol = 0.5*kRadTolerance;
-  static const G4double halfCarTol = 0.5*kCarTolerance;
 
   // check this side of z cut first, because that's fast
   //
@@ -428,8 +431,6 @@ G4ThreeVector G4EllipticalCone::SurfaceNormal( const G4ThreeVector& p) const
 G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
                                          const G4ThreeVector& v  ) const
 {
-  static const G4double halfTol = 0.5*kCarTolerance;
-
   G4double distMin = kInfinity;
 
   // code from EllipticalTube
@@ -440,7 +441,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   // Check z = -dz planer surface
   //
 
-  if (sigz < halfTol)
+  if (sigz < halfCarTol)
   {
     //
     // We are "behind" the shape in z, and so can
@@ -459,8 +460,8 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       // on the surface of the ellipse
       //
 
-      if ( sqr(p.x()/( xSemiAxis - halfTol ))
-         + sqr(p.y()/( ySemiAxis - halfTol )) <= sqr( zheight+zTopCut ) )
+      if ( sqr(p.x()/( xSemiAxis - halfCarTol ))
+         + sqr(p.y()/( ySemiAxis - halfCarTol )) <= sqr( zheight+zTopCut ) )
         return kInfinity;
 
     }
@@ -485,7 +486,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
         //
         // Yup. Return q, unless we are on the surface
         //
-        return (sigz < -halfTol) ? q : 0;
+        return (sigz < -halfCarTol) ? q : 0;
       }
       else if (xi/(xSemiAxis*xSemiAxis)*v.x()
              + yi/(ySemiAxis*ySemiAxis)*v.y() >= 0)
@@ -504,15 +505,15 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   //
   sigz = p.z() - zTopCut;
   
-  if (sigz > -halfTol)
+  if (sigz > -halfCarTol)
   {
     if (v.z() >= 0)
     {
 
       if (sigz > 0) return kInfinity;
 
-      if ( sqr(p.x()/( xSemiAxis - halfTol ))
-         + sqr(p.y()/( ySemiAxis - halfTol )) <= sqr( zheight-zTopCut ) )
+      if ( sqr(p.x()/( xSemiAxis - halfCarTol ))
+         + sqr(p.y()/( ySemiAxis - halfCarTol )) <= sqr( zheight-zTopCut ) )
         return kInfinity;
 
     }
@@ -524,7 +525,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
 
       if ( sqr(xi/xSemiAxis) + sqr(yi/ySemiAxis) <= sqr( zheight - zTopCut ) )
       {
-        return (sigz > -halfTol) ? q : 0;
+        return (sigz > -halfCarTol) ? q : 0;
       }
       else if (xi/(xSemiAxis*xSemiAxis)*v.x()
              + yi/(ySemiAxis*ySemiAxis)*v.y() >= 0)
@@ -569,8 +570,8 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       }
   }
   
-  if (p.z() > zTopCut - halfTol
-   && p.z() < zTopCut + halfTol )
+  if (p.z() > zTopCut - halfCarTol
+   && p.z() < zTopCut + halfCarTol )
   {
     if (v.z() > 0.) 
       { return kInfinity; }
@@ -578,8 +579,8 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
     return distMin = 0.;
   }
   
-  if (p.z() < -zTopCut + halfTol
-   && p.z() > -zTopCut - halfTol)
+  if (p.z() < -zTopCut + halfCarTol
+   && p.z() > -zTopCut - halfCarTol)
   {
     if (v.z() < 0.)
       { return distMin = kInfinity; }
@@ -602,12 +603,12 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
    
   // if the discriminant is negative it never hits the curved object
   //
-  if ( discr < -halfTol )
+  if ( discr < -halfCarTol )
     { return distMin; }
   
   // case below is when it hits or grazes the surface
   //
-  if ( (discr >= - halfTol ) && (discr < halfTol ) )
+  if ( (discr >= - halfCarTol ) && (discr < halfCarTol ) )
   {
     return distMin = std::fabs(-B/(2.*A)); 
   }
@@ -617,7 +618,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
  
   // Special case::Point on Surface, Check norm.dot(v)
 
-  if ( ( std::fabs(plus) < halfTol )||( std::fabs(minus) < halfTol ) )
+  if ( ( std::fabs(plus) < halfCarTol )||( std::fabs(minus) < halfCarTol ) )
   {
     G4ThreeVector truenorm(p.x()/(xSemiAxis*xSemiAxis),
                            p.y()/(ySemiAxis*ySemiAxis),
@@ -635,7 +636,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
   // G4double lambda = std::fabs(plus) < std::fabs(minus) ? plus : minus;  
   G4double lambda = 0;
 
-  if ( minus > halfTol && minus < distMin ) 
+  if ( minus > halfCarTol && minus < distMin ) 
   {
     lambda = minus ;
     // check normal vector   n * v < 0
@@ -651,7 +652,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       }
     }
   }
-  if ( plus > halfTol  && plus < distMin )
+  if ( plus > halfCarTol  && plus < distMin )
   {
     lambda = plus ;
     // check normal vector   n * v < 0
@@ -667,7 +668,7 @@ G4double G4EllipticalCone::DistanceToIn( const G4ThreeVector& p,
       }
     }
   }
-  if (distMin < halfTol) distMin=0.;
+  if (distMin < halfCarTol) distMin=0.;
   return distMin ;
 }
 

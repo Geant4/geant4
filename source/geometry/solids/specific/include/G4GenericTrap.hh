@@ -197,6 +197,8 @@ class G4GenericTrap : public G4VSolid
     static const G4int       fgkNofVertices;
     static const G4double    fgkTolerance;
 
+    G4double halfCarTolerance;
+
     // data members
 
     G4double                 fDz;

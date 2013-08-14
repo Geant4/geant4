@@ -563,13 +563,11 @@ void G4TwistedTubs::AddPolyToExtent( const G4ThreeVector &v0,
 EInside G4TwistedTubs::Inside(const G4ThreeVector& p) const
 {
 
-   static const G4double halftol
+   const G4double halftol
      = 0.5 * G4GeometryTolerance::GetInstance()->GetRadialTolerance();
    // static G4int timerid = -1;
    // G4Timer timer(timerid, "G4TwistedTubs", "Inside");
    // timer.Start();
-   
-
 
    G4ThreeVector *tmpp;
    EInside       *tmpinside;

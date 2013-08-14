@@ -168,7 +168,7 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me,
    //  of me.cross(vec).)
    // If me is on boundary of vec, return 0.
 
-   static const G4double kAngTolerance
+   const G4double kAngTolerance
      = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
    G4RotationMatrix unitrot;

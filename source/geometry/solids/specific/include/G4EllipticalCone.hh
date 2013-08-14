@@ -166,6 +166,7 @@ class G4EllipticalCone : public G4VSolid
   private:
 
     G4double kRadTolerance;
+    G4double halfRadTol, halfCarTol;
 
     G4double fCubicVolume;
     G4double fSurfaceArea;

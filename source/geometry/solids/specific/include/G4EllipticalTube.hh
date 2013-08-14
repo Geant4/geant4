@@ -143,6 +143,8 @@ class G4EllipticalTube : public G4VSolid
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface.
 
+    G4double halfTol;
+
     G4double fCubicVolume;
     G4double fSurfaceArea;
     mutable G4Polyhedron* fpPolyhedron;

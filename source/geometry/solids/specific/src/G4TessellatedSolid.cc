@@ -1102,9 +1102,21 @@ G4TessellatedSolid::DistanceToInNoVoxels (const G4ThreeVector &p,
       {
         minDist  = dist;
       }
-      else 
+      else
+      {
         if (-kCarToleranceHalf <= dist && dist <= kCarToleranceHalf)
+	{
           return 0.0;
+        }
+        else
+        {
+	  if  (distFromSurface > -kCarToleranceHalf
+            && distFromSurface <  kCarToleranceHalf)
+          {
+            minDist = dist;
+          }
+        }
+      }
     }
   }
   return minDist;
@@ -1325,9 +1337,17 @@ DistanceToInCandidates(const std::vector<G4int> &candidates,
       {
         minDistance  = dist;
       }
-      else if (-kCarToleranceHalf <= dist && dist <= kCarToleranceHalf)
+      else
       {
-        return 0.0;
+        if (-kCarToleranceHalf <= dist && dist <= kCarToleranceHalf)
+        {
+         return 0.0;
+        }
+        else if  (distFromSurface > -kCarToleranceHalf
+               && distFromSurface <  kCarToleranceHalf)
+        {
+          minDistance = dist; 
+        }
       }
     }
   }
