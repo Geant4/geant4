@@ -59,7 +59,7 @@
 
 // user classes
 #include "B01DetectorConstruction.hh"
-#include "B01PhysicsList.hh"
+#include "FTFP_BERT.hh"
 #include "B01PrimaryGeneratorAction.hh"
 #include "B01RunAction.hh"
 
@@ -82,10 +82,10 @@ int main(int argc, char **argv)
   G4RunManager *runManager = new G4RunManager;
   
   // create the detector      ---------------------------
-  B01DetectorConstruction *detector = new B01DetectorConstruction();
+  B01DetectorConstruction* detector = new B01DetectorConstruction();
   runManager->SetUserInitialization(detector);
   //  ---------------------------------------------------
-  runManager->SetUserInitialization(new B01PhysicsList);
+  runManager->SetUserInitialization(new FTFP_BERT);
   runManager->SetUserAction(new B01PrimaryGeneratorAction);
   runManager->SetUserAction(new B01RunAction);
   runManager->Initialize();

@@ -50,7 +50,7 @@
 // Constructor
 B01RunAction::B01RunAction(): 
   G4UserRunAction(),
-  fFieldName(15),
+  //  fFieldName(15),
   fFieldValue(14)
 {
   // - Prepare data member for B01Run.
@@ -205,17 +205,17 @@ void B01RunAction::PrintHeader(std::ostream *out)
   vecScoreName.push_back("SLWE_v");
 
   // head line
-  //std::string vname = FillString("Volume", ' ', fFieldName+1);
+//   std::string vname;
+//   vname = FillString("Volume", ' ', fFieldName+1);
   //*out << vname << '|';
-  std::string vname;
   *out << std::setw(fFieldValue) << "Volume" << " |";
   for (std::vector<G4String>::iterator it = vecScoreName.begin();
-       it != vecScoreName.end(); it++) {
-      //vname = FillString((*it),
-//                       ' ', 
-//                       fFieldValue+1, 
-//                       false);
-//    *out << vname << '|';
+      it != vecScoreName.end(); it++) {
+//      vname = FillString((*it),
+//                         ' ', 
+//                         fFieldValue+1, 
+//                         false);
+//      *out << vname << '|';
       *out << std::setw(fFieldValue) << (*it) << " |";
   }
   *out << G4endl;  
