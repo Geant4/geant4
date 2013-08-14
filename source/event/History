@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 9th, 2013 Dennis Wright (event-V09-06-12)
+- include G4GeneralParticleSourceMessenger.cc which was omitted in previous tag
+  IonLvlCommand and relevant data members added to
+  G4GeneralParticleSourceMessenger.hh
+
+July 31st, 2013  Dennis Wright (event-V09-06-11)
+- G4ParticleGunMessenger.hh, .cc: add G4UIcommand ionLvlCmd so that particle
+  gun can shoot ions with integer isomer level
+- G4GeneralParticleSourceMessenger.hh: add ionL command (see above comment)
+
 July 11th, 2013, M.Asai (evet-V09-06-10)
 - Remove unnecessary static G4ThreadLocal variables in G4PrimaryTransformer.
 
