@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 August 2013: V.Ivant (emhighenergy-V09-06-06)
+09 August 2013: V.Ivant (emhighenergy-V09-06-05)
+- G4hBremsstrahlung - use inheritence of G4MuBremsstrahlung; 
+    removed unused headers;
+- G4hPairProduction - use inheritence of G4MuPairProduction;
+    removed unused headers; lowestEnergy limit should not be lower 
+    than 8*mass because in that case the model is not applicable
+
 09 July 2013: V.Ivant (emhighenergy-V09-06-04)
 - G4hPairProductionModel - substitute SetCurrentElement(G4double) 
     by SetElement(G4int)
