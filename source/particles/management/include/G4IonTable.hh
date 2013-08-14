@@ -43,7 +43,8 @@
 //      Add GetNucleusEncoding according PDG 2006 9 Oct. 2006 H.Kurashige
 //      Use STL map                              30 Jul. 2009 H.Kurashige
 //      Add G4IsomerTable                        5 May. 2013  H.Kurashige
-
+//      Add GetIsomerMass                       25 July 2013  H.Kurashige
+//
 #ifndef G4IonTable_h
 #define G4IonTable_h 1
 
@@ -191,13 +192,14 @@ class G4IonTable
 	 			      G4double &E,   G4int &lvl);
    // Energy will not be given even for excited state!!  
  
-   G4double             GetIonMass(G4int Z, G4int A, G4int L=0) const;
-   G4double             GetNucleusMass(G4int Z, G4int A, G4int L=0) const;
-   // These two methods returns Nucleus (i.e. full ionized atom) mass 
+   G4double   GetIonMass(G4int Z, G4int A, G4int L=0, G4int lvl=0) const;
+   G4double   GetNucleusMass(G4int Z, G4int A, G4int L=0, G4int lvl=0) const;
+   G4double   GetIsomerMass(G4int Z, G4int A, G4int lvl=0) const;
+    // These methods returns Nucleus (i.e. full ionized atom) mass 
    // ,where Z is Atomic Number (number of protons) and
    //  A is Atomic Number (number of nucleons and hyperons)
    //  L is number of lambda (A= nn + np + nlambda)
-
+   //  lvl is isomer level
  
    
    G4int                 Entries() const;
@@ -241,8 +243,8 @@ class G4IonTable
 
    // Create Ion 
    
-   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4double E);
-   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4int  lvl);
+   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4double E) const;
+   G4IsotopeProperty* FindIsotope(G4int Z, G4int A, G4int  lvl) const; 
    // Ask properties of isotopes to this G4VIsotopeTable 
    
    G4ParticleDefinition* GetLightIon(G4int Z, G4int A) const;
@@ -253,7 +255,6 @@ class G4IonTable
    // return true if the particle is pre-defined ion
  
    void                  AddProcessManager(G4ParticleDefinition*);
-   void                  AddProcessManager(const G4String& ionName);
    // Add process manager to ions with name of 'ionName'
 
    G4int                GetVerboseLevel() const;
@@ -282,9 +283,12 @@ class G4IonTable
    enum { numberOfElements = 118};
    static const G4String       elementName[numberOfElements];
     
-    //needed for MT
-    void InitializeLightIons();
+   //needed for MT
+   void InitializeLightIons();
 
+
+ private:
+   G4int n_error;
 };
 
 inline G4int  G4IonTable::GetNumberOfElements() const

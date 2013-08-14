@@ -44,8 +44,9 @@
 //      fixed  some improper codings     08 Apr., 99 H.Kurashige
 //      modified FindIon/GetIon methods  17 AUg., 99 H.Kurashige
 //      implement new version for using STL map instaed of 
-//      RW PtrHashedDictionary           28 ct., 99  H.Kurashige
-
+//      RW PtrHashedDictionary           28 Oct., 99  H.Kurashige
+//      remove G4ShortLivedTable         25 July, 13 H.Kurashige
+// 
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -53,7 +54,6 @@
 #include "G4UImessenger.hh"
 #include "G4ParticleMessenger.hh"
 #include "G4IonTable.hh"
-#include "G4ShortLivedTable.hh"
 #include "G4StateManager.hh"
 
 // These fields should be thread local or thread private. For a singleton
@@ -72,12 +72,6 @@ G4ThreadLocal G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::fEncod
 //
 G4IonTable*            G4ParticleTable::fIonTable = 0;
 
-// This field should be thread local or thread private. For a singleton
-// class, we can change any member field as static without any problem
-// because there is only one instance. Then we are allowed to add 
-// "G4ThreadLocal".
-//
-G4ThreadLocal G4ShortLivedTable*     G4ParticleTable::fShortLivedTable = 0;
 
 // These shadow pointers are used by each worker thread to copy the content
 // from the master thread. 
@@ -86,11 +80,8 @@ G4ParticleMessenger* G4ParticleTable::fParticleMessengerShadow = 0;
 G4ParticleTable::G4PTblDictionary*  G4ParticleTable::fDictionaryShadow = 0;
 G4ParticleTable::G4PTblDicIterator* G4ParticleTable::fIteratorShadow = 0;
 G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::fEncodingDictionaryShadow = 0;
-G4ShortLivedTable*     G4ParticleTable::fShortLivedTableShadow = 0;
-
 
 // Static class variable: ptr to single instance of class
-
 G4ParticleTable* G4ParticleTable::fgParticleTable =0;
 
 #ifdef G4MULTITHREADED
@@ -110,7 +101,6 @@ G4ParticleTable* G4ParticleTable::GetParticleTable()
 
     // Here we initialize all thread private data members.
     //
-    ////if (fDictionary == 0) fgParticleTable->SlaveG4ParticleTable();
     if (fDictionary == 0) fgParticleTable->WorkerG4ParticleTable();
 
     return fgParticleTable;
@@ -124,7 +114,6 @@ G4ParticleTable::G4ParticleTable()
       genericIon(NULL)
 {
   fDictionary = new G4PTblDictionary();
-
 
   // Set up the shadow pointer used by worker threads.
   //
@@ -141,11 +130,8 @@ G4ParticleTable::G4ParticleTable()
   {
     fIteratorShadow = fIterator;
   }
-
-  fEncodingDictionary = new G4PTblEncodingDictionary();
-
- // Ion Table
  
+  fEncodingDictionary = new G4PTblEncodingDictionary();
   // Set up the shadow pointer used by worker threads.
   //
   if (fEncodingDictionaryShadow == 0)
@@ -153,17 +139,10 @@ G4ParticleTable::G4ParticleTable()
     fEncodingDictionaryShadow = fEncodingDictionary;
   }
 
+
+   // Ion Table
   fIonTable = new G4IonTable();
 
-  // short lived table
-  fShortLivedTable = new G4ShortLivedTable();
-
-  // Set up the shadow pointer used by worker threads.
-  //
-  if (fShortLivedTableShadow == 0)
-  {
-    fShortLivedTableShadow = fShortLivedTable;
-  }
 }
 
 // This method is similar to the constructor. It is used by each worker
@@ -172,56 +151,7 @@ G4ParticleTable::G4ParticleTable()
 //
 void G4ParticleTable::SlaveG4ParticleTable()
 {
-G4Exception("G4ParticleTable::SlaveG4ParticleTable()","G4MT0000",FatalException,"Obsolete");
-/********************************************************
-  if (fDictionary != 0) return;
-
-  // The iterator for the shadow particle table is not sharable.
-  //
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
-  G4ParticleTable::lockCount++;
-#endif
-
-  fDictionary = new G4PTblDictionary();
-
-  fIteratorShadow->reset();
-  while( (*fIteratorShadow)() )
-  {
-    G4ParticleDefinition* particle = fIteratorShadow->value();
-    fDictionary->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) );
-  }       
-
-  fIterator =  new G4PTblDicIterator( *fDictionary);
-
-  fEncodingDictionary = new G4PTblEncodingDictionary();
-
-  fIteratorShadow->reset();
-
-  while( (*fIteratorShadow)() )
-  {
-    G4ParticleDefinition* particle = fIteratorShadow->value();
-    G4int code = particle->GetPDGEncoding();
-    if (code !=0 )
-    {
-      fEncodingDictionary->insert( std::pair<G4int, G4ParticleDefinition*>(code ,particle) );
-    }
-  }       
-
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
-#endif
-
-  fIonTable->SlaveG4IonTable();
-
-  fShortLivedTable = new G4ShortLivedTable();
-  G4int numOfShortLived = fShortLivedTableShadow->size();
-
-  for (G4int i = 0; i < numOfShortLived ; i++)
-  {
-    fShortLivedTable->Insert(fShortLivedTableShadow->GetParticle(i));
-  }
-***************************/
+  G4Exception("G4ParticleTable::SlaveG4ParticleTable()","G4MT0000",FatalException,"Obsolete");
 }
 
 void G4ParticleTable::WorkerG4ParticleTable()
@@ -233,35 +163,29 @@ void G4ParticleTable::WorkerG4ParticleTable()
   G4ParticleTable::lockCount++;
 #endif
 
-  if(fDictionary == 0) 
-  { fDictionary = new G4PTblDictionary(); }
-  else
-  { fDictionary->clear(); }
+  if(fDictionary == 0) { 
+    fDictionary = new G4PTblDictionary();   
+  } else { 
+    fDictionary->clear(); 
+  }
+
+  if(fEncodingDictionary == 0){
+    fEncodingDictionary = new G4PTblEncodingDictionary(); 
+  } else { 
+    fEncodingDictionary->clear(); 
+  }
 
   fIteratorShadow->reset();
   while( (*fIteratorShadow)() )
   {
     G4ParticleDefinition* particle = fIteratorShadow->value();
     fDictionary->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) );
-  }       
-
-  fIterator =  new G4PTblDicIterator( *fDictionary);
-
-  if(fEncodingDictionary == 0)
-  { fEncodingDictionary = new G4PTblEncodingDictionary(); }
-  else
-  { fEncodingDictionary->clear(); }
-
-  fIteratorShadow->reset();
-  while( (*fIteratorShadow)() )
-  {
-    G4ParticleDefinition* particle = fIteratorShadow->value();
     G4int code = particle->GetPDGEncoding();
-    if (code !=0 )
-    {
+    if (code !=0 ) {
       fEncodingDictionary->insert( std::pair<G4int, G4ParticleDefinition*>(code ,particle) );
     }
   }       
+  fIterator =  new G4PTblDicIterator( *fDictionary);
 
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
@@ -269,13 +193,6 @@ void G4ParticleTable::WorkerG4ParticleTable()
 
   fIonTable->WorkerG4IonTable();
 
-  if( fShortLivedTable == 0 )
-  {
-    fShortLivedTable = new G4ShortLivedTable(); 
-    G4int numOfShortLived = fShortLivedTableShadow->size();
-    for (G4int i = 0; i < numOfShortLived ; i++)
-    { fShortLivedTable->Insert(fShortLivedTableShadow->GetParticle(i)); }
-  }
 }
 
 // Do we need DestroySlaveG4ParticleTable()? 
@@ -288,11 +205,6 @@ G4ParticleTable::~G4ParticleTable()
    // remove all items from G4ParticleTable
    RemoveAllParticles();
 
-  // delete Short Lived table 
-  if (fShortLivedTable!=0) delete fShortLivedTable;
-  fShortLivedTable =0;
-
-
   //delete Ion Table 
   if (fIonTable!=0) delete fIonTable;
   fIonTable =0;
@@ -303,6 +215,7 @@ G4ParticleTable::~G4ParticleTable()
     delete fEncodingDictionary;
     fEncodingDictionary =0;
   }
+
 
   if(fDictionary){
     if (fIterator!=0 )delete fIterator;
@@ -375,14 +288,6 @@ void G4ParticleTable::DeleteAllParticles()
   //set readyToUse false  
   readyToUse = false;
 
-  //G4StateManager* pStateManager = G4StateManager::GetStateManager();
-  //G4ApplicationState currentState = pStateManager->GetCurrentState();
-  //if (currentState != G4State_Quit) {
-  //  G4Exception("G4ParticleTable::DeleteAllParticle()",
-  //		"PART114", JustWarning,
-  //		"Try to delete particles in state other than State_Quit");    
-  //}
-
 #ifdef G4VERBOSE
   if (verboseLevel>1){
     G4cout << "G4ParticleTable::DeleteAllParticles() " << G4endl;
@@ -423,16 +328,6 @@ void G4ParticleTable::RemoveAllParticles()
   //remove all contnts in Ion Table
   if (fIonTable!=0) {
     fIonTable->clear();
-  }
-
-  // remomve all contents in hort Lived table 
-  if (fShortLivedTable!=0) {
-    fShortLivedTable->clear();
- }
-
-  // clear dictionary for encoding
-  if (fEncodingDictionary) {
-      fEncodingDictionary->clear();
   }
 
   // clear dictionary
@@ -478,11 +373,11 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 
     } else {
       G4PTblDictionary *pdic =  fDictionary;
-      G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
 
       // insert into Dictionary
       pdic->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) );
 
+      G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
       // insert into EncodingDictionary
       G4int code = particle->GetPDGEncoding();
       if (code !=0 ) {
@@ -492,11 +387,6 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
       // insert it in IonTable if "nucleus"
       if (fIonTable->IsIon(particle) ){
         fIonTable->Insert(particle);
-      }
-
-      // insert it in ShortLivedTable if "shortlived"
-      if (particle->IsShortLived() ){
-	fShortLivedTable->Insert(particle);
       }
 
       // set Verbose Level same as ParticleTable
@@ -554,11 +444,6 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
     fIonTable->Remove(particle);
   }
   
-  // Remove it from ShortLivedTable if "shortlived"
-  if (particle->IsShortLived() ){
-    fShortLivedTable->Remove(particle);
-  }
-
 #ifdef G4VERBOSE
   if (verboseLevel>3){
     G4cout << "The particle "<< particle->GetParticleName()
@@ -569,6 +454,11 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
   return particle;
 }
 
+///////////////////////////////////////////////////////////////////////
+// NOTE ::
+//  Following FindIon/GetIon methods will be removed in future relases
+//  Use  FindIon/GetIon methods of G4IonTable instead
+//
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int , G4int )
 {
@@ -599,6 +489,15 @@ G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int L, G4doubl
    return fIonTable->GetIon(Z, A, L, E);
 }
 
+G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int level)
+{
+   CheckReadiness();
+   if (Z <= 0) return 0;
+   if (A < Z) return 0;
+   if (level < 0) return 0;
+   return fIonTable->GetIon(Z, A, level);
+}
+
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
 {
@@ -619,9 +518,10 @@ G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int L, G4doub
    if (E<0.) return 0;
    return fIonTable->FindIon(Z, A, L, E);
 }
+/////////////////////////////////////////////////////////////////////
 
 ////////////////////
-G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
+G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index) const
 {
    CheckReadiness();
   if ( (index >=0) && (index < entries()) ) {
@@ -643,7 +543,7 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index)
 }
 
 ////////////////////
-const G4String& G4ParticleTable::GetParticleName(G4int index)
+const G4String& G4ParticleTable::GetParticleName(G4int index) const
 {
   G4ParticleDefinition* aParticle =GetParticle(index);
   if (aParticle != 0) {
@@ -654,7 +554,7 @@ const G4String& G4ParticleTable::GetParticleName(G4int index)
 }
 
 ////////////////////
-G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name)
+G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name) const
 {
   G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
   if (it != fDictionary->end()) {
@@ -665,7 +565,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_nam
 }
 
 ////////////////////
-G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle)
+G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle ) const
 {
   CheckReadiness();
   G4String key = GetKey(particle);
@@ -673,7 +573,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *
 }
 
 ////////////////////
-G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
+G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding ) const
 {
    CheckReadiness();
     // check aPDGEncoding is valid
@@ -703,7 +603,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding )
 }
 
 ////////////////////
-void G4ParticleTable::DumpTable(const G4String &particle_name)  
+void G4ParticleTable::DumpTable(const G4String &particle_name) const 
 {
   CheckReadiness();
   if (( particle_name == "ALL" ) || (particle_name == "all")){
@@ -730,7 +630,7 @@ void G4ParticleTable::DumpTable(const G4String &particle_name)
   }
 }
 
-void G4ParticleTable::CheckReadiness()
+void G4ParticleTable::CheckReadiness() const
 {
   if(!readyToUse) {
    G4String msg;
@@ -748,32 +648,28 @@ void G4ParticleTable::CheckReadiness()
 }
 
  
-const G4ShortLivedTable*  G4ParticleTable::GetShortLivedTable()
-{
-  return fShortLivedTable;
-}
 
-G4IonTable*  G4ParticleTable::GetIonTable()
+G4IonTable*  G4ParticleTable::GetIonTable() const
 {
   return fIonTable;
 }
  
-G4ParticleTable::G4PTblDictionary* G4ParticleTable::GetDictionary()
+const G4ParticleTable::G4PTblDictionary* G4ParticleTable::GetDictionary() const
 {
   return fDictionary;
 }
 
-G4ParticleTable::G4PTblDicIterator* G4ParticleTable::GetIterator()
+G4ParticleTable::G4PTblDicIterator* G4ParticleTable::GetIterator() const
 {
   return fIterator;
 }
 
-const G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::GetEncodingDictionary()
+const G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::GetEncodingDictionary() const
 {
   return fEncodingDictionary;
 }
 
-G4bool  G4ParticleTable::contains(const G4String& particle_name)
+G4bool  G4ParticleTable::contains(const G4String& particle_name) const
 {
   G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
   return (it != fDictionary->end());

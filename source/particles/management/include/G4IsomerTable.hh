@@ -35,6 +35,8 @@
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // HISTORY
+// 25/07/13   isomerTable is chaned to const member 
+//
 ///////////////////////////////////////////////////////////////////////////////
 
 //
@@ -98,7 +100,7 @@ protected:
 
 private:
   enum {nEntries=3075,MaxA=260, MinZ=2, MaxZ=100};
-  static G4ThreadLocal G4double isomerTable[nEntries][5];
+  static const G4double isomerTable[nEntries][5];
   // Table of Isomer Property
   //  0: PID = Z*10000 + 10*A + Lvl
   //  1: Energy [keV]

@@ -221,7 +221,7 @@ G4bool G4ParticlePropertyTable::SetParticleProperty(const G4ParticlePropertyData
   if (pData.fPDGLifeTimeModified) {
     aParticle->thePDGLifeTime = pData.thePDGLifeTime; 
   }
-  for (size_t flv=0; flv<<G4ParticlePropertyData::NumberOfQuarkFlavor; ++flv) {
+  for (size_t flv=0; flv<G4ParticlePropertyData::NumberOfQuarkFlavor; ++flv) {
     if (pData.fQuarkContentModified){
       aParticle->theQuarkContent[flv] = pData.theQuarkContent[flv];
     }

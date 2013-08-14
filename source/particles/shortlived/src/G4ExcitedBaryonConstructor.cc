@@ -40,7 +40,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
-#include "G4ShortLivedTable.hh"
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4VDecayChannel.hh"
 #include "G4DecayTable.hh"

@@ -133,7 +133,8 @@ G4ParticleDefinition::G4ParticleDefinition(
                    theAtomicNumber(0),
                    theAtomicMass(0),
                    verboseLevel(1),
-  		   fApplyCutsFlag(false)
+  		   fApplyCutsFlag(false),
+		   isGeneralIon(false)
 {
    static G4String nucleus("nucleus");
 

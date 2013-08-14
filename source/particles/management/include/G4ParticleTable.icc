@@ -52,27 +52,27 @@ inline
 }
 
 inline 
- G4ParticleDefinition* G4ParticleTable::FindAntiParticle(G4int aPDGEncoding)
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(G4int aPDGEncoding) const
 {
   return FindParticle( FindParticle(aPDGEncoding)->GetAntiPDGEncoding() );
 }
 
 inline 
- G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4String& particle_name) 
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4String& particle_name) const
 {
   G4int pcode = FindParticle(particle_name) -> GetAntiPDGEncoding();
   return FindParticle(pcode);
 }
 
 inline 
- G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4ParticleDefinition *particle)
+ G4ParticleDefinition* G4ParticleTable::FindAntiParticle(const G4ParticleDefinition *particle) const
 {
   G4int pcode = particle -> GetAntiPDGEncoding();
   return FindParticle(pcode);
 }
 
 inline 
- G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle)
+ G4bool  G4ParticleTable::contains(const G4ParticleDefinition *particle) const
 {
  return contains(GetKey(particle));
 }

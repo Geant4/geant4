@@ -67,7 +67,23 @@ G4Ions::G4Ions(
     theExcitationEnergy(excitation),
     theIsomerLevel(isomer)
 {
-  // isomer level isset to 10 
+   if ((aName == "proton") || (aName == "neutron")) { 
+     isGeneralIon = false ;
+   } else if (   (aName == "GenericIon") || (aName == "alpha") 
+       || (aName == "He3") || (aName == "deuteron")|| (aName == "triton")) {
+     isGeneralIon = false ;
+   } else if ( (aName == "anti_He3") || (aName == "anti_deuteron")
+	|| (aName == "anti_triton") || (aName == "anti_alpha") ) {
+     isGeneralIon = false ;
+   } else if ( (aName == "iron") || (aName == "oxygen") ||  (aName == "nitrogen")
+        || (aName == "carbon") || (aName == "helium") || (aName == "alpha+")
+        || (aName == "hydrogen") || (aName == "Ps-1s") || (aName == "Ps-2s")) {
+     isGeneralIon = false ;
+   } else {
+     isGeneralIon = true;
+   }
+
+  // isomer level isset to 9 
   // if isomer level is set to 0 for excited state
   if ((theExcitationEnergy > 0.0) && (isomer==0)) isomer =9; 
 

@@ -229,8 +229,12 @@ class G4ParticleDefinition
         //  1: Warning message
         //  2: More
 
-      void SetApplyCutsFlag(G4bool);
+      void   SetApplyCutsFlag(G4bool);
       G4bool GetApplyCutsFlag() const;
+
+      G4bool IsGeneralIon() const;
+      // true only if the particle is G4Ions
+      // (it means that theProcessManager is same as one for G4GenricIon)
 
       G4int operator==(const G4ParticleDefinition &right) const;
       G4int operator!=(const G4ParticleDefinition &right) const;
@@ -391,6 +395,9 @@ class G4ParticleDefinition
  
       G4int verboseLevel;
       G4bool fApplyCutsFlag;
+
+   protected:
+      G4bool isGeneralIon;
 };
 
 #include "G4ParticleDefinition.icc"

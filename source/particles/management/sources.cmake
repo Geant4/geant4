@@ -71,7 +71,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4PionRadiativeDecayChannel.hh
         G4PrimaryParticle.hh
         G4PrimaryVertex.hh
-        G4ShortLivedTable.hh
         G4TauLeptonicDecayChannel.hh
         G4VDecayChannel.hh
         G4VIsotopeTable.hh
@@ -111,7 +110,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4PionRadiativeDecayChannel.cc
         G4PrimaryParticle.cc
         G4PrimaryVertex.cc
-        G4ShortLivedTable.cc
         G4TauLeptonicDecayChannel.cc
         G4VDecayChannel.cc
         G4VIsotopeTable.cc

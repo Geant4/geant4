@@ -37,7 +37,7 @@
 
 #include "G4IsomerTable.hh"
 
-G4ThreadLocal G4double G4IsomerTable::isomerTable[G4IsomerTable::nEntries][5] =
+const G4double G4IsomerTable::isomerTable[G4IsomerTable::nEntries][5] =
 {
 {  20060 ,  0       ,  1.16382e+09    ,  0     ,  0            },   //He6   
 {  20080 ,  0       ,  1.71681e+08    ,  0     ,  0            },   //He8   

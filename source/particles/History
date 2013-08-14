@@ -17,6 +17,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 3. Aug. 2013 Hisaya Kurashige (particles-V09-06-38)
+- Do not copy IsotopeTable of G4Iontable to Worker thread
+- Clean up methods of G4ParticleTable 
+
+- 31 July 2013  Dennis Wright (particles-V09-06-37)
+- Add GetIon(Z,A,level) to G4ParticleTable
+
+- 29. Jul. 2013 Hisaya Kurashige (particles-V09-06-36)
+- Revert EncodingDictionary in G4ParticleTable
+
+- 29. Jul. 2013 Hisaya Kurashige (particles-V09-06-35)
+- Add DNA particles for setting isGeneralIon flag in G4Ions constructor 
+
+- 26. Jul. 2013 Hisaya Kurashige (particles-V09-06-34)
+- Fix bug in  G4ParticlePropertyTable::SetParticleProperty [Problem1506]
+- Fix G4IonTable::WorkerG4IonTable() (process manager was added for proton) 
+- Fix G4ParticleTable::WorkerG4ParticleTable() (fIterator was not created)
+- G4IsomerTbale::isomerTable is changed to static const (was static G4ThreadLocal)
+- G4NucleiPropertiesTableAME03 and G4NucleiPropertiesTheoreticalTable 
+  are changed to static const (was static G4ThreadLocal)
+- Add isomer level to G4IsonTable::GetNucleusMass 
+- Add G4ParticleDefinition::IsGeneralIon method
+- Add G4Exception for G4IonTable::CreateIon methods with excited energy
+  (This method will be removed in the next releasae)
+- Remove ShortLivedDictionary and EncodingDictionary in G4ParticleTable
+
 - 11. Jul. 2013 Gabriele Cosmo (particles-V09-06-33)
 - Simplified use of allocator for G4DynamicParticle.
 

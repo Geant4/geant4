@@ -113,7 +113,8 @@ namespace antilightions {
 G4IonTable::G4IonTable()
   : EnergyUnit (0.1 * keV),
     pIsomerTable(0),
-    isIsomerCreated(false)
+    isIsomerCreated(false),
+    n_error(0)
 {
   fIonList = new G4IonList();
 
@@ -140,22 +141,8 @@ G4IonTable::G4IonTable()
 void G4IonTable::SlaveG4IonTable()
 {
 G4Exception("G4ParticleTable::SlaveG4ParticleTable()","G4MT0000",FatalException,"Obsolete");
-/*****************************
-  fIonList = new G4IonList();
-  fIsotopeTableList = new std::vector<G4VIsotopeTable*>;
-
-  G4IonListIterator it;
-  for (it = fIonListShadow->begin() ; it != fIonListShadow->end(); it++ )
-  {
-    fIonList->insert(*it);
-  }
-
-  for (size_t i = 0; i < fIsotopeTableListShadow->size(); i++)
-  {
-    fIsotopeTableList->push_back((*fIsotopeTableListShadow)[i]);
-  }
-**********************************/
 }
+
 void G4IonTable::WorkerG4IonTable()
 {
   if( fIonList == 0 )
@@ -164,25 +151,26 @@ void G4IonTable::WorkerG4IonTable()
   { fIonList->clear(); }
 
   G4IonListIterator it;
-  for (it = fIonListShadow->begin() ; it != fIonListShadow->end(); it++ )
-  {
+  for (it = fIonListShadow->begin() ; it != fIonListShadow->end(); it++ ) {
     G4ParticleDefinition* ion = const_cast<G4ParticleDefinition*>(it->second);
-    AddProcessManager(ion); 
+    if (ion->IsGeneralIon()) AddProcessManager(ion); 
     fIonList->insert(*it);
   }
 
-  if( fIsotopeTableList == 0 )
-  {
-    fIsotopeTableList = new std::vector<G4VIsotopeTable*>; 
-    for (size_t i = 0; i < fIsotopeTableListShadow->size(); i++)
-    { fIsotopeTableList->push_back((*fIsotopeTableListShadow)[i]); }
-  }
+  // Do not copy Isotoper Table to Worker thread
+  //if( fIsotopeTableList == 0 ) {
+  //  fIsotopeTableList = new std::vector<G4VIsotopeTable*>; 
+  //  for (size_t i = 0; i < fIsotopeTableListShadow->size(); i++){
+  //    fIsotopeTableList->push_back((*fIsotopeTableListShadow)[i]); 
+  //  }
+  //}
+
 }
 
 void G4IonTable::InitializeLightIons()
 {
-    lightions::Init();
-    antilightions::Init();
+  lightions::Init();
+  antilightions::Init();
 }
 
 
@@ -218,6 +206,13 @@ G4IonTable::~G4IonTable()
 ////////////////////
 G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
 {
+  if ((E>0.0) && (n_error==0)){
+    G4Exception("G4ParticleTable::CreateIon()",
+		"PART130", JustWarning,
+		"CreateIon method with excited energy will be removed in the next release");	
+    n_error +=1;
+  }
+
   G4ParticleDefinition* ion=0;
 
   // check whether GenericIon has processes
@@ -336,6 +331,12 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
 G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4double E)
 {
   if (L==0) return CreateIon(A,Z,E);
+  if ((E>0.0) && (n_error==0)){
+    G4Exception("G4ParticleTable::CreateIon()",
+		"PART130", JustWarning,
+		"CreateIon method with excited energy will be removed in the next release");	
+    n_error +=1;
+  }
   
   // create hyper nucleus
   G4ParticleDefinition* ion=0;
@@ -1293,20 +1294,21 @@ G4ParticleDefinition* G4IonTable::GetLightAntiIon(G4int Z, G4int A) const
 /////////////////
 // -- GetNucleusMass/GetIonMass ---
 /////////////////
-G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A, G4int L) const
+G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A, G4int L, G4int lvl) const
 {
-  if ( (A<1)  || (Z<0) || (L<0) ){
+  if ( (A<1)  || (Z<0) || (L<0) || (lvl<0) || (lvl>9) ){
 #ifdef G4VERBOSE
     if (GetVerboseLevel()>0) {
       G4cout << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " 
-             << " Z =" << Z << "  A = " << A  << G4endl;
+             << " Z =" << Z << "  A = " << A  
+	     << " L = " << L << " lvl = " << lvl << G4endl;
     }
 #endif
     G4Exception( "G4IonTable::GetNucleusMass()","PART107",
 		 EventMustBeAborted, "illegal atomic number/mass");
     return -1.0;
   }
-
+  
   G4double mass;
   if (L == 0) {
     // calculate nucleus mass
@@ -1318,17 +1320,48 @@ G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A, G4int L) const
       // use G4NucleiProperties::GetNuclearMass
       mass = G4NucleiProperties::GetNuclearMass(A, Z);
     }
+    
+    // Isomer
+    if ( lvl>0 ) {
+      // -- loop over all particles in Ion table
+      G4int encoding=GetNucleusEncoding(Z, A);
+      G4IonList::iterator i = fIonList->find(encoding);
+      G4bool isFound =false;
+      for( ;i != fIonList->end() ; i++) {
+	ion = i->second;
+	if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
+	// excitation level
+	if ( ((const G4Ions*)(ion))->GetIsomerLevel() == lvl) {
+	  isFound = true;
+	  break;
+	}
+      }
+      if (isFound) {
+	// return existing isomer mass
+	mass = ion->GetPDGMass();
+      } else {
+	// Find isomer from IsotopeTable
+	const G4IsotopeProperty*  fProperty = FindIsotope(Z, A, lvl);
+	if (fProperty !=0 ) mass += fProperty->GetEnergy();
+      }
+    }
 
   } else {
     mass = G4HyperNucleiProperties::GetNuclearMass(A, Z, L);
-  }
+    }
   return mass;
 }
 
 //////////////////
-G4double  G4IonTable::GetIonMass(G4int Z, G4int A, G4int L) const
+G4double  G4IonTable::GetIsomerMass(G4int Z, G4int A, G4int  lvl) const
 {
-   return GetNucleusMass(Z,A,L);
+  return GetNucleusMass(Z,A,0,lvl);
+}
+
+//////////////////
+G4double  G4IonTable::GetIonMass(G4int Z, G4int A, G4int L, G4int lvl) const
+{
+  return GetNucleusMass(Z,A,L,lvl);
 }
 
 
@@ -1462,14 +1495,17 @@ G4int G4IonTable::GetVerboseLevel() const
 /////////////////
 void  G4IonTable::AddProcessManager(G4ParticleDefinition* ion)
 {
-  if(ion->GetParticleSubType()!="generic")
-  { AddProcessManager(ion->GetParticleName()); return; }
-  if(ion->GetParticleName()=="GenericIon")
-  { AddProcessManager(ion->GetParticleName()); return; }
-  
+  // check State 
+  //G4StateManager* pStateManager = G4StateManager::GetStateManager();
+  //G4ApplicationState currentState = pStateManager->GetCurrentState();
+  // do not attach process managaer in event loop
+  //if (currentState == G4State_EventProc) return;
+ 
+
   // check whether GenericIon has processes
   G4ParticleDefinition* genericIon = 
     G4ParticleTable::GetParticleTable()->GetGenericIon();
+
   G4ProcessManager* pman=0;
   if (genericIon!=0) pman = genericIon->GetProcessManager();
   if ((genericIon ==0) || (pman==0)){
@@ -1480,28 +1516,10 @@ void  G4IonTable::AddProcessManager(G4ParticleDefinition* ion)
 		 "Can not create ions because GenericIon is not ready");
     return;
   }
- 
+  
   ion->SetProcessManager(pman);
-////  G4cout << "G4IonTable::AddProcessManager() : " << ion->GetParticleName() << G4endl;
+  ////  G4cout << "G4IonTable::AddProcessManager() : " << ion->GetParticleName() << G4endl;
 
-}
-
-void  G4IonTable::AddProcessManager(const G4String& name)
-{
-  // create command string for addProcManager
-  std::ostringstream osAdd;
-  osAdd << "/run/particle/addProcManager "<< name;
-  G4String cmdAdd = osAdd.str();
-//G4cout << "G4IonTable::AddProcessManager " << cmdAdd << G4endl;
-  // set /control/verbose 0
-  G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
-  G4UImanager::GetUIpointer()->SetVerboseLevel(0);
-
-  // issue /run/particle/addProcManage
-  G4UImanager::GetUIpointer()->ApplyCommand(cmdAdd);
-
-  // retreive  /control/verbose 
-  G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
 }
 
 #include <vector>     
@@ -1532,7 +1550,7 @@ G4VIsotopeTable* G4IonTable::GetIsotopeTable(size_t index) const
 
 
 ////////////////////
-G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E)
+G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E) const
 {
   if (fIsotopeTableList ==0) return 0;
   if (fIsotopeTableList->size()==0) return 0;
@@ -1584,7 +1602,7 @@ G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4double E)
 }
 
 ////////////////////
-G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4int lvl)
+G4IsotopeProperty* G4IonTable::FindIsotope(G4int Z, G4int A, G4int lvl) const
 {
   if (fIsotopeTableList ==0) return 0;
   if (fIsotopeTableList->size()==0) return 0;

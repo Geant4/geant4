@@ -181,3 +181,8 @@ inline
    thePDGMagneticMoment = magneticMoment;
 }
 
+inline      
+  G4bool G4ParticleDefinition::IsGeneralIon() const
+{
+  return isGeneralIon;
+}
