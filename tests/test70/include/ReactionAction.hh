@@ -36,6 +36,8 @@ class ReactionAction : public G4UserReactionAction
         ReactionAction(const ReactionAction& other);
         ReactionAction& operator=(const ReactionAction& other);
 
+        virtual void TimeStepAction();
+
         virtual void UserReactionAction(const G4Track&,const G4Track&,
                                   const G4TrackFastVector&, G4int);
 };

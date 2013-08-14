@@ -51,3 +51,9 @@ src/LaunchG4.cc
 src/G4ITSteppingMessenger.cc
 src/G4ITStepManager.cc
 src/DetectorConstruction.cc
+include/ITSteppingAction.hh
+include/ITTrackingInteractivity.hh
+src/ITSteppingAction.cc
+src/ITTrackingInteractivity.cc
+include/ITTrackingAction.hh
+src/ITTrackingAction.cc

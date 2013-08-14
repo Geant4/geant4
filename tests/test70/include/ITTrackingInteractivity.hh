@@ -23,50 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITSteppingMessenger.hh 60427 2012-07-11 16:34:35Z matkara $
-//
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
-//
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
-//
+#ifndef ITTRACKINGINTERACTIVITY_HH
+#define ITTRACKINGINTERACTIVITY_HH
 
-#ifndef G4ITSTEPPINGMESSENGER_H
-#define G4ITSTEPPINGMESSENGER_H
+#include "G4ITTrackingInteractivity.hh"
 
-class G4ITStepManager;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger;
-class G4UIcommand;
-class G4UIcmdWithADoubleAndUnit;
-
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class G4ITSteppingMessenger: public G4UImessenger
+class ITTrackingInteractivity : public G4ITTrackingInteractivity
 {
-  public:
-    G4ITSteppingMessenger(G4ITStepManager* runMgr);
-    ~G4ITSteppingMessenger();
+    G4UserTrackingAction* fpUserTrackingAction;
+    G4UserSteppingAction* fpUserSteppingAction;
+    int fStoreTrajectory;
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+public:
+    ITTrackingInteractivity();
+    virtual ~ITTrackingInteractivity();
 
-  private:
-    G4ITStepManager * fITStepManager;
+    virtual void StartTracking(G4Track*);
+    virtual void AppendStep(G4Track* track, G4Step* step);
+    virtual void EndTracking(G4Track*);
 
-  private: //commands
-    G4UIdirectory*              fITDirectory;
+    void SetUserAction(G4UserTrackingAction*);
+    inline G4UserTrackingAction* GetUserTrackingAction();
 
-    G4UIcmdWithADoubleAndUnit*  fEndTime;
-    G4UIcmdWithADoubleAndUnit*  fTimeTolerance;
-    G4UIcmdWithAnInteger*       fVerboseCmd;
-    G4UIcmdWithAnInteger*       fMaxStepNumber;
-    G4UIcmdWithoutParameter*    fInitCmd;
-    G4UIcmdWithoutParameter*    fProcessCmd;
-    G4UIcmdWithAnInteger*       fMaxNULLTimeSteps;
+    void SetUserAction(G4UserSteppingAction*);
+    inline G4UserSteppingAction* GetUserSteppingAction();
 };
 
-#endif // G4ITSTEPPINGMESSENGER_H
+inline void ITTrackingInteractivity::SetUserAction(G4UserTrackingAction* trackAct)
+{
+    fpUserTrackingAction = trackAct;
+}
+
+inline void ITTrackingInteractivity::SetUserAction(G4UserSteppingAction* stepAct)
+{
+    fpUserSteppingAction = stepAct;
+}
+
+inline G4UserSteppingAction* ITTrackingInteractivity::GetUserSteppingAction()
+{
+    return fpUserSteppingAction;
+}
+
+inline G4UserTrackingAction* ITTrackingInteractivity::GetUserTrackingAction()
+{
+    return fpUserTrackingAction;
+}
+
+#endif // ITTRACKINGINTERACTIVITY_HH

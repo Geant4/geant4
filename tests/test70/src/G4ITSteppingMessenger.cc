@@ -48,13 +48,21 @@ G4ITSteppingMessenger::G4ITSteppingMessenger(G4ITStepManager * stepMgr)
     fITDirectory = new G4UIdirectory("/IT/");
     fITDirectory->SetGuidance("IT control commands.");
 
-    // Set end Time
+    // Set end time
     fEndTime = new G4UIcmdWithADoubleAndUnit("/IT/endTime", this);
-    fEndTime->SetGuidance("Set end Time");
+    fEndTime->SetGuidance("Set end time");
     fEndTime->AvailableForStates(G4State_PreInit,G4State_Idle);
     fEndTime->SetUnitCategory("Time");
     fEndTime->SetDefaultUnit("picosecond");
     fEndTime->SetDefaultValue(1);
+
+    // Set time tolerance
+    fTimeTolerance = new G4UIcmdWithADoubleAndUnit("/IT/timeTolerance", this);
+    fTimeTolerance->SetGuidance("Set time tolerance");
+    fTimeTolerance->AvailableForStates(G4State_PreInit,G4State_Idle);
+    fTimeTolerance->SetUnitCategory("Time");
+    fTimeTolerance->SetDefaultUnit("picosecond");
+    fTimeTolerance->SetDefaultValue(1);
 
     // Initialize
     fInitCmd = new G4UIcmdWithoutParameter("/IT/initialize",this);
@@ -90,6 +98,7 @@ G4ITSteppingMessenger::G4ITSteppingMessenger(G4ITStepManager * stepMgr)
 
 G4ITSteppingMessenger::~G4ITSteppingMessenger()
 {
+    delete fTimeTolerance;
     delete fITDirectory;
     delete fInitCmd;
     delete fEndTime;
@@ -105,6 +114,8 @@ void G4ITSteppingMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     { fITStepManager->Process(); }
     else if(command==fEndTime)
     { fITStepManager->SetEndTime(fEndTime->GetNewDoubleValue(newValue)); }
+    else if (command == fTimeTolerance)
+    { fITStepManager->SetTimeTolerance(fTimeTolerance->GetNewDoubleValue(newValue)); }
     else if( command==fVerboseCmd )
     { fITStepManager->SetVerbose(fVerboseCmd->GetNewIntValue(newValue)); }
     else if( command==fInitCmd )
@@ -123,6 +134,8 @@ G4String G4ITSteppingMessenger::GetCurrentValue(G4UIcommand * command)
     { cv = fVerboseCmd->ConvertToString(fITStepManager->GetVerbose()); }
     else if(command==fEndTime)
     { cv = fEndTime->ConvertToString(fITStepManager->GetEndTime()); }
+    else if (command == fTimeTolerance)
+    {  cv = fTimeTolerance->ConvertToString(fITStepManager->GetTimeTolerance()); }
     else if( command==fInitCmd )
     { cv = fInitCmd->ConvertToString(fITStepManager->IsInitialized()); }
     else if(command == fMaxNULLTimeSteps)

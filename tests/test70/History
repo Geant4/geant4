@@ -12,17 +12,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-28 November 2012, Gabriele Cosmo, test70-V09-05-12
-------------------------------------------------------
-- Fixed parameter shadowing in SteppingAction.
+30 July 2013 A.Dotti   (test70-V09-06-00)
+-----------------------------------------------------
+  Bug fixing for compilation warnings for unused varialbes (clang32)
 
 23 October 2012, M.K (test70-V09-05-11)
 ------------------------------------------------------
-- Add #include "G4UImanager.hh" in LaunchG4.cc
+Add #include "G4UImanager.hh" in LaunchG4.cc
 
 17 October 2012, M.K (test70-V09-05-10)
 ------------------------------------------------------
-- Rename G4DNADiffustionControlledModel to G4DNASmoluchowskiReactionModel
+Rename G4DNADiffustionControlledModel to G4DNASmoluchowskiReactionModel
 
 11 October 2012, Gabriele Cosmo (test70-V09-05-09)
 ------------------------------------------------------

@@ -23,50 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITSteppingMessenger.hh 60427 2012-07-11 16:34:35Z matkara $
-//
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
-//
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
-//
+#include "ITTrackingAction.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Molecule.hh"
+#include "G4UnitsTable.hh"
 
-#ifndef G4ITSTEPPINGMESSENGER_H
-#define G4ITSTEPPINGMESSENGER_H
-
-class G4ITStepManager;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger;
-class G4UIcommand;
-class G4UIcmdWithADoubleAndUnit;
-
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class G4ITSteppingMessenger: public G4UImessenger
+ITTrackingAction::ITTrackingAction(): G4UserTrackingAction()
 {
-  public:
-    G4ITSteppingMessenger(G4ITStepManager* runMgr);
-    ~G4ITSteppingMessenger();
+    ;
+}
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+ITTrackingAction::~ITTrackingAction()
+{
+    ;
+}
 
-  private:
-    G4ITStepManager * fITStepManager;
+void ITTrackingAction::PreUserTrackingAction(const G4Track*)
+{
+//    G4cout << "Track ID : " << track->GetTrackID()
+//           << "\t"
+//           << "Molecule name : " << GetMolecule(track)->GetName()
+//           << "\t"
+//           <<"Track time " << G4BestUnit(track->GetGlobalTime(), "Time")
+//          << " tracking " << G4endl;
 
-  private: //commands
-    G4UIdirectory*              fITDirectory;
+}
 
-    G4UIcmdWithADoubleAndUnit*  fEndTime;
-    G4UIcmdWithADoubleAndUnit*  fTimeTolerance;
-    G4UIcmdWithAnInteger*       fVerboseCmd;
-    G4UIcmdWithAnInteger*       fMaxStepNumber;
-    G4UIcmdWithoutParameter*    fInitCmd;
-    G4UIcmdWithoutParameter*    fProcessCmd;
-    G4UIcmdWithAnInteger*       fMaxNULLTimeSteps;
-};
+void ITTrackingAction::PostUserTrackingAction(const G4Track* /*track*/)
+{
 
-#endif // G4ITSTEPPINGMESSENGER_H
+}
+

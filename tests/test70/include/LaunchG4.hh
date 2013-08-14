@@ -71,9 +71,6 @@ private :
 
 private :
     PrimaryGeneratorAction* fpPrimGenAct ;
-#ifdef G4VIS_USE
-    G4VisManager* fpVisManager ;
-#endif
 
     G4RunManager * fpRunManager ;
 

@@ -23,50 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITSteppingMessenger.hh 60427 2012-07-11 16:34:35Z matkara $
-//
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
-//
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
-//
+#ifndef ITSTEPPINGACTION_HH
+#define ITSTEPPINGACTION_HH
 
-#ifndef G4ITSTEPPINGMESSENGER_H
-#define G4ITSTEPPINGMESSENGER_H
+#include "G4UserSteppingAction.hh"
+#include "G4Molecule.hh"
+#include <map>
+// #include <TVector3.h>
 
-class G4ITStepManager;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger;
-class G4UIcommand;
-class G4UIcmdWithADoubleAndUnit;
+// class TTree;
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
+using namespace std;
 
-class G4ITSteppingMessenger: public G4UImessenger
+class ITSteppingAction : public G4UserSteppingAction
 {
-  public:
-    G4ITSteppingMessenger(G4ITStepManager* runMgr);
-    ~G4ITSteppingMessenger();
+    /*
+    map<const G4Molecule, TTree*> fpTree;
+    TVector3 fPosition;
+    G4int fTrackID;
+    G4double fTime;
+    const char* fMolName;
+    */
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+public:
+    ITSteppingAction();
+    virtual ~ITSteppingAction();
 
-  private:
-    G4ITStepManager * fITStepManager;
-
-  private: //commands
-    G4UIdirectory*              fITDirectory;
-
-    G4UIcmdWithADoubleAndUnit*  fEndTime;
-    G4UIcmdWithADoubleAndUnit*  fTimeTolerance;
-    G4UIcmdWithAnInteger*       fVerboseCmd;
-    G4UIcmdWithAnInteger*       fMaxStepNumber;
-    G4UIcmdWithoutParameter*    fInitCmd;
-    G4UIcmdWithoutParameter*    fProcessCmd;
-    G4UIcmdWithAnInteger*       fMaxNULLTimeSteps;
+    virtual void UserSteppingAction(const G4Step*);
 };
 
-#endif // G4ITSTEPPINGMESSENGER_H
+#endif // ITSTEPPINGACTION_HH

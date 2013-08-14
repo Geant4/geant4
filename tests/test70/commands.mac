@@ -1,2 +1,5 @@
 /tracking/verbose 0
+#/IT/maxStepsNumber 3
+/IT/endTime 10.3 nanosecond
+/IT/timeTolerance 0.1 picosecond
 /run/beamOn 1

@@ -56,6 +56,9 @@
 #include "G4AllITManager.hh"
 #include "G4ITStepManager.hh"
 #include "G4DNAChemistryManager.hh"
+#include "ITTrackingInteractivity.hh"
+#include "ITSteppingAction.hh"
+#include "ITTrackingAction.hh"
 
 //#ifdef G4VIS_USE
 //#include "G4VisExecutive.hh"
@@ -77,10 +80,6 @@ LaunchG4::LaunchG4()
     fpRunManager = 0;
     fpPrimGenAct = 0;
 
-#ifdef G4VIS_USE
-//    fpVisManager = 0;
-#endif
-
 #ifdef G4UI_USE
     fpSession = 0;
 #endif
@@ -88,10 +87,6 @@ LaunchG4::LaunchG4()
 
 LaunchG4::~LaunchG4()
 {
-#ifdef G4VIS_USE
-//    if(fpVisManager)
-//        delete fpVisManager;
-#endif
 
 #ifdef G4UI_USE
     if(fpSession)
@@ -140,12 +135,12 @@ void LaunchG4::Initialize(G4double incidentEnergy, G4bool chemistryFlag)
     {
         G4ITStepManager::Instance()->SetUserAction(new ReactionAction());
         G4ITStepManager::Instance()->SetVerbose(1);
-    }
 
-#ifdef G4VIS_USE
-//    fpVisManager = new G4VisExecutive;
-//    fpVisManager->Initialize();
-#endif
+        ITTrackingInteractivity* itInteractivity = new ITTrackingInteractivity();
+        itInteractivity ->SetUserAction(new ITSteppingAction);
+        itInteractivity ->SetUserAction(new ITTrackingAction);
+        G4ITStepManager::Instance()->SetInteractivity(itInteractivity);
+    }
 
     // Initialize G4 kernel
     fpRunManager->Initialize();
