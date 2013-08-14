@@ -27,9 +27,9 @@
 /// \brief Main program of the medical/fanoCavity2 example
 //
 // $Id$
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -59,10 +59,10 @@ int main(int argc,char** argv) {
  
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
+ 
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    
+
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
@@ -70,53 +70,52 @@ int main(int argc,char** argv) {
   DetectorConstruction* det;
   PhysicsList* phys;
   PrimaryGeneratorAction* kin;
-     
+
   runManager->SetUserInitialization(det  = new DetectorConstruction);
-  runManager->SetUserInitialization(phys = new PhysicsList(det));
+  runManager->SetUserInitialization(phys = new PhysicsList());
   runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
-    
-  //set user action classes  
+
+  //set user action classes
   RunAction* run        = new RunAction(det,kin);
   EventAction* event    = new EventAction(run);
-  TrackingAction* track = new TrackingAction(run);      
-  SteppingAction* step  = new SteppingAction(det,run,event,track);
-  
-  runManager->SetUserAction(run); 
+  TrackingAction* track = new TrackingAction(run);
+  SteppingAction* step  = new SteppingAction(det,run,track);
+
+  runManager->SetUserAction(run);
   runManager->SetUserAction(event);
   runManager->SetUserAction(track);      
   runManager->SetUserAction(step);
 
-  //get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
+  //get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
 #ifdef G4VIS_USE
       G4VisManager* visManager = new G4VisExecutive;
       visManager->Initialize();
 #endif
 
-  if (argc!=1)   // batch mode  
+  if (argc!=1)   // batch mode
     {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UImanager->ApplyCommand(command+fileName);
     }
-    
+ 
   else           // interactive mode :define visualization and UI terminal
-    { 
+    {
 #ifdef G4UI_USE
      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
-     UImanager->ApplyCommand("/control/execute vis.mac");     
+     UImanager->ApplyCommand("/control/execute vis.mac");
 #endif
      ui->SessionStart();
      delete ui;
-#endif     
+#endif
 
 #ifdef G4VIS_USE
      delete visManager;
-#endif     
+#endif
     }
-
 
   //job termination
   //
@@ -125,4 +124,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

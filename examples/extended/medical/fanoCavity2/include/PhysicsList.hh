@@ -39,7 +39,6 @@
 
 class G4VPhysicsConstructor;
 
-class DetectorConstruction;
 class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +46,7 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VModularPhysicsList
 {
 public:
-  PhysicsList(DetectorConstruction*);
+  PhysicsList();
  ~PhysicsList();
 
   virtual void ConstructParticle();
@@ -60,7 +59,6 @@ public:
     
 private:
 
-  DetectorConstruction*  fDetector;
   PhysicsListMessenger*  fMessenger; 
 
   G4String               fEmName;

@@ -34,7 +34,6 @@
 #include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "HistoManager.hh"
 
@@ -45,8 +44,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
-                               EventAction* EvAct,TrackingAction* TrAct)
-:fDetector(det), fRunAction(RuAct), fEventAction(EvAct), fTrackAction(TrAct),
+                               TrackingAction* TrAct)
+:fDetector(det), fRunAction(RuAct), fTrackAction(TrAct),
  fWall(0), fCavity(0)
 { 
   first = true;

@@ -29,10 +29,9 @@
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard_WVI.hh"
-#include "DetectorConstruction.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -61,9 +60,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard_WVI::PhysListEmStandard_WVI(const G4String& name,
-                               DetectorConstruction* det)
-: G4VPhysicsConstructor(name), fDetector(det)
+PhysListEmStandard_WVI::PhysListEmStandard_WVI(const G4String& name)
+: G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

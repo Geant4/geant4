@@ -37,15 +37,13 @@
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysListEmStandard_SS : public G4VPhysicsConstructor
 {
 public: 
-  PhysListEmStandard_SS(const G4String& name, 
-                             DetectorConstruction* det);
+  PhysListEmStandard_SS(const G4String& name);
  ~PhysListEmStandard_SS();
 
 public: 
@@ -58,7 +56,6 @@ public:
   virtual void ConstructProcess();
   
 private:
-  DetectorConstruction* fDetector;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
