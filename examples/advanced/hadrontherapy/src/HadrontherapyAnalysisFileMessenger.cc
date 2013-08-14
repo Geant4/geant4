@@ -43,8 +43,12 @@
 #include "HadrontherapyMatrix.hh"
 
 /////////////////////////////////////////////////////////////////////////////
+#ifdef G4ANALYSIS_USE_ROOT
 HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager* amgr)
 :AnalysisManager(amgr)
+#else
+HadrontherapyAnalysisFileMessenger::HadrontherapyAnalysisFileMessenger(HadrontherapyAnalysisManager*)
+#endif
 {  
   secondaryCmd = new G4UIcmdWithABool("/analysis/secondary",this);
   secondaryCmd -> SetParameterName("secondary", true);

@@ -7,6 +7,13 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================
+31.07.2013 A.Dotti;        Tag: hadrontherapy-V09-06-02
+           - Fixing compilation warnings from clang32 (unused private
+             data filed): in case of no ROOT found
+
+30.07.2013 A.Dotti;        Tag: hadrontherapy-V09-06-01
+           - Fixing compilation warnings from clang32 (unused private 
+             data filed)
 
 03.02.2013 V.Ivanchenko;   Tag: hadrontherapy-V09-06-00
            - Renamed hadronic physics class

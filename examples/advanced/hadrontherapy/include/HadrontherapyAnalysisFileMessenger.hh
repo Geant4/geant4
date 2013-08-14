@@ -67,8 +67,6 @@ public:
   void SetNewValue(G4UIcommand* command, G4String newValue);
     
 private:
-  HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
-
   /**   
    * G4 user interface command (that takes a string argument) object
    * Constructor requires command name and messenger class(this).
@@ -77,6 +75,7 @@ private:
   G4UIcmdWithAString *DoseMatrixCmd;
 #ifdef G4ANALYSIS_USE_ROOT
   G4UIcmdWithAString *FileNameCmd;
+  HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
 #endif
 };
 

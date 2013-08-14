@@ -38,36 +38,21 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class HadrontherapyPrimaryGeneratorAction;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithADouble;
 
 class HadrontherapyPrimaryGeneratorMessenger: public G4UImessenger
 {
 public:
-  HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
+  HadrontherapyPrimaryGeneratorMessenger();
   ~HadrontherapyPrimaryGeneratorMessenger();
     
   //void SetNewValue(G4UIcommand*, G4String);
 
 private:
-  HadrontherapyPrimaryGeneratorAction* HadrontherapyAction; 
   G4UIdirectory*                    beamParametersDir;
   G4UIdirectory*                    EnergyDir;
   G4UIdirectory*                    particlePositionDir;
   G4UIdirectory*                    MomentumDir;
-  G4UIcmdWithADoubleAndUnit*        meanKineticEnergyCmd;    
-  G4UIcmdWithADoubleAndUnit*        sigmaEnergyCmd;  
-  G4UIcmdWithADoubleAndUnit*        XpositionCmd;   
-  G4UIcmdWithADoubleAndUnit*        YpositionCmd; 
-  G4UIcmdWithADoubleAndUnit*        ZpositionCmd; 
-  G4UIcmdWithADoubleAndUnit*        sigmaYCmd; 
-  G4UIcmdWithADoubleAndUnit*        sigmaZCmd; 
-  G4UIcmdWithADouble*        sigmaMomentumYCmd; 
-  G4UIcmdWithADouble*        sigmaMomentumZCmd; 
-
-
 };
 
 #endif

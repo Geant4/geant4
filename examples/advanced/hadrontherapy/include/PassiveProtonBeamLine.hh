@@ -130,8 +130,6 @@ private:
   PassiveProtonBeamLineMessenger* passiveMessenger;  
   G4VPhysicalVolume* physicalTreatmentRoom;
   HadrontherapyDetectorConstruction* hadrontherapyDetectorConstruction; 
-
-  G4Material* kapton;
 	
   G4double vacuumZoneXSize;
   G4double vacuumZoneYSize;
@@ -256,8 +254,6 @@ private:
   G4LogicalVolume* logicMOPICathode;
   G4VPhysicalVolume* physiMOPICathode;
 
-  G4VisAttributes* redWire;
-
   // First Air Gap
   G4double MOPISecondAirGapXSize;
   G4double MOPISecondAirGapYSize;
@@ -292,7 +288,6 @@ private:
   G4VPhysicalVolume* physiMOPISecondKaptonLayer;
 
   G4double innerRadiusFinalCollimator;
-  G4VPhysicalVolume* mother;
   
   G4VPhysicalVolume* physiFirstMonitorLayer1;
   G4VPhysicalVolume* physiFirstMonitorLayer2;
