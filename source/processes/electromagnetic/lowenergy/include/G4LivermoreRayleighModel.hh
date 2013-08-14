@@ -47,6 +47,11 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       G4VEmModel* masterModel);
+
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
@@ -71,12 +76,12 @@ private:
   G4LivermoreRayleighModel(const G4LivermoreRayleighModel&);
 
   G4bool isInitialised;
-  G4int maxZ;
   G4int verboseLevel;
 
   G4double lowEnergyLimit;  
 
-  std::vector<G4LPhysicsFreeVector*> dataCS;
+  static G4int maxZ;
+  static G4LPhysicsFreeVector* dataCS[101];
 
   G4ParticleChangeForGamma* fParticleChange;
 

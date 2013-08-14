@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09.08.2013  V.Ivanchenko, tag emlowen-V09-06-23
+            - fixed bug in previous tag
+09.08.2013  V.Ivanchenko, tag emlowen-V09-06-22
+            - G4LivermorePhotoElectricModel - migration to MT
+
+04.08.2013  S.Incerti, tag emlowen-V09-06-21
+            - G4LivermoreGammaConversionModel - migration to MT
+
+01.08.2013  V.Ivanchenko, tag emlowen-V09-06-20
+            - G4PenelopeRayleighModel - removed debug printout
+            - G4LivermoreRayleighModel - migration to MT: sharing
+                internal tables between threads, two new methods
+                added InitialiseLocal, InitialiseForElement
+
+23.07.2013  V.Ivanchenko, tag emlowen-V09-06-18
+22.07.2013  V.Ivanchenko, tag emlowen-V09-06-17
+            - added protection for MT mode in G4PenelopeRaylModel
+
 03.07.2013  M.Asai, tag emlowen-V09-06-16
             - Fix G4IonDEDXScalingICRU73.cc for multi-threading:
               "referenceAr" and "referenceFe" are now instantiated

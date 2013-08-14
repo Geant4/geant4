@@ -25,7 +25,8 @@
 //
 // Author: Sebastien Incerti
 //         22 January 2012
-//         on base of G4LivermoreGammaConversionModel
+//         on base of G4LivermoreGammaConversionModel (original version)
+//         and G4LivermoreRayleighModel (MT version)
 
 #include "G4LivermoreGammaConversionModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -37,14 +38,16 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel(const G4ParticleDefinition*,
-								 const G4String& nam)
-:G4VEmModel(nam),smallEnergy(2.*MeV),isInitialised(false),maxZ(99)
+G4int G4LivermoreGammaConversionModel::maxZ = 99;
+G4LPhysicsFreeVector* G4LivermoreGammaConversionModel::data[] = {0};
+
+G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel
+(const G4ParticleDefinition*, const G4String& nam)
+:G4VEmModel(nam),isInitialised(false),smallEnergy(2.*MeV)
 {
   fParticleChange = 0;
 
   lowEnergyLimit = 2.0*electron_mass_c2;
-  data.resize(maxZ+1,0); 
   	 
   verboseLevel= 0;
   // Verbosity scale for debugging purposes:
@@ -62,7 +65,7 @@ G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel(const G4Particl
 
 G4LivermoreGammaConversionModel::~G4LivermoreGammaConversionModel()
 {  
-  for(G4int i=0; i<=maxZ; ++i) { delete data[i]; }
+  if(IsMaster()) { for(G4int i=0; i<=maxZ; ++i) { delete data[i]; } }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -80,39 +83,52 @@ G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition* particle
 	   << G4endl;
   }
 
-  // Initialise element selector
-  
-  InitialiseElementSelectors(particle, cuts);
-
-  // Access to elements
-  
-  char* path = getenv("G4LEDATA");
-
-  G4ProductionCutsTable* theCoupleTable =
-    G4ProductionCutsTable::GetProductionCutsTable();
-  G4int numOfCouples = theCoupleTable->GetTableSize();
-  
-  for(G4int i=0; i<numOfCouples; ++i) 
+  if(IsMaster()) 
   {
-    const G4Material* material = 
-      theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
-    const G4ElementVector* theElementVector = material->GetElementVector();
-    G4int nelm = material->GetNumberOfElements();
-    
-    for (G4int j=0; j<nelm; ++j) 
+
+    // Initialise element selector
+
+    InitialiseElementSelectors(particle, cuts);
+
+    // Access to elements
+  
+    char* path = getenv("G4LEDATA");
+
+    G4ProductionCutsTable* theCoupleTable =
+      G4ProductionCutsTable::GetProductionCutsTable();
+  
+    G4int numOfCouples = theCoupleTable->GetTableSize();
+  
+    for(G4int i=0; i<numOfCouples; ++i) 
     {
-        
-      G4int Z = (G4int)(*theElementVector)[j]->GetZ();
-      if(Z < 1)          { Z = 1; }
-      else if(Z > maxZ)  { Z = maxZ; }
-      if(!data[Z]) { ReadData(Z, path); }
+      const G4Material* material = 
+        theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+      const G4ElementVector* theElementVector = material->GetElementVector();
+      G4int nelm = material->GetNumberOfElements();
+    
+      for (G4int j=0; j<nelm; ++j) 
+      {
+        G4int Z = (G4int)(*theElementVector)[j]->GetZ();
+        if(Z < 1)          { Z = 1; }
+        else if(Z > maxZ)  { Z = maxZ; }
+        if(!data[Z]) { ReadData(Z, path); }
+      }
     }
   }
+  
   //
   
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LivermoreGammaConversionModel::InitialiseLocal(const G4ParticleDefinition*,
+					              G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -170,6 +186,7 @@ void G4LivermoreGammaConversionModel::ReadData(size_t Z, const char* path)
     
     data[Z]->Retrieve(fin, true);
   } 
+
   // Activation of spline interpolation
   data[Z] ->SetSpline(true);  
   
@@ -428,4 +445,18 @@ G4LivermoreGammaConversionModel::ScreenFunction2(G4double screenVariable)
   
   return value;
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4AutoLock.hh"
+namespace { G4Mutex LivermoreGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
+
+void G4LivermoreGammaConversionModel::InitialiseForElement(const G4ParticleDefinition*, 
+						    G4int Z)
+{
+  G4AutoLock l(&LivermoreGammaConversionModelMutex);
+  //  G4cout << "G4LivermoreGammaConversionModel::InitialiseForElement Z= " 
+  //   << Z << G4endl;
+  if(!data[Z]) { ReadData(Z); }
+}
 

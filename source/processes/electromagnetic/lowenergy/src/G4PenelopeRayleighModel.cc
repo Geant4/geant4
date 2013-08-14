@@ -168,7 +168,7 @@ void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* ,
     samplingTable = new std::map<const G4Material*,G4PenelopeSamplingData*>;
 
 
-  if (verboseLevel > 0) {
+  if (verboseLevel > 1) {
     G4cout << "Penelope Rayleigh model v2008 is initialized " << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / keV << " keV - "
@@ -338,6 +338,8 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
   
   const G4Material* theMat = couple->GetMaterial();
+
+  CrossSectionPerVolume(theMat, aDynamicGamma->GetDefinition(), photonEnergy0);
   
   //1) Verify if tables are ready
   if (!pMaxTable || !samplingTable)
@@ -612,6 +614,7 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
   G4double q2min = 0;
   G4double q2max = 0;
   const size_t np = 150; //hard-coded in Penelope
+  //G4cout << "Init N= " << logQSquareGrid.size() << G4endl;
   for (size_t i=1;i<logQSquareGrid.size();i++)
     {
       G4double Q2 = std::exp(logQSquareGrid[i]);
@@ -619,6 +622,7 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
 	{
 	  q2max = std::exp(logQSquareGrid[i-1]);
 	}
+      //G4cout << "Q2= " << Q2 << " q2max= " << q2max << G4endl;
     }
   
   size_t nReducedPoints = np/4;
@@ -632,6 +636,7 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
     }
   if (q2min > (q2max-1e-10))
     {
+      G4cout << "q2min= " << q2min << " q2max= " << q2max << G4endl;
       G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
 		  "em2048",FatalException,
 		  "Too narrow grid to initialize the sampling algorithm");
