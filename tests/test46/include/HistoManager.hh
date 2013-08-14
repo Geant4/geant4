@@ -114,20 +114,15 @@ private:
   static HistoManager* fManager;
 
   const G4ParticleDefinition* primaryDef;
-  const G4ParticleDefinition* neutron;
 
-  G4double beamEnergy;
   G4double worldZ;
   G4double sizeXY;
   G4double primaryKineticEnergy;
-  G4double currentKinEnergy;
 
   G4double E[25];
   G4double ecal[6];
   G4double edep[6];
   G4double erms[6];
-  G4double edeptr[6];
-  G4double ermstr[6];
   G4int    stat[6];
   G4double Eecal;
   G4double eecal;
@@ -154,7 +149,6 @@ private:
 
   G4double maxEnergy;
   G4double maxTotEnergy;
-  G4double maxEnergyAbs;
 
   G4double m_gamma;
   G4double m_e;
@@ -162,11 +156,6 @@ private:
   G4double m_n;
   
   G4int n_evt;
-  G4int n_elec;
-  G4int n_posit;
-  G4int n_gam;
-  G4int n_gamph;
-  G4int n_gam_tar;
   G4int n_lowe;
   G4int n_step;
   G4int nHisto;
