@@ -111,9 +111,11 @@ private:
   G4int    defaultAct;
 
   std::vector<AIDA::IHistogram1D*> histo;
-  AIDA::IAnalysisFactory* af;  
   AIDA::ITuple*   ntup;
+#ifdef G4ANALYSIS_USE
+  AIDA::IAnalysisFactory* af;  
   AIDA::ITree*    tree;
+#endif
   HistoMessenger* messenger;
   std::vector<G4int>     active;
   std::vector<G4int>     bins;

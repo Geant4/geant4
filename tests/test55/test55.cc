@@ -68,7 +68,7 @@ int main(int argc,char** argv) {
   //set user action classes
    RunAction* run;
   
-  runManager->SetUserAction(run = new RunAction(det,phys,kin)); 
+  runManager->SetUserAction(run = new RunAction(det,kin));
   runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new TrackingAction(run));  
   runManager->SetUserAction(new SteppingAction(det,run));

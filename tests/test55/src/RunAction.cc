@@ -47,9 +47,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
+RunAction::RunAction(DetectorConstruction* det,
                      PrimaryGeneratorAction* kin)
-:detector(det), physics(phys), kinematic(kin)
+:detector(det), kinematic(kin)
 { 
   tallyEdep = new G4double[MaxTally];
   binLength = 1.*mm; 

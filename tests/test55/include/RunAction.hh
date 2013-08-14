@@ -47,7 +47,7 @@ class TestSeries;
 class RunAction : public G4UserRunAction
 {
 public:
-  RunAction(DetectorConstruction*, PhysicsList*,
+  RunAction(DetectorConstruction*,
 	    PrimaryGeneratorAction*);
   virtual ~RunAction();
 
@@ -78,7 +78,6 @@ private:
   RunActionMessenger*     messenger;
     
   DetectorConstruction*   detector;
-  PhysicsList*            physics;
   PrimaryGeneratorAction* kinematic;
   G4double*               tallyEdep;   
   G4double                binLength;
