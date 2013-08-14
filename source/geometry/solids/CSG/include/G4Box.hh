@@ -139,6 +139,7 @@ class G4Box : public G4CSGSolid
   private:
 
     G4double fDx,fDy,fDz;
+    G4double delta;  // Cached half Cartesian tolerance
 };
 
 #include "G4Box.icc"

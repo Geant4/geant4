@@ -220,6 +220,10 @@ class G4Cons : public G4CSGSolid
     G4bool fPhiFullCone;
       //
       // Flag for identification of section or full cone
+
+    G4double halfCarTolerance, halfRadTolerance, halfAngTolerance;
+      //
+      // Cached half tolerance values
 };
 
 #include "G4Cons.icc"

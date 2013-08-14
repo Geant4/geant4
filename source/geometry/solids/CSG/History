@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 14, 2013  G.Cosmo                 geom-csg-V09-06-03
+- Move function-scoped 'static const' values for half-tolerances to private
+  data members of classes, to overcome false-positive race-conditions defects
+  reported by Valgrind in MT mode.
+- Corrected sanity check for wrong/small dimensions in G4Box constructor.
+
 April 16, 2013  T.Nikitina               geom-csg-V09-06-02
 - Fix in G4Cons::DistanceToIn(p,v) for initialisation of dRmax for the
   case of shape with Rmin1=Rmax1=0.

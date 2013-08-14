@@ -201,6 +201,10 @@ class G4Torus : public G4CSGSolid
     
     G4double fRminTolerance, fRmaxTolerance, kRadTolerance, kAngTolerance;
       // Radial and angular tolerances
+
+    G4double halfCarTolerance, halfAngTolerance;
+      // Cached half tolerance values
+
 };
 
 #include "G4Torus.icc"

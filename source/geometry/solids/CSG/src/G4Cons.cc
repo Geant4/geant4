@@ -85,6 +85,10 @@ G4Cons::G4Cons( const G4String& pName,
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
+  halfCarTolerance=kCarTolerance*0.5;
+  halfRadTolerance=kRadTolerance*0.5;
+  halfAngTolerance=kAngTolerance*0.5;
+
   // Check z-len
   //
   if ( pDz < 0 )
@@ -125,7 +129,9 @@ G4Cons::G4Cons( __void__& a )
     fRmin1(0.), fRmin2(0.), fRmax1(0.), fRmax2(0.), fDz(0.),
     fSPhi(0.), fDPhi(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.),
     cosHDPhiIT(0.), sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
-    fPhiFullCone(false)
+    fPhiFullCone(false), halfCarTolerance(0.), halfRadTolerance(0.),
+    halfAngTolerance(0.)
+
 {
 }
 
@@ -148,7 +154,10 @@ G4Cons::G4Cons(const G4Cons& rhs)
     fDPhi(rhs.fDPhi), sinCPhi(rhs.sinCPhi), cosCPhi(rhs.cosCPhi),
     cosHDPhiOT(rhs.cosHDPhiOT), cosHDPhiIT(rhs.cosHDPhiIT),
     sinSPhi(rhs.sinSPhi), cosSPhi(rhs.cosSPhi), sinEPhi(rhs.sinEPhi),
-    cosEPhi(rhs.cosEPhi), fPhiFullCone(rhs.fPhiFullCone)
+    cosEPhi(rhs.cosEPhi), fPhiFullCone(rhs.fPhiFullCone),
+    halfCarTolerance(rhs.halfCarTolerance),
+    halfRadTolerance(rhs.halfRadTolerance),
+    halfAngTolerance(rhs.halfAngTolerance)
 {
 }
 
@@ -178,6 +187,9 @@ G4Cons& G4Cons::operator = (const G4Cons& rhs)
    sinSPhi = rhs.sinSPhi; cosSPhi = rhs.cosSPhi;
    sinEPhi = rhs.sinEPhi; cosEPhi = rhs.cosEPhi;
    fPhiFullCone = rhs.fPhiFullCone;
+   halfCarTolerance = rhs.halfCarTolerance;
+   halfRadTolerance = rhs.halfRadTolerance;
+   halfAngTolerance = rhs.halfAngTolerance;
 
    return *this;
 }
@@ -190,9 +202,6 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
 {
   G4double r2, rl, rh, pPhi, tolRMin, tolRMax; // rh2, rl2 ;
   EInside in;
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
-  static const G4double halfRadTolerance=kRadTolerance*0.5;
-  static const G4double halfAngTolerance=kAngTolerance*0.5;
 
   if (std::fabs(p.z()) > fDz + halfCarTolerance )  { return in = kOutside; }
   else if(std::fabs(p.z()) >= fDz - halfCarTolerance )    { in = kSurface; }
@@ -483,9 +492,6 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
   G4double tanRMin, secRMin, pRMin, widRMin;
   G4double tanRMax, secRMax, pRMax, widRMax;
 
-  static const G4double delta  = 0.5*kCarTolerance;
-  static const G4double dAngle = 0.5*kAngTolerance;
-  
   G4ThreeVector norm, sumnorm(0.,0.,0.), nZ = G4ThreeVector(0.,0.,1.);
   G4ThreeVector nR, nr(0.,0.,0.), nPs, nPe;
 
@@ -510,8 +516,8 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
     {
       pPhi = std::atan2(p.y(),p.x());
 
-      if (pPhi  < fSPhi-delta)            { pPhi += twopi; }
-      else if (pPhi > fSPhi+fDPhi+delta)  { pPhi -= twopi; }
+      if (pPhi  < fSPhi-halfCarTolerance)            { pPhi += twopi; }
+      else if (pPhi > fSPhi+fDPhi+halfCarTolerance)  { pPhi -= twopi; }
 
       distSPhi = std::fabs( pPhi - fSPhi ); 
       distEPhi = std::fabs( pPhi - fSPhi - fDPhi ); 
@@ -524,7 +530,7 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
     nPs = G4ThreeVector(std::sin(fSPhi), -std::cos(fSPhi), 0);
     nPe = G4ThreeVector(-std::sin(fSPhi+fDPhi), std::cos(fSPhi+fDPhi), 0);
   }
-  if ( rho > delta )   
+  if ( rho > halfCarTolerance )   
   {
     nR = G4ThreeVector(p.x()/rho/secRMax, p.y()/rho/secRMax, -tanRMax/secRMax);
     if (fRmin1 || fRmin2)
@@ -533,30 +539,30 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
     }
   }
 
-  if( distRMax <= delta )
+  if( distRMax <= halfCarTolerance )
   {
     noSurfaces ++;
     sumnorm += nR;
   }
-  if( (fRmin1 || fRmin2) && (distRMin <= delta) )
+  if( (fRmin1 || fRmin2) && (distRMin <= halfCarTolerance) )
   {
     noSurfaces ++;
     sumnorm += nr;
   }
   if( !fPhiFullCone )   
   {
-    if (distSPhi <= dAngle)
+    if (distSPhi <= halfAngTolerance)
     {
       noSurfaces ++;
       sumnorm += nPs;
     }
-    if (distEPhi <= dAngle) 
+    if (distEPhi <= halfAngTolerance) 
     {
       noSurfaces ++;
       sumnorm += nPe;
     }
   }
-  if (distZ <= delta)  
+  if (distZ <= halfCarTolerance)  
   {
     noSurfaces ++;
     if ( p.z() >= 0.)  { sumnorm += nZ; }
@@ -712,8 +718,6 @@ G4double G4Cons::DistanceToIn( const G4ThreeVector& p,
 {
   G4double snxt = kInfinity ;      // snxt = default return value
   const G4double dRmax = 50*(fRmax1+fRmax2);// 100*(Rmax1+Rmax2)/2.
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
-  static const G4double halfRadTolerance=kRadTolerance*0.5;
 
   G4double tanRMax,secRMax,rMaxAv,rMaxOAv ;  // Data for cones
   G4double tanRMin,secRMin,rMinAv,rMinOAv ;
@@ -1448,10 +1452,6 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
                                       G4ThreeVector *n) const
 {
   ESide side = kNull, sider = kNull, sidephi = kNull;
-
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
-  static const G4double halfRadTolerance=kRadTolerance*0.5;
-  static const G4double halfAngTolerance=kAngTolerance*0.5;
 
   G4double snxt,srd,sphi,pdist ;
 

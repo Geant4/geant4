@@ -62,9 +62,10 @@ G4Box::G4Box(const G4String& pName,
                    G4double pZ)
   : G4CSGSolid(pName), fDx(pX), fDy(pY), fDz(pZ)
 {
+  delta = 0.5*kCarTolerance;
   if ( (pX < 2*kCarTolerance)
-    && (pY < 2*kCarTolerance)
-    && (pZ < 2*kCarTolerance) )  // limit to thickness of surfaces
+    || (pY < 2*kCarTolerance)
+    || (pZ < 2*kCarTolerance) )  // limit to thickness of surfaces
   {
     std::ostringstream message;
     message << "Dimensions too small for Solid: " << GetName() << "!" << G4endl
@@ -79,7 +80,7 @@ G4Box::G4Box(const G4String& pName,
 //                            for usage restricted to object persistency.
 
 G4Box::G4Box( __void__& a )
-  : G4CSGSolid(a), fDx(0.), fDy(0.), fDz(0.)
+  : G4CSGSolid(a), fDx(0.), fDy(0.), fDz(0.), delta(0.)
 {
 }
 
@@ -96,7 +97,7 @@ G4Box::~G4Box()
 // Copy constructor
 
 G4Box::G4Box(const G4Box& rhs)
-  : G4CSGSolid(rhs), fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz)
+  : G4CSGSolid(rhs), fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz), delta(rhs.delta)
 {
 }
 
@@ -119,6 +120,7 @@ G4Box& G4Box::operator = (const G4Box& rhs)
    fDx = rhs.fDx;
    fDy = rhs.fDy;
    fDz = rhs.fDz;
+   delta = rhs.delta;
 
    return *this;
 }
@@ -367,7 +369,6 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 
 EInside G4Box::Inside(const G4ThreeVector& p) const
 {
-  static const G4double delta=0.5*kCarTolerance;
   EInside in = kOutside ;
   G4ThreeVector q(std::fabs(p.x()), std::fabs(p.y()), std::fabs(p.z()));
 
@@ -413,7 +414,6 @@ G4ThreeVector G4Box::SurfaceNormal( const G4ThreeVector& p) const
   // New code for particle on surface including edges and corners with specific
   // normals
 
-  static const G4double delta    = 0.5*kCarTolerance;
   const G4ThreeVector nX  = G4ThreeVector( 1.0, 0,0  );
   const G4ThreeVector nmX = G4ThreeVector(-1.0, 0,0  );
   const G4ThreeVector nY  = G4ThreeVector( 0, 1.0,0  );
@@ -560,8 +560,6 @@ G4double G4Box::DistanceToIn(const G4ThreeVector& p,
   G4double stmp ;
   G4double sOut=kInfinity, sOuty=kInfinity, sOutz=kInfinity ;
 
-  static const G4double delta = 0.5*kCarTolerance;
-
   safx = std::fabs(p.x()) - fDx ;     // minimum distance to x surface of shape
   safy = std::fabs(p.y()) - fDy ;
   safz = std::fabs(p.z()) - fDz ;
@@ -696,8 +694,6 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
 {
   ESide side = kUndefined ;
   G4double pdist,stmp,snxt=kInfinity;
-
-  static const G4double delta = 0.5*kCarTolerance;
 
   if (calcNorm) { *validNorm = true ; }  // All normals are valid
 

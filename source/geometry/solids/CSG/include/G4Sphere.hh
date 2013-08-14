@@ -238,6 +238,10 @@ class G4Sphere : public G4CSGSolid
     G4bool fFullPhiSphere, fFullThetaSphere, fFullSphere;
       //
       // Flags for identification of section, shell or full sphere
+
+    G4double halfCarTolerance, halfAngTolerance;
+      //
+      // Cached half tolerance values
 };
 
 #include "G4Sphere.icc"

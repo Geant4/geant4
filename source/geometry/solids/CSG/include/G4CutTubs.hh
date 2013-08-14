@@ -151,6 +151,10 @@ class G4CutTubs : public G4Tubs
     G4bool fPhiFullCutTube;
       //
       // Flag for identification of section or full tube
+
+    G4double halfCarTolerance, halfRadTolerance, halfAngTolerance;
+      //
+      // Cached half tolerance values
 };
 
 #include "G4CutTubs.icc"

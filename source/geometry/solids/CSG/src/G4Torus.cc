@@ -107,7 +107,10 @@ G4Torus::SetAllParameters( G4double pRmin,
 
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
-  
+
+  halfCarTolerance = 0.5*kCarTolerance;
+  halfAngTolerance = 0.5*kAngTolerance;
+
   if ( pRtor >= pRmax+1.e3*kCarTolerance )  // Check swept radius, as in G4Cons
   {
     fRtor = pRtor ;
@@ -178,7 +181,8 @@ G4Torus::SetAllParameters( G4double pRmin,
 G4Torus::G4Torus( __void__& a )
   : G4CSGSolid(a), fRmin(0.), fRmax(0.), fRtor(0.), fSPhi(0.),
     fDPhi(0.), fRminTolerance(0.), fRmaxTolerance(0. ),
-    kRadTolerance(0.), kAngTolerance(0.)
+    kRadTolerance(0.), kAngTolerance(0.),
+    halfCarTolerance(0.), halfAngTolerance(0.)
 {
 }
 
@@ -197,7 +201,9 @@ G4Torus::G4Torus(const G4Torus& rhs)
   : G4CSGSolid(rhs), fRmin(rhs.fRmin),fRmax(rhs.fRmax),
     fRtor(rhs.fRtor),fSPhi(rhs.fSPhi),fDPhi(rhs.fDPhi),
     fRminTolerance(rhs.fRminTolerance), fRmaxTolerance(rhs.fRmaxTolerance),
-    kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance)
+    kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
+    halfCarTolerance(rhs.halfCarTolerance),
+    halfAngTolerance(rhs.halfAngTolerance)
 {
 }
 
@@ -221,6 +227,8 @@ G4Torus& G4Torus::operator = (const G4Torus& rhs)
    fRtor = rhs.fRtor; fSPhi = rhs.fSPhi; fDPhi = rhs.fDPhi;
    fRminTolerance = rhs.fRminTolerance; fRmaxTolerance = rhs.fRmaxTolerance;
    kRadTolerance = rhs.kRadTolerance; kAngTolerance = rhs.kAngTolerance;
+   halfCarTolerance = rhs.halfCarTolerance;
+   halfAngTolerance = rhs.halfAngTolerance;
 
    return *this;
 }
@@ -292,8 +300,6 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
   G4double bigdist = 10*mm ;
   G4double tmin = kInfinity ;
   G4double t, scal ;
-  static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
   // calculate the distances to the intersections with the Torus
   // from a given point p and direction v.
@@ -630,9 +636,9 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
   G4double r2, pt2, pPhi, tolRMin, tolRMax ;
 
   EInside in = kOutside ;
-  static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
-                                               // General precals
+  // General precals
+  //
   r2  = p.x()*p.x() + p.y()*p.y() ;
   pt2 = r2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*std::sqrt(r2) ;
 
@@ -998,8 +1004,6 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   G4double tolORMin2;  // `generous' radii squared
   G4double tolORMax2;
 
-  static const G4double halfCarTolerance = 0.5*kCarTolerance;
- 
   G4double Dist,xi,yi,zi,rhoi2,it2; // Intersection point variables
 
   G4double Comp;
@@ -1188,9 +1192,6 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 {
   ESide    side = kNull, sidephi = kNull ;
   G4double snxt = kInfinity, sphi, sd[4] ;
-
-  static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
   // Vars for phi intersection
   //

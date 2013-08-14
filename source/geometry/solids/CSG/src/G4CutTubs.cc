@@ -69,6 +69,10 @@ G4CutTubs::G4CutTubs( const G4String &pName,
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
+  halfCarTolerance = kCarTolerance*0.5;
+  halfRadTolerance = kRadTolerance*0.5;
+  halfAngTolerance = kAngTolerance*0.5;
+
   // Check on Cutted Planes Normals
   // If there is NO CUT, propose to use G4Tubs instead
   //
@@ -135,9 +139,9 @@ G4CutTubs::G4CutTubs( const G4String &pName,
 //                            for usage restricted to object persistency.
 //
 G4CutTubs::G4CutTubs( __void__& a )
-  : G4Tubs(a), 
-    fLowNorm(G4ThreeVector()), fHighNorm(G4ThreeVector()),
-    fPhiFullCutTube(false)
+  : G4Tubs(a), fLowNorm(G4ThreeVector()),
+    fHighNorm(G4ThreeVector()), fPhiFullCutTube(false),
+    halfCarTolerance(0.), halfRadTolerance(0.), halfAngTolerance(0.)
 {
 }
 
@@ -154,9 +158,11 @@ G4CutTubs::~G4CutTubs()
 // Copy constructor
 
 G4CutTubs::G4CutTubs(const G4CutTubs& rhs)
-  : G4Tubs(rhs),
-    fLowNorm(rhs.fLowNorm), fHighNorm(rhs.fHighNorm),
-    fPhiFullCutTube(rhs.fPhiFullCutTube)
+  : G4Tubs(rhs), fLowNorm(rhs.fLowNorm), fHighNorm(rhs.fHighNorm),
+    fPhiFullCutTube(rhs.fPhiFullCutTube),
+    halfCarTolerance(rhs.halfCarTolerance),
+    halfRadTolerance(rhs.halfRadTolerance),
+    halfAngTolerance(rhs.halfAngTolerance)
 {
 }
 
@@ -178,6 +184,9 @@ G4CutTubs& G4CutTubs::operator = (const G4CutTubs& rhs)
    //
    fLowNorm = rhs.fLowNorm; fHighNorm = rhs.fHighNorm;
    fPhiFullCutTube = rhs.fPhiFullCutTube;
+   halfCarTolerance = rhs.halfCarTolerance;
+   halfRadTolerance = rhs.halfRadTolerance;
+   halfAngTolerance = rhs.halfAngTolerance;
 
    return *this;
 }
@@ -405,9 +414,6 @@ EInside G4CutTubs::Inside( const G4ThreeVector& p ) const
   G4double tolRMin,tolRMax;
   G4ThreeVector vZ=G4ThreeVector(0,0,fDz);
   EInside in = kInside;
-  static const G4double halfCarTolerance=kCarTolerance*0.5;
-  static const G4double halfRadTolerance=kRadTolerance*0.5;
-  static const G4double halfAngTolerance=kAngTolerance*0.5;
 
   // Check if point is contained in the cut plane in -/+ Z
 
@@ -516,9 +522,6 @@ G4ThreeVector G4CutTubs::SurfaceNormal( const G4ThreeVector& p ) const
   G4double distZLow,distZHigh, distRMin, distRMax;
   G4double distSPhi = kInfinity, distEPhi = kInfinity;
   G4ThreeVector vZ=G4ThreeVector(0,0,fDz);
-
-  static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfAngTolerance = 0.5*kAngTolerance;
 
   G4ThreeVector norm, sumnorm(0.,0.,0.);
   G4ThreeVector nZ = G4ThreeVector(0, 0, 1.0);
@@ -766,9 +769,6 @@ G4double G4CutTubs::DistanceToIn( const G4ThreeVector& p,
   const G4double dRmax = 100.*fRMax;
   G4ThreeVector vZ=G4ThreeVector(0,0,fDz);
   
-  static const G4double halfCarTolerance = 0.5*kCarTolerance;
-  static const G4double halfRadTolerance = 0.5*kRadTolerance;
-
   // Intersection point variables
   //
   G4double Dist, sd=0, xi, yi, zi, rho2, inum, iden, cosPsi, Comp,calf ;
@@ -1284,8 +1284,6 @@ G4double G4CutTubs::DistanceToOut( const G4ThreeVector& p,
   G4double deltaR, t1, t2, t3, b, c, d2, roMin2 ;
   G4double distZLow,distZHigh,calfH,calfL;
   G4ThreeVector vZ=G4ThreeVector(0,0,fDz);
-  static const G4double halfCarTolerance = kCarTolerance*0.5;
-  static const G4double halfAngTolerance = kAngTolerance*0.5;
  
   // Vars for phi intersection:
   //
