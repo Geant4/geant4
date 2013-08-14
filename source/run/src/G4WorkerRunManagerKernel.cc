@@ -61,7 +61,16 @@ void G4WorkerRunManagerKernel::SetupShadowProcess() const
         }
         G4ProcessVector& procs = *(pm->GetProcessList());
         G4ProcessVector& procsM= *(pmM->GetProcessList());
-        assert( procs.size() == procsM.size() );
+        if( procs.size() != procsM.size() )
+        {
+          G4ExceptionDescription msg;
+          msg<<" Size of G4ProcessVector is inconsistent between master and worker threads ";
+          msg<<" for the particle <"<<pd->GetParticleName()<<">. \n";
+          msg<<" size of G4ProcessVector for worker thread is "<<procs.size();
+          msg<<" while masther thread is "<<procsM.size()<<".";
+          G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
+        }
+        //assert( procs.size() == procsM.size() );
         //To each process add the reference to the same
         //process from master. Note that we rely on
         //processes being in the correct order!

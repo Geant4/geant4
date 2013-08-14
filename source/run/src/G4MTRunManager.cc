@@ -48,9 +48,9 @@ G4MTRunManager* G4MTRunManager::fMasterRM = 0;
 
 namespace {
  G4Mutex cmdHandlingMutex = G4MUTEX_INITIALIZER;
- //Mutex to access/manipulate uiCmdsForWorker command stack
  G4Mutex scorerMergerMutex = G4MUTEX_INITIALIZER;
  G4Mutex runMergerMutex = G4MUTEX_INITIALIZER;
+ G4Mutex setUpEventMutex = G4MUTEX_INITIALIZER;
 }
 
 //This is needed to initialize windows conditions
@@ -120,6 +120,8 @@ G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
 #if defined (WIN32)
     InitializeWindowsConditions();
 #endif
+
+    numberOfEventToBeProcessed = 0;
 }
 
 G4MTRunManager::~G4MTRunManager()
@@ -186,6 +188,9 @@ std::vector<G4String> G4MTRunManager::GetCommandStack()
 
 void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, G4int n_select)
 {
+    numberOfEventToBeProcessed = n_events;
+    numberOfEventProcessed = 0;
+
     if(verboseLevel>0)
     { timer->Start(); }
     
@@ -199,9 +204,8 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     else
     { n_select_msg = -1; }
 
-    //User initialize seeds
-    
-    //If user did not implement InitializeSeeds, use default: 2 seeds per event number
+    //initialize seeds
+    //If user did not implement InitializeSeeds, use default: 2 seeds per event 
     if ( InitializeSeeds(n_events) == false )
     {
         G4RNGHelper* helper = G4RNGHelper::GetInstance();
@@ -219,13 +223,11 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     //This will also start the workers
     //Currently we do not allow to change the
     //number of threads: threads area created once
-    //and that's all
     if ( threads.size() == 0 ) {
       for ( G4int nw = 0 ; nw<nworkers; ++nw) {
         //Create a new worker and remember it
         G4WorkerThread* context = new G4WorkerThread;
         context->SetNumberThreads(nworkers);
-        context->SetNumberEvents(n_events);
         context->SetThreadId(nw);
         G4Thread* thread = userWorkerInitialization->CreateAndStartWorker(context);
         threads.push_back(thread);
@@ -337,6 +339,21 @@ void G4MTRunManager::MergeRun(const G4Run* localRun)
   if(currentRun) currentRun->Merge(localRun); 
 }
 
+G4bool G4MTRunManager::SetUpAnEvent(G4Event* evt, CLHEP::HepRandomEngine * egn)
+{
+  G4AutoLock l(&setUpEventMutex);
+  if( numberOfEventProcessed < numberOfEventToBeProcessed )
+  {
+    evt->SetEventID(numberOfEventProcessed);
+    G4RNGHelper* helper = G4RNGHelper::GetInstance();
+    G4int idx_rndm = 2*numberOfEventProcessed;
+    G4long seeds[3] = { helper->GetSeed(idx_rndm), helper->GetSeed(idx_rndm+1), 0 };
+    egn->setSeeds(seeds,-1);
+    numberOfEventProcessed++;
+    return true;
+  }
+  return false;
+}
 
 void G4MTRunManager::TerminateWorkers()
 {
@@ -354,7 +371,6 @@ void G4MTRunManager::TerminateWorkers()
 #endif
     threads.clear();
 }
-
 
 #include "G4IonTable.hh"
 #include "G4ParticleTable.hh"

@@ -216,76 +216,12 @@ G4VUserPhysicsList & G4VUserPhysicsList::operator=(const G4VUserPhysicsList & ri
 
 ////////////////////////////////////////////////////////
 void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
-					   G4ProcessManager*     newManager)
+					   G4ProcessManager*    )
 {
   if (newParticle == 0) return;
-  if (newParticle->GetProcessManager() != 0) {
-#ifdef G4VERBOSE
-    if (verboseLevel >1){
-      G4cout << "G4VUserPhysicsList::AddProcessManager: "
-	     << newParticle->GetParticleName()
-	     << " already has ProcessManager " << newParticle->GetProcessManager() 
-             << G4endl;
-    }
-#endif
-    return;
-  }
-
-  // create new process manager if newManager  == 0
-  if (newManager  == 0){
-    // Add ProcessManager
-    if (newParticle->GetParticleType() == "nucleus") {
-      // Create a copy of the process manager of "GenericIon" in case of "nucleus"
-      G4ParticleDefinition* genericIon =
-	   (G4ParticleTable::GetParticleTable())->FindParticle("GenericIon");
-
-      if (genericIon != 0) {
-	G4ProcessManager* ionMan = genericIon->GetProcessManager();
-	if (ionMan != 0) {
-	  newManager = new G4ProcessManager(*ionMan);
-	} else {
-	  // no process manager has been registered yet
-	  newManager = new G4ProcessManager(newParticle);
-	  G4Exception("G4VUserPhysicsList::AddProcessManager",
-		      "Run0251", RunMustBeAborted,
-		      "GenericIon has no ProcessMamanger"); 	
-	}
-      } else {
-	// "GenericIon" does not exist
-	newManager = new G4ProcessManager(newParticle);
-	G4Exception("G4VUserPhysicsList::AddProcessManager",
-		    "Run0252", RunMustBeAborted,
-		    "GenericIon does not exist"); 	
-      }
-
-    } else {
-      // create process manager for particles other than "nucleus"
-      newManager = new G4ProcessManager(newParticle);
-    }
-  }
-
-  // set particle type
-  newManager->SetParticleType(newParticle);
-
-  // add the process manager
-  newParticle->SetProcessManager(newManager);
-
-  //record the process manager for each particle in master thread
-  if( newParticle->GetMasterProcessManager() == 0 ) newParticle->SetMasterProcessManager(newManager);
-
-#ifdef G4VERBOSE
- if (verboseLevel >2){
-    G4cout << "G4VUserPhysicsList::AddProcessManager: "
-	   << "adds ProcessManager to "
-	   << newParticle->GetParticleName() << G4endl;
-    newManager->DumpInfo();
-  }
-#endif
-////////////  if ( fIsPhysicsTableBuilt
-////////////       && (newParticle->GetParticleType() == "nucleus")) {
-////////////    PreparePhysicsTable(newParticle);
-////////////    BuildPhysicsTable(newParticle);
-////////////  }
+  G4Exception("G4VUserPhysicsList::AddProcessManager",
+	      "Run0252", JustWarning,
+	      "This method is obsolete"); 	
 }
 
 
@@ -672,7 +608,6 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 
     //Get processes from master thread;
     G4ProcessManager* pManagerShadow = particle->GetMasterProcessManager();
-    G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
 
     G4ProcessVector* pVector = pManager->GetProcessList();
     if (!pVector) {
@@ -695,6 +630,8 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       for(G4int iv1=0;iv1<pVector->size();iv1++)
       { G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName() << G4endl; }
       G4cout << "--------------------------------------------------------------" << G4endl;
+      G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
+
       for(G4int iv2=0;iv2<pVectorShadow->size();iv2++)
       { G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName() << G4endl; }
     }
@@ -704,70 +641,17 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
         //Infer if we are in a worker thread or master thread
         //Master thread is the one in which the process manager
         // and process manager shadow pointers are the same
-//        if ( pManagerShadow == pManager )
-//        {
-//            (*pVector)[j]->BuildPhysicsTable(*particle);
-//        }
-//        else
-//        {
-//            (*pVector)[j]->BuildWorkerPhysicsTable(*particle);
-//        }
-
-        //=============================================================
-        // Andrea: START : prototype style initization, to be removed
-        G4VMultipleScattering *currentProcess = dynamic_cast<G4VMultipleScattering *>((*pVector)[j]);
-      if (currentProcess != NULL)
-      {
-        if (pManagerShadow != pManager)
+        if ( pManagerShadow == pManager )
         {
-          G4VMultipleScattering *firstProcess = dynamic_cast<G4VMultipleScattering *>((*pVectorShadow)[j]);
-          if ( firstProcess == NULL )
-          {
-              G4ExceptionDescription msg;
-              msg<<"Process in process vector for particle "<<particle->GetParticleName()<<" at position "<<j;
-              msg<<" does not match master-thread process-vector (G4VMultipleScattering)";
-              G4Exception("G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition*)",
-                             "Run0035", FatalException,msg);
-              return;
-          }
-          currentProcess->SlaveBuildPhysicsTable(*particle, firstProcess);
+            (*pVector)[j]->BuildPhysicsTable(*particle);
         }
         else
         {
-          (*pVector)[j]->BuildPhysicsTable(*particle);
+            (*pVector)[j]->BuildWorkerPhysicsTable(*particle);
         }
-        continue;
-      }
 
-      G4VEnergyLossProcess *currentProcess2 = dynamic_cast<G4VEnergyLossProcess *>((*pVector)[j]);
-      if (currentProcess2 != NULL)
-      {
-        if (pManagerShadow != pManager)
-        {
-          G4VEnergyLossProcess *firstProcess2 = dynamic_cast<G4VEnergyLossProcess *>((*pVectorShadow)[j]);
-          if ( firstProcess2 == NULL )
-          {
-            G4ExceptionDescription msg;
-            msg<<"Process in process vector for particle "<<particle->GetParticleName()<<" at position "<<j;
-            msg<<" does not match master-thread process-vector (G4VEnergyLossProcess)";
-            G4Exception("G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition*)",
-                        "Run0035", FatalException,msg);
-            return;
-          }
-          currentProcess2->SlaveBuildPhysicsTable(*particle, firstProcess2);
-        }
-        else
-        {
-          (*pVector)[j]->BuildPhysicsTable(*particle);
-        }
-        continue;
-      }
-
-      (*pVector)[j]->BuildPhysicsTable(*particle);
-        //=============================================================
-        //ANDREA : STOP : Prototype implementation
-    }
-  }
+    } //End loop on processes vector
+  } //End if short-lived
 }
 
 ///////////////////////////////////////////////////////////////
@@ -823,56 +707,16 @@ void G4VUserPhysicsList::PreparePhysicsTable(G4ParticleDefinition* particle)
         //Infer if we are in a worker thread or master thread
         //Master thread is the one in which the process manager
         // and process manager shadow pointers are the same
-//        if ( pManagerShadow == pManager )
-//        {
-//            (*pVector)[j]->PreparePhysicsTable(*particle);
-//        }
-//        else
-//        {
-//            (*pVector)[j]->PrepareWorkerPhysicsTable(*particle);
-//        }
-
-        //=============================================================
-      //ANDREA : START : protptype initialization
-      G4VMultipleScattering *currentProcess = dynamic_cast<G4VMultipleScattering *>((*pVector)[j]);
-      if (currentProcess != NULL)
-      {
-        if (pManagerShadow != pManager)
+        if ( pManagerShadow == pManager )
         {
-	  //Andrea Dotti 14 Jan 2013: Change to interface
-          //G4VMultipleScattering *firstProcess = dynamic_cast<G4VMultipleScattering *>((*pVectorShadow)[j]);
-          currentProcess->SlavePreparePhysicsTable(*particle);
+            (*pVector)[j]->PreparePhysicsTable(*particle);
         }
         else
         {
-          (*pVector)[j]->PreparePhysicsTable(*particle);
+            (*pVector)[j]->PrepareWorkerPhysicsTable(*particle);
         }
-        continue;
-      }
-
-      G4VEnergyLossProcess *currentProcess2 = dynamic_cast<G4VEnergyLossProcess *>((*pVector)[j]);
-      if (currentProcess2 != NULL)
-      {
-        if (pManagerShadow != pManager)
-        {
-	  //Andrea Dotti 14 Jan 2013: Change to interface
-          //G4VEnergyLossProcess *firstProcess2 = dynamic_cast<G4VEnergyLossProcess *>((*pVectorShadow)[j]);
-          currentProcess2->SlavePreparePhysicsTable(*particle);
-        }
-        else
-        {
-          (*pVector)[j]->PreparePhysicsTable(*particle);
-        }
-        continue;
-      }
-
-      (*pVector)[j]->PreparePhysicsTable(*particle);
-        
-        //=============================================================
-        //ANDREA : STOP : protptype initialization
-
-    }
-  }
+    } //End loop on processes vector
+  } //End if pn ShortLived
 }
 
 //TODO Should we change this function?

@@ -59,6 +59,7 @@ public:
 public:
     //Inherited methods to re-implement for MT case
     virtual void InitializeEventLoop(G4int n_event, const char* macroFile=0, G4int n_select=-1);
+
     //The following do not do anything for this runmanager
     virtual void TerminateOneEvent();
     virtual void ProcessOneEvent(G4int i_event);
@@ -66,6 +67,14 @@ public:
     virtual void ConstructScoringWorlds();
     virtual void InitializePhysics();
     virtual void RunTermination();
+
+    //The following method should be invoked by G4WorkerRunManager for each event.
+    //False is returned if no more event to be processed.
+    // Note: G4Event object must be instantiated by a worker thread. In case no more
+    //  event remains to be processed, that worker thread must delete that G4Event
+    //  object.
+    virtual G4bool SetUpAnEvent(G4Event*, CLHEP::HepRandomEngine*);
+
     //Method called by Initialize() method
 protected:
     //Initialize the seeds list, if derived class does not implement this method
@@ -105,6 +114,9 @@ private:
     //wait workers have finished current event loop.
     //This function will return only when all
     //workers have finished processing events for this run.
+protected:
+    G4int numberOfEventToBeProcessed;
+
 public:
     void ThisWorkerReady();
     //Worker threads barrier:

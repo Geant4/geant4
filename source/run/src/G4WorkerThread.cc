@@ -26,17 +26,6 @@
 #include "G4WorkerThread.hh"
 #include "G4WorkerRunManager.hh"
 #include "G4MTRunManager.hh"
-//#include "G4VUserWorkerInitialization.hh"
-
-//void G4WorkerThread::SetUserWorkerInitialization(G4VUserWorkerInitialization *userWorkerInit)
-//{
-//    uWorkerInit = userWorkerInit;
-//}
-
-//G4VUserWorkerInitialization* G4WorkerThread::GetUserWorkerInitialization() const
-//{
-//    return uWorkerInit;
-//}
 
 void G4WorkerThread::SetThreadId(G4int tid)
 {
@@ -46,16 +35,6 @@ void G4WorkerThread::SetThreadId(G4int tid)
 G4int G4WorkerThread::GetThreadId() const
 {
     return threadId;
-}
-
-void G4WorkerThread::SetNumberEvents(G4int nevt)
-{
-    totalNumEvents = nevt;
-}
-
-G4int G4WorkerThread::GetNumberEvents() const
-{
-    return totalNumEvents;
 }
 
 void G4WorkerThread::SetNumberThreads(G4int nw)

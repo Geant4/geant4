@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Aug 7th, 2013, M.Asai (run-V09-06-79)
+- G4WorkerRunManager no longer has a for-loop for the event loop, but it
+  asks G4MTRunManager to process another event. With this modification,
+  number of events processed on each thread varies based on the 
+  availability of each thread.
+- Based on this modification, the array of random number seeds and event
+  ID are centrary managed by G4MTRunManager.
+
+Aug 6th, 2013, A.Dotti (run-V09-06-78)
+- Protecting agains compilation warning in case G4VERBOSE is not defined
+
+July 29th, 2013, A.Dotti (run-V09-06-77)
+- Activating new interfaces for worker thread G4VProcess initialization 
+  (requires procman-V09-06-02) in G4VUserPhysicsList for
+  {Prepare,Build}PhysicsTable. Co-working with tag emutils-V09-06-52.
+
+July 26th, 2013, H.Kurashige(run-V09-06-76)
+- Add G4Exception for obsolete method of G4VUserPhysicsList::AddProcessManager
+
 July 16th, 2013, A.Dotti (run-V09-06-75)
 - Preparing for new G4VProcess initialization of workers
   (code currently commented out)

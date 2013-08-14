@@ -37,41 +37,23 @@
 #include "G4Types.hh"
 #include "G4String.hh"
 
-class G4MTRunManager;
-class G4WorkerRunManager;
-//class G4VUserWorkerInitialization;
 #include "G4Threading.hh"///AAADEBUG
 
 class G4WorkerThread {
 public:
-    //void SetWorkerRunManager( G4WorkerRunManager* workerRM );
-    //G4WorkerRunManager* GetWorkerRunManager() const;
-    //void SetUserWorkerInitialization( G4VUserWorkerInitialization* userWorkerInit );
-    //G4VUserWorkerInitialization* GetUserWorkerInitialization() const;
-        
     void SetThreadId( G4int threadId );
     G4int GetThreadId() const;
         
     void SetNumberThreads( G4int numnberThreads );
     G4int GetNumberThreads() const; 
         
-    void SetNumberEvents( G4int totNevents );
-    G4int GetNumberEvents() const;
-    
-    //void SetMasterRunManager( G4MTRunManager* masterRM );
-    //G4MTRunManager* GetMasterRunManager() const;
-    
     //Build geometry for workers
     static void BuildGeometryAndPhysicsVector();
     static void DestroyGeometryAndPhysicsVector();
 
 private:
-    //G4MTRunManager* masterRunManager;
-    //G4WorkerRunManager* workerRunManager;
-    //G4VUserWorkerInitialization* uWorkerInit;
     G4int threadId;
     G4int numThreads;
-    G4int totalNumEvents;
     
 };
 #endif //G4WorkerThread_hh

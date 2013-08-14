@@ -55,6 +55,7 @@ public:
     //Modified for worker behavior
     virtual void DoEventLoop(G4int n_event,const char* macroFile=0,G4int n_select=-1);
     virtual void ProcessOneEvent(G4int i_event);
+    virtual G4Event* GenerateEvent(G4int i_event);
     //G4int NewCommands( const std::vector<G4String>& newCmdsToExecute , G4String& currentCmd );
     //Called by the MTRunManager when new UI commands are to be executed.
     //It is not assumed method is not thread-safe: i.e. should be called sequentially
@@ -82,5 +83,8 @@ public:
     virtual void SetUserAction(G4UserStackingAction* userAction);
     virtual void SetUserAction(G4UserTrackingAction* userAction);
     virtual void SetUserAction(G4UserSteppingAction* userAction);
+
+protected:
+    G4bool eventLoopOnGoing;
 };
 #endif //G4WorkerRunManager_h

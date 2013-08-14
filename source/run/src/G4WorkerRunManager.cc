@@ -39,6 +39,8 @@
 #include "G4UserWorkerInitialization.hh"
 #include "G4UserRunAction.hh"
 #include "G4RNGHelper.hh"
+#include "G4Run.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
 #include <sstream>
 
 G4WorkerRunManager* G4WorkerRunManager::GetWorkerRunManager()
@@ -58,6 +60,8 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
     G4ScoringManager* masterScM = G4MTRunManager::GetMasterScoringManager();
     if(masterScM) G4ScoringManager::GetScoringManager(); //TLS instance for a worker
+
+    eventLoopOnGoing = false;
 }
 
 #include "G4MTRunManager.hh"
@@ -99,21 +103,40 @@ void G4WorkerRunManager::InitializeGeometry() {
 
 void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4int n_select)
 {
+    if(!userPrimaryGeneratorAction)
+    {
+      G4Exception("G4RunManager::GenerateEvent()", "Run0032", FatalException,
+                "G4VUserPrimaryGeneratorAction is not defined!");
+    }
+
     //This is the same as in the sequential case, just the for-loop indexes are
     //different
     InitializeEventLoop(n_event,macroFile,n_select);
     //Signal this thread can start event loop.
     //Note this will return only when all threads reach this point
     G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
-    const G4UserWorkerInitialization* uwi =G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
+    const G4UserWorkerInitialization* uwi
+       = G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
     //Call a user hook: this is guaranteed all threads are "synchronized"
     uwi->WorkerRunStart();
     // Event loop
-    for ( G4int i_event = workerContext->GetThreadId(); i_event<n_event; i_event += workerContext->GetNumberThreads() )
+    eventLoopOnGoing = true;
+///////    G4int i_event = workerContext->GetThreadId();
+    G4int i_event = -1;
+    while(eventLoopOnGoing)
     {
-        ProcessOneEvent(i_event);
+      ProcessOneEvent(i_event);
+      if(eventLoopOnGoing)
+      {
         TerminateOneEvent();
-        if(runAborted) break;
+        if(runAborted)
+        { eventLoopOnGoing = false; }
+//////        else
+//////        {
+//////          i_event += workerContext->GetNumberThreads();
+//////          eventLoopOnGoing = i_event<n_event;
+//////        }
+      }
     }
     //Call a user hook: note this is before the next barrier
     //so threads execute this method asyncrhonouzly
@@ -121,20 +144,61 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     uwi->WorkerRunEnd();
      
     TerminateEventLoop();
-
 }
 
 void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 {
+  currentEvent = GenerateEvent(i_event);
+  if(eventLoopOnGoing)
+  {  
+    eventManager->ProcessOneEvent(currentEvent);
+    AnalyzeEvent(currentEvent);
+    UpdateScoring();
+    if(currentEvent->GetEventID()<n_select_msg) G4UImanager::GetUIpointer()->ApplyCommand(msgText);
+  }
+}
+
+G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
+{
+  G4Event* anEvent = new G4Event(i_event);
+  if(i_event<0)
+  {
+    eventLoopOnGoing = G4MTRunManager::GetMasterRunManager()
+                       ->SetUpAnEvent(anEvent,G4Random::getTheEngine());
+    if(!eventLoopOnGoing)
+    {
+      delete anEvent;
+      return 0;
+    }
+  }
+  else
+  {
     //Need to reseed random number generator
     G4RNGHelper* helper = G4RNGHelper::GetInstance();
     long seeds[3] = { helper->GetSeed(i_event*2) , helper->GetSeed(i_event*2+1), 0 };
     G4Random::setTheSeeds(seeds);
-    currentEvent = GenerateEvent(i_event);
-    eventManager->ProcessOneEvent(currentEvent);
-    AnalyzeEvent(currentEvent);
-    UpdateScoring();
-    if(i_event<n_select_msg) G4UImanager::GetUIpointer()->ApplyCommand(msgText);
+  }
+
+  if(storeRandomNumberStatusToG4Event==1 || storeRandomNumberStatusToG4Event==3)
+  {
+    std::ostringstream oss;
+    G4Random::saveFullState(oss);
+    randomNumberStatusForThisEvent = oss.str();
+    anEvent->SetRandomNumberStatus(randomNumberStatusForThisEvent);
+  }
+
+  if(storeRandomNumberStatus) {
+      G4String fileN = "currentEvent";
+      if ( rngStatusEventsFlag ) {
+          std::ostringstream os;
+          os << "run" << currentRun->GetRunID() << "evt" << anEvent->GetEventID();
+          fileN = os.str();
+      }
+      StoreRNGStatus(fileN);
+  }
+
+  userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
+  return anEvent;
 }
 
 void G4WorkerRunManager::RunTermination()
