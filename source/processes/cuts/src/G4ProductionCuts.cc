@@ -51,7 +51,11 @@ G4ProductionCuts::G4ProductionCuts() :
 }
 
 G4ProductionCuts::G4ProductionCuts(const G4ProductionCuts& right) 
+  :   isModified(true)
 {
+  for (G4int i=0; i< NumberOfG4CutIndex; i++) {
+    fRangeCuts.push_back(0.0);
+  }
   *this = right;
 }
 

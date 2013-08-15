@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 21st, 2013  - H.Kurashige (procuts-V09-06-07)
+- Fix the bug in G4ProductionCuts copy constructor
+
 June 21st, 2013  - M.Asai (procuts-V09-06-06)
 - G4ProductionCutstable: print out energy thresholds regardless of
   G4MaterialCutsCouple::IsReCalcNeeded(). 
