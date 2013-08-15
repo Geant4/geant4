@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 July 2013 - P.Arce (ascii-V09-06-04)
+- Corrected typo in G4tgrPlaceParameterisation::operator<<().
+  Addressing problem report #1504.
+
 23 April 2013 - G.Cosmo (ascii-V09-06-03)
 - Corrected History file, for loss of description of tags 06-00 and 06-01...
 
