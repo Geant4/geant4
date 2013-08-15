@@ -63,10 +63,11 @@ G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
   particleCmd->SetParameterName("particleName",true);
   particleCmd->SetDefaultValue("geantino");
   G4String candidateList; 
-  G4int nPtcl = particleTable->entries();
-  for(G4int i=0;i<nPtcl;i++)
+  G4ParticleTable::G4PTblDicIterator* itr = particleTable->GetIterator();
+  itr->reset();
+  while( (*itr)() )
   {
-    G4ParticleDefinition* pd = particleTable->GetParticle(i);
+    G4ParticleDefinition* pd = itr->value();
     if( !(pd->IsShortLived()) || pd->GetDecayTable() )
     {
       candidateList += pd->GetParticleName();
@@ -302,7 +303,6 @@ void G4ParticleGunMessenger::IonLevelCommand(G4String newValues)
         fIonEnergyLevel = StoI(sQ);
       }
     }
-
     G4ParticleDefinition* ion = 0;
     ion =  particleTable->GetIon(fAtomicNumber,fAtomicMass,fIonEnergyLevel);
     if (ion == 0) {

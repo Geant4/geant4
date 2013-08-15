@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 14th, 2013  M.Asai (event-V09-06-13)
+- G4ParticleGunMessenger: /gun/particle commands now consults to the particle
+  table for all the available particles except general ions.
+
 August 9th, 2013 Dennis Wright (event-V09-06-12)
 - include G4GeneralParticleSourceMessenger.cc which was omitted in previous tag
   IonLvlCommand and relevant data members added to
