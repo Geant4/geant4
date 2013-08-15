@@ -106,12 +106,8 @@ class F02PhysicsList: public G4VUserPhysicsList
     G4eIonisation*         theeminusIonisation;
     G4eBremsstrahlung*     theeminusBremsstrahlung;
 
-    G4PAIonisation*        fPAIonisation ;
-    G4ForwardXrayTR*       fForwardXrayTR ;
-    
     G4eIonisation*         theeplusIonisation;
     G4eBremsstrahlung*     theeplusBremsstrahlung;
-    G4eplusAnnihilation*   theeplusAnnihilation;
 
     F02StepCut* theeminusStepCut ;
     F02StepCut* theeplusStepCut ;

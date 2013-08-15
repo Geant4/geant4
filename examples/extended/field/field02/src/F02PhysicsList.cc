@@ -47,51 +47,42 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-
-
-
-/////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02PhysicsList::F02PhysicsList(F02DetectorConstruction* p)
 :  G4VUserPhysicsList(), MaxChargedStep(DBL_MAX),
    thePhotoElectricEffect(0), theComptonScattering(0),
    theGammaConversion(0), theeminusIonisation(0),
    theeminusBremsstrahlung(0), theeplusIonisation(0),
-   theeplusBremsstrahlung(0), theeplusAnnihilation(0),
+   theeplusBremsstrahlung(0),
    theeminusStepCut(0), theeplusStepCut(0)
 {
   pDet = p;
 
-  defaultCutValue = 1.000*mm ;
+  defaultCutValue = 1.000*mm;
 
-  cutForGamma = defaultCutValue ;
-  cutForElectron = defaultCutValue ;
+  cutForGamma = defaultCutValue;
+  cutForElectron = defaultCutValue;
 
   SetVerboseLevel(1);
   physicsListMessenger = new F02PhysicsListMessenger(this);
 }
 
-/////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02PhysicsList::~F02PhysicsList()
 {
-  delete physicsListMessenger; 
+  delete physicsListMessenger;
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
   // This ensures that objects of these particle types will be
-  // created in the program. 
+  // created in the program.
 
   ConstructBosons();
   ConstructLeptons();
@@ -99,9 +90,7 @@ void F02PhysicsList::ConstructParticle()
   ConstructBarions();
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PhysicsList::ConstructBosons()
 {
@@ -113,8 +102,9 @@ void F02PhysicsList::ConstructBosons()
 
   G4ChargedGeantino::ChargedGeantinoDefinition();
 
-
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PhysicsList::ConstructLeptons()
 {
@@ -131,6 +121,8 @@ void F02PhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void F02PhysicsList::ConstructMesons()
 {
  //  mesons
@@ -142,6 +134,7 @@ void F02PhysicsList::ConstructMesons()
   G4KaonMinus::KaonMinusDefinition();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PhysicsList::ConstructBarions()
 {
@@ -151,10 +144,7 @@ void F02PhysicsList::ConstructBarions()
   G4AntiProton::AntiProtonDefinition();
 }
 
-
-///////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PhysicsList::ConstructProcess()
 {
@@ -165,9 +155,7 @@ void F02PhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -199,89 +187,90 @@ void F02PhysicsList::ConstructEM()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
-    if (particleName == "gamma") 
+    if (particleName == "gamma")
     {
       // Construct processes for gamma
 
-      thePhotoElectricEffect = new G4PhotoElectricEffect();      
+      thePhotoElectricEffect = new G4PhotoElectricEffect();
       theComptonScattering   = new G4ComptonScattering();
       theGammaConversion     = new G4GammaConversion();
-      
+
       pmanager->AddDiscreteProcess(thePhotoElectricEffect);
       pmanager->AddDiscreteProcess(theComptonScattering);
 
       pmanager->AddDiscreteProcess(theGammaConversion);
-      
-    } 
-    else if (particleName == "e-") 
+ 
+    }
+    else if (particleName == "e-")
     {
-      // Construct processes for electron 
+      // Construct processes for electron
 
       theeminusIonisation = new G4eIonisation();
       theeminusBremsstrahlung = new G4eBremsstrahlung();
       theeminusStepCut = new F02StepCut();
 
       pmanager->AddProcess(theeminusIonisation,-1,2,2);
-      pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3); 
+      pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
       pmanager->AddProcess(theeminusStepCut,-1,-1,4);
-      theeminusStepCut->SetMaxStep(MaxChargedStep) ;
+      theeminusStepCut->SetMaxStep(MaxChargedStep);
 
-    } 
-    else if (particleName == "e+") 
+    }
+    else if (particleName == "e+")
     {
-      // Construct processes for positron 
+      // Construct processes for positron
 
       theeplusIonisation = new G4eIonisation();
       theeplusBremsstrahlung = new G4eBremsstrahlung();
       theeplusStepCut = new F02StepCut();
-      
+
       pmanager->AddProcess(theeplusIonisation,-1,2,2);
       pmanager->AddProcess(theeplusBremsstrahlung,-1,-1,3);
       pmanager->AddProcess(theeplusStepCut,-1,-1,5);
-      theeplusStepCut->SetMaxStep(MaxChargedStep) ;
+      theeplusStepCut->SetMaxStep(MaxChargedStep);
   
-    } 
-    else if( particleName == "mu+" || 
-             particleName == "mu-"    ) 
+    }
+    else if( particleName == "mu+" ||
+             particleName == "mu-"    )
     {
-      // Construct processes for muon+ 
+      // Construct processes for muon+
 
       F02StepCut* muonStepCut = new F02StepCut();
 
-      G4MuIonisation* themuIonisation = new G4MuIonisation() ;
+      G4MuIonisation* themuIonisation = new G4MuIonisation();
       pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1);
       pmanager->AddProcess(themuIonisation,-1,2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung(),-1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4); 
-      
+      pmanager->AddProcess(new G4MuPairProduction(),-1,-1,4);
+ 
       pmanager->AddProcess( muonStepCut,-1,-1,3);
-      muonStepCut->SetMaxStep(MaxChargedStep) ;
+      muonStepCut->SetMaxStep(MaxChargedStep);
 
-    } 
+    }
     else if (
-                particleName == "proton"  
-               || particleName == "antiproton"  
-               || particleName == "pi+"  
-               || particleName == "pi-"  
-               || particleName == "kaon+"  
-               || particleName == "kaon-"  
+                particleName == "proton"
+               || particleName == "antiproton"
+               || particleName == "pi+"
+               || particleName == "pi-"
+               || particleName == "kaon+"
+               || particleName == "kaon-"
               )
     {
       F02StepCut* thehadronStepCut = new F02StepCut();
 
-      G4hIonisation* thehIonisation = new G4hIonisation() ; 
+      G4hIonisation* thehIonisation = new G4hIonisation();
       G4hMultipleScattering* thehMultipleScattering =
-                     new G4hMultipleScattering() ;
-
+                     new G4hMultipleScattering();
 
       pmanager->AddProcess(thehMultipleScattering,-1,1,1);
       pmanager->AddProcess(thehIonisation,-1,2,2);
 
-        pmanager->AddProcess( thehadronStepCut,-1,-1,3);
-        thehadronStepCut->SetMaxStep(MaxChargedStep) ;
+      pmanager->AddProcess( thehadronStepCut,-1,-1,3);
+      thehadronStepCut->SetMaxStep(MaxChargedStep);
     }
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
 
@@ -297,8 +286,8 @@ void F02PhysicsList::ConstructGeneral()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (theDecayProcess->IsApplicable(*particle)) 
-    { 
+    if (theDecayProcess->IsApplicable(*particle))
+    {
       pmanager ->AddProcess(theDecayProcess);
 
       // set ordering for PostStepDoIt and AtRestDoIt
@@ -309,17 +298,17 @@ void F02PhysicsList::ConstructGeneral()
   }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PhysicsList::SetCuts()
 {
-  G4Timer theTimer ;
-  theTimer.Start() ;
+  G4Timer theTimer;
+  theTimer.Start();
   if (verboseLevel >0)
   {
     G4cout << "F02PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
+  }
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
  
@@ -333,30 +322,30 @@ void F02PhysicsList::SetCuts()
   theTimer.Stop();
   G4cout.precision(6);
   G4cout << G4endl ;
-  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() << " s " <<G4endl;
+  G4cout << "total time(SetCuts)=" << theTimer.GetUserElapsed() 
+                                   << " s " <<G4endl;
 
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PhysicsList::SetGammaCut(G4double val)
 {
   cutForGamma = val;
 }
 
-///////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PhysicsList::SetElectronCut(G4double val)
 {
   cutForElectron = val;
 }
 
-////////////////////////////////////////////////////////////////////////////
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F02PhysicsList::SetMaxStep(G4double step)
 {
-  MaxChargedStep = step ;
+  MaxChargedStep = step;
   G4cout << " MaxChargedStep=" << MaxChargedStep << G4endl;
   G4cout << G4endl;
 }
-
