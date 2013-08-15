@@ -33,7 +33,6 @@
 
 #include "TrackingAction.hh"
 
-#include "DetectorConstruction.hh"
 #include "RunAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
@@ -42,10 +41,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
+TrackingAction::TrackingAction(RunAction* run,
                                PrimaryGeneratorAction* kin)
 :G4UserTrackingAction(),
- fDetector(det), fRunAction(run), fKinematic(kin)
+ fRunAction(run), fKinematic(kin)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

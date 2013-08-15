@@ -32,7 +32,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "DetectorConstruction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
@@ -42,10 +41,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* RuAct,
+SteppingAction::SteppingAction(RunAction* RuAct,
                                EventAction* event)
 :G4UserSteppingAction(),
- fDetector(det), fRunAction(RuAct), fEventAction(event)
+ fRunAction(RuAct), fEventAction(event)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

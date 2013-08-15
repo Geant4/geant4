@@ -33,7 +33,6 @@
 
 #include "PrimaryGeneratorAction.hh"
 
-#include "DetectorConstruction.hh"
 #include "PrimaryGeneratorMessenger.hh"
 
 #include "G4Event.hh"
@@ -46,10 +45,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
+PrimaryGeneratorAction::PrimaryGeneratorAction()
 :G4VUserPrimaryGeneratorAction(),                                               
  fParticleGun(0),
- fDetector(det),
  fRndmBeam(0),
  fGunMessenger(0)
 {

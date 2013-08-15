@@ -37,7 +37,6 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
-class DetectorConstruction;
 class RunAction;
 class PrimaryGeneratorAction;
 
@@ -46,13 +45,12 @@ class PrimaryGeneratorAction;
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*, RunAction*, PrimaryGeneratorAction*);
+    TrackingAction(RunAction*, PrimaryGeneratorAction*);
    ~TrackingAction() {};
    
     virtual void PostUserTrackingAction(const G4Track*);
     
   private:
-    DetectorConstruction*   fDetector;
     RunAction*              fRunAction;
     PrimaryGeneratorAction* fKinematic;
 };

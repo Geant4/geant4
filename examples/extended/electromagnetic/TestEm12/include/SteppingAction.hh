@@ -36,7 +36,6 @@
 
 #include "G4UserSteppingAction.hh"
 
-class DetectorConstruction;
 class RunAction;
 class EventAction;
 
@@ -45,13 +44,12 @@ class EventAction;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*,RunAction*,EventAction*);
+    SteppingAction(RunAction*,EventAction*);
    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
     
   private:
-    DetectorConstruction* fDetector;
     RunAction*            fRunAction;
     EventAction*          fEventAction;
 };

@@ -72,7 +72,7 @@ int main(int argc,char** argv) {
    PrimaryGeneratorAction* kin;
   runManager->SetUserInitialization(det  = new DetectorConstruction);
   runManager->SetUserInitialization(phys = new PhysicsList);
-  runManager->SetUserAction(kin = new PrimaryGeneratorAction(det));
+  runManager->SetUserAction(kin = new PrimaryGeneratorAction());
     
   //set user action classes
   RunAction*   run;
@@ -80,8 +80,8 @@ int main(int argc,char** argv) {
   
   runManager->SetUserAction(run   = new RunAction(det,phys,kin)); 
   runManager->SetUserAction(event = new EventAction(run));
-  runManager->SetUserAction(new TrackingAction(det,run,kin));  
-  runManager->SetUserAction(new SteppingAction(det,run,event));
+  runManager->SetUserAction(new TrackingAction(run,kin));  
+  runManager->SetUserAction(new SteppingAction(run,event));
 
   //get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -118,4 +118,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
