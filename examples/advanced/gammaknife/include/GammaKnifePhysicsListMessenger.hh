@@ -58,7 +58,6 @@ private:
   G4UIcmdWithADoubleAndUnit* electCutCmd;
   G4UIcmdWithADoubleAndUnit* protoCutCmd;    
   G4UIcmdWithADoubleAndUnit* allCutCmd;    
-  G4UIcmdWithADoubleAndUnit* allDetectorCmd;    
 };
 
 #endif

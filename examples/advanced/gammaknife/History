@@ -7,6 +7,10 @@ francesco.romano@lns.infn.it
              History file of the GammaKnife application
          ====================================================
 
+30.07.2013 A.Dotti;        Tag: gammaknife-V09-06-00
+           - Removing unused data members (clang32 compilation 
+	     warning)
+
 16.11.2012 J.Allison;      Tag: gammaknife-V09-05-06
            - gammaknife.cc: Removed unnecessary #include "G4UIXm.hh".
 
