@@ -29,7 +29,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -76,7 +76,7 @@ int main(int argc,char** argv) {
   RunAction* run;  
   runManager->SetUserAction(run = new RunAction(det,prim)); 
   runManager->SetUserAction(new EventAction);
-  runManager->SetUserAction(new SteppingAction(prim,run));
+  runManager->SetUserAction(new SteppingAction(run));
    
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -96,7 +96,7 @@ int main(int argc,char** argv) {
 #endif    
 
 #ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
       ui->SessionStart();
       delete ui;
 #endif
@@ -113,4 +113,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

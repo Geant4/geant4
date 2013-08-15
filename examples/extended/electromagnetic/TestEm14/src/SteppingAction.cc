@@ -32,15 +32,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "HistoManager.hh"
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(PrimaryGeneratorAction* prim, RunAction* RuAct)
-:G4UserSteppingAction(),fPrimary(prim),fRunAction(RuAct)
+SteppingAction::SteppingAction(RunAction* RuAct)
+:G4UserSteppingAction(),fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
