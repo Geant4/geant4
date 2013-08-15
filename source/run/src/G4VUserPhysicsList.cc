@@ -234,7 +234,7 @@ void G4VUserPhysicsList::InitializeProcessManager()
   G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
-//  G4cout << "Particle table is held by G4VUserPhysicsList::InitializeProcessManager" << G4endl;
+  G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
 
   // loop over all particles in G4ParticleTable
   theParticleIterator->reset();
@@ -246,10 +246,22 @@ void G4VUserPhysicsList::InitializeProcessManager()
       // create process manager if the particle has no its one
       pmanager = new G4ProcessManager(particle);
       particle->SetProcessManager(pmanager);
-
       if( particle->GetMasterProcessManager() == 0 ) particle->SetMasterProcessManager(pmanager);
     }
-      
+  }
+
+  if(gion)
+  {
+    G4ProcessManager* gionPM = gion->GetProcessManager();
+    // loop over all particles once again (this time, with all general ions)
+    theParticleIterator->reset(false);
+    while( (*theParticleIterator)() ){
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      if(particle->IsGeneralIon())
+      {
+        particle->SetProcessManager(gionPM);
+      }
+    }
   }
 
   //release lock for particle table accesses.

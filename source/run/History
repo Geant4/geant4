@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Aug 14th, 2013, M.Asai (run-V09-06-80)
+- G4VUserPhysicsList takes care of setting the process manager pointer
+  of GenericIon to all the general ions for worker threads.
+
 Aug 7th, 2013, M.Asai (run-V09-06-79)
 - G4WorkerRunManager no longer has a for-loop for the event loop, but it
   asks G4MTRunManager to process another event. With this modification,

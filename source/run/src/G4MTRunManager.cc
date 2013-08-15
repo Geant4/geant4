@@ -534,8 +534,10 @@ void G4MTRunManager::ThisWorkerReady()
 #ifdef WIN32
     LeaveCriticalSection( &cs1 );
 #endif
-    const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).NewSubInstances();
-    G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
+
+// I believe this is not necessary and safe to remove (Makoto)
+//    const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).NewSubInstances();
+//    G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
 }
 
 
