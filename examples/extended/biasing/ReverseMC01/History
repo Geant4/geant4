@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-July, 2013  P.Gumplinger    (ReverseMC01-V09-06-03)
+- fix clang32 compilation warnings
+
 12-June, 2013  I.Hrivnacova    (ReverseMC01-V09-06-02)
 - Applied coding guidelines (virtual keyword, data members initialization)
 - Code clean-up: indention, redundant public/protected/private keywords

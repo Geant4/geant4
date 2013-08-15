@@ -126,7 +126,6 @@ class VariableLengthPartition
   private:
     size_t nbin;
     side   conv;
-    long   location;
 
     std::vector<double> bin;
 }

@@ -43,8 +43,9 @@
 //           -registering in  Conv* ASCII files every 5000 events the computed
 //                edep with  precision.
 //           -Correction of the adjoint computed current and answer matrices
-//                by a factor n_asked/n_processed for the case where a run is aborted
-//                because the user expected precision on e_dep has been reached.
+//                by a factor n_asked/n_processed for the case where a run
+//                is aborted because the user expected precision on e_dep has
+//                been reached.
 //
 //-------------------------------------------------------------
 
@@ -68,7 +69,7 @@ class Histo2DVar;
 class G4Timer;
 class RMC01AnalysisManagerMessenger;
 
-enum PRIM_SPECTRUM_TYPE{EXPO,POWER}; 
+enum PRIM_SPECTRUM_TYPE{EXPO,POWER};
 
 class G4Step;
 
@@ -77,15 +78,15 @@ class G4Step;
 class RMC01AnalysisManager
 {
 public:
-  
+
   ~RMC01AnalysisManager();
   static RMC01AnalysisManager* GetInstance();
-  
-   void BeginOfRun(const G4Run*); 
-   void EndOfRun(const G4Run*); 
-   void BeginOfEvent(const G4Event*); 
-   void EndOfEvent(const G4Event*); 
-   
+
+   void BeginOfRun(const G4Run*);
+   void EndOfRun(const G4Run*);
+   void BeginOfEvent(const G4Event*);
+   void EndOfEvent(const G4Event*);
+ 
    void SetPrimaryExpSpectrumForAdjointSim(
                                   const G4String& particle_name,
                                   G4double fluence,
@@ -101,8 +102,8 @@ private:
 
   static RMC01AnalysisManager* fInstance;
 
-  RMC01AnalysisManager(); 
-  
+  RMC01AnalysisManager();
+
   void EndOfEventForForwardSimulation(const G4Event* anEvent);
   void EndOfEventForAdjointSimulation(const G4Event* anEvent);
   G4double PrimDiffAndDirFluxForAdjointSim(G4double prim_energy);
@@ -113,20 +114,16 @@ private:
   void ResetHistograms();
   void ComputeMeanEdepAndError(const G4Event* anEvent,
                                 G4double& mean,G4double& error);
-  
+
   RMC01AnalysisManagerMessenger*  fMsg;
-  
+
   //Histos for  fwd simulation
   //--------------
   Histo1DVar* fEdep_vs_prim_ekin;
   Histo1DVar* fElectron_current;
   Histo1DVar* fProton_current;
   Histo1DVar* fGamma_current;
-  
-  //Fluence
-  //------------
-  G4double fOmni_fluence_for_fwd_sim;
-  
+
   //Variable to check the convergence of the energy deposited
   //            for forward and adjoint simulations
   //---------------------------------------------------------
@@ -139,24 +136,22 @@ private:
   G4double fPrecision_to_reach;
   G4bool fStop_run_if_precision_reached;
   G4int fNb_evt_modulo_for_convergence_test;
-  
-  
+
   //Histos for adjoint simulation
   //-----------------------------
   Histo1DVar* fEdep_rmatrix_vs_electron_prim_energy;
   Histo2DVar* fElectron_current_rmatrix_vs_electron_prim_energy;
   Histo2DVar* fGamma_current_rmatrix_vs_electron_prim_energy;
-  
+
   Histo1DVar* fEdep_rmatrix_vs_gamma_prim_energy;
   Histo2DVar* fElectron_current_rmatrix_vs_gamma_prim_energy;
   Histo2DVar* fGamma_current_rmatrix_vs_gamma_prim_energy;
-  
+
   Histo1DVar* fEdep_rmatrix_vs_proton_prim_energy;
   Histo2DVar* fElectron_current_rmatrix_vs_proton_prim_energy;
   Histo2DVar* fProton_current_rmatrix_vs_proton_prim_energy;
   Histo2DVar* fGamma_current_rmatrix_vs_proton_prim_energy;
-  
-  
+
   //Prim spectrum to which the adjoint simulation will be normalised
   //Answer matrices will be also registered for post processing
   //normalisation
