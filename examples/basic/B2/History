@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14/08/13 P. Gumplinger (exampleB2-V09-06-05)
+- remove static comment in B2MagneticField.hh for GetGlobalFieldManager
+
 26/06/13 G. Cosmo (exampleB2-V09-06-04)
 - Fixed use of G4Random instead of HepRandom in B2b.
 

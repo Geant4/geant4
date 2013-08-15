@@ -54,7 +54,7 @@ class B2MagneticField : public G4UniformMagField
       
   protected:
     // Find the global Field Manager
-    G4FieldManager* GetGlobalFieldManager(); // static 
+    G4FieldManager* GetGlobalFieldManager();
 
     B2FieldMessenger* fMessenger;
 };
