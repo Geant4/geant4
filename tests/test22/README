@@ -2,24 +2,23 @@
  Test22 is aimed for testing of FTF model and for a comparison
  of FTF results with corresponding experimental data.
  
- Data, input (kind of "macro") files, Root macros, and shell scripts
- are not in  this directory, but in: verification/hadronic/test22 .
+ Data, input (kind of "macro") files, ROOT macros, and shell scripts
+ are not in this directory, but in: verification/hadronic/test22 .
 
- Contents of  subdirectories "src", "include" are based on test30.
+ Contents of  subdirectories "src" and "include" are based on test30.
 
  Other subdirectories contain codes for defined reactions. 
  The name of subdirectory shows reaction information stored in it.
  For example:
- -  Subdirectory ChipsX allows one to calculate Chips total and elastic
+
+ -  Subdirectory ChipsX allows to calculate Chips total and elastic
     cross sections. 
-    Data, input files, Root macros, and shell scripts are kept in the
+    Data, input files, ROOT macros, and shell scripts are kept in the
     corresponding subdirectory of verification:
       verification/hadronic/test22/ChipsX
+
  -  Subdirectory KmPchan allows one to calculate K- Proton interaction 
     channel cross sections using FTF model.
-    Data, input files, Root macros, and shell scripts are kept in the
+    Data, input files, ROOT macros, and shell scripts are kept in the
     corresponding subdirectory of verification:
       verification/hadronic/test22/KmPchan
-
- 
-      

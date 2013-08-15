@@ -15,6 +15,27 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
 -------------------------------------------------------------------------
 
+26 July 2013 Alberto Ribon                         (test22-V09-06-17)
+---------------------------------------------------------------------
+Trying to fix a problem in Windows by using EXCLUDE_FROM_ALL in the
+CMakeLists.txt file, as suggested by Ben.
+
+26 July 2013 Alberto Ribon                         (test22-V09-06-16)
+---------------------------------------------------------------------
+Following a new suggestion by Ben, all the CMake build commands are
+now condensed into one single, main CMakeLists.txt, whereas the
+CMakeLists.txt files in the subdirectories are deleted.
+
+24/25 July 2013 Alberto Ribon/P Gumplinger  (test22-V09-06-14 / - 15)
+---------------------------------------------------------------------
+Changed all CMakeLists.txt (following Ben's suggestion) to factorize
+into a common library the shared code between all tests; retagged as
+test22-V09-06-15.
+
+23 July 2013 Alberto Ribon                         (test22-V09-06-13)
+---------------------------------------------------------------------
+Renamed all main source files, xxx.cc, as test22_xxx.cc.
+
 17 July 2013 Alberto Ribon                         (test22-V09-06-12)
 ---------------------------------------------------------------------
 Fixed some extra Clang warnings related to pz=pz and pt=pt.
