@@ -47,8 +47,8 @@ class G4LogicalVolume;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*, RunAction*, PrimaryGeneratorAction*,
-                   EventAction*, HistoManager*);
+    SteppingAction(DetectorConstruction*,
+                   EventAction*);
    ~SteppingAction();
 
     void UserSteppingAction(const G4Step*);
@@ -57,10 +57,7 @@ class SteppingAction : public G4UserSteppingAction
     
   private:
     DetectorConstruction* detector;
-    RunAction*              runAct;
-    PrimaryGeneratorAction* primary;        
     EventAction*            eventAct;
-    HistoManager*           histoManager;
     
     G4bool           first;
     G4LogicalVolume* lvol_world;

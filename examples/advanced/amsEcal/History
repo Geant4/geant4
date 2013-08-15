@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-01-04-12 A.Dotti (amsEcla-V09-06-00)
+30-07-13 A.Dotti (amsEcal-V09-06-01)
+- Bug fixing for clang32: warning unused private data field
+
+01-04-13 A.Dotti (amsEcla-V09-06-00)
 - Porting to new G4VUserPhysicsList split-class mechanism 
 
 28-11-12 G.Cosmo (amsEcal-V09-05-03)

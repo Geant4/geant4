@@ -80,9 +80,11 @@ class HistoManager
     G4String                 fileName[2];
     G4String                 fileType;
     G4String                 fileOption;
-    G4bool                   factoryOn;                    
-    AIDA::IAnalysisFactory*  af;        
+#ifdef G4ANALYSIS_USE
+    G4bool                   factoryOn;
+    AIDA::IAnalysisFactory*  af;
     AIDA::ITree*             tree;
+#endif
     
     AIDA::IHistogram1D*      histo[MaxHisto];    
     G4bool                   exist[MaxHisto];

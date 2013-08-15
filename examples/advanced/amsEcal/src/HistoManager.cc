@@ -39,7 +39,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:factoryOn(false),af(0),tree(0)
+#ifdef G4ANALYSIS_USE
+: factoryOn(false),af(0),tree(0)
+#endif
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory

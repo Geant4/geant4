@@ -35,17 +35,15 @@
 #include "G4ParticleGun.hh"
 #include "globals.hh"
 
-class G4Event;
 class DetectorConstruction;
 class PrimaryGeneratorMessenger;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    PrimaryGeneratorAction(DetectorConstruction*, HistoManager*);    
+    PrimaryGeneratorAction(DetectorConstruction*);    
    ~PrimaryGeneratorAction();
 
   public:
@@ -57,8 +55,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   private:
     G4ParticleGun*         particleGun;
     DetectorConstruction*  Detector;
-    HistoManager*          histoManager;        
-    G4double               beam;          //lateral beam extension   
+    G4double               beam;          //lateral beam extension
     
     PrimaryGeneratorMessenger* gunMessenger; 
 };
