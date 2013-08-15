@@ -29,6 +29,13 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+23rd July 2013 - Gunter Folger (cmake-V09-06-20)
+- Update datasets for NDL to NDL4.4
+
+23rd July 2013 - Ben Morgan (cmake-V09-06-19)
+- Modules/Geant4InstallData.cmake : Remove GEANT4_INSTALL_EXAMPLES option.
+  Always install example/ directory, move installation scripting into 
+  the top level CMakeLists.txt.
 
 25th June 2013 - John Apostolakis (cmake-V09-06-18)
 - Added FindTBB.cmake module for Intel Threading-Building-Blocks library.

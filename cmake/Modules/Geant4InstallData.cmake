@@ -1,31 +1,4 @@
-# - Configure and install read only architecture independent files
-# There are only two main items to install here:
-#
-#  Geant4 Examples - basically everything under the 'examples' directory.
-#
-#  Geant4 Data Libraries - not supplied with code, these are reused from
-#                          available pre-existing installed and optionally
-#                          downloaded and installed from the net.
-#
-
-#-----------------------------------------------------------------------
-# Install examples if requested
-#
-option(GEANT4_INSTALL_EXAMPLES "Install source code for Geant4 examples" OFF)
-mark_as_advanced(GEANT4_INSTALL_EXAMPLES)
-
-if(GEANT4_INSTALL_EXAMPLES)
-  install(DIRECTORY examples
-    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
-    COMPONENT Examples
-    PATTERN "CVS" EXCLUDE
-    PATTERN ".svn" EXCLUDE
-    )
-endif()
-
-GEANT4_ADD_FEATURE(GEANT4_INSTALL_EXAMPLES "Will install source code for Geant4 examples")
-
-# - Top level build script of Geant4Data
+# - Configure and install Geant4 Data Libraries
 # The following functions and macros are defined to help define, install,
 # reuse and export datasets and associated variables.
 #
