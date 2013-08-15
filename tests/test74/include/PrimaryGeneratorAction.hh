@@ -34,7 +34,7 @@
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
-#include "DetectorConstruction.hh"
+class DetectorConstruction;
 #include "G4Event.hh"
 #include "G4ParticleTable.hh"
 
@@ -54,6 +54,5 @@ private:
 
   G4String primaryParticleName ;
   G4ParticleGun*           particleGun;
-  DetectorConstruction*    Detector;
 };
 #endif

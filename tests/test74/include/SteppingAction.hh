@@ -52,8 +52,6 @@ public:
 private:
 
   RunAction*              Run;
-  DetectorConstruction*   Detector; 
-  PrimaryGeneratorAction* Primary;
-      
+
 };
 #endif

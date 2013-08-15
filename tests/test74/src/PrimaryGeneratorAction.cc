@@ -34,8 +34,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-:Detector(DC)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction*)
 {
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);

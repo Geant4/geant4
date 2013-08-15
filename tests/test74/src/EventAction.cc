@@ -30,7 +30,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "EventAction.hh"
-#include "RunAction.hh"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -41,8 +40,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-EventAction::EventAction(RunAction* run)
-:Run(run)
+EventAction::EventAction(RunAction*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

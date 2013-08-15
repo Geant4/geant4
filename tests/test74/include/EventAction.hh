@@ -50,7 +50,6 @@ public:
     void EndOfEventAction(const G4Event*);
         
 private:
-  
-    RunAction*        	     Run;
-};
+
+  };
 #endif

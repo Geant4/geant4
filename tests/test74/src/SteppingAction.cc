@@ -31,8 +31,6 @@
 
 #include "SteppingAction.hh"
 #include "RunAction.hh"
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -42,8 +40,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,PrimaryGeneratorAction* pri)
-:Run(run),Detector(det),Primary(pri)
+SteppingAction::SteppingAction(RunAction* run,DetectorConstruction*,PrimaryGeneratorAction*)
+:Run(run)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
