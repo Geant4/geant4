@@ -77,7 +77,6 @@ private:
   
   G4int    fNbOfCrystals;                // Nb of chambers in the tracker region
   G4double fCrystalWidth;                // width of the chambers
-  G4double fCrystalWidht;
   G4double fCrystalLenght;
   //@@@  ExGflashDetectorConstruction : wie mache ich das am besten ?
   G4Box *fCrystal[100];      

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-Jul-2013, Peter Gumplinger (exgflash-V09-06-02)
+- fix MAC/clang32 compilation warnings
+ 
 16-Jul-2013, Marc Verderi (exgflash-V09-06-01)
 - Migration to MT
 
