@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-07-13 A.Ribon      (materials-V09-06-20)
+- Added forgotten initialization of elm2Data in the default
+  constructor of G4ElementData.
+
 01-07-13 V.Ivanchenko (materials-V09-06-19)
 - G4NistMaterialBuilder - make all access/print methods to be const;
     added formatting of printout (bug #1423)

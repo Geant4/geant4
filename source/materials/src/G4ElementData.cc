@@ -50,6 +50,7 @@ G4ElementData::G4ElementData()
   name = "";
   for(G4int i=0; i<maxNumElements; ++i) {
     elmData[i] = 0;
+    elm2Data[i] = 0;
     compLength[i] = 0;
   }
 }
