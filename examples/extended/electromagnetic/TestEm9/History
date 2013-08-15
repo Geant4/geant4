@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-07-13 P.Gumplinger (testem9-V09-06-06)
+- comply with compiler warnings about unused class fields in HistoManager.hh
+
 01-04-13 A.Dotti (testem9-V09-06-03,testem9-V09-06-04,testem9-V09-06-05)
 - New G4VUserPhysicsList interface needed for MT
      

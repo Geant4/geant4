@@ -130,14 +130,14 @@ private:
 
   G4double fTrackLength;
   G4double fStep;
-  G4double fStepTarget;
+//  G4double fStepTarget;
   G4bool fTrackAbs;        // Track is in absorber
   G4int fEvt;
   G4int fElec;
   G4int fPosit;
   G4int fGam;
-  G4int fGamph;
-  G4int fGamTar;
+//  G4int fGamph;
+//  G4int fGamTar;
   G4int fLowe;
   G4int fBinsE, fBinsEA, fBinsED;
 
