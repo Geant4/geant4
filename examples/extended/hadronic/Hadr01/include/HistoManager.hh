@@ -116,7 +116,6 @@ private:
   G4double fEdepP;
   G4double fEdepSum;
   G4double fEdepSum2;
-  G4double fBeamEnergy;
   G4double fLength;
   G4double fAbsZ0;
   G4double fPrimaryKineticEnergy;
