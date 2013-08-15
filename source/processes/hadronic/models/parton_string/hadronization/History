@@ -15,6 +15,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29-July-2013, H.Kurashige  (had-hadronization-V09-06-01)
+- Remove inclusion of G4ShortLivedTable.hh (G4VLongitudinalStringDecay.cc) 
+
 02-May-2013, A.Ribon       (had-hadronization-V09-06-00)
 - For thread safety, replaced CLHEP::RandFlat with G4RandFlat in
   G4VLongitudinalStringDecay.cc.

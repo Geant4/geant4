@@ -45,7 +45,6 @@
 #include "G4VShortLivedParticle.hh"
 #include "G4ShortLivedConstructor.hh"
 #include "G4ParticleTable.hh"
-#include "G4ShortLivedTable.hh"
 #include "G4PhaseSpaceDecayChannel.hh"
 #include "G4VDecayChannel.hh"
 #include "G4DecayTable.hh"
