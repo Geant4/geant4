@@ -187,7 +187,6 @@ void Tst13PhysicsList::ConstructEM()
 // Hadron Processes
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
 
 #include "G4PionPlusInelasticProcess.hh"
@@ -216,31 +215,17 @@ void Tst13PhysicsList::ConstructEM()
 #include "G4OmegaMinusInelasticProcess.hh"
 #include "G4AntiOmegaMinusInelasticProcess.hh"
 
-// Low-energy models
-#include "G4LElastic.hh"
-#include "G4LFission.hh"
-#include "G4LCapture.hh"
-
-// #include "G4LEKaonZeroSInelastic.hh"
-// #include "G4LEKaonZeroLInelastic.hh"
-/*
-#include "G4LEAntiProtonInelastic.hh"
-#include "G4LEAntiNeutronInelastic.hh"
-#include "G4LEAntiLambdaInelastic.hh"
-#include "G4LEAntiSigmaPlusInelastic.hh"
-#include "G4LEAntiSigmaMinusInelastic.hh"
-#include "G4LEAntiXiZeroInelastic.hh"
-#include "G4LEAntiXiMinusInelastic.hh"
-#include "G4LEDeuteronInelastic.hh"
-#include "G4LETritonInelastic.hh"
-#include "G4LEAlphaInelastic.hh"
-#include "G4LEAntiOmegaMinusInelastic.hh"
-*/
+// Elastic scattering model
+#include "G4HadronElastic.hh"
 
 // Medium-energy models
 #include "G4CascadeInterface.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4QMDReaction.hh"
+#include "G4NeutronRadCapture.hh"
+
+// Neutron capture cross sections
+#include "G4NeutronCaptureXS.hh"
 
 // High-energy and generator models
 #include "G4TheoFSGenerator.hh"
@@ -317,12 +302,12 @@ void Tst13PhysicsList::ConstructHad()
   G4VLongitudinalStringDecay* theFragmentation = new G4QGSMFragmentation;
   G4ExcitedStringDecay* theStringDecay = new G4ExcitedStringDecay(theFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
-
   // done with the generator model (most of the above is also available as default)
+
+  // Basic elastic scattering - default energy range and cross sections
   G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
-  G4LElastic* theElasticModel = new G4LElastic;
-  theElasticProcess->RegisterMe(theElasticModel);
-  G4HadronElasticProcess* theElasticProcess1 = new G4HadronElasticProcess;
+  G4HadronElastic* elasticModel = new G4HadronElastic();
+  theElasticProcess->RegisterMe(elasticModel);
 
   // FTFP model for hadrons above 19 GeV 
   G4TheoFSGenerator* ftfp_hi = new G4TheoFSGenerator;
@@ -418,9 +403,7 @@ void Tst13PhysicsList::ConstructHad()
 
     } else if (particleName == "neutron") {     
       // elastic scattering
-      G4LElastic* theElasticModel1 = new G4LElastic;
-      theElasticProcess1->RegisterMe(theElasticModel1);
-      pmanager->AddDiscreteProcess(theElasticProcess1);
+      pmanager->AddDiscreteProcess(theElasticProcess);
 
       // inelastic scattering
       G4NeutronInelasticProcess* theInelasticProcess = 
@@ -429,16 +412,12 @@ void Tst13PhysicsList::ConstructHad()
       theInelasticProcess->RegisterMe(theTheoModel);
       pmanager->AddDiscreteProcess(theInelasticProcess);
 
-      // fission
-      G4HadronFissionProcess* theFissionProcess = new G4HadronFissionProcess;
-      G4LFission* theFissionModel = new G4LFission;
-      theFissionProcess->RegisterMe(theFissionModel);
-      pmanager->AddDiscreteProcess(theFissionProcess);
-
       // capture
       G4HadronCaptureProcess* theCaptureProcess = new G4HadronCaptureProcess;
-      G4LCapture* theCaptureModel = new G4LCapture;
-      theCaptureProcess->RegisterMe(theCaptureModel);
+      G4NeutronRadCapture* captureModel = new G4NeutronRadCapture;
+      theCaptureProcess->RegisterMe(captureModel);
+      G4NeutronCaptureXS* theCaptureXS = new G4NeutronCaptureXS;
+      theCaptureProcess->AddDataSet(theCaptureXS);
       pmanager->AddDiscreteProcess(theCaptureProcess);
 
     } else if (particleName == "anti_neutron") {
@@ -566,7 +545,7 @@ void Tst13PhysicsList::ConstructHad()
 }
 
 void Tst13PhysicsList::ConstructLeptHad()
-{;}
+{}
 
 #include "G4Decay.hh"
 void Tst13PhysicsList::ConstructGeneral()
