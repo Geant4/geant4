@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-07-13  P.Gumplinger (exhadr03-V09-06-21)
+- fix MAC/clang32 compilation warnings
+
 11-07-13 I.Hrivnacova (exhadr03-V09-06-20) 
 - In HistoManager: use new analysis manager method SetH1Activation()   
 
