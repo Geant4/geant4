@@ -26,6 +26,15 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+30th July 2013  John Allison  (visman-V09-06-09)
+- G4VisManager.cc:
+  o Added missing fDirectoryList.push_back for /vis/touchable/.
+    Fixes Bug 1503.
+  o Removed check on fpSceneHandler->GetModel() in
+    G4VisManager::DispatchToModel.  This was a bug introduced during the
+    elimination of i_mode.  Fixes Bug 1499 (whereby
+    trajectory->DrawTrajectory() had stopped working).
+
 10th June 2013  John Allison  (visman-V09-06-07)
 - G4ViewParameters.cc: Migrated to modeling-V09-06-06:
   o Replaced PVNameCopyNoPathNotEqual by appropriate operator!=.

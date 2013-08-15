@@ -435,6 +435,7 @@ void G4VisManager::RegisterMessengers () {
   
   directory = new G4UIdirectory ("/vis/touchable/");
   directory -> SetGuidance ("Operations on touchables.");
+  fDirectoryList.push_back (directory);
   directory = new G4UIdirectory ("/vis/touchable/set/");
   directory -> SetGuidance ("Set vis attributes of current touchable.");
   fDirectoryList.push_back (directory);
@@ -1137,11 +1138,7 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory)
   assert (0 != trajectoryModel); // Should exist
 
   if (IsValidView()) {
-    G4TrajectoriesModel* trajectoriesModel =
-      dynamic_cast<G4TrajectoriesModel*>(fpSceneHandler->GetModel());
-    if (trajectoriesModel) {
       trajectoryModel->Draw(trajectory, visible);
-    }
   }
 }
 

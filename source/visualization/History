@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+30th July 2013  John Allison  (vis-V09-06-19)
+- visman-V09-06-08: Fixes Bugs 1499 and 1503.
+
 17th June 2013  John Allison  (vis-V09-06-18)
 - gMocren-V09-06-06: Reverted snprintf to sprintf.
   o snprintf not in cstdlib on Windows.
