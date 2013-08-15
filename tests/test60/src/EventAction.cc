@@ -41,8 +41,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-EventAction::EventAction(RunAction* run)
-:Run(run)
+EventAction::EventAction(RunAction*)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

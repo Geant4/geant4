@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 July 2013  S.Incerti tag test60-V09-06-06
+            - Fixed MAC/clang32 warning
+
+30 July 2013  S.Incerti tag test60-V09-06-05
+            - Fixed MAC/clang32 warning
+
 11 June 2013  M.Karamitros tag test60-V09-06-04
             - Convert RunAction::fProcCounter into an object rather than a pointer
 
