@@ -12,6 +12,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 July 2013  Dennis Wright  (test61-V09-06-04)
+-----------------------------------------------
+- Tst61PhysicsList: remove fission (redundant) and replace G4LCapture model
+  with G4NeutronRadCapture
+
 3 July 2013  Dennis Wright  (test61-V09-06-03)
 ----------------------------------------------
 - Tst61PhysicsList: complete the removal of LEP models and clean up

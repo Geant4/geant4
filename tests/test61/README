@@ -30,7 +30,6 @@ Building:      This test has a special CMakeLists.txt to be used only by system
                3. Clean up (if necessary) and re-configure, assuming a 64 bit machine
                   and Geant4 version 9.6:
 
-                  rm test61
                   cmake .
 
               4. Build test61:
