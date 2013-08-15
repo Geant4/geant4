@@ -96,7 +96,6 @@ private:
 	G4String AcceleratorName, AcceleratorMacFileName, nextAcceleratorXRotationName;
 
 	G4VPhysicalVolume *PVAccWorld;
-	G4RotationMatrix *rotation;
 	G4int idCurrentRotationX;
 	G4double currentRotationX, isoCentre, Z_Value_PhaseSpaceBeforeJaws;
 	std::vector <G4double> rotationsX;

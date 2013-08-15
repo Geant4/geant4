@@ -15,6 +15,9 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26.07.2013    P. Gumplinger, tag medical_linac-V09-06-01
+              fix clang32 compilation warnings
+
 14.12.2012    A. Ribon, tag medical_linac-V09-06-00
               - Removed obsolete G4HadronQElasticPhysics.
 

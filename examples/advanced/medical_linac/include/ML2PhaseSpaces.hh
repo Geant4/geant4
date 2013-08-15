@@ -67,7 +67,6 @@ public:
 	inline void save(){sensDetParticle->save();}
 private:
 	CML2SDWithParticle *sensDetParticle;
-	G4int nParticles;
 
         G4VPhysicalVolume *phVol;
 

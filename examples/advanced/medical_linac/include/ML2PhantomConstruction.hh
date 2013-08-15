@@ -87,7 +87,6 @@ private:
 	void createPhysicalVolumeNamesList(G4VPhysicalVolume  *PV);
 	CML2PhantomConstructionMessenger *phantomContstructionMessenger;
 	static CML2PhantomConstruction * instance;
-	G4int nVoxelsX, nVoxelsY, nVoxelsZ;
 	G4String phantomName, PhantomFileName ;
 
 	G4VPhysicalVolume *PVPhmWorld;

@@ -74,7 +74,6 @@ public:
 	void SetNewValue(G4UIcommand* cmd, G4String newValue);
 private:
 	CML2CInputData *CInputData;
-	CML2Main *ML2Main;
 
 	G4UIcmdWith3VectorAndUnit *phaseSpaceCentre, *phaseSpaceHalfSize;
 	G4UIcmdWithAString *phaseSPaceOutFile, *ROGOutFile;
