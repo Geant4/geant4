@@ -38,7 +38,6 @@
 #include "globals.hh"
 
 class DetectorConstruction;
-class PrimaryGeneratorAction;
 class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,14 +45,13 @@ class RunAction;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(DetectorConstruction*, PrimaryGeneratorAction*, RunAction*);
+    SteppingAction(DetectorConstruction*, RunAction*);
    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
     
   private:
     DetectorConstruction*   fDetector;
-    PrimaryGeneratorAction* fPrimary;
     RunAction*              fRunAction;
 };
 

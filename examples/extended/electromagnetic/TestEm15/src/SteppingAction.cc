@@ -33,7 +33,6 @@
 
 #include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "HistoManager.hh"
 
@@ -42,8 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* det,
-                               PrimaryGeneratorAction* prim, RunAction* RuAct)
-:G4UserSteppingAction(),fDetector(det), fPrimary(prim), fRunAction(RuAct)
+                               RunAction* RuAct)
+:G4UserSteppingAction(),fDetector(det), fRunAction(RuAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
