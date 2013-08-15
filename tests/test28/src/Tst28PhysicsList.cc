@@ -194,7 +194,6 @@ void Tst28PhysicsList::ConstructEM()
 // Hadron Processes
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
 
 #include "G4PionPlusInelasticProcess.hh"
@@ -224,13 +223,15 @@ void Tst28PhysicsList::ConstructEM()
 #include "G4OmegaMinusInelasticProcess.hh"
 #include "G4AntiOmegaMinusInelasticProcess.hh"
 
-// Low-energy Models
-
+// Low energy Models
 #include "G4HadronElastic.hh"
-#include "G4LFission.hh"
-#include "G4LCapture.hh"
+#include "G4HadronCaptureProcess.hh"
 
-// -- geneator models
+// Neutron capture model and cross sections
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronCaptureXS.hh"
+
+// Geneator models
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4Evaporation.hh"
@@ -238,8 +239,7 @@ void Tst28PhysicsList::ConstructEM()
 #include "G4FermiBreakUp.hh"
 #include "G4StatMF.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
-#include "G4Fancy3DNucleus.hh"
-#include "G4LEProtonInelastic.hh"
+// #include "G4Fancy3DNucleus.hh"
 #include "G4StringModel.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4QGSModel.hh"
@@ -260,16 +260,7 @@ void Tst28PhysicsList::ConstructEM()
 #include "G4EMDissociationCrossSection.hh"
 #include "G4WilsonAbrasionModel.hh"
 
-//
 // ConstructHad()
-//
-// Makes discrete physics processes for the hadrons, at present limited
-// to those particles with GHEISHA interactions (INTRC > 0).
-// The processes are: Elastic scattering, Inelastic scattering,
-// Fission (for neutron only), and Capture (neutron).
-//
-// F.W.Jones  06-JUL-1998
-//
 
 void Tst28PhysicsList::ConstructHad()
 {
@@ -409,23 +400,20 @@ void Tst28PhysicsList::ConstructHad()
       // elastic scattering
       theElasticProcess1->RegisterMe(new G4HadronElastic());
       pmanager->AddDiscreteProcess(theElasticProcess1);
+
       // inelastic scattering
       G4NeutronInelasticProcess* theInelasticProcess = 
                                     new G4NeutronInelasticProcess("inelastic");
       theInelasticProcess->RegisterMe(theBC);
       theInelasticProcess->RegisterMe(theTheoModel);
       pmanager->AddDiscreteProcess(theInelasticProcess);
-      // fission
-      G4HadronFissionProcess* theFissionProcess =
-                                    new G4HadronFissionProcess;
-      G4LFission* theFissionModel = new G4LFission;
-      theFissionProcess->RegisterMe(theFissionModel);
-      pmanager->AddDiscreteProcess(theFissionProcess);
+
       // capture
-      G4HadronCaptureProcess* theCaptureProcess =
-                                    new G4HadronCaptureProcess;
-      G4LCapture* theCaptureModel = new G4LCapture;
-      theCaptureProcess->RegisterMe(theCaptureModel);
+      G4HadronCaptureProcess* theCaptureProcess = new G4HadronCaptureProcess;
+      G4NeutronRadCapture* captureModel = new G4NeutronRadCapture;
+      theCaptureProcess->RegisterMe(captureModel);
+      G4NeutronCaptureXS* theCaptureXS = new G4NeutronCaptureXS;
+      theCaptureProcess->AddDataSet(theCaptureXS);
       pmanager->AddDiscreteProcess(theCaptureProcess);
 
     } else if (particleName == "anti_neutron") {

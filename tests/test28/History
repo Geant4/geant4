@@ -12,6 +12,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 July 2013  Dennis Wright  (test28-V09-06-02)
+-----------------------------------------------
+- Tst28PhysicsList: remove fission process (redundant) and replace G4LCapture
+  with G4NeutronRadCapture
+
 2 July 2013  Dennis Wright  (test28-V09-06-01)
 ----------------------------------------------
 - Tst28PhysicsList: replace LEP models with Bertini and FTFP
