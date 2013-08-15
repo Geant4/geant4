@@ -12,6 +12,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 July 2013  Dennis Wright (test25-V09-06-03)
+----------------------------------------------
+- test25.in: increase events per run from 1 to 100
+- add CMakeLists_Standalone.txt to build test outside of system testing
+- README: update for building in cmake
+- Tst25PhysicsList.cc: remove all LE (Gheisha) models and replace with
+    Bertini, FTFP and BinaryLightIon models
+- fission process (including G4LFission model) removed (redundant)
+
 6 June 2013  Michael Kelsey (test25-V09-06-02)
 -  Continue MT compatibility migrations, per Gunter.  Add new
    Tst25ActionInitialization to replace runManager->SetUserAction() calls.

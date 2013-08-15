@@ -12,133 +12,133 @@
 /gun/particle proton
 /mydet/SelectMaterial Cu
 /gun/energy 50 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 100 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 800 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 1500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 3000 MeV
-/run/beamOn 1
+/run/beamOn 100
 #
 # neutron at 1 GeV in Cu
 #
 /gun/particle neutron
 /mydet/SelectMaterial Cu
 /gun/energy 50 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 100 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 800 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 1500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 3000 MeV
-/run/beamOn 1
+/run/beamOn 100
 #
 # proton at 1 GeV in U
 #
 /gun/particle proton
 /mydet/SelectMaterial U
 /gun/energy 50 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 100 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 800 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 1500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 3000 MeV
-/run/beamOn 1
+/run/beamOn 100
 #
 # neutron at 1 GeV in U
 #
 /gun/particle neutron
 /mydet/SelectMaterial U
 /gun/energy 50 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 100 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 800 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 1500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 3000 MeV
-/run/beamOn 1
+/run/beamOn 100
 #
 # proton at 1 GeV in Si
 #
 /gun/particle proton
 /mydet/SelectMaterial Si
 /gun/energy 50 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 100 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 800 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 1500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 3000 MeV
-/run/beamOn 1
+/run/beamOn 100
 #
 # neutron at 1 GeV in Si
 #
 /gun/particle neutron
 /mydet/SelectMaterial Si
 /gun/energy 50 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 100 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 800 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 1500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 3000 MeV
-/run/beamOn 1
+/run/beamOn 100
 #
 # proton at 1 GeV in H
 #
 /gun/particle proton
 /mydet/SelectMaterial H
 /gun/energy 50 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 100 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 800 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 1500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 3000 MeV
-/run/beamOn 1
+/run/beamOn 100
 #
 # neutron at 1 GeV in H
 #
 /gun/particle neutron
 /mydet/SelectMaterial H
 /gun/energy 50 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 100 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 800 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 1500 MeV
-/run/beamOn 1
+/run/beamOn 100
 /gun/energy 3000 MeV
-/run/beamOn 1
+/run/beamOn 100
