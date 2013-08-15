@@ -9,6 +9,9 @@ $Id$
                        Package History file
                        --------------------
 
+30 July 2013 - A.Dotti - microdosimetry-V09-06-05
+- Fix compilation warnings from clang32
+
 7 June 2013 - M. Karamitros - microdosimetry-V09-06-04
 - Remove unnecessary output
 

@@ -33,8 +33,6 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "DetectorConstruction.hh"
-
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 #include <iostream>
@@ -49,7 +47,7 @@ class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*);
+  RunAction();
   ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
@@ -84,7 +82,6 @@ private:
   /////////////////
   // Attributes
   //
-  DetectorConstruction* fpDetectorConstruction;    
   TrackingAction* fpTrackingAction;
   bool fInitialized;
   bool fDebug;

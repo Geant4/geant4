@@ -42,8 +42,7 @@ void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction(DetectorConstruction* det)
-:fpDetectorConstruction(det)
+RunAction::RunAction()
 {
 	fpTrackingAction = 0;
 	fInitialized = 0;

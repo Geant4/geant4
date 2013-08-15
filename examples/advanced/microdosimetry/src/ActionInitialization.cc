@@ -76,7 +76,7 @@ void ActionInitialization::Build() const
 	TrackingAction* trackingAction = new TrackingAction(fDetectorConstruction);
 	SetUserAction(trackingAction);
 
-	RunAction* runAction= new RunAction(fDetectorConstruction);
+	RunAction* runAction= new RunAction();
 	SetUserAction(runAction);
 
 	SetUserAction(new SteppingAction());
