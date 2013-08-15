@@ -61,6 +61,7 @@ void Tst18RunAction::BeginOfRunAction(const G4Run* aRun)
   Energies.clear();
   Weights.clear();
   Times.clear();
+  EventNumber = 0;
 }
 
 
@@ -87,6 +88,13 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
       << G4endl ;    
   }
   G4cout<< G4endl;
+
+  if(Particles.size()/EventNumber == 1) {
+    G4cout << " Abort " << G4endl;
+    G4Exception("Tst18RunAction::EndOfRunAction", "Tst18_00",
+		FatalException, "No Decay Products Found");
+  }
+
 }
 
 void Tst18RunAction::FillParticleName(G4String name)
@@ -107,5 +115,10 @@ void Tst18RunAction::FillWeight(G4double weight)
 void Tst18RunAction::FillTime(G4double time)
 {
   Times.push_back(time);
+}
+
+void Tst18RunAction::FillEventNumber()
+{
+  EventNumber++;
 }
 

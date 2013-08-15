@@ -52,6 +52,7 @@ class Tst18RunAction : public G4UserRunAction
     void FillEnergy(G4double);
     void FillWeight(G4double);
     void FillTime(G4double);
+    void FillEventNumber();
 
   private:
     G4String fileName;  // log file name for the run
@@ -61,6 +62,9 @@ class Tst18RunAction : public G4UserRunAction
     std::vector<G4double> Energies;
     std::vector<G4double> Weights;
     std::vector<G4double> Times;
+
+    G4int EventNumber;
+
 };
 
 #endif

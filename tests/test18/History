@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 July 2013  Alex Howard (test18-V09-06-06)
+----------------------------------------------
+- Removed unused data member from Tst18EventAction
+
+29 July 2013  Alex Howard (test18-V09-06-05)
+----------------------------------------------
+- Throw an exception if the number of particles is equal to the number of
+  projectiles (i.e. no decay products/stable projectile).
+
 15 July 2013  Dennis Wright (test18-V09-06-04)
 ----------------------------------------------
 - set numberOfThreads to 1 in test18.large_N.in and test18.in.  This is a 

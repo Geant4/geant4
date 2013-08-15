@@ -48,9 +48,13 @@ void Tst18SteppingAction::UserSteppingAction(const G4Step* fStep)
   const G4SteppingManager* pSM = fpSteppingManager;
   G4Track* fTrack = pSM->GetTrack();
   G4int StepNo = fTrack->GetCurrentStepNumber();
+  G4int TrackNo = fTrack->GetTrackID();
   if(StepNo >= 10000) fTrack->SetTrackStatus(fStopAndKill);
 
   if (StepNo == 1) {
+    if(TrackNo == 1) {
+      runAction->FillEventNumber();
+    }
     G4StepPoint* prePoint = fStep->GetPreStepPoint();
 
     runAction->FillParticleName(fTrack->GetDefinition()->GetParticleName() );

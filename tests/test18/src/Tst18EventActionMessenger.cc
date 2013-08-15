@@ -56,8 +56,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Tst18EventActionMessenger::Tst18EventActionMessenger(Tst18EventAction* EvAct)
-  : eventAction(EvAct)
+//Tst18EventActionMessenger::Tst18EventActionMessenger(Tst18EventAction* EvAct)
+Tst18EventActionMessenger::Tst18EventActionMessenger(Tst18EventAction*)
+//  : eventAction(EvAct)
 { 
 }
 

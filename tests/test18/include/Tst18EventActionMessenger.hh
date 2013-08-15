@@ -91,7 +91,7 @@ class Tst18EventActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    Tst18EventAction*   eventAction;   
+  //    Tst18EventAction*   eventAction;   
 };
 
 #endif
