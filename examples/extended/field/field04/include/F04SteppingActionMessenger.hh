@@ -41,14 +41,12 @@ class F04SteppingActionMessenger: public G4UImessenger
 {
   public:
 
-    F04SteppingActionMessenger(F04SteppingAction* );
+    F04SteppingActionMessenger();
     virtual ~F04SteppingActionMessenger();
 
     virtual void SetNewValue(G4UIcommand* ,G4String );
 
   private:
-
-    F04SteppingAction* fSteppingAction;
 
     G4UIdirectory*     fSteppingDir;
 

@@ -48,7 +48,7 @@ F04SteppingAction::F04SteppingAction()
    fTargetVolume(0),
    fTestPlaneVolume(0)
 {
-  fSteppingMessenger = new F04SteppingActionMessenger(this);
+  fSteppingMessenger = new F04SteppingActionMessenger();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
