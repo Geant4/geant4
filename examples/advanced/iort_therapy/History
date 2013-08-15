@@ -7,6 +7,13 @@ carlo.casarino@polooncologicocefalu.it
              History file of the IORT application
          ====================================================
 
+30.07.2013 - A.Dotti: tag iort_therapy-V09-06-05
+               fix last compilation warning from clang32
+
+28/29.07.2013 - P.Gumplinger: tag iort_therapy-V09-06-03/iort_therapy-V09-06-04
+               fix new compilation warning
+26.07.2013 - P.Gumplinger: tag iort_therapy-V09-06-02
+               fix clang32 compilation warnings
 04.02.2013 - G.Folger; tag iort_therapy-V09-06-01
                IORTPhysicsList.cc: Update for renamed physics builders
 	       GNUmakefile: correct G4INSTALL

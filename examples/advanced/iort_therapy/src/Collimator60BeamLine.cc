@@ -62,83 +62,63 @@ Collimator60BeamLine::Collimator60BeamLine():
   
 
   solidFinalCollimatorIORT(0),
-  logicFinalCollimatorIORT(0),
   physiFinalCollimatorIORT(0),
 
   solidGiunz1FinalCollIORT(0),
-  logicGiunz1FinalCollIORT(0),
   physiGiunz1FinalCollIORT(0),
 
   solidGiunz2FinalCollIORT(0),  
-  logicGiunz2FinalCollIORT(0),
   physiGiunz2FinalCollIORT(0),
 
   solidGiunz3FinalCollIORT(0),
-  logicGiunz3FinalCollIORT(0),
   physiGiunz3FinalCollIORT(0),  
 
   solidGiunz3FinalCollIntIORT(0),
-  logicGiunz3FinalCollIntIORT(0),
   physiGiunz3FinalCollIntIORT(0), 
   
   solidGiunz4FinalCollIORT(0),
-  logicGiunz4FinalCollIORT(0),
   physiGiunz4FinalCollIORT(0),
 
   solidGiunz5FinalCollIORT(0),
-  logicGiunz5FinalCollIORT(0),
   physiGiunz5FinalCollIORT(0),
   
   solidBlocco1IORT(0),
-  logicBlocco1IORT(0),
   physiBlocco1IORT(0),
 
   solidBlocco2IORT(0),
-  logicBlocco2IORT(0),
   physiBlocco2IORT(0),
 
   solidBlocco3IORT(0),
-  logicBlocco3IORT(0),
   physiBlocco3IORT(0),
 
   solidBlocco20mmIORT(0),
-  logicBlocco20mmIORT(0),
   physiBlocco20mmIORT(0),  
 
   solidCM1_1_2IORT(0),
-  logicCM1_1_2IORT(0),
   physiCM1_1_2IORT(0),
   
   solidCM1_2_2IORT(0),
-  logicCM1_2_2IORT(0),
   physiCM1_2_2IORT(0),
   
   solidCM2_1_2IORT(0),
-  logicCM2_1_2IORT(0),
   physiCM2_1_2IORT(0),
 
   solidCM2_2_2IORT(0),
-  logicCM2_2_2IORT(0),
   physiCM2_2_2IORT(0),  
 
   solidCCMIORT(0),
-  logicCCMIORT(0),
   physiCCMIORT(0),
 
   solidPFS1IORT(0),
-  logicPFS1IORT(0),
   physiPFS1IORT(0),
 
   solidPFS2IORT(0),
-  logicPFS2IORT(0),
   physiPFS2IORT(0),
 
   solidPFS3IORT(0),
-  logicPFS3IORT(0),
   physiPFS3IORT(0),
 
   solidFTIORT(0),
-  logicFTIORT(0),
   physiFTIORT(0)
 
 

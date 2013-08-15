@@ -188,7 +188,6 @@ private:
 
   IORTDetectorMessenger* detectorMessenger; 
 
-  G4VisAttributes* skyBlue;
   G4VisAttributes* red;
 
   G4VPhysicalVolume* motherPhys;

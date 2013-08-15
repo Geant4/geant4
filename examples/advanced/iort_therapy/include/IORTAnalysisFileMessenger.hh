@@ -61,7 +61,11 @@ class G4UIcmdWithABool;
 class IORTAnalysisFileMessenger: public G4UImessenger
 {
 public:
+#ifdef G4ANALYSIS_USE_ROOT
   IORTAnalysisFileMessenger(IORTAnalysisManager*);
+#else
+  IORTAnalysisFileMessenger();
+#endif
   ~IORTAnalysisFileMessenger();
 
   /**   
@@ -73,8 +77,9 @@ public:
   void SetNewValue(G4UIcommand* command, G4String newValue);
     
 private:
+#ifdef G4ANALYSIS_USE_ROOT
   IORTAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
-
+#endif
   /**   
    * G4 user interface command (that takes a string argument) object
    * Constructor requires command name and messenger class(this).
