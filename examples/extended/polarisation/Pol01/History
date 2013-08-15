@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-07-13 P.Gumplinger (expol01-V09-06-00)
+- fix MAC/clang32 compilation warnings
+
 09-11-10 M.Asai (expol01-V09-03-03)
 - Fix AIDA file option.
 
