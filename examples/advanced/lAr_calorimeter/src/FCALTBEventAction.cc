@@ -58,7 +58,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALTBEventAction::FCALTBEventAction(FCALSteppingAction* SA)
-  :calorimeterCollID(-1),drawFlag("all"),printModulo(10), StepAction(SA), eventMessenger(0)
+  :drawFlag("all"),printModulo(10), StepAction(SA), eventMessenger(0)
 {
   eventMessenger = new FCALTBEventActionMessenger(this);
 }  

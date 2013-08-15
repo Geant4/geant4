@@ -68,7 +68,7 @@ private:
 
 private:
 
-  G4double EmModuleRMin, EmModuleRMax, EmModuleLenght, CableTroffLenght,
+  G4double EmModuleRMin, EmModuleRMax, EmModuleLenght,
            EmModuleStartPhi, EmModuleDPhi;
   G4double FCALEmSmart;
 

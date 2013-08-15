@@ -58,7 +58,6 @@ private:
   G4double CryostatRMin, CryostatRMax, CryostatLenght, StartingPhi, DPhi;
 
   G4double InsulationRMin, InsulationRMax, InsulationLenght;
-  G4double InsulationPosX, InsulationPosY, InsulationPosZ;
 
   G4double LArgRMin, LArgRMax, LArgLenght;
   G4double LArgPosX, LArgPosY, LArgPosZ;
