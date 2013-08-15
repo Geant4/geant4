@@ -135,7 +135,7 @@ void HistoManager::Initialise()
   fNdeut      = 0;
   fNalpha     = 0;
   fNkaons     = 0;
-  fNmuons     = 0; 
+  fNmuons     = 0;
   fNcpions    = 0;
   fNpi0       = 0;
   fNneutron   = 0;
@@ -170,20 +170,20 @@ void HistoManager::BookHisto()
   fHisto->Add1D("8","Log10 Energy (GeV) of charged kaons",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("9","Log10 Energy (GeV) of neutral kaons",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("10","Log10 Energy (GeV) of deuterons and tritons",
-		fNBinsE,-5.,5.,1.0);
+                fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("11","Log10 Energy (GeV) of He3 and alpha",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("12","Log10 Energy (GeV) of Generic Ions",fNBinsE,-5.,5.,1.0);
   fHisto->Add1D("13","Log10 Energy (GeV) of muons",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("14","Log10 Energy (GeV) of pi+",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("15","Log10 Energy (GeV) of pi-",fNBinsE,-4.,6.,1.0);
   fHisto->Add1D("16",
-		"X Section (mb) of Secondary Fragments Z with E>1 GeV (mb)",
-		25,0.5,25.5,1.0);
+                "X Section (mb) of Secondary Fragments Z with E>1 GeV (mb)",
+                25,0.5,25.5,1.0);
   fHisto->Add1D("17","Secondary Fragment A E>1 GeV",50,0.5,50.5,1.0);
   fHisto->Add1D("18","Secondary Fragment Z E<1 GeV",25,0.5,25.5,1.0);
   fHisto->Add1D("19","Secondary Fragment A E<1 GeV",50,0.5,50.5,1.0);
   fHisto->Add1D("20","X Section (mb) of Secondary Fragments Z (mb) ",
-		25,0.5,25.5,1.0);
+                25,0.5,25.5,1.0);
   fHisto->Add1D("21","Secondary Fragment A ",50,0.5,50.5,1.0);
 }
 
@@ -233,45 +233,45 @@ void HistoManager::EndOfRun()
   fEdepSum2 *= x;
   fEdepSum2 -= fEdepSum*fEdepSum;
   if(fEdepSum2 > 0.0) fEdepSum2 = std::sqrt(fEdepSum2);
-  else               fEdepSum2 = 0.0;
+  else                fEdepSum2 = 0.0;
 
   G4cout                         << "Beam particle                        "
                                  << fPrimaryDef->GetParticleName() <<G4endl;
-  G4cout                         << "Beam Energy(GeV)                     " 
+  G4cout                         << "Beam Energy(GeV)                     "
                                  << fPrimaryKineticEnergy/GeV <<G4endl;
   G4cout                         << "Number of events                     " 
-				 << fNevt <<G4endl;
+                                 << fNevt <<G4endl;
   G4cout << std::setprecision(4) << "Average energy deposit (GeV)         " 
-	 << fEdepSum/GeV 
+         << fEdepSum/GeV
          << "   RMS(GeV) " << fEdepSum2/GeV << G4endl;
-  G4cout << std::setprecision(4) << "Average number of steps              " 
-	 << xs << G4endl;
+  G4cout << std::setprecision(4) << "Average number of steps              "
+         << xs << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma              " 
-	 << xg << G4endl;
+         << xg << G4endl;
   G4cout << std::setprecision(4) << "Average number of e-                 " 
-	 << xe << G4endl;
+         << xe << G4endl;
   G4cout << std::setprecision(4) << "Average number of e+                 " 
-	 << xp << G4endl;
+         << xp << G4endl;
   G4cout << std::setprecision(4) << "Average number of neutrons           " 
-	 << xn << G4endl;
+         << xn << G4endl;
   G4cout << std::setprecision(4) << "Average number of protons            " 
-	 << xpn << G4endl;
+         << xpn << G4endl;
   G4cout << std::setprecision(4) << "Average number of antiprotons        " 
-	 << xap << G4endl;
+         << xap << G4endl;
   G4cout << std::setprecision(4) << "Average number of pi+ & pi-          " 
-	 << xpc << G4endl;
+         << xpc << G4endl;
   G4cout << std::setprecision(4) << "Average number of pi0                " 
-	 << xp0 << G4endl;
+         << xp0 << G4endl;
   G4cout << std::setprecision(4) << "Average number of kaons              " 
-	 << xpk << G4endl;
+         << xpk << G4endl;
   G4cout << std::setprecision(4) << "Average number of muons              " 
-	 << xpm << G4endl;
+         << xpm << G4endl;
   G4cout << std::setprecision(4) << "Average number of deuterons+tritons  " 
-	 << xid << G4endl;
+         << xid << G4endl;
   G4cout << std::setprecision(4) << "Average number of He3+alpha          " 
-	 << xia << G4endl;
+         << xia << G4endl;
   G4cout << std::setprecision(4) << "Average number of ions               " 
-	 << xio << G4endl;
+         << xio << G4endl;
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
 
@@ -280,11 +280,11 @@ void HistoManager::EndOfRun()
     fHisto->ScaleH1(i,x);
   }
   // will work only for pure material - 1 element
-  //  G4cout << fMaterial << G4endl; 
+  //  G4cout << fMaterial << G4endl;
   G4double F= 1000/(fLength*barn*fMaterial->GetTotNbOfAtomsPerVolume());
-  if(F > 0.0) { 
-    fHisto->ScaleH1(16, F); 
-    fHisto->ScaleH1(20, F); 
+  if(F > 0.0) {
+    fHisto->ScaleH1(16, F);
+    fHisto->ScaleH1(20, F);
   }
 
   fHisto->Save();
@@ -320,22 +320,22 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     fPrimaryKineticEnergy = e;
     fPrimaryDef = pd;
     G4ThreeVector dir = track->GetMomentumDirection();
-    if(1 < fVerbose) 
-      G4cout << "### Primary " << name 
+    if(1 < fVerbose)
+      G4cout << "### Primary " << name
              << " kinE(GeV)= " << e/GeV
              << "; m(GeV)= " << pd->GetPDGMass()/GeV
-             << "; pos(mm)= " << track->GetPosition()/mm 
-             << ";  dir= " << track->GetMomentumDirection() 
+             << "; pos(mm)= " << track->GetPosition()/mm
+             << ";  dir= " << track->GetMomentumDirection()
              << G4endl;
  
     // Secondary track
   } else {
-    if(1 < fVerbose) 
-      G4cout << "=== Secondary " << name 
+    if(1 < fVerbose)
+      G4cout << "=== Secondary " << name
              << " kinE(GeV)= " << e/GeV
              << "; m(GeV)= " << pd->GetPDGMass()/GeV
-             << "; pos(mm)= " << track->GetPosition()/mm 
-             << ";  dir= " << track->GetMomentumDirection() 
+             << "; pos(mm)= " << track->GetPosition()/mm
+             << ";  dir= " << track->GetMomentumDirection()
              << G4endl;
     e = std::log10(e/GeV);
     if(pd == G4Gamma::Gamma()) {
@@ -359,7 +359,6 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       fNcpions++;
       fHisto->Fill(6,e,1.0);
       fHisto->Fill(14,e,1.0);
-
     } else if ( pd == G4PionMinus::PionMinus()) {
       fNcpions++;
       fHisto->Fill(6,e,1.0);
@@ -368,12 +367,12 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     } else if ( pd == G4PionZero::PionZero()) {
       fNpi0++;
       fHisto->Fill(7,e,1.0);
-    } else if ( pd == G4KaonPlus::KaonPlus() || 
-		pd == G4KaonMinus::KaonMinus()) {
+    } else if ( pd == G4KaonPlus::KaonPlus() ||
+                pd == G4KaonMinus::KaonMinus()) {
       fNkaons++;
       fHisto->Fill(8,e,1.0);
-    } else if ( pd == G4KaonZeroShort::KaonZeroShort() || 
-		pd == G4KaonZeroLong::KaonZeroLong()) {
+    } else if ( pd == G4KaonZeroShort::KaonZeroShort() ||
+                pd == G4KaonZeroLong::KaonZeroLong()) {
       fNkaons++;
       fHisto->Fill(9,e,1.0);
     } else if ( pd == G4Deuteron::Deuteron() || pd == G4Triton::Triton()) {
@@ -396,10 +395,10 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
       }
       fHisto->Fill(20,Z,1.0);
       fHisto->Fill(21,A,1.0);
-    } else if ( pd == G4MuonPlus::MuonPlus() || 
-		pd == G4MuonMinus::MuonMinus()) {
+    } else if ( pd == G4MuonPlus::MuonPlus() ||
+      pd == G4MuonMinus::MuonMinus()) {
       fNmuons++;
-      fHisto->Fill(13,e,1.0);    
+      fHisto->Fill(13,e,1.0);
     }
   }
 }
@@ -411,8 +410,8 @@ void HistoManager::AddTargetStep(const G4Step* step)
   ++fNstep;
   G4double edep = step->GetTotalEnergyDeposit();
 
-  if(edep > 0.0) { 
-    G4ThreeVector pos = 
+  if(edep > 0.0) {
+    G4ThreeVector pos =
       (step->GetPreStepPoint()->GetPosition() +
        step->GetPostStepPoint()->GetPosition())*0.5;
 
@@ -436,9 +435,9 @@ void HistoManager::AddTargetStep(const G4Step* step)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::SetVerbose(G4int val)        
+void HistoManager::SetVerbose(G4int val)
 {
-  fVerbose = val; 
+  fVerbose = val;
   fHisto->SetVerbose(val);
 }
 
@@ -457,7 +456,11 @@ void HistoManager::SetIonPhysics(const G4String& nam)
     G4cout << "### HistoManager WARNING: Ion Physics is already defined: <"
            << nam << "> is ignored!" << G4endl;
   } else if(nam == "DPMJET") {
+#ifdef G4_USE_DPMJET
     fIonPhysics = new IonDPMJETPhysics(false);
+#else
+    fIonPhysics = new IonDPMJETPhysics();
+#endif
     fPhysList->ReplacePhysics(fIonPhysics);
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
     G4cout << "### SetIonPhysics: Ion Physics DPMJET/Binary is added"

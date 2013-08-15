@@ -65,7 +65,11 @@ class IonDPMJETPhysics : public G4VHadronPhysics
 {
 public:
 
+#ifdef G4_USE_DPMJET
   IonDPMJETPhysics(G4bool val);
+#else
+  IonDPMJETPhysics();
+#endif
   virtual ~IonDPMJETPhysics();
 
   // This method will be invoked in the Construct() method.
@@ -83,9 +87,11 @@ private:
   G4VCrossSectionDataSet* fShen;
   G4VCrossSectionDataSet* fIonH;
   G4BinaryLightIonReaction*  fIonBC;
+#ifdef G4_USE_DPMJET
   G4DPMJET2_5Model*          fDPM;
   G4DPMJET2_5CrossSection*   fDpmXS;
   G4bool                  fUseDPMJETXS;
+#endif
 };
 
 #endif

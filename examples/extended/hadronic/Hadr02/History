@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-07-13  P.Gumplinger (exhadr02-V09-06-04)
+- fix MAC/clang32 compilation warnings
+
 14-04-13  V.Ivanchenko (exhadr02-V09-06-03)
 - Disable energy/momentum check
 

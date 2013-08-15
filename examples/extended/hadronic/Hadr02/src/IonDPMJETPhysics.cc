@@ -76,9 +76,15 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4_USE_DPMJET
 IonDPMJETPhysics::IonDPMJETPhysics(G4bool val)
-  : G4VHadronPhysics("ionInelasticDPMJET"),fIonBC(0),fDPM(0),
-    fUseDPMJETXS(val)
+#else
+IonDPMJETPhysics::IonDPMJETPhysics()
+#endif
+  : G4VHadronPhysics("ionInelasticDPMJET"),fIonBC(0)
+#ifdef G4_USE_DPMJET
+    ,fDPM(0), fUseDPMJETXS(val)
+#endif
 {
   fTripathi = fTripathiLight = fShen = fIonH = 0;
   SetPhysicsType(bIons);
