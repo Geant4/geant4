@@ -39,14 +39,13 @@
 
 class DetectorConstruction;
 class RunAction;
-class EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*,RunAction*,EventAction*);
+    TrackingAction(DetectorConstruction*,RunAction*);
    ~TrackingAction() {};
    
     virtual void  PreUserTrackingAction(const G4Track*);   
@@ -55,7 +54,6 @@ class TrackingAction : public G4UserTrackingAction {
   private:
     DetectorConstruction* fDetector;
     RunAction*            fRunAct;    
-    EventAction*          fEventAct;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

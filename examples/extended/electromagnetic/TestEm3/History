@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-07-13 P.Gumplinger (testem3-V09-06-09)
+- remove unused field fEventAct from TrackingAction class
+
 11-07-13 I.Hrivnacova (testem3-V09-06-08) 
 - Updated CMakeLists.txt and SharedFilesList.txt for added classes
   in Hbook analysis code
