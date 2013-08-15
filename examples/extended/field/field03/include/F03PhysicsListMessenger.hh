@@ -63,8 +63,6 @@ class F03PhysicsListMessenger : public G4UImessenger
     G4UIcmdWithADoubleAndUnit* setMaxStepCmd;
     G4UIcmdWithADoubleAndUnit* cutGCmd;
     G4UIcmdWithADoubleAndUnit* cutECmd;
-    G4UIcmdWithADoubleAndUnit* cutPCmd;
-    G4UIcmdWithADoubleAndUnit* rCmd;
     G4UIcmdWithADoubleAndUnit* eCmd;
  
 };

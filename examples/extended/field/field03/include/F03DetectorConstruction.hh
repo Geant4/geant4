@@ -91,10 +91,9 @@ class F03DetectorConstruction : public G4VUserDetectorConstruction
                  
   private:
      
-     G4UniformMagField*    fMagField;         // pointer to the magnetic field
      F03FieldSetup*        fEmFieldSetup;     
      F03DetectorMessenger* fDetectorMessenger;// pointer to the Messenger
-     F03CalorimeterSD*     fCalorimeterSD;    // pointer to the sensitive detector
+     F03CalorimeterSD*     fCalorimeterSD;    // pointer to the sensitive det.
       
      // volumes 
           

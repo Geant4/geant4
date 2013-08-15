@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 29, 2013 - P.Gumplinger fieldex03-V09-06-00
+- fix MAC/clang32 compilation warnings
+
 February 14, 2013 - I.Hrivnacova
 -----------------------------
 - Applied coding guidelines (data members initialization);
