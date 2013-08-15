@@ -97,11 +97,13 @@ G4ParticleMessenger::G4ParticleMessenger(G4ParticleTable* pTable)
   createAllIonCmd = new G4UIcmdWithoutParameter("/particle/createAllIon",this);
   createAllIonCmd->SetGuidance("Create All ions (ground state)");
   createAllIonCmd->AvailableForStates(G4State_Idle);
+  createAllIonCmd->SetToBeBroadcasted(false);
 
   //Commnad   /particle/createAllIsomer
   createAllIsomerCmd = new G4UIcmdWithoutParameter("/particle/createAllIsomer",this);
   createAllIsomerCmd->SetGuidance("Create All isomers");
   createAllIsomerCmd->AvailableForStates(G4State_Idle);
+  createAllIsomerCmd->SetToBeBroadcasted(false);
 
   // -- particle/property/Verbose ---
   verboseCmd = new G4UIcmdWithAnInteger("/particle/verbose",this);

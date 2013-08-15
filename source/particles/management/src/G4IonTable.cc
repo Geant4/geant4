@@ -140,7 +140,7 @@ G4IonTable::G4IonTable()
 //
 void G4IonTable::SlaveG4IonTable()
 {
-G4Exception("G4ParticleTable::SlaveG4ParticleTable()","G4MT0000",FatalException,"Obsolete");
+G4Exception("G4IonTable::SlaveG4ParticleTable()","G4MT0000",FatalException,"Obsolete");
 }
 
 void G4IonTable::WorkerG4IonTable()
@@ -152,8 +152,8 @@ void G4IonTable::WorkerG4IonTable()
 
   G4IonListIterator it;
   for (it = fIonListShadow->begin() ; it != fIonListShadow->end(); it++ ) {
-    G4ParticleDefinition* ion = const_cast<G4ParticleDefinition*>(it->second);
-    if (ion->IsGeneralIon()) AddProcessManager(ion); 
+///////////////////////////    G4ParticleDefinition* ion = const_cast<G4ParticleDefinition*>(it->second);
+///////////////////////////    if (ion->IsGeneralIon()) AddProcessManager(ion); 
     fIonList->insert(*it);
   }
 
@@ -206,13 +206,6 @@ G4IonTable::~G4IonTable()
 ////////////////////
 G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
 {
-  if ((E>0.0) && (n_error==0)){
-    G4Exception("G4ParticleTable::CreateIon()",
-		"PART130", JustWarning,
-		"CreateIon method with excited energy will be removed in the next release");	
-    n_error +=1;
-  }
-
   G4ParticleDefinition* ion=0;
 
   // check whether GenericIon has processes
@@ -331,12 +324,6 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
 G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4double E)
 {
   if (L==0) return CreateIon(A,Z,E);
-  if ((E>0.0) && (n_error==0)){
-    G4Exception("G4ParticleTable::CreateIon()",
-		"PART130", JustWarning,
-		"CreateIon method with excited energy will be removed in the next release");	
-    n_error +=1;
-  }
   
   // create hyper nucleus
   G4ParticleDefinition* ion=0;
@@ -925,7 +912,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int lvl)
 	isFound = true;
 	break;
       }
-    }
+    } 
   }
 
   if ( isFound ){ 
@@ -1496,11 +1483,19 @@ G4int G4IonTable::GetVerboseLevel() const
 void  G4IonTable::AddProcessManager(G4ParticleDefinition* ion)
 {
   // check State 
-  //G4StateManager* pStateManager = G4StateManager::GetStateManager();
-  //G4ApplicationState currentState = pStateManager->GetCurrentState();
+  G4StateManager* pStateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = pStateManager->GetCurrentState();
   // do not attach process managaer in event loop
-  //if (currentState == G4State_EventProc) return;
- 
+  if (currentState == G4State_EventProc) //////return;
+  {
+    if (n_error<10)
+    {
+      G4cout << "Defining process manager for " << ion->GetParticleName() << G4endl;
+      G4Exception("G4IonTable::AddProcessManager()", "PART130", JustWarning,
+	"Defining process manager during an event loop is thread unsafe and will be dropped from the next release.");
+      n_error +=1;
+    }
+  }
 
   // check whether GenericIon has processes
   G4ParticleDefinition* genericIon = 
@@ -1518,7 +1513,6 @@ void  G4IonTable::AddProcessManager(G4ParticleDefinition* ion)
   }
   
   ion->SetProcessManager(pman);
-  ////  G4cout << "G4IonTable::AddProcessManager() : " << ion->GetParticleName() << G4endl;
 
 }
 

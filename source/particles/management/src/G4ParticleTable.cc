@@ -162,7 +162,6 @@ void G4ParticleTable::WorkerG4ParticleTable()
   G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
   G4ParticleTable::lockCount++;
 #endif
-
   if(fDictionary == 0) { 
     fDictionary = new G4PTblDictionary();   
   } else { 
@@ -175,7 +174,7 @@ void G4ParticleTable::WorkerG4ParticleTable()
     fEncodingDictionary->clear(); 
   }
 
-  fIteratorShadow->reset();
+  fIteratorShadow->reset(false);
   while( (*fIteratorShadow)() )
   {
     G4ParticleDefinition* particle = fIteratorShadow->value();

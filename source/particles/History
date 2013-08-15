@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 14. Aug. 2013  Makoto Asai (particles-V09-06-39)
+- ParticleTableIterator skips general ions unless it is reset with 
+  "false" as its parameter.
+- Add warning message if a process manager is to be registered to
+  a particle during the event loop.
+- G4ParticleMessenger : /particle/createAllIon and /particle/createAllIsomer
+  won't propagate to worker threads as all ions and isomers are created
+  in the master thread and particle table and ion table of worker threads
+  inherit those of masther thread.
+
 - 3. Aug. 2013 Hisaya Kurashige (particles-V09-06-38)
 - Do not copy IsotopeTable of G4Iontable to Worker thread
 - Clean up methods of G4ParticleTable 
