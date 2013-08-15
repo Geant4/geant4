@@ -66,9 +66,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
         G4bosons
         G4geometrymng
         G4globman
-        G4hadronic_mgt
-        G4hadronic_util
-        G4hadronic_xsect
         G4ions
         G4leptons
         G4materials
@@ -79,6 +76,9 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
         G4volumes
         G4intercoms
         G4had_preequ_exciton
+        G4hadronic_mgt
+        G4hadronic_util
+        G4hadronic_xsect
         G4had_mod_man
         G4had_mod_util
         G4hadronic_deex_evaporation
@@ -88,7 +88,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
         G4hadronic_deex_multifragmentation
         G4hadronic_deex_photon_evaporation
         G4hadronic_deex_util
-        G4hadronic_mgt
         G4hadronic_inclxx_utils
         G4hadronic_inclxx_physics
 

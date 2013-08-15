@@ -16,6 +16,12 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+24 July 2013 - Davide Mancusi (hadr-inclxx-V09-06-21)
+-----------------------------------------------------------
+- INCL++ v5.1.13.3
+  o Fixes crash in very low-energy (~1 MeV) p+He4 reactions
+    and in light-ion-induced reactions.
+
 16 July 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-20)
 -----------------------------------------------------------
 -  Correction to CMake scripts for granular build.

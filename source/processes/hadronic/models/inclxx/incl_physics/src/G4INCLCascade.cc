@@ -457,6 +457,16 @@ namespace G4INCL {
   }
 
   void INCL::makeCompoundNucleus() {
+    // If this is not a nucleus-nucleus collision, don't attempt to make a
+    // compound nucleus.
+    //
+    // Yes, even nucleon-nucleus collisions can lead to particles entering
+    // below the Fermi level. Take e.g. 1-MeV p + He4.
+    if(!nucleus->isNucleusNucleusCollision()) {
+      forceTransparent = true;
+      return;
+    }
+
     // Reset the internal Nucleus variables
     nucleus->getStore()->clearIncoming();
     nucleus->getStore()->clearOutgoing();
