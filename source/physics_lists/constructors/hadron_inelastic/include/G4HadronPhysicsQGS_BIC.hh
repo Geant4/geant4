@@ -61,7 +61,6 @@
 #include "G4BinaryProtonBuilder.hh"
 
 #include "G4NeutronBuilder.hh"
-#include "G4LEPNeutronBuilder.hh"
 #include "G4FTFBinaryNeutronBuilder.hh"
 #include "G4QGSBinaryNeutronBuilder.hh"
 #include "G4BinaryNeutronBuilder.hh"
@@ -87,7 +86,6 @@ class G4HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
 
     struct ThreadPrivate {
       G4NeutronBuilder * theNeutrons;
-      G4LEPNeutronBuilder * theLEPNeutron;
       G4FTFBinaryNeutronBuilder * theFTFBinaryNeutron;
       G4QGSBinaryNeutronBuilder * theQGSBinaryNeutron;
       G4BinaryNeutronBuilder * theBinaryNeutron;
@@ -112,8 +110,11 @@ class G4HadronPhysicsQGS_BIC : public G4VPhysicsConstructor
 
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
+
+      G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate* tpdata;
+
     // G4bool QuasiElastic;
 };
 

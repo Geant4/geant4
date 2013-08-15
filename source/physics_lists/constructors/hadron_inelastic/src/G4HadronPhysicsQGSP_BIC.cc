@@ -55,6 +55,10 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronCaptureXS.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -66,7 +70,6 @@ G4HadronPhysicsQGSP_BIC::tpdata = 0;
 G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(G4int)
     :  G4VPhysicsConstructor("hInelastic QGSP_BIC")
 /*    , theNeutrons(0)
-    , theLEPNeutron(0)
     , theFTFPNeutron(0)
     , theQGSPNeutron(0)
     , theBinaryNeutron(0)
@@ -80,14 +83,14 @@ G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(G4int)
     , theBinaryPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)*/
+    , theFTFPAntiBaryon(0)
+    , xsNeutronCaptureXS(0)*/
 //    , QuasiElastic(true)
 {}
 
 G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(const G4String& name, G4bool /* quasiElastic */)
     :  G4VPhysicsConstructor(name)
 /*    , theNeutrons(0)
-    , theLEPNeutron(0)
     , theFTFPNeutron(0)
     , theQGSPNeutron(0)
     , theBinaryNeutron(0)
@@ -101,7 +104,8 @@ G4HadronPhysicsQGSP_BIC::G4HadronPhysicsQGSP_BIC(const G4String& name, G4bool /*
     , theBinaryPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)*/
+    , theFTFPAntiBaryon(0)
+    , xsNeutronCaptureXS(0)*/
 //    , QuasiElastic(quasiElastic)
 {}
 
@@ -120,11 +124,6 @@ void G4HadronPhysicsQGSP_BIC::CreateModels()
   tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF));
   tpdata->theFTFPNeutron->SetMinEnergy(minFTFP);
   tpdata->theFTFPNeutron->SetMaxEnergy(maxFTFP);  
-  // Exclude LEP only from Inelastic 
-  //  -- Register it for otpdata->ther processes: Capture, Elastic
-  tpdata->theNeutrons->RegisterMe(tpdata->theLEPNeutron=new G4LEPNeutronBuilder);
-  tpdata->theLEPNeutron->SetMinInelasticEnergy(0.0*GeV);
-  tpdata->theLEPNeutron->SetMaxInelasticEnergy(0.0*GeV);
 
   tpdata->theNeutrons->RegisterMe(tpdata->theBinaryNeutron=new G4BinaryNeutronBuilder);
   tpdata->theBinaryNeutron->SetMaxEnergy(maxBIC);
@@ -156,7 +155,6 @@ G4HadronPhysicsQGSP_BIC::~G4HadronPhysicsQGSP_BIC()
    delete tpdata->theBinaryNeutron;
    delete tpdata->theQGSPNeutron;
    delete tpdata->theFTFPNeutron;
-   delete tpdata->theLEPNeutron;
    delete tpdata->theBertiniPiK;
    delete tpdata->theQGSPPiK;
    delete tpdata->theFTFPPiK;
@@ -168,6 +166,8 @@ G4HadronPhysicsQGSP_BIC::~G4HadronPhysicsQGSP_BIC()
    delete tpdata->theFTFPAntiBaryon;
    delete tpdata->theAntiBaryon;
    delete tpdata->theHyperon;
+   delete tpdata->xsNeutronCaptureXS;
+
    delete tpdata; tpdata =0 ;
 }
 
@@ -196,5 +196,22 @@ void G4HadronPhysicsQGSP_BIC::ConstructProcess()
   tpdata->thePiK->Build();
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
+
+  // --- Neutrons ---
+  G4HadronicProcess* capture = 0;
+  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
+  G4ProcessVector*  pv = pmanager->GetProcessList();
+  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
+    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
+      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
+    }
+  }
+  if ( ! capture ) {
+    capture = new G4HadronCaptureProcess("nCapture");
+    pmanager->AddDiscreteProcess(capture);
+  }
+  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  capture->AddDataSet(tpdata->xsNeutronCaptureXS);
+  capture->RegisterMe(new G4NeutronRadCapture());
 }
 

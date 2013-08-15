@@ -55,6 +55,10 @@
 #include "G4ChipsKaonZeroInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronCaptureXS.hh"
+
 #include "G4PhysListUtil.hh"
 
 // factory
@@ -69,7 +73,6 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(G4int)
 /*    , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , theLEPNeutron(0)
     , thePiK(0)
     , theBertiniPiK(0)
     , theFTFPPiK(0)
@@ -82,7 +85,8 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(G4int)
     , QuasiElastic(false)
   /*    , ChipsKaonMinus(0)
     , ChipsKaonPlus(0)
-    , ChipsKaonZero(0) */
+    , ChipsKaonZero(0)
+    , xsNeutronCaptureXS(0)*/
 {}
 
 G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool quasiElastic)
@@ -90,7 +94,6 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool 
 /*    , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , theLEPNeutron(0)
     , thePiK(0)
     , theBertiniPiK(0)
     , theFTFPPiK(0)
@@ -103,7 +106,8 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool 
     , QuasiElastic(quasiElastic)
   /*    , ChipsKaonMinus(0)
     , ChipsKaonPlus(0)
-    , ChipsKaonZero(0)*/
+    , ChipsKaonZero(0)
+    , xsNeutronCaptureXS(0)*/
 {}
 
 void G4HadronPhysicsFTFP_BERT::CreateModels()
@@ -115,9 +119,6 @@ void G4HadronPhysicsFTFP_BERT::CreateModels()
   tpdata->theNeutrons->RegisterMe(tpdata->theBertiniNeutron=new G4BertiniNeutronBuilder);
   tpdata->theBertiniNeutron->SetMinEnergy(0.0*GeV);
   tpdata->theBertiniNeutron->SetMaxEnergy(5*GeV);
-  tpdata->theNeutrons->RegisterMe(tpdata->theLEPNeutron=new G4LEPNeutronBuilder);
-  tpdata->theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
-  tpdata->theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
 
   tpdata->thePro=new G4ProtonBuilder;
   tpdata->theFTFPPro=new G4FTFPProtonBuilder(QuasiElastic);
@@ -142,7 +143,6 @@ G4HadronPhysicsFTFP_BERT::~G4HadronPhysicsFTFP_BERT()
   delete tpdata->theNeutrons;
   delete tpdata->theBertiniNeutron;
   delete tpdata->theFTFPNeutron;
-  delete tpdata->theLEPNeutron;    
 
   delete tpdata->thePiK;
   delete tpdata->theBertiniPiK;
@@ -155,7 +155,9 @@ G4HadronPhysicsFTFP_BERT::~G4HadronPhysicsFTFP_BERT()
   delete tpdata->theHyperon;
   delete tpdata->theAntiBaryon;
   delete tpdata->theFTFPAntiBaryon;
-  
+ 
+  delete tpdata->xsNeutronCaptureXS; 
+ 
   //Note that here we need to set to 0 the pointer
   //since tpdata is static and if thread are "reused"
   //it can be problematic
@@ -183,11 +185,10 @@ void G4HadronPhysicsFTFP_BERT::ConstructProcess()
   tpdata->thePro->Build();
   tpdata->thePiK->Build();
 
-  // use CHIPS cross sections also for Kaons
+  // --- Kaons ---
   tpdata->ChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
   tpdata->ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
   tpdata->ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
-  //
     
   G4PhysListUtil::FindInelasticProcess(G4KaonMinus::KaonMinus())->AddDataSet(tpdata->ChipsKaonMinus);
   G4PhysListUtil::FindInelasticProcess(G4KaonPlus::KaonPlus())->AddDataSet(tpdata->ChipsKaonPlus);
@@ -196,5 +197,21 @@ void G4HadronPhysicsFTFP_BERT::ConstructProcess()
     
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
-}
 
+  // --- Neutrons ---
+  G4HadronicProcess* capture = 0;
+  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
+  G4ProcessVector*  pv = pmanager->GetProcessList();
+  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
+    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
+      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
+    }
+  }
+  if ( ! capture ) {
+    capture = new G4HadronCaptureProcess("nCapture");
+    pmanager->AddDiscreteProcess(capture);
+  }
+  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  capture->AddDataSet(tpdata->xsNeutronCaptureXS);
+  capture->RegisterMe(new G4NeutronRadCapture());
+}

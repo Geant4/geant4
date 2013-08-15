@@ -62,6 +62,12 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4PhysListUtil.hh"
 
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronCaptureXS.hh"
+#include "G4NeutronHPCaptureData.hh"
+#include "G4LFission.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -76,7 +82,6 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
     , theLENeutron(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , theLEPNeutron(0)
     , thePiK(0)
     , theBertiniPiK(0)
     , theFTFPPiK(0)
@@ -92,7 +97,8 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding( G4int )
     , theChipsKaonZero(0)
     , theBGGxsNeutron(0)
     , theNeutronHPJENDLHEInelastic(0)
-    , theBGGxsProton(0) */
+    , theBGGxsProton(0)
+    , xsNeutronCaptureXS(0)*/
     , useLEND(false)
     , evaluation()
 {}
@@ -103,7 +109,6 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool 
     , theLENeutron(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , theLEPNeutron(0)
     , thePiK(0)
     , theBertiniPiK(0)
     , theFTFPPiK(0)
@@ -119,7 +124,8 @@ G4HadronPhysicsShielding::G4HadronPhysicsShielding(const G4String& name, G4bool 
     , theChipsKaonZero(0)
     , theBGGxsNeutron(0)
     , theNeutronHPJENDLHEInelastic(0)
-    , theBGGxsProton(0) */
+    , theBGGxsProton(0)
+    , xsNeutronCaptureXS(0)*/
     , useLEND(false)
     , evaluation()
 {}
@@ -129,16 +135,12 @@ void G4HadronPhysicsShielding::CreateModels()
 {
   G4bool quasiElasticFTF= false;   // Use built-in quasi-elastic (not add-on)
 
-  tpdata->theNeutrons=new G4NeutronBuilder;
+  tpdata->theNeutrons=new G4NeutronBuilder( true ); // Fission on
   tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF);
   tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron);
   tpdata->theNeutrons->RegisterMe(tpdata->theBertiniNeutron=new G4BertiniNeutronBuilder);
   tpdata->theBertiniNeutron->SetMinEnergy(19.9*MeV);
   tpdata->theBertiniNeutron->SetMaxEnergy(5*GeV);
-  tpdata->theNeutrons->RegisterMe(tpdata->theLEPNeutron=new G4LEPNeutronBuilder);
-  tpdata->theLEPNeutron->SetMinEnergy(19.9*MeV);
-  tpdata->theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
-  tpdata->theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
   //tpdata->theNeutrons->RegisterMe(tpdata->theHPNeutron=new G4NeutronHPBuilder);
 
     if ( useLEND != true )
@@ -189,6 +191,8 @@ G4HadronPhysicsShielding::~G4HadronPhysicsShielding()
   delete tpdata->theBGGxsNeutron;
   delete tpdata->theNeutronHPJENDLHEInelastic;
   delete tpdata->theBGGxsProton;
+
+  delete tpdata->xsNeutronCaptureXS;
 
   delete tpdata; tpdata=0;
 }
@@ -246,4 +250,34 @@ void G4HadronPhysicsShielding::ConstructProcess()
 
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
+
+  // --- Neutrons ---
+  G4HadronicProcess* capture = 0;
+  G4HadronicProcess* fission = 0;
+  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
+  G4ProcessVector*  pv = pmanager->GetProcessList();
+  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
+    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
+      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
+    } else if ( fFission == ((*pv)[i])->GetProcessSubType() ) {
+      fission = static_cast<G4HadronicProcess*>((*pv)[i]);
+    }
+  }
+  if ( ! capture ) {
+    capture = new G4HadronCaptureProcess("nCapture");
+    pmanager->AddDiscreteProcess(capture);
+  }
+  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  capture->AddDataSet(tpdata->xsNeutronCaptureXS);
+  capture->AddDataSet( new G4NeutronHPCaptureData );
+  G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
+  theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
+  capture->RegisterMe( theNeutronRadCapture );
+  if ( ! fission ) {
+    fission = new G4HadronFissionProcess("nFission");
+    pmanager->AddDiscreteProcess(fission);
+  }
+  G4LFission* theNeutronLEPFission = new G4LFission();
+  theNeutronLEPFission->SetMinEnergy( 19.9*MeV );
+  fission->RegisterMe( theNeutronLEPFission );
 }

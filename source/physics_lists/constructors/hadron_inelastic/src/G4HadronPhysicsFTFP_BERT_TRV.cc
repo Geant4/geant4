@@ -51,8 +51,6 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4LFission.hh"
 #include "G4ChipsKaonMinusInelasticXS.hh"
 #include "G4ChipsKaonPlusInelasticXS.hh"
 #include "G4ChipsKaonZeroInelasticXS.hh"
@@ -195,7 +193,9 @@ void G4HadronPhysicsFTFP_BERT_TRV::ConstructParticle()
 void G4HadronPhysicsFTFP_BERT_TRV::ConstructProcess()
 {
   if ( tpdata == 0 ) tpdata = new ThreadPrivate;
+
   CreateModels();
+
   tpdata->theNeutrons->Build();
   tpdata->thePro->Build();
   tpdata->thePiK->Build();
@@ -204,7 +204,6 @@ void G4HadronPhysicsFTFP_BERT_TRV::ConstructProcess()
   tpdata->theAntiBaryon->Build();
 
   // --- Kaons ---
-  // Use Chips cross sections
   tpdata->ChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
   tpdata->ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
   tpdata->ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
@@ -215,20 +214,15 @@ void G4HadronPhysicsFTFP_BERT_TRV::ConstructProcess()
   G4PhysListUtil::FindInelasticProcess(G4KaonZeroLong::KaonZeroLong())->AddDataSet(tpdata->ChipsKaonZero);
 
   // --- Neutrons ---
-  // Use the same cross sections and neutron capture as in QBBC.
-  // Need also to assigned a model (Gheisha) to fission.
   tpdata->xsNeutronInelasticXS = new G4NeutronInelasticXS();  
   G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->xsNeutronInelasticXS);
 
   G4HadronicProcess* capture = 0;
-  G4HadronicProcess* fission = 0;
   G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
   G4ProcessVector*  pv = pmanager->GetProcessList();
   for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
     if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
       capture = static_cast<G4HadronicProcess*>((*pv)[i]);
-    } else if ( fFission == ((*pv)[i])->GetProcessSubType() ) {
-      fission = static_cast<G4HadronicProcess*>((*pv)[i]);
     }
   }
   if ( ! capture ) {
@@ -238,11 +232,4 @@ void G4HadronPhysicsFTFP_BERT_TRV::ConstructProcess()
   tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
   capture->RegisterMe(new G4NeutronRadCapture());
-  if ( ! fission ) {
-    fission = new G4HadronFissionProcess("nFission");
-    pmanager->AddDiscreteProcess(fission);
-  }
-  fission->RegisterMe(new G4LFission());
-
 }
-

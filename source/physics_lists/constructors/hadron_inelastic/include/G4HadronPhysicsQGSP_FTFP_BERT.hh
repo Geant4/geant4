@@ -58,7 +58,6 @@
 #include "G4FTFPNeutronBuilder.hh"
 #include "G4QGSPNeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
-#include "G4LEPNeutronBuilder.hh"
 
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
@@ -85,7 +84,6 @@ class G4HadronPhysicsQGSP_FTFP_BERT : public G4VPhysicsConstructor
       G4FTFPNeutronBuilder * theFTFPNeutron;
       G4QGSPNeutronBuilder * theQGSPNeutron;
       G4BertiniNeutronBuilder * theBertiniNeutron;
-      G4LEPNeutronBuilder * theLEPNeutron;
     
       G4PiKBuilder * thePiK;
       G4FTFPPiKBuilder * theFTFPPiK;
@@ -101,6 +99,8 @@ class G4HadronPhysicsQGSP_FTFP_BERT : public G4VPhysicsConstructor
 
       G4AntiBarionBuilder     *theAntiBaryon;
       G4FTFPAntiBarionBuilder *theFTFPAntiBaryon;
+
+      G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate* tpdata;
 

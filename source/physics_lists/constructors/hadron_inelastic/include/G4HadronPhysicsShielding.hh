@@ -55,7 +55,6 @@
 #include "G4NeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
 #include "G4FTFPNeutronBuilder.hh"
-#include "G4LEPNeutronBuilder.hh"
 #include "G4NeutronHPBuilder.hh"
 
 #include "G4HyperonFTFPBuilder.hh"
@@ -86,7 +85,6 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
       G4VNeutronBuilder * theLENeutron;
       G4BertiniNeutronBuilder * theBertiniNeutron;
       G4FTFPNeutronBuilder * theFTFPNeutron;
-      G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
  
       G4PiKBuilder * thePiK;
       G4BertiniPiKBuilder * theBertiniPiK;
@@ -108,6 +106,8 @@ class G4HadronPhysicsShielding : public G4VPhysicsConstructor
       G4VCrossSectionDataSet * theBGGxsNeutron;
       G4VCrossSectionDataSet * theNeutronHPJENDLHEInelastic;
       G4VCrossSectionDataSet * theBGGxsProton;
+
+      G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate* tpdata;
 

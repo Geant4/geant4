@@ -14,6 +14,18 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-Jul-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-16)
+- Nothing is changed: simply re-propose the previous tag after
+  fixing an initialization problem in materials category.
+
+19-Jul-2013, Alberto Ribon		(phys-ctor-hinelastic-V09-06-15)
+- Replaced LEP neutron capture (Gheisha cross section and G4LCapture model)
+  with G4NeutronCaptureXS (cross section) and G4NeutronRadCapture (model)
+  in all physics lists.
+- Removed LEP fission (Gheisha cross section and G4LFission model) in
+  all physics lists which do not make use of neutron_HP.
+  For the HP-based physics lists, used LEP fission only above 19.9 MeV.
+
 18-Jun-2013, Alberto Ribon		(phys-ctor-hinelastic-V09-06-14)
 - Re-enable quasiElastic in the signature of the constructors
   (but not in the implementation).

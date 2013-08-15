@@ -57,6 +57,12 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4IonConstructor.hh"
 
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronCaptureXS.hh"
+#include "G4NeutronHPCaptureData.hh"
+#include "G4LFission.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -68,7 +74,6 @@ G4HadronPhysicsINCLXX::tpdata = 0;
 G4HadronPhysicsINCLXX::G4HadronPhysicsINCLXX(G4int)
     :  G4VPhysicsConstructor("hInelastic INCLXX")
 /*    , theNeutrons(0)
-    , theLEPNeutron(0)
     , theQGSPNeutron(0)
     , theFTFPNeutron(0)
     , theBertiniNeutron(0)
@@ -86,7 +91,8 @@ G4HadronPhysicsINCLXX::G4HadronPhysicsINCLXX(G4int)
     , theINCLXXPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)*/
+    , theFTFPAntiBaryon(0)
+    , xsNeutronCaptureXS(0)*/
     , QuasiElastic(true)
     , withNeutronHP(false)
     , withFTFP(false)
@@ -96,7 +102,6 @@ G4HadronPhysicsINCLXX::G4HadronPhysicsINCLXX(G4int)
 G4HadronPhysicsINCLXX::G4HadronPhysicsINCLXX(const G4String& name, const G4bool quasiElastic, const G4bool neutronHP, const G4bool ftfp)
     :  G4VPhysicsConstructor(name) 
 /*    , theNeutrons(0)
-    , theLEPNeutron(0)
     , theQGSPNeutron(0)
     , theFTFPNeutron(0)
     , theBertiniNeutron(0)
@@ -114,7 +119,8 @@ G4HadronPhysicsINCLXX::G4HadronPhysicsINCLXX(const G4String& name, const G4bool 
     , theINCLXXPro(0)
     , theHyperon(0)
     , theAntiBaryon(0)
-    , theFTFPAntiBaryon(0)*/
+    , theFTFPAntiBaryon(0)
+    , xsNeutronCaptureXS(0)*/
     , QuasiElastic(quasiElastic)
     , withNeutronHP(neutronHP)
     , withFTFP(ftfp)
@@ -133,11 +139,7 @@ void G4HadronPhysicsINCLXX::CreateModels()
   tpdata->theQGSPPiK=0;
   
 
-  tpdata->theNeutrons=new G4NeutronBuilder;
-  tpdata->theNeutrons->RegisterMe(tpdata->theLEPNeutron=new G4LEPNeutronBuilder);
-  tpdata->theLEPNeutron->SetMinInelasticEnergy(0.*eV);
-  tpdata->theLEPNeutron->SetMaxInelasticEnergy(0.*eV);  
-  if (withNeutronHP) tpdata->theLEPNeutron->SetMinEnergy(19.9*MeV);
+  tpdata->theNeutrons=new G4NeutronBuilder( withNeutronHP );
   tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(quasiElasticFTF));
   tpdata->theFTFPNeutron->SetMinEnergy(9.5*GeV);
   if(!withFTFP) {
@@ -198,7 +200,6 @@ G4HadronPhysicsINCLXX::~G4HadronPhysicsINCLXX()
 {
    delete tpdata->theFTFPNeutron;
    delete tpdata->theQGSPNeutron;
-   delete tpdata->theLEPNeutron;
    delete tpdata->theBertiniNeutron;
    delete tpdata->theINCLXXNeutron;
    delete tpdata->theNeutronHP;
@@ -215,7 +216,8 @@ G4HadronPhysicsINCLXX::~G4HadronPhysicsINCLXX()
    delete tpdata->theHyperon;
    delete tpdata->theAntiBaryon;
    delete tpdata->theFTFPAntiBaryon;
-   
+   delete tpdata->xsNeutronCaptureXS;
+  
    delete tpdata; tpdata = 0;
 }
 
@@ -244,5 +246,36 @@ void G4HadronPhysicsINCLXX::ConstructProcess()
   tpdata->thePiK->Build();
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
-}
 
+  // --- Neutrons ---
+  G4HadronicProcess* capture = 0;
+  G4HadronicProcess* fission = 0;
+  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
+  G4ProcessVector*  pv = pmanager->GetProcessList();
+  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
+    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
+      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
+    } else if ( fFission == ((*pv)[i])->GetProcessSubType() ) {
+      fission = static_cast<G4HadronicProcess*>((*pv)[i]);
+    }
+  }
+  if ( ! capture ) {
+    capture = new G4HadronCaptureProcess("nCapture");
+    pmanager->AddDiscreteProcess(capture);
+  }
+  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  capture->AddDataSet(tpdata->xsNeutronCaptureXS);
+  G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
+  capture->RegisterMe( theNeutronRadCapture );
+  if ( withNeutronHP ) {
+    capture->AddDataSet( new G4NeutronHPCaptureData );
+    theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
+    if ( ! fission ) {
+      fission = new G4HadronFissionProcess("nFission");
+      pmanager->AddDiscreteProcess(fission);
+    }
+    G4LFission* theNeutronLEPFission = new G4LFission();
+    theNeutronLEPFission->SetMinEnergy( 19.9*MeV );
+    fission->RegisterMe( theNeutronLEPFission );
+  }
+}

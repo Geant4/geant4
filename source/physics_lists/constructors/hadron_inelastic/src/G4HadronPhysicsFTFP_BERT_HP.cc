@@ -47,6 +47,12 @@
 #include "G4ChipsKaonZeroInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronCaptureXS.hh"
+#include "G4NeutronHPCaptureData.hh"
+#include "G4LFission.hh"
+
 #include "G4PhysListUtil.hh"
 
 // factory
@@ -62,7 +68,6 @@ G4HadronPhysicsFTFP_BERT_HP::G4HadronPhysicsFTFP_BERT_HP(G4int)
 /*    , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , theLEPNeutron(0)
     , theHPNeutron(0)
     , thePiK(0)
     , theBertiniPiK(0)
@@ -76,7 +81,8 @@ G4HadronPhysicsFTFP_BERT_HP::G4HadronPhysicsFTFP_BERT_HP(G4int)
     , QuasiElastic(false)
   /*    , ChipsKaonMinus(0)
     , ChipsKaonPlus(0)
-    , ChipsKaonZero(0)*/
+    , ChipsKaonZero(0)
+    , xsNeutronCaptureXS(0)*/
 {}
 
 G4HadronPhysicsFTFP_BERT_HP::G4HadronPhysicsFTFP_BERT_HP(const G4String& name, G4bool quasiElastic)
@@ -84,7 +90,6 @@ G4HadronPhysicsFTFP_BERT_HP::G4HadronPhysicsFTFP_BERT_HP(const G4String& name, G
 /*    , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , theLEPNeutron(0)
     , theHPNeutron(0)
     , thePiK(0)
     , theBertiniPiK(0)
@@ -98,21 +103,18 @@ G4HadronPhysicsFTFP_BERT_HP::G4HadronPhysicsFTFP_BERT_HP(const G4String& name, G
     , QuasiElastic(quasiElastic)
   /*    , ChipsKaonMinus(0)
     , ChipsKaonPlus(0)
-    , ChipsKaonZero(0)*/
+    , ChipsKaonZero(0)
+    , xsNeutronCaptureXS(0)*/
 {}
 
 void G4HadronPhysicsFTFP_BERT_HP::CreateModels()
 {
 
-  tpdata->theNeutrons=new G4NeutronBuilder;
+  tpdata->theNeutrons=new G4NeutronBuilder( true ); // Fission on
   tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(QuasiElastic);
   tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron);
   tpdata->theNeutrons->RegisterMe(tpdata->theBertiniNeutron=new G4BertiniNeutronBuilder);
   tpdata->theBertiniNeutron->SetMinEnergy(19.9*MeV);
-  tpdata->theNeutrons->RegisterMe(tpdata->theLEPNeutron=new G4LEPNeutronBuilder);
-  tpdata->theLEPNeutron->SetMinEnergy(19.9*MeV);
-  tpdata->theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
-  tpdata->theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);
   tpdata->theBertiniNeutron->SetMaxEnergy(5*GeV);
   tpdata->theNeutrons->RegisterMe(tpdata->theHPNeutron=new G4NeutronHPBuilder);
 
@@ -131,7 +133,7 @@ void G4HadronPhysicsFTFP_BERT_HP::CreateModels()
   tpdata->theHyperon=new G4HyperonFTFPBuilder;
     
   tpdata->theAntiBaryon=new G4AntiBarionBuilder;
-  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new  G4FTFPAntiBarionBuilder(QuasiElastic));
+  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(QuasiElastic));
 }
 
 G4HadronPhysicsFTFP_BERT_HP::~G4HadronPhysicsFTFP_BERT_HP()
@@ -139,7 +141,6 @@ G4HadronPhysicsFTFP_BERT_HP::~G4HadronPhysicsFTFP_BERT_HP()
   delete tpdata->theNeutrons;
   delete tpdata->theBertiniNeutron;
   delete tpdata->theFTFPNeutron;
-  delete tpdata->theLEPNeutron;
   delete tpdata->theHPNeutron;
 
   delete tpdata->thePiK;
@@ -153,7 +154,9 @@ G4HadronPhysicsFTFP_BERT_HP::~G4HadronPhysicsFTFP_BERT_HP()
   delete tpdata->theHyperon;
   delete tpdata->theAntiBaryon;
   delete tpdata->theFTFPAntiBaryon;
-  
+
+  delete tpdata->xsNeutronCaptureXS;
+
   delete tpdata; tpdata = 0;
 } 
 
@@ -178,7 +181,7 @@ void G4HadronPhysicsFTFP_BERT_HP::ConstructProcess()
   tpdata->thePro->Build();
   tpdata->thePiK->Build();
 
-  // use CHIPS cross sections also for Kaons
+  // --- Kaons ---
   tpdata->ChipsKaonMinus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusInelasticXS::Default_Name());
   tpdata->ChipsKaonPlus = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusInelasticXS::Default_Name());
   tpdata->ChipsKaonZero = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroInelasticXS::Default_Name());
@@ -190,4 +193,34 @@ void G4HadronPhysicsFTFP_BERT_HP::ConstructProcess()
     
   tpdata->theHyperon->Build();
   tpdata->theAntiBaryon->Build();
+
+  // --- Neutrons ---
+  G4HadronicProcess* capture = 0;
+  G4HadronicProcess* fission = 0;
+  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
+  G4ProcessVector*  pv = pmanager->GetProcessList();
+  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) {
+    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) {
+      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
+    } else if ( fFission == ((*pv)[i])->GetProcessSubType() ) {
+      fission = static_cast<G4HadronicProcess*>((*pv)[i]);
+    }
+  }
+  if ( ! capture ) {
+    capture = new G4HadronCaptureProcess("nCapture");
+    pmanager->AddDiscreteProcess(capture);
+  }
+  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  capture->AddDataSet(tpdata->xsNeutronCaptureXS);
+  capture->AddDataSet( new G4NeutronHPCaptureData );
+  G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
+  theNeutronRadCapture->SetMinEnergy( 19.9*MeV ); 
+  capture->RegisterMe( theNeutronRadCapture );
+  if ( ! fission ) {
+    fission = new G4HadronFissionProcess("nFission");
+    pmanager->AddDiscreteProcess(fission);
+  }
+  G4LFission* theNeutronLEPFission = new G4LFission();
+  theNeutronLEPFission->SetMinEnergy( 19.9*MeV );
+  fission->RegisterMe( theNeutronLEPFission );
 }

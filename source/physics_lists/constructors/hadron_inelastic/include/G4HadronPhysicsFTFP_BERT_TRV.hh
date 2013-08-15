@@ -77,6 +77,7 @@ class G4HadronPhysicsFTFP_BERT_TRV : public G4VPhysicsConstructor
 
   private:
     void CreateModels();
+
     struct ThreadPrivate {
       G4NeutronBuilder * theNeutrons;
       G4BertiniNeutronBuilder * theBertiniNeutron;
@@ -95,7 +96,6 @@ class G4HadronPhysicsFTFP_BERT_TRV : public G4VPhysicsConstructor
       G4AntiBarionBuilder * theAntiBaryon;
       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
 
-  //    G4VCrossSectionDataSet * theCHIPSInelastic;
       G4VCrossSectionDataSet * ChipsKaonMinus;
       G4VCrossSectionDataSet * ChipsKaonPlus;
       G4VCrossSectionDataSet * ChipsKaonZero;
@@ -103,8 +103,8 @@ class G4HadronPhysicsFTFP_BERT_TRV : public G4VPhysicsConstructor
       G4VCrossSectionDataSet * xsNeutronCaptureXS;
     };
     static G4ThreadLocal ThreadPrivate* tpdata;
-    G4bool QuasiElastic;
 
+    G4bool QuasiElastic;
 };
 
 #endif
