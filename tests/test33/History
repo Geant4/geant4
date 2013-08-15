@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 29th, 2013 A. Howard  - test33-V09-06-01
+- Removed unused variable FieldName from Tst33RunAction.
+
 December 17th, 2012 A. Howard  - test33-V09-06-00
 - Removed obsolete G4CellScorer class references.
 

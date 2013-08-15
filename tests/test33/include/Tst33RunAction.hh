@@ -64,7 +64,7 @@ private:
   // Data member 
   // - vector of MultiFunctionalDetecor names.
   std::vector<G4String> theSDName;  
-  G4int FieldName;
+  //  G4int FieldName;
   G4int FieldValue;
 
 

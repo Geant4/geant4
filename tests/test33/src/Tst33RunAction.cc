@@ -49,7 +49,7 @@
 //=======================================================================
 // Constructor
 Tst33RunAction::Tst33RunAction():
-  FieldName(13),
+  //  FieldName(13),
   FieldValue(13)
 //   FieldName(25),
 //   FieldValue(14)
