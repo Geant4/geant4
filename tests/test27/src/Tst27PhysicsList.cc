@@ -226,10 +226,10 @@ void Tst27PhysicsList::ConstructEM()
 #include "G4OmegaMinusInelasticProcess.hh"
 #include "G4AntiOmegaMinusInelasticProcess.hh"
 
-// Low-energy Models
+// Low energy Models
 #include "G4HadronElastic.hh"
-#include "G4LFission.hh"
-#include "G4LCapture.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronCaptureXS.hh"
 
 // Generator models
 #include "G4TheoFSGenerator.hh"
@@ -295,7 +295,6 @@ void Tst27PhysicsList::ConstructHad()
 
   G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess();
   theElasticProcess->RegisterMe(new G4HadronElastic());
-  G4HadronElasticProcess* theElasticProcess1 = new G4HadronElasticProcess();
 
   theParticleIterator->reset();
   while ((*theParticleIterator)()) {
@@ -368,27 +367,22 @@ void Tst27PhysicsList::ConstructHad()
       pmanager->AddDiscreteProcess(theInelasticProcess);
 
     } else if (particleName == "neutron") {
-
       // elastic scattering
-      theElasticProcess1->RegisterMe(new G4HadronElastic);
-      pmanager->AddDiscreteProcess(theElasticProcess1);
+      pmanager->AddDiscreteProcess(theElasticProcess);
+
       // inelastic scattering
       G4NeutronInelasticProcess* theInelasticProcess =
                               new G4NeutronInelasticProcess("inelastic");
       theInelasticProcess->RegisterMe(theBC);
       theInelasticProcess->RegisterMe(theTheoModel);
       pmanager->AddDiscreteProcess(theInelasticProcess);
-      // fission
-      G4HadronFissionProcess* theFissionProcess =
-                              new G4HadronFissionProcess;
-      G4LFission* theFissionModel = new G4LFission;
-      theFissionProcess->RegisterMe(theFissionModel);
-      pmanager->AddDiscreteProcess(theFissionProcess);
+
       // capture
-      G4HadronCaptureProcess* theCaptureProcess =
-                              new G4HadronCaptureProcess;
-      G4LCapture* theCaptureModel = new G4LCapture;
-      theCaptureProcess->RegisterMe(theCaptureModel);
+      G4HadronCaptureProcess* theCaptureProcess = new G4HadronCaptureProcess;
+      G4NeutronRadCapture* captureModel = new G4NeutronRadCapture;
+      theCaptureProcess->RegisterMe(captureModel);
+      G4NeutronCaptureXS* theCaptureXS = new G4NeutronCaptureXS;
+      theCaptureProcess->AddDataSet(theCaptureXS);
       pmanager->AddDiscreteProcess(theCaptureProcess);
 
     } else if (particleName == "anti_neutron") {
