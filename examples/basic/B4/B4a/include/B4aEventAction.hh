@@ -34,8 +34,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class B4RunAction;
-
 class G4GenericMessenger;
 
 /// Event action class
@@ -67,7 +65,6 @@ class B4aEventAction : public G4UserEventAction
     
   private:
     G4GenericMessenger*  fMessenger;
-    B4RunAction*  fRunAction;
    
     G4double  fEnergyAbs;
     G4double  fEnergyGap;

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24/07/13 P. Gumplinger (exampleB4-V09-06-10)
+- remove unused B4RunAction* fRunAction in B4aEventAction.hh
+
 11/06/13 I. Hrivnacova (exampleB4-V09-06-09)
 - Fixed B4[b]RunAction::EndOfRunAction(): to get the analysis file
   closed also when no events are processed
