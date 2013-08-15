@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jul 30, 2013, A. Dotti, tag human_phantom-V09-06-03
+- Bug fixing for compilation warning for clang32
+
 May 23, 2013, G. Cosmo, tag human_phantom-V09-06-02
 - Corrected typo in G4HumanPhantomAnalysisManager for printout of file name.
 
