@@ -94,9 +94,8 @@ int main(int argc,char** argv)
 
   runManager->SetUserAction(eventAction);
 
-  Em10SteppingAction* steppingAction = new Em10SteppingAction(detector,
-                                                            eventAction, 
-                                                            runAction);
+  Em10SteppingAction* steppingAction = new Em10SteppingAction(eventAction,
+                                                              runAction);
   runManager->SetUserAction(steppingAction);
 
 
