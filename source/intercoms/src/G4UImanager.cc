@@ -50,6 +50,8 @@
 G4ThreadLocal G4UImanager * G4UImanager::fUImanager = 0;
 G4ThreadLocal G4bool G4UImanager::fUImanagerHasBeenKilled = false;
 
+G4int G4UImanager::igThreadID = -1;
+
 G4UImanager * G4UImanager::GetUIpointer()
 {
   if(!fUImanager)
@@ -648,6 +650,7 @@ void G4UImanager::SetUpForAThread(G4int tId)
   threadID = tId;
   G4iosInitialization();
   threadCout = new G4MTcoutDestination(threadID);
+  threadCout->SetIgnoreCout(igThreadID);
 }
 
 void G4UImanager::SetCoutFileName(const G4String& fileN, G4bool ifAppend)
@@ -694,5 +697,14 @@ void G4UImanager::SetThreadUseBuffer(G4bool flg)
   threadCout->EnableBuffering(flg);
 }
 
-
+void G4UImanager::SetThreadIgnore(G4int tid)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0)
+  {
+    igThreadID = tid;
+    return;
+  }
+  threadCout->SetIgnoreCout(tid);
+}
 

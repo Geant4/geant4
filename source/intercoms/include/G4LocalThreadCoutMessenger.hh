@@ -41,6 +41,7 @@ class G4UIdirectory;
 class G4UIcommand;
 class G4UIcmdWithABool;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -58,7 +59,7 @@ class G4LocalThreadCoutMessenger: public G4UImessenger
     G4UIcommand*               cerrFileNameCmd;
     G4UIcmdWithABool*      bufferCoutCmd;
     G4UIcmdWithAString*    prefixCmd;
-
+    G4UIcmdWithAnInteger*  ignoreCmd;
 };
 
 #endif

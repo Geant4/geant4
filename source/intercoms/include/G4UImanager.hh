@@ -260,12 +260,14 @@ class G4UImanager : public G4VStateDependent
   private:
       G4int threadID;
       G4MTcoutDestination* threadCout;
+      static G4int igThreadID;
 
   public:
       void SetCoutFileName(const G4String& fileN = "G4cout.txt", G4bool ifAppend = true);
       void SetCerrFileName(const G4String& fileN = "G4cerr.txt", G4bool ifAppend = true);
       void SetThreadPrefixString(const G4String& s = "W");
       void SetThreadUseBuffer(G4bool flg = true);
+      void SetThreadIgnore(G4int tid = 0);
 };
 
 #endif

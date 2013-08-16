@@ -36,6 +36,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIparameter.hh"
 #include "G4Tokenizer.hh"
 
@@ -84,6 +85,16 @@ G4LocalThreadCoutMessenger::G4LocalThreadCoutMessenger()
   prefixCmd->SetParameterName("prefix",true);
   prefixCmd->SetDefaultValue("G4WT");
   prefixCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  ignoreCmd = new G4UIcmdWithAnInteger("/control/cout/ignoreThreadsExcept",this);
+  ignoreCmd->SetGuidance("Omit cout from threads except the specified one.");
+  ignoreCmd->SetGuidance("This command takes effect only if cout destination is screen without buffering.");
+  ignoreCmd->SetGuidance("If specified thread ID is greater than the number of threads,");
+  ignoreCmd->SetGuidance("no cout is displayed from worker threads. -1 to reset.");
+  ignoreCmd->SetGuidance("This command does not affect to cerr.");
+  ignoreCmd->SetParameterName("threadID",true);
+  ignoreCmd->SetDefaultValue(0);
+  ignoreCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 G4LocalThreadCoutMessenger::~G4LocalThreadCoutMessenger()
@@ -92,6 +103,7 @@ G4LocalThreadCoutMessenger::~G4LocalThreadCoutMessenger()
   delete cerrFileNameCmd;
   delete bufferCoutCmd;
   delete prefixCmd;
+  delete ignoreCmd;
   delete coutDir;
 }
 
@@ -116,5 +128,7 @@ void G4LocalThreadCoutMessenger::SetNewValue(G4UIcommand* command,G4String newVa
   { UI->SetThreadUseBuffer(StoB(newVal)); }
   else if(command == prefixCmd)
   { UI->SetThreadPrefixString(newVal); }
+  else if(command == ignoreCmd)
+  { UI->SetThreadIgnore(StoI(newVal)); }
 }
 

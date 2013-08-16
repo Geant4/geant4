@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 August, 2013 M. Asai (intercoms-V09-06-07)
+- Improve the behavior of ignoring thread cout.
+
+15 August, 2013 M. Asai (intercoms-V09-06-06)
+- G4MTcoutDestination now has a capability of printing out only for
+  the selected thread to make the display readable.
+- Introducing according UI command /control/cout/ignoreThreadsExcept.
+
 23 May, 2013 M. Asai (intercoms-V09-06-05)
 - Introducing /control/cout/ command category for handling thread-local cout/cerr.
 
