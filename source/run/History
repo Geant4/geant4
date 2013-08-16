@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Aug 15th, 2013, M.Asai (run-V09-06-81)
+- Re-tag 
+
 Aug 14th, 2013, M.Asai (run-V09-06-80)
 - G4VUserPhysicsList takes care of setting the process manager pointer
   of GenericIon to all the general ions for worker threads.

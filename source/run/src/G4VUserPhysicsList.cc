@@ -243,10 +243,16 @@ void G4VUserPhysicsList::InitializeProcessManager()
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if  (pmanager==0) {
-      // create process manager if the particle has no its one
+      // create process manager if the particle does not have its own.
       pmanager = new G4ProcessManager(particle);
       particle->SetProcessManager(pmanager);
       if( particle->GetMasterProcessManager() == 0 ) particle->SetMasterProcessManager(pmanager);
+#ifdef G4VERBOSE
+      if (verboseLevel >2){
+        G4cout << "G4VUserPhysicsList::InitializeProcessManager: creating ProcessManager to "
+          << particle->GetParticleName() << G4endl;
+      }
+#endif
     }
   }
 
@@ -260,6 +266,12 @@ void G4VUserPhysicsList::InitializeProcessManager()
       if(particle->IsGeneralIon())
       {
         particle->SetProcessManager(gionPM);
+#ifdef G4VERBOSE
+        if (verboseLevel >2){
+          G4cout << "G4VUserPhysicsList::InitializeProcessManager: copying ProcessManager to "
+            << particle->GetParticleName() << G4endl;
+        }
+#endif
       }
     }
   }
