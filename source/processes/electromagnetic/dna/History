@@ -14,6 +14,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+16-08-2013  S.I.         tag emdna-V09-06-10
+	    Added G4DNAIons
+
 25-06-2013  M.K.         tag emdna-V09-06-09
 	    G4MoleculeID: Rectify initialization
 	    G4MoleculeCounter: Automatic switch between unique_ptr or 

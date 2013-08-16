@@ -52,6 +52,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNACrossSectionDataSet.hh
         G4DNADamages.hh
         G4DNAGenericIonsManager.hh
+	G4DNAIons.hh
         G4DNAMolecularReactionTable.hh
         G4DNAWaterExcitationStructure.hh
         G4DNAWaterIonisationStructure.hh
@@ -62,6 +63,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
         G4DNACrossSectionDataSet.cc
         G4DNADamages.cc
         G4DNAGenericIonsManager.cc
+	G4DNAIons.cc
         G4DNAMolecularReactionTable.cc
         G4DNAWaterExcitationStructure.cc
         G4DNAWaterIonisationStructure.cc
