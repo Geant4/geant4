@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/DICOM/src/DicomPhysicsList.cc
 /// \brief Implementation of the DicomPhysicsList class
 //
-// $Id$
 
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"

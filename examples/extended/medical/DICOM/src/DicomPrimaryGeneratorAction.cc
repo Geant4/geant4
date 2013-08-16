@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/DICOM/src/DicomPrimaryGeneratorAction.cc
 /// \brief Implementation of the DicomPrimaryGeneratorAction class
 //
@@ -54,6 +56,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomPrimaryGeneratorAction::DicomPrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0)
 {
   G4int nParticle = 1;
   fParticleGun  = new G4ParticleGun(nParticle);               

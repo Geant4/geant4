@@ -23,16 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/DICOM/include/DicomNestedPhantomParameterisation.hh
 /// \brief Definition of the DicomNestedPhantomParameterisation class
-//
-// $Id$
 //
 
 #ifndef DICOMNESTEDPARAMETERISATION_HH
 #define DICOMNESTEDPARAMETERISATION_HH
 
 #include <vector>
+#include <map>
 
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
@@ -42,6 +43,7 @@ class G4VPhysicalVolume;
 class G4VTouchable; 
 class G4VSolid;
 class G4Material;
+class G4VisAttributes;
 
 // CSG Entities which may be parameterised/replicated
 //
@@ -68,13 +70,13 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
                                        std::vector<G4Material*>& mat);
     virtual ~DicomNestedPhantomParameterisation(); 
 
-    G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
+    virtual G4Material* ComputeMaterial(G4VPhysicalVolume *currentVol,
                                 const G4int repNo, 
                                 const G4VTouchable *parentTouch );
       // Must cope with parentTouch for navigator's SetupHierarchy
 
-    G4int       GetNumberOfMaterials() const;
-    G4Material* GetMaterial(G4int idx) const;
+    virtual G4int       GetNumberOfMaterials() const;
+    virtual G4Material* GetMaterial(G4int idx) const;
       // Needed to define materials for instances of Nested Parameterisation 
       // Current convention: each call should return the materials 
       // of all instances with the same mother/ancestor volume
@@ -85,41 +87,43 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
     void SetMaterialIndices( size_t* matInd ) { fMaterialIndices = matInd; }
     void SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz );
 
-    void ComputeTransformation(const G4int no,
+    virtual void ComputeTransformation(const G4int no,
                                      G4VPhysicalVolume *currentPV) const;
 
     // Additional standard Parameterisation methods, 
     // which can be optionally defined, in case solid is used.
 
-    void ComputeDimensions(G4Box &, const G4int,
+    virtual void ComputeDimensions(G4Box &, const G4int,
                                     const G4VPhysicalVolume *) const;
 
     using G4VNestedParameterisation::ComputeMaterial;
 
   private:  // Dummy declarations to get rid of warnings ...
 
-    void ComputeDimensions (G4Trd&, const G4int,
+    virtual void ComputeDimensions (G4Trd&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Trap&, const G4int,
+    virtual void ComputeDimensions (G4Trap&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Cons&, const G4int,
+    virtual void ComputeDimensions (G4Cons&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Sphere&, const G4int,
+    virtual void ComputeDimensions (G4Sphere&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Orb&, const G4int,
+    virtual void ComputeDimensions (G4Orb&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Torus&, const G4int,
+    virtual void ComputeDimensions (G4Torus&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Para&, const G4int,
+    virtual void ComputeDimensions (G4Para&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Hype&, const G4int,
+    virtual void ComputeDimensions (G4Hype&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Tubs&, const G4int,
+    virtual void ComputeDimensions (G4Tubs&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polycone&, const G4int,
+    virtual void ComputeDimensions (G4Polycone&, const G4int,
                             const G4VPhysicalVolume*) const {}
-    void ComputeDimensions (G4Polyhedra&, const G4int,
+    virtual void ComputeDimensions (G4Polyhedra&, const G4int,
                             const G4VPhysicalVolume*) const {}
+
+    void ReadColourData();
 
   private:
 
@@ -128,5 +132,7 @@ class DicomNestedPhantomParameterisation : public G4VNestedParameterisation
     std::vector<G4Material*> fMaterials;
     size_t* fMaterialIndices; // Index in materials corresponding to each voxel
 //    unsigned int* fMaterialIndices; // Index in materials corresponding to each voxel
+    std::map<G4String,G4VisAttributes*> fColours;
+
 };
 #endif

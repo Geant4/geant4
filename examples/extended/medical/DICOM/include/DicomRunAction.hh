@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/DICOM/include/DicomRunAction.hh
 /// \brief Definition of the DicomRunAction class
 //
-// $Id$
-// 
 
 #ifndef DicomRunAction_h
 #define DicomRunAction_h 1
@@ -59,7 +59,7 @@ private:
   // Data member 
   // - vector of MultiFunctionalDetecor names.
   std::vector<G4String> fSDName;  
-  G4int fFieldName;
+//  G4int fFieldName;
   G4int fFieldValue;
 
 

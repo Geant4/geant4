@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/DICOM/include/DicomRun.hh
 /// \brief Definition of the DicomRun class
 //
-// $Id$
 
 #ifndef DicomRun_h
 #define DicomRun_h 1
@@ -75,6 +76,7 @@ private:
   std::vector<G4String> fCollName;
   std::vector<G4int> fCollID;
   std::vector<G4THitsMap<G4double>*> fRunMap;
+
 };
 
 //

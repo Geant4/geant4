@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file DicomRegularDetectorConstruction.cc
 /// \brief Implementation of the DicomRegularDetectorConstruction clas
 //
@@ -48,7 +50,8 @@
 #include "DicomPhantomParameterisationColour.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomRegularDetectorConstruction::DicomRegularDetectorConstruction() : DicomDetectorConstruction()
+DicomRegularDetectorConstruction::DicomRegularDetectorConstruction() 
+ : DicomDetectorConstruction()
 {
 }
 

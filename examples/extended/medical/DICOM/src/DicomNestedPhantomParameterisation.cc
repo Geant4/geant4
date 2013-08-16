@@ -38,26 +38,54 @@
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 
+#include "G4VisAttributes.hh"
+#include "G4VVisManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomNestedPhantomParameterisation::
 DicomNestedPhantomParameterisation(const G4ThreeVector& voxelSize,
                                          std::vector<G4Material*>& mat):
-  G4VNestedParameterisation(), fdX(voxelSize.x()),
-  fdY(voxelSize.y()), fdZ(voxelSize.z()), fMaterials(mat)
+  G4VNestedParameterisation(),
+  fdX(voxelSize.x()), fdY(voxelSize.y()), fdZ(voxelSize.z()),
+  fnX(0), fnY(0), fnZ(0),
+  fMaterials(mat),
+  fMaterialIndices(0)
 {
-  fnX = 0;
-  fnY = 0;
-  fnZ = 0;
-  fMaterialIndices = 0;
-
-  // Position of voxels. 
+  // Position of voxels.
   // x and y positions are already defined in DetectorConstruction by using
   // replicated volume. Here only we need to define is z positions of voxels.
+    ReadColourData();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomNestedPhantomParameterisation::~DicomNestedPhantomParameterisation()
 {
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DicomNestedPhantomParameterisation::ReadColourData()
+{
+    //----- Add a G4VisAttributes for materials not defined in file;
+    G4VisAttributes* blankAtt = new G4VisAttributes;
+    blankAtt->SetVisibility( FALSE );
+    fColours["Default"] = blankAtt;
+
+    G4String colourFile = "ColourMap.dat";
+
+    //----- Read file
+    std::ifstream fin(colourFile.c_str());
+    G4int nMate;
+    G4String mateName;
+    G4double cred, cgreen, cblue, copacity;
+    fin >> nMate;
+    for( G4int ii = 0; ii < nMate; ii++ ){
+        fin >> mateName >> cred >> cgreen >> cblue >> copacity;
+        G4Colour colour( cred, cgreen, cblue, copacity );
+        G4VisAttributes* visAtt = (copacity > 0.) ?
+        (new G4VisAttributes( colour )) : (new G4VisAttributes(G4VisAttributes::Invisible));
+        //visAtt->SetForceSolid(true);
+        fColours[mateName] = visAtt;
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,37 +99,55 @@ SetNoVoxel( unsigned int nx, unsigned int ny, unsigned int nz )
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4Material* DicomNestedPhantomParameterisation::
-ComputeMaterial(G4VPhysicalVolume*, const G4int copyNoZ, 
+ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
                                     const G4VTouchable* parentTouch)
 {
-  // protection for initialization and vis at idle state
-  //
-  if(parentTouch==0) return fMaterials[0];
+    // protection for initialization and vis at idle state
+    //
+    if(parentTouch==0) return fMaterials[0];
 
-  // Copy number of voxels. 
-  // Copy number of X and Y are obtained from replication number.
-  // Copy nymber of Z is the copy number of current voxel.
-  G4int ix = parentTouch->GetReplicaNumber(0);
-  G4int iy = parentTouch->GetReplicaNumber(1);
-  G4int iz = copyNoZ;
+    // Copy number of voxels.
+    // Copy number of X and Y are obtained from replication number.
+    // Copy nymber of Z is the copy number of current voxel.
+    G4int ix = parentTouch->GetReplicaNumber(0);
+    G4int iy = parentTouch->GetReplicaNumber(1);
 
-  G4int copyNo = ix + fnX*iy + fnX*fnY*iz;
+    G4int copyNo = ix + fnX*iy + fnX*fnY*iz;
+    //G4int ix = parentTouch->GetReplicaNumber(0);
+    //G4int iy = parentTouch->GetReplicaNumber(1);
+    //G4int iz = copyNoZ;
+    //G4int copyNo = ix + fnX*iy + fnX*fnY*iz;
 
-  unsigned int matIndex = GetMaterialIndex(copyNo);
+    unsigned int matIndex = GetMaterialIndex(copyNo);
 
-  return fMaterials[ matIndex ];
+    if( physVol && G4VVisManager::GetConcreteInstance()) {
+        G4String mateName = fMaterials.at(matIndex)->GetName();
+        std::string::size_type iuu = mateName.find("__");
+        if( iuu != std::string::npos ) {
+            mateName = mateName.substr( 0, iuu );
+        }
+
+        if(0 < fColours.count(mateName)) {
+            physVol->GetLogicalVolume()->SetVisAttributes(fColours.find(mateName)->second);
+        } else {
+            physVol->GetLogicalVolume()->SetVisAttributes(fColours.begin()->second);
+        }
+    }
+
+    return fMaterials[ matIndex ];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 unsigned int DicomNestedPhantomParameterisation::
 GetMaterialIndex( unsigned int copyNo ) const
 {
-  return *(fMaterialIndices+copyNo);
+    //return *(fMaterialIndices+copyNo);
+    return fMaterialIndices[copyNo];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 // Number of Materials
-// Material scanner is required for preparing physics tables and so on before 
+// Material scanner is required for preparing physics tables and so on before
 // starting simulation, so that G4 has to know number of materials.
 //
 G4int DicomNestedPhantomParameterisation::GetNumberOfMaterials() const

@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/DICOM/src/DicomEventAction.cc
 /// \brief Implementation of the DicomEventAction class
 //
@@ -46,7 +48,9 @@
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-DicomEventAction::DicomEventAction():fDrawFlag("all")
+DicomEventAction::DicomEventAction()
+ : G4UserEventAction(),
+   fDrawFlag("all")
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

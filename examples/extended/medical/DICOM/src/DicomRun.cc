@@ -23,12 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/DICOM/src/DicomRun.cc
-/// \brief Implementation of the DicomRun class
-//
-//
 // $Id$
 //
+/// \file medical/DICOM/src/DicomRun.cc
+/// \brief Implementation of the DicomRun class
 
 //=====================================================================
 ///
@@ -106,6 +104,7 @@ DicomRun::DicomRun(const std::vector<G4String> mfdName): G4Run()
         }
     }
   }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -142,20 +141,20 @@ void DicomRun::RecordEvent(const G4Event* aEvent)
   //=======================================================
   // Sum up HitsMap of this Event  into HitsMap of this RUN
   //=======================================================
-  G4int Ncol = fCollID.size();
-  for ( G4int i = 0; i < Ncol ; i++ ){  // Loop over HitsCollection
-    G4THitsMap<G4double>* EvtMap=0;
-    if ( fCollID[i] >= 0 ){           // Collection is attached to HCE
-      EvtMap = (G4THitsMap<G4double>*)(HCE->GetHC(fCollID[i]));
-    }else{
-      G4cout <<" Error EvtMap Not Found "<< i << G4endl;
+    G4int Ncol = fCollID.size();
+    for ( G4int i = 0; i < Ncol ; i++ ){  // Loop over HitsCollection
+        G4THitsMap<G4double>* EvtMap=0;
+        if ( fCollID[i] >= 0 ){           // Collection is attached to HCE
+            EvtMap = (G4THitsMap<G4double>*)(HCE->GetHC(fCollID[i]));
+        }else{
+            G4cout <<" Error EvtMap Not Found "<< i << G4endl;
+        }
+        if ( EvtMap )  {
+            //=== Sum up HitsMap of this event to HitsMap of RUN.===
+            *fRunMap[i] += *EvtMap;
+            //======================================================
+        }
     }
-    if ( EvtMap )  {
-      //=== Sum up HitsMap of this event to HitsMap of RUN.===
-      *fRunMap[i] += *EvtMap;
-      //======================================================
-    }
-  }
 
   
 }

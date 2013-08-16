@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file DicomRunAction.cc
 /// \brief Implementation of the DicomRunAction class
+//
 
 #include "DicomRunAction.hh"
 #include "DicomRun.hh"
@@ -35,10 +38,14 @@
 #include "G4THitsMap.hh"
 
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 /// Constructor
 DicomRunAction::DicomRunAction():
-  fFieldName(15),
+  G4UserRunAction(),
+//  fFieldName(15),
   fFieldValue(14)
 {
   // - Prepare data member for DicomRun.
@@ -72,46 +79,56 @@ void DicomRunAction::BeginOfRunAction(const G4Run* aRun)
 void DicomRunAction::EndOfRunAction(const G4Run* aRun)
 {
     G4cout << " ###### EndOfRunAction  " <<G4endl;
-  //- DicomRun object.
-  DicomRun* re02Run = (DicomRun*)aRun;
-  //--- Dump all scored quantities involved in DicomRun.
-  for ( G4int i = 0; i < (G4int)fSDName.size(); i++ ){
-    //
-    //---------------------------------------------
-    // Dump accumulated quantities for this RUN.
-    //  (Display only central region of x-y plane)
-    //      0       ConcreteSD/DoseDeposit
-    //---------------------------------------------
-    G4THitsMap<G4double>* DoseDeposit = re02Run->GetHitsMap(fSDName[i]+"/DoseDeposit");
+    //- DicomRun object.
+    DicomRun* re02Run = (DicomRun*)aRun;
+    //--- Dump all scored quantities involved in DicomRun.
+    for ( G4int i = 0; i < (G4int)fSDName.size(); i++ ){
+        //
+        //---------------------------------------------
+        // Dump accumulated quantities for this RUN.
+        //  (Display only central region of x-y plane)
+        //      0       ConcreteSD/DoseDeposit
+        //---------------------------------------------
+        G4THitsMap<G4double>* DoseDeposit =
+          re02Run->GetHitsMap(fSDName[i]+"/DoseDeposit");
 
-    G4cout << "=============================================================" <<G4endl;
-    G4cout << " Number of event processed : "<< aRun->GetNumberOfEvent() << G4endl;
-    G4cout << "=============================================================" <<G4endl;
+        G4cout <<
+          "============================================================="
+        << G4endl;
+        G4cout <<
+          " Number of event processed : "<< aRun->GetNumberOfEvent() << G4endl;
+        G4cout <<
+          "============================================================="
+        << G4endl;
 
-    std::ofstream fileout;
-    G4String fname = "dicom.out";
-    fileout.open(fname);
-    G4cout << " opened file " << fname << " for dose output" << G4endl;
+        std::ofstream fileout;
+        G4String fname = "dicom.out";
+        fileout.open(fname);
+        G4cout << " opened file " << fname << " for dose output" << G4endl;
 
 
-    if( DoseDeposit && DoseDeposit->GetMap()->size() != 0 ) {
-      std::ostream *myout = &G4cout;
-      PrintHeader(myout);
-      std::map<G4int,G4double*>::iterator itr = DoseDeposit->GetMap()->begin();
-      for(; itr != DoseDeposit->GetMap()->end(); itr++) {
-        fileout <<  itr->first
-               << "     "  << *(itr->second)
-               << G4endl;
-        G4cout << "    " << itr->first
-               << "     " << std::setprecision(6) << *(itr->second) << " Gy"
-               << G4endl;
-      }
-      G4cout << "============================================="<<G4endl;
+        if( DoseDeposit && DoseDeposit->GetMap()->size() != 0 ) {
+            std::ostream *myout = &G4cout;
+            PrintHeader(myout);
+            std::map<G4int,G4double*>::iterator itr =
+              DoseDeposit->GetMap()->begin();
+            for(; itr != DoseDeposit->GetMap()->end(); itr++) {
+                fileout <<  itr->first
+                << "     "  << *(itr->second)/gray
+                << G4endl;
+                G4cout << "    " << itr->first
+                << "     " << std::setprecision(6) << *(itr->second)/gray
+                << " Gy"
+                << G4endl;
+            }
+            G4cout << "============================================="<<G4endl;
+        }
+        fileout.close();
+        G4cout << " closed file " << fname << " for dose output" << G4endl;
+
     }
-    fileout.close();
-    G4cout << " closed file " << fname << " for dose output" << G4endl;
-  
-  }
+
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,17 +145,17 @@ void DicomRunAction::PrintHeader(std::ostream *out)
   for (std::vector<G4String>::iterator it = vecScoreName.begin();
        it != vecScoreName.end(); it++) {
       //vname = FillString((*it),
-//                       ' ', 
-//                       FieldValue+1, 
+//                       ' ',
+//                       FieldValue+1,
 //                       false);
 //    *out << vname << '|';
       *out << std::setw(fFieldValue) << (*it) << "  |";
   }
-  *out << G4endl;  
+  *out << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-std::string DicomRunAction::FillString(const std::string &name, 
+std::string DicomRunAction::FillString(const std::string &name,
                                        char c, G4int n, G4bool back)
 {
   std::string fname("");

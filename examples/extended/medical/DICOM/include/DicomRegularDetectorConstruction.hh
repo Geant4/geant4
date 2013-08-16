@@ -23,6 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
 /// \file medical/DICOM/include/DicomRegularDetectorConstruction.hh
 /// \brief Definition of the DicomRegularDetectorConstruction class
 //
