@@ -165,6 +165,7 @@ void G4IonTable::WorkerG4IonTable()
   //  }
   //}
 
+  fIsotopeTableList = new std::vector<G4VIsotopeTable*>;
 }
 
 void G4IonTable::InitializeLightIons()

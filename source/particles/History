@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 15. Aug. 2013  Makoto Asai (particles-V09-06-40)
+- G4IonTable.cc: Fix the initialiaztion of IsomerTableList for
+  worker thread.
+
 - 14. Aug. 2013  Makoto Asai (particles-V09-06-39)
 - ParticleTableIterator skips general ions unless it is reset with 
   "false" as its parameter.
