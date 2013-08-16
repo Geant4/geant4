@@ -76,30 +76,6 @@ G4NistManager* G4NistManager::Instance()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4NistManager::G4NistManager()
-{
-  nElements  = 0;
-  nMaterials = 0;
-  verbose    = 0;
-
-  elmBuilder = new G4NistElementBuilder(verbose);
-  matBuilder = new G4NistMaterialBuilder(elmBuilder,verbose);
-  
-  messenger  = new G4NistMessenger(this);  
-  g4pow = G4Pow::GetInstance();
-
-  // compute frequently used values for mean atomic numbers
-  for(G4int j=1; j<101; ++j) {
-    G4double A = elmBuilder->GetAtomicMassAmu(j);
-    POWERA27[j] = std::pow(A,0.27);
-    LOGAZ[j]    = std::log(A);
-  }
-  POWERA27[0] = 1.0;
-  LOGAZ[0]    = 0.0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4NistManager::~G4NistManager()
 {
   //  G4cout << "NistManager: start material destruction" << G4endl;
@@ -213,6 +189,34 @@ void G4NistManager::SetVerbose(G4int val)
   verbose = val;
   elmBuilder->SetVerbose(val);
   matBuilder->SetVerbose(val);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4AutoLock.hh"
+namespace { G4Mutex NistManagerMutex = G4MUTEX_INITIALIZER; }
+G4NistManager::G4NistManager()
+{
+  G4AutoLock l(&NistManagerMutex);
+
+  nElements  = 0;
+  nMaterials = 0;
+  verbose    = 0;
+
+  elmBuilder = new G4NistElementBuilder(verbose);
+  matBuilder = new G4NistMaterialBuilder(elmBuilder,verbose);
+  
+  messenger  = new G4NistMessenger(this);  
+  g4pow = G4Pow::GetInstance();
+
+  // compute frequently used values for mean atomic numbers
+  for(G4int j=1; j<101; ++j) {
+    G4double A = elmBuilder->GetAtomicMassAmu(j);
+    POWERA27[j] = std::pow(A,0.27);
+    LOGAZ[j]    = std::log(A);
+  }
+  POWERA27[0] = 1.0;
+  LOGAZ[0]    = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
