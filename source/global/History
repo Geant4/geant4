@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 15, 2013 M.Asai (global-V09-06-60)
+- G4MTcoutDestination now has a capabilitu of printing out only for 
+  the selected thread to make the display readable.
+
 August 6, 2013 V.Ivantchenko (global-V09-06-59)
 - Fixed compillation
 August 6, 2013 V.Ivantchenko (global-V09-06-58)

@@ -57,6 +57,7 @@ class G4MTcoutDestination : public G4coutDestination
     void SetCerrFileName(const G4String& fileN = "G4cerr.txt", G4bool ifAppend = true);
     void EnableBuffering(G4bool flag=true);
     void SetPrefixString(const G4String& wd = "G4WT");
+    void SetIgnoreCout(G4int tid = 0);
 
   private:
 
@@ -72,6 +73,7 @@ class G4MTcoutDestination : public G4coutDestination
     G4bool useBuffer;
     G4bool threadCoutToFile;
     G4bool threadCerrToFile;
+    G4bool ignoreCout;
 
     std::ostringstream cout_buffer;
     std::ostringstream cerr_buffer;

@@ -38,7 +38,7 @@
 G4MTcoutDestination::G4MTcoutDestination(const G4int& threadId,
                               std::ostream& co, std::ostream&  ce)
 : finalcout(co), finalcerr(ce), id(threadId), useBuffer(false),
-  threadCoutToFile(false), threadCerrToFile(false)
+  threadCoutToFile(false), threadCerrToFile(false), ignoreCout(false)
 {
   G4coutbuf.SetDestination(this);
   G4cerrbuf.SetDestination(this);
@@ -58,7 +58,7 @@ G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
   { coutFile<<msg<<std::flush; }
   else if( useBuffer )
   { cout_buffer<<msg; }
-  else
+  else if( !ignoreCout )
   { finalcout<<prefix<<id<<" > "<<msg; }
   return 0;
 }
@@ -108,6 +108,14 @@ void G4MTcoutDestination::EnableBuffering(G4bool flag)
 
 void G4MTcoutDestination::SetPrefixString(const G4String& wd)
 { prefix = wd; }
+
+void G4MTcoutDestination::SetIgnoreCout(G4int tid)
+{
+ if(tid<0)
+ { ignoreCout = false; }
+ else
+ { ignoreCout = (tid!=id); }
+}
 
 void G4MTcoutDestination::CloseCoutFile()
 {
