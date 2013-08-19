@@ -124,6 +124,15 @@ G4VSceneHandler::~G4VSceneHandler () {
   }
 }
 
+const G4VisExtent& G4VSceneHandler::GetExtent() const
+{
+  if (fpScene) {
+    return fpScene->GetExtent();
+  } else {
+    return G4VisExtent::NullExtent;
+  }
+}
+
 void G4VSceneHandler::PreAddSolid (const G4Transform3D& objectTransformation,
 				   const G4VisAttributes& visAttribs) {
   fObjectTransformation = objectTransformation;

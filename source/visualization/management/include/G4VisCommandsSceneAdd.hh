@@ -296,6 +296,18 @@ private:
   G4UIcommand* fpCommand;
 };
 
+class G4VisCommandSceneAddMagneticField: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddMagneticField ();
+  virtual ~G4VisCommandSceneAddMagneticField ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddMagneticField (const G4VisCommandSceneAddMagneticField&);
+  G4VisCommandSceneAddMagneticField& operator = (const G4VisCommandSceneAddMagneticField&);
+  G4UIcmdWithoutParameter* fpCommand;
+};
+
 class G4VisCommandSceneAddPSHits: public G4VVisCommandScene {
 public:
   G4VisCommandSceneAddPSHits ();

@@ -26,7 +26,7 @@
 //
 // $Id$
 //
-// 
+//
 // John Allison  19th July 1996.
 //
 // Class description
@@ -191,7 +191,9 @@ public: // With description
   virtual void AddPrimitive (const G4Square&)     = 0;      
   virtual void AddPrimitive (const G4Polymarker&);
   // Default implementation in this class but can be over-ridden.
-  virtual void AddPrimitive (const G4Polyhedron&) = 0;  
+  virtual void AddPrimitive (const G4Polyhedron&) = 0;
+
+  virtual const G4VisExtent& GetExtent() const;
 
   //////////////////////////////////////////////////////////////
   // Access functions.

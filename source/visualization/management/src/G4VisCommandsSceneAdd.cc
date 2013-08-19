@@ -36,6 +36,7 @@
 #include "G4ModelingParameters.hh"
 #include "G4HitsModel.hh"
 #include "G4DigiModel.hh"
+#include "G4MagneticFieldModel.hh"
 #include "G4PSHitsModel.hh"
 #include "G4TrajectoriesModel.hh"
 #include "G4ScaleModel.hh"
@@ -1645,6 +1646,49 @@ void G4VisCommandSceneAddLogo2D::Logo2D::operator()
   sceneHandler.BeginPrimitives2D();
   sceneHandler.AddPrimitive(text);
   sceneHandler.EndPrimitives2D();
+}
+
+////////////// /vis/scene/add/magneticField ///////////////////////////////////////
+
+G4VisCommandSceneAddMagneticField::G4VisCommandSceneAddMagneticField () {
+  fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/magneticField", this);
+  fpCommand -> SetGuidance
+  ("Adds magnetic field representation to current scene.");
+}
+
+G4VisCommandSceneAddMagneticField::~G4VisCommandSceneAddMagneticField () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddMagneticField::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddMagneticField::SetNewValue (G4UIcommand*, G4String) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4MagneticFieldModel* model = new G4MagneticFieldModel;
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "Magnetic field, if any, will be drawn in scene \""
+      << currentSceneName << "\"."
+      << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
 }
 
 ////////////// /vis/scene/add/psHits ///////////////////////////////////////

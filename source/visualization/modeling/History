@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+18th August 2013  John Allison  (modeling-V09-06-08 requires greps-V09-06-06)
+- Added skeleton G4MagneticFieldModel.
+
 16th June 2013  John Allison  (modeling-V09-06-07)
 - G4ModelingParameters: Small bug fix to previous tag.
 

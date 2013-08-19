@@ -417,6 +417,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddLogicalVolume);
   RegisterMessenger(new G4VisCommandSceneAddLogo);
   RegisterMessenger(new G4VisCommandSceneAddLogo2D);
+  RegisterMessenger(new G4VisCommandSceneAddMagneticField);
   RegisterMessenger(new G4VisCommandSceneAddPSHits);
   RegisterMessenger(new G4VisCommandSceneAddScale);
   RegisterMessenger(new G4VisCommandSceneAddText);

@@ -164,7 +164,6 @@ void G4OpenGLQtViewer::CreateMainWindow (
     if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
       YPos = offset;
     }
-    fGLWindow->resize(getWinWidth(), getWinHeight());
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::CreateMainWindow :: resizing to %d %d \n",getWinWidth(), getWinHeight());
 #endif
@@ -172,7 +171,6 @@ void G4OpenGLQtViewer::CreateMainWindow (
     fGLWindow->show();
   } else {
     fGLWindow = fWindow;
-    fGLWindow->resize(getWinWidth(), getWinHeight());
   }
 
   if(!fWindow) return;
@@ -2216,13 +2214,16 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 void G4OpenGLQtViewer::initSceneTreeComponent(){
 
   fSceneTreeWidget = new QWidget();
-  fSceneTreeWidget->setLayout (new QVBoxLayout());
+  QVBoxLayout* layoutSceneTreeComponentsTBWidget = new QVBoxLayout();
+  fSceneTreeWidget->setLayout (layoutSceneTreeComponentsTBWidget);
 
   if (fUISceneTreeComponentsTBWidget != NULL) {
     fUISceneTreeComponentsTBWidget->addTab(fSceneTreeWidget,QString(GetName().data()));
   }
 
-  QLayout* layoutSceneTreeComponentsTBWidget = fSceneTreeWidget->layout();
+
+  // reduce margins
+  layoutSceneTreeComponentsTBWidget->setContentsMargins(5,5,5,5);
 
 
   fSceneTreeComponentTreeWidget = new QTreeWidget();
@@ -2250,6 +2251,9 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   QGroupBox *groupBox = new QGroupBox(tr("Touchables slider"),depthWidget);
   QHBoxLayout *groupBoxLayout = new QHBoxLayout(groupBox);
 
+  // reduce margins
+  groupBoxLayout->setContentsMargins(5,5,5,5);
+
   QLabel *zero = new QLabel();
   zero->setText("Show all");          
   QLabel *one = new QLabel();
@@ -2258,6 +2262,9 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   fSceneTreeDepthSlider->setMaximum (1000);
   fSceneTreeDepthSlider->setMinimum (0);
   fSceneTreeDepthSlider->setTickPosition(QSlider::TicksAbove);
+  // set a minimum size
+  fSceneTreeDepthSlider->setMinimumWidth (40);
+
   groupBoxLayout->addWidget(zero);
   groupBoxLayout->addWidget(fSceneTreeDepthSlider);
   groupBoxLayout->addWidget(one);
@@ -2272,10 +2279,22 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   QHBoxLayout *helpLayout = new QHBoxLayout();
   QPushButton* select = new QPushButton("select item(s)");
   fHelpLine = new QLineEdit();
-  helpLayout->addWidget(new QLabel("Search :",helpWidget));
   helpLayout->addWidget(fHelpLine);
   helpLayout->addWidget(select);
   helpWidget->setLayout(helpLayout);
+  helpLayout->setContentsMargins(0,0,0,0);
+
+  // set a minimum size
+  fHelpLine->setMinimumWidth (20);
+
+  QSizePolicy policy = fHelpLine->sizePolicy();
+  policy.setHorizontalStretch(10);
+  fHelpLine->setSizePolicy(policy);
+
+  policy = select->sizePolicy();
+  policy.setHorizontalStretch(1);
+  select->setSizePolicy(policy);
+
   layoutSceneTreeComponentsTBWidget->addWidget(helpWidget);
 
   connect( fHelpLine, SIGNAL( returnPressed () ), this, SLOT(changeSearchSelection()));
@@ -2467,6 +2486,9 @@ QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
                          "/vis/geometry/set/visibility " + logicalName + " 0 true\n"+
                          "and rebuild the view with /vis/viewer/rebuild.\n"+
                          "Click here will only show/hide all child components");
+  } else {
+    // Set a tootip
+    newItem->setToolTip (0,QString("double-click to change the color"));
   }
 
   // special case: if alpha=0, it is a totally transparent objet,
@@ -2966,6 +2988,69 @@ bool G4OpenGLQtViewer::parseAndCheckVisibility(QTreeWidgetItem * treeNode,int PO
     }
   } // end for
   return false;
+}
+
+
+std::string G4OpenGLQtViewer::parseSceneTreeAndSaveState(){
+  std::string commandLine = "";
+  for (int b=0;b<fSceneTreeComponentTreeWidget->topLevelItemCount();b++) {
+    commandLine += parseSceneTreeElementAndSaveState(fSceneTreeComponentTreeWidget->topLevelItem(b),1)+"\n";
+  }
+  if (commandLine != "") {
+    commandLine = std::string("# Disable auto refresh and quieten vis messages whilst scene and\n") +
+    "# trajectories are established:\n" +
+    "/vis/viewer/set/autoRefresh false\n" +
+    "/vis/verbose errors" +
+    commandLine +
+    "# Re-establish auto refreshing and verbosity:\n" +
+    "/vis/viewer/set/autoRefresh true\n" +
+    "/vis/verbose confirmations\n";
+  }
+  printf("%s",commandLine.c_str());
+  return commandLine;
+}
+
+
+std::string G4OpenGLQtViewer::parseSceneTreeElementAndSaveState(QTreeWidgetItem* item, unsigned int level){
+  // parse current item
+  std::string str( level, ' ' );
+  std::string commandLine = "\n#"+ str + "PV Name: " + item->text(0).toStdString();
+
+  if (item->text(3) != "") {
+    commandLine += " LV Name: "+item->text(3).toStdString()+"\n";
+    // save check state
+    commandLine += "/vis/geometry/set/visibility " + item->text(3).toStdString() + " ! "; // let default value for depth
+    if (item->checkState(0) == Qt::Checked) {
+      commandLine += "1";
+    }
+    if (item->checkState(0) == Qt::Unchecked) {
+      commandLine += "0";
+    }
+    commandLine +="\n";
+    
+    // save color
+    const QColor& c = item->data(2,Qt::UserRole).value<QColor>();
+    std::stringstream red;
+    red << ((double)c.red())/255;
+    std::stringstream green;
+    green << (double)c.green()/255;
+    std::stringstream blue;
+    blue << ((double)c.blue())/255;
+    std::stringstream alpha;
+    alpha << ((double)c.alpha())/255;
+    
+    commandLine += "/vis/geometry/set/colour " + item->text(3).toStdString() + " ! " + red.str() + " " + green.str() + " " + blue.str() + " " + alpha.str()+"\n";
+
+  } else {
+    commandLine += "\n";
+  }
+
+  // parse childs
+  for (int b=0;b< item->childCount();b++) {
+    commandLine += parseSceneTreeElementAndSaveState(item->child(b),level+1);
+  }
+  
+  return commandLine;
 }
 
 

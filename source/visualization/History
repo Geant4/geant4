@@ -24,8 +24,12 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+18th August 2013  John Allison (vis-V09-06-20 requires greps-V09-06-06)
+- modeling-V09-06-08: Added skeleton G4MagneticFieldModel.
+- visman-V09-06-10: Added /vis/scene/add/magneticField.
+
 30th July 2013  John Allison  (vis-V09-06-19)
-- visman-V09-06-08: Fixes Bugs 1499 and 1503.
+- visman-V09-06-09: Fixes Bugs 1499 and 1503.
 
 17th June 2013  John Allison  (vis-V09-06-18)
 - gMocren-V09-06-06: Reverted snprintf to sprintf.

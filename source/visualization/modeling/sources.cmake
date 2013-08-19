@@ -60,6 +60,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4HitFilterFactories.hh
         G4HitsModel.hh
         G4LogicalVolumeModel.hh
+        G4MagneticFieldModel.hh
         G4ModelApplyCommandsT.hh
         G4ModelColourMap.hh
         G4ModelCommandUtils.hh
@@ -106,6 +107,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4HitFilterFactories.cc
         G4HitsModel.cc
         G4LogicalVolumeModel.cc
+        G4MagneticFieldModel.cc
         G4ModelingParameters.cc
         G4NullModel.cc
         G4PSHitsModel.cc
