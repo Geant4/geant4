@@ -403,22 +403,40 @@ void G4MTRunManager::InitializePhysics()
 // The basic algorith of each barrier works like this:
 // In the master:
 //   WaitWorkers()  {
-//    while (true) 
+//    while (true)
 //    {
-//     G4AutoLock l(&counterMutex);
+//     G4AutoLock l(&counterMutex);                          || Mutex is locked (1)
 //     if ( counter == nActiveThreads ) break;
-//     G4CONDITIONWAIT( &conditionOnCounter, &counterMutex);
-//    }
-//    G4CONDITIONBROADCAST( &doSomethingCanStart );
-//   }
+//     G4CONDITIONWAIT( &conditionOnCounter, &counterMutex); || Mutex is atomically released and wait, upon return locked (2)
+//    }                                                      || unlock mutex
+//    G4AutoLock l(&counterMutex);                           || lock again mutex (3)
+//    G4CONDITIONBROADCAST( &doSomethingCanStart );          || Here mutex is locked (4)
+//   }                                                       || final unlock (5)
 // In the workers:
 //   WaitSignalFromMaster() {
-//    G4AutoLock l(&counterMutex);
+//    G4AutoLock l(&counterMutex);                           || (6)
 //    ++counter;
-//    G4CONDITIONBROADCAST(&conditionOnCounter);
-//    G4CONDITIONWAIT( &doSomethingCanStart , &counterMutex);
+//    G4CONDITIONBROADCAST(&conditionOnCounter);             || (7)
+//    G4CONDITIONWAIT( &doSomethingCanStart , &counterMutex);|| (8)
 //   }
-// Each barriers requires 2 conditions and one mutex, and a counter.
+// Each barriers requires 2 conditions and one mutex, plus a counter.
+// Important note: the thread calling broadcast should hold the mutex
+// before calling broadcast to obtain predictible behavior
+// http://pubs.opengroup.org/onlinepubs/7908799/xsh/pthread_cond_broadcast.html
+// Also remember that the wait for condition will atomically release the mutex
+// and wait on condition, but it will lock again on mutex when returning
+// Here it is how the control flows.
+// Imagine master starts and only one worker (nActiveThreads==1)
+// Master       |    Worker        | counter | Who holds mutex
+// Gets to (1)  |   Blocks on (6)  | 0       | M
+// Waits in (2) |                  | 0       | -
+//              |  Arrives to (7)  | 1       | W
+//              |  Waits in (8)    | 1       | -
+// Gets to (1)  |                  | 1       | M
+// Jumps to (3) |                  | 1       | M
+// End          |                  | 1       | -
+//              | End              | 1       | -
+// Similarly for more than one worker threads or if worker starts
 
 #ifdef WIN32
 #include <windows.h> //For CRITICAL_SECTION objects
@@ -515,6 +533,7 @@ void G4MTRunManager::WaitForReadyWorkers()
     numberOfEndOfEventLoopWorkers = 0;
     
     //signal workers they can start the event-loop
+    G4AutoLock l2(&numberOfReadyWorkersMutex);
     G4CONDTIONBROADCAST(&beginEventLoopCondition);
 }
 
@@ -534,10 +553,15 @@ void G4MTRunManager::ThisWorkerReady()
 #ifdef WIN32
     LeaveCriticalSection( &cs1 );
 #endif
-
-// I believe this is not necessary and safe to remove (Makoto)
-//    const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).NewSubInstances();
-//    G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
+    //Protects access to shared resource, guarantees we do not call this method
+    //while someone else is modifying its content (e.g. creating a new particle)
+    //G4PDefManager& pdm = const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager());
+    //pdm.Lock();
+    //pdm.NewSubInstances();
+    //pdm.UnLock();
+    //const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).NewSubInstances();
+    // I believe this is not necessary and safe to remove (Makoto)
+    //G4ParticleTable::GetParticleTable()->WorkerG4ParticleTable();
 }
 
 
@@ -566,6 +590,7 @@ void G4MTRunManager::WaitForEndEventLoopWorkers()
     G4AutoLock l(&numberOfReadyWorkersMutex);
     numberOfReadyWorkers = 0;
     //Signal workers they can end event-loop
+    G4AutoLock l2(&numberOfEndOfEventLoopWorkersMutex);
     G4CONDTIONBROADCAST(&endEventLoopCondition);
 }
 
@@ -618,8 +643,10 @@ void G4MTRunManager::NewActionRequest(G4MTRunManager::WorkerActionRequest newReq
   //Reset counter of workers ready-for-new-action in preparation of next call
   G4AutoLock l2(&numberOfReadyWorkersForNewActionMutex);
   numberOfReadyWorkersForNewAction = 0;
-  l2.unlock();
-  //Now wignal all workers that there is a new action to be performed
+  //l2.unlock(); //<----- This thread needs to have control on mutex associated
+  //to condition variable (report from valgrind --tool=drd)
+  //see: http://pic.dhe.ibm.com/infocenter/iseries/v7r1m0/index.jsp?topic=%2Fapis%2Fusers_73.htm
+  //Now signal all workers that there is a new action to be performed
   G4CONDTIONBROADCAST(&requestChangeActionForWorker);
 }
 

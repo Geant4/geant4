@@ -88,8 +88,9 @@ G4VModularPhysicsList & G4VModularPhysicsList::operator=(const G4VModularPhysics
     fIsCheckedForRetrievePhysicsTable = right.fIsCheckedForRetrievePhysicsTable;
     fIsRestoredCutValues = right.fIsRestoredCutValues;
     directoryPhysicsTable = right.directoryPhysicsTable;
-    fDisplayThreshold = right.fDisplayThreshold;
-    fIsPhysicsTableBuilt = right.fIsPhysicsTableBuilt;
+    fDisplayThreshold = static_cast<const G4VUserPhysicsList&>(right).GetSubInstanceManager().offset[right.GetInstanceID()]._fDisplayThreshold;
+    fIsPhysicsTableBuilt = static_cast<const G4VUserPhysicsList&>(right).GetSubInstanceManager().offset[right.GetInstanceID()]._fIsPhysicsTableBuilt;
+    //fDisplayThreshold = right.fDisplayThreshold;
     fDisableCheckParticleList = right.fDisableCheckParticleList;
     verboseLevel = right.verboseLevel;
     

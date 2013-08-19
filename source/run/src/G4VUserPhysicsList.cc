@@ -99,6 +99,8 @@ void G4VUPLData::initialize()
     _theParticleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
     _theMessenger = 0;
     _thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper();
+    _fIsPhysicsTableBuilt = false;
+    _fDisplayThreshold = 0;
 }
 
 ////////////////////////////////////////////////////////
@@ -111,8 +113,8 @@ G4VUserPhysicsList::G4VUserPhysicsList()
    fIsCheckedForRetrievePhysicsTable(false),
    fIsRestoredCutValues(false),
    directoryPhysicsTable("."),
-   fDisplayThreshold(0),
-   fIsPhysicsTableBuilt(false),
+   //fDisplayThreshold(0),
+   //fIsPhysicsTableBuilt(false),
    fDisableCheckParticleList(false)
 {
     g4vuplInstanceID = subInstanceManager.CreateSubInstance(); //AND
@@ -138,6 +140,9 @@ G4VUserPhysicsList::G4VUserPhysicsList()
   //thePLHelper->SetVerboseLevel(verboseLevel);
     //G4MT_thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper(); //AND
     G4MT_thePLHelper->SetVerboseLevel(verboseLevel); //AND
+
+    fIsPhysicsTableBuilt = false;
+    fDisplayThreshold = 0;
 
 }
 
@@ -172,8 +177,8 @@ G4VUserPhysicsList::G4VUserPhysicsList(const G4VUserPhysicsList& right)
    fIsCheckedForRetrievePhysicsTable(right.fIsCheckedForRetrievePhysicsTable),
    fIsRestoredCutValues(right.fIsRestoredCutValues),
    directoryPhysicsTable(right.directoryPhysicsTable),
-   fDisplayThreshold(right.fDisplayThreshold),
-   fIsPhysicsTableBuilt(right.fIsPhysicsTableBuilt),
+   //fDisplayThreshold(right.fDisplayThreshold),
+   //fIsPhysicsTableBuilt(right.fIsPhysicsTableBuilt),
    fDisableCheckParticleList(right.fDisableCheckParticleList)
 {
   g4vuplInstanceID = subInstanceManager.CreateSubInstance(); //AND
@@ -192,6 +197,9 @@ G4VUserPhysicsList::G4VUserPhysicsList(const G4VUserPhysicsList& right)
   //thePLHelper->SetVerboseLevel(verboseLevel);
     G4MT_thePLHelper = G4PhysicsListHelper::GetPhysicsListHelper(); //AND
     G4MT_thePLHelper->SetVerboseLevel(verboseLevel); //AND
+    
+    fIsPhysicsTableBuilt = right.GetSubInstanceManager().offset[right.GetInstanceID()]._fIsPhysicsTableBuilt;
+    fDisplayThreshold = right.GetSubInstanceManager().offset[right.GetInstanceID()]._fDisplayThreshold;
 }
 
 
@@ -207,8 +215,10 @@ G4VUserPhysicsList & G4VUserPhysicsList::operator=(const G4VUserPhysicsList & ri
     fIsCheckedForRetrievePhysicsTable = right.fIsCheckedForRetrievePhysicsTable;
     fIsRestoredCutValues = right.fIsRestoredCutValues;
     directoryPhysicsTable = right.directoryPhysicsTable;
-    fDisplayThreshold = right.fDisplayThreshold;
-    fIsPhysicsTableBuilt = right.fIsPhysicsTableBuilt;
+    //fDisplayThreshold = right.fDisplayThreshold;
+      fIsPhysicsTableBuilt = right.GetSubInstanceManager().offset[right.GetInstanceID()]._fIsPhysicsTableBuilt;
+      fDisplayThreshold = right.GetSubInstanceManager().offset[right.GetInstanceID()]._fDisplayThreshold;
+      //fIsPhysicsTableBuilt = right.fIsPhysicsTableBuilt;
     fDisableCheckParticleList = right.fDisableCheckParticleList;
   }
   return *this;

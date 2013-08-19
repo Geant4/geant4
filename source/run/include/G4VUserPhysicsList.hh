@@ -109,6 +109,8 @@ public:
     G4ParticleTable::G4PTblDicIterator* _theParticleIterator;
     G4UserPhysicsListMessenger* _theMessenger;
     G4PhysicsListHelper* _thePLHelper;
+    G4bool _fIsPhysicsTableBuilt;
+    G4int _fDisplayThreshold;
 };
 // The type G4VUPLManager is introduced to encapsulate the methods used by
 // both the master thread and worker threads to allocate memory space for
@@ -151,6 +153,8 @@ typedef G4VUPLManager G4VUserPhysicsListSubInstanceManager;
 #define theParticleIterator ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theParticleIterator)
 #define G4MT_theMessenger ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theMessenger)
 #define G4MT_thePLHelper ((this->subInstanceManager.offset[this->g4vuplInstanceID])._thePLHelper)
+#define fIsPhysicsTableBuilt ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fIsPhysicsTableBuilt)
+#define fDisplayThreshold ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fDisplayThreshold)
 
 class G4VUserPhysicsList
 {
@@ -372,10 +376,10 @@ class G4VUserPhysicsList
    G4String directoryPhysicsTable;   
 
    // flag for displaying the range cuts & energy thresholds
-   G4int fDisplayThreshold;
+   //G4int fDisplayThreshold;
 
   // flag for Physics Table has been built 
-   G4bool fIsPhysicsTableBuilt;
+   //G4bool fIsPhysicsTableBuilt;
 
   // flag for CheckParticleList 
   G4bool fDisableCheckParticleList; 

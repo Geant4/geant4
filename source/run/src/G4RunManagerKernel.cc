@@ -57,6 +57,8 @@
 #include "G4MTRunManager.hh"
 #include "G4AllocatorList.hh"
 
+#include "G4AutoLock.hh"
+
 #ifdef G4FPE_DEBUG
   #include "G4FPEDetection.hh"
 #endif
@@ -440,6 +442,10 @@ void G4RunManagerKernel::SetupPhysics()
 #endif
 }
 
+namespace {
+    G4Mutex initphysicsmutex = G4MUTEX_INITIALIZER;
+}
+
 void G4RunManagerKernel::InitializePhysics()
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
@@ -467,9 +473,13 @@ void G4RunManagerKernel::InitializePhysics()
     
   if(verboseLevel>1) G4cout << "physicsList->CheckParticleList() start." << G4endl;
   physicsList->CheckParticleList();
+    //Cannot assume that SetCuts and CheckRegions are thread safe. We need to mutex
+    //Report from valgrind --tool=drd
   if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
+  G4AutoLock l(&initphysicsmutex);
   physicsList->SetCuts();
   CheckRegions();
+  l.unlock();
   physicsInitialized = true;
   if(geometryInitialized && currentState!=G4State_Idle)
   { stateManager->SetNewState(G4State_Idle); }

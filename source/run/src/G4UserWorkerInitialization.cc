@@ -275,7 +275,7 @@ void* G4UserWorkerInitialization::StartThread( void* context )
                 uimgr->ApplyCommand(*it);
             }
             //TODO: when /run/beamOn is not passed, do it here!
-            // wrm->BeamOn( wThreadContext->GetNumberEvents() , .... );
+            ///wrm->BeamOn( 000000wThreadContext->GetNumberEvents() , .... );
             //wrm->BeamOn(1); //AND <-Simulate a second call to /run/beamOn
             //TODO: move this stuff away since it will be allowed to have always the same threads for more runs
             //in interactive mode
@@ -361,6 +361,9 @@ void G4UserWorkerInitialization::SetUserAction(G4UserTrackingAction* action) con
 void G4UserWorkerInitialization::SetUserAction(G4UserSteppingAction* action) const
 { G4RunManager::GetRunManager()->SetUserAction(action); } 
 
+namespace {
+    G4Mutex rngCreateMutex = G4MUTEX_INITIALIZER;
+}
 
 void G4UserWorkerInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
 {
@@ -368,6 +371,8 @@ void G4UserWorkerInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine* aN
     //A Call to this just forces the creation to defaults
     G4Random::getTheEngine();
     //Poor man's solution to check which RNG Engine is used in master thread
+    // Need to make these calls thread safe
+    G4AutoLock l(&rngCreateMutex);
     if ( dynamic_cast<const CLHEP::HepJamesRandom*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::HepJamesRandom); return; }
     if ( dynamic_cast<const CLHEP::RanecuEngine*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::RanecuEngine); return; }
     if ( dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::Ranlux64Engine); return; }

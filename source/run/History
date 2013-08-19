@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Aug 16th, 2013, A.Dotti (run-V09-06-82)
+- Enable locking of mutex in master loop on condition variable: 
+  fix deadlock observed in Mac OS X 10.8 after report from valgrind drd tool
+- Correct MT defects reported by DRD tool
+
 Aug 15th, 2013, M.Asai (run-V09-06-81)
 - Re-tag 
 
