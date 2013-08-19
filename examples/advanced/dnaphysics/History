@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+19 August 2013 - tag dnaphysics-V09-06-08 - S. Incerti
+- Updated README
+
 6 August 2013 - tag dnaphysics-V09-06-07 - S. Incerti
 - Removed unused variable in RunAction
 
