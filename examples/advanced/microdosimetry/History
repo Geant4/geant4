@@ -9,6 +9,9 @@ $Id$
                        Package History file
                        --------------------
 
+19 Aug 2013 - S. Incerti - microdosimetry-V09-06-06
+- Updated README
+
 30 July 2013 - A.Dotti - microdosimetry-V09-06-05
 - Fix compilation warnings from clang32
 
