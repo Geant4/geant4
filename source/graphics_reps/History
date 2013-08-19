@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18th August 2013  John Allison  (greps-V09-06-06)
+- G4VGraphicsScene: Added GetExtent.
+
 15th May 2013  Gabriele Cosmo (greps-V09-06-05)
 - Cleanup of automatic changes for MT in G4AttCheck, G4AttDefStore,
   G4TypeKey, G4TypeKeyT, G4Colour, HepPolyhedron and BooleanProcessor.
