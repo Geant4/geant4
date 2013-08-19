@@ -29,6 +29,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th August 2013 - Ivana Hrivnacova (cmake-V09-06-21)
+- Suppress error messages from FindAIDA module for informative options.
+  This fixes problem report #1485.
+
 23rd July 2013 - Gunter Folger (cmake-V09-06-20)
 - Update datasets for NDL to NDL4.4
 
