@@ -14,6 +14,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+16-08-2013  S.I.         tag emdna-V09-06-11
+	    Adapted G4DNAGenericIonsManager to use of G4DNAIons
+
 16-08-2013  S.I.         tag emdna-V09-06-10
 	    Added G4DNAIons
 
