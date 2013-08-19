@@ -15,6 +15,28 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 August 2013  Dennis Wright (test18-V09-06-08)
+------------------------------------------------
+- move decay product exception from run action to event action to
+    avoid end-of-run FP exception in MT mode.  Increment number of secondaries
+    in stepping action.
+ 
+- Tst18PrimaryGeneratorAction : for thread safety, use
+    G4ParticleGun::SetParticleMomentumDirection instead of UI commands to set
+    ion direction
+
+14 August 2013  Makoto Asai
+---------------------------
+- Remove while-loop from Tst18PhysicsList::ConstructGeneral() and
+  directly access G4ParticleTable::GetParticleTable()->GetGenericIon()
+  method to get the pointer.
+
+12 August 2013  Dennis Wright (test18-V09-06-07)
+------------------------------------------------
+- test18.in, test18.large_N.in : 
+  add /particle/createAllIsomer to make metastable states available
+  replace  /gun/ion Z A Z E with  /gun/ionL Z A Z Lvl
+
 29 July 2013  Alex Howard (test18-V09-06-06)
 ----------------------------------------------
 - Removed unused data member from Tst18EventAction

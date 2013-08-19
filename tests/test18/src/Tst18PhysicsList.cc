@@ -83,7 +83,7 @@ void Tst18PhysicsList::ConstructParticle()
   ConstructAllIons();
   ConstructAllShortLiveds();
 
-  //  G4GenericIon::GenericIonDefinition();
+  G4GenericIon::GenericIonDefinition();
 }
 
 void Tst18PhysicsList::ConstructProcess()
@@ -372,18 +372,22 @@ void Tst18PhysicsList::ConstructGeneral()
   }
   // Declare radioactive decay to the GenericIon in the IonTable.
   //
-  const G4IonTable *theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
-  G4RadioactiveDecay *theRadioactiveDecay = new G4RadioactiveDecay();
-  for (G4int i = 0; i < theIonTable->Entries(); i++) {
-    G4String particleName = theIonTable->GetParticle(i)->GetParticleName();
-    if (particleName == "GenericIon") {
-      G4ProcessManager* pmanager = theIonTable->GetParticle(i)->GetProcessManager();
+/////////  const G4IonTable *theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
+/////////  for (G4int i = 0; i < theIonTable->Entries(); i++) {
+/////////    G4String particleName = theIonTable->GetParticle(i)->GetParticleName();
+/////////    if (particleName == "GenericIon") {
+  G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+  if(gion)
+  {
+      G4RadioactiveDecay *theRadioactiveDecay = new G4RadioactiveDecay();
+      G4ProcessManager* pmanager = gion->GetProcessManager();
       pmanager->SetVerboseLevel(0);
       pmanager ->AddProcess(theRadioactiveDecay);
       pmanager ->SetProcessOrdering(theRadioactiveDecay, idxPostStep);
       pmanager ->SetProcessOrdering(theRadioactiveDecay, idxAtRest);
-    }
-  } 
+  }
+/////////    }
+/////////  } 
 }
 
 void Tst18PhysicsList::SetCuts()

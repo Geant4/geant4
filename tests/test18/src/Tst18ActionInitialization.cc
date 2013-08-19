@@ -43,8 +43,9 @@ void Tst18ActionInitialization::Build() const {
   SetUserAction(new Tst18PrimaryGeneratorAction);
   Tst18RunAction* runAction = new Tst18RunAction;
   SetUserAction(runAction);
-  SetUserAction(new Tst18EventAction);
-  SetUserAction(new Tst18SteppingAction(runAction) );
+  Tst18EventAction* eventAction = new Tst18EventAction;
+  SetUserAction(eventAction);
+  SetUserAction(new Tst18SteppingAction(runAction, eventAction) );
 }
 
 void Tst18ActionInitialization::BuildForMaster() const {

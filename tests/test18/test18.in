@@ -22,48 +22,49 @@
 /tracking/verbose 0
 /process/verbose 1
 /grdm/verbose 0
-#
-# First ion is NA-24 (ground state) which beta decays.  The range of the nucleus
-# does not need to be restricted since MG-24 is the only product and is stable.
-# 
-/gun/particle ion
-/gun/ion 11 24 11 0
+/particle/createAllIsomer
 /gun/energy 1 MeV
+/gun/particle ion
+#
+# First reaction is beta- decay of 24Na ground state.  The range of nuclei does
+# not have to be restricted since 24Mg is the only product and is stable.
+#
+/gun/ionL 11 24 11 0
 /run/beamOn 1
 #
-# NE-24 beta- decay
+# 24Ne beta- decay
 #
 #/grdm/nucleusLimits 24 24 10 10
-/gun/ion 10 24 10 0
+/gun/ionL 10 24 10 0
 /run/beamOn 1
 #
-# F-9 beta- decay
+# 9F beta- decay
 #
 #/grdm/nucleusLimits 24 24 9 9
-/gun/ion 9 24 9 0
+/gun/ionL 9 24 9 0
 /run/beamOn 1
 #
-# AL-24 ground state beta+ decay
+# 24Al (ground state) beta+ decay
 #
 #/grdm/nucleusLimits 24 24 13 13
-/gun/ion 13 24 13 0
+/gun/ionL 13 24 13 0
 /run/beamOn 1
 #
-# NA-24 (472 keV metastable state) beta+ decay and IT
+# 24Na (472 keV metastable state) beta- decay and IT
 #
 #/grdm/nucleusLimits 24 24 11 11
-/gun/ion 11 24 11 472
+/gun/ionL 11 24 11 1
 /run/beamOn 1
 #
-# CR-46 beta+ decay
+# 46Cr beta+ decay
 #
 #/grdm/nucleusLimits 46 46 24 24
-/gun/ion 24 46 24 0
+/gun/ionL 24 46 24 0
 /run/beamOn 1
 #
-# PO-215 alpha decay
+# 215Po alpha decay
 #
 /grdm/nucleusLimits 215 215 84 84
-/gun/ion 84 215 84 0
+/gun/ionL 84 215 84 0
 /run/beamOn 1
 

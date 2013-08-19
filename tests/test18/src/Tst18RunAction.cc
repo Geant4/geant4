@@ -25,6 +25,12 @@
 //
 // $Id$
 //
+//  File:        Tst18RunAction.cc
+//  Description: Run action for radioactive decay system test 
+//  Author:      F. Lei (DERA UK)
+//                  updated by Dennis Wright (SLAC)
+//  Date:        14 August 2013
+//
 
 #include "Tst18RunActionMessenger.hh"
 #include "Tst18RunAction.hh"
@@ -67,9 +73,7 @@ void Tst18RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void Tst18RunAction::EndOfRunAction(const G4Run* )
 {
-  
-  for (size_t i=0; i<Particles.size();i++) {
-
+  for (size_t i = 0; i < Particles.size(); i++) {
     G4cout
       << std::setiosflags(std::ios::fixed)
       << std::setprecision(3)
@@ -88,12 +92,6 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
       << G4endl ;    
   }
   G4cout<< G4endl;
-
-  if(Particles.size()/EventNumber == 1) {
-    G4cout << " Abort " << G4endl;
-    G4Exception("Tst18RunAction::EndOfRunAction", "Tst18_00",
-		FatalException, "No Decay Products Found");
-  }
 
 }
 

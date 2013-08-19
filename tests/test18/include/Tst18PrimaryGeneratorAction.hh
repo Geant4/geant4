@@ -23,8 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
+//
+//  File:        Tst18PrimaryGeneratorAction.hh
+//  Description: Generator action for radioactive decay system test 
+//  Author:      F. Lei (DERA UK)
+//                  updated by Dennis Wright (SLAC)
+//  Date:        14 August 2013
 //
 
 #ifndef Tst18PrimaryGeneratorAction_h
@@ -34,8 +39,6 @@
 
 #include "G4IonTable.hh"
 #include "RadioactiveDecayGun.hh"
-
-//class G4ParticleGun;
 
 class G4Event;
 
@@ -50,8 +53,7 @@ class Tst18PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
   protected:
 
-     RadioactiveDecayGun *theParticleGun;
-
+    RadioactiveDecayGun* theParticleGun;
 };
 
 #endif

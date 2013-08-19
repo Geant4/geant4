@@ -23,19 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//  File:        Tst18EventAction.cc
+//  Description: Event action for radioactive decay system test 
+//  Author:	 Dennis Wright (SLAC)
+//                 (original by F. Lei DERA UK)
+//  Date:        14 August 2013
 //
-// MODULE:		Tst18EventAction.cc
-//
-// Author:		F Lei
-// Organisation:	DERA UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		12115/JG/NL Work Order No. 3
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-// CHANGE HISTORY
-// --------------
+
 #include "G4ios.hh"
 #include "Tst18EventActionMessenger.hh"
 #include "Tst18EventAction.hh"
@@ -47,64 +41,34 @@
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18EventAction::Tst18EventAction()
-  : eventMessenger(0)
+ : eventMessenger(0), numberOfSecondariesPerEvent(0)
 {
   eventMessenger = new Tst18EventActionMessenger(this);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst18EventAction::~Tst18EventAction()
 {
   delete eventMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void Tst18EventAction::BeginOfEventAction(const G4Event*)
 {
+  numberOfSecondariesPerEvent = 0;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst18EventAction::EndOfEventAction(const G4Event*)
 {
+  if (numberOfSecondariesPerEvent < 2) {
+    G4cout << " Abort " << G4endl;
+    G4Exception("Tst18EventAction::EndOfEventAction", "Tst18_00",
+                FatalException, "No Decay Products Found");
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void Tst18EventAction::IncrementParticleNumber()
+{
+  numberOfSecondariesPerEvent++;
+}
 

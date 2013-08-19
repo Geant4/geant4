@@ -44,9 +44,7 @@
 // 29 February 2000, P R Truscott, DERA UK
 // 0.b.3 release.
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-////////////////////////////////////////////////////////////////////////////////
-//
+
 #include "G4ParticleGun.hh"
 #include "G4Event.hh"
 #include "globals.hh"
@@ -55,8 +53,7 @@
 #include "RadioactiveDecayGunmessenger.hh"
 
 class RadioactiveDecayGunmessenger;
-////////////////////////////////////////////////////////////////////////////////
-//
+
 class RadioactiveDecayGun : public G4ParticleGun
 {
   // class description
@@ -64,28 +61,21 @@ class RadioactiveDecayGun : public G4ParticleGun
   // to allow user to specify an isotope as the initial tracking particle.
   // class description - end
 
-public:
-  RadioactiveDecayGun();
-  ~RadioactiveDecayGun();
+  public:
+    RadioactiveDecayGun();
+    ~RadioactiveDecayGun();
 
-public: // with description
+  public: // with description
 
-  void  SetNucleus(Nucleus theIon1);
-  // Sets the isotope.
-  //
+    // Set the isotope
+    void SetNucleus(Nucleus theIon1);
+
+    // Get the isotope
     inline Nucleus GetNucleus() {return theIon;}
-  // Returns the specified isotope.
-  //
-private:
 
-  RadioactiveDecayGunmessenger  *theRadioactiveDecayGunMessenger;
-
-  Nucleus theIon;
-
+  private:
+    RadioactiveDecayGunmessenger* theRadioactiveDecayGunMessenger;
+    Nucleus theIon;
 };
 #endif
-////////////////////////////////////////////////////////////////////////////////
-
-
-
 

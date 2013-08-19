@@ -25,6 +25,10 @@
 //
 // $Id$
 //
+//  File:        Tst18RunAction.hh
+//  Description: Run action for radioactive decay system test 
+//  Author:      F. Lei (DERA UK)
+//
 
 #ifndef Tst18RunAction_h
 #define Tst18RunAction_h 1

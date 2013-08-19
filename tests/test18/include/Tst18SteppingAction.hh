@@ -32,17 +32,20 @@
 #include "G4UserSteppingAction.hh"
 
 class Tst18RunAction;
+class Tst18EventAction;
 
 class Tst18SteppingAction : public G4UserSteppingAction
 {
   public:
-    Tst18SteppingAction(Tst18RunAction*);
+    Tst18SteppingAction(Tst18RunAction*, Tst18EventAction*);
     virtual ~Tst18SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
 
   private:
     Tst18RunAction* runAction;
+    Tst18EventAction* eventAction;
 };
 
 #endif
+

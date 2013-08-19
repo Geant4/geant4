@@ -23,17 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
+//
+//  File:        Tst18PrimaryGeneratorAction.cc
+//  Description: Generator action for radioactive decay system test 
+//  Author:      F. Lei (DERA UK)
+//                  updated by Dennis Wright (SLAC)
+//  Date:        14 August 2013
 //
 
 #include "Tst18PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
-#include "G4UImanager.hh"
+#include "G4ParticleMomentum.hh"
 #include "globals.hh"
-
 #include "RadioactiveDecayGun.hh"
 
 
@@ -45,31 +49,28 @@ Tst18PrimaryGeneratorAction::Tst18PrimaryGeneratorAction()
 Tst18PrimaryGeneratorAction::~Tst18PrimaryGeneratorAction()
 {
   delete theParticleGun;
-//  delete theIonTable;
 }
 
 void Tst18PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-    G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4ParticleMomentum pm(1.0, 0.0, 0.0);
+
   G4int i = anEvent->GetEventID() % 3;
   switch(i)
   {
     case 0:
-      UI->ApplyCommand("/gun/direction 1.0 0.0 0.0");
       break;
     case 1:
-      UI->ApplyCommand("/gun/direction 0.0 1.0 0.0");
+      pm.setX(0.0);
+      pm.setY(1.0);
       break;
     case 2:
-      UI->ApplyCommand("/gun/direction 0.0 0.0 1.0");
+      pm.setY(0.0);
+      pm.setZ(1.0);
       break;
   }
 
+  theParticleGun->SetParticleMomentumDirection(pm);
   theParticleGun->GeneratePrimaryVertex(anEvent);
 }
-
-
-
-
-
 

@@ -27,6 +27,7 @@
 #include <vector>
 
 #include "Tst18SteppingAction.hh"
+#include "Tst18EventAction.hh"
 #include "Tst18RunAction.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
@@ -34,8 +35,8 @@
 #include "G4SteppingManager.hh"
 
 
-Tst18SteppingAction::Tst18SteppingAction(Tst18RunAction* rA)
- : runAction(rA)
+Tst18SteppingAction::Tst18SteppingAction(Tst18RunAction* rA, Tst18EventAction* eA)
+ : runAction(rA), eventAction(eA)
 {}
 
 
@@ -61,6 +62,7 @@ void Tst18SteppingAction::UserSteppingAction(const G4Step* fStep)
     runAction->FillEnergy(prePoint->GetKineticEnergy()/keV);
     runAction->FillWeight(prePoint->GetWeight() ); 
     runAction->FillTime((prePoint->GetGlobalTime() - prePoint->GetLocalTime() )/s);
+    eventAction->IncrementParticleNumber();
   } 
 }
 

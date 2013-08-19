@@ -23,22 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+//  File:        Tst18EventAction.hh
+//  Description: Event action for radioactive decay system test 
+//  Author:      Dennis Wright (SLAC)
+//                 (original by F. Lei DERA UK)
+//  Date:        14 August 2013
 //
-// MODULE:		Tst18EventAction.hh
-//
-// Author:		F Lei
-// Organisation:	DERA UK
-// Customer:		ESA/ESTEC, NOORDWIJK
-// Contract:		12115/JG/NL Work Order No. 3
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
-//
-// CHANGE HISTORY
-// --------------
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 #ifndef Tst18EventAction_h
 #define Tst18EventAction_h 1
@@ -48,7 +38,6 @@
 
 class Tst18EventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class Tst18EventAction : public G4UserEventAction
 {
@@ -59,15 +48,12 @@ class Tst18EventAction : public G4UserEventAction
   public:
     void BeginOfEventAction(const G4Event* anEvent);
     void EndOfEventAction(const G4Event* anEvent);
+    void IncrementParticleNumber();
     
   private:
-    Tst18EventActionMessenger*  eventMessenger;
+    Tst18EventActionMessenger* eventMessenger;
+    G4int numberOfSecondariesPerEvent;
 };
 
 #endif
-
-    
-
-
-
 
