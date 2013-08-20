@@ -73,6 +73,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4MottCoefficients.hh
         G4NuclearStopping.hh
         G4PAIModel.hh
+        G4PAIModelData.hh
         G4PAIPhotonModel.hh
         G4PAIxSection.hh
         G4PAIySection.hh
@@ -138,6 +139,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4MottCoefficients.cc
         G4NuclearStopping.cc
         G4PAIModel.cc
+        G4PAIModelData.cc
         G4PAIPhotonModel.cc
         G4PAIxSection.cc
         G4PAIySection.cc

@@ -18,6 +18,11 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+19 August 13: V.Ivanchenko (emstand-V09-06-55)
+- G4PAIModelData - new class to handle PAI internal data
+- G4PAIModel - data handling extracted to G4PAIModelData, is data 
+    class may be shared between threads; code cleanup
+
 12 August 13: V.Ivanchenko (emstand-V09-06-54)
 - G4BetheBlochModel, G4BraggIonModel - returned back method MinEnergyCut
     in order to protect from the bug #1481 

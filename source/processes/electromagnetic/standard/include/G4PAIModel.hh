@@ -39,6 +39,8 @@
 // Modifications:
 // 08-04-05 Major optimisation of internal interfaces (V.Ivantchenko)
 // 26-09-07 Fixed tmax computation (V.Ivantchenko)
+// 19.08.13 V.Ivanchenko extract data handling to G4PAIModelData class 
+//          added sharing of internal data between threads (MT migration)
 //
 //
 // Class Description:
@@ -52,18 +54,17 @@
 #ifndef G4PAIModel_h
 #define G4PAIModel_h 1
 
-#include <vector>
-#include "G4VEmModel.hh"
-#include "globals.hh"
-#include "G4VEmFluctuationModel.hh"
-#include "G4PAIySection.hh"
-#include "G4SandiaTable.hh"
+#include <CLHEP/Units/PhysicalConstants.h>
 
-class G4PhysicsLogVector;
-class G4PhysicsTable;
+#include "G4VEmModel.hh"
+#include "G4VEmFluctuationModel.hh"
+#include "globals.hh"
+#include <vector>
+
 class G4Region;
 class G4MaterialCutsCouple;
 class G4ParticleChangeForLoss;
+class G4PAIModelData;
 
 class G4PAIModel : public G4VEmModel, public G4VEmFluctuationModel
 {
@@ -76,7 +77,8 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
-  virtual void InitialiseMe(const G4ParticleDefinition*);
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+                               G4VEmModel* masterModel);
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 			       const G4ParticleDefinition*,
@@ -106,72 +108,35 @@ public:
 				  G4double,
 				  G4double);
 
-  void     DefineForRegion(const G4Region* r) ;
-  void     ComputeSandiaPhotoAbsCof();
-  void     BuildPAIonisationTable();
-  void     BuildLambdaVector();
+  void DefineForRegion(const G4Region* r);
 
-  G4double GetdNdxCut( G4int iPlace, G4double transferCut);
-  G4double GetdEdxCut( G4int iPlace, G4double transferCut);
-  G4double GetPostStepTransfer( G4double scaledTkin );
-  G4double GetEnergyTransfer( G4int iPlace,
-			      G4double position,
-			      G4int iTransfer );
+  inline G4PAIModelData* GetPAIModelData();
 
-  void SetVerboseLevel(G4int verbose){fVerbose=verbose;};
+  inline G4double ComputeMaxEnergy(G4double scaledEnergy);
+
+  inline void SetVerboseLevel(G4int verbose);
 
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy);
+			      G4double kinEnergy);
 
 private:
 
-  void SetParticle(const G4ParticleDefinition* p);
+  inline G4int FindCoupleIndex(const G4MaterialCutsCouple*);
+
+  inline void SetParticle(const G4ParticleDefinition* p);
 
   // hide assignment operator 
   G4PAIModel & operator=(const  G4PAIModel &right);
   G4PAIModel(const  G4PAIModel&);
 
-  // The vector over proton kinetic energies: the range of gammas
   G4int                fVerbose; 
-  G4double             fLowestGamma;
-  G4double             fHighestGamma;
-  G4double             fLowestKineticEnergy;
-  G4double             fHighestKineticEnergy;
-  G4int                fTotBin;
-  G4int                fMeanNumber;
-  G4PhysicsLogVector*  fParticleEnergyVector ;
-  G4PAIySection        fPAIySection;
-  G4SandiaTable        fSandia;
 
-  // vectors
-
-  G4PhysicsTable*                    fPAItransferTable;
-  std::vector<G4PhysicsTable*>       fPAIxscBank;
-
-  G4PhysicsTable*                    fPAIdEdxTable;
-  std::vector<G4PhysicsTable*>       fPAIdEdxBank;
+  G4PAIModelData*      fModelData; 
 
   std::vector<const G4MaterialCutsCouple*> fMaterialCutsCoupleVector;
-  std::vector<const G4Region*>       fPAIRegionVector;
-
-  const G4MaterialCutsCouple*        fCutCouple;
-  const G4Material*                  fMaterial;
-  G4double                           fDeltaCutInKinEnergy; 
-
-  size_t                             fMatIndex ;  
-  G4double**                         fSandiaPhotoAbsCof ;
-  G4int                              fSandiaIntervalNumber ;
-
-  G4PhysicsLogVector*                fdEdxVector ;
-  std::vector<G4PhysicsLogVector*>   fdEdxTable ;
-
-  G4PhysicsLogVector*                fLambdaVector ;
-  std::vector<G4PhysicsLogVector*>   fLambdaTable ;
-
-  G4PhysicsLogVector*                fdNdxCutVector ;
-  std::vector<G4PhysicsLogVector*>   fdNdxCutTable ;
+  std::vector<const G4Region*>      fPAIRegionVector;
 
   const G4ParticleDefinition* fParticle;
   const G4ParticleDefinition* fElectron;
@@ -179,18 +144,51 @@ private:
   G4ParticleChangeForLoss*    fParticleChange;
 
   G4double fMass;
-  G4double fSpin;
-  G4double fChargeSquare;
   G4double fRatio;
-  G4double fHighKinEnergy;
+  G4double fChargeSquare;
   G4double fLowKinEnergy;
-  G4double fTwoln10;
-  G4double fBg2lim; 
-  G4double fTaulim;
-  G4double fQc;
 
   G4bool   isInitialised;
 };
+
+inline G4PAIModelData* G4PAIModel::GetPAIModelData()
+{
+  return fModelData;
+}
+
+inline G4double G4PAIModel::ComputeMaxEnergy(G4double scaledEnergy)
+{
+  return MaxSecondaryEnergy(fParticle, scaledEnergy/fRatio);
+}
+
+inline void G4PAIModel::SetVerboseLevel(G4int verbose) 
+{ 
+  fVerbose=verbose; 
+}
+
+inline G4int G4PAIModel::FindCoupleIndex(const G4MaterialCutsCouple* couple)
+{
+  G4int idx = -1;
+  size_t jMatMax = fMaterialCutsCoupleVector.size();
+  for(size_t jMat = 0;jMat < jMatMax; ++jMat) { 
+    if(couple == fMaterialCutsCoupleVector[jMat]) {
+      idx = jMat; 
+      break; 
+    }
+  }
+  return idx;
+}
+
+inline void G4PAIModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(fParticle != p) {
+    fParticle = p;
+    fMass = fParticle->GetPDGMass();
+    fRatio = CLHEP::proton_mass_c2/fMass;
+    G4double q = fParticle->GetPDGCharge()/CLHEP::eplus;
+    fChargeSquare = q*q;
+  }
+}
 
 #endif
 
