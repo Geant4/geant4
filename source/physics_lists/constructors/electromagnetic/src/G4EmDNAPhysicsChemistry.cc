@@ -73,7 +73,7 @@
 // e+
 #include "G4Positron.hh"
 #include "G4eMultipleScattering.hh"
-#include "G4UrbanMscModel95.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -575,7 +575,7 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
             // Identical to G4EmStandardPhysics_option3
 
             G4eMultipleScattering* msc = new G4eMultipleScattering();
-            msc->AddEmModel(0, new G4UrbanMscModel95());
+	    // msc->AddEmModel(0, new G4UrbanMscModel());
             msc->SetStepLimitType(fUseDistanceToBoundary);
             G4eIonisation* eIoni = new G4eIonisation();
             eIoni->SetStepFunction(0.2, 100*um);

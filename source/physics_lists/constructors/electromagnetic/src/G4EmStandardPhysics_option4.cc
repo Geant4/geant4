@@ -57,7 +57,6 @@
 #include "G4MuMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4MscStepLimitType.hh"
-#include "G4UrbanMscModel93.hh"
 #include "G4UrbanMscModel.hh"
 #include "G4DummyModel.hh"
 #include "G4WentzelVIModel.hh"

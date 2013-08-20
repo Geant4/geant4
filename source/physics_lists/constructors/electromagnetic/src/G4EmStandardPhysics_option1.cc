@@ -62,7 +62,7 @@
 #include "G4eCoulombScatteringModel.hh"
 #include "G4CoulombScattering.hh"
 #include "G4WentzelVIModel.hh"
-#include "G4UrbanMscModel93.hh"
+#include "G4UrbanMscModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -215,7 +215,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
-      G4UrbanMscModel93* msc1 = new G4UrbanMscModel93();
+      G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
@@ -241,7 +241,7 @@ void G4EmStandardPhysics_option1::ConstructProcess()
 
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
-      G4UrbanMscModel93* msc1 = new G4UrbanMscModel93();
+      G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);

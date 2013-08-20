@@ -83,7 +83,7 @@
 #include "G4NuclearStopping.hh"
 
 // msc models
-#include "G4UrbanMscModel95.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4GoudsmitSaundersonMscModel.hh"
 #include "G4CoulombScattering.hh"
@@ -247,7 +247,7 @@ void G4EmLowEPPhysics::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
+      //msc->AddEmModel(0, new G4UrbanMscModel());
       //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       ph->RegisterProcess(msc, particle);
@@ -275,7 +275,7 @@ void G4EmLowEPPhysics::ConstructProcess()
       // Identical to G4EmStandardPhysics_option3
       
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
+      // msc->AddEmModel(0, new G4UrbanMscModel());
       //msc->AddEmModel(0, new G4GoudsmitSaundersonMscModel());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       G4eIonisation* eIoni = new G4eIonisation();
