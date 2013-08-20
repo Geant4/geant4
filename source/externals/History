@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-August-2013: G.Cosmo (externals-V09-06-05)
+- Corrected CMakeLists.txt script in CLHEP module to have missing .icc
+  and .cdat files explicitly listed.
+
 19-April-2013: G.Cosmo (externals-V09-06-04)
 - Hack for making tracer.cxx application in memoryprotection module
   compile on Mac/clang.

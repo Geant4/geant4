@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 August 2013 - G.Cosmo
+- Corrected CMakeLists.txt script to have missing .icc and .cdat files
+  explicitly listed.
+
 15 November 2012 - G.Cosmo
 - Updated to CLHEP-2.1.3.1:
   * Vector (L.Garren <garren@fnal.gov>):
