@@ -244,7 +244,7 @@ template<class T> TLBE<T>::~TLBE()
 // e-
 #include "G4eMultipleScattering.hh"
 #include "G4UniversalFluctuation.hh"
-#include "G4UrbanMscModel93.hh"
+#include "G4UrbanMscModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4LivermoreIonisationModel.hh"
@@ -330,7 +330,7 @@ template<class T> TLBE<T>::~TLBE()
        // process ordering: AddProcess(name, at rest, along step, post step)
        // -1 = not implemented, then ordering
        	G4eMultipleScattering* msc = new G4eMultipleScattering();     
-        msc->AddEmModel(0, new G4UrbanMscModel93());
+        //msc->AddEmModel(0, new G4UrbanMscModel());
         msc->SetStepLimitType(fUseDistanceToBoundary);
         pmanager->AddProcess(msc,                   -1, 1, 1);
       
@@ -355,7 +355,7 @@ template<class T> TLBE<T>::~TLBE()
       {
 	//positron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());      
+      //msc->AddEmModel(0, new G4UrbanMscModel());      
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       G4eIonisation* eIoni = new G4eIonisation();
