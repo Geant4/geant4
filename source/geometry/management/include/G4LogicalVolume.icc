@@ -219,6 +219,28 @@ void G4LogicalVolume::ClearDaughters()
 }
 
 // ********************************************************************
+// CharacteriseDaughters
+// ********************************************************************
+//
+inline
+EVolume G4LogicalVolume::CharacteriseDaughters() const
+{
+  EVolume type;
+  G4VPhysicalVolume *pVol;
+
+  if ( GetNoDaughters()==1 )
+  {
+    pVol = GetDaughter(0);
+    type = pVol->VolumeType();
+  }
+  else
+  {
+    type = kNormal;
+  }
+  return type;
+}
+
+// ********************************************************************
 // GetSolid
 // ********************************************************************
 //

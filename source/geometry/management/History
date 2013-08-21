@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 21, 2013 G.Cosmo                    geommng-V09-06-09
+- Added methods G4VPhysicalVolume::VolumeType() and
+  G4LogicalVolume::CharacteriseDaughters() to be used by G4Navigator.
+
 July 29, 2013 T.Nikitina                   geommng-V09-06-08
 - Fix to G4VSolid::EstimateCubicVolume() to make proper use of specified
   accuracy. Addressing problem report #1493.

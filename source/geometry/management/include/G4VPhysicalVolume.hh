@@ -172,6 +172,9 @@ class G4VPhysicalVolume
     inline void SetName(const G4String& pName);
       // Set the volume's name.
 
+    inline EVolume VolumeType() const;
+      // Characterise the `type' of volume - normal/replicated/parameterised.
+
     virtual G4int GetMultiplicity() const;
       // Returns number of object entities (1 for normal placements,
       // n for replicas or parameterised).

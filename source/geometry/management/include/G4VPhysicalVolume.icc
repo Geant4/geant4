@@ -111,6 +111,26 @@ void G4VPhysicalVolume::SetName(const G4String& pName)
 }
 
 inline
+EVolume G4VPhysicalVolume::VolumeType() const
+{
+  EVolume type;
+  EAxis axis;
+  G4int nReplicas;
+  G4double width,offset;
+  G4bool consuming;
+  if ( IsReplicated() )
+  {
+    GetReplicationData(axis,nReplicas,width,offset,consuming);
+    type = (consuming) ? kReplica : kParameterised;
+  }
+  else
+  {
+    type = kNormal;
+  }
+  return type;
+}
+
+inline
 G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
 {
   G4RotationMatrix  aRotM;   // Initialised to identity

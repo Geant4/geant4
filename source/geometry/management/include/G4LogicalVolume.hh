@@ -238,6 +238,8 @@ class G4LogicalVolume
     G4int TotalVolumeEntities() const;
       // Returns the total number of physical volumes (replicated or placed)
       // in the tree represented by the current logical volume.
+    inline EVolume CharacteriseDaughters() const;
+      // Characterise the daughters of this logical volume.
 
     inline G4VSolid* GetSolid() const;
     inline void SetSolid(G4VSolid *pSolid);
