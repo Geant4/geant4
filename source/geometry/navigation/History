@@ -17,21 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 21st, 2013 - G.Cosmo  (geomnav-V09-06-13)
+---------------------------
+- Rationalised implementation of VolumeType() and CharacteriseDaughters()
+  in G4Navigator, to use implementation now provided in G4VPhysicalVolume
+  and G4LogicalVolume respectively.
+
 July 15th, 2013 - J.Apostolakis  (geomnav-V09-06-12)
-------------------------------
-G4SafetyHelper
-  - Fix compilation warning.
-  - Take out unused variable and cleanup. 
+-------------------------------
+- G4SafetyHelper: fixed compilation warning; take out unused variable
+  and cleanup. 
 
 July 12th, 2013 - J.Apostolakis  (geomnav-V09-06-11)
-------------------------------
-G4SafetyHelper
-  Protection against storing 'fake' safety, in case  maxLength is used ( not DBL_MAX )
+-------------------------------
+- G4SafetyHelper: protection against storing 'fake' safety, in case
+  'maxLength' is used ( not DBL_MAX ).
 
 June 4th, 2013 - J.Apostolakis  (geomnav-V09-06-10)
 ------------------------------
-G4MultiNavigator.cc: Fix use of enum as boolean in GetGlobalExitNormal().  
-    Issue identified by Coverity. 
+- G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().  
+  Issue identified by Coverity. 
 
 Jun 3rd, 2013 - G.Cosmo (geomnav-V09-06-09)
 -----------------------
