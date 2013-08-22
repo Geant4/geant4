@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-Aug-2013, V.Ivanchenko (phys-ctor-em-V09-06-10)
+-  Removed G4UrbanMscModel95 from EmDNA constructor
+
 19-Aug-2013, V.Ivanchenko (phys-ctor-em-V09-06-09)
 -  in all constructors use G4UrbanMscModel instead of Urban93 or Urban95
 
