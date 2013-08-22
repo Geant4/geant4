@@ -52,7 +52,7 @@
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4WentzelVIModel.hh"
-#include "G4UrbanMscModel93.hh"
+#include "G4UrbanMscModel.hh"
 #include "G4eCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
@@ -166,12 +166,12 @@ void PhysListEmStandard::ConstructProcess()
       msc->SetStepLimitType(fMinimal);
       if (newForElectrons) {
         std::cout << "new model for electrons" << std::endl;
-      G4UrbanMscModel93* msc93 = new G4UrbanMscModel93();
-          msc93->SetSkin(10);//<<<<<<<<<<<<<<<<<<<<<<
+      G4UrbanMscModel* mscModel = new G4UrbanMscModel();
+          mscModel->SetSkin(10);//<<<<<<<<<<<<<<<<<<<<<<
       G4WentzelVIModel* wvi = new G4WentzelVIModel();
-      msc93->SetHighEnergyLimit(mscEnergyLimit);
+      mscModel->SetHighEnergyLimit(mscEnergyLimit);
       wvi->SetLowEnergyLimit(mscEnergyLimit);
-      msc->AddEmModel(0, msc93);
+      msc->AddEmModel(0, mscModel);
       msc->AddEmModel(0, wvi);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
@@ -196,11 +196,11 @@ void PhysListEmStandard::ConstructProcess()
       msc->SetStepLimitType(fMinimal);
       if (newForElectrons ) {
         std::cout << "new model for positrons" << std::endl;
-      G4UrbanMscModel93* msc93 = new G4UrbanMscModel93();
+      G4UrbanMscModel* mscModel = new G4UrbanMscModel();
       G4WentzelVIModel* wvi = new G4WentzelVIModel();
-      msc93->SetHighEnergyLimit(mscEnergyLimit);
+      mscModel->SetHighEnergyLimit(mscEnergyLimit);
       wvi->SetLowEnergyLimit(mscEnergyLimit);
-      msc->AddEmModel(0, msc93);
+      msc->AddEmModel(0, mscModel);
       msc->AddEmModel(0, wvi);
       pmanager->AddProcess(msc,                     -1, 1, 1);
       pmanager->AddProcess(eioni,                   -1, 2, 2);

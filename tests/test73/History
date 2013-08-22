@@ -11,6 +11,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 Aug 2013, V.Ivanchenko (test73-V09-06-01)
+Removed G4UrbanMscModel93
+
 03 Apr 2013, Andrea Dotti (test73-V09-06-00)
 Migrating to new G4VPhysicsConstructor API needed for G4MT
 
