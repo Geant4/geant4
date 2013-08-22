@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-08-2013, V.Ivanchenko (test67-V09-06-14)
+  Removed G4UrbanMscModel93
+
 30-07-2013 A.Dotti   (test67-V09-06-13)
   Bug fixing for compilation warnings for unused varialbes (clang32)
 

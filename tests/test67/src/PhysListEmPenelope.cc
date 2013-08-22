@@ -90,7 +90,6 @@
 #include "G4NuclearStopping.hh"
 
 // msc models
-#include "G4UrbanMscModel93.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
 
@@ -180,7 +179,6 @@ void PhysListEmPenelope::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       
@@ -211,7 +209,6 @@ void PhysListEmPenelope::ConstructProcess()
     } else if (particleName == "e+") {
     
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel93());
       msc->SetStepLimitType(fUseDistanceToBoundary);
       pmanager->AddProcess(msc,                   -1, 1, 1);
 
