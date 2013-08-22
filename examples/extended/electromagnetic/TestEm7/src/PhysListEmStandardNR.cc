@@ -29,7 +29,7 @@
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandardNR.hh"
 
@@ -53,7 +53,7 @@
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
-#include "G4UrbanMscModel95.hh"
+#include "G4UrbanMscModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -142,9 +142,6 @@ void PhysListEmStandardNR::ConstructProcess()
       // ionisation
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);
-      //G4VEmModel* theIoniPenelope = new G4PenelopeIonisationModel();
-      //theIoniPenelope->SetHighEnergyLimit(0.1*MeV);
-      //eIoni->AddEmModel(0, theIoniPenelope, new G4UniversalFluctuation());
 
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
@@ -157,9 +154,6 @@ void PhysListEmStandardNR::ConstructProcess()
       // ionisation
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);
-      //      G4VEmModel* theIoniPenelope = new G4PenelopeIonisationModel();
-      //      theIoniPenelope->SetHighEnergyLimit(0.1*MeV);
-      //      eIoni->AddEmModel(0, theIoniPenelope, new G4UniversalFluctuation());
 
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
@@ -185,7 +179,7 @@ void PhysListEmStandardNR::ConstructProcess()
     } else if (particleName == "alpha" || particleName == "He3") {
 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      G4UrbanMscModel95* model = new G4UrbanMscModel95();
+      G4UrbanMscModel* model = new G4UrbanMscModel();
       model->SetActivationLowEnergyLimit(energyLimit);
       msc->SetEmModel(model, 1);
       ph->RegisterProcess(msc, particle);
@@ -199,7 +193,7 @@ void PhysListEmStandardNR::ConstructProcess()
     } else if (particleName == "GenericIon" ) { 
 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      G4UrbanMscModel95* model = new G4UrbanMscModel95();
+      G4UrbanMscModel* model = new G4UrbanMscModel();
       model->SetActivationLowEnergyLimit(energyLimit);
       msc->SetEmModel(model, 1);
       ph->RegisterProcess(msc, particle);
@@ -216,7 +210,7 @@ void PhysListEmStandardNR::ConstructProcess()
                particleName == "triton") { 
 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      G4UrbanMscModel95* model = new G4UrbanMscModel95();
+      G4UrbanMscModel* model = new G4UrbanMscModel();
       model->SetActivationLowEnergyLimit(energyLimit);
       msc->SetEmModel(model, 1);
       ph->RegisterProcess(msc, particle);
