@@ -40,7 +40,6 @@
 #include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4UrbanMscModel95.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -103,7 +102,6 @@ void PhysListEmStandard::ConstructProcess()
         } else if (particleName == "e-") {
             
             G4eMultipleScattering* msc = new G4eMultipleScattering();
-            msc->AddEmModel(0, new G4UrbanMscModel95());
             ph->RegisterProcess(msc, particle);
             G4eIonisation* eIoni = new G4eIonisation();
             eIoni->SetStepFunction(0.1, 100*um);
@@ -113,7 +111,6 @@ void PhysListEmStandard::ConstructProcess()
         } else if (particleName == "e+") {
             
             G4eMultipleScattering* msc = new G4eMultipleScattering();
-            msc->AddEmModel(0, new G4UrbanMscModel95());
             ph->RegisterProcess(msc, particle);
             G4eIonisation* eIoni = new G4eIonisation();
             eIoni->SetStepFunction(0.1, 100*um);

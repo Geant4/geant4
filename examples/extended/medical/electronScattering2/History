@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 August 2013  V.Ivanchenko (exampleES2-V09-06-04)
+- PhysListEmStandard - removed G4UrbanMscModel95 - use default
+    model
+
 05 June 2013  Ivana Hrivnacova (exampleES2-V09-06-03)
 - Apply coding guidelines (initialization of data members)
 
