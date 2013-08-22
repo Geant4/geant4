@@ -79,7 +79,7 @@ class G4GeometryMessenger : public G4UImessenger
     G4UIcmdWithABool          *chkCmd, *pchkCmd, *verCmd;
     G4UIcmdWithoutParameter   *recCmd, *resCmd;
     G4UIcmdWithADoubleAndUnit *tolCmd;
-    G4UIcmdWithAnInteger      *verbCmd, *rslCmd, *rcsCmd, *rcdCmd;
+    G4UIcmdWithAnInteger      *verbCmd, *rslCmd, *rcsCmd, *rcdCmd, *errCmd;
 
     G4double      tol;
     G4int         recLevel, recDepth;

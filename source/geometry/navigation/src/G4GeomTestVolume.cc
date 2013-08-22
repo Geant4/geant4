@@ -51,7 +51,7 @@ G4GeomTestVolume::G4GeomTestVolume( G4VPhysicalVolume *theTarget,
                                     G4int numberOfPoints,
                                     G4bool theVerbosity )
   : target(theTarget), tolerance(theTolerance),
-    resolution(numberOfPoints), verbosity(theVerbosity)
+    resolution(numberOfPoints), maxErr(1), verbosity(theVerbosity)
 {;}
 
 //
@@ -76,6 +76,14 @@ void G4GeomTestVolume::SetTolerance(G4double tol)
 }
 
 //
+// Get number of points to check (resolution)
+//
+G4int G4GeomTestVolume::GetResolution() const
+{
+  return resolution;
+}
+
+//
 // Set number of points to check (resolution)
 //
 void G4GeomTestVolume::SetResolution(G4int np)
@@ -84,11 +92,35 @@ void G4GeomTestVolume::SetResolution(G4int np)
 }
 
 //
+// Get verbosity
+//
+G4bool G4GeomTestVolume::GetVerbosity() const
+{
+  return verbosity;
+}
+
+//
 // Set verbosity
 //
 void G4GeomTestVolume::SetVerbosity(G4bool verb)
 {
   verbosity = verb;
+}
+
+//
+// Get errors reporting threshold
+//
+G4int G4GeomTestVolume::GetErrorsThreshold() const
+{
+  return maxErr;
+}
+
+//
+// Set maximum number of errors to report
+//
+void G4GeomTestVolume::SetErrorsThreshold(G4int max)
+{
+  maxErr = max;
 }
 
 //
@@ -110,7 +142,7 @@ void G4GeomTestVolume::TestRecursiveOverlap( G4int slevel, G4int depth )
   //
   if ( slevel==0 )
   {
-    target->CheckOverlaps(resolution, tolerance, verbosity);
+    target->CheckOverlaps(resolution, tolerance, verbosity, maxErr);
   }
 
   //
@@ -138,6 +170,7 @@ void G4GeomTestVolume::TestRecursiveOverlap( G4int slevel, G4int depth )
     // Recurse
     //
     G4GeomTestVolume vTest( daughter, tolerance, resolution, verbosity );
+    vTest.SetErrorsThreshold(maxErr);
     vTest.TestRecursiveOverlap( slevel,depth );
   }
 }

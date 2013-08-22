@@ -153,6 +153,14 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   rcdCmd->SetParameterName("recursion_depth",true);
   rcdCmd->SetDefaultValue(-1);
 
+  errCmd = new G4UIcmdWithAnInteger( "/geometry/test/maximum_errors", this );
+  errCmd->SetGuidance( "Set the maximum number of overlap errors to report" );
+  errCmd->SetGuidance( "for each single volume being checked." );
+  errCmd->SetGuidance( "Once reached the maximum number specified, overlaps" );
+  errCmd->SetGuidance( "affecting that volume further than that are simply ignored." );
+  errCmd->SetParameterName("maximum_errors",true);
+  errCmd->SetDefaultValue(1);
+
   recCmd = new G4UIcmdWithoutParameter( "/geometry/test/run", this );
   recCmd->SetGuidance( "Start running the recursive overlap check." );
   recCmd->SetGuidance( "Volumes are recursively asked to verify for overlaps" );
@@ -171,7 +179,7 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
 G4GeometryMessenger::~G4GeometryMessenger()
 {
   delete verCmd; delete recCmd; delete rslCmd;
-  delete resCmd; delete rcsCmd; delete rcdCmd;
+  delete resCmd; delete rcsCmd; delete rcdCmd; delete errCmd;
   delete tolCmd;
   delete verbCmd; delete pchkCmd; delete chkCmd;
   delete geodir; delete navdir; delete testdir;
@@ -233,6 +241,10 @@ G4GeometryMessenger::SetNewValue( G4UIcommand* command, G4String newValues )
   }
   else if (command == rcdCmd) {
     recDepth = rcdCmd->GetNewIntValue( newValues );
+  }
+  else if (command == errCmd) {
+    Init();
+    tvolume->SetErrorsThreshold(errCmd->GetNewIntValue( newValues ));
   }
   else if (command == recCmd) {
     Init();

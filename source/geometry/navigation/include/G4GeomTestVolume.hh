@@ -66,6 +66,9 @@ class G4GeomTestVolume
     G4bool GetVerbosity() const;
     void SetVerbosity(G4bool verbosity);
       // Get/Set verbosity mode (default set to true)
+    G4int GetErrorsThreshold() const;
+    void SetErrorsThreshold(G4int max);
+      // Get/Set maximum number of errors to report (default set to 1)
 
     void TestRecursiveOverlap( G4int sLevel=0, G4int depth=-1 );
       // Activate overlaps check, propagating recursively to the daughters,
@@ -79,6 +82,7 @@ class G4GeomTestVolume
     G4VPhysicalVolume *target;        // Target volume
     G4double tolerance;               // Error tolerance
     G4int resolution;                 // Number of points to test
+    G4int maxErr;                     // Maximum number of errors to report
     G4bool verbosity;                 // Verbosity level for overlaps check
 };
 

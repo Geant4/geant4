@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 22nd, 2013 - G.Cosmo  (geomnav-V09-06-14)
+---------------------------
+- Added ability to set maximum number of errors to report for overlaps
+  from a volume in G4GeometryMessenger.
+  Added new UI command "/geometry/test/maximum_errors [int]" to fix the
+  threshold. By default, for each volume, reports stop after the first
+  error reported.
+
 August 21st, 2013 - G.Cosmo  (geomnav-V09-06-13)
 ---------------------------
 - Rationalised implementation of VolumeType() and CharacteriseDaughters()
