@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22/08/2013  Vladimir Ivanchenko (rdecay02-V09-06-02)
+- Removed unused include of G4UrbanMscModel93.hh 
+
 01/04/2013 A.Dotti (rdecay02-V09-06-01)
 - New API for phsyics list
 
