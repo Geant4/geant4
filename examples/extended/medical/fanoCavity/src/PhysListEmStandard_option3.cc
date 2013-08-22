@@ -29,7 +29,7 @@
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard_option3.hh"
 #include "DetectorConstruction.hh"
@@ -43,7 +43,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
-#include "G4UrbanMscModel95.hh"
 
 #include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
@@ -87,7 +86,8 @@ void PhysListEmStandard_option3::ConstructProcess()
       // gamma
     
       G4ComptonScattering* compton = new G4ComptonScattering();
-      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
+      MyKleinNishinaCompton* comptonModel = 
+        new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
       compton->SetEmModel(comptonModel );
             
@@ -98,7 +98,6 @@ void PhysListEmStandard_option3::ConstructProcess()
     } else if (particleName == "e-") {
       //electron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
             
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
@@ -110,7 +109,6 @@ void PhysListEmStandard_option3::ConstructProcess()
     } else if (particleName == "e+") {
       //positron
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->AddEmModel(0, new G4UrbanMscModel95());
             
       G4eIonisation* pIoni = new G4eIonisation();
       pIoni->SetEmModel(new MyMollerBhabhaModel);
@@ -143,7 +141,7 @@ void PhysListEmStandard_option3::ConstructProcess()
       
   //multiple coulomb scattering
   //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
+  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  
       
   //energy loss
   //
