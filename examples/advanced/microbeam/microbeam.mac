@@ -1,0 +1,13 @@
+/tracking/storeTrajectory 1
+
+/run/initialize
+
+/process/inactivate nuclearStopping
+
+# Uncomment this line of you want visualization
+#/control/execute vis.mac
+
+/tracking/verbose 0
+/run/verbose 0
+
+/run/beamOn 10
