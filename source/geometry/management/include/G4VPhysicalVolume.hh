@@ -210,7 +210,7 @@ class G4VPhysicalVolume
       //  If non-zero the volume is a candidate for specialised 
       //  navigation such as 'nearest neighbour' directly on volumes.
     virtual G4bool CheckOverlaps(G4int res=1000, G4double tol=0.,
-                                 G4bool verbose=true);
+                                 G4bool verbose=true, G4int errMax=1);
       // Verifies if the placed volume is overlapping with existing
       // daughters or with the mother volume. Provides default resolution
       // for the number of points to be generated and verified.

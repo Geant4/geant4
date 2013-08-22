@@ -140,7 +140,7 @@ G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
 // Only implemented for placed and parameterised volumes.
 // Not required for replicas.
 //
-G4bool G4VPhysicalVolume::CheckOverlaps(G4int, G4double, G4bool)
+G4bool G4VPhysicalVolume::CheckOverlaps(G4int, G4double, G4bool, G4int)
 {
   return false;
 }

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 22, 2013 G.Cosmo                  geommng-V09-06-10
+- Added parameter to specify maximum number of overlap errors to report
+  in G4VPhysicalVolume::CheckOverlaps().
+
 August 21, 2013 G.Cosmo                    geommng-V09-06-09
 - Added methods G4VPhysicalVolume::VolumeType() and
   G4LogicalVolume::CharacteriseDaughters() to be used by G4Navigator.
