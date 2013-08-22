@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-08-13  V.Ivanchenko (test46-V09-06-07)
+- Obsolete G4UrbanMscModel93 model is copied from source and
+    renamed to UrbanMscModel93 in order be able continue testing
+
 30-07-13 A.Dotti (test46-V09-06-06)
 - Bug fixing for compilation warning unused variable (clang32)
 

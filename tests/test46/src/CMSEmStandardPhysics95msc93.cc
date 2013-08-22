@@ -40,7 +40,7 @@
 #include "G4eMultipleScattering.hh"
 #include "G4MscStepLimitType.hh"
 //#include "CMSUrbanMscModel93.hh"
-#include "G4UrbanMscModel93.hh"
+#include "UrbanMscModel93.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -172,7 +172,7 @@ void CMSEmStandardPhysics95msc93::ConstructProcess()
       eioni->SetStepFunction(0.8, 1.0*mm);
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
-      msc->AddEmModel(0,new G4UrbanMscModel93());
+      msc->AddEmModel(0,new UrbanMscModel93());
 
       G4eBremsstrahlung* ebrem = new G4eBremsstrahlung();
       //ebrem->SetEmModel(new G4SeltzerBergerModel95(), 1);
@@ -189,7 +189,7 @@ void CMSEmStandardPhysics95msc93::ConstructProcess()
       eioni->SetStepFunction(0.8, 1.0*mm);
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fMinimal);
-      msc->AddEmModel(0,new G4UrbanMscModel93());
+      msc->AddEmModel(0,new UrbanMscModel93());
 
       G4eBremsstrahlung* ebrem = new G4eBremsstrahlung();
       //ebrem->SetEmModel(new G4SeltzerBergerModel95(), 1);

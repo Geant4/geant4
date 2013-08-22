@@ -39,7 +39,7 @@
 #include "G4hMultipleScattering.hh"
 #include "G4eMultipleScattering.hh"
 #include "G4MscStepLimitType.hh"
-#include "G4UrbanMscModel93.hh"
+#include "UrbanMscModel93.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -166,6 +166,7 @@ void CMSEmStandardPhysics92::ConstructProcess()
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
       G4eMultipleScattering* msc = new G4eMultipleScattering;
+      msc->AddEmModel(0,new UrbanMscModel93());
       msc->SetStepLimitType(fMinimal);
       pmanager->AddProcess(msc,                   -1, 1, 1);
       pmanager->AddProcess(eioni,                 -1, 2, 2);
@@ -176,6 +177,7 @@ void CMSEmStandardPhysics92::ConstructProcess()
       G4eIonisation* eioni = new G4eIonisation();
       eioni->SetStepFunction(0.8, 1.0*mm);
       G4eMultipleScattering* msc = new G4eMultipleScattering;
+      msc->AddEmModel(0,new UrbanMscModel93());
       msc->SetStepLimitType(fMinimal);
       pmanager->AddProcess(msc,                     -1, 1, 1);
       pmanager->AddProcess(eioni,                   -1, 2, 2);
