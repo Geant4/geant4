@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 August 2013, V.Ivanchenko (test17-V09-06-03)
+             Removed G4UrbanMscModel93
+
 31 July 2013, Andrea Dotti (test17-V09-06-02)
              Bug fixing for unused variables for clang32. Second round
 
