@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 22nd, 2013 G.Cosmo - geomvol-V09-06-08
+- Added parameter to specify maximum number of overlap errors to report.
+  Adapted code in CheckOverlaps() in G4PVPlacement and G4PVParameterised
+  to take into account the threshold.
+
 April 2nd, 2013 G.Cosmo - geomvol-V09-06-07
 - More optimisation to G4LogicalBorderSurface and G4LogicalSkinSurface
   in the use of static tables.

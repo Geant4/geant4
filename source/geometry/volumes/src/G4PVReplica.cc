@@ -34,53 +34,13 @@
 #include "G4PVReplica.hh"
 #include "G4LogicalVolume.hh"
 
-// This static member is thread local. For each thread, it points to the     
+// This static member is thread local. For each thread, it points to the
 // array of G4ReplicaData instances.
 //
 template <class G4ReplicaData> G4ThreadLocal
 G4ReplicaData* G4GeomSplitter<G4ReplicaData>::offset = 0;
-
-// This new field helps to use the class G4PVRManager.
-//
 G4PVRManager G4PVReplica::subInstanceManager;
-
-// ********************************************************************
-// GetSubInstanceManager
-//
-// Returns the private data instance manager.
-// *******************************************************************
-const G4PVRManager& G4PVReplica::GetSubInstanceManager()
-{
-    return subInstanceManager;
-}
-
-
-// This method is similar to the constructor. It is used by each worker
-// thread to achieve the same effect as that of the master thread exept
-// to register the new created instance. This method is invoked explicitly.
-// It does not create a new G4PVReplica instance. It only assigns the value
-// for the fields encapsulated by the class G4ReplicaData.
-//
-void G4PVReplica::InitialiseWorker(G4PVReplica *pMasterObject)
-{
-
-  G4VPhysicalVolume::InitialiseWorker( pMasterObject, 0, G4ThreeVector());
-  subInstanceManager.SlaveCopySubInstanceArray();
-  G4MT_copyNo = -1;
-  CheckAndSetParameters (faxis, fnReplicas, fwidth, foffset);
-} 
-
-// This method is similar to the destructor. It is used by each worker
-// thread to achieve the partial effect as that of the master thread.
-// For G4PVReplica instances, it destories the rotation matrix.
-//
-void G4PVReplica::TerminateWorker(G4PVReplica* /*pMasterObject*/)
-{
-  if ( faxis==kPhi )
-  {
-    delete GetRotation();
-  }
-}
+// This new field helps to use the class G4PVRManager.
 
 G4PVReplica::G4PVReplica( const G4String& pName,
                                 G4LogicalVolume* pLogical,
@@ -300,3 +260,50 @@ void   G4PVReplica::SetRegularStructureId( G4int Code )
 {
   fRegularVolsId= Code; 
 } 
+
+
+
+
+
+//
+
+// ********************************************************************
+// GetSubInstanceManager
+//
+// Returns the private data instance manager.
+// *******************************************************************
+const G4PVRManager& G4PVReplica::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
+
+
+// This method is similar to the constructor. It is used by each worker
+// thread to achieve the same effect as that of the master thread exept
+// to register the new created instance. This method is invoked explicitly.
+// It does not create a new G4PVReplica instance. It only assigns the value
+// for the fields encapsulated by the class G4ReplicaData.
+//
+void G4PVReplica::InitialiseWorker(G4PVReplica *pMasterObject)
+{
+  
+  G4VPhysicalVolume::InitialiseWorker( pMasterObject, 0, G4ThreeVector());
+  subInstanceManager.SlaveCopySubInstanceArray();
+  G4MT_copyNo = -1;
+  CheckAndSetParameters (faxis, fnReplicas, fwidth, foffset);
+}
+
+// This method is similar to the destructor. It is used by each worker
+// thread to achieve the partial effect as that of the master thread.
+// For G4PVReplica instances, it destories the rotation matrix.
+//
+void G4PVReplica::TerminateWorker(G4PVReplica* /*pMasterObject*/)
+{
+  if ( faxis==kPhi )
+  {
+    delete GetRotation();
+  }
+}
+
+
+
