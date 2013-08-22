@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+21 August 13: V.Ivanchenko (emstand-V09-06-56)
+- G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96 rae removed
+    only one version of the model G4UrbanMscModel  is left  
+
 19 August 13: V.Ivanchenko (emstand-V09-06-55)
 - G4PAIModelData - new class to handle PAI internal data
 - G4PAIModel - data handling extracted to G4PAIModelData, is data 
