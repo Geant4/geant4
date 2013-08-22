@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-08-2013, V.Ivanchenko tag test50-V09-06-06
+  Removed G4UrbanMscModel93
+
 31-07-2013 A.Dotti     tag test50-V09-06-05
   Correct behavior if G4ANALYSIS_USE define is set
 
