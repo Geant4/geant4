@@ -14,8 +14,11 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-Aug-2013, Vladimir Ivantchenko       (phys-lists-V09-06-13)
+- LBE - removed forgotten header
+
 19-Aug-2013, Vladimir Ivantchenko       (phys-lists-V09-06-12)
-- LBE - use G4UrbanmscModel instead on Urban93
+- LBE - use G4UrbanMscModel instead on Urban93
 
 14-Jun-2013, Peter Gumplinger           (phys-lists-V09-06-11)
 - fix coverity error in LBE.inc

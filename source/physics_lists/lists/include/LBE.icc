@@ -265,11 +265,6 @@ template<class T> TLBE<T>::~TLBE()
 #include "G4NuclearStopping.hh"
 #include "G4EnergyLossTables.hh"
 
-
-// msc models
-#include "G4UrbanMscModel93.hh"
-
-
 //muon:
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
