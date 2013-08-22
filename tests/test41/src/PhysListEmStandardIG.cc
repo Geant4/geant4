@@ -103,7 +103,8 @@ void PhysListEmStandardIG::ConstructProcess()
       //muon  
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
       G4WentzelVIModel* wvi = new G4WentzelVIModel();
-      //msc->SetRangeFactor(0.1);
+      msc->SetRangeFactor(0.05);
+
       msc->AddEmModel(0, wvi);
       pmanager->AddProcess(msc, -1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);

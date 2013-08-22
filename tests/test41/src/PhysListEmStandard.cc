@@ -37,7 +37,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4eMultipleScattering.hh"
-//#include "G4UrbanMscModel93.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eBremsstrahlungModel.hh"

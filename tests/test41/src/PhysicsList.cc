@@ -36,6 +36,8 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
 
+#include "G4GoudsmitSaundersonMscModel.hh"
+
 #include "StepMax.hh"
 #include "G4DecayPhysics.hh"
 
@@ -49,8 +51,6 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
-#include "G4UrbanMscModel93.hh"
-#include "G4UrbanMscModel95.hh"
 #include "PhysListEmStandard.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,12 +115,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics();
 
-  } else if (name == "emstandard_msc96") {
-
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandard();
-
   } else if (name == "emstandard_opt1") {
 
     emName = name;
@@ -145,20 +139,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new G4EmStandardPhysics_option3();
 
-  } else if (name == "emstandard_msc93") {
-
-    AddPhysicsList("emstandard_msc96");
-    G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
-    G4UrbanMscModel93* mscm = new G4UrbanMscModel93();
-    conf->SetExtraEmModel("mu+","msc",mscm);
-
-  } else if (name == "emstandard_msc95") {
-
-    AddPhysicsList("emstandard_msc96");
-    G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
-    G4UrbanMscModel95* mscm = new G4UrbanMscModel95();
-    conf->SetExtraEmModel("mu+","msc",mscm);
-
   } else if (name == "standardSS") {
 
     emName = name;
@@ -170,6 +150,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardIG(name);
+
+  } else if (name == "emstandardGS") {
+
+    AddPhysicsList("emstandard_opt3");
+    G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
+    G4GoudsmitSaundersonMscModel* mscm = new G4GoudsmitSaundersonMscModel();
+    conf->SetExtraEmModel("mu+","msc",mscm);
 
   } else {
 
