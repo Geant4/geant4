@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-08-13 V.Ivant (fano2-V09-06-08)
+- PhysListEmStandard_option3 - use G4UrbanMscModel instead of 
+    G4UrbanMscModel95
+
 29/31-07-13 P.Gumplinger (fano2-V09-06-06/07)
 - fic MAC/clang32 compilation warnings
 
