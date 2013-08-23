@@ -55,11 +55,6 @@ public:
 
   G4HadronElasticPhysics(G4int ver = 0); 
 
-  // obsolete
-  G4HadronElasticPhysics(const G4String& name , 
-			 G4int ver = 0, G4bool hp = false, 
-			 const G4String& type="");
-
   virtual ~G4HadronElasticPhysics();
 
   // This method will be invoked in the Construct() method. 

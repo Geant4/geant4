@@ -93,16 +93,6 @@ G4HadronElasticPhysics::G4HadronElasticPhysics(G4int ver)
   }
 }
 
-G4HadronElasticPhysics::G4HadronElasticPhysics(const G4String&,
-    G4int ver, G4bool, const G4String&)
-  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver) 
-{
-  if(verbose > 1) { 
-    G4cout << "### G4HadronElasticPhysics: " << GetPhysicsName() 
-	   << G4endl; 
-  }
-}
-
 G4HadronElasticPhysics::~G4HadronElasticPhysics()
 {}
 
@@ -124,12 +114,13 @@ void G4HadronElasticPhysics::ConstructProcess()
   if(wasActivated) { return; }
   wasActivated = true;
 
-  G4double elimitPi = 1.0*GeV;
-  G4double elimitAntiNuc = 100*MeV;
+  const G4double elimitPi = 1.0*GeV;
+  const G4double elimitAntiNuc = 100.*MeV;
+  const G4double delta = 0.1*MeV;
   if(verbose > 1) {
-    G4cout << "### HadronElasticPhysics Construct Processes with the limit for pi " 
-	   << elimitPi/GeV << " GeV" 
-	   << "                                                  for anti-neuclei " 
+    G4cout << "### HadronElasticPhysics::ConstructProcess: Elimit for pi " 
+	   << elimitPi/GeV << " GeV" << G4endl;
+    G4cout << "                                         for anti-neuclei " 
 	   << elimitAntiNuc/GeV << " GeV"	   << G4endl;
   }
 
@@ -141,8 +132,8 @@ void G4HadronElasticPhysics::ConstructProcess()
   G4HadronElastic* lhep0 = new G4HadronElastic();
   G4HadronElastic* lhep1 = new G4HadronElastic();
   G4HadronElastic* lhep2 = new G4HadronElastic();
-  lhep1->SetMaxEnergy(elimitPi);
-  lhep2->SetMaxEnergy(elimitAntiNuc);
+  lhep1->SetMaxEnergy(elimitPi+delta);
+  lhep2->SetMaxEnergy(elimitAntiNuc+delta);
 
   G4ChipsElasticModel* chipsp = new G4ChipsElasticModel();
   neutronModel = new G4ChipsElasticModel();

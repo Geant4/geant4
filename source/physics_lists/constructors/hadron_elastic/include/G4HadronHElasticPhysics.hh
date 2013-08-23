@@ -48,9 +48,6 @@ public:
 
   G4HadronHElasticPhysics(G4int ver = 0); 
 
-  // obsolete
-  G4HadronHElasticPhysics(G4int ver, G4bool hp, const G4String& type="");
-
   virtual ~G4HadronHElasticPhysics();
 
   // This method will be invoked in the Construct() method. 

@@ -81,15 +81,6 @@ G4ThreadLocal G4bool G4HadronHElasticPhysics::wasActivated = false;
 G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver)
   : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver)
 {
-  //  if(verbose > 1) { 
-  G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() 
-	 << " is obsolete and soon will be removed" << G4endl; 
-}
-
-G4HadronHElasticPhysics::G4HadronHElasticPhysics(G4int ver, G4bool,
-						 const G4String&)
-  : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver)
-{
   if(verbose > 1) { 
     G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() 
 	   << G4endl; 
@@ -118,12 +109,13 @@ void G4HadronHElasticPhysics::ConstructProcess()
   if(wasActivated) { return; }
   wasActivated = true;
 
-  G4double elimitPi = 1.0*GeV;
-  G4double elimitAntiNuc = 100*MeV;
+  const G4double elimit = 1.0*GeV;
+  const G4double elimitAntiNuc = 100*MeV;
+  const G4double delta = 0.1*MeV;
   if(verbose > 1) {
-    G4cout << "### HadronElasticPhysics Construct Processes with the limit for pi " 
-	   << elimitPi/GeV << " GeV" 
-	   << "                                                  for anti-neuclei " 
+    G4cout << "### HadronElasticPhysics::ConstructProcess: Elimit for HE " 
+	   << elimit/GeV << " GeV" << G4endl;
+    G4cout << "                                         for anti-neuclei " 
 	   << elimitAntiNuc/GeV << " GeV"	   << G4endl;
   }
 
@@ -135,14 +127,14 @@ void G4HadronHElasticPhysics::ConstructProcess()
   G4HadronElastic* lhep0 = new G4HadronElastic();
   G4HadronElastic* lhep1 = new G4HadronElastic();
   G4HadronElastic* lhep2 = new G4HadronElastic();
-  lhep1->SetMaxEnergy(elimitPi);
-  lhep2->SetMaxEnergy(elimitAntiNuc);
+  lhep1->SetMaxEnergy(elimit+delta);
+  lhep2->SetMaxEnergy(elimitAntiNuc+delta);
 
-  G4ChipsElasticModel* chipsp = new G4ChipsElasticModel();
-  G4ChipsElasticModel* neutronModel = new G4ChipsElasticModel();
+  G4ChipsElasticModel* chips = new G4ChipsElasticModel();
+  chips->SetMaxEnergy(elimit+delta);
 
   G4ElasticHadrNucleusHE* he = new G4ElasticHadrNucleusHE(); 
-  he->SetMinEnergy(elimitPi);
+  he->SetMinEnergy(elimit);
 
   aParticleIterator->reset();
   while( (*aParticleIterator)() )
@@ -178,9 +170,9 @@ void G4HadronHElasticPhysics::ConstructProcess()
     } else if(pname == "proton") {   
 
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
-      //hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
-      hel->AddDataSet(new G4ChipsProtonElasticXS());
-      hel->RegisterMe(chipsp);
+      hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
+      hel->RegisterMe(chips);
+      hel->RegisterMe(he);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
@@ -191,8 +183,8 @@ void G4HadronHElasticPhysics::ConstructProcess()
 
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
       hel->AddDataSet(new G4NeutronElasticXS());
-      //hel->AddDataSet(new G4ChipsNeutronElasticXS());
-      hel->RegisterMe(neutronModel);
+      hel->RegisterMe(chips);
+      hel->RegisterMe(he);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
 	G4cout << "### HadronElasticPhysics: " 

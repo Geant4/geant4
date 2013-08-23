@@ -118,7 +118,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  G4double elimitAntiNuc = 100*MeV;
+  const G4double elimitAntiNuc = 100.1*MeV;
   if(verbose > 1) {
     G4cout << "### HadronDElasticPhysics Construct Processes " 
 	   << " for anti-neuclei " 
@@ -131,6 +131,8 @@ void G4HadronDElasticPhysics::ConstructProcess()
     new G4CrossSectionElastic(anuc->GetComponentCrossSection());
 
   G4HadronElastic* lhep0 = new G4HadronElastic();
+  G4HadronElastic* lhep1 = new G4HadronElastic();
+  lhep1->SetMaxEnergy(10.1*MeV);
   G4HadronElastic* lhep2 = new G4HadronElastic();
   lhep2->SetMaxEnergy(elimitAntiNuc);
 
@@ -173,6 +175,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
       hel->AddDataSet(new G4BGGNucleonElasticXS(particle));
       //hel->AddDataSet(new G4CHIPSElasticXS());
       model = new G4DiffuseElastic();
+      hel->RegisterMe(lhep1);
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -185,6 +188,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
       hel->AddDataSet(new G4NeutronElasticXS());
       model = new G4DiffuseElastic();
+      hel->RegisterMe(lhep1);
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -198,6 +202,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
       hel->AddDataSet(new G4BGGPionElasticXS(particle));
       model = new G4DiffuseElastic();
+      hel->RegisterMe(lhep1);
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -210,6 +215,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
       hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
+      hel->RegisterMe(lhep1);
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -221,6 +227,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
       hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
+      hel->RegisterMe(lhep1);
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -234,6 +241,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
       hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonZeroElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
+      hel->RegisterMe(lhep1);
       hel->RegisterMe(model);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {
@@ -254,9 +262,6 @@ void G4HadronDElasticPhysics::ConstructProcess()
       pmanager->AddDiscreteProcess(hel);
     }
   }
-
-  //G4double elimit = 1.0*GeV;
-
   if(verbose > 1) {
     G4cout << "### HadronDElasticPhysics Construct Processes " << G4endl;
   }
