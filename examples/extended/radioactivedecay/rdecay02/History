@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23/08/2013  Vladimir Ivanchenko (rdecay02-V09-06-04)
+- exrdmPhysicsList - use standard constructors for EM physics, removed
+    local low-energy EM physics
+
+23/08/2013  Vladimir Ivanchenko (rdecay02-V09-06-03)
+- exrdmPhysicsList - use standard constructors for hadronic builders
+    instead of obsolete
+
 22/08/2013  Vladimir Ivanchenko (rdecay02-V09-06-02)
 - Removed unused include of G4UrbanMscModel93.hh 
 
