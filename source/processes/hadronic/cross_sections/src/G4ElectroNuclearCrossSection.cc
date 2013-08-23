@@ -79,7 +79,7 @@ static const G4double infEn = 9.e27;
 static const G4int nN=14;
 //
 static const G4double z=std::log(EMa);                    // Initial argument
-static const G4double p=poc*(z-pos)+shd*std::exp(-reg*z); // CrossX on theHighTableEdge (small change)
+static const G4double phte=poc*(z-pos)+shd*std::exp(-reg*z); // CrossX on theHighTableEdge (small change)
 static const G4int    imax=27;   // Not more than "imax" steps to find the solution
 static const G4double eps=0.001; // Accuracy which satisfies the search
 //
@@ -2488,7 +2488,7 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
   G4double lastLE=lastG+lmel;                          // recover std::log(eE) from the gamma (lastG)
   G4double topLim=lastLE-.001;                         // maximum std::log(phE) for equivalent photons
   G4double rE=EMa/std::exp(lastLE);                         // r=EMa/Eel to make the firs guess
-  G4double x=z+f/p/(lastG*(2.-rE*(2.-rE))-1.);         // First guess (the first step from the edge)
+  G4double x=z+f/phte/(lastG*(2.-rE*(2.-rE))-1.);         // First guess (the first step from the edge)
 #ifdef pdebug
   G4cout<<"SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastG="<<lastG<<",x="<<x<<G4endl;
 #endif
