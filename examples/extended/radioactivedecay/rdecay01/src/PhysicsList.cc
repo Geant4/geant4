@@ -97,7 +97,10 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
-  radioactiveDecay->SetHLThreshold(-1.*s);
+  //Caution! With G4MT migration this threshold can no longer be set smaller
+  //than nanosecond
+  radioactiveDecay->SetHLThreshold(nanosecond);
+
   radioactiveDecay->SetICM(true);                //Internal Conversion
   radioactiveDecay->SetARM(false);               //Atomic Rearangement
   

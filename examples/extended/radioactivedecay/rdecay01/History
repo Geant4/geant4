@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+23-08-13 L.Desorgher (rdecay01-V09-06-06) 
+- In PhysicsList set the half life threshold of the G4RadioactiveDecay to 
+   nanosecond 
 
 11-07-13 I.Hrivnacova (rdecay01-V09-06-05) 
 - In HistoManager: use new analysis manager method SetH1Activation()   
