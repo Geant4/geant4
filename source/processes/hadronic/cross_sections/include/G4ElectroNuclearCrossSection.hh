@@ -42,6 +42,17 @@
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include <map>
+
+//A cache element
+struct cacheEl_t {
+    G4int F;
+    G4double* J1;
+    G4double* J2;
+    G4double* J3;
+    G4double H;
+    G4double TH;
+};
 
 class G4ElectroNuclearCrossSection : public G4VCrossSectionDataSet
 {
@@ -82,6 +93,19 @@ private:
 private:
     G4int currentN;
     G4int currentZ;
+    
+    //Cache structure
+    std::map<G4int,cacheEl_t>* cache;
+    G4int lastUsedKey;
+    cacheEl_t* lastUsedCacheEl;
+    //Cache values for XS
+    G4double lastE ; //Last used energy value
+    G4double lastSig; //Last used XS value
+    G4double lastG; //Last value of gamma=lnE-ln(me)
+    G4int    lastL; //Last used in the cross section TheLastBin
+    
+    const G4double mNeut;
+    const G4double mProt;
 };
 
 
