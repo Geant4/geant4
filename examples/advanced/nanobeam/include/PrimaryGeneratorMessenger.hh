@@ -23,17 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #ifndef PrimaryGeneratorMessenger_h
 #define PrimaryGeneratorMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 
 class PrimaryGeneratorAction;
@@ -43,15 +39,17 @@ class PrimaryGeneratorAction;
 class PrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
+    
     PrimaryGeneratorMessenger(PrimaryGeneratorAction*);
    ~PrimaryGeneratorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    PrimaryGeneratorAction* Action;
-    G4UIdirectory* gunDir;         
-    G4UIcmdWithAnInteger* emissionCmd;        
+    
+    PrimaryGeneratorAction* fAction;
+    G4UIdirectory* fGunDir;         
+    G4UIcmdWithAnInteger* fEmissionCmd;        
 };
 
 #endif

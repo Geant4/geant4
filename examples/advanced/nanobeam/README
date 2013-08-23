@@ -16,8 +16,6 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France
 * e-mail:incerti@cenbg.in2p3.fr
 
-Last modified by S. Incerti, 06/10/2010
-
 ---->1. INTRODUCTION.                                                    
                                                                        
 The nanobeam example simulates the beam optics of the nanobeam line installed 
@@ -74,13 +72,13 @@ Visualization has not been implemented.
 1) You must have compiled your Geant4 installation with the FULL version of the
 CLHEP library which can handle matrix operations.
 
-2) The code should be compiled with gmake and run with :
+2) The code should be compiled cmake and run with :
 
-> $G4WORDIR/bin/$G4SYSTEM/nanobeam 
+./nanobeam 
 
 The macro file default.mac is read by default.
 
-It can be one of the following macro files :
+Several macro files are provided:
 
 1) for the computation of intrinsic aberration coefficients :
 coef-square.mac : using square magnetic field model (=default.mac)
@@ -110,7 +108,8 @@ Physics builder G4EmStandardPhysics), including the G4StepLimiter process.
 All results are stored in the nanobeam.root file and can be displayed with the provided
 ROOT macro file plot.C: 
 * be sure to have ROOT installed on your machine
-* be sure to be in the nanobeam directory
+* be sure to be in the directory where ROOT output files are generated
+* copy plot.C into this directory
 * launch ROOT by typing root
 * under your ROOT session, type in : .X plot.C to execute the macro file
 
@@ -122,10 +121,8 @@ This macro file shows :
 - the grid shadow image (option)
 
 The output ntuples can be written as xml or csv files, by uncommenting the 
-appropriate header file in 
- include/HistoManager.hh
-and by leaving all others commented. See section 9.2 of the Geant4 Application 
-Developer Manual for further information.
+appropriate header file in include/Analysis.hh
+and by leaving all others commented. 
 
 ---------------------------------------------------------------------------
 

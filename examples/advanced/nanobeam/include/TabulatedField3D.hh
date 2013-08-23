@@ -23,17 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #include "G4MagneticField.hh"
-#include "G4ios.hh"
 
-#include "globals.hh"
 #include <fstream>
 #include <vector>
-#include <cmath>
+
 using namespace std;
 
 class TabulatedField3D
@@ -45,20 +42,29 @@ class TabulatedField3D
 {
     
 public:
+  
   TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4float gr4, G4int quadModel);
+  
   void  GetFieldValue( const  double Point[4],
 		       double *Bfield          ) const;
 
 private:
-  vector< vector< vector< double > > > xField;
-  vector< vector< vector< double > > > yField;
-  vector< vector< vector< double > > > zField;
-  G4int nx,ny,nz; 
-  G4double minx, maxx, miny, maxy, minz, maxz;
-  G4double dx, dy, dz;
   
-  G4float gradient1, gradient2, gradient3, gradient4;
-  G4int model;
+  vector< vector< vector< double > > > fXField;
+  
+  vector< vector< vector< double > > > fYField;
+  
+  vector< vector< vector< double > > > fZField;
+  
+  G4int fNx,fNy,fNz; 
+  
+  G4double fMinix, fMaxix, fMiniy, fMaxiy, fMiniz, fMaxiz;
+  
+  G4double fDx, fDy, fDz;
+  
+  G4float fGradient1, fGradient2, fGradient3, fGradient4;
+  
+  G4int fModel;
 
 };
 

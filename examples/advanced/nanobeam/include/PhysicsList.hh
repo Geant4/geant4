@@ -23,15 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4ParticleTypes.hh"
 
@@ -64,10 +62,10 @@ public:
   
 private:
   
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4double cutForProton;
+  G4double fCutForGamma;
+  G4double fCutForElectron;
+  G4double fCutForPositron;
+  G4double fCutForProton;
   
 protected:
   // these methods Construct particles 

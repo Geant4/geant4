@@ -10,22 +10,21 @@
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
+// * work  make  afNy representation or  warranty, express or implied, *
+// * regarding  this  software system or assume afNy liability for its *
 // * use.  Please see the license in the file  LICENSE  and URL above *
 // * for the full disclaimer and the limitation of liability.         *
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration.                      *
 // * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
+// * afNy work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #include "TabulatedField3D.hh"
 #include "G4SystemOfUnits.hh"
@@ -49,13 +48,13 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
   G4cout << "   G3 (T/m) = "<< gr3 << G4endl;
   G4cout << "   G4 (T/m) = "<< gr4 << G4endl;
   
-  gradient1 = gr1;
-  gradient2 = gr2;
-  gradient3 = gr3;
-  gradient4 = gr4;
-  model = choiceModel;
+  fGradient1 = gr1;
+  fGradient2 = gr2;
+  fGradient3 = gr3;
+  fGradient4 = gr4;
+  fModel = choiceModel;
   
-  if (model==2)
+  if (fModel==2)
   {
   const char * filename ="OM50.grid";
   
@@ -68,86 +67,86 @@ TabulatedField3D::TabulatedField3D(G4float gr1, G4float gr2, G4float gr3, G4floa
   ifstream file( filename ); // Open the file for reading.
   
   // Read table dimensions 
-  file >> nx >> ny >> nz; // Note dodgy order
+  file >> fNx >> fNy >> fNz; // Note dodgy order
 
   G4cout << "  [ Number of values x,y,z: " 
-	 << nx << " " << ny << " " << nz << " ] "
+	 << fNx << " " << fNy << " " << fNz << " ] "
 	 << endl;
 
   // Set up storage space for table
-  xField.resize( nx );
-  yField.resize( nx );
-  zField.resize( nx );
+  fXField.resize( fNx );
+  fYField.resize( fNx );
+  fZField.resize( fNx );
   int ix, iy, iz;
-  for (ix=0; ix<nx; ix++) {
-    xField[ix].resize(ny);
-    yField[ix].resize(ny);
-    zField[ix].resize(ny);
-    for (iy=0; iy<ny; iy++) {
-      xField[ix][iy].resize(nz);
-      yField[ix][iy].resize(nz);
-      zField[ix][iy].resize(nz);
+  for (ix=0; ix<fNx; ix++) {
+    fXField[ix].resize(fNy);
+    fYField[ix].resize(fNy);
+    fZField[ix].resize(fNy);
+    for (iy=0; iy<fNy; iy++) {
+      fXField[ix][iy].resize(fNz);
+      fYField[ix][iy].resize(fNz);
+      fZField[ix][iy].resize(fNz);
     }
   }
   
   // Read in the data
   double xval,yval,zval,bx,by,bz;
   double permeability; // Not used in this example.
-  for (ix=0; ix<nx; ix++) {
-    for (iy=0; iy<ny; iy++) {
-      for (iz=0; iz<nz; iz++) {
+  for (ix=0; ix<fNx; ix++) {
+    for (iy=0; iy<fNy; iy++) {
+      for (iz=0; iz<fNz; iz++) {
         file >> xval >> yval >> zval >> bx >> by >> bz >> permeability;
         if ( ix==0 && iy==0 && iz==0 ) {
-          minx = xval * lenUnit;
-          miny = yval * lenUnit;
-          minz = zval * lenUnit;
+          fMinix = xval * lenUnit;
+          fMiniy = yval * lenUnit;
+          fMiniz = zval * lenUnit;
         }
-        xField[ix][iy][iz] = bx ;
-        yField[ix][iy][iz] = by ;
-        zField[ix][iy][iz] = bz ;
+        fXField[ix][iy][iz] = bx ;
+        fYField[ix][iy][iz] = by ;
+        fZField[ix][iy][iz] = bz ;
       }
     }
   }
   file.close();
 
-  maxx = xval * lenUnit;
-  maxy = yval * lenUnit;
-  maxz = zval * lenUnit;
+  fMaxix = xval * lenUnit;
+  fMaxiy = yval * lenUnit;
+  fMaxiz = zval * lenUnit;
 
   G4cout << "\n ---> ... done reading " << endl;
 
   // G4cout << " Read values of field from file " << filename << endl; 
   G4cout << " ---> assumed the order:  x, y, z, Bx, By, Bz "
 	 << "\n ---> Min values x,y,z: " 
-	 << minx/cm << " " << miny/cm << " " << minz/cm << " cm "
+	 << fMinix/cm << " " << fMiniy/cm << " " << fMiniz/cm << " cm "
 	 << "\n ---> Max values x,y,z: " 
-	 << maxx/cm << " " << maxy/cm << " " << maxz/cm << " cm " << endl;
+	 << fMaxix/cm << " " << fMaxiy/cm << " " << fMaxiz/cm << " cm " << endl;
 
-  dx = maxx - minx;
-  dy = maxy - miny;
-  dz = maxz - minz;
+  fDx = fMaxix - fMinix;
+  fDy = fMaxiy - fMiniy;
+  fDz = fMaxiz - fMiniz;
   G4cout << "\n ---> Dif values x,y,z (range): " 
-	 << dx/cm << " " << dy/cm << " " << dz/cm << " cm in z "
+	 << fDx/cm << " " << fDy/cm << " " << fDz/cm << " cm in z "
 	 << "\n-----------------------------------------------------------" << endl;
 
   
   // Table normalization
-  for (ix=0; ix<nx; ix++) 
+  for (ix=0; ix<fNx; ix++) 
   {
-    for (iy=0; iy<ny; iy++) 
+    for (iy=0; iy<fNy; iy++) 
     {
-      for (iz=0; iz<nz; iz++) 
+      for (iz=0; iz<fNz; iz++) 
       {
 
-	xField[ix][iy][iz] = (xField[ix][iy][iz]/197.736);
-        yField[ix][iy][iz] = (yField[ix][iy][iz]/197.736);
-        zField[ix][iy][iz] = (zField[ix][iy][iz]/197.736);
+	fXField[ix][iy][iz] = (fXField[ix][iy][iz]/197.736);
+        fYField[ix][iy][iz] = (fYField[ix][iy][iz]/197.736);
+        fZField[ix][iy][iz] = (fZField[ix][iy][iz]/197.736);
 
 	}
     }
   }
 
-  } // model==2
+  } // fModel==2
 
 }
  
@@ -167,7 +166,7 @@ void TabulatedField3D::GetFieldValue(const double point[4],
 //******************************************************************
 
 // MAP
-if (model==2)
+if (fModel==2)
 {
   Bfield[0] = 0.0;
   Bfield[1] = 0.0;
@@ -183,11 +182,11 @@ if (model==2)
   G4int quad;
   G4double gradient[5];
 
-  gradient[0]=gradient1*(tesla/m)/coef;
-  gradient[1]=gradient2*(tesla/m)/coef;
-  gradient[2]=gradient3*(tesla/m)/coef; 
-  gradient[3]=gradient4*(tesla/m)/coef;
-  gradient[4]=-gradient3*(tesla/m)/coef;
+  gradient[0]=fGradient1*(tesla/m)/coef;
+  gradient[1]=fGradient2*(tesla/m)/coef;
+  gradient[2]=fGradient3*(tesla/m)/coef; 
+  gradient[3]=fGradient4*(tesla/m)/coef;
+  gradient[4]=-fGradient3*(tesla/m)/coef;
 
   for (quad=0; quad<=4; quad++)
   {
@@ -201,16 +200,16 @@ if (model==2)
        
   if 
   (
-    x>=minx && x<=maxx &&
-    y>=miny && y<=maxy &&
-    z>=minz && z<=maxz 
+    x>=fMinix && x<=fMaxix &&
+    y>=fMiniy && y<=fMaxiy &&
+    z>=fMiniz && z<=fMaxiz 
   ) 
   {
     // Position of given point within region, normalized to the range
     // [0,1]
-    double xfraction = (x - minx) / dx;
-    double yfraction = (y - miny) / dy; 
-    double zfraction = (z - minz) / dz;
+    double xfraction = (x - fMinix) / fDx;
+    double yfraction = (y - fMiniy) / fDy; 
+    double zfraction = (z - fMiniz) / fDz;
 
     // Need addresses of these to pass to modf below.
     // modf uses its second argument as an OUTPUT argument.
@@ -218,9 +217,9 @@ if (model==2)
     
     // Position of the point within the cuboid defined by the
     // nearest surrounding tabulated points
-    double xlocal = ( std::modf(xfraction*(nx-1), &xdindex));
-    double ylocal = ( std::modf(yfraction*(ny-1), &ydindex));
-    double zlocal = ( std::modf(zfraction*(nz-1), &zdindex));
+    double xlocal = ( std::modf(xfraction*(fNx-1), &xdindex));
+    double ylocal = ( std::modf(yfraction*(fNy-1), &ydindex));
+    double zlocal = ( std::modf(zfraction*(fNz-1), &zdindex));
     
     // The indices of the nearest tabulated point whose coordinates
     // are all less than those of the given point
@@ -230,36 +229,36 @@ if (model==2)
     
     // Interpolated field
     Bfield[0] =
-     (xField[xindex  ][yindex  ][zindex  ] * (1-xlocal) * (1-ylocal) * (1-zlocal) +
-      xField[xindex  ][yindex  ][zindex+1] * (1-xlocal) * (1-ylocal) *    zlocal  +
-      xField[xindex  ][yindex+1][zindex  ] * (1-xlocal) *    ylocal  * (1-zlocal) +
-      xField[xindex  ][yindex+1][zindex+1] * (1-xlocal) *    ylocal  *    zlocal  +
-      xField[xindex+1][yindex  ][zindex  ] *    xlocal  * (1-ylocal) * (1-zlocal) +
-      xField[xindex+1][yindex  ][zindex+1] *    xlocal  * (1-ylocal) *    zlocal  +
-      xField[xindex+1][yindex+1][zindex  ] *    xlocal  *    ylocal  * (1-zlocal) +
-      xField[xindex+1][yindex+1][zindex+1] *    xlocal  *    ylocal  *    zlocal)*gradient[quad]
+     (fXField[xindex  ][yindex  ][zindex  ] * (1-xlocal) * (1-ylocal) * (1-zlocal) +
+      fXField[xindex  ][yindex  ][zindex+1] * (1-xlocal) * (1-ylocal) *    zlocal  +
+      fXField[xindex  ][yindex+1][zindex  ] * (1-xlocal) *    ylocal  * (1-zlocal) +
+      fXField[xindex  ][yindex+1][zindex+1] * (1-xlocal) *    ylocal  *    zlocal  +
+      fXField[xindex+1][yindex  ][zindex  ] *    xlocal  * (1-ylocal) * (1-zlocal) +
+      fXField[xindex+1][yindex  ][zindex+1] *    xlocal  * (1-ylocal) *    zlocal  +
+      fXField[xindex+1][yindex+1][zindex  ] *    xlocal  *    ylocal  * (1-zlocal) +
+      fXField[xindex+1][yindex+1][zindex+1] *    xlocal  *    ylocal  *    zlocal)*gradient[quad]
       + Bfield[0];
       
     Bfield[1] =
-     (yField[xindex  ][yindex  ][zindex  ] * (1-xlocal) * (1-ylocal) * (1-zlocal) +
-      yField[xindex  ][yindex  ][zindex+1] * (1-xlocal) * (1-ylocal) *    zlocal  +
-      yField[xindex  ][yindex+1][zindex  ] * (1-xlocal) *    ylocal  * (1-zlocal) +
-      yField[xindex  ][yindex+1][zindex+1] * (1-xlocal) *    ylocal  *    zlocal  +
-      yField[xindex+1][yindex  ][zindex  ] *    xlocal  * (1-ylocal) * (1-zlocal) +
-      yField[xindex+1][yindex  ][zindex+1] *    xlocal  * (1-ylocal) *    zlocal  +
-      yField[xindex+1][yindex+1][zindex  ] *    xlocal  *    ylocal  * (1-zlocal) +
-      yField[xindex+1][yindex+1][zindex+1] *    xlocal  *    ylocal  *    zlocal)*gradient[quad] 
+     (fYField[xindex  ][yindex  ][zindex  ] * (1-xlocal) * (1-ylocal) * (1-zlocal) +
+      fYField[xindex  ][yindex  ][zindex+1] * (1-xlocal) * (1-ylocal) *    zlocal  +
+      fYField[xindex  ][yindex+1][zindex  ] * (1-xlocal) *    ylocal  * (1-zlocal) +
+      fYField[xindex  ][yindex+1][zindex+1] * (1-xlocal) *    ylocal  *    zlocal  +
+      fYField[xindex+1][yindex  ][zindex  ] *    xlocal  * (1-ylocal) * (1-zlocal) +
+      fYField[xindex+1][yindex  ][zindex+1] *    xlocal  * (1-ylocal) *    zlocal  +
+      fYField[xindex+1][yindex+1][zindex  ] *    xlocal  *    ylocal  * (1-zlocal) +
+      fYField[xindex+1][yindex+1][zindex+1] *    xlocal  *    ylocal  *    zlocal)*gradient[quad] 
       + Bfield[1];
 
     Bfield[2] =
-     (zField[xindex  ][yindex  ][zindex  ] * (1-xlocal) * (1-ylocal) * (1-zlocal) +
-      zField[xindex  ][yindex  ][zindex+1] * (1-xlocal) * (1-ylocal) *    zlocal  +
-      zField[xindex  ][yindex+1][zindex  ] * (1-xlocal) *    ylocal  * (1-zlocal) +
-      zField[xindex  ][yindex+1][zindex+1] * (1-xlocal) *    ylocal  *    zlocal  +
-      zField[xindex+1][yindex  ][zindex  ] *    xlocal  * (1-ylocal) * (1-zlocal) +
-      zField[xindex+1][yindex  ][zindex+1] *    xlocal  * (1-ylocal) *    zlocal  +
-      zField[xindex+1][yindex+1][zindex  ] *    xlocal  *    ylocal  * (1-zlocal) +
-      zField[xindex+1][yindex+1][zindex+1] *    xlocal  *    ylocal  *    zlocal)*gradient[quad]
+     (fZField[xindex  ][yindex  ][zindex  ] * (1-xlocal) * (1-ylocal) * (1-zlocal) +
+      fZField[xindex  ][yindex  ][zindex+1] * (1-xlocal) * (1-ylocal) *    zlocal  +
+      fZField[xindex  ][yindex+1][zindex  ] * (1-xlocal) *    ylocal  * (1-zlocal) +
+      fZField[xindex  ][yindex+1][zindex+1] * (1-xlocal) *    ylocal  *    zlocal  +
+      fZField[xindex+1][yindex  ][zindex  ] *    xlocal  * (1-ylocal) * (1-zlocal) +
+      fZField[xindex+1][yindex  ][zindex+1] *    xlocal  * (1-ylocal) *    zlocal  +
+      fZField[xindex+1][yindex+1][zindex  ] *    xlocal  *    ylocal  * (1-zlocal) +
+      fZField[xindex+1][yindex+1][zindex+1] *    xlocal  *    ylocal  *    zlocal)*gradient[quad]
       + Bfield[2];
 
      } 
@@ -272,7 +271,7 @@ if (model==2)
 //******************************************************************
 // SQUARE
 
-if (model==1)
+if (fModel==1)
 {
   Bfield[0] = 0.0;
   Bfield[1] = 0.0;
@@ -290,12 +289,12 @@ if (model==1)
   G4double y = point[1];
   G4double z = point[2];
 
-  if (z>=-3770*mm && z<=-3670*mm)  G0 = (gradient1/coef)* tesla/m;
-  if (z>=-3630*mm && z<=-3530*mm)  G0 = (gradient2/coef)* tesla/m;
+  if (z>=-3770*mm && z<=-3670*mm)  G0 = (fGradient1/coef)* tesla/m;
+  if (z>=-3630*mm && z<=-3530*mm)  G0 = (fGradient2/coef)* tesla/m;
   
-  if (z>=-380*mm  && z<=-280*mm)   G0 = (gradient3/coef)* tesla/m;
-  if (z>=-240*mm  && z<=-140*mm)   G0 = (gradient4/coef)* tesla/m;
-  if (z>=-100*mm  && z<=0*mm)      G0 = (-gradient3/coef)* tesla/m;
+  if (z>=-380*mm  && z<=-280*mm)   G0 = (fGradient3/coef)* tesla/m;
+  if (z>=-240*mm  && z<=-140*mm)   G0 = (fGradient4/coef)* tesla/m;
+  if (z>=-100*mm  && z<=0*mm)      G0 = (-fGradient3/coef)* tesla/m;
 
   Bx = y*G0;
   By = x*G0;
@@ -312,7 +311,7 @@ if (model==1)
 //******************************************************************
 // ENGE
 
-if (model==3)
+if (fModel==3)
 {
 
   // X POSITION OF FIRST QUADRUPOLE
@@ -328,10 +327,10 @@ if (model==3)
   G4double zoprime;
   
   G4double Grad1, Grad2, Grad3, Grad4, Grad5;
-  Grad1=gradient1;
-  Grad2=gradient2;
-  Grad3=gradient3;
-  Grad4=gradient4;
+  Grad1=fGradient1;
+  Grad2=fGradient2;
+  Grad3=fGradient3;
+  Grad4=fGradient4;
   Grad5=-Grad3;  
 
   Bfield[0] = 0.0;
@@ -481,10 +480,10 @@ if (model==3)
 
 	  P0 = c0[i]+c1[i]*s+c2[i]*s*s;
 
-	  P1 = c1[i]/a0[i]+2*c2[i]*(z_local-z1[i])/a0[i]/a0[i];       //dP/dz
+	  P1 = c1[i]/a0[i]+2*c2[i]*(z_local-z1[i])/a0[i]/a0[i];       //dP/fDz
 	  if (z_local<-z1[i])  P1 = -c1[i]/a0[i]+2*c2[i]*(z_local+z1[i])/a0[i]/a0[i];  // --"--
 
-	  P2 = 2*c2[i]/a0[i]/a0[i]; 	//   d2P/dz2
+	  P2 = 2*c2[i]/a0[i]/a0[i]; 	//   d2P/fDz2
 
 	  //P3 = 0;    			//  d3P/dw3 ??
 
@@ -505,9 +504,9 @@ if (model==3)
 	  );
 	  
 	 G0 = gradient[i]*cte/(1+std::exp(P0));    	// G = G0*K(z) , se (7) p1397 Incerti et.al
-	 G1 = gradient[i]*K1;				// dG/dz
-	 G2 = gradient[i]*K2;				// d2G/dz2
-	 G3 = gradient[i]*K3;				// d3G/dz3
+	 G1 = gradient[i]*K1;				// dG/fDz
+	 G2 = gradient[i]*K2;				// d2G/fDz2
+	 G3 = gradient[i]*K3;				// d3G/fDz3
 
 	 }
 	  

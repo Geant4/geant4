@@ -23,25 +23,19 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
-#include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
 #include "G4Mag_UsualEqRhs.hh"
-#include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
-#include "G4EqMagElectricField.hh"
 #include "G4UserLimits.hh"
-#include "G4MagIntegratorDriver.hh"
 #include "G4ClassicalRK4.hh"
-#include "G4ChordFinder.hh"
 #include "G4PropagatorInField.hh"
 
 #include "DetectorMessenger.hh"
@@ -52,6 +46,7 @@
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
+
   DetectorConstruction();
   ~DetectorConstruction();
 
@@ -69,49 +64,49 @@ public:
   G4int GetCoef();
   void SetCoef();
   
-  G4int GetProfile(){return profile;};
+  G4int GetProfile(){return fProfile;};
   void SetProfile(G4int myProfile);
   
-  G4int GetGrid(){return grid;};
+  G4int GetGrid(){return fGrid;};
   void SetGrid(G4int myGrid);
 
-  G4float G1, G2, G3, G4;
-  G4int model, coef, profile, grid;
+  G4LogicalVolume* GetLogicalWorld() {return fLogicWorld;};
+  G4LogicalVolume* GetLogicalVol() {return fLogicVol;};
+  G4LogicalVolume* GetLogicalGrid() {return fLogicControlVol_GridShadow;};
 
-  G4LogicalVolume* GetLogicalWorld() {return logicWorld;};
-  G4LogicalVolume* GetLogicalVol() {return logicVol;};
-  G4LogicalVolume* GetLogicalGrid() {return logicControlVol_GridShadow;};
+  G4float fG1, fG2, fG3, fG4;
+  G4int fModel, fCoef, fProfile, fGrid;
 
 private:
    
   void DefineMaterials();
   G4VPhysicalVolume* ConstructVolumes();     
 
-  G4VPhysicalVolume* physiWorld;
-  G4LogicalVolume*   logicWorld;  
-  G4Box*             solidWorld;
+  G4VPhysicalVolume* fPhysiWorld;
+  G4LogicalVolume*   fLogicWorld;  
+  G4Box*             fSolidWorld;
   
-  G4VPhysicalVolume* physiVol;
-  G4LogicalVolume*   logicVol;  
-  G4Box*             solidVol;
+  G4VPhysicalVolume* fPhysiVol;
+  G4LogicalVolume*   fLogicVol;  
+  G4Box*             fSolidVol;
   
-  G4VPhysicalVolume* physiGridVol;
-  G4LogicalVolume*   logicGridVol;  
-  G4Box*	     solidGridVol;
+  G4VPhysicalVolume* fPhysiGridVol;
+  G4LogicalVolume*   fLogicGridVol;  
+  G4Box*	     fSolidGridVol;
 
-  G4VPhysicalVolume* physiGridVol_Hole;
-  G4LogicalVolume*   logicGridVol_Hole;  
-  G4Box*	     solidGridVol_Hole;
+  G4VPhysicalVolume* fPhysiGridVol_Hole;
+  G4LogicalVolume*   fLogicGridVol_Hole;  
+  G4Box*	     fSolidGridVol_Hole;
 
-  G4VPhysicalVolume* physiControlVol_GridShadow;
-  G4LogicalVolume*   logicControlVol_GridShadow;  
-  G4Box*             solidControlVol_GridShadow;
+  G4VPhysicalVolume* fPhysiControlVol_GridShadow;
+  G4LogicalVolume*   fLogicControlVol_GridShadow;  
+  G4Box*             fSolidControlVol_GridShadow;
 
-  G4Material*        defaultMaterial;
-  G4Material*        gridMaterial;
+  G4Material*        fDefaultMaterial;
+  G4Material*        fGridMaterial;
 
-  G4bool gradientsInitialized;
-  DetectorMessenger* detectorMessenger;
+  G4bool fGradientsInitialized;
+  DetectorMessenger* fDetectorMessenger;
 
 };
 #endif

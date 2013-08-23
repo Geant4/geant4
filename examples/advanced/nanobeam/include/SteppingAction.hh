@@ -23,19 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #ifndef SteppingAction_h
 #define SteppingAction_h 1
 
-#include "G4UserSteppingAction.hh"
 #include "G4SteppingManager.hh"
 
 #include "RunAction.hh"
-#include "DetectorConstruction.hh"
-#include "PrimaryGeneratorAction.hh"
 #include "G4Proton.hh"
 
 
@@ -43,23 +39,26 @@
 
 class SteppingAction : public G4UserSteppingAction
 {
+
 public:
+
   SteppingAction(RunAction*,DetectorConstruction*,PrimaryGeneratorAction*);
   ~SteppingAction();
   
   void UserSteppingAction(const G4Step*);
   
 private:
-  RunAction*            Run;
-  DetectorConstruction* Detector; 
-  PrimaryGeneratorAction* Primary;
+
+  RunAction*              fRun;
+  DetectorConstruction*   fDetector; 
+  PrimaryGeneratorAction* fPrimary;
   
-  G4double xIn,x0;
-  G4double yIn,y0;
-  G4double zIn,z0;
-  G4double theta0, phi0;
-  G4double thetaIn, phiIn;
-  G4double E;
+  G4double fXIn,fX0;
+  G4double fYIn,fY0;
+  G4double fZIn,fZ0;
+  G4double fTheta0, fPhi0;
+  G4double fThetaIn, fPhiIn;
+  G4double fE;
         
 };
 

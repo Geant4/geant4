@@ -23,35 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
-#include "G4TrackingManager.hh"
-#include "G4Track.hh"
+#ifndef Analysis_h
+#define Analysis_h 1
 
-#include "TrackingAction.hh"
-#include "RunAction.hh"
+#include "g4root.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-TrackingAction::TrackingAction(RunAction* run)
-:Run(run)
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void TrackingAction::PostUserTrackingAction(const G4Track*)
-{   
-}
-
-
-
-
-
-
-
-
-
-
+#endif

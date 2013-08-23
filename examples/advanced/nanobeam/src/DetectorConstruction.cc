@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #include "DetectorConstruction.hh"
 #include "G4PhysicalConstants.hh"
@@ -36,15 +35,15 @@
 
 DetectorConstruction::DetectorConstruction()
 { 
- detectorMessenger = new DetectorMessenger(this);
- gradientsInitialized=false;
- G1=0; G2=0; G3=0; G4=0; coef=0; profile=0; grid=0;
+ fDetectorMessenger = new DetectorMessenger(this);
+ fGradientsInitialized=false;
+ fG1=0; fG2=0; fG3=0; fG4=0; fCoef=0; fProfile=0; fGrid=0;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ delete fDetectorMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,11 +72,12 @@ void DetectorConstruction::DefineMaterials()
   G4NistManager *man=G4NistManager::Instance();
   man->SetVerbose(1);
 
+  //
   G4cout << G4endl << *(G4Material::GetMaterialTable()) << G4endl;
 
   // Default materials in setup.
-  defaultMaterial = vacuum;
-  gridMaterial = man->FindOrBuildMaterial("G4_Ni"); 
+  fDefaultMaterial = vacuum;
+  fGridMaterial = man->FindOrBuildMaterial("G4_Ni"); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -86,13 +86,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
 
   static G4bool fieldIsInitialized = false;
-  if(!fieldIsInitialized && gradientsInitialized)
+  if(!fieldIsInitialized && fGradientsInitialized)
   {
       G4FieldManager* pFieldMgr;
       G4MagIntegratorStepper* pStepper;
       G4Mag_UsualEqRhs* pEquation;
     
-      G4MagneticField* Field= new TabulatedField3D(G1, G2, G3, G4, model);
+      G4MagneticField* Field= new TabulatedField3D(fG1, fG2, fG3, fG4, fModel);
       
       pEquation = new G4Mag_UsualEqRhs (Field);
       pStepper = new G4ClassicalRK4 (pEquation);
@@ -120,18 +120,18 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  solidWorld = new G4Box("World",		   	//its name
+  fSolidWorld = new G4Box("World",		   	//its name
 			   12*m/2,12*m/2,22*m/2);  	//its size
   
 
-  logicWorld = new G4LogicalVolume(solidWorld,	        //its solid
-				   defaultMaterial,	//its material
-				   "World");		//its name
+  fLogicWorld = new G4LogicalVolume(fSolidWorld,	//its solid
+				    fDefaultMaterial,	//its material
+				    "World");		//its name
   
-  physiWorld = new G4PVPlacement(0,			//no rotation
+  fPhysiWorld = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(),	//at (0,0,0)
                                  "World",		//its name
-                                 logicWorld,		//its logical volume
+                                 fLogicWorld,		//its logical volume
                                  NULL,			//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
@@ -139,25 +139,25 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   // MAGNET VOLUME 
 
-  solidVol = new G4Box("Vol",				//its name
+  fSolidVol = new G4Box("Vol",				//its name
 			   10*m/2,10*m/2,9.120*m/2);  	//its size
   
 
-  logicVol = new G4LogicalVolume(solidVol,	        //its solid
-				   defaultMaterial,	//its material
-				   "Vol");		//its name
+  fLogicVol = new G4LogicalVolume(fSolidVol,	        //its solid
+				  fDefaultMaterial,	//its material
+				  "Vol");		//its name
   
-  physiVol = new G4PVPlacement(0,			//no rotation
+  fPhysiVol = new G4PVPlacement(0,			//no rotation
   				 G4ThreeVector(0,0,-4310*mm),	//at (0,0,0)
                                  "Vol",			//its name
-                                 logicVol,		//its logical volume
-                                 physiWorld,		//its mother  volume
+                                 fLogicVol,		//its logical volume
+                                 fPhysiWorld,		//its mother  volume
                                  false,			//no boolean operation
                                  0);			//copy number
 
   // GRID
   
-  if (grid==1)
+  if (fGrid==1)
   {
   
   G4cout << G4endl;
@@ -175,17 +175,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
   G4double z_grid=thickness_grid/2.0; 
 
-  solidGridVol= new G4Box("GridVolume",x_grid,y_grid,z_grid);   //its size
+  fSolidGridVol= new G4Box("GridVolume",x_grid,y_grid,z_grid);   //its size
   
-  logicGridVol = new G4LogicalVolume(solidGridVol,  		//its solid
-				   gridMaterial,               	//its material
-				   "GridVolume");		//its name
+  fLogicGridVol = new G4LogicalVolume(fSolidGridVol,  		//its solid
+				      fGridMaterial,            //its material
+				      "GridVolume");		//its name
   
-  physiGridVol = new G4PVPlacement(0,				//no rotation
+  fPhysiGridVol = new G4PVPlacement(0,				//no rotation
   				 G4ThreeVector(0,0,grid_Zpos),	// origin
-                                 logicGridVol,			//its logical volume
+                                 fLogicGridVol,			//its logical volume
                                  "GridVolume",			//its name
-                                 logicWorld,	        	//its mother  volume
+                                 fLogicWorld,	        	//its mother  volume
                                  false,				//no boolean operation
                                  0);	
 
@@ -195,11 +195,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4double pix_grid=1.3e-2*mm;
   G4int    num_half_grid=100;
 
-  solidGridVol_Hole= new G4Box("GridHole",holeSize/2,holeSize/2,z_grid);   //its size
+  fSolidGridVol_Hole= new G4Box("GridHole",holeSize/2,holeSize/2,z_grid);   //its size
   
-  logicGridVol_Hole = new G4LogicalVolume(solidGridVol_Hole,  	    //its solid
-				   defaultMaterial,                 //its material
-				   "GridHole");		            //its name
+  fLogicGridVol_Hole = new G4LogicalVolume(fSolidGridVol_Hole,  	    //its solid
+				   fDefaultMaterial,                        //its material
+				   "GridHole");		                    //its name
 
  
   for(int i=-num_half_grid;i<num_half_grid;i++)
@@ -216,11 +216,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 		number_index_grid=(i+num_half_grid)*1000+(j+num_half_grid);
 
-   		physiGridVol_Hole  = new G4PVPlacement(0,		//no rotation
+   		fPhysiGridVol_Hole  = new G4PVPlacement(0,		//no rotation
 			  	 G4ThreeVector(x0_grid,y0_grid,z0_grid),//origin
-                                 logicGridVol_Hole,			//its logical volume
+                                 fLogicGridVol_Hole,			//its logical volume
   			         "GridHole",				//its name
-                                 logicGridVol,	        		//its mother  volume
+                                 fLogicGridVol,	        		//its mother  volume
                                  false,					//no boolean operation
                                  number_index_grid);
 	}	
@@ -231,62 +231,63 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4double ContVolSizeXY = 1*m;
   G4double ImPlaneWidth = 0.001*mm;
  
-  solidControlVol_GridShadow =
+  fSolidControlVol_GridShadow =
     new G4Box
     ("ControlVol_GridShadow", ContVolSizeXY/2, ContVolSizeXY/2 , ImPlaneWidth/2);
  
-  logicControlVol_GridShadow = 
+  fLogicControlVol_GridShadow = 
     new G4LogicalVolume
-    (solidControlVol_GridShadow, defaultMaterial, "ControlVol_GridShadow");
+    (fSolidControlVol_GridShadow, fDefaultMaterial, "ControlVol_GridShadow");
   
-  physiControlVol_GridShadow = 
+  fPhysiControlVol_GridShadow = 
     new G4PVPlacement 
-    ( 0, G4ThreeVector(0,0,(250+300)*mm), logicControlVol_GridShadow, "ControlVol_GridShadow",logicWorld, false, 0);
+    ( 0, G4ThreeVector(0,0,(250+300)*mm), fLogicControlVol_GridShadow, "ControlVol_GridShadow",
+      fLogicWorld, false, 0);
      
  
   } // end GRID
   
   // STEP MINIMUM SIZE 
-  logicVol->SetUserLimits(new G4UserLimits(1*mm));
+  fLogicVol->SetUserLimits(new G4UserLimits(1*mm));
 
-  return physiWorld;
+  return fPhysiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetG1(G4float value)
 {
-  G1 = value;
+  fG1 = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetG2(G4float value)
 {
-  G2 = value;
+  fG2 = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetG3(G4float value)
 {
-  G3 = value;
+  fG3 = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetG4(G4float value)
 {
-  G4 = value;
+  fG4 = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetModel(G4int modelChoice)
 {
-if (modelChoice==1) model=1;
-if (modelChoice==2) model=2;
-if (modelChoice==3) model=3;
+if (modelChoice==1) fModel=1;
+if (modelChoice==2) fModel=2;
+if (modelChoice==3) fModel=3;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -295,7 +296,7 @@ if (modelChoice==3) model=3;
  
 void DetectorConstruction::UpdateGeometry()
 {
-  gradientsInitialized=true;
+  fGradientsInitialized=true;
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
@@ -304,27 +305,27 @@ void DetectorConstruction::UpdateGeometry()
 
 void DetectorConstruction::SetCoef()
 {
-  coef=1;
+  fCoef=1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int DetectorConstruction::GetCoef()
 {
-  return coef;
+  return fCoef;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetProfile(G4int myProfile)
 {
-  profile=myProfile;
+  fProfile=myProfile;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void DetectorConstruction::SetGrid(G4int myGrid)
 {
-  grid=myGrid;
+  fGrid=myGrid;
 }
 

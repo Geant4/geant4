@@ -23,37 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
-
-#include <iomanip>
-#include <iostream>
-#include <fstream>
-#include <fstream>
-#include <vector>
-#include <cmath>
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 // #define MATRIX_BOUND_CHECK
 
 #include "RunAction.hh"
 
-#include "G4ios.hh"
-#include "Randomize.hh"
-#include "HistoManager.hh"
-
-#include "G4SteppingManager.hh"
-#include "G4Run.hh"
-#include "G4Material.hh"
-#include "G4UImanager.hh"
-#include "G4UnitsTable.hh"
+#include "Analysis.hh"
 
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* pri)
-:detector(det),primary(pri)
+:fDetector(det),fPrimary(pri)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,12 +50,13 @@ RunAction::~RunAction()
 void RunAction::BeginOfRunAction(const G4Run* /*aRun*/)
 {
    // Vector initialization 
-   row=0;
+   
+   fRow=0;
      
-   xVector = CLHEP::HepVector(32);
-   yVector = CLHEP::HepVector(32);
-   thetaVector = CLHEP::HepVector(32);
-   phiVector = CLHEP::HepVector(32);
+   fXVector = CLHEP::HepVector(32);
+   fYVector = CLHEP::HepVector(32);
+   fThetaVector = CLHEP::HepVector(32);
+   fPhiVector = CLHEP::HepVector(32);
    
    // Histograms
    // Get/create analysis manager
@@ -118,16 +103,15 @@ void RunAction::BeginOfRunAction(const G4Run* /*aRun*/)
 void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
 {
 
-if (detector->GetCoef()==1)
+if (fDetector->GetCoef()==1)
 {
-
 	CLHEP::HepMatrix m;
 	
 	// VECTOR READING
 	// VECTOR READING
 
 	m = CLHEP::HepMatrix(32,32);
-	m = primary->GetMatrix();
+	m = fPrimary->GetMatrix();
 
 	G4cout << G4endl;
 	G4cout << "===> NANOBEAM LINE INTRINSIC ABERRATION COEFFICIENTS (units of micrometer and mrad) :" << G4endl;
@@ -137,7 +121,7 @@ if (detector->GetCoef()==1)
 
 	m.invert(inv);
 	CLHEP::HepVector tmp(32,0);
-	tmp=m*xVector;
+	tmp=m*fXVector;
 	CLHEP::HepVector b;
 	b=tmp.sub(2,2);   G4cout << "<x|theta>=" << b << G4endl;
 	b=tmp.sub(8,8);   G4cout << "<x|theta*delta>=" << b << G4endl;
@@ -146,12 +130,12 @@ if (detector->GetCoef()==1)
 	m.invert(inv);
 
 	m.invert(inv);
-	tmp = m*thetaVector;
+	tmp = m*fThetaVector;
 	m.invert(inv);
 	b=tmp.sub(2,2); G4cout << "<x|x>=" << b << G4endl;
 
 	m.invert(inv);
-	tmp=m*yVector;
+	tmp=m*fYVector;
 	b=tmp.sub(3,3);   G4cout << "<y|phi>=" << b << G4endl;
 	b=tmp.sub(9,9);   G4cout << "<y|phi*delta>=" << b << G4endl;
 	b=tmp.sub(11,11); G4cout << "<y|theta^2*phi>=" << b << G4endl;
@@ -159,19 +143,20 @@ if (detector->GetCoef()==1)
 	m.invert(inv);
 
 	m.invert(inv);
-	tmp = m*phiVector;
+	tmp = m*fPhiVector;
 	m.invert(inv);
 	b=tmp.sub(3,3); G4cout << "<y|y>=" << b << G4endl;
 
 }
 
-// Save histograms
+ // Save histograms
+ 
  G4AnalysisManager* man = G4AnalysisManager::Instance();
  man->Write();
  man->CloseFile();
+ 
  // Complete clean-up
+ 
  delete G4AnalysisManager::Instance();
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

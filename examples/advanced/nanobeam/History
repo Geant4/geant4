@@ -9,6 +9,9 @@ $Id$
                        Package History file
                        --------------------
 
+23 Aug 2013 - tag nanobeam-V09-06-04  - S. Incerti
+- Coding style cleaning
+
 29 May 2013 - tag nanobeam-V09-06-03  -L. Pandola
 - Migrate analysis from AIDA (in a singleton class) to the 
 g4analysis tools. AIDA dependency is removed. Output file is 

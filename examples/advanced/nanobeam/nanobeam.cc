@@ -23,9 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id: Nanobeam.cc,v 1.8 2010-10-09 16:30:27 sincerti Exp $
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -39,18 +38,12 @@
 #include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 
 int main(int argc,char** argv) {
 
   // Choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  // Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
@@ -63,13 +56,10 @@ int main(int argc,char** argv) {
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
     
-
   // Set user action classes
   RunAction* RunAct = new RunAction(detector,primary);
 
   runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new EventAction(RunAct));
-  runManager->SetUserAction(new TrackingAction(RunAct)); 
   runManager->SetUserAction(new SteppingAction(RunAct,detector,primary));
   
   // Initialize G4 kernel

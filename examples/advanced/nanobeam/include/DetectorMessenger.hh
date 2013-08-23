@@ -23,16 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+// Please cite the following paper if you use this software
+// Nucl.Instrum.Meth.B260:20-27, 2007
 
 #ifndef DetectorMessenger_h
 #define DetectorMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
-#include "G4UIdirectory.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithoutParameter.hh"
@@ -52,17 +49,17 @@ class DetectorMessenger: public G4UImessenger
     
   private:
   
-    DetectorConstruction*   Detector;
+    DetectorConstruction*   fDetector;
    
-    G4UIdirectory* quadDir;
-    G4UIcmdWithADouble* G1Cmd;
-    G4UIcmdWithADouble* G2Cmd;
-    G4UIcmdWithADouble* G3Cmd;
-    G4UIcmdWithADouble* G4Cmd;
-    G4UIcmdWithAnInteger* modelCmd;
-    G4UIcmdWithAnInteger* profileCmd;
-    G4UIcmdWithAnInteger* gridCmd;
-    G4UIcmdWithoutParameter* UpdateCmd;
+    G4UIdirectory* fQuadDir;
+    G4UIcmdWithADouble* fG1Cmd;
+    G4UIcmdWithADouble* fG2Cmd;
+    G4UIcmdWithADouble* fG3Cmd;
+    G4UIcmdWithADouble* fG4Cmd;
+    G4UIcmdWithAnInteger* fModelCmd;
+    G4UIcmdWithAnInteger* fProfileCmd;
+    G4UIcmdWithAnInteger* fGridCmd;
+    G4UIcmdWithoutParameter* fUpdateCmd;
 };
 #endif
 
