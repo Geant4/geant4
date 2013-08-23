@@ -29,6 +29,13 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+22nd August 2013 - Ben Morgan (cmake-V09-06-22)
+- Modules/Geant4MakeRules_cxx.cmake : Check for "Apple LLVM" string
+  in output of regex parse of "clang++ -v" command output. If string is
+  found, re-parse string to extract LLVM version on which Apple LLVM is
+  based because this reflects the true LLVM, and hence C++ Standard
+  support, of the compiler. Fixes problem with being unable to change
+  C++ Standard with latest Xcode reported by Gabriele Cosmo. 
 
 16th August 2013 - Ivana Hrivnacova (cmake-V09-06-21)
 - Suppress error messages from FindAIDA module for informative options.

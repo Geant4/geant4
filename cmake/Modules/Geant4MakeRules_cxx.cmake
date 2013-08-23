@@ -73,6 +73,15 @@ function(__configure_cxxstd_clang)
     ERROR_STRIP_TRAILING_WHITESPACE
     )
   string(REGEX REPLACE ".*clang version ([0-9]\\.[0-9]+).*" "\\1" _clangcxx_version ${_clangcxx_dumpedversion})
+  # Apple Clang 4.2 no longer reports clang version but LLVM version
+  # Moreover, this is Apple versioning, not LLVM upstream
+  # If this is the case, the previous regex will not do anything.
+  # Check to see if we have "Apple LLVM version" in the output,
+  # and if so extract the original LLVM version which should appear as
+  # "based on LLVM X.Ysvn"
+  if(APPLE AND "${_clangcxx_version}" MATCHES ".*Apple LLVM version.*")
+    string(REGEX REPLACE ".*based on LLVM ([0-9]\\.[0-9]+)svn.*" "\\1" _clangcxx_version ${_clangcxx_version})
+  endif()  
   message(STATUS "Clang version : ${_clangcxx_version}")
 
   if(_clangcxx_version VERSION_LESS 2.9)
