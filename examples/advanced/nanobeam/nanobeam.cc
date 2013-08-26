@@ -54,15 +54,19 @@ int main(int argc,char** argv) {
 
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
+
+  // By default, only one thread for aberration coefficient calculation ("coef*" macros)
+  //
+  // For high statistics (no aberration coefficient calculation, "image*" & "grid*" macros), 
+  // switch to more threads 
+    
+  runManager->SetNumberOfThreads(1);
+  //runManager->SetNumberOfThreads(2);
+
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
 
-  // By default, MT is not used for aberration coefficient calculation ("coef*" macros)
-  // For high statistics (no aberration coefficient calculation, "image*" & "grid*" macros) switch to MT
-    
-  runManager->SetNumberOfThreads(1);
-  //runManager->SetNumberOfThreads(2);
   
   //
   // Set mandatory initialization classes
