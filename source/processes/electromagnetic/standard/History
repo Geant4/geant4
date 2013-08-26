@@ -18,6 +18,14 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+23 August 13: V.Ivanchenko (emstand-V09-06-58)
+- G4PAIModelData added interpolation of dedx and cross section
+    between energy bins of internal tables
+
+23 August 13: V.Ivanchenko (emstand-V09-06-57)
+- G4IonFluctuations, G4UniversalFluctuations - use G4Pow for log, exp, 
+    pow in run time methods - expected slightly improve CPU performance
+
 21 August 13: V.Ivanchenko (emstand-V09-06-56)
 - G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96 rae removed
     only one version of the model G4UrbanMscModel  is left  

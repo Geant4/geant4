@@ -192,10 +192,29 @@ G4double G4PAIModelData::DEDXPerVolume(G4int coupleIndex, G4double scaledTkin,
   // VI: iPlace is the low edge index of the bin
   // iPlace is in interval from 0 to (N-1)
   size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+
+  G4bool one = true;
+  if(scaledTkin >= fParticleEnergyVector->Energy(nPlace)) { iPlace = nPlace; }
+  else if(scaledTkin > fParticleEnergyVector->Energy(0)) { 
+    one = false; 
+  }
 
   // VI: apply interpolation of the vector
-  G4double dEdx = fdEdxTable[coupleIndex]->Value(scaledTkin) - 
-    (*(fPAIdEdxBank[coupleIndex]))(iPlace)->Value(cut);
+  G4double dEdx = fdEdxTable[coupleIndex]->Value(scaledTkin);
+  G4double del  = (*(fPAIdEdxBank[coupleIndex]))(iPlace)->Value(cut);
+  if(!one) {
+    G4double del2 = (*(fPAIdEdxBank[coupleIndex]))(iPlace+1)->Value(cut);
+    G4double E1 = fParticleEnergyVector->Energy(iPlace); 
+    G4double E2 = fParticleEnergyVector->Energy(iPlace+1);
+    G4double W  = 1.0/(E2 - E1);
+    G4double W1 = (E2 - scaledTkin)*W;
+    G4double W2 = (scaledTkin - E1)*W;
+    del *= W1;
+    del += W2*del2;
+  }
+  dEdx -= del;
+
   if( dEdx < 0.) { dEdx = 0.; }
   return dEdx;
 }
@@ -211,6 +230,13 @@ G4PAIModelData::CrossSectionPerVolume(G4int coupleIndex,
 
   // iPlace is in interval from 0 to (N-1)
   size_t iPlace = fParticleEnergyVector->FindBin(scaledTkin, 0);
+  size_t nPlace = fParticleEnergyVector->GetVectorLength() - 1;
+
+  G4bool one = true;
+  if(scaledTkin >= fParticleEnergyVector->Energy(nPlace)) { iPlace = nPlace; }
+  else if(scaledTkin > fParticleEnergyVector->Energy(0)) { 
+    one = false; 
+  }
 
   //G4cout<<"iPlace = "<<iPlace<<"; tmax = "
   // <<tmax<<"; cutEnergy = "<<cutEnergy<<G4endl;  
@@ -220,6 +246,19 @@ G4PAIModelData::CrossSectionPerVolume(G4int coupleIndex,
   //G4cout<<"cross2 = "<<cross2<<G4endl;  
   cross  = (cross2-cross1);
   //G4cout<<"cross = "<<cross<<G4endl;  
+  if(!one) {
+    cross2 = (*(fPAIxscBank[coupleIndex]))(iPlace+1)->Value(tcut) -
+      (*(fPAIxscBank[coupleIndex]))(iPlace+1)->Value(tmax);
+
+    G4double E1 = fParticleEnergyVector->Energy(iPlace); 
+    G4double E2 = fParticleEnergyVector->Energy(iPlace+1);
+    G4double W  = 1.0/(E2 - E1);
+    G4double W1 = (E2 - scaledTkin)*W;
+    G4double W2 = (scaledTkin - E1)*W;
+    cross *= W1;
+    cross += W2*cross2;
+  }
+
   if( cross < 0.0) { cross = 0.0; }
   return cross;
 }

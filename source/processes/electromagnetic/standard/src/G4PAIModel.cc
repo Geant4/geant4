@@ -166,6 +166,14 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
   }
 }
 
+/////////////////////////////////////////////////////////////////////////
+
+void G4PAIModel::InitialiseLocal(const G4ParticleDefinition*, 
+				 G4VEmModel* masterModel)
+{
+  fModelData = static_cast<G4PAIModel*>(masterModel)->GetPAIModelData();
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 G4double G4PAIModel::ComputeDEDXPerVolume(const G4Material*,
@@ -181,14 +189,6 @@ G4double G4PAIModel::ComputeDEDXPerVolume(const G4Material*,
   G4double scaledTkin = kineticEnergy*fRatio;
  
   return fChargeSquare*fModelData->DEDXPerVolume(coupleIndex, scaledTkin, cut);
-}
-
-/////////////////////////////////////////////////////////////////////////
-
-void G4PAIModel::InitialiseLocal(const G4ParticleDefinition*, 
-				 G4VEmModel* masterModel)
-{
-  fModelData = static_cast<G4PAIModel*>(masterModel)->GetPAIModelData();
 }
 
 /////////////////////////////////////////////////////////////////////////

@@ -56,6 +56,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4UniversalFluctuation.hh"
 
+class G4Pow;
+
 class G4IonFluctuations : public G4VEmFluctuationModel
 {
 
@@ -95,6 +97,8 @@ private:
 
   G4UniversalFluctuation      uniFluct;
   const G4ParticleDefinition* particle;
+
+  G4Pow*   g4pow; 
 
   G4double particleMass;
   G4double charge;
