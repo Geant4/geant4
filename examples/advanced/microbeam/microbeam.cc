@@ -42,8 +42,6 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 
-//#include "Randomize.hh"
-
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"
 #endif
@@ -51,11 +49,6 @@
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-//#include "PrimaryGeneratorAction.hh"
-//#include "RunAction.hh"
-//#include "EventAction.hh"
-//#include "SteppingAction.hh"
-//#include "HistoManager.hh"
 
 int main(int argc,char** argv) {
 
