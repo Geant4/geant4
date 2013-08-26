@@ -674,7 +674,7 @@ namespace G4INCL {
         if(thisRMS>0.0)
           return thisRMS;
         else {
-          INCL_DEBUG("getNuclearRadius: Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl
+          INCL_DEBUG("getNuclearRadius: Radius for nucleus A = " << A << " Z = " << Z << " is not available" << std::endl
                      << "returning radius for C12");
           return positionRMS[6][12];
         }
@@ -709,12 +709,14 @@ namespace G4INCL {
           if(thisRMS>0.0)
             return thisRMS;
           else {
-            INCL_ERROR("getRadiusParameter : Radius for nucleus A = " << A << " Z = " << Z << " is ==0.0" << std::endl);
-            return 0.0;
+            INCL_DEBUG("getRadiusParameter: Radius for nucleus A = " << A << " Z = " << Z << " is not available" << std::endl
+                       << "returning radius for C12");
+            return positionRMS[6][12];
           }
         } else {
-          INCL_ERROR("getRadiusParameter : No radius for nucleus A = " << A << " Z = " << Z << std::endl);
-          return 0.0;
+          INCL_DEBUG("getRadiusParameter: Radius for nucleus A = " << A << " Z = " << Z << " is not available" << std::endl
+                     << "returning radius for C12");
+          return positionRMS[6][12];
         }
       } else if(A < 28 && A >= 6) {
         return mediumRadius[A-1];

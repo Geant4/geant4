@@ -16,6 +16,14 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+26 August 2013 - Davide Mancusi (hadr-inclxx-V09-06-22)
+-----------------------------------------------------------
+- INCL++ v5.1.13.4
+  o Fixes crash in very low-energy (~1 MeV) p+He4
+  reactions -- really.
+- Restore granular dependencies and include_directories
+  fix by G. Cosmo.
+
 24 July 2013 - Davide Mancusi (hadr-inclxx-V09-06-21)
 -----------------------------------------------------------
 - INCL++ v5.1.13.3
