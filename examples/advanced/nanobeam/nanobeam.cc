@@ -26,61 +26,76 @@
 // Please cite the following paper if you use this software
 // Nucl.Instrum.Meth.B260:20-27, 2007
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "Randomize.hh"
-
-#ifdef G4UI_USE
-  #include "G4UIExecutive.hh"
+#ifdef G4MULTITHREADED
+  #include "G4MTRunManager.hh"
+#else
+  #include "G4RunManager.hh"
 #endif
 
+#include "G4UImanager.hh"
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
+
+#ifdef G4VIS_USE
+  #include "G4VisExecutive.hh"
+#endif
+
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "SteppingAction.hh"
 
 int main(int argc,char** argv) {
 
   // Choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
 
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
+
+  // By default, MT is not used for aberration coefficient calculation ("coef*" macros)
+  // For high statistics (no aberration coefficient calculation, "image*" & "grid*" macros) switch to MT
+    
+  runManager->SetNumberOfThreads(1);
+  //runManager->SetNumberOfThreads(2);
+  
+  //
   // Set mandatory initialization classes
+  
   DetectorConstruction* detector = new DetectorConstruction;
+    
   runManager->SetUserInitialization(detector);
+  
   runManager->SetUserInitialization(new PhysicsList);
   
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(primary);
-    
-  // Set user action classes
-  RunAction* RunAct = new RunAction(detector,primary);
-
-  runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary));
+  // User action initialization
   
+  runManager->SetUserInitialization(new ActionInitialization(detector));
+    
   // Initialize G4 kernel
+  
   runManager->Initialize();
     
   // Get the pointer to the User Interface manager 
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();  
-
-  //
-  remove ("nanobeam.root");
+  
+  G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
   
   if (argc==1)   // Define UI session for interactive mode.
   { 
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-    UImanager->ApplyCommand("/control/execute default.mac");     
-    ui->SessionStart();
-    delete ui;
+#ifdef _WIN32
+    G4UIsession * session = new G4UIterminal();
+#else
+    G4UIsession * session = new G4UIterminal(new G4UItcsh);
 #endif
+    UImanager->ApplyCommand("/control/execute default.mac");    
+    session->SessionStart();
+    delete session;
   }
-     
   else           // Batch mode
   { 
     G4String command = "/control/execute ";
@@ -88,6 +103,8 @@ int main(int argc,char** argv) {
     UImanager->ApplyCommand(command+fileName);
   }
 
+  //
+  
   delete runManager;
 
   return 0;

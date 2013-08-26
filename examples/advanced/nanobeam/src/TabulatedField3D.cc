@@ -23,8 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Please cite the following paper if you use this software
+// Please cite the following papers if you use this software
 // Nucl.Instrum.Meth.B260:20-27, 2007
+// IEEE TNS 51, 4:1395-1401, 2004
 
 #include "TabulatedField3D.hh"
 #include "G4SystemOfUnits.hh"
@@ -160,8 +161,8 @@ void TabulatedField3D::GetFieldValue(const double point[4],
   G4double coef, G0;
   G0 = 0;
   
-  coef=1; //protons
-  //coef=2; // alphas
+  coef=1; // for protons
+  //coef=2; // for alphas
 
 //******************************************************************
 
@@ -315,13 +316,13 @@ if (fModel==3)
 {
 
   // X POSITION OF FIRST QUADRUPOLE
-  //G4double lineX = 0*mm;
+  // G4double lineX = 0*mm;
 
   // Z POSITION OF FIRST QUADRUPOLE
   G4double lineZ = -3720*mm;
 
   // QUADRUPOLE HALF LENGTH
-  //G4double quadHalfLength = 50*mm;
+  // G4double quadHalfLength = 50*mm;
   
   // QUADRUPOLE CENTER COORDINATES
   G4double zoprime;
@@ -354,105 +355,101 @@ if (fModel==3)
   G4double c0[5], c1[5], c2[5], z1[5], z2[5], a0[5], gradient[5];
   
   // DOUBLET***************
+  
   // QUADRUPOLE 1
-  c0[0] = -10.;			// Ci are constants in the; Pn(z)=C0+C1*s+C2*s^2
+  c0[0] = -10.;			// Ci are constants in Pn(z)=C0+C1*s+C2*s^2
   c1[0] = 3.08874;
   c2[0] = -0.00618654;
-  z1[0] = 28.6834*mm;		//Fringing field lower limit
-  z2[0] = z1[0]+50*mm;		//Fringing field upper limit	
-  a0[0] = 7.5*mm;             	//Bore Radius
+  z1[0] = 28.6834*mm;		// Fringing field lower limit
+  z2[0] = z1[0]+50*mm;		// Fringing field upper limit	
+  a0[0] = 7.5*mm;             	// Bore Radius
   gradient[0] =Grad1*(tesla/m)/coef;           
 
   // QUADRUPOLE 2
-  c0[1] = -10.;			// Ci are constants in the; Pn(z)=C0+C1*s+C2*s^2
+  c0[1] = -10.;			// Ci are constants in Pn(z)=C0+C1*s+C2*s^2
   c1[1] = 3.08874;
   c2[1] = -0.00618654;
-  z1[1] = 28.6834*mm; 		//Fringing field lower limit
-  z2[1] = z1[1]+50*mm;		//Fringing field upper limit
-  a0[1] = 7.5*mm;             	//Bore Radius
+  z1[1] = 28.6834*mm; 		// Fringing field lower limit
+  z2[1] = z1[1]+50*mm;		// Fringing field upper limit
+  a0[1] = 7.5*mm;             	// Bore Radius
   gradient[1] =Grad2*(tesla/m)/coef;
     
   // TRIPLET**********
+
   // QUADRUPOLE 3
-  c0[2] = -10.;			// Ci are constants in the; Pn(z)=C0+C1*s+C2*s^2
+  c0[2] = -10.;			// Ci are constants in Pn(z)=C0+C1*s+C2*s^2
   c1[2] = 3.08874;
   c2[2] = -0.00618654;
-  z1[2] = 28.6834*mm;		//Fringing field lower limit
-  z2[2] = z1[2]+50*mm;		//Fringing field upper limit
-  a0[2] = 7.5*mm;             	//Bore Radius
+  z1[2] = 28.6834*mm;		// Fringing field lower limit
+  z2[2] = z1[2]+50*mm;		// Fringing field upper limit
+  a0[2] = 7.5*mm;             	// Bore Radius
   gradient[2] = Grad3*(tesla/m)/coef;
 
   // QUADRUPOLE 4
-  c0[3] = -10.;			// Ci are constants in the; Pn(z)=C0+C1*s+C2*s^2
+  c0[3] = -10.;			// Ci are constants in Pn(z)=C0+C1*s+C2*s^2
   c1[3] = 3.08874;
   c2[3] = -0.00618654;
-  z1[3] = 28.6834*mm;		//Fringing field lower limit
-  z2[3] = z1[3]+50*mm;		//Fringing field upper limit
-  a0[3] = 7.5*mm;             	//Bore Radius
+  z1[3] = 28.6834*mm;		// Fringing field lower limit
+  z2[3] = z1[3]+50*mm;		// Fringing field upper limit
+  a0[3] = 7.5*mm;             	// Bore Radius
   gradient[3] = Grad4*(tesla/m)/coef;
   
    // QUADRUPOLE 5
-  c0[4] = -10.;			// Ci are constants in the; Pn(z)=C0+C1*s+C2*s^2
+  c0[4] = -10.;			// Ci are constants in Pn(z)=C0+C1*s+C2*s^2
   c1[4] = 3.08874;
   c2[4] = -0.00618654;
-  z1[4] = 28.6834*mm;		//Fringing field lower limit
-  z2[4] = z1[4]+50*mm;		//Fringing field upper limit
-  a0[4] = 7.5*mm;             	//Bore Radius
+  z1[4] = 28.6834*mm;		// Fringing field lower limit
+  z2[4] = z1[4]+50*mm;		// Fringing field upper limit
+  a0[4] = 7.5*mm;             	// Bore Radius
   gradient[4] = Grad5*(tesla/m)/coef;  
 
   // FIELD CREATED BY A QUADRUPOLE IN ITS LOCAL FRAME
   G4double Bx_local,By_local,Bz_local;
   Bx_local = 0; By_local = 0; Bz_local = 0;
   
-  // FIELD CREATED BY A QUADRUPOOLE IN WORLD FRAME
-  //unused G4double Bx_quad,By_quad,Bz_quad;
-  //unsued Bx_quad = 0; By_quad=0; Bz_quad=0;
-  
   // QUADRUPOLE FRAME
   G4double x_local,y_local,z_local;
   x_local= 0; y_local=0; z_local=0;
 
-  //G4double vars = 0;               // For Enges formula
-  G4double G1, G2, G3;	        // For Enges formula
-  //G4double K0, K1, K2, K3;	// For Enges formula
-  //G4double P0, P1, P2, P3, cte;	// For Enges formula
-  G4double     K1, K2, K3;	// For Enges formula
-  G4double P0, P1, P2,     cte;	// For Enges formula
+  G4double myVars = 0;          // For Enge formula
+  G4double G1, G2, G3;	        // For Enge formula
+  G4double K1, K2, K3; 		// For Enge formula
+  G4double P0, P1, P2, cte;	// For Enge formula
 
-  //K0=0;
   K1=0;
   K2=0;
   K3=0;
+
   P0=0;
   P1=0;
   P2=0;
-  //P3=0;
+
   G0=0;
   G1=0;
   G2=0;
   G3=0;
+
   cte=0;
   
   for (G4int i=0;i<5; i++) // LOOP ON MAGNETS
   {
  
 	if (i<2) // (if Doublet)
-	 	{	
-			zoprime = lineZ + i*140*mm; //centre of magnet nbr i 
-			x_local = x; 
-			y_local = y; 
-			z_local = (z - zoprime);
-		}
+	{	
+	   zoprime = lineZ + i*140*mm; // centre of magnet nbr i 
+	   x_local = x; 
+	   y_local = y; 
+	   z_local = (z - zoprime);
+	}
 	else    // else the current magnet is in the triplet
-		{
-			zoprime = lineZ + i*140*mm +(3150-40)*mm;
+	{
+	   zoprime = lineZ + i*140*mm +(3150-40)*mm;
 
-			x_local = x; 
-			y_local = y; 
-			z_local = (z - zoprime);
+	   x_local = x; 
+	   y_local = y; 
+	   z_local = (z - zoprime);
 	
-		}	
-				
+	}					
 	 
 	 if ( z_local < -z2[i] || z_local > z2[i])  // Outside the fringing field
 	 {
@@ -462,8 +459,7 @@ if (fModel==3)
 	  G3=0;
 	 }
 	 
-
-	 if ( (z_local>=-z1[i]) & (z_local<=z1[i]) ) // inside the quadrupole but outside the fringefield
+	 if ( (z_local>=-z1[i]) && (z_local<=z1[i]) ) // inside the quadrupole but outside the fringefield
 	 {
 	  G0=gradient[i];
 	  G1=0;
@@ -471,48 +467,46 @@ if (fModel==3)
 	  G3=0;
 	 }
 	 
-	 if ( ((z_local>=-z2[i]) & (z_local<-z1[i])) ||  ((z_local>z1[i]) & (z_local<=z2[i])) ) // Inside the fringefield
+	 if ( ((z_local>=-z2[i]) && (z_local<-z1[i])) ||  ((z_local>z1[i]) && (z_local<=z2[i])) ) // inside the fringefield
 	 {
 
-     //vars = ( z_local - z1[i]) / a0[i];     // se (8)
-     //if (z_local<-z1[i])  vars = ( - z_local - z1[i]) / a0[i];  // se (9)  p1397 Incerti et.al.
+          myVars = ( z_local - z1[i]) / a0[i];     // se (8) p1397 TNS 51
+          if (z_local<-z1[i])  myVars = ( - z_local - z1[i]) / a0[i];  // see (9) p1397 TNS 51
 
 
-	  P0 = c0[i]+c1[i]*s+c2[i]*s*s;
+	  P0 = c0[i]+c1[i]*myVars+c2[i]*myVars*myVars;
 
-	  P1 = c1[i]/a0[i]+2*c2[i]*(z_local-z1[i])/a0[i]/a0[i];       //dP/fDz
-	  if (z_local<-z1[i])  P1 = -c1[i]/a0[i]+2*c2[i]*(z_local+z1[i])/a0[i]/a0[i];  // --"--
+	  P1 = c1[i]/a0[i]+2*c2[i]*(z_local-z1[i])/a0[i]/a0[i]; // dP/fDz
+	  if (z_local<-z1[i])  P1 = -c1[i]/a0[i]+2*c2[i]*(z_local+z1[i])/a0[i]/a0[i];
 
-	  P2 = 2*c2[i]/a0[i]/a0[i]; 	//   d2P/fDz2
-
-	  //P3 = 0;    			//  d3P/dw3 ??
+	  P2 = 2*c2[i]/a0[i]/a0[i]; 	// d2P/fDz2
 
 	  cte = 1 + std::exp(c0[i]);   // (1+e^c0)
 
-	  K1 = -cte*P1*std::exp(P0)/( (1+std::exp(P0))*(1+std::exp(P0)) );  // se (11) p1397 Incerti et.al.
+	  K1 = -cte*P1*std::exp(P0)/( (1+std::exp(P0))*(1+std::exp(P0)) );  // see (11) p1397 TNS 51
 
-	 K2 = -cte*std::exp(P0)*(					// se (12) p1397 Incerti et.al.
-	  P2/( (1+std::exp(P0))*(1+std::exp(P0)) )
-	 +2*P1*K1/(1+std::exp(P0))/cte
-	 +P1*P1/(1+std::exp(P0))/(1+std::exp(P0))
-	 );                                                            
+	  K2 = -cte*std::exp(P0)*(					// see (12) p1397 TNS 51
+	   P2/( (1+std::exp(P0))*(1+std::exp(P0)) )
+	   +2*P1*K1/(1+std::exp(P0))/cte
+	   +P1*P1/(1+std::exp(P0))/(1+std::exp(P0))
+	   );                                                            
  
-	 K3 = -cte*std::exp(P0)*(				// se (13) p1397 Incerti et.al	
-	 (3*P2*P1+P1*P1*P1)/(1+std::exp(P0))/(1+std::exp(P0))
-	 +4*K1*(P1*P1+P2)/(1+std::exp(P0))/cte
-	 +2*P1*(K1*K1/cte/cte+K2/(1+std::exp(P0))/cte)
-	  );
+	  K3 = -cte*std::exp(P0)*(				// see (13) p1397 TNS 51	
+	   (3*P2*P1+P1*P1*P1)/(1+std::exp(P0))/(1+std::exp(P0))
+	   +4*K1*(P1*P1+P2)/(1+std::exp(P0))/cte
+	   +2*P1*(K1*K1/cte/cte+K2/(1+std::exp(P0))/cte)
+	   );
 	  
-	 G0 = gradient[i]*cte/(1+std::exp(P0));    	// G = G0*K(z) , se (7) p1397 Incerti et.al
-	 G1 = gradient[i]*K1;				// dG/fDz
-	 G2 = gradient[i]*K2;				// d2G/fDz2
-	 G3 = gradient[i]*K3;				// d3G/fDz3
+	  G0 = gradient[i]*cte/(1+std::exp(P0));    	// G = G0*K(z) see (7) p1397 TNS 51
+	  G1 = gradient[i]*K1;				// dG/fDz
+	  G2 = gradient[i]*K2;				// d2G/fDz2
+	  G3 = gradient[i]*K3;				// d3G/fDz3
 
 	 }
 	  
-	 Bx_local = y_local*(G0-(1./12)*(3*x_local*x_local+y_local*y_local)*G2); 	// se (4) p1396 Incerti et.al
-	 By_local = x_local*(G0-(1./12)*(3*y_local*y_local+x_local*x_local)*G2);	// se (5) p1396 Incerti et.al
-	 Bz_local = x_local*y_local*(G1-(1./12)*(x_local*x_local+y_local*y_local)*G3);	// se (6) p1396 Incerti et.al
+	 Bx_local = y_local*(G0-(1./12)*(3*x_local*x_local+y_local*y_local)*G2); 	// see (4) p1396 TNS 51
+	 By_local = x_local*(G0-(1./12)*(3*y_local*y_local+x_local*x_local)*G2);	// see (5) p1396 TNS 51
+	 Bz_local = x_local*y_local*(G1-(1./12)*(x_local*x_local+y_local*y_local)*G3);	// see (6) p1396 TNS 51
 
 	 // TOTAL MAGNETIC FIELD
 	 
