@@ -79,13 +79,34 @@ const{ return false; }
 G4int G4StackManager::operator!=(const G4StackManager &) 
 const{ return true; }
 
+#include "G4ParticleDefinition.hh"
+#include "G4VProcess.hh"
+
 G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajectory)
 {
-  G4ClassificationOfNewTrack classification;
+  const G4ParticleDefinition* pd = newTrack->GetParticleDefinition();
+  if(!(pd->GetProcessManager()))
+  {
+    G4ExceptionDescription ED;
+    ED << "A track without proper process manager is pushed into the track stack.\n"
+       << " Particle name : " << pd->GetParticleName() << " -- ";
+    if(newTrack->GetParentID()<0)
+    { ED << "created by a primary particle generator."; }
+    else
+    { 
+      const G4VProcess* vp = newTrack->GetCreatorProcess();
+      if(vp)
+      { ED << "created by " << vp->GetProcessName() << "."; }
+      else
+      { ED << "creaded by unknown process."; }
+    }
+    G4Exception("G4StackManager::PushOneTrack","Event10051",
+                 FatalException,ED);
+  }
+    
+  G4ClassificationOfNewTrack classification = DefaultClassification( newTrack ); 
   if(userStackingAction) 
   { classification = userStackingAction->ClassifyNewTrack( newTrack ); }
-  else
-  { classification = DefaultClassification( newTrack ); }
 
   if(classification==fKill)   // delete newTrack without stacking
   {

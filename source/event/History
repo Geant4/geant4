@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 23rd, 2013  M.Asai (event-V09-06-14)
+- G4StackManager now checks a track having proper process manager.
+
 August 14th, 2013  M.Asai (event-V09-06-13)
 - G4ParticleGunMessenger: /gun/particle commands now consults to the particle
   table for all the available particles except general ions.
