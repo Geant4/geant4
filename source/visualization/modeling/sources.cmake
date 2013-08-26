@@ -26,6 +26,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/event/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/Boolean/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
@@ -56,7 +57,6 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4CallbackModel.hh
         G4DigiFilterFactories.hh
         G4DigiModel.hh
-        G4FlavoredParallelWorldModel.hh
         G4HitFilterFactories.hh
         G4HitsModel.hh
         G4LogicalVolumeModel.hh
@@ -103,7 +103,6 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4BoundingSphereScene.cc
         G4DigiFilterFactories.cc
         G4DigiModel.cc
-        G4FlavoredParallelWorldModel.cc
         G4HitFilterFactories.cc
         G4HitsModel.cc
         G4LogicalVolumeModel.cc

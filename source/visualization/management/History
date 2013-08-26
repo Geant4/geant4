@@ -26,6 +26,9 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+24th August 2013  John Allison  (visman-V09-06-11 coworks modeling-V09-06-09)
+- Removed G4FlavoredParallelWorldModel.
+
 18th August 2013  John Allison  (visman-V09-06-10 requires
   modeling-V09-06-08, which in turn requires greps-V09-06-06)
 - Added /vis/scene/add/magneticField.

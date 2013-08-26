@@ -410,7 +410,6 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddDigis);
   RegisterMessenger(new G4VisCommandSceneAddEventID);
   RegisterMessenger(new G4VisCommandSceneAddFrame);
-  RegisterMessenger(new G4VisCommandSceneAddGhosts);
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLine);
   RegisterMessenger(new G4VisCommandSceneAddLine2D);

@@ -44,10 +44,8 @@
 #include "G4ArrowModel.hh"
 #include "G4AxesModel.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
-#include "G4VGlobalFastSimulationManager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4FlavoredParallelWorldModel.hh"
 #include "G4ApplicationState.hh"
 #include "G4VUserVisAction.hh"
 #include "G4CallbackModel.hh"
@@ -720,120 +718,6 @@ void G4VisCommandSceneAddFrame::Frame::operator()
   sceneHandler.AddPrimitive(frame);
   sceneHandler.EndPrimitives2D();
 }
-
-////////////// /vis/scene/add/ghosts ///////////////////////////////////////
-
-G4VisCommandSceneAddGhosts::G4VisCommandSceneAddGhosts () {
-  G4bool omitable;
-  fpCommand = new G4UIcmdWithAString ("/vis/scene/add/ghosts", this);
-  fpCommand -> SetGuidance
-    ("Adds ghost volumes (G4FlavoredParallelWorld) to the current scene.");
-  fpCommand -> SetGuidance ("Selects by particle.");
-  fpCommand -> SetParameterName ("particle", omitable = true);
-  fpCommand -> SetDefaultValue ("all");
-}
-
-G4VisCommandSceneAddGhosts::~G4VisCommandSceneAddGhosts () {
-  delete fpCommand;
-}
-
-G4String G4VisCommandSceneAddGhosts::GetCurrentValue (G4UIcommand*) {
-  return "";
-}
-
-void G4VisCommandSceneAddGhosts::SetNewValue(G4UIcommand*, G4String newValue) {
-
-  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-  G4bool warn(verbosity >= G4VisManager::warnings);
-
-  G4Scene* pScene = fpVisManager->GetCurrentScene();
-  if (!pScene) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
-    }
-    return;
-  }
-  const G4String& currentSceneName = pScene -> GetName ();
-
-  // Gets the G4GlobalFastSimulationManager pointer if any.
-  G4VGlobalFastSimulationManager* theGlobalFastSimulationManager;
-  if(!(theGlobalFastSimulationManager = 
-       G4VGlobalFastSimulationManager::GetConcreteInstance ())){
-    if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: no G4GlobalFastSimulationManager" << G4endl;
-    }
-    return;
-  }
-  
-  // Gets the G4ParticleTable pointer.
-  G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
-  
-  // If "all" (the default) loops on all known particles
-  if(newValue=="all") 
-    {
-      G4VFlavoredParallelWorld* CurrentFlavoredWorld = 0;
-      G4bool successful = false;
-      for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
-	   iParticle++)
-	{
-	  CurrentFlavoredWorld = theGlobalFastSimulationManager->
-	    GetFlavoredWorldForThis(theParticleTable->GetParticle(iParticle));
-	  
-	  if(CurrentFlavoredWorld)
-	    successful = successful || pScene -> 
-	      AddRunDurationModel(new G4FlavoredParallelWorldModel 
-				  (CurrentFlavoredWorld), warn);
-	}
-      if (successful) 
-	{
-	  if (verbosity >= G4VisManager::confirmations) 
-	    G4cout << "Ghosts have been added to scene \""
-		   << currentSceneName << "\"."
-		   << G4endl;
-	  UpdateVisManagerScene (currentSceneName);
-	}
-      else 
-	{
-	  G4cout << "ERROR: There are no ghosts."<<G4endl;
-	  G4VisCommandsSceneAddUnsuccessful(verbosity);
-	}
-      return;
-    }
-  
-  // Given a particle name looks just for the concerned Ghosts, if any.
-  G4ParticleDefinition* currentParticle = 
-    theParticleTable->FindParticle(newValue);
-  
-  if (currentParticle == NULL) 
-    {
-      if (verbosity >= G4VisManager::errors) 
-	G4cout << "ERROR: \"" << newValue
-	       << "\": not found this particle name!" << G4endl;
-      return;
-    }
-  
-  G4VFlavoredParallelWorld* worldForThis =
-    theGlobalFastSimulationManager->GetFlavoredWorldForThis(currentParticle);
-  if(worldForThis) 
-    {
-      G4bool successful = pScene -> AddRunDurationModel
-	(new G4FlavoredParallelWorldModel (worldForThis), warn);
-      if (successful) {
-	if (verbosity >= G4VisManager::confirmations) 
-	  G4cout << "Ghosts have been added to scene \""
-		 << currentSceneName << "\"."
-		 << G4endl;
-	UpdateVisManagerScene (currentSceneName);
-      }
-    }
-  else 
-    if (verbosity >= G4VisManager::errors) 
-      {
-	G4cout << "ERROR: There are no ghosts for \""<<newValue<<"\""<<G4endl;
-	G4VisCommandsSceneAddUnsuccessful(verbosity);
-      }
-}
-
 
 ////////////// /vis/scene/add/hits ///////////////////////////////////////
 
