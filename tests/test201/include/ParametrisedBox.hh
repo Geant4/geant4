@@ -92,6 +92,11 @@ public:
 			 const G4VPhysicalVolume* pV) const {
     G4VPVParameterisation::ComputeDimensions(shape,n,pV);
   }	
+  void ComputeDimensions(G4Ellipsoid& shape,
+			 const G4int n,
+			 const G4VPhysicalVolume* pV) const {
+    G4VPVParameterisation::ComputeDimensions(shape,n,pV);
+  }	
   void ComputeDimensions(G4Polycone& shape,
 			 const G4int n,
 			 const G4VPhysicalVolume* pV) const {
