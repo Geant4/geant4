@@ -110,7 +110,7 @@ void* G4UserWorkerInitialization::StartThread( void* context )
     G4UImanager::GetUIpointer()->SetUpForAThread(thisID);
     //Set the global thread-ID for this thread,
     //using a global function
-    G4SetThreadId(thisID);
+    G4Threading::G4SetThreadId(thisID);
     
     //================
     //Step-1:
