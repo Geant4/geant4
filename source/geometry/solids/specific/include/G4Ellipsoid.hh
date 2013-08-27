@@ -81,6 +81,10 @@ class G4Ellipsoid : public G4VSolid
 
     // Solid standard methods
    
+    void ComputeDimensions(G4VPVParameterisation* p,
+                           const G4int n,
+                           const G4VPhysicalVolume* pRep);
+
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,

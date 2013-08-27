@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-Aug-2013  G.Cosmo (geom-specific-V09-06-17)
+- Enabled G4Ellipsoid for parameterisation.
+
 14-Aug-2013  G.Cosmo (geom-specific-V09-06-16)
 - Move function-scoped 'static const' values for half-tolerances to private
   data members of classes, to overcome false-positive race-conditions defects

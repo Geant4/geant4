@@ -45,8 +45,9 @@
 #include "G4GeometryTolerance.hh"
 
 #include "meshdefs.hh"
-
 #include "Randomize.hh"
+
+#include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
@@ -166,6 +167,18 @@ G4Ellipsoid& G4Ellipsoid::operator = (const G4Ellipsoid& rhs)
    zBottomCut = rhs.zBottomCut; zTopCut = rhs.zTopCut;
 
    return *this;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Dispatch to parameterisation for replication mechanism dimension
+// computation & modification.
+
+void G4Ellipsoid::ComputeDimensions(G4VPVParameterisation* p,
+                                    const G4int n,
+                                    const G4VPhysicalVolume* pRep)
+{
+  p->ComputeDimensions(*this,n,pRep);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
