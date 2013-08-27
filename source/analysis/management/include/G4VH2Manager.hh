@@ -35,15 +35,12 @@
 #include "G4BaseAnalysisManager.hh"
 #include "globals.hh"
 
-class G4H2Messenger;
 class G4HnManager;
 class G4AnalysisManagerState;
 
 class G4VH2Manager : public G4BaseAnalysisManager
 {
-  // Disable using the object managers outside G4VAnalysisManager and
-  // its messenger
-  friend class G4H2Messenger;
+  // Disable using the object managers outside G4VAnalysisManager
   friend class G4VAnalysisManager;
 
   protected:
@@ -103,10 +100,6 @@ class G4VH2Manager : public G4BaseAnalysisManager
    
    // data members
     G4HnManager* fHnManager;
-
-  private:
-    // data members
-    G4H2Messenger* fMessenger;
 };
 
 #endif

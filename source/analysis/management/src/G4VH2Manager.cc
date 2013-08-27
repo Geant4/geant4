@@ -29,22 +29,18 @@
 
 #include "G4VH2Manager.hh"
 #include "G4HnManager.hh"
-#include "G4H2Messenger.hh"
 
 //_____________________________________________________________________________
 G4VH2Manager::G4VH2Manager(const G4AnalysisManagerState& state)
   : G4BaseAnalysisManager(state),
-    fHnManager(0),
-    fMessenger(0)
+    fHnManager(0)
 {
   fHnManager = new G4HnManager("H2", state);
-  fMessenger = new G4H2Messenger(this);
 }
 
 //_____________________________________________________________________________
 G4VH2Manager::~G4VH2Manager()
 {  
   delete fHnManager;
-  delete fMessenger;
 }
 

@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 26, 2013 A.Dotti (analysis-V09-06-19)
+- New interface for functions in G4Threading.hh, 
+  now in G4Threading namespace
+
 August 1, 2013 I.Hrivnacova (analysis-V09-06-18)
 - Fixed CMake build (added missing *.icc files in HEADERS);
   thanks to Mike Kelsey for pointing at this.

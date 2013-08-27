@@ -1,7 +1,3 @@
-//
-// ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
 // * The  Geant4 software  is  copyright of the Copyright Holders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
 // * conditions of the Geant4 Software License,  included in the file *
@@ -23,23 +19,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VH1Manager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
+// $Id: G4Fcn.hh 72292 2013-07-15 12:01:43Z ihrivnac $
 
-// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
 
-#include "G4VH1Manager.hh"
-#include "G4HnManager.hh"
+#ifndef G4AnalysisUtilities_h
+#define G4AnalysisUtilities_h 1
 
-//_____________________________________________________________________________
-G4VH1Manager::G4VH1Manager(const G4AnalysisManagerState& state)
-  : G4BaseAnalysisManager(state),
-    fHnManager(0)
-{
-  fHnManager = new G4HnManager("H1", state);
+#include "globals.hh"
+
+#include <vector>
+
+namespace G4Analysis {
+
+// Invalid object Id
+// 
+const G4int kInvalidId = -1;
+
+// Utility functions for checking input parameters
+//
+G4bool CheckNbins(G4int nbins);
+G4bool CheckMinMax(G4double xmin, G4double xmax, const G4String& binSchemeName);
+G4bool CheckBins(const std::vector<G4double>& bins);
+
 }
 
-//_____________________________________________________________________________
-G4VH1Manager::~G4VH1Manager()
-{
-  delete fHnManager;
-}
+#endif
+
+
+
+

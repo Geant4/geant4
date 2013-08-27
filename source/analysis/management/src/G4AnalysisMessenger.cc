@@ -29,6 +29,10 @@
 
 #include "G4AnalysisMessenger.hh"
 #include "G4VAnalysisManager.hh"
+#include "G4FileMessenger.hh"
+#include "G4H1Messenger.hh"
+#include "G4H2Messenger.hh"
+#include "G4HnMessenger.hh"
 
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -37,6 +41,11 @@
 G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
     fManager(manager),
+    fFileMessenger(0),
+    fH1Messenger(0),
+    fH2Messenger(0),
+    fH1HnMessenger(0),
+    fH2HnMessenger(0),
     fAnalysisDir(0),  
     fSetActivationCmd(0),
     fVerboseCmd(0)
@@ -56,6 +65,10 @@ G4AnalysisMessenger::G4AnalysisMessenger(G4VAnalysisManager* manager)
   fVerboseCmd->SetGuidance("Set verbose level");
   fVerboseCmd->SetParameterName("VerboseLevel",false);
   fVerboseCmd->SetRange("VerboseLevel>=0 && VerboseLevel<=4");
+  
+  fFileMessenger = new G4FileMessenger(manager);
+  fH1Messenger = new G4H1Messenger(manager);
+  fH2Messenger = new G4H2Messenger(manager);
 }
 
 //_____________________________________________________________________________
@@ -64,11 +77,28 @@ G4AnalysisMessenger::~G4AnalysisMessenger()
   delete fSetActivationCmd;
   delete fVerboseCmd;
   delete fAnalysisDir;
+  delete fFileMessenger;
+  delete fH1Messenger;
+  delete fH2Messenger;
+  delete fH1HnMessenger;
+  delete fH2HnMessenger;
 }
 
 //
 // public functions
 //
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::SetH1HnManager(G4HnManager* h1HnManager)
+{
+  fH1HnMessenger = new G4HnMessenger(h1HnManager);
+}  
+
+//_____________________________________________________________________________
+void G4AnalysisMessenger::SetH2HnManager(G4HnManager* h2HnManager)
+{
+  fH2HnMessenger = new G4HnMessenger(h2HnManager);
+}  
 
 //_____________________________________________________________________________
 void G4AnalysisMessenger::SetNewValue(G4UIcommand* command, G4String newValues)

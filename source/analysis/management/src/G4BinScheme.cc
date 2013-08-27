@@ -23,23 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VH1Manager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
+// $Id:$
 
-// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 22/08/2013  (ivana@ipno.in2p3.fr)
 
-#include "G4VH1Manager.hh"
-#include "G4HnManager.hh"
+#include "G4BinScheme.hh"
+
+namespace G4Analysis
+{
 
 //_____________________________________________________________________________
-G4VH1Manager::G4VH1Manager(const G4AnalysisManagerState& state)
-  : G4BaseAnalysisManager(state),
-    fHnManager(0)
+G4BinScheme GetBinScheme(const G4String& binSchemeName)
 {
-  fHnManager = new G4HnManager("H1", state);
+  G4BinScheme binScheme = kLinearBinScheme;
+   if ( binSchemeName != "linear" ) {
+    if      ( binSchemeName == "log" )  binScheme = kLogBinScheme;
+    // There is no name associated with kUserBinScheme
+    else {
+      G4ExceptionDescription description;
+      description 
+        << "    \"" << binScheme << "\" binning scheme is not supported." << G4endl
+        << "    " << "Linear binning will be applied.";
+      G4Exception("G4Analysis::GetBinScheme",
+                "Analysis_W013", JustWarning, description);
+    }              
+  }
+  return binScheme;            
 }
-
-//_____________________________________________________________________________
-G4VH1Manager::~G4VH1Manager()
-{
-  delete fHnManager;
+    
 }

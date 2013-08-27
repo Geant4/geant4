@@ -25,7 +25,7 @@
 //
 // $Id: G4FileMessenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
-// The messenger class for G4VFileManager
+// The messenger class for File management
 //
 // It implements commands:
 // - /analysis/setFileName name
@@ -40,19 +40,19 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VFileManager;
+class G4VAnalysisManager;
 class G4UIcmdWithAString;
 
 class G4FileMessenger : public G4UImessenger
 {
   public:
-    G4FileMessenger(G4VFileManager* manager);
+    G4FileMessenger(G4VAnalysisManager* manager);
     virtual ~G4FileMessenger();
    
     // methods
     virtual void SetNewValue(G4UIcommand* command, G4String value);
  
-    G4VFileManager*  fManager; ///< Associated class
+    G4VAnalysisManager*  fManager; ///< Associated class
     
     G4UIcmdWithAString*  fSetFileNameCmd;
     G4UIcmdWithAString*  fSetHistoDirNameCmd;

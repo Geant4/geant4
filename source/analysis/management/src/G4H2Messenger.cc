@@ -28,7 +28,7 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4H2Messenger.hh"
-#include "G4VH2Manager.hh"
+#include "G4VAnalysisManager.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -37,7 +37,7 @@
 #include <iostream>
 
 //_____________________________________________________________________________
-G4H2Messenger::G4H2Messenger(G4VH2Manager* manager)
+G4H2Messenger::G4H2Messenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
     fManager(manager),
     fH2Dir(0),  

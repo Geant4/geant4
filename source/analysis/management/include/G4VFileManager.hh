@@ -35,8 +35,6 @@
 #include "G4BaseAnalysisManager.hh"
 #include "globals.hh"
 
-class G4FileMessenger;
-
 class G4VFileManager
 {
   public:
@@ -63,7 +61,6 @@ class G4VFileManager
 
   protected:
     // data members
-    G4FileMessenger* fMessenger;
     const G4AnalysisManagerState& fState;
     G4String fFileName;
     G4String fHistoDirectoryName;

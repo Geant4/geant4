@@ -32,6 +32,7 @@
 
 #include "globals.hh"
 #include "G4Fcn.hh" 
+#include "G4BinScheme.hh" 
 
 struct G4HnInformation
 {
@@ -39,7 +40,8 @@ struct G4HnInformation
                   const G4String& xunitName, const G4String& yunitName,
                   const G4String& fxName, const G4String& fyName,
                   G4double xunit, G4double yunit,
-                  G4Fcn fx, G4Fcn fy) 
+                  G4Fcn fx, G4Fcn fy,
+                  G4BinScheme xBinScheme, G4BinScheme yBinScheme) 
     : fName(name),  
       fXUnitName(xunitName), 
       fYUnitName(yunitName), 
@@ -49,6 +51,8 @@ struct G4HnInformation
       fYUnit(yunit), 
       fXFcn(fx),
       fYFcn(fy),
+      fXBinScheme(xBinScheme),
+      fYBinScheme(yBinScheme),
       fActivation(true),
       fAscii(false)
        {}
@@ -62,6 +66,8 @@ struct G4HnInformation
   G4double fYUnit;
   G4Fcn    fXFcn;
   G4Fcn    fYFcn;
+  G4BinScheme fXBinScheme;
+  G4BinScheme fYBinScheme;
   G4bool   fActivation;
   G4bool   fAscii;  
   

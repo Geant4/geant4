@@ -28,19 +28,16 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4HnManager.hh"
-#include "G4HnMessenger.hh"
 
 //_____________________________________________________________________________
 G4HnManager::G4HnManager(const G4String& hnType,
                          const G4AnalysisManagerState& state)
   : G4BaseAnalysisManager(state),
-    fMessenger(0),
     fHnType(hnType),
     fNofActiveObjects(0),
     fNofAsciiObjects(0),
     fHnVector()
 {
-  fMessenger = new G4HnMessenger(this);
 }
 
 //_____________________________________________________________________________
@@ -50,7 +47,6 @@ G4HnManager::~G4HnManager()
   for (it = fHnVector.begin(); it != fHnVector.end(); it++ ) {
     delete (*it);
   }  
-  delete fMessenger;
 }
 
 // 
@@ -61,11 +57,12 @@ G4HnManager::~G4HnManager()
 void G4HnManager::AddH1Information(const G4String& name,
                                    const G4String& unitName,
                                    const G4String& fcnName,
-                                   G4double unit, G4Fcn fcn)
+                                   G4double unit, G4Fcn fcn,
+                                   G4BinScheme binScheme)
 {
   fHnVector.push_back(
     new G4HnInformation(name, unitName, unitName, fcnName, fcnName,
-                        unit, unit, fcn, fcn));
+                        unit, unit, fcn, fcn, binScheme, binScheme));
   ++fNofActiveObjects;
 }  
 
@@ -76,11 +73,12 @@ void  G4HnManager::AddH2Information(const G4String& name,
                                     const G4String& xfcnName,
                                     const G4String& yfcnName,
                                     G4double xunit, G4double yunit,
-                                    G4Fcn xfcn, G4Fcn yfcn) 
+                                    G4Fcn xfcn, G4Fcn yfcn, 
+                                    G4BinScheme xBinScheme, G4BinScheme yBinScheme)
 {
   fHnVector.push_back(
     new G4HnInformation(name, xunitName, yunitName, xfcnName, yfcnName,
-                        xunit, yunit, xfcn, yfcn));
+                        xunit, yunit, xfcn, yfcn, xBinScheme, yBinScheme));
   ++fNofActiveObjects;
 }  
 

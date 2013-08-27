@@ -25,7 +25,7 @@
 //
 // $Id: G4H1Messenger.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
-// The messenger class for G4VH1Manager.
+// The messenger class for H1 management.
 // It implements commands in /analysis/h1 directory.
 //
 // This messenger class is a generalization of the HistoMessenger class,
@@ -40,14 +40,14 @@
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4VH1Manager;
+class G4VAnalysisManager;
 class G4UIdirectory;
 class G4UIcommand;
 
 class G4H1Messenger : public G4UImessenger
 {
   public:
-    G4H1Messenger(G4VH1Manager* manager);
+    G4H1Messenger(G4VAnalysisManager* manager);
     virtual ~G4H1Messenger();
    
     // methods
@@ -60,7 +60,7 @@ class G4H1Messenger : public G4UImessenger
     void SetH1XAxisCmd();
     void SetH1YAxisCmd();
  
-    G4VH1Manager*  fManager; ///< Associated class
+    G4VAnalysisManager*  fManager; ///< Associated class
     
     G4UIdirectory*         fH1Dir;   
     G4UIcommand*           fCreateH1Cmd;

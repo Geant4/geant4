@@ -40,8 +40,6 @@
 
 #include <vector>
 
-class G4HnMessenger; 
-
 class G4HnManager : public G4BaseAnalysisManager
 {
   public:
@@ -55,14 +53,16 @@ class G4HnManager : public G4BaseAnalysisManager
                           const G4String& unitName,
                           const G4String& fcnName,
                           G4double unit, 
-                          G4Fcn fx);
+                          G4Fcn fx,
+                          G4BinScheme binScheme);
     void AddH2Information(const G4String& name,
                           const G4String& xunitName, 
                           const G4String& yunitName,
                           const G4String& xfcnName,
                           const G4String& yfcnName,
                           G4double xunit, G4double yunit, 
-                          G4Fcn fx, G4Fcn fy); 
+                          G4Fcn fx, G4Fcn fy,
+                          G4BinScheme xBinScheme, G4BinScheme yBinScheme); 
     // Access methofd    
     G4HnInformation* GetHnInformation(G4int id,
                           G4String functionName = "",
@@ -100,8 +100,6 @@ class G4HnManager : public G4BaseAnalysisManager
 
   private:
     // Data members
-    G4HnMessenger* fMessenger;
-    
     G4String  fHnType;
     G4int     fNofActiveObjects;
     G4int     fNofAsciiObjects;

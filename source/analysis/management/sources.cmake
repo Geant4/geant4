@@ -32,7 +32,9 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4AnalysisVerbose.hh
         G4AnalysisManagerState.hh
         G4AnalysisMessenger.hh
+        G4AnalysisUtilities.hh
         G4BaseAnalysisManager.hh
+        G4BinScheme.hh
         G4Fcn.hh
         G4FileMessenger.hh
         G4H1Messenger.hh
@@ -51,6 +53,9 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4AnalysisManagerState.cc
         G4AnalysisMessenger.cc
         G4BaseAnalysisManager.cc
+        G4AnalysisUtilities.cc
+        G4BinScheme.cc
+        G4Fcn.cc
         G4FileMessenger.cc
         G4H1Messenger.cc
         G4H2Messenger.cc

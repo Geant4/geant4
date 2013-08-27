@@ -28,15 +28,13 @@
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
 #include "G4VFileManager.hh"
-#include "G4FileMessenger.hh"
 #include "G4AnalysisManagerState.hh"
 
 #include "G4Threading.hh"
 
 //_____________________________________________________________________________
 G4VFileManager::G4VFileManager(const G4AnalysisManagerState& state)
-  : fMessenger(0),
-    fState(state),
+  : fState(state),
     fFileName(""), 
     fHistoDirectoryName(""), 
     fNtupleDirectoryName(""),
@@ -44,13 +42,11 @@ G4VFileManager::G4VFileManager(const G4AnalysisManagerState& state)
     fLockHistoDirectoryName(false), 
     fLockNtupleDirectoryName(false)
 {
-  fMessenger = new G4FileMessenger(this);
 }
 
 //_____________________________________________________________________________
 G4VFileManager::~G4VFileManager()
 {
-  delete fMessenger;
 }
 
 // 
@@ -112,7 +108,7 @@ G4String G4VFileManager::GetFullFileName() const
   // Add thread Id to a file name if MT processing
   if ( ! fState.GetIsMaster() ) {
     std::ostringstream os;
-    os << G4GetPidId();
+    os << G4Threading::G4GetPidId();
     name.append("_t");
     name.append(os.str());
   }  
@@ -135,7 +131,7 @@ G4String G4VFileManager::GetNtupleFileName(const G4String& ntupleName) const
   // Add thread Id to a file name if MT processing
   if ( ! fState.GetIsMaster() ) {
     std::ostringstream os;
-    os << G4GetPidId();
+    os << G4Threading::G4GetPidId();
     name.append("_t");
     name.append(os.str());
   }  

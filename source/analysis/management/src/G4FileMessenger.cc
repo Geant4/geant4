@@ -28,13 +28,13 @@
 // Author: Ivana Hrivnacova, 18/06/2013 (ivana@ipno.in2p3.fr)
 
 #include "G4FileMessenger.hh"
-#include "G4VFileManager.hh"
+#include "G4VAnalysisManager.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 
 //_____________________________________________________________________________
-G4FileMessenger::G4FileMessenger(G4VFileManager* manager)
+G4FileMessenger::G4FileMessenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
     fManager(manager),
     fSetFileNameCmd(0),

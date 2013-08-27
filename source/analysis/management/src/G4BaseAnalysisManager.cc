@@ -63,26 +63,6 @@ G4double G4BaseAnalysisManager::GetUnitValue(const G4String& unit) const
 }   
 
 //_____________________________________________________________________________
-G4Fcn G4BaseAnalysisManager::GetFunction(const G4String& fcnName) const
-{
-  G4Fcn fcn = G4FcnIdentity;
-   if ( fcnName != "none" ) {
-    if      ( fcnName == "log" )  fcn = std::log;
-    else if ( fcnName == "log10") fcn = std::log10;
-    else if ( fcnName == "exp" )  fcn = std::exp;
-    else {
-      G4ExceptionDescription description;
-      description 
-        << "    \"" << fcnName << "\" function is not supported." << G4endl
-        << "    " << "No function will be applied to h1 values.";
-      G4Exception("G4AnalysisMessenger::GetFunction",
-                "Analysis_W013", JustWarning, description);
-    }              
-  }
-  return fcn;            
-}
-    
-//_____________________________________________________________________________
 void G4BaseAnalysisManager::UpdateTitle(G4String& title, 
                                         const G4String& unitName, 
                                         const G4String& fcnName) const
@@ -118,8 +98,8 @@ G4bool G4BaseAnalysisManager::SetFirstId(G4int firstId)
   if ( fLockFirstId ) {
     G4ExceptionDescription description;
     description 
-      << "Cannot set FirstHistoId as its value was already used.";
-    G4Exception("G4VH1Manager::SetFirstHistoId()",
+      << "Cannot set FirstId as its value was already used.";
+    G4Exception("G4BaseAnalysisManager::SetFirstId()",
                 "Analysis_W009", JustWarning, description);
     return false;
   }              

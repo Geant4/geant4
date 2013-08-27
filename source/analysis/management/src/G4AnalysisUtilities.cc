@@ -23,23 +23,74 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VH1Manager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
+// $Id:$
 
-// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 22/08/2013  (ivana@ipno.in2p3.fr)
 
-#include "G4VH1Manager.hh"
-#include "G4HnManager.hh"
+#include "G4AnalysisUtilities.hh"
+#include "G4BinScheme.hh"
+
+namespace G4Analysis
+{
 
 //_____________________________________________________________________________
-G4VH1Manager::G4VH1Manager(const G4AnalysisManagerState& state)
-  : G4BaseAnalysisManager(state),
-    fHnManager(0)
+G4bool CheckNbins(G4int nbins)
 {
-  fHnManager = new G4HnManager("H1", state);
+  if ( nbins <= 0 ) {
+    G4ExceptionDescription description;
+    description 
+      << "    Illegal value of number of bins: nbins <= 0" << G4endl;
+      G4Exception("G4VAnalysisManager::CheckNbins",
+                  "Analysis_W013", JustWarning, description);
+    return false;
+  }
+  else
+    return true;                   
+}  
+
+
+//_____________________________________________________________________________
+G4bool CheckMinMax(G4double xmin, G4double xmax, const G4String& binSchemeName)
+{
+  G4bool result = true;
+  
+  if ( xmax <= xmin ) {
+    G4ExceptionDescription description;
+    description 
+      << "    Illegal values of (xmin >= xmax)" << G4endl;
+      G4Exception("G4VAnalysisManager::CheckMinMax",
+                  "Analysis_W013", JustWarning, description);
+                  
+    result = false;
+  }
+  
+  if ( ( GetBinScheme(binSchemeName) == kLogBinScheme ) && ( xmin == 0 ) ) {
+    G4ExceptionDescription description;
+    description 
+      << "    Illegal value of (xmin = 0) with logarithmic binning" << G4endl;
+      G4Exception("G4VAnalysisManager::CheckMinMax",
+                  "Analysis_W013", JustWarning, description);
+                  
+    result = false;
+  }
+  
+  return result;
+}  
+
+//_____________________________________________________________________________
+G4bool CheckBins(const std::vector<G4double>& bins)
+{
+  if ( bins.size() == 0 ) {
+    G4ExceptionDescription description;
+    description 
+      << "    Illegal bins vector (size = 0)" << G4endl;
+      G4Exception("G4VAnalysisManager::CheckBins",
+                  "Analysis_W013", JustWarning, description);
+    return false;
+  }
+  else
+    return true;                   
+
 }
 
-//_____________________________________________________________________________
-G4VH1Manager::~G4VH1Manager()
-{
-  delete fHnManager;
 }

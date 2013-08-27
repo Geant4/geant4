@@ -50,6 +50,18 @@ G4int G4H1DummyManager::CreateH1(const G4String& /*name*/,
                                G4int /*nbins*/, 
                                G4double /*xmin*/, G4double /*xmax*/,
                                const G4String& /*unitName*/, 
+                               const G4String& /*fcnName*/,
+                               const G4String& /*binScheme*/)
+{
+  ExceptionForHistograms("CreateH1");
+  return 0;
+}                                         
+
+//_____________________________________________________________________________
+G4int G4H1DummyManager::CreateH1(const G4String& /*name*/, 
+                               const G4String& /*title*/, 
+                               const std::vector<G4double>& /*bins*/,
+                               const G4String& /*unitName*/, 
                                const G4String& /*fcnName*/)
 {
   ExceptionForHistograms("CreateH1");
@@ -60,6 +72,17 @@ G4int G4H1DummyManager::CreateH1(const G4String& /*name*/,
 G4bool G4H1DummyManager::SetH1(G4int /*id*/,
                                 G4int /*nbins*/, 
                                 G4double /*xmin*/, G4double /*xmax*/,
+                                const G4String& /*unitName*/, 
+                                const G4String& /*fcnName*/,
+                                const G4String& /*binScheme*/)
+{                                
+  ExceptionForHistograms("SetH1");
+  return false;
+}
+  
+//_____________________________________________________________________________
+G4bool G4H1DummyManager::SetH1(G4int /*id*/,
+                                const std::vector<G4double>& /*bins*/,
                                 const G4String& /*unitName*/, 
                                 const G4String& /*fcnName*/)
 {                                

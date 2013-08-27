@@ -35,14 +35,14 @@
 #include "G4BaseAnalysisManager.hh"
 #include "globals.hh"
 
-class G4H1Messenger;
+#include <vector>
+
 class G4HnManager;
 class G4AnalysisManagerState;
 
 class G4VH1Manager : public G4BaseAnalysisManager
 {
   // Disable using the object managers outside 
-  friend class G4H1Messenger;
   friend class G4VAnalysisManager;
 
   protected:
@@ -53,10 +53,20 @@ class G4VH1Manager : public G4BaseAnalysisManager
     virtual G4int CreateH1(const G4String& name, const G4String& title,
                            G4int nbins, G4double xmin, G4double xmax,
                            const G4String& unitName = "none",
+                           const G4String& fcnName = "none",
+                           const G4String& binSchemeName = "linear") = 0;
+    virtual G4int CreateH1(const G4String& name, const G4String& title,
+                           const std::vector<G4double>& bins,
+                           const G4String& unitName = "none",
                            const G4String& fcnName = "none") = 0;
 
     virtual G4bool SetH1(G4int id,
                            G4int nbins, G4double xmin, G4double xmax,
+                           const G4String& unitName = "none",
+                           const G4String& fcnName = "none",
+                           const G4String& binSchemeName = "linear") = 0;
+    virtual G4bool SetH1(G4int id,
+                           const std::vector<G4double>& bins,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none") = 0;
 
@@ -89,10 +99,6 @@ class G4VH1Manager : public G4BaseAnalysisManager
    
    // data members
     G4HnManager* fHnManager;
-
-  private:
-    // data members
-    G4H1Messenger* fMessenger;
 };
 
 #endif

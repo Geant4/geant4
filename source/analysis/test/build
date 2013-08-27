@@ -67,10 +67,10 @@ fi
 
 if [ ${build_cl_exe} = "yes" ] ; then
   cppflags="${cppflags} /I../.."
-  cppflags="${cppflags} /I../include" # if within G4.
+  cppflags="${cppflags} /I../g4tools/include" # if within G4.
 else
   cppflags="${cppflags} -I../.."
-  cppflags="${cppflags} -I../include" # if within G4.
+  cppflags="${cppflags} -I../g4tools/include" # if within G4.
 fi
 
 if [ ${exa} = "wroot" ] ; then

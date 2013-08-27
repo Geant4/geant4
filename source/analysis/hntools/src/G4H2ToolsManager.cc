@@ -35,6 +35,8 @@
 
 #include <fstream>
 
+using namespace G4Analysis;
+
 //_____________________________________________________________________________
 G4H2ToolsManager::G4H2ToolsManager(const G4AnalysisManagerState& state)
  : G4VH2Manager(state),
@@ -119,7 +121,8 @@ G4int G4H2ToolsManager::CreateH2(const G4String& name,  const G4String& title,
              
   fH2Vector.push_back(h2);
   fHnManager->AddH2Information(name, xunitName, yunitName, xfcnName, yfcnName, 
-                               xunit, yunit, xfcn, yfcn);
+                               xunit, yunit, xfcn, yfcn, 
+                               kLinearBinScheme, kLinearBinScheme);
   
   fLockFirstId = true;
 #ifdef G4VERBOSE

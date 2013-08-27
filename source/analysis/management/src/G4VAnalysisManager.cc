@@ -29,6 +29,7 @@
 
 #include "G4VAnalysisManager.hh"
 #include "G4AnalysisMessenger.hh"
+#include "G4AnalysisUtilities.hh"
 #include "G4HnManager.hh"
 #include "G4VH1Manager.hh"
 #include "G4VH2Manager.hh"
@@ -36,6 +37,8 @@
 #include "G4VFileManager.hh"
 
 #include <iostream>
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4VAnalysisManager::G4VAnalysisManager(const G4String& type, G4bool isMaster)
@@ -70,6 +73,7 @@ void G4VAnalysisManager::SetH1Manager(G4VH1Manager* h1Manager)
 {
   fVH1Manager = h1Manager;
   fH1HnManager = h1Manager->fHnManager;
+  fMessenger->SetH1HnManager(fH1HnManager);
 } 
 
 //_____________________________________________________________________________
@@ -77,6 +81,7 @@ void G4VAnalysisManager::SetH2Manager(G4VH2Manager* h2Manager)
 {
   fVH2Manager = h2Manager;
   fH2HnManager = h2Manager->fHnManager;
+  fMessenger->SetH2HnManager(fH2HnManager);
 }  
 
 //_____________________________________________________________________________
@@ -209,9 +214,24 @@ G4String G4VAnalysisManager::GetNtupleDirectoryName() const
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
                                G4int nbins, G4double xmin, G4double xmax,
+                               const G4String& unitName, const G4String& fcnName,
+                               const G4String& binSchemeName)
+{
+  if ( ! CheckNbins(nbins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, binSchemeName) ) return kInvalidId;
+
+  return fVH1Manager->CreateH1(name, title, nbins, xmin, xmax, 
+                               unitName, fcnName, binSchemeName);
+}                                         
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
+                               const std::vector<G4double>& bins,
                                const G4String& unitName, const G4String& fcnName)
 {
-  return fVH1Manager->CreateH1(name, title, nbins, xmin, xmax, unitName, fcnName);
+  if ( ! CheckBins(bins) ) return kInvalidId;
+
+  return fVH1Manager->CreateH1(name, title, bins, unitName, fcnName);
 }                                         
 
 //_____________________________________________________________________________
@@ -222,6 +242,11 @@ G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
                                const G4String& xfcnName, const G4String& yfcnName)
                                
 {
+  if ( ! CheckNbins(nxbins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, "linear") ) return kInvalidId;
+  if ( ! CheckNbins(nybins) ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, "linear") ) return kInvalidId;
+
   return fVH2Manager->CreateH2(name, title, 
                               nxbins, xmin, xmax, nybins, ymin, ymax, 
                               xunitName, yunitName, xfcnName, yfcnName);
@@ -230,9 +255,23 @@ G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetH1(G4int id,
                                 G4int nbins, G4double xmin, G4double xmax,
+                                const G4String& unitName, const G4String& fcnName,
+                                const G4String& binSchemeName)
+{                                
+  if ( ! CheckNbins(nbins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, binSchemeName) ) return kInvalidId;
+
+  return fVH1Manager->SetH1(id, nbins, xmin, xmax, unitName, fcnName, binSchemeName); 
+}
+  
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetH1(G4int id,
+                                const std::vector<G4double>& bins,
                                 const G4String& unitName, const G4String& fcnName)
 {                                
-  return fVH1Manager->SetH1(id, nbins, xmin, xmax, unitName, fcnName); 
+  if ( ! CheckBins(bins) ) return kInvalidId;
+
+  return fVH1Manager->SetH1(id, bins, unitName, fcnName); 
 }
   
 //_____________________________________________________________________________
@@ -242,6 +281,11 @@ G4bool G4VAnalysisManager::SetH2(G4int id,
                                 const G4String& xunitName, const G4String& yunitName,
                                 const G4String& xfcnName, const G4String& yfcnName)
 {                                
+  if ( ! CheckNbins(nxbins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, "linear") ) return kInvalidId;
+  if ( ! CheckNbins(nybins) ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, "linear") ) return kInvalidId;
+
   return fVH2Manager->SetH2(id, nxbins, xmin, xmax, nybins, ymin, ymax, 
                            xunitName, yunitName, xfcnName, yfcnName);
 }

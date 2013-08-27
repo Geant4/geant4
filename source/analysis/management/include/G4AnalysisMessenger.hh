@@ -39,6 +39,12 @@
 #include "globals.hh"
 
 class G4VAnalysisManager;
+class G4HnManager;
+class G4FileMessenger;
+class G4H1Messenger;
+class G4H2Messenger;
+class G4HnMessenger;
+
 class G4UIdirectory;
 class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
@@ -50,9 +56,19 @@ class G4AnalysisMessenger : public G4UImessenger
     virtual ~G4AnalysisMessenger();
    
     // methods
+    void SetH1HnManager(G4HnManager* h1HnManager);
+    void SetH2HnManager(G4HnManager* h2HnManager);
+
+    // methods
     virtual void SetNewValue(G4UIcommand* command, G4String value);
- 
+
+    // data members
     G4VAnalysisManager*    fManager; ///< Associated class
+    G4FileMessenger*       fFileMessenger;
+    G4H1Messenger*         fH1Messenger;
+    G4H2Messenger*         fH2Messenger;
+    G4HnMessenger*         fH1HnMessenger;
+    G4HnMessenger*         fH2HnMessenger;
     
     G4UIdirectory*         fAnalysisDir;   
     G4UIcmdWithABool*      fSetActivationCmd;   

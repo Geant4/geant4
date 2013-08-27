@@ -76,7 +76,13 @@ class G4VAnalysisManager
     G4int CreateH1(const G4String& name, const G4String& title,
                    G4int nbins, G4double xmin, G4double xmax,
                    const G4String& unitName = "none",
+                   const G4String& fcnName = "none",
+                   const G4String& binSchemeName = "linear");
+    G4int CreateH1(const G4String& name, const G4String& title,
+                   const std::vector<G4double>& bins,
+                   const G4String& unitName = "none",
                    const G4String& fcnName = "none");
+
     G4int CreateH2(const G4String& name, const G4String& title,
                    G4int nxbins, G4double xmin, G4double xmax, 
                    G4int nybins, G4double ymin, G4double ymax,
@@ -88,7 +94,13 @@ class G4VAnalysisManager
     G4bool SetH1(G4int id,
                    G4int nbins, G4double xmin, G4double xmax,
                    const G4String& unitName = "none",
+                   const G4String& fcnName = "none",
+                   const G4String& binSchemeName = "linear");
+    G4bool SetH1(G4int id,
+                   const std::vector<G4double>& bins,
+                   const G4String& unitName = "none",
                    const G4String& fcnName = "none");
+
     G4bool SetH2(G4int id,
                    G4int nxbins, G4double xmin, G4double xmax, 
                    G4int nybins, G4double ymin, G4double ymax,

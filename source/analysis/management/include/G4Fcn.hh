@@ -38,4 +38,12 @@ typedef G4double (*G4Fcn) (G4double);
 // Identity function
 inline G4double G4FcnIdentity(G4double value) { return value; }
 
+// Utility function
+namespace G4Analysis {
+G4Fcn GetFunction(const G4String& fcnName);
+}
+
+
+
+
 #endif  

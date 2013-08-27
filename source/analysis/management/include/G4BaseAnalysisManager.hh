@@ -34,6 +34,7 @@
 #define G4BaseAnalysisManager_h 1
 
 #include "G4Fcn.hh"
+#include "G4BinScheme.hh"
 #include "globals.hh"
 
 class G4AnalysisManagerState;
@@ -52,7 +53,6 @@ class G4BaseAnalysisManager
   protected:
     // methods
     G4double GetUnitValue(const G4String& unit) const;
-    G4Fcn    GetFunction(const G4String& fcnName) const;
     
     void UpdateTitle(G4String& title, 
                      const G4String& unitName, const G4String& fcnName) const;

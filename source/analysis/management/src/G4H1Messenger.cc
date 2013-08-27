@@ -32,7 +32,7 @@
 // by Michel Maire (michel.maire@lapp.in2p3.fr)
 
 #include "G4H1Messenger.hh"
-#include "G4VH1Manager.hh"
+#include "G4VAnalysisManager.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
@@ -41,7 +41,7 @@
 #include <iostream>
 
 //_____________________________________________________________________________
-G4H1Messenger::G4H1Messenger(G4VH1Manager* manager)
+G4H1Messenger::G4H1Messenger(G4VAnalysisManager* manager)
   : G4UImessenger(),
     fManager(manager),
     fH1Dir(0),  
@@ -112,6 +112,15 @@ void G4H1Messenger::CreateH1Cmd()
   h1ValFcn0->SetParameterCandidates("log log10 exp none");
   h1ValFcn0->SetDefaultValue("none");
   
+  G4UIparameter* h1ValBinScheme0 = new G4UIparameter("valBinScheme0", 's', true);
+  G4String binSchemeGuidance = "The binning scheme (linear, log).\n";
+  h1ValBinScheme0->SetParameterCandidates("linear log");
+  binSchemeGuidance 
+    += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
+  binSchemeGuidance += "but none value should be used insted.";
+  h1ValBinScheme0->SetGuidance(binSchemeGuidance);
+  h1ValBinScheme0->SetDefaultValue("linear");
+  
   fCreateH1Cmd = new G4UIcommand("/analysis/h1/create", this);
   fCreateH1Cmd->SetGuidance("Create 1D histogram");
   fCreateH1Cmd->SetParameter(h1Name);
@@ -121,6 +130,7 @@ void G4H1Messenger::CreateH1Cmd()
   fCreateH1Cmd->SetParameter(h1ValMax0);
   fCreateH1Cmd->SetParameter(h1ValUnit0);
   fCreateH1Cmd->SetParameter(h1ValFcn0);
+  fCreateH1Cmd->SetParameter(h1ValBinScheme0);
   fCreateH1Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }  
 
@@ -144,7 +154,7 @@ void G4H1Messenger::SetH1Cmd()
   G4UIparameter* h1ValUnit = new G4UIparameter("valUnit", 's', true);
   h1ValUnit->SetGuidance("The unit of valMin and valMax");
   h1ValUnit->SetDefaultValue("none");
- 
+
   G4UIparameter* h1ValFcn = new G4UIparameter("valFcn", 's', true);
   h1ValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnGuidance = "The function applied to filled values (log, log10, exp, none).\n";
@@ -152,6 +162,15 @@ void G4H1Messenger::SetH1Cmd()
   fcnGuidance += "but none value should be used insted.";
   h1ValFcn->SetGuidance(fcnGuidance);
   h1ValFcn->SetDefaultValue("none");
+
+  G4UIparameter* h1ValBinScheme = new G4UIparameter("valBinScheme", 's', true);
+  h1ValBinScheme->SetParameterCandidates("linear log");
+  G4String binSchemeGuidance = "The binning scheme (linear, log).\n";
+  binSchemeGuidance 
+    += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
+  binSchemeGuidance += "but none value should be used insted.";
+  h1ValBinScheme->SetGuidance(binSchemeGuidance);
+  h1ValBinScheme->SetDefaultValue("linear");
  
   fSetH1Cmd = new G4UIcommand("/analysis/h1/set", this);
   fSetH1Cmd->SetGuidance("Set parameters for the 1D histogram of #Id :");
@@ -162,6 +181,7 @@ void G4H1Messenger::SetH1Cmd()
   fSetH1Cmd->SetParameter(h1ValMax);
   fSetH1Cmd->SetParameter(h1ValUnit);
   fSetH1Cmd->SetParameter(h1ValFcn);
+  fSetH1Cmd->SetParameter(h1ValBinScheme);
   fSetH1Cmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }  
 
@@ -232,9 +252,10 @@ void G4H1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4double vmin,vmax; 
     G4String sunit;
     G4String sfcn;
+    G4String sbinScheme;
     std::istringstream is(newValues.data());
-    is >> name >> title >> nbins >> vmin >> vmax >> sunit >> sfcn;
-    fManager->CreateH1(name, title, nbins, vmin, vmax, sunit, sfcn);     
+    is >> name >> title >> nbins >> vmin >> vmax >> sunit >> sfcn >> sbinScheme;
+    fManager->CreateH1(name, title, nbins, vmin, vmax, sunit, sfcn, sbinScheme);     
   }
   else if ( command == fSetH1Cmd ) {
     G4int id; 
@@ -242,9 +263,10 @@ void G4H1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4double vmin, vmax; 
     G4String sunit;
     G4String sfcn;
+    G4String sbinScheme;
     std::istringstream is(newValues.data());
-    is >> id >> nbins >> vmin >> vmax >> sunit >> sfcn;
-    fManager->SetH1(id, nbins, vmin, vmax, sunit, sfcn);     
+    is >> id >> nbins >> vmin >> vmax >> sunit >> sfcn >> sbinScheme;
+    fManager->SetH1(id, nbins, vmin, vmax, sunit, sfcn, sbinScheme);     
   }
   else if ( command == fSetH1TitleCmd ) {
     G4int id; 
