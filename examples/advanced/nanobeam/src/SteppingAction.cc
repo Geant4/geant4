@@ -50,7 +50,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
 G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-//if (fDetector->GetCoef()==1) 
+if (fDetector->GetCoef()==1) 
 {
 
   if  ( (step->GetTrack()->GetDynamicParticle()->GetDefinition() == 
@@ -92,15 +92,12 @@ G4AnalysisManager* man = G4AnalysisManager::Instance();
                 << (fThetaIn/mrad) << " PHI(mrad)=" << (fPhiIn/mrad) << G4endl;
          G4cout << G4endl;
 
-         if (fDetector->GetCoef()==1) 
-	 {
-           fRun->AddRow();
-           fRun->AddToXVector(fXIn/um);
-           fRun->AddToYVector(fYIn/um);
-           fRun->AddToThetaVector(fThetaIn/mrad);
-           fRun->AddToPhiVector(fPhiIn/mrad);
-         }
-	 
+         fRun->AddRow();
+         fRun->AddToXVector(fXIn/um);
+         fRun->AddToYVector(fYIn/um);
+         fRun->AddToThetaVector(fThetaIn/mrad);
+         fRun->AddToPhiVector(fPhiIn/mrad);
+
 	 //Fill ntuple 3
 	 man->FillNtupleDColumn(3,0,fXIn/um);
 	 man->FillNtupleDColumn(3,1,fYIn/um);
