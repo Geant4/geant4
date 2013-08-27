@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 27, 2013 G.Cosmo                  geommng-V09-06-11
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
 August 22, 2013 G.Cosmo                  geommng-V09-06-10
 - Added parameter to specify maximum number of overlap errors to report
   in G4VPhysicalVolume::CheckOverlaps().
