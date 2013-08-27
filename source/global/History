@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 26, 2013 A.Dotti(global-V09-06-62)
+- Add namespace G4Threading to functions defined in G4Threading.hh
+
 August 26, 2013 A.Dotti(global-V09-06-61)
 - Correct MT defects identified by DRD:
    i. Protect G4MTcoutDestination
