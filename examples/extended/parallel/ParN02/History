@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 27th, 2013 G.Cosmo - ParN02-V09-06-00
+-------------------------
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
 August 30th, 2012 G.Cosmo - ParN02-V09-05-01
 -------------------------
 - Simplified GNUmake scripts.

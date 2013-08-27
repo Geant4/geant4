@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 #include "ParN02Job.hh"
-#include "G4WorkerRunManager.hh"
+
 #include "ExN02DetectorConstruction.hh"
 #include "ExN02PhysicsList.hh"
 #include "ExN02PrimaryGeneratorAction.hh"
@@ -34,6 +34,8 @@
 #include "FTFP_BERT.hh"
 
 #include "G4VisExecutive.hh"
+
+#include "G4RunManager.hh"
 
 ParN02Job::ParN02Job(const G4String& mf) :
 G4VtbbJob(mf),
@@ -47,11 +49,19 @@ ParN02Job::~ParN02Job() {
 }
 
 //Called once by main thread
-void ParN02Job::CreateDetector(G4tbbRunManager* /*rm*/)
+void ParN02Job::CreateDetectorAndSetup(G4tbbRunManager* /*rm*/)
 {
   G4cout<<"ParN02Job Create detector, start."<<G4endl;
   detector = new ExN02DetectorConstruction();
   G4cout<<"ParN02Job detector created,  end."<<G4endl;
+
+#ifdef G4VIS_USE
+  // Visualization, if you choose to have it!
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+#endif
+
 }
 
 //Called by worker thread - which are not the master 
@@ -83,13 +93,6 @@ void ParN02Job::JobPrepare(G4RunManager* rm )
   // Altenative: Obtain (or create) a "Physics Workspace"
   //
   
-#ifdef G4VIS_USE
-  // Visualization, if you choose to have it!
-  //
-  G4VisManager* visManager = new G4VisExecutive;
-  visManager->Initialize();
-#endif
-
   G4cout<<"ParN02Job JobPrepare : done"<<G4endl;
 }
 

@@ -32,59 +32,86 @@
 
 #include "G4tbbWorkerRunManager.hh"
 
+//TBB includes
+#include <tbb/task_scheduler_init.h>
+#include <tbb/task.h>
+
 //Global instance of seeds queue
 G4tbbRunManager::G4tbbSeedsQueueType 
   G4tbbRunManager::seedsQueue = G4tbbRunManager::G4tbbSeedsQueueType();
 
+G4tbbRunManager* G4tbbRunManager::fMasterTbbRM = 0; 
+
 G4tbbRunManager::G4tbbRunManager() : G4RunManager() ,
-  seedsSequenceLength(1)
+  seedsSequenceLength(1),
+  fFirstBeamOnCall(true),
+  fCreatedTaskList(false),
+  fNumWorkers(1)
 {
-   // instancesList.push(this);
+   if( fMasterTbbRM ) 
+        G4Exception("G4RunManager", "Run034",
+                    FatalException, "Must only define one *master* TBB Run Manager." ); 
+   else
+      fMasterTbbRM= this; 
 }
 
 G4tbbRunManager::~G4tbbRunManager()
 {
-  // Should try to destroy the Worker run managers created in each thread .. 
+  // Destroy the Worker run managers created to carry out the tasks
+  G4tbbWorkerRunManager::DestroyWorkersAndCleanup(); 
 
   //  These should call the cleanup methods on each worker (thread) used
-  //    tbbSlaveDestroyGeometryAndPhysicsVector(); 
-
-  G4tbbWorkerRunManager::DestroyWorkersAndCleanup(); 
+  //    the methods will be similar to 
+  //      tbbSlaveDestroyGeometryAndPhysicsVector();
+  
+  if( fCreatedTaskList ) delete fpTaskList;
 }
 
-void G4tbbRunManager::DoEventLoop( G4int n_event,
-                                   const char* macroFile,
-                                   G4int n_sel) {
-
-  //Implementation of G4 event loop
-  //Problem : this must be done only once (per run). 
-  //  This means that the BeamOn command must be applied only once, 
-  //   ie by the "master thread" (in the sense of G4MT)
-  //  if ( isSlave != 0 ) return;
+void G4tbbRunManager::InitializeAndCreateTaskList( G4int noWorkers )
+{
+  G4cout<<"Initializing task_manager with "<< noWorkers<<" workers."<<G4endl;
+  tbb::task_scheduler_init init( noWorkers );
   
-  n_select = n_sel;
-  //Copy from standard RunManager
-  if(verboseLevel>0) 
-  { timer->Start(); }
+  fNumWorkers= noWorkers;
+  
+  G4cout<<"Creating TBB tasklist and setting it to the runManager"<<G4endl;
+  tbb::task_list *tlist= new tbb::task_list;
+  SetTaskList( tlist );
+  assert(tlist->empty()==true);
+  
+  fCreatedTaskList=true;
+}
 
-  if(macroFile!=0)
-  { 
-    if(n_select<0) n_select = n_event;
-    msg = "/control/execute ";
-    msg += macroFile;
-  }
-  else
-  { n_select = -1; }
 
-  //Event loop, in this case it's a list of tasks: one event= one task
-  G4int i_event;
-  for( i_event=0; i_event<n_event; i_event++ )
+void G4tbbRunManager::BeamOn(G4int n_event, const char* macroFile,G4int num_select)
+{
+  
+  G4cout<<"BeamOn called. ";
+  G4cout<<" Thread ID is:"<< gettid()
+  <<"; runManager pointer:"<<this<<G4endl;
+  
+  if(!fpTaskList) InitializeAndCreateTaskList( fNumWorkers );
+  
+  G4bool cond = ConfirmBeamOnCondition();
+  if(cond)
   {
-    G4tbbTask& task = *new(tbb::task::allocate_root()) 
-               G4tbbTask(job,i_event,/*n_select,msg,*/seedsSequenceLength);
-    tasklist->push_back( task );
+    numberOfEventToBeProcessed = n_event;
+    ConstructScoringWorlds();
+    RunInitialization();
+    if(n_event>0)
+    {
+      DoEventLoop(n_event,macroFile,num_select);
+      assert( fpTaskList->empty()==false );
+    }
   }
   
+  SpawnTasksAndWait(fpTaskList);
+  
+  G4cout<<"tbbRunManager::BeamOn> Work done"<<G4endl;
+  
+  G4cout<<"tbbRunManager::BeamOn> Calling RunTermination()."<<G4endl;
+  RunTermination();
+
   // Code copied from standard RunManager method TerminateEventLoop()
   if(verboseLevel>0)
   {
@@ -92,15 +119,67 @@ void G4tbbRunManager::DoEventLoop( G4int n_event,
     G4cout << "Run terminated." << G4endl;
     G4cout << "Run Summary" << G4endl;
     if(runAborted)
-    { 
-       G4cout << "  Run Aborted after " << i_event + 1 
-              << " events processed." << G4endl; 
+    {
+      G4cout << "  Run Aborted " << G4endl;
+      // "after " << i_event + 1  << " events processed." << G4endl;
     }
     else
-    { 
-       G4cout << "  Number of events processed : " << n_event << G4endl; 
+    {
+      G4cout << "  Number of events processed : " << n_event << G4endl;
     }
     G4cout << "  "  << *timer << G4endl;
+  }
+  
+  fFirstBeamOnCall= false;
+}
+
+
+void G4tbbRunManager::DoEventLoop( G4int n_event,
+                                  const char* macroFile,
+                                  G4int n_sel) {
+  
+  //Implementation of G4 event loop
+  //Problem : this must be done only once (per run).
+  //  This means that the BeamOn command must be applied only once,
+  //   ie by the "master thread" (in the sense of G4MT)
+  //  if ( isSlave != 0 ) return;
+  
+  n_select = n_sel;
+  //Copy from standard RunManager
+  if(verboseLevel>0)
+  { timer->Start(); }
+  
+  if(macroFile!=0)
+  {
+    if(n_select<0) n_select = n_event;
+    msg = "/control/execute ";
+    msg += macroFile;
+  }
+  else
+  { n_select = -1; }
+  
+  // "Event loop", in this case it
+  //   Creates a list of tasks: one event= one task
+  G4int i_event;
+  for( i_event=0; i_event<n_event; i_event++ )
+  {
+    G4tbbTask& task = *new(tbb::task::allocate_root())
+    G4tbbTask(job,i_event,/*n_select,msg,*/seedsSequenceLength);
+    fpTaskList->push_back( task );
+  }
+  G4cout<<"G4tbbRunManager::DoEventLoop> Created " << n_event << " tasks."<<G4endl;
+  
+}
+
+void G4tbbRunManager::SpawnTasksAndWait( tbb::task_list* tlist )
+{
+  assert(!fpTaskList);
+  
+  try {
+    G4cout<<"Now spawn work and waiting"<<G4endl;
+    tbb::task::spawn_root_and_wait( *tlist );
+  } catch(std::exception& e) {
+    G4cerr<<"Error occurred. Error test is:\""<<e.what()<<"\""<<G4endl;
   }
 }
 

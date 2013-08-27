@@ -77,7 +77,7 @@ void G4VtbbJob::InitRun( G4tbbRunManager* rm)
                 FatalException, "G4tbbRunManager is not defined!");
   }
   //Step 1- Create the detector setup
-  this->CreateDetector(rm); 
+  this->CreateDetectorAndSetup(rm); 
 
   //Step 2- Prepare whatever else is needed to start the job 
   //         - except User Actions

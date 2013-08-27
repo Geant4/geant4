@@ -39,7 +39,8 @@
 #ifndef G4tbbWorkerRunManager_h
 #define G4tbbWorkerRunManager_h 1
 
-#include "G4WorkerRunManager.hh"
+// #include "G4WorkerRunManager.hh" // Cannot use this - it relies on G4MTRunManager
+
 // #include "G4VScoringMesh.hh"
 
 // #include <tbb/task.h>
@@ -47,10 +48,13 @@
 
 // #include <tbb/enumerable_thread_specific.h>
 
+#include "G4RunManager.hh"
 #include "G4WorkerThread.hh"
 
-class G4tbbWorkerRunManager : public G4WorkerRunManager 
+class G4tbbWorkerRunManager :  public G4RunManager 
 {
+//  It is very similar to G4WorkerRunManager
+//    - but cannot inherit from it, due to its registration mechanism with G4MTRunManager
 
 public:
     G4tbbWorkerRunManager();
@@ -68,21 +72,31 @@ public:
                                   G4tbbWorkerRunManagerInstancesType;
     static G4tbbWorkerRunManagerInstancesType& GetInstancesList(); 
 
-    // virtual void RunTermination();
     static void DestroyWorkersAndCleanup(); 
     static unsigned int NumberOfWorkers();
+
 protected:
-    // virtual void ConstructScoringWorlds();
-    // virtual void StoreRNGStatus(const G4String& filenamePrefix );
-
-    // Do not forget to set the worker context - in the Worker Thread
-    // void SetWorkerThread( G4WorkerThread* wc ) { workerContext = wc; }
-
     //Global static instance of a queue containing all instances of this objects
     static G4tbbWorkerRunManagerInstancesType instancesList;
+
+protected:
+   // Main methods needed - similar to WorkerRunManager
+    virtual void InitializeGeometry();
+    virtual void RunTermination();
+
+   // Auxiliar methods needed - similar to WorkerRunManager
+    virtual void ConstructScoringWorlds();
+    virtual void StoreRNGStatus(const G4String& filenamePrefix );
+
+    static  void UseCounterId( G4bool useCounter ) { fUseCounterId= useCounter; } 
 
 private:
     // Worker thread context
     G4WorkerThread* fWorkerContext; 
+    G4RunManager* fMasterRM; 
+
+    static unsigned int fWorkerCounter; 
+    static G4bool   fUseCounterId; 
+
 };
 #endif //G4tbbWorkerRunManager_h

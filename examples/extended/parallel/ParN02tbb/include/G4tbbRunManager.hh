@@ -23,18 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//  Run Manager adapted for use with TBB.
 //
-//   This Run Manager will be used on the 'master' - which
-//  initialises the key ingredients (needed by all)
+//  Run Manager adapted for use with TBB.
+// 
+//   This Run Manager will be used on the 'master' - which 
+//  initialises the key ingredients (needed by all) 
 //  and configures the separate elements as 'tasks', run by
 //  workers as 'G4VtbbJob' tasks.
-//
+// 
 #ifndef G4TBBRUNMANAGER_HH
 #define G4TBBRUNMANAGER_HH
 
 #include "G4RunManager.hh"
-#include "G4WorkerRunManager.hh"
 
 class G4tbbTask;
 class G4VtbbJob;
@@ -54,14 +54,24 @@ public:
   virtual ~G4tbbRunManager();
   static void AddSeed( const long& seed );
   void SetSeedsSequenceLength( int l ) { seedsSequenceLength = l; }
-  void SetTaskList( tbb::task_list* tlist ) { tasklist = tlist; }
+  void SetTaskList( tbb::task_list* tlist ) { fpTaskList = tlist; }
 
-            //This should be "clear" with delete
+            //This should be "cleared" with delete
 
   void SetJob( G4VtbbJob* j ) { job=j; }
 
   unsigned int GetNumberOfWorkers();
 
+  static G4tbbRunManager* GetMasterTbbRunManager() { return fMasterTbbRM; } 
+   // The object must be created 'normally', but it should be singular.
+
+  void BeamOn(G4int n_event, const char* macroFile="", G4int n_select=0);
+   // Customised beam On - calls Start Tasks
+  
+  // Initialize TBB - can be overridden if needed
+  virtual void InitializeAndCreateTaskList( G4int nthreads );
+  virtual void SpawnTasksAndWait( tbb::task_list* tlist );
+  
 protected:
   //Create tasks (1task = 1event)
   virtual void DoEventLoop(G4int n_event,
@@ -83,13 +93,20 @@ private:
   int seedsSequenceLength;
 
   //G4bool isSlaveInitialized;
-  //void InitSlave();
 
+  G4bool fFirstBeamOnCall;
+  G4bool fCreatedTaskList;
+  unsigned int fNumWorkers;
+  
   //Pointer to the list of tasks in which add the new created tasks
-  tbb::task_list* tasklist;
+  tbb::task_list* fpTaskList;
 
   //The job configuration object
   G4VtbbJob* job;
+
+   static G4tbbRunManager* fMasterTbbRM;   // Truly Singular
+    // The only instance (even in presence of threads/worker
+    // Meant for use by workers Run Managers.
  };
 
 

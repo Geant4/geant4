@@ -52,6 +52,7 @@ class G4Trap;
 class G4Cons;
 class G4Orb;
 class G4Sphere;
+class G4Ellipsoid;
 class G4Torus;
 class G4Para;
 class G4Hype;
@@ -72,7 +73,7 @@ class ExN02ChamberParameterisation : public G4VPVParameterisation
                                  G4double lengthInitial,
                                  G4double lengthFinal );
 
-    virtual				 
+    virtual 
    ~ExN02ChamberParameterisation();
    
     void ComputeTransformation (const G4int copyNo,
@@ -88,6 +89,7 @@ class ExN02ChamberParameterisation : public G4VPVParameterisation
     void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
     void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}

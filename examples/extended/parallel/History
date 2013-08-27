@@ -10,6 +10,10 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 August 2013, G. Cosmo (exparallel-V09-06-01)
+- Added G4Ellipsoid among solids enabled for parameterisation
+  in examples ParN02, ParN02tbb, ParN04 and MPI/exMPI02.
+
 25 June 2013, I. Hrivnacova (exparallel-V09-06-00)
 - Added ParN02tbb example and updated CMakeLists.txt.
 

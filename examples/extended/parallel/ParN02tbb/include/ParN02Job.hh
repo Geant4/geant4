@@ -37,7 +37,7 @@ public:
    //Interface implementation, from base class
 
    // Work in master 
-   void CreateDetector(G4tbbRunManager* rm=0); // G4tbbWorkerRunManager* rm);
+   void CreateDetectorAndSetup(G4tbbRunManager* rm=0); // G4tbbWorkerRunManager* rm);
 
    // Initialise worker - or 'master' (as worker)
    void JobPrepare(G4RunManager* rm=0);

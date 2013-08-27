@@ -41,7 +41,7 @@ public:
 protected:
 
    // Work in master 
-  virtual void CreateDetector(G4tbbRunManager* rm=0 ) =0;
+  virtual void CreateDetectorAndSetup(G4tbbRunManager* rm=0 ) =0;
 
    // Initialise worker - or 'master' (as worker)
   virtual void JobPrepare(G4RunManager* rm=0) =0;

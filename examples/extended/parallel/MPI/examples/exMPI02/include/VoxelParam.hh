@@ -60,6 +60,9 @@ public:
   (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
 
   virtual void ComputeDimensions
+  (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const {}
+
+  virtual void ComputeDimensions
   (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
 
 
