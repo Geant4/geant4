@@ -52,6 +52,7 @@ class G4Trap;
 class G4Cons;
 class G4Orb;
 class G4Sphere;
+class G4Ellipsoid;
 class G4Torus;
 class G4Para;
 class G4Hype;
@@ -73,29 +74,30 @@ class ExP01ChamberParameterisation : public G4VPVParameterisation
                                  G4double widthChamber, 
                                  G4double lengthInitial,
                                  G4double lengthFinal );
-
-    virtual                                 
+                                 
    ~ExP01ChamberParameterisation();
    
-    virtual void ComputeTransformation (const G4int copyNo,
+    void ComputeTransformation (const G4int copyNo,
                                 G4VPhysicalVolume* physVol) const;
     
-    virtual void ComputeDimensions (G4Box & trackerLayer, const G4int copyNo,
+    void ComputeDimensions (G4Box & trackerLayer, const G4int copyNo,
                             const G4VPhysicalVolume* physVol) const;
 
   private:  // Dummy declarations to get rid of warnings ...
 
-    virtual void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-    virtual void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trd&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Trap&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Cons&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
+    void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
+
   private:
 
     G4int    fNoChambers;   

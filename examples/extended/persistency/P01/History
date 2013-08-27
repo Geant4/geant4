@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 27th, 2013  G. Cosmo (exampleP01-V09-06-03)
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
 June 17th, 2013 I. Hrivnacova (exampleP01-V09-06-02)
 - Applied coding guidelines (data members names, intialization, separators)
 
