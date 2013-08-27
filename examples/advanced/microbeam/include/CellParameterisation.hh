@@ -79,6 +79,10 @@ class CellParameterisation : public G4VPVParameterisation
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
+    void ComputeDimensions(G4Ellipsoid &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
     void ComputeDimensions(G4Orb &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
