@@ -48,8 +48,8 @@ class G4QMDCollision
 {
    public:
       G4QMDCollision();
-      G4QMDCollision( const G4QMDCollision& );
-      G4QMDCollision& operator= ( const G4QMDCollision& );
+//      G4QMDCollision( const G4QMDCollision& );
+//      G4QMDCollision& operator= ( const G4QMDCollision& );
       ~G4QMDCollision();
 
       void CalKinematicsOfBinaryCollisions( G4double );

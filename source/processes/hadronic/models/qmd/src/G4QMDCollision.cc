@@ -51,6 +51,7 @@ G4QMDCollision::G4QMDCollision()
    theScatterer = new G4Scatterer();
 }
 
+/*
 G4QMDCollision::G4QMDCollision( const G4QMDCollision& obj )
 : fdeltar ( obj.fdeltar )
 , fbcmax0 ( obj.fbcmax0 ) // NN maximum impact parameter
@@ -100,12 +101,13 @@ G4QMDCollision & G4QMDCollision::operator= ( const G4QMDCollision& obj)
 
    return *this;
 }
+*/
 
 
 G4QMDCollision::~G4QMDCollision()
 {
-   if ( theSystem != NULL ) delete theSystem;
-   if ( theMeanField != NULL ) delete theMeanField;
+   //if ( theSystem != NULL ) delete theSystem;
+   //if ( theMeanField != NULL ) delete theMeanField;
    delete theScatterer;
 }
 
