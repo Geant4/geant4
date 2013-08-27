@@ -172,7 +172,13 @@ int main(int argc,char** argv)
 #ifdef G4UI_USE
      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
 #ifdef G4VIS_USE
-     UImanager->ApplyCommand("/control/execute vis.mac");
+//     UImanager->ApplyCommand("/control/execute vis.mac");
+     G4cout << "At the prompt, issue commands to set up your detector and field, then:" << G4endl;
+     G4cout << "/run/initialize" << G4endl;
+     G4cout << "Then if you want a viewer:"<< G4endl;
+     G4cout << "/control/execute vis.mac" << G4endl;
+     G4cout << "Then: " << G4endl;
+     G4cout << "/run/beamOn … etc." << G4endl;
 #endif
      ui->SessionStart();
      delete ui;
