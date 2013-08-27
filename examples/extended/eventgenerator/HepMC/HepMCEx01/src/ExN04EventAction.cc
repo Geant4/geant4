@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04EventAction.cc
 /// \brief Implementation of the ExN04EventAction class
 //
+// $Id$
+//
 
 #include "ExN04EventAction.hh"
 

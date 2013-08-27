@@ -26,12 +26,9 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4AsciiReader.cc
 /// \brief Implementation of the HepMCG4AsciiReader class
 //
-// ====================================================================
+// $Id$
 //
-//   HepMCG4AsciiReader.cc
-//   $Id$
-//
-// ====================================================================
+
 #include "HepMCG4AsciiReader.hh"
 #include "HepMCG4AsciiReaderMessenger.hh"
 

@@ -26,6 +26,9 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterROGeometry.cc
 /// \brief Implementation of the ExN04CalorimeterROGeometry class
 //
+// $Id$
+//
+
 #include "ExN04CalorimeterROGeometry.hh"
 #include "ExN04DummySD.hh"
 

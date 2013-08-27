@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackerSD.cc
 /// \brief Implementation of the ExN04TrackerSD class
 //
+// $Id$
+//
 
 #include "ExN04TrackerSD.hh"
 #include "ExN04TrackerHit.hh"

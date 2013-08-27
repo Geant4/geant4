@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04StackingAction.cc
 /// \brief Implementation of the ExN04StackingAction class
 //
+// $Id$
+//
 
 #include "ExN04StackingAction.hh"
 #include "G4SDManager.hh"

@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04DetectorConstruction.hh
 /// \brief Definition of the ExN04DetectorConstruction class
 //
+// $Id$
+//
 
 #ifndef ExN04DetectorConstruction_h
 #define ExN04DetectorConstruction_h 1

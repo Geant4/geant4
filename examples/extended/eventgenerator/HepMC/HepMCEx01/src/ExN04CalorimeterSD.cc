@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterSD.cc
 /// \brief Implementation of the ExN04CalorimeterSD class
 //
+// $Id$
+//
 
 #include "ExN04CalorimeterSD.hh"
 #include "ExN04CalorimeterHit.hh"

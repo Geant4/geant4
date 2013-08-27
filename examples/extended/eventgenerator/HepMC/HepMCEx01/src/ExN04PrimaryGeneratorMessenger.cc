@@ -26,12 +26,9 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the ExN04PrimaryGeneratorMessenger class
 //
-// ====================================================================
+// $Id$
 //
-//   ExN04PrimaryGeneratorMessenger.cc
-//   $Id$
-//
-// ====================================================================
+
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithoutParameter.hh"

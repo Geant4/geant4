@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04SteppingAction.hh
 /// \brief Definition of the ExN04SteppingAction class
 //
+// $Id$
+//
 
 #ifndef ExN04SteppingAction_H
 #define ExN04SteppingAction_H 1

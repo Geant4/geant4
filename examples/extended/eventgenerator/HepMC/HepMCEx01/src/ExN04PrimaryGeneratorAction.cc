@@ -26,12 +26,9 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04PrimaryGeneratorAction.cc
 /// \brief Implementation of the ExN04PrimaryGeneratorAction class
 //
-// ====================================================================
+// $Id$
 //
-//   ExN04PrimaryGeneratorAction.cc
-//   $Id$
-//
-// ====================================================================
+
 #include "ExN04PrimaryGeneratorAction.hh"
 #include "ExN04PrimaryGeneratorMessenger.hh"
 

@@ -26,14 +26,9 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/HepMCG4PythiaInterface.hh
 /// \brief Definition of the HepMCG4PythiaInterface class
 //
-// ====================================================================
+// $Id$
 //
-//   HepMCG4PythiaInterface.hh
-//   $Id$
-//
-//   A generic interface class with Pythia event generator via HepMC.
-//
-// ====================================================================
+
 #ifndef HEPMC_G4_PYTHIA_INTERFACE_H
 #define HEPMC_G4_PYTHIA_INTERFACE_H
 
@@ -41,6 +36,8 @@
 #include "HepMC/IO_HEPEVT.h"
 
 class HepMCG4PythiaMessenger;
+
+/// A generic interface class with Pythia event generator via HepMC.
 
 class HepMCG4PythiaInterface : public HepMCG4Interface {
 protected:

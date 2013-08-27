@@ -26,7 +26,6 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04SteppingVerbose.hh
 /// \brief Definition of the ExN04SteppingVerbose class
 //
-//
 // $Id$
 //
 //   This class manages the verbose outputs in G4SteppingManager. 

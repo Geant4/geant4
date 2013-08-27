@@ -26,12 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4PythiaMessenger.cc
 /// \brief Implementation of the HepMCG4PythiaMessenger class
 //
-// ====================================================================
+// $Id$
 //
-//   HepMCG4PythiaMessenger.cc
-//   $Id$
-//
-// ====================================================================
 
 #ifdef G4LIB_USE_PYTHIA
 

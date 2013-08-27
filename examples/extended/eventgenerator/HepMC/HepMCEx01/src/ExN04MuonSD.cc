@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04MuonSD.cc
 /// \brief Implementation of the ExN04MuonSD class
 //
+// $Id$
+//
 
 #include "ExN04MuonSD.hh"
 #include "ExN04MuonHit.hh"

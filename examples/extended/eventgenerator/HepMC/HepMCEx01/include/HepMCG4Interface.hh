@@ -26,20 +26,17 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/HepMCG4Interface.hh
 /// \brief Definition of the HepMCG4Interface class
 //
-// ====================================================================
+// $Id$
 //
-//   HepMCG4Interface.hh
-//   $Id$
-//
-//   A base class for primary generation via HepMC object.
-//   This class is derived from G4VPrimaryGenerator.
-//
-// ====================================================================
+
 #ifndef HEPMC_G4_INTERFACE_H
 #define HEPMC_G4_INTERFACE_H
 
 #include "G4VPrimaryGenerator.hh"
 #include "HepMC/GenEvent.h"
+
+/// A base class for primary generation via HepMC object.
+/// This class is derived from G4VPrimaryGenerator.
 
 class HepMCG4Interface : public G4VPrimaryGenerator {
 protected:

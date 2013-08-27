@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04CalorimeterSD.hh
 /// \brief Definition of the ExN04CalorimeterSD class
 //
+// $Id$
+//
 
 #ifndef ExN04CalorimeterSD_h
 #define ExN04CalorimeterSD_h 1

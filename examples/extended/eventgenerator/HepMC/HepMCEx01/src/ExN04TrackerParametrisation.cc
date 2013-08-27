@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04TrackerParametrisation.cc
 /// \brief Implementation of the ExN04TrackerParametrisation class
 //
+// $Id$
+//
 
 #include "ExN04TrackerParametrisation.hh"
 

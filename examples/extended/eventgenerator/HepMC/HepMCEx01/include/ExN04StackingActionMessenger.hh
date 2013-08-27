@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04StackingActionMessenger.hh
 /// \brief Definition of the ExN04StackingActionMessenger class
 //
+// $Id$
+//
 
 #ifndef ExN04StackingActionMessenger_h
 #define ExN04StackingActionMessenger_h 1

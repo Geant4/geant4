@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04TrackingAction.hh
 /// \brief Definition of the ExN04TrackingAction class
 //
+// $Id$
+//
 
 #ifndef ExN04TrackingAction_h
 #define ExN04TrackingAction_h 1

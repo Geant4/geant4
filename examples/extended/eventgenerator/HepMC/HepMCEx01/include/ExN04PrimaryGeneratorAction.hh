@@ -26,12 +26,9 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04PrimaryGeneratorAction.hh
 /// \brief Definition of the ExN04PrimaryGeneratorAction class
 //
-// ====================================================================
+// $Id$
 //
-//   ExN04PrimaryGeneratorAction.hh
-//   $Id$
-//
-// ====================================================================
+
 #ifndef EXN04_PRIMARY_GENERATOR_ACTION_H
 #define EXN04_PRIMARY_GENERATOR_ACTION_H
 

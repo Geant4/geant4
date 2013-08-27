@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04Field.hh
 /// \brief Definition of the ExN04Field class
 //
+// $Id$
+//
 
 #ifndef ExN04Field_H
 #define ExN04Field_H 1

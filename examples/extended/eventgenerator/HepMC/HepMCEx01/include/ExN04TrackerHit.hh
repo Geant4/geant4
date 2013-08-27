@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04TrackerHit.hh
 /// \brief Definition of the ExN04TrackerHit class
 //
+// $Id$
+//
 
 #ifndef ExN04TrackerHit_h
 #define ExN04TrackerHit_h 1

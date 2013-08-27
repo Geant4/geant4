@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/include/ExN04MuonHit.hh
 /// \brief Definition of the ExN04MuonHit class
 //
+// $Id$
+//
 
 #ifndef ExN04MuonHit_h
 #define ExN04MuonHit_h 1

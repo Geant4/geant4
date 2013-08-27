@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04SteppingAction.cc
 /// \brief Implementation of the ExN04SteppingAction class
 //
+// $Id$
+//
 
 #include "ExN04SteppingAction.hh"
 #include "G4SteppingManager.hh"

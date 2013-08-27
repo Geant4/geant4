@@ -26,12 +26,9 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/HepMCG4Interface.cc
 /// \brief Implementation of the HepMCG4Interface class
 //
-// ====================================================================
+// $Id$
 //
-//   HepMCG4Interface.cc
-//   $Id$
-//
-// ====================================================================
+
 #include "HepMCG4Interface.hh"
 
 #include "G4RunManager.hh"

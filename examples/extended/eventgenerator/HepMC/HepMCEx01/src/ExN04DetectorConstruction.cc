@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04DetectorConstruction.cc
 /// \brief Implementation of the ExN04DetectorConstruction class
 //
+// $Id$
+//
 
 #include "ExN04DetectorConstruction.hh"
 #include "ExN04TrackerSD.hh"

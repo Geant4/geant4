@@ -26,6 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx01/src/ExN04CalorimeterParametrisation.cc
 /// \brief Implementation of the ExN04CalorimeterParametrisation class
 //
+// $Id$
+//
 
 #include "ExN04CalorimeterParametrisation.hh"
 
