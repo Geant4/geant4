@@ -56,6 +56,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithAnInteger.hh"
 #include "G4Tokenizer.hh"
 #include "G4RunManager.hh"
 #include "G4StateManager.hh"
@@ -1535,9 +1536,25 @@ void G4VisCommandSceneAddLogo2D::Logo2D::operator()
 ////////////// /vis/scene/add/magneticField ///////////////////////////////////////
 
 G4VisCommandSceneAddMagneticField::G4VisCommandSceneAddMagneticField () {
-  fpCommand = new G4UIcmdWithoutParameter ("/vis/scene/add/magneticField", this);
+  G4bool ommitable;
+  fpCommand = new G4UIcmdWithAnInteger ("/vis/scene/add/magneticField", this);
+  fpCommand->SetParameterName("nDataPointsPerHalfScene",ommitable=true);
+  fpCommand->SetDefaultValue(10);
   fpCommand -> SetGuidance
   ("Adds magnetic field representation to current scene.");
+  fpCommand -> SetGuidance
+  ("The parameter is no. of data points per half scene.  So, possibly, at"
+   "\nmaximum, the number of data points sampled is (2*n+1)^3, which can grow"
+   "\nlarge--be warned!"
+   "\nYou might find that your scene is cluttered by thousands of arrows for"
+   "\nthe default number of data points, so try reducing to 2 or 3, e.g:"
+   "\n  /vis/scene/add/magneticField 3"
+   "\nor, if only a small part of the scene has a field:"
+   "\n  /vis/scene/add/magneticField 50 # or more");
+  fpCommand -> SetGuidance
+  ("In the arrow representation, the length of the arrow is proporational"
+   "\nto the magnitude of the field and the colour is mapped onto the range"
+   "\nas a fraction of the maximum magnitude: 0->0.5->1 is blue->green->red.");
 }
 
 G4VisCommandSceneAddMagneticField::~G4VisCommandSceneAddMagneticField () {
@@ -1548,7 +1565,8 @@ G4String G4VisCommandSceneAddMagneticField::GetCurrentValue (G4UIcommand*) {
   return "";
 }
 
-void G4VisCommandSceneAddMagneticField::SetNewValue (G4UIcommand*, G4String) {
+void G4VisCommandSceneAddMagneticField::SetNewValue
+(G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
@@ -1561,13 +1579,18 @@ void G4VisCommandSceneAddMagneticField::SetNewValue (G4UIcommand*, G4String) {
     return;
   }
 
-  G4MagneticFieldModel* model = new G4MagneticFieldModel;
+  G4int nDataPointsPerHalfScene = fpCommand->GetNewIntValue(newValue);
+  
+  G4MagneticFieldModel* model =
+  new G4MagneticFieldModel(nDataPointsPerHalfScene);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Magnetic field, if any, will be drawn in scene \""
-      << currentSceneName << "\"."
+      << currentSceneName
+      << "\"\n  with "
+      << nDataPointsPerHalfScene << " data points per half scene."
       << G4endl;
     }
   }
