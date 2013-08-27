@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 27, 2013 G. Cosmo (exampleRE01-V09-06-05)
+- Added G4Ellipsoid among solids enabled for parameterisation
+
 Apr 01, 2013 A. Dotti (exampleRE01-V09-06-04)
 - New API for physics lists needed for MT
 
