@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 27th, 2013       G.Cosmo (geomdiv-V09-06-03)
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
 March 22nd, 2013        G.Cosmo (geomdiv-V09-06-02)
 - Use dynamic instead of static cast in singleton accessor implementation
   for G4PVDivisionFactory.
