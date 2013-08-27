@@ -52,6 +52,8 @@ G4MTcoutDestination::~G4MTcoutDestination()
   if( threadCerrToFile ) CloseCerrFile();
 }
 
+namespace  { G4Mutex coutm = G4MUTEX_INITIALIZER; }
+
 G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
 {
   if( threadCoutToFile )
@@ -59,7 +61,7 @@ G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
   else if( useBuffer )
   { cout_buffer<<msg; }
   else if( !ignoreCout )
-  { finalcout<<prefix<<id<<" > "<<msg; }
+  {   G4AutoLock l(&coutm); finalcout<<prefix<<id<<" > "<<msg; }
   return 0;
 }
 
@@ -70,7 +72,7 @@ G4int G4MTcoutDestination::ReceiveG4cerr(const G4String& msg)
   if( useBuffer )
   { cerr_buffer<<msg; }
   else
-  { finalcerr<<prefix<<id<<" > "<<msg; }
+  {   G4AutoLock l(&coutm); finalcerr<<prefix<<id<<" > "<<msg; }
   return 0;
 }
 
@@ -128,8 +130,6 @@ void G4MTcoutDestination::CloseCerrFile()
   if( cerrFile.is_open() ) cerrFile.close(); 
   threadCerrToFile = false;
 }
-
-namespace  { G4Mutex coutm = G4MUTEX_INITIALIZER; }
 
 void G4MTcoutDestination::DumpBuffer()
 {

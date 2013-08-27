@@ -71,24 +71,24 @@ class G4TemplateAutoLock
 
     G4TemplateAutoLock(M* mtx, L l, U u) : locked(false), _m(mtx), _l(l), _u(u)
     {
-        _l(_m);
-        locked = true;
+        lock();
     }
 
     virtual ~G4TemplateAutoLock()
     {
-        _u(_m);
+        unlock();
     }
 
-    void unlock() {
+    inline void unlock() {
         if ( !locked ) return;
         _u(_m);
         locked = false;
     }
 
-    void lock() {
+    inline void lock() {
         if ( locked ) return;
         _l(_m);
+        locked = true;
     }
 
   private:

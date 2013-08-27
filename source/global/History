@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 26, 2013 A.Dotti(global-V09-06-61)
+- Correct MT defects identified by DRD:
+   i. Protect G4MTcoutDestination
+  ii. Correct check of already-locked condition for G4AutoLock
+ iii. Protect creation of shared resource in G4MTHepRandom
+- Add performance test for RNG engines 
+
 August 15, 2013 M.Asai (global-V09-06-60)
 - G4MTcoutDestination now has a capabilitu of printing out only for 
   the selected thread to make the display readable.

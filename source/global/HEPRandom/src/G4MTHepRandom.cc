@@ -33,6 +33,7 @@
 
 #include "G4MTHepRandom.hh"
 #include "G4Threading.hh"
+#include "G4AutoLock.hh"
 
 G4ThreadLocal CLHEP::HepRandomEngine* G4MTHepRandom::theEngine = 0;
 G4ThreadLocal G4MTHepRandom* G4MTHepRandom::theGenerator = 0;
@@ -193,20 +194,22 @@ G4int G4MTHepRandom::createInstance()
   return 0;
 }
 
-G4Mutex jamesrandom = G4MUTEX_INITIALIZER;
+namespace {
+    G4Mutex jamesrandom = G4MUTEX_INITIALIZER;
+}
 
 G4int G4MTHepRandom::createInstanceOnce()
 {
   if (isActive) return isActive;
   isActive = 1;
 
-  G4MUTEXLOCK(&jamesrandom);
 
   static G4ThreadLocal CLHEP::HepJamesRandom *defaultEngine = 0;
-  if (!defaultEngine)  { defaultEngine = new CLHEP::HepJamesRandom; }
+  if (!defaultEngine)  {
+      G4AutoLock l(&jamesrandom);
+      defaultEngine = new CLHEP::HepJamesRandom;
+  }
  
-  G4MUTEXUNLOCK(&jamesrandom);
-
   if ( !theEngine )  { theEngine = defaultEngine; }
   if ( !theGenerator )  { theGenerator = new G4MTHepRandom( theEngine ); }
 
