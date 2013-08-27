@@ -124,6 +124,16 @@ ComputeDimensions(G4Orb& orb,const G4int index,const G4VPhysicalVolume*) const
 }
 
 void G4GDMLParameterisation::
+ComputeDimensions(G4Ellipsoid& ellipsoid,const G4int index,const G4VPhysicalVolume*) const
+{
+   ellipsoid.SetSemiAxis(parameterList[index].dimension[0],
+                         parameterList[index].dimension[1],
+                         parameterList[index].dimension[2]);
+   ellipsoid.SetZCuts(parameterList[index].dimension[3],
+                      parameterList[index].dimension[4]);
+}
+
+void G4GDMLParameterisation::
 ComputeDimensions(G4Torus& torus,const G4int index,const G4VPhysicalVolume*) const
 {
    torus.SetAllParameters(parameterList[index].dimension[0], // pRmin
