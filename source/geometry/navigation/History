@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 27th, 2013 - G.Cosmo  (geomnav-V09-06-15)
+---------------------------
+- Added G4Ellipsoid among solids enabled for parameterisation in
+  G4PhantomParameterisation.
+
 August 22nd, 2013 - G.Cosmo  (geomnav-V09-06-14)
 ---------------------------
 - Added ability to set maximum number of errors to report for overlaps
