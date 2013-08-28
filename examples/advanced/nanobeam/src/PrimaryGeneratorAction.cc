@@ -36,7 +36,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 :fDetector(DC)
 {
   fAngleMax = 0.09;
-  fEmission =0;
+  fEmission = 0;
 
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
@@ -185,6 +185,16 @@ if (fEmission==1)
 		            
         phi = phi / 1000;
         theta = theta / 1000;
+
+        /*
+        G4cout << fDetector->GetG1() << G4endl;
+        G4cout << fDetector->GetG2() << G4endl;
+        G4cout << fDetector->GetG3() << G4endl;
+        G4cout << fDetector->GetG4() << G4endl;
+        G4cout << fDetector->GetModel() << G4endl;
+        G4cout << fDetector->GetCoef() << G4endl;
+        G4cout << fDetector->GetGrid() << G4endl;
+        */
 
 } // end coefficient
 
