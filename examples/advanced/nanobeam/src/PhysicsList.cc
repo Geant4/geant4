@@ -88,7 +88,6 @@ void PhysicsList::ConstructBarions()
   //  barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
-  G4GenericIon::GenericIonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

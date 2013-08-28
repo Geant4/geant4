@@ -10,9 +10,6 @@
   c1 = new TCanvas ("c1","",200,10,800,800);
   c1.Divide(2,2);
 
-  system ("rm -rf nanobeam.root");
-  system ("hadd nanobeam.root nanobeam_*.root");
-  
   TFile f("nanobeam.root"); 
 
   TNtuple* ntuple0;
