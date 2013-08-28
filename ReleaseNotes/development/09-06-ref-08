@@ -1,0 +1,513 @@
+
+                       geant4-09-06-ref-08
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Added capability to print out on standard output only for a selected
+   thread to improve readability.
+ o Added G4Ellipsoid among solids enabled for parameterisation.
+ o Added ability to set maximum number of errors to report for overlaps
+   from a volume and added appropriate UI command.
+ o Fixes in G4IonTable for the treatment of ions in multi-threaded mode.
+ o Replaced LEP neutron capture with alternative models.
+   Removed LEP fission (Gheisha cross-section and G4LFission model) in
+   all physics lists which do not make use of neutron_HP.
+ o Removed G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96.
+   Only one version of the model G4UrbanMscModel is now left.
+ o Enabled new interfaces for worker-thread G4VProcess initialization.
+   Updated G4WorkerRunManager to allow varying number of events processed
+   on each thread based on thread availability.
+ o New dataset G4NDL-4.4.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-06-22
+-----
+- Removed GEANT4_INSTALL_EXAMPLES option. Always install 'example' directory.
+- Suppress error messages from FindAIDA module for informative options.
+  Addressing problem report #1485.
+- Corrected check for clang version. Fixes problem with being unable to
+  change C++ Standard for clang when using latest version.
+- Updated datasets for G4NDL to G4NDL-4.4
+
+analysis                                         analysis-V09-06-19
+--------
+- Adapted to use new interface with namespace for functions in G4Threading.
+- Fixed CMake script by adding missing *.icc files.
+
+event                                            event-V09-06-14
+-----
+- G4ParticleGunMessenger: added UI command 'ionLvlCmd' so that particle
+  gun can shoot ions with integer isomer level. Added 'ionL' command to
+  G4GeneralParticleSourceMessenger.
+- G4ParticleGunMessenger: /gun/particle commands now consults to the particle
+  table for all available particles except general ions.
+- G4StackManager now checks a track having proper process manager.
+
+externals                                        externals-V09-06-05
+---------
+- Minor correction to CMake script for internal CLHEP module.
+
+geometry/divisions                               geomdiv-V09-06-03
+------------------
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+geometry/management                              geommng-V09-06-11
+-------------------
+- Fix to G4VSolid::EstimateCubicVolume() to make proper use of specified
+  accuracy. Addressing problem report #1493.
+- Added parameter to specify maximum number of overlap errors to report
+  in G4VPhysicalVolume::CheckOverlaps().
+- Added methods G4VPhysicalVolume::VolumeType() and
+  G4LogicalVolume::CharacteriseDaughters() to be used by G4Navigator.
+- Added G4Ellipsoid among solids enabled for parameterisation.
+
+geometry/navigation                              geomnav-V09-06-15
+-------------------
+- Added ability to set maximum number of errors to report for overlaps
+  from a volume in G4GeometryMessenger.
+  Added new UI command "/geometry/test/maximum_errors [int]" to fix the
+  threshold. By default, for each volume, reports stop after the first
+  error reported.
+- Rationalised implementation of VolumeType() and CharacteriseDaughters()
+  in G4Navigator, to use implementation now provided in G4VPhysicalVolume
+  and G4LogicalVolume respectively.
+- Added G4Ellipsoid among solids enabled for parameterisation in
+  G4PhantomParameterisation.
+
+geometry/solids/CSG                              geom-csg-V09-06-03
+-------------------
+- Corrected sanity check for wrong/small dimensions in G4Box constructor.
+- Moved function-scoped 'static const' values for half-tolerances to private
+  data members of classes, to overcome false-positive race-conditions defects
+  reported by Valgrind in MT mode.
+
+geometry/solids/specific                         geom-specific-V09-06-17
+------------------------
+- Fix in G4TessellatedSolid::DistanceToIn(p,v) for specific cases where points
+  are located near surface
+- Move function-scoped 'static const' values for half-tolerances to private
+  data members of classes, to overcome false-positive race-conditions defects
+  reported by Valgrind in MT mode.
+- Enabled G4Ellipsoid for parameterisation.
+
+geometry/volumes                                 geomvol-V09-06-08
+----------------
+- Added parameter to specify maximum number of overlap errors to report.
+  Adapted code in CheckOverlaps() in G4PVPlacement and G4PVParameterised
+  to take into account the threshold.
+
+global                                           global-V09-06-62
+------
+- G4PhysicsLogVector, G4PhysicsLnVector: more accurate check of bin inside
+  FindBinLocation() method to avoid cases of event non-reproducibility.
+- G4StatDouble: added new method add(G4StatDouble*) to be used in MT mode.
+- G4MTcoutDestination now has a capability of printing out only for 
+  the selected thread to make the display readable.
+- Corrected MT defects identified by DRD: protected G4MTcoutDestination;
+  corrected check of already-locked condition for G4AutoLock; protected
+  creation of shared resource in G4MTHepRandom.
+  Add namespace 'G4Threading' to functions defined in G4Threading unit.
+- Updated date and tag for ref-08.
+
+graphics_reps                                    greps-V09-06-06
+-------------
+- Added GetExtent() method in G4VGraphicsScene.
+
+intercoms                                        intercoms-V09-06-07
+---------
+- Introducing UI command '/control/cout/ignoreThreadsExcept' to select
+  thread for which enabling printout on cout.
+
+materials                                        materials-V09-06-21
+---------
+- Corrected initialization of 'elm2Data' in G4ElementData default constructor.
+- G4NistManager: added G4AutoLock in the constructor to avoid potential rare
+  situation of client code calling the singleton from worker thread.
+
+particles                                        particles-V09-06-40
+---------
+- Fixed bug in G4ParticlePropertyTable::SetParticleProperty().
+  Addressing problem report #1506.
+- Fixes in G4IonTable: added process manager for proton; fixed initialiaztion
+  of IsomerTableList for worker thread.
+- Changed G4IsomerTbale::isomerTable to 'static const' and removed
+  unnecessary thread-local specification.
+  Same for G4NucleiPropertiesTableAME03 and G4NucleiPropertiesTheoreticalTable.
+- Added isomer level to G4IsonTable::GetNucleusMass().
+- Added G4ParticleDefinition::IsGeneralIon() method
+- Added DNA particles for setting 'isGeneralIon' flag in G4Ions constructor.
+- Added G4Exception for G4IonTable::CreateIon() methods with excited energy
+  NOTE: this method will be removed in the next release.
+- Removed ShortLivedDictionary in G4ParticleTable.
+  Added method GetIon(Z,A,level).
+  Avoid copying IsotopeTable of G4Iontable to Worker thread.
+  Fix: 'fIterator' was not created.
+- ParticleTableIterator skips general ions unless it is reset with 
+  "false" as its parameter.
+- Added warning message if a process manager is to be registered to
+  a particle during the event loop.
+- G4ParticleMessenger : /particle/createAllIon and /particle/createAllIsomer
+  won't propagate to worker threads as all ions and isomers are created
+  in the master thread and particle table and ion table of worker threads
+  inherit those of master thread.
+
+physics_lists
+-------------
+- builders (phys-builders-V09-06-08)
+  o Introduced Boolean parameter to G4NeutronBuilder constructor to switch on
+    fission process. The default is fission off, but for the HP-based physics
+    lists it is activated.
+- constructors/electromagnetic (phys-ctor-em-V09-06-10)
+  o In all constructors use G4UrbanMscModel instead of Urban93 or Urban95.
+- constructors/hadron_elastic (phys-ctor-helastic-V09-06-05)
+  o G4HadronDElasticPhysics: DiffuseElastic model active above 10 MeV,
+    LHEP model active below 10.1 MeV.
+  o G4HadronHElasticPhysics: code cleanup.
+- constructors/hadron_inelastic (phys-ctor-hinelastic-V09-06-16)
+  o Replaced LEP neutron capture (Gheisha cross-section and G4LCapture model)
+    with G4NeutronCaptureXS (cross-section) and G4NeutronRadCapture (model)
+    in all physics lists.
+  o Removed LEP fission (Gheisha cross-section and G4LFission model) in
+    all physics lists which do not make use of neutron_HP.
+    For the HP-based physics lists, used LEP fission only above 19.9 MeV.
+- lists (phys-lists-V09-06-13)
+  o LBE: use G4UrbanMscModel instead on Urban93.
+
+persistency/ascii                                ascii-V09-06-04
+-----------------
+- Corrected typo in G4tgrPlaceParameterisation::operator<<().
+  Addressing problem report #1504.
+
+persistency/gdml                                 gdml-V09-06-05
+----------------
+- Added G4Ellipsoid among solids enabled for parameterisation in
+  G4GDMLParameterisation.
+
+processes/cuts                                   procuts-V09-06-07
+--------------
+- Fix bug in G4ProductionCuts copy constructor.
+
+processes/electromagnetic/adjoint                emadjoint-V09-06-07
+---------------------------------
+- G4AdjointhMultipleScattering: use G4UrbanMscModel instead of Urban95.
+
+processes/electromagnetic/dna                    emdna-V09-06-11
+-----------------------------
+- Added G4DNAIons. Adapted G4DNAGenericIonsManager to use of G4DNAIons.
+
+processes/electromagnetic/highenergy             emhighenergy-V09-06-06
+------------------------------------
+- G4hBremsstrahlung: use inheritence of G4MuBremsstrahlung; removed
+  unused headers;
+- G4hPairProduction: use inheritence of G4MuPairProduction; removed
+  unused headers; lowestEnergy limit should not be lower than 8*mass
+  because in that case the model is not applicable.
+
+processes/electromagnetic/lowenergy              emlowen-V09-06-23
+-----------------------------------
+- Added protection for MT mode in G4PenelopeRaylModel.
+- G4LivermoreRayleighModel, G4LivermoreGammaConversionModel,
+  G4LivermorePhotoElectricModel: migration to MT. Sharing of internal tables
+  between threads; added two new methods InitialiseLocal() and
+  InitialiseForElement().
+
+processes/electromagnetic/muons                  emmuons-V09-06-17
+-------------------------------
+- G4MuBremsstrahlungModel: reduced 'minThreshold' from 1 keV to 0.9 keV
+  to avoid extra warning printout.
+- G4MuPairProduction: removed unused headers; lowestEnergy limit should not be
+  lower than 8*mass because the model is not applicable.
+  Improved initialisation printout.
+- G4MuPairProductionModel: fixed bining to 1000 for internal sampling table.
+- G4MuBremsstrahlung: removed unused headers.
+- G4MuPairProductionModel: reimplemented sampling table as G4ElementData with
+  2D-tables per atomic number; rewritten sampling algorithm, data fully shared
+  between threads.
+
+processes/electromagnetic/standard               emstand-V09-06-58
+----------------------------------
+- G4IonFluctuations, G4UniversalFluctuations: use G4Pow for log(), exp(), 
+  pow() in run time methods; expected slightly improve CPU performance.
+- Removed G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96.
+  Only one version of the model G4UrbanMscModel is now left.
+- G4PAIModelData: new class to handle PAI internal data.
+- G4PAIModel: data handling extracted to G4PAIModelData, data class may be
+  shared between threads. Code cleanup.
+- G4BetheBlochModel, G4BraggIonModel: returned back method MinEnergyCut()
+  in order to protect from cases reported in problem report #1481.
+
+processes/electromagnetic/utils                  emutils-V09-06-53
+-------------------------------
+- G4EmModelManager: check MinEnergyCut() method.
+  Addressing probkem report #1481
+- G4VEmProcess, G4LossTableManager: added master/worker initialisation
+  to discrete processes.
+- G4VEmModel: added pointer to G4ElementDat and Get method in
+  order to allow sharing G4ElementData between threads.
+- G4VEnergyLossProcess, G4VMultipleScattering: use GetMasterProcess()
+  method in PreparePhysicsTable() and BuildPhysicsTable() methods.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-06-29)
+  o Improvements and cleanup in G4ElectroNuclearCrossSection.
+- models/cascade (hadr-casc-V09-06-47)
+  o Added use of "Id" and "Name" keywords where missing.
+  o Moved local statics to file scope to avoid thread collisions.
+    Fixes for thread safety in G4InuclSpecialFunctions,
+    G4*EquilibriumEvaporator and paraMaker.
+  o G4InuclParticleNames: provide particle identification functions,
+    equivalent to those in G4InuclElementaryParticle, for direct use of
+    type codes.
+    G4InuclElementaryParticle: replaced identification functions with calls
+    through to new G4InuclParticleNames functions.
+  o G4CascadeInterface: replacing "Z=1" with "Z==1" in Boolean ternary
+    operation. Addressing problem report #1513.
+  o Fixed Coverity defect in G4CascadeDeexciteBase.
+- models/im_r_matrix (hadr-im_r-V09-06-05)
+  o Removed inclusion of G4ShortLivedTable.hh in G4ResonanceNames.
+- models/inclxx (hadr-inclxx-V09-06-22)
+  o Updated to INCL++ v5.1.13.4: fixed crash in very low-energy (~1 MeV)
+    p+He4 reactions and in light-ion-induced reactions.
+- models/parton_string/diffraction (hadr-string-diff-V09-06-15)
+  o Set Delta-isobar probability to 10%, as a compromise between better
+    agreement with thin-target data and smaller impact on hadronic shower
+    observables.
+- models/parton_string/hadronization (had-hadronization-V09-06-01)
+  o Removed inclusion of G4ShortLivedTable.hh in G4VLongitudinalStringDecay.
+- models/qmd (hadr-qmd-V09-06-09)
+  o Fixed double deletion problem on G4QMDCollision.
+
+run                                              run-V09-06-83
+---
+- G4WorkerRunManager no longer has a for-loop for the event loop, but
+  asks G4MTRunManager to process another event. With this modification,
+  number of events processed on each thread varies based on the availability
+  of each thread; the array of random number seeds and event-ID are
+  centrally managed by G4MTRunManager.
+  Adopt new interface for G4Threading namespace.
+- Enable locking of mutex in master loop on condition variable: 
+  fixes deadlock observed in MacOS after report from Valgrind/DRD tool.
+- Corrected MT defects reported by Valgrind/DRD tool.
+- Activating new interfaces for worker thread G4VProcess initialization 
+  in G4VUserPhysicsList for [Prepare,Build]PhysicsTable().
+  G4VUserPhysicsList takes care of setting the process manager pointer
+  of GenericIon to all the general ions for worker threads.
+- Added G4Exception warning for obsolete method AddProcessManager() in
+  G4VUserPhysicsList.
+
+visualization                                    vis-V09-06-21
+-------------
+- management:
+  o Added command /vis/scene/add/magneticField.
+  o Removed G4FlavoredParallelWorldModel.
+  o G4VisManager: added missing push_back for /vis/touchable/;
+    addressing problem report #1503.
+    Removed check on fpSceneHandler->GetModel() in method DispatchToModel();
+    addressing problem report #1499.
+- modeling:
+  o Added skeleton G4MagneticFieldModel.
+
+data sets
+---------
+- G4NDL.4.4:
+  o Corrected 74W182 and 90Th232, for inconsistency of inelastic
+    cross-sections with final state data.
+
+examples                                         examples-V09-06-08
+--------
+- Updated reference outputs.
+- advanced/air_shower (air_shower-V09-06-01)
+  o Added G4Ellipsoid among solids enabled for parameterisation.
+- advanced/amsEcal (amsEcal-V09-06-01)
+- advanced/dnaphysics (dnaphysics-V09-06-08)
+- advanced/gammaknife (gammaknife-V09-06-00)
+- advanced/hadrontherapy (hadrontherapy-V09-06-02)
+- advanced/human_phantom (human_phantom-V09-06-03)
+- advanced/iort_therapy (iort_therapy-V09-06-05)
+- advanced/lAr_calorimeter (lAr_calorimeter-V09-06-05)
+- advanced/medical_linac (medical_linac-V09-06-01)
+  o Fixed compilation warning on clang32 for unused data members.
+- advanced/microbeam (microbeam-V09-06-04)
+  o Migrated example to multi-threading.
+  o Added G4Ellipsoid among solids enabled for parameterisation.
+- advanced/microdosimetry (microdosimetry-V09-06-07)
+  o Fixed compilation warning on clang32 for unused data members.
+- advanced/nanobeam (nanobeam-V09-06-04)
+  o Coding style cleaning.
+- advanced/purging_magnet (purmag-V09-06-02)
+- advanced/underground_physics (DMX-V09-06-07)
+  o Fixed compilation warning on clang32 for unused data members.
+- basic/B2 (exampleB2-V09-06-06)
+  o Added G4Ellipsoid among solids enabled for parameterisation in B2b.
+  o Fixed comment in B2MagneticField::GetGlobalFieldManager().
+- basic/B4 (exampleB4-V09-06-11)
+  o Fixed B4[b]RunAction::EndOfRunAction() to get the printed histogram
+    statistics correctly.
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/biasing/B01 (B01-V09-06-06)
+  o Replaced B01PhysicsList with FTFP_BERT as part of LHEP removal.
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/biasing/B02 (B02-V09-06-06)
+- extended/biasing/ReverseMC01 (ReverseMC01-V09-06-03)
+- extended/electromagnetic/TestEm3 (testem3-V09-06-09)
+- extended/electromagnetic/TestEm5 (testem5-V09-06-08)
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/electromagnetic/TestEm7 (testem7-V09-06-12)
+  o PhysListEmStandardNR: use G4UrbanMscModel instead of G4UrbanMscModel95.
+- extended/electromagnetic/TestEm9 (testem9-V09-06-06)
+- extended/electromagnetic/TestEm10 (testem10-V09-06-01)
+- extended/electromagnetic/TestEm12 (testem12-V09-06-10)
+- extended/electromagnetic/TestEm14 (testem14-V09-06-09)
+- extended/electromagnetic/TestEm15 (testem15-V09-06-07)
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/eventgenerator/HepMC (exHepMC-V09-06-00)
+  o Added G4Ellipsoid among solids enabled for parameterisation in HepMCEx01.
+- extended/field/field01 (fieldex01-V09-06-01)
+- extended/field/field02 (fieldex02-V09-06-00)
+- extended/field/field03 (fieldex03-V09-06-00)
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/field/field04 (fieldex04-V09-06-04)
+  o Do not execute vis.mac in main().
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/hadronic/Hadr01 (exhadr01-V09-06-05)
+- extended/hadronic/Hadr02 (exhadr02-V09-06-04)
+- extended/hadronic/Hadr03 (exhadr03-V09-06-21)
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/medical/DICOM (DICOM-V09-06-01)
+  o Fix in DicomHandler for problems when using DCM files other than
+    those provided in the examples.
+  o Added DicomPhantomZSliceMerged class to handle inconsistencies in
+    DCM file meta-data.
+  o Extended DicomPhantomZSliceHeader class to hold density and material ID
+    data and the printing of data to files instead of DicomHandler.
+  o Added more anonymous DICOM files and adapted configuration scripts.
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/medical/electronScattering2 (exampleES2-V09-06-04)
+  o PhysListEmStandard: removed G4UrbanMscModel95; use default model.
+- extended/medical/fanoCavity (fano-V09-06-08)
+- extended/medical/fanoCavity2 (fano2-V09-06-08)
+  o PhysListEmStandard_option3: use G4UrbanMscModel instead of Urban95.
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/parallel (exparallel-V09-06-01)
+  o Added G4Ellipsoid among solids enabled for parameterisation
+    in examples ParN02, ParN02tbb, ParN04 and MPI/exMPI02.
+- extended/parallel/ParN02tbb (TBB-V09-06-05)
+  o Created BeamOn method to ensure that RunTermination() is not
+    called just after tasks are created (ie. before they are executed).
+  o Added new virtual methods to initialize TBB.
+  o Changed G4tbbWorkerRunManager to derive directly from G4RunManager;
+    adapted satellite classes.
+- extended/parameterisations/gflash (exgflash-V09-06-02)
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/persistency/gdml/G02 (G02-V09-06-00)
+- extended/persistency/P01 (exampleP01-V09-06-03)
+  o Added G4Ellipsoid among solids for parameterisation.
+- extended/polarisation/Pol01 (expol01-V09-06-00)
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/radioactivedecay/rdecay01 (rdecay01-V09-06-06)
+  o In PhysicsList set the half life threshold of the G4RadioactiveDecay
+    to nanosecond.
+- extended/radioactivedecay/rdecay02 (rdecay02-V09-06-04)
+  o exrdmPhysicsList: use standard constructors for EM physics, removed
+    local low-energy EM physics. Use standard constructors for hadronic
+    builders instead of obsolete.
+  o Removed unused inclusion of G4UrbanMscModel93.
+- extended/runAndEvent/RE01 (exampleRE01-V09-06-05)
+  o Added G4Ellipsoid among solids enabled for parameterisation.
+- extended/runAndEvent/RE02 (exampleRE02-V09-06-04)
+  o Fixed compilation warning on clang32 for unused data members.
+- extended/runAndEvent/RE04 (exampleRE04-V09-06-03)
+- extended/runAndEvent/RE05 (exampleRE05-V09-06-07)
+  o Added G4Ellipsoid among solids enabled for parameterisation.
+
+tests                                            tests-V09-06-08
+-----
+- Updated reference outputs and tools.
+- tests/test13 (test13-V09-06-01)
+  o Tst13PhysicsList: removed G4LFission model and process (redundant);
+    replaced G4LCapture model with G4NeutronRadCapture;
+    replaced G4LElastic model with G4HadronElastic.
+- tests/test17 (test17-V09-06-03)
+  o Removed use of G4UrbanMscModel93.
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test18 (test18-V09-06-08)
+  o Moved decay product exception from run action to event action to
+    avoid end-of-run FP exception in MT mode. Incremented number of
+    secondaries in stepping action.
+  o Tst18PrimaryGeneratorAction: for thread safety, use
+    G4ParticleGun::SetParticleMomentumDirection instead of UI commands
+    to set ion direction.
+  o Removed while-loop from Tst18PhysicsList::ConstructGeneral() and
+    directly access G4ParticleTable::GetParticleTable()->GetGenericIon()
+    method to get the pointer.
+  o Throw an exception if the number of particles is equal to the number of
+    projectiles (i.e. no decay products/stable projectile).
+  o test18.in, test18.large_N.in: added commands /particle/createAllIsomer
+    to make metastable states available.
+    Replaced '/gun/ion Z A Z E' with '/gun/ionL Z A Z Lvl'.
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test22 (test22-V09-06-17)
+  o Renamed all main source files, xxx.cc, as test22_xxx.cc.
+  o Fixed compilation warning on clang32 for unused data members.
+  o Fixes to configuration files.
+- tests/test24 (test24-V09-06-02)
+  o Tst24PhysicsList: removed G4LFission model and process (redundant);
+    replaced G4LCapture model with G4NeutronRadCapture;
+    replaced G4LElastic model with G4HadronElastic.
+- tests/test25 (test25-V09-06-03)
+  o Tst25PhysicsList: removed all LE (Gheisha) models and replaced with
+    Bertini, FTFP and BinaryLightIon models.
+  o Removed redundant fission process (including G4LFission model).
+  o test25.in: increased events per run from 1 to 100.
+  o Added CMakeLists_Standalone.txt to build test outside of system testing.
+  o README: update for building in cmake
+- tests/test27 (test27-V09-06-03)
+- tests/test28 (test28-V09-06-02)
+  o Removed fission process and model, replaced G4LCapture with
+    G4NeutronRadCapture.
+- tests/test31 (test31-V09-06-03)
+- tests/test33 (test33-V09-06-01)
+- tests/test34 (test34-V09-06-00)
+- tests/test36 (test36-V09-06-05)
+- tests/test37 (test37-V09-06-04)
+- tests/test40 (test40-V09-06-00)
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test41 (test41-V09-06-05)
+  o Added test of GS model. Removed use of G4UrbanMscModel93 and 95.
+- tests/test44 (test44-V09-06-02)
+- tests/test45 (test45-V09-06-01)
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test46 (test46-V09-06-07)
+  o Renamed G4UrbanMscModel93 to UrbanMscModel93.
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test50 (test50-V09-06-06)
+  o Removed use of G4UrbanMscModel93.
+  o Corrected behavior if G4ANALYSIS_USE define is set.
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test53 (test53-V09-06-01)
+- tests/test54 (test54-V09-06-01)
+- tests/test55 (test55-V09-06-01)
+- tests/test56 (test56-V09-06-03)
+- tests/test58 (test58-V09-06-01)
+- tests/test60 (test60-V09-06-06)
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test61 (test61-V09-06-04)
+  o Tst61PhysicsList: removed fission (redundant) and replaced
+    G4LCapture model with G4NeutronRadCapture.
+- tests/test67 (test67-V09-06-14)
+  o Removed use of G4UrbanMscModel93.
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test70 (test70-V09-06-00)
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test73 (test73-V09-06-02)
+  o Removed use of G4UrbanMscModel93.
+- tests/test74 (test74-V09-06-01)
+  o Fixed compilation warning on clang32 for unused data members.
+- tests/test201 (test201-V09-06-00)
+  o Added G4Ellipsoid among solids enabled for parameterisation.
