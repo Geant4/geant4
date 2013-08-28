@@ -35,7 +35,6 @@
 
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
 
 #include "G4Transform3D.hh"
 #include "G4VisAttributes.hh"
@@ -306,7 +305,7 @@ public:
 private:
   G4VisCommandSceneAddMagneticField (const G4VisCommandSceneAddMagneticField&);
   G4VisCommandSceneAddMagneticField& operator = (const G4VisCommandSceneAddMagneticField&);
-  G4UIcmdWithAnInteger* fpCommand;
+  G4UIcmdWithoutParameter* fpCommand;
 };
 
 class G4VisCommandSceneAddPSHits: public G4VVisCommandScene {

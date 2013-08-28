@@ -45,7 +45,7 @@ class G4MagneticFieldModel: public G4VModel {
 
 public: // With description
 
-  G4MagneticFieldModel(G4int nDataPointsPerHalfScene = 10);
+  G4MagneticFieldModel();
   virtual ~G4MagneticFieldModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
@@ -56,11 +56,6 @@ private:
   // Private copy contructor and assignment to forbid use...
   G4MagneticFieldModel (const G4MagneticFieldModel&);
   G4MagneticFieldModel& operator = (const G4MagneticFieldModel&);
-
-  // No. of data points sampled per half scene.
-  // Note that total number of data poinrs sampled is (2*n+1)^3, which
-  // can get very big very soon.
-  G4int fNDataPointsPerHalfScene;
 };
 
 #endif

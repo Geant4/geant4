@@ -20,20 +20,6 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
-27th August 2013  John Allison  (modeling-V09-06-13)
-- G4MagneticFieldModel:
-  o Removed diagnostic print statements.
-  o Note: Remaining print statements need converting to G4Exception.
-
-26th August 2013  John Allison  (modeling-V09-06-12)
-- G4MagneticFieldModel: Variable no. of data points per half scene.
-
-25th August 2013  John Allison  (modeling-V09-06-11)
-- G4MagneticFieldModel: Bug fix.
-
-25th August 2013  John Allison  (modeling-V09-06-10)
-- G4MagneticFieldModel: First attempt.
-
 24th August 2013  John Allison  (modeling-V09-06-09 coworks visman-V09-06-11)
 - Removed G4FlavoredParallelWorldModel.
 

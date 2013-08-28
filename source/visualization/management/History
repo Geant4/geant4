@@ -26,10 +26,6 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-26th August 2013  John Allison  (visman-V09-06-12)
-- /vis/scene/add/magneticField
-  o Added integer parameter: No. of data points per half scene.
-
 24th August 2013  John Allison  (visman-V09-06-11 coworks modeling-V09-06-09)
 - Removed G4FlavoredParallelWorldModel.
 
