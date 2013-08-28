@@ -9,6 +9,10 @@ $Id$
 
                       ---------------------
 
+28.08.2013 - Gabriele Cosmo (DICOM-V09-06-02)
+           Added G4Ellipsoid to solids enabled for parameterisation in
+           DicomNestedPhantomParameterisation.
+
 29.07.2013 - Peter Gumplinger (DICOM-V09-06-01)
            Fixed MAC/clang32 compilation warnings in DicomRunAction and
            DiconIntersectVolume classes
