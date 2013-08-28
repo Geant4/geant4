@@ -379,7 +379,7 @@ examples                                         examples-V09-06-08
 - extended/hadronic/Hadr02 (exhadr02-V09-06-04)
 - extended/hadronic/Hadr03 (exhadr03-V09-06-21)
   o Fixed compilation warning on clang32 for unused data members.
-- extended/medical/DICOM (DICOM-V09-06-01)
+- extended/medical/DICOM (DICOM-V09-06-02)
   o Fix in DicomHandler for problems when using DCM files other than
     those provided in the examples.
   o Added DicomPhantomZSliceMerged class to handle inconsistencies in
@@ -387,6 +387,8 @@ examples                                         examples-V09-06-08
   o Extended DicomPhantomZSliceHeader class to hold density and material ID
     data and the printing of data to files instead of DicomHandler.
   o Added more anonymous DICOM files and adapted configuration scripts.
+  o Added G4Ellipsoid to solids enabled for parameterisation in
+    DicomNestedPhantomParameterisation.
   o Fixed compilation warning on clang32 for unused data members.
 - extended/medical/electronScattering2 (exampleES2-V09-06-04)
   o PhysListEmStandard: removed G4UrbanMscModel95; use default model.
@@ -420,7 +422,9 @@ examples                                         examples-V09-06-08
   o Removed unused inclusion of G4UrbanMscModel93.
 - extended/runAndEvent/RE01 (exampleRE01-V09-06-05)
   o Added G4Ellipsoid among solids enabled for parameterisation.
-- extended/runAndEvent/RE02 (exampleRE02-V09-06-04)
+- extended/runAndEvent/RE02 (exampleRE02-V09-06-05)
+  o Added G4Ellipsoid to solids enabled for parameterisation in
+    RE02NestedPhantomParameterisation.
   o Fixed compilation warning on clang32 for unused data members.
 - extended/runAndEvent/RE04 (exampleRE04-V09-06-03)
 - extended/runAndEvent/RE05 (exampleRE05-V09-06-07)
