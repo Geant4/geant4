@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
+ Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -133,6 +133,7 @@ hBrems:   for  proton    SubType= 3
 hPairProd:   for  proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -185,6 +186,7 @@ hBrems:   for  anti_proton    SubType= 3
 hPairProd:   for  anti_proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -210,6 +212,7 @@ hBrems:   for  kaon+    SubType= 3
 hPairProd:   for  kaon+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -235,6 +238,7 @@ hBrems:   for  kaon-    SubType= 3
 hPairProd:   for  kaon-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -261,6 +265,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -293,6 +298,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -324,6 +330,7 @@ hBrems:   for  pi+    SubType= 3
 hPairProd:   for  pi+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -349,6 +356,7 @@ hBrems:   for  pi-    SubType= 3
 hPairProd:   for  pi-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -380,7 +388,7 @@ hPairProd:   for  pi-    SubType= 4
                            Hadronic Processes for anti_proton
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 100 MeV
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
         Model:              AntiAElastic: 100 MeV ---> 100 TeV
      Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
@@ -482,18 +490,15 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: nCapture
-        Model:                G4LCapture: 0 eV  ---> 20 TeV
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
-
-  Process: nFission
-        Model:                G4LFission: 0 eV  ---> 20 TeV
-     Cr_sctns:          GheishaFissionXS: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for pi+
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1 GeV
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
@@ -514,7 +519,7 @@ hPairProd:   for  pi-    SubType= 4
                            Hadronic Processes for pi-
 
   Process: hadElastic
-        Model:              hElasticLHEP: 0 eV  ---> 1 GeV
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
         Model:           hElasticGlauber: 1 GeV ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
@@ -550,7 +555,97 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
-   time(s) spent user  time: 10.67s, wall time: 31.11s
+Defining process manager for Pb204
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Pb206
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Pb207
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Pb208
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Pb200
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Au194
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Ce135
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Xe124
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Yb167
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Pb203
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+   time(s) spent user  time: 11.82s, wall time: 23.75s
 #
 # neutron at 100 GeV in Pb
 #
@@ -560,7 +655,7 @@ hPairProd:   for  pi-    SubType= 4
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 8.55s, wall time: 25.63s
+   time(s) spent user  time: 8.58s, wall time: 17.18s
 #
 # pi+ at 100 GeV in Pb
 #
@@ -570,7 +665,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 7.85s, wall time: 23.44s
+   time(s) spent user  time: 7.73s, wall time: 15.54s
 #
 # pi- at 100 GeV in Pb
 #
@@ -580,7 +675,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 7.68s, wall time: 19.5s
+   time(s) spent user  time: 8.06s, wall time: 16.16s
 #
 # kaon+ at 100 GeV in Pb
 #
@@ -590,7 +685,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 8.88s, wall time: 26.1s
+   time(s) spent user  time: 9.86s, wall time: 19.67s
 #
 # kaon- at 100 GeV in Pb
 #
@@ -600,7 +695,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 7.49s, wall time: 20.74s
+   time(s) spent user  time: 8.64s, wall time: 17.24s
 #
 # kaon0S at 100 GeV in Pb
 #
@@ -610,7 +705,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 8.8s, wall time: 24.55s
+   time(s) spent user  time: 8.22s, wall time: 16.42s
 #
 # kaon0L at 100 GeV in Pb
 #
@@ -620,7 +715,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 7.57s, wall time: 21.81s
+   time(s) spent user  time: 8.31s, wall time: 16.6s
 #
 # proton at 100 GeV in Al
 #
@@ -727,6 +822,7 @@ hBrems:   for  proton    SubType= 3
 hPairProd:   for  proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -779,6 +875,7 @@ hBrems:   for  anti_proton    SubType= 3
 hPairProd:   for  anti_proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -804,6 +901,7 @@ hBrems:   for  kaon+    SubType= 3
 hPairProd:   for  kaon+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -829,6 +927,7 @@ hBrems:   for  kaon-    SubType= 3
 hPairProd:   for  kaon-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -855,6 +954,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -887,6 +987,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -918,6 +1019,7 @@ hBrems:   for  pi+    SubType= 3
 hPairProd:   for  pi+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -943,9 +1045,10 @@ hBrems:   for  pi-    SubType= 3
 hPairProd:   for  pi-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-   time(s) spent user  time: 1.87s, wall time: 6.35s
+   time(s) spent user  time: 1.8s, wall time: 3.71s
 #
 # neutron at 100 GeV in Al
 #
@@ -954,7 +1057,7 @@ hPairProd:   for  pi-    SubType= 4
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.04s, wall time: 2.83s
+   time(s) spent user  time: 1.08s, wall time: 2.07s
 #
 # pi+ at 100 GeV in Al
 #
@@ -963,7 +1066,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 0.96s, wall time: 2.87s
+   time(s) spent user  time: 0.96s, wall time: 1.97s
 #
 # pi- at 100 GeV in Al
 #
@@ -972,7 +1075,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 0.97s, wall time: 2.29s
+   time(s) spent user  time: 0.9s, wall time: 1.8s
 #
 # kaon+ at 100 GeV in Al
 #
@@ -981,7 +1084,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 0.89s, wall time: 2.49s
+   time(s) spent user  time: 0.98s, wall time: 1.98s
 #
 # kaon- at 100 GeV in Al
 #
@@ -990,7 +1093,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 0.99s, wall time: 3.02s
+   time(s) spent user  time: 0.9s, wall time: 1.79s
 #
 # kaon0S at 100 GeV in Al
 #
@@ -999,7 +1102,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 0.91s, wall time: 2.32s
+   time(s) spent user  time: 0.91s, wall time: 1.81s
 #
 # kaon0L at 100 GeV in Al
 #
@@ -1008,7 +1111,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 0.82s, wall time: 1.93s
+   time(s) spent user  time: 0.79s, wall time: 1.59s
 #
 # proton at 100 GeV in Air
 #
@@ -1115,6 +1218,7 @@ hBrems:   for  proton    SubType= 3
 hPairProd:   for  proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1167,6 +1271,7 @@ hBrems:   for  anti_proton    SubType= 3
 hPairProd:   for  anti_proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1192,6 +1297,7 @@ hBrems:   for  kaon+    SubType= 3
 hPairProd:   for  kaon+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1217,6 +1323,7 @@ hBrems:   for  kaon-    SubType= 3
 hPairProd:   for  kaon-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1243,6 +1350,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1275,6 +1383,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1306,6 +1415,7 @@ hBrems:   for  pi+    SubType= 3
 hPairProd:   for  pi+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1331,9 +1441,10 @@ hBrems:   for  pi-    SubType= 3
 hPairProd:   for  pi-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-   time(s) spent user  time: 0s, wall time: 0.01s
+   time(s) spent user  time: 0.01s, wall time: 0.01s
 #
 # neutron at 100 GeV in Air
 #
@@ -1351,7 +1462,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0.01s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0s
 #
 # pi- at 100 GeV in Air
 #
@@ -1369,7 +1480,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0.01s, wall time: 0.01s
 #
 # kaon- at 100 GeV in Air
 #
@@ -1387,7 +1498,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0.01s, wall time: 0s
+   time(s) spent user  time: 0s, wall time: 0s
 #
 # kaon0L at 100 GeV in Air
 #
@@ -1406,7 +1517,7 @@ SimpleBox is now made of Air
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.09s, wall time: 0.29s
+   time(s) spent user  time: 0.14s, wall time: 0.34s
 #
 # anti_neutron at 10 GeV in Pb
 #
@@ -1416,7 +1527,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.1s, wall time: 0.31s
+   time(s) spent user  time: 0.22s, wall time: 0.42s
 #
 # anti_deuteron at 10 GeV in Pb
 #
@@ -1426,9 +1537,8 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2114 2212
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2114 2112
-   time(s) spent user  time: 0.19s, wall time: 0.51s
+Unknown anti-baryon for FTF annihilation: PDGcodes - -2214 2112
+   time(s) spent user  time: 0.29s, wall time: 0.59s
 #
 # anti_triton at 10 GeV in Pb
 #
@@ -1438,7 +1548,7 @@ Unknown anti-baryon for FTF annihilation: PDGcodes - -2114 2112
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.03s
+   time(s) spent user  time: 0.03s, wall time: 0.03s
 #
 # anti_He3 at 10 GeV in Pb
 #
@@ -1448,7 +1558,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.04s, wall time: 0.13s
+   time(s) spent user  time: 0.03s, wall time: 0.13s
 #
 # anti_alpha at 10 GeV in Pb
 #
@@ -1458,7 +1568,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.11s, wall time: 0.3s
+   time(s) spent user  time: 0.04s, wall time: 0.04s
 #
 # anti_proton at 10 GeV in Al
 #
@@ -1467,7 +1577,7 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.01s
+   time(s) spent user  time: 0.01s, wall time: 0.01s
 #
 # anti_neutron at 10 GeV in Al
 #
@@ -1476,7 +1586,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.01s, wall time: 0.02s
+   time(s) spent user  time: 0.01s, wall time: 0.01s
 #
 # anti_deuteron at 10 GeV in Al
 #
@@ -1485,11 +1595,8 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2214 2212
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2114 2212
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2114 2114
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2214 2212
-   time(s) spent user  time: 0.01s, wall time: 0.01s
+Unknown anti-baryon for FTF annihilation: PDGcodes - -2214 2112
+   time(s) spent user  time: 0.02s, wall time: 0.02s
 #
 # anti_triton at 10 GeV in Al
 #
@@ -1498,7 +1605,7 @@ Unknown anti-baryon for FTF annihilation: PDGcodes - -2214 2212
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.01s, wall time: 0s
+   time(s) spent user  time: 0.01s, wall time: 0.01s
 #
 # anti_He3 at 10 GeV in Al
 #
@@ -1507,7 +1614,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.01s, wall time: 0.01s
+   time(s) spent user  time: 0.01s, wall time: 0.11s
 #
 # anti_alpha at 10 GeV in Al
 #
@@ -1516,7 +1623,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.01s, wall time: 0.21s
+   time(s) spent user  time: 0.01s, wall time: 0.01s
 #
 # anti_proton at 10 GeV in Air
 #

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
+ Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -288,6 +288,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -314,6 +315,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -461,6 +463,42 @@ msc:   for pi-    SubType= 10
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
+Defining process manager for Pb208
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Pb206
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Pb207
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Pb204
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 #
 # neutron at 1 GeV in Pb
 #
@@ -477,6 +515,60 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 10
+Defining process manager for Hg205
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Hg192
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Au194
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Tl197
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Tl194
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+Defining process manager for Tl195
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 #
 # neutron at 10 GeV in Pb
 #
@@ -672,6 +764,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -698,6 +791,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -937,6 +1031,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -963,6 +1058,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
