@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
+ Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -154,6 +154,7 @@ hBrems:   for  proton    SubType= 3
 hPairProd:   for  proton    SubType= 4
       dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
       Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Sampling table 33x1001 from 7.50618 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=     1000 PeV
 
@@ -175,6 +176,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
       Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Sampling table 37x1001 from 1 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=     1000 PeV
 
@@ -196,6 +198,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
       Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Sampling table 37x1001 from 1 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=     1000 PeV
 
@@ -216,6 +219,7 @@ hBrems:   for  pi+    SubType= 3
 hPairProd:   for  pi+    SubType= 4
       dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
       Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Sampling table 36x1001 from 1.11656 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=     1000 PeV
 
@@ -236,6 +240,7 @@ hBrems:   for  pi-    SubType= 3
 hPairProd:   for  pi-    SubType= 4
       dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
       Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      Sampling table 36x1001 from 1.11656 GeV to 1e+06 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=     1000 PeV
 
@@ -298,18 +303,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.29s Real=2.59s Sys=0s
+  User=2.27s Real=2.82s Sys=0s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 462991	muPairProd : 63893	muBrems : 647
+ Number of process calls --->	muIoni : 463808	muPairProd : 64065	muBrems : 660
 
- Simulation: total CrossSection = 0.52753 /cm	 MeanFreePath = 1.8956 cm 	 massicCrossSection = 0.067031 cm2/g
+ Simulation: total CrossSection = 0.52853 /cm	 MeanFreePath = 1.892 cm 	 massicCrossSection = 0.067158 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1783091211, 617365115
+ Current couple of seeds = 270232083, 1444709301
 ----------------------------------------
 #
 /gun/particle pi+
@@ -343,7 +348,7 @@ Index : 0     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1783091211, 617365115
+ Current couple of seeds = 270232083, 1444709301
 ----------------------------------------
 Start Run processing.
 
@@ -369,17 +374,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.25s Real=2.4s Sys=0s
+  User=2.23s Real=3s Sys=0.01s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 433975	hPairProd : 59698	hBrems : 353
+ Number of process calls --->	hIoni : 435005	hPairProd : 59600	hBrems : 337
 
- Simulation: total CrossSection = 0.49403 /cm	 MeanFreePath = 2.0242 cm 	 massicCrossSection = 0.062773 cm2/g
+ Simulation: total CrossSection = 0.49494 /cm	 MeanFreePath = 2.0204 cm 	 massicCrossSection = 0.06289 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 759122171, 619493205
+ Current couple of seeds = 364471086, 1147835068
 ----------------------------------------
 #
 /gun/particle proton
@@ -413,7 +418,7 @@ Index : 0     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 759122171, 619493205
+ Current couple of seeds = 364471086, 1147835068
 ----------------------------------------
 Start Run processing.
 
@@ -439,17 +444,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.1s Real=2.16s Sys=0s
+  User=2.08s Real=2.09s Sys=0s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 434995	hPairProd : 34062	hBrems : 9
+ Number of process calls --->	hIoni : 434903	hPairProd : 34114	hBrems : 7
 
- Simulation: total CrossSection = 0.46907 /cm	 MeanFreePath = 2.1319 cm 	 massicCrossSection = 0.059602 cm2/g
+ Simulation: total CrossSection = 0.46902 /cm	 MeanFreePath = 2.1321 cm 	 massicCrossSection = 0.059596 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1671530062, 1223717994
+ Current couple of seeds = 613508996, 2103217183
 ----------------------------------------
 #
 G4 kernel has come to Quit state.

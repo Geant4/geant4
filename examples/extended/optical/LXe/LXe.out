@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
+ Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -142,6 +142,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -168,6 +169,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -215,7 +217,7 @@ Index : 3     used in the geometry : Yes
 
 Start Run processing.
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for LXe  0.126 mm/MeV
-	Energy weighted position of hits in LXe : (-0.219476,0.220233,-103.498)
+	Energy weighted position of hits in LXe : (-0.21948,0.220235,-103.498)
 	Total energy deposition in scintillator : 511 (keV)
 	Reconstructed position of hits in LXe : (-0.369197,0.730354,-17.3753)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
@@ -254,7 +256,7 @@ Unacounted for photons in this event : 0
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.57s Real=0.68s Sys=0s
+  User=0.58s Real=0.88s Sys=0.01s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
+ Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -209,12 +209,21 @@ Available colours:
 #
 /run/beamOn 10000
 ### Run 0 start.
+Defining process manager for O18
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART130
+      issued by : G4IonTable::AddProcessManager()
+Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 
 ---> end of event: 0
 
 --------------------End of Global Run----------------------- 
- The run was 10000 events  Nb of 'good' e+ annihilations: 1273
- Total dose in patient : 304.606 picoGy 
+ The run was 10000 events  Nb of 'good' e+ annihilations: 1274
+ Total dose in patient : 304.401 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

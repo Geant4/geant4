@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-07    (2-August-2013)
+ Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -251,6 +251,7 @@ hBrems:   for  proton    SubType= 3
 hPairProd:   for  proton    SubType= 4
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
+      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -326,6 +327,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -348,6 +350,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -369,6 +372,7 @@ hBrems:   for  pi+    SubType= 3
 hPairProd:   for  pi+    SubType= 4
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -390,6 +394,7 @@ hBrems:   for  pi-    SubType= 3
 hPairProd:   for  pi-    SubType= 4
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
       Lambda tables from threshold to 10 TeV in 240 bins, spline: 1
+      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -452,7 +457,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.67s Real=1.82s Sys=0s
+  User=1.7s Real=1.8s Sys=0s
 
  ======================== run summary ======================
 
@@ -462,17 +467,17 @@ Run Summary
 
  TrackLength= 1.0004 cm 	 nb of steps= 2.5074  stepSize= 3.9899 mm 
 
- d-rays  : eLoss/primary= 244.12 keV	  nb of d-rays= 0.23308  <Tkin>= 1.0474 MeV  Tmin= 351.9 keV  Tmax= 4.9325 MeV
+ d-rays  : eLoss/primary= 244.2 keV	  nb of d-rays= 0.2331  <Tkin>= 1.0476 MeV  Tmin= 351.9 keV  Tmax= 4.9325 MeV
 
- gamma   : eLoss/primary= 160.83 keV	  nb of gammas= 0.27671  <Tkin>= 581.22 keV  Tmin= 2.9408 keV  Tmax= 9.7286 MeV
+ gamma   : eLoss/primary= 160.91 keV	  nb of gammas= 0.27671  <Tkin>= 581.5 keV  Tmin= 2.9408 keV  Tmax= 9.7286 MeV
 
  deposit : eLoss/primary= 1.7327 MeV	 <dEcut > table= 1.7337 MeV   ---> simul/reference= 0.99946
 
- total   : eLoss/primary= 2.1377 MeV	 <dEfull> table= 2.1387 MeV   ---> simul/reference= 0.99951
+ total   : eLoss/primary= 2.1378 MeV	 <dEfull> table= 2.1387 MeV   ---> simul/reference= 0.99958
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 345611154, 166225783
+ Current couple of seeds = 1712041111, 802871252
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
