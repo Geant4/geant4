@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 31st, 2013  M.Asai (event-V09-06-17)
+- Fix the way of detecting improper process namager.
+
+August 29th, 2013  M.Asai (event-V09-06-16)
+- Retagged with more optional verbosity.
+
+August 28th, 2013  M.Asai (event-V09-06-15)
+- Split class mechanism of G4ParticleDefinition has been changed.
+  Now all general ions share the object ID with GenericIon so that
+  TLS pointers to G4ProcessManager are not created for such ions.
+
 August 23rd, 2013  M.Asai (event-V09-06-14)
 - G4StackManager now checks a track having proper process manager.
 

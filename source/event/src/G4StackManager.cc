@@ -82,10 +82,15 @@ const{ return true; }
 #include "G4ParticleDefinition.hh"
 #include "G4VProcess.hh"
 
+//Needed for temporal service
+#include "G4ParticleTable.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+
 G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajectory)
 {
   const G4ParticleDefinition* pd = newTrack->GetParticleDefinition();
-  if(!(pd->GetProcessManager()))
+  if(pd->GetParticleDefinitionID() < 0)
   {
     G4ExceptionDescription ED;
     ED << "A track without proper process manager is pushed into the track stack.\n"
@@ -100,8 +105,47 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajector
       else
       { ED << "creaded by unknown process."; }
     }
-    G4Exception("G4StackManager::PushOneTrack","Event10051",
+////  Temporal care of setting process manager for general ion.
+    if(pd->IsGeneralIon())
+    {
+      ED << "\n Process manager is temporally set, but this operation is thread-unsafe\n"
+         << "and will be replaced with other methods at version 10.0.";
+      G4Exception("G4StackManager::PushOneTrack","Event10051",JustWarning,ED);
+      G4ParticleDefinition* genericIon = G4ParticleTable::GetParticleTable()->GetGenericIon();
+      G4ProcessManager* pman=0;
+      if (genericIon!=0) pman = genericIon->GetProcessManager();
+      if ((genericIon ==0) || (pman==0)){
+        G4Exception( "G4IonTable::AddProcessManager()","PART10052", FatalException,
+                   "Can not define process manager. GenericIon is not available.");
+      }
+      G4ParticleDefinition* ion = const_cast<G4ParticleDefinition*>(pd);
+      ion->SetParticleDefinitionID(genericIon->GetParticleDefinitionID());
+#ifdef G4VERBOSE
+      if( verboseLevel > 1 )
+      {
+        G4ProcessManager* ionPman = ion->GetProcessManager();
+        G4cout << "Now " << ion->GetParticleName() << " has a process manaegr at " << ionPman
+               << " that is equivalent to " << pman << G4endl;
+        G4ProcessVector* ionPvec = ionPman->GetProcessList();
+        for(G4int ip1=0;ip1<ionPvec->size();ip1++)
+        {
+          G4cout << " " << ip1 << " - " << (*ionPvec)[ip1]->GetProcessName()
+                 << " AtRest " << ionPman->GetAtRestIndex((*ionPvec)[ip1])
+                 << ", AlongStep " << ionPman->GetAlongStepIndex((*ionPvec)[ip1])
+                 << ", PostStep " << ionPman->GetPostStepIndex((*ionPvec)[ip1])
+                 << G4endl;
+        }
+      }
+#endif
+    }
+////  End of temporal care of setting process manager
+    else
+    {
+      G4Exception("G4StackManager::PushOneTrack","Event10051",
                  FatalException,ED);
+      delete newTrack;
+      return GetNUrgentTrack();
+    }
   }
     
   G4ClassificationOfNewTrack classification = DefaultClassification( newTrack ); 
