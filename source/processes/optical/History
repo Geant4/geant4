@@ -16,6 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th August 2014 P. Gumplinger (op-V09-06-06)
+- move theStatus assignment for Dichroic where the decision is actually made
+- made the necessary and required modifications for G4OpBoundaryProcess to
+  work in situations with parallel worlds
+- G4OpBoundaryProcess will now invoke the ProcessHit method of the sensitive
+  detector associated with the PostStepPoint volume when optical photons are
+  detected at the entrance boundary
+
 14th June 2014 P. Gumplinger (op-V09-06-05)
 - fix coverity errors in G4OpBoundaryProcess
 
@@ -34,7 +42,7 @@ committal in the CVS repository !
   is being absorbed/shifted. Please, see bug report on the Forum:
   http://hypernews.slac.stanford.edu/HyperNews/geant4/get/opticalphotons/509.html
   Thanks to Ben Loer (FNAL)
-- Add the capability of simulating the transmission of a dichronic filter;
+- Add the capability of simulating the transmission of a dichroic filter;
 
   In this first implementation, the photon is either reflected or transmitted
   without changing direction. Surface->SetType(dielectric_dichroic);

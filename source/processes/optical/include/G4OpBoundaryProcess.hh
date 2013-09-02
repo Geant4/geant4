@@ -205,6 +205,9 @@ private:
 
         void BoundaryProcessVerbose(void) const;
 
+        // Invoke SD for post step point if the photon is 'detected'
+        G4bool InvokeSD(const G4Step* step);
+
 private:
 
 	G4double thePhotonMomentum;

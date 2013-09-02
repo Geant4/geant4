@@ -79,6 +79,9 @@
 #include "G4OpBoundaryProcess.hh"
 #include "G4GeometryTolerance.hh"
 
+#include "G4VSensitiveDetector.hh"
+#include "G4ParallelWorldProcess.hh"
+
 #include "G4SystemOfUnits.hh"
 
 /////////////////////////
@@ -155,6 +158,7 @@ G4OpBoundaryProcess::~G4OpBoundaryProcess(){}
 // PostStepDoIt
 // ------------
 //
+
 G4VParticleChange*
 G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
@@ -163,30 +167,44 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         aParticleChange.Initialize(aTrack);
         aParticleChange.ProposeVelocity(aTrack.GetVelocity());
 
-        G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
-        G4StepPoint* pPostStepPoint = aStep.GetPostStepPoint();
+        // Get hyperStep from  G4ParallelWorldProcess
+        //  NOTE: PostSetpDoIt of this process should be
+        //        invoked after G4ParallelWorldProcess!
+
+        const G4Step* pStep = &aStep;
+
+        const G4Step* hStep = G4ParallelWorldProcess::GetHyperStep();
+        
+        if (hStep) pStep = hStep;
+
+        G4bool isOnBoundary =
+                (pStep->GetPostStepPoint()->GetStepStatus() == fGeomBoundary);
+
+        if (isOnBoundary) {
+           Material1 = pStep->GetPreStepPoint()->GetMaterial();
+           Material2 = pStep->GetPostStepPoint()->GetMaterial();
+        } else {
+           theStatus = NotAtBoundary;
+           if ( verboseLevel > 0) BoundaryProcessVerbose();
+           return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+        }
+
+        G4VPhysicalVolume* thePrePV  =
+                               pStep->GetPreStepPoint() ->GetPhysicalVolume();
+        G4VPhysicalVolume* thePostPV =
+                               pStep->GetPostStepPoint()->GetPhysicalVolume();
 
         if ( verboseLevel > 0 ) {
            G4cout << " Photon at Boundary! " << G4endl;
-           G4VPhysicalVolume* thePrePV = pPreStepPoint->GetPhysicalVolume();
-           G4VPhysicalVolume* thePostPV = pPostStepPoint->GetPhysicalVolume();
            if (thePrePV)  G4cout << " thePrePV:  " << thePrePV->GetName()  << G4endl;
            if (thePostPV) G4cout << " thePostPV: " << thePostPV->GetName() << G4endl;
         }
 
-        if (pPostStepPoint->GetStepStatus() != fGeomBoundary){
-	        theStatus = NotAtBoundary;
-                if ( verboseLevel > 0) BoundaryProcessVerbose();
-	        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
-	}
 	if (aTrack.GetStepLength()<=kCarTolerance/2){
 	        theStatus = StepTooSmall;
                 if ( verboseLevel > 0) BoundaryProcessVerbose();
 	        return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 	}
-
-	Material1 = pPreStepPoint  -> GetMaterial();
-	Material2 = pPostStepPoint -> GetMaterial();
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
@@ -199,17 +217,20 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
            G4cout << " Old Polarization:       " << OldPolarization << G4endl;
         }
 
-        G4ThreeVector theGlobalPoint = pPostStepPoint->GetPosition();
-
-        G4Navigator* theNavigator =
-                     G4TransportationManager::GetTransportationManager()->
-                                              GetNavigatorForTracking();
+        G4ThreeVector theGlobalPoint = pStep->GetPostStepPoint()->GetPosition();
 
         G4bool valid;
         //  Use the new method for Exit Normal in global coordinates,
-        //    which provides the normal more reliably. 
-        theGlobalNormal = 
-                     theNavigator->GetGlobalExitNormal(theGlobalPoint,&valid);
+        //    which provides the normal more reliably.
+
+        // ID of Navigator which limits step
+
+        G4int hNavId = G4ParallelWorldProcess::GetHypNavigatorID();
+        std::vector<G4Navigator*>::iterator iNav =
+                G4TransportationManager::GetTransportationManager()->
+                                         GetActiveNavigatorsIterator();
+        theGlobalNormal =
+                   (iNav[hNavId])->GetGlobalExitNormal(theGlobalPoint,&valid);
 
         if (valid) {
           theGlobalNormal = -theGlobalNormal;
@@ -287,32 +308,24 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4LogicalSurface* Surface = NULL;
 
-        Surface = G4LogicalBorderSurface::GetSurface
-	          (pPreStepPoint ->GetPhysicalVolume(),
-	           pPostStepPoint->GetPhysicalVolume());
+        Surface = G4LogicalBorderSurface::GetSurface(thePrePV, thePostPV);
 
         if (Surface == NULL){
-	  G4bool enteredDaughter=(pPostStepPoint->GetPhysicalVolume()
-				  ->GetMotherLogical() ==
-				  pPreStepPoint->GetPhysicalVolume()
-				  ->GetLogicalVolume());
+          G4bool enteredDaughter= (thePostPV->GetMotherLogical() ==
+                                   thePrePV ->GetLogicalVolume());
 	  if(enteredDaughter){
-	    Surface = G4LogicalSkinSurface::GetSurface
-	      (pPostStepPoint->GetPhysicalVolume()->
-	       GetLogicalVolume());
+	    Surface = 
+              G4LogicalSkinSurface::GetSurface(thePostPV->GetLogicalVolume());
 	    if(Surface == NULL)
-	      Surface = G4LogicalSkinSurface::GetSurface
-	      (pPreStepPoint->GetPhysicalVolume()->
-	       GetLogicalVolume());
+	      Surface =
+                G4LogicalSkinSurface::GetSurface(thePrePV->GetLogicalVolume());
 	  }
 	  else {
-	    Surface = G4LogicalSkinSurface::GetSurface
-	      (pPreStepPoint->GetPhysicalVolume()->
-	       GetLogicalVolume());
+	    Surface =
+              G4LogicalSkinSurface::GetSurface(thePrePV->GetLogicalVolume());
 	    if(Surface == NULL)
-	      Surface = G4LogicalSkinSurface::GetSurface
-	      (pPostStepPoint->GetPhysicalVolume()->
-	       GetLogicalVolume());
+	      Surface =
+                G4LogicalSkinSurface::GetSurface(thePostPV->GetLogicalVolume());
 	  }
 	}
 
@@ -512,6 +525,8 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
            G4double finalVelocity = groupvel->Value(thePhotonMomentum);
            aParticleChange.ProposeVelocity(finalVelocity);
         }
+
+        if ( theStatus == Detection ) InvokeSD(pStep);
 
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
@@ -824,8 +839,6 @@ void G4OpBoundaryProcess::DielectricLUT()
 
 void G4OpBoundaryProcess::DielectricDichroic()
 {
-        theStatus = Dichroic;
-
         // Calculate Angle between Normal and Photon Momentum
         G4double anglePhotonToNormal = OldMomentum.angle(-theGlobalNormal);
 
@@ -859,6 +872,7 @@ void G4OpBoundaryProcess::DielectricDichroic()
         if ( !G4BooleanRand(theTransmittance) ) // Not transmitted, so reflect
            DoReflection();
         else {
+           theStatus = Dichroic;
            NewMomentum = OldMomentum;
            NewPolarization = OldPolarization;
         }
@@ -1229,4 +1243,15 @@ void G4OpBoundaryProcess::CalculateReflectivity()
   theReflectivity =
              GetReflectivity(E1_perp, E1_parl, incidentangle,
                                                  RealRindex, ImaginaryRindex);
+}
+
+G4bool G4OpBoundaryProcess::InvokeSD(const G4Step* pStep)
+{
+  G4Step aStep = *pStep;
+
+  aStep.AddTotalEnergyDeposit(thePhotonMomentum);
+
+  G4VSensitiveDetector* sd = aStep.GetPostStepPoint()->GetSensitiveDetector();
+  if (sd) return sd->Hit(&aStep);
+  else return false;
 }
