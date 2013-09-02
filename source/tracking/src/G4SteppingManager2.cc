@@ -50,6 +50,7 @@
 #include "G4TransportationManager.hh"
 #include "G4SteppingManager.hh"
 #include "G4LossTableManager.hh"
+#include "G4ParticleTable.hh"
 
 /////////////////////////////////////////////////
 void G4SteppingManager::GetProcessNumber()
@@ -368,6 +369,8 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	 // it invokes a rest process at the beginning of the tracking
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+           if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
+           { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
@@ -442,6 +445,8 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 	 // it invokes a rest process at the beginning of the tracking
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+           if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
+           { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
@@ -558,6 +563,8 @@ void G4SteppingManager::InvokePSDIP(size_t np)
             // it invokes a rest process at the beginning of the tracking
 	    if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+              if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
+              { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
 	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 		fSecondary->push_back( tempSecondaryTrack );

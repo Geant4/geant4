@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th August 2013 M.Asai (tracking-V09-06-04)
+- Add protection against null pointer for the process manager of
+  secondaries in case secondaries are generated at zero kinetic energy.
+
 11th April 2013 G.Cosmo (tracking-V09-06-03)
 - Cleanup of automatic changes for MT in classes: G4RichTrajectory,
   G4RichTrajectoryPoint, G4SmoothTrajectory, G4SmoothTrajectoryPoint,
