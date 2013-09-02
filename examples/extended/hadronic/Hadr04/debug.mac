@@ -1,0 +1,16 @@
+
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 2
+#
+/testhadr/det/setMat Water_ts 
+/testhadr/det/setSize 1 m
+#
+/run/initialize
+#
+/gun/particle neutron
+/gun/energy 2 MeV
+#
+/control/execute vis.mac
+#
+/run/beamOn 1
