@@ -451,7 +451,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
 
     for (size_t it=0; it<=nbinse; ++it) {
 
-      pv->PutY(it, log(kinEnergy));
+      pv->PutY(it, log(kinEnergy/MeV));
       maxPairEnergy = MaxSecondaryEnergy(particle,kinEnergy);
       /*
       G4cout << "it= " << it << " E= " << kinEnergy 
@@ -477,7 +477,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
 	if(0 == it) { pv->PutX(i, x); }
 
 	if(0.0 < coef) {
-	  G4double ep = maxPairEnergy*exp(coef*(x + dy*0.5));
+	  G4double ep = minPairEnergy*exp(-coef*(x + dy*0.5));
 
 	  // not multiplied by interval, because table 
           // will be used only for sampling
@@ -507,6 +507,9 @@ void G4MuPairProductionModel::SampleSecondaries(
 			      G4double tmax)
 {
   G4double kineticEnergy = aDynamicParticle->GetKineticEnergy();
+  //G4cout << "------- G4MuPairProductionModel::SampleSecondaries E(MeV)= " 
+  //	 << kineticEnergy << "  " 
+  //	 << aDynamicParticle->GetDefinition()->GetParticleName() << G4endl;
   G4double totalEnergy   = kineticEnergy + particleMass;
   G4double totalMomentum = 
     sqrt(kineticEnergy*(kineticEnergy + 2.0*particleMass));
@@ -518,7 +521,7 @@ void G4MuPairProductionModel::SampleSecondaries(
   G4int Z = G4lrint(anElement->GetZ());
   SetElement(Z);
 
-  // define interval of enegry transfer
+  // define interval of energy transfer
   G4double maxPairEnergy = MaxSecondaryEnergy(particle,kineticEnergy);
   G4double maxEnergy     = std::min(tmax, maxPairEnergy);
   G4double minEnergy     = std::max(tmin, minPairEnergy);
@@ -526,7 +529,7 @@ void G4MuPairProductionModel::SampleSecondaries(
   if(minEnergy >= maxEnergy) { return; }
   //G4cout << "emin= " << minEnergy << " emax= " << maxEnergy 
   //	 << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
-  //       << " ymin= " << ymin << " dy= " << dy << G4endl;
+  //      << " ymin= " << ymin << " dy= " << dy << G4endl;
 
   G4double coeff = -log(maxPairEnergy/minPairEnergy)/ymin;
 
@@ -540,9 +543,10 @@ void G4MuPairProductionModel::SampleSecondaries(
   if(maxEnergy < maxPairEnergy) {
     yymax = log(minPairEnergy/maxEnergy)/coeff;
   }
+  //G4cout << "yymin= " << yymin << "  yymax= " << yymax << G4endl;
 
   // units should not be used, bacause table was built without
-  G4double logTkin = log(kineticEnergy);
+  G4double logTkin = log(kineticEnergy/MeV);
 
   // sample e-e+ energy, pair energy first
 
@@ -578,7 +582,7 @@ void G4MuPairProductionModel::SampleSecondaries(
       x += (x2 - x)*(lnZ - lz1)/(lz2 - lz1);
     }
     //G4cout << "x= " << x << "  coeff= " << coeff << G4endl;
-    PairEnergy = maxPairEnergy*exp(x*coeff);
+    PairEnergy = minPairEnergy*exp(-x*coeff);
     
   } while((PairEnergy < minEnergy || PairEnergy > maxEnergy) && 10 > count);
 
@@ -635,6 +639,7 @@ void G4MuPairProductionModel::SampleSecondaries(
   // add secondary
   vdp->push_back(aParticle1);
   vdp->push_back(aParticle2);
+  //G4cout << "-- G4MuPairProductionModel::SampleSecondaries done" << G4endl; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

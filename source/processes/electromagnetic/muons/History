@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 August 2013: V.Ivant (emmuons-V09-06-18)
+- G4MuBremsstrahlungModel - do not repeat initialisation of elelment
+    selectors if model is shared between particle and anti-particle
+- G4MuPairProductionModel - fixed bug in energy sampling whihc couse 
+    FPE and other problems
+
 09 August 2013: V.Ivant (emmuons-V09-06-17)
 - G4MuPairProduction - improved initialisation printout
 - G4MuPairProductionModel - fixed bining to 1000 for internal 
@@ -44,7 +50,7 @@ committal in the CVS repository !
 17 June 2013: V.Ivant (emmuons-V09-06-14)
 - G4MuPairProductionModel, G4MuBremsstrahlungModel - added 
     MinPrimaryEnergy method implementation (all cross section tables
-    will start from the reaction threshold
+    will start from the reaction threshold)
 
 17 June 2013: V.Ivant (emmuons-V09-06-13)
 - G4MuPairProductionModel - added protection and warning message
