@@ -30,12 +30,17 @@
 #include "G4H1ToolsManager.hh"
 #include "G4HnManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "tools/histo/h1d"
 
 #include <fstream>
 
 using namespace G4Analysis;
+
+//
+// Constructors, destructor
+//
 
 //_____________________________________________________________________________
 G4H1ToolsManager::G4H1ToolsManager(const G4AnalysisManagerState& state)
@@ -52,6 +57,131 @@ G4H1ToolsManager::~G4H1ToolsManager()
   for (it = fH1Vector.begin(); it != fH1Vector.end(); it++ ) {
     delete (*it);
   }  
+}
+
+//
+// Utility functions
+//
+
+namespace {
+
+//_____________________________________________________________________________
+void  UpdateH1Information(G4HnInformation* information,
+                          const G4String& unitName, 
+                          const G4String& fcnName,
+                          G4BinScheme binScheme)
+{
+  G4double unit = GetUnitValue(unitName);
+  G4Fcn fcn = GetFunction(fcnName);
+  information->fXUnitName = unitName;
+  information->fYUnitName = unitName;
+  information->fXFcnName = fcnName;
+  information->fYFcnName = fcnName;
+  information->fXUnit = unit;
+  information->fYUnit = unit;
+  information->fXFcn = fcn;
+  information->fYFcn = fcn;
+  information->fXBinScheme = binScheme;
+  information->fYBinScheme = binScheme;
+}  
+
+//_____________________________________________________________________________
+void AddH1Annotation(tools::histo::h1d* h1d,
+                     const G4String& unitName, 
+                     const G4String& fcnName)
+{                                   
+  G4String axisTitle;
+  UpdateTitle(axisTitle, unitName, fcnName);        
+  h1d->add_annotation(tools::histo::key_axis_x_title(), axisTitle);
+}  
+
+//_____________________________________________________________________________
+tools::histo::h1d* CreateToolsH1(const G4String& title,
+                                 G4int nbins, G4double xmin, G4double xmax, 
+                                 const G4String& fcnName,
+                                 const G4String& binSchemeName)
+{
+  G4Fcn fcn = GetFunction(fcnName);
+  G4BinScheme binScheme = GetBinScheme(binSchemeName);
+  
+  if ( binScheme != kLogBinScheme ) {
+    if ( binScheme == kUserBinScheme ) {
+      // This should never happen, but let's make sure about it
+      // by issuing a warning
+      G4ExceptionDescription description;
+      description 
+        << "    User binning scheme setting was ignored." << G4endl
+        << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
+      G4Exception("G4H1ToolsManager::CreateH1",
+                "Analysis_W013", JustWarning, description);
+    }              
+    return new tools::histo::h1d(title, nbins, fcn(xmin), fcn(xmax));
+  }
+  else {
+    // Compute edges
+    std::vector<G4double> edges;
+    ComputeEdges(nbins, xmin, xmax, fcn, binScheme, edges);
+    return new tools::histo::h1d(title, edges); 
+  }
+}     
+
+//_____________________________________________________________________________
+tools::histo::h1d* CreateToolsH1(const G4String& title,
+                                 const std::vector<G4double>& edges,
+                                 const G4String& fcnName)
+{
+  G4Fcn fcn = GetFunction(fcnName);
+
+  // Apply function 
+  std::vector<G4double> newEdges;
+  ComputeEdges(edges, fcn, newEdges);
+  
+  return new tools::histo::h1d(title, newEdges); 
+}  
+
+//_____________________________________________________________________________
+void ConfigureToolsH1(tools::histo::h1d* h1d,
+                       G4int nbins, G4double xmin, G4double xmax,  
+                       const G4String& fcnName,
+                       const G4String& binSchemeName)
+{
+  G4Fcn fcn = GetFunction(fcnName);
+  G4BinScheme binScheme = GetBinScheme(binSchemeName);
+
+  if ( binScheme != kLogBinScheme ) {
+    if ( binScheme == kUserBinScheme ) {
+      // This should never happen, but let's make sure about it
+      // by issuing a warning
+      G4ExceptionDescription description;
+      description 
+        << "    User binning scheme setting was ignored." << G4endl
+        << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
+      G4Exception("G4H1ToolsManager::SetH1",
+                "Analysis_W013", JustWarning, description);
+    }              
+    h1d->configure(nbins, fcn(xmin), fcn(xmax));
+  }
+  else {
+    // Compute bins
+    std::vector<G4double> edges;
+    ComputeEdges(nbins, xmin, xmax, fcn, binScheme, edges);
+    h1d->configure(edges);
+  }
+}     
+
+//_____________________________________________________________________________
+void ConfigureToolsH1(tools::histo::h1d* h1d,
+                      const std::vector<G4double>& edges,
+                      const G4String& fcnName)
+{
+  // Apply function to edges
+  G4Fcn fcn = GetFunction(fcnName);
+  std::vector<G4double> newEdges;
+  ComputeEdges(edges, fcn, newEdges);
+
+  h1d->configure(newEdges);
+}
+
 }
 
 // 
@@ -87,172 +217,13 @@ tools::histo::h1d*  G4H1ToolsManager::GetH1InFunction(G4int id,
 void G4H1ToolsManager::AddH1Information(const G4String& name,  
                                         const G4String& unitName, 
                                         const G4String& fcnName,
-                                        const G4String& binSchemeName) const
+                                        G4BinScheme binScheme) const
 {
   G4double unit = GetUnitValue(unitName);
   G4Fcn fcn = GetFunction(fcnName);
-  G4BinScheme binScheme = GetBinScheme(binSchemeName);
   fHnManager->AddH1Information(name, unitName, fcnName, unit, fcn, binScheme);
 }  
                                         
-//_____________________________________________________________________________
-void  G4H1ToolsManager::UpdateH1Information(G4HnInformation* information,
-                                   const G4String& unitName, 
-                                   const G4String& fcnName,
-                                   G4BinScheme binScheme) const
-{
-  G4double unit = GetUnitValue(unitName);
-  G4Fcn fcn = GetFunction(fcnName);
-  information->fXUnitName = unitName;
-  information->fYUnitName = unitName;
-  information->fXFcnName = fcnName;
-  information->fYFcnName = fcnName;
-  information->fXUnit = unit;
-  information->fYUnit = unit;
-  information->fXFcn = fcn;
-  information->fYFcn = fcn;
-  information->fXBinScheme = binScheme;
-  information->fYBinScheme = binScheme;
-}  
-                              
-//_____________________________________________________________________________
-void  G4H1ToolsManager::UpdateH1Information(G4HnInformation* information,
-                                   const G4String& unitName, 
-                                   const G4String& fcnName,
-                                   const G4String& binSchemeName) const
-{
-  G4BinScheme binScheme = GetBinScheme(binSchemeName);
-  UpdateH1Information(information, unitName, fcnName, binScheme);
-}  
-                              
-//_____________________________________________________________________________
-void G4H1ToolsManager::AddH1Annotation(tools::histo::h1d* h1d,
-                                   const G4String& unitName, 
-                                   const G4String& fcnName) const
-{                                   
-  G4String axisTitle;
-  UpdateTitle(axisTitle, unitName, fcnName);        
-  h1d->add_annotation(tools::histo::key_axis_x_title(), axisTitle);
-}  
-
-//_____________________________________________________________________________
-void G4H1ToolsManager::ComputeBins(G4int nbins, G4double xmin, G4double xmax, 
-                                   G4Fcn fcn, 
-                                   std::vector<G4double>& bins) const
-{
-// Compute bins from parameters
-
-  G4double dlog 
-    = (std::log10(fcn(xmax)) - std::log10(fcn(xmin)))/(nbins-1);
-  G4double dx = std::pow(10, dlog);
-  G4double binValue = fcn(xmin);
-  while ( G4int(bins.size()) < nbins ) {
-    bins.push_back(binValue);
-    binValue *= dx;
-  }
-}                                          
-
-//_____________________________________________________________________________
-void G4H1ToolsManager::ComputeBins(const std::vector<G4double>& bins, 
-                                  G4Fcn fcn, 
-                                  std::vector<G4double>& newBins) const
-{
-// Apply function to defined bins
-  std::vector<G4double>::const_iterator it;
-  for (it = bins.begin(); it != bins.end(); it++ ) {
-    newBins.push_back(fcn(*it));
-  }
-}
-
-//_____________________________________________________________________________
-tools::histo::h1d* G4H1ToolsManager::CreateToolsH1(
-                                       const G4String& title,
-                                       G4int nbins, G4double xmin, G4double xmax, 
-                                       const G4String& fcnName,
-                                       const G4String& binSchemeName) const
-{
-  G4Fcn fcn = GetFunction(fcnName);
-  G4BinScheme binScheme = GetBinScheme(binSchemeName);
-  
-  if ( binScheme != kLogBinScheme ) {
-    if ( binScheme == kUserBinScheme ) {
-      // This should never happen, but let's make sure about it
-      // by issuing a warning
-      G4ExceptionDescription description;
-      description 
-        << "    User binning scheme setting was ignored." << G4endl
-        << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
-      G4Exception("G4H1ToolsManager::CreateH1",
-                "Analysis_W013", JustWarning, description);
-    }              
-    return new tools::histo::h1d(title, nbins, fcn(xmin), fcn(xmax));
-  }
-  else {
-    // Compute bins
-    std::vector<G4double> bins;
-    ComputeBins(nbins, xmin, xmax, fcn, bins);
-    return new tools::histo::h1d(title, bins); 
-  }
-}     
-
-//_____________________________________________________________________________
-tools::histo::h1d* G4H1ToolsManager::CreateToolsH1(
-                                       const G4String& title,
-                                       const std::vector<G4double>& bins,
-                                       const G4String& fcnName) const
-{
-  G4Fcn fcn = GetFunction(fcnName);
-
-  // Apply function 
-  std::vector<G4double> newBins;
-  ComputeBins(bins, fcn, newBins);
-  
-  return new tools::histo::h1d(title, newBins); 
-}  
-
-//_____________________________________________________________________________
-void G4H1ToolsManager::ConfigureToolsH1(tools::histo::h1d* h1d,
-                                        G4int nbins, G4double xmin, G4double xmax,  
-                                        const G4String& fcnName,
-                                        const G4String& binSchemeName) const
-{
-  G4Fcn fcn = GetFunction(fcnName);
-  G4BinScheme binScheme = GetBinScheme(binSchemeName);
-
-  if ( binScheme != kLogBinScheme ) {
-    if ( binScheme == kUserBinScheme ) {
-      // This should never happen, but let's make sure about it
-      // by issuing a warning
-      G4ExceptionDescription description;
-      description 
-        << "    User binning scheme setting was ignored." << G4endl
-        << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
-      G4Exception("G4H1ToolsManager::SetH1",
-                "Analysis_W013", JustWarning, description);
-    }              
-    h1d->configure(nbins, fcn(xmin), fcn(xmax));
-  }
-  else {
-    // Compute bins
-    std::vector<G4double> bins;
-    ComputeBins(nbins, xmin, xmax, fcn, bins);
-    h1d->configure(bins);
-  }
-}     
-
-//_____________________________________________________________________________
-void G4H1ToolsManager::ConfigureToolsH1(tools::histo::h1d* h1d,
-                                        const std::vector<G4double>& bins,
-                                        const G4String& fcnName) const
-{
-  // Apply function to bins
-  G4Fcn fcn = GetFunction(fcnName);
-  std::vector<G4double> newBins;
-  ComputeBins(bins, fcn, newBins);
-
-  h1d->configure(newBins);
-}
-
 //_____________________________________________________________________________
 G4int G4H1ToolsManager::RegisterToolsH1(tools::histo::h1d* h1d, 
                                         const G4String& name)
@@ -280,13 +251,14 @@ G4int G4H1ToolsManager::CreateH1(const G4String& name,  const G4String& title,
     fState.GetVerboseL4()->Message("create", "H1", name);
 #endif
   tools::histo::h1d* h1d
-    = CreateToolsH1( title, nbins, xmin, xmax, fcnName, binSchemeName);
+    = CreateToolsH1(title, nbins, xmin, xmax, fcnName, binSchemeName);
     
   // Add annotation
   AddH1Annotation(h1d, unitName, fcnName);        
     
   // Save H1 information
-  AddH1Information(name, unitName, fcnName, binSchemeName);
+  G4BinScheme binScheme = GetBinScheme(binSchemeName);
+  AddH1Information(name, unitName, fcnName, binScheme);
     
   // Register histogram 
   G4int id = RegisterToolsH1(h1d, name); 
@@ -300,7 +272,7 @@ G4int G4H1ToolsManager::CreateH1(const G4String& name,  const G4String& title,
 
 //_____________________________________________________________________________
 G4int G4H1ToolsManager::CreateH1(const G4String& name,  const G4String& title,
-                                 const std::vector<G4double>& bins,
+                                 const std::vector<G4double>& edges,
                                  const G4String& unitName, const G4String& fcnName)
 {
 #ifdef G4VERBOSE
@@ -308,13 +280,13 @@ G4int G4H1ToolsManager::CreateH1(const G4String& name,  const G4String& title,
     fState.GetVerboseL4()->Message("create", "H1", name);
 #endif
   tools::histo::h1d* h1d 
-    = CreateToolsH1(title, bins, fcnName);
+    = CreateToolsH1(title, edges, fcnName);
     
   // Add annotation
   AddH1Annotation(h1d, unitName, fcnName);        
     
   // Save H1 information
-  AddH1Information(name, unitName, fcnName, "userBinScheme");
+  AddH1Information(name, unitName, fcnName, kUserBinScheme);
     
   // Register histogram 
   G4int id = RegisterToolsH1(h1d, name); 
@@ -348,7 +320,8 @@ G4bool G4H1ToolsManager::SetH1(G4int id,
   AddH1Annotation(h1d, unitName, fcnName);        
     
   // Update information
-  UpdateH1Information(info, unitName, fcnName, binSchemeName);
+  G4BinScheme binScheme = GetBinScheme(binSchemeName);
+  UpdateH1Information(info, unitName, fcnName, binScheme);
 
   // Set activation
   fHnManager->SetActivation(id, true); 
@@ -358,7 +331,7 @@ G4bool G4H1ToolsManager::SetH1(G4int id,
 
 //_____________________________________________________________________________
 G4bool G4H1ToolsManager::SetH1(G4int id,
-                           const std::vector<G4double>& bins,
+                           const std::vector<G4double>& edges,
                            const G4String& unitName,
                            const G4String& fcnName)
 {
@@ -372,7 +345,7 @@ G4bool G4H1ToolsManager::SetH1(G4int id,
 #endif
 
   // Configure tools h1
-  ConfigureToolsH1(h1d, bins, fcnName);
+  ConfigureToolsH1(h1d, edges, fcnName);
       
   // Add annotation
   AddH1Annotation(h1d, unitName, fcnName);        

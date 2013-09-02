@@ -81,7 +81,7 @@ class G4H1ToolsManager : public G4VH1Manager
                            const G4String& fcnName = "none",
                            const G4String& binScheme = "linear");
     virtual G4int CreateH1(const G4String& name, const G4String& title,
-                           const std::vector<G4double>& bins,
+                           const std::vector<G4double>& edges,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none");
                            
@@ -91,7 +91,7 @@ class G4H1ToolsManager : public G4VH1Manager
                            const G4String& fcnName = "none",
                            const G4String& binSchemeName = "linear");
     virtual G4bool SetH1(G4int id,
-                           const std::vector<G4double>& bins,
+                           const std::vector<G4double>& edges,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none");
     virtual G4bool ScaleH1(G4int id, G4double factor);
@@ -137,47 +137,7 @@ class G4H1ToolsManager : public G4VH1Manager
     void AddH1Information(const G4String& name,  
                           const G4String& unitName, 
                           const G4String& fcnName,
-                          const G4String& binSchemeName) const;
-
-    void UpdateH1Information(G4HnInformation* information,
-                          const G4String& unitName, 
-                          const G4String& fcnName,
                           G4BinScheme binScheme) const;
-                           
-    void UpdateH1Information(G4HnInformation* information,
-                          const G4String& unitName, 
-                          const G4String& fcnName,
-                          const G4String& binSchemeName) const;
-                           
-    void AddH1Annotation(tools::histo::h1d* h1,
-                          const G4String& unitName, 
-                          const G4String& fcnName) const;
-                          
-    void ComputeBins(G4int nbins, G4double xmin, G4double xmax, G4Fcn fcn, 
-                          std::vector<G4double>& bins) const;
-
-    void ComputeBins(const std::vector<G4double>& bins, G4Fcn fcn, 
-                          std::vector<G4double>& newBins) const;
-
-    tools::histo::h1d* CreateToolsH1(
-                          const G4String& title,
-                          G4int nbins, G4double xmin, G4double xmax,
-                          const G4String& fcnName,
-                          const G4String& binSchemeName) const;
-
-    tools::histo::h1d* CreateToolsH1(
-                          const G4String& title,
-                          const std::vector<G4double>& bins,
-                          const G4String& fcnName) const;
-
-    void ConfigureToolsH1(tools::histo::h1d* h1d,
-                          G4int nbins, G4double xmin, G4double xmax, 
-                          const G4String& fcnName,
-                          const G4String& binSchemeName) const;
-
-    void ConfigureToolsH1(tools::histo::h1d* h1d,
-                          const std::vector<G4double>& bins,
-                          const G4String& fcnName) const;
 
     G4int RegisterToolsH1(tools::histo::h1d* h1d, 
                           const G4String& name);

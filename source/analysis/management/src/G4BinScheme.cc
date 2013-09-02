@@ -36,10 +36,11 @@ namespace G4Analysis
 G4BinScheme GetBinScheme(const G4String& binSchemeName)
 {
   G4BinScheme binScheme = kLinearBinScheme;
-   if ( binSchemeName != "linear" ) {
-    if      ( binSchemeName == "log" )  binScheme = kLogBinScheme;
-    // There is no name associated with kUserBinScheme
+  if ( binSchemeName != "linear" ) {
+    if  ( binSchemeName == "log" )  
+      binScheme = kLogBinScheme;
     else {
+      // There is no name associated with kUserBinScheme
       G4ExceptionDescription description;
       description 
         << "    \"" << binScheme << "\" binning scheme is not supported." << G4endl
@@ -49,6 +50,55 @@ G4BinScheme GetBinScheme(const G4String& binSchemeName)
     }              
   }
   return binScheme;            
+}
+
+//_____________________________________________________________________________
+void ComputeEdges(G4int nbins, G4double xmin, G4double xmax, 
+                  G4Fcn fcn, G4BinScheme binScheme,
+                  std::vector<G4double>& edges)
+{
+// Compute edges from parameters
+
+  if ( binScheme == kLinearBinScheme ) {
+    G4double dx = (xmax - xmin ) / nbins;
+    G4double binValue = xmin;
+    while ( G4int(edges.size()) <= nbins ) {
+      edges.push_back(binValue);
+      binValue += dx;
+    }
+  }  
+  else if ( binScheme == kLogBinScheme ) {
+    G4double dlog 
+      = (std::log10(fcn(xmax)) - std::log10(fcn(xmin)))/ nbins;
+    G4double dx = std::pow(10, dlog);
+    G4double binValue = fcn(xmin);
+    while ( G4int(edges.size()) <= nbins ) {
+      edges.push_back(binValue);
+      binValue *= dx;
+    }
+  }
+  else if ( binScheme == kUserBinScheme ) {  
+    // This should never happen, but let's make sure about it
+    // by issuing a warning
+    G4ExceptionDescription description;
+    description 
+      << "    User binning scheme setting was ignored." << G4endl
+      << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
+    G4Exception("G4Analysis::ComputeEdges",
+              "Analysis_W013", JustWarning, description);
+  }              
+}                                          
+
+//_____________________________________________________________________________
+void ComputeEdges(const std::vector<G4double>& edges, 
+                  G4Fcn fcn, 
+                  std::vector<G4double>& newBins)
+{
+// Apply function to defined edges
+  std::vector<G4double>::const_iterator it;
+  for (it = edges.begin(); it != edges.end(); it++ ) {
+    newBins.push_back(fcn(*it));
+  }
 }
     
 }

@@ -78,8 +78,9 @@ class G4VAnalysisManager
                    const G4String& unitName = "none",
                    const G4String& fcnName = "none",
                    const G4String& binSchemeName = "linear");
+
     G4int CreateH1(const G4String& name, const G4String& title,
-                   const std::vector<G4double>& bins,
+                   const std::vector<G4double>& edges,
                    const G4String& unitName = "none",
                    const G4String& fcnName = "none");
 
@@ -89,21 +90,42 @@ class G4VAnalysisManager
                    const G4String& xunitName = "none", 
                    const G4String& yunitName = "none",
                    const G4String& xfcnName = "none", 
+                   const G4String& yfcnName = "none",
+                   const G4String& xbinScheme = "linear",
+                   const G4String& ybinScheme = "linear");
+   
+    G4int CreateH2(const G4String& name, const G4String& title,
+                   const std::vector<G4double>& xedges,
+                   const std::vector<G4double>& yedges,
+                   const G4String& xunitName = "none", 
+                   const G4String& yunitName = "none",
+                   const G4String& xfcnName = "none", 
                    const G4String& yfcnName = "none");
-                           
+                         
     G4bool SetH1(G4int id,
                    G4int nbins, G4double xmin, G4double xmax,
                    const G4String& unitName = "none",
                    const G4String& fcnName = "none",
                    const G4String& binSchemeName = "linear");
+
     G4bool SetH1(G4int id,
-                   const std::vector<G4double>& bins,
+                   const std::vector<G4double>& edges,
                    const G4String& unitName = "none",
                    const G4String& fcnName = "none");
 
     G4bool SetH2(G4int id,
                    G4int nxbins, G4double xmin, G4double xmax, 
                    G4int nybins, G4double ymin, G4double ymax,
+                   const G4String& xunitName = "none", 
+                   const G4String& yunitName = "none",
+                   const G4String& xfcnName = "none", 
+                   const G4String& yfcnName = "none",
+                   const G4String& xbinSchemeName = "linear",
+                   const G4String& ybinSchemeName = "linear");
+
+    G4bool SetH2(G4int id,
+                   const std::vector<G4double>& xedges,
+                   const std::vector<G4double>& yedges,
                    const G4String& xunitName = "none", 
                    const G4String& yunitName = "none",
                    const G4String& xfcnName = "none", 

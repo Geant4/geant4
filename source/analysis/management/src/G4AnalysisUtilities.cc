@@ -29,6 +29,7 @@
 
 #include "G4AnalysisUtilities.hh"
 #include "G4BinScheme.hh"
+#include "G4UnitsTable.hh"
 
 namespace G4Analysis
 {
@@ -78,13 +79,13 @@ G4bool CheckMinMax(G4double xmin, G4double xmax, const G4String& binSchemeName)
 }  
 
 //_____________________________________________________________________________
-G4bool CheckBins(const std::vector<G4double>& bins)
+G4bool CheckEdges(const std::vector<G4double>& edges)
 {
-  if ( bins.size() == 0 ) {
+  if ( edges.size() <= 1 ) {
     G4ExceptionDescription description;
     description 
-      << "    Illegal bins vector (size = 0)" << G4endl;
-      G4Exception("G4VAnalysisManager::CheckBins",
+      << "    Illegal edges vector (size <= 1)" << G4endl;
+      G4Exception("G4VAnalysisManager::CheckEdges",
                   "Analysis_W013", JustWarning, description);
     return false;
   }
@@ -92,5 +93,26 @@ G4bool CheckBins(const std::vector<G4double>& bins)
     return true;                   
 
 }
+
+//_____________________________________________________________________________
+G4double GetUnitValue(const G4String& unit)
+{
+   G4double value = 1.;
+   if ( unit != "none" ) {
+     value = G4UnitDefinition::GetValueOf(unit);
+     if ( value == 0. ) value = 1.; 
+   }  
+   return value;
+}   
+
+//_____________________________________________________________________________
+void UpdateTitle(G4String& title, 
+                 const G4String& unitName, 
+                 const G4String& fcnName)
+{
+  if ( fcnName != "none" )  { title += " "; title += fcnName; title += "("; }
+  if ( unitName != "none" ) { title += " ["; title += unitName; title += "]";}
+  if ( fcnName != "none" )  { title += ")"; }
+}                                                            
 
 }

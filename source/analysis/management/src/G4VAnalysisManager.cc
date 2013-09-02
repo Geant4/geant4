@@ -226,12 +226,12 @@ G4int G4VAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
 
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
-                               const std::vector<G4double>& bins,
+                               const std::vector<G4double>& edges,
                                const G4String& unitName, const G4String& fcnName)
 {
-  if ( ! CheckBins(bins) ) return kInvalidId;
+  if ( ! CheckEdges(edges) ) return kInvalidId;
 
-  return fVH1Manager->CreateH1(name, title, bins, unitName, fcnName);
+  return fVH1Manager->CreateH1(name, title, edges, unitName, fcnName);
 }                                         
 
 //_____________________________________________________________________________
@@ -239,17 +239,37 @@ G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
                                G4int nxbins, G4double xmin, G4double xmax,
                                G4int nybins, G4double ymin, G4double ymax,
                                const G4String& xunitName, const G4String& yunitName,
-                               const G4String& xfcnName, const G4String& yfcnName)
+                               const G4String& xfcnName, const G4String& yfcnName,
+                               const G4String& xbinSchemeName, 
+                               const G4String& ybinSchemeName)
                                
 {
   if ( ! CheckNbins(nxbins) ) return kInvalidId;
-  if ( ! CheckMinMax(xmin, xmax, "linear") ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xbinSchemeName) ) return kInvalidId;
+
   if ( ! CheckNbins(nybins) ) return kInvalidId;
-  if ( ! CheckMinMax(ymin, ymax, "linear") ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, ybinSchemeName) ) return kInvalidId;
 
   return fVH2Manager->CreateH2(name, title, 
-                              nxbins, xmin, xmax, nybins, ymin, ymax, 
-                              xunitName, yunitName, xfcnName, yfcnName);
+                               nxbins, xmin, xmax, nybins, ymin, ymax, 
+                               xunitName, yunitName, xfcnName, yfcnName, 
+                               xbinSchemeName, ybinSchemeName);
+}                                         
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
+                               const std::vector<G4double>& xedges,
+                               const std::vector<G4double>& yedges,
+                               const G4String& xunitName, const G4String& yunitName,
+                               const G4String& xfcnName, const G4String& yfcnName)
+                               
+{
+  if ( ! CheckEdges(xedges) ) return kInvalidId;
+  if ( ! CheckEdges(yedges) ) return kInvalidId;
+
+  return fVH2Manager->CreateH2(name, title, 
+                               xedges, yedges,
+                               xunitName, yunitName, xfcnName, yfcnName);
 }                                         
 
 //_____________________________________________________________________________
@@ -266,12 +286,12 @@ G4bool G4VAnalysisManager::SetH1(G4int id,
   
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetH1(G4int id,
-                                const std::vector<G4double>& bins,
+                                const std::vector<G4double>& edges,
                                 const G4String& unitName, const G4String& fcnName)
 {                                
-  if ( ! CheckBins(bins) ) return kInvalidId;
+  if ( ! CheckEdges(edges) ) return kInvalidId;
 
-  return fVH1Manager->SetH1(id, bins, unitName, fcnName); 
+  return fVH1Manager->SetH1(id, edges, unitName, fcnName); 
 }
   
 //_____________________________________________________________________________
@@ -279,15 +299,33 @@ G4bool G4VAnalysisManager::SetH2(G4int id,
                                 G4int nxbins, G4double xmin, G4double xmax, 
                                 G4int nybins, G4double ymin, G4double ymax,
                                 const G4String& xunitName, const G4String& yunitName,
-                                const G4String& xfcnName, const G4String& yfcnName)
+                                const G4String& xfcnName, const G4String& yfcnName,
+                                const G4String& xbinSchemeName, 
+                                const G4String& ybinSchemeName)
 {                                
   if ( ! CheckNbins(nxbins) ) return kInvalidId;
-  if ( ! CheckMinMax(xmin, xmax, "linear") ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xbinSchemeName) ) return kInvalidId;
+
   if ( ! CheckNbins(nybins) ) return kInvalidId;
-  if ( ! CheckMinMax(ymin, ymax, "linear") ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, ybinSchemeName) ) return kInvalidId;
 
   return fVH2Manager->SetH2(id, nxbins, xmin, xmax, nybins, ymin, ymax, 
-                           xunitName, yunitName, xfcnName, yfcnName);
+                            xunitName, yunitName, xfcnName, yfcnName,
+                            xbinSchemeName, ybinSchemeName);
+}
+                                  
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetH2(G4int id,
+                                const std::vector<G4double>& xedges,
+                                const std::vector<G4double>& yedges,
+                                const G4String& xunitName, const G4String& yunitName,
+                                const G4String& xfcnName, const G4String& yfcnName)
+{                                
+  if ( ! CheckEdges(xedges) ) return kInvalidId;
+  if ( ! CheckEdges(yedges) ) return kInvalidId;
+
+  return fVH2Manager->SetH2(id, xedges, yedges, 
+                            xunitName, yunitName, xfcnName, yfcnName);
 }
                                   
 //_____________________________________________________________________________

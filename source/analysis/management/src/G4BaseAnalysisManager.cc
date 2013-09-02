@@ -29,7 +29,6 @@
 
 #include "G4BaseAnalysisManager.hh"
 #include "G4AnalysisManagerState.hh"
-#include "G4UnitsTable.hh"
 
 #include <iostream>
 
@@ -51,27 +50,6 @@ G4BaseAnalysisManager::~G4BaseAnalysisManager()
 // protected methods
 //
 
-//_____________________________________________________________________________
-G4double G4BaseAnalysisManager::GetUnitValue(const G4String& unit) const
-{
-   G4double value = 1.;
-   if ( unit != "none" ) {
-     value = G4UnitDefinition::GetValueOf(unit);
-     if ( value == 0. ) value = 1.; 
-   }  
-   return value;
-}   
-
-//_____________________________________________________________________________
-void G4BaseAnalysisManager::UpdateTitle(G4String& title, 
-                                        const G4String& unitName, 
-                                        const G4String& fcnName) const
-{
-  if ( fcnName != "none" )  { title += " "; title += fcnName; title += "("; }
-  if ( unitName != "none" ) { title += " ["; title += unitName; title += "]";}
-  if ( fcnName != "none" )  { title += ")"; }
-}  
-                                                          
 //_____________________________________________________________________________
 void  G4BaseAnalysisManager::ExceptionForHistograms(
                                          const G4String& functionName) const

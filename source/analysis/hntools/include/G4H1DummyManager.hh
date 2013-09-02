@@ -53,7 +53,7 @@ class G4H1DummyManager : public G4VH1Manager
                            const G4String& fcnName = "none",
                            const G4String& binScheme = "linear");
     virtual G4int CreateH1(const G4String& name, const G4String& title,
-                           const std::vector<G4double>& bins,
+                           const std::vector<G4double>& edges,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none");
                            
@@ -63,7 +63,7 @@ class G4H1DummyManager : public G4VH1Manager
                            const G4String& fcnName = "none",
                            const G4String& binSchemeName = "linear");
     virtual G4bool SetH1(G4int id,
-                           const std::vector<G4double>& bins,
+                           const std::vector<G4double>& edges,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none");
 

@@ -60,7 +60,7 @@ G4int G4H1DummyManager::CreateH1(const G4String& /*name*/,
 //_____________________________________________________________________________
 G4int G4H1DummyManager::CreateH1(const G4String& /*name*/, 
                                const G4String& /*title*/, 
-                               const std::vector<G4double>& /*bins*/,
+                               const std::vector<G4double>& /*edges*/,
                                const G4String& /*unitName*/, 
                                const G4String& /*fcnName*/)
 {
@@ -82,7 +82,7 @@ G4bool G4H1DummyManager::SetH1(G4int /*id*/,
   
 //_____________________________________________________________________________
 G4bool G4H1DummyManager::SetH1(G4int /*id*/,
-                                const std::vector<G4double>& /*bins*/,
+                                const std::vector<G4double>& /*edges*/,
                                 const G4String& /*unitName*/, 
                                 const G4String& /*fcnName*/)
 {                                

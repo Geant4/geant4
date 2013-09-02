@@ -54,11 +54,31 @@ class G4H2DummyManager : public G4VH2Manager
                            const G4String& xunitName = "none", 
                            const G4String& yunitName = "none",
                            const G4String& xfcnName = "none", 
-                           const G4String& yfcnName = "none");
+                           const G4String& yfcnName = "none",
+                           const G4String& xbinScheme = "linear",
+                           const G4String& ybinScheme = "linear");
                            
+    virtual G4int CreateH2(const G4String& name, const G4String& title,
+                           const std::vector<G4double>& xedges,
+                           const std::vector<G4double>& yedges,
+                           const G4String& xunitName = "none", 
+                           const G4String& yunitName = "none",
+                           const G4String& xfcnName = "none", 
+                           const G4String& yfcnName = "none");
+                          
     virtual G4bool SetH2(G4int id,
                            G4int nxbins, G4double xmin, G4double xmax, 
                            G4int nybins, G4double ymin, G4double ymax,
+                           const G4String& xunitName = "none", 
+                           const G4String& yunitName = "none",
+                           const G4String& xfcnName = "none", 
+                           const G4String& yfcnName = "none",
+                           const G4String& xbinScheme = "linear",
+                           const G4String& ybinScheme = "linear");
+                           
+    virtual G4bool SetH2(G4int id,
+                           const std::vector<G4double>& xedges,
+                           const std::vector<G4double>& yedges,
                            const G4String& xunitName = "none", 
                            const G4String& yunitName = "none",
                            const G4String& xfcnName = "none", 

@@ -37,10 +37,16 @@ namespace G4Analysis {
 const G4int kInvalidId = -1;
 
 // Utility functions for checking input parameters
-//
 G4bool CheckNbins(G4int nbins);
 G4bool CheckMinMax(G4double xmin, G4double xmax, const G4String& binSchemeName);
-G4bool CheckBins(const std::vector<G4double>& bins);
+G4bool CheckEdges(const std::vector<G4double>& edges);
+
+// Get unit value with added handling of b"none" 
+G4double GetUnitValue(const G4String& unit);
+
+// Add unit & fcn to the title
+void UpdateTitle(G4String& title, 
+                 const G4String& unitName, const G4String& fcnName);
 
 }
 

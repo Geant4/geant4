@@ -54,11 +54,31 @@ class G4VH2Manager : public G4BaseAnalysisManager
                            const G4String& xunitName = "none", 
                            const G4String& yunitName = "none",
                            const G4String& xfcnName = "none", 
+                           const G4String& yfcnName = "none",
+                           const G4String& xbinScheme = "linear",
+                           const G4String& ybinScheme = "linear") = 0;
+                           
+    virtual G4int CreateH2(const G4String& name, const G4String& title,
+                           const std::vector<G4double>& xedges,
+                           const std::vector<G4double>& yedges,
+                           const G4String& xunitName = "none", 
+                           const G4String& yunitName = "none",
+                           const G4String& xfcnName = "none", 
                            const G4String& yfcnName = "none") = 0;
                            
     virtual G4bool SetH2(G4int id,
                            G4int nxbins, G4double xmin, G4double xmax, 
                            G4int nybins, G4double ymin, G4double ymax,
+                           const G4String& xunitName = "none", 
+                           const G4String& yunitName = "none",
+                           const G4String& xfcnName = "none", 
+                           const G4String& yfcnName = "none", 
+                           const G4String& xbinScheme = "linear",
+                           const G4String& ybinScheme = "linear") = 0;
+
+    virtual G4bool SetH2(G4int id,
+                           const std::vector<G4double>& xedges,
+                           const std::vector<G4double>& yedges,
                            const G4String& xunitName = "none", 
                            const G4String& yunitName = "none",
                            const G4String& xfcnName = "none", 
@@ -100,6 +120,12 @@ class G4VH2Manager : public G4BaseAnalysisManager
    
    // data members
     G4HnManager* fHnManager;
+
+  private:    
+    // Not implemented copy constructor
+    G4VH2Manager(const G4VH2Manager& rhs);
+    // Not implemented assignment operator
+    G4VH2Manager& operator=(const G4VH2Manager& rhs);
 };
 
 #endif

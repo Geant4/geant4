@@ -56,7 +56,7 @@ class G4VH1Manager : public G4BaseAnalysisManager
                            const G4String& fcnName = "none",
                            const G4String& binSchemeName = "linear") = 0;
     virtual G4int CreateH1(const G4String& name, const G4String& title,
-                           const std::vector<G4double>& bins,
+                           const std::vector<G4double>& edges,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none") = 0;
 
@@ -66,7 +66,7 @@ class G4VH1Manager : public G4BaseAnalysisManager
                            const G4String& fcnName = "none",
                            const G4String& binSchemeName = "linear") = 0;
     virtual G4bool SetH1(G4int id,
-                           const std::vector<G4double>& bins,
+                           const std::vector<G4double>& edges,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none") = 0;
 
@@ -99,6 +99,12 @@ class G4VH1Manager : public G4BaseAnalysisManager
    
    // data members
     G4HnManager* fHnManager;
+
+  private:    
+    // Not implemented copy constructor
+    G4VH1Manager(const G4VH1Manager& rhs);
+    // Not implemented assignment operator
+    G4VH1Manager& operator=(const G4VH1Manager& rhs);
 };
 
 #endif

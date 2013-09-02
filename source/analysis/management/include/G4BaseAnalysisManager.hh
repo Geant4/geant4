@@ -52,11 +52,6 @@ class G4BaseAnalysisManager
     
   protected:
     // methods
-    G4double GetUnitValue(const G4String& unit) const;
-    
-    void UpdateTitle(G4String& title, 
-                     const G4String& unitName, const G4String& fcnName) const;
-                     
     void ExceptionForHistograms(const G4String& functionName) const;                     
 
     // data members

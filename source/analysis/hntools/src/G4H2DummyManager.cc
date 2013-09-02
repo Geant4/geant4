@@ -54,6 +54,22 @@ G4int G4H2DummyManager::CreateH2(const G4String& /*name*/,
                                const G4String& /*xunitName*/, 
                                const G4String& /*yunitName*/, 
                                const G4String& /*xfcnName*/,
+                               const G4String& /*yfcnName*/,
+                               const G4String& /*xbinScheme*/,
+                               const G4String& /*ybinScheme*/)
+{
+  ExceptionForHistograms("CreateH2");
+  return 0;
+}                                         
+
+//_____________________________________________________________________________
+G4int G4H2DummyManager::CreateH2(const G4String& /*name*/, 
+                               const G4String& /*title*/, 
+                               const std::vector<G4double>& /*xedges*/,
+                               const std::vector<G4double>& /*yedges*/,
+                               const G4String& /*xunitName*/, 
+                               const G4String& /*yunitName*/, 
+                               const G4String& /*xfcnName*/,
                                const G4String& /*yfcnName*/)
 {
   ExceptionForHistograms("CreateH2");
@@ -66,6 +82,21 @@ G4bool G4H2DummyManager::SetH2(G4int /*id*/,
                                 G4double /*xmin*/, G4double /*xmax*/, 
                                 G4int /*nybins*/, 
                                 G4double /*ymin*/, G4double /*ymax*/,
+                                const G4String& /*xunitName*/, 
+                                const G4String& /*yunitName*/, 
+                                const G4String& /*xfcnName*/,
+                                const G4String& /*yfcnName*/,
+                                const G4String& /*xbinScheme*/,
+                                const G4String& /*ybinScheme*/)
+{                                
+  ExceptionForHistograms("SetH2");
+  return false;
+}
+
+//_____________________________________________________________________________
+G4bool G4H2DummyManager::SetH2(G4int /*id*/,
+                                const std::vector<G4double>& /*xedges*/,
+                                const std::vector<G4double>& /*yedges*/,
                                 const G4String& /*xunitName*/, 
                                 const G4String& /*yunitName*/, 
                                 const G4String& /*xfcnName*/,

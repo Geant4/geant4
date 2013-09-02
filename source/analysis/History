@@ -17,9 +17,22 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 02, 2013 I. Hrivnacova (analysis-V09-06-21)
+- Fixed saving binScheme in H2 information 
+
+August 26, 2013 I. Hrivnacova (analysis-V09-06-20)
+- Fixed Coverity defects 
+  (missing copy constructor and assignment operator in G4VH1Manager
+   and G4VH2Manager)
+
 August 26, 2013 A.Dotti (analysis-V09-06-19)
 - New interface for functions in G4Threading.hh, 
   now in G4Threading namespace
+  And also (I. Hrivnacova):
+- Added a possibility to define logarithmic binning for H1 and H2
+- Reorganized messenger classes per objects: they are now associated
+  with the public interface (G4VAnalysisManager) 
+- Fixed path to g4tools in test/build
 
 August 1, 2013 I.Hrivnacova (analysis-V09-06-18)
 - Fixed CMake build (added missing *.icc files in HEADERS);
