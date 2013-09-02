@@ -37,11 +37,17 @@ static const std::string& s_class() {\
 }\
 static void check_class_name() {a_name::s_class();}
 
-#define TOOLS_T_SCLASS(a_name)\
+#define TOOLS_T_SCLASS(a_T,a_name)\
 static const std::string& s_class() {\
   static const std::string s_v(#a_name);\
   return s_v;\
 }\
-static void check_class_name() {a_name<T>::s_class();}
+static void check_class_name() {a_name<a_T>::s_class();}
+
+#define TOOLS_SCLASS_NO_CHECK(a_name)\
+static const std::string& s_class() {\
+  static const std::string s_v(#a_name);\
+  return s_v;\
+}
 
 #endif

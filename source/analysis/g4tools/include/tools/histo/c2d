@@ -93,6 +93,7 @@ public:
 
   c2d& operator=(const c2d& a_from) {
     base_cloud::operator=(a_from);
+    if(&a_from==this) return *this;
     m_xs = a_from.m_xs;
     m_ys = a_from.m_ys;
     m_lower_x = a_from.m_lower_x;

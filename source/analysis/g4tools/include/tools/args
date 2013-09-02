@@ -85,10 +85,11 @@ public:
     return to(s,a_value);
   }
   template <class aT>
-  bool find(const std::string& a_string,aT& a_value) const {
+  bool find(const std::string& a_string,aT& a_value,
+            const aT& a_def = aT()) const {
     std::string _s;
-    if(!find(a_string,_s)) {a_value = aT();return false;}
-    return to<aT>(_s,a_value);
+    if(!find(a_string,_s)) {a_value = a_def;return false;}
+    return to<aT>(_s,a_value,a_def);
   }
   std::vector<std::string> tovector() const {
     // Return a vector of string <name=value>
@@ -302,6 +303,8 @@ public:
     }
   }
 
+public: //backcomp (for Panoramix).
+  bool isAnArgument(const std::string& a_key) const {return is_arg(a_key);}
 protected:
   std::vector<arg> m_args;
 };

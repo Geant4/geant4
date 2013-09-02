@@ -27,13 +27,13 @@ inline bool to_pointer(const std::string& a_string,void*& a_value){
   return true;
 }
 
-inline std::string p2s(void* a_value){
+inline std::string p2s(const void* a_value){
   char s[512];
   snpf(s,sizeof(s),"%lu",(unsigned long)a_value);
   return s;
 }
 
-inline std::string p2sx(void* a_value){
+inline std::string p2sx(const void* a_value){
   char s[512];
   snpf(s,sizeof(s),"0x%lx",(unsigned long)a_value);
   return s;

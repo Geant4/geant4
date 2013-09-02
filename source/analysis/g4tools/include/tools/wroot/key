@@ -221,6 +221,11 @@ protected:
     if(a_nbytes) {//GB
       m_seek_key = m_file.END();
       m_file.set_END(m_seek_key+nsize);
+
+      //NOTE : the free segment logic found in ROOT/TKey
+      //       is not yet needed right now for us, since
+      //       we always write at end of file. The update
+      //       of the eof free_seg is done in set_END.
     } else { //basket
       m_seek_key = 0;
     }

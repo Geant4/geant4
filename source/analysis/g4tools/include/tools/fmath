@@ -39,6 +39,8 @@ inline int fround(float a_x) {
   else return (a_x>0.0f) ? int(a_x+0.5f) : -int(0.5f-a_x);
 }
 
+inline float fstep(float a_x) {return a_x<0.0f?0.0f:1.0f;}
+
 }
 
 #endif

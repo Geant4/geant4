@@ -197,7 +197,7 @@ public:
 template <class T>
 class Vector : public virtual istorable {
 public:
-  TOOLS_T_SCLASS(tools::osc::Vector)
+  TOOLS_T_SCLASS(T,tools::osc::Vector)
 protected:
   virtual void* cast(const std::string& a_class) const {
     if(void* p = tools::cmp_cast<Vector>(this,a_class)) return p;
@@ -228,7 +228,7 @@ protected:
   static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
     const Vector* local = tools::safe_cast<istorable,Vector>(a_o);
     if(!local) return false;
-    return local->Vector::visit(a_v); //IMPORTANT : have Vector::
+    return local->Vector<T>::visit(a_v); //IMPORTANT : have Vector::
   }
 public:
   Vector(const std::vector<T>& a_vec,const std::string& a_T)

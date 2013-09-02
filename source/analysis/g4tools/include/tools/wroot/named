@@ -74,6 +74,7 @@ public:
     }
   }
   ObjArray& operator=(const ObjArray& a_from){
+    if(&a_from==this) return *this;
     tools::clear<T>(*this);
 
     typedef typename std::vector<T*>::const_iterator it_t;

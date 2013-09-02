@@ -1,3 +1,16 @@
+ 1.7.0 :
+ - test/cpp/list_free_segs.C : to list free segments in a out.root file.
+ - wroot/file : set_END() : update first back free segment m_first field
+   when writing something. This permits to have good free segs infos in file.
+ - wroot/file/make_free_seg : use free_seg/add_free() function.
+ - wroot/free_seg : add_free function.
+ - histo/c[1,2,3] : operator= : protect against same object.
+ - wroot/named/ObjArray : operator= : protect against same object.
+ - wroot/ntuple/column : operator= : protect against same object.
+ - sto/to() : have a default value.
+ - pointer/p2s : void* -> const void*.
+ - args/find() : have a default value.
+
  1.6.0 :
  - test/cpp/wroot.cpp : add an empty tree to check the below modification.
  - wroot/basket/stream : remove the if(!m_data.length()) test that

@@ -123,8 +123,8 @@ inline const std::string& s_tex() {
   return s_v;
 }
 
-inline const std::string& s_vbo() {
-  static const std::string s_v("vbo");
+inline const std::string& s_gsto() {
+  static const std::string s_v("gsto");
   return s_v;
 }
 

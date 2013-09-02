@@ -134,7 +134,7 @@ public:
   }
 protected:
   basket(const basket& a_from)
-  : ibo(a_from)
+  :ibo(a_from)
   ,key(a_from)
   ,m_data(m_file.out(),m_file.byte_swap(),256)
   ,m_nev_buf_size(a_from.m_nev_buf_size)

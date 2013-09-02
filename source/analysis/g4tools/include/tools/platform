@@ -62,9 +62,10 @@ inline bool slow_cpu()         {return false;}
 inline unsigned int tex_mem_limit() {
   // glGet(GL_MAX_TEXTURE_SIZE) :
   //   MacBookPro : it returns 8192.
-  //   Android : it returns 2048.
+  //   SGS : it returns 2048.
   //   iPad1 : it returns 2048.
   //   iPod : it returns ?
+  //   Nexus 10 : it returns ?
 
   // 1024*1024  //*3 =   3 145 728
   // 2048*2048  //*3 =  12 582 912

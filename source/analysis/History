@@ -17,6 +17,12 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 02, 2013 I. Hrivnacova (analysis-V09-06-22)
+- Updated to g4tools 1.7.0 (by G. Barrand):
+  Fixed problem report #1523 (incorrect setting the list of free blocks 
+  in the ROOT file).
+  See History_tools for complete list of modifications.
+
 September 02, 2013 I. Hrivnacova (analysis-V09-06-21)
 - Fixed saving binScheme in H2 information 
 

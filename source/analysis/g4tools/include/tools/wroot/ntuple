@@ -70,6 +70,7 @@ public:
     ,m_tmp(a_from.m_tmp)    
     {}
     column& operator=(const column& a_from){
+      if(&a_from==this) return *this;
       m_leaf = 0;
       m_def = a_from.m_def;
       m_tmp = a_from.m_tmp;

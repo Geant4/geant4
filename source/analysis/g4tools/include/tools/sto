@@ -38,11 +38,11 @@ inline bool to(const std::string& a_string,bool& a_value){
 namespace tools {
 
 template <class T>
-inline bool to(const std::string& a_s,T& a_v) {
-  if(a_s.empty()) {a_v = T();return false;} //for TOOLS_STL istringstream.
+inline bool to(const std::string& a_s,T& a_v,const T& a_def = T()) {
+  if(a_s.empty()) {a_v = a_def;return false;} //for TOOLS_STL istringstream.
   std::istringstream strm(a_s.c_str());
   strm >> a_v;
-  if(strm.fail()) {a_v = T();return false;}
+  if(strm.fail()) {a_v = a_def;return false;}
   return strm.eof();
 }
 

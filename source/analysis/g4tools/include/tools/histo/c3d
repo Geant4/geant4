@@ -111,6 +111,7 @@ public:
 
   c3d& operator=(const c3d& a_from) {
     base_cloud::operator=(a_from);
+    if(&a_from==this) return *this;
     m_xs = a_from.m_xs;
     m_ys = a_from.m_ys;
     m_zs = a_from.m_zs;
