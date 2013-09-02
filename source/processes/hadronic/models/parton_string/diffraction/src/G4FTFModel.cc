@@ -2453,6 +2453,7 @@ G4bool G4FTFModel::AdjustNucleons(G4VSplitableHadron *SelectedAntiBaryon,
         <<" "<< Mprojectile<<" "<<Mtarget+Mprojectile<<G4endl;
 #endif
 
+            M2projectile=sqr(Mprojectile);                                    // Uzhi 31.08.13
             if(SqrtS < Mtarget + Mprojectile) {OuterSuccess=false; continue;}
 
             G4double Xcenter=std::sqrt(sqr(TNucleonMass) + PtNucleon.mag2())
@@ -2819,9 +2820,13 @@ G4bool G4FTFModel::AdjustNucleons(G4VSplitableHadron *SelectedAntiBaryon,
                          std::sqrt(sqr(PNucleonMass)  + PtNucleonP.mag2() ) + 
                          std::sqrt(sqr(PResidualMass) + PtResidualP.mag2())  ;
 
+                     M2projectile=sqr(Mprojectile);                              // Uzhi 31.08.13
+
             G4double Mtarget=
                          std::sqrt(sqr(TNucleonMass)  + PtNucleonT.mag2() ) + 
                          std::sqrt(sqr(TResidualMass) + PtResidualT.mag2())  ;
+
+                     M2target=sqr(Mtarget);                                      // Uzhi 31.08.13
 
             if(SqrtS < Mprojectile+Mtarget) {OuterSuccess=false; continue;}
 
@@ -2886,6 +2891,7 @@ G4bool G4FTFModel::AdjustNucleons(G4VSplitableHadron *SelectedAntiBaryon,
             M2target=(sqr(TNucleonMass)  + PtNucleonT.mag2() )/XminusNucleon + 
                      (sqr(TResidualMass) + PtResidualT.mag2())/XminusResidual;
 
+//            if(SqrtS < std::sqrt(M2projectile)+std::sqrt(M2target)) {OuterSuccess=false; break;} // Uzhi 31.08.13
           } while (SqrtS < std::sqrt(M2projectile)+std::sqrt(M2target));
 
           G4double DecayMomentum2= sqr(S) + sqr(M2projectile) + sqr(M2target)
@@ -2954,6 +2960,7 @@ G4bool G4FTFModel::AdjustNucleons(G4VSplitableHadron *SelectedAntiBaryon,
         <<"       "<<ProjectileResidual4Momentum<<G4endl;
 #endif
 //--------------------------------------------------------------
+
         Mt2 = sqr(TNucleonMass) + PtNucleonT.mag2();
         Pz=-WminusTarget*XminusNucleon/2. + Mt2/(2.*WminusTarget*XminusNucleon);
         E = WminusTarget*XminusNucleon/2. + Mt2/(2.*WminusTarget*XminusNucleon);
