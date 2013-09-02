@@ -9,6 +9,21 @@ $Id$
                        Package History file
                        --------------------
 
+28 Aug 2013 - tag nanobeam-V09-06-09  - S. Incerti
+- Changed default field model
+
+28 Aug 2013 - tag nanobeam-V09-06-08  - S. Incerti
+- Changed initialisation of fields & variables
+
+27 Aug 2013 - tag nanobeam-V09-06-07  - S. Incerti
+- Removed visualisation
+
+25 Aug 2013 - tag nanobeam-V09-06-06  - S. Incerti
+- MT migration (cont.)
+
+24 Aug 2013 - tag nanobeam-V09-06-05  - S. Incerti
+- MT migration
+
 23 Aug 2013 - tag nanobeam-V09-06-04  - S. Incerti
 - Coding style cleaning
 

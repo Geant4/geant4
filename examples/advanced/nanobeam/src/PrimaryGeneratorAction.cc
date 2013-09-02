@@ -36,7 +36,9 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 :fDetector(DC)
 {
   fAngleMax = 0.09;
-  fEmission =0;
+  
+  // Default
+  fEmission = 1;
 
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
@@ -83,7 +85,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 if (fEmission==1)
 {
-	fDetector->SetCoef();
+	fDetector->SetCoef(1);
 	fShoot=true;
 	de = 0;
 
@@ -186,12 +188,23 @@ if (fEmission==1)
         phi = phi / 1000;
         theta = theta / 1000;
 
+        /*
+        G4cout << fDetector->GetG1() << G4endl;
+        G4cout << fDetector->GetG2() << G4endl;
+        G4cout << fDetector->GetG3() << G4endl;
+        G4cout << fDetector->GetG4() << G4endl;
+        G4cout << fDetector->GetModel() << G4endl;
+        G4cout << fDetector->GetCoef() << G4endl;
+        G4cout << fDetector->GetGrid() << G4endl;
+        */
+
 } // end coefficient
 
 // Full beam
 
 if (fEmission==2)
 {
+	fDetector->SetCoef(0);
 	fShoot=false;
 	
 	G4double aR, angle, rR;

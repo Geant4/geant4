@@ -33,11 +33,26 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4ThreadLocal TabulatedField3D* DetectorConstruction::fField = 0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 DetectorConstruction::DetectorConstruction()
 { 
  fDetectorMessenger = new DetectorMessenger(this);
  fGradientsInitialized=false;
- fG1=0; fG2=0; fG3=0; fG4=0; fCoef=0; fProfile=0; fGrid=0;
+ 
+ //Default values (square field, coef calculation, profile)
+ 
+ fModel=1;
+ fG1=-11.964623; 
+ fG2=16.494652; 
+ fG3=9.866770; 
+ fG4=-6.244493; 
+ fCoef=1; 
+ fProfile=1; 
+ fGrid=0;
+
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -84,41 +99,6 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 {
-
-  static G4bool fieldIsInitialized = false;
-  if(!fieldIsInitialized && fGradientsInitialized)
-  {
-      G4FieldManager* pFieldMgr;
-      G4MagIntegratorStepper* pStepper;
-      G4Mag_UsualEqRhs* pEquation;
-    
-      G4MagneticField* Field= new TabulatedField3D(fG1, fG2, fG3, fG4, fModel);
-      
-      pEquation = new G4Mag_UsualEqRhs (Field);
-      pStepper = new G4ClassicalRK4 (pEquation);
-      pFieldMgr=G4TransportationManager::GetTransportationManager()->GetFieldManager();
-      
-      G4ChordFinder *pChordFinder = new G4ChordFinder(Field,1e-9*m,pStepper);
-      pFieldMgr->SetChordFinder( pChordFinder );
-      
-      pFieldMgr->SetDetectorField(Field);
-      
-      fieldIsInitialized = true;
-      
-      // tuned parameters
-      pFieldMgr->GetChordFinder()->SetDeltaChord(1.e-9*m);
-      pFieldMgr->SetDeltaIntersection(1.e-9*m);
-      pFieldMgr->SetDeltaOneStep(1.e-9*m);     
-
-      G4PropagatorInField *propInField;
-      propInField =
-       G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
-      propInField->SetMinimumEpsilonStep(1e-11);
-      propInField->SetMaximumEpsilonStep(1e-10);
-
-    }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
   fSolidWorld = new G4Box("World",		   	//its name
 			   12*m/2,12*m/2,22*m/2);  	//its size
@@ -303,9 +283,9 @@ void DetectorConstruction::UpdateGeometry()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void DetectorConstruction::SetCoef()
+void DetectorConstruction::SetCoef(G4int val)
 {
-  fCoef=1;
+  fCoef=val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -327,5 +307,35 @@ void DetectorConstruction::SetProfile(G4int myProfile)
 void DetectorConstruction::SetGrid(G4int myGrid)
 {
   fGrid=myGrid;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void DetectorConstruction::ConstructSDandField()
+{
+//  static G4bool fieldIsInitialized = false;
+//  if(!fieldIsInitialized && fGradientsInitialized)
+
+  if(!fField) fField = new TabulatedField3D(fG1, fG2, fG3, fG4, fModel); 
+  
+  fEquation = new G4Mag_UsualEqRhs (fField);
+
+  fStepper = new G4ClassicalRK4 (fEquation);
+
+  fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+
+  fChordFinder = new G4ChordFinder(fField,1e-9*m,fStepper);
+
+  fFieldMgr->SetChordFinder(fChordFinder);
+  fFieldMgr->SetDetectorField(fField);    
+  fFieldMgr->GetChordFinder()->SetDeltaChord(1e-9*m);
+  fFieldMgr->SetDeltaIntersection(1e-9*m);
+  fFieldMgr->SetDeltaOneStep(1e-9*m);     
+      
+  fPropInField =
+    G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
+  fPropInField->SetMinimumEpsilonStep(1e-11);
+  fPropInField->SetMaximumEpsilonStep(1e-10);
+
 }
 

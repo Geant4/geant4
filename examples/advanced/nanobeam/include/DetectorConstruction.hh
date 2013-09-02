@@ -51,18 +51,28 @@ public:
   ~DetectorConstruction();
 
   G4VPhysicalVolume* Construct();
+
+  void ConstructSDandField();
+     
   void PrintDetectorParameters();
  
   void SetG1 (G4float);
   void SetG2 (G4float);
   void SetG3 (G4float);
   void SetG4 (G4float);
+  
+  G4float GetG1 () {return fG1;};
+  G4float GetG2 () {return fG2;};
+  G4float GetG3 () {return fG3;};
+  G4float GetG4 () {return fG4;};
+  
   void UpdateGeometry();
 
+  G4int GetModel(){return fModel;};
   void SetModel (G4int);
   
   G4int GetCoef();
-  void SetCoef();
+  void SetCoef(G4int val);
   
   G4int GetProfile(){return fProfile;};
   void SetProfile(G4int myProfile);
@@ -107,6 +117,16 @@ private:
 
   G4bool fGradientsInitialized;
   DetectorMessenger* fDetectorMessenger;
+  
+  //
+  
+  static G4ThreadLocal TabulatedField3D * fField;
+
+  G4FieldManager * fFieldMgr;
+  G4MagIntegratorStepper * fStepper;
+  G4Mag_UsualEqRhs * fEquation;
+  G4ChordFinder * fChordFinder ;
+  G4PropagatorInField * fPropInField;
 
 };
 #endif

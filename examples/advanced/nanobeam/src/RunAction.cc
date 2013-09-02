@@ -29,7 +29,6 @@
 // #define MATRIX_BOUND_CHECK
 
 #include "RunAction.hh"
-
 #include "Analysis.hh"
 
 using namespace std;
@@ -58,9 +57,15 @@ void RunAction::BeginOfRunAction(const G4Run* /*aRun*/)
    fThetaVector = CLHEP::HepVector(32);
    fPhiVector = CLHEP::HepVector(32);
    
-   // Histograms
-   // Get/create analysis manager
-   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  // Histograms
+  
+  // Get/create analysis manager
+  G4cout << "##### Create analysis manager " << isMaster << "  " << this << G4endl;
+  
+  G4AnalysisManager* man = G4AnalysisManager::Create(isMaster);
+  
+  G4cout << "Using " << man->GetType() << " analysis manager" << G4endl;
+
   
    // Open an output file
    man->OpenFile("nanobeam");
