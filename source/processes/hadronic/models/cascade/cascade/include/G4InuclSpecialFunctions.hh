@@ -36,6 +36,7 @@
 // 20130308  M. Kelsey -- New function to encapsulate INUCL power expansion
 // 20130808  M. Kelsey -- Convert paraMaker[Truncated] to class object, to
 //		allow thread isolation
+// 20130829  M. Kelsey -- Address Coverity #52158, 52161 for copy actions.
 
 #ifndef G4INUCL_SPECIAL_FUNC_HH
 #define G4INUCL_SPECIAL_FUNC_HH
@@ -98,6 +99,10 @@ namespace G4InuclSpecialFunctions {
   private:
     G4int verboseLevel;
     G4CascadeInterpolator<5>* interp;
+
+    // No copy actions
+    paraMaker(const paraMaker& right);
+    paraMaker& operator=(const paraMaker& right);
   };
 }
 

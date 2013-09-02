@@ -15,6 +15,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29 August 2013  Michael Kelsey (hadr-casc-V09-06-48)
+----------------------------------------------------
+Address Coverity #52158 and 52161.
+
+- G4InuclSpecialFunctions.hh:  Add copy action declarations to paraMaker.
+
 8 August 2013  Michael Kelsey (hadr-casc-V09-06-47)
 ---------------------------------------------------
 More thread-safety fixes:
