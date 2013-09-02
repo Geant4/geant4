@@ -277,7 +277,16 @@ G4ComponentGGHadronNucleusXsc::GetIsoCrossSection(const G4DynamicParticle* aPart
            theParticle == theK0S     || 
            theParticle == theK0L        ) 
   {
-    sigma        = GetKaonNucleonXscVector(aParticle, A, Z);
+    // sigma        = GetKaonNucleonXscVector(aParticle, A, Z);
+
+    sigma = Z*hnXsc->GetKaonNucleonXscGG(aParticle, theProton);
+
+    hpInXsc = hnXsc->GetInelasticHadronNucleonXsc();
+
+    sigma += N*hnXsc->GetKaonNucleonXscGG(aParticle, theNeutron);
+
+    hnInXsc = hnXsc->GetInelasticHadronNucleonXsc();
+
     cofInelastic = 2.2;
     cofTotal     = 2.0;
     R = 1.3*fermi;

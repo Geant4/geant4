@@ -75,6 +75,8 @@ public:
 
   G4double GetHadronNucleonXscNS(const G4DynamicParticle*, const G4ParticleDefinition*);
 
+  G4double GetKaonNucleonXscGG(const G4DynamicParticle*, const G4ParticleDefinition*);
+
   G4double GetHadronNucleonXscVU(const G4DynamicParticle*, const G4ParticleDefinition*);
 
   // kinematics and set/get
