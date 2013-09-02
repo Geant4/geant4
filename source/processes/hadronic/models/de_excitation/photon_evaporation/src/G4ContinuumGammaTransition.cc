@@ -53,7 +53,6 @@
 #include "G4ContinuumGammaTransition.hh"
 #include "G4VLevelDensityParameter.hh"
 #include "G4ConstantLevelDensityParameter.hh"
-#include "G4RandGeneralTmp.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -112,29 +111,45 @@ void G4ContinuumGammaTransition::SelectGamma()
 
   _eGamma = 0.;
 
-  G4int nBins = 200;
-  G4double sampleArray[200];
+  G4int nBins = 100;
+  G4double sampleArray[101];
+  sampleArray[0] = 0.0;
   G4int i;
-  for (i=0; i<nBins; i++)
-    {
-      G4double e = _eMin + ( (_eMax - _eMin) / nBins) * i;
-      sampleArray[i] = E1Pdf(e);
-
-      if(_verbose > 10)
-	G4cout << "*---* G4ContinuumTransition: e = " << e 
-	       << " pdf = " << sampleArray[i] << G4endl;
+  G4double del = (_eMax - _eMin) / G4double(nBins);
+  G4double sum = 0;
+  G4double w1 = E1Pdf(_eMin);
+  G4double w2;
+  //G4cout << _eMin << "  " << _eMax << "  " << del << G4endl;
+  for (i=1; i<=nBins; i++) {
+    G4double e = _eMin + del * i;
+    w2 = E1Pdf(e);
+    sum += 0.5*(w1 + w2);
+    w1 = w2;
+    sampleArray[i] = sum;
+    if(_verbose > 10) {
+      G4cout << "*---* G4ContinuumTransition: e = " << e 
+	     << " pdf = " << sampleArray[i] << G4endl;
     }
-  G4RandGeneralTmp randGeneral(sampleArray, nBins);
-  G4double random = randGeneral.shoot();
-  
-  _eGamma = _eMin + (_eMax - _eMin) * random;
+  }
+  sum *= G4UniformRand();
+  _eGamma = _eMax;
+  for (i=1; i<=nBins; i++) {
+    if(sum <= sampleArray[i]) {
+      _eGamma = _eMin + del * i;
+      G4double w = sampleArray[i] - sampleArray[i-1];
+      //G4cout << _eGamma << "  " << w << G4endl;
+      if(w != 0.0) {
+	_eGamma -= (sampleArray[i] - sum)*del/w;
+      }
+      break;
+    }
+  }   
   
   G4double finalExcitation = _excitation - _eGamma;
   
   if(_verbose > 10) {
     G4cout << "*---*---* G4ContinuumTransition: eGamma = " << _eGamma
-	   << "   finalExcitation = " << finalExcitation 
-	   << " random = " << random << G4endl;
+	   << "   finalExcitation = " << finalExcitation << G4endl;
   }
   //  if (finalExcitation < 0)
   if(finalExcitation < _minLevelE/2.)

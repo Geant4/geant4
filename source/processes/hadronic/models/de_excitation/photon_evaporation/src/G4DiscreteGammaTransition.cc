@@ -66,7 +66,6 @@
 #include "G4DiscreteGammaTransition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include "G4RandGeneralTmp.hh"
 #include "G4AtomicShells.hh"
 #include "G4NuclearLevel.hh"
 #include "G4NuclearLevelStore.hh"

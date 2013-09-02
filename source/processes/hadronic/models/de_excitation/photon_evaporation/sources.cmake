@@ -67,7 +67,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_photon_evaporation
         G4PhotonEvaporation.hh
         G4PromptPhotonEvaporation.hh
         G4PtrLevelVector.hh
-        G4RandGeneralTmp.hh
         G4VGammaDeexcitation.hh
         G4VGammaTransition.hh
         G4VPhotonEvaporation.hh
