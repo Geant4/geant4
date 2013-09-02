@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+  Added G4log.hh, G4exp.hh, G4vdtcore.hh - fast log and exp 
+    converted from vdt library (http://svnweb.cern.ch/world/wsvn/vdt)
+
+August 31, 2013 M.Asai (global-V09-06-63)
+- G4Threading::G4GetThreadId() returns -2 instead of 0 for the case 
+  of sequential mode.
+
 August 26, 2013 A.Dotti(global-V09-06-62)
 - Add namespace G4Threading to functions defined in G4Threading.hh
 

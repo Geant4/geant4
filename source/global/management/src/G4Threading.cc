@@ -99,7 +99,7 @@ G4Pid_t G4Threading::G4GetPidId()  // In sequential mode return Process ID and n
 }
 
 G4int G4Threading::G4GetNumberOfCores() { return 1; }
-G4int G4Threading::G4GetThreadId() { return 0; }
+G4int G4Threading::G4GetThreadId() { return -2; }
 void G4Threading::G4SetThreadId(G4int) {}
 
 #endif

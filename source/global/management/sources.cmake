@@ -89,9 +89,12 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4VStateDependent.hh
         G4Version.hh
         G4coutDestination.hh
+        G4exp.hh
         G4ios.hh
+        G4log.hh
         G4strstreambuf.hh
         G4ofstreamDestination.hh
+        G4vdtcore.hh
         G4MTcoutDestination.hh
     SOURCES
         G4Allocator.cc
