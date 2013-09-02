@@ -138,12 +138,11 @@ G4ParticleDefinition::G4ParticleDefinition(
 {
    static G4String nucleus("nucleus");
 
-   g4particleDefinitionInstanceID = subInstanceManager.CreateSubInstance();
-   G4MT_pmanager = 0;
+   g4particleDefinitionInstanceID = -1;
    theProcessManagerShadow = 0;
 
    theParticleTable = G4ParticleTable::GetParticleTable();
-   
+
    //set verboseLevel equal to ParticleTable 
    verboseLevel = theParticleTable->GetVerboseLevel();
 
@@ -400,3 +399,44 @@ G4double G4ParticleDefinition::CalculateAnomaly()  const
   }
 }
 
+void G4ParticleDefinition::SetParticleDefinitionID(G4int id)
+{
+  if(id<0)
+  {
+    g4particleDefinitionInstanceID = subInstanceManager.CreateSubInstance(); 
+    G4MT_pmanager = 0;
+  }
+  else
+  {
+    if(isGeneralIon)
+    { g4particleDefinitionInstanceID = id; }
+    else
+    {
+      G4ExceptionDescription ed;
+      ed << "ParticleDefinitionID should not be set for the particles <"
+         << theParticleName << ">.";
+      G4Exception( "G4ParticleDefintion::SetParticleDefinitionID","PART10114",
+                   FatalException,ed);
+    }
+  }
+}
+
+#include "G4Threading.hh"
+
+void G4ParticleDefinition::SetProcessManager(G4ProcessManager *aProcessManager)
+{
+  if(g4particleDefinitionInstanceID<0 && !isGeneralIon)
+  {
+    if(G4Threading::G4GetThreadId() >= 0)
+    {
+      G4ExceptionDescription ed;
+      ed << "ProcessManager is being set to " << theParticleName
+         << " without proper initialization of TLS pointer vector.\n"
+         << "This operation is thread-unsafe.";
+      G4Exception( "G4ParticleDefintion::SetProcessManager","PART10116",
+                   JustWarning,ed);
+    }
+    SetParticleDefinitionID();
+  }
+  G4MT_pmanager = aProcessManager;
+}

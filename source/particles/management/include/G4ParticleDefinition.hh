@@ -398,6 +398,10 @@ class G4ParticleDefinition
 
    protected:
       G4bool isGeneralIon;
+
+   public:
+      void SetParticleDefinitionID(G4int id=-1);
+      G4int GetParticleDefinitionID() const;
 };
 
 #include "G4ParticleDefinition.icc"

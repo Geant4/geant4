@@ -66,6 +66,7 @@ inline
 inline
  G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
 {
+    if(g4particleDefinitionInstanceID<0) return 0;
     return G4MT_pmanager;
 }
 
@@ -79,12 +80,6 @@ inline
   void G4ParticleDefinition::SetMasterProcessManager( G4ProcessManager* aNewPM )
 {
    theProcessManagerShadow = aNewPM;
-}
-
-inline
- void G4ParticleDefinition::SetProcessManager(G4ProcessManager *aProcessManager)
-{
-    G4MT_pmanager = aProcessManager;
 }
 
 inline
@@ -186,3 +181,10 @@ inline
 {
   return isGeneralIon;
 }
+
+inline
+  G4int G4ParticleDefinition::GetParticleDefinitionID() const
+{
+  return g4particleDefinitionInstanceID; 
+}
+

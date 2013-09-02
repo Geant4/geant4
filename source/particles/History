@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 1. Sep. 2013  Makoto Asai (particles-V09-06-45)
+- Ditto for Linux and Windows.
+
+- 1. Sep. 2013  Makoto Asai (particles-V09-06-44)
+- Further protection.
+
+- 31. Aug. 2013  Makoto Asai (particles-V09-06-43)
+- G4ParticleDefinition::SetProcessManager() now checks the readiness of
+  TLS pointer and sets it up if it isn't. This fix is required for unit
+  tests that do not use Run Manager.
+
+- 28. Aug. 2013  Makoto Asai (particles-V09-06-42)
+- Retagged.
+
+- 28. Aug. 2013  Makoto Asai (particles-V09-06-41)
+- Split class mechanism of G4ParticleDefinition has been changed. Now all
+  general ions share the object ID with GenericIon so that TLS pointers
+  to G4ProcessManager are not created for such ions.
+
 - 15. Aug. 2013  Makoto Asai (particles-V09-06-40)
 - G4IonTable.cc: Fix the initialiaztion of IsomerTableList for
   worker thread.
