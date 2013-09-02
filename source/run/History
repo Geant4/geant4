@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Aug 30th, 2013, M.Asai (run-V09-06-87)
+- In addition to G4IonTable::InitializeLightIons(), 
+  G4IonConstructor::ConstructParticle() is invoked to ensure all
+  light ions are properly constructed when GenericIon is constructed.
+
+Aug 30th, 2013, M.Asai (run-V09-06-86)
+- G4IonTable::InitializeLightIons() is invoked for both MT and
+  sequential mode.
+
+Aug 28th, 2013, M.Asai (run-V09-06-85)
+- Split class mechanism of G4ParticleDefinition has been changed. Now all
+  general ions share the object ID with GenericIon so that TLS pointers
+  to G4ProcessManager are not created for such ions.
+
+Aug 28th, 2013, M.Asai (run-V09-06-84)
+- Move StartThread static method from G4UserWorkerInitialization to
+  G4MTRunManager and cleaned up.
+
 Aug 26th, 2013, A.Dotti (run-V09-06-83)
 - Use new interface for G4Threading namespace
 

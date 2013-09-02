@@ -60,10 +60,11 @@ class G4UserStackingAction;
 class G4UserTrackingAction;
 class G4UserSteppingAction;
 
+class G4WorkerThread;
+class G4WorkerRunManager;
+
 #include "G4Threading.hh"
-#include "G4WorkerThread.hh"
-#include "G4WorkerRunManager.hh"
-#include "G4MTRunManager.hh"
+#include "Randomize.hh"
 
 class G4UserWorkerInitialization {
 public: // with description
@@ -121,9 +122,6 @@ public: // with description
     // user-defined WorkerRunManager.
     // By default this method instantiates G4WorkerRunManager object.
 
-protected:   
-    static G4ThreadLocal G4WorkerThread* wThreadContext;
-    
 protected: // with description
     void SetUserAction(G4VUserPrimaryGeneratorAction*) const;
     void SetUserAction(G4UserRunAction*) const;
@@ -133,15 +131,7 @@ protected: // with description
     void SetUserAction(G4UserSteppingAction*) const;
     // These methods should be used to define user's action classes.
 
-private:
-    static void* StartThread( void* context);
-    // This static function is used to start a pthread-based
-    // worker.
-    // context is the instance of type G4UserWorkerAction.
-    // Method called by CreateAndStartWorker
-
 };
     
-//                  G4WorkerRunManager* rm = GetRunManager();
 #endif //G4UserWorkerInitialization_hh
 

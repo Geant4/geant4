@@ -430,6 +430,9 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 }
 
 #include "G4IonTable.hh"
+#include "G4ParticleTableIterator.hh"
+#include "G4IonConstructor.hh"
+
 void G4RunManagerKernel::SetupPhysics()
 {
     if(runManagerKernelType==workerRMK) return;
@@ -437,9 +440,31 @@ void G4RunManagerKernel::SetupPhysics()
     G4ParticleTable::GetParticleTable()->SetReadiness();
     physicsList->ConstructParticle();
     //Andrea: Temporary for MT
-#ifdef G4MULTITHREADED
+//////#ifdef G4MULTITHREADED
+    G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+    if(gion)
+    { G4IonConstructor::ConstructParticle(); }
     G4ParticleTable::GetParticleTable()->GetIonTable()->InitializeLightIons();
-#endif
+//////#endif
+
+    G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
+    pItr->reset();
+    while( (*pItr)() )
+    {
+      G4ParticleDefinition* particle = pItr->value();
+      if(!(particle->IsGeneralIon())) particle->SetParticleDefinitionID();
+    }
+
+    if(gion)
+    {
+      G4int gionId = gion->GetParticleDefinitionID();
+      pItr->reset(false);
+      while( (*pItr)() )
+      {
+        G4ParticleDefinition* particle = pItr->value();
+        if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
+      }
+    }
 }
 
 namespace {

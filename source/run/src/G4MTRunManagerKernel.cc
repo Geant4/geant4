@@ -50,3 +50,214 @@ void G4MTRunManagerKernel::SetupShadowProcess() const
     //ShadowProcess pointer == process poitner
     G4RunManagerKernel::SetupShadowProcess();
 }
+
+#include "G4WorkerRunManager.hh"
+#include "G4UserWorkerInitialization.hh"
+#include "G4VUserActionInitialization.hh"
+#include "G4WorkerThread.hh"
+#include "G4UImanager.hh"
+#include "G4LogicalVolume.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4PVReplica.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Region.hh"
+#include "G4Material.hh"
+#include "G4PhysicsVector.hh"
+#include "G4VDecayChannel.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4MaterialTable.hh"
+#include "G4PolyconeSide.hh"
+#include "G4PolyhedraSide.hh"
+#include "G4PVParameterised.hh"
+#include "G4VUserPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "G4VModularPhysicsList.hh"
+
+G4ThreadLocal G4WorkerThread* G4MTRunManagerKernel::wThreadContext = 0;
+G4WorkerThread* G4MTRunManagerKernel::GetWorkerThread() 
+{ return wThreadContext; }
+
+void* G4MTRunManagerKernel::StartThread(void* context)
+{
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //!!!!!! IMPORTANT !!!!!!!!!
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // Here is not sequential anymore and G4UserWorkerInitialization is
+  // a shared user initialization class
+  // This means this method cannot use data memebers of G4RunManagerKernel
+  // unless they are invariant ("read-only") and can be safely shared.
+  //  All the rest that is not invariant should be incapsualted into
+  //  the context (or, as for wThreadContext be G4ThreadLocal)
+  //!!!!!!!!!!!!!!!!!!!!!!!!!!
+//#ifdef G4MULTITHREADED
+//    turnontpmalloc();
+//#endif
+
+  wThreadContext = static_cast<G4WorkerThread*>(context);  
+  G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager();
+
+  //============================
+  //Step-0: Thread ID
+  //============================
+  //Initliazie per-thread stream-output
+  //The following line is needed before we actually do IO initialization
+  //becasue the constructor of UI manager resets the IO destination.
+  G4int thisID = wThreadContext->GetThreadId();
+  G4Threading::G4SetThreadId(thisID);
+  G4UImanager::GetUIpointer()->SetUpForAThread(thisID);
+
+  //============================
+  //Step-1: Random number engine
+  //============================
+  //RNG Engine needs to be initialized by "cloning" the master one.
+  const CLHEP::HepRandomEngine* masterEngine = masterRM->getMasterRandomEngine();
+  masterRM->GetUserWorkerInitialization()->SetupRNGEngine(masterEngine);
+
+  //============================
+  //Step-2: Initialize worker thread
+  //============================
+  masterRM->GetUserWorkerInitialization()->WorkerInitialize();
+  //Now initialize worker part of shared objects (geometry/physics)
+  wThreadContext->BuildGeometryAndPhysicsVector();
+  G4WorkerRunManager* wrm
+        = masterRM->GetUserWorkerInitialization()->CreateWorkerRunManager();
+  wrm->SetWorkerThread(wThreadContext);
+
+  //================================
+  //Step-3: Setup worker run manager
+  //================================
+  // Set the detector and physics list to the worker thread. Share with master
+  const G4VUserDetectorConstruction* detector = masterRM->GetUserDetectorConstruction();
+  wrm->G4RunManager::SetUserInitialization(const_cast<G4VUserDetectorConstruction*>(detector));
+  const G4VUserPhysicsList* physicslist = masterRM->GetUserPhysicsList();
+  wrm->SetUserInitialization(const_cast<G4VUserPhysicsList*>(physicslist));
+
+  //================================
+  //Step-4: Initialize worker run manager
+  //================================
+  if(masterRM->GetUserActionInitialization())
+  { masterRM->GetNonConstUserActionInitialization()->Build(); }
+  masterRM->GetUserWorkerInitialization()->WorkerStart();
+  wrm->Initialize();
+
+  //================================
+  //Step5: Loop overorders from the master thread 
+  //================================
+  G4MTRunManager::WorkerActionRequest nextAction = masterRM->ThisWorkerWaitForNextAction();
+  while( nextAction != G4MTRunManager::ENDWORKER )
+  {
+    if( nextAction == G4MTRunManager::NEXTITERATION ) // start the next run
+    {
+      //The following code deals with changing materials between runs
+      static G4ThreadLocal G4bool skipInitialization = true;
+      if(skipInitialization)
+      { 
+        // re-initialization is not necessary for the first run
+        skipInitialization = false;
+      }
+      else
+      {
+        ReinitializeGeometry();
+      }
+
+      // Execute UI commands stored in the masther UI manager
+      std::vector<G4String> cmds = masterRM->GetCommandStack();
+      G4UImanager* uimgr = G4UImanager::GetUIpointer(); //TLS instance
+      std::vector<G4String>::const_iterator it = cmds.begin();
+      for(;it!=cmds.end();it++)
+      { uimgr->ApplyCommand(*it); }
+    }
+    else
+    {
+      G4ExceptionDescription d;
+      d<<"Cannot continue, this worker has been requested an unknwon action: "
+       <<nextAction<<" expecting: ENDWORKER(=" <<G4MTRunManager::ENDWORKER
+       <<") or NEXTITERATION(="<<G4MTRunManager::NEXTITERATION<<")";
+      G4Exception("G4UserWorkerInitialization::StartThread","Run0035",FatalException,d);
+    }
+
+    //Now wait for master thread to signal new action to be performed
+    nextAction = masterRM->ThisWorkerWaitForNextAction();
+  } //No more actions to perform
+
+  //======================
+  //Step-6: Terminate worker thread
+  //===============================
+  masterRM->GetUserWorkerInitialization()->WorkerStop();
+  delete wrm;
+  wThreadContext->DestroyGeometryAndPhysicsVector();
+  wThreadContext = 0;
+
+  return static_cast<void*>(0);
+}
+
+void G4MTRunManagerKernel::ReinitializeGeometry()
+{
+  //=================================================
+  //Step-0: keep sensitive detector and field manager
+  //=================================================
+  typedef std::map<G4LogicalVolume*,std::pair<G4VSensitiveDetector*,G4FieldManager*> > LV2SDFM;
+  LV2SDFM lvmap;
+  G4PhysicalVolumeStore* mphysVolStore = G4PhysicalVolumeStore::GetInstance(); 
+  for(size_t ip=0;ip<mphysVolStore->size();ip++)
+  {
+    G4VPhysicalVolume* pv = (*mphysVolStore)[ip];
+    G4LogicalVolume *lv = pv->GetLogicalVolume();
+    G4VSensitiveDetector* sd = lv->GetSensitiveDetector();
+    G4FieldManager* fm = lv->GetFieldManager();
+    if(sd||fm) lvmap[lv] = std::make_pair(sd,fm);
+  }
+
+  //===========================
+  //Step-1: Clean the instances
+  //===========================
+  const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).FreeSlave();
+  const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).FreeSlave();
+  const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).FreeSlave();
+  const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).FreeSlave();
+  const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).FreeSlave();
+  const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).FreeSlave();
+
+  //===========================
+  //Step-2: Re-create instances
+  //===========================
+  const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+  const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+  const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+  const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).SlaveInitializeSubInstance();
+  const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
+  const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
+
+  //===============================
+  //Step-3: Re-initialize instances
+  //===============================
+  for(size_t ip=0;ip<mphysVolStore->size();ip++)
+  {
+    G4VPhysicalVolume* physVol = (*mphysVolStore)[ip];
+    G4LogicalVolume* g4LogicalVolume = physVol->GetLogicalVolume();
+    G4VSolid* g4VSolid = g4LogicalVolume->GetMasterSolid(); // shadow pointer
+    G4PVReplica* g4PVReplica = 0;
+    g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
+    if(g4PVReplica) // if the volume is a replica
+    {
+      G4VSolid *slaveg4VSolid = g4VSolid->Clone();
+      g4LogicalVolume->InitialiseWorker(g4LogicalVolume,slaveg4VSolid,0);
+    }
+    else
+    { g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0); }
+  }
+
+  //===================================================
+  //Step-4: Restore sensitive detector and field manaer
+  //===================================================
+  LV2SDFM::const_iterator it = lvmap.begin();
+  for(; it!=lvmap.end() ; ++it )
+  {
+    G4LogicalVolume* lv = it->first;
+    G4VSensitiveDetector* sd = (it->second).first;
+    G4FieldManager* fm = (it->second).second;
+    lv->SetFieldManager(fm, false);
+    lv->SetSensitiveDetector(sd);
+  }
+}
+

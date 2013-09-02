@@ -343,6 +343,8 @@ public: // with description
     { return physicsList; }
     inline const G4VUserActionInitialization* GetUserActionInitialization() const
     { return userActionInitialization; }
+    inline G4VUserActionInitialization* GetNonConstUserActionInitialization() const
+    { return userActionInitialization; }
     inline const G4UserWorkerInitialization* GetUserWorkerInitialization() const
     { return userWorkerInitialization; }
     inline const G4UserRunAction* GetUserRunAction() const

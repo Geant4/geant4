@@ -525,6 +525,19 @@ void G4MTRunManager::WaitForReadyWorkers()
     {
       createIsomerOnlyOnce = true;
       G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+     
+      G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+      if(gion)
+      {
+        G4int gionId = gion->GetParticleDefinitionID();
+        G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
+        pItr->reset(false);
+        while( (*pItr)() )
+        {
+          G4ParticleDefinition* particle = pItr->value();
+          if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
+        }
+      }
     }
 
     //Prepare to wait for workers to end eventloop

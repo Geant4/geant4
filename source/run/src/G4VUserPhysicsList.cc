@@ -584,8 +584,8 @@ void G4VUserPhysicsList::BuildPhysicsTable()
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
   if(!(particle->GetMasterProcessManager())) {
-////    G4cout << "#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(" 
-////           << particle->GetParticleName() << ") skipped..." << G4endl;
+    G4cout << "#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(" 
+           << particle->GetParticleName() << ") skipped..." << G4endl;
     return;
   }
   if (fRetrievePhysicsTable) {

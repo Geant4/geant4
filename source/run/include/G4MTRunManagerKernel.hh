@@ -55,6 +55,10 @@
 #define G4MTRunManagerKernel_h 1
 
 #include "G4RunManagerKernel.hh"
+#include "G4Threading.hh"
+#include "G4MTRunManager.hh"
+
+class G4WorkerThread;
 
 class G4MTRunManagerKernel : public G4RunManagerKernel {
 public:
@@ -63,6 +67,18 @@ public:
 protected:
     void SetupShadowProcess() const;
 
+public:
+    // This static method is used to start a worker thread.
+    // Virtual methods to be invoked from this methos are
+    // defined in G4UserWorkerInitialization class.
+    static void* StartThread(void* context);
+
+private:
+    static void ReinitializeGeometry();
+private:
+    static G4ThreadLocal G4WorkerThread* wThreadContext;
+public:
+    static G4WorkerThread* GetWorkerThread();
 };
 
 #endif //G4MTRunManagerKernel_h
