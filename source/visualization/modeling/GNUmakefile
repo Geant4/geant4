@@ -23,6 +23,7 @@ CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/navigation/include
+CPPFLAGS += -I$(G4BASE)/geometry/magneticfield/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/Boolean/include

@@ -24,6 +24,26 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+30th August 2013  John Allison  (vis-V09-06-24)
+- modeling-V09-06-15: - GNUmakefile: Added geometry/magneticfield/include.
+
+29th August 2013  John Allison  (vis-V09-06-23)
+- modeling-V09-06-14: Fixed a corrupted file (SVN glitch?).
+
+27th August 2013  John Allison  (vis-V09-06-22)
+- modeling-V09-06-13:
+  o G4MagneticFieldModel: Removed diagnostic print statements.
+
+26th August 2013  John Allison
+- modeling-V09-06-12:
+  o G4MagneticFieldModel: Variable no. of data points per half scene.
+- visman-V09-06-12:
+  o /vis/scene/add/magneticField:
+    . Added integer parameter: No. of data points per half scene.
+
+25th August 2013  John Allison
+- modeling-V09-06-11: G4MagneticFieldModel: Bug fix.
+
 24th August 2013  John Allison  (vis-V09-06-21)
 - visman-V09-06-11 and modeling-V09-06-09 (coworking)
   o Removed G4FlavoredParallelWorldModel.
