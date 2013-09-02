@@ -57,8 +57,8 @@ using namespace std;
 
 G4PAIModelData::G4PAIModelData(G4double tmin, G4double tmax, G4int ver)
 { 
-  const G4int nPerDecade = 20; 
-  const G4double lowestTkin = 0.1*MeV;
+  const G4int nPerDecade = 10; 
+  const G4double lowestTkin = 50*keV;
   const G4double highestTkin = 10*TeV;
 
   fPAIySection.SetVerbose(ver);
@@ -77,9 +77,10 @@ G4PAIModelData::G4PAIModelData(G4double tmin, G4double tmax, G4int ver)
 						 fHighestKineticEnergy,
 						 fTotBin);
   if(0 < ver) {
-    G4cout << "G4PAIModelData: Nbins= " << fTotBin
+    G4cout << "### G4PAIModelData: Nbins= " << fTotBin
 	   << " Tmin(MeV)= " << fLowestKineticEnergy/MeV
-	   << " Tmax(GeV)= " << fHighestKineticEnergy/GeV << G4endl;
+	   << " Tmax(GeV)= " << fHighestKineticEnergy/GeV 
+	   << "  tmin(keV)= " << tmin/keV << G4endl;
   }
 }
 
@@ -140,12 +141,12 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
     G4double tau = kinEnergy/proton_mass_c2;
     G4double bg2 = tau*( tau + 2. );
 
-    G4double Tkin = Tmax;
-    if (Tmax < Tmin + deltaLow ) { Tkin = Tmin + deltaLow; }
+    if (Tmax < Tmin + deltaLow ) { Tmax = Tmin + deltaLow; }
 
-    fPAIySection.Initialize(mat, Tkin, bg2, &fSandia);
+    fPAIySection.Initialize(mat, Tmax, bg2, &fSandia);
 
-    // G4cout<<"ionloss = "<<ionloss*cm/keV<<" keV/cm"<<endl;
+    //G4cout << i << ". TransferMax(keV)= "<< Tmax/keV << "  cut(keV)= " 
+    //	   << cut/keV << "  E(MeV)= " << kinEnergy/MeV << G4endl;
 
     G4int n = fPAIySection.GetSplineSize();
     G4PhysicsFreeVector* transferVector = new G4PhysicsFreeVector(n);
@@ -153,21 +154,19 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
 
     for( G4int k = 0; k < n; k++ )
     {
-      transferVector->PutValue( k ,
-                                fPAIySection.GetSplineEnergy(k+1),
-                                fPAIySection.GetIntegralPAIySection(k+1) );
-      dEdxVector->PutValue( k ,
-                                fPAIySection.GetSplineEnergy(k+1),
-                                fPAIySection.GetIntegralPAIdEdx(k+1) );
+      G4double t = fPAIySection.GetSplineEnergy(k+1);
+      transferVector->PutValue(k , t, 
+                               t*t*fPAIySection.GetIntegralPAIySection(k+1));
+      dEdxVector->PutValue(k, t, fPAIySection.GetIntegralPAIdEdx(k+1));
     }
-    //G4cout << *transferVector << G4endl;
+    // G4cout << *transferVector << G4endl;
 
     G4double ionloss = fPAIySection.GetMeanEnergyLoss();//  total <dE/dx>
 
     if(ionloss < 0.0) { ionloss = 0.0; }
     dEdxCutVector->PutValue(i,ionloss);
 
-    G4double dNdxCut = transferVector->Value(cut);
+    G4double dNdxCut = transferVector->Value(cut)/(cut*cut);
     //G4cout << "i= " << i << " x= " << dNdxCut << G4endl;
     if(dNdxCut < 0.0) { dNdxCut = 0.0; }
     dNdxCutVector->PutValue(i, dNdxCut);
@@ -237,18 +236,22 @@ G4PAIModelData::CrossSectionPerVolume(G4int coupleIndex,
   else if(scaledTkin > fParticleEnergyVector->Energy(0)) { 
     one = false; 
   }
+  G4PhysicsTable* table = fPAIxscBank[coupleIndex];
+
+  G4double tmax2 = tmax*tmax;
+  G4double tcut2 = tcut*tcut;
 
   //G4cout<<"iPlace = "<<iPlace<<"; tmax = "
   // <<tmax<<"; cutEnergy = "<<cutEnergy<<G4endl;  
-  cross1 = (*(fPAIxscBank[coupleIndex]))(iPlace)->Value(tmax);
+  cross1 = (*table)(iPlace)->Value(tmax)/tmax2;
   //G4cout<<"cross1 = "<<cross1<<G4endl;  
-  cross2 = (*(fPAIxscBank[coupleIndex]))(iPlace)->Value(tcut);
+  cross2 = (*table)(iPlace)->Value(tcut)/tcut2;
   //G4cout<<"cross2 = "<<cross2<<G4endl;  
   cross  = (cross2-cross1);
   //G4cout<<"cross = "<<cross<<G4endl;  
   if(!one) {
-    cross2 = (*(fPAIxscBank[coupleIndex]))(iPlace+1)->Value(tcut) -
-      (*(fPAIxscBank[coupleIndex]))(iPlace+1)->Value(tmax);
+    cross2 = (*table)(iPlace+1)->Value(tcut)/tcut2 
+      - (*table)(iPlace+1)->Value(tmax)/tmax2;
 
     G4double E1 = fParticleEnergyVector->Energy(iPlace); 
     G4double E2 = fParticleEnergyVector->Energy(iPlace+1);
@@ -282,10 +285,15 @@ G4double G4PAIModelData::SampleAlongStepTransfer(G4int coupleIndex,
   else if(scaledTkin > fParticleEnergyVector->Energy(0)) { 
     one = false; 
   }
-  dNdxCut1 = (*(fdNdxCutTable[coupleIndex]))(iPlace);
+  G4PhysicsLogVector* vcut = fdNdxCutTable[coupleIndex];
+  G4PhysicsVector* v1 = (*(fPAIxscBank[coupleIndex]))(iPlace);
+  G4PhysicsVector* v2 = 0;
 
-  G4double meanN1 =
-    ((*(*(fPAIxscBank[coupleIndex]))(iPlace))(0) - dNdxCut1)*stepFactor;
+  dNdxCut1 = (*vcut)[iPlace];
+  G4double esq1 = (v1->Energy(0))*(v1->Energy(0));
+  G4double esq2 = esq1;
+
+  G4double meanN1 = ((*v1)[0]/esq1 - dNdxCut1)*stepFactor;
   meanNumber = meanN1;
 
   //G4cout<<"iPlace = "<<iPlace<< " meanN1= " << meanN1 
@@ -295,9 +303,10 @@ G4double G4PAIModelData::SampleAlongStepTransfer(G4int coupleIndex,
   W1 = 1.0;
   W2 = 0.0;
   if(!one) {
-    dNdxCut2 = (*(fdNdxCutTable[coupleIndex]))(iPlace+1);
-    G4double meanN2 =
-      ((*(*(fPAIxscBank[coupleIndex]))(iPlace+1))(0) - dNdxCut2)*stepFactor;
+    v2 = (*(fPAIxscBank[coupleIndex]))(iPlace+1);
+    dNdxCut2 = (*vcut)[iPlace+1];
+    esq2 = (v2->Energy(0))*(v2->Energy(0));
+    G4double meanN2 = ((*v2)[0]/esq2 - dNdxCut2)*stepFactor;
     E1 = fParticleEnergyVector->Energy(iPlace); 
     E2 = fParticleEnergyVector->Energy(iPlace+1);
     W = 1.0/(E2 - E1);
@@ -317,14 +326,12 @@ G4double G4PAIModelData::SampleAlongStepTransfer(G4int coupleIndex,
 
   for(G4int i=0; i< numOfCollisions; ++i) {
     G4double rand = G4UniformRand();
-    position = dNdxCut1+
-      ((*(*(fPAIxscBank[coupleIndex]))(iPlace))(0) - dNdxCut1)*rand;
+    position = dNdxCut1 + ((*v1)[0]/esq1 - dNdxCut1)*rand;
     omega = GetEnergyTransfer(coupleIndex, iPlace, position);
     //G4cout << "omega(keV)= " << omega/keV << G4endl;
     if(!one) {
-      position = dNdxCut2+
-	((*(*(fPAIxscBank[coupleIndex]))(iPlace+1))(0) - dNdxCut2)*rand;
-      G4double omega2 = GetEnergyTransfer(coupleIndex,iPlace+1, position);
+      position = dNdxCut2 + ((*v2)[0]/esq2 - dNdxCut2)*rand;
+      G4double omega2 = GetEnergyTransfer(coupleIndex, iPlace+1, position);
       omega = omega*W1 + omega2*W2;
     }
     //G4cout << "omega(keV)= " << omega/keV << G4endl;
@@ -348,7 +355,7 @@ G4double G4PAIModelData::SampleAlongStepTransfer(G4int coupleIndex,
 G4double G4PAIModelData::SamplePostStepTransfer(G4int coupleIndex, 
 						G4double scaledTkin) const
 {  
-  // G4cout<<"G4PAIModelData::GetPostStepTransfer"<<G4endl;
+  //G4cout<<"G4PAIModelData::GetPostStepTransfer"<<G4endl;
   G4double transfer = 0.0;
   G4double rand = G4UniformRand();
 
@@ -358,30 +365,32 @@ G4double G4PAIModelData::SamplePostStepTransfer(G4int coupleIndex,
   //  size_t iTransfer, iTr1, iTr2;
   G4double position, dNdxCut1, dNdxCut2, E1, E2, W1, W2, W;
 
+  G4PhysicsVector* cutv = fdNdxCutTable[coupleIndex];
+
   // Fermi plato, try from left
   if(scaledTkin >= fParticleEnergyVector->GetMaxEnergy()) 
   {
-    position = (*(fdNdxCutTable[coupleIndex]))(nPlace)*rand;
-    transfer = GetEnergyTransfer(coupleIndex, iPlace, position);
+    position = (*cutv)[nPlace]*rand;
+    transfer = GetEnergyTransfer(coupleIndex, nPlace, position);
   }
   else if(scaledTkin <= fParticleEnergyVector->Energy(0))
   {
-    position = (*(fdNdxCutTable[coupleIndex]))(0)*rand;
-    transfer = GetEnergyTransfer(coupleIndex, iPlace, position);
+    position = (*cutv)[0]*rand;
+    transfer = GetEnergyTransfer(coupleIndex, 0, position);
   }
   else 
   {  
-    dNdxCut1 = (*(fdNdxCutTable[coupleIndex]))(iPlace);  
-    dNdxCut2 = (*(fdNdxCutTable[coupleIndex]))(iPlace+1);  
-
-    // G4cout<<"dNdxCut1 = "<<dNdxCut1<<G4endl;
-    // G4cout<<"dNdxCut2 = "<<dNdxCut2<<G4endl;
+    dNdxCut1 = (*cutv)[iPlace];  
+    dNdxCut2 = (*cutv)[iPlace+1];  
 
     E1 = fParticleEnergyVector->Energy(iPlace); 
     E2 = fParticleEnergyVector->Energy(iPlace+1);
     W  = 1.0/(E2 - E1);
     W1 = (E2 - scaledTkin)*W;
     W2 = (scaledTkin - E1)*W;
+
+    //G4cout<<"iPlace= " << "  dNdxCut1 = "<<dNdxCut1 
+    //	  <<" dNdxCut2 = "<<dNdxCut2<< " W1= " << W1 << " W2= " << W2 <<G4endl;
 
     position = dNdxCut1*rand;
     G4double tr1 = GetEnergyTransfer(coupleIndex, iPlace, position);
@@ -391,7 +400,7 @@ G4double G4PAIModelData::SamplePostStepTransfer(G4int coupleIndex,
 
     transfer = tr1*W1 + tr2*W2;
   }
-  // G4cout<<"PAImodel PostStepTransfer = "<<transfer/keV<<" keV"<<G4endl; 
+  //G4cout<<"PAImodel PostStepTransfer = "<<transfer/keV<<" keV"<<G4endl; 
   if(transfer < 0.0 ) { transfer = 0.0; }
   return transfer;
 }
@@ -405,34 +414,57 @@ G4double G4PAIModelData::GetEnergyTransfer(G4int coupleIndex,
 					   size_t iPlace, 
 					   G4double position) const
 { 
-  if(position > (*(*(fPAIxscBank[coupleIndex]))(iPlace))[0]) {
-    return (*(*(fPAIxscBank[coupleIndex]))(iPlace))[0];
-  }
+  G4PhysicsVector* v = (*(fPAIxscBank[coupleIndex]))(iPlace);
+  G4double esq = (v->Energy(0))*(v->Energy(0));  
+  if(position*esq >= (*v)[0]) { return v->Energy(0); }
+
+  size_t iTransferMax = v->GetVectorLength() - 1;
+  esq = (v->Energy(iTransferMax))*(v->Energy(iTransferMax));  
+  if(position*esq < (*v)[iTransferMax]) { return v->Energy(iTransferMax); }
 
   size_t iTransfer;
-  size_t iTransferMax = 
-    (*(fPAIxscBank[coupleIndex]))(iPlace)->GetVectorLength();
-  G4double x1, x2, y1, y2(0.0), energyTransfer;
+  G4double x1(0.0), x2(0.0), y1(0.0), y2(0.0), energyTransfer, 
+    xsq1(0.0), xsq2(0.0);
 
-  for(iTransfer=1; iTransfer < iTransferMax; ++iTransfer) {
-    y2 = (*(*(fPAIxscBank[coupleIndex]))(iPlace))[iTransfer];
-    if(position > y2) { break; }
+  for(iTransfer=1; iTransfer<iTransferMax; ++iTransfer) {
+    x2 = v->Energy(iTransfer);
+    xsq2 = x2*x2;
+    y2 = (*v)[iTransfer];
+    if(position*xsq2 >= y2) { break; }
   }
 
-  y1 = (*(*(fPAIxscBank[coupleIndex]))(iPlace))[iTransfer-1];
-
-  x1 = (*(fPAIxscBank[coupleIndex]))(iPlace)->Energy(iTransfer-1);
-  x2 = (*(fPAIxscBank[coupleIndex]))(iPlace)->Energy(iTransfer);
+  y1 = (*v)[iTransfer-1];
+  x1 = v->Energy(iTransfer-1);
+  xsq1 = x1*x1;
+  //G4cout << "i= " << iTransfer << " imax= " << iTransferMax
+  //	 << " x1= " << x1 << " x2= " << x2 << G4endl;
 
   energyTransfer = x1;
   if ( x1 != x2 ) {
     if ( y1 == y2  ) {
       energyTransfer += (x2 - x1)*G4UniformRand();
     } else {
-      energyTransfer += (position - y1)*(x2 - x1)/(y2 - y1);
+      y1 /= xsq1;
+      y2 /= xsq2;
+      if(x1*1.1 < x2) {
+	const G4int nbins = 10;
+        G4double del = (x2 - x1)/G4int(nbins);
+        G4double x0  = x1;
+        for(G4int i=1; i<=nbins; ++i) {
+          x2 = x0 + i*del;
+          xsq2 = x2*x2;
+          y2 = v->Value(x2)/xsq2;
+          if(position >= y2) { break; }
+          x1 = x2;
+          y1 = y2;
+          xsq1 = xsq2;
+	}
+      }
+      energyTransfer =
+	sqrt((y2 - y1)*xsq1*xsq2/(position*(xsq1 - xsq2) - y1*xsq1 + y2*xsq2));
     }
   }
-  //G4cout << "x1(keV)= " << x1/keV << " x2(keV)= " << x2/keV
+  //  G4cout << "x1(keV)= " << x1/keV << " x2(keV)= " << x2/keV
   //	 << " y1= " << y1 << " y2= " << y2 << " pos= " << position
   //	 << " E(keV)= " << energyTransfer/keV << G4endl; 
   return energyTransfer;

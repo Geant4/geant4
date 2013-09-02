@@ -131,9 +131,9 @@ private:
   G4PAIModel & operator=(const  G4PAIModel &right);
   G4PAIModel(const  G4PAIModel&);
 
-  G4int                fVerbose; 
+  G4int                       fVerbose; 
 
-  G4PAIModelData*      fModelData; 
+  G4PAIModelData*             fModelData; 
 
   std::vector<const G4MaterialCutsCouple*> fMaterialCutsCoupleVector;
   std::vector<const G4Region*>      fPAIRegionVector;
@@ -146,7 +146,6 @@ private:
   G4double fMass;
   G4double fRatio;
   G4double fChargeSquare;
-  G4double fLowKinEnergy;
 
   G4bool   isInitialised;
 };

@@ -86,8 +86,16 @@ void G4KleinNishinaModel::Initialise(const G4ParticleDefinition* p,
 				     const G4DataVector& cuts)
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
-  InitialiseElementSelectors(p, cuts);
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4KleinNishinaModel::InitialiseLocal(const G4ParticleDefinition*,
+					  G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

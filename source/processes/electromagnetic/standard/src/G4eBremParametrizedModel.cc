@@ -155,11 +155,19 @@ void G4eBremParametrizedModel::Initialise(const G4ParticleDefinition* p,
 
   currentZ = 0.;
 
-  InitialiseElementSelectors(p, cuts);
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
 
   if(isInitialised) { return; }
   fParticleChange = GetParticleChangeForLoss();
   isInitialised = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eBremParametrizedModel::InitialiseLocal(const G4ParticleDefinition*,
+					       G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

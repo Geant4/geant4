@@ -221,14 +221,11 @@ G4PEEffectFluoModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
     //
     G4double elecKineEnergy = energy - bindingEnergy;
     if (elecKineEnergy > fminimalEnergy) {
-      G4ThreeVector elecDirection =
+      G4DynamicParticle* aParticle = new G4DynamicParticle(theElectron, 
 	GetAngularDistribution()->SampleDirection(aDynamicPhoton, 
 						  elecKineEnergy,
-						  i, 
-						  couple->GetMaterial());
-   
-      G4DynamicParticle* aParticle = 
-	new G4DynamicParticle(theElectron, elecDirection, elecKineEnergy);
+						  i, couple->GetMaterial()), 
+							   elecKineEnergy);
       fvect->push_back(aParticle);
     } else {
       edep += elecKineEnergy;

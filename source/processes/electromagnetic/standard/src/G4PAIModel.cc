@@ -73,6 +73,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4PAIModelData.hh"
+#include "G4DeltaAngle.hh"
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -92,7 +93,8 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   if(p) { SetParticle(p); }
   else  { SetParticle(fElectron); }
 
-  fLowKinEnergy = 0.1*MeV;
+  // default generator
+  SetAngularDistribution(new G4DeltaAngle());
 
   isInitialised = false;
 }
@@ -120,10 +122,13 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
   fParticleChange = GetParticleChangeForLoss();
 
   if(IsMaster()) { 
+
+    InitialiseElementSelectors(p, cuts);
+
     if(!fModelData) {
 
-      G4double tmin = fRatio*std::max(fLowKinEnergy, LowEnergyLimit());
-      G4double tmax =  HighEnergyLimit()*fRatio;
+      G4double tmin = LowEnergyLimit()*fRatio;
+      G4double tmax = HighEnergyLimit()*fRatio;
       fModelData = new G4PAIModelData(tmin, tmax, fVerbose);
     }
     // Prepare initialization
@@ -172,6 +177,7 @@ void G4PAIModel::InitialiseLocal(const G4ParticleDefinition*,
 				 G4VEmModel* masterModel)
 {
   fModelData = static_cast<G4PAIModel*>(masterModel)->GetPAIModelData();
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -236,8 +242,8 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4ThreeVector direction= dp->GetMomentumDirection();
   G4double scaledTkin    = kineticEnergy*fRatio;
   G4double totalEnergy   = kineticEnergy + fMass;
-  G4double pSquare       = kineticEnergy*(totalEnergy+fMass);
- 
+  G4double totalMomentum = sqrt(kineticEnergy*(totalEnergy+fMass));
+
   G4double deltaTkin = 
     fModelData->SamplePostStepTransfer(coupleIndex, scaledTkin);
 
@@ -252,36 +258,20 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   if( deltaTkin > tmax) { deltaTkin = tmax; }
 
-  G4double deltaTotalMomentum = 
-    sqrt(deltaTkin*(deltaTkin + 2.*electron_mass_c2 ));
-  G4double totalMomentum      = sqrt(pSquare);
-  G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
-                                /(deltaTotalMomentum * totalMomentum);
-
-  if( costheta > 1.0 ) { costheta = 1.0; }
-  G4double sintheta = 0.0;
-  G4double sin2 = 1. - costheta*costheta;
-  if( sin2 > 0.) { sintheta = sqrt(sin2); }
-
-  //  direction of the delta electron
-  G4double phi  = twopi*G4UniformRand(); 
-
-  G4ThreeVector deltaDirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
-  deltaDirection.rotateUz(direction);
+  const G4Element* anElement = SelectRandomAtom(matCC,fParticle,kineticEnergy);
+  G4int Z = G4lrint(anElement->GetZ());
+ 
+  G4DynamicParticle* deltaRay = new G4DynamicParticle(fElectron, 
+	    GetAngularDistribution()->SampleDirection(dp, deltaTkin,
+		 				      Z, matCC->GetMaterial()),
+						      deltaTkin);
 
   // primary change
   kineticEnergy -= deltaTkin;
-  G4ThreeVector dir = 
-    totalMomentum*direction - deltaTotalMomentum*deltaDirection;
+  G4ThreeVector dir = totalMomentum*direction - deltaRay->GetMomentum();
   direction = dir.unit();
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(direction);
-
-  // create G4DynamicParticle object for e- delta ray 
-  G4DynamicParticle* deltaRay = new G4DynamicParticle();
-  deltaRay->SetDefinition(fElectron);
-  deltaRay->SetKineticEnergy( deltaTkin ); //!!! trick for last steps/2.0???
-  deltaRay->SetMomentumDirection(deltaDirection); 
 
   vdp->push_back(deltaRay);
 }

@@ -23,82 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4DeltaAngle.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
 //
 //
-// File name:     G4KleinNishinaCompton
+// File name:  G4DeltaAngle
 //
-// Author:        Vladimir Ivanchenko on base of Michel Maire code
-//
-// Creation date: 15.03.2005
-//
-// Modifications:
-// 18-04-05 Use G4ParticleChangeForGamma (V.Ivantchenko)
-//
-//
-// Class Description:
-//
-// Implementation of gamma Compton scatteribg on free electron
+// Author:     Vladimir Ivantchenko
 // 
-
+// Creation date: 23 August 2013
+//
+// Modifications: 
+//
+// Class Description: 
+//
+// Delta-electron Angular Distribution Generation 
+//
 // -------------------------------------------------------------------
 //
 
-#ifndef G4KleinNishinaCompton_h
-#define G4KleinNishinaCompton_h 1
+#ifndef G4DeltaAngle_h
+#define G4DeltaAngle_h 1
 
-#include "G4VEmModel.hh"
+#include "G4ios.hh"
+#include "globals.hh"
+#include "G4VEmAngularDistribution.hh"
 
-class G4ParticleChangeForGamma;
+class G4ParticleDefinition;
 
-class G4KleinNishinaCompton : public G4VEmModel
+class G4DeltaAngle : public G4VEmAngularDistribution
 {
 
 public:
 
-  G4KleinNishinaCompton(const G4ParticleDefinition* p = 0, 
-			const G4String& nam = "Klein-Nishina");
+  G4DeltaAngle(const G4String& name = "");
 
-  virtual ~G4KleinNishinaCompton();
+  virtual ~G4DeltaAngle();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
+                                         G4double kinEnergyFinal,
+                                         G4int Z,
+                                         const G4Material* mat = 0);
 
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel);
-
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double kinEnergy, 
-                                      G4double Z, 
-                                      G4double A, 
-                                      G4double cut,
-                                      G4double emax);
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
-
-protected:
-
-  G4ParticleDefinition*     theGamma;
-  G4ParticleDefinition*     theElectron;
-  G4ParticleChangeForGamma* fParticleChange;
-  G4double                  lowestGammaEnergy;
+  void PrintGeneratorInformation() const;
 
 private:
 
-  // hide assignment operator
-  G4KleinNishinaCompton & operator=(const  G4KleinNishinaCompton &right);
-  G4KleinNishinaCompton(const  G4KleinNishinaCompton&);
+  // hide assignment operator 
+  G4DeltaAngle & operator=(const  G4DeltaAngle &right);
+  G4DeltaAngle(const  G4DeltaAngle&);
+
+  const G4ParticleDefinition* fElectron;
+  std::vector<G4double> prob;
+  G4int                 nprob;
 
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #endif
+

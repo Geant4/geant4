@@ -77,10 +77,19 @@ G4KleinNishinaCompton::~G4KleinNishinaCompton()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4KleinNishinaCompton::Initialise(const G4ParticleDefinition*,
-                                       const G4DataVector&)
+void G4KleinNishinaCompton::Initialise(const G4ParticleDefinition* p,
+                                       const G4DataVector& cuts)
 {
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4KleinNishinaCompton::InitialiseLocal(const G4ParticleDefinition*,
+					    G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

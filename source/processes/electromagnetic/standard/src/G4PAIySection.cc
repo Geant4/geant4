@@ -838,8 +838,11 @@ G4double G4PAIySection::SumOverInterval( G4int i )
    x1 = fSplineEnergy[i+1];
    y0 = fDifPAIySection[i];
    yy1 = fDifPAIySection[i+1];
+   //G4cout << "## x0= " << x0 << " x1= " << x1 << G4endl;
    c = x1/x0;
+   //G4cout << "c= " << c << " y0= " << y0 << " yy1= " << yy1 << G4endl;
    a = log10(yy1/y0)/log10(c);
+   //G4cout << "a= " << a << G4endl;
    // b = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a);
    a += 1;

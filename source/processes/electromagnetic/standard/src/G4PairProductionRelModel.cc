@@ -113,7 +113,15 @@ void G4PairProductionRelModel::Initialise(const G4ParticleDefinition* p,
 					  const G4DataVector& cuts)
 {
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
-  InitialiseElementSelectors(p, cuts);
+  if(IsMaster()) { InitialiseElementSelectors(p, cuts); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PairProductionRelModel::InitialiseLocal(const G4ParticleDefinition*,
+					       G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

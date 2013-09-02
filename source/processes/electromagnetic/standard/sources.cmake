@@ -55,6 +55,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4BraggModel.hh
         G4ComptonScattering.hh
         G4CoulombScattering.hh
+        G4DeltaAngle.hh
         G4DipBustGenerator.hh
         G4GammaConversion.hh
         G4GoudsmitSaundersonMscModel.hh
@@ -119,6 +120,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ComptonScattering.cc
         G4CoulombScattering.cc
         G4GammaConversion.cc
+        G4DeltaAngle.cc
         G4DipBustGenerator.cc
         G4GoudsmitSaundersonMscModel.cc
         G4GoudsmitSaundersonTable.cc

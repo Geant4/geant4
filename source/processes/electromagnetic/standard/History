@@ -18,6 +18,34 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+30 August 13: V.Ivanchenko (emstand-V09-06-62)
+- G4PAIModelData - fixed numerical problem by defining internal
+    low-energy limit for proton 50 keV
+
+30 August 13: V.Ivanchenko (emstand-V09-06-61)
+- G4SeltzerBergerModel - if in the method ComputeDXSectionPerAtom
+    it turs out that data for given Z are not uploaded call 
+    InitialiseForElement instead of ReadData in order to set 
+    AutoLock - this is kind of sanity for MT mode
+- G4PAIModel - do not upply hard-coded low-limit on energy, because 
+    it should done coherently inside G4PAIModelData
+- G4PAIModelData - scale internal differential cross section
+    table as 1/t^2, where t is energy transfer in oreder to more
+    smooth x-section; fixed bug in sampling algorithm - removed
+    steps in delta electron energy spectrum
+
+29 August 13: V.Ivanchenko (emstand-V09-06-60)
+- G4BetheHeitlerModel, G4KleinNishinaCompton, G4KleinNishinaModel,
+  G4PairProductionRelModel, G4eBremParametrizedModel - implemented
+    InitialiseLocal method in order to share element selectors between
+    threads
+
+28 August 13: V.Ivanchenko (emstand-V09-06-59)
+- G4PEEffectFluoModel - minor optimisation
+- G4DeltaAngle - angular generator for delta-electrons taking
+    into account electron motion
+- G4PAIModel - use G4DeltaAngle angular generator
+
 23 August 13: V.Ivanchenko (emstand-V09-06-58)
 - G4PAIModelData added interpolation of dedx and cross section
     between energy bins of internal tables
