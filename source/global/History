@@ -17,8 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-  Added G4log.hh, G4exp.hh, G4vdtcore.hh - fast log and exp 
-    converted from vdt library (http://svnweb.cern.ch/world/wsvn/vdt)
+September 3, 2013 G.Cosmo, V.Ivantchenko (global-V09-06-64)
+- Added G4Log and G4Exp headers for fast log and exp; converted from
+  the VDT library (http://svnweb.cern.ch/world/wsvn/vdt).
 
 August 31, 2013 M.Asai (global-V09-06-63)
 - G4Threading::G4GetThreadId() returns -2 instead of 0 for the case 

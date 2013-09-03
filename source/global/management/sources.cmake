@@ -42,9 +42,11 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4ErrorPropagatorData.icc
         G4Evaluator.hh
         G4ExceptionSeverity.hh
+        G4Exp.hh
         G4FPEDetection.hh
         G4FastVector.hh
         G4GeometryTolerance.hh
+        G4Log.hh
         G4LPhysicsFreeVector.hh
         G4LPhysicsFreeVector.icc
         G4OrderedTable.hh
@@ -89,12 +91,9 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4VStateDependent.hh
         G4Version.hh
         G4coutDestination.hh
-        G4exp.hh
         G4ios.hh
-        G4log.hh
         G4strstreambuf.hh
         G4ofstreamDestination.hh
-        G4vdtcore.hh
         G4MTcoutDestination.hh
     SOURCES
         G4Allocator.cc
