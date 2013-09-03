@@ -55,8 +55,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 // --------------------------------------------------------------------
-#ifndef G4exp_h
-#define G4exp_h 1
+#ifndef G4Exp_h
+#define G4Exp_h 1
 
 #include <limits>
 #include "G4Types.hh"
@@ -170,7 +170,7 @@ namespace G4ExpConsts
 
 
 /// Exponential Function double precision
-inline G4double G4exp(G4double initial_x)
+inline G4double G4Exp(G4double initial_x)
 {
     G4double x = initial_x;
     G4double px=G4ExpConsts::fpfloor(G4ExpConsts::LOG2E * x +0.5);
@@ -217,7 +217,7 @@ inline G4double G4exp(G4double initial_x)
 // Exp single precision --------------------------------------------------------
 
 /// Exponential Function single precision
-inline G4float G4expf(G4float initial_x)
+inline G4float G4Expf(G4float initial_x)
 {
     G4float x = initial_x;
 
@@ -256,8 +256,8 @@ inline G4float G4expf(G4float initial_x)
 //------------------------------------------------------------------------------
 
 void expv(const uint32_t size, G4double const * __restrict__ iarray, G4double* __restrict__ oarray);
-void G4expv(const uint32_t size, G4double const * __restrict__ iarray, G4double* __restrict__ oarray);
+void G4Expv(const uint32_t size, G4double const * __restrict__ iarray, G4double* __restrict__ oarray);
 void expfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
-void G4expfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
+void G4Expfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
 
 #endif

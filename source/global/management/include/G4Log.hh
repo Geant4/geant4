@@ -56,8 +56,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 // --------------------------------------------------------------------
-#ifndef G4log_h
-#define G4log_h 1
+#ifndef G4Log_h
+#define G4Log_h 1
 
 #include <limits>
 #include "G4Types.hh"
@@ -217,7 +217,7 @@ namespace G4LogConsts
 
 // Log double precision --------------------------------------------------------
 
-inline G4double G4log(G4double x)
+inline G4double G4Log(G4double x)
 {
         const G4double original_x = x;
 
@@ -298,7 +298,7 @@ namespace G4LogConsts
 
 // Log single precision --------------------------------------------------------
 
-inline G4float G4logf( G4float x )
+inline G4float G4Logf( G4float x )
 {
         const G4float original_x = x;
 
@@ -331,8 +331,8 @@ inline G4float G4logf( G4float x )
 //------------------------------------------------------------------------------
 
 void logv(const uint32_t size, G4double const * __restrict__ iarray, G4double* __restrict__ oarray);
-void G4logv(const uint32_t size, G4double const * __restrict__ iarray, G4double* __restrict__ oarray);
+void G4Logv(const uint32_t size, G4double const * __restrict__ iarray, G4double* __restrict__ oarray);
 void logfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
-void G4logfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
+void G4Logfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
 
 #endif /* LOG_H_ */
