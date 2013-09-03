@@ -42,6 +42,7 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4ErrorPropagationNavigator.hh
         G4GeomTestVolume.hh
         G4GeometryMessenger.hh
+        G4GlobalMagFieldMessenger.hh
         G4MultiLevelLocator.hh
         G4MultiNavigator.hh
         G4NavigationLogger.hh
@@ -77,6 +78,7 @@ GEANT4_DEFINE_MODULE(NAME G4navigation
         G4ErrorPropagationNavigator.cc
         G4GeomTestVolume.cc
         G4GeometryMessenger.cc
+        G4GlobalMagFieldMessenger.cc
         G4MultiLevelLocator.cc
         G4MultiNavigator.cc
         G4NavigationLogger.cc

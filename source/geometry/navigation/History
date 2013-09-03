@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 3rd, 2013 - I.Hrivnacova  (geomnav-V09-06-16)
+----------------------------------
+- Added new messenger class G4GlobalMagFieldMessenger defining UI commands
+  for creating/deleting the global uniform magnetic field and
+  activating/inactivating it according to the set field value.
+
 August 27th, 2013 - G.Cosmo  (geomnav-V09-06-15)
 ---------------------------
 - Added G4Ellipsoid among solids enabled for parameterisation in
