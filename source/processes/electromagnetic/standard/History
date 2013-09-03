@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+02 September 13: V.Ivanchenko (emstand-V09-06-63)
+- G4PAIModelData - fixed very end of the delta-electron spectra
+
 30 August 13: V.Ivanchenko (emstand-V09-06-62)
 - G4PAIModelData - fixed numerical problem by defining internal
     low-energy limit for proton 50 keV
