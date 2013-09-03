@@ -74,6 +74,13 @@ public:
     //  event remains to be processed, that worker thread must delete that G4Event
     //  object.
     virtual G4bool SetUpAnEvent(G4Event*, CLHEP::HepRandomEngine*);
+    // Same as above method, but the seeds are set only once over "eventModulo" events.
+    // The return value shows the number of events the caller Worker has to process
+    // (between 1 and eventModulo depending on number of events yet to be processed).
+    // G4Event object has the event ID of the first event of this bunch.
+    // If zero is returned no more event needs to be processed, and worker thread 
+    // must delete that G4Event.
+    virtual G4int SetUpNEvents(G4Event*, CLHEP::HepRandomEngine*);
 
     //Method called by Initialize() method
 protected:
@@ -185,6 +192,13 @@ public:
 private:
     WorkerActionRequest nextActionRequest;
     void NewActionRequest( WorkerActionRequest newRequest );
+
+protected:
+    G4int eventModulo;
+    G4int nSeedsUsed;
+public:
+    inline void SetEventModulo(G4int i=1) { eventModulo = i; }
+    inline G4int GetEventModulo() const { return eventModulo; }
 
 };
 

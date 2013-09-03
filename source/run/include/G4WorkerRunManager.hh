@@ -86,5 +86,7 @@ public:
 
 protected:
     G4bool eventLoopOnGoing;
+    G4int nevModulo;
+    G4int currEvID;
 };
 #endif //G4WorkerRunManager_h

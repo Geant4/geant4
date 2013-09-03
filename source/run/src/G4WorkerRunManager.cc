@@ -62,6 +62,8 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     if(masterScM) G4ScoringManager::GetScoringManager(); //TLS instance for a worker
 
     eventLoopOnGoing = false;
+    nevModulo = -1;
+    currEvID = -1;
 }
 
 #include "G4MTRunManager.hh"
@@ -123,6 +125,8 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     eventLoopOnGoing = true;
 ///////    G4int i_event = workerContext->GetThreadId();
     G4int i_event = -1;
+    nevModulo = -1;
+    currEvID = -1;
     while(eventLoopOnGoing)
     {
       ProcessOneEvent(i_event);
@@ -163,8 +167,33 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
   G4Event* anEvent = new G4Event(i_event);
   if(i_event<0)
   {
-    eventLoopOnGoing = G4MTRunManager::GetMasterRunManager()
+    G4int nevM = G4MTRunManager::GetMasterRunManager()->GetEventModulo();
+    if(nevM==1)
+    {
+      eventLoopOnGoing = G4MTRunManager::GetMasterRunManager()
                        ->SetUpAnEvent(anEvent,G4Random::getTheEngine());
+    }
+    else
+    {
+      if(nevModulo<=0)
+      {
+        G4int nevToDo = G4MTRunManager::GetMasterRunManager()
+                         ->SetUpNEvents(anEvent,G4Random::getTheEngine());
+        if(nevToDo==0)
+        { eventLoopOnGoing = false; }
+        else
+        {
+          currEvID = anEvent->GetEventID();
+          nevModulo = nevToDo - 1;
+        }
+      }
+      else
+      {
+        anEvent->SetEventID(++currEvID);
+        nevModulo--;
+      }
+    }
+
     if(!eventLoopOnGoing)
     {
       delete anEvent;

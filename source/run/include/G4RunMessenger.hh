@@ -84,6 +84,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIcommand *               beamOnCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
     G4UIcmdWithAnInteger *      nThreadsCmd;
+    G4UIcmdWithAnInteger *      evModCmd;
     G4UIcmdWithAString *        dumpRegCmd;
     G4UIcmdWithoutParameter *   dumpCoupleCmd;
     G4UIcmdWithABool *          optCmd;

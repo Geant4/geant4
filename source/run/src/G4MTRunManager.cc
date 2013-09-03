@@ -82,7 +82,8 @@ G4MTRunManagerKernel* G4MTRunManager::GetMTMasterRunManagerKernel()
 G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
     nworkers(2),
     masterRNGEngine(0),
-    nextActionRequest(UNDEFINED)
+    nextActionRequest(UNDEFINED),
+    eventModulo(1),nSeedsUsed(0)
 {
     if ( fMasterRM )
     {
@@ -190,6 +191,7 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
 {
     numberOfEventToBeProcessed = n_events;
     numberOfEventProcessed = 0;
+    nSeedsUsed = 0;
 
     if(verboseLevel>0)
     { timer->Start(); }
@@ -209,7 +211,9 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
     if ( InitializeSeeds(n_events) == false )
     {
         G4RNGHelper* helper = G4RNGHelper::GetInstance();
-        for ( G4int ne = 0 ; ne < n_events*2 ; ++ne)
+        G4int nev = n_events;
+        if(eventModulo>1) nev = (n_events-1)/eventModulo + 1;
+        for ( G4int ne = 0 ; ne < nev*2 ; ++ne)
             helper->AddOneSeed( (long) (100000000L * G4Random::getTheGenerator()->flat()) );
     }
     
@@ -346,13 +350,34 @@ G4bool G4MTRunManager::SetUpAnEvent(G4Event* evt, CLHEP::HepRandomEngine * egn)
   {
     evt->SetEventID(numberOfEventProcessed);
     G4RNGHelper* helper = G4RNGHelper::GetInstance();
-    G4int idx_rndm = 2*numberOfEventProcessed;
+    G4int idx_rndm = 2*nSeedsUsed;
     G4long seeds[3] = { helper->GetSeed(idx_rndm), helper->GetSeed(idx_rndm+1), 0 };
     egn->setSeeds(seeds,-1);
     numberOfEventProcessed++;
+    nSeedsUsed++;
     return true;
   }
   return false;
+}
+
+G4int G4MTRunManager::SetUpNEvents(G4Event* evt, CLHEP::HepRandomEngine * egn)
+{
+  G4AutoLock l(&setUpEventMutex);
+  if( numberOfEventProcessed < numberOfEventToBeProcessed )
+  {
+    G4int nev = eventModulo;
+    if(numberOfEventProcessed + nev > numberOfEventToBeProcessed)
+    { nev = numberOfEventToBeProcessed - numberOfEventProcessed; }
+    evt->SetEventID(numberOfEventProcessed);
+    G4RNGHelper* helper = G4RNGHelper::GetInstance();
+    G4int idx_rndm = 2*nSeedsUsed;
+    G4long seeds[3] = { helper->GetSeed(idx_rndm), helper->GetSeed(idx_rndm+1), 0 };
+    egn->setSeeds(seeds,-1);
+    numberOfEventProcessed += nev;
+    nSeedsUsed++;
+    return nev;
+  }
+  return 0;
 }
 
 void G4MTRunManager::TerminateWorkers()

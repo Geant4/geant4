@@ -101,6 +101,17 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   nThreadsCmd->SetToBeBroadcasted(false);
   nThreadsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  evModCmd = new G4UIcmdWithAnInteger("/run/eventModulo",this);
+  evModCmd->SetGuidance("Set the modulo N for setting random number seeds"); 
+  evModCmd->SetGuidance("i.e. random number seeds are set by the G4MTRunManager for every N events.");
+  evModCmd->SetGuidance("This command is valid only for multi-threaded mode.");
+  evModCmd->SetGuidance("The command is ignored if it is issued in sequential mode.");
+  evModCmd->SetParameterName("nev",true);
+  evModCmd->SetDefaultValue(1);
+  evModCmd->SetRange("nev>0");
+  evModCmd->SetToBeBroadcasted(false);
+  evModCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   dumpRegCmd = new G4UIcmdWithAString("/run/dumpRegion",this);
   dumpRegCmd->SetGuidance("Dump region information.");
   dumpRegCmd->SetGuidance("In case name of a region is not given, all regions will be displayed.");
@@ -237,6 +248,7 @@ G4RunMessenger::~G4RunMessenger()
   delete beamOnCmd;
   delete verboseCmd;
   delete nThreadsCmd;
+  delete evModCmd;
   delete optCmd;
   delete dumpRegCmd;
   delete dumpCoupleCmd;
@@ -295,6 +307,24 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     {
       G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
       "/run/numberOfThreads command is issued to local thread.");
+    }
+  }
+  else if( command==evModCmd)
+  {
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if( rmType==G4RunManager::masterRM )
+    {
+      static_cast<G4MTRunManager*>(runManager)->SetEventModulo(evModCmd->GetNewIntValue(newValue));
+    }
+    else if ( rmType==G4RunManager::sequentialRM )
+    {
+      G4cout<<"*** /run/eventModulo command is issued in sequential mode."
+            <<"\nCommand is ignored.";
+    }
+    else
+    {
+      G4Exception("G4RunMessenger::ApplyNewCommand","Run0902",FatalException,
+      "/run/eventModulo command is issued to local thread.");
     }
   }
   else if( command==dumpRegCmd )
