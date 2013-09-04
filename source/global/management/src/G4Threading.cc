@@ -75,6 +75,7 @@ G4int G4Threading::G4GetNumberOfCores()
 
 void G4Threading::G4SetThreadId(G4int value ) { G4ThreadID = value; }
 G4int G4Threading::G4GetThreadId() { return G4ThreadID; }
+G4bool G4Threading::IsWorkerThread() { return (G4ThreadID>=0); }
 
 #if defined(WIN32)  // WIN32 stuff needed for MT
 DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m )
@@ -100,6 +101,7 @@ G4Pid_t G4Threading::G4GetPidId()  // In sequential mode return Process ID and n
 
 G4int G4Threading::G4GetNumberOfCores() { return 1; }
 G4int G4Threading::G4GetThreadId() { return -2; }
+G4bool G4Threading::IsWorkerThread() { return false; }
 void G4Threading::G4SetThreadId(G4int) {}
 
 #endif

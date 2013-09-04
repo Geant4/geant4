@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 3, 2013 M.Asai (global-V09-06-66)
+- Introducing G4Threaing::IsWorkerThread() method. It returns true when
+  it is invoked in a worker thread, while it returns true for masther
+  thread and for sequential mode.
+
 September 3, 2013 G.Cosmo, V.Ivantchenko (global-V09-06-65, global-V09-06-64)
 - Added G4Log and G4Exp headers for fast log and exp; converted from
   the VDT library (http://svnweb.cern.ch/world/wsvn/vdt).

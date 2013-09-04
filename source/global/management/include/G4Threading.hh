@@ -171,6 +171,7 @@ namespace G4Threading {
   G4Pid_t G4GetPidId();
   G4int G4GetNumberOfCores();
   G4int G4GetThreadId();
+  G4bool IsWorkerThread();
   void G4SetThreadId( G4int aNewValue );
 }
 #endif //G4Threading_hh
