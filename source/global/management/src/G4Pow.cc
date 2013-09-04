@@ -87,20 +87,20 @@ G4Pow::G4Pow()
   for(G4int i=1; i<=max2; ++i)
   {
     ener[i] = powN(100.,i); 
-    logen[i]= G4Log(ener[i]); 
-    lz2[i]  = G4Log(1.0 + i*0.2);
+    logen[i]= std::log(ener[i]); 
+    lz2[i]  = std::log(1.0 + i*0.2);
   }
 
   for(G4int i=1; i<maxZ; ++i)
   {
     G4double x  = G4double(i);
     pz13[i] = std::pow(x,onethird);
-    lz[i]   = G4Log(x);
+    lz[i]   = std::log(x);
     if(i < maxZfact)
     { 
       f *= x; 
       fact[i] = f;
-      fexp[i] = G4Exp(0.5*i);
+      fexp[i] = std::exp(0.5*i);
     }
     logf += lz[i];
     logfact[i] = logf;

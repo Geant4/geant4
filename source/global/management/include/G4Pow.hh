@@ -49,8 +49,6 @@
 #define G4Pow_h 1
 
 #include "globals.hh"
-#include "G4Log.hh"
-#include "G4Exp.hh"
 #include "G4DataVector.hh"
 
 class G4Pow
@@ -186,7 +184,7 @@ inline G4double G4Pow::logA(G4double A) const
   }
   else
   {
-    res = G4Log(a);
+    res = std::log(a);
   }
   if(1.0 > A) { res = -res; }
   return res;
@@ -215,7 +213,7 @@ inline G4double G4Pow::logX(G4double x) const
   }
   else
   {
-    res = G4Log(a);
+    res = std::log(a);
   }
   if(1.0 > x) { res = -res; }
   return res;
@@ -245,7 +243,7 @@ inline G4double G4Pow::expA(G4double A) const
   }
   else
   {
-    res = G4Exp(a);
+    res = std::exp(a);
   }
   if(0.0 > A) { res = 1.0/res; }
   return res;
