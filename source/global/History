@@ -17,8 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 4, 2013 G.Cosmo (global-V09-06-67)
+- Added inclusion of <stdin.h> in G4Exp and G4Log headers.
+  Make them matching to std::exp and std::log on Windows plaatform.
+- Use G4Log and G4Exp within G4Pow and G4Poisson. Expected slight
+  performance boost; numerical results to be validated.
+
 September 3, 2013 M.Asai (global-V09-06-66)
-- Introducing G4Threaing::IsWorkerThread() method. It returns true when
+- Introducing G4Threading::IsWorkerThread() method. It returns true when
   it is invoked in a worker thread, while it returns true for masther
   thread and for sequential mode.
 

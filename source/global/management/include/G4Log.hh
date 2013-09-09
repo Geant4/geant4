@@ -59,7 +59,14 @@
 #ifndef G4Log_h
 #define G4Log_h 1
 
+#ifdef WIN32
+
+  #define G4Log std::log
+
+#else
+
 #include <limits>
+#include <stdint.h>
 #include "G4Types.hh"
 
 // local namespace for the constants/functions which are necessary only here
@@ -334,5 +341,7 @@ void logv(const uint32_t size, G4double const * __restrict__ iarray, G4double* _
 void G4Logv(const uint32_t size, G4double const * __restrict__ iarray, G4double* __restrict__ oarray);
 void logfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
 void G4Logfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
+
+#endif /* WIN32 */
 
 #endif /* LOG_H_ */

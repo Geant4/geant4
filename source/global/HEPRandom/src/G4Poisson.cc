@@ -31,6 +31,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4Poisson.hh"
+#include "G4Exp.hh"
 #include "Randomize.hh"
 
 G4long G4Poisson(G4double mean)
@@ -42,7 +43,7 @@ G4long G4Poisson(G4double mean)
   if(mean <= border)
   {
     G4double position = G4UniformRand();
-    G4double poissonValue = std::exp(-mean);
+    G4double poissonValue = G4Exp(-mean);
     G4double poissonSum = poissonValue;
 
     while(poissonSum <= position)

@@ -58,7 +58,14 @@
 #ifndef G4Exp_h
 #define G4Exp_h 1
 
+#ifdef WIN32
+
+  #define G4Exp std::exp
+
+#else
+
 #include <limits>
+#include <stdint.h>
 #include "G4Types.hh"
 
 namespace G4ExpConsts
@@ -259,5 +266,7 @@ void expv(const uint32_t size, G4double const * __restrict__ iarray, G4double* _
 void G4Expv(const uint32_t size, G4double const * __restrict__ iarray, G4double* __restrict__ oarray);
 void expfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
 void G4Expfv(const uint32_t size, G4float const * __restrict__ iarray, G4float* __restrict__ oarray);
+
+#endif /* WIN32 */
 
 #endif
