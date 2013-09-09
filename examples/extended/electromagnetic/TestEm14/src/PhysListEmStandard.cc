@@ -30,7 +30,7 @@
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
@@ -41,6 +41,7 @@
 #include "G4ComptonScattering.hh"
 #include "G4KleinNishinaModel.hh"
 #include "G4GammaConversion.hh"
+#include "G4GammaConversionToMuons.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -90,6 +91,7 @@ void PhysListEmStandard::ConstructProcess()
       cs->SetEmModel(new G4KleinNishinaModel());
       pmanager->AddDiscreteProcess(cs);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
+      pmanager->AddDiscreteProcess(new G4GammaConversionToMuons);      
       
     } else if (particleName == "e-") {
       //electron
