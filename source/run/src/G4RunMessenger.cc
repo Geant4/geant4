@@ -104,11 +104,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   evModCmd = new G4UIcmdWithAnInteger("/run/eventModulo",this);
   evModCmd->SetGuidance("Set the modulo N for setting random number seeds"); 
   evModCmd->SetGuidance("i.e. random number seeds are set by the G4MTRunManager for every N events.");
+  evModCmd->SetGuidance("If zero is set, a default value, that is roughly given by this.");
+  evModCmd->SetGuidance("   N = int( number_of_event / ( 100 * number_of_threads ) )");
   evModCmd->SetGuidance("This command is valid only for multi-threaded mode.");
-  evModCmd->SetGuidance("The command is ignored if it is issued in sequential mode.");
+  evModCmd->SetGuidance("This command is ignored if it is issued in sequential mode.");
   evModCmd->SetParameterName("nev",true);
-  evModCmd->SetDefaultValue(1);
-  evModCmd->SetRange("nev>0");
+  evModCmd->SetDefaultValue(0);
+  evModCmd->SetRange("nev>=0");
   evModCmd->SetToBeBroadcasted(false);
   evModCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 

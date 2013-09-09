@@ -435,9 +435,9 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 
 void G4RunManagerKernel::SetupPhysics()
 {
+    G4ParticleTable::GetParticleTable()->SetReadiness();
     if(runManagerKernelType==workerRMK) return;
 
-    G4ParticleTable::GetParticleTable()->SetReadiness();
     physicsList->ConstructParticle();
     //Andrea: Temporary for MT
 //////#ifdef G4MULTITHREADED
@@ -494,7 +494,6 @@ void G4RunManagerKernel::InitializePhysics()
   if(verboseLevel>1) G4cout << "physicsList->Construct() start." << G4endl;
   if(numberOfParallelWorld>0) physicsList->UseCoupledTransportation();
   physicsList->Construct();
-  SetupShadowProcess();
     
   if(verboseLevel>1) G4cout << "physicsList->CheckParticleList() start." << G4endl;
   physicsList->CheckParticleList();
@@ -542,13 +541,16 @@ G4bool G4RunManagerKernel::RunInitialization()
     return false;
   }
 
+  if(geometryNeedsToBeClosed) CheckRegularGeometry();
+
+  SetupShadowProcess();
   UpdateRegion();
   BuildPhysicsTables();
 
   if(geometryNeedsToBeClosed)
   {
     ResetNavigator();
-    CheckRegularGeometry();
+    // CheckRegularGeometry();
     // Notify the VisManager as well
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
     if(pVVisManager) pVVisManager->GeometryHasChanged();

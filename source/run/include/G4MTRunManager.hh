@@ -194,11 +194,12 @@ private:
     void NewActionRequest( WorkerActionRequest newRequest );
 
 protected:
+    G4int eventModuloDef;
     G4int eventModulo;
     G4int nSeedsUsed;
 public:
-    inline void SetEventModulo(G4int i=1) { eventModulo = i; }
-    inline G4int GetEventModulo() const { return eventModulo; }
+    inline void SetEventModulo(G4int i=1) { eventModuloDef = i; }
+    inline G4int GetEventModulo() const { return eventModuloDef; }
 
 };
 

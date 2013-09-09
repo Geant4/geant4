@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 5th, 2013, M.Asai (run-V09-06-93)
+- Fix the timing of CheckRegularGeometry() so that ScoreSplitterProcess
+  is properly set to the worker process manager.
+
+Sep 5th, 2013, M.Asai (run-V09-06-92)
+- G4ParticleTable::GetParticleTable()->SetReadiness(); is invoked
+  for the worker threads as well to make sure ions could be created
+  during an event loop.
+- Ions are created only if G4GenericIon is defined in the physics
+  List.
+
+Sep 4th, 2013, M.Asai (run-V09-06-91)
+- Fix compilation error on Windows.
+
+Sep 4th, 2013, M.Asai (run-V09-06-90)
+- Fix the timing of setting process shadow pointer to make sure
+  parallel world process is properly included for worker thread.
+
 Sep 2nd, 2013, M.Asai (run-V09-06-89)
 - Clean up.
 

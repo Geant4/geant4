@@ -83,7 +83,7 @@ G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
     nworkers(2),
     masterRNGEngine(0),
     nextActionRequest(UNDEFINED),
-    eventModulo(1),nSeedsUsed(0)
+    eventModuloDef(0),eventModulo(1),nSeedsUsed(0)
 {
     if ( fMasterRM )
     {
@@ -208,6 +208,25 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
 
     //initialize seeds
     //If user did not implement InitializeSeeds, use default: 2 seeds per event 
+    if( eventModuloDef > 0 )
+    {
+      eventModulo = eventModuloDef;
+      if(eventModulo > numberOfEventToBeProcessed/nworkers)
+      {
+        eventModulo = numberOfEventToBeProcessed/nworkers;
+        if(eventModulo<1) eventModulo =1;
+        G4ExceptionDescription msgd;
+        msgd << "Event modulo is reduced to " << eventModulo
+            << " to distribute events to all threads.";
+        G4Exception("G4MTRunManager::InitializeEventLoop()",
+                  "Run10035", JustWarning, msgd);
+      }
+    }
+    else
+    {
+      eventModulo = int(std::sqrt(double(numberOfEventToBeProcessed/nworkers)));
+      if(eventModulo<1) eventModulo =1;
+    }
     if ( InitializeSeeds(n_events) == false )
     {
         G4RNGHelper* helper = G4RNGHelper::GetInstance();
@@ -549,11 +568,10 @@ void G4MTRunManager::WaitForReadyWorkers()
     if(!createIsomerOnlyOnce)
     {
       createIsomerOnlyOnce = true;
-      G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
-     
       G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
       if(gion)
       {
+        G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
         G4int gionId = gion->GetParticleDefinitionID();
         G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
         pItr->reset(false);
