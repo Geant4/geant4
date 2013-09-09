@@ -59,9 +59,8 @@
 // 20 November 2011, V.Ivanchenko
 //                        - Migration to new design of atomic deexcitation
 //
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ///////////////////////////////////////////////////////////////////////////////
-//
+
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NuclearLevelManager.hh"
@@ -116,12 +115,11 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
   SetNumberOfDaughters (1);
   FillDaughterNucleus (0, A, Z, theDaughterExcitation);
   Qtransition = theQtransition;
-  halflifethreshold = -1.*second;
+  halflifethreshold = nanosecond;
   applyICM = true;
   applyARM = true;
 }
 
-//
 // Constructor for a daughter nucleus and one other particle.
 //
 G4NuclearDecayChannel::
@@ -149,7 +147,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
   SetDaughter(0, theDaughterName1);
   FillDaughterNucleus (1, A, Z, theDaughterExcitation);
   Qtransition = theQtransition;
-  halflifethreshold = -1.*second;
+  halflifethreshold = nanosecond;
   applyICM = true;
   applyARM = true;
 }
@@ -187,7 +185,8 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode &theMode,
   FillDaughterNucleus(1, A, Z, theDaughterExcitation);
   RandomEnergy = randBeta;
   Qtransition = theQtransition;
-  halflifethreshold = -1*second;
+
+  halflifethreshold = nanosecond;
   applyICM = true;
   applyARM = true;
 }
@@ -200,20 +199,13 @@ void G4NuclearDecayChannel::FillDaughterNucleus(G4int index, G4int A, G4int Z,
 {
   // Determine if the proposed daughter nucleus has a sensible A, Z and excitation
   // energy.
-  if (A<1 || Z<0 || theDaughterExcitation <0.0)
-  {
-//    G4cerr <<"Error in G4NuclearDecayChannel::FillDaughterNucleus";
-//    G4cerr <<"Inappropriate values of daughter A, Z or excitation" <<G4endl;
-//    G4cerr <<"A = " <<A <<" and Z = " <<Z;
-//    G4cerr <<" Ex = " <<theDaughterExcitation*MeV  <<"MeV" <<G4endl;
+  if (A < 1 || Z < 0 || theDaughterExcitation < 0.0) {
     G4ExceptionDescription ed;
     ed << "Inappropriate values of daughter A, Z or excitation: "
        << A << " , " << Z << " , " << theDaughterExcitation*MeV << " MeV "
        << G4endl;
     G4Exception("G4NuclearDecayChannel::FillDaughterNucleus()", "HAD_RDM_006",
                 FatalException, ed);
-
-    // G4Exception(__FILE__, G4inttostring(__LINE__), FatalException, "G4NuclearDecayChannel::FillDaughterNucleus");
   }
 
   // Save A and Z to local variables.  Find the GROUND STATE of the daughter
@@ -227,39 +219,37 @@ void G4NuclearDecayChannel::FillDaughterNucleus(G4int index, G4int A, G4int Z,
   } else {
     G4IonTable *theIonTable =
       (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
-    daughterNucleus = theIonTable->GetIon(daughterZ, daughterA, theDaughterExcitation*MeV);
+    daughterNucleus = theIonTable->GetIon(daughterZ, daughterA);
   }
   daughterExcitation = theDaughterExcitation;
   SetDaughter(index, daughterNucleus);
 }
 
 
-G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
+G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
 {
   // Load the details of the parent and daughter particles if they have not
   // been defined properly
-
   if (G4MT_parent == 0) FillParent();
   if (G4MT_daughters == 0) FillDaughters();
 
   // We want to ensure that the difference between the total
   // parent and daughter masses equals the energy liberated by the transition.
 
-  theParentMass = 0.0;
-  for( G4int index=0; index < numberOfDaughters; index++)
-    {theParentMass += G4MT_daughters[index]->GetPDGMass();}
-  theParentMass += Qtransition  ;
-  // bug fix for beta+ decay (flei 25/09/01)
-  if (decayMode == 2) theParentMass -= 2*0.511 * MeV;
-  //
-#ifdef G4VERBOSE
-  if (GetVerboseLevel()>1) {
-    G4cout << "G4NuclearDecayChannel::DecayIt "<< G4endl;
-    G4cout << "the decay mass = " << theParentMass << G4endl;
+  G4double deltaM;
+  if (decayMode == 1) {         // beta- decay
+    deltaM = CLHEP::electron_mass_c2;
+  } else if (decayMode == 2) {  // beta+ decay
+    deltaM = 2.*CLHEP::electron_mass_c2;
+  } else {                      // all others
+    deltaM = 0.0;
   }
-#endif
 
-  SetParentMass (theParentMass);
+  G4double groundStateParentMass = G4MT_parent->GetPDGMass();
+  G4double massAvailableForDecay =
+                     groundStateParentMass - deltaM - daughterExcitation;
+  // theParentMass = 0.0;
+  SetParentMass(massAvailableForDecay);
   
   // Define a product vector.
   G4DecayProducts* products = 0;
@@ -269,7 +259,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
   switch (numberOfDaughters) {
     case 0:
       G4cerr << "G4NuclearDecayChannel::DecayIt ";
-      G4cerr << " daughters not defined " <<G4endl;
+      G4cerr << " daughters not defined " << G4endl;
       break;
     case 1:
       products = OneBodyDecayIt();
@@ -281,9 +271,6 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
       products = BetaDecayIt();
       break;
     default:
-      // G4cerr <<"Error in G4NuclearDecayChannel::DecayIt" <<G4endl;
-      // G4cerr <<"Number of daughters in decay = " <<numberOfDaughters <<G4endl;
-      // G4Exception(__FILE__, G4inttostring(__LINE__), FatalException,  "G4NuclearDecayChannel::DecayIt");
     {
       G4ExceptionDescription ed;
       ed << " More than 3 daughters in decay: N = " << numberOfDaughters
@@ -313,6 +300,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
 
       dynamicDaughter = products->PopProducts();
       G4LorentzVector daughterMomentum = dynamicDaughter->Get4Momentum();
+      daughterMomentum.setE(daughterMomentum.e() + daughterExcitation);   // DHW
       G4ThreeVector const daughterMomentum1(static_cast<const G4LorentzVector> (daughterMomentum));
 
       // Now define a G4Fragment with the correct A, Z and excitation,
@@ -333,6 +321,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
       if (decayMode == 0) {
         deexcitation->RDMForced(true);
       } else {
+        // Not forced, but decay will still happen if lifetime < 1 ns
         deexcitation->RDMForced(false);
       }
 
@@ -346,11 +335,14 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
       //  this change is related to bug #1001  (F.Lei 07/05/2010)
 
       G4FragmentVector* gammas = 0;	
-      if (applyICM) {
-        gammas = deexcitation->BreakUp(nucleus);	
-      } else {
+// DHW      if (applyICM) {
+        // Single gamma emission
+// DHW        gammas = deexcitation->BreakUp(nucleus);	
+// DHW      } else {
+        // Multi-gamma emission  (what does ICM have to do with this choice?)
+        // DiscreteDeexcitation sets ICM off by default - G4NuclearDecayChannel::DecayIt sets it on
         gammas = deexcitation->BreakItUp(nucleus);
-      }
+// DHW      }
 
       // the returned G4FragmentVector contains the residual nuclide
       // as its last entry.
@@ -369,23 +361,48 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
 
       // now the nucleus
       G4double finalDaughterExcitation = gammas->operator[](nGammas)->GetExcitationEnergy();
-      // f.lei (03/01/03) this is needed to fix the crach in test18 
       if (finalDaughterExcitation <= 1.0*keV) finalDaughterExcitation = 0;
       
       if (dynamicDaughter) delete dynamicDaughter;
       
       G4IonTable* theIonTable =
           (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());      
-      dynamicDaughter = new G4DynamicParticle(
-                  theIonTable->GetIon(daughterZ,daughterA,finalDaughterExcitation),
-                  daughterMomentum1);
-      products->PushProducts (dynamicDaughter); 
+
+      G4ParticleDefinition* daughterIon;
+
+      // Search for metastable level corresponding to excitation energy
+      G4int lvl = 0;
+      G4double dEx;
+      G4bool match = false;
+      do {
+        daughterIon = theIonTable->FindIon(daughterZ, daughterA, lvl);
+        dEx = 0.;
+        if (daughterIon) dEx = ((const G4Ions*)(daughterIon))->GetExcitationEnergy();
+        match = std::abs(dEx - finalDaughterExcitation) < keV;
+        lvl++;
+      } while (!match && (lvl < 10) );
+
+      if (lvl == 10) {
+        if (match) {
+          daughterIon = theIonTable->FindIon(daughterZ, daughterA, 9);
+        } else {
+          daughterIon = theIonTable->FindIon(daughterZ, daughterA, 0);
+          G4ExceptionDescription ed;
+          ed << "No matching metastable state found for (" << daughterZ << ", "
+             << daughterA << ") - returning ground state " << G4endl;
+          G4Exception("G4NuclearDecayChannel::DecayIt()", "HAD_RDM_005",
+                      JustWarning, ed);
+        }
+      }
+
+      dynamicDaughter = new G4DynamicParticle(daughterIon, daughterMomentum1);  
+      products->PushProducts(dynamicDaughter); 
       
-      // retrive the ICM shell index
+      // retrieve the ICM shell index
       shellIndex = deexcitation->GetVacantShellNumber();
       
       // Delete/reset variables associated with the gammas.
-      while (!gammas->empty()) {
+      while (!gammas->empty() ) {
         delete *(gammas->end()-1);
         gammas->pop_back();
       }
@@ -399,19 +416,16 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
       switch (decayMode)
         {
         case KshellEC:
-	  //
 	  {
             eShell = 0; // --> 0 from 1 (f.lei 30/4/2008)
           }
           break;
         case LshellEC:
-	  //
           {
             eShell = G4int(G4UniformRand()*3)+1;
           }
           break;
         case MshellEC:
-	  //
           {
             // limit the shell index to 6 as specified by the ARM (F.Lei 06/05/2010)
             // eShell = G4int(G4UniformRand()*5)+4;
@@ -525,57 +539,56 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double theParentMass)
 
 G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
 {
-  if (GetVerboseLevel()>1) G4cout << "G4Decay::BetaDecayIt()"<<G4endl;
-
-  //daughters'mass
-  G4double daughtermass[3];
-  G4double sumofdaughtermass = 0.0;
   G4double pmass = GetParentMass();
-  for (G4int index=0; index<3; index++)
-    {
-     daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
-     sumofdaughtermass += daughtermass[index];
-    }
 
-  //create parent G4DynamicParticle at rest
+  G4double daughtermass[3];
+  for (G4int index = 0; index < 3; index++) {
+    daughtermass[index] = G4MT_daughters[index]->GetPDGMass();
+  }
+
+  // Add excitation energy so daughter can be decayed later
+  daughtermass[1] += daughterExcitation;
+
+  // Create parent G4DynamicParticle at rest and create products
   G4ParticleMomentum dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
-
-  //create G4Decayproducts
-  G4DecayProducts *products = new G4DecayProducts(*parentparticle);
-  delete parentparticle;
-
-  G4double Q = pmass - sumofdaughtermass;  
+  G4DynamicParticle parentParticle(G4MT_parent, dummy, 0.0);
+  G4DecayProducts* products = new G4DecayProducts(parentParticle);
 
   // faster method as suggested by Dirk Kruecker of FZ-Julich
   G4double daughtermomentum[3];
   G4double daughterenergy[3];
   // Use the histogram distribution to generate the beta energy
-  daughterenergy[0] = RandomEnergy->shoot() * Q;
-  daughtermomentum[0] = std::sqrt(daughterenergy[0]*daughterenergy[0] +
-                        2.0*daughterenergy[0] * daughtermass[0]);
+  daughterenergy[0] = Qtransition*RandomEnergy->shoot();
+  daughtermomentum[0] = std::sqrt(daughterenergy[0]*(daughterenergy[0] + 2.*daughtermass[0]) );
 
   // neutrino energy distribution is flat within the kinematical limits
-  G4double rd = 2*G4UniformRand()-1;
+  G4double rd = 2.*G4UniformRand() - 1.;
   // limits
-  G4double Mme=pmass-daughtermass[0];
-  G4double K=0.5-daughtermass[1]*daughtermass[1]/(2*Mme*Mme-4*pmass*daughterenergy[0]);
+  G4double Mme = daughtermass[1] + Qtransition;
+  G4double K = 0.5 - daughtermass[1]*daughtermass[1]/(2*Mme*Mme-4*pmass*daughterenergy[0]);
 	  
-  daughterenergy[2]=K*(Mme-daughterenergy[0]+rd*daughtermomentum[0]);
-  daughtermomentum[2] = daughterenergy[2] ; 
-	  
+  daughterenergy[2] = K * (Mme - daughterenergy[0] + rd*daughtermomentum[0]);
+  daughtermomentum[2] = daughterenergy[2];
+
   // the recoil nucleus
-  daughterenergy[1] = Q-daughterenergy[0]-daughterenergy[2];
-  G4double recoilmomentumsquared = daughterenergy[1]*daughterenergy[1] +
-                             2.0*daughterenergy[1] * daughtermass[1];
+  daughterenergy[1] = Qtransition - daughterenergy[0] - daughterenergy[2];
+  G4double recoilmomentumsquared =
+               daughterenergy[1]*(daughterenergy[1] + 2.0*daughtermass[1]);
   if (recoilmomentumsquared < 0.0) recoilmomentumsquared = 0.0;
   daughtermomentum[1] = std::sqrt(recoilmomentumsquared);
   
   // output message
   if (GetVerboseLevel()>1) {
-    G4cout <<"     daughter 0:" <<daughtermomentum[0]/GeV <<"[GeV/c]" <<G4endl;
-    G4cout <<"     daughter 1:" <<daughtermomentum[1]/GeV <<"[GeV/c]" <<G4endl;
-    G4cout <<"     daughter 2:" <<daughtermomentum[2]/GeV <<"[GeV/c]" <<G4endl;
+    G4cout << " G4NuclearDecayChannel::BetaDecayIt() " << G4endl;
+    G4cout <<"     e- momentum: " <<daughtermomentum[0]/GeV <<" [GeV/c]" <<G4endl;
+    G4cout <<"     daughter momentum: " <<daughtermomentum[1]/GeV <<" [GeV/c]" <<G4endl;
+    G4cout <<"     nu momentum: " <<daughtermomentum[2]/GeV <<" [GeV/c]" <<G4endl;
+    G4cout <<"     e- energy: " << daughtermass[0] + daughterenergy[0] << G4endl;
+    G4cout <<"     daughter energy: " << daughtermass[1] + daughterenergy[1] << G4endl;
+    G4cout <<"     nu energy: " << daughtermass[2] + daughterenergy[2] << G4endl;
+    G4cout <<"     total of daughter energies: " << daughtermass[0] + daughtermass[1] +
+               daughtermass[2] + daughterenergy[0] + daughterenergy[1] + daughterenergy[2] 
+            << G4endl; 
   }
   //create daughter G4DynamicParticle
   G4double costheta, sintheta, phi, sinphi, cosphi;
@@ -594,8 +607,7 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
                daughtermomentum[2]*daughtermomentum[2]-
                daughtermomentum[0]*daughtermomentum[0])/
         (2.0*daughtermomentum[2]*daughtermomentum[0]);
-  // added the following test to avoid rounding erros. A problem
-  // reported bye Ben Morgan of Uni.Warwick
+
   if (costhetan > 1.) costhetan = 1.;
   if (costhetan < -1.) costhetan = -1.;
   sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
@@ -617,7 +629,7 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
                          (direction0*daughtermomentum[0] +
 			  direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0));
   products->PushProducts(daughterparticle);
-  
+
   if (GetVerboseLevel()>1) {
     G4cout << "G4NuclearDecayChannel::BetaDecayIt ";
     G4cout << "  create decay products in rest frame " <<G4endl;

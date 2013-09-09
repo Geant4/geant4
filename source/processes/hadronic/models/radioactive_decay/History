@@ -14,6 +14,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+5 September 2013  Dennis Wright  radioactive_decay-V09-06-12
+------------------------------------------------------------ 
+- G4NuclearDecayChannel::DecayIt() : remove unused variable and argument
+  (theParentMass)
+
+16 August 2013  Dennis Wright  radioactive_decay-V09-06-11
+----------------------------------------------------------
+- cleanup and retag
+
+12 August 2013  Dennis Wright  radioactive_decay-V09-06-10
+----------------------------------------------------------
+- G4RadioactiveDecay:
+    move registry of isotope table from BuildPhysicsTable to ctor.
+    This fixes problem of missing secondaries and is probably OK for MT.
+
+- G4NuclearDecayChannel: use integer metastable state levels instead of
+    energy values.  Where only energy is known search for nearest integer
+    level. 
+
 12 July 2013  Dennis Wright  radioactive_decay-V09-06-09
 --------------------------------------------------------
 - G4RadioactiveDecay:
