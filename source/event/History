@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 6th, 2013  M.Asai (event-V09-06-19)
+- Fix incorrect initialization in G4ParticleGunMessenger class for
+  /gun/ionL command.
+
+September 6th, 2013  M.Asai (event-V09-06-18)
+- Remove G4ParticleTable::GetIon() and use G4IonTable::GetIon()
+  instead.
+
 August 31st, 2013  M.Asai (event-V09-06-17)
 - Fix the way of detecting improper process namager.
 

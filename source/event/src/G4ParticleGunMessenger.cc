@@ -45,7 +45,8 @@
 #include "G4Tokenizer.hh"
 
 G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)
-  :fParticleGun(fPtclGun),fShootIon(false)
+  :fParticleGun(fPtclGun),fShootIon(false),
+   fAtomicNumber(0),fAtomicMass(0),fIonCharge(0),fIonExciteEnergy(0.0),fIonEnergyLevel(0)
 {
   particleTable = G4ParticleTable::GetParticleTable();
 
@@ -226,13 +227,10 @@ void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValue
   { fParticleGun->SetParticlePolarization(polCmd->GetNew3VectorValue(newValues)); }
   else if( command==numberCmd )
   { fParticleGun->SetNumberOfParticles(numberCmd->GetNewIntValue(newValues)); }
-  else if( command==ionCmd ) {
-    G4cout << " ionCmd: newValues = " << newValues << G4endl;
-    IonCommand(newValues);
- } else if( command==ionLvlCmd ) {
-    G4cout << " ionLvlCmd: newValues = " << newValues << G4endl;
-    IonLevelCommand(newValues);
-  }
+  else if( command==ionCmd ) 
+  { IonCommand(newValues); }
+  else if( command==ionLvlCmd ) 
+  { IonLevelCommand(newValues); }
 }
 
 G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand * command)
@@ -284,6 +282,8 @@ G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand * command)
   return cv;
 }
 
+#include "G4IonTable.hh"
+
 void G4ParticleGunMessenger::IonLevelCommand(G4String newValues)
 {
   if (fShootIon) {
@@ -298,13 +298,13 @@ void G4ParticleGunMessenger::IonLevelCommand(G4String newValues)
       fIonCharge = StoI(sQ);
       sQ = next();
       if (sQ.isNull()) {
-        fIonExciteEnergy = 0.0;
+        fIonEnergyLevel = 0;
       } else {
         fIonEnergyLevel = StoI(sQ);
       }
     }
     G4ParticleDefinition* ion = 0;
-    ion =  particleTable->GetIon(fAtomicNumber,fAtomicMass,fIonEnergyLevel);
+    ion =  G4IonTable::GetIonTable()->GetIon(fAtomicNumber,fAtomicMass,fIonEnergyLevel);
     if (ion == 0) {
       G4cout << "Ion with Z = " << fAtomicNumber << ", A = " << fAtomicMass
              << ", I = " << fIonEnergyLevel << " is not defined " << G4endl;
@@ -339,7 +339,7 @@ void G4ParticleGunMessenger::IonCommand(G4String newValues)
     }
 
     G4ParticleDefinition* ion = 0;
-    ion =  particleTable->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
+    ion =  G4IonTable::GetIonTable()->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
     if (ion==0) {
     G4cout << "Ion with Z=" << fAtomicNumber;
     G4cout << " A=" << fAtomicMass << "is not defined" << G4endl;    
