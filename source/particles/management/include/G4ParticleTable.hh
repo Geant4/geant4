@@ -118,20 +118,20 @@ class G4ParticleTable
    const G4String& GetParticleName(G4int index) const;
    // returns name of i-th particles in the ParticleTable
 
-   G4ParticleDefinition* FindParticle(G4int  PDGEncoding ) const;
-   G4ParticleDefinition* FindParticle(const G4String &particle_name) const;
-   G4ParticleDefinition* FindParticle(const G4ParticleDefinition *particle) const;
+   G4ParticleDefinition* FindParticle(G4int  PDGEncoding );
+   G4ParticleDefinition* FindParticle(const G4String &particle_name);
+   G4ParticleDefinition* FindParticle(const G4ParticleDefinition *particle);
    // returns a pointer to the particle (0 if not contained)
 
-   G4ParticleDefinition* FindAntiParticle(G4int  PDGEncoding ) const;
-   G4ParticleDefinition* FindAntiParticle(const G4String &particle_name) const;
-   G4ParticleDefinition* FindAntiParticle(const G4ParticleDefinition *particle) const;
+   G4ParticleDefinition* FindAntiParticle(G4int  PDGEncoding );
+   G4ParticleDefinition* FindAntiParticle(const G4String &particle_name);
+   G4ParticleDefinition* FindAntiParticle(const G4ParticleDefinition *particle);
    // returns a pointer to its anti-particle (0 if not contained)
 
    G4PTblDicIterator* GetIterator() const;
    // return the pointer of Iterator (RW compatible)
    
-   void DumpTable(const G4String &particle_name = "ALL") const;
+   void DumpTable(const G4String &particle_name = "ALL");
    // dump information of particles specified by name 
  
  public: //With Description

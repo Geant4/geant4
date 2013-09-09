@@ -342,7 +342,7 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
   // check particle name
   if ((particle == 0) || (GetKey(particle).isNull())) {
     G4Exception("G4ParticleTable::Insert()",
-		"PART121", JustWarning,
+		"PART121", FatalException,
 		"Particle witnout name can not be registered.");    
 #ifdef G4VERBOSE
     if (verboseLevel>1){
@@ -355,32 +355,37 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 
     if (contains(particle)) {  
 #ifdef G4VERBOSE
-      if (verboseLevel>1){
-	G4cout << "The particle " << particle->GetParticleName() 
-	       << "  has been already registered in the Particle Table "<< G4endl;
-      }
-      G4String msg = "The particle ";
-      msg += particle->GetParticleName();
-      msg += "  has been already registered in the Particle Table ";
-      G4Exception("G4ParticleTable::Insert()",
-		  "PART122", JustWarning,msg);	
       if (verboseLevel>2){
         FindParticle(particle) -> DumpTable();
       }
 #endif
-      return  FindParticle(particle);
+      G4String msg = "The particle ";
+      msg += particle->GetParticleName();
+      msg += "  has already been registered in the Particle Table ";
+      G4Exception("G4ParticleTable::Insert()",
+		  "PART122", FatalException,msg);	
+////////////////////      return  FindParticle(particle);
+      return particle;
 
     } else {
-      G4PTblDictionary *pdic =  fDictionary;
+      G4PTblDictionary *pdic =  fDictionaryShadow;
 
       // insert into Dictionary
       pdic->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) );
+#ifdef G4MULTITHREADED
+      if(G4Threading::IsWorkerThread())
+      { fDictionary->insert( std::pair<G4String, G4ParticleDefinition*>(GetKey(particle), particle) ); }
+#endif
 
-      G4PTblEncodingDictionary *pedic =  fEncodingDictionary;  
+      G4PTblEncodingDictionary *pedic =  fEncodingDictionaryShadow;  
       // insert into EncodingDictionary
       G4int code = particle->GetPDGEncoding();
       if (code !=0 ) {
         pedic->insert( std::pair<G4int, G4ParticleDefinition*>(code ,particle) );
+#ifdef G4MULTITHREADED
+        if(G4Threading::IsWorkerThread())
+        { fEncodingDictionary->insert( std::pair<G4int, G4ParticleDefinition*>(code ,particle) ); }
+#endif
       }       
 
       // insert it in IonTable if "nucleus"
@@ -406,6 +411,16 @@ G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
 {
+  if(!particle) return 0;
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) {
+    G4ExceptionDescription ed;
+    ed << "Request of removing " << particle->GetParticleName()
+       << " is ignored as it is invoked from a worker thread.";
+    G4Exception("G4ParticleTable::Remove()","PART10117",JustWarning,ed);
+    return 0;
+  }
+#endif
   if (readyToUse) {
     G4StateManager* pStateManager = G4StateManager::GetStateManager();
     G4ApplicationState currentState = pStateManager->GetCurrentState();
@@ -426,13 +441,13 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
     }
   }
   
-  G4PTblDictionary::iterator it =  fDictionary->find(GetKey(particle));
-  if (it != fDictionary->end()) {
-    fDictionary->erase(it);
+  G4PTblDictionary::iterator it =  fDictionaryShadow->find(GetKey(particle));
+  if (it != fDictionaryShadow->end()) {
+    fDictionaryShadow->erase(it);
     // remove from EncodingDictionary
     G4int code = particle->GetPDGEncoding();
     if (code !=0 ) {
-      fEncodingDictionary->erase(fEncodingDictionary->find(code)); 
+      fEncodingDictionaryShadow->erase(fEncodingDictionary->find(code)); 
     }
   } else {
     return 0;
@@ -461,6 +476,8 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int , G4int )
 {
+   G4Exception("G4ParticleTable::FindIon()","PART11117",JustWarning,
+   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
    CheckReadiness();
    if (Z<=0) return 0;
    if (A<Z) return 0;
@@ -470,6 +487,8 @@ G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int , G4int )
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4double E)
 {
+   G4Exception("G4ParticleTable::FindIon()","PART11117",JustWarning,
+   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
    CheckReadiness();
    if (Z<=0) return 0;
    if (A<Z) return 0;
@@ -480,6 +499,8 @@ G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4double E)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int L, G4double E)
 {
+   G4Exception("G4ParticleTable::GetIon()","PART11117",JustWarning,
+   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
    CheckReadiness();
    if (Z<=0) return 0;
    if (A-L<Z) return 0;
@@ -490,6 +511,8 @@ G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int L, G4doubl
 
 G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int level)
 {
+   G4Exception("G4ParticleTable::GetIon()","PART11117",JustWarning,
+   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
    CheckReadiness();
    if (Z <= 0) return 0;
    if (A < Z) return 0;
@@ -500,6 +523,8 @@ G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int level)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
 {
+   G4Exception("G4ParticleTable::FindIon()","PART11117",JustWarning,
+   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
    CheckReadiness();
    if (Z<=0) return 0;
    if (A<Z) return 0;
@@ -510,6 +535,8 @@ G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int L, G4double E)
 {
+   G4Exception("G4ParticleTable::FindIon()","PART11117",JustWarning,
+   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
    CheckReadiness();
    if (Z<=0) return 0;
    if (A-L<Z) return 0;
@@ -553,18 +580,36 @@ const G4String& G4ParticleTable::GetParticleName(G4int index) const
 }
 
 ////////////////////
-G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name) const
+G4ParticleDefinition* G4ParticleTable::FindParticle(const G4String &particle_name) 
 {
   G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
   if (it != fDictionary->end()) {
     return (*it).second;
   } else {
+#ifdef G4MULTITHREADED
+    G4ParticleDefinition* ptcl = 0;
+    if(G4Threading::IsWorkerThread())
+    {
+      G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
+      G4PTblDictionary::iterator its = fDictionaryShadow->find(particle_name);
+      if(its != fDictionaryShadow->end())
+      {
+        fDictionary->insert(*its);
+        ptcl = (*its).second;
+        G4int code = ptcl->GetPDGEncoding();
+        if(code!=0) fEncodingDictionary->insert(std::pair<G4int, G4ParticleDefinition*>(code,ptcl) );
+      }
+      G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);
+    }
+    return ptcl;
+#else
     return 0;
+#endif
   }
 }
 
 ////////////////////
-G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle ) const
+G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *particle )
 {
   CheckReadiness();
   G4String key = GetKey(particle);
@@ -572,7 +617,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(const G4ParticleDefinition *
 }
 
 ////////////////////
-G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding ) const
+G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding ) 
 {
    CheckReadiness();
     // check aPDGEncoding is valid
@@ -593,6 +638,22 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding ) const
       particle = (*it).second;
     }
 
+#ifdef G4MULTITHREADED
+    if(particle == 0 && G4Threading::IsWorkerThread())
+    {
+      G4MUTEXLOCK(&G4ParticleTable::particleTableMutex);
+      G4PTblEncodingDictionary::iterator its = fEncodingDictionaryShadow->find(aPDGEncoding);
+      if(its!=fEncodingDictionaryShadow->end())
+      {
+        particle = (*its).second;
+        fEncodingDictionary->insert(*its);
+        G4String key = GetKey(particle);
+        fDictionary->insert( std::pair<G4String, G4ParticleDefinition*>(key,particle) );
+      }
+      G4MUTEXUNLOCK(&G4ParticleTable::particleTableMutex);  
+    }
+#endif
+
 #ifdef G4VERBOSE
     if ((particle == 0) && (verboseLevel>1) ){
       G4cout << "CODE:" << aPDGEncoding << " does not exist in ParticleTable " << G4endl;
@@ -602,7 +663,7 @@ G4ParticleDefinition* G4ParticleTable::FindParticle(G4int aPDGEncoding ) const
 }
 
 ////////////////////
-void G4ParticleTable::DumpTable(const G4String &particle_name) const 
+void G4ParticleTable::DumpTable(const G4String &particle_name) 
 {
   CheckReadiness();
   if (( particle_name == "ALL" ) || (particle_name == "all")){
@@ -670,8 +731,8 @@ const G4ParticleTable::G4PTblEncodingDictionary* G4ParticleTable::GetEncodingDic
 
 G4bool  G4ParticleTable::contains(const G4String& particle_name) const
 {
-  G4PTblDictionary::iterator it =  fDictionary->find(particle_name);
-  return (it != fDictionary->end());
+  G4PTblDictionary::iterator it =  fDictionaryShadow->find(particle_name);
+  return (it != fDictionaryShadow->end());
 }
 
 G4int G4ParticleTable::entries() const

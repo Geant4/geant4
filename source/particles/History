@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 8. Sep. 2013  Makoto Asai (particles-V09-06-48)
+- G4ParticleTable: Update thread-local disctionaries when a particle
+  is created during an event loop.
+
+- 6. Sep. 2013  Makoto Asai (particles-V09-06-47)
+- Fix the use of Mutex in G4IonTable.
+
+- 5. Sep. 2013  Makoto Asai (particles-V09-06-46)
+- Particle table and ion table in the master thread are properly updated
+  even if a particle is instantiated during an event loop.
+
 - 1. Sep. 2013  Makoto Asai (particles-V09-06-45)
 - Ditto for Linux and Windows.
 

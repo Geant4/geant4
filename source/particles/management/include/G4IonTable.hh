@@ -76,6 +76,10 @@ class G4IonTable
    typedef  std::multimap<G4int, const G4ParticleDefinition*>::iterator G4IonListIterator;
 
  public:
+   static G4IonTable* GetIonTable()
+   { return G4ParticleTable::GetParticleTable()->GetIonTable(); }
+
+ public:
   // constructor
    G4IonTable();
 
@@ -226,17 +230,25 @@ class G4IonTable
 
 
  protected:
+   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int lvl=0);
+   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int L, G4int lvl);
+   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4double E, G4int J=0);
+   G4ParticleDefinition* FindIonInMaster(G4int Z, G4int A, G4int L,
+				 G4double E, G4int J=0);
+
    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4double E);
    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, G4double E);
    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int lvl=0);
    G4ParticleDefinition* CreateIon(G4int Z, G4int A, G4int L, G4int lvl);
 
-   G4ParticleDefinition* SlaveCreateIon(G4ParticleDefinition* ion, G4int Z, G4int A, G4double E);
+   void                  InsertWorker(const G4ParticleDefinition* particle);
+
+   // Obsolete
+   // G4ParticleDefinition* SlaveCreateIon(G4ParticleDefinition* ion, G4int Z, G4int A, G4double E);
    // All threads share the particle table and particles including ions. This method
    // is invoked by any work thread for ions that have been created by other threads
    // to achieve the partial effect when ions are created by other threads.
-
-   G4ParticleDefinition* SlaveCreateIon(G4ParticleDefinition* ion, G4int Z, G4int A, G4int L, G4double E);
+   // G4ParticleDefinition* SlaveCreateIon(G4ParticleDefinition* ion, G4int Z, G4int A, G4int L, G4double E);
    // All threads share the particle table and particles including ions. This method
    // is invoked by any work thread for ions that have been created by other threads
    // to achieve the partial effect when ions are created by other threads.
@@ -286,9 +298,13 @@ class G4IonTable
    //needed for MT
    void InitializeLightIons();
 
-
  private:
    G4int n_error;
+
+#ifdef G4MULTITHREADED
+ public:
+   static G4Mutex ionTableMutex;
+#endif
 };
 
 inline G4int  G4IonTable::GetNumberOfElements() const
