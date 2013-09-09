@@ -39,15 +39,12 @@ class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4Material;
 class G4UserLimits;
+class G4GlobalMagFieldMessenger;
 
 class B2aDetectorMessenger;
-class B2MagneticField;
 
-/// Detector construction class to define materials and geometry.
-///
-/// In addition a transverse uniform magnetic field is defined in
-/// SetMagField() method which can be activated via a command
-/// defined in the B2aDetectorMessenger class. 
+/// Detector construction class to define materials, geometry
+/// and global uniform magnetic field.
 
 class B2aDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -83,7 +80,8 @@ class B2aDetectorConstruction : public G4VUserDetectorConstruction
 
     B2aDetectorMessenger*  fMessenger;   // messenger
 
-    static G4ThreadLocal B2MagneticField*      fMagField;     // magnetic field
+    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+                                         // magnetic field messenger
     
     G4bool  fCheckOverlaps; // option to activate checking of volumes overlaps 
 };

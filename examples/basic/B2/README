@@ -20,11 +20,12 @@ $Id$
      (in B2bDetectorConstruction), see also B2bChamberParameterisation class.
 
      In addition, a global, uniform, and transverse magnetic field can be 
-     applied (see B2MagneticField and B2FiledMessenger classes) and set via 
-     interactive commands. 
+     applied using G4GlobalMagFieldMessenger, instantiated in 
+     B2bDetectorConstruction::ConstructSDandField with a non zero field value,
+     or via interactive commands. 
      For example:
 
-     /B2/det/setField 0.2 tesla
+     /globalField/setValue 0.2 0 0 tesla
  
      An instance of the B2TrackerSD class is created and associated with each 
      logical chamber volume (in B2a) and with the one G4LogicalVolume associated 

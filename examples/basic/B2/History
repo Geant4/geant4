@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04/09/13 I. Hrivnacova (exampleB2-V09-06-07)
+- Magnetic field classes (B2MagneticField, B2FieldMessenger) replaced
+  with use of new G4GlobalMagFieldMessenger class.
+
 27/08/13 G.Cosmo (exampleB2-V09-06-06)
 - Added G4Ellipsoid among solids enabled for parameterisation in B2b.
 

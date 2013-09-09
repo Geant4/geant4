@@ -31,7 +31,6 @@
 #include "B2bDetectorConstruction.hh"
 #include "B2bDetectorMessenger.hh"
 #include "B2bChamberParameterisation.hh"
-#include "B2MagneticField.hh"
 #include "B2TrackerSD.hh"
 
 #include "G4Material.hh"
@@ -42,6 +41,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
+#include "G4GlobalMagFieldMessenger.hh"
 
 #include "G4GeometryTolerance.hh"
 #include "G4GeometryManager.hh"
@@ -57,13 +57,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal B2MagneticField* B2bDetectorConstruction::fMagField=0;
+G4ThreadLocal 
+G4GlobalMagFieldMessenger* B2bDetectorConstruction::fMagFieldMessenger = 0;
  
 B2bDetectorConstruction::B2bDetectorConstruction()
 :G4VUserDetectorConstruction(),
  fLogicTarget(NULL), fLogicChamber(NULL), 
  fTargetMaterial(NULL), fChamberMaterial(NULL), 
- fStepLimit(NULL),
+ fStepLimit(NULL), 
  fCheckOverlaps(true)
 {
   fMessenger = new B2bDetectorMessenger(this);
@@ -74,7 +75,7 @@ B2bDetectorConstruction::B2bDetectorConstruction()
 B2bDetectorConstruction::~B2bDetectorConstruction()
 {
   delete fStepLimit;
-  delete fMessenger;             
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -283,8 +284,12 @@ void B2bDetectorConstruction::ConstructSDandField()
                                             "TrackerHitsCollection");
   SetSensitiveDetector( fLogicChamber,  aTrackerSD );
 
-  // Magnetic field
-  fMagField = new B2MagneticField();
+  // Create global magnetic field messenger.
+  // Uniform magnetic field is then created automatically if
+  // the field value is not zero.
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+  fMagFieldMessenger->SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

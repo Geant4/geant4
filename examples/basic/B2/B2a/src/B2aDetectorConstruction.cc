@@ -30,7 +30,6 @@
  
 #include "B2aDetectorConstruction.hh"
 #include "B2aDetectorMessenger.hh"
-#include "B2MagneticField.hh"
 #include "B2TrackerSD.hh"
 
 #include "G4Material.hh"
@@ -40,6 +39,7 @@
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
+#include "G4GlobalMagFieldMessenger.hh"
 
 #include "G4GeometryTolerance.hh"
 #include "G4GeometryManager.hh"
@@ -55,7 +55,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-G4ThreadLocal B2MagneticField* B2aDetectorConstruction::fMagField=0;
+G4ThreadLocal 
+G4GlobalMagFieldMessenger* B2aDetectorConstruction::fMagFieldMessenger = 0;
 
 B2aDetectorConstruction::B2aDetectorConstruction()
 :G4VUserDetectorConstruction(), 
@@ -296,8 +297,12 @@ void B2aDetectorConstruction::ConstructSDandField()
   // of "Chamber_LV".
   SetSensitiveDetector("Chamber_LV", aTrackerSD, true);
 
-  // Magnetic field
-  fMagField = new B2MagneticField();
+  // Create global magnetic field messenger.
+  // Uniform magnetic field is then created automatically if
+  // the field value is not zero.
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+  fMagFieldMessenger->SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

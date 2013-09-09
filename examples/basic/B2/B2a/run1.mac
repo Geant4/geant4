@@ -25,7 +25,8 @@
 # set a magnetic field and max allowed step length
 # 3 event with printing hits
 #
-/B2/det/setField 0.2 tesla
+/globalField/verbose 1
+/globalField/setValue 0.2 0 0 tesla
 /B2/det/stepMax 1.0 mm
 /gun/energy 0.3 GeV
 /run/beamOn 3
