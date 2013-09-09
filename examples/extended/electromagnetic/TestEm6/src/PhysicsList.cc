@@ -71,10 +71,6 @@
 
 #include "G4ProcessTable.hh"
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -180,10 +176,11 @@ void PhysicsList::ConstructEM()
 
     if (particleName == "gamma") {
       // gamma    allow  only   gamma -> mu+mu-
+      // pmanager->AddDiscreteProcess(new G4GammaConversionToMuons);
+      // pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
+      // pmanager->AddDiscreteProcess(new G4ComptonScattering);
+      // pmanager->AddDiscreteProcess(new G4GammaConversion);
       pmanager->AddDiscreteProcess(new G4GammaConversionToMuons);
-      pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
-      pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      pmanager->AddDiscreteProcess(new G4GammaConversion);
           
     } else if (particleName == "e-") {
       //electron
@@ -250,8 +247,8 @@ void PhysicsList::ConstructGeneral()
   while ((*theParticleIterator)()){
       G4ParticleDefinition* particle = theParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
-      if (theDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) {
-        pmanager ->AddProcess(theDecayProcess);
+      if (theDecayProcess->IsApplicable(*particle) && !particle->IsShortLived())
+      { pmanager ->AddProcess(theDecayProcess);
         // set ordering for PostStepDoIt and AtRestDoIt
         pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
         pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
@@ -282,12 +279,12 @@ void PhysicsList::SetCuts()
 void PhysicsList::SetGammaToMuPairFac(G4double fac)
 {
   G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
-  G4GammaConversionToMuons* theGammaToMuPairProcess = (G4GammaConversionToMuons*)
+  G4GammaConversionToMuons* gammaToMuPairProcess = (G4GammaConversionToMuons*)
                        theProcessTable->FindProcess("GammaToMuPair","gamma");
-  if(theGammaToMuPairProcess) theGammaToMuPairProcess->SetCrossSecFactor(fac);
+  if(gammaToMuPairProcess) gammaToMuPairProcess->SetCrossSecFactor(fac);
   else G4cout 
-    << "Warning. No process GammaToMuPair found, SetGammaToMuPairFac was ignored" 
-    << G4endl;
+   << "Warning. No process GammaToMuPair found, SetGammaToMuPairFac was ignored"
+   << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -295,12 +292,12 @@ void PhysicsList::SetGammaToMuPairFac(G4double fac)
 void PhysicsList::SetAnnihiToMuPairFac(G4double fac)
 {
   G4ProcessTable* theProcessTable = G4ProcessTable::GetProcessTable();
-  G4AnnihiToMuPair* theAnnihiToMuPairProcess = (G4AnnihiToMuPair*)
+  G4AnnihiToMuPair* annihiToMuPairProcess = (G4AnnihiToMuPair*)
                          theProcessTable->FindProcess("AnnihiToMuPair","e+");
-  if(theAnnihiToMuPairProcess) theAnnihiToMuPairProcess->SetCrossSecFactor(fac);
+  if(annihiToMuPairProcess) annihiToMuPairProcess->SetCrossSecFactor(fac);
   else G4cout 
-    << "Warning. No process AnnihiToMuPair found, SetAnnihiToMuPairFac was ignored"
-    << G4endl;
+   << "Warning. No process AnnihiToMuPair found, SetAnnihiToMuPairFac ignored"
+   << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

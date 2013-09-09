@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+05-09-13 mma (testem6-V09-06-03)
+- PhysicsList: restore G4GammaConversionToMuons
+     
 19-06-13 mma (testem6-V09-06-02)
-- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep() .
+- SteppingVerbose: use G4Step::GetSecondaryInCurrentStep()
      
 07-06-13 mma (testem6-V09-06-01)
 - Cosmetic in SteppingAction.
