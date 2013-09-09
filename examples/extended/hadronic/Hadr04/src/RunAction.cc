@@ -155,24 +155,30 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  G4cout << "\n Parcours of incident neutron:";
   
  G4double meanCollision1  = (G4double)fNbStep1/NbOfEvents;
- G4double meanCollision2  = (G4double)fNbStep2/NbOfEvents; 
+ G4double meanCollision2  = (G4double)fNbStep2/NbOfEvents;
+ G4double meanCollisTota  = meanCollision1 + meanCollision2;
 
  G4cout << "\n   nb of collisions    E>1*eV= " << meanCollision1
-        << ";  E<1*eV= " << meanCollision2;
+        << "      E<1*eV= " << meanCollision2
+        << "       total= " << meanCollisTota;        
         
  G4double meanTrackLen1  = fTrackLen1/NbOfEvents;
- G4double meanTrackLen2  = fTrackLen2/NbOfEvents; 
+ G4double meanTrackLen2  = fTrackLen2/NbOfEvents;
+ G4double meanTrackLtot  =  meanTrackLen1 + meanTrackLen2;  
 
  G4cout 
-   << "\n   total track length  E>1*eV= " << G4BestUnit(meanTrackLen1,"Length")
-   << "  E<1*eV= " << G4BestUnit(meanTrackLen2, "Length");
+   << "\n   track length        E>1*eV= " << G4BestUnit(meanTrackLen1,"Length")
+   << "  E<1*eV= " << G4BestUnit(meanTrackLen2, "Length")
+   << "   total= " << G4BestUnit(meanTrackLtot, "Length");   
    
  G4double meanTime1  = fTime1/NbOfEvents;
- G4double meanTime2  = fTime2/NbOfEvents; 
+ G4double meanTime2  = fTime2/NbOfEvents;
+ G4double meanTimeTo = meanTime1 + meanTime2;  
 
  G4cout 
    << "\n   time of flight      E>1*eV= " << G4BestUnit(meanTime1,"Time")
-   << "  E<1*eV= " << G4BestUnit(meanTime2, "Time") << G4endl;
+   << "  E<1*eV= " << G4BestUnit(meanTime2, "Time")
+   << "   total= " << G4BestUnit(meanTimeTo, "Time") << G4endl;   
              
  //particles count
  //
