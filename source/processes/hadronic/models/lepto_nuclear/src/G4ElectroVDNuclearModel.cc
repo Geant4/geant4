@@ -46,6 +46,7 @@
 
 #include "G4ElectroNuclearCrossSection.hh"
 #include "G4PhotoNuclearCrossSection.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4CascadeInterface.hh"
 #include "G4TheoFSGenerator.hh"
@@ -67,7 +68,7 @@ G4ElectroVDNuclearModel::G4ElectroVDNuclearModel()
   SetMaxEnergy(1*PeV);
 
   electroXS = new G4ElectroNuclearCrossSection();
-  gammaXS = new G4PhotoNuclearCrossSection();      
+  gammaXS = new G4PhotoNuclearCrossSection();
   ftfp = new G4TheoFSGenerator();
   precoInterface = new G4GeneratorPrecompoundInterface();
   theHandler = new G4ExcitationHandler();
@@ -124,17 +125,17 @@ G4ElectroVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
   theParticleChange.SetEnergyChange(leptonKE);
   theParticleChange.SetMomentumChange(aTrack.Get4Momentum().vect().unit() );
  
-  // Set up sanity checks for real photon production 
+  // Set up sanity checks for real photon production
   G4DynamicParticle lepton(aTrack.GetDefinition(), aTrack.Get4Momentum() );
-  G4int targZ = targetNucleus.GetZ_asInt();
-  G4int targA = targetNucleus.GetA_asInt();
-  G4Isotope* iso = 0;
-  G4Element* ele = 0;
-  G4Material* mat = 0; 
-  G4double eXS = electroXS->GetIsoCrossSection(&lepton, targZ, targA, iso, ele, mat);
+//  G4int targZ = targetNucleus.GetZ_asInt();
+//  G4int targA = targetNucleus.GetA_asInt();
+//  G4Isotope* iso = 0;
+//  G4Element* ele = 0;
+//  G4Material* mat = 0;
+//  G4double eXS = electroXS->GetIsoCrossSection(&lepton, targZ, targA, iso, ele, mat);
 
   // If electronuclear cross section is negative, return initial track
-  if (eXS > 0.0) {
+//  if (eXS > 0.0) {
     photonEnergy = electroXS->GetEquivalentPhotonEnergy();
     // Photon energy cannot exceed lepton energy
     if (photonEnergy < leptonKE) {
@@ -147,7 +148,7 @@ G4ElectroVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
         // Interact gamma with nucleus
         if (transferredPhoton) CalculateHadronicVertex(transferredPhoton, targetNucleus);
       }
-    }
+ //   }
   }
   return &theParticleChange;
 }
