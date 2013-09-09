@@ -17,8 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05.09.2013  M.Asai, tag emlowen-V09-06-24
+            - G4IonDEDXScalingICRU73 - remove GetIon for reference
+              Fe and Ar but use G4IonTable::GetIonMass() instead
+              to prevent unnecessary instantiation of ion objects
+              for individual threads.
+
 09.08.2013  V.Ivanchenko, tag emlowen-V09-06-23
             - fixed bug in previous tag
+
 09.08.2013  V.Ivanchenko, tag emlowen-V09-06-22
             - G4LivermorePhotoElectricModel - migration to MT
 
