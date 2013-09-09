@@ -64,14 +64,10 @@ public:
 
   virtual void CrossSectionDescription(std::ostream&) const;
 
-  virtual G4bool
-  IsIsoApplicable(const G4DynamicParticle* aParticle, G4int /*Z*/,
-                  G4int /*A*/, const G4Element*, const G4Material*);
-
-  virtual G4double
-  GetIsoCrossSection(const G4DynamicParticle* aParticle, 
-		     G4int /*Z*/, G4int /*A*/, 
-		     const G4Isotope*, const G4Element*, const G4Material*);
+  virtual G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
+                                     const G4Material*);
+    virtual G4double GetElementCrossSection(const G4DynamicParticle*, G4int Z,
+                                    const G4Material* mat);
 
   G4double GetEquivalentPhotonEnergy();
 

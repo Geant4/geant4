@@ -2247,20 +2247,13 @@ G4ElectroNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) con
     << "all energies.\n";
 }
 
-G4bool
-G4ElectroNuclearCrossSection::IsIsoApplicable(
-                                              const G4DynamicParticle* /*aParticle*/, G4int /*Z*/,
-                                              G4int /*A*/, const G4Element*, const G4Material*)
+G4bool G4ElectroNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*aParticle*/, G4int /*Z*/, const G4Material*)
 {
     return true;
 }
 
 
-G4double
-G4ElectroNuclearCrossSection::GetIsoCrossSection(
-                                                 const G4DynamicParticle* aPart,
-                                                 G4int ZZ, G4int /*AA*/,
-                                                 const G4Isotope*, const G4Element*, const G4Material*)
+G4double G4ElectroNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* aPart, G4int ZZ, const G4Material*)
 {
     const G4double Energy = aPart->GetKineticEnergy()/MeV; // Energy of the electron
 
