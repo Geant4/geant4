@@ -238,3 +238,8 @@ void G4VProcess::PrepareWorkerPhysicsTable(const G4ParticleDefinition& part)
 {
     PreparePhysicsTable(part);
 }
+
+void G4VProcess::SetMasterProcess( G4VProcess* masterP)
+{
+    masterProcessShadow = masterP;
+}

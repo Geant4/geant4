@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- Sep. 6th, 2013   M.Asai (procman-V09-06-03)
+- Change G4VProcess::SetMasterProcess() to be a virtual method so that
+  a process that owns another process (e.g. a wrapper process) could
+  properly invoke this method of the owned (wrapped) process.
+
 - Jul. 16th, 2013   A. Dotti (procman-V09-06-02)
 - Adding worker initialization virtual method for MT:
   G4VProcess::{Build,Prepare}WorkerPhysicsTable(const G4ParticleDefinition&)

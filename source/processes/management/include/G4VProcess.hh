@@ -373,7 +373,7 @@ private:
     //For multi-threaded: poitner to the instance of this process
     // for the master thread
 public:
-    void SetMasterProcess( G4VProcess* masterP);
+    virtual void SetMasterProcess( G4VProcess* masterP);
     // Sets the master thread process instance
     const G4VProcess* GetMasterProcess() const;
     // Returns the master thread process instnace
@@ -532,12 +532,6 @@ inline
  G4bool G4VProcess::isPostStepDoItIsEnabled() const
 {
   return enablePostStepDoIt;
-}
-
-inline
- void G4VProcess::SetMasterProcess( G4VProcess* masterP)
-{
-    masterProcessShadow = masterP;
 }
 
 inline
