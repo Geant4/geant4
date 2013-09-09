@@ -9,6 +9,9 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+05 Sep 2013 - S. Incerti - tag microbeam-V09-06-05
+- Updated README
+
 27 Aug 2013 - G. Cosmo - tag microbeam-V09-06-04
 - Added G4Ellipsoid among solids enabled for parameterisation.
 

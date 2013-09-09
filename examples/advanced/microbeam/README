@@ -130,11 +130,15 @@ microbeam.mac:
 
 ---->4. HOW TO RUN THE EXAMPLE                                         
   
-The code should be compiled with cmake and run with:
+The code should be compiled with cmake.
 
+Put the 'phantom.dat' file into your build directory.
+
+Run the example from your build directory with:
 ./microbeam
 
-The macro file microbeam.mac is read by default.
+The macro file microbeam.mac is read by default. 
+
 
 The works in MT mode.
 
