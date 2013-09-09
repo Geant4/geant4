@@ -468,7 +468,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   G4ThreeVector moveVec = (position - lastEndPosition );
   G4double      moveLenSq= moveVec.mag2();
   if( (!fNewTrack) && (!fRelocatedPoint)
-   && ( moveLenSq> kCarTolerance*kCarTolerance ) )
+   && ( moveLenSq> 10*kCarTolerance*kCarTolerance ) )
   {
      ReportMove( position, lastEndPosition, "Position" ); 
   }

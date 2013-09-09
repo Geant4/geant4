@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 9th, 2013 - G.Cosmo  (geomnav-V09-06-17)
+-----------------------------
+- Relaxed condition for reported move in G4PathFinder::Locate() to exclude
+  reports for intentional pushes.
+
 September 3rd, 2013 - I.Hrivnacova  (geomnav-V09-06-16)
 ----------------------------------
 - Added new messenger class G4GlobalMagFieldMessenger defining UI commands
