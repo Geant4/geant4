@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-Sep-2013, Luciano Pandola            (phys-lists-V09-06-14)
+- LBE.icc, add missing #include of G4HadronCaptureProcess
+(gave compilation error to user application using LBE) 
+
 21-Aug-2013, Vladimir Ivantchenko       (phys-lists-V09-06-13)
 - LBE - removed forgotten header
 

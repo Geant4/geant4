@@ -514,6 +514,7 @@ template<class T> TLBE<T>::~TLBE()
 
 // Elastic processes:
 #include "G4HadronElasticProcess.hh"
+#include "G4HadronCaptureProcess.hh"
 #include "G4HadronElastic.hh"
 #include "G4ChipsElasticModel.hh"
 #include "G4ElasticHadrNucleusHE.hh"
