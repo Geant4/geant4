@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10/09/13 I. Hrivnacova (exampleB2-V09-06-08)
+- Removed "tcsh" selection from G4UIExecutive in exampleB2b.cc
+  (unwantedly introduced with previous update)
+
 04/09/13 I. Hrivnacova (exampleB2-V09-06-07)
 - Magnetic field classes (B2MagneticField, B2FieldMessenger) replaced
   with use of new G4GlobalMagFieldMessenger class.

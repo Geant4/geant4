@@ -104,7 +104,7 @@ int main(int argc,char** argv)
   else
     {  // interactive mode : define UI session
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv, "tcsh");
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
 #ifdef G4VIS_USE
         UImanager->ApplyCommand("/control/execute init_vis.mac");
 #else
