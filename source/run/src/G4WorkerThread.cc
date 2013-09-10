@@ -55,7 +55,7 @@ G4int G4WorkerThread::GetNumberThreads() const
 #include "G4Region.hh"
 #include "G4Material.hh"
 #include "G4PhysicsVector.hh"
-#include "G4VDecayChannel.hh"
+/////@@#include "G4VDecayChannel.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4MaterialTable.hh"
 #include "G4PolyconeSide.hh"
@@ -83,7 +83,7 @@ void G4WorkerThread::BuildGeometryAndPhysicsVector()
     const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
     //Physics related
     //const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).SlaveInitializeSubInstance();
-    const_cast<G4DecayChannelManager&>(G4VDecayChannel::GetSubInstanceManager()).NewSubInstances();
+/////@@    const_cast<G4DecayChannelManager&>(G4VDecayChannel::GetSubInstanceManager()).NewSubInstances();
     const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).NewSubInstances();
     const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).NewSubInstances();
     const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).NewSubInstances();
@@ -193,7 +193,7 @@ void G4WorkerThread::DestroyGeometryAndPhysicsVector()
     const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).FreeSlave();
     const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).FreeSlave();
     //const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4DecayChannelManager&>(G4VDecayChannel::GetSubInstanceManager()).FreeSlave();
+/////@@    const_cast<G4DecayChannelManager&>(G4VDecayChannel::GetSubInstanceManager()).FreeSlave();
     const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).FreeSlave();
     const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).FreeSlave();
     const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).FreeSlave();
