@@ -70,6 +70,7 @@
 #include "G4RIsotopeTable.hh"
 #include "G4RadioactivityTable.hh"
 #include "G4ThreeVector.hh"
+#include "G4Threading.hh"
 
 class G4RadioactiveDecaymessenger;
 
@@ -309,7 +310,10 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     std::map<G4int, G4String> theUserRadioactiveDataFiles;
 
     // Library of decay tables
-    DecayTableMap dkmap;
+    DecayTableMap* dkmap;
+#ifdef G4MULTITHREADED
+    static DecayTableMap* master_dkmap;
+#endif
 
     // Remainder of life time at rest
     G4double fRemainderLifeTime;
@@ -338,6 +342,11 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4VParticleChange* PostStepDoIt(const G4Track& theTrack,
                                     const G4Step& theStep)
       {return DecayIt(theTrack, theStep);}
+
+#ifdef G4MULTITHREADED
+  public:
+    static G4Mutex radioactiveDecayMutex;
+#endif
 };
 
 #endif

@@ -141,6 +141,9 @@ using namespace CLHEP;
 
 const G4double G4RadioactiveDecay::levelTolerance = 2.0*keV;
 const G4ThreeVector G4RadioactiveDecay::origin(0.,0.,0.);
+#ifdef G4MULTITHREADED
+DecayTableMap* G4RadioactiveDecay::master_dkmap = 0;
+#endif
 
 G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
  : G4VRestDiscreteProcess(processName, fDecay), HighestValue(20.0),
@@ -173,8 +176,11 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   // Reset the list of user defined data files
   theUserRadioactiveDataFiles.clear();
 
-  // Zero the map of decay tables
-  dkmap.clear();
+  // Instantiate the map of decay tables
+#ifdef G4MULTITHREADED
+  if(!master_dkmap) master_dkmap = new DecayTableMap;
+#endif
+  dkmap = new DecayTableMap;
 
   // Apply default values.
   NSourceBin  = 1;
@@ -236,17 +242,17 @@ G4RadioactiveDecay::IsApplicable(const G4ParticleDefinition& aParticle)
 
 G4DecayTable* G4RadioactiveDecay::GetDecayTable(G4ParticleDefinition* aNucleus)
 {
-  G4DecayTable* theDecayTable;
+  G4DecayTable* theDecayTable = 0;
   G4int Z = aNucleus->GetAtomicNumber();
   G4int A = aNucleus->GetAtomicMass();
   G4int lvl = ((const G4Ions*)aNucleus)->GetIsomerLevel();
   G4int key = Z*10000 + A*10 + lvl;
   // G4cout << " GetDecayTable: key = " << key << G4endl;
-  DecayTableMap::iterator table_ptr = dkmap.find(key);
+  DecayTableMap::iterator table_ptr = dkmap->find(key);
 
-  if (table_ptr == dkmap.end() ) {               // If table not there,              
+  if (table_ptr == dkmap->end() ) {               // If table not there,              
     theDecayTable = LoadDecayTable(*aNucleus);   // load from file and
-    dkmap[key] = theDecayTable;                  // store in library 
+    (*dkmap)[key] = theDecayTable;                  // store in library 
   } else {
     theDecayTable = table_ptr->second;
   }
@@ -691,17 +697,35 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
 //                                                                            //
 ////////////////////////////////////////////////////////////////////////////////
 
+#ifdef G4MULTITHREADED
+#include "G4AutoLock.hh"
+G4Mutex G4RadioactiveDecay::radioactiveDecayMutex = G4MUTEX_INITIALIZER;
+#endif
+
 G4DecayTable*
 G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
 {
-  // Create and initialise variables used in the method.
-  G4DecayTable* theDecayTable = new G4DecayTable();
-
   // Generate input data file name using Z and A of the parent nucleus
   // file containing radioactive decay data.
   G4int A = ((const G4Ions*)(&theParentNucleus))->GetAtomicMass();
   G4int Z = ((const G4Ions*)(&theParentNucleus))->GetAtomicNumber();
   G4int lvl = ((const G4Ions*)(&theParentNucleus))->GetIsomerLevel();
+
+  G4DecayTable* theDecayTable = 0;
+
+#ifdef G4MULTITHREADED
+  G4AutoLock lk(&G4RadioactiveDecay::radioactiveDecayMutex);
+
+  G4int key = Z*10000 + A*10 + lvl;
+  DecayTableMap::iterator master_table_ptr = master_dkmap->find(key);
+
+  if (master_table_ptr != master_dkmap->end() ) {   // If table is there,              
+    return master_table_ptr->second;
+  }
+#endif
+
+  // Create and initialise variables used in the method.
+  theDecayTable = new G4DecayTable();
 
   //Check if data have been provided by the user
   G4String file= theUserRadioactiveDataFiles[1000*A+Z];
@@ -1029,6 +1053,9 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
       theDecayTable ->DumpInfo();
     }
 
+#ifdef G4MULTITHREADED
+  (*master_dkmap)[key] = theDecayTable;                  // store in master library 
+#endif
   return theDecayTable;
 }
 
