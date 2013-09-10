@@ -39,13 +39,17 @@
 //                      of the cross section is stil the same but it is not done per isotope (Z, N),
 //                      but per element (Z). Average is taken for NIST.
 
-
-
 #include <iostream>
 
 #include "G4SystemOfUnits.hh"
 #include "G4HadTmpUtil.hh"
 #include "G4ElectroNuclearCrossSection.hh"
+
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4ElectroNuclearCrossSection);
+
 //
 //A. Dotti 2-May-2013
 //Optimizing code
@@ -2173,8 +2177,8 @@ static const G4double* P1[nN]={P10,P11,P12,P13,P14,P15,P16,P17,P18,P19,P110,P111
 static const G4double* P2[nN]={P20,P21,P22,P23,P24,P25,P26,P27,P28,P29,P210,P211,P212,P213};
 //
 
-G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection(const G4String& nam)
-: G4VCrossSectionDataSet(nam) , currentN(0), currentZ(0), lastZ(0),
+G4ElectroNuclearCrossSection::G4ElectroNuclearCrossSection():G4VCrossSectionDataSet(Default_Name()),
+currentN(0), currentZ(0), lastZ(0),
 lastE(0), lastSig(0), lastG(0), lastL(0), mNeut(G4NucleiProperties::GetNuclearMass(1,0)), mProt(G4NucleiProperties::GetNuclearMass(1,1))
 {
     //Initialize caches
