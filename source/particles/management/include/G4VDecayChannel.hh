@@ -42,62 +42,62 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4PDefSplitter.hh"
+/////@@#include "G4PDefSplitter.hh"
 
 class    G4ParticleDefinition;
 class    G4DecayProducts;
 class    G4ParticleTable;
 
-class G4DecayChannelData
-{
-  // Encapsulates the fields associated to the class G4VDecayChannel that
-  // may not be read-only.
-
-  public:
-
-    void initialize()
-    {
-      parent = 0;
-      daughters = 0;
-      parent_mass = 0.0;
-      daughters_mass = 0;
-    }
-
-    G4ParticleDefinition*  parent;
-    G4ParticleDefinition** daughters;
-    G4double               parent_mass;
-    G4double*              daughters_mass;
-};
-
-// The type G4DecayChannelManager is introduced to encapsulate the methods used
-// by both the master thread and worker threads to allocate memory space for
-// the fields encapsulated by the class G4DecayChannelData. When each thread
-// initializes the value for these fields, it refers to them using a macro
-// definition defined below. For every G4DecayChannel instance, there is
-// a corresponding G4DecayChannelData instance. All G4DecayChannelData
-// instances are organized by the class G4DecayChannelManager as an array.
-// The field "int instanceID" is added to the class G4DecayChannel.
-// The value of this field in each G4DecayChannel instance is the subscript
-// of the corresponding G4DecayChannelData instance.
-// In order to use the class G4DecayChannelManager, we add a static member in
-// G4DecayChannel as follows: "static G4DecayChannelManager subInstanceManager".
-// For the master thread, the array for G4DecayChannelData instances grows
-// dynamically along with G4DecayChannel instances are created.
-// For each worker thread, it copies the array of  G4DecayChannelData instances
-// from the master thread.
-// In addition, it invokes a method similiar to the constructor explicitly
-// to achieve the partial effect for each instance in the array.
-//
-typedef G4PDefSplitter<G4DecayChannelData> G4DecayChannelManager;
-
-// These macros change the references to fields that are now encapsulated
-// in the class G4DecayChannelData.
-//
-#define G4MT_parent ((G4VDecayChannel::subInstanceManager.offset[instanceID]).parent)
-#define G4MT_daughters ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters)
-#define G4MT_parent_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).parent_mass)
-#define G4MT_daughters_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters_mass)
-
+/////@@class G4DecayChannelData
+/////@@{
+/////@@  // Encapsulates the fields associated to the class G4VDecayChannel that
+/////@@  // may not be read-only.
+/////@@
+/////@@  public:
+/////@@
+/////@@    void initialize()
+/////@@    {
+/////@@      parent = 0;
+/////@@      daughters = 0;
+/////@@      parent_mass = 0.0;
+/////@@      daughters_mass = 0;
+/////@@    }
+/////@@
+/////@@    G4ParticleDefinition*  parent;
+/////@@    G4ParticleDefinition** daughters;
+/////@@    G4double               parent_mass;
+/////@@    G4double*              daughters_mass;
+/////@@};
+/////@@
+/////@@// The type G4DecayChannelManager is introduced to encapsulate the methods used
+/////@@// by both the master thread and worker threads to allocate memory space for
+/////@@// the fields encapsulated by the class G4DecayChannelData. When each thread
+/////@@// initializes the value for these fields, it refers to them using a macro
+/////@@// definition defined below. For every G4DecayChannel instance, there is
+/////@@// a corresponding G4DecayChannelData instance. All G4DecayChannelData
+/////@@// instances are organized by the class G4DecayChannelManager as an array.
+/////@@// The field "int instanceID" is added to the class G4DecayChannel.
+/////@@// The value of this field in each G4DecayChannel instance is the subscript
+/////@@// of the corresponding G4DecayChannelData instance.
+/////@@// In order to use the class G4DecayChannelManager, we add a static member in
+/////@@// G4DecayChannel as follows: "static G4DecayChannelManager subInstanceManager".
+/////@@// For the master thread, the array for G4DecayChannelData instances grows
+/////@@// dynamically along with G4DecayChannel instances are created.
+/////@@// For each worker thread, it copies the array of  G4DecayChannelData instances
+/////@@// from the master thread.
+/////@@// In addition, it invokes a method similiar to the constructor explicitly
+/////@@// to achieve the partial effect for each instance in the array.
+/////@@//
+/////@@typedef G4PDefSplitter<G4DecayChannelData> G4DecayChannelManager;
+/////@@
+/////@@// These macros change the references to fields that are now encapsulated
+/////@@// in the class G4DecayChannelData.
+/////@@//
+/////@@#define G4MT_parent ((G4VDecayChannel::subInstanceManager.offset[instanceID]).parent)
+/////@@#define G4MT_daughters ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters)
+/////@@#define G4MT_parent_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).parent_mass)
+/////@@#define G4MT_daughters_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters_mass)
+/////@@
 class G4VDecayChannel
 {
   // Class Description:
@@ -169,12 +169,12 @@ class G4VDecayChannel
     G4int GetVerboseLevel()  const;
     void  DumpInfo();
 
-  public:  // without description
-
-    // returns the instance ID.
-    inline G4int GetInstanceID() const;
-    // returns the private data instance manager.
-    static const G4DecayChannelManager& GetSubInstanceManager();
+/////@@  public:  // without description
+/////@@
+/////@@    // returns the instance ID.
+/////@@    inline G4int GetInstanceID() const;
+/////@@    // returns the private data instance manager.
+/////@@    static const G4DecayChannelManager& GetSubInstanceManager();
 
   protected: // with description
 
@@ -223,10 +223,14 @@ class G4VDecayChannel
 
     static const G4String noName;
 
-    // This field is used as instance ID.
-    G4int instanceID;
-    // This field helps to use the class G4DecayChannelManager introduced above.
-    G4PART_DLL static G4DecayChannelManager subInstanceManager;
+/////@@    // This field is used as instance ID.
+/////@@    G4int instanceID;
+/////@@    // This field helps to use the class G4DecayChannelManager introduced above.
+/////@@    G4PART_DLL static G4DecayChannelManager subInstanceManager;
+    G4ParticleDefinition*  G4MT_parent;
+    G4ParticleDefinition** G4MT_daughters;
+    G4double               G4MT_parent_mass;
+    G4double*              G4MT_daughters_mass;
 };
 
 // ------------------------------------------------------------
@@ -333,7 +337,7 @@ inline
 inline
  G4int G4VDecayChannel::GetVerboseLevel() const { return verboseLevel; }
 
-inline
- G4int G4VDecayChannel::GetInstanceID() const { return instanceID; }
+/////@@inline
+/////@@ G4int G4VDecayChannel::GetInstanceID() const { return instanceID; }
 
 #endif

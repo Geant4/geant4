@@ -43,21 +43,21 @@
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
 
-// This static member is thread local. For each thread, it holds the array
-// size of G4DecayChannelData instances.
-//
-template <class G4DecayChannelData> G4ThreadLocal
-G4int G4PDefSplitter<G4DecayChannelData>::slavetotalspace = 0;
-
-// This static member is thread local. For each thread, it points to the
-// array of G4DecayChannelData instances.
-//
-template <class G4DecayChannelData> G4ThreadLocal
-G4DecayChannelData* G4PDefSplitter<G4DecayChannelData>::offset = 0;
-
-// This new field helps to use the class G4VDecayChannelSubInstanceManager.
-//
-G4DecayChannelManager G4VDecayChannel::subInstanceManager;
+/////@@// This static member is thread local. For each thread, it holds the array
+/////@@// size of G4DecayChannelData instances.
+/////@@//
+/////@@template <class G4DecayChannelData> G4ThreadLocal
+/////@@G4int G4PDefSplitter<G4DecayChannelData>::slavetotalspace = 0;
+/////@@
+/////@@// This static member is thread local. For each thread, it points to the
+/////@@// array of G4DecayChannelData instances.
+/////@@//
+/////@@template <class G4DecayChannelData> G4ThreadLocal
+/////@@G4DecayChannelData* G4PDefSplitter<G4DecayChannelData>::offset = 0;
+/////@@
+/////@@// This new field helps to use the class G4VDecayChannelSubInstanceManager.
+/////@@//
+/////@@G4DecayChannelManager G4VDecayChannel::subInstanceManager;
 
 const G4String G4VDecayChannel::noName = " ";
 
@@ -69,7 +69,7 @@ G4VDecayChannel::G4VDecayChannel()
    particletable(0),
    verboseLevel(1)		
 {
-  instanceID = subInstanceManager.CreateSubInstance();
+/////@@  instanceID = subInstanceManager.CreateSubInstance();
   G4MT_parent = 0;
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
@@ -87,7 +87,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
    particletable(0),
    verboseLevel(Verbose)		
 {
-  instanceID = subInstanceManager.CreateSubInstance();
+/////@@  instanceID = subInstanceManager.CreateSubInstance();
   G4MT_parent = 0;
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
@@ -112,7 +112,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
 		particletable(0),
 		verboseLevel(1)		
 {
-  instanceID = subInstanceManager.CreateSubInstance();
+/////@@  instanceID = subInstanceManager.CreateSubInstance();
   G4MT_parent = 0;
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
@@ -137,7 +137,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
 
 G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
 {
-  instanceID = subInstanceManager.CreateSubInstance();
+/////@@  instanceID = subInstanceManager.CreateSubInstance();
 
   kinematics_name = right.kinematics_name;
   verboseLevel = right.verboseLevel;
@@ -215,10 +215,10 @@ G4VDecayChannel::~G4VDecayChannel()
   G4MT_daughters_mass =0;
 } 
 
-const G4DecayChannelManager& G4VDecayChannel::GetSubInstanceManager()
-{
-  return subInstanceManager;
-}
+/////@@const G4DecayChannelManager& G4VDecayChannel::GetSubInstanceManager()
+/////@@{
+/////@@  return subInstanceManager;
+/////@@}
 
 void G4VDecayChannel::ClearDaughtersName()
 {

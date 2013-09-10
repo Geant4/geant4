@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 9. Sep. 2013  Makoto Asai (particles-V09-06-49)
+- Remove split class mechanism from G4VDecayChannel class.
+
 - 8. Sep. 2013  Makoto Asai (particles-V09-06-48)
 - G4ParticleTable: Update thread-local disctionaries when a particle
   is created during an event loop.
