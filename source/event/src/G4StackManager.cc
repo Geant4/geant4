@@ -55,12 +55,14 @@ G4StackManager::~G4StackManager()
 {
   if(userStackingAction) delete userStackingAction;
 
+#ifdef G4VERBOSE
   if(verboseLevel>0)
   {
     G4cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl;
     G4cout << " Maximum number of tracks in the urgent stack : " << urgentStack->GetMaxNTrack() << G4endl;
     G4cout << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << G4endl;
   }
+#endif
   delete urgentStack;
   delete waitingStack;
   delete postponeStack;
@@ -92,25 +94,33 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajector
   const G4ParticleDefinition* pd = newTrack->GetParticleDefinition();
   if(pd->GetParticleDefinitionID() < 0)
   {
+#ifdef G4VERBOSE
     G4ExceptionDescription ED;
-    ED << "A track without proper process manager is pushed into the track stack.\n"
-       << " Particle name : " << pd->GetParticleName() << " -- ";
-    if(newTrack->GetParentID()<0)
-    { ED << "created by a primary particle generator."; }
-    else
-    { 
-      const G4VProcess* vp = newTrack->GetCreatorProcess();
-      if(vp)
-      { ED << "created by " << vp->GetProcessName() << "."; }
+    if(verboseLevel>0) {
+      ED << "A track without proper process manager is pushed into the track stack.\n"
+         << " Particle name : " << pd->GetParticleName() << " -- ";
+      if(newTrack->GetParentID()<0)
+      { ED << "created by a primary particle generator."; }
       else
-      { ED << "creaded by unknown process."; }
+      { 
+        const G4VProcess* vp = newTrack->GetCreatorProcess();
+        if(vp)
+        { ED << "created by " << vp->GetProcessName() << "."; }
+        else
+        { ED << "creaded by unknown process."; }
+      }
     }
+#endif
 ////  Temporal care of setting process manager for general ion.
     if(pd->IsGeneralIon())
     {
-      ED << "\n Process manager is temporally set, but this operation is thread-unsafe\n"
-         << "and will be replaced with other methods at version 10.0.";
-      G4Exception("G4StackManager::PushOneTrack","Event10051",JustWarning,ED);
+#ifdef G4VERBOSE
+      if( verboseLevel > 0 ) {
+        ED << "\n Process manager is temporally set, but this operation is thread-unsafe\n"
+           << "and will be replaced with other methods at version 10.0.";
+        G4Exception("G4StackManager::PushOneTrack","Event10051",JustWarning,ED);
+      }
+#endif
       G4ParticleDefinition* genericIon = G4ParticleTable::GetParticleTable()->GetGenericIon();
       G4ProcessManager* pman=0;
       if (genericIon!=0) pman = genericIon->GetProcessManager();
@@ -141,8 +151,13 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajector
 ////  End of temporal care of setting process manager
     else
     {
-      G4Exception("G4StackManager::PushOneTrack","Event10051",
-                 FatalException,ED);
+#ifdef G4VERBOSE
+      if( verboseLevel > 0 ) {
+        ED << "\nThis track is deleted.";
+        G4Exception("G4StackManager::PushOneTrack","Event10051",
+                 JustWarning,ED);
+      }
+#endif
       delete newTrack;
       return GetNUrgentTrack();
     }

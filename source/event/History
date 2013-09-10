@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 9th, 2013  M.Asai (event-V09-06-20)
+- Change the warning message in G4StackManager on missing process
+  manager to be issued only when the verbose level is greater than 0.
+  
 September 6th, 2013  M.Asai (event-V09-06-19)
 - Fix incorrect initialization in G4ParticleGunMessenger class for
   /gun/ionL command.
