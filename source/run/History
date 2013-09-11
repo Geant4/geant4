@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 10th, 2013, M.Asai (run-V09-06-95)
+- Set up decay channels before starting an event loop. This is required
+  as G4VDecayChannel class is no longer a split class.
+
 Sep 9th, 2013, M.Asai (run-V09-06-94)
 - Remove split class mechanism from G4VDecayChannel class.
 

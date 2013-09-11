@@ -59,7 +59,6 @@ void G4MTRunManagerKernel::SetupShadowProcess() const
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVReplica.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Region.hh"
 #include "G4Material.hh"
 #include "G4PhysicsVector.hh"
@@ -258,6 +257,29 @@ void G4MTRunManagerKernel::ReinitializeGeometry()
     G4FieldManager* fm = (it->second).second;
     lv->SetFieldManager(fm, false);
     lv->SetSensitiveDetector(sd);
+  }
+}
+
+#include "G4ParticleDefinition.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleTableIterator.hh"
+#include "G4DecayTable.hh"
+#include "G4VDecayChannel.hh"
+
+void G4MTRunManagerKernel::SetUpDecayChannels()
+{
+  G4ParticleTable::G4PTblDicIterator* pItr
+    = G4ParticleTable::GetParticleTable()->GetIterator();
+  pItr->reset();
+  while((*pItr)())
+  {
+    G4DecayTable* dt = pItr->value()->GetDecayTable();
+    if(dt)
+    {
+      G4int nCh = dt->entries();
+      for(G4int i=0;i<nCh;i++)
+      { dt->GetDecayChannel(i)->GetDaughter(0); }
+    }
   }
 }
 

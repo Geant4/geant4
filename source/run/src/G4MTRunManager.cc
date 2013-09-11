@@ -189,6 +189,8 @@ std::vector<G4String> G4MTRunManager::GetCommandStack()
 
 void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, G4int n_select)
 {
+    MTkernel->SetUpDecayChannels();
+
     numberOfEventToBeProcessed = n_events;
     numberOfEventProcessed = 0;
     nSeedsUsed = 0;

@@ -67,7 +67,7 @@ public:
 protected:
     void SetupShadowProcess() const;
 
-public:
+public: // with descroption
     // This static method is used to start a worker thread.
     // Virtual methods to be invoked from this methos are
     // defined in G4UserWorkerInitialization class.
@@ -79,6 +79,12 @@ private:
     static G4ThreadLocal G4WorkerThread* wThreadContext;
 public:
     static G4WorkerThread* GetWorkerThread();
+
+public: // with descroption
+    // Fill decay tables with particle definition pointers of
+    // decay products. This method has to be invoked by 
+    // MTRunManager before event loop starts on workers.
+    void SetUpDecayChannels();
 };
 
 #endif //G4MTRunManagerKernel_h
