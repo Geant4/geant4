@@ -65,20 +65,30 @@ class G4PhotoNuclearCrossSection : public G4VCrossSectionDataSet
   // Body
   private:
 
-    static G4ThreadLocal G4int     lastN;   // The last N of calculated nucleus
-    static G4ThreadLocal G4int     lastZ;   // The last Z of calculated nucleus
-    static G4ThreadLocal G4double  lastSig; // Last value of the Cross Section
-    static G4ThreadLocal G4double* lastGDR; // Pointer to the last array of GDR cross sections
-    static G4ThreadLocal G4double* lastHEN; // Pointer to the last array of HEn cross sections
-    static G4ThreadLocal G4double  lastE;   // Last used in the cross section Energy
-    static G4ThreadLocal G4double  lastTH;  // Last value of the Energy Threshold (A-dependent)
-    static G4ThreadLocal G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
+     G4int     lastN;   // The last N of calculated nucleus
+     G4int     lastZ;   // The last Z of calculated nucleus
+     G4double  lastSig; // Last value of the Cross Section
+     G4double* lastGDR; // Pointer to the last array of GDR cross sections
+     G4double* lastHEN; // Pointer to the last array of HEn cross sections
+     G4double  lastE;   // Last used in the cross section Energy
+     G4double  lastTH;  // Last value of the Energy Threshold (A-dependent)
+     G4double  lastSP;  // Last value of the ShadowingPomeron (A-dependent)
 
     // Vector of pointers to the GDRPhotonuclearCrossSection
-    static G4ThreadLocal std::vector <G4double*> *GDR_G4MT_TLS_;
+    std::vector <G4double*> GDR;
 
     // Vector of pointers to the HighEnPhotonuclearCrossSect
-    static G4ThreadLocal std::vector <G4double*> *HEN_G4MT_TLS_;
+    std::vector <G4double*> HEN;
+    
+    // Associative memory for acceleration
+    
+    std::vector <G4int> colN;    // N of calculated nuclei
+    std::vector <G4int> colZ;    // Z of calculated nuclei
+    std::vector <G4double> spA;  // shadowing coefficients (A-dependent)
+    std::vector <G4double> eTH;    // energy threshold (A-dependent)
+
+    G4double mNeut;
+    G4double mProt;
 };
 
 #endif
