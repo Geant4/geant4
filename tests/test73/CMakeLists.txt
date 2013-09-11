@@ -34,11 +34,11 @@ GEANT4_ADD_TEST( test73-build BUILD test73 LABELS Nightly Continuous PhysicsChec
 #they can be promoted to nightlies adding the Nichtly and Continous
 #LABELS
 
-GEANT4_ADD_TEST(test73-local COMMAND ${CMAKE_CURRENT_BINARY_DIR}/test73 run_all.mac local
-	       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/local
-	       DEPENDS test73-build
-  	       LABELS PhysicsChecks
-	       ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+#GEANT4_ADD_TEST(test73-local COMMAND ${CMAKE_CURRENT_BINARY_DIR}/test73 run_all.mac local
+#	       WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/local
+#	       DEPENDS test73-build
+#	       LABELS PhysicsChecks
+#	       ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
 
 GEANT4_ADD_TEST(test73-FTFP_BERT_EMX COMMAND ${CMAKE_CURRENT_BINARY_DIR}/test73 run_all.mac FTFP_BERT_EMX
