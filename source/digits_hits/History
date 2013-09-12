@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 11, 2013, M. Asai (digits_hits-V09-06-06)
+- Remove unnecessary G4Exception.
+
 Mar 29, 2013, T. Aso  (digits_hits-V09-06-05)
 - Adding missing options in command-based scorers in G4ScoreQuantityMessenger and
   G4ScoreQuantityMessengerQCmd.

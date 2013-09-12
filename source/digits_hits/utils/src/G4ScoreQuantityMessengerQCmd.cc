@@ -29,8 +29,12 @@
 // ---------------------------------------------------------------------
 // Modifications
 // 08-Oct-2010 T.Aso remove unit of G4PSPassageCellCurrent.
-//  01-Jun-2012  T.Aso  Support weighted/dividedByArea options 
+// 01-Jun-2012 T.Aso Support weighted/dividedByArea options 
 //                      in flatCurrent and flatFulx commands.
+// 29-Mar-2013 T.Aso Support weighted options in the nOfTrack command.
+//                   Support a boundary flag option in the nOfStep command
+//                  for skipping stepLength=0 steps.
+// 
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
@@ -164,7 +168,8 @@ void G4ScoreQuantityMessenger::QuantityCommands()
   qnOfStepCmd->
   SetGuidance("[usage] /score/quantiy/nOfStep qname  bflag"); 
   qnOfStepCmd->SetGuidance("  qname  :(String) scorer name");
-  qnOfStepCmd->SetGuidance("  bflag  :(Bool) Count boundary if true");
+  qnOfStepCmd->SetGuidance("  bflag  :(Bool) Skip zero step ");
+  qnOfStepCmd->SetGuidance("          at geometry boundary if true");
   param = new G4UIparameter("qname",'s',false);
   qnOfStepCmd->SetParameter(param);
   param = new G4UIparameter("bflag",'b',true);  

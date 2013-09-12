@@ -33,7 +33,9 @@
 //  24-Mar-2011  T.Aso  Size and segmentation for replicated cylinder.
 //  01-Jun-2012  T.Aso  Support weighted/dividedByArea options 
 //                      in flatCurrent and flatFulx commands.
-//  27-Mar-2013  T.Aso  Missing options were supported.
+//  27-Mar-2013  T.Aso  Unit option in the kineticEnergy filter was 
+//                     supported.
+//                       
 // ---------------------------------------------------------------------
 
 #include "G4ScoreQuantityMessenger.hh"
