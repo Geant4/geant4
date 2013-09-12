@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+11 September 13: V.Ivanchenko (emstand-V09-06-64)
+- G4PairProductionRelModel - add SetupForMaterial(..) call
+    into SampleScattering method to fix infinite loop in MT mode
+
 02 September 13: V.Ivanchenko (emstand-V09-06-63)
 - G4PAIModelData - fixed very end of the delta-electron spectra
 

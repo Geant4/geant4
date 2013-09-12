@@ -349,8 +349,11 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   // do it fast if GammaEnergy < 2. MeV
   static const G4double Egsmall=2.*MeV;
 
+  SetupForMaterial(theGamma, aMaterial, GammaEnergy);
+
   // select randomly one element constituing the material
-  const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
+  const G4Element* anElement = 
+    SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
 
   if (GammaEnergy < Egsmall) {
 
