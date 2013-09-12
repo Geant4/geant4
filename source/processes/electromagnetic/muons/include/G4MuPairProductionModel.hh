@@ -170,8 +170,11 @@ private:
   // gamma energy bins
   G4int    nYBinPerDecade;
   size_t   nbiny;
+  size_t   nbine;
   G4double ymin;
   G4double dy;
+  G4double emin;
+  G4double emax;
 
   static const G4int zdat[5];
   static const G4double adat[5];

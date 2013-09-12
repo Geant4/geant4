@@ -113,6 +113,7 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
     nzdat(5),
     nYBinPerDecade(4),
     nbiny(1000),
+    nbine(0),
     ymin(-5.),
     dy(0.005)
 {
@@ -129,6 +130,8 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
     G4double limit = p->GetPDGMass()*8;
     if(limit > lowestKinEnergy) { lowestKinEnergy = limit; }
   }
+  emin = lowestKinEnergy;
+  emax = 10*TeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -159,6 +162,18 @@ void G4MuPairProductionModel::Initialise(const G4ParticleDefinition* p,
                                          const G4DataVector& cuts)
 { 
   SetParticle(p); 
+
+  // define scale of internal table for each thread only once
+  if(0 == nbine) {
+    emax = HighEnergyLimit();
+    emin = std::max(lowestKinEnergy, LowEnergyLimit());
+    nbine = size_t(nYBinPerDecade*log10(emax/emin));
+    if(nbine < 3) { nbine = 3; }
+
+    G4double maxPairEnergy = MaxSecondaryEnergy(particle,emin);
+    ymin = log(minPairEnergy/maxPairEnergy);
+    dy   = -ymin/G4double(nbiny);
+  }
 
   if(IsMaster() && p == particle) { 
     
@@ -432,27 +447,19 @@ G4double G4MuPairProductionModel::ComputeCrossSectionPerAtom(
 
 void G4MuPairProductionModel::MakeSamplingTables()
 {
-  G4double emax = HighEnergyLimit();
-  G4double emin = std::max(lowestKinEnergy, LowEnergyLimit());
-  size_t nbinse = size_t(nYBinPerDecade*log10(emax/emin));
-  if(nbinse < 3) { nbinse = 3; }
-  G4double factore = exp(log(emax/emin)/G4double(nbinse));
+  G4double factore = exp(log(emax/emin)/G4double(nbine));
 
-  G4double maxPairEnergy = MaxSecondaryEnergy(particle,emin);
-  ymin = log(minPairEnergy/maxPairEnergy);
-  dy   = -ymin/G4double(nbiny);
-  
   for (G4int iz=0; iz<nzdat; ++iz) {
 
     G4double Z = zdat[iz];
     SetElement(zdat[iz]);
-    G4Physics2DVector* pv = new G4Physics2DVector(nbiny+1,nbinse+1);
+    G4Physics2DVector* pv = new G4Physics2DVector(nbiny+1,nbine+1);
     G4double kinEnergy = emin;
 
-    for (size_t it=0; it<=nbinse; ++it) {
+    for (size_t it=0; it<=nbine; ++it) {
 
       pv->PutY(it, log(kinEnergy/MeV));
-      maxPairEnergy = MaxSecondaryEnergy(particle,kinEnergy);
+      G4double maxPairEnergy = MaxSecondaryEnergy(particle,kinEnergy);
       /*
       G4cout << "it= " << it << " E= " << kinEnergy 
 	     << "  " << particle->GetParticleName()   
@@ -491,7 +498,7 @@ void G4MuPairProductionModel::MakeSamplingTables()
       kinEnergy *= factore;
 
       // to avoid precision lost
-      if(it+1 == nbinse) { kinEnergy = emax; }
+      if(it+1 == nbine) { kinEnergy = emax; }
     }
     fElementData->InitialiseForElement(zdat[iz], pv);
   }
@@ -538,10 +545,10 @@ void G4MuPairProductionModel::SampleSecondaries(
   G4double yymax = 0.0;
 
   if(minEnergy > minPairEnergy) {
-    yymin = log(minPairEnergy/minEnergy)/coeff;
+    yymin = log(minEnergy/maxPairEnergy)/coeff;
   }
   if(maxEnergy < maxPairEnergy) {
-    yymax = log(minPairEnergy/maxEnergy)/coeff;
+    yymax = log(maxEnergy/maxPairEnergy)/coeff;
   }
   //G4cout << "yymin= " << yymin << "  yymax= " << yymax << G4endl;
 

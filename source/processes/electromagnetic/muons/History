@@ -17,10 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 September 2013: V.Ivant (emmuons-V09-06-19)
+- G4MuPairProductionModel - fixed bug in sampling when cut value is 
+    high; perform common initialisation of internal variables for
+    all threads - fix of non-reproducibility
+
 29 August 2013: V.Ivant (emmuons-V09-06-18)
 - G4MuBremsstrahlungModel - do not repeat initialisation of elelment
     selectors if model is shared between particle and anti-particle
-- G4MuPairProductionModel - fixed bug in energy sampling whihc couse 
+- G4MuPairProductionModel - fixed bug in energy sampling which couse 
     FPE and other problems
 
 09 August 2013: V.Ivant (emmuons-V09-06-17)
