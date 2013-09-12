@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 September 2013 W. Pokorski (hadr-lepnuc-V09-06-03)
+---------------------------------------------
+- Adaptation to use GetElementCrossSection of photonuclear XS
+
+
 04 September 2013 W. Pokorski (hadr-lepnuc-V09-06-02)
 ---------------------------------------------
 - Removing unused variables
