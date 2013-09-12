@@ -69,6 +69,7 @@ G4_REFERENCE_XS_FACTORY(G4NucleonNuclearCrossSection);
 G4_REFERENCE_XS_FACTORY(G4GlauberGribovCrossSection);
 G4_REFERENCE_XS_FACTORY(G4GGNuclNuclCrossSection);
 G4_REFERENCE_XS_FACTORY(G4ElectroNuclearCrossSection);
+G4_REFERENCE_XS_FACTORY(G4PhotoNuclearCrossSection);
 
 
 G4ThreadLocal G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;
