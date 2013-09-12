@@ -500,9 +500,9 @@ void G4RunManager::InitializeGeometry()
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
 
   kernel->DefineWorldVolume(userDetector->Construct(),false);
-  if(runManagerType == sequentialRM) userDetector->ConstructSDandField();
+  userDetector->ConstructSDandField();
   nParallelWorlds = userDetector->ConstructParallelGeometries();
-  if(runManagerType == sequentialRM) userDetector->ConstructParallelSD();
+  userDetector->ConstructParallelSD();
   kernel->SetNumberOfParallelWorld(nParallelWorlds);
   geometryInitialized = true;
 }

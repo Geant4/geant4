@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 11th, 2013, M.Asai (run-V09-06-96)
+- Fix ConstructSD() to be invoked for masther thread as well.
+
 Sep 10th, 2013, M.Asai (run-V09-06-95)
 - Set up decay channels before starting an event loop. This is required
   as G4VDecayChannel class is no longer a split class.
