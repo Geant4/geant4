@@ -129,7 +129,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     // data members
   
-    G4bool wasActivated;
+    static G4ThreadLocal G4bool wasActivated;
 
     // messenger
     G4OpticalPhysicsMessenger* fMessenger;

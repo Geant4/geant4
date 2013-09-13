@@ -41,7 +41,7 @@
 #include "G4LossTableManager.hh"
 #include "G4EmSaturation.hh"
 
-
+G4ThreadLocal G4bool G4OpticalPhysics::wasActivated = false;
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -52,8 +52,6 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4OpticalPhysics);
 
 G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
   : G4VPhysicsConstructor(name),
-
-    wasActivated(false),
 
     fScintillationProcess(NULL),
     fCerenkovProcess(NULL),
@@ -98,6 +96,7 @@ G4OpticalPhysics::~G4OpticalPhysics()
      if (fOpMieHGScatteringProcess) delete fOpMieHGScatteringProcess;
      if (fOpBoundaryProcess) delete fOpBoundaryProcess;
 
+     wasActivated = false;
   }
 }
 
