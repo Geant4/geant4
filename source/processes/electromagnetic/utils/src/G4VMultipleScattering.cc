@@ -174,105 +174,11 @@ G4VMultipleScattering::GetModelByIndex(G4int idx, G4bool ver) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//Worker threads share physics tables with the master thread for
-//this kind of process. This member function is used by worker
-//threads to achieve the partial effect of the master thread when
-//it builds physcis tables.
-
-void 
-G4VMultipleScattering::SlavePreparePhysicsTable(const G4ParticleDefinition& part)
-{
-  if(!firstParticle) { firstParticle = &part; }
-  if(part.GetParticleType() == "nucleus") {
-    SetStepLimitType(fMinimal);
-    SetLateralDisplasmentFlag(false);
-    SetRangeFactor(0.2);
-    G4String pname = part.GetParticleName();
-    if(pname != "deuteron" && pname != "triton" &&
-       pname != "alpha+"   && pname != "helium" &&
-       pname != "alpha"    && pname != "He3" &&
-       pname != "hydrogen") {
-
-      const G4ParticleDefinition* theGenericIon = 
-        G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
-     
-      if(theGenericIon && firstParticle != theGenericIon) {
-	G4ProcessManager* pm =  theGenericIon->GetProcessManager();
-	G4ProcessVector* v = pm->GetAlongStepProcessVector();
-	size_t n = v->size();
-	for(size_t j=0; j<n; ++j) {
-	  if((*v)[j] == this) {
-	    firstParticle = theGenericIon;
-	    isIon = true; 
-	    break; 
-	  }
-	}
-      }
-    }
-  }
-
-  emManager->PreparePhysicsTable(&part, this, false);
-  currParticle = 0;
-
-  if(1 < verboseLevel) {
-    G4cout << "### G4VMultipleScattering::SlavePrepearPhysicsTable() for "
-           << GetProcessName()
-           << " and particle " << part.GetParticleName()
-           << " local particle " << firstParticle->GetParticleName()
-	   << " isIon= " << isIon 
-           << G4endl;
-  }
-
-  if(firstParticle == &part) {
-
-    InitialiseProcess(firstParticle);
-
-    // initialisation of models
-    numberOfModels = modelManager->NumberOfModels();
-    for(G4int i=0; i<numberOfModels; ++i) {
-      G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
-      msc->SetIonisation(0, firstParticle);
-      msc->SetMasterThread(false);
-
-      if(0 == i) { currentModel = msc; }
-      if(isIon) {
-	msc->SetStepLimitType(fMinimal);
-	msc->SetLateralDisplasmentFlag(false);
-	msc->SetRangeFactor(0.2);
-      } else {
-	msc->SetStepLimitType(StepLimitType());
-	msc->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-	msc->SetSkin(Skin());
-	msc->SetRangeFactor(RangeFactor());
-	msc->SetGeomFactor(GeomFactor());
-      }
-      msc->SetPolarAngleLimit(polarAngleLimit);
-      G4double emax = 
-	std::min(msc->HighEnergyLimit(),emManager->MaxKinEnergy());
-      msc->SetHighEnergyLimit(emax);
-    }
-
-    modelManager->Initialise(firstParticle, G4Electron::Electron(), 
-			     10.0, verboseLevel);
-
-    if(!safetyHelper) {
-      safetyHelper = G4TransportationManager::GetTransportationManager()
-	->GetSafetyHelper();
-      safetyHelper->InitialiseHelper();
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void 
 G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  if(GetMasterProcess() != this) {
-    SlavePreparePhysicsTable(part);
-    return;
-  }
+  G4bool master = true;
+  if(GetMasterProcess() != this) { master = false; }
 
   if(!firstParticle) { firstParticle = &part; }
   if(part.GetParticleType() == "nucleus") {
@@ -303,7 +209,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
     }
   }
 
-  emManager->PreparePhysicsTable(&part, this, true);
+  emManager->PreparePhysicsTable(&part, this, master);
   currParticle = 0;
 
   if(1 < verboseLevel) {
@@ -324,6 +230,7 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
     for(G4int i=0; i<numberOfModels; ++i) {
       G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
       msc->SetIonisation(0, firstParticle);
+      msc->SetMasterThread(master);
       if(0 == i) { currentModel = msc; }
       if(isIon) {
 	msc->SetStepLimitType(fMinimal);
@@ -355,74 +262,6 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//01.25.2009 Xin Dong: Phase II change for Geant4 multi-threading.
-//Worker threads share physics tables with the master thread for
-//this kind of process. This member function is used by worker
-//threads to achieve the partial effect of the master thread when
-//it prepares physcis tables.
-
-void 
-G4VMultipleScattering::SlaveBuildPhysicsTable(const G4ParticleDefinition& part,
-					      const G4VMultipleScattering* master)
-{
-  G4String num = part.GetParticleName();
-  if(1 < verboseLevel) {
-    G4cout << "### G4VMultipleScattering::SlaveBuildPhysicsTable() for "
-           << GetProcessName()
-           << " and particle " << num
-	   << " 1st particle " << firstParticle->GetParticleName()
-           << G4endl;
-  }
-  if(firstParticle == &part) { 
-        
-    emManager->BuildPhysicsTable(firstParticle);
-
-    // initialisation of models
-    G4bool printing = true;
-    numberOfModels = modelManager->NumberOfModels();
-    /*
-    G4cout << "### G4VMultipleScattering::SlaveBuildPhysicsTable() for "
-           << GetProcessName()
-           << " and particle " << num
-	   << " Nmod= " << numberOfModels << "  " << this
-           << G4endl;
-    */
-    for(G4int i=0; i<numberOfModels; ++i) {
-      G4VMscModel* msc = 
-	static_cast<G4VMscModel*>(GetModelByIndex(i, printing));
-      G4VMscModel* msc0= 
-	static_cast<G4VMscModel*>(master->GetModelByIndex(i,printing));
-      msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
-    }
-  }
-
-  // explicitly defined printout by particle name
-  if(0 < verboseLevel && (num == "e-" || 
-			  num == "e+"    || num == "mu+" || 
-			  num == "mu-"   || num == "proton"|| 
-			  num == "pi+"   || num == "pi-" || 
-			  num == "kaon+" || num == "kaon-" || 
-			  num == "alpha" || num == "anti_proton" || 
-			  num == "GenericIon"))
-    { 
-      G4cout << G4endl << GetProcessName() 
-	     << ":   for " << num
-	     << "    SubType= " << GetProcessSubType() 
-	     << G4endl;
-      PrintInfo();
-      modelManager->DumpModelList(verboseLevel);
-    }
-
-  if(1 < verboseLevel) {
-    G4cout << "### G4VMultipleScattering::SlaveBuildPhysicsTable() done for "
-           << GetProcessName()
-           << " and particle " << num
-           << G4endl;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   G4String num = part.GetParticleName();
@@ -433,11 +272,10 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 	   << " IsMaster= " << G4LossTableManager::Instance()->IsMaster()
            << G4endl;
   }
-  const G4VMultipleScattering* masterProcess = static_cast<const G4VMultipleScattering*>(GetMasterProcess()); 
-  if(masterProcess != this) {
-    SlaveBuildPhysicsTable(part, masterProcess);
-    return;
-  }
+  G4bool master = true;
+  const G4VMultipleScattering* masterProcess = 
+    static_cast<const G4VMultipleScattering*>(GetMasterProcess()); 
+  if(masterProcess != this) { master = false; }
 
   if(firstParticle == &part) { 
     /*    
@@ -449,6 +287,27 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
            << G4endl;
     */
     emManager->BuildPhysicsTable(firstParticle);
+
+    if(!master) {
+      // initialisation of models
+      G4bool printing = true;
+      numberOfModels = modelManager->NumberOfModels();
+      /*
+	G4cout << "### G4VMultipleScattering::SlaveBuildPhysicsTable() for "
+	<< GetProcessName()
+	<< " and particle " << num
+	<< " Nmod= " << numberOfModels << "  " << this
+	<< G4endl;
+      */
+      for(G4int i=0; i<numberOfModels; ++i) {
+	G4VMscModel* msc = 
+	  static_cast<G4VMscModel*>(GetModelByIndex(i, printing));
+	G4VMscModel* msc0= 
+	  static_cast<G4VMscModel*>(masterProcess->GetModelByIndex(i,printing));
+	msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
+      }
+    }
+
   }
 
   // explicitly defined printout by particle name

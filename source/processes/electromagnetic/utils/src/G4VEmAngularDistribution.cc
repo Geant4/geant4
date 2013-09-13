@@ -59,4 +59,13 @@ G4VEmAngularDistribution::G4VEmAngularDistribution(const G4String& name)
 G4VEmAngularDistribution::~G4VEmAngularDistribution() 
 {}
 
+G4ThreeVector& G4VEmAngularDistribution::SampleDirectionForShell(
+					 const G4DynamicParticle* dp,
+					 G4double finalTotalEnergy,
+					 G4int Z, G4int,
+					 const G4Material* mat)
+{
+  return SampleDirection(dp, finalTotalEnergy, Z, mat); 
+}
+
 //    

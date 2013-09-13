@@ -17,9 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 September 13: V.Ivant (emutils-V09-06-54)
+- G4VMultipleScattering, G4VEnergyLossProcess - removed obsolete 
+    methods SlavePreparePhysicsTable(..) and SlaveBuildPhysicsTable(..)
+- G4VEmAngularDistribution - added extra virtual method 
+    SampleDirectionForShell(...)
+
 07 August 13: V.Ivant (emutils-V09-06-53)
-- G4VEmModel - added pointer to G4ElementDat and Get method in
-    order to allow sharing G4ElementData between threads
+- G4VEmModel - added pointer to G4ElementData and GetElementData method 
+    in order to allow sharing G4ElementData between threads
 - G4EmModelManager - check MinEnergyCut method to address bug #1481
 
 27 July 13: V.Ivant (emutils-V09-06-52)
