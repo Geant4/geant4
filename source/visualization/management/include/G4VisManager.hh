@@ -516,6 +516,10 @@ private:
   // Digi filter model manager
   G4VisFilterManager<G4VDigi>* fpDigiFilterMgr;
 
+#ifdef G4MULTITHREADED
+public:
+  virtual void SetUpForAThread();
+#endif
 };
 
 #include "G4VisManager.icc"

@@ -1501,8 +1501,17 @@ void G4VisManager::BeginOfEvent ()
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
 }
 
+#ifdef G4MULTITHREADED
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+namespace { G4Mutex visEndOfEventMutex = G4MUTEX_INITIALIZER; }
+#endif
+
 void G4VisManager::EndOfEvent ()
 {
+#ifdef G4MULTITHREADED
+  G4AutoLock al(&visEndOfEventMutex);
+#endif
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
 
   // Don't call IsValidView unless there is a scene handler.  This
@@ -1895,3 +1904,10 @@ G4VisManager::RegisterModelFactories()
     G4cout<<"class. See G4VisExecutive for an example."<<G4endl;
   }
 }
+
+#ifdef G4MULTITHREADED
+void G4VisManager::SetUpForAThread()
+{
+  // new G4VisStateDependent(this); 
+}
+#endif
