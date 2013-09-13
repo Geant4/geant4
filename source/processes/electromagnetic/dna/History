@@ -14,9 +14,6 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
-12-09-2013  M.K.         tag emdna-V09-06-12
-	    Correct bound checks in G4ITManager.icc
-
 16-08-2013  S.I.         tag emdna-V09-06-11
 	    Adapted G4DNAGenericIonsManager to use of G4DNAIons
 
