@@ -217,7 +217,13 @@ protected:
 
   static void SetConcreteInstance (G4VVisManager*);
 
-  static G4ThreadLocal G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
+  static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
+
+#ifdef G4MULTITHREADED
+public:
+  // This method is invoked by G4WorkerRunManager
+  virtual void SetUpForAThread() = 0;
+#endif
 };
 
 #endif

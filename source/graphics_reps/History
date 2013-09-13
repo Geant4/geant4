@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12th September 2013  Makoto Asai (greps-V09-06-08)
+- Introducing G4VVisManager::SetUpForAThread(). This method is invoked
+  by G4WorkerRunManager so that G4VisManager will get noticed at the
+  end of event of each worker thread.
+
+12th September 2013  Makoto Asai (greps-V09-06-07)
+- Remove G4ThreadLocal keyword from G4VVisManager.
+
 18th August 2013  John Allison  (greps-V09-06-06)
 - G4VGraphicsScene: Added GetExtent.
 

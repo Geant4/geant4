@@ -34,7 +34,7 @@
 
 G4VVisManager::~G4VVisManager () {}
 
-G4ThreadLocal G4VVisManager* G4VVisManager::fpConcreteInstance = 0;
+G4VVisManager* G4VVisManager::fpConcreteInstance = 0;
 
 G4VVisManager* G4VVisManager::GetConcreteInstance ()
 {
