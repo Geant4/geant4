@@ -41,6 +41,7 @@
 #include "G4RNGHelper.hh"
 #include "G4Run.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4VVisManager.hh"
 #include <sstream>
 
 G4WorkerRunManager* G4WorkerRunManager::GetWorkerRunManager()
@@ -64,6 +65,11 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     eventLoopOnGoing = false;
     nevModulo = -1;
     currEvID = -1;
+
+#ifdef G4MULTITHREADED
+    G4VVisManager* pVVis = G4VVisManager::GetConcreteInstance();
+    if(pVVis) pVVis->SetUpForAThread();
+#endif
 }
 
 #include "G4MTRunManager.hh"
