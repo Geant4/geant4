@@ -539,4 +539,33 @@ const G4VProcess* G4VProcess::GetMasterProcess() const
 {
     return masterProcessShadow;
 }
+
+inline
+void G4VProcess::SubtractNumberOfInteractionLengthLeft(
+                                  G4double previousStepSize )
+{
+  if (currentInteractionLength>0.0) {
+    theNumberOfInteractionLengthLeft -= previousStepSize/currentInteractionLength;
+    if(theNumberOfInteractionLengthLeft<0.) {
+       theNumberOfInteractionLengthLeft=CLHEP::perMillion;
+    }
+
+  } else {
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cerr << "G4VProcess::SubtractNumberOfInteractionLengthLeft()";
+      G4cerr << " [" << theProcessName << "]" <<G4endl;
+      G4cerr << " currentInteractionLength = " << currentInteractionLength << " [mm]";
+      G4cerr << " previousStepSize = " << previousStepSize << " [mm]";
+      G4cerr << G4endl;
+    }
+#endif
+    G4String msg = "Negative currentInteractionLength for ";
+    msg +=      theProcessName;
+    G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()",
+                "ProcMan201",EventMustBeAborted,
+                msg);
+  }
+}
+
 #endif

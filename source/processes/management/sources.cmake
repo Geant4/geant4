@@ -35,8 +35,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4procman
     HEADERS
-        G4IVContinuousDiscreteProcess.hh
-        G4IVRestDiscreteProcess.hh
         G4ParticleTypes.hh
         G4ProcTblElement.hh
         G4ProcTblElement.icc
@@ -60,8 +58,6 @@ GEANT4_DEFINE_MODULE(NAME G4procman
         G4VRestProcess.hh
         G4WrapperProcess.hh
     SOURCES
-        G4IVContinuousDiscreteProcess.cc
-        G4IVRestDiscreteProcess.cc
         G4ProcTblElement.cc
         G4ProcessAttribute.cc
         G4ProcessManager.cc

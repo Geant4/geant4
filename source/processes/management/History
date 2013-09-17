@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Sep. 14th, 2013   M.Asai (procman-V09-06-05)
+- Now G4VProcess::SubtractNumberOfInteractionLengthLeft() is inlined.
+
+- Sep. 14th, 2013   M.Asai (procman-V09-06-04)
+- Remove unused and obsolete intermediate layer classes
+  G4IVContinuousDiscreteProcess and G4IVRestDiscreteProcess.
+
 - Sep. 6th, 2013   M.Asai (procman-V09-06-03)
 - Change G4VProcess::SetMasterProcess() to be a virtual method so that
   a process that owns another process (e.g. a wrapper process) could

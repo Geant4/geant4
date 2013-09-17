@@ -97,33 +97,6 @@ void G4VProcess::ResetNumberOfInteractionLengthLeft()
   theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
 }
 
-void G4VProcess::SubtractNumberOfInteractionLengthLeft(
-                                  G4double previousStepSize )
-{
-  if (currentInteractionLength>0.0) {
-    theNumberOfInteractionLengthLeft -= previousStepSize/currentInteractionLength;
-    if(theNumberOfInteractionLengthLeft<0.) {
-       theNumberOfInteractionLengthLeft=perMillion;
-    }          
-
-  } else {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cerr << "G4VProcess::SubtractNumberOfInteractionLengthLeft()";
-      G4cerr << " [" << theProcessName << "]" <<G4endl;
-      G4cerr << " currentInteractionLength = " << currentInteractionLength/cm << " [cm]";
-      G4cerr << " previousStepSize = " << previousStepSize/cm << " [cm]";
-      G4cerr << G4endl;
-    }
-#endif
-    G4String msg = "Negative currentInteractionLength for ";
-    msg += 	theProcessName;
-    G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()",
-		"ProcMan201",EventMustBeAborted,
-		msg);
-  }
-}
-
 void G4VProcess::StartTracking(G4Track*)
 {
   currentInteractionLength = -1.0;
