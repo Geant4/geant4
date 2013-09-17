@@ -369,7 +369,6 @@ void G4EmStandardPhysics_option2::ConstructProcess()
   //    
   G4EmProcessOptions opt;
   opt.SetVerbose(verbose);
-  opt.SetApplyCuts(true);
   
   // Scattering options
   //

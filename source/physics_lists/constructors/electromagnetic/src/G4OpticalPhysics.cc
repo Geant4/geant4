@@ -85,7 +85,8 @@ G4OpticalPhysics::~G4OpticalPhysics()
 {
   delete fMessenger;
 
-  if (wasActivated) {
+// Process objects are deleted elsewhere.
+/*************  if (wasActivated) {
 
      if (fScintillationProcess) delete fScintillationProcess;
      if (fCerenkovProcess) delete fCerenkovProcess;
@@ -97,7 +98,7 @@ G4OpticalPhysics::~G4OpticalPhysics()
      if (fOpBoundaryProcess) delete fOpBoundaryProcess;
 
      wasActivated = false;
-  }
+  } ************************/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -14,6 +14,15 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-Sep-2013, V.Ivanchenko (phys-ctor-em-V09-06-13)
+- G4EmStandardPhysics - enable ApplyCuts option
+- G4EmStandardPhysics_option2 - disable ApplyCuts option
+    both changings are needed to check an effect of these options
+    to optimise EM for the release 
+
+14-Sep-2013, M.Asai (phys-ctor-em-V09-06-12)
+- Further fix G4OpticalPhysics for MT. 
+
 12-Sep-2013, M.Asai (phys-ctor-em-V09-06-11)
 - Fix G4OpticalPhysics for MT. 
 
