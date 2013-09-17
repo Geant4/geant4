@@ -23,11 +23,7 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find ROOT (required package)
 #
-find_package(ROOT QUIET)
-if(NOT ROOT_FOUND)
-  message(STATUS "G4 Examples: ROOT package not found. --> AnaEx02 example disabled")  
-  return()
-endif()
+find_package(ROOT REQUIRED)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project

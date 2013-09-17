@@ -9,6 +9,14 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th September 2013 I. Hrivnacova (analysisExample-V09-06-02)
+- AnaEx01 migrated to MT;
+  an argument isOnMaster added to HistoManager::book() method
+  (for consistency in all AnaEx0N examples)
+
+16th September 2013 I. Hrivnacova (analysisExample-V09-06-01)
+- Fixed handling required packages in CMake files
+
 08th February 2013 Ivana Hrivnacova (analysisExample-V09-06-00)
 - Applied coding guidelines in AnaEx01,2,3
 

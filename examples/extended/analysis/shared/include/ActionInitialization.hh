@@ -23,60 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx03/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+// $Id: ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class DetectorConstruction;
 
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
- class ITuple;
-} 
-  const G4int MaxHisto = 5;
+/// Action initialization class.
+///
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoManager
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-  
-    HistoManager();
-   ~HistoManager();
-   
-    void book(G4bool isOnMaster);
-    void save();
+    ActionInitialization(DetectorConstruction* detector);
+    virtual ~ActionInitialization();
 
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-    void FillNtuple(G4double EnergyAbs, G4double EnergyGap,
-                    G4double TrackLAbs, G4double TrackLGap);
-    
-    void PrintStatistic();
-        
   private:
-  
-    AIDA::IAnalysisFactory*  fAF;        
-    AIDA::ITree*             fTree;
-    
-    AIDA::IHistogram1D*      fHisto[MaxHisto];            
-    AIDA::ITuple*            fNtuple1;    
-    AIDA::ITuple*            fNtuple2;    
+    DetectorConstruction* fDetector;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    

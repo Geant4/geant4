@@ -68,7 +68,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   //histograms
   //
-  fHistoManager->book(); 
+  fHistoManager->book(isMaster); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

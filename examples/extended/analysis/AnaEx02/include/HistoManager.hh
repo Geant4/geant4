@@ -54,7 +54,7 @@ class HistoManager
     HistoManager();
    ~HistoManager();
    
-    void book();
+    void book(G4bool isOnMaster);
     void save();
 
     void FillHisto(G4int id, G4double bin, G4double weight = 1.0);

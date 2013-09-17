@@ -23,13 +23,8 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find AIDA (required package)
 #
-find_package(AIDA QUIET)
-if(NOT AIDA_FOUND)
-  message(STATUS "G4 Examples: AIDA package not found. --> AnaEx03 example disabled")  
-  return()
-else()
-  add_definitions(-DG4ANALYSIS_USE) 
-endif()
+find_package(AIDA REQUIRED)
+add_definitions(-DG4ANALYSIS_USE) 
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project

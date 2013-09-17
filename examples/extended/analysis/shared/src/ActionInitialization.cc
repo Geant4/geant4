@@ -23,60 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx03/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+// $Id: ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
-
-#include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-namespace AIDA {
- class IAnalysisFactory;
- class ITree;
- class IHistogram1D;
- class ITuple;
-} 
-  const G4int MaxHisto = 5;
+#include "ActionInitialization.hh"
+#include "HistoManager.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManager
+ActionInitialization::ActionInitialization(DetectorConstruction* detector)
+ : G4VUserActionInitialization(),
+   fDetector(detector)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  public:
+  // Histo manager
+  HistoManager*  histo = new HistoManager();
   
-    HistoManager();
-   ~HistoManager();
-   
-    void book(G4bool isOnMaster);
-    void save();
-
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
-
-    void FillNtuple(G4double EnergyAbs, G4double EnergyGap,
-                    G4double TrackLAbs, G4double TrackLGap);
-    
-    void PrintStatistic();
-        
-  private:
-  
-    AIDA::IAnalysisFactory*  fAF;        
-    AIDA::ITree*             fTree;
-    
-    AIDA::IHistogram1D*      fHisto[MaxHisto];            
-    AIDA::ITuple*            fNtuple1;    
-    AIDA::ITuple*            fNtuple2;    
-};
+  // Actions
+  SetUserAction(new RunAction(histo));
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void ActionInitialization::Build() const
+{
+  // Histo manager
+  HistoManager*  histo = new HistoManager();
+  
+  // Actions
+  //
+  SetUserAction(new PrimaryGeneratorAction(fDetector));
+  
+  RunAction* runAction = new RunAction(histo);  
+  SetUserAction(runAction);
+  
+  EventAction* eventAction = new EventAction(runAction, histo);
+  SetUserAction(eventAction);
 
+  SteppingAction* steppingAction = new SteppingAction(fDetector, eventAction);
+  SetUserAction(steppingAction);
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
