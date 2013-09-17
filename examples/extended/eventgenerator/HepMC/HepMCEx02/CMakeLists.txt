@@ -23,11 +23,7 @@ include(${Geant4_USE_FILE})
 #----------------------------------------------------------------------------
 # Find HepMC (required package)
 #
-find_package(HepMC QUIET)
-if(NOT HEPMC_FOUND)
-  message(STATUS "G4 Examples: HepMC package not found. --> HepMCEx02 example disabled")  
-  return()
-endif()
+find_package(HepMC REQUIRED)
 
 #----------------------------------------------------------------------------
 # Find Pythia6 (optional package)
