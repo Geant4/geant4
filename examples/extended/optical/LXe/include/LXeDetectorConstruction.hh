@@ -38,6 +38,7 @@ class G4Box;
 class G4Tubs;
 class LXePMTSD;
 class LXeScintSD;
+class LXeMainVolume;
 class G4Sphere;
 
 #include "G4Material.hh"
@@ -52,6 +53,10 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
 
     LXeDetectorConstruction();
     virtual ~LXeDetectorConstruction();
+
+    // To allow use of G4VUserDetectorConstruction protected
+    // functions G4VDetectorConstruction::SetSensitiveDetector(..)
+    friend class LXeMainVolume;
 
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
@@ -89,8 +94,8 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
     void SetWLSSlabOn(G4bool b){fWLSslab=b; fUpdated=true;}
     G4bool GetWLSSlabOn(){return fWLSslab;}
 
-    void SetMainVolumeOn(G4bool b){fMainVolume=b; fUpdated=true;}
-    G4bool GetMainVolumeOn(){return fMainVolume;}
+    void SetMainVolumeOn(G4bool b){fMainVolumeOn=b; fUpdated=true;}
+    G4bool GetMainVolumeOn(){return fMainVolumeOn;}
 
     void SetNFibers(G4int n){fNfibers=n; fUpdated=true;}
     G4int GetNFibers(){return fNfibers;}
@@ -139,8 +144,10 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
     static G4bool fSphereOn;
     G4double fRefl;
     G4bool fWLSslab;
-    G4bool fMainVolume;
+    G4bool fMainVolumeOn;
     G4double fSlab_z;
+
+    LXeMainVolume* fMainVolume;
 
     G4MaterialPropertiesTable* fLXe_mt;
     G4MaterialPropertiesTable* fMPTPStyrene;

@@ -69,6 +69,7 @@ LXeSteppingAction::~LXeSteppingAction() {}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
+
   G4Track* theTrack = theStep->GetTrack();
 
   if ( theTrack->GetCurrentStepNumber() == 1 ) fExpectedNextStatus = Undefined;
@@ -86,7 +87,7 @@ void LXeSteppingAction::UserSteppingAction(const G4Step * theStep){
   G4VPhysicalVolume* thePostPV = thePostPoint->GetPhysicalVolume();
 
   G4OpBoundaryProcessStatus boundaryStatus=Undefined;
-  static G4OpBoundaryProcess* boundary=NULL;
+  static G4ThreadLocal G4OpBoundaryProcess* boundary=NULL;
 
   //find the boundary process only once
   if(!boundary){

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 13, 2013 Peter Gumplinger (LXe-V09-06-08)
+- apply all of Ivana's modifications to make the code MT ready
+
 July 16, 2013 Ivana Hrivnacova (LXe-V09-06-07)
 - Make LXeTrajectoryAllocator thread local (required for MT)
 

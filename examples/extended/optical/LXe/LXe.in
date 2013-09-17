@@ -5,13 +5,13 @@
 #**
 #**************
 /run/verbose 1
+/tracking/verbose 1
 #/LXe/detector/MainScintYield 100
 /LXe/saveThreshold 1000
 /LXe/pmtThreshold 2
 #/LXe/forceDrawPhotons true
 #/LXe/forceDrawNoPhotons false
 /LXe/eventVerbose 1
-#/tracking/verbose 1
 #/optics_engine/selectOpProcess Scintillation
 #/optics_engine/setOpProcessUse false
 #/optics_engine/setOpProcessVerbose 1
@@ -22,4 +22,4 @@
 /optics_engine/selectOpProcess Scintillation
 #/optics_engine/setOpProcessVerbose 0
 /optics_engine/setTrackSecondariesFirst false
-/run/beamOn 3
+/run/beamOn 1

@@ -52,15 +52,19 @@ class LXeMainVolume : public G4PVPlacement
                  G4int pCopyNo,
                  LXeDetectorConstruction* c);
 
+    void ConstructSDandField();
+
   private:
 
     void VisAttributes();
     void SurfaceProperties();
 
     void PlacePMTs(G4LogicalVolume* pmt_Log,
-                   G4RotationMatrix* rot, G4double &a, G4double &b, G4double da,
-                   G4double db, G4double amin, G4double bmin, G4int na, G4int nb,
-                   G4double &x, G4double &y, G4double &z, G4int &k,LXePMTSD* sd);
+                   G4RotationMatrix* rot,
+                   G4double &a, G4double &b, G4double da,
+                   G4double db, G4double amin, G4double bmin,
+                   G4int na, G4int nb,
+                   G4double &x, G4double &y, G4double &z, G4int &k);
 
     void CopyValues();
 
@@ -90,14 +94,17 @@ class LXeMainVolume : public G4PVPlacement
     // Logical volumes
     //
     G4LogicalVolume* fScint_log;
-    static G4LogicalVolume* fHousing_log;
+    G4LogicalVolume* fHousing_log;
     G4LogicalVolume* fPmt_log;
     G4LogicalVolume* fPhotocath_log;
     G4LogicalVolume* fSphere_log;
 
+    // Sensitive Detectors positions
+    std::vector<G4ThreeVector> fPmtPositions;
+
     //Sensitive Detectors
-    static LXeScintSD* fScint_SD;
-    static LXePMTSD* fPmt_SD;
+    static G4ThreadLocal LXeScintSD* fScint_SD;
+    static G4ThreadLocal LXePMTSD* fPmt_SD;
 };
 
 #endif

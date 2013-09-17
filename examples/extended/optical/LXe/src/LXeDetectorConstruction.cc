@@ -249,8 +249,9 @@ G4VPhysicalVolume* LXeDetectorConstruction::ConstructDetector()
   fExperimentalHall_log->SetVisAttributes(G4VisAttributes::Invisible);
 
   //Place the main volume
-  if(fMainVolume){
-    new LXeMainVolume(0,G4ThreeVector(),fExperimentalHall_log,false,0,this);
+  if(fMainVolumeOn){
+    fMainVolume
+      = new LXeMainVolume(0,G4ThreeVector(),fExperimentalHall_log,false,0,this);
   }
 
   //Place the WLS slab
@@ -292,6 +293,7 @@ G4VPhysicalVolume* LXeDetectorConstruction::ConstructDetector()
 
 void LXeDetectorConstruction::ConstructSDandField()
 {
+  if (fMainVolume) fMainVolume->ConstructSDandField();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -359,7 +361,8 @@ void LXeDetectorConstruction::SetDefaults(){
 
   fNfibers=15;
   fWLSslab=false;
-  fMainVolume=true;
+  fMainVolumeOn=true;
+  fMainVolume=NULL;
   fSlab_z=2.5*mm;
 
   G4UImanager::GetUIpointer()

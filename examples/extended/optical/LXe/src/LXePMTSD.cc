@@ -59,6 +59,17 @@ LXePMTSD::~LXePMTSD() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void LXePMTSD::SetPmtPositions(const std::vector<G4ThreeVector>& positions)
+{
+  for (G4int i=0; i<G4int(positions.size()); ++i) {
+    if(fPMTPositionsX)fPMTPositionsX->push_back(positions[i].x());
+    if(fPMTPositionsY)fPMTPositionsY->push_back(positions[i].y());
+    if(fPMTPositionsZ)fPMTPositionsZ->push_back(positions[i].z());
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void LXePMTSD::Initialize(G4HCofThisEvent* hitsCE){
   fPMTHitCollection = new LXePMTHitsCollection
                       (SensitiveDetectorName,collectionName[0]);

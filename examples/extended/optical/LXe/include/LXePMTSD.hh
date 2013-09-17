@@ -36,6 +36,8 @@
 #include "G4VSensitiveDetector.hh"
 #include "LXePMTHit.hh"
 
+#include <vector>
+
 class G4Step;
 class G4HCofThisEvent;
 
@@ -69,11 +71,7 @@ class LXePMTSD : public G4VSensitiveDetector
     }
 
     //Store a pmt position
-    inline void SetPMTPos(G4int n,G4double x,G4double y,G4double z){
-      if(fPMTPositionsX)fPMTPositionsX->insertAt(n,x);
-      if(fPMTPositionsY)fPMTPositionsY->insertAt(n,y);
-      if(fPMTPositionsZ)fPMTPositionsZ->insertAt(n,z);
-    }
+    void SetPmtPositions(const std::vector<G4ThreeVector>& positions);
 
   private:
 

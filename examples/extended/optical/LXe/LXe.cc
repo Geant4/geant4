@@ -28,6 +28,7 @@
 /// \file optical/LXe/LXe.cc
 /// \brief Main program of the optical/LXe example
 //
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -55,6 +56,8 @@
 #include "G4UIExecutive.hh"
 #endif
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int main(int argc, char** argv)
 {
 #ifdef G4MULTITHREADED
@@ -63,7 +66,7 @@ int main(int argc, char** argv)
 #else
   // User Verbose output class
   //
-  G4VSteppingVerbose::SetInstance(new LXeSteppingVerbose());
+  // G4VSteppingVerbose::SetInstance(new LXeSteppingVerbose());
 
   G4RunManager * runManager = new G4RunManager;
 #endif
@@ -113,3 +116,5 @@ int main(int argc, char** argv)
   delete runManager;
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
