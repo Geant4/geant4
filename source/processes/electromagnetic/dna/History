@@ -14,6 +14,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+14-09-2013  M.Asai       tag emdna-V09-06-14
+            G4VProcess::SubtractNumberOfInteractionLengthLeft() is no longer
+            a virtual methood since v9.6 and thus it must not be overwritten
+            with virtual keyword in G4VITProcess.
+
+12-09-2013  M.K.         tag emdna-V09-06-13
+	    Correction of an inadvertent modification introduced in previous tag
+
+12-09-2013  M.K.         tag emdna-V09-06-12
+	    Correct bound checks in G4ITManager.icc
+
 16-08-2013  S.I.         tag emdna-V09-06-11
 	    Adapted G4DNAGenericIonsManager to use of G4DNAIons
 

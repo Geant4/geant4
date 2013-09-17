@@ -140,14 +140,6 @@ protected:  // with description
 
     inline virtual void ClearInteractionTimeLeft();
 
-    //_________________________________________________
-    // Redefine needed members and method of G4VProcess
-    virtual void      SubtractNumberOfInteractionLengthLeft(
-        G4double previousStepSize
-    );
-    // subtract NumberOfInteractionLengthLeft by the value corresponding to
-    // previousStepSize
-
     inline virtual void      ClearNumberOfInteractionLengthLeft();
     // clear NumberOfInteractionLengthLeft
     // !!! This method should be at the end of PostStepDoIt()

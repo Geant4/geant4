@@ -95,26 +95,3 @@ void G4VITProcess::StartTracking(G4Track* track)
     fpState = 0;
 }
 
-void G4VITProcess::SubtractNumberOfInteractionLengthLeft(
-                                  G4double previousStepSize )
-{
-  if (fpState->currentInteractionLength>0.0) {
-    fpState->theNumberOfInteractionLengthLeft -= previousStepSize/(fpState->currentInteractionLength);
-    if(fpState->theNumberOfInteractionLengthLeft<0.) {
-       fpState->theNumberOfInteractionLengthLeft=perMillion;
-    }
-
-  } else {
-#ifdef G4VERBOSE
-    if (verboseLevel>0) {
-      G4cerr << "G4VProcess::SubtractNumberOfInteractionLengthLeft()";
-      G4cerr << " [" << theProcessName << "]" <<G4endl;
-      G4cerr << " currentInteractionLength = " << *currentInteractionLength/cm << " [cm]";
-      G4cerr << " previousStepSize = " << previousStepSize/cm << " [cm]";
-      G4cerr << G4endl;
-    }
-#endif
-    G4Exception("G4VProcess::SubtractNumberOfInteractionLengthLeft()",
-		"Negative currentInteractionLength",EventMustBeAborted,theProcessName);
-  }
-}
