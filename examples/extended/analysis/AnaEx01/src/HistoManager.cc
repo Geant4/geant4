@@ -61,12 +61,12 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::book()
+void HistoManager::book(G4bool isOnMaster)
 {
   // Create or get analysis manager
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isOnMaster);
   analysisManager->SetVerboseLevel(2);
   G4String extension = analysisManager->GetFileType();
   fFileName[1] = fFileName[0] + "." + extension;

@@ -14,6 +14,7 @@ ExG4HbookNtupleManager
 
 SHARED_CLASSES_PATH ../shared
 SHARED_CLASSES_LIST
+ActionInitialization
 DetectorConstruction
 DetectorMessenger
 EventAction

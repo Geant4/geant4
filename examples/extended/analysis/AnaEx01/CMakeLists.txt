@@ -33,6 +33,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Get examples sources from common and shared
 #
 list(APPEND sources 
+  ${PROJECT_SOURCE_DIR}/../shared/src/ActionInitialization.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/DetectorConstruction.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/DetectorMessenger.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/EventAction.cc
