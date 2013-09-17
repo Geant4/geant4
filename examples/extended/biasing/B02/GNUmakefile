@@ -4,12 +4,6 @@
 # --------------------------------------------------------------
 
 
-# this GNUmakefile shows how to use the example together with Anaphe
-# you may also chose another AIDA compliant analysis package.
-#
-# The environment variable ANAPHETOP has to be setup. See ../README
-#
-
 name := exampleB02
 G4TARGET := $(name)
 G4EXLIB := true

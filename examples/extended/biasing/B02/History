@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 16th, 2013 I.Hrivnacova - B02-V09-06-07
+- CMake and GNUmake files clean-up (removed AIDA related stuff)
+
 Aug 5th, 2013 A.Howard - B02-V09-06-06
 - Removed redundant fFieldName datamember from B02RunAction
 
