@@ -193,11 +193,11 @@ void G4NistManager::SetVerbose(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex NistManagerMutex = G4MUTEX_INITIALIZER; }
+//#include "G4AutoLock.hh"
+//namespace { G4Mutex NistManagerMutex = G4MUTEX_INITIALIZER; }
 G4NistManager::G4NistManager()
 {
-  G4AutoLock l(&NistManagerMutex);
+  //G4AutoLock l(&NistManagerMutex);
 
   nElements  = 0;
   nMaterials = 0;

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-09-13 V.Ivanchenko (materials-V09-06-22)
+- G4NistManager - comment out AutoLock as probably useless
+
 15-08-13 V.Ivanchenko (materials-V09-06-21)
 - G4NistManager - added AutoLock in the constructor to avoid
     rarely possible situation that any code calls this singleton 
