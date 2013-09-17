@@ -108,7 +108,7 @@ G4String G4VFileManager::GetFullFileName() const
   // Add thread Id to a file name if MT processing
   if ( ! fState.GetIsMaster() ) {
     std::ostringstream os;
-    os << G4Threading::G4GetPidId();
+    os << G4Threading::G4GetThreadId();
     name.append("_t");
     name.append(os.str());
   }  
@@ -131,7 +131,7 @@ G4String G4VFileManager::GetNtupleFileName(const G4String& ntupleName) const
   // Add thread Id to a file name if MT processing
   if ( ! fState.GetIsMaster() ) {
     std::ostringstream os;
-    os << G4Threading::G4GetPidId();
+    os << G4Threading::G4GetThreadId();
     name.append("_t");
     name.append(os.str());
   }  

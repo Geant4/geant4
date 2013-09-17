@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 17, 2013 I. Hrivnacova (analysis-V09-06-23)
+- Use thread Id (now available) in generating file names instead 
+  of thread Pid.
+
 September 02, 2013 I. Hrivnacova (analysis-V09-06-22)
 - Updated to g4tools 1.7.0 (by G. Barrand):
   Fixed problem report #1523 (incorrect setting the list of free blocks 
