@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 Sept 13: P.Gumplinger (xrays-V09-06-06)
+- G4Scintillation - fix a bug changing incorrect GetMaxValue to GetMaxEnergy
+
 13 June 13: P.Gumplinger (xrays-V09-06-05)
 - G4Scintillation - added BuildPhysicsTable method which is doing initialisation
   as before but at the moment when material list is fully defined.

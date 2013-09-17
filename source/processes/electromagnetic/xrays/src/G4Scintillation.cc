@@ -771,7 +771,7 @@ GetScintillationYieldByParticleType(const G4Track &aTrack, const G4Step &aStep)
   G4double StepEnergyDeposit = aStep.GetTotalEnergyDeposit();
   G4double PreStepKineticEnergy = aStep.GetPreStepPoint()->GetKineticEnergy();
 
-  if(PreStepKineticEnergy <= Scint_Yield_Vector->GetMaxValue()){
+  if(PreStepKineticEnergy <= Scint_Yield_Vector->GetMaxEnergy()){
     G4double Yield1 = Scint_Yield_Vector->Value(PreStepKineticEnergy);
     G4double Yield2 = Scint_Yield_Vector->
                                Value(PreStepKineticEnergy - StepEnergyDeposit);
@@ -781,8 +781,8 @@ GetScintillationYieldByParticleType(const G4Track &aTrack, const G4Step &aStep)
     ed << "\nG4Scintillation::GetScintillationYieldByParticleType(): Request\n"
        <<   "for scintillation light yield above the available energy range\n"
        <<   "specifed in G4MaterialPropertiesTable. A linear interpolation\n"
-       <<   "will be performed to compute scintillation light yield using\n"
-       <<   " L_max / E_max to compute scintillation yield.\n"
+       <<   "will be performed to compute the scintillation light yield using\n"
+       <<   "(L_max / E_max) as the photon yield per unit energy."
        << G4endl;
     G4String cmt = "\nScintillation yield may be unphysical!\n";
     G4Exception("G4Scintillation::GetScintillationYieldByParticleType()",
