@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 16th, 2013 I.Hrivnacova - geomvol-V09-06-09
+- Removed thread-local specification for G4LogicalBorderSurfaceTable and
+  G4LogicalSkinSurfaceTable, as now supposed to be shared.
+
 August 22nd, 2013 G.Cosmo - geomvol-V09-06-08
 - Added parameter to specify maximum number of overlap errors to report.
   Adapted code in CheckOverlaps() in G4PVPlacement and G4PVParameterised

@@ -41,17 +41,17 @@
 #include "G4LogicalBorderSurface.hh"
 #include "G4VPhysicalVolume.hh"
 
-G4ThreadLocal G4LogicalBorderSurfaceTable *
-G4LogicalBorderSurface::theBorderSurfaceTable = 0;
+G4LogicalBorderSurfaceTable *G4LogicalBorderSurface::theBorderSurfaceTable = 0;
 
 //
 // Constructor & destructor
 //
 
-G4LogicalBorderSurface::G4LogicalBorderSurface(const G4String& name,
-                                               G4VPhysicalVolume* vol1, 
-                                               G4VPhysicalVolume* vol2,
-                                               G4SurfaceProperty* surfaceProperty)
+G4LogicalBorderSurface::
+G4LogicalBorderSurface(const G4String& name,
+                             G4VPhysicalVolume* vol1, 
+                             G4VPhysicalVolume* vol2,
+                             G4SurfaceProperty* surfaceProperty)
   : G4LogicalSurface(name, surfaceProperty),
     Volume1(vol1), Volume2(vol2)
 {

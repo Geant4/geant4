@@ -41,8 +41,7 @@
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalVolume.hh"
 
-G4ThreadLocal G4LogicalSkinSurfaceTable *
-G4LogicalSkinSurface::theSkinSurfaceTable = 0;
+G4LogicalSkinSurfaceTable *G4LogicalSkinSurface::theSkinSurfaceTable = 0;
 
 //
 // Constructors & destructor

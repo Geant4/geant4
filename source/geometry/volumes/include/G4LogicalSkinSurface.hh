@@ -88,7 +88,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
     G4LogicalVolume* LogVolume;
       // Logical Volume pointer on side 1.
 
-    static G4ThreadLocal G4LogicalSkinSurfaceTable *theSkinSurfaceTable;
+    static G4LogicalSkinSurfaceTable *theSkinSurfaceTable;
       // The static Table of SkinSurfaces.
 
 };
