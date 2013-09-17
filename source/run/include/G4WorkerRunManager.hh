@@ -77,6 +77,7 @@ public:
     virtual void SetUserInitialization(G4VUserDetectorConstruction* userInit);
     virtual void SetUserInitialization(G4VUserActionInitialization* userInit);
     virtual void SetUserInitialization(G4UserWorkerInitialization* userInit);
+    virtual void SetUserInitialization(G4UserWorkerThreadInitialization* userInit);
     virtual void SetUserAction(G4UserRunAction* userAction);
     virtual void SetUserAction(G4VUserPrimaryGeneratorAction* userAction);
     virtual void SetUserAction(G4UserEventAction* userAction);

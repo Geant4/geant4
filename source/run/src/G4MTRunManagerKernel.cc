@@ -53,6 +53,7 @@ void G4MTRunManagerKernel::SetupShadowProcess() const
 
 #include "G4WorkerRunManager.hh"
 #include "G4UserWorkerInitialization.hh"
+#include "G4UserWorkerThreadInitialization.hh"
 #include "G4VUserActionInitialization.hh"
 #include "G4WorkerThread.hh"
 #include "G4UImanager.hh"
@@ -81,7 +82,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   //!!!!!!!!!!!!!!!!!!!!!!!!!!
   //!!!!!! IMPORTANT !!!!!!!!!
   //!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // Here is not sequential anymore and G4UserWorkerInitialization is
+  // Here is not sequential anymore and G4UserWorkerThreadInitialization is
   // a shared user initialization class
   // This means this method cannot use data memebers of G4RunManagerKernel
   // unless they are invariant ("read-only") and can be safely shared.
@@ -110,16 +111,17 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   //============================
   //RNG Engine needs to be initialized by "cloning" the master one.
   const CLHEP::HepRandomEngine* masterEngine = masterRM->getMasterRandomEngine();
-  masterRM->GetUserWorkerInitialization()->SetupRNGEngine(masterEngine);
+  masterRM->GetUserWorkerThreadInitialization()->SetupRNGEngine(masterEngine);
 
   //============================
   //Step-2: Initialize worker thread
   //============================
-  masterRM->GetUserWorkerInitialization()->WorkerInitialize();
+  if(masterRM->GetUserWorkerInitialization())
+  { masterRM->GetUserWorkerInitialization()->WorkerInitialize(); }
   //Now initialize worker part of shared objects (geometry/physics)
   wThreadContext->BuildGeometryAndPhysicsVector();
   G4WorkerRunManager* wrm
-        = masterRM->GetUserWorkerInitialization()->CreateWorkerRunManager();
+        = masterRM->GetUserWorkerThreadInitialization()->CreateWorkerRunManager();
   wrm->SetWorkerThread(wThreadContext);
 
   //================================
@@ -136,7 +138,8 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   //================================
   if(masterRM->GetUserActionInitialization())
   { masterRM->GetNonConstUserActionInitialization()->Build(); }
-  masterRM->GetUserWorkerInitialization()->WorkerStart();
+  if(masterRM->GetUserWorkerInitialization())
+  { masterRM->GetUserWorkerInitialization()->WorkerStart(); }
   wrm->Initialize();
 
   //================================
@@ -172,7 +175,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
       d<<"Cannot continue, this worker has been requested an unknwon action: "
        <<nextAction<<" expecting: ENDWORKER(=" <<G4MTRunManager::ENDWORKER
        <<") or NEXTITERATION(="<<G4MTRunManager::NEXTITERATION<<")";
-      G4Exception("G4UserWorkerInitialization::StartThread","Run0035",FatalException,d);
+      G4Exception("G4MTRunManagerKernel::StartThread","Run0035",FatalException,d);
     }
 
     //Now wait for master thread to signal new action to be performed
@@ -182,7 +185,8 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   //======================
   //Step-6: Terminate worker thread
   //===============================
-  masterRM->GetUserWorkerInitialization()->WorkerStop();
+  if(masterRM->GetUserWorkerInitialization())
+  { masterRM->GetUserWorkerInitialization()->WorkerStop(); }
   delete wrm;
   wThreadContext->DestroyGeometryAndPhysicsVector();
   wThreadContext = 0;

@@ -37,6 +37,7 @@
 #include "G4VUserPhysicsList.hh"
 #include "G4VUserActionInitialization.hh"
 #include "G4UserWorkerInitialization.hh"
+#include "G4UserWorkerThreadInitialization.hh"
 #include "G4UserRunAction.hh"
 #include "G4RNGHelper.hh"
 #include "G4Run.hh"
@@ -83,6 +84,7 @@ G4WorkerRunManager::~G4WorkerRunManager() {
     //delete them
     userDetector = 0;
     userWorkerInitialization = 0;
+    userWorkerThreadInitialization = 0;
     userActionInitialization = 0;
     physicsList = 0;
     if(verboseLevel>0) G4cout<<"Destroying WorkerRunManager ("<<this<<")"<<G4endl;
@@ -126,7 +128,7 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     const G4UserWorkerInitialization* uwi
        = G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
     //Call a user hook: this is guaranteed all threads are "synchronized"
-    uwi->WorkerRunStart();
+    if(uwi) uwi->WorkerRunStart();
     // Event loop
     eventLoopOnGoing = true;
 ///////    G4int i_event = workerContext->GetThreadId();
@@ -151,7 +153,7 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     //Call a user hook: note this is before the next barrier
     //so threads execute this method asyncrhonouzly
     //(TerminateRun allows for synch via G4RunAction::EndOfRun)
-    uwi->WorkerRunEnd();
+    if(uwi) uwi->WorkerRunEnd();
      
     TerminateEventLoop();
 }
@@ -300,6 +302,12 @@ void G4WorkerRunManager::SetUserInitialization(G4UserWorkerInitialization*)
                 FatalException, "This method should be used only with an instance of G4MTRunManager");
 }
 
+void G4WorkerRunManager::SetUserInitialization(G4UserWorkerThreadInitialization*)
+{
+    G4Exception("G4RunManager::SetUserInitialization(G4UserWorkerThreadInitialization*)", "Run3021",
+                FatalException, "This method should be used only with an instance of G4MTRunManager");
+}
+
 void G4WorkerRunManager::SetUserInitialization(G4VUserActionInitialization*)
 {
     G4Exception("G4RunManager::SetUserInitialization(G4VUserActionInitialization*)", "Run3021",
@@ -328,8 +336,9 @@ void G4WorkerRunManager::SetupDefaultRNGEngine()
 {
     const CLHEP::HepRandomEngine* mrnge = G4MTRunManager::GetMasterRunManager()->getMasterRandomEngine();
     assert(mrnge);//Master has created RNG
-    const G4UserWorkerInitialization* uwi =G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
-    uwi->SetupRNGEngine(mrnge);
+    const G4UserWorkerThreadInitialization* uwti
+      =G4MTRunManager::GetMasterRunManager()->GetUserWorkerThreadInitialization();
+    uwti->SetupRNGEngine(mrnge);
 }
 
 

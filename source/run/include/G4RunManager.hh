@@ -110,6 +110,7 @@
 class G4VUserDetectorConstruction;
 class G4VUserPhysicsList;
 class G4UserWorkerInitialization;
+class G4UserWorkerThreadInitialization;
 class G4VUserActionInitialization;
 class G4UserRunAction;
 class G4VUserPrimaryGeneratorAction;
@@ -275,6 +276,7 @@ public: // with description
     G4VUserPhysicsList * physicsList;
     G4VUserActionInitialization * userActionInitialization;
     G4UserWorkerInitialization * userWorkerInitialization;
+    G4UserWorkerThreadInitialization * userWorkerThreadInitialization;
     G4UserRunAction * userRunAction;
     G4VUserPrimaryGeneratorAction * userPrimaryGeneratorAction;
     G4UserEventAction * userEventAction;
@@ -329,6 +331,7 @@ public: // with description
     virtual void SetUserInitialization(G4VUserPhysicsList* userInit);
     virtual void SetUserInitialization(G4VUserActionInitialization* userInit);
     virtual void SetUserInitialization(G4UserWorkerInitialization* userInit);
+    virtual void SetUserInitialization(G4UserWorkerThreadInitialization* userInit);
     virtual void SetUserAction(G4UserRunAction* userAction);
     virtual void SetUserAction(G4VUserPrimaryGeneratorAction* userAction);
     virtual void SetUserAction(G4UserEventAction* userAction);
@@ -347,6 +350,8 @@ public: // with description
     { return userActionInitialization; }
     inline const G4UserWorkerInitialization* GetUserWorkerInitialization() const
     { return userWorkerInitialization; }
+    inline const G4UserWorkerThreadInitialization* GetUserWorkerThreadInitialization() const
+    { return userWorkerThreadInitialization; }
     inline const G4UserRunAction* GetUserRunAction() const
     { return userRunAction; }
     inline const G4VUserPrimaryGeneratorAction* GetUserPrimaryGeneratorAction() const

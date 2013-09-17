@@ -88,6 +88,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4UserPhysicsListMessenger.hh
         G4UserRunAction.hh
         G4UserWorkerInitialization.hh
+        G4UserWorkerThreadInitialization.hh
         G4VModularPhysicsList.hh
         G4VPersistencyManager.hh
         G4VPhysicsConstructor.hh
@@ -121,6 +122,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4UserPhysicsListMessenger.cc
         G4UserRunAction.cc
         G4UserWorkerInitialization.cc
+        G4UserWorkerThreadInitialization.cc
         G4VModularPhysicsList.cc
         G4VPersistencyManager.cc
         G4VUserActionInitialization.cc

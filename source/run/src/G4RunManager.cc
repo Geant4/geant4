@@ -46,6 +46,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VUserActionInitialization.hh"
 #include "G4UserWorkerInitialization.hh"
+#include "G4UserWorkerThreadInitialization.hh"
 #include "G4UserRunAction.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4VPersistencyManager.hh"
@@ -76,6 +77,7 @@ G4RunManager* G4RunManager::GetRunManager()
 G4RunManager::G4RunManager()
 :userDetector(0),physicsList(0),
  userActionInitialization(0),userWorkerInitialization(0),
+ userWorkerThreadInitialization(0),
  userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
  userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
  geometryInitialized(false),physicsInitialized(false),
@@ -113,6 +115,7 @@ G4RunManager::G4RunManager()
 G4RunManager::G4RunManager( RMType rmType )
 :userDetector(0),physicsList(0),
  userActionInitialization(0),userWorkerInitialization(0),
+ userWorkerThreadInitialization(0),
 userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
 userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
 geometryInitialized(false),physicsInitialized(false),
@@ -236,6 +239,12 @@ void G4RunManager::DeleteUserInitializations()
         delete userWorkerInitialization;
         userWorkerInitialization = 0;
         if(verboseLevel>1) G4cout <<"UserWorkerInitialization deleted." << G4endl;
+    }
+    if(userWorkerThreadInitialization)
+    {
+        delete userWorkerThreadInitialization;
+        userWorkerThreadInitialization = 0;
+        if(verboseLevel>1) G4cout <<"UserWorkerThreadInitialization deleted." << G4endl;
     }
 
 }
@@ -759,6 +768,12 @@ void G4RunManager::SetUserInitialization(G4UserWorkerInitialization* /*userInit*
 {
   G4Exception("G4RunManager::SetUserInitialization()", "Run3001", FatalException,
     "Base-class G4RunManager cannot take G4UserWorkerInitialization. Use G4MTRunManager.");
+}
+
+void G4RunManager::SetUserInitialization(G4UserWorkerThreadInitialization* /*userInit*/)
+{
+  G4Exception("G4RunManager::SetUserThreadInitialization()", "Run3001", FatalException,
+    "Base-class G4RunManager cannot take G4UserWorkerThreadInitialization. Use G4MTRunManager.");
 }
 
 void G4RunManager::SetUserInitialization(G4VUserActionInitialization* userInit)

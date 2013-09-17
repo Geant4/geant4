@@ -46,6 +46,7 @@
 class G4MTRunManagerKernel;
 class G4ScoringManager;
 class G4UserWorkerInitialization;
+class G4UserWorkerThreadInitialization;
 
 //TODO: Split random number storage from this class
 
@@ -162,6 +163,7 @@ public: // with description
     virtual void SetUserInitialization(G4VUserPhysicsList* userPL);
     virtual void SetUserInitialization(G4VUserDetectorConstruction* userDC);
     virtual void SetUserInitialization(G4UserWorkerInitialization* userInit);
+    virtual void SetUserInitialization(G4UserWorkerThreadInitialization* userInit);
     virtual void SetUserInitialization(G4VUserActionInitialization* userInit);
     virtual void SetUserAction(G4UserRunAction* userAction);
     virtual void SetUserAction(G4VUserPrimaryGeneratorAction* userAction);

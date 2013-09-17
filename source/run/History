@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 16th, 2013, M.Asai (run-V09-06-99)
+- Split part of G4UserWorkerInitialization to G4UserWorkerThreadInitialization.
+
 Sep 12th, 2013, M.Asai (run-V09-06-98)
 - Add #ifdef G4MULTITHREADED prtection for the modification introduced 
   in the previous tag.

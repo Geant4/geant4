@@ -32,6 +32,7 @@
 #include "G4TransportationManager.hh"
 #include "G4VUserActionInitialization.hh"
 #include "G4UserWorkerInitialization.hh"
+#include "G4UserWorkerThreadInitialization.hh"
 #include "G4WorkerThread.hh"
 #include "G4Run.hh"
 #include "G4UImanager.hh"
@@ -238,9 +239,9 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
             helper->AddOneSeed( (long) (100000000L * G4Random::getTheGenerator()->flat()) );
     }
     
-    //Now initialize workers. Check if user defined a WorkerInitialization
-    if ( userWorkerInitialization == 0 )
-    { userWorkerInitialization = new G4UserWorkerInitialization(); }
+    //Now initialize workers. Check if user defined a WorkerThreadInitialization
+    if ( userWorkerThreadInitialization == 0 )
+    { userWorkerThreadInitialization = new G4UserWorkerThreadInitialization(); }
     
     //Prepare UI commands for threads
     PrepareCommandsStack();
@@ -254,7 +255,7 @@ void G4MTRunManager::InitializeEventLoop(G4int n_events, const char* macroFile, 
         G4WorkerThread* context = new G4WorkerThread;
         context->SetNumberThreads(nworkers);
         context->SetThreadId(nw);
-        G4Thread* thread = userWorkerInitialization->CreateAndStartWorker(context);
+        G4Thread* thread = userWorkerThreadInitialization->CreateAndStartWorker(context);
         threads.push_back(thread);
       }
     }
@@ -297,6 +298,11 @@ void G4MTRunManager::ConstructScoringWorlds()
 void G4MTRunManager::SetUserInitialization(G4UserWorkerInitialization* userInit)
 {
   userWorkerInitialization = userInit;
+}
+
+void G4MTRunManager::SetUserInitialization(G4UserWorkerThreadInitialization* userInit)
+{
+  userWorkerThreadInitialization = userInit;
 }
 
 void G4MTRunManager::SetUserInitialization(G4VUserActionInitialization* userInit)
@@ -410,7 +416,7 @@ void G4MTRunManager::TerminateWorkers()
     {
         G4Thread* t = * ( threads.begin() );
         threads.pop_front();
-        userWorkerInitialization->JoinWorker(t);
+        userWorkerThreadInitialization->JoinWorker(t);
         //G4THREADJOIN(*t);
         delete t;
     }
