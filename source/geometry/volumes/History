@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 17th, 2013 G.Cosmo - geomvol-V09-06-10
+- Use G4EnhancedVecAllocator in G4NavigationHistory only in MT mode.
+
 September 16th, 2013 I.Hrivnacova - geomvol-V09-06-09
 - Removed thread-local specification for G4LogicalBorderSurfaceTable and
   G4LogicalSkinSurfaceTable, as now supposed to be shared.
