@@ -58,7 +58,7 @@ class G4RTSteppingAction : public G4UserSteppingAction
     virtual void UserSteppingAction(const G4Step*);
 
   private:
-    G4bool ignoreTransparency;
+    static G4bool ignoreTransparency;
 
   public:
     inline void SetIgnoreTransparency(G4bool val)

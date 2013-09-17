@@ -24,6 +24,10 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+15th September 2013 Makoto Asai (raytracer-V09-06-02)
+- Move data member of G4RTSteppingAction static. Preparation toward
+  making G4TheRayTracer class multi-threaded.
+
 16th June 2013  Makoto Asai (raytracer-V09-06-01)
 - Make G4RayTrajectory and G4RayTrajectoryPoint classes thread safe.
 

@@ -40,10 +40,10 @@
 #include "G4StepStatus.hh"
 #include "G4TransportationManager.hh"
 
+G4bool G4RTSteppingAction::ignoreTransparency = false;
+
 G4RTSteppingAction::G4RTSteppingAction()
-{
-  ignoreTransparency=false;
-}
+{}
 
 void G4RTSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
