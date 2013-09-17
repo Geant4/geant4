@@ -99,19 +99,10 @@ endif()
 
 #-----------------------------------------------------------------------
 # Setup Library Format Option.
-# Libraries can be built in one of two 'formats':
-#  global   : One library per category.
-#  granular : One library per module.
-#
-# This division does not always apply because some libraries are the same
-# in both 'formats', e.g. G4materials or G4OpenGL.
-# Global libraries are built by default, but we provide an option to 
-# switch to granular format. Granular format is only intended for 
-# developers, so we mark this option as advanced and warn the user.
-
-# Still warn, because the variable can still be set from the command line!
+# Always build global libraries - always FATAL_ERROR if old
+# granular library switch is set, e.g. from command line
 if(GEANT4_BUILD_GRANULAR_LIBS)
-  message(WARNING " Granular libraries are only intended for developers!")
+  message(FATAL_ERROR " Granular libraries are no longer supported!")
 endif()
 
 #-----------------------------------------------------------------------

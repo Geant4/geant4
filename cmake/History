@@ -29,6 +29,14 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+16th September 2013 - Ben Morgan (cmake-V09-06-24)
+- Modules/Geant4LibraryBuildOptions.cmake : Emit fatal error if
+  GEANT4_BUILD_GRANULAR_LIBS variable is set.
+
+30th August 2013 - Gunter Folger (cmake-V09-06-23)
+- add FindXvfb checking if fake X server Xvfb is installed in system (/usr/bin)
+    needed by test202.
+	
 22nd August 2013 - Ben Morgan (cmake-V09-06-22)
 - Modules/Geant4MakeRules_cxx.cmake : Check for "Apple LLVM" string
   in output of regex parse of "clang++ -v" command output. If string is
