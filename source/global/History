@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 16, 2013 V.Ivantchenko (global-V09-06-68)
+- G4Pow: optimized logA() and logX() functions.
+
 September 4, 2013 G.Cosmo (global-V09-06-67)
 - Added inclusion of <stdin.h> in G4Exp and G4Log headers.
   Make them matching to std::exp and std::log on Windows plaatform.

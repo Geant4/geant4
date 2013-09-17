@@ -70,7 +70,7 @@ G4Pow::G4Pow()
   maxA2   = 1.25 + max2*0.2;
   maxAexp = -0.76+ maxZfact*0.5;
 
-  ener.resize(max2+1,0.0);
+  ener.resize(max2+1,1.0);
   logen.resize(max2+1,0.0);
   lz2.resize(max2+1,0.0);
   pz13.resize(maxZ,0.0);
@@ -86,7 +86,7 @@ G4Pow::G4Pow()
 
   for(G4int i=1; i<=max2; ++i)
   {
-    ener[i] = powN(100.,i); 
+    ener[i] = powN(500.,i); 
     logen[i]= G4Log(ener[i]); 
     lz2[i]  = G4Log(1.0 + i*0.2);
   }

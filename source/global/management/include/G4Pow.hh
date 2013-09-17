@@ -101,6 +101,8 @@ class G4Pow
     G4Pow();
    ~G4Pow();
 
+    inline G4double logBase(G4double x) const;
+
   private:
 
     static G4ThreadLocal G4Pow* fpInstance;
@@ -165,12 +167,9 @@ inline G4double G4Pow::logZ(G4int Z) const
   return lz[Z];
 }
 
-inline G4double G4Pow::logA(G4double A) const
+inline G4double G4Pow::logBase(G4double a) const
 {
   G4double res;
-  G4double a = A;
-  if(1.0 > A) { a = 1.0/A; }
-
   if(a <= maxA2) 
   {
     G4int i = G4int(max2*(a - 1) + 0.5);
@@ -188,7 +187,14 @@ inline G4double G4Pow::logA(G4double A) const
   {
     res = G4Log(a);
   }
-  if(1.0 > A) { res = -res; }
+  return res;
+}
+
+inline G4double G4Pow::logA(G4double A) const
+{
+  G4double res;
+  if(1.0 <= A) { res = logBase(A); }
+  else         { res = -logBase(1./A); }
   return res;
 }
 
@@ -200,23 +206,21 @@ inline G4double G4Pow::logX(G4double x) const
 
   if(a <= maxA) 
   {
-    res = logA(a);
+    res = logBase(a);
   }
-  else if(a <= ener[max2])
+  else if(a <= ener[2])
   {
-    for(G4int i=1; i<max2; ++i)
-    {
-      if(a < ener[i+1]) 
-      { 
-        res = logen[i] + logA(a/ener[i]);
-	break;
-      }
-    }
+    res = logen[1] + logBase(a/ener[1]);
+  }
+  else if(a <= ener[3])
+  {
+    res = logen[2] + logBase(a/ener[2]);
   }
   else
   {
     res = G4Log(a);
   }
+
   if(1.0 > x) { res = -res; }
   return res;
 }
