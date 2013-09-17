@@ -122,6 +122,7 @@ examples/advanced            cirrone@lns.infn.it             Pablo Cirrone
   brachytherapy              susanna@uow.edu.au              Susanna Guatelli
   ChargeExchangeMC           cirrone@lns.infn.it             Pablo Cirrone
   composite_calorimeter      Andrea.Dotti@cern.ch            Andrea Dotti
+  dnageometry                incerti@cenbg.in2p3.fr          Sebastien Incerti
   dnaphysics                 incerti@cenbg.in2p3.fr          Sebastien Incerti
   eRosita                    Maria.Grazia.Pia@ge.infn.it     Maria Grazia Pia
   gammaknife                 romanof@lns.infn.it             Francesco Romano
