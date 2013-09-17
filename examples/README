@@ -101,8 +101,8 @@ Extended level examples
  optical
    - Examples of generic optical processes simulation setups
  parallel
-   - Examples of event-level parallelism in Geant4 using the
-     TOP-C distribution, and MPI technique
+   - Examples of event-level parallelism in Geant4 using either the
+     TOP-C library, Intel-TBB library or MPI technique
  parameterisations
    - Examples for fast shower parameterisations according to specific models
  persistency
@@ -129,9 +129,18 @@ Advanced level examples
  composite_calorimeter
    - Test-beam simulation used in CMS against real data taken
      in 1996 in a CMS Hadron calorimeter test-beam at LHC
+ dnageometry
+   - Setup of a realistic nucleus model of a cell, including chromosomes,
+     in combination with Geant4-DNA physics
+ dnaphysics
+   - Simulation of track structures in liquid water using the Geant4-DNA
+     physics processes and models
  eRosita
    - Simplified eROSITA X-ray telescope setup for instrumental background
      simulations for fluorescence measurements.
+ gammaknife
+   - Application specifically developed to simulate an advanced device for
+     Stereotactic Radiosurgery; reproduces a Leksell Gamma-Knife unit model C
  gammaray_telescope
    - Simulation of a typical telescope for gamma ray analysis
  hadrontherapy
@@ -139,6 +148,9 @@ Advanced level examples
  human_phantom
    - Anthropomorphic phantoms (male and female) based on MIRD/ORNL model
      with geometry description derived from GDML persistent files
+ iort_therapy
+   - Application specifically developed to address typical needs related to
+     the Intra-Operative Radio-Therapy (IORT) technique
  lAr_calorimeter
    - Simulation of the Liquid Argon Calorimeter of the ATLAS
      Detector at LHC
@@ -157,11 +169,6 @@ Advanced level examples
  purging_magnet
    - Simulation of electrons traveling through a 3D magnetic field of a
      strong purging magnet used for treatment head in a medical environment
- radioprotection
-   - Application for the evaluation of dose in astronauts, vehicle concepts
-     and Moon surface habitat configurations, in a space radiation environment
- Rich
-   - Rich Test Beam Simulation
  underground_physics
    - Setup of an underground dark matter experiment
  xray_fluorescence
