@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th September 2013  Makoto Asai (greps-V09-06-09)
+- G4Colour now has a dummy += operator.
+
 12th September 2013  Makoto Asai (greps-V09-06-08)
 - Introducing G4VVisManager::SetUpForAThread(). This method is invoked
   by G4WorkerRunManager so that G4VisManager will get noticed at the
