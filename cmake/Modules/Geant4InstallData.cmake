@@ -15,6 +15,17 @@
 #            NAME/VERSION/FILENAME/EXTENSION/ENVVAR/MD5SUM
 #          Provided for backward compatibility.
 #
+# function geant4_export_datasets([BUILD|INSTALL] <output variable>)
+#          Set output variable to list of dataset tuples for export to
+#          Geant4Config.cmake
+#          A tuple has the format:
+#            NAME/ENVVAR/PATH
+#          BUILD will set the PATH entry to the path to the dataset used
+#          for the build of Geant4.
+#
+#          INSTALL will set the PATH entry to the path to the dataset used
+#          by an install of Geant4.
+#          
 # function geant4_add_dataset(NAME      <id>
 #                             VERSION   <ver>
 #                             FILENAME  <file>
@@ -139,6 +150,45 @@ function(geant4_tupleize_datasets _output)
       list(APPEND _tuple ${_tmpprop})
     endforeach()
     string(REPLACE ";" "/" _tuple "${_tuple}")
+    list(APPEND _tmplist "${_tuple}")
+  endforeach()
+  
+  set(${_output} ${_tmplist} PARENT_SCOPE)
+endfunction()
+
+#-----------------------------------------------------------------------
+# function geant4_export_datasets([BUILD|INSTALL] <output variable>)
+#          Set output variable to list of dataset tuples for export to
+#          Geant4Config.cmake
+#          A tuple has the format:
+#            NAME/ENVVAR/PATH
+#          BUILD will set the PATH entry to the path to the dataset used
+#          for the build of Geant4.
+#
+#          INSTALL will set the PATH entry to the path to the dataset used
+#          by an install of Geant4.
+#
+function(geant4_export_datasets _type _output)
+  geant4_get_datasetnames(_names)
+  set(_tmplist)
+
+  foreach(_ds ${_names})
+    set(_tuple ${_ds})
+    get_property(_tmpprop GLOBAL PROPERTY ${_ds}_ENVVAR)
+    list(APPEND _tuple ${_tmpprop})
+
+    if(${_type} STREQUAL "BUILD")
+      get_property(_tmpprop GLOBAL PROPERTY ${_ds}_BUILD_DIR)
+    elseif(${_type} STREQUAL "INSTALL")
+      get_property(_tmpprop GLOBAL PROPERTY ${_ds}_INSTALL_DIR)
+    else()
+      message(FATAL_ERROR "incorrect argument to geant4_export_datasets")
+    endif()
+
+    list(APPEND _tuple ${_tmpprop})
+    # Because we have paths, use tuple separator that should not
+    # appear in a path.
+    string(REPLACE ";" "|" _tuple "${_tuple}")
     list(APPEND _tmplist "${_tuple}")
   endforeach()
   

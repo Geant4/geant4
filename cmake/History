@@ -29,6 +29,29 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17th September 2013 - Ben Morgan (cmake-V09-06-25)
+- Templates/geant4-config.cmake.in : Expand export variable holding
+  list of dataset tuples. Process list from CMake ';' separated to
+  shell ' ' separated list. Implement new '--datasets' argument to
+  print out space separated dataset name, envvar name and path, with
+  information for each dataset on a separate line.
+- Templates/Geant4Config.cmake.in : Expand export variable holding
+  list of dataset tuples. Process list to create variable holding a
+  list of dataset names, plus variables, one per dataset, holding the
+  dataset environment variable and configured path. 
+- Modules/Geant4ConfigureConfigScript.cmake : Call geant4_export_datasets
+  function before configuration of build/install tree version(s) of
+  geant4-config so dataset information can be exported to it
+- Modules/Geant4BuildProjectConfig.cmake : Call geant4_export_datasets
+  function before configuration of build/install tree version(s) of
+  Geant4Config.cmake so dataset information can be exported to the
+  CMake config script.
+- Modules/Geant4InstallData.cmake : Implement new geant4_export_datasets 
+  function. Write list of dataset tuples to an output variable, each
+  tuple consisting of dataset name, envvar name and path separated by "|"
+  Use option argument BUILD|INSTALL to use build and install paths for
+  datasets respectively.
+
 16th September 2013 - Ben Morgan (cmake-V09-06-24)
 - Modules/Geant4LibraryBuildOptions.cmake : Emit fatal error if
   GEANT4_BUILD_GRANULAR_LIBS variable is set.

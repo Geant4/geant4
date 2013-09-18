@@ -90,6 +90,18 @@
 # system APIs as required, and you should use these to ensure you compile
 # and link against the same API version.
 #
+# Environment variables for and directory paths to physics datasets 
+# used by some Geant4 physics processes may be determined from the
+# variables
+#
+#  Geant4_DATASETS               (List of dataset names known to Geant4)
+#  Geant4_DATASET_<NAME>_ENVVAR  (Name of environment variable used by 
+#                                 Geant4 to query for path to dataset
+#                                 <NAME>)
+#  Geant4_DATASET_<NAME>_PATH    (Path to dataset <NAME>. NB this may
+#                                 point to a non-existent path if Geant4
+#                                 was configured not to install data)
+#
 #-----------------------------------------------------------------------
 # Variables used by this module which can change the default behaviour of
 # this module. They need to be set prior to the call to find_package
@@ -200,6 +212,23 @@ if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
     set(Geant4_LIBDEPS_LOADED 1)
   endif()
 endif()
+
+#-----------------------------------------------------------------------
+# Data Resources
+# NB: Because data paths can be "forward declared" these offer no
+# guarantee of data existence. They only provide a hint.
+#
+set(Geant4_DATASET_DESCRIPTIONS "@GEANT4_DATASET_DESCRIPTIONS@")
+
+foreach(_g4dataset_tuple ${Geant4_DATASET_DESCRIPTIONS})
+  # Format is NAME|ENVVAR|PATH
+  string(REPLACE "|" ";" _g4dataset_tuple "${_g4dataset_tuple}")
+  list(GET _g4dataset_tuple 0 _g4dataset_name)
+  list(APPEND Geant4_DATASETS ${_g4dataset_name})
+  list(GET _g4dataset_tuple 1 Geant4_DATASET_${_g4dataset_name}_ENVVAR)
+  list(GET _g4dataset_tuple 2 Geant4_DATASET_${_g4dataset_name}_PATH)
+endforeach()
+unset(Geant4_DATASET_DESCRIPTIONS)
 
 #-----------------------------------------------------------------------
 # Setup components.

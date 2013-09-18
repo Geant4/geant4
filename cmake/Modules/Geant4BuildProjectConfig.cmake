@@ -118,6 +118,9 @@ set(GEANT4_MODULE_PATH_SETUP "
 set(CMAKE_MODULE_PATH \${CMAKE_MODULE_PATH} ${CMAKE_MODULE_PATH})
 ")
 
+# Geant4 data used in build tree
+geant4_export_datasets(BUILD GEANT4_DATASET_DESCRIPTIONS)
+
 # Export targets from the build tree. We rely on the GEANT4_EXPORTED_TARGETS
 # global property to list these for us.
 #
@@ -197,6 +200,9 @@ get_filename_component(Geant4_INCLUDE_DIR \"\${_thisdir}/${GEANT4_RELATIVE_HEADE
 endif()
 
 set(GEANT4_MODULE_PATH_SETUP)
+
+# Geant4 data used in install tree
+geant4_export_datasets(INSTALL GEANT4_DATASET_DESCRIPTIONS)
 
 # Install exported targets file for the install tree - we just install
 # the named export

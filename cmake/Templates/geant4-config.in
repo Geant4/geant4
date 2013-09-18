@@ -208,6 +208,28 @@ if test "x${geant4_uses_x11}" = "xyes" ; then
 fi
 
 #-----------------------------------------------------------------------
+# Datasets
+# - List creation for sh compatibility, see:
+#    https://wiki.ubuntu.com/DashAsBinSh
+dataset_list=$(awk 'BEGIN { split( "@GEANT4_CONFIG_DATASET_DESCRIPTIONS@", array, ";"); for (i=1;i<=length(array);i++) { print array[i]; } }')
+
+#-----------------------------------------------------------------------
+# function print_datasets
+#          print dataset information with one line per dataset and each
+#          line in the format
+#            <NAME> <ENVVARNAME> <PATH>
+print_datasets()
+{
+  for ds in ${dataset_list} ; do
+    dataset_name=$(echo $ds | cut -d "|" -f1)
+    dataset_envvar=$(echo $ds | cut -d "|" -f2)
+    dataset_path=$(echo $ds | cut -d "|" -f3)
+    echo ${dataset_name} ${dataset_envvar} ${dataset_path}
+  done
+  exit 0
+}
+
+#-----------------------------------------------------------------------
 # function help
 #          print help on available command line arguments and enabled
 #          and disabled features of the toolkit
@@ -229,6 +251,9 @@ Usage: geant4-config [OPTION...]
 
   --has-feature FEATURE   output yes if FEATURE is supported,
                           or no if not supported
+
+  --datasets              output dataset name, environment variable 
+                          and path, with one line per dataset
 
 Known Features:
 EOF
@@ -332,6 +357,10 @@ while test $# -gt 0 ; do
           echo "no"
           ;;
       esac
+      ;;
+
+    --datasets)
+      print_datasets
       ;;
 
     -?)

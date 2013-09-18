@@ -189,6 +189,9 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     ${_dir}")
   endforeach()
 
+  # - Data
+  geant4_export_datasets(BUILD GEANT4_CONFIG_DATASET_DESCRIPTIONS)
+
   # Configure the build tree script
   # If we're on CMake 2.8 and above, we try to use file(COPY) to create an
   # executable script
@@ -240,6 +243,9 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(GEANT4_CONFIG_LIBDIR "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
     set(GEANT4_CONFIG_INCLUDE_DIRS "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}/Geant4")
   endif() 
+
+  # - Data
+  geant4_export_datasets(INSTALL GEANT4_CONFIG_DATASET_DESCRIPTIONS)
 
   # Configure the install tree script
   configure_file(
