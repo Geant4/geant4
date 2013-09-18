@@ -1,0 +1,295 @@
+
+                       geant4-09-06-ref-09
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Updated histogramming tools to g4tools 1.7.0.
+ o Added new messenger class for defining UI commands for creating/deleting
+   the global uniform magnetic field and activating/inactivating it according
+   to the set field value.
+ o Fixes for the handling of generic ions in MT mode.
+ o Major clean up and restructuring for electro-nuclear and photo-nuclear
+   cross-sections code.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V09-06-24
+-----
+- Disabled granular libraries build model issue fatal error if
+  GEANT4_BUILD_GRANULAR_LIBS variable is set.
+- added FindXvfb checking if fake X server Xvfb is installed in system.
+
+analysis                                         analysis-V09-06-23
+--------
+- Updated to g4tools 1.7.0.
+- Added possibility to define logarithmic binning for H1 and H2.
+- Reorganized messenger classes per objects: they are now associated
+  with the public interface (G4VAnalysisManager).
+- Fixed incorrect setting of the list of free blocks in the Root file.
+  Addressing problem report #1523.
+- Fixed saving binScheme in H2 information.
+- Adapted to new namespace interface from G4Threading.
+  Use thread Id (now available) in generating file names instead 
+  of thread Pid.
+- Fixed Coverity defects in G4VH1Manager and G4VH2Manager.
+
+digits_hits                                      digits_hits-V09-06-06
+-----------
+- Removed unnecessary G4Exception.
+
+event                                            event-V09-06-20
+-----
+- Fix the way of detecting improper process namager.
+  Fix incorrect initialization in G4ParticleGunMessenger class for
+  /gun/ionL command.
+- Changed split class mechanism of G4ParticleDefinition; now all generic ions
+  share the object ID with GenericIon so that TLS pointers to G4ProcessManager
+  are not created for them.
+  Remove G4ParticleTable::GetIon() and use G4IonTable::GetIon() instead.
+- Changed warning message in G4StackManager on missing process manager to be
+  issued only when the verbose level is greater than 0.
+
+geometry/navigation                              geomnav-V09-06-17
+-------------------
+- Added new messenger class G4GlobalMagFieldMessenger defining UI commands
+  for creating/deleting the global uniform magnetic field and
+  activating/inactivating it according to the set field value.
+- Relaxed condition for reported move in G4PathFinder::Locate() to exclude
+  reports for intentional pushes.
+
+geometry/volumes                                 geomvol-V09-06-10
+----------------
+- Removed thread-local specification for G4LogicalBorderSurfaceTable and
+  G4LogicalSkinSurfaceTable, as now supposed to be shared.
+- Use G4EnhancedVecAllocator in G4NavigationHistory only in MT mode.
+
+global                                           global-V09-06-68
+------
+- Introduced G4Log and G4Exp headers for fast log and exp; converted from
+  the VDT library (http://svnweb.cern.ch/world/wsvn/vdt).
+  Make them matching to std::exp and std::log on Windows plaatform.
+  Adopt them within G4Pow and G4Poisson. Expected slight performance boost.
+- G4Pow: optimized logA() and logX() functions.
+- Introducing G4Threading::IsWorkerThread() method, returning true when
+  invoked from a worker thread, false for master thread and sequential mode.
+  G4Threading::G4GetThreadId() returns -2 instead of 0 for the case 
+  of sequential mode.
+- Updated date and tag for ref-09.
+
+graphics_reps                                    greps-V09-06-08
+-------------
+- Removed G4ThreadLocal keyword from G4VVisManager.
+  Introducing G4VVisManager::SetUpForAThread(). This method is invoked
+  by G4WorkerRunManager so that G4VisManager will get noticed at the
+  end of event of each worker thread.
+
+materials                                        materials-V09-06-22
+---------
+- G4NistManager removed AutoLock previously introduced in constructor.
+
+particles                                        particles-V09-06-49
+---------
+- Changed split class mechanism of G4ParticleDefinition; now all generic ions
+  share the object ID with GenericIon so that TLS pointers to G4ProcessManager
+  are not created for them. 
+- G4ParticleDefinition::SetProcessManager() now checks the readiness of
+  TLS pointer and sets it up if it isn't.
+- G4ParticleTable: update thread-local dictionaries when a particle
+  is created during event loop.
+  Particle table and ion table in the master thread are properly updated
+  even if a particle is instantiated during event loop.
+- Removed split class mechanism from G4VDecayChannel class.
+
+physics_lists
+-------------
+- constructors/electromagnetic (phys-ctor-em-V09-06-13)
+  o G4EmStandardPhysics: enabled ApplyCuts option.
+    G4EmStandardPhysics_option2: disabled ApplyCuts option.
+    Changes required in order to check their effect for CPU optimisation.
+  o Fix in G4OpticalPhysics for MT.
+- lists (phys-lists-V09-06-14)
+  o LBE: add missing header inclusion for G4HadronCaptureProcess.
+
+processes/electromagnetic/dna                    emdna-V09-06-14
+-----------------------------
+- Fix in G4VITProcess to not override SubtractNumberOfInteractionLengthLeft()
+  method from G4VProcess, as no longer a virtual methood since release v9.6.
+
+processes/electromagnetic/lowenergy              emlowen-V09-06-24
+-----------------------------------
+- G4IonDEDXScalingICRU73: removed GetIon() for reference Fe and Ar, but use
+  G4IonTable::GetIonMass() instead to prevent unnecessary instantiation of
+  ion objects for individual threads.
+
+processes/electromagnetic/muons                  emmuons-V09-06-19
+-------------------------------
+- G4MuBremsstrahlungModel: fix to avoid unnecessary repeated initialisation of
+  element selectors if model is shared between particle and anti-particle.
+- G4MuPairProductionModel: fixed bug in energy sampling responsible for
+  detected floating-point exceptions and event-reproducibility problems.
+  Fixed bug in sampling when cut value is high; perform common initialisation
+  of internal variables for all threads; fixes remaining cases of event
+  non-reproducibility in MT mode.
+
+processes/electromagnetic/standard               emstand-V09-06-64
+----------------------------------
+- G4BetheHeitlerModel, G4KleinNishinaCompton, G4KleinNishinaModel,
+  G4PairProductionRelModel, G4eBremParametrizedModel: implemented
+  InitialiseLocal() method in order to share element selectors between threads. Added SetupForMaterial() call in
+  G4PairProductionRelModel::SampleScattering() method to fix infinite loop
+  in MT mode.
+- G4PAIModelData: scale internal differential cross-section table as 1/t^2,
+  where 't' is the energy transfer for smoother cross-section; fixed bug in
+  sampling algorithm: removed steps in delta electron energy spectrum.
+  Fixed numerical problem by defining internal low-energy limit for proton
+  50 keV; fixed very end of the delta-electron spectra.
+  G4PAIModel: do not supply hard-coded low-limit on energy, because done
+  coherently inside G4PAIModelData.
+- G4DeltaAngle: angular generator for delta-electrons taking into account
+  electron motion. Use it in G4PAIModel.
+- G4SeltzerBergerModel: sanity check for MT mode when loading data.
+- G4PEEffectFluoModel: minor optimisation.
+
+processes/electromagnetic/utils                  emutils-V09-06-54
+-------------------------------
+- G4VMultipleScattering, G4VEnergyLossProcess: removed obsolete 
+  methods SlavePreparePhysicsTable() and SlaveBuildPhysicsTable().
+- G4VEmAngularDistribution: added extra virtual method 
+  SampleDirectionForShell().
+
+processes/electromagnetic/xrays                  xrays-V09-06-06
+-------------------------------
+- G4Scintillation: fixed incorrect call to GetMaxValue() with GetMaxEnergy().
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V09-06-35)
+  o Major clean up and restructuring in G4ElectroNuclearCrossSection
+    and G4PhotoNuclearCrossSection. Calculation is now done for average N.
+    Replacing 'per isotope' methods by 'per element'.
+    Adopting cross-section factory.
+  o Fix in G4HadronNucleonXsc.
+- models/cascade (hadr-casc-V09-06-48)
+  o Fixed Coverity defects in G4InuclSpecialFunctions.
+- models/de_excitation (hadr-deex-V09-06-21)
+  o G4ContinuumGammaTransition: use G4UniformRand and a simple algorithm 
+    to sample continuous gamma transition instead of G4RandGeneralTmp;
+    changed number of bins for sampling to 100 instead of 200
+    Deleted redundant class G4RandGeneralTmp.
+- models/lepto_nuclear (hadr-lepnuc-V09-06-03)
+  o Adapted to use GetElementCrossSection() from G4PhotoNuclearCrossSection.
+  o Removed redundant check for cross-section greater than zero.
+    Removed unused variables.
+- models/parton_string/diffraction (hadr-string-diff-V09-06-16)
+  o Fixed case of division by zero in FTF model.
+- models/radioactive_decay (radioactive_decay-V09-06-13)
+  o G4RadioactiveDecay: move registry of isotope table from BuildPhysicsTable()
+    to constructor. Fixing problem of missing secondaries for MT.
+    Fix in LoadDecayTable() to read data file only once in MT mode.
+  o G4NuclearDecayChannel: use integer metastable state levels instead of
+    energy values. Where only energy is known search for nearest integer level. 
+
+processes/management                             procman-V09-06-05
+--------------------
+- Changed G4VProcess::SetMasterProcess() to be a virtual method so that
+  a process owning another process (e.g. a wrapper process) can properly
+  invoke this method.
+- Remove unused and obsolete intermediate layer classes
+  G4IVContinuousDiscreteProcess and G4IVRestDiscreteProcess.
+- Now G4VProcess::SubtractNumberOfInteractionLengthLeft() is inlined.
+
+processes/optical                                op-V09-06-06
+-----------------
+- Fixes in made G4OpBoundaryProcess to work properly with parallel worlds.
+- G4OpBoundaryProcess now invokes the ProcessHit() method of the sensitive
+  detector associated with the PostStepPoint volume when optical photons are
+  detected at the entrance boundary.
+- Fixed assignment of status for Dichroic.
+
+run                                              run-V09-06-99
+---
+- Fix in ConstructSD() to be invoked for master thread as well.
+- G4WorkerRunManager now invokes G4VVisManager::SetUpForAThread() method
+  so that G4VisManager will get noticed at the end of event of each
+  worker thread.
+- Fixed timing of setting process shadow pointer to make sure parallel
+  world process is properly included for worker thread.
+  Fixed timing of CheckRegularGeometry() so that ScoreSplitterProcess
+  is properly set to the worker process manager.
+- Introducing G4MTRunManager::SetEventModulo() and correspondng
+  /run/eventModulo command to specify the number of events to be sent to a
+  worker thread at one time and set the random number seeds.
+- G4IonTable::InitializeLightIons() is invoked for both MT and sequential mode.
+  G4IonConstructor::ConstructParticle() is invoked to ensure all
+  light ions are properly constructed when GenericIon is constructed.
+- Changed split class mechanism of G4ParticleDefinition; now all generic ions
+  share the object ID with GenericIon so that TLS pointers to G4ProcessManager
+  are not created for them.
+- G4ParticleTable::GetParticleTable()->SetReadiness(); is invoked for the
+  worker threads as well to make sure ions could be created during event loop.
+  Ions are created only if G4GenericIon is defined in the physics-list.
+- Removed split class mechanism from G4VDecayChannel class.
+  Set up decay channels before starting event loop.
+- Split part of G4UserWorkerInitialization to G4UserWorkerThreadInitialization.
+
+tracking                                         tracking-V09-06-04
+--------
+- Added protection against null pointer for the process manager of
+  secondaries in case secondaries are generated at zero kinetic energy.
+
+visualization                                    vis-V09-06-24
+-------------
+- management (visman-V09-06-13):
+  o In command "/vis/scene/add/magneticField" added integer parameter
+    (number of data points per half scene).
+  o Introducing G4VisManager::SetUpForAThread(), method invoked by
+    G4WorkerRunManager so that G4VisManager will get noticed at the
+    end of event of each worker thread.
+- modeling:
+  o G4MagneticFieldModel: Removed diagnostic print statements and bug fixes.
+- RayTracer (raytracer-V09-06-02):
+  o Move data member of G4RTSteppingAction static. Preparation towards
+    making G4TheRayTracer class multi-threaded.
+
+examples                                         examples-V09-06-09
+--------
+- Updated reference outputs.
+- advanced/dnageometry (dnageometry-V09-06-00)
+  o New example implementing a setup of a realistic nucleus model of a cell,
+    including chromosomes, in combination with Geant4-DNA physics.
+- advanced/microbeam (microbeam-V09-06-05)
+  o Updated README.
+- advanced/nanobeam (nanobeam-V09-06-09)
+  o Migrated example to multi-threading.
+  o Changed default field model.
+- basic/B2 (exampleB2-V09-06-08)
+  o Replaced magnetic field classes (B2MagneticField, B2FieldMessenger)
+    with use of new G4GlobalMagFieldMessenger class.
+- basic/B3 (exampleB3-V09-06-05)
+  o B3PrimaryGeneratorAction.cc : Change G4ParticleTable::GetIon() to
+    G4IonTable::GetIon(), as the former method becomes obsolete.
+- extended/analysis (analysisExample-V09-06-02)
+  o Migrated example AnaEx01 (AnaEx01-V09-06-02) to multi-threading.
+  o Fixed handling of required packages in CMake scripts.
+- extended/biasing/B02 (B02-V09-06-07)
+  o Cleanup of CMake and GNUmake scripts.
+- extended/electromagnetic/TestEm6 (testem6-V09-06-03)
+- extended/electromagnetic/TestEm14 (testem14-V09-06-10)
+  o PhysicsList: restored G4GammaConversionToMuons.
+- extended/eventgenerator (exEventgenerator-V09-06-00)
+  o Fixed handling of required packages in CMake scripts.
+- extended/hadronic/Hadr04 (exhadr04-V09-06-01)
+  o New example focussed on neutronHP physics, especially neutron transport,
+    including thermal scattering.
+- extended/optical/LXe (LXe-V09-06-08)
+  o Corrections required for multi-threading.
+
+tests                                            tests-V09-06-09
+-----
+- Updated reference outputs and tools.
+- tests/test73 (test73-V09-06-03)
+  o Removed test73-local: use only production physics lists.
