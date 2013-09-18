@@ -12,6 +12,8 @@
 #
 /run/initialize
 #
+/testem/phys/SetGammaToMuPairFac 1000
+#
 /gun/particle gamma
 /gun/energy 100 TeV
 #

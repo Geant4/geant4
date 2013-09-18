@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18-09-13 V.Ivant (testem6-V09-06-04)
+- fixed tag format
+
+17-09-13 V.Ivant (testem6-V09-05-04)
+- TestEm6.in - added cross section factor to gamma->mu+mu- process
      
 05-09-13 mma (testem6-V09-06-03)
 - PhysicsList: restore G4GammaConversionToMuons
