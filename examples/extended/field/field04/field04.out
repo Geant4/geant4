@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -815,96 +815,6 @@ Index : 3     used in the geometry : Yes
 ----------------------------------------
 
 ---> Begin of Event: 0
-Defining process manager for W180
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for W182
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for W183
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for W184
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for W186
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Hf170
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for W165
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for W176
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for W178
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for W174
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 
 ---> Begin of Event: 10
 

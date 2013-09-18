@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -458,7 +458,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.68s Real=3.35s Sys=0s
+  User=2.69s Real=2.98s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -926,30 +926,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.5s Real=4.06s Sys=0.01s
+  User=2.43s Real=3.1s Sys=0.01s
 
  ======================== run summary ======================
 
  The run was 50000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.46 keV +- 62.2 eV 
+ Total energy deposit in absorber per event = 18.46 keV +- 62.14 eV 
 
- -----> Mean dE/dx = 19.12 MeV/cm	(0.9895 MeV*cm2/g)
+ -----> Mean dE/dx = 19.11 MeV/cm	(0.9894 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 17.91 MeV/cm	(0.9269 MeV*cm2/g)
    full dEdx       = 61.41 MeV/cm	(3.179 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 2.251 keV   secondaries = 42.63 keV +- 2.246 keV
+ Leakage :  primary = 15.64 MeV +- 2.24 keV   secondaries = 42.38 keV +- 2.235 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.919 um  +- 10.94 nm 
- Total track length (neutral) in absorber per event = 127.7 nm  +- 4.638 nm 
+ Total track length (charged) in absorber per event = 9.918 um  +- 10.93 nm 
+ Total track length (neutral) in absorber per event = 127.4 nm  +- 4.632 nm 
 
- Number of steps (charged) in absorber per event = 6.18 +- 1.48e-05
- Number of steps (neutral) in absorber per event = 0.02844 +- 1.48e-05
+ Number of steps (charged) in absorber per event = 6.179 +- 1.479e-05
+ Number of steps (neutral) in absorber per event = 0.0284 +- 1.479e-05
 
- Number of secondaries per event : Gammas = 0.02832   electrons = 0.02224   positrons = 0
+ Number of secondaries per event : Gammas = 0.02828   electrons = 0.02222   positrons = 0
 
  Number of events with the primary particle transmitted = 99.98 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 99.98 %
@@ -960,11 +960,11 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 35.33 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad   Tail ratio = 2.876 %
+  central part defined as +- 105.3 mrad   Tail ratio = 2.879 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 139389333, 2043454827
+ Current couple of seeds = 467763144, 1975772707
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um
@@ -1391,20 +1391,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 139389333, 2043454827
+ Current couple of seeds = 467763144, 1975772707
 ----------------------------------------
 Start Run processing.
 
 ---> Begin of Event: 0
-Defining process manager for C12
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 
 ---> Begin of Event: 10000
 
@@ -1416,7 +1407,7 @@ Defining process manager during an event loop is thread unsafe and will be dropp
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=4.94s Real=5.54s Sys=0.05s
+  User=4.92s Real=6.3s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -1430,16 +1421,16 @@ Run Summary
    restricted dEdx = 1.754 MeV/cm	(1.866 MeV*cm2/g)
    full dEdx       = 2.266 MeV/cm	(2.41 MeV*cm2/g)
 
- Leakage :  primary = 95.12 MeV +- 1.358 keV   secondaries = 25.9 keV +- 706.8 eV 
+ Leakage :  primary = 95.12 MeV +- 1.358 keV   secondaries = 25.95 keV +- 707 eV 
  Energy balance :  edep + eleak = 96.2 MeV
 
- Total track length (charged) in absorber per event = 5.176 mm  +- 3.818 um 
- Total track length (neutral) in absorber per event = 18.2 um  +- 1.869 um 
+ Total track length (charged) in absorber per event = 5.176 mm  +- 3.813 um 
+ Total track length (neutral) in absorber per event = 18.13 um  +- 1.868 um 
 
- Number of steps (charged) in absorber per event = 12.27 +- 0.0002763
- Number of steps (neutral) in absorber per event = 0.00986 +- 0.0002763
+ Number of steps (charged) in absorber per event = 12.27 +- 0.0002762
+ Number of steps (neutral) in absorber per event = 0.0099 +- 0.0002762
 
- Number of secondaries per event : Gammas = 0.00938   electrons = 4.042   positrons = 0
+ Number of secondaries per event : Gammas = 0.00942   electrons = 4.043   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -1448,13 +1439,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0.002 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 7.313 mrad (central part only)
+  rms proj angle of transmit primary particle = 7.315 mrad (central part only)
   computed theta0 (Highland formula)          = 7.636 mrad
-  central part defined as +- 22.91 mrad   Tail ratio = 1.307 %
+  central part defined as +- 22.91 mrad   Tail ratio = 1.319 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1693637907, 1929613813
+ Current couple of seeds = 1391071933, 1550768151
 ----------------------------------------
 #
 /testem/phys/setCuts 1 mm
@@ -1881,7 +1872,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1693637907, 1929613813
+ Current couple of seeds = 1391071933, 1550768151
 ----------------------------------------
 Start Run processing.
 
@@ -1897,21 +1888,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=1.37s Real=1.49s Sys=0s
+  User=1.36s Real=1.75s Sys=0.05s
 
  ======================== run summary ======================
 
  The run was 50000 proton of 175 GeV through 8 mm  of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit in absorber per event = 4.744 MeV +- 123.2 keV
+ Total energy deposit in absorber per event = 4.73 MeV +- 122.9 keV
 
- -----> Mean dE/dx = 5.928 MeV/cm	(2.195 MeV*cm2/g)
+ -----> Mean dE/dx = 5.909 MeV/cm	(2.189 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 4.024 MeV/cm	(1.49 MeV*cm2/g)
    full dEdx       = 6.049 MeV/cm	(2.24 MeV*cm2/g)
 
- Leakage :  primary = 174.7 GeV +- 123.2 keV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 174.7 GeV +- 122.9 keV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 174.7 GeV
 
  Total track length (charged) in absorber per event = 8.004 mm  +- 0 fm 
@@ -1929,13 +1920,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.02057 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02056 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02111 mrad
-  central part defined as +- 0.06333 mrad   Tail ratio = 1.322 %
+  central part defined as +- 0.06333 mrad   Tail ratio = 1.326 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 453776373, 2080713689
+ Current couple of seeds = 1892064962, 440595172
 ----------------------------------------
 #
 /testem/det/setAbsMat Iron
@@ -2366,49 +2357,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 453776373, 2080713689
+ Current couple of seeds = 1892064962, 440595172
 ----------------------------------------
 Start Run processing.
 
 ---> Begin of Event: 0
-Defining process manager for Fe56
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Fe54
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Fe57
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 
 ---> Begin of Event: 10000
-Defining process manager for Fe58
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 
 ---> Begin of Event: 20000
 
@@ -2418,30 +2373,30 @@ Defining process manager during an event loop is thread unsafe and will be dropp
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=17.86s Real=22.82s Sys=0.06s
+  User=16.86s Real=20.55s Sys=0.26s
 
  ======================== run summary ======================
 
  The run was 50000 mu+ of 100 GeV through 1 m   of Iron (density: 7.87 g/cm3 )
 
- Total energy deposit in absorber per event = 2.156 GeV +- 15.26 MeV
+ Total energy deposit in absorber per event = 2.152 GeV +- 14.51 MeV
 
- -----> Mean dE/dx = 21.56 MeV/cm	(2.74 MeV*cm2/g)
+ -----> Mean dE/dx = 21.52 MeV/cm	(2.735 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 11.22 MeV/cm	(1.425 MeV*cm2/g)
    full dEdx       = 21.6 MeV/cm	(2.745 MeV*cm2/g)
 
- Leakage :  primary = 97.84 GeV +- 15.26 MeV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 97.85 GeV +- 14.55 MeV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 100 GeV
 
- Total track length (charged) in absorber per event = 100 cm  +- 6.052 um 
+ Total track length (charged) in absorber per event = 100 cm  +- 2.456 um 
  Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 47.94 +- 0.0003479
+ Number of steps (charged) in absorber per event = 47.92 +- 0.0002216
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0.049   electrons = 46.34   positrons = 1.258
+ Number of secondaries per event : Gammas = 0.04978   electrons = 46.31   positrons = 1.268
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -2450,13 +2405,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.127 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.132 mrad (central part only)
   computed theta0 (Highland formula)          = 1.182 mrad
-  central part defined as +- 3.545 mrad   Tail ratio = 0.312 %
+  central part defined as +- 3.545 mrad   Tail ratio = 0.325 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 531742662, 1340446356
+ Current couple of seeds = 1507146051, 1248240679
 ----------------------------------------
 #
 G4 kernel has come to Quit state.

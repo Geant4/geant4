@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -51,18 +51,18 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 /testhadr/verbose 1
 /run/beamOn 10
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -89,7 +89,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -116,11 +116,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -284,7 +284,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -317,7 +317,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -586,100 +586,18 @@ Histo::Add1D: New histogram will be booked: #h7  <Charge exchange cross section 
 Histo::Add1D: New histogram will be booked: #h8  <Total cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
 Start Run processing.
 EventAction: Event # 0 started
-Defining process manager for Al27
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Mg24
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for C17
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for N14
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Na25
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Mg26
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for O17
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Na22
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for C13
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Li6
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.1s Real=0.1s Sys=0.01s
+  User=0.13s Real=0.15s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ### Fill Cross Sections for proton off Al
@@ -742,7 +660,7 @@ HistoManager: End of run actions are started
    53      0.3428    0.001198    2.318e-05     0.001222
    54      0.3508    0.001243    2.498e-05     0.001268
    55      0.3589    0.001287    2.693e-05     0.001314
-   56      0.3673    0.001331    2.903e-05      0.00136
+   56      0.3673    0.001331    2.902e-05      0.00136
    57      0.3758    0.001375    3.128e-05     0.001406
    58      0.3846    0.001419    3.371e-05     0.001453
    59      0.3936    0.001463    3.633e-05     0.001499
@@ -750,7 +668,7 @@ HistoManager: End of run actions are started
    61      0.4121     0.00157     4.22e-05     0.001612
    62      0.4217     0.00164    4.548e-05     0.001686
    63      0.4315    0.001711    4.902e-05      0.00176
-   64      0.4416    0.001781    5.283e-05     0.001834
+   64      0.4416    0.001781    5.282e-05     0.001834
    65      0.4519    0.001851    5.693e-05     0.001908
    66      0.4624    0.001921    6.136e-05     0.001983
    67      0.4732    0.001992    6.613e-05     0.002058
@@ -761,7 +679,7 @@ HistoManager: End of run actions are started
    72      0.5309    0.002421    9.615e-05     0.002517
    73      0.5433    0.002591    0.0001036     0.002694
    74      0.5559    0.002761    0.0001117     0.002872
-   75      0.5689    0.002931    0.0001204     0.003051
+   75      0.5689    0.002931    0.0001203     0.003051
    76      0.5821    0.003101    0.0001297     0.003231
    77      0.5957    0.003271    0.0001398     0.003411
    78      0.6095    0.003441    0.0001507     0.003592
@@ -771,18 +689,18 @@ HistoManager: End of run actions are started
    82      0.6683    0.004122    0.0002033     0.004325
    83      0.6839    0.005003    0.0002191     0.005222
    84      0.6998    0.006023    0.0002361     0.006259
-   85      0.7161    0.007043    0.0002545     0.007298
+   85      0.7161    0.007043    0.0002544     0.007298
    86      0.7328    0.008063    0.0002742     0.008337
    87      0.7499    0.009083    0.0002955     0.009379
-   88      0.7674      0.0101    0.0003185      0.01042
-   89      0.7852     0.01112    0.0003433      0.01147
-   90      0.8035     0.01214      0.00037      0.01251
-   91      0.8222     0.01316    0.0003987      0.01356
-   92      0.8414     0.01418    0.0004297      0.01461
-   93       0.861      0.0152    0.0004631      0.01567
-   94       0.881     0.02438     0.000499      0.02488
+   88      0.7674      0.0101    0.0003184      0.01042
+   89      0.7852     0.01112    0.0003431      0.01147
+   90      0.8035     0.01214    0.0003691      0.01251
+   91      0.8222     0.01316    0.0003981      0.01356
+   92      0.8414     0.01418    0.0004293      0.01461
+   93       0.861      0.0152    0.0004628      0.01567
+   94       0.881     0.02438    0.0004989      0.02488
    95      0.9016     0.03447    0.0005378      0.03501
-   96      0.9226     0.04457    0.0005797      0.04515
+   96      0.9226     0.04457    0.0005796      0.04515
    97      0.9441     0.05466    0.0006246      0.05529
    98      0.9661     0.06475    0.0006731      0.06543
    99      0.9886     0.07485    0.0007254      0.07557
@@ -1490,6 +1408,6 @@ HistoManager: End of run actions are started
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.44 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.46 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

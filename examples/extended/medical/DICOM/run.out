@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -135,19 +135,20 @@ Available colours:
 /random/setSavingFlag 1
 /run/initialize
 /run/beamOn 100
+G4RunManagerKernel -- G4ScoreSplittingProcess is appended to all particles.
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -174,7 +175,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -201,11 +202,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -369,7 +370,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 43 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -402,7 +403,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 43 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -723,7 +724,6 @@ Index : 8     used in the geometry : Yes
 
 ====================================================================
 
-G4RunManagerKernel -- G4ScoreSplittingProcess is appended to all particles.
 ++ phantomSD/DoseDeposit id 0
 ### Run 0 start.
 Start Run processing.
@@ -830,35 +830,36 @@ EV: 99
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.99s Real=1.03s Sys=0.01s
+  User=1s Real=1.03s Sys=0s
  ###### EndOfRunAction  
 =============================================================
  Number of event processed : 100
 =============================================================
  opened file dicom.out for dose output
      Voxel |   DoseDeposit  |
-    8127     8.1213e-08 Gy
-    8128     5.86791e-08 Gy
+    8127     6.16601e-08 Gy
+    8128     6.19176e-08 Gy
     8254     2.6705e-09 Gy
-    8255     5.50118e-08 Gy
-    8256     6.87636e-08 Gy
-    24511     6.33131e-08 Gy
-    24512     5.35066e-08 Gy
+    8255     5.96557e-08 Gy
+    8256     5.77888e-08 Gy
+    11708     5.67951e-10 Gy
+    24511     5.80894e-08 Gy
+    24512     6.54297e-08 Gy
     24638     2.67048e-09 Gy
-    24639     7.74359e-08 Gy
-    24640     6.2471e-08 Gy
-    40508     9.6646e-10 Gy
-    40636     9.31036e-10 Gy
+    24639     8.20798e-08 Gy
+    24640     5.72585e-08 Gy
+    40508     9.66456e-10 Gy
+    40636     9.31037e-10 Gy
     40637     1.85645e-09 Gy
     40765     3.81825e-10 Gy
     40766     2.51919e-09 Gy
-    40767     2.4267e-10 Gy
-    40895     8.1285e-08 Gy
-    40896     4.83613e-08 Gy
+    40767     1.20835e-09 Gy
+    40895     8.76245e-08 Gy
+    40896     6.50938e-08 Gy
     40897     2.38942e-09 Gy
     41022     2.67045e-09 Gy
-    41023     5.58675e-08 Gy
-    41024     6.13567e-08 Gy
+    41023     6.86511e-08 Gy
+    41024     4.93745e-08 Gy
 =============================================
  closed file dicom.out for dose output
 G4 kernel has come to Quit state.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -312,7 +312,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=2.77s Real=4.08s Sys=0s
+  User=1.57s Real=1.74s Sys=0.03s
 
  ======================== run summary ======================
 
@@ -320,29 +320,29 @@ Run Summary
 
  ============================================================
 
- total energy deposit: 99.809 MeV
+ total energy deposit: 99.817 MeV
 
- nb tracks/event   neutral:     25.223   charged:     137.66
- nb  steps/event   neutral:     130.58   charged:     203.94
+ nb tracks/event   neutral:     25.177   charged:     15.218
+ nb  steps/event   neutral:     131.84   charged:     80.859
 
  nb of process calls per event: 
-   Transportation     annihil       compt        conv       eBrem       eIoni         msc        phot
-          0.948         1.4      105.36         1.4      22.939      179.13      0.4725      22.877
+    CoulombScatTransportation     annihil       compt        conv       eBrem       eIoni         msc        phot
+         0.0005       0.914       1.417      106.66       1.416      22.814      56.251       0.375      22.848
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.133 cm    rms = 3.7655 cm 
- proj Range = 9.6845 cm    rms = 3.5059 cm 
- proj/true  = 0.86993
- transverse dispersion at end = 1.6626 cm 
-      mass true Range from simulation = 30.058 g/cm2 
+ true Range = 11.047 cm    rms = 3.8309 cm 
+ proj Range = 9.5816 cm    rms = 3.5497 cm 
+ proj/true  = 0.86737
+ transverse dispersion at end = 1.6549 cm 
+      mass true Range from simulation = 29.826 g/cm2 
        from PhysicsTable (csda range) = 32.099 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1890882382, 1352695959
+ Current couple of seeds = 2119214915, 1793688333
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -354,7 +354,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.19 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.17 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

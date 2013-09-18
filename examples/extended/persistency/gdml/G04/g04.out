@@ -1,13 +1,13 @@
 
 Usage: gdml_det <intput_gdml_file:mandatory>
 
-G4GDML: Reading '/ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-08_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
+G4GDML: Reading '/ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-09_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
 G4GDML: Reading structure...
 G4GDML: Reading setup...
-G4GDML: Reading '/ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-08_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
+G4GDML: Reading '/ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-09_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 
         ############################################
@@ -15,7 +15,7 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -335,7 +335,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/direction 0 0 -1
 /run/beamOn 20
 

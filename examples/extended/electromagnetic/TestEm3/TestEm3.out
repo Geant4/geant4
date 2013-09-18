@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -78,18 +78,18 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /run/beamOn 100
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -116,7 +116,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -143,11 +143,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -311,7 +311,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -344,7 +344,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -471,35 +471,35 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.35s Real=5.34s Sys=0s
+  User=3.12s Real=3.83s Sys=0.07s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 777.38 MeV :  19.33 MeV     2.486 +- 0.2486 %      54.4 cm  +- 1.47 cm 
-   liquidArgon:  212.9 MeV :  18.39 MeV     8.636 +- 0.8636 %      1.05 m   +- 9.51 cm 
+          Lead: 781.45 MeV :   16.1 MeV     2.061 +- 0.2061 %      45.3 cm  +-  1.2 cm 
+   liquidArgon: 208.34 MeV :  14.22 MeV     6.826 +- 0.6826 %      1.02 m   +- 7.38 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma          506
- Mean number of e-             866
- Mean number of e+             53.4
- Mean number of charged steps  5086.59
- Mean number of neutral steps  3602.72
+ Mean number of gamma          491
+ Mean number of e-             135
+ Mean number of e+             52.7
+ Mean number of charged steps  3349.73
+ Mean number of neutral steps  3590.61
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 777.353 MeV
-liquidArgon:	 212.886 MeV
+      Lead:	 781.413 MeV
+liquidArgon:	 208.335 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 948350343, 53243750
+ Current couple of seeds = 949807677, 1464997005
 ----------------------------------------
 #
 /process/em/setSecBiasing eIoni World 0.3 2 MeV
@@ -517,18 +517,18 @@ liquidArgon:	 212.886 MeV
  Secondary biasing is activated for e- and eBrem inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 5
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -555,7 +555,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -582,11 +582,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -750,7 +750,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -783,7 +783,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -883,7 +883,7 @@ Index : 2     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 948350343, 53243750
+ Current couple of seeds = 949807677, 1464997005
 ----------------------------------------
 Start Run processing.
 
@@ -893,35 +893,35 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.64s Real=4.15s Sys=0.01s
+  User=2.87s Real=3.3s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 776.36 MeV :  20.16 MeV     2.597 +- 0.2597 %      51.8 cm  +- 1.35 cm 
-   liquidArgon: 212.66 MeV :  17.28 MeV     8.125 +- 0.8125 %      1.01 m   +- 8.62 cm 
+          Lead: 777.99 MeV :  22.97 MeV     2.952 +- 0.2952 %      44.9 cm  +- 1.37 cm 
+   liquidArgon: 210.55 MeV :  17.64 MeV     8.377 +- 0.8377 %        99 cm  +- 7.82 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma          291
- Mean number of e-             557
- Mean number of e+             53.2
- Mean number of charged steps  4319.98
- Mean number of neutral steps  2892.42
+ Mean number of gamma          286
+ Mean number of e-             115
+ Mean number of e+             52.9
+ Mean number of charged steps  3138.84
+ Mean number of neutral steps  2827.24
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 775.597 MeV
-liquidArgon:	 214.124 MeV
+      Lead:	 776.631 MeV
+liquidArgon:	 212.872 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1600549246, 579524105
+ Current couple of seeds = 86486624, 336770902
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
@@ -934,7 +934,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.32 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.28 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

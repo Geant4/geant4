@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -19,7 +19,7 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 /monopole/setup 
 Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
-/control/execute /ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-08_branch/examples/extended/exoticphysics/monopole/monopole.in
+/control/execute /ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-09_branch/examples/extended/exoticphysics/monopole/monopole.in
 /control/verbose 1
 /run/verbose 0
 /testex/run/verbose 1
@@ -65,18 +65,18 @@ G4ProcessManager:  particle[monopole]
 /run/beamOn 100
 ### Monopole ionisation model with d-electron production, Gmag= 68.518
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -103,7 +103,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -130,11 +130,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -298,7 +298,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -331,7 +331,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -595,7 +595,7 @@ hPairProd:   for  pi-    SubType= 4
 
  The run consists of 100 monopole of 100 GeV through 10 cm  of G4_Si (density: 2.33 g/cm3 )
 
- projected Range= 7.7393 cm    rms= 89.865 um 
+ projected Range= 7.7385 cm    rms= 97.526 um 
 ### Stopping Powers
  E(MeV)= 0.001  dedxp= 24.465 dedxmp= 1.4828
  E(MeV)= 0.0012589  dedxp= 27.276 dedxmp= 1.6637
@@ -702,8 +702,8 @@ Range table for G4_Si
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.36433 0.0974551 0.526637 0.153746 0.329918 0.791656 0.606539 0.672357 0.60045 0.436358 0.515532 0.678587 0.127297 0.49584 0.629305 0.896503 0.914183 0.488244 0.0216866 0.0981344 0.147196 0.449244 0.661425 0.317997 
+ float_seed_table[] = 0.212055 0.211617 0.0850996 0.970877 0.213427 0.377811 0.946199 0.169612 0.565489 0.113718 0.419897 0.490261 0.663516 0.681055 0.45512 0.11418 0.424626 0.330234 0.836903 0.948589 0.366865 0.188495 0.248954 0.497031 
  i_lag = 18, j_lag = 4
- carry = 0, count24 = 20
+ carry = 5.96046e-08, count24 = 17
  luxury = 3 nskip = 199
 ----------------------------------------

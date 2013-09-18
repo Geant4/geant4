@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -417,18 +417,18 @@ PhysicsList::SetCuts:CutLength : 500 um
 #
 /run/beamOn 1000
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -447,7 +447,7 @@ eIoni:   for  e-    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -457,7 +457,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -476,7 +476,7 @@ eIoni:   for  e+    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 eBrem:   for  e+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -486,11 +486,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -509,7 +509,7 @@ hIoni:   for  proton    SubType= 2
                Bragg :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 hBrems:   for  proton    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -647,7 +647,7 @@ muIoni:   for  mu+    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -663,7 +663,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -683,7 +683,7 @@ muIoni:   for  mu-    SubType= 2
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
         MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -699,7 +699,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -718,7 +718,7 @@ hIoni:   for  pi+    SubType= 2
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 hBrems:   for  pi+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -747,7 +747,7 @@ hIoni:   for  pi-    SubType= 2
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
       ===== EM models for the G4Region  GasDetector ======
-            PAIModel :  Emin=        0 eV    Emax=       10 TeV
+            PAIModel :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 hBrems:   for  pi-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -823,37 +823,37 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.08s Real=0.08s Sys=0s
+  User=0.21s Real=0.23s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 0.74993 +- 0.11517 keV    RMS/Emean = 4.8567
-   Mean number of steps in absorber= 1.24  mean number of ion-clusters = 781.71 MeanCluster= 781.54
+   Mean energy deposit in absorber = 0.74573 +- 0.11454 keV    RMS/Emean = 4.8572
+   Mean number of steps in absorber= 1.242  mean number of ion-clusters = 812.28 MeanCluster= 812.5
 
- ====== Energy deposit distribution   Noverflows= 0.009 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.013 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           2       0.002
-    2         6         103       0.103
-    3         9         269       0.269
-    4        12         235       0.235
-    5        15         169       0.169
-    6        18          80        0.08
-    7        21          44       0.044
-    8        24          28       0.028
-    9        27          20        0.02
-   10        30          14       0.014
-   11        33           6       0.006
-   12        36           5       0.005
-   13        39           4       0.004
-   14        42           4       0.004
-   15        45           2       0.002
+    1         3           1       0.001
+    2         6          97       0.097
+    3         9         265       0.265
+    4        12         263       0.263
+    5        15         143       0.143
+    6        18          81       0.081
+    7        21          55       0.055
+    8        24          32       0.032
+    9        27          11       0.011
+   10        30          10        0.01
+   11        33           8       0.008
+   12        36           4       0.004
+   13        39           5       0.005
+   14        42           2       0.002
+   15        45           4       0.004
    16        48           1       0.001
    17        51           1       0.001
-   18        54           1       0.001
-   19        57           3       0.003
+   18        54           3       0.003
+   19        57           1       0.001
  ================== run end ==========================
 #
 G4 kernel has come to Quit state.
@@ -867,7 +867,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.63 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.52 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
