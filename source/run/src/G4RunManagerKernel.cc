@@ -344,8 +344,11 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
   if(topologyIsChanged) geometryNeedsToBeClosed = true;
 
   // Notify the VisManager as well                                                                                
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager) pVVisManager->GeometryHasChanged();
+  if(!(G4Threading::IsWorkerThread()))
+  {
+    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+    if(pVVisManager) pVVisManager->GeometryHasChanged();
+  }
 
   geometryInitialized = true;
   if(physicsInitialized && currentState!=G4State_Idle)
@@ -401,8 +404,11 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   if(topologyIsChanged) geometryNeedsToBeClosed = true;
   
   // Notify the VisManager as well
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager) pVVisManager->GeometryHasChanged();
+  if(!(G4Threading::IsWorkerThread()))
+  {
+    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+    if(pVVisManager) pVVisManager->GeometryHasChanged();
+  }
 
   geometryInitialized = true;
   if(physicsInitialized && currentState!=G4State_Idle)
@@ -552,8 +558,11 @@ G4bool G4RunManagerKernel::RunInitialization()
     ResetNavigator();
     // CheckRegularGeometry();
     // Notify the VisManager as well
-    G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-    if(pVVisManager) pVVisManager->GeometryHasChanged();
+    if(!(G4Threading::IsWorkerThread()))
+    {
+      G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+      if(pVVisManager) pVVisManager->GeometryHasChanged();
+    }
   }
  
   GetPrimaryTransformer()->CheckUnknown();

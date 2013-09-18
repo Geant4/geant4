@@ -43,6 +43,8 @@
 #include "G4Run.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4VVisManager.hh"
+#include "G4SDManager.hh"
+#include "G4VScoringMesh.hh"
 #include <sstream>
 
 G4WorkerRunManager* G4WorkerRunManager::GetWorkerRunManager()
@@ -111,6 +113,57 @@ void G4WorkerRunManager::InitializeGeometry() {
     geometryInitialized = true;
 }
 
+void G4WorkerRunManager::RunInitialization()
+{
+  if(!(kernel->RunInitialization())) return;
+  if(currentRun) delete currentRun;
+  currentRun = 0;
+
+  //Signal this thread can start event loop.
+  //Note this will return only when all threads reach this point
+  G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
+  const G4UserWorkerInitialization* uwi
+       = G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
+  //Call a user hook: this is guaranteed all threads are "synchronized"
+  if(uwi) uwi->WorkerRunStart();
+
+  if(userRunAction) currentRun = userRunAction->GenerateRun();
+  if(!currentRun) currentRun = new G4Run();
+
+  currentRun->SetRunID(runIDCounter);
+  currentRun->SetNumberOfEventToBeProcessed(numberOfEventToBeProcessed);
+
+  currentRun->SetDCtable(DCtable);
+  G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
+  if(fSDM)
+  { currentRun->SetHCtable(fSDM->GetHCtable()); }
+
+  std::ostringstream oss;
+    G4Random::saveFullState(oss);
+  randomNumberStatusForThisRun = oss.str();
+  currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
+
+  previousEvents->clear();
+  for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
+  { previousEvents->push_back((G4Event*)0); }
+
+  if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
+
+  if(storeRandomNumberStatus) {
+      G4String fileN = "currentRun";
+      if ( rngStatusEventsFlag ) {
+          std::ostringstream os;
+          os << "run" << currentRun->GetRunID();
+          fileN = os.str();
+      }
+      StoreRNGStatus(fileN);
+  }
+
+  runAborted = false;
+  numberOfEventProcessed = 0;
+  if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
+}
+
 void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4int n_select)
 {
     if(!userPrimaryGeneratorAction)
@@ -122,13 +175,7 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     //This is the same as in the sequential case, just the for-loop indexes are
     //different
     InitializeEventLoop(n_event,macroFile,n_select);
-    //Signal this thread can start event loop.
-    //Note this will return only when all threads reach this point
-    G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
-    const G4UserWorkerInitialization* uwi
-       = G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
-    //Call a user hook: this is guaranteed all threads are "synchronized"
-    if(uwi) uwi->WorkerRunStart();
+
     // Event loop
     eventLoopOnGoing = true;
 ///////    G4int i_event = workerContext->GetThreadId();
@@ -150,10 +197,6 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
 //////        }
       }
     }
-    //Call a user hook: note this is before the next barrier
-    //so threads execute this method asyncrhonouzly
-    //(TerminateRun allows for synch via G4RunAction::EndOfRun)
-    if(uwi) uwi->WorkerRunEnd();
      
     TerminateEventLoop();
 }
@@ -246,6 +289,13 @@ void G4WorkerRunManager::RunTermination()
     if(ScM) mtRM->MergeScores(ScM);
     mtRM->MergeRun(currentRun);
 
+    //Call a user hook: note this is before the next barrier
+    //so threads execute this method asyncrhonouzly
+    //(TerminateRun allows for synch via G4RunAction::EndOfRun)
+    const G4UserWorkerInitialization* uwi
+       = G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
+    if(uwi) uwi->WorkerRunEnd();
+
     G4RunManager::RunTermination();
     //Signal this thread has finished envent-loop.
     //Note this will return only whan all threads reach this point
@@ -328,8 +378,8 @@ void G4WorkerRunManager::SetUserInitialization(G4VUserPhysicsList* pl)
 
 void G4WorkerRunManager::SetUserAction(G4UserRunAction* userAction)
 {
-    userRunAction = userAction;
-    userRunAction->SetMaster(false);
+    G4RunManager::SetUserAction(userAction);
+    userAction->SetMaster(false);
 }
 
 void G4WorkerRunManager::SetupDefaultRNGEngine()

@@ -118,6 +118,8 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   //============================
   if(masterRM->GetUserWorkerInitialization())
   { masterRM->GetUserWorkerInitialization()->WorkerInitialize(); }
+  if(masterRM->GetUserActionInitialization())
+  { masterRM->GetUserActionInitialization()->InitializeSteppingVerbose(); }
   //Now initialize worker part of shared objects (geometry/physics)
   wThreadContext->BuildGeometryAndPhysicsVector();
   G4WorkerRunManager* wrm

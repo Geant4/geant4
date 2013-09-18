@@ -40,7 +40,6 @@
 #define G4WorkerRunManager_h 1
 
 #include "G4RunManager.hh"
-#include "G4VScoringMesh.hh"
 
 class G4WorkerThread;
 class G4WorkerRunManagerKernel;
@@ -51,8 +50,9 @@ public:
     static G4WorkerRunManagerKernel* GetWorkerRunManagerKernel();
     G4WorkerRunManager();
     ~G4WorkerRunManager();
-    virtual void InitializeGeometry();
     //Modified for worker behavior
+    virtual void InitializeGeometry();
+    virtual void RunInitialization();
     virtual void DoEventLoop(G4int n_event,const char* macroFile=0,G4int n_select=-1);
     virtual void ProcessOneEvent(G4int i_event);
     virtual G4Event* GenerateEvent(G4int i_event);

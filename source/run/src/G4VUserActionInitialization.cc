@@ -53,5 +53,7 @@ void G4VUserActionInitialization::SetUserAction(G4UserTrackingAction* action) co
 void G4VUserActionInitialization::SetUserAction(G4UserSteppingAction* action) const
 { G4RunManager::GetRunManager()->SetUserAction(action); } 
 
+G4VSteppingVerbose* G4VUserActionInitialization::InitializeSteppingVerbose() const
+{ return static_cast<G4VSteppingVerbose*>(0); }
 
 
