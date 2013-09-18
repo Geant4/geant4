@@ -4,6 +4,9 @@ $Id:$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+30th August 2013 Gunter Folger (test202-V09-06-04)
+- Enable to run test202, if fake X server Xvfb is installed in system.
+
 28th May 2013  John Allison (test202-V09-06-03)
 - CMakeLists.txt: Curtailed to prevent, for now, launching into the test system.
 
