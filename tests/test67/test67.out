@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -458,8 +458,8 @@ ooo Run 0 starts (global).
 Choosing random seed according to time(0) 
 
 --------- Ranecu engine status ---------
- Initial seed (index) = 202
- Current couple of seeds = 1602947134, 1623728829
+ Initial seed (index) = 149
+ Current couple of seeds = 1778258822, 1763106149
 ----------------------------------------
 
 ---> Begin Of Event: 0
@@ -661,7 +661,7 @@ Choosing random seed according to time(0)
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 123
+Global results with 100000 events : 146
 ooo Run 1 starts (global).
 
 ---> Begin Of Event: 0
@@ -863,7 +863,7 @@ ooo Run 1 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 799
+Global results with 100000 events : 742
 ooo Run 2 starts (global).
 
 ---> Begin Of Event: 0
@@ -1065,7 +1065,7 @@ ooo Run 2 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 2544
+Global results with 100000 events : 2473
 ooo Run 3 starts (global).
 
 ---> Begin Of Event: 0
@@ -1267,7 +1267,7 @@ ooo Run 3 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 2430
+Global results with 100000 events : 2419
 ooo Run 4 starts (global).
 
 ---> Begin Of Event: 0
@@ -1469,7 +1469,7 @@ ooo Run 4 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 1348
+Global results with 100000 events : 1401
 ooo Run 5 starts (global).
 
 ---> Begin Of Event: 0
@@ -1671,8 +1671,8 @@ ooo Run 5 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 566
+Global results with 100000 events : 558
 TEST PASSED
 Going to close the ROOT file....done
 Execution terminated
-User=25.64s Real=41.89s Sys=0.03s
+User=25s Real=53.78s Sys=0.04s

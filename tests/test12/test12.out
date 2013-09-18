@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -31,18 +31,18 @@ SimpleBox is now made of Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -69,7 +69,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -96,11 +96,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -264,7 +264,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -297,7 +297,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -536,97 +536,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
-Defining process manager for Pb204
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Pb206
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Pb207
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Pb208
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Tc93
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Yb160
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Hf169
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Xe127
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Sm140
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Er162
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-   time(s) spent user  time: 21.3s, wall time: 42.18s
+   time(s) spent user  time: 21.04s, wall time: 29.33s
 #
 # neutron at 100 GeV in Pb
 #
@@ -636,7 +546,7 @@ Defining process manager during an event loop is thread unsafe and will be dropp
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 16.94s, wall time: 32.55s
+   time(s) spent user  time: 18.5s, wall time: 24.3s
 #
 # pi+ at 100 GeV in Pb
 #
@@ -646,7 +556,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 15.03s, wall time: 28.78s
+   time(s) spent user  time: 16.8s, wall time: 22.33s
 #
 # pi- at 100 GeV in Pb
 #
@@ -656,7 +566,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 15.4s, wall time: 29.39s
+   time(s) spent user  time: 16.57s, wall time: 20.11s
 #
 # kaon+ at 100 GeV in Pb
 #
@@ -666,7 +576,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 16.16s, wall time: 31.02s
+   time(s) spent user  time: 16.76s, wall time: 21.22s
 #
 # kaon- at 100 GeV in Pb
 #
@@ -676,7 +586,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 17.32s, wall time: 35.06s
+   time(s) spent user  time: 16.09s, wall time: 19.56s
 #
 # kaon0S at 100 GeV in Pb
 #
@@ -686,7 +596,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 15.29s, wall time: 30.59s
+   time(s) spent user  time: 15.65s, wall time: 19.54s
 #
 # kaon0L at 100 GeV in Pb
 #
@@ -696,7 +606,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 100
-   time(s) spent user  time: 15.42s, wall time: 30.83s
+   time(s) spent user  time: 16.93s, wall time: 18.78s
 #
 # proton at 100 GeV in Al
 #
@@ -706,18 +616,18 @@ SimpleBox is now made of Pb
 SimpleBox is now made of Al
 /run/beamOn 100
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -744,7 +654,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -771,11 +681,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -939,7 +849,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -972,7 +882,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1029,7 +939,7 @@ hPairProd:   for  pi-    SubType= 4
       Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-   time(s) spent user  time: 2.32s, wall time: 4.63s
+   time(s) spent user  time: 2.38s, wall time: 2.61s
 #
 # neutron at 100 GeV in Al
 #
@@ -1038,7 +948,7 @@ hPairProd:   for  pi-    SubType= 4
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.53s, wall time: 3.03s
+   time(s) spent user  time: 1.49s, wall time: 1.59s
 #
 # pi+ at 100 GeV in Al
 #
@@ -1047,7 +957,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.56s, wall time: 3.16s
+   time(s) spent user  time: 1.28s, wall time: 1.99s
 #
 # pi- at 100 GeV in Al
 #
@@ -1056,7 +966,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.34s, wall time: 2.64s
+   time(s) spent user  time: 1.4s, wall time: 1.56s
 #
 # kaon+ at 100 GeV in Al
 #
@@ -1065,7 +975,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.22s, wall time: 2.42s
+   time(s) spent user  time: 1.33s, wall time: 1.4s
 #
 # kaon- at 100 GeV in Al
 #
@@ -1074,7 +984,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.23s, wall time: 2.53s
+   time(s) spent user  time: 1.33s, wall time: 1.55s
 #
 # kaon0S at 100 GeV in Al
 #
@@ -1083,7 +993,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.31s, wall time: 2.62s
+   time(s) spent user  time: 1.28s, wall time: 1.51s
 #
 # kaon0L at 100 GeV in Al
 #
@@ -1092,7 +1002,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 100
-   time(s) spent user  time: 1.32s, wall time: 2.61s
+   time(s) spent user  time: 1.42s, wall time: 1.53s
 #
 # proton at 100 GeV in Air
 #
@@ -1102,18 +1012,18 @@ SimpleBox is now made of Al
 SimpleBox is now made of Air
 /run/beamOn 100
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -1140,7 +1050,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1167,11 +1077,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1335,7 +1245,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1368,7 +1278,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1434,7 +1344,7 @@ hPairProd:   for  pi-    SubType= 4
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0s, wall time: 0.01s
+   time(s) spent user  time: 0s, wall time: 0s
 #
 # pi+ at 100 GeV in Air
 #
@@ -1443,7 +1353,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0.01s, wall time: 0.1s
+   time(s) spent user  time: 0s, wall time: 0s
 #
 # pi- at 100 GeV in Air
 #
@@ -1461,7 +1371,7 @@ SimpleBox is now made of Air
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 100
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0.01s, wall time: 0s
 #
 # kaon- at 100 GeV in Air
 #
@@ -1498,7 +1408,7 @@ SimpleBox is now made of Air
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.17s, wall time: 0.27s
+   time(s) spent user  time: 0.16s, wall time: 0.16s
 #
 # anti_neutron at 10 GeV in Pb
 #
@@ -1508,7 +1418,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.1s, wall time: 0.19s
+   time(s) spent user  time: 0.12s, wall time: 0.14s
 #
 # anti_deuteron at 10 GeV in Pb
 #
@@ -1518,9 +1428,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2114 2112
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2114 2112
-   time(s) spent user  time: 0.21s, wall time: 0.41s
+   time(s) spent user  time: 0.2s, wall time: 0.2s
 #
 # anti_triton at 10 GeV in Pb
 #
@@ -1530,7 +1438,7 @@ Unknown anti-baryon for FTF annihilation: PDGcodes - -2114 2112
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.04s, wall time: 0.14s
+   time(s) spent user  time: 0.05s, wall time: 0.09s
 #
 # anti_He3 at 10 GeV in Pb
 #
@@ -1540,7 +1448,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.03s, wall time: 0.03s
+   time(s) spent user  time: 0.03s, wall time: 0.1s
 #
 # anti_alpha at 10 GeV in Pb
 #
@@ -1550,7 +1458,7 @@ SimpleBox is now made of Pb
  Material Pbnot found, using Pb
 SimpleBox is now made of Pb
 /run/beamOn 5
-   time(s) spent user  time: 0.05s, wall time: 0.15s
+   time(s) spent user  time: 0.04s, wall time: 0.04s
 #
 # anti_proton at 10 GeV in Al
 #
@@ -1568,7 +1476,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.02s
+   time(s) spent user  time: 0.01s, wall time: 0s
 #
 # anti_deuteron at 10 GeV in Al
 #
@@ -1577,9 +1485,8 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2214 2212
-Unknown anti-baryon for FTF annihilation: PDGcodes - -2114 2112
-   time(s) spent user  time: 0.01s, wall time: 0.01s
+Unknown anti-baryon for FTF annihilation: PDGcodes - -2214 2112
+   time(s) spent user  time: 0.02s, wall time: 0.02s
 #
 # anti_triton at 10 GeV in Al
 #
@@ -1597,7 +1504,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 5
-   time(s) spent user  time: 0.02s, wall time: 0.02s
+   time(s) spent user  time: 0.01s, wall time: 0.01s
 #
 # anti_alpha at 10 GeV in Al
 #
@@ -1615,7 +1522,7 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Air
 SimpleBox is now made of Air
 /run/beamOn 5
-   time(s) spent user  time: 0s, wall time: 0s
+   time(s) spent user  time: 0.01s, wall time: 0s
 #
 # anti_neutron at 10 GeV in Air
 #

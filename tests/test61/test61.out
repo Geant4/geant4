@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -28,7 +28,6 @@ Tst61PhysicsList::SetCuts:CutLength : 1000 (mm)
 #
 /gun/particle ion
 /gun/ion 6 12 2
- ionCmd: newValues = 6 12 2 0.0
 /gun/energy 12.0 GeV
 /mydet/SelectMaterial U
 SimpleBox is now made of U
@@ -410,106 +409,39 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
-Defining process manager for U238
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
-Defining process manager for Co64
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
-Defining process manager for Sn117
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Rh107
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Ag114
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Kr87
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Cs135
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Nb103
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Sb121
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-Defining process manager for Ru106
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART130
-      issued by : G4IonTable::AddProcessManager()
-Defining process manager during an event loop is thread unsafe and will be dropped from the next release.
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=46.38s Real=68.39s Sys=0.44s
+  User=13.05s Real=25.19s Sys=0.16s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
 /gun/particle ion
 /gun/ion 6 12 2
- ionCmd: newValues = 6 12 2 0.0
 /gun/energy 12.0 GeV
 /mydet/SelectMaterial H
 SimpleBox is now made of H
@@ -764,16 +696,23 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 Start Run processing.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
 /gun/particle ion
 /gun/ion 6 12 2
- ionCmd: newValues = 6 12 2 0.0
 /gun/energy 12.0 GeV
 /mydet/SelectMaterial Si
 SimpleBox is now made of Si
@@ -1033,16 +972,351 @@ Index : 2     used in the geometry : Yes
 ====================================================================
 
 Start Run processing.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=5.06s Real=9.53s Sys=0.01s
+  User=4.79s Real=7.9s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
 /gun/particle ion
 /gun/ion 6 12 2
- ionCmd: newValues = 6 12 2 0.0
 /gun/energy 12.0 GeV
 /mydet/SelectMaterial H2O
 SimpleBox is now made of H2O
@@ -1307,17 +1581,420 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 Start Run processing.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : had012
+      issued by : G4HadronicProcess:CheckResult()
+Warning: Bad energy non-conservation detected, will re-sample the interaction
+ Process / Model: inelastic / QMDModel
+ Primary: deuteron (1000010020), E= 3572.65, target nucleus (1,1)
+ E(initial - final) = -1089.57 MeV.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=1.26s Real=2.57s Sys=0s
+  User=2.37s Real=4.52s Sys=0.01s
 #
 #
 # C(12,6)++ at 200 MeV in U
 #
 /gun/particle ion
 /gun/ion 6 12 2
- ionCmd: newValues = 6 12 2 0.0
 /gun/energy 2400 MeV
 /mydet/SelectMaterial U
 SimpleBox is now made of U
@@ -1372,7 +2049,6 @@ Run Summary
 #
 /gun/particle ion
 /gun/ion 6 12 2
- ionCmd: newValues = 6 12 2 0.0
 /gun/energy 2400 MeV
 /mydet/SelectMaterial H
 SimpleBox is now made of H
@@ -1427,7 +2103,6 @@ Run Summary
 #
 /gun/particle ion
 /gun/ion 6 12 2
- ionCmd: newValues = 6 12 2 0.0
 /gun/energy 2400 MeV
 /mydet/SelectMaterial Si
 SimpleBox is now made of Si
@@ -1473,10 +2148,58 @@ Index : 3     used in the geometry : No
 ====================================================================
 
 Start Run processing.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.56s Real=1.18s Sys=0s
+  User=0.44s Real=0.44s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1485,7 +2208,6 @@ Run Summary
 #
 /gun/particle ion
 /gun/ion 26 56 26
- ionCmd: newValues = 26 56 26 0.0
 /gun/energy 56.0 GeV
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
@@ -1755,14 +2477,38 @@ Index : 4     used in the geometry : Yes
 ====================================================================
 
 Start Run processing.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=70.24s Real=136.04s Sys=0.02s
+  User=21.18s Real=27.27s Sys=0.03s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1555524481, 745558218
+ Current couple of seeds = 635865683, 234290039
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1775,7 +2521,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.68 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.7 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

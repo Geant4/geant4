@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-08    (29-August-2013)
+ Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -16,18 +16,18 @@ PhysicsList::AddPhysicsList: <standardGS> is not defined
 ### G4EmConfigurator::AddModels n= 0
 PhysicsList::SetCuts:CutLength : 1 mm 
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma    SubType= 13
+compt:   for  gamma, applyCuts: 1     SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma    SubType= 14
+conv:   for  gamma, applyCuts: 1     SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -54,7 +54,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-    SubType= 1
+CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -81,11 +81,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+    SubType= 5
+annihil:   for  e+, applyCuts: 1     SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+    SubType= 1
+CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -249,7 +249,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
+CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -282,7 +282,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-    SubType= 1
+CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 38 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -364,121 +364,121 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.59s Real=12.82s Sys=0s
+  User=7.69s Real=10.25s Sys=0.06s
 Thicknesses(mm)= 1.57423  1  1  
 Bins(R/R0)=      0.00738313  0  0  
  ----------------------------------------------------------
  ----------------  RUN SUMMARY ----------------------------
  ----------------------------------------------------------
-       Mean number of steps 123.466
+       Mean number of steps 121.574
              Medium 1 ==>   G4_Mo
 	 FMR (z/r0)    ||       J  
-	   0.00738313	          2.55406
-	   0.0147663	          3.01455
-	   0.0221494	          3.53729
-	   0.0295325	          3.78001
-	   0.0369157	          4.21436
-	   0.0442988	          4.43774
-	   0.0516819	          4.79196
-	   0.0590651	          4.94927
-	   0.0664482	          5.1138
-	   0.0738313	          5.18395
-	   0.0812144	          5.20676
-	   0.0885976	          5.25827
-	   0.0959807	          5.23801
-	   0.103364	          5.17788
-	   0.110747	          5.05946
-	   0.11813	          4.94547
-	   0.125513	          5.03587
-	   0.132896	          4.84201
-	   0.14028	          4.79162
-	   0.147663	          4.60728
-	   0.155046	          4.67583
-	   0.162429	          4.62507
-	   0.169812	          4.43774
-	   0.177195	          4.348
-	   0.184578	          4.1946
-	   0.191961	          4.05708
-	   0.199345	          3.9299
-	   0.206728	          3.83516
-	   0.214111	          3.72013
-	   0.221494	          3.35128
-	   0.228877	          3.17692
-	   0.23626	          3.08147
-	   0.243643	          2.96032
-	   0.251026	          2.88304
-	   0.25841	          2.79341
-	   0.265793	          2.63307
-	   0.273176	          2.5726
-	   0.280559	          2.37206
-	   0.287942	          2.21706
-	   0.295325	          2.11942
-	   0.302708	          2.04095
-	   0.310092	          1.92385
-	   0.317475	          1.79235
-	   0.324858	          1.69929
-	   0.332241	          1.64074
-	   0.339624	          1.45002
-	   0.347007	          1.38886
-	   0.35439	          1.22258
-	   0.361773	          1.24324
-	   0.369157	          1.19384
-	   0.37654	          1.10649
-	   0.383923	          0.976967
-	   0.391306	          0.872345
-	   0.398689	          0.826036
-	   0.406072	          0.727545
-	   0.413455	          0.68237
-	   0.420839	          0.604097
-	   0.428222	          0.564447
-	   0.435605	          0.50926
-	   0.442988	          0.418296
-	   0.450371	          0.401137
-	   0.457754	          0.38157
-	   0.465137	          0.316924
-	   0.47252	          0.285304
-	   0.479904	          0.274047
-	   0.487287	          0.222654
-	   0.49467	          0.184202
-	   0.502053	          0.187101
-	   0.509436	          0.163135
-	   0.516819	          0.161624
-	   0.524202	          0.144648
-	   0.531585	          0.110218
-	   0.538969	          0.11377
-	   0.546352	          0.0962749
-	   0.553735	          0.0753946
-	   0.561118	          0.0547619
-	   0.568501	          0.0295599
-	   0.575884	          0.0371162
-	   0.583267	          0.0418372
-	   0.590651	          0.0317467
-	   0.598034	          0.0260881
-	   0.605417	          0.0152841
-	   0.6128	          0.011277
-	   0.620183	          0.0101676
-	   0.627566	          0.0135114
-	   0.634949	          0.0189342
-	   0.642332	          0.0150156
-	   0.649716	          0.00279818
-	   0.657099	          0.0050334
-	   0.664482	          0.00732685
-	   0.671865	          0.00651551
-	   0.679248	          0.00593522
-	   0.686631	          0.0128278
-	   0.694014	          0.0126656
-	   0.701398	          0.010589
-	   0.708781	          0.0161446
-	   0.716164	          0.00995153
-	   0.723547	          0.00501774
-	   0.73093	          0.00169727
-	   0.738313	          0.000238766
+	   0.00738313	          2.46025
+	   0.0147663	          2.96794
+	   0.0221494	          3.32685
+	   0.0295325	          3.65703
+	   0.0369157	          3.94366
+	   0.0442988	          4.31854
+	   0.0516819	          4.46908
+	   0.0590651	          4.94466
+	   0.0664482	          5.24598
+	   0.0738313	          5.1932
+	   0.0812144	          5.29474
+	   0.0885976	          5.27175
+	   0.0959807	          5.21316
+	   0.103364	          5.20293
+	   0.110747	          5.10913
+	   0.11813	          5.08873
+	   0.125513	          5.02228
+	   0.132896	          4.896
+	   0.14028	          4.73293
+	   0.147663	          4.63883
+	   0.155046	          4.68081
+	   0.162429	          4.44284
+	   0.169812	          4.44223
+	   0.177195	          4.26772
+	   0.184578	          4.21105
+	   0.191961	          4.06243
+	   0.199345	          3.92791
+	   0.206728	          3.67148
+	   0.214111	          3.48852
+	   0.221494	          3.48351
+	   0.228877	          3.36806
+	   0.23626	          3.18587
+	   0.243643	          3.06409
+	   0.251026	          2.85634
+	   0.25841	          2.78828
+	   0.265793	          2.74524
+	   0.273176	          2.65709
+	   0.280559	          2.54186
+	   0.287942	          2.31186
+	   0.295325	          2.16727
+	   0.302708	          2.11123
+	   0.310092	          1.96508
+	   0.317475	          1.90964
+	   0.324858	          1.70718
+	   0.332241	          1.6316
+	   0.339624	          1.55126
+	   0.347007	          1.37176
+	   0.35439	          1.32385
+	   0.361773	          1.2278
+	   0.369157	          1.07267
+	   0.37654	          1.0306
+	   0.383923	          0.934167
+	   0.391306	          0.903152
+	   0.398689	          0.813187
+	   0.406072	          0.741718
+	   0.413455	          0.685544
+	   0.420839	          0.606991
+	   0.428222	          0.556452
+	   0.435605	          0.482825
+	   0.442988	          0.407945
+	   0.450371	          0.392104
+	   0.457754	          0.375989
+	   0.465137	          0.28105
+	   0.47252	          0.282316
+	   0.479904	          0.240868
+	   0.487287	          0.232372
+	   0.49467	          0.189073
+	   0.502053	          0.189003
+	   0.509436	          0.146674
+	   0.516819	          0.121864
+	   0.524202	          0.102296
+	   0.531585	          0.0917435
+	   0.538969	          0.0752182
+	   0.546352	          0.0588758
+	   0.553735	          0.0591703
+	   0.561118	          0.0524717
+	   0.568501	          0.0576038
+	   0.575884	          0.0380003
+	   0.583267	          0.0480273
+	   0.590651	          0.0400427
+	   0.598034	          0.0291734
+	   0.605417	          0.050566
+	   0.6128	          0.0365773
+	   0.620183	          0.0153405
+	   0.627566	          0.01561
+	   0.634949	          0.0183371
+	   0.642332	          0.0115134
+	   0.649716	          0.00709101
+	   0.657099	          0.0109101
+	   0.664482	          0.00799373
+	   0.671865	          0.0107729
+	   0.679248	          0.0183007
+	   0.686631	          0.0118272
+	   0.694014	          0.00905285
+	   0.701398	          0.0121353
+	   0.708781	          0.0153191
+	   0.716164	          0.00608282
+	   0.723547	          0.0102841
+	   0.73093	          0.00760815
+	   0.738313	          0.00602714
 
- Deposit energy (MeV) = 0.386151
+ Deposit energy (MeV) = 0.385435
  ----------------------------------------------------------
  ----------------------------------------------------------
  ----------------------------------------------------------
- Total Deposit energy (MeV) = 0.386151
+ Total Deposit energy (MeV) = 0.385435
  ----------------------------------------------------------
  ----------------  END OF RUN SUMMARY ---------------------
  ----------------------------------------------------------
