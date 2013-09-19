@@ -123,10 +123,8 @@ protected:
 						   G4double Z,
 						   G4double pairEnergy);
 
-  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kineticEnergy);
-
-  inline void SetElement(G4int Z);
+  inline G4double MaxSecondaryEnergyForElement(G4double kineticEnergy,
+					       G4double Z);
 
 private:
 
@@ -200,14 +198,18 @@ void G4MuPairProductionModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4MuPairProductionModel::SetElement(G4int Z)
+inline G4double 
+G4MuPairProductionModel::MaxSecondaryEnergyForElement(G4double kineticEnergy,
+						      G4double ZZ)
 {
+  G4int Z = G4lrint(ZZ);
   if(Z != currentZ) {
     currentZ = Z;
     z13 = nist->GetZ13(Z);
     z23 = z13*z13;
     lnZ = nist->GetLOGZ(Z);
   }
+  return kineticEnergy + particleMass*(1.0 - 0.75*sqrte*z13);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -218,17 +220,19 @@ G4MuPairProductionModel::FindScaledEnergy(G4int Z, G4double rand,
 					  G4double yymin, G4double yymax)
 {
   G4double x = rand;
+  G4double res = yymin;
   G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
   if(!pv) { 
     DataCorrupted(Z, logTkin); 
-  } else if(yymin > ymin || yymax < 0.0) {
+  } else {
     G4double pmin = pv->Value(yymin, logTkin);
     G4double pmax = pv->Value(yymax, logTkin);
     G4double p0   = pv->Value(0.0, logTkin);
     if(p0 <= 0.0) { DataCorrupted(Z, logTkin); }
     else { x = (pmin + rand*(pmax - pmin))/p0; }
+    res = pv->FindLinearX(x, logTkin);
   }
-  return pv->FindLinearX(x, logTkin);
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

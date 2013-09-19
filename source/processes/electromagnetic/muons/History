@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 September 2013: V.Ivant (emmuons-V09-06-21)
+- G4MuPairProductionModel - minor cleanup
+
+18 September 2013: V.Ivant (emmuons-V09-06-20)
+- G4MuPairProductionModel - fixed trivial Coverity report; merge 
+    SetElement() and MaxSecondaryEnergy() methods into one
+    MaxSecondaryEnergyForElement() - this is more performant
+    and more safe for reproducibility; use G4Log and G4Exp
+- G4MuBremsstrahlungModel and G4MuBetheBlochModel - use G4Log and 
+    G4Exp
+
 12 September 2013: V.Ivant (emmuons-V09-06-19)
 - G4MuPairProductionModel - fixed bug in sampling when cut value is 
     high; perform common initialisation of internal variables for

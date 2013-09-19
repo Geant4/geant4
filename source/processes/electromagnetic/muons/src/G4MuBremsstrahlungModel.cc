@@ -75,6 +75,8 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,7 +93,7 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
     particle(0),
-    sqrte(sqrt(exp(1.))),
+    sqrte(sqrt(G4Exp(1.))),
     bh(202.4),
     bh1(446.),
     btf(183.),
@@ -249,8 +251,8 @@ G4double G4MuBremsstrahlungModel::ComputeMicroscopicCrossSection(
   G4double vcut = cut/totalEnergy;
   G4double vmax = tkin/totalEnergy;
 
-  G4double aaa = log(vcut);
-  G4double bbb = log(vmax);
+  G4double aaa = G4Log(vcut);
+  G4double bbb = G4Log(vmax);
   G4int    kkk = (G4int)((bbb-aaa)/ak1)+k2 ;
   if(kkk < 1) { kkk = 1; }
 
@@ -262,7 +264,7 @@ G4double G4MuBremsstrahlungModel::ComputeMicroscopicCrossSection(
   {
     for(G4int i=0; i<6; i++)
     {
-      G4double ep = exp(aa + xgi[i]*hhh)*totalEnergy;
+      G4double ep = G4Exp(aa + xgi[i]*hhh)*totalEnergy;
       cross += ep*wgi[i]*ComputeDMicroscopicCrossSection(tkin, Z, ep);
     }
     aa += hhh;
@@ -311,7 +313,7 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
 
   // nucleus contribution logarithm
   G4double rab1=b*z13;
-  G4double fn=log(rab1/(dnstar*(electron_mass_c2+rab0*rab1))*
+  G4double fn=G4Log(rab1/(dnstar*(electron_mass_c2+rab0*rab1))*
               (mass+delta*(dnstar*sqrte-2.))) ;
   if(fn <0.) { fn = 0.; }
   // electron contribution logarithm
@@ -320,7 +322,7 @@ G4double G4MuBremsstrahlungModel::ComputeDMicroscopicCrossSection(
   if(gammaEnergy<epmax1)
   {
     G4double rab2=b1*z13*z13 ;
-    fe=log(rab2*mass/((1.+delta*rmass/(electron_mass_c2*sqrte))*
+    fe=G4Log(rab2*mass/((1.+delta*rmass/(electron_mass_c2*sqrte))*
                               (electron_mass_c2+rab0*rab2))) ;
     if(fe<0.) { fe=0.; }
   }
@@ -386,12 +388,12 @@ void G4MuBremsstrahlungModel::SampleSecondaries(
   G4double lnepksi, epksi;
   G4double func2;
 
-  G4double xmin = log(tmin/MeV);
-  G4double xmax = log(kineticEnergy/tmin);
+  G4double xmin = G4Log(tmin/MeV);
+  G4double xmax = G4Log(kineticEnergy/tmin);
 
   do {
     lnepksi = xmin + G4UniformRand()*xmax;
-    epksi   = MeV*exp(lnepksi);
+    epksi   = MeV*G4Exp(lnepksi);
     func2   = epksi*ComputeDMicroscopicCrossSection(kineticEnergy,Z,epksi);
 
   } while(func2 < func1*G4UniformRand());
