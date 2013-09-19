@@ -23,17 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Author: S. Guatelli (susanna@uow.edu.au), with 
-// the support of Ivana Hrivnacova (Ivana.Hrivnacova@cern.ch)
-// $Id$
+// Author: S. Guatelli, susanna@uow.edu.au
 //
+#include "BrachyActionInitialization.hh"
+#include "BrachyPrimaryGeneratorAction.hh"
+#include "BrachySteppingAction.hh"
+#include "G4RunManager.hh"
 
-#ifndef BrachyAnalysis_h
-#define BrachyAnalysis_h 1
+BrachyActionInitialization::BrachyActionInitialization(BrachyAnalysisManager* analysis_manager):
+G4VUserActionInitialization()
+{
+analysis = analysis_manager;
+}
 
-#include "g4analysis_defs.hh"
 
-using namespace G4Root;
-//using namespace G4Xml;
+BrachyActionInitialization::~BrachyActionInitialization()
+{}
 
-#endif
+void BrachyActionInitialization::BuildForMaster() const
+{
+	// In MT mode, to be clearer, the RunAction class for the master thread might be
+	// different than the one used for the workers.
+	// This RunAction will be called before and after starting the
+	// workers.
+}
+
+
+void BrachyActionInitialization::Build() const
+{   
+ // Initialize the primary particles
+BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction(analysis);
+SetUserAction(primary); 
+
+BrachySteppingAction* stepping = new BrachySteppingAction(analysis);
+SetUserAction(stepping);
+	
+}  
+

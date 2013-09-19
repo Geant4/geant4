@@ -6,9 +6,9 @@
 /source/switch Iodium
 ###### Generation of primary field
 #### Generate gamma deriving from radioactive decay
-#/control/execute iodine_source_primary.mac
+/control/execute iodine_source_primary.mac
 #### ... or generate radioactive decay of iodine
-/control/execute iodine_decay.mac
+#/control/execute iodine_decay.mac
 #
 #
 # Scoring mesh is used to calculate
@@ -24,7 +24,7 @@
 /score/close
 #
 /score/list                                             
-/run/beamOn  100
+/run/beamOn  1000
 #
 # Dump scores to a file
 #

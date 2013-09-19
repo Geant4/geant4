@@ -38,12 +38,16 @@
 //    *******************************
 //
 //
+#ifdef G4MULTITHREADED
+  #include "G4MTRunManager.hh"
+#else
+  #include "G4RunManager.hh"
+#endif
 
-#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "BrachyFactoryIr.hh"
-
+#include "BrachyActionInitialization.hh"
 #include "BrachyAnalysisManager.hh"
 
 #ifdef G4VIS_USE
@@ -54,7 +58,6 @@
 #include "BrachyPhysicsList.hh"
 #include "BrachyPrimaryGeneratorAction.hh"
 #include "G4SDManager.hh"
-#include "BrachyRunAction.hh"
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
@@ -69,27 +72,24 @@
 
 #include "G4ScoringManager.hh"
 #include "BrachyUserScoreWriter.hh"
-#include "BrachySteppingAction.hh"
 
 int main(int argc ,char ** argv)
 
 {
-  G4ScoringManager::GetScoringManager(); // instanciate the interactive scoring manager
 
-  G4RunManager* pRunManager = new G4RunManager;
-
-  // Access to the Scoring Manager pointer
-  G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
-
-// Instantiate the analysis manager
-  BrachyAnalysisManager* analysis = new BrachyAnalysisManager();
-
-#ifdef ANALYSIS_USE
-  // Create ROOT file, histograms and ntuple
-  analysis -> book();
+#ifdef G4MULTITHREADED
+  G4MTRunManager* pRunManager = new G4MTRunManager;
+  pRunManager->SetNumberOfThreads(4); // Is equal to 2 by default
+#else
+ G4RunManager* pRunManager = new G4RunManager;
 #endif
 
+ // Access to the Scoring Manager pointer
+  G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
+
+
   // Overwrite the default output file with user-defined one 
+  BrachyAnalysisManager* analysis = new BrachyAnalysisManager();
   scoringManager->SetScoreWriter(new BrachyUserScoreWriter(analysis));
 
   // Initialize the physics component
@@ -99,15 +99,15 @@ int main(int argc ,char ** argv)
   BrachyDetectorConstruction  *pDetectorConstruction = new  BrachyDetectorConstruction();
   pRunManager -> SetUserInitialization(pDetectorConstruction);
 
-  // Initialize the primary particles
-  BrachyPrimaryGeneratorAction* primary = new BrachyPrimaryGeneratorAction();
-  pRunManager -> SetUserAction(primary);
+//  Analysis Manager
+#ifdef ANALYSIS_USE
+analysis -> book();
+#endif
 
-  BrachySteppingAction* stepping = new BrachySteppingAction(analysis);
-  pRunManager -> SetUserAction(stepping);
+  // User action initialization  
 
-  BrachyRunAction *pRunAction = new BrachyRunAction();
-  pRunManager -> SetUserAction(pRunAction);
+  BrachyActionInitialization* actions = new BrachyActionInitialization(analysis);
+  pRunManager->SetUserInitialization(actions);
  
   //Initialize G4 kernel
   pRunManager -> Initialize();
@@ -148,7 +148,8 @@ int main(int argc ,char ** argv)
    analysis -> save(); 
 #endif
 
-   delete analysis;
+  delete analysis;
+
 
   delete pRunManager;
 

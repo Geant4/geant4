@@ -8,7 +8,7 @@
 
 
 The brachytherapy example is currently maintained and upgraded by Susanna Guatelli (1), with the support of
-Pablo Cirrone (2), Luciano Pandola (3), Dean Cutajar (1) and Stuart P. George (1)
+Pablo Cirrone(2), Luciano Pandola (3), Dean Cutajar (1) and Stuart P. George (1)
 
 1. Centre For Medical Radiation Physics (CMRP), University of Wollongong, NSW, Australia.
 2. LNS, INFN, Catania, Italy.
@@ -38,6 +38,9 @@ In particular in this example it is shown how to:
 - define the physics by means of a Geant4 Modular Physics List
 - switch different physics approaches to model electromagnetic physics
 - save results in an analysis ROOT file using the Geant4 analysis component.               
+
+The example can be executed in multithreading mode
+
 ------------------------------------------------------------------------
 ----> 1.Experimental set-up.                                            
 

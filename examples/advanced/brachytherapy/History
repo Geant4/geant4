@@ -8,6 +8,9 @@ $Id$
 
                       Category History file
                       ---------------------
+19.09.2013 -  S. Guatelli; tag brachy-V09-06-01
+              Multithreading option introduced
+
 09.05.2013 -  S. Guatelli; tag brachy-V09-06-00
               Modular Physics List introduced
               Analysis class introduced using g4tools

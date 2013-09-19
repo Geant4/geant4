@@ -18,12 +18,12 @@
 /score/list  
 ##### Primary radiation Field
 # Generate emitted photons
-#/control/execute iridium_source_primary.mac
+/control/execute iridium_source_primary.mac
 #
 # Alternatively generated Ir decay
-/control/execute iridium_decay.mac
+#/control/execute iridium_decay.mac
 ################################################
-/run/beamOn  100
+/run/beamOn  1000
 #
 # Dump scores to a file
 #

@@ -47,13 +47,15 @@
 #include "G4GeneralParticleSource.hh"
 #include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "BrachyAnalysisManager.hh"
 
-BrachyPrimaryGeneratorAction::BrachyPrimaryGeneratorAction()
+BrachyPrimaryGeneratorAction::BrachyPrimaryGeneratorAction(BrachyAnalysisManager* analysis_manager)
 {
 // Use the GPS to generate primary particles,
 // Particle type, energy position, direction are specified in the 
 // the macro file primary.mac 
  gun = new G4GeneralParticleSource();
+ analysis = analysis_manager;
 }
 
 BrachyPrimaryGeneratorAction::~BrachyPrimaryGeneratorAction()
@@ -64,6 +66,14 @@ delete gun;
 void BrachyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   gun -> GeneratePrimaryVertex(anEvent);
+
+#ifdef ANALYSIS_USE
+ if (gun -> GetParticleDefinition()-> GetParticleName()== "gamma")
+ { 
+ G4double energy = gun -> GetParticleEnergy();
+ analysis -> FillPrimaryParticleHistogram(energy);
+}
+#endif 
 }
 
 

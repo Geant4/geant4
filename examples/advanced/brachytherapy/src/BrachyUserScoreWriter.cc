@@ -34,7 +34,7 @@ Original code from geant4/examples/extended/runAndEvent/RE03, by M. Asai
 #include <fstream>
 #include "BrachyUserScoreWriter.hh"
 #include "G4SystemOfUnits.hh"
-#include "BrachyAnalysis.hh"
+#include "BrachyAnalysisManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4SDParticleFilter.hh"
 #include "G4VPrimitiveScorer.hh"
@@ -124,7 +124,7 @@ for(int x = 0; x < fNMeshSegments[0]; x++) {
 
 #ifdef ANALYSIS_USE          
         // Save the same information in the output analysis file
-        analysis -> FillNtupleWithEnergyDeposition(xx, yy, zz, *(value->second)/keV);
+       analysis -> FillNtupleWithEnergyDeposition(xx, yy, zz, *(value->second)/keV);
 #endif
 }}}} 
 

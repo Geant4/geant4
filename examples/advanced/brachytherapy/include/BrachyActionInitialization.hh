@@ -23,36 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author: S. Guatelli, susanna@uow.edu.au
 //
-// $Id$
-//
-//    ********************************************
-//    *                                          *
-//    *      BrachyPrimaryGeneratorAction.hh     *
-//    *                                          *
-//    ********************************************
-// 
-// code developed by Susanna Guatelli
+#ifndef BrachyActionInitialization_h
+#define BrachyActionInitialization_h 1
 
-#ifndef BrachyPrimaryGeneratorAction_h
-#define BrachyPrimaryGeneratorAction_h 1
+#include "G4VUserActionInitialization.hh"
+#include "BrachyAnalysisManager.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-
-class G4GeneralParticleSource;
 class BrachyAnalysisManager;
 
-class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class BrachyActionInitialization: public G4VUserActionInitialization
 {
- public:
-   BrachyPrimaryGeneratorAction(BrachyAnalysisManager*);
-   ~BrachyPrimaryGeneratorAction();
+  public:
+    BrachyActionInitialization(BrachyAnalysisManager* analysis);
+    virtual ~BrachyActionInitialization();
 
- public:
-  void GeneratePrimaries(G4Event* anEvent);
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
- private:
-  G4GeneralParticleSource* gun;
-  BrachyAnalysisManager* analysis;
+private:
+    BrachyAnalysisManager* analysis;
 };
+
 #endif
+
+    
