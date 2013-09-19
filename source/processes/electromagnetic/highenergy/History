@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 August 2013: V.Ivant (emhighenergy-V09-06-07)
+- G4hPairProductionModel - do not call obsolete SetElement() method;
+    use G4Log and G4Exp
+- G4hBremsstrahlungModel - use G4Log
+
 09 August 2013: V.Ivant (emhighenergy-V09-06-06)
 09 August 2013: V.Ivant (emhighenergy-V09-06-05)
 - G4hBremsstrahlung - use inheritence of G4MuBremsstrahlung; 
