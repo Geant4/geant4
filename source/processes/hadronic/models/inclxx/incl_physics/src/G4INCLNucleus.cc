@@ -54,10 +54,6 @@
 #include "G4INCLCluster.hh"
 #include "G4INCLClusterDecay.hh"
 #include "G4INCLDeJongSpin.hh"
-#include "G4INCLNuclearPotentialEnergyIsospinSmooth.hh"
-#include "G4INCLNuclearPotentialEnergyIsospin.hh"
-#include "G4INCLNuclearPotentialIsospin.hh"
-#include "G4INCLNuclearPotentialConstant.hh"
 #include <iterator>
 #include <cstdlib>
 #include <sstream>
@@ -94,23 +90,8 @@ namespace G4INCL {
       potentialType = IsospinPotential;
       pionPotential = true;
     }
-    switch(potentialType) {
-      case IsospinEnergySmoothPotential:
-        thePotential = new NuclearPotential::NuclearPotentialEnergyIsospinSmooth(theA, theZ, pionPotential);
-        break;
-      case IsospinEnergyPotential:
-        thePotential = new NuclearPotential::NuclearPotentialEnergyIsospin(theA, theZ, pionPotential);
-        break;
-      case IsospinPotential:
-        thePotential = new NuclearPotential::NuclearPotentialIsospin(theA, theZ, pionPotential);
-        break;
-      case ConstantPotential:
-        thePotential = new NuclearPotential::NuclearPotentialConstant(theA, theZ, pionPotential);
-        break;
-      default:
-        INCL_FATAL("Unrecognized potential type at Nucleus creation." << std::endl);
-        break;
-    }
+
+    thePotential = NuclearPotential::createPotential(potentialType, theA, theZ, pionPotential);
 
     ParticleTable::setProtonSeparationEnergy(thePotential->getSeparationEnergy(Proton));
     ParticleTable::setNeutronSeparationEnergy(thePotential->getSeparationEnergy(Neutron));
@@ -128,9 +109,10 @@ namespace G4INCL {
 
   Nucleus::~Nucleus() {
     delete theStore;
-    delete thePotential;
     deleteProjectileRemnant();
-    /* We don't delete the density here any more -- the Factory is caching them
+    /* We don't delete the potential and the density here any more -- Factories
+     * are caching them
+    delete thePotential;
     delete theDensity;*/
   }
 
@@ -167,6 +149,10 @@ namespace G4INCL {
     justCreated.clear();
     toBeUpdated.clear(); // Clear the list of particles to be updated by the propagation model.
     blockedDelta = NULL;
+
+    if(!finalstate) // do nothing if no final state was returned
+      return;
+
     G4double totalEnergy = 0.0;
 
     FinalStateValidity const validity = finalstate->getValidity();

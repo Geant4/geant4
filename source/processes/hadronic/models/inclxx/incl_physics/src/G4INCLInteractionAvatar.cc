@@ -58,10 +58,13 @@ namespace G4INCL {
 
   const G4double InteractionAvatar::locEAccuracy = 1.E-4;
   const G4int InteractionAvatar::maxIterLocE = 50;
+  G4ThreadLocal Particle *InteractionAvatar::backupParticle1 = NULL;
+  G4ThreadLocal Particle *InteractionAvatar::backupParticle2 = NULL;
 
   InteractionAvatar::InteractionAvatar(G4double time, G4INCL::Nucleus *n, G4INCL::Particle *p1)
     : IAvatar(time), theNucleus(n),
-    particle1(p1), particle2(NULL), isPiN(false),
+    particle1(p1), particle2(NULL),
+    isPiN(false),
     violationEFunctor(NULL)
   {
   }
@@ -78,28 +81,31 @@ namespace G4INCL {
   InteractionAvatar::~InteractionAvatar() {
   }
 
+  void InteractionAvatar::deleteBackupParticles() {
+    delete backupParticle1;
+    if(backupParticle2)
+      delete backupParticle2;
+    backupParticle1 = NULL;
+    backupParticle2 = NULL;
+  }
+
   void InteractionAvatar::preInteractionBlocking() {
-    oldParticle1Type = particle1->getType();
-    oldParticle1Energy = particle1->getEnergy();
-    oldParticle1Potential = particle1->getPotentialEnergy();
-    oldParticle1Momentum = particle1->getMomentum();
-    oldParticle1Position = particle1->getPosition();
-    oldParticle1Mass = particle1->getMass();
-    oldParticle1Helicity = particle1->getHelicity();
+    if(backupParticle1)
+      (*backupParticle1) = (*particle1);
+    else
+      backupParticle1 = new Particle(*particle1);
 
     if(particle2) {
-      oldParticle2Type = particle2->getType();
-      oldParticle2Energy = particle2->getEnergy();
-      oldParticle2Potential = particle2->getPotentialEnergy();
-      oldParticle2Momentum = particle2->getMomentum();
-      oldParticle2Position = particle2->getPosition();
-      oldParticle2Mass = particle2->getMass();
-      oldParticle2Helicity = particle2->getHelicity();
-      oldTotalEnergy = oldParticle1Energy + oldParticle2Energy
+      if(backupParticle2)
+        (*backupParticle2) = (*particle2);
+      else
+        backupParticle2 = new Particle(*particle2);
+
+      oldTotalEnergy = particle1->getEnergy() + particle2->getEnergy()
         - particle1->getPotentialEnergy() - particle2->getPotentialEnergy();
       oldXSec = CrossSections::total(particle1, particle2);
     } else {
-      oldTotalEnergy = oldParticle1Energy - particle1->getPotentialEnergy();
+      oldTotalEnergy = particle1->getEnergy() - particle1->getPotentialEnergy();
     }
   }
 
@@ -133,7 +139,7 @@ namespace G4INCL {
       return false;
 
     ThreeVector pos = p->getPosition();
-    p->updateReflectionMomentum();
+    p->rpCorrelate();
     G4double pos2 = pos.mag2();
     const G4double r = theNucleus->getSurfaceRadius(p);
     short iterations=0;
@@ -331,23 +337,9 @@ namespace G4INCL {
   }
 
   void InteractionAvatar::restoreParticles() const {
-    particle1->setType(oldParticle1Type);
-    particle1->setEnergy(oldParticle1Energy);
-    particle1->setPotentialEnergy(oldParticle1Potential);
-    particle1->setMomentum(oldParticle1Momentum);
-    particle1->setPosition(oldParticle1Position);
-    particle1->setMass(oldParticle1Mass);
-    particle1->setHelicity(oldParticle1Helicity);
-
-    if(particle2) {
-      particle2->setType(oldParticle2Type);
-      particle2->setEnergy(oldParticle2Energy);
-      particle2->setPotentialEnergy(oldParticle2Potential);
-      particle2->setMomentum(oldParticle2Momentum);
-      particle2->setPosition(oldParticle2Position);
-      particle2->setMass(oldParticle2Mass);
-      particle2->setHelicity(oldParticle2Helicity);
-    }
+    (*particle1) = (*backupParticle1);
+    if(particle2)
+      (*particle2) = (*backupParticle2);
   }
 
   G4bool InteractionAvatar::enforceEnergyConservation(FinalState * const fs) {
@@ -419,6 +411,7 @@ namespace G4INCL {
     for(ParticleIter i=finalParticles.begin(); i!=finalParticles.end(); ++i, ++iP) {
       (*i)->setMomentum((*iP)*alpha);
       (*i)->adjustEnergyFromMomentum();
+      (*i)->rpCorrelate();
       (*i)->boost(-(*boostVector));
       if(theNucleus)
         theNucleus->updatePotentialEnergy(*i);

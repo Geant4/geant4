@@ -47,25 +47,25 @@ namespace G4INCL {
 
     namespace {
 
-      G4ThreadLocal std::map<G4int,NuclearDensity*> *nuclearDensityCache = NULL;
+      G4ThreadLocal std::map<G4int,NuclearDensity const *> *nuclearDensityCache = NULL;
       G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rpCorrelationTableCache = NULL;
       G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rCDFTableCache = NULL;
       G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *pCDFTableCache = NULL;
 
     }
 
-    NuclearDensity* createDensity(const G4int A, const G4int Z) {
+    NuclearDensity const *createDensity(const G4int A, const G4int Z) {
       if(!nuclearDensityCache)
-        nuclearDensityCache = new std::map<G4int,NuclearDensity*>;
+        nuclearDensityCache = new std::map<G4int,NuclearDensity const *>;
 
       const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
-      const std::map<G4int,NuclearDensity*>::const_iterator mapEntry = nuclearDensityCache->find(nuclideID);
+      const std::map<G4int,NuclearDensity const *>::const_iterator mapEntry = nuclearDensityCache->find(nuclideID);
       if(mapEntry == nuclearDensityCache->end()) {
         InverseInterpolationTable *rpCorrelationTableProton = createRPCorrelationTable(Proton, A, Z);
         InverseInterpolationTable *rpCorrelationTableNeutron = createRPCorrelationTable(Neutron, A, Z);
         if(!rpCorrelationTableProton || !rpCorrelationTableNeutron)
           return NULL;
-        NuclearDensity *density = new NuclearDensity(A, Z, rpCorrelationTableProton, rpCorrelationTableNeutron);
+        NuclearDensity const *density = new NuclearDensity(A, Z, rpCorrelationTableProton, rpCorrelationTableNeutron);
         (*nuclearDensityCache)[nuclideID] = density;
         return density;
       } else {
@@ -231,10 +231,10 @@ namespace G4INCL {
 
     void addDensityToCache(const G4int A, const G4int Z, NuclearDensity * const density) {
       if(!nuclearDensityCache)
-        nuclearDensityCache = new std::map<G4int,NuclearDensity*>;
+        nuclearDensityCache = new std::map<G4int,NuclearDensity const *>;
 
       const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
-      const std::map<G4int,NuclearDensity*>::const_iterator mapEntry = nuclearDensityCache->find(nuclideID);
+      const std::map<G4int,NuclearDensity const *>::const_iterator mapEntry = nuclearDensityCache->find(nuclideID);
       if(mapEntry != nuclearDensityCache->end())
         delete mapEntry->second;
 
@@ -244,7 +244,7 @@ namespace G4INCL {
     void clearCache() {
 
       if(nuclearDensityCache) {
-        for(std::map<G4int,NuclearDensity*>::const_iterator i = nuclearDensityCache->begin(); i!=nuclearDensityCache->end(); ++i)
+        for(std::map<G4int,NuclearDensity const *>::const_iterator i = nuclearDensityCache->begin(); i!=nuclearDensityCache->end(); ++i)
           delete i->second;
         nuclearDensityCache->clear();
         delete nuclearDensityCache;

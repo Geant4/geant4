@@ -218,11 +218,11 @@ namespace G4INCL {
             INCL_ERROR("First collision must be within a target spectator and a non-target spectator");
           }
           if(isParticle1Spectator) {
-            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorPosition(oldParticle1Position.mag());
-            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorMomentum(oldParticle1Momentum.mag());
+            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorPosition(backupParticle1->getPosition().mag());
+            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorMomentum(backupParticle1->getMomentum().mag());
           } else {
-            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorPosition(oldParticle2Position.mag());
-            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorMomentum(oldParticle2Momentum.mag());
+            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorPosition(backupParticle2->getPosition().mag());
+            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorMomentum(backupParticle2->getMomentum().mag());
           }
 
           // Store the elasticity of the first collision

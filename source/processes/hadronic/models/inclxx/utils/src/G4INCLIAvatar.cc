@@ -92,7 +92,7 @@ namespace G4INCL {
     INCL_DEBUG("Random seeds before getChannel: " << Random::getSeeds() << std::endl);
     IChannel *c = getChannel();
     if( !c ) {
-      return new FinalState;
+      return NULL;
     }
     INCL_DEBUG("Random seeds before getFinalState: " << Random::getSeeds() << std::endl);
     FinalState *fs = c->getFinalState();

@@ -16,6 +16,13 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+19 September 2013 - Davide Mancusi (hadr-inclxx-V09-06-23, -24)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc4
+  o Slightly faster, and probably gentler as far as memory thrashing is
+  concerned
+  o A handful of bug fixes
+
 26 August 2013 - Davide Mancusi (hadr-inclxx-V09-06-22)
 -----------------------------------------------------------
 - INCL++ v5.1.13.4

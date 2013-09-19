@@ -57,6 +57,9 @@ namespace G4INCL {
 
   void AvatarAction::afterAvatarAction(IAvatar *a, Nucleus * /*n*/, FinalState *fs) {
 
+    if(!fs) // do nothing if there is no final state
+      return;
+
     INCL_DEBUG("Random seeds after avatar " << a->getID() << ": "
           << G4INCL::Random::getSeeds() << std::endl);
 

@@ -217,6 +217,7 @@ namespace G4INCL {
         ("rp-correlation-n", po::value<G4double>(&rpCorrelationCoefficientNeutron)->default_value(1.), "correlation coefficient for the neutron r-p correlation. Overrides the value specified using the rp-correlation option. Default: 1 (full correlation).")
         ("neutron-skin-thickness", po::value<G4double>(&neutronSkinThickness)->default_value(0.), "thickness of the neutron skin, in fm. Default: 0.")
         ("neutron-skin-additional-diffuseness", po::value<G4double>(&neutronSkinAdditionalDiffuseness)->default_value(0.), "additional diffuseness of the neutron density distribution (with respect to the proton diffuseness), in fm. Default: 0.")
+        ("refraction", po::value<G4bool>(&refraction)->default_value(false), "whether to use refraction when particles are transmitted. Default: false.")
         ;
 
       // Select options allowed on the command line
@@ -778,6 +779,7 @@ namespace G4INCL {
       rpCorrelationCoefficientNeutron = 1.;
       neutronSkinThickness = 0.;
       neutronSkinAdditionalDiffuseness = 0.;
+      refraction=false;
   }
 
   std::string Config::summary() {

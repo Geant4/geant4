@@ -72,7 +72,7 @@ namespace G4INCL {
      */
     G4double getMaxRFromP(const ParticleType t, const G4double p) const;
 
-    G4double getMaxTFromR(const ParticleType t, const G4double r) const;
+    G4double getMinPFromR(const ParticleType t, const G4double r) const;
 
     G4double getMaximumRadius() const { return theMaximumRadius; };
 
@@ -94,7 +94,7 @@ namespace G4INCL {
      *
      * \return the radius
      */
-    G4double getTransmissionRadius(ParticleType type) {
+    G4double getTransmissionRadius(ParticleType type) const {
 // assert(type!=Composite);
       return transmissionRadius[type];
     };
@@ -122,7 +122,7 @@ namespace G4INCL {
     G4double transmissionRadius[UnknownParticle];
 
     InverseInterpolationTable const *rFromP[UnknownParticle];
-    InverseInterpolationTable const *tFromR[UnknownParticle];
+    InverseInterpolationTable const *pFromR[UnknownParticle];
   };
 
 }

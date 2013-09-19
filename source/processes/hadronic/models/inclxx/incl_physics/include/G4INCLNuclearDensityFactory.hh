@@ -52,7 +52,7 @@ namespace G4INCL {
 
     InverseInterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z);
 
-    NuclearDensity *createDensity(const G4int A, const G4int Z);
+    NuclearDensity const *createDensity(const G4int A, const G4int Z);
 
     void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InverseInterpolationTable * const table);
 

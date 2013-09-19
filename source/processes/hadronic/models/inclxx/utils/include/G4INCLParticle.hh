@@ -85,7 +85,8 @@ namespace G4INCL {
       nCollisions(rhs.nCollisions),
       nDecays(rhs.nDecays),
       thePotentialEnergy(rhs.thePotentialEnergy),
-      reflectionMomentum(rhs.reflectionMomentum),
+      rpCorrelated(rhs.rpCorrelated),
+      uncorrelatedMomentum(rhs.uncorrelatedMomentum),
       theHelicity(rhs.theHelicity),
       emissionTime(rhs.emissionTime),
       outOfWell(rhs.outOfWell),
@@ -133,7 +134,8 @@ namespace G4INCL {
       std::swap(outOfWell, rhs.outOfWell);
 
       std::swap(theMass, rhs.theMass);
-      std::swap(reflectionMomentum, rhs.reflectionMomentum);
+      std::swap(rpCorrelated, rhs.rpCorrelated);
+      std::swap(uncorrelatedMomentum, rhs.uncorrelatedMomentum);
     }
 
   public:
@@ -729,13 +731,30 @@ namespace G4INCL {
      * the radius of the sphere where the nucleon moves. It is necessary to
      * introduce fuzzy r-p correlations.
      */
-    G4double getReflectionMomentum() const { return reflectionMomentum; }
+    G4double getReflectionMomentum() const {
+      if(rpCorrelated)
+        return theMomentum.mag();
+      else
+        return uncorrelatedMomentum;
+    }
 
-    /// \brief Set the reflection momentum
-    void setReflectionMomentum(const G4double p) { reflectionMomentum = p; }
+    /// \brief Set the uncorrelated momentum
+    void setUncorrelatedMomentum(const G4double p) { uncorrelatedMomentum = p; }
 
-    /// \brief Set the reflection momentum from the particle momentum
-    void updateReflectionMomentum() { reflectionMomentum = theMomentum.mag(); }
+    /// \brief Make the particle follow a strict r-p correlation
+    void rpCorrelate() { rpCorrelated = true; }
+
+    /// \brief Make the particle not follow a strict r-p correlation
+    void rpDecorrelate() { rpCorrelated = false; }
+
+    /// \brief Get the cosine of the angle between position and momentum
+    G4double getCosRPAngle() const {
+      const G4double norm = thePosition.mag2()*thePropagationMomentum->mag2();
+      if(norm>0.)
+        return thePosition.dot(*thePropagationMomentum) / std::sqrt(norm);
+      else
+        return 1.;
+    }
 
   protected:
     G4int theZ, theA;
@@ -753,7 +772,8 @@ namespace G4INCL {
     G4double thePotentialEnergy;
     long ID;
 
-    G4double reflectionMomentum;
+    G4bool rpCorrelated;
+    G4double uncorrelatedMomentum;
 
   private:
     G4double theHelicity;

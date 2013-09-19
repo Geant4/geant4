@@ -300,6 +300,12 @@ namespace G4INCL {
     /// \brief Set the neutron-skin additional diffuseness
     void setNeutronSkinAdditionalDiffuseness(const G4double d) { neutronSkinAdditionalDiffuseness=d; }
 
+    /// \brief True if we should use refraction
+    G4bool getRefraction() const { return refraction; }
+
+    /// \brief Set the refraction variable
+    void setRefraction(const G4bool r) { refraction = r; }
+
 #if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
     /// \brief Echo the input options.
     std::string const echo() const;
@@ -403,6 +409,8 @@ namespace G4INCL {
 
     G4double neutronSkinThickness;
     G4double neutronSkinAdditionalDiffuseness;
+
+    G4bool refraction;
   };
 
 }

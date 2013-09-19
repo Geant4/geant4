@@ -664,12 +664,12 @@ namespace G4INCL {
     }
 
     G4double getNuclearRadius(const ParticleType t, const G4int A, const G4int Z) {
-// assert(A>0 && Z>=0 && Z<=A);
+// assert(A>=0);
       if(A >= 19 || (A < 6 && A >= 2)) {
         // For large (Woods-Saxon or Modified Harmonic Oscillator) or small
         // (Gaussian) nuclei, the radius parameter is just the nuclear radius
         return getRadiusParameter(t,A,Z);
-      } else if(A < clusterTableASize && Z < clusterTableZSize && A >= 6) {
+      } else if(A < clusterTableASize && Z>=0 && Z < clusterTableZSize && A >= 6) {
         const G4double thisRMS = positionRMS[Z][A];
         if(thisRMS>0.0)
           return thisRMS;
@@ -696,7 +696,7 @@ namespace G4INCL {
     }
 
     G4double getRadiusParameter(const ParticleType t, const G4int A, const G4int Z) {
-// assert(A>0 && Z>=0 && Z<=A);
+// assert(A>0);
       if(A >= 28) {
         // phenomenological radius fit
         G4double r0 = (2.745e-4 * A + 1.063) * std::pow(A, 1.0/3.0);
@@ -704,7 +704,7 @@ namespace G4INCL {
           r0 += neutronSkinThickness;
         return r0;
       } else if(A < 6 && A >= 2) {
-        if(Z<clusterTableZSize) {
+        if(Z<clusterTableZSize && Z>=0) {
           const G4double thisRMS = positionRMS[Z][A];
           if(thisRMS>0.0)
             return thisRMS;

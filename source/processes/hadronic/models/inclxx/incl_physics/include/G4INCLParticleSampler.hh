@@ -86,7 +86,7 @@ namespace G4INCL {
         rpCorrelationCoefficient[t] = corrCoeff;
       }
 
-      ParticleList sampleParticles(ThreeVector const &position) const;
+      ParticleList sampleParticles(ThreeVector const &position);
 
     private:
 

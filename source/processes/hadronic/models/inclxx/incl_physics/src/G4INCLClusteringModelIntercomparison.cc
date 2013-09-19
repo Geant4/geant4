@@ -68,9 +68,13 @@ namespace G4INCL {
 
   const G4double ClusteringModelIntercomparison::limitCosEscapeAngle = 0.7;
 
-  static G4bool cascadingFirstPredicate(Particle *aParticle) {
-    return !aParticle->isTargetSpectator();
+#ifndef INCLXX_IN_GEANT4_MODE
+  namespace {
+    G4bool cascadingFirstPredicate(ConsideredPartner const &aPartner) {
+      return !aPartner.isTargetSpectator;
+    }
   }
+#endif
 
   Cluster* ClusteringModelIntercomparison::getCluster(Nucleus *nucleus, Particle *particle) {
     // Set the maximum clustering mass dynamically, based on the current nucleus
@@ -130,7 +134,7 @@ namespace G4INCL {
       delete [] consideredPartners;
       delete [] isInRunningConfiguration;
       nConsideredMax = 2*theNucleusA;
-      consideredPartners = new Particle *[nConsideredMax];
+      consideredPartners = new ConsideredPartner[nConsideredMax];
       isInRunningConfiguration = new G4bool [nConsideredMax];
       std::fill(isInRunningConfiguration,
                 isInRunningConfiguration + nConsideredMax,
@@ -157,7 +161,7 @@ namespace G4INCL {
         // Keep trace of how much energy is carried by cascading nucleons. This
         // is used to stop the clustering algorithm as soon as possible.
         if(!(*i)->isTargetSpectator())
-          cascadingEnergyPool += (*i)->getEnergy() - (*i)->getPotentialEnergy() - 931.3;
+          cascadingEnergyPool += consideredPartners[nConsidered].energy - consideredPartners[nConsidered].potentialEnergy - 931.3;
         nConsidered++;
         // Make sure we don't exceed the array size
 // assert(nConsidered<=nConsideredMax);
@@ -167,7 +171,7 @@ namespace G4INCL {
     // to participants. As soon as we encounter the first spectator in
     // the list we know that all the remaining nucleons will be
     // spectators too.
-    std::partition(consideredPartners, consideredPartners+nConsidered, cascadingFirstPredicate);
+//    std::partition(consideredPartners, consideredPartners+nConsidered, cascadingFirstPredicate);
 
     // Clear the sets of checked configurations
     // We stop caching two masses short of the max mass -- there seems to be a
@@ -206,9 +210,9 @@ namespace G4INCL {
     return chosenCluster;
   }
 
-  inline G4double ClusteringModelIntercomparison::getPhaseSpace(const G4int oldA, Particle const * const p) {
-    const G4double psSpace = (p->getPosition() - runningPositions[oldA]).mag2();
-    const G4double psMomentum = (p->getMomentum()*oldA - runningMomenta[oldA]).mag2();
+  inline G4double ClusteringModelIntercomparison::getPhaseSpace(const G4int oldA, ConsideredPartner const &p) {
+    const G4double psSpace = (p.position - runningPositions[oldA]).mag2();
+    const G4double psMomentum = (p.momentum*oldA - runningMomenta[oldA]).mag2();
     return psSpace * psMomentum * clusterPosFact2[oldA + 1];
   }
 
@@ -249,10 +253,10 @@ namespace G4INCL {
       // Only accept particles that are not already part of the cluster
       if(isInRunningConfiguration[i]) continue;
 
-      Particle * const candidateNucleon = consideredPartners[i];
+      ConsideredPartner const &candidateNucleon = consideredPartners[i];
 
       // Z and A of the new cluster
-      newZ = oldZ + candidateNucleon->getZ();
+      newZ = oldZ + candidateNucleon.Z;
       newN = newA - newZ;
 
       // Skip this nucleon if we already have too many protons or neutrons
@@ -293,14 +297,14 @@ namespace G4INCL {
       }
 
       // Sum of the total energies of the cluster components
-      runningEnergies[newA] = runningEnergies[oldA] + candidateNucleon->getEnergy();
+      runningEnergies[newA] = runningEnergies[oldA] + candidateNucleon.energy;
       // Sum of the potential energies of the cluster components
-      runningPotentials[newA] = runningPotentials[oldA] + candidateNucleon->getPotentialEnergy();
+      runningPotentials[newA] = runningPotentials[oldA] + candidateNucleon.potentialEnergy;
 
       // Update the available cascading kinetic energy
       G4double oldCascadingEnergyPool = cascadingEnergyPool;
-      if(!candidateNucleon->isTargetSpectator())
-        cascadingEnergyPool -= candidateNucleon->getEnergy() - candidateNucleon->getPotentialEnergy() - 931.3;
+      if(!candidateNucleon.isTargetSpectator)
+        cascadingEnergyPool -= candidateNucleon.energy - candidateNucleon.potentialEnergy - 931.3;
 
       // Check an approximate Coulomb barrier. If the cluster is below
       // 0.5*barrier and the remaining available energy from cascading nucleons
@@ -315,8 +319,8 @@ namespace G4INCL {
       }
 
       // Here the nucleon has passed all the tests. Accept it in the cluster.
-      runningPositions[newA] = (runningPositions[oldA] * oldA + candidateNucleon->getPosition())*clusterPosFact[newA];
-      runningMomenta[newA] = runningMomenta[oldA] + candidateNucleon->getMomentum();
+      runningPositions[newA] = (runningPositions[oldA] * oldA + candidateNucleon.position)*clusterPosFact[newA];
+      runningMomenta[newA] = runningMomenta[oldA] + candidateNucleon.momentum;
 
       // Add the config to the container
       if(cachingEnabled)
@@ -348,7 +352,7 @@ namespace G4INCL {
 
           // Store the running configuration in a ParticleList
           for(G4int j=0; j<oldA; ++j)
-            candidateConfiguration[j] = consideredPartners[runningConfiguration[j]];
+            candidateConfiguration[j] = consideredPartners[runningConfiguration[j]].particle;
 
           // Sanity check on number of nucleons in running configuration
 // assert(std::count(isInRunningConfiguration, isInRunningConfiguration+nConsidered, true)==selectedA-1);

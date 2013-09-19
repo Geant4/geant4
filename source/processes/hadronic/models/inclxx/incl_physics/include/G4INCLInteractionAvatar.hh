@@ -67,6 +67,9 @@ namespace G4INCL {
       /// \brief Max number of iterations for the determination of the local-energy Q-value
       static const G4int maxIterLocE;
 
+      /// \brief Release the memory allocated for the backup particles
+      static void deleteBackupParticles();
+
     protected:
       virtual G4INCL::IChannel* getChannel() = 0;
 
@@ -109,16 +112,11 @@ namespace G4INCL {
             theLocalEnergyType == AlwaysLocalEnergy);
       }
 
-      G4INCL::Nucleus *theNucleus;
-      G4INCL::Particle *particle1, *particle2;
+      Nucleus *theNucleus;
+      Particle *particle1, *particle2;
+      static G4ThreadLocal Particle *backupParticle1, *backupParticle2;
       ThreeVector boostVector;
-      ParticleType oldParticle1Type, oldParticle2Type;
-      G4double oldParticle1Energy, oldParticle2Energy, oldTotalEnergy, oldXSec;
-      G4double oldParticle1Potential, oldParticle2Potential;
-      G4double oldParticle1Mass, oldParticle2Mass;
-      G4double oldParticle1Helicity, oldParticle2Helicity;
-      ThreeVector oldParticle1Momentum, oldParticle2Momentum;
-      ThreeVector oldParticle1Position, oldParticle2Position;
+      G4double oldTotalEnergy, oldXSec;
       G4bool isPiN;
 
     private:

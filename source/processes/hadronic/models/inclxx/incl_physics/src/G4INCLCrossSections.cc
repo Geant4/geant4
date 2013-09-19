@@ -418,14 +418,13 @@ sel100: return sel;
       Particle neutronTarget(Neutron, nullVector, nullVector);
       const G4double sigmapp = total(&protonProjectile, &protonTarget);
       const G4double sigmapn = total(&protonProjectile, &neutronTarget);
-      const G4double sigmanp = total(&neutronProjectile, &protonTarget);
       const G4double sigmann = total(&neutronProjectile, &neutronTarget);
       /* We compute the interaction distance from the largest of the NN cross
        * sections. Note that this is different from INCL4.6, which just takes the
        * average of the four, and will in general lead to a different geometrical
        * cross section.
        */
-      const G4double largestSigma = std::max(sigmapp, std::max(sigmapn, std::max(sigmanp,sigmann)));
+      const G4double largestSigma = std::max(sigmapp, std::max(sigmapn, sigmann));
       const G4double interactionDistance = std::sqrt(largestSigma/Math::tenPi);
 
       return interactionDistance;

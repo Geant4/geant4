@@ -74,7 +74,11 @@ namespace G4INCL {
       if(tf0<0.0) return 0.0;
       pfl0 = std::sqrt(tf0*(tf0 + 2.0*mass));
     }
-    const G4double pl = pfl0*n->getDensity()->getMaxTFromR(t, r);
+    const G4double pReflection = p->getReflectionMomentum()/pfl0;
+    const G4double reflectionRadius = n->getDensity()->getMaxRFromP(p->getType(), pReflection);
+    const G4double pNominal = p->getMomentum().mag()/pfl0;
+    const G4double nominalReflectionRadius = n->getDensity()->getMaxRFromP(p->getType(), pNominal);
+    const G4double pl = pfl0*n->getDensity()->getMinPFromR(t, r*nominalReflectionRadius/reflectionRadius);
     vloc = std::sqrt(pl*pl + mass*mass) - mass;
 
     return vloc;

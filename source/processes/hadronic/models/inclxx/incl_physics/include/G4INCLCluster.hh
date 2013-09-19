@@ -318,7 +318,7 @@ namespace G4INCL {
         (*p)->boost(aBoostVector);
         // Apply Lorentz contraction to the particle position
         (*p)->lorentzContract(aBoostVector,thePosition);
-        (*p)->updateReflectionMomentum();
+        (*p)->rpCorrelate();
       }
 
       INCL_DEBUG("Cluster was boosted with (bx,by,bz)=("

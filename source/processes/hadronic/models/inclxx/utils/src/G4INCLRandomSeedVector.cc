@@ -57,7 +57,7 @@ namespace G4INCL {
         return out;
       for(size_t i=0; i<sv.size()-1; ++i)
         out << sv.at(i) << '\t';
-      out << sv.at(sv.size()-1) << std::endl;
+      out << sv.at(sv.size()-1);
       return out;
     }
 

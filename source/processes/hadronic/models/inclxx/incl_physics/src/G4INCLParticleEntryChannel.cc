@@ -183,15 +183,39 @@ namespace G4INCL {
           theEnergy(theParticle->getEnergy()),
           theMass(theParticle->getMass()),
           theQValueCorrection(correction),
-          theMomentum(theParticle->getMomentum())
-          {}
+          refraction(n->getStore()->getConfig()->getRefraction()),
+          theMomentumDirection(theParticle->getMomentum())
+          {
+            if(refraction) {
+              const ThreeVector &position = theParticle->getPosition();
+              const G4double r2 = position.mag2();
+              if(r2>0.)
+                normal = - position / std::sqrt(r2);
+              G4double cosIncidenceAngle = theParticle->getCosRPAngle();
+              if(cosIncidenceAngle < -1.)
+                sinIncidenceAnglePOut = 0.;
+              else
+                sinIncidenceAnglePOut = theMomentumDirection.mag()*std::sqrt(1.-cosIncidenceAngle*cosIncidenceAngle);
+            } else {
+              sinIncidenceAnglePOut = 0.;
+            }
+          }
         ~IncomingEFunctor() {}
         G4double operator()(const G4double v) const {
           G4double energyInside = std::max(theMass, theEnergy + v - theQValueCorrection);
           theParticle->setEnergy(energyInside);
           theParticle->setPotentialEnergy(v);
+          if(refraction) {
+            // Compute the new direction of the particle momentum
+            const G4double pIn = std::sqrt(energyInside*energyInside-theMass*theMass);
+            const G4double sinRefractionAngle = sinIncidenceAnglePOut/pIn;
+            const G4double cosRefractionAngle = (sinRefractionAngle>1.) ? 0. : std::sqrt(1.-sinRefractionAngle*sinRefractionAngle);
+            const ThreeVector momentumInside = theMomentumDirection - normal * normal.dot(theMomentumDirection) + normal * (pIn * cosRefractionAngle);
+            theParticle->setMomentum(momentumInside);
+          } else {
+            theParticle->setMomentum(theMomentumDirection); // keep the same direction
+          }
           // Scale the particle momentum
-          theParticle->setMomentum(theMomentum); // keep the same direction
           theParticle->adjustMomentumFromEnergy();
           return v - thePotential->computePotentialEnergy(theParticle);
         }
@@ -199,10 +223,13 @@ namespace G4INCL {
       private:
         Particle *theParticle;
         NuclearPotential::INuclearPotential const *thePotential;
-        G4double theEnergy;
-        G4double theMass;
-        G4double theQValueCorrection;
-        ThreeVector theMomentum;
+        const G4double theEnergy;
+        const G4double theMass;
+        const G4double theQValueCorrection;
+        const G4bool refraction;
+        const ThreeVector theMomentumDirection;
+        ThreeVector normal;
+        G4double sinIncidenceAnglePOut;
     } theIncomingEFunctor(theParticle,theNucleus,theQValueCorrection);
 
     G4double v = theNucleus->getPotential()->computePotentialEnergy(theParticle);

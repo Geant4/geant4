@@ -58,6 +58,8 @@
 #include "G4INCLGlobals.hh"
 #include "G4INCLNuclearDensityFactory.hh"
 
+#include "G4INCLINuclearPotential.hh"
+
 #include "G4INCLCoulombDistortion.hh"
 #include "G4INCLICoulomb.hh"
 #include "G4INCLCoulombNone.hh"
@@ -179,6 +181,7 @@ namespace G4INCL {
   }
 
   INCL::~INCL() {
+    G4INCL::InteractionAvatar::deleteBackupParticles();
     G4INCL::Pauli::deleteBlockers();
     G4INCL::CoulombDistortion::deleteCoulomb();
     G4INCL::Random::deleteGenerator();
@@ -187,6 +190,7 @@ namespace G4INCL {
     G4INCL::Logger::deleteLoggerSlave();
 #endif
     G4INCL::NuclearDensityFactory::clearCache();
+    G4INCL::NuclearPotential::clearCache();
     delete avatarAction;
     delete propagationAction;
     delete propagationModel;
@@ -766,32 +770,15 @@ namespace G4INCL {
         ParticleTable::getNaturalIsotopicDistribution(Z);
       IsotopeVector theIsotopes = anIsotopicDistribution.getIsotopes();
       for(IsotopeIter i=theIsotopes.begin(); i!=theIsotopes.end(); ++i) {
-        NuclearDensity *theDensity = NuclearDensityFactory::createDensity(i->theA,Z);
-        if(!theDensity) {
-          INCL_FATAL("NULL density in initUniverseRadius. "
-                << "Projectile type=" << p.theType
-                << ", A=" << p.theA
-                << ", Z=" << p.theZ
-                << ", kinE=" << kineticEnergy
-                << ", target A=" << A
-                << ", Z=" << Z
-                << std::endl);
-        }
-        rMax = std::max(theDensity->getMaximumRadius(), rMax);
+        const G4double pMaximumRadius = ParticleTable::getMaximumNuclearRadius(Proton, i->theA, Z);
+        const G4double nMaximumRadius = ParticleTable::getMaximumNuclearRadius(Neutron, i->theA, Z);
+        const G4double maximumRadius = std::min(pMaximumRadius, nMaximumRadius);
+        rMax = std::max(maximumRadius, rMax);
       }
     } else {
-      NuclearDensity *theDensity = NuclearDensityFactory::createDensity(A,Z);
-      if(!theDensity) {
-        INCL_FATAL("NULL density in initUniverseRadius. "
-              << "Projectile type=" << p.theType
-              << ", A=" << p.theA
-              << ", Z=" << p.theZ
-              << ", kinE=" << kineticEnergy
-              << ", target A=" << A
-              << ", Z=" << Z
-              << std::endl);
-      }
-      rMax = theDensity->getMaximumRadius();
+      const G4double pMaximumRadius = ParticleTable::getMaximumNuclearRadius(Proton, A, Z);
+      const G4double nMaximumRadius = ParticleTable::getMaximumNuclearRadius(Neutron, A, Z);
+      rMax = std::min(pMaximumRadius, nMaximumRadius);
     }
     if(p.theType==Composite || p.theType==Proton || p.theType==Neutron) {
       const G4double interactionDistanceNN = CrossSections::interactionDistanceNN(p, kineticEnergy);

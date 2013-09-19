@@ -54,6 +54,40 @@
 
 namespace G4INCL {
 
+  /** \brief Container for the relevant information
+   *
+   * This struct contains all the information that is relevant for the
+   * clustering algorithm. It is probably more compact than the Particles it
+   * feeds on, hopefully improving cache performance.
+   */
+  struct ConsideredPartner {
+    Particle *particle;
+    G4bool isTargetSpectator;
+    G4int Z;
+    ThreeVector position;
+    ThreeVector momentum;
+    G4double energy;
+    G4double potentialEnergy;
+
+    ConsideredPartner() :
+      particle(NULL),
+      isTargetSpectator(false),
+      Z(0),
+      energy(0.),
+      potentialEnergy(0.)
+    {}
+
+    ConsideredPartner(Particle * const p) :
+      particle(p),
+      isTargetSpectator(particle->isTargetSpectator()),
+      Z(particle->getZ()),
+      position(particle->getPosition()),
+      momentum(particle->getMomentum()),
+      energy(particle->getEnergy()),
+      potentialEnergy(particle->getPotentialEnergy())
+    {}
+  };
+
   /// \brief Cluster coalescence algorithm used in the IAEA intercomparison
   class ClusteringModelIntercomparison : public IClusteringModel {
   public:
@@ -109,7 +143,7 @@ namespace G4INCL {
 
   private:
     void findClusterStartingFrom(const G4int oldA, const G4int oldZ);
-    G4double getPhaseSpace(const G4int oldA, Particle const * const p);
+    G4double getPhaseSpace(const G4int oldA, ConsideredPartner const &p);
 
     Nucleus *theNucleus;
 
@@ -158,17 +192,18 @@ namespace G4INCL {
 
     /** \brief Array of considered cluster partners
      *
-     * A dynamical array of Particle* is allocated on this variable and filled
-     * with pointers to nucleons which are eligible for clustering. We used to
-     * use a ParticleList for this purpose, but this made it very cumbersome to
-     * check whether nucleons had already been included in the running
-     * configuration. Using an array of Particle* coupled with a boolean mask
-     * (\see{isInRunningConfiguration}) reduces the overhead by a large amount.
-     * Running times for 1-GeV p+Pb208 went down by almost 30% (!).
+     * A dynamical array of ConsideredPartner objects is allocated on this
+     * variable and filled with pointers to nucleons which are eligible for
+     * clustering. We used to use a ParticleList for this purpose, but this
+     * made it very cumbersome to check whether nucleons had already been
+     * included in the running configuration. Using an array of Particle*
+     * coupled with a boolean mask (\see{isInRunningConfiguration}) reduces the
+     * overhead by a large amount.  Running times for 1-GeV p+Pb208 went down
+     * by almost 30% (!).
      *
      * Lesson learnt: when you need speed, nothing beats a good ol' array.
      */
-    Particle **consideredPartners;
+    ConsideredPartner *consideredPartners;
 
     /** \brief Array of flags for nucleons in the running configuration
      *

@@ -58,10 +58,6 @@ namespace G4INCL {
     std::fill(theRCDFTable, theRCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
     std::fill(thePCDFTable, thePCDFTable + UnknownParticle, static_cast<InverseInterpolationTable *>(NULL));
     std::fill(rpCorrelationCoefficient, rpCorrelationCoefficient + UnknownParticle, 1.);
-    theRCDFTable[Proton] = NuclearDensityFactory::createRCDFTable(Proton, A, Z);
-    thePCDFTable[Proton] = NuclearDensityFactory::createPCDFTable(Proton, A, Z);
-    theRCDFTable[Neutron] = NuclearDensityFactory::createRCDFTable(Neutron, A, Z);
-    thePCDFTable[Neutron] = NuclearDensityFactory::createPCDFTable(Neutron, A, Z);
     rpCorrelationCoefficient[Proton] = ParticleTable::getRPCorrelationCoefficient(Proton);
     rpCorrelationCoefficient[Neutron] = ParticleTable::getRPCorrelationCoefficient(Neutron);
   }
@@ -97,7 +93,16 @@ namespace G4INCL {
     }
   }
 
-  ParticleList ParticleSampler::sampleParticles(const ThreeVector &position) const {
+  ParticleList ParticleSampler::sampleParticles(const ThreeVector &position) {
+
+    if(sampleOneProton == &ParticleSampler::sampleOneParticleWithoutRPCorrelation) {
+      // sampling without correlation, we need to initialize the CDF tables
+      theRCDFTable[Proton] = NuclearDensityFactory::createRCDFTable(Proton, theA, theZ);
+      thePCDFTable[Proton] = NuclearDensityFactory::createPCDFTable(Proton, theA, theZ);
+      theRCDFTable[Neutron] = NuclearDensityFactory::createRCDFTable(Neutron, theA, theZ);
+      thePCDFTable[Neutron] = NuclearDensityFactory::createPCDFTable(Neutron, theA, theZ);
+    }
+
     ParticleList theList;
     if(theA > 2) {
       ParticleType type = Proton;
@@ -132,9 +137,10 @@ namespace G4INCL {
     const ThreeVector momentumVector = Random::sphereVector(theFermiMomentum);
     const G4double momentumAbs = momentumVector.mag();
     const G4double momentumRatio = momentumAbs/theFermiMomentum;
-    const ThreeVector positionVector = Random::sphereVector(theDensity->getMaxRFromP(t, momentumRatio));
+    const G4double reflectionRadius = theDensity->getMaxRFromP(t, momentumRatio);
+    const ThreeVector positionVector = Random::sphereVector(reflectionRadius);
     Particle *aParticle = new Particle(t, momentumVector, positionVector);
-    aParticle->setReflectionMomentum(momentumAbs);
+    aParticle->setUncorrelatedMomentum(momentumAbs);
     return aParticle;
   }
 
@@ -153,9 +159,10 @@ namespace G4INCL {
     const G4double y = Math::pow13(ranNumbers.second);
     const G4double theFermiMomentum = thePotential->getFermiMomentum(t);
     const ThreeVector momentumVector = Random::normVector(y*theFermiMomentum);
-    const ThreeVector positionVector = Random::sphereVector(theDensity->getMaxRFromP(t, x));
+    const G4double reflectionRadius = theDensity->getMaxRFromP(t, x);
+    const ThreeVector positionVector = Random::sphereVector(reflectionRadius);
     Particle *aParticle = new Particle(t, momentumVector, positionVector);
-    aParticle->setReflectionMomentum(x*theFermiMomentum);
+    aParticle->setUncorrelatedMomentum(x*theFermiMomentum);
     return aParticle;
   }
 

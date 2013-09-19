@@ -381,17 +381,17 @@ namespace G4INCL {
     }
 
     /// \brief Setter for theDensity
-    void setDensity(NuclearDensity * const d) {
+    void setDensity(NuclearDensity const * const d) {
       theDensity=d;
       if(theParticleSampler)
         theParticleSampler->setDensity(theDensity);
     };
 
     /// \brief Getter for theDensity
-    NuclearDensity* getDensity() const { return theDensity; };
+    NuclearDensity const *getDensity() const { return theDensity; };
 
     /// \brief Getter for thePotential
-    NuclearPotential::INuclearPotential* getPotential() const { return thePotential; };
+    NuclearPotential::INuclearPotential const *getPotential() const { return thePotential; };
 
   private:
     /** \brief Compute the recoil kinematics for a 1-nucleon remnant.
@@ -440,10 +440,10 @@ namespace G4INCL {
     ProjectileRemnant *theProjectileRemnant;
 
     /// \brief Pointer to the NuclearDensity object
-    NuclearDensity *theDensity;
+    NuclearDensity const *theDensity;
 
     /// \brief Pointer to the NuclearPotential object
-    NuclearPotential::INuclearPotential *thePotential;
+    NuclearPotential::INuclearPotential const *thePotential;
 
   };
 

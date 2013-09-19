@@ -64,7 +64,7 @@ namespace G4INCL {
   }
 
   FinalState* ParticleEntryAvatar::postInteraction(FinalState *fs) {
-    theParticle->updateReflectionMomentum();
+    theParticle->rpCorrelate();
     return fs;
   }
 
