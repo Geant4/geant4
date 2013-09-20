@@ -54,10 +54,6 @@ class LXeDetectorConstruction : public G4VUserDetectorConstruction
     LXeDetectorConstruction();
     virtual ~LXeDetectorConstruction();
 
-    // To allow use of G4VUserDetectorConstruction protected
-    // functions G4VDetectorConstruction::SetSensitiveDetector(..)
-    friend class LXeMainVolume;
-
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
 

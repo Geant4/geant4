@@ -179,8 +179,7 @@ void LXeMainVolume::ConstructSDandField()
   //logical volume.
   //It does however need to be attached to something or else it doesnt get
   //reset at the begining of events
-  //fConstructor->SetSensitiveDetector("photocath_log"fPhotocath_log, fPmt_SD);
-  fConstructor->SetSensitiveDetector("photocath_log", fPmt_SD);
+  fPhotocath_log->SetSensitiveDetector(fPmt_SD);
 
   // Scint SD
 
@@ -189,8 +188,7 @@ void LXeMainVolume::ConstructSDandField()
     fScint_SD = new LXeScintSD("/LXeDet/scintSD");
     SDman->AddNewDetector(fScint_SD);
   }
-  //fConstructor->SetSensitiveDetector(fScint_log, fScint_SD);
-  fConstructor->SetSensitiveDetector("scint_log", fScint_SD);
+  fScint_log->SetSensitiveDetector(fScint_SD);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
