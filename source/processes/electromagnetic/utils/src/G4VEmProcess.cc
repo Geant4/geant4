@@ -339,10 +339,10 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
       if(theLambdaTable) {
 	bld->InitialiseBaseMaterials(theLambdaTable);
+	FindLambdaMax();
       } else if(theLambdaTablePrim) {
 	bld->InitialiseBaseMaterials(theLambdaTablePrim);
       }
-      if(buildLambdaTable) { FindLambdaMax(); }
 
       // local initialisation of models
       G4bool printing = true;
@@ -397,7 +397,8 @@ void G4VEmProcess::BuildLambdaTable()
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  G4LossTableBuilder* bld = (G4LossTableManager::Instance())->GetTableBuilder();
+  G4LossTableBuilder* bld = 
+    (G4LossTableManager::Instance())->GetTableBuilder();
 
   G4PhysicsLogVector* aVector = 0;
   G4PhysicsLogVector* bVector = 0;
@@ -422,6 +423,7 @@ void G4VEmProcess::BuildLambdaTable()
       // build main table
       if(buildLambdaTable) {
 	delete (*theLambdaTable)[i];
+	(*theLambdaTable)[i] = 0;
 
         G4bool startNull = startFromNull;
 	// if start from zero then change the scale
@@ -471,12 +473,13 @@ void G4VEmProcess::BuildLambdaTable()
 	modelManager->FillLambdaVector(aVectorPrim, couple, false, 
 				       fIsCrossSectionPrim);
 	aVectorPrim->FillSecondDerivatives();
-	G4PhysicsTableHelper::SetPhysicsVector(theLambdaTablePrim, i, aVectorPrim);
+	G4PhysicsTableHelper::SetPhysicsVector(theLambdaTablePrim, i, 
+					       aVectorPrim);
       }
     }
   }
 
-  if(buildLambdaTable) { FindLambdaMax(); }
+  if(theLambdaTable) { FindLambdaMax(); }
 
   if(1 < verboseLevel) {
     G4cout << "Lambda table is built for "
@@ -580,7 +583,8 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   // forced biasing only for primary particles
   if(biasManager) {
     if(0 == track.GetParentID()) {
-      if(biasFlag && biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+      if(biasFlag && 
+	 biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
         return biasManager->GetStepLimit(currentCoupleIndex, previousStepSize);
       }
     }
@@ -609,7 +613,8 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
     } else if(currentInteractionLength < DBL_MAX) {
 
       // subtract NumberOfInteractionLengthLeft using previous step
-      theNumberOfInteractionLengthLeft -= previousStepSize/currentInteractionLength;
+      theNumberOfInteractionLengthLeft -= 
+	previousStepSize/currentInteractionLength;
       //SubtractNumberOfInteractionLengthLeft(previousStepSize);
       if(theNumberOfInteractionLengthLeft < 0.) {
 	theNumberOfInteractionLengthLeft = 0.0;
@@ -709,12 +714,10 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
       G4double eloss = 0.0;
-      weight *= biasManager->ApplySecondaryBiasing(secParticles,
-						   track, currentModel,
-						   &fParticleChange,
-						   eloss, currentCoupleIndex, 
-						   (*theCuts)[currentCoupleIndex],
-						   step.GetPostStepPoint()->GetSafety());
+      weight *= biasManager->ApplySecondaryBiasing(
+        secParticles, track, currentModel, &fParticleChange, eloss, 
+        currentCoupleIndex, (*theCuts)[currentCoupleIndex],
+	step.GetPostStepPoint()->GetSafety());
       if(eloss > 0.0) {
 	eloss += fParticleChange.GetLocalEnergyDeposit();
         fParticleChange.ProposeLocalEnergyDeposit(eloss);
@@ -758,7 +761,7 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
           t->SetWeight(weight);
           pParticleChange->AddSecondary(t); 
           //G4cout << "Secondary(post step) has weight " << t->GetWeight() 
-	  //      << ", Ekin= " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
+	  // << ", Ekin= " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
         } else {
 	  delete dp;
 	  edep += e;

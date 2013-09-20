@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 September 13: V.Ivant (emutils-V09-06-55)
+- G4VEmProcess - fixed Coverity warning 
+
 13 September 13: V.Ivant (emutils-V09-06-54)
 - G4VMultipleScattering, G4VEnergyLossProcess - removed obsolete 
     methods SlavePreparePhysicsTable(..) and SlaveBuildPhysicsTable(..)
