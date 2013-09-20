@@ -96,6 +96,8 @@
 #include <vector>
 #include <map>
 
+#include "G4Threading.hh"
+
 class G4Scene;
 class G4UIcommand;
 class G4UImessenger;
@@ -520,6 +522,11 @@ private:
 public:
   virtual void SetUpForAThread();
 #endif
+
+  virtual void IgnoreStateChanges(G4bool);
+
+protected:
+  G4bool fIgnoreStateChanges;
 };
 
 #include "G4VisManager.icc"

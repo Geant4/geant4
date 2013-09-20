@@ -96,7 +96,8 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   fpRequestedEvent (0),
   fAbortReviewKeptEvents    (false),
   fIsDrawGroup              (false),
-  fDrawGroupNestingDepth    (0)
+  fDrawGroupNestingDepth    (0),
+  fIgnoreStateChanges       (false)
   // All other objects use default constructors.
 {
   fpTrajDrawModelMgr = new G4VisModelManager<G4VTrajectoryModel>("/vis/modeling/trajectories");
@@ -1487,6 +1488,7 @@ void G4VisManager::PrintInvalidPointers () const {
 
 void G4VisManager::BeginOfRun ()
 {
+  if(fIgnoreStateChanges) return;
   //G4cout << "G4VisManager::BeginOfRun" << G4endl;
   fKeptLastEvent = false;
   fEventKeepingSuspended = false;
@@ -1496,6 +1498,7 @@ void G4VisManager::BeginOfRun ()
 
 void G4VisManager::BeginOfEvent ()
 {
+  if(fIgnoreStateChanges) return;
   //G4cout << "G4VisManager::BeginOfEvent" << G4endl;
   fTransientsDrawnThisEvent = false;
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
@@ -1509,6 +1512,7 @@ namespace { G4Mutex visEndOfEventMutex = G4MUTEX_INITIALIZER; }
 
 void G4VisManager::EndOfEvent ()
 {
+  if(fIgnoreStateChanges) return;
 #ifdef G4MULTITHREADED
   G4AutoLock al(&visEndOfEventMutex);
 #endif
@@ -1593,6 +1597,7 @@ void G4VisManager::EndOfEvent ()
 
 void G4VisManager::EndOfRun ()
 {
+  if(fIgnoreStateChanges) return;
   //G4cout << "G4VisManager::EndOfRun" << G4endl;
 
   // Don't call IsValidView unless there is a scene handler.  This
@@ -1911,3 +1916,8 @@ void G4VisManager::SetUpForAThread()
   // new G4VisStateDependent(this); 
 }
 #endif
+
+void G4VisManager::IgnoreStateChanges(G4bool val)
+{
+  fIgnoreStateChanges = val; 
+}

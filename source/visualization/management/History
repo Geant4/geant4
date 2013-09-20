@@ -26,6 +26,10 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+19th September 2013  Makoto Asai  (visman-V09-06-14)
+- Implementing IgnoreStateChanges() to be invoked from RayTracer and
+  other utilities that have their own event loop.
+
 12th September 2013  Makoto Asai  (visman-V09-06-13)
 - Introducing G4VisManager::SetUpForAThread(). This method is invoked
   by G4WorkerRunManager so that G4VisManager will get noticed at the
