@@ -40,6 +40,7 @@ CPPFLAGS += -I$(G4BASE)/digits_hits/detector/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/digits/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/event/include
+CPPFLAGS += -I$(G4BASE)/run/include
 CPPFLAGS += -I$(G4BASE)/track/include
 CPPFLAGS += -I$(G4BASE)/tracking/include
 CPPFLAGS += -I$(G4BASE)/digits_hits/hits/include

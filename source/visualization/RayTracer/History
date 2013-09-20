@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+20th September 2013 Gabriele Cosmo (raytracer-V09-06-06)
+- Fixed GNUmakefile. Added dependency on "run" category...
+
 19th September 2013 Makoto Asai (raytracer-V09-06-05)
 - Removed unused variable in G4RTPrimaryGeneratorAction.hh.
 
