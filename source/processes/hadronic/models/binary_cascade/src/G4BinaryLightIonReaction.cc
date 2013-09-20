@@ -428,10 +428,7 @@ G4ReactionProductVector * G4BinaryLightIonReaction::FuseNucleiAndPrompound(const
    G4double m_nucl=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(tZ,tA);
    G4LorentzVector aL(mom.t()+m_nucl, plop);
    aPreFrag.SetMomentum(aL);
-   G4ParticleDefinition * preFragDef;
-   preFragDef = G4ParticleTable::GetParticleTable()
-   ->FindIon(pZ+tZ,pA+tA,0,pZ+tZ);
-   aPreFrag.SetParticleDefinition(preFragDef);
+
 
    //      G4cout << "Fragment INFO "<< pA+tA <<" "<<pZ+tZ<<" "
    //             << aL <<" "<<preFragDef->GetParticleName()<<G4endl;
@@ -603,9 +600,6 @@ void G4BinaryLightIonReaction::DeExciteSpectatorNucleus(G4ReactionProductVector 
       G4double mFragment=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(spectatorZ,spectatorA);
       pFragment=G4LorentzVector(0,0,0,mFragment+std::max(0.,theStatisticalExEnergy) );
       aProRes.SetMomentum(pFragment);
-      G4ParticleDefinition * resDef;
-      resDef = G4ParticleTable::GetParticleTable()->FindIon(spectatorZ,spectatorA,0,spectatorZ);
-      aProRes.SetParticleDefinition(resDef);
 
       proFrag = theHandler->BreakItUp(aProRes);
 

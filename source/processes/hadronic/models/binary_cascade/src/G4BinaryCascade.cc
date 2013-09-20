@@ -1725,7 +1725,7 @@ G4double G4BinaryCascade::CorrectShortlivedPrimaryForFermi(
         G4int PDGcode=primary->GetDefinition()->GetPDGEncoding();
         Efermi=((G4RKPropagation *)thePropagator)->GetField(PDGcode,primary->GetPosition());
 
-        if ( std::abs(PDGcode > 1000) && PDGcode != 2112 && PDGcode != 2212 )
+        if ( std::abs(PDGcode) > 1000 && PDGcode != 2112 && PDGcode != 2212 )
         {
             Efermi = ((G4RKPropagation *)thePropagator)->GetField(G4Neutron::Neutron()->GetPDGEncoding(),primary->GetPosition());
             G4LorentzVector mom4Primary=primary->Get4Momentum();
@@ -2443,9 +2443,6 @@ G4Fragment * G4BinaryCascade::FindFragments()
     //GF  fragment->SetNumberOfParticles(excitons-holes);
     fragment->SetNumberOfParticles(excitons);
     fragment->SetNumberOfCharged(zCaptured);
-    G4ParticleDefinition * aIonDefinition =
-            G4ParticleTable::GetParticleTable()->FindIon(a,z,0,z);
-    fragment->SetParticleDefinition(aIonDefinition);
 
     return fragment;
 }

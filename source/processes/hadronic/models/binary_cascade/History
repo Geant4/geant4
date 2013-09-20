@@ -12,6 +12,24 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+20 Sep 2013 Gunter Folger      had-binary-V09-06-08
+- revert change introduced for coverity fix, rev 72276, in tag 
+  had-binary-V09-06-07. The tag was rejected, and in teh ways for
+  unrelated fixes.
+  Remove commented lines for G4Fragment.SetParticleDefinition()
+  
+20 Sept 2013 V.Ivanchenko 
+- G4BinaryCascade, G4BinaryLightIonCascade - fixed infinite exception
+    output by commenting out G4Fragment.SetParticleDefinition() for
+    ions - ion definition is not used inside G4Fragment class
+
+10 Sep 2013 Gunter Folger
+- G4BinaryCascade.cc: fix typo, bug report 1511.
+
+12 Jul 2013 Gunter Folger      had-binary-V09-06-07
+- G4BinaryLightIonReaction: fix for coverity report on small leak 
+
  9 May 2013 John Apostolakis	 had-binary-V09-06-06  Retag
  8 May 2013 John Apostolakis	 had-binary-V09-06-05 
 - Revised signature of SetChargeMomentumMass for fields (G4KM_NucleonEqRhs,
