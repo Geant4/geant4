@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 19, 2013, M. Asai (digits_hits-V09-06-08)
+- G4VReadOutGeometry now issues a G4Exception warning message if it is used.
+
+Sep 14, 2013, M. Asai (digits_hits-V09-06-07)
+- The pointer is now overwritten if a detector of same name is registered to G4SDManager.
+
 Sep 11, 2013, M. Asai (digits_hits-V09-06-06)
 - Remove unnecessary G4Exception.
 

@@ -63,6 +63,7 @@ class G4SDStructure
   private:
       G4SDStructure* FindSubDirectory(G4String subD);
       G4String ExtractDirName(G4String aPath);
+      void RemoveSD(G4VSensitiveDetector*);
 
   private:
       std::vector<G4SDStructure*> structure;

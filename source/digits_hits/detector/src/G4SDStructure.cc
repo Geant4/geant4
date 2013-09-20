@@ -83,13 +83,16 @@ void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD,
     G4VSensitiveDetector* tgtSD = GetSD( aSD->GetName() );
     if( tgtSD != 0 )
     {
-      G4cout << aSD->GetName() << " had already stored in "
-           << pathName << G4endl;
+#ifdef G4VERBOSE
+      G4ExceptionDescription ed;
+      ed << aSD->GetName() << " had already been stored in "
+         << pathName << ". Object pointer is overwitten.\n";
+      ed << "It's users' responsibility to delete the old sensitive detector object.";
+      G4Exception("G4SDStructure::AddNewDetector()","DET1010",JustWarning,ed);
+#endif
+      RemoveSD( aSD );
     }
-    else
-    {
-      detector.push_back( aSD );
-    }
+    detector.push_back( aSD );
   }
 }
 
@@ -110,6 +113,16 @@ G4VSensitiveDetector* G4SDStructure::GetSD(G4String aSDName)
     if( aSDName == tgtSD->GetName() ) return tgtSD;
   }
   return 0;
+}
+
+void G4SDStructure::RemoveSD(G4VSensitiveDetector* sd)
+{
+  std::vector<G4VSensitiveDetector*>::iterator itr = detector.begin();
+  for(;itr!=detector.end();itr++)
+  { 
+    if((*itr)==sd) detector.erase(itr);
+    break;
+  }
 }
 
 G4String G4SDStructure::ExtractDirName(G4String aName)
