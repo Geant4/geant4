@@ -23,67 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm1/src/HistoManager.cc
-/// \brief Implementation of the HistoManager class
-//
 // $Id$
-// 
+//
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
+
+#include "ActionInitialization.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "SteppingAction.hh"
+#include "TrackingAction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "DetectorConstruction.hh"
+#include "StackingAction.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "HistoManager.hh"
-#include "G4UnitsTable.hh"
+ActionInitialization::ActionInitialization(DetectorConstruction* det)
+ : G4VUserActionInitialization(),detector(det)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::HistoManager(G4bool isOnMaster)
-  : fFileName("testem1")
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  Book(isOnMaster);
+ SetUserAction(new RunAction(true));
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-HistoManager::~HistoManager()
-{
-  delete G4AnalysisManager::Instance();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::Book(G4bool isOnMaster)
+void ActionInitialization::Build() const
 {
-  // Create or get analysis manager
-  // The choice of analysis technology is done via selection of a namespace
-  // in HistoManager.hh
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isOnMaster);
-  analysisManager->SetFileName(fFileName);
-  analysisManager->SetVerboseLevel(1);
-  analysisManager->SetFirstHistoId(1);     // start histogram numbering from 1
-  analysisManager->SetActivation(true);    // enable inactivation of histograms
   
-  // Define histograms start values
-  const G4int kMaxHisto = 6;
-  const G4String id[] = { "1", "2", "3" , "4", "5", "6"};
-  const G4String title[] = 
-                { "total track length of primary particle",      //1
-                  "nb steps of primary particle",                //2
-                  "step size of primary particle",               //3
-                  "total energy deposit",                        //4
-                  "energy of charged secondaries at creation",   //5
-                  "energy of neutral secondaries at creation"    //6                  
-                 };
-  // Default values (to be reset via /analysis/h1/set command)               
-  G4int nbins = 100;
-  G4double vmin = 0.;
-  G4double vmax = 100.;
+  PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(detector);
+  SetUserAction(prim);
 
-  // Create all histograms as inactivated 
-  // as we have not yet set nbins, vmin, vmax
-  for (G4int k=0; k<kMaxHisto; k++) {
-    G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
-    analysisManager->SetH1Activation(ih, false);    
-  }
-}
+  RunAction* run = new RunAction(false,detector,prim);
+  SetUserAction(run); 
+  
+  EventAction* event = new EventAction();
+  SetUserAction(event);
+
+  SetUserAction(new TrackingAction(prim,run));
+
+  SetUserAction(new SteppingAction(run,event));
+
+  SetUserAction(new StackingAction());
+
+
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

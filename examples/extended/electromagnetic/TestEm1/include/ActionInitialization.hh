@@ -23,38 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm1/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
-//
 // $Id$
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
+class DetectorConstruction;
 
-#include "g4root.hh"
-////#include "g4xml.hh"
-////#include "g4hbook.hh"
+/// Action initialization class.
+///
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoManager
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-   HistoManager(G4bool isOnMaster);
-  ~HistoManager();
+    ActionInitialization(DetectorConstruction*);
+    virtual ~ActionInitialization();
+
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
   private:
-    void Book(G4bool isOnMaster);
+    DetectorConstruction* detector;
 
-    G4String fFileName;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    

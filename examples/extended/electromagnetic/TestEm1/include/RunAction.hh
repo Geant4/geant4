@@ -50,7 +50,7 @@ class HistoManager;
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+    RunAction(G4bool master, DetectorConstruction* det=NULL, PrimaryGeneratorAction* prim=NULL);
    ~RunAction();
 
   public:
