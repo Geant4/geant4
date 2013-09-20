@@ -24,6 +24,18 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+19th September 2013 Makoto Asai (raytracer-V09-06-05)
+- Removed unused variable in G4RTPrimaryGeneratorAction.hh.
+
+19th September 2013 Makoto Asai (raytracer-V09-06-04)
+- Both G4TheRayTracer and G4TheMTRayTracer invoke G4VVisManager::IgnoreStateChanges()
+  method to avoid unnecessary state-change handling.
+- Co-working with greps-V09-06-10.
+
+17th September 2013 Makoto Asai (raytracer-V09-06-03)
+- Introducing G4TheMTRayTracer that is multi-threaded. 
+- Co-working with run-V09-06-100 and greps-V09-06-09.
+
 15th September 2013 Makoto Asai (raytracer-V09-06-02)
 - Move data member of G4RTSteppingAction static. Preparation toward
   making G4TheRayTracer class multi-threaded.

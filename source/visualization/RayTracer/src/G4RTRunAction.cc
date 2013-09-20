@@ -24,45 +24,34 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RTRunAction.cc 66264 2012-12-14 10:17:44Z allison $
 //
 //
-
-// class description:
-//
-//  This is a concrete class of G4UserSteppingAction. This class is used
-// by G4RayTracer for managing a ray tracked through volumes. An object
-// of this class is constructed by G4RayTracer and set to G4SteppingManager
-// with replacement of user defined stepping action during the period of
-// ray tracing.
 //
 
-//////////////////////
-//G4RTSteppingAction
-/////////////////////
+///////////////////////
+//G4RTRunAction.cc
+///////////////////////
 
+#include "G4RTRunAction.hh"
+#include "G4RTRun.hh"
+#include "G4SDManager.hh"
 
-#ifndef G4RTSteppingAction_h
-#define G4RTSteppingAction_h 1
+G4RTRunAction::G4RTRunAction(){;}
+G4RTRunAction::~G4RTRunAction(){;}
 
+G4Run* G4RTRunAction::GenerateRun()
+{ return new G4RTRun; }
 
-#include "G4UserSteppingAction.hh"
-#include "globals.hh"
-
-class G4RTSteppingAction : public G4UserSteppingAction
+void G4RTRunAction::BeginOfRunAction(const G4Run*)
 {
-  public:
-    G4RTSteppingAction();
-    virtual ~G4RTSteppingAction(){;}
+  G4SDManager* theSDMan = G4SDManager::GetSDMpointerIfExist();
+  if(theSDMan) theSDMan->Activate("/",false); 
+}
 
-    virtual void UserSteppingAction(const G4Step*);
+void G4RTRunAction::EndOfRunAction(const G4Run*)
+{
+  G4SDManager* theSDMan = G4SDManager::GetSDMpointerIfExist();
+  if(theSDMan) theSDMan->Activate("/",true); 
+}
 
-  private:
-    static G4bool ignoreTransparency;
-
-  public:
-    static void SetIgnoreTransparency(G4bool val);
-    static G4bool GetIgnoreTransparency();
-};
-
-#endif

@@ -53,6 +53,7 @@
 #include "G4TransportationManager.hh"
 #include "G4RegionStore.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4VVisManager.hh"
 
 G4TheRayTracer::G4TheRayTracer(G4VFigureFileMaker* figMaker,
 			       G4VRTScanner* scanner)
@@ -66,7 +67,7 @@ G4TheRayTracer::G4TheRayTracer(G4VFigureFileMaker* figMaker,
   theRayTracerStackingAction = 0;
   theRayTracerTrackingAction = 0;
   theRayTracerSteppingAction = 0;
-  theMessenger = G4RTMessenger::GetInstance(this,theRayTracerSteppingAction);
+  theMessenger = G4RTMessenger::GetInstance(this);
   theEventManager = G4EventManager::GetEventManager();
 
   nColumn = 640;
@@ -187,6 +188,9 @@ G4bool G4TheRayTracer::CreateBitMap()
   G4double viewSpanY = stepAngle*nRow;
   G4bool succeeded;
 
+  G4VVisManager* visMan = G4VVisManager::GetConcreteInstance();
+  visMan->IgnoreStateChanges(true);
+
 // Confirm process(es) of Geantino is initialized
   G4VPhysicalVolume* pWorld =
 	G4TransportationManager::GetTransportationManager()->
@@ -281,6 +285,7 @@ G4bool G4TheRayTracer::CreateBitMap()
   }
 
   theStateMan->SetNewState(G4State_Idle); 
+  visMan->IgnoreStateChanges(false);
   return true;
 }
 

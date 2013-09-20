@@ -24,45 +24,54 @@
 // ********************************************************************
 //
 //
-// $Id$
-//
-//
-
-// class description:
-//
-//  This is a concrete class of G4UserSteppingAction. This class is used
-// by G4RayTracer for managing a ray tracked through volumes. An object
-// of this class is constructed by G4RayTracer and set to G4SteppingManager
-// with replacement of user defined stepping action during the period of
-// ray tracing.
+// $Id: G4RTPrimaryGeneratorAction.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 
-//////////////////////
-//G4RTSteppingAction
-/////////////////////
+#ifndef G4RTPrimaryGeneratorAction_h
+#define G4RTPrimaryGeneratorAction_h 1
 
-
-#ifndef G4RTSteppingAction_h
-#define G4RTSteppingAction_h 1
-
-
-#include "G4UserSteppingAction.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
+class G4Event;
+class G4ParticleDefinition;
+class G4VPhysicalVolume;
 #include "globals.hh"
+#include "geomdefs.hh"
+#include "G4ThreeVector.hh"
 
-class G4RTSteppingAction : public G4UserSteppingAction
+class G4RTPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    G4RTSteppingAction();
-    virtual ~G4RTSteppingAction(){;}
-
-    virtual void UserSteppingAction(const G4Step*);
-
-  private:
-    static G4bool ignoreTransparency;
+    G4RTPrimaryGeneratorAction();
+    virtual ~G4RTPrimaryGeneratorAction();
 
   public:
-    static void SetIgnoreTransparency(G4bool val);
-    static G4bool GetIgnoreTransparency();
+    virtual void GeneratePrimaries(G4Event* anEvent);
+    void SetUp();
+
+  private:
+    G4ParticleDefinition* particle_definition;
+    G4double              particle_energy;
+    G4double              particle_time;
+    G4ThreeVector         particle_polarization;
+
+    G4VPhysicalVolume*    pWorld;
+    EInside               whereisit;
+
+    G4int nColumn;
+    G4int nRow;
+
+    G4ThreeVector eyePosition;
+    G4ThreeVector eyeDirection;
+    G4ThreeVector up;
+    G4double headAngle;
+    G4double viewSpan;
+    G4double stepAngle;
+    G4double viewSpanX;
+    G4double viewSpanY;
+
+    G4bool distortionOn;
 };
 
 #endif
+
+

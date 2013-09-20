@@ -24,45 +24,55 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RTRun.hh 73913 2013-09-16 21:51:09Z asaim $
 //
 //
 
 // class description:
 //
-//  This is a concrete class of G4UserSteppingAction. This class is used
-// by G4RayTracer for managing a ray tracked through volumes. An object
-// of this class is constructed by G4RayTracer and set to G4SteppingManager
-// with replacement of user defined stepping action during the period of
-// ray tracing.
-//
 
 //////////////////////
-//G4RTSteppingAction
+//G4RTRun
 /////////////////////
 
+#ifndef G4RTRun_h
+#define G4RTRun_h 1
 
-#ifndef G4RTSteppingAction_h
-#define G4RTSteppingAction_h 1
-
-
-#include "G4UserSteppingAction.hh"
 #include "globals.hh"
+#include "G4Run.hh"
+#include "G4THitsMap.hh"
+#include "G4Colour.hh"
 
-class G4RTSteppingAction : public G4UserSteppingAction
+class G4Event;
+class G4TheMTRayTracer;
+class G4VisAttributes;
+class G4RayTrajectoryPoint;
+
+class G4RTRun : public G4Run
 {
   public:
-    G4RTSteppingAction();
-    virtual ~G4RTSteppingAction(){;}
+    G4RTRun();
+    virtual ~G4RTRun();
 
-    virtual void UserSteppingAction(const G4Step*);
+    virtual void RecordEvent(const G4Event*);
+    virtual void Merge(const G4Run*);
 
   private:
-    static G4bool ignoreTransparency;
+    G4THitsMap<G4Colour>* colorMap;
 
   public:
-    static void SetIgnoreTransparency(G4bool val);
-    static G4bool GetIgnoreTransparency();
+    G4THitsMap<G4Colour>* GetMap() const { return colorMap; }
+
+  private:
+    G4Colour backgroundColour;
+    G4ThreeVector lightDirection;
+    G4double attenuationLength;
+
+  private:
+    G4Colour GetSurfaceColour(G4RayTrajectoryPoint*);
+    G4Colour GetMixedColour(G4Colour,G4Colour,G4double);
+    G4Colour Attenuate(G4RayTrajectoryPoint*,G4Colour);
+    G4bool ValidColour(const G4VisAttributes*);
 };
 
 #endif

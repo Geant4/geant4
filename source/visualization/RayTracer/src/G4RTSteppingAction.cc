@@ -79,3 +79,7 @@ void G4RTSteppingAction::UserSteppingAction(const G4Step* aStep)
   }
 }
 
+void G4RTSteppingAction::SetIgnoreTransparency(G4bool val)
+{ ignoreTransparency = val; }
+G4bool G4RTSteppingAction::GetIgnoreTransparency()
+{ return ignoreTransparency; }

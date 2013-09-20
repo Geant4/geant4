@@ -24,45 +24,32 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RTRunAction.hh 73913 2013-09-16 21:51:09Z asaim $
 //
 //
 
 // class description:
 //
-//  This is a concrete class of G4UserSteppingAction. This class is used
-// by G4RayTracer for managing a ray tracked through volumes. An object
-// of this class is constructed by G4RayTracer and set to G4SteppingManager
-// with replacement of user defined stepping action during the period of
-// ray tracing.
-//
 
 //////////////////////
-//G4RTSteppingAction
+//G4RTRunAction
 /////////////////////
 
+#ifndef G4RTRunAction_h
+#define G4RTRunAction_h 1
 
-#ifndef G4RTSteppingAction_h
-#define G4RTSteppingAction_h 1
-
-
-#include "G4UserSteppingAction.hh"
+#include "G4UserRunAction.hh"
 #include "globals.hh"
 
-class G4RTSteppingAction : public G4UserSteppingAction
+class G4RTRunAction : public G4UserRunAction
 {
   public:
-    G4RTSteppingAction();
-    virtual ~G4RTSteppingAction(){;}
+    G4RTRunAction();
+    virtual ~G4RTRunAction();
 
-    virtual void UserSteppingAction(const G4Step*);
-
-  private:
-    static G4bool ignoreTransparency;
-
-  public:
-    static void SetIgnoreTransparency(G4bool val);
-    static G4bool GetIgnoreTransparency();
+    virtual G4Run* GenerateRun();
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
 };
 
 #endif
