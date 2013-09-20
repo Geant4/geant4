@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th September 2013  Makoto Asai (greps-V09-06-11)
+- Fix compilation error for sequential mode.
+
+19th September 2013  Makoto Asai (greps-V09-06-10)
+- Introducing G4VVisManager::IgnoreStateChanges() virtual method.
+  This method should be invoked by a class that has its own event loop,
+  such as the RayTracer, material scanner, etc. If the argument is true,
+  the following state changes among Idle, GeomClosed and EventProc are
+  caused by such a class, and thus not by the ordinary event simulation.
+  The same method with false should be invoked once such an event loop
+  is over.
+
 17th September 2013  Makoto Asai (greps-V09-06-09)
 - G4Colour now has a dummy += operator.
 

@@ -219,11 +219,21 @@ protected:
 
   static G4VVisManager* fpConcreteInstance;  // Pointer to real G4VisManager.
 
-#ifdef G4MULTITHREADED
 public:
+
+#ifdef G4MULTITHREADED
   // This method is invoked by G4WorkerRunManager
   virtual void SetUpForAThread() = 0;
 #endif
+
+  // This method shoud be invoked by a class that has its own event loop, 
+  // such as the RayTracer, material scanner, etc. If the argument is true,
+  // the following state changes among Idle, GeomClosed and EventProc are
+  // caused by such a class, and thus not by the ordinary event simulation.
+  // The same method with false should be invoked once such an event loop 
+  // is over.
+  virtual void IgnoreStateChanges(G4bool);
+  
 };
 
 #endif

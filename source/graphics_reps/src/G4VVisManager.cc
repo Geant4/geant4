@@ -45,3 +45,7 @@ void G4VVisManager::SetConcreteInstance (G4VVisManager* man)
 {
   fpConcreteInstance = man;
 }
+
+void G4VVisManager::IgnoreStateChanges (G4bool)
+{;}
+
