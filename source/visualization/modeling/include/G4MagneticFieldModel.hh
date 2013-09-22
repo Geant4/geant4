@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticFieldModel.hh 66264 2012-12-14 10:17:44Z allison $
+// $Id$
 //
 // 
 // John Allison  17th August 2013
@@ -57,10 +57,10 @@ private:
   G4MagneticFieldModel (const G4MagneticFieldModel&);
   G4MagneticFieldModel& operator = (const G4MagneticFieldModel&);
 
-  // No. of data points sampled per half scene.
-  // Note that total number of data poinrs sampled is (2*n+1)^3, which
-  // can get very big very soon.
-  G4int fNDataPointsPerHalfScene;
+  // No. of data points sampled per maximum half scene extent.
+  // Note that total number of data poinrs sampled can be as high as
+  // (2*n+1)^3, which can get very big very soon.
+  G4int fNDataPointsPerMaxHalfScene;
 };
 
 #endif

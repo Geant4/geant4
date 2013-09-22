@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticFieldModel.cc 66839 2013-01-14 13:19:31Z allison $
+// $Id$
 //
 // 
 // John Allison  17th August 2013
@@ -49,13 +49,13 @@ G4MagneticFieldModel::~G4MagneticFieldModel ()
 {
 }
 
-G4MagneticFieldModel::G4MagneticFieldModel (G4int nDataPointsPerHalfScene)
-: fNDataPointsPerHalfScene(nDataPointsPerHalfScene)
+G4MagneticFieldModel::G4MagneticFieldModel (G4int nDataPointsPerMaxHalfScene)
+: fNDataPointsPerMaxHalfScene(nDataPointsPerMaxHalfScene)
 {
   fType = "G4MagneticFieldModel";
   fGlobalTag = fType;
   std::ostringstream oss;
-  oss << fNDataPointsPerHalfScene;
+  oss << fNDataPointsPerMaxHalfScene;
   fGlobalDescription = fType + ':' + oss.str();
 }
 
@@ -113,10 +113,15 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
   }
 
   // Constants
-  const G4int nSamples = 2 * fNDataPointsPerHalfScene + 1;
-  const G4int nSamples2 = nSamples * nSamples;
-  const G4int nSamples3 = nSamples * nSamples * nSamples;  // (2*n+1)^3 arrows!!
-  const G4double interval = maxHalfScene / fNDataPointsPerHalfScene;
+  const G4double interval = maxHalfScene / fNDataPointsPerMaxHalfScene;
+  const G4int nDataPointsPerXHalfScene = G4int(xHalfScene / interval);
+  const G4int nDataPointsPerYHalfScene = G4int(yHalfScene / interval);
+  const G4int nDataPointsPerZHalfScene = G4int(zHalfScene / interval);
+  const G4int nXSamples = 2 * nDataPointsPerXHalfScene + 1;
+  const G4int nYSamples = 2 * nDataPointsPerYHalfScene + 1;
+  const G4int nZSamples = 2 * nDataPointsPerZHalfScene + 1;
+  const G4int nSamples = nXSamples * nYSamples * nZSamples;
+  const G4int nSamples3 = nSamples * 3;
   const G4double arrowLengthMax = 0.8 * interval;
   const G4int nResults = 6;  // 3 B-field + 3 E-field.
 
@@ -125,84 +130,75 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
   double result[nResults];
 
   // Working vectors for field values, etc.
-  std::vector<G4double> BField(nSamples3 * 3);       // Initialises to zero.
-  std::vector<G4double> BFieldMagnitude(nSamples3);  // Initialises to zero.
-  std::vector<G4double> xyz(nSamples3 * 3);          // Initialises to zero.
+  std::vector<G4double> BField(nSamples3);          // Initialises to zero.
+  std::vector<G4double> BFieldMagnitude(nSamples);  // Initialises to zero.
+  std::vector<G4double> xyz(nSamples3);             // Initialises to zero.
 
   // Get field values and ascertain maximum field.
   G4double BFieldMagnitudeMax = -std::numeric_limits<G4double>::max();
-  for (G4int i = 0; i < nSamples; i++) {
-    G4double x = (i - fNDataPointsPerHalfScene) * interval;
-    if (x >= xMin && x <= xMax) {
-      position_time[0] = x;
-      for (G4int j = 0; j < nSamples; j++) {
-        G4double y = (j - fNDataPointsPerHalfScene) * interval;
-        if (y >= yMin && y <= yMax) {
-          position_time[1] = y;
-          for (G4int k = 0; k < nSamples; k++) {
-            G4double z = (k - fNDataPointsPerHalfScene) * interval;
-            if (z >= zMin && z <= zMax) {
-              position_time[2] = z;
-              // Calculate indices into working vectors
-              const G4int ijk = i * nSamples2 + j * nSamples + k;
-              const G4int ijk3 = ijk * 3;
-              // Find logical volume at this location.
-              G4ThreeVector pos(x,y,z);
-              const G4VPhysicalVolume* pPV =
-              navigator->LocateGlobalPointAndSetup(pos,0,false,true);
-              // Find field.
-              const G4Field* field = globalField;
-              if (pPV) {
-//                if (pPV->GetName() != "World") {
-//                  G4cout << pPV->GetName() << ":" << pPV->GetCopyNo() << G4endl;
-//                }
-                const G4LogicalVolume* pLV = pPV->GetLogicalVolume();
-                if (pLV) {
-                  // Value for Region, if any, overrides
-                  G4Region* pRegion = pLV->GetRegion();
-                  if (pRegion) {
-                    G4FieldManager* pRegionFieldMgr = pRegion->GetFieldManager();
-                    if (pRegionFieldMgr) {
-                      field = pRegionFieldMgr->GetDetectorField();
-//                      G4cout << "Region with field" << G4endl;
-                    }
-                  }
-                  // 'Local' value from logical volume, if any, overrides
-                  G4FieldManager* pLVFieldMgr = pLV->GetFieldManager();
-                  if (pLVFieldMgr) {
-                    field = pLVFieldMgr->GetDetectorField();
-//                    G4cout << "Logical volume with field" << G4endl;
-                  }
-                }
-              }
-              // If field found, get values and store in working vectors.
-              if (field) {
-                // Get field values in result array.
-                field->GetFieldValue(position_time,result);
-//                G4cout
-//                << "BField/T:"
-//                << " " << result[0]/tesla
-//                << " " << result[1]/tesla
-//                << " " << result[2]/tesla
-//                << G4endl;
-                // Store B-field components.
-                for (G4int l = 0; l < 3; l++) {
-                  BField[ijk3 + l] = result[l];
-                }
-                // Calculate magnitude and store.
-                G4double mag = sqrt
-                (result[0]*result[0]+result[1]*result[1]+result[2]*result[2]);
-                BFieldMagnitude[ijk] = mag;
-                // Store position.
-                xyz[ijk3] = x;
-                xyz[ijk3 + 1] = y;
-                xyz[ijk3 + 2] = z;
-                // Find maximum field magnitude.
-                if (mag > BFieldMagnitudeMax) {
-                  BFieldMagnitudeMax = mag;
-                }
+  for (G4int i = 0; i < nXSamples; i++) {
+    G4double x = (i - nDataPointsPerXHalfScene) * interval;
+    position_time[0] = x;
+    for (G4int j = 0; j < nYSamples; j++) {
+      G4double y = (j - nDataPointsPerYHalfScene) * interval;
+      position_time[1] = y;
+      for (G4int k = 0; k < nZSamples; k++) {
+        G4double z = (k - nDataPointsPerZHalfScene) * interval;
+        position_time[2] = z;
+        // Calculate indices into working vectors
+        const G4int ijk = i * nYSamples * nZSamples + j * nZSamples + k;
+        const G4int ijk3 = ijk * 3;
+        // Find volume at this location.
+        G4ThreeVector pos(x,y,z);
+        const G4VPhysicalVolume* pPV =
+        navigator->LocateGlobalPointAndSetup(pos,0,false,true);
+        const G4Field* field = globalField;
+        if (pPV) {
+          // Get logical volume.
+          const G4LogicalVolume* pLV = pPV->GetLogicalVolume();
+          if (pLV) {
+            // Value for Region, if any, overrides
+            G4Region* pRegion = pLV->GetRegion();
+            if (pRegion) {
+              G4FieldManager* pRegionFieldMgr = pRegion->GetFieldManager();
+              if (pRegionFieldMgr) {
+                field = pRegionFieldMgr->GetDetectorField();
+                // G4cout << "Region with field" << G4endl;
               }
             }
+            // 'Local' value from logical volume, if any, overrides
+            G4FieldManager* pLVFieldMgr = pLV->GetFieldManager();
+            if (pLVFieldMgr) {
+              field = pLVFieldMgr->GetDetectorField();
+              // G4cout << "Logical volume with field" << G4endl;
+            }
+          }
+        }
+        // If field found, get values and store in working vectors.
+        if (field) {
+          // Get field values in result array.
+          field->GetFieldValue(position_time,result);
+          //                G4cout
+          //                << "BField/T:"
+          //                << " " << result[0]/tesla
+          //                << " " << result[1]/tesla
+          //                << " " << result[2]/tesla
+          //                << G4endl;
+          // Store B-field components.
+          for (G4int l = 0; l < 3; l++) {
+            BField[ijk3 + l] = result[l];
+          }
+          // Calculate magnitude and store.
+          G4double mag = sqrt
+          (result[0]*result[0]+result[1]*result[1]+result[2]*result[2]);
+          BFieldMagnitude[ijk] = mag;
+          // Store position.
+          xyz[ijk3] = x;
+          xyz[ijk3 + 1] = y;
+          xyz[ijk3 + 2] = z;
+          // Find maximum field magnitude.
+          if (mag > BFieldMagnitudeMax) {
+            BFieldMagnitudeMax = mag;
           }
         }
       }
@@ -216,7 +212,7 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     return;
   }
 
-  for (G4int i = 0; i < nSamples3; i++) {
+  for (G4int i = 0; i < nSamples; i++) {
     if (BFieldMagnitude[i] > 0) {
       const G4int i3 = i * 3;
       const G4double x = xyz[i3];

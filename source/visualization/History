@@ -24,6 +24,32 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+21st September 2013  John Allison  (vis-V09-06-26)
+- modeling-V09-06-17: Fix compiler warnings.
+
+20th September 2013  John Allison  (vis-V09-06-25 needs greps-V09-06-11)
+- modeling-V09-06-16:
+  o G4MagneticFieldModel:
+  - Added $Id functionality.
+  - Allowed for scene with extent not necessarily equal in x, y and z.
+- visman-V09-06-15
+  o First implementation of multithreading visualisation:
+  o Drawing from user code is explicitly ignored.
+  o Events are kept until end of run, then drawn:
+    - this could mean a huge consumption of memory.
+    - to avoid this, "/vis/disable".
+  o Some debug statements remain for testing.
+- visman-V09-06-14 (M.Asai)
+  o Implementing IgnoreStateChanges() to be invoked from RayTracer and
+    other utilities that have their own event loop.
+- visman-V09-06-13 (M.Asai)
+  o Introducing G4VisManager::SetUpForAThread(). This method is invoked
+    by G4WorkerRunManager so that G4VisManager will get noticed at the
+    end of event of each worker thread.
+- raytracer-V09-06-02 to raytracer-V09-06-06:
+  o Developments for multithreading (M.Asai)
+  o Needs greps-V09-06-11.
+
 30th August 2013  John Allison  (vis-V09-06-24)
 - modeling-V09-06-15: - GNUmakefile: Added geometry/magneticfield/include.
 

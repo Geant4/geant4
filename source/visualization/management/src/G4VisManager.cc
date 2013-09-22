@@ -76,6 +76,11 @@
 #include <vector>
 #include <sstream>
 
+#ifdef G4MULTITHREADED
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+#endif
+
 G4VisManager* G4VisManager::fpInstance = 0;
 
 G4VisManager::Verbosity G4VisManager::fVerbosity = G4VisManager::warnings;
@@ -648,6 +653,9 @@ void G4VisManager::SelectTrajectoryModel(const G4String& model)
 
 void G4VisManager::BeginDraw (const G4Transform3D& objectTransform)
 {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   fDrawGroupNestingDepth++;
   if (fDrawGroupNestingDepth > 1) {
     G4Exception
@@ -666,6 +674,9 @@ void G4VisManager::BeginDraw (const G4Transform3D& objectTransform)
 
 void G4VisManager::EndDraw ()
 {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   fDrawGroupNestingDepth--;
   if (fDrawGroupNestingDepth != 0) {
     if (fDrawGroupNestingDepth < 0) fDrawGroupNestingDepth = 0;
@@ -679,6 +690,9 @@ void G4VisManager::EndDraw ()
 
 void G4VisManager::BeginDraw2D (const G4Transform3D& objectTransform)
 {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   fDrawGroupNestingDepth++;
   if (fDrawGroupNestingDepth > 1) {
     G4Exception
@@ -697,6 +711,9 @@ void G4VisManager::BeginDraw2D (const G4Transform3D& objectTransform)
 
 void G4VisManager::EndDraw2D ()
 {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   fDrawGroupNestingDepth--;
   if (fDrawGroupNestingDepth != 0) {
     if (fDrawGroupNestingDepth < 0) fDrawGroupNestingDepth = 0;
@@ -710,6 +727,9 @@ void G4VisManager::EndDraw2D ()
 
 template <class T> void G4VisManager::DrawT
 (const T& graphics_primitive, const G4Transform3D& objectTransform) {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   if (fIsDrawGroup) {
     if (objectTransform != fpSceneHandler->GetObjectTransformation()) {
       G4Exception
@@ -730,6 +750,9 @@ template <class T> void G4VisManager::DrawT
 
 template <class T> void G4VisManager::DrawT2D
 (const T& graphics_primitive, const G4Transform3D& objectTransform) {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   if (fIsDrawGroup) {
     if (objectTransform != fpSceneHandler->GetObjectTransformation()) {
       G4Exception
@@ -827,6 +850,9 @@ void G4VisManager::Draw2D (const G4Text& text,
 }
 
 void G4VisManager::Draw (const G4VHit& hit) {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   if (fIsDrawGroup) {
     fpSceneHandler -> AddCompound (hit);
   } else {
@@ -838,6 +864,9 @@ void G4VisManager::Draw (const G4VHit& hit) {
 }
 
 void G4VisManager::Draw (const G4VDigi& digi) {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   if (fIsDrawGroup) {
     fpSceneHandler -> AddCompound (digi);
   } else {
@@ -849,6 +878,9 @@ void G4VisManager::Draw (const G4VDigi& digi) {
 }
 
 void G4VisManager::Draw (const G4VTrajectory& traj) {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   if (fIsDrawGroup) {
     fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
     fpSceneHandler -> AddCompound (traj);
@@ -864,6 +896,9 @@ void G4VisManager::Draw (const G4VTrajectory& traj) {
 void G4VisManager::Draw (const G4LogicalVolume& logicalVol,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   // Find corresponding solid.
   G4VSolid* pSol = logicalVol.GetSolid ();
   Draw (*pSol, attribs, objectTransform);
@@ -872,6 +907,9 @@ void G4VisManager::Draw (const G4LogicalVolume& logicalVol,
 void G4VisManager::Draw (const G4VSolid& solid,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   if (fIsDrawGroup) {
     fpSceneHandler -> PreAddSolid (objectTransform, attribs);
     solid.DescribeYourselfTo (*fpSceneHandler);
@@ -890,6 +928,9 @@ void G4VisManager::Draw (const G4VPhysicalVolume& physicalVol,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
   // Find corresponding logical volume and solid.
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
   G4LogicalVolume* pLV  = physicalVol.GetLogicalVolume ();
   G4VSolid*        pSol = pLV -> GetSolid ();
   Draw (*pSol, attribs, objectTransform);
@@ -1068,8 +1109,8 @@ void G4VisManager::GeometryHasChanged () {
 	     << G4endl;
     }
   }
-
 }
+
 void G4VisManager::NotifyHandlers () {
 
   if (fVerbosity >= confirmations) {
@@ -1099,7 +1140,6 @@ void G4VisManager::NotifyHandlers () {
 	     << G4endl;
     }
   }
-
 }
 
 G4bool G4VisManager::FilterTrajectory(const G4VTrajectory& trajectory)
@@ -1486,6 +1526,126 @@ void G4VisManager::PrintInvalidPointers () const {
   }
 }
 
+#ifdef G4MULTITHREADED
+// Start of multithreaded versions of Begin/EndOfRun/Event.
+
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+namespace {
+//  G4Mutex visBeginOfRunMutex = G4MUTEX_INITIALIZER;
+//  G4Mutex visBeginOfEventMutex = G4MUTEX_INITIALIZER;
+  G4Mutex visEndOfEventMutex = G4MUTEX_INITIALIZER;
+  G4Mutex visEndOfRunMutex = G4MUTEX_INITIALIZER;
+}
+
+void G4VisManager::BeginOfRun ()
+{
+  if(fIgnoreStateChanges) return;
+//  G4AutoLock al(&visBeginOfRunMutex);
+//  G4cout << "G4VisManager::BeginOfRun" << G4endl;
+//  G4int ev_thread_id = G4Threading::G4GetThreadId();
+//  if(G4Threading::IsWorkerThread()) {
+//    G4cout << "Worker";
+//  } else {
+//    G4cout << "Master";
+//  }
+//  G4cout << " thread ID: " << ev_thread_id << G4endl;
+  if(G4Threading::IsWorkerThread()) return;
+}
+
+void G4VisManager::BeginOfEvent ()
+{
+  if(fIgnoreStateChanges) return;
+//  G4AutoLock al(&visBeginOfEventMutex);
+//  G4cout << "G4VisManager::BeginOfEvent" << G4endl;
+//  G4int ev_thread_id = G4Threading::G4GetThreadId();
+//  if(G4Threading::IsWorkerThread()) {
+//    G4cout << "Worker";
+//  } else {
+//    G4cout << "Master";
+//  }
+//  G4cout << " thread ID: " << ev_thread_id << G4endl;
+}
+
+void G4VisManager::EndOfEvent ()
+{
+  if(fIgnoreStateChanges) return;
+  
+  G4AutoLock al(&visEndOfEventMutex);
+
+  G4cout << "G4VisManager::EndOfEvent" << G4endl;
+  G4int ev_thread_id = G4Threading::G4GetThreadId();
+  if(G4Threading::IsWorkerThread()) {
+    G4cout << "Worker";
+  } else {
+    G4cout << "Master";
+  }
+  G4cout << " thread ID: " << ev_thread_id << G4endl;
+
+  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
+  if (!currentEvent) return;
+
+  if (fpConcreteInstance) {
+    G4cout << "Requesting keeping event " << currentEvent->GetEventID() << G4endl;
+    eventManager->KeepTheCurrentEvent();
+  }
+}
+
+void G4VisManager::EndOfRun ()
+{
+  if(fIgnoreStateChanges) return;
+
+  G4AutoLock al(&visEndOfRunMutex);
+
+  G4cout << "G4VisManager::EndOfRun" << G4endl;
+  G4int ev_thread_id = G4Threading::G4GetThreadId();
+  if(G4Threading::IsWorkerThread()) {
+    G4cout << "Worker";
+  } else {
+    G4cout << "Master";
+  }
+  G4cout << " thread ID: " << ev_thread_id << G4endl;
+  if(G4Threading::IsWorkerThread()) return;
+
+  // Don't call IsValidView unless there is a scene handler.  This
+  // avoids WARNING message at end of event and run when the user has
+  // not instantiated a scene handler, e.g., in batch mode.
+  G4bool valid = GetConcreteInstance() && fpSceneHandler && IsValidView();
+  if (!valid) return;
+
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  const G4Run* currentRun = runManager->GetCurrentRun();
+  if (!currentRun) return;
+
+  const std::vector<const G4Event*>*
+  eventsFromThreads = currentRun->GetEventVector();
+  std::vector<const G4Event*>::const_iterator i;
+  if (fpScene->GetRefreshAtEndOfEvent()) {
+    for (i = eventsFromThreads->begin(); i != eventsFromThreads->end(); ++i) {
+      G4cout << "Drawing event " << (*i)->GetEventID() << G4endl;
+      fpSceneHandler->ClearTransientStore();
+      fpSceneHandler->DrawEvent(*i);
+      // ShowView guarantees the view comes to the screen.  No action
+      // is taken for passive viewers like OGL*X, but it passes control to
+      // interactive viewers, such OGL*Xm and allows file-writing
+      // viewers have to close the file.
+      fpViewer->ShowView();
+    }
+  } else {  // Accumulate events.
+    fpSceneHandler->ClearTransientStore();
+    for (i = eventsFromThreads->begin(); i != eventsFromThreads->end(); ++i) {
+      G4cout << "Drawing event " << (*i)->GetEventID() << G4endl;
+      fpSceneHandler->DrawEvent(*i);
+    }
+    fpViewer->ShowView();
+  }
+}
+
+// End of multithreaded versions of Begin/EndOfRun/Event.
+#else
+// Start of sequential versions of Begin/EndOfRun/Event.
+
 void G4VisManager::BeginOfRun ()
 {
   if(fIgnoreStateChanges) return;
@@ -1504,19 +1664,14 @@ void G4VisManager::BeginOfEvent ()
   if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
 }
 
-#ifdef G4MULTITHREADED
-#include "G4Threading.hh"
-#include "G4AutoLock.hh"
-namespace { G4Mutex visEndOfEventMutex = G4MUTEX_INITIALIZER; }
-#endif
-
 void G4VisManager::EndOfEvent ()
 {
   if(fIgnoreStateChanges) return;
-#ifdef G4MULTITHREADED
-  G4AutoLock al(&visEndOfEventMutex);
-#endif
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
+
+  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
+  if (!currentEvent) return;
 
   // Don't call IsValidView unless there is a scene handler.  This
   // avoids WARNING message at end of event and run when the user has
@@ -1526,10 +1681,6 @@ void G4VisManager::EndOfEvent ()
 
   G4RunManager* runManager = G4RunManager::GetRunManager();
   const G4Run* currentRun = runManager->GetCurrentRun();
-
-  G4EventManager* eventManager = G4EventManager::GetEventManager();
-  const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
-  if (!currentEvent) return;
 
   // We are about to draw the event (trajectories, etc.), but first we
   // have to clear the previous event(s) if necessary.  If this event
@@ -1560,7 +1711,8 @@ void G4VisManager::EndOfEvent ()
     // Unless last event (in which case wait end of run)...
     if (eventID < nEventsToBeProcessed - 1) {
       // ShowView guarantees the view comes to the screen.  No action
-      // is taken for normal viewers like OGL, but file-writing
+      // is taken for passive viewers like OGL*X, but it passes control to
+      // interactive viewers, such OGL*Xm and allows file-writing
       // viewers have to close the file.
       fpViewer->ShowView();
       fpSceneHandler->SetMarkForClearingTransientStore(true);
@@ -1608,9 +1760,10 @@ void G4VisManager::EndOfRun ()
     if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
 	fpSceneHandler->DrawEndOfRunModels();
-	// ShowView guarantees the view comes to the screen.  No
-	// action is taken for normal viewers like OGL, but
-	// file-writing viewers have to close the file.
+        // ShowView guarantees the view comes to the screen.  No action
+        // is taken for passive viewers like OGL*X, but it passes control to
+        // interactive viewers, such OGL*Xm and allows file-writing
+        // viewers have to close the file.
 	fpViewer->ShowView();
         // An extra refresh for auto-refresh viewers
         if (fpViewer->GetViewParameters().IsAutoRefresh()) {
@@ -1667,6 +1820,8 @@ void G4VisManager::EndOfRun ()
     }
   }
 }
+
+#endif  // End of sequential versions of Begin/EndOfRun/Event.
 
 void G4VisManager::ClearTransientStoreIfMarked(){
   // Assumes valid view.
@@ -1913,7 +2068,7 @@ G4VisManager::RegisterModelFactories()
 #ifdef G4MULTITHREADED
 void G4VisManager::SetUpForAThread()
 {
-  // new G4VisStateDependent(this); 
+  new G4VisStateDependent(this); 
 }
 #endif
 
