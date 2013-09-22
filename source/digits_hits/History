@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Sep 20, 2013, M. Asai (digits_hits-V09-06-09)
+- Fix G4SDStructure::RemoveSD() method.
+
 Sep 19, 2013, M. Asai (digits_hits-V09-06-08)
 - G4VReadOutGeometry now issues a G4Exception warning message if it is used.
 

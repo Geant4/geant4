@@ -120,8 +120,10 @@ void G4SDStructure::RemoveSD(G4VSensitiveDetector* sd)
   std::vector<G4VSensitiveDetector*>::iterator itr = detector.begin();
   for(;itr!=detector.end();itr++)
   { 
-    if((*itr)==sd) detector.erase(itr);
-    break;
+    if((*itr)==sd) {
+      detector.erase(itr);
+      break;
+    }
   }
 }
 
