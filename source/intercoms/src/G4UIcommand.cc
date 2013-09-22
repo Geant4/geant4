@@ -39,13 +39,14 @@
 #include <sstream>
 
 G4UIcommand::G4UIcommand()
-  : messenger(0), bp(0), token(IDENTIFIER), paramERR(0)
+  : messenger(0), toBeBroadcasted(false), toBeFlushed(false),
+    bp(0), token(IDENTIFIER), paramERR(0)
 {
 }
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
-			 G4UImessenger * theMessenger)
-:messenger(theMessenger),toBeBroadcasted(true),toBeFlushed(false),
+     G4UImessenger * theMessenger, G4bool tBB)
+:messenger(theMessenger),toBeBroadcasted(tBB),toBeFlushed(false),
 token(IDENTIFIER),paramERR(0)
 {
   G4String comStr = theCommandPath;

@@ -33,11 +33,11 @@
 #include "G4ios.hh"
 
 G4UIcommandTree::G4UIcommandTree()
-:guidance(NULL)
+:guidance(NULL),broadcastCommands(true)
 { }
 
 G4UIcommandTree::G4UIcommandTree(const char * thePathName)
-:guidance(NULL)
+:guidance(NULL),broadcastCommands(true)
 {
   pathName = thePathName;
 }
@@ -68,6 +68,7 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
   if( remainingPath.isNull() )
   {
     guidance = newCommand;
+    if(!(newCommand->ToBeBroadcasted())) broadcastCommands = false;
     return;
   }
   G4int i = remainingPath.first('/');
@@ -80,6 +81,7 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
       if( remainingPath == command[i_thCommand]->GetCommandName() )
       { return; }
     }
+    if(!broadcastCommands) newCommand->SetToBeBroadcasted(false);
     command.push_back( newCommand );
     return;
   }
@@ -93,12 +95,14 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
     {
       if( nextPath == tree[i_thTree]->GetPathName() )
       { 
+        if(!broadcastCommands) newCommand->SetToBeBroadcasted(false);
 	tree[i_thTree]->AddNewCommand( newCommand );
 	return; 
       }
     }
     G4UIcommandTree * newTree = new G4UIcommandTree( nextPath );
     tree.push_back( newTree );
+    if(!broadcastCommands) newCommand->SetToBeBroadcasted(false);
     newTree->AddNewCommand( newCommand );
     return;
   }

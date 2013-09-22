@@ -73,6 +73,7 @@ class G4UIcommandTree
       std::vector<G4UIcommandTree*> tree;
       G4UIcommand *guidance;
       G4String pathName;
+      G4bool broadcastCommands;
 
   public:
       inline const G4UIcommand * GetGuidance() const

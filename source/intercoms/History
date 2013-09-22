@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 September, 2013 M. Asai (intercoms-V09-06-08)
+- A UI command directory may be specified as such that all commands in that
+  directory and all decendant directories should not be broadcased to
+  worker threads. This setting must be made by the argument of G4UIdirectory
+  constructor and cannot be changed. Each individual command may still be
+  set to be broadcasted by accessing to G4UIcommand::SetToBeBroadcasted()
+  method individually.
+
 15 August, 2013 M. Asai (intercoms-V09-06-07)
 - Improve the behavior of ignoring thread cout.
 

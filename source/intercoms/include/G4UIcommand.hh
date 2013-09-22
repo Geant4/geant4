@@ -53,9 +53,14 @@ class G4UIcommand
   public:
       G4UIcommand();
   public: // with description
-      G4UIcommand(const char * theCommandPath, G4UImessenger * theMessenger);
+      G4UIcommand(const char * theCommandPath, G4UImessenger * theMessenger,
+                  G4bool tBB = true);
       //  Constructor. The command string with full path directory
       // and the pointer to the messenger must be given.
+      // If tBB is set to false, this command won't be sent to worker threads.
+      // This tBB parameter could be changed with SetToBeBroadcasted() method
+      // except for G4UIdirectory.
+
   public:
       virtual ~G4UIcommand();
 
