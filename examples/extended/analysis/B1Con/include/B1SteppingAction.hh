@@ -23,62 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx02/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+// $Id: B1SteppingAction.hh 69565 2013-05-08 12:35:31Z gcosmo $
 //
-// $Id$
-// GEANT4 tag $Name: geant4-09-04 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1SteppingAction.hh
+/// \brief Definition of the B1SteppingAction class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#ifndef B1SteppingAction_h
+#define B1SteppingAction_h 1
 
+#include "G4UserSteppingAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Stepping action class
+/// 
 
- class TFile;
- class TTree;
- class TH1D;
+class G4LogicalVolume;
 
-  const G4int MaxHisto = 5;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoManager
+class B1SteppingAction : public G4UserSteppingAction
 {
   public:
-  
-    HistoManager();
-   ~HistoManager();
-   
-    void book();
-    void save();
+    B1SteppingAction();
+    virtual ~B1SteppingAction();
 
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
+    // method from the base class
+    virtual void UserSteppingAction(const G4Step*);
 
-    void FillNtuple(G4double energyAbs, G4double energyGap,
-                    G4double trackLAbs, G4double trackLGap);
-    
-    void PrintStatistic();
-        
   private:
-  
-    TFile*   fRootFile;
-    TH1D*    fHisto[MaxHisto];            
-    TTree*   fNtuple1;    
-    TTree*   fNtuple2;    
-
-    G4double fEabs;
-    G4double fEgap;
-    G4double fLabs;
-    G4double fLgap;
+    G4LogicalVolume* fScoringVolume;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

@@ -23,62 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx02/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+// $Id: B1EventInformation.hh 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-// $Id$
-// GEANT4 tag $Name: geant4-09-04 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1EventInformation.hh
+/// \brief Definition of the B1EventInformation class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#ifndef B1EventInformation_h
+#define B1EventInformation_h 1
 
+#include "G4VUserEventInformation.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Event information class
+///
+/// It holds data member fEnergySum for accumulating 
+/// the event energy deposit for an event.
+/// These data are then used in the run action to compute the dose.
 
- class TFile;
- class TTree;
- class TH1D;
-
-  const G4int MaxHisto = 5;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoManager
+class B1EventInformation : public G4VUserEventInformation
 {
   public:
-  
-    HistoManager();
-   ~HistoManager();
-   
-    void book();
-    void save();
-
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
-
-    void FillNtuple(G4double energyAbs, G4double energyGap,
-                    G4double trackLAbs, G4double trackLGap);
+    B1EventInformation();
+    virtual ~B1EventInformation();
     
-    void PrintStatistic();
-        
+    virtual void Print() const;
+    
+    G4double GetEdepEvent() const { return fEdepEvent; }
+    void AddEdep(G4double de) { fEdepEvent += de; }
+     
   private:
-  
-    TFile*   fRootFile;
-    TH1D*    fHisto[MaxHisto];            
-    TTree*   fNtuple1;    
-    TTree*   fNtuple2;    
-
-    G4double fEabs;
-    G4double fEgap;
-    G4double fLabs;
-    G4double fLgap;
+    G4double  fEdepEvent;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    

@@ -23,59 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx02/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+// $Id: B1ConRun.hh 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-// $Id$
-// GEANT4 tag $Name: geant4-09-04 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1ConRun.hh
+/// \brief Definition of the B1ConRun class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#ifndef B1ConRun_h
+#define B1ConRun_h 1
 
+#include "G4Run.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4Event;
 
- class TFile;
- class TTree;
- class TH1D;
+/// Run class
+///
 
-  const G4int MaxHisto = 5;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoManager
+class B1ConRun : public G4Run
 {
   public:
-  
-    HistoManager();
-   ~HistoManager();
-   
-    void book();
-    void save();
+    B1ConRun();
+    virtual ~B1ConRun();
 
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
+    virtual void RecordEvent(const G4Event*);
+    virtual void Merge(const G4Run*);
 
-    void FillNtuple(G4double energyAbs, G4double energyGap,
-                    G4double trackLAbs, G4double trackLGap);
-    
-    void PrintStatistic();
-        
+  public:
+    // get methods
+    G4double GetEdepRun()  const { return fEdepRun; }
+    G4double GetEdep2Run() const { return fEdep2Run; }
+    G4int GetNumberOfEvent() const { return (G4int)fEdepEventVector.size(); };
+    G4double GetEdepPerEvent(G4int i) const { return fEdepEventVector[i]; };
+
   private:
-  
-    TFile*   fRootFile;
-    TH1D*    fHisto[MaxHisto];            
-    TTree*   fNtuple1;    
-    TTree*   fNtuple2;    
-
-    G4double fEabs;
-    G4double fEgap;
-    G4double fLabs;
-    G4double fLgap;
+    G4double  fEdepRun;
+    G4double  fEdep2Run;
+    std::vector<G4double> fEdepEventVector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

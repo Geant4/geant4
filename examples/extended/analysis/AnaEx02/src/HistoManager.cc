@@ -65,7 +65,7 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::book(G4bool /*isOnMaster*/)
+void HistoManager::book()
 { 
  // Creating a tree container to handle histograms and ntuples.
  // This tree is associated to an output file.

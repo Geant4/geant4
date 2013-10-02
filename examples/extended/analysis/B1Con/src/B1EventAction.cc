@@ -23,62 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx02/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+// $Id: B1EventAction.cc 71044 2013-06-10 09:31:08Z gcosmo $
 //
-// $Id$
-// GEANT4 tag $Name: geant4-09-04 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1EventAction.cc
+/// \brief Implementation of the B1EventAction class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#include "B1EventAction.hh"
+#include "B1EventInformation.hh"
 
-#include "globals.hh"
+#include "G4EventManager.hh"
+#include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- class TFile;
- class TTree;
- class TH1D;
-
-  const G4int MaxHisto = 5;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class HistoManager
-{
-  public:
-  
-    HistoManager();
-   ~HistoManager();
-   
-    void book();
-    void save();
-
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
-
-    void FillNtuple(G4double energyAbs, G4double energyGap,
-                    G4double trackLAbs, G4double trackLGap);
-    
-    void PrintStatistic();
-        
-  private:
-  
-    TFile*   fRootFile;
-    TH1D*    fHisto[MaxHisto];            
-    TTree*   fNtuple1;    
-    TTree*   fNtuple2;    
-
-    G4double fEabs;
-    G4double fEgap;
-    G4double fLabs;
-    G4double fLgap;
-};
+B1EventAction::B1EventAction()
+: G4UserEventAction(),
+  fPrintModulo(100)
+{ ; } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B1EventAction::~B1EventAction()
+{ ; }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1EventAction::BeginOfEventAction(const G4Event* event)
+{  
+  G4int eventNb = event->GetEventID();
+  if (eventNb%fPrintModulo == 0) { 
+    G4cout << "\n---> Begin of event: " << eventNb << G4endl;
+  }
+ 
+  fpEventManager->SetUserInformation(new B1EventInformation());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1EventAction::EndOfEventAction(const G4Event*)
+{ ; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

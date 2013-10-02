@@ -70,7 +70,7 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::book(G4bool /*isOnMaster*/)
+void HistoManager::book()
 { 
 #ifdef G4ANALYSIS_USE
   if(!fAF) return;                

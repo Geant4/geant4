@@ -23,62 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx02/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+// $Id: B1ConRun.cc 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-// $Id$
-// GEANT4 tag $Name: geant4-09-04 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1ConRun.cc
+/// \brief Implementation of the B1ConRun class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#include "B1ConRun.hh"
+#include "B1EventInformation.hh"
 
-#include "globals.hh"
+#include "G4Event.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- class TFile;
- class TTree;
- class TH1D;
-
-  const G4int MaxHisto = 5;
+B1ConRun::B1ConRun()
+: G4Run(),
+  fEdepRun(0.), fEdep2Run(0.)
+{ fEdepEventVector.clear(); }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManager
+B1ConRun::~B1ConRun()
+{ ; } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1ConRun::RecordEvent(const G4Event* event)
+{  
+  B1EventInformation* evInfo
+    = static_cast<B1EventInformation*>(event->GetUserInformation());
+  G4double EdepEvent = evInfo->GetEdepEvent();
+  fEdepRun  += EdepEvent;
+  fEdep2Run += EdepEvent*EdepEvent;
+  fEdepEventVector.push_back( evInfo->GetEdepEvent() );
+
+  G4Run::RecordEvent(event);
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1ConRun::Merge(const G4Run* aRun)
 {
-  public:
-  
-    HistoManager();
-   ~HistoManager();
-   
-    void book();
-    void save();
+  const B1ConRun* localRun = static_cast<const B1ConRun*>(aRun);
+  //const B1ConRun* localRunn = static_cast<const B1ConRun*>(aRun);
+  //B1ConRun* localRun = const_cast<B1ConRun*>(localRunn);
 
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
+  fEdepRun  += localRun->fEdepRun;
+  fEdep2Run += localRun->fEdep2Run;
 
-    void FillNtuple(G4double energyAbs, G4double energyGap,
-                    G4double trackLAbs, G4double trackLGap);
-    
-    void PrintStatistic();
-        
-  private:
-  
-    TFile*   fRootFile;
-    TH1D*    fHisto[MaxHisto];            
-    TTree*   fNtuple1;    
-    TTree*   fNtuple2;    
-
-    G4double fEabs;
-    G4double fEgap;
-    G4double fLabs;
-    G4double fLgap;
-};
+  for ( size_t i = 0 ; i != localRun->fEdepEventVector.size() ; i++ ) {
+     fEdepEventVector.push_back( localRun->fEdepEventVector[i] );
+  }
+  //for ( std::vector<G4double>::iterator 
+  //      it = localRun->fEdepEventVector.begin(); it != localRun->fEdepEventVector.end(); it++ ) { 
+  //   fvEdepEventVector.push_back( *it );
+  //}
+  G4Run::Merge(aRun); 
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
-

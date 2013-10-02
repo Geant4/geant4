@@ -23,62 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx02/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+// $Id: B1ConActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-// GEANT4 tag $Name: geant4-09-04 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1ConActionInitialization.cc
+/// \brief Implementation of the B1ConActionInitialization class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
-
-#include "globals.hh"
+#include "B1ConActionInitialization.hh"
+#include "B1PrimaryGeneratorAction.hh"
+#include "B1ConRunAction.hh"
+#include "B1EventAction.hh"
+#include "B1SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- class TFile;
- class TTree;
- class TH1D;
-
-  const G4int MaxHisto = 5;
+B1ConActionInitialization::B1ConActionInitialization()
+ : G4VUserActionInitialization()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManager
+B1ConActionInitialization::~B1ConActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1ConActionInitialization::BuildForMaster() const
 {
-  public:
-  
-    HistoManager();
-   ~HistoManager();
-   
-    void book();
-    void save();
-
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
-
-    void FillNtuple(G4double energyAbs, G4double energyGap,
-                    G4double trackLAbs, G4double trackLGap);
-    
-    void PrintStatistic();
-        
-  private:
-  
-    TFile*   fRootFile;
-    TH1D*    fHisto[MaxHisto];            
-    TTree*   fNtuple1;    
-    TTree*   fNtuple2;    
-
-    G4double fEabs;
-    G4double fEgap;
-    G4double fLabs;
-    G4double fLgap;
-};
+  SetUserAction(new B1ConRunAction);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void B1ConActionInitialization::Build() const
+{
+  SetUserAction(new B1PrimaryGeneratorAction);
+  SetUserAction(new B1ConRunAction);
+  SetUserAction(new B1EventAction);
+  SetUserAction(new B1SteppingAction);
+}  
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

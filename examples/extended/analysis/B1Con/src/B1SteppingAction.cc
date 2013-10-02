@@ -23,62 +23,60 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx02/include/HistoManager.hh
-/// \brief Definition of the HistoManager class
+// $Id: B1SteppingAction.cc 71044 2013-06-10 09:31:08Z gcosmo $
 //
-// $Id$
-// GEANT4 tag $Name: geant4-09-04 $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file B1SteppingAction.cc
+/// \brief Implementation of the B1SteppingAction class
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#include "B1SteppingAction.hh"
+#include "B1EventInformation.hh"
+#include "B1DetectorConstruction.hh"
 
-#include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
- class TFile;
- class TTree;
- class TH1D;
-
-  const G4int MaxHisto = 5;
+#include "G4Step.hh"
+#include "G4Event.hh"
+#include "G4RunManager.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4LogicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManager
+B1SteppingAction::B1SteppingAction()
+: G4UserSteppingAction(),
+  fScoringVolume(0)
+{ ; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B1SteppingAction::~B1SteppingAction()
+{ ; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1SteppingAction::UserSteppingAction(const G4Step* step)
 {
-  public:
-  
-    HistoManager();
-   ~HistoManager();
-   
-    void book();
-    void save();
+  if (!fScoringVolume)
+  { 
+    const B1DetectorConstruction* detectorConstruction
+      = static_cast<const B1DetectorConstruction*>
+        (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+    fScoringVolume = detectorConstruction->GetScoringVolume();   
+  }
 
-    void FillHisto(G4int id, G4double bin, G4double weight = 1.0);
-    void Normalize(G4int id, G4double fac);    
+  // get volume of the current step
+  G4LogicalVolume* volume 
+    = step->GetPreStepPoint()->GetTouchableHandle()
+      ->GetVolume()->GetLogicalVolume();
+      
+  // check if we are in scoring volume
+  if (volume != fScoringVolume) return;
 
-    void FillNtuple(G4double energyAbs, G4double energyGap,
-                    G4double trackLAbs, G4double trackLGap);
-    
-    void PrintStatistic();
-        
-  private:
-  
-    TFile*   fRootFile;
-    TH1D*    fHisto[MaxHisto];            
-    TTree*   fNtuple1;    
-    TTree*   fNtuple2;    
-
-    G4double fEabs;
-    G4double fEgap;
-    G4double fLabs;
-    G4double fLgap;
-};
+  // collect energy deposited in this step
+  G4double edepStep = step->GetTotalEnergyDeposit();
+  B1EventInformation* evInfo
+    = static_cast<B1EventInformation*>(G4RunManager::GetRunManager()
+               ->GetCurrentEvent()->GetUserInformation());
+  evInfo->AddEdep(edepStep);  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
 

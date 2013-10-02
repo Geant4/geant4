@@ -9,6 +9,10 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th September 2013 I. Hrivnacova (analysisExample-V09-06-03)
+- Updated for changes in analysis:
+  removal of G4AnalysisManager::Create(isMaster)
+
 16th September 2013 I. Hrivnacova (analysisExample-V09-06-02)
 - AnaEx01 migrated to MT;
   an argument isOnMaster added to HistoManager::book() method
