@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-Sep-2013, Davide Mancusi             (phys-ctor-hinelastic-V09-06-17)
+- Fix a possible null-pointer dereference in HadronPhysicsINCLXX.
+
 22-Jul-2013, Alberto Ribon              (phys-ctor-hinelastic-V09-06-16)
 - Nothing is changed: simply re-propose the previous tag after
   fixing an initialization problem in materials category.

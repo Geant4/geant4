@@ -198,27 +198,29 @@ void G4HadronPhysicsINCLXX::CreateModels()
 
 G4HadronPhysicsINCLXX::~G4HadronPhysicsINCLXX()
 {
-   delete tpdata->theFTFPNeutron;
-   delete tpdata->theQGSPNeutron;
-   delete tpdata->theBertiniNeutron;
-   delete tpdata->theINCLXXNeutron;
-   delete tpdata->theNeutronHP;
-   delete tpdata->theFTFPPro;
-   delete tpdata->theQGSPPro;
-   delete tpdata->thePro;
-   delete tpdata->theBertiniPro;
-   delete tpdata->theINCLXXPro;
-   delete tpdata->theFTFPPiK;
-   delete tpdata->theQGSPPiK;
-   delete tpdata->theINCLXXPiK;
-   delete tpdata->theBertiniPiK;
-   delete tpdata->thePiK;
-   delete tpdata->theHyperon;
-   delete tpdata->theAntiBaryon;
-   delete tpdata->theFTFPAntiBaryon;
-   delete tpdata->xsNeutronCaptureXS;
-  
-   delete tpdata; tpdata = 0;
+  if(tpdata) {
+    delete tpdata->theFTFPNeutron;
+    delete tpdata->theQGSPNeutron;
+    delete tpdata->theBertiniNeutron;
+    delete tpdata->theINCLXXNeutron;
+    delete tpdata->theNeutronHP;
+    delete tpdata->theFTFPPro;
+    delete tpdata->theQGSPPro;
+    delete tpdata->thePro;
+    delete tpdata->theBertiniPro;
+    delete tpdata->theINCLXXPro;
+    delete tpdata->theFTFPPiK;
+    delete tpdata->theQGSPPiK;
+    delete tpdata->theINCLXXPiK;
+    delete tpdata->theBertiniPiK;
+    delete tpdata->thePiK;
+    delete tpdata->theHyperon;
+    delete tpdata->theAntiBaryon;
+    delete tpdata->theFTFPAntiBaryon;
+    delete tpdata->xsNeutronCaptureXS;
+
+    delete tpdata; tpdata = 0;
+  }
 }
 
 void G4HadronPhysicsINCLXX::ConstructParticle()
