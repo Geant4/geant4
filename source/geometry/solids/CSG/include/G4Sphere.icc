@@ -181,7 +181,6 @@ void G4Sphere::CheckDPhiAngle(G4double dPhi)
   if ( dPhi >= CLHEP::twopi-kAngTolerance*0.5 )
   {
     fDPhi=CLHEP::twopi;
-    fSPhi=0;
   }
   else
   {

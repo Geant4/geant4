@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 2, 2013  G.Cosmo                 geom-csg-V09-06-04
+- Correctly initialise fSPhi to zero in G4Sphere constructor.
+
 August 14, 2013  G.Cosmo                 geom-csg-V09-06-03
 - Move function-scoped 'static const' values for half-tolerances to private
   data members of classes, to overcome false-positive race-conditions defects
