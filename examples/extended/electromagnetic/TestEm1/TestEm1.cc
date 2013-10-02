@@ -61,7 +61,7 @@
 int main(int argc,char** argv) {
  
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
@@ -69,7 +69,7 @@ int main(int argc,char** argv) {
   // Construct the default run manager
   #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(1);
+    runManager->SetNumberOfThreads(2);
   #else
     G4RunManager* runManager = new G4RunManager;
   #endif

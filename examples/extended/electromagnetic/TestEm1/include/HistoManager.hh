@@ -45,11 +45,11 @@
 class HistoManager
 {
   public:
-   HistoManager(G4bool isOnMaster);
+   HistoManager();
   ~HistoManager();
 
   private:
-    void Book(G4bool isOnMaster);
+    void Book();
 
     G4String fFileName;
 };

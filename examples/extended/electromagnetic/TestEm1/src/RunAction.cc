@@ -46,10 +46,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(G4bool isOnMaster, DetectorConstruction* det, PrimaryGeneratorAction* kin)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 :G4UserRunAction(),fDetector(det),fPrimary(kin),fHistoManager(0)
 { 
- fHistoManager = new HistoManager(isOnMaster);
+ fHistoManager = new HistoManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,7 +67,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   // save Rndm status
   ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  CLHEP::HepRandom::showEngineStatus();
+  G4Random::showEngineStatus();
 
   fNbOfTraks0 = fNbOfTraks1 = fNbOfSteps0 = fNbOfSteps1 = 0;
   fEdep = 0.;
@@ -201,7 +201,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }    
   
   // show Rndm status
-  CLHEP::HepRandom::showEngineStatus(); 
+  G4Random::showEngineStatus(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

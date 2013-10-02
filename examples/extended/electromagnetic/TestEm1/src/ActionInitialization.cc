@@ -52,7 +52,7 @@ ActionInitialization::~ActionInitialization()
 
 void ActionInitialization::BuildForMaster() const
 {
- SetUserAction(new RunAction(true));
+ SetUserAction(new RunAction());
 }
 
 
@@ -64,7 +64,7 @@ void ActionInitialization::Build() const
   PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(detector);
   SetUserAction(prim);
 
-  RunAction* run = new RunAction(false,detector,prim);
+  RunAction* run = new RunAction(detector,prim);
   SetUserAction(run); 
   
   EventAction* event = new EventAction();

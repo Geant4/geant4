@@ -36,10 +36,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::HistoManager(G4bool isOnMaster)
+HistoManager::HistoManager()
   : fFileName("testem1")
 {
-  Book(isOnMaster);
+  Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,12 +51,12 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::Book(G4bool isOnMaster)
+void HistoManager::Book()
 {
   // Create or get analysis manager
   // The choice of analysis technology is done via selection of a namespace
   // in HistoManager.hh
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isOnMaster);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetFileName(fFileName);
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetFirstHistoId(1);     // start histogram numbering from 1
