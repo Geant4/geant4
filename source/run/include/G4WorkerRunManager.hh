@@ -38,7 +38,7 @@
 
 #ifndef G4WorkerRunManager_h
 #define G4WorkerRunManager_h 1
-
+#include "G4RNGHelper.hh"
 #include "G4RunManager.hh"
 
 class G4WorkerThread;
@@ -89,5 +89,7 @@ protected:
     G4bool eventLoopOnGoing;
     G4int nevModulo;
     G4int currEvID;
+    G4SeedsQueue seedsQueue;
 };
+
 #endif //G4WorkerRunManager_h

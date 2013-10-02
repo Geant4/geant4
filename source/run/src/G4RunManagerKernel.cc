@@ -438,6 +438,7 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 #include "G4IonTable.hh"
 #include "G4ParticleTableIterator.hh"
 #include "G4IonConstructor.hh"
+#include "G4Geantino.hh"
 
 void G4RunManagerKernel::SetupPhysics()
 {
@@ -445,13 +446,13 @@ void G4RunManagerKernel::SetupPhysics()
     if(runManagerKernelType==workerRMK) return;
 
     physicsList->ConstructParticle();
-    //Andrea: Temporary for MT
-//////#ifdef G4MULTITHREADED
+
+    // For sanity reason
+    G4Geantino::GeantinoDefinition();
     G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
     if(gion)
     { G4IonConstructor::ConstructParticle(); }
     G4ParticleTable::GetParticleTable()->GetIonTable()->InitializeLightIons();
-//////#endif
 
     G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
     pItr->reset();

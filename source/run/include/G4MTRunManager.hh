@@ -40,6 +40,7 @@
 
 #include "G4RunManager.hh"
 #include "G4Threading.hh"
+#include "G4RNGHelper.hh"
 #include <list>
 #include <map>
 
@@ -74,14 +75,14 @@ public:
     // Note: G4Event object must be instantiated by a worker thread. In case no more
     //  event remains to be processed, that worker thread must delete that G4Event
     //  object.
-    virtual G4bool SetUpAnEvent(G4Event*, CLHEP::HepRandomEngine*);
+    virtual G4bool SetUpAnEvent(G4Event*, long& s1, long& s2, long& s3);
     // Same as above method, but the seeds are set only once over "eventModulo" events.
     // The return value shows the number of events the caller Worker has to process
     // (between 1 and eventModulo depending on number of events yet to be processed).
     // G4Event object has the event ID of the first event of this bunch.
     // If zero is returned no more event needs to be processed, and worker thread 
     // must delete that G4Event.
-    virtual G4int SetUpNEvents(G4Event*, CLHEP::HepRandomEngine*);
+    virtual G4int SetUpNEvents(G4Event*, G4SeedsQueue* seedsQueue);
 
     //Method called by Initialize() method
 protected:
@@ -98,7 +99,11 @@ public:
     //collect from UI managere the list of commands that threads
     //will execute.
 private:
+    // Number of worker threads. To be set by SetNumberOfThreads() method.
     G4int nworkers;
+    // Force to use this number regardless of SetNumberOfThreads() method.
+    G4int forcedNwokers;
+
     //List of workers (i.e. thread)
     typedef std::list<G4Thread*> G4ThreadsList;
     G4ThreadsList threads;
@@ -199,10 +204,20 @@ protected:
     G4int eventModuloDef;
     G4int eventModulo;
     G4int nSeedsUsed;
+    G4int nSeedsFilled;
+    G4int nSeedsMax;
+    G4int nSeedsPerEvent;
+    double* randDbl;
+
+    void RefillSeeds();
+
 public:
     inline void SetEventModulo(G4int i=1) { eventModuloDef = i; }
     inline G4int GetEventModulo() const { return eventModuloDef; }
 
+public:
+    virtual void AbortRun(G4bool softAbort=false);
+    virtual void AbortEvent();
 };
 
 #endif //G4MTRunManager_h

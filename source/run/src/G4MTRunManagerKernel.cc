@@ -27,6 +27,13 @@
 #include "G4MTRunManagerKernel.hh"
 #include "G4RegionStore.hh"
 #include "G4StateManager.hh"
+#include "G4AutoLock.hh"
+
+std::vector<G4WorkerRunManager*>* G4MTRunManagerKernel::workerRMvector = 0;
+
+namespace {
+ G4Mutex workerRMMutex = G4MUTEX_INITIALIZER;
+}
 
 G4MTRunManagerKernel::G4MTRunManagerKernel() : G4RunManagerKernel(masterRMK)
 {
@@ -37,11 +44,24 @@ G4MTRunManagerKernel::G4MTRunManagerKernel() : G4RunManagerKernel(masterRMK)
     msg<<" This type of RunManager can only be used in mult-threaded applications.";
     G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
 #endif
-
+    if(!workerRMvector) workerRMvector = new std::vector<G4WorkerRunManager*>;
 }
 
 G4MTRunManagerKernel::~G4MTRunManagerKernel()
 {
+    if(!workerRMvector)
+    {
+      if(workerRMvector->size()>0)
+      {
+        G4ExceptionDescription msg;
+        msg<<"G4MTRunManagerKernel is to be deleted while "
+           <<workerRMvector->size()<<" G4WorkerRunManager are still alive.";
+        G4Exception("G4RunManagerKernel::~G4RunManagerKernel()",
+                    "Run10035",FatalException,msg);
+      }
+      delete workerRMvector;
+      workerRMvector = 0;
+    }  
 }
 
 void G4MTRunManagerKernel::SetupShadowProcess() const
@@ -125,6 +145,9 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   G4WorkerRunManager* wrm
         = masterRM->GetUserWorkerThreadInitialization()->CreateWorkerRunManager();
   wrm->SetWorkerThread(wThreadContext);
+  G4AutoLock wrmm(&workerRMMutex);
+  workerRMvector->push_back(wrm);
+  wrmm.unlock();
 
   //================================
   //Step-3: Setup worker run manager
@@ -184,12 +207,24 @@ void* G4MTRunManagerKernel::StartThread(void* context)
     nextAction = masterRM->ThisWorkerWaitForNextAction();
   } //No more actions to perform
 
-  //======================
+  //===============================
   //Step-6: Terminate worker thread
   //===============================
   if(masterRM->GetUserWorkerInitialization())
   { masterRM->GetUserWorkerInitialization()->WorkerStop(); }
-  delete wrm;
+
+  wrmm.lock();
+  std::vector<G4WorkerRunManager*>::iterator itrWrm = workerRMvector->begin();
+  for(;itrWrm!=workerRMvector->end();itrWrm++)
+  {
+    if((*itrWrm)==wrm)
+    {
+      workerRMvector->erase(itrWrm);
+      break;
+    }
+  }
+  wrmm.unlock();
+    
   wThreadContext->DestroyGeometryAndPhysicsVector();
   wThreadContext = 0;
 
@@ -287,5 +322,13 @@ void G4MTRunManagerKernel::SetUpDecayChannels()
       { dt->GetDecayChannel(i)->GetDaughter(0); }
     }
   }
+}
+
+void G4MTRunManagerKernel::BroadcastAbortRun(G4bool softAbort)
+{
+  G4AutoLock wrmm(&workerRMMutex);
+  std::vector<G4WorkerRunManager*>::iterator itr = workerRMvector->begin();
+  for(;itr!=workerRMvector->end();itr++)
+  { (*itr)->AbortRun(softAbort); }
 }
 

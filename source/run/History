@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 1st, 2013, A.Dotti (run-V09-06-104)
+- Bug fix: add mutex for de-registration worker threads
+
+Oct 1st, 2013, M.Asai (run-V09-06-103)
+- Add a mutex protection for registrering worker threads.
+- Introduce G4FORCENUMBEROFTHREADS shell variable to force the number
+  of threads regardless of G4MTRunManager::SetNumberOfThreads() or
+  corresponding UI command.
+
+Sep 29th, 2013, M.Asai (run-V09-06-102)
+- In MT mode, random number seeds are created for all events regardless
+  of eventModulo in G4MTRunManager. Performance should be slightly
+  degraded but event reproducibility should be restored.
+
+Sep 25th, 2013, M.Asai (run-V09-06-101)
+- Add AbortRun() functionality to G4MTRunManager and related classes.
+
 Sep 17th, 2013, M.Asai (run-V09-06-100)
 - Move the barrier ThisWorkerReady() from G4WorkerRunManager::DoEventLoop()
   to G4WorkerRunManager::RunInitialization() and change the location of

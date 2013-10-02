@@ -176,12 +176,17 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     //different
     InitializeEventLoop(n_event,macroFile,n_select);
 
+    // Reset random number seeds queue
+    while(seedsQueue.size()>0)
+    { seedsQueue.pop(); }
+
     // Event loop
     eventLoopOnGoing = true;
 ///////    G4int i_event = workerContext->GetThreadId();
     G4int i_event = -1;
     nevModulo = -1;
     currEvID = -1;
+
     while(eventLoopOnGoing)
     {
       ProcessOneEvent(i_event);
@@ -216,20 +221,23 @@ void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 {
   G4Event* anEvent = new G4Event(i_event);
+  long s1, s2;
+  long s3 = 0;
+
   if(i_event<0)
   {
     G4int nevM = G4MTRunManager::GetMasterRunManager()->GetEventModulo();
     if(nevM==1)
     {
       eventLoopOnGoing = G4MTRunManager::GetMasterRunManager()
-                       ->SetUpAnEvent(anEvent,G4Random::getTheEngine());
+                       ->SetUpAnEvent(anEvent,s1,s2,s3);
     }
     else
     {
       if(nevModulo<=0)
       {
         G4int nevToDo = G4MTRunManager::GetMasterRunManager()
-                         ->SetUpNEvents(anEvent,G4Random::getTheEngine());
+                         ->SetUpNEvents(anEvent,&seedsQueue);
         if(nevToDo==0)
         { eventLoopOnGoing = false; }
         else
@@ -243,6 +251,11 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
         anEvent->SetEventID(++currEvID);
         nevModulo--;
       }
+      if(eventLoopOnGoing)
+      {
+        s1 = seedsQueue.front(); seedsQueue.pop();
+        s2 = seedsQueue.front(); seedsQueue.pop();
+      }
     }
 
     if(!eventLoopOnGoing)
@@ -255,9 +268,12 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
   {
     //Need to reseed random number generator
     G4RNGHelper* helper = G4RNGHelper::GetInstance();
-    long seeds[3] = { helper->GetSeed(i_event*2) , helper->GetSeed(i_event*2+1), 0 };
-    G4Random::setTheSeeds(seeds);
+    s1 = helper->GetSeed(i_event*2);
+    s2 = helper->GetSeed(i_event*2+1);
   }
+
+  long seeds[3] = { s1, s2, 0 };
+  G4Random::setTheSeeds(seeds,-1);
 
   if(storeRandomNumberStatusToG4Event==1 || storeRandomNumberStatusToG4Event==3)
   {

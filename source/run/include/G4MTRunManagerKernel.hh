@@ -59,6 +59,8 @@
 #include "G4MTRunManager.hh"
 
 class G4WorkerThread;
+class G4WorkerRunManager;
+#include <vector>
 
 class G4MTRunManagerKernel : public G4RunManagerKernel {
 public:
@@ -85,6 +87,13 @@ public: // with descroption
     // decay products. This method has to be invoked by 
     // MTRunManager before event loop starts on workers.
     void SetUpDecayChannels();
+
+private:
+    static std::vector<G4WorkerRunManager*>* workerRMvector;
+
+public:
+    // This method should be invoked by G4MTRunManager
+    void BroadcastAbortRun(G4bool softAbort);
 };
 
 #endif //G4MTRunManagerKernel_h
