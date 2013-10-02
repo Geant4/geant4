@@ -53,17 +53,16 @@ class G4RootAnalysisManager : public  G4VAnalysisManager
     virtual ~G4RootAnalysisManager();
     
     // static methods
-    static G4RootAnalysisManager* Create(G4bool isMaster = true);
     static G4RootAnalysisManager* Instance();
 
     // Access methods
-    virtual tools::histo::h1d*  GetH1(G4int id, G4bool warn = true,
-                                      G4bool onlyIfActive = true) const;
-    virtual tools::histo::h2d*  GetH2(G4int id, G4bool warn = true,
-                                      G4bool onlyIfActive = true) const;
+    tools::histo::h1d*  GetH1(G4int id, G4bool warn = true,
+                              G4bool onlyIfActive = true) const;
+    tools::histo::h2d*  GetH2(G4int id, G4bool warn = true,
+                              G4bool onlyIfActive = true) const;
     
-    virtual tools::wroot::ntuple* GetNtuple() const;
-    virtual tools::wroot::ntuple* GetNtuple(G4int ntupleId) const;
+    tools::wroot::ntuple* GetNtuple() const;
+    tools::wroot::ntuple* GetNtuple(G4int ntupleId) const;
     
   protected:
     // virtual methods from base class
@@ -73,7 +72,6 @@ class G4RootAnalysisManager : public  G4VAnalysisManager
 
   private:
     // static data members
-    static G4int fgCounter;
     static G4RootAnalysisManager* fgMasterInstance;
     static G4ThreadLocal G4RootAnalysisManager* fgInstance;    
 

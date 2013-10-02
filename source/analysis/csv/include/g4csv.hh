@@ -27,18 +27,11 @@
 
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
 
-#ifndef g4csv_defs_h
-#define g4csv_defs_h
+#ifndef g4csv_h
+#define g4csv_h
 
-#include "tools/wcsv_ntuple"
-#include "G4CsvAnalysisManager.hh"
+#include "g4csv_defs.hh"
 
-namespace G4Csv {
-
-  typedef tools::wcsv::ntuple*  G4Ntuple; 
-  typedef G4CsvAnalysisManager G4AnalysisManager; 
-}  
+using namespace G4Csv;
 
 #endif
-
-  

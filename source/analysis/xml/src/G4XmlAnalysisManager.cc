@@ -32,12 +32,10 @@
 #include "G4H1ToolsManager.hh"
 #include "G4H2ToolsManager.hh"
 #include "G4XmlNtupleManager.hh"
+#include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
 #include "tools/waxml/histos"
-
-//#include <fstream>
-//#include <cstdio>
 
 // mutex in a file scope
 
@@ -46,32 +44,17 @@ namespace {
   G4Mutex mergeH1Mutex = G4MUTEX_INITIALIZER;
   //Mutex to lock master manager when merging H1 histograms 
   G4Mutex mergeH2Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock instances counter
-  G4Mutex counterMutex = G4MUTEX_INITIALIZER;
 }  
 
-G4int G4XmlAnalysisManager::fgCounter = 0;
 G4XmlAnalysisManager* G4XmlAnalysisManager::fgMasterInstance = 0;
 G4ThreadLocal G4XmlAnalysisManager* G4XmlAnalysisManager::fgInstance = 0;
-
-//_____________________________________________________________________________
-G4XmlAnalysisManager* G4XmlAnalysisManager::Create(G4bool isMaster)
-{
-  if ( fgInstance == 0 ) {
-    // In sequential mode create always master manager
-    if ( ! G4AnalysisManagerState::IsMT() ) isMaster = true;
-
-    fgInstance = new G4XmlAnalysisManager(isMaster);
-  }
-  
-  return fgInstance;
-}    
 
 //_____________________________________________________________________________
 G4XmlAnalysisManager* G4XmlAnalysisManager::Instance()
 {
   if ( fgInstance == 0 ) {
-    fgInstance = new G4XmlAnalysisManager();
+    G4bool isMaster = ! G4Threading::IsWorkerThread();
+    fgInstance = new G4XmlAnalysisManager(isMaster);
   }
   
   return fgInstance;
@@ -85,8 +68,7 @@ G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
    fNtupleManager(0),
    fFileManager(0)
 {
-  if ( ( isMaster && fgMasterInstance ) ||
-       ( (! isMaster ) && fgInstance ) ) {
+  if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
     G4ExceptionDescription description;
     description 
       << "      " 
@@ -111,10 +93,6 @@ G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
   SetH2Manager(fH2Manager);
   SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
-
-  G4AutoLock lCounter(&counterMutex);
-  fgCounter++;
-  lCounter.unlock();
 }
 
 //_____________________________________________________________________________
@@ -122,10 +100,6 @@ G4XmlAnalysisManager::~G4XmlAnalysisManager()
 {  
   if ( fState.GetIsMaster() ) fgMasterInstance = 0;
   fgInstance = 0;
- 
-  G4AutoLock lCounter(&counterMutex);
-  fgCounter--;
-  lCounter.unlock();
 }
 
 // 
@@ -140,7 +114,9 @@ G4bool G4XmlAnalysisManager::WriteH1()
   const std::vector<G4HnInformation*>& hnVector
     = fH1Manager->GetHnVector();
 
-  if ( fState.GetIsMaster() || ( ! fgMasterInstance ) )  {
+  if ( ! h1Vector.size() ) return true;
+
+  if ( ! G4Threading::IsWorkerThread() )  {
 
     for ( G4int i=0; i<G4int(h1Vector.size()); ++i ) {
       G4HnInformation* info = hnVector[i];
@@ -187,7 +163,9 @@ G4bool G4XmlAnalysisManager::WriteH2()
   const std::vector<G4HnInformation*>& hnVector
     = fH2Manager->GetHnVector();
 
-  if ( fState.GetIsMaster() || ( ! fgMasterInstance ) )  {
+  if ( ! h2Vector.size() ) return true;
+
+  if ( ! G4Threading::IsWorkerThread() )  {
 
     // h2 histograms
     for ( G4int i=0; i<G4int(h2Vector.size()); ++i ) {
@@ -387,7 +365,7 @@ G4bool G4XmlAnalysisManager::CloseFileImpl()
   finalResult = finalResult && result;
   
   // Close ntuple files
-  if ( ( fgCounter == 1 ) || ( ! fState.GetIsMaster() ) ) {
+  if ( ( ! G4AnalysisManagerState::IsMT() ) || ( ! fState.GetIsMaster() ) ) {
     // In sequential mode or in MT mode only on workers
     result = CloseNtupleFiles();
     finalResult = finalResult && result;
@@ -404,7 +382,9 @@ G4bool G4XmlAnalysisManager::CloseFileImpl()
   finalResult = finalResult && result;
 
   // delete files if empty
-  if ( fFileManager->GetHnFile() && fH1Manager->IsEmpty() && fH2Manager->IsEmpty() ) {
+  // (ntuple files are created only if an ntuple is created)
+  if ( fFileManager->GetHnFile() && 
+       fH1Manager->IsEmpty() && fH2Manager->IsEmpty() ) {
     std::remove(fFileManager->GetFullFileName());
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL1() ) 

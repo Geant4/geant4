@@ -33,6 +33,7 @@
 #include "G4H2ToolsManager.hh"
 #include "G4RootNtupleManager.hh"
 #include "G4AnalysisVerbose.hh"
+#include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
 #include "tools/wroot/to"
@@ -48,32 +49,17 @@ namespace {
   G4Mutex mergeH1Mutex = G4MUTEX_INITIALIZER;
   //Mutex to lock master manager when merging H1 histograms 
   G4Mutex mergeH2Mutex = G4MUTEX_INITIALIZER;
-  //Mutex to lock instances counter
-  G4Mutex counterMutex = G4MUTEX_INITIALIZER;
 }  
 
-G4int G4RootAnalysisManager::fgCounter = 0;
 G4RootAnalysisManager* G4RootAnalysisManager::fgMasterInstance = 0;
 G4ThreadLocal G4RootAnalysisManager* G4RootAnalysisManager::fgInstance = 0;
-
-//_____________________________________________________________________________
-G4RootAnalysisManager* G4RootAnalysisManager::Create(G4bool isMaster)
-{
-  if ( fgInstance == 0 ) {
-    // In sequential mode create always master manager
-    if ( ! G4AnalysisManagerState::IsMT() ) isMaster = true;
-
-    fgInstance = new G4RootAnalysisManager(isMaster);
-  }
-  
-  return fgInstance;
-}    
 
 //_____________________________________________________________________________
 G4RootAnalysisManager* G4RootAnalysisManager::Instance()
 {
   if ( fgInstance == 0 ) {
-    fgInstance = new G4RootAnalysisManager();
+    G4bool isMaster = ! G4Threading::IsWorkerThread();
+    fgInstance = new G4RootAnalysisManager(isMaster);
   }
   
   return fgInstance;
@@ -87,8 +73,7 @@ G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
    fNtupleManager(0),
    fFileManager(0)
 {
-  if ( ( isMaster && fgMasterInstance ) ||
-       ( (! isMaster ) && fgInstance ) ) {
+  if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
     G4ExceptionDescription description;
     description 
       << "      " 
@@ -112,10 +97,6 @@ G4RootAnalysisManager::G4RootAnalysisManager(G4bool isMaster)
   SetH2Manager(fH2Manager);
   SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
-
-  G4AutoLock lCounter(&counterMutex);
-  fgCounter++;
-  lCounter.unlock();
 }
 
 //_____________________________________________________________________________
@@ -123,10 +104,6 @@ G4RootAnalysisManager::~G4RootAnalysisManager()
 {
   if ( fState.GetIsMaster() ) fgMasterInstance = 0;
   fgInstance = 0;
- 
-  G4AutoLock lCounter(&counterMutex);
-  fgCounter--;
-  lCounter.unlock();
 }
 
 // 
@@ -141,7 +118,9 @@ G4bool G4RootAnalysisManager::WriteH1()
   const std::vector<G4HnInformation*>& hnVector
     = fH1Manager->GetHnVector();
 
-  if ( fState.GetIsMaster() || ( ! fgMasterInstance ) )  {
+  if ( ! h1Vector.size() ) return true;
+
+  if ( ! G4Threading::IsWorkerThread() )  {
   
     for ( G4int i=0; i<G4int(h1Vector.size()); ++i ) {
       G4HnInformation* info = hnVector[i];
@@ -186,7 +165,9 @@ G4bool G4RootAnalysisManager::WriteH2()
   const std::vector<G4HnInformation*>& hnVector
     = fH2Manager->GetHnVector();
 
-  if ( fState.GetIsMaster() || ( ! fgMasterInstance ) )  {
+  if ( ! h2Vector.size() ) return true;
+
+  if ( ! G4Threading::IsWorkerThread() )  {
   
     for ( G4int i=0; i<G4int(h2Vector.size()); ++i ) {
       G4HnInformation* info = hnVector[i];
@@ -334,9 +315,12 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
   // close file
   fFileManager->CloseFile();  
 
-  // delete files if empty
-  if ( ( ( fgCounter > 1 ) && fState.GetIsMaster() && 
-           fH1Manager->IsEmpty() && fH2Manager->IsEmpty() ) || 
+  // No files clean-up in sequential mode
+  if ( ! fState.IsMT() )  return result;
+  
+  // Delete files if empty in MT mode
+  if ( ( fState.GetIsMaster() && 
+         fH1Manager->IsEmpty() && fH2Manager->IsEmpty() ) || 
        ( ( ! fState.GetIsMaster() ) && fNtupleManager->IsEmpty() ) ) {
     std::remove(fFileManager->GetFullFileName());
 #ifdef G4VERBOSE
@@ -355,4 +339,4 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
 
   return result;
 } 
-   
+  

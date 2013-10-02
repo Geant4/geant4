@@ -48,6 +48,7 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4VH1Manager.hh
         G4VH2Manager.hh
         G4VNtupleManager.hh
+        g4analysis_defs.hh
     SOURCES
         G4AnalysisVerbose.cc
         G4AnalysisManagerState.cc

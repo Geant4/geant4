@@ -53,16 +53,15 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     ~G4XmlAnalysisManager();
     
     // static methods
-    static G4XmlAnalysisManager* Create(G4bool isMaster = true);
     static G4XmlAnalysisManager* Instance();
 
     // Access methods
-    virtual tools::histo::h1d* GetH1(G4int id, G4bool warn = true,
-                                     G4bool onlyIfActive = true) const;
-    virtual tools::histo::h2d* GetH2(G4int id, G4bool warn = true,
-                                     G4bool onlyIfActive = true) const;
-    virtual tools::waxml::ntuple* GetNtuple() const;
-    virtual tools::waxml::ntuple* GetNtuple(G4int ntupleId) const;
+    tools::histo::h1d* GetH1(G4int id, G4bool warn = true,
+                             G4bool onlyIfActive = true) const;
+    tools::histo::h2d* GetH2(G4int id, G4bool warn = true,
+                             G4bool onlyIfActive = true) const;
+    tools::waxml::ntuple* GetNtuple() const;
+    tools::waxml::ntuple* GetNtuple(G4int ntupleId) const;
 
   protected:
     // virtual methods from base class
@@ -72,7 +71,6 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
 
   private:
     // static data members
-    static G4int fgCounter;
     static G4XmlAnalysisManager* fgMasterInstance;
     static G4ThreadLocal G4XmlAnalysisManager* fgInstance;
 

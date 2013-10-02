@@ -34,39 +34,20 @@
 #include "G4CsvNtupleManager.hh"
 #include "G4AnalysisVerbose.hh"
 #include "G4UnitsTable.hh"
+#include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
 #include <iostream>
 
-// mutex in a file scope
-
-namespace {
-  //Mutex to lock instances counter
-  G4Mutex counterMutex = G4MUTEX_INITIALIZER;
-}  
-
-G4int G4CsvAnalysisManager::fgCounter = 0;
 G4CsvAnalysisManager* G4CsvAnalysisManager::fgMasterInstance = 0;
 G4ThreadLocal G4CsvAnalysisManager* G4CsvAnalysisManager::fgInstance = 0;
-
-//_____________________________________________________________________________
-G4CsvAnalysisManager* G4CsvAnalysisManager::Create(G4bool isMaster)
-{
-  if ( fgInstance == 0 ) {
-    // In sequential mode create always master manager
-    if ( ! G4AnalysisManagerState::IsMT() ) isMaster = true;
-
-    fgInstance = new G4CsvAnalysisManager(isMaster);
-  }
-  
-  return fgInstance;
-}    
 
 //_____________________________________________________________________________
 G4CsvAnalysisManager* G4CsvAnalysisManager::Instance()
 {
   if ( fgInstance == 0 ) {
-    fgInstance = new G4CsvAnalysisManager();
+    G4bool isMaster = ! G4Threading::IsWorkerThread();
+    fgInstance = new G4CsvAnalysisManager(isMaster);
   }
   
   return fgInstance;
@@ -78,8 +59,7 @@ G4CsvAnalysisManager::G4CsvAnalysisManager(G4bool isMaster)
    fNtupleManager(0),
    fFileManager(0)
 {
-  if ( ( isMaster && fgMasterInstance ) ||
-       ( (! isMaster ) && fgInstance ) ) {
+  if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
     G4ExceptionDescription description;
     description << "      " 
                 << "G4CsvAnalysisManager already exists." 
@@ -104,10 +84,6 @@ G4CsvAnalysisManager::G4CsvAnalysisManager(G4bool isMaster)
   SetH2Manager(fH2Manager);
   SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
-
-  G4AutoLock lCounter(&counterMutex);
-  fgCounter++;
-  lCounter.unlock();
 }
 
 //_____________________________________________________________________________
@@ -115,10 +91,6 @@ G4CsvAnalysisManager::~G4CsvAnalysisManager()
 {  
   if ( fState.GetIsMaster() ) fgMasterInstance = 0;
   fgInstance = 0;
- 
-  G4AutoLock lCounter(&counterMutex);
-  fgCounter--;
-  lCounter.unlock();
 }
 
 // 
@@ -192,7 +164,7 @@ G4bool G4CsvAnalysisManager::CloseFileImpl()
   finalResult = finalResult && result;
   
   // Close ntuple files
-  if ( ( fgCounter == 1 ) || ( ! fState.GetIsMaster() ) ) {
+  if ( ( ! G4AnalysisManagerState::IsMT() ) || ( ! fState.GetIsMaster() ) ) {
     // In sequential mode or in MT mode only on workers
     result = CloseNtupleFiles();
     finalResult = finalResult && result;

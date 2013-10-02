@@ -17,6 +17,23 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 02, 2013 I. Hrivnacova (analysis-V09-06-25)
+- Do not call WriteH1[2]() when no histograms are defined.
+  This allows to run application which uses only ntuples without
+  a master instance of analysis manager.
+
+September 30, 2013 I. Hrivnacova (analysis-V09-06-24)
+- Removed static G4AnalysisManager::Create(G4bool isMaster) function 
+  (the master/worker is now identified automatically)
+- Removed instances counter and its mutex  
+- Reimplemented  G4AnalysisManagerState::IsMT() with use of
+  G4Threading functions 
+- Removed virtual declaration for GetH1, GetH2, GetNtuple functions
+  in manager classes (to follow NVI pattern)
+- Fixed installing of g4analysis_defs.hh  header
+- Fixed g4csv.hh (it was overwritten by mistake with g4csv_defs.hh)
+- Fixed g4csv_defs.hh (G4Ntuple is the ntuple type, and not a pointer)
+
 September 17, 2013 I. Hrivnacova (analysis-V09-06-23)
 - Use thread Id (now available) in generating file names instead 
   of thread Pid.

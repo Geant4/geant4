@@ -56,12 +56,11 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     ~G4CsvAnalysisManager();
     
     // static methods
-    static G4CsvAnalysisManager* Create(G4bool isMaster = true);
     static G4CsvAnalysisManager* Instance();
 
     // Access methods
-    virtual tools::wcsv::ntuple* GetNtuple() const;
-    virtual tools::wcsv::ntuple* GetNtuple(G4int ntupleId) const;
+    tools::wcsv::ntuple* GetNtuple() const;
+    tools::wcsv::ntuple* GetNtuple(G4int ntupleId) const;
 
   protected:
     // virtual methods from base class
@@ -72,7 +71,6 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
   private:
     // static data members
     //
-    static G4int fgCounter;
     static G4CsvAnalysisManager* fgMasterInstance;
     static G4ThreadLocal G4CsvAnalysisManager* fgInstance;
 

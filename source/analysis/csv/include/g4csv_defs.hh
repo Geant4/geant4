@@ -35,7 +35,7 @@
 
 namespace G4Csv {
 
-  typedef tools::wcsv::ntuple*  G4Ntuple; 
+  typedef tools::wcsv::ntuple  G4Ntuple; 
   typedef G4CsvAnalysisManager G4AnalysisManager; 
 }  
 

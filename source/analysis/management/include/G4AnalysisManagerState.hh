@@ -34,6 +34,7 @@
 
 #include "globals.hh"
 #include "G4AnalysisVerbose.hh" 
+#include "G4Threading.hh"
 
 class G4AnalysisManagerState
 {
@@ -43,13 +44,9 @@ class G4AnalysisManagerState
   public: 
     G4AnalysisManagerState(const G4String& type, G4bool isMaster);
     
-    // Utility method (to be removed when available in global category)
-    static G4bool IsMT() {
-      G4bool isMT = false;
-#ifdef G4MULTITHREADED
-      isMT = true;
-#endif  
-      return isMT;
+    // Utility method 
+    static G4bool IsMT() { 
+      return G4Threading::G4GetThreadId() > -2;
     }            
 
     // get methods
