@@ -51,8 +51,8 @@ class G4NuclearDecayChannel : public G4GeneralPhaseSpaceDecay
   
   public: // with description
 
-    G4NuclearDecayChannel(const G4RadioactiveDecayMode&, G4int Verbose)
-    : G4GeneralPhaseSpaceDecay(Verbose) {;}
+    G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode, G4int Verbose)
+    : G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode),Qtransition(0) {;}
     // default constructor
 
     G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode, G4int Verbose,
@@ -134,19 +134,21 @@ class G4NuclearDecayChannel : public G4GeneralPhaseSpaceDecay
     G4NuclearDecayChannel& operator=(const G4NuclearDecayChannel &right);
 
   protected:
-    G4RadioactiveDecayMode decayMode;
+    //Data members marked with G4ThreadLocal are not invariant among threads
+    //Need to make them TLS
+    const G4RadioactiveDecayMode decayMode;
     static const G4double pTolerance;
     static const G4double levelTolerance;
-    G4double daughterExcitation;
+    static G4ThreadLocal G4double daughterExcitation;
     G4int daughterA;
     G4int daughterZ;
-    G4ParticleDefinition* daughterNucleus;  // not dynamically allocated
-    G4DynamicParticle* dynamicDaughter;     // not dynamically allocated
-    G4double Qtransition;
+    G4ParticleDefinition* daughterNucleus;  
+    static G4ThreadLocal G4DynamicParticle* dynamicDaughter;     
+    const G4double Qtransition;
     G4double halflifethreshold;
     G4bool applyICM;
     G4bool applyARM;
-    G4RandGeneral* RandomEnergy;            // not dynamically allocated    
+    G4RandGeneral* RandomEnergy;   // not dynamically allocated
 };
 #endif
 

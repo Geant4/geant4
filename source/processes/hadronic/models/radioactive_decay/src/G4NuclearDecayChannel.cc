@@ -85,9 +85,14 @@
 //#include "G4AtomicShell.hh"
 //#include "G4AtomicDeexcitation.hh"
 
+//Model const parameters
 const G4double G4NuclearDecayChannel:: pTolerance = 0.001;
 const G4double G4NuclearDecayChannel:: levelTolerance = 2.0*keV;
 //const G4bool G4NuclearDecayChannel:: FermiOn = true;
+
+//These are a kind of "cache"
+G4ThreadLocal G4DynamicParticle* G4NuclearDecayChannel::dynamicDaughter = 0;
+G4ThreadLocal G4double G4NuclearDecayChannel::daughterExcitation = 0;
 
 //
 // Constructor for one decay product (the nucleus).
@@ -101,7 +106,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
                       G4int A,
                       G4int Z,
                       G4double theDaughterExcitation)
- :G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode), dynamicDaughter(0),
+ :G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode), Qtransition(theQtransition),
   RandomEnergy(0)
 {
 #ifdef G4VERBOSE
@@ -114,10 +119,10 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
   SetBR (theBR);
   SetNumberOfDaughters (1);
   FillDaughterNucleus (0, A, Z, theDaughterExcitation);
-  Qtransition = theQtransition;
   halflifethreshold = nanosecond;
   applyICM = true;
   applyARM = true;
+  FillDaughters();
 }
 
 // Constructor for a daughter nucleus and one other particle.
@@ -132,7 +137,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
                       G4int Z,
                       G4double theDaughterExcitation,
                       const G4String theDaughterName1)
- :G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode), dynamicDaughter(0),
+ :G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode), Qtransition(theQtransition),
   RandomEnergy(0)
 {
 #ifdef G4VERBOSE
@@ -146,10 +151,10 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
   SetNumberOfDaughters (2);
   SetDaughter(0, theDaughterName1);
   FillDaughterNucleus (1, A, Z, theDaughterExcitation);
-  Qtransition = theQtransition;
   halflifethreshold = nanosecond;
   applyICM = true;
   applyARM = true;
+  FillDaughters();
 }
 
 //
@@ -169,7 +174,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode &theMode,
                       G4double theDaughterExcitation,
                       const G4String theDaughterName1,
                       const G4String theDaughterName2)
- :G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode), dynamicDaughter(0)
+ :G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode), Qtransition(theQtransition)//, dynamicDaughter(0) //AND
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1)
@@ -184,11 +189,11 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode &theMode,
   SetDaughter(2, theDaughterName2);
   FillDaughterNucleus(1, A, Z, theDaughterExcitation);
   RandomEnergy = randBeta;
-  Qtransition = theQtransition;
 
   halflifethreshold = nanosecond;
   applyICM = true;
   applyARM = true;
+  FillDaughters();
 }
 
 G4NuclearDecayChannel::~G4NuclearDecayChannel()
@@ -225,13 +230,12 @@ void G4NuclearDecayChannel::FillDaughterNucleus(G4int index, G4int A, G4int Z,
   SetDaughter(index, daughterNucleus);
 }
 
-
 G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
 {
   // Load the details of the parent and daughter particles if they have not
   // been defined properly
-  if (G4MT_parent == 0) FillParent();
-  if (G4MT_daughters == 0) FillDaughters();
+  // if (G4MT_parent == 0) FillParent();
+  // if (G4MT_daughters == 0) FillDaughters();
 
   // We want to ensure that the difference between the total
   // parent and daughter masses equals the energy liberated by the transition.
@@ -279,7 +283,6 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
                   FatalException, ed);
     }
   }
-
   if (products == 0) {
     G4ExceptionDescription ed;
     ed << " Parent nucleus " << *parent_name << " was not decayed " << G4endl;
@@ -297,12 +300,10 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
     if (daughterExcitation > 0.0) {
       // Pop the daughter nucleus off the product vector - we need to retain
       // the momentum of this particle.
-
       dynamicDaughter = products->PopProducts();
       G4LorentzVector daughterMomentum = dynamicDaughter->Get4Momentum();
       daughterMomentum.setE(daughterMomentum.e() + daughterExcitation);   // DHW
       G4ThreeVector const daughterMomentum1(static_cast<const G4LorentzVector> (daughterMomentum));
-
       // Now define a G4Fragment with the correct A, Z and excitation,
       // and declare and initialise a G4PhotonEvaporation object    
       G4Fragment nucleus(daughterA, daughterZ, daughterMomentum);
@@ -536,7 +537,6 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
   return products;
 }
 
-
 G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
 {
   G4double pmass = GetParentMass();
@@ -558,7 +558,7 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
   G4double daughtermomentum[3];
   G4double daughterenergy[3];
   // Use the histogram distribution to generate the beta energy
-  daughterenergy[0] = Qtransition*RandomEnergy->shoot();
+    daughterenergy[0] = Qtransition*RandomEnergy->shoot(G4Random::getTheEngine());
   daughtermomentum[0] = std::sqrt(daughterenergy[0]*(daughterenergy[0] + 2.*daughtermass[0]) );
 
   // neutrino energy distribution is flat within the kinematical limits

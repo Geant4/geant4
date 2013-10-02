@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+1 October 2013  Makoto Asai  radioactive_decay-V09-06-14
+--------------------------------------------------------
+- G4NuclearDecayChannel : Fixed thread-safety and reproducability issues.
+
 9 September 2013  Makoto Asai  radioactive_decay-V09-06-13
 ---------------------------------------------------------- 
 - G4RadioactiveDecay::LoadDecayTable() : modify to read data file only once
