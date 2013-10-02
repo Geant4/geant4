@@ -70,6 +70,7 @@
 //		with G4Fragment
 // 20130628  Fissioner produces G4Fragment output directly in G4CollisionOutput
 // 20130808  M. Kelsey -- Use new object-version of paraMaker, for thread safety
+// 20130924  M. Kelsey -- Use G4Log, G4Exp for CPU speedup
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4SystemOfUnits.hh"
@@ -84,14 +85,71 @@
 #include "G4LorentzConvertor.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 using namespace G4InuclParticleNames;
 using namespace G4InuclSpecialFunctions;
 
+namespace {			// Interpolation arrays for QF
+  const G4double QFREP[72] = {  
+    //     TL201 *     *   *    *
+    //      1    2     3   4    5
+    22.5, 22.0, 21.0, 21.0, 20.0,
+    //     BI209 BI207 PO210 AT213 *    TH234
+    //      6     7    8     9     10   11
+    20.6, 20.6, 18.6, 15.8, 13.5, 6.5,
+    //     TH233 TH232 TH231 TH230 TX229 PA233 PA232 PA231 PA230 U240
+    //     12    13    14    15    16    17    18    19    20    21
+    6.65, 6.22, 6.27, 6.5,  6.7,  6.2,  6.25, 5.9,  6.1,  5.75,
+    //     U239 U238 U237  U236 U235 U234 U233 U232 U231
+    //     22   23   24    25   26   27   28   29   30
+    6.46, 5.7, 6.28, 5.8, 6.15, 5.6, 5.8, 5.2, 5.8,
+    //     NP238 NP237 NP236 NP235 PU245 NP234  PU244 NP233
+    //     31    32    33    34    35    36     37    38
+    6.2 , 5.9 , 5.9,  6.0,  5.8,  5.7,   5.4,  5.4,
+    //     PU242 PU241 PU240 PU239 PU238 AM247 PU236 AM245 AM244 AM243
+    //     39    40    41    42    43    44    45    46    47    48
+    5.6,  6.1,  5.57, 6.3,  5.5,  5.8,  4.7,  6.2,  6.4,  6.2,
+    //     AM242 AM241 AM240 CM250 AM239 CM249 CM248 CM247 CM246
+    //     49    50    51    52    53    54    55    56    57
+    6.5,  6.2,  6.5,  5.3,  6.4,  5.7,  5.7,  6.2,  5.7,
+    //     CM245 CM244 CM243 CM242 CM241 BK250 CM240
+    //     58    59    60    61    62    63    64
+    6.3,  5.8,  6.7,  5.8,  6.6,  6.1,  4.3,
+    //     BK249 CF252 CF250 CF248 CF246 ES254 ES253 FM254
+    //     65    66    67    68    69    70    71    72
+    6.2,  3.8,  5.6,  4.0,  4.0,  4.2,  4.2,  3.5 };
+
+  static const G4double XREP[72] = {
+    //      1      2     3      4      5
+    0.6761, 0.677, 0.6788, 0.6803, 0.685,
+    //      6     7     8     9     10     11
+    0.6889, 0.6914, 0.6991, 0.7068, 0.725, 0.7391,
+    //     12  13    14   15   16    17  18    19    20    21
+    0.74, 0.741, 0.742, 0.743, 0.744, 0.7509, 0.752, 0.7531, 0.7543, 0.7548,
+    //     22    23    24
+    0.7557, 0.7566, 0.7576,
+    //      25     26   27    28    29   30   31    32     33    34
+    0.7587, 0.7597, 0.7608, 0.762, 0.7632, 0.7644, 0.7675, 0.7686, 0.7697, 0.7709,
+    //      35    36    37    38    39   40    41
+    0.7714, 0.7721, 0.7723, 0.7733, 0.7743, 0.7753, 0.7764,
+    //      42    43    44    45    46    47    48   49
+    0.7775, 0.7786, 0.7801, 0.781, 0.7821, 0.7831, 0.7842, 0.7852,
+    //     50     51    52    53    54    55    56    57    58
+    0.7864, 0.7875, 0.7880, 0.7887, 0.7889, 0.7899, 0.7909, 0.7919, 0.7930,
+    //      59    60    61    62    63    64
+    0.7941, 0.7953, 0.7965, 0.7977, 0.7987, 0.7989,
+    //      65    66    67    68    69    70    71    72
+    0.7997, 0.8075, 0.8097, 0.8119, 0.8143, 0.8164, 0.8174, 0.8274 };
+}
+
+
+// Constructor and destructor
 
 G4EquilibriumEvaporator::G4EquilibriumEvaporator()
   : G4CascadeDeexciteBase("G4EquilibriumEvaporator"),
-    theParaMaker(verboseLevel) {
+    theParaMaker(verboseLevel), QFinterp(XREP) {
   parms.first.resize(6,0.);
   parms.second.resize(6,0.);
 }
@@ -248,7 +306,7 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
       if (TM1 > huge_num) TM1 = huge_num;
       else if (TM1 < small) TM1 = small;
 
-      W[0] *= std::exp(TM1);
+      W[0] *= G4Exp(TM1);
       prob_sum += W[0];
     }
       
@@ -261,7 +319,7 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	if (TM1 > huge_num) TM1 = huge_num;
 	else if (TM1 < small) TM1 = small;
 
-	W[i] *= std::exp(TM1);
+	W[i] *= G4Exp(TM1);
 	prob_sum += W[i];
       }
     }
@@ -281,7 +339,7 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	if (TM1 > huge_num) TM1 = huge_num;
 	else if (TM1 < small) TM1 = small;
 
-	W[6] = BF * std::exp(TM1);
+	W[6] = BF * G4Exp(TM1);
 	if (W[6] > fisssion_cut*W[0]) W[6] = fisssion_cut*W[0]; 	     
 
 	prob_sum += W[6];
@@ -313,7 +371,7 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	G4double FMAX;
 
 	if (T04 < EEXS) {
-	  FMAX = (T04*T04*T04*T04) * std::exp((EEXS - T04) / T00);
+	  FMAX = (T04*T04*T04*T04) * G4Exp((EEXS - T04) / T00);
 	} else {
 	  FMAX = EEXS*EEXS*EEXS*EEXS;
 	}; 
@@ -325,7 +383,7 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	while (itry < itry_max) {
 	  itry++;
 	  S = EEXS * inuclRndm();
-	  X1 = (S*S*S*S) * std::exp((EEXS - S) / T00);
+	  X1 = (S*S*S*S) * G4Exp((EEXS - S) / T00);
 
 	  if (X1 > FMAX * inuclRndm()) break;
 	};
@@ -394,7 +452,7 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	}
 
 	G4double uc = 2.0 * std::sqrt(u[icase] * TM[icase]);
-	G4double ur = (uc > huge_num ? std::exp(huge_num) : std::exp(uc));
+	G4double ur = (uc > huge_num ? G4Exp(huge_num) : G4Exp(uc));
 	G4double d1 = 1.0 / ur;
 	G4double d2 = 1.0 / (ur - 1.0);	    
 	G4int itry1 = 0;
@@ -408,7 +466,7 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 
 	  while (itry < itry_max && EPR < 0.0) {
 	    itry++;
-	    G4double uu = uc + std::log((1.0 - d1) * inuclRndm() + d2);
+	    G4double uu = uc + G4Log((1.0 - d1) * inuclRndm() + d2);
 	    S = 0.5 * (uc * uc - uu * uu) / u[icase];
 	    EPR = TM[icase] - S * A / (A - 1.0) + V[icase];
 	  }; 
@@ -673,60 +731,3 @@ G4double G4EquilibriumEvaporator::getE0(G4int /*a*/) const {
 
   return e0;   
 }
-
-
-// Interpolation arrays for QF
-const G4double G4EquilibriumEvaporator::QFREP[72] = {  
-    //     TL201 *     *   *    *
-    //      1    2     3   4    5
-    22.5, 22.0, 21.0, 21.0, 20.0,
-    //     BI209 BI207 PO210 AT213 *    TH234
-    //      6     7    8     9     10   11
-    20.6, 20.6, 18.6, 15.8, 13.5, 6.5,
-    //     TH233 TH232 TH231 TH230 TX229 PA233 PA232 PA231 PA230 U240
-    //     12    13    14    15    16    17    18    19    20    21
-    6.65, 6.22, 6.27, 6.5,  6.7,  6.2,  6.25, 5.9,  6.1,  5.75,
-    //     U239 U238 U237  U236 U235 U234 U233 U232 U231
-    //     22   23   24    25   26   27   28   29   30
-    6.46, 5.7, 6.28, 5.8, 6.15, 5.6, 5.8, 5.2, 5.8,
-    //     NP238 NP237 NP236 NP235 PU245 NP234  PU244 NP233
-    //     31    32    33    34    35    36     37    38
-    6.2 , 5.9 , 5.9,  6.0,  5.8,  5.7,   5.4,  5.4,
-    //     PU242 PU241 PU240 PU239 PU238 AM247 PU236 AM245 AM244 AM243
-    //     39    40    41    42    43    44    45    46    47    48
-    5.6,  6.1,  5.57, 6.3,  5.5,  5.8,  4.7,  6.2,  6.4,  6.2,
-    //     AM242 AM241 AM240 CM250 AM239 CM249 CM248 CM247 CM246
-    //     49    50    51    52    53    54    55    56    57
-    6.5,  6.2,  6.5,  5.3,  6.4,  5.7,  5.7,  6.2,  5.7,
-    //     CM245 CM244 CM243 CM242 CM241 BK250 CM240
-    //     58    59    60    61    62    63    64
-    6.3,  5.8,  6.7,  5.8,  6.6,  6.1,  4.3,
-    //     BK249 CF252 CF250 CF248 CF246 ES254 ES253 FM254
-    //     65    66    67    68    69    70    71    72
-    6.2,  3.8,  5.6,  4.0,  4.0,  4.2,  4.2,  3.5 };
-
-namespace {
-  static const G4double XREP[72] = {
-    //      1      2     3      4      5
-    0.6761, 0.677, 0.6788, 0.6803, 0.685,
-    //      6     7     8     9     10     11
-    0.6889, 0.6914, 0.6991, 0.7068, 0.725, 0.7391,
-    //     12  13    14   15   16    17  18    19    20    21
-    0.74, 0.741, 0.742, 0.743, 0.744, 0.7509, 0.752, 0.7531, 0.7543, 0.7548,
-    //     22    23    24
-    0.7557, 0.7566, 0.7576,
-    //      25     26   27    28    29   30   31    32     33    34
-    0.7587, 0.7597, 0.7608, 0.762, 0.7632, 0.7644, 0.7675, 0.7686, 0.7697, 0.7709,
-    //      35    36    37    38    39   40    41
-    0.7714, 0.7721, 0.7723, 0.7733, 0.7743, 0.7753, 0.7764,
-    //      42    43    44    45    46    47    48   49
-    0.7775, 0.7786, 0.7801, 0.781, 0.7821, 0.7831, 0.7842, 0.7852,
-    //     50     51    52    53    54    55    56    57    58
-    0.7864, 0.7875, 0.7880, 0.7887, 0.7889, 0.7899, 0.7909, 0.7919, 0.7930,
-    //      59    60    61    62    63    64
-    0.7941, 0.7953, 0.7965, 0.7977, 0.7987, 0.7989,
-    //      65    66    67    68    69    70    71    72
-    0.7997, 0.8075, 0.8097, 0.8119, 0.8143, 0.8164, 0.8174, 0.8274 };
-}
-
-const G4CascadeInterpolator<72> G4EquilibriumEvaporator::QFinterp(XREP);

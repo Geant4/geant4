@@ -142,6 +142,9 @@
 //		inverseMFP() returns "large" value instead of input path.
 // 20130806  M. Kelsey -- Move static G4InuclEP's to file scope to avoid
 //		thread collisions
+// 20130924  M. Kelsey -- Use G4Log, G4Exp, G4Pow for CPU speedup
+// 20130925  M. Kelsey -- Eliminate unnecessary use of pow() in integrals
+// 20131001  M. Kelsey -- Move QDinterp object to data member, thread local
 
 #include "G4NucleiModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -162,6 +165,8 @@
 #include "G4ParticleLargerBeta.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 #include <vector>
 #include <algorithm>
 #include <functional>
@@ -219,26 +224,44 @@ const G4double G4NucleiModel::pion_vp_small = 0.007;
 const G4double G4NucleiModel::kaon_vp       = 0.015;
 const G4double G4NucleiModel::hyperon_vp    = 0.030;
 
+// Cross-section scaling parameter for gamma-quasideuteron scattering
+const G4double G4NucleiModel::gammaQDscale = G4CascadeParameters::gammaQDScale();
+
+// For convenience in computing densities
 const G4double G4NucleiModel::piTimes4thirds = pi*4./3.;
 
 // Cut-off limits for extreme values in calculations
-
 const G4double G4NucleiModel::small = 1.0e-9;
 const G4double G4NucleiModel::large = 1000.;
 
+namespace {
+  const G4double kebins[] =
+    {  0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
+       0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
+       2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
 
-// Constructors
+  const G4double gammaQDxsec[30] =
+    { 2.8,    1.3,    0.89,   0.56,   0.38,   0.27,   0.19,   0.14,   0.098,
+      0.071, 0.054,  0.0003, 0.0007, 0.0027, 0.0014, 0.001,  0.0012, 0.0005,
+      0.0003, 0.0002,0.0002, 0.0002, 0.0002, 0.0002, 0.0001, 0.0001, 0.0001,
+      0.0001, 0.0001, 0.0001 };
+}
+
+
+// Constructors and destructor
 G4NucleiModel::G4NucleiModel()
   : verboseLevel(0), nuclei_radius(0.), nuclei_volume(0.), number_of_zones(0),
     A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
-    current_nucl2(0), neutronEP(neutron), protonEP(proton) {}
+    current_nucl2(0), gammaQDinterp(kebins),
+    neutronEP(neutron), protonEP(proton) {}
 
 G4NucleiModel::G4NucleiModel(G4int a, G4int z)
   : verboseLevel(0), nuclei_radius(0.), nuclei_volume(0.), number_of_zones(0),
     A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
-    current_nucl2(0), neutronEP(neutron), protonEP(proton) {
+    current_nucl2(0), gammaQDinterp(kebins),
+    neutronEP(neutron), protonEP(proton) {
   generateModel(a,z);
 }
 
@@ -246,7 +269,8 @@ G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei)
   : verboseLevel(0), nuclei_radius(0.), nuclei_volume(0.), number_of_zones(0),
     A(0), Z(0), theNucleus(0), neutronNumber(0), protonNumber(0),
     neutronNumberCurrent(0), protonNumberCurrent(0), current_nucl1(0),
-    current_nucl2(0), neutronEP(neutron), protonEP(proton) {
+    current_nucl2(0), gammaQDinterp(kebins),
+    neutronEP(neutron), protonEP(proton) {
   generateModel(nuclei);
 }
 
@@ -369,7 +393,7 @@ void G4NucleiModel::fillZoneRadii(G4double nuclearRadius) {
     G4cout << " >>> G4NucleiModel::fillZoneRadii" << G4endl;
 
   G4double skinRatio = nuclearRadius/skinDepth;
-  G4double skinDecay = std::exp(-skinRatio);    
+  G4double skinDecay = G4Exp(-skinRatio);    
 
   if (A < 5) {			// Light ions treated as simple balls
     zone_radii.push_back(nuclearRadius);
@@ -381,21 +405,21 @@ void G4NucleiModel::fillZoneRadii(G4double nuclearRadius) {
     
     ur[0] = 0.0;
     for (G4int i = 0; i < number_of_zones; i++) {
-      G4double y = std::sqrt(-std::log(alfa3[i]));
+      G4double y = std::sqrt(-G4Log(alfa3[i]));
       zone_radii.push_back(gaussRadius * y);
       ur[i+1] = y;
     }
   } else if (A < 100) {		// Intermediate nuclei have three-zone W-S
     ur[0] = -skinRatio;
     for (G4int i = 0; i < number_of_zones; i++) {
-      G4double y = std::log((1.0 + skinDecay)/alfa3[i] - 1.0);
+      G4double y = G4Log((1.0 + skinDecay)/alfa3[i] - 1.0);
       zone_radii.push_back(nuclearRadius + skinDepth * y);
       ur[i+1] = y;
     }
   } else {			// Heavy nuclei have six-zone W-S
     ur[0] = -skinRatio;
     for (G4int i = 0; i < number_of_zones; i++) {
-      G4double y = std::log((1.0 + skinDecay)/alfa6[i] - 1.0);
+      G4double y = G4Log((1.0 + skinDecay)/alfa6[i] - 1.0);
       zone_radii.push_back(nuclearRadius + skinDepth * y);
       ur[i+1] = y;
     }
@@ -484,12 +508,12 @@ G4double G4NucleiModel::zoneIntegralWoodsSaxon(G4double r1, G4double r2,
 
   G4double d2 = 2.0 * skinRatio;
   G4double dr = r2 - r1;
-  G4double fr1 = r1 * (r1 + d2) / (1.0 + std::exp(r1));
-  G4double fr2 = r2 * (r2 + d2) / (1.0 + std::exp(r2));
+  G4double fr1 = r1 * (r1 + d2) / (1.0 + G4Exp(r1));
+  G4double fr2 = r2 * (r2 + d2) / (1.0 + G4Exp(r2));
   G4double fi = (fr1 + fr2) / 2.;
   G4double fun1 = fi * dr;
   G4double fun;
-  G4double jc = 1;
+  G4int jc = 1;
   G4double dr1 = dr;
   G4int itry = 0;
 
@@ -499,18 +523,17 @@ G4double G4NucleiModel::zoneIntegralWoodsSaxon(G4double r1, G4double r2,
 
     G4double r = r1 - dr;
     fi = 0.0;
-    G4int jc1 = G4int(std::pow(2.0, jc - 1) + 0.1);
 
-    for (G4int i = 0; i < jc1; i++) { 
+    for (G4int i = 0; i < jc; i++) { 
       r += dr1; 
-      fi += r * (r + d2) / (1.0 + std::exp(r));
+      fi += r * (r + d2) / (1.0 + G4Exp(r));
     }
 
     fun = 0.5 * fun1 + fi * dr;
 
     if (std::fabs((fun - fun1) / fun) <= epsilon) break;
 
-    jc++;
+    jc *= 2;
     dr1 = dr;
     fun1 = fun;
   }	// while (itry < itry_max)
@@ -520,7 +543,7 @@ G4double G4NucleiModel::zoneIntegralWoodsSaxon(G4double r1, G4double r2,
 
   G4double skinDepth3 = skinDepth*skinDepth*skinDepth;
 
-  return skinDepth3 * (fun + skinRatio*skinRatio*std::log((1.0 + std::exp(-r1)) / (1.0 + std::exp(-r2))));
+  return skinDepth3 * (fun + skinRatio*skinRatio*G4Log((1.0 + G4Exp(-r1)) / (1.0 + G4Exp(-r2))));
 }
 
 
@@ -537,12 +560,12 @@ G4double G4NucleiModel::zoneIntegralGaussian(G4double r1, G4double r2,
   const G4int itry_max = 1000;
 
   G4double dr = r2 - r1;
-  G4double fr1 = r1 * r1 * std::exp(-r1 * r1);
-  G4double fr2 = r2 * r2 * std::exp(-r2 * r2);
+  G4double fr1 = r1 * r1 * G4Exp(-r1 * r1);
+  G4double fr2 = r2 * r2 * G4Exp(-r2 * r2);
   G4double fi = (fr1 + fr2) / 2.;
   G4double fun1 = fi * dr;
   G4double fun;
-  G4double jc = 1;
+  G4int jc = 1;
   G4double dr1 = dr;
   G4int itry = 0;
 
@@ -551,18 +574,17 @@ G4double G4NucleiModel::zoneIntegralGaussian(G4double r1, G4double r2,
     itry++;
     G4double r = r1 - dr;
     fi = 0.0;
-    G4int jc1 = int(std::pow(2.0, jc - 1) + 0.1);
 
-    for (G4int i = 0; i < jc1; i++) { 
+    for (G4int i = 0; i < jc; i++) { 
       r += dr1; 
-      fi += r * r * std::exp(-r * r);
+      fi += r * r * G4Exp(-r * r);
     }
 
     fun = 0.5 * fun1 + fi * dr;  
 
     if (std::fabs((fun - fun1) / fun) <= epsilon) break;
 
-    jc++;
+    jc *= 2;
     dr1 = dr;
     fun1 = fun;
   }	// while (itry < itry_max)
@@ -1217,7 +1239,7 @@ void G4NucleiModel::choosePointAlongTraj(G4CascadParticle& cparticle) {
 		       + inverseMeanFreePath(cparticle, protonEP, iz));
 
     // Integral of exp(-len/mfp) from start of zone to end
-    G4double wt = (std::exp(-len[i-1]*invmfp)-std::exp(-len[i]*invmfp)) / invmfp;
+    G4double wt = (G4Exp(-len[i-1]*invmfp)-G4Exp(-len[i]*invmfp)) / invmfp;
 
     wtlen[i] = wtlen[i-1] + wt;
 
@@ -1428,7 +1450,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	momentums.clear();
      
 	if (ab < 3) { // deuteron, simplest case
-	  G4double r = 2.214 - 3.4208 * std::log(1.0 - 0.981 * inuclRndm());
+	  G4double r = 2.214 - 3.4208 * G4Log(1.0 - 0.981 * inuclRndm());
 	  G4ThreeVector coord1 = generateWithRandomAngles(r).vect();
 	  coordinates.push_back(coord1);
 	  coordinates.push_back(-coord1);
@@ -1477,13 +1499,13 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	      for (i = 0; i < 2; i++) {
 		G4int itry1 = 0;
 		G4double ss, u, rho; 
-		G4double fmax = std::exp(-0.5) / std::sqrt(0.5);
+		G4double fmax = G4Exp(-0.5) / std::sqrt(0.5);
 
 		while (itry1 < itry_max) {
 		  itry1++;
-		  ss = -std::log(inuclRndm());
+		  ss = -G4Log(inuclRndm());
 		  u = fmax * inuclRndm();
-		  rho = std::sqrt(ss) * std::exp(-ss);
+		  rho = std::sqrt(ss) * G4Exp(-ss);
 
 		  if (rho > u && ss < s3max) {
 		    ss = r0forAeq3 * std::sqrt(ss);
@@ -1539,7 +1561,7 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 	    G4double b = 3./(ab - 2.0);
 	    G4double b1 = 1.0 - b / 2.0;
 	    G4double u = b1 + std::sqrt(b1 * b1 + b);
-	    G4double fmax = (1.0 + u/b) * u * std::exp(-u);
+	    G4double fmax = (1.0 + u/b) * u * G4Exp(-u);
 	  
 	    while (badco && itry < itry_max) {
 
@@ -1553,10 +1575,10 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 		while (itry1 < itry_max) {
 		  itry1++;
-		  ss = -std::log(inuclRndm());
+		  ss = -G4Log(inuclRndm());
 		  u = fmax * inuclRndm();
 
-		  if (std::sqrt(ss) * std::exp(-ss) * (1.0 + ss/b) > u
+		  if (std::sqrt(ss) * G4Exp(-ss) * (1.0 + ss/b) > u
 		      && ss < s4max) {
 		    ss = r0forAeq4 * std::sqrt(ss);
 		    coord1 = generateWithRandomAngles(ss).vect();
@@ -1629,8 +1651,8 @@ void G4NucleiModel::initializeCascad(G4InuclNuclei* bullet,
 
 	      while(itry2 < itry_max) {
 		itry2++;
-		u = -std::log(0.879853 - 0.8798502 * inuclRndm());
-		x = u * std::exp(-u);
+		u = -G4Log(0.879853 - 0.8798502 * inuclRndm());
+		x = u * G4Exp(-u);
 
 		if(x > inuclRndm()) {
 		  p = std::sqrt(0.01953 * u);
@@ -1827,14 +1849,14 @@ G4NucleiModel::generateInteractionLength(const G4CascadParticle& cparticle,
 
   G4double pw = -path * invmfp;		// Ratio of path in zone to MFP
   if (pw < -huge_num) pw = -huge_num;
-  pw = 1.0 - std::exp(pw);
+  pw = 1.0 - G4Exp(pw);
     
   if (verboseLevel > 2) 
     G4cout << " mfp " << 1./invmfp << " pw " << pw << G4endl;
     
   // Primary particle(s) should always interact at least once
   if (forceFirst(cparticle) || (inuclRndm() < pw)) {
-    spath = -std::log(1.0 - pw * inuclRndm()) / invmfp;
+    spath = -G4Log(1.0 - pw * inuclRndm()) / invmfp;
     if (cparticle.young(young_cut, spath)) spath = large;
     
     if (verboseLevel > 2) 
@@ -1891,23 +1913,3 @@ G4double G4NucleiModel::totalCrossSection(G4double ke, G4int rtype) const
 
   return (crossSectionUnits * xsecTable->getCrossSection(ke));
 }
-
-
-// Cross-section table, parameters for gamma-quasideuteron scattering
-
-const G4double G4NucleiModel::gammaQDscale = G4CascadeParameters::gammaQDScale();
-
-namespace {
-  static const G4double kebins[] =
-    {  0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
-       0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
-       2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
-}
-
-const G4double G4NucleiModel::gammaQDxsec[30] =
-  { 2.8,    1.3,    0.89,   0.56,   0.38,   0.27,   0.19,   0.14,   0.098,
-    0.071, 0.054,  0.0003, 0.0007, 0.0027, 0.0014, 0.001,  0.0012, 0.0005,
-    0.0003, 0.0002,0.0002, 0.0002, 0.0002, 0.0002, 0.0001, 0.0001, 0.0001,
-    0.0001, 0.0001, 0.0001 };
-
-const G4CascadeInterpolator<30> G4NucleiModel::gammaQDinterp(kebins);

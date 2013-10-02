@@ -46,6 +46,7 @@
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 // 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
 //		with G4Fragment
+// 20130924  M. Kelsey -- Replace std::pow with G4Pow::powN() for CPU speed
 
 #include <algorithm>
 
@@ -56,6 +57,7 @@
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4ParticleLargerEkin.hh"
+#include "G4Pow.hh"
 
 using namespace G4InuclSpecialFunctions;
 
@@ -282,16 +284,17 @@ void G4BigBanger::generateMomentumModules(G4double etot, G4int a, G4int z) {
 G4double G4BigBanger::xProbability(G4double x, G4int a) const {
   if (verboseLevel > 3) G4cout << " >>> G4BigBanger::xProbability" << G4endl;
 
-  G4double ekpr = 0.0;
+  G4Pow* theG4Pow = G4Pow::GetInstance();	// For convenience
 
+  G4double ekpr = 0.0;
   if(x < 1.0 || x > 0.0) {
     ekpr = x * x;
 
     if (a%2 == 0) { // even A
-      ekpr *= std::sqrt(1.0 - x) * std::pow((1.0 - x), (3*a-6)/2); 
+      ekpr *= std::sqrt(1.0 - x) * theG4Pow->powN((1.0 - x), (3*a-6)/2); 
     }
     else {
-      ekpr *= std::pow((1.0 - x), (3*a-5)/2);
+      ekpr *= theG4Pow->powN((1.0 - x), (3*a-5)/2);
     };
   }; 
   

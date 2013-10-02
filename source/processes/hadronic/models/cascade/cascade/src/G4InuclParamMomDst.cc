@@ -31,11 +31,14 @@
 //		final-state momentum distributions in Bertini-style cascade
 //
 // 20130308  M. Kelsey -- Move PQ,PR calculation to G4InuclSpecialFunctions.
+// 20130924  M. Kelsey -- Replace std::pow with G4Pow::powN() for CPU speed
 
 #include "G4InuclParamMomDst.hh"
-#include "Randomize.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4InuclParticleNames.hh"
+#include "G4Pow.hh"
+#include "Randomize.hh"
+
 using namespace G4InuclSpecialFunctions;
 using namespace G4InuclParticleNames;
 
@@ -53,16 +56,18 @@ G4InuclParamMomDst::GetMomentum(G4int ptype, const G4double& ekin) const {
 
   if (verboseLevel > 3) G4cout << " JK " << JK << G4endl;
 
+  G4Pow* theG4Pow = G4Pow::GetInstance();	// For convenience
+
   G4double Spow = randomInuclPowers(ekin, coeffPR[JK]);
 
   G4double C=0., PS=0.;
   for(G4int im = 0; im < 3; im++) {
     C = coeffPS[JK][im];
-    PS += C * std::pow(ekin, im);
+    PS += C * theG4Pow->powN(ekin, im);
 
     if (verboseLevel >3) {
       G4cout << " im " << im << " : coeffPS[JK][im] " << C
-	     << " ekin^im " << std::pow(ekin, im) << G4endl;
+	     << " ekin^im " << theG4Pow->powN(ekin, im) << G4endl;
     }
   }
   

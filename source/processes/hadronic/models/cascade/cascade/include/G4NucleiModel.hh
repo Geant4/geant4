@@ -71,6 +71,7 @@
 //		fix spelling of "Deutron" -> "Deuteron"
 // 20130808  M. Kelsey -- To avoid thread collisions, move static neutronEP
 //		and protonEP objects to const data members.
+// 20131001  M. Kelsey -- Move QDinterp object to data member, thread local
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -288,6 +289,8 @@ private:
   G4int current_nucl1;
   G4int current_nucl2;
 
+  G4CascadeInterpolator<30> gammaQDinterp;	// quasideuteron interpolator
+
   // Symbolic names for nuclear potentials
   enum PotentialType { WoodsSaxon=0, Gaussian=1 };
 
@@ -309,15 +312,13 @@ private:
   static const G4double kaon_vp;
   static const G4double hyperon_vp;
 
+  // Scale parameter for gamma-quasideuteron scattering
+  static const G4double gammaQDscale;
+
   // FIXME:  We should not be using this!
   static const G4double piTimes4thirds;
   static const G4double crossSectionUnits;
   static const G4double radiusUnits;
-
-  // Cross-section table, parameters for gamma-quasideuteron scattering
-  static const G4double gammaQDscale;
-  static const G4double gammaQDxsec[30];
-  static const G4CascadeInterpolator<30> gammaQDinterp;
 
   // Neutrons and protons, for computing trajectory placements
   const G4InuclElementaryParticle neutronEP;

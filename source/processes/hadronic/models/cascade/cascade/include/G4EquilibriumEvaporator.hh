@@ -42,6 +42,7 @@
 // 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
 //		with G4Fragment
 // 20130808  Use new object-version of paraMaker, for thread safety
+// 20131001  Move QFinterpolation to data member to be thread local (not shared)
 
 #ifndef G4EQUILIBRIUM_EVAPORATOR_HH
 #define G4EQUILIBRIUM_EVAPORATOR_HH
@@ -84,9 +85,8 @@ private:
   std::pair<std::vector<G4double>, std::vector<G4double> > parms;
   G4CollisionOutput fission_output;
 
-  // Interpolation arrays for QF
-  static const G4double QFREP[72];
-  static const G4CascadeInterpolator<72> QFinterp;
+  // Interpolation object for QF
+  G4CascadeInterpolator<72> QFinterp;
 
   G4Fissioner theFissioner;
   G4BigBanger theBigBanger;

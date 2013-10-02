@@ -34,12 +34,15 @@
 // 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
 //		with G4Fragment
 // 20130808  Use new object-version of paraMaker, for thread safety
+// 20130924  Add local pointer to G4Pow for convenience
 
 #ifndef G4NON_EQUILIBRIUM_EVAPORATOR_HH
 #define G4NON_EQUILIBRIUM_EVAPORATOR_HH
 
 #include "G4CascadeDeexciteBase.hh"
 #include "G4InuclSpecialFunctions.hh"
+
+class G4Pow;
 
 class G4NonEquilibriumEvaporator : public G4CascadeDeexciteBase {
 public:
@@ -50,6 +53,8 @@ public:
 
 private:
   G4InuclSpecialFunctions::paraMaker theParaMaker;
+  G4Pow* theG4Pow;			// Convenient reference to singleton
+
   G4double getMatrixElement(G4int A) const;
   G4double getE0(G4int A) const; 
   G4double getParLev(G4int A, G4int Z) const;

@@ -48,6 +48,7 @@
 // 20130622  Inherit from G4CascadeDeexciteBase, move to deExcite() interface
 //		with G4Fragment
 // 20130808  M. Kelsey -- Use new object-version of paraMaker, for thread safety
+// 20130924  M. Kelsey -- Replace std::pow with G4Pow::powN() for CPU speed
 
 #include <cmath>
 
@@ -59,13 +60,14 @@
 #include "G4InuclNuclei.hh"
 #include "G4InuclSpecialFunctions.hh"
 #include "G4LorentzConvertor.hh"
+#include "G4Pow.hh"
 
 using namespace G4InuclSpecialFunctions;
 
 
 G4NonEquilibriumEvaporator::G4NonEquilibriumEvaporator()
   : G4CascadeDeexciteBase("G4NonEquilibriumEvaporator"),
-    theParaMaker(verboseLevel) {}
+    theParaMaker(verboseLevel), theG4Pow(G4Pow::GetInstance()) {}
 
 
 void G4NonEquilibriumEvaporator::deExcite(const G4Fragment& target,
@@ -191,17 +193,29 @@ void G4NonEquilibriumEvaporator::deExcite(const G4Fragment& target,
 	      G4double F = F2 / F1;
 	      G4double M1 = 2.77 * MELE * PL;
 	      G4double D[3] = { 0., 0., 0. };
-	      D[0] = M1 * F2 * F2 * std::pow(F, NEX-1) / (QEX+1);
-	      
+	      D[0] = M1 * F2 * F2 * theG4Pow->powN(F, NEX-1) / (QEX+1);
+	      if (verboseLevel > 3) {
+		G4cout << " D[0] " << D[0] << " with F " << F
+		       << " powN(F,NEX-1) " << theG4Pow->powN(F, NEX-1)
+		       << G4endl;
+	      }
+
 	      if (D[0] > 0.0) {
 		
 		if (NEX >= 2) {
 		  D[1] = 0.0462 / parlev / G4cbrt(A) * QP * EEXS / QEX;
 		  
 		  if (EMP > eexs_cut) 
-		    D[2] = D[1] * std::pow(EMP / EEXS, NEX) * (1.0 + CPA1);
-		  D[1] *= std::pow(EMN / EEXS, NEX) * getAL(A);   
-		  
+		    D[2] = D[1] * theG4Pow->powN(EMP/EEXS, NEX) * (1.0 + CPA1);
+		  D[1] *= theG4Pow->powN(EMN/EEXS, NEX) * getAL(A);   
+
+		  if (verboseLevel > 3) {
+		    G4cout << " D[1] " << D[1] << " with powN(EMN/EEXS, NEX) "
+			   << theG4Pow->powN(EMN/EEXS, NEX) << G4endl
+			   << " D[2] " << D[2] << " with powN(EMP/EEXS, NEX) "
+			   << theG4Pow->powN(EMP/EEXS, NEX) << G4endl;
+		  }
+
 		  if (QNP < 1) D[1] = 0.0;
 		  if (QPP < 1) D[2] = 0.0;
 		  
@@ -300,11 +314,20 @@ void G4NonEquilibriumEvaporator::deExcite(const G4Fragment& target,
 			} else {		         
 			  G4double QEX2 = 1.0 / QEX;
 			  G4double QEX1 = 1.0 / (QEX-1);
-			  X = std::pow(0.5 * R, QEX2);
+			  X = theG4Pow->powA(0.5*R, QEX2);
+			  if (verboseLevel > 3) {
+			    G4cout << " R " << R << " QEX2 " << QEX2
+				   << " powA(R, QEX2) " << X << G4endl;
+			  }
 			  
 			  for (G4int i = 0; i < 1000; i++) {
 			    G4double DX = X * QEX1 * 
-			      (1.0 + QEX2 * X * (1.0 - R / std::pow(X, NEX)) / (1.0 - X));
+			      (1.0 + QEX2 * X * (1.0 - R / theG4Pow->powN(X, NEX)) / (1.0 - X));
+			    if (verboseLevel > 3) {
+			      G4cout << " NEX " << NEX << " powN(X, NEX) "
+				     << theG4Pow->powN(X, NEX) << G4endl;
+			    }
+			    
 			    X -= DX;
 			    
 			    if (std::fabs(DX / X) < 0.01) break;  

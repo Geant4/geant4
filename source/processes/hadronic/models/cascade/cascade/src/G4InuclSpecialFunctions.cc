@@ -31,6 +31,7 @@
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 // 20130308  M. Kelsey -- New function to compute INUCL-style random value
 // 20130314  M. Kelsey -- Restore null initializer and if-block for _TLS_.
+// 20130924  M. Kelsey -- Use G4Log, G4Exp, G4Pow for CPU speedup
 
 #include <cmath>
 
@@ -38,6 +39,9 @@
 #include "G4PhysicalConstants.hh"
 #include "G4LorentzVector.hh"
 #include "G4ThreeVector.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
+#include "G4Pow.hh"
 #include "Randomize.hh"
 
 
@@ -46,6 +50,8 @@
 G4double 
 G4InuclSpecialFunctions::randomInuclPowers(G4double ekin, 
 					   const G4double (&coeff)[4][4]) {
+  G4Pow* theG4Pow = G4Pow::GetInstance();
+
   G4double S = G4UniformRand();		// Random fraction for expansion
 
   G4double C, V;
@@ -54,11 +60,11 @@ G4InuclSpecialFunctions::randomInuclPowers(G4double ekin,
     V = 0.0;
     for (G4int k=0; k<4; k++) {
       C = coeff[i][k];
-      V += C * std::pow(ekin, k);
+      V += C * theG4Pow->powN(ekin, k);
     }
 
     PQ += V;
-    PR += V * std::pow(S, i);
+    PR += V * theG4Pow->powN(S, i);
   }
 
   return std::sqrt(S) * (PR + (1-PQ)*(S*S*S*S));
@@ -104,7 +110,7 @@ G4double G4InuclSpecialFunctions::FermiEnergy(G4int A, G4int Z, G4int ntype) {
 }
 
 G4double G4InuclSpecialFunctions::G4cbrt(G4double x) {
-  return x==0 ? 0. : (x<0?-1.:1.)*std::exp(std::log(std::fabs(x))/3.);
+  return x==0 ? 0. : (x<0?-1.:1.)*G4Exp(G4Log(std::fabs(x))/3.);
 }
 
 G4double G4InuclSpecialFunctions::inuclRndm() { 
@@ -119,7 +125,7 @@ G4double G4InuclSpecialFunctions::randomGauss(G4double sigma) {
   r2 = r2 > eps ? r2 : eps;
   r2 = r2 < 1.0 - eps ? r2 : 1.0 - eps; 
 
-  return sigma * std::sin(twopi * r1) * std::sqrt(-2.0 * std::log(r2)); 
+  return sigma * std::sin(twopi * r1) * std::sqrt(-2.0 * G4Log(r2)); 
 } 
 
 G4double G4InuclSpecialFunctions::randomPHI() { 

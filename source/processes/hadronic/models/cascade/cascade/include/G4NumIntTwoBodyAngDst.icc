@@ -32,10 +32,13 @@
 //
 // 20130219	M. Kelsey: Move to .icc file, required for templated classes
 // 20130620  Fix Coverity #50295, recursive #include.
+// 20130924  M. Kelsey -- Use G4Log, G4Exp for CPU speedup
 
 #ifndef G4NumIntTwoBodyAngDst_icc
 #define G4NumIntTwoBodyAngDst_icc 1
 
+#include "G4Log.hh"
+#include "G4Exp.hh"
 #include "Randomize.hh"
 
 
@@ -57,7 +60,7 @@ GetCosTheta(const G4double& ekin, const G4double& pcm) const
     }
   } else {
     slope = 2.*tcoeff*pcm*pcm; 
-    costh = std::log(1.0 - xrand*(1. - std::exp(2.*slope) ) )/slope - 1.0;
+    costh = G4Log(1.0 - xrand*(1. - G4Exp(2.*slope) ) )/slope - 1.0;
   }
   return costh;
 }
