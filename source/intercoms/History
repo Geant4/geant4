@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 September, 2013 M. Asai (intercoms-V09-06-09)
+- G4UImessenger constructor with command directory now may take
+  a boolean flag of not-to-be-broadcasted.
+
 20 September, 2013 M. Asai (intercoms-V09-06-08)
 - A UI command directory may be specified as such that all commands in that
   directory and all decendant directories should not be broadcased to

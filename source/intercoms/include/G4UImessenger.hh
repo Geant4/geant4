@@ -48,7 +48,8 @@ class G4UImessenger
 {
   public: // with description
       G4UImessenger();
-      G4UImessenger(const G4String& path, const G4String& dsc);
+      G4UImessenger(const G4String& path, const G4String& dsc,
+                    G4bool commandsToBeBroadcasted = true);
       // Constructor. In the implementation of the concrete messenger, all commands
       // related to the messenger must be constructed.
       virtual ~G4UImessenger();
@@ -83,7 +84,8 @@ class G4UImessenger
       // shortcut way for creating directory and commands
       G4UIdirectory* baseDir; // used if new object is created
       G4String baseDirName;   // used if dir already exists
-      void CreateDirectory(const G4String& path, const G4String& dsc);
+      void CreateDirectory(const G4String& path, const G4String& dsc,
+                           G4bool commandsToBeBroadcasted=true);
       template <typename T> T* CreateCommand(const G4String& cname, 
                                              const G4String& dsc);
 
