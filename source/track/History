@@ -18,6 +18,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- September 26, 2013 M.Asai (track-V09-06-03)
+- Fix compilation warning caused by the previous tag.
+
+- September 26, 2013 M.Asai (track-V09-06-02)
+- Introduce CreatorModelIndex to G4Track and its access methods.
+
 - April 10, 2013 G.Cosmo (track-V09-06-01)
 - Cleanup of automatic changes for MT in classes in G4Track.
 - Moved constructor and destructor of G4VelocityTable singleton to private.

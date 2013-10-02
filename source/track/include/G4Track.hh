@@ -61,6 +61,7 @@
 #include "G4TrackStatus.hh"           // Include from 'tracking'
 #include "G4TouchableHandle.hh"       // Include from 'geometry'
 #include "G4VUserTrackInformation.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 #include "G4Material.hh"
 
@@ -241,6 +242,13 @@ public: // With description
    const G4VProcess* GetCreatorProcess() const;
    void SetCreatorProcess(const G4VProcess* aValue);
 
+   inline void SetCreatorModelIndex(G4int idx)
+   { fCreatorModelIndex = idx; }
+   inline G4String& GetCreatorModelName()
+   { return G4PhysicsModelCatalog::GetModelName(fCreatorModelIndex); }
+   inline G4int GetCreatorModelID()
+   { return fCreatorModelIndex; }
+
   // track weight
   // These are methods for manipulating a weight for this track.
    G4double GetWeight() const;
@@ -300,6 +308,7 @@ public: // With description
    G4double fVtxKineticEnergy;          // Kinetic energy at the vertex
    const G4LogicalVolume* fpLVAtVertex; //Logical Volume at the vertex
    const G4VProcess* fpCreatorProcess; // Process which created the track
+   G4int fCreatorModelIndex;           // Index of the physics model which created the track
    
    G4VUserTrackInformation* fpUserInformation;
 
