@@ -20,11 +20,19 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+30th September 2013  John Allison  (modeling-V09-06-19)
+- Re-tagged after clean-up by Gunter and Mke.
+
+27th September 2013  Michael Kelsey (modeling-V09-06-18)
+- G4MagneticFieldModel.hh:  Remove expanded '$'Id'$' value and re-commit to
+  (hopefully!) synchronize SVN state and eliminate "Modified" warnings in
+  CDash.
+
 21st September 2013  John Allison  (modeling-V09-06-17)
 - G4MagneticFieldModel: Fix compiler warnings.
 
 20th September 2013  John Allison  (modeling-V09-06-16)
-- G4MagneticFieldModel: Added $Id$ functionality.
+- G4MagneticFieldModel: Added '$'Id'$' functionality.
 
 2nd September 2013  John Allison
 - G4MagneticFieldModel.cc:

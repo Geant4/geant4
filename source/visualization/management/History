@@ -26,6 +26,23 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+25th September 2013  John Allison  (visman-V09-06-17)
+- G4VisManager.cc:
+  o Vis commands are *not* be broadcast to threads.
+  o Fix crash in EndOfEvent for batch MT mode.
+
+24th September 2013  John Allison  (visman-V09-06-16)
+- G4VisCommands.cc:
+  o /vis/reviewKeptEvents: Keep enabled state (ConcreteInstance pointer).
+- G4VisManager.cc:
+  o Move SetConcreteInstance *out* of IsValidView.
+    . Now in Enable().
+    . Begin/EndOfRun/Event methods protected if !ConcreteInstance.
+  o Implemented IgnoreStateChanges.
+  o MT mode:
+    . Implemented maxNumberOfKeptEvents.
+  o Cosmetics.
+
 20th September 2013  John Allison  (visman-V09-06-15)
 - First implementation of multithreading visualisation:
   o Drawing from user code is explicitly ignored.

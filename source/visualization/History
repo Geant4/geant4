@@ -24,6 +24,24 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+30th September 2013  John Allison  (vis-V09-06-30)
+- modeling-V09-06-19: Re-tagged after clean-up by Gunter and Mike.
+
+27th September 2013  Michael Kelsey  (vis-V09-06-29)
+- modeling-V09-06-18
+  o Try to resolve SVN "modified" warnings due to 'Id' string use.
+
+25th September 2013  John Allison  (vis-V09-06-28)
+- visman-V09-06-17:
+  o Vis commands are *not* be broadcast to threads.
+  o Fix crash in EndOfEvent for batch MT mode.
+
+24th September 2013  John Allison  (vis-V09-06-27)
+- visman-V09-06-16:
+  o /vis/reviewKeptEvents: Keep enabled state (ConcreteInstance pointer).
+  o Implemented IgnoreStateChanges.
+  o MT mode: Implemented maxNumberOfKeptEvents.
+
 21st September 2013  John Allison  (vis-V09-06-26)
 - modeling-V09-06-17: Fix compiler warnings.
 

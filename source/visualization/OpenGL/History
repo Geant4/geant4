@@ -17,11 +17,6 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-4th July 2013  Laurent Garnier
-- G4OpenGLQtViewer:
-   o Better margin control and adding a tooltip on scene tree colour item
-   o Add a parseSceneTreeAndSaveState() in order to save the scene tree state
-
 17th June 2013  John Allison  (opengl-V09-06-06)
 - G4OpenGLQtViewer: Commented out skeleton code below.
 

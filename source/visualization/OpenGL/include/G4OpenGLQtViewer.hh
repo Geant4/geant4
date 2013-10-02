@@ -213,10 +213,6 @@ private:
   // Get the old tree wigdet item for POindex if exists
   QTreeWidgetItem* getOldTreeWidgetItem(int POindex);
 
-// parse the scene tree and return a string of status that can be saved
-  std::string parseSceneTreeAndSaveState();
-
-  std::string parseSceneTreeElementAndSaveState(QTreeWidgetItem* item, unsigned int level);
 
   QMenu *fContextMenu;
   QPoint fLastPos1;
