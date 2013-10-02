@@ -5,6 +5,10 @@
                        Package History file
                        --------------------
 
+30 September 2013 - tag dnaphysics-V09-06-09 - I. Hrivnacova
+- Updated for changes in analysis:
+  (removal of G4AnalysisManager::Create(isMaster))
+
 19 August 2013 - tag dnaphysics-V09-06-08 - S. Incerti
 - Updated README
 
