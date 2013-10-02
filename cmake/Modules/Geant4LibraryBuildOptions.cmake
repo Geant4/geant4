@@ -14,6 +14,11 @@
 #
 
 #-----------------------------------------------------------------------
+# Load needed modules
+#
+include(CheckCXXSourceCompiles)
+
+#-----------------------------------------------------------------------
 # Set up Build types or configurations
 # If further tuning of compiler flags is needed then it should be done here.
 # (It can't be done in the make rules override section).
@@ -34,6 +39,14 @@ endif()
 option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" OFF)
 
 if(GEANT4_BUILD_MULTITHREADED)
+  # - Need Thread Local Storage support (POSIX)
+  if(UNIX)
+    check_cxx_source_compiles("__thread int i; int main(){return 0;}" HAVE_TLS)
+    if(NOT HAVE_TLS)
+      message(FATAL_ERROR "Configured compiler ${CMAKE_CXX_COMPILER} does not support thread local storage")
+    endif()
+  endif()
+
   add_definitions(-DG4MULTITHREADED)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${GEANT4_MULTITHREADED_CXX_FLAGS}")
 endif()

@@ -29,6 +29,17 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+26th September 2013 - Ben Morgan (cmake-V09-06-26)
+- Modules/Geant4LibraryBuildOptions.cmake : When building in
+  multithreaded mode on a UNIX system, perform a compile test to check
+  that compiler supports thread local storage via availability of
+  "__thread". Emit a FATAL_ERROR if the compiler does not support TLS,
+  reporting this and the compiler used. 
+- Templates/geant4-config.cmake.in : Implement new --check-datasets and
+  --install-datasets tasks. The former checks that the known datasets are
+  installed in the configured location, reporting status. The latter is a
+  stub for implementing post-install download and unpack of datasets
+
 17th September 2013 - Ben Morgan (cmake-V09-06-25)
 - Templates/geant4-config.cmake.in : Expand export variable holding
   list of dataset tuples. Process list from CMake ';' separated to

@@ -230,6 +230,82 @@ print_datasets()
 }
 
 #-----------------------------------------------------------------------
+# function check_datasets
+#          Check whether datasets exist as directories at the expected
+#          location. Print dataset name, path and install status
+#
+bool_to_string()
+{
+  if test $1 ; then
+    echo $2
+  else
+    echo $3
+  fi
+}
+
+check_datasets()
+{
+  for ds in ${dataset_list} ; do
+    dataset_name=$(echo $ds | cut -d "|" -f1)
+    dataset_path=$(echo $ds | cut -d "|" -f3)
+    dataset_status=$(bool_to_string $(test -d ${dataset_path}) INSTALLED NOTFOUND)
+    echo ${dataset_name} ${dataset_status} ${dataset_path}
+  done
+}
+
+
+install_datasets()
+{
+  G4CURL=$(which curl)
+  if test "x${G4CURL}" = "x" ; then
+    echo "error: no curl executable found"
+    exit 1
+  fi
+
+  if test ! -x "${G4CURL}" ; then
+    echo "error: curl '${G4CURL}' is not executable"
+    exit 1
+  fi
+
+  datasets_to_install=''
+  for ds in ${dataset_list} ; do
+    dataset_name=$(echo $ds | cut -d "|" -f1)
+    dataset_path=$(echo $ds | cut -d "|" -f3)
+  
+    if test ! -d ${dataset_path} ; then
+      datasets_to_install="${datasets_to_install} ${dataset_name}"
+    fi
+  done
+
+  if test "x${datasets_to_install}" != "x" ; then
+    # - Check the installation directory is writable
+
+    # - Create download cache
+    g4downloaddir=$(mktemp -d -t g4dlc)
+    echo "${g4downloaddir}"
+    if test -d ${g4downloaddir} ; then
+      echo "created download cache"
+    else
+      echo "failed to create '${g4downloaddir}'"
+    fi
+
+    # - Download/install loop
+
+
+    # - Clean up download cache
+    rm -Rf ${g4downloaddir}
+    if test -d ${g4downloaddir} ; then
+      echo "failed to remove '${g4downloaddir}'"
+    else
+      echo "cleaned download cache"
+    fi 
+  fi
+
+  echo "all datasets installed"
+  exit 0
+}
+
+#-----------------------------------------------------------------------
 # function help
 #          print help on available command line arguments and enabled
 #          and disabled features of the toolkit
@@ -254,6 +330,14 @@ Usage: geant4-config [OPTION...]
 
   --datasets              output dataset name, environment variable 
                           and path, with one line per dataset
+
+  --check-datasets        output dataset name, installation status and
+                          expected installation location, with one line
+                          per dataset
+
+  --install-datasets      download and install any missing datasets,
+                          requires a network connection and for the dataset
+                          path to be user writable
 
 Known Features:
 EOF
@@ -361,6 +445,14 @@ while test $# -gt 0 ; do
 
     --datasets)
       print_datasets
+      ;;
+
+    --check-datasets)
+      check_datasets
+      ;;
+
+    --install-datasets)
+      install_datasets
       ;;
 
     -?)
