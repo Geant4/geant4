@@ -37,13 +37,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B4RunAction::B4RunAction(G4bool isOnMaster)
+B4RunAction::B4RunAction()
  : G4UserRunAction()
 { 
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
   // in B4Analysis.hh
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isOnMaster);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   G4cout << "Using " << analysisManager->GetType() << G4endl;
 
   // Create directories 

@@ -48,7 +48,7 @@ B4dActionInitialization::~B4dActionInitialization()
 
 void B4dActionInitialization::BuildForMaster() const
 {
-  SetUserAction(new B4RunAction(true));
+  SetUserAction(new B4RunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +56,7 @@ void B4dActionInitialization::BuildForMaster() const
 void B4dActionInitialization::Build() const
 {
   SetUserAction(new B4PrimaryGeneratorAction);
-  SetUserAction(new B4RunAction(false));
+  SetUserAction(new B4RunAction);
   SetUserAction(new B4dEventAction);
 }  
 

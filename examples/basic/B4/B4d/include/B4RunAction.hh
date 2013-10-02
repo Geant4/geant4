@@ -57,7 +57,7 @@ class G4Run;
 class B4RunAction : public G4UserRunAction
 {
   public:
-    B4RunAction(G4bool isOnMaster);
+    B4RunAction();
     virtual ~B4RunAction();
 
     virtual void BeginOfRunAction(const G4Run*);

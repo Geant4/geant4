@@ -57,7 +57,7 @@ class G4Run;
 class B4bRunAction : public G4UserRunAction
 {
   public:
-    B4bRunAction(G4bool isOnMaster);
+    B4bRunAction();
     virtual ~B4bRunAction();
 
     virtual G4Run* GenerateRun();
