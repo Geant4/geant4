@@ -9,6 +9,10 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+30 Sep 2013 - I. Hrivnacova - tag microbeam-V09-06-06
+- Updated for changes in analysis:
+  (removal of G4AnalysisManager::Create(isMaster))
+
 05 Sep 2013 - S. Incerti - tag microbeam-V09-06-05
 - Updated README
 

@@ -61,9 +61,9 @@ void RunAction::BeginOfRunAction(const G4Run*)
  
   // Histograms
   // Get/create analysis manager
-  G4cout << "##### Create analysis manager " << isMaster << "  " << this << G4endl;
+  G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   
-  G4AnalysisManager* man = G4AnalysisManager::Create(isMaster);
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
   
   G4cout << "Using " << man->GetType() << " analysis manager" << G4endl;
 
