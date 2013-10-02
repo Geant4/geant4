@@ -9,6 +9,10 @@ $Id$
                        Package History file
                        --------------------
 
+30 Sep 2013 - tag nanobeam-V09-06-10  - I. Hrivnacova
+- Updated for changes in analysis:
+  (removal of G4AnalysisManager::Create(isMaster))
+
 28 Aug 2013 - tag nanobeam-V09-06-09  - S. Incerti
 - Changed default field model
 
