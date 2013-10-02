@@ -144,8 +144,8 @@ foreach(_i 01 03)
   GEANT4_ADD_TEST(example-ext-analysis-anaex${_i} COMMAND ${BINDIR}/AnaEx${_i} ${SRCDIR}/extended/analysis/AnaEx${_i}/AnaEx${_i}.in DEPENDS example-ext-analysis-anaex${_i}-build)
 endforeach()
 
-GEANT4_ADD_TEST(example-ext-analysis-n03con COMMAND ${BINDIR}/exampleN03Con ${SRCDIR}/extended/analysis/N03Con/exampleN03Con.in
-                                BUILD ${SRCDIR}/extended/analysis/N03Con)
+GEANT4_ADD_TEST(example-ext-analysis-b1con COMMAND ${BINDIR}/exampleB1Con ${SRCDIR}/extended/analysis/B1Con/exampleB1Con.in
+                                BUILD ${SRCDIR}/extended/analysis/B1Con)
 
 
 GEANT4_ADD_TEST(example-ext-biasing-b01 COMMAND ${BINDIR}/exampleB01 

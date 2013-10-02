@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ctests-V09-06-13 30 September 2013 Ivana Hrivnacova
+- N03Con test replaced with B1Con
+
 ctests-V09-06-12 13 June 2013 Andrea Dotti
 - factor out phonns example test definition.
   Requires phononExample-V09-06-03
