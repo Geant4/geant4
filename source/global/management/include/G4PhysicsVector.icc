@@ -118,21 +118,6 @@ inline
   return Value(theEnergy, idx);
 }
 
-//---------------------------------------------------------------
-
-inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
-{
-  size_t id = idx;
-  if(e < binVector[1]) { 
-    id = 0; 
-  } else if(e >= binVector[numberOfNodes-2]) { 
-    id = numberOfNodes - 2; 
-  } else if(idx >= numberOfNodes || e < binVector[idx] || e > binVector[idx+1]) { 
-    id = FindBinLocation(e); 
-  }
-  return id;
-}
-
 //------------------------------------------------
 
 inline
@@ -243,6 +228,46 @@ inline
 G4int G4PhysicsVector::GetVerboseLevel(G4int)
 {
    return verboseLevel;
+}
+
+//---------------------------------------------------------------
+
+inline 
+size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
+{
+   size_t bin;
+   if(type == T_G4PhysicsLogVector) {
+     bin = size_t(G4Log(theEnergy)/dBin - baseBin);
+     if(bin > numberOfNodes - 2) { bin = numberOfNodes - 2; }   
+   } else if(type == T_G4PhysicsLinearVector) {
+     bin = size_t( theEnergy/dBin - baseBin ); 
+     if(bin > numberOfNodes - 2) { bin = numberOfNodes - 2; }   
+   } else {
+     bin = 0;
+     size_t bin2;
+     size_t bin3 = numberOfNodes - 1;
+     while (bin != bin3 - 1) {
+       bin2 = bin + (bin3 - bin + 1)/2;
+       if (theEnergy > binVector[bin2]) { bin = bin2; }
+       else { bin3 = bin2; }
+     }
+   }
+   return bin;
+}
+
+//---------------------------------------------------------------
+
+inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
+{
+  size_t id = idx;
+  if(e < binVector[1]) { 
+    id = 0; 
+  } else if(e >= binVector[numberOfNodes-2]) { 
+    id = numberOfNodes - 2; 
+  } else if(idx >= numberOfNodes || e < binVector[idx] || e > binVector[idx+1]) { 
+    id = FindBinLocation(e); 
+  }
+  return id;
 }
 
 //---------------------------------------------------------------

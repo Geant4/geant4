@@ -24,62 +24,47 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PhysicsModelCatalog.hh 67281 2013-02-13 14:41:55Z gcosmo $
 //
 // 
-//--------------------------------------------------------------------
-//      GEANT 4 class header file
+// -----------------------------------------------------------------
 //
-//  G4PhysicsLinearVector.hh
+//      ------------------- class G4PhysicsModelCatalog -----------------
 //
-//  Class description:
+// Class description:
 //
-//    A physics vector which has values of energy-loss, cross-section, 
-//    and other physics values of a particle in matter in a given 
-//    range of the energy, momentum, etc. The scale of energy/momentum
-//    bins is in linear.
 
-//  History:
-//    02 Dec. 1995, G.Cosmo : Structure created based on object model
-//    03 Mar. 1996, K.Amako : Implemented the 1st version
-//    01 Jul. 1996, K.Amako : Cache mechanism and hidden bin from the 
-//                            user introduced
-//    26 Sep. 1996, K.Amako : Constructor with only 'bin size' added
-//    11 Nov. 2000, H.Kurashige : Use STL vector for dataVector and binVector
-//    16 Aug. 2011  H.Kurashige : Move dBin, baseBin to the base class
-//    02 Oct. 2013  V.Ivanchenko : Remove FindBinLocation method
-//
-//--------------------------------------------------------------------
-
-#ifndef G4PhysicsLinearVector_h
-#define G4PhysicsLinearVector_h 1
+#ifndef G4PhysicsModelCatalog_HH
+#define G4PhysicsModelCatalog_HH
 
 #include "globals.hh"
-#include "G4PhysicsVector.hh"
+#include <vector>
+#include "G4String.hh"
 
-class G4PhysicsLinearVector : public G4PhysicsVector  
+typedef std::vector<G4String> modelCatalog;
+
+class G4PhysicsModelCatalog
 {
-  public:
+private:  // with description
 
-    G4PhysicsLinearVector();
-    explicit G4PhysicsLinearVector(size_t theNbin);
-      // Constructors
+    G4PhysicsModelCatalog();
+    ~G4PhysicsModelCatalog();
+    
+public:  // with description
+    
+    static G4int Register(G4String&);
+    static G4String& GetModelName(G4int);
 
-  public: // with description
+public:  // without description
 
-    G4PhysicsLinearVector(G4double theEmin, G4double theEmax, size_t theNbin);
-      // Constructor
+    static G4int GetIndex(G4String&);
+    static G4int Entries();
+    static void Destroy();
+    
+private:
 
-    virtual ~G4PhysicsLinearVector();
-      // Destructor
-
-    virtual G4bool Retrieve(std::ifstream& fIn, G4bool ascii);
-
-    virtual void ScaleVector(G4double factorE, G4double factorV);
-      // Scale all values of the vector and second derivatives
-      // by factorV, energies by vectorE. 
+    static modelCatalog* catalog;
 
 };
-
 
 #endif

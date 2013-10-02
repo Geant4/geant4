@@ -55,6 +55,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsLinearVector.hh
         G4PhysicsLnVector.hh
         G4PhysicsLogVector.hh
+        G4PhysicsModelCatalog.hh
         G4PhysicsOrderedFreeVector.hh
         G4PhysicsOrderedFreeVector.icc
         G4PhysicsTable.hh
@@ -109,6 +110,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsLinearVector.cc
         G4PhysicsLnVector.cc
         G4PhysicsLogVector.cc
+        G4PhysicsModelCatalog.cc
         G4PhysicsOrderedFreeVector.cc
         G4PhysicsTable.cc
         G4PhysicsVector.cc

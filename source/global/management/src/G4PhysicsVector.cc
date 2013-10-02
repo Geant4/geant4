@@ -68,7 +68,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool)
    verboseLevel(0)
 {
   if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
-  g4pow = G4Pow::GetInstance();
+  // g4pow = G4Pow::GetInstance();
 }
 
 // --------------------------------------------------------------
@@ -81,7 +81,7 @@ G4PhysicsVector::~G4PhysicsVector()
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
-  g4pow = G4Pow::GetInstance();
+  //  g4pow = G4Pow::GetInstance();
 
   dBin         = right.dBin;
   baseBin      = right.baseBin;

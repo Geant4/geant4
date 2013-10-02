@@ -17,6 +17,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 02, 2013 V.Ivantchenko (global-V09-06-73)
+- G4Pow - fixed typo in previous tag
+
+October 02, 2013 V.Ivantchenko (global-V09-06-72)
+- G4Pow - is now static not G4ThreadLocal, added check that it is 
+    instantiated in the master thread
+- G4PhysicsVector - FindBinLocation is now inlined and not virtual,
+    using table type different algorithms are invoked to compute bin
+    number; use G4Log
+- G4PhysicsLogVector,  G4PhysicsLinearVector, G4PhysicsOrderedFreeVector,
+  G4LPhysicsFreeVector, G4PhysicsFreeVector, G4PhysicsLnVector - removed
+    FindBinLocation methods
+- G4PhysicsLogVector - use G4Log and G4Exp instead of log10
+
+October 1, 2013 T.Koi (global-V09-06-71)
+- Add data member of name to G4ConvergenceTester
+  Tune format of output result
+
+September 26, 2013 M.Asai (global-V09-06-70)
+- Fix a typo of class name in sources.cmake.
+
+September 26, 2013 M.Asai (global-V09-06-69)
+- Introducing G4PhysicsModelCatalog class to be used my physics models
+  and G4Track.
+
 September 16, 2013 V.Ivantchenko (global-V09-06-68)
 - G4Pow: optimized logA() and logX() functions.
 

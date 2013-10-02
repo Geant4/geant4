@@ -105,7 +105,7 @@ class G4Pow
 
   private:
 
-    static G4ThreadLocal G4Pow* fpInstance;
+    static G4Pow* fpInstance;
 
     const G4double onethird;
     const G4int    max2;

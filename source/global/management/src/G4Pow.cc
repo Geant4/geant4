@@ -44,8 +44,9 @@
 // -------------------------------------------------------------------
 
 #include "G4Pow.hh"
+#include "G4Threading.hh"
 
-G4ThreadLocal G4Pow* G4Pow::fpInstance = 0;
+G4Pow* G4Pow::fpInstance = 0;
 
 // -------------------------------------------------------------------
 
@@ -63,6 +64,11 @@ G4Pow* G4Pow::GetInstance()
 G4Pow::G4Pow()
   : onethird(1.0/3.0), max2(5)
 {
+  if(G4Threading::IsWorkerThread() == true) { 
+    G4Exception ("G4Pow::G4Pow()", "glob090", FatalException, 
+                 "Attempt to instantiate G4Pow in worker thread");
+  }
+
   const G4int maxZ = 512; 
   const G4int maxZfact = 170; 
 

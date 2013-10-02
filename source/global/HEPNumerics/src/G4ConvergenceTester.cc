@@ -41,9 +41,10 @@
 //
 
 #include "G4ConvergenceTester.hh"
+#include <iomanip>
 
-G4ConvergenceTester::G4ConvergenceTester()
- : n(0), sum(0.), mean(0.), var(0.), sd(0.), r(0.), efficiency(0.),
+G4ConvergenceTester::G4ConvergenceTester( G4String theName )
+ : name(theName), n(0), sum(0.), mean(0.), var(0.), sd(0.), r(0.), efficiency(0.),
    r2eff(0.), r2int(0.), shift(0.), vov(0.), fom(0.), largest(0.),
    largest_score_happened(0), mean_1(0.), var_1(0.), sd_1(0.), r_1(0.),
    shift_1(0.), vov_1(0.), fom_1(0.), noBinOfHistory(16), slope(0.),
@@ -96,7 +97,7 @@ void G4ConvergenceTester::AddScore( G4double x )
        nonzero_histories.insert( std::pair< G4int , G4double > ( n , x ) );
        if ( x > largest_scores.back() )  
        { 
-//        Following serch  should become faster if begin from bottom.
+//        Following serch should become faster if begin from bottom.
           std::vector< G4double >::iterator it; 
           for ( it = largest_scores.begin() ; it != largest_scores.end() ; it++ )
           { 
@@ -348,21 +349,23 @@ void G4ConvergenceTester::ShowResult(std::ostream& out)
     // call calStat to recompute the statistical values
    if(!statsAreUpdated) { calStat(); }
 
-   out << "EFFICIENCY = " << efficiency << G4endl;
-   out << "MEAN = " << mean << G4endl;
-   out << "VAR = " << var << G4endl;
-   out << "SD = " << sd << G4endl;
-   out << "R = "<< r << G4endl;
-   out << "SHIFT = "<< shift << G4endl;
-   out << "VOV = "<< vov << G4endl;
-   out << "FOM = "<< fom << G4endl;
+   out << G4endl;
+   out << "G4ConvergenceTester Output Result of " << name << G4endl;
+   out << std::setw(20) << "EFFICIENCY = " << std::setw(13)  << efficiency << G4endl;
+   out << std::setw(20) << "MEAN = " << std::setw(13) << mean << G4endl;
+   out << std::setw(20) << "VAR = " << std::setw(13) << var << G4endl;
+   out << std::setw(20) << "SD = " << std::setw(13) << sd << G4endl;
+   out << std::setw(20) << "R = " << std::setw(13) << r << G4endl;
+   out << std::setw(20) << "SHIFT = "<< std::setw(13) << shift << G4endl;
+   out << std::setw(20) << "VOV = "<< std::setw(13) << vov << G4endl;
+   out << std::setw(20) << "FOM = "<< std::setw(13) << fom << G4endl;
 
-   out << "THE LARGEST SCORE = " << largest << " and it happend at " << largest_score_happened << "th event" << G4endl;
-   out << "Affected Mean = " << mean_1 << " and its ratio to orignal is " << mean_1/mean << G4endl;
-   out << "Affected VAR = " << var_1 << " and its ratio to orignal is " << var_1/var << G4endl;
-   out << "Affected R = " << r_1 << " and its ratio to orignal is " << r_1/r << G4endl;
-   out << "Affected SHIFT = " << shift_1 << " and its ratio to orignal is " << shift_1/shift << G4endl;
-   out << "Affected FOM = " << fom_1 << " and its ratio to orignal is " << fom_1/fom << G4endl;
+   out << std::setw(20) << "THE LARGEST SCORE = " << std::setw(13) << largest << " and it happend at " << largest_score_happened << "th event" << G4endl;
+   out << std::setw(20) << "Affected Mean = " << std::setw(13) << mean_1 << " and its ratio to orignal is " << mean_1/mean << G4endl;
+   out << std::setw(20) << "Affected VAR = " << std::setw(13) << var_1 << " and its ratio to orignal is " << var_1/var << G4endl;
+   out << std::setw(20) << "Affected R = " << std::setw(13) << r_1 << " and its ratio to orignal is " << r_1/r << G4endl;
+   out << std::setw(20) << "Affected SHIFT = " << std::setw(13) << shift_1 << " and its ratio to orignal is " << shift_1/shift << G4endl;
+   out << std::setw(20) << "Affected FOM = " << std::setw(13) << fom_1 << " and its ratio to orignal is " << fom_1/fom << G4endl;
 
    check_stat_history(out);
 
@@ -384,22 +387,34 @@ void G4ConvergenceTester::ShowResult(std::ostream& out)
 
 void G4ConvergenceTester::ShowHistory(std::ostream& out)
 {
-   out << "i/" << noBinOfHistory << " till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int" << G4endl;
+   out << G4endl;
+   out << "G4ConvergenceTester Output History of " << name << G4endl;
+   out << "i/" << noBinOfHistory << " till_ith      mean" 
+       << std::setw(13) << "var" 
+       << std::setw(13) << "sd" 
+       << std::setw(13) << "r" 
+       << std::setw(13) << "vov" 
+       << std::setw(13) << "fom" 
+       << std::setw(13) << "shift" 
+       << std::setw(13) << "e"
+       << std::setw(13) << "r2eff"
+       << std::setw(13) << "r2int" 
+       << G4endl;
    for ( G4int i = 1 ; i <=  noBinOfHistory  ; i++ )
    {
-      out << i << " " 
-             << history_grid [ i-1 ] << " "
-             << mean_history [ i-1 ] << " "  
-             << var_history [ i-1 ] << " "  
-             << sd_history [ i-1 ] << " "  
-             << r_history [ i-1 ] << " "  
-             << vov_history [ i-1 ] << " "  
-             << fom_history [ i-1 ] << " " 
-             << shift_history [ i-1 ] << " "  
-             << e_history [ i-1 ] << " " 
-             << r2eff_history [ i-1 ] << " " 
-             << r2int_history [ i-1 ] << " " 
-             << G4endl;
+      out << std::setw( 4) << i << " " 
+          << std::setw( 5) << history_grid [ i-1 ] 
+          << std::setw(13) << mean_history [ i-1 ] 
+          << std::setw(13) << var_history [ i-1 ] 
+          << std::setw(13) << sd_history [ i-1 ] 
+          << std::setw(13) << r_history [ i-1 ] 
+          << std::setw(13) << vov_history [ i-1 ] 
+          << std::setw(13) << fom_history [ i-1 ] 
+          << std::setw(13) << shift_history [ i-1 ] 
+          << std::setw(13) << e_history [ i-1 ] 
+          << std::setw(13) << r2eff_history [ i-1 ] 
+          << std::setw(13) << r2int_history [ i-1 ]
+          << G4endl;
    }
 }
 

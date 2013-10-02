@@ -24,52 +24,60 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ios.cc 70004 2013-05-21 16:28:30Z adotti $
 //
-// 
-// ------------------------------------------------------------------
-//
-// Class G4LPhysicsFreeVector -- header file
-//
-// Class description:
-//
-// Derived from base class G4PhysicsVector
-// This is a free vector for Low Energy Physics cross section data.
-// The class name includes an "L" to distinguish it from other groups
-// who may wish to implement a free vector in a different way.
-// A subdivision method is used to find the energy|momentum bin.
 
-// F.W. Jones, TRIUMF, 04-JUN-96
-// 11-NOV-00 H.Kurashige: use STL vector for dataVector and binVector
-// 02-APR-08 A.Bagulya: use GetValue() from base class
-// 02-OCT-13  V.Ivanchenko : Remove FindBinLocation method
-//
-// ------------------------------------------------------------------
+#include "G4PhysicsModelCatalog.hh"
 
-#ifndef G4LPhysicsFreeVector_h
-#define G4LPhysicsFreeVector_h 1
-
-#include "G4PhysicsVector.hh"
-
-class G4LPhysicsFreeVector : public G4PhysicsVector  
-{
-
-public: // with description
-
-   G4LPhysicsFreeVector();
-
-   G4LPhysicsFreeVector(size_t nbin, G4double binmin, G4double binmax);
-
-   virtual ~G4LPhysicsFreeVector();
-
-   void PutValues(size_t binNumber, G4double binValue, G4double dataValue);
-     // G4PhysicsVector has PutValue() but it is inconvenient.
-     // Want to simultaneously fill the bin and data vectors.
-
-   void DumpValues();
-
-};
-
-#include "G4LPhysicsFreeVector.icc"
-
+#ifdef G4MULTITHREADED
+#include "G4Threading.hh"
 #endif
+
+modelCatalog* G4PhysicsModelCatalog::catalog = 0;
+
+G4PhysicsModelCatalog::G4PhysicsModelCatalog()
+{ catalog = new modelCatalog; }
+
+G4PhysicsModelCatalog::~G4PhysicsModelCatalog()
+{ delete catalog; catalog = 0; }
+
+G4int G4PhysicsModelCatalog::Register(G4String& name)
+{
+  G4int idx = GetIndex(name);
+  if(idx>=0) return idx;
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return -1;
+#endif
+  catalog->push_back(name);
+  return catalog->size()-1;
+}
+
+G4String& G4PhysicsModelCatalog::GetModelName(G4int idx) 
+{
+  static G4String undef = "Undefined";
+  if(!catalog) new G4PhysicsModelCatalog;
+  if(idx>=0 && idx<Entries()) return (*catalog)[idx];
+  return undef;
+}
+
+G4int G4PhysicsModelCatalog::GetIndex(G4String& name) 
+{
+  if(!catalog) new G4PhysicsModelCatalog;
+  for(G4int idx=0;idx<Entries();idx++)
+  { if((*catalog)[idx]==name) return idx; }
+  return -1;
+}
+
+G4int G4PhysicsModelCatalog::Entries() 
+{ return (catalog) ? G4int(catalog->size()) : -1; }
+
+void G4PhysicsModelCatalog::Destroy()
+{ 
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) return;
+#endif
+  if(catalog) delete catalog;
+  catalog = 0;
+}
+
+

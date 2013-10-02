@@ -108,7 +108,7 @@ void G4PhysicsFreeVector::PutValue( size_t theBinNumber,
      edgeMin = binVector[0];
   }
 }
-
+/*
 size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
 {
   // For G4PhysicsFreeVector, FindBinLocation is implemented using
@@ -135,3 +135,4 @@ size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
 
   return upperBound;
 }
+*/

@@ -59,7 +59,7 @@ class G4ConvergenceTester
 {
    public:
 
-      G4ConvergenceTester();
+      G4ConvergenceTester( G4String theName="NONAME" );
      ~G4ConvergenceTester();
       G4ConvergenceTester( G4double );
 
@@ -111,6 +111,7 @@ class G4ConvergenceTester
 
    private:
 
+      G4String name;
       std::map< G4int , G4double > nonzero_histories;
         // (ith-history , score value)
       G4int n;

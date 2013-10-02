@@ -55,6 +55,8 @@
 //    04 May. 2010  H.Kurashige  : Use G4PhysicsVectorCache
 //    28 May  2010  H.Kurashige  : Stop using  pointers to G4PVDataVector
 //    16 Aug. 2011  H.Kurashige  : Add dBin, baseBin and verboseLevel
+//    02 Oct. 2013  V.Ivanchenko : FindBinLocation method become inlined;
+//                                 instead of G4Pow G4Log is used
 //---------------------------------------------------------------
 
 #ifndef G4PhysicsVector_h
@@ -68,7 +70,7 @@
 #include "G4ios.hh"
 #include "G4Allocator.hh"
 #include "G4PhysicsVectorType.hh"
-#include "G4Pow.hh"
+#include "G4Log.hh"
 
 typedef std::vector<G4double> G4PVDataVector;
 
@@ -142,7 +144,7 @@ class G4PhysicsVector
     inline G4double GetMaxEnergy() const;
          // Returns the energy of the last point of the vector
 
-    virtual G4double GetLowEdgeEnergy(size_t binNumber) const;
+    G4double GetLowEdgeEnergy(size_t binNumber) const;
          // Obsolete method
          // Get the energy value at the low edge of the specified bin.
          // Take note that the 'binNumber' starts from '0'.
@@ -200,9 +202,6 @@ class G4PhysicsVector
 
   protected:
 
-    virtual size_t FindBinLocation(G4double theEnergy) const=0;
-         // Find the bin# in which theEnergy belongs - pure virtual function
-
     void DeleteData();
     void CopyData(const G4PhysicsVector& vec);
          // Internal methods for allowing copy of objects
@@ -220,10 +219,7 @@ class G4PhysicsVector
     G4PVDataVector  binVector;     // Vector to keep energy
     G4PVDataVector  secDerivative; // Vector to keep second derivatives 
 
-    G4Pow*          g4pow;
-
   private:
-
 
     G4bool SplinePossible();
 
@@ -233,6 +229,9 @@ class G4PhysicsVector
          // Spline interpolation function
 
     inline G4double Interpolation(size_t idx, G4double energy) const;
+
+    inline size_t FindBinLocation(G4double theEnergy) const;
+         // Find the bin# in which theEnergy belongs 
 
     G4bool     useSpline;
 
