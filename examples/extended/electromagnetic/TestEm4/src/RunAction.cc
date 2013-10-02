@@ -41,10 +41,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(G4bool isOnMaster)
+RunAction::RunAction()
  : G4UserRunAction()
 {
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Create(isOnMaster);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetFirstHistoId(1);  
   // Creating histograms
   //
@@ -67,7 +67,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   // save Rndm status
   //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  CLHEP::HepRandom::showEngineStatus();
+  G4Random::showEngineStatus();
 
   
    // Get analysis manager
@@ -91,7 +91,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n ### Run " << aRun->GetRunID() << " ended." << G4endl;
   
   // show Rndm status
-  CLHEP::HepRandom::showEngineStatus();         
+  G4Random::showEngineStatus();         
 
   //save histograms      
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
