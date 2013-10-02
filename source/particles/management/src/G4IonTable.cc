@@ -1553,9 +1553,9 @@ G4int G4IonTable::GetVerboseLevel() const
 void  G4IonTable::AddProcessManager(G4ParticleDefinition* ion)
 {
   // check State and do not attach process managaer in event loop
-  G4StateManager* pStateManager = G4StateManager::GetStateManager();
-  G4ApplicationState currentState = pStateManager->GetCurrentState();
-  if (currentState == G4State_EventProc) return;
+//  G4StateManager* pStateManager = G4StateManager::GetStateManager();
+//  G4ApplicationState currentState = pStateManager->GetCurrentState();
+//  if (currentState == G4State_EventProc) return;
 //  {
 //    if (n_error<10)
 //    {

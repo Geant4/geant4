@@ -66,7 +66,7 @@ class G4PhaseSpaceDecayChannel :public G4VDecayChannel
      static G4double Pmx(G4double e, G4double p1, G4double p2);
 
   private: 
-     G4double        current_parent_mass;
+     static G4ThreadLocal G4double        current_parent_mass;
      G4DecayProducts *OneBodyDecayIt();
      G4DecayProducts *TwoBodyDecayIt();
      G4DecayProducts *ThreeBodyDecayIt();

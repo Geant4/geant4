@@ -46,10 +46,10 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
+G4ThreadLocal G4double G4PhaseSpaceDecayChannel::current_parent_mass = 0.0;
 
 G4PhaseSpaceDecayChannel::G4PhaseSpaceDecayChannel(G4int Verbose)
- :G4VDecayChannel("Phase Space", Verbose),
-  current_parent_mass(0.0)
+ :G4VDecayChannel("Phase Space", Verbose)
 {
 
 }
@@ -68,8 +68,7 @@ G4PhaseSpaceDecayChannel::G4PhaseSpaceDecayChannel(
 					  theDaughterName1,
 					  theDaughterName2,
 					  theDaughterName3,
-					  theDaughterName4),
-			  current_parent_mass(0.0)
+					  theDaughterName4)
 {
 
 }
