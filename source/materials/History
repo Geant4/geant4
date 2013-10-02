@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-10-13 V.Ivanchenko (materials-V09-06-23)
+- G4NistManager - G4Exception for the case when G4NistManager
+    is instantiated in a worker thread 
+
 16-09-13 V.Ivanchenko (materials-V09-06-22)
 - G4NistManager - comment out AutoLock as probably useless
 

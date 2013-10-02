@@ -193,11 +193,14 @@ void G4NistManager::SetVerbose(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//#include "G4AutoLock.hh"
-//namespace { G4Mutex NistManagerMutex = G4MUTEX_INITIALIZER; }
+#include "G4Threading.hh"
+
 G4NistManager::G4NistManager()
 {
-  //G4AutoLock l(&NistManagerMutex);
+  if(G4Threading::IsWorkerThread() == true) { 
+    G4Exception ("G4NistMaterial::G4NistManager()", "mat090", FatalException, 
+                 "Attempt to instantiate G4NistManager in worker thread");
+  }
 
   nElements  = 0;
   nMaterials = 0;
