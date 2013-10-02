@@ -62,6 +62,9 @@
 #include "G4VPreCompoundModel.hh"
 #include "G4PreCompoundModel.hh"
 
+// G4IonTable
+#include "G4IonTable.hh"
+
 #include <fstream>
 #include <iostream>
 
@@ -165,6 +168,8 @@ private:
 
   G4bool complainedAboutBackupModel;
   G4bool complainedAboutPreCompound;
+
+  G4IonTable * const theIonTable;
 };
 
 #endif

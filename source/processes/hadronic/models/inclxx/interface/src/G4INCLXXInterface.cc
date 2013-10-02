@@ -55,7 +55,8 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
   thePreCompoundModel(aPreCompound),
   theInterfaceStore(G4INCLXXInterfaceStore::GetInstance()),
   complainedAboutBackupModel(false),
-  complainedAboutPreCompound(false)
+  complainedAboutPreCompound(false),
+  theIonTable(G4IonTable::GetIonTable())
 {
   if(!thePreCompoundModel) {
     G4HadronicInteraction* p =
@@ -182,10 +183,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   G4HadProjectile const *aProjectileTrack = &aTrack;
   G4Nucleus *theTargetNucleus = &theNucleus;
   if(inverseKinematics) {
-    G4ParticleTable * const theParticleTable = G4ParticleTable::GetParticleTable();
     const G4int oldTargetA = theNucleus.GetA_asInt();
     const G4int oldTargetZ = theNucleus.GetZ_asInt();
-    G4ParticleDefinition *oldTargetDef = theParticleTable->GetIon(oldTargetZ, oldTargetA, 0.0);
+    G4ParticleDefinition *oldTargetDef = theIonTable->GetIon(oldTargetZ, oldTargetA, 0);
     const G4ParticleDefinition *oldProjectileDef = aTrack.GetDefinition();
 
     if(oldProjectileDef != 0 && oldTargetDef != 0) {
@@ -195,7 +195,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
       if(newTargetA > 0 && newTargetZ > 0) {
         // This should give us the same energy per nucleon
         theTargetNucleus = new G4Nucleus(newTargetA, newTargetZ);
-        const G4double theProjectileMass = theParticleTable->GetIonTable()->GetIonMass(oldTargetZ, oldTargetA);
+        const G4double theProjectileMass = theIonTable->GetIonMass(oldTargetZ, oldTargetA);
         toInverseKinematics = new G4LorentzRotation(aTrack.Get4Momentum().boostVector());
         G4LorentzVector theProjectile4Momentum(0.0, 0.0, 0.0, theProjectileMass);
         G4DynamicParticle swappedProjectileParticle(oldTargetDef, (*toInverseKinematics) * theProjectile4Momentum);
@@ -326,7 +326,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
             << "\n                remnant i=" << i << ", nRemnants=" << eventInfo.nRemnants
             << "\n                Reaction was: " << aTrack.GetKineticEnergy()/MeV
             << "-MeV " << aTrack.GetDefinition()->GetParticleName() << " + "
-            << G4ParticleTable::GetParticleTable()->GetIon(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0.0)->GetParticleName()
+            << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
             << ", in " << (inverseKinematics ? "inverse" : "direct") << " kinematics.";
           theInterfaceStore->EmitWarning(ss.str());
 	}
@@ -360,7 +360,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     std::stringstream ss;
     ss << "maximum number of tries exceeded for the proposed "
     << aTrack.GetKineticEnergy()/MeV << "-MeV " << aTrack.GetDefinition()->GetParticleName()
-    << " + " << G4ParticleTable::GetParticleTable()->GetIon(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0.0)->GetParticleName()
+    << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
     << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics.";
     theInterfaceStore->EmitWarning(ss.str());
     theResult.SetStatusChange(isAlive);
@@ -446,7 +446,7 @@ G4ParticleDefinition *G4INCLXXInterface::toG4ParticleDefinition(G4int A, G4int Z
   else if(A == 3 && Z == 2)  return G4He3::He3();
   else if(A == 4 && Z == 2)  return G4Alpha::Alpha();
   else if(A > 0 && Z > 0 && A > Z) { // Returns ground state ion definition
-    return G4ParticleTable::GetParticleTable()->GetIon(Z, A, 0.0);
+    return theIonTable->GetIon(Z, A, 0);
   } else { // Error, unrecognized particle
     return 0;
   }

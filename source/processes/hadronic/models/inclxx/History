@@ -16,6 +16,16 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+26 September 2013 - Davide Mancusi (hadr-inclxx-V09-06-26)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc6
+  o Get rid of calls to G4ParticleTable::GetIonTable(), too!
+
+24 September 2013 - Davide Mancusi (hadr-inclxx-V09-06-25)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc5
+  o Get rid of obsolete calls to G4ParticleTable::GetIon().
+
 19 September 2013 - Davide Mancusi (hadr-inclxx-V09-06-23, -24)
 ---------------------------------------------------------------
 - INCL++ v5.1.14_rc4
