@@ -31,6 +31,7 @@
 // --------
 // 03 Dec 2009   L Pandola    First implementation
 // 25 May 2011   L.Pandola    Renamed (make v2008 as default Penelope)
+// 19 Sep 2013   L.Pandola    Migration to MT
 //
 
 #include "G4PenelopeRayleighModel.hh"
@@ -49,16 +50,20 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition*,
+G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition* part,
 						 const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),logAtomicCrossSection(0),   
-   atomicFormFactor(0),logFormFactorTable(0),pMaxTable(0),samplingTable(0)
+  :G4VEmModel(nam),fParticleChange(0),fParticle(0),isInitialised(false),
+   logAtomicCrossSection(0),atomicFormFactor(0),logFormFactorTable(0),
+   pMaxTable(0),samplingTable(0)    
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
   //  SetLowEnergyLimit(fIntrinsicLowEnergyLimit);
   SetHighEnergyLimit(fIntrinsicHighEnergyLimit);
+
+  if (part)
+    SetParticle(part);
+
   //
   verboseLevel= 0;
   // Verbosity scale:
@@ -89,27 +94,35 @@ G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition*,
 
 G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
 {
-  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
-  if (logAtomicCrossSection)
+  if (IsMaster())
     {
-      for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
-	if (i->second) delete i->second;
-      delete logAtomicCrossSection;
-     }
-
-   if (atomicFormFactor)
-     {
-       for (i=atomicFormFactor->begin();i != atomicFormFactor->end();i++)
-	 if (i->second) delete i->second;
-       delete atomicFormFactor;
-     }
-
-  ClearTables();
+      std::map <G4int,G4PhysicsFreeVector*>::iterator i;
+      if (logAtomicCrossSection)
+	{
+	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
+	    if (i->second) delete i->second;
+	  delete logAtomicCrossSection;
+	}
+      
+      if (atomicFormFactor)
+	{
+	  for (i=atomicFormFactor->begin();i != atomicFormFactor->end();i++)
+	    if (i->second) delete i->second;
+	  delete atomicFormFactor;
+	}
+      
+      ClearTables();
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void G4PenelopeRayleighModel::ClearTables()
 {
+  if (!IsMaster())    
+    //Should not be here!
+    G4Exception("G4PenelopeRayleighModel::ClearTables()",
+		"em0100",FatalException,"Worker thread in this method");    
+
    std::map <const G4Material*,G4PhysicsFreeVector*>::iterator i;
  
    if (logFormFactorTable)
@@ -142,44 +155,117 @@ void G4PenelopeRayleighModel::ClearTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* ,
+void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* part,
 					 const G4DataVector& )
 {
   if (verboseLevel > 3)
     G4cout << "Calling G4PenelopeRayleighModel::Initialise()" << G4endl;
 
-  //clear tables depending on materials, not the atomic ones
-  ClearTables();
+  SetParticle(part);
+
+  //Only the master model creates/fills/destroys the tables
+  if (IsMaster() && part == fParticle) 
+    {
+      //clear tables depending on materials, not the atomic ones
+      ClearTables();
   
-  //create new tables
-  //
-  // logAtomicCrossSection and atomicFormFactor are created only once,
-  // since they are never cleared
-  if (!logAtomicCrossSection)
-    logAtomicCrossSection = new std::map<G4int,G4PhysicsFreeVector*>;
-  if (!atomicFormFactor)
-    atomicFormFactor = new std::map<G4int,G4PhysicsFreeVector*>;
+      //create new tables
+      //
+      // logAtomicCrossSection and atomicFormFactor are created only once,
+      // since they are never cleared
+      if (!logAtomicCrossSection)
+	logAtomicCrossSection = new std::map<G4int,G4PhysicsFreeVector*>;
+      if (!atomicFormFactor)
+	atomicFormFactor = new std::map<G4int,G4PhysicsFreeVector*>;
+      
+      if (!logFormFactorTable)
+	logFormFactorTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
+      if (!pMaxTable)
+	pMaxTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
+      if (!samplingTable)
+	samplingTable = new std::map<const G4Material*,G4PenelopeSamplingData*>;
 
-  if (!logFormFactorTable)
-    logFormFactorTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
-  if (!pMaxTable)
-    pMaxTable = new std::map<const G4Material*,G4PhysicsFreeVector*>;
-  if (!samplingTable)
-    samplingTable = new std::map<const G4Material*,G4PenelopeSamplingData*>;
 
+      G4ProductionCutsTable* theCoupleTable = 
+	G4ProductionCutsTable::GetProductionCutsTable();
+      
+      for (size_t i=0;i<theCoupleTable->GetTableSize();i++)
+	{
+	  const G4Material* material = 
+	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+	  const G4ElementVector* theElementVector = material->GetElementVector();
+	  
+	  for (size_t j=0;j<material->GetNumberOfElements();j++)
+	    {
+	      G4int iZ = (G4int) theElementVector->at(j)->GetZ();
+	      //read data files only in the master
+	      if (!logAtomicCrossSection->count(iZ))
+		ReadDataFile(iZ);	      
+	    }
 
-  if (verboseLevel > 1) {
-    G4cout << "Penelope Rayleigh model v2008 is initialized " << G4endl
-	   << "Energy range: "
-	   << LowEnergyLimit() / keV << " keV - "
-	   << HighEnergyLimit() / GeV << " GeV"
-	   << G4endl;
-  }
+	  //1) If the table has not been built for the material, do it!
+	  if (!logFormFactorTable->count(material))
+	    BuildFormFactorTable(material);
+
+	  //2) retrieve or build the sampling table
+	  if (!(samplingTable->count(material)))
+	    InitializeSamplingAlgorithm(material);
+
+	  //3) retrieve or build the pMax data
+	  if (!pMaxTable->count(material))
+	    GetPMaxTable(material);
+
+	}
+  
+      if (verboseLevel > 1) {
+	G4cout << "Penelope Rayleigh model v2008 is initialized " << G4endl
+	       << "Energy range: "
+	       << LowEnergyLimit() / keV << " keV - "
+	       << HighEnergyLimit() / GeV << " GeV"
+	       << G4endl;
+      }
+    }
 
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeRayleighModel::InitialiseLocal(const G4ParticleDefinition* part,
+						     G4VEmModel *masterModel)
+{
+  if (verboseLevel > 3)
+    G4cout << "Calling  G4PenelopeRayleighModel::InitialiseLocal()" << G4endl;
+ 
+  //
+  //Check that particle matches: one might have multiple master models (e.g. 
+  //for e+ and e-).
+  //
+  if (part == fParticle)
+    {
+      //Get the const table pointers from the master to the workers
+      const G4PenelopeRayleighModel* theModel = 
+	static_cast<G4PenelopeRayleighModel*> (masterModel);
+      
+      //Copy pointers to the data tables
+      logAtomicCrossSection = theModel->logAtomicCrossSection;
+      atomicFormFactor = theModel->atomicFormFactor;
+      logFormFactorTable = theModel->logFormFactorTable;
+      pMaxTable = theModel->pMaxTable;
+      samplingTable = theModel->samplingTable;
+      
+      //copy the G4DataVector with the grid
+      logQSquareGrid = theModel->logQSquareGrid;
+      
+      //Same verbosity for all workers, as the master
+      verboseLevel = theModel->verboseLevel;
+    }
+
+  return;
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -199,9 +285,7 @@ G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDef
  
    G4int iZ = (G4int) Z;
 
-   //read data files
-   if (!logAtomicCrossSection->count(iZ))
-     ReadDataFile(iZ);
+ 
    //now it should be ok
    if (!logAtomicCrossSection->count(iZ))
      {
@@ -234,10 +318,14 @@ G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDef
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void G4PenelopeRayleighModel::BuildFormFactorTable(const G4Material* material)
 {
- 
-  /*
-    1) get composition and equivalent molecular density
-  */
+   if (!IsMaster())    
+      //Should not be here!
+    G4Exception("G4PenelopeRayleighModel::BuildFormFactorTable()",
+		"em0100",FatalException,"Worker thread in this method");  
+
+   /*
+     1) get composition and equivalent molecular density
+   */
   
   G4int nElements = material->GetNumberOfElements();
   const G4ElementVector* elementVector = material->GetElementVector();
@@ -339,7 +427,6 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   
   const G4Material* theMat = couple->GetMaterial();
 
-  CrossSectionPerVolume(theMat, aDynamicGamma->GetDefinition(), photonEnergy0);
   
   //1) Verify if tables are ready
   if (!pMaxTable || !samplingTable)
@@ -349,14 +436,9 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
       return;
     }
   
-  //2) retrieve or build the sampling table
-  if (!(samplingTable->count(theMat)))
-    InitializeSamplingAlgorithm(theMat);
   G4PenelopeSamplingData* theDataTable = samplingTable->find(theMat)->second;
   
-  //3) retrieve or build the pMax data
-  if (!pMaxTable->count(theMat))
-    GetPMaxTable(theMat);
+ 
   G4PhysicsFreeVector* thePMax = pMaxTable->find(theMat)->second;
 
   G4double cosTheta = 1.0;
@@ -427,6 +509,11 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
 void G4PenelopeRayleighModel::ReadDataFile(const G4int Z)
 {
+  if (!IsMaster())    
+      //Should not be here!
+    G4Exception("G4PenelopeRayleighModel::ReadDataFile()",
+		"em0100",FatalException,"Worker thread in this method");  
+
   if (verboseLevel > 2)
     {
       G4cout << "G4PenelopeRayleighModel::ReadDataFile()" << G4endl;
@@ -570,9 +657,7 @@ G4double G4PenelopeRayleighModel::GetFSquared(const G4Material* mat, const G4dou
   G4double logQSquared = (QSquared>1e-10) ? std::log(QSquared) : -23.;
   //last value of the table
   G4double maxlogQ2 = logQSquareGrid[logQSquareGrid.size()-1];
-  //If the table has not been built for the material, do it!
-  if (!logFormFactorTable->count(mat))
-    BuildFormFactorTable(mat);
+  
   
   //now it should  be all right
   G4PhysicsFreeVector* theVec = logFormFactorTable->find(mat)->second;
@@ -611,6 +696,11 @@ G4double G4PenelopeRayleighModel::GetFSquared(const G4Material* mat, const G4dou
 
 void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
 {
+  if (!IsMaster())    
+    //Should not be here!
+    G4Exception("G4PenelopeRayleighModel::InitializeSamplingAlgorithm()",
+		"em0100",FatalException,"Worker thread in this method");  
+
   G4double q2min = 0;
   G4double q2max = 0;
   const size_t np = 150; //hard-coded in Penelope
@@ -1038,6 +1128,11 @@ void G4PenelopeRayleighModel::InitializeSamplingAlgorithm(const G4Material* mat)
 
 void G4PenelopeRayleighModel::GetPMaxTable(const G4Material* mat)
 {
+  if (!IsMaster())    
+      //Should not be here!
+    G4Exception("G4PenelopeRayleighModel::GetPMaxTable()",
+		"em0100",FatalException,"Worker thread in this method");  
+
   if (!pMaxTable)
     {
       G4cout << "G4PenelopeRayleighModel::BuildPMaxTable" << G4endl;
@@ -1183,4 +1278,13 @@ void G4PenelopeRayleighModel::DumpFormFactorTable(const G4Material* mat)
     }
   //DONE
   return;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+
+void G4PenelopeRayleighModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!fParticle) {
+    fParticle = p;  
+  }
 }
