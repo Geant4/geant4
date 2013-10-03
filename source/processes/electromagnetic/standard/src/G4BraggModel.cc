@@ -71,6 +71,8 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -165,7 +167,7 @@ G4double G4BraggModel::ComputeCrossSectionPerElectron(
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
 
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -229,7 +231,7 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
     G4double beta2 = bg2/(gam*gam);
     G4double x     = cutEnergy/tmax;
 
-    dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
+    dedx += (G4Log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
           * (material->GetElectronDensity())/beta2;
   }
 
@@ -397,7 +399,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
     
     } else if ( T < 10000.0 ) {
       G4double slow  = a[iMolecula][1] * pow(T, 0.45) ;
-      G4double shigh = log( 1.0 + a[iMolecula][3]/T  
+      G4double shigh = G4Log( 1.0 + a[iMolecula][3]/T  
                      + a[iMolecula][4]*T ) * a[iMolecula][2]/T ;
       ionloss = slow*shigh / (slow + shigh) ;     
     } 
@@ -562,7 +564,7 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
 
   // Main parametrisation
   G4double slow  = a[i][1] * pow(T, 0.45) ;
-  G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+  G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
   ionloss = slow*shigh*fac / (slow + shigh) ;     
   
   if ( ionloss < 0.0) { ionloss = 0.0; }
@@ -760,8 +762,8 @@ G4double G4BraggModel::ChemicalFactor(G4double kineticEnergy,
   G4double beta125  = sqrt(1.0 - 1.0/(gamma125*gamma125)) ;
   
   G4double factor = 1.0 + (expStopPower125/eloss125 - 1.0) *
-                   (1.0 + exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
-                   (1.0 + exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
+                   (1.0 + G4Exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
+                   (1.0 + G4Exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
 
   return factor ;
 }

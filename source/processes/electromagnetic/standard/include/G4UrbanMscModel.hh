@@ -60,6 +60,8 @@
 
 #include "G4VMscModel.hh"
 #include "G4MscStepLimitType.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 class G4ParticleChangeForMSC;
 class G4SafetyHelper;
@@ -192,9 +194,9 @@ void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
 inline
 void G4UrbanMscModel::UpdateCache()                                   
 {
-    lnZ = std::log(Zeff);
+    lnZ = G4Log(Zeff);
     // correction in theta0 formula
-    G4double w = std::exp(lnZ/6.);
+    G4double w = G4Exp(lnZ/6.);
     G4double facz = 0.990395+w*(-0.168386+w*0.093286) ;
     coeffth1 = facz*(1. - 8.7780e-2/Zeff);
     coeffth2 = facz*(4.0780e-2 + 1.7315e-4*Zeff);

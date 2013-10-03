@@ -64,8 +64,8 @@
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4LossTableManager.hh"
-#include "G4Pow.hh"
-#include "G4NistManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,8 +87,6 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   xsecn.resize(nelments);
   prob.resize(nelments);
   theManager = G4LossTableManager::Instance();
-  fNistManager = G4NistManager::Instance();
-  fG4pow = G4Pow::GetInstance();
   wokvi = new G4WentzelOKandVIxSection();
 
   preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange 
@@ -294,7 +292,7 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
       e1 = 0.5*(e1 + preKinEnergy);
       cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial);
       lambdaeff = GetTransportMeanFreePath(particle,e1);
-      zPathLength = lambdaeff*(1.0 - exp(-tPathLength/lambdaeff));
+      zPathLength = lambdaeff*(1.0 - G4Exp(-tPathLength/lambdaeff));
     }
   } else { lambdaeff = DBL_MAX; }
   //G4cout<<"Comp.geom: zLength= "<<zPathLength<<" tLength= "<<tPathLength<<G4endl;
@@ -350,7 +348,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 	lambdaeff = GetTransportMeanFreePath(particle,e1);
 	tau = zPathLength/lambdaeff;
       
-	if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
+	if(tau < 0.999999) { tPathLength = -lambdaeff*G4Log(1.0 - tau); } 
 	else               { tPathLength = currentRange; }
       }
     }
@@ -379,7 +377,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
       if(tau < numlimit) { 
 	tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
       } 
-      else if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
+      else if(tau < 0.999999) { tPathLength = -lambdaeff*G4Log(1.0 - tau); } 
       else                    { tPathLength = currentRange; }
 
       if(tPathLength > currentRange) { tPathLength = currentRange; }
@@ -438,12 +436,12 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       z0 *= 0.5;
       nMscSteps = 2;
     } 
-    if(z0 > zzmin) { zzz = exp(-1.0/z0); }
+    if(z0 > zzmin) { zzz = G4Exp(-1.0/z0); }
   } 
 
   // step limit due to single scattering
   G4double x1 = 2*tPathLength;
-  if(0.0 < xtsec) { x1 = -log(G4UniformRand())/xtsec; }
+  if(0.0 < xtsec) { x1 = -G4Log(G4UniformRand())/xtsec; }
 
   // no scattering case
   if(singleScatteringMode && x1 > tPathLength)  
@@ -514,7 +512,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
       // new proposed step length
       x2 -= step; 
-      x1  = -log(G4UniformRand())/xtsec; 
+      x1  = -G4Log(G4UniformRand())/xtsec; 
 
     // multiple scattering
     } else { 
@@ -524,7 +522,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
       // sample z in interval 0 - 1
       do {
-	z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand());
+	z = -z0*G4Log(1.0 - (1.0 - zzz)*G4UniformRand());
       } while(z > 1.0);
       cost = 1.0 - 2.0*z/*factCM*/;
       if(cost > 1.0)       { cost = 1.0; }

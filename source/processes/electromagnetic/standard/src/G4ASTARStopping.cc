@@ -53,6 +53,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+static const G4double fac = MeV*cm2/g;
+
 G4ASTARStopping::G4ASTARStopping()
 {
   currentMaterial = 0;
@@ -421,7 +423,6 @@ AddData(T0,e73, 73);
 void G4ASTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
 {
 sdata[idx] = new G4LPhysicsFreeVector(78, ekin[0]*MeV, ekin[77]*MeV);
-static const G4double fac = MeV*cm2/g;
 for(size_t i=0; i<78; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); }
 sdata[idx]->SetSpline(true);
 }

@@ -60,11 +60,12 @@
 #include "G4ModifiedTsai.hh"
 
 #include "G4Physics2DVector.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 
 #include "G4ios.hh"
 #include <fstream>
 #include <iomanip>
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -73,6 +74,11 @@ using namespace std;
 G4Physics2DVector* G4SeltzerBergerModel::dataSB[] = {0};
 G4double G4SeltzerBergerModel::ylimit[] = {0.0};
 G4double G4SeltzerBergerModel::expnumlim = -12.;
+
+static const G4double emaxlog = 4*G4Log(10.);
+static const G4double alpha = CLHEP::twopi*CLHEP::fine_structure_const; 
+static const G4double epeaklimit= 300*CLHEP::MeV; 
+static const G4double elowlimit = 20*CLHEP::keV; 
 
 G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
 					   const G4String& nam)
@@ -159,7 +165,6 @@ void G4SeltzerBergerModel::ReadData(G4int Z, const char* path)
   //G4cout << "G4SeltzerBergerModel read from <" << ost.str().c_str() 
   //	 << ">" << G4endl;
   G4Physics2DVector* v = new G4Physics2DVector();
-  static const G4double emaxlog = 4*log(10.);
   if(v->Retrieve(fin)) { 
     if(useBicubicInterpolation) { v->SetBicubicInterpolation(true); }
     dataSB[Z] = v; 
@@ -182,10 +187,9 @@ G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
 
   if(gammaEnergy < 0.0 || kinEnergy <= 0.0) { return 0.0; }
   G4double x = gammaEnergy/kinEnergy;
-  G4double y = log(kinEnergy/MeV);
+  G4double y = G4Log(kinEnergy/MeV);
   G4int Z = G4lrint(currentZ);
 
-  static const G4double alpha = twopi*fine_structure_const; 
   //G4cout << "G4SeltzerBergerModel::ComputeDXSectionPerAtom Z= " << Z
   //	 << " x= " << x << " y= " << y << " " << dataSB[Z] << G4endl;
   if(!dataSB[Z]) { InitialiseForElement(0, Z); }
@@ -209,7 +213,7 @@ G4double G4SeltzerBergerModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
       G4double invbeta2 = (e2 + particleMass)/sqrt(e2*(e2 + 2*particleMass));
       G4double xxx = alpha*currentZ*(invbeta1 - invbeta2);
       if(xxx < expnumlim) { cross = 0.0; }
-      else { cross *= exp(xxx); }
+      else { cross *= G4Exp(xxx); }
     } else {
       cross = 0.0;
     }
@@ -248,9 +252,9 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 	 << " Z= " << Z << " cut(MeV)= " << cut/MeV 
 	 << " emax(MeV)= " << emax/MeV << " corr= " << densityCorr << G4endl;
   */
-  G4double xmin = log(cut*cut + densityCorr);
-  G4double xmax = log(emax*emax  + densityCorr);
-  G4double y = log(kineticEnergy/MeV);
+  G4double xmin = G4Log(cut*cut + densityCorr);
+  G4double xmax = G4Log(emax*emax  + densityCorr);
+  G4double y = G4Log(kineticEnergy/MeV);
 
   G4double gammaEnergy, v; 
 
@@ -258,9 +262,6 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4double x0 = cut/kineticEnergy;
   G4double vmax = dataSB[Z]->Value(x0, y, idx, idy)*1.02;
   //  G4double invbeta1 = 0;
-
-  static const G4double epeaklimit= 300*MeV; 
-  static const G4double elowlimit = 20*keV; 
 
   // majoranta corrected for e-
   if(isElectron && x0 < 0.97 && 
@@ -275,7 +276,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   //  G4int ncount = 0;
   do {
     //++ncount;
-    G4double x = exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
+    G4double x = G4Exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
     if(x < 0.0) { x = 0.0; }
     gammaEnergy = sqrt(x);
     G4double x1 = gammaEnergy/kineticEnergy;
@@ -290,7 +291,7 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
       G4double xxx = twopi*fine_structure_const*currentZ*(invbeta1 - invbeta2);
 
       if(xxx < expnumlim) { v = 0.0; }
-      else { v *= exp(xxx); }
+      else { v *= G4Exp(xxx); }
     }
    
     if (v > 1.05*vmax && nwarn < 5) {

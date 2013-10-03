@@ -66,6 +66,8 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -176,7 +178,7 @@ G4double G4BraggIonModel::ComputeCrossSectionPerElectron(
     G4double energy  = kineticEnergy + mass;
     G4double energy2 = energy*energy;
     G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
-    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*log(maxEnergy/cutEnergy)/tmax;
+    cross = 1.0/cutEnergy - 1.0/maxEnergy - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
 
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
@@ -241,7 +243,7 @@ G4double G4BraggIonModel::ComputeDEDXPerVolume(const G4Material* material,
     G4double beta2 = bg2/(gam*gam);
     G4double x     = tmin/tmax;
 
-    dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
+    dedx += (G4Log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
           * (material->GetElectronDensity())/beta2;
   }
 
@@ -427,7 +429,7 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
     // Free electron gas model
     if ( T < 0.001 ) {
       G4double slow  = a[i][0] ;
-      G4double shigh = log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 )
+      G4double shigh = G4Log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 )
 	 * a[i][2]*1000.0 ;
       ionloss  = slow*shigh / (slow + shigh) ;
       ionloss *= sqrt(T*1000.0) ;
@@ -435,7 +437,7 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
       // Main parametrisation
     } else {
       G4double slow  = a[i][0] * pow((T*1000.0), a[i][1]) ;
-      G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+      G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
       ionloss = slow*shigh / (slow + shigh) ;
        /*
 	 G4cout << "## " << i << ". T= " << T << " slow= " << slow
@@ -586,7 +588,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
   // Free electron gas model
   if ( T < 0.001 ) {
     G4double slow  = a[i][0] ;
-    G4double shigh = log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 )
+    G4double shigh = G4Log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 )
                    * a[i][2]*1000.0 ;
     ionloss  = slow*shigh / (slow + shigh) ;
     ionloss *= sqrt(T*1000.0) ;
@@ -594,7 +596,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
   // Main parametrisation
   } else {
     G4double slow  = a[i][0] * pow((T*1000.0), a[i][1]) ;
-    G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+    G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
     ionloss = slow*shigh / (slow + shigh) ;
     /*
     G4cout << "## " << i << ". T= " << T << " slow= " << slow
@@ -676,7 +678,7 @@ G4double G4BraggIonModel::HeEffChargeSquare(G4double z,
   static const G4double c[6] = {0.2865,  0.1266, -0.001429,
 				0.02402,-0.01135, 0.001475};
 
-  G4double e = std::max(0.0,std::log(kinEnergyHeInMeV*massFactor));
+  G4double e = std::max(0.0, G4Log(kinEnergyHeInMeV*massFactor));
   G4double x = c[0] ;
   G4double y = 1.0 ;
   for (G4int i=1; i<6; i++) {
@@ -685,8 +687,8 @@ G4double G4BraggIonModel::HeEffChargeSquare(G4double z,
   }
 
   G4double w = 7.6 -  e ;
-  w = 1.0 + (0.007 + 0.00005*z) * exp( -w*w ) ;
-  w = 4.0 * (1.0 - exp(-x)) * w * w ;
+  w = 1.0 + (0.007 + 0.00005*z) * G4Exp( -w*w ) ;
+  w = 4.0 * (1.0 - G4Exp(-x)) * w * w ;
 
   return w;
 }

@@ -66,6 +66,7 @@
 #include "G4Positron.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,7 +77,7 @@ G4MollerBhabhaModel::G4MollerBhabhaModel(const G4ParticleDefinition* p,
   : G4VEmModel(nam),
     particle(0),
     isElectron(true),
-    twoln10(2.0*log(10.0)),
+    twoln10(2.0*G4Log(10.0)),
     lowLimit(0.02*keV),
     isInitialised(false)
 {
@@ -142,7 +143,7 @@ G4MollerBhabhaModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* 
       G4double gg = (2.0*gam - 1.0)/gamma2;
       cross = ((xmax - xmin)*(1.0 - gg + 1.0/(xmin*xmax)
 			      + 1.0/((1.0-xmin)*(1.0 - xmax)))
-            - gg*log( xmax*(1.0 - xmin)/(xmin*(1.0 - xmax)) ) ) / beta2;
+            - gg*G4Log( xmax*(1.0 - xmin)/(xmin*(1.0 - xmax)) ) ) / beta2;
 
     //Bhabha (e+e-) scattering
     } else {
@@ -159,7 +160,7 @@ G4MollerBhabhaModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* 
       cross = (xmax - xmin)*(1.0/(beta2*xmin*xmax) + b2
             - 0.5*b3*(xmin + xmax)
 	    + b4*(xmin*xmin + xmin*xmax + xmax*xmax)/3.0)
-            - b1*log(xmax/xmin);
+            - b1*G4Log(xmax/xmin);
     }
 
     cross *= twopi_mc2_rcl2/kineticEnergy;
@@ -242,9 +243,9 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
   // electron
   if (isElectron) {
 
-    dedx = log(2.0*(tau + 2.0)/eexc2) - 1.0 - beta2
-         + log((tau-d)*d) + tau/(tau-d)
-         + (0.5*d*d + (2.0*tau + 1.)*log(1. - d/tau))/gamma2;
+    dedx = G4Log(2.0*(tau + 2.0)/eexc2) - 1.0 - beta2
+         + G4Log((tau-d)*d) + tau/(tau-d)
+         + (0.5*d*d + (2.0*tau + 1.)*G4Log(1. - d/tau))/gamma2;
    
   //positron
   } else {
@@ -253,13 +254,13 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
     G4double d3 = d2*d/1.5;
     G4double d4 = d3*d*0.75;
     G4double y  = 1.0/(1.0 + gam);
-    dedx = log(2.0*(tau + 2.0)/eexc2) + log(tau*d)
+    dedx = G4Log(2.0*(tau + 2.0)/eexc2) + G4Log(tau*d)
          - beta2*(tau + 2.0*d - y*(3.0*d2 
          + y*(d - d3 + y*(d2 - tau*d3 + d4))))/tau;
   } 
 
   //density correction 
-  G4double x = log(bg2)/twoln10;
+  G4double x = G4Log(bg2)/twoln10;
   dedx -= material->GetIonisation()->DensityCorrection(x); 
 
   // now you can compute the total ionization loss

@@ -54,6 +54,8 @@
 #include "G4Positron.hh"
 #include "G4Proton.hh"
 #include "G4LossTableManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -92,7 +94,7 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection() :
       G4double x = a0*fG4pow->Z13(j);
       if(1 == j) { ScreenRSquare[j] = 0.5*alpha2*a0*a0; }
       else {
-	ScreenRSquare[j] = 0.5*(1 + exp(-j*j*0.001))*alpha2*x*x;
+	ScreenRSquare[j] = 0.5*(1 + G4Exp(-j*j*0.001))*alpha2*x*x;
 	ScreenRSquareElec[j] = 0.5*alpha2*x*x;
       }
       x = fNistManager->GetA27(j);
@@ -223,7 +225,7 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
       if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
       x1= x/(1 + x);
-      xlog = log(1.0 + x);  
+      xlog = G4Log(1.0 + x);  
       y = xlog - x1; 
       if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }
@@ -261,7 +263,7 @@ G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
       if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
     } else { 
       x1= x/(1 + x);
-      xlog = log(1.0 + x);  
+      xlog = G4Log(1.0 + x);  
       y = xlog - x1; 
       if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
     }

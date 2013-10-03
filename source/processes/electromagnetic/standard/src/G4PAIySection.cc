@@ -64,7 +64,12 @@ const G4double G4PAIySection::fDelta = 0.005; // energy shift from interval bord
 const G4double G4PAIySection::fError = 0.005; // error in lin-log approximation
 
 const G4int G4PAIySection::fMaxSplineSize = 500;  // Max size of output spline
-                                                    // arrays
+                                                  // arrays
+
+static const G4double betaBohr = fine_structure_const;
+static const G4double cofBetaBohr = 4.0;
+static const G4double betaBohr2   = fine_structure_const*fine_structure_const;
+static const G4double betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
 
 //////////////////////////////////////////////////////////////////
 //
@@ -574,7 +579,6 @@ G4double G4PAIySection::DifPAIySection( G4int              i ,
   G4double beta, be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result;
    //G4double beta, be4;
    //G4double be4;
-   static const G4double betaBohr = fine_structure_const;
    // G4double betaBohr2 = fine_structure_const*fine_structure_const;
    // G4double betaBohr4 = betaBohr2*betaBohr2*4.0;
    be2 = betaGammaSq/(1 + betaGammaSq);
@@ -643,9 +647,6 @@ G4double G4PAIySection::PAIdNdxCerenkov( G4int    i ,
    G4double be2, be4;
 
    //G4double cof         = 1.0;
-   static const G4double cofBetaBohr = 4.0;
-   static const G4double betaBohr2   = fine_structure_const*fine_structure_const;
-   static const G4double betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
 
    be2 = betaGammaSq/(1 + betaGammaSq);
    be4 = be2*be2;
@@ -705,16 +706,12 @@ G4double G4PAIySection::PAIdNdxPlasmon( G4int    i ,
    G4double be2, be4;
 
    cof = 1;
-   static const G4double cofBetaBohr = 4.0;
-   static const G4double betaBohr2   = fine_structure_const*fine_structure_const;
-   static const G4double betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
 
    be2 = betaGammaSq/(1 + betaGammaSq);
    be4 = be2*be2;
  
    resonance = log(2*electron_mass_c2*be2/fSplineEnergy[i]);  
    resonance *= fImPartDielectricConst[i]/hbarc;
-
 
    dNdxP = ( resonance + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i] );
 

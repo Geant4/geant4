@@ -67,10 +67,40 @@
 #include "G4Poisson.hh"
 #include "G4Pow.hh"
 #include "globals.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
+
+static const G4double c_highland = 13.6*CLHEP::MeV ;
+static const G4double Tlim = 10.*CLHEP::MeV;
+static const G4double sigmafactor =
+       CLHEP::twopi*CLHEP::classic_electr_radius*CLHEP::classic_electr_radius;
+static const G4double epsfactor = 2.*CLHEP::electron_mass_c2*
+       CLHEP::electron_mass_c2*CLHEP::Bohr_radius*CLHEP::Bohr_radius
+       /(CLHEP::hbarc*CLHEP::hbarc);
+static const G4double beta2lim = Tlim*(Tlim+2.*CLHEP::electron_mass_c2)/
+       ((Tlim+CLHEP::electron_mass_c2)*(Tlim+CLHEP::electron_mass_c2));
+static const G4double bg2lim   = Tlim*(Tlim+2.*CLHEP::electron_mass_c2)/
+       (CLHEP::electron_mass_c2*CLHEP::electron_mass_c2);
+
+static const G4double sig0[15] = {
+ 0.2672*CLHEP::barn,  0.5922*CLHEP::barn,  2.653*CLHEP::barn, 6.235*CLHEP::barn,
+ 11.69*CLHEP::barn  , 13.24*CLHEP::barn  , 16.12*CLHEP::barn, 23.00*CLHEP::barn,
+ 35.13*CLHEP::barn  , 39.95*CLHEP::barn  , 50.85*CLHEP::barn, 67.19*CLHEP::barn,
+ 91.15*CLHEP::barn  , 104.4*CLHEP::barn  , 113.1*CLHEP::barn};
+
+static const G4double Tdat[22] = { 
+ 100*CLHEP::eV,  200*CLHEP::eV,  400*CLHEP::eV,  700*CLHEP::eV,
+   1*CLHEP::keV,   2*CLHEP::keV,   4*CLHEP::keV,   7*CLHEP::keV,
+  10*CLHEP::keV,  20*CLHEP::keV,  40*CLHEP::keV,  70*CLHEP::keV,
+ 100*CLHEP::keV, 200*CLHEP::keV, 400*CLHEP::keV, 700*CLHEP::keV,
+   1*CLHEP::MeV,   2*CLHEP::MeV,   4*CLHEP::MeV,   7*CLHEP::MeV,
+  10*CLHEP::MeV,  20*CLHEP::MeV};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   : G4VMscModel(nam)
@@ -95,7 +125,6 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   geommin       = 1.e-3*mm;
   geomlimit     = geombig;
   presafety     = 0.*mm;
-  //facsafety     = 0.50 ;
                           
   y             = 0.;
 
@@ -170,21 +199,10 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
                                    G4double AtomicNumber,G4double,
 				   G4double, G4double)
 {
-  static const G4double sigmafactor =
-                         twopi*classic_electr_radius*classic_electr_radius;
-  static const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
-                            Bohr_radius*Bohr_radius/(hbarc*hbarc);
   static const G4double epsmin = 1.e-4 , epsmax = 1.e10;
 
   static const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38.,47.,
 				     50., 56., 64., 74., 79., 82. };
-
-  static const G4double Tdat[22] = { 100*eV,  200*eV,  400*eV,  700*eV,
-				     1*keV,   2*keV,   4*keV,   7*keV,
-				     10*keV,  20*keV,  40*keV,  70*keV,
-				     100*keV, 200*keV, 400*keV, 700*keV,
-				     1*MeV,   2*MeV,   4*MeV,   7*MeV,
-				     10*MeV,  20*MeV};
 
   // corr. factors for e-/e+ lambda for T <= Tlim
   static const G4double celectron[15][22] =
@@ -282,17 +300,6 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
             1.456,1.412,1.364,1.328,1.307,1.282            }};
 
   //data/corrections for T > Tlim  
-  static const G4double Tlim = 10.*MeV;
-  static const G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
-                      ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
-  static const G4double bg2lim   = Tlim*(Tlim+2.*electron_mass_c2)/
-                      (electron_mass_c2*electron_mass_c2);
-
-  static const G4double sig0[15] = {
-    0.2672*barn,  0.5922*barn, 2.653*barn,  6.235*barn,
-    11.69*barn  , 13.24*barn  , 16.12*barn, 23.00*barn ,
-    35.13*barn  , 39.95*barn  , 50.85*barn, 67.19*barn ,
-    91.15*barn  , 104.4*barn  , 113.1*barn};
 		      		       
   static const G4double hecorr[15] = {
     120.70, 117.50, 105.00, 92.92, 79.23,  74.510,  68.29,
@@ -328,8 +335,8 @@ G4double G4UrbanMscModel::ComputeCrossSectionPerAtom(
   G4double eps = epsfactor*bg2/Z23;
 
   if     (eps<epsmin)  sigma = 2.*eps*eps;
-  else if(eps<epsmax)  sigma = log(1.+2.*eps)-2.*eps/(1.+2.*eps);
-  else                 sigma = log(2.*eps)-1.+1./eps;
+  else if(eps<epsmax)  sigma = G4Log(1.+2.*eps)-2.*eps/(1.+2.*eps);
+  else                 sigma = G4Log(2.*eps)-1.+1./eps;
 
   sigma *= ChargeSquare*AtomicNumber*AtomicNumber/(beta2*bg2);
 
@@ -499,7 +506,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
               // geomlimit is a geometrical step length
               // transform it to true path length (estimation)
               if((1.-geomlimit/lambda0) > 0.)
-                geomlimit = -lambda0*log(1.-geomlimit/lambda0)+tlimitmin ;
+                geomlimit = -lambda0*G4Log(1.-geomlimit/lambda0)+tlimitmin ;
 
               if(stepStatus == fGeomBoundary)
                 tgeom = geomlimit/facgeom;
@@ -706,7 +713,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   G4double zmean = tPathLength;
   if (tPathLength < currentRange*dtrl) {
     if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
-    else             zmean = lambda0*(1.-exp(-tau));
+    else             zmean = lambda0*(1.-G4Exp(-tau));
     zPathLength = zmean ;
     return zPathLength;    
 
@@ -715,7 +722,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;
     if(tPathLength < currentRange)
-      zmean = (1.-exp(par3*log(1.-tPathLength/currentRange)))/(par1*par3) ;
+      zmean = (1.-G4Exp(par3*G4Log(1.-tPathLength/currentRange)))/(par1*par3) ;
     else {
       zmean = 1./(par1*par3) ;
     }
@@ -729,7 +736,7 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
     par1 = (lambda0-lambda1)/(lambda0*tPathLength);
     par2 = 1./(par1*lambda0);
     par3 = 1.+par2 ;
-    zmean = (1.-exp(par3*log(lambda1/lambda0)))/(par1*par3);
+    zmean = (1.-G4Exp(par3*G4Log(lambda1/lambda0)))/(par1*par3);
   }
 
   zPathLength = zmean;
@@ -760,10 +767,10 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
     if((geomStepLength > lambda0*tausmall) && !insideskin) {
 
       if(par1 <  0.) {
-	tlength = -lambda0*log(1.-geomStepLength/lambda0) ;
+	tlength = -lambda0*G4Log(1.-geomStepLength/lambda0) ;
       } else {
 	if(par1*par3*geomStepLength < 1.) {
-	  tlength = (1.-exp(log(1.-par1*par3*geomStepLength)/par3))/par1 ;
+	  tlength = (1.-G4Exp(G4Log(1.-par1*par3*geomStepLength)/par3))/par1 ;
 	} else {
 	  tlength = currentRange;
 	}
@@ -787,13 +794,12 @@ G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
   // for all particles take the width of the central part
   //  from a  parametrization similar to the Highland formula
   // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
-  static const G4double c_highland = 13.6*MeV ;
   G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
                          KineticEnergy*(KineticEnergy+2.*mass)/
                       ((currentKinEnergy+mass)*(KineticEnergy+mass)));
   y = trueStepLength/currentRadLength;
   G4double theta0 = c_highland*std::abs(charge)*sqrt(y)/betacp;
-  y = log(y);
+  y = G4Log(y);
   // correction factor from e- scattering data
   G4double corr = coeffth1+coeffth2*y;                
 
@@ -915,7 +921,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   if(std::fabs(lambda1/lambda0 - 1) > 0.01 && lambda1 > 0.)
   {
     // mean tau value
-    tau = trueStepLength*log(lambda0/lambda1)/(lambda0-lambda1);
+    tau = trueStepLength*G4Log(lambda0/lambda1)/(lambda0-lambda1);
   }
 
   currentTau = tau ;
@@ -930,8 +936,8 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       xmeanth = 1.0 - tau*(1.0 - 0.5*tau);
       x2meanth= 1.0 - tau*(5.0 - 6.25*tau)/3.;
     } else {
-      xmeanth = exp(-tau);
-      x2meanth = (1.+2.*exp(-2.5*tau))/3.;
+      xmeanth = G4Exp(-tau);
+      x2meanth = (1.+2.*G4Exp(-2.5*tau))/3.;
     }
     G4double relloss = 1.-KineticEnergy/currentKinEnergy;
 
@@ -970,10 +976,10 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     }
 
     // parameter for tail
-    G4double ltau= log(tau);
-    G4double u   = exp(ltau/6.);
-    if(extremesmallstep)  u = exp(log(tsmall/lambda0)/6.);
-    G4double xx  = log(lambdaeff/currentRadLength);
+    G4double ltau= G4Log(tau);
+    G4double u   = G4Exp(ltau/6.);
+    if(extremesmallstep)  u = G4Exp(G4Log(tsmall/lambda0)/6.);
+    G4double xx  = G4Log(lambdaeff/currentRadLength);
     G4double xsi = coeffc1+u*(coeffc2+coeffc3*u)+coeffc4*xx;
 
     // tail should not be too big
@@ -998,7 +1004,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 
     G4double c1 = c-1.;
 
-    G4double ea = exp(-xsi);
+    G4double ea = G4Exp(-xsi);
     G4double eaa = 1.-ea ;
     G4double xmean1 = 1.-(1.-(1.+xsi)*ea)*x/eaa;
     G4double x0 = 1. - xsi*x;
@@ -1034,7 +1040,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     {
       G4double var = 0;
       if(G4UniformRand() < prob) {
-        cth = 1.+log(ea+G4UniformRand()*eaa)*x;
+        cth = 1.+G4Log(ea+G4UniformRand()*eaa)*x;
       } else {
         var = (1.0 - d)*G4UniformRand();
         if(var < numlim*d) {
@@ -1042,7 +1048,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
           cth = -1.0 + var*(1.0 - 0.5*var*c)*(2. + (c - xsi)*x);
         } else {
           cth = 1. + x*(c - xsi - c*pow(var + d, -1.0/c1));
-          //b-b1*bx/exp(log(ebx+(eb1-ebx)*G4UniformRand())/c1) ;
+          //b-b1*bx/G4Exp(G4Log(ebx+(eb1-ebx)*G4UniformRand())/c1) ;
         }
       } 
       if(KineticEnergy > 5*GeV && cth < 0.9) {
@@ -1084,7 +1090,7 @@ G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth,G4double x2meanth)
   // sampling
   G4double cth = 1.;
   if(G4UniformRand() < prob)
-    cth = -1.+2.*exp(log(G4UniformRand())/(a+1.));
+    cth = -1.+2.*G4Exp(G4Log(G4UniformRand())/(a+1.));
   else
     cth = -1.+2.*G4UniformRand();
   return cth;
@@ -1097,7 +1103,7 @@ G4double G4UrbanMscModel::SampleDisplacement()
   G4double r = 0.0;
   if ((currentTau >= tausmall) && !insideskin) {
     G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
-    r = rmax*exp(log(G4UniformRand())/3.);
+    r = rmax*G4Exp(G4Log(G4UniformRand())/3.);
   }
   return r;
 }
@@ -1118,9 +1124,9 @@ G4double G4UrbanMscModel::LatCorrelation()
     else
     {
       G4double etau = 0.;
-      if(currentTau < taubig) etau = exp(-currentTau);
+      if(currentTau < taubig) etau = G4Exp(-currentTau);
       latcorr = -kappa*currentTau;
-      latcorr = exp(latcorr)/kappami1;
+      latcorr = G4Exp(latcorr)/kappami1;
       latcorr += 1.-kappa*etau/kappami1 ;
       latcorr *= 2.*lambdaeff/3. ;
     }

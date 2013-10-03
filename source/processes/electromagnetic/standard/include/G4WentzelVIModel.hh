@@ -63,8 +63,6 @@
 
 class G4ParticleDefinition;
 class G4LossTableManager;
-class G4NistManager;
-class G4Pow;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -111,10 +109,8 @@ private:
   G4WentzelVIModel(const  G4WentzelVIModel&);
 
   G4LossTableManager*       theManager;
-  G4NistManager*            fNistManager;
   G4ParticleChangeForMSC*   fParticleChange;
   G4WentzelOKandVIxSection* wokvi;
-  G4Pow*                    fG4pow;
 
   const G4DataVector*       currentCuts;
 

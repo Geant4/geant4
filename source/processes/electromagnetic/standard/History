@@ -18,6 +18,13 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+02 October 13: V.Ivanchenko (emstand-V09-06-65)
+- G4ESTARStopping - added ESTAR stopping power data
+- General cleanup of many classes: use G4Log and G4Exp, 
+    moved 'static const G4double var = expression' lines our of 
+    the source to avoid any problem in MT mode, significant speedup 
+    of initialisation and some speedup in run time 
+
 11 September 13: V.Ivanchenko (emstand-V09-06-64)
 - G4PairProductionRelModel - add SetupForMaterial(..) call
     into SampleScattering method to fix infinite loop in MT mode

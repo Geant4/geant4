@@ -65,6 +65,7 @@
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
 #include "G4ParticleChangeForLoss.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,7 +76,7 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
   : G4VEmModel(nam),
     particle(0),
     tlimit(DBL_MAX),
-    twoln10(2.0*log(10.0)),
+    twoln10(2.0*G4Log(10.0)),
     bg2lim(0.0169),
     taulim(8.4146e-3),
     isIon(false),
@@ -194,7 +195,7 @@ G4BetheBlochModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
     G4double beta2     = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
 
     cross = 1.0/cutEnergy - 1.0/maxEnergy 
-      - beta2*log(maxEnergy/cutEnergy)/tmax;
+      - beta2*G4Log(maxEnergy/cutEnergy)/tmax;
 
     // +term for spin=1/2 particle
     if( 0.5 == spin ) { cross += 0.5*(maxEnergy - cutEnergy)/energy2; }
@@ -263,7 +264,7 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   G4double eDensity = material->GetElectronDensity();
 
-  G4double dedx = log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)
+  G4double dedx = G4Log(2.0*electron_mass_c2*bg2*cutEnergy/eexc2)
                 - (1.0 + cutEnergy/tmax)*beta2;
 
   if(0.5 == spin) {
@@ -272,7 +273,7 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
   }
 
   // density correction
-  G4double x = log(bg2)/twoln10;
+  G4double x = G4Log(bg2)/twoln10;
   dedx -= material->GetIonisation()->DensityCorrection(x);
 
   // shell correction
