@@ -252,6 +252,9 @@ void G4PhysicsListHelper::AddTransportation()
 		  "No process manager");
       continue;
     } 
+    // Molecule use different type transportation
+    if(particle->GetParticleType() == "Molecule") continue; 
+
     // add transportation with ordering = ( -1, "first", "first" )
     pmanager ->AddProcess(theTransportationProcess);
     pmanager ->SetProcessOrderingToFirst(theTransportationProcess, idxAlongStep);

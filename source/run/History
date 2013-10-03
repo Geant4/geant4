@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 2nd, 2013, H.Kurashige (run-V09-06-105)
+- Modified G4PhysicsListHelper::AddTransportation() 
+  that would prevent to add the G4Transportation to 'Molecues'
+
 Oct 1st, 2013, A.Dotti (run-V09-06-104)
 - Bug fix: add mutex for de-registration worker threads
 
