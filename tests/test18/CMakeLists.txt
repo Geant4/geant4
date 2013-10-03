@@ -40,3 +40,8 @@ target_link_libraries(test18 ${Geant4_LIBRARIES} )
 #
 install(TARGETS test18 DESTINATION bin)
 
+#--Test definitions -------
+GEANT4_ADD_TEST(test18-build BUILD test18)
+GEANT4_ADD_TEST(test18 COMMAND test18 ${CMAKE_CURRENT_SOURCE_DIR}/test18.large_N.in
+		       	       	          ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+					  DEPENDS test18-build)
