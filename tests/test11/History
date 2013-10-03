@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03 August 2013 Andrea Dotti  (test11-V09-06-04)
+-----------------------------------------------
+- Temporarly force MT to use 2 threads: 
+  (even overwriting G4FORCENUMBEROFTHREADS env variable)
+  to avoid HP to use too much memory. To be re-enabled when
+  HP has been fully migrated to MT sharing DB tables.
+
 14 June 2013  Dennis Wright  (test11-V09-06-03)
 -----------------------------------------------
 - update README to reflect previous change from LEP to Bertini/FTFP

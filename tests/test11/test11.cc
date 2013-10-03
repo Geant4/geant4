@@ -41,6 +41,7 @@
 #endif
 
 #include "G4ios.hh"
+#include <stdlib.h>
 
 int main(int argc,char** argv) {
 
@@ -48,13 +49,19 @@ int main(int argc,char** argv) {
   CLHEP::RanecuEngine defaultEngine;
   G4Random::setTheEngine(&defaultEngine);
 
+  G4cout<<"Warning: forcing G4FORCENUMBEROFTHREADS=2"<<G4endl;
+  char env[]="G4FORCENUMBEROFTHREADS=2";
+  putenv(env);
+
+  //A. Dotti (2 Oct 2013): disable MT.
+  // HP model is using too much memory causing issues in CDash
   // Run manager
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
-#else
-  G4RunManager* runManager = new G4RunManager;
-#endif
+  #ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+    runManager->SetNumberOfThreads(4);
+  #else
+    G4RunManager* runManager = new G4RunManager;
+  #endif
 
   // UserInitialization classes
   runManager->SetUserInitialization(new Tst11DetectorConstruction);
