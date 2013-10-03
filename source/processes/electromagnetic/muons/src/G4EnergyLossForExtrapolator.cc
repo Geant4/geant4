@@ -181,9 +181,9 @@ G4EnergyLossForExtrapolator::TrueStepLength(G4double kinEnergy,
   if(SetupKinematics(part, mat, kinEnergy)) {
     if(part == electron || part == positron) {
       G4double x = stepLength*ComputeValue(kinEnergy, mscElectron);
-      if(x < 0.2) res *= (1.0 + 0.5*x + x*x/3.0);
-      else if(x < 0.9999) res = -std::log(1.0 - x)*stepLength/x;
-      else res = ComputeRange(kinEnergy,part);
+      if(x < 0.2)         { res *= (1.0 + 0.5*x + x*x/3.0); }
+      else if(x < 0.9999) { res = -G4Log(1.0 - x)*stepLength/x; }
+      else                { res = ComputeRange(kinEnergy,part); }
     
     } else {
       res = ComputeTrueStep(mat,part,kinEnergy,stepLength);

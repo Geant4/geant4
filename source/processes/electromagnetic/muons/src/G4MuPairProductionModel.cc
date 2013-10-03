@@ -530,8 +530,8 @@ void G4MuPairProductionModel::SampleSecondaries(
   G4double coeff = -G4Log(maxPairEnergy/minPairEnergy)/ymin;
 
   // compute limits 
-  G4double yymin = G4Log(minEnergy/maxPairEnergy)/coeff;
-  G4double yymax = G4Log(maxEnergy/maxPairEnergy)/coeff;
+  G4double yymin = G4Log(minEnergy/kineticEnergy)/coeff;
+  G4double yymax = G4Log(maxEnergy/kineticEnergy)/coeff;
  
   //G4cout << "yymin= " << yymin << "  yymax= " << yymax << G4endl;
 
