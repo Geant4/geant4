@@ -77,7 +77,8 @@ void B1ConRunAction::BeginOfRunAction(const G4Run* aRun)
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   if (IsMaster()) {
-     fdose_tally = new G4ConvergenceTester();
+     fdose_tally = new G4ConvergenceTester("DOSE_TALLY");
+     //fdose_tally = new G4ConvergenceTester();
   }
 
 }
