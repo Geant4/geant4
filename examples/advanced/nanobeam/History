@@ -9,6 +9,9 @@ $Id$
                        Package History file
                        --------------------
 
+03 Oct 2013 - tag nanobeam-V09-06-11  - S. Incerti
+- Updated CMakeLists.txt
+
 30 Sep 2013 - tag nanobeam-V09-06-10  - I. Hrivnacova
 - Updated for changes in analysis:
   (removal of G4AnalysisManager::Create(isMaster))

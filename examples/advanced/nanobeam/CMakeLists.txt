@@ -43,7 +43,7 @@ target_link_libraries(nanobeam ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(nanobeam_SCRIPTS
-    default.mac nanobeam.out
+    default.mac nanobeam.out plot.C
   )
 
 foreach(_script ${nanobeam_SCRIPTS})
