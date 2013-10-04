@@ -40,7 +40,7 @@ target_link_libraries(microbeam ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(microbeam_SCRIPTS
-    microbeam.mac microbeam.out vis.mac phantom.dat
+    microbeam.mac microbeam.out vis.mac phantom.dat plot.C
   )
 
 foreach(_script ${microbeam_SCRIPTS})
