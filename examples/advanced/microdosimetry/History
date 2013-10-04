@@ -9,6 +9,9 @@ $Id: History 73136 2013-08-19 14:28:09Z sincerti $
                        Package History file
                        --------------------
 
+3 Oct 2013 - S. Incerti - microdosimetry-V09-06-09
+- Updated CMakeLists.txt
+
 30 Sep 2013 - I. Hrivnacova - microdosimetry-V09-06-08
 - Updated for changes in analysis:
   (removal of G4AnalysisManager::Create(isMaster))
