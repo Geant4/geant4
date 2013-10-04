@@ -137,8 +137,13 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   biasManager  = 0;
   biasFlag     = false; 
   weightFlag   = false;
-  (G4LossTableManager::Instance())->Register(this);
-  warn = 0;
+  lManager = G4LossTableManager::Instance();
+  lManager->Register(this);
+  secID = fluoID = augerID = biasID = -1;
+  mainSecondaries = 100;
+  if("phot" == GetProcessName() || "compt" == GetProcessName()) { 
+    mainSecondaries = 1; 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -160,7 +165,7 @@ G4VEmProcess::~G4VEmProcess()
   }
   delete modelManager;
   delete biasManager;
-  (G4LossTableManager::Instance())->DeRegister(this);
+  lManager->DeRegister(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -255,10 +260,9 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   if(particle != &part) { return; }
 
-  G4LossTableManager* man = G4LossTableManager::Instance();
-  G4LossTableBuilder* bld = man->GetTableBuilder();
+  G4LossTableBuilder* bld = lManager->GetTableBuilder();
 
-  man->PreparePhysicsTable(&part, this, isMaster);
+  lManager->PreparePhysicsTable(&part, this, isMaster);
 
   Clear();
   InitialiseProcess(particle);
@@ -282,7 +286,7 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     }
   }
 
-  if(man->AtomDeexcitation()) { modelManager->SetFluoFlag(true); }
+  if(lManager->AtomDeexcitation()) { modelManager->SetFluoFlag(true); }
   theCuts = modelManager->Initialise(particle,secondaryParticle,
 				     2.,verboseLevel);
   theCutsGamma    = theCoupleTable->GetEnergyCutsVector(idxG4GammaCut);
@@ -306,6 +310,17 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     biasManager->Initialise(part,GetProcessName(),verboseLevel); 
     biasFlag = false; 
   }
+  // defined ID of secondary particles
+  if(isMaster) {
+    G4String nam1 = GetProcessName();
+    G4String nam2 = nam1 + "_fluo" ;
+    G4String nam3 = nam1 + "_auger";
+    G4String nam4 = nam1 + "_split";
+    secID   = G4PhysicsModelCatalog::Register(nam1); 
+    fluoID  = G4PhysicsModelCatalog::Register(nam2); 
+    augerID = G4PhysicsModelCatalog::Register(nam3); 
+    biasID  = G4PhysicsModelCatalog::Register(nam4); 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -328,9 +343,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   if(particle == &part) { 
 
-    G4LossTableManager* man = G4LossTableManager::Instance();
-    G4LossTableBuilder* bld = man->GetTableBuilder();
-
+    G4LossTableBuilder* bld = lManager->GetTableBuilder();
 
     // worker initialisation
     if(masterProc) {
@@ -397,8 +410,7 @@ void G4VEmProcess::BuildLambdaTable()
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  G4LossTableBuilder* bld = 
-    (G4LossTableManager::Instance())->GetTableBuilder();
+  G4LossTableBuilder* bld = lManager->GetTableBuilder();
 
   G4PhysicsLogVector* aVector = 0;
   G4PhysicsLogVector* bVector = 0;
@@ -710,6 +722,8 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 				  track.GetDynamicParticle(),
 				  (*theCuts)[currentCoupleIndex]);
 
+  G4int num0 = secParticles.size();
+
   // splitting or Russian roulette
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
@@ -759,7 +773,20 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
           G4Track* t = new G4Track(dp, time, track.GetPosition());
           t->SetTouchableHandle(track.GetTouchableHandle());
           t->SetWeight(weight);
-          pParticleChange->AddSecondary(t); 
+          pParticleChange->AddSecondary(t);
+
+	  // define type of secondary
+          if(i < mainSecondaries) { t->SetCreatorModelIndex(secID); }
+          else if(i < num0) {
+            if(p == theGamma) { 
+	      t->SetCreatorModelIndex(fluoID);
+	    } else {
+	      t->SetCreatorModelIndex(augerID);
+	    }
+	  } else {
+	    t->SetCreatorModelIndex(biasID);
+	  }
+ 
           //G4cout << "Secondary(post step) has weight " << t->GetWeight() 
 	  // << ", Ekin= " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
         } else {
@@ -860,7 +887,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 	       << filename << ">"
 	       << G4endl;
       }
-      if((G4LossTableManager::Instance())->SplineFlag()) {
+      if(lManager->SplineFlag()) {
 	size_t n = theLambdaTable->length();
 	for(size_t i=0; i<n; ++i) {
 	  if((* theLambdaTable)[i]) {
@@ -887,7 +914,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 	       << filename << ">"
 	       << G4endl;
       }
-      if((G4LossTableManager::Instance())->SplineFlag()) {
+      if(lManager->SplineFlag()) {
 	size_t n = theLambdaTablePrim->length();
 	for(size_t i=0; i<n; ++i) {
 	  if((* theLambdaTablePrim)[i]) {
@@ -1024,7 +1051,7 @@ G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
 {
   G4PhysicsVector* v = 
     new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
-  v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+  v->SetSpline(lManager->SplineFlag());
   return v;
 }
 

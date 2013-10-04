@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03 October 13: V.Ivant (emutils-V09-06-56)
+- G4AngleDirect - dummy angular generator
+- G4ionEffectiveCharge - use G4Log, G4Exp, G4Pow
+- G4VEmProcess, G4VEnergyLossProcess, G4VAtomDeexcitation - added modelID 
+    for secondary tracks (different mecanisms of production of secondaries 
+    may be distingwished)
+- G4EnergyLossMessenger, G4EmProcessOptions - added UI command and c++
+    interface to set verbose level for worker thread
+
 20 September 13: V.Ivant (emutils-V09-06-55)
 - G4VEmProcess - fixed Coverity warning 
 

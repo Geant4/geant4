@@ -592,6 +592,9 @@ private:
 
   G4GPILSelection  aGPILSelection;
 
+  G4int    secID;  
+  G4int    subsecID;  
+  G4int    biasID;  
 };
 
 // ======== Run time inline methods ================

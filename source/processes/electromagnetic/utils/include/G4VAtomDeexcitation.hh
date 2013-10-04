@@ -170,6 +170,8 @@ private:
   G4VAtomDeexcitation(G4VAtomDeexcitation &);
   G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right);
 
+  const G4ParticleDefinition* gamma;
+
   G4ProductionCutsTable* theCoupleTable;
   G4double lowestKinEnergy;
   G4int    verbose;
@@ -188,6 +190,9 @@ private:
   std::vector<G4bool>   AugerRegions;
   std::vector<G4bool>   PIXERegions;
   std::vector<G4DynamicParticle*> vdyn;
+
+  static G4int pixeIDg;
+  static G4int pixeIDe;
 };
 
 inline void G4VAtomDeexcitation::SetFluo(G4bool val)

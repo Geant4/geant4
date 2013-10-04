@@ -110,6 +110,7 @@ private:
   G4UIcmdWithAString*        pixeeXsCmd;
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;
+  G4UIcmdWithAnInteger*      ver2Cmd;
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lamCmd;
   G4UIcmdWithADouble*        lllCmd;

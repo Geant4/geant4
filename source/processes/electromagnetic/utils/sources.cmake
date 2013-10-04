@@ -43,6 +43,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emutils
     HEADERS
+        G4AngleDirect.hh
         G4AtomicShell.hh
         G4AtomicShellEnumerator.hh
         G4DummyModel.hh
@@ -75,6 +76,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4VMultipleScattering.hh
         G4ionEffectiveCharge.hh
     SOURCES
+        G4AngleDirect.cc
         G4AtomicShell.cc
         G4DummyModel.cc
         G4ElectronIonPair.cc

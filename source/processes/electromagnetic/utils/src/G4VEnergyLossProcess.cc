@@ -53,7 +53,7 @@
 // 17-02-03 Fix problem of store/restore tables (V.Ivanchenko)
 // 18-02-03 Add control on CutCouple usage (V.Ivanchenko)
 // 26-02-03 Simplify control on GenericIons (V.Ivanchenko)
-// 06-03-03 Control on GenericIons using SubType + update verbose (V.Ivanchenko)
+// 06-03-03 Control on GenericIons using SubType+ update verbose (V.Ivanchenko)
 // 10-03-03 Add Ion registration (V.Ivanchenko)
 // 22-03-03 Add Initialisation of cash (V.Ivanchenko)
 // 26-03-03 Remove finalRange modification (V.Ivanchenko)
@@ -253,6 +253,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
   scTracks.reserve(5);
   secParticles.reserve(5);
+
+  secID = biasID = subsecID = -1;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -455,7 +457,8 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       lManager->RegisterExtraParticle(&part, this);
     }
     if(1 < verboseLevel) {
-      G4cout << "### G4VEnergyLossProcess::PreparePhysicsTable() interrupted for "
+      G4cout << "### G4VEnergyLossProcess::PreparePhysicsTable()"
+	     << " interrupted for "
 	     << part.GetParticleName() << "  isIon= " << isIon 
 	     << "  particle " << particle << "  GenericIon " << theGenericIon 
 	     << G4endl;
@@ -542,6 +545,16 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     chargeSqRatio = q*q;
     if(chargeSqRatio > 0.0) { reduceFactor = 1.0/(chargeSqRatio*massRatio); }
   }
+
+  // defined ID of secondary particles
+  if(master) {
+    G4String nam1 = GetProcessName();
+    G4String nam4 = nam1 + "_split";
+    G4String nam5 = nam1 + "_subcut";
+    secID   = G4PhysicsModelCatalog::Register(nam1); 
+    biasID  = G4PhysicsModelCatalog::Register(nam4); 
+    subsecID= G4PhysicsModelCatalog::Register(nam5);
+  } 
 
   // initialisation of models
   G4int nmod = modelManager->NumberOfModels();
@@ -1040,7 +1053,8 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   *condition = NotForced;
   G4double x = DBL_MAX;
 
-  // initialisation of material, mass, charge, model at the beginning of the step
+  // initialisation of material, mass, charge, model 
+  // at the beginning of the step
   DefineMaterial(track.GetMaterialCutsCouple());
   preStepKinEnergy    = track.GetKineticEnergy();
   preStepScaledEnergy = preStepKinEnergy*massRatio;
@@ -1058,7 +1072,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
     }
   }
   //  if(particle->GetPDGMass() > 0.9*GeV)
-  //G4cout << "q2= " << chargeSqRatio << " massRatio= " << massRatio << G4endl; 
+  //G4cout << "q2= "<<chargeSqRatio << " massRatio= " << massRatio << G4endl; 
   // initialisation for sampling of the interaction length 
   //if(previousStepSize <= 0.0) { theNumberOfInteractionLengthLeft = -1.0; }
   //if(theNumberOfInteractionLengthLeft < 0.0) { mfpKinEnergy = DBL_MAX; }
@@ -1066,7 +1080,8 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   // forced biasing only for primary particles
   if(biasManager) {
     if(0 == track.GetParentID()) {
-      if(biasFlag && biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
+      if(biasFlag && 
+	 biasManager->ForcedInteractionRegion(currentCoupleIndex)) {
         return biasManager->GetStepLimit(currentCoupleIndex, previousStepSize);
       }
     }
@@ -1382,6 +1397,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 void 
 G4VEnergyLossProcess::FillSecondariesAlongStep(G4double&, G4double& weight)
 {
+  G4int n0 = scTracks.size();
+
   // weight may be changed by biasing manager
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
@@ -1399,6 +1416,8 @@ G4VEnergyLossProcess::FillSecondariesAlongStep(G4double&, G4double& weight)
     if(t) {
       t->SetWeight(weight); 
       pParticleChange->AddSecondary(t);
+      if(i < n0) { t->SetCreatorModelIndex(secID); }
+      else       { t->SetCreatorModelIndex(biasID); }
       //G4cout << "Secondary(along step) has weight " << t->GetWeight() 
       //<< ", kenergy " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
     }
@@ -1480,6 +1499,7 @@ G4VEnergyLossProcess::SampleSubCutSecondaries(std::vector<G4Track*>& tracks,
       if(addSec) {
 	G4Track* t = new G4Track((*it), pretime + fragment*dt, r);
 	t->SetTouchableHandle(track->GetTouchableHandle());
+	t->SetCreatorModelIndex(subsecID);
 	tracks.push_back(t);
 	esec += t->GetKineticEnergy();
 	if (t->GetParticleDefinition() == thePositron) { 
@@ -1565,20 +1585,22 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 
   // sample secondaries
   secParticles.clear();
-  //G4cout << "Energy of primary: " << dynParticle->GetKineticEnergy()/MeV<<G4endl;
+  //G4cout<< "Eprimary: "<<dynParticle->GetKineticEnergy()/MeV<<G4endl;
   currentModel->SampleSecondaries(&secParticles, currentCouple, 
 				  dynParticle, tcut);
+
+  G4int num0 = secParticles.size();
 
   // bremsstrahlung splitting or Russian roulette  
   if(biasManager) {
     if(biasManager->SecondaryBiasingRegion(currentCoupleIndex)) {
       G4double eloss = 0.0;
-      weight *= 
-	biasManager->ApplySecondaryBiasing(secParticles,
-					   track, currentModel, 
-					   &fParticleChange, eloss,
-					   currentCoupleIndex, tcut, 
-					   step.GetPostStepPoint()->GetSafety());
+      weight *= biasManager->ApplySecondaryBiasing(
+				      secParticles,
+				      track, currentModel, 
+				      &fParticleChange, eloss,
+				      currentCoupleIndex, tcut, 
+				      step.GetPostStepPoint()->GetSafety());
       if(eloss > 0.0) {
 	eloss += fParticleChange.GetLocalEnergyDeposit();
         fParticleChange.ProposeLocalEnergyDeposit(eloss);
@@ -1598,6 +1620,9 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 	G4Track* t = new G4Track(secParticles[i], time, track.GetPosition());
 	t->SetTouchableHandle(track.GetTouchableHandle());
 	t->SetWeight(weight); 
+	if(i < num0) { t->SetCreatorModelIndex(secID); }
+	else         { t->SetCreatorModelIndex(biasID); }
+
 	//G4cout << "Secondary(post step) has weight " << t->GetWeight() 
 	//<< ", kenergy " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
 	pParticleChange->AddSecondary(t);

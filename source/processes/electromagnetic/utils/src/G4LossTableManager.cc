@@ -1117,7 +1117,9 @@ void
 G4LossTableManager::SetParameters(const G4ParticleDefinition* aParticle,
 				  G4VEnergyLossProcess* p)
 {
-  if(stepFunctionActive) { p->SetStepFunction(maxRangeVariation, maxFinalStep); }
+  if(stepFunctionActive) { 
+    p->SetStepFunction(maxRangeVariation, maxFinalStep); 
+  }
   if(integralActive)     { p->SetIntegral(integral); }
   if(minEnergyActive)    { p->SetMinKinEnergy(minKinEnergy); }
   if(maxEnergyActive)    { p->SetMaxKinEnergy(maxKinEnergy); }
@@ -1338,10 +1340,10 @@ G4double G4LossTableManager::GetCSDARange(const G4ParticleDefinition *aParticle,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4double 
-G4LossTableManager::GetRangeFromRestricteDEDX(const G4ParticleDefinition *aParticle,
-					      G4double kineticEnergy,
-					      const G4MaterialCutsCouple *couple)
+G4double G4LossTableManager::GetRangeFromRestricteDEDX(
+                             const G4ParticleDefinition *aParticle,
+			     G4double kineticEnergy,
+			     const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = DBL_MAX;
@@ -1375,9 +1377,10 @@ G4double G4LossTableManager::GetEnergy(const G4ParticleDefinition *aParticle,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4LossTableManager::GetDEDXDispersion(const G4MaterialCutsCouple *couple,
-					       const G4DynamicParticle* dp,
-					       G4double& length)
+G4double G4LossTableManager::GetDEDXDispersion(
+                             const G4MaterialCutsCouple *couple,
+			     const G4DynamicParticle* dp,
+			     G4double& length)
 {
   const G4ParticleDefinition* aParticle = dp->GetParticleDefinition();
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }

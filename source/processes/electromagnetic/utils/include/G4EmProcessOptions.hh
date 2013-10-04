@@ -99,7 +99,8 @@ public:
 
   void SetBuildCSDARange(G4bool val);
 
-  void SetVerbose(G4int val, const G4String& name = "all");
+  void SetVerbose(G4int val, const G4String& name = "all", 
+		  G4bool worker = false);
 
   void SetLambdaFactor(G4double val);
 

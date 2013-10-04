@@ -85,6 +85,7 @@ class G4VParticleChange;
 class G4PhysicsTable;
 class G4PhysicsVector;
 class G4EmBiasingManager;
+class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -321,6 +322,7 @@ private:
 
   // ======== Parameters of the class fixed at construction =========
 
+  G4LossTableManager*          lManager;
   G4EmModelManager*            modelManager;
   G4EmBiasingManager*          biasManager;
   const G4ParticleDefinition*  theGamma;
@@ -394,7 +396,11 @@ private:
   G4bool                       biasFlag;
   G4bool                       weightFlag;
 
-  G4int                        warn;
+  G4int                        mainSecondaries;
+  G4int                        secID;  
+  G4int                        fluoID;  
+  G4int                        augerID;  
+  G4int                        biasID;  
 };
 
 // ======== Run time inline methods ================
