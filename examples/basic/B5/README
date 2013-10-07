@@ -1,0 +1,227 @@
+$Id$
+
+    =========================================================
+    Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+    =========================================================
+
+                       Extended Example B5
+                       -------------------- 
+
+  Example B5 implements a double-arm spectrometer with wire chambers, 
+  hodoscopes and calorimeters.  Event simulation and collection are 
+  enabled, as well as event display and analysis.
+
+
+  1. GEOMETRY
+
+     The spectrometer consists of two detector arms 
+     (see B5DetectorConstruction).  One arm provides 
+     position and timing information of the incident particle while the 
+     other collects position, timing and energy information of the particle
+     after it has been deflected by a magnetic field centered at the 
+     spectrometer pivot point.
+ 
+       - First arm:  box filled with air, also containing:
+
+           1 hodoscope (15 vertical strips of plastic scintillator)
+           1 drift chamber (5 horizontal argon gas layers with a 
+                            "virtual wire" at the center of each layer)
+
+       - Magnetic field region: air-filled cylinder which contains
+                                the field
+
+       - Second arm:  box filled with air, also containing:
+
+           1 hodoscope (25 vertical strips of plastic scintillator)
+           1 drift chamber (5 horizontal argon gas layers with a 
+                            "virtual wire" at the center of each layer)
+           1 electromagnetic calorimeter: 
+                 a box sub-divided along x,y and z
+                 axes into cells of CsI 
+           1 hadronic calorimeter: 
+                 a box sub-divided along x,y, and z axes
+                 into cells of lead, with a layer of 
+                 plastic scintillator placed at the center 
+                 of each cell
+
+  2. PHYSICS
+
+     This example uses the reference hadronic physics list, FTFP_BERT,
+     and also adds the G4StepLimiter process.
+
+
+  3. EVENT:
+
+     An event consists of the generation of a single particle which is 
+     transported through the first spectrometer arm.  Here, a scintillator 
+     hodoscope records the reference time of the particle before it passes
+     through a drift chamber where the particle position is measured. 
+     Momentum analysis is performed as the particle passes through a magnetic
+     field at the spectrometer pivot and then into the second spectrometer 
+     arm.  In the second arm, the particle passes through another hodoscope
+     and drift chamber before interacting in the electromagnetic calorimeter.
+     Here it is likely that particles will induce electromagnetic showers.  
+     The shower energy is recorded in a three-dimensional array of CsI 
+     crystals.  Secondary particles from the shower, as well as primary 
+     particles which do not interact in the CsI crystals, pass into the 
+     hadronic calorimeter.  Here, the remaining energy is collected in a 
+     three-dimensional array of scintillator-lead sandwiches.
+
+     Several aspects of the event may be changed interactively by the user:
+
+       - initial particle type
+       - initial momentum and angle
+       - momentum and angle spreads
+       - type of initial particle may be randomized
+       - strength of magnetic field
+       - angle of the second spectrometer arm
+       
+     All UI commans are available in /mydet command directory:
+       /mydet/armAngle angle unit
+       /mydet/verbose  verboseLevel
+       /mydet/fieldValue field unit
+       /mydet/momentum  value unit
+       /mydet/sigmaMomentum value unit
+       /mydet/sigmaAngle value unit
+       /mydet/randomizePrimary [true|false]
+       
+     They are implemented in B5DetectorConstMessenger, B5EventActionMessenger,
+     B5MagneticFieldMessenger and B5PrimaryGeneratorMessenger classes.
+
+  4. DETECTOR RESPONSE:
+
+     All the information required to simulate and analyze an event is 
+     recorded in hits.  This information is recorded in the following 
+     sensitive detectors:
+
+       - hodoscope:
+           particle time
+           particle position
+           strip ID
+             (see B5HodoscopeSD, B5HodoscopeHit classes)  
+
+       - drift chamber: 
+           particle time
+           particle position
+           layer ID
+             (see B5DriftChamberSD, B5DriftChamberHit classes)  
+ 
+       - electromagnetic calorimeter: 
+           particle position 
+           energy deposited in cell
+           cell ID
+             (see B5EMCalorimeterSD, B5EMCalorimeterHit classes)  
+  
+       - hadronic calorimeter:   
+           particle position 
+           energy deposited in cell
+           cell ID
+             (see B5HadCalorimeterSD, B5HadCalorimeterHit classes)  
+
+
+  5. ANALYSIS:
+
+   The analysis tools are used to accumulate statistics.
+   Histograms and an ntuple are created in B5RunAction::B5RunAction() 
+   constructor for the following quantities:
+
+   1D histograms:
+   - Number of hits in Chamber 1
+   - Number of hits in Chamber 2
+
+   2D histograms:
+   - Drift Chamber 1 X vs Y positions
+   - Drift Chamber 2 X vs Y positions
+   - Total energy deposit vs time of flight  
+   
+   Ntuple:
+   - Number of hits in Chamber 1
+   - Number of hits in Chamber 2
+   - Total energy deposit in EM calorimeter
+   - Total energy deposit in Hadronic calorimeter
+   - Time of flight in Hodoscope 1
+   - Time of flight in Hodoscope 2
+
+   The histograms and ntuple are saved in the output file in a format
+   according to a technology selected in B5Analysis.hh.
+
+   When running in multi-threading mode, the histograms accumulated on threads are
+   automatically merged in a single output file, while the ntuple is written
+   in files per thread.
+
+ The following paragraphs are common to all basic examples
+
+ A- VISUALISATION
+
+   The visualization manager is set via the G4VisExecutive class
+   in the main() function in exampleB5.cc.    
+   The initialisation of the drawing is done via a set of /vis/ commands
+   in the macro vis.mac. This macro is automatically read from
+   the main function when the example is used in interactive running mode.
+
+   By default, vis.mac opens an OpenGL viewer (/vis/open OGL).
+   The user can change the initial viewer by commenting out this line
+   and instead uncommenting one of the other /vis/open statements, such as
+   HepRepFile or DAWNFILE (which produce files that can be viewed with the
+   HepRApp and DAWN viewers, respectively).  Note that one can always
+   open new viewers at any time from the command line.  For example, if
+   you already have a view in, say, an OpenGL window with a name
+   "viewer-0", then
+      /vis/open DAWNFILE
+   then to get the same view
+      /vis/viewer/copyView viewer-0
+   or to get the same view *plus* scene-modifications
+      /vis/viewer/set/all viewer-0
+   then to see the result
+      /vis/viewer/flush
+
+   The DAWNFILE, HepRepFile drivers are always available
+   (since they require no external libraries), but the OGL driver requires
+   that the Geant4 libraries have been built with the OpenGL option.
+
+   From Release 9.6 the vis.mac macro in example B5 has additional commands
+   that demonstrate additional functionality of the vis system, such as
+   displaying text, axes, scales, date, logo and shows how to change
+   viewpoint and style.  Consider copying these to other examples or
+   your application.  To see even more commands use help or
+   ls or browse the available UI commands in the Application
+   Developers Guide, Section 7.1.
+
+   For more information on visualization, including information on how to
+   install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
+   for example,
+   http://geant4.slac.stanford.edu/Presentations/vis/G4[VIS]Tutorial/G4[VIS]Tutorial.html
+   (where [VIS] can be replaced by DAWN, OpenGL and HepRApp)
+
+   The tracks are automatically drawn at the end of each event, accumulated
+   for all events and erased at the beginning of the next run.
+
+ B- USER INTERFACES
+ 
+   The user command interface is set via the G4UIExecutive class
+   in the main() function in exampleB5.cc 
+   The selection of the user command interface is then done automatically 
+   according to the Geant4 configuration or it can be done explicitly via 
+   the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
+ 
+ C- HOW TO RUN
+
+    - Execute exampleB5 in the 'interactive mode' with visualization:
+        % ./exampleB5
+      and type in the commands from run1.mac line by line:  
+        Idle> /control/verbose 2
+        Idle> /tracking/verbose 1
+        Idle> /run/beamOn 10 
+        Idle> ...
+        Idle> exit
+      or
+        Idle> /control/execute run1.mac
+        ....
+        Idle> exit
+
+    - Execute exampleB5  in the 'batch' mode from macro files 
+      (without visualization)
+        % ./exampleB5 run2.mac
+        % ./exampleB5 exampleB5.in > exampleB5.out
+
+	
