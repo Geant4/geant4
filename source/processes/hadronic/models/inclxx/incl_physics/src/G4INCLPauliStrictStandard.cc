@@ -51,7 +51,7 @@ namespace G4INCL {
     delete theStandardBlocker;
   }
 
-  G4bool PauliStrictStandard::isBlocked(ParticleList const particleList, Nucleus const * const nucleus) const {
+  G4bool PauliStrictStandard::isBlocked(ParticleList const &particleList, Nucleus const * const nucleus) {
     if(nucleus->getStore()->getBook()->getAcceptedCollisions() == 0) {
       return theStrictBlocker->isBlocked(particleList, nucleus);
     } else {

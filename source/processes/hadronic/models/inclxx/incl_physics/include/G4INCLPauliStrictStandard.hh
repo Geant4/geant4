@@ -53,10 +53,10 @@ namespace G4INCL {
     /// \brief Dummy assignment operator to silence Coverity warning
     PauliStrictStandard &operator=(const PauliStrictStandard &rhs);
 
-    G4bool isBlocked(ParticleList const, Nucleus const * const) const;
+    G4bool isBlocked(ParticleList const &, Nucleus const * const);
 
   private:
-    IPauli const *theStrictBlocker, *theStandardBlocker;
+    IPauli *theStrictBlocker, *theStandardBlocker;
   };
 }
 

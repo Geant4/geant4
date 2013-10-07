@@ -46,7 +46,7 @@ namespace G4INCL {
     IPauli() {};
     virtual ~IPauli() {};
 
-    virtual G4bool isBlocked(ParticleList const, Nucleus const * const) const = 0;
+    virtual G4bool isBlocked(ParticleList const &, Nucleus const * const) = 0;
 
   protected:
   };

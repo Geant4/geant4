@@ -35,42 +35,34 @@
 #include "globals.hh"
 
 #include "G4INCLCDPP.hh"
+#include <functional>
+#include <algorithm>
 
 namespace G4INCL {
 
-  CDPP::CDPP() {}
+  CDPP::CDPP() :
+    Sk(0.0),
+    TbelowTf(0.0),
+    thePotential(NULL)
+  {}
 
   CDPP::~CDPP() {}
 
-  G4bool CDPP::isBlocked(ParticleList const created, Nucleus const * const nucleus) const {
+  G4bool CDPP::isBlocked(ParticleList const &created, Nucleus const * const nucleus) {
     G4double S = nucleus->computeSeparationEnergyBalance();
 
-    ParticleList remnantParticles = nucleus->getStore()->getParticles();
-    remnantParticles.insert(remnantParticles.end(), created.begin(), created.end());
+    thePotential = nucleus->getPotential();
 
-    G4double Sk = 0.0;
-    G4double TbelowTf = 0.0;
-    for(ParticleIter i = remnantParticles.begin(); i != remnantParticles.end();
-        ++i) {
+    ParticleList const &remnantParticles = nucleus->getStore()->getParticles();
 
-      if((*i)->isNucleon()) {
-        const G4double Tf = nucleus->getPotential()->getFermiEnergy(*i);
-        const G4double T = (*i)->getKineticEnergy();
+    Sk = 0.0;
+    TbelowTf = 0.0;
 
-        if(T > Tf) {
-          const G4double sep = nucleus->getPotential()->getSeparationEnergy(*i);
-          Sk += sep;
-        } else {
-          TbelowTf += T - (*i)->getPotentialEnergy();
-        }
-      } else if((*i)->isPion() || (*i)->isResonance()) {
-        const G4double sep = nucleus->getPotential()->getSeparationEnergy(*i);
-        Sk += sep;
-      }
+    std::for_each(remnantParticles.begin(), remnantParticles.end(), std::bind1st(std::mem_fun(&G4INCL::CDPP::processOneParticle), this));
+    std::for_each(created.begin(), created.end(), std::bind1st(std::mem_fun(&G4INCL::CDPP::processOneParticle), this));
 
-    }
-    G4double Tinitial = nucleus->getInitialInternalEnergy();
-    G4double Eblock = TbelowTf - Tinitial - Sk - S;
+    const G4double Tinitial = nucleus->getInitialInternalEnergy();
+    const G4double Eblock = TbelowTf - Tinitial - Sk - S;
 
     return (Eblock < 0.0);
   }

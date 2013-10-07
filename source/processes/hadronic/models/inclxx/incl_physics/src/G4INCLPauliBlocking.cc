@@ -40,18 +40,18 @@
 
 namespace G4INCL {
 
-  const IPauli * Pauli::thePauliBlocker = 0;
-  const IPauli * Pauli::theCDPP = 0;
+  IPauli * Pauli::thePauliBlocker = 0;
+  IPauli * Pauli::theCDPP = 0;
 
-  void Pauli::setBlocker(IPauli const * pauliBlocker) {
+  void Pauli::setBlocker(IPauli * const pauliBlocker) {
     thePauliBlocker = pauliBlocker;
   }
 
-  void Pauli::setCDPP(IPauli const * cdpp) {
+  void Pauli::setCDPP(IPauli * const cdpp) {
     theCDPP = cdpp;
   }
 
-  G4bool Pauli::isBlocked(ParticleList const modifiedAndCreated, Nucleus const * const nucleus) {
+  G4bool Pauli::isBlocked(ParticleList const &modifiedAndCreated, Nucleus const * const nucleus) {
     G4bool isPauliBlocked = false;
     if(thePauliBlocker != 0) {
       isPauliBlocked = thePauliBlocker->isBlocked(modifiedAndCreated, nucleus);
@@ -60,7 +60,7 @@ namespace G4INCL {
     return isPauliBlocked;
   }
 
-  G4bool Pauli::isCDPPBlocked(ParticleList const created, Nucleus const * const nucleus) {
+  G4bool Pauli::isCDPPBlocked(ParticleList const &created, Nucleus const * const nucleus) {
     G4bool isCDPPBlocked = false;
     if(theCDPP != 0) {
       isCDPPBlocked = theCDPP->isBlocked(created, nucleus);

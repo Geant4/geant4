@@ -45,7 +45,7 @@ namespace G4INCL {
     PauliStandard();
     ~PauliStandard();
 
-    G4bool isBlocked(ParticleList const, Nucleus const * const) const;
+    G4bool isBlocked(ParticleList const &, Nucleus const * const);
     G4double getBlockingProbability(Particle const * const, Nucleus const * const) const;
 
   private:

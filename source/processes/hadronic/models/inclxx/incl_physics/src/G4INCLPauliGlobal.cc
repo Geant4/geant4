@@ -42,7 +42,7 @@ namespace G4INCL {
   PauliGlobal::PauliGlobal() {}
   PauliGlobal::~PauliGlobal() {}
 
-  G4bool PauliGlobal::isBlocked(ParticleList const pL, Nucleus const * const n) const {
+  G4bool PauliGlobal::isBlocked(ParticleList const &pL, Nucleus const * const n) {
     for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
       // Pauli blocking only applies to nucleons
       if(!(*p)->isNucleon()) continue;

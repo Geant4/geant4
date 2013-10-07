@@ -50,7 +50,7 @@ namespace G4INCL {
 
   PauliStandard::~PauliStandard() {}
 
-  G4bool PauliStandard::isBlocked(ParticleList const pL, Nucleus const * const n) const {
+  G4bool PauliStandard::isBlocked(ParticleList const &pL, Nucleus const * const n) {
     for(ParticleIter p = pL.begin(); p != pL.end(); ++p) {
       if( !(*p)->isNucleon() ) continue;
       if(getBlockingProbability(*p, n) > Random::shoot()) return true;
@@ -82,7 +82,7 @@ namespace G4INCL {
 
     // Get the list of particles that are currently inside the
     // nucleus.
-    ParticleList particles = nucleus->getStore()->getParticles();
+    ParticleList const &particles = nucleus->getStore()->getParticles();
 
     G4int nl = 0;
     for(ParticleIter it = particles.begin(); it != particles.end(); ++it) {

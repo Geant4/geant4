@@ -45,7 +45,7 @@ namespace G4INCL {
     PauliStrict();
     ~PauliStrict();
 
-    G4bool isBlocked(ParticleList const, Nucleus const * const) const;
+    G4bool isBlocked(ParticleList const &, Nucleus const * const);
   };
 }
 

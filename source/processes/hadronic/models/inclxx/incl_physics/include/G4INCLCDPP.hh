@@ -40,6 +40,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLIPauli.hh"
+#include "G4INCLINuclearPotential.hh"
 
 namespace G4INCL {
   class CDPP : public IPauli {
@@ -47,9 +48,30 @@ namespace G4INCL {
     CDPP();
     ~CDPP();
 
-    G4bool isBlocked(ParticleList const, Nucleus const * const) const;
+    G4bool isBlocked(ParticleList const &, Nucleus const * const);
+
+    inline void processOneParticle(Particle const * const p) {
+      if(p->isNucleon()) {
+        const G4double Tf = thePotential->getFermiEnergy(p);
+        const G4double T = p->getKineticEnergy();
+
+        if(T > Tf) {
+          const G4double sep = thePotential->getSeparationEnergy(p);
+          Sk += sep;
+        } else {
+          TbelowTf += T - p->getPotentialEnergy();
+        }
+      } else if(p->isPion() || p->isResonance()) {
+        const G4double sep = thePotential->getSeparationEnergy(p);
+        Sk += sep;
+      }
+    }
 
   protected:
+    G4double Sk;
+    G4double TbelowTf;
+    NuclearPotential::INuclearPotential const * thePotential;
+
   };
 }
 

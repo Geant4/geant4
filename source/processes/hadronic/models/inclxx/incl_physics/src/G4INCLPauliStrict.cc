@@ -41,7 +41,7 @@ namespace G4INCL {
   PauliStrict::PauliStrict() {}
   PauliStrict::~PauliStrict() {}
 
-  G4bool PauliStrict::isBlocked(ParticleList const pL, Nucleus const * const n) const {
+  G4bool PauliStrict::isBlocked(ParticleList const &pL, Nucleus const * const n) {
     for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
       if(!(*p)->isNucleon()) continue;
       const G4double pmod2 = (*p)->getMomentum().mag2();
