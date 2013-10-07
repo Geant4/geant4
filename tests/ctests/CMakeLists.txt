@@ -72,6 +72,12 @@ GEANT4_ADD_TEST(example-bas-b4d
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B4/B4d
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B4/B4d
                 BUILD exampleB4d PROJECT B4d ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-bas-b5 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B5/exampleB5
+                        ${CMAKE_SOURCE_DIR}/examples/basic/B5/exampleB5.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B5
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B5
+                BUILD exampleB5 PROJECT B5 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
 #-------------------------------------------------------------------------------------------------
 #---Extended-----------------------------------------------------------------------------------------

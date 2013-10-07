@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-06-15 04 October 2013 Ivana Hrivnacova
+- Fixed B5 test in CMake
+
+ctests-V09-06-14 03 October 2013 Ivana Hrivnacova
+- Added basic/B5 example 
+
 ctests-V09-06-13 30 September 2013 Ivana Hrivnacova
 - N03Con test replaced with B1Con
 

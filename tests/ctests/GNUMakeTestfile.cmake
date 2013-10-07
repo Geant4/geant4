@@ -134,6 +134,8 @@ GEANT4_ADD_TEST(example-bas-b4c COMMAND ${BINDIR}/exampleB4c -m ${SRCDIR}/basic/
                                 BUILD ${SRCDIR}/basic/B4/B4c)
 GEANT4_ADD_TEST(example-bas-b4d COMMAND ${BINDIR}/exampleB4d -m ${SRCDIR}/basic/B4/B4d/exampleB4.in
                                 BUILD ${SRCDIR}/basic/B4/B4d)
+GEANT4_ADD_TEST(example-bas-b5  COMMAND ${BINDIR}/exampleB5 ${SRCDIR}/basic/B5/exampleB5.in
+                                BUILD ${SRCDIR}/basic/B5)
 
 GEANT4_ADD_TEST(example-ext-analysis-a01 COMMAND ${BINDIR}/A01app ${SRCDIR}/extended/analysis/A01/test.in
                                 BUILD ${SRCDIR}/extended/analysis/A01)
