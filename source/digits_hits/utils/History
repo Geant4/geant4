@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 05, 2013  A.Kimura (detutils-V09-06-00)
+- Fixed a bug in G4ScoringBox::DrawColumn(...), which was a wrong size check of the column.
+
 June 14, 2010  G.Cosmo (detutils-V09-03-00)
 - Added missing virtual destructor to G4VScoringMesh and removed unnecessary
   virtual qualifiers to G4ScoringBox.
