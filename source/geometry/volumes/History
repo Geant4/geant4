@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 4th, 2013 J.Apostolakis - geomvol-V09-06-14
+- Retag due to issue with testing - needed to ensure use of geommng 12
+ NOTE: co-works with geommng-V09-06-12 and geom-specific-V09-06-19
+
+October 4th, 2013 J.Apostolakis - geomvol-V09-06-13
+- Separated functionality for Solids (PCone/PHedra Sides) from 
+   G4GeometryWorkspace into separate class G4SolidsWorkspace in 
+   solids/specific.  Needed to satisfy dependence issue.
+ NOTE: co-works with geommng-V09-06-12 and geom-specific-V09-06-18
+
+October 3rd, 2013 J.Apostolakis - geomvol-V09-06-12
+- Added new classes G4GeometryWorkspace - to create and manage MT objects.
+   and G4GeometryWorkspacePool which keeps Workspace objects. 
+- Small improvements and description in G4GeometryWorkspace.
 
 September 17th, 2013 G.Cosmo - geomvol-V09-06-10
 - Use G4EnhancedVecAllocator in G4NavigationHistory only in MT mode.

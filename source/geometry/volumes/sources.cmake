@@ -38,6 +38,8 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
         G4AssemblyVolume.hh
         G4AssemblyVolume.icc
         G4EnhancedVecAllocator.hh
+        G4GeometryWorkspace.hh
+        G4GeometryWorkspacePool.hh
         G4GRSSolid.hh
         G4GRSSolid.icc
         G4GRSSolidHandle.hh
@@ -63,6 +65,8 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
         G4TouchableHistoryHandle.hh
     SOURCES
         G4AssemblyVolume.cc
+        G4GeometryWorkspace.cc
+        G4GeometryWorkspacePool.cc
         G4GRSSolid.cc
         G4GRSVolume.cc
         G4LogicalBorderSurface.cc

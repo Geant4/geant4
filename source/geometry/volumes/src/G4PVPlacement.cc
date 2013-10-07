@@ -158,7 +158,7 @@ G4PVPlacement::G4PVPlacement( __void__& a )
 //
 G4PVPlacement::~G4PVPlacement()
 {
-  if( fallocatedRotM ){ delete G4MT_rot; }
+  if( fallocatedRotM ){ delete this->GetRotation() ; }
 }
 
 // ----------------------------------------------------------------------
