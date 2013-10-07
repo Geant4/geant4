@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-Oct-2013, Davide Mancusi             (phys-builders-V09-06-09)
+- INCLXX neutron builder now uses G4NeutronInelasticXS.
+
 22-Jul-2013, Alberto Ribon              (phys-builders-V09-06-08)
 - Nothing is changed: simply re-propose the previous tag after
   fixing an initialization problem in materials category.

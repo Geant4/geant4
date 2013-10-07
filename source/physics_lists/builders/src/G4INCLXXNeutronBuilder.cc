@@ -28,7 +28,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4BGGNucleonInelasticXS.hh"
+#include "G4NeutronInelasticXS.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4HadronicInteractionRegistry.hh"
@@ -59,7 +59,7 @@ Build(G4NeutronInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-  aP->AddDataSet(new G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
+  aP->AddDataSet(new G4NeutronInelasticXS);
 }
 
 G4INCLXXNeutronBuilder::
