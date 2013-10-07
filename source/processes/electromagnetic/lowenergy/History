@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07.10.2013, L.Pandola, tag emlowen-V09-06-26
+	    Migration to MT for the Penelope models of 
+	    bremsstrahlung and e+ annihilation.
+            Improve CPU performances of G4PenelopePhotoElectricModel
+
 01.10.2013, L.Pandola, tag emlowen-V09-06-25
 	    Migration to MT for G4PenelopePhotoElectricModel,
             G4PenelopeRayleighModel and G4PenelopeGammaConversionModel

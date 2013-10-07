@@ -30,13 +30,17 @@
 // History:
 // --------
 // 08 Jan 2010   L Pandola  First implementation
-// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is active.
-//                          Make sure that fluorescence/Auger is generated only if 
-//                          above threshold
+// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger 
+//                          is active.
+//                          Make sure that fluorescence/Auger is generated 
+//                          only if above threshold
 // 25 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
 // 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
 // 07 Oct 2011   L Pandola  Bug fix (potential violation of energy conservation)
-// 27 Sep 2013   L Pandola  Migrate to MT paradigm, only master model manages tables.
+// 27 Sep 2013   L Pandola  Migrate to MT paradigm, only master model manages 
+//                          tables.
+// 02 Oct 2013   L Pandola  Rewrite sampling algorithm of SelectRandomShell()
+//                          to improve CPU performances
 //
 
 #include "G4PenelopePhotoElectricModel.hh"
@@ -602,81 +606,6 @@ void G4PenelopePhotoElectricModel::ReadDataFile(G4int Z)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
-{
-  G4double logEnergy = std::log(energy);
-
-  //Check if data have been read (it should be!)
-  if (!logAtomicShellXS->count(Z))
-     {
-       G4ExceptionDescription ed;
-       ed << "Cannot find shell cross section data for Z=" << Z << G4endl;
-       G4Exception("G4PenelopePhotoElectricModel::SelectRandomShell()",
-		   "em2038",FatalException,ed);
-     }
-
-  size_t shellIndex = 0;
- 
-  G4PhysicsTable* theTable =  logAtomicShellXS->find(Z)->second;
-
-  G4DataVector* tempVector = new G4DataVector();
-
-  G4double sum = 0;
-  //loop on shell partial XS, retrieve the value for the given energy and store on 
-  //a temporary vector
-  tempVector->push_back(sum); //first element is zero
-
-  G4PhysicsFreeVector* totalXSLog = (G4PhysicsFreeVector*) (*theTable)[0];
-  G4double logXS = totalXSLog->Value(logEnergy);
-  G4double totalXS = std::exp(logXS);
-					   
-  //Notice: totalXS is the total cross section and it does *not* correspond to 
-  //the sum of partialXS's, since these include only K, L and M shells.
-  //
-  // Therefore, here one have to consider the possibility of ionisation of 
-  // an outer shell. Conventionally, it is indicated with id=10 in Penelope
-  //
-  
-  for (size_t k=1;k<theTable->entries();k++)
-    {
-      G4PhysicsFreeVector* partialXSLog = (G4PhysicsFreeVector*) (*theTable)[k];
-      G4double logXSLocal = partialXSLog->Value(logEnergy);
-      G4double partialXS = std::exp(logXSLocal);
-      sum += partialXS;
-      tempVector->push_back(sum);     
-    }
-
-  tempVector->push_back(totalXS); //last element
-
-  G4double random = G4UniformRand()*totalXS; 
-
-  /*
-  for (size_t i=0;i<tempVector->size(); i++)
-    G4cout << i << " " << (*tempVector)[i]/totalXS << G4endl;
-  */
-  
-  //locate bin of tempVector
-  //Now one has to sample according to the elements in tempVector
-  //This gives the left edge of the interval...
-  size_t lowerBound = 0;
-  size_t upperBound = tempVector->size()-1; 
-  while (lowerBound <= upperBound)
-   {
-     size_t midBin = (lowerBound + upperBound)/2;
-     if( random < (*tempVector)[midBin])
-       upperBound = midBin-1; 
-     else
-       lowerBound = midBin+1; 
-   }
- 
-  shellIndex = upperBound;
-
-  delete tempVector;
-  return shellIndex;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 size_t G4PenelopePhotoElectricModel::GetNumberOfShellXS(G4int Z)
 {
   if (!IsMaster())
@@ -766,4 +695,51 @@ void G4PenelopePhotoElectricModel::SetParticle(const G4ParticleDefinition* p)
   if(!fParticle) {
     fParticle = p;  
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+
+size_t G4PenelopePhotoElectricModel::SelectRandomShell(G4int Z,G4double energy)
+{
+  G4double logEnergy = std::log(energy);
+
+  //Check if data have been read (it should be!)
+  if (!logAtomicShellXS->count(Z))
+     {
+       G4ExceptionDescription ed;
+       ed << "Cannot find shell cross section data for Z=" << Z << G4endl;
+       G4Exception("G4PenelopePhotoElectricModel::SelectRandomShell()",
+		   "em2038",FatalException,ed);
+     }
+
+  // size_t shellIndex = 0;
+ 
+  G4PhysicsTable* theTable =  logAtomicShellXS->find(Z)->second;
+
+  G4double sum = 0;
+
+  G4PhysicsFreeVector* totalXSLog = (G4PhysicsFreeVector*) (*theTable)[0];
+  G4double logXS = totalXSLog->Value(logEnergy);
+  G4double totalXS = std::exp(logXS);
+					   
+  //Notice: totalXS is the total cross section and it does *not* correspond to 
+  //the sum of partialXS's, since these include only K, L and M shells.
+  //
+  // Therefore, here one have to consider the possibility of ionisation of 
+  // an outer shell. Conventionally, it is indicated with id=10 in Penelope
+  //
+  G4double random = G4UniformRand()*totalXS; 
+
+  for (size_t k=1;k<theTable->entries();k++)
+    {
+      //Add one shell
+      G4PhysicsFreeVector* partialXSLog = (G4PhysicsFreeVector*) (*theTable)[k];
+      G4double logXSLocal = partialXSLog->Value(logEnergy);
+      G4double partialXS = std::exp(logXSLocal);
+      sum += partialXS;
+      if (random <= sum)	
+	return k-1;	
+    }
+  //none of the shells K, L, M: return outer shell
+  return 9;
 }

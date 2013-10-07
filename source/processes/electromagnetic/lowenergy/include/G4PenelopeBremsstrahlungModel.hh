@@ -31,6 +31,7 @@
 // -----------
 // 23 Aug 2010   L. Pandola   1st implementation. 
 // 24 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
+// 02 Oct 2013   L. Pandola   Migrated to multi-thread
 //
 // -------------------------------------------------------------------
 //
@@ -71,7 +72,9 @@ public:
   virtual ~G4PenelopeBremsstrahlungModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-  
+  virtual void InitialiseLocal(const G4ParticleDefinition*,
+			       G4VEmModel*);
+
   //DUMMY METHOD
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition* theParticle,
                                               G4double kinEnergy,
@@ -108,6 +111,7 @@ public:
 
 protected:
   G4ParticleChangeForLoss* fParticleChange;
+  const G4ParticleDefinition* fParticle;
 
 private:
   void ClearTables();
@@ -117,7 +121,8 @@ private:
 
   G4PenelopeCrossSection* GetCrossSectionTableForCouple(const G4ParticleDefinition*,
   							const G4Material*,G4double cut);
- 
+  void SetParticle(const G4ParticleDefinition*);
+
   //Intrinsic energy limits of the model: cannot be extended by the parent process
   G4double fIntrinsicLowEnergyLimit;
   G4double fIntrinsicHighEnergyLimit;
@@ -130,7 +135,8 @@ private:
 
   //
   //Members to handle and store cross section tables
-  void BuildXSTable(const G4Material*,G4double cut);
+  void BuildXSTable(const G4Material* material,G4double cut);
+
   //This is the main energy grid
   G4PhysicsLogVector* energyGrid;
   size_t nBins;

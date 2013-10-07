@@ -32,6 +32,9 @@
 // 20 Oct 2010   L. Pandola   1st implementation. 
 // 02 May 2011   L. Pandola   Remove dependency on CLHEP::HepMatrix
 // 24 May 2011   L. Pandola   Renamed (make default Penelope)
+// 03 Oct 2013   L. Pandola   Migration to MT
+// 07 Oct 2013   L. Pandola   Add verbosity and ismaster flag for the 
+//                             master-only methods
 //
 // -------------------------------------------------------------------
 //
@@ -55,21 +58,25 @@ class G4PhysicsTable;
 class G4PenelopeBremsstrahlungFS 
 {
 public:
-  
-  G4PenelopeBremsstrahlungFS();
+  //! Only master models are supposed to create instances
+  G4PenelopeBremsstrahlungFS(G4int verbosity=0);
   ~G4PenelopeBremsstrahlungFS();
  
+  //! Master and workers (do not touch tables)
   G4double GetEffectiveZSquared(const G4Material* mat);
-  void ClearTables();
-  size_t GetNBinsX(){return nBinsX;};
- 
-
-  //utilities
+  size_t GetNBinsX() const {return nBinsX;};
   G4double GetMomentumIntegral(G4double* y,			   
 			       G4double up,G4int momOrder);
-
-  G4PhysicsTable* GetScaledXSTable(const G4Material*,G4double cut);
+  const G4PhysicsTable* GetScaledXSTable(const G4Material*,G4double cut);
   G4double SampleGammaEnergy(G4double energy,const G4Material*, G4double cut);
+
+  //! Reserved for the master model: they build and handle tables
+  void ClearTables(G4bool isMaster=true);
+  void BuildScaledXSTable(const G4Material* material,G4double cut,
+			  G4bool isMaster);
+
+  void SetVerbosity(G4int ver){fVerbosity=ver;};
+  G4int GetVerbosity(){return fVerbosity;};
 
 private:
   //assignment operator
@@ -83,7 +90,6 @@ private:
   std::map< std::pair<const G4Material*,G4double> , 
 	    G4PhysicsTable*> *theReducedXSTable; 
 
-  void BuildScaledXSTable(const G4Material* material,G4double cut);
   std::map<const G4Material*,G4double> *theEffectiveZSq;
   
 
@@ -116,6 +122,8 @@ private:
   //memory on the fly. This vector is over-written at every call of 
   //SampleGammaEnergy()
   G4PhysicsFreeVector* theTempVec; 
+
+  G4int fVerbosity;
 
 };
 
