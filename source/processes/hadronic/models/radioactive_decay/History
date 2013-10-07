@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+4 October 2013  Dennis Wright radioactive_decay-V09-06-15
+---------------------------------------------------------
+- G4NuclearDecayChannel: change class member daughterExcitation
+  from TLS back to plain G4double - fixes infinite loop in decay chain
+ 
 1 October 2013  Makoto Asai  radioactive_decay-V09-06-14
 --------------------------------------------------------
 - G4NuclearDecayChannel : Fixed thread-safety and reproducability issues.

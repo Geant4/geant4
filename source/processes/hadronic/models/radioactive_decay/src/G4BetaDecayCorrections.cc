@@ -161,6 +161,9 @@ G4BetaDecayCorrections::ShapeFactor(const G4BetaDecayType& bdt,
       }
       break;
 
+    case (secondForbidden) :
+      break;
+
     case (uniqueSecondForbidden) :
       {
         G4double eta = alphaZ*std::sqrt(1. + p_e*p_e)/p_e;
@@ -183,6 +186,9 @@ G4BetaDecayCorrections::ShapeFactor(const G4BetaDecayType& bdt,
 
         factor = term1 + term2 + term3;
       }
+      break;
+
+    case (thirdForbidden) :
       break;
 
     case (uniqueThirdForbidden) :

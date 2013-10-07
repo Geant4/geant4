@@ -139,7 +139,7 @@ class G4NuclearDecayChannel : public G4GeneralPhaseSpaceDecay
     const G4RadioactiveDecayMode decayMode;
     static const G4double pTolerance;
     static const G4double levelTolerance;
-    static G4ThreadLocal G4double daughterExcitation;
+    G4double daughterExcitation;
     G4int daughterA;
     G4int daughterZ;
     G4ParticleDefinition* daughterNucleus;  

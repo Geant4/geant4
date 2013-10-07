@@ -92,7 +92,6 @@ const G4double G4NuclearDecayChannel:: levelTolerance = 2.0*keV;
 
 //These are a kind of "cache"
 G4ThreadLocal G4DynamicParticle* G4NuclearDecayChannel::dynamicDaughter = 0;
-G4ThreadLocal G4double G4NuclearDecayChannel::daughterExcitation = 0;
 
 //
 // Constructor for one decay product (the nucleus).
@@ -379,7 +378,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
         daughterIon = theIonTable->FindIon(daughterZ, daughterA, lvl);
         dEx = 0.;
         if (daughterIon) dEx = ((const G4Ions*)(daughterIon))->GetExcitationEnergy();
-        match = std::abs(dEx - finalDaughterExcitation) < keV;
+        match = std::abs(dEx - finalDaughterExcitation) < 2.*keV;
         lvl++;
       } while (!match && (lvl < 10) );
 
