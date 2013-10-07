@@ -59,8 +59,8 @@ InitialiseWorker( G4VPhysicalVolume* /*pMasterObject*/,
 {
   subInstanceManager.SlaveCopySubInstanceArray();
 
-  G4MT_rot = pRot;
-  G4MT_trans = tlate;
+  this->SetRotation( pRot );      // G4MT_rot   = pRot;
+  this->SetTranslation( tlate );  // G4MT_trans = tlate;
   //  G4PhysicalVolumeStore::Register(this);
 }
 
@@ -90,8 +90,9 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
     fname(pName), flmother(0)
 {
   instanceID = subInstanceManager.CreateSubInstance();
-  G4MT_rot = pRot;
-  G4MT_trans = tlate; 
+
+  this->SetRotation( pRot );       // G4MT_rot = pRot;
+  this->SetTranslation( tlate );   // G4MT_trans = tlate;
   G4PhysicalVolumeStore::Register(this);
 }
 
@@ -105,7 +106,9 @@ G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
   //
   instanceID = subInstanceManager.CreateSubInstance();
 
-  G4MT_rot = 0; 
+  this->SetRotation( 0 );                             // G4MT_rot = 0; 
+  this->SetTranslation( G4ThreeVector(0., 0., 0.) );  // G4MT_trans = ...
+
   G4PhysicalVolumeStore::Register(this);
 }
 
@@ -129,10 +132,10 @@ G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
   G4RotationMatrix* retval = &IdentityRM;
 
   // Insure against frot being a null pointer
-  if(G4MT_rot)
+  if(this->GetRotation())
   {
-    aRotM = G4MT_rot->inverse();
-    retval= &aRotM;
+     aRotM = GetRotation()->inverse();
+     retval= &aRotM;
   }
   return retval;
 }

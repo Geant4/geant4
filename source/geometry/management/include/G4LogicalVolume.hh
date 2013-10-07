@@ -177,16 +177,6 @@ class G4LVData
 //
 typedef G4GeomSplitter<G4LVData>  G4LVManager;
 
-// These macros change the references to fields that are now encapsulated
-// in the class G4LVData.
-//
-#define G4MT_solid ((subInstanceManager.offset[instanceID]).fSolid)
-#define G4MT_sdetector ((subInstanceManager.offset[instanceID]).fSensitiveDetector)
-#define G4MT_fmanager ((subInstanceManager.offset[instanceID]).fFieldManager)
-#define G4MT_material ((subInstanceManager.offset[instanceID]).fMaterial)
-#define G4MT_mass ((subInstanceManager.offset[instanceID]).fMass)
-#define G4MT_ccouple ((subInstanceManager.offset[instanceID]).fCutsCouple)
-
 class G4LogicalVolume
 {
   typedef std::vector<G4VPhysicalVolume*> G4PhysicalVolumeList;
@@ -267,7 +257,11 @@ class G4LogicalVolume
       //       method returns the mass of the present logical volume only 
       //       (subtracted for the volume occupied by the daughter volumes).
       //       An optional argument to specify a material is also provided.
-
+    void   ResetMass(); 
+      // Ensure that cached value of Mass is invalidated - due to change in 
+      //  state, e.g. change of size of Solid, change of type of solid,
+      //              or the addition/deletion of a daughter volume. 
+ 
     inline G4FieldManager* GetFieldManager() const;
       // Gets current FieldManager.
     void SetFieldManager(G4FieldManager *pFieldMgr, G4bool forceToAllDaughters); 
@@ -349,11 +343,17 @@ class G4LogicalVolume
       // Gets current SensitiveDetector for the master thread.
     inline G4VSolid* GetMasterSolid() const;
       // Gets current Solid for the master thread.
-
+  
     inline G4int GetInstanceID() const;
       // Returns the instance ID.
     static const G4LVManager& GetSubInstanceManager();
-      // Returns the private data instance manager.    
+ 
+      // Sets the private data instance manager - in order to use a particular Workspace
+
+    // static const G4LVManager* GetSubInstanceManagerPtr(); 
+    // static const G4LVManager  SetSubInstanceManager(G4LVManager* subInstanceManager);
+      // Revised Implementation - to enable Workspaces which can used by different
+      //   threads at different times (only one thread or task can use a workspace at a time. ) 
 
     inline void Lock();
       // Set lock identifier for final deletion of entity.
@@ -366,6 +366,13 @@ class G4LogicalVolume
     void TerminateWorker(G4LogicalVolume *ptrMasterObject);
       // This method is similar to the destructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
+
+    inline void AssignFieldManager( G4FieldManager *fldMgr);
+      // Set the FieldManager - only at this level (do not push down hierarchy)
+  
+    // Optimised Methods - passing thread instance of worker data
+    inline static G4VSolid* GetSolid(G4LVData &instLVdata) ; // const;
+    inline static void SetSolid(G4LVData &instLVdata, G4VSolid *pSolid);
 
   private:
 
@@ -402,7 +409,10 @@ class G4LogicalVolume
       // Pointer to the cuts region (if any)
     G4double fBiasWeight;
       // Weight used in the event biasing technique.
-
+  
+    G4bool fChangedState;
+      // Invalidates any estimations from previous state
+  
     G4int instanceID;
       // This new field is used as instance ID.
     G4GEOM_DLL static G4LVManager subInstanceManager;

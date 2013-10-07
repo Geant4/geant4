@@ -38,6 +38,18 @@
 // 17.05.02 - G.Cosmo: Added IsToOptimise() method
 // --------------------------------------------------------------------
 
+
+// These macros change the references to fields that are now encapsulated
+// in the class G4LVData.
+//
+#define G4MT_solid     ((subInstanceManager.offset[instanceID]).fSolid)
+#define G4MT_sdetector ((subInstanceManager.offset[instanceID]).fSensitiveDetector)
+#define G4MT_fmanager  ((subInstanceManager.offset[instanceID]).fFieldManager)
+#define G4MT_material  ((subInstanceManager.offset[instanceID]).fMaterial)
+#define G4MT_mass      ((subInstanceManager.offset[instanceID]).fMass)
+#define G4MT_ccouple   ((subInstanceManager.offset[instanceID]).fCutsCouple)
+#define G4MT_instance  (subInstanceManager.offset[instanceID])
+
 // ********************************************************************
 // GetName
 // ********************************************************************
@@ -77,6 +89,12 @@ G4FieldManager* G4LogicalVolume::GetFieldManager() const
 {
   return G4MT_fmanager;
 }
+
+inline void G4LogicalVolume::AssignFieldManager( G4FieldManager *fldMgr)
+{
+  G4MT_fmanager= fldMgr;
+}
+
 
 // ********************************************************************
 // GetMasterFieldManager
@@ -141,7 +159,9 @@ void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
                 "Replica or parameterised volume must be the only daughter !");
   }
 
+  // Invalidate previous calculation of mass - if any - for all threads
   G4MT_mass = 0.;
+  // SignalVolumeChange();  // fVolumeChanged= true;
   fDaughters.push_back(pNewDaughter);
 
   G4LogicalVolume* pDaughterLogical = pNewDaughter->GetLogicalVolume();
@@ -240,14 +260,29 @@ EVolume G4LogicalVolume::CharacteriseDaughters() const
   return type;
 }
 
+inline
+void G4LogicalVolume::ResetMass()
+{
+  G4MT_mass= 0.0;
+  // Do not fChangedState= 1; 
+}
+
 // ********************************************************************
 // GetSolid
 // ********************************************************************
 //
 inline
+G4VSolid* G4LogicalVolume::GetSolid(G4LVData &instLVdata) // const
+{
+  return instLVdata.fSolid;
+}
+
+inline
 G4VSolid* G4LogicalVolume::GetSolid() const
 {
-  return G4MT_solid;
+  // return G4MT_solid;
+  // return ((subInstanceManager.offset[instanceID]).fSolid);
+  return this->GetSolid( subInstanceManager.offset[instanceID] ); 
 }
 
 // ********************************************************************
@@ -267,8 +302,20 @@ G4VSolid* G4LogicalVolume::GetMasterSolid() const
 inline
 void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
 {
+
+  // ((subInstanceManager.offset[instanceID]).fSolid) = pSolid;
   G4MT_solid=pSolid;
-  G4MT_mass = 0.;
+  // G4MT_mass = 0.;
+  this->ResetMass(); 
+}
+
+inline
+void G4LogicalVolume::SetSolid(G4LVData &instLVdata, G4VSolid *pSolid)
+{  
+  instLVdata.fSolid = pSolid;
+  // G4MT_solid=pSolid;
+  instLVdata.fMass= 0;
+  // A fast way to reset the mass ... ie G4MT_mass = 0.;
 }
 
 // ********************************************************************
@@ -557,4 +604,10 @@ G4double G4LogicalVolume::GetBiasWeight() const
 {
   return fBiasWeight;
 }
-
+#undef G4MT_solid
+#undef G4MT_sdetector
+#undef G4MT_fmanager
+#undef G4MT_material
+// #undef G4MT_mass
+// #undef G4MT_ccouple
+#undef G4MT_instance

@@ -72,6 +72,11 @@ class G4GeomSplitter
       return (totalobj - 1);
     }
 
+    void CopyMasterContents()
+    {
+      memcpy(offset, sharedOffset, totalspace * sizeof(T));
+    }
+  
     void SlaveCopySubInstanceArray()
       // Invoked by each worker thread to copy all the subinstance array
       // from the master thread.
@@ -80,10 +85,10 @@ class G4GeomSplitter
       offset = (T *) realloc(offset, totalspace * sizeof(T));
       if (offset == 0)
       {
-        G4Exception("G4GeomSPlitter::SlaveCopySubInstanceArray()",
+        G4Exception("G4GeomSplitter::SlaveCopySubInstanceArray()",
                     "OutOfMemory", FatalException, "Cannot malloc space!");
       }
-      memcpy(offset, sharedOffset, totalspace * sizeof(T));
+      CopyMasterContents();
     }
 
     void SlaveInitializeSubInstance()
@@ -96,7 +101,7 @@ class G4GeomSplitter
 
       if (offset == 0)
       {
-        G4Exception("G4GeomSPlitter::SlaveInitializeSubInstance()",
+        G4Exception("G4GeomSplitter::SlaveInitializeSubInstance()",
                     "OutOfMemory", FatalException, "Cannot malloc space!");
       }
 
@@ -106,12 +111,62 @@ class G4GeomSplitter
       }
     }
 
+    void SlaveReCopySubInstanceArray()
+    // Invoked by each worker thread at start of a run (2nd or later)
+    //  to copy again all the subinstance array from the master thread.
+    // To cope with user's changes in Geometry - e.g. change of material in a volume
+    {
+      if (!offset)  {
+        SlaveInitializeSubInstance();
+        G4Exception("G4GeomSPlitter::SlaveReCopySubInstance()",
+                    "MissingInitialisation", JustWarning,
+                    "Must be called after Initialisation or first Copy.");
+      }
+      CopyMasterContents();
+    }
+  
     void FreeSlave()
       // Invoked by all threads to free the subinstance array.
     {
       if (!offset)  { return; }
       delete offset;
       offset = 0;
+    }
+
+   // 
+   // Extension - to allow sharing of workspaces  - John Apostolakis 28 May 2013
+  
+    T*   GetOffset() { return offset; }
+  
+    void UseWorkArea( T* newOffset ) // ,  G4int numObjects, G4int numSpace)
+    {
+      // Use recycled work area - which was created previously
+      if( offset ) 
+      {
+         G4Exception("G4GeomSplitter::UseWorkspace()", 
+                    "TwoWorkspaces", FatalException,
+                    "Thread already has workspace - cannot use another.");
+      }
+      offset= newOffset;
+      // totalobj= numObjects;
+      // totalspace= numSpace;
+    }
+
+    T* FreeWorkArea() // G4int* numObjects, G4int* numSpace)
+    {
+      // Detach this thread from this Location
+      // The object which calls this method is responsible for it.
+      //
+      T* offsetRet= offset;
+
+       offset= 0; 
+
+       return offsetRet;
+    }
+  
+    void Destroy()
+    {
+ 
     }
 
   public:

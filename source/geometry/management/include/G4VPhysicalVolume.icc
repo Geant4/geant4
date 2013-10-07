@@ -31,6 +31,14 @@
 //
 // --------------------------------------------------------------------
 
+// These macros change the references to fields that are now encapsulated
+// in the class G4PVData.
+//
+#define G4MT_rot ((subInstanceManager.offset[instanceID]).frot)
+#define G4MT_trans ((subInstanceManager.offset[instanceID]).ftrans)
+
+#define G4MT_pvdata (subInstanceManager.offset[instanceID])
+
 inline
 G4bool G4VPhysicalVolume::operator == (const G4VPhysicalVolume& right) const
 {
@@ -160,3 +168,6 @@ G4ThreeVector  G4VPhysicalVolume::GetFrameTranslation() const
 {
   return -G4MT_trans;
 }
+
+#undef G4MT_rot
+#undef G4MT_trans

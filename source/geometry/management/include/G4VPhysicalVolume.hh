@@ -60,42 +60,19 @@ class G4VPVParameterisation;
 
 class G4PVData
 {
-  // Encapsulates the fields associated to the class
-  // G4VPhysicalVolume that may not be read-only.          
+  // Encapsulates the fields associated to G4VPhysicalVolume
+  //  that are not read-only - they will change during simulation
+  //  and must have a per-thread state.
 
   public:
-
     void initialize() {}
 
     G4RotationMatrix *frot;
     G4ThreeVector ftrans;
 };
 
-// The type G4PVManager is introduced to encapsulate the methods used by
-// both the master thread and worker threads to allocate memory space for
-// the fields encapsulated by the class G4PVData. When each thread
-// initializes the value for these fields, it refers to them using a macro
-// definition defined below. For every G4VPhysicalVolume instance, there is
-// a corresponding G4PVData instance. All G4PVData instances are organized
-// by the class G4PVManager as an array.
-// The field "int instanceID" is added to the class G4VPhysicalVolume.
-// The value of this field in each G4VPhysicalVolume instance is the subscript
-// of the corresponding G4PVData instance.
-// In order to use the class G4PVManager, we add a static member in the class
-// G4VPhysicalVolume as follows: "static G4PVManager subInstanceManager;".
-// For the master thread, the array for G4PVData instances grows dynamically
-// along with G4VPhysicalVolume instances are created. For each worker thread,
-// it copies the array of G4PVData instances from the master thread.           
-// In addition, it invokes a method similiar to the constructor explicitly
-// to achieve the partial effect for each instance in the array.
-//
 typedef G4GeomSplitter<G4PVData> G4PVManager;
-
-// These macros change the references to fields that are now encapsulated
-// in the class G4PVData.
-//
-#define G4MT_rot ((subInstanceManager.offset[instanceID]).frot)
-#define G4MT_trans ((subInstanceManager.offset[instanceID]).ftrans)
+// Implementation detail for use of G4PVData objects 
 
 class G4VPhysicalVolume
 {
@@ -244,9 +221,10 @@ class G4VPhysicalVolume
   protected:
 
     G4int instanceID;
-      // This new field is used as instance ID.
+      // For use in implementing the per-thread data,
+      //   It is equivalent to a pointer to a G4PVData object.
     G4GEOM_DLL static G4PVManager subInstanceManager;
-      // This new field helps to use the class G4PVManager introduced above.
+      //  Needed to use G4PVManager for the G4PVData per-thread objects.
 
   private:
 
@@ -262,6 +240,26 @@ class G4VPhysicalVolume
     G4String fname;              // The name of the volume
     G4LogicalVolume   *flmother; // The current mother logical volume
 };
+
+// NOTE: 
+// The type G4PVManager is introduced to encapsulate the methods used by
+// both the master thread and worker threads to allocate memory space for
+// the fields encapsulated by the class G4PVData. When each thread
+// initializes the value for these fields, it refers to them using a macro
+// definition defined below. For every G4VPhysicalVolume instance, there is
+// a corresponding G4PVData instance. All G4PVData instances are organized
+// by the class G4PVManager as an array.
+// The field "int instanceID" is added to the class G4VPhysicalVolume.
+// The value of this field in each G4VPhysicalVolume instance is the subscript
+// of the corresponding G4PVData instance.
+// In order to use the class G4PVManager, we add a static member in the class
+// G4VPhysicalVolume as follows: "static G4PVManager subInstanceManager;".
+// For the master thread, the array for G4PVData instances grows dynamically
+// along with G4VPhysicalVolume instances are created. For each worker thread,
+// it copies the array of G4PVData instances from the master thread.           
+// In addition, it invokes a method similiar to the constructor explicitly
+// to achieve the partial effect for each instance in the array.
+//
 
 #include "G4VPhysicalVolume.icc"
 

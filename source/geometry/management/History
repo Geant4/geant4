@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 3, 2013 J.Apostolakis           geommng-V09-06-12
+- Cleanup of G4LogicalVolume, G4VPhysicalVolume
+     Moved long description of helper classes to end of headers.
+     Moved macros to icc file. 
+     Revised source code to use Get/Set methods in place of 'macros'
+      introduced with G4MT,  ie G4MT_rot etc
+- LogicalVolume: Added new methods, data member
+     * new methods AssignFieldManager, 
+     * Get/Set Solid( G4LVData, .) for potential performance improvement
+     * bool fChangedState.
 
 August 27, 2013 G.Cosmo                  geommng-V09-06-11
 - Added G4Ellipsoid among solids enabled for parameterisation.
