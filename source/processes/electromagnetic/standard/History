@@ -18,6 +18,11 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+04 October 13: V.Ivanchenko (emstand-V09-06-66)
+- G4SeltzerBergerModel - added one simple method
+- G4ESTARStopping - added implementation of forgotten method, cleanup
+- G4PAIModelData - V. Grichine add restricted dE/dx vector
+
 02 October 13: V.Ivanchenko (emstand-V09-06-65)
 - G4ESTARStopping - added ESTAR stopping power data
 - General cleanup of many classes: use G4Log and G4Exp, 

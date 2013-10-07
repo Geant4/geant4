@@ -123,6 +123,11 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
 			   fHighestKineticEnergy,
 			   fTotBin);
 
+  G4PhysicsLogVector* dEdxMeanVector =
+    new G4PhysicsLogVector(fLowestKineticEnergy,
+			   fHighestKineticEnergy,
+			   fTotBin);
+
   G4PhysicsLogVector* dNdxCutVector = 
     new G4PhysicsLogVector(fLowestKineticEnergy,
 			   fHighestKineticEnergy,
@@ -163,13 +168,16 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
 
     G4double ionloss = fPAIySection.GetMeanEnergyLoss();//  total <dE/dx>
 
-    if(ionloss < 0.0) { ionloss = 0.0; }
-    dEdxCutVector->PutValue(i,ionloss);
+    if(ionloss < 0.0) ionloss = 0.0; 
+
+    dEdxMeanVector->PutValue(i,ionloss);
 
     G4double dNdxCut = transferVector->Value(cut)/cut;
+    G4double dEdxCut = dEdxVector->Value(cut)/cut;
     //G4cout << "i= " << i << " x= " << dNdxCut << G4endl;
     if(dNdxCut < 0.0) { dNdxCut = 0.0; }
     dNdxCutVector->PutValue(i, dNdxCut);
+    dEdxCutVector->PutValue(i, dEdxCut);
 
     PAItransferTable->insertAt(i,transferVector);
     PAIdEdxTable->insertAt(i,dEdxVector);
@@ -178,9 +186,10 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
 
   fPAIxscBank.push_back(PAItransferTable);
   fPAIdEdxBank.push_back(PAIdEdxTable);
-  fdEdxTable.push_back(dEdxCutVector);
-  fdNdxCutTable.push_back(dNdxCutVector);
+  fdEdxTable.push_back(dEdxMeanVector);
 
+  fdNdxCutTable.push_back(dNdxCutVector);
+  fdEdxCutTable.push_back(dEdxCutVector);
 }
 
 //////////////////////////////////////////////////////////////////////////////

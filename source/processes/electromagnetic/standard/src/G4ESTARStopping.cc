@@ -57,8 +57,8 @@ G4ESTARStopping::G4ESTARStopping()
   currentMaterial = 0;
   matIndex = -1;
 
-  name.resize(279,"");
-  sdata.resize(279,0);
+  name.resize(280,"");
+  sdata.resize(280,0);
 
   Initialise();
 }
@@ -67,23 +67,24 @@ G4ESTARStopping::G4ESTARStopping()
 
 G4ESTARStopping::~G4ESTARStopping()
 {
-  for(size_t i=0; i<279; ++i) { delete sdata[i]; }
+  for(size_t i=1; i<280; ++i) { delete sdata[i]; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int G4ESTARStopping:: GetIndex (const G4Material* mat)
 {  
-  if (mat == currentMaterial) { return matIndex; }
-  G4String matName = mat->GetName();
-  for (G4int i=0; i<279; ++i){
-    if (matName == name[i]){ 
-      matIndex = i;
-      currentMaterial = mat;
-      return i;
+  if (mat != currentMaterial) {
+    G4String matName = mat->GetName();
+    for (G4int i=1; i<280; ++i){
+      if (matName == name[i]){ 
+	matIndex = i;
+	currentMaterial = mat;
+	break;
+      }
     }
   }
-  return -1;
+  return matIndex;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,7 +105,7 @@ G4double G4ESTARStopping::GetElectronicDEDX(G4int i, G4double energy)
 void G4ESTARStopping::Initialise()
 {
 
- G4double T0[25]={1.0E-03,3.0E-03,5.0E-03,9.0E-03,2.5E-02,4.5E-02,8.0E-02,.2,.4,.7,1.5,3.5,6.0,10.,30.,50.,90.,250.,450.,800.,2000.,4.0E+03,6.0E+03,8.0E+03,1.0E+04};
+G4double T0[25]={1.0E-03,3.0E-03,5.0E-03,9.0E-03,2.5E-02,4.5E-02,8.0E-02,.2,.4,.7,1.5,3.5,6.0,10.,30.,50.,90.,250.,450.,800.,2000.,4.0E+03,6.0E+03,8.0E+03,1.0E+04};
 emin = T0[0]*MeV;
 
 name[1]="G4_1,2-DICHLOROBENZENE";
@@ -945,14 +946,17 @@ name[279]="G4_Cf";
 G4double e279[25]={5.732,1.321E+01,1.114E+01,8.306,4.469,3.079,2.177,1.391,1.145,1.091,1.181,1.506,1.903,2.528,5.716,9.011,1.575E+01,4.327E+01,7.794E+01,1.389E+02,3.484E+02,6.981E+02,1.048E+03,1.398E+03,1.748E+03};
 AddData(T0,e279,279);
 
- 
 } 
 
 void G4ESTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
 {
-sdata[idx] = new G4LPhysicsFreeVector(25, ekin[0]*MeV, ekin[25]*MeV);
-for(size_t i=0; i<26; ++i) { sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); }
-sdata[idx]->SetSpline(true);
+  //G4cout << "G4ESTARStopping::AddData: idx= " << idx << G4endl;
+  sdata[idx] = new G4LPhysicsFreeVector(25, ekin[0]*MeV, ekin[24]*MeV);
+  for(size_t i=0; i<25; ++i) { 
+    sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); 
+  }
+  sdata[idx]->SetSpline(true);
+  //G4cout << "done " << G4endl;
 }
 
 

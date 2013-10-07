@@ -38,6 +38,8 @@
 //
 // Modifications:
 //
+// 04.10.13 V. Grichine add cut of dE/dx, redirect <dE/dx> to   std::vector<G4PhysicsLogVector*>  fdEdxTable;
+//
 //
 // Class Description:
 //
@@ -109,6 +111,7 @@ private:
   std::vector<G4PhysicsTable*>      fPAIdEdxBank;
   std::vector<G4PhysicsLogVector*>  fdEdxTable;
   std::vector<G4PhysicsLogVector*>  fdNdxCutTable;
+  std::vector<G4PhysicsLogVector*>  fdEdxCutTable;
 
 };
 

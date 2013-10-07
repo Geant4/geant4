@@ -70,7 +70,8 @@ public:
   G4int GetIndex(const G4Material*);
 
   G4double GetElectronicDEDX(G4int idx, G4double energy);
-  G4double GetElectronicDEDX(const G4Material*, G4double energy);
+
+  inline G4double GetElectronicDEDX(const G4Material*, G4double energy);
 
 private:
 

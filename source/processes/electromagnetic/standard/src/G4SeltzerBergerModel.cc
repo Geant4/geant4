@@ -135,6 +135,13 @@ void G4SeltzerBergerModel::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4String G4SeltzerBergerModel::DirectoryPath() const
+{
+  return "/brem_SB/br";
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4SeltzerBergerModel::ReadData(G4int Z, const char* path)
 {
   //  G4cout << "ReadData Z= " << Z << G4endl;
@@ -152,7 +159,7 @@ void G4SeltzerBergerModel::ReadData(G4int Z, const char* path)
     }
   }
   std::ostringstream ost;
-  ost << datadir << "/brem_SB/br" << Z;
+  ost << datadir << DirectoryPath() << Z;
   std::ifstream fin(ost.str().c_str());
   if( !fin.is_open()) {
     G4ExceptionDescription ed;

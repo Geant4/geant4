@@ -84,6 +84,8 @@ protected:
 
   virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
+  virtual G4String DirectoryPath() const;
+
 private:
 
   void ReadData(G4int Z, const char* path = 0);
