@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 October 13: V.Ivant (emutils-V09-06-57)
+- G4VEmModel - fixed bug in fanoCavity test - element selectors are created
+    even if cut value is high
+
 03 October 13: V.Ivant (emutils-V09-06-56)
 - G4AngleDirect - dummy angular generator
 - G4ionEffectiveCharge - use G4Log, G4Exp, G4Pow

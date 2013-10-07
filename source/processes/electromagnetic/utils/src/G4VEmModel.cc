@@ -139,10 +139,10 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
   // large number of points requires significant increase of memory
   //G4bool spline = man->SplineFlag();
   G4bool spline = false;
-
-  //G4cout << "IES: for " << GetName() << " Emin(MeV)= " << lowLimit/MeV 
-  //	 << " Emax(MeV)= " << highLimit/MeV << G4endl;
-
+  /*
+  G4cout << "IES: for " << GetName() << " Emin(MeV)= " << lowLimit/MeV 
+  	 << " Emax(MeV)= " << highLimit/MeV << G4endl;
+  */
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth
   if(highLimit <= lowLimit) { return; }
@@ -164,7 +164,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
 
   // initialise vector
   for(G4int i=0; i<numOfCouples; ++i) {
-    if(cuts[i] < highLimit) {
+    //if(cuts[i] < highLimit) {
       fCurrentCouple = theCoupleTable->GetMaterialCutsCouple(i);
       const G4Material* material = fCurrentCouple->GetMaterial();
 
@@ -176,14 +176,14 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
       }
       if(create) {
         G4double emin = std::max(lowLimit, MinPrimaryEnergy(material, part));
-        if(emin < highLimit) {
+        //if(emin < highLimit) {
 	  G4int nbins = G4int(man->GetNumberOfBinsPerDecade()
 			      * std::log10(highLimit/emin) / 6.0);
 	  if(nbins < 3) { nbins = 3; }
 
 	  (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
 						       emin,highLimit,spline);
-	}
+	  //}
       }
       ((*elmSelectors)[i])->Initialise(part, cuts[i]);
       /*     
@@ -194,7 +194,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
 	     << "  " << (*elmSelectors)[i] << G4endl;      
       ((*elmSelectors)[i])->Dump(part);
       */
-    }
+      //}
   } 
 }
 
