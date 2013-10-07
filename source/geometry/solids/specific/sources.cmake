@@ -65,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4QuadrangularFacet.hh
         G4ReduciblePolygon.hh
         G4SolidExtentList.hh
+        G4SolidsWorkspace.hh
         G4SurfaceVoxelizer.hh
         G4SurfaceVoxelizer.icc
         G4TessellatedGeometryAlgorithms.hh
@@ -108,6 +109,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4QuadrangularFacet.cc
         G4ReduciblePolygon.cc
         G4SolidExtentList.cc
+        G4SolidsWorkspace.cc
         G4SurfaceVoxelizer.cc
         G4TessellatedGeometryAlgorithms.cc
         G4TessellatedSolid.cc
