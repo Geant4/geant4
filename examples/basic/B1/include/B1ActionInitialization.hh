@@ -34,7 +34,6 @@
 #include "G4VUserActionInitialization.hh"
 
 /// Action initialization class.
-///
 
 class B1ActionInitialization : public G4VUserActionInitialization
 {
@@ -44,8 +43,9 @@ class B1ActionInitialization : public G4VUserActionInitialization
 
     virtual void BuildForMaster() const;
     virtual void Build() const;
-
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

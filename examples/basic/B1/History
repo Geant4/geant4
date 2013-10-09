@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08/10/13 mma (exampleB1-V09-06-04)
+- Removed B1EventInformation for keeping maximum simplicity
+- Improved documentation (added paragraph on Run::Merge())
+- Code clean-up
      
 09/06/13 mma (exampleB1-V09-06-03)
 - clarify local names in user actions

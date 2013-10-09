@@ -60,18 +60,20 @@ B1RunAction::B1RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1RunAction::~B1RunAction()
-{ ; }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* B1RunAction::GenerateRun()
-{ return new B1Run; }
+{
+  return new B1Run; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1RunAction::BeginOfRunAction(const G4Run* aRun)
+void B1RunAction::BeginOfRunAction(const G4Run* run)
 { 
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
 
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
@@ -79,25 +81,25 @@ void B1RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1RunAction::EndOfRunAction(const G4Run* aRun)
+void B1RunAction::EndOfRunAction(const G4Run* run)
 {
-  G4int nofEvents = aRun->GetNumberOfEvent();
+  G4int nofEvents = run->GetNumberOfEvent();
   if (nofEvents == 0) return;
   
-  const B1Run* b1Run = static_cast<const B1Run*>(aRun);
+  const B1Run* b1Run = static_cast<const B1Run*>(run);
 
   // Compute dose
   //
-  G4double edepRun  = b1Run->GetEdepRun();
-  G4double edep2Run = b1Run->GetEdep2Run();
-  G4double rms = edep2Run - edepRun*edepRun/nofEvents;
+  G4double edep  = b1Run->GetEdep();
+  G4double edep2 = b1Run->GetEdep2();
+  G4double rms = edep2 - edep*edep/nofEvents;
   if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
 
   const B1DetectorConstruction* detectorConstruction
    = static_cast<const B1DetectorConstruction*>
      (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   G4double mass = detectorConstruction->GetScoringVolume()->GetMass();
-  G4double dose = edepRun/mass;
+  G4double dose = edep/mass;
   G4double rmsDose = rms/mass;
 
   // Run conditions
@@ -118,16 +120,15 @@ void B1RunAction::EndOfRunAction(const G4Run* aRun)
         
   // Print
   //  
-  if (IsMaster())
-  {
+  if (IsMaster()) {
     G4cout
      << "\n--------------------End of Global Run-----------------------";
   }
-  else
-  {
+  else {
     G4cout
      << "\n--------------------End of Local Run------------------------";
   }
+  
   G4cout
      << "\n The run consists of " << nofEvents << " "<< runCondition
      << "\n Dose in scoring volume : " 

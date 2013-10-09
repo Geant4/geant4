@@ -29,45 +29,39 @@
 /// \brief Implementation of the B1Run class
 
 #include "B1Run.hh"
-#include "B1EventInformation.hh"
-
-#include "G4Event.hh"
-#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1Run::B1Run()
 : G4Run(),
-  fEdepRun(0.), fEdep2Run(0.)
-{ ; } 
+  fEdep(0.), 
+  fEdep2(0.)
+{} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1Run::~B1Run()
-{ ; } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1Run::RecordEvent(const G4Event* event)
-{  
-  B1EventInformation* evInfo
-    = static_cast<B1EventInformation*>(event->GetUserInformation());
-  G4double EdepEvent = evInfo->GetEdepEvent();
-  fEdepRun  += EdepEvent;
-  fEdep2Run += EdepEvent*EdepEvent;
-
-  G4Run::RecordEvent(event);
-}
+{} 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1Run::Merge(const G4Run* aRun)
+void B1Run::Merge(const G4Run* run)
 {
-  const B1Run* localRun = static_cast<const B1Run*>(aRun);
-  fEdepRun  += localRun->fEdepRun;
-  fEdep2Run += localRun->fEdep2Run;
+  const B1Run* localRun = static_cast<const B1Run*>(run);
+  fEdep  += localRun->fEdep;
+  fEdep2 += localRun->fEdep2;
 
-  G4Run::Merge(aRun); 
+  G4Run::Merge(run); 
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1Run::AddEdep (G4double edep)
+{
+  fEdep  += edep;
+  fEdep2 += edep*edep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
