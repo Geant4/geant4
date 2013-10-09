@@ -28,17 +28,18 @@
 /// \file exampleB5.cc
 /// \brief Main program of the analysis/B5 example
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-
 #include "B5DetectorConstruction.hh"
-#include "B5PrimaryGeneratorAction.hh"
-#include "B5RunAction.hh"
+#include "B5ActionInitialization.hh"
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
+
+#include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
 #include "G4StepLimiterPhysics.hh"
-
-#include "B5EventAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -52,26 +53,26 @@
 
 int main(int argc,char** argv)
 {
-    // RunManager construction
+  // Construct the default run manager
+  //
+#ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+    runManager->SetNumberOfThreads(4);
+#else
     G4RunManager* runManager = new G4RunManager;
+#endif
     
-    // mandatory user initialization classes
+    // Mandatory user initialization classes
     runManager->SetUserInitialization(new B5DetectorConstruction);
     
     G4VModularPhysicsList* physicsList = new FTFP_BERT;
     physicsList->RegisterPhysics(new G4StepLimiterPhysics());
     runManager->SetUserInitialization(physicsList);
     
-    // mandatory user action class
-    runManager->SetUserAction(new B5PrimaryGeneratorAction);
-    
-    // optional user action classes
-    runManager->SetUserAction(new B5RunAction);
+    // User action initialization
+    runManager->SetUserInitialization(new B5ActionInitialization());
 
-    // optional user action classes
-    runManager->SetUserAction(new B5EventAction);
-    
-    // initialize Geant4 kernel
+    // Initialize Geant4 kernel
     runManager->Initialize();
     
 #ifdef G4VIS_USE

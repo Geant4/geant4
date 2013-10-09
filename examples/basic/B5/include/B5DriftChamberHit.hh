@@ -84,18 +84,18 @@ private:
 
 typedef G4THitsCollection<B5DriftChamberHit> B5DriftChamberHitsCollection;
 
-extern G4Allocator<B5DriftChamberHit> B5DriftChamberHitAllocator;
+extern G4ThreadLocal G4Allocator<B5DriftChamberHit>* B5DriftChamberHitAllocator;
 
 inline void* B5DriftChamberHit::operator new(size_t)
 {
-    void* aHit;
-    aHit = (void*)B5DriftChamberHitAllocator.MallocSingle();
-    return aHit;
+    if (!B5DriftChamberHitAllocator)
+        B5DriftChamberHitAllocator = new G4Allocator<B5DriftChamberHit>;
+    return (void*)B5DriftChamberHitAllocator->MallocSingle();
 }
 
 inline void B5DriftChamberHit::operator delete(void* aHit)
 {
-    B5DriftChamberHitAllocator.FreeSingle((B5DriftChamberHit*) aHit);
+    B5DriftChamberHitAllocator->FreeSingle((B5DriftChamberHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

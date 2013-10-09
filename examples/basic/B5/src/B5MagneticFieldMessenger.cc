@@ -58,7 +58,7 @@ B5MagneticFieldMessenger::~B5MagneticFieldMessenger()
 void B5MagneticFieldMessenger::SetNewValue(G4UIcommand * command,
                                            G4String newValue)
 {
-    if( command==fFieldCmd )
+    if ( command==fFieldCmd )
     { fField->SetField(fFieldCmd->GetNewDoubleValue(newValue)); }
 }
 
@@ -67,7 +67,7 @@ void B5MagneticFieldMessenger::SetNewValue(G4UIcommand * command,
 G4String B5MagneticFieldMessenger::GetCurrentValue(G4UIcommand * command)
 {
     G4String cv;
-    if( command==fFieldCmd )
+    if ( command==fFieldCmd )
     { cv = fFieldCmd->ConvertToString(fField->GetField(),"tesla"); }
     
     return cv;

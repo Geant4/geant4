@@ -89,18 +89,18 @@ private:
 
 typedef G4THitsCollection<B5HadCalorimeterHit> B5HadCalorimeterHitsCollection;
 
-extern G4Allocator<B5HadCalorimeterHit> B5HadCalorimeterHitAllocator;
+extern G4ThreadLocal G4Allocator<B5HadCalorimeterHit>* B5HadCalorimeterHitAllocator;
 
 inline void* B5HadCalorimeterHit::operator new(size_t)
 {
-    void* aHit;
-    aHit = (void*)B5HadCalorimeterHitAllocator.MallocSingle();
-    return aHit;
+    if (!B5HadCalorimeterHitAllocator)
+        B5HadCalorimeterHitAllocator = new G4Allocator<B5HadCalorimeterHit>;
+    return (void*)B5HadCalorimeterHitAllocator->MallocSingle();
 }
 
 inline void B5HadCalorimeterHit::operator delete(void* aHit)
 {
-    B5HadCalorimeterHitAllocator.FreeSingle((B5HadCalorimeterHit*) aHit);
+    B5HadCalorimeterHitAllocator->FreeSingle((B5HadCalorimeterHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

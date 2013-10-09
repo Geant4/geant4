@@ -86,18 +86,18 @@ private:
 
 typedef G4THitsCollection<B5HodoscopeHit> B5HodoscopeHitsCollection;
 
-extern G4Allocator<B5HodoscopeHit> B5HodoscopeHitAllocator;
+extern G4ThreadLocal G4Allocator<B5HodoscopeHit>* B5HodoscopeHitAllocator;
 
 inline void* B5HodoscopeHit::operator new(size_t)
 {
-    void* aHit;
-    aHit = (void*)B5HodoscopeHitAllocator.MallocSingle();
-    return aHit;
+    if (!B5HodoscopeHitAllocator)
+        B5HodoscopeHitAllocator = new G4Allocator<B5HodoscopeHit>;
+    return (void*)B5HodoscopeHitAllocator->MallocSingle();
 }
 
 inline void B5HodoscopeHit::operator delete(void*aHit)
 {
-    B5HodoscopeHitAllocator.FreeSingle((B5HodoscopeHit*) aHit);
+    B5HodoscopeHitAllocator->FreeSingle((B5HodoscopeHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

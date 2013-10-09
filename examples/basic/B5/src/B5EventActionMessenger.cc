@@ -40,7 +40,7 @@ B5EventActionMessenger::B5EventActionMessenger(B5EventAction* mpga)
 : G4UImessenger(), fTarget(mpga), fVerboseCmd(0)
 {
     fVerboseCmd = new G4UIcmdWithAnInteger("/mydet/verbose",this);
-    fVerboseCmd->SetGuidance("Verbose level for each event.");
+    fVerboseCmd->SetGuidance("Event verbose level.");
     fVerboseCmd->SetGuidance(
                 " Event summary will be displayed for every 'level' events.");
     fVerboseCmd->SetParameterName("level",true);
@@ -60,7 +60,7 @@ B5EventActionMessenger::~B5EventActionMessenger()
 void B5EventActionMessenger::SetNewValue(G4UIcommand* command,
                                          G4String newValue)
 {
-    if( command==fVerboseCmd )
+    if ( command==fVerboseCmd )
     { fTarget ->SetVerbose(fVerboseCmd->GetNewIntValue(newValue)); }
 }
 
@@ -69,7 +69,7 @@ void B5EventActionMessenger::SetNewValue(G4UIcommand* command,
 G4String B5EventActionMessenger::GetCurrentValue(G4UIcommand* command)
 {
     G4String cv;
-    if( command==fVerboseCmd )
+    if ( command==fVerboseCmd )
     { cv = fVerboseCmd->ConvertToString(fTarget ->GetVerbose()); }
     
     return cv;

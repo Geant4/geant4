@@ -11,6 +11,13 @@ $Id$
 
 ---------------------------------------------------------------------------  
 
+08 October 2013 Ivana Hrivnacova (exampleB5-V09-06-02)
+- Migration to MT
+- Removed Edep vs Tof histogram (remained empty),
+  adjusted min max in Chamber1[2] XY histograms
+- Less verbose output from exampleB5.in and run2.mac
+- Code clean-up
+
 03 October 2013 Ivana Hrivnacova (exampleB5-V09-06-01)
 - A new tag co-working with a fix in ctest.
 

@@ -42,12 +42,14 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
-G4Allocator<B5HodoscopeHit> B5HodoscopeHitAllocator;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal G4Allocator<B5HodoscopeHit>* B5HodoscopeHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5HodoscopeHit::B5HodoscopeHit(G4int i,G4double t)
-:G4VHit(), fId(i), fTime(t), fPos(0), fPLogV(0)
+: G4VHit(), fId(i), fTime(t), fPos(0), fPLogV(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,12 +92,12 @@ int B5HodoscopeHit::operator==(const B5HodoscopeHit &/*right*/) const
 void B5HodoscopeHit::Draw()
 {
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-    if(pVVisManager)
+    if (pVVisManager)
     {
         G4Transform3D trans(fRot.inverse(),fPos);
         G4VisAttributes attribs;
         const G4VisAttributes* pVA = fPLogV->GetVisAttributes();
-        if(pVA) attribs = *pVA;
+        if (pVA) attribs = *pVA;
         G4Colour colour(0.,1.,1.);
         attribs.SetColour(colour);
         attribs.SetForceSolid(true);

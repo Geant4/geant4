@@ -42,24 +42,26 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
-G4Allocator<B5DriftChamberHit> B5DriftChamberHitAllocator;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal G4Allocator<B5DriftChamberHit>* B5DriftChamberHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B5DriftChamberHit::B5DriftChamberHit():
-G4VHit(), fLayerID(-1), fTime(0.), fLocalPos(0), fWorldPos(0)
-{;}
+B5DriftChamberHit::B5DriftChamberHit()
+: G4VHit(), fLayerID(-1), fTime(0.), fLocalPos(0), fWorldPos(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B5DriftChamberHit::B5DriftChamberHit(G4int z):
-fLayerID(z), fTime(0.), fLocalPos(0), fWorldPos(0)
-{;}
+B5DriftChamberHit::B5DriftChamberHit(G4int z)
+: G4VHit(), fLayerID(z), fTime(0.), fLocalPos(0), fWorldPos(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5DriftChamberHit::~B5DriftChamberHit()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

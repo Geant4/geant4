@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5DriftChamberSD::B5DriftChamberSD(G4String name)
-:G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
+: G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
 {
     G4String HCname = "driftChamberColl";
     collectionName.insert(HCname);
@@ -49,7 +49,8 @@ B5DriftChamberSD::B5DriftChamberSD(G4String name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B5DriftChamberSD::~B5DriftChamberSD(){;}
+B5DriftChamberSD::~B5DriftChamberSD()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,7 +58,7 @@ void B5DriftChamberSD::Initialize(G4HCofThisEvent* hce)
 {
     fHitsCollection = new B5DriftChamberHitsCollection
     (SensitiveDetectorName,collectionName[0]);
-    if(fHCID<0)
+    if (fHCID<0)
     { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
     hce->AddHitsCollection(fHCID,fHitsCollection);
 }
@@ -67,7 +68,7 @@ void B5DriftChamberSD::Initialize(G4HCofThisEvent* hce)
 G4bool B5DriftChamberSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
     G4double charge = step->GetTrack()->GetDefinition()->GetPDGCharge();
-    if(charge==0.) return true;
+    if (charge==0.) return true;
     
     G4StepPoint* preStepPoint = step->GetPreStepPoint();
     G4TouchableHistory* theTouchable

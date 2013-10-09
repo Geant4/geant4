@@ -1,17 +1,12 @@
 #
-# Macro file for exampleB5
+# Test macro file for exampleB5
 #
-#    reference input test.in
-#    reference output test.out 
-#    test.out was created with RH9.0, gcc3.2.2
-#                 geant4.6.0, clhep 1.8.1.0, HadronPhysicsQGSP_BERT 
-#                 on 29-Jan-2004 T. Koi SLAC
-#
-#  turn off randomization 
-#
-/mydet/randomizePrimary FALSE
+
+# Turn off randomization 
+/mydet/randomizePrimary false
 /mydet/sigmaMomentum 0. 
 /mydet/sigmaAngle 0.
+/mydet/verbose 5
 #
 /mydet/armAngle 30. deg
 /gun/particle proton
@@ -30,7 +25,6 @@
 /mydet/momentum 100. GeV
 /mydet/fieldValue 100. tesla
 /run/beamOn 5
-#
 #
 /mydet/armAngle 30. deg
 /gun/particle proton

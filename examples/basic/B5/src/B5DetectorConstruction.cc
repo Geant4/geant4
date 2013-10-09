@@ -68,16 +68,23 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ThreadLocal B5MagneticField* B5DetectorConstruction::fMagneticField = 0;
+G4ThreadLocal G4FieldManager* B5DetectorConstruction::fFieldMgr = 0;
+    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 B5DetectorConstruction::B5DetectorConstruction()
 : G4VUserDetectorConstruction(), 
-fMessenger(0), fMagneticField(0), fFieldMgr(0),
-fVisAttributes(),
-fArmAngle(30.*deg), fArmRotation(0), fSecondArmPhys(0)
+  fMessenger(0),
+  fHodoscope1Logical(0), fHodoscope2Logical(0),
+  fWirePlane1Logical(0), fWirePlane2Logical(0),
+  fCellLogical(0), fHadCalScintiLogical(0),
+  fMagneticLogical(0),
+  fVisAttributes(),
+  fArmAngle(30.*deg), fArmRotation(0), fSecondArmPhys(0)
 
 {
     fMessenger = new B5DetectorConstMessenger(this);
-    fMagneticField = new B5MagneticField();
-    fFieldMgr = new G4FieldManager();
     fArmRotation = new G4RotationMatrix();
     fArmRotation->rotateY(fArmAngle);
 }
@@ -101,14 +108,6 @@ B5DetectorConstruction::~B5DetectorConstruction()
 
 G4VPhysicalVolume* B5DetectorConstruction::Construct()
 {
-    // All managed (deleted) by SDManager
-    G4VSensitiveDetector* hodoscope1;
-    G4VSensitiveDetector* hodoscope2;
-    G4VSensitiveDetector* chamber1;
-    G4VSensitiveDetector* chamber2;
-    G4VSensitiveDetector* emCalorimeter;
-    G4VSensitiveDetector* hadCalorimeter;
-
     // Construct materials
     ConstructMaterials();
     G4Material* air = G4Material::GetMaterial("G4_AIR");
@@ -122,16 +121,6 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     //
     G4bool checkOverlaps = true;
 
-    // Local Magnetic Field
-    static G4bool fieldIsInitialized = false;
-    
-    if(!fieldIsInitialized)
-    {
-        fFieldMgr->SetDetectorField(fMagneticField);
-        fFieldMgr->CreateChordFinder(fMagneticField);
-        fieldIsInitialized = true;
-    }
-    
     // geometries --------------------------------------------------------------
     // experimental hall (world volume)
     G4VSolid* worldSolid 
@@ -149,21 +138,20 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     G4NistManager* man = G4NistManager::Instance();
     G4Material* G4_Galactic = man->FindOrBuildMaterial("G4_Galactic");
     
-    G4LogicalVolume* magneticLogical
-      = new G4LogicalVolume(magneticSolid,G4_Galactic,"magneticLogical",
-                            fFieldMgr);
+    fMagneticLogical
+      = new G4LogicalVolume(magneticSolid,G4_Galactic,"magneticLogical");
     
     // placement of Tube
     
     G4RotationMatrix* fieldRot = new G4RotationMatrix();
     fieldRot->rotateX(90.*deg);
-    new G4PVPlacement(fieldRot,G4ThreeVector(),magneticLogical,
+    new G4PVPlacement(fieldRot,G4ThreeVector(),fMagneticLogical,
                       "magneticPhysical",worldLogical,
                       false,0,checkOverlaps);
     
     // set "user limits" for drawing smooth curve
     G4UserLimits* userLimits = new G4UserLimits(5.0*cm);
-    magneticLogical->SetUserLimits(userLimits);
+    fMagneticLogical->SetUserLimits(userLimits);
     
     // first arm
     G4VSolid* firstArmSolid 
@@ -189,12 +177,12 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     // hodoscopes in first arm
     G4VSolid* hodoscope1Solid 
       = new G4Box("hodoscope1Box",5.*cm,20.*cm,0.5*cm);
-    G4LogicalVolume* hodoscope1Logical
+    fHodoscope1Logical
       = new G4LogicalVolume(hodoscope1Solid,scintillator,"hodoscope1Logical");
     for (G4int i=0;i<15;i++)
     {
         G4double x1 = (i-7)*10.*cm;
-        new G4PVPlacement(0,G4ThreeVector(x1,0.,-1.5*m),hodoscope1Logical,
+        new G4PVPlacement(0,G4ThreeVector(x1,0.,-1.5*m),fHodoscope1Logical,
                           "hodoscope1Physical",firstArmLogical,
                           false,i,checkOverlaps);
     }
@@ -215,21 +203,21 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     // "virtual" wire plane
     G4VSolid* wirePlane1Solid 
       = new G4Box("wirePlane1Box",1.*m,30.*cm,0.1*mm);
-    G4LogicalVolume* wirePlane1Logical
+    fWirePlane1Logical
       = new G4LogicalVolume(wirePlane1Solid,argonGas,"wirePlane1Logical");
-    new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),wirePlane1Logical,
+    new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),fWirePlane1Logical,
                       "wirePlane1Physical",chamber1Logical,
                       false,0,checkOverlaps);
     
     // hodoscopes in second arm
     G4VSolid* hodoscope2Solid 
       = new G4Box("hodoscope2Box",5.*cm,20.*cm,0.5*cm);
-    G4LogicalVolume* hodoscope2Logical
+    fHodoscope2Logical
       = new G4LogicalVolume(hodoscope2Solid,scintillator,"hodoscope2Logical");
     for (G4int i=0;i<25;i++)
     {
         G4double x2 = (i-12)*10.*cm;
-        new G4PVPlacement(0,G4ThreeVector(x2,0.,0.),hodoscope2Logical,
+        new G4PVPlacement(0,G4ThreeVector(x2,0.,0.),fHodoscope2Logical,
                           "hodoscope2Physical",secondArmLogical,
                           false,i,checkOverlaps);
     }
@@ -250,9 +238,9 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     // "virtual" wire plane
     G4VSolid* wirePlane2Solid 
       = new G4Box("wirePlane2Box",1.5*m,30.*cm,0.1*mm);
-    G4LogicalVolume* wirePlane2Logical
+    fWirePlane2Logical
       = new G4LogicalVolume(wirePlane2Solid,argonGas,"wirePlane2Logical");
-    new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),wirePlane2Logical,
+    new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),fWirePlane2Logical,
                       "wirePlane2Physical",chamber2Logical,
                       false,0,checkOverlaps);
     
@@ -268,10 +256,10 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     // EMcalorimeter cells
     G4VSolid* cellSolid 
       = new G4Box("cellBox",7.5*cm,7.5*cm,15.*cm);
-    G4LogicalVolume* cellLogical
+    fCellLogical
       = new G4LogicalVolume(cellSolid,csI,"cellLogical");
     G4VPVParameterisation* cellParam = new B5CellParameterisation();
-    new G4PVParameterised("cellPhysical",cellLogical,emCalorimeterLogical,
+    new G4PVParameterised("cellPhysical",fCellLogical,emCalorimeterLogical,
                           kXAxis,80,cellParam);
     
     // hadron calorimeter
@@ -310,38 +298,12 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     // scintillator plates
     G4VSolid* HadCalScintiSolid
       = new G4Box("HadCalScintiBox",15.*cm,15.*cm,0.5*cm);
-    G4LogicalVolume* HadCalScintiLogical
+    fHadCalScintiLogical
       = new G4LogicalVolume(HadCalScintiSolid,scintillator,
                             "HadCalScintiLogical");
-    new G4PVPlacement(0,G4ThreeVector(0.,0.,2.*cm),HadCalScintiLogical,
+    new G4PVPlacement(0,G4ThreeVector(0.,0.,2.*cm),fHadCalScintiLogical,
                       "HadCalScintiPhysical",HadCalLayerLogical,
                       false,0,checkOverlaps);
-    
-    // sensitive detectors -----------------------------------------------------
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    G4String SDname;
-    
-    hodoscope1 = new B5HodoscopeSD(SDname="/hodoscope1");
-    SDman->AddNewDetector(hodoscope1);
-    hodoscope1Logical->SetSensitiveDetector(hodoscope1);
-    hodoscope2 = new B5HodoscopeSD(SDname="/hodoscope2");
-    SDman->AddNewDetector(hodoscope2);
-    hodoscope2Logical->SetSensitiveDetector(hodoscope2);
-    
-    chamber1 = new B5DriftChamberSD(SDname="/chamber1");
-    SDman->AddNewDetector(chamber1);
-    wirePlane1Logical->SetSensitiveDetector(chamber1);
-    chamber2 = new B5DriftChamberSD(SDname="/chamber2");
-    SDman->AddNewDetector(chamber2);
-    wirePlane2Logical->SetSensitiveDetector(chamber2);
-    
-    emCalorimeter = new B5EmCalorimeterSD(SDname="/EMcalorimeter");
-    SDman->AddNewDetector(emCalorimeter);
-    cellLogical->SetSensitiveDetector(emCalorimeter);
-    
-    hadCalorimeter = new B5HadCalorimeterSD(SDname="/HadCalorimeter");
-    SDman->AddNewDetector(hadCalorimeter);
-    HadCalScintiLogical->SetSensitiveDetector(hadCalorimeter);
     
     // visualization attributes ------------------------------------------------
     
@@ -351,7 +313,7 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     fVisAttributes.push_back(visAttributes);
     
     visAttributes = new G4VisAttributes(G4Colour(0.9,0.9,0.9));   // LightGray
-    magneticLogical->SetVisAttributes(visAttributes);
+    fMagneticLogical->SetVisAttributes(visAttributes);
     fVisAttributes.push_back(visAttributes);
     
     visAttributes = new G4VisAttributes(G4Colour(1.0,1.0,1.0));
@@ -361,8 +323,8 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     fVisAttributes.push_back(visAttributes);
     
     visAttributes = new G4VisAttributes(G4Colour(0.8888,0.0,0.0));
-    hodoscope1Logical->SetVisAttributes(visAttributes);
-    hodoscope2Logical->SetVisAttributes(visAttributes);
+    fHodoscope1Logical->SetVisAttributes(visAttributes);
+    fHodoscope2Logical->SetVisAttributes(visAttributes);
     fVisAttributes.push_back(visAttributes);
     
     visAttributes = new G4VisAttributes(G4Colour(0.0,1.0,0.0));
@@ -372,8 +334,8 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     
     visAttributes = new G4VisAttributes(G4Colour(0.0,0.8888,0.0));
     visAttributes->SetVisibility(false);
-    wirePlane1Logical->SetVisAttributes(visAttributes);
-    wirePlane2Logical->SetVisAttributes(visAttributes);
+    fWirePlane1Logical->SetVisAttributes(visAttributes);
+    fWirePlane2Logical->SetVisAttributes(visAttributes);
     fVisAttributes.push_back(visAttributes);
     
     visAttributes = new G4VisAttributes(G4Colour(0.8888,0.8888,0.0));
@@ -382,7 +344,7 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     fVisAttributes.push_back(visAttributes);
     
     visAttributes = new G4VisAttributes(G4Colour(0.9,0.9,0.0));
-    cellLogical->SetVisAttributes(visAttributes);
+    fCellLogical->SetVisAttributes(visAttributes);
     fVisAttributes.push_back(visAttributes);
     
     visAttributes = new G4VisAttributes(G4Colour(0.0, 0.0, 0.9));
@@ -394,13 +356,66 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     HadCalColumnLogical->SetVisAttributes(visAttributes);
     HadCalCellLogical->SetVisAttributes(visAttributes);
     HadCalLayerLogical->SetVisAttributes(visAttributes);
-    HadCalScintiLogical->SetVisAttributes(visAttributes);
+    fHadCalScintiLogical->SetVisAttributes(visAttributes);
     fVisAttributes.push_back(visAttributes);
     
     // return the world physical volume ----------------------------------------
     
     return worldPhysical;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B5DetectorConstruction::ConstructSDandField()
+{
+    G4cout << "B5DetectorConstruction::ConstructSDandField()" << G4endl;
+
+    // sensitive detectors -----------------------------------------------------
+    G4SDManager* SDman = G4SDManager::GetSDMpointer();
+    G4String SDname;
+    
+    G4VSensitiveDetector* hodoscope1 
+      = new B5HodoscopeSD(SDname="/hodoscope1");
+    SDman->AddNewDetector(hodoscope1);
+    fHodoscope1Logical->SetSensitiveDetector(hodoscope1);
+
+    G4VSensitiveDetector* hodoscope2 
+      = new B5HodoscopeSD(SDname="/hodoscope2");
+    SDman->AddNewDetector(hodoscope2);
+    fHodoscope2Logical->SetSensitiveDetector(hodoscope2);
+    
+    G4VSensitiveDetector* chamber1 
+      = new B5DriftChamberSD(SDname="/chamber1");
+    SDman->AddNewDetector(chamber1);
+    fWirePlane1Logical->SetSensitiveDetector(chamber1);
+
+    G4VSensitiveDetector* chamber2 
+      = new B5DriftChamberSD(SDname="/chamber2");
+    SDman->AddNewDetector(chamber2);
+    fWirePlane2Logical->SetSensitiveDetector(chamber2);
+    
+    G4VSensitiveDetector* emCalorimeter 
+      = new B5EmCalorimeterSD(SDname="/EMcalorimeter");
+    SDman->AddNewDetector(emCalorimeter);
+    fCellLogical->SetSensitiveDetector(emCalorimeter);
+    
+    G4VSensitiveDetector* hadCalorimeter 
+      = new B5HadCalorimeterSD(SDname="/HadCalorimeter");
+    SDman->AddNewDetector(hadCalorimeter);
+    fHadCalScintiLogical->SetSensitiveDetector(hadCalorimeter);
+
+    // magnetic field ----------------------------------------------------------
+    if (!fMagneticField) {
+      fMagneticField = new B5MagneticField();
+      G4cout << "fMagneticField " <<  fMagneticField << G4endl;
+      fFieldMgr = new G4FieldManager();
+      fFieldMgr->SetDetectorField(fMagneticField);
+      fFieldMgr->CreateChordFinder(fMagneticField);
+      G4bool forceToAllDaughters = true;
+      fMagneticLogical->SetFieldManager(fFieldMgr, forceToAllDaughters);
+    }  
+    G4cout << "B5DetectorConstruction::ConstructSDandField() done" << G4endl;
+}    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -436,7 +451,7 @@ void B5DetectorConstruction::ConstructMaterials()
 
 void B5DetectorConstruction::SetArmAngle(G4double val)
 {
-    if(!fSecondArmPhys)
+    if (!fSecondArmPhys)
     {
         G4cerr << "Detector has not yet been constructed." << G4endl;
         return;

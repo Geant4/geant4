@@ -60,13 +60,12 @@ B5RunAction::B5RunAction()
     ->CreateH1("Chamber2","Drift Chamber 2 # Hits", 50, 0., 50); // h1 Id = 1
   
   // Creating 2D histograms
-  analysisManager                                                // h2 Id = 0
-    ->CreateH2("Chamber1 XY","Drift Chamber 1 X vs Y", 50, 0., 50, 50, 0., 50); 
-  analysisManager                                                // h2 Id = 1
-    ->CreateH2("Chamber2 XY","Drift Chamber 2 X vs Y", 50, 0., 50, 50, 0., 50);
-  analysisManager                                                // h2 Id = 2
-    ->CreateH2("Edep vs Tof","EDep vs Time-of-flight", 50, 0., 50*MeV, 
-               50, 0., 1e-08);
+  analysisManager                                                
+    ->CreateH2("Chamber1 XY","Drift Chamber 1 X vs Y",           // h2 Id = 0
+               50, -1000., 1000, 50, -300., 300.); 
+  analysisManager                                                
+    ->CreateH2("Chamber2 XY","Drift Chamber 2 X vs Y",           // h2 Id = 1
+               50, -1500., 1500, 50, -300., 300.);
 
   // Creating ntuple
   //

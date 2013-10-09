@@ -39,7 +39,7 @@
 B5CellParameterisation::B5CellParameterisation()
 : G4VPVParameterisation()
 {
-    for(int copyNo=0;copyNo<80;copyNo++)
+    for (G4int copyNo=0;copyNo<80;copyNo++)
     {
         G4int column = copyNo / 4;
         G4int row = copyNo % 4;
@@ -51,7 +51,7 @@ B5CellParameterisation::B5CellParameterisation()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5CellParameterisation::~B5CellParameterisation()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

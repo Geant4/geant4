@@ -41,7 +41,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5EmCalorimeterSD::B5EmCalorimeterSD(G4String name)
-:G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
+: G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
 {
     G4String HCname;
     collectionName.insert(HCname="EMcalorimeterColl");
@@ -58,12 +58,12 @@ void B5EmCalorimeterSD::Initialize(G4HCofThisEvent* hce)
 {
     fHitsCollection = new B5EmCalorimeterHitsCollection
     (SensitiveDetectorName,collectionName[0]);
-    if(fHCID<0)
+    if (fHCID<0)
     { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
     hce->AddHitsCollection(fHCID,fHitsCollection);
     
     // fill calorimeter hits with zero energy deposition
-    for(int i=0;i<80;i++)
+    for (G4int i=0;i<80;i++)
     {
         B5EmCalorimeterHit* hit = new B5EmCalorimeterHit(i);
         fHitsCollection->insert( hit );
@@ -75,7 +75,7 @@ void B5EmCalorimeterSD::Initialize(G4HCofThisEvent* hce)
 G4bool B5EmCalorimeterSD::ProcessHits(G4Step*step, G4TouchableHistory*)
 {
     G4double edep = step->GetTotalEnergyDeposit();
-    if(edep==0.) return true;
+    if (edep==0.) return true;
     
     G4StepPoint* preStepPoint = step->GetPreStepPoint();
     G4TouchableHistory* theTouchable
@@ -85,7 +85,7 @@ G4bool B5EmCalorimeterSD::ProcessHits(G4Step*step, G4TouchableHistory*)
     
     B5EmCalorimeterHit* hit = (*fHitsCollection)[copyNo];
     // check if it is first touch
-    if(!(hit->GetLogV()))
+    if (!(hit->GetLogV()))
     {
         // fill volume information
         hit->SetLogV(thePhysical->GetLogicalVolume());

@@ -41,24 +41,26 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
-G4Allocator<B5EmCalorimeterHit> B5EmCalorimeterHitAllocator;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal G4Allocator<B5EmCalorimeterHit>* B5EmCalorimeterHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B5EmCalorimeterHit::B5EmCalorimeterHit():
-G4VHit(), fCellID(-1), fEdep(0.), fPos(0), fPLogV(0)
-{;}
+B5EmCalorimeterHit::B5EmCalorimeterHit()
+: G4VHit(), fCellID(-1), fEdep(0.), fPos(0), fPLogV(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B5EmCalorimeterHit::B5EmCalorimeterHit(G4int z):
-fCellID(z), fEdep(0.), fPos(0), fPLogV(0)
-{;}
+B5EmCalorimeterHit::B5EmCalorimeterHit(G4int z)
+:  G4VHit(), fCellID(z), fEdep(0.), fPos(0), fPLogV(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5EmCalorimeterHit::~B5EmCalorimeterHit()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -96,16 +98,16 @@ int B5EmCalorimeterHit::operator==(const B5EmCalorimeterHit &right) const
 void B5EmCalorimeterHit::Draw()
 {
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-    if(pVVisManager&&(fEdep>0.))
+    if (pVVisManager&&(fEdep>0.))
     {
         // Draw a calorimeter cell with a color corresponding to its energy deposit
         G4Transform3D trans(fRot.inverse(),fPos);
         G4VisAttributes attribs;
         const G4VisAttributes* pVA = fPLogV->GetVisAttributes();
-        if(pVA) attribs = *pVA;
+        if (pVA) attribs = *pVA;
         G4double rcol = fEdep/(0.7*GeV);
-        if(rcol>1.) rcol = 1.;
-        if(rcol<0.4) rcol = 0.4;
+        if (rcol>1.) rcol = 1.;
+        if (rcol<0.4) rcol = 0.4;
         G4Colour colour(rcol,0.,0.);
         attribs.SetColour(colour);
         attribs.SetForceSolid(true);

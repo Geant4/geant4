@@ -23,66 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B5ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B5DetectorConstruction.hh
-/// \brief Definition of the B5DetectorConstruction class
+/// \file B5ActionInitialization.cc
+/// \brief Implementation of the B5ActionInitialization class
 
-#ifndef B5DetectorConstruction_h
-#define B5DetectorConstruction_h 1
-
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
-#include "G4RotationMatrix.hh"
-#include "G4FieldManager.hh"
-
-#include <vector>
-
-class B5DetectorConstMessenger;
-class B5MagneticField;
-
-class G4VPhysicalVolume;
-class G4Material;
-class G4VSensitiveDetector;
-class G4VisAttributes;
+#include "B5ActionInitialization.hh"
+#include "B5PrimaryGeneratorAction.hh"
+#include "B5RunAction.hh"
+#include "B5EventAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class B5DetectorConstruction : public G4VUserDetectorConstruction
+B5ActionInitialization::B5ActionInitialization()
+ : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B5ActionInitialization::~B5ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B5ActionInitialization::BuildForMaster() const
 {
-public:
-    B5DetectorConstruction();
-    virtual ~B5DetectorConstruction();
-    
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
-
-    void SetArmAngle(G4double val);
-    G4double GetArmAngle() { return fArmAngle; }
-    
-    void ConstructMaterials();
-    
-private:
-    B5DetectorConstMessenger* fMessenger;
-    
-    static G4ThreadLocal B5MagneticField* fMagneticField;
-    static G4ThreadLocal G4FieldManager* fFieldMgr;
-    
-    G4LogicalVolume* fHodoscope1Logical;
-    G4LogicalVolume* fHodoscope2Logical;
-    G4LogicalVolume* fWirePlane1Logical;
-    G4LogicalVolume* fWirePlane2Logical;
-    G4LogicalVolume* fCellLogical;
-    G4LogicalVolume* fHadCalScintiLogical;
-    G4LogicalVolume* fMagneticLogical;
-    
-    std::vector<G4VisAttributes*> fVisAttributes;
-    
-    G4double fArmAngle;
-    G4RotationMatrix* fArmRotation;
-    G4VPhysicalVolume* fSecondArmPhys;
-};
+  SetUserAction(new B5RunAction);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void B5ActionInitialization::Build() const
+{
+  SetUserAction(new B5PrimaryGeneratorAction);
+  SetUserAction(new B5RunAction);
+  SetUserAction(new B5EventAction);
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

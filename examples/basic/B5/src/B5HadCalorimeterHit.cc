@@ -43,24 +43,26 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
-G4Allocator<B5HadCalorimeterHit> B5HadCalorimeterHitAllocator;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal G4Allocator<B5HadCalorimeterHit>* B5HadCalorimeterHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B5HadCalorimeterHit::B5HadCalorimeterHit():
-G4VHit(), fColumnID(-1), fRowID(-1), fEdep(0.), fPos(0)
-{;}
+B5HadCalorimeterHit::B5HadCalorimeterHit()\
+: G4VHit(), fColumnID(-1), fRowID(-1), fEdep(0.), fPos(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B5HadCalorimeterHit::B5HadCalorimeterHit(G4int iCol,G4int iRow):
-G4VHit(), fColumnID(iCol), fRowID(iRow), fEdep(0.), fPos(0)
-{;}
+B5HadCalorimeterHit::B5HadCalorimeterHit(G4int iCol,G4int iRow)
+: G4VHit(), fColumnID(iCol), fRowID(iRow), fEdep(0.), fPos(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5HadCalorimeterHit::~B5HadCalorimeterHit()
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,7 +100,7 @@ int B5HadCalorimeterHit::operator==(const B5HadCalorimeterHit &right) const
 void B5HadCalorimeterHit::Draw()
 {
     G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-    if(pVVisManager&&(fEdep>0.))
+    if (pVVisManager&&(fEdep>0.))
     {
         // Draw a calorimeter cell with depth propotional to the energy deposition
         G4Transform3D trans(fRot.inverse(),fPos);

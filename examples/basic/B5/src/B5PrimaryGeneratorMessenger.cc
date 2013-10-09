@@ -89,13 +89,13 @@ B5PrimaryGeneratorMessenger::~B5PrimaryGeneratorMessenger()
 void B5PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,
                                                G4String newValue)
 {
-    if( command==fMomentumCmd )
+    if ( command==fMomentumCmd )
     { fGenerator->SetMomentum(fMomentumCmd->GetNewDoubleValue(newValue)); }
-    if( command==fSigmaMomCmd )
+    if ( command==fSigmaMomCmd )
     { fGenerator->SetSigmaMomentum(fSigmaMomCmd->GetNewDoubleValue(newValue)); }
-    if( command==fSigmaAngCmd )
+    if ( command==fSigmaAngCmd )
     { fGenerator->SetSigmaAngle(fSigmaAngCmd->GetNewDoubleValue(newValue)); }
-    if( command==fRandomCmd )
+    if ( command==fRandomCmd )
     { fGenerator->SetRandomize(fRandomCmd->GetNewBoolValue(newValue)); }
 }
 
@@ -104,13 +104,13 @@ void B5PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,
 G4String B5PrimaryGeneratorMessenger::GetCurrentValue(G4UIcommand * command)
 {
     G4String cv;
-    if( command==fMomentumCmd )
+    if ( command==fMomentumCmd )
     { cv = fMomentumCmd->ConvertToString(fGenerator->GetMomentum(),"GeV"); }
-    if( command==fSigmaMomCmd )
+    if ( command==fSigmaMomCmd )
     { cv = fSigmaMomCmd->ConvertToString(fGenerator->GetSigmaMomentum(),"GeV"); }
-    if( command==fSigmaAngCmd )
+    if ( command==fSigmaAngCmd )
     { cv = fSigmaAngCmd->ConvertToString(fGenerator->GetSigmaAngle(),"deg"); }
-    if( command==fRandomCmd )
+    if ( command==fRandomCmd )
     { cv = fRandomCmd->ConvertToString(fGenerator->GetRandomize()); }
     
     return cv;
