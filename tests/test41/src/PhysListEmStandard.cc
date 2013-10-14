@@ -39,9 +39,7 @@
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
-#include "G4eBremsstrahlungModel.hh"
 #include "G4eplusAnnihilation.hh"
-#include "G4Generator2BS.hh"
 
 #include "G4MuMultipleScattering.hh"
 #include "G4MuIonisation.hh"

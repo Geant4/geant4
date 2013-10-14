@@ -53,6 +53,7 @@
 #include "G4ionIonisation.hh"
 #include "G4CoulombScattering.hh"
 #include "G4WentzelVIModel.hh"
+#include "G4eSingleCoulombScatteringModel.hh"
 
 #include "G4EmProcessOptions.hh"
 
@@ -101,16 +102,19 @@ void PhysListEmStandardIG::ConstructProcess()
     } else if (particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      G4MuMultipleScattering* msc = new G4MuMultipleScattering();
-      G4WentzelVIModel* wvi = new G4WentzelVIModel();
-      msc->SetRangeFactor(0.05);
+      // G4MuMultipleScattering* msc = new G4MuMultipleScattering();
+      // G4WentzelVIModel* wvi = new G4WentzelVIModel();
+      // msc->SetRangeFactor(0.05);
 
-      msc->AddEmModel(0, wvi);
-      pmanager->AddProcess(msc, -1, 1, 1);
+      // msc->AddEmModel(0, wvi);
+      //pmanager->AddProcess(msc, -1, 1, 1);
       pmanager->AddProcess(new G4MuIonisation,       -1, 2, 2);
       pmanager->AddProcess(new G4MuBremsstrahlung,   -1,-3, 3);
       pmanager->AddProcess(new G4MuPairProduction,   -1,-4, 4);
-      pmanager->AddDiscreteProcess(new G4CoulombScattering());
+
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      cs->AddEmModel(0, new G4eSingleCoulombScatteringModel());
+      pmanager->AddDiscreteProcess(cs);
              
     } else if (particleName == "alpha" || particleName == "He3") {
       pmanager->AddProcess(new G4MuMultipleScattering(),-1, 1, 1);
