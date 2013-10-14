@@ -129,10 +129,10 @@ G4UIQt::G4UIQt (
 ,fMainSplitterWidget(NULL)
 ,fRightSplitterWidget(NULL)
 ,fHelpVSplitter(NULL)
-,fLastQTabSizeX(0)
-,fLastQTabSizeY(0)
 ,fToolbarApp(NULL)
 ,fToolbarUser(NULL)
+,fStringSeparator("__$$$@%%###__")
+,fLastOpenPath("")
 ,fMoveSelected(false)
 ,fRotateSelected(true)
 ,fPickSelected(false)
@@ -142,7 +142,12 @@ G4UIQt::G4UIQt (
 
   G4Qt* interactorManager = G4Qt::getInstance (argc,argv,(char*)"Qt");
   if (!(QApplication*)interactorManager->GetMainInteractor()) {
-    G4cout        << "G4UIQt : Unable to init Qt. Aborted" << G4endl;
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    G4int verbose = UImanager->GetVerboseLevel();
+    
+    if (verbose >= 2) {
+      G4cout        << "G4UIQt : Unable to init Qt. Aborted" << G4endl;
+    }
   }
   
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -158,132 +163,38 @@ G4UIQt::G4UIQt (
   }
 
   if (found) {
-    G4cout        << "G4UIQt : Found an external App with a QMainWindow already defined. Aborted" << G4endl;
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    G4int verbose = UImanager->GetVerboseLevel();
+    
+    if (verbose >= 2) {
+      G4cout        << "G4UIQt : Found an external App with a QMainWindow already defined. Aborted" << G4endl;
+    }
     return ;
   }
   fMainWindow = new QMainWindow();
 
- 
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::Initialise after main window creation +++++++++++\n");
-#endif
-
+  // resize to a big size in order to gave space for the viewer
+  fMainWindow->resize(500,500);
 
   // the splitter
-  fMainSplitterWidget = new QSplitter(Qt::Horizontal,fMainWindow);
+  fMainSplitterWidget = new QSplitter(Qt::Horizontal);
 
-  QWidget *leftSplitterWidget = new QWidget(fMainSplitterWidget);
-  QVBoxLayout * layoutLeftSplitterWidget = new QVBoxLayout();
-  leftSplitterWidget->setLayout(layoutLeftSplitterWidget);
-  fRightSplitterWidget = new QSplitter(Qt::Vertical,fMainSplitterWidget);
-
-
-  fUITabWidget = new QTabWidget();
-  //  fUITabWidget->setMinimumHeight(100);
-
-  // Set layouts
-  QWidget* commandLineWidget = new QWidget();
-  QVBoxLayout *layoutCommandLine = new QVBoxLayout();
-  commandLineWidget->setLayout(layoutCommandLine);
-
-  // fill them
-
-  fCommandLabel = new QLabel("",commandLineWidget);
-
-  fCommandArea = new QLineEdit(commandLineWidget);
-  fCommandArea->installEventFilter(this);
-  fCommandArea->activateWindow();
-
-  fCommandArea->setFocusPolicy ( Qt::StrongFocus );
-  fCommandArea->setFocus(Qt::TabFocusReason);
-  fCommandArea->setToolTip("Apply command");
-
-  commandLineWidget->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
-
-
-  layoutCommandLine->addWidget(fCommandLabel);
-  layoutCommandLine->addWidget(fCommandArea);
-
-  fHelpTBWidget = new QWidget(fUITabWidget);
-  fHistoryTBWidget = new QWidget(fUITabWidget);
-  fSceneTreeComponentsTBWidget = new QTabWidget(fUITabWidget);
-
-#if QT_VERSION < 0x040200
-  fSceneTreeComponentsTBWidget->hide();
-#else
-  fSceneTreeComponentsTBWidget->setVisible(false);
-#endif
-
-  fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
-
-  layoutLeftSplitterWidget->addWidget(fUITabWidget);
-
-  fCoutTBWidget = new QGroupBox("Output");
-
-  // fill right splitter
-  fRightSplitterWidget->addWidget(fEmptyViewerTabLabel);
-  fRightSplitterWidget->addWidget(fCoutTBWidget);
-  fRightSplitterWidget->addWidget(commandLineWidget);
-
-  // set the splitter size
-  QList<int> list2;
-  list2.append(600);
-  list2.append(150);
-  //  fRightSplitterWidget->setSizes(list2);
-
+  fMainSplitterWidget->addWidget(CreateLeftSplitterWidget());
+  fMainSplitterWidget->addWidget(CreateRightSplitterWidget());
   
-  CreateVisParametersTBWidget();
-  CreateHelpTBWidget();
-  CreateHistoryTBWidget();
-
-  CreateCoutTBWidget();
-
-
+  QSizePolicy policy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+  policy.setHorizontalStretch(5);
+  fRightSplitterWidget->setSizePolicy(policy);
   
-
-
-  // the right splitter 
-  fUITabWidget->addTab(fSceneTreeComponentsTBWidget,"Scene tree");
-  fUITabWidget->addTab(fHelpTBWidget,"Help");
-  fUITabWidget->addTab(fHistoryTBWidget,"History");
-  fUITabWidget->setCurrentWidget(fSceneTreeComponentsTBWidget);
-
-  // Only at creation. Will be set visible when sessionStart();
- #if QT_VERSION < 0x040200
-  fEmptyViewerTabLabel->hide();
- #else
-  fEmptyViewerTabLabel->setVisible(false);
- #endif
-
-
-  fMainSplitterWidget->addWidget(leftSplitterWidget);
-  fMainSplitterWidget->addWidget(fRightSplitterWidget);
-  // set the splitter size
-  QList<int> list;
-  list.append(200 );
-  list.append(650);
-  fMainSplitterWidget->setSizes(list);
-
-
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::G4UIQt :: 5\n");
-#endif
-
-
+  policy = fLeftSplitterWidget->sizePolicy();
+  policy.setHorizontalStretch(1);
+  fLeftSplitterWidget->setSizePolicy(policy);
+  
   fMainWindow->setCentralWidget(fMainSplitterWidget);
-
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::G4UIQt :: 6\n");
-#endif
-
-  // Connect signal
-  connect(fCommandArea, SIGNAL(returnPressed()), SLOT(CommandEnteredCallback()));
-  connect(fUITabWidget, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 
   fMainWindow->setWindowTitle(QFileInfo( QCoreApplication::applicationFilePath() ).fileName()); 
-  fMainWindow->resize(300,600); 
   fMainWindow->move(QPoint(50,50));
 
   // Set not visible until session start
@@ -292,10 +203,6 @@ G4UIQt::G4UIQt (
  #else
   fMainWindow->setVisible(false);
  #endif
-
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::G4UIQt END\n");
-#endif
 }
 
 
@@ -303,9 +210,6 @@ G4UIQt::G4UIQt (
 G4UIQt::~G4UIQt(
 ) 
 { 
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::~G4UIQt Delete\n");
-#endif
   G4UImanager* UI = G4UImanager::GetUIpointer();  // TO KEEP
   if(UI!=NULL) {  // TO KEEP
     UI->SetSession(NULL);  // TO KEEP
@@ -314,18 +218,16 @@ G4UIQt::~G4UIQt(
   }
   
   if (fMainWindow!=NULL) {
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::~G4UIQt DELETE fMainWindow\n");
-#endif
     delete fMainWindow;
   }
 }
 
 /** Create the History ToolBox Widget
  */
-void G4UIQt::CreateHistoryTBWidget(
+QWidget* G4UIQt::CreateHistoryTBWidget(
 ) 
 {
+  fHistoryTBWidget = new QWidget();
 
   QVBoxLayout *layoutHistoryTB = new QVBoxLayout();
   fHistoryTBTableList = new QListWidget();
@@ -336,21 +238,23 @@ void G4UIQt::CreateHistoryTBWidget(
   layoutHistoryTB->addWidget(fHistoryTBTableList);
 
   fHistoryTBWidget->setLayout(layoutHistoryTB);
+  return fHistoryTBWidget;
 }
+
 
 /** Create the Help ToolBox Widget
  */
-void G4UIQt::CreateHelpTBWidget(
+QWidget* G4UIQt::CreateHelpTBWidget(
 ) 
 {
-
+  fHelpTBWidget = new QWidget();
   
   QWidget *helpWidget = new QWidget();
   QHBoxLayout *helpLayout = new QHBoxLayout();
   QVBoxLayout *vLayout = new QVBoxLayout();
   fHelpVSplitter = new QSplitter(Qt::Horizontal);
   fHelpLine = new QLineEdit(fHelpTBWidget);
-  helpLayout->addWidget(new QLabel("Search :",helpWidget));
+  helpLayout->addWidget(new QLabel("Search :"));
   helpLayout->addWidget(fHelpLine);
   connect( fHelpLine, SIGNAL( editingFinished () ), this, SLOT( LookForHelpStringCallback() ) );
   
@@ -370,28 +274,23 @@ void G4UIQt::CreateHelpTBWidget(
   vLayout->addWidget(helpWidget);
   vLayout->addWidget(fHelpVSplitter,1);
   
-  fHelpTBWidget->setMinimumSize(50,50);
-  fHelpTBWidget->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
-
-  // set the splitter size
-  QList<int> list;
-  list.append( 50 );
-  list.append( 50 );
-  fHelpVSplitter->setSizes(list);
-  
   helpWidget->setLayout(helpLayout);
   fHelpTBWidget->setLayout(vLayout);
+
+  return fHelpTBWidget;
 }
 
 
 /** Create the Cout ToolBox Widget
  */
-void G4UIQt::CreateCoutTBWidget(
+QWidget* G4UIQt::CreateCoutTBWidget(
 ) 
 {
+  fCoutTBWidget = new QGroupBox("Output");
+
   QVBoxLayout *layoutCoutTB = new QVBoxLayout();
 
-  fCoutTBTextArea = new QTextEdit(fCoutTBWidget);
+  fCoutTBTextArea = new QTextEdit();
 
   // set font familly and size
   fCoutTBTextArea->setFontFamily("Courier");
@@ -414,23 +313,140 @@ void G4UIQt::CreateCoutTBWidget(
   layoutCoutTBButtons->addWidget(coutFilterLabel);
   layoutCoutTBButtons->addWidget(fCoutFilter);
 
+  // reduce margins
+  layoutCoutTBButtons->setContentsMargins(3,3,3,0);
+
   layoutCoutTB->addWidget(fCoutTBTextArea);
   layoutCoutTB->addWidget(coutButtonWidget);
 
-  fCoutTBWidget->resize(100,100);
-  fCoutTBTextArea->setMinimumHeight(10);
-  fCoutTBWidget->setMinimumHeight(150);
-  //  fCoutTBTextArea->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
-  fCoutTBWidget->setSizePolicy (QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum));
   fCoutTBWidget->setLayout(layoutCoutTB);
+
+  QSizePolicy policy = QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
+  policy.setVerticalStretch(1);
+  fCoutTBTextArea->setSizePolicy(policy);
+  fCoutTBTextArea->setMinimumSize(50,50);
+    
+  return fCoutTBWidget;
 }
 
 
 /** Create the VisParameters ToolBox Widget
  */
-void G4UIQt::CreateVisParametersTBWidget(
+QWidget* G4UIQt::CreateVisParametersTBWidget(
 ) 
 {
+  return NULL;
+}
+
+
+/** Create the VisParameters ToolBox Widget
+ */
+QWidget* G4UIQt::CreateUITabWidget(
+) 
+{
+  fUITabWidget = new QTabWidget();
+
+  // the right splitter 
+  fUITabWidget->addTab(CreateSceneTreeComponentsTBWidget(),"Scene tree");
+  fUITabWidget->addTab(CreateHelpTBWidget(),"Help");
+  fUITabWidget->addTab(CreateHistoryTBWidget(),"History");
+  //  fUITabWidget->setCurrentWidget(fSceneTreeComponentsTBWidget);
+
+  connect(fUITabWidget, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
+
+  return fUITabWidget;
+}
+
+
+QWidget* G4UIQt::CreateSceneTreeComponentsTBWidget(){
+
+  fSceneTreeComponentsTBWidget = new QTabWidget();
+
+#if QT_VERSION < 0x040200
+  fSceneTreeComponentsTBWidget->hide();
+#else
+  fSceneTreeComponentsTBWidget->setVisible(false);
+#endif
+
+  return fSceneTreeComponentsTBWidget;
+}
+
+
+QWidget* G4UIQt::CreateLeftSplitterWidget(){
+
+  fLeftSplitterWidget = new QWidget();
+  QVBoxLayout * layoutLeftSplitterWidget = new QVBoxLayout();
+  fLeftSplitterWidget->setLayout(layoutLeftSplitterWidget);
+
+  layoutLeftSplitterWidget->addWidget(CreateUITabWidget());
+
+  fLeftSplitterWidget->resize(100,100);
+  return fLeftSplitterWidget;
+}
+
+
+QWidget* G4UIQt::CreateRightSplitterWidget(){
+
+  fRightSplitterWidget = new QSplitter(Qt::Vertical);
+
+  // Set layouts
+  QWidget* commandLineWidget = new QWidget();
+  QHBoxLayout *layoutCommandLine = new QHBoxLayout();
+  commandLineWidget->setLayout(layoutCommandLine);
+
+  // fill them
+
+  fCommandLabel = new QLabel("",commandLineWidget);
+
+  fCommandArea = new QLineEdit(commandLineWidget);
+  fCommandArea->installEventFilter(this);
+  fCommandArea->activateWindow();
+
+  fCommandArea->setFocusPolicy ( Qt::StrongFocus );
+  fCommandArea->setFocus(Qt::TabFocusReason);
+  fCommandArea->setToolTip("Apply command");
+
+
+  layoutCommandLine->addWidget(fCommandLabel);
+  layoutCommandLine->addWidget(fCommandArea);
+
+
+  fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
+
+
+
+
+  // fill right splitter
+    
+  //  Create an widget to handle OGL widget and label
+  QWidget* handleWidget = new QWidget();
+  handleWidget->setLayout(new QVBoxLayout());
+
+  handleWidget->layout()->addWidget(fEmptyViewerTabLabel);
+
+  fRightSplitterWidget->addWidget(handleWidget);
+  fRightSplitterWidget->addWidget(CreateCoutTBWidget());
+  fRightSplitterWidget->addWidget(commandLineWidget);
+
+  QSizePolicy policy = QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
+  policy.setVerticalStretch(100);
+  handleWidget->setMinimumSize(50,50);
+  handleWidget->setSizePolicy(policy);
+  
+  policy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+  policy.setVerticalStretch(1);
+  fCoutTBWidget->setSizePolicy(policy);
+
+  policy = QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
+  policy.setVerticalStretch(1);
+  commandLineWidget->setMinimumSize(50,50);
+  commandLineWidget->setSizePolicy(policy);
+
+  // Connect signal
+  connect(fCommandArea, SIGNAL(returnPressed()), SLOT(CommandEnteredCallback()));
+  connect(fCommandArea, SIGNAL(textEdited(const QString &)), SLOT(CommandEditedCallback(const QString &)));
+
+  return fRightSplitterWidget;
 }
 
 
@@ -449,19 +465,12 @@ QTabWidget* G4UIQt::GetSceneTreeComponentsTBWidget(
 bool G4UIQt::AddTabWidget(
  QWidget* aWidget
 ,QString name
-,int sizeX
-,int sizeY
+,int
+,int
 )
 {
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::AddTabWidget %d %d\n",sizeX, sizeY);
-#endif
 
   if (fViewerTabWidget == NULL) {
-#ifdef G4DEBUG_INTERFACES_BASIC
-    printf("G4UIQt::AddTabWidget +++++\n");
-#endif
-
     fViewerTabWidget = new G4QTabWidget(fRightSplitterWidget);
 #if QT_VERSION < 0x040500
 #else
@@ -472,20 +481,13 @@ bool G4UIQt::AddTabWidget(
 #else
     fViewerTabWidget->setUsesScrollButtons (true);
 #endif
-    QSizePolicy policy = fViewerTabWidget->sizePolicy();
-    policy.setHorizontalStretch(1);
-    policy.setVerticalStretch(1);
-    fViewerTabWidget->setSizePolicy(policy);
-    
+      
 #if QT_VERSION < 0x040500
 #else
     connect(fViewerTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
 #endif
     connect(fViewerTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int))); 
   }
-
-  fLastQTabSizeX = sizeX;
-  fLastQTabSizeY = sizeY;
 
   if (!aWidget) {
     return false;
@@ -496,28 +498,20 @@ bool G4UIQt::AddTabWidget(
   // L.Garnier 26/05/2010 : not exactly the same in qt3. Could cause some
   // troubles
   if (fEmptyViewerTabLabel != NULL) {
-    int index = fRightSplitterWidget->indexOf(fEmptyViewerTabLabel);
+    int index = fRightSplitterWidget->widget(0)->layout()->indexOf(fEmptyViewerTabLabel);
     if ( index != -1) {
-      fEmptyViewerTabLabel->hide();
-      fEmptyViewerTabLabel->setParent(NULL);
+      fRightSplitterWidget->widget(0)->layout()->removeWidget(fEmptyViewerTabLabel);
       delete fEmptyViewerTabLabel;
       fEmptyViewerTabLabel = NULL;
       
-      fRightSplitterWidget->insertWidget(index,fViewerTabWidget);
-      
-      aWidget->setParent(fViewerTabWidget);
+      fRightSplitterWidget->widget(0)->layout()->addWidget(fViewerTabWidget);
     }
   }
-
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::AddTabWidget ADD %d %d + %d %d---------------------------------------------------\n",sizeX, sizeY,sizeX-fViewerTabWidget->width(),sizeY-fViewerTabWidget->height());
-#endif
-
 
   // Problems with resize. The widgets are not realy drawn at this step,
   // then we have to force them on order to check the size
 
-  fViewerTabWidget->insertTab(fViewerTabWidget->count(),aWidget,name);
+  fViewerTabWidget->addTab(aWidget,name);
 
   fViewerTabWidget->setCurrentIndex(fViewerTabWidget->count()-1);
 
@@ -527,25 +521,16 @@ bool G4UIQt::AddTabWidget(
  #else
    fViewerTabWidget->setLastTabCreated(fViewerTabWidget->currentIndex());
  #endif
-  
-   fViewerTabWidget->resize(sizeX,sizeY);
 
   return true;
 }
 
 
 void G4UIQt::UpdateTabWidget(int tabNumber) {
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::UpdateTabWidget %d\n",tabNumber);
-#endif
   if ( fViewerTabWidget == NULL) {
     fViewerTabWidget = new G4QTabWidget;
   }
   
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::UpdateTabWidget CALL REPAINT tabGL\n");
-#endif
-
   fViewerTabWidget->setCurrentIndex(tabNumber);
 
   // Send this signal to unblock graphic updates !
@@ -559,12 +544,6 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
 
   // This will send a paintEvent to OGL Viewers
   fViewerTabWidget->setTabSelected(true);
-
-  QCoreApplication::sendPostedEvents () ;
-
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::UpdateTabWidget END\n");
-#endif
 }
 
 
@@ -572,9 +551,6 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
  */
 void G4UIQt::ResizeTabWidget( QResizeEvent* e) {
   for (G4int a=0;a<fViewerTabWidget->count() ;a++) {
-#ifdef G4DEBUG_INTERFACES_BASIC
-    printf("G4UIQt::ResizeTabWidget +++++++++++++++++++++++++++++++++++++++\n");
-#endif
     fViewerTabWidget->widget(a)->resize(e->size());
   }
 }
@@ -585,56 +561,20 @@ void G4UIQt::ResizeTabWidget( QResizeEvent* e) {
 G4UIsession* G4UIQt::SessionStart (
 )
 {
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::G4UIQt SessionStart\n");
-#endif
-
   G4Qt* interactorManager = G4Qt::getInstance ();
-
   Prompt("Session :");
   exitSession = false;
-/*
-  if (fEmptyViewerTabLabel != NULL) {
-    bool visible = false;
-    if (fViewerTabWidget != NULL) {
-      if (fViewerTabWidget->isVisible()) {
-        visible = true;
-      }
-    }
-  }
-*/
+
+  QCoreApplication::sendPostedEvents () ;
+
   #if QT_VERSION < 0x040200
       fMainWindow->show();
   #else
       fMainWindow->setVisible(true);
   #endif
-  // get the size of the tabbar
-  int tabBarX = 0;
-  int tabBarY = 0;
-
-  if (fViewerTabWidget != NULL) {
-    tabBarX = -fViewerTabWidget->widget(0)->width();
-    tabBarY = -fViewerTabWidget->widget(0)->height();
-  }
-  fMainWindow->resize(tabBarX+fMainWindow->width()+fLastQTabSizeX,tabBarY+fMainWindow->height()+fLastQTabSizeY);
-
-  QCoreApplication::sendPostedEvents () ;
-
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::G4UIQt SessionStart2\n");
-#endif
   interactorManager->DisableSecondaryLoop (); // TO KEEP
   if ((QApplication*)interactorManager->GetMainInteractor())
     ((QApplication*)interactorManager->GetMainInteractor())->exec();
-
-  // on ne passe pas le dessous ? FIXME ????
-  // je ne pense pas 13/06
-
-  //   void* event; // TO KEEP
-  //   while((event = interactorManager->GetEvent())!=NULL) {  // TO KEEP
-  //     interactorManager->DispatchEvent(event); // TO KEEP
-  //     if(exitSession==true) break; // TO KEEP
-  //   } // TO KEEP
 
   interactorManager->EnableSecondaryLoop ();
   return this;
@@ -706,9 +646,8 @@ void G4UIQt::SecondaryLoop (
   G4Qt* interactorManager = G4Qt::getInstance (); // TO KEEP ?
   Prompt(aPrompt); // TO KEEP
   exitPause = false; // TO KEEP
-  void* eventTmp; // TO KEEP
-  while((eventTmp = interactorManager->GetEvent())!=NULL) {  // TO KEEP
-    interactorManager->DispatchEvent(eventTmp); // TO KEEP
+  while(1) {
+    ((QApplication*)interactorManager)->processEvents(QEventLoop::WaitForMoreEvents);
     if(exitPause==true) break; // TO KEEP
   } // TO KEEP
   Prompt("Session :"); // TO KEEP
@@ -730,19 +669,15 @@ G4int G4UIQt::ReceiveG4cout (
   QStringList newStr;
   
   // Add to stringList
-  newStr = QStringList(QString((char*)aString.data()));
+  newStr = QStringList(QString((char*)aString.data()).trimmed());
   fG4cout += newStr;
 
   QStringList result = newStr.filter(fCoutFilter->text());
 
-//  if (result.join("\n").isEmpty()) {
   if (result.join("").isEmpty()) {
     return 0;
   }
-  QString txt = QString((char*)aString.data());
-//fCoutTBTextArea->append(result.join("\n"));
-  fCoutTBTextArea->setPlainText(fCoutTBTextArea->toPlainText ().append(result.join("")));
-//fCoutTBTextArea->append(txt);
+  fCoutTBTextArea->append(result.join(""));
   fCoutTBTextArea->repaint();
 
   fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());
@@ -772,7 +707,11 @@ G4int G4UIQt::ReceiveG4cerr (
 
   // Suppress space, \n,\t,\r...
   if (QString(aString.data()).trimmed() != "") {
-    QMessageBox::critical(fMainWindow, "Error",aString.data());
+    if ((G4StateManager::GetStateManager()->GetCurrentState() == G4State_Abort) ||
+        (G4StateManager::GetStateManager()->GetCurrentState() == G4State_Quit )) {
+      // In case of Abort or Quit, the useful error message should be in the last error message !
+      QMessageBox::critical(fMainWindow, "Error",QString(fLastErrMessage.data())+"\n"+aString.data());
+    }
   }
   QColor previousColor = fCoutTBTextArea->textColor();
   fCoutTBTextArea->setTextColor(Qt::red);
@@ -780,6 +719,10 @@ G4int G4UIQt::ReceiveG4cerr (
   fCoutTBTextArea->setTextColor(previousColor);
   fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());
   fCoutTBTextArea->repaint();
+
+  if (QString(aString.data()).trimmed() != "") {
+    fLastErrMessage = aString;
+  }
   return 0;
 }
 
@@ -824,7 +767,13 @@ void G4UIQt::AddButton (
   QMenu *parentTmp = (QMenu*)GetInteractor(aMenu);
 
   if(parentTmp==NULL) {
-    G4cout << "Menu name " << aMenu<< " does not exist, please define it before using it."<< G4endl;
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    G4int verbose = UImanager->GetVerboseLevel();
+    
+    if (verbose >= 2) {
+      G4cout << "Menu name " << aMenu<< " does not exist, please define it before using it."<< G4endl;
+    }
+    return;
   }
   
   // Find the command in the command tree
@@ -839,7 +788,12 @@ void G4UIQt::AddButton (
   }
   
   if(treeTop->FindPath(aCommand) == NULL) {
-    G4cout << "Warning: command '"<< aCommand <<"' does not exist, please define it before using it."<< G4endl;
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    G4int verbose = UImanager->GetVerboseLevel();
+    
+    if (verbose >= 2) {
+      G4cout << "Warning: command '"<< aCommand <<"' does not exist, please define it before using it."<< G4endl;
+    }
   }
 
   QSignalMapper *signalMapper = new QSignalMapper(this);
@@ -870,7 +824,12 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     // try to open a file
     pix = QPixmap(aFileName);
     if (pix.isNull()) {
-      G4cout << "Warning: file '"<< aFileName <<"' is incorrect or does not exist, this command will not be build"<< G4endl;
+      G4UImanager* UImanager = G4UImanager::GetUIpointer();
+      G4int verbose = UImanager->GetVerboseLevel();
+      
+      if (verbose >= 2) {
+        G4cout << "Warning: file '"<< aFileName <<"' is incorrect or does not exist, this command will not be build"<< G4endl;
+      }
       return;
     }
     userToolBar = true; 
@@ -1601,20 +1560,25 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
       ;
     pix = QPixmap(xpm);
   } else {
-    G4cout << "Parameter"<< aIconFile <<" not defined"<< G4endl;
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    G4int verbose = UImanager->GetVerboseLevel();
+    
+    if (verbose >= 2) {
+      G4cout << "Parameter"<< aIconFile <<" not defined"<< G4endl;
+    }
     return;
   }
   QToolBar *currentToolbar = NULL;
   if (userToolBar) {
     if (fToolbarUser == NULL) {
-      fToolbarUser = new QToolBar(fMainWindow);
+      fToolbarUser = new QToolBar();
       fToolbarUser->setIconSize (QSize(20,20));
       fMainWindow->addToolBar(Qt::TopToolBarArea, fToolbarUser);
     }
     currentToolbar = fToolbarUser;
   } else {
     if (fToolbarApp == NULL) {
-      fToolbarApp = new QToolBar(fMainWindow);
+      fToolbarApp = new QToolBar();
       fToolbarApp->setIconSize (QSize(20,20));
       fMainWindow->addToolBar(Qt::TopToolBarArea, fToolbarApp);
     }
@@ -1627,13 +1591,15 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
 
   // special cases :"open"
   if (std::string(aIconFile) == "open") {
-    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(OpenIconCallback(const QString&)));
-    signalMapper->setMapping(action, QString(aCommand));
+    connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(OpenIconCallback(const QString &)));
+    QString txt = aCommand + fStringSeparator + aLabel;
+    signalMapper->setMapping(action, QString(txt));
 
   // special cases :"save"
   } else if (std::string(aIconFile) == "save") {
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(SaveIconCallback(const QString&)));
-    signalMapper->setMapping(action, QString(aCommand));
+    QString txt = aCommand + fStringSeparator + aLabel;
+    signalMapper->setMapping(action, QString(txt));
 
   // special cases : cursor style
   } else if ((std::string(aIconFile) == "move") ||
@@ -1710,9 +1676,15 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
     G4UImanager* UI = G4UImanager::GetUIpointer();
     if(UI==NULL) return;
     G4UIcommandTree * treeTop = UI->GetTree();
-    
-    if(treeTop->FindPath(aCommand) == NULL) {
-      G4cout << "Warning: command '"<< aCommand <<"' does not exist, please define it before using it."<< G4endl;
+    if (aCommand != NULL) {
+      if(treeTop->FindPath(aCommand) == NULL) {
+        G4UImanager* UImanager = G4UImanager::GetUIpointer();
+        G4int verbose = UImanager->GetVerboseLevel();
+        
+        if (verbose >= 2) {
+          G4cout << "Warning: command '"<< aCommand <<"' does not exist, please define it before using it."<< G4endl;
+        }
+      }
     }
     
     connect(signalMapper, SIGNAL(mapped(const QString &)),this, SLOT(ButtonCallback(const QString&)));
@@ -1738,9 +1710,6 @@ void G4UIQt::ActivateCommand(
       newValue.strip(G4String::both);
       targetCom = ModifyToFullPathCommand( newValue );
     }
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::ActivateCommand found : %s \n",targetCom.data());
-#endif
   if (targetCom != "") {
     OpenHelpTreeOnCommand(targetCom.data());
   }
@@ -2441,9 +2410,6 @@ G4bool G4UIQt::GetHelpChoice(
  G4int&
 )
 {
-#ifdef G4DEBUG_INTERFACES_BASIC
-  printf("G4UIQt::GetHelpChoice SHOULD NEVER GO HERE");
-#endif
   return true;
 }
 
@@ -2522,9 +2488,6 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
   bool res= false;
   // change cursor position if needed
   if (moveCommandCursor == true) {
-#ifdef G4DEBUG_INTERFACES_BASIC
-    printf("G4UIQt::eventFilter setCursor Position\n");
-#endif
     fCommandArea->setCursorPosition ( fCommandArea->text().length() );
     fCommandArea->setCursorPosition (4);
   } else {
@@ -2580,27 +2543,56 @@ void G4UIQt::ExitHelp(
 void G4UIQt::CommandEnteredCallback (
 )
 {
-  G4String command (fCommandArea->text().toStdString().c_str());
-  if (fCommandArea->text().trimmed() != "") {
-    fHistoryTBTableList->addItem(fCommandArea->text());
-    fHistoryTBTableList->clearSelection();
-    fHistoryTBTableList->setCurrentItem(NULL);
-    fCommandArea->setText("");
+  // split by any new line character
+  QStringList list = fCommandArea->text().split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
 
-    G4Qt* interactorManager = G4Qt::getInstance ();
-    if (interactorManager) { 
-      interactorManager->FlushAndWaitExecution();
+  // Apply for all commands
+  for (int a=0; a< list.size(); a++) {
+    QString txt (list[a].trimmed());
+    if (txt != "") {
+      fHistoryTBTableList->addItem(txt);
+      fHistoryTBTableList->clearSelection();
+      fHistoryTBTableList->setCurrentItem(NULL);
+      fCommandArea->setText("");
+      G4Qt* interactorManager = G4Qt::getInstance ();
+      if (interactorManager) {
+        interactorManager->FlushAndWaitExecution();
+      }
+      
+      G4String command = txt.toStdString().c_str();
+      if (command(0,4) != "help") {
+        ApplyShellCommand (command,exitSession,exitPause);
+      } else {
+        ActivateCommand(command);
+      }
     }
-    if (command(0,4) != "help") {
-      ApplyShellCommand (command,exitSession,exitPause);
-    } else {
-      ActivateCommand(command);
-    }
-    // Rebuild help tree
-    FillHelpTree();
+  }
+  
+  // Rebuild help tree
+  FillHelpTree();
+  
+  if(exitSession==true)
+    SessionTerminate();
+}
 
-    if(exitSession==true) 
-      SessionTerminate();
+
+/** Callback when the text in the line edit is changed.
+ When a newline is inserted, trigger the Activate Command
+ on this text end set unchanged the end of the line after the newline.
+ */
+void G4UIQt::CommandEditedCallback(const QString &)
+{
+  QStringList list = fCommandArea->text().split(QRegExp("[\r\n]"),QString::SkipEmptyParts);
+
+  if (list.size() > 1) { // trigger ActivateCommand
+    for (int a=0; a<list.size()-1; a++) {
+      // set only the first part
+      fCommandArea->setText(list[a]);
+      // trigger callback
+      CommandEnteredCallback();
+    }
+    // reset unfinished command
+    fCommandArea->setText(list[list.size()-1]);
   }
 }
 
@@ -2812,9 +2804,6 @@ void G4UIQt::CommandHistoryCallback(
   if (!item)
     return;
   fCommandArea->setText(item->text());
-#ifdef G4DEBUG_INTERFACES_BASIC
-    printf("G4UIQt::CommandHistoryCallback change text\n");
-#endif
 }
 
 
@@ -3165,20 +3154,30 @@ void G4UIQt::ChangeSurfaceStyle(const QString& action) {
 }
 
 
-void G4UIQt::OpenIconCallback(const QString& aCommand) {
+void G4UIQt::OpenIconCallback(const QString& aParam) {
 
-  QString nomFich = QFileDialog::getOpenFileName(fMainWindow, "Load", "vis", "Macro files (*.mac)");
-   if (nomFich != "") {
-     G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ QString(" ")+ nomFich).toStdString().c_str());
-   }
+  QString aCommand = aParam.left(aParam.indexOf(fStringSeparator));
+  QString aLabel = aParam.mid(aParam.indexOf(fStringSeparator)+fStringSeparator.length());
+
+  QString nomFich = QFileDialog::getOpenFileName(fMainWindow, aLabel, fLastOpenPath, "Macro files (*.mac)");
+  if (nomFich != "") {
+    G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ QString(" ")+ nomFich).toStdString().c_str());
+    QDir dir;
+    fLastOpenPath = dir.absoluteFilePath(nomFich);
+  }
 }
 
 
-void G4UIQt::SaveIconCallback(const QString& aCommand) {
+void G4UIQt::SaveIconCallback(const QString& aParam) {
 
-  QString nomFich = QFileDialog::getSaveFileName(fMainWindow, "Save", "viewerState", "Macro files (*.mac)");
+  QString aCommand = aParam.left(aParam.indexOf(fStringSeparator));
+  QString aLabel = aParam.mid(aParam.indexOf(fStringSeparator)+fStringSeparator.length());
+
+  QString nomFich = QFileDialog::getSaveFileName(fMainWindow, aLabel, fLastOpenPath, "Macro files (*.mac)");
   if (nomFich != "") {
     G4UImanager::GetUIpointer()->ApplyCommand((QString(aCommand)+ QString(" ")+nomFich).toStdString().c_str());
+    QDir dir;
+    fLastOpenPath = dir.absoluteFilePath(nomFich);
   }
 }
 
@@ -3483,15 +3482,13 @@ void G4UIQt::TabCloseCallback(int a){
       fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
     }
 
-  // fill right splitter
-    fRightSplitterWidget->insertWidget(0,fEmptyViewerTabLabel);
+  fRightSplitterWidget->widget(0)->layout()->removeWidget(fViewerTabWidget);
+  delete fViewerTabWidget;
+  fViewerTabWidget = NULL;
+      
+  fRightSplitterWidget->widget(0)->layout()->addWidget(fEmptyViewerTabLabel);
 
-    fMainSplitterWidget->show();
     fEmptyViewerTabLabel->show();
-    fViewerTabWidget->setParent(0);
-    fViewerTabWidget->setVisible(false);
-    delete fViewerTabWidget;
-    fViewerTabWidget = NULL;
   }
 #endif
 }
@@ -3521,12 +3518,9 @@ QPaintEvent *
 
     if ( isTabSelected()) {
 
-      QCoreApplication::sendPostedEvents () ;
+      //      QCoreApplication::sendPostedEvents () ;
 
-#ifdef G4DEBUG_INTERFACES_BASIC
-      printf("G4QTabWidget::paintEvent OK\n");
-#endif
-      QString text = tabText (currentIndex()); 
+      QString text = tabText (currentIndex());
 
       if (lastCreated == -1) {
         QString paramSelect = QString("/vis/viewer/select ")+text;

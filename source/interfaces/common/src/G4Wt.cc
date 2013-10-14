@@ -24,38 +24,39 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Wt.cc,v 1.17 2010-05-20 07:01:03 lgarnier Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // L. Garnier
 
-#if defined(G4INTY_BUILD_QT) || defined(G4INTY_USE_QT)
+#if defined(G4INTY_BUILD_WT) || defined(G4INTY_USE_WT)
 
 #include <stdlib.h>
 #include <string.h>
 
 #include "G4ios.hh"
 
-#include "G4Qt.hh"
-#include "G4UImanager.hh"
-#include <qwidget.h>
+#include "G4Wt.hh"
 
-#include <qapplication.h>
+#include <Wt/WApplication>
+#include <Wt/WEnvironment>
 
 
-G4Qt* G4Qt::instance    = NULL;
+G4Wt* G4Wt::instance    = NULL;
 
-static G4bool QtInited  = FALSE;
+static G4bool WtInited  = FALSE;
 
 /***************************************************************************/
-G4Qt* G4Qt::getInstance (
-) 
+G4Wt* G4Wt::getInstance (
+ ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  return G4Qt::getInstance (0,NULL,(char*)"Geant4");
+  return G4Wt::getInstance (0,NULL,(char*)"Geant4");
 }
+
 /***************************************************************************/
-G4Qt* G4Qt::getInstance (
+G4Wt* G4Wt::getInstance (
  int    a_argn
 ,char** a_args
 ,char*  a_class
@@ -64,39 +65,38 @@ G4Qt* G4Qt::getInstance (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if (instance==NULL) {
-    instance = new G4Qt(a_argn,a_args,a_class);
+    instance = new G4Wt(a_argn,a_args,a_class);
   }
   return instance;
 }
 /***************************************************************************/
-G4Qt::G4Qt (
+G4Wt::G4Wt (
  int    a_argn
 ,char** a_args
  ,char*  /*a_class */
- )
+)
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   argn = 0;
   args = NULL;
-  externalApp = false;
 
 #ifdef G4DEBUG_INTERFACES_COMMON
-  printf("G4Qt::G4Qt try to inited Qt\n");
+  printf("G4Wt::G4Wt try to inited Wt\n");
 #endif
-  // Check if Qt already init in another external app
-  if(qApp) {
-    externalApp = true;
-    QtInited  = TRUE;
-    SetMainInteractor (qApp);
+  // Check if Wt already init in another external app
+  if(wApp) {
+    WtInited  = TRUE;
+    SetMainInteractor (wServer);
+    //#endif
     SetArguments      (a_argn,a_args);
     
 #ifdef G4DEBUG_INTERFACES_COMMON
-    printf("G4Qt::G4Qt alredy inited in external \n");
+    printf("G4Wt::G4Wt alredy inited in external \n");
 #endif
   } else {
     
-    if(QtInited==FALSE) {  //Qt should be Inited once !
+    if(WtInited==FALSE) {  //Wt should be Inited once !
       // Then two cases :
       // - It is the first time we create G4UI  (argc!=0)
       //   -> Inited and register
@@ -106,9 +106,9 @@ G4Qt::G4Qt (
       if (a_argn != 0) {
         argn = a_argn;
         args = a_args;
-
+        
       } else { //argc = 0
-
+        
         // FIXME : That's not the good arguments, but I don't know how to get args from other Interactor.
         // Ex: How to get them from G4Xt ?
         argn = 1;
@@ -116,46 +116,48 @@ G4Qt::G4Qt (
         args[0] = (char *)malloc(10 * sizeof(char));
         strncpy(args[0], "my_app \0", 9);
       }
-
+      
       int *p_argn = (int*)malloc(sizeof(int));
       *p_argn = argn;
 #ifdef G4DEBUG_INTERFACES_COMMON
-    printf("G4Qt::G4Qt QAppl \n");
+      printf("G4Wt::G4Wt WAppl \n");
 #endif
-      new QApplication (*p_argn, args);
-      if(!qApp) {
+      Wt::WApplication:: instance();
+      ////
+      //WApplication (*p_argn, args);
+
+      if(!wApp) {
         
-        G4UImanager* UImanager = G4UImanager::GetUIpointer();
-        G4int verbose = UImanager->GetVerboseLevel();
-        if (verbose >= 2) {
-          G4cout        << "G4Qt : Unable to init Qt." << G4endl;
-        }
+        G4cout        << "G4Wt : Unable to init Wt." << G4endl;
       } else {
-        QtInited  = TRUE;
+        WtInited  = TRUE;
         if (a_argn != 0) {
 #ifdef G4DEBUG_INTERFACES_COMMON
-          printf("G4Qt::G4Qt SetMainInteractor\n");
+          printf("G4Wt::G4Wt SetMainInteractor\n");
 #endif
-          SetMainInteractor (qApp);
+          //          SetMainInteractor ();
         }
         SetArguments      (a_argn,a_args);
 #ifdef G4DEBUG_INTERFACES_COMMON
-        printf("G4Qt::G4Qt inited Qt END\n");
+        printf("G4Wt::G4Wt inited Wt END\n");
 #endif
       }
     }
   }
 #ifdef G4DEBUG_INTERFACES_COMMON
-  if (qApp) {
-    printf("G4Qt::qApp already exist\n");
+  if (wApp) {
+    printf("G4Wt::wApp already exist\n");
   }  else {
-    printf("G4Qt::qApp not exist\n");
+    printf("G4Wt::wApp not exist\n");
   }
 #endif
   //  AddDispatcher     ((G4DispatchFunction)XtDispatchEvent);
+
+
+  DisableSecondaryLoop ();
 }
 /***************************************************************************/
-G4Qt::~G4Qt (
+G4Wt::~G4Wt (
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
@@ -165,40 +167,41 @@ G4Qt::~G4Qt (
   }
 }
 /***************************************************************************/
-G4bool G4Qt::Inited (
+G4bool G4Wt::Inited (
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  return QtInited;
+  return WtInited;
 }
 /***************************************************************************/
-void* G4Qt::GetEvent (
+void* G4Wt::GetEvent (
 ) 
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+//FIXME
+//   G4cout        << "G4Wt : Rien compris a cette fonction G4Wt::GetEvent." << G4endl;
+//  static XEvent  event;
+//  if(appContext==NULL) return NULL;
+//  if(mainApp==NULL) return NULL;
+//  WtAppNextEvent (appContext, &event);
+//  return         &event;
+  printf("*");
   return 0;
 }
 /***************************************************************************/
-void G4Qt::FlushAndWaitExecution (
+void G4Wt::FlushAndWaitExecution (
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  if(!qApp) return;
-  qApp->processEvents();
-}
-
-/***************************************************************************/
-bool G4Qt::IsExternalApp (
-)
-/***************************************************************************/
-/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-  return externalApp;
+  //  printf("G4Wt::FlushAndWaitExecution ::  Flush ....\n");
+  if(!wApp) return;
+  //  wApp->processEvents();
 }
 
 #endif
+
 
 

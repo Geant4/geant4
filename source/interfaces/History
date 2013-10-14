@@ -17,6 +17,56 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th October 2013  Laurent Garnier (interfaces-V09-06-05)
+- G4UIQt :
+  o Fix SecondaryLoop for Qt. It was doing nothing at all, now processing
+    events until exitPause = true
+  o Remove debug statements
+
+23th August 2013  Laurent Garnier
+- Add first draft classes for Wt (web based interfaces) common/src/G4Wt.cc common/include/G4Wt.hh basic/include/G4UIWt.hh basic/src/G4UIWt.cc
+- G4UIQt : Remove unused parameter
+- G4UIExecutive : Add BUILD_WT case (not yet done for cmake)
+
+12th August 2013  Laurent Garnier
+- G4UIQt : 
+   o Add a field to memorise the last open directory on Icon->Open
+   o Fix some warning messages
+- G4UIQt, G4Qt : Change some G4cout messages to be displayed only when
+  verbosity >= 2
+
+8th August 2013  Laurent Garnier
+- G4VBasicShell::ExecuteCommand : Add information when command not found
+- G4UIQt.cc : in ReceveiveG4Cerr, change behavious :
+   o before on each G4err it was displaying an alert box, now it display an alert
+     box only if it will Abort or Quit the programm
+   o All G4err messages are now in red. Previously there were sometimes changing 
+     color to black. 
+   o When entering a command, if this command is multiple line it will now take 
+     it in account as multiples commands.
+
+7th August 2013  Laurent Garnier
+- G4UIQt.cc :
+  o Change the name of the fileselector on the open/save Icon
+  o Fix a potential problem on the ToolBar
+  o Add a public method to get the MainWindow
+ 
+1st August 2013  Laurent Garnier
+- G4Qt.cc : Fiw a non UTF8 caracter (bug #1487)
+ 
+2nd July 2013  Laurent Garnier
+- G4UIQt.cc : Fix coverity defect 48022
+ 
+27th June 2013  Laurent Garnier
+- G4UIQt.cc : Improve OGL window resizing by opening to a bigger size, changing
+  strech factors and others little effects.
+ 
+18th June 2013  Laurent Garnier
+- G4UIQt.cc: Add some minors improvements to Qt interface
+  o Minimize border size
+  o OpenGL windows size changing when app size change
+  o Changing some functions signature
+
 3nd June 2013  Laurent Garnier (interfaces-V09-06-02 interfaces-V09-06-03 interfaces-V09-06-04)
 - G4UIQt.cc: Coverity fix:
   o Initialize class members

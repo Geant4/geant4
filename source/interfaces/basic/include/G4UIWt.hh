@@ -24,41 +24,35 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4UIWt.hh,v 1.23 2010-06-10 15:37:13 lgarnier Exp $
 //
-#ifndef G4UIQt_h
-#define G4UIQt_h 
+#ifndef G4UIWt_h
+#define G4UIWt_h 
 
-#if defined(G4UI_BUILD_QT_SESSION) || defined(G4UI_USE_QT)
+#if defined(G4UI_BUILD_WT_SESSION) || defined(G4UI_USE_WT)
 
 #include <map>
 
 #include "G4VBasicShell.hh"
 #include "G4VInteractiveSession.hh"
 
-#include <qobject.h>
-#include <qmap.h>
-#include <qstringlist.h>
-#include <qtabwidget.h>
+#include <Wt/WObject>
+#include <Wt/WWidget>
+#include <Wt/WPushbutton>
+#include <Wt/WTree>
+#include <Wt/WTreeNode>
+#include <Wt/WMenu>
+#include <Wt/WTabWidget>
+#include <Wt/WStringListModel>
 
-class QMainWindow;
-class QLineEdit;
+
+
 class G4UIsession;
-class QListWidget;
-class QTreeWidget;
-class QTreeWidgetItem;
-class QTextEdit;
-class QLabel;
-class QResizeEvent;
-class QTabWidget;
-class QStringList;
-class QSplitter;
-class QToolBar;
 
 // Class description :
 //
-//  G4UIQt : class to handle a Qt interactive session.
-// G4UIQt is the Qt version of G4UIterminal.
+//  G4UIWt : class to handle a Wt interactive session.
+// G4UIWt is the Wt version of G4UIterminal.
 //
 //  A command box is at disposal for entering/recalling Geant4 commands.
 //  A menubar could be customized through the AddMenu, AddButton, AddIcon methods.
@@ -75,11 +69,10 @@ class QToolBar;
 //
 // Class description - end :
 
-class G4QTabWidget : public QTabWidget {
-public :
-  G4QTabWidget();
-  G4QTabWidget(QSplitter*&);
-  void paintEvent  ( QPaintEvent * event );
+class G4WTabWidget : public Wt::WTabWidget {
+  public :
+  G4WTabWidget();
+  G4WTabWidget(Wt::WContainerWidget*&);
   inline void setTabSelected(bool a) { tabSelected = a; };
   inline void setLastTabCreated(int a) { lastCreated = a; };
   inline bool isTabSelected() { return tabSelected; };
@@ -89,14 +82,14 @@ public :
 
 };
 
-class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSession {
-  Q_OBJECT
+
+class G4UIWt : public Wt::WObject, public G4VBasicShell, public G4VInteractiveSession  {
 
 public: // With description
-  G4UIQt(int,char**);
+  G4UIWt(int,char**);
   // (argv, argc) or (0, NULL) had to be given.
   G4UIsession* SessionStart();
-  // To enter interactive X loop ; waiting/executing command,...
+  // To enter interactive Wt loop ; waiting/executing command,...
   void AddMenu(const char*,const char*);
   // To add a pulldown menu in the menu bar. 
   // First argument is the name of the menu.
@@ -114,12 +107,12 @@ public: // With description
   // Second argument is the selected icon type (open save move rotate pick zoom_in zoom_out wireframe solid hidden_line_removal hidden_line_and_surface_removal perspective ortho user_icon).
   // Third argument is the Geant4 command executed when the button is fired.
   // Fourth argument is the path to the icon file if "user_icon" selected
-  // Ex : AddButton("change background color","../background.xpm"," /vis/viewer/set/background"); 
+  // Ex : AddButton("change background color","../background.xpm"," /vis/viewer/set/background");
 
-  bool AddTabWidget(QWidget*,QString,int,int);
+  bool AddTabWidget( Wt::WWidget*, Wt::WString,int,int);
   // To add a tab for vis openGL Qt driver
   
-  QTabWidget* GetSceneTreeComponentsTBWidget();
+  Wt::WTabWidget* GetSceneTreeComponentsTBWidget();
   // Get the viewComponent
 
   bool IsSplitterReleased();
@@ -140,24 +133,25 @@ public: // With description
     return fZoomOutSelected;
   };
 
-  void SetIconMoveSelected();
-  void SetIconRotateSelected();
-  void SetIconPickSelected();
-  void SetIconZoomInSelected();
-  void SetIconZoomOutSelected();
-  void SetIconHLHSRSelected();
-  void SetIconHLRSelected();
-  void SetIconSolidSelected();
-  void SetIconWireframeSelected();
-  void SetIconPerspectiveSelected();
-  void SetIconOrthoSelected();
+  /*  void SetIconMoveSelected();
+   void SetIconRotateSelected();
+   void SetIconPickSelected();
+   void SetIconZoomInSelected();
+   void SetIconZoomOutSelected();
+   void SetIconHLHSRSelected();
+   void SetIconHLRSelected();
+   void SetIconSolidSelected();
+   void SetIconWireframeSelected();
+   void SetIconPerspectiveSelected();
+   void SetIconOrthoSelected();
+   */
 
-  inline QMainWindow * GetMainWindow() {
+  inline  Wt::WContainerWidget * GetMainWindow() {
     return fMainWindow;
   };
 
 public:
-  ~G4UIQt();
+  ~G4UIWt();
   void Prompt(G4String);
   void SessionTerminate();
   virtual void PauseSessionStart(const G4String&);
@@ -172,92 +166,95 @@ private:
   void FillHelpTree();
   virtual void ExitHelp() const;
 
-  void CreateHelpTree(QTreeWidgetItem*,G4UIcommandTree*);
-  QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
+  void CreateHelpTree( Wt::WTreeNode*,G4UIcommandTree*);
+  Wt::WTreeNode* FindTreeItem( Wt::WTreeNode *,const std::string&);
 
-  QString GetCommandList(const G4UIcommand*);
+  Wt::WString GetCommandList(const G4UIcommand*);
 
   virtual G4bool GetHelpChoice(G4int&);// have to be implemeted because we heritate from G4VBasicShell
-  bool eventFilter(QObject*,QEvent*);
+  bool eventFilter(Wt::WObject*,Wt::WEvent*);
   void ActivateCommand(G4String);
-  QMap<int,QString> LookForHelpStringInChildTree(G4UIcommandTree *,const QString&);
+  //  QMap<int,Wt::WString> LookForHelpStringInChildTree(G4UIcommandTree *,const Wt::WString&);
 
-  QWidget* CreateVisParametersTBWidget();
-  QWidget* CreateHelpTBWidget();
-  QWidget* CreateCoutTBWidget();
-  QWidget* CreateHistoryTBWidget();
-  QWidget* CreateUITabWidget();
-  QWidget* CreateSceneTreeComponentsTBWidget();
-  QWidget* CreateRightSplitterWidget();
-  QWidget* CreateLeftSplitterWidget();
-  void OpenHelpTreeOnCommand(const QString &);
-  QString GetShortCommandPath(QString);
-  QString GetLongCommandPath(QTreeWidgetItem*);
+  Wt::WContainerWidget* CreateVisParametersTBWidget();
+  Wt::WWidget* CreateHelpTBWidget();
+  Wt::WWidget* CreateCoutTBWidget();
+  Wt::WWidget* CreateHistoryTBWidget();
+  Wt::WWidget* CreateUITabWidget();
+  Wt::WWidget* CreateSceneTreeComponentsTBWidget();
+  Wt::WContainerWidget* CreateRightSplitterWidget();
+  Wt::WContainerWidget* CreateLeftSplitterWidget();
+  void OpenHelpTreeOnCommand(const Wt::WString &);
+  Wt::WString GetShortCommandPath(const std::string & );
+  Wt::WString GetLongCommandPath( Wt::WTreeNode*);
   G4bool IsGUICommand(const G4UIcommand*);
-  bool CreateVisCommandGroupAndToolBox(G4UIcommand*, QWidget*, int, bool isDialog);
-  bool CreateCommandWidget(G4UIcommand* command, QWidget* parent, bool isDialog);
+  bool CreateVisCommandGroupAndToolBox(G4UIcommand*, Wt::WWidget*, int, bool isDialog);
+  bool CreateCommandWidget(G4UIcommand* command, Wt::WContainerWidget* parent, bool isDialog);
 
 private:
 
-  QMainWindow * fMainWindow;
-  QLabel *fCommandLabel;
-  QLineEdit * fCommandArea;
-  QTextEdit *fCoutTBTextArea;
-  QTextEdit *fHelpArea;
-  QTabWidget* fUITabWidget;
-  QStringList fG4cout;
-  QLineEdit * fCoutFilter;
-
-  QListWidget *fHistoryTBTableList;
-  QTreeWidget *fHelpTreeWidget;
-  QWidget* fHelpTBWidget;
-  QWidget* fHistoryTBWidget;
-  QWidget* fCoutTBWidget;
-  QTabWidget* fSceneTreeComponentsTBWidget;
-  QLineEdit* fHelpLine;
-  G4QTabWidget* fViewerTabWidget;
-  QString fCoutText;
-  QLabel *fEmptyViewerTabLabel;
-  QSplitter * fMainSplitterWidget;
-  QSplitter* fRightSplitterWidget;
-  QWidget* fLeftSplitterWidget;
-  QSplitter * fHelpVSplitter;
-
-  QToolBar *fToolbarApp;
-  QToolBar *fToolbarUser;
-  QString fStringSeparator;
-  G4String fLastErrMessage;
-  QString fLastOpenPath;
+  Wt::WContainerWidget * fMainWindow;
+  Wt::WLabel *fCommandLabel;
+  Wt::WLineEdit * fCommandArea;
+  Wt::WTextArea *fCoutTBTextArea;
+  Wt::WTextArea *fHelpArea;
+  Wt::WTabWidget* fUITabWidget;
+  Wt::WStringListModel fG4cout;
+  Wt::WLineEdit * fCoutFilter;
   
+  Wt::WSelectionBox *fHistoryTBTableList;
+  Wt::WTree *fHelpTreeWidget;
+  Wt::WPanel* fHelpTBWidget;
+  Wt::WPanel* fHistoryTBWidget;
+  Wt::WPanel* fCoutTBWidget;  
+  Wt::WTabWidget* fSceneTreeComponentsTBWidget;
+  Wt::WLineEdit* fHelpLine;
+  G4WTabWidget* fViewerTabWidget;
+  Wt::WString fCoutText;
+  Wt::WLabel *fEmptyViewerTabLabel;
+  Wt::WContainerWidget* fMainSplitterWidget;
+  Wt::WContainerWidget* fRightSplitterWidget;
+  Wt::WContainerWidget* fLeftSplitterWidget;
+  Wt::WContainerWidget* fHelpVSplitter;
+  
+  Wt::WToolBar *fToolbarApp;
+  Wt::WToolBar *fToolbarUser;
+  Wt::WString fStringSeparator;
+  G4String fLastErrMessage;
+  Wt::WString fLastOpenPath;
+
   bool fMoveSelected;
   bool fRotateSelected;
   bool fPickSelected;
   bool fZoomInSelected;
   bool fZoomOutSelected;
+  G4bool fExitSession;
+  G4bool fExitPause;
+  
 
-private Q_SLOTS :
+  private :
   void ExitSession();
   void ClearButtonCallback();
   void CommandEnteredCallback();
-  void CommandEditedCallback(const QString & text);
-  void ButtonCallback(const QString&);
+  void CommandEditedCallback(const Wt::WString & text);
+  void ButtonCallback(const char*);
   void HelpTreeClicCallback();
   void HelpTreeDoubleClicCallback();
   void ShowHelpCallback();
   void CommandHistoryCallback();
   void LookForHelpStringCallback();
-  void UpdateTabWidget(int);
-  void ResizeTabWidget( QResizeEvent* );
-  void CoutFilterCallback(const QString&);
+  void CurrentChangedTabWidgetCallback(int);
+  void CoutFilterCallback(const Wt::WString&);
   void TabCloseCallback(int);
   void ToolBoxActivated(int);
-  void VisParameterCallback(QWidget*);
-  void ChangeColorCallback(QWidget*);
-  void ChangeCursorStyle(const QString&);
-  void ChangeSurfaceStyle(const QString&);
-  void OpenIconCallback(const QString&);
-  void SaveIconCallback(const QString&);
-  void ChangePerspectiveOrtho(const QString&);
+  void VisParameterCallback(Wt::WContainerWidget*);
+  void ChangeColorCallback(Wt::WContainerWidget*);
+  void ChangeCursorStyle(const Wt::WString&);
+  void ChangeSurfaceStyle(const Wt::WString&);
+  void OpenIconCallback(const Wt::WString&);
+  void SaveIconCallback(const Wt::WString&);
+  void ChangePerspectiveOrthoCallback(const Wt::WString&);
+  
 };
 
 #endif
