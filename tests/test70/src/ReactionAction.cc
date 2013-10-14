@@ -28,7 +28,7 @@
 #include "G4ITStepManager.hh"
 #include "G4UnitsTable.hh"
 
-ReactionAction::ReactionAction() : G4UserReactionAction()
+ReactionAction::ReactionAction() : G4UserTimeStepAction()
 {
     //ctor
 }
@@ -38,7 +38,7 @@ ReactionAction::~ReactionAction()
     //dtor
 }
 
-ReactionAction::ReactionAction(const ReactionAction& other) : G4UserReactionAction(other)
+ReactionAction::ReactionAction(const ReactionAction& other) : G4UserTimeStepAction(other)
 {
     //copy ctor
 }
@@ -52,9 +52,9 @@ ReactionAction& ReactionAction::operator=(const ReactionAction& rhs)
 
 void ReactionAction::TimeStepAction()
 {
-    G4cout << "_________________" << G4endl;
-    G4cout << "Time Step : " << G4BestUnit(G4ITStepManager::Instance()->GetTimeStep(), "Time") << G4endl;
-    G4cout <<  "End of step : " << G4BestUnit(G4ITStepManager::Instance()->GetGlobalTime(), "Time") << G4endl;
+//    G4cout << "_________________" << G4endl;
+//    G4cout << "Time Step : " << G4BestUnit(G4ITStepManager::Instance()->GetTimeStep(), "Time") << G4endl;
+//    G4cout <<  "End of step : " << G4BestUnit(G4ITStepManager::Instance()->GetGlobalTime(), "Time") << G4endl;
 }
 
 void ReactionAction::UserReactionAction(const G4Track&,const G4Track&,

@@ -23,50 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITSteppingMessenger.hh 60427 2012-07-11 16:34:35Z matkara $
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
-//
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
-//
 
-#ifndef G4ITSTEPPINGMESSENGER_H
-#define G4ITSTEPPINGMESSENGER_H
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-class G4ITStepManager;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger;
-class G4UIcommand;
-class G4UIcmdWithADoubleAndUnit;
+#include "G4VUserActionInitialization.hh"
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
+class DetectorConstruction;
 
-class G4ITSteppingMessenger: public G4UImessenger
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    G4ITSteppingMessenger(G4ITStepManager* runMgr);
-    ~G4ITSteppingMessenger();
+    ActionInitialization();
+    virtual ~ActionInitialization();
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
-
-  private:
-    G4ITStepManager * fITStepManager;
-
-  private: //commands
-    G4UIdirectory*              fITDirectory;
-
-    G4UIcmdWithADoubleAndUnit*  fEndTime;
-    G4UIcmdWithADoubleAndUnit*  fTimeTolerance;
-    G4UIcmdWithAnInteger*       fVerboseCmd;
-    G4UIcmdWithAnInteger*       fMaxStepNumber;
-    G4UIcmdWithoutParameter*    fInitCmd;
-    G4UIcmdWithoutParameter*    fProcessCmd;
-    G4UIcmdWithAnInteger*       fMaxNULLTimeSteps;
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
 
-#endif // G4ITSTEPPINGMESSENGER_H
+#endif
+
+    

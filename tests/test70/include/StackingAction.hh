@@ -34,11 +34,8 @@ class G4Track;
 class StackingAction : public G4UserStackingAction
 {    
  
-  protected: 
-    G4bool fLaunchITStepMan;
-
 public:
-    StackingAction(G4bool flag = false);
+    StackingAction();
     virtual ~StackingAction();
     virtual void NewStage();
 };

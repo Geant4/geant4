@@ -46,23 +46,19 @@
 #include "LaunchG4.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "TrackingAction.hh"
-#include "StackingAction.hh"
-#include "ReactionAction.hh"
-#include "G4AllITManager.hh"
-#include "G4ITStepManager.hh"
+#include "ActionInitialization.hh"
+#include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4DNAChemistryManager.hh"
-#include "ITTrackingInteractivity.hh"
-#include "ITSteppingAction.hh"
-#include "ITTrackingAction.hh"
+#include <iomanip>
+#include "G4Timer.hh"
+#include "G4SystemOfUnits.hh"
+#include "Parser.hh"
 
-//#ifdef G4VIS_USE
-//#include "G4VisExecutive.hh"
-//#endif
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
 
 #include "G4UImanager.hh"
 
@@ -70,176 +66,198 @@
 #include "G4UIExecutive.hh"
 #endif
 
-
 using namespace std;
 
 LaunchG4::LaunchG4()
 {
-    G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+	G4VSteppingVerbose::SetInstance(new SteppingVerbose);
 
-    fpRunManager = 0;
-    fpPrimGenAct = 0;
+	fpRunManager = 0;
+	fpPrimGenAct = 0;
+#ifdef G4VIS_USE
+	fpVisManager = 0;
+#endif
 
 #ifdef G4UI_USE
-    fpSession = 0;
+	fpSession = 0;
 #endif
 }
 
 LaunchG4::~LaunchG4()
 {
+#ifdef G4VIS_USE
+	if(fpVisManager)
+		delete fpVisManager;
+#endif
 
 #ifdef G4UI_USE
-    if(fpSession)
-        delete fpSession;
+	if(fpSession)
+		delete fpSession;
 #endif
 
-    if(fpRunManager)
-        delete fpRunManager;
+	if(fpRunManager)
+		delete fpRunManager;
 }
 
-G4ParticleDefinition* LaunchG4::GetParticleDefinition()
+void LaunchG4::Initialize(G4bool chemistryFlag)
 {
-    return fpPrimGenAct->GetParticleDefinition() ;
-}
-
-void LaunchG4::Initialize(G4double incidentEnergy, G4bool chemistryFlag)
-{
-    // Construct the default run manager
-    fpRunManager = new G4RunManager;
-    //------------------------------------------------------------------
-    // Set mandatory user initialization classes
-    fpRunManager->SetUserInitialization(new DetectorConstruction);
-
-    // PhysicsList
-    PhysicsList* thePhysicsList = new PhysicsList();
-    thePhysicsList->SetChemistryFlag(chemistryFlag);
-    fpRunManager->SetUserInitialization(thePhysicsList);
-
-    //------------------------------------------------------------------
-    // Set mandatory user action classes
-    PrimaryGeneratorAction* primGenAction = new PrimaryGeneratorAction();
-
-    if(incidentEnergy>0)
-        primGenAction->SetIncidentEnergy(incidentEnergy);
-    fpPrimGenAct = primGenAction ;
-
-    fpRunManager->SetUserAction(primGenAction);
-
-    //------------------------------------------------------------------
-    // Set optional user action classes
-    fpRunManager->SetUserAction(new RunAction());
-    fpRunManager->SetUserAction(new TrackingAction());
-    fpRunManager->SetUserAction(new SteppingAction(primGenAction));
-    fpRunManager->SetUserAction(new StackingAction(chemistryFlag));
-    if(chemistryFlag)
-    {
-        G4ITStepManager::Instance()->SetUserAction(new ReactionAction());
-        G4ITStepManager::Instance()->SetVerbose(1);
-
-        ITTrackingInteractivity* itInteractivity = new ITTrackingInteractivity();
-        itInteractivity ->SetUserAction(new ITSteppingAction);
-        itInteractivity ->SetUserAction(new ITTrackingAction);
-        G4ITStepManager::Instance()->SetInteractivity(itInteractivity);
-    }
-
-    // Initialize G4 kernel
-    fpRunManager->Initialize();
-
-    G4DNAChemistryManager::Instance()->WriteInto("output.txt");
-}
-
-void LaunchG4::StartTimer()
-{
-//    if( clock_gettime( CLOCK_MONOTONIC, &fStart) == -1 )
-//    {
-//        perror( "clock gettime" );
-//        exit(EXIT_FAILURE);
-//    }
-}
-
-void LaunchG4::EndTimer()
-{
-//    if( clock_gettime( CLOCK_MONOTONIC, &fEnd) == -1 )
-//    {
-//        perror( "clock gettime" );
-//        exit(EXIT_FAILURE);
-//    }
-}
-
-void LaunchG4::RunSimu(G4bool drawing)
-{
-    // Get the pointer to the User Interface manager
-    G4UImanager* UI = G4UImanager::GetUIpointer();
 
 #ifdef G4VIS_USE
-    if(drawing)
-    {
-        G4cout << "Will start to process the script commands.mac" << G4endl;
-        UI->ApplyCommand("/control/execute vis.mac");
-    }
+	fpVisManager = new G4VisExecutive;
+	fpVisManager->Initialize();
 #endif
 
-    G4cout << "Will start to process the script commands.mac" << G4endl;
+	Command* commandLine = 0;
+	if((commandLine = Parser::GetParser()->GetCommandIfActive("-mt")))
+	{
+		
+#ifdef G4MULTITHREADED
 
-    StartTimer();
-    UI->ApplyCommand("/control/execute commands.mac");
-    EndTimer();
+		fpRunManager= new G4MTRunManager;
 
-    G4cout << "Has finished to process the script commands.mac" << G4endl;
+		if(commandLine->fOption.empty())
+		{
+			((G4MTRunManager*)fpRunManager)->SetNumberOfThreads(1);
+		}
+		else
+		{
+			int nThreads = G4UIcommand::ConvertToInt(commandLine->fOption);
+			((G4MTRunManager*)fpRunManager)->SetNumberOfThreads(nThreads);
+		}
+#else
+	fpRunManager = new G4RunManager();
 
-#ifdef G4VIS_USE
-//    if(drawing)
-//        UI->ApplyCommand("/control/execute vis2.mac");
 #endif
 
+	}
+	else
+	{
+		fpRunManager = new G4RunManager;
+	}
 
-//    G4double executionTime = double(fEnd.tv_sec - fStart.tv_sec) + (fEnd.tv_nsec - fStart.tv_nsec)/1e9;
-//    G4cout<<"Execution time =" << executionTime <<G4endl;
+	/**
+	 * Tells to the chemistry manager whether the chemistry
+	 * needs to be activated.
+	 * WARNING : if you don't use the chemistry do not activate it
+	 * otherwise it might generate memory leaks with tracks created but
+	 * not destroyed.
+	 */
+	G4DNAChemistryManager::Instance()->SetChemistryActivation(chemistryFlag);
+
+	//------------------------------------------------------------------
+	// Set mandatory user initialization classes
+	fpRunManager->SetUserInitialization(new DetectorConstruction);
+	fpRunManager->SetUserInitialization(new PhysicsList());
+	fpRunManager->SetUserInitialization(new ActionInitialization());
+
+	// Initialize G4 kernel
+	fpRunManager->Initialize();
 }
 
-void LaunchG4::RunSimu(G4String macFile, G4bool /*drawing*/)
+void LaunchG4::RunSimu(G4String macFile)
 {
-    // Get the pointer to the User Interface manager
-    G4UImanager* UI = G4UImanager::GetUIpointer();
+	// Get the pointer to the User Interface manager
+	G4UImanager* UI = G4UImanager::GetUIpointer();
 
-    G4String command = "/control/execute " ;
-    command += macFile ;
+	G4String command = "/control/execute " ;
+	command += macFile ;
 
-    StartTimer();
-    UI->ApplyCommand(command);
-    EndTimer();
+	G4cout << setfill ('-') << setw (7) << " " ;
+	G4cout << "LaunchG4::RunSimu - Start script : " << macFile ;
+	G4cout << setfill ('-') << setw (7) << " " ;
+	G4cout<< G4endl;
 
-//    G4double executionTime = double(fEnd.tv_sec - fStart.tv_sec) + (fEnd.tv_nsec - fStart.tv_nsec)/1e9;
-//    G4cout<<"Execution time =" << executionTime <<G4endl;
+	G4Timer timer;
+	timer.Start();
+	UI->ApplyCommand(command);
+	timer.Stop();
+
+	G4cout << setfill ('-') << setw (7) << " " ;
+	G4cout << "LaunchG4::RunSimu - End script : " << macFile ;
+	G4cout << setfill ('-') << setw (7) << " " ;
+	G4cout<< G4endl;
+
+	G4cout << setfill ('-') << setw (7) << " " ;
+	G4cout<<"User Elapsed Time (s) =" << timer.GetUserElapsed() / s << " ";
+	G4cout << setfill ('-') << setw (7) << " " ;
+	G4cout<< G4endl;
 }
 
-void LaunchG4::NewSession(int argc,char** argv)
+void LaunchG4::NewSession(int argc,char** argv, const G4String& sessionType)
 {
 #ifdef G4UI_USE
-    // Define UI fpSession for interactive mode.
-    // fpSession = new G4UIterminal(new G4UItcsh);
-    if(fpSession == 0)
-    {
-#if defined(G4UI_USE_QT)
-        G4cout << "You use Qt, please wait while processing,"
-               << " if you chose the rich trajectory, this may take a long while, "
-               << " but at the end, a window will appear ..." << G4endl;
-#endif
-        fpSession = new G4UIExecutive(argc,argv);
-    }
-
-    G4UImanager* UI = G4UImanager::GetUIpointer();
-        if (fpSession->IsGUI())
-          UI->ApplyCommand("/control/execute gui.mac");
+	// Define UI fpSession for interactive mode.
+	if(fpSession == 0)
+	{
+		fpSession = new G4UIExecutive(argc,argv,sessionType);
+		BuildGUIFrame();
+	}
 #endif
 }
-
 
 void LaunchG4::StartSession()
 {
 #ifdef G4UI_USE
-    // Define UI fpSession for interactive mode.
-    if(fpSession)
-    fpSession->SessionStart();
+	// Define UI fpSession for interactive mode.
+	if(fpSession)
+		fpSession->SessionStart();
+#endif
+}
+
+
+void LaunchG4::BuildGUIFrame()
+{
+#ifdef G4UI_USE
+	if(fpSession && fpSession -> IsGUI())
+	{
+		G4UImanager* UI = G4UImanager::GetUIpointer();
+
+		// General Menu :
+		UI->ApplyCommand("/gui/addMenu file File");
+		//        UI->ApplyCommand("/gui/addButton file Continue continue");
+		UI->ApplyCommand("/gui/addButton file Exit \"exit\"");
+
+		UI->ApplyCommand("/gui/addMenu run Run");
+		UI->ApplyCommand("/gui/addButton run \"beamOn 1\" \"/run/beamOn 1\"");
+		UI->ApplyCommand("/gui/addButton run \"beamOn ...\" \"/run/beamOn\"");
+
+		UI->ApplyCommand("/gui/addMenu gun Gun");
+		UI->ApplyCommand("/gui/addButton gun \"setDefault\" \"/gun/setDefault\"");
+		UI->ApplyCommand("/gui/addButton gun \"Select particle\"  \"/gun/particle\"");
+		UI->ApplyCommand("/gui/addButton gun \"Select energy\"  \"/gun/energy\"");
+		UI->ApplyCommand("/gui/addButton gun \"Select position\"  \"/gun/position\"");
+		UI->ApplyCommand("/gui/addButton gun \"Select direction\"  \"/gun/direction\"");
+
+		// Viewer menu :
+		UI->ApplyCommand("/gui/addMenu viewer Viewer");
+		UI->ApplyCommand("/gui/addButton viewer \"Set style surface\" \"/vis/viewer/set/style surface\"");
+		UI->ApplyCommand("/gui/addButton viewer \"Set style wireframe\" \"/vis/viewer/set/style wire\"");
+		UI->ApplyCommand("/gui/addButton viewer \"Refresh viewer\" \"/vis/viewer/refresh\"");
+		UI->ApplyCommand("/gui/addButton viewer \"Update viewer (interaction or end-of-file)\" \"/vis/viewer/update\"");
+		UI->ApplyCommand("/gui/addButton viewer \"Flush viewer (= refresh + update)\" \"/vis/viewer/flush\"");
+		UI->ApplyCommand("/gui/addButton viewer \"Update scene\" \"/vis/scene/notifyHandlers\"");
+
+		// Les commandes icones ne fonctionnent qu avec Qt - pas encore implementees dans autres GUI
+		// open/save icons
+		UI->ApplyCommand("/gui/addIcon \"Open macro file\" open /control/execute");
+		UI->ApplyCommand("/gui/addIcon \"Save viewer state\" save /vis/viewer/save");
+
+		// Cursors style icons
+		UI->ApplyCommand("/gui/addIcon Move move");
+		UI->ApplyCommand("/gui/addIcon Pick pick");
+		UI->ApplyCommand("/gui/addIcon \"Zoom out\" zoom_out");
+		UI->ApplyCommand("/gui/addIcon \"Zoom in\" zoom_in");
+		UI->ApplyCommand("/gui/addIcon Rotate rotate");
+
+		// Surface Style icons
+		UI->ApplyCommand("/gui/addIcon \"Hidden line removal\" hidden_line_removal");
+		UI->ApplyCommand("/gui/addIcon \"Hidden line and hidden surface removal\" hidden_line_and_surface_removal");
+		UI->ApplyCommand("/gui/addIcon Surfaces solid");
+		UI->ApplyCommand("/gui/addIcon Wireframe wireframe");
+
+		// Perspective/Ortho icons
+		UI->ApplyCommand("/gui/addIcon Perspective perspective");
+		UI->ApplyCommand("/gui/addIcon Orthographic ortho");
+	}
 #endif
 }

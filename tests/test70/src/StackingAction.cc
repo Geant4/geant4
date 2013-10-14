@@ -23,16 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4TrackStatus.hh"
-#include "G4ClassificationOfNewTrack.hh"
 #include "StackingAction.hh"
-#include "G4EventManager.hh"
-#include "G4ITManager.hh"
-#include "G4ITStepManager.hh"
+#include "G4StackManager.hh"
+#include "G4DNAChemistryManager.hh"
 
-StackingAction::StackingAction(G4bool flag)
+StackingAction::StackingAction()
 {
-    fLaunchITStepMan = flag;
 }
 
 
@@ -41,10 +37,8 @@ StackingAction::~StackingAction()
 
 void StackingAction::NewStage()
 {
-    if(stackManager->GetNTotalTrack() == 0 && fLaunchITStepMan )
+    if(stackManager->GetNTotalTrack() == 0)
     {
-        G4cout << "You are launching the chemistry ..." << G4endl ;
-        G4ITStepManager::Instance() -> Process();
-        G4ITStepManager::Instance() -> ClearList();
+        G4DNAChemistryManager::Instance()->Run();
     }
 }

@@ -26,9 +26,9 @@
 #ifndef ITACTION_H
 #define ITACTION_H
 
-#include "G4UserReactionAction.hh"
+#include "G4UserTimeStepAction.hh"
 
-class ReactionAction : public G4UserReactionAction
+class ReactionAction : public G4UserTimeStepAction
 {
     public:
         ReactionAction();

@@ -46,11 +46,12 @@
 #ifndef LaunchG4_HH
 #define LaunchG4_HH 1
 
-#include "G4RunManager.hh"
+#include "globals.hh"
 
 class PrimaryGeneratorAction;
 class G4UIExecutive;
 class G4VisManager;
+class G4RunManager;
 
 class LaunchG4
 {
@@ -58,16 +59,12 @@ public:
     LaunchG4();
     ~LaunchG4();
 
-    void Initialize(G4double , G4bool chemistryflag = true);
-    G4ParticleDefinition* GetParticleDefinition();
-    void RunSimu(G4bool drawing = false);
-    void RunSimu(G4String macFile, G4bool drawing = false);
+    void Initialize(G4bool chemistryflag = true);
+    void RunSimu(G4String macFile);
     void StartSession();
-    void NewSession(int argc,char** argv);
 
-private :
-    void StartTimer();
-    void EndTimer();
+    void NewSession(int argc,char** argv, const G4String& sessionType = "");
+    void BuildGUIFrame();
 
 private :
     PrimaryGeneratorAction* fpPrimGenAct ;
@@ -78,7 +75,9 @@ private :
     G4UIExecutive * fpSession ;
 #endif
 
-//    struct timespec fStart, fEnd;
+#ifdef G4VIS_USE
+    G4VisManager* fpVisManager ;
+#endif
 
 };
 #endif /* LaunchG4_HH */

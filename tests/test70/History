@@ -12,6 +12,34 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10.10.2013 M.K                  tag test70-V09-06-05
+-----------------------------------------------------
+- Add #include time.h in test70.cc
+- Remove verbose in ReactionAction::TimeStepAction()
+
+06.10.2013 M.K			tag test70-V09-06-04
+-----------------------------------------------------
+- Remove nightly tests
+
+04.10.2013 M.K                  tag test70-V09-06-03
+-----------------------------------------------------
+- Change check on MT mode
+
+04.10.2013 M.K 			tag test70-V09-06-02
+-----------------------------------------------------
+- Change tag's name
+- Use the unused variable
+
+03.10.2013 M.K			tag test70-v90-06-01 (should have been called test70-V09-06-01)
+-----------------------------------------------------
+ Update to MT framework
+ Update to DNA dev
+ Define new tests
+
+1st August 2013 L.Garnier   
+-----------------------------------------------------
+  remove an accent in a comment to be UTF-8 compliant.
+
 30 July 2013 A.Dotti   (test70-V09-06-00)
 -----------------------------------------------------
   Bug fixing for compilation warnings for unused varialbes (clang32)

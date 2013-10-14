@@ -183,39 +183,29 @@ void ITTrackingInteractivity::EndTracking(G4Track* track)
 #ifdef G4VERBOSE
             if(fVerboseLevel>10) trajectory->ShowTrajectory();
 #endif
-            G4cout << "!!!!!!!!" << G4endl;
             G4TrackStatus istop = track->GetTrackStatus();
-            G4cout << "!!!!!!!!" << G4endl;
+
             if(trajectory&&(istop!=fStopButAlive)&&(istop!=fSuspend))
             {
                 G4Event* currentEvent = G4EventManager::GetEventManager()->GetNonconstCurrentEvent();
-                G4cout << "!!!!!!!!" << G4endl;
-                G4cout << "Current Event : " << currentEvent << G4endl;
+
                 G4TrajectoryContainer* trajectoryContainer = currentEvent->GetTrajectoryContainer();
-                G4cout << "!!!!!!!!" << G4endl;
+
                 if(!trajectoryContainer)
                 {
-                    G4cout << "!!!!!!!!" << G4endl;
                     trajectoryContainer = new G4TrajectoryContainer;
                     currentEvent->SetTrajectoryContainer(trajectoryContainer);
                 }
                 trajectoryContainer->insert(trajectory);
-                G4cout << "!!!!!!!!" << G4endl;
             }
-            G4cout << "!!!!!!!!" << G4endl;
         }
         // Destruct the trajectory if it was created
         else if( (!fStoreTrajectory)&&trajectory ) {
-            G4cout << "!!!!!!!!" << G4endl;
             delete trajectory;
             trajectory = 0;
-            G4cout << "!!!!!!!!" << G4endl;
         }
-        G4cout << "!!!!!!!!" << G4endl;
         delete trajectory_lock;
-        G4cout << "!!!!!!!!" << G4endl;
         trackingInfo->SetTrajectory_Lock(0);
-        G4cout << "!!!!!!!!" << G4endl;
     }
 #endif
 }
