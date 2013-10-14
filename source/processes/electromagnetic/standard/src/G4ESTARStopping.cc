@@ -52,13 +52,23 @@
 
 static const G4double fac = MeV*cm2/g;
 
-G4ESTARStopping::G4ESTARStopping()
+G4ESTARStopping::G4ESTARStopping(const G4String& datatype)
 {
   currentMaterial = 0;
   matIndex = -1;
 
   name.resize(280,"");
   sdata.resize(280,0);
+
+  type = 0;
+  dirPath = getenv("G4LEDATA");
+  if(!dirPath) {
+    G4Exception("G4ESTARStopping()","em0006",FatalException,
+		"Environment variable G4LEDATA not defined");
+  }
+
+  if("basic" == datatype)     { type = 1; }
+  else if("long" == datatype) { type = 2; }
 
   Initialise();
 }
@@ -951,9 +961,62 @@ AddData(T0,e279,279);
 void G4ESTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
 {
   //G4cout << "G4ESTARStopping::AddData: idx= " << idx << G4endl;
-  sdata[idx] = new G4LPhysicsFreeVector(25, ekin[0]*MeV, ekin[24]*MeV);
-  for(size_t i=0; i<25; ++i) { 
-    sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); 
+  G4double x1, x2, x3, x4, x5, x6, x7;
+
+  // hardtyped data
+  if(0 == type) {
+    sdata[idx] = new G4LPhysicsFreeVector(25, ekin[0]*MeV, ekin[24]*MeV);
+    for(size_t i=0; i<25; ++i) { 
+      sdata[idx]->PutValues(i, ekin[i]*MeV, stop[i]*fac); 
+    }
+
+    // basic data
+  } else if(1 == type) {
+    std::ostringstream ost;
+    if(idx >= 182) {
+      ost << dirPath << "/estar/estar_basic/elems/" << idx - 181 << ".dat";
+    } else {
+      size_t n = (name[idx]).size();
+      ost << dirPath << "/estar/estar_basic/mater/" << (name[idx]).substr(3, n - 3);
+    }
+    std::ifstream fin(ost.str().c_str());
+    if( !fin.is_open()) {
+      G4ExceptionDescription ed;
+      ed << "ESTAR data file <" << ost.str().c_str()
+	 << "> is not retrieved!";
+      G4Exception("G4ESTARStopping::AddData","em0003",FatalException,
+                ed,"G4LEDATA version should be G4EMLOW6.34 or later.");
+      return;
+    }
+    sdata[idx] = new G4LPhysicsFreeVector(81, 0.01*MeV, GeV);
+    for(size_t i=0; i<81; ++i) { 
+      fin >> x1 >> x2 >> x3 >> x4 >> x5 >> x6 >> x7;
+      sdata[idx]->PutValues(i, x1*MeV, x2*fac); 
+    }
+
+    // long data
+  } else {
+    std::ostringstream ost;
+    if(idx >= 182) {
+      ost << dirPath << "/estar/estar_long/elems/" << idx - 181 << ".dat";
+    } else {
+      size_t n = (name[idx]).size();
+      ost << dirPath << "/estar/estar_long/mater/" << (name[idx]).substr(3, n - 3);
+    }
+    std::ifstream fin(ost.str().c_str());
+    if( !fin.is_open()) {
+      G4ExceptionDescription ed;
+      ed << "ESTAR data file <" << ost.str().c_str()
+	 << "> is not retrieved!";
+      G4Exception("G4ESTARStopping::AddData","em0003",FatalException,
+                ed,"G4LEDATA version should be G4EMLOW6.34 or later.");
+      return;
+    }
+    sdata[idx] = new G4LPhysicsFreeVector(97, 0.001*MeV, 10*GeV);
+    for(size_t i=0; i<97; ++i) { 
+      fin >> x1 >> x2 >> x3 >> x4 >> x5;
+      sdata[idx]->PutValues(i, x1*MeV, x2*fac); 
+    }
   }
   sdata[idx]->SetSpline(true);
   //G4cout << "done " << G4endl;

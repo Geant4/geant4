@@ -18,6 +18,16 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+14 October 13: V.Ivanchenko (emstand-V09-06-68)
+- G4DeltaAngleFreeScat - is added
+- G4ESTARStopping - added reading from G4LEDATA
+
+12 October 13: V.Ivanchenko (emstand-V09-06-67)
+- G4WentzelVIModel, G4eCoulombScatteringModel - added fixedCut 
+    member of the class and Get/Set method, will be used
+    in fanoCavity and other tests
+- New classes G4PAIPhotModel, G4PAIPhotData (V.Grichine)
+
 04 October 13: V.Ivanchenko (emstand-V09-06-66)
 - G4SeltzerBergerModel - added one simple method
 - G4ESTARStopping - added implementation of forgotten method, cleanup

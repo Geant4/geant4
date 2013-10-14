@@ -23,80 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ESTARStopping.hh 66241 2012-12-13 18:34:42Z gunter $
-
-#ifndef G4ESTARStopping_h
-#define G4ESTARStopping_h 1
-
-//---------------------------------------------------------------------------
+// $Id: G4DeltaAngleFreeScat.cc 68380 2013-03-22 18:39:29Z vnivanch $
 //
-// ClassName:   G4ESTARStopping
+// -------------------------------------------------------------------
 //
-// Description: Data on stopping power
+// GEANT4 Class file
 //
-// Author:      Anton Ivantchenko 18.04.2006
 //
-// Organisation:        QinetiQ Ltd, UK
-// Customer:            ESA/ESTEC, NOORDWIJK
-// Contract:            CSMAN-5288
+// File name:     G4DeltaAngleFreeScat
 //
-// Modifications:
+// Author:        Vladimir Ivantcheko
 // 
-//----------------------------------------------------------------------------
+// Creation date: 23 August 2013
 //
-// Class Description:
+// Modifications: 
 //
-// Data on Stopping Powers from the NIST Data Base  
-// http://physics.nist.gov/PhysRefData/STAR/Text/ESTAR.html
+// Class Description: 
+//
+// Delta-electron Angular Distribution Generation 
+//
+// Class Description: End 
+//
+// -------------------------------------------------------------------
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4DeltaAngleFreeScat.hh"
+#include "G4PhysicalConstants.hh"
+#include "Randomize.hh"
 
+using namespace std;
 
-#include "globals.hh"
-#include "G4LPhysicsFreeVector.hh"
-#include <vector>
+G4DeltaAngleFreeScat::G4DeltaAngleFreeScat(const G4String&)
+  : G4VEmAngularDistribution("deltaFree")
+{}    
 
-class G4Material;
+G4DeltaAngleFreeScat::~G4DeltaAngleFreeScat() 
+{}
 
-class G4ESTARStopping 
-{ 
-public: 
-
-  G4ESTARStopping(const G4String& datatype = "");
-
-  ~G4ESTARStopping();
-
-  G4int GetIndex(const G4Material*);
-
-  G4double GetElectronicDEDX(G4int idx, G4double energy);
-
-  inline G4double GetElectronicDEDX(const G4Material*, G4double energy);
-
-private:
-
-  void Initialise();
-
-  void AddData(G4double* e, G4double* s, G4int idx);
-
-  // hide assignment operator
-  G4ESTARStopping & operator=(const  G4ESTARStopping &right);
-  G4ESTARStopping(const  G4ESTARStopping&);
-
-  char* dirPath;
-
-  G4int type;
-  G4int matIndex;
-  const G4Material* currentMaterial;
-  G4double emin;
-  std::vector<G4String> name;
-  std::vector<G4LPhysicsFreeVector*> sdata;
-};
-
-inline G4double G4ESTARStopping::GetElectronicDEDX(const G4Material* mat, 
-						   G4double energy)
+G4ThreeVector& 
+G4DeltaAngleFreeScat::SampleDirection(const G4DynamicParticle* dp,
+			      G4double kinEnergyFinal, G4int, 
+			      const G4Material*)
 {
-  return GetElectronicDEDX(GetIndex(mat), energy);
+  G4double deltaMomentum = 
+    sqrt(kinEnergyFinal*(kinEnergyFinal + 2*electron_mass_c2));
+
+  G4double costet = kinEnergyFinal*(dp->GetTotalEnergy() + electron_mass_c2) /
+    (deltaMomentum * dp->GetTotalMomentum());
+
+  G4double phi = G4UniformRand()*twopi;
+  G4double sintet = sqrt((1 - costet)*(1 + costet));
+ 
+  fLocalDirection.set(sintet*cos(phi), sintet*sin(phi), costet);
+  fLocalDirection.rotateUz(dp->GetMomentumDirection());
+
+  return fLocalDirection;
 }
 
-#endif
+void G4DeltaAngleFreeScat::PrintGeneratorInformation() const
+{} 

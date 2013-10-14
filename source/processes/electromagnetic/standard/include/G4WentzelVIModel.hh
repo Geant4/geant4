@@ -96,6 +96,12 @@ public:
 
   virtual G4double ComputeTrueStepLength(G4double geomStepLength);
 
+  // defines low energy limit on energy transfer to atomic electron
+  inline void SetFixedCut(G4double);
+
+  // low energy limit on energy transfer to atomic electron
+  inline G4double GetFixedCut() const;
+
 private:
 
   G4double ComputeXSectionPerVolume();
@@ -116,6 +122,7 @@ private:
 
   G4double tlimitminfix;
   G4double invsqrt12;
+  G4double fixedCut;
 
   // cache kinematics
   G4double preKinEnergy;
@@ -174,6 +181,20 @@ inline void G4WentzelVIModel::SetupParticle(const G4ParticleDefinition* p)
     particle = p;
     wokvi->SetupParticle(p);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4WentzelVIModel::SetFixedCut(G4double val)
+{
+  fixedCut = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4WentzelVIModel::GetFixedCut() const
+{
+  return fixedCut;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

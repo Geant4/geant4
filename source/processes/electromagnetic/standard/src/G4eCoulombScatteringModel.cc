@@ -88,6 +88,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
   theIonTable  = G4ParticleTable::GetParticleTable()->GetIonTable();
   theProton    = G4Proton::Proton();
   currentMaterial = 0; 
+  fixedCut = -1.0;
 
   pCuts = 0;
 
@@ -128,7 +129,8 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
   */
-  pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
+  pCuts = 
+    G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   /*
   G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
   	 << part->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
@@ -139,9 +141,17 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
     isInitialised = true;
     fParticleChange = GetParticleChangeForGamma();
   }
-  if(mass < GeV && part->GetParticleName() != "GenericIon") {
+  if(IsMaster() && mass < GeV && part->GetParticleName() != "GenericIon") {
     InitialiseElementSelectors(part,cuts);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4eCoulombScatteringModel::InitialiseLocal(const G4ParticleDefinition*, 
+						G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -163,7 +173,9 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   cosTetMinNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosThetaMax < cosTetMinNuc) {
     G4int iz = G4int(Z);
-    cosTetMinNuc = wokvi->SetupTarget(iz, cutEnergy);
+    G4double cut = cutEnergy;
+    if(fixedCut > 0.0) { cut = fixedCut; }
+    cosTetMinNuc = wokvi->SetupTarget(iz, cut);
     cosTetMaxNuc = cosThetaMax; 
     if(iz == 1 && cosTetMaxNuc < 0.0 && particle == theProton) { 
       cosTetMaxNuc = 0.0; 
@@ -210,13 +222,16 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   	 << " cut= " << cutEnergy<< G4endl;
   */
   // Choose nucleus
+  G4double cut = cutEnergy;
+  if(fixedCut > 0.0) { cut = fixedCut; }
+
   const G4Element* currentElement = 
-    SelectRandomAtom(couple,particle,kinEnergy,cutEnergy,kinEnergy);
+    SelectRandomAtom(couple,particle,kinEnergy,cut,kinEnergy);
 
   G4double Z = currentElement->GetZ();
 
   if(ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
-  				kinEnergy, cutEnergy, kinEnergy) == 0.0) 
+  				kinEnergy, cut, kinEnergy) == 0.0) 
     { return; }
 
   G4int iz = G4int(Z);

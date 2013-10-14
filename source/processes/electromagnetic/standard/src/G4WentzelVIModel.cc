@@ -88,6 +88,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   prob.resize(nelments);
   theManager = G4LossTableManager::Instance();
   wokvi = new G4WentzelOKandVIxSection();
+  fixedCut = -1.0;
 
   preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange 
     = xtsec = 0;
@@ -148,7 +149,9 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
   DefineMaterial(CurrentCouple());
   cosTetMaxNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosTetMaxNuc < 1.0) {
-    cosTetMaxNuc = wokvi->SetupTarget(G4lrint(Z), cutEnergy);
+    G4double cut = cutEnergy;
+    if(fixedCut > 0.0) { cut = fixedCut; }
+    cosTetMaxNuc = wokvi->SetupTarget(G4lrint(Z), cut);
     cross = wokvi->ComputeTransportCrossSectionPerAtom(cosTetMaxNuc);
     /*
     if(p->GetParticleName() == "e-")      
@@ -414,6 +417,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
   // use average kinetic energy over the step
   G4double cut = (*currentCuts)[currentMaterialIndex];
+  if(fixedCut > 0.0) { cut = fixedCut; }
   /*  
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy/MeV
   	 << " Leff= " << lambdaeff <<" sig0(1/mm)= " << xtsec 
@@ -597,6 +601,7 @@ G4double G4WentzelVIModel::ComputeXSectionPerVolume()
     prob.resize(nelm);
   }
   G4double cut = (*currentCuts)[currentMaterialIndex];
+  if(fixedCut > 0.0) { cut = fixedCut; }
   //  cosTetMaxNuc = wokvi->GetCosThetaNuc();
 
   // check consistency

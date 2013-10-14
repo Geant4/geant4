@@ -56,6 +56,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ComptonScattering.hh
         G4CoulombScattering.hh
         G4DeltaAngle.hh
+        G4DeltaAngleFreeScat.hh
         G4DipBustGenerator.hh
         G4ESTARStopping.hh
         G4GammaConversion.hh
@@ -76,6 +77,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4NuclearStopping.hh
         G4PAIModel.hh
         G4PAIModelData.hh
+        G4PAIPhotData.hh
+        G4PAIPhotModel.hh
         G4PAIPhotonModel.hh
         G4PAIxSection.hh
         G4PAIySection.hh
@@ -122,6 +125,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4CoulombScattering.cc
         G4GammaConversion.cc
         G4DeltaAngle.cc
+        G4DeltaAngleFreeScat.cc
         G4DipBustGenerator.cc
         G4ESTARStopping.cc
         G4GoudsmitSaundersonMscModel.cc
@@ -141,6 +145,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4NuclearStopping.cc
         G4PAIModel.cc
         G4PAIModelData.cc
+        G4PAIPhotData.cc
+        G4PAIPhotModel.cc
         G4PAIPhotonModel.cc
         G4PAIxSection.cc
         G4PAIySection.cc
