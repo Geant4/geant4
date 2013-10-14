@@ -219,7 +219,6 @@ G4MuPairProductionModel::FindScaledEnergy(G4int Z, G4double rand,
 					  G4double logTkin,
 					  G4double yymin, G4double yymax)
 {
-  G4double x = rand;
   G4double res = yymin;
   G4Physics2DVector* pv = fElementData->GetElement2DData(Z);
   if(!pv) { 
@@ -229,8 +228,7 @@ G4MuPairProductionModel::FindScaledEnergy(G4int Z, G4double rand,
     G4double pmax = pv->Value(yymax, logTkin);
     G4double p0   = pv->Value(0.0, logTkin);
     if(p0 <= 0.0) { DataCorrupted(Z, logTkin); }
-    else { x = (pmin + rand*(pmax - pmin))/p0; }
-    res = pv->FindLinearX(x, logTkin);
+    else { res = pv->FindLinearX((pmin + rand*(pmax - pmin))/p0, logTkin); }
   }
   return res;
 }

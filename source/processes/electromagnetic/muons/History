@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 October 2013: V.Ivant (emmuons-V09-06-23)
+- G4MuPairProductionModel - fixed problem with the end of the spectra
+    by cleanup initialisation of sampling table
+
 02 October 2013: V.Ivant (emmuons-V09-06-22)
-- G4MuPairProductionModel - fixed problem with theend of the spectra
 - G4EnergyLossForExtrapolator - use G4Log
 
 19 September 2013: V.Ivant (emmuons-V09-06-21)

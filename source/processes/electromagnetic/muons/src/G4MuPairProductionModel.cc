@@ -374,7 +374,7 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
     G4double yeu = 5.-a6+4.*bet*a7 ;
     G4double yed = 2.*(1.+3.*bet)*G4Log(3.+xii)-a6-a1*(2.-a6) ;
     G4double ye1 = 1.+yeu/yed ;
-    G4double ale=G4Log(bbb/z13*sqrt(xi1*ye1)/(1.+screen*ye1)) ;
+    G4double ale = G4Log(bbb/z13*sqrt(xi1*ye1)/(1.+screen*ye1)) ;
     G4double cre = 0.5*G4Log(1.+2.25*z23*xi1*ye1/massratio2) ;
     G4double be;
 
@@ -400,13 +400,13 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
     }
 
     G4double fm = alm_crm*bm;
-    if ( fm < 0.) fm = 0. ;
+    if ( fm < 0.) { fm = 0.; }
 
     sum += wgi[i]*a4*(fe+fm/massratio2);
   }
 
   cross = -tmn*sum*factorForCross*z2*residEnergy/(totalEnergy*pairEnergy);
-
+  if(cross < 0.0) { cross = 0.0; }
   return cross;
 }
 
@@ -456,7 +456,11 @@ void G4MuPairProductionModel::MakeSamplingTables()
 	     << " maxE= " << maxPairEnergy << "  minE= " << minPairEnergy 
 	     << " ymin= " << ymin << G4endl;
       */
-      G4double coef = -G4Log(maxPairEnergy/minPairEnergy)/ymin;
+      G4double coef = G4Log(minPairEnergy/kinEnergy)/ymin;
+      G4double ymax = G4Log(maxPairEnergy/kinEnergy)/coef;
+      G4double fac  = (ymax - ymin)/dy;
+      size_t imax   = (size_t)fac;
+      fac -= (G4double)imax;
    
       G4double xSec = 0.0;
       G4double x = ymin;
@@ -473,14 +477,19 @@ void G4MuPairProductionModel::MakeSamplingTables()
 
 	if(0 == it) { pv->PutX(i, x); }
 
-	if(0.0 < coef) {
-	  G4double ep = minPairEnergy*G4Exp(-coef*(x + dy*0.5));
+	if(i < imax) {
+	  G4double ep = kinEnergy*G4Exp(coef*(x + dy*0.5));
 
 	  // not multiplied by interval, because table 
           // will be used only for sampling
 	  //G4cout << "i= " << i << " x= " << x << "E= " << kinEnergy  
 	  //	 << " Egamma= " << ep << G4endl;
 	  xSec += ep*ComputeDMicroscopicCrossSection(kinEnergy, Z, ep);
+
+	  // last bin before the kinematic limit
+	} else if(i == imax) {
+	  G4double ep = kinEnergy*G4Exp(coef*(x + fac*dy*0.5));
+	  xSec += ep*fac*ComputeDMicroscopicCrossSection(kinEnergy, Z, ep);
 	}
 	pv->PutValue(i + 1, it, xSec);
         x += dy;
@@ -524,10 +533,10 @@ void G4MuPairProductionModel::SampleSecondaries(
 
   if(minEnergy >= maxEnergy) { return; }
   //G4cout << "emin= " << minEnergy << " emax= " << maxEnergy 
-  //	 << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
-  //      << " ymin= " << ymin << " dy= " << dy << G4endl;
+  // << " minPair= " << minPairEnergy << " maxpair= " << maxPairEnergy 
+  //    << " ymin= " << ymin << " dy= " << dy << G4endl;
 
-  G4double coeff = -G4Log(maxPairEnergy/minPairEnergy)/ymin;
+  G4double coeff = G4Log(minPairEnergy/kineticEnergy)/ymin;
 
   // compute limits 
   G4double yymin = G4Log(minEnergy/kineticEnergy)/coeff;
@@ -557,6 +566,7 @@ void G4MuPairProductionModel::SampleSecondaries(
 
   G4double PairEnergy = 0.0;
   G4int count = 0;
+  //G4cout << "start loop Z1= " << iz1 << " Z2= " << iz2 << G4endl;
   do {
     ++count;
     // sampling using only one random number
@@ -572,11 +582,11 @@ void G4MuPairProductionModel::SampleSecondaries(
       x += (x2 - x)*(lnZ - lz1)/(lz2 - lz1);
     }
     //G4cout << "x= " << x << "  coeff= " << coeff << G4endl;
-    PairEnergy = minPairEnergy*G4Exp(-x*coeff);
+    PairEnergy = kineticEnergy*G4Exp(x*coeff);
     
   } while((PairEnergy < minEnergy || PairEnergy > maxEnergy) && 10 > count);
 
-  //G4cout << "PairEnergy(GeV)= " << PairEnergy/GeV 
+  //G4cout << "## PairEnergy(GeV)= " << PairEnergy/GeV 
   //	 << " Etot(GeV)= " << totalEnergy/GeV << G4endl; 
 
   // sample r=(E+-E-)/PairEnergy  ( uniformly .....)
