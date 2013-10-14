@@ -25,7 +25,7 @@
 //
 // $Id: WLSActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file WLSActionInitialization.cc
+/// \file optical/wls/src/WLSActionInitialization.cc
 /// \brief Implementation of the WLSActionInitialization class
 
 #include "WLSActionInitialization.hh"
@@ -38,6 +38,7 @@
 #include "WLSTrackingAction.hh"
 #include "WLSSteppingAction.hh"
 #include "WLSStackingAction.hh"
+#include "WLSSteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -74,3 +75,8 @@ void WLSActionInitialization::Build() const
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VSteppingVerbose* WLSActionInitialization::InitializeSteppingVerbose() const
+{
+  return new WLSSteppingVerbose();
+}  

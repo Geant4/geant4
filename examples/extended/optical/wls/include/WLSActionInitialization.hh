@@ -25,7 +25,7 @@
 //
 // $Id: WLSActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file WLSActionInitialization.hh
+/// \file optical/wls/include/WLSActionInitialization.hh
 /// \brief Definition of the WLSActionInitialization class
 
 #ifndef WLSActionInitialization_h
@@ -48,6 +48,8 @@ class WLSActionInitialization : public G4VUserActionInitialization
 
     virtual void BuildForMaster() const;
     virtual void Build() const;
+    
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
 
   private:
     WLSDetectorConstruction* fDetector;

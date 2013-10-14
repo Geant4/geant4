@@ -46,7 +46,6 @@
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
-#include "WLSWorkerInitialization.hh"
 #else
 #include "G4RunManager.hh"
 #include "WLSSteppingVerbose.hh"
