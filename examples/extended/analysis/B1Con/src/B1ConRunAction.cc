@@ -61,12 +61,14 @@ B1ConRunAction::B1ConRunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1ConRunAction::~B1ConRunAction()
-{ ; }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* B1ConRunAction::GenerateRun()
-{ return new B1ConRun; }
+{ 
+  return new B1ConRun; 
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,6 +78,7 @@ void B1ConRunAction::BeginOfRunAction(const G4Run* aRun)
 
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+  
   if (IsMaster()) {
      fdose_tally = new G4ConvergenceTester("DOSE_TALLY");
      //fdose_tally = new G4ConvergenceTester();
@@ -94,16 +97,16 @@ void B1ConRunAction::EndOfRunAction(const G4Run* aRun)
 
   // Compute dose
   //
-  G4double edepRun  = b1ConRun->GetEdepRun();
-  G4double edep2Run = b1ConRun->GetEdep2Run();
-  G4double rms = edep2Run - edepRun*edepRun/nofEvents;
+  G4double edep  = b1ConRun->GetEdep();
+  G4double edep2 = b1ConRun->GetEdep2();
+  G4double rms = edep2 - edep*edep/nofEvents;
   if (rms > 0.) rms = std::sqrt(rms); else rms = 0.;
 
   const B1DetectorConstruction* detectorConstruction
    = static_cast<const B1DetectorConstruction*>
      (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
   G4double mass = detectorConstruction->GetScoringVolume()->GetMass();
-  G4double dose = edepRun/mass;
+  G4double dose = edep/mass;
   G4double rmsDose = rms/mass;
 
   // Run conditions

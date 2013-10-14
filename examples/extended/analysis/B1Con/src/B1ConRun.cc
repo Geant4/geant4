@@ -29,56 +29,41 @@
 /// \brief Implementation of the B1ConRun class
 
 #include "B1ConRun.hh"
-#include "B1EventInformation.hh"
-
-#include "G4Event.hh"
-#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1ConRun::B1ConRun()
-: G4Run(),
-  fEdepRun(0.), fEdep2Run(0.)
-{ fEdepEventVector.clear(); }
+: B1Run(),
+  fEdepEventVector()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1ConRun::~B1ConRun()
-{ ; } 
+{} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1ConRun::RecordEvent(const G4Event* event)
-{  
-  B1EventInformation* evInfo
-    = static_cast<B1EventInformation*>(event->GetUserInformation());
-  G4double EdepEvent = evInfo->GetEdepEvent();
-  fEdepRun  += EdepEvent;
-  fEdep2Run += EdepEvent*EdepEvent;
-  fEdepEventVector.push_back( evInfo->GetEdepEvent() );
-
-  G4Run::RecordEvent(event);
-}
- 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1ConRun::Merge(const G4Run* aRun)
 {
+  // Merge data in base class
+  B1Run::Merge(aRun); 
+
   const B1ConRun* localRun = static_cast<const B1ConRun*>(aRun);
-  //const B1ConRun* localRunn = static_cast<const B1ConRun*>(aRun);
-  //B1ConRun* localRun = const_cast<B1ConRun*>(localRunn);
-
-  fEdepRun  += localRun->fEdepRun;
-  fEdep2Run += localRun->fEdep2Run;
-
   for ( size_t i = 0 ; i != localRun->fEdepEventVector.size() ; i++ ) {
      fEdepEventVector.push_back( localRun->fEdepEventVector[i] );
   }
-  //for ( std::vector<G4double>::iterator 
-  //      it = localRun->fEdepEventVector.begin(); it != localRun->fEdepEventVector.end(); it++ ) { 
-  //   fvEdepEventVector.push_back( *it );
-  //}
-  G4Run::Merge(aRun); 
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1ConRun::AddEdep (G4double edep)
+{
+  // Update data in base class
+  B1Run::AddEdep(edep);
+
+  fEdepEventVector.push_back(edep);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

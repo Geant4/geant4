@@ -23,39 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1SteppingAction.cc 71044 2013-06-10 09:31:08Z gcosmo $
+// $Id: B1SteppingAction.cc 74479 2013-10-08 14:58:59Z ihrivnac $
 //
 /// \file B1SteppingAction.cc
 /// \brief Implementation of the B1SteppingAction class
 
 #include "B1SteppingAction.hh"
-#include "B1EventInformation.hh"
+#include "B1EventAction.hh"
 #include "B1DetectorConstruction.hh"
 
 #include "G4Step.hh"
 #include "G4Event.hh"
 #include "G4RunManager.hh"
-#include "G4LogicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1SteppingAction::B1SteppingAction()
+B1SteppingAction::B1SteppingAction(B1EventAction* eventAction)
 : G4UserSteppingAction(),
+  fEventAction(eventAction),
   fScoringVolume(0)
-{ ; }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1SteppingAction::~B1SteppingAction()
-{ ; }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1SteppingAction::UserSteppingAction(const G4Step* step)
 {
-  if (!fScoringVolume)
-  { 
+  if (!fScoringVolume) { 
     const B1DetectorConstruction* detectorConstruction
       = static_cast<const B1DetectorConstruction*>
         (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
@@ -72,10 +71,7 @@ void B1SteppingAction::UserSteppingAction(const G4Step* step)
 
   // collect energy deposited in this step
   G4double edepStep = step->GetTotalEnergyDeposit();
-  B1EventInformation* evInfo
-    = static_cast<B1EventInformation*>(G4RunManager::GetRunManager()
-               ->GetCurrentEvent()->GetUserInformation());
-  evInfo->AddEdep(edepStep);  
+  fEventAction->AddEdep(edepStep);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

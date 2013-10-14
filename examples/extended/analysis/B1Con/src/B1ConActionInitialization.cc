@@ -58,8 +58,11 @@ void B1ConActionInitialization::Build() const
 {
   SetUserAction(new B1PrimaryGeneratorAction);
   SetUserAction(new B1ConRunAction);
-  SetUserAction(new B1EventAction);
-  SetUserAction(new B1SteppingAction);
+
+  B1EventAction* eventAction = new B1EventAction;
+  SetUserAction(eventAction);
+  
+  SetUserAction(new B1SteppingAction(eventAction));
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

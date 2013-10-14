@@ -31,33 +31,29 @@
 #ifndef B1ConRun_h
 #define B1ConRun_h 1
 
-#include "G4Run.hh"
+#include "B1Run.hh"
 #include "globals.hh"
 
 class G4Event;
 
-/// Run class
+/// Run class which extends B1Run
 ///
 
-class B1ConRun : public G4Run
+class B1ConRun : public B1Run
 {
   public:
     B1ConRun();
     virtual ~B1ConRun();
 
-    virtual void RecordEvent(const G4Event*);
+    // method from the base class
     virtual void Merge(const G4Run*);
+    virtual void AddEdep (G4double edep); 
 
-  public:
     // get methods
-    G4double GetEdepRun()  const { return fEdepRun; }
-    G4double GetEdep2Run() const { return fEdep2Run; }
-    G4int GetNumberOfEvent() const { return (G4int)fEdepEventVector.size(); };
-    G4double GetEdepPerEvent(G4int i) const { return fEdepEventVector[i]; };
+    G4int GetNumberOfEvent() const { return (G4int)fEdepEventVector.size(); }
+    G4double GetEdepPerEvent(G4int i) const { return fEdepEventVector[i]; }
 
   private:
-    G4double  fEdepRun;
-    G4double  fEdep2Run;
     std::vector<G4double> fEdepEventVector;
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1EventAction.hh 69565 2013-05-08 12:35:31Z gcosmo $
+// $Id: B1EventAction.hh 74479 2013-10-08 14:58:59Z ihrivnac $
 //
 /// \file B1EventAction.hh
 /// \brief Definition of the B1EventAction class
@@ -48,8 +48,12 @@ class B1EventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event* event);
     virtual void EndOfEventAction(const G4Event* event);
 
+    void AddEdep(G4double edep) { fEdep += edep; }
+    G4double GetEdep() const    { return fEdep; }
+
   private:
-    G4int  fPrintModulo;
+    G4int     fPrintModulo;
+    G4double  fEdep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,33 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1EventInformation.cc 66536 2012-12-19 14:32:36Z ihrivnac $
+// $Id: B1Run.cc 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-/// \file B1EventInformation.cc
-/// \brief Implementation of the B1EventInformation class
+/// \file B1Run.cc
+/// \brief Implementation of the B1Run class
 
-#include "B1EventInformation.hh"
-
-#include "G4SystemOfUnits.hh"
+#include "B1Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1EventInformation::B1EventInformation()
-: G4VUserEventInformation(),
-  fEdepEvent(0.)
-{ ; } 
+B1Run::B1Run()
+: G4Run(),
+  fEdep(0.), 
+  fEdep2(0.)
+{} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B1EventInformation::~B1EventInformation()
-{ ; } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B1EventInformation::Print() const
-{  
-  G4cout << "Stored energy deposited per event : " << fEdepEvent/MeV << " MeV" 
-         << G4endl;
-}
+B1Run::~B1Run()
+{} 
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1Run::Merge(const G4Run* run)
+{
+  const B1Run* localRun = static_cast<const B1Run*>(run);
+  fEdep  += localRun->fEdep;
+  fEdep2 += localRun->fEdep2;
+
+  G4Run::Merge(run); 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1Run::AddEdep (G4double edep)
+{
+  fEdep  += edep;
+  fEdep2 += edep*edep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+

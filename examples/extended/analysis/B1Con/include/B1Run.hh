@@ -23,40 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1EventInformation.hh 66536 2012-12-19 14:32:36Z ihrivnac $
+// $Id: B1Run.hh 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-/// \file B1EventInformation.hh
-/// \brief Definition of the B1EventInformation class
+/// \file B1Run.hh
+/// \brief Definition of the B1Run class
 
-#ifndef B1EventInformation_h
-#define B1EventInformation_h 1
+#ifndef B1Run_h
+#define B1Run_h 1
 
-#include "G4VUserEventInformation.hh"
+#include "G4Run.hh"
 #include "globals.hh"
 
-/// Event information class
-///
-/// It holds data member fEnergySum for accumulating 
-/// the event energy deposit for an event.
-/// These data are then used in the run action to compute the dose.
+class G4Event;
 
-class B1EventInformation : public G4VUserEventInformation
+/// Run class
+///
+
+class B1Run : public G4Run
 {
   public:
-    B1EventInformation();
-    virtual ~B1EventInformation();
+    B1Run();
+    virtual ~B1Run();
+
+    // method from the base class
+    virtual void Merge(const G4Run*);
     
-    virtual void Print() const;
-    
-    G4double GetEdepEvent() const { return fEdepEvent; }
-    void AddEdep(G4double de) { fEdepEvent += de; }
-     
+    virtual void AddEdep (G4double edep); 
+
+    // get methods
+    G4double GetEdep()  const { return fEdep; }
+    G4double GetEdep2() const { return fEdep2; }
+
   private:
-    G4double  fEdepEvent;
+    G4double  fEdep;
+    G4double  fEdep2;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-    

@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10/10/13 I. Hrivnacova (B1Con-V09-06-03)
+- Updated for changes in B1 example
+- README.B01 renamed to README.B1 and kept identical with B1/README
+  (to make future updates easier).
+
 10/03/13 KOI, Tatsumi (B1Con-V09-06-02)
 - Fix CMakeLists.txt
   Update README and .README

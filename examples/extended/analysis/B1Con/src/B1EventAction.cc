@@ -23,28 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1EventAction.cc 71044 2013-06-10 09:31:08Z gcosmo $
+// $Id: B1EventAction.cc 74479 2013-10-08 14:58:59Z ihrivnac $
 //
 /// \file B1EventAction.cc
 /// \brief Implementation of the B1EventAction class
 
 #include "B1EventAction.hh"
-#include "B1EventInformation.hh"
+#include "B1Run.hh"
 
-#include "G4EventManager.hh"
 #include "G4Event.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1EventAction::B1EventAction()
 : G4UserEventAction(),
-  fPrintModulo(100)
-{ ; } 
+  fPrintModulo(100),
+  fEdep(0.)
+{} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B1EventAction::~B1EventAction()
-{ ; }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,13 +55,19 @@ void B1EventAction::BeginOfEventAction(const G4Event* event)
   if (eventNb%fPrintModulo == 0) { 
     G4cout << "\n---> Begin of event: " << eventNb << G4endl;
   }
- 
-  fpEventManager->SetUserInformation(new B1EventInformation());
+  
+  fEdep = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B1EventAction::EndOfEventAction(const G4Event*)
-{ ; }
+{   
+  // accumulate statistics in B1Run
+  B1Run* run 
+    = static_cast<B1Run*>(
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->AddEdep(fEdep);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
