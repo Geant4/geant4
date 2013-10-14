@@ -37,7 +37,10 @@
 class B5MagneticField;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Magnetic field messenger
+///
+/// It implements commands:
+/// - /mydet/fieldValue value unit
 
 class B5MagneticFieldMessenger: public G4UImessenger
 {

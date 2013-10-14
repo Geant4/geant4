@@ -96,8 +96,7 @@ $Id$
 
        - hodoscope:
            particle time
-           particle position
-           strip ID
+           strip ID, position and rotation
              (see B5HodoscopeSD, B5HodoscopeHit classes)  
 
        - drift chamber: 
@@ -107,15 +106,13 @@ $Id$
              (see B5DriftChamberSD, B5DriftChamberHit classes)  
  
        - electromagnetic calorimeter: 
-           particle position 
            energy deposited in cell
-           cell ID
+           cell ID, position and rotation
              (see B5EMCalorimeterSD, B5EMCalorimeterHit classes)  
   
        - hadronic calorimeter:   
-           particle position 
            energy deposited in cell
-           cell ID
+           cell column ID and row ID, position and rotation
              (see B5HadCalorimeterSD, B5HadCalorimeterHit classes)  
 
 

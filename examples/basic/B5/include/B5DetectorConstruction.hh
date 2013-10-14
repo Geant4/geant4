@@ -46,7 +46,7 @@ class G4Material;
 class G4VSensitiveDetector;
 class G4VisAttributes;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Detector construction
 
 class B5DetectorConstruction : public G4VUserDetectorConstruction
 {

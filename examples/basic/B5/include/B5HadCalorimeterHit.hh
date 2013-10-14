@@ -42,7 +42,12 @@
 class G4AttDef;
 class G4AttValue;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Hadron Calorimeter hit
+///
+/// It records:
+/// - the cell column ID and row ID
+/// - the energy deposit 
+/// - the cell position and rotation
 
 class B5HadCalorimeterHit : public G4VHit
 {

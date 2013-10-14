@@ -38,7 +38,7 @@ class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Hodoscope sensitive detector
 
 class B5HodoscopeSD : public G4VSensitiveDetector
 {

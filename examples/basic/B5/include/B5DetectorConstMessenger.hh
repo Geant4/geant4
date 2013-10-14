@@ -39,7 +39,10 @@ class B5DetectorConstruction;
 class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Detector construction messenger 
+///
+/// It implements commands:
+/// - /mydet/armAngle value unit
 
 class B5DetectorConstMessenger: public G4UImessenger
 {

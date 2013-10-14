@@ -39,7 +39,7 @@ class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Drift chamber sensitive detector
 
 class B5DriftChamberSD : public G4VSensitiveDetector
 {

@@ -40,7 +40,14 @@ class G4ParticleGun;
 class G4Event;
 class G4ParticleDefinition;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Primary generator
+///
+/// A single particle is generated.
+/// User can select 
+/// - the initial momentum and angle
+/// - the momentum and angle spreads
+/// - random selection of a particle type from proton, kaon+, pi+, muon+, e+ 
+
 
 class B5PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {

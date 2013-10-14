@@ -37,7 +37,10 @@
 class B5EventAction;
 class G4UIcmdWithAnInteger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Event action messenger
+///
+/// It implements commands:
+/// - /mydet/verbose level
 
 class B5EventActionMessenger: public G4UImessenger
 {

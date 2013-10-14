@@ -43,8 +43,7 @@
 B5EmCalorimeterSD::B5EmCalorimeterSD(G4String name)
 : G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
 {
-    G4String HCname;
-    collectionName.insert(HCname="EMcalorimeterColl");
+    collectionName.insert("EMcalorimeterColl");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,8 +55,8 @@ B5EmCalorimeterSD::~B5EmCalorimeterSD()
 
 void B5EmCalorimeterSD::Initialize(G4HCofThisEvent* hce)
 {
-    fHitsCollection = new B5EmCalorimeterHitsCollection
-    (SensitiveDetectorName,collectionName[0]);
+    fHitsCollection 
+      = new B5EmCalorimeterHitsCollection(SensitiveDetectorName,collectionName[0]);
     if (fHCID<0)
     { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
     hce->AddHitsCollection(fHCID,fHitsCollection);
@@ -66,7 +65,7 @@ void B5EmCalorimeterSD::Initialize(G4HCofThisEvent* hce)
     for (G4int i=0;i<80;i++)
     {
         B5EmCalorimeterHit* hit = new B5EmCalorimeterHit(i);
-        fHitsCollection->insert( hit );
+        fHitsCollection->insert(hit);
     }
 }
 
@@ -77,20 +76,19 @@ G4bool B5EmCalorimeterSD::ProcessHits(G4Step*step, G4TouchableHistory*)
     G4double edep = step->GetTotalEnergyDeposit();
     if (edep==0.) return true;
     
-    G4StepPoint* preStepPoint = step->GetPreStepPoint();
-    G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(preStepPoint->GetTouchable());
-    G4VPhysicalVolume* thePhysical = theTouchable->GetVolume();
-    G4int copyNo = thePhysical->GetCopyNo();
+    G4TouchableHistory* touchable
+      = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
+    G4VPhysicalVolume* physical = touchable->GetVolume();
+    G4int copyNo = physical->GetCopyNo();
     
     B5EmCalorimeterHit* hit = (*fHitsCollection)[copyNo];
     // check if it is first touch
     if (!(hit->GetLogV()))
     {
         // fill volume information
-        hit->SetLogV(thePhysical->GetLogicalVolume());
+        hit->SetLogV(physical->GetLogicalVolume());
         G4AffineTransform transform 
-          = theTouchable->GetHistory()->GetTopTransform();
+          = touchable->GetHistory()->GetTopTransform();
         transform.Invert();
         hit->SetRot(transform.NetRotation());
         hit->SetPos(transform.NetTranslation());

@@ -42,7 +42,12 @@
 class G4AttDef;
 class G4AttValue;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// EM Calorimeter hit
+///
+/// It records:
+/// - the cell ID
+/// - the energy deposit 
+/// - the cell logical volume, its position and rotation
 
 class B5EmCalorimeterHit : public G4VHit
 {

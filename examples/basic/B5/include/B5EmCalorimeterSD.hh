@@ -39,7 +39,7 @@ class G4Step;
 class G4HCofThisEvent;
 class G4TouchableHistory;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// EM calorimeter sensitive detector
 
 class B5EmCalorimeterSD : public G4VSensitiveDetector
 {
@@ -57,4 +57,5 @@ private:
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif

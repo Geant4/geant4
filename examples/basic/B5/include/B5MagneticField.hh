@@ -36,7 +36,7 @@
 
 class B5MagneticFieldMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Magnetic field
 
 class B5MagneticField : public G4MagneticField
 {

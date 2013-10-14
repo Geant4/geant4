@@ -42,7 +42,12 @@
 class G4AttDef;
 class G4AttValue;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Hodoscope hit
+///
+/// It records:
+/// - the strip ID
+/// - the particle time
+/// - the strip logical volume, its position and rotation
 
 class B5HodoscopeHit : public G4VHit
 {

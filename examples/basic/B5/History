@@ -11,6 +11,11 @@ $Id$
 
 ---------------------------------------------------------------------------  
 
+10 October 2013 Ivana Hrivnacova (exampleB5-V09-06-03)
+- Fixed compiler warning from B5EventAction
+- Added class descriptions
+- Code clean-up
+
 08 October 2013 Ivana Hrivnacova (exampleB5-V09-06-02)
 - Migration to MT
 - Removed Edep vs Tof histogram (remained empty),

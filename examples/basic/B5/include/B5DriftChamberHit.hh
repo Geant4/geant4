@@ -42,7 +42,12 @@
 class G4AttDef;
 class G4AttValue;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Drift chamber hit
+///
+/// It records:
+/// - the layer ID
+/// - the particle time
+/// - the particle local and global positions
 
 class B5DriftChamberHit : public G4VHit
 {

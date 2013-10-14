@@ -163,7 +163,7 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
     analysisManager->FillNtupleIColumn(1, dHC1->entries());
     
     // ECEnergy
-    G4int totalEmHit = 0.;
+    G4int totalEmHit = 0;
     G4double totalEmE = 0.;
     for (G4int i=0;i<80;i++)
     {
@@ -178,7 +178,7 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
     analysisManager->FillNtupleDColumn(2, totalEmE);
 
     // HCEnergy
-    G4int totalHadHit = 0.;
+    G4int totalHadHit = 0;
     G4double totalHadE = 0.;
     for (G4int i=0;i<20;i++)
     {

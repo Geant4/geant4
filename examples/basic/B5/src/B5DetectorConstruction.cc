@@ -368,8 +368,6 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
 
 void B5DetectorConstruction::ConstructSDandField()
 {
-    G4cout << "B5DetectorConstruction::ConstructSDandField()" << G4endl;
-
     // sensitive detectors -----------------------------------------------------
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
     G4String SDname;
@@ -407,14 +405,12 @@ void B5DetectorConstruction::ConstructSDandField()
     // magnetic field ----------------------------------------------------------
     if (!fMagneticField) {
       fMagneticField = new B5MagneticField();
-      G4cout << "fMagneticField " <<  fMagneticField << G4endl;
       fFieldMgr = new G4FieldManager();
       fFieldMgr->SetDetectorField(fMagneticField);
       fFieldMgr->CreateChordFinder(fMagneticField);
       G4bool forceToAllDaughters = true;
       fMagneticLogical->SetFieldManager(fFieldMgr, forceToAllDaughters);
     }  
-    G4cout << "B5DetectorConstruction::ConstructSDandField() done" << G4endl;
 }    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

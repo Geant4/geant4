@@ -71,9 +71,10 @@ G4bool B5HodoscopeSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     if (edep==0.) return true;
     
     G4StepPoint* preStepPoint = step->GetPreStepPoint();
-    G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(preStepPoint->GetTouchable());
-    G4int copyNo = theTouchable->GetVolume()->GetCopyNo();
+
+    G4TouchableHistory* touchable
+      = (G4TouchableHistory*)(preStepPoint->GetTouchable());
+    G4int copyNo = touchable->GetVolume()->GetCopyNo();
     G4double hitTime = preStepPoint->GetGlobalTime();
     
     // check if this finger already has a hit
@@ -86,8 +87,9 @@ G4bool B5HodoscopeSD::ProcessHits(G4Step* step, G4TouchableHistory*)
             break;
         }
     }
-    // if it has, then take the earlier time
+
     if (ix>=0)
+        // if it has, then take the earlier time
     {
         if ((*fHitsCollection)[ix]->GetTime()>hitTime)
         { (*fHitsCollection)[ix]->SetTime(hitTime); }
@@ -96,14 +98,14 @@ G4bool B5HodoscopeSD::ProcessHits(G4Step* step, G4TouchableHistory*)
         // if not, create a new hit and set it to the collection
     {
         B5HodoscopeHit* hit = new B5HodoscopeHit(copyNo,hitTime);
-        G4VPhysicalVolume* thePhysical = theTouchable->GetVolume();
-        hit->SetLogV(thePhysical->GetLogicalVolume());
+        G4VPhysicalVolume* physical = touchable->GetVolume();
+        hit->SetLogV(physical->GetLogicalVolume());
         G4AffineTransform transform 
-          = theTouchable->GetHistory()->GetTopTransform();
+          = touchable->GetHistory()->GetTopTransform();
         transform.Invert();
         hit->SetRot(transform.NetRotation());
         hit->SetPos(transform.NetTranslation());
-        fHitsCollection->insert( hit );
+        fHitsCollection->insert(hit);
     }    
     return true;
 }

@@ -37,7 +37,7 @@
 
 class B5EventActionMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Event action
 
 class B5EventAction : public G4UserEventAction
 {

@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file B5DriftChamber.cc
+/// \file B5DriftChamberSD.cc
 /// \brief Implementation of the B5DriftChamber class
 
 #include "B5DriftChamberSD.hh"
@@ -43,8 +43,7 @@
 B5DriftChamberSD::B5DriftChamberSD(G4String name)
 : G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
 {
-    G4String HCname = "driftChamberColl";
-    collectionName.insert(HCname);
+    collectionName.insert("driftChamberColl");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,8 +55,8 @@ B5DriftChamberSD::~B5DriftChamberSD()
 
 void B5DriftChamberSD::Initialize(G4HCofThisEvent* hce)
 {
-    fHitsCollection = new B5DriftChamberHitsCollection
-    (SensitiveDetectorName,collectionName[0]);
+    fHitsCollection 
+      = new B5DriftChamberHitsCollection(SensitiveDetectorName,collectionName[0]);
     if (fHCID<0)
     { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
     hce->AddHitsCollection(fHCID,fHitsCollection);
@@ -71,13 +70,15 @@ G4bool B5DriftChamberSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     if (charge==0.) return true;
     
     G4StepPoint* preStepPoint = step->GetPreStepPoint();
-    G4TouchableHistory* theTouchable
-    = (G4TouchableHistory*)(preStepPoint->GetTouchable());
-    G4VPhysicalVolume* theMotherPhysical = theTouchable->GetVolume(1); // mother
-    G4int copyNo = theMotherPhysical->GetCopyNo();
+
+    G4TouchableHistory* touchable
+      = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
+    G4VPhysicalVolume* motherPhysical = touchable->GetVolume(1); // mother
+    G4int copyNo = motherPhysical->GetCopyNo();
+
     G4ThreeVector worldPos = preStepPoint->GetPosition();
     G4ThreeVector localPos
-    = theTouchable->GetHistory()->GetTopTransform().TransformPoint(worldPos);
+      = touchable->GetHistory()->GetTopTransform().TransformPoint(worldPos);
     
     B5DriftChamberHit* hit = new B5DriftChamberHit(copyNo);
     hit->SetWorldPos(worldPos);

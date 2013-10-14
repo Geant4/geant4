@@ -35,7 +35,7 @@
 #include "G4VPVParameterisation.hh"
 class G4VPhysicalVolume;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// EM Calorimeter cell parameterisation
 
 class B5CellParameterisation : public G4VPVParameterisation
 {

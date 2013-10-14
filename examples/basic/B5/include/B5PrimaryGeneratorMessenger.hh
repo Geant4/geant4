@@ -39,7 +39,13 @@ class B5PrimaryGeneratorAction;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithABool;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Primary generator messenger
+/// 
+/// It implements commands:
+/// - /mydet/momentum value unit
+/// - /mydet/sigmaMomentum value unit
+/// - /mydet/sigmaAngle value unit
+/// - /mydet/randomizePrimary true|false
 
 class B5PrimaryGeneratorMessenger: public G4UImessenger
 {
