@@ -28,7 +28,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "G4DNAMolecularDecayDisplacer.hh"
+#include "G4DNAWaterDissociationDisplacer.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAWaterExcitationStructure.hh"
 #include "G4ProcessManager.hh"
@@ -49,7 +49,7 @@
 #include "G4DNAChargeDecrease.hh"
 #include "G4DNAChargeIncrease.hh"
 
-#include "G4DNAMolecularDecay.hh"
+#include "G4DNAMolecularDissociation.hh"
 #include "G4DNABrownianTransportation.hh"
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4DNAMolecularStepByStepModel.hh"
@@ -96,6 +96,11 @@
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
+
+#include "G4ITStepManager.hh"
+#include "G4DNAMolecularStepByStepModel.hh"
+#include "G4DNASmoluchowskiReactionModel.hh"
+
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysicsChemistry);
 
@@ -141,7 +146,10 @@ void G4EmDNAPhysicsChemistry::ConstructParticle()
     genericIonsManager->GetIon("alpha+");
     genericIonsManager->GetIon("helium");
     genericIonsManager->GetIon("hydrogen");
+
+    ConstructMolecules();
 }
+
 void G4EmDNAPhysicsChemistry::ConstructMolecules()
 {
     //-----------------------------------
@@ -154,7 +162,8 @@ void G4EmDNAPhysicsChemistry::ConstructMolecules()
     G4H2O2::Definition();
     G4H2::Definition();
 
-    ConstructDecayChannels() ;
+    ConstructDecayChannels();
+    ConstructReactionTable();
 }
 
 void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
@@ -195,12 +204,12 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     //Decay 1 : OH + H
     decCh1->SetEnergy(waterExcitation.ExcitationEnergy(0));
     decCh1->SetProbability(0.35);
-    decCh1 -> SetDisplacementType(G4DNAMolecularDecayDisplacer::NoDisplacement);
+    decCh1 -> SetDisplacementType(G4DNAWaterDissociationDisplacer::NoDisplacement);
 
     decCh2->AddProduct(OH);
     decCh2->AddProduct(H);
     decCh2->SetProbability(0.65);
-    decCh2 -> SetDisplacementType(G4DNAMolecularDecayDisplacer::A1B1_DissociationDecay);
+    decCh2 -> SetDisplacementType(G4DNAWaterDissociationDisplacer::A1B1_DissociationDecay);
 
     water->AddExcitedState("A^1B_1");
     water->AddDecayChannel("A^1B_1",decCh1);
@@ -228,14 +237,14 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     decCh2->AddProduct(OH);
     decCh2->AddProduct(OH);
     decCh2->SetProbability(0.15);
-    decCh2->SetDisplacementType(G4DNAMolecularDecayDisplacer::B1A1_DissociationDecay);
+    decCh2->SetDisplacementType(G4DNAWaterDissociationDisplacer::B1A1_DissociationDecay);
 
     //Decay 3 : OH + H_3Op + e_aq
     decCh3->AddProduct(OH);
     decCh3->AddProduct(H3O);
     decCh3->AddProduct(e_aq);
     decCh3->SetProbability(0.55);
-    decCh3->SetDisplacementType(G4DNAMolecularDecayDisplacer::AutoIonisation);
+    decCh3->SetDisplacementType(G4DNAWaterDissociationDisplacer::AutoIonisation);
 
     *occ = *(water->GetGroundStateElectronOccupancy());
     occ->RemoveElectron(3); // this is the transition form ground state to
@@ -259,7 +268,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     decCh1->AddProduct(e_aq);
 
     decCh1->SetProbability(0.5);
-    decCh1->SetDisplacementType(G4DNAMolecularDecayDisplacer::AutoIonisation);
+    decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::AutoIonisation);
 
     //Decay channel 2 : energy
     decCh2->SetEnergy(waterExcitation.ExcitationEnergy(2));
@@ -288,7 +297,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     decCh1->AddProduct(e_aq);
 
     decCh1->SetProbability(0.5);
-    decCh1->SetDisplacementType(G4DNAMolecularDecayDisplacer::AutoIonisation);
+    decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::AutoIonisation);
 
     //Decay channel 2 : energy
     decCh2->SetEnergy(waterExcitation.ExcitationEnergy(3));
@@ -319,7 +328,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     decCh1->AddProduct(H3O);
     decCh1->AddProduct(e_aq);
     decCh1->SetProbability(0.5);
-    decCh1->SetDisplacementType(G4DNAMolecularDecayDisplacer::AutoIonisation);
+    decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::AutoIonisation);
 
     //Decay channel 2 : energy
     decCh2->SetEnergy(waterExcitation.ExcitationEnergy(4));
@@ -340,7 +349,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     decCh1->AddProduct(H3O);
     decCh1->AddProduct(OH);
     decCh1->SetProbability(1);
-    decCh1->SetDisplacementType(G4DNAMolecularDecayDisplacer::Ionisation_DissociationDecay);
+    decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::Ionisation_DissociationDecay);
 
     *occ = *(water->GetGroundStateElectronOccupancy());
     occ->RemoveElectron(4,1); // this is a ionized h2O with a hole in its last orbital
@@ -374,7 +383,7 @@ void G4EmDNAPhysicsChemistry::ConstructDecayChannels()
     decCh1->AddProduct(OHm);
     decCh1->AddProduct(OH);
     decCh1->SetProbability(1);
-    //decCh1->SetDisplacementType(G4DNAMolecularDecayDisplacer::DissociativeAttachment);
+    //decCh1->SetDisplacementType(G4DNAWaterDissociationDisplacer::DissociativeAttachment);
 
     *occ = *(water->GetGroundStateElectronOccupancy());
     occ->AddElectron(5,1); // H_2O^-
@@ -474,8 +483,6 @@ void AddProcessManager(G4ParticleDefinition* newParticle, G4ProcessManager* newM
 
 void G4EmDNAPhysicsChemistry::ConstructProcess()
 {
-
-    ConstructMolecules();
     // Is placed outside ConstructParticles to avoid
     // the transportation process to be added to the molecules
 
@@ -487,7 +494,7 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
         G4ParticleDefinition* particle = aParticleIterator->value();
         G4String particleName = particle->GetParticleName();
         G4String particleType = particle->GetParticleType();
-        G4ProcessManager* pmanager = particle->GetProcessManager();
+//        G4ProcessManager* pmanager = particle->GetProcessManager();
 
         if (particleName == "e-") {
 
@@ -618,26 +625,26 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
         }
         else if(particleType == "Molecule" && particleName != "H_{2}O")
         {
-            if  (pmanager==0)
-            {
-		AddProcessManager(particle,new G4ProcessManager(particle));
-            }
+//            if(pmanager==0)
+//            {
+//            	AddProcessManager(particle,new G4ProcessManager(particle));
+//            }
 
             G4DNABrownianTransportation* brown = new G4DNABrownianTransportation();
+         //   brown->SetVerboseLevel(4);
             ph->RegisterProcess(brown, particle);
         }
         else if (particleName == "H_{2}O")
         {
-            if  (pmanager==0)
-            {
-		AddProcessManager(particle,new G4ProcessManager(particle));
-            }
+//            if(pmanager==0)
+//            {
+//            	AddProcessManager(particle,new G4ProcessManager(particle));
+//            }
 
-            G4DNAMolecularDecay* decayProcess = new G4DNAMolecularDecay("H2O_DNAMolecularDecay");
-            decayProcess -> SetDecayDisplacer(particle, new G4DNAMolecularDecayDisplacer);
+            G4DNAMolecularDissociation* decayProcess = new G4DNAMolecularDissociation("H2O_DNAMolecularDecay");
+            decayProcess -> SetDecayDisplacer(particle, new G4DNAWaterDissociationDisplacer);
             decayProcess -> SetVerboseLevel(1);
             ph->RegisterProcess(decayProcess, particle);
-
         }
 
 
@@ -651,8 +658,29 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
     G4LossTableManager::Instance()->SetAtomDeexcitation(de);
     de->SetFluo(true);
 
+    //=========================================
     // Chemistry
-    ConstructReactionTable();
+    //=========================================
+    // ConstructReactionTable();
+
+    //=========================================
+	// Diffusion controlled reaction model
+    //=========================================
+	/**
+	 * The reaction model defines how to compute the reaction range between molecules
+	 */
+
+	G4VDNAReactionModel* reactionRadiusComputer = new G4DNASmoluchowskiReactionModel();
+	G4DNAMolecularReactionTable::GetReactionTable() -> PrintTable(reactionRadiusComputer);
+
+	/**
+	 * The StepByStep model tells the step manager how to behave before and after each step,
+	 * how to compute the time steps.
+	 */
+	G4DNAMolecularStepByStepModel* sbs = new G4DNAMolecularStepByStepModel();
+	G4ITStepManager::Instance()->GetModelHandler()->RegisterModel(sbs, 0);
+	sbs->SetReactionTable(G4DNAMolecularReactionTable::GetReactionTable());
+	sbs->SetReactionModel(reactionRadiusComputer);
 
     /**
       * Tells to the chemistry manager whether the chemistry
@@ -661,5 +689,5 @@ void G4EmDNAPhysicsChemistry::ConstructProcess()
       * otherwise it might generate memory leaks with tracks created but
       * not destroyed.
       */
-    G4DNAChemistryManager::Instance()->SetChemistryActivation(true);
+    // G4DNAChemistryManager::Instance()->SetChemistryActivation(true);
 }
