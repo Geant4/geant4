@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 13th, 2013, M.Asai (run-V09-06-109)
+- Changed print-out for /run/printProgress command.
+
+Oct 12th, 2013, M.Asai (run-V09-06-108)
+- Introducing /run/printProgress command.
+
+Oct 12th, 2013, M.Asai (run-V09-06-107)
+- Fixed guidance tests in G4RunMessenger.
+
+Oct 10th, 2013, M.Asai (run-V09-06-106)
+- Added Mutex lock for G4MTRunManagerKernel::ReinitializeGeometry().
+
 Oct 2nd, 2013, H.Kurashige (run-V09-06-105)
 - Modified G4PhysicsListHelper::AddTransportation() 
   that would prevent to add the G4Transportation to 'Molecues'

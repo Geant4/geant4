@@ -82,7 +82,8 @@ G4RunManager::G4RunManager()
  userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
  geometryInitialized(false),physicsInitialized(false),
  runAborted(false),initializedAtLeastOnce(false),
- geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
+ geometryToBeOptimized(true),runIDCounter(0),
+ verboseLevel(0),printModulo(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
@@ -116,16 +117,17 @@ G4RunManager::G4RunManager( RMType rmType )
 :userDetector(0),physicsList(0),
  userActionInitialization(0),userWorkerInitialization(0),
  userWorkerThreadInitialization(0),
-userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
-userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
-geometryInitialized(false),physicsInitialized(false),
-runAborted(false),initializedAtLeastOnce(false),
-geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
-currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
-numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
-storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
-currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
-numberOfEventProcessed(0)
+ userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
+ userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
+ geometryInitialized(false),physicsInitialized(false),
+ runAborted(false),initializedAtLeastOnce(false),
+ geometryToBeOptimized(true),runIDCounter(0),
+ verboseLevel(0),printModulo(0),DCtable(0),
+ currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
+ numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
+ storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
+ currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
+ numberOfEventProcessed(0)
 {
   //This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -320,6 +322,8 @@ void G4RunManager::RunInitialization()
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)0); }
 
+  if(printModulo>0 || verboseLevel>0)
+  { G4cout << "### Run " << currentRun->GetRunID() << " starts." << G4endl; }
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
 
   if(storeRandomNumberStatus) {
@@ -334,7 +338,6 @@ void G4RunManager::RunInitialization()
 
   runAborted = false;
   numberOfEventProcessed = 0;
-  if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
 }
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
@@ -429,6 +432,8 @@ G4Event* G4RunManager::GenerateEvent(G4int i_event)
       StoreRNGStatus(fileN);
   }  
     
+  if(printModulo > 0 && anEvent->GetEventID()%printModulo == 0 )
+  { G4cout << "--> Event " << anEvent->GetEventID() << " starts." << G4endl; }
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
 }

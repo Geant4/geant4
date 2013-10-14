@@ -147,6 +147,11 @@ void G4WorkerRunManager::RunInitialization()
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)0); }
 
+  if(printModulo>0 || verboseLevel>0)
+  {
+    G4cout << "### Run " << currentRun->GetRunID() << " starts on worker thread "
+           << G4Threading::G4GetThreadId() << "." << G4endl;
+  }
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
 
   if(storeRandomNumberStatus) {
@@ -161,7 +166,6 @@ void G4WorkerRunManager::RunInitialization()
 
   runAborted = false;
   numberOfEventProcessed = 0;
-  if(verboseLevel>0) G4cout << "Start Run processing." << G4endl;
 }
 
 void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4int n_select)
@@ -293,6 +297,11 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
       StoreRNGStatus(fileN);
   }
 
+  if(printModulo > 0 && anEvent->GetEventID()%printModulo == 0 )
+  {
+    G4cout << "--> Event " << anEvent->GetEventID() << " starts with initial seeds ("
+           << s1 << "," << s2 << ")." << G4endl;
+  }
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;
 }

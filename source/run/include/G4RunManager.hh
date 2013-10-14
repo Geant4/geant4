@@ -296,6 +296,7 @@ public: // with description
 
     G4int runIDCounter;
     G4int verboseLevel;
+    G4int printModulo;
     G4Timer * timer;
     G4DCtable* DCtable;
 
@@ -471,6 +472,10 @@ public: // with description
       kernel->SetVerboseLevel(vl); }
     inline G4int GetVerboseLevel() const
     { return verboseLevel; }
+    inline G4int GetPrintProgress()
+    { return printModulo; }
+    inline void SetPrintProgress(G4int i)
+    { printModulo = i; }
 
     inline void SetGeometryToBeOptimized(G4bool vl)
     { 

@@ -233,6 +233,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
 
 void G4MTRunManagerKernel::ReinitializeGeometry()
 {
+  G4AutoLock wrmm(&workerRMMutex);
   //=================================================
   //Step-0: keep sensitive detector and field manager
   //=================================================
@@ -299,6 +300,7 @@ void G4MTRunManagerKernel::ReinitializeGeometry()
     lv->SetFieldManager(fm, false);
     lv->SetSensitiveDetector(sd);
   }
+  wrmm.unlock();
 }
 
 #include "G4ParticleDefinition.hh"

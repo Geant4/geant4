@@ -35,8 +35,9 @@
 //      Implemented commands are following;
 //
 //  Commands : 
-//    BeamOn *              Start a Run.
-//    Verbose *             Set the Verbose level of G4RunManager.
+//    beamOn *              Start a Run.
+//    verbose *             Set the Verbose level of G4RunManager.
+//    printProgress *       Set the frequency of printing out the progress of a run.
 //    dumpRegion *          Dump information of a region.
 //    dumpCouples *         Dump information of material-cuts-couples.
 //    optimizeGeometry *    Set the optimization flag of closing geometry.
@@ -83,6 +84,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIdirectory *             runDirectory;
     G4UIcommand *               beamOnCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
+    G4UIcmdWithAnInteger *      printProgCmd;
     G4UIcmdWithAnInteger *      nThreadsCmd;
     G4UIcmdWithAnInteger *      evModCmd;
     G4UIcmdWithAString *        dumpRegCmd;

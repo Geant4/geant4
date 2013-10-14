@@ -91,6 +91,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=2");
 
+  printProgCmd = new G4UIcmdWithAnInteger("/run/printProgress",this);
+  printProgCmd->SetGuidance("Display begin_of_event information at given frequency.");
+  printProgCmd->SetGuidance("If it is set to zero, no print-out is shown.");
+  printProgCmd->SetParameterName("mod",true);
+  printProgCmd->SetDefaultValue(0);
+  printProgCmd->SetRange("mod>=0");
+
   nThreadsCmd = new G4UIcmdWithAnInteger("/run/numberOfThreads",this);
   nThreadsCmd->SetGuidance("Set the number of threads to be used.");
   nThreadsCmd->SetGuidance("This command is valid only for multi-threaded mode.");
@@ -102,10 +109,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   nThreadsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   evModCmd = new G4UIcmdWithAnInteger("/run/eventModulo",this);
-  evModCmd->SetGuidance("Set the modulo N for setting random number seeds"); 
-  evModCmd->SetGuidance("i.e. random number seeds are set by the G4MTRunManager for every N events.");
-  evModCmd->SetGuidance("If zero is set, a default value, that is roughly given by this.");
-  evModCmd->SetGuidance("   N = int( number_of_event / ( 100 * number_of_threads ) )");
+  evModCmd->SetGuidance("Set the event modulo for dispatching events to worker threads"); 
+  evModCmd->SetGuidance("i.e. each worker thread is ordered to simulate N events and then");
+  evModCmd->SetGuidance("comes back to G4MTRunManager for next set.");
+  evModCmd->SetGuidance("If it is set to zero (default value), N is roughly given by this.");
+  evModCmd->SetGuidance("   N = int( sqrt( number_of_events / number_of_threads ) )");
+  evModCmd->SetGuidance("The value N may affect on the computing performance in particular");
+  evModCmd->SetGuidance("if N is too small compared to the total number of events.");
   evModCmd->SetGuidance("This command is valid only for multi-threaded mode.");
   evModCmd->SetGuidance("This command is ignored if it is issued in sequential mode.");
   evModCmd->SetParameterName("nev",true);
@@ -249,6 +259,7 @@ G4RunMessenger::~G4RunMessenger()
   delete materialScanner;
   delete beamOnCmd;
   delete verboseCmd;
+  delete printProgCmd;
   delete nThreadsCmd;
   delete evModCmd;
   delete optCmd;
@@ -292,6 +303,8 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }
   else if( command==verboseCmd )
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }
+  else if( command == printProgCmd )
+  { runManager->SetPrintProgress(printProgCmd->GetNewIntValue(newValue)); }
   else if( command==nThreadsCmd )
   {
     G4RunManager::RMType rmType = runManager->GetRunManagerType();
@@ -398,6 +411,8 @@ G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
   
   if( command==verboseCmd )
   { cv = verboseCmd->ConvertToString(runManager->GetVerboseLevel()); }
+  else if( command == printProgCmd )
+  { cv = printProgCmd->ConvertToString(runManager->GetPrintProgress()); }
   else if( command==randDirCmd )
   { cv = runManager->GetRandomNumberStoreDir(); }
   else if( command==randEvtCmd )
