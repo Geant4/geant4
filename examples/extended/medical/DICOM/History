@@ -8,6 +8,8 @@ $Id$
                       Category History file
 
                       ---------------------
+09.10.2013 - Ivana Hrivnacova (DICOM-V09-06-03)
+           Fixed file description (DicomPhantomZSliceMerged.hh)
 
 28.08.2013 - Gabriele Cosmo (DICOM-V09-06-02)
            Added G4Ellipsoid to solids enabled for parameterisation in
