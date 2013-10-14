@@ -84,16 +84,22 @@ inline G4ITType operator -(const G4ITType& left,const int& right) {
 class G4ITTypeManager
 {
 private:
-    static G4ThreadLocal G4ITTypeManager* fgInstance ;
+    static /*G4ThreadLocal*/ G4ITTypeManager* fgInstance ;
+    static G4ThreadLocal G4ITTypeManager* fgInstance_local ;
     G4ITType fLastType;
     G4ITTypeManager();
     virtual ~G4ITTypeManager();
+
+    size_t fRessource;
 
 public :
     G4ITType NewType() ;
     size_t size() const;
     static G4ITTypeManager* Instance();
     static void DeleteInstance();
+
+    void ReserveRessource();
+    void ReleaseRessource();
 };
 
 #define ITDef(T)\

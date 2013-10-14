@@ -42,7 +42,7 @@
 // ###                         H3O                                    ###
 // ###          oxonium is the usual name for H3O+ (hydronium)        ###
 // ######################################################################
-G4ThreadLocal G4H3O* G4H3O::theInstance = 0;
+/*G4ThreadLocal*/ G4H3O* G4H3O::theInstance = 0;
 
 G4H3O* G4H3O::Definition()
 {

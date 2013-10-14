@@ -23,12 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+//
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
-//
-// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
 // History:
 // -----------
@@ -36,47 +35,43 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef G4VUSERITACTION_H
-#define G4VUSERITACTION_H
+#ifndef G4VMolecularDecayDisplacer_h
+#define G4VMolecularDecayDisplacer_h 1
 
 #include "globals.hh"
-#include "G4Track.hh"
-#include "G4TrackFastVector.hh"
+#include "G4ThreeVector.hh"
+#include <vector>
 
-/**
-  * G4UserReactionAction is used by G4ITStepManager.
-  * - StartProcessing called before processing
-  * - TimeStepAction called at every global step
-  * - UserReactionAction called when a reaction occurs
-  * - EndProcessing called after processing
-  */
+class G4Molecule;
+class G4MolecularDecayChannel;
 
-class G4UserReactionAction
+typedef int DisplacementType;
+
+class G4VMolecularDecayDisplacer
 {
-public:
-   G4UserReactionAction();
-   G4UserReactionAction(const G4UserReactionAction& );
-   virtual ~G4UserReactionAction();
+public :
+    virtual std::vector<G4ThreeVector> GetProductsDisplacement(const G4MolecularDecayChannel*) const = 0;
+    virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDecayChannel*) const = 0;
+    inline void SetVerbose(G4int);
+    virtual ~G4VMolecularDecayDisplacer();
 
-   virtual void StartProcessing(){;}
+#if defined G4EM_ALLOC_EXPORT
+    G4DLLEXPORT static const DisplacementType NoDisplacement;
+#else
+    G4DLLIMPORT static const DisplacementType NoDisplacement;
+#endif
 
-   /** In this method, the user can use :
-    * G4ITStepManager::Instance()->GetGlobalTime(), to know the current simulation time
-    * G4ITStepManager::Instance()->GetMinTime(), to know the selected minimum time
-    * WARNING : The call of this method happens before the call of DoIT methods
-    */
-   virtual void TimeStepAction(){;}
-
-   /**
-    * This method enables to kill products right after they are generated
-    */
-   virtual void UserReactionAction(const G4Track& /*trackA*/,const G4Track& /*trackB*/,
-                                   const G4TrackFastVector& /*products*/,
-                                   int /*nbProducts*/){;}
-   virtual void EndProcessing(){;}
-
-private:
-    G4UserReactionAction& operator=(const G4UserReactionAction& );
+protected :
+    G4VMolecularDecayDisplacer();
+    G4int fVerbose ;
+    static DisplacementType AddDisplacement();
+    static /*G4ThreadLocal*/ DisplacementType *Last;
 };
 
-#endif // G4VUSERITACTION_H
+void G4VMolecularDecayDisplacer :: SetVerbose(G4int verbose)
+{
+    fVerbose = verbose ;
+}
+#endif
+
+

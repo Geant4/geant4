@@ -43,8 +43,9 @@
 
 class G4SafetyHelper;
 
-/// \brief { The transportation method implemented is the one from
-///         Ermak-McCammon : J. Chem. Phys. 69, 1352 (1978)}
+/* \brief { The transportation method implemented is the one from
+ *         Ermak-McCammon : J. Chem. Phys. 69, 1352 (1978)}
+ */
 
 class G4DNABrownianTransportation : public G4ITTransportation
 {

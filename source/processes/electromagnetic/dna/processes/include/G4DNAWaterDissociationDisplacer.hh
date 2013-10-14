@@ -36,17 +36,17 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef G4DNAMolecularDecayDisplacer_h
-#define G4DNAMolecularDecayDisplacer_h 1
+#ifndef G4DNAWaterDissociationDisplacer_h
+#define G4DNAWaterDissociationDisplacer_h 1
 
-#include "G4VMolecularDecayDisplacer.hh"
+#include "G4VMolecularDissociationDisplacer.hh"
 #include "G4MoleculeID.hh"
 
-class G4DNAMolecularDecayDisplacer : public G4VMolecularDecayDisplacer
+class G4DNAWaterDissociationDisplacer : public G4VMolecularDecayDisplacer
 {
 public :
-    G4DNAMolecularDecayDisplacer();
-    virtual ~G4DNAMolecularDecayDisplacer() ;
+    G4DNAWaterDissociationDisplacer();
+    virtual ~G4DNAWaterDissociationDisplacer() ;
 
     virtual std::vector<G4ThreeVector> GetProductsDisplacement(const G4MolecularDecayChannel*) const;
     virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDecayChannel*) const;

@@ -36,24 +36,24 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emdna-molman
     HEADERS
         G4MolecularConfiguration.hh
-        G4MolecularDecayChannel.hh
-        G4MolecularDecayTable.hh
+        G4MolecularDissociationChannel.hh
+        G4MolecularDissociationTable.hh
         G4MoleculeCounter.hh
         G4MoleculeDefinition.hh
         G4MoleculeHandleManager.hh
         G4Molecule.hh
         G4MoleculeID.hh
-        G4VMolecularDecayDisplacer.hh
+        G4VMolecularDissociationDisplacer.hh
     SOURCES
         G4MolecularConfiguration.cc
-        G4MolecularDecayChannel.cc
-        G4MolecularDecayTable.cc
+        G4MolecularDissociationChannel.cc
+        G4MolecularDissociationTable.cc
         G4MoleculeCounter.cc
         G4Molecule.cc
         G4MoleculeDefinition.cc
         G4MoleculeHandleManager.cc
         G4MoleculeID.cc
-        G4VMolecularDecayDisplacer.cc
+        G4VMolecularDissociationDisplacer.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng
         G4volumes

@@ -88,7 +88,7 @@ public: // With Description
 #ifdef __IBMCPP__
     inline void *operator new(size_t sz, void* p) { return p; }
 #endif
-    inline void operator delete(void *aVUserTrackInformation);
+    inline void operator delete(void*);
 
     G4Molecule(const G4Molecule&);
     G4Molecule & operator=(const G4Molecule &right);
@@ -236,12 +236,9 @@ private:
      */
     G4Molecule();
 
-    void Init();
-    G4DynamicParticle* fDynamicParticle;
+    G4MolecularConfiguration* fpMolecularConfiguration;
 
-    G4MolecularConfiguration* fMolecularConfiguration;
-
-    static G4ThreadLocal double fgTemperature;
+    static /*G4ThreadLocal*/ double fgTemperature;
 };
 
 

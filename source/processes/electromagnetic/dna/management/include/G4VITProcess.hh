@@ -161,7 +161,7 @@ private :
     // processes are created using a copy constructor they will have the same
     // fProcessID. NOTE: due to MT, this cannot be "const".
 
-    static G4ThreadLocal size_t *fNbProcess;
+    static /*G4ThreadLocal*/ size_t *fNbProcess;
 
     G4bool fInstantiateProcessState;
     //_________________________________________________

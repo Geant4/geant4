@@ -25,10 +25,10 @@
 //
 // $Id$
 //
-#include "G4VMolecularDecayDisplacer.hh"
+#include "G4VMolecularDissociationDisplacer.hh"
 #include "G4Molecule.hh"
 
-G4ThreadLocal DisplacementType *G4VMolecularDecayDisplacer::Last = 0;
+/*G4ThreadLocal*/ DisplacementType *G4VMolecularDecayDisplacer::Last = 0;
 const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement = G4VMolecularDecayDisplacer::AddDisplacement();
 
 G4VMolecularDecayDisplacer::G4VMolecularDecayDisplacer()

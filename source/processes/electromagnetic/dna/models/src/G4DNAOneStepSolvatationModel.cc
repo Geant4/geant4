@@ -36,7 +36,7 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4DNASancheSolvatationModel.hh"
+#include "G4DNAOneStepSolvatationModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4DNAWaterExcitationStructure.hh"
@@ -46,7 +46,7 @@
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
 
-G4DNASancheSolvatationModel::G4DNASancheSolvatationModel(const G4ParticleDefinition*,
+G4DNAOneStepSolvatationModel::G4DNAOneStepSolvatationModel(const G4ParticleDefinition*,
                                                          const G4String& nam):
     G4VEmModel(nam),fIsInitialised(false)
 {
@@ -60,11 +60,11 @@ G4DNASancheSolvatationModel::G4DNASancheSolvatationModel(const G4ParticleDefinit
 }
 
 //______________________________________________________________________
-G4DNASancheSolvatationModel::~G4DNASancheSolvatationModel()
+G4DNAOneStepSolvatationModel::~G4DNAOneStepSolvatationModel()
 {}
 
 //______________________________________________________________________
-void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particleDefinition,
+void G4DNAOneStepSolvatationModel::Initialise(const G4ParticleDefinition* particleDefinition,
                                              const G4DataVector&)
 {
 #ifdef G4VERBOSE
@@ -75,7 +75,7 @@ void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particl
     {
         G4ExceptionDescription exceptionDescription ;
         exceptionDescription << "Attempting to calculate cross section for wrong particle";
-        G4Exception("G4DNASancheSolvatationModel::CrossSectionPerVolume","G4DNASancheSolvatationModel001",
+        G4Exception("G4DNAOneStepSolvatationModel::CrossSectionPerVolume","G4DNAOneStepSolvatationModel001",
                     FatalErrorInArgument,exceptionDescription);
         return;
     }
@@ -91,7 +91,7 @@ void G4DNASancheSolvatationModel::Initialise(const G4ParticleDefinition* particl
 }
 
 //______________________________________________________________________
-G4double G4DNASancheSolvatationModel::CrossSectionPerVolume(const G4Material* material,
+G4double G4DNAOneStepSolvatationModel::CrossSectionPerVolume(const G4Material* material,
                                                             const G4ParticleDefinition*,
                                                             G4double ekin,
                                                             G4double,
@@ -121,7 +121,7 @@ G4double G4DNASancheSolvatationModel::CrossSectionPerVolume(const G4Material* ma
 }
 
 //______________________________________________________________________
-G4ThreeVector G4DNASancheSolvatationModel::RadialDistributionOfProducts(G4double expectationValue) const
+G4ThreeVector G4DNAOneStepSolvatationModel::RadialDistributionOfProducts(G4double expectationValue) const
 {
     G4double sigma = std::sqrt(1.57)/2*expectationValue;
 
@@ -169,7 +169,7 @@ G4ThreeVector G4DNASancheSolvatationModel::RadialDistributionOfProducts(G4double
 }
 
 //______________________________________________________________________
-void G4DNASancheSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
+void G4DNAOneStepSolvatationModel::SampleSecondaries(std::vector<G4DynamicParticle*>*,
                                                     const G4MaterialCutsCouple*,
                                                     const G4DynamicParticle* particle,
                                                     G4double,

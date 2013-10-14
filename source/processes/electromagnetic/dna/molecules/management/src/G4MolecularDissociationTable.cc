@@ -35,8 +35,8 @@
 //
 // ----------------------------------------------------------------
 
-#include "G4MolecularDecayTable.hh"
-#include "G4MolecularDecayChannel.hh"
+#include "G4MolecularDissociationTable.hh"
+#include "G4MolecularDissociationChannel.hh"
 
 using namespace std;
 

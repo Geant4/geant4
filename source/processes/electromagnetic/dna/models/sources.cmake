@@ -64,7 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNARuddIonisationExtendedModel.hh
         G4DNARuddIonisationModel.hh
         G4DNASancheExcitationModel.hh
-        G4DNASancheSolvatationModel.hh
+        G4DNAOneStepSolvatationModel.hh
         G4DNAScreenedRutherfordElasticModel.hh
         G4DNATransformElectronModel.hh
     SOURCES
@@ -83,7 +83,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNARuddIonisationExtendedModel.cc
         G4DNARuddIonisationModel.cc
         G4DNASancheExcitationModel.cc
-        G4DNASancheSolvatationModel.cc
+        G4DNAOneStepSolvatationModel.cc
         G4DNAScreenedRutherfordElasticModel.cc
         G4DNATransformElectronModel.cc
     GRANULAR_DEPENDENCIES

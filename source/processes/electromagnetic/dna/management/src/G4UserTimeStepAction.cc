@@ -33,17 +33,17 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4UserReactionAction.hh"
+#include "G4UserTimeStepAction.hh"
 
-G4UserReactionAction::G4UserReactionAction()
+G4UserTimeStepAction::G4UserTimeStepAction()
 {;}
 
-G4UserReactionAction::~G4UserReactionAction()
+G4UserTimeStepAction::~G4UserTimeStepAction()
 {;}
 
-G4UserReactionAction::G4UserReactionAction(const G4UserReactionAction& /*other*/){;}
+G4UserTimeStepAction::G4UserTimeStepAction(const G4UserTimeStepAction& /*other*/){;}
 
-G4UserReactionAction& G4UserReactionAction::operator=(const G4UserReactionAction& rhs)
+G4UserTimeStepAction& G4UserTimeStepAction::operator=(const G4UserTimeStepAction& rhs)
 {
     if (this == &rhs) return *this;
     return *this;

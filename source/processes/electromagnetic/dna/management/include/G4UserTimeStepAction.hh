@@ -25,10 +25,10 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
-//
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
+//
+// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
 // History:
 // -----------
@@ -36,30 +36,47 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef G4DNAElectronSolvatation_h
-#define G4DNAElectronSolvatation_h 1
+#ifndef G4VUSERITACTION_H
+#define G4VUSERITACTION_H
 
-#include "G4VEmProcess.hh"
+#include "globals.hh"
+#include "G4Track.hh"
+#include "G4TrackFastVector.hh"
 
-// Available models
-#include "G4DNAOneStepSolvatationModel.hh"
-#include "G4DNATransformElectronModel.hh"
+/**
+  * G4UserTimeStepAction is used by G4ITStepManager.
+  * - StartProcessing called before processing
+  * - TimeStepAction called at every global step
+  * - UserReactionAction called when a reaction occurs
+  * - EndProcessing called after processing
+  */
 
-class G4DNAElectronSolvatation : public G4VEmProcess
+class G4UserTimeStepAction
 {
-public :
-    G4DNAElectronSolvatation(const G4String& processName ="DNAElectronSolvatation",
-                             G4ProcessType type = fElectromagnetic);
-    virtual ~G4DNAElectronSolvatation();
+public:
+   G4UserTimeStepAction();
+   G4UserTimeStepAction(const G4UserTimeStepAction& );
+   virtual ~G4UserTimeStepAction();
 
-    virtual G4bool IsApplicable(const G4ParticleDefinition&);
-    virtual void PrintInfo();
+   virtual void StartProcessing(){;}
 
-protected:
-    virtual void InitialiseProcess(const G4ParticleDefinition*);
+   /** In this method, the user can use :
+    * G4ITStepManager::Instance()->GetGlobalTime(), to know the current simulation time
+    * G4ITStepManager::Instance()->GetMinTime(), to know the selected minimum time
+    * WARNING : The call of this method happens before the call of DoIT methods
+    */
+   virtual void TimeStepAction(){;}
+
+   /**
+    * This method enables to kill products right after they are generated
+    */
+   virtual void UserReactionAction(const G4Track& /*trackA*/,const G4Track& /*trackB*/,
+                                   const G4TrackFastVector& /*products*/,
+                                   int /*nbProducts*/){;}
+   virtual void EndProcessing(){;}
 
 private:
-    G4bool       isInitialised;
+    G4UserTimeStepAction& operator=(const G4UserTimeStepAction& );
 };
 
-#endif
+#endif // G4VUSERITACTION_H

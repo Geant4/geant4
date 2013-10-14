@@ -53,6 +53,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITNavigator.icc
         G4ITReactionChange.hh
         G4ITReactionTable.hh
+        G4ITStepManager.hh
+        G4ITSteppingMessenger.hh
         G4ITStepProcessor.hh
         G4ITStepStatus.hh
         G4ITTrackHolder.hh
@@ -62,14 +64,14 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITTransportation.icc
         G4ITTransportationManager.hh
         G4ITType.hh
-	G4KDMap.hh
+        G4KDMap.hh
         G4KDNode.hh
         G4KDTree.hh
         G4KDTreeResult.hh
         G4ReferenceCast.hh
         G4TrackingInformation.hh
         G4TrackList.hh
-        G4UserReactionAction.hh
+        G4UserTimeStepAction.hh
         G4VITModel.hh
         G4VITProcess.hh
         G4VITReactionProcess.hh
@@ -90,6 +92,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITNavigator.cc
         G4ITReactionChange.cc
         G4ITReactionTable.cc
+        G4ITStepManager.cc
+        G4ITSteppingMessenger.cc
         G4ITStepProcessor2.cc
         G4ITStepProcessor.cc
         G4ITTrackHolder.cc
@@ -98,13 +102,13 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITTransportation.cc
         G4ITTransportationManager.cc
         G4ITType.cc
-	G4KDMap.cc
+        G4KDMap.cc
         G4KDNode.cc
         G4KDTree.cc
         G4KDTreeResult.cc
         G4TrackingInformation.cc
         G4TrackList.cc
-        G4UserReactionAction.cc
+        G4UserTimeStepAction.cc
         G4VITModel.cc
         G4VITProcess.cc
         G4VITReactionProcess.cc

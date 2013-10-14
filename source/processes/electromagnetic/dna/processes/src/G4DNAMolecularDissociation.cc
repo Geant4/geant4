@@ -36,7 +36,7 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4DNAMolecularDecay.hh"
+#include "G4DNAMolecularDissociation.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4Molecule.hh"
@@ -45,7 +45,7 @@
 
 using namespace std;
 
-G4DNAMolecularDecay::G4DNAMolecularDecay(const G4String& processName,
+G4DNAMolecularDissociation::G4DNAMolecularDissociation(const G4String& processName,
                                          G4ProcessType type) : G4VITRestProcess(processName, type)
 {
     // set Process Sub Type
@@ -68,7 +68,7 @@ G4DNAMolecularDecay::G4DNAMolecularDecay(const G4String& processName,
     fDecayAtFixedTime = true ;
 }
 
-G4DNAMolecularDecay::~G4DNAMolecularDecay()
+G4DNAMolecularDissociation::~G4DNAMolecularDissociation()
 {
     DecayDisplacementMap::iterator it = fDecayDisplacementMap.begin();
 
@@ -83,7 +83,7 @@ G4DNAMolecularDecay::~G4DNAMolecularDecay()
     fDecayDisplacementMap.clear();
 }
 
-G4DNAMolecularDecay::G4DNAMolecularDecay(const G4DNAMolecularDecay &right) :
+G4DNAMolecularDissociation::G4DNAMolecularDissociation(const G4DNAMolecularDissociation &right) :
     G4VITRestProcess(right)
 {
     fDecayAtFixedTime = right . fDecayAtFixedTime;
@@ -91,7 +91,7 @@ G4DNAMolecularDecay::G4DNAMolecularDecay(const G4DNAMolecularDecay &right) :
     fVerbose = right.fVerbose ;
 }
 
-G4bool G4DNAMolecularDecay::IsApplicable(const G4ParticleDefinition& aParticleType)
+G4bool G4DNAMolecularDissociation::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
     if(aParticleType.GetParticleType()=="Molecule")
     {
@@ -111,14 +111,14 @@ G4bool G4DNAMolecularDecay::IsApplicable(const G4ParticleDefinition& aParticleTy
     }
 }
 
-G4double G4DNAMolecularDecay::GetMeanLifeTime(const G4Track& track  ,
+G4double G4DNAMolecularDissociation::GetMeanLifeTime(const G4Track& track  ,
                                               G4ForceCondition*)
 {
     G4double output = GetMolecule(track)-> GetDecayTime() - track.GetProperTime() ;
     return (output > 0 ? output : 0 );
 }
 
-G4VParticleChange* G4DNAMolecularDecay::DecayIt(
+G4VParticleChange* G4DNAMolecularDissociation::DecayIt(
     const G4Track& track,
     const G4Step& )
 {
@@ -144,7 +144,7 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
             G4ExceptionDescription exceptionDescription;
             theMotherMolecule->GetElectronOccupancy()->DumpInfo();
             exceptionDescription << "No decay channel was found for the molecule : " << theMotherMolecule-> GetName() << G4endl;
-            G4Exception("G4DNAMolecularDecay::DecayIt", "G4DNAMolecularDecay::NoDecayChannel",FatalException,exceptionDescription);
+            G4Exception("G4DNAMolecularDissociation::DecayIt", "G4DNAMolecularDissociation::NoDecayChannel",FatalException,exceptionDescription);
             return &aParticleChange;
         }
 
@@ -262,12 +262,12 @@ G4VParticleChange* G4DNAMolecularDecay::DecayIt(
     return &aParticleChange;
 }
 
-void G4DNAMolecularDecay::SetDecayDisplacer (const G4ParticleDefinition* molDef, G4VMolecularDecayDisplacer* aDisplacer)
+void G4DNAMolecularDissociation::SetDecayDisplacer (const G4ParticleDefinition* molDef, G4VMolecularDecayDisplacer* aDisplacer)
 {
     fDecayDisplacementMap[molDef] = aDisplacer;
 }
 
-G4VMolecularDecayDisplacer* G4DNAMolecularDecay::GetDecayDisplacer(const G4ParticleDefinition* molDef)
+G4VMolecularDecayDisplacer* G4DNAMolecularDissociation::GetDecayDisplacer(const G4ParticleDefinition* molDef)
 {
     return fDecayDisplacementMap[molDef] ;
 }

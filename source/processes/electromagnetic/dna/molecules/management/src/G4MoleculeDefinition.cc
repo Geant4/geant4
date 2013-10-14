@@ -113,7 +113,6 @@ void G4MoleculeDefinition::AddExcitedState(const G4String& val)
     }
 
     fDecayTable->AddExcitedState(val);
-
 }
 //___________________________________________________________________________
 const G4String& G4MoleculeDefinition::GetExcitedState(const G4ElectronOccupancy* occ) const
@@ -193,7 +192,7 @@ G4MoleculeDefinition::G4MoleculeDefinition(const G4MoleculeDefinition& right):
     {
         fDecayTable = new G4MolecularDecayTable(*(right.fDecayTable));
     }
-    else fDecayTable =0;
+    else fDecayTable = 0;
 }
 
 //___________________________________________________________________________

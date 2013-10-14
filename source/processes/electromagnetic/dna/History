@@ -13,6 +13,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
+10-10-2013  M.K.         tag emdna-V09-06-18
+            - Remove G4VERBOSE testing in G4DNABrownianTransportation::BuildPhysicsTable
+
+06-10-2013  M.K.         tag emdna-V09-06-17
+            - Same as before once again
+
+03-10-2013  M.K.         tag emdna-V09-06-16
+            - Same as before
+
+03-10-2013  M.K.	 tag emdna-V09-06-15
+	    - Improve MT compatibility
+	    - Enhance G4DNAChemistryManager to be the main interface used 
+	    by the user - stage 1
 
 14-09-2013  M.Asai       tag emdna-V09-06-14
             G4VProcess::SubtractNumberOfInteractionLengthLeft() is no longer

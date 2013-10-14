@@ -32,7 +32,7 @@
 //
 // **********************************************************************
 
-#include "G4MolecularDecayChannel.hh"
+#include "G4MolecularDissociationChannel.hh"
 #include "G4Molecule.hh"
 #include "G4MoleculeHandleManager.hh"
 

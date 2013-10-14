@@ -62,14 +62,10 @@ typedef G4ReferenceCountedHandle< std::vector<G4Track*> > G4TrackVectorHandle;
 class G4ITModelProcessor
 {
 public:
-    /** Default constructor */
     G4ITModelProcessor();
-    /** Default destructor */
     virtual ~G4ITModelProcessor();
 
-
     inline void SetModelHandler(G4ITModelHandler*);
-
     void Initialize();
     
     /**

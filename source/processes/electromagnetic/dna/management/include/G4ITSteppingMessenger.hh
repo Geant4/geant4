@@ -23,55 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4ITSteppingMessenger.hh 60427 2012-07-11 16:34:35Z matkara $
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
-//
-// -------------------------------------------------------------------
 
-#ifndef G4VMolecularDecayDisplacer_h
-#define G4VMolecularDecayDisplacer_h 1
+#ifndef G4ITSTEPPINGMESSENGER_H
+#define G4ITSTEPPINGMESSENGER_H
 
+class G4ITStepManager;
+class G4UIdirectory;
+class G4UIcmdWithoutParameter;
+class G4UIcmdWithAnInteger;
+class G4UIcommand;
+class G4UIcmdWithADoubleAndUnit;
+
+#include "G4UImessenger.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
-#include <vector>
 
-class G4Molecule;
-class G4MolecularDecayChannel;
-
-typedef int DisplacementType;
-
-class G4VMolecularDecayDisplacer
+class G4ITSteppingMessenger: public G4UImessenger
 {
-public :
-    virtual std::vector<G4ThreeVector> GetProductsDisplacement(const G4MolecularDecayChannel*) const = 0;
-    virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDecayChannel*) const = 0;
-    inline void SetVerbose(G4int);
-    virtual ~G4VMolecularDecayDisplacer();
+  public:
+    G4ITSteppingMessenger(G4ITStepManager* runMgr);
+    ~G4ITSteppingMessenger();
 
-#if defined G4EM_ALLOC_EXPORT
-    G4DLLEXPORT static const DisplacementType NoDisplacement;
-#else
-    G4DLLIMPORT static const DisplacementType NoDisplacement;
-#endif
+  public:
+    void SetNewValue(G4UIcommand * command,G4String newValues);
+    G4String GetCurrentValue(G4UIcommand * command);
 
-protected :
-    G4VMolecularDecayDisplacer();
-    G4int fVerbose ;
-    static DisplacementType AddDisplacement();
-    static G4ThreadLocal DisplacementType *Last;
+  private:
+    G4ITStepManager * fITStepManager;
+
+  private: //commands
+    G4UIdirectory*              fITDirectory;
+
+    G4UIcmdWithADoubleAndUnit*  fEndTime;
+    G4UIcmdWithADoubleAndUnit*  fTimeTolerance;
+    G4UIcmdWithAnInteger*       fVerboseCmd;
+    G4UIcmdWithAnInteger*       fMaxStepNumber;
+    G4UIcmdWithoutParameter*    fInitCmd;
+    G4UIcmdWithoutParameter*    fProcessCmd;
+    G4UIcmdWithAnInteger*       fMaxNULLTimeSteps;
 };
 
-void G4VMolecularDecayDisplacer :: SetVerbose(G4int verbose)
-{
-    fVerbose = verbose ;
-}
-#endif
-
-
+#endif // G4ITSTEPPINGMESSENGER_H

@@ -111,7 +111,7 @@ public :
     */
     G4double GetNbElectrons() const;
 
-    /** Show the electronic state of the molecule.
+    /** Display the electronic state of the molecule.
     */
     void PrintState() const;
 
@@ -123,6 +123,12 @@ public :
        * processes to calculate the mean square jump distance between two
        * changes of direction. In three dimension : <x^2> = 6 D t where t is
        * the mean jump time between two changes of direction.
+       *
+       * Note : Diffusion Coefficient in one medium only
+       * For the time being, we will consider only one diffusion
+       * coefficient for the all simulation => diffusion in one medium only
+       * If the user needs to use the diffusion in different materials,
+       * she/he should contact the developpers/mainteners of this package
        */
     inline void SetDiffusionCoefficient(G4double);
 

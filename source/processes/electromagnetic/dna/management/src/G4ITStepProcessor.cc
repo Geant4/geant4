@@ -56,7 +56,7 @@
 using namespace std;
 
 static const size_t SizeOfSelectedDoItVector=100;
-static const size_t& gMaxNProcesses(G4VITProcess::GetMaxProcessIndex());
+//static const size_t& gMaxNProcesses(G4VITProcess::GetMaxProcessIndex());
 
 //____________________________________________________________________________________
 
@@ -76,8 +76,10 @@ G4ITStepProcessor::G4ITStepProcessor()
 
 G4ITStepProcessor::G4ITStepProcessorState::G4ITStepProcessorState() :
     G4ITStepProcessorState_Lock(),
-    fSelectedAtRestDoItVector (gMaxNProcesses,0),
-    fSelectedPostStepDoItVector (gMaxNProcesses,0)
+//    fSelectedAtRestDoItVector (gMaxNProcesses,0),
+//    fSelectedPostStepDoItVector (gMaxNProcesses,0)
+    fSelectedAtRestDoItVector (G4VITProcess::GetMaxProcessIndex(),0),
+    fSelectedPostStepDoItVector (G4VITProcess::GetMaxProcessIndex(),0)
 {
     fPhysicalStep = -1.;
     fPreviousStepSize = -1.;
@@ -94,8 +96,10 @@ G4ITStepProcessor::G4ITStepProcessorState::G4ITStepProcessorState() :
 // should not be used
 G4ITStepProcessor::G4ITStepProcessorState::G4ITStepProcessorState(const G4ITStepProcessorState& ) :
     G4ITStepProcessorState_Lock(),
-    fSelectedAtRestDoItVector (gMaxNProcesses,0),
-    fSelectedPostStepDoItVector (gMaxNProcesses,0)
+//    fSelectedAtRestDoItVector (gMaxNProcesses,0),
+//    fSelectedPostStepDoItVector (gMaxNProcesses,0)
+    fSelectedAtRestDoItVector (G4VITProcess::GetMaxProcessIndex(),0),
+    fSelectedPostStepDoItVector (G4VITProcess::GetMaxProcessIndex(),0)
 {
     fPhysicalStep = -1.;
     fPreviousStepSize = -1.;
@@ -115,9 +119,11 @@ G4ITStepProcessor::G4ITStepProcessorState&  G4ITStepProcessor::G4ITStepProcessor
     if(this == &rhs) return *this;
 
     fSelectedAtRestDoItVector.clear();
-    fSelectedAtRestDoItVector.resize(gMaxNProcesses,0);
+//    fSelectedAtRestDoItVector.resize(gMaxNProcesses,0);
+    fSelectedAtRestDoItVector.resize(G4VITProcess::GetMaxProcessIndex(),0);
     fSelectedPostStepDoItVector.clear();
-    fSelectedPostStepDoItVector.resize(gMaxNProcesses,0);
+//    fSelectedPostStepDoItVector.resize(gMaxNProcesses,0);
+    fSelectedPostStepDoItVector.resize(G4VITProcess::GetMaxProcessIndex(),0);
 
     fPhysicalStep = -1.;
     fPreviousStepSize = -1.;

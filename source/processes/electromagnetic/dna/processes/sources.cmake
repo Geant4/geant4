@@ -60,8 +60,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-processes
         G4DNAElectronSolvatation.hh
         G4DNAExcitation.hh
         G4DNAIonisation.hh
-        G4DNAMolecularDecayDisplacer.hh
-        G4DNAMolecularDecay.hh
+        G4DNAWaterDissociationDisplacer.hh
+        G4DNAMolecularDissociation.hh
         G4DNASecondOrderReaction.hh
         G4DNAVibExcitation.hh
     SOURCES
@@ -73,8 +73,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-processes
         G4DNAElectronSolvatation.cc
         G4DNAExcitation.cc
         G4DNAIonisation.cc
-        G4DNAMolecularDecay.cc
-        G4DNAMolecularDecayDisplacer.cc
+        G4DNAMolecularDissociation.cc
+        G4DNAWaterDissociationDisplacer.cc
         G4DNASecondOrderReaction.cc
         G4DNAVibExcitation.cc
     GRANULAR_DEPENDENCIES

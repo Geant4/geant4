@@ -81,6 +81,9 @@ public:
       */
     static void DeleteInstance();
 
+
+    void Run();
+
     /**
       * Tells the chemMan to write into a file
       * the position and electronic state of the water molecule
@@ -142,14 +145,14 @@ public:
 protected :
     G4DNAWaterExcitationStructure* GetExcitationLevel();
     G4DNAWaterIonisationStructure* GetIonisationLevel();
+    void InitializeFile();
+    G4DNAChemistryManager();
 
 private:
-    G4DNAChemistryManager();
-    static G4ThreadLocal std::auto_ptr<G4DNAChemistryManager> *fInstance;
+    static /*G4ThreadLocal*/ std::auto_ptr<G4DNAChemistryManager> *fInstance;
     bool fActiveChemistry;
-
-    std::ofstream  fOutput;
     G4bool fWriteFile;
+    static G4ThreadLocal std::ofstream*  fOutput;
 
     G4DNAWaterExcitationStructure* fExcitationLevel;
     G4DNAWaterIonisationStructure* fIonisationLevel;

@@ -44,8 +44,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
 #include "G4ElectronOccupancy.hh"
-#include "G4MolecularDecayTable.hh"
-#include "G4MolecularDecayChannel.hh"
+#include "G4MolecularDissociationTable.hh"
+#include "G4MolecularDissociationChannel.hh"
 #include "G4MoleculeID.hh"
 
 // ######################################################################
@@ -125,7 +125,6 @@ private :
 
 private:
     G4double fMass;
-    G4String fType;
 
     G4int fNbOfElectrons;
     G4int fNbOfMolecularShells;
@@ -133,8 +132,8 @@ private:
     // Diffusion Coefficient in one medium only
     // Note : For the time being, we will consider only one diffusion
     // coefficient for the all simulation => diffusion in one medium only
-    // If the user needs to use the diffusion in different medium,
-    // he should contact the developpers/mainteners of this package
+    // If the user needs to use the diffusion in different materials,
+    // she/he should contact the developpers/mainteners of this package
     G4double fDiffusionCoefficient;
 
     G4int fAtomsNb;

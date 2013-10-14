@@ -285,7 +285,7 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
     G4cout<<"Number of possible reactions: "<< n << G4endl;
 
     ////////////////////////////////////////////////////////////////////
-    // Tableau dynamique en fonction du nombre de caractère maximal dans
+    // Tableau dynamique en fonction du nombre de caractere maximal dans
     // chaque colonne
     ////////////////////////////////////////////////////////////////////
 

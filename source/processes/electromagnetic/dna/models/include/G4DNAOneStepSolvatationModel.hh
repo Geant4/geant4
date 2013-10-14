@@ -36,24 +36,27 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef G4SancheSolvatationModel_
-#define G4SancheSolvatationModel_
+#ifndef G4DNAOneStepSolvatationModel_
+#define G4DNAOneStepSolvatationModel_
 
 #include "G4VEmModel.hh"
 
 /**
-  * When an electron reaches the highest energy domain of G4DNASancheSolvatationModel,
+  * When an electron reaches the highest energy domain of G4DNAOneStepSolvatationModel,
   * it is then automatically converted into a solvated electron and displace from its original
   * position using a published thermalization statistic.
   *
+  * Article: Jintana Meesungnoen, Jean-Paul Jay-Gerin, Abdelali Filali-Mouhim, and Samlee Mankhetkorn (2002)
+  * Low-Energy Electron Penetration Range in Liquid Water.
+  * Radiation Research: November 2002, Vol. 158, No. 5, pp. 657-660.
   */
 
-class G4DNASancheSolvatationModel : public G4VEmModel
+class G4DNAOneStepSolvatationModel : public G4VEmModel
 {
 public :
-    G4DNASancheSolvatationModel(const G4ParticleDefinition* p = 0,
+    G4DNAOneStepSolvatationModel(const G4ParticleDefinition* p = 0,
                              const G4String& nam = "DNASancheSolvatationModel");
-    virtual ~G4DNASancheSolvatationModel();
+    virtual ~G4DNAOneStepSolvatationModel();
 
     virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -82,11 +85,11 @@ protected:
     G4int fVerboseLevel;
 
 private :
-    G4DNASancheSolvatationModel & operator=(const  G4DNASancheSolvatationModel &right);
-    G4DNASancheSolvatationModel(const  G4DNASancheSolvatationModel&);
+    G4DNAOneStepSolvatationModel & operator=(const  G4DNAOneStepSolvatationModel &right);
+    G4DNAOneStepSolvatationModel(const  G4DNAOneStepSolvatationModel&);
 };
 
-inline void G4DNASancheSolvatationModel::SetVerbose(int flag)
+inline void G4DNAOneStepSolvatationModel::SetVerbose(int flag)
 {
     fVerboseLevel = flag;
 }

@@ -36,7 +36,7 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4DNAMolecularDecayDisplacer.hh"
+#include "G4DNAWaterDissociationDisplacer.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4H2O.hh"
@@ -51,20 +51,20 @@
 
 using namespace std;
 
-const DisplacementType G4DNAMolecularDecayDisplacer::Ionisation_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
-const DisplacementType G4DNAMolecularDecayDisplacer::A1B1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
-const DisplacementType G4DNAMolecularDecayDisplacer::B1A1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
-const DisplacementType G4DNAMolecularDecayDisplacer::AutoIonisation = G4VMolecularDecayDisplacer::AddDisplacement();
-const DisplacementType G4DNAMolecularDecayDisplacer::DissociativeAttachment = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAWaterDissociationDisplacer::Ionisation_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAWaterDissociationDisplacer::A1B1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAWaterDissociationDisplacer::B1A1_DissociationDecay = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAWaterDissociationDisplacer::AutoIonisation = G4VMolecularDecayDisplacer::AddDisplacement();
+const DisplacementType G4DNAWaterDissociationDisplacer::DissociativeAttachment = G4VMolecularDecayDisplacer::AddDisplacement();
 
-G4DNAMolecularDecayDisplacer::G4DNAMolecularDecayDisplacer() :
+G4DNAWaterDissociationDisplacer::G4DNAWaterDissociationDisplacer() :
     G4VMolecularDecayDisplacer()
 {;}
 
-G4DNAMolecularDecayDisplacer::~G4DNAMolecularDecayDisplacer()
+G4DNAWaterDissociationDisplacer::~G4DNAWaterDissociationDisplacer()
 {;}
 
-G4ThreeVector G4DNAMolecularDecayDisplacer::GetMotherMoleculeDisplacement(const G4MolecularDecayChannel* theDecayChannel) const
+G4ThreeVector G4DNAWaterDissociationDisplacer::GetMotherMoleculeDisplacement(const G4MolecularDecayChannel* theDecayChannel) const
 {
     G4int decayType = theDecayChannel -> GetDisplacementType();
 
@@ -102,7 +102,7 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::GetMotherMoleculeDisplacement(const 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(const G4MolecularDecayChannel* theDecayChannel) const
+vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(const G4MolecularDecayChannel* theDecayChannel) const
 {
     G4int nbProducts = theDecayChannel -> GetNbProducts();
     vector<G4ThreeVector> theProductDisplacementVector (nbProducts);
@@ -292,7 +292,7 @@ vector<G4ThreeVector> G4DNAMolecularDecayDisplacer::GetProductsDisplacement(cons
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ThreeVector G4DNAMolecularDecayDisplacer::radialDistributionOfProducts(G4double Rrms) const
+G4ThreeVector G4DNAWaterDissociationDisplacer::radialDistributionOfProducts(G4double Rrms) const
 {
     G4double sigma = Rrms/sqrt(3.);
     G4double expectationValue = 2.*sqrt(2./3.14)*sigma;
@@ -342,7 +342,7 @@ G4ThreeVector G4DNAMolecularDecayDisplacer::radialDistributionOfProducts(G4doubl
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ThreeVector G4DNAMolecularDecayDisplacer::radialDistributionOfElectron() const
+G4ThreeVector G4DNAWaterDissociationDisplacer::radialDistributionOfElectron() const
 {
 
     G4double sigma = 1./2.;
