@@ -18,11 +18,11 @@ geant4_add_dataset(
 # - Low energy electromagnetics
 geant4_add_dataset(
   NAME      G4EMLOW
-  VERSION   6.33
+  VERSION   6.34
   FILENAME  G4EMLOW
   EXTENSION tar.gz
   ENVVAR    G4LEDATA
-  MD5SUM    0002a1c16c9b1fb5e8d49dfbce12a576
+  MD5SUM    6a720b8f7eeeb8eadd59946cd4fe6ec1
   )
 
 # - Photon evaporation
