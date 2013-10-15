@@ -81,7 +81,9 @@ void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD,
   else
   { // The sensitive detector should be kept in this directory.
     G4VSensitiveDetector* tgtSD = GetSD( aSD->GetName() );
-    if( tgtSD != 0 )
+    if(!tgtSD)
+    { detector.push_back( aSD ); }
+    else if( tgtSD != aSD )
     {
 #ifdef G4VERBOSE
       G4ExceptionDescription ed;
@@ -90,9 +92,9 @@ void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD,
       ed << "It's users' responsibility to delete the old sensitive detector object.";
       G4Exception("G4SDStructure::AddNewDetector()","DET1010",JustWarning,ed);
 #endif
-      RemoveSD( aSD );
+      RemoveSD( tgtSD );
+      detector.push_back( aSD );
     }
-    detector.push_back( aSD );
   }
 }
 
