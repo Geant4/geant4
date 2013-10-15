@@ -52,8 +52,10 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
+#include "G4Log.hh"
 
 class G4ParticleChangeForGamma;
+class G4Pow;
 
 class G4BetheHeitlerModel : public G4VEmModel
 {
@@ -94,6 +96,7 @@ private:
   G4BetheHeitlerModel & operator=(const G4BetheHeitlerModel &right);
   G4BetheHeitlerModel(const  G4BetheHeitlerModel&);
 
+  G4Pow*                    g4pow;
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
   G4ParticleDefinition*     thePositron;
@@ -110,7 +113,7 @@ inline G4double G4BetheHeitlerModel::ScreenFunction1(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*G4Log(ScreenVariable+0.952);
    else
      screenVal = 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
 
@@ -127,7 +130,7 @@ inline G4double G4BetheHeitlerModel::ScreenFunction2(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*G4Log(ScreenVariable+0.952);
    else
      screenVal = 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
 

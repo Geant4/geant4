@@ -436,7 +436,7 @@ G4double G4BraggIonModel::StoppingPower(const G4Material* material,
 
       // Main parametrisation
     } else {
-      G4double slow  = a[i][0] * pow((T*1000.0), a[i][1]) ;
+      G4double slow  = a[i][0] * G4Exp(G4Log(T*1000.0)*a[i][1]) ;
       G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
       ionloss = slow*shigh / (slow + shigh) ;
        /*
@@ -595,7 +595,7 @@ G4double G4BraggIonModel::ElectronicStoppingPower(G4double z,
 
   // Main parametrisation
   } else {
-    G4double slow  = a[i][0] * pow((T*1000.0), a[i][1]) ;
+    G4double slow  = a[i][0] * G4Exp(G4Log(T*1000.0)*a[i][1]) ;
     G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
     ionloss = slow*shigh / (slow + shigh) ;
     /*

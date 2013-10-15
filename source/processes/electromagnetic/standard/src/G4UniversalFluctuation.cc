@@ -77,6 +77,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Pow.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -226,8 +227,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     G4double a1 = 0. , a2 = 0., a3 = 0. ;
 
     if(tmax > ipotFluct) {
-      //G4double w2 = log(2.*electron_mass_c2*beta2*gam2)-beta2;
-      G4double w2 = g4pow->logX(2.*electron_mass_c2*beta2*gam2)-beta2;
+      G4double w2 = G4Log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
       if(w2 > ipotLogFluct)  {
 	G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
@@ -238,7 +238,6 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 	if(a1 < nmaxCont) { 
 	  //small energy loss
 	  G4double sa1 = sqrt(a1);
-	  //	  if(G4UniformRand() < exp(-sa1))
 	  if(G4UniformRand() < g4pow->expA(-sa1))
 	    {
 	      e1 = esmall;
@@ -265,8 +264,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 
     G4double w1 = tmax/e0;
     if(tmax > e0) {
-      //      a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*log(w1));
-      a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*g4pow->logX(w1));
+      a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*G4Log(w1));
     }
     //'nearly' Gaussian fluctuation if a1>nmaxCont&&a2>nmaxCont&&a3>nmaxCont  
     G4double emean = 0.;
@@ -320,8 +318,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
       if(a3 > nmaxCont)
 	{
 	  alfa            = w1*(nmaxCont+a3)/(w1*nmaxCont+a3);
-	  //	  G4double alfa1  = alfa*log(alfa)/(alfa-1.);
-	  G4double alfa1  = alfa*g4pow->logX(alfa)/(alfa-1.);
+	  G4double alfa1  = alfa*G4Log(alfa)/(alfa-1.);
 	  G4double namean = a3*w1*(alfa-1.)/((w1-1.)*alfa);
 	  emean          += namean*e0*alfa1;
 	  sig2e          += e0*e0*namean*(alfa-alfa1*alfa1);

@@ -64,6 +64,7 @@
 #include "G4Material.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Pow.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -427,8 +428,8 @@ G4double G4IonFluctuations::RelativisticFactor(const G4Material* mat,
   // H.Geissel et al. NIM B, 195 (2002) 3.
   G4double bF2= 2.0*eF/electron_mass_c2;
   G4double f  = 0.4*(1.0 - beta2)/((1.0 - 0.5*beta2)*Z);
-  if(beta2 > bF2) f *= log(2.0*electron_mass_c2*beta2/I)*bF2/beta2;
-  else            f *= log(4.0*eF/I);
+  if(beta2 > bF2) f *= G4Log(2.0*electron_mass_c2*beta2/I)*bF2/beta2;
+  else            f *= G4Log(4.0*eF/I);
 
   //  G4cout << "f= " << f << " beta2= " << beta2 
   //	 << " bf2= " << bF2 << " q^2= " << chargeSquare << G4endl;

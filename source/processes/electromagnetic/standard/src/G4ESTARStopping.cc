@@ -991,7 +991,7 @@ void G4ESTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
     sdata[idx] = new G4LPhysicsFreeVector(81, 0.01*MeV, GeV);
     for(size_t i=0; i<81; ++i) { 
       fin >> x1 >> x2 >> x3 >> x4 >> x5 >> x6 >> x7;
-      sdata[idx]->PutValues(i, x1*MeV, x2*fac); 
+      sdata[idx]->PutValues(i, x1*MeV, x4*fac); 
     }
 
     // long data
@@ -1015,7 +1015,7 @@ void G4ESTARStopping::AddData(G4double* ekin, G4double* stop, G4int idx)
     sdata[idx] = new G4LPhysicsFreeVector(97, 0.001*MeV, 10*GeV);
     for(size_t i=0; i<97; ++i) { 
       fin >> x1 >> x2 >> x3 >> x4 >> x5;
-      sdata[idx]->PutValues(i, x1*MeV, x2*fac); 
+      sdata[idx]->PutValues(i, x1*MeV, x4*fac); 
     }
   }
   sdata[idx]->SetSpline(true);

@@ -63,6 +63,8 @@
 #include "G4LossTableManager.hh"
 #include "G4Pow.hh"
 #include "G4NistManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -285,7 +287,7 @@ G4double G4WentzelVIRelModel::ComputeGeomPathLength(G4double truelength)
       e1 = 0.5*(e1 + preKinEnergy);
       cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial);
       lambdaeff = GetTransportMeanFreePath(particle,e1);
-      zPathLength = lambdaeff*(1.0 - exp(-tPathLength/lambdaeff));
+      zPathLength = lambdaeff*(1.0 - G4Exp(-tPathLength/lambdaeff));
     }
   } else { lambdaeff = DBL_MAX; }
   //G4cout<<"Comp.geom: zLength= "<<zPathLength<<" tLength= "<<tPathLength<<G4endl;
@@ -339,7 +341,7 @@ G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
 	lambdaeff = GetTransportMeanFreePath(particle,e1);
 	tau = zPathLength/lambdaeff;
       
-	if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
+	if(tau < 0.999999) { tPathLength = -lambdaeff*G4Log(1.0 - tau); } 
 	else               { tPathLength = currentRange; }
       }
     }
@@ -365,7 +367,7 @@ G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
       lambdaeff = 1./cross; 
       G4double tau = zPathLength*cross;
       if(tau < numlimit) { tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); } 
-      else if(tau < 0.999999) { tPathLength = -lambdaeff*log(1.0 - tau); } 
+      else if(tau < 0.999999) { tPathLength = -lambdaeff*G4Log(1.0 - tau); } 
       else                    { tPathLength = currentRange; }
 
       if(tPathLength > currentRange) { tPathLength = currentRange; }
@@ -420,7 +422,7 @@ G4WentzelVIRelModel::SampleScattering(const G4ThreeVector& oldDirection,
 
   // step limit due to single scattering
   G4double x1 = 2*tPathLength;
-  if(0.0 < xtsec) { x1 = -log(G4UniformRand())/xtsec; }
+  if(0.0 < xtsec) { x1 = -G4Log(G4UniformRand())/xtsec; }
 
   const G4ElementVector* theElementVector = 
     currentMaterial->GetElementVector();
@@ -478,7 +480,7 @@ G4WentzelVIRelModel::SampleScattering(const G4ThreeVector& oldDirection,
       dir = temp;
 
       // new proposed step length
-      x1  = -log(G4UniformRand())/xtsec; 
+      x1  = -G4Log(G4UniformRand())/xtsec; 
       x2 -= step; 
       if(x2 <= 0.0) { --nMscSteps; }
 
@@ -498,8 +500,8 @@ G4WentzelVIRelModel::SampleScattering(const G4ThreeVector& oldDirection,
         if(z0 > 5.0) { z = G4UniformRand(); }
 	else {
 	  G4double zzz = 0.0;
-	  if(z0 > 0.01) { zzz = exp(-1.0/z0); }
-	  z = -z0*log(1.0 - (1.0 - zzz)*G4UniformRand());
+	  if(z0 > 0.01) { zzz = G4Exp(-1.0/z0); }
+	  z = -z0*G4Log(1.0 - (1.0 - zzz)*G4UniformRand());
 	  //  /(1.0 - (1.0/z0 + 1.0)*zzz); 
 	}
 

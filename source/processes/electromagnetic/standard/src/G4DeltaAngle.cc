@@ -53,6 +53,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Electron.hh"
 #include "G4AtomicShells.hh"
+#include "G4Log.hh"
 
 using namespace std;
 
@@ -97,7 +98,7 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
   do {
   
     // the atomic electron
-    G4double x = -log(G4UniformRand());
+    G4double x = -G4Log(G4UniformRand());
     G4double eKinEnergy = bindingEnergy*x;
     G4double ePotEnergy = bindingEnergy*(1.0 + x);
     G4double e = kinEnergyFinal + ePotEnergy + electron_mass_c2;

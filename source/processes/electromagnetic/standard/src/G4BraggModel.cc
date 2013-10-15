@@ -78,6 +78,8 @@
 
 using namespace std;
 
+static const G4double invLog10 = 1.0/G4Log(10.);
+
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
     particle(0),
@@ -398,7 +400,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
       ionloss = a[iMolecula][0] * sqrt(T) ;
     
     } else if ( T < 10000.0 ) {
-      G4double slow  = a[iMolecula][1] * pow(T, 0.45) ;
+      G4double slow  = a[iMolecula][1] * G4Exp(G4Log(T)* 0.45);
       G4double shigh = G4Log( 1.0 + a[iMolecula][3]/T  
                      + a[iMolecula][4]*T ) * a[iMolecula][2]/T ;
       ionloss = slow*shigh / (slow + shigh) ;     
@@ -407,13 +409,13 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
     if ( ionloss < 0.0) ionloss = 0.0 ;
     if ( 10 == iMolecula ) { 
       if (T < 100.0) {
-	ionloss *= (1.0+0.023+0.0066*log10(T));  
+	ionloss *= (1.0+0.023+0.0066*G4Log(T)*invLog10);  
       }
       else if (T < 700.0) {   
-	ionloss *=(1.0+0.089-0.0248*log10(T-99.));
+	ionloss *=(1.0+0.089-0.0248*G4Log(T-99.)*invLog10);
       } 
       else if (T < 10000.0) {    
-	ionloss *=(1.0+0.089-0.0248*log10(700.-99.));
+	ionloss *=(1.0+0.089-0.0248*G4Log(700.-99.)*invLog10);
       }
     }
     ionloss /= atomicWeight[iMolecula];
@@ -563,7 +565,7 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
   }
 
   // Main parametrisation
-  G4double slow  = a[i][1] * pow(T, 0.45) ;
+  G4double slow  = a[i][1] * G4Exp(G4Log(T) * 0.45) ;
   G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
   ionloss = slow*shigh*fac / (slow + shigh) ;     
   

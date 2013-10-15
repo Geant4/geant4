@@ -59,6 +59,7 @@
 #include "G4ModifiedTsai.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
+#include "G4Log.hh"
 
 G4ModifiedTsai::G4ModifiedTsai(const G4String&)
   : G4VEmAngularDistribution("AngularGenUrban")
@@ -83,7 +84,7 @@ G4ModifiedTsai::SampleDirection(const G4DynamicParticle* dp,
   G4double u;
 
   do {
-    u = - std::log(G4UniformRand()*G4UniformRand());
+    u = - G4Log(G4UniformRand()*G4UniformRand());
 
     if ( border > G4UniformRand() ) { u /= a1; }
     else                            { u /= a2; }

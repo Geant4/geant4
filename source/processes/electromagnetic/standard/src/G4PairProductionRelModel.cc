@@ -62,6 +62,7 @@
 
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LossTableManager.hh"
+#include "G4Exp.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -268,11 +269,11 @@ G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplusEnergy)
   else if (s0<1.9516) {
     // intermediate suppression
     // using eq.77 approxim. valid s0<2.      
-    phiLPM = 1.-exp(-6.*s0*(1.+(3.-pi)*s0)
+    phiLPM = 1.-G4Exp(-6.*s0*(1.+(3.-pi)*s0)
 		+s3/(0.623+0.795*s0+0.658*s2));
     if (s0<0.415827397755) {
       // using eq.77 approxim. valid 0.07<s<2
-      G4double psiLPM = 1-exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
+      G4double psiLPM = 1-G4Exp(-4*s0-8*s2/(1+3.936*s0+4.97*s2-0.05*s3+7.50*s4));
       gLPM = 3*psiLPM-2*phiLPM;
     }
     else {
@@ -366,7 +367,7 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     // limits of the screening variable
     G4double screenfac = 136.*epsil0/(anElement->GetIonisation()->GetZ3());
-    G4double screenmax = exp ((42.24 - FZ)/8.368) - 0.952 ;
+    G4double screenmax = G4Exp ((42.24 - FZ)/8.368) - 0.952 ;
     G4double screenmin = min(4.*screenfac,screenmax);
 
     // limits of the energy sampling
@@ -386,7 +387,7 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     do {
       if ( NormF1/(NormF1+NormF2) > G4UniformRand() ) {
-	epsil = 0.5 - epsilrange*pow(G4UniformRand(), 0.333333);
+	epsil = 0.5 - epsilrange*nist->GetZ13(G4UniformRand());
 	screenvar = screenfac/(epsil*(1-epsil));
 	if (fLPMflag && GammaEnergy>100.*GeV) {
 	  CalcLPMFunctions(GammaEnergy,GammaEnergy*epsil);

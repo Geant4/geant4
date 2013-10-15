@@ -1020,8 +1020,8 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     G4double b1 = b+1.;
     G4double bx = c*x;
 
-    G4double eb1 = pow(b1,c1);
-    G4double ebx = pow(bx,c1);
+    G4double eb1 = G4Exp(G4Log(b1)*c1);
+    G4double ebx = G4Exp(G4Log(bx)*c1);
     G4double d = ebx/eb1;
 
     G4double xmean2 = (x0 + d - (bx - b1*d)/(c-2.))/(1. - d);
@@ -1047,7 +1047,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
           var /= (d*c1); 
           cth = -1.0 + var*(1.0 - 0.5*var*c)*(2. + (c - xsi)*x);
         } else {
-          cth = 1. + x*(c - xsi - c*pow(var + d, -1.0/c1));
+          cth = 1. + x*(c - xsi - c*G4Exp(-G4Log(var + d)/c1));
           //b-b1*bx/G4Exp(G4Log(ebx+(eb1-ebx)*G4UniformRand())/c1) ;
         }
       } 

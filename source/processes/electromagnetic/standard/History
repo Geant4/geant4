@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+15 October 13: V.Ivanchenko (emstand-V09-06-69)
+- In many classes std::pow(x,y) substituted by G4Exp(G4Log(x)*y)
+
 14 October 13: V.Ivanchenko (emstand-V09-06-68)
 - G4DeltaAngleFreeScat - is added
 - G4ESTARStopping - added reading from G4LEDATA

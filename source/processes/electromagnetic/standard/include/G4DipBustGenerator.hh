@@ -72,13 +72,11 @@ public:
 
   void PrintGeneratorInformation() const;
 
-protected:
-
 private:
 
   // hide assignment operator 
-     G4DipBustGenerator & operator=(const  G4DipBustGenerator &right);
-     G4DipBustGenerator(const  G4DipBustGenerator&);
+  G4DipBustGenerator & operator=(const  G4DipBustGenerator &right);
+  G4DipBustGenerator(const  G4DipBustGenerator&);
 
 };
 

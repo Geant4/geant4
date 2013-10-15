@@ -60,7 +60,7 @@
 #include "G4Gamma.hh"
 #include "Randomize.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4Log.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -90,6 +90,7 @@ G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
   theGamma    = G4Gamma::Gamma();
   thePositron = G4Positron::Positron();
   theElectron = G4Electron::Electron();
+  g4pow = G4Pow::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -219,7 +220,7 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     do {
       if ( NormF1/(NormF1+NormF2) > G4UniformRand() ) {
-	epsil = 0.5 - epsilrange*pow(G4UniformRand(), 0.333333);
+	epsil = 0.5 - epsilrange*g4pow->A13(G4UniformRand());
 	screenvar = screenfac/(epsil*(1-epsil));
 	greject = (ScreenFunction1(screenvar) - FZ)/F10;
               

@@ -107,7 +107,15 @@ private:
 
   G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
+  G4double ComputeParametrizedDXSectionPerAtom(G4double kineticEnergy, 
+					       G4double gammaEnergy, 
+					       G4double Z);
+
   void SetParticle(const G4ParticleDefinition* p);
+
+  G4double ScreenFunction1(G4double ScreenVariable);
+
+  G4double ScreenFunction2(G4double ScreenVariable);
 
   // * fast inline functions *
   inline void SetCurrentElement(const G4double);

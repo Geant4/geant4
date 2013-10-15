@@ -72,6 +72,29 @@ const G4double G4eBremParametrizedModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
 
 static const G4double tlow = 1.*CLHEP::MeV;
 
+//
+// GEANT4 internal units.
+//
+static const G4double
+     ah10 = 4.67733E+00, ah11 =-6.19012E-01, ah12 = 2.02225E-02,
+     ah20 =-7.34101E+00, ah21 = 1.00462E+00, ah22 =-3.20985E-02,
+     ah30 = 2.93119E+00, ah31 =-4.03761E-01, ah32 = 1.25153E-02;
+
+static const G4double
+     bh10 = 4.23071E+00, bh11 =-6.10995E-01, bh12 = 1.95531E-02,
+     bh20 =-7.12527E+00, bh21 = 9.69160E-01, bh22 =-2.74255E-02,
+     bh30 = 2.69925E+00, bh31 =-3.63283E-01, bh32 = 9.55316E-03;
+
+static const G4double
+     al00 =-2.05398E+00, al01 = 2.38815E-02, al02 = 5.25483E-04,
+     al10 =-7.69748E-02, al11 =-6.91499E-02, al12 = 2.22453E-03,
+     al20 = 4.06463E-02, al21 =-1.01281E-02, al22 = 3.40919E-04;
+
+static const G4double
+     bl00 = 1.04133E+00, bl01 =-9.43291E-03, bl02 =-4.54758E-04,
+     bl10 = 1.19253E-01, bl11 = 4.07467E-02, bl12 =-1.30718E-03,
+     bl20 =-1.59391E-02, bl21 = 7.27752E-03, bl22 =-1.94405E-04;
+
 using namespace std;
 
 G4eBremParametrizedModel::G4eBremParametrizedModel(const G4ParticleDefinition* p,
@@ -203,7 +226,6 @@ G4double G4eBremParametrizedModel::ComputeDEDXPerVolume(
   }
   dedx *= bremFactor;
 
-
   return dedx;
 }
 
@@ -270,7 +292,6 @@ G4double G4eBremParametrizedModel::ComputeCrossSectionPerAtom(
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
 G4double G4eBremParametrizedModel::ComputeXSectionPerAtom(G4double cut)
 {
   G4double cross = 0.0;
@@ -290,7 +311,7 @@ G4double G4eBremParametrizedModel::ComputeXSectionPerAtom(G4double cut)
 
     for(G4int i=0; i<8; i++) {
 
-      G4double eg = exp(e0 + xgi[i]*delta)*totalEnergy;
+      G4double eg = G4Exp(e0 + xgi[i]*delta)*totalEnergy;
 
       xs = ComputeDXSectionPerAtom(eg);
 
@@ -306,33 +327,9 @@ G4double G4eBremParametrizedModel::ComputeXSectionPerAtom(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-//
-// GEANT4 internal units.
-//
-  static const G4double
-     ah10 = 4.67733E+00, ah11 =-6.19012E-01, ah12 = 2.02225E-02,
-     ah20 =-7.34101E+00, ah21 = 1.00462E+00, ah22 =-3.20985E-02,
-     ah30 = 2.93119E+00, ah31 =-4.03761E-01, ah32 = 1.25153E-02;
-
-  static const G4double
-     bh10 = 4.23071E+00, bh11 =-6.10995E-01, bh12 = 1.95531E-02,
-     bh20 =-7.12527E+00, bh21 = 9.69160E-01, bh22 =-2.74255E-02,
-     bh30 = 2.69925E+00, bh31 =-3.63283E-01, bh32 = 9.55316E-03;
-
-  static const G4double
-     al00 =-2.05398E+00, al01 = 2.38815E-02, al02 = 5.25483E-04,
-     al10 =-7.69748E-02, al11 =-6.91499E-02, al12 = 2.22453E-03,
-     al20 = 4.06463E-02, al21 =-1.01281E-02, al22 = 3.40919E-04;
-
-  static const G4double
-     bl00 = 1.04133E+00, bl01 =-9.43291E-03, bl02 =-4.54758E-04,
-     bl10 = 1.19253E-01, bl11 = 4.07467E-02, bl12 =-1.30718E-03,
-     bl20 =-1.59391E-02, bl21 = 7.27752E-03, bl22 =-1.94405E-04;
-
-G4double ScreenFunction1(G4double ScreenVariable)
-
 // compute the value of the screening function 3*PHI1 - PHI2
 
+G4double G4eBremParametrizedModel::ScreenFunction1(G4double ScreenVariable)
 {
   G4double screenVal;
 
@@ -346,10 +343,9 @@ G4double ScreenFunction1(G4double ScreenVariable)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double ScreenFunction2(G4double ScreenVariable)
-
 // compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
 
+G4double G4eBremParametrizedModel::ScreenFunction2(G4double ScreenVariable)
 {
   G4double screenVal;
 
@@ -361,15 +357,19 @@ G4double ScreenFunction2(G4double ScreenVariable)
   return screenVal;
 } 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // Parametrized cross section
-G4double ComputeParametrizedDXSectionPerAtom(G4double kineticEnergy, G4double gammaEnergy, G4double Z) {
-  G4double lnZ = G4Log(Z); // 3.*(anElement->GetIonisation()->GetlogZ3());
+G4double G4eBremParametrizedModel::ComputeParametrizedDXSectionPerAtom(
+                                   G4double kineticEnergy, 
+				   G4double gammaEnergy, G4double Z) 
+{
+  SetCurrentElement(Z);
   G4double FZ = lnZ* (4.- 0.55*lnZ);
-  G4double ZZ = std::pow (Z*(Z+1.),1./3.); // anElement->GetIonisation()->GetZZ3();
-  G4double Z3 = std::pow (Z,1./3.); // (anElement->GetIonisation()->GetZ3())
+  G4double Z3 = z13; 
+  G4double ZZ = z13*nist->GetZ13(G4lrint(Z)+1); 
 
-  G4double totalEnergy = kineticEnergy + electron_mass_c2;
+  totalEnergy = kineticEnergy + electron_mass_c2;
 
   //  G4double x, epsil, greject, migdal, grejmax, q;
   G4double epsil, greject;
@@ -379,7 +379,7 @@ G4double ComputeParametrizedDXSectionPerAtom(G4double kineticEnergy, G4double ga
   // precalculated parameters
   G4double ah, bh;
 
-if (kineticEnergy > tlow) {
+  if (kineticEnergy > tlow) {
        
     G4double ah1 = ah10 + ZZ* (ah11 + ZZ* ah12);
     G4double ah2 = ah20 + ZZ* (ah21 + ZZ* ah22);
@@ -433,7 +433,7 @@ if (kineticEnergy > tlow) {
     */
   }
 
- return greject;
+  return greject;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -463,8 +463,7 @@ G4double G4eBremParametrizedModel::ComputeDXSectionPerAtom(G4double gammaEnergy)
 
   G4double main2 = ComputeParametrizedDXSectionPerAtom(kinEnergy,gammaEnergy,currentZ);
   std::cout<<"main2 = "<<main2<<std::endl;
-  std::cout<<"main2tot = "<<main2 * ( (Fel-fCoulomb) + Finel/currentZ ) /  (Fel-fCoulomb);
-
+  std::cout<<"main2tot = "<<main2 * ( (Fel-fCoulomb) + Finel/currentZ )/(Fel-fCoulomb);
 
   G4double cross =  main2; //main+secondTerm;
   return cross;
@@ -500,7 +499,7 @@ void G4eBremParametrizedModel::SampleSecondaries(
   G4double gammaEnergy, f, x; 
 
   do {
-    x = exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
+    x = G4Exp(xmin + G4UniformRand()*(xmax - xmin)) - densityCorr;
     if(x < 0.0) x = 0.0;
     gammaEnergy = sqrt(x);
     f = ComputeDXSectionPerAtom(gammaEnergy);
