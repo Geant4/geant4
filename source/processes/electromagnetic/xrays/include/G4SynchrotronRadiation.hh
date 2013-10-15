@@ -59,6 +59,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
+class G4VEmAngularDistribution;
 
 class G4SynchrotronRadiation : public G4VDiscreteProcess
 {
@@ -69,12 +70,12 @@ public:
 
   virtual ~G4SynchrotronRadiation();
 
-  G4double GetMeanFreePath( const G4Track& track,
-                                     G4double previousStepSize,
-                                     G4ForceCondition* condition );
+  virtual G4double GetMeanFreePath( const G4Track& track,
+				    G4double previousStepSize,
+				    G4ForceCondition* condition );
 
-  G4VParticleChange *PostStepDoIt( const G4Track& track,
-                                      const G4Step& Step    );
+  virtual G4VParticleChange *PostStepDoIt( const G4Track& track,
+					   const G4Step& Step    );
 
   G4double GetPhotonEnergy( const G4Track& trackData,
                                const G4Step&  stepData      );
@@ -84,14 +85,19 @@ public:
   G4double InvSynFracInt(G4double x);
   G4double Chebyshev(G4double a,G4double b,const G4double c[],
 		     G4int n, G4double x);
-  G4bool IsApplicable(const G4ParticleDefinition&);
-  void BuildPhysicsTable(const G4ParticleDefinition& );
-  void PrintInfoDefinition();
+
+  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition& );
+  virtual void PrintInfoDefinition();
+
+  void SetAngularGenerator(G4VEmAngularDistribution* p);
 
 private:
 
   G4SynchrotronRadiation & operator=(const G4SynchrotronRadiation &right);
   G4SynchrotronRadiation(const G4SynchrotronRadiation&);
+
+  G4VEmAngularDistribution*   genAngle;
 
   G4ParticleDefinition*       theGamma;
   const G4ParticleDefinition* theElectron;
@@ -106,13 +112,6 @@ private:
 };
 
 //////////////////////////  INLINE METHODS  /////////////////////////////
-inline G4bool
-G4SynchrotronRadiation::IsApplicable( const G4ParticleDefinition& particle )
-{
-
-  return ( ( &particle == (const G4ParticleDefinition *)theElectron ) ||
-           ( &particle == (const G4ParticleDefinition *)thePositron )    );
-}
 
 inline G4double 
 G4SynchrotronRadiation::Chebyshev(G4double a, G4double b, const G4double c[],

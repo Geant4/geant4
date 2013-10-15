@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 Oct 13: V.Ivanchenko (xrays-V09-06-07)
+- G4SynchrotronRadiation added interface to G4VEmAngularDistribution,
+    the default G4DipBustGenerator; minor code cleanup
+
 12 Sept 13: P.Gumplinger (xrays-V09-06-06)
 - G4Scintillation - fix a bug changing incorrect GetMaxValue to GetMaxEnergy
 
