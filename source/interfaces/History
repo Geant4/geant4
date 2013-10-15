@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-10th October 2013  Laurent Garnier (interfaces-V09-06-05)
+14th October 2013  Laurent Garnier (interfaces-V09-06-07)
+- G4UIWt : 
+  o Fix a warning about "/*" within comment
+
+10th October 2013  Laurent Garnier (interfaces-V09-06-06)
+                      forgot to tag interfaces-V09-06-05)
 - G4UIQt :
   o Fix SecondaryLoop for Qt. It was doing nothing at all, now processing
     events until exitPause = true
