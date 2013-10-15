@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+14 October 2013  Dennis Wright radioactive_decay-V09-06-16
+----------------------------------------------------------
+- G4NuclearDecayChannel::DecayIt: add an electron mass to the parent nucleus
+  in case of electron capture.  This fixes the G4GeneralPhaseSpaceDecay::Pmx()
+  mass deficit warning. 
+
 4 October 2013  Dennis Wright radioactive_decay-V09-06-15
 ---------------------------------------------------------
 - G4NuclearDecayChannel: change class member daughterExcitation

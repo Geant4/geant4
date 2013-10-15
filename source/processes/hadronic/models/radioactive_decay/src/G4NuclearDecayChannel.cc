@@ -223,8 +223,10 @@ void G4NuclearDecayChannel::FillDaughterNucleus(G4int index, G4int A, G4int Z,
   } else {
     G4IonTable *theIonTable =
       (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
+    // GetIon with only Z and A arguments returns ground state         
     daughterNucleus = theIonTable->GetIon(daughterZ, daughterA);
   }
+
   daughterExcitation = theDaughterExcitation;
   SetDaughter(index, daughterNucleus);
 }
@@ -236,23 +238,23 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
   // if (G4MT_parent == 0) FillParent();
   // if (G4MT_daughters == 0) FillDaughters();
 
-  // We want to ensure that the difference between the total
-  // parent and daughter masses equals the energy liberated by the transition.
-
+  // Reaction-dependent mass adjustment 
   G4double deltaM;
-  if (decayMode == 1) {         // beta- decay
+  if (decayMode == 1) {                         // beta- decay
     deltaM = CLHEP::electron_mass_c2;
-  } else if (decayMode == 2) {  // beta+ decay
+  } else if (decayMode == 2) {                  // beta+ decay
     deltaM = 2.*CLHEP::electron_mass_c2;
-  } else {                      // all others
+  } else if (decayMode < 6 && decayMode > 2) {  // EC
+    deltaM = -CLHEP::electron_mass_c2;
+  } else {                                      // all others
     deltaM = 0.0;
   }
 
-  G4double groundStateParentMass = G4MT_parent->GetPDGMass();
-  G4double massAvailableForDecay =
-                     groundStateParentMass - deltaM - daughterExcitation;
-  // theParentMass = 0.0;
-  SetParentMass(massAvailableForDecay);
+  // Mass available for decay in rest frame of parent after correcting for
+  // the appropriate number of electron masses and reserving the daughter
+  // excitation energy to be applied later 
+  G4double massOfParent = G4MT_parent->GetPDGMass();  // PDG mass includes excitation energy
+  SetParentMass(massOfParent - deltaM - daughterExcitation);
   
   // Define a product vector.
   G4DecayProducts* products = 0;
@@ -389,7 +391,8 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
           daughterIon = theIonTable->FindIon(daughterZ, daughterA, 0);
           G4ExceptionDescription ed;
           ed << "No matching metastable state found for (" << daughterZ << ", "
-             << daughterA << ") - returning ground state " << G4endl;
+             << daughterA << ") with excitation " << finalDaughterExcitation
+             << " - returning ground state " << G4endl;
           G4Exception("G4NuclearDecayChannel::DecayIt()", "HAD_RDM_005",
                       JustWarning, ed);
         }
