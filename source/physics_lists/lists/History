@@ -14,6 +14,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-Oct-2013, Davide Mancusi             (phys-lists-V09-06-16)
+- Missing header.
+
+15-Oct-2013, Davide Mancusi             (phys-lists-V09-06-15)
+- Make the *_HP variants of the INCLXX-based physics list use ElasticHP.
+
 06-Sep-2013, Luciano Pandola            (phys-lists-V09-06-14)
 - LBE.icc, add missing #include of G4HadronCaptureProcess
 (gave compilation error to user application using LBE) 
