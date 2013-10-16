@@ -103,7 +103,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
    G4int targ_Z = target.GetZ_asInt();
    G4int targ_A = target.GetA_asInt();
-   G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon( targ_Z , targ_A , 0.0 );
+   G4ParticleDefinition* targ_pd = G4IonTable::GetIonTable()->GetIon( targ_Z , targ_A , 0.0 );
 
 
    //G4NistManager* nistMan = G4NistManager::Instance();
@@ -489,7 +489,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       G4int ia = (*it)->GetMassNumber();
       G4int iz = (*it)->GetAtomicNumber();
 
-      G4LorentzVector lv ( G4ThreeVector( 0.0 ) , (*it)->GetExcitationEnergy()*GeV + G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass( iz , ia ) );
+      G4LorentzVector lv ( G4ThreeVector( 0.0 ) , (*it)->GetExcitationEnergy()*GeV + G4IonTable::GetIonTable()->GetIonMass( iz , ia ) );
 
       G4Fragment* aFragment = new G4Fragment( ia , iz , lv );
 
@@ -572,7 +572,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       if ( notBreak == true )
       {
 
-         G4ParticleDefinition* pd = G4ParticleTable::GetParticleTable()->GetIon( (*it)->GetAtomicNumber() , (*it)->GetMassNumber(), (*it)->GetExcitationEnergy()*GeV );
+         G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( (*it)->GetAtomicNumber() , (*it)->GetMassNumber(), (*it)->GetExcitationEnergy()*GeV );
          G4LorentzVector p4_CM = nucleus_p4CM;
          G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB ); // Back to LAB  
          G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
