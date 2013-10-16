@@ -124,7 +124,7 @@ namespace G4INCL {
         INCL_DEBUG("Transmission probability for cluster " << candidateCluster->getID() << " = " << clusterTransmissionProbability << std::endl);
 
         if (x <= clusterTransmissionProbability) {
-          theNucleus->getStore()->getBook()->incrementEmittedClusters();
+          theNucleus->getStore()->getBook().incrementEmittedClusters();
           INCL_DEBUG("Cluster " << candidateCluster->getID() << " passes the Coulomb barrier, transmitting." << std::endl);
           return new TransmissionChannel(theNucleus, candidateCluster);
         } else {
@@ -177,13 +177,13 @@ namespace G4INCL {
       if(out->isCluster()) {
 	Cluster *clusterOut = dynamic_cast<Cluster*>(out);
         ParticleList const components = clusterOut->getParticles();
-        for(ParticleIter i=components.begin(); i!=components.end(); ++i) {
+        for(ParticleIter i=components.begin(), e=components.end(); i!=e; ++i) {
           if(!(*i)->isTargetSpectator())
-            theNucleus->getStore()->getBook()->decrementCascading();
+            theNucleus->getStore()->getBook().decrementCascading();
         }
       } else if(!theParticle->isTargetSpectator()) {
 // assert(out==theParticle);
-        theNucleus->getStore()->getBook()->decrementCascading();
+        theNucleus->getStore()->getBook().decrementCascading();
       }
     }
     return fs;

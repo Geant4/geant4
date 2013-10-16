@@ -258,7 +258,7 @@ namespace G4INCL {
       if(anAvatar) theNucleus->getStore()->add(anAvatar);
     }
 
-    IAvatar *StandardPropagationModel::generateBinaryCollisionAvatar(Particle * const p1, Particle * const p2) const {
+    IAvatar *StandardPropagationModel::generateBinaryCollisionAvatar(Particle * const p1, Particle * const p2) {
       // Is either particle a participant?
       if(!p1->isParticipant() && !p2->isParticipant() && p1->getParticipantType()==p2->getParticipantType()) return NULL;
 
@@ -276,17 +276,17 @@ namespace G4INCL {
       G4bool hasLocalEnergy;
       if(p1->isPion() || p2->isPion())
         hasLocalEnergy = ((theLocalEnergyDeltaType == FirstCollisionLocalEnergy &&
-              theNucleus->getStore()->getBook()->getAcceptedCollisions()==0) ||
+              theNucleus->getStore()->getBook().getAcceptedCollisions()==0) ||
             theLocalEnergyDeltaType == AlwaysLocalEnergy);
       else
         hasLocalEnergy = ((theLocalEnergyType == FirstCollisionLocalEnergy &&
-              theNucleus->getStore()->getBook()->getAcceptedCollisions()==0) ||
+              theNucleus->getStore()->getBook().getAcceptedCollisions()==0) ||
             theLocalEnergyType == AlwaysLocalEnergy);
       const G4bool p1HasLocalEnergy = (hasLocalEnergy && !p1->isPion());
       const G4bool p2HasLocalEnergy = (hasLocalEnergy && !p2->isPion());
 
-      Particle backupParticle1 = *p1;
       if(p1HasLocalEnergy) {
+        backupParticle1 = *p1;
         p1->propagate(t - currentTime);
         if(p1->getPosition().mag() > theNucleus->getSurfaceRadius(p1)) {
           *p1 = backupParticle1;
@@ -294,8 +294,8 @@ namespace G4INCL {
         }
         KinematicsUtils::transformToLocalEnergyFrame(theNucleus, p1);
       }
-      Particle backupParticle2 = *p2;
       if(p2HasLocalEnergy) {
+        backupParticle2 = *p2;
         p2->propagate(t - currentTime);
         if(p2->getPosition().mag() > theNucleus->getSurfaceRadius(p2)) {
           *p2 = backupParticle2;
@@ -320,7 +320,7 @@ namespace G4INCL {
       }
 
       // Is the CM energy > cutNN? (no cutNN on the first collision)
-      if(theNucleus->getStore()->getBook()->getAcceptedCollisions()>0
+      if(theNucleus->getStore()->getBook().getAcceptedCollisions()>0
           && p1->isNucleon() && p2->isNucleon()
           && squareTotalEnergyInCM < BinaryCollisionAvatar::getCutNNSquared()) return NULL;
 
@@ -374,10 +374,10 @@ namespace G4INCL {
     void StandardPropagationModel::generateUpdatedCollisions(const ParticleList &updatedParticles, const ParticleList &particles) {
 
       // Loop over all the updated particles
-      for(ParticleIter updated = updatedParticles.begin(); updated != updatedParticles.end(); ++updated)
+      for(ParticleIter updated=updatedParticles.begin(), e=updatedParticles.end(); updated!=e; ++updated)
       {
         // Loop over all the particles
-        for(ParticleIter particle = particles.begin(); particle != particles.end(); ++particle)
+        for(ParticleIter particle=particles.begin(), end=particles.end(); particle!=end; ++particle)
         {
           /* Consider the generation of a collision avatar only if (*particle)
            * is not one of the updated particles.
@@ -396,7 +396,7 @@ namespace G4INCL {
       haveExcept=(except.size()!=0);
 
       // Loop over all the particles
-      for(ParticleIter p1 = particles.begin(); p1 != particles.end(); ++p1)
+      for(ParticleIter p1=particles.begin(), e=particles.end(); p1!=e; ++p1)
       {
         // Loop over the rest of the particles
         ParticleIter p2 = p1;
@@ -413,7 +413,7 @@ namespace G4INCL {
 
     void StandardPropagationModel::updateAvatars(const ParticleList &particles) {
 
-      for(ParticleIter iter = particles.begin(); iter != particles.end(); ++iter) {
+      for(ParticleIter iter=particles.begin(), e=particles.end(); iter!=e; ++iter) {
         G4double time = this->getReflectionTime(*iter);
         if(time <= maximumTime) registerAvatar(new SurfaceAvatar(*iter, time, theNucleus));
       }
@@ -424,7 +424,7 @@ namespace G4INCL {
     void StandardPropagationModel::generateAllAvatars(G4bool excludeUpdated) {
       ParticleList particles = theNucleus->getStore()->getParticles();
       if(particles.empty()) { INCL_ERROR("No particles inside the nucleus!" << std::endl); }
-      for(ParticleIter i = particles.begin(); i != particles.end(); ++i) {
+      for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
         G4double time = this->getReflectionTime(*i);
         if(time <= maximumTime) registerAvatar(new SurfaceAvatar(*i, time, theNucleus));
       }
@@ -436,7 +436,7 @@ namespace G4INCL {
     }
 
     void StandardPropagationModel::generateDecays(const ParticleList &particles) {
-      for(ParticleIter i = particles.begin(); i != particles.end(); ++i) {
+      for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
 	if((*i)->isDelta()) {
     G4double decayTime = DeltaDecayChannel::computeDecayTime((*i));
 	  G4double time = currentTime + decayTime;
@@ -486,7 +486,7 @@ namespace G4INCL {
         theNucleus->getStore()->timeStep(theAvatar->getTime() - currentTime);
 
         currentTime = theAvatar->getTime();
-        theNucleus->getStore()->getBook()->setCurrentTime(currentTime);
+        theNucleus->getStore()->getBook().setCurrentTime(currentTime);
       }
 
       return theAvatar;
@@ -494,7 +494,7 @@ namespace G4INCL {
 
     void StandardPropagationModel::putSpectatorsOnShell(IAvatarList const &entryAvatars, ParticleList const &spectators) {
       G4double deltaE = 0.0;
-      for(ParticleIter p=spectators.begin(); p!=spectators.end(); ++p) {
+      for(ParticleIter p=spectators.begin(), e=spectators.end(); p!=e; ++p) {
         // put the spectators on shell (conserving their momentum)
         const G4double oldEnergy = (*p)->getEnergy();
         (*p)->setTableMass();
@@ -504,7 +504,7 @@ namespace G4INCL {
 
       deltaE /= entryAvatars.size(); // energy to remove from each participant
 
-      for(IAvatarIter a=entryAvatars.begin(); a!=entryAvatars.end(); ++a) {
+      for(IAvatarIter a=entryAvatars.begin(), e=entryAvatars.end(); a!=e; ++a) {
         // remove the energy from the participant
         Particle *p = (*a)->getParticles().front();
         ParticleType const t = p->getType();

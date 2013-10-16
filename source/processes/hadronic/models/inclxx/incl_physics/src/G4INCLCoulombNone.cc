@@ -64,7 +64,7 @@ namespace G4INCL {
     std::list<Intersection> theIntersections;
     G4double theFirstEntryTime = 1E+60; // a large time
     G4int theFirstID = 0;
-    for(ParticleIter p=projectiles.begin(); p!=projectiles.end(); ++p) {
+    for(ParticleIter p=projectiles.begin(), e=projectiles.end(); p!=e; ++p) {
       // Check if the particle enters the nucleus
       Intersection intersection(IntersectionFactory::getEarlierTrajectoryIntersection(
             (*p)->getPosition(),
@@ -85,7 +85,7 @@ namespace G4INCL {
     }
 
     std::list<Intersection>::const_iterator intIter = theIntersections.begin();
-    for( ParticleIter p=projectiles.begin(); p!=projectiles.end(); ++p, ++intIter) {
+    for(ParticleIter p=projectiles.begin(), e=projectiles.end(); p!=e; ++p, ++intIter) {
 
       if((*intIter).exists) {
         // If the particle enters the nucleus, generate a ParticleEntryAvatar

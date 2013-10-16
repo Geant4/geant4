@@ -242,7 +242,7 @@ namespace G4INCL {
     delete nucleus;
 
     nucleus = new Nucleus(A, Z, theConfig, maxUniverseRadius);
-    nucleus->getStore()->getBook()->reset();
+    nucleus->getStore()->getBook().reset();
     nucleus->initializeParticles();
 
     propagationModel->setNucleus(nucleus);
@@ -496,7 +496,7 @@ namespace G4INCL {
 
     G4bool success = true;
     G4bool atLeastOneNucleonEntering = false;
-    for(std::vector<Particle*>::const_iterator p=shuffledComponents.begin(); p!=shuffledComponents.end(); ++p) {
+    for(std::vector<Particle*>::const_iterator p=shuffledComponents.begin(), e=shuffledComponents.end(); p!=e; ++p) {
       // Skip particles that miss the interaction distance
       Intersection intersectionInteractionDistance(IntersectionFactory::getEarlierTrajectoryIntersection(
             (*p)->getPosition(),
@@ -548,7 +548,7 @@ namespace G4INCL {
     // Subtract the angular momentum of the projectile remnant
     ParticleList const &outgoing = nucleus->getStore()->getOutgoingParticles();
 // assert(outgoing.size()==0 || outgoing.size()==1);
-    for(ParticleIter i=outgoing.begin(); i!=outgoing.end(); ++i) {
+    for(ParticleIter i=outgoing.begin(), e=outgoing.end(); i!=e; ++i) {
       theCNSpin -= (*i)->getAngularMomentum();
     }
 
@@ -666,7 +666,7 @@ namespace G4INCL {
       return false;
     }
     // Stop if there are no participants and no pions inside the nucleus
-    if(nucleus->getStore()->getBook()->getCascading()==0 &&
+    if(nucleus->getStore()->getBook().getCascading()==0 &&
         nucleus->getStore()->getIncomingParticles().empty()) {
       INCL_DEBUG("No participants in the nucleus and no incoming particles left, stopping cascade" << std::endl);
       return false;
@@ -769,7 +769,7 @@ namespace G4INCL {
       IsotopicDistribution const &anIsotopicDistribution =
         ParticleTable::getNaturalIsotopicDistribution(Z);
       IsotopeVector theIsotopes = anIsotopicDistribution.getIsotopes();
-      for(IsotopeIter i=theIsotopes.begin(); i!=theIsotopes.end(); ++i) {
+      for(IsotopeIter i=theIsotopes.begin(), e=theIsotopes.end(); i!=e; ++i) {
         const G4double pMaximumRadius = ParticleTable::getMaximumNuclearRadius(Proton, i->theA, Z);
         const G4double nMaximumRadius = ParticleTable::getMaximumNuclearRadius(Neutron, i->theA, Z);
         const G4double maximumRadius = std::min(pMaximumRadius, nMaximumRadius);

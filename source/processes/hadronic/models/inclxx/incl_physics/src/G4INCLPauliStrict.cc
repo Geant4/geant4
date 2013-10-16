@@ -42,7 +42,7 @@ namespace G4INCL {
   PauliStrict::~PauliStrict() {}
 
   G4bool PauliStrict::isBlocked(ParticleList const &pL, Nucleus const * const n) {
-    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
       if(!(*p)->isNucleon()) continue;
       const G4double pmod2 = (*p)->getMomentum().mag2();
       const G4double pFermi = n->getPotential()->getFermiMomentum(*p);

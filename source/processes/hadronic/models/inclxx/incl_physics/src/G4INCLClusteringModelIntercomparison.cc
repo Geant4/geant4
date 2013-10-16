@@ -146,7 +146,7 @@ namespace G4INCL {
     cascadingEnergyPool = 0.;
     nConsidered = 0;
     const ParticleList particles = theNucleus->getStore()->getParticles();
-    for(ParticleIter i = particles.begin(); i != particles.end(); ++i) {
+    for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
       if (!(*i)->isNucleon()) continue; // Only nucleons are allowed in clusters
       if ((*i)->getID() == theLeadingParticle->getID()) continue; // Don't count the leading particle
 

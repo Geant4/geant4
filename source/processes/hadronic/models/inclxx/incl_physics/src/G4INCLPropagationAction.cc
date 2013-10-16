@@ -50,7 +50,7 @@ namespace G4INCL {
   }
 
   void PropagationAction::beforePropagationAction(IPropagationModel * /*pm*/) {
-    // assert(pm->getNucleus()->getStore()->getBook()->getCascading() == pm->getNucleus()->getStore()->countCascading());
+    // assert(pm->getNucleus()->getStore()->getBook().getCascading() == pm->getNucleus()->getStore()->countCascading());
   }
 
   void PropagationAction::afterPropagationAction(IPropagationModel * /* pm */,

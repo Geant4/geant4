@@ -132,7 +132,7 @@ namespace G4INCL {
 
   std::string InverseInterpolationTable::print() const {
     std::string message;
-    for(std::vector<InterpolationNode>::const_iterator n=nodes.begin(); n!=nodes.end(); ++n)
+    for(std::vector<InterpolationNode>::const_iterator n=nodes.begin(), e=nodes.end(); n!=e; ++n)
       message += n->print();
     return message;
   }

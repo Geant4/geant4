@@ -101,7 +101,7 @@ namespace G4INCL {
       const G4double theProjectileCorrectionPerNucleon = theProjectileCorrection / particles.size();
 
       // Update the kinematics of the components
-      for(ParticleIter i=particles.begin(); i!=particles.end(); ++i) {
+      for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
         (*i)->setEnergy((*i)->getEnergy() + theProjectileCorrectionPerNucleon);
         (*i)->setMass((*i)->getInvariantMass());
 #if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
@@ -129,7 +129,7 @@ namespace G4INCL {
     do {
       accepted = 0;
       ParticleList toBeAdded = pL;
-      for(ParticleIter p=toBeAdded.begin(); p!=toBeAdded.end(); ++p) {
+      for(ParticleIter p=toBeAdded.begin(), e=toBeAdded.end(); p!=e; ++p) {
         G4bool isAccepted = addDynamicalSpectator(*p);
         if(isAccepted) {
           pL.remove(*p);
@@ -146,7 +146,7 @@ namespace G4INCL {
     G4double theNewEnergy = theEnergy;
     G4int theNewA = theA;
     G4int theNewZ = theZ;
-    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
 // assert((*p)->isNucleon());
       // Add the initial (off-shell) momentum and energy to the projectile remnant
       theNewMomentum += getStoredMomentum(*p);
@@ -169,7 +169,7 @@ namespace G4INCL {
     }
 
     // Add all the participants to the projectile remnant
-    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
       particles.push_back(*p);
     }
 
@@ -198,7 +198,7 @@ namespace G4INCL {
     G4double theNewEnergy = theEnergy;
     G4int theNewA = theA;
     G4int theNewZ = theZ;
-    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
 // assert((*p)->isNucleon());
       // Add the initial (off-shell) momentum and energy to the projectile remnant
       theNewMomentum += getStoredMomentum(*p);
@@ -226,7 +226,7 @@ namespace G4INCL {
       ThreeVector bestMomentum;
       G4double bestEnergy = -1.;
       G4int bestA = -1, bestZ = -1;
-      for(ParticleList::iterator p=pL.begin(); p!=pL.end(); ++p) {
+      for(ParticleList::iterator p=pL.begin(), e=pL.end(); p!=e; ++p) {
         // Subtract the initial (off-shell) momentum and energy from the new
         // projectile remnant
         const ThreeVector theNewerMomentum = theNewMomentum - getStoredMomentum(*p);
@@ -271,7 +271,7 @@ namespace G4INCL {
     }
 
     // Add the accepted participants to the projectile remnant
-    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
       particles.push_back(*p);
     }
     theA = theNewA;
@@ -345,7 +345,7 @@ namespace G4INCL {
 
   ProjectileRemnant::EnergyLevels ProjectileRemnant::getPresentEnergyLevelsExcept(const long exceptID) const {
     EnergyLevels theEnergyLevels;
-    for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+    for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
       if((*p)->getID()!=exceptID) {
         EnergyLevelMap::const_iterator i = theInitialEnergyLevels.find((*p)->getID());
 // assert(i!=theInitialEnergyLevels.end());
@@ -358,12 +358,12 @@ namespace G4INCL {
 
   ProjectileRemnant::EnergyLevels ProjectileRemnant::getPresentEnergyLevelsWith(const ParticleList &pL) const {
     EnergyLevels theEnergyLevels;
-    for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+    for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
       EnergyLevelMap::const_iterator i = theInitialEnergyLevels.find((*p)->getID());
 // assert(i!=theInitialEnergyLevels.end());
       theEnergyLevels.push_back(i->second);
     }
-    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
       EnergyLevelMap::const_iterator i = theInitialEnergyLevels.find((*p)->getID());
 // assert(i!=theInitialEnergyLevels.end());
       theEnergyLevels.push_back(i->second);

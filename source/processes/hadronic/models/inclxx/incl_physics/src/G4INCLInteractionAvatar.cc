@@ -172,7 +172,7 @@ namespace G4INCL {
 
     if(!isPiN) {
       // Boost back to lab
-      for( ParticleIter i = modifiedAndCreated.begin(); i != modifiedAndCreated.end(); ++i )
+      for(ParticleIter i=modifiedAndCreated.begin(), e=modifiedAndCreated.end(); i!=e; ++i )
         (*i)->boost(-boostVector);
     }
 
@@ -181,7 +181,7 @@ namespace G4INCL {
 
     // Mark pions that have been created outside their well (we will force them
     // to be emitted later).
-    for( ParticleIter i = created.begin(); i != created.end(); ++i )
+    for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
       if((*i)->isPion() && (*i)->getPosition().mag() > theNucleus->getSurfaceRadius(*i)) {
         (*i)->makeParticipant();
         (*i)->setOutOfWell();
@@ -202,7 +202,7 @@ namespace G4INCL {
       restoreParticles();
 
       // Delete newly created particles
-      for( ParticleIter i = created.begin(); i != created.end(); ++i )
+      for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
         delete *i;
 
       FinalState *fsBlocked = new FinalState;
@@ -217,7 +217,7 @@ namespace G4INCL {
     INCL_DEBUG("postInteraction after energy conservation: final state: " << std::endl << fs->print() << std::endl);
 
     // Check that outgoing delta resonances can decay to pi-N
-    for( ParticleIter i = modified.begin(); i != modified.end(); ++i )
+    for(ParticleIter i=modified.begin(), e=modified.end(); i!=e; ++i )
       if((*i)->isDelta() &&
           (*i)->getMass() < ParticleTable::effectiveDeltaDecayThreshold) {
         INCL_DEBUG("Mass of the produced delta below decay threshold; forbidding collision. deltaMass=" <<
@@ -227,7 +227,7 @@ namespace G4INCL {
         restoreParticles();
 
         // Delete newly created particles
-        for( ParticleIter j = created.begin(); j != created.end(); ++j )
+        for(ParticleIter j=created.begin(), end=created.end(); j!=end; ++j )
           delete *j;
 
         FinalState *fsBlocked = new FinalState;
@@ -249,7 +249,7 @@ namespace G4INCL {
       restoreParticles();
 
       // Delete newly created particles
-      for( ParticleIter i = created.begin(); i != created.end(); ++i )
+      for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
         delete *i;
 
       FinalState *fsBlocked = new FinalState;
@@ -271,7 +271,7 @@ namespace G4INCL {
       restoreParticles();
 
       // Delete newly created particles
-      for( ParticleIter i = created.begin(); i != created.end(); ++i )
+      for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
         delete *i;
 
       FinalState *fsBlocked = new FinalState;
@@ -284,7 +284,7 @@ namespace G4INCL {
     INCL_DEBUG("CDPP: Allowed!" << std::endl);
 
     // If all went well, try to bring particles inside the nucleus...
-    for( ParticleIter i = modifiedAndCreated.begin(); i != modifiedAndCreated.end(); ++i )
+    for(ParticleIter i=modifiedAndCreated.begin(), e=modifiedAndCreated.end(); i!=e; ++i )
     {
       // ...except for pions beyond their surface radius.
       if((*i)->isOutOfWell()) continue;
@@ -296,7 +296,7 @@ namespace G4INCL {
     }
 
     // Collision accepted!
-    for( ParticleIter i = modifiedAndCreated.begin(); i != modifiedAndCreated.end(); ++i ) {
+    for(ParticleIter i=modifiedAndCreated.begin(), e=modifiedAndCreated.end(); i!=e; ++i ) {
       if(!(*i)->isOutOfWell()) {
         // Decide if the particle should be made into a spectator
         // (Back to spectator)
@@ -317,21 +317,21 @@ namespace G4INCL {
           INCL_DEBUG("The following particle goes back to spectator:" << std::endl
               << (*i)->print() << std::endl);
           if(!(*i)->isTargetSpectator()) {
-            theNucleus->getStore()->getBook()->decrementCascading();
+            theNucleus->getStore()->getBook().decrementCascading();
           }
           (*i)->makeTargetSpectator();
         } else {
           if((*i)->isTargetSpectator()) {
-            theNucleus->getStore()->getBook()->incrementCascading();
+            theNucleus->getStore()->getBook().incrementCascading();
           }
           (*i)->makeParticipant();
         }
       }
     }
     ParticleList destroyed = fs->getDestroyedParticles();
-    for( ParticleIter i = destroyed.begin(); i != destroyed.end(); ++i )
+    for(ParticleIter i=destroyed.begin(), e=destroyed.end(); i!=e; ++i )
       if(!(*i)->isTargetSpectator())
-        theNucleus->getStore()->getBook()->decrementCascading();
+        theNucleus->getStore()->getBook().decrementCascading();
 
     return fs;
   }
@@ -363,7 +363,7 @@ namespace G4INCL {
       (*violationEFunctor)(theSolution.x);
     } else if(theNucleus){
       INCL_DEBUG("Couldn't enforce energy conservation after an interaction, root-finding algorithm failed." << std::endl);
-      theNucleus->getStore()->getBook()->incrementEnergyViolationInteraction();
+      theNucleus->getStore()->getBook().incrementEnergyViolationInteraction();
     }
     delete violationEFunctor;
     violationEFunctor = NULL;
@@ -389,7 +389,7 @@ namespace G4INCL {
     // Store the particle momenta (necessary for the calls to
     // scaleParticleMomenta() to work)
     particleMomenta.clear();
-    for(ParticleIter i=finalParticles.begin(); i!=finalParticles.end(); ++i) {
+    for(ParticleIter i=finalParticles.begin(), e=finalParticles.end(); i!=e; ++i) {
       (*i)->boost(*boostVector);
       particleMomenta.push_back((*i)->getMomentum());
     }
@@ -399,7 +399,7 @@ namespace G4INCL {
     scaleParticleMomenta(alpha);
 
     G4double deltaE = 0.0;
-    for(ParticleIter i=finalParticles.begin(); i!=finalParticles.end(); ++i)
+    for(ParticleIter i=finalParticles.begin(), e=finalParticles.end(); i!=e; ++i)
       deltaE += (*i)->getEnergy() - (*i)->getPotentialEnergy();
     deltaE -= initialEnergy;
     return deltaE;
@@ -408,7 +408,7 @@ namespace G4INCL {
   void InteractionAvatar::ViolationEMomentumFunctor::scaleParticleMomenta(const G4double alpha) const {
 
     std::list<ThreeVector>::const_iterator iP = particleMomenta.begin();
-    for(ParticleIter i=finalParticles.begin(); i!=finalParticles.end(); ++i, ++iP) {
+    for(ParticleIter i=finalParticles.begin(), e=finalParticles.end(); i!=e; ++i, ++iP) {
       (*i)->setMomentum((*iP)*alpha);
       (*i)->adjustEnergyFromMomentum();
       (*i)->rpCorrelate();

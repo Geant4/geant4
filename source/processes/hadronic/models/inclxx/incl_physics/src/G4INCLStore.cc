@@ -42,7 +42,6 @@
 namespace G4INCL {
 
   Store::Store(Config const * const config) :
-    theBook(new Book),
     loadedA(0),
     loadedZ(0),
     loadedStoppingTime(0.),
@@ -51,58 +50,49 @@ namespace G4INCL {
   }
 
   Store::~Store() {
-    theBook->reset();
-    delete theBook;
-    theBook = 0;
+    theBook.reset();
     clear();
   }
 
   void Store::add(Particle *p) {
-    const long ID = p->getID();
-    particles[ID]=p;
     inside.push_back(p);
 
-    if(particleAvatarConnections.find(ID)==particleAvatarConnections.end()) {
-      std::vector<long> *aIDs = new std::vector<long>;
-      particleAvatarConnections[ID] = aIDs;
+    if(particleAvatarConnections.find(p)==particleAvatarConnections.end()) {
+      std::vector<IAvatar*> *avatars = new std::vector<IAvatar*>;
+      particleAvatarConnections[p] = avatars;
     }
   }
 
   void Store::addParticleEntryAvatar(IAvatar *a) {
     // Add the avatar to the avatar map
-    avatars[a->getID()]=a;
     avatarList.push_back(a);
 
     ParticleList pList = a->getParticles();
-    for(ParticleIter i = pList.begin(); i != pList.end(); ++i) {
+    for(ParticleIter i=pList.begin(), e=pList.end(); i!=e; ++i) {
       addIncomingParticle((*i));
       // Connect each particle to the avatar
-      connectParticleAndAvatar((*i)->getID(), a->getID());
+      connectParticleAndAvatar(*i, a);
     }
   }
 
   void Store::addParticleEntryAvatars(IAvatarList const &al) {
-    for(IAvatarIter a=al.begin(); a!=al.end(); ++a)
+    for(IAvatarIter a=al.begin(), e=al.end(); a!=e; ++a)
       addParticleEntryAvatar(*a);
   }
 
   void Store::add(IAvatar *a) {
     // Add the avatar to the avatar map
-    avatars[a->getID()]=a;
     avatarList.push_back(a);
 
     ParticleList pList = a->getParticles();
-    for(ParticleIter i = pList.begin(); i != pList.end(); ++i) {
-      // If one of the particles participating in this avatar haven't
-      // been registered with the store we can do it now. On the other
-      // hand, if this happens, it's probably a symptom of a bug
+    for(ParticleIter i=pList.begin(), e=pList.end(); i!=e; ++i) {
+      // If one of the particles participating in this avatar hasn't been
+      // registered with the store, it's probably a symptom of a bug
       // somewhere...
-      if(particles.find((*i)->getID()) == particles.end()) {
-       INCL_ERROR("Avatar was added before related particles. This is probably a bug." << std::endl);
-        add((*i));
-      }
+// assert(particleAvatarConnections.find(*i) != particleAvatarConnections.end());
+
       // Connect each particle to the avatar
-      connectParticleAndAvatar((*i)->getID(), a->getID());
+      connectParticleAndAvatar(*i, a);
     }
 
   }
@@ -111,67 +101,63 @@ namespace G4INCL {
     incoming.push_back(p);
   }
 
-  void Store::connectParticleAndAvatar(long particleID, long avatarID) {
-    std::map<long, std::vector<long>* >::const_iterator iter = particleAvatarConnections.find(particleID);
+  void Store::connectParticleAndAvatar(Particle * const p, IAvatar * const a) {
+    std::map<Particle*, std::vector<IAvatar*>* >::const_iterator iter = particleAvatarConnections.find(p);
     // If the particle is already connected to other avatars
     if(iter!=particleAvatarConnections.end()) { // Add to the existing map entry
-      std::vector<long> *p = iter->second;
-      p->push_back(avatarID);
+      std::vector<IAvatar*> *avatars = iter->second;
+      avatars->push_back(a);
     } else { // Create a new map entry
-      std::vector<long> *p = new std::vector<long>;
-      p->push_back(avatarID);
-      particleAvatarConnections[particleID]=p;
+      std::vector<IAvatar*> *avatars = new std::vector<IAvatar*>;
+      avatars->push_back(a);
+      particleAvatarConnections[p] = avatars;
     }
   }
 
-  void Store::removeAvatarFromParticle(long particleID, long avatarID) {
-    std::vector<long>* theseAvatars = particleAvatarConnections.find(particleID)->second;
-    std::vector<long>* newAvatars = new std::vector<long>();
-    for(std::vector<long>::const_iterator iter = theseAvatars->begin();
-	iter != theseAvatars->end(); ++iter) {
-      if((*iter) != avatarID) {
-	newAvatars->push_back((*iter));
+  void Store::removeAvatarFromParticle(Particle * const p, IAvatar * const a) {
+    std::vector<IAvatar*>* theseAvatars = particleAvatarConnections.find(p)->second;
+    std::vector<IAvatar*>* newAvatars = new std::vector<IAvatar*>();
+    for(std::vector<IAvatar*>::const_iterator iter = theseAvatars->begin(),
+	e = theseAvatars->end(); iter != e; ++iter) {
+      if(*iter != a) {
+	newAvatars->push_back(*iter);
       }
     }
     delete theseAvatars;
-    particleAvatarConnections[particleID] = newAvatars;
+    particleAvatarConnections[p] = newAvatars;
   }
 
-  void Store::removeAvatarByID(long ID) {
+  void Store::removeAvatar(IAvatar * const avatar) {
     // Disconnect the avatar from particles
-    IAvatar *avatar = avatars.find(ID)->second;
     ParticleList particlesRelatedToAvatar = avatar->getParticles();
-    for(ParticleIter particleIDiter
-	  = particlesRelatedToAvatar.begin();
-	particleIDiter != particlesRelatedToAvatar.end(); ++particleIDiter) {
-      removeAvatarFromParticle((*particleIDiter)->getID(), ID);
+    for(ParticleIter particleIter = particlesRelatedToAvatar.begin(), e = particlesRelatedToAvatar.end();
+        particleIter != e; ++particleIter) {
+      removeAvatarFromParticle(*particleIter, avatar);
     }
 
 #ifdef INCL_AVATAR_SEARCH_INCLSort
     // Remove the avatar iterator from the avatarIterList, if it is present.
-    std::list<IAvatarIter>::iterator it=binaryIterSearch(avatars.find(ID)->second);
+    std::list<IAvatarIter>::iterator it=binaryIterSearch(avatar);
     if(it != avatarIterList.end())
       avatarIterList.erase(it);
 #endif
 
     // Remove the avatar itself
     avatarList.remove(avatar);
-    avatars.erase(ID);
   }
 
-  void Store::particleHasBeenUpdated(long particleID) {
-    std::vector<long> temp_aIDs;
-    std::vector<long> *aIDs = particleAvatarConnections.find(particleID)->second;
-    for(std::vector<long>::iterator i = aIDs->begin();
-	i != aIDs->end(); ++i) {
-      temp_aIDs.push_back((*i));
+  void Store::particleHasBeenUpdated(Particle * const particle) {
+    std::vector<IAvatar*> temp_avatars;
+    std::vector<IAvatar*> *avatars = particleAvatarConnections.find(particle)->second;
+    for(std::vector<IAvatar*>::iterator i = avatars->begin(),
+	e = avatars->end(); i != e; ++i) {
+      temp_avatars.push_back(*i);
     }
 
-    for(std::vector<long>::iterator i = temp_aIDs.begin();
-	i != temp_aIDs.end(); ++i) {
-      IAvatar *tmpAvatar = avatars.find(*i)->second;
-      removeAvatarByID((*i));
-      delete tmpAvatar;
+    for(std::vector<IAvatar*>::iterator i = temp_avatars.begin(),
+	e = temp_avatars.end(); i != e; ++i) {
+      removeAvatar(*i);
+      delete *i;
     }
   }
 
@@ -197,14 +183,14 @@ namespace G4INCL {
   }
 #endif
 
-  void Store::removeAvatarsFromParticle(long ID) {
-    std::vector<long> *relatedAvatars = particleAvatarConnections.find(ID)->second;
-    for(std::vector<long>::const_iterator i = relatedAvatars->begin();
-	i != relatedAvatars->end(); ++i) {
-      removeAvatarByID((*i));
+  void Store::removeAvatarsFromParticle(Particle * const particle) {
+    std::vector<IAvatar*> *relatedAvatars = particleAvatarConnections.find(particle)->second;
+    for(std::vector<IAvatar*>::const_iterator i = relatedAvatars->begin(),
+	e = relatedAvatars->end(); i != e; ++i) {
+      removeAvatar(*i);
     }
     delete relatedAvatars;
-    particleAvatarConnections.erase(ID);
+    particleAvatarConnections.erase(particle);
   }
 
   IAvatar* Store::findSmallestTime() {
@@ -254,34 +240,31 @@ namespace G4INCL {
 #error Unrecognized INCL_AVATAR_SEARCH. Allowed values are: FullSort, INCLSort, MinElement.
 #endif
 
-    removeAvatarByID(avatar->getID());
+    removeAvatar(avatar);
     return avatar;
   }
 
   void Store::timeStep(G4double step) {
-    for(std::map<long, Particle*>::iterator particleIter
-	  = particles.begin();
-	particleIter != particles.end(); ++particleIter) {
-      (*particleIter).second->propagate(step);
+    for(ParticleIter particleIter = inside.begin(), particleEnd=inside.end();
+	particleIter != particleEnd; ++particleIter) {
+      (*particleIter)->propagate(step);
     }
   }
 
-  void Store::particleHasBeenEjected(long ID) {
-    particleHasBeenUpdated(ID);
+  void Store::particleHasBeenEjected(Particle * const p) {
+    particleHasBeenUpdated(p);
     // The particle will be destroyed when destroying the Store
-    inside.remove(particles.find(ID)->second);
-    particles.erase(ID);
-    delete particleAvatarConnections.find(ID)->second;
-    particleAvatarConnections.erase(ID);
+    inside.remove(p);
+    std::map<Particle*, std::vector<IAvatar*>* >::iterator mapItem = particleAvatarConnections.find(p);
+    delete mapItem->second;
+    particleAvatarConnections.erase(mapItem);
   }
 
-  void Store::particleHasBeenDestroyed(long ID) {
-    particleHasBeenUpdated(ID);
+  void Store::particleHasBeenDestroyed(Particle * const p) {
+    particleHasBeenUpdated(p);
     // Have to destroy the particle here, the Store will forget about it
-    Particle * const toDelete = particles.find(ID)->second;
-    inside.remove(toDelete);
-    delete toDelete;
-    particles.erase(ID);
+    inside.remove(p);
+    delete p;
   }
 
   void Store::particleHasEntered(Particle * const particle) {
@@ -289,64 +272,32 @@ namespace G4INCL {
     add(particle);
   }
 
-  ParticleList Store::getParticipants() {
-    INCL_WARN("Store::getParticipants is probably slow..." << std::endl);
-    ParticleList result;
-    for(std::map<long, Particle*>::iterator iter = particles.begin();
-	iter != particles.end(); ++iter) {
-      if((*iter).second->isParticipant()) {
-	result.push_back((*iter).second);
-      }
-    }
-    return result;
-  }
-
-  ParticleList Store::getSpectators() {
-    INCL_WARN("Store::getSpectators is probably slow..." << std::endl);
-    ParticleList result;
-    for(std::map<long, Particle*>::iterator iter = particles.begin();
-	iter != particles.end(); ++iter) {
-      if(!(*iter).second->isParticipant()) {
-	result.push_back((*iter).second);
-      }
-    }
-    return result;
-  }
-
   void Store::clearAvatars() {
-    for(std::map<long, IAvatar*>::iterator iter = avatars.begin();
-	iter != avatars.end(); ++iter) {
-      delete (*iter).second;
+    for(IAvatarIter iter = avatarList.begin(), e = avatarList.end(); iter != e; ++iter) {
+      delete *iter;
     }
 
-    for(std::map<long, std::vector<long>*>::iterator iter = particleAvatarConnections.begin();
-	iter != particleAvatarConnections.end(); ++iter) {
-      delete (*iter).second;
+    for(std::map<Particle*, std::vector<IAvatar*>*>::iterator iter = particleAvatarConnections.begin(),
+	e = particleAvatarConnections.end(); iter != e; ++iter) {
+      delete iter->second;
     }
 
     particleAvatarConnections.clear();
-    avatars.clear();
     avatarList.clear();
 
   }
 
   void Store::initialiseParticleAvatarConnections() {
-    for(ParticleIter ip=inside.begin(); ip!=inside.end(); ++ip) {
-      std::vector<long> *aIDs = new std::vector<long>;
-      particleAvatarConnections[(*ip)->getID()] = aIDs;
+    for(ParticleIter ip=inside.begin(), e=inside.end(); ip!=e; ++ip) {
+      std::vector<IAvatar*> *avatars = new std::vector<IAvatar*>;
+      particleAvatarConnections[*ip] = avatars;
     }
   }
 
   void Store::clear() {
     clearAvatars();
-    inside.clear();
 
-    for(std::map<long, Particle*>::iterator iter = particles.begin();
-	iter != particles.end(); ++iter) {
-      delete (*iter).second;
-    }
-    particles.clear();
-
+    clearInside();
     clearOutgoing();
 
     if( incoming.size() != 0 ) {
@@ -360,8 +311,15 @@ namespace G4INCL {
 
   }
 
+  void Store::clearInside() {
+    for(ParticleIter iter=inside.begin(), e=inside.end(); iter!=e; ++iter) {
+      delete *iter;
+    }
+    inside.clear();
+  }
+
   void Store::clearOutgoing() {
-    for(ParticleIter iter = outgoing.begin();	iter != outgoing.end(); ++iter) {
+    for(ParticleIter iter=outgoing.begin(), e=outgoing.end(); iter!=e; ++iter) {
       if((*iter)->isCluster()) {
         Cluster *c = dynamic_cast<Cluster *>(*iter);
 // assert(c);
@@ -415,7 +373,7 @@ namespace G4INCL {
       p->setPotentialEnergy(v);
       if(isParticipant == 1) {
         p->makeParticipant();
-        theBook->incrementCascading();
+        theBook.incrementCascading();
       }
       add(p);
     }
@@ -426,7 +384,7 @@ namespace G4INCL {
   std::string Store::printParticleConfiguration() {
     std::stringstream ss;
     G4int A = 0, Z = 0;
-    for(ParticleIter i = inside.begin(); i != inside.end(); ++i) {
+    for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
       if((*i)->getType() == Proton) {
 	A++;
 	Z++;
@@ -441,7 +399,7 @@ namespace G4INCL {
 	      << "100.0" << " "
 	      << "0.0" << std::endl;
 
-    for(ParticleIter i = inside.begin(); i != inside.end(); ++i) {
+    for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
       G4int ID = (*i)->getID();
       G4int type = 0;
       if((*i)->getType() == Proton) {
@@ -482,16 +440,14 @@ namespace G4INCL {
 
   std::string Store::printAvatars() {
     std::stringstream ss;
-    IAvatarIter i;
-    for(i = avatarList.begin(); i != avatarList.end(); ++i) {
+    for(IAvatarIter i = avatarList.begin(), e = avatarList.end(); i != e; ++i) {
       ss << (*i)->toString() << std::endl;
     }
     return ss.str();
   }
 
   G4bool Store::containsCollisions() const {
-    IAvatarIter i;
-    for(i = avatarList.begin(); i != avatarList.end(); ++i)
+    for(IAvatarIter i = avatarList.begin(), e = avatarList.end(); i != e; ++i)
       if((*i)->getType()==CollisionAvatarType) return true;
     return false;
   }

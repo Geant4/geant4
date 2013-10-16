@@ -84,7 +84,7 @@ namespace G4INCL {
     // avatars with no cutNN before any collision took place.
     if(particle1->isNucleon()
         && particle2->isNucleon()
-        && theNucleus->getStore()->getBook()->getAcceptedCollisions()!=0) {
+        && theNucleus->getStore()->getBook().getAcceptedCollisions()!=0) {
       const G4double energyCM2 = KinematicsUtils::squareTotalEnergyInCM(particle1, particle2);
       // Below a certain cut value we don't do anything:
       if(energyCM2 < cutNNSquared) {
@@ -198,19 +198,19 @@ namespace G4INCL {
 
     switch(fs->getValidity()) {
       case PauliBlockedFS:
-        theNucleus->getStore()->getBook()->incrementBlockedCollisions();
+        theNucleus->getStore()->getBook().incrementBlockedCollisions();
         break;
       case NoEnergyConservationFS:
       case ParticleBelowFermiFS:
       case ParticleBelowZeroFS:
         break;
       case ValidFS:
-        theNucleus->getStore()->getBook()->incrementAcceptedCollisions();
-        if(theNucleus->getStore()->getBook()->getAcceptedCollisions() == 1) {
+        theNucleus->getStore()->getBook().incrementAcceptedCollisions();
+        if(theNucleus->getStore()->getBook().getAcceptedCollisions() == 1) {
           // Store time and cross section of the first collision
-          G4double t = theNucleus->getStore()->getBook()->getCurrentTime();
-          theNucleus->getStore()->getBook()->setFirstCollisionTime(t);
-          theNucleus->getStore()->getBook()->setFirstCollisionXSec(oldXSec);
+          G4double t = theNucleus->getStore()->getBook().getCurrentTime();
+          theNucleus->getStore()->getBook().setFirstCollisionTime(t);
+          theNucleus->getStore()->getBook().setFirstCollisionXSec(oldXSec);
 
           // Store position and momentum of the spectator on the first
           // collision
@@ -218,15 +218,15 @@ namespace G4INCL {
             INCL_ERROR("First collision must be within a target spectator and a non-target spectator");
           }
           if(isParticle1Spectator) {
-            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorPosition(backupParticle1->getPosition().mag());
-            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorMomentum(backupParticle1->getMomentum().mag());
+            theNucleus->getStore()->getBook().setFirstCollisionSpectatorPosition(backupParticle1->getPosition().mag());
+            theNucleus->getStore()->getBook().setFirstCollisionSpectatorMomentum(backupParticle1->getMomentum().mag());
           } else {
-            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorPosition(backupParticle2->getPosition().mag());
-            theNucleus->getStore()->getBook()->setFirstCollisionSpectatorMomentum(backupParticle2->getMomentum().mag());
+            theNucleus->getStore()->getBook().setFirstCollisionSpectatorPosition(backupParticle2->getPosition().mag());
+            theNucleus->getStore()->getBook().setFirstCollisionSpectatorMomentum(backupParticle2->getMomentum().mag());
           }
 
           // Store the elasticity of the first collision
-          theNucleus->getStore()->getBook()->setFirstCollisionIsElastic(isElastic);
+          theNucleus->getStore()->getBook().setFirstCollisionIsElastic(isElastic);
         }
     }
     return fs;

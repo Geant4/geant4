@@ -131,7 +131,7 @@ namespace G4INCL {
 
     /// \brief Clear the incoming list and delete the particles
     inline void deleteIncoming() {
-      for(ParticleIter iter = incoming.begin(); iter != incoming.end(); ++iter) {
+      for(ParticleIter iter=incoming.begin(), e=incoming.end(); iter!=e; ++iter) {
         delete (*iter);
       }
       clearIncoming();
@@ -142,7 +142,7 @@ namespace G4INCL {
      * triggers the removal of obsolete avatars and their
      * disconnection from the particle.
      */
-    void particleHasBeenUpdated(long);
+    void particleHasBeenUpdated(Particle * const);
 
     /**
      * Find the avatar that has the smallest time.
@@ -160,7 +160,7 @@ namespace G4INCL {
      * inside particles and removes all avatars related to this
      * particle.
      */
-    void particleHasBeenEjected(long);
+    void particleHasBeenEjected(Particle * const);
 
     /** \brief add the particle to the outgoing particle list.
      *
@@ -173,7 +173,7 @@ namespace G4INCL {
      * \param pl list of particles to be added
      */
     void addToOutgoing(ParticleList const &pl) {
-      for(ParticleIter p=pl.begin(); p!=pl.end(); ++p)
+      for(ParticleIter p=pl.begin(), e=pl.end(); p!=e; ++p)
         addToOutgoing(*p);
     }
 
@@ -181,7 +181,7 @@ namespace G4INCL {
      * Remove the particle from the system. This also removes all
      * avatars related to this particle.
      */
-    void particleHasBeenDestroyed(long);
+    void particleHasBeenDestroyed(Particle * const);
 
     /** \brief Move a particle from incoming to inside
      *
@@ -211,7 +211,7 @@ namespace G4INCL {
     ParticleList extractDynamicalSpectators() {
       ParticleList spectators;
       std::list<std::list<Particle*>::iterator> toBeErased;
-      for(std::list<Particle*>::iterator p=outgoing.begin(); p!=outgoing.end(); ++p) {
+      for(std::list<Particle*>::iterator p=outgoing.begin(), e=outgoing.end(); p!=e; ++p) {
         if((*p)->isProjectileSpectator()) {
 // assert((*p)->isNucleon());
           spectators.push_back(*p); // add them to the list we will return
@@ -238,11 +238,11 @@ namespace G4INCL {
      * Return the pointer to the Book object which keeps track of
      * various counters.
      */
-    Book* getBook() {return theBook; };
+    Book &getBook() { return theBook; };
 
     G4int countCascading() {
       G4int n=0;
-      for(ParticleIter i=inside.begin(); i!=inside.end(); ++i) {
+      for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
         if(!(*i)->isTargetSpectator())
           ++n;
       }
@@ -255,25 +255,18 @@ namespace G4INCL {
     Config const * getConfig() { return theConfig; };
 
     /**
-     * Get list of participants (active nucleons).
-     *
-     * Warning: This (slow) method may be deprecated in the near future...
-     */
-    ParticleList getParticipants();
-
-    /**
-     * Get list of spectators (active nucleons).
-     *
-     * Warning: This (slow) method may be deprecated in the near future...
-     */
-    ParticleList getSpectators();
-
-    /**
      * Clear all avatars and particles from the store.
      *
      * Warning! This actually deletes the objects as well!
      */
     void clear();
+
+    /**
+     * Clear all inside particles from the store.
+     *
+     * Warning! This actually deletes the objects as well!
+     */
+    void clearInside();
 
     /**
      * Clear all outgoing particles from the store.
@@ -375,40 +368,25 @@ namespace G4INCL {
     /**
      * Remove all avatars connected to a particle
      */
-    void removeAvatarsFromParticle(long ID);
-
-    /**
-     * Check if a particle is in the avatarParticleConnections map
-     */
-    G4bool avatarInConnectionMap(long);
+    void removeAvatarsFromParticle(Particle * const p);
 
 
     /**
      * Connects a particle and an avatar
      */
-    void connectParticleAndAvatar(long particleID, long avatarID);
+    void connectParticleAndAvatar(Particle * const p, IAvatar * const a);
 
     /**
      * Removes an avatar
      */
-    void removeAvatarFromParticle(long particleID, long avatarID);
-    void removeAvatarByID(long ID);
+    void removeAvatarFromParticle(Particle * const p, IAvatar * const a);
+    void removeAvatar(IAvatar * const a);
 
   private:
     /**
-     * Map of particle ID -> Particle*
+     * Map particle -> [avatar]
      */
-    std::map<long, Particle*> particles;
-
-    /**
-     * Map of avatar ID -> IAvatar*
-     */
-    std::map<long, IAvatar*> avatars;
-
-    /**
-     * Map particle ID -> [avatar IDs]
-     */
-    std::map<long, std::vector<long>* > particleAvatarConnections;
+    std::map<Particle*, std::vector<IAvatar*>* > particleAvatarConnections;
 
     /**
      * List of all avatars
@@ -443,7 +421,7 @@ namespace G4INCL {
     /**
      * The Book object keeps track of global counters
      */
-    Book *theBook;
+    Book theBook;
 
     /**
      * The target nucleus mass number that was loaded from a particle file

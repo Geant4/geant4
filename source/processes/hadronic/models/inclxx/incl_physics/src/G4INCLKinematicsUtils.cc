@@ -139,7 +139,7 @@ namespace G4INCL {
 
   G4double sumTotalEnergies(const ParticleList &pl) {
     G4double E = 0.0;
-    for(ParticleIter i = pl.begin(); i != pl.end(); ++i) {
+    for(ParticleIter i=pl.begin(), e=pl.end(); i!=e; ++i) {
       E += (*i)->getEnergy();
     }
     return E;
@@ -147,7 +147,7 @@ namespace G4INCL {
 
   ThreeVector sumMomenta(const ParticleList &pl) {
     ThreeVector p(0.0, 0.0, 0.0);
-    for(ParticleIter i = pl.begin(); i != pl.end(); ++i) {
+    for(ParticleIter i=pl.begin(), e=pl.end(); i!=e; ++i) {
       p += (*i)->getMomentum();
     }
     return p;

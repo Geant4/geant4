@@ -98,7 +98,7 @@ namespace G4INCL {
       theExcitationEnergy(rhs.theExcitationEnergy),
       theSpin(rhs.theSpin)
     {
-      for(ParticleIter p=rhs.particles.begin(); p!=rhs.particles.end(); ++p) {
+      for(ParticleIter p=rhs.particles.begin(), e=rhs.particles.end(); p!=e; ++p) {
         particles.push_back(new Particle(**p));
       }
       if(rhs.theParticleSampler)
@@ -131,7 +131,7 @@ namespace G4INCL {
     }
 
     void deleteParticles() {
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         delete (*p);
       }
       clearParticles();
@@ -183,7 +183,7 @@ namespace G4INCL {
 
     /// \brief Add a list of particles to the cluster
     void addParticles(ParticleList const &pL) {
-      for(ParticleIter p=pL.begin(); p!=pL.end(); ++p)
+      for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p)
         addParticle(*p);
     }
 
@@ -207,7 +207,7 @@ namespace G4INCL {
         << std::endl
         << "Contains the following particles:"
         << std::endl;
-      for(ParticleIter i=particles.begin(); i!=particles.end(); ++i)
+      for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i)
         ss << (*i)->print();
       ss << std::endl;
       return ss.str();
@@ -227,7 +227,7 @@ namespace G4INCL {
       // First compute the current CM position and total momentum
       ThreeVector theCMPosition, theTotalMomentum;
       G4double theTotalEnergy = 0.0;
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         theCMPosition += (*p)->getPosition();
         theTotalMomentum += (*p)->getMomentum();
         theTotalEnergy += (*p)->getEnergy();
@@ -245,7 +245,7 @@ namespace G4INCL {
       const G4double rescaling = std::sqrt(((G4double)theA)/((G4double)(theA-1)));
 
       // Loop again to boost and reposition
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         // \bug{We should do the following, but the Fortran version actually
         // does not!
         // (*p)->boost(betaCM);
@@ -279,7 +279,7 @@ namespace G4INCL {
       const G4double theDynamicalPotential = computeDynamicalPotential();
       INCL_DEBUG("The dynamical potential is " << theDynamicalPotential << " MeV" << std::endl);
 
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         const G4double energy = (*p)->getEnergy() - theDynamicalPotential;
         const ThreeVector &momentum = (*p)->getMomentum();
         // Here particles are put off-shell so that we can satisfy the energy-
@@ -299,7 +299,7 @@ namespace G4INCL {
     void setPosition(const ThreeVector &position) {
       ThreeVector shift(position-thePosition);
       Particle::setPosition(position);
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         (*p)->setPosition((*p)->getPosition()+shift);
       }
     }
@@ -314,7 +314,7 @@ namespace G4INCL {
      */
     void boost(const ThreeVector &aBoostVector) {
       Particle::boost(aBoostVector);
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         (*p)->boost(aBoostVector);
         // Apply Lorentz contraction to the particle position
         (*p)->lorentzContract(aBoostVector,thePosition);
@@ -337,7 +337,7 @@ namespace G4INCL {
      */
     void freezeInternalMotion() {
       const ThreeVector &normMomentum = theMomentum / getMass();
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         const G4double pMass = (*p)->getMass();
         const ThreeVector frozenMomentum = normMomentum * pMass;
         const G4double frozenEnergy = std::sqrt(frozenMomentum.mag2()+pMass*pMass);
@@ -356,7 +356,7 @@ namespace G4INCL {
      */
     virtual void rotate(const G4double angle, const ThreeVector &axis) {
       Particle::rotate(angle, axis);
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         (*p)->rotate(angle, axis);
       }
     }
@@ -364,7 +364,7 @@ namespace G4INCL {
     /// \brief Make all the components projectile spectators, too
     virtual void makeProjectileSpectator() {
       Particle::makeProjectileSpectator();
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         (*p)->makeProjectileSpectator();
       }
     }
@@ -372,7 +372,7 @@ namespace G4INCL {
     /// \brief Make all the components target spectators, too
     virtual void makeTargetSpectator() {
       Particle::makeTargetSpectator();
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         (*p)->makeTargetSpectator();
       }
     }
@@ -380,7 +380,7 @@ namespace G4INCL {
     /// \brief Make all the components participants, too
     virtual void makeParticipant() {
       Particle::makeParticipant();
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         (*p)->makeParticipant();
       }
     }
@@ -405,7 +405,7 @@ namespace G4INCL {
      */
     G4double computeDynamicalPotential() {
       G4double theDynamicalPotential = 0.0;
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         theDynamicalPotential += (*p)->getEnergy();
       }
       theDynamicalPotential -= getTableMass();

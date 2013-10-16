@@ -113,7 +113,7 @@ namespace G4INCL {
             nucleus(n),
             outgoingParticles(n->getStore()->getOutgoingParticles()),
             theEventInfo(ei) {
-              for(ParticleIter p=outgoingParticles.begin(); p!=outgoingParticles.end(); ++p) {
+              for(ParticleIter p=outgoingParticles.begin(), e=outgoingParticles.end(); p!=e; ++p) {
                 particleMomenta.push_back((*p)->getMomentum());
                 particleKineticEnergies.push_back((*p)->getKineticEnergy());
               }
@@ -163,7 +163,7 @@ namespace G4INCL {
             ThreeVector pBalance = nucleus->getIncomingMomentum();
             std::list<ThreeVector>::const_iterator iP = particleMomenta.begin();
             std::list<G4double>::const_iterator iE = particleKineticEnergies.begin();
-            for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i, ++iP, ++iE)
+            for( ParticleIter i = outgoingParticles.begin(), e = outgoingParticles.end(); i!=e; ++i, ++iP, ++iE)
             {
               const G4double mass = (*i)->getMass();
               const G4double newKineticEnergy = (*iE) * rescale;
@@ -198,7 +198,7 @@ namespace G4INCL {
             outgoingParticles(n->getStore()->getOutgoingParticles()),
             theEventInfo(ei) {
               thePTBoostVector = nucleus->getIncomingMomentum()/nucleus->getInitialEnergy();
-              for(ParticleIter p=outgoingParticles.begin(); p!=outgoingParticles.end(); ++p) {
+              for(ParticleIter p=outgoingParticles.begin(), e=outgoingParticles.end(); p!=e; ++p) {
                 (*p)->boost(thePTBoostVector);
                 particleCMMomenta.push_back((*p)->getMomentum());
               }
@@ -249,7 +249,7 @@ namespace G4INCL {
             // Rescale the CM momenta of the outgoing particles.
             ThreeVector remnantMomentum = theIncomingMomentum;
             std::list<ThreeVector>::const_iterator iP = particleCMMomenta.begin();
-            for( ParticleIter i = outgoingParticles.begin(); i != outgoingParticles.end(); ++i, ++iP)
+            for( ParticleIter i = outgoingParticles.begin(), e = outgoingParticles.end(); i!=e; ++i, ++iP)
             {
               (*i)->setMomentum(*iP * rescale);
               (*i)->adjustEnergyFromMomentum();

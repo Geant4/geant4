@@ -104,7 +104,7 @@ namespace G4INCL {
           restoreParticles();
 
           // Delete newly created particles
-          for( ParticleIter i = created.begin(); i != created.end(); ++i )
+          for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
             delete *i;
 
           FinalState *fsBlocked = new FinalState;
@@ -129,7 +129,7 @@ namespace G4INCL {
         // Copy the final state, but don't include the pion (as if it had been
         // emitted right away).
         FinalState *emissionFS = new FinalState;
-        for(ParticleIter i=modified.begin(); i!=modified.end(); ++i)
+        for(ParticleIter i=modified.begin(), e=modified.end(); i!=e; ++i)
           emissionFS->addModifiedParticle(*i);
 
         // Test CDPP blocking
@@ -142,7 +142,7 @@ namespace G4INCL {
           restoreParticles();
 
           // Delete newly created particles
-          for( ParticleIter i = created.begin(); i != created.end(); ++i )
+          for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
             delete *i;
 
           FinalState *fsBlocked = new FinalState;
@@ -167,14 +167,14 @@ namespace G4INCL {
     if(theNucleus) {
       switch(fs->getValidity()) {
         case PauliBlockedFS:
-          theNucleus->getStore()->getBook()->incrementBlockedDecays();
+          theNucleus->getStore()->getBook().incrementBlockedDecays();
           break;
         case NoEnergyConservationFS:
         case ParticleBelowFermiFS:
         case ParticleBelowZeroFS:
           break;
         case ValidFS:
-          theNucleus->getStore()->getBook()->incrementAcceptedDecays();
+          theNucleus->getStore()->getBook().incrementAcceptedDecays();
       }
     }
     return fs;

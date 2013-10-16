@@ -43,7 +43,7 @@ namespace G4INCL {
   PauliGlobal::~PauliGlobal() {}
 
   G4bool PauliGlobal::isBlocked(ParticleList const &pL, Nucleus const * const n) {
-    for(ParticleIter p=pL.begin(); p!=pL.end(); ++p) {
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
       // Pauli blocking only applies to nucleons
       if(!(*p)->isNucleon()) continue;
 
@@ -56,7 +56,7 @@ namespace G4INCL {
       // Count particles of the same type as p below the Fermi sea
       const ParticleList particles = n->getStore()->getParticles();
       G4int nSea = 0;
-      for(ParticleIter i=particles.begin(); i!=particles.end(); ++i) {
+      for(ParticleIter i=particles.begin(), end=particles.end(); i!=end; ++i) {
         if((*i)->getType() != t) continue;
         const G4double pmod2 = (*i)->getMomentum().mag2();
         if(pmod2<pFermiSquared) nSea++;

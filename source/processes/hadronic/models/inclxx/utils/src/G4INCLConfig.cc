@@ -265,7 +265,7 @@ namespace G4INCL {
             po::collect_unrecognized(parsedOptions.options, po::exclude_positional);
           G4bool ignoreNext = false;
           const std::string match = "-datafile-path";
-          for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(); i!=unhandledOptions.end(); ++i) {
+          for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(), e=unhandledOptions.end(); i!=e; ++i) {
             if(ignoreNext) {
               ignoreNext=false;
               continue;
@@ -320,7 +320,7 @@ namespace G4INCL {
           po::collect_unrecognized(parsedOptions.options, po::exclude_positional);
         G4bool ignoreNext = false;
         const std::string match = "-datafile-path";
-        for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(); i!=unhandledOptions.end(); ++i) {
+        for(std::vector<std::string>::const_iterator i=unhandledOptions.begin(), e=unhandledOptions.end(); i!=e; ++i) {
           if(ignoreNext) {
             ignoreNext=false;
             continue;
@@ -655,7 +655,7 @@ namespace G4INCL {
 
           // Append suffixes to the output file root for each explicitly specified CLI option
           typedef po::variables_map::const_iterator BPOVMIter;
-          for(BPOVMIter i=variablesMap.begin(); i!=variablesMap.end(); ++i) {
+          for(BPOVMIter i=variablesMap.begin(), e=variablesMap.end(); i!=e; ++i) {
             std::string const &name = i->first;
             // Only process CLI options
             if(name!="projectile"
@@ -829,7 +829,7 @@ namespace G4INCL {
     std::stringstream ss;
     ss << std::boolalpha;
     OptVector const &anOptVect = aDesc.options();
-    for(OptIter opt=anOptVect.begin(); opt!=anOptVect.end(); ++opt) {
+    for(OptIter opt=anOptVect.begin(), e=anOptVect.end(); opt!=e; ++opt) {
       std::string description = (*opt)->description();
       String::wrap(description);
       String::replaceAll(description, "\n", "\n# ");

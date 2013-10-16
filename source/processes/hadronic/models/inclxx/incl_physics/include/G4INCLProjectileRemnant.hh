@@ -140,7 +140,7 @@ namespace G4INCL {
 
     /// \brief Clear the stored projectile components and delete the particles
     void deleteStoredComponents() {
-      for(std::map<long,Particle*>::const_iterator p=storedComponents.begin(); p!=storedComponents.end(); ++p)
+      for(std::map<long,Particle*>::const_iterator p=storedComponents.begin(), e=storedComponents.end(); p!=e; ++p)
         delete p->second;
       clearStoredComponents();
     }
@@ -175,7 +175,7 @@ namespace G4INCL {
 
     /// \brief Store the projectile components
     void storeComponents() {
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         // Store the particles (needed for forced CN)
         storedComponents[(*p)->getID()]=new Particle(**p);
       }
@@ -190,7 +190,7 @@ namespace G4INCL {
     void storeEnergyLevels() {
       EnergyLevels energies;
 
-      for(ParticleIter p=particles.begin(); p!=particles.end(); ++p) {
+      for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         const G4double theCMEnergy = (*p)->getEnergy();
         // Store the CM energy in the EnergyLevels map
         theInitialEnergyLevels[(*p)->getID()] = theCMEnergy;
@@ -235,7 +235,7 @@ namespace G4INCL {
 
     ParticleList getStoredComponents() const {
       ParticleList pL;
-      for(std::map<long,Particle*>::const_iterator p=storedComponents.begin(); p!=storedComponents.end(); ++p)
+      for(std::map<long,Particle*>::const_iterator p=storedComponents.begin(), e=storedComponents.end(); p!=e; ++p)
         pL.push_back(p->second);
       return pL;
     }

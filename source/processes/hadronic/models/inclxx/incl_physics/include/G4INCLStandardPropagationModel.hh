@@ -105,7 +105,7 @@ namespace G4INCL {
        * Generate a two-particle avatar, if all the appropriate conditions are
        * met.
        */
-      IAvatar *generateBinaryCollisionAvatar(Particle * const p1, Particle * const p2) const;
+      IAvatar *generateBinaryCollisionAvatar(Particle * const p1, Particle * const p2);
 
       /** \brief Get the reflection time.
        *
@@ -181,6 +181,7 @@ namespace G4INCL {
       G4double currentTime;
       G4bool firstAvatar;
       LocalEnergyType theLocalEnergyType, theLocalEnergyDeltaType;
+      Particle backupParticle1, backupParticle2;
 
       /// \brief Put spectators on shell by extracting energy from the participants.
       void putSpectatorsOnShell(IAvatarList const &entryAvatars, ParticleList const &spectators);

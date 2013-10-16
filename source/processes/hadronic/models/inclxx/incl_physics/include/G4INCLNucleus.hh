@@ -87,7 +87,7 @@ namespace G4INCL {
         theNpInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
         theNnInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
       }
-      if(!p->isTargetSpectator()) theStore->getBook()->incrementCascading();
+      if(!p->isTargetSpectator()) theStore->getBook().incrementCascading();
     };
 
     /**
@@ -127,8 +127,8 @@ namespace G4INCL {
      */
     G4double computeSeparationEnergyBalance() const {
       G4double S = 0.0;
-      ParticleList outgoing = theStore->getOutgoingParticles();
-      for(ParticleIter i = outgoing.begin(); i != outgoing.end(); ++i) {
+      ParticleList const &outgoing = theStore->getOutgoingParticles();
+      for(ParticleIter i=outgoing.begin(), e=outgoing.end(); i!=e; ++i) {
         const ParticleType t = (*i)->getType();
         switch(t) {
           case Proton:
@@ -241,8 +241,8 @@ namespace G4INCL {
 
     ///\brief Returns true if the nucleus contains any deltas.
     inline G4bool containsDeltas() {
-      ParticleList inside = theStore->getParticles();
-      for(ParticleIter i=inside.begin(); i!=inside.end(); ++i)
+      ParticleList const &inside = theStore->getParticles();
+      for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
         if((*i)->isDelta()) return true;
       return false;
     }
@@ -251,8 +251,6 @@ namespace G4INCL {
      * Print the nucleus info
      */
     std::string print();
-
-    std::string dump();
 
     Store* getStore() const {return theStore; };
     void setStore(Store *s) {

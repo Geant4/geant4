@@ -107,7 +107,7 @@ namespace G4INCL {
         else
           theLocalEnergyType = theNucleus->getStore()->getConfig()->getLocalEnergyBBType();
 
-        const G4bool firstAvatar = (theNucleus->getStore()->getBook()->getAcceptedCollisions() == 0);
+        const G4bool firstAvatar = (theNucleus->getStore()->getBook().getAcceptedCollisions() == 0);
         return ((theLocalEnergyType == FirstCollisionLocalEnergy && firstAvatar) ||
             theLocalEnergyType == AlwaysLocalEnergy);
       }

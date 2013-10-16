@@ -77,7 +77,7 @@ namespace G4INCL {
   void CoulombNonRelativistic::distortOut(ParticleList const &pL,
       Nucleus const * const nucleus) const {
 
-    for(ParticleIter particle=pL.begin(); particle!=pL.end(); ++particle) {
+    for(ParticleIter particle=pL.begin(), e=pL.end(); particle!=e; ++particle) {
 
       const G4int Z = (*particle)->getZ();
       if(Z == 0) continue;

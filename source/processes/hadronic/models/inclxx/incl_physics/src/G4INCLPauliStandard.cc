@@ -51,7 +51,7 @@ namespace G4INCL {
   PauliStandard::~PauliStandard() {}
 
   G4bool PauliStandard::isBlocked(ParticleList const &pL, Nucleus const * const n) {
-    for(ParticleIter p = pL.begin(); p != pL.end(); ++p) {
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p) {
       if( !(*p)->isNucleon() ) continue;
       if(getBlockingProbability(*p, n) > Random::shoot()) return true;
     }
@@ -85,7 +85,7 @@ namespace G4INCL {
     ParticleList const &particles = nucleus->getStore()->getParticles();
 
     G4int nl = 0;
-    for(ParticleIter it = particles.begin(); it != particles.end(); ++it) {
+    for(ParticleIter it=particles.begin(), e=particles.end(); it!=e; ++it) {
       // Skip comparing with the same particle
       if( (*it)->getID() == particle->getID() ) continue;
 

@@ -49,7 +49,7 @@ namespace G4INCL {
   }
 
   void AvatarAction::beforeAvatarAction(IAvatar *a, Nucleus *n) {
-    n->getStore()->getBook()->incrementAvatars(a->getType());
+    n->getStore()->getBook().incrementAvatars(a->getType());
     INCL_DEBUG("Random seeds before avatar " << a->getID() << ": "
           << G4INCL::Random::getSeeds() << std::endl);
     INCL_DEBUG("Next avatar:" << std::endl << a->dump() << std::endl);
@@ -64,14 +64,14 @@ namespace G4INCL {
           << G4INCL::Random::getSeeds() << std::endl);
 
     ParticleList modified = fs->getModifiedParticles();
-    for( ParticleIter p = modified.begin(); p != modified.end(); ++p )
+    for(ParticleIter p=modified.begin(), e=modified.end(); p!=e; ++p )
       if(a->isACollision())
         (*p)->incrementNumberOfCollisions();
       else if(a->isADecay())
         (*p)->incrementNumberOfDecays();
 
     ParticleList created = fs->getCreatedParticles();
-    for( ParticleIter p = created.begin(); p != created.end(); ++p )
+    for(ParticleIter p=created.begin(), e=created.end(); p!=e; ++p )
       if(a->isACollision())
         (*p)->incrementNumberOfCollisions();
       else if(a->isADecay())

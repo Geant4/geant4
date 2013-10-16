@@ -73,7 +73,7 @@ namespace G4INCL {
     std::stringstream particleString;
     ParticleList pl = getParticles();
     G4int numberOfParticles = 0;
-    for(ParticleIter i = pl.begin(); i != pl.end(); ++i) {
+    for(ParticleIter i=pl.begin(), e=pl.end(); i!=e; ++i) {
       numberOfParticles++;
       particleString << (*i)->getID() << " ";
     }
