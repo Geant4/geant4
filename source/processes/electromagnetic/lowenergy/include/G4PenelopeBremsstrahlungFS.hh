@@ -62,13 +62,18 @@ public:
   G4PenelopeBremsstrahlungFS(G4int verbosity=0);
   ~G4PenelopeBremsstrahlungFS();
  
+  //!
   //! Master and workers (do not touch tables)
-  G4double GetEffectiveZSquared(const G4Material* mat);
+  //! All of them are const
+  //!
+  G4double GetEffectiveZSquared(const G4Material* mat) const;
   size_t GetNBinsX() const {return nBinsX;};
   G4double GetMomentumIntegral(G4double* y,			   
-			       G4double up,G4int momOrder);
-  const G4PhysicsTable* GetScaledXSTable(const G4Material*,G4double cut);
-  G4double SampleGammaEnergy(G4double energy,const G4Material*, G4double cut);
+			       G4double up,G4int momOrder) const;
+  const G4PhysicsTable* GetScaledXSTable(const G4Material*,
+					 const G4double cut) const;
+  G4double SampleGammaEnergy(G4double energy,
+			     const G4Material*, const G4double cut) const;
 
   //! Reserved for the master model: they build and handle tables
   void ClearTables(G4bool isMaster=true);

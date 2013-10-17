@@ -146,7 +146,7 @@ void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4PenelopeBremsstrahlungFS::GetEffectiveZSquared(const G4Material* material)
+G4double G4PenelopeBremsstrahlungFS::GetEffectiveZSquared(const G4Material* material) const
 {
   if (!theEffectiveZSq)
     {
@@ -438,7 +438,7 @@ void G4PenelopeBremsstrahlungFS::ReadDataFile(G4int Z)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4PenelopeBremsstrahlungFS::GetMomentumIntegral(G4double* y,
-							   G4double xup,G4int momOrder)
+							   G4double xup,G4int momOrder) const
 //x is always the gridX
 {
   //Corresponds to the function RLMOM of Penelope
@@ -514,7 +514,7 @@ G4double G4PenelopeBremsstrahlungFS::GetMomentumIntegral(G4double* y,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4PhysicsTable* G4PenelopeBremsstrahlungFS::GetScaledXSTable(const G4Material* mat,
-							       G4double cut)
+								   const G4double cut) const
 { 
   //check if it already contains the entry
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
@@ -610,7 +610,7 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
 namespace{G4Mutex G4PenelopeBremsstrahlungFSMutex = G4MUTEX_INITIALIZER;}
 
 G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4Material* mat, 
-							 G4double cut)
+							     const G4double cut) const
 {
   //since theTempVect is allocated only once (member variable), but it is overwritten 
   //at every call of this method, it is necessary to make sure that two threads 

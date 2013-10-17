@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16.10.2013, L.Pandola, tag emlowen-V09-06-28
+	    Migration to MT for the Penelope Compton model
+	    Fix Exception on G4PenelopeOscillatorManager 
+            reported by Krzysztof Genser for specific materials
+
+08.10.2013, L.Pandola, tag emlowen-V09-06-27	
+	    Enforce const for G4PenelopeBremsstrahlungFS methods
+            used by the workers.
+	    Migration to MT for the Penelope Ionisation model,
+	    and related helper classes (including Penelope PIXE).
+
 07.10.2013, L.Pandola, tag emlowen-V09-06-26
 	    Migration to MT for the Penelope models of 
 	    bremsstrahlung and e+ annihilation.

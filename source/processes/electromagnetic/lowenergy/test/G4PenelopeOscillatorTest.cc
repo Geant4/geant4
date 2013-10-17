@@ -33,7 +33,7 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 
-#include "G4PEEffectModel.hh"
+//#include "G4PEEffectModel.hh"
 #include "G4KleinNishinaCompton.hh"
 #include "G4BetheHeitlerModel.hh"
 
@@ -72,12 +72,13 @@
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4MuonPlus.hh"
-
+#include "G4NistManager.hh"
 #include "G4PenelopeOscillatorManager.hh"
 #include "G4PenelopeIonisationCrossSection.hh"
 #include "G4AtomicShellEnumerator.hh"
 #include "G4LivermoreIonisationCrossSection.hh"
 #include "G4PenelopeIonisationXSHandler.hh"
+#include "G4SystemOfUnits.hh"
 
 int main() {
 
@@ -109,9 +110,23 @@ int main() {
   Water2->AddElement(HEl,11.189*perCent); 
   Water2->AddElement(OEl,88.811*perCent);
   
+  //Polyethylene092:
 
-  G4Material* material = Gold;
+  G4Material* Polyethylene092 = new G4Material("Polyethylene", 0.92*g/cm3,
+					       2);
+  G4NistManager* man = G4NistManager::Instance();
+   
+  Polyethylene092->AddElement(man->FindOrBuildElement("C"), 0.1428);
+  Polyethylene092->AddElement(man->FindOrBuildElement("H"), 0.8572);
+
+  //Polyethylene092->AddMaterial(man->FindOrBuildMaterial("G4_C"), 0.1428);
+  //Polyethylene092->AddMaterial(man->FindOrBuildMaterial("G4_H"), 0.8572);
+
+
+  G4Material* material = Water2; //Polyethylene092;
   G4MaterialCutsCouple* theCouple = new G4MaterialCutsCouple(material);
+
+
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 

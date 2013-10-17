@@ -37,6 +37,7 @@
 //                          above threshold
 // 24 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
 // 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
+// 09 Oct 2013   L Pandola  Migration to MT
 //
 #include "G4PenelopeComptonModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -58,7 +59,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
+G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition* part,
 					       const G4String& nam)
   :G4VEmModel(nam),fParticleChange(0),isInitialised(false),fAtomDeexcitation(0),
    oscManager(0)
@@ -70,6 +71,9 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition*,
   //
   oscManager = G4PenelopeOscillatorManager::GetOscillatorManager();
 
+  if (part)
+    SetParticle(part);
+ 
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -91,7 +95,7 @@ G4PenelopeComptonModel::~G4PenelopeComptonModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition*,
+void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* part,
 					  const G4DataVector&)
 {
   if (verboseLevel > 3)
@@ -108,20 +112,51 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition*,
       G4cout << "Please make sure this is intended" << G4endl;
     }
 
+  SetParticle(part);
 
-  if (verboseLevel > 0) 
+  if (IsMaster() && part == fParticle) 
     {
-      G4cout << "Penelope Compton model v2008 is initialized " << G4endl
-	     << "Energy range: "
-	     << LowEnergyLimit() / keV << " keV - "
-	     << HighEnergyLimit() / GeV << " GeV";  
-    }
-  
+
+      if (verboseLevel > 0) 
+	{
+	  G4cout << "Penelope Compton model v2008 is initialized " << G4endl
+		 << "Energy range: "
+		 << LowEnergyLimit() / keV << " keV - "
+		 << HighEnergyLimit() / GeV << " GeV";  
+	}
+    }      
+
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
   isInitialised = true; 
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4PenelopeComptonModel::InitialiseLocal(const G4ParticleDefinition* part,
+                                                     G4VEmModel *masterModel)
+{
+  if (verboseLevel > 3)
+    G4cout << "Calling  G4PenelopeComptonModel::InitialiseLocal()" << G4endl;
+ 
+  //
+  //Check that particle matches: one might have multiple master models (e.g. 
+  //for e+ and e-).
+  //
+  if (part == fParticle)
+    {
+      //Get the const table pointers from the master to the workers
+      const G4PenelopeComptonModel* theModel = 
+        static_cast<G4PenelopeComptonModel*> (masterModel);
+      
+      //Same verbosity for all workers, as the master
+      verboseLevel = theModel->verboseLevel;
+    }
+
+  return;
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -891,3 +926,11 @@ G4double G4PenelopeComptonModel::KleinNishinaCrossSection(G4double energy,
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
+
+void G4PenelopeComptonModel::SetParticle(const G4ParticleDefinition* p)
+{
+  if(!fParticle) {
+    fParticle = p;  
+  }
+}
