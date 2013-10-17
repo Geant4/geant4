@@ -47,65 +47,43 @@
 #include "G4ReactionProduct.hh"
 #include "G4InteractionContent.hh"
 
-class G4FTFParticipants : public G4VParticipants
-{
+
+class G4FTFParticipants : public G4VParticipants {
 
   public:
-      G4FTFParticipants();
-      const G4FTFParticipants & operator=(const G4FTFParticipants &right);
-      ~G4FTFParticipants();
+    G4FTFParticipants();
+    const G4FTFParticipants& operator=( const G4FTFParticipants& right );
+    ~G4FTFParticipants();
+    int operator==( const G4FTFParticipants& right ) const;
+    int operator!=( const G4FTFParticipants& right ) const;
 
-      int operator==(const G4FTFParticipants &right) const;
-      int operator!=(const G4FTFParticipants &right) const;
-/*---------------------------------------------------       // Uzhi Nov. 2012
-      void InitProjectileNucleus(G4int theZ, G4int theA);
-      void SetProjectileNucleus(G4V3DNucleus * aNucleus);
-      G4V3DNucleus * GetProjectileNucleus() const;
-//---------------------------------------------------
-*/
-      void GetList(const G4ReactionProduct  &thePrimary, 
-                         G4FTFParameters    *theParameters);
+    void GetList( const G4ReactionProduct& thePrimary, G4FTFParameters* theParameters );
+    void StartLoop();
+    G4bool Next();
+    void SortInteractionsIncT();
+    void ShiftInteractionTime();
+    G4InteractionContent& GetInteraction();  
+    std::vector< G4InteractionContent* > theInteractions;
 
-      void StartLoop();
-      G4bool Next();
-
-      void SortInteractionsIncT();
-      void ShiftInteractionTime();
-
-//??  const G4InteractionContent & GetInteraction() const;
-      G4InteractionContent & GetInteraction();
-      
-      std::vector<G4InteractionContent *> theInteractions;
-//      G4V3DNucleus *theProjectileNucleus;
   private:
-
-      G4FTFParticipants(const G4FTFParticipants &right);
-
-//      std::vector<G4InteractionContent *> theInteractions;
-  
-      G4int currentInteraction;
+    G4FTFParticipants( const G4FTFParticipants& right );
+    G4int currentInteraction;
 
 };
 
 
-inline
-void G4FTFParticipants::StartLoop()
-{
-	currentInteraction=-1;
-}
-
-inline
-G4bool G4FTFParticipants::Next()
-{
-	return ++currentInteraction < static_cast<G4int>(theInteractions.size());
+inline void G4FTFParticipants::StartLoop() {
+  currentInteraction = -1;
 }
 
 
-//inline
-//const G4InteractionContent & G4FTFParticipants::GetInteraction() const
-inline
-G4InteractionContent & G4FTFParticipants::GetInteraction()
-{
-	return *theInteractions[currentInteraction];
+inline G4bool G4FTFParticipants::Next() {
+  return ++currentInteraction < static_cast< G4int >( theInteractions.size() );
 }
+
+
+inline G4InteractionContent& G4FTFParticipants::GetInteraction() {
+  return *theInteractions[ currentInteraction ];
+}
+
 #endif

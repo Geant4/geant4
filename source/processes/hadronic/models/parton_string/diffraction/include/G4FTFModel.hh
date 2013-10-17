@@ -28,7 +28,7 @@
 // GEANT4 tag $Name:  $
 //
 // Class Description
-// Final state production code for hadron inelastic scattering above 20 GeV
+// Final state production code for hadron inelastic scattering above 3 GeV
 // based on the modeling ansatz used in FRITIOF.
 // To be used in your physics list in case you need this physics.
 // In this case you want to register an object of this class with an object
@@ -46,15 +46,9 @@
 //       class implementing the excitation in the FTF Parton String Model
 // ------------------------------------------------------------
 
-
 #include "G4VPartonStringModel.hh"
-
-class G4VSplitableHadron;
-class G4ExcitedString;
-
 #include "G4FTFParameters.hh"
 #include "G4FTFParticipants.hh"
-
 #include "G4ExcitedStringVector.hh"
 #include "G4DiffractiveExcitation.hh"
 #include "G4ElasticHNScattering.hh"
@@ -62,91 +56,87 @@ class G4ExcitedString;
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
-class G4FTFModel : public G4VPartonStringModel
-{
+class G4VSplitableHadron;
+class G4ExcitedString;
+
+
+class G4FTFModel : public G4VPartonStringModel {
 
   public:
-      G4FTFModel(const G4String& modelName = "FTF");
-      ~G4FTFModel();
+    G4FTFModel( const G4String& modelName = "FTF" );
+    ~G4FTFModel();
+
+    void Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProjectile );
+    G4ExcitedStringVector* GetStrings();
+    G4V3DNucleus* GetWoundedNucleus() const;
+    G4V3DNucleus* GetTargetNucleus() const;
+    G4V3DNucleus* GetProjectileNucleus() const;
+
+    virtual void ModelDescription( std::ostream& ) const;
+
   private:
-      G4FTFModel(const G4FTFModel &right);
-      const G4FTFModel & operator=(const G4FTFModel &right);
-      int operator==(const G4FTFModel &right) const;
-      int operator!=(const G4FTFModel &right) const;
-  public:
-      void Init(const G4Nucleus & aNucleus, const G4DynamicParticle & aProjectile);
-      G4ExcitedStringVector * GetStrings();
-      G4V3DNucleus * GetWoundedNucleus() const;
-      G4V3DNucleus * GetTargetNucleus() const;
-      G4V3DNucleus * GetProjectileNucleus() const;
+    G4FTFModel( const G4FTFModel& right );
+    const G4FTFModel& operator=( const G4FTFModel& right );
+    int operator==( const G4FTFModel& right ) const;
+    int operator!=( const G4FTFModel& right ) const;
 
-      virtual void ModelDescription(std::ostream&) const;
-
-  protected:
+    void StoreInvolvedNucleon();              
+    void ReggeonCascade();
+    G4bool PutOnMassShell();
+    G4bool ExciteParticipants();
+    G4ExcitedStringVector* BuildStrings();
+    void GetResiduals();                  
+    G4bool AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
+                           G4Nucleon*          ProjectileNucleon,
+                           G4VSplitableHadron* SelectedTargetNucleon,
+                           G4Nucleon*          TargetNucleon,
+                           G4bool              Annihilation ); 
+    G4ThreeVector GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const;
   
-  private:
-       void StoreInvolvedNucleon();              
-       void ReggeonCascade();
-       G4bool PutOnMassShell();
-       G4bool ExciteParticipants();
-       G4ExcitedStringVector * BuildStrings();
-       void GetResiduals();                  
-       G4bool AdjustNucleons(G4VSplitableHadron *SelectedAntiBaryon,
-                             G4Nucleon          *ProjectileNucleon,
-                             G4VSplitableHadron *SelectedTargetNucleon,
-                             G4Nucleon          *TargetNucleon,
-                             G4bool Annihilation); 
-       G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
-  
-  private:     
-
-       G4ReactionProduct theProjectile;       
-       G4FTFParticipants theParticipants;
+    G4ReactionProduct theProjectile;       
+    G4FTFParticipants theParticipants;
        
-      G4Nucleon * TheInvolvedNucleonsOfTarget[250];
-       G4int  NumberOfInvolvedNucleonsOfTarget;
+    G4Nucleon* TheInvolvedNucleonsOfTarget[250];
+    G4int NumberOfInvolvedNucleonsOfTarget;
 
-       G4Nucleon * TheInvolvedNucleonsOfProjectile[250];
-       G4int  NumberOfInvolvedNucleonsOfProjectile;
+    G4Nucleon* TheInvolvedNucleonsOfProjectile[250];
+    G4int NumberOfInvolvedNucleonsOfProjectile;
 
-       G4FTFParameters         * theParameters;
-       G4DiffractiveExcitation * theExcitation;
-       G4ElasticHNScattering   * theElastic;
-       G4FTFAnnihilation       * theAnnihilation;  
+    G4FTFParameters* theParameters;
+    G4DiffractiveExcitation* theExcitation;
+    G4ElasticHNScattering* theElastic;
+    G4FTFAnnihilation* theAnnihilation;  
 
-       std::vector<G4VSplitableHadron *> theAdditionalString; 
+    std::vector< G4VSplitableHadron* > theAdditionalString; 
 
-       G4double        LowEnergyLimit;
-       G4bool          HighEnergyInter;
+    G4double LowEnergyLimit;
+    G4bool HighEnergyInter;
 
-       G4LorentzVector ProjectileResidual4Momentum;
-       G4int           ProjectileResidualMassNumber;
-       G4int           ProjectileResidualCharge;
-       G4double        ProjectileResidualExcitationEnergy;
+    G4LorentzVector ProjectileResidual4Momentum;
+    G4int           ProjectileResidualMassNumber;
+    G4int           ProjectileResidualCharge;
+    G4double        ProjectileResidualExcitationEnergy;
 
-       G4LorentzVector TargetResidual4Momentum;
-       G4int           TargetResidualMassNumber;
-       G4int           TargetResidualCharge;
-       G4double        TargetResidualExcitationEnergy;
+    G4LorentzVector TargetResidual4Momentum;
+    G4int           TargetResidualMassNumber;
+    G4int           TargetResidualCharge;
+    G4double        TargetResidualExcitationEnergy;
 
 };
 
-// ------------------------------------------------------------
-inline 
-G4V3DNucleus * G4FTFModel::GetWoundedNucleus() const
-{
-	return theParticipants.GetWoundedNucleus();
+
+inline G4V3DNucleus* G4FTFModel::GetWoundedNucleus() const {
+  return theParticipants.GetWoundedNucleus();
 }
 
-inline 
-G4V3DNucleus * G4FTFModel::GetTargetNucleus() const
-{
-	return theParticipants.GetWoundedNucleus();
+
+inline G4V3DNucleus* G4FTFModel::GetTargetNucleus() const {
+  return theParticipants.GetWoundedNucleus();
 }
 
-inline 
-G4V3DNucleus * G4FTFModel::GetProjectileNucleus() const
-{
-	return theParticipants.GetProjectileNucleus();
+
+inline G4V3DNucleus* G4FTFModel::GetProjectileNucleus() const {
+  return theParticipants.GetProjectileNucleus();
 }
+
 #endif
