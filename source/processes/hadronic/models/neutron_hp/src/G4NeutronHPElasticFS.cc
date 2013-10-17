@@ -44,7 +44,7 @@
 #include "G4Alpha.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4NeutronHPDataUsed.hh"
 
 #include "zlib.h"
@@ -393,8 +393,10 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
     }
     else
     {
-      theRecoil->SetDefinition(G4ParticleTable::GetParticleTable()
-                               ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ)));
+      //theRecoil->SetDefinition(G4ParticleTable::GetParticleTable()
+      //                         ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ)));
+      theRecoil->SetDefinition(G4IonTable::GetIonTable()
+                               ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0 ));
     }
     theRecoil->SetMomentum(theTarget.GetMomentum());
     theResult.AddSecondary(theRecoil);

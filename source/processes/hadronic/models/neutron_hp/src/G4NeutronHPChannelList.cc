@@ -34,6 +34,7 @@
 #include "G4HadFinalState.hh"
 #include "G4HadProjectile.hh"
 #include "G4NeutronHPFinalState.hh"
+#include "G4IonTable.hh"
 
   G4ThreadLocal G4int G4NeutronHPChannelList::trycounter = 0;
 
@@ -138,7 +139,7 @@
        unChanged.Clear();
 
        //For Ep Check create unchanged final state including rest target 
-       G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon ( targZ , targA , 0.0 );
+       G4ParticleDefinition* targ_pd = G4IonTable::GetIonTable()->GetIon ( targZ , targA , 0.0 );
        G4DynamicParticle* targ_dp = new G4DynamicParticle( targ_pd , G4ThreeVector(1,0,0), 0.0 );
        unChanged.SetEnergyChange(aTrack.GetKineticEnergy());
        unChanged.SetMomentumChange(aTrack.Get4Momentum().vect() );

@@ -42,7 +42,7 @@
 #include "G4Electron.hh"
 #include "G4NeutronHPDataUsed.hh"
 
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 void G4NeutronHPInelasticBaseFS::InitGammas(G4double AR, G4double ZR)
 {
@@ -244,7 +244,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 
     //TK120607
     //Final momentum check should be done before return
-    G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
+    G4ParticleDefinition* targ_pd = G4IonTable::GetIonTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
     G4LorentzVector targ_4p_lab ( theTarget.GetMomentum() , std::sqrt( targ_pd->GetPDGMass()*targ_pd->GetPDGMass() + theTarget.GetMomentum().mag2() ) );
     G4LorentzVector proj_4p_lab = theTrack.Get4Momentum();
     G4LorentzVector init_4p_lab = proj_4p_lab + targ_4p_lab;
@@ -510,7 +510,7 @@ if ( (G4int)(theBaseZ+eps) == 4 && (G4int)(theBaseA+eps) == 9 )
   delete tmpHadrons;
 
 //080721 
-   G4ParticleDefinition* targ_pd = G4ParticleTable::GetParticleTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
+   G4ParticleDefinition* targ_pd = G4IonTable::GetIonTable()->GetIon ( (G4int)theBaseZ , (G4int)theBaseA , 0.0 );
    G4LorentzVector targ_4p_lab ( theTarget.GetMomentum() , std::sqrt( targ_pd->GetPDGMass()*targ_pd->GetPDGMass() + theTarget.GetMomentum().mag2() ) );
    G4LorentzVector proj_4p_lab = theTrack.Get4Momentum();
    G4LorentzVector init_4p_lab = proj_4p_lab + targ_4p_lab;

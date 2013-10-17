@@ -42,7 +42,7 @@
 #include "G4Nucleus.hh"
 #include "G4PhotonEvaporation.hh"
 #include "G4Fragment.hh"
-#include "G4ParticleTable.hh" 
+#include "G4IonTable.hh" 
 #include "G4NeutronHPDataUsed.hh"
 
   G4HadFinalState * G4NeutronHPCaptureFS::ApplyYourself(const G4HadProjectile & theTrack)
@@ -109,8 +109,9 @@
         
         // T. K. comment out below line
         //theOne->SetDefinition( G4Gamma::Gamma() );
-        G4ParticleTable* theTable = G4ParticleTable::GetParticleTable();
-        if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
+        G4IonTable* theTable = G4IonTable::GetIonTable();
+        //if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
+        if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0 ) );
 
         //if ( (*i)->GetExcitationEnergy() > 0 )
         if ( (*it)->GetExcitationEnergy() > 1.0e-2*eV )
@@ -158,8 +159,12 @@
     if ( nPhotons == 1 && thePhotons->operator[](0)->GetDefinition()->GetBaryonNumber() == 0 )
     {
        G4ThreeVector direction = thePhotons->operator[](0)->GetMomentum().unit();
-       G4double Q = G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ))->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass()
-         - G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ))->GetPDGMass();
+
+       //G4double Q = G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ))->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass()
+       //  - G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ))->GetPDGMass();
+       G4double Q = G4IonTable::GetIonTable()->GetIonMass(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0) + G4Neutron::Neutron()->GetPDGMass()
+         - G4IonTable::GetIonTable()->GetIonMass(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
+
        thePhotons->operator[](0)->SetMomentum( Q*direction );
     } 
 //
@@ -176,8 +181,10 @@
     if ( nPhotons == 1 && thePhotons->operator[](0)->GetDefinition()->GetBaryonNumber() == 0 )
     {
        G4DynamicParticle * theOne = new G4DynamicParticle;
-       G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
-                                        ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+       //G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+       //                                 ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+       G4ParticleDefinition * aRecoil = G4IonTable::GetIonTable()
+                                        ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
        theOne->SetDefinition(aRecoil);
        // Now energy; 
        // Can be done slightly better @
@@ -210,8 +217,10 @@
 
 //101203TK
     G4bool residual = false;
-    G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
-                                   ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+    //G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
+    //                               ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
+    G4ParticleDefinition * aRecoil = G4IonTable::GetIonTable()
+                                   ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
     for ( G4int j = 0 ; j != theResult.GetNumberOfSecondaries() ; j++ )
     {
        if ( theResult.GetSecondary(j)->GetParticle()->GetDefinition() == aRecoil ) residual = true;
