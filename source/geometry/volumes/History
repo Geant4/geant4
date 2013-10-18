@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 17th, 2013 J. Apostolakis, A. Dotti - geamvol-V09-06-15
+October 17th, 2013 J.Apostolakis, A.Dotti - geomvol-V09-06-15
 - Cleanup of the code removing unnecessary lines of codes and comments
 - G4GeometryWorkspacePool::CreateWorkspace
    Do not create a second object G4GeometryWorkspace' 
