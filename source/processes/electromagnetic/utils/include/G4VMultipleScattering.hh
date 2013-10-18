@@ -217,6 +217,9 @@ public:
   inline G4MscStepLimitType StepLimitType() const;
   inline void SetStepLimitType(G4MscStepLimitType val);
 
+  inline G4double LowestKinEnergy() const;
+  inline void SetLowestKinEnergy(G4double val);
+
   inline const G4ParticleDefinition* FirstParticle() const;
 
   //------------------------------------------------------------------------
@@ -389,6 +392,20 @@ inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val)
 {
   stepLimit = val;
   if(val == fMinimal) { facrange = 0.2; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4VMultipleScattering::LowestKinEnergy() const
+{
+  return lowestKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VMultipleScattering::SetLowestKinEnergy(G4double val)
+{
+  lowestKinEnergy = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

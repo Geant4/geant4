@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 October 13: V.Ivant (emutils-V09-06-58)
+- G4VMultipleScattering - increased lowestLimit from 1 eV to 10 eV
+    because Urban msc model cannot handle low-energy e- below 10 eV;
+    added Get/Set methods for this parameter
+- G4EmModelManager - fixed control on cut value per G4Region, the
+    problem was observed when PAI model is used in a some region
+    with very low cut
+    
 06 October 13: V.Ivant (emutils-V09-06-57)
 - G4VEmModel - fixed bug in fanoCavity test - element selectors are created
     even if cut value is high

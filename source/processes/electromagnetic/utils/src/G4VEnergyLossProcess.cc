@@ -1508,7 +1508,8 @@ G4VEnergyLossProcess::SampleSubCutSecondaries(std::vector<G4Track*>& tracks,
 
 	/*	
 	if(-1 < verboseLevel) 
-	  G4cout << "New track " << t->GetParticleDefinition()->GetParticleName()
+	  G4cout << "New track " 
+	         << t->GetParticleDefinition()->GetParticleName()
 		 << " e(keV)= " << t->GetKineticEnergy()/keV
 		 << " fragment= " << fragment
 		 << G4endl;
@@ -1624,7 +1625,8 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 	else         { t->SetCreatorModelIndex(biasID); }
 
 	//G4cout << "Secondary(post step) has weight " << t->GetWeight() 
-	//<< ", kenergy " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
+	//       << ", kenergy " << t->GetKineticEnergy()/MeV << " MeV" 
+	//       << " time= " << time/ns << " ns " << G4endl;
 	pParticleChange->AddSecondary(t);
       }
     }

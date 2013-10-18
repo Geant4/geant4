@@ -104,7 +104,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
   if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
 
   geomMin = 0.01*CLHEP::nm;
-  lowestKinEnergy = 1*eV;
+  lowestKinEnergy = 10*eV;
 
   // default limit on polar angle
   polarAngleLimit = 0.0;
@@ -128,10 +128,12 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType
 
 G4VMultipleScattering::~G4VMultipleScattering()
 {
+  /*
   if(1 < verboseLevel) {
     G4cout << "G4VMultipleScattering destruct " << GetProcessName() 
 	   << G4endl;
   }
+  */
   delete modelManager;
   emManager->DeRegister(this);
 }
@@ -423,8 +425,9 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
     }
   } else { isActive = false; }
   
+  
+  //if(currParticle->GetPDGMass() > GeV)    
   /*
-  if(currParticle->GetPDGMass() > GeV)    
   G4cout << "MSC::AlongStepGPIL: Ekin= " << ekin
          << "  " << currParticle->GetParticleName()
 	 << " gPathLength= " << gPathLength
