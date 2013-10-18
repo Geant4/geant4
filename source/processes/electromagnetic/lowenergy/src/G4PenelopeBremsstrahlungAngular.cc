@@ -42,6 +42,8 @@
 // 18 Jul 2012  L. Pandola       Migrated to the new basic interface of G4VEmAngularDistribution
 //                               Now returns a G4ThreeVector and takes care of the rotation
 // 03 Oct 2013  L. Pandola       Migrated to MT: only the master model handles tables  
+// 17 Oct 2013  L. Pandola       Partially revert MT migration. The angular generator is kept as 
+//                                thread-local, and each worker has full access to it.
 //
 //----------------------------------------------------------------
 
@@ -169,12 +171,16 @@ void G4PenelopeBremsstrahlungAngular::ReadDataFile()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G4bool isMaster)
+void G4PenelopeBremsstrahlungAngular::PrepareTables(const G4Material* material,G4bool /*isMaster*/ )
 {
-  if (!isMaster)    
+  //Unused at the moment: the G4PenelopeBremsstrahlungAngular is thread-local, so each worker 
+  //builds its own version of the tables.
+  /*
+    if (!isMaster)    
     //Should not be here!
     G4Exception("G4PenelopeBremsstrahlungAngular::PrepareTables()",
-		"em0100",FatalException,"Worker thread in this method");  
+    "em0100",FatalException,"Worker thread in this method");  
+  */
 
   //Check if data file has already been read
   if (!dataRead)

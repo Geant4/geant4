@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17.10.2013, L.Pandola, tag emlowen-V09-06-29
+	    Partially revert the MT migration of emlowen-V09-06-26 
+            to fix a problem found by STT. The angular generator of 
+	    Penelope bremsstrahlung is kept thread-local (one copy 
+            per worker). 
+
 16.10.2013, L.Pandola, tag emlowen-V09-06-28
 	    Migration to MT for the Penelope Compton model
 	    Fix Exception on G4PenelopeOscillatorManager 

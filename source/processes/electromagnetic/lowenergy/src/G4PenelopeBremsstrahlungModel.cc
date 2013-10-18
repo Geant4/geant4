@@ -35,6 +35,8 @@
 // 18 Jul 2012   L. Pandola   Migrate to the new interface of the angular generator, which 
 //                            now provides the G4ThreeVector and takes care of rotation
 // 02 Oct 2013   L. Pandola   Migrated to MT
+// 17 Oct 2013   L. Pandola   Partially revert the MT migration: the angular generator is 
+//                             kept as thread-local, and created/managed by the workers.
 //
 
 #include "G4PenelopeBremsstrahlungModel.hh"
@@ -98,10 +100,11 @@ G4PenelopeBremsstrahlungModel::~G4PenelopeBremsstrahlungModel()
     {
       ClearTables();
       if (fPenelopeFSHelper)
-	delete fPenelopeFSHelper;
-      if (fPenelopeAngular)
-	delete fPenelopeAngular;
+	delete fPenelopeFSHelper;   
     }
+  // This is thread-local at the moment
+  if (fPenelopeAngular)
+    delete fPenelopeAngular;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -193,8 +196,27 @@ void G4PenelopeBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition* 
       XSTableElectron = theModel->XSTableElectron;
       XSTablePositron = theModel->XSTablePositron;
       fPenelopeFSHelper = theModel->fPenelopeFSHelper;
-      fPenelopeAngular = theModel->fPenelopeAngular;
       
+      //fPenelopeAngular = theModel->fPenelopeAngular;
+      
+      //created in each thread and initialized.
+      if (!fPenelopeAngular)
+	fPenelopeAngular = new G4PenelopeBremsstrahlungAngular();     
+      //forces the cleaning of tables, in this specific case
+      if (fPenelopeAngular)
+	fPenelopeAngular->Initialize();
+      
+      G4ProductionCutsTable* theCoupleTable = 
+	G4ProductionCutsTable::GetProductionCutsTable();      
+      //Build tables for all materials
+      for (size_t i=0;i<theCoupleTable->GetTableSize();i++)
+	{
+	  const G4Material* theMat = 
+	    theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+	  fPenelopeAngular->PrepareTables(theMat,IsMaster());
+	}
+
+
       //copy the data
       nBins = theModel->nBins;
       
