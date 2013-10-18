@@ -73,7 +73,7 @@ class G4GeometryWorkspacePool
  private: 
      G4GeometryWorkspacePool* thePool; 
 
-     void* fWarehouse; 
+     //void* fWarehouse;
      // G4GeometryWarehouse* fWarehouse;
      // This is "void" to hide the actual container type for workspaces
      // Likely to be a simple STL contaier for MT or something better for tbb

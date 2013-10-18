@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 17th, 2013 J. Apostolakis, A. Dotti - geamvol-V09-06-15
+- Cleanup of the code removing unnecessary lines of codes and comments
+- G4GeometryWorkspacePool::CreateWorkspace
+   Do not create a second object G4GeometryWorkspace' 
+-  Fixed Singleton G4GeometryWorkspacePool - for thread safe creation of object. 
+
 October 4th, 2013 J.Apostolakis - geomvol-V09-06-14
 - Retag due to issue with testing - needed to ensure use of geommng 12
  NOTE: co-works with geommng-V09-06-12 and geom-specific-V09-06-19

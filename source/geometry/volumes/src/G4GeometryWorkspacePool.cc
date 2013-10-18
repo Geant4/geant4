@@ -29,12 +29,17 @@
 #include "G4GeometryWorkspacePool.hh"
 #include "G4GeometryWorkspace.hh"
 
+#include "G4AutoLock.hh"
+namespace {
+    G4Mutex singletonM = G4MUTEX_INITIALIZER;
+}
 G4ThreadLocal G4GeometryWorkspace* G4GeometryWorkspacePool::fMyWorkspace=0;
 
 // static
 G4GeometryWorkspacePool* G4GeometryWorkspacePool::GetInstance()
 {
-   static G4GeometryWorkspacePool* thePool=0; 
+    G4AutoLock l(&singletonM);
+   static G4GeometryWorkspacePool* thePool=0;
    if( !thePool ) thePool= new G4GeometryWorkspacePool();
    return thePool;
 }
@@ -50,8 +55,6 @@ G4GeometryWorkspace* G4GeometryWorkspacePool::CreateWorkspace()
       G4Exception("GeometryWorspacePool::CreateWorkspace", "Geom-003",
                   FatalException, "Failed to create workspace.");
     }else{
-       geometryWrk= new G4GeometryWorkspace();
-       geometryWrk->UseWorkspace();
        fMyWorkspace= geometryWrk;
     }
   }else{
@@ -75,7 +78,6 @@ void G4GeometryWorkspacePool::CreateAndUseWorkspace()  // Create it (as above) a
 G4GeometryWorkspace* G4GeometryWorkspacePool::FindOrCreateWorkspace()
 {
    G4GeometryWorkspace* geometryWrk= fMyWorkspace;
-   // if( fWarehouse ){ geometryWrk= fWarehouse->GetWorkspace(); } 
    if( !geometryWrk ){ 
       geometryWrk= this->CreateWorkspace(); 
    } 
@@ -102,34 +104,24 @@ void G4GeometryWorkspacePool::ReleaseAndDestroyWorkspace(G4GeometryWorkspace *ge
 void G4GeometryWorkspacePool::Recycle( G4GeometryWorkspace *geometryWrk )
 {
    geometryWrk->ReleaseWorkspace(); 
-   if( fWarehouse ){ 
-      // geometryWrk= fWarehouse->StoreWorkspace( geometryWrk ); 
-   } else { 
-      delete geometryWrk; 
-   }
+   //if( fWarehouse ){
+   //} else {
+    delete geometryWrk;
+   //}
 }
-      // Keep the unused Workspace - for recycling
-
 
 void G4GeometryWorkspacePool::CleanUpAndDestroyAllWorkspaces()
 {
-   // G4GeometryWorkspacePool* thePool= GetInstance();
-   // delete thePool;
 }
 
 
 G4GeometryWorkspacePool::G4GeometryWorkspacePool()
-// : fMyWorkspace(0)
 {
-  fWarehouse=0;
+//  fWarehouse=0;
 }
 
 G4GeometryWorkspacePool::~G4GeometryWorkspacePool()
 {
-   // delete fWarehouse;
-   // fWarehouse->free();
-
-   // delete fMyWorkspace;
 }
 
 

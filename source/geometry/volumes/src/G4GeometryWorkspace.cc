@@ -55,16 +55,12 @@ G4GeometryWorkspace::G4GeometryWorkspace()
   // Create a work area for Logical Volumes in this thread - then capture its address
   InitialiseWorkspace();
   
-  // fpLogicalVolumeSIM->SlaveCopySubInstanceArray();
   fLogicalVolumeOffset= fpLogicalVolumeSIM->GetOffset();
 
-  // fpPhysicalVolumeSIM->SlaveCopySubInstanceArray();
   fPhysicalVolumeOffset= fpPhysicalVolumeSIM->GetOffset();
 
-  // fpReplicaSIM->SlaveCopySubInstanceArray();
   fReplicaOffset= fpReplicaSIM->GetOffset();
 
-  // fpRegionSIM->SlaveInitializeSubInstance();
   fRegionOffset= fpRegionSIM->GetOffset();
 }
 
@@ -79,7 +75,7 @@ G4GeometryWorkspace::~G4GeometryWorkspace()
 void
 G4GeometryWorkspace::UseWorkspace()
 {
-  G4cout << "G4GeometryWorkspace::UseWorkspace: Copying geometry - Start " << G4endl;
+  G4cout << "G4GeometryWorkspace::UseWorkspace: start " << G4endl;
 
   // Implementation copied from  G4WorkerThread::BuildGeometryAndPhysicsVector()
   //  and improved for G4PVParamaterised
@@ -92,7 +88,10 @@ G4GeometryWorkspace::UseWorkspace()
   fpReplicaSIM->UseWorkArea(fReplicaOffset);
   fpRegionSIM->UseWorkArea(fRegionOffset);
 
-  InitialisePhysicalVolumes();  // Not sure if this is needed - done already ?
+  // When recycling a workspace 
+  //   - it must be a lightweight operation, to reuse a valid work area
+  //   - so it must NOT Initialise anything!
+  // Do not call InitialisePhysicalVolumes();
 }
 
 
@@ -104,12 +103,11 @@ void G4GeometryWorkspace::ReleaseWorkspace()
   
   fpReplicaSIM->UseWorkArea(0);
   fpRegionSIM->UseWorkArea(0);
-
-  InitialisePhysicalVolumes();  // Not sure if this is needed - done already ?
 }
 
-G4Mutex solidclone= G4MUTEX_INITIALIZER;
-
+namespace {
+    G4Mutex solidclone= G4MUTEX_INITIALIZER;
+}
 void G4GeometryWorkspace::InitialisePhysicalVolumes()
   {
     G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
@@ -132,7 +130,6 @@ void G4GeometryWorkspace::InitialisePhysicalVolumes()
             g4PVReplica->InitialiseWorker(g4PVReplica);
             if( ! g4PVReplica->IsParameterised() )
             {
-              //logicalVol->SlavelogicalVol(logicalVol, solid, 0);
                logicalVol->InitialiseWorker(logicalVol,solid,0);
             }
             else
@@ -149,7 +146,7 @@ void G4GeometryWorkspace::InitialisePhysicalVolumes()
             }
         }
     }
-    G4cout << "G4GeometryWorkspace::CreateAndUseWorkspace: "
+    G4cout << "G4GeometryWorkspace::InitialisePhysicalVolumes: "
            << "Copying geometry - Done!" << G4endl;
 }
 
@@ -241,7 +238,7 @@ G4GeometryWorkspace::InitialiseWorkspace()
 
   InitialisePhysicalVolumes();
   
-  G4cout << "G4GeometryWorkspace::CreateAndUseWorkspace: "
+  G4cout << "G4GeometryWorkspace::InitialiseWorkspace: "
   << "Copying geometry - Done!" << G4endl;
 }
 
