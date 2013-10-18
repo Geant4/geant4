@@ -16,14 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+17-Oct-2013  J.Apostolakis/A.Dotti (geom-specific-V09-06-21)
+- Cleanup of code for workspace
+
+16-Oct-2013  J.Apostolakis/A.Dotti (geom-specific-V09-06-20)
+- Created G4SolidsWorkspacePool class, to manage Workspaces
+  Fixed Singleton G4SolidsWorkspacePool - for thread safe creation of object. 
+
 04-Oct-2013  J.Apostolakis (geom-specific-V09-06-19)
-  *Requires* tag geommng-V09-06-12 
+  NOTE: *Requires* tag geommng-V09-06-12 
          and co-works with geomvol-V09-06-13
 
-04-Oct-2013  J.Apostolakis (geom-specific-V09-06-18) (geom-specific-V09-06-19)
+04-Oct-2013  J.Apostolakis (geom-specific-V09-06-18)
 - Created G4SolidsWorkspace class, to create, initialize and destroy
   per-thread state of PolyCone Sides and PolyHedra Sides.
-
 
 27-Aug-2013  G.Cosmo (geom-specific-V09-06-17)
 - Enabled G4Ellipsoid for parameterisation.

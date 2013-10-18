@@ -44,9 +44,6 @@ G4SolidsWorkspace::G4SolidsWorkspace()
 
   // Copy information from master into PolyCone/Gon Sides in this thread.
   InitialiseWorkspace();
-  //  Old version was:
-  // fpPolyconeSideSIM->SlaveInitializeSubInstance();
-  // fpPolyhedraSideSIM->SlaveInitializeSubInstance();
 
   // Capture its address of PolyCone/Gon Sides in this thread
   fPolyconeSideOffset= fpPolyconeSideSIM->GetOffset();                                
@@ -72,7 +69,6 @@ G4SolidsWorkspace::UseWorkspace()
   fpPolyconeSideSIM->UseWorkArea(fPolyconeSideOffset);
   fpPolyhedraSideSIM->UseWorkArea(fPolyhedraSideOffset);
 
-  InitialiseSolids();  // Not sure if this is needed - done already ?
 }
 
 
@@ -81,20 +77,10 @@ void G4SolidsWorkspace::ReleaseWorkspace()
 {
   fpPolyconeSideSIM->UseWorkArea(0);
   fpPolyhedraSideSIM->UseWorkArea(0);
-  
-  // InitialiseSolids();  //  Not needed.  Potentially would fail
 }
 
 void G4SolidsWorkspace::InitialiseSolids()
 {
-   // Stub method, in case some action is necessary 
-   // -----------
-   // G4SolidsStore* solidStore = G4SolidsStore::GetInstance();
-   //for (size_t ip=0; ip<solidStore->size(); ip++) {
-   //   G4VSolid *solid = (*solidStore)[ip];
-   // }
-   // G4cout << "G4SolidsWorkspace::CreateAndUseWorkspace: "
-   //       << "Copying geometry - Done!" << G4endl;
 }
 
 void
@@ -102,10 +88,7 @@ G4SolidsWorkspace::InitialiseWorkspace()
 {
   G4cout << "G4SolidsWorkspace::InitialiseWorkspace: "
          << "Copying geometry - Start " << G4endl;
-  
-  // Implementation copied from 
-  //     G4WorkerThread::BuildGeometryAndPhysicsVector()
-  
+    
   //Geometry related, split classes mechanism:
   //   Do *NOT* instantiate sub-instance for this thread,
   //     just copy the contents !!
@@ -122,9 +105,6 @@ G4SolidsWorkspace::InitialiseWorkspace()
 
 void G4SolidsWorkspace::DestroyWorkspace()
 {
-  // G4SolidsStore* solidStore = G4SolidsStore::GetInstance();
-  // for (size_t ip=0; ip<solidStore->size(); ip++)  { }
-
   fpPolyconeSideSIM->FreeSlave();
   fpPolyhedraSideSIM->FreeSlave();
 }
