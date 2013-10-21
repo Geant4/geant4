@@ -41,6 +41,9 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "G4DataVector.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,74 +52,74 @@ class PrimaryGeneratorAction;
 
 class G4Run;
 
-namespace AIDA {
-  class ITree;
-  class IHistogram1D;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
-  public:
+public:
 
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-   ~RunAction();
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+  virtual ~RunAction();
 
-    void BeginOfRunAction(const G4Run*);
-    void   EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void   EndOfRunAction(const G4Run*);
 
-    inline void initializePerEvent();
-           void fillPerEvent();
-    inline void fillPerTrack(G4double,G4double);
-    inline void fillPerStep (G4double,G4int,G4int);
-    inline void particleFlux(G4ParticleDefinition*,G4int);
+  inline void AddWorkerRunAction(RunAction*);
 
-  private:
+  inline void initializePerEvent();
+         void fillPerEvent();
+  inline void fillPerTrack(G4double,G4double);
+  inline void fillPerStep (G4double,G4int,G4int);
+  inline void particleFlux(G4ParticleDefinition*,G4int);
 
-    void bookHisto();
-    void saveHisto();
+private:
 
-  private:
+  void Reset();
 
-    DetectorConstruction*   Det;
-    PrimaryGeneratorAction* Kin;
+  DetectorConstruction*   Det;
+  PrimaryGeneratorAction* Kin;
 
-    G4int nLbin;
-    G4DataVector dEdL;
-    G4DataVector sumELongit;
-    G4DataVector sumE2Longit;
-    G4DataVector sumELongitCumul;
-    G4DataVector sumE2LongitCumul;
+  std::vector<RunAction*> runActions;
 
-    G4int nRbin;
-    G4DataVector dEdR;
-    G4DataVector sumERadial;
-    G4DataVector sumE2Radial;
-    G4DataVector sumERadialCumul;
-    G4DataVector sumE2RadialCumul;
+  G4int NbOfEvents;
 
-    G4DataVector gammaFlux;
-    G4DataVector electronFlux;
-    G4DataVector positronFlux;
+  G4int nLbin;
+  G4DataVector dEdL;
+  G4DataVector sumELongit;
+  G4DataVector sumE2Longit;
+  G4DataVector sumELongitCumul;
+  G4DataVector sumE2LongitCumul;
 
-    G4double ChargTrLength;
-    G4double sumChargTrLength;
-    G4double sum2ChargTrLength;
+  G4int nRbin;
+  G4DataVector dEdR;
+  G4DataVector sumERadial;
+  G4DataVector sumE2Radial;
+  G4DataVector sumERadialCumul;
+  G4DataVector sumE2RadialCumul;
 
-    G4double NeutrTrLength;
-    G4double sumNeutrTrLength;
-    G4double sum2NeutrTrLength;
-#ifdef G4ANALYSIS_USE
-    AIDA::ITree* tree;             // the tree should only be deleted at the end
-    AIDA::IHistogram1D* histo[12];   // (after writing the histos to file)
-#endif
+  G4DataVector gammaFlux;
+  G4DataVector electronFlux;
+  G4DataVector positronFlux;
+  
+  G4double ChargTrLength;
+  G4double sumChargTrLength;
+  G4double sum2ChargTrLength;
+
+  G4double NeutrTrLength;
+  G4double sumNeutrTrLength;
+  G4double sum2NeutrTrLength;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline
-void RunAction::initializePerEvent()
+inline void RunAction::AddWorkerRunAction(RunAction* run)
+{
+  runActions.push_back(run);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void RunAction::initializePerEvent()
 {
   //initialize arrays of energy deposit per bin
   for (G4int i=0; i<nLbin; i++)
@@ -126,7 +129,7 @@ void RunAction::initializePerEvent()
      { dEdR[j] = 0.; }     
   
   //initialize tracklength 
-    ChargTrLength = NeutrTrLength = 0.;
+  ChargTrLength = NeutrTrLength = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,8 +137,8 @@ void RunAction::initializePerEvent()
 inline
 void RunAction::fillPerTrack(G4double charge, G4double trkLength)
 {
-  if (charge != 0.) ChargTrLength += trkLength;
-  else              NeutrTrLength += trkLength;   
+  if (charge != 0.) { ChargTrLength += trkLength; }
+  else              { NeutrTrLength += trkLength; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -143,15 +146,11 @@ void RunAction::fillPerTrack(G4double charge, G4double trkLength)
 inline
 void RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 {
-  if(Lbin<nLbin && Lbin>=0) dEdL[Lbin] += dEstep; 
-  if(Rbin<nRbin && Rbin>=0) dEdR[Rbin] += dEstep;
+  if(Lbin<nLbin && Lbin>=0) { dEdL[Lbin] += dEstep; }
+  if(Rbin<nRbin && Rbin>=0) { dEdR[Rbin] += dEstep; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 
 inline
 void RunAction::particleFlux(G4ParticleDefinition* particle, G4int Lplan)

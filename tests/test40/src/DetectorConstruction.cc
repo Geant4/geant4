@@ -47,29 +47,37 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+#include "G4RunManager.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal G4UniformMagField* DetectorConstruction::magField = 0;
 
 DetectorConstruction::DetectorConstruction()
 :nLtot(20),nRtot(20),dLradl(1.),dRradl(0.25),
- myMaterial(0),magField(0)  ,
+ myMaterial(0),
  EcalLength(0.),EcalRadius(0.)    ,
  solidEcal(0) ,logicEcal(0) ,physiEcal(0),
  solidSlice(0),logicSlice(0),physiSlice(0),
- solidRing(0) ,logicRing(0) ,physiRing(0)
+ solidRing(0) ,logicRing(0) ,physiRing(0),fieldValue(0.0)
 {
   DefineMaterials();
   detectorMessenger = new DetectorMessenger(this);
   edeptrue = 0.9425;
   rmstrue = 0.0355;
   limittrue = DBL_MAX;
-  histoName = "testem2.paw";
-  histoType = "hbook";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ delete detectorMessenger;}
+{ 
+  delete detectorMessenger;
+  delete magField;
+  magField = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -155,7 +163,7 @@ void DetectorConstruction::DefineMaterials()
   myMaterial    = PbWO;
   worldMaterial = Air;
 
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  //G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,10 +186,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   
   //Vertex volume
 
-  G4Box* solidVV = new G4Box("VolV",EcalRadius*0.8,EcalRadius*0.8,EcalLength*0.01);
+  G4Box* solidVV = 
+    new G4Box("VolV",EcalRadius*0.8,EcalRadius*0.8,EcalLength*0.01);
   G4LogicalVolume* logicVV = new G4LogicalVolume( solidVV,worldMaterial,"VolV");
-  G4VPhysicalVolume* physVV = new G4PVPlacement(0,G4ThreeVector(0.,0.,-EcalLength*0.6),
-                                       "VolV",logicVV,world,false,0);
+  G4VPhysicalVolume* physVV = 
+    new G4PVPlacement(0,G4ThreeVector(0.,0.,-EcalLength*0.6),
+		      "VolV",logicVV,world,false,0);
 
 
   // Vertex detector
@@ -191,10 +201,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   G4double widthX = 2.0*EcalRadius*0.8/xl;
   G4double x0 = -0.5*widthX*(xl - 1.0);
 
-  G4Box* solidLayer = new G4Box("Layer",widthX*0.49,EcalRadius*0.8,EcalLength*0.0099);
-  G4LogicalVolume* logicLayer = new G4LogicalVolume(solidLayer,worldMaterial,"Layer");       
+  G4Box* solidLayer = 
+    new G4Box("Layer",widthX*0.49,EcalRadius*0.8,EcalLength*0.0099);
+  G4LogicalVolume* logicLayer = 
+    new G4LogicalVolume(solidLayer,worldMaterial,"Layer");       
   for (G4int j=0; j<nl; j++) {
-    new G4PVPlacement(0,G4ThreeVector(x0,0.,0.),"Layer",logicLayer,physVV,false,j);
+    new G4PVPlacement(0,G4ThreeVector(x0,0.,0.),"Layer",
+		      logicLayer,physVV,false,j);
     x0 += widthX;
   }
   
@@ -203,7 +216,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   //
   solidEcal = new G4Tubs("Ecal",0.,EcalRadius,0.5*EcalLength,0.,360*deg);
   logicEcal = new G4LogicalVolume( solidEcal,myMaterial,"Ecal",0,0,0);
-  physiEcal = new G4PVPlacement(0,G4ThreeVector(),"Ecal",logicEcal,world,false,0);
+  physiEcal = 
+    new G4PVPlacement(0,G4ThreeVector(),"Ecal",logicEcal,world,false,0);
 				
   // Ring
   //
@@ -224,7 +238,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
         physiSlice = new G4PVPlacement(0,G4ThreeVector(),"Slice",logicSlice,
                                     physiRing,false,0);
      }				                   
-
 
   G4cout << "Absorber is " << G4BestUnit(EcalLength,"Length") 
        << " of " << myMaterial->GetName() << G4endl; 
@@ -249,6 +262,7 @@ void DetectorConstruction::SetMaterial(const G4String& materialChoice)
   // search the material by its name
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   if (pttoMaterial) myMaterial = pttoMaterial;
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -258,6 +272,7 @@ void DetectorConstruction::SetWorldMaterial(const G4String& materialChoice)
   // search the material by its name
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   if (pttoMaterial) worldMaterial = pttoMaterial;
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -266,6 +281,7 @@ void DetectorConstruction::SetLBining(G4ThreeVector Value)
 {
   nLtot = (G4int)Value(0);
   dLradl = Value(1);
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -274,6 +290,7 @@ void DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   nRtot = (G4int)Value(0);
   dRradl = Value(1);
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -283,38 +300,51 @@ void DetectorConstruction::SetEdepAndRMS(G4ThreeVector Value)
   edeptrue = Value(0);
   rmstrue  = Value(1);
   limittrue= Value(2);
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
+void DetectorConstruction::ConstructSDandField()
+{
+  if(!magField && 0.0 != fieldValue) {
+    G4FieldManager* fieldMgr
+      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+    magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
+    fieldMgr->SetDetectorField(magField);
+    fieldMgr->CreateChordFinder(magField);
+  }   
+}
 
-void DetectorConstruction::SetMagField(G4double fieldValue)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetMagField(G4double value)
 {
   //apply a global uniform magnetic field along Z axis
   G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  if(magField) delete magField;		//delete the existing magn field
-
-  if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
-  } else {
+  if(0.0 == value) {
+    fieldValue = 0.0;
+    delete magField;
     magField = 0;
-    fieldMgr->SetDetectorField(magField);
+
+  } else if(fieldValue != value) {
+
+    if(magField) {
+      delete magField; 
+      magField = 0;
+      fieldMgr->SetDetectorField(magField);
+    }
+    fieldValue = value;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

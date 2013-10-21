@@ -16,6 +16,7 @@
 /run/verbose 1
 /tracking/verbose 0
 /event/verbose 0
+/process/em/workerVerbose 0
 /testem/event/printModulo 100
 #
 # Acceptance printout is activated

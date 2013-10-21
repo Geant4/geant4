@@ -59,8 +59,6 @@ private:
 
   G4UIdirectory*             testemDir;
   G4UIcmdWithAString*        MaterCmd;
-  G4UIcmdWithAString*     factoryCmd;
-  G4UIcmdWithAString*     fileCmd;
   G4UIcmdWith3Vector*        LBinCmd;
   G4UIcmdWith3Vector*        RBinCmd;
   G4UIcmdWith3Vector*        accCmd;

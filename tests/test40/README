@@ -36,11 +36,10 @@ $Id$
      
  2- PHYSICS LISTS
 
-    Physics Lists are subdivided on 4 following modules:
+    Physics List is fixed
     1. "particles" - particle definitions  
     2. "general" - decays and transportation  
-    3. "standard" (alternative) - standard EM physics
-    4. "model"    (alternative) - standard EM physics using model approach
+    3. "standard" - standard EM physics opt0
       	    
  3- AN EVENT : THE PRIMARY GENERATOR
  
@@ -58,10 +57,17 @@ $Id$
  		% cd test40
  		% gmake
  		
-     - execute test40 in 'batch' mode from macro files
+     - execute test40 in batch mode from macro files
  		% test40 test40.in
- 		
-     - execute test40 in 'interactive mode'
+
+     - execute test40 in batch multi-thread (MT) mode from macro files 
+       and number of threads N 
+  		% test40 test40.in N
+       for instance
+  		% test40 test40.in 4
+       alternative one can define environment variable G4NUMBEROFTHREADS=N 		
+
+     - execute test40 in interactive mode
  		% test40
  		....
  		Idle> type your commands

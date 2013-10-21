@@ -87,11 +87,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
 
-  factoryCmd = new G4UIcmdWithAString("/testem/histo/fileName",this);
-  factoryCmd->SetGuidance("set name for the histograms file");
-
-  fileCmd = new G4UIcmdWithAString("/testem/histo/fileType",this);
-  fileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,8 +100,6 @@ DetectorMessenger::~DetectorMessenger()
   delete FieldCmd;
   delete UpdateCmd;
   delete testemDir;
-  delete factoryCmd;
-  delete fileCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -130,10 +123,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   if( command == UpdateCmd )
    { Detector->UpdateGeometry();}
-
-  if (command == factoryCmd) Detector->SetHistoName(newValue);
-
-  if (command == fileCmd) Detector->SetHistoType(newValue);
 
 }
 

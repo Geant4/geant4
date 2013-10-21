@@ -16,10 +16,11 @@
 /run/verbose 1
 /tracking/verbose 0
 /event/verbose 0
+/process/em/workerVerbose 0
 /testem/event/printModulo 100
 #
 # Acceptance printout is activated
-/testem/det/acceptance  0.95140202  0.0082 4.0
+/testem/det/acceptance  0.95140202  0.0082 8.0
 #
 /gun/particle e-
 /gun/energy 5 GeV

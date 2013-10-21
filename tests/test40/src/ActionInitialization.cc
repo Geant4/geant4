@@ -24,66 +24,54 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: ActionInitialization.cc 66241 2012-12-13 18:34:42Z gunter $
 //
-//
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "EmAcceptance.hh"
+#include "ActionInitialization.hh"
+
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "TrackingAction.hh"
+#include "SteppingAction.hh"
+#include "PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EmAcceptance::EmAcceptance()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EmAcceptance::~EmAcceptance()
-{}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EmAcceptance::BeginOfAcceptance(const G4String& title, G4int stat)
+ActionInitialization::ActionInitialization(DetectorConstruction* det, 
+					   PrimaryGeneratorAction* prim)
+  : detector(det), generator(prim)
 {
-  G4cout << G4endl;
-  G4cout << "<<<<<ACCEPTANCE>>>>> " << stat << " events for " << title << G4endl;
-  isAccepted = true;
+  masterRunAction = new RunAction(det, prim);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EmAcceptance::EndOfAcceptance()
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::Build() const
 {
-  G4String resume = "IS ACCEPTED";
-  if(!isAccepted) { 
-    resume = "IS NOT ACCEPTED"; 
-    G4cerr << "Fail acceptance test dE/RMS= " << delta << " > " 
-	   << deltalim << G4endl;
-  }
-  G4cout << "<<<<<END>>>>>   " << resume << G4endl;
-  G4cout << G4endl;
+  SetUserAction(generator);
+  RunAction* run = new RunAction(detector, generator);
+  masterRunAction->AddWorkerRunAction(run);
+
+  SetUserAction(run);
+  SetUserAction(new EventAction(run));
+  SetUserAction(new TrackingAction(run));
+  SetUserAction(new SteppingAction(detector, run));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
-                                           G4double avr, G4double avr0,
-                                           G4double rms, G4double limit)
+void ActionInitialization::BuildForMaster() const
 {
-  G4double x = std::sqrt((G4double)stat);
-  G4double dde = avr - avr0;
-  G4double de = std::abs(dde*x/rms);
-
-  G4cout << title << ": " << avr << "  del"<< title << "= " << dde 
-	 << " nrms= " << de << G4endl;
-  if(de > limit) { 
-    isAccepted = false; 
-    delta = de;
-    deltalim = limit;
-  }
+  SetUserAction(masterRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

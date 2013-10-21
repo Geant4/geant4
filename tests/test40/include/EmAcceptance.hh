@@ -56,6 +56,8 @@ private:
   EmAcceptance(const EmAcceptance&);
 
   G4bool isAccepted;
+  G4double delta;
+  G4double deltalim;
 
 };
 

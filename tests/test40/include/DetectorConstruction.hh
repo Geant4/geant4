@@ -49,81 +49,76 @@ class DetectorMessenger;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
 
-    DetectorConstruction();
-   ~DetectorConstruction();
+  DetectorConstruction();
+  virtual ~DetectorConstruction();
 
-  public:
+  void SetMaterial(const G4String&);
+  void SetWorldMaterial(const G4String&);
+  void SetLBining (G4ThreeVector);
+  void SetRBining (G4ThreeVector);
+  void SetMagField(G4double);
 
-     void SetMaterial(const G4String&);
-     void SetWorldMaterial(const G4String&);
-     void SetLBining (G4ThreeVector);
-     void SetRBining (G4ThreeVector);
-     void SetMagField(G4double);
+  virtual G4VPhysicalVolume* Construct();
 
-     G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
 
-     void UpdateGeometry();
+  void UpdateGeometry();
 
-     const
-     G4VPhysicalVolume* GetEcal() {return physiEcal;};
-     G4Material*    GetMaterial() {return myMaterial;};
+  inline const
+  G4VPhysicalVolume* GetEcal() const {return physiEcal;};
+  inline G4Material* GetMaterial() const {return myMaterial;};
 
-     // Subdivision of absorber
-     G4int    GetnLtot()          {return nLtot;};
-     G4int    GetnRtot()          {return nRtot;};
-     G4double GetdLradl()         {return dLradl;};
-     G4double GetdRradl()         {return dRradl;};
-     G4double GetfullLength()     {return EcalLength;};
-     G4double GetfullRadius()     {return EcalRadius;};
+  // Subdivision of absorber
+  inline G4int    GetnLtot()      const   {return nLtot;};
+  inline G4int    GetnRtot()      const   {return nRtot;};
+  inline G4double GetdLradl()     const   {return dLradl;};
+  inline G4double GetdRradl()     const   {return dRradl;};
+  inline G4double GetfullLength() const   {return EcalLength;};
+  inline G4double GetfullRadius() const   {return EcalRadius;};
 
-     // Acceptance parameters
-     void     SetEdepAndRMS(G4ThreeVector);
-     G4double GetAverageEdep() const    {return edeptrue;};
-     G4double GetRMSEdep() const        {return rmstrue;};
-     G4double GetLimitEdep() const      {return limittrue;};
+  // Acceptance parameters
+  void            SetEdepAndRMS(G4ThreeVector);
+  inline G4double GetAverageEdep() const    {return edeptrue;};
+  inline G4double GetRMSEdep()     const    {return rmstrue;};
+  inline G4double GetLimitEdep()   const    {return limittrue;};
 
-     // Histogram name and type
-     void SetHistoName(G4String& val)   {histoName = val;};
-     void SetHistoType(G4String& val)   {histoType = val;};
-     const G4String& HistoName() const  {return histoName;};
-     const G4String& HistoType() const  {return histoType;};
+private:
 
-  private:
+  void DefineMaterials();
+  G4VPhysicalVolume* ConstructVolumes();
 
-     void DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();
+  G4int    nLtot,  nRtot;          // nb of bins: longitudinal and radial
+  G4double dLradl, dRradl;         // bin thickness (in radl unit)
 
-     G4int    nLtot,  nRtot;          // nb of bins: longitudinal and radial
-     G4double dLradl, dRradl;         // bin thickness (in radl unit)
+  G4Material* myMaterial;          //pointer to the material
+  G4Material* worldMaterial;       //pointer to the material
 
-     G4Material* myMaterial;          //pointer to the material
-     G4Material* worldMaterial;       //pointer to the material
-     G4UniformMagField* magField;     //pointer to the mag field
+  static G4ThreadLocal G4UniformMagField* magField;    
 
-     G4double EcalLength;             //full length of the Calorimeter
-     G4double EcalRadius;             //radius  of the Calorimeter
+  G4double EcalLength;             //full length of the Calorimeter
+  G4double EcalRadius;             //radius  of the Calorimeter
 
-     G4Tubs*            solidEcal;    //pointer to the solid calorimeter
-     G4LogicalVolume*   logicEcal;    //pointer to the logical calorimeter
-     G4VPhysicalVolume* physiEcal;    //pointer to the physical calorimeter
+  G4Tubs*            solidEcal;    //pointer to the solid calorimeter
+  G4LogicalVolume*   logicEcal;    //pointer to the logical calorimeter
+  G4VPhysicalVolume* physiEcal;    //pointer to the physical calorimeter
 
-     G4Tubs*            solidSlice;   //pointer to the solid  L-slice
-     G4LogicalVolume*   logicSlice;   //pointer to the logical L-slide
-     G4VPhysicalVolume* physiSlice;   //pointer to the physical L-slide
+  G4Tubs*            solidSlice;   //pointer to the solid  L-slice
+  G4LogicalVolume*   logicSlice;   //pointer to the logical L-slide
+  G4VPhysicalVolume* physiSlice;   //pointer to the physical L-slide
 
-     G4Tubs*            solidRing;    //pointer to the solid  R-slice
-     G4LogicalVolume*   logicRing;    //pointer to the logical R-slide
-     G4VPhysicalVolume* physiRing;    //pointer to the physical R-slide
+  G4Tubs*            solidRing;    //pointer to the solid  R-slice
+  G4LogicalVolume*   logicRing;    //pointer to the logical R-slide
+  G4VPhysicalVolume* physiRing;    //pointer to the physical R-slide
 
-     DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+  DetectorMessenger* detectorMessenger;  //pointer to the Messenger
 
-     G4double           edeptrue;
-     G4double           rmstrue;
-     G4double           limittrue;
-     G4String           histoName;
-     G4String           histoType;
+  G4double           fieldValue;
+
+  G4double           edeptrue;
+  G4double           rmstrue;
+  G4double           limittrue;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
