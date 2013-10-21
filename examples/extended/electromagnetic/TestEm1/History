@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+18-10-13 mma (testem1-V09-06-10)
+- PhysicsList::AddDecay() : use G4PhysicsListHelper
 
 30-09-13 I.Hrivnacova (testem1-V09-06-09) 
 - Updated for changes in analysis:

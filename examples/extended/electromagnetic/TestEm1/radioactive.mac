@@ -26,8 +26,9 @@
 /analysis/setFileName rdecay
 /analysis/h1/set 4 100 0 80 keV	#total edep
 #	 
-/testem/event/printModulo 40000
+/testem/event/printModulo 10000
 #
-###/run/beamOn 400000
+###/run/beamOn 40000
+#
 /tracking/verbose 2
 /run/beamOn 1

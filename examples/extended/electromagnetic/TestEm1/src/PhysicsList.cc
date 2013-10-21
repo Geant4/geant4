@@ -284,11 +284,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4ProcessManager.hh"
+#include "G4PhysicsListHelper.hh"
 #include "G4Decay.hh"
 
 void PhysicsList::AddDecay()
-{ 
+{
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+    
   // Decay Process
   //
   G4Decay* fDecayProcess = new G4Decay();
@@ -296,17 +298,8 @@ void PhysicsList::AddDecay()
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle)) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
+    if (fDecayProcess->IsApplicable(*particle)) 
+      ph->RegisterProcess(fDecayProcess, particle);    
   }
 }
 
@@ -328,6 +321,7 @@ void PhysicsList::AddRadioactiveDecay()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4ProcessManager.hh"
 #include "StepMax.hh"
 
 void PhysicsList::AddStepMax()
