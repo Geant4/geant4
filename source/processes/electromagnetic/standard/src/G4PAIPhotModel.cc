@@ -55,6 +55,7 @@
 #include "Randomize.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include "G4Gamma.hh"
 #include "G4Poisson.hh"
 #include "G4Step.hh"
 #include "G4Material.hh"
@@ -100,7 +101,8 @@ G4PAIPhotModel::~G4PAIPhotModel()
 void G4PAIPhotModel::Initialise(const G4ParticleDefinition* p,
 			    const G4DataVector& cuts)
 {
-  if(fVerbose > 0) {
+  // if(fVerbose > 0) 
+  {
     G4cout<<"G4PAIPhotModel::Initialise for "<<p->GetParticleName()<<G4endl;
   }
 
@@ -195,16 +197,18 @@ G4double G4PAIPhotModel::CrossSectionPerVolume( const G4Material*,
 					    G4double maxEnergy  ) 
 {
   G4int coupleIndex = FindCoupleIndex(CurrentCouple());
-  if(0 > coupleIndex) { return 0.0; }
+
+  if(0 > coupleIndex) return 0.0; 
 
   G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
-  if(tmax <= cutEnergy) { return 0.0; }
+
+  if(tmax <= cutEnergy)  return 0.0; 
 
   G4double scaledTkin = kineticEnergy*fRatio;
-
-  return fChargeSquare*fModelData->CrossSectionPerVolume(coupleIndex, 
+  G4double xsc = fChargeSquare*fModelData->CrossSectionPerVolume(coupleIndex, 
 							 scaledTkin, 
 							 cutEnergy, tmax);
+  return xsc;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -222,47 +226,110 @@ void G4PAIPhotModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   if(0 > coupleIndex) { return; }
 
   SetParticle(dp->GetDefinition());
+
   G4double kineticEnergy = dp->GetKineticEnergy();
 
   G4double tmax = MaxSecondaryEnergy(fParticle, kineticEnergy);
-  if(maxEnergy < tmax) { tmax = maxEnergy; }
-  if(tmin >= tmax) { return; }
 
-  G4ThreeVector direction= dp->GetMomentumDirection();
-  G4double scaledTkin    = kineticEnergy*fRatio;
-  G4double totalEnergy   = kineticEnergy + fMass;
-  G4double totalMomentum = sqrt(kineticEnergy*(totalEnergy+fMass));
+  if( maxEnergy <  tmax) tmax = maxEnergy; 
+  if( tmin      >= tmax) return; 
 
-  G4double deltaTkin = 
-    fModelData->SamplePostStepTransfer(coupleIndex, scaledTkin);
+  G4ThreeVector direction = dp->GetMomentumDirection();
+  G4double scaledTkin     = kineticEnergy*fRatio;
+  G4double totalEnergy    = kineticEnergy + fMass;
+  G4double totalMomentum  = sqrt(kineticEnergy*(totalEnergy + fMass));
+  G4double plRatio        = fModelData->GetPlasmonRatio(coupleIndex, scaledTkin);
 
-  // G4cout<<"G4PAIPhotModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV
-  // <<" keV "<<G4endl;
-
-  if( deltaTkin <= 0. && fVerbose > 0) 
+  if( G4UniformRand() <= plRatio )
   {
+    G4double deltaTkin = fModelData->SamplePostStepPlasmonTransfer(coupleIndex, scaledTkin);
+
+    // G4cout<<"G4PAIPhotModel::SampleSecondaries; dp "<<dp->GetParticleDefinition()->GetParticleName()
+    // <<"; Tkin = "<<kineticEnergy/keV<<" keV; transfer = "<<deltaTkin/keV<<" keV "<<G4endl;
+
+    if( deltaTkin <= 0. && fVerbose > 0) 
+    {
     G4cout<<"G4PAIPhotModel::SampleSecondary e- deltaTkin = "<<deltaTkin<<G4endl;
-  }
-  if( deltaTkin <= 0.) { return; }
+    }
+    if( deltaTkin <= 0.) return; 
 
-  if( deltaTkin > tmax) { deltaTkin = tmax; }
+    if( deltaTkin > tmax) deltaTkin = tmax;
 
-  const G4Element* anElement = SelectRandomAtom(matCC,fParticle,kineticEnergy);
-  G4int Z = G4lrint(anElement->GetZ());
+    const G4Element* anElement = SelectRandomAtom(matCC,fParticle,kineticEnergy);
+    G4int Z = G4lrint(anElement->GetZ());
  
-  G4DynamicParticle* deltaRay = new G4DynamicParticle(fElectron, 
+    G4DynamicParticle* deltaRay = new G4DynamicParticle(fElectron, 
 	    GetAngularDistribution()->SampleDirection(dp, deltaTkin,
 		 				      Z, matCC->GetMaterial()),
 						      deltaTkin);
 
-  // primary change
-  kineticEnergy -= deltaTkin;
-  G4ThreeVector dir = totalMomentum*direction - deltaRay->GetMomentum();
-  direction = dir.unit();
-  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
-  fParticleChange->SetProposedMomentumDirection(direction);
+    // primary change
 
-  vdp->push_back(deltaRay);
+    kineticEnergy -= deltaTkin;
+
+    if( kineticEnergy <= 0. ) // kill primary as local? energy deposition
+    {
+      fParticleChange->SetProposedKineticEnergy(0.0);
+      fParticleChange->ProposeLocalEnergyDeposit(kineticEnergy+deltaTkin);
+      // fParticleChange->ProposeTrackStatus(fStopAndKill);
+      return; 
+    }
+    else
+    {
+      G4ThreeVector dir = totalMomentum*direction - deltaRay->GetMomentum();
+      direction = dir.unit();
+      fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+      fParticleChange->SetProposedMomentumDirection(direction);
+      vdp->push_back(deltaRay);
+    }
+  }
+  else // secondary X-ray CR photon
+  {
+    G4double deltaTkin     = fModelData->SamplePostStepPhotonTransfer(coupleIndex, scaledTkin);
+
+    //  G4cout<<"PAIPhotonModel PhotonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl; 
+
+    if( deltaTkin <= 0. )
+    {
+      G4cout<<"G4PAIPhotonModel::SampleSecondary gamma deltaTkin = "<<deltaTkin<<G4endl;
+    }
+    if( deltaTkin <= 0.) return;
+
+    if( deltaTkin >= kineticEnergy ) // stop primary
+    {
+      deltaTkin = kineticEnergy;
+      kineticEnergy = 0.0;
+    }
+    G4double costheta = 0.; // G4UniformRand(); // VG: ??? for start only
+    G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
+
+    //  direction of the 'Cherenkov' photon  
+    G4double phi = twopi*G4UniformRand(); 
+    G4double dirx = sintheta*cos(phi), diry = sintheta*sin(phi), dirz = costheta;
+
+    G4ThreeVector deltaDirection(dirx,diry,dirz);
+    deltaDirection.rotateUz(direction);
+
+    if( kineticEnergy > 0.) // primary change
+    {
+      kineticEnergy -= deltaTkin;
+      fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+    }
+    else // stop primary, but pass X-ray CR
+    {
+      // fParticleChange->ProposeLocalEnergyDeposit(deltaTkin);
+      fParticleChange->SetProposedKineticEnergy(0.0);
+    }
+    // create G4DynamicParticle object for photon ray
+ 
+    G4DynamicParticle* photonRay = new G4DynamicParticle;
+    photonRay->SetDefinition( G4Gamma::Gamma() );
+    photonRay->SetKineticEnergy( deltaTkin );
+    photonRay->SetMomentumDirection(deltaDirection); 
+
+    vdp->push_back(photonRay);
+  }
+  return;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -272,26 +339,31 @@ G4double G4PAIPhotModel::SampleFluctuations( const G4MaterialCutsCouple* matCC,
 					 G4double, G4double step,
 					 G4double eloss)
 {
+  // return 0.;
   G4int coupleIndex = FindCoupleIndex(matCC);
   if(0 > coupleIndex) { return eloss; }
 
   SetParticle(aParticle->GetDefinition());
 
-  /*
-  G4cout << "G4PAIPhotModel::SampleFluctuations step(mm)= "<< step/mm
-	 << "  Eloss(keV)= " << eloss/keV  << " in " 
-	 << matCC->Getmaterial()->GetName() << G4endl;
-  */
+  
+  // G4cout << "G4PAIPhotModel::SampleFluctuations step(mm)= "<< step/mm
+  // << "  Eloss(keV)= " << eloss/keV  << " in " 
+  // << matCC->GetMaterial()->GetName() << G4endl;
+  
 
   G4double Tkin       = aParticle->GetKineticEnergy();
   G4double scaledTkin = Tkin*fRatio;
 
-  G4double loss = fModelData->SampleAlongStepTransfer(coupleIndex, Tkin,
+  G4double loss = fModelData->SampleAlongStepPhotonTransfer(coupleIndex, Tkin,
 						      scaledTkin,
 						      step*fChargeSquare);
+           loss += fModelData->SampleAlongStepPlasmonTransfer(coupleIndex, Tkin,
+						      scaledTkin,
+							      step*fChargeSquare);
+
   
-  // G4cout<<"PAIPhotModel AlongStepLoss = "<<loss/keV<<" keV, on step = "
-  //<<step/mm<<" mm"<<G4endl; 
+  // G4cout<<"  PAIPhotModel::SampleFluctuations loss = "<<loss/keV<<" keV, on step = "
+  // <<step/mm<<" mm"<<G4endl; 
   return loss;
 
 }

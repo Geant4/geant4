@@ -18,6 +18,12 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+20 October 13: V.Ivanchenko (emstand-V09-06-70)
+- G4WentzelVIModel - added GetWVICrossSEction - access method
+    to cross section class
+- V.Grichine G4PAIPhotModel ans G4PAIPhotData classes were in 
+secondary electron/X-ray mode.
+
 15 October 13: V.Ivanchenko (emstand-V09-06-69)
 - In many classes std::pow(x,y) substituted by G4Exp(G4Log(x)*y)
 

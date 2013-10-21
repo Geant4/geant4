@@ -80,16 +80,32 @@ public:
   G4double CrossSectionPerVolume(G4int coupleIndex, G4double scaledTkin,
 				 G4double tcut, G4double tmax) const;
 
+  G4double GetPlasmonRatio( G4int coupleIndex, G4double scaledTkin ) const;
+
   G4double SampleAlongStepTransfer(G4int coupleIndex, G4double kinEnergy,
+				   G4double scaledTkin,
+				   G4double stepFactor) const;
+  G4double SampleAlongStepPhotonTransfer(G4int coupleIndex, G4double kinEnergy,
+				   G4double scaledTkin,
+				   G4double stepFactor) const;
+  G4double SampleAlongStepPlasmonTransfer(G4int coupleIndex, G4double kinEnergy,
 				   G4double scaledTkin,
 				   G4double stepFactor) const;
 
   G4double SamplePostStepTransfer(G4int coupleIndex, 
 				  G4double scaledTkin) const;
+  G4double SamplePostStepPhotonTransfer(G4int coupleIndex, 
+				  G4double scaledTkin) const;
+  G4double SamplePostStepPlasmonTransfer(G4int coupleIndex, 
+				  G4double scaledTkin) const;
 
 private:
 
   G4double GetEnergyTransfer(G4int coupleIndex, size_t iPlace, 
+			     G4double position) const;
+  G4double GetEnergyPhotonTransfer(G4int coupleIndex, size_t iPlace, 
+			     G4double position) const;
+  G4double GetEnergyPlasmonTransfer(G4int coupleIndex, size_t iPlace, 
 			     G4double position) const;
 
   // hide assignment operator 
@@ -106,9 +122,16 @@ private:
   G4SandiaTable        fSandia;
 
   std::vector<G4PhysicsTable*>      fPAIxscBank;
+  std::vector<G4PhysicsTable*>      fPAIphotonBank;
+  std::vector<G4PhysicsTable*>      fPAIplasmonBank;
+
   std::vector<G4PhysicsTable*>      fPAIdEdxBank;
   std::vector<G4PhysicsLogVector*>  fdEdxTable;
+
   std::vector<G4PhysicsLogVector*>  fdNdxCutTable;
+  std::vector<G4PhysicsLogVector*>  fdNdxCutPhotonTable;
+  std::vector<G4PhysicsLogVector*>  fdNdxCutPlasmonTable;
+
   std::vector<G4PhysicsLogVector*>  fdEdxCutTable;
 
 };

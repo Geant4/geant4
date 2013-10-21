@@ -102,6 +102,9 @@ public:
   // low energy limit on energy transfer to atomic electron
   inline G4double GetFixedCut() const;
 
+  // access to cross section class
+  inline G4WentzelOKandVIxSection* GetWVICrossSection();
+
 private:
 
   G4double ComputeXSectionPerVolume();
@@ -195,6 +198,13 @@ inline void G4WentzelVIModel::SetFixedCut(G4double val)
 inline G4double G4WentzelVIModel::GetFixedCut() const
 {
   return fixedCut;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4WentzelOKandVIxSection* G4WentzelVIModel::GetWVICrossSection()
+{
+  return wokvi;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
