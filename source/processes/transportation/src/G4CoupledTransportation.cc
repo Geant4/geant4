@@ -67,6 +67,11 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
     fPreviousSftOrigin( 0.,0.,0. ),
     fPreviousMassSafety( 0.0 ),
     fPreviousFullSafety( 0.0 ),
+
+    fMassGeometryLimitedStep( false ), 
+    fAnyGeometryLimitedStep( false ), 
+    endpointDistance( -1.0 ),  // fEndPointDistance( -1.0 ), 
+
     fThreshold_Warning_Energy( 100 * MeV ),  
     fThreshold_Important_Energy( 250 * MeV ), 
     fThresholdTrials( 10 ), 
@@ -101,6 +106,9 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
   if ( !pNullTouchableHandle)  { pNullTouchableHandle = new G4TouchableHandle; }
   fCurrentTouchableHandle = *pNullTouchableHandle;
     // Points to (G4VTouchable*) 0
+
+  G4FieldManager  *globalFieldMgr= transportMgr->GetFieldManager();
+  fGlobalFieldExists= globalFieldMgr ? globalFieldMgr->GetDetectorField() : 0 ; 
 
   fEndGlobalTimeComputed  = false;
   fCandidateEndGlobalTime = 0;

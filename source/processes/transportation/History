@@ -17,11 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 13th, 2013, G.Cosmo transport-V09-06-06
+October 18th 2013, J.Apostolakis transport-V09-06-07
+--------------------------------
+- Initialize missing data members in G4CoupledTransportation constructor 
+  Addresses issue identified by Coverity.
+
+May 13th, 2013, G.Cosmo          transport-V09-06-06
 -----------------------
 - Removed left-over assert() calls in G4CoupledTransportation.
 
-May 9th, 2013, J.Apostolakis transport-V09-06-05
+May 9th, 2013, J.Apostolakis     transport-V09-06-05
 ----------------------------
 - Added protection to revised G4CoupledTransportation for case that chord
   finder (or field manager) is not defined.
