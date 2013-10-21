@@ -8,6 +8,12 @@ $Id$
 
                       Category History file
                       ---------------------
+
+21.10.2013 -  L. Pandola; brachy-V09-06-02
+	      Fix bug in BrachySteppingAction.cc reported by John A. 
+              (replace = with ==). Use G4ParticleDefinition instead 
+              of string.
+
 19.09.2013 -  S. Guatelli; tag brachy-V09-06-01
               Multithreading option introduced
 

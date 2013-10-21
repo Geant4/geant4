@@ -30,7 +30,7 @@
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
-#include "G4SystemOfUnits.hh"
+
 #include "G4ios.hh"
 #include "G4SteppingManager.hh"
 #include "G4Step.hh"
@@ -39,8 +39,11 @@
 #include "G4ParticleDefinition.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4TrackStatus.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4Gamma.hh"
 #include "BrachyAnalysisManager.hh"
 #include "BrachySteppingAction.hh"
+#include "G4SystemOfUnits.hh"
 
 BrachySteppingAction::BrachySteppingAction(BrachyAnalysisManager* analysisMan):analysis(analysisMan)
 { 
@@ -69,10 +72,10 @@ void BrachySteppingAction::UserSteppingAction(const G4Step* aStep)
      
    for(size_t lp1=0;lp1<(*fSecondary).size(); lp1++)
    { 
-     // Retrieve the name of the particle
-   G4String particleName = (*fSecondary)[lp1] -> GetDefinition() -> GetParticleName();
+     // Retrieve particle
+     const G4ParticleDefinition* particleName = (*fSecondary)[lp1] -> GetDefinition();     
 
-     if (particleName = "gamma")
+     if (particleName == G4Gamma::Definition())
      {
       G4String process = (*fSecondary)[lp1]-> GetCreatorProcess()-> GetProcessName();  
       
