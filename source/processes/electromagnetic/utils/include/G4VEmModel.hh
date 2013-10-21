@@ -279,6 +279,9 @@ public:
 				    G4double cutEnergy = 0.0,
 				    G4double maxEnergy = DBL_MAX);
 
+  // to select atom if cross section is proportional number of electrons 
+  inline G4int SelectRandomAtomNumber(const G4Material*);
+
   //------------------------------------------------------------------------
   // Get/Set methods
   //------------------------------------------------------------------------
@@ -314,6 +317,10 @@ public:
   inline G4bool DeexcitationFlag() const;
 
   inline G4bool ForceBuildTableFlag() const;
+
+  inline G4bool UseAngularGeneratorFlag() const;
+
+  inline void SetAngularGeneratorFlag(G4bool);
 
   inline void SetHighEnergyLimit(G4double);
 
@@ -380,6 +387,7 @@ private:
 
   G4bool          localTable;
   G4bool          localElmSelectors;
+  G4bool          useAngularGenerator;
   G4int           nSelectors;
   std::vector<G4EmElementSelector*>* elmSelectors;
 
@@ -516,6 +524,25 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
+{
+  size_t nn = mat->GetNumberOfElements();
+  const G4ElementVector* elmv = mat->GetElementVector();
+  G4int Z = G4int((*elmv)[0]->GetZ());
+  if(1 < nn) {
+    const G4double* at = mat->GetVecNbOfAtomsPerVolume();
+    G4double tot = mat->GetTotNbOfAtomsPerVolume()*G4UniformRand();
+    for( size_t i=0; i<nn; ++i) {
+      Z = G4int((*elmv)[0]->GetZ());
+      tot -= Z*at[i];
+      if(tot <= 0.0) { break; }
+    }
+  }
+  return Z;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
 {
   SetCurrentElement(elm);
@@ -619,6 +646,20 @@ inline G4bool G4VEmModel::DeexcitationFlag() const
 inline G4bool G4VEmModel::ForceBuildTableFlag() const 
 {
   return flagForceBuildTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4VEmModel::UseAngularGeneratorFlag() const
+{
+  return useAngularGenerator;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmModel::SetAngularGeneratorFlag(G4bool val)
+{
+  useAngularGenerator = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

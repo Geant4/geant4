@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 October 13: V.Ivant (emutils-V09-06-60)
+- G4VEmModel - added extra flag  useAngularGenerator and Get/Set methods
+
+20 October 13: V.Ivant (emutils-V09-06-59)
+- G4VEmModel - added extra method SelectRandomAtomNumber
+
 17 October 13: V.Ivant (emutils-V09-06-58)
 - G4VMultipleScattering - increased lowestLimit from 1 eV to 10 eV
     because Urban msc model cannot handle low-energy e- below 10 eV;

@@ -73,6 +73,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   elmSelectors = 0;
   localElmSelectors = true;
   localTable = true;
+  useAngularGenerator = false;
   idxTable = 0;
 
   G4LossTableManager::Instance()->Register(this);
