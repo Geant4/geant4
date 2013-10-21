@@ -238,10 +238,16 @@ size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
    size_t bin;
    if(type == T_G4PhysicsLogVector) {
      bin = size_t(G4Log(theEnergy)/dBin - baseBin);
-     if(bin > numberOfNodes - 2) { bin = numberOfNodes - 2; }   
+     if(bin + 2 > numberOfNodes) { bin = numberOfNodes - 2; }
+     else if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
+     else if(bin + 2 < numberOfNodes && theEnergy > binVector[bin+1]) 
+            { ++bin; }
    } else if(type == T_G4PhysicsLinearVector) {
      bin = size_t( theEnergy/dBin - baseBin ); 
-     if(bin > numberOfNodes - 2) { bin = numberOfNodes - 2; }   
+     if(bin + 2 > numberOfNodes) { bin = numberOfNodes - 2; }   
+     else if(bin > 0 && theEnergy < binVector[bin]) { --bin; }
+     else if(bin + 2 < numberOfNodes && theEnergy > binVector[bin+1]) 
+            { ++bin; }
    } else {
      bin = 0;
      size_t bin2;
@@ -251,6 +257,14 @@ size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
        if (theEnergy > binVector[bin2]) { bin = bin2; }
        else { bin3 = bin2; }
      }
+/*
+// V.I. Usage of this algorithm provide identical results
+//      no CPU advantage is observed in EM tests
+//      if new validation information will be known this code may be used
+     G4PVDataVector::const_iterator it =
+       std::lower_bound(binVector.begin(), binVector.end(), theEnergy);
+     bin = it - binVector.begin() - 1;
+*/
    }
    return bin;
 }
