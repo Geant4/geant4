@@ -141,11 +141,20 @@ class G4GeomSplitter
     void UseWorkArea( T* newOffset ) // ,  G4int numObjects, G4int numSpace)
     {
       // Use recycled work area - which was created previously
-      if( offset ) 
+      if( offset && offset!=newOffset )
       {
-         G4Exception("G4GeomSplitter::UseWorkspace()", 
+         if( newOffset != offset ) 
+         {
+              G4Exception("G4GeomSplitter::UseWorkspace()", 
                     "TwoWorkspaces", FatalException,
                     "Thread already has workspace - cannot use another.");
+         }
+         else
+         {
+              G4Exception("G4GeomSplitter::UseWorkspace()", 
+                    "TwoWorkspaces", JustWarning,
+                    "Thread already has a workspace - trying to set the same again.");
+         }
       }
       offset= newOffset;
       // totalobj= numObjects;

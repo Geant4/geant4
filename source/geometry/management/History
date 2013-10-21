@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 18th, 2013, A. Dotti		geommng-V09-06-13
+- Bug fixing in G4GeomSplitter::UseWorkspace method
+  check if offset pointer is assigned AND different from new value
+
 October 3, 2013 J.Apostolakis           geommng-V09-06-12
 - Cleanup of G4LogicalVolume, G4VPhysicalVolume
      Moved long description of helper classes to end of headers.
