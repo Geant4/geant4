@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 Oct 2013: V.Ivanchenko (emadjoint-V09-06-08)
+- G4AdjointBremsstrahlungModel - removed unused obsolete headers
+
 21 Jul 2013: V.Ivanchenko (emadjoint-V09-06-07)
 - G4AdjointhMultipleScattering - use G4UrbanMscModel instead of
     G4UrbanMscModel95

@@ -55,8 +55,6 @@
 #define G4AdjointBremsstrahlungModel_h 1
 #include "globals.hh"
 #include "G4VEmAdjointModel.hh"
-#include "G4eBremsstrahlungModel.hh"
-//#include "G4PenelopeBremsstrahlungModel.hh"
 #include "G4PhysicsTable.hh"
 #include "G4EmModelManager.hh"
 class G4Timer;
