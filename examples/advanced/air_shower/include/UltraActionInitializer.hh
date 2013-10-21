@@ -23,62 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: UltraActionInitializer.hh 66241 2012-12-13 18:34:42Z gunter $
+// GEANT4 tag $Name:  $
 //
-// --------------------------------------------------------------
-//                 GEANT 4 - ULTRA experiment example
-// --------------------------------------------------------------
-//
-// Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
-//
-//    ****************************************************
-//    *      UltraRunActionMessenger.cc
-//    ****************************************************
-//
-//    Messenger Class for UltraRunAction
-//    Allows to set the run ID
-//
-#include "UltraRunActionMessenger.hh"
-#include "UltraRunAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcommand.hh"
-#include "G4UIparameter.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
-#include <sstream>
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-UltraRunActionMessenger::UltraRunActionMessenger(UltraRunAction* aRunAction)
-:theRunAction(aRunAction)
+#ifndef UltraActionInitializer_h
+#define UltraActionInitializer_h 1
+
+#include "G4VUserActionInitialization.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class UltraActionInitializer : public G4VUserActionInitialization
 {
-  runDirectory = new G4UIdirectory("/mysetrun/");
-  runDirectory->SetGuidance("My set commands.");
+public:
 
-  runIDCmd = new G4UIcommand("/mysetrun/SetRunID",this);
-  runIDCmd->SetGuidance("Set run ID");
-  runIDCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  G4UIparameter* p1 = new G4UIparameter("runID",'i',true);
-  p1->SetDefaultValue(1000);
-  runIDCmd->SetParameter(p1);
-}
+  UltraActionInitializer();
+  ~UltraActionInitializer(){;};
+  
+  void Build() const;
+  void BuildForMaster() const;
 
-UltraRunActionMessenger::~UltraRunActionMessenger()
-{
-  delete runIDCmd;
-  delete runDirectory;
-}
+};
 
-void UltraRunActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{
-  const char* nv = (const char*)newValue;
-  if( command==runIDCmd )
-  {
-    G4int id;
-    std::istringstream is(nv);
-    is >> id;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-    theRunAction->MySetRunID(id);  
-  }
-}
-
-
+#endif
 

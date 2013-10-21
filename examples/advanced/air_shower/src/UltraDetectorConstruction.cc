@@ -51,7 +51,6 @@
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4SDManager.hh"
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4Element.hh"
@@ -71,18 +70,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-UltraDetectorConstruction::UltraDetectorConstruction()
+UltraDetectorConstruction::UltraDetectorConstruction() : 
+  logicalPMT(0)
 {
-
- PMTSD   = 0;
-
- // Sensitive Detector Manager
- SDmanager = G4SDManager::GetSDMpointer();
-
-// Define wavelength limits for materials definition
- lambda_min = 200*nm ; 
- lambda_max = 700*nm ; 
-
+  // Define wavelength limits for materials definition
+  lambda_min = 200*nm ; 
+  lambda_max = 700*nm ;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -162,6 +155,14 @@ World_phys   = new G4PVPlacement(0,G4ThreeVector(),"World",World_log,0,false,0);
 #endif
 
   return World_phys;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void UltraDetectorConstruction::ConstructSDandField()
+{ 
+  UltraPMTSD* PMTSD = new UltraPMTSD("PMTSD");
+  SetSensitiveDetector(logicalPMT,PMTSD);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -472,92 +473,93 @@ new G4LogicalBorderSurface("Air/Ground Surface",World_phys,physGround,OpticalAir
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume *World_phys){
+G4VPhysicalVolume* UltraDetectorConstruction::ConstructUVscope(G4VPhysicalVolume *World_phys)
+{
 
-//	------------- Volumes --------------
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-G4cout << "#                                                    #" << G4endl ;  
-G4cout << "#           Building the Telescope    ...            #" << G4endl ;  
-G4cout << "#                                                    #" << G4endl ;  
-
-/////////////////////////////////////////////////////////////
-// UVscope housing is a cylinder made of 1 mm thick aluminum
-/////////////////////////////////////////////////////////////
-
-G4double UVscopeHeight    = 1030.0*mm ;
-G4double UVscopeDiameter  = 518.0*mm ;
-G4double UVscopeThickness = 1.0*mm   ;
-G4double UVscopeBaffle    = 514.0*mm ; 
-
-G4double UVscopeInnerRadius = UVscopeDiameter/2.0-UVscopeThickness ;
-G4double UVscopeOuterRadius = UVscopeDiameter/2.0 ; 
-
-G4ThreeVector UVscopePosition = G4ThreeVector(0.0*m,0.0*m,-1.0*m) ;
-G4String name;
-G4Material* Al = G4Material::GetMaterial(name = "Aluminum");
-
-
-G4Tubs *solidUVscope = 
- new G4Tubs("UVscopeSolid",UVscopeInnerRadius,UVscopeOuterRadius,UVscopeHeight/2.0,0.0,twopi) ;
-G4LogicalVolume *logicUVscope =
- new G4LogicalVolume(solidUVscope,Al,"UVscopeLV",0,0,0);
-G4VPhysicalVolume *physicalUVscope =
- new G4PVPlacement(0,UVscopePosition,"UVSCopePV",logicUVscope,World_phys,false,0);
-
-
-//////////////////////////////////////
-// Back cover of the UVscope cylinder
-//////////////////////////////////////
-
-G4Tubs *solidUVscopeBack = 
- new G4Tubs("UVscopeBackSolid",0.0,UVscopeOuterRadius,UVscopeThickness/2.0,0.0,twopi) ;
-
-G4LogicalVolume *logicUVscopeBack = 
- new G4LogicalVolume(solidUVscopeBack,Al,"UVscopeBackLV",0,0,0);
-
-G4ThreeVector UVscopeBackPosition ;
-UVscopeBackPosition =  UVscopePosition+G4ThreeVector(0.0*mm,0.0*mm,-(UVscopeHeight/2.0+UVscopeThickness/2.0)) ;
-G4VPhysicalVolume *physicalUVscopeBack = 
- new G4PVPlacement(0,UVscopeBackPosition,"UVscopeBack",logicUVscopeBack,World_phys,false,0);
+  //	------------- Volumes --------------
+  
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
+  
+  G4cout << "#                                                    #" << G4endl ;  
+  G4cout << "#           Building the Telescope    ...            #" << G4endl ;  
+  G4cout << "#                                                    #" << G4endl ;  
+  
+  /////////////////////////////////////////////////////////////
+  // UVscope housing is a cylinder made of 1 mm thick aluminum
+  /////////////////////////////////////////////////////////////
+  
+  G4double UVscopeHeight    = 1030.0*mm ;
+  G4double UVscopeDiameter  = 518.0*mm ;
+  G4double UVscopeThickness = 1.0*mm   ;
+  G4double UVscopeBaffle    = 514.0*mm ; 
+  
+  G4double UVscopeInnerRadius = UVscopeDiameter/2.0-UVscopeThickness ;
+  G4double UVscopeOuterRadius = UVscopeDiameter/2.0 ; 
+  
+  G4ThreeVector UVscopePosition = G4ThreeVector(0.0*m,0.0*m,-1.0*m) ;
+  G4String name;
+  G4Material* Al = G4Material::GetMaterial(name = "Aluminum");
+  
+  
+  G4Tubs *solidUVscope = 
+    new G4Tubs("UVscopeSolid",UVscopeInnerRadius,UVscopeOuterRadius,UVscopeHeight/2.0,0.0,twopi) ;
+  G4LogicalVolume *logicUVscope =
+    new G4LogicalVolume(solidUVscope,Al,"UVscopeLV",0,0,0);
+  G4VPhysicalVolume *physicalUVscope =
+    new G4PVPlacement(0,UVscopePosition,"UVSCopePV",logicUVscope,World_phys,false,0);
 
 
+  //////////////////////////////////////
+  // Back cover of the UVscope cylinder
+  //////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+  G4Tubs *solidUVscopeBack = 
+    new G4Tubs("UVscopeBackSolid",0.0,UVscopeOuterRadius,UVscopeThickness/2.0,0.0,twopi) ;
+
+  G4LogicalVolume *logicUVscopeBack = 
+    new G4LogicalVolume(solidUVscopeBack,Al,"UVscopeBackLV",0,0,0);
+
+  G4ThreeVector UVscopeBackPosition ;
+  UVscopeBackPosition =  UVscopePosition+G4ThreeVector(0.0*mm,0.0*mm,-(UVscopeHeight/2.0+UVscopeThickness/2.0)) ;
+  G4VPhysicalVolume *physicalUVscopeBack = 
+    new G4PVPlacement(0,UVscopeBackPosition,"UVscopeBack",logicUVscopeBack,World_phys,false,0);
+
+
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   G4cout << "#                                                    #" << G4endl ;  
   G4cout << "#           Building the Fresnel lens ...            #" << G4endl ;  
   G4cout << "#                                                    #" << G4endl ;  
 
-G4double      LensDiameter        = 457*mm ; // Size of the optical active area of the lens.
-G4int      LensNumOfGrooves    = 13 ;
-//G4int      LensNumOfGrooves    = 129 ;
-//G4int      LensNumOfGrooves    = 1287 ;
+  G4double      LensDiameter        = 457*mm ; // Size of the optical active area of the lens.
+  G4int      LensNumOfGrooves    = 13 ;
+  //G4int      LensNumOfGrooves    = 129 ;
+  //G4int      LensNumOfGrooves    = 1287 ;
 
-G4double      LensBorderThickness = 2.8*mm ;     // Thickness of the border area. 
-G4double      LensFocalLength     = 441.973*mm ; // This parameter depends on the lens geometry, etc !!
-G4Material   *LensMaterial        = G4Material::GetMaterial(name = "Acrylic") ;
-G4ThreeVector LensPosition        = UVscopePosition+G4ThreeVector(0.0*mm,0.0*mm,UVscopeHeight/2.0-UVscopeBaffle) ;
-
-
-FresnelLens = new UltraFresnelLens(LensDiameter,LensNumOfGrooves,LensMaterial,World_phys,LensPosition) ;
+  G4double      LensBorderThickness = 2.8*mm ;     // Thickness of the border area. 
+  G4double      LensFocalLength     = 441.973*mm ; // This parameter depends on the lens geometry, etc !!
+  G4Material   *LensMaterial        = G4Material::GetMaterial(name = "Acrylic") ;
+  G4ThreeVector LensPosition        = UVscopePosition+G4ThreeVector(0.0*mm,0.0*mm,UVscopeHeight/2.0-UVscopeBaffle) ;
 
 
-///////////////////////////////////
-// Lens supporting ring (aluminum)
-///////////////////////////////////
+  FresnelLens = new UltraFresnelLens(LensDiameter,LensNumOfGrooves,LensMaterial,World_phys,LensPosition) ;
 
-G4Tubs *solidLensFrame = new G4Tubs("LensFrame",LensDiameter/2.0,UVscopeInnerRadius,LensBorderThickness/2.0,0.0,twopi) ;
-G4LogicalVolume *logicLensFrame = new G4LogicalVolume(solidLensFrame,Al,"LensFrameLV",0,0,0);
 
-G4ThreeVector LensFramePosition ;
-LensFramePosition = LensPosition+G4ThreeVector(0.0*mm,0.0*mm,-((FresnelLens->GetThickness())/2.0+solidLensFrame->GetDz())) ;
+  ///////////////////////////////////
+  // Lens supporting ring (aluminum)
+  ///////////////////////////////////
 
-G4VPhysicalVolume *physicalLensFrame =
-  new G4PVPlacement(0,LensFramePosition,"LensFramePV",logicLensFrame,World_phys,false,0);
+  G4Tubs *solidLensFrame = new G4Tubs("LensFrame",LensDiameter/2.0,UVscopeInnerRadius,LensBorderThickness/2.0,0.0,twopi) ;
+  G4LogicalVolume *logicLensFrame = new G4LogicalVolume(solidLensFrame,Al,"LensFrameLV",0,0,0);
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
+  G4ThreeVector LensFramePosition ;
+  LensFramePosition = LensPosition+G4ThreeVector(0.0*mm,0.0*mm,-((FresnelLens->GetThickness())/2.0+solidLensFrame->GetDz())) ;
+
+  G4VPhysicalVolume *physicalLensFrame =
+    new G4PVPlacement(0,LensFramePosition,"LensFramePV",logicLensFrame,World_phys,false,0);
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
   G4cout << "#                                                    #" << G4endl ;  
@@ -565,92 +567,84 @@ G4VPhysicalVolume *physicalLensFrame =
   G4cout << "#                                                    #" << G4endl ;  
 
 
-// Photomultiplier window is a spherical section made of quartz
+  // Photomultiplier window is a spherical section made of quartz
 
-G4double PMT_thick   =   1.0*mm ; // Thickness of PMT window
-G4double PMT_curv    =  65.5*mm ; // Radius of curvature of PMT window
-G4double StartTheta  = (180.0-31.2)*pi/180. ;
-G4double EndTheta    = 31.2*pi/180. ;
+  G4double PMT_thick   =   1.0*mm ; // Thickness of PMT window
+  G4double PMT_curv    =  65.5*mm ; // Radius of curvature of PMT window
+  G4double StartTheta  = (180.0-31.2)*pi/180. ;
+  G4double EndTheta    = 31.2*pi/180. ;
 
-G4Sphere *solidPMT ;
-solidPMT = new G4Sphere("PMT_solid",PMT_curv-PMT_thick,PMT_curv,0.0,twopi,StartTheta,EndTheta);
+  G4Sphere *solidPMT ;
+  solidPMT = new G4Sphere("PMT_solid",PMT_curv-PMT_thick,PMT_curv,0.0,twopi,StartTheta,EndTheta);
 
-G4Material* Quartz = G4Material::GetMaterial(name = "Quartz");
-G4LogicalVolume * logicalPMT ;
-logicalPMT = new G4LogicalVolume(solidPMT,Quartz,"PMT_log",0,0,0);
+  G4Material* Quartz = G4Material::GetMaterial(name = "Quartz");
+  logicalPMT = new G4LogicalVolume(solidPMT,Quartz,"PMT_log",0,0,0);
 
 
-// Place PMT is at Lens Focus
+  // Place PMT is at Lens Focus
 
-G4ThreeVector PMTpos = LensPosition + G4ThreeVector(0.0*cm,0.0*cm,-(LensFocalLength+PMT_curv)) ;
+  G4ThreeVector PMTpos = LensPosition + G4ThreeVector(0.0*cm,0.0*cm,-(LensFocalLength+PMT_curv)) ;
 
-// Rotate PMT window through the axis OX by an angle = 180. degrees
+  // Rotate PMT window through the axis OX by an angle = 180. degrees
 
-G4RotationMatrix *PMTrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),pi);
-new G4PVPlacement(PMTrot,PMTpos,"PMT1",logicalPMT,World_phys,false,0);
+  G4RotationMatrix *PMTrot = new G4RotationMatrix(G4ThreeVector(1.0,0.0,0.0),pi);
+  new G4PVPlacement(PMTrot,PMTpos,"PMT1",logicalPMT,World_phys,false,0);
 
-  if(!PMTSD)
-    {
-      PMTSD = new UltraPMTSD("PMTSD");
-      SDmanager->AddNewDetector( PMTSD );
-    }
+ 
+  G4VisAttributes* PMTVisAtt   = new G4VisAttributes(true,G4Colour(0.0,0.0,1.0)) ;   
+  logicalPMT->SetVisAttributes(PMTVisAtt);
 
-  if (logicalPMT){logicalPMT->SetSensitiveDetector(PMTSD);}
-
-G4VisAttributes* PMTVisAtt   = new G4VisAttributes(true,G4Colour(0.0,0.0,1.0)) ;   
-logicalPMT->SetVisAttributes(PMTVisAtt);
-
-//////////////////////////////////////////////////////////////////////////////////////////
-//   Optical properties of the interface between the Air and the walls of the 
-//   UVscope cylinder (5% reflectivity)
+  //////////////////////////////////////////////////////////////////////////////////////////
+  //   Optical properties of the interface between the Air and the walls of the 
+  //   UVscope cylinder (5% reflectivity)
 
 
   G4cout << "#    Defining interface's optical properties  ...    #" << G4endl ;  
   G4cout << "#                                                    #" << G4endl ;  
 
 
-G4OpticalSurface *OpticalAirPaint = new G4OpticalSurface("AirPaintSurface");
-OpticalAirPaint->SetModel(unified);
-OpticalAirPaint->SetType(dielectric_dielectric);
-OpticalAirPaint->SetFinish(groundfrontpainted);
+  G4OpticalSurface *OpticalAirPaint = new G4OpticalSurface("AirPaintSurface");
+  OpticalAirPaint->SetModel(unified);
+  OpticalAirPaint->SetType(dielectric_dielectric);
+  OpticalAirPaint->SetFinish(groundfrontpainted);
 
-const G4int NUM = 2;
-G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
-G4double BLACKPAINTREFLECTIVITY[NUM]      = { 0.05, 0.05 };
-//G4double WHITEPAINTREFLECTIVITY[NUM]      = { 0.99, 0.99 };
+  const G4int NUM = 2;
+  G4double XX[NUM] = {h_Planck*c_light/lambda_max, h_Planck*c_light/lambda_min} ; 
+  G4double BLACKPAINTREFLECTIVITY[NUM]      = { 0.05, 0.05 };
+  //G4double WHITEPAINTREFLECTIVITY[NUM]      = { 0.99, 0.99 };
 
-G4MaterialPropertiesTable *AirPaintMPT = new G4MaterialPropertiesTable();
-AirPaintMPT->AddProperty("REFLECTIVITY", XX, BLACKPAINTREFLECTIVITY,NUM);
-OpticalAirPaint->SetMaterialPropertiesTable(AirPaintMPT);
+  G4MaterialPropertiesTable *AirPaintMPT = new G4MaterialPropertiesTable();
+  AirPaintMPT->AddProperty("REFLECTIVITY", XX, BLACKPAINTREFLECTIVITY,NUM);
+  OpticalAirPaint->SetMaterialPropertiesTable(AirPaintMPT);
 
-//OpticalAirPaint->DumpInfo();
+  //OpticalAirPaint->DumpInfo();
 
-new G4LogicalBorderSurface("Air/UVscope Cylinder Surface",World_phys,physicalUVscope,OpticalAirPaint);
+  new G4LogicalBorderSurface("Air/UVscope Cylinder Surface",World_phys,physicalUVscope,OpticalAirPaint);
 
-new G4LogicalBorderSurface("Air/LensFrame Surface",World_phys,physicalLensFrame,OpticalAirPaint);
+  new G4LogicalBorderSurface("Air/LensFrame Surface",World_phys,physicalLensFrame,OpticalAirPaint);
 
-new G4LogicalBorderSurface("Air/UVscope Back Cover Surface",World_phys,physicalUVscopeBack,OpticalAirPaint);
-
-
-/////////////////////////////////////////////////////////////////////////////////////
+  new G4LogicalBorderSurface("Air/UVscope Back Cover Surface",World_phys,physicalUVscopeBack,OpticalAirPaint);
 
 
-   G4VisAttributes* LensVisAtt  = new G4VisAttributes(G4Colour(1.0,0.0,0.0)) ;   // Red
-   LensVisAtt ->SetVisibility(true);
+  /////////////////////////////////////////////////////////////////////////////////////
 
 
-   if (FresnelLens){
-   FresnelLens->GetPhysicalVolume()->GetLogicalVolume()->SetVisAttributes(LensVisAtt);
-   }
+  G4VisAttributes* LensVisAtt  = new G4VisAttributes(G4Colour(1.0,0.0,0.0)) ;   // Red
+  LensVisAtt ->SetVisibility(true);
 
-   G4VisAttributes* UVscopeVisAtt  = new G4VisAttributes(G4Colour(0.5,0.5,0.5)) ;   // Gray
-   UVscopeVisAtt ->SetVisibility(true);
 
-   physicalUVscope     ->GetLogicalVolume()->SetVisAttributes(UVscopeVisAtt);
-   physicalUVscopeBack ->GetLogicalVolume()->SetVisAttributes(UVscopeVisAtt);
-   physicalLensFrame   ->GetLogicalVolume()->SetVisAttributes(UVscopeVisAtt);
+  if (FresnelLens){
+    FresnelLens->GetPhysicalVolume()->GetLogicalVolume()->SetVisAttributes(LensVisAtt);
+  }
 
-/////////////////////////////////////////////////////////////////////////////////////
+  G4VisAttributes* UVscopeVisAtt  = new G4VisAttributes(G4Colour(0.5,0.5,0.5)) ;   // Gray
+  UVscopeVisAtt ->SetVisibility(true);
+
+  physicalUVscope     ->GetLogicalVolume()->SetVisAttributes(UVscopeVisAtt);
+  physicalUVscopeBack ->GetLogicalVolume()->SetVisAttributes(UVscopeVisAtt);
+  physicalLensFrame   ->GetLogicalVolume()->SetVisAttributes(UVscopeVisAtt);
+
+  /////////////////////////////////////////////////////////////////////////////////////
 
   G4cout << "#                                                    #" << G4endl ;  
   G4cout << "#               UVscope is built ! ...               #" << G4endl ;  

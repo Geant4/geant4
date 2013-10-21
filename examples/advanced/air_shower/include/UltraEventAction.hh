@@ -56,19 +56,16 @@ class G4HCofThisEvent;
 class UltraEventAction : public G4UserEventAction
 {
   public:
-    UltraEventAction(UltraRunAction*);
+    UltraEventAction();
    ~UltraEventAction();
 
   public:
     void BeginOfEventAction(const G4Event*);
     void EndOfEventAction(const G4Event*);
     
-
-    G4int GetRunNumb(){return UltraRun->GetRunNumb() ;} ;
     G4int GetEvtNumb(){return evtNb ;} ;
 
   private:
-    UltraRunAction* UltraRun;
     G4int    evtNb ;
 
   private: 

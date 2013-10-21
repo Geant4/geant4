@@ -7,6 +7,11 @@
                            History file
                            ------------
 
+21.10.2013 - L. Pandola (air_shower-V09-06-02)
+	     Migrated to MT. Works in MT and sequential mode.
+	     Removed RunActionMessenger and edited UltraMacro.mac 
+	     accordingly.
+
 27.08.2013 - G. Cosmo (air_shower-V09-06-01)
              Added G4Ellipsoid among solids enabled for parameterisation.
 

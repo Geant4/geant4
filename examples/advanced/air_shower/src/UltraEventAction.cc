@@ -39,7 +39,6 @@
 //    filling 
 //
 #include "UltraEventAction.hh"
-#include "UltraRunAction.hh"
 #include "UltraPrimaryGeneratorAction.hh"
 #include "UltraOpticalHit.hh"
 
@@ -55,8 +54,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-UltraEventAction::UltraEventAction(UltraRunAction* run)
-  :UltraRun(run),OpticalHitsCollID(-1)
+UltraEventAction::UltraEventAction()
+  :OpticalHitsCollID(-1)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -94,16 +93,14 @@ void UltraEventAction::EndOfEventAction(const G4Event* evt)
   // Fill histograms
   G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  if(HCE){
-    
+  if(HCE){    
     if(OpticalHitsCollID != -1) OpticalHitsColl = 
-      (UltraOpticalHitsCollection*)(HCE->GetHC(OpticalHitsCollID));
-    
+      (UltraOpticalHitsCollection*)(HCE->GetHC(OpticalHitsCollID));    
   }
+
   G4int nOptHits = 0 ; 
   
-  if(OpticalHitsColl){
-    
+  if(OpticalHitsColl){    
     nOptHits = OpticalHitsColl->entries();
     
 #ifdef ULTRA_VERBOSE

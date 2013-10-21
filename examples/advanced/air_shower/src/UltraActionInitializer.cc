@@ -23,46 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: UltraActionInitializer.cc 66241 2012-12-13 18:34:42Z gunter $
+// GEANT4 tag $Name:  $
 //
-// --------------------------------------------------------------
-//                 GEANT 4 - ULTRA experiment example
-// --------------------------------------------------------------
-//
-// Code developed by:
-// B. Tome, M.C. Espirito-Santo, A. Trindade, P. Rodrigues 
-//
-//   **********************************************
-//   *        UltraRunActionMessenger.hh
-//   **********************************************
-//
-//    Messenger Class for UltraRunAction
-//    Allows to set the run ID
-//
-#ifndef UltraRunActionMessenger_h
-#define UltraRunActionMessenger_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4UIdirectory;
-class UltraRunAction;
-#include "G4UImessenger.hh"
-#include "globals.hh"
+#include "UltraActionInitializer.hh"
 
-class UltraRunActionMessenger: public G4UImessenger
+#include "UltraPrimaryGeneratorAction.hh"
+#include "UltraRunAction.hh"
+#include "UltraEventAction.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+UltraActionInitializer::UltraActionInitializer() : 
+  G4VUserActionInitialization()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void UltraActionInitializer::Build() const 
 {
-public:
-    UltraRunActionMessenger(UltraRunAction*);
-    ~UltraRunActionMessenger();
+  
+  // primary generator
+  SetUserAction(new UltraPrimaryGeneratorAction());
 
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
+  //Thread-local RunAction: same class, but code controlled by IsMaster()
+  SetUserAction(new UltraRunAction());
+  SetUserAction(new UltraEventAction());
+}
 
-  private:
-    UltraRunAction * theRunAction;
-    
-  private: //commands
-    G4UIdirectory *             runDirectory;
-    G4UIcommand *               runIDCmd ;
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
-
+void UltraActionInitializer::BuildForMaster() const
+{ 
+  //Thread-local RunAction: same class, but code controlled by IsMaster()
+  SetUserAction(new UltraRunAction());
+}
 
