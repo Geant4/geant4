@@ -66,21 +66,29 @@ G4int G4WorkerThread::GetNumberThreads() const
 #include "G4VUserPhysicsList.hh"
 #include "G4VPhysicsConstructor.hh"
 #include "G4VModularPhysicsList.hh"
+#include "G4GeometryWorkspace.hh"
+#include "G4GeometryWorkspacePool.hh"
+#include "G4SolidsWorkspace.hh"
+#include "G4SolidsWorkspacePool.hh"
 
-namespace  {
-    G4Mutex solidclone = G4MUTEX_INITIALIZER;
-}
+//namespace  {
+//    G4Mutex solidclone = G4MUTEX_INITIALIZER;
+//}
 
 void G4WorkerThread::BuildGeometryAndPhysicsVector()
-{        
+{
+    // Initialise all split classes in the geometry with copy of data from master thread
+    G4GeometryWorkspacePool::GetInstance()->CreateAndUseWorkspace();
+    G4SolidsWorkspacePool::GetInstance()->CreateAndUseWorkspace();
+
     //Geometry related, split classes mechanism: instantiate sub-instance for this thread
-    const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-    const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-    const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-    const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).SlaveInitializeSubInstance();
+    //const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+    //const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+    //const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+    //const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).SlaveInitializeSubInstance();
     //G4Material::g4materialSubInstanceManager.SlaveCopySubInstanceArray(); //< Not anymore splitted class
-    const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
-    const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
+    //const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
+    //const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
     //Physics related
     //const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).SlaveInitializeSubInstance();
 /////@@    const_cast<G4DecayChannelManager&>(G4VDecayChannel::GetSubInstanceManager()).NewSubInstances();
@@ -88,7 +96,7 @@ void G4WorkerThread::BuildGeometryAndPhysicsVector()
     const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).NewSubInstances();
     const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).NewSubInstances();
     const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-    
+    /*
     G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
     for (size_t ip=0; ip<physVolStore->size(); ip++)
     {
@@ -133,6 +141,7 @@ void G4WorkerThread::BuildGeometryAndPhysicsVector()
             g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0);
         }
     }
+     */
     
     //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
     
@@ -145,59 +154,130 @@ void G4WorkerThread::BuildGeometryAndPhysicsVector()
 
 void G4WorkerThread::DestroyGeometryAndPhysicsVector()
 {
-    G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
-    for (size_t ip=0; ip<physVolStore->size(); ip++)
-    {
-        G4VPhysicalVolume* physVol = (*physVolStore)[ip];
-        G4LogicalVolume *g4LogicalVolume = physVol->GetLogicalVolume();
-        //    G4VSolid *g4VSolid = g4LogicalVolume->fSolid;
-        G4PVReplica *g4PVReplica = 0;
-        g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
-        if (g4PVReplica)
-        {
-            //g4PVReplica->DestroySlaveG4PVReplica(g4PVReplica);
-            g4PVReplica->TerminateWorker(g4PVReplica);
-            G4PVParameterised *g4PVParameterised = 0;
-            g4PVParameterised =  dynamic_cast<G4PVParameterised*>(physVol);
-            if (g4PVParameterised)
-            {
-                //        G4VSolid *slaveg4VSolid = g4VSolid->Clone();
-                //g4LogicalVolume->DestroySlaveG4LogicalVolume(g4LogicalVolume);
-                g4LogicalVolume->TerminateWorker(g4LogicalVolume);
-                //        delete slaveg4VSolid;
-            }
-            else
-            {
-                //g4LogicalVolume->DestroySlaveG4LogicalVolume(g4LogicalVolume);
-                g4LogicalVolume->TerminateWorker(g4LogicalVolume);
-            }
-        }
-        else
-        {
-            //g4LogicalVolume->DestroySlaveG4LogicalVolume(g4LogicalVolume);
-            g4LogicalVolume->TerminateWorker(g4LogicalVolume);
-        }
-    }
-    
-    //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-    
-    //size_t nmat = theMaterialTable->size();
-    //size_t i;
-    //for(i=0; i<nmat; i++) {
-    //    ((*theMaterialTable)[i])->DestroySlaveG4Material();
-    //}
-    
-    const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).FreeSlave();
-    //const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).FreeSlave();
-/////@@    const_cast<G4DecayChannelManager&>(G4VDecayChannel::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).FreeSlave();
+#if 0
+    // Manage Geometry Workspace explicitly
+    fGeometryWrk->ReleaseAndDestroyWorkspace();
+    delete fGeometryWrk;
+    fGeometryWrk=0;
+#else
+    // Alternative:
+    // Initialise all split classes in the geometry with copy of data from master thread
+    // G4GeometryWorkspacePool::GetInstance()->ReleaseAndDestroyMyWorkspace();
+    G4GeometryWorkspacePool::GetInstance()->GetWorkspace()->DestroyWorkspace();
+    G4SolidsWorkspacePool::GetInstance()->GetWorkspace()->DestroyWorkspace();
+#endif
+//    
+//
+//    G4PhysicalVolumeStore* physVolStore = G4PhysicalVolumeStore::GetInstance();
+//    for (size_t ip=0; ip<physVolStore->size(); ip++)
+//    {
+//        G4VPhysicalVolume* physVol = (*physVolStore)[ip];
+//        G4LogicalVolume *g4LogicalVolume = physVol->GetLogicalVolume();
+//        //    G4VSolid *g4VSolid = g4LogicalVolume->fSolid;
+//        G4PVReplica *g4PVReplica = 0;
+//        g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
+//        if (g4PVReplica)
+//        {
+//            //g4PVReplica->DestroySlaveG4PVReplica(g4PVReplica);
+//            g4PVReplica->TerminateWorker(g4PVReplica);
+//            G4PVParameterised *g4PVParameterised = 0;
+//            g4PVParameterised =  dynamic_cast<G4PVParameterised*>(physVol);
+//            if (g4PVParameterised)
+//            {
+//                //        G4VSolid *slaveg4VSolid = g4VSolid->Clone();
+//                //g4LogicalVolume->DestroySlaveG4LogicalVolume(g4LogicalVolume);
+//                g4LogicalVolume->TerminateWorker(g4LogicalVolume);
+//                //        delete slaveg4VSolid;
+//            }
+//            else
+//            {
+//                //g4LogicalVolume->DestroySlaveG4LogicalVolume(g4LogicalVolume);
+//                g4LogicalVolume->TerminateWorker(g4LogicalVolume);
+//            }
+//        }
+//        else
+//        {
+//            //g4LogicalVolume->DestroySlaveG4LogicalVolume(g4LogicalVolume);
+//            g4LogicalVolume->TerminateWorker(g4LogicalVolume);
+//        }
+//    }
+//    
+//    //const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+//    
+//    //size_t nmat = theMaterialTable->size();
+//    //size_t i;
+//    //for(i=0; i<nmat; i++) {
+//    //    ((*theMaterialTable)[i])->DestroySlaveG4Material();
+//    //}
+//    
+//    const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).FreeSlave();
+//    const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).FreeSlave();
+//    const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).FreeSlave();
+//    const_cast<G4PDefManager&>(G4ParticleDefinition::GetSubInstanceManager()).FreeSlave();
+//    const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).FreeSlave();
+//    //const_cast<G4PVecManager&>(G4PhysicsVector::GetSubInstanceManager()).FreeSlave();
+///////@@    const_cast<G4DecayChannelManager&>(G4VDecayChannel::GetSubInstanceManager()).FreeSlave();
+//    const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).FreeSlave();
+//    const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).FreeSlave();
     const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).FreeSlave();
     const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).FreeSlave();
     const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).FreeSlave();
+}
+
+void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
+{
+    //=================================================
+    //Step-0: keep sensitive detector and field manager
+    //=================================================
+    // First remember SD and Filed Associated with worker
+    //  in order to re-use it
+    // (note that all the stuff after this will reset SD and Field
+    typedef std::map<G4LogicalVolume*,std::pair<G4VSensitiveDetector*,G4FieldManager*> > LV2SDFM;
+    LV2SDFM lvmap;
+    G4PhysicalVolumeStore* mphysVolStore = G4PhysicalVolumeStore::GetInstance();
+    for(size_t ip=0; ip<mphysVolStore->size(); ip++)
+    {
+        G4VPhysicalVolume* pv = (*mphysVolStore)[ip];
+        G4LogicalVolume *lv = pv->GetLogicalVolume();
+        G4VSensitiveDetector* sd = lv->GetSensitiveDetector();
+        G4FieldManager* fm = lv->GetFieldManager();
+        if ( sd || fm )
+            lvmap[lv] = std::make_pair(sd,fm);
+    }
+    
+    //===========================
+    //Step-1: Clean the workspace
+    //===========================
+    G4GeometryWorkspace* geomWorkspace= G4GeometryWorkspacePool::GetInstance()->GetWorkspace();
+    geomWorkspace->DestroyWorkspace();
+    G4SolidsWorkspace* solidWorkspace = G4SolidsWorkspacePool::GetInstance()->GetWorkspace();
+    solidWorkspace->DestroyWorkspace();
+    
+    //===========================
+    //Step-2: Re-create and initialize workspace
+    //===========================
+    geomWorkspace->InitialiseWorkspace();
+    solidWorkspace->InitialiseWorkspace();
+
+    // Alternative
+    //
+    // To wipe, release and get a new one ...
+    // G4GeometryWorkspacePool *fWorkspaceMgr=  G4GeometryWorkspaceOutlet::GetInstance();
+    // fWorkspaceMgr->ReleaseAndDestroyMyWorkspace();
+    // Now re-create
+    // fWorkspaceMgr->CreateAndUseWorkspace();
+    
+    
+    //===================================================
+    //Step-4: Restore sensitive detector and field manaer
+    //===================================================
+    for ( LV2SDFM::const_iterator it = lvmap.begin() ; it != lvmap.end() ; ++it )
+    {
+        G4LogicalVolume* lv      = it->first;
+        G4VSensitiveDetector* sd = (it->second).first;
+        G4FieldManager* fm       = (it->second).second;
+        lv->SetFieldManager(fm, false); //What should be the second parameter? We use always false for MT mode
+        lv->SetSensitiveDetector(sd);
+    }
 }
 

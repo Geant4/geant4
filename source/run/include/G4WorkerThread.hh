@@ -50,6 +50,7 @@ public:
     //Build geometry for workers
     static void BuildGeometryAndPhysicsVector();
     static void DestroyGeometryAndPhysicsVector();
+    static void UpdateGeometryAndPhysicsVectorFromMaster();
 
 private:
     G4int threadId;

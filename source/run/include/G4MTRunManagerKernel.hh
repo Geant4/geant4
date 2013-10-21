@@ -75,8 +75,8 @@ public: // with descroption
     // defined in G4UserWorkerInitialization class.
     static void* StartThread(void* context);
 
-private:
-    static void ReinitializeGeometry();
+//private:
+//    static void ReinitializeGeometry();
 private:
     static G4ThreadLocal G4WorkerThread* wThreadContext;
 public:

@@ -184,7 +184,8 @@ void* G4MTRunManagerKernel::StartThread(void* context)
       }
       else
       {
-        ReinitializeGeometry();
+//        ReinitializeGeometry();
+          wThreadContext->UpdateGeometryAndPhysicsVectorFromMaster();          
       }
 
       // Execute UI commands stored in the masther UI manager
@@ -231,77 +232,78 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   return static_cast<void*>(0);
 }
 
-void G4MTRunManagerKernel::ReinitializeGeometry()
-{
-  G4AutoLock wrmm(&workerRMMutex);
-  //=================================================
-  //Step-0: keep sensitive detector and field manager
-  //=================================================
-  typedef std::map<G4LogicalVolume*,std::pair<G4VSensitiveDetector*,G4FieldManager*> > LV2SDFM;
-  LV2SDFM lvmap;
-  G4PhysicalVolumeStore* mphysVolStore = G4PhysicalVolumeStore::GetInstance(); 
-  for(size_t ip=0;ip<mphysVolStore->size();ip++)
-  {
-    G4VPhysicalVolume* pv = (*mphysVolStore)[ip];
-    G4LogicalVolume *lv = pv->GetLogicalVolume();
-    G4VSensitiveDetector* sd = lv->GetSensitiveDetector();
-    G4FieldManager* fm = lv->GetFieldManager();
-    if(sd||fm) lvmap[lv] = std::make_pair(sd,fm);
-  }
-
-  //===========================
-  //Step-1: Clean the instances
-  //===========================
-  const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).FreeSlave();
-  const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).FreeSlave();
-  const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).FreeSlave();
-  const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).FreeSlave();
-  const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).FreeSlave();
-  const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).FreeSlave();
-
-  //===========================
-  //Step-2: Re-create instances
-  //===========================
-  const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-  const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-  const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).SlaveCopySubInstanceArray();
-  const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).SlaveInitializeSubInstance();
-  const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
-  const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
-
-  //===============================
-  //Step-3: Re-initialize instances
-  //===============================
-  for(size_t ip=0;ip<mphysVolStore->size();ip++)
-  {
-    G4VPhysicalVolume* physVol = (*mphysVolStore)[ip];
-    G4LogicalVolume* g4LogicalVolume = physVol->GetLogicalVolume();
-    G4VSolid* g4VSolid = g4LogicalVolume->GetMasterSolid(); // shadow pointer
-    G4PVReplica* g4PVReplica = 0;
-    g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
-    if(g4PVReplica) // if the volume is a replica
-    {
-      G4VSolid *slaveg4VSolid = g4VSolid->Clone();
-      g4LogicalVolume->InitialiseWorker(g4LogicalVolume,slaveg4VSolid,0);
-    }
-    else
-    { g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0); }
-  }
-
-  //===================================================
-  //Step-4: Restore sensitive detector and field manaer
-  //===================================================
-  LV2SDFM::const_iterator it = lvmap.begin();
-  for(; it!=lvmap.end() ; ++it )
-  {
-    G4LogicalVolume* lv = it->first;
-    G4VSensitiveDetector* sd = (it->second).first;
-    G4FieldManager* fm = (it->second).second;
-    lv->SetFieldManager(fm, false);
-    lv->SetSensitiveDetector(sd);
-  }
-  wrmm.unlock();
-}
+//Now moved to G4WorkerThread
+//void G4MTRunManagerKernel::ReinitializeGeometry()
+//{
+//  G4AutoLock wrmm(&workerRMMutex);
+//  //=================================================
+//  //Step-0: keep sensitive detector and field manager
+//  //=================================================
+//  typedef std::map<G4LogicalVolume*,std::pair<G4VSensitiveDetector*,G4FieldManager*> > LV2SDFM;
+//  LV2SDFM lvmap;
+//  G4PhysicalVolumeStore* mphysVolStore = G4PhysicalVolumeStore::GetInstance(); 
+//  for(size_t ip=0;ip<mphysVolStore->size();ip++)
+//  {
+//    G4VPhysicalVolume* pv = (*mphysVolStore)[ip];
+//    G4LogicalVolume *lv = pv->GetLogicalVolume();
+//    G4VSensitiveDetector* sd = lv->GetSensitiveDetector();
+//    G4FieldManager* fm = lv->GetFieldManager();
+//    if(sd||fm) lvmap[lv] = std::make_pair(sd,fm);
+//  }
+//
+//  //===========================
+//  //Step-1: Clean the instances
+//  //===========================
+//  const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).FreeSlave();
+//  const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).FreeSlave();
+//  const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).FreeSlave();
+//  const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).FreeSlave();
+//  const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).FreeSlave();
+//  const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).FreeSlave();
+//
+//  //===========================
+//  //Step-2: Re-create instances
+//  //===========================
+//  const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+//  const_cast<G4PVManager&>(G4VPhysicalVolume::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+//  const_cast<G4PVRManager&>(G4PVReplica::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+//  const_cast<G4RegionManager&>(G4Region::GetSubInstanceManager()).SlaveInitializeSubInstance();
+//  const_cast<G4PlSideManager&>(G4PolyconeSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
+//  const_cast<G4PhSideManager&>(G4PolyhedraSide::GetSubInstanceManager()).SlaveInitializeSubInstance();
+//
+//  //===============================
+//  //Step-3: Re-initialize instances
+//  //===============================
+//  for(size_t ip=0;ip<mphysVolStore->size();ip++)
+//  {
+//    G4VPhysicalVolume* physVol = (*mphysVolStore)[ip];
+//    G4LogicalVolume* g4LogicalVolume = physVol->GetLogicalVolume();
+//    G4VSolid* g4VSolid = g4LogicalVolume->GetMasterSolid(); // shadow pointer
+//    G4PVReplica* g4PVReplica = 0;
+//    g4PVReplica =  dynamic_cast<G4PVReplica*>(physVol);
+//    if(g4PVReplica) // if the volume is a replica
+//    {
+//      G4VSolid *slaveg4VSolid = g4VSolid->Clone();
+//      g4LogicalVolume->InitialiseWorker(g4LogicalVolume,slaveg4VSolid,0);
+//    }
+//    else
+//    { g4LogicalVolume->InitialiseWorker(g4LogicalVolume,g4VSolid,0); }
+//  }
+//
+//  //===================================================
+//  //Step-4: Restore sensitive detector and field manaer
+//  //===================================================
+//  LV2SDFM::const_iterator it = lvmap.begin();
+//  for(; it!=lvmap.end() ; ++it )
+//  {
+//    G4LogicalVolume* lv = it->first;
+//    G4VSensitiveDetector* sd = (it->second).first;
+//    G4FieldManager* fm = (it->second).second;
+//    lv->SetFieldManager(fm, false);
+//    lv->SetSensitiveDetector(sd);
+//  }
+//  wrmm.unlock();
+//}
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
