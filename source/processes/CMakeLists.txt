@@ -34,9 +34,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
     include(Geant4MacroLibraryTargets)
     GEANT4_GLOBAL_LIBRARY_TARGET(NAME G4processes
         COMPONENTS
-            biasing/management/sources.cmake
-            biasing/generic/sources.cmake
-            biasing/importance/sources.cmake
+            biasing/sources.cmake
             cuts/sources.cmake
             decay/sources.cmake
             electromagnetic/adjoint/sources.cmake
