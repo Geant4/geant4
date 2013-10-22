@@ -390,10 +390,19 @@ namespace G4INCL {
       }
     }
 
+    void StandardPropagationModel::generateCollisions(const ParticleList &particles) {
+      // Loop over all the particles
+      for(ParticleIter p1=particles.begin(), e=particles.end(); p1!=e; ++p1) {
+        // Loop over the rest of the particles
+        for(ParticleIter p2 = p1 + 1; p2 != particles.end(); ++p2) {
+          registerAvatar(generateBinaryCollisionAvatar(*p1,*p2));
+        }
+      }
+    }
+
     void StandardPropagationModel::generateCollisions(const ParticleList &particles, const ParticleList &except) {
 
-      G4bool haveExcept;
-      haveExcept=(except.size()!=0);
+      const G4bool haveExcept = !except.empty();
 
       // Loop over all the particles
       for(ParticleIter p1=particles.begin(), e=particles.end(); p1!=e; ++p1)
@@ -421,19 +430,30 @@ namespace G4INCL {
       generateUpdatedCollisions(particles, p);             // Predict collisions with spectators and participants
     }
 
-    void StandardPropagationModel::generateAllAvatars(G4bool excludeUpdated) {
-      ParticleList particles = theNucleus->getStore()->getParticles();
-      if(particles.empty()) { INCL_ERROR("No particles inside the nucleus!" << std::endl); }
+    void StandardPropagationModel::generateAllAvatars() {
+      ParticleList const &particles = theNucleus->getStore()->getParticles();
+// assert(!particles.empty());
       for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
         G4double time = this->getReflectionTime(*i);
         if(time <= maximumTime) registerAvatar(new SurfaceAvatar(*i, time, theNucleus));
       }
-      ParticleList except;
-      if(excludeUpdated)
-        except = theNucleus->getUpdatedParticles();
+      generateCollisions(particles);
+      generateDecays(particles);
+    }
+
+#ifdef INCL_REGENERATE_AVATARS
+    void StandardPropagationModel::generateAllAvatarsExceptUpdated() {
+      ParticleList const &particles = theNucleus->getStore()->getParticles();
+// assert(!particles.empty());
+      for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
+        G4double time = this->getReflectionTime(*i);
+        if(time <= maximumTime) registerAvatar(new SurfaceAvatar(*i, time, theNucleus));
+      }
+      ParticleList except = theNucleus->getUpdatedParticles();
       generateCollisions(particles,except);
       generateDecays(particles);
     }
+#endif
 
     void StandardPropagationModel::generateDecays(const ParticleList &particles) {
       for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
@@ -458,7 +478,7 @@ namespace G4INCL {
         // updated particles
         theNucleus->getStore()->clearAvatars();
         theNucleus->getStore()->initialiseParticleAvatarConnections();
-        generateAllAvatars(true);
+        generateAllAvatarsExceptUpdated();
       }
 #else
       // Deltas are created by transforming nucleon into a delta for
@@ -470,8 +490,8 @@ namespace G4INCL {
       generateDecays(updatedParticles);
 
       ParticleList needNewAvatars = theNucleus->getUpdatedParticles();
-      ParticleList created = theNucleus->getCreatedParticles();
-      needNewAvatars.splice(needNewAvatars.end(), created);
+      ParticleList const &created = theNucleus->getCreatedParticles();
+      needNewAvatars.insert(needNewAvatars.end(), created.begin(), created.end());
       updateAvatars(needNewAvatars);
 #endif
 

@@ -222,7 +222,7 @@ namespace G4INCL {
     ParticleList rejected;
     while(!positiveExcitationEnergy && !pL.empty()) {
       G4double maxExcitationEnergy = -1.E30;
-      ParticleList::iterator best = pL.end();
+      ParticleMutableIter best = pL.end();
       ThreeVector bestMomentum;
       G4double bestEnergy = -1.;
       G4int bestA = -1, bestZ = -1;

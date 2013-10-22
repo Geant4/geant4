@@ -139,6 +139,15 @@ namespace G4INCL {
       /** \brief Generate and register collisions among particles in a list, except between those in another list.
        *
        * This method generates all possible collisions among the particles.
+       * Each collision is generated only once.
+       *
+       * \param particles list of particles
+       */
+      void generateCollisions(const ParticleList &particles);
+
+      /** \brief Generate and register collisions among particles in a list, except between those in another list.
+       *
+       * This method generates all possible collisions among the particles.
        * Each collision is generated only once. The collision is NOT generated
        * if BOTH collision partners belong to the except list.
        *
@@ -164,11 +173,16 @@ namespace G4INCL {
        */
       void updateAvatars(const ParticleList &particles);
 
+      /// \brief (Re)Generate all possible avatars.
+      void generateAllAvatars();
+
+#ifdef INCL_REGENERATE_AVATARS
       /** \brief (Re)Generate all possible avatars.
        *
-       * \param excludeUpdated exclude collisions between updated particles.
+       * This method excludes collision avatars between updated particles.
        */
-      void generateAllAvatars(G4bool excludeUpdated=false);
+      void generateAllAvatarsExceptUpdated();
+#endif
 
       /**
        * Propagate all particles and return the first avatar.

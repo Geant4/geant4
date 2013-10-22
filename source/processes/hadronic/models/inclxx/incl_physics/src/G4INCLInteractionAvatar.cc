@@ -383,8 +383,8 @@ namespace G4INCL {
   {
     // Set up the finalParticles list
     finalParticles = finalState->getModifiedParticles();
-    ParticleList created = finalState->getCreatedParticles();
-    finalParticles.splice(finalParticles.end(), created);
+    ParticleList const &created = finalState->getCreatedParticles();
+    finalParticles.insert(finalParticles.end(), created.begin(), created.end());
 
     // Store the particle momenta (necessary for the calls to
     // scaleParticleMomenta() to work)

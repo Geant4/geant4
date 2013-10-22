@@ -89,8 +89,9 @@ namespace G4INCL {
     G4double theTime;
   };
 
-  typedef std::list<IAvatar*> IAvatarList;
-  typedef std::list<IAvatar*>::const_iterator IAvatarIter;
+  typedef UnorderedVector<IAvatar*> IAvatarList;
+  typedef UnorderedVector<IAvatar*>::const_iterator IAvatarIter;
+  typedef UnorderedVector<IAvatar*>::iterator IAvatarMutableIter;
 }
 
 #endif /* IAVATAR_HH_ */

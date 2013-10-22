@@ -16,6 +16,16 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+21 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-30)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc11
+  o Fix compilation errors on Mac.
+
+21 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-29)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc10
+  o More optimisation.
+
 15 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-28)
 ---------------------------------------------------------------
 - INCL++ v5.1.14_rc8

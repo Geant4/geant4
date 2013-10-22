@@ -49,7 +49,7 @@
 #include "G4INCLParticleType.hh"
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLLogger.hh"
-#include <list>
+#include <vector>
 #include <sstream>
 #include <string>
 #include <algorithm>
@@ -58,8 +58,38 @@ namespace G4INCL {
 
   class Particle;
 
-  typedef std::list<G4INCL::Particle*> ParticleList;
-  typedef std::list<G4INCL::Particle*>::const_iterator ParticleIter;
+  template<class T>
+    class UnorderedVector : private std::vector<T> {
+      public:
+        UnorderedVector() {}
+        using std::vector<T>::push_back;
+        using std::vector<T>::pop_back;
+        using std::vector<T>::size;
+        using std::vector<T>::begin;
+        using std::vector<T>::end;
+        using std::vector<T>::rbegin;
+        using std::vector<T>::rend;
+        using std::vector<T>::front;
+        using std::vector<T>::back;
+        using std::vector<T>::clear;
+        using std::vector<T>::empty;
+        using std::vector<T>::insert;
+        using std::vector<T>::erase;
+        using typename std::vector<T>::iterator;
+        using typename std::vector<T>::reverse_iterator;
+        using typename std::vector<T>::const_iterator;
+        using typename std::vector<T>::const_reverse_iterator;
+        void remove(const T &t) {
+          const typename std::vector<T>::iterator removeMe = std::find(begin(), end(), t);
+// assert(removeMe!=end());
+          *removeMe = back();
+          pop_back();
+        }
+    };
+
+  typedef UnorderedVector<Particle*>   ParticleList;
+  typedef ParticleList::const_iterator ParticleIter;
+  typedef ParticleList::iterator       ParticleMutableIter;
 
   class Particle {
   public:

@@ -228,9 +228,8 @@ namespace G4INCL {
     /// \brief Shuffle the list of stored projectile components
     ParticleList shuffleStoredComponents() {
       ParticleList pL = getStoredComponents();
-      std::vector<Particle *> theVector(pL.begin(),pL.end());
-      std::random_shuffle(theVector.begin(), theVector.end(), shuffleComponentsHelper);
-      return ParticleList(theVector.begin(),theVector.end());
+      std::random_shuffle(pL.begin(), pL.end(), shuffleComponentsHelper);
+      return pL;
     }
 
     ParticleList getStoredComponents() const {

@@ -507,8 +507,9 @@ namespace G4INCL {
 
       // Build an entry avatar for this nucleon
       atLeastOneNucleonEntering = true;
-      ParticleEntryAvatar theAvatar(0.0, nucleus, *p);
-      FinalState *fs = theAvatar.getFinalState();
+      ParticleEntryAvatar *theAvatar = new ParticleEntryAvatar(0.0, nucleus, *p);
+      nucleus->getStore()->addParticleEntryAvatar(theAvatar);
+      FinalState *fs = theAvatar->getFinalState();
       nucleus->applyFinalState(fs);
       FinalStateValidity validity = fs->getValidity();
       delete fs;

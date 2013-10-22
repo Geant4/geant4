@@ -43,6 +43,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+// #include <cassert>
 
 #if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
 #include <boost/program_options/options_description.hpp>

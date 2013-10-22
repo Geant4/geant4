@@ -39,7 +39,6 @@
 
 #include <map>
 #include <list>
-#include <vector>
 #include <string>
 #include <algorithm>
 
@@ -210,19 +209,16 @@ namespace G4INCL {
      */
     ParticleList extractDynamicalSpectators() {
       ParticleList spectators;
-      std::list<std::list<Particle*>::iterator> toBeErased;
-      for(std::list<Particle*>::iterator p=outgoing.begin(), e=outgoing.end(); p!=e; ++p) {
+      for(ParticleIter p=outgoing.begin(), e=outgoing.end(); p!=e; ++p) {
         if((*p)->isProjectileSpectator()) {
 // assert((*p)->isNucleon());
           spectators.push_back(*p); // add them to the list we will return
-          toBeErased.push_back(p); // we will remove them from outgoing later
         }
       }
 
       // Now erase them from outgoing
-      for(std::list<std::list<Particle*>::iterator>::iterator i=toBeErased.begin();
-          i!=toBeErased.end(); ++i) {
-        outgoing.erase(*i);
+      for(ParticleIter i=spectators.begin(); i!=spectators.end(); ++i) {
+        outgoing.remove(*i);
       }
 
       return spectators;
@@ -365,28 +361,50 @@ namespace G4INCL {
     /// \brief Dummy assignment operator to shut up Coverity warnings
     Store &operator=(Store const &rhs);
 
-    /**
-     * Remove all avatars connected to a particle
-     */
-    void removeAvatarsFromParticle(Particle * const p);
 
-
-    /**
-     * Connects a particle and an avatar
+    /** \brief Connect an avatar to a particle
+     *
+     * Adds the avatar to the list of avatars where the particle appears. This
+     * is typically called when the avatar is created.
+     *
+     * \param p the particle
+     * \param a the avatar
      */
-    void connectParticleAndAvatar(Particle * const p, IAvatar * const a);
+    void connectAvatarToParticle(IAvatar * const a, Particle * const p);
 
-    /**
-     * Removes an avatar
+    /** \brief Disconnect an avatar from a particle
+     *
+     * Removes the avatar from the list of avatars where the particle appears.
+     * This is typically called when the avatar has been invalidated or
+     * realised.
+     *
+     * \param p the particle
+     * \param a the avatar
      */
-    void removeAvatarFromParticle(Particle * const p, IAvatar * const a);
+    void disconnectAvatarFromParticle(IAvatar * const a, Particle * const p);
+
+    /** \brief Remove an avatar from the list of avatars
+     *
+     * Removes an avatar from the list of all avatars. The avatar is *not*
+     * deleted. Use removeAndDeleteAvatar for that.
+     *
+     * \param a the avatar to remove
+     */
     void removeAvatar(IAvatar * const a);
+
+    /** \brief Remove an avatar from the list of avatars
+     *
+     * Removes an avatar from the list of all avatars and deletes it.
+     *
+     * \param a the avatar to remove and delete
+     */
+    void removeAndDeleteAvatar(IAvatar * const a);
 
   private:
     /**
      * Map particle -> [avatar]
      */
-    std::map<Particle*, std::vector<IAvatar*>* > particleAvatarConnections;
+    std::map<Particle*, IAvatarList* > particleAvatarConnections;
 
     /**
      * List of all avatars
