@@ -62,10 +62,10 @@ private:
   void BuildG4Solid( std::vector<G4String> params );
   G4PhantomParameterisation* GetPhantomParam(G4bool bMustExist);
   G4bool IsPhantomVolume( G4VPhysicalVolume* pv );
-  std::vector<G4VPhysicalVolume*> 
-        GetPhysicalVolumes( const G4String& name, bool exists, G4int nVols );
-  std::vector<G4LogicalVolume*>
-        GetLogicalVolumes( const G4String& name, bool exists, G4int nVols );
+  std::vector<G4VPhysicalVolume*> GetPhysicalVolumes( const G4String& name, 
+                              bool exists, G4int nVols );
+  std::vector<G4LogicalVolume*> GetLogicalVolumes( const G4String& name, 
+                           bool exists, G4int nVols );
   std::vector<G4String> GetWordsInString( const G4String& stemp);
 
 private:

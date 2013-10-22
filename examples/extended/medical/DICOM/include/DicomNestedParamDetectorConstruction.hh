@@ -49,6 +49,9 @@ public:
   DicomNestedParamDetectorConstruction();
   ~DicomNestedParamDetectorConstruction();
 
+protected:
+    //virtual void ConstructSDandField();
+    
 private:
 
   virtual void ConstructPhantom();

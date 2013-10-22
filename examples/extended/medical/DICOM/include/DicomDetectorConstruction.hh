@@ -36,6 +36,8 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "DicomPhantomZSliceHeader.hh"
 
+#include <set>
+
 class G4Material;
 class G4Box;
 class G4LogicalVolume;
@@ -88,6 +90,8 @@ protected:
 
     void SetScorer(G4LogicalVolume* voxel_logic);
 
+    virtual void ConstructSDandField();
+    
 protected:
     G4Material* fAir;
 
@@ -120,6 +124,10 @@ protected:
     G4double fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ;
 
     DicomPhantomZSliceMerged* mergedSlices;
+
+    std::set<G4LogicalVolume*> scorers;
+    
+  G4bool fConstructed;
 };
 
 #endif

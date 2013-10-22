@@ -23,54 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: DicomActionInitialization.cc 68058 2013-07-22 14:47:43Z jmadsen $
 //
-/// \file medical/DICOM/include/DicomRunAction.hh
-/// \brief Definition of the DicomRunAction class
-//
+/// \file DicomActionInitialization.cc
+/// \brief Implementation of the DicomActionInitialization class
 
-#ifndef DicomRunAction_h
-#define DicomRunAction_h 1
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
-#include <vector>
+#include "DicomActionInitialization.hh"
 
-class G4Run;
-class DicomRun;
+#include "DicomActionInitialization.hh"
+#include "DicomPrimaryGeneratorAction.hh"
+#include "DicomRunAction.hh"
+#include "DicomEventAction.hh"
 
-class DicomRunAction : public G4UserRunAction
+//====================================================================================
+
+DicomActionInitialization::DicomActionInitialization()
+: G4VUserActionInitialization()
+{  }
+
+//====================================================================================
+
+DicomActionInitialization::~DicomActionInitialization()
+{  }
+
+//====================================================================================
+
+void DicomActionInitialization::BuildForMaster() const
 {
-public:
-    // constructor and destructor
-    DicomRunAction();
-    virtual ~DicomRunAction();
+    SetUserAction(new DicomRunAction);
+}
 
-    static DicomRunAction* Instance();
+//====================================================================================
 
-public:
-    // virtual method from G4UserRunAction.
-    virtual G4Run* GenerateRun();
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void EndOfRunAction(const G4Run*);
-
-    DicomRun* GetDicomRun() const { return dcmrun; }
-
-public:
-    void PrintHeader(std::ostream *out);
-    std::string FillString(const std::string &name, char c, G4int n, G4bool back=true);
-
-private:
-    static DicomRunAction* fgInstance;
-    DicomRun* dcmrun;
-
-    // Data member
-    // - vector of MultiFunctionalDetecor names.
-    std::vector<G4String> fSDName;
-    G4int fFieldValue;
+void DicomActionInitialization::Build() const
+{
+    SetUserAction(new DicomPrimaryGeneratorAction);
+    SetUserAction(new DicomRunAction);
+    SetUserAction(new DicomEventAction);
     
-};
+}
 
-//
+//====================================================================================
 
-#endif
+

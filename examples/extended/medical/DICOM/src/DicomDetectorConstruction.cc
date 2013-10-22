@@ -44,6 +44,11 @@
 #include "DicomDetectorConstruction.hh"
 #include "DicomPhantomZSliceHeader.hh"
 
+#include "DicomRunAction.hh"
+#include "DicomRun.hh"
+
+#include "G4VisAttributes.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomDetectorConstruction::DicomDetectorConstruction()
  : G4VUserDetectorConstruction(),
@@ -67,8 +72,11 @@ DicomDetectorConstruction::DicomDetectorConstruction()
    fNVoxelZ(0),
    fVoxelHalfDimX(0),
    fVoxelHalfDimY(0),
-   fVoxelHalfDimZ(0)
+   fVoxelHalfDimZ(0),
+
+   fConstructed(false)
 {
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,6 +87,8 @@ DicomDetectorConstruction::~DicomDetectorConstruction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* DicomDetectorConstruction::Construct()
 {
+  if(!fConstructed || fWorld_phys == 0) {
+    fConstructed = true;
     InitialisationOfMaterials();
 
     //----- Build world
@@ -108,7 +118,7 @@ G4VPhysicalVolume* DicomDetectorConstruction::Construct()
 
     ConstructPhantomContainer();
     ConstructPhantom();
-
+  }
     return fWorld_phys;
 }
 
@@ -514,17 +524,25 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
                       false,           // No op. bool.
                       1);              // Copy number
 
+    //fContainer_logic->SetVisAttributes(new G4VisAttributes(G4Colour(1.,0.,0.)));
 }
 
 
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4PSDoseDeposit.hh"
+#include "G4PSDoseDeposit3D.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
 {
 
+    G4cout << "\n\n\n\n\t SET SCORER : " << voxel_logic->GetName() << " \n\n\n" << G4endl;
+
+
+    scorers.insert(voxel_logic);
+
+    /*
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
     //
     // Sensitive Detector Name
@@ -541,7 +559,48 @@ void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
     voxel_logic->SetSensitiveDetector(MFDet);
 
     G4PSDoseDeposit*   scorer = new G4PSDoseDeposit("DoseDeposit");
-    MFDet->RegisterPrimitive(scorer);
+    MFDet->RegisterPrimitive(scorer);*/
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DicomDetectorConstruction::ConstructSDandField()
+{
+
+    G4cout << "\n\n\n\n\t CONSTRUCT SD AND FIELD \n\n\n" << G4endl;
+    
+    //G4SDManager* SDman = G4SDManager::GetSDMpointer();
+
+    //SDman->SetVerboseLevel(1);
+
+    //
+    // Sensitive Detector Name
+    G4String concreteSDname = "phantomSD";
+    std::vector<G4String> scorer_names;
+    scorer_names.push_back(concreteSDname);
+    //------------------------
+    // MultiFunctionalDetector
+    //------------------------
+    //
+    // Define MultiFunctionalDetector with name.
+    // declare MFDet as a MultiFunctionalDetector scorer
+    G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(concreteSDname);
+    //SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
+    //G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit("DoseDeposit");
+    G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit3D("DoseDeposit", fNVoxelX, fNVoxelY, 
+                            fNVoxelZ);
+    MFDet->RegisterPrimitive(dosedep);
+
+    for(std::set<G4LogicalVolume*>::iterator ite = scorers.begin(); ite != scorers.end(); ++ite) {
+        SetSensitiveDetector(*ite, MFDet);
+    }
+
+    /*if(DicomRunAction::Instance()->GetDicomRun()) {
+        DicomRunAction::Instance()->GetDicomRun()->ConstructMFD(scorer_names);
+    }*/
+
+
+}
+
 

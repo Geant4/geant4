@@ -79,13 +79,19 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
   //----- Set list of materials
   param->SetMaterials( fMaterials ); 
 
-  //----- Set list of material indices: for each voxel it is a number that correspond to the index of its material in the vector of materials defined above
+  //----- Set list of material indices: for each voxel it is a number that
+  // correspond to the index of its material in the vector of materials defined above
   param->SetMaterialIndices( fMateIDs );
 
   //----- Define voxel logical volume
   G4Box* voxel_solid = new G4Box( "Voxel", fVoxelHalfDimX, fVoxelHalfDimY, fVoxelHalfDimZ);
-  G4LogicalVolume* voxel_logic = new G4LogicalVolume(voxel_solid,fMaterials[0],"VoxelLogical",0,0,0); // material is not relevant, it will be changed by the ComputeMaterial method of the parameterisation
+  G4LogicalVolume* voxel_logic = new G4LogicalVolume(voxel_solid,fMaterials[0],"VoxelLogical",
+                             0,0,0);
+  // material is not relevant, it will be changed by the
+  // ComputeMaterial method of the parameterisation
 
+    voxel_logic->SetVisAttributes(new G4VisAttributes(G4VisAttributes::Invisible));
+    
   //--- Assign the fContainer volume of the parameterisation
   param->BuildContainerSolid(fContainer_phys);
 
@@ -95,12 +101,15 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
                                    fContainer_solid->GetZHalfLength() );
 
 
-  //----- The G4PVParameterised object that uses the created parameterisation should be placed in the fContainer logical volume
+  //----- The G4PVParameterised object that uses the created parameterisation
+  // should be placed in the fContainer logical volume
   G4PVParameterised * phantom_phys = new G4PVParameterised("phantom",voxel_logic,fContainer_logic,
                         kXAxis, fNVoxelX*fNVoxelY*fNVoxelZ, param);
-  // if axis is set as kUndefined instead of kXAxis, GEANT4 will do an smart voxel optimisation (not needed if G4RegularNavigation is used)
+  // if axis is set as kUndefined instead of kXAxis, GEANT4 will do an smart voxel optimisation 
+  // (not needed if G4RegularNavigation is used)
 
-  //----- Set this physical volume as having a regular structure of type 1, so that G4RegularNavigation is used
+  //----- Set this physical volume as having a regular structure of type 1, so that 
+  // G4RegularNavigation is used
   phantom_phys->SetRegularStructureId(1); // if not set, G4VoxelNavigation will be used instead 
 
   SetScorer(voxel_logic);

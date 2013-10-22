@@ -43,9 +43,15 @@
 // + Université Laval, Québec (QC) Canada
 //*******************************************************//
 
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
+
 #include "globals.hh"
 #include "G4UImanager.hh"
-#include "G4RunManager.hh"
 #include "Randomize.hh"
 
 #include "DicomPhysicsList.hh"
@@ -53,9 +59,9 @@
 #include "DicomRegularDetectorConstruction.hh"
 #include "DicomNestedParamDetectorConstruction.hh"
 #include "DicomPartialDetectorConstruction.hh"
-#include "DicomPrimaryGeneratorAction.hh"
-#include "DicomEventAction.hh"
-#include "DicomRunAction.hh"
+
+#include "DicomActionInitialization.hh"
+
 #include "DicomHandler.hh"
 #include "DicomIntersectVolume.hh"
 #include "QGSP_BIC.hh"
@@ -69,6 +75,8 @@
 #include "G4UIExecutive.hh"
 #endif
 
+//=================================================================================
+
 int main(int argc,char** argv)
 {
 
@@ -79,7 +87,36 @@ int main(int argc,char** argv)
         bPartial = TRUE;
     }
 
+    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+    CLHEP::HepRandom::setTheSeed(24534575684783);
+    long seeds[2];
+    seeds[0] = 534524575674523;
+    seeds[1] = 526345623452457;
+    CLHEP::HepRandom::setTheSeeds(seeds);
+
+    // Construct the default run manager
+#ifdef G4MULTITHREADED
+    char* nthread_c = getenv("DICOM_NTHREADS");
+
+    unsigned nthreads = 4;
+    unsigned env_threads = 0;
+    
+    if(nthread_c) { env_threads = G4UIcommand::ConvertToDouble(nthread_c); }
+    if(env_threads > 0) { nthreads = env_threads; }
+
+    G4MTRunManager* runManager = new G4MTRunManager;
+    runManager->SetNumberOfThreads(nthreads);
+
+    std::cout << "\n\n\tDICOM running in multithreaded mode with " << nthreads 
+          << " threads\n\n" << std::endl;
+
+    
+#else
     G4RunManager* runManager = new G4RunManager;
+    std::cout << "\n\n\tDICOM running in serial mode\n\n" << std::endl;
+
+#endif
+    
     DicomDetectorConstruction* theGeometry = 0;
     DicomHandler* dcmHandler = 0;
 
@@ -100,11 +137,13 @@ int main(int argc,char** argv)
     }
 
     // runManager->SetUserInitialization(new DicomPhysicsList);
-    runManager->SetUserInitialization(new QGSP_BIC);
+    G4VUserPhysicsList* phys = 0;
+    runManager->SetUserInitialization(phys = new QGSP_BIC);
+    phys->SetVerboseLevel(0);
     runManager->SetUserInitialization(theGeometry);
-    runManager->SetUserAction(new DicomPrimaryGeneratorAction());
-    runManager->SetUserAction(new DicomRunAction);
-    runManager->SetUserAction(new DicomEventAction);
+
+    // Set user action classes
+    runManager->SetUserInitialization(new DicomActionInitialization());
 
     runManager->Initialize();
 
@@ -116,7 +155,6 @@ int main(int argc,char** argv)
     visManager->Initialize();
 #endif
 
-    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
@@ -145,9 +183,7 @@ int main(int argc,char** argv)
     delete visManager;
 #endif
     
-    if( !bPartial ){
-        delete dcmHandler;
-    }
+    if( !bPartial ) { delete dcmHandler; }
     
     return 0;
 }

@@ -46,6 +46,8 @@
 
 #include "DicomEventAction.hh"
 #include "G4Event.hh"
+#include "DicomRunAction.hh"
+#include "DicomRun.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomEventAction::DicomEventAction()
@@ -64,6 +66,7 @@ void DicomEventAction::BeginOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomEventAction::EndOfEventAction(const G4Event*)
+void DicomEventAction::EndOfEventAction(const G4Event* evt)
 {
+    //DicomRunAction::Instance()->GetDicomRun()->RecordEvent(evt);
 }

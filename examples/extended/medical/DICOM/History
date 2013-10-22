@@ -8,6 +8,13 @@ $Id$
                       Category History file
 
                       ---------------------
+
+15.10.2013 - Jonathan Madsen (DICOM-V09-06-04)
+	   - Modified DICOM to enable multithreading
+	     - Adapted scorers
+	     - Added ActionInitialization class
+	     - Modified RunAction to handle master and daughter threads
+
 09.10.2013 - Ivana Hrivnacova (DICOM-V09-06-03)
            Fixed file description (DicomPhantomZSliceMerged.hh)
 

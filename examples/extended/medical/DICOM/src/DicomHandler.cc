@@ -78,15 +78,15 @@ DicomHandler* DicomHandler::Instance()
 
 DicomHandler::DicomHandler()
 :   DATABUFFSIZE(8192), LINEBUFFSIZE(5020), FILENAMESIZE(512),
-fCompression(0), fNFiles(0), fRows(0), fColumns(0),
-fBitAllocated(0), fMaxPixelValue(0), fMinPixelValue(0),
-fPixelSpacingX(0.), fPixelSpacingY(0.),
-fSliceThickness(0.), fSliceLocation(0.),
-fRescaleIntercept(0), fRescaleSlope(0),
-fLittleEndian(true), fImplicitEndian(false),
-fPixelRepresentation(0), nbrequali(0),
-valuedensity(NULL),valueCT(NULL),readCalibration(false),
-mergedSlices(NULL),driverFile("Data.dat"),ct2densityFile("CT2Density.dat")
+    fCompression(0), fNFiles(0), fRows(0), fColumns(0),
+    fBitAllocated(0), fMaxPixelValue(0), fMinPixelValue(0),
+    fPixelSpacingX(0.), fPixelSpacingY(0.),
+    fSliceThickness(0.), fSliceLocation(0.),
+    fRescaleIntercept(0), fRescaleSlope(0),
+    fLittleEndian(true), fImplicitEndian(false),
+    fPixelRepresentation(0), nbrequali(0),
+    valuedensity(NULL),valueCT(NULL),readCalibration(false),
+    mergedSlices(NULL),driverFile("Data.dat"),ct2densityFile("CT2Density.dat")
 {
     mergedSlices = new DicomPhantomZSliceMerged;
 }
