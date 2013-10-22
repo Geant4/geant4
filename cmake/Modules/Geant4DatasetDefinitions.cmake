@@ -48,11 +48,11 @@ geant4_add_dataset(
 # - Neutron XS
 geant4_add_dataset(
   NAME      G4NEUTRONXS
-  VERSION   1.3
+  VERSION   1.4
   FILENAME  G4NEUTRONXS
   EXTENSION tar.gz
   ENVVAR    G4NEUTRONXSDATA
-  MD5SUM    ede7c4b3e99cbe1773b672a7404fe0f6
+  MD5SUM    665a12771267e3b31a08c622ba1238a7
   )
 
 # - PII

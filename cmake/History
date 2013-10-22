@@ -28,7 +28,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
      ----------------------------------------------------------
+
+21st October 2013 - Gunter Folger (cmake-V09-06-28)
+- switch to G4NEUTRONXS 1.4
 
 14th October 2013 - Gunter Folger (cmake-V09-06-27)
 - switch to G4EMLOW 6.34
