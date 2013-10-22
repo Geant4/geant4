@@ -290,7 +290,7 @@ G4LElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleu
      }
      catch(G4HadronicException)
      {
-       std::cerr << "GHADException originating from components of G4LElastic"<<std::cout;
+       std::cerr << "GHADException originating from components of G4LElastic"<<std::endl;
        throw;
      }
      G4ParticleDefinition * theDef = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon(Z,A,0);
