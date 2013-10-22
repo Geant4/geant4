@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 21. Oct. 2013  Makoto Asai (particles-V09-06-51)
+- Naming convention of isomers and general excited nuclides has been
+  unified. They always appear with excitation energy in unit of keV.
+
 - 1. Oct. 2013  Makoto Asai (particles-V09-06-50)
 - Protect a G4PhaseSpaceDecayChannel::current_parent_mass to be
   thread local.

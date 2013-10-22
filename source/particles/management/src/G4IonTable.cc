@@ -263,7 +263,8 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
 
   // ion name
   G4String name =""; 
-  if (lvl<9) name = GetIonName(Z, A, lvl);
+  /////////////if (lvl<9) name = GetIonName(Z, A, lvl);
+  if (lvl==0) name = GetIonName(Z, A, lvl);
   else       name = GetIonName(Z, A, Eex);
 
   // PDG encoding 
@@ -353,7 +354,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int L, G4double 
   G4double Eex =  ((int)(E/EnergyUnit+0.5))*EnergyUnit;
   G4double mass =  GetNucleusMass(Z, A, L)+ Eex;
   G4int    lvl = 0;
-  // lvl1 is assigned to 9 temporally
+  // lvl is assigned to 9 temporally
   if (Eex>0.0) lvl=9;
    
   // PDG encoding 
@@ -455,8 +456,10 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int lvl)
     if (lvl>0) return 0;
   }
   // get ion name
-  G4String name = GetIonName(Z, A, lvl);
-  if (lvl==9) name = GetIonName(Z, A, Eex);
+  G4String name =""; 
+  /////////////if (lvl<9) name = GetIonName(Z, A, lvl);
+  if (lvl==0) name = GetIonName(Z, A, lvl);
+  else       name = GetIonName(Z, A, Eex);
 
   // PDG encoding 
   G4int encoding = GetNucleusEncoding(Z,A,Eex,lvl);
@@ -1107,7 +1110,7 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const
   if ( ! os ) {
     os = new std::ostringstream();
     os->setf(std::ios::fixed);
-    os->precision(1);
+    os->precision(3);
   }
 
   name = GetIonName(Z, A);
