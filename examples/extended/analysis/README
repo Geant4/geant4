@@ -24,9 +24,9 @@ AnaEx03
 
  As AnaEx01, showing basic features common to all AIDA implementations.
 
-N03Con
+B1Con
 ------
 
- N03Con shows how to use the statistical tool G4ConvergenceTester.
+ B1Con shows how to use the statistical tool G4ConvergenceTester.
  It does not make histograms.
- It has the same geometry as N03 and AnaEx01,2,3.
+ It has the same geometry as B1.

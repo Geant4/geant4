@@ -91,8 +91,8 @@
    
 \section AnaEx03_s4 AIDA and OpenScientist
 
- See the pages \link ExampleA01AIDA README.AIDA \endlink and
-  \link ExampleA01OpenScientist README.OpenScientist \endlink in \ref ExampleA01
+ See the pages \link ExampleAnaEx03AIDA README.AIDA \endlink and
+  \link ExampleAnaEx03OpenScientist README.OpenScientist \endlink
  for more indications how to use this system to visualize and handle 
  histogram files.
   

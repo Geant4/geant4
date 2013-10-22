@@ -9,7 +9,7 @@ include(${Geant4_USE_FILE})
 
 add_subdirectory(A01)
 add_subdirectory(AnaEx01)
-add_subdirectory(N03Con)
+add_subdirectory(B1Con)
 
 #----------------------------------------------------------------------------
 # AnaEx02 example requires ROOT

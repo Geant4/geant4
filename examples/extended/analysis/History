@@ -9,6 +9,11 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22th October 2013 I. Hrivnacova (analysisExample-V09-06-04)
+- N03Con replaced with B1Con 
+- Adding README files on AIDA and OpenScientist form A01 
+  (which is being migrated to g4tools in B5) in AnaEx03
+
 30th September 2013 I. Hrivnacova (analysisExample-V09-06-03)
 - Updated for changes in analysis:
   removal of G4AnalysisManager::Create(isMaster)
