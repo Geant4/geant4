@@ -511,6 +511,29 @@ void G4RunManagerKernel::InitializePhysics()
   physicsList->SetCuts();
   CheckRegions();
   l.unlock();
+
+  static G4bool createIsomerOnlyOnce = false;
+  if(!G4Threading::IsWorkerThread())
+  {
+    if(!createIsomerOnlyOnce)
+    {
+      createIsomerOnlyOnce = true;
+      G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+      if(gion)
+      {
+        G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+        G4int gionId = gion->GetParticleDefinitionID();
+        G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
+        pItr->reset(false);
+        while( (*pItr)() )
+        {
+          G4ParticleDefinition* particle = pItr->value();
+          if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
+        }
+      }
+    }
+  }
+
   physicsInitialized = true;
   if(geometryInitialized && currentState!=G4State_Idle)
   { stateManager->SetNewState(G4State_Idle); }

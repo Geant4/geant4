@@ -496,8 +496,6 @@ void G4MTRunManager::TerminateWorkers()
 void G4MTRunManager::InitializePhysics()
 {
     G4RunManager::InitializePhysics();
-    //G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIon();
-    //G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
     //BERTINI, this is needed to create pseudo-particles, to be removed
     G4CascadeInterface::Initialize();
 }
@@ -658,24 +656,24 @@ void G4MTRunManager::WaitForReadyWorkers()
 #endif
     }
     //Now number of workers is as expected.
-    static G4bool createIsomerOnlyOnce = false;
-    if(!createIsomerOnlyOnce)
-    {
-      createIsomerOnlyOnce = true;
-      G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
-      if(gion)
-      {
-        G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
-        G4int gionId = gion->GetParticleDefinitionID();
-        G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
-        pItr->reset(false);
-        while( (*pItr)() )
-        {
-          G4ParticleDefinition* particle = pItr->value();
-          if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
-        }
-      }
-    }
+//////    static G4bool createIsomerOnlyOnce = false;
+//////    if(!createIsomerOnlyOnce)
+//////    {
+//////      createIsomerOnlyOnce = true;
+//////      G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+//////      if(gion)
+//////      {
+//////        ////G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+//////        G4int gionId = gion->GetParticleDefinitionID();
+//////        G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
+//////        pItr->reset(false);
+//////        while( (*pItr)() )
+//////        {
+//////          G4ParticleDefinition* particle = pItr->value();
+//////          if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
+//////        }
+//////      }
+//////    }
 
     //Prepare to wait for workers to end eventloop
     //Reset number of workers in "EndOfEventLoop"

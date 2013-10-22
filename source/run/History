@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 21st, 2013, M.Asai (run-V09-06-111)
+- Moved CreateAllIsomer to G4RunManagerKernel so that it is invoked
+  for both MT and SEQ modes.
+
 Oct 18th, 2013, A.Dotti (run-V09-06-110)
 - Activate use of Workspace mechanism for geometry split classes
   This tag requires geomvol-V09-06-15, geom-specific-V09-06-21,
