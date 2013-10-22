@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+21 October 2013  Dennis Wright radioactive_decay-V09-06-17
+----------------------------------------------------------
+- G4NuclearDecayChannel::DecayIt: in loop to search for isomer levels, add
+  Andrea Dotti's protections and fatal exception for zero pointers when daughter
+  ions are not found
+
 14 October 2013  Dennis Wright radioactive_decay-V09-06-16
 ----------------------------------------------------------
 - G4NuclearDecayChannel::DecayIt: add an electron mass to the parent nucleus

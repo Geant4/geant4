@@ -322,8 +322,11 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
       // but in IT mode, we need to force the transition 
       if (decayMode == 0) {
         deexcitation->RDMForced(true);
+        // at this point, de-excitation will occur even if IT state is long-lived (>1ns)
+        // Why does it need to be forced? 
       } else {
-        // Not forced, but decay will still happen if lifetime < 1 ns
+        // Not forced, but decay will still happen if lifetime < 1 ns,
+        // otherwise no gamma decay is performed
         deexcitation->RDMForced(false);
       }
 
@@ -338,10 +341,14 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
 
       G4FragmentVector* gammas = 0;	
 // DHW      if (applyICM) {
-        // Single gamma emission
+        // Single gamma emission.  Use this opiton to ensure that IC coefficients
+        // are correctly applied.  If multi-gamma emission, IC coefficient for 
+        // shell of first emission is applied to all shells (incorrect)
+              // Here IT is forced and a single gamma is emitted
+              // What happens to other IT gammas in chain? 
 // DHW        gammas = deexcitation->BreakUp(nucleus);	
 // DHW      } else {
-        // Multi-gamma emission  (what does ICM have to do with this choice?)
+        // Multi-gamma emission
         // DiscreteDeexcitation sets ICM off by default - G4NuclearDecayChannel::DecayIt sets it on
         gammas = deexcitation->BreakItUp(nucleus);
 // DHW      }
@@ -364,7 +371,9 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
       // now the nucleus
       G4double finalDaughterExcitation = gammas->operator[](nGammas)->GetExcitationEnergy();
       if (finalDaughterExcitation <= 1.0*keV) finalDaughterExcitation = 0;
-      
+
+      // Done with daughter nucleus from original decay.  Get rid of it and replace
+      // it with daughter resulting from gamma transitions      
       if (dynamicDaughter) delete dynamicDaughter;
       
       G4IonTable* theIonTable =
@@ -379,8 +388,10 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
       do {
         daughterIon = theIonTable->FindIon(daughterZ, daughterA, lvl);
         dEx = 0.;
-        if (daughterIon) dEx = ((const G4Ions*)(daughterIon))->GetExcitationEnergy();
-        match = std::abs(dEx - finalDaughterExcitation) < 2.*keV;
+        if (daughterIon) {
+          dEx = ((const G4Ions*)(daughterIon))->GetExcitationEnergy();
+          match = std::abs(dEx - finalDaughterExcitation) < 2.*keV;
+        }
         lvl++;
       } while (!match && (lvl < 10) );
 
@@ -395,6 +406,18 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
              << " - returning ground state " << G4endl;
           G4Exception("G4NuclearDecayChannel::DecayIt()", "HAD_RDM_005",
                       JustWarning, ed);
+          if (daughterIon == 0) {
+            // Cannot find ground state, try to create it on the fly
+            // because later we use it
+            daughterIon = theIonTable->GetIon(daughterZ, daughterA, 0);
+            if (daughterIon == 0) {
+              G4ExceptionDescription fed;
+              fed << "Cannot create ion ("<< daughterZ << "," << daughterA
+                  << ")" << G4endl;
+              G4Exception("G4NuclearDecayChannel::DecayIt()", "HAD_RDM_011",
+                          FatalException, fed);
+            }
+          }
         }
       }
 
