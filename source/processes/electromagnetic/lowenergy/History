@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22.10.2013, V.Ivanchenko, tag emlowen-V09-06-31
+            G4LivermoreComptonModel, G4LivermoreGammaConversionModel,
+            G4RayleighAngularGenerator - use G4Log, G4Exp
+
+22.10.2013, V.Ivanchenko, tag emlowen-V09-06-30
+            G4LivermoreGammaConversionModelRC - fixed compillation 
+            warnings due non-accurate definition of variables
+            G4LivermoreComptonModel (A.Bagulya) and 
+            G4LivermoreBremsstrahlungModel are migrated to MT 
+
 17.10.2013, L.Pandola, tag emlowen-V09-06-29
 	    Partially revert the MT migration of emlowen-V09-06-26 
             to fix a problem found by STT. The angular generator of 

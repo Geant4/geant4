@@ -91,6 +91,9 @@ private:
   G4LivermoreGammaConversionModelRC & operator=(const  G4LivermoreGammaConversionModelRC &right);
   G4LivermoreGammaConversionModelRC(const  G4LivermoreGammaConversionModelRC&);
 
+  G4double fbeta (G4double x);
+  G4double Dilog (G4double x);
+
 
 };
 

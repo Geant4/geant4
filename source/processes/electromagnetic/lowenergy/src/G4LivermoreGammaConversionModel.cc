@@ -31,6 +31,8 @@
 #include "G4LivermoreGammaConversionModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -301,7 +303,7 @@ void G4LivermoreGammaConversionModel::SampleSecondaries(
 
     // Limits of the screening variable
     G4double screenFactor = 136. * epsilon0Local / (element->GetIonisation()->GetZ3()) ;
-    G4double screenMax = std::exp ((42.24 - fZ)/8.368) - 0.952 ;
+    G4double screenMax = G4Exp ((42.24 - fZ)/8.368) - 0.952 ;
     G4double screenMin = std::min(4.*screenFactor,screenMax) ;
 
     // Limits of the energy sampling
@@ -364,11 +366,11 @@ void G4LivermoreGammaConversionModel::SampleSecondaries(
   //  if (9. / (9. + d) > G4UniformRand())
   if (0.25 > G4UniformRand())
     {
-      u = - std::log(G4UniformRand() * G4UniformRand()) / a1 ;
+      u = - G4Log(G4UniformRand() * G4UniformRand()) / a1 ;
     }
   else
     {
-      u = - std::log(G4UniformRand() * G4UniformRand()) / a2 ;
+      u = - G4Log(G4UniformRand() * G4UniformRand()) / a2 ;
     }
 
   G4double thetaEle = u*electron_mass_c2/electronTotEnergy;
@@ -422,7 +424,7 @@ G4LivermoreGammaConversionModel::ScreenFunction1(G4double screenVariable)
   G4double value;
   
   if (screenVariable > 1.)
-    value = 42.24 - 8.368 * std::log(screenVariable + 0.952);
+    value = 42.24 - 8.368 * G4Log(screenVariable + 0.952);
   else
     value = 42.392 - screenVariable * (7.796 - 1.961 * screenVariable);
   
@@ -439,7 +441,7 @@ G4LivermoreGammaConversionModel::ScreenFunction2(G4double screenVariable)
   G4double value;
   
   if (screenVariable > 1.)
-    value = 42.24 - 8.368 * std::log(screenVariable + 0.952);
+    value = 42.24 - 8.368 * G4Log(screenVariable + 0.952);
   else
     value = 41.405 - screenVariable * (5.828 - 0.8945 * screenVariable);
   

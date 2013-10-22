@@ -356,12 +356,30 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   //G4cout << "PHI " << phi << G4endl;
   //G4cout << "PSI " << psi << G4endl;
 
-  G4double phie = psi; //azimuthal angle for the electron
+  G4double phie, phip; 
+  G4double choice;
+  choice = G4UniformRand();
+  if (choice <= 0.5)
+    {
+      phie = psi; //azimuthal angle for the electron
+      phip = phie+phi; //azimuthal angle for the positron
+    }
+  else
+    {
+      // opzione 1 phie / phip equivalenti
+
+      phip = psi; //azimuthal angle for the positron
+      phie = phip + phi; //azimuthal angle for the electron
+    }
+
+
+  // Electron Kinematics 
 
   G4double dirX = sinTheta*cos(phie);
   G4double dirY = sinTheta*sin(phie);
   G4double dirZ = cosTheta;
   G4ThreeVector electronDirection(dirX,dirY,dirZ);
+
   // Kinematics of the created pair:
   // the electron and positron are assumed to have a symetric angular
   // distribution with respect to the Z axis along the parent photon
@@ -385,7 +403,8 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   sinTheta = 0.;
 
   SetTheta(&cosTheta,&sinTheta,Ene);
-  G4double phip = phie+phi; //azimuthal angle for the positron
+
+  // Positron Kinematics
 
   dirX = sinTheta*cos(phip);
   dirY = sinTheta*sin(phip);
