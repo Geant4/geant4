@@ -1,9 +1,9 @@
 #------------------------------------------------------------------------------
 # CMakeLists.txt
-# Module : G4hadronic
-# Package: Geant4.src.G4processes.G4hadronic
+# Module : G4biasing
+# Package: Geant4.src.G4processes.G4biasing
 #
-# Intermediate level CMakeLists.txt - just process subdirectories
+# CMakeLists.txt for building a single granular library.
 #
 # Generated on : 24/9/2010
 #
@@ -11,7 +11,8 @@
 #
 #------------------------------------------------------------------------------
 
-add_subdirectory(management)
-add_subdirectory(generic)
-add_subdirectory(importance)
+if(GEANT4_BUILD_GRANULAR_LIBS)
+    include(Geant4MacroLibraryTargets)
+    GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
+endif()
 

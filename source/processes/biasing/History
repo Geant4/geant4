@@ -17,15 +17,6 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct 9th, 2013 Alex Howard (procbiasing-V09-06-02)
-- fixed sources.cmake for looking for non-existent files
-
-Oct 9th, 2013 Alex Howard (procbiasing-V09-06-01)
-- Added cmake and gnumake and sources.cmake files to new directory structure
-
-Oct 9th, 2013 Alex Howard (procbiasing-V09-06-00)
-- Re-ordered directory structure for generic physics biasing
-
 June 7th, 2012 Gabriele Cosmo (procbiasing-V09-05-00)
 - Fixed spurious cases of hidden variable visibility, detected with
   '-Wshadow' compilation option on gcc compiler.
