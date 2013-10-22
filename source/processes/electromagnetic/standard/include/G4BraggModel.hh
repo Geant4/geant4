@@ -152,7 +152,6 @@ private:
   G4BraggModel & operator=(const  G4BraggModel &right);
   G4BraggModel(const  G4BraggModel&);
 
-
   G4EmCorrections*            corr;
 
   const G4ParticleDefinition* particle;

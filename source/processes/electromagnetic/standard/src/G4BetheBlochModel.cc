@@ -66,6 +66,7 @@
 #include "G4EmCorrections.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4Log.hh"
+#include "G4DeltaAngle.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -118,6 +119,9 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
   if(!isInitialised) {
     isInitialised = true;
     fParticleChange = GetParticleChangeForLoss();
+    if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
+      SetAngularDistribution(new G4DeltaAngle());
+    }
   }
 }
 
@@ -322,14 +326,15 @@ void G4BetheBlochModel::CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
     eloss = elossnew;
     //G4cout << "G4BetheBlochModel::CorrectionsAlongStep: e= " << preKinEnergy
     //	   << " qfactor= " << qfactor 
-    //	   << " highOrder= " << highOrder << " (" << highOrder/eloss << ")" << G4endl;    
+    //	   << " highOrder= " << highOrder << " (" 
+    // << highOrder/eloss << ")" << G4endl;    
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
-					  const G4MaterialCutsCouple*,
+					  const G4MaterialCutsCouple* couple,
 					  const G4DynamicParticle* dp,
 					  G4double minKinEnergy,
 					  G4double maxEnergy)
@@ -385,46 +390,53 @@ void G4BetheBlochModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     if(G4UniformRand() > grej) return;
   }
 
-  // delta-electron is produced
-  G4double totMomentum = totEnergy*sqrt(beta2);
-  G4double deltaMomentum =
-           sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
-                                   (deltaMomentum * totMomentum);
+  G4ThreeVector deltaDirection;
+
+  if(UseAngularGeneratorFlag()) {
+
+    const G4Material* mat =  couple->GetMaterial();
+    G4int Z = SelectRandomAtomNumber(mat);
+
+    deltaDirection = 
+      GetAngularDistribution()->SampleDirection(dp, deltaKinEnergy, Z, mat);
+
+  } else {
+ 
+    G4double deltaMomentum =
+      sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+    G4double cost = deltaKinEnergy * (totEnergy + electron_mass_c2) /
+      (deltaMomentum * dp->GetTotalMomentum());
+    if(cost > 1.0) { cost = 1.0; }
+    G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+
+    G4double phi = twopi * G4UniformRand() ;
+
+    deltaDirection.set(sint*cos(phi),sint*sin(phi), cost) ;
+    deltaDirection.rotateUz(dp->GetMomentumDirection());
+  }  
+
   /*
-  if(cost > 1.0) {
-    G4cout << "### G4BetheBlochModel WARNING: cost= " 
-	   << cost << " > 1 for "
+    G4cout << "### G4BetheBlochModel " 
 	   << dp->GetDefinition()->GetParticleName()
 	   << " Ekin(MeV)= " <<  kineticEnergy
-	   << " p(MeV/c)= " <<  totMomentum
 	   << " delEkin(MeV)= " << deltaKinEnergy
-	   << " delMom(MeV/c)= " << deltaMomentum
 	   << " tmin(MeV)= " << minKinEnergy
 	   << " tmax(MeV)= " << maxKinEnergy
            << " dir= " << dp->GetMomentumDirection()
+           << " dirDelta= " << deltaDirection
 	   << G4endl;
-    cost = 1.0;
   }
   */
-  G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
-
-  G4double phi = twopi * G4UniformRand() ;
-
-
-  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost);
-  G4ThreeVector direction = dp->GetMomentumDirection();
-  deltaDirection.rotateUz(direction);
 
   // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
-						   deltaDirection,deltaKinEnergy);
+  G4DynamicParticle* delta = 
+    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
 
   vdp->push_back(delta);
 
   // Change kinematics of primary particle
-  kineticEnergy       -= deltaKinEnergy;
-  G4ThreeVector finalP = direction*totMomentum - deltaDirection*deltaMomentum;
+  kineticEnergy -= deltaKinEnergy;
+  G4ThreeVector finalP = dp->GetMomentum() - delta->GetMomentum();
   finalP               = finalP.unit();
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);

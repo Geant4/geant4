@@ -71,6 +71,7 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4LossTableManager.hh"
 #include "G4EmCorrections.hh"
+#include "G4DeltaAngle.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
@@ -121,6 +122,9 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
   if(!isInitialised) {
     isInitialised = true;
 
+    if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
+      SetAngularDistribution(new G4DeltaAngle());
+    }
     G4String pname = particle->GetParticleName();
     if(particle->GetParticleType() == "nucleus" && 
        pname != "deuteron" && pname != "triton" &&
@@ -252,7 +256,7 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
-				     const G4MaterialCutsCouple*,
+				     const G4MaterialCutsCouple* couple,
 				     const G4DynamicParticle* dp,
 				     G4double xmin,
 				     G4double maxEnergy)
@@ -267,8 +271,6 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   G4double beta2   = kineticEnergy*(kineticEnergy + 2.0*mass)/energy2;
   G4double grej    = 1.0;
   G4double deltaKinEnergy, f;
-
-  G4ThreeVector direction = dp->GetMomentumDirection();
 
   // sampling follows ...
   do {
@@ -286,30 +288,41 @@ void G4BraggModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 
   } while( grej*G4UniformRand() >= f );
 
-  G4double deltaMomentum =
-           sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double totMomentum = energy*sqrt(beta2);
-  G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
-                                   (deltaMomentum * totMomentum);
-  if(cost > 1.0) cost = 1.0;
-  G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+  G4ThreeVector deltaDirection;
 
-  G4double phi = twopi * G4UniformRand() ;
+  if(UseAngularGeneratorFlag()) {
+    const G4Material* mat =  couple->GetMaterial();
+    G4int Z = SelectRandomAtomNumber(mat);
 
-  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
-  deltaDirection.rotateUz(direction);
+    deltaDirection = 
+      GetAngularDistribution()->SampleDirection(dp, deltaKinEnergy, Z, mat);
+
+  } else {
+ 
+    G4double deltaMomentum =
+      sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+    G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
+      (deltaMomentum * dp->GetTotalMomentum());
+    if(cost > 1.0) { cost = 1.0; }
+    G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+
+    G4double phi = twopi * G4UniformRand() ;
+
+    deltaDirection.set(sint*cos(phi),sint*sin(phi), cost) ;
+    deltaDirection.rotateUz(dp->GetMomentumDirection());
+  }  
+
+  // create G4DynamicParticle object for delta ray
+  G4DynamicParticle* delta = 
+    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
 
   // Change kinematics of primary particle
-  kineticEnergy       -= deltaKinEnergy;
-  G4ThreeVector finalP = direction*totMomentum - deltaDirection*deltaMomentum;
+  kineticEnergy -= deltaKinEnergy;
+  G4ThreeVector finalP = dp->GetMomentum() - delta->GetMomentum();
   finalP               = finalP.unit();
   
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
   fParticleChange->SetProposedMomentumDirection(finalP);
-
-  // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,deltaDirection,
-						   deltaKinEnergy);
 
   vdp->push_back(delta);
 }

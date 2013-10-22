@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+21 October 13: V.Ivanchenko (emstand-V09-06-71)
+- G4BraggModel, G4BraggIonModel, G4BetheBlochModel, G4MollerBhabhaModel
+    added possibility to use angular generator
+
 20 October 13: V.Ivanchenko (emstand-V09-06-70)
 - G4WentzelVIModel - added GetWVICrossSEction - access method
     to cross section class

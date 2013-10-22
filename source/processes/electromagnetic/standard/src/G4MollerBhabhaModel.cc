@@ -67,6 +67,7 @@
 #include "Randomize.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4Log.hh"
+#include "G4DeltaAngle.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -112,6 +113,9 @@ void G4MollerBhabhaModel::Initialise(const G4ParticleDefinition* p,
 
   isInitialised = true;
   fParticleChange = GetParticleChangeForLoss();
+  if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
+    SetAngularDistribution(new G4DeltaAngle());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -279,11 +283,12 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
-					    const G4MaterialCutsCouple*,
-					    const G4DynamicParticle* dp,
-					    G4double cutEnergy,
-					    G4double maxEnergy)
+void 
+G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
+				       const G4MaterialCutsCouple* couple,
+				       const G4DynamicParticle* dp,
+				       G4double cutEnergy,
+				       G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
   //const G4Material* mat = couple->GetMaterial();
@@ -300,15 +305,12 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
   if(tmin >= tmax) { return; }
 
   G4double energy = kineticEnergy + electron_mass_c2;
-  G4double totalMomentum = sqrt(kineticEnergy*(energy + electron_mass_c2));
   G4double xmin   = tmin/kineticEnergy;
   G4double xmax   = tmax/kineticEnergy;
   G4double gam    = energy/electron_mass_c2;
   G4double gamma2 = gam*gam;
   G4double beta2  = 1.0 - 1.0/gamma2;
   G4double x, z, q, grej;
-
-  G4ThreeVector direction = dp->GetMomentumDirection();
 
   //Moller (e-e-) scattering
   if (isElectron) {
@@ -366,31 +368,42 @@ void G4MollerBhabhaModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp
 
   G4double deltaKinEnergy = x * kineticEnergy;
 
-  G4double deltaMomentum =
-           sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
-  G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
-                                   (deltaMomentum * totalMomentum);
-  G4double sint = (1.0 - cost)*(1. + cost);
-  if(sint > 0.0) { sint = sqrt(sint); }
-  else { sint = 0.0; }
+  G4ThreeVector deltaDirection;
 
-  G4double phi = twopi * G4UniformRand() ;
+  if(UseAngularGeneratorFlag()) {
+    const G4Material* mat =  couple->GetMaterial();
+    G4int Z = SelectRandomAtomNumber(mat);
 
-  G4ThreeVector deltaDirection(sint*cos(phi),sint*sin(phi), cost) ;
-  deltaDirection.rotateUz(direction);
+    deltaDirection = 
+      GetAngularDistribution()->SampleDirection(dp, deltaKinEnergy, Z, mat);
+
+  } else {
+ 
+    G4double deltaMomentum =
+      sqrt(deltaKinEnergy * (deltaKinEnergy + 2.0*electron_mass_c2));
+    G4double cost = deltaKinEnergy * (energy + electron_mass_c2) /
+      (deltaMomentum * dp->GetTotalMomentum());
+    if(cost > 1.0) { cost = 1.0; }
+    G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+
+    G4double phi = twopi * G4UniformRand() ;
+
+    deltaDirection.set(sint*cos(phi),sint*sin(phi), cost) ;
+    deltaDirection.rotateUz(dp->GetMomentumDirection());
+  }  
+
+  // create G4DynamicParticle object for delta ray
+  G4DynamicParticle* delta = 
+    new G4DynamicParticle(theElectron,deltaDirection,deltaKinEnergy);
+  vdp->push_back(delta);
 
   // primary change
   kineticEnergy -= deltaKinEnergy;
+  G4ThreeVector finalP = dp->GetMomentum() - delta->GetMomentum();
+  finalP               = finalP.unit();
+
   fParticleChange->SetProposedKineticEnergy(kineticEnergy);
-
-  G4ThreeVector dir = totalMomentum*direction - deltaMomentum*deltaDirection;
-  direction = dir.unit();
-  fParticleChange->SetProposedMomentumDirection(direction);
-
-  // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(theElectron,
-						   deltaDirection,deltaKinEnergy);
-  vdp->push_back(delta);
+  fParticleChange->SetProposedMomentumDirection(finalP);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
