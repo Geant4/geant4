@@ -132,7 +132,7 @@ G4bool G4LevelReader::Read(std::ifstream& dataFile)
 G4bool 
 G4LevelReader::ReadDataItem(std::istream& dataFile, G4double& x) 
 {
-  G4bool okay = (dataFile >> buffer);		// Get next token
+  G4bool okay = (dataFile >> buffer) !=0;		// Get next token
   if (okay) x = strtod(buffer, NULL);
 
   return okay;
