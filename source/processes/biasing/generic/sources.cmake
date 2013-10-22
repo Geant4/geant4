@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # sources.cmake
-# Module : G4biasing
-# Package: Geant4.src.G4processes.G4biasing
+# Module : G4biasing_gen
+# Package: Geant4.src.G4processes.G4biasing_gen
 #
 # Sources description for a library.
 # Lists the sources and headers of the code explicitely.
@@ -42,35 +42,9 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 # Define the Geant4 Module.
 #
 include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4biasing
+GEANT4_DEFINE_MODULE(NAME G4biasing_gen
     HEADERS
-        G4GeometrySampler.hh
-        G4ImportanceConfigurator.hh
-        G4ImportanceProcess.hh
-        G4PlaceOfAction.hh
-        G4ProcessPlacer.hh
-        G4SamplingPostStepAction.hh
-        G4TrackTerminator.hh
-        G4VProcessPlacer.hh
-        G4VSampler.hh
-        G4VSamplerConfigurator.hh
-        G4WeightCutOffConfigurator.hh
-        G4WeightCutOffProcess.hh
-        G4WeightWindowConfigurator.hh
-        G4WeightWindowProcess.hh
     SOURCES
-        G4GeometrySampler.cc
-        G4ImportanceConfigurator.cc
-        G4ImportanceProcess.cc
-        G4ProcessPlacer.cc
-        G4SamplingPostStepAction.cc
-        G4VProcessPlacer.cc
-        G4VSampler.cc
-        G4VSamplerConfigurator.cc
-        G4WeightCutOffConfigurator.cc
-        G4WeightCutOffProcess.cc
-        G4WeightWindowConfigurator.cc
-        G4WeightWindowProcess.cc
     GRANULAR_DEPENDENCIES
         G4cuts
         G4detector
@@ -88,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing
         G4track
         G4transportation
         G4volumes
+	G4biasing_mgt
     GLOBAL_DEPENDENCIES
         G4digits_hits
         G4geometry
