@@ -9,13 +9,12 @@ $Id$
                                      ------
 
 Description:  test of n and p cross sections in the classes
-              G4NeutronInelasticCrossSection and G4ProtonInelasticCrossSection 
-              using the LEP and HEP models.  All electromagnetic, hadronic and
-              decay processes are included.  For hadrons other than n and p, 
-              the default LHEP cross sections are used.
+              G4NeutronInelasticCrossSection and G4ProtonInelasticCrossSection.
+              All electromagnetic, hadronic and decay processes are included.
+              For hadrons other than n and p, the default cross sections are
+              used.
  
               Detector is a simple box of air, aluminum or lead.
-
 
 Usage:        auto-generated file provides input for neutron and proton runs 
               with incident energies of 1, 10 and 20 GeV for each material.
@@ -31,37 +30,28 @@ Building:     This test has a special CMakeLists.txt to be used only by system
               1. copy the test directory from geant4/tests to your working
                  directory
 
+                 cp -r $G4SOURCE/tests/test16 .
+
               2. replace the existing version of CMakeLists.txt with a
                  stand-alone one:
 
+                 cd test16
                  mv CMakeLists.txt CMakeLists.txtorig
                  mv CMakeLists_Standalone.txt CMakeLists.txt
 
-              3. Clean up (if necessary) and re-configure, assuming a 64 bit machine
-                 and Geant4 version 9.6:
+              3. Clean up (if necessary) and re-configure, assuming at least
+                 Geant4 version 9.6:
 
-                 rm test16
-                 rm test16_hadronic_exerciser
-                 setenv G4INSTALL /location_of_geant4/geant4-install/
-                 cmake -DGeant4_DIR=$G4INSTALL/lib64/Geant4-9.6.0/ 
+                 cmake .
 
               4. Build both test16 and test16_hadronic_exerciser:
 
-                 make -jN -f Makefile 
+                 make -f Makefile 
                  
 Running:      First generate the input file:
 
                  ./test16_hadronic_exerciser >& test16.in &
 
-              Set the environment variables G4LEDATA and G4LEVELGAMMADATA to
-              point to the EM and nuclear data files:
-
-                 setenv G4LEDATA /path_to_file/G4EMLOW6.32
-                 setenv G4LEVELGAMMADATA /path_to_file/PhotonEvaporation2.3
-
-              where G4EMLOW6.32 and PhotonEvaporation2.3 are the latest versions
-              of the data files at this release.
- 
               Finally, run the test:
   
                  ./test16 test16.in >& test16.out &

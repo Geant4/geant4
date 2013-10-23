@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -146,7 +146,7 @@ phot:   for  gamma    SubType= 12
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -166,7 +166,7 @@ eBrem:   for  e-    SubType= 3
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -198,7 +198,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -211,12 +211,11 @@ hIoni:   for  GenericIon    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
@@ -224,7 +223,7 @@ hIoni:   for  alpha    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -237,7 +236,7 @@ hIoni:   for  anti_proton    SubType= 2
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -250,7 +249,7 @@ hIoni:   for  kaon+    SubType= 2
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -263,7 +262,7 @@ hIoni:   for  kaon-    SubType= 2
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -277,7 +276,7 @@ muIoni:   for  mu+    SubType= 2
 msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -288,7 +287,6 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -304,7 +302,7 @@ muIoni:   for  mu-    SubType= 2
 msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -315,7 +313,6 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -330,7 +327,7 @@ hIoni:   for  pi+    SubType= 2
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -343,126 +340,122 @@ hIoni:   for  pi-    SubType= 2
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+============================================================================================
+             HADRONIC PROCESSES SUMMARY (verbose level 1)
 
-====================================================================
-                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+                                  Hadronic Processes for <anti_neutron>
+                                  -----------------------------------
+          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
----------------------------------------------------
-                           Hadronic Processes for anti_neutron
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  Process: hadElastic
-        Model:                G4LElastic: 0 eV  ---> 2.88022e+295 J  
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+           inelastic  Models:     G4LEAntiNeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 25
+                                  G4HEAntiNeutronInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
 
-  Process: inelastic
-        Model:  G4LEAntiNeutronInelastic: 0 eV  ---> 25 GeV
-        Model:  G4HEAntiNeutronInelastic: 20 GeV ---> 10 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
----------------------------------------------------
-                           Hadronic Processes for anti_proton
 
-  Process: hadElastic
-        Model:                G4LElastic: 0 eV  ---> 2.88022e+295 J  
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+                                  Hadronic Processes for <anti_proton>
+                                  -----------------------------------
+          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-  Process: inelastic
-        Model:   G4LEAntiProtonInelastic: 0 eV  ---> 25 GeV
-        Model:   G4HEAntiProtonInelastic: 20 GeV ---> 10 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
----------------------------------------------------
-                           Hadronic Processes for kaon+
+           inelastic  Models:      G4LEAntiProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 25
+                                   G4HEAntiProtonInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
 
-  Process: hadElastic
-        Model:                G4LElastic: 0 eV  ---> 2.88022e+295 J  
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  Process: inelastic
-        Model:     G4LEKaonPlusInelastic: 0 eV  ---> 25 GeV
-        Model:     G4HEKaonPlusInelastic: 20 GeV ---> 10 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
----------------------------------------------------
-                           Hadronic Processes for kaon-
+                                  Hadronic Processes for <kaon+>
+                                  -----------------------------------
+          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-  Process: hadElastic
-        Model:                G4LElastic: 0 eV  ---> 2.88022e+295 J  
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  Process: inelastic
-        Model:    G4LEKaonMinusInelastic: 0 eV  ---> 25 GeV
-        Model:    G4HEKaonMinusInelastic: 20 GeV ---> 10 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+           inelastic  Models:        G4LEKaonPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
+                                     G4HEKaonPlusInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
 
-  Process: hBertiniCaptureAtRest
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
----------------------------------------------------
-                           Hadronic Processes for lambda
 
-  Process: hadElastic
-        Model:                G4LElastic: 0 eV  ---> 2.88022e+295 J  
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+                                  Hadronic Processes for <kaon->
+                                  -----------------------------------
+          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-  Process: inelastic
-        Model:       G4LELambdaInelastic: 0 eV  ---> 25 GeV
-        Model:       G4HELambdaInelastic: 20 GeV ---> 10 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
----------------------------------------------------
-                           Hadronic Processes for neutron
+           inelastic  Models:       G4LEKaonMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 25
+                                    G4HEKaonMinusInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
 
-  Process: hadElastic
-        Model:                G4LElastic: 0 eV  ---> 2.88022e+295 J  
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  Process: inelastic
-        Model:      G4LENeutronInelastic: 0 eV  ---> 55 GeV
-        Model:      G4HENeutronInelastic: 45 GeV ---> 10 TeV
-     Cr_sctns:          Wellisch-Laidlaw: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+          hBertiniCaptureAtRest
 
----------------------------------------------------
-                           Hadronic Processes for pi+
+                                  Hadronic Processes for <lambda>
+                                  -----------------------------------
+          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-  Process: hadElastic
-        Model:                G4LElastic: 0 eV  ---> 2.88022e+295 J  
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  Process: inelastic
-        Model:     G4LEPionPlusInelastic: 0 eV  ---> 55 GeV
-        Model:     G4HEPionPlusInelastic: 45 GeV ---> 10 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+           inelastic  Models:          G4LELambdaInelastic: Emin(GeV)=    0  Emax(GeV)= 25
+                                       G4HELambdaInelastic: Emin(GeV)=   20  Emax(GeV)= 10000
 
----------------------------------------------------
-                           Hadronic Processes for pi-
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  Process: hadElastic
-        Model:                G4LElastic: 0 eV  ---> 2.88022e+295 J  
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
-  Process: inelastic
-        Model:    G4LEPionMinusInelastic: 0 eV  ---> 55 GeV
-        Model:    G4HEPionMinusInelastic: 45 GeV ---> 10 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+                                  Hadronic Processes for <neutron>
+                                  -----------------------------------
+          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
 
-  Process: hBertiniCaptureAtRest
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
----------------------------------------------------
-                           Hadronic Processes for proton
+           inelastic  Models:         G4LENeutronInelastic: Emin(GeV)=    0  Emax(GeV)= 55
+                                      G4HENeutronInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
 
-  Process: hadElastic
-        Model:                G4LElastic: 0 eV  ---> 2.88022e+295 J  
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+           inelastic  Crs sctns:          Wellisch-Laidlaw: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
 
-  Process: inelastic
-        Model:       G4LEProtonInelastic: 0 eV  ---> 55 GeV
-        Model:       G4HEProtonInelastic: 45 GeV ---> 10 TeV
-     Cr_sctns:             Axen-Wellisch: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
-================================================================
+                                  Hadronic Processes for <pi+>
+                                  -----------------------------------
+          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+           inelastic  Models:        G4LEPionPlusInelastic: Emin(GeV)=    0  Emax(GeV)= 55
+                                     G4HEPionPlusInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
+
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+
+                                  Hadronic Processes for <pi->
+                                  -----------------------------------
+          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+           inelastic  Models:       G4LEPionMinusInelastic: Emin(GeV)=    0  Emax(GeV)= 55
+                                    G4HEPionMinusInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
+
+           inelastic  Crs sctns:          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+          hBertiniCaptureAtRest
+
+                                  Hadronic Processes for <proton>
+                                  -----------------------------------
+          hadElastic  Models:                   G4LElastic: Emin(GeV)=    0  Emax(GeV)= 1.79769e+305
+
+          hadElastic  Crs sctns:            GheishaElastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+           inelastic  Models:          G4LEProtonInelastic: Emin(GeV)=    0  Emax(GeV)= 55
+                                       G4HEProtonInelastic: Emin(GeV)=   45  Emax(GeV)= 10000
+
+           inelastic  Crs sctns:             Axen-Wellisch: Emin(GeV)=    0  Emax(GeV)= 100000
+                                          GheishaInelastic: Emin(GeV)=    0  Emax(GeV)= 100000
+
+============================================================================================
 #
 # neutron at 1 GeV in Pb
 #
@@ -532,7 +525,7 @@ phot:   for  gamma    SubType= 12
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -552,7 +545,7 @@ eBrem:   for  e-    SubType= 3
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -584,7 +577,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -597,7 +590,7 @@ hIoni:   for  GenericIon    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -610,7 +603,7 @@ hIoni:   for  alpha    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -623,7 +616,7 @@ hIoni:   for  anti_proton    SubType= 2
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -636,7 +629,7 @@ hIoni:   for  kaon+    SubType= 2
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -649,7 +642,7 @@ hIoni:   for  kaon-    SubType= 2
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -663,7 +656,7 @@ muIoni:   for  mu+    SubType= 2
 msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -674,7 +667,6 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -690,7 +682,7 @@ muIoni:   for  mu-    SubType= 2
 msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -701,7 +693,6 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -716,7 +707,7 @@ hIoni:   for  pi+    SubType= 2
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -729,7 +720,7 @@ hIoni:   for  pi-    SubType= 2
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 #
 # neutron at 1 GeV in Al
 #
@@ -799,7 +790,7 @@ phot:   for  gamma    SubType= 12
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -819,7 +810,7 @@ eBrem:   for  e-    SubType= 3
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -851,7 +842,7 @@ hIoni:   for  proton    SubType= 2
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -864,7 +855,7 @@ hIoni:   for  GenericIon    SubType= 2
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV
 
 hIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -877,7 +868,7 @@ hIoni:   for  alpha    SubType= 2
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -890,7 +881,7 @@ hIoni:   for  anti_proton    SubType= 2
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -903,7 +894,7 @@ hIoni:   for  kaon+    SubType= 2
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -916,7 +907,7 @@ hIoni:   for  kaon-    SubType= 2
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -930,7 +921,7 @@ muIoni:   for  mu+    SubType= 2
 msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muBrems:   for  mu+    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -941,7 +932,6 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -957,7 +947,7 @@ muIoni:   for  mu-    SubType= 2
 msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 muBrems:   for  mu-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -968,7 +958,6 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -983,7 +972,7 @@ hIoni:   for  pi+    SubType= 2
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -996,7 +985,7 @@ hIoni:   for  pi-    SubType= 2
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 #
 # neutron at 1 GeV in Air
 #
