@@ -37,13 +37,13 @@ Building:      this test has a special CMakeLists.txt to be used only by system
                2. replace the existing version of CMakeLists.txt with a
                   stand-alone one:
 
+                  cd test18
                   mv CMakeLists.txt CMakeLists.txtorig
                   mv CMakeLists_Standalone.txt CMakeLists.txt
 
                3. Clean up (if necessary) and re-configure, assuming a 64 bit machine
                   and Geant4 version 9.6:
 
-                  rm test18
                   cmake .
 
               4. Build test18:

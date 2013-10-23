@@ -197,13 +197,11 @@ void Tst18PhysicsList::ConstructEM()
 #include "G4OmegaMinusInelasticProcess.hh"
 
 // Models
-
-#include "G4LElastic.hh"
+#include "G4HadronElastic.hh"
 #include "G4CascadeInterface.hh"
 #include "G4BinaryLightIonReaction.hh"
 
 // Stopping processes
-
 #include "G4PiMinusAbsorptionBertini.hh"
 #include "G4KaonMinusAbsorptionBertini.hh"
 
@@ -212,7 +210,7 @@ void Tst18PhysicsList::ConstructHad()
 {
   // Elastic model and process
   G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
-  G4LElastic* theElasticModel = new G4LElastic;
+  G4HadronElastic* theElasticModel = new G4HadronElastic;
   theElasticProcess->RegisterMe(theElasticModel);
 
   // Inelastic hadronic model for hadrons
