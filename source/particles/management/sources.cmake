@@ -53,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4NucleiProperties.hh
         G4NucleiPropertiesTableAME03.hh
         G4NucleiPropertiesTheoreticalTable.hh
+	G4NuclideTable.hh
         G4PDGCodeChecker.hh
         G4PDefSplitter.hh
         G4ParticleDefinition.hh
@@ -99,6 +100,9 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4NucleiPropertiesTableAME03.cc
         G4NucleiPropertiesTheoreticalTableA.cc
         G4NucleiPropertiesTheoreticalTableB.cc
+	G4NuclideTable.cc
+	G4NuclideTable2.cc
+	G4NuclideTable3.cc
         G4PDGCodeChecker.cc
         G4ParticleDefinition.cc
         G4ParticleMessenger.cc
