@@ -57,6 +57,7 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
+#include "G4Log.hh"
 
 //
 // Constructor
@@ -249,24 +250,8 @@ G4double G4ContinuumGammaTransition::GammaTime()
 
   G4double GammaR = 0.30 * (40.3 /G4Pow::GetInstance()->powZ(_nucleusA,0.2) )*MeV;
   G4double tau = hbar_Planck/GammaR;
-  G4double creationTime = -tau*std::log(G4UniformRand());
-  /*
-  G4double tMin = 0;
-  G4double tMax = 10.0 * tau;
-  G4int nBins = 200;
-  G4double sampleArray[200];
+  G4double creationTime = -tau*G4Log(G4UniformRand());
 
-  for(G4int i = 0; i<nBins;i++)
-  {
-    G4double t = tMin + ((tMax-tMin)/nBins)*i;
-    sampleArray[i] = (std::exp(-t/tau))/tau;
-  }
-
-  G4RandGeneralTmp randGeneral(sampleArray, nBins);
-  G4double random = randGeneral.shoot();
-  
-  G4double creationTime = tMin + (tMax - tMin) * random;
-  */
   return creationTime;
 }
 

@@ -46,6 +46,7 @@
 #include "G4Nucleus.hh"
 
 class G4PhotonEvaporation;
+class G4IonTable;
 
 class G4NeutronRadCapture : public G4HadronicInteraction
 {
@@ -64,7 +65,9 @@ private:
   G4NeutronRadCapture(const G4NeutronRadCapture&);
 
   G4double lowestEnergyLimit;
+  G4double minExcitation;
   G4PhotonEvaporation* photonEvaporation;
+  G4IonTable*  theTableOfIons;
 };
 
 #endif

@@ -57,9 +57,11 @@
 //              Removed unphysical corretions of gamma energy; fixed default particle 
 //              as gamma; do not subtract bounding energy in case of electron emmision
 //
-//		  03 November 2011, L. Desorgher
-//				Extend the use of the code for Z>100 by not calling G4AtomicShells::GetBindingEnergy for Z>100
-//				For Z>100 the binding energy is set to 0, the atomic relaxation is not simulated in G4RadDecay
+//	  3 November 2011, L. Desorgher
+//		Extend the use of the code for Z>100 by not calling 
+//              G4AtomicShells::GetBindingEnergy for Z>100
+//		For Z>100 the binding energy is set to 0, the atomic relaxation is 
+//              not simulated in G4RadDecay
 //
 // -------------------------------------------------------------------
 
@@ -70,6 +72,7 @@
 #include "G4NuclearLevel.hh"
 #include "G4NuclearLevelStore.hh"
 #include "G4Pow.hh"
+#include "G4Log.hh"
 
 G4DiscreteGammaTransition::
 G4DiscreteGammaTransition(const G4NuclearLevel& level, G4int Z, G4int /*A*/)
@@ -218,7 +221,7 @@ void G4DiscreteGammaTransition::SelectGamma()
       //09.05.2010 VI rewrite samling of decay time 
       //              assuming ordinary exponential low
       _gammaCreationTime = 0.;      
-      if(tau > 0.0) {  _gammaCreationTime = -tau*std::log(G4UniformRand()); }
+      if(tau > 0.0) {  _gammaCreationTime = -tau*G4Log(G4UniformRand()); }
 
     }
   return;

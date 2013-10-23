@@ -32,6 +32,7 @@
 #include "G4F20GEMProbability.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
 
 G4F20GEMProbability::G4F20GEMProbability() :
   G4GEMProbability(20,9,2.0) // A,Z,Spin
@@ -87,7 +88,7 @@ G4F20GEMProbability::G4F20GEMProbability() :
 
   ExcitEnergies.push_back(6627.0*keV);
   ExcitSpins.push_back(2.0);
-  ExcitLifetimes.push_back(hbar_Planck*std::log(2.0)/(0.29*keV));
+  ExcitLifetimes.push_back(hbar_Planck*G4Log(2.0)/(0.29*keV));
 
   ExcitEnergies.push_back(6648.0*keV);
   ExcitSpins.push_back(1.0);
