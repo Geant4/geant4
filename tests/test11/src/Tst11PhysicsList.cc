@@ -237,9 +237,9 @@ void Tst11PhysicsList::ConstructEM()
 
 // Low-energy Models
 
-#include "G4LElastic.hh"
+#include "G4HadronElastic.hh"
 #include "G4LFission.hh"
-#include "G4LCapture.hh"
+#include "G4NeutronRadCapture.hh"
 
 // Low energy neutron models
 #include "G4NeutronHPCapture.hh"
@@ -332,20 +332,18 @@ void Tst11PhysicsList::ConstructHad()
 
    G4TheoFSGenerator * theFTFPforIon;
 
-// Binary Cascade
+   // Binary Cascade
    G4BinaryLightIonReaction* theIonBC = new G4BinaryLightIonReaction(thePreCompound);
    theIonBC->SetMinEnergy(0.0);
    theIonBC->SetMaxEnergy(4*GeV);
 
-// FTFP
+   // FTFP
    theFTFPforIon = theFTFPwtBERT;
 
-//Prepairing models END
-
-   G4HadronElasticProcess* theElasticProcess = 
-                                    new G4HadronElasticProcess;
-   G4LElastic* theElasticModel = new G4LElastic;
+   G4HadronElasticProcess* theElasticProcess = new G4HadronElasticProcess;
+   G4HadronElastic* theElasticModel = new G4HadronElastic;
    theElasticProcess->RegisterMe(theElasticModel);
+
    G4HadronElasticProcess* theElasticProcess1 = 
                                     new G4HadronElasticProcess;
    theParticleIterator->reset();
@@ -420,7 +418,7 @@ void Tst11PhysicsList::ConstructHad()
       else if (particleName == "neutron") {
          
           // elastic scattering
-         G4LElastic* theElasticModel1 = new G4LElastic;
+         G4HadronElastic* theElasticModel1 = new G4HadronElastic;
          G4NeutronHPElastic * theElasticNeutron = new G4NeutronHPElastic;
          theElasticProcess1->RegisterMe(theElasticModel1);
          theElasticModel1->SetMinEnergy(19*MeV);
@@ -467,7 +465,7 @@ void Tst11PhysicsList::ConstructHad()
          // capture
          G4HadronCaptureProcess* theCaptureProcess =
                                     new G4HadronCaptureProcess;
-         G4LCapture* theCaptureModel = new G4LCapture;
+         G4NeutronRadCapture* theCaptureModel = new G4NeutronRadCapture;
          theCaptureModel->SetMinEnergy(19*MeV);
          theCaptureProcess->RegisterMe(theCaptureModel);
          G4NeutronHPCapture * theLENeutronCaptureModel = new G4NeutronHPCapture;

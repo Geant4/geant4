@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 October 2013  Dennis Wright  (test11-V09-06-05)
+--------------------------------------------------
+- replace remaining LEP models (G4LElastic and G4LCapture)
+
 03 August 2013 Andrea Dotti  (test11-V09-06-04)
 -----------------------------------------------
 - Temporarly force MT to use 2 threads: 
