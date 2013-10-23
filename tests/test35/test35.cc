@@ -313,14 +313,8 @@ int main(int argc, char** argv)
       } else if(line == "#generator") {
 	nameGen = "";
         (*fin) >> nameGen;
-	if (nameGen == "" || nameGen == "chips"
-	    || nameGen == "qgsc" || nameGen == "ftfc") {
-	  G4cout << "Generator name is empty! " << G4endl; 
-	  continue;
-	}
         hFile = nameGen;
-        if(nameGen == "binary")       { hFile = "bic"; }
-
+        if(nameGen == "binary") { hFile = "bic"; }
 	// Bertini and FTFP always active
         else if(nameGen == "bertini") { 
 	  hFile = "bert"; 
@@ -470,9 +464,7 @@ int main(int argc, char** argv)
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
 
-    if(nameGen == "lepar") {
-      cs = new G4HadronInelasticDataSet();
-    } else if(part == proton) {
+    if(part == proton) {
       if(xsbgg)      { cs = new G4BGGNucleonInelasticXS(part); }
       else if(Z > 1) { cs = new G4ProtonInelasticCrossSection(); }
       else           { cs = new G4HadronInelasticDataSet(); }

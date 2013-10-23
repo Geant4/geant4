@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test35-V09-06-04  23 October 2013 V.Ivanchenko
+- Removed LHEP and RPG
+
 test35-V09-06-03  10 May 2013 V.Ivanchenko
 - Added initialisation of ion tables, substitute LHEP by FTFP
     in test35.in
