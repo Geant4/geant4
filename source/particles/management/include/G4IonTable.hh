@@ -62,6 +62,7 @@ class G4ParticleTable;
 class G4VIsotopeTable; 
 class G4IsotopeProperty;
 class G4IsomerTable; 
+class G4NuclideTable; 
 
 class G4IonTable
 {
@@ -124,7 +125,10 @@ class G4IonTable
    void CreateAllIsomer();
    // All excited ions with long life time (>1.0*ns) will be created
    //  isomers are defined in G4VIsotopeTable
-
+   
+   void PreloadNuclide();
+   // All nuclide with a life time longer than certain value will be created
+   // prior to the event loop.
 
    // Find/Get "ground state" and "excited state" 
    G4ParticleDefinition* GetIon(G4int Z, G4int A, G4int lvl=0);
@@ -272,11 +276,9 @@ class G4IonTable
    G4int                GetVerboseLevel() const;
    // get Verbose Level defined in G4ParticleTable
 
-   const G4double EnergyUnit;
-   // energy unit for calculating excitation energy   
-
  private:
    G4IsomerTable* pIsomerTable;
+   G4NuclideTable* pNuclideTable;
    G4bool         isIsomerCreated;
    // Isomer table and flag of creation    
  
