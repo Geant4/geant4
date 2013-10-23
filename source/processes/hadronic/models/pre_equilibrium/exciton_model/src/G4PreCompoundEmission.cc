@@ -46,6 +46,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 #include "Randomize.hh"
 #include "G4PreCompoundParameters.hh"
 #include "G4PreCompoundEmissionFactory.hh"
@@ -73,41 +75,36 @@ void G4PreCompoundEmission::SetDefaultModel()
 {
   if (theFragmentsFactory) { delete theFragmentsFactory; }
   theFragmentsFactory = new G4PreCompoundEmissionFactory();
-  if (theFragmentsVector) 
-    {
-      theFragmentsVector->SetVector(theFragmentsFactory->GetFragmentVector());
-    }
-  else 
-    {
-      theFragmentsVector = 
-	new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
-    }
-  return;
+  if (theFragmentsVector) {
+    theFragmentsVector->SetVector(theFragmentsFactory->GetFragmentVector());
+  } else {
+    theFragmentsVector = 
+      new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
+  }
 }
 
 void G4PreCompoundEmission::SetHETCModel()
 {
   if (theFragmentsFactory) delete theFragmentsFactory;
   theFragmentsFactory = new G4HETCEmissionFactory();
-  if (theFragmentsVector) 
-    {
-      theFragmentsVector->SetVector(theFragmentsFactory->GetFragmentVector());
-    }
-  else 
-    {
-      theFragmentsVector = 
-	new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
-    }
-  return;
+  if (theFragmentsVector) {
+    theFragmentsVector->SetVector(theFragmentsFactory->GetFragmentVector());
+  } else {
+    theFragmentsVector = 
+      new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
+  }
 }
 
-G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
+G4ReactionProduct* 
+G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 {
   // Choose a Fragment for emission
-  G4VPreCompoundFragment * thePreFragment = theFragmentsVector->ChooseFragment();
+  G4VPreCompoundFragment * thePreFragment = 
+    theFragmentsVector->ChooseFragment();
   if (thePreFragment == 0)
     {
-      G4cout <<  "G4PreCompoundEmission::PerformEmission : I couldn't choose a fragment\n"
+      G4cout << "G4PreCompoundEmission::PerformEmission : "
+	     << "I couldn't choose a fragment\n"
 	     << "while trying to de-excite\n" 
 	     << aFragment << G4endl;
       throw G4HadronicException(__FILE__, __LINE__, "");
@@ -117,7 +114,8 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   //G4cout << *thePreFragment << G4endl;
 
   // Kinetic Energy of emitted fragment
-  G4double kinEnergyOfEmittedFragment = thePreFragment->GetKineticEnergy(aFragment);
+  G4double kinEnergyOfEmittedFragment = 
+    thePreFragment->GetKineticEnergy(aFragment);
   //  if(kinEnergyOfEmittedFragment < MeV) {
   //  G4cout << "Chosen fragment: " << G4endl;
   //  G4cout << *thePreFragment << G4endl;
@@ -175,10 +173,10 @@ G4ReactionProduct * G4PreCompoundEmission::PerformEmission(G4Fragment & aFragmen
   return MyRP;
 }
 
-void
-G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragment,
-					   const G4Fragment& aFragment,
-					   G4double ekin) 
+void G4PreCompoundEmission::AngularDistribution(
+                            G4VPreCompoundFragment* thePreFragment,
+			    const G4Fragment& aFragment,
+			    G4double ekin) 
 {
   G4int p = aFragment.GetNumberOfParticles();
   G4int h = aFragment.GetNumberOfHoles();
@@ -241,8 +239,8 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragmen
  
   if(an < 0.1) { cost = 1. - 2*random; }
   else {
-    G4double exp2an = std::exp(-2*an);
-    cost = 1. + std::log(1-random*(1-exp2an))/an;
+    G4double exp2an = G4Exp(-2*an);
+    cost = 1. + G4Log(1-random*(1-exp2an))/an;
     if(cost > 1.) { cost = 1.; }
     else if(cost < -1.) {cost = -1.; }
   }  
@@ -250,11 +248,13 @@ G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment* thePreFragmen
   G4double phi = CLHEP::twopi*G4UniformRand();
   
   // Calculate the momentum magnitude of emitted fragment 	
-  G4double pmag = std::sqrt(ekin*(ekin + 2.0*thePreFragment->GetNuclearMass()));
+  G4double pmag = 
+    std::sqrt(ekin*(ekin + 2.0*thePreFragment->GetNuclearMass()));
   
   G4double sint = std::sqrt((1.0-cost)*(1.0+cost));
 
-  theFinalMomentum.set(pmag*std::cos(phi)*sint,pmag*std::sin(phi)*sint,pmag*cost);
+  theFinalMomentum.set(pmag*std::cos(phi)*sint,pmag*std::sin(phi)*sint,
+		       pmag*cost);
 
   // theta is the angle wrt the incident direction
   G4ThreeVector theIncidentDirection = aFragment.GetMomentum().vect().unit();
@@ -270,17 +270,18 @@ G4double G4PreCompoundEmission::rho(G4int p, G4int h, G4double gg,
   
   if ( E - Aph < 0.0) { return 0.0; }
   
-  G4double logConst =  (p+h)*std::log(gg) 
-    - g4pow->logfactorial(p+h-1) - g4pow->logfactorial(p) - g4pow->logfactorial(h);
+  G4double logConst =  (p+h)*G4Log(gg) 
+    - g4pow->logfactorial(p+h-1) - g4pow->logfactorial(p) 
+    - g4pow->logfactorial(h);
 
   // initialise values using j=0
 
   G4double t1=1;
   G4double t2=1;
-  G4double logt3 = (p+h-1) * std::log(E-Aph) + logConst;
+  G4double logt3 = (p+h-1) * G4Log(E-Aph) + logConst;
   const G4double logmax = 200.;
   if(logt3 > logmax) { logt3 = logmax; }
-  G4double tot = std::exp( logt3 );
+  G4double tot = G4Exp( logt3 );
 
   // and now sum rest of terms
   // 25.02.2010 V.Ivanchenko change while to for loop and cleanup 
@@ -291,9 +292,9 @@ G4double G4PreCompoundEmission::rho(G4int p, G4int h, G4double gg,
       if(Eeff < 0.0) { break; }
       t1 *= -1.;
       t2 *= (G4double)(h+1-j)/(G4double)j;
-      logt3 = (p+h-1) * std::log( Eeff) + logConst;
+      logt3 = (p+h-1) * G4Log( Eeff) + logConst;
       if(logt3 > logmax) { logt3 = logmax; }
-      tot += t1*t2*std::exp(logt3);
+      tot += t1*t2*G4Exp(logt3);
     }
         
   return tot;

@@ -62,6 +62,7 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4LorentzVector.hh"
+#include "G4Exp.hh"
 
 G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr) 
   : G4VPreCompoundModel(ptr,"PRECO"), useHETCEmission(false), 
@@ -221,7 +222,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
     // J. M. Quesada (Jan. 08)  equilibrium hole number could be used as preeq.
     // evap. delimiter (IAEA report)
     
-    // Loop for transitions, it is performed while there are preequilibrium transitions.
+    // Loop for transitions, it is performed while there are 
+    // preequilibrium transitions.
     G4bool ThereIsTransition = false;
     
     //        G4cout<<"----------------------------------------"<<G4endl;
@@ -229,14 +231,15 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
     //        G4double NH=aFragment.GetNumberOfHoles();
     //        G4double NE=aFragment.GetNumberOfExcitons();
     //        G4cout<<" Ex. Energy="<<aFragment.GetExcitationEnergy()<<G4endl;
-    //        G4cout<<"N. excitons="<<NE<<"  N. Part="<<NP<<"N. Holes ="<<NH<<G4endl;
+    //   G4cout<<"N. excitons="<<NE<<"  N. Part="<<NP<<"N. Holes ="<<NH<<G4endl;
     //G4int transition=0;
     do {
       //transition++;
       //G4cout<<"transition number .."<<transition<<G4endl;
       //G4cout<<" n ="<<aFragment.GetNumberOfExcitons()<<G4endl;
       G4bool go_ahead = false;
-      // soft cutoff criterium as an "ad-hoc" solution to force increase in  evaporation  
+      // soft cutoff criterium as an "ad-hoc" solution to force 
+      // increase in  evaporation  
       G4int test = aFragment.GetNumberOfExcitons();
       if (test <= EquilibriumExcitonNumber) { go_ahead=true; }
 
@@ -244,7 +247,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
       if (useSCO && go_ahead)
 	{
 	  G4double x = G4double(test)/G4double(EquilibriumExcitonNumber) - 1;
-	  if( G4UniformRand() < 1.0 -  std::exp(-x*x/0.32) ) { go_ahead = false; }
+	  if( G4UniformRand() < 1.0 -  G4Exp(-x*x/0.32) ) { go_ahead = false; }
 	} 
         
       // JMQ: WARNING:  CalculateProbability MUST be called prior to Get methods !! 
@@ -272,8 +275,8 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
 	  G4double TotalEmissionProbability = 
 	    theEmission->GetTotalProbability(aFragment);
 	  //
-	  //G4cout<<"#1 TotalEmissionProbability="<<TotalEmissionProbability<<" Nex= " 
-	  //	<<aFragment.GetNumberOfExcitons()<<G4endl;
+	  //G4cout<<"#1 TotalEmissionProbability="<<TotalEmissionProbability
+	  // <<" Nex= " <<aFragment.GetNumberOfExcitons()<<G4endl;
 	  //
 	  // Check if number of excitons is greater than 0
 	  // else perform equilibrium emission

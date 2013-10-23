@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23-October-2013 V.Ivanchenko  hadr-pre-V09-06-05
+-------------------------------------------------
+- G4PreCompoundModel, G4PreCompoundEmission, G4PreCompoundProton -
+    use G4Log and G4Exp
+
 30-April-2013 V.Ivanchenko  hadr-pre-V09-06-04
 -------------------------------------------------
 - G4HETCFragment - CLHEP::RandGamma substituted by G4RandGamma
