@@ -42,7 +42,7 @@
 #include "G4RunManager.hh"
 #include "Randomize.hh"
 #include "UltraAnalysisManager.hh"
-
+#include <ctime>
 #include "Randomize.hh"
 
 
