@@ -9,6 +9,9 @@ $Id$
 
                       ---------------------
 
+23.10.2013 - Gabriele Cosmo (DICOM-V09-06-05)
+	   - Fixed compilation warnings.
+
 15.10.2013 - Jonathan Madsen (DICOM-V09-06-04)
 	   - Modified DICOM to enable multithreading
 	     - Adapted scorers

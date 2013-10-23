@@ -66,7 +66,5 @@ void DicomEventAction::BeginOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomEventAction::EndOfEventAction(const G4Event* evt)
-{
-    //DicomRunAction::Instance()->GetDicomRun()->RecordEvent(evt);
-}
+void DicomEventAction::EndOfEventAction(const G4Event*)
+{ }
