@@ -12,6 +12,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 October 2013  Dennis Wright  (test24-V09-06-03)
+--------------------------------------------------
+- remove unused LEP header
+- update test24.out
+
 19 July 2013  Dennis Wright  (test24-V09-06-02)
 -----------------------------------------------
 - Tst24PhysicsList:

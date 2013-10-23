@@ -233,7 +233,6 @@ void Tst24PhysicsList::ConstructEM()
 #include "G4StatMF.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4Fancy3DNucleus.hh"
-#include "G4LEProtonInelastic.hh"
 #include "G4StringModel.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4FTFModel.hh"
