@@ -96,6 +96,8 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4strstreambuf.hh
         G4ofstreamDestination.hh
         G4MTcoutDestination.hh
+	G4CacheDetails.hh
+	G4Cache.hh
     SOURCES
         G4Allocator.cc
         G4AllocatorPool.cc
@@ -129,6 +131,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4ios.cc
         G4ofstreamDestination.cc
         G4MTcoutDestination.cc
+	G4CacheDetails.cc
     GRANULAR_DEPENDENCIES
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 23, 2013 A.Dotti       (global-V09-06-75)
+- Adding G4Cache classes for a thread-private data members in 
+  shared classes.
+
 October 18, 2013 V.Ivantchenko (global-V09-06-74)
 - G4PhysicsVector - in the FindBinLocation method extra checks
     are added for Log and Lin vectors to avoid rare cases when bin 
