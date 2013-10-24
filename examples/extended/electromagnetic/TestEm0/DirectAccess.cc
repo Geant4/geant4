@@ -42,7 +42,7 @@
 #include "G4eeToTwoGammaModel.hh"
 
 #include "G4MollerBhabhaModel.hh"
-#include "G4eBremsstrahlungModel.hh"
+#include "G4SeltzerBergerModel.hh"
 
 #include "G4BetheBlochModel.hh"
 #include "G4BraggModel.hh"
@@ -96,17 +96,17 @@ int main() {
   for (G4double Energy = Emin; Energy <= Emax; Energy += dE) {
     G4cout << "\n " << G4BestUnit (Energy, "Energy")
      << "\t" 
-     << G4BestUnit (phot->ComputeCrossSectionPerAtom(gamma,Energy,Z), "Surface")
+     << G4BestUnit (phot->ComputeCrossSectionPerAtom(gamma,Energy,Z),"Surface")
      << "\t"         
-     << G4BestUnit (comp->ComputeCrossSectionPerAtom(gamma,Energy,Z), "Surface")
+     << G4BestUnit (comp->ComputeCrossSectionPerAtom(gamma,Energy,Z),"Surface")
      << "\t"         
-     << G4BestUnit (conv->ComputeCrossSectionPerAtom(gamma,Energy,Z), "Surface")
+     << G4BestUnit (conv->ComputeCrossSectionPerAtom(gamma,Energy,Z),"Surface")
      << "\t \t"         
-     << G4BestUnit (phot->ComputeMeanFreePath(gamma,Energy,material), "Length")
+     << G4BestUnit (phot->ComputeMeanFreePath(gamma,Energy,material),"Length")
      << "\t"         
-     << G4BestUnit (comp->ComputeMeanFreePath(gamma,Energy,material), "Length")
+     << G4BestUnit (comp->ComputeMeanFreePath(gamma,Energy,material),"Length")
      << "\t"         
-     << G4BestUnit (conv->ComputeMeanFreePath(gamma,Energy,material), "Length");
+     << G4BestUnit (conv->ComputeMeanFreePath(gamma,Energy,material),"Length");
   }
 
   G4cout << G4endl;
@@ -123,17 +123,17 @@ int main() {
   //
   Emin = 1.01*MeV; Emax = 2.01*MeV; dE = 100*keV;
 
-  G4cout << "\n #### e+ annihilation : CrossSectionPerAtom and MeanFreePath for " 
-         << material->GetName() << G4endl;
+  G4cout << "\n #### e+ annihilation : CrossSectionPerAtom and MeanFreePath"
+         << " for " << material->GetName() << G4endl;
   G4cout << "\n Energy \t e+ annihil \t";
   G4cout <<           "\t e+ annihil" << G4endl;
   
   for (G4double Energy = Emin; Energy <= Emax; Energy += dE) {
     G4cout << "\n " << G4BestUnit (Energy, "Energy")
      << "\t" 
-     << G4BestUnit (anni->ComputeCrossSectionPerAtom(posit,Energy,Z), "Surface")
+     << G4BestUnit (anni->ComputeCrossSectionPerAtom(posit,Energy,Z),"Surface")
      << "\t \t"         
-     << G4BestUnit (anni->ComputeMeanFreePath(posit,Energy,material), "Length");
+     << G4BestUnit (anni->ComputeMeanFreePath(posit,Energy,material),"Length");
   }
 
   G4cout << G4endl;
@@ -145,15 +145,15 @@ int main() {
   G4ParticleDefinition* elec = G4Electron::Electron();
    
   G4VEmModel* ioni = new G4MollerBhabhaModel();
-  G4VEmModel* brem = new G4eBremsstrahlungModel();
+  G4VEmModel* brem = new G4SeltzerBergerModel();
   
   // compute CrossSection per atom and MeanFreePath
   //
   Emin = 1.01*MeV; Emax = 101.01*MeV; dE = 10*MeV;
   G4double Ecut = 100*keV;
 
-  G4cout << "\n ####electron: CrossSection, MeanFreePath and StoppingPower for "
-         << material->GetName() 
+  G4cout << "\n ####electron: CrossSection, MeanFreePath and StoppingPower"
+         << " for " << material->GetName() 
          << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
          
   G4cout << "\n Energy \t ionization \t bremsstra \t";
@@ -198,8 +198,8 @@ int main() {
   Emin = 1.01*MeV; Emax = 102.01*MeV; dE = 10*MeV;
   Ecut = 100*keV;
 
-  G4cout << "\n #### proton : CrossSection, MeanFreePath and StoppingPower for "
-         << material->GetName() 
+  G4cout << "\n #### proton : CrossSection, MeanFreePath and StoppingPower"
+         << " for " << material->GetName() 
          << ";\tEnergy cut = " << G4BestUnit (Ecut, "Energy") << G4endl;
          
   G4cout << "\n Energy \t ionization \t";
