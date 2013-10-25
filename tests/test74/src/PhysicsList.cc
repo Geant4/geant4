@@ -100,10 +100,10 @@ void PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// Geant4-MuElec MODELS
+// Geant4-MicroElec MODELS
 
-#include "G4MuElecElastic.hh"
-#include "G4MuElecInelastic.hh"
+#include "G4MicroElecElastic.hh"
+#include "G4MicroElecInelastic.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -118,20 +118,20 @@ void PhysicsList::ConstructEM()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
-// Geant4-MuElec
+// Geant4-MicroElec
 
     if (particleName == "e-") {
 
-      pmanager->AddDiscreteProcess(new G4MuElecElastic("e-_G4MuElecElastic"));
-      pmanager->AddDiscreteProcess(new G4MuElecInelastic("e-_G4MuElecInelastic"));
+      pmanager->AddDiscreteProcess(new G4MicroElecElastic("e-_G4MicroElecElastic"));
+      pmanager->AddDiscreteProcess(new G4MicroElecInelastic("e-_G4MicroElecInelastic"));
      	    
     } else if ( particleName == "proton" ) {
 
-      pmanager->AddDiscreteProcess(new G4MuElecInelastic("p_G4MuElecInelastic"));
+      pmanager->AddDiscreteProcess(new G4MicroElecInelastic("p_G4MicroElecInelastic"));
 
     }  else if ( particleName == "GenericIon" ) {
 
-      pmanager->AddDiscreteProcess(new G4MuElecInelastic("ion_G4MuElecInelastic"));
+      pmanager->AddDiscreteProcess(new G4MicroElecInelastic("ion_G4MicroElecInelastic"));
 
     }
 

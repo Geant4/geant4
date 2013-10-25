@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -58,10 +58,8 @@ PhysicsList::SetCuts:CutLength : 1 nm
      Transportation,ion_G4MuElecInelastic, e-_G4MuElecElastic,e-_G4MuElecInelastic
 p_G4MuElecInelastic
 /particle/list
-         GenericIon,                He3,              alpha,           anti_He3
-         anti_alpha,      anti_deuteron,        anti_proton,        anti_triton
-           deuteron,                 e+,                 e-,              gamma
-           geantino,      opticalphoton,             proton,             triton
+         GenericIon,        anti_proton,                 e+,                 e-
+              gamma,           geantino,      opticalphoton,             proton
 
 /run/particle/dumpCutValues
 #
@@ -89,7 +87,7 @@ MuElecInelasticModel :  Emin=        0 eV    Emax=      100 GeV
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -98,7 +96,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-### Run 0 starts.
+Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -116,7 +114,7 @@ Run Summary
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -125,11 +123,11 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-### Run 1 starts.
+Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.55s Real=0.68s Sys=0s
+  User=0.54s Real=0.54s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
@@ -144,7 +142,7 @@ Run Summary
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Si
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -153,13 +151,13 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-### Run 2 starts.
+Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=26.95s Real=43.66s Sys=0.11s
+  User=26.87s Real=26.89s Sys=0.02s
 
- The run consists of 1 Ca48 of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
+ The run consists of 1 Ca48[0.0] of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
  Process calls frequency --->	ion_G4MuElecInelastic = 68208	e-_G4MuElecElastic = 569734	e-_G4MuElecInelastic = 43540
  Total transfered energy (keV)=4800
@@ -168,8 +166,3 @@ Run Summary
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 33 Mb
-============================================================
-RunManagerKernel is deleted. Good bye :)

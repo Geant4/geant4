@@ -23,40 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#include "G4VUserActionInitialization.hh"
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
-#include "DetectorConstruction.hh"
-#include "G4Event.hh"
-#include "G4ParticleTable.hh"
+class DetectorConstruction;
+class PrimaryGeneratorAction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class ActionInitialization : public G4VUserActionInitialization
 {
-public:
+  public:
+    ActionInitialization();
+    virtual ~ActionInitialization();
 
-  PrimaryGeneratorAction();    
-  ~PrimaryGeneratorAction();
-  
-  void GeneratePrimaries(G4Event*);
-  G4ParticleGun* GetParticleGun() {return fParticleGun;};
-  const G4String& GetParticleName()
-  {
-	  return fPrimaryParticleName;
-  }
-
-private:
-
-  G4String fPrimaryParticleName ;
-  G4ParticleGun*           fParticleGun;
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
+
 #endif
+
+    

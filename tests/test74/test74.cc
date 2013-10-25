@@ -30,6 +30,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
@@ -45,41 +46,47 @@
 #include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "ActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 int main(int argc,char** argv) 
 {
-  // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  	// Choose the Random engine
+
+	G4Random::setTheEngine(new CLHEP::RanecuEngine);
+
+	// Construct the default run manager
+
+#ifdef G4MULTITHREADED
+	G4MTRunManager* runManager = new G4MTRunManager;
+	runManager->SetNumberOfThreads(2);
+#else
+	G4RunManager* runManager = new G4RunManager;
+#endif
 
   // Set mandatory user initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
+  
   PhysicsList * pl;
   runManager->SetUserInitialization(pl = new PhysicsList);
   pl->DisableCheckParticleList();
+  
+  // User action initialization
+  //
+  runManager->SetUserInitialization(new ActionInitialization());
  
-  // Set mandatory user action classes
-  PrimaryGeneratorAction* primary;
-  runManager->SetUserAction(primary = new PrimaryGeneratorAction(detector));
-
-  // Set optional user action classes
-  RunAction* RunAct = new RunAction(detector,primary);
-  runManager->SetUserAction(RunAct);
- 
-  runManager->SetUserAction(new EventAction(RunAct));
-
-  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary));
+  
+  // Initialize G4 kernel
+  //
+  runManager->Initialize();
   
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
    
-  // Initialize G4 kernel
-  runManager->Initialize();
-    
   // Get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 

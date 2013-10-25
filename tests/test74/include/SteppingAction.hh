@@ -44,7 +44,7 @@ class SteppingAction : public G4UserSteppingAction
 {
 public:
 
-  SteppingAction(RunAction*, DetectorConstruction*, PrimaryGeneratorAction*);
+  SteppingAction(RunAction*); 
   ~SteppingAction();
   
   void UserSteppingAction(const G4Step*);
@@ -52,6 +52,8 @@ public:
 private:
 
   RunAction*              Run;
+  DetectorConstruction*   Detector; 
+  PrimaryGeneratorAction* Primary;
 
 };
 #endif

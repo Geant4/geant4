@@ -28,16 +28,18 @@
 // -------------------------------------------------------------------
 
 #include "RunAction.hh"
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-:Detector(det), Primary(prim), ProcCounter(0)
+RunAction::RunAction()
 {  
-  ProcCounter = new ProcessesCount;
-  totalCount = 0;
-  eTransfer = 0.;
+	fpPrimary = 0;
+	fTotalCount = 0;
+	fE_Transfered = 0.;
+	fInitialized = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -45,24 +47,46 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
 RunAction::~RunAction()
 {}
 
+void RunAction::Initialize()
+{
+	fpDetector = (DetectorConstruction*) G4RunManager::GetRunManager()->GetUserDetectorConstruction();
+	fpPrimary = (PrimaryGeneratorAction*) G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction();
+	fInitialized = true;
+}
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {  
-  eTransfer = 0.;
+	if(fInitialized == false) Initialize();
+	else fProcCounter.clear();
+
+	fE_Transfered = 0.;
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::CountProcesses(G4String procName)
 {
-   //does the process  already encounted ?
-   size_t nbProc = ProcCounter->size();
-   size_t i = 0;
-   while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
-   if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
+	//does the process  already encounted ?
+	size_t nbProc = fProcCounter.size();
+	size_t i = 0;
+	while ((i<nbProc)&&(fProcCounter[i]->GetName()!=procName)) i++;
+	if (i == nbProc) fProcCounter.push_back( new OneProcessCount(procName));
 
-   (*ProcCounter)[i]->Count();
+	fProcCounter[i]->Count();
+}
+
+void RunAction::ResetCounter()
+{
+	// delete and remove all contents in ProcCounter
+	while (fProcCounter.size()>0){
+		OneProcessCount* aProcCount=fProcCounter.back();
+		fProcCounter.pop_back();
+		delete aProcCount;
+	}
+	// delete ProcCounter;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -74,40 +98,40 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4int  prec = G4cout.precision(5);
     
-  G4Material* material = Detector->GetMaterial();
+  G4Material* material = fpDetector->GetMaterial();
   G4double density = material->GetDensity();
   G4int survive = 0;
    
-  G4ParticleDefinition* particle = 
-                            Primary->GetParticleGun()->GetParticleDefinition();
-  G4String Particle = particle->GetParticleName();    
-  
-  G4double energy = Primary->GetParticleGun()->GetParticleEnergy();
-  G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
+  const G4ParticleDefinition* particle = fpPrimary->GetParticleGun()->GetParticleDefinition();
+  const G4String& particleName = particle->GetParticleName();
+  G4double energy = fpPrimary->GetParticleGun()->GetParticleEnergy();
+	
+  G4cout << "\n The run consists of " << NbOfEvents << " "<< particleName << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-	 << G4BestUnit(Detector->GetSize(),"Length") << " of "
+	 << G4BestUnit(fpDetector->GetSize(),"Length") << " of "
 	 << material->GetName() << " (density: " 
 	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
   G4cout << "\n Process calls frequency --->";
-  for (size_t i=0; i< ProcCounter->size();i++) {
-     G4String procName = (*ProcCounter)[i]->GetName();
-     G4int    count    = (*ProcCounter)[i]->GetCounter(); 
-     G4cout << "\t" << procName << " = " << count;
-     if (procName == "Transportation") survive = count;
+  for (size_t i=0; i< fProcCounter.size();i++)
+  {
+  	G4String procName = (fProcCounter)[i]->GetName();
+ 	G4int    count    = (fProcCounter)[i]->GetCounter();
+ 	G4cout << "\t" << procName << " = " << count;
+ 	if (procName == "Transportation") survive = count;
   }
   
   if (survive > 0) {
     G4cout << "\n\n Nb of incident particles surviving after "
-           << G4BestUnit(Detector->GetSize(),"Length") << " of "
+           << G4BestUnit(fpDetector->GetSize(),"Length") << " of "
 	   << material->GetName() << " : " << survive << G4endl;
   }
   
-  if (totalCount == 0) totalCount = 1;   //force printing anyway
+  if (fTotalCount == 0) fTotalCount = 1;   //force printing anyway
  
   G4cout << G4endl;
-  G4cout << " Total transfered energy (keV)=" <<eTransfer/keV<< G4endl;
+  G4cout << " Total transfered energy (keV)=" <<fE_Transfered/keV<< G4endl;
   G4cout << G4endl;
 
 /*
@@ -161,14 +185,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 */	 	 
   //restore default format	 
-  G4cout.precision(prec);         
-
-  // delete and remove all contents in ProcCounter 
-  while (ProcCounter->size()>0){
-    OneProcessCount* aProcCount=ProcCounter->back();
-    ProcCounter->pop_back();
-    delete aProcCount;
-  }
-//  delete ProcCounter;
+  G4cout.precision(prec);
+  ResetCounter();
   
 }

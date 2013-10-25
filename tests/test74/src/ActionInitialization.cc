@@ -23,60 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// -------------------------------------------------------------------
-// $Id$
-// -------------------------------------------------------------------
+//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "SteppingAction.hh"
-#include "RunAction.hh"
-#include "DetectorConstruction.hh"
+#include "ActionInitialization.hh"
 #include "PrimaryGeneratorAction.hh"
-
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
+#include "RunAction.hh"
+#include "SteppingAction.hh"
+#include "DetectorConstruction.hh"
 #include "G4RunManager.hh"
-#include "G4SteppingManager.hh"
-#include "G4VTouchable.hh"
-#include "G4VPhysicalVolume.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* run) 
-{
-  	Run= run;
-	Detector = (DetectorConstruction*) G4RunManager::GetRunManager()->GetUserDetectorConstruction();
-	Primary = (PrimaryGeneratorAction*) G4RunManager::GetRunManager()->GetUserPrimaryGeneratorAction();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-SteppingAction::~SteppingAction()
+ActionInitialization::ActionInitialization() : G4VUserActionInitialization()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void SteppingAction::UserSteppingAction(const G4Step* stp)
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::Build() const
 {
-  G4StepPoint* endPoint = stp->GetPostStepPoint();
-  G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
-  Run->CountProcesses(procName);
+  SetUserAction(new PrimaryGeneratorAction);
+  
+  RunAction* runAction= new RunAction();
+  SetUserAction(runAction);
+  
+  SetUserAction(new SteppingAction(runAction));
+}  
 
-  G4double edep = stp->GetTotalEnergyDeposit();
-  Run->SumeTransf(edep);
-
-  G4Track* track = stp->GetTrack();
-  G4double kinEnergy = track->GetKineticEnergy();
-
-  G4ParticleDefinition* particle = track->GetDefinition();
-  G4String particleName = particle->GetParticleName(); 
-  G4double Mion_c2 = particle->GetPDGMass();
-  G4double ekin = kinEnergy*proton_mass_c2/Mion_c2 ;
-
-  if(particleName!="e-" && ekin/keV < 50)
-  {
-    track->SetTrackStatus(fStopAndKill);
-    Run->SumeTransf(kinEnergy);
-  }
-}    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
