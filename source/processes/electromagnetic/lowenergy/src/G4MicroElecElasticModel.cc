@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// G4MuElecElasticModel.cc, 2011/08/29 A.Valentin, M. Raine
+// G4MicroElecElasticModel.cc, 2011/08/29 A.Valentin, M. Raine
 //
 // Based on the following publications
 //	    - Geant4 physics processes for microdosimetry simulation:
@@ -35,7 +35,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 
-#include "G4MuElecElasticModel.hh"
+#include "G4MicroElecElasticModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -45,20 +45,10 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuElecElasticModel::G4MuElecElasticModel(const G4ParticleDefinition*,
+G4MicroElecElasticModel::G4MicroElecElasticModel(const G4ParticleDefinition*,
                                              const G4String& nam)
 :G4VEmModel(nam),isInitialised(false)
 {
-  
-   G4cout << G4endl;
-   G4cout << "*******************************************************************************" << G4endl;
-   G4cout << "*******************************************************************************" << G4endl;
-   G4cout << "   The name of the class G4MuElecElasticModel is changed to G4MicroElecElasticModel. " << G4endl;
-   G4cout << "   The obsolete class will be REMOVED with the next release of Geant4. " << G4endl;
-   G4cout << "*******************************************************************************" << G4endl;
-   G4cout << "*******************************************************************************" << G4endl;
-   G4cout << G4endl;
-   
   nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
 
   killBelowEnergy = 16.7 * eV; // Minimum e- energy for energy loss by excitation
@@ -78,7 +68,7 @@ G4MuElecElasticModel::G4MuElecElasticModel(const G4ParticleDefinition*,
   
   if( verboseLevel>0 ) 
   { 
-    G4cout << "MuElec Elastic model is constructed " << G4endl
+    G4cout << "MicroElec Elastic model is constructed " << G4endl
            << "Energy range: "
            << lowEnergyLimit / eV << " eV - "
            << highEnergyLimit / keV << " keV"
@@ -89,14 +79,14 @@ G4MuElecElasticModel::G4MuElecElasticModel(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4MuElecElasticModel::~G4MuElecElasticModel()
+G4MicroElecElasticModel::~G4MicroElecElasticModel()
 {  
   // For total cross section
   
-  std::map< G4String,G4MuElecCrossSectionDataSet*,std::less<G4String> >::iterator pos;
+  std::map< G4String,G4MicroElecCrossSectionDataSet*,std::less<G4String> >::iterator pos;
   for (pos = tableData.begin(); pos != tableData.end(); ++pos)
   {
-    G4MuElecCrossSectionDataSet* table = pos->second;
+    G4MicroElecCrossSectionDataSet* table = pos->second;
     delete table;
   }
 
@@ -108,25 +98,25 @@ G4MuElecElasticModel::~G4MuElecElasticModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
+void G4MicroElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
                                        const G4DataVector& /*cuts*/)
 {
 
   if (verboseLevel > 3)
-    G4cout << "Calling G4MuElecElasticModel::Initialise()" << G4endl;
+    G4cout << "Calling G4MicroElecElasticModel::Initialise()" << G4endl;
 
   // Energy limits
   
   if (LowEnergyLimit() < lowEnergyLimit)
   {
-    G4cout << "G4MuElecElasticModel: low energy limit increased from " << 
+    G4cout << "G4MicroElecElasticModel: low energy limit increased from " << 
 	LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << G4endl;
     SetLowEnergyLimit(lowEnergyLimit);
     }
 
   if (HighEnergyLimit() > highEnergyLimit)
   {
-    G4cout << "G4MuElecElasticModel: high energy limit decreased from " << 
+    G4cout << "G4MicroElecElasticModel: high energy limit decreased from " << 
         HighEnergyLimit()/MeV << " MeV to " << highEnergyLimit/MeV << " MeV" << G4endl;
     SetHighEnergyLimit(highEnergyLimit);
   }
@@ -146,7 +136,7 @@ void G4MuElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
 
     tableFile[electron] = fileElectron;
 
-    G4MuElecCrossSectionDataSet* tableE = new G4MuElecCrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
+    G4MicroElecCrossSectionDataSet* tableE = new G4MicroElecCrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
     tableE->LoadData(fileElectron);
     tableData[electron] = tableE;
     
@@ -156,7 +146,7 @@ void G4MuElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
  
     if (!path)
     {
-      G4Exception("G4MuElecElasticModel::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");
+      G4Exception("G4MicroElecElasticModel::Initialise","em0006",FatalException,"G4LEDATA environment variable not set.");
       return;
     }
 
@@ -165,7 +155,7 @@ void G4MuElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
      
     if (!eDiffCrossSection) 
-	G4Exception("G4MuElecElasticModel::Initialise","em0003",FatalException,"Missing data file: /microelec/sigmadiff_elastic_e_Si.dat");
+	G4Exception("G4MicroElecElasticModel::Initialise","em0003",FatalException,"Missing data file: /microelec/sigmadiff_elastic_e_Si.dat");
       
     eTdummyVec.push_back(0.);
 
@@ -194,11 +184,11 @@ void G4MuElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
     // End final state
   
   if (verboseLevel > 2) 
-    G4cout << "Loaded cross section files for MuElec Elastic model" << G4endl;
+    G4cout << "Loaded cross section files for MicroElec Elastic model" << G4endl;
 
   if( verboseLevel>0 ) 
   { 
-    G4cout << "MuElec Elastic model is initialized " << G4endl
+    G4cout << "MicroElec Elastic model is initialized " << G4endl
            << "Energy range: "
            << LowEnergyLimit() / eV << " eV - "
            << HighEnergyLimit() / keV << " keV"
@@ -214,14 +204,14 @@ void G4MuElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuElecElasticModel::CrossSectionPerVolume(const G4Material* material,
+G4double G4MicroElecElasticModel::CrossSectionPerVolume(const G4Material* material,
 					   const G4ParticleDefinition* p,
 					   G4double ekin,
 					   G4double,
 					   G4double)
 {
   if (verboseLevel > 3)
-    G4cout << "Calling CrossSectionPerVolume() of G4MuElecElasticModel" << G4endl;
+    G4cout << "Calling CrossSectionPerVolume() of G4MicroElecElasticModel" << G4endl;
 
  // Calculate total cross section for model
 
@@ -239,12 +229,12 @@ G4double G4MuElecElasticModel::CrossSectionPerVolume(const G4Material* material,
       if (ekin < lowEnergyLimitOfModel) ekin = lowEnergyLimitOfModel;
       //      
       
-	std::map< G4String,G4MuElecCrossSectionDataSet*,std::less<G4String> >::iterator pos;
+	std::map< G4String,G4MicroElecCrossSectionDataSet*,std::less<G4String> >::iterator pos;
 	pos = tableData.find(particleName);
 	
 	if (pos != tableData.end())
 	{
-	  G4MuElecCrossSectionDataSet* table = pos->second;
+	  G4MicroElecCrossSectionDataSet* table = pos->second;
 	  if (table != 0)
 	  {
 	    sigma = table->FindValue(ekin);
@@ -252,7 +242,7 @@ G4double G4MuElecElasticModel::CrossSectionPerVolume(const G4Material* material,
 	}
 	else
 	{
-	    G4Exception("G4MuElecElasticModel::ComputeCrossSectionPerVolume","em0002",FatalException,"Model not applicable to particle type.");
+	    G4Exception("G4MicroElecElasticModel::ComputeCrossSectionPerVolume","em0002",FatalException,"Model not applicable to particle type.");
 	}
   }
 
@@ -270,7 +260,7 @@ G4double G4MuElecElasticModel::CrossSectionPerVolume(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4MuElecElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
+void G4MicroElecElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
 					      const G4MaterialCutsCouple* /*couple*/,
 					      const G4DynamicParticle* aDynamicElectron,
 					      G4double,
@@ -278,7 +268,7 @@ void G4MuElecElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*
 {
 
   if (verboseLevel > 3)
-    G4cout << "Calling SampleSecondaries() of G4MuElecElasticModel" << G4endl;
+    G4cout << "Calling SampleSecondaries() of G4MicroElecElasticModel" << G4endl;
 
   G4double electronEnergy0 = aDynamicElectron->GetKineticEnergy();
   
@@ -315,7 +305,7 @@ void G4MuElecElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* /*
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuElecElasticModel::Theta
+G4double G4MicroElecElasticModel::Theta
   (G4ParticleDefinition * particleDefinition, G4double k, G4double integrDiff) 							  
 {
 
@@ -371,7 +361,7 @@ G4double G4MuElecElasticModel::Theta
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuElecElasticModel::LinLogInterpolate(G4double e1, 
+G4double G4MicroElecElasticModel::LinLogInterpolate(G4double e1, 
 						        G4double e2, 
 						        G4double e, 
 						        G4double xs1, 
@@ -385,7 +375,7 @@ G4double G4MuElecElasticModel::LinLogInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuElecElasticModel::LogLogInterpolate(G4double e1, 
+G4double G4MicroElecElasticModel::LogLogInterpolate(G4double e1, 
 						        G4double e2, 
 						        G4double e, 
 						        G4double xs1, 
@@ -400,7 +390,7 @@ G4double G4MuElecElasticModel::LogLogInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuElecElasticModel::QuadInterpolator(G4double e11, G4double e12, 
+G4double G4MicroElecElasticModel::QuadInterpolator(G4double e11, G4double e12, 
 						       G4double e21, G4double e22, 
 						       G4double xs11, G4double xs12, 
 						       G4double xs21, G4double xs22, 
@@ -416,7 +406,7 @@ G4double G4MuElecElasticModel::QuadInterpolator(G4double e11, G4double e12,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuElecElasticModel::RandomizeCosTheta(G4double k) 
+G4double G4MicroElecElasticModel::RandomizeCosTheta(G4double k) 
 {
   G4double integrdiff=0;
  G4double uniformRand=G4UniformRand();

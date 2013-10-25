@@ -53,6 +53,15 @@ G4MuElecInelastic::G4MuElecInelastic(const G4String& processName,
     isInitialised(false)
 {
   SetProcessSubType(53);
+  
+   G4cout << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "   The name of the class G4MuElecInelastic is changed to G4MicroElecInelastic. " << G4endl;
+   G4cout << "   The obsolete class will be REMOVED with the next release of Geant4. " << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << "*******************************************************************************" << G4endl;
+   G4cout << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,16 +101,16 @@ void G4MuElecInelastic::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(!EmModel()) SetEmModel(new G4MuElecInelasticModel);
       EmModel()->SetLowEnergyLimit(50.*keV);
-      EmModel()->SetHighEnergyLimit(1*GeV);
+      EmModel()->SetHighEnergyLimit(10*GeV);
 
       AddEmModel(1, EmModel());   
     }
 
-    else
+    else if(name == "GenericIon")
     {
       if(!EmModel()) SetEmModel(new G4MuElecInelasticModel);
       EmModel()->SetLowEnergyLimit(50.*keV);
-      EmModel()->SetHighEnergyLimit(100.*GeV);
+      EmModel()->SetHighEnergyLimit(10000.*GeV);
 
       AddEmModel(1, EmModel());   
     }

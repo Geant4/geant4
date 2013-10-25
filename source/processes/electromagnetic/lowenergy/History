@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.10.2013  S. Incerti, M. Raine, tag emlowen-V09-06-32
+            Added G4MicroElec* processes and models 
+	    in replacement of G4MuElec*
+
 22.10.2013, V.Ivanchenko, tag emlowen-V09-06-31
             G4LivermoreComptonModel, G4LivermoreGammaConversionModel,
             G4RayleighAngularGenerator - use G4Log, G4Exp
