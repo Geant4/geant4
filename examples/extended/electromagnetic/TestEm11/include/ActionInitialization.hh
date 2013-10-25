@@ -23,42 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/include/EventActionMessenger.hh
-/// \brief Definition of the EventActionMessenger class
+// $Id: ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef EventActionMessenger_h
-#define EventActionMessenger_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "G4VUserActionInitialization.hh"
 
-class EventAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+class DetectorConstruction;
+class PhysicsList;
+class G4VSteppingVerbose;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-class EventActionMessenger: public G4UImessenger
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    EventActionMessenger(EventAction*);
-   ~EventActionMessenger();
+    ActionInitialization(DetectorConstruction* detector, PhysicsList* physics);
+    virtual ~ActionInitialization();
+
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+   
   private:
-    EventAction*          fEventAction;
-    G4UIdirectory*        fEventDir;        
-    G4UIcmdWithAString*   fDrawCmd;
-    G4UIcmdWithAnInteger* fPrintCmd;    
+    DetectorConstruction* fDetector;
+    PhysicsList* fPhysics;    
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
+
+    

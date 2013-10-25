@@ -37,33 +37,23 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class RunAction;
-class EventActionMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction(RunAction*);
+    EventAction();
    ~EventAction();
 
   public:
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
-    void AddEdep(G4double edep) {fTotalEdep += edep;};
-    
-    void SetDrawFlag(G4String val) {fDrawFlag = val;};
-    void SetPrintModulo(G4int val) {fPrintModulo = val;};
-            
+    void AddEdep(G4double edep) { fTotalEdep += edep; }
+    G4double GetEdep() const    { return fTotalEdep; }
     
   private:
-    RunAction*             fRunAct;
-    G4double               fTotalEdep;
-    G4String               fDrawFlag;
-    G4int                  fPrintModulo;
-    EventActionMessenger*  fEventMessenger;
+    G4double  fTotalEdep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

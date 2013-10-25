@@ -25,6 +25,6 @@
 /analysis/h1/set 5 100 0.  20. mm		#proj range
 /analysis/h1/set 6 100 0.  24. mm		#track length secondaries
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000

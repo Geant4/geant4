@@ -15,6 +15,21 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-10-13 I.Hrivnacova (testem11-V09-06-13)
+- Fixed normalization of histograms 1,8
+- Removed EventActionMessenger and migration to new 
+  /run/printProgress command
+
+30-09-13 I.Hrivnacova 
+- Updated for changes in analysis:
+  removal of G4AnalysisManager::Create(isMaster)
+
+26-09-13 I.Hrivnacova 
+- Migration to MT:
+  adding ActionInitialization and Run classes
+- Removed obsolete option and command for selection of tracks for
+  drawing from EventAction, EventActionMessenger
+
 11-07-13 I.Hrivnacova (testem11-V09-06-12) 
 - Updated CMakeLists.txt and SharedFilesList.txt for added classes
   in Hbook analysis code

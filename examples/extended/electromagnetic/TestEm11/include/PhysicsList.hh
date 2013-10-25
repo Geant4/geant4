@@ -74,7 +74,7 @@ class PhysicsList: public G4VModularPhysicsList
        
     G4String               fEmName;
     G4VPhysicsConstructor* fEmPhysicsList;    
-    StepMax*               fStepMaxProcess;
+    static G4ThreadLocal StepMax* fStepMaxProcess;
     
     PhysicsListMessenger*  fMessenger;
 };

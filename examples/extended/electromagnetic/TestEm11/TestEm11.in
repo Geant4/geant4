@@ -23,6 +23,6 @@
 ###/analysis/h1/set 4 100 0.  200. um	#step length
 ###/analysis/h1/set 5 100 0.    1. mm	#proj range
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 20000

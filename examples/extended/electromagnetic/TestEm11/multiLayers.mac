@@ -23,6 +23,6 @@
 /analysis/setFileName bone
 /analysis/h1/set 1 300 0. 300. mm		#edep profile
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 #
 /run/beamOn 1000000
