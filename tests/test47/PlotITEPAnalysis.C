@@ -40,9 +40,11 @@ float KE[30], ExpValue[30], YY[30], Err1[30], Err2[30];
 // regression test business
 //
 const int NVersions = 4;
-std::string Versions[4] = { "geant4-09-04-ref10", "geant4-09-05", "geant4-09-05-p01", "geant4-09-05-ref02+MKtag"  };
+std::string Versions[4] = { "geant4-09-06-ref07", "geant4-10-00-b01", "geant4-09-06-ref03", "geant4-09-06-p01" };
+// std::string Versions[4] = { "geant4-09-04-ref10", "geant4-09-05", "geant4-09-05-p01", "geant4-09-05-ref02+MKtag"  };
 // std::string Versions[4] = { "geant4-09-04-ref10", "geant4-09-05-ref01", "geant4-09-05-ref02+MKtag", "geant4-09-05-p01"  };
-int ColorVersion[4] = { kBlack, 7, kRed, kGreen }; // 7 = very light sky-blue
+// int ColorVersion[4] = { kBlack, 7, kRed, kGreen }; // 7 = very light sky-blue
+int ColorVersion[5] = { kRed, kGreen, 7, kBlack, 14 };
 
 
 // model comparison business
@@ -141,6 +143,35 @@ void plotBertiniSummary( std::string beam, std::string target )
    plotMC2Data( beam, target, en, "neutron", "119.0", "bertini", 4 );
 
    myc2->cd();
+   
+   return;
+
+}
+
+// --> end of bertini regression business
+
+// --> Binary regression business
+//
+void plotBinarySummary( std::string beam, std::string target )
+{
+   
+
+   TCanvas *myc1 = new TCanvas("myc1","",800,600);
+   myc1->Divide(2,2);
+   
+   myc1->cd(1);
+   plotMC2Data( beam, target, "1.40", "proton", "59.1", "binary", 4 );
+   
+   myc1->cd(2);
+   plotMC2Data( beam, target, "1.40", "neutron", "59.1", "binary", 4 );
+   
+   myc1->cd(3);
+   plotMC2Data( beam, target, "1.40", "proton", "119.0", "binary",  4 );
+
+   myc1->cd(4);
+   plotMC2Data( beam, target, "1.40", "neutron", "119.0", "binary", 4 );
+   
+   myc1->cd();
    
    return;
 

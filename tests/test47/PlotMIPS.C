@@ -29,18 +29,16 @@ void plotXF(std::string element, std::string ene, int first=0, int logy=0,
 	    double ymin=-1, double ymax=-1., std::string particle="neutron",
 	    int legend=1,  std::string dir=".", std::string dird=".");
 
-const int modelsMIPS=4;
-std::string ModelsMIPS[5]  = {"qgsp",      "ftfp",      "CHIPS", "hepar", "lepar"};
-std::string ModelNamesM[5] = {"QGS-Preco", "FTF-Preco", "CHIPS", "HEP"  , "LEP"};
+const int modelsMIPS=2;
+std::string ModelsMIPS[2]  = {"qgsp",      "ftfp" };
+std::string ModelNamesM[2] = {"QGS-Preco", "FTF-Preco"};
 int         colModel[9]    = {3, 2, 1, 7, 4, 6, 9, 8, 12};
 int         symbModel[9]   = {24, 29, 25, 27, 26, 23, 21, 20, 22};
 int         stylModel[9]   = {1, 2, 3, 4, 5, 6, 1, 7, 8};
 
 const int modelsD=5;
 //std::string ModelNameD("ftfp"), ModelNameMD("FTF-Preco");
-//std::string ModelNameD("CHIPS"), ModelNameMD("CHIPS");
 std::string ModelNameD("qgsp"), ModelNameMD("QGS_Preco");
-//std::string ModelNameD("hepar"), ModelNameMD("HEP");
 //std::string ModelDirectory[5] = {"9.4.p01", "9.4.ref09", "9.5.ref02", "9.5.ref09", "9.5.ref10"};
 //std::string ModelNamesD[5] = {"(9.4.p01)", "(9.4.ref09)", "(9.5.ref02)", "(9.5.ref09)", "(9.5.ref10)"};
 std::string ModelDirectory[5] = {"9.4.ref09", "9.5.ref00", "9.5.ref02", "9.5.ref09", "9.5.ref10"};

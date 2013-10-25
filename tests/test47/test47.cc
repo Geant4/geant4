@@ -142,8 +142,15 @@ int main(int argc, char** argv) {
   const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
   const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
 
+  G4GenericIon* gion = G4GenericIon::GenericIon();
+  gion->SetProcessManager(new G4ProcessManager(gion));  
+
   G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
   partTable->SetReadiness();
+
+  G4IonTable* ionTable = partTable->GetIonTable();
+  ionTable->CreateAllIon();
+  ionTable->CreateAllIsomer();
 
   // Track
   G4ThreeVector aPosition  = G4ThreeVector(0.,0.,0.);
@@ -333,7 +340,12 @@ int main(int argc, char** argv) {
 
     G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
 
-    G4double amass = phys->GetNucleusMass();
+    const G4Element* elm = material->GetElement(0); 
+    G4int A = (G4int)(elm->GetN()+0.5);
+    G4int Z = (G4int)(elm->GetZ()+0.5);
+
+    // G4double amass = phys->GetNucleusMass();
+    G4double amass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, A);
     G4double pmass = (G4Proton::Proton())->GetPDGMass();
 
     if (!proc) { 
@@ -344,10 +356,6 @@ int main(int argc, char** argv) {
     } else {
       G4cout << "Nucleus mass " << amass << " proton mass " << pmass << G4endl;
     }
-    const G4Element* elm = material->GetElement(0); 
-
-    G4int A = (G4int)(elm->GetN()+0.5);
-    G4int Z = (G4int)(elm->GetZ()+0.5);
 
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
     G4cout << "The material:  " << material->GetName() 
@@ -366,6 +374,7 @@ int main(int argc, char** argv) {
 
     G4double mass = part->GetPDGMass();
     energy = sqrt(m_p*m_p + mass*mass);
+    // amass defined earlier
     G4double eTot  = energy+amass;
 
     G4cout << "energy = " << energy/CLHEP::GeV << " GeV" << G4endl;
@@ -376,15 +385,15 @@ int main(int argc, char** argv) {
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
     
-    if(nameGen == "LElastic" || nameGen == "BertiniElastic" || nameGen == "elastic") {
+    if( nameGen == "BertiniElastic" || nameGen == "elastic" ) {
       cs = new G4HadronElasticDataSet();
-    } else if(part == proton && Z > 1 && nameGen != "lepar") {
+    } else if(part == proton && Z > 1) {
       if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
       else      cs = new G4ProtonInelasticCrossSection();
-    } else if(part == neutron && Z > 1 && nameGen != "lepar") {
+    } else if(part == neutron && Z > 1 && nameGen ) {
       if(xsbgg) cs = new G4BGGNucleonInelasticXS(part);
       else      cs = new G4NeutronInelasticCrossSection();
-    } else if((part == pin || part == pip) && Z > 1 && nameGen != "lepar") {
+    } else if((part == pin || part == pip) && Z > 1 && nameGen ) {
       if(xsbgg) cs = new G4BGGPionInelasticXS(part);
       else cs = new G4PiNuclearCrossSection();
     } else { 

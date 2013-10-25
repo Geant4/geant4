@@ -15,7 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-January 30, 2013 Julia Yarba (test47-V09-06-01)
+October 24, 2013 - Julia Yarba (test47-V09-06-04)
+- Add config for (future) ctest-ing
+- update CMakeList.txt
+
+October 24, 2013 - Julia Yarba (test47-V09-06-03)
+- Finalize cleaning up (from scripts) LEP, HEP, RPG,CHIPS
+
+October 23, 2013 - Julia Yarba (test47-V09-06-02)
+- Include several earlier updates to the code, scripts, etc.
+- Remove LEP, HEP, RPG
+- Update CMakeList.tst to a standard format
+
+January 30, 2013 - Julia Yarba (test47-V09-06-01)
 - Finish cleaning up ties to CHIPS/QGSC/FTFC, 
   from the code and the ITEP scripts
 - Remove MaterialsTest47 and replace with the use if G4NistManager

@@ -48,7 +48,7 @@ setenv LD_LIBRARY_PATH $G4LIB/:$CLHEP_BASE_DIR/lib/:$ROOTSYS/lib/
 
 cd test47 
 
-set lists = ( "lepar" "bertini" "binary" "ftfp" "qgsc" )
+set lists = ( "bertini" "binary" "ftfp" )
 
 set energyPIP = ( 1400 5000 )
 set targetPIP = ( "C" "U" )

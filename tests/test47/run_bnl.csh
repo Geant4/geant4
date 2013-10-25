@@ -48,7 +48,7 @@ setenv LD_LIBRARY_PATH $G4LIB/:$CLHEP_BASE_DIR/lib/:$ROOTSYS/lib/
 
 cd test47 
 
-set lists = ( "lepar" "bertini" "qgsp" "ftfp" "qgsc" )
+set lists = ( "bertini" "qgsp" "ftfp" )
 
 set energy = 14600 
 set target = ( "Be" "Cu" "Au" )

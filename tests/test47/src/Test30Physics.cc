@@ -59,19 +59,6 @@
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
 
-#include "G4LEPionPlusInelastic.hh"
-#include "G4LEPionMinusInelastic.hh"
-#include "G4LEProtonInelastic.hh"
-#include "G4LENeutronInelastic.hh"
-#include "G4HEPionPlusInelastic.hh"
-#include "G4HEPionMinusInelastic.hh"
-#include "G4HEProtonInelastic.hh"
-#include "G4HENeutronInelastic.hh"
-#include "G4RPGPiPlusInelastic.hh"
-#include "G4RPGPiMinusInelastic.hh"
-#include "G4RPGProtonInelastic.hh"
-#include "G4RPGNeutronInelastic.hh"
-
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
@@ -148,43 +135,8 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   // Choose generator
 
-  if(gen_name == "lepar") {
-    if(part_name == "proton")   
-      sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
-    else if(part_name == "pi+") 
-      sg = new Test30VSecondaryGenerator(new G4LEPionPlusInelastic(),mat);
-    else if(part_name == "pi-") 
-      sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
-    else if(part_name == "neutron") 
-      sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
 
-  } else if(gen_name == "hepar") {
-    if(part_name == "proton")   
-      sg = new Test30VSecondaryGenerator(new G4HEProtonInelastic(),mat);
-    else if(part_name == "pi+") 
-      sg = new Test30VSecondaryGenerator(new G4HEPionPlusInelastic(),mat);
-    else if(part_name == "pi-") 
-      sg = new Test30VSecondaryGenerator(new G4HEPionMinusInelastic(),mat);
-    else if(part_name == "neutron") 
-      sg = new Test30VSecondaryGenerator(new G4HENeutronInelastic(),mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "rpg") {
-    if(part_name == "proton")   
-      sg = new Test30VSecondaryGenerator(new G4RPGProtonInelastic(),mat);
-    else if(part_name == "pi+") 
-      sg = new Test30VSecondaryGenerator(new G4RPGPiPlusInelastic(),mat);
-    else if(part_name == "pi-") 
-      sg = new Test30VSecondaryGenerator(new G4RPGPiMinusInelastic(),mat);
-    else if(part_name == "neutron") 
-      sg = new Test30VSecondaryGenerator(new G4RPGNeutronInelastic(),mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "binary_pc") {
+  if(gen_name == "binary_pc") {
     theDeExcitation = new G4ExcitationHandler();
     G4PreCompoundModel* pcm = new G4PreCompoundModel(theDeExcitation);
     thePreCompound = pcm;
@@ -241,12 +193,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     HsQGSBInterface* qgsb = new HsQGSBInterface();
     qgsb->SetMinEnergy(GeV);
     sg = new Test30VSecondaryGenerator(qgsb, mat);
-    theProcess->SetSecondaryGenerator(sg);
-    man->AddDiscreteProcess(theProcess);
-
-  } else if(gen_name == "LElastic") {
-    G4LElastic* els = new G4LElastic();
-    sg = new Test30VSecondaryGenerator(els, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 

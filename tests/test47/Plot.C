@@ -20,7 +20,9 @@
 #include "TStyle.h"
 #include "TGraph.h"
 
-const int modelsITEP=6, modelsBNL=6, modelsD=7;
+const int modelsITEP=4, modelsBNL=4, modelsD=7; // not sure what modelsD is for, and if it should stay at 7
+                                                // the number of models<ITEP/BNL> has gone down from 6 to 4
+						// since we've removed LEP and CHIPS, and also HEP
 
 //std::string ModelsITEP[2]  = {"bertini", "bertP"};
 //std::string ModelsITEPh[2] = {"bertini", "bertP"};
@@ -28,9 +30,9 @@ const int modelsITEP=6, modelsBNL=6, modelsD=7;
 //std::string ModelsITEP[2]  = {"ftfp", "ftfpU"};
 //std::string ModelsITEPh[2] = {"ftfp", "ftfpU"};
 //std::string ModelNamesI[2] = {"FTFP (80 MeV)", "FTFP (10 MeV)"};
-std::string ModelsITEP[6]  = {"lepar", "bertini", "binary",  "qgsp",      "ftfp",      "CHIPS"};
-std::string ModelsITEPh[6] = {"lepar", "bertini", "binary",  "qgsp",      "ftfp",      "CHIPS"};
-std::string ModelNamesI[6] = {"LEP",   "Bertini", "Binary",  "QGS-Preco", "FTF-Preco", "CHIPS"};
+std::string ModelsITEP[4]  = {"bertini", "binary",  "qgsp",      "ftfp"};
+std::string ModelsITEPh[4] = {"bertini", "binary",  "qgsp",      "ftfp"};
+std::string ModelNamesI[4] = {"Bertini", "Binary",  "QGS-Preco", "FTF-Preco"};
 //std::string ModelsITEP[9]  = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp",      "CHIPS"};
 //std::string ModelsITEPh[9] = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp",      "CHIPS"};
 //std::string ModelNamesI[9] = {"LEP",   "FTF-Bin", "Bertini", "Binary", "QGS-Chips", "QGS-Preco", "QGS-Bin","FTF-Preco", "CHIPS"};
@@ -72,9 +74,9 @@ std::string ModelNamesD[7] = {"(9.3.p01)", "(9.3.ref06)", "(9.3.ref09)", "(9.4.r
 //std::string ModelsBNL[2]  = {"ftfp", "ftfpU"};
 //std::string ModelsBNLh[2] = {"ftfp", "ftfpU"};
 //std::string ModelNamesB[2] = {"FTFP (80 MeV)", "FTFP (10 MeV)"};
-std::string ModelsBNL[6]   = {"lepar", "bertini", "binary", "qgsp",      "ftfp", "CHIPS"};
-std::string ModelsBNLh[6]  = {"lepar", "bertini", "binary", "qgsp",      "ftfp", "CHIPS"};
-std::string ModelNamesB[6] = {"LEP",   "Bertini", "Binary", "QGS-Preco", "FTF-Preco","CHIPS"};
+std::string ModelsBNL[4]   = {"bertini", "binary", "qgsp",      "ftfp"};
+std::string ModelsBNLh[4]  = {"bertini", "binary", "qgsp",      "ftfp"};
+std::string ModelNamesB[4] = {"Bertini", "Binary", "QGS-Preco", "FTF-Preco"};
 
 //std::string ModelsBNL[9]   = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp", "CHIPS"};
 //std::string ModelsBNLh[9]  = {"lepar", "ftfb",    "bertini", "binary", "qgsc",      "qgsp",      "qgsb",   "ftfp", "CHIPS"};
