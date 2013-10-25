@@ -23,59 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/src/EmAcceptance.cc
-/// \brief Implementation of the Emeptance class
 //
-// $Id$
+// $Id: ActionInitialization.cc 66241 2012-12-13 18:34:42Z gunter $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-#include "EmAcceptance.hh"
+#include "ActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EmAcceptance::EmAcceptance()
- : fIsAccepted(false)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EmAcceptance::~EmAcceptance()
-{}
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "TrackingAction.hh"
+#include "SteppingAction.hh"
+#include "PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EmAcceptance::BeginOfAcceptance(const G4String& title, G4int stat)
+ActionInitialization::ActionInitialization(DetectorConstruction* det, 
+                                         PrimaryGeneratorAction* prim)
+  : detector(det), generator(prim)
 {
-  G4cout << G4endl;
-  G4cout << "<<<<ACCEPTANCE>>>> " << stat << " events for " << title << G4endl;
-  fIsAccepted = true;
+  masterRunAction = new RunAction(det, prim);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EmAcceptance::EndOfAcceptance()
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::Build() const
 {
-  G4String resume = "IS ACCEPTED";
-  if(!fIsAccepted) resume = "IS NOT ACCEPTED";
-  G4cout << "<<<<END>>>>   " << resume << G4endl;
-  G4cout << G4endl;
+  SetUserAction(generator);
+  RunAction* run = new RunAction(detector, generator);
+  masterRunAction->AddWorkerRunAction(run);
+
+  SetUserAction(run);
+  SetUserAction(new EventAction(run));
+  SetUserAction(new TrackingAction(run));
+  SetUserAction(new SteppingAction(detector, run));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
-                                     G4double avr, G4double avr0,
-                                     G4double rms, G4double limit)
+void ActionInitialization::BuildForMaster() const
 {
-  G4double x = std::sqrt((G4double)stat);
-  G4double dde = avr - avr0;
-  G4double de = dde*x/rms;
-  if(std::fabs(de) > limit) fIsAccepted = false;
-  
-  G4cout << title << ": " << avr << "  del" << title << "= " << dde 
-         << " nrms= " << de << G4endl;
+  SetUserAction(masterRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

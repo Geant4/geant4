@@ -49,10 +49,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction (DetectorConstruction* det)
   fParticleGun  = new G4ParticleGun(n_particle);
 
   G4ParticleDefinition* particle
-                 = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+    = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleEnergy(5.*GeV);  
-  fParticleGun->SetParticlePosition(fInitPos = G4ThreeVector(-1*cm,-1*cm,-1*cm));  
+  fParticleGun->SetParticlePosition(fInitPos = 
+                                    G4ThreeVector(-1*cm,-1*cm,-1*cm));  
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
 }
 

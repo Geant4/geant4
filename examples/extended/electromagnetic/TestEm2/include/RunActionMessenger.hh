@@ -47,21 +47,21 @@ class G4UIcmdWithAnInteger;
 
 class RunActionMessenger: public G4UImessenger
 {
-  public:
-    RunActionMessenger(RunAction*);
-   ~RunActionMessenger();
+public:
+  RunActionMessenger(RunAction*);
+  virtual ~RunActionMessenger();
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-    RunAction*            fRun;
+private:
+  RunAction*            fRun;
     
-    G4UIdirectory*        fRunDir;
-    G4UIcmdWith3Vector*   fAccCmd;
-    G4UIcmdWithAnInteger* fVerbCmd;
+  G4UIdirectory*        fRunDir;
+  G4UIcmdWith3Vector*   fAccCmd;
+  G4UIcmdWithAnInteger* fVerbCmd;
             
-    G4UIdirectory*        fHistoDir;        
-    G4UIcmdWithAString*   factoryCmd;
+  G4UIdirectory*        fHistoDir;        
+  G4UIcmdWithAString*   factoryCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

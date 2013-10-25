@@ -44,7 +44,7 @@
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
-#include "G4Decay.hh"
+#include "G4DecayPhysics.hh"
 #include "StepMax.hh"
 
 #include "G4LossTableManager.hh"
@@ -53,50 +53,12 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
-// Bosons
-#include "G4ChargedGeantino.hh"
-#include "G4Geantino.hh"
 #include "G4Gamma.hh"
-
-// leptons
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
-#include "G4NeutrinoMu.hh"
-#include "G4AntiNeutrinoMu.hh"
-
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4NeutrinoE.hh"
-#include "G4AntiNeutrinoE.hh"
-
-// Mesons
-#include "G4PionPlus.hh"
-#include "G4PionMinus.hh"
-#include "G4PionZero.hh"
-#include "G4Eta.hh"
-#include "G4EtaPrime.hh"
-
-#include "G4KaonPlus.hh"
-#include "G4KaonMinus.hh"
-#include "G4KaonZero.hh"
-#include "G4AntiKaonZero.hh"
-#include "G4KaonZeroLong.hh"
-#include "G4KaonZeroShort.hh"
-
-// Baryons
 #include "G4Proton.hh"
-#include "G4AntiProton.hh"
-#include "G4Neutron.hh"
-#include "G4AntiNeutron.hh"
 
-// Nuclei
-#include "G4Alpha.hh"
-#include "G4Deuteron.hh"
-#include "G4Triton.hh"
-#include "G4He3.hh"
-#include "G4GenericIon.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -114,10 +76,9 @@ PhysicsList::PhysicsList()
   SetVerboseLevel(1);
 
   // EM physics
-  ///fEmName = "emstandard_opt0";  
-  ///fEmPhysicsList = new G4EmStandardPhysics();
-  fEmName = "local";    
-  fEmPhysicsList = new PhysListEmStandard(fEmName);    
+  fEmName = "emstandard_opt0";  
+  fEmPhysicsList = new G4EmStandardPhysics();
+  fDecay = new G4DecayPhysics();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -126,55 +87,15 @@ PhysicsList::~PhysicsList()
 {
   delete fMessenger;
   delete fEmPhysicsList;
+  delete fDecay;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructParticle()
 {
-  // pseudo-particles
-  G4Geantino::GeantinoDefinition();
-  G4ChargedGeantino::ChargedGeantinoDefinition();
-  
-  // gamma
-  G4Gamma::GammaDefinition();
-  
-  // leptons
-  G4Electron::ElectronDefinition();
-  G4Positron::PositronDefinition();
-  G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus::MuonMinusDefinition();
-
-  G4NeutrinoE::NeutrinoEDefinition();
-  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
-  G4NeutrinoMu::NeutrinoMuDefinition();
-  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
-
-  // mesons
-  G4PionPlus::PionPlusDefinition();
-  G4PionMinus::PionMinusDefinition();
-  G4PionZero::PionZeroDefinition();
-  G4Eta::EtaDefinition();
-  G4EtaPrime::EtaPrimeDefinition();
-  G4KaonPlus::KaonPlusDefinition();
-  G4KaonMinus::KaonMinusDefinition();
-  G4KaonZero::KaonZeroDefinition();
-  G4AntiKaonZero::AntiKaonZeroDefinition();
-  G4KaonZeroLong::KaonZeroLongDefinition();
-  G4KaonZeroShort::KaonZeroShortDefinition();
-
-  // barions
-  G4Proton::ProtonDefinition();
-  G4AntiProton::AntiProtonDefinition();
-  G4Neutron::NeutronDefinition();
-  G4AntiNeutron::AntiNeutronDefinition();
-
-  // ions
-  G4Deuteron::DeuteronDefinition();
-  G4Triton::TritonDefinition();
-  G4He3::He3Definition();
-  G4Alpha::AlphaDefinition();
-  G4GenericIon::GenericIonDefinition();
+  fEmPhysicsList->ConstructParticle();
+  fDecay->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -191,7 +112,7 @@ void PhysicsList::ConstructProcess()
   
   // decay process
   //
-  AddDecay();
+  fDecay->ConstructProcess();
 
   // step limitation (as a full process)
   //  
@@ -264,31 +185,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::AddDecay()
-{
-  // decay process
-  //
-  G4Decay* fDecayProcess = new G4Decay();
-
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
@@ -320,8 +216,17 @@ void PhysicsList::SetCuts()
   SetCutValue(fCutForGamma, "gamma");
   SetCutValue(fCutForElectron, "e-");
   SetCutValue(fCutForPositron, "e+");
+  SetCutValue(fCutForPositron, "proton");
 
-  if (verboseLevel>0) DumpCutValuesTable();
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()) {
+    if(verboseLevel>1) { DumpCutValuesTable(); }
+  } else {
+    if(verboseLevel>0) { DumpCutValuesTable(); }
+  }
+#else
+  if(verboseLevel>0) { DumpCutValuesTable(); }
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

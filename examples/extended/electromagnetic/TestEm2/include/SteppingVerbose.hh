@@ -44,7 +44,7 @@ class SteppingVerbose : public G4SteppingVerbose {
 public:   
 
   SteppingVerbose();
- ~SteppingVerbose();
+  virtual ~SteppingVerbose();
  
   virtual void TrackingStarted();
   virtual void StepInfo();

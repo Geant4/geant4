@@ -46,24 +46,24 @@ class G4UIcmdWithAString;
 
 class PhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
+  PhysicsListMessenger(PhysicsList* );
+  virtual ~PhysicsListMessenger();
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
-    PhysicsList* fPhysicsList;
+  PhysicsList* fPhysicsList;
     
-    G4UIdirectory*             fPhysDir;        
-    G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* fElectCutCmd;
-    G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* fAllCutCmd;    
-    G4UIcmdWithAString*        fListCmd;
-    
+  G4UIdirectory*             fPhysDir;        
+  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
+  G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
+  G4UIcmdWithADoubleAndUnit* fAllCutCmd;    
+  G4UIcmdWithAString*        fListCmd;
+  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

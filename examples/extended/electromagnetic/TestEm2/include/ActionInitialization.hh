@@ -23,59 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/src/EmAcceptance.cc
-/// \brief Implementation of the Emeptance class
 //
-// $Id$
+// $Id: ActionInitialization.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "EmAcceptance.hh"
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EmAcceptance::EmAcceptance()
- : fIsAccepted(false)
-{}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EmAcceptance::~EmAcceptance()
-{}
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
+
+#include "G4VUserActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EmAcceptance::BeginOfAcceptance(const G4String& title, G4int stat)
+class RunAction;
+class DetectorConstruction;
+class PrimaryGeneratorAction;
+
+class ActionInitialization : public G4VUserActionInitialization
 {
-  G4cout << G4endl;
-  G4cout << "<<<<ACCEPTANCE>>>> " << stat << " events for " << title << G4endl;
-  fIsAccepted = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EmAcceptance::EndOfAcceptance()
-{
-  G4String resume = "IS ACCEPTED";
-  if(!fIsAccepted) resume = "IS NOT ACCEPTED";
-  G4cout << "<<<<END>>>>   " << resume << G4endl;
-  G4cout << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EmAcceptance::EmAcceptanceGauss(const G4String& title, G4int stat,
-                                     G4double avr, G4double avr0,
-                                     G4double rms, G4double limit)
-{
-  G4double x = std::sqrt((G4double)stat);
-  G4double dde = avr - avr0;
-  G4double de = dde*x/rms;
-  if(std::fabs(de) > limit) fIsAccepted = false;
+public:
   
-  G4cout << title << ": " << avr << "  del" << title << "= " << dde 
-         << " nrms= " << de << G4endl;
-}
+  ActionInitialization(DetectorConstruction*, PrimaryGeneratorAction*);
+
+  virtual ~ActionInitialization();
+
+  virtual void Build() const;
+
+  virtual void BuildForMaster() const;
+
+private:
+
+  RunAction* masterRunAction;
+  DetectorConstruction* detector;
+  PrimaryGeneratorAction* generator;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif

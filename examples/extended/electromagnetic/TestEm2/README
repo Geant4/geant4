@@ -100,6 +100,11 @@ $Id$
      - Execute TestEm2 in 'batch' mode from macro files
  		% TestEm2   run01.mac
 
+     - Execute TestEm2 in 'batch' mode using multi-threading
+ 		% TestEm2   run01.mac 4
+       here 4 is number of threads, it should be user defined,
+       optimel value dependents on hardware
+
      - Execute TestEm2 in 'interactive mode' with visualization
  		% TestEm2
  		....

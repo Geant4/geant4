@@ -45,63 +45,67 @@ class G4LogicalVolume;
 class G4UniformMagField;
 class DetectorMessenger;
 
-      const G4int MaxBin = 500;
+const G4int MaxBin = 500;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
 
-    DetectorConstruction();
-   ~DetectorConstruction();
+  DetectorConstruction();
+  virtual ~DetectorConstruction();
 
-  public:
+public:
 
-     void SetMaterial(const G4String&);
-     void SetLBining (G4ThreeVector);
-     void SetRBining (G4ThreeVector);
-     void SetMagField(G4double);
+  void SetMaterial(const G4String&);
+  void SetLBining (G4ThreeVector);
+  void SetRBining (G4ThreeVector);
+  void SetMagField(G4double);
 
-     virtual G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
 
-     void UpdateGeometry();
+  virtual void ConstructSDandField();
 
-     const
-     G4VPhysicalVolume* GetEcal() {return fPhysiEcal;};
-     G4Material*    GetMaterial() {return fMaterial;};
+  void UpdateGeometry();
 
-     // Subdivision of absorber
-     G4int    GetnLtot()          {return fNLtot;};
-     G4int    GetnRtot()          {return fNRtot;};
-     G4double GetdLradl()         {return fDLradl;};
-     G4double GetdRradl()         {return fDRradl;};
-     G4double GetdLlength()       {return fDLlength;};
-     G4double GetdRlength()       {return fDRlength;};     
-     G4double GetfullLength()     {return fEcalLength;};
-     G4double GetfullRadius()     {return fEcalRadius;};
+  const
+  G4VPhysicalVolume* GetEcal() {return fPhysiEcal;};
+  G4Material*    GetMaterial() {return fMaterial;};
 
-  private:
+  // Subdivision of absorber
+  G4int    GetnLtot()          {return fNLtot;};
+  G4int    GetnRtot()          {return fNRtot;};
+  G4double GetdLradl()         {return fDLradl;};
+  G4double GetdRradl()         {return fDRradl;};
+  G4double GetdLlength()       {return fDLlength;};
+  G4double GetdRlength()       {return fDRlength;};     
+  G4double GetfullLength()     {return fEcalLength;};
+  G4double GetfullRadius()     {return fEcalRadius;};
 
-     void DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();
+private:
 
-     G4int    fNLtot,    fNRtot;       // nb of bins: longitudinal and radial
-     G4double fDLradl,   fDRradl;      // bin thickness (in radl unit)
-     G4double fDLlength, fDRlength;    // bin thickness (in length unit)
+  void DefineMaterials();
+  G4VPhysicalVolume* ConstructVolumes();
 
-     G4Material* fMaterial;            //pointer to the material
-     G4UniformMagField* fMagField;     //pointer to the mag field
+  G4int    fNLtot,    fNRtot;       // nb of bins: longitudinal and radial
+  G4double fDLradl,   fDRradl;      // bin thickness (in radl unit)
+  G4double fDLlength, fDRlength;    // bin thickness (in length unit)
 
-     G4double fEcalLength;             //full length of the Calorimeter
-     G4double fEcalRadius;             //radius  of the Calorimeter
+  G4Material* fMaterial;            //pointer to the material
+   
+  static G4ThreadLocal G4UniformMagField* fMagField;  
+   
+  G4double fEcalLength;             //full length of the Calorimeter
+  G4double fEcalRadius;             //radius  of the Calorimeter
 
-     G4Tubs*            fSolidEcal;    //pointer to the solid calorimeter
-     G4LogicalVolume*   fLogicEcal;    //pointer to the logical calorimeter
-     G4VPhysicalVolume* fPhysiEcal;    //pointer to the physical calorimeter
+  G4Tubs*            fSolidEcal;    //pointer to the solid calorimeter
+  G4LogicalVolume*   fLogicEcal;    //pointer to the logical calorimeter
+  G4VPhysicalVolume* fPhysiEcal;    //pointer to the physical calorimeter
 
-     DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
+  DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
 
+  G4double           fieldValue;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

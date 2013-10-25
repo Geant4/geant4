@@ -100,17 +100,16 @@ PhysicsListMessenger::~PhysicsListMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
+void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {       
   if( command == fGammaCutCmd )
    { fPhysicsList->SetCutForGamma(fGammaCutCmd->GetNewDoubleValue(newValue));}
      
   if( command == fElectCutCmd )
-   { fPhysicsList->SetCutForElectron(fElectCutCmd->GetNewDoubleValue(newValue));}
+   {fPhysicsList->SetCutForElectron(fElectCutCmd->GetNewDoubleValue(newValue));}
      
   if( command == fProtoCutCmd )
-   { fPhysicsList->SetCutForPositron(fProtoCutCmd->GetNewDoubleValue(newValue));}
+   {fPhysicsList->SetCutForPositron(fProtoCutCmd->GetNewDoubleValue(newValue));}
 
   if( command == fAllCutCmd )
     {

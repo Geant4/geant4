@@ -56,14 +56,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ThreadLocal G4UniformMagField* DetectorConstruction::fMagField = 0;
+
 DetectorConstruction::DetectorConstruction()
 :G4VUserDetectorConstruction(),
  fNLtot(40),fNRtot(50),fDLradl(0.5),fDRradl(0.1),
  fDLlength(0.),fDRlength(0.),
- fMaterial(0),fMagField(0),
+ fMaterial(0),
  fEcalLength(0.),fEcalRadius(0.),
  fSolidEcal(0),fLogicEcal(0),fPhysiEcal(0),
- fDetectorMessenger(0)
+ fDetectorMessenger(0),fieldValue(0.0)
 {
   DefineMaterials();
   SetMaterial("G4_PbWO4");
@@ -114,7 +116,7 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("Aluminium",   z=13., a= 26.98*g/mole, density= 2.7*g/cm3);
   new G4Material("Iron",        z=26., a= 55.85*g/mole, density= 7.87*g/cm3);  
   new G4Material("Copper",      z=29., a= 63.55*g/mole, density= 8.960*g/cm3); 
-  new G4Material("Tungsten",    z=74., a=183.84*g/mole, density=19.35*g/cm3);    
+  new G4Material("Tungsten",    z=74., a=183.84*g/mole, density=19.35*g/cm3); 
   new G4Material("Lead",        z=82., a=207.19*g/mole, density=11.35*g/cm3);  
   new G4Material("Uranium"    , z=92., a=238.03*g/mole, density= 18.95*g/cm3);
 
@@ -169,9 +171,9 @@ void DetectorConstruction::SetMaterial(const G4String& materialChoice)
   G4Material* pttoMaterial =
     G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  if (pttoMaterial) {
+  if(pttoMaterial &&  fMaterial != pttoMaterial) {
     fMaterial = pttoMaterial;
-    if(fLogicEcal) fLogicEcal->SetMaterial(fMaterial);
+    if(fLogicEcal) { fLogicEcal->SetMaterial(fMaterial); }
     G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   }
 }
@@ -187,6 +189,7 @@ void DetectorConstruction::SetLBining(G4ThreeVector Value)
     fNLtot = MaxBin;
   }  
   fDLradl = Value(1);
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -200,33 +203,51 @@ void DetectorConstruction::SetRBining(G4ThreeVector Value)
     fNRtot = MaxBin;
   }    
   fDRradl = Value(1);
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::SetMagField(G4double fieldValue)
+void DetectorConstruction::ConstructSDandField()
+{
+  if(!fMagField && 0.0 != fieldValue) {
+    G4FieldManager* fieldMgr
+      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+    fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
+    fieldMgr->SetDetectorField(fMagField);
+    fieldMgr->CreateChordFinder(fMagField);
+  }   
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::SetMagField(G4double value)
 {
   //apply a global uniform magnetic field along Z axis
   G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  if(fMagField) delete fMagField;                //delete the existing magn field
+  //delete the existing magn field
+  if(fMagField) { delete fMagField; }
 
-  if(fieldValue!=0.)                        // create a new one if non nul
-  { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
+  // create a new one if non-zero
+  if(value!=0.) {                    
+    fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,value));
     fieldMgr->SetDetectorField(fMagField);
     fieldMgr->CreateChordFinder(fMagField);
   } else {
     fMagField = 0;
     fieldMgr->SetDetectorField(fMagField);
   }
+  fieldValue = value;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

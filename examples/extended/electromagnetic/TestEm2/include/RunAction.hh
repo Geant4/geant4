@@ -52,85 +52,93 @@ typedef  std::vector<G4double> MyVector;
 class DetectorConstruction;
 class PrimaryGeneratorAction;
 class RunActionMessenger;
-
 class G4Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
-  public:
+public:
 
-    RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-   ~RunAction();
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
+  virtual ~RunAction();
 
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void   EndOfRunAction(const G4Run*);
 
-           void InitializePerEvent();
-           void FillPerEvent();
-    inline void FillPerTrack(G4double,G4double);
-    inline void FillPerStep (G4double,G4int,G4int);
-    inline void AddStep (G4double q);
+  inline void AddWorkerRunAction(RunAction*);
+
+  void InitializePerEvent();
+  void FillPerEvent();
+
+  inline void FillPerTrack(G4double,G4double);
+  inline void FillPerStep (G4double,G4int,G4int);
+
+  inline void AddStep(G4double q);
     
-    void SetVerbose(G4int val)  {fVerbose = val;};
+  inline void SetVerbose(G4int val)  {fVerbose = val;};
     
-     // Acceptance parameters
-     void     SetEdepAndRMS(G4ThreeVector);
+  // Acceptance parameters
+  void     SetEdepAndRMS(G4ThreeVector);
      
-     G4double GetAverageEdep() const    {return fEdeptrue;};
-     G4double GetRMSEdep() const        {return fRmstrue;};
-     G4double GetLimitEdep() const      {return fLimittrue;};
-
-     // Histogram name and type
-     void SetHistoName(G4String& val)   {fHistoName[0] = val;};
+  // Histogram name 
+  inline void SetHistoName(G4String& val) {fHistoName[0] = val;};
      
-     const G4String& GetHistoName() const  {return fHistoName[1];};
-     
-  private:
+private:
 
-    void BookHisto();
-    void CleanHisto();
+  void BookHisto();
+  void SaveHisto();
+  void Reset();
 
-  private:
+  DetectorConstruction*   fDet;
+  PrimaryGeneratorAction* fKin;
+  RunActionMessenger*     fRunMessenger;
+  G4AnalysisManager*      fAnalysisManager;
 
-    DetectorConstruction*   fDet;
-    PrimaryGeneratorAction* fKin;
-    RunActionMessenger*     fRunMessenger;
+  std::vector<RunAction*> runActions;
+
+  G4int NbOfEvents;
     
-    G4int f_nLbin;
-    MyVector f_dEdL;
-    MyVector fSumELongit;
-    MyVector fSumE2Longit;
-    MyVector fSumELongitCumul;
-    MyVector fSumE2LongitCumul;
+  G4int f_nLbin;
+  MyVector f_dEdL;
+  MyVector fSumELongit;
+  MyVector fSumE2Longit;
+  MyVector fSumELongitCumul;
+  MyVector fSumE2LongitCumul;
 
-    G4int f_nRbin;
-    MyVector f_dEdR;
-    MyVector fSumERadial;
-    MyVector fSumE2Radial;
-    MyVector fSumERadialCumul;
-    MyVector fSumE2RadialCumul;
+  G4int f_nRbin;
+  MyVector f_dEdR;
+  MyVector fSumERadial;
+  MyVector fSumE2Radial;
+  MyVector fSumERadialCumul;
+  MyVector fSumE2RadialCumul;
 
-    G4double fChargTrLength;
-    G4double fSumChargTrLength;
-    G4double fSum2ChargTrLength;
+  G4double fChargTrLength;
+  G4double fSumChargTrLength;
+  G4double fSum2ChargTrLength;
 
-    G4double fNeutrTrLength;
-    G4double fSumNeutrTrLength;
-    G4double fSum2NeutrTrLength;
+  G4double fNeutrTrLength;
+  G4double fSumNeutrTrLength;
+  G4double fSum2NeutrTrLength;
 
-    G4double fEdeptrue;
-    G4double fRmstrue;
-    G4double fLimittrue;
+  G4double fEdeptrue;
+  G4double fRmstrue;
+  G4double fLimittrue;
 
-    G4double fChargedStep;
-    G4double fNeutralStep;    
+  G4double fChargedStep;
+  G4double fNeutralStep;    
     
-    G4int    fVerbose;
+  G4int    fVerbose;
     
-    G4String fHistoName[2];
+  G4String fHistoName[2];
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void RunAction::AddWorkerRunAction(RunAction* run)
+{
+  runActions.push_back(run);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

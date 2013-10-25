@@ -30,9 +30,10 @@
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -44,6 +45,7 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
+#include "ActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -63,24 +65,68 @@ int main(int argc,char** argv) {
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
 
-  // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
 
-  // set mandatory initialization classes
-  DetectorConstruction* detector = new DetectorConstruction();
-  runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new PhysicsList());
-  
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(primary);
+ // Number of threads is defined via 3nd argument
+  G4String nn = "";
+
+#ifdef G4MULTITHREADED  
+  if (argc==3) { nn = argv[2]; }
+
+  if("" == nn) {
+    // Number of threads is defined via environment variable
+    char* path = getenv("G4NUMBEROFTHREADS");
+    if(path) { nn = G4String(path); }
+  }
+#endif
+
+  G4RunManager * runManager = 0;
+  G4MTRunManager * runManagerMT = 0;
+
+  // MT mode
+  if("" != nn) {
+    runManagerMT = new G4MTRunManager();
+    G4int N = 0;
+    std::istringstream is(nn);
+    is >> N;
+    if(N < 1) { N = 1; }
+    runManagerMT->SetNumberOfThreads(N);
+
+    // set mandatory initialization classes
+    DetectorConstruction* detector = new DetectorConstruction();
+    runManagerMT->SetUserInitialization(detector);
+    runManagerMT->SetUserInitialization(new PhysicsList());
+    PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+
+    // set user actions
+    runManagerMT->SetUserInitialization(new ActionInitialization(detector,
+                                                                 primary));
+
+    G4cout << "##### TestEm2 started for " << N << " threads" 
+           << " #####" << G4endl;
+
+    // sequential mode
+  } else {
+    runManager = new G4RunManager();
+
+    // set mandatory initialization classes
+    DetectorConstruction* detector = new DetectorConstruction();
+    runManager->SetUserInitialization(detector);
+    runManager->SetUserInitialization(new PhysicsList());  
+    PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+    runManager->SetUserAction(primary);
     
-  // set user action classes
-  RunAction* RunAct = new RunAction(detector,primary);
-  runManager->SetUserAction(RunAct);
-  runManager->SetUserAction(new EventAction   (RunAct));
-  runManager->SetUserAction(new TrackingAction(RunAct));
-  runManager->SetUserAction(new SteppingAction(detector,RunAct)); 
-  
+    // set user action classes
+    RunAction* RunAct = new RunAction(detector,primary);
+    runManager->SetUserAction(RunAct);
+    runManager->SetUserAction(new EventAction   (RunAct));
+    runManager->SetUserAction(new TrackingAction(RunAct));
+    runManager->SetUserAction(new SteppingAction(detector,RunAct)); 
+
+    G4cout << "##### test40 started in sequential mode" 
+           << " #####" << G4endl;
+
+  }
+
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
@@ -91,7 +137,7 @@ int main(int argc,char** argv) {
       UI->ApplyCommand(command+fileName);
     }
     
-  else           // define visualization and UI terminal for interactive mode
+  else  // define visualization and UI terminal for interactive mode
     { 
 #ifdef G4VIS_USE
      G4VisManager* visManager = new G4VisExecutive;
@@ -113,9 +159,9 @@ int main(int argc,char** argv) {
   // job termination
   //
   delete runManager;
+  delete runManagerMT;
 
   return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

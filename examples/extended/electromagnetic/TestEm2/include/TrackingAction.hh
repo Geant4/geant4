@@ -42,13 +42,13 @@ class RunAction;
 
 class TrackingAction : public G4UserTrackingAction {
 
- public:
-   TrackingAction(RunAction*);
-  ~TrackingAction() {};
+public:
+  TrackingAction(RunAction*);
+  virtual ~TrackingAction() {};
 
-   virtual void PostUserTrackingAction(const G4Track*);
+  virtual void PostUserTrackingAction(const G4Track*);
 
- private:
+private:
    RunAction* fRun;
     
 };
