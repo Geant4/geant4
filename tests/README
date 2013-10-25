@@ -1,4 +1,4 @@
-$Id: README 67993 2013-03-13 11:05:01Z gunter $
+$Id: README 74985 2013-10-25 10:21:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,9 +24,13 @@ test01 ## Geometry - CSG solids and navigator:
        ## including Boolean, assemblies, reflection and calorimeter benchmark.
 test02 ## FTFP_BERT_HP Physics Lists
        ## test02.in (em test) is obsolete; hadron test is the main
+test03 ## Free slot
+test04 ## Free slot
 test05 ## Geometry - Tessellated solids and General Particle Source.
        ## (Action? Eventually add CAD input setup.)
+test06 ## Free slot
 test07 ## Statistical evaluation prototype.  (Derived originally from ExN03)
+test08 ## Free slot
 test09 ## Basic e.m. processes, Polarised Compton, new photelectric
        ## effect, synchrotron radiation, simple box.
        ## (Action?  Add magnetic field, ElossPLus, muon test script)
@@ -35,22 +39,23 @@ test11 ## Neutron transport.
 test12 ## FTF String Model + precompound.
 test13 ## QGSM, Dual Parton Model + precompound.
 test14 ## LowEnergy em (photons and electrons).
-test15 ## available; up to 9.5 used for Isotope Production
+test15 ## Free slot [up to 9.5 used for Isotope Production].
 test16 ## n and p Cross-Sections
 test17 ## LowEnergy e.m. (protons, antiprotons and ions). 
 test18 ## Radioactive decay.
-test19 ## Hadronic interactions in the range from ~20GeV and up to ~100-120GeV
-test20 ## Pi0 production test 
+test19 ## Hadronic interactions in the range from ~20GeV and up to ~100-120GeV (not for stt)
+test20 ## Pi0 production test (not for stt)
 test22 ## Thin-target validation tests of FTF
-test23 ## Thin target tests using physics lists
+test23 ## Thin target tests using physics lists (not for stt)
 test24 ## Binary cascade hadronic model.
 test25 ## Classical cascade hadronic model.
+test26 ## Free slot
 test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
 test28 ## Hadronic abrasion/ablation and em-dissociation.
 test29 ## Free slot
 test30 ## Hadronic generators test versus thin target data E<3 GeV (not for stt).
 test31 ## Test of stopping powers and energy loss for EM physics (not for stt) .
-test32 ## Test of hadronic cross sections
+test32 ## Test of hadronic cross sections (not for stt)
 test33 ## Importance biasing and scoring.
 test34 ## Shower parameterisation with 'gflash'.
 test35 ## Hadronic Generator test versus HARP data 3 GeV < E < 13 GeV (not for stt).
@@ -88,7 +93,8 @@ test64 ## Bertini and Fritiof nuclear capture at rest.
 test65 ## LEND hadronic model.
 test67 ## EM low-energy Penelope (and also others)
 test68 ## Reproducibility tests of FTFP_BERT with simplified calorimeters.
-test69 ## INCL++ model 
+test69 ## INCL++ model
+test70 ## Geant4-DNA processes
 test73 ## Multiple Scattering Test: test models in semi-realistic setup (inspired by LHCb)
 test74 ## EM low-energy G4MuElec* processes and models
 test75 ## photon-nuclear (electro-nucl.) interactions

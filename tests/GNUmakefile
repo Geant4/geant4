@@ -8,8 +8,8 @@ endif
  
 include $(G4INSTALL)/config/architecture.gmk
 
-# Symbolic links to novice examples using test101, etc...
-EXAMPLES = 01 02 03 04 05 06 07
+# Symbolic links to basic examples using test101, etc...
+EXAMPLES = 1 2 3 4 5
 
 # Symbolic links to extended persistency examples using test401, etc...
 #temp PERSISTENCY += 01 02
@@ -43,9 +43,6 @@ FIELD += 01 02 03 04
 BIAS += 01 
 #temp BIAS_AIDA += 02
 #temp BIAS_PYTHON += 03
-
-#02 03 04 05 06 07
-
 
 # System Tests...
 SUBDIRS += test01
@@ -266,16 +263,16 @@ examples_links_source:
 # Clean source links
 	@$(MAKE) clean_examples_links_source
 
-# Novice
+# Basic
 	@for nn in $(EXAMPLES); do \
 	  testdir=test1$$nn; \
-	  exdir=$(G4INSTALL)/examples/novice/N$$nn; \
+	  exdir=$(G4INSTALL)/examples/basic/B$$nn; \
 	  ln -s $$exdir $$testdir; \
 	  for i in $$exdir/*.in; do \
 	    exin=`basename $$i`; \
 	    exout=`basename $$i .in`.out; \
-	    testin=`echo $$exin | sed s/exampleN/test1/`; \
-	    testout=`echo $$exout | sed s/exampleN/test1/`; \
+	    testin=`echo $$exin | sed s/exampleB/test1/`; \
+	    testout=`echo $$exout | sed s/exampleB/test1/`; \
 	    ln -s $$exin $$testdir/$$testin; \
 	    ln -s $$exout $$testdir/$$testout; \
 	  done; \
