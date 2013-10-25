@@ -129,6 +129,20 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_QT "no")
   endif()
 
+  # - Wt
+  if(GEANT4_USE_WT)
+    set(G4_BUILTWITH_WT "yes")
+    set(G4_WT_INCLUDE_DIRS ${Wt_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
+
+    set(G4_WT_CFLAGS )
+    foreach(_dir ${G4_WT_INCLUDE_DIRS})
+      set(G4_WT_CFLAGS "${G4_WT_CFLAGS} -I${_dir}")
+    endforeach()
+
+  else()
+    set(G4_BUILTWITH_WT "no")
+  endif()
+
   # - Motif
   if(GEANT4_USE_XM)
     set(G4_BUILTWITH_MOTIF "yes")

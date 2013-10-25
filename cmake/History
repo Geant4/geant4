@@ -30,6 +30,33 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+24th October 2013 - Ben Morgan (cmake-V09-06-30)
+- Modules/FindWt.cmake : add use of FindPackageHandleStandardArgs to
+  ensure correct behaviour when supplying REQUIRED/QUIET keywords
+
+24rd October 2013 - Laurent Garnier
+- Template/Geant4Config.cmake.in
+  Template/geant4make-skeleton.in
+  Modules/Geant4ConfigureConfigScript.cmake
+  Add Wt support
+
+24th October 2013 - Ben Morgan
+- Modules/Geant4InterfaceOptions.cmake : Simplify configuration of
+  Wt and Boost location.
+
+24rd October 2013 - Laurent Garnier
+- Modules/Geant4InterfaceOptions.cmake : Add section for locating Wt
+- Modules/FindWt.cmake : New file taken form Wt sources 
+  http://www.webtoolkit.eu/wt/download
+
+23rd October 2013 - Ben Morgan (cmake-V09-06-29)
+- Templates/Geant4UseQt5.cmake.in : New file providing forward
+  compatibility of compilation against Qt5 with no changes required
+  to CMake scripts in interfaces and OpenGL.
+- Modules/Geant4InterfaceOptions.cmake : Search for Qt5 first, then Qt4.
+  When Qt5 is found, configure forward compatibility use file using
+  Geant4UseQt5.cmake.in template. If Qt5 is not found, unset its usage
+  and require loacation of Qt4.
 
 21st October 2013 - Gunter Folger (cmake-V09-06-28)
 - switch to G4NEUTRONXS 1.4

@@ -55,6 +55,7 @@
 #
 #  motif             (Motif-X11/OpenGL Graphical User Interface)
 #  qt                (Qt4/OpenGL Graphical User Interface)
+#  wt                (Wt/OpenGL Web based Graphical User Interface)
 #
 #  vis_network_dawn  (Client/Server network interface to DAWN visualization)
 #  vis_network_vrml  (Client/Server network interface to VRML visualization)
@@ -335,6 +336,22 @@ if(Geant4_qt_FOUND)
     set(_geant4_use_opengl_library ON)
   endif()
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS qt)
+endif()
+
+# - Wt (UI and Vis!)
+set(Geant4_wt_FOUND @GEANT4_USE_WT@)
+if(Geant4_wt_FOUND)
+  if(Geant4_FIND_REQUIRED_wt OR Geant4_FIND_REQUIRED_ui_all OR
+      Geant4_FIND_REQUIRED_vis_all)
+    list(APPEND 
+      Geant4_DEFINITIONS 
+      -DG4INTY_USE_WT
+      -DG4UI_USE_WT
+      -DG4VIS_USE_OPENGLWT
+      )
+    set(_geant4_use_opengl_library ON)
+  endif()
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS wt)
 endif()
 
 # - Motif (UI and Vis!)
