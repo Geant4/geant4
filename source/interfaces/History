@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23th October 2013  Laurent Garnier (interfaces-V09-06-08 need cmake-V09-06-29)
+- sources.cmake : Remove Qt5 configuration, it is now include in cmake.
+
 14th October 2013  Laurent Garnier (interfaces-V09-06-07)
 - G4UIWt : 
   o Fix a warning about "/*" within comment
