@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -72,9 +72,9 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 0 starts.
 ### Run 0 start
 ### Histo books 1 histograms in <test44.root>
-Start Run processing.
 EventAction: Event # 0 started
 
 *********************************************************************************************************
@@ -133,7 +133,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
@@ -148,6 +148,6 @@ Average number of steps of primary   47
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.31 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.27 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

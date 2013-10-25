@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -503,13 +503,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     -------   --------     ------   ------   --------   ----------    ----------
       92.05          2k         1       50         50         0.00    Calorimeter
        7.95          0k         1        3          4         0.00    Layer
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
 ---> Begin Of Event: 0
 
@@ -517,13 +517,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.1s Real=0.1s Sys=0.01s
+  User=0.14s Real=0.14s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 8.0582 MeV :  1.666 MeV     2.067 +- 0.2067 %      5.82 mm  +-  1.4 mm 
-   liquidArgon: 1.8275 MeV :  1.701 MeV     9.306 +- 0.9306 %      9.06 mm  +- 8.85 mm 
+          Lead: 8.0989 MeV :  1.611 MeV      1.99 +- 0.199 %      5.99 mm  +-  1.3 mm 
+   liquidArgon: 1.6766 MeV :  1.672 MeV     9.971 +- 0.9971 %      8.34 mm  +- 8.55 mm 
 
 ------------------------------------------------------------
  Beam particle gamma  E = 10 MeV
@@ -531,15 +531,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 8.05818 MeV
-liquidArgon:	 1.82751 MeV
+      Lead:	 8.09886 MeV
+liquidArgon:	 1.67656 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1974869774, 805973357
+ Current couple of seeds = 1550707139, 1349705094
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand
@@ -556,7 +556,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.34 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.29 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

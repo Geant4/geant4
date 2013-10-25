@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -538,30 +538,30 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.93s Real=2.78s Sys=0s
+  User=1.76s Real=2.34s Sys=0s
 
  The run consists of 1000 C12 of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
- Projected Range= 303.199 um    rms= 1.44701 um 
- Mean number of primary steps = 304.664
+ Projected Range= 303.199 um    rms= 1.44736 um 
+ Mean number of primary steps = 304.651
  Total energy deposit= 144 MeV
- NIEL energy deposit = 98.0861 keV
+ NIEL energy deposit = 97.9765 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2104678091, 1937454339
+ Current couple of seeds = 1314871172, 648956734
 ----------------------------------------
 /control/verbose 0
 
@@ -647,17 +647,17 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2104678091, 1937454339
+ Current couple of seeds = 1314871172, 648956734
 ----------------------------------------
 
 ---> Begin of Event: 0
 
  The run consists of 1000 C12 of 144 MeV through 20 cm  of G4_Be (density: 1.848 g/cm3 )
 
- Projected Range= 381.537 um    rms= 1.90669 um 
- Mean number of primary steps = 382.864
+ Projected Range= 381.538 um    rms= 1.877 um 
+ Mean number of primary steps = 382.868
  Total energy deposit= 144 MeV
- NIEL energy deposit = 77.9327 keV
+ NIEL energy deposit = 78.0001 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -762,14 +762,14 @@ Run Summary
 
  The run consists of 1000 C12 of 144 MeV through 20 cm  of G4_C (density: 2 g/cm3 )
 
- Projected Range= 346.022 um    rms= 1.68436 um 
- Mean number of primary steps = 347.351
+ Projected Range= 346.111 um    rms= 1.74932 um 
+ Mean number of primary steps = 347.434
  Total energy deposit= 144 MeV
- NIEL energy deposit = 92.1243 keV
+ NIEL energy deposit = 92.0752 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 427227863, 430593017
+ Current couple of seeds = 619432682, 846490406
 ----------------------------------------
 
 ***** Table : Nb of materials = 8 *****
@@ -888,7 +888,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 427227863, 430593017
+ Current couple of seeds = 619432682, 846490406
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -897,12 +897,12 @@ Run Summary
 
  Projected Range= 70.14 um    rms= 0 fm 
  Mean number of primary steps = 73
- Total energy deposit= 8.26514 MeV
- NIEL energy deposit = 4.58302 keV
+ Total energy deposit= 8.2681 MeV
+ NIEL energy deposit = 4.57732 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1135298819, 2087305886
+ Current couple of seeds = 2057389429, 406502106
 ----------------------------------------
 
 ***** Table : Nb of materials = 9 *****
@@ -1041,7 +1041,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1135298819, 2087305886
+ Current couple of seeds = 2057389429, 406502106
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1050,12 +1050,12 @@ Run Summary
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 2.82941 MeV
- NIEL energy deposit = 1.6129 keV
+ Total energy deposit= 2.83086 MeV
+ NIEL energy deposit = 1.61087 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 35563694, 1086038493
+ Current couple of seeds = 708307317, 1403087554
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1214,7 +1214,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 35563694, 1086038493
+ Current couple of seeds = 708307317, 1403087554
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1223,12 +1223,12 @@ Run Summary
 
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 2.53049 MeV
- NIEL energy deposit = 1.41735 keV
+ Total energy deposit= 2.53485 MeV
+ NIEL energy deposit = 1.42075 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 545646101, 1027594142
+ Current couple of seeds = 4343602, 120067024
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1387,7 +1387,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 545646101, 1027594142
+ Current couple of seeds = 4343602, 120067024
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1395,13 +1395,13 @@ Run Summary
  The run consists of 1000 C12 of 79.08 MeV through 70.14 um  of G4_KAPTON (density: 1.42 g/cm3 )
 
  Projected Range= 70.14 um    rms= 0 fm 
- Mean number of primary steps = 73.002
- Total energy deposit= 23.7159 MeV
- NIEL energy deposit = 11.7274 keV
+ Mean number of primary steps = 73
+ Total energy deposit= 23.7077 MeV
+ NIEL energy deposit = 11.7184 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 791901899, 1240858840
+ Current couple of seeds = 1993577393, 121451083
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1560,7 +1560,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 791901899, 1240858840
+ Current couple of seeds = 1993577393, 121451083
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1569,12 +1569,12 @@ Run Summary
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 8.03335 MeV
- NIEL energy deposit = 4.06366 keV
+ Total energy deposit= 8.0398 MeV
+ NIEL energy deposit = 4.06711 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2042693388, 696799208
+ Current couple of seeds = 986467532, 1921721159
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1733,7 +1733,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2042693388, 696799208
+ Current couple of seeds = 986467532, 1921721159
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1742,12 +1742,12 @@ Run Summary
 
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 9.21565 MeV
- NIEL energy deposit = 4.81351 keV
+ Total energy deposit= 9.21746 MeV
+ NIEL energy deposit = 4.80715 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 572893438, 1129445346
+ Current couple of seeds = 614640896, 1738435857
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -1906,7 +1906,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 572893438, 1129445346
+ Current couple of seeds = 614640896, 1738435857
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -1915,12 +1915,12 @@ Run Summary
 
  Projected Range= 46.7 um    rms= 0 fm 
  Mean number of primary steps = 49
- Total energy deposit= 36.416 MeV
- NIEL energy deposit = 19.5163 keV
+ Total energy deposit= 36.4041 MeV
+ NIEL energy deposit = 19.491 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 445755460, 1904407758
+ Current couple of seeds = 1346619684, 587403712
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -2079,7 +2079,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 445755460, 1904407758
+ Current couple of seeds = 1346619684, 587403712
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -2088,12 +2088,12 @@ Run Summary
 
  Projected Range= 29.333 um    rms= 0 fm 
  Mean number of primary steps = 32
- Total energy deposit= 18.4315 MeV
- NIEL energy deposit = 9.85449 keV
+ Total energy deposit= 18.4417 MeV
+ NIEL energy deposit = 9.85585 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 515231491, 1839607572
+ Current couple of seeds = 1470997581, 1225598418
 ----------------------------------------
 
 ***** Table : Nb of materials = 10 *****
@@ -2252,7 +2252,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 515231491, 1839607572
+ Current couple of seeds = 1470997581, 1225598418
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -2261,12 +2261,12 @@ Run Summary
 
  Projected Range= 23.143 um    rms= 0 fm 
  Mean number of primary steps = 26
- Total energy deposit= 16.4437 MeV
- NIEL energy deposit = 8.61232 keV
+ Total energy deposit= 16.4471 MeV
+ NIEL energy deposit = 8.60544 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1459915226, 928642178
+ Current couple of seeds = 1794377738, 1330889406
 ----------------------------------------
 
 ===============================================================================
@@ -2280,8 +2280,8 @@ Run Summary
                                 (MeV)                (%)                (%)    
 -------------------------------------------------------------------------------
        C12          G4_Al       144.0     300.1 um   5.0  303.199 um   -1.0   P
-       C12          G4_Be       144.0     381.5 um   5.0  381.537 um   -0.0   P
-       C12           G4_C       144.0     327.7 um   5.0  346.022 um   -5.6   F
+       C12          G4_Be       144.0     381.5 um   5.0  381.538 um   -0.0   P
+       C12           G4_C       144.0     327.7 um   5.0  346.111 um   -5.6   F
 -------------------------------------------------------------------------------
   TOTAL = 3, FAILED = 1, PASSED = 2
 ===============================================================================
@@ -2297,15 +2297,15 @@ Run Summary
   Particle       Material      Energy    Ref.Value  Err.   Sim.Value  Diff. P/F
                                 (MeV)                (%)                (%)    
 -------------------------------------------------------------------------------
-       Li7      G4_KAPTON        29.8      8.44 MeV  5.0  8.26514 MeV   2.1   P
-       Li7  G4_POLYCAR...        29.8      2.93 MeV  5.0  2.82941 MeV   3.4   P
-       Li7       G4_MYLAR        29.8      2.61 MeV  5.0  2.53049 MeV   3.0   P
-       C12      G4_KAPTON        79.1     23.17 MeV  5.0  23.7159 MeV  -2.4   P
-       C12  G4_POLYCAR...        79.1      7.34 MeV  5.0  8.03335 MeV  -9.4   F
-       C12       G4_MYLAR        59.0      9.39 MeV  5.0  9.21565 MeV   1.9   P
-       O16      G4_KAPTON        78.2     35.47 MeV  5.0   36.416 MeV  -2.7   P
-       O16  G4_POLYCAR...        78.2     18.18 MeV  5.0  18.4315 MeV  -1.4   P
-       O16       G4_MYLAR        78.2     16.32 MeV  5.0  16.4437 MeV  -0.8   P
+       Li7      G4_KAPTON        29.8      8.44 MeV  5.0   8.2681 MeV   2.0   P
+       Li7  G4_POLYCAR...        29.8      2.93 MeV  5.0  2.83086 MeV   3.4   P
+       Li7       G4_MYLAR        29.8      2.61 MeV  5.0  2.53485 MeV   2.9   P
+       C12      G4_KAPTON        79.1     23.17 MeV  5.0  23.7077 MeV  -2.3   P
+       C12  G4_POLYCAR...        79.1      7.34 MeV  5.0   8.0398 MeV  -9.5   F
+       C12       G4_MYLAR        59.0      9.39 MeV  5.0  9.21746 MeV   1.8   P
+       O16      G4_KAPTON        78.2     35.47 MeV  5.0  36.4041 MeV  -2.6   P
+       O16  G4_POLYCAR...        78.2     18.18 MeV  5.0  18.4417 MeV  -1.4   P
+       O16       G4_MYLAR        78.2     16.32 MeV  5.0  16.4471 MeV  -0.8   P
 -------------------------------------------------------------------------------
   TOTAL = 9, FAILED = 1, PASSED = 8
 ===============================================================================

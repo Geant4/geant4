@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -495,7 +495,7 @@ hPairProd:   for  pi-    SubType= 4
         Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
         Model:                     PRECO: 0 eV  ---> 2 MeV
         Model: INCL++ cascade with G4ExcitationHandler: 1 MeV ---> 3 GeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -602,11 +602,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-Start Run processing.
+### Run 0 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.45s Real=2.3s Sys=0s
+  User=0.46s Real=0.64s Sys=0.01s
 #
 # neutron at 1 GeV in Th
 #
@@ -640,19 +640,11 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
+### Run 1 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.44s Real=0.45s Sys=0.01s
+  User=0.4s Real=0.44s Sys=0s
 #
 # pi+ at 1 GeV in Th
 #
@@ -686,11 +678,11 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 2 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.35s Real=0.37s Sys=0s
+  User=0.26s Real=0.28s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -724,11 +716,11 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 3 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.49s Real=1s Sys=0s
+  User=0.33s Real=0.41s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -1091,11 +1083,11 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 4 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.42s Real=0.87s Sys=0s
+  User=0.35s Real=0.42s Sys=0.01s
 #
 # neutron at 1 GeV in U
 #
@@ -1134,11 +1126,11 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 5 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.5s Real=1.16s Sys=0s
+  User=0.47s Real=0.48s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1177,11 +1169,11 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 6 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.53s Real=1.21s Sys=0s
+  User=0.57s Real=0.59s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -1220,11 +1212,11 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 7 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=1.02s Sys=0.01s
+  User=0.35s Real=0.35s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1592,11 +1584,11 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 8 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.38s Real=0.72s Sys=0s
+  User=0.32s Real=0.45s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1640,11 +1632,11 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 9 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.59s Real=1.03s Sys=0s
+  User=0.39s Real=0.47s Sys=0.01s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1688,11 +1680,11 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 10 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.58s Sys=0s
+  User=0.53s Real=0.64s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1736,11 +1728,11 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 11 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.42s Real=1.13s Sys=0s
+  User=0.35s Real=0.38s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -2113,11 +2105,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 12 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.37s Sys=0.01s
+  User=0.14s Real=0.17s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -2166,11 +2158,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 13 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.37s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -2219,11 +2211,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 14 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.11s Real=0.31s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -2272,11 +2264,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 15 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.29s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -2654,11 +2646,11 @@ Index : 4     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 16 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.05s Sys=0.01s
 #
 # neutron at 1 GeV in Si
 #
@@ -2712,11 +2704,11 @@ Index : 4     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 17 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.15s Sys=0s
+  User=0.04s Real=0.03s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2770,7 +2762,7 @@ Index : 4     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 18 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
@@ -2828,11 +2820,11 @@ Index : 4     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 19 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.02s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -3215,11 +3207,11 @@ Index : 5     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 20 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -3278,7 +3270,7 @@ Index : 5     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 21 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
@@ -3341,11 +3333,11 @@ Index : 5     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 22 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -3404,7 +3396,7 @@ Index : 5     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 23 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
@@ -3467,43 +3459,11 @@ Index : 5     used in the geometry : No
 
 ====================================================================
 
-Start Run processing.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
+### Run 24 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.63s Real=2.53s Sys=0s
+  User=0.87s Real=0.97s Sys=0.02s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3562,11 +3522,11 @@ Index : 5     used in the geometry : No
 
 ====================================================================
 
-Start Run processing.
+### Run 25 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.54s Real=0.55s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3626,123 +3586,11 @@ Index : 5     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
+### Run 26 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.04s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -3801,11 +3649,11 @@ Index : 5     used in the geometry : No
 
 ====================================================================
 
-Start Run processing.
+### Run 27 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.4s Real=0.4s Sys=0s
+  User=0.2s Real=0.23s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -3816,7 +3664,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 1.3 Mb
+Dynamic pools deleted: 12 / Total memory freed: 1.2 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

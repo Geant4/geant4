@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -298,7 +298,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-Start Run processing.
+### Run 0 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -363,11 +363,11 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 1 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.15s Real=0.36s Sys=0s
+  User=0.15s Real=0.45s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -404,7 +404,7 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 2 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -412,19 +412,15 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000119 5.27e-05  5.27e-05    Absorber phot
+    1        0        0      -50         0  0.00155  0.00147   0.00147    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00188        0        0         0    Absorber initStep
-    1 -5.03e-06 1.35e-05      -50   0.00166 0.000225 1.94e-05  1.94e-05    Absorber msc
-    2 1.96e-07 2.54e-05      -50   0.00151 0.000151 1.94e-05  3.89e-05    Absorber msc
-    3 1.12e-05 2.76e-05      -50    0.0012 0.000303 1.94e-05  5.83e-05    Absorber msc
-    4 1.23e-05 3.85e-05      -50  0.000724 0.000478 2.65e-05  8.48e-05    Absorber eIoni
-    5 8.58e-06 4.33e-05      -50         0 0.000724  2.1e-05  0.000106    Absorber eIoni
+    0        0        0      -50   0.00045        0        0         0    Absorber initStep
+    1 3.13e-06  6.5e-07      -50         0  0.00045 1.17e-05  1.17e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -463,7 +459,7 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 3 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
@@ -504,7 +500,7 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 4 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -512,7 +508,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.12e-05  0.00197   0.00197    Absorber phot
+    1        0        0      -50         0 8.07e-05  0.00248   0.00248    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -520,7 +516,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000519        0        0         0    Absorber initStep
-    1 -1.48e-06 -3.55e-06      -50         0 0.000519 1.38e-05  1.38e-05    Absorber eIoni
+    1 2.71e-06 9.22e-07      -50         0 0.000519 1.38e-05  1.38e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -559,418 +555,7 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
-#
-/gun/energy 300 eV
-/tracking/verbose 1
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 8.07e-05 0.000199  0.000199    Absorber phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000219        0        0         0    Absorber initStep
-    1 -3.96e-07 1.12e-06      -50         0 0.000219 5.97e-06  5.97e-06    Absorber eIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.01s Real=0.12s Sys=0s
-#
-/gun/particle e-
-#---------------
-/gun/energy 10 keV
-/tracking/verbose 1
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1 -9.55e-06 -8.67e-06      -50   0.00986 0.000137 4.88e-05  4.88e-05    Absorber eIoni
-    2 -4.79e-05 -4.64e-05      -50    0.0097 0.000163 7.29e-05  0.000122    Absorber msc
-    3 -5.58e-05 -5.37e-05      -50   0.00942 2.41e-05 1.13e-05  0.000133    Absorber eIoni
-    4 -0.000101 -7.75e-05      -50   0.00922 0.000204 7.29e-05  0.000206    Absorber msc
-    5 -0.000128 -8.01e-05      -50   0.00905 0.000168 4.18e-05  0.000248    Absorber msc
-    6 -0.000194 -6.81e-05      -50    0.0089 0.000147 7.29e-05  0.000321    Absorber msc
-    7 -0.000258 -5.37e-05      -50   0.00865 0.000252 7.29e-05  0.000393    Absorber msc
-    8 -0.000258 -5.37e-05      -50   0.00865 2.42e-06 7.22e-07  0.000394       World Transportation
-    9   0.0107  0.00321      -50   0.00864 8.86e-06   0.0184    0.0188       World eIoni
-   10    0.107  -0.0107    -50.2   0.00823 0.000413    0.178     0.197       World msc
-   11    0.198  -0.0918    -50.3   0.00782 0.000409    0.178     0.374       World msc
-   12    0.239   -0.165    -50.4   0.00739 0.000429    0.178     0.552       World msc
-   13    0.292   -0.287    -50.5   0.00693 0.000459    0.178      0.73       World msc
-   14      0.4   -0.382    -50.6    0.0066  0.00033    0.178     0.908       World msc
-   15    0.518   -0.444    -50.7   0.00607 0.000533    0.178      1.09       World msc
-   16    0.548   -0.548    -50.8   0.00486  0.00121    0.178      1.26       World msc
-   17    0.561   -0.688    -50.8   0.00421  0.00065    0.178      1.44       World msc
-   18    0.496   -0.777    -50.9   0.00347 0.000732    0.178      1.62       World msc
-   19    0.455   -0.733    -51.1   0.00215  0.00133     0.23      1.85       World eIoni
-   20    0.518   -0.751    -51.1  0.000414  0.00146     0.14      1.99       World eIoni
-   21    0.521   -0.755    -51.1         0 0.000414   0.0157         2       World eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.518   -0.751    -51.1  0.000276        0        0         0       World initStep
-    1    0.517   -0.753    -51.1         0 0.000276   0.0104    0.0104       World eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -5.58e-05 -5.37e-05      -50  0.000254        0        0         0    Absorber initStep
-    1 -5.6e-05 -5.43e-05      -50         0 0.000254 6.72e-06  6.72e-06    Absorber eIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.3s Real=0.88s Sys=0.01s
-#
-/gun/energy 2 keV
-/tracking/verbose 1
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1 -5.06e-06 2.48e-06      -50   0.00122 6.04e-05 1.28e-05  1.28e-05    Absorber eIoni
-    2 -7.28e-06 1.29e-05      -50  0.000713  0.00051 2.02e-05   3.3e-05    Absorber msc
-    3 -5.27e-06 1.84e-05      -50         0 0.000713 2.02e-05  5.31e-05    Absorber msc
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -5.06e-06 2.48e-06      -50  0.000717        0        0         0    Absorber initStep
-    1 -1.12e-06 -1.57e-06      -50  0.000501 0.000216 1.18e-05  1.18e-05    Absorber msc
-    2 2.18e-06 -4.91e-09      -50   7.7e-05 0.000424 1.18e-05  2.36e-05    Absorber msc
-    3 2.53e-06 2.03e-07      -50         0  7.7e-05 3.19e-06  2.68e-05    Absorber eIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.08s Real=0.08s Sys=0s
-#
-/gun/energy 600 eV
-/tracking/verbose 1
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1 3.91e-06 -1.34e-07      -50  0.000224 0.000376 1.09e-05  1.09e-05    Absorber msc
-    2 5.01e-06 -1.72e-07      -50         0 0.000224 6.08e-06   1.7e-05    Absorber eIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Aluminium 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
+### Run 5 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
@@ -1011,7 +596,430 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 6 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0003        0        0         0    Absorber initStep
+    1        0        0      -50         0 8.07e-05 0.000135  0.000135    Absorber phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50  0.000219        0        0         0    Absorber initStep
+    1 -1.19e-06 -2.45e-07      -50         0 0.000219 5.97e-06  5.97e-06    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 7 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.01s Real=0.02s Sys=0s
+#
+/gun/particle e-
+#---------------
+/gun/energy 10 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 8 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50      0.01        0        0         0    Absorber initStep
+    1 -1.57e-05 -1.66e-05      -50   0.00966 0.000343 7.29e-05  7.29e-05    Absorber msc
+    2 -6.19e-05 -5.47e-05      -50   0.00935 0.000312 7.29e-05  0.000146    Absorber msc
+    3 -0.000109  -0.0001      -50   0.00902  0.00033 7.29e-05  0.000219    Absorber msc
+    4 -0.000144 -0.000121      -50   0.00883  0.00019 7.29e-05  0.000292    Absorber msc
+    5 -0.000183 -0.000143      -50    0.0077 0.000121 5.64e-05  0.000348    Absorber eIoni
+    6 -0.000203 -0.000149      -50   0.00728 0.000137 2.22e-05   0.00037    Absorber eIoni
+    7 -0.000267 -0.000154      -50   0.00649 0.000507 7.28e-05  0.000443    Absorber eIoni
+    8 -0.00031 -0.000185      -50   0.00618 0.000313 7.29e-05  0.000516    Absorber msc
+    9 -0.000337 -0.000239      -50   0.00568 0.000499 7.29e-05  0.000589    Absorber msc
+   10 -0.000366 -0.000275      -50   0.00517 0.000514 7.29e-05  0.000662    Absorber msc
+   11 -0.000409 -0.000276      -50   0.00479 0.000376 7.29e-05  0.000735    Absorber msc
+   12 -0.000437 -0.000297      -50   0.00437 0.000422    7e-05  0.000805    Absorber msc
+   13 -0.000441 -0.000309      -50    0.0043  6.5e-05 1.56e-05   0.00082    Absorber msc
+   14 -0.00048 -0.000344      -50   0.00399 0.000319 7.29e-05  0.000893    Absorber msc
+   15 -0.000487 -0.000354      -50   0.00298 0.000203 1.32e-05  0.000906    Absorber eIoni
+   16 -0.000527 -0.000337      -50   0.00255 0.000426 7.29e-05  0.000979    Absorber msc
+   17 -0.000559 -0.000357      -50     0.002 0.000557 7.29e-05   0.00105    Absorber msc
+   18 -0.000555 -0.000361      -50   0.00181 0.000182 2.54e-05   0.00108    Absorber msc
+   19 -0.000553 -0.000354      -50   0.00175 6.69e-05 1.11e-05   0.00109    Absorber msc
+   20 -0.000553 -0.000354      -50   0.00174 8.47e-06  6.6e-07   0.00109       World Transportation
+   21   0.0226   0.0052      -50   0.00124 0.000495   0.0517    0.0527       World msc
+   22   0.0137  0.00084    -50.1   0.00038 0.000865   0.0517     0.104       World msc
+   23  0.00933 -0.00153    -50.1         0  0.00038   0.0143     0.119       World eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000487 -0.000354      -50  0.000802        0        0         0    Absorber initStep
+    1 -0.000484 -0.000359      -50  0.000228 0.000575 1.24e-05  1.24e-05    Absorber msc
+    2 -0.000483 -0.00036      -50         0 0.000228 6.15e-06  1.86e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000267 -0.000154      -50  0.000281        0        0         0    Absorber initStep
+    1 -0.000268 -0.000152      -50         0 0.000281 7.34e-06  7.34e-06    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000203 -0.000149      -50   0.00028        0        0         0    Absorber initStep
+    1 -0.000202 -0.000148      -50         0  0.00028 7.31e-06  7.31e-06    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000183 -0.000143      -50   0.00101        0        0         0    Absorber initStep
+    1 -0.000181 -0.000144      -50         0  0.00101  3.4e-05   3.4e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 9 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.3s Real=0.68s Sys=0s
+#
+/gun/energy 2 keV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 10 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1 -3.44e-06   -9e-06      -50   0.00195 4.86e-05 2.02e-05  2.02e-05    Absorber msc
+    2 1.67e-06 -1.9e-05      -50   0.00176  0.00019 2.02e-05  4.03e-05    Absorber msc
+    3 6.97e-06 -1.48e-05      -50   0.00132 0.000439 2.02e-05  6.05e-05    Absorber msc
+    4 1.85e-05 -1.44e-05      -50    0.0011 0.000225 2.02e-05  8.06e-05    Absorber msc
+    5 2.78e-05 -1.32e-05      -50         0   0.0011 3.87e-05  0.000119    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 11 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.08s Real=0.08s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 12 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1 1.07e-07 3.91e-06      -50  6.04e-05  0.00054 1.09e-05  1.09e-05    Absorber msc
+    2 8.33e-08 3.67e-06      -50  2.62e-05 3.43e-05 1.22e-06  1.21e-05    Absorber msc
+    3 7.89e-08 3.62e-06      -50         0 2.62e-05 1.86e-06   1.4e-05    Absorber eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 13 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.03s Real=0.13s Sys=0s
+#
+/gun/energy 300 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Aluminium 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 14 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -1058,7 +1066,7 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 15 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
@@ -1187,7 +1195,7 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 16 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -1195,80 +1203,51 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000634 0.000155  0.000155    Absorber phot
+    1        0        0      -50         0  0.00249  0.00376   0.00376    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00937        0        0         0    Absorber initStep
-    1 -1.32e-05 -2.89e-05      -50   0.00933 3.86e-05 4.66e-05  4.66e-05    Absorber msc
-    2 -2.23e-05 -5.01e-05      -50   0.00912 0.000209 4.55e-05  9.21e-05    Absorber msc
-    3 -3.76e-05 -5.91e-05      -50   0.00908 3.62e-05 3.91e-05  0.000131    Absorber msc
-    4 -5.09e-05 -6.27e-05      -50   0.00887 0.000217 3.75e-05  0.000169    Absorber msc
-    5 -6.48e-05 -7.6e-05      -50   0.00885 1.33e-05 3.75e-05  0.000206    Absorber msc
-    6 -6.23e-05 -7.92e-05      -50   0.00875 0.000103 2.81e-05  0.000234    Absorber eIoni
-    7 -6.78e-05 -9.48e-05      -50   0.00869 6.13e-05 3.75e-05  0.000272    Absorber msc
-    8 -8.83e-05 -0.000104      -50   0.00845 0.000236 3.47e-05  0.000306    Absorber eIoni
-    9 -0.000108 -9.02e-05      -50   0.00833 0.000122 3.75e-05  0.000344    Absorber msc
-   10 -0.000134 -8.88e-05      -50   0.00819 0.000138 3.75e-05  0.000381    Absorber msc
-   11 -0.000155 -8.93e-05      -50   0.00815 4.07e-05 3.11e-05  0.000413    Absorber msc
-   12 -0.000146 -9.47e-05      -50   0.00784 0.000312 3.75e-05   0.00045    Absorber msc
-   13 -0.000153 -8.27e-05      -50   0.00747 0.000374 3.75e-05  0.000488    Absorber msc
-   14 -0.000142 -7.02e-05      -50    0.0073 0.000169 3.75e-05  0.000525    Absorber msc
-   15 -0.000129 -7.15e-05      -50   0.00727  2.4e-05 3.75e-05  0.000563    Absorber msc
-   16 -0.000125 -7.16e-05      -50   0.00673 6.21e-05 6.55e-06  0.000569    Absorber eIoni
-   17 -0.000121 -5.23e-05      -50   0.00648 0.000251 3.75e-05  0.000607    Absorber msc
-   18 -0.000128 -7.28e-05      -50   0.00619 0.000294 3.75e-05  0.000644    Absorber msc
-   19 -0.000123 -8.41e-05      -50   0.00539 6.53e-05 2.62e-05   0.00067    Absorber eIoni
-   20 -0.000126 -0.000102      -50   0.00477 0.000236 3.03e-05  0.000701    Absorber eIoni
-   21 -0.000114 -0.000115      -50   0.00448 0.000295 3.75e-05  0.000738    Absorber msc
-   22 -0.000112 -0.000124      -50   0.00433 0.000151 3.75e-05  0.000776    Absorber msc
-   23 -0.000103 -0.000131      -50   0.00398 0.000343 2.55e-05  0.000801    Absorber msc
-   24 -9.95e-05 -0.000143      -50   0.00381  0.00017 3.75e-05  0.000839    Absorber msc
-   25 -0.000104 -0.00015      -50   0.00359 0.000224 2.33e-05  0.000862    Absorber msc
-   26 -0.000105 -0.000148      -50   0.00356 3.34e-05  2.9e-06  0.000865    Absorber msc
-   27 -0.000105 -0.000148      -50   0.00355 7.47e-06 6.18e-07  0.000865    Absorber msc
-   28 -0.000105 -0.000148      -50   0.00355 2.95e-06 2.44e-07  0.000866       World Transportation
-   29   -0.055   0.0346      -50   0.00304 0.000506   0.0879    0.0888       World msc
-   30   -0.112   0.0137    -50.1   0.00233 0.000705   0.0879     0.177       World msc
-   31   -0.112   0.0136    -50.1   0.00207 1.33e-05 0.000291     0.177       World eIoni
-   32   -0.163   0.0154    -50.1   0.00124  0.00083   0.0879     0.265       World msc
-   33   -0.191   0.0185    -50.1         0  0.00124   0.0732     0.338       World eIoni
+    0        0        0      -50   0.00751        0        0         0    Absorber initStep
+    1 -9.48e-06 2.73e-06      -50    0.0055  0.00165   0.0004    0.0004    Absorber eIoni
+    2 -3.75e-06 2.66e-05      -50   0.00405 0.000601 8.67e-05  0.000487    Absorber eIoni
+    3 5.51e-06  1.8e-05      -50   0.00319 0.000456 7.84e-05  0.000566    Absorber eIoni
+    4 2.02e-06 2.39e-05      -50   0.00162  0.00124 0.000116  0.000682    Absorber eIoni
+    5 3.08e-06 2.41e-05      -50         0  0.00162 5.06e-05  0.000732    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.112   0.0136    -50.1  0.000256        0        0         0       World initStep
-    1   -0.114   0.0124    -50.1         0 0.000256  0.00967   0.00967       World eIoni
+    0 2.02e-06 2.39e-05      -50  0.000337        0        0         0    Absorber initStep
+    1 5.46e-08 2.44e-05      -50         0 0.000337 7.86e-06  7.86e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000126 -0.000102      -50  0.000377        0        0         0    Absorber initStep
-    1 -0.000127 -0.000102      -50         0 0.000377  8.7e-06   8.7e-06    Absorber eIoni
+    0 5.51e-06  1.8e-05      -50    0.0004        0        0         0    Absorber initStep
+    1 5.15e-06  1.7e-05      -50         0   0.0004 9.19e-06  9.19e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000123 -8.41e-05      -50  0.000734        0        0         0    Absorber initStep
-    1 -0.00012 -8.55e-05      -50         0 0.000734 1.74e-05  1.74e-05    Absorber eIoni
+    0 -3.75e-06 2.66e-05      -50  0.000853        0        0         0    Absorber initStep
+    1 -5.78e-06 2.57e-05      -50         0 0.000853 2.09e-05  2.09e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000125 -7.16e-05      -50  0.000479        0        0         0    Absorber initStep
-    1 -0.000124 -7.33e-05      -50  0.000286 0.000193 6.16e-06  6.16e-06    Absorber msc
-    2 -0.000125 -7.43e-05      -50         0 0.000286 6.83e-06   1.3e-05    Absorber eIoni
+    0 -9.48e-06 2.73e-06      -50  0.000356        0        0         0    Absorber initStep
+    1 -8.69e-06 4.26e-06      -50         0 0.000356 8.25e-06  8.25e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1312,11 +1291,11 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 17 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.21s Real=0.22s Sys=0s
+  User=0.22s Real=0.42s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1358,7 +1337,7 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 18 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -1366,16 +1345,33 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000435 7.13e-05  7.13e-05    Absorber phot
+    1        0        0      -50         0 0.000412  0.00109   0.00109    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50   0.00156        0        0         0    Absorber initStep
-    1  9.4e-07 -1.54e-06      -50  0.000552  0.00101 4.69e-05  4.69e-05    Absorber eIoni
-    2 -2.04e-07 -2.35e-06      -50         0 0.000552 1.27e-05  5.95e-05    Absorber eIoni
+    0        0        0      -50   0.00159        0        0         0    Absorber initStep
+    1 3.07e-06 3.68e-06      -50   0.00093 7.17e-05  9.5e-06   9.5e-06    Absorber eIoni
+    2 1.94e-06  3.9e-06      -50  0.000509 8.47e-05 9.09e-06  1.86e-05    Absorber eIoni
+    3 1.31e-06 2.63e-06      -50         0 0.000509 1.17e-05  3.02e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 1.94e-06  3.9e-06      -50  0.000336        0        0         0    Absorber initStep
+    1 1.33e-06 5.31e-06      -50         0 0.000336 7.84e-06  7.84e-06    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 3.07e-06 3.68e-06      -50  0.000586        0        0         0    Absorber initStep
+    1 5.54e-06    4e-06      -50         0 0.000586 1.35e-05  1.35e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1419,11 +1415,11 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 19 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.15s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1465,7 +1461,7 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 20 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -1473,15 +1469,15 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000148 1.14e-05  1.14e-05    Absorber phot
+    1        0        0      -50         0 0.000153 0.000183  0.000183    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000452        0        0         0    Absorber initStep
-    1 1.41e-06 -1.44e-06      -50         0 0.000452 1.03e-05  1.03e-05    Absorber eIoni
+    0        0        0      -50  0.000447        0        0         0    Absorber initStep
+    1 -4.17e-07 -1.97e-06      -50         0 0.000447 1.02e-05  1.02e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1525,11 +1521,11 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 21 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -1571,7 +1567,7 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 22 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -1579,7 +1575,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000148 0.000109  0.000109    Absorber phot
+    1        0        0      -50         0 0.000148 0.000136  0.000136    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -1587,7 +1583,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000152        0        0         0    Absorber initStep
-    1 -9.46e-07  5.6e-07      -50         0 0.000152 4.36e-06  4.36e-06    Absorber eIoni
+    1 -4.42e-07  1.2e-06      -50         0 0.000152 4.36e-06  4.36e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1631,11 +1627,11 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 23 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -1679,7 +1675,7 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 24 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -1687,192 +1683,117 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1 -1.75e-05 -1.16e-05      -50   0.00996 4.18e-05 4.21e-05  4.21e-05    Absorber msc
-    2 -3.08e-05 -1.28e-06      -50   0.00964 0.000321 4.21e-05  8.43e-05    Absorber msc
-    3 -4.29e-05 -2.03e-05      -50   0.00961 2.63e-05 4.21e-05  0.000126    Absorber msc
-    4 -5.96e-05 -4.56e-05      -50   0.00947 0.000136 4.21e-05  0.000169    Absorber msc
-    5 -8.71e-05 -4.95e-05      -50   0.00924 0.000235 4.21e-05  0.000211    Absorber msc
-    6 -0.000112 -6.27e-05      -50   0.00898 0.000254 4.21e-05  0.000253    Absorber msc
-    7 -9.3e-05 -7.4e-05      -50   0.00894 4.46e-05 4.21e-05  0.000295    Absorber msc
-    8 -6.69e-05 -7.97e-05      -50   0.00885 8.83e-05 4.21e-05  0.000337    Absorber msc
-    9 -4.15e-05 -9.32e-05      -50   0.00864  0.00021 4.21e-05  0.000379    Absorber msc
-   10 -2.51e-05 -7.92e-05      -50   0.00857 6.94e-05 4.21e-05  0.000421    Absorber msc
-   11 -2.3e-05 -7.63e-05      -50     0.007 0.000412 4.29e-06  0.000426    Absorber eIoni
-   12   -2e-07 -8.24e-05      -50   0.00696 4.41e-05 4.21e-05  0.000468    Absorber msc
-   13 9.97e-06 -6.99e-05      -50   0.00572  7.1e-05 2.73e-05  0.000495    Absorber eIoni
-   14 7.87e-06 -5.87e-05      -50   0.00403 2.88e-05    2e-05  0.000515    Absorber eIoni
-   15 2.06e-05 -5.02e-05      -50   0.00373 0.000299 4.21e-05  0.000557    Absorber msc
-   16 1.27e-05 -4.3e-05      -50   0.00349 0.000236 4.21e-05  0.000599    Absorber msc
-   17 1.44e-06 -4.84e-05      -50    0.0033 0.000191 4.21e-05  0.000641    Absorber msc
-   18 1.31e-05 -4.78e-05      -50   0.00291 0.000393 4.21e-05  0.000683    Absorber msc
-   19 2.19e-05 -5.26e-05      -50   0.00241 0.000176  3.8e-05  0.000721    Absorber eIoni
-   20 2.18e-05 -5.25e-05      -50   0.00203 8.92e-06 1.19e-07  0.000722    Absorber eIoni
-   21 2.53e-05 -4.81e-05      -50   0.00141 0.000613 4.21e-05  0.000764    Absorber msc
-   22 2.87e-05 -4.56e-05      -50         0  0.00141 4.15e-05  0.000805    Absorber eIoni
+    1 -1.02e-05 1.84e-05      -50   0.00988 0.000121 4.21e-05  4.21e-05    Absorber msc
+    2 -1.21e-05 2.48e-05      -50   0.00954 2.88e-05 1.15e-05  5.36e-05    Absorber eIoni
+    3    2e-06 3.69e-05      -50   0.00934   0.0002 4.21e-05  9.58e-05    Absorber msc
+    4 1.65e-05 6.29e-05      -50   0.00934        0 4.21e-05  0.000138    Absorber msc
+    5 4.44e-05 7.37e-05      -50   0.00894 0.000401 4.21e-05   0.00018    Absorber msc
+    6    6e-05 8.79e-05      -50   0.00889 4.85e-05 4.21e-05  0.000222    Absorber msc
+    7 7.42e-05 0.000113      -50   0.00864 0.000247 4.21e-05  0.000264    Absorber msc
+    8 8.09e-05 0.000124      -50   0.00821 3.96e-05 1.81e-05  0.000282    Absorber eIoni
+    9 9.91e-05 0.000144      -50   0.00809 0.000121 4.21e-05  0.000325    Absorber msc
+   10 9.28e-05 0.000171      -50   0.00798 0.000115 4.21e-05  0.000367    Absorber msc
+   11 7.96e-05 0.000185      -50   0.00769 0.000284 4.21e-05  0.000409    Absorber msc
+   12 5.73e-05 0.000197      -50   0.00747 0.000223 4.21e-05  0.000451    Absorber msc
+   13 5.44e-05 0.000221      -50   0.00733 0.000137 4.21e-05  0.000493    Absorber msc
+   14 4.36e-05 0.000243      -50   0.00725 7.73e-05 4.21e-05  0.000535    Absorber msc
+   15 5.35e-05  0.00022      -50   0.00698 0.000269 4.21e-05  0.000577    Absorber msc
+   16 6.39e-05 0.000228      -50   0.00688 0.000109 4.21e-05  0.000619    Absorber msc
+   17 6.91e-05 0.000242      -50   0.00685 2.04e-05 4.21e-05  0.000662    Absorber msc
+   18 7.21e-05 0.000249      -50   0.00582 5.81e-05 9.96e-06  0.000672    Absorber eIoni
+   19 9.13e-05 0.000248      -50   0.00483 0.000265 4.17e-05  0.000713    Absorber eIoni
+   20 9.98e-05 0.000255      -50   0.00387 0.000164 1.69e-05   0.00073    Absorber eIoni
+   21 0.000105 0.000256      -50   0.00205 3.95e-05 8.36e-06  0.000739    Absorber eIoni
+   22 0.000108 0.000256      -50   0.00172  2.6e-05 4.82e-06  0.000743    Absorber eIoni
+   23  0.00011  0.00026      -50  0.000918 0.000306 9.37e-06  0.000753    Absorber eIoni
+   24 0.000112 0.000262      -50         0 0.000918  2.3e-05  0.000776    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0  0.00011  0.00026      -50  0.000493        0        0         0    Absorber initStep
+    1  0.00011 0.000261      -50         0 0.000493 1.13e-05  1.13e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000108 0.000256      -50  0.000305        0        0         0    Absorber initStep
+    1 0.000107 0.000255      -50         0 0.000305  7.2e-06   7.2e-06    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000105 0.000256      -50   0.00178        0        0         0    Absorber initStep
+    1 0.000101 0.000254      -50   0.00176 2.69e-05 1.01e-05  1.01e-05    Absorber msc
+    2 0.000102 0.000254      -50   0.00168 7.81e-05 9.45e-06  1.96e-05    Absorber msc
+    3 0.000106 0.000254      -50   0.00164 4.42e-05 7.93e-06  2.75e-05    Absorber msc
+    4 0.000109 0.000255      -50   0.00146 0.000179  7.8e-06  3.53e-05    Absorber msc
+    5  0.00011 0.000255      -50   0.00111 5.29e-06 9.25e-07  3.62e-05    Absorber eIoni
+    6 0.000111 0.000258      -50   0.00109 1.65e-05  6.7e-06  4.29e-05    Absorber msc
+    7 0.000113 0.000258      -50   0.00063 5.88e-05 4.43e-06  4.74e-05    Absorber eIoni
+    8 0.000116 0.000259      -50         0  0.00063 1.46e-05   6.2e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 11,   Parent ID = 7
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 0.000113 0.000258      -50  0.000402        0        0         0    Absorber initStep
+    1 0.000113 0.000257      -50         0 0.000402 9.23e-06  9.23e-06    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 7
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0  0.00011 0.000255      -50  0.000344        0        0         0    Absorber initStep
+    1 0.000112 0.000254      -50         0 0.000344    8e-06     8e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 2.18e-05 -5.25e-05      -50  0.000374        0        0         0    Absorber initStep
-    1 2.06e-05 -5.09e-05      -50         0 0.000374 8.62e-06  8.62e-06    Absorber eIoni
+    0 9.98e-05 0.000255      -50  0.000793        0        0         0    Absorber initStep
+    1  9.9e-05 0.000257      -50         0 0.000793 1.91e-05  1.91e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 2.19e-05 -5.26e-05      -50  0.000322        0        0         0    Absorber initStep
-    1 2.21e-05 -5.45e-05      -50         0 0.000322 7.55e-06  7.55e-06    Absorber eIoni
+    0 9.13e-05 0.000248      -50  0.000723        0        0         0    Absorber initStep
+    1 9.36e-05 0.000248      -50         0 0.000723 1.71e-05  1.71e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 7.87e-06 -5.87e-05      -50   0.00166        0        0         0    Absorber initStep
-    1 9.82e-06 -6.31e-05      -50   0.00145 0.000209 1.27e-05  1.27e-05    Absorber msc
-    2 5.96e-06 -6.55e-05      -50    0.0014 5.41e-05 1.19e-05  2.46e-05    Absorber msc
-    3 1.35e-06 -6.51e-05      -50         0   0.0014  4.1e-05  6.55e-05    Absorber eIoni
+    0 7.21e-05 0.000249      -50   0.00098        0        0         0    Absorber initStep
+    1 7.15e-05 0.000252      -50         0  0.00098  2.5e-05   2.5e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 9.97e-06 -6.99e-05      -50   0.00117        0        0         0    Absorber initStep
-    1 9.23e-06 -6.7e-05      -50  0.000558 8.05e-05 7.37e-06  7.37e-06    Absorber eIoni
-    2 7.36e-06 -6.6e-05      -50         0 0.000558 1.28e-05  2.02e-05    Absorber eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 9.23e-06 -6.7e-05      -50  0.000534        0        0         0    Absorber initStep
-    1 1.08e-05 -6.58e-05      -50         0 0.000534 1.22e-05  1.22e-05    Absorber eIoni
+    0 8.09e-05 0.000124      -50  0.000391        0        0         0    Absorber initStep
+    1 8.27e-05 0.000123      -50         0 0.000391 8.99e-06  8.99e-06    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -2.3e-05 -7.63e-05      -50   0.00116        0        0         0    Absorber initStep
-    1 -2.52e-05 -7.53e-05      -50         0  0.00116 3.13e-05  3.13e-05    Absorber eIoni
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
-/tracking/verbose 0
-/run/beamOn 1000
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No 
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
-
-Index : 2     used in the geometry : Yes
- Material : Lead
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1000
-  User=0.45s Real=0.52s Sys=0s
-#
-/gun/energy 2 keV
-/tracking/verbose 1
-/run/beamOn 1
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Lead 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No 
- Material : Aluminium
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
-
-Index : 2     used in the geometry : Yes
- Material : Lead
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1 -5.61e-07 -1.89e-06      -50   0.00199 1.28e-05 4.08e-06  4.08e-06    Absorber msc
-    2  3.3e-07 -4.82e-06      -50   0.00198 1.07e-05 4.08e-06  8.16e-06    Absorber msc
-    3 -2.06e-07 -7.59e-06      -50   0.00191 7.13e-05 4.08e-06  1.22e-05    Absorber msc
-    4 -1.03e-06 -8.01e-06      -50   0.00191        0 1.37e-06  1.36e-05    Absorber msc
-    5 -1.02e-06 -8.01e-06      -50    0.0019 1.26e-06 6.62e-08  1.37e-05       World Transportation
-    6 -0.00812  -0.0119      -50   0.00128 0.000349   0.0419    0.0419       World eIoni
-    7   0.0136  -0.0137    -50.1  0.000551 0.000725   0.0551    0.0971       World msc
-    8   0.0215  -0.0111    -50.1         0 0.000551   0.0221     0.119       World eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.00812  -0.0119      -50  0.000278        0        0         0       World initStep
-    1  -0.0114  -0.0122      -50         0 0.000278   0.0104    0.0104       World eIoni
+    0 -1.21e-05 2.48e-05      -50  0.000312        0        0         0    Absorber initStep
+    1 -1.14e-05 2.67e-05      -50         0 0.000312 7.35e-06  7.35e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -1916,13 +1837,13 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 25 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.18s Real=0.68s Sys=0s
+  User=0.45s Real=0.96s Sys=0s
 #
-/gun/energy 600 eV
+/gun/energy 2 keV
 /tracking/verbose 1
 /run/beamOn 1
 
@@ -1962,18 +1883,40 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 26 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1 2.03e-06 -1.16e-07      -50  0.000422 0.000178 5.28e-06  5.28e-06    Absorber msc
-    2 2.05e-06 -1.68e-06      -50  0.000357 6.49e-05 5.28e-06  1.06e-05    Absorber msc
-    3 1.68e-06 -1.01e-06      -50  1.56e-06 0.000356 5.28e-06  1.58e-05    Absorber msc
-    4 1.72e-06 -1.14e-06      -50         0 1.56e-06 4.32e-07  1.63e-05    Absorber eIoni
+    0        0        0      -50     0.002        0        0         0    Absorber initStep
+    1 -1.83e-06 7.49e-07      -50     0.002        0 4.08e-06  4.08e-06    Absorber msc
+    2 -2.58e-06 3.15e-06      -50   0.00196 3.91e-05 4.08e-06  8.16e-06    Absorber msc
+    3 -2.27e-06 6.32e-06      -50   0.00196        0 4.08e-06  1.22e-05    Absorber msc
+    4 -2.77e-06 9.46e-06      -50   0.00193 3.53e-05 4.08e-06  1.63e-05    Absorber msc
+    5 -4.87e-06 1.18e-05      -50   0.00187 5.62e-05 4.08e-06  2.04e-05    Absorber msc
+    6 -7.14e-06 1.08e-05      -50   0.00186  1.2e-05 4.08e-06  2.45e-05    Absorber msc
+    7 -6.74e-06 8.62e-06      -50   0.00173 0.000129 4.08e-06  2.86e-05    Absorber msc
+    8 -8.76e-06  6.6e-06      -50   0.00168 5.06e-05 4.08e-06  3.27e-05    Absorber msc
+    9 -9.23e-06 6.04e-06      -50  0.000951 0.000239 8.26e-07  3.35e-05    Absorber eIoni
+   10 -1.12e-05 6.87e-06      -50  0.000902 4.99e-05 4.08e-06  3.76e-05    Absorber msc
+   11 -1.01e-05 8.99e-06      -50  0.000747 0.000154 4.08e-06  4.16e-05    Absorber msc
+   12 -8.75e-06 1.06e-05      -50  0.000747        0 4.08e-06  4.57e-05    Absorber msc
+   13 -8.36e-06 1.23e-05      -50  0.000552 0.000195 4.08e-06  4.98e-05    Absorber msc
+   14 -9.52e-06 1.41e-05      -50  0.000531 2.19e-05 4.08e-06  5.39e-05    Absorber msc
+   15 -9.23e-06 1.48e-05      -50   0.00048 5.04e-05 4.08e-06   5.8e-05    Absorber msc
+   16 -6.98e-06 1.54e-05      -50         0  0.00048  1.1e-05   6.9e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -9.23e-06 6.04e-06      -50  0.000487        0        0         0    Absorber initStep
+    1 -7.9e-06 4.92e-06      -50  0.000433  5.4e-05 6.08e-06  6.08e-06    Absorber msc
+    2 -8.06e-06 2.79e-06      -50  0.000281 0.000152 6.08e-06  1.22e-05    Absorber msc
+    3 -8.95e-06 1.02e-06      -50         0 0.000281 6.74e-06  1.89e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2017,11 +1960,114 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 27 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.04s Real=0.04s Sys=0s
+  User=0.18s Real=0.28s Sys=0s
+#
+/gun/energy 600 eV
+/tracking/verbose 1
+/run/beamOn 1
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 28 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0        0        0      -50    0.0006        0        0         0    Absorber initStep
+    1 1.47e-06 -1.41e-06      -50  0.000522 7.78e-05 5.28e-06  5.28e-06    Absorber msc
+    2  2.6e-06 -1.19e-07      -50  0.000301 0.000221 5.28e-06  1.06e-05    Absorber msc
+    3 3.19e-06 9.87e-07      -50  0.000212 8.94e-05 5.28e-06  1.58e-05    Absorber msc
+    4 3.27e-06 8.41e-07      -50  0.000212        0 6.33e-07  1.65e-05    Absorber msc
+    5 3.34e-06  7.2e-07      -50  0.000212        0 5.27e-07   1.7e-05       World Transportation
+    6 0.000317 -0.000543      -50         0 0.000212  0.00826   0.00828       World eIoni
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+/tracking/verbose 0
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 10 nm      e- 10 nm      e+ 10 nm  proton 10 nm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : Aluminium
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+
+Index : 2     used in the geometry : Yes
+ Material : Lead
+ Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
+ Energy thresholds :  gamma  250 eV     e-  250 eV     e+  250 eV  proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 29 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.03s Real=0.14s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2063,7 +2109,7 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 30 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -2115,7 +2161,7 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 31 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
@@ -2250,7 +2296,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 32 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -2258,46 +2304,64 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1        0        0    -49.6   0.00973 1.42e-05    0.431     0.431    Absorber compt
-    2     0.18    -2.07    -49.7         0 0.000537     2.08      2.51    Absorber phot
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.18    -2.07    -49.7   0.00919        0        0         0    Absorber initStep
-    1    0.179    -2.07    -49.7   0.00758  0.00136 0.000606  0.000606    Absorber eIoni
-    2    0.179    -2.07    -49.7   0.00506  0.00205    0.001   0.00161    Absorber eIoni
-    3    0.179    -2.07    -49.7         0  0.00506 0.000941   0.00255    Absorber eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.179    -2.07    -49.7  0.000457        0        0         0    Absorber initStep
-    1    0.179    -2.07    -49.7         0 0.000457 1.84e-05  1.84e-05    Absorber eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.179    -2.07    -49.7  0.000254        0        0         0    Absorber initStep
-    1    0.179    -2.07    -49.7         0 0.000254    1e-05     1e-05    Absorber eIoni
+    1        0        0    -49.3         0 0.000537    0.682     0.682    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0    -49.6  0.000258        0        0         0    Absorber initStep
-    1 -2.19e-07 2.52e-06    -49.6         0 0.000258 1.02e-05  1.02e-05    Absorber eIoni
+    0        0        0    -49.3   0.00946        0        0         0    Absorber initStep
+    1 1.62e-05  0.00102    -49.3   0.00498  0.00351  0.00159   0.00159    Absorber eIoni
+    2 -1.17e-05  0.00131    -49.3   0.00281  0.00178 0.000403     0.002    Absorber eIoni
+    3 -4.3e-05  0.00137    -49.3   0.00142 0.000776 0.000129   0.00213    Absorber eIoni
+    4 -4.56e-05   0.0014    -49.3  0.000783  0.00033 4.96e-05   0.00218    Absorber eIoni
+    5 -3.94e-05   0.0014    -49.3         0 0.000783 3.77e-05   0.00221    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -4.56e-05   0.0014    -49.3  0.000307        0        0         0    Absorber initStep
+    1 -4.82e-05   0.0014    -49.3         0 0.000307  1.2e-05   1.2e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -4.3e-05  0.00137    -49.3  0.000614        0        0         0    Absorber initStep
+    1 -4.06e-05  0.00138    -49.3         0 0.000614 2.67e-05  2.67e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -1.17e-05  0.00131    -49.3  0.000389        0        0         0    Absorber initStep
+    1 -7.03e-06  0.00131    -49.3         0 0.000389 1.53e-05  1.53e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 1.62e-05  0.00102    -49.3  0.000977        0        0         0    Absorber initStep
+    1 1.66e-05  0.00102    -49.3  0.000689 2.29e-05 7.53e-07  7.53e-07    Absorber eIoni
+    2 2.02e-05  0.00103    -49.3         0 0.000689 3.13e-05   3.2e-05    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 3
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 1.66e-05  0.00102    -49.3  0.000265        0        0         0    Absorber initStep
+    1 1.85e-05  0.00102    -49.3         0 0.000265 1.04e-05  1.04e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2342,11 +2406,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 33 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.15s Real=0.17s Sys=0s
+  User=0.14s Real=0.24s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2393,7 +2457,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 34 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -2401,7 +2465,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537   0.0125    0.0125    Absorber phot
+    1        0        0      -50         0 0.000537   0.0298    0.0298    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -2409,7 +2473,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50   0.00146        0        0         0    Absorber initStep
-    1 -1.29e-05 3.97e-05      -50         0  0.00146 0.000103  0.000103    Absorber eIoni
+    1 3.12e-05 -2.52e-05      -50         0  0.00146 0.000103  0.000103    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2458,11 +2522,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 35 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.13s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2509,7 +2573,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 36 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -2517,7 +2581,7 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537 0.000241  0.000241    Absorber phot
+    1        0        0      -50         0 0.000537 0.000485  0.000485    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -2525,7 +2589,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
-    1 7.93e-08 4.02e-07      -50         0 6.27e-05 4.27e-06  4.27e-06    Absorber eIoni
+    1 5.69e-07 -7.75e-08      -50         0 6.27e-05 4.27e-06  4.27e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2574,11 +2638,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 37 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2625,7 +2689,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 38 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -2633,15 +2697,15 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 1.42e-05  0.00225   0.00225    Absorber phot
+    1        0        0      -50         0 2.92e-05 0.000188  0.000188    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0      -50  0.000286        0        0         0    Absorber initStep
-    1 -7.43e-07 3.24e-06      -50         0 0.000286 1.12e-05  1.12e-05    Absorber eIoni
+    0        0        0      -50  0.000271        0        0         0    Absorber initStep
+    1 1.67e-06 -3.51e-06      -50         0 0.000271 1.06e-05  1.06e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2690,7 +2754,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 39 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
@@ -2743,7 +2807,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 40 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -2751,41 +2815,39 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1 -1.41e-06 -7.54e-05      -50    0.0096 0.000397 0.000258  0.000258    Absorber msc
-    2 -4.15e-05 -6.47e-05      -50   0.00948 0.000126 0.000258  0.000517    Absorber msc
-    3 1.86e-05 -7.9e-05      -50    0.0092 0.000283 0.000258  0.000775    Absorber msc
-    4 7.97e-05 -0.00017      -50   0.00852 0.000671 0.000258   0.00103    Absorber msc
-    5 0.000189 -0.000218      -50   0.00793  0.00059 0.000279   0.00131    Absorber msc
-    6 0.000436  -0.0002      -50   0.00737 0.000566 0.000347   0.00166    Absorber msc
-    7 0.000678 -1.43e-05      -50   0.00682  0.00055 0.000405   0.00206    Absorber msc
-    8 0.000713 8.83e-06      -50   0.00633 0.000149 5.66e-05   0.00212    Absorber eIoni
-    9 0.000713 8.84e-06      -50   0.00464 1.44e-05 8.29e-08   0.00212    Absorber eIoni
-   10  0.00103 1.91e-05      -50         0  0.00464 0.000803   0.00292    Absorber eIoni
+    1 7.53e-05  4.7e-06      -50   0.00939 0.000607 0.000258  0.000258    Absorber msc
+    2 5.79e-05 -3.1e-05      -50   0.00898 0.000414 0.000258  0.000517    Absorber msc
+    3 -5.39e-05 -0.000161      -50   0.00862 0.000363 0.000258  0.000775    Absorber msc
+    4 -0.000125 -0.000236      -50   0.00824 0.000378 0.000258   0.00103    Absorber msc
+    5 -0.000164 -0.000392      -50   0.00731 0.000468 0.000235   0.00127    Absorber eIoni
+    6 -0.000268 -0.00044      -50   0.00663 0.000351 0.000145   0.00141    Absorber eIoni
+    7 -0.000471 -0.000634      -50   0.00435  0.00228 0.000327   0.00174    Absorber msc
+    8 -0.000739 -0.000634      -50   0.00176  0.00227   0.0004   0.00214    Absorber eIoni
+    9 -0.000781 -0.000588      -50         0  0.00176 0.000141   0.00228    Absorber eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0 -0.000739 -0.000634      -50  0.000326        0        0         0    Absorber initStep
+    1 -0.00074 -0.000636      -50         0 0.000326 1.27e-05  1.27e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000713 8.84e-06      -50   0.00167        0        0         0    Absorber initStep
-    1 0.000663 1.47e-05      -50  0.000534 0.000772  8.7e-05   8.7e-05    Absorber eIoni
-    2 0.000653 1.53e-05      -50         0 0.000534 2.23e-05  0.000109    Absorber eIoni
-
-*********************************************************************************************************
-* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 3
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000663 1.47e-05      -50  0.000363        0        0         0    Absorber initStep
-    1 0.000664 1.53e-05      -50         0 0.000363 1.42e-05  1.42e-05    Absorber eIoni
+    0 -0.000268 -0.00044      -50  0.000331        0        0         0    Absorber initStep
+    1 -0.000271 -0.000435      -50         0 0.000331 1.29e-05  1.29e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 0.000713 8.83e-06      -50  0.000343        0        0         0    Absorber initStep
-    1 0.000712 1.41e-05      -50         0 0.000343 1.34e-05  1.34e-05    Absorber eIoni
+    0 -0.000164 -0.000392      -50  0.000461        0        0         0    Absorber initStep
+    1 -0.000158 -0.000391      -50         0 0.000461 1.86e-05  1.86e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2834,11 +2896,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 41 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.23s Real=0.23s Sys=0s
+  User=0.22s Real=0.42s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2885,7 +2947,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 42 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -2893,13 +2955,13 @@ Start Run processing.
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1 2.65e-05 -2.28e-05      -50   0.00163  0.00037 7.47e-05  7.47e-05    Absorber msc
-    2 7.08e-05 -1.65e-05      -50   0.00107 0.000559 7.47e-05  0.000149    Absorber msc
-    3 9.62e-05 -1.57e-05      -50         0  0.00107 6.15e-05  0.000211    Absorber eIoni
+    1 -3.48e-05 -2.74e-06      -50   0.00152 0.000481 7.47e-05  7.47e-05    Absorber msc
+    2 -7.47e-05 7.61e-06      -50   0.00107 0.000449 7.47e-05  0.000149    Absorber msc
+    3 -9.76e-05 1.31e-05      -50         0  0.00107 6.14e-05  0.000211    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2944,11 +3006,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 43 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.06s Sys=0s
+  User=0.05s Real=0.15s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2995,7 +3057,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 44 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -3052,11 +3114,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 45 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -3103,7 +3165,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 46 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
@@ -3160,7 +3222,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 47 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
@@ -3304,11 +3366,11 @@ Index : 3     used in the geometry : No
 
 ====================================================================
 
-Start Run processing.
+### Run 48 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.05s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -3353,11 +3415,11 @@ Index : 3     used in the geometry : No
 
 ====================================================================
 
-Start Run processing.
+### Run 49 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /calor/setAbsMat Lead
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -3410,11 +3472,11 @@ Index : 3     used in the geometry : No
 
 ====================================================================
 
-Start Run processing.
+### Run 50 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.03s Sys=0s
+  User=0.02s Real=0.12s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -3459,11 +3521,11 @@ Index : 3     used in the geometry : No
 
 ====================================================================
 
-Start Run processing.
+### Run 51 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 /calor/setAbsMat Water
 
  The  WORLD   is made of 2000mm of Air, the transverse size (R) of the world is 2000 mm. 
@@ -3516,7 +3578,7 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 52 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
@@ -3565,11 +3627,11 @@ Index : 3     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 53 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -3577,47 +3639,47 @@ UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
-Rayl for gamma in Air : 1 calls
+Rayl for gamma in Air : 2 calls
 Rayl for gamma in Aluminium : 29 calls
-Rayl for gamma in Lead : 41 calls
-Rayl for gamma in Water : 47 calls
-Transportation for e+ in Air : 1523 calls
-Transportation for e- in Air : 4989 calls
-Transportation for e- in Aluminium : 59 calls
-Transportation for e- in Lead : 295 calls
-Transportation for e- in Water : 18 calls
-Transportation for gamma in Air : 5478 calls
+Rayl for gamma in Lead : 43 calls
+Rayl for gamma in Water : 51 calls
+Transportation for e+ in Air : 1537 calls
+Transportation for e- in Air : 4990 calls
+Transportation for e- in Aluminium : 56 calls
+Transportation for e- in Lead : 262 calls
+Transportation for e- in Water : 13 calls
+Transportation for gamma in Air : 5465 calls
 annihil for e+ in Air : 2 calls
 annihil for e+ in Aluminium : 40 calls
-annihil for e+ in Lead : 934 calls
-annihil for e+ in Water : 4 calls
+annihil for e+ in Lead : 933 calls
+annihil for e+ in Water : 6 calls
 compt for gamma in Aluminium : 3 calls
 compt for gamma in Lead : 1 calls
-compt for gamma in Water : 25 calls
-conv for gamma in Air : 3 calls
-conv for gamma in Aluminium : 489 calls
-conv for gamma in Lead : 1876 calls
-conv for gamma in Water : 136 calls
-eBrem for e- in Aluminium : 4 calls
-eBrem for e- in Lead : 6 calls
+compt for gamma in Water : 23 calls
+conv for gamma in Air : 2 calls
+conv for gamma in Aluminium : 498 calls
+conv for gamma in Lead : 1872 calls
+conv for gamma in Water : 146 calls
+eBrem for e- in Aluminium : 3 calls
+eBrem for e- in Lead : 13 calls
 eBrem for e- in Water : 1 calls
-eIoni for e- in Air : 6651 calls
-eIoni for e- in Aluminium : 23333 calls
-eIoni for e- in Lead : 26165 calls
-eIoni for e- in Water : 22242 calls
-msc for e- in Air : 6247 calls
-msc for e- in Aluminium : 15910 calls
-msc for e- in Lead : 33077 calls
-msc for e- in Water : 7672 calls
-phot for gamma in Air : 16 calls
+eIoni for e- in Air : 6873 calls
+eIoni for e- in Aluminium : 23289 calls
+eIoni for e- in Lead : 25973 calls
+eIoni for e- in Water : 22235 calls
+msc for e- in Air : 6283 calls
+msc for e- in Aluminium : 16096 calls
+msc for e- in Lead : 32815 calls
+msc for e- in Water : 7590 calls
+phot for gamma in Air : 15 calls
 phot for gamma in Aluminium : 4002 calls
-phot for gamma in Lead : 4004 calls
-phot for gamma in Water : 3994 calls
+phot for gamma in Lead : 4009 calls
+phot for gamma in Water : 3995 calls
 EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 1
-Dynamic pools deleted: 12 / Total memory freed: 0.059 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.054 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

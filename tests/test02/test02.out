@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -543,11 +543,11 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 0 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # electron 500 MeV in Air
 #
@@ -897,7 +897,7 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 1 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -906,6 +906,6 @@ Run Summary
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.46 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.4 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

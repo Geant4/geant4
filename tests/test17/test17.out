@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -559,23 +559,23 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 0 starts.
 ### Run 0 start.
-Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.05s Real=6.37s Sys=0s
+  User=1.93s Real=2.23s Sys=0.02s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
     Track Length in absorber = 9.01053 +- 0.0151122  microns 
-    CSDA  Range  in absorber = 8.92183 +- 0.0146123  microns 
+    CSDA  Range  in absorber = 8.92184 +- 0.0146119  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
     Track Length (G4 - ICRU49) = -0.0484728 +- 0.0151122 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0528311 +- 0.0146123 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.05284 +- 0.0146119 microns 
 
 Average Number electrons per event = 218.94
 Average Number photons per event   = 0.003
@@ -602,22 +602,23 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 1 starts.
 ### Run 1 start.
-Start Run processing.
+EvtNo= 292  length= 0.0131427  xend= 0.000909176
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.55s Real=5.19s Sys=0.01s
+  User=2.43s Real=5s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 11.859 +- 0.0196813  microns 
-    CSDA  Range  in absorber = 10.96 +- 0.0125625  microns 
+ end of Run TotNbofEvents = 999 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
+    Track Length in absorber = 11.8573 +- 0.0187316  microns 
+    CSDA  Range  in absorber = 10.9579 +- 0.0123313  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
-Average Number electrons per event = 253.506
-Average Number photons per event   = 0.003
+Average Number electrons per event = 253.259
+Average Number photons per event   = 0.002002
 
 #
 /testem/phys/setCuts 0.003 mm
@@ -986,17 +987,17 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 2 starts.
 ### Run 2 start.
-Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.09s Real=0.21s Sys=0s
+  User=0.08s Real=0.07s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12 with Ekin = 6 MeV p= 366.244 MeV/c
-    Track Length in absorber = 8.27538 +- 0.0111382  microns 
-    CSDA  Range  in absorber = 8.14376 +- 0.00915151  microns 
+    Track Length in absorber = 8.26737 +- 0.010911  microns 
+    CSDA  Range  in absorber = 8.12782 +- 0.0092731  microns 
 
     Energy deposit in absorber = 6  MeV 
 
@@ -1378,26 +1379,26 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 3 starts.
 ### Run 3 start.
-Start Run processing.
-EvtNo= 977  length= 0.00888535  xend= 0.00221853
+EvtNo= 978  length= 0.00888535  xend= 0.00221853
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.76s Real=8.49s Sys=0.01s
+  User=2.71s Real=3.91s Sys=0.02s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.00989 +- 0.0152024  microns 
-    CSDA  Range  in absorber = 8.91342 +- 0.0149038  microns 
+    Track Length in absorber = 9.00869 +- 0.0151834  microns 
+    CSDA  Range  in absorber = 8.91163 +- 0.0148652  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = -0.04911 +- 0.0152024 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0444219 +- 0.0149038 microns 
+    Track Length (G4 - ICRU49) = -0.0503073 +- 0.0151834 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0426318 +- 0.0148652 microns 
 
-Average Number electrons per event = 220.05
+Average Number electrons per event = 220.125
 Average Number photons per event   = 0.025025
 
 #
@@ -1422,31 +1423,31 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 4 starts.
 ### Run 4 start.
-Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.73s Real=6.84s Sys=0s
+  User=2.6s Real=6.2s Sys=0.14s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
-    Track Length in absorber = 9.00967 +- 0.0151735  microns 
-    CSDA  Range  in absorber = 8.92082 +- 0.0148654  microns 
+    Track Length in absorber = 9.01422 +- 0.0153576  microns 
+    CSDA  Range  in absorber = 8.92719 +- 0.0147893  microns 
 
     Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = -0.049332 +- 0.0151735 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.0518186 +- 0.0148654 microns 
+    Track Length (G4 - ICRU49) = -0.04478 +- 0.0153576 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.0581925 +- 0.0147893 microns 
 
-Average Number electrons per event = 222.667
-Average Number photons per event   = 0.019
+Average Number electrons per event = 222.488
+Average Number photons per event   = 0.023
 
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.45 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.41 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

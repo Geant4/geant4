@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -450,13 +450,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -480,30 +480,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=3.79s Real=4.5s Sys=0.02s
+  User=3.63s Real=6s Sys=0s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 100 MeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.451 keV +- 16.08 eV 
+ Total energy deposit in absorber per event = 6.45 keV +- 16.14 eV 
 
  -----> Mean dE/dx = 3.225 MeV/cm	(1.384 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 3.016 MeV/cm	(1.295 MeV*cm2/g)
-   full dEdx       = 13.55 MeV/cm	(5.817 MeV*cm2/g)
+   full dEdx       = 14.03 MeV/cm	(6.023 MeV*cm2/g)
 
- Leakage :  primary = 99.97 MeV +- 2.651 keV   secondaries = 18.59 keV +- 2.651 keV
+ Leakage :  primary = 99.97 MeV +- 3.287 keV   secondaries = 25.5 keV +- 3.287 keV
  Energy balance :  edep + eleak = 100 MeV
 
- Total track length (charged) in absorber per event = 20.25 um  +- 7.528 nm 
- Total track length (neutral) in absorber per event = 29.67 nm  +- 1.989 nm 
+ Total track length (charged) in absorber per event = 20.25 um  +- 7.599 nm 
+ Total track length (neutral) in absorber per event = 27.12 nm  +- 1.905 nm 
 
- Number of steps (charged) in absorber per event = 4.221 +- 8.677e-06
- Number of steps (neutral) in absorber per event = 0.00321 +- 8.677e-06
+ Number of steps (charged) in absorber per event = 4.222 +- 8.717e-06
+ Number of steps (neutral) in absorber per event = 0.00268 +- 8.717e-06
 
- Number of secondaries per event : Gammas = 0.00321   electrons = 0.01711   positrons = 0
+ Number of secondaries per event : Gammas = 0.00267   electrons = 0.01686   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -514,11 +514,11 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 1.327 mrad (central part only)
   computed theta0 (Highland formula)          = 1.342 mrad
-  central part defined as +- 4.026 mrad   Tail ratio = 2.728 %
+  central part defined as +- 4.026 mrad   Tail ratio = 2.741 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1319169653, 1216227745
+ Current couple of seeds = 639656723, 2062273781
 ----------------------------------------
 #
 /testem/det/setAbsMat Gold
@@ -943,13 +943,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 1 starts.
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1319169653, 1216227745
+ Current couple of seeds = 639656723, 2062273781
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -973,45 +973,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.75s Real=5.27s Sys=0.01s
+  User=4.45s Real=9.41s Sys=0.01s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.57 keV +- 46.03 eV 
+ Total energy deposit in absorber per event = 18.59 keV +- 45.9 eV 
 
- -----> Mean dE/dx = 19.23 MeV/cm	(0.9951 MeV*cm2/g)
+ -----> Mean dE/dx = 19.25 MeV/cm	(0.9964 MeV*cm2/g)
 
  From formulas :
-   restricted dEdx = 17.92 MeV/cm	(0.9276 MeV*cm2/g)
-   full dEdx       = 60.88 MeV/cm	(3.151 MeV*cm2/g)
+   restricted dEdx = 17.91 MeV/cm	(0.927 MeV*cm2/g)
+   full dEdx       = 61.45 MeV/cm	(3.181 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 1.462 keV   secondaries = 38.76 keV +- 1.458 keV
+ Leakage :  primary = 15.64 MeV +- 1.555 keV   secondaries = 40.94 keV +- 1.55 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.933 um  +- 8.502 nm 
- Total track length (neutral) in absorber per event = 127.8 nm  +- 3.295 nm 
+ Total track length (charged) in absorber per event = 9.932 um  +- 8.298 nm 
+ Total track length (neutral) in absorber per event = 131.3 nm  +- 6.173 nm 
 
- Number of steps (charged) in absorber per event = 6.199 +- 9.221e-06
- Number of steps (neutral) in absorber per event = 0.02825 +- 9.221e-06
+ Number of steps (charged) in absorber per event = 6.202 +- 9.109e-06
+ Number of steps (neutral) in absorber per event = 0.02765 +- 9.109e-06
 
- Number of secondaries per event : Gammas = 0.02808   electrons = 0.02252   positrons = 0
+ Number of secondaries per event : Gammas = 0.02753   electrons = 0.02253   positrons = 0
 
  Number of events with the primary particle transmitted = 99.99 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 99.99 %
 
  Number of events with the primary particle reflected = 0.013 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.304 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.295 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 35.43 mrad (central part only)
+  rms proj angle of transmit primary particle = 35.28 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad   Tail ratio = 2.924 %
+  central part defined as +- 105.3 mrad   Tail ratio = 2.948 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 511504605, 2015258391
+ Current couple of seeds = 2002692050, 157217377
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um
@@ -1026,7 +1026,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.34 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.3 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

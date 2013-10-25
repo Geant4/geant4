@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -572,14 +572,6 @@ SimpleBox is now made of Pb
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 1
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 #
 # kaon0L at 100 GeV in Pb
 #
@@ -920,14 +912,6 @@ hPairProd:   for  pi-    SubType= 4
       Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 #
 # pi+ at 100 GeV in Al
 #
@@ -1460,14 +1444,6 @@ SimpleBox is now made of Al
 /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 /run/beamOn 1
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 #
 # alpha at 100 MeV in Al
 #

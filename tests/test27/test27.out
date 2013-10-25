@@ -13,24 +13,23 @@
 SimpleBox is now made of U
 /run/verbose 2
 /run/setCut 1 m
-Tst24PhysicsList::SetCuts:CutLength : 1000 (mm)
+Tst27PhysicsList::SetCuts:CutLength : 1000 (mm)
 /run/initialize
 userDetector->Construct() start.
- material Pb not found, using default material 
 SLog is registered to the default region.
 physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
-Tst24PhysicsList::SetCuts:CutLength : 1000 (mm)
+Tst27PhysicsList::SetCuts:CutLength : 1000 (mm)
 /gun/direction 1 0 0
 #
-# proton at 10 GeV in U
+# deuteron at 1 GeV/nucleon in U
 #
-/gun/particle proton
-/gun/energy 10 GeV
+/gun/particle deuteron
+/gun/energy 1.0 GeV
 /mydet/SelectMaterial U
 SimpleBox is now made of U
-/run/beamOn 20
+/run/beamOn 2000
 
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
@@ -255,6 +254,15 @@ hIoni:   for  pi-    SubType= 2
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 
 ---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 20 GeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
@@ -262,7 +270,7 @@ hIoni:   for  pi-    SubType= 2
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: inelastic
-        Model:           TheoFSGenerator: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 0 eV  ---> 20 GeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -274,7 +282,7 @@ hIoni:   for  pi-    SubType= 2
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: inelastic
-        Model:           TheoFSGenerator: 0 eV  ---> 100 TeV
+        Model:                      FTFP: 0 eV  ---> 20 GeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -339,7 +347,7 @@ hIoni:   for  pi-    SubType= 2
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: inelastic
-        Model:            Binary Cascade: 0 eV  ---> 10.1 GeV
+        Model:            BertiniCascade: 0 eV  ---> 20 GeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -351,7 +359,7 @@ hIoni:   for  pi-    SubType= 2
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: inelastic
-        Model:            Binary Cascade: 0 eV  ---> 10.1 GeV
+        Model:            BertiniCascade: 0 eV  ---> 20 GeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -401,16 +409,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ### Run 0 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=1.95s Real=2.46s Sys=0s
+  Number of events processed : 2000
+  User=54.63s Real=109.53s Sys=0.03s
 #
-# neutron at 10 GeV in U
-#
-/gun/particle neutron
-/gun/energy 10 GeV
-/mydet/SelectMaterial U
-SimpleBox is now made of U
-/run/beamOn 20
+# and at 30 MeV
+/gun/energy 30 MeV
+/run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -439,92 +443,16 @@ Index : 0     used in the geometry : Yes
 ### Run 1 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=1.9s Real=2.4s Sys=0.03s
+  Number of events processed : 1000
+  User=0.02s Real=0.12s Sys=0s
 #
-# pi+ at 10 GeV in U
+# deuteron at 1 GeV/nucleon on H
 #
-/gun/particle pi+
-/gun/energy 10 GeV
-/mydet/SelectMaterial U
-SimpleBox is now made of U
-/run/beamOn 20
-
-Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
- This region is in the mass world.
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Uranium 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-### Run 2 starts.
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=2.41s Real=3.52s Sys=0s
-#
-# pi- at 10 GeV in U
-#
-/gun/particle pi-
-/gun/energy 10 GeV
-/mydet/SelectMaterial U
-SimpleBox is now made of U
-/run/beamOn 20
-
-Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
- This region is in the mass world.
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Uranium 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-### Run 3 starts.
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=2.45s Real=4.26s Sys=0.01s
-#
-# proton at 10 GeV in Cu
-#
-/gun/particle proton
-/gun/energy 10 GeV
-/mydet/SelectMaterial Cu
-SimpleBox is now made of Cu
-/run/beamOn 20
+/gun/particle deuteron
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial H
+SimpleBox is now made of H
+/run/beamOn 2000
 
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
@@ -749,7 +677,7 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
+ Materials : H 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -766,33 +694,29 @@ Index : 0     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : Yes
- Material : Copper
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
-### Run 4 starts.
+### Run 2 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.62s Real=0.62s Sys=0s
+  Number of events processed : 2000
+  User=0.03s Real=0.04s Sys=0s
 #
-# neutron at 10 GeV in Cu
-#
-/gun/particle neutron
-/gun/energy 10 GeV
-/mydet/SelectMaterial Cu
-SimpleBox is now made of Cu
-/run/beamOn 20
+# and at 30 MeV
+/gun/energy 30 MeV
+/run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
+ Materials : H 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -809,113 +733,27 @@ Index : 0     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : Yes
- Material : Copper
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 ====================================================================
 
-### Run 5 starts.
+### Run 3 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.62s Real=0.64s Sys=0s
+  Number of events processed : 1000
+  User=0.15s Real=0.34s Sys=0s
 #
-# pi+ at 10 GeV in Cu
+# deuteron at 1 GeV/nucleon on Silicon
 #
-/gun/particle pi+
-/gun/energy 10 GeV
-/mydet/SelectMaterial Cu
-SimpleBox is now made of Cu
-/run/beamOn 20
-
-Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
- This region is in the mass world.
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : Yes
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-### Run 6 starts.
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=0.6s Real=0.63s Sys=0s
-#
-# pi- at 10 GeV in Cu
-#
-/gun/particle pi-
-/gun/energy 10 GeV
-/mydet/SelectMaterial Cu
-SimpleBox is now made of Cu
-/run/beamOn 20
-
-Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
- This region is in the mass world.
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Copper 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : Yes
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-### Run 7 starts.
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=0.56s Real=0.62s Sys=0s
-#
-# proton at 10 GeV in Si
-#
-/gun/particle proton
-/gun/energy 10 GeV
+/gun/particle deuteron
+/gun/energy 1.0 GeV
 /mydet/SelectMaterial Si
 SimpleBox is now made of Si
-/run/beamOn 20
+/run/beamOn 2000
 
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
@@ -1157,9 +995,9 @@ Index : 0     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No 
- Material : Copper
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
 
 Index : 2     used in the geometry : Yes
  Material : Silicon
@@ -1170,19 +1008,15 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-### Run 8 starts.
+### Run 4 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.22s Real=0.23s Sys=0s
+  Number of events processed : 2000
+  User=15.19s Real=30.45s Sys=0.01s
 #
-# neutron at 10 GeV in Si
-#
-/gun/particle neutron
-/gun/energy 10 GeV
-/mydet/SelectMaterial Si
-SimpleBox is now made of Si
-/run/beamOn 20
+# and at 30 MeV
+/gun/energy 30 MeV
+/run/beamOn 1000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1205,9 +1039,198 @@ Index : 0     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No 
- Material : Copper
+ Material : H
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+
+Index : 2     used in the geometry : Yes
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 5 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.04s Real=0.04s Sys=0s
+#
+#
+# deuteron at 200 MeV in U
+#
+/gun/particle deuteron
+/gun/energy 200 MeV
+/mydet/SelectMaterial U
+SimpleBox is now made of U
+/run/beamOn 2000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : H
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+
+Index : 2     used in the geometry : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
+
+====================================================================
+
+### Run 6 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 2000
+  User=1.95s Real=3.95s Sys=0s
+#
+# and at 30 MeV
+/gun/energy 30 MeV
+/run/beamOn 1000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : H
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+
+Index : 2     used in the geometry : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
+
+====================================================================
+
+### Run 7 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=0.03s Real=0.03s Sys=0s
+#
+# deuteron at 200 MeV/nucleon on H
+#
+/gun/particle deuteron
+/gun/energy 200 MeV
+/mydet/SelectMaterial H
+SimpleBox is now made of H
+/run/beamOn 2000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : H 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : Yes
+ Material : H
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
+
+====================================================================
+
+### Run 8 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 2000
+  User=0.03s Real=0.03s Sys=0s
+#
+# deuteron at 200 MeV/nucleon on Silicon
+#
+/gun/particle deuteron
+/gun/energy 200 MeV
+/mydet/SelectMaterial Si
+SimpleBox is now made of Si
+/run/beamOn 2000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : No 
+ Material : H
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
 
 Index : 2     used in the geometry : Yes
  Material : Silicon
@@ -1221,22 +1244,24 @@ Index : 2     used in the geometry : Yes
 ### Run 9 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.18s Real=0.19s Sys=0s
+  Number of events processed : 2000
+  User=1.22s Real=2.52s Sys=0s
 #
-# pi+ at 10 GeV in Si
+#  .....end deuteron.............
 #
-/gun/particle pi+
-/gun/energy 10 GeV
-/mydet/SelectMaterial Si
-SimpleBox is now made of Si
-/run/beamOn 20
+# alpha at 1 GeV/nucleon in U
+#
+/gun/particle alpha
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial U
+SimpleBox is now made of U
+/run/beamOn 2000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
+ Materials : Uranium 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -1247,341 +1272,116 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No 
+Index : 0     used in the geometry : Yes
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : Yes
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-====================================================================
-
-### Run 10 starts.
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=0.2s Real=0.32s Sys=0s
-#
-# pi- at 10 GeV in Si
-#
-/gun/particle pi-
-/gun/energy 10 GeV
-/mydet/SelectMaterial Si
-SimpleBox is now made of Si
-/run/beamOn 20
-
-Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
- This region is in the mass world.
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Silicon 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
 Index : 1     used in the geometry : No 
- Material : Copper
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : Yes
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-### Run 11 starts.
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=0.17s Real=0.18s Sys=0s
-#
-# proton at 10 GeV in Carbon
-#
-/gun/particle proton
-/gun/energy 10 GeV
-/mydet/SelectMaterial G4_C
- Using geant4 material G4_C
-SimpleBox is now made of G4_C
-/run/beamOn 20
-
-conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
-
-compt:   for  gamma    SubType= 13
-      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
-
-phot:   for  gamma    SubType= 12
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
-
-msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
-
-eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
-
-msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
-
-eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
-
-annihil:   for  e+    SubType= 5
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
-
-hIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-msc:   for alpha    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
-
-msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-msc:   for mu+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
-
-muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for mu-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
-
-muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
- This region is in the mass world.
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_C 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
 
 Index : 2     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
-Index : 3     used in the geometry : Yes
- Material : G4_C
+====================================================================
+
+### Run 10 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 2000
+  User=3.02s Real=6.01s Sys=0s
+#
+# alpha at 1 GeV/nucleon on H
+#
+/gun/particle alpha
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial H
+SimpleBox is now made of H
+/run/beamOn 2000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : H 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No 
+ Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : Yes
+ Material : H
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
+
+====================================================================
+
+### Run 11 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 2000
+  User=0.03s Real=0.04s Sys=0s
+#
+# alpha at 1 GeV/nucleon on Silicon
+#
+/gun/particle alpha
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial Si
+SimpleBox is now made of Si
+/run/beamOn 2000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Silicon 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : No 
+ Material : Uranium
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+
+Index : 1     used in the geometry : No 
+ Material : H
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+
+Index : 2     used in the geometry : Yes
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1590,23 +1390,22 @@ Index : 3     used in the geometry : Yes
 ### Run 12 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.12s Real=0.14s Sys=0s
+  Number of events processed : 2000
+  User=1.09s Real=2.19s Sys=0s
 #
-# neutron at 10 GeV in Carbon
+# deuteron at 200 MeV/nucleon in U
 #
-/gun/particle neutron
-/gun/energy 10 GeV
-/mydet/SelectMaterial G4_C
- Using geant4 material G4_C
-SimpleBox is now made of G4_C
-/run/beamOn 20
+/gun/particle alpha
+/gun/energy 200 MeV
+/mydet/SelectMaterial U
+SimpleBox is now made of U
+/run/beamOn 2000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_C 
+ Materials : Uranium 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -1617,50 +1416,44 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No 
+Index : 0     used in the geometry : Yes
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No 
- Material : Copper
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
 
 Index : 2     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
-
-Index : 3     used in the geometry : Yes
- Material : G4_C
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
 
 ====================================================================
 
 ### Run 13 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.13s Real=0.17s Sys=0s
+  Number of events processed : 2000
+  User=0.03s Real=0.03s Sys=0s
 #
-# pi+ at 10 GeV in Carbon
+# alpha at 200 MeV/nucleon on H
 #
-/gun/particle pi+
-/gun/energy 10 GeV
-/mydet/SelectMaterial G4_C
- Using geant4 material G4_C
-SimpleBox is now made of G4_C
-/run/beamOn 20
+/gun/particle alpha
+/gun/energy 200 MeV
+/mydet/SelectMaterial H
+SimpleBox is now made of H
+/run/beamOn 2000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_C 
+ Materials : H 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -1676,45 +1469,39 @@ Index : 0     used in the geometry : No
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No 
- Material : Copper
+Index : 1     used in the geometry : Yes
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
-
-Index : 3     used in the geometry : Yes
- Material : G4_C
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
 
 ====================================================================
 
 ### Run 14 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.14s Real=0.21s Sys=0s
+  Number of events processed : 2000
+  User=0.3s Real=0.59s Sys=0s
 #
-# pi- at 10 GeV in Carbon
+# alpha at 200 MeV/nucleon on Silicon
 #
-/gun/particle pi-
-/gun/energy 10 GeV
-/mydet/SelectMaterial G4_C
- Using geant4 material G4_C
-SimpleBox is now made of G4_C
-/run/beamOn 20
+/gun/particle alpha
+/gun/energy 200 MeV
+/mydet/SelectMaterial Si
+SimpleBox is now made of Si
+/run/beamOn 2000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_C 
+ Materials : Silicon 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -1731,19 +1518,14 @@ Index : 0     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No 
- Material : Copper
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
 
-Index : 2     used in the geometry : No 
+Index : 2     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
-
-Index : 3     used in the geometry : Yes
- Material : G4_C
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -1752,242 +1534,25 @@ Index : 3     used in the geometry : Yes
 ### Run 15 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.13s Real=0.15s Sys=0s
+  Number of events processed : 2000
+  User=0.06s Real=0.17s Sys=0s
 #
-# proton at 10 GeV in Beryllium
+#  .....end alpha............
 #
-/gun/particle proton
-/gun/energy 10 GeV
-/mydet/SelectMaterial G4_Be
- Using geant4 material G4_Be
-SimpleBox is now made of G4_Be
-/run/beamOn 20
-
-conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
-
-compt:   for  gamma    SubType= 13
-      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
-
-phot:   for  gamma    SubType= 12
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
-
-msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
-
-eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
-
-msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
-
-eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      LPM flag: 1 for E > 1 GeV
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
-
-annihil:   for  e+    SubType= 5
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
-
-hIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-msc:   for alpha    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
-
-msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
-
-msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
-
-msc:   for mu+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
-
-muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for mu-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
-
-muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
-
-muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
-
-hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+# C(12,6)++ at 1 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial U
+SimpleBox is now made of U
+/run/beamOn 2000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_Be 
+ Materials : Uranium 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -1998,55 +1563,45 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : No 
+Index : 0     used in the geometry : Yes
  Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : No 
- Material : Copper
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
 
 Index : 2     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
-
-Index : 3     used in the geometry : No 
- Material : G4_C
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
-
-Index : 4     used in the geometry : Yes
- Material : G4_Be
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  1.69557 MeV    e-  506.049 MeV    e+  479.562 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
 
 ====================================================================
 
 ### Run 16 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.12s Real=0.14s Sys=0.01s
+  Number of events processed : 2000
+  User=1.93s Real=3.83s Sys=0s
 #
-# neutron at 10 GeV in Beryllium
+# C(12,6)++ at 1 GeV/nucleon on H
 #
-/gun/particle neutron
-/gun/energy 10 GeV
-/mydet/SelectMaterial G4_Be
- Using geant4 material G4_Be
-SimpleBox is now made of G4_Be
-/run/beamOn 20
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial H
+SimpleBox is now made of H
+/run/beamOn 2000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_Be 
+ Materials : H 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -2062,50 +1617,40 @@ Index : 0     used in the geometry : No
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No 
- Material : Copper
+Index : 1     used in the geometry : Yes
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No 
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
-
-Index : 3     used in the geometry : No 
- Material : G4_C
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
-
-Index : 4     used in the geometry : Yes
- Material : G4_Be
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  1.69557 MeV    e-  506.049 MeV    e+  479.562 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
 
 ====================================================================
 
 ### Run 17 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.11s Real=0.25s Sys=0s
+  Number of events processed : 2000
+  User=0.1s Real=0.2s Sys=0s
 #
-# pi+ at 10 GeV in Beryllium
+# C(12,6)++ at 1 GeV/nucleon on Silicon
 #
-/gun/particle pi+
-/gun/energy 10 GeV
-/mydet/SelectMaterial G4_Be
- Using geant4 material G4_Be
-SimpleBox is now made of G4_Be
-/run/beamOn 20
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial Si
+SimpleBox is now made of Si
+/run/beamOn 2000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_Be 
+ Materials : Silicon 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -2122,24 +1667,14 @@ Index : 0     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No 
- Material : Copper
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
 
-Index : 2     used in the geometry : No 
+Index : 2     used in the geometry : Yes
  Material : Silicon
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
-
-Index : 3     used in the geometry : No 
- Material : G4_C
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
-
-Index : 4     used in the geometry : Yes
- Material : G4_Be
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  1.69557 MeV    e-  506.049 MeV    e+  479.562 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2148,75 +1683,17 @@ Index : 4     used in the geometry : Yes
 ### Run 18 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0.13s Real=0.16s Sys=0s
+  Number of events processed : 2000
+  User=0.86s Real=1.76s Sys=0s
 #
-# pi- at 10 GeV in Beryllium
+# C(12,6)++ at 1 GeV/nucleon on Water
 #
-/gun/particle pi-
-/gun/energy 10 GeV
-/mydet/SelectMaterial G4_Be
- Using geant4 material G4_Be
-SimpleBox is now made of G4_Be
-/run/beamOn 20
-
-Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
- This region is in the mass world.
- Root logical volume(s) : SLog 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : G4_Be 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : No 
- Material : Uranium
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 1     used in the geometry : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : No 
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
-
-Index : 3     used in the geometry : No 
- Material : G4_C
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
-
-Index : 4     used in the geometry : Yes
- Material : G4_Be
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  1.69557 MeV    e-  506.049 MeV    e+  479.562 MeV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-### Run 19 starts.
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=0.13s Real=0.13s Sys=0s
-#
-# proton at 10 GeV in H
-#
-/gun/particle proton
-/gun/energy 10 GeV
-/mydet/SelectMaterial H
-SimpleBox is now made of H
-/run/beamOn 20
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial H2O
+SimpleBox is now made of H2O
+/run/beamOn 2000
 
 conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
@@ -2441,7 +1918,7 @@ Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : H 
+ Materials : Water 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -2458,9 +1935,66 @@ Index : 0     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No 
- Material : Copper
+ Material : H
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+
+Index : 2     used in the geometry : No 
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
+
+Index : 3     used in the geometry : Yes
+ Material : Water
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  842.936 keV    e-  324.767 MeV    e+  307.769 MeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 19 starts.
+Run terminated.
+Run Summary
+  Number of events processed : 2000
+  User=0.69s Real=1.39s Sys=0s
+#
+#
+# C(12,6)++ at 200 MeV in U
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 200 MeV
+/mydet/SelectMaterial U
+SimpleBox is now made of U
+/run/beamOn 2000
+
+Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
+ This region is in the mass world.
+ Root logical volume(s) : SLog 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Uranium 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Uranium
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : No 
+ Material : H
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
 
 Index : 2     used in the geometry : No 
  Material : Silicon
@@ -2468,37 +2002,26 @@ Index : 2     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
 Index : 3     used in the geometry : No 
- Material : G4_C
+ Material : Water
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
-
-Index : 4     used in the geometry : No 
- Material : G4_Be
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  1.69557 MeV    e-  506.049 MeV    e+  479.562 MeV proton 100 MeV
-
-Index : 5     used in the geometry : Yes
- Material : H
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+ Energy thresholds :  gamma  842.936 keV    e-  324.767 MeV    e+  307.769 MeV proton 100 MeV
 
 ====================================================================
 
 ### Run 20 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  Number of events processed : 2000
+  User=0.03s Real=0.03s Sys=0s
 #
-# neutron at 10 GeV in H
+# C(12,6)++ at 200 MeV/nucleon on H
 #
-/gun/particle neutron
-/gun/energy 10 GeV
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 200 MeV
 /mydet/SelectMaterial H
 SimpleBox is now made of H
-/run/beamOn 20
+/run/beamOn 2000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -2520,10 +2043,12 @@ Index : 0     used in the geometry : No
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
-Index : 1     used in the geometry : No 
- Material : Copper
+Index : 1     used in the geometry : Yes
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : No 
  Material : Silicon
@@ -2531,43 +2056,32 @@ Index : 2     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
 Index : 3     used in the geometry : No 
- Material : G4_C
+ Material : Water
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
-
-Index : 4     used in the geometry : No 
- Material : G4_Be
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  1.69557 MeV    e-  506.049 MeV    e+  479.562 MeV proton 100 MeV
-
-Index : 5     used in the geometry : Yes
- Material : H
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
+ Energy thresholds :  gamma  842.936 keV    e-  324.767 MeV    e+  307.769 MeV proton 100 MeV
 
 ====================================================================
 
 ### Run 21 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  Number of events processed : 2000
+  User=0.33s Real=0.73s Sys=0s
 #
-# pi+ at 10 GeV in H
+# C(12,6)++ at 200 MeV/nucleon on Silicon
 #
-/gun/particle pi+
-/gun/energy 10 GeV
-/mydet/SelectMaterial H
-SimpleBox is now made of H
-/run/beamOn 20
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 200 MeV
+/mydet/SelectMaterial Si
+SimpleBox is now made of Si
+/run/beamOn 2000
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : H 
+ Materials : Silicon 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -2584,53 +2098,266 @@ Index : 0     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No 
- Material : Copper
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
-
-Index : 2     used in the geometry : No 
- Material : Silicon
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
-
-Index : 3     used in the geometry : No 
- Material : G4_C
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
-
-Index : 4     used in the geometry : No 
- Material : G4_Be
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  1.69557 MeV    e-  506.049 MeV    e+  479.562 MeV proton 100 MeV
-
-Index : 5     used in the geometry : Yes
  Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
  Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+
+Index : 2     used in the geometry : Yes
+ Material : Silicon
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : No 
+ Material : Water
+ Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
+ Energy thresholds :  gamma  842.936 keV    e-  324.767 MeV    e+  307.769 MeV proton 100 MeV
 
 ====================================================================
 
 ### Run 22 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  Number of events processed : 2000
+  User=0.05s Real=0.06s Sys=0s
 #
-# pi- at 10 GeV in H
+#  .....end C(12,6)++............
 #
-/gun/particle pi-
-/gun/energy 10 GeV
-/mydet/SelectMaterial H
-SimpleBox is now made of H
-/run/beamOn 20
+# beyond what we really can do.... we think.
+# Fe(56,26) charge 5 at 2 GeV in Lead
+#
+/gun/particle ion
+/gun/ion 26 56 5
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 1
+
+conv:   for  gamma    SubType= 14
+      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+compt:   for  gamma    SubType= 13
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
+
+phot:   for  gamma    SubType= 12
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
+
+msc:   for e-    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+annihil:   for  e+    SubType= 5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+
+hIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+msc:   for kaon+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+msc:   for mu+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+msc:   for pi-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
  Root logical volume(s) : SLog 
  Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : H 
+ Materials : Lead 
  Production cuts :   gamma 1 m       e- 1 m       e+ 1 m   proton 1 m  
 
 Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
@@ -2647,9 +2374,9 @@ Index : 0     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
 
 Index : 1     used in the geometry : No 
- Material : Copper
+ Material : H
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
+ Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
 
 Index : 2     used in the geometry : No 
  Material : Silicon
@@ -2657,19 +2384,14 @@ Index : 2     used in the geometry : No
  Energy thresholds :  gamma  10 GeV    e-  1.01792 GeV    e+  964.644 MeV proton 100 MeV
 
 Index : 3     used in the geometry : No 
- Material : G4_C
+ Material : Water
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  3.06298 MeV    e-  662.113 MeV    e+  627.457 MeV proton 100 MeV
+ Energy thresholds :  gamma  842.936 keV    e-  324.767 MeV    e+  307.769 MeV proton 100 MeV
 
-Index : 4     used in the geometry : No 
- Material : G4_Be
+Index : 4     used in the geometry : Yes
+ Material : Lead
  Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  1.69557 MeV    e-  506.049 MeV    e+  479.562 MeV proton 100 MeV
-
-Index : 5     used in the geometry : Yes
- Material : H
- Range cuts        :  gamma  1 m      e-  1 m      e+  1 m   proton 1 m  
- Energy thresholds :  gamma  990 eV     e-  707.805 keV    e+  689.033 keV proton 100 MeV
+ Energy thresholds :  gamma  10 GeV    e-  10 GeV    e+  10 GeV proton 100 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -2678,7 +2400,7 @@ Index : 5     used in the geometry : Yes
 ### Run 23 starts.
 Run terminated.
 Run Summary
-  Number of events processed : 20
+  Number of events processed : 1
   User=0s Real=0s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -2690,8 +2412,8 @@ RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.68 Mb
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.6 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
