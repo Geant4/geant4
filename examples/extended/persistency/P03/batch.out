@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -401,7 +401,7 @@ G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
     "my tube":1
       "sphere":1
 G4ASCIITreeSceneHandler::EndModeling
-Start Run processing.
+### Run 0 starts.
 Run terminated.
 Run Summary
   Number of events processed : 10
@@ -436,6 +436,7 @@ G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
       "sphere":1
 G4ASCIITreeSceneHandler::EndModeling
 10 events have been kept for refreshing and/or reviewing.
+  "/vis/reviewKeptEvents" to review them.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -448,7 +449,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 14 of which, static: 1
-Dynamic pools deleted: 13 / Total memory freed: 0.12 Mb
+Dynamic pools deleted: 13 / Total memory freed: 0.1 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

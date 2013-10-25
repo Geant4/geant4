@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -498,6 +498,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -506,7 +507,6 @@ Index : 0     used in the geometry : Yes
 ----------------------------------------
 
 ----> Histogram file is opened in testem2.root
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -520,36 +520,35 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.61s Real=4.11s Sys=0.03s
+  User=3.44s Real=3.6s Sys=0.01s
 
  SUMMARY 
 
 
- Mean number of charged steps:  3810.47
- Mean number of neutral steps:  3824.81
+ Mean number of charged steps:  3822.45
+ Mean number of neutral steps:  3832.77
 
- energy deposit :   94.87 % E0 +-    1.09 % E0
- charged traklen:  422.85 radl +-    5.20 radl
- neutral traklen: 4175.54 radl +-  114.56 radl
+ energy deposit :   95.04 % E0 +-    0.68 % E0
+ charged traklen:  423.48 radl +-    3.70 radl
+ neutral traklen: 4193.36 radl +-  113.97 radl
 
- 90.00 % confinement: radius = 2.78 radl  (2.48 cm )
+ 90.00 % confinement: radius = 2.75 radl  (2.46 cm )
 
 ... write Root file : testem2.root - done
-... close Root file : testem2.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1164843949, 1171851968
+ Current couple of seeds = 1811945004, 1278904676
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.948652  delEdep= -0.000348029 nrms= -0.424425
-Erms: 0.0108847  delErms= 0.00268475 nrms= 3.27408
+Edep: 0.950445  delEdep= 0.001445 nrms= 1.76219
+Erms: 0.0067516  delErms= -0.0014484 nrms= -1.76635
 <<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.3 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.27 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

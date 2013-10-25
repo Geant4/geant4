@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -439,10 +439,10 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 0 starts.
 ### Run 0 start.
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -525,8 +525,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0  -1.86 um  -17.8 cm   2.16 cm   2.45 keV     0 eV      0 fm      0 fm      World   initStep
     1  -1.59 um  -17.8 cm   2.16 cm   2.28 MeV  2.45 keV   210 um    210 um      World     eIoni
-    2  -1.31 um  -18.2 cm   2.16 cm   37.6 MeV   450 eV   3.54 mm   3.75 mm      World     eIoni
-    3  -1.12 um    -20 cm   2.16 cm    221 MeV  3.61 keV  1.84 cm   2.21 cm OutOfWorldTransportation
+    2  -1.31 um  -18.2 cm   2.16 cm   37.6 MeV   450 eV   3.54 mm   3.75 mm      WorldTransportation
+    3  -1.31 um  -18.2 cm   2.16 cm   37.6 MeV7.53e-14 eV 0.000395 fm   3.75 mm      World     eIoni
+    4  -1.12 um    -20 cm   2.16 cm    221 MeV  3.61 keV  1.84 cm   2.21 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -2879,10 +2880,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0   3.72 um  -8.98 cm   1.83 cm   2.38 keV     0 eV      0 fm      0 fm      World   initStep
     1   15.5 um  -8.99 cm   1.83 cm   2.17 MeV  2.38 keV   200 um    200 um      World     eIoni
-    2   33.8 um  -10.1 cm   1.83 cm    112 MeV  1.44 keV  1.09 cm   1.11 cm      WorldTransportation
-    3   33.8 um  -10.1 cm   1.83 cm    112 MeV3.72e-13 eV 0.00185 fm   1.11 cm      World     eIoni
-    4   39.7 um  -12.8 cm   1.83 cm    385 MeV  4.32 keV  2.73 cm   3.85 cm      World     eIoni
-    5   44.4 um    -20 cm   1.83 cm    1.1 GeV  15.1 keV  7.18 cm     11 cm OutOfWorldTransportation
+    2   33.8 um  -10.1 cm   1.83 cm    112 MeV  1.44 keV  1.09 cm   1.11 cm      World     eIoni
+    3   39.7 um  -12.8 cm   1.83 cm    385 MeV  4.32 keV  2.73 cm   3.85 cm      World     eIoni
+    4   44.4 um    -20 cm   1.83 cm    1.1 GeV  15.1 keV  7.18 cm     11 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 3
@@ -4836,13 +4836,13 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.06s Real=0.09s Sys=0s
+  User=0.04s Real=0.06s Sys=0.01s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 1
-Dynamic pools deleted: 12 / Total memory freed: 0.098 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.087 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

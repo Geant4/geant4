@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -813,17 +813,17 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 ### Run 0 start
 HistoManager: Histograms are booked and run has been started
  BinsCluster= 200    BinsE= 20   Emax(keV)= 60
-Start Run processing.
 ### PrimaryGeneratorAction::GeneratePrimaries ##########
 ### proton  E(MeV)= 200000
 ########################################################
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.21s Real=0.23s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000
@@ -867,7 +867,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.52 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.45 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -479,31 +479,31 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.12s Real=0.13s Sys=0s
+  User=0.13s Real=0.15s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	2.7386 cm  +- 1.3406 mm 
- geomPathLength :	2.0624 cm  +- 848.02 um 
- lateralDisplac :	143.5 um  +- 1.2184 mm 
- Psi            :	7.6887 mrad +- 60.832 mrad  (0.44053 deg +- 3.4854 deg)
+ truePathLength :	2.7386 cm  +- 1.3403 mm 
+ geomPathLength :	2.0625 cm  +- 847.88 um 
+ lateralDisplac :	143.53 um  +- 1.2187 mm 
+ Psi            :	7.6894 mrad +- 60.838 mrad  (0.44057 deg +- 3.4858 deg)
 
- Theta_plane    :	134.58 mrad  (7.7108 deg)
- phi correlation:	0.0051984 +- 0.061195  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	134.59 mrad  (7.7115 deg)
+ phi correlation:	0.0051978 +- 0.061193  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -552,19 +552,19 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 1 starts.
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 1795894202, 141055913
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.17s Real=0.24s Sys=0s
+  User=0.16s Real=0.17s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -600,7 +600,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.16 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.14 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

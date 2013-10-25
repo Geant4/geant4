@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -202,37 +202,37 @@ Index : 5     used in the geometry : Yes
 
 ====================================================================
 
+### Run 0 starts.
 ### Run 0 start
 ### Histo start initialisation nHisto= 10
    80 bins R   stepR= 2.5 mm 
    60 bins Z   stepZ= 5 mm 
    200 bins E   stepE= 0.25 MeV 
    14-th bin in Z is used for R distribution
-Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=6.13s Real=7.13s Sys=0.02s
+  User=5.96s Real=7.9s Sys=0.01s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         13.3
-Average number of gamma                      19.34
-Average number of e+                         0.7598
-Average number of steps in the phantom       11.45
+Average number of e-                         13.38
+Average number of gamma                      19.4
+Average number of e+                         0.7637
+Average number of steps in the phantom       11.4
 Average number of e- steps in the target     18.06
-Average number of g  produced in the target  18.54
-Average number of e- produced in the target  7.116
-Average number of g produced in the phantom  0.4812
-Average number of e- produced in the phantom 2.657
-Total fGamma fluence in front of the phantom 8.072 MeV 
+Average number of g  produced in the target  18.57
+Average number of e- produced in the target  7.092
+Average number of g produced in the phantom  0.4746
+Average number of e- produced in the phantom 2.648
+Total fGamma fluence in front of the phantom 7.918 MeV 
 ========================================================
 
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.41 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.35 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

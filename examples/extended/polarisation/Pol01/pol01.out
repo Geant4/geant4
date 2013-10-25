@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -153,8 +153,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 ### Run 0 start.
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -168,33 +168,33 @@ Run Summary
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.610461 0.914617 0.496486 0.116813 0.858309 0.00759017 0.00754017 0.0509143 0.733074 0.452326 0.689366 0.545937 0.332368 0.0503588 0.607584 0.761418 0.36778 0.711494 0.29532 0.124226 0.201371 0.851051 0.188286 0.0528449 
- i_lag = 10, j_lag = 20
- carry = 0, count24 = 18
+ float_seed_table[] = 0.0264334 0.64195 0.493295 0.18851 0.964281 0.456406 0.955391 0.929855 0.0357821 0.988903 0.156919 0.15968 0.511123 0.687872 0.589778 0.119016 0.248571 0.219332 0.0155595 0.415101 0.524789 0.53116 0.417337 0.126677 
+ i_lag = 11, j_lag = 21
+ carry = 5.96046e-08, count24 = 1
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31236
-	pol-compt = 302
-	pol-eBrem = 399
-	msc = 2849
-	pol-phot = 196
-	pol-eIoni = 649
-	pol-conv = 218
-	pol-annihil = 74
+	Transportation = 31356
+	pol-compt = 322
+	pol-eBrem = 456
+	msc = 3160
+	pol-phot = 217
+	pol-eIoni = 706
+	pol-conv = 234
+	pol-annihil = 78
  Gamma: 
-Mean Number per Event :1.012
-Mean Energy :9.5426 MeV +- 1.9845 MeV
-Mean Polarization :-0.96084 +- 0.19082
+Mean Number per Event :1.0147
+Mean Energy :9.4968 MeV +- 2.0773 MeV
+Mean Polarization :-0.95613 +- 0.20134
  Electron: 
-Mean Number per Event :0.0352
-Mean Energy :5.2872 MeV +- 2.4771 MeV
-Mean Polarization :-0.72477 +- 0.29872
+Mean Number per Event :0.0372
+Mean Energy :5.2761 MeV +- 2.5555 MeV
+Mean Polarization :-0.73068 +- 0.29286
  Positron: 
-Mean Number per Event :0.0146
-Mean Energy :4.3885 MeV +- 2.0184 MeV
-Mean Polarization :-0.61519 +- 0.30698
+Mean Number per Event :0.0159
+Mean Energy :4.2428 MeV +- 1.9881 MeV
+Mean Polarization :-0.62539 +- 0.30229
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -206,7 +206,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.025 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.023 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

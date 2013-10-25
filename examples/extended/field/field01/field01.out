@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -431,10 +431,10 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 0 starts.
 ### Run 0 start.
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -450,7 +450,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -464,10 +464,10 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 1 starts.
 ### Run 1 start.
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -497,10 +497,10 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 2 starts.
 ### Run 2 start.
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -530,10 +530,10 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 3 starts.
 ### Run 3 start.
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -563,10 +563,10 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 4 starts.
 ### Run 4 start.
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -599,10 +599,10 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 5 starts.
 ### Run 5 start.
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -630,10 +630,10 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 6 starts.
 ### Run 6 start.
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -657,13 +657,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 1
-Dynamic pools deleted: 12 / Total memory freed: 0.08 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.07 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

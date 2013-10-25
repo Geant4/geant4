@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -93,6 +93,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -101,7 +102,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 
 ---> stepMax from histos 1 and 8 = 2.03705 cm 
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -125,7 +125,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.41s Real=2.61s Sys=0s
+  User=2.35s Real=2.42s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -133,18 +133,18 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 3.943 MeV +- 223.635 keV
+ Total Energy deposited        = 3.944 MeV +- 223.774 keV
 
- Track length of primary track = 2.037 cm  +- 2.814 mm 
+ Track length of primary track = 2.039 cm  +- 2.810 mm 
  Range from EmCalculator       = 2.037 cm  (from full dE/dx)
 
- Projected range               = 1.321 cm  +- 3.907 mm 
+ Projected range               = 1.324 cm  +- 3.909 mm 
 
- Nb of steps of primary track  = 16.29 +- 3.00	 Step size= 1.288 mm  +- 281.707 um 
+ Nb of steps of primary track  = 16.28 +- 3.00	 Step size= 1.289 mm  +- 281.531 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1116957348, 1079204462
+ Current couple of seeds = 2037147422, 625359834
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -156,7 +156,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.16 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.14 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

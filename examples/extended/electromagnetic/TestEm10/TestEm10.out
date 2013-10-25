@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -384,35 +384,35 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.89s Real=0.99s Sys=0s
+  User=0.88s Real=1.35s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=44.9507 +- 0.633135  mm  
+    mean charged track length   in absorber=45.1772 +- 0.670936  mm  
 
-            mean energy deposit in absorber=0.0532101 +- 0.000921609  MeV 
+            mean energy deposit in absorber=0.0536227 +- 0.00096073  MeV 
 
- mean number of steps in absorber (charged) =9.053 +- 0.253673      
- mean number of steps in absorber (neutral) =2.717 +- 0.0504867      
+ mean number of steps in absorber (charged) =8.914 +- 0.243012      
+ mean number of steps in absorber (neutral) =2.819 +- 0.0518868      
 
-   mean number of charged secondaries = 3.422 +- 0.0734569
+   mean number of charged secondaries = 3.47 +- 0.076414
 
-   mean number of neutral secondaries = 0.045 +- 0.00655553
+   mean number of neutral secondaries = 0.054 +- 0.00714731
 
-   mean number of e-s =3.422  and e+s =0
+   mean number of e-s =3.47  and e+s =0
 
-(number) transmission coeff=0.231  reflection coeff=0
+(number) transmission coeff=0.237  reflection coeff=0
 
  energy deposit distribution 
 #entries=1000    #underflows=0    #overflows=64
@@ -424,71 +424,71 @@ Run Summary
     4   6.15385           0           0
     5   7.69231           0           0
     6   9.23077           0           0
-    7   10.7692           0           0
+    7   10.7692           1       0.001
     8   12.3077           0           0
-    9   13.8462           3       0.003
-   10   15.3846           4       0.004
+    9   13.8462           4       0.004
+   10   15.3846           3       0.003
    11   16.9231          15       0.015
-   12   18.4615          16       0.016
-   13        20          16       0.016
-   14   21.5385          11       0.011
-   15   23.0769          27       0.027
-   16   24.6154          20        0.02
-   17   26.1538          30        0.03
-   18   27.6923          23       0.023
-   19   29.2308          25       0.025
+   12   18.4615          15       0.015
+   13        20          12       0.012
+   14   21.5385          14       0.014
+   15   23.0769          25       0.025
+   16   24.6154          13       0.013
+   17   26.1538          21       0.021
+   18   27.6923          26       0.026
+   19   29.2308          33       0.033
    20   30.7692          33       0.033
-   21   32.3077          26       0.026
-   22   33.8462          30        0.03
-   23   35.3846          30        0.03
-   24   36.9231          28       0.028
+   21   32.3077          30        0.03
+   22   33.8462          38       0.038
+   23   35.3846          27       0.027
+   24   36.9231          36       0.036
    25   38.4615          30        0.03
-   26        40          29       0.029
-   27   41.5385          29       0.029
-   28   43.0769          32       0.032
-   29   44.6154          20        0.02
-   30   46.1538          31       0.031
-   31   47.6923          25       0.025
-   32   49.2308          32       0.032
+   26        40          28       0.028
+   27   41.5385          30        0.03
+   28   43.0769          26       0.026
+   29   44.6154          25       0.025
+   30   46.1538          27       0.027
+   31   47.6923          23       0.023
+   32   49.2308          30        0.03
    33   50.7692          22       0.022
-   34   52.3077          22       0.022
-   35   53.8462          12       0.012
-   36   55.3846          27       0.027
-   37   56.9231          30        0.03
-   38   58.4615          21       0.021
-   39        60          21       0.021
-   40   61.5385          20        0.02
+   34   52.3077          15       0.015
+   35   53.8462          21       0.021
+   36   55.3846          26       0.026
+   37   56.9231          23       0.023
+   38   58.4615          18       0.018
+   39        60          29       0.029
+   40   61.5385          17       0.017
    41   63.0769          14       0.014
-   42   64.6154          16       0.016
+   42   64.6154          14       0.014
    43   66.1538          15       0.015
-   44   67.6923          14       0.014
-   45   69.2308          16       0.016
-   46   70.7692          13       0.013
+   44   67.6923          15       0.015
+   45   69.2308          11       0.011
+   46   70.7692          10        0.01
    47   72.3077          10        0.01
-   48   73.8462           8       0.008
-   49   75.3846           7       0.007
-   50   76.9231           8       0.008
-   51   78.4615           9       0.009
-   52        80          11       0.011
-   53   81.5385           5       0.005
-   54   83.0769           6       0.006
-   55   84.6154           3       0.003
-   56   86.1538           2       0.002
-   57   87.6923           8       0.008
-   58   89.2308           4       0.004
-   59   90.7692           6       0.006
+   48   73.8462          11       0.011
+   49   75.3846          10        0.01
+   50   76.9231           9       0.009
+   51   78.4615           8       0.008
+   52        80          12       0.012
+   53   81.5385           1       0.001
+   54   83.0769           4       0.004
+   55   84.6154           8       0.008
+   56   86.1538           5       0.005
+   57   87.6923          11       0.011
+   58   89.2308           6       0.006
+   59   90.7692           5       0.005
    60   92.3077           6       0.006
-   61   93.8462           5       0.005
-   62   95.3846           5       0.005
-   63   96.9231           3       0.003
+   61   93.8462           7       0.007
+   62   95.3846           2       0.002
+   63   96.9231           4       0.004
    64   98.4615           2       0.002
 
- Emp =       0.0307692   width=      0.0384615  MeV 
+ Emp =       0.0338462   width=      0.0369231  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1626016571, 1262449576
+ Current couple of seeds = 1989564072, 61060926
 ----------------------------------------
 
 ========= Table of registered couples ==============================
@@ -519,6 +519,6 @@ Index : 2     used in the geometry : Yes
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 1
-Dynamic pools deleted: 12 / Total memory freed: 0.42 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.36 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

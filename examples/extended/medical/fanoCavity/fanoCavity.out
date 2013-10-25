@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -212,23 +212,23 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
- ---> NbofEvents= 1000   NbOfelectr= 70169   Tkin= 586.623 keV (0.000 %)   NbOfelec in cav= 4985   Dose/EnFluence= 32.812 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70169   Tkin= 587.523 keV (0.000 %)   NbOfelec in cav= 5064   Dose/EnFluence= 34.304 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 141091   Tkin= 587.983 keV (0.232 %)   NbOfelec in cav= 9654   Dose/EnFluence= 31.556 cm2/g (-3.830 %)
+ ---> NbofEvents= 2000   NbOfelectr= 141065   Tkin= 587.759 keV (0.040 %)   NbOfelec in cav= 9786   Dose/EnFluence= 32.761 cm2/g (-4.499 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 212111   Tkin= 587.593 keV (-0.066 %)   NbOfelec in cav= 14167   Dose/EnFluence= 30.487 cm2/g (-3.387 %)
+ ---> NbofEvents= 3000   NbOfelectr= 211547   Tkin= 587.352 keV (-0.069 %)   NbOfelec in cav= 14334   Dose/EnFluence= 31.207 cm2/g (-4.743 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=27.69s Real=30.95s Sys=0.14s
+  User=27.22s Real=32.23s Sys=0.11s
 
  ======================== run summary ======================
 
@@ -238,32 +238,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 282295  Transportation= 77626  msc= 2466454  eIoni= 1722660  conv= 1
+ Process calls frequency --->  compt= 281689  Transportation= 78168  msc= 2464883  eIoni= 1719937
 
- Gamma crossSections in wall material :  compt= 63.447 cm2/g  conv= 0.000 cm2/g   --> total= 63.447 cm2/g
+ Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 587.7075 keV +- 0.1031 %  (--> range in wall material = 2.2190 mm )
- Mass_energy_transfer coef: 29.8307 cm2/g
+ Mean energy of secondary e- = 588.0271 keV +- 0.1030 %  (--> range in wall material = 2.2206 mm )
+ Mass_energy_transfer coef: 29.8469 cm2/g
 
- StoppingPower in wall   = 1.9642 MeV*cm2/g
-               in cavity = 1.9642 MeV*cm2/g
+ StoppingPower in wall   = 1.9640 MeV*cm2/g
+               in cavity = 1.9640 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 18710	 Energy = 9.4539 GeV
-      Exit  --> nbParticles = 18715	 Energy = 9.4540 GeV
+      Enter --> nbParticles = 19112	 Energy = 9.6496 GeV
+      Exit  --> nbParticles = 19112	 Energy = 9.6504 GeV
 
- Total edep in cavity = 13.7153 MeV +- 4.8978 %	 Total charged trackLength = 51.6218 m     (mean value = 2.7590 mm )
- Total dose in cavity = 21.8286 MeV/mg
- Dose/EnergyFluence   = 30.8594 cm2/g
+ Total edep in cavity = 13.8889 MeV +- 3.6884 %	 Total charged trackLength = 53.2175 m     (mean value = 2.7845 mm )
+ Total dose in cavity = 22.1048 MeV/mg
+ Dose/EnergyFluence   = 31.2499 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.03449 +- 0.05068
+ (Dose/EnergyFluence)/Mass_energy_transfer = 1.04701 +- 0.03863
 
- StepSize of ch. tracks in wall   = 112.8420 um  +- 71.9861 um 	 (nbSteps/track = 14.8490)
- StepSize of ch. tracks in cavity = 766.1975 um  +- 957.0002 um 	 (nbSteps/track = 3.6010)
+ StepSize of ch. tracks in wall   = 112.7461 um  +- 72.0287 um 	 (nbSteps/track = 14.8612)
+ StepSize of ch. tracks in cavity = 769.5613 um  +- 962.0339 um 	 (nbSteps/track = 3.6183)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1398567863, 1495986644
+ Current couple of seeds = 100595595, 977048709
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

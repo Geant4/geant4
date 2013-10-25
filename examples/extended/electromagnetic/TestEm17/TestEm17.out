@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -273,13 +273,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -303,18 +303,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.16s Real=3.21s Sys=0.04s
+  User=2.17s Real=2.83s Sys=0s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 462481	muPairProd : 63347	muBrems : 665
+ Number of process calls --->	muIoni : 463808	muPairProd : 64065	muBrems : 660
 
- Simulation: total CrossSection = 0.52649 /cm	 MeanFreePath = 1.8994 cm 	 massicCrossSection = 0.066899 cm2/g
+ Simulation: total CrossSection = 0.52853 /cm	 MeanFreePath = 1.892 cm 	 massicCrossSection = 0.067158 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 869030765, 1423962906
+ Current couple of seeds = 270232083, 1444709301
 ----------------------------------------
 #
 /gun/particle pi+
@@ -344,13 +344,13 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 1 starts.
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 869030765, 1423962906
+ Current couple of seeds = 270232083, 1444709301
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -374,17 +374,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.09s Real=2.49s Sys=0s
+  User=2.14s Real=2.31s Sys=0s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 434705	hPairProd : 59514	hBrems : 327
+ Number of process calls --->	hIoni : 435005	hPairProd : 59600	hBrems : 337
 
- Simulation: total CrossSection = 0.49455 /cm	 MeanFreePath = 2.0221 cm 	 massicCrossSection = 0.062839 cm2/g
+ Simulation: total CrossSection = 0.49494 /cm	 MeanFreePath = 2.0204 cm 	 massicCrossSection = 0.06289 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 104392107, 651012902
+ Current couple of seeds = 364471086, 1147835068
 ----------------------------------------
 #
 /gun/particle proton
@@ -414,13 +414,13 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
+### Run 2 starts.
 ### Run 2 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 104392107, 651012902
+ Current couple of seeds = 364471086, 1147835068
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -444,17 +444,17 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.97s Real=2.25s Sys=0.01s
+  User=2s Real=2.18s Sys=0s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hPairProd : 34129	hIoni : 435396	hBrems : 8
+ Number of process calls --->	hIoni : 434903	hPairProd : 34114	hBrems : 7
 
- Simulation: total CrossSection = 0.46953 /cm	 MeanFreePath = 2.1298 cm 	 massicCrossSection = 0.059661 cm2/g
+ Simulation: total CrossSection = 0.46902 /cm	 MeanFreePath = 2.1321 cm 	 massicCrossSection = 0.059596 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1789541349, 525436336
+ Current couple of seeds = 613508996, 2103217183
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
@@ -467,7 +467,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.1 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.094 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

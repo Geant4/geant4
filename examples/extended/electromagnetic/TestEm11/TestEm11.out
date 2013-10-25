@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -439,13 +439,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
      100.00          0k         1        1          1         0.00    G4_Si
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -453,7 +453,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=3.25s Real=3.45s Sys=0s
+  User=3.16s Real=4.72s Sys=0.04s
 
  ======================== run summary ======================
 
@@ -462,20 +462,20 @@ Run Summary
 
  ============================================================
 
- Total Energy deposited        = 452.676 keV +- 101.589 keV
+ Total Energy deposited        = 452.736 keV +- 101.522 keV
 
- Track length of primary track = 887.277 um  +- 189.635 um 
+ Track length of primary track = 887.321 um  +- 189.558 um 
  Range from EmCalculator = 942.765 um  (from full dE/dx)
 
- Projected range               = 318.277 um  +- 204.250 um 
+ Projected range               = 318.292 um  +- 204.141 um 
 
- Nb of steps of primary track  = 21.36 +- 4.79	 Step size= 42.049 um  +- 7.281 um 
+ Nb of steps of primary track  = 21.36 +- 4.79	 Step size= 42.048 um  +- 7.277 um 
 
- absorbed = 80.03 %   transmit = 4.05 %   reflected = 15.91 %
+ absorbed = 80.06 %   transmit = 4.05 %   reflected = 15.89 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2012521024, 1322143551
+ Current couple of seeds = 231008573, 702274557
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -487,7 +487,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.18 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.16 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

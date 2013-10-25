@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -213,8 +213,8 @@ Available colours:
 ---> end of event: 0
 
 --------------------End of Global Run----------------------- 
- The run was 10000 events  Nb of 'good' e+ annihilations: 1268
- Total dose in patient : 598.268 picoGy 
+ The run was 10000 events  Nb of 'good' e+ annihilations: 1362
+ Total dose in patient : 599.826 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

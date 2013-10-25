@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -246,6 +246,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -265,19 +266,18 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
  StoppingPower in wall   = 1.8644 MeV*cm2/g
                in cavity = 1.8644 MeV*cm2/g
-Start Run processing.
 
---->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05391 Ne-_cav= 2789 doseCavity/Ebeam= 1.15642  (100*(ratio-1) = 15.64166 %)
+--->evntNb= 10000 Nwall= 9999 Ncav= 2 Ic/Iw= 1.05391 Ne-_cav= 2789 doseCavity/Ebeam= 1.15642  (100*(ratio-1) = 15.64161 %)
 
---->evntNb= 20000 Nwall= 19995 Ncav= 6 Ic/Iw= 1.58109 Ne-_cav= 5677 doseCavity/Ebeam= 1.09915  (100*(ratio-1) = 9.91520 %)
+--->evntNb= 20000 Nwall= 19995 Ncav= 6 Ic/Iw= 1.58109 Ne-_cav= 5677 doseCavity/Ebeam= 1.09915  (100*(ratio-1) = 9.91515 %)
 
---->evntNb= 30000 Nwall= 29991 Ncav= 10 Ic/Iw= 1.75686 Ne-_cav= 8496 doseCavity/Ebeam= 1.13248  (100*(ratio-1) = 13.24785 %)
+--->evntNb= 30000 Nwall= 29991 Ncav= 10 Ic/Iw= 1.75686 Ne-_cav= 8496 doseCavity/Ebeam= 1.13246  (100*(ratio-1) = 13.24556 %)
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=7.71s Real=9s Sys=0.02s
+  User=7.34s Real=10.32s Sys=0.1s
 
- Process calls frequency --->  msc= 586444  eIoni= 607544  Transportation= 22814
+ Process calls frequency --->  msc= 586445  eIoni= 607543  Transportation= 22814
 
  Charged particle flow in cavity :
       Enter --> nbParticles = 11401	 Energy = 7.214 GeV
@@ -285,15 +285,15 @@ Run Summary
 
  beamFluence in wall = 39986	 in cavity = 14	 Icav/Iwall = 1.84480	 energyFluence = 37.95067 MeV*cm2/mg
 
- Total edep in cavity = 8.44693 MeV +- 3.97975 %
- Total dose in cavity = 42.23466 MeV*cm2/mg +- 3.97975 %
+ Total edep in cavity = 8.44680 MeV +- 3.97978 %
+ Total dose in cavity = 42.23400 MeV*cm2/mg +- 3.97978 %
 
- DoseCavity/EnergyFluence = 1.11288 +- 0.04429
+ DoseCavity/EnergyFluence = 1.11287 +- 0.04429
 
  Total charged trackLength in cavity = 37.5460 m     (mean value = 3.2932 mm )
 
  StepSize of ch. tracks in wall   = 150.0466 um  +- 136.5394 um 	 (nbSteps/track = 29.3925)
- StepSize of ch. tracks in cavity = 904.3957 um  +- 1.7523 mm 	 (nbSteps/track = 3.6413)
+ StepSize of ch. tracks in cavity = 904.3959 um  +- 1.7523 mm 	 (nbSteps/track = 3.6413)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -309,7 +309,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.035 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.032 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

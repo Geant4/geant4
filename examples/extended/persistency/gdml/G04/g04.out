@@ -1,13 +1,13 @@
 
 Usage: gdml_det <intput_gdml_file:mandatory>
 
-G4GDML: Reading '/ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-09_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
+G4GDML: Reading '/ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-10_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
 G4GDML: Reading structure...
 G4GDML: Reading setup...
-G4GDML: Reading '/ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-09_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
+G4GDML: Reading '/ec/G4-builds/release/slc5-gcc43-RelWithDebInfo/09-06-ref-10_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 
         ############################################
@@ -15,7 +15,7 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -111,7 +111,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-Start Run processing.
+### Run 0 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -363,7 +363,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 1 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -587,7 +587,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -616,7 +616,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 2 starts.
 Processing hits ....
 Processing hits ....
 Processing hits ....
@@ -668,7 +668,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 3 starts.
 Processing hits ....
 Processing hits ....
 Processing hits ....
@@ -720,7 +720,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-Start Run processing.
+### Run 4 starts.
 Processing hits ....
 Processing hits ....
 Processing hits ....

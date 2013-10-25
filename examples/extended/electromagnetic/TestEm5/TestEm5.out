@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -428,13 +428,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -458,7 +458,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.69s Real=2.98s Sys=0.01s
+  User=2.58s Real=3.77s Sys=0.02s
 
  ======================== run summary ======================
 
@@ -906,13 +906,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 1 starts.
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 343250563, 1719315759
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -926,7 +926,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.43s Real=3.1s Sys=0.01s
+  User=2.46s Real=2.8s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -1387,13 +1387,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 2 starts.
 ### Run 2 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 467763144, 1975772707
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -1407,7 +1407,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=4.92s Real=6.3s Sys=0.01s
+  User=4.77s Real=5.32s Sys=0.02s
 
  ======================== run summary ======================
 
@@ -1421,16 +1421,16 @@ Run Summary
    restricted dEdx = 1.754 MeV/cm	(1.866 MeV*cm2/g)
    full dEdx       = 2.266 MeV/cm	(2.41 MeV*cm2/g)
 
- Leakage :  primary = 95.12 MeV +- 1.358 keV   secondaries = 25.95 keV +- 707 eV 
+ Leakage :  primary = 95.12 MeV +- 1.358 keV   secondaries = 25.92 keV +- 706.7 eV 
  Energy balance :  edep + eleak = 96.2 MeV
 
- Total track length (charged) in absorber per event = 5.176 mm  +- 3.813 um 
- Total track length (neutral) in absorber per event = 18.13 um  +- 1.868 um 
+ Total track length (charged) in absorber per event = 5.176 mm  +- 3.814 um 
+ Total track length (neutral) in absorber per event = 18.14 um  +- 1.869 um 
 
  Number of steps (charged) in absorber per event = 12.27 +- 0.0002762
- Number of steps (neutral) in absorber per event = 0.0099 +- 0.0002762
+ Number of steps (neutral) in absorber per event = 0.00982 +- 0.0002762
 
- Number of secondaries per event : Gammas = 0.00942   electrons = 4.043   positrons = 0
+ Number of secondaries per event : Gammas = 0.00934   electrons = 4.042   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -1439,13 +1439,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0.002 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 7.315 mrad (central part only)
+  rms proj angle of transmit primary particle = 7.313 mrad (central part only)
   computed theta0 (Highland formula)          = 7.636 mrad
-  central part defined as +- 22.91 mrad   Tail ratio = 1.319 %
+  central part defined as +- 22.91 mrad   Tail ratio = 1.309 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1391071933, 1550768151
+ Current couple of seeds = 578960530, 695861682
 ----------------------------------------
 #
 /testem/phys/setCuts 1 mm
@@ -1868,13 +1868,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 3 starts.
 ### Run 3 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1391071933, 1550768151
+ Current couple of seeds = 578960530, 695861682
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -1888,21 +1888,21 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=1.36s Real=1.75s Sys=0.05s
+  User=1.31s Real=1.79s Sys=0.02s
 
  ======================== run summary ======================
 
  The run was 50000 proton of 175 GeV through 8 mm  of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit in absorber per event = 4.73 MeV +- 122.9 keV
+ Total energy deposit in absorber per event = 4.744 MeV +- 123.2 keV
 
- -----> Mean dE/dx = 5.909 MeV/cm	(2.189 MeV*cm2/g)
+ -----> Mean dE/dx = 5.928 MeV/cm	(2.195 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 4.024 MeV/cm	(1.49 MeV*cm2/g)
    full dEdx       = 6.049 MeV/cm	(2.24 MeV*cm2/g)
 
- Leakage :  primary = 174.7 GeV +- 122.9 keV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 174.7 GeV +- 123.2 keV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 174.7 GeV
 
  Total track length (charged) in absorber per event = 8.004 mm  +- 0 fm 
@@ -1911,7 +1911,7 @@ Run Summary
  Number of steps (charged) in absorber per event = 1.266 +- 0
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0   electrons = 0.2657   positrons = 0.00056
+ Number of secondaries per event : Gammas = 0   electrons = 0.2656   positrons = 0.00056
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -1922,11 +1922,11 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 0.02056 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02111 mrad
-  central part defined as +- 0.06333 mrad   Tail ratio = 1.326 %
+  central part defined as +- 0.06333 mrad   Tail ratio = 1.322 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1892064962, 440595172
+ Current couple of seeds = 324670222, 881819469
 ----------------------------------------
 #
 /testem/det/setAbsMat Iron
@@ -2353,13 +2353,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
+### Run 4 starts.
 ### Run 4 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1892064962, 440595172
+ Current couple of seeds = 324670222, 881819469
 ----------------------------------------
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -2373,30 +2373,30 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=16.86s Real=20.55s Sys=0.26s
+  User=16.69s Real=21.56s Sys=0.12s
 
  ======================== run summary ======================
 
  The run was 50000 mu+ of 100 GeV through 1 m   of Iron (density: 7.87 g/cm3 )
 
- Total energy deposit in absorber per event = 2.152 GeV +- 14.51 MeV
+ Total energy deposit in absorber per event = 2.156 GeV +- 15.26 MeV
 
- -----> Mean dE/dx = 21.52 MeV/cm	(2.735 MeV*cm2/g)
+ -----> Mean dE/dx = 21.56 MeV/cm	(2.74 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 11.22 MeV/cm	(1.425 MeV*cm2/g)
    full dEdx       = 21.6 MeV/cm	(2.745 MeV*cm2/g)
 
- Leakage :  primary = 97.85 GeV +- 14.55 MeV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 97.84 GeV +- 15.26 MeV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 100 GeV
 
- Total track length (charged) in absorber per event = 100 cm  +- 2.456 um 
+ Total track length (charged) in absorber per event = 100 cm  +- 6.052 um 
  Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 47.92 +- 0.0002216
+ Number of steps (charged) in absorber per event = 47.94 +- 0.0003479
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0.04978   electrons = 46.31   positrons = 1.268
+ Number of secondaries per event : Gammas = 0.04898   electrons = 46.34   positrons = 1.258
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -2405,13 +2405,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 1.132 mrad (central part only)
+  rms proj angle of transmit primary particle = 1.127 mrad (central part only)
   computed theta0 (Highland formula)          = 1.182 mrad
-  central part defined as +- 3.545 mrad   Tail ratio = 0.325 %
+  central part defined as +- 3.545 mrad   Tail ratio = 0.312 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1507146051, 1248240679
+ Current couple of seeds = 1188187814, 1085370953
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
@@ -2424,7 +2424,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.43 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.38 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

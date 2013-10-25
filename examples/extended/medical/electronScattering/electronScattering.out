@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -269,6 +269,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     -------   --------     ------   ------   --------   ----------    ----------
       55.71          0k         2        2          9         0.00    Frame
       44.29          0k         1        3          4         0.00    Gas
+### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -276,7 +277,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ... open Root analysis file : eScattering.root - done
-Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -300,17 +300,16 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=12.85s Real=14.85s Sys=0.03s
+  User=12.52s Real=14.44s Sys=0.03s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 13 MeV through 0 fm  of Air (density: 1.21 mg/cm3)
 ... write Root file : eScattering.root - done
-... close Root file : eScattering.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1577461225, 83497629
+ Current couple of seeds = 1547234808, 270146714
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -322,7 +321,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.38 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.33 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

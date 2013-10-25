@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-09    (30-September-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -575,6 +575,7 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
+### Run 0 starts.
 ### Run 0 start
 Histo::Add1D: New histogram will be booked: #h1  <Elastic cross section (barn,1.0) as a functions of log10(p/GeV)  700  -3  4  1
 Histo::Add1D: New histogram will be booked: #h2  <Elastic cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
@@ -584,20 +585,11 @@ Histo::Add1D: New histogram will be booked: #h5  <Capture cross section (barn) a
 Histo::Add1D: New histogram will be booked: #h6  <Fission cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
 Histo::Add1D: New histogram will be booked: #h7  <Charge exchange cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
 Histo::Add1D: New histogram will be booked: #h8  <Total cross section (barn) as a functions of log10(E/MeV)  800  -1  7  1
-Start Run processing.
 EventAction: Event # 0 started
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART11117
-      issued by : G4ParticleTable::FindIon()
-This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.13s Real=0.15s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ### Fill Cross Sections for proton off Al
@@ -1408,6 +1400,6 @@ HistoManager: End of run actions are started
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.46 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.41 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
