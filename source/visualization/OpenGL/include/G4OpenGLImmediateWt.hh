@@ -34,11 +34,16 @@
 
 #include "G4VGraphicsSystem.hh"
 
+#include <Wt/WContainerWidget>
+
 class G4OpenGLImmediateWt: public G4VGraphicsSystem {
 public:
   G4OpenGLImmediateWt ();
   G4VSceneHandler* CreateSceneHandler (const G4String& name = "");
   G4VViewer*  CreateViewer  (G4VSceneHandler&, const G4String& name = "");
+  
+private:
+  Wt::WContainerWidget* fWGLContainer;
 };
 
 #endif

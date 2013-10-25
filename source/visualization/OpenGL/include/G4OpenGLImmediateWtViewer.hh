@@ -36,47 +36,100 @@
 #define G4OPENGLIMMEDIATEWTVIEWER_HH
 
 #include "G4OpenGLImmediateViewer.hh"
-#include "G4OpenGLImmediateQtViewer.hh"
 #include "G4OpenGLWtViewer.hh"
-#include <Wt/WPaintedWidget>
 #include <Wt/WEvent>
-
-//#include <qgl.h> // include <qglwidget.h>
 
 #include "globals.hh"
 
 class G4OpenGLImmediateSceneHandler;
-class QMouseEvent;
 
-class G4OpenGLImmediateWtViewer : public G4VViewer,
-  /*  public G4OpenGLImmediateViewer ,*/ public Wt::WPaintedWidget {
+class G4OpenGLImmediateWtViewer :
+public G4OpenGLWtViewer, public G4OpenGLImmediateViewer, public Wt::WGLWidget {
    
 public:
-  G4OpenGLImmediateWtViewer (G4OpenGLImmediateSceneHandler& scene, Wt::WContainerWidget *,
-                const G4String& name = "");
+  G4OpenGLImmediateWtViewer (G4OpenGLImmediateSceneHandler& scene, Wt::WContainerWidget*, const G4String& name = "");
   ~G4OpenGLImmediateWtViewer ();
+  void Initialise ();
+  void resizeGL(int, int);
+  void paintGL();
+  void initializeGL ();
   void DrawView();
   void ShowView();
+  void SetView();
+  //
+  void popMatrix();
+  void pushMatrix();
+  void multMatrixd(const GLdouble*);
+  void setMatrixUniforms();
+  void loadIdentity();
+  
+  void wtDrawArrays(GLenum mode,int first, G4int nPoints, std::vector<double> a_vertices);
+  void enableClientState(int mode);
+  void disableClientState(int mode);
+  
+  void ComputeView ();
+  void drawScene ();
+  void FinishView();
+  
+  Program shaderProgram_;
 
 private:
-  G4OpenGLImmediateQtViewer * fQtViewer;
-  //  void WtShowEvent(QShowEvent event );
-  void WtWheelEvent(Wt::WMouseEvent event);
-  void WtMousePressEvent(Wt::WMouseEvent event);
-  void WtMouseMoveEvent(Wt::WMouseEvent event);
-  void WtMouseDoubleClickEvent(Wt::WMouseEvent event);
-  //  void WtMouseReleaseEvent(Wt::WMouseEvent event);
+  //  void showEvent(QShowEvent event );
+  void mousePressEvent(Wt::WMouseEvent *event);
+  void mouseMoveEvent(Wt::WMouseEvent *event);
+  void mouseDoubleClickEvent(Wt::WMouseEvent *event);
+  void mouseReleaseEvent(Wt::WMouseEvent event);
   //  void WtContextMenuEvent(QContextMenuEvent e);
-  void WtKeyPressEvent (Wt::WKeyEvent event); 
+  void keyPressEvent (Wt::WKeyEvent *event);
   void paintEvent(Wt::WPaintDevice * event);
 
-  QMouseEvent * ConvertWtMouseEventToQt(Wt::WMouseEvent event);
-  QWheelEvent * ConvertWtWheelEventToQt(Wt::WMouseEvent event);
-  QKeyEvent * ConvertWtKeyEventToQt(Wt::WKeyEvent event);
+  void updateWWidget();
+  void centerpoint(double &x, double &y, double &z);
 
+  // Program and related variables
+  AttribLocation vertexPositionAttribute_;
+  AttribLocation vertexNormalAttribute_;
+  UniformLocation pMatrixUniform_;
+  UniformLocation cMatrixUniform_;
+  UniformLocation mvMatrixUniform_;
+  UniformLocation nMatrixUniform_;
+  
+  // A client-side JavaScript matrix variable
+  JavaScriptMatrix4x4 jsMatrix_;
+  
+  // The so-called VBOs, Vertex Buffer Objects
+  // This one contains both vertex (xyz) and normal (xyz) data
+  Buffer objBuffer_;
+  //  void ComputeView ();
   // implements G4VViewer::SetView() and ClearView()
-  void SetView ();
-  void ClearView ();
+  //  void SetView ();
+  //  void ClearView ();
+
+  // The shaders, in plain text format
+  std::string vertexShader_;
+  std::string fragmentShader_;
+  
+  
+  // To avoid copying large constant data around, the data points are stored
+  // in a global variable.
+  std::vector<double> data;
+  GLfloat* normals;
+  std::vector <Buffer> VBO_Buffer;
+#ifdef TEST_WT_EXAMPLE
+  // Sets the shader source. Must be set before the widget is first rendered.
+  void setShaders(const std::string &vertexShader,
+                  const std::string &fragmentShader);
+  void readObj(const std::string &fname,
+               std::vector<double> &data);
+  
+  
+protected:
+  void drawCube();
+private:
+  
+#endif
+
+
 };
 
 #endif
