@@ -183,7 +183,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
           G4double elevel1 = 0.0;
           G4double elevel2 = 0.0;
 	  G4ParticleDefinition* ion = 0; 
-          for(level=1; level<10; ++level) {
+          for(level=1; level<9; ++level) {
 	    ion = theTableOfIons->GetIon(Z, A, level);
             //G4cout << level << "  " << ion << G4endl;
             if(ion) {
