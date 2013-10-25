@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th October 2013  Gabriele Cosmo (examples-V09-06-10)
+- Updated reference outputs according to reference tag geant4-09-06-ref-10.
+- Includes tags: air_shower-V09-06-03, brachy-V09-06-02, dnaphysics-V09-06-10,
+                 microbeam-V09-06-07, microdosimetry-V09-06-09,
+                 nanobeam-V09-06-11, exampleB1-V09-06-04, exampleB4-V09-06-12,
+                 exampleB5-V09-06-03, analysisExample-V09-06-04,
+                 testem0-V09-06-07, testem1-V09-06-10, testem4-V09-06-09,
+                 testem6-V09-06-04, testem16-V09-06-05, DICOM-V09-06-05,
+                 LXe-V09-06-09, WLS-V09-06-08.
+
 17th September 2013  Gabriele Cosmo (examples-V09-06-09)
 - Updated reference outputs according to reference tag geant4-09-06-ref-09.
 - Includes tags: dnageometry-V09-06-00, microbeam-V09-06-05, nanobeam-V09-06-09,
