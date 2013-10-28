@@ -49,8 +49,8 @@ int main(int argc,char** argv) {
   CLHEP::RanecuEngine defaultEngine;
   G4Random::setTheEngine(&defaultEngine);
 
-  G4cout<<"Warning: forcing G4FORCENUMBEROFTHREADS=2"<<G4endl;
-  char env[]="G4FORCENUMBEROFTHREADS=2";
+  G4cout<<"Warning: forcing G4FORCENUMBEROFTHREADS=4"<<G4endl;
+  char env[]="G4FORCENUMBEROFTHREADS=4";
   putenv(env);
 
   //A. Dotti (2 Oct 2013): disable MT.
