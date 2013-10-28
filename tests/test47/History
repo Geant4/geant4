@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 25, 2013 - Julia Yarba (test47-V09-06-05)
+- Cleanup compilation warnings from src/HistoEPTest47.cc
+
 October 24, 2013 - Julia Yarba (test47-V09-06-04)
 - Add config for (future) ctest-ing
 - update CMakeList.txt

@@ -41,18 +41,20 @@ HistoEPTest47::HistoEPTest47() : pin(0), debug(false), hiPx(0), hiPy(0),
 }
 
 HistoEPTest47::~HistoEPTest47() {
-  if (hiPx   > 0) delete hiPx;
-  if (hiPy   > 0) delete hiPy;
-  if (hiPz   > 0) delete hiPz;
-  if (hiE    > 0) delete hiE;
-  if (hiKE   > 0) delete hiKE;
-  if (hiDpByp> 0) delete hiDpByp;
-  if (hiR    > 0) delete hiR;
-  if (hiX    > 0) delete hiX;
-  if (hiY    > 0) delete hiY;
-  if (hiZ    > 0) delete hiZ;
-  if (hiAngX > 0) delete hiAngX;
-  if (hiAngY > 0) delete hiAngY;
+
+  if (hiPx)    delete hiPx;
+  if (hiPy)    delete hiPy;
+  if (hiPz)    delete hiPz;
+  if (hiE)     delete hiE;
+  if (hiKE)    delete hiKE;
+  if (hiDpByp) delete hiDpByp;
+  if (hiR)     delete hiR;
+  if (hiX)     delete hiX;
+  if (hiY)     delete hiY;
+  if (hiZ)     delete hiZ;
+  if (hiAngX)  delete hiAngX;
+  if (hiAngY)  delete hiAngY;
+
 }
 
 void HistoEPTest47::fill(G4VParticleChange* aChange, G4LorentzVector& pinit,
@@ -118,18 +120,18 @@ void HistoEPTest47::initialize(std::string namePart, std::string nameMat,
 
   pin = momentum;
   char name[100], title[160];
-  if (hiPx   > 0) delete hiPx;
-  if (hiPy   > 0) delete hiPy;
-  if (hiPz   > 0) delete hiPz;
-  if (hiE    > 0) delete hiE;
-  if (hiKE   > 0) delete hiKE;
-  if (hiDpByp> 0) delete hiDpByp;
-  if (hiR    > 0) delete hiR;
-  if (hiX    > 0) delete hiX;
-  if (hiY    > 0) delete hiY;
-  if (hiZ    > 0) delete hiZ;
-  if (hiAngX > 0) delete hiAngX;
-  if (hiAngY > 0) delete hiAngY;
+  if (hiPx)    delete hiPx;
+  if (hiPy)    delete hiPy;
+  if (hiPz)    delete hiPz;
+  if (hiE)     delete hiE;
+  if (hiKE)    delete hiKE;
+  if (hiDpByp) delete hiDpByp;
+  if (hiR)     delete hiR;
+  if (hiX)     delete hiX;
+  if (hiY)     delete hiY;
+  if (hiZ)     delete hiZ;
+  if (hiAngX)  delete hiAngX;
+  if (hiAngY)  delete hiAngY;
   sprintf (name, "PxBalance");
   sprintf (title, "Px Balance in %s + %s at %6.2f GeV/c (%s)",namePart.c_str(),
 	   nameMat.c_str(), momentum, nameGen.c_str());
