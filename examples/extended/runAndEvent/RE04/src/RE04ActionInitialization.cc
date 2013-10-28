@@ -23,51 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/include/RE04DetectorConstruction.hh
-/// \brief Definition of the RE04DetectorConstruction class
+// $Id: RE04ActionInitialization.cc 66522 2012-12-19 12:26:04Z ihrivnac $
 //
-// $Id: $
+/// \file src/RE04ActionInitialization.cc
+/// \brief Implementation of the RE04ActionInitialization class
 //
-#ifndef RE04DetectorConstruction_h
-#define RE04DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+#include "RE04ActionInitialization.hh"
+#include "RE04PrimaryGeneratorAction.hh"
+#include "RE04EventAction.hh"
+//#include "RE04TrackingAction.hh"
+//#include "RE04SteppingAction.hh"
 
-class G4Material;
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-class G4Region;
+RE04ActionInitialization::RE04ActionInitialization()
+{;}
 
-//
-/// User detector construction class
-///
-/// - void DefineMaterials()
-///     defines materials
-/// - void SetupGeometry()
-///     creates the world volume and detector geometries
-//
-class RE04DetectorConstruction : public G4VUserDetectorConstruction
+RE04ActionInitialization::~RE04ActionInitialization()
+{;}
+
+void RE04ActionInitialization::Build() const
 {
-  public:
-    RE04DetectorConstruction();
-    virtual ~RE04DetectorConstruction();
+  //
+  SetUserAction(new RE04PrimaryGeneratorAction);
+  //
+  SetUserAction(new RE04EventAction);
+  //
+  //SetUserAction(new RE04TrackingAction);
+  //SetUserAction(new RE04SteppingAction);
 
-  public:
-    virtual G4VPhysicalVolume* Construct();
-  
-  private:
-    void DefineMaterials();
-    void SetupGeometry();
+}
 
-  private:
-    G4Material* fAir;
-    G4Material* fWater;
-    G4Material* fPb;
-    G4VPhysicalVolume* fWorldPhys;
-    G4bool fConstructed;
-
-};
-
-#endif
+void RE04ActionInitialization::BuildForMaster() const
+{
+  //
+  //G4UserRunAction* run_action = new RE04RunAction;
+  //SetUserAction(run_action);
+}
 

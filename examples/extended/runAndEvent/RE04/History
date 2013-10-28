@@ -13,6 +13,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 25, 2013 M. Asai (exampleRE04-V09-06-04)
+- MT migration
+
 Aug 27, 2013 G. Cosmo (exampleRE04-V09-06-03)
 - Added G4Ellipsoid among solids enabled for parameterisation
 

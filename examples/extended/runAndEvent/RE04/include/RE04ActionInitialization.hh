@@ -23,50 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE04/include/RE04DetectorConstruction.hh
-/// \brief Definition of the RE04DetectorConstruction class
+// $Id: RE04ActionInitialization.hh 66522 2012-12-19 12:26:04Z ihrivnac $
 //
-// $Id: $
+/// \file include/RE04ActionInitialization.hh
+/// \brief Definition of the RE04ActionInitialization class
 //
-#ifndef RE04DetectorConstruction_h
-#define RE04DetectorConstruction_h 1
 
-#include "G4VUserDetectorConstruction.hh"
+#ifndef RE04ActionInitialization_H
+#define RE04ActionInitialization_H 1
+
 #include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class G4Material;
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-class G4Region;
-
-//
-/// User detector construction class
-///
-/// - void DefineMaterials()
-///     defines materials
-/// - void SetupGeometry()
-///     creates the world volume and detector geometries
-//
-class RE04DetectorConstruction : public G4VUserDetectorConstruction
+class RE04ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    RE04DetectorConstruction();
-    virtual ~RE04DetectorConstruction();
+  RE04ActionInitialization();//G4bool bParallelWorld);
+    virtual ~RE04ActionInitialization();
 
-  public:
-    virtual G4VPhysicalVolume* Construct();
-  
-  private:
-    void DefineMaterials();
-    void SetupGeometry();
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
 
-  private:
-    G4Material* fAir;
-    G4Material* fWater;
-    G4Material* fPb;
-    G4VPhysicalVolume* fWorldPhys;
-    G4bool fConstructed;
-
+private:
+  //G4bool m_bParallelWorld;
 };
 
 #endif

@@ -42,7 +42,7 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4Allocator<RE04Trajectory> faTrajAllocator;
+G4ThreadLocal G4Allocator<RE04Trajectory> * faTrajAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE04Trajectory::RE04Trajectory()
