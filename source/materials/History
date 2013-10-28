@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-10-13 M.Kelsey (materials-V09-06-24)
+- NEW classes for logical (physics info) and physical (oriented) crystal
+  lattices.  Ported here from exoticphysics/phonons example.
+
 01-10-13 V.Ivanchenko (materials-V09-06-23)
 - G4NistManager - G4Exception for the case when G4NistManager
     is instantiated in a worker thread 
