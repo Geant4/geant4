@@ -17,6 +17,41 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 25. Oct. 2013  Makoto Asai (particles-V09-06-59)
+- Fix search logic in G4NuclideTable.
+
+- 25. Oct. 2013  Makoto Asai (particles-V09-06-58)
+- Additional cout for the case G4IsotopeProperty is not found.
+
+- 25. Oct. 2013  Makoto Asai (particles-V09-06-57)
+- Temporary tag.
+
+- 25. Oct. 2013  Makoto Asai (particles-V09-06-56)
+- Remove unnecessary G4cout.
+
+- 24. Oct. 2013  Makoto Asai (particles-V09-06-55)
+- Protect G4IonTable against rare cases when only the excited states are
+  preloaded while the ground state with non-zero epsilon energy is
+  created on the fly.
+
+- 24. Oct. 2013  Makoto Asai (particles-V09-06-54)
+- Fix G4IonTable so that it properly uses iosomer levels defined by 
+  G4NuclideTable even if other physics processes may set their own
+  isomer tables.
+
+- 23. Oct. 2013  Michael Kelsey
+- Add new G4Phonon{Long,TransSlow,TransFast} particles to bosons/ category.
+  These will NOT be built as part of G4BosonConstructor; user physics lists
+  must create them explicitly.
+
+- 23. Oct. 2013  Makoto Asai (particles-V09-06-53)
+- Fixed uninitialized pointer.
+- Extend G4NuclideTable class to allow reading a data file if needed.
+
+- 22. Oct. 2013  Makoto Asai (particles-V09-06-52)
+- Introducing G4NuclideTable class. Ground state and isomer are
+  pre-loaded from this table before the first beamOn.
+
 - 21. Oct. 2013  Makoto Asai (particles-V09-06-51)
 - Naming convention of isomers and general excited nuclides has been
   unified. They always appear with excitation energy in unit of keV.
