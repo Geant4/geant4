@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th October 2013  John Allison  (greps-V09-06-12)
+- Cosmetic changes to code layout and comments.
+
 19th September 2013  Makoto Asai (greps-V09-06-11)
 - Fix compilation error for sequential mode.
 

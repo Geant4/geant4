@@ -148,6 +148,9 @@ public: // With description
   virtual void AddPrimitive (const G4Polyhedron&) = 0;
 
   virtual const G4VisExtent& GetExtent() const;
+  // The concrete class should overload this or
+  // G4VisExtent::NullExtent will be returned.
+  // See G4VScenHandler for example.
 
 };
 

@@ -98,7 +98,7 @@ public: // With description
 
   G4bool operator != (const G4Colour& c) const;
   G4bool operator == (const G4Colour& c) const {return !(operator != (c));}
-  G4Colour& operator += (const G4Colour&) { return *this; }
+  G4Colour& operator += (const G4Colour&) {return *this;}  // Dummy
   G4double GetRed   () const;
   G4double GetGreen () const;
   G4double GetBlue  () const;
