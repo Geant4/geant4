@@ -34,22 +34,31 @@
 
 #include "globals.hh"
 
-#ifndef G4INCLAvatarActions_hh
-#define G4INCLAvatarActions_hh 1
+/** \file G4INCLNuclearMassTable.hh
+ * \brief Functions that encapsulate a mass table
+ *
+ * \date 22nd October 2013
+ * \author Davide Mancusi
+ */
 
-#include "G4INCLIAvatar.hh"
-#include "G4INCLNucleus.hh"
-#include "G4INCLFinalState.hh"
+#ifndef G4INCLNuclearMassTable_HH
+#define G4INCLNuclearMassTable_HH
+
+#ifndef INCLXX_IN_GEANT4_MODE
+
+#include <map>
+#include <string>
 
 namespace G4INCL {
-  class AvatarAction {
-  public:
-    AvatarAction();
-    ~AvatarAction();
-    void beforeAvatarAction(IAvatar *a, Nucleus *n);
-    void afterAvatarAction(IAvatar *a, Nucleus *n, FinalState *fs);
 
-  private:
-  };
+  namespace NuclearMassTable {
+    void initialize(const std::string &path, const G4double pMass, const G4double nMass);
+    G4double getMass(const G4int A, const G4int Z);
+    void deleteTable();
+  }
+
 }
-#endif
+
+#endif // INCLXX_IN_GEANT4_MODE
+
+#endif // G4INCLNuclearMassTable_HH

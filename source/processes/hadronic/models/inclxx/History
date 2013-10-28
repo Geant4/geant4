@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+25 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-31)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc13
+  o Mostly cosmetic changes, some code refactoring.
+
 21 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-30)
 ---------------------------------------------------------------
 - INCL++ v5.1.14_rc11

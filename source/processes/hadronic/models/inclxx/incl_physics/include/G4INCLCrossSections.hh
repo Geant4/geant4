@@ -37,47 +37,48 @@
 #ifndef G4INCLCrossSections_hh
 #define G4INCLCrossSections_hh 1
 
-#include "G4INCLParticle.hh"
-#include "G4INCLIAvatar.hh"
-#include "G4INCLIChannel.hh"
+#include "G4INCLICrossSections.hh"
 
 namespace G4INCL {
   namespace CrossSections {
+      G4double elastic(Particle const * const p1, Particle const * const p2);
+      G4double total(Particle const * const p1, Particle const * const p2);
 
-    G4double elastic(Particle const * const p1, Particle const * const p2);
-    G4double total(Particle const * const p1, Particle const * const p2);
+      G4double pionNucleon(Particle const * const p1, Particle const * const p2);
 
-    G4double pionNucleon(Particle const * const p1, Particle const * const p2);
+      G4double recombination(Particle const * const p1, Particle const * const p2);
+      G4double deltaProduction(Particle const * const p1, Particle const * const p2);
 
-    G4double recombination(Particle const * const p1, Particle const * const p2);
-    G4double deltaProduction(Particle const * const p1, Particle const * const p2);
+      /** \brief Calculate the slope of the NN DDXS.
+       *
+       * \param energyCM energy in the CM frame, in MeV
+       * \param iso total isospin of the system
+       *
+       * \return the slope of the angular distribution
+       */
+      G4double calculateNNAngularSlope(G4double energyCM, G4int iso);
 
-    /** \brief Calculate the slope of the NN DDXS.
-     *
-     * \param energyCM energy in the CM frame, in MeV
-     * \param iso total isospin of the system
-     *
-     * \return the slope of the angular distribution
-     */
-    G4double calculateNNDiffCrossSection(G4double energyCM, G4int iso);
+      /** \brief Compute the "interaction distance".
+       *
+       * Defined on the basis of the average value of the N-N cross sections at
+       * the given kinetic energy.
+       *
+       * \return the interaction distance
+       */
+      G4double interactionDistanceNN(const ParticleSpecies &aSpecies, const G4double kineticEnergy);
 
-    /** \brief Compute the "interaction distance".
-     *
-     * Defined on the basis of the average value of the N-N cross sections at
-     * the given kinetic energy.
-     *
-     * \return the interaction distance
-     */
-    G4double interactionDistanceNN(const ParticleSpecies &aSpecies, const G4double kineticEnergy);
+      /** \brief Compute the "interaction distance".
+       *
+       * Defined on the basis of the average value of the pi-N cross sections at
+       * the given kinetic energy.
+       *
+       * \return the interaction distance
+       */
+      G4double interactionDistancePiN(const G4double projectileKineticEnergy);
 
-    /** \brief Compute the "interaction distance".
-     *
-     * Defined on the basis of the average value of the pi-N cross sections at
-     * the given kinetic energy.
-     *
-     * \return the interaction distance
-     */
-    G4double interactionDistancePiN(const G4double projectileKineticEnergy);
+      void setCrossSections(ICrossSections *c);
+
+      void deleteCrossSections();
 
   }
 }

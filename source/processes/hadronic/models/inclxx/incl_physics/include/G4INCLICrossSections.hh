@@ -34,25 +34,51 @@
 
 #include "globals.hh"
 
-#ifndef G4INCLPropagationAction_hh
-#define G4INCLPropagationAction_hh 1
+/** \file G4INCLICrossSections.hh
+ * \brief Abstract interface for the cross-section classes
+ *
+ * \date 25nd October 2013
+ * \author Davide Mancusi
+ */
 
-#include "G4INCLIPropagationModel.hh"
-#include "G4INCLIAvatar.hh"
+#ifndef G4INCLICROSSSECTIONS_HH
+#define G4INCLICROSSSECTIONS_HH
 
-namespace G4INCL  {
+#include "G4INCLParticle.hh"
 
-  class PropagationAction {
-  public:
-    PropagationAction();
-    ~PropagationAction();
+namespace G4INCL {
+  /// \brief Abstract interface for the cross-section classes
+  class ICrossSections {
+    public:
 
-    void beforePropagationAction(IPropagationModel *pm);
-    void afterPropagationAction(IPropagationModel *pm,
-				IAvatar *avatar);
+      ICrossSections() {}
+      virtual ~ICrossSections() {}
 
-  private:
-    long stepCounter;
+      /// \brief Elastic particle-particle cross section
+      virtual G4double elastic(Particle const * const p1, Particle const * const p2) = 0;
+
+      /// \brief Total (elastic+inelastic) particle-particle cross section
+      virtual G4double total(Particle const * const p1, Particle const * const p2) = 0;
+
+      /// \brief Total (elastic+inelastic) pion-nucleon cross section
+      virtual G4double pionNucleon(Particle const * const p1, Particle const * const p2) = 0;
+
+      /// \brief Cross section for NDelta->NN
+      virtual G4double recombination(Particle const * const p1, Particle const * const p2) = 0;
+
+      /// \brief Cross section for NN->NDelta
+      virtual G4double deltaProduction(Particle const * const p1, Particle const * const p2) = 0;
+
+      /** \brief Calculate the slope of the NN DDXS.
+       *
+       * \param energyCM energy in the CM frame, in MeV
+       * \param iso total isospin of the system
+       *
+       * \return the slope of the angular distribution
+       */
+      virtual G4double calculateNNAngularSlope(G4double energyCM, G4int iso) = 0;
+
   };
 }
+
 #endif

@@ -69,7 +69,7 @@ namespace G4INCL {
     // Calculate the outcome of the channel:
     G4double psq = particle1->getMomentum().mag2();
     G4double pnorm = std::sqrt(psq);
-    G4double b = CrossSections::calculateNNDiffCrossSection(pl, isospin);
+    G4double b = CrossSections::calculateNNAngularSlope(pl, isospin);
     G4double btmax = 4.0 * psq * b;
     G4double z = std::exp(-btmax);
     G4double ranres = Random::shoot();

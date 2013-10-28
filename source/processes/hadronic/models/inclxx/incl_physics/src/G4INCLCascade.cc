@@ -44,6 +44,7 @@
 #include "G4INCLGeant4Random.hh"
 #include "G4INCLStandardPropagationModel.hh"
 #include "G4INCLParticleTable.hh"
+#include "G4INCLNuclearMassTable.hh"
 #include "G4INCLGlobalInfo.hh"
 
 #include "G4INCLPauliBlocking.hh"
@@ -53,6 +54,10 @@
 #include "G4INCLPauliStrictStandard.hh"
 #include "G4INCLPauliGlobal.hh"
 #include "G4INCLCDPP.hh"
+
+#include "G4INCLCrossSections.hh"
+#include "G4INCLICrossSections.hh"
+#include "G4INCLCrossSectionsINCL46.hh"
 
 #include "G4INCLLogger.hh"
 #include "G4INCLGlobals.hh"
@@ -123,6 +128,9 @@ namespace G4INCL {
     else if(pauli == G4INCL::NoPauli)
       G4INCL::Pauli::setBlocker(NULL);
 
+    // Set the cross-section set
+    CrossSections::setCrossSections(new CrossSectionsINCL46);
+
     if(theConfig->getCDPP())
       G4INCL::Pauli::setCDPP(new G4INCL::CDPP);
     else
@@ -156,8 +164,8 @@ namespace G4INCL {
     // finding schemes and even to support things like curved
     // trajectories in the future.
     propagationModel = new G4INCL::StandardPropagationModel(theConfig->getLocalEnergyBBType(),theConfig->getLocalEnergyPiType());
-    propagationAction = new PropagationAction();
-    avatarAction = new AvatarAction();
+    cascadeAction = new CascadeAction();
+    cascadeAction->beforeRunAction(theConfig);
 
     theGlobalInfo.cascadeModel = theConfig->getVersionString();
     theGlobalInfo.deexcitationModel = theConfig->getDeExcitationString();
@@ -182,6 +190,10 @@ namespace G4INCL {
 
   INCL::~INCL() {
     G4INCL::InteractionAvatar::deleteBackupParticles();
+#ifndef INCLXX_IN_GEANT4_MODE
+    G4INCL::NuclearMassTable::deleteTable();
+#endif
+    G4INCL::CrossSections::deleteCrossSections();
     G4INCL::Pauli::deleteBlockers();
     G4INCL::CoulombDistortion::deleteCoulomb();
     G4INCL::Random::deleteGenerator();
@@ -191,8 +203,8 @@ namespace G4INCL {
 #endif
     G4INCL::NuclearDensityFactory::clearCache();
     G4INCL::NuclearPotential::clearCache();
-    delete avatarAction;
-    delete propagationAction;
+    cascadeAction->afterRunAction();
+    delete cascadeAction;
     delete propagationModel;
     delete theConfig;
   }
@@ -264,10 +276,13 @@ namespace G4INCL {
       return theEventInfo;
     }
 
+    cascadeAction->beforeCascadeAction(propagationModel);
+
     const G4bool canRunCascade = preCascade(projectileSpecies, kineticEnergy);
     if(canRunCascade) {
       cascade();
       postCascade();
+      cascadeAction->afterCascadeAction(nucleus);
     }
     updateGlobalInfo();
     return theEventInfo;
@@ -328,19 +343,19 @@ namespace G4INCL {
   void INCL::cascade() {
     do {
       // Run book keeping actions that should take place before propagation:
-      propagationAction->beforePropagationAction(propagationModel);
+      cascadeAction->beforePropagationAction(propagationModel);
 
       // Get the avatar with the smallest time and propagate particles
       // to that point in time.
       G4INCL::IAvatar *avatar = propagationModel->propagate();
 
       // Run book keeping actions that should take place after propagation:
-      propagationAction->afterPropagationAction(propagationModel, avatar);
+      cascadeAction->afterPropagationAction(propagationModel, avatar);
 
       if(avatar == 0) break; // No more avatars in the avatar list.
 
       // Run book keeping actions that should take place before avatar:
-      avatarAction->beforeAvatarAction(avatar, nucleus);
+      cascadeAction->beforeAvatarAction(avatar, nucleus);
 
       // Channel is responsible for calculating the outcome of the
       // selected avatar. There are different kinds of channels. The
@@ -352,7 +367,7 @@ namespace G4INCL {
       G4INCL::FinalState *finalState = avatar->getFinalState();
 
       // Run book keeping actions that should take place after avatar:
-      avatarAction->afterAvatarAction(avatar, nucleus, finalState);
+      cascadeAction->afterAvatarAction(avatar, nucleus, finalState);
 
       // So now we must give this information to the nucleus
       nucleus->applyFinalState(finalState);
@@ -820,4 +835,5 @@ namespace G4INCL {
     // collisions
     theGlobalInfo.nEnergyViolationInteraction += theEventInfo.nEnergyViolationInteraction;
   }
+
 }

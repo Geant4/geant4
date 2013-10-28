@@ -40,8 +40,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLIPropagationModel.hh"
-#include "G4INCLPropagationAction.hh"
-#include "G4INCLAvatarAction.hh"
+#include "G4INCLCascadeAction.hh"
 #include "G4INCLEventInfo.hh"
 #include "G4INCLGlobalInfo.hh"
 #include "G4INCLLogger.hh"
@@ -89,8 +88,7 @@ namespace G4INCL {
       G4double maxUniverseRadius;
       G4double maxInteractionDistance;
       G4double fixedImpactParameter;
-      PropagationAction *propagationAction;
-      AvatarAction *avatarAction;
+      CascadeAction *cascadeAction;
       Config const * const theConfig;
       Nucleus *nucleus;
       G4bool forceTransparent;

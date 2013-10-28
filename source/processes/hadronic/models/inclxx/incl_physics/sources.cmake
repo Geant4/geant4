@@ -55,6 +55,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLElasticChannel.hh
         G4INCLDeltaDecayChannel.hh
         G4INCLNucleus.hh
+        G4INCLCrossSectionsINCL46.hh
         G4INCLCluster.hh
         G4INCLParticleEntryChannel.hh
         G4INCLNDFGaussian.hh
@@ -63,6 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLClustering.hh
         G4INCLNuclearDensityFactory.hh
         G4INCLSurfaceAvatar.hh
+        G4INCLCascadeAction.hh
         G4INCLReflectionChannel.hh
         G4INCLBinaryCollisionAvatar.hh
         G4INCLNDFHardSphere.hh
@@ -78,7 +80,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLNuclearPotentialEnergyIsospin.hh
         G4INCLCoulombDistortion.hh
         G4INCLClusteringModelNone.hh
-        G4INCLAvatarAction.hh
         G4INCLIClusteringModel.hh
         G4INCLDeJongSpin.hh
         G4INCLParticleEntryAvatar.hh
@@ -101,7 +102,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLPauliStrictStandard.hh
         G4INCLNuclearDensity.hh
         G4INCLParticleSampler.hh
-        G4INCLPropagationAction.hh
+        G4INCLICrossSections.hh
         G4INCLConstantRandom.hh
         G4INCLNDFParis.hh
         G4INCLClusteringModelIntercomparison.hh
@@ -123,6 +124,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLParticleEntryChannel.cc
         G4INCLPauliBlocking.cc
         G4INCLDeuteronDensity.cc
+        G4INCLCrossSectionsINCL46.cc
         G4INCLSurfaceAvatar.cc
         G4INCLDeltaDecayChannel.cc
         G4INCLNuclearPotentialIsospin.cc
@@ -131,12 +133,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLRecombinationChannel.cc
         G4INCLParticleEntryAvatar.cc
         G4INCLDeltaProductionChannel.cc
-        G4INCLAvatarAction.cc
         G4INCLDeJongSpin.cc
         G4INCLStandardPropagationModel.cc
         G4INCLElasticChannel.cc
         G4INCLDecayAvatar.cc
-        G4INCLPropagationAction.cc
         G4INCLNuclearDensity.cc
         G4INCLClusterDecay.cc
         G4INCLPhaseSpaceDecay.cc
@@ -147,6 +147,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLPauliGlobal.cc
         G4INCLPauliStrictStandard.cc
         G4INCLCrossSections.cc
+        G4INCLCascadeAction.cc
         G4INCLNucleus.cc
         G4INCLClusteringModelIntercomparison.cc
         G4INCLClustering.cc

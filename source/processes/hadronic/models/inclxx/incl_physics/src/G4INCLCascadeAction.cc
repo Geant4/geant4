@@ -34,28 +34,77 @@
 
 #include "globals.hh"
 
-#include "G4INCLAvatarAction.hh"
+#include "G4INCLCascadeAction.hh"
 #include "G4INCLLogger.hh"
 #include "G4INCLRandom.hh"
 
 namespace G4INCL {
 
-  AvatarAction::AvatarAction() {
+  CascadeAction::CascadeAction() :
+    stepCounter(0)
+  {}
 
+  CascadeAction::~CascadeAction()
+  {}
+
+  void CascadeAction::beforeRunAction(Config const *config) {
+    beforeRunDefaultAction(config);
+    beforeRunUserAction(config);
   }
 
-  AvatarAction::~AvatarAction() {
-
+  void CascadeAction::beforeCascadeAction(IPropagationModel *pm) {
+    beforeCascadeDefaultAction(pm);
+    beforeCascadeUserAction(pm);
   }
 
-  void AvatarAction::beforeAvatarAction(IAvatar *a, Nucleus *n) {
+  void CascadeAction::beforePropagationAction(IPropagationModel *pm) {
+    beforePropagationDefaultAction(pm);
+    beforePropagationUserAction(pm);
+  }
+
+  void CascadeAction::beforeAvatarAction(IAvatar *a, Nucleus *n) {
+    beforeAvatarDefaultAction(a, n);
+    beforeAvatarUserAction(a, n);
+  }
+
+  void CascadeAction::afterAvatarAction(IAvatar *a, Nucleus *n, FinalState *fs) {
+    afterAvatarDefaultAction(a, n, fs);
+    afterAvatarUserAction(a, n, fs);
+  }
+
+  void CascadeAction::afterPropagationAction(IPropagationModel *pm, IAvatar *avatar) {
+    afterPropagationDefaultAction(pm, avatar);
+    afterPropagationUserAction(pm, avatar);
+  }
+
+  void CascadeAction::afterCascadeAction(Nucleus *n) {
+    afterCascadeDefaultAction(n);
+    afterCascadeUserAction(n);
+  }
+
+  void CascadeAction::afterRunAction() {
+    afterRunDefaultAction();
+    afterRunUserAction();
+  }
+
+
+
+  void CascadeAction::beforeRunDefaultAction(Config const * /*pm*/) {}
+
+  void CascadeAction::beforeCascadeDefaultAction(IPropagationModel * /*pm*/) {}
+
+  void CascadeAction::beforePropagationDefaultAction(IPropagationModel * /*pm*/) {
+    // assert(pm->getNucleus()->getStore()->getBook().getCascading() == pm->getNucleus()->getStore()->countCascading());
+  }
+
+  void CascadeAction::beforeAvatarDefaultAction(IAvatar *a, Nucleus *n) {
     n->getStore()->getBook().incrementAvatars(a->getType());
     INCL_DEBUG("Random seeds before avatar " << a->getID() << ": "
           << G4INCL::Random::getSeeds() << std::endl);
     INCL_DEBUG("Next avatar:" << std::endl << a->dump() << std::endl);
   }
 
-  void AvatarAction::afterAvatarAction(IAvatar *a, Nucleus * /*n*/, FinalState *fs) {
+  void CascadeAction::afterAvatarDefaultAction(IAvatar *a, Nucleus * /*n*/, FinalState *fs) {
 
     if(!fs) // do nothing if there is no final state
       return;
@@ -78,4 +127,18 @@ namespace G4INCL {
         (*p)->incrementNumberOfDecays();
 
   }
+
+  void CascadeAction::afterPropagationDefaultAction(IPropagationModel * /* pm */,
+                                                IAvatar * /*avatar */) {
+    ++stepCounter; // Increment the step counter
+
+#ifdef INCL_DEBUG_LOG
+    //   INCL_DATABLOCK(pm->getNucleus()->getStore()->printParticleConfiguration());
+#endif
+  }
+
+  void CascadeAction::afterCascadeDefaultAction(Nucleus * /*pm*/) {}
+
+  void CascadeAction::afterRunDefaultAction() {}
+
 }

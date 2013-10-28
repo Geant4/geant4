@@ -57,6 +57,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLHashing.hh
         G4INCLLogger.hh
         G4INCLGlobalInfo.hh
+        G4INCLNuclearMassTable.hh
         G4INCLGlobals.hh
         G4INCLRandomSeedVector.hh
         G4INCLParticleType.hh
@@ -82,6 +83,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLParticleTable.cc
         G4INCLIAvatar.cc
         G4INCLIFunction1D.cc
+        G4INCLNuclearMassTable.cc
         G4INCLEventInfo.cc
         G4INCLGlobals.cc
         G4INCLConfigVersion.cc

@@ -344,6 +344,7 @@ namespace G4INCL {
     G4int verboseEvent;
 
     G4int randomSeed1, randomSeed2;
+    static const G4int randomSeedMin, randomSeedMax;
 
     std::string pauliString;
     PauliType pauliType;

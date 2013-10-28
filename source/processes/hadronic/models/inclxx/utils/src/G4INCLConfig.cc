@@ -42,6 +42,9 @@
 
 namespace G4INCL {
 
+  const G4int Config::randomSeedMin = 1;
+  const G4int Config::randomSeedMax = ((1<<30)-1)+(1<<30); // 2^31-1
+
   Config::Config()
   {
     init();
@@ -148,6 +151,12 @@ namespace G4INCL {
         ;
 
       // Run-specific options
+      std::stringstream randomSeed1Description, randomSeed2Description;
+      randomSeed1Description << "first seed for the random-number generator (between "
+        << randomSeedMin << "and " << randomSeedMax << ")";
+      randomSeed2Description << "second seed for the random-number generator (between "
+        << randomSeedMin << "and " << randomSeedMax << ")";
+
       runOptDesc.add_options()
         ("title", po::value<std::string>(&title)->default_value("INCL default run title"), "run title")
         ("output,o", po::value<std::string>(&outputFileRoot), "root for generating output file names. File-specific suffixes (.root, .out, etc.) will be appended to this root. Defaults to the input file name, if given; otherwise, defaults to a string composed of the explicitly specified options and of a customisable suffix, if provided using the -s option")
@@ -165,8 +174,8 @@ namespace G4INCL {
          "  \tHe-4, He4, 4He (and so on)")
         ("energy,E", po::value<G4double>(&projectileKineticEnergy), "* total kinetic energy of the projectile, in MeV")
         ("verbose-event", po::value<G4int>(&verboseEvent)->default_value(-1), "request verbose logging for the specified event only")
-        ("random-seed-1", po::value<G4int>(&randomSeed1)->default_value(666), "first seed for the random-number generator")
-        ("random-seed-2", po::value<G4int>(&randomSeed2)->default_value(777), "second seed for the random-number generator")
+        ("random-seed-1", po::value<G4int>(&randomSeed1)->default_value(666), randomSeed1Description.str().c_str())
+        ("random-seed-2", po::value<G4int>(&randomSeed2)->default_value(777), randomSeed2Description.str().c_str())
 #ifdef INCL_ROOT_USE
         ("root-selection", po::value<std::string>(&rootSelectionString)->default_value(""), "ROOT selection for abridged output ROOT tree. For example: \"A==1 && Z==0 && theta<3\" selects only events where a neutron is scattered in the forward direction.")
 #endif
@@ -715,6 +724,24 @@ namespace G4INCL {
         variablesMap.insert(std::make_pair("logfile", po::variable_value(boost::any(logFileName), false)));
       }
 
+      // --random-seed-1 and 2
+      if(!variablesMap.count("random-seed-1")) {
+        if(randomSeed1<randomSeedMin || randomSeed1>randomSeedMax) {
+          std::cerr << "Invalid value for random-seed-1. "
+            << "Allowed range: [" << randomSeedMin << ", " << randomSeedMax << "]." << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      }
+      if(!variablesMap.count("random-seed-2")) {
+        if(randomSeed2<randomSeedMin || randomSeed2>randomSeedMax) {
+          std::cerr << "Invalid value for random-seed-2. "
+            << "Allowed range: [" << randomSeedMin << ", " << randomSeedMax << "]." << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      }
+
     }
     catch(std::exception& e)
     {
@@ -838,9 +865,13 @@ namespace G4INCL {
       ss << name << " = ";
       po::variable_value const &value = variablesMap.find(name)->second;
       std::type_info const &type = value.value().type();
-      if(type == typeid(std::string))
-        ss << value.as<std::string>();
-      else if(type == typeid(G4int))
+      if(type == typeid(std::string)) {
+        const std::string svalue = value.as<std::string>();
+        if(svalue.empty())
+          ss << "\"\"";
+        else
+          ss << svalue;
+      } else if(type == typeid(G4int))
         ss << value.as<G4int>();
       else if(type == typeid(G4float))
         ss << value.as<G4float>();

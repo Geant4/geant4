@@ -34,31 +34,59 @@
 
 #include "globals.hh"
 
-#include "G4INCLPropagationAction.hh"
-#include "G4INCLLogger.hh"
-// #include <cassert>
+/** \file G4INCLCrossSectionsINCL46.hh
+ * \brief Cross sections used in INCL4.6
+ *
+ * \date 25nd October 2013
+ * \author Davide Mancusi
+ */
+
+#ifndef G4INCLCROSSSECTIONSINCL46_HH
+#define G4INCLCROSSSECTIONSINCL46_HH
+
+#include "G4INCLICrossSections.hh"
 
 namespace G4INCL {
+  /// \brief Cross sections used in INCL4.6
+ 
+  class CrossSectionsINCL46 : public ICrossSections{
+    public:
 
-  PropagationAction::PropagationAction()
-    :stepCounter(0)
-  {
+      /// \brief Elastic particle-particle cross section
+      virtual G4double elastic(Particle const * const p1, Particle const * const p2);
 
-  }
+      /// \brief Total (elastic+inelastic) particle-particle cross section
+      virtual G4double total(Particle const * const p1, Particle const * const p2);
 
-  PropagationAction::~PropagationAction() {
-  }
+      /// \brief Total (elastic+inelastic) pion-nucleon cross section
+      virtual G4double pionNucleon(Particle const * const p1, Particle const * const p2);
 
-  void PropagationAction::beforePropagationAction(IPropagationModel * /*pm*/) {
-    // assert(pm->getNucleus()->getStore()->getBook().getCascading() == pm->getNucleus()->getStore()->countCascading());
-  }
+      /// \brief Cross section for NDelta->NN
+      virtual G4double recombination(Particle const * const p1, Particle const * const p2);
 
-  void PropagationAction::afterPropagationAction(IPropagationModel * /* pm */,
-						 IAvatar * /*avatar */) {
-    ++stepCounter; // Increment the step counter
+      /// \brief Cross section for NN->NDelta
+      virtual G4double deltaProduction(Particle const * const p1, Particle const * const p2);
 
-#ifdef INCL_DEBUG_LOG
-    //   INCL_DATABLOCK(pm->getNucleus()->getStore()->printParticleConfiguration());
-#endif
-  }
+      /** \brief Calculate the slope of the NN DDXS.
+       *
+       * \param energyCM energy in the CM frame, in MeV
+       * \param iso total isospin of the system
+       *
+       * \return the slope of the angular distribution
+       */
+      virtual G4double calculateNNAngularSlope(G4double energyCM, G4int iso);
+
+    protected:
+
+      /// \brief Internal implementation of the elastic cross section
+      G4double elasticNNLegacy(Particle const * const part1, Particle const * const part2);
+
+      /// \brief Internal function for the delta-production cross section
+      G4double deltaProduction(const G4int isospin, const G4double pLab);
+
+      G4double spnPiPlusPHE(const G4double x);
+      G4double spnPiMinusPHE(const G4double x);
+  };
 }
+
+#endif

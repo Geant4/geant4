@@ -35,6 +35,7 @@
 #include "globals.hh"
 
 #include "G4INCLParticleTable.hh"
+#include "G4INCLNuclearMassTable.hh"
 #include <algorithm>
 // #include <cassert>
 #include <cmath>
@@ -247,14 +248,6 @@ namespace G4INCL {
 
 #ifdef INCLXX_IN_GEANT4_MODE
       G4ThreadLocal G4IonTable *theG4IonTable;
-#else
-      std::vector< std::vector <G4bool> > massTableMask;
-      std::vector< std::vector <G4double> > massTable;
-#endif
-
-#ifndef INCLXX_IN_GEANT4_MODE
-      /// \brief Read nuclear masses from a data file
-      void readRealMasses(std::string const &path);
 #endif
 
       /// \brief Transform a IUPAC char to an char representing an integer digit
@@ -264,50 +257,6 @@ namespace G4INCL {
 
       /// \brief Transform an integer digit (represented by a char) to a IUPAC char
       char intToIUPAC(char n) { return elementIUPACDigits.at(n); }
-
-#ifndef INCLXX_IN_GEANT4_MODE
-      void readRealMasses(std::string const &path) {
-        // Clear the existing tables, if any
-        massTableMask.clear();
-        massTable.clear();
-
-        // File name
-        std::string fileName(path + "/walletlifetime.dat");
-        INCL_DEBUG("Reading real nuclear masses from file " << fileName << std::endl);
-
-        // Open the file stream
-        std::ifstream massTableIn(fileName.c_str());
-        if(!massTableIn.good()) {
-          std::cerr << "Cannot open " << fileName << " data file." << std::endl;
-          std::abort();
-          return;
-        }
-
-        // Read in the data
-        unsigned int Z, A;
-        const G4double amu = 931.494061; // atomic mass unit in MeV/c^2
-        const G4double eMass = 0.5109988; // electron mass in MeV/c^2
-        G4double excess;
-        massTableIn >> A >> Z >> excess;
-        do {
-          // Dynamically determine the table size
-          if(Z>=massTable.size()) {
-            massTable.resize(Z+1);
-            massTableMask.resize(Z+1);
-          }
-          if(A>=massTable[Z].size()) {
-            massTable[Z].resize(A+1, 0.);
-            massTableMask[Z].resize(A+1, false);
-          }
-
-          massTable.at(Z).at(A) = A*amu + excess - Z*eMass;
-          massTableMask.at(Z).at(A) = true;
-
-          massTableIn >> A >> Z >> excess;
-        } while(massTableIn.good());
-
-      }
-#endif
 
       /// \brief Get the singleton instance of the natural isotopic distributions
       const NaturalIsotopicDistributions *getNaturalIsotopicDistributions() {
@@ -325,13 +274,6 @@ namespace G4INCL {
       piMinusMass = theINCLPionMass;
       piZeroMass = theINCLPionMass;
 
-#ifndef INCLXX_IN_GEANT4_MODE
-      std::string dataFilePath;
-      if(theConfig)
-        dataFilePath = theConfig->getINCLXXDataFilePath();
-      readRealMasses(dataFilePath);
-#endif
-
       if(theConfig && theConfig->getUseRealMasses()) {
         getTableMass = getRealMass;
         getTableParticleMass = getRealMass;
@@ -339,6 +281,14 @@ namespace G4INCL {
         getTableMass = getINCLMass;
         getTableParticleMass = getINCLMass;
       }
+
+#ifndef INCLXX_IN_GEANT4_MODE
+      std::string dataFilePath;
+      if(theConfig)
+        dataFilePath = theConfig->getINCLXXDataFilePath();
+      NuclearMassTable::initialize(dataFilePath, getRealMass(Proton), getRealMass(Neutron));
+#endif
+
 #ifdef INCLXX_IN_GEANT4_MODE
       G4ParticleTable *theG4ParticleTable = G4ParticleTable::GetParticleTable();
       theG4IonTable = theG4ParticleTable->GetIonTable();
@@ -547,14 +497,7 @@ namespace G4INCL {
         return A*getRealMass(Proton);
       else if(A>1) {
 #ifndef INCLXX_IN_GEANT4_MODE
-        if(hasMassTable(A,Z))
-          return massTable.at(Z).at(A);
-        else {
-          INCL_DEBUG("Real mass unavailable for isotope A=" << A << ", Z=" << Z
-                << ", using Weizsaecker's formula"
-                << std::endl);
-          return getWeizsaeckerMass(A,Z);
-        }
+        return ::G4INCL::NuclearMassTable::getMass(A,Z);
 #else
         return theG4IonTable->GetNucleusMass(Z,A) / MeV;
 #endif
@@ -578,29 +521,6 @@ namespace G4INCL {
       else
         return 0.;
     }
-
-#ifndef INCLXX_IN_GEANT4_MODE
-    G4double hasMassTable(const unsigned int A, const unsigned int Z) {
-      return ( Z > 0 && A > 0
-          && Z < massTableMask.size() && A < massTableMask.at(Z).size()
-          && massTableMask.at(Z).at(A));
-    }
-
-    G4double getWeizsaeckerMass(const G4int A, const G4int Z) {
-      const G4int Npairing = (A-Z)%2;                  // pairing
-      const G4int Zpairing = Z%2;
-      const G4double fA = (G4double) A;
-      const G4double fZ = (G4double) Z;
-      G4double binding =
-        - 15.67*fA                          // nuclear volume
-        + 17.23*Math::pow23(fA)                // surface energy
-        + 93.15*((fA/2.-fZ)*(fA/2.-fZ))/fA       // asymmetry
-        + 0.6984523*fZ*fZ*Math::powMinus13(fA);      // coulomb
-      if( Npairing == Zpairing ) binding += (Npairing+Zpairing-1) * 12.0 / std::sqrt(fA);  // pairing
-
-      return fZ*getRealMass(Proton)+((G4double)(A-Z))*getRealMass(Neutron)+binding;
-    }
-#endif
 
     G4double getTableQValue(const G4int A1, const G4int Z1, const G4int A2, const G4int Z2) {
       return getTableMass(A1,Z1) + getTableMass(A2,Z2) - getTableMass(A1+A2,Z1+Z2);
