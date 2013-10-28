@@ -23,48 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file RE06/include/RE06ParallelWorld.hh
-/// \brief Definition of the RE06ParallelWorld class
+// $Id: RE06ActionInitialization.cc 66522 2012-12-19 12:26:04Z ihrivnac $
 //
-// $Id$
-// 
+/// \file src/RE06ActionInitialization.cc
+/// \brief Implementation of the RE06ActionInitialization class
+//
 
-#ifndef RE06ParallelWorld_h
-#define RE06ParallelWorld_h 1
+#include "RE06ActionInitialization.hh"
+#include "RE06PrimaryGeneratorAction.hh"
+#include "RE06RunAction.hh"
 
-#include "G4VUserParallelWorld.hh"
-#include "globals.hh"
+RE06ActionInitialization::RE06ActionInitialization()
+{;}
 
-class G4LogicalVolume;
-class G4VPhysicalVolume;
+RE06ActionInitialization::~RE06ActionInitialization()
+{;}
 
-class RE06ParallelWorld : public G4VUserParallelWorld
+void RE06ActionInitialization::Build() const
 {
-  public:
-    RE06ParallelWorld(G4String worldName);
-    virtual ~RE06ParallelWorld();
+  //
+  SetUserAction(new RE06PrimaryGeneratorAction);
+  //
+  SetUserAction(new RE06RunAction);
 
-    virtual void Construct();
-    virtual void ConstructSD();
-  
-    void SetSerialGeometry(G4bool ser);
-    G4bool IsSerial() const { return fSerial; }
+}
 
-  private:
-    void SetupGeometry();
-    void SetupDetectors();
-     
-    G4LogicalVolume*   fCalorLogical[3];
-    G4LogicalVolume*   fLayerLogical[3];
-    G4VPhysicalVolume* fCalorPhysical[3];
-    G4VPhysicalVolume* fLayerPhysical[3];
-    G4String           fCalName[3];
-    G4bool             fConstructed;
-    G4bool             fSerial;
-    G4double           fTotalThickness;
-    G4int              fNumberOfLayers;
-};
-
-
-#endif
+void RE06ActionInitialization::BuildForMaster() const
+{
+  //
+  G4UserRunAction* run_action = new RE06RunAction;
+  SetUserAction(run_action);
+}
 

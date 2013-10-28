@@ -69,7 +69,8 @@ RE06DetectorConstruction::RE06DetectorConstruction()
   fTotalThickness (2.0*m),
   fLayerThickness(0.),
   fConstructed(false),
-  fWorldMaterial(0), 
+  fConstructedSDandField(false),
+  fWorldMaterial(0),
   fAbsorberMaterial(0),
   fGapMaterial(0),
   fLayerSolid(0),
@@ -106,8 +107,8 @@ RE06DetectorConstruction::~RE06DetectorConstruction()
 
 G4VPhysicalVolume* RE06DetectorConstruction::Construct()
 {
-  if(!fConstructed)
-  { 
+//  if(!fConstructed)
+  {
     fConstructed = true;
     DefineMaterials();
     SetupGeometry();
@@ -117,6 +118,15 @@ G4VPhysicalVolume* RE06DetectorConstruction::Construct()
     PrintCalorParameters();
   }
   return fWorldPhysical;
+}
+
+void RE06DetectorConstruction::ConstructSDandField() {
+
+//  if(!fConstructedSDandField)
+  {
+    fConstructedSDandField = true;
+    SetupDetectors();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -274,7 +284,7 @@ void RE06DetectorConstruction::SetupGeometry()
   fGapSolid = new G4Box("Gap",0.5*m,0.5*m,fLayerThickness/4.);
   for(i=0;i<3;i++)
   {
-    fGapLogical[i] = new G4LogicalVolume(fGapSolid,fGapMaterial,"Gap");
+    fGapLogical[i] = new G4LogicalVolume(fGapSolid,fGapMaterial,fCalName[i]+"_Gap");
     fGapPhysical[i] = new G4PVPlacement(0,G4ThreeVector(0.,0.,fLayerThickness/4.),
                 fGapLogical[i],fCalName[i]+"_gap",fLayerLogical[i],false,0);
   }
@@ -371,11 +381,10 @@ void RE06DetectorConstruction::SetupDetectors()
     primitive->SetFilter(epFilter);
     det->RegisterPrimitive(primitive);
 
-    G4SDManager::GetSDMpointer()->AddNewDetector(det);
     if(j==0)
-    { fLayerLogical[i]->SetSensitiveDetector(det); }
+     { SetSensitiveDetector(fLayerLogical[i], det); }
     else
-    { fGapLogical[i]->SetSensitiveDetector(det); }
+    { SetSensitiveDetector(fGapLogical[i], det);}
    }
   }
   G4SDManager::GetSDMpointer()->SetVerboseLevel(0);

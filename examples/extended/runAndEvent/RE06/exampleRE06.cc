@@ -32,8 +32,11 @@
 //      GEANT 4 - example RE06 
 // --------------------------------------------------------------
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
-#include "G4UImanager.hh"
+#endif
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -43,12 +46,17 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "G4UImanager.hh"
+
+
 #include "RE06DetectorConstruction.hh"
 #include "RE06ParallelWorld.hh"
 #include "RE06PhysicsList.hh"
 #include "RE06PrimaryGeneratorAction.hh"
 #include "RE06RunAction.hh"
 #include "RE06SteppingVerbose.hh"
+#include "RE06ActionInitialization.hh"
+#include "RE06WorkerInitialization.hh"
 
 int main(int argc,char** argv)
 {
@@ -58,7 +66,13 @@ int main(int argc,char** argv)
 
  // Construct the run manager
  //
- G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+  runManager->SetUserInitialization(new RE06WorkerInitialization);
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
  // Set mandatory initialization classes
  //
@@ -68,14 +82,10 @@ int main(int argc,char** argv)
  //
  G4VUserPhysicsList* physics = new RE06PhysicsList;
  runManager->SetUserInitialization(physics);
-    
+  
  // Set user action classes
  //
- G4VUserPrimaryGeneratorAction* gen_action = new RE06PrimaryGeneratorAction;
- runManager->SetUserAction(gen_action);
- //
- G4UserRunAction* run_action = new RE06RunAction;
- runManager->SetUserAction(run_action);
+ runManager->SetUserInitialization(new RE06ActionInitialization);
   
 #ifdef G4VIS_USE
  // Visualization manager

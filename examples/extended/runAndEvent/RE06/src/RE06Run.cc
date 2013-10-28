@@ -77,6 +77,7 @@ RE06Run::RE06Run()
       fColIDPara[i][j] = SDMan->GetCollectionID(fullName);
     }
   }
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -100,6 +101,7 @@ void RE06Run::RecordEvent(const G4Event* evt)
         = (G4THitsMap<G4double>*)(HCE->GetHC(fColIDSum[i][j]));
       fMapSum[i][j] += *evtMap;
     }
+
     for(j=0;j<3;j++)
     {
       G4THitsMap<G4double>* evtMap 
@@ -114,6 +116,7 @@ void RE06Run::RecordEvent(const G4Event* evt)
         fMapMin[i][j].set(key,val);
       }
     }
+
   }
   for(i=0;i<3;i++)
   {
@@ -127,10 +130,39 @@ void RE06Run::RecordEvent(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void RE06Run::Merge(const G4Run * aRun) {
+  const RE06Run * localRun = static_cast<const RE06Run *>(aRun);
+  
+  for(G4int i = 0; i < 6; i++) {
+    for(G4int j = 0; j < 6; j++) {
+      fMapSum[i][j] += localRun->fMapSum[i][j];
+    }
 
+    for(G4int j = 0; j < 3; j++) {
+      std::map<G4int, G4double*>::iterator itr = localRun->fMapMin[i][j].GetMap()->begin();
+      for(; itr != localRun->fMapMin[i][j].GetMap()->end(); itr++) {
+        G4int key = itr->first;
+        G4double val = *(itr->second);
+        G4double * mapP = fMapMin[i][j][key];
+        if(!mapP || val < *mapP) fMapMin[i][j].set(key, val);
+      }
+    }
+  }
+
+  for(G4int i = 0; i < 3; i++) {
+      for(G4int j = 0; j < 6; j++) {
+        fMapPara[i][j] += localRun->fMapPara[i][j];
+      }
+  }
+  
+  G4Run::Merge(aRun);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4double RE06Run::GetTotal(const G4THitsMap<G4double> &map) const
 {
   G4double tot = 0.;
+  if(map.GetSize()==0) return tot;
   std::map<G4int,G4double*>::iterator itr = map.GetMap()->begin();
   for(; itr != map.GetMap()->end(); itr++) 
   { tot += *(itr->second); }
@@ -142,6 +174,8 @@ G4double RE06Run::GetTotal(const G4THitsMap<G4double> &map) const
 G4double RE06Run::FindMinimum(const G4THitsMap<G4double> &map) const
 {
   G4double val = DBL_MAX;
+
+  if(map.GetSize()==0) return val;
   std::map<G4int,G4double*>::iterator itr = map.GetMap()->begin();
   for(; itr != map.GetMap()->end(); itr++) 
   { if(val>*(itr->second)) val = *(itr->second); }

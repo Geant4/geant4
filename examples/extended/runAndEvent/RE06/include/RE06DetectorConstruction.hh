@@ -49,7 +49,9 @@ class RE06DetectorConstruction : public G4VUserDetectorConstruction
     virtual ~RE06DetectorConstruction();
 
     virtual G4VPhysicalVolume* Construct();
-     
+  
+    void ConstructSDandField();
+  
     void PrintCalorParameters() const;
     void SetAbsorberMaterial(G4String materialChoice);     
     G4String GetAbsorberMaterial() const;
@@ -77,7 +79,8 @@ class RE06DetectorConstruction : public G4VUserDetectorConstruction
     G4double           fLayerThickness; ///< = fTotalThickness / fNumberOfLayers
 
     G4bool             fConstructed;
-    
+    G4bool             fConstructedSDandField;
+  
     G4String           fCalName[3];
 
     G4Material*        fWorldMaterial;

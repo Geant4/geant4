@@ -83,12 +83,18 @@ void RE06ParallelWorld::Construct()
   { 
     fConstructed = true;
     SetupGeometry();
-    SetupDetectors();
+    //SetupDetectors();
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void RE06ParallelWorld::ConstructSD()
+{
+    SetupDetectors();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE06ParallelWorld::SetupGeometry()
 {
   //     
@@ -179,9 +185,10 @@ void RE06ParallelWorld::SetupDetectors()
     det->RegisterPrimitive(primitive);
 
     G4SDManager::GetSDMpointer()->AddNewDetector(det);
-    fLayerLogical[i]->SetSensitiveDetector(det); 
+    SetSensitiveDetector(fLayerLogical[i], det);
   }
   G4SDManager::GetSDMpointer()->SetVerboseLevel(0);
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
