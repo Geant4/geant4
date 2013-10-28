@@ -5,6 +5,7 @@
 #
 # PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 1
 /run/verbose 1
 #
@@ -17,7 +18,7 @@
 #
 /testem/phys/addPhysics  emstandard_opt0
 #
-/testem/phys/setCuts 1.0 mm
+/run/setCut 1.0 mm
 #
 /run/initialize
 /process/em/verbose 1

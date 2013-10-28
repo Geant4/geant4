@@ -187,10 +187,16 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   Reset();
 
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  G4bool show = true;
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread() == true) { show = false; }
+#endif
 
   // save Rndm status
-  CLHEP::HepRandom::showEngineStatus();
+  if(show) { 
+    G4cout << "### Run " << aRun->GetRunID() << " start" << G4endl;
+    CLHEP::HepRandom::showEngineStatus(); 
+  }
 
   //histograms
   //
@@ -264,14 +270,16 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 #ifdef G4MULTITHREADED
   if(G4Threading::IsWorkerThread() == true) {
     NbOfEvents = aRun->GetNumberOfEvent();
-    fAnalysisManager->Write();
+    //fAnalysisManager->Write();
     return;
   } 
-  //  Reset();
 
   for(size_t it = 0; it < runActions.size(); ++it) { 
     RunAction* anAction = runActions[it];
     NbOfEvents += anAction->NbOfEvents;
+
+    fChargedStep += anAction->fChargedStep;
+    fNeutralStep += anAction->fNeutralStep; 
 
     for (G4int i=0; i<f_nLbin; i++) {
       fSumELongit[i] += anAction->fSumELongit[i];
@@ -384,7 +392,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
                             - fSumNeutrTrLength*fSumNeutrTrLength));
 
   //print
-  //
 
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);

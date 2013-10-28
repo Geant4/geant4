@@ -46,6 +46,7 @@
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "ActionInitialization.hh"
+#include "NThreads.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -65,67 +66,32 @@ int main(int argc,char** argv) {
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
 
-
- // Number of threads is defined via 3nd argument
-  G4String nn = "";
-
 #ifdef G4MULTITHREADED  
+  G4MTRunManager * runManager = new G4MTRunManager(); 
+
+  // Number of threads is defined via 3nd argument
+  G4String nn = "";
   if (argc==3) { nn = argv[2]; }
 
-  if("" == nn) {
-    // Number of threads is defined via environment variable
-    char* path = getenv("G4NUMBEROFTHREADS");
-    if(path) { nn = G4String(path); }
-  }
+  NThreads th;
+  G4int N = th.GetNumberOfThreads(nn);
+  runManager->SetNumberOfThreads(N);
+  G4cout << "##### TestEm2 started for " << N << " threads" 
+         << " #####" << G4endl;
+#else
+  G4RunManager * runManager = new G4RunManager(); 
+  G4cout << "##### TestEm2 started in sequential mode" 
+         << " #####" << G4endl;
 #endif
 
-  G4RunManager * runManager = 0;
-  G4MTRunManager * runManagerMT = 0;
+  // set mandatory initialization classes
+  DetectorConstruction* detector = new DetectorConstruction();
+  runManager->SetUserInitialization(detector);
+  runManager->SetUserInitialization(new PhysicsList());
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
 
-  // MT mode
-  if("" != nn) {
-    runManagerMT = new G4MTRunManager();
-    G4int N = 0;
-    std::istringstream is(nn);
-    is >> N;
-    if(N < 1) { N = 1; }
-    runManagerMT->SetNumberOfThreads(N);
-
-    // set mandatory initialization classes
-    DetectorConstruction* detector = new DetectorConstruction();
-    runManagerMT->SetUserInitialization(detector);
-    runManagerMT->SetUserInitialization(new PhysicsList());
-    PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
-
-    // set user actions
-    runManagerMT->SetUserInitialization(new ActionInitialization(detector,
-                                                                 primary));
-
-    G4cout << "##### TestEm2 started for " << N << " threads" 
-           << " #####" << G4endl;
-
-    // sequential mode
-  } else {
-    runManager = new G4RunManager();
-
-    // set mandatory initialization classes
-    DetectorConstruction* detector = new DetectorConstruction();
-    runManager->SetUserInitialization(detector);
-    runManager->SetUserInitialization(new PhysicsList());  
-    PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
-    runManager->SetUserAction(primary);
-    
-    // set user action classes
-    RunAction* RunAct = new RunAction(detector,primary);
-    runManager->SetUserAction(RunAct);
-    runManager->SetUserAction(new EventAction   (RunAct));
-    runManager->SetUserAction(new TrackingAction(RunAct));
-    runManager->SetUserAction(new SteppingAction(detector,RunAct)); 
-
-    G4cout << "##### test40 started in sequential mode" 
-           << " #####" << G4endl;
-
-  }
+  // set user actions
+  runManager->SetUserInitialization(new ActionInitialization(detector,primary));
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
@@ -143,8 +109,7 @@ int main(int argc,char** argv) {
      G4VisManager* visManager = new G4VisExecutive;
      visManager->Initialize();
 #endif
-                 
-     
+                      
 #ifdef G4UI_USE
       G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
       ui->SessionStart();
@@ -159,8 +124,6 @@ int main(int argc,char** argv) {
   // job termination
   //
   delete runManager;
-  delete runManagerMT;
-
   return 0;
 }
 

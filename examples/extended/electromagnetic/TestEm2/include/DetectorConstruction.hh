@@ -67,8 +67,6 @@ public:
 
   virtual void ConstructSDandField();
 
-  void UpdateGeometry();
-
   const
   G4VPhysicalVolume* GetEcal() {return fPhysiEcal;};
   G4Material*    GetMaterial() {return fMaterial;};

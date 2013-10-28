@@ -56,8 +56,13 @@ ActionInitialization::~ActionInitialization()
 void ActionInitialization::Build() const
 {
   SetUserAction(generator);
+
+#ifdef G4MULTITHREADED
   RunAction* run = new RunAction(detector, generator);
   masterRunAction->AddWorkerRunAction(run);
+#else
+  RunAction* run = masterRunAction;
+#endif
 
   SetUserAction(run);
   SetUserAction(new EventAction(run));

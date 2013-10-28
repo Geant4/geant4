@@ -43,14 +43,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(),fDetector(Det),
- fTestemDir(0),
- fDetDir(0),  
- fMaterCmd(0),
- fLBinCmd(0),
- fRBinCmd(0),
- fFieldCmd(0),
- fUpdateCmd(0)
+:G4UImessenger(),fDetector(Det)
 {
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance(" detector control.");
@@ -83,12 +76,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fFieldCmd->SetParameterName("Bz",false);
   fFieldCmd->SetUnitCategory("Magnetic flux density");
   fFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  fUpdateCmd->SetGuidance("Update geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,7 +86,6 @@ DetectorMessenger::~DetectorMessenger()
   delete fLBinCmd;
   delete fRBinCmd;
   delete fFieldCmd;
-  delete fUpdateCmd;
   delete fDetDir;
   delete fTestemDir;
 }
@@ -119,9 +105,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   if( command == fFieldCmd )
    { fDetector->SetMagField(fFieldCmd->GetNewDoubleValue(newValue));}
-
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry();}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

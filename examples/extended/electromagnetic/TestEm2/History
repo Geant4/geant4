@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-10-13 V.Ivanchenko (testem2-V09-06-09) 
+- Added NThread helper class
+
+26-10-13 V.Ivanchenko (testem2-V09-06-08) 
+- Cleanup of options and macro files
+
 24-10-13 V.Ivanchenko (testem2-V09-06-07) 
 - Migrated to MT mode (A.Bagulya)
 

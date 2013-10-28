@@ -23,46 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/include/PhysicsListMessenger.hh
-/// \brief Definition of the PhysicsListMessenger class
+/// \file electromagnetic/TestEm2/include/NThreads.hh
+/// \brief Definition of the NThreads class
 //
-// $Id$
+// $Id: NThreads.hh 74878 2013-10-23 13:36:43Z vnivanch $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#ifndef NThreads_h
+#define NThreads_h 1
 
 #include "globals.hh"
-#include "G4UImessenger.hh"
-
-class PhysicsList;
-class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class NThreads 
 {
 public:
   
-  PhysicsListMessenger(PhysicsList* );
-  virtual ~PhysicsListMessenger();
-    
-  virtual void SetNewValue(G4UIcommand*, G4String);
-    
-private:
-  
-  PhysicsList* fPhysicsList;
-    
-  G4UIdirectory*             fPhysDir;        
-  G4UIcmdWithAString*        fListCmd;
-  
+  NThreads() {};
+
+  G4int GetNumberOfThreads(const G4String& s) {
+    G4String nn = s;
+    if("" == nn) {
+      char* path = getenv("G4NUMBEROFTHREADS");
+      if(path) { nn = G4String(path); }
+      else     { nn = "1"; }
+    }
+    G4int N = 0;
+    std::istringstream is(nn);
+    is >> N;
+    if(N < 1) { N = 1; }
+    return N;
+  };
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    
