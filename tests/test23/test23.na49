@@ -1,0 +1,24 @@
+#verbose
+-1
+#rad
+//--------Proton_processes
+#particle
+proton
+#isNA49
+#position(mm)
+0. 0. -480.
+#direction
+0. 0. 1.
+//--------
+#target-geom(mm)
+6.4 6.4 940. G4Box
+#material
+C
+#momentum(MeV/c)
+158000.0
+#events
+100
+#physicslist
+qgsp_ftfp_bert
+#run
+#exit

@@ -1,0 +1,88 @@
+
+proton_C_antiproton_integr.dat:
+
+# pT integrated invariant cross section F, density distribution dN/dxF,
+# mean p_T and mean p_T^2 as a function of x_F for antiprotons
+# in p+C interactions at 158 GeV beam from NA49.
+# Errors are given in percent as upper limit considering the full 
+# statistical error of each measured xF/pT point.
+# xF        F    error  dN/dxF  error  <pT>   error <pT^2>  error
+
+
+
+proton_C_antiproton_pt_xf.dat:
+
+# Invariant differential inclusive cross section [mb/GeV^2] of anti-protons 
+# in p+C interactions at 158 GeV beam (sqrt(s)=17.2 GeV) from NA49
+#  xF     pT       xsect       error
+
+
+proton_C_neutron_integr.dat:
+
+# pT integrated density distribution dN/dxF
+# as a function of x_F for neutrons 
+# in p+C interactions at 158 GeV beam from NA49.
+# Errors are always given in percent.
+# xF  dN/dxF  error
+
+
+proton_C_piminus_integr.dat:
+
+# pT integrated invariant cross section F, density distribution dN/dxF, 
+# mean p_T and mean p_T^2 as a function of x_F for NEGATIVE PIONS
+# in p+C interactions at 158 GeV beam from NA49.
+# Errors are always given in percent.
+
+
+proton_C_piminus_pt_xf.dat:
+
+# Invariant differential inclusive cross section [mb/GeV^2] of negative pions 
+# in p+C interactions at 158 GeV beam (sqrt(s)=17.2 GeV in N+N) from NA49
+# xF  pT    xsect    error
+
+
+proton_C_pion_dndy.dat:
+
+# pT integrated density distribution dN/dy as a function of rapidity 
+# for positive and negative pions 
+# in p+C interactions at 158 GeV beam from NA49.
+# A common 2 % systematic error is to be assumed for all datapoints
+# y     pi+    pi-
+
+
+proton_C_piplus_integr.dat:
+
+# pT integrated invariant cross section F, density distribution dN/dxF, 
+# mean p_T and mean p_T^2 as a function of x_F for POSITIVE PIONS 
+# in p+C interactions at 158 GeV beam from NA49.
+# Errors are always given in percent.
+
+
+proton_C_piplus_pt_xf.dat:
+
+# Invariant differential inclusive cross section [mb/GeV^2] of positive pions 
+# in p+C interactions at 158 GeV beam (sqrt(s)=17.2 GeV in N+N) from NA49
+# xF  pT    xsect    error
+
+
+proton_C_proton_integr.dat:
+
+# pT integrated invariant cross section F, density distribution dN/dxF, 
+# mean p_T and mean p_T^2 as a function of x_F for protons 
+# in p+C interactions at 158 GeV beam from NA49.
+# Errors are given in percent as upper limit considering the full 
+# statistical error of each measured xF/pT point.
+# xF        F    error  dN/dxF  error  <pT>   error <pT^2>  error
+
+
+proton_C_proton_pt_xf.dat:
+
+# Invariant differential inclusive cross section [mb/GeV^2] of protons 
+# in p+C interactions at 158 GeV beam (sqrt(s)=17.2 GeV) from NA49
+#  xF     pT      xsect      error
+
+
+
+
+
+

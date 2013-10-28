@@ -1,0 +1,65 @@
+#----------------------------------------------------------------------------
+#
+#  Note-1: Env.variables G4INSTALL, G4LIB, ROOTSYS need to be setup
+#
+#  Note-2: Maybe ROOT can be pulled in via ROOT_INCLUDE_DIR - need to double check...
+#
+# Usage:
+#
+# mkdir /tests/CommonSW-build
+# cd /tests/CommonSW-build
+# cmake -DGeant4_DIR=$G4LIB/Geant4-9.6.0 \
+#       ../CommonSW
+# make
+# make install
+#
+# Note-3: in some cases, one would also use -DGeant4_SOURCE_DIR=$G4INSTALL option,
+#         but here's it's not necessary - the system will even tell about that
+# Note-3: make install will bail out as it wont know where to install - need work !
+#
+
+
+
+# Setup the project
+cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+project(CommonSW)
+
+#----------------------------------------------------------------------------
+# Find Geant4 package, no UI and Vis drivers activated
+#
+find_package(Geant4 REQUIRED)
+
+#----------------------------------------------------------------------------
+# Setup Geant4 include directories and compile definitions
+#
+include(${Geant4_USE_FILE})
+
+find_package(ROOT QUIET)
+if(NOT ROOT_FOUND)
+  message(STATUS "G4 TESTS: ROOT package not found. --> test47 disabled")  
+  return()
+endif()
+
+#----------------------------------------------------------------------------
+# Locate sources and headers for this project
+#
+include_directories(${PROJECT_SOURCE_DIR}/include 
+                    ${Geant4_INCLUDE_DIR}
+		    ${ROOTSYS}/include)
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
+file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+
+#----------------------------------------------------------------------------
+# Add (build) the library, and link it to the Geant4 and Root libraries
+#
+add_library(CommonSW SHARED ${sources} ${headers})
+target_link_libraries(CommonSW ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+
+#----------------------------------------------------------------------------
+# Install the executable to 'lib' directory under CMAKE_INSTALL_PREFIX
+#
+# set(CMAKE_INSTALL_PREFIX ${G4WORKDIR}/CommonSW)
+set(CMAKE_INSTALL_PREFIX ${PROJECT_SOURCE_DIR})
+install(TARGETS CommonSW LIBRARY DESTINATION lib)
+### install(TARGETS exampleN01 DESTINATION bin)
+

@@ -1,0 +1,13 @@
+
+Responsible: Julia Yarba, Fermilab
+
+This test will perform benchmarking of various physics lists vs thin target data,
+in the intermediate and high energy range (such as HARP, ITEP, NA61, NA49, etc.).
+
+Additional tests may also be added in the future.
+
+WORK IN PROGRESS.
+
+Details will be added as they come.
+
+

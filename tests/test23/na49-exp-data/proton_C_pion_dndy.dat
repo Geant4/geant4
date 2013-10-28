@@ -1,0 +1,19 @@
+# pT integrated density distribution dN/dy as a function of rapidity 
+# for positive and negative pions 
+# in p+C interactions at 158 GeV beam from NA49.
+# A common 2 % systematic error is to be assumed for all datapoints
+# y     pi+    pi-
+-0.6   0.9795 0.9311
+-0.4   0.9994 0.9521
+-0.2   1.0120 0.9688
+ 0.0   1.0010 0.9646
+ 0.2   0.9796 0.9317
+ 0.4   0.9373 0.8751
+ 0.6   0.8941 0.8159
+ 0.8   0.8448 0.7597
+ 1.0   0.7898 0.6905
+ 1.2   0.7291 0.6131
+ 1.4   0.6611 0.5296
+ 1.6   0.5807 0.4451
+ 1.8   0.4942 0.3612
+ 2.0   0.4069 0.2806
