@@ -9,7 +9,7 @@
 #
 # Paths are always hardcoded in the build tree version as this is never
 # intended to be relocatable.
-# The Install Tree script uses self-location based on that in 
+# The Install Tree script uses self-location based on that in
 # {root,clehep}-config is the install itself is relocatable, otherwise
 # absolute paths are encoded.
 #
@@ -42,7 +42,7 @@ function(get_system_include_dirs _dirs)
     execute_process(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -v -E -x c++ -dD g4dummy
       WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/CMakeFiles
       ERROR_VARIABLE _cxxOutput
-      OUTPUT_VARIABLE _cxxStdout 
+      OUTPUT_VARIABLE _cxxStdout
       )
 
     file(REMOVE "${CMAKE_BINARY_DIR}/CMakeFiles/g4dummy")
@@ -57,7 +57,7 @@ function(get_system_include_dirs _dirs)
         list(APPEND _resultIncludeDirs "${_includePath}")
       endforeach()
     endif()
-   
+
     # Restore original locale
     set(ENV{LC_ALL}      ${_orig_lc_all})
     set(ENV{LC_MESSAGES} ${_orig_lc_messages})
@@ -116,7 +116,12 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   # - Qt
   if(GEANT4_USE_QT)
     set(G4_BUILTWITH_QT "yes")
-    set(G4_QT_INCLUDE_DIRS ${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTOPENGL_INCLUDE_DIR})
+    if(QT4_FOUND)
+      set(G4_QT_INCLUDE_DIRS ${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTOPENGL_INCLUDE_DIR})
+    else()
+      set(G4_QT_INCLUDE_DIRS ${Qt5Core_INCLUDE_DIRS} ${Qt5Gui_INCLUDE_DIRS} ${Qt5Widgets_INCLUDE_DIRS} ${Qt5OpenGL_INCLUDE_DIRS} ${Qt5PrintSupport_INCLUDE_DIRS})
+    endif()
+
     list(REMOVE_DUPLICATES G4_QT_INCLUDE_DIRS)
     list(REMOVE_ITEM G4_QT_INCLUDE_DIRS ${_cxx_compiler_dirs})
 
@@ -124,7 +129,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     foreach(_dir ${G4_QT_INCLUDE_DIRS})
       set(G4_QT_CFLAGS "${G4_QT_CFLAGS} -I${_dir}")
     endforeach()
-
   else()
     set(G4_BUILTWITH_QT "no")
   endif()
@@ -138,7 +142,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     foreach(_dir ${G4_WT_INCLUDE_DIRS})
       set(G4_WT_CFLAGS "${G4_WT_CFLAGS} -I${_dir}")
     endforeach()
-
   else()
     set(G4_BUILTWITH_WT "no")
   endif()
@@ -174,7 +177,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_INVENTOR "no")
   endif()
 
-  # If we have a module that uses X11, We have to play with the X11 
+  # If we have a module that uses X11, We have to play with the X11
   # paths to get a clean set suitable for inclusion
   if(G4_CONFIG_NEEDS_X11)
     set(_raw_x11_includes ${X11_INCLUDE_DIR})
@@ -188,7 +191,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
 
   # Configure the script
   # - BUILD TREE
-  # Ouch, the include path will be LONG, but at least we always have 
+  # Ouch, the include path will be LONG, but at least we always have
   # absolute paths...
   set(GEANT4_CONFIG_SELF_LOCATION "# BUILD TREE IS NON-RELOCATABLE")
   set(GEANT4_CONFIG_INSTALL_PREFIX "${PROJECT_BINARY_DIR}")
@@ -218,7 +221,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
       @ONLY
       )
 
-    file(COPY 
+    file(COPY
       ${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/geant4-config
       DESTINATION ${PROJECT_BINARY_DIR}
       FILE_PERMISSIONS
@@ -246,7 +249,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(GEANT4_CONFIG_LIBDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
     set(GEANT4_CONFIG_INCLUDE_DIRS "${CMAKE_INSTALL_FULL_INCLUDEDIR}/Geant4")
   else()
-    # Calculate base of self contained install based on relative path from 
+    # Calculate base of self contained install based on relative path from
     # CMAKE_INSTALL_FULL_BINDIR to CMAKE_INSTALL_PREFIX.
     file(RELATIVE_PATH _bin_to_prefix ${CMAKE_INSTALL_FULL_BINDIR} ${CMAKE_INSTALL_PREFIX})
     # Strip any trailing path separators just for neatness.
@@ -256,7 +259,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(GEANT4_CONFIG_INSTALL_EXECPREFIX \"\")
     set(GEANT4_CONFIG_LIBDIR "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
     set(GEANT4_CONFIG_INCLUDE_DIRS "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}/Geant4")
-  endif() 
+  endif()
 
   # - Data
   geant4_export_datasets(INSTALL GEANT4_CONFIG_DATASET_DESCRIPTIONS)

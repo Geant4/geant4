@@ -1,19 +1,19 @@
 # - Set up backward compatible Geant4 GNU make toolchain
 #
-# The GNU make based buildsystem for Geant4 provides a toolchain for 
-# users building simple Geant4 applications. The old style build and 
-# install of Geant4 provides a customized set of non-standard install 
-# paths with use of the toolchain dependent on environment variables 
+# The GNU make based buildsystem for Geant4 provides a toolchain for
+# users building simple Geant4 applications. The old style build and
+# install of Geant4 provides a customized set of non-standard install
+# paths with use of the toolchain dependent on environment variables
 # pointing to the install paths.
 #
-# This script processes information on the CMake install paths, system 
-# and compiler to determine the following variables for backward 
+# This script processes information on the CMake install paths, system
+# and compiler to determine the following variables for backward
 # compatibility:
 #
-#  GEANT4_SYSTEM      Old style system name, e.g. 'Linux', 'Darwin' 
+#  GEANT4_SYSTEM      Old style system name, e.g. 'Linux', 'Darwin'
 #                     or 'WIN32'
 #
-#  GEANT4_COMPILER    Old system compiler id, e.g. 'g++', 'VC'. 
+#  GEANT4_COMPILER    Old system compiler id, e.g. 'g++', 'VC'.
 #
 #  G4INSTALL          Location of 'config' subdirectory which contains
 #                     all the GNU make toolchain fragments
@@ -25,25 +25,25 @@
 #                     contain subdirectories named
 #                     GEANT4_SYSTEM-GEANT4_COMPILER
 #
-# These variables are used in a CMake configuration file which is used 
-# to generate shell scripts (C and Bourne flavour) the user can source 
-# to set up their environment for use of the old toolchain. 
-# These replace the old 'env.(c)sh' scripts to allow users to work with 
-# the new CMake built libraries transparently if their application 
+# These variables are used in a CMake configuration file which is used
+# to generate shell scripts (C and Bourne flavour) the user can source
+# to set up their environment for use of the old toolchain.
+# These replace the old 'env.(c)sh' scripts to allow users to work with
+# the new CMake built libraries transparently if their application
 # relies on the old style toolchain.
 #
 # The scripts are generated for both the build and install trees so that
-# developers wishing to write test applications do not have to install 
+# developers wishing to write test applications do not have to install
 # their fresh build of Geant4.
 #
 # Compatibility with the library path style:
 #
 #  <prefix>/lib/G4SYSTEM-G4COMPILER
 #
-# is provided by installing a directory 'geant4-<version>' in the 
+# is provided by installing a directory 'geant4-<version>' in the
 # <prefix>/lib directory and creating a symbolic link inside here
 # pointing up one directory level.
-# This will not work on Windows however, and here users are recommended 
+# This will not work on Windows however, and here users are recommended
 # to use Visual Studio directly, or to use CMake for application
 # configuration.
 #
@@ -52,7 +52,7 @@
 # - Functions and Macros to help configuration of shell scripts.
 #-----------------------------------------------------------------------
 # macro _g4tc_shell_setup(<shell>)
-#       Set shell parameters such as program, family and common builtins 
+#       Set shell parameters such as program, family and common builtins
 #       for supplied shell (e.g. 'bourne' or 'cshell'
 #
 macro(_g4tc_shell_setup SHELL_FAMILY)
@@ -73,14 +73,14 @@ endmacro()
 
 #-----------------------------------------------------------------------
 # function _g4tc_selflocate(<output> <shell> <script> <variable name>)
-#          Set output to string containing shell commands needed to 
+#          Set output to string containing shell commands needed to
 #          locate the directory in which script is located if the
 #          script is sourced. This derived location is set as the
 #          value of the shell variable name.
 #
 function(_g4tc_selflocate TEMPLATE_NAME SHELL_FAMILY SCRIPT_NAME LOCATION_VARIABLE)
   if(${SHELL_FAMILY} STREQUAL "bourne")
-    set(${TEMPLATE_NAME} 
+    set(${TEMPLATE_NAME}
       "# Self locate script when sourced
 if [ -z \"\$BASH_VERSION\" ]; then
   # Not bash, so rely on sourcing from correct location
@@ -169,17 +169,17 @@ endfunction()
 
 #-----------------------------------------------------------------------
 # function _g4tc_setenv_command(<output> <shell> <name> <value>)
-#          Set output to a string whose value is the shell command to 
+#          Set output to a string whose value is the shell command to
 #          set an environment variable with name and value
 #
 function(_g4tc_setenv_command TEMPLATE_NAME SHELL_FAMILY VARIABLE_NAME VARIABLE_VALUE)
   if(${SHELL_FAMILY} STREQUAL "bourne")
-    set(${TEMPLATE_NAME} 
+    set(${TEMPLATE_NAME}
       "export ${VARIABLE_NAME}=${VARIABLE_VALUE}"
       PARENT_SCOPE
       )
   elseif(${SHELL_FAMILY} STREQUAL "cshell")
-    set(${TEMPLATE_NAME} 
+    set(${TEMPLATE_NAME}
       "setenv ${VARIABLE_NAME} ${VARIABLE_VALUE}"
       PARENT_SCOPE
       )
@@ -188,7 +188,7 @@ endfunction()
 
 #-----------------------------------------------------------------------
 # function _g4tc_setenv_ifnotset_command(<output> <shell> <name> <value>)
-#          Set output to a string whose value is the shell command to 
+#          Set output to a string whose value is the shell command to
 #          set an environment variable with name and value if the
 #          variable is not already set
 #
@@ -207,7 +207,7 @@ fi
   # -- cshell
   elseif(${SHELL_FAMILY} STREQUAL "cshell")
     # Again, verbatim to get correct formatting...
-    set(${TEMPLATE_NAME} 
+    set(${TEMPLATE_NAME}
       "
 if ( ! \${?${VARIABLE_NAME}} ) then
   setenv ${VARIABLE_NAME} ${VARIABLE_VALUE}
@@ -370,6 +370,16 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
 
   # - Qt UI AND VIS
   if(GEANT4_USE_QT)
+    _g4tc_setenv_command(GEANT4_TC_QTHOME ${SHELL_FAMILY} QTHOME ${G4QTHOME})
+    _g4tc_setenv_command(GEANT4_TC_QTLIBPATH ${SHELL_FAMILY} QTLIBPATH ${G4QTLIBPATH})
+    if(QT4_FOUND)
+      set(GEANT4_TC_QTLIBS "#Geant4Make automatically handles QTLIBS for Qt4")
+      set(GEANT4_TC_GLQTLIBS "#Geant4Make automatically handles GLQTLIBS for Qt4")
+    else()
+      _g4tc_setenv_command(GEANT4_TC_QTLIBS ${SHELL_FAMILY} QTLIBS "\"-L${G4QTLIBPATH} ${G4QTLIBLIST}\"")
+      _g4tc_setenv_command(GEANT4_TC_GLQTLIBS ${SHELL_FAMILY} GLQTLIBS "\"-L${G4QTLIBPATH} ${G4GLQTLIBLIST}\"")
+    endif()
+
     _g4tc_setenv_command(GEANT4_TC_G4UI_USE_QT ${SHELL_FAMILY} G4UI_USE_QT 1)
     _g4tc_setenv_command(GEANT4_TC_G4VIS_USE_OPENGLQT ${SHELL_FAMILY} G4VIS_USE_OPENGLQT 1)
 
@@ -439,7 +449,7 @@ endmacro()
 
 #-----------------------------------------------------------------------
 # macro _g4tc_configure_build_tree_scripts()
-#       Macro to configure toolchain compatibility scripts for the 
+#       Macro to configure toolchain compatibility scripts for the
 #       build tree
 #
 macro(_g4tc_configure_build_tree_scripts SCRIPT_NAME)
@@ -460,7 +470,7 @@ endmacro()
 
 #-----------------------------------------------------------------------
 # macro _g4tc_configure_install_tree_script()
-#       Macro to configure toolchain compatibility scripts for the 
+#       Macro to configure toolchain compatibility scripts for the
 #       install tree
 #
 macro(_g4tc_configure_install_tree_scripts CONFIGURE_DESTINATION SCRIPT_NAME INSTALL_DESTINATION)
@@ -480,7 +490,7 @@ macro(_g4tc_configure_install_tree_scripts CONFIGURE_DESTINATION SCRIPT_NAME INS
     install(FILES
       ${CONFIGURE_DESTINATION}/${SCRIPT_NAME}${GEANT4_TC_SHELL_EXTENSION}
       DESTINATION ${INSTALL_DESTINATION}
-      PERMISSIONS 
+      PERMISSIONS
         OWNER_READ OWNER_WRITE OWNER_EXECUTE
         GROUP_READ GROUP_EXECUTE
         WORLD_READ WORLD_EXECUTE
@@ -494,12 +504,12 @@ endmacro()
 # Implementation section
 #-----------------------------------------------------------------------
 # Configure shell scripts for BUILD TREE
-# This means we have to point to libraries in the build tree, but 
+# This means we have to point to libraries in the build tree, but
 # includes and resource files will be in the source tree
 # This script never needs to be relocatable, so we don't need to use the
 # self location functionality.
 # N.B. IT WILL NOT WORK when building with VS/Xcode or any multiconfig
-# buildtool because we cannot reconcile the output paths these use with 
+# buildtool because we cannot reconcile the output paths these use with
 # those expected by the old toolchain...
 #
 set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
@@ -523,8 +533,8 @@ _g4tc_configure_build_tree_scripts(geant4make)
 
 #-----------------------------------------------------------------------
 # Configure shell scripts for INSTALL TREE
-# This means we have to point things to their final location when 
-# installed. These paths are all determined by the CMAKE_INSTALL_FULL 
+# This means we have to point things to their final location when
+# installed. These paths are all determined by the CMAKE_INSTALL_FULL
 # directories and others.
 # If we are relocatable, then the structure we will have is
 # +- CMAKE_INSTALL_PREFIX
@@ -581,8 +591,8 @@ _g4tc_configure_install_tree_scripts(
     )
 
 
-# - For install tree, we also need to install the config directory 
-#   which contains all the old toolchain scripts, and to create a 
+# - For install tree, we also need to install the config directory
+#   which contains all the old toolchain scripts, and to create a
 #   softlink to the G4SYSTEM directory.
 #
 install(DIRECTORY config
@@ -644,14 +654,14 @@ foreach(_shell bourne;cshell)
   set(_scriptfullname ${_scriptbasename}${GEANT4_TC_SHELL_EXTENSION})
 
   # Set locate self command
-  _g4tc_selflocate(GEANT4_ENV_SELFLOCATE_COMMAND 
-    ${_shell} 
-    ${_scriptbasename} 
+  _g4tc_selflocate(GEANT4_ENV_SELFLOCATE_COMMAND
+    ${_shell}
+    ${_scriptbasename}
     geant4_envbindir
     )
 
   # Set path, which should be where the script itself is installed
-  _g4tc_prepend_path(GEANT4_ENV_BINPATH_SETUP 
+  _g4tc_prepend_path(GEANT4_ENV_BINPATH_SETUP
     ${_shell}
     PATH
     "\"\$geant4_envbindir\""
@@ -688,7 +698,7 @@ foreach(_shell bourne;cshell)
   install(FILES
     ${PROJECT_BINARY_DIR}/InstallTreeFiles/${_scriptfullname}
     DESTINATION ${CMAKE_INSTALL_BINDIR}
-    PERMISSIONS 
+    PERMISSIONS
     OWNER_READ OWNER_WRITE OWNER_EXECUTE
     GROUP_READ GROUP_EXECUTE
     WORLD_READ WORLD_EXECUTE

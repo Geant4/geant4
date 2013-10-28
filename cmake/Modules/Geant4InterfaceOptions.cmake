@@ -100,6 +100,9 @@ if(GEANT4_USE_QT)
     set(Qt5_USE_FILE_IN "${PROJECT_SOURCE_DIR}/cmake/Templates/Geant4UseQt5.cmake.in")
     set(QT_USE_FILE "${PROJECT_BINARY_DIR}/Geant4UseQt5.cmake")
     configure_file("${Qt5_USE_FILE_IN}" "${QT_USE_FILE}" @ONLY)
+    get_target_property(QT_QMAKE_EXECUTABLE ${Qt5Core_QMAKE_EXECUTABLE} IMPORTED_LOCATION)
+    set(G4QTLIBLIST "-lQt5PrintSupport -lQt5Widgets -lQt5Gui -lQt5Core")
+    set(G4GLQTLIBLIST "-lQt5OpenGL ${G4QTLIBLIST}")
   else()
     unset(Qt5Core_DIR CACHE)
     unset(Qt5Gui_DIR CACHE)
@@ -111,12 +114,15 @@ if(GEANT4_USE_QT)
 
   find_package(OpenGL REQUIRED)
 
+  # Variables for export
+  execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_PREFIX OUTPUT_VARIABLE G4QTHOME OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND ${QT_QMAKE_EXECUTABLE} -query QT_INSTALL_LIBS OUTPUT_VARIABLE G4QTLIBPATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+
   # OpenGL part of Qt is in OpenGL component so mark the need to
   # add OpenGL.
   set(GEANT4_USE_OPENGL ON)
   GEANT4_ADD_FEATURE(GEANT4_USE_QT "Build Geant4 with Qt support")
 endif()
-
 
 #-----------------------------------------------------------------------
 # Configure Wt Support
@@ -133,7 +139,7 @@ if(GEANT4_USE_WT)
   set(WT_DEFINITIONS "-DQT_NO_KEYWORDS")
 
   # Link the library to the Wt library, plus its dependents.
-  list(APPEND Wt_LIBRARY "${Boost_signals_LIBRARY}")
+  list(APPEND Wt_LIBRARY "${Boost_SIGNALS_LIBRARY}")
 
   # WebGL part of Wt is in OpenGL component so mark the need to
   # add OpenGL.

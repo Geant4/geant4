@@ -30,6 +30,19 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+26th October 2013 - Ben Morgan (cmake-V09-06-32)
+- Modules/Geant4DatasetDefinitions.cmake : Remove ENSDFSTATE data definition
+
+25th October 2013 - Ben Morgan (cmake-V09-06-31)
+Templates/Geant4Config.cmake.in : Re-find Qt5 when Geant4 uses it to ensu     re imported targets are recreated
+Templates/geant4make-skeleton.in : Support export of QT4/5 variables to G     eant4Make
+Modules/Geant4ToolchainBackwardCompatibility.cmake : Support export of QT     4/5 variables to Geant4Make
+Modules/Geant4InterfaceOptions.cmake : Support export of QT4/5 variables      to Geant4Make
+
+25st October 2013 - Gunter Folger 
+- switch to G4ELOW6.35
+- add new NuclideTable with datafile ENSDFSTATE
+
 24th October 2013 - Ben Morgan (cmake-V09-06-30)
 - Modules/FindWt.cmake : add use of FindPackageHandleStandardArgs to
   ensure correct behaviour when supplying REQUIRED/QUIET keywords
