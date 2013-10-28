@@ -118,8 +118,7 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
  
   //     
   // Shape 1
-  //
-  
+  //  
   G4Material* shape1_mat = nist->FindOrBuildMaterial("G4_A-150_TISSUE");
   G4ThreeVector pos1 = G4ThreeVector(0, 2*cm, -7*cm);
         
@@ -132,29 +131,6 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
     new G4Cons("Shape1", 
     shape1_rmina, shape1_rmaxa, shape1_rminb, shape1_rmaxb, shape1_hz,
     shape1_phimin, shape1_phimax);
-/*
-  // Full sphere shape
-  G4double shape1_rmax = 4*cm;
-  G4Orb* solidShape1 =    
-    new G4Orb("Shape1",                     //its name
-              shape1_rmax);                 //its size
-
-  // Sphere shape
-  G4double shape1_rmin = 0*cm, shape1_rmax = 4*cm;
-  G4double shape1_thetamin = 0.*deg, shape1_thetamax =  180.*deg;    
-  G4double shape1_phimin = 0.*deg, shape1_phimax =  360.*deg;    
-  G4Sphere* solidShape1 =    
-    new G4Sphere("Shape1",                  //its name
-        shape1_rmin, shape1_rmax,                //its size
-        shape1_phimin, shape1_phimax,            //phi angle
-        shape1_thetamin, shape1_thetamax);       //theta angle
-     
-  // Box shape
-  G4double shape1_dx = 8*cm, shape1_dy = 8*cm, shape1_dz = 8*cm;    
-  G4Box* solidShape1 =    
-    new G4Box("Shape1",                     //its name
-         0.5*shape1_dx, 0.5*shape1_dy, 0.5*shape1_dz);     //its size
-*/
                       
   G4LogicalVolume* logicShape1 =                         
     new G4LogicalVolume(solidShape1,         //its solid
@@ -176,17 +152,6 @@ G4VPhysicalVolume* B1DetectorConstruction::Construct()
   //
   G4Material* shape2_mat = nist->FindOrBuildMaterial("G4_BONE_COMPACT_ICRU");
   G4ThreeVector pos2 = G4ThreeVector(0, -1*cm, 7*cm);
-/*
-  //  Shape 2 - conical section shape       
-   G4double shape2_rmina =  0.*cm, shape2_rmaxa = 5.*cm;
-   G4double shape2_rminb =  0.*cm, shape2_rmaxb = 8.*cm;
-   G4double shape2_hz = 3.*cm;
-   G4double shape2_phimin = 0.*deg, shape2_phimax = 360.*deg;
-   G4Cons* solidShape2 =    
-     new G4Cons("Shape2", 
-     shape2_rmina, shape2_rmaxa, shape2_rminb, shape2_rmaxb, shape2_hz,
-     shape2_phimin, shape2_phimax);
-*/
 
   // Trapezoid shape       
   G4double shape2_dxa = 12*cm, shape2_dxb = 12*cm;

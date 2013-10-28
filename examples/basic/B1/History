@@ -14,13 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+26/10/13 mma (exampleB1-V09-06-05)
+- Use /run/printProgress. Cleanup in EventAction
 
-08/10/13 mma (exampleB1-V09-06-04)
+08/10/13 I. Hrivnacova (exampleB1-V09-06-04)
 - Removed B1EventInformation for keeping maximum simplicity
 - Improved documentation (added paragraph on Run::Merge())
 - Code clean-up
      
-09/06/13 mma (exampleB1-V09-06-03)
+09/06/13 I. Hrivnacova (exampleB1-V09-06-03)
 - clarify local names in user actions
      
 05/06/13 mma (exampleB1-V09-06-02)

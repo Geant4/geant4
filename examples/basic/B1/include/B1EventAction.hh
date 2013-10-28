@@ -49,10 +49,8 @@ class B1EventAction : public G4UserEventAction
     virtual void EndOfEventAction(const G4Event* event);
 
     void AddEdep(G4double edep) { fEdep += edep; }
-    G4double GetEdep() const    { return fEdep; }
 
   private:
-    G4int     fPrintModulo;
     G4double  fEdep;
 };
 
