@@ -34,10 +34,8 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-class G4Box;
 class G4VPhysicalVolume;
-class G4UniformMagField;
-class G4GenericMessenger;
+class G4GlobalMagFieldMessenger;
 
 /// Detector construction class to define materials and geometry.
 /// The calorimeter is a box made of a given number of layers. A layer consists
@@ -50,11 +48,8 @@ class G4GenericMessenger;
 /// - the number of layers,
 /// - the transverse size of the calorimeter (the input face is a square).
 ///
-/// In addition a transverse uniform magnetic field is defined in
-/// SetMagField() method which can be activated
-/// via a command defined using G4GenericMessenger class: 
-/// - /B4/det/setMagField value unit
-
+/// In addition a transverse uniform magnetic field is defined 
+/// via G4GlobalMagFieldMessenger class.
 
 class B4DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -66,10 +61,6 @@ class B4DetectorConstruction : public G4VUserDetectorConstruction
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
 
-    // set methods
-    //
-    void SetMagField(G4double fieldValue);
-    
     // get methods
     //
     const G4VPhysicalVolume* GetAbsorberPV() const;
@@ -83,9 +74,9 @@ class B4DetectorConstruction : public G4VUserDetectorConstruction
   
     // data members
     //
-    static G4ThreadLocal G4GenericMessenger* fMessenger;  // messenger 
-    static G4ThreadLocal G4UniformMagField*  fMagField;   // magnetic field
-    
+    static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+                                      // magnetic field messenger
+     
     G4VPhysicalVolume*   fAbsorberPV; // the absorber physical volume
     G4VPhysicalVolume*   fGapPV;      // the gap physical volume
     

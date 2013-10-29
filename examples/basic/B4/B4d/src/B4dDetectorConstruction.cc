@@ -37,7 +37,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
-#include "G4UniformMagField.hh"
+#include "G4GlobalMagFieldMessenger.hh"
 
 #include "G4SDManager.hh"
 #include "G4SDChargedFilter.hh"
@@ -49,19 +49,13 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-#include "G4GenericMessenger.hh"
-
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-#include <stdio.h>
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal G4GenericMessenger* B4dDetectorConstruction::fMessenger = 0; 
-G4ThreadLocal G4UniformMagField*  B4dDetectorConstruction::fMagField = 0;
+G4ThreadLocal 
+G4GlobalMagFieldMessenger* B4dDetectorConstruction::fMagFieldMessenger = 0; 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -75,10 +69,8 @@ B4dDetectorConstruction::B4dDetectorConstruction()
 
 B4dDetectorConstruction::~B4dDetectorConstruction()
 { 
-  delete fMessenger;
-  delete fMagField;
-  fMessenger = 0;
-  fMagField = 0; 
+  delete fMagFieldMessenger;
+  fMagFieldMessenger = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -136,9 +128,10 @@ G4VPhysicalVolume* B4dDetectorConstruction::DefineVolumes()
   G4Material* gapMaterial = G4Material::GetMaterial("liquidArgon");
   
   if ( ! defaultMaterial || ! absorberMaterial || ! gapMaterial ) {
-    G4cerr << "Cannot retrieve materials already defined. " << G4endl;
-    G4cerr << "Exiting application " << G4endl;
-    exit(1);
+    G4ExceptionDescription msg;
+    msg << "Cannot retrieve materials already defined."; 
+    G4Exception("B4DetectorConstruction::DefineVolumes()",
+      "MyCode0001", FatalException, msg);
   }  
    
   //     
@@ -322,44 +315,12 @@ void B4dDetectorConstruction::ConstructSDandField()
   // 
   // Magnetic field
   //
-
-  // No field is defined by default
-  // (It can be activated via UI command)
-  SetMagField(0.);
-
-  // Define /B4/det commands using generic messenger class
-  fMessenger 
-    = new G4GenericMessenger(this, "/B4/det/", "Detector construction control");
-
-  // Define /B4/det/setMagField command
-  G4GenericMessenger::Command& setMagFieldCmd
-    = fMessenger->DeclareMethod("setMagField", 
-                                &B4dDetectorConstruction::SetMagField, 
-                                "Define magnetic field value (in X direction");
-  setMagFieldCmd.SetUnitCategory("Magnetic flux density");                                
+  // Create global magnetic field messenger.
+  // Uniform magnetic field is then created automatically if
+  // the field value is not zero.
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
+  fMagFieldMessenger->SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void B4dDetectorConstruction::SetMagField(G4double fieldValue)
-{
-  // Apply a global uniform magnetic field along X axis
-  G4FieldManager* fieldManager
-    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  // Delete the existing magnetic field
-  if ( fMagField )  delete fMagField; 
-
-  if ( fieldValue != 0. ) {
-    // create a new one if not null
-    fMagField 
-      = new G4UniformMagField(G4ThreeVector(fieldValue, 0., 0.));
-      
-    fieldManager->SetDetectorField(fMagField);
-    fieldManager->CreateChordFinder(fMagField);
-  } 
-  else {
-    fMagField = 0;
-    fieldManager->SetDetectorField(fMagField);
-  }
-}

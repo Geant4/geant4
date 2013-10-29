@@ -15,7 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-01/10/13 I.Hrivnacova (exampleB4-V09-06-12) 
+29/10/13 I. Hrivnacova (exampleB4-V09-06-14)
+- Fixed macro (using /run/printProgress)
+
+29/10/13 I. Hrivnacova (exampleB4-V09-06-13)
+- Using G4GlobalMagFieldMessenger
+- Using G4Exception for warnings and error messages
+- Using G4RunManager::SetPrintProgress()
+- Using Gent4 default number of threads when not set via command line
+- Updated README
+
+01/10/13 I. Hrivnacova (exampleB4-V09-06-12) 
 - Updated for changes in analysis:
   removal of G4AnalysisManager::Create(isMaster)
 

@@ -33,6 +33,7 @@
 #include "B4Analysis.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -41,6 +42,9 @@
 B4bRunAction::B4bRunAction()
  : G4UserRunAction()
 { 
+  // set printing event number per each event
+  G4RunManager::GetRunManager()->SetPrintProgress(1);     
+
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
   // in B4Analysis.hh

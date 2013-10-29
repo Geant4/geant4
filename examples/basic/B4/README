@@ -26,13 +26,13 @@ $Id$
  	- the number of layers, and
  	- the transverse size of the calorimeter (the entrance face is a square). 
  	
-   In addition a transverse uniform magnetic field can be applied and set 
-   via the interactive command defined in 
-     B4[c,d]DetectorConstruction::ConstructSDandField()
-   using the G4GenericMessenger class.
+   In addition, a global, uniform, and transverse magnetic field can be 
+   applied using G4GlobalMagFieldMessenger, instantiated in 
+     B4[c,d]DetectorConstruction::ConstructSDandField 
+   with a non zero field value, or via interactive commands. 
    For example:
 
-     /B4/det/setMagField 0.2 tesla
+   /globalField/setValue 0.2 0 0 tesla
 
 
 	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
@@ -69,16 +69,18 @@ $Id$
  3- ACTION INITALIZATION
 
    A newly introduced class, B4[a,b,c,d]ActionInitialization, 
-   instantiates and registers to Geant4 kernel all user action classes 
-   which are defined thread-local and a run action class (if present) 
-   which is defined both thread-local and global.
+   instantiates and registers to Geant4 kernel all user action classes.
    
-   The thread-local action classes are defined in 
-     B4[a,b,c,d]ActionInitialization::Build() 
-   and  the global run action class is defined in 
-     B4[a,b,c,d]ActionInitialization::BuildForMaster().
-   Note that B4[a,b,c,d]ActionInitialization::Build() is also used to 
-   instatiate user action clasess in sequential mode.
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      B4[a,b,c,d]ActionInitialization::Build() 
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
+
+   A run action class is instantiated both thread-local 
+   and global that's why its instance has is created also in the method
+      B4[a,b,c,d]ActionInitialization::BuildForMaster()
+   which is invoked only in multi-threading mode.
 
  4- PRIMARY GENERATOR
  
@@ -91,12 +93,10 @@ $Id$
  5- RUNS and EVENTS
  
    A run is a set of events. 
-   
-   The user can choose the frequency of printing from B4aEventAction (or event 
-   action classes in other options) via the interactive command defined
-   using the G4GenericMessenger class, for example:
+   The user can choose the frequency of printing via the Geant4 interactive 
+   command, for example:
     
-     /B4/event/setPrintModulo 100
+     /run/printProgress 100
    
  6- DETECTOR RESPONSE
  
@@ -239,7 +239,12 @@ $Id$
  
     This example handles the program arguments in a new way.
     It can be run with the following optional arguments:
-    % exampleB4a [-m macro ] [-u UIsession]
+    % exampleB4a [-m macro ] [-u UIsession] [-t nThreads]
+    
+    The -t option is available only in multi-threading mode
+    and it allows the user to override the Geant4 default number of 
+    threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
+    environment variable which has the top priority.
  
     - Execute exampleB4a in the 'interactive mode' with visualization
         % exampleB4a

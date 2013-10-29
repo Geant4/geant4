@@ -32,6 +32,7 @@
 #include "B4Analysis.hh"
 
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -40,6 +41,9 @@
 B4RunAction::B4RunAction()
  : G4UserRunAction()
 { 
+  // set printing event number per each event
+  G4RunManager::GetRunManager()->SetPrintProgress(1);     
+
   // Create analysis manager
   // The choice of analysis technology is done via selectin of a namespace
   // in B4Analysis.hh
@@ -80,10 +84,8 @@ B4RunAction::~B4RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4RunAction::BeginOfRunAction(const G4Run* run)
+void B4RunAction::BeginOfRunAction(const G4Run* /*run*/)
 { 
-  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-
   //inform the runManager to save random number seed
   //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   
@@ -98,7 +100,7 @@ void B4RunAction::BeginOfRunAction(const G4Run* run)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B4RunAction::EndOfRunAction(const G4Run* /*aRun*/)
+void B4RunAction::EndOfRunAction(const G4Run* /*run*/)
 {
   // print histogram statistics
   //

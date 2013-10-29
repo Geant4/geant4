@@ -7,6 +7,6 @@
 # electron 50 MeV in direction (0.,0.,1.)
 # 1000 events
 #
-/B4/event/setPrintModulo 100
+/run/printProgress 100
 /run/beamOn 1000
 

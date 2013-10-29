@@ -39,7 +39,7 @@
 /vis/modeling/trajectories/TimeSliceByCharge/default/setAuxPtsSize 5
 /vis/modeling/trajectories/TimeSliceByCharge/default/setTimeSliceInterval 0.001 ns
 /vis/modeling/trajectories/list
-#/B4/det/setMagField 5 T
+#//globalField/setValue 5 0 0 tesla
 #/vis/scene/add/trajectories rich smooth
 
 # Re-establish auto refreshing and verbosity:

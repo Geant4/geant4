@@ -26,19 +26,18 @@
  	- the number of layers, and
  	- the transverse size of the calorimeter (the entrance face is a square). 
  	
-   In addition a transverse uniform magnetic field can be applied and set 
-   via the interactive command defined in 
+   In addition, a global, uniform, and transverse magnetic field can be 
+   applied using G4GlobalMagFieldMessenger, instantiated in 
      B4DetectorConstruction::ConstructSDandField() 
     (see also     
     \link B4cDetectorConstruction::ConstructSDandField() B4c \endlink,
     \link B4dDetectorConstruction::ConstructSDandField() B4d \endlink variants)
-   using the G4GenericMessenger class.
+   with a non zero field value, or via interactive commands. 
    For example:
- 
+
 \verbatim
-/B4/det/setMagField 0.2 tesla
+/globalField/setValue 0.2 0 0 tesla
 \endverbatim
- 
 	
 <pre>
 	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
@@ -81,24 +80,26 @@
     \link B4bActionInitialization B4b \endlink, 
     \link B4cActionInitialization B4c \endlink,
     \link B4dActionInitialization B4d \endlink variants),
-   instantiates and registers to Geant4 kernel all user action classes 
-   which are defined thread-local and a run action class (if present) 
-   which is defined both thread-local and global.
+   instantiates and registers to Geant4 kernel all user action classes;
    
-   The thread-local action classes are defined in 
-     B4aActionInitialization::Build() 
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      B4aActionInitialization::Build() 
    (see also 
     \link B4bActionInitialization::Build() B4b \endlink, 
     \link B4cActionInitialization::Build() B4c \endlink,
     \link B4dActionInitialization::Build() B4d \endlink variants),
-   and  the global run action class is defined in 
-     B4aActionInitialization::BuildForMaster().
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
+
+    A run action class is instantiated both thread-local 
+   and global that's why its instance has is created also in the method
+      B4aActionInitialization::BuildForMaster() 
    (see also 
     \link B4bActionInitialization::BuildForMaster() B4b \endlink, 
     \link B4cActionInitialization::BuildForMaster() B4c \endlink,
     \link B4dActionInitialization::BuildForMaster() B4d \endlink variants),
-   Note that B4[a,b,c,d]ActionInitialization::Build() is also used to instatiate 
-   user action clasess in sequential mode.
+   which is invoked only in multi-threading mode.
 
 \section B4_s4 PRIMARY GENERATOR
 
@@ -112,12 +113,10 @@
 
    A run is a set of events. 
    
-   The user can choose the frequency of printing from B4aEventAction (or event 
-   action classes in other options) via the interactive command defined
-   using the G4GenericMessenger class, for example:
-    
+   The user can choose the frequency of printing via the Geant4 interactive 
+   command, for example:
 \verbatim
-/B4/event/setPrintModulo 100
+/run/printProgress 100
 \endverbatim
 
 \section B4_s6- DETECTOR RESPONSE
@@ -279,8 +278,13 @@ The following paragraphs are common to all basic examples
    This example handles the program arguments in a new way.
    It can be run with the following optional arguments:
 \verbatim
-% exampleB4a [-m macro ] [-u UIsession]
+% exampleB4a [-m macro ] [-u UIsession] [-t nThreads]
 \endverbatim 
+    
+   The -t option is available only in multi-threading mode
+   and it allows the user to override the Geant4 default number of 
+   threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
+   environment variable which has the top priority.
  
    - Execute exampleB4a in the 'interactive mode' with visualization
 \verbatim

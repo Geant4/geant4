@@ -76,7 +76,7 @@ int main(int argc,char** argv)
   G4String macro;
   G4String session;
 #ifdef G4MULTITHREADED
-  G4int nThreads = 4;
+  G4int nThreads = 0;
 #endif
   for ( G4int i=1; i<argc; i=i+2 ) {
     if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
@@ -100,7 +100,9 @@ int main(int argc,char** argv)
   //
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(nThreads);
+  if ( nThreads > 0 ) { 
+    runManager->SetNumberOfThreads(nThreads);
+  }  
 #else
   G4RunManager * runManager = new G4RunManager;
 #endif
