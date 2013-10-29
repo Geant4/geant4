@@ -78,6 +78,7 @@ G4ThreadLocal G4IonTable::G4IonList* G4IonTable::fIonList = 0;
 G4ThreadLocal std::vector<G4VIsotopeTable*> *G4IonTable::fIsotopeTableList = 0;
 G4IonTable::G4IonList* G4IonTable::fIonListShadow = 0;
 std::vector<G4VIsotopeTable*> *G4IonTable::fIsotopeTableListShadow = 0;
+const G4double G4IonTable::tolerance = 2.0*keV;
 
 namespace lightions {
     static const G4ParticleDefinition* p_proton=0;
@@ -689,7 +690,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
       if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
       // excitation level
       G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-      if ( std::fabs( E - anExcitaionEnergy )< G4NuclideTable::Tolerance()) {
+      if ( std::fabs( E - anExcitaionEnergy )< tolerance) {
 	isFound = true;
 	break;
       }
@@ -735,7 +736,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L, G4double E,
     if(  ion->GetQuarkContent(3) != L) break;
     // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-    if ( std::fabs( E - anExcitaionEnergy )< G4NuclideTable::Tolerance()) {
+    if ( std::fabs( E - anExcitaionEnergy )< tolerance) {
       isFound = true;
       break;
     }
@@ -1609,7 +1610,7 @@ G4ParticleDefinition* G4IonTable::FindIonInMaster(G4int Z, G4int A, G4double E, 
     if ( ( ion->GetAtomicNumber() != Z) || (ion->GetAtomicMass()!=A) ) break;
     // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-    if ( std::fabs( E - anExcitaionEnergy )< 10.0*G4NuclideTable::Tolerance()) {
+    if ( std::fabs( E - anExcitaionEnergy )< tolerance) {
       isFound = true;
       break;
     }
@@ -1642,7 +1643,7 @@ G4ParticleDefinition* G4IonTable::FindIonInMaster(G4int Z, G4int A, G4int L, G4d
     if(  ion->GetQuarkContent(3) != L) break;
     // excitation level
     G4double anExcitaionEnergy = ((const G4Ions*)(ion))->GetExcitationEnergy();
-    if ( std::fabs( E - anExcitaionEnergy )< 10.0*G4NuclideTable::Tolerance()) {
+    if ( std::fabs( E - anExcitaionEnergy )< tolerance) {
       isFound = true;
       break;
     }

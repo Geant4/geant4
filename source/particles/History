@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 28. Oct. 2013  Makoto Asai (particles-V09-06-60)
+- Correct the energy tolerance for G4IonTable::FindIon(Z,A,E).
+
 - 25. Oct. 2013  Makoto Asai (particles-V09-06-59)
 - Fix search logic in G4NuclideTable.
 

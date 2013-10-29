@@ -293,6 +293,7 @@ class G4IonTable
    // ion list. This implementation is equivalent to make the ion table thread
    // private. The two shadow ponters are used by each worker thread to copy the
    // content from the master thread.
+   static const G4double tolerance;
  
    enum { numberOfElements = 118};
    static const G4String       elementName[numberOfElements];
