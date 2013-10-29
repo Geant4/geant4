@@ -39,8 +39,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B2EventAction::B2EventAction()
-: G4UserEventAction(),
-  fPrintModulo(1000)
+: G4UserEventAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,25 +49,13 @@ B2EventAction::~B2EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B2EventAction::BeginOfEventAction(const G4Event* event)
-{  
-  G4int eventID = event->GetEventID();
-  if ( eventID % fPrintModulo == 0) { 
-    G4cout << "\n---> Begin of event: " << eventID << G4endl;
-    //CLHEP::HepRandom::showEngineStatus();
-  }
-}
+void B2EventAction::BeginOfEventAction(const G4Event*)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B2EventAction::EndOfEventAction(const G4Event* event)
 {
-  // print per event (modulo n)
-
-  G4int eventID = event->GetEventID();
-  if ( eventID % fPrintModulo == 0)
-    G4cout << "---> End of event: " << eventID << G4endl;
-
   // get number of stored trajectories
 
   G4TrajectoryContainer* trajectoryContainer = event->GetTrajectoryContainer();
@@ -77,6 +64,7 @@ void B2EventAction::EndOfEventAction(const G4Event* event)
 
   // periodic printing
 
+  G4int eventID = event->GetEventID();
   if ( eventID < 100 || eventID % 100 == 0) {
     G4cout << ">>> Event: " << eventID  << G4endl;
     if ( trajectoryContainer ) {

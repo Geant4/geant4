@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29/10/13 I. Hrivnacova (exampleB2-V09-06-09)
+- Using G4RunManager::SetPrintProgress()
+- Removed SetNumberOfThreads(4) from main (use Geant4 default)
+- Fixed deleting fMagFieldMessenger in DetectorConstruction
+- Updated README
+
 10/09/13 I. Hrivnacova (exampleB2-V09-06-08)
 - Removed "tcsh" selection from G4UIExecutive in exampleB2b.cc
   (unwantedly introduced with previous update)

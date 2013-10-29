@@ -56,16 +56,18 @@ $Id$
  3- ACTION INITALIZATION
 
    A newly introduced class, B2ActionInitialization,
-   instantiates and registers to Geant4 kernel all user action classes
-   which are defined thread-local and a run action class (if present)
-   which is defined both thread-local and global.
+   instantiates and registers to Geant4 kernel all user action classes.
+   
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      B2[a,b]ActionInitialization::Build() 
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
 
-   The thread-local action classes are defined in
-     B2ActionInitialization::Build()
-   and the global run action class is defined in
-     B2ActionInitialization::BuildForMaster().
-   Note that B2[a,b]ActionInitialization::Build() is also used to
-   instatiate user action clasess in sequential mode.
+   A run action class is instantiated both thread-local 
+   and global that's why its instance has is created also in the method
+      B2[a,b]ActionInitialization::BuildForMaster() 
+   which is invoked only in multi-threading mode.
 
  4- PRIMARY GENERATOR
 

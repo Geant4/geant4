@@ -79,6 +79,8 @@ B2aDetectorConstruction::~B2aDetectorConstruction()
   delete [] fLogicChamber; 
   delete fStepLimit;
   delete fMessenger;
+  delete fMagFieldMessenger;
+  fMagFieldMessenger = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
