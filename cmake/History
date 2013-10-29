@@ -30,6 +30,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+28th October 2013 - Ben Morgan (cmake-V09-06-33)
+- Modules/Geant4InterfaceOptions.cmake : BUGFIX : add Wt_HTTP_LIBRARY to
+list of libraries required by Wt interface.
+
 26th October 2013 - Ben Morgan (cmake-V09-06-32)
 - Modules/Geant4DatasetDefinitions.cmake : Remove ENSDFSTATE data definition
 

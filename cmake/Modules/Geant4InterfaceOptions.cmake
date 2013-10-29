@@ -139,7 +139,7 @@ if(GEANT4_USE_WT)
   set(WT_DEFINITIONS "-DQT_NO_KEYWORDS")
 
   # Link the library to the Wt library, plus its dependents.
-  list(APPEND Wt_LIBRARY "${Boost_SIGNALS_LIBRARY}")
+  list(APPEND Wt_LIBRARY "${Wt_HTTP_LIBRARY}" "${Boost_SIGNALS_LIBRARY}")
 
   # WebGL part of Wt is in OpenGL component so mark the need to
   # add OpenGL.
