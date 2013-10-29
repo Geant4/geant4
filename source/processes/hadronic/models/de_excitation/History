@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+28 October 2013 Vladimir Ivanchenko (hadr-deex-V09-06-25)
+----------------------------------------------------------
+- G4LevelReader, G4NuclearLevelManager - attempt to fix compillation 
+    problem at Windows VC12 
+
 24 October 2013 Vladimir Ivanchenko (hadr-deex-V09-06-24)
 ----------------------------------------------------------
 - G4NeutronRadCapture, G4ExcitationHandler - changed max isomer level 

@@ -196,10 +196,12 @@ G4bool G4NuclearLevelManager::ReadDataLine(std::ifstream& dataFile) {
 G4bool 
 G4NuclearLevelManager::ReadDataItem(std::istream& dataFile, G4double& x) 
 {
-  G4bool okay = (dataFile >> buffer) != 0;		// Get next token
-  if (okay) x = strtod(buffer, NULL);
+  dataFile >> x;		
+  // G4bool okay = (dataFile >> buffer) != 0;		// Get next token
+  // if (okay) x = strtod(buffer, NULL);
 
-  return okay;
+  //  return okay;
+  return !dataFile.fail();
 }
 
 void G4NuclearLevelManager::ProcessDataLine() 
