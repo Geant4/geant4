@@ -472,7 +472,7 @@ bool G4GMocrenIO::storeData4() {
   std::ofstream ofile(kFileName.c_str(),
 		      std::ios_base::out|std::ios_base::binary);
   if(DEBUG || kVerbose > 0)
-    G4cout << "         file open status: " << ofile << G4endl;
+    G4cout << "         file open status: " << ofile.rdbuf() << G4endl;
   
   // file identifier
   ofile.write("gMocren ", 8);

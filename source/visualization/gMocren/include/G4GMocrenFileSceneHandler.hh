@@ -180,7 +180,7 @@ private:
   private:
     // Private assigment operator -
     // assignment not allowed.  Keeps Coverity happy.
-    Index3D& operator = (const Index3D&);
+    // Index3D& operator = (const Index3D&);
   };
 
   std::map<Index3D, float> kNestedModality;

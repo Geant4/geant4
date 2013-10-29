@@ -20,6 +20,12 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+29th June 2013  Gabriele Cosmo (gMocren-V09-06-07)
+- Commmented out private declaration of G4GMocrenFileSceneHandler::operator=()
+  to overcome compilation error on MacOSX 10.9 Mavericks.
+- Fixed streaming on cout of ofstream content in G4GMocrenIO::storeData4().
+  Clears a compilation error detected on Windows/VC++12.
+
 17th June 2013  John Allison (gMocren-V09-06-06)
 - G4GMocrenFileSceneHandler.cc: Reverted snprintf to sprintf.
   o snprintf not in cstdlib on Windows.
