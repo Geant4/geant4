@@ -63,7 +63,7 @@
 #include "G4LossTableBuilder.hh"
 #include "G4MollerBhabhaModel.hh"
 #include "G4BetheBlochModel.hh"
-#include "G4eBremsstrahlungModel.hh"
+#include "G4eBremsstrahlungRelModel.hh"
 #include "G4MuPairProductionModel.hh"
 #include "G4MuBremsstrahlungModel.hh"
 #include "G4ProductionCuts.hh"
@@ -287,30 +287,33 @@ void G4EnergyLossForExtrapolator::Initialisation()
 
   G4LossTableBuilder builder; 
 
-  if(verbose>1) 
-    G4cout << "### G4EnergyLossForExtrapolator Builds electron tables" << G4endl;
-
+  if(verbose>1) {
+    G4cout << "### G4EnergyLossForExtrapolator Builds electron tables" 
+	   << G4endl;
+  }
   ComputeElectronDEDX(electron, dedxElectron);
   builder.BuildRangeTable(dedxElectron,rangeElectron);  
   builder.BuildInverseRangeTable(rangeElectron, invRangeElectron);  
 
-  if(verbose>1) 
-    G4cout << "### G4EnergyLossForExtrapolator Builds positron tables" << G4endl;
-
+  if(verbose>1) {
+    G4cout << "### G4EnergyLossForExtrapolator Builds positron tables" 
+	   << G4endl;
+  }
   ComputeElectronDEDX(positron, dedxPositron);
   builder.BuildRangeTable(dedxPositron, rangePositron);  
   builder.BuildInverseRangeTable(rangePositron, invRangePositron);  
 
-  if(verbose>1) 
+  if(verbose>1) {
     G4cout << "### G4EnergyLossForExtrapolator Builds muon tables" << G4endl;
-
+  }
   ComputeMuonDEDX(muonPlus, dedxMuon);
   builder.BuildRangeTable(dedxMuon, rangeMuon);  
   builder.BuildInverseRangeTable(rangeMuon, invRangeMuon);  
 
-  if(verbose>1) 
-    G4cout << "### G4EnergyLossForExtrapolator Builds proton tables" << G4endl;
-
+  if(verbose>1) {
+    G4cout << "### G4EnergyLossForExtrapolator Builds proton tables" 
+	   << G4endl;
+  }
   ComputeProtonDEDX(proton, dedxProton);
   builder.BuildRangeTable(dedxProton, rangeProton);  
   builder.BuildInverseRangeTable(rangeProton, invRangeProton);  
@@ -409,12 +412,12 @@ G4EnergyLossForExtrapolator::ComputeEnergy(G4double range,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void 
-G4EnergyLossForExtrapolator::ComputeElectronDEDX(const G4ParticleDefinition* part,
-						 G4PhysicsTable* table) 
+void G4EnergyLossForExtrapolator::ComputeElectronDEDX(
+                                  const G4ParticleDefinition* part,
+				  G4PhysicsTable* table) 
 {
   G4MollerBhabhaModel* ioni = new G4MollerBhabhaModel();
-  G4eBremsstrahlungModel* brem = new G4eBremsstrahlungModel();
+  G4eBremsstrahlungRelModel* brem = new G4eBremsstrahlungRelModel();
   ioni->Initialise(part, cuts);
   brem->Initialise(part, cuts);
 
@@ -445,7 +448,8 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX(const G4ParticleDefinition* par
          G4cout << "j= " << j
                 << "  e(MeV)= " << e/MeV  
                 << " dedx(Mev/cm)= " << dedx*cm/MeV
-                << " dedx(Mev.cm2/g)= " << dedx/((MeV*mat->GetDensity())/(g/cm2)) 
+                << " dedx(Mev.cm2/g)= " 
+		<< dedx/((MeV*mat->GetDensity())/(g/cm2)) 
 		<< G4endl;
        }
        aVector->PutValue(j,dedx);

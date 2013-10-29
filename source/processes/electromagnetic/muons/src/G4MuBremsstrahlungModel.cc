@@ -105,6 +105,8 @@ G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
   theGamma = G4Gamma::Gamma();
   nist = G4NistManager::Instance();
 
+  lowestKinEnergy = 1.*GeV;  
+
   mass = rmass = cc = coeff = 1.0;
 
   if(0.0 == fDN[1]) {
@@ -128,7 +130,7 @@ G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*,
-                                               const G4MaterialCutsCouple*)
+					       const G4MaterialCutsCouple*)
 {
   return minThreshold;
 }

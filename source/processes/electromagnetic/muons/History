@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 October 13: V.Ivanchenko (emmuons-V09-06-24)
+- G4EnergyLossForExtrapolator - substitute G4eBremsstrahlungModel 
+    by G4SeltzerBergerModel
+- G4MuBremsstrahlungModel - lowest energy is set to 1 GeV
+
 14 October 2013: V.Ivant (emmuons-V09-06-23)
 - G4MuPairProductionModel - fixed problem with the end of the spectra
     by cleanup initialisation of sampling table
