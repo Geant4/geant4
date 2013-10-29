@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-Oct-2013, V.Ivanchenko (phys-ctor-em-V09-06-18)
+- G4EmStandardPhysics - disable ApplyCuts option
+- G4EmStandardPhysics_option2 - removed unused header
+
 10-Oct-2013, M.K (phys-ctor-em-V09-06-17)
 - Same as before
 

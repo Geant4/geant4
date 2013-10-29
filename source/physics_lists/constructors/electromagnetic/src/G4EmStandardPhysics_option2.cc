@@ -66,11 +66,9 @@
 #include "G4eCoulombScatteringModel.hh"
 #include "G4UrbanMscModel.hh"
 #include "G4WentzelVIModel.hh"
-//#include "G4GoudsmitSaundersonMscModel.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
-#include "G4eBremsstrahlungModel.hh"
 #include "G4eBremsstrahlungRelModel.hh"
 #include "G4eplusAnnihilation.hh"
 #include "G4Generator2BS.hh"
@@ -91,7 +89,6 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 #include "G4alphaIonisation.hh"
-//#include "G4IonParametrisedLossModel.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
