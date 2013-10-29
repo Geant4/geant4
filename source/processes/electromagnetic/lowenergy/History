@@ -17,11 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-             G4LivermoreComptonModel, G4LivermorePhotoElectricModel
-               fixed Coverity reports (V.Ivanchenko)
+
+28.10.2013  L. Pandola, tag emlowen-V09-06-34             
+	    Remove AutoLock from G4PenelopeBremsstrahlungFS. Support 
+	    vector is allocated and released at every loop (not 
+	    optimal) to avoid interference of threads.
 
 27.10.2013  S. Incerti, M. Raine, tag emlowen-V09-06-33
             Updated sources.cmake
+	    Fixed Coverity reports is G4LivermoreComptonMode (VI), 
+            G4LivermorePhotoElectricModel (VI) and 
+ 	    G4PenelopeComptonModel (LP)
 
 24.10.2013  S. Incerti, M. Raine, tag emlowen-V09-06-32
             Added G4MicroElec* processes and models 

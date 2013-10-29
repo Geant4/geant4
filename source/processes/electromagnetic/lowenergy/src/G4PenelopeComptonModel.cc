@@ -61,7 +61,8 @@
 
 G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition* part,
 					       const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),isInitialised(false),fAtomDeexcitation(0),
+  :G4VEmModel(nam),fParticleChange(0),fParticle(0),
+   isInitialised(false),fAtomDeexcitation(0),
    oscManager(0)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
