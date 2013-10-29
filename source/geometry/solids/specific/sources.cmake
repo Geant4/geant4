@@ -47,6 +47,8 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4EnclosingCylinder.hh
         G4ExtrudedSolid.hh
         G4ExtrudedSolid.icc
+        G4GenericPolycone.hh
+        G4GenericPolycone.icc
         G4GenericTrap.hh
         G4GenericTrap.icc
         G4Hype.hh
@@ -98,6 +100,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4EllipticalTube.cc
         G4EnclosingCylinder.cc
         G4ExtrudedSolid.cc
+        G4GenericPolycone.cc
         G4GenericTrap.cc
         G4Hype.cc
         G4IntersectingCone.cc

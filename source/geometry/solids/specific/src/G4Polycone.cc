@@ -38,7 +38,6 @@
 // --------------------------------------------------------------------
 
 #include "G4Polycone.hh"
-
 #include "G4PolyconeSide.hh"
 #include "G4PolyPhiFace.hh"
 
@@ -61,7 +60,7 @@ G4Polycone::G4Polycone( const G4String& name,
                         const G4double zPlane[],
                         const G4double rInner[],
                         const G4double rOuter[]  )
-  : G4VCSGfaceted( name ), genericPcon(false)
+  : G4VCSGfaceted( name )
 {
   //
   // Some historical ugliness
@@ -137,7 +136,7 @@ G4Polycone::G4Polycone( const G4String& name,
                               G4int    numRZ,
                         const G4double r[],
                         const G4double z[]   )
-  : G4VCSGfaceted( name ), genericPcon(true)
+  : G4VCSGfaceted( name )
 { 
   
   G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
@@ -146,13 +145,27 @@ G4Polycone::G4Polycone( const G4String& name,
   
   // Set original_parameters struct for consistency
   //
-  SetOriginalParameters(rz);
+  
+  G4bool convertible=SetOriginalParameters(rz);
 
+  if(!convertible)
+  {
+    std::ostringstream message;
+    message << "Polycone " << GetName() << "cannot be converted" << G4endl
+            << "to Polycone with (Rmin,Rmaz,Z) parameters!";
+    G4Exception("G4Polycone::G4Polycone()", "GeomSolids0002",
+                FatalException, message, "Use G4GenericPolycone instead!");
+  }
+  else
+  {
+    G4cout << "INFO: Converting polycone " << GetName() << G4endl
+           << "to optimized polycone with (Rmin,Rmaz,Z) parameters !"
+           << G4endl;
+  }
   delete rz;
 }
 
 
-//
 // Create
 //
 // Generic create routine, called by each constructor after
@@ -327,8 +340,8 @@ void G4Polycone::Create( G4double phiStart,
 //
 G4Polycone::G4Polycone( __void__& a )
   : G4VCSGfaceted(a), startPhi(0.),  endPhi(0.), phiIsOpen(false),
-    genericPcon(false), numCorner(0), corners(0),
-    original_parameters(0), enclosingCylinder(0)
+    numCorner(0), corners(0),original_parameters(0), 
+    enclosingCylinder(0)
 {
 }
 
@@ -386,7 +399,6 @@ void G4Polycone::CopyStuff( const G4Polycone &source )
   endPhi    = source.endPhi;
   phiIsOpen  = source.phiIsOpen;
   numCorner  = source.numCorner;
-  genericPcon= source.genericPcon;
 
   //
   // The corner array
@@ -421,16 +433,6 @@ void G4Polycone::CopyStuff( const G4Polycone &source )
 //
 G4bool G4Polycone::Reset()
 {
-  if (genericPcon)
-  {
-    std::ostringstream message;
-    message << "Solid " << GetName() << " built using generic construct."
-            << G4endl << "Not applicable to the generic construct !";
-    G4Exception("G4Polycone::Reset()", "GeomSolids1001",
-                JustWarning, message, "Parameters NOT resetted.");
-    return 1;
-  }
-
   //
   // Clear old setup
   //
@@ -545,8 +547,7 @@ std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
      << "    starting phi angle : " << startPhi/degree << " degrees \n"
      << "    ending phi angle   : " << endPhi/degree << " degrees \n";
   G4int i=0;
-  if (!genericPcon)
-  {
+  
     G4int numPlanes = original_parameters->Num_z_planes;
     os << "    number of Z planes: " << numPlanes << "\n"
        << "              Z values: \n";
@@ -567,7 +568,7 @@ std::ostream& G4Polycone::StreamInfo( std::ostream& os ) const
       os << "              Z plane " << i << ": "
          << original_parameters->Rmax[i] << "\n";
     }
-  }
+  
   os << "    number of RZ points: " << numCorner << "\n"
      << "              RZ values (corners): \n";
      for (i=0; i<numCorner; i++)
@@ -639,7 +640,7 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
   else if(chose >= Aone && chose < Aone + Atwo)
   {
     if(fRmin1 != fRmin2)
-      { 
+    { 
       zRand = RandFlat::shoot(-1.*afDz,afDz); 
       point = G4ThreeVector (rtwo*cosu*(qtwo-zRand),
                              rtwo*sinu*(qtwo-zRand), zRand);
@@ -803,8 +804,6 @@ G4ThreeVector G4Polycone::GetPointOnCut(G4double fRMin1, G4double fRMax1,
 //
 G4ThreeVector G4Polycone::GetPointOnSurface() const
 {
-  if (!genericPcon)  // Polycone by faces
-  {
     G4double Area=0,totArea=0,Achose1=0,Achose2=0,phi,cosphi,sinphi,rRand;
     G4int i=0;
     G4int numPlanes = original_parameters->Num_z_planes;
@@ -885,11 +884,7 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
 
     return G4ThreeVector(rRand*cosphi,rRand*sinphi,
                          original_parameters->Z_values[numPlanes-1]);  
-  }
-  else  // Generic Polycone
-  {
-    return GetPointOnSurfaceGeneric();  
-  }
+ 
 }
 
 //
@@ -900,295 +895,13 @@ G4Polyhedron* G4Polycone::CreatePolyhedron() const
   //
   // This has to be fixed in visualization. Fake it for the moment.
   // 
-  if (!genericPcon)
-  {
+  
     return new G4PolyhedronPcon( original_parameters->Start_angle,
                                  original_parameters->Opening_angle,
                                  original_parameters->Num_z_planes,
                                  original_parameters->Z_values,
                                  original_parameters->Rmin,
                                  original_parameters->Rmax );
-  }
-  else
-  {
-    // The following code prepares for:
-    // HepPolyhedron::createPolyhedron(int Nnodes, int Nfaces,
-    //                                  const double xyz[][3],
-    //                                  const int faces_vec[][4])
-    // Here is an extract from the header file HepPolyhedron.h:
-    /**
-     * Creates user defined polyhedron.
-     * This function allows to the user to define arbitrary polyhedron.
-     * The faces of the polyhedron should be either triangles or planar
-     * quadrilateral. Nodes of a face are defined by indexes pointing to
-     * the elements in the xyz array. Numeration of the elements in the
-     * array starts from 1 (like in fortran). The indexes can be positive
-     * or negative. Negative sign means that the corresponding edge is
-     * invisible. The normal of the face should be directed to exterior
-     * of the polyhedron. 
-     * 
-     * @param  Nnodes number of nodes
-     * @param  Nfaces number of faces
-     * @param  xyz    nodes
-     * @param  faces_vec  faces (quadrilaterals or triangles)
-     * @return status of the operation - is non-zero in case of problem
-     */
-    const G4int numSide =
-          G4int(G4Polyhedron::GetNumberOfRotationSteps()
-                * (endPhi - startPhi) / twopi) + 1;
-    G4int nNodes;
-    G4int nFaces;
-    typedef G4double double3[3];
-    double3* xyz;
-    typedef G4int int4[4];
-    int4* faces_vec;
-    if (phiIsOpen)
-    {
-      // Triangulate open ends. Simple ear-chopping algorithm...
-      // I'm not sure how robust this algorithm is (J.Allison).
-      //
-      std::vector<G4bool> chopped(numCorner, false);
-      std::vector<G4int*> triQuads;
-      G4int remaining = numCorner;
-      G4int iStarter = 0;
-      while (remaining >= 3)
-      {
-        // Find unchopped corners...
-        //
-        G4int A = -1, B = -1, C = -1;
-        G4int iStepper = iStarter;
-        do
-        {
-          if (A < 0)      { A = iStepper; }
-          else if (B < 0) { B = iStepper; }
-          else if (C < 0) { C = iStepper; }
-          do
-          {
-            if (++iStepper >= numCorner) { iStepper = 0; }
-          }
-          while (chopped[iStepper]);
-        }
-        while (C < 0 && iStepper != iStarter);
-
-        // Check triangle at B is pointing outward (an "ear").
-        // Sign of z cross product determines...
-        //
-        G4double BAr = corners[A].r - corners[B].r;
-        G4double BAz = corners[A].z - corners[B].z;
-        G4double BCr = corners[C].r - corners[B].r;
-        G4double BCz = corners[C].z - corners[B].z;
-        if (BAr * BCz - BAz * BCr < kCarTolerance)
-        {
-          G4int* tq = new G4int[3];
-          tq[0] = A + 1;
-          tq[1] = B + 1;
-          tq[2] = C + 1;
-          triQuads.push_back(tq);
-          chopped[B] = true;
-          --remaining;
-        }
-        else
-        {
-          do
-          {
-            if (++iStarter >= numCorner) { iStarter = 0; }
-          }
-          while (chopped[iStarter]);
-        }
-      }
-      // Transfer to faces...
-      //
-      nNodes = (numSide + 1) * numCorner;
-      nFaces = numSide * numCorner + 2 * triQuads.size();
-      faces_vec = new int4[nFaces];
-      G4int iface = 0;
-      G4int addition = numCorner * numSide;
-      G4int d = numCorner - 1;
-      for (G4int iEnd = 0; iEnd < 2; ++iEnd)
-      {
-        for (size_t i = 0; i < triQuads.size(); ++i)
-        {
-          // Negative for soft/auxiliary/normally invisible edges...
-          //
-          G4int a, b, c;
-          if (iEnd == 0)
-          {
-            a = triQuads[i][0];
-            b = triQuads[i][1];
-            c = triQuads[i][2];
-          }
-          else
-          {
-            a = triQuads[i][0] + addition;
-            b = triQuads[i][2] + addition;
-            c = triQuads[i][1] + addition;
-          }
-          G4int ab = std::abs(b - a);
-          G4int bc = std::abs(c - b);
-          G4int ca = std::abs(a - c);
-          faces_vec[iface][0] = (ab == 1 || ab == d)? a: -a;
-          faces_vec[iface][1] = (bc == 1 || bc == d)? b: -b;
-          faces_vec[iface][2] = (ca == 1 || ca == d)? c: -c;
-          faces_vec[iface][3] = 0;
-          ++iface;
-        }
-      }
-
-      // Continue with sides...
-
-      xyz = new double3[nNodes];
-      const G4double dPhi = (endPhi - startPhi) / numSide;
-      G4double phi = startPhi;
-      G4int ixyz = 0;
-      for (G4int iSide = 0; iSide < numSide; ++iSide)
-      {
-        for (G4int iCorner = 0; iCorner < numCorner; ++iCorner)
-        {
-          xyz[ixyz][0] = corners[iCorner].r * std::cos(phi);
-          xyz[ixyz][1] = corners[iCorner].r * std::sin(phi);
-          xyz[ixyz][2] = corners[iCorner].z;
-          if (iSide == 0)   // startPhi
-          {
-            if (iCorner < numCorner - 1)
-            {
-              faces_vec[iface][0] = ixyz + 1;
-              faces_vec[iface][1] = -(ixyz + numCorner + 1);
-              faces_vec[iface][2] = ixyz + numCorner + 2;
-              faces_vec[iface][3] = ixyz + 2;
-            }
-            else
-            {
-              faces_vec[iface][0] = ixyz + 1;
-              faces_vec[iface][1] = -(ixyz + numCorner + 1);
-              faces_vec[iface][2] = ixyz + 2;
-              faces_vec[iface][3] = ixyz - numCorner + 2;
-            }
-          }
-          else if (iSide == numSide - 1)   // endPhi
-          {
-            if (iCorner < numCorner - 1)
-              {
-                faces_vec[iface][0] = ixyz + 1;
-                faces_vec[iface][1] = ixyz + numCorner + 1;
-                faces_vec[iface][2] = ixyz + numCorner + 2;
-                faces_vec[iface][3] = -(ixyz + 2);
-              }
-            else
-              {
-                faces_vec[iface][0] = ixyz + 1;
-                faces_vec[iface][1] = ixyz + numCorner + 1;
-                faces_vec[iface][2] = ixyz + 2;
-                faces_vec[iface][3] = -(ixyz - numCorner + 2);
-              }
-          }
-          else
-          {
-            if (iCorner < numCorner - 1)
-              {
-                faces_vec[iface][0] = ixyz + 1;
-                faces_vec[iface][1] = -(ixyz + numCorner + 1);
-                faces_vec[iface][2] = ixyz + numCorner + 2;
-                faces_vec[iface][3] = -(ixyz + 2);
-              }
-              else
-              {
-                faces_vec[iface][0] = ixyz + 1;
-                faces_vec[iface][1] = -(ixyz + numCorner + 1);
-                faces_vec[iface][2] = ixyz + 2;
-                faces_vec[iface][3] = -(ixyz - numCorner + 2);
-              }
-            }
-            ++iface;
-            ++ixyz;
-        }
-        phi += dPhi;
-      }
-
-      // Last corners...
-
-      for (G4int iCorner = 0; iCorner < numCorner; ++iCorner)
-      {
-        xyz[ixyz][0] = corners[iCorner].r * std::cos(phi);
-        xyz[ixyz][1] = corners[iCorner].r * std::sin(phi);
-        xyz[ixyz][2] = corners[iCorner].z;
-        ++ixyz;
-      }
-    }
-    else  // !phiIsOpen - i.e., a complete 360 degrees.
-    {
-      nNodes = numSide * numCorner;
-      nFaces = numSide * numCorner;;
-      xyz = new double3[nNodes];
-      faces_vec = new int4[nFaces];
-      const G4double dPhi = (endPhi - startPhi) / numSide;
-      G4double phi = startPhi;
-      G4int ixyz = 0, iface = 0;
-      for (G4int iSide = 0; iSide < numSide; ++iSide)
-      {
-        for (G4int iCorner = 0; iCorner < numCorner; ++iCorner)
-        {
-          xyz[ixyz][0] = corners[iCorner].r * std::cos(phi);
-          xyz[ixyz][1] = corners[iCorner].r * std::sin(phi);
-          xyz[ixyz][2] = corners[iCorner].z;
-
-          if (iSide < numSide - 1)
-          {
-            if (iCorner < numCorner - 1)
-            {
-              faces_vec[iface][0] = ixyz + 1;
-              faces_vec[iface][1] = -(ixyz + numCorner + 1);
-              faces_vec[iface][2] = ixyz + numCorner + 2;
-              faces_vec[iface][3] = -(ixyz + 2);
-            }
-            else
-            {
-              faces_vec[iface][0] = ixyz + 1;
-              faces_vec[iface][1] = -(ixyz + numCorner + 1);
-              faces_vec[iface][2] = ixyz + 2;
-              faces_vec[iface][3] = -(ixyz - numCorner + 2);
-            }
-          }
-          else   // Last side joins ends...
-          {
-            if (iCorner < numCorner - 1)
-            {
-              faces_vec[iface][0] = ixyz + 1;
-              faces_vec[iface][1] = -(ixyz + numCorner - nFaces + 1);
-              faces_vec[iface][2] = ixyz + numCorner - nFaces + 2;
-              faces_vec[iface][3] = -(ixyz + 2);
-            }
-            else
-            {
-              faces_vec[iface][0] = ixyz + 1;
-              faces_vec[iface][1] = -(ixyz - nFaces + numCorner + 1);
-              faces_vec[iface][2] = ixyz - nFaces + 2;
-              faces_vec[iface][3] = -(ixyz - numCorner + 2);
-            }
-          }
-          ++ixyz;
-          ++iface;
-        }
-        phi += dPhi;
-      }
-    }
-    G4Polyhedron* polyhedron = new G4Polyhedron;
-    G4int problem = polyhedron->createPolyhedron(nNodes, nFaces, xyz, faces_vec);
-    delete [] faces_vec;
-    delete [] xyz;
-    if (problem)
-    {
-      std::ostringstream message;
-      message << "Problem creating G4Polyhedron for: " << GetName();
-      G4Exception("G4Polycone::CreatePolyhedron()", "GeomSolids1002",
-                  JustWarning, message);
-      delete polyhedron;
-      return 0;
-    }
-    else
-    {
-      return polyhedron;
-    }
-  }
 }
 
 
@@ -1256,7 +969,7 @@ G4PolyconeHistorical::operator=( const G4PolyconeHistorical& right )
   return *this;
 }
 
-void  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
+G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
 {
   G4int numPlanes = (G4int)numCorner;  
   G4bool isConvertible=true;
@@ -1455,4 +1168,5 @@ void  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
     original_parameters->Opening_angle = endPhi-startPhi;
     original_parameters->Num_z_planes = numPlanes;
   }
+  return isConvertible;
 }

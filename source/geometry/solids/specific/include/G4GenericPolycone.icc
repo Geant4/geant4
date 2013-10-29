@@ -24,60 +24,43 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4GenericPolycone.icc 72078 2013-07-08 12:31:53Z tnikitin $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
 //
-// G4Polycone.icc
+// G4GenericPolycone.icc
 //
-// Implementation of inline methods of G4Polycone
+// Implementation of inline methods of G4GenericPolycone
 // --------------------------------------------------------------------
 
 inline
-G4double G4Polycone::GetStartPhi() const
+G4double G4GenericPolycone::GetStartPhi() const
 {
   return startPhi;
 }
 
 inline
-G4double G4Polycone::GetEndPhi() const
+G4double G4GenericPolycone::GetEndPhi() const
 {
   return endPhi;
 }
 
 inline
-G4bool G4Polycone::IsOpen() const
+G4bool G4GenericPolycone::IsOpen() const
 {
   return phiIsOpen;
 }
 
 inline
-G4int G4Polycone::GetNumRZCorner() const
+G4int G4GenericPolycone::GetNumRZCorner() const
 {
   return numCorner;
 }
 
 inline
-G4PolyconeSideRZ G4Polycone::GetCorner(G4int index) const
+G4PolyconeSideRZ G4GenericPolycone::GetCorner(G4int index) const
 {
   return corners[index];
-}
-
-inline
-G4PolyconeHistorical* G4Polycone::GetOriginalParameters() const
-{
-  return original_parameters;
-}
-
-inline
-void G4Polycone::SetOriginalParameters(G4PolyconeHistorical* pars)
-{
-  if (!pars)
-    G4Exception("G4Polycone::SetOriginalParameters()", "GeomSolids0002",
-                FatalException, "NULL pointer to parameters!");
-  *original_parameters = *pars;
-  fCubicVolume = 0.;
-  fpPolyhedron = 0;
 }
 

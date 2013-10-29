@@ -161,7 +161,7 @@ class G4Polyhedra : public G4VCSGfaceted
 
  protected:  // without description
 
-  inline void SetOriginalParameters();
+  void SetOriginalParameters(G4ReduciblePolygon *rz);
     // Sets internal parameters for the generic constructor.
 
   void Create( G4double phiStart,           // initial phi starting angle
