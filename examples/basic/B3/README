@@ -50,18 +50,19 @@ $Id$
                                           /InstallationGuide/html/ch03s03.html
  3- ACTION INITALIZATION
 
-   A newly (June 2013) introduced class, B3ActionInitialization,
-   instantiates and registers to Geant4 kernel all user action classes
-   which are defined thread-local and a run action class (if present)
-   which is defined both thread-local and global.
+   A newly introduced class, B1ActionInitialization, instantiates and registers 
+   to Geant4 kernel all user action classes.
 
-   The thread-local action classes are defined in
-     B3ActionInitialization::Build()
-   Note that B3ActionInitialization::Build() is also used to
-   instantiate user action classes in sequential mode.
-        
-   The global run action class is defined in
-     B3ActionInitialization::BuildForMaster().
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      B3ActionInitialization::Build() 
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
+
+   A run action class is instantiated both thread-local 
+   and global that's why its instance has is created also in the method
+      B3ActionInitialization::BuildForMaster() 
+   which is invoked only in multi-threading mode.
     	 
  4- PRIMARY GENERATOR
   

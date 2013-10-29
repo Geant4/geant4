@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29/10/13 I. Hrivnacova (exampleB3-V09-06-06)
+- Removed SetNumberOfThreads(4) from main (use Geant4 default)
+- Updated README
+     
 09/09/13 M.Asai (exampleB3-V09-06-05)
 - B3PrimaryGeneratorAction.cc : Change G4ParticleTable::GetIon() to
   G4IonTable::GetIon(), as the former method becomes obsolete.
