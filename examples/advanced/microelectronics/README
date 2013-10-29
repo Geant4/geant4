@@ -1,0 +1,106 @@
+-------------------------------------------------------------------
+$Id: README,v 1.1 2012-09-21 mraine Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		  Geant4 - Microelectronics example
+     =========================================================
+
+                                README file
+                          ----------------------
+
+                           CORRESPONDING AUTHOR 
+
+M. Raine
+CEA, DAM, DIF, F-91297 Arpajon, France
+* e-mail:melanie.raine@cea.fr
+
+---->0. INTRODUCTION.                                                    
+                                                                       
+The microelectronics example simulates the track of a 5 MeV proton in silicon. 
+Geant4 standard EM models are used in the World volume while Geant4-MicroElec models
+are used in a Target volume, declared as a Region.
+
+---->1. GEOMETRY SET-UP.
+ 
+The geometry is a 1 um side cube (World) made of silicon containing a smaller cubic Target volume of silicon.
+
+---->2. SET-UP 
+                                                                        
+Make sure G4LEDATA points to the low energy electromagnetic libraries.
+
+The variable G4ANALYSIS_USE must be set to 1.
+  
+The code should be compiled with cmake: 
+    $ cd $HOME
+    $ mkdir microelectronics-build
+    $ cd $HOME/microelectronics-build
+    $ cmake -DGeant4_DIR=/your_path/geant4-install/lib64/Geant4-9.5.0 $HOME/microelectronics
+    $ make
+
+It works in MT mode.
+
+---->3. HOW TO RUN THE EXAMPLE                                         
+
+In interactive mode, run:
+
+./Microelectronics
+
+The macro microelectronics.mac is executed by default. 
+
+To get visualization, make sure to uncomment the #/control/execute vis.mac
+ line in the macro.
+
+---->4. PHYSICS
+
+This example shows:
+- how to use the Geant4-MicroElec processes, 
+- how to affect them a name
+- how to combine them with Standard EM Physics.
+
+A simple electron capture process is also provided in order to kill electrons 
+below a chosen energy threshold, set in the Physics list.
+
+Look at the PhyscisList.cc file.
+
+---->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+
+The output results consists in a microelectronics.root file, containing for each simulation step:
+- the type of particle for the current step
+- the type of process for the current step
+- the track position of the current step (in nanometers)
+- the energy deposit along the current step (in eV)
+- the step length (in nm)
+- the total enery loss along the current step (in eV)
+
+This file can be easily analyzed using for example the provided ROOT macro 
+file plot.C; to do so :
+* be sure to have ROOT installed on your machine
+* be sure to be in the microelectronics directory
+* launch ROOT by typing root
+* under your ROOT session, type in : .X plot.C to execute the macro file
+* alternatively you can type directly under your session : root plot.C
+
+The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
+
+-particles:
+e-       : 1    
+proton   : 2
+ion 	 : 3
+
+-processes:
+e-_G4MicroElecElastic		11
+e-_G4MicroElecInelastic		12
+eCapture			13
+
+p_G4MicroElecInelastic		14
+
+ion_G4MicroElecInelastic	15
+
+hIoni				16
+eIoni				17
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+melanie.raine@cea.fr
