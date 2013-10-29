@@ -254,7 +254,7 @@ typename G4Cache<V>::value_type & G4Cache<V>::Get() const
 { return GetCache(); }
 
 template<class V>
-void G4Cache<V>::Put( const value_type& val )
+void G4Cache<V>::Put( const value_type& val ) const
 { GetCache() = val; }
 
 //Should here remove from cache element?
@@ -414,9 +414,4 @@ typename G4MapCache<K,V>::value_type& G4MapCache<K,V>::operator[](const G4MapCac
     return (G4Cache<map_type>::Get())[k];
 }
 
-
-
-#ifdef g4cdebug
-#undef g4cdebug
-#endif
 #endif

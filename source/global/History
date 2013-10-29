@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 29, 2013 A.Dotti       (global-V09-06-77)
+- Retagging, wrong commit previous tag
+
 October 28, 2013 A.Dotti       (global-V09-06-76)
 - Bug fixing in G4Cache::Put method signature
 
