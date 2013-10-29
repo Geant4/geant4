@@ -105,6 +105,12 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
         G4LowEPComptonModel.hh
+        G4MicroElecCrossSectionDataSet.hh
+        G4MicroElecElastic.hh
+        G4MicroElecElasticModel.hh
+        G4MicroElecInelastic.hh
+        G4MicroElecInelasticModel.hh
+        G4MicroElecSiStructure.hh
         G4MuElecCrossSectionDataSet.hh
         G4MuElecElastic.hh
         G4MuElecElasticModel.hh
@@ -213,6 +219,12 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
         G4LowEPComptonModel.cc
+        G4MicroElecCrossSectionDataSet.cc
+        G4MicroElecElastic.cc
+        G4MicroElecElasticModel.cc
+        G4MicroElecInelastic.cc
+        G4MicroElecInelasticModel.cc
+        G4MicroElecSiStructure.cc
         G4MuElecCrossSectionDataSet.cc
         G4MuElecElastic.cc
         G4MuElecElasticModel.cc

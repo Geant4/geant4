@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+             G4LivermoreComptonModel, G4LivermorePhotoElectricModel
+               fixed Coverity reports (V.Ivanchenko)
+
+27.10.2013  S. Incerti, M. Raine, tag emlowen-V09-06-33
+            Updated sources.cmake
+
 24.10.2013  S. Incerti, M. Raine, tag emlowen-V09-06-32
             Added G4MicroElec* processes and models 
 	    in replacement of G4MuElec*

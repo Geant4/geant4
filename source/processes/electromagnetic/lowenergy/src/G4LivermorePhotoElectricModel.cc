@@ -445,7 +445,15 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
       G4cout << "File " << ost1.str().c_str()
              << " is opened by G4LivermorePhotoElectricModel" << G4endl;
     }
-    fin1 >> n1 >> n2 >> x;
+    fin1 >> n1;
+    if(fin1.fail()) { return; }
+
+    fin1 >> n2;
+    if(fin1.fail()) { return; }
+
+    fin1 >> x;
+    if(fin1.fail()) { return; }
+
     fNShells[Z] = n1;
     fParam[Z]->reserve(6*n1+1);
     fParam[Z]->push_back(x*MeV);

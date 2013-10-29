@@ -87,6 +87,8 @@ G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
   //Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
 
+  fParticleChange = 0;
+  fAtomDeexcitation = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
