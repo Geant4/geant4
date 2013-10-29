@@ -71,10 +71,8 @@ G4Run* B1RunAction::GenerateRun()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B1RunAction::BeginOfRunAction(const G4Run* run)
+void B1RunAction::BeginOfRunAction(const G4Run*)
 { 
-  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-
   //inform the runManager to save random number seed
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 }

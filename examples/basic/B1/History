@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28/10/13 I. Hrivnacova (exampleB1-V09-06-06)
+- Removed SetNumberOfThreads(4) from main (use Geant4 default)
      
 26/10/13 mma (exampleB1-V09-06-05)
 - Use /run/printProgress. Cleanup in EventAction

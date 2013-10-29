@@ -36,8 +36,6 @@
 
 /// Event action class
 ///
-/// It instantiates B1EventInformation object at the beginning of
-/// each event.
 
 class B1EventAction : public G4UserEventAction
 {
