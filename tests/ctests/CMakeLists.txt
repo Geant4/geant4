@@ -431,6 +431,12 @@ GEANT4_ADD_TEST(example-adv-microdosimetry
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry
                 BUILD microdosimetry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-adv-microelectronics 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/microelectronics/microelectronics 
+                        ${CMAKE_SOURCE_DIR}/examples/advanced/microelectronics/microelectronics.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/microelectronics
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/microelectronics
+                BUILD microelectronics ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 if(GEANT4_USE_SYSTEM_CLHEP)
   GEANT4_ADD_TEST(example-adv-nanobeam 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/nanobeam/nanobeam 
