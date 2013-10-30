@@ -67,6 +67,9 @@
     #define G4MUTEXLOCK pthread_mutex_lock
     #define G4MUTEXUNLOCK pthread_mutex_unlock
 
+    // Macro to iniaizlie a Mutex
+    #define G4MUTEXINIT(mutex) pthread_mutex_init( &mutex , NULL);
+
     // Macro to create a G4Thread object
     //
     #define G4THREADCREATE( worker , func , arg )  { \
@@ -116,6 +119,7 @@
     DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m );
     #define G4MUTEXLOCK G4WaitForSingleObjectInf
 
+    #define G4MUTEXINIT(mutex) InitializeCriticalSection( &mutex );
     // Not clear why following two lines are needed...
     //
     BOOL G4ReleaseMutex( __in G4Mutex m);
@@ -151,6 +155,7 @@
   typedef G4int G4Thread;
   #define G4MUTEX_INITIALIZER 1
   G4int fake_mutex_lock_unlock( G4Mutex* );// { return 0; }
+  #define G4MUTEXINIT(mutex) ;;
   #define G4MUTEXLOCK fake_mutex_lock_unlock
   #define G4MUTEXUNLOCK fake_mutex_lock_unlock
   #define G4THREADCREATE( worker , func , arg ) ;;

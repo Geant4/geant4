@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Octover 29, 2013 A.Dotti       (global-V09-06-78)
+- Adding G4ThreadPrivateSingleton class for thread-private singleton
+  handling and G4AutoDelete namespace with utility function for 
+  simplified garbage-collection: management/include/G4AutoDelete.hh
+  management/include/G4ThreadLocalSingleton.hh. Two unit tests have
+  been developed management/test/testAutoDelete.cc and 
+  management/test/testG4TLSSingleton.cc
+- Adding G4MUTEXINIT macro that expands to pthread_mutex_init
 
 October 29, 2013 A.Dotti       (global-V09-06-77)
 - Retagging, wrong commit previous tag
