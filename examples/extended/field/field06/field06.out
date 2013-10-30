@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-04    (24-April-2013)
+ Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -19,6 +19,18 @@
 
 
 
+ *** Neutron *** 
+ magneticMoment: -1.91304
+ g_factor: -3.82609
+ charge: 0
+ anomaly: -2.91304
+ corrected anomaly: -2.91568
+ *** anomaly: -2.91568
+ *** MuonPlus *** 
+ magneticMoment: 1.00117
+ g_factor: 1.00117
+ charge: 1
+ anomaly: -0.499417
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -63,25 +75,6 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
- magneticMoment: -1.91304
- g_factor: -3.82609
- anomaly: -2.91304
- corrected anomaly: -2.91568
- *** anomaly: -2.91568
- magneticMoment: 1.00117
- g_factor: 1.00117
- anomaly: -0.499417
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : PART114
-      issued by : G4ParticleDefintion::G4ParticleDefintion
-CalculateAnomaly() method will be removed in next release
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
- *** anomaly: 0.499417
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 /event/verbose 1
 /tracking/verbose 1
 #
@@ -89,7 +82,7 @@ Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  990 eV     e+  -1 MeV proton 100 keV
@@ -98,7 +91,7 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-Start Run processing.
+### Run 0 starts.
 =====================================
   G4EventManager::ProcessOneEvent()  
 =====================================
@@ -2299,13 +2292,16 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.1s Real=0.11s Sys=0.02s
+  User=0.08s Real=0.12s Sys=0.03s
 #
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-Particle table is held by G4VUserPhysicsList::InitializeProcessManager
-Particle table is released by G4VUserPhysicsList::InitializeProcessManager
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
  Maximum number of tracks in the urgent stack : 1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+================== Deleting memory pools ===================
+Number of memory pools allocated: 10; of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.0096 Mb
+============================================================
+RunManagerKernel is deleted. Good bye :)

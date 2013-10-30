@@ -23,50 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file field/field06/include/F06EventAction.hh
-/// \brief Definition of the F06EventAction class
-//
+/// \file F06ActionInitialization.hh
+/// \brief Definition of the F06ActionInitialization class
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#ifndef F06ActionInitialization_h
+#define F06ActionInitialization_h 1
 
-#ifndef F06EventAction_h
-#define F06EventAction_h 1
+#include "G4VUserActionInitialization.hh"
 
-#include "globals.hh"
-#include "G4UserEventAction.hh"
+/// Action initialization class.
 
-class F06EventActionMessenger;
-
-class F06EventAction : public G4UserEventAction
+class F06ActionInitialization : public G4VUserActionInitialization
 {
   public:
+    F06ActionInitialization();
+    virtual ~F06ActionInitialization();
 
-    F06EventAction();
-    virtual ~F06EventAction();
-
-  public:
-
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
-
-    G4int GetEventNo();
-    void SetEventVerbose(G4int);
-
-    void SetDrawFlag(G4String val)  { fDrawFlag = val; };
-    void SetPrintModulo(G4int val)  { fPrintModulo = val; };
-
-  private:
-
-    F06EventActionMessenger* fEventMessenger;
-
-    G4int fVerboseLevel;
-    G4int fPrintModulo;
-
-    G4String fDrawFlag;
-
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -69,6 +69,8 @@ void F06PhysicsList::ConstructParticle()
     G4AntiNeutrinoE::AntiNeutrinoEDefinition();
     G4MuonPlus::MuonPlusDefinition();
     G4MuonMinus::MuonMinusDefinition();
+
+    G4GenericIon::GenericIonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

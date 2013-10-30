@@ -59,6 +59,8 @@ F06PrimaryGeneratorAction::F06PrimaryGeneratorAction(void)
   G4double muN = 0.5*CLHEP::eplus*CLHEP::hbar_Planck/
                                                (mass_proton/CLHEP::c_squared);
 
+  G4cout << " *** Neutron *** " << G4endl;
+
   particle = particleTable->FindParticle("neutron");
   G4double mass_neutron = particle->GetPDGMass();
 
@@ -85,6 +87,8 @@ F06PrimaryGeneratorAction::F06PrimaryGeneratorAction(void)
   anomaly = (g_factor - 2.)/2.;
   G4cout << " *** anomaly: " << anomaly << G4endl;
 
+    G4cout << " *** MuonPlus *** " << G4endl;
+
   particle = particleTable->FindParticle("mu+");
   G4double mass_muon = particle->GetPDGMass();
 
@@ -105,8 +109,8 @@ F06PrimaryGeneratorAction::F06PrimaryGeneratorAction(void)
   anomaly = (g_factor - 2.)/2.;
   G4cout << " anomaly: " << anomaly << G4endl;
 
-  anomaly = particle->CalculateAnomaly();
-  G4cout << " *** anomaly: " << anomaly << G4endl;
+//  anomaly = particle->CalculateAnomaly();
+//  G4cout << " *** anomaly: " << anomaly << G4endl;
 
   particle = particleTable->FindParticle("neutron");
   fParticleGun->SetParticleDefinition(particle);

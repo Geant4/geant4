@@ -58,8 +58,17 @@
 
  6- HOW TO START ?
 
+   This example handles the program arguments in a new way.
+   It can be run with the following optional arguments:
+   % OpNovice [-m macro ] [-u UIsession] [-t nThreads]
+
+   The -t option is available only in multi-threading mode
+   and it allows the user to override the Geant4 default number of
+   threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
+   environment variable which has the top priority.
+
         - execute field06 in 'batch' mode from macro files e.g.
-                % field06 field06.in > field06.out &
+                % field06 -m field06.in > field06.out &
 
         - execute field06 in 'interactive' mode with visualization e.g.
                 % field60

@@ -23,77 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file field/field06/src/F06Field.cc
-/// \brief Implementation of the F06Field class
-//
+/// \file F06ActionInitialization.cc
+/// \brief Implementation of the F04ActionInitialization class
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "F06Field.hh"
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
-#include "G4EqGravityField.hh"
-#include "G4ChordFinder.hh"
-#include "G4PropagatorInField.hh"
-
-#include "G4ClassicalRK4.hh"
-
-#include "G4SystemOfUnits.hh"
+#include "F06ActionInitialization.hh"
+#include "F06PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F06Field::F06Field() : G4UniformGravityField()
+F06ActionInitialization::F06ActionInitialization()
+ : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F06ActionInitialization::~F06ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F06ActionInitialization::BuildForMaster() const
 {
-  fEquation = new G4EqGravityField(this);
-
-  G4FieldManager* fieldManager
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  fieldManager->SetDetectorField(this);
-
-//  fStepper = new G4ClassicalRK4(fEquation,12);
-  fStepper = new G4ClassicalRK4(fEquation,8);
-
-  G4double minStep           = 0.01*mm;
-
-  fChordFinder = new G4ChordFinder((G4MagneticField*)this,minStep,fStepper);
- 
-  // Set accuracy parameters
-  G4double deltaChord        = 3.0*mm;
-  fChordFinder->SetDeltaChord( deltaChord );
-
-  G4double deltaOneStep      = 0.01*mm;
-  fieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
-
-  G4double deltaIntersection = 0.1*mm;
-  fieldManager->SetDeltaIntersection(deltaIntersection);
-
-  G4TransportationManager* transportManager =
-         G4TransportationManager::GetTransportationManager();
-
-  fFieldPropagator = transportManager->GetPropagatorInField();
-
-  G4double epsMin            = 2.5e-7*mm;
-  G4double epsMax            = 0.05*mm;
- 
-  fFieldPropagator->SetMinimumEpsilonStep(epsMin);
-  fFieldPropagator->SetMaximumEpsilonStep(epsMax);
- 
-  fieldManager->SetChordFinder(fChordFinder);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F06Field::~F06Field()
+void F06ActionInitialization::Build() const
 {
-  if (fEquation)    delete fEquation;
-  if (fStepper)     delete fStepper;
-  if (fChordFinder) delete fChordFinder;
-}
+  SetUserAction(new F06PrimaryGeneratorAction);
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

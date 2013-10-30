@@ -38,13 +38,14 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 
-class F06Field;
-
 class G4Material;
  
 class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+
+class G4UniformGravityField;
+class G4FieldManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,6 +59,7 @@ class F06DetectorConstruction : public G4VUserDetectorConstruction
   public:
  
     virtual G4VPhysicalVolume* Construct();
+    virtual void ConstructSDandField();
 
   private:
  
@@ -67,7 +69,7 @@ class F06DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   fLogicWorld;    //pointer to the logical World
      G4VPhysicalVolume* fPhysiWorld;    //pointer to the physical World
 
-     F06Field* fField;
+     static G4ThreadLocal G4UniformGravityField* fField;
 
   private:
  

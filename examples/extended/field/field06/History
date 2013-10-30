@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 29th, 2013 P. Gumplinger - fieldex06-V09-06-05
+- remove all reference to WorkerInitialization and remove SetNumberOfThreads
+
+Oct 25th, 2013 P. Gumplinger - fieldex06-V09-06-04
+- migration to MT
+
 May 13th, 2013 P. Gumplinger - fieldex06-V09-06-03
 - use all initialized variables in F06PrimaryGeneratorAction.cc
 
