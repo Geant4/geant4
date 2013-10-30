@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 29, 2013 P. Gumplinger (OpNovice-V09-06-08)
+- remove all reference to LXeWorkerInitialization and remove SetNumberOfThreads
+
+October 25, 2013 P. Gumplinger (OpNovice-V09-06-07)
+- Instantiate SteppingVerbose in a new method in OpNoviceActionInitialization
+  and removed LXeWorkerInitialization (not needed anymore)
+- Add OpNoviceSteppingAction to count secondary optical photons to compare
+  with OpNoviceStackingAction
+
 11 June 2013, V.Ivanchenko (OpNovice-V09-06-06)
 - OpNovicePhysicsList - construct all particles to avoid exception
     in execution of ConstructParticle() method; removed unnecessary

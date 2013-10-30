@@ -42,10 +42,8 @@
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
-#include "OpNoviceWorkerInitialization.hh"
 #else
 #include "G4RunManager.hh"
-#include "OpNoviceSteppingVerbose.hh"
 #endif
 
 #include "G4UImanager.hh"
@@ -63,32 +61,76 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+namespace {
+  void PrintUsage() {
+    G4cerr << " Usage: " << G4endl;
+    G4cerr << " OpNovice [-m macro ] [-u UIsession] [-t nThreads] [-r seed] "
+           << G4endl;
+    G4cerr << "   note: -t option is available only for multi-threaded mode."
+           << G4endl;
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
-  // Run manager
+  // Evaluate arguments
+  //
+  if ( argc > 9 ) {
+    PrintUsage();
+    return 1;
+  }
+
+  G4String macro;
+  G4String session;
+#ifdef G4MULTITHREADED
+  G4int nThreads = 0;
+#endif
+
+  G4long myseed = 345354;
+  for ( G4int i=1; i<argc; i=i+2 ) {
+     if      ( G4String(argv[i]) == "-m" ) macro   = argv[i+1];
+     else if ( G4String(argv[i]) == "-u" ) session = argv[i+1];
+     else if ( G4String(argv[i]) == "-r" ) myseed  = atoi(argv[i+1]);
+#ifdef G4MULTITHREADED
+     else if ( G4String(argv[i]) == "-t" ) {
+                    nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
+    }
+#endif
+    else {
+      PrintUsage();
+      return 1;
+    }
+  }
+
+  // Choose the Random engine
+  //
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
+
+  // Construct the default run manager
   //
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
+  if ( nThreads > 0 ) runManager->SetNumberOfThreads(nThreads);
 #else
-  // User Verbose output class
-  //
-  G4VSteppingVerbose::SetInstance(new OpNoviceSteppingVerbose());
-
-  // Seed the random number generator manually
-  G4long myseed = 345354;
-  G4Random::setTheSeed(myseed);
-
   G4RunManager * runManager = new G4RunManager;
+  // Seed the random number generator manually
+  G4Random::setTheSeed(myseed);
 #endif
 
-  // UserInitialization classes - mandatory
+  // Set mandatory initialization classes
   //
+  // Detector construction
   runManager-> SetUserInitialization(new OpNoviceDetectorConstruction());
+  // Physics list
   runManager-> SetUserInitialization(new OpNovicePhysicsList());
-
+  // User action initialization
   runManager->SetUserInitialization(new OpNoviceActionInitialization());
 
   // Initialize G4 kernel
@@ -108,28 +150,27 @@ int main(int argc,char** argv)
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer(); 
    
-  if (argc==1)   // Define UI session for interactive mode
-    {
+  if ( macro.size() ) {
+     // Batch mode
+     G4String command = "/control/execute ";
+     UImanager->ApplyCommand(command+macro);
+  }
+  else // Define UI session for interactive mode
+  {
 #ifdef G4UI_USE
-      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+     G4UIExecutive * ui = new G4UIExecutive(argc,argv,session);
 #ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");
+     UImanager->ApplyCommand("/control/execute vis.mac");
 #else
-      UImanager->ApplyCommand("/control/execute OpNovice.in");
+     UImanager->ApplyCommand("/control/execute OpNovice.in");
 #endif
-      if (ui->IsGUI())
-         UImanager->ApplyCommand("/control/execute gui.mac");
-      ui->SessionStart();
-      delete ui;
+     if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");
+     ui->SessionStart();
+     delete ui;
 #endif
-    }
-  else         // Batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
-    }
-   
+  }
+
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not

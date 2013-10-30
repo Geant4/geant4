@@ -23,65 +23,76 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: OpNoviceSteppingAction.cc 71007 2013-06-09 16:14:59Z maire $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file OpNoviceSteppingAction.cc
+/// \brief Implementation of the OpNoviceSteppingAction class
 
-#include "OpNoviceStackingAction.hh"
+#include "OpNoviceSteppingAction.hh"
 
-#include "G4VProcess.hh"
-
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTypes.hh"
+#include "G4Step.hh"
 #include "G4Track.hh"
-#include "G4ios.hh"
+#include "G4OpticalPhoton.hh"
+
+#include "G4Event.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-OpNoviceStackingAction::OpNoviceStackingAction()
-  : G4UserStackingAction(),
-    fScintillationCounter(0), fCerenkovCounter(0)
-{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-OpNoviceStackingAction::~OpNoviceStackingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ClassificationOfNewTrack
-OpNoviceStackingAction::ClassifyNewTrack(const G4Track * aTrack)
-{
-  if(aTrack->GetDefinition() == G4OpticalPhoton::OpticalPhotonDefinition())
-  { // particle is optical photon
-    if(aTrack->GetParentID()>0)
-    { // particle is secondary
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Scintillation")
-        fScintillationCounter++;
-      if(aTrack->GetCreatorProcess()->GetProcessName() == "Cerenkov")
-        fCerenkovCounter++;
-    }
-  }
-  return fUrgent;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void OpNoviceStackingAction::NewStage()
-{
-  G4cout << "Number of Scintillation photons produced in this event : "
-         << fScintillationCounter << G4endl;
-  G4cout << "Number of Cerenkov photons produced in this event : "
-         << fCerenkovCounter << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void OpNoviceStackingAction::PrepareNewEvent()
-{
+OpNoviceSteppingAction::OpNoviceSteppingAction()
+: G4UserSteppingAction()
+{ 
   fScintillationCounter = 0;
-  fCerenkovCounter = 0;
+  fCerenkovCounter      = 0;
+  fEventNumber = -1;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+OpNoviceSteppingAction::~OpNoviceSteppingAction()
+{ ; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void OpNoviceSteppingAction::UserSteppingAction(const G4Step* step)
+{
+  G4int eventNumber = G4RunManager::GetRunManager()->
+                                              GetCurrentEvent()->GetEventID();
+
+  if (eventNumber != fEventNumber) {
+     G4cout << " Number of Scintillation Photons in previous event: "
+            << fScintillationCounter << G4endl;
+     G4cout << " Number of Cerenkov Photons in previous event: "
+            << fCerenkovCounter << G4endl;
+     fEventNumber = eventNumber;
+     fScintillationCounter = 0;
+     fCerenkovCounter = 0;
+  }
+
+  G4Track* track = step->GetTrack();
+
+  G4String ParticleName = track->GetDynamicParticle()->
+                                 GetParticleDefinition()->GetParticleName();
+
+  if (ParticleName == "opticalphoton") return;
+
+  const std::vector<const G4Track*>* secondaries =
+                                            step->GetSecondaryInCurrentStep();
+
+  if (secondaries->size()>0) {
+     for(unsigned int i=0; i<secondaries->size(); ++i) {
+        if (secondaries->at(i)->GetParentID()>0) {
+           if(secondaries->at(i)->GetDynamicParticle()->GetParticleDefinition()
+               == G4OpticalPhoton::OpticalPhotonDefinition()){
+              if (secondaries->at(i)->GetCreatorProcess()->GetProcessName()
+               == "Scintillation")fScintillationCounter++;
+              if (secondaries->at(i)->GetCreatorProcess()->GetProcessName()
+               == "Cerenkov")fCerenkovCounter++;
+           }
+        }
+     }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

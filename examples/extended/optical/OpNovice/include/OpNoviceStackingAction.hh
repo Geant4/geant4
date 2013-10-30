@@ -47,7 +47,8 @@ class OpNoviceStackingAction : public G4UserStackingAction
     virtual void PrepareNewEvent();
 
   private:
-    G4int fGammaCounter;
+    G4int fScintillationCounter;
+    G4int fCerenkovCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

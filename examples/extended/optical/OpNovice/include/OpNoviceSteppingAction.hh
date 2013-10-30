@@ -23,22 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: OpNoviceWorkerInitialization.cc 66522 2012-12-19 12:26:04Z ihrivnac $
+// $Id: OpNoviceSteppingAction.hh 69469 2013-05-05 21:42:35Z ihrivnac $
 //
-/// \file OpNovice/src/OpNoviceWorkerInitialization.cc
-/// \brief Implementation of the OpNoviceWorkerInitialization class
-//
+/// \file OpNoviceSteppingAction.hh
+/// \brief Definition of the OpNoviceSteppingAction class
 
-#include "OpNoviceWorkerInitialization.hh"
-#include "OpNoviceSteppingVerbose.hh"
+#ifndef OpNoviceSteppingAction_h
+#define OpNoviceSteppingAction_h 1
 
-OpNoviceWorkerInitialization::OpNoviceWorkerInitialization()
-{;}
+#include "G4UserSteppingAction.hh"
+#include "globals.hh"
 
-OpNoviceWorkerInitialization::~OpNoviceWorkerInitialization()
-{;}
+/// Stepping action class
+/// 
 
-void OpNoviceWorkerInitialization::WorkerInitialize() const
+class OpNoviceSteppingAction : public G4UserSteppingAction
 {
-  G4VSteppingVerbose::SetInstance(new OpNoviceSteppingVerbose());
-}
+  public:
+    OpNoviceSteppingAction();
+    virtual ~OpNoviceSteppingAction();
+
+    // method from the base class
+    virtual void UserSteppingAction(const G4Step*);
+
+  private:
+    G4int fScintillationCounter;
+    G4int fCerenkovCounter;
+    G4int fEventNumber;
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
