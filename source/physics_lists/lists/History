@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-Oct-2013, Alberto Ribon              (phys-lists-V09-06-17)
+- LBE : deleted stoppingPhysics in the destructor (Coverity defect).
+
 15-Oct-2013, Davide Mancusi             (phys-lists-V09-06-16)
 - Missing header.
 
