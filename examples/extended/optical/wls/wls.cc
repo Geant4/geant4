@@ -28,17 +28,7 @@
 /// \file optical/wls/wls.cc
 /// \brief Main program of the optical/wls example
 //
-//
-//
-//
-// --------------------------------------------------------------
-//      GEANT 4 - Example wls
-//
-// --------------------------------------------------------------
-// Comments
-//
-//
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef WIN32
 #include <unistd.h>
@@ -48,7 +38,6 @@
 #include "G4MTRunManager.hh"
 #else
 #include "G4RunManager.hh"
-#include "WLSSteppingVerbose.hh"
 #endif
 
 #include "G4UImanager.hh"
@@ -73,16 +62,13 @@
 // argv[0] is always the name of the program
 // argv[1] points to the first argument, and so on
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int main(int argc,char** argv) 
 {
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
 #else
-  // User Verbose output class
-  //
-  G4VSteppingVerbose::SetInstance(new WLSSteppingVerbose());
-
   G4int seed = 123;
   if (argc  > 2) seed = atoi(argv[argc-1]);
 
@@ -184,3 +170,5 @@ int main(int argc,char** argv)
 
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

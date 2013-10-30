@@ -16,6 +16,9 @@ track of all tags.
  
      ----------------------------------------------------------
 
+October 29, 2013 P. Gumplinger (WLS-V09-06-09)
+- make sure only one SteppingVerbose is activated, remove SetNumberOfThreads
+
 October 09, 2013 I. Hrivnacova (WLS-V09-06-08)
 - Instantiate SteppingVerbose in a new method in WLSActionInitialization
   and removed WLSWorkerInitialization (not needed anymore)

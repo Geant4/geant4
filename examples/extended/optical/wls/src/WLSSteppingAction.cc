@@ -148,7 +148,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
   G4Track* theTrack = theStep->GetTrack();
   WLSUserTrackInformation* trackInformation
       = (WLSUserTrackInformation*)theTrack->GetUserInformation();
- 
+
   G4StepPoint* thePrePoint  = theStep->GetPreStepPoint();
   G4StepPoint* thePostPoint = theStep->GetPostStepPoint();
 
