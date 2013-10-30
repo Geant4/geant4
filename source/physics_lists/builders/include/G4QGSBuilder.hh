@@ -77,7 +77,6 @@ private:
   G4QGSMFragmentation* theQGSM;
 
   G4bool quasielFlag;
-  G4bool diffFlag;
 
 };
 

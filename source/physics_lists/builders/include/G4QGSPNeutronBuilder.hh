@@ -48,7 +48,6 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSModel.hh"
@@ -80,7 +79,6 @@ class G4QGSPNeutronBuilder : public G4VNeutronBuilder
     G4QuasiElasticChannel * theQuasiElastic;
 
     G4QGSMFragmentation * theQGSM;
-    G4ExcitationHandler * theHandler;
 
     G4double theMin;
 

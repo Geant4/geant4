@@ -48,7 +48,6 @@
 #include "G4VPiKBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSModel.hh"
@@ -84,7 +83,6 @@ class G4QGSPPiKBuilder : public G4VPiKBuilder
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
     G4QGSMFragmentation * theQGSM;
-    G4ExcitationHandler * theHandler;
     G4double theMin;
 
 };

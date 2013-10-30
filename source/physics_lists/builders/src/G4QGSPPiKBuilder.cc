@@ -49,6 +49,8 @@
 #include "G4ChipsKaonPlusInelasticXS.hh"
 #include "G4ChipsKaonZeroInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
+#include "G4ExcitationHandler.hh"
+
 
 G4QGSPPiKBuilder::
 G4QGSPPiKBuilder(G4bool quasiElastic) 
@@ -64,7 +66,7 @@ G4QGSPPiKBuilder(G4bool quasiElastic)
   
 
   theCascade = new G4GeneratorPrecompoundInterface;
-  thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
+  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
   theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
@@ -88,7 +90,6 @@ G4QGSPPiKBuilder::
   delete theStringModel;
   delete theModel;
   delete theQGSM;
-  //delete theHandler;
 }
 
 void G4QGSPPiKBuilder::
