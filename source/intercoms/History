@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 October, 2013 P. Mato (intercoms-V09-06-10)
+- Fixed problem with G4GenericMessenger reported by Ivana that SetUnit 
+  and SetRange were not working together. Fixed variable shadowing in 
+  G4AnyType.hh.
+
 25 September, 2013 M. Asai (intercoms-V09-06-09)
 - G4UImessenger constructor with command directory now may take
   a boolean flag of not-to-be-broadcasted.

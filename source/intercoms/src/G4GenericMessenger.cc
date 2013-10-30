@@ -145,6 +145,8 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String
   G4UImessenger* messenger = command->GetMessenger();
   G4String range = command->GetRange();
   std::vector<G4String> guidance;
+  G4String par_name = command->GetParameter(0)->GetParameterName();
+  bool par_omitable = command->GetParameter(0)->IsOmittable();
   for (G4int i = 0; i < command->GetGuidanceEntries(); i++) guidance.push_back(command->GetGuidanceLine(i));
   // Before deleting the command we need to add a fake one to avoid deleting the directory entry and with its guidance
   G4UIcommand tmp((cmdpath+"_tmp").c_str(), messenger);
@@ -154,6 +156,7 @@ G4GenericMessenger::Command& G4GenericMessenger::Command::SetUnit(const G4String
     G4UIcmdWithADoubleAndUnit* cmd_t = new G4UIcmdWithADoubleAndUnit(cmdpath, messenger);
     if(spec == UnitDefault) cmd_t->SetDefaultUnit(unit);
     else if(spec == UnitCategory) cmd_t->SetUnitCategory(unit);
+    cmd_t->SetParameterName(par_name, par_omitable);
     command = cmd_t;
   }
   else if (*type == typeid(G4ThreeVector)) {

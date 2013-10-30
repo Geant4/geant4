@@ -156,14 +156,14 @@ private:
     }
     /** ToString */
     virtual std::string ToString() const {
-      std::stringstream s;
-      s << fRef;
-      return s.str();
+      std::stringstream ss;
+      ss << fRef;
+      return ss.str();
     }
     /** FromString */
     virtual void FromString(const std::string& val) {
-      std::stringstream s(val);
-      s >> fRef;
+      std::stringstream ss(val);
+      ss >> fRef;
     }
     /** representation */
     ValueType& fRef;
