@@ -37,6 +37,7 @@
 #include "LXeTrackingAction.hh"
 #include "LXeSteppingAction.hh"
 #include "LXeStackingAction.hh"
+#include "LXeSteppingVerbose.hh"
 
 #include "LXeRecorderBase.hh"
 
@@ -70,6 +71,13 @@ void LXeActionInitialization::Build() const
   SetUserAction(new LXeEventAction(fRecorder));
   SetUserAction(new LXeTrackingAction(fRecorder));
   SetUserAction(new LXeSteppingAction(fRecorder));
-}  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VSteppingVerbose* LXeActionInitialization::InitializeSteppingVerbose() const
+{
+  return new LXeSteppingVerbose();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 29, 2013 P. Gumplinger (LXe-V09-06-11)
+- remove all reference to LXeWorkerInitialization and SetNumberOfThreads
+
+October 25, 2013 P. Gumplinger (LXe-V09-06-10)
+- Instantiate SteppingVerbose in a new method in LXeActionInitialization
+  and removed LXeWorkerInitialization (not needed anymore)
+
 September 20, 2013 Ivana Hrivnacova (LXe-V09-06-09)
 - Fixed setting of sensitive detectors to logical volumes
 

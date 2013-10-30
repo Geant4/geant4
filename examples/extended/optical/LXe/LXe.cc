@@ -32,10 +32,8 @@
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
-#include "LXeWorkerInitialization.hh"
 #else
 #include "G4RunManager.hh"
-#include "LXeSteppingVerbose.hh"
 #endif
 
 #include "G4UImanager.hh"
@@ -62,12 +60,7 @@ int main(int argc, char** argv)
 {
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
 #else
-  // User Verbose output class
-  //
-  // G4VSteppingVerbose::SetInstance(new LXeSteppingVerbose());
-
   G4RunManager * runManager = new G4RunManager;
 #endif
 
