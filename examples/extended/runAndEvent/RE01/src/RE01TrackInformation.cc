@@ -34,7 +34,8 @@
 #include "G4ios.hh"
 #include "G4SystemOfUnits.hh"    
 
-G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
+G4ThreadLocal G4Allocator<RE01TrackInformation> * aTrackInformationAllocator = 0;
+//G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackInformation::RE01TrackInformation()

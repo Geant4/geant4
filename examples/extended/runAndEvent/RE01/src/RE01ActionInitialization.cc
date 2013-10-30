@@ -23,38 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/include/RE01EventAction.hh
-/// \brief Definition of the RE01EventAction class
+// $Id: RE01ActionInitialization.cc 66522 2012-12-19 12:26:04Z ihrivnac $
 //
-// $Id$
+/// \file src/RE01ActionInitialization.cc
+/// \brief Implementation of the RE01ActionInitialization class
 //
 
-#ifndef RE01EventAction_h
-#define RE01EventAction_h 1
+#include "RE01ActionInitialization.hh"
+#include "RE01PrimaryGeneratorAction.hh"
+#include "RE01RunAction.hh"
+#include "RE01EventAction.hh"
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
+#include "RE01StackingAction.hh"
+#include "RE01TrackingAction.hh"
+#include "RE01SteppingAction.hh"
 
-class G4PrimaryParticle;
+RE01ActionInitialization::RE01ActionInitialization()
+{;}
 
-class RE01EventAction : public G4UserEventAction
+RE01ActionInitialization::~RE01ActionInitialization()
+{;}
+
+void RE01ActionInitialization::Build() const
 {
-public:
-  RE01EventAction();//G4bool);
-  virtual ~RE01EventAction();
+  //
+  SetUserAction(new RE01PrimaryGeneratorAction);
+  //
+  SetUserAction(new RE01RunAction);
+  //
+  SetUserAction(new RE01EventAction);
 
-public:
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void EndOfEventAction(const G4Event*);
+  //
+  SetUserAction(new RE01StackingAction);
+  //
+  SetUserAction(new RE01TrackingAction);
+  //
+  SetUserAction(new RE01SteppingAction);
+}
 
-private:
-  G4int fTrackerCollID;
-  G4int fCalorimeterCollID;
-  G4int fMuonCollID;
-  
-  void PrintPrimary(G4PrimaryParticle* pp,G4int ind);
-};
+void RE01ActionInitialization::BuildForMaster() const
+{
+  //
+  G4UserRunAction* run_action = new RE01RunAction;
+  SetUserAction(run_action);
+}
 
-#endif
-
-    

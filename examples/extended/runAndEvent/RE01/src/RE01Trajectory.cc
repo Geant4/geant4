@@ -47,7 +47,7 @@
 #include "G4PrimaryParticle.hh"
 #include "RE01TrackInformation.hh"
 
-G4Allocator<RE01Trajectory> myTrajectoryAllocator;
+G4ThreadLocal G4Allocator<RE01Trajectory> * myTrajectoryAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01Trajectory::RE01Trajectory(const G4Track* aTrack)

@@ -23,38 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/RE01/include/RE01EventAction.hh
-/// \brief Definition of the RE01EventAction class
+// $Id: RE01ActionInitialization.hh 66522 2012-12-19 12:26:04Z ihrivnac $
 //
-// $Id$
+/// \file include/RE01ActionInitialization.hh
+/// \brief Definition of the RE01ActionInitialization class
 //
 
-#ifndef RE01EventAction_h
-#define RE01EventAction_h 1
+#ifndef RE01ActionInitialization_H
+#define RE01ActionInitialization_H 1
 
-#include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class G4PrimaryParticle;
-
-class RE01EventAction : public G4UserEventAction
+class RE01ActionInitialization : public G4VUserActionInitialization
 {
-public:
-  RE01EventAction();//G4bool);
-  virtual ~RE01EventAction();
+  public:
+  RE01ActionInitialization();
+    virtual ~RE01ActionInitialization();
 
-public:
-  virtual void BeginOfEventAction(const G4Event*);
-  virtual void EndOfEventAction(const G4Event*);
+    virtual void Build() const;
+    virtual void BuildForMaster() const;
 
 private:
-  G4int fTrackerCollID;
-  G4int fCalorimeterCollID;
-  G4int fMuonCollID;
-  
-  void PrintPrimary(G4PrimaryParticle* pp,G4int ind);
+  //G4bool m_bParallelWorld;
 };
 
 #endif
 
-    

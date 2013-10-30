@@ -94,18 +94,18 @@ public:
 
 };
 
-extern G4Allocator<RE01Trajectory> myTrajectoryAllocator;
+extern G4ThreadLocal G4Allocator<RE01Trajectory> * myTrajectoryAllocator;
 
 inline void* RE01Trajectory::operator new(size_t)
 {
-  void* aTrajectory;
-  aTrajectory = (void*)myTrajectoryAllocator.MallocSingle();
-  return aTrajectory;
+  if(!myTrajectoryAllocator)
+    myTrajectoryAllocator = new G4Allocator<RE01Trajectory>;
+  return (void*)myTrajectoryAllocator->MallocSingle();
 }
 
 inline void RE01Trajectory::operator delete(void* aTrajectory)
 {
-  myTrajectoryAllocator.FreeSingle((RE01Trajectory*)aTrajectory);
+  myTrajectoryAllocator->FreeSingle((RE01Trajectory*)aTrajectory);
 }
 
 #endif

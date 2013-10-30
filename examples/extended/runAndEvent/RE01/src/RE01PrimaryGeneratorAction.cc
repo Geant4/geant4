@@ -61,12 +61,21 @@ RE01PrimaryGeneratorAction::RE01PrimaryGeneratorAction()
 
   fMessenger = new RE01PrimaryGeneratorMessenger(this);
   fUseHEPEvt = true;
+  
+  G4cout << "*********************************************2" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4AutoLock.hh"
+namespace {
+  G4Mutex RE01PrimGenDestrMutex = G4MUTEX_INITIALIZER;
+  G4Mutex RE01PrimGenMutex = G4MUTEX_INITIALIZER;
+}
+
 RE01PrimaryGeneratorAction::~RE01PrimaryGeneratorAction()
 {
-  delete fHEPEvt;
+  G4AutoLock lock(&RE01PrimGenDestrMutex);
+  if(fHEPEvt) {delete fHEPEvt; fHEPEvt = 0;}
   delete fParticleGun;
   delete fMessenger;
 }
@@ -75,7 +84,9 @@ RE01PrimaryGeneratorAction::~RE01PrimaryGeneratorAction()
 void RE01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   if(fUseHEPEvt)
-  { fHEPEvt->GeneratePrimaryVertex(anEvent); }
+  {
+    G4AutoLock lock(&RE01PrimGenMutex);
+    fHEPEvt->GeneratePrimaryVertex(anEvent); }
   else
   { fParticleGun->GeneratePrimaryVertex(anEvent); }
 }

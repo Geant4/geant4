@@ -40,18 +40,19 @@
 // --------------------------------------------------------------
 
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
 #include "G4UImanager.hh"
 
 #include "RE01DetectorConstruction.hh"
 #include "RE01PhysicsList.hh"
 #include "QGSP_BERT.hh"
-#include "RE01PrimaryGeneratorAction.hh"
-#include "RE01RunAction.hh"
-#include "RE01EventAction.hh"
-#include "RE01StackingAction.hh"
-#include "RE01TrackingAction.hh"
-#include "RE01SteppingAction.hh"
+
+#include "RE01ActionInitialization.hh"
+
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -63,7 +64,12 @@
 
 int main(int argc,char** argv)
 {
-  G4RunManager* runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+ G4MTRunManager * runManager = new G4MTRunManager;
+ //runManager->SetNumberOfThreads(4);
+#else
+ G4RunManager * runManager = new G4RunManager;
+#endif
 
 #ifdef G4VIS_USE
   // Visualization manager construction
@@ -75,14 +81,9 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new RE01PhysicsList);
   //runManager->SetUserInitialization(new QGSP_BERT);
   
+  runManager->SetUserInitialization(new RE01ActionInitialization);
+  
   runManager->Initialize();
-
-  runManager->SetUserAction(new RE01PrimaryGeneratorAction);
-  runManager->SetUserAction(new RE01RunAction);  
-  runManager->SetUserAction(new RE01EventAction);
-  runManager->SetUserAction(new RE01StackingAction);
-  runManager->SetUserAction(new RE01TrackingAction);
-  runManager->SetUserAction(new RE01SteppingAction);
   
   if(argc==1)
   {

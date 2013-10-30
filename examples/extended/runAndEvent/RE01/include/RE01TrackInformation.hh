@@ -89,16 +89,18 @@ private:
 
 };
 
-extern G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
+extern G4ThreadLocal G4Allocator<RE01TrackInformation> * aTrackInformationAllocator;
+//extern  G4Allocator<RE01TrackInformation> aTrackInformationAllocator;
 
 inline void* RE01TrackInformation::operator new(size_t)
-{ void* aTrackInfo;
-  aTrackInfo = (void*)aTrackInformationAllocator.MallocSingle();
-  return aTrackInfo;
+{
+  if(!aTrackInformationAllocator)
+    aTrackInformationAllocator = new G4Allocator<RE01TrackInformation>;
+  return (void*)aTrackInformationAllocator->MallocSingle();
 }
 
 inline void RE01TrackInformation::operator delete(void *aTrackInfo)
-{ aTrackInformationAllocator.FreeSingle((RE01TrackInformation*)aTrackInfo);}
+{ aTrackInformationAllocator->FreeSingle((RE01TrackInformation*)aTrackInfo);}
 
 #endif
 

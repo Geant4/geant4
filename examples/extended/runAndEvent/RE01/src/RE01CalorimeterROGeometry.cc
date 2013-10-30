@@ -110,7 +110,7 @@ G4VPhysicalVolume* RE01CalorimeterROGeometry::Build()
   G4LogicalVolume * caloROcellLog
     = new G4LogicalVolume(caloROcellTub, dummyMat, "caloROcellLogical",0,0,0);
 //  G4VPhysicalVolume * caloROcellPhys =
-      new G4PVReplica("caloROcellPhysical", caloROcellLog, caloROphiDivisionPhys,
+  new G4PVReplica("caloROcellPhysical", caloROcellLog, caloROphiDivisionPhys,
                       kZAxis, fSegmentsinZ,2.*fCaloRing_dz);
 
   return ROWorldPhys;

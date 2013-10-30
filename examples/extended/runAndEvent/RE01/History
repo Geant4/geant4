@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 29, 2013 A. Kimura (exampleRE01-V09-06-07)
+- Added RE01ActionInitialization.{hh,cc}
+
+Oct 25, 2013 M. Asai (exampleRE01-V09-06-06)
+- MT migration.
+
 Aug 27, 2013 G. Cosmo (exampleRE01-V09-06-05)
 - Added G4Ellipsoid among solids enabled for parameterisation
 

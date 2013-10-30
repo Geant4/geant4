@@ -36,6 +36,8 @@
 #include "globals.hh"
 
 class G4VPhysicalVolume;
+class G4LogicalVolume;
+class G4VReadOutGeometry;
 
 class RE01DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -45,10 +47,14 @@ public:
   
 public:
   virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
   
 private:
 #include "RE01DetectorParameterDef.hh"
 
+  G4LogicalVolume * fTrackerLayer_log;
+  G4LogicalVolume * fCalorimeter_log;
+  G4VReadOutGeometry * fCalorimeterRO;
 };
 
 #endif

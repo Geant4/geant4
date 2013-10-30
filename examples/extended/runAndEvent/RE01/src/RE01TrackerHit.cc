@@ -42,7 +42,7 @@
 #include "G4VisAttributes.hh"
 #include "G4SystemOfUnits.hh"    
 
-G4Allocator<RE01TrackerHit> RE01TrackerHitAllocator;
+G4ThreadLocal G4Allocator<RE01TrackerHit> * RE01TrackerHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 RE01TrackerHit::RE01TrackerHit()

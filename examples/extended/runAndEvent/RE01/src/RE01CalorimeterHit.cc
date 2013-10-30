@@ -43,7 +43,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4SystemOfUnits.hh"    
 
-G4Allocator<RE01CalorimeterHit> RE01CalorimeterHitAllocator;
+G4ThreadLocal G4Allocator<RE01CalorimeterHit> * RE01CalorimeterHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01CalorimeterHit::RE01CalorimeterHit(G4LogicalVolume* logVol,
