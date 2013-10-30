@@ -1,0 +1,130 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                     Test 19 History file
+                     --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Oct 29, 2013 Julia Yarba (test19-V09-06-05)
+-- Add 1st version of MC/Data plotting script (so far, only for NA49)
+
+Oct 25, 2013 Julia Yarba (test19-V09-06-04)
+-- Update the code to use common-purpose code from test23/shared
+-- Remove duplicate from /src "process wrappers" (now in test23/shared)
+-- Update CMakeList.txt
+-- Fix compilation warnings
+
+Feb 22, 2013 Julia Yarba (test19-V09-06-03)
+-- Include NA61 kplus data (p+C)
+-- Update code and Root script
+
+Feb 16, 2013 Julia Yarba (test19-V09-06-02)
+-- Include NA49 tables for p+C and analysis tools for a part 
+   of those newly added spectra
+
+Feb 5, 2013 Julia Yarba (test19-V09-06-01)
+- From now on, is used as a validation package for high(er) energy end
+- 1st version of validation application code + a portion of NA61 data 
+  & an analysis Root script
+- In the near future, will also include data from NA49 and MIPP
+
+Dec 10th 2012 Alberto Ribon  (test19-V09-06-00)
+-  Removed the CHIPS test: the slot is now available.
+
+Oct 9th 2012 Gabriele Cosmo  (test19-V09-05-02)
+- Explicit inclusion of units and constants headers.
+
+May 11th 2012 Mikhail Kosov  (test19-V09-05-01)
+- Work around for e/m conservation
+
+Apr 20th 2012 Mikhail Kosov  (test19-V09-05-00)
+- Added testing of G4QNGamma + workaround with a seed
+
+Nov 16th 2011 G.Folger        (test19-V09-04-05)
+- Migrate to new G4Exception
+
+Nov 8, 2011  Mikhail Kossov (test19-V09-04-04)
+- Navigator is out of all loops (for 9.4-ref10)
+
+Nov 1, 2011  Mikhail Kossov (test19-V09-04-03)
+- bug fix in debug print (200*(27^2))/200-((200*27)/200)^2=1.8*10^-12<0
+
+Nov 1, 2011  Mikhail Kossov (test19-V09-04-02)
+- the dE2+dP2 limit is increased from .27 to .5 MeV2 (for rescattering)
+
+Sept 30th 2011 G.Folger        (test19-V09-04-01)
+             Fix gcc46 compilation warning in test19.cc
+
+Jan 20th, 2010 Luciano Pandola (test19-V09-04-00)
+- removed obsolete G4hLowEnergyIonisation from the 
+  physics list
+
+Oct 28th, 2010 Gunter Folger   (test19-V09-03-07)
+- trivial fix for CLHEP 2.1.x in test19.cc
+
+Jun 24th, 2010  Mikhail Kossov (test19-V09-03-06)
+- base version for the test group (with harpcdp)
+
+Jun 24th, 2010  Mikhail Kossov (test19-V09-03-05)
+- harpcdp directory is added (working internal version)
+
+Jun 18th, 2010  Mikhail Kossov (test19-V09-03-04)
+- More processes to test, corrections in QGS/FTF
+
+Jun 1st, 2010  Mikhail Kossov (test19-V09-03-03)
+- Get rid of G4MultipleScattering in Test19PhysicsList
+
+Apr 9th, 2010  Mikhail Kossov (test19-V09-03-02)
+- Neutron capture and fusion cross-sections test is added
+
+Feb 26th, 2010  Mikhail Kossov (test19-V09-03-01)
+- Elastic cross-sections test is extended and improved
+
+Jan 27th, 2010  Mikhail Kossov (test19-V09-03-00)
+- Elastic cross-sections test is added
+
+Nov 27th, 2009  Mikhail Kossov (test19-V09-02-10)
+- PhotonEnergy histogram is added
+
+Nov 17th, 2009  Mikhail Kossov (test19-V09-02-09)
+- Magnetic field and G4QCollision -> G4QInelastic
+
+Oct 12th, 2009  Mikhail Kossov (test19-V09-02-08)
+- Inelastic cross-sections improvement
+
+Sept 22nd, 2009  Mikhail Kossov (test19-V09-02-07)
+- Inelastic cross-sections and LowEnergy test
+
+Sept 8nd, 2009  Mikhail Kossov (test19-V09-02-06)
+- More detailed check of quanum numbers
+
+Sept 2nd, 2009  Mikhail Kossov (test19-V09-02-05)
+- Made usable for the Ion-Ion Inelastic tests
+
+Aug 28th, 2009  Mikhail Kossov (test19-V09-02-04)
+- Small Valgrind induced improvements
+
+Aug 21th, 2009  Mikhail Kossov (test19-V09-02-03)
+- Updated version for checking all-particles, all-targets, all-energies CHIPS
+
+May 26th, 2009  Mikhail Kossov (test19-V09-02-01)
+- pA and nA interasctions are added to the test
+
+May 26th, 2009  Mikhail Kossov (test19-V09-02-00)
+- Update according to new restrictions for light ions implemented
+  in G4VUserPhysicsList (run category).
+- Picked up some old changes lying on the HEAD.
+
+May 25th, 2009  Mikhail Kossov
+- History is created.
+

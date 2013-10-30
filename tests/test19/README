@@ -1,0 +1,24 @@
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+  Responsible:
+  Julia Yarba, FNAL (email: yarba_j@fnal.gov or Julia.Yarba@cern.ch)
+  
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+  This test is for validating Geant4 higher-energy end models, 
+  such as FTF(P) or QGS(P) vs experimental data in the range
+  from 31GeV/c (N161) and up to 158GeV/c (NA49).
+  
+  In the initial round we plan to add here NA61/SHINE, NA49, 
+  and MIPP data.
+  
+  Other datasets starting from ~20GeV/c can be added, as they 
+  become available and/or suggested.
+  
+  At present (Feb.22, 2013), a portion of NA61 and NA49 spectra 
+  is here, together with Geant4 application code and an analysis 
+  scripts.
+  
+  WORK IN PROGESS !!!
+  MORE DATASETS ARE COMING SOON !!!

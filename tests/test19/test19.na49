@@ -1,0 +1,28 @@
+#verbose
+-1
+#rad
+//--------Proton_processes
+#particle
+proton
+#isNA49
+#position(mm)
+0. 0. 0.
+#direction
+0. 0. 1.
+//--------
+#material
+C
+#momentum(MeV/c)
+158000.0
+#events
+10000
+#generator
+qgsp
+#run
+#generator
+qgsp-g4lund-str-fragm
+#run
+#generator
+ftfp
+#run
+#exit
