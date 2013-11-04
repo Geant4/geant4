@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+                                            field-V09-06-09 - same as
+Nov 01st, 2013 P.Gumplinger               - field-V09-06-08
+- add G4RepleteEofM: EofM that includes force due to B, E, and gravity field
+  as well as mu*grad(B) and spin tracking.
+
 May 10th, 2013 P.Gumplinger/J.Apostolakis - field-V09-06-07
 -----------------------------------------
 - Revised number of field components (to allow up to 24).
