@@ -29,7 +29,6 @@
 /// \brief Implementation of the B5DetectorConstruction class
 
 #include "B5DetectorConstruction.hh"
-#include "B5DetectorConstMessenger.hh"
 #include "B5MagneticField.hh"
 #include "B5CellParameterisation.hh"
 #include "B5HodoscopeSD.hh"
@@ -59,6 +58,7 @@
 #include "G4SDManager.hh"
 #include "G4VSensitiveDetector.hh"
 #include "G4RunManager.hh"
+#include "G4GenericMessenger.hh"
 
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
@@ -84,9 +84,11 @@ B5DetectorConstruction::B5DetectorConstruction()
   fArmAngle(30.*deg), fArmRotation(0), fSecondArmPhys(0)
 
 {
-    fMessenger = new B5DetectorConstMessenger(this);
     fArmRotation = new G4RotationMatrix();
     fArmRotation->rotateY(fArmAngle);
+    
+    // define commands for this class
+    DefineCommands();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -462,6 +464,26 @@ void B5DetectorConstruction::SetArmAngle(G4double val)
     
     // tell G4RunManager that we change the geometry
     G4RunManager::GetRunManager()->GeometryHasBeenModified();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B5DetectorConstruction::DefineCommands()
+{
+    // Define /B5/detector command directory using generic messenger class
+    fMessenger = new G4GenericMessenger(this, 
+                                        "/B5/detector/", 
+                                        "Detector control");
+
+    // armAngle command
+    G4GenericMessenger::Command& armAngleCmd
+      = fMessenger->DeclareMethod("armAngle", 
+                                  &B5DetectorConstruction::SetArmAngle, 
+                                  "Set rotation angle of the second arm.");
+    armAngleCmd.SetParameterName("angle", true);
+    armAngleCmd.SetRange("angle>=0. && angle<180.");                                
+    armAngleCmd.SetDefaultValue("30.");
+    armAngleCmd.SetDefaultUnit("deg");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

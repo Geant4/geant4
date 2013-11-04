@@ -38,13 +38,13 @@
 
 #include <vector>
 
-class B5DetectorConstMessenger;
 class B5MagneticField;
 
 class G4VPhysicalVolume;
 class G4Material;
 class G4VSensitiveDetector;
 class G4VisAttributes;
+class G4GenericMessenger;
 
 /// Detector construction
 
@@ -63,7 +63,9 @@ public:
     void ConstructMaterials();
     
 private:
-    B5DetectorConstMessenger* fMessenger;
+    void DefineCommands();
+
+    G4GenericMessenger* fMessenger;
     
     static G4ThreadLocal B5MagneticField* fMagneticField;
     static G4ThreadLocal G4FieldManager* fFieldMgr;

@@ -5,29 +5,30 @@
 #
 #  turn off randomization 
 #
-/mydet/randomizePrimary FALSE
-/mydet/sigmaMomentum 0. 
-/mydet/sigmaAngle 0.
-/mydet/verbose 10
+/B5/generator/randomizePrimary FALSE
+/B5/generator/sigmaMomentum 0. 
+/B5/generator/sigmaAngle 0.
+/run/verbose 1
+/run/printProgress 0
 #
-/mydet/armAngle 30. deg
+/B5/detector/armAngle 30. deg
 /gun/particle proton
-/mydet/momentum 100. GeV
-/mydet/fieldValue 100. tesla
+/B5/generator/momentum 100. GeV
+/B5/field/value 100. tesla
 /analysis/setFileName B5_proton
 /run/beamOn 30
 #
-/mydet/armAngle 60. deg
+/B5/detector/armAngle 60. deg
 /gun/particle pi+
-/mydet/momentum 100. GeV
-/mydet/fieldValue 200. tesla
+/B5/generator/momentum 100. GeV
+/B5/field/value 200. tesla
 /analysis/setFileName B5_pi+
 /run/beamOn 30
 #
 /gun/particle e+
-/mydet/armAngle 30. deg
-/mydet/momentum 100. GeV
-/mydet/fieldValue 100. tesla
+/B5/detector/armAngle 30. deg
+/B5/generator/momentum 100. GeV
+/B5/field/value 100. tesla
 /analysis/setFileName B5_e+
 /run/beamOn 30
 

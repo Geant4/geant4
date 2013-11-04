@@ -8,19 +8,19 @@
 # field value: 1.0*tesla
 /run/beamOn 3
 #
-/mydet/armAngle 0. deg
-/mydet/fieldValue 0. tesla
+/B5/detector/armAngle 0. deg
+/B5/field/value 0. tesla
 /run/beamOn 3
 #
-/mydet/armAngle 60. deg
-/mydet/fieldValue 2. tesla
+/B5/detector/armAngle 60. deg
+/B5/field/value 2. tesla
 /run/beamOn 3
 #
-/mydet/armAngle 30. deg
-/mydet/fieldValue 1. tesla
-/mydet/momentum 2. GeV
-/mydet/sigmaMomentum 0. 
-/mydet/sigmaAngle 0.
-/mydet/sigmaAngle 2. deg
+/B5/detector/armAngle 30. deg
+/B5/field/value 1. tesla
+/B5/generator/momentum 2. GeV
+/B5/generator/sigmaMomentum 0. 
+/B5/generator/sigmaAngle 0.
+/B5/generator/sigmaAngle 2. deg
 /run/beamOn 3
 

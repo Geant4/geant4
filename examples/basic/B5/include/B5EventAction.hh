@@ -35,8 +35,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class B5EventActionMessenger;
-
 /// Event action
 
 class B5EventAction : public G4UserEventAction
@@ -47,9 +45,6 @@ public:
     
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
-
-    void SetVerbose(G4int val) { fVerboseLevel = val; }
-    G4int GetVerbose() const { return fVerboseLevel; }
     
 private:
     G4int fHHC1ID;
@@ -58,9 +53,6 @@ private:
     G4int fDHC2ID;
     G4int fECHCID;
     G4int fHCHCID;
-    
-    B5EventActionMessenger* fMessenger;
-    G4int fVerboseLevel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

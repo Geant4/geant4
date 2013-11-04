@@ -34,7 +34,7 @@
 #include "globals.hh"
 #include "G4MagneticField.hh"
 
-class B5MagneticFieldMessenger;
+class G4GenericMessenger;
 
 /// Magnetic field
 
@@ -50,7 +50,9 @@ public:
     G4double GetField() const { return fBy; }
     
 private:
-    B5MagneticFieldMessenger* fMessenger;
+    void DefineCommands();
+
+    G4GenericMessenger* fMessenger;
     G4double fBy;
 };
 

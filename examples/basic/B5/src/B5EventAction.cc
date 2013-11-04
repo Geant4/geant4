@@ -29,7 +29,6 @@
 /// \brief Implementation of the B5EventAction class
 
 #include "B5EventAction.hh"
-#include "B5EventActionMessenger.hh"
 #include "B5HodoscopeHit.hh"
 #include "B5DriftChamberHit.hh"
 #include "B5EmCalorimeterHit.hh"
@@ -37,6 +36,7 @@
 #include "B5Analysis.hh"
 
 #include "G4Event.hh"
+#include "G4RunManager.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4VHitsCollection.hh"
@@ -53,19 +53,16 @@ B5EventAction::B5EventAction()
   fDHC1ID(-1),
   fDHC2ID(-1),
   fECHCID(-1),
-  fHCHCID(-1),
-  fMessenger(0),
-  fVerboseLevel(1)
+  fHCHCID(-1)
 {
-    fMessenger = new B5EventActionMessenger(this);
+  // set printing per each event
+  G4RunManager::GetRunManager()->SetPrintProgress(1);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5EventAction::~B5EventAction()
-{
-    delete fMessenger;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -210,7 +207,8 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
     // Print diagnostics
     // 
     
-    if (fVerboseLevel==0 || event->GetEventID() % fVerboseLevel != 0) return;
+    G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+    if ( printModulo==0 || event->GetEventID() % printModulo != 0) return;
     
     G4PrimaryParticle* primary = event->GetPrimaryVertex(0)->GetPrimary(0);
     G4cout << G4endl

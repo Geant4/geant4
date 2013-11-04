@@ -29,12 +29,12 @@
 /// \brief Implementation of the B5PrimaryGeneratorAction class
 
 #include "B5PrimaryGeneratorAction.hh"
-#include "B5PrimaryGeneratorMessenger.hh"
 
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4GenericMessenger.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 
@@ -42,7 +42,7 @@
 
 B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
 : G4VUserPrimaryGeneratorAction(),     
-  fParticleGun(0), fGunMessenger(0), 
+  fParticleGun(0), fMessenger(0), 
   fPositron(0), fMuon(0), fPion(0), fKaon(0), fProton(0),
   fMomentum(1000.*MeV),
   fSigmaMomentum(50.*MeV),
@@ -51,9 +51,6 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
 {
     G4int n_particle = 1;
     fParticleGun  = new G4ParticleGun(n_particle);
-    
-    //create a messenger for this class
-    fGunMessenger = new B5PrimaryGeneratorMessenger(this);
     
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4String particleName;
@@ -66,6 +63,9 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
     // default particle kinematics
     fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-8.*m));
     fParticleGun->SetParticleDefinition(fPositron);
+    
+    // define commands for this class
+    DefineCommands();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,7 +73,7 @@ B5PrimaryGeneratorAction::B5PrimaryGeneratorAction()
 B5PrimaryGeneratorAction::~B5PrimaryGeneratorAction()
 {
     delete fParticleGun;
-    delete fGunMessenger;
+    delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,6 +121,57 @@ void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
                                                              std::cos(angle)));
     
     fParticleGun->GeneratePrimaryVertex(event);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B5PrimaryGeneratorAction::DefineCommands()
+{
+    // Define /B5/generator command directory using generic messenger class
+    fMessenger 
+      = new G4GenericMessenger(this, 
+                               "/B5/generator/", 
+                               "Primary generator control");
+              
+    // momentum command
+    G4GenericMessenger::Command& momentumCmd
+      = fMessenger->DeclareProperty("momentum", fMomentum, 
+                                    "Mean momentum of primaries.");
+    momentumCmd.SetParameterName("p", true);
+    momentumCmd.SetRange("p>=0.");                                
+    momentumCmd.SetDefaultValue("1.");
+    momentumCmd.SetDefaultUnit("GeV");
+    // ok
+    //momentumCmd.SetParameterName("p", true);
+    //momentumCmd.SetRange("p>=0.");                                
+    
+    // sigmaMomentum command
+    G4GenericMessenger::Command& sigmaMomentumCmd
+      = fMessenger->DeclareProperty("sigmaMomentum", fSigmaMomentum, 
+                                    "Sigma momentum of primaries.");
+    sigmaMomentumCmd.SetParameterName("sp", true);
+    sigmaMomentumCmd.SetRange("sp>=0.");                                
+    sigmaMomentumCmd.SetDefaultValue("50.");
+    sigmaMomentumCmd.SetDefaultUnit("MeV");
+
+    // sigmaAngle command
+    G4GenericMessenger::Command& sigmaAngleCmd
+      = fMessenger->DeclareProperty("sigmaAngle", fSigmaAngle, 
+                                    "Sigma angle divergence of primaries.");
+    sigmaAngleCmd.SetParameterName("t", true);
+    sigmaAngleCmd.SetRange("t>=0.");                                
+    sigmaAngleCmd.SetDefaultValue("2.");
+    sigmaAngleCmd.SetDefaultUnit("deg");
+
+    // randomizePrimary command
+    G4GenericMessenger::Command& randomCmd
+      = fMessenger->DeclareProperty("randomizePrimary", fRandomizePrimary);
+    G4String guidance = "Boolean flag for randomizing primary particle types.\n";   
+    guidance += "In case this flag is false, you can select the primary particle\n";
+    guidance += "  with /gun/particle command.";                               
+    randomCmd.SetGuidance(guidance);
+    randomCmd.SetParameterName("flg", true);
+    randomCmd.SetDefaultValue("true");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

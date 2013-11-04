@@ -64,26 +64,33 @@
    three-dimensional array of scintillator-lead sandwiches.
 
    Several aspects of the event may be changed interactively by the user:
-     - initial particle type
+     - angle of the second spectrometer arm
+     - strength of magnetic field
      - initial momentum and angle
      - momentum and angle spreads
      - type of initial particle may be randomized
-     - strength of magnetic field
-     - angle of the second spectrometer arm
-
-   All UI commans are available in /mydet command directory:
+     
+   The initial particle type can be changed using the G4ParticleGun command:
 \verbatim
-/mydet/armAngle angle unit
-/mydet/verbose  verboseLevel
-/mydet/fieldValue field unit
-/mydet/momentum  value unit
-/mydet/sigmaMomentum value unit
-/mydet/sigmaAngle value unit
-/mydet/randomizePrimary [true|false]
+/gun/particle particleName
 \endverbatim
-
-   They are implemented in B5DetectorConstMessenger, B5EventActionMessenger,
-   B5MagneticFieldMessenger and B5PrimaryGeneratorMessenger classes.
+       
+   The UI commands specific to this example are available in /B5 command 
+   directory:
+\verbatim
+/B5/detector/armAngle angle unit
+/B5/field/value field unit
+/B5/generator/momentum  value unit
+/B5/generator/sigmaMomentum value unit
+/B5/generator/sigmaAngle value unit
+/B5/generator/randomizePrimary [true|false]
+\endverbatim
+     
+   They are implemented in 
+    - B5DetectorConstruction::DefineCommands(), 
+    - B5MagneticField::DefineCommands() and 
+    - B5PrimaryGeneratorAction::DefineCommands() methods 
+   using G4GenericMessenger class.
 
 \section B5_s4 DETECTOR RESPONSE
 
@@ -142,6 +149,8 @@
    When running in multi-threading mode, the histograms accumulated on threads are
    automatically merged in a single output file, while the ntuple is written
    in files per thread.
+
+<hr>
 
 The following paragraphs are common to all basic examples
 

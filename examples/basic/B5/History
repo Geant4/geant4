@@ -11,6 +11,19 @@ $Id$
 
 ---------------------------------------------------------------------------  
 
+02 November 2013 Ivana Hrivnacova (exampleB5-V09-06-06)
+- New tag for testing, no changes in the example
+
+31 October 2013 Ivana Hrivnacova (exampleB5-V09-06-05)
+- SetDefaultValue arguments passed in generic messenger commands
+  must be of G4Stringg type.
+  (This fixes compilation warnings.)
+
+30 October 2013 Ivana Hrivnacova (exampleB5-V09-06-04)
+- Replaced messenger classes with use of G4GenericMessenger
+- Removed SetNumberOfThreads from main
+- Updated macros and README
+
 10 October 2013 Ivana Hrivnacova (exampleB5-V09-06-03)
 - Fixed compiler warning from B5EventAction
 - Added class descriptions
