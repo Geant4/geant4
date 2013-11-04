@@ -52,6 +52,12 @@ const G4double G4NuclideTable::levelTolerance = 1.0*eV;
   
  
 ///////////////////////////////////////////////////////////////////////////////
+G4NuclideTable* G4NuclideTable::GetInstance() {
+   static G4NuclideTable instance;
+   return &instance;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 G4NuclideTable::G4NuclideTable()
   :G4VIsotopeTable("Isomer"),
    threshold_of_half_life(1000.0*ns),

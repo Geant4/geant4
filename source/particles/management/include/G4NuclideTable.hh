@@ -66,10 +66,7 @@ class G4NuclideTable : public G4VIsotopeTable
       //G4NuclideTable& operator=( const G4NuclideTable& p ){};
 
    public:
-      static G4NuclideTable* GetInstance() {
-         static G4NuclideTable instance;
-         return &instance;
-      };
+      static G4NuclideTable* GetInstance(); 
       static G4NuclideTable* GetNuclideTable() { return GetInstance(); };
 public:
   typedef std::vector<G4IsotopeProperty*> G4IsotopeList;
