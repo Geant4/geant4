@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1 November, 2013 P. Mato (intercoms-V09-06-11)
+- Moved template specilizations from G4AnyType.cc to header file to
+  avoid Windows linking problems.
+
 29 October, 2013 P. Mato (intercoms-V09-06-10)
 - Fixed problem with G4GenericMessenger reported by Ivana that SetUnit 
   and SetRange were not working together. Fixed variable shadowing in 
