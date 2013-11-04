@@ -55,9 +55,12 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4ParticleChangeForGamma.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+const G4double log106 = 6*G4Log(10.);
 
 G4VEmModel::G4VEmModel(const G4String& nam):
   flucModel(0),anglModel(0), name(nam), lowLimit(0.1*CLHEP::keV), 
@@ -140,10 +143,10 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
   // large number of points requires significant increase of memory
   //G4bool spline = man->SplineFlag();
   G4bool spline = false;
-  /*
-  G4cout << "IES: for " << GetName() << " Emin(MeV)= " << lowLimit/MeV 
-  	 << " Emax(MeV)= " << highLimit/MeV << G4endl;
-  */
+  
+  //G4cout << "IES: for " << GetName() << " Emin(MeV)= " << lowLimit/MeV 
+  //	 << " Emax(MeV)= " << highLimit/MeV << G4endl;
+  
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth
   if(highLimit <= lowLimit) { return; }
@@ -165,37 +168,39 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
 
   // initialise vector
   for(G4int i=0; i<numOfCouples; ++i) {
-    //if(cuts[i] < highLimit) {
-      fCurrentCouple = theCoupleTable->GetMaterialCutsCouple(i);
-      const G4Material* material = fCurrentCouple->GetMaterial();
 
-      // selector already exist check if should be deleted
-      G4bool create = true;
-      if((*elmSelectors)[i]) {
-	if(material == ((*elmSelectors)[i])->GetMaterial()) { create = false; }
-	else { delete (*elmSelectors)[i]; }
-      }
-      if(create) {
-        G4double emin = std::max(lowLimit, MinPrimaryEnergy(material, part));
-        //if(emin < highLimit) {
-	  G4int nbins = G4int(man->GetNumberOfBinsPerDecade()
-			      * std::log10(highLimit/emin) / 6.0);
-	  if(nbins < 3) { nbins = 3; }
+    // no need in element selectors for infionite cuts
+    if(cuts[i] == DBL_MAX) { continue; }
+   
+    fCurrentCouple = theCoupleTable->GetMaterialCutsCouple(i);
+    const G4Material* material = fCurrentCouple->GetMaterial();
 
-	  (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
-						       emin,highLimit,spline);
-	  //}
-      }
-      ((*elmSelectors)[i])->Initialise(part, cuts[i]);
-      /*     
+    // selector already exist check if should be deleted
+    G4bool create = true;
+    if((*elmSelectors)[i]) {
+      if(material == ((*elmSelectors)[i])->GetMaterial()) { create = false; }
+      else { delete (*elmSelectors)[i]; }
+    }
+    if(create) {
+      G4double emin = std::max(lowLimit, 
+			       MinPrimaryEnergy(material, part, cuts[i]));
+      G4double emax = std::max(highLimit, 10*emin);
+      G4int nbins = G4int(man->GetNumberOfBinsPerDecade()
+			  *G4Log(emax/emin)/log106);
+      if(nbins < 3) { nbins = 3; }
+
+      (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
+						   emin,emax,spline);
+    }
+    ((*elmSelectors)[i])->Initialise(part, cuts[i]);
+    /*      
       G4cout << "G4VEmModel::InitialiseElmSelectors i= " << i
 	     << " idx= " << fCurrentCouple->GetIndex() 
 	     << "  "  << part->GetParticleName() 
 	     << " for " << GetName() << "  cut= " << cuts[i] 
 	     << "  " << (*elmSelectors)[i] << G4endl;      
       ((*elmSelectors)[i])->Dump(part);
-      */
-      //}
+    */
   } 
 }
 
@@ -249,7 +254,8 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
   SetupForMaterial(p, material, ekin);
   G4double cross = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  const G4double* theAtomNumDensityVector = 
+    material->GetVecNbOfAtomsPerVolume();
   G4int nelm = material->GetNumberOfElements(); 
   if(nelm > nsec) {
     xsec.resize(nelm);

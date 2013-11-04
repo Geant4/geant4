@@ -281,8 +281,8 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   // Are models defined?
   if(!isWorld) {
     G4ExceptionDescription ed;
-    ed << "No models defined for the World volume for " << p->GetParticleName() 
-       << " !";
+    ed << "No models defined for the World volume for " 
+       << p->GetParticleName() << " !";
     G4Exception("G4EmModelManager::Initialise","em0002",
 		FatalException, ed);
   }
@@ -493,7 +493,8 @@ G4EmModelManager::Initialise(const G4ParticleDefinition* p,
         G4double rcut = std::min(minSubRange*pcuts->GetProductionCut(idx), 
 				 maxSubCutInRange);
 	G4double tcutmax = 
-	  theCoupleTable->ConvertRangeToEnergy(secondaryParticle,material,rcut);
+	  theCoupleTable->ConvertRangeToEnergy(secondaryParticle,
+					       material,rcut);
 	if(tcutmax < subcut) { subcut = tcutmax; }
 	(*theSubCuts)[i] = subcut;
       }
@@ -748,7 +749,9 @@ void G4EmModelManager::DumpModelList(G4int verb)
 	}
 	G4VEmAngularDistribution* an = model->GetAngularDistribution();
         if(an) { G4cout << "   " << an->GetName(); }
-        if(fluoFlag && model->DeexcitationFlag()) { G4cout << "  FluoActive"; }
+        if(fluoFlag && model->DeexcitationFlag()) { 
+	  G4cout << "  FluoActive"; 
+	}
 	G4cout << G4endl;
       }  
     }

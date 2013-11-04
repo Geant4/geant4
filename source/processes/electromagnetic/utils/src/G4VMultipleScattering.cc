@@ -87,7 +87,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType):
+G4VMultipleScattering::G4VMultipleScattering(const G4String& name, 
+					     G4ProcessType):
   G4VContinuousDiscreteProcess("msc", fElectromagnetic),
   numberOfModels(0),
   firstParticle(0),
@@ -419,7 +420,8 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   if(currentModel->IsActive(ekin) && gPathLength >= geomMin 
      && ekin >= lowestKinEnergy) {
     isActive = true;
-    tPathLength = currentModel->ComputeTruePathLengthLimit(track, gPathLength);
+    tPathLength = 
+      currentModel->ComputeTruePathLengthLimit(track, gPathLength);
     if (tPathLength < physStepLimit) { 
       *selection = CandidateForSelection; 
     }
@@ -504,7 +506,8 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 
       G4double r2 = displacement.mag2();
 
-      //G4cout << "R= " << sqrt(r2) << " postSafety= " << postSafety << G4endl;
+      //G4cout << "R= " << sqrt(r2) << " postSafety= " << postSafety 
+      // << G4endl;
 
       // make correction for displacement
       if(r2 > 0.0) {
@@ -560,7 +563,8 @@ G4double G4VMultipleScattering::GetContinuousStepLimit(
   G4GPILSelection selection = NotCandidateForSelection;
   G4double x = AlongStepGetPhysicalInteractionLength(track,previousStepSize,
 						     currentMinimalStep,
-						     currentSafety, &selection);
+						     currentSafety, 
+						     &selection);
   return x;
 }
 
@@ -608,12 +612,14 @@ G4VMultipleScattering::StorePhysicsTable(const G4ParticleDefinition* part,
 
       if ( yes ) {
 	if ( verboseLevel>0 ) {
-	  G4cout << "Physics table are stored for " << part->GetParticleName()
+	  G4cout << "Physics table are stored for " 
+		 << part->GetParticleName()
 		 << " and process " << GetProcessName()
 		 << " with a name <" << name << "> " << G4endl;
 	}
       } else {
-	G4cout << "Fail to store Physics Table for " << part->GetParticleName()
+	G4cout << "Fail to store Physics Table for " 
+	       << part->GetParticleName()
 	       << " and process " << GetProcessName()
 	       << " in the directory <" << directory
 	       << "> " << G4endl;

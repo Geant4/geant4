@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 November 13: V.Ivant (emutils-V09-06-61)
+- G4VEmProcess, G4VEnegryLossProcess - fixed bug in GPIL computation 
+    when a particle enter a volume in whihc current EM model has
+    different activation energy range than in the previous region
+- G4VEmModel - improved definition of min and max energy for
+    element selectors
+
 21 October 13: V.Ivant (emutils-V09-06-60)
 - G4VEmModel - added extra flag  useAngularGenerator and Get/Set methods
 

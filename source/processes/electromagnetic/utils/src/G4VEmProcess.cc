@@ -83,6 +83,7 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4EmBiasingManager.hh"
 #include "G4GenericIon.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -590,7 +591,10 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   DefineMaterial(track.GetMaterialCutsCouple());
   SelectModel(preStepKinEnergy, currentCoupleIndex);
 
-  if(!currentModel->IsActive(preStepKinEnergy)) { return x; }
+  if(!currentModel->IsActive(preStepKinEnergy)) { 
+    currentInteractionLength = DBL_MAX;
+    return x; 
+  }
  
   // forced biasing only for primary particles
   if(biasManager) {
@@ -620,7 +624,10 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
     if (theNumberOfInteractionLengthLeft < 0.0) {
 
       // beggining of tracking (or just after DoIt of this process)
-      ResetNumberOfInteractionLengthLeft();
+      // ResetNumberOfInteractionLengthLeft();
+
+      theNumberOfInteractionLengthLeft =  -G4Log( G4UniformRand() );
+      theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
 
     } else if(currentInteractionLength < DBL_MAX) {
 
@@ -630,7 +637,6 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
       //SubtractNumberOfInteractionLengthLeft(previousStepSize);
       if(theNumberOfInteractionLengthLeft < 0.) {
 	theNumberOfInteractionLengthLeft = 0.0;
-	//theNumberOfInteractionLengthLeft = perMillion;
       }
     }
 
