@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 31th, 2013, A.Dotti (run-V09-06-113)
+- Retagging, previous tag was rejected by mistake.
+
+Oct 30th, 2013, A.Dotti (run-V09-06-112)
+- Bug fixing: reintroduce delete of worker run manager at end of 
+  G4MTRunManagerKernel::StartThread function.
+
 Oct 21st, 2013, M.Asai (run-V09-06-111)
 - Moved CreateAllIsomer to G4RunManagerKernel so that it is invoked
   for both MT and SEQ modes.

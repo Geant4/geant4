@@ -225,7 +225,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
     }
   }
   wrmm.unlock();
-    
+  delete wrm;
   wThreadContext->DestroyGeometryAndPhysicsVector();
   wThreadContext = 0;
 
