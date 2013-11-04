@@ -40,13 +40,12 @@
 
 class RunAction;
 class DetectorConstruction;
-class PrimaryGeneratorAction;
 
 class ActionInitialization : public G4VUserActionInitialization
 {
 public:
   
-  ActionInitialization(DetectorConstruction*, PrimaryGeneratorAction*);
+  ActionInitialization(DetectorConstruction*);
 
   virtual ~ActionInitialization();
 
@@ -54,13 +53,13 @@ public:
 
   virtual void BuildForMaster() const;
 
+  virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+
 private:
 
   RunAction* masterRunAction;
   DetectorConstruction* detector;
-#ifdef G4MULTITHREADED
-  PrimaryGeneratorAction* generator;
-#endif
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

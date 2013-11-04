@@ -392,11 +392,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
                             - fSumNeutrTrLength*fSumNeutrTrLength));
 
   //print
-
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
   G4int  prec = G4cout.precision(2);
   
+  // show Rndm status
+  CLHEP::HepRandom::showEngineStatus();
+
   if (fVerbose) {
 
     G4cout << "                 LOGITUDINAL PROFILE                   "
@@ -440,9 +442,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      }
   }
   
-  G4cout << "\n SUMMARY \n" << G4endl;
+  G4cout << "\n ===== SUMMARY ===== \n" << G4endl;
 
-  G4cout << "\n"
+  G4cout << " Total number pf events:        " << NbOfEvents << "\n"
          << " Mean number of charged steps:  " << fChargedStep << G4endl;
   G4cout << " Mean number of neutral steps:  " << fNeutralStep 
          << "\n" << G4endl;
@@ -471,9 +473,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   // save histos and close analysis
   SaveHisto();
   
-  // show Rndm status
-  CLHEP::HepRandom::showEngineStatus();
-
   // Acceptance
   if(fLimittrue < DBL_MAX) {
     EmAcceptance acc;

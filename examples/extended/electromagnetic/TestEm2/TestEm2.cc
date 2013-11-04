@@ -44,9 +44,7 @@
 #include "EventAction.hh"
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
-#include "SteppingVerbose.hh"
 #include "ActionInitialization.hh"
-#include "NThreads.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -61,23 +59,18 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
 #ifdef G4MULTITHREADED  
   G4MTRunManager * runManager = new G4MTRunManager(); 
 
-  // Number of threads is defined via 3nd argument
-  G4String nn = "";
-  if (argc==3) { nn = argv[2]; }
-
-  NThreads th;
-  G4int N = th.GetNumberOfThreads(nn);
-  runManager->SetNumberOfThreads(N);
-  G4cout << "##### TestEm2 started for " << N << " threads" 
-         << " #####" << G4endl;
+  // Number of threads can be defined via 3rd argument
+  if (argc==3) {
+    G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    runManager->SetNumberOfThreads(nThreads);
+  }
+  G4cout << "##### TestEm2 started for " << runManager->GetNumberOfThreads() 
+         << " threads" << " #####" << G4endl;
 #else
   G4RunManager * runManager = new G4RunManager(); 
   G4cout << "##### TestEm2 started in sequential mode" 
@@ -88,10 +81,9 @@ int main(int argc,char** argv) {
   DetectorConstruction* detector = new DetectorConstruction();
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList());
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
 
   // set user actions
-  runManager->SetUserInitialization(new ActionInitialization(detector,primary));
+  runManager->SetUserInitialization(new ActionInitialization(detector));
 
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  

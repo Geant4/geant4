@@ -41,8 +41,6 @@
 #include "globals.hh"
 
 #include "g4root.hh"
-////#include "g4xml.hh"
-////#include "g4hbook.hh"
 
 #include <vector>
 typedef  std::vector<G4double> MyVector;

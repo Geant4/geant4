@@ -56,7 +56,7 @@ private:
   G4ParticleGun*           fParticleGun;
   DetectorConstruction*    fDetector;
     
-  G4ThreeVector            fInitPos; 
+  G4bool                   fInitPos; 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

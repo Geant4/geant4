@@ -15,11 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-11-13 V.Ivanchenko (testem2-V09-06-13) 
+- Improved printout
+
+04-11-13 V.Ivanchenko (testem2-V09-06-12) 
+- Removed hbook, NThread, maximally simplified example
+
 01-11-13 A.Dotti (testem2-V09-06-11)
 - Fix for compilation warnings from clang
 
 31-10-13 A.Dotti (testem2-V09-06-10)
-- Bug fixing for shared PRoimaryGeneratorAction pointer 
+- Bug fixing for shared PrimaryGeneratorAction pointer 
 
 26-10-13 V.Ivanchenko (testem2-V09-06-09) 
 - Added NThread helper class
