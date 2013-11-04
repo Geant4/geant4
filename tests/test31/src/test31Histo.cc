@@ -118,7 +118,9 @@ void test31Histo::BeginOfHisto(G4int num)
   n_mumu = 0;
   n_pipi = 0;
 
-  if(!extra) extra = new G4EnergyLossForExtrapolator(1);
+  if(extra) { delete extra; }
+
+  extra = new G4EnergyLossForExtrapolator(1);
   bookHisto(); 
 
   if(verbose > 0) {

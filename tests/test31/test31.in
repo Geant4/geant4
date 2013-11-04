@@ -30,6 +30,7 @@
 /testem/phys/stepMax         1 km
 #
 /test31/AbsorberMaterial     G4_Si
+/run/initialize
 #
 /gun/particle e-
 /run/beamOn 100

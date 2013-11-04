@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-11-13  V.Ivant (test31-V09-06-05)
+- test31DetectorConstruction - further cleanup; make G4_Si run to
+    be used in test31.in 
+
+31-10-13  V.Ivant (test31-V09-06-04)
+- test31DetectorConstruction - removed unused methods; cleanup 
+    material change
+- PhysicsList - added Opt4 EM physics
+
 30-07-13  A.Dotti (test31-V09-06-03)
 - Bug fixing for unused variables clang32
 

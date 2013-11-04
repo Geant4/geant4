@@ -53,6 +53,13 @@
 #include "StackingAction.hh"
 
 #include "G4Timer.hh"
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
+#ifdef G4UI_USE
+#include "G4UIExecutive.hh"
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,14 +108,19 @@ int main(int argc,char** argv) {
      
   if (argc==1)   // Define UI terminal for interactive mode
     {
-      G4UIsession * session;
-#ifdef G4UI_USE_TCSH
-      session = new G4UIterminal(new G4UItcsh);
-#else
-      session = new G4UIterminal();
+#ifdef G4VIS_USE
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
 #endif
-      session->SessionStart();
-      delete session;
+ 
+#ifdef G4UI_USE
+      G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+      ui->SessionStart();
+      delete ui;
+#endif
+#ifdef G4VIS_USE
+      delete visManager;
+#endif
     }
   else if (argc>1) // Batch mode with 1 or more files
     {

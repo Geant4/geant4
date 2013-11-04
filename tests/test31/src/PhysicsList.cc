@@ -49,6 +49,7 @@
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
+#include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
@@ -111,8 +112,9 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
-  if(verbose > 0) 
+  if(verbose > 0) {
     G4cout << "### PhysicsList Construte Processes" << G4endl;
+  }
   if(!emBuilderIsRegisted) { AddPhysicsList("emstandard"); }
   G4VModularPhysicsList::ConstructProcess();
   /*
@@ -157,6 +159,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
+  } else if (name == "emstandard_opt4" && !emBuilderIsRegisted) {
+    RegisterPhysics(new G4EmStandardPhysics_option4());
+    emBuilderIsRegisted = true;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
+
   } else if (name == "emlivermore" && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmLivermorePhysics());
     emBuilderIsRegisted = true;
@@ -167,7 +174,8 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emBuilderIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
 
-  } else if (name == "step_limit" && !stepLimiterIsRegisted && emBuilderIsRegisted) {
+  } else if (name == "step_limit" && !stepLimiterIsRegisted 
+	     && emBuilderIsRegisted) {
     RegisterPhysics(new StepLimiterBuilder());
     stepLimiterIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
@@ -197,9 +205,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     gnucIsRegisted = true;
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
     
-  } else if(!emBuilderIsRegisted) {
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" 
-           << " fail - EM physics should be registered first " << G4endl;
   } else {
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" 
            << " fail - module is already regitered or is unknown " << G4endl;

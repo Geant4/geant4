@@ -41,7 +41,6 @@
 #include "test31DetectorConstruction.hh"
 
 #include "test31DetectorMessenger.hh"
-#include "test31EventAction.hh"
 #include "test31SD.hh"
 #include "test31Histo.hh"
 
@@ -74,31 +73,32 @@ test31DetectorConstruction::test31DetectorConstruction():
   solidWorld(0),
   logicWorld(0),
   physWorld(0),
+  logicGap(0),
   solidAbs(0),
   logicAbs(0),
   physAbs(0),
   magField(0),
-  theEvent(0),
-  myVerbose(0),
-  detIsConstructed(false),
-  nAbsSaved(0),
+  myVerbose(1),
   nFirstEvtToDebug(-1),
   nLastEvtToDebug(-1)
 {
+  histo = test31Histo::GetPointer();
+  nameMatAbsorber = nameMatWorld = nameMatGap = "";
+ 
+  DefineMaterials();
+
   // Default parameter values of the calorimeter
   // corresponds to water test
-  nameMatAbsorber   = G4String("G4_WATER");
-  AbsorberThickness = 1.0*mm;    
-  SizeXY            = 1000.0*mm;
-  gap               = 0.0;
-  NumberOfAbsorbers = 300;
-  nameMatWorld      = G4String("G4_Galactic");
-  nameMatGap        = G4String("G4_Galactic");
-  WorldSizeZ        = 400.0*mm;
-  maxDelta          = 10.0*MeV;
+  SetAbsorberMaterial("G4_WATER");
+  SetGapMaterial("G4_Galactic");
+  SetWorldMaterial("G4_Galactic");
 
-  DefineMaterials();
-  test31Histo::GetPointer();
+  SetNumberOfAbsorbers(300);
+  SetNumAbsorbersSaved(300);
+  SetAbsorberThickness(1.0*mm);
+  SetAbsorberSizeXY(1000.0*mm);
+  SetGap(0.0);
+  SetWorldSizeZ(400.0*mm);
 
   // create commands for interactive definition of the calorimeter  
   detectorMessenger = new test31DetectorMessenger(this);
@@ -109,13 +109,6 @@ test31DetectorConstruction::test31DetectorConstruction():
 test31DetectorConstruction::~test31DetectorConstruction()
 { 
   delete detectorMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VPhysicalVolume* test31DetectorConstruction::Construct()
-{
-  return ConstructGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -148,7 +141,7 @@ void test31DetectorConstruction::DefineMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-G4VPhysicalVolume* test31DetectorConstruction::ConstructGeometry()
+G4VPhysicalVolume* test31DetectorConstruction::Construct()
 {
   if(myVerbose > 0) {
     G4cout << "test31DetectorConstruction: ConstructGeometry starts" << G4endl;
@@ -160,9 +153,6 @@ G4VPhysicalVolume* test31DetectorConstruction::ConstructGeometry()
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
 
-  WorldMaterial = GetMaterial(nameMatWorld);
-  AbsorberMaterial = GetMaterial(nameMatAbsorber);
-  GapMaterial = GetMaterial(nameMatGap);
   ComputeGeomParameters();
 
   //     
@@ -177,9 +167,10 @@ G4VPhysicalVolume* test31DetectorConstruction::ConstructGeometry()
   // 
   G4double dz = 0.5*(AbsorberThickness + gap)*NumberOfAbsorbers;  
   G4Box* solid = new G4Box("Container",SizeXY,SizeXY,dz);
-  G4LogicalVolume* lv = new G4LogicalVolume(solid,GapMaterial,"Container");
-  G4VPhysicalVolume* pv = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, dz),"Container",
-					    lv,physWorld,false,0);
+  logicGap = new G4LogicalVolume(solid,GapMaterial,"Container");
+  G4VPhysicalVolume* pv = new G4PVPlacement(0,G4ThreeVector(0.0, 0.0, dz),
+					    "Container",
+					    logicGap,physWorld,false,0);
   //                               
   // Absorber
   // 
@@ -202,14 +193,9 @@ G4VPhysicalVolume* test31DetectorConstruction::ConstructGeometry()
   (G4SDManager::GetSDMpointer())->AddNewDetector( calorimeterSD );
   logicAbs->SetSensitiveDetector(calorimeterSD);
 
-  PrintGeomParameters();  
-
-  detIsConstructed = true;
-
-  //
-  //always return the physical World
-  //
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+
+  PrintGeomParameters();  
 
   return physWorld;
 }
@@ -235,26 +221,21 @@ void test31DetectorConstruction::PrintGeomParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4Material* test31DetectorConstruction::GetMaterial(const G4String& mat)
-{
-  // search the material by its name
-  G4Material* pttoMaterial = 
-    G4NistManager::Instance()->FindOrBuildMaterial(mat);
-  if(!pttoMaterial) {
-    G4cout << "Find or BUild material " << mat << " fail " << G4endl;  
-  }
-  if(detIsConstructed) MaterialIsChanged();
-  return pttoMaterial;
-}
-    
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void test31DetectorConstruction::SetNumberOfAbsorbers(G4int val)
 {
   // change Absorber thickness and recompute the calorimeter parameters
   NumberOfAbsorbers = val;
-  if(detIsConstructed) GeometryIsChanged();
+  histo->SetNumberOfAbsorbers(val);
+  GeometryIsChanged();
 }  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void test31DetectorConstruction::SetNumAbsorbersSaved(G4int val)     
+{
+  nSaved = val;
+  histo->SetNumAbsorbersSaved(val);
+}
     
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -262,7 +243,8 @@ void test31DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   // change Absorber thickness and recompute the calorimeter parameters
   AbsorberThickness = val;
-  if(detIsConstructed) GeometryIsChanged();
+  histo->SetAbsorberThickness(val);
+  GeometryIsChanged();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -271,7 +253,7 @@ void test31DetectorConstruction::SetAbsorberSizeXY(G4double val)
 {
   // change the transverse size and recompute the calorimeter parameters
   SizeXY = val;
-  if(detIsConstructed) GeometryIsChanged();
+  GeometryIsChanged();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -279,7 +261,7 @@ void test31DetectorConstruction::SetAbsorberSizeXY(G4double val)
 void test31DetectorConstruction::SetWorldSizeZ(G4double val)
 {
   WorldSizeZ = val;
-  if(detIsConstructed) GeometryIsChanged();
+  GeometryIsChanged();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -287,8 +269,52 @@ void test31DetectorConstruction::SetWorldSizeZ(G4double val)
 void test31DetectorConstruction::SetGap(G4double val)
 {
   gap = val;
-  if(detIsConstructed) GeometryIsChanged();
+  histo->SetGap(val);
+  GeometryIsChanged();
 }  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void test31DetectorConstruction::SetAbsorberMaterial(const G4String& v) 
+{
+  if(v == nameMatAbsorber) { return; }
+  G4Material* mat = G4NistManager::Instance()->FindOrBuildMaterial(v);
+  if (mat) {
+    AbsorberMaterial = mat;
+    nameMatAbsorber = v;
+    if(logicAbs) { logicAbs->SetMaterial(mat); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
+  histo->SetAbsorberMaterial(mat);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void test31DetectorConstruction::SetGapMaterial(const G4String& v) 
+{
+  if(v == nameMatGap) { return; }
+  G4Material* mat = G4NistManager::Instance()->FindOrBuildMaterial(v);
+  if (mat) {
+    GapMaterial = mat;
+    nameMatGap = v;
+    if(logicGap) { logicGap->SetMaterial(mat); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void test31DetectorConstruction::SetWorldMaterial(const G4String& v) 
+{
+  if(v == nameMatWorld) { return; }
+  G4Material* mat = G4NistManager::Instance()->FindOrBuildMaterial(v);
+  if (mat) {
+    WorldMaterial = mat;
+    nameMatWorld = v;
+    if(logicWorld) { logicWorld->SetMaterial(mat); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -336,7 +362,7 @@ void test31DetectorConstruction::ComputeGeomParameters()
   test31Histo* h = test31Histo::GetPointer(); 
   h->SetNumberOfAbsorbers(NumberOfAbsorbers);
   h->SetAbsorberThickness(AbsorberThickness);
-  h->SetNumAbsorbersSaved(nAbsSaved);
+  h->SetNumAbsorbersSaved(nSaved);
   h->SetGap(gap);
   h->SetAbsorberMaterial(AbsorberMaterial);
 }
@@ -345,21 +371,13 @@ void test31DetectorConstruction::ComputeGeomParameters()
   
 void test31DetectorConstruction::UpdateGeometry()
 {
-  (G4RunManager::GetRunManager())->DefineWorldVolume(ConstructGeometry());
+  GeometryIsChanged();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void test31DetectorConstruction::GeometryIsChanged()
 {
-  (G4RunManager::GetRunManager())->GeometryHasBeenModified();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void test31DetectorConstruction::MaterialIsChanged()
-{
-  (G4RunManager::GetRunManager())->CutOffHasBeenModified();
   (G4RunManager::GetRunManager())->GeometryHasBeenModified();
 }
 
