@@ -31,8 +31,10 @@
 // --------
 // 23 Nov 2010   L Pandola    First complete implementation
 // 02 May 2011   L.Pandola    Remove dependency on CLHEP::HepMatrix
-// 24 May 2011   L. Pandola   Renamed (make v2008 as default Penelope)
+// 24 May 2011   L.Pandola    Renamed (make v2008 as default Penelope)
 // 03 Oct 2013   L.Pandola    Migration to MT
+// 30 Oct 2013   L.Pandola    Use G4Cache to avoid new/delete of the 
+//                             data vector on the fly in SampleGammaEnergy()
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -44,6 +46,7 @@
 #include "G4PhysicsLogVector.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4Material.hh"
+#include "G4AutoDelete.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -52,6 +55,7 @@ G4PenelopeBremsstrahlungFS::G4PenelopeBremsstrahlungFS(G4int verbosity) :
   theReducedXSTable(0),theEffectiveZSq(0),theSamplingTable(0),
   thePBcut(0),fVerbosity(verbosity)
 {
+  fCache.Put(0);
   G4double tempvector[nBinsX] = 
     {1.0e-12,0.025e0,0.05e0,0.075e0,0.1e0,0.15e0,0.2e0,0.25e0,
     0.3e0,0.35e0,0.4e0,0.45e0,0.5e0,0.55e0,0.6e0,0.65e0,0.7e0,
@@ -71,7 +75,9 @@ G4PenelopeBremsstrahlungFS::G4PenelopeBremsstrahlungFS(G4int verbosity) :
 
 G4PenelopeBremsstrahlungFS::~G4PenelopeBremsstrahlungFS()
 {
-  ClearTables();
+  ClearTables(); 
+  
+  //Content of fCache is cleaned up automatically via G4AutoDelete
 
   //Clear manually theElementData
   std::map<G4int,G4DataVector*>::iterator i;
@@ -605,7 +611,6 @@ void G4PenelopeBremsstrahlungFS::InitializeEnergySampling(const G4Material* mate
 G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4Material* mat, 
 							     const G4double cut) const
 {
-  //
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
   if (!(theSamplingTable->count(theKey)) || !(thePBcut->count(theKey)))
     {
@@ -653,12 +658,24 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
   //Get the appropriate physics vector
   const G4PhysicsFreeVector* theVec1 = (G4PhysicsFreeVector*) (*theTableInte)[eBin];
 
-  //use a "temporary" vector which contains the linear interpolation of the x spectra 
-  //in energy. To avoid any inteference with the concurring threads, the vector is 
-  //allocated/deleted during the method [not optimal]. This avoids the use of AutoLock.
-  //The vector is filled at every call, because the interpolation factors change!
-  G4PhysicsFreeVector* theTempVec = new G4PhysicsFreeVector(nBinsX);
- 
+  //Use a "temporary" vector which contains the linear interpolation of the x spectra 
+  //in energy. The temporary vector is thread-local, so that there is no conflict. 
+  //This is achieved via G4Cache. The theTempVect is allocated only once per thread 
+  //(member variable), but it is overwritten at every call of this method 
+  //(because the interpolation factors change!)
+  G4PhysicsFreeVector* theTempVec = fCache.Get();
+  if (!theTempVec) //First time this thread gets the cache
+    {
+      theTempVec = new G4PhysicsFreeVector(nBinsX);
+      //Register the pointer for auto-clean up at the end
+      G4AutoDelete::Register(theTempVec);
+      fCache.Put(theTempVec);
+      if (fVerbosity > 4)
+	G4cout << "Creating new instance of G4PhysicsFreeVector() on the worker" << G4endl;
+    }
+
+  //theTempVect is allocated only once (member variable), but it is overwritten at 
+  //every call of this method (because the interpolation factors change!)
   if (!firstOrLastBin)
     {  
       const G4PhysicsFreeVector* theVec2 = (G4PhysicsFreeVector*) (*theTableInte)[eBin+1];
@@ -766,7 +783,6 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	  G4cout << "Conflicting end-point values: w1=" << w1 << "; w2 = " << w2 << G4endl;
 	  G4cout << "wbcut = " << wbcut << " energy= " << energy/keV << " keV" << G4endl;
 	  G4cout << "cut = " << cut/keV << " keV" << G4endl;
-	  delete theTempVec;
 	  return w1*energy;
 	}
   
@@ -782,7 +798,6 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
       eGamma *= energy;
     }while(eGamma < cut); //repeat if sampled sub-cut!  
 
-  delete theTempVec;
   return eGamma;
 }
 

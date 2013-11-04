@@ -34,7 +34,6 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 
-#include "G4PEEffectModel.hh"
 #include "G4KleinNishinaCompton.hh"
 #include "G4BetheHeitlerModel.hh"
 
@@ -54,8 +53,8 @@
 #include "G4UnitsTable.hh"
 
 #include "G4PenelopeComptonModel.hh"
-#include "G4Penelope08RayleighModel.hh"
-#include "G4Penelope08PhotoElectricModel.hh"
+#include "G4PenelopeRayleighModel.hh"
+#include "G4PenelopePhotoElectricModel.hh"
 #include "G4PenelopePhotoElectricModel.hh"
 #include "G4PenelopeGammaConversionModel.hh"
 #include "G4PenelopeAnnihilationModel.hh"
@@ -65,6 +64,7 @@
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4MuonPlus.hh"
+#include "G4SystemOfUnits.hh"
 
 int main() {
 
@@ -120,8 +120,7 @@ int main() {
   //G4VEmModel* comp = new G4PenelopeComptonModel();
   //G4VEmModel* conv = new G4PenelopeGammaConversionModel(); 
   //G4Penelope08RayleighModel* ray = new G4Penelope08RayleighModel();
-  G4Penelope08PhotoElectricModel* phot = new G4Penelope08PhotoElectricModel();
-  G4PenelopePhotoElectricModel* phot01 = new G4PenelopePhotoElectricModel();
+  G4PenelopePhotoElectricModel* phot = new G4PenelopePhotoElectricModel();
 
   // compute CrossSection per atom and MeanFreePath
   //
@@ -136,8 +135,6 @@ int main() {
   phot->Initialise(gamma,dummy);
   phot->SetVerbosityLevel(0);
 
-  phot01->Initialise(gamma,dummy);
-  phot01->SetVerbosityLevel(0);
 
   //G4double atomDensity = material->GetTotNbOfAtomsPerVolume();
   //G4cout << atomDensity/(1./cm3) << " atoms/cm3" << G4endl;
@@ -147,9 +144,7 @@ int main() {
     {
       G4double energy = Emin*std::pow(10,i*logStep);
       G4double XSVOLUME = phot->CrossSectionPerVolume(material,gamma,energy);
-      G4double XSVOLUME2 = phot01->CrossSectionPerVolume(material,gamma,energy);
-      file << energy/eV << " " << XSVOLUME/(1./cm) << " " << 
-         XSVOLUME2/(1./cm) << G4endl;
+      file << energy/eV << " " << XSVOLUME/(1./cm) << G4endl;
     }	
   file.close();
 
@@ -162,8 +157,6 @@ int main() {
       G4double energy = Emin*std::pow(10,i*logStep);
       G4double XS0 = phot->ComputeCrossSectionPerAtom(gamma,
 						      energy,ZZ);
-      G4double XS1 = phot01->ComputeCrossSectionPerAtom(gamma,
-                                                      energy,ZZ);
       ff << energy/eV << " " << XS0/barn << " ";
       for (G4int ish=0;ish<nShells;ish++)
 	{

@@ -72,13 +72,14 @@ G4LivermoreGammaConversionModel::~G4LivermoreGammaConversionModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void 
-G4LivermoreGammaConversionModel::Initialise(const G4ParticleDefinition* particle,
-					    const G4DataVector& cuts)
+void G4LivermoreGammaConversionModel::Initialise(
+                                const G4ParticleDefinition* particle,
+				const G4DataVector& cuts)
 {
   if (verboseLevel > 1) 
   {
-    G4cout << "Calling Initialise() of G4LivermoreGammaConversionModel." << G4endl
+    G4cout << "Calling Initialise() of G4LivermoreGammaConversionModel." 
+	   << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / MeV << " MeV - "
 	   << HighEnergyLimit() / GeV << " GeV"
@@ -131,6 +132,16 @@ void G4LivermoreGammaConversionModel::InitialiseLocal(const G4ParticleDefinition
 					              G4VEmModel* masterModel)
 {
   SetElementSelectors(masterModel->GetElementSelectors());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4LivermoreGammaConversionModel::MinPrimaryEnergy(const G4Material*,
+						  const G4ParticleDefinition*,
+						  G4double)
+{
+  return lowEnergyLimit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -218,11 +229,11 @@ G4LivermoreGammaConversionModel::ComputeCrossSectionPerAtom(const G4ParticleDefi
 
   G4LPhysicsFreeVector* pv = data[intZ];
 
-  // element was not initialised
+  // if element was not initialised
+  // do initialisation safely for MT mode
   if(!pv) 
   {
-    char* path = getenv("G4LEDATA");
-    ReadData(intZ, path);
+    InitialiseForElement(0, intZ);
     pv = data[intZ];
     if(!pv) { return xs; }
   }
@@ -232,7 +243,8 @@ G4LivermoreGammaConversionModel::ComputeCrossSectionPerAtom(const G4ParticleDefi
   if(verboseLevel > 0)
   {
     G4int n = pv->GetVectorLength() - 1;
-    G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" << GammaEnergy/MeV << G4endl;
+    G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" 
+	    << GammaEnergy/MeV << G4endl;
     G4cout  <<  "  cs (Geant4 internal unit)=" << xs << G4endl;
     G4cout  <<  "    -> first cs value in EADL data file (iu) =" << (*pv)[0] << G4endl;
     G4cout  <<  "    -> last  cs value in EADL data file (iu) =" << (*pv)[n] << G4endl;
@@ -453,8 +465,9 @@ G4LivermoreGammaConversionModel::ScreenFunction2(G4double screenVariable)
 #include "G4AutoLock.hh"
 namespace { G4Mutex LivermoreGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
 
-void G4LivermoreGammaConversionModel::InitialiseForElement(const G4ParticleDefinition*, 
-						    G4int Z)
+void G4LivermoreGammaConversionModel::InitialiseForElement(
+				      const G4ParticleDefinition*, 
+				      G4int Z)
 {
   G4AutoLock l(&LivermoreGammaConversionModelMutex);
   //  G4cout << "G4LivermoreGammaConversionModel::InitialiseForElement Z= " 
@@ -462,3 +475,4 @@ void G4LivermoreGammaConversionModel::InitialiseForElement(const G4ParticleDefin
   if(!data[Z]) { ReadData(Z); }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -149,6 +149,9 @@ private:
   G4PenelopeBremsstrahlungFS* fPenelopeFSHelper;
   G4PenelopeBremsstrahlungAngular* fPenelopeAngular;
 
+  //Used only for G4EmCalculator and Unit Tests
+  G4bool fLocalTable;
+
 };
 
 #endif

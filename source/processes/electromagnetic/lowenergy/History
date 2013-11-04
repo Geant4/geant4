@@ -17,6 +17,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02.11.2013  L. Pandola, tag emlowen-V09-06-39
+	    Bug fixes in Penelope Ionisation and Bremsstrahlung
+            after emlowen-V09-06-36. Should occur only in unit 
+            tests or by G4EmCalculator.
+
+01.11.2013  V. Ivanchenko, tag emlowen-V09-06-38
+            G4LivermorePhotoElectricModel - do not upload data in 
+            SampleSecondaries method, instead kill the gamma
+
+01.11.2013  V. Ivanchenko, tag emlowen-V09-06-37
+            G4LivermoreGammaConversionModel, G4LivermoreRayleighModel,
+            G4LivermorePhotoElectricModel, G4LivermoreComptonModel - more
+            accurate read data from file in run time (shoudl be used
+            onlz in Unit tests and by G4EmCalculator)  
+
+31.10.2013  L. Pandola, tag emlowen-V09-06-36
+	    Allow for (AutoLock-protected) creation on-the-fly of 
+            tables. Nothing changes for loops driven by the RunManager.
+            Allows to get the CrossSection and StoppingPower without 
+	    crash from Unit Tests and G4EmCalculator
+	    
+30.10.2013  L. Pandola, tag emlowen-V09-06-35
+	    Implemented G4Cache in G4PenelopeBremsstrahlungFS, to 
+	    avoid the new/delete mechanism of emlowen-V09-06-34 in 
+	    a MT-safe way.
 
 28.10.2013  L. Pandola, tag emlowen-V09-06-34             
 	    Remove AutoLock from G4PenelopeBremsstrahlungFS. Support 

@@ -72,6 +72,10 @@ public:
 				       G4double tmin,
 				       G4double maxEnergy);
 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double);
+
 private:
 
   void ReadData(size_t Z, const char* path = 0);

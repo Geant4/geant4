@@ -127,6 +127,9 @@ private:
   G4double GetFSquared(const G4Material*,const G4double);
   void InitializeSamplingAlgorithm(const G4Material*);
 
+  //Used only for G4EmCalculator and Unit Tests
+  G4bool fLocalTable;
+
 };
 
 #endif

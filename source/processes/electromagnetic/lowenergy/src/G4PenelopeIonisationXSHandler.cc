@@ -137,14 +137,8 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTableElectron->count(theKey)) //table already built	
 	return XSTableElectron->find(theKey)->second;
-      else
-	{	 
-	  G4ExceptionDescription ed;
-	  ed << "Unable to build e- table for " << mat->GetName() << G4endl;
-	  G4Exception("G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple()",
-		      "em0029",FatalException,ed);	   
-	    
-	}
+      else	 
+        return NULL;	 
     }
   
   if (part == G4Positron::Positron())
@@ -160,14 +154,8 @@ G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple(const G4ParticleDef
       if (XSTablePositron->count(theKey)) //table already built	
 	return XSTablePositron->find(theKey)->second;
       else
-	{	  	  
-	  G4ExceptionDescription ed;
-	  ed << "Unable to build e+ table for " << mat->GetName() << G4endl;
-	    G4Exception("G4PenelopeIonisationXSHandler::GetCrossSectionTableForCouple()",
-			"em0029",FatalException,ed);	   	   
-	  
-	}
-    }
+        return NULL;  
+   }
   return NULL;
 }
 
@@ -192,6 +180,7 @@ void G4PenelopeIonisationXSHandler::BuildXSTable(const G4Material* mat,G4double 
     {
       G4cout << "G4PenelopeIonisationXSHandler: going to build cross section table " << G4endl;
       G4cout << "for " << part->GetParticleName() << " in " << mat->GetName() << G4endl;
+      G4cout << "Cut= " << cut/keV << " keV" << G4endl;
     }
 
   std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);

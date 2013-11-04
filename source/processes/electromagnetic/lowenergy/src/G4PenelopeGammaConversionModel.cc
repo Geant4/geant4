@@ -48,6 +48,7 @@
 #include "G4Positron.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4MaterialCutsCouple.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -56,7 +57,8 @@ G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleD
   :G4VEmModel(nam),fParticleChange(0),fParticle(0),
    logAtomicCrossSection(0),
    fEffectiveCharge(0),fMaterialInvScreeningRadius(0),
-   fScreeningFunction(0),isInitialised(false)
+   fScreeningFunction(0),isInitialised(false),fLocalTable(false)
+
 {  
   fIntrinsicLowEnergyLimit = 2.0*electron_mass_c2;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -84,7 +86,7 @@ G4PenelopeGammaConversionModel::G4PenelopeGammaConversionModel(const G4ParticleD
 G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
 {
   //Delete shared tables, they exist only in the master model
-  if (IsMaster())
+  if (IsMaster() || fLocalTable)
     {
       std::map <G4int,G4PhysicsFreeVector*>::iterator i;
       if (logAtomicCrossSection)
@@ -212,6 +214,8 @@ void G4PenelopeGammaConversionModel::InitialiseLocal(const G4ParticleDefinition*
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+namespace { G4Mutex  PenelopeGammaConversionModelMutex = G4MUTEX_INITIALIZER; }
+
 G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
 								    const G4ParticleDefinition*,
 								    G4double energy,
@@ -230,13 +234,29 @@ G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
 
   G4int iZ = (G4int) Z;
  
- //now it should be ok
+  //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+  //not invoked
+  if (!logAtomicCrossSection)
+    {
+      //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+      //Unit Tests
+      fLocalTable = true;
+      logAtomicCrossSection = new std::map<G4int,G4PhysicsFreeVector*>;
+    }
+  //now it should be ok
   if (!logAtomicCrossSection->count(iZ))
      {
+       //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+       //not filled up. This can happen in a UnitTest or via G4EmCalculator
        G4ExceptionDescription ed;
-       ed << "Unable to retrieve cross section table for Z=" << iZ << G4endl;
+       ed << "Unable to retrieve the cross section table for Z=" << iZ << G4endl;
+       ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;   
        G4Exception("G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom()",
-		   "em2018",FatalException,ed);
+		   "em2018",JustWarning,ed);
+       //protect file reading via autolock
+       G4AutoLock lock(&PenelopeGammaConversionModelMutex);
+       ReadDataFile(iZ);
+       lock.unlock();
      }
 
   G4double cs = 0;

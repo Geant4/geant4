@@ -205,9 +205,10 @@ G4double G4LivermoreRayleighModel::ComputeCrossSectionPerAtom(
 
   G4LPhysicsFreeVector* pv = dataCS[intZ];
 
-  // element was not initialised
+  // if element was not initialised
+  // do initialisation safely for MT mode
   if(!pv) { 
-    ReadData(intZ);
+    InitialiseForElement(0, intZ);
     pv = dataCS[intZ];
     if(!pv) { return xs; }
   }

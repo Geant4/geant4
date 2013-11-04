@@ -58,13 +58,14 @@
 #include "G4PhysicsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+namespace { G4Mutex  PenelopeBremsstrahlungModelMutex = G4MUTEX_INITIALIZER; }
  
 G4PenelopeBremsstrahlungModel::G4PenelopeBremsstrahlungModel(const G4ParticleDefinition* part,
 							     const G4String& nam)
   :G4VEmModel(nam),fParticleChange(0),fParticle(0),
    isInitialised(false),energyGrid(0),  
    XSTableElectron(0),XSTablePositron(0),fPenelopeFSHelper(0),
-   fPenelopeAngular(0)
+   fPenelopeAngular(0),fLocalTable(false)
   
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
@@ -96,7 +97,7 @@ G4PenelopeBremsstrahlungModel::G4PenelopeBremsstrahlungModel(const G4ParticleDef
  
 G4PenelopeBremsstrahlungModel::~G4PenelopeBremsstrahlungModel()
 {
-  if (IsMaster())
+  if (IsMaster() || fLocalTable)    
     {
       ClearTables();
       if (fPenelopeFSHelper)
@@ -434,7 +435,7 @@ void G4PenelopeBremsstrahlungModel::SampleSecondaries(std::vector<G4DynamicParti
 
 void G4PenelopeBremsstrahlungModel::ClearTables()
 {
-  if (!IsMaster())    
+  if (!IsMaster() && !fLocalTable)    
     //Should not be here!
     G4Exception("G4PenelopeBremsstrahlungModel::ClearTables()",
 		"em0100",FatalException,"Worker thread in this method");  
@@ -485,7 +486,7 @@ G4double G4PenelopeBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition*
 
 void G4PenelopeBremsstrahlungModel::BuildXSTable(const G4Material* mat,G4double cut)
 {
-  if (!IsMaster())    
+  if (!IsMaster() && !fLocalTable)    
     //Should not be here!
     G4Exception("G4PenelopeBremsstrahlungModel::BuildXSTable()",
 		"em0100",FatalException,"Worker thread in this method");  
@@ -613,45 +614,87 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
 
   if (part == G4Electron::Electron())
     {
+      //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+      //not invoked
       if (!XSTableElectron)
-        {	  
+        {
+	  //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+	  //Unit Tests
           G4String excep = "The Cross Section Table for e- was not initialized correctly!";
           G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
-		      "em2013",FatalException,excep);          
-	  return NULL;
+		      "em2013",JustWarning,excep);
+	  fLocalTable = true;
+	  XSTableElectron = new
+	    std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
+	  if (!energyGrid)
+	    energyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
+						HighEnergyLimit(), 
+						nBins-1); //one hidden bin is added
+	  if (!fPenelopeFSHelper)
+ 	    fPenelopeFSHelper = new G4PenelopeBremsstrahlungFS(verboseLevel);
         }
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTableElectron->count(theKey)) //table already built
         return XSTableElectron->find(theKey)->second;
       else
 	{
+	  //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+	  //not filled up. This can happen in a UnitTest or via G4EmCalculator
 	  G4ExceptionDescription ed;
-	  ed << "Unable to build e- table for " << mat->GetName() << " at Ecut(gamma)= " 
+	  ed << "Unable to find e- table for " << mat->GetName() << " at Ecut(gamma)= " 
 	     << cut/keV << " keV " << G4endl;
+	  ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
 	  G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
-		      "em2009",FatalException,ed);
+		      "em2009",JustWarning,ed);
+	  //protect file reading via autolock
+	  G4AutoLock lock(&PenelopeBremsstrahlungModelMutex);
+          fPenelopeFSHelper->BuildScaledXSTable(mat,cut,true); //pretend to be a master
+	  BuildXSTable(mat,cut);
+	  lock.unlock();
+	  //now it should be ok
+	  return XSTableElectron->find(theKey)->second;
 	}
         
     }
   if (part == G4Positron::Positron())
     {
+      //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+      //not invoked
       if (!XSTablePositron)
         {
 	  G4String excep = "The Cross Section Table for e+ was not initialized correctly!";
           G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
-		      "em2013",FatalException,excep); 
-	  return NULL;
+		      "em2013",JustWarning,excep); 
+	  fLocalTable = true;
+	  XSTablePositron = new 
+	    std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>;
+	  if (!energyGrid)
+	    energyGrid = new G4PhysicsLogVector(LowEnergyLimit(),
+						HighEnergyLimit(), 
+						nBins-1); //one hidden bin is added
+	  if (!fPenelopeFSHelper)
+            fPenelopeFSHelper = new G4PenelopeBremsstrahlungFS(verboseLevel);
         }
       std::pair<const G4Material*,G4double> theKey = std::make_pair(mat,cut);
       if (XSTablePositron->count(theKey)) //table already built
         return XSTablePositron->find(theKey)->second;
       else
-        {          
+        { 
+	  //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+	  //not filled up. This can happen in a UnitTest or via G4EmCalculator
 	  G4ExceptionDescription ed;
-	  ed << "Unable to build e+ table for " << mat->GetName() << G4endl;
+	  ed << "Unable to find e+ table for " << mat->GetName() << " at Ecut(gamma)= " 
+	     << cut/keV << " keV " << G4endl;
+	  ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
 	  G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
-		      "em2009",FatalException,ed);
-            
+		      "em2009",JustWarning,ed);
+	  //protect file reading via autolock
+	  G4AutoLock lock(&PenelopeBremsstrahlungModelMutex);
+          fPenelopeFSHelper->BuildScaledXSTable(mat,cut,true); //pretend to be a master
+	  BuildXSTable(mat,cut);
+	  lock.unlock();
+	  //now it should be ok
+	  return XSTablePositron->find(theKey)->second;            
         }
     }
   return NULL;

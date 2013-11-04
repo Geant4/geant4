@@ -57,6 +57,7 @@
 #include "G4AtomicShell.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4AutoLock.hh"
 #include "G4LossTableManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -64,7 +65,7 @@
 G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefinition* part,
 							   const G4String& nam)
   :G4VEmModel(nam),fParticleChange(0),fParticle(0),
-   isInitialised(false),fAtomDeexcitation(0),logAtomicShellXS(0)
+   isInitialised(false),fAtomDeexcitation(0),logAtomicShellXS(0),fLocalTable(false)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -93,7 +94,7 @@ G4PenelopePhotoElectricModel::G4PenelopePhotoElectricModel(const G4ParticleDefin
 
 G4PenelopePhotoElectricModel::~G4PenelopePhotoElectricModel()
 {  
-  if (IsMaster())
+  if (IsMaster() || fLocalTable)
     {
       std::map <G4int,G4PhysicsTable*>::iterator i;
       if (logAtomicShellXS)
@@ -201,7 +202,7 @@ void G4PenelopePhotoElectricModel::InitialiseLocal(const G4ParticleDefinition* p
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+namespace { G4Mutex  PenelopePhotoElectricModelMutex = G4MUTEX_INITIALIZER; }
 G4double G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom(
 								  const G4ParticleDefinition*,
 								  G4double energy,
@@ -217,12 +218,33 @@ G4double G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom(
 
   G4int iZ = (G4int) Z;
 
+  //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+  //not invoked
+  if (!logAtomicShellXS)
+    {
+      //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+      //Unit Tests
+      fLocalTable = true;
+      logAtomicShellXS = new std::map<G4int,G4PhysicsTable*>;
+    }
+
   //now it should be ok
   if (!logAtomicShellXS->count(iZ))     
-    G4Exception("G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom()",
-		"em2038",FatalException,
-		"Unable to retrieve the shell cross section table");     
-  
+    {
+      //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+      //not filled up. This can happen in a UnitTest or via G4EmCalculator
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve the shell cross section table for Z=" << iZ << G4endl;
+      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+      G4Exception("G4PenelopePhotoElectricModel::ComputeCrossSectionPerAtom()",
+		  "em2038",JustWarning,ed);
+      //protect file reading via autolock
+      G4AutoLock lock(&PenelopePhotoElectricModelMutex);
+      ReadDataFile(iZ);
+      lock.unlock();
+	
+    }
+
   G4double cross = 0;
 
   G4PhysicsTable* theTable =  logAtomicShellXS->find(iZ)->second;

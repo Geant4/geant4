@@ -46,6 +46,7 @@
 #include "G4ElementTable.hh"
 #include "G4Element.hh"
 #include "G4PhysicsFreeVector.hh"
+#include "G4AutoLock.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -54,7 +55,7 @@ G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition* par
 						 const G4String& nam)
   :G4VEmModel(nam),fParticleChange(0),fParticle(0),isInitialised(false),
    logAtomicCrossSection(0),atomicFormFactor(0),logFormFactorTable(0),
-   pMaxTable(0),samplingTable(0)    
+   pMaxTable(0),samplingTable(0),fLocalTable(false)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -94,7 +95,7 @@ G4PenelopeRayleighModel::G4PenelopeRayleighModel(const G4ParticleDefinition* par
 
 G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
 {
-  if (IsMaster())
+  if (IsMaster() || fLocalTable)
     {
       std::map <G4int,G4PhysicsFreeVector*>::iterator i;
       if (logAtomicCrossSection)
@@ -103,7 +104,10 @@ G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
 	    if (i->second) delete i->second;
 	  delete logAtomicCrossSection;
 	}
-      
+    }
+  if (IsMaster())
+    {
+      std::map <G4int,G4PhysicsFreeVector*>::iterator i;
       if (atomicFormFactor)
 	{
 	  for (i=atomicFormFactor->begin();i != atomicFormFactor->end();i++)
@@ -268,7 +272,7 @@ void G4PenelopeRayleighModel::InitialiseLocal(const G4ParticleDefinition* part,
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+namespace { G4Mutex  PenelopeRayleighModelMutex = G4MUTEX_INITIALIZER; }
 G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 							     G4double energy,
 							     G4double Z,
@@ -284,13 +288,30 @@ G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDef
     G4cout << "Calling CrossSectionPerAtom() of G4PenelopeRayleighModel" << G4endl;
  
    G4int iZ = (G4int) Z;
-
- 
+   
+   //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+   //not invoked
+   if (!logAtomicCrossSection)
+     {
+       //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+       //Unit Tests
+       fLocalTable = true;
+       logAtomicCrossSection = new std::map<G4int,G4PhysicsFreeVector*>;
+     }
    //now it should be ok
    if (!logAtomicCrossSection->count(iZ))
      {
+       //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+       //not filled up. This can happen in a UnitTest or via G4EmCalculator
+       G4ExceptionDescription ed;
+       ed << "Unable to retrieve the cross section table for Z=" << iZ << G4endl;
+       ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
        G4Exception("G4PenelopeRayleighModel::ComputeCrossSectionPerAtom()",
-		   "em2040",FatalException,"Unable to load the cross section table");
+		   "em2040",JustWarning,ed);
+       //protect file reading via autolock
+       G4AutoLock lock(&PenelopeRayleighModelMutex);
+       ReadDataFile(iZ);
+       lock.unlock();       
      }
 
    G4double cross = 0;

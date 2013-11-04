@@ -35,6 +35,8 @@
 // 03 Oct 2013   L. Pandola   Migration to MT
 // 07 Oct 2013   L. Pandola   Add verbosity and ismaster flag for the 
 //                             master-only methods
+// 30 Oct 2013   L. Pandola   Add a G4Cache of temporary vectors as 
+//                             private member. 
 //
 // -------------------------------------------------------------------
 //
@@ -48,6 +50,7 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
+#include "G4Cache.hh"
 #include <map>
 
 class G4PhysicsFreeVector;
@@ -90,8 +93,8 @@ private:
   G4PenelopeBremsstrahlungFS(const G4PenelopeBremsstrahlungFS&);
   
   //Differential cross section tables
-  //Table contains G4PhysicsVectors of log(XS(E,x)) vs. log(E) for a grid of 32 values in 
-  //x (= reduced photon energy)
+  //Table contains G4PhysicsVectors of log(XS(E,x)) vs. log(E) 
+  //for a grid of 32 values in x (= reduced photon energy)
   std::map< std::pair<const G4Material*,G4double> , 
 	    G4PhysicsTable*> *theReducedXSTable; 
 
@@ -122,6 +125,12 @@ private:
 	    G4PhysicsTable*> *theSamplingTable;
   std::map< std::pair<const G4Material*,G4double> , 
 	    G4PhysicsFreeVector* > *thePBcut;
+ 
+  //temporary vector. Used as member variable to avoid to book/release the 
+  //memory on the fly. This vector is over-written at every call of 
+  //SampleGammaEnergy(). It is thread-local (each thread has its own) 
+  //and managed by G4Cache
+  G4Cache<G4PhysicsFreeVector*> fCache;
 
   G4int fVerbosity;
 

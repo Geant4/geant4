@@ -118,9 +118,11 @@ private:
 
   std::pair<G4double,G4double> GetScreeningFunctions(G4double);	
 
-
   G4int verboseLevel;
   G4bool isInitialised;
+
+  //Used only for G4EmCalculator and Unit Tests
+  G4bool fLocalTable;
 };
 
 

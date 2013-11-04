@@ -77,14 +77,7 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(
 
   // default generator
   SetAngularDistribution(new G4SauterGavrilaAngularDistribution());
-  /*
-  for(G4int i=0; i<maxZ; ++i) { 
-    fCrossSection[i] = 0; 
-    fCrossSectionLE[i] = 0; 
-    fNShells[i] = 0;
-    fNShellsUsed[i] = 0;
-  }
-  */
+
   if(verboseLevel>0) {
     G4cout << "Livermore PhotoElectric is constructed " 
 	   << " nShellLimit= " << nShellLimit << G4endl;
@@ -183,10 +176,10 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
   G4int Z = G4lrint(ZZ);
   if(Z < 1 || Z >= maxZ) { return cs; }
 
-  // element was not initialised
+  // if element was not initialised
+  // do initialisation safely for MT mode
   if(!fCrossSection[Z]) {
-    char* path = getenv("G4LEDATA");
-    ReadData(Z, path);
+    InitialiseForElement(0, Z);
     if(!fCrossSection[Z]) { return cs; }
   }
 
@@ -253,14 +246,10 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
 
   if(Z >= maxZ) { Z = maxZ-1; }
 
-  // element was not initialised
+  // element was not initialised gamma should be absorbed
   if(!fCrossSection[Z]) {
-    char* path = getenv("G4LEDATA");
-    ReadData(Z, path);
-    if(!fCrossSection[Z]) { 
-      fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy);
-      return;
-    }
+    fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy);
+    return;
   }
   
   // shell index

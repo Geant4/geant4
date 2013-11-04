@@ -125,6 +125,8 @@ private:
   size_t SelectRandomShell(G4int Z,G4double energy);
   G4String WriteTargetShell(size_t shellID);
 
+  //Used only for G4EmCalculator and Unit Tests
+  G4bool fLocalTable;
 
 };
 

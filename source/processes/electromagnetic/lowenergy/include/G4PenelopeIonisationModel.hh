@@ -145,6 +145,9 @@ private:
 
   size_t nBins;
 
+  //Used only for G4EmCalculator and Unit Tests
+  G4bool fLocalTable;
+
 };
 
 #endif

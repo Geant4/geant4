@@ -62,9 +62,10 @@
 #include "G4PhysicsLogVector.hh" 
 #include "G4LossTableManager.hh"
 #include "G4PenelopeIonisationXSHandler.hh"
+#include "G4AutoLock.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+namespace { G4Mutex  PenelopeIonisationModelMutex = G4MUTEX_INITIALIZER; }
  
 G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition* part,
 						     const G4String& nam)
@@ -72,7 +73,7 @@ G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*
    fAtomDeexcitation(0),kineticEnergy1(0.*eV),
    cosThetaPrimary(1.0),energySecondary(0.*eV),
    cosThetaSecondary(0.0),targetOscillator(-1),
-   theCrossSectionHandler(0)
+   theCrossSectionHandler(0),fLocalTable(false)
 {
   fIntrinsicLowEnergyLimit = 100.0*eV;
   fIntrinsicHighEnergyLimit = 100.0*GeV;
@@ -103,7 +104,7 @@ G4PenelopeIonisationModel::G4PenelopeIonisationModel(const G4ParticleDefinition*
  
 G4PenelopeIonisationModel::~G4PenelopeIonisationModel()
 {
-  if (IsMaster())
+  if (IsMaster() || fLocalTable)
     {
       if (theCrossSectionHandler)
 	delete theCrossSectionHandler;
@@ -244,10 +245,41 @@ G4double G4PenelopeIonisationModel::CrossSectionPerVolume(const G4Material* mate
   G4double totalCross = 0.0;
   G4double crossPerMolecule = 0.;
 
+  //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+  //not invoked
+  if (!theCrossSectionHandler)
+    {
+      //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+      //Unit Tests
+      fLocalTable = true;
+      theCrossSectionHandler = new G4PenelopeIonisationXSHandler(nBins);	
+    }
+  
   const G4PenelopeCrossSection* theXS = 
     theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,
 							  material,
 							  cutEnergy);
+  if (!theXS)
+    {
+      //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+      //not filled up. This can happen in a UnitTest or via G4EmCalculator
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve the cross section table for " << theParticle->GetParticleName() << 
+       " in " << material->GetName() << ", cut = " << cutEnergy/keV << " keV " << G4endl;
+      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+      G4Exception("G4PenelopeIonisationModel::CrossSectionPerVolume()",
+		  "em2038",JustWarning,ed);
+      //protect file reading via autolock
+      G4AutoLock lock(&PenelopeIonisationModelMutex);
+      theCrossSectionHandler->BuildXSTable(material,cutEnergy,theParticle);
+      lock.unlock();
+      //now it should be ok
+      theXS = 
+	theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,
+							  material,
+							  cutEnergy);
+    }
+
 
   if (theXS)
     crossPerMolecule = theXS->GetHardCrossSection(energy);
@@ -322,11 +354,42 @@ G4double G4PenelopeIonisationModel::ComputeDEDXPerVolume(const G4Material* mater
   if (verboseLevel > 3)
     G4cout << "Calling ComputeDEDX() of G4PenelopeIonisationModel" << G4endl;
  
+  //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+  //not invoked
+  if (!theCrossSectionHandler)
+    {
+      //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+      //Unit Tests
+      fLocalTable = true;
+      theCrossSectionHandler = new G4PenelopeIonisationXSHandler(nBins);	
+    }
 
   const G4PenelopeCrossSection* theXS = 
     theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,material,
 							  cutEnergy);
-  G4double sPowerPerMolecule = 0.0;
+  
+  if (!theXS)
+    {
+      //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+      //not filled up. This can happen in a UnitTest or via G4EmCalculator
+      G4ExceptionDescription ed;
+      ed << "Unable to retrieve the cross section table for " << theParticle->GetParticleName() <<
+       " in " << material->GetName() << ", cut = " << cutEnergy/keV << " keV " << G4endl;
+      ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+      G4Exception("G4PenelopeIonisationModel::ComputeDEDXPerVolume()",
+		  "em2038",JustWarning,ed);
+      //protect file reading via autolock
+      G4AutoLock lock(&PenelopeIonisationModelMutex);
+      theCrossSectionHandler->BuildXSTable(material,cutEnergy,theParticle);
+      lock.unlock();
+      //now it should be ok
+      theXS = 
+	theCrossSectionHandler->GetCrossSectionTableForCouple(theParticle,
+							  material,
+							  cutEnergy);
+    }
+
+ G4double sPowerPerMolecule = 0.0;
   if (theXS)
     sPowerPerMolecule = theXS->GetSoftStoppingPower(kineticEnergy);
 

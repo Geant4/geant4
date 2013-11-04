@@ -252,13 +252,13 @@ G4LivermoreComptonModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   if(intZ < 1 || intZ > maxZ) { return cs; } 
 
   G4LPhysicsFreeVector* pv = data[intZ];
-  // element was not initialised
+
+  // if element was not initialised
+  // do initialisation safely for MT mode
   if(!pv) 
     {
-      char* path = getenv("G4LEDATA");
-      ReadData(intZ, path);
+      InitialiseForElement(0, Z);
       pv = data[intZ];
-
       if(!pv) { return cs; }
     }
 
