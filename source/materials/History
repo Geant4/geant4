@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-10-13 V.Ivanchenko (materials-V09-06-25)
+- G4SandiaTable, G4StaticSandiaData - V.Grichine added data for water
+
 23-10-13 M.Kelsey (materials-V09-06-24)
 - NEW classes for logical (physics info) and physical (oriented) crystal
   lattices.  Ported here from exoticphysics/phonons example.

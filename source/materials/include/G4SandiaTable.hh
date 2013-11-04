@@ -110,9 +110,11 @@ private:
   // static members of the class
   static const G4int      fNumberOfElements;
   static const G4int      fIntervalLimit;
-  static const G4int      fNumberOfIntervals;
+  static const G4int      fNumberOfIntervals;  
+  static const G4int      fH2OlowerInt;
 
   static const G4double   fSandiaTable[981][5];
+  static const G4double   fH2OlowerI1[23][5];
   static const G4int      fNbOfIntervals[101];
   static const G4double   fZtoAratio[101];
   static const G4double   fIonizationPotentials[101];
@@ -163,6 +165,9 @@ public:  // without description
 
   G4double** GetPointerToCof(); 
 
+  G4bool GetLowerI1(){return fLowerI1;};
+  void SetLowerI1(G4bool flag){fLowerI1=flag;};
+
 private:
 
   void ComputeMatTable();
@@ -177,7 +182,7 @@ private:
 
   G4int fMaxInterval ;
   G4int fVerbose;
-  
+  G4bool fLowerI1;  
 };
     
 #endif 
