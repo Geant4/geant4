@@ -1563,9 +1563,8 @@ void UTubs::Extent (UVector3 &aMin, UVector3 &aMax) const
 	aMax = UVector3(fRMax, fRMax, fDz);
 }
 
-void UTubs::GetParametersList(int aNumber,double *aArray) const
+void UTubs::GetParametersList(int,double *aArray) const
 {
-  aNumber=5;
   aArray[0]=GetInnerRadius();
   aArray[1]=GetOuterRadius();
   aArray[2]=GetZHalfLength();

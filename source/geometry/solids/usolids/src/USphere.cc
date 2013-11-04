@@ -3110,9 +3110,8 @@ void USphere::Extent (UVector3 &aMin, UVector3 &aMax) const
 	aMax.Set(fRmax);
 }
 
-void USphere::GetParametersList(int aNumber,double * aArray) const
+void USphere::GetParametersList(int,double * aArray) const
 {
-  aNumber=6;
   aArray[0]=GetInnerRadius();
   aArray[1]=GetOuterRadius();
   aArray[2]=GetStartPhiAngle();

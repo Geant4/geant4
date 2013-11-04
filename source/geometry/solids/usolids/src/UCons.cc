@@ -1907,9 +1907,8 @@ void UCons::Extent (UVector3 &aMin, UVector3 &aMax) const
 	aMax = UVector3(max, max, fDz);
 }
 
-void UCons::GetParametersList(int aNumber,double *aArray) const
+void UCons::GetParametersList(int,double *aArray) const
 {
-  aNumber=7;
   aArray[0]=GetInnerRadiusMinusZ();
   aArray[1]=GetOuterRadiusMinusZ();
   aArray[2]=GetInnerRadiusPlusZ();

@@ -44,7 +44,7 @@
 #define G4UCONS_HH
 
 #include "G4USolid.hh"
-#include "Ucons.hh"
+#include "UCons.hh"
 
 class G4UCons : public G4USolid
 {

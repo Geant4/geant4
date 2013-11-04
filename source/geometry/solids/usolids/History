@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 1, 2013  G.Cosmo                 geom-usolids-V09-06-02
+- Fixed compilation error and warnings on SLC6.
+
 November 1, 2013  G.Cosmo                 geom-usolids-V09-06-01
 - Added wrappers for Ubox, Ucons, UGenericPolycone, UMultiUnion, UOrb,
   UPolycone, UPolyhedra, USphere, UTet, UTrd, UTubs.

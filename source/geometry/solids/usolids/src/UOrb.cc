@@ -512,7 +512,7 @@ VUSolid* UOrb:: Clone() const
     fSurfaceArea = rhs.fSurfaceArea;
     return *this;
  }
-void UOrb::GetParametersList(int aNumber, double *aArray)const
+void UOrb::GetParametersList(int, double *aArray)const
 {
-  aNumber=1; aArray[0]=GetRadius();
+  aArray[0]=GetRadius();
 }

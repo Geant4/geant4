@@ -136,7 +136,7 @@ inline G4PolyconeHistorical* G4UPolycone::GetOriginalParameters() const
   G4PolyconeHistorical* pdata = new G4PolyconeHistorical(pars->fNumZPlanes);
   pdata->Start_angle = pars->fStartAngle;
   pdata->Opening_angle = pars->fOpeningAngle;
-  for (unsigned int i=0; i<pars->fNumZPlanes; ++i)
+  for (G4int i=0; i<pars->fNumZPlanes; ++i)
   {
     pdata->Z_values[i] = pars->fZValues[i];
     pdata->Rmin[i] = pars->Rmin[i];
@@ -150,7 +150,7 @@ inline void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
   pdata->fStartAngle = pars->Start_angle;
   pdata->fOpeningAngle = pars->Opening_angle;
   pdata->fNumZPlanes = pars->Num_z_planes;
-  for (unsigned int i=0; i<pdata->fNumZPlanes; ++i)
+  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
   {
     pdata->fZValues[i] = pars->Z_values[i];
     pdata->Rmin[i] = pars->Rmin[i];

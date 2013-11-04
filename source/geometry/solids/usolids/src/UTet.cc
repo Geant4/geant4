@@ -568,9 +568,8 @@ void UTet::Extent ( UVector3 &aMin, UVector3 &aMax) const
 	aMin.y = -fDy; aMax.y = fDy;
 	aMin.z = -fDz; aMax.z = fDz;
 }
-void UTet::GetParametersList(int aNumber, double* aArray) const
+void UTet::GetParametersList(int, double* aArray) const
 {
-  aNumber = 12;
   aArray[0]=fAnchor.x;aArray[1]=fAnchor.y;aArray[2]=fAnchor.z;
   aArray[3]=fP2.x;aArray[4]=fP2.y;aArray[5]=fP2.z;
   aArray[6]=fP3.x;aArray[7]=fP3.y;aArray[8]=fP3.z;

@@ -150,7 +150,7 @@ inline G4PolyhedraHistorical* G4UPolyhedra::GetOriginalParameters() const
   pdata->Start_angle = pars->fStartAngle;
   pdata->Opening_angle = pars->fOpeningAngle;
   pdata->numSide = pars->fNumSide;
-  for (unsigned int i=0; i<pars->fNumZPlanes; ++i)
+  for (G4int i=0; i<pars->fNumZPlanes; ++i)
   {
     pdata->Z_values[i] = pars->fZValues[i];
     pdata->Rmin[i] = pars->Rmin[i];
@@ -165,7 +165,7 @@ inline void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
   pdata->fOpeningAngle = pars->Opening_angle;
   pdata->fNumSide = pars->numSide;
   pdata->fNumZPlanes = pars->Num_z_planes;
-  for (unsigned int i=0; i<pdata->fNumZPlanes; ++i)
+  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
   {
     pdata->fZValues[i] = pars->Z_values[i];
     pdata->Rmin[i] = pars->Rmin[i];

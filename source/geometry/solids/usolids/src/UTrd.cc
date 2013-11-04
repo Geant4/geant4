@@ -1226,9 +1226,8 @@ UVector3 UTrd::GetPointOnSurface() const
 
  }
 
-void UTrd::GetParametersList(int aNumber,double * aArray) const
+void UTrd::GetParametersList(int,double * aArray) const
 {
-  aNumber=5;
     aArray[0]=GetXHalfLength1();
     aArray[1]=GetXHalfLength2();
     aArray[2]=GetYHalfLength1();
