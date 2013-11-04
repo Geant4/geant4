@@ -36,10 +36,10 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
+#include "Run.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4HadronicProcessStore.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -50,8 +50,9 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
   : G4UserRunAction(),
-    fDetector(det), fPrimary(prim), fHistoManager(0)
+    fDetector(det), fPrimary(prim), fRun(0), fHistoManager(0)
 {
+ // Book predefined histograms
  fHistoManager = new HistoManager(); 
 }
 
@@ -60,6 +61,14 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
 RunAction::~RunAction()
 {
  delete fHistoManager;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Run* RunAction::GenerateRun()
+{ 
+  fRun = new Run(fDetector); 
+  return fRun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,34 +87,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   if ( analysisManager->IsActive() ) {
     analysisManager->OpenFile();
   }  
-  //initialization per run
-  //
-  fNbStep1 = fNbStep2 = 0;
-  fTrackLen1 = fTrackLen2 = 0.;
-  fTime1 = fTime2 = 0.;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::ParticleCount(G4String name, G4double Ekin)
-{
-  fParticleCount[name]++;
-  fEmean[name] += Ekin;
-  //update min max
-  if (fParticleCount[name] == 1) fEmin[name] = fEmax[name] = Ekin;
-  if (Ekin < fEmin[name]) fEmin[name] = Ekin;
-  if (Ekin > fEmax[name]) fEmax[name] = Ekin;  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::SumTrackLength(G4int nstep1, G4int nstep2, 
-                               G4double trackl1, G4double trackl2,
-                               G4double time1, G4double time2)
-{
-  fNbStep1   += nstep1;  fNbStep2   += nstep2;
-  fTrackLen1 += trackl1; fTrackLen2 += trackl2;
-  fTime1 += time1; fTime2 += time2;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,12 +96,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   if (NbOfEvents == 0) return;
 
-  G4int prec = 5, wid = prec + 2;  
+  G4int prec = 5;  
   G4int dfprec = G4cout.precision(prec);
     
   G4Material* material = fDetector->GetMaterial();
   G4double density = material->GetDensity();
-  G4int survive = 0;
    
   G4ParticleDefinition* particle = 
                             fPrimary->GetParticleGun()->GetParticleDefinition();
@@ -131,81 +111,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << G4BestUnit(fDetector->GetSize(),"Length") << " of "
          << material->GetName() << " (density: " 
          << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-  
-  //frequency of processes
-  //
-  G4cout << "\n Process calls frequency --->";
-  std::map<const G4VProcess*,G4int>::iterator it;    
-  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
-     G4String procName = it->first->GetProcessName();
-     G4int    count    = it->second;
-     G4cout << "\t" << procName << "= " << count;
-     if (procName == "Transportation") survive = count;
-  }
-  G4cout << G4endl;
-      
-  if (survive > 0) {
-    G4cout << "\n Nb of incident particles surviving after "
-           << G4BestUnit(0.5*(fDetector->GetSize()),"Length") << " of "
-           << material->GetName() << " : " << survive << G4endl;
-  }
-
- // total track length of incident neutron
- //
- G4cout << "\n Parcours of incident neutron:";
-  
- G4double meanCollision1  = (G4double)fNbStep1/NbOfEvents;
- G4double meanCollision2  = (G4double)fNbStep2/NbOfEvents;
- G4double meanCollisTota  = meanCollision1 + meanCollision2;
-
- G4cout << "\n   nb of collisions    E>1*eV= " << meanCollision1
-        << "      E<1*eV= " << meanCollision2
-        << "       total= " << meanCollisTota;        
-        
- G4double meanTrackLen1  = fTrackLen1/NbOfEvents;
- G4double meanTrackLen2  = fTrackLen2/NbOfEvents;
- G4double meanTrackLtot  =  meanTrackLen1 + meanTrackLen2;  
-
- G4cout 
-   << "\n   track length        E>1*eV= " << G4BestUnit(meanTrackLen1,"Length")
-   << "  E<1*eV= " << G4BestUnit(meanTrackLen2, "Length")
-   << "   total= " << G4BestUnit(meanTrackLtot, "Length");   
-   
- G4double meanTime1  = fTime1/NbOfEvents;
- G4double meanTime2  = fTime2/NbOfEvents;
- G4double meanTimeTo = meanTime1 + meanTime2;  
-
- G4cout 
-   << "\n   time of flight      E>1*eV= " << G4BestUnit(meanTime1,"Time")
-   << "  E<1*eV= " << G4BestUnit(meanTime2, "Time")
-   << "   total= " << G4BestUnit(meanTimeTo, "Time") << G4endl;   
-             
- //particles count
- //
- G4cout << "\n List of generated particles:" << G4endl;
-     
- std::map<G4String,G4int>::iterator ip;               
- for (ip = fParticleCount.begin(); ip != fParticleCount.end(); ip++) { 
-    G4String name = ip->first;
-    G4int count   = ip->second;
-    G4double eMean = fEmean[name]/count;
-    G4double eMin = fEmin[name], eMax = fEmax[name];    
          
-    G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
-           << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
-           << "\t( "  << G4BestUnit(eMin, "Energy")
-           << " --> " << G4BestUnit(eMax, "Energy") 
-           << ")" << G4endl;           
- }
-                   
   //restore default format         
-  G4cout.precision(dfprec);
-           
-  // remove all contents in fProcCounter 
-  fProcCounter.clear();
-  // remove all contents in fParticleCount
-  fParticleCount.clear(); 
-  fEmean.clear();  fEmin.clear(); fEmax.clear();  
+  G4cout.precision(dfprec);         
+         
+  //compute and print statistics
+  //
+  if (isMaster) fRun->ComputeStatistics();    
   
   //save histograms      
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();

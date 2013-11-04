@@ -23,51 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/EventActionMessenger.cc
-/// \brief Implementation of the EventActionMessenger class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
-// $Id: EventActionMessenger.cc 70755 2013-06-05 12:17:48Z ihrivnac $
-// 
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "EventActionMessenger.hh"
+#ifndef Run_h
+#define Run_h 1
 
-#include "EventAction.hh"
+#include "G4Run.hh"
+#include "G4VProcess.hh"
+#include "globals.hh"
+#include <map>
 
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAnInteger.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:G4UImessenger(),
- fEventAction(EvAct),fEventDir(0), fPrintCmd(0) 
-{ 
-  fEventDir = new G4UIdirectory("/testhadr/event/");
-  fEventDir ->SetGuidance("event control");
-      
-  fPrintCmd = new G4UIcmdWithAnInteger("/testhadr/event/printModulo",this);
-  fPrintCmd->SetGuidance("Print events modulo n");
-  fPrintCmd->SetParameterName("EventNb",false);
-  fPrintCmd->SetRange("EventNb>0");
-  fPrintCmd->AvailableForStates(G4State_Idle);      
-}
+class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventActionMessenger::~EventActionMessenger()
+class Run : public G4Run
 {
-  delete fPrintCmd;
-  delete fEventDir;   
-}
+  public:
+    Run(DetectorConstruction*);
+   ~Run();
+
+  public:
+    void CountProcesses(const G4VProcess* process) 
+                  {fProcCounter[process]++;};                  
+                  
+    void ParticleCount(G4String, G4double);
+    
+    void SumTrackLength (G4int,G4int,G4double,G4double,G4double,G4double);
+      
+    void ComputeStatistics(); 
+            
+    virtual void Merge(const G4Run*);
+
+  private:
+    DetectorConstruction* fDetector;
+    
+    std::map<const G4VProcess*,G4int> fProcCounter;        
+    std::map<G4String,G4int>    fParticleCount;
+    std::map<G4String,G4double> fEmean;
+    std::map<G4String,G4double> fEmin;
+    std::map<G4String,G4double> fEmax;
+        
+    G4int fNbStep1, fNbStep2;
+    G4double fTrackLen1, fTrackLen2;
+    G4double fTime1, fTime2;    
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if (command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

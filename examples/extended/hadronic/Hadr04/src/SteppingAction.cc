@@ -32,14 +32,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "TrackingAction.hh"
 #include "HistoManager.hh"
+
+#include "G4RunManager.hh"
                            
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct, TrackingAction* TrAct)
-: G4UserSteppingAction(),fRunAction(RuAct),fTrackingAction(TrAct)
+SteppingAction::SteppingAction(TrackingAction* TrAct)
+: G4UserSteppingAction(),fTrackingAction(TrAct)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +57,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // 
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
   const G4VProcess* process   = endPoint->GetProcessDefinedStep();
-  fRunAction->CountProcesses(process);
+  Run* run = static_cast<Run*>(
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->CountProcesses(process);
 
   // incident neutron
   //

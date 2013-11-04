@@ -37,7 +37,6 @@
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
 
-class RunAction;
 class TrackingAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,13 +44,12 @@ class TrackingAction;
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(RunAction*, TrackingAction*);
+    SteppingAction(TrackingAction*);
    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
     
   private:
-    RunAction* fRunAction;
     TrackingAction* fTrackingAction;    
 };
 

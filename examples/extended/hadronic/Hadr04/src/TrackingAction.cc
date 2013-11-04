@@ -33,20 +33,17 @@
 
 #include "TrackingAction.hh"
 
-#include "DetectorConstruction.hh"
-#include "RunAction.hh"
-#include "PrimaryGeneratorAction.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
 
+#include "G4RunManager.hh"
 #include "G4Track.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det, RunAction* run,
-                               PrimaryGeneratorAction* kin)
+TrackingAction::TrackingAction()
 :G4UserTrackingAction(),
- fDetector(det), fRunAction(run), fKinematic(kin),
  fNbStep1(0),fNbStep2(0),fTrackLen1(0.),fTrackLen2(0.),fTime1(0.),fTime2(0.)
 { }
 
@@ -81,8 +78,10 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  G4int trackID = track->GetTrackID();
  if (trackID > 1) return;
  
- fRunAction->SumTrackLength(fNbStep1,fNbStep2,fTrackLen1,fTrackLen2,
-                                              fTime1,fTime2);
+ Run* run 
+    = static_cast<Run*>(
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
+ run->SumTrackLength(fNbStep1,fNbStep2,fTrackLen1,fTrackLen2,fTime1,fTime2);
  
  // histograms
  //

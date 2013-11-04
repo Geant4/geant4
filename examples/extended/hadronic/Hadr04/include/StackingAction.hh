@@ -37,20 +37,15 @@
 #include "G4UserStackingAction.hh"
 #include "globals.hh"
 
-class RunAction;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction(RunAction*);
+    StackingAction();
    ~StackingAction();
      
     virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
-    
-  private:
-    RunAction* fRunAction;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

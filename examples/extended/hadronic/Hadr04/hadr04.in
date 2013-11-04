@@ -15,10 +15,10 @@
 #
 /process/list
 #
-/particle/createAllIsomer
+###/particle/createAllIsomer
 /gun/particle neutron
 /gun/energy 2 MeV
 #
-/testhadr/event/printModulo 100
+/run/printProgress 100
 #
 /run/beamOn 1000

@@ -35,16 +35,14 @@
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "G4VProcess.hh"
 #include "globals.hh"
-#include <map>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction;
+class Run;
 class PrimaryGeneratorAction;
 class HistoManager;
-class G4Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,31 +53,16 @@ class RunAction : public G4UserRunAction
    ~RunAction();
 
   public:
+    virtual G4Run* GenerateRun();  
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-
-    void CountProcesses(const G4VProcess* process) 
-                  {fProcCounter[process]++;};                  
-                  
-    void ParticleCount(G4String, G4double);
-    
-    void SumTrackLength (G4int,G4int,G4double,G4double,G4double,G4double);
                             
   private:
     DetectorConstruction*      fDetector;
     PrimaryGeneratorAction*    fPrimary;
+    Run*                       fRun;    
     HistoManager*              fHistoManager;
         
-    std::map<const G4VProcess*,G4int>   fProcCounter;
-        
-    std::map<G4String,G4int> fParticleCount;
-    std::map<G4String,G4double> fEmean;
-    std::map<G4String,G4double> fEmin;
-    std::map<G4String,G4double> fEmax;
-    
-    G4int fNbStep1, fNbStep2;
-    G4double fTrackLen1, fTrackLen2;
-    G4double fTime1, fTime2;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -32,14 +32,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "StackingAction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 
+#include "G4RunManager.hh"
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StackingAction::StackingAction(RunAction* RA)
-:G4UserStackingAction(),fRunAction(RA)
+StackingAction::StackingAction()
+:G4UserStackingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,8 +58,10 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
 
   //count secondary particles
   G4String name   = aTrack->GetDefinition()->GetParticleName();
-  G4double energy = aTrack->GetKineticEnergy();  
-  fRunAction->ParticleCount(name,energy);
+  G4double energy = aTrack->GetKineticEnergy();
+  Run* run = static_cast<Run*>(
+        G4RunManager::GetRunManager()->GetNonConstCurrentRun());    
+  run->ParticleCount(name,energy);
 
   //kill all secondaries  
   return fKill;
