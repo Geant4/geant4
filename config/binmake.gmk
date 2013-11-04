@@ -81,6 +81,9 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/management/include \
               -I$(G4BASE)/processes/cuts/include \
               -I$(G4BASE)/processes/biasing/include \
+              -I$(G4BASE)/processes/biasing/generic/include \
+              -I$(G4BASE)/processes/biasing/importance/include \
+              -I$(G4BASE)/processes/biasing/management/include \
               -I$(G4BASE)/processes/scoring/include \
               -I$(G4BASE)/processes/decay/include \
               -I$(G4BASE)/processes/optical/include \
@@ -147,6 +150,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/solids/CSG/include \
               -I$(G4BASE)/geometry/solids/specific/include \
               -I$(G4BASE)/geometry/solids/Boolean/include \
+              -I$(G4BASE)/geometry/solids/usolids/include \
               -I$(G4BASE)/geometry/divisions/include \
               -I$(G4BASE)/geometry/volumes/include \
               -I$(G4BASE)/geometry/navigation/include \
