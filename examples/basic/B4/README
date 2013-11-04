@@ -188,6 +188,38 @@ $Id$
    For details, see comment lines  described in the macro files.
    These macros are designed to help your understanding of the User's Guide.
    
+ 9- HOW TO RUN
+ 
+    This example handles the program arguments in a new way.
+    It can be run with the following optional arguments:
+    % exampleB4a [-m macro ] [-u UIsession] [-t nThreads]
+    
+    The -t option is available only in multi-threading mode
+    and it allows the user to override the Geant4 default number of 
+    threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
+    environment variable which has the top priority.
+ 
+    - Execute exampleB4a in the 'interactive mode' with visualization
+        % exampleB4a
+      and type in the commands from run1.mac line by line:  
+        Idle> /tracking/verbose 1 
+        Idle> /run/beamOn 1
+        Idle> ...
+        Idle> exit
+      or
+        Idle> /control/execute run1.mac
+        ....
+        Idle> exit
+
+    - Execute exampleB4a in the 'batch' mode from macro files
+      (without visualization)
+        % exampleB4a -m run2.mac
+        % exampleB4a -m exampleB4.in > exampleB4.out
+ 		
+    - Execute exampleB4a in the 'interactive mode' with a selected UI session,
+      e.g. tcsh
+        % exampleB4a -u tcsh 
+
  The following paragraphs are common to all basic examples
        				
  A- VISUALIZATION
@@ -234,38 +266,3 @@ $Id$
    The selection of the user command interface is then done automatically 
    according to the Geant4 configuration or it can be done explicitly via 
    the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
- 
- C- HOW TO RUN
- 
-    This example handles the program arguments in a new way.
-    It can be run with the following optional arguments:
-    % exampleB4a [-m macro ] [-u UIsession] [-t nThreads]
-    
-    The -t option is available only in multi-threading mode
-    and it allows the user to override the Geant4 default number of 
-    threads. The number of threads can be also set via G4FORCENUMBEROFTHREADS
-    environment variable which has the top priority.
- 
-    - Execute exampleB4a in the 'interactive mode' with visualization
-        % exampleB4a
-      and type in the commands from run1.mac line by line:  
-        Idle> /tracking/verbose 1 
-        Idle> /run/beamOn 1
-        Idle> ...
-        Idle> exit
-      or
-        Idle> /control/execute run1.mac
-        ....
-        Idle> exit
-
-    - Execute exampleB4a in the 'batch' mode from macro files
-      (without visualization)
-        % exampleB4a -m run2.mac
-        % exampleB4a -m exampleB4.in > exampleB4.out
- 		
-    - Execute exampleB4a in the 'interactive mode' with a selected UI session,
-      e.g. tcsh
-        % exampleB4a -u tcsh 
-
- 
-  

@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30/10/13 I. Hrivnacova (exampleB4-V09-06-16)
+- Added a protection when /run/printProgress value is set to zero 
+
+30/10/13 I. Hrivnacova (exampleB4-V09-06-15)
+- Updated README
+
 29/10/13 I. Hrivnacova (exampleB4-V09-06-14)
 - Fixed macro (using /run/printProgress)
 

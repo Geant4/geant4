@@ -161,7 +161,7 @@ void B4dEventAction::EndOfEventAction(const G4Event* event)
   //
   G4int eventID = event->GetEventID();
   G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
-  if ( eventID % printModulo == 0) {
+  if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
     G4cout << "---> End of event: " << eventID << G4endl;     
     PrintEventStatistics(absoEdep, absoTrackLength, gapEdep, gapTrackLength);
   }
