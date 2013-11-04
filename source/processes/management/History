@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Oct. 30th, 2013   M.Kelsey (procman-V09-06-07)
+- Add fPhonon to G4VProcess::GetProcessTypeName() [should have done it below]
+
 - Oct. 28th, 2013   M.Kelsey (procman-V09-06-06)
 - Add fPhonon to G4ProcessType.hh for new phonon processes.
 

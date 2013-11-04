@@ -37,6 +37,7 @@
 // ------------------------------------------------------------
 //   removed thePhysicsTable           02 Aug. 1998 H.Kurashige
 //   Modified DumpInfo                 15 Aug. 1998 H.Kurashige
+//   Add fPhonon to ProcessTypeName    30 Oct. 2013 M.Kelsey
 
 #include "G4VProcess.hh"
 
@@ -122,8 +123,7 @@ void G4VProcess::EndTracking()
 }
 
 
-const G4String& G4VProcess::GetProcessTypeName(G4ProcessType aType ) 
-{
+namespace {
   static const G4String typeNotDefined = "NotDefined";
   static const G4String typeTransportation = "Transportation";
   static const G4String typeElectromagnetic = "Electromagnetic";
@@ -134,31 +134,28 @@ const G4String& G4VProcess::GetProcessTypeName(G4ProcessType aType )
   static const G4String typeGeneral = "General";
   static const G4String typeParameterisation = "Parameterisation";
   static const G4String typeUserDefined = "UserDefined";
+  static const G4String typePhonon = "Phonon";
   static const G4String noType = "------";
+}
 
-  if (aType ==   fNotDefined) {
-    return  typeNotDefined;
-  } else if  (aType ==   fTransportation ) {
-    return typeTransportation;
-  } else if  (aType ==   fElectromagnetic ) {
-    return typeElectromagnetic;
-  } else if  (aType ==   fOptical ) {
-    return typeOptical;
-  } else if  (aType ==   fHadronic ) {
-    return typeHadronic;
-  } else if  (aType ==   fPhotolepton_hadron ) {
-    return typePhotolepton_hadron;
-  } else if  (aType ==   fDecay ) {
-    return typeDecay;
-  } else if  (aType ==   fGeneral ) {
-    return typeGeneral;
-  } else if  (aType ==   fParameterisation ) {
-    return typeParameterisation;
-  } else if  (aType ==   fUserDefined ) {
-    return typeUserDefined;
-  } else {
-    return noType;  
+const G4String& G4VProcess::GetProcessTypeName(G4ProcessType aType ) 
+{
+  switch (aType) {
+  case fNotDefined:         return typeNotDefined; break;
+  case fTransportation:     return typeTransportation; break;
+  case fElectromagnetic:    return typeElectromagnetic; break;
+  case fOptical:            return typeOptical; break;
+  case fHadronic:           return typeHadronic; break;
+  case fPhotolepton_hadron: return typePhotolepton_hadron; break;
+  case fDecay:              return typeDecay; break;
+  case fGeneral:            return typeGeneral; break;
+  case fParameterisation:   return typeParameterisation; break;
+  case fUserDefined:        return typeUserDefined; break;
+  case fPhonon:             return typePhonon; break;
+  default: ;
   }
+
+  return noType;  
 }
 
 G4VProcess & G4VProcess::operator=(const G4VProcess &)
