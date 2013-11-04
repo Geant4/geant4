@@ -55,8 +55,6 @@ foreach(_script ${MICROELECTRONICS_SCRIPTS})
     )
 endforeach()
 
-add_custom_target(MICROELECTRONICS DEPENDS microelectronics)
-
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #

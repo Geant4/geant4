@@ -9,6 +9,10 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        Package History file
                        --------------------
 
+31 October 2013 - L. Pandola - microelectronics-V09-06-01
+	 Edited CMakeLists.txt to make the test work on 
+	 Windows
+
 29 October 2013 - M. Raine - microelectronics-V09-06-00
 	 Package created, based on microdosimetry.
 
