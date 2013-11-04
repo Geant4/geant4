@@ -243,3 +243,4 @@ void RE01DetectorConstruction::ConstructSDandField() {
   SetSensitiveDetector(fCalorimeter_log, calorimeterSD);
 
 }
+
