@@ -100,7 +100,6 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4alphaIonisation.hh
         G4eBremsstrahlung.hh
 	G4eBremParametrizedModel.hh
-        G4eBremsstrahlungModel.hh
         G4eBremsstrahlungRelModel.hh
         G4eCoulombScatteringModel.hh
         G4eIonisation.hh
@@ -168,7 +167,6 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4alphaIonisation.cc
         G4eBremsstrahlung.cc
 	G4eBremParametrizedModel.cc
-        G4eBremsstrahlungModel.cc
         G4eBremsstrahlungRelModel.cc
         G4eCoulombScatteringModel.cc
         G4eIonisation.cc

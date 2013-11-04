@@ -149,7 +149,7 @@ void G4PAIySection::Initialize( const G4Material* material,
       fIntervalNumber--;
       continue;
     }
-    if( ( sandia->GetSandiaMatTablePAI(i-1,0) >= maxEnergyTransfer ) || i > fIntervalNumber ) 
+    if( ( sandia->GetSandiaMatTablePAI(i-1,0) >= maxEnergyTransfer ) || i >= fIntervalNumber ) 
     {
       fEnergyInterval[i] = maxEnergyTransfer;
       fIntervalNumber = i;
@@ -833,6 +833,9 @@ G4double G4PAIySection::SumOverInterval( G4int i )
 
    x0 = fSplineEnergy[i];
    x1 = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0 = fDifPAIySection[i];
    yy1 = fDifPAIySection[i+1];
    //G4cout << "## x0= " << x0 << " x1= " << x1 << G4endl;
@@ -872,6 +875,9 @@ G4double G4PAIySection::SumOverIntervaldEdx( G4int i )
 
    x0 = fSplineEnergy[i];
    x1 = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0 = fDifPAIySection[i];
    yy1 = fDifPAIySection[i+1];
    c = x1/x0;
@@ -903,6 +909,9 @@ G4double G4PAIySection::SumOverInterCerenkov( G4int i )
 
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0  = fdNdxCerenkov[i];
    yy1 = fdNdxCerenkov[i+1];
    // G4cout<<"SumC, i = "<<i<<"; x0 ="<<x0<<"; x1 = "<<x1
@@ -937,6 +946,9 @@ G4double G4PAIySection::SumOverInterPlasmon( G4int i )
 
    x0  = fSplineEnergy[i];
    x1  = fSplineEnergy[i+1];
+
+   if( std::abs( 2.*(x1-x0)/(x1+x0) ) < 1.e-6) return 0.;
+
    y0  = fdNdxPlasmon[i];
    yy1 = fdNdxPlasmon[i+1];
    c = x1/x0;

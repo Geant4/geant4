@@ -18,6 +18,18 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+01 November 13: V.Ivanchenko (emstand-V09-06-73)
+- G4PAIxSection, G4PAIySection - V.Grichine fixed problem of division
+    by zero
+- G4eBremsstrahlungRelModel, G4eCoulombScatteringModel - implemented
+    MinPrimaryEnergy method needed to set low-energy limit for 
+    cross section tables
+
+28 October 13: V.Ivanchenko (emstand-V09-06-72)
+- G4eBremsstrahlungModel - removed as obsolete
+- G4ESTARStopping, G4GoudsmitSaundersonTable, 
+  G4GoudsmitSaundersonMscModel - fixed Coverity reports
+
 21 October 13: V.Ivanchenko (emstand-V09-06-71)
 - G4BraggModel, G4BraggIonModel, G4BetheBlochModel, G4MollerBhabhaModel
     added possibility to use angular generator

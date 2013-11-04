@@ -257,20 +257,21 @@ void G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()
   //Probability and their cumulative loading data
   G4String filename;
 
+  char* path = getenv("G4LEDATA");
+  if (!path)
+    {
+      G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()","em0006",
+		  FatalException,
+		  "Environment variable G4LEDATA not defined");
+      return;
+    }
+
+  G4String pathString(path);
+
   for(G4int level = 0; level < 2; level++){
     if(level == 0) { filename = "PDF.dat"; }
     if(level == 1) { filename = "CPDF.dat"; }
  
-    char* path = getenv("G4LEDATA");
-    if (!path)
-      {
-	G4Exception("G4GoudsmitSaundersonTable::LoadPDFandCPDFdata()","em0006",
-		    FatalException,
-		    "Environment variable G4LEDATA not defined");
-        return;
-      }
-
-    G4String pathString(path);
     G4String dirFile = pathString + "/msc_GS/" + filename;
     
     FILE *infile = fopen(dirFile,"r"); 

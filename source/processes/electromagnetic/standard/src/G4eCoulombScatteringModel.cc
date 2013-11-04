@@ -154,6 +154,34 @@ void G4eCoulombScatteringModel::InitialiseLocal(const G4ParticleDefinition*,
   SetElementSelectors(masterModel->GetElementSelectors());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double 
+G4eCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
+					    const G4ParticleDefinition* part,
+					    G4double)
+{
+  SetupParticle(part);
+
+  // define cut using cuts for proton
+  G4double cut = 
+    std::max(recoilThreshold, (*pCuts)[CurrentCouple()->GetIndex()]);
+
+  // find out lightest element
+  const G4ElementVector* theElementVector = material->GetElementVector();
+  G4int nelm = material->GetNumberOfElements();
+  G4int Z = 300;
+  for (G4int j=0; j<nelm; ++j) {        
+    G4int iz = (G4int)(*theElementVector)[j]->GetZ();
+    if(iz < Z) { Z = iz; }
+  }
+  G4int A = G4lrint(fNistManager->GetAtomicMassAmu(Z));
+  G4double targetMass = G4NucleiProperties::GetNuclearMass(A, Z);
+  G4double t = std::max(cut, 0.5*(cut + sqrt(2*cut*targetMass)));
+
+  return std::max(lowEnergyThreshold, t);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
@@ -163,7 +191,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
 		G4double cutEnergy, G4double)
 {
   //G4cout << "### G4eCoulombScatteringModel::ComputeCrossSectionPerAtom  for " 
-  //  << p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV << G4endl; 
+  //<< p->GetParticleName()<<" Z= "<<Z<<" e(MeV)= "<< kinEnergy/MeV << G4endl; 
   G4double cross = 0.0;
   if(p != particle) { SetupParticle(p); }
 

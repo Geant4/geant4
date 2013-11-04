@@ -205,6 +205,8 @@ public:
 	  G4double GetNormalizationCof() const { return fNormalizationCof; }
 
 	  G4double GetLowEnergyCof() const { return fLowEnergyCof; }
+
+  void SetVerbose(G4int v){fVerbose=v;};
           
 	  inline G4double GetPAItable(G4int i,G4int j) const;
 

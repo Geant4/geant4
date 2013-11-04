@@ -84,7 +84,8 @@ G4SeltzerBergerModel::G4SeltzerBergerModel(const G4ParticleDefinition* p,
 					   const G4String& nam)
   : G4eBremsstrahlungRelModel(p,nam),useBicubicInterpolation(false)
 {
-  SetLowEnergyLimit(0.0);
+  SetLowestKinEnergy(1.0*keV);
+  SetLowEnergyLimit(LowestKinEnergy());
   SetLPMFlag(false);
   nwarn = 0;
   idx = idy = 0;
@@ -370,7 +371,7 @@ void G4SeltzerBergerModel::InitialiseForElement(const G4ParticleDefinition*,
 						G4int Z)
 {
   G4AutoLock l(&SeltzerBergerModelMutex);
-  //  G4cout << "G4SeltzerBergerModel::InitialiseForElement Z= " << Z << G4endl;
+  // G4cout << "G4SeltzerBergerModel::InitialiseForElement Z= " << Z << G4endl;
   if(!dataSB[Z]) { ReadData(Z); }
 }
 

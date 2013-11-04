@@ -94,8 +94,16 @@ public:
   virtual void SetupForMaterial(const G4ParticleDefinition*,
                                 const G4Material*,G4double);
 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double cut);
+
   inline void SetLPMconstant(G4double val);
   inline G4double LPMconstant() const;
+
+  inline void SetLowestKinEnergy(G4double);
+  inline G4double LowestKinEnergy() const;
+
 
 protected:
 
@@ -141,8 +149,6 @@ protected:
   G4double kinEnergy;
   G4double totalEnergy;
   G4double currentZ;
-  //G4double z13, z23, lnZ;
-  //G4double Fel, Finel, fCoulomb, fMax; 
   G4double densityFactor;
   G4double densityCorr;
 
@@ -155,7 +161,7 @@ private:
   static const G4double Finel_light[5];
 
   // consts
-  G4double lowKinEnergy;
+  G4double lowestKinEnergy;
   G4double fMigdalConstant;
   G4double fLPMconstant;
   G4double energyThresholdLPM;
@@ -249,6 +255,18 @@ inline
 G4double G4eBremsstrahlungRelModel::LPMconstant() const 
 {
   return fLPMconstant;
+}
+
+inline void G4eBremsstrahlungRelModel::SetLowestKinEnergy(G4double val)
+{
+  lowestKinEnergy = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eBremsstrahlungRelModel::LowestKinEnergy() const
+{
+  return lowestKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -71,17 +71,21 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const G4double G4eBremsstrahlungRelModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
-						  0.5917, 0.7628, 0.8983, 0.9801 };
-const G4double G4eBremsstrahlungRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
-					    0.1813, 0.1569, 0.1112, 0.0506 };
-const G4double G4eBremsstrahlungRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71} ;
-const G4double G4eBremsstrahlungRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924} ;
+const G4double 
+G4eBremsstrahlungRelModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
+				   0.5917, 0.7628, 0.8983, 0.9801 };
+const G4double 
+G4eBremsstrahlungRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
+				   0.1813, 0.1569, 0.1112, 0.0506 };
+const G4double 
+G4eBremsstrahlungRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71};
+const G4double 
+G4eBremsstrahlungRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924};
 
 using namespace std;
 
-G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition* p,
-						     const G4String& nam)
+G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(
+       const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
     particle(0),
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
@@ -94,8 +98,8 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(const G4ParticleDefinition*
   fParticleChange = 0;
   theGamma = G4Gamma::Gamma();
 
-  lowKinEnergy = 0.1*GeV;
-  SetLowEnergyLimit(lowKinEnergy);  
+  lowestKinEnergy = 1.0*MeV;
+  SetLowEnergyLimit(lowestKinEnergy);  
 
   nist = G4NistManager::Instance();  
 
@@ -162,8 +166,7 @@ void G4eBremsstrahlungRelModel::SetupForMaterial(const G4ParticleDefinition*,
 
   // define critical gamma energies (important for integration/dicing)
   klpm=totalEnergy*totalEnergy/lpmEnergy;
-  kp=sqrt(densityCorr);
-    
+  kp=sqrt(densityCorr);    
 }
 
 
@@ -173,8 +176,6 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 					   const G4DataVector& cuts)
 {
   if(p) { SetParticle(p); }
-
-  lowKinEnergy = LowEnergyLimit();
 
   currentZ = 0.;
 
@@ -195,6 +196,16 @@ void G4eBremsstrahlungRelModel::InitialiseLocal(const G4ParticleDefinition*,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4double 
+G4eBremsstrahlungRelModel::MinPrimaryEnergy(const G4Material*,
+					    const G4ParticleDefinition*,
+					    G4double cut)
+{
+  return std::max(lowestKinEnergy, cut);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(
 					     const G4Material* material,
                                              const G4ParticleDefinition* p,
@@ -202,7 +213,7 @@ G4double G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(
                                                    G4double cutEnergy)
 {
   if(!particle) { SetParticle(p); }
-  if(kineticEnergy < lowKinEnergy) { return 0.0; }
+  if(kineticEnergy < LowEnergyLimit()) { return 0.0; }
   G4double cut = std::min(cutEnergy, kineticEnergy);
   if(cut == 0.0) { return 0.0; }
 
@@ -273,7 +284,7 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
 					      G4double maxEnergy)
 {
   if(!particle) { SetParticle(p); }
-  if(kineticEnergy < lowKinEnergy) { return 0.0; }
+  if(kineticEnergy < LowEnergyLimit()) { return 0.0; }
   G4double cut  = std::min(cutEnergy, kineticEnergy);
   G4double tmax = std::min(maxEnergy, kineticEnergy);
 
@@ -477,7 +488,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 				      G4double maxEnergy)
 {
   G4double kineticEnergy = dp->GetKineticEnergy();
-  if(kineticEnergy < lowKinEnergy) { return; }
+  if(kineticEnergy < LowEnergyLimit()) { return; }
   G4double cut  = std::min(cutEnergy, kineticEnergy);
   G4double emax = std::min(maxEnergy, kineticEnergy);
   if(cut >= emax) { return; }

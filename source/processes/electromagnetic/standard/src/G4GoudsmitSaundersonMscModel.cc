@@ -777,8 +777,7 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
 
   G4String pathString(path);
   G4String dirFile = pathString + "/msc_GS/" + filename;
-  FILE *infile;
-  infile = fopen(dirFile,"r"); 
+  FILE *infile = fopen(dirFile,"r"); 
   if (infile == 0)
     {
       G4ExceptionDescription ed;
@@ -869,7 +868,6 @@ void G4GoudsmitSaundersonMscModel::LoadELSEPAXSections()
   }
 
   fclose(infile);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -103,6 +103,10 @@ public:
 				 G4double tmin,
 				 G4double maxEnergy);
 
+  virtual G4double MinPrimaryEnergy(const G4Material*,
+				    const G4ParticleDefinition*,
+				    G4double);
+
   // defines low energy limit of the model
   inline void SetLowEnergyThreshold(G4double val);
 

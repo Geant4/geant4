@@ -77,7 +77,7 @@ private:
 
   void Initialise();
 
-  void AddData(G4double* e, G4double* s, G4int idx);
+  void AddData(const G4double* e, const G4double* s, G4int idx);
 
   // hide assignment operator
   G4ESTARStopping & operator=(const  G4ESTARStopping &right);

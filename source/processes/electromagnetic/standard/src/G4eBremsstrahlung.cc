@@ -77,7 +77,6 @@
 #include "G4eBremsstrahlung.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Gamma.hh"
-#include "G4eBremsstrahlungModel.hh"
 #include "G4SeltzerBergerModel.hh"
 #include "G4eBremsstrahlungRelModel.hh"
 #include "G4UnitsTable.hh"
