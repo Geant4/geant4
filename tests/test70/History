@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11.11.2013 M.K                  tag test70-V09-06-06
+-----------------------------------------------------
+- Remove test70 from tests
+
 10.10.2013 M.K                  tag test70-V09-06-05
 -----------------------------------------------------
 - Add #include time.h in test70.cc
