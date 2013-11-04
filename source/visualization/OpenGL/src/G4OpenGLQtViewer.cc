@@ -124,7 +124,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
   if ( fUiQt) {
     if (!fBatchMode) {
       if (!interactorManager->IsExternalApp()) {
-        isTabbedView = fUiQt->AddTabWidget(fWindow,name,getWinWidth(),getWinHeight());
+        isTabbedView = fUiQt->AddTabWidget((QWidget*)fWindow,name,getWinWidth(),getWinHeight());
         fUISceneTreeComponentsTBWidget = fUiQt->GetSceneTreeComponentsTBWidget();
         isTabbedView = true;
       }
@@ -525,8 +525,8 @@ void G4OpenGLQtViewer::showShortcuts() {
     if (fUiQt->IsIconRotateSelected()) {  // rotate
       text += "Click and move mouse to rotate volume \n";
       text += "ALT + Click and move mouse to rotate volume (Toggle View/Theta-Phi Direction) \n";
-      text += "CTRL + Click and zoom mouse to zoom in/out \n";
-      text += "SHIFT + Click and zoommove camera point of view \n";
+      text += "CTRL + Click and move mouse to zoom in/out \n";
+      text += "SHIFT + Click and move mouse to change camera point of view \n";
     } else  if (fUiQt->IsIconMoveSelected()) { //move
       text += "Move camera point of view with mouse \n";
     } else  if (fUiQt->IsIconPickSelected()) { //pick
@@ -1006,7 +1006,10 @@ void G4OpenGLQtViewer::FinishView()
 */
 void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
 {
-  if ((evnt->buttons() & Qt::LeftButton) && (! (evnt->modifiers() & Qt::ControlModifier ))){
+  if (evnt->button() == Qt::RightButton) {
+    return;
+  }
+  if ((evnt->button() & Qt::LeftButton) && (! (evnt->modifiers() & Qt::ControlModifier ))){
     fWindow->setMouseTracking(true);
     fAutoMove = false; // stop automove
     fLastPos1 = evnt->pos();

@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+30th October 2013  Tatiana Nikitina  (modeling-V09-06-20)
+- Make use of G4GenericPolycone in G4ArrowModel.
+  Coworks with tag "geom-specific-V09-06-22".
+
 30th September 2013  John Allison  (modeling-V09-06-19)
 - Re-tagged after clean-up by Gunter and Mke.
 

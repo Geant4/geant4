@@ -34,11 +34,6 @@
 
 #ifdef G4VIS_BUILD_OPENGLWT_DRIVER
 
-#define TEST_WT_EXAMPLE 1
-//#define TEAPOT 1
-#define NORMAL 1
-#define G4DEBUG_VIS_OGL 1
-
 #include "G4OpenGLWtViewer.hh"
 #include "G4VViewer.hh"
 #include "G4VSceneHandler.hh"
@@ -82,7 +77,7 @@ void G4OpenGLWtViewer::CreateMainWindow (
   fWindow = glWidget ;
   //  fWindow->makeCurrent();
 
-  G4Wt* interactorManager = G4Wt::getInstance ();
+//  G4Wt* interactorManager = G4Wt::getInstance ();
   // return false if G4UIWt was not launch
   
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -204,7 +199,6 @@ G4OpenGLWtViewer::G4OpenGLWtViewer (
   ,fTempFolderPath("")
   ,fMovieTempFolderPath("")
   ,fSaveFileName("")
-  ,fBatchMode(false)
   ,fParameterFileName("mpeg_encode_parameter_file.par")
   ,fMovieParametersDialog(NULL)
   ,fRecordingStep(WAIT)
@@ -218,6 +212,7 @@ G4OpenGLWtViewer::G4OpenGLWtViewer (
   ,fAltKeyPress(false)
   ,fControlKeyPress(false)
   ,fShiftKeyPress(false)
+  ,fBatchMode(false)
   ,fUiWt(NULL)
 {
 

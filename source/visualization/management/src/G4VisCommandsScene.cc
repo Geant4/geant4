@@ -320,6 +320,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
       }
     } else {
       pScene->SetRefreshAtEndOfEvent(true);
+      pScene->SetMaxNumberOfKeptEvents(maxNumberOfKeptEvents);
       pSceneHandler->SetMarkForClearingTransientStore(true);
     }
   }

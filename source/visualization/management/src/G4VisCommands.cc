@@ -302,6 +302,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 	  first = false;
 	  G4cout <<
   "  Useful commands might be:"
+  "\n    \"/vis/scene/add/trajectories\" if not already added."
   "\n    \"/vis/viewer/...\" to change the view (zoom, set/viewpoint,...)."
   "\n    \"/vis/oglx/printEPS\" to get hard copy."
   "\n    \"/vis/open\" to get alternative viewer."

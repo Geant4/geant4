@@ -43,6 +43,7 @@
 #include "G4UImanager.hh"
 
 #include <Wt/WLabel>
+#include <Wt/WContainerWidget>
 
 G4OpenGLImmediateWt::G4OpenGLImmediateWt ():
   G4VGraphicsSystem ("OpenGLImmediateWt",

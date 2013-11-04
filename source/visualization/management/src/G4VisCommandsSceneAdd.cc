@@ -266,7 +266,14 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand = new G4UIcommand ("/vis/scene/add/axes", this);
   fpCommand -> SetGuidance ("Add axes.");
   fpCommand -> SetGuidance
-    ("Draws axes at (x0, y0, z0) of given length and colour.");
+  ("Draws axes at (x0, y0, z0) of given length and colour.");
+  fpCommand -> SetGuidance
+  ("If \"unitcolour\" is \"auto\", x, y and z will be red, green and blue"
+   "\n  respectively.  Otherwise choose from the pre-defined text-specified"
+   "\n  colours - see information printed by the vis manager at start-up or"
+   "\n  use \"/vis/list\".");
+  fpCommand -> SetGuidance
+  ("If \"length\" is negative, it is set to about 25% of scene extent.");
   G4UIparameter* parameter;
   parameter =  new G4UIparameter ("x0", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
@@ -279,20 +286,12 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("length", 'd', omitable = true);
   parameter->SetDefaultValue (-1.);
-  parameter->SetGuidance
-    ("If negative, length automatic, about 25% of scene extent.");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
   parameter->SetDefaultValue ("m");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unitcolour", 's', omitable = true);
   parameter->SetDefaultValue  ("auto");
-  parameter->SetGuidance
-    ("If \"auto\", x, y and z will be red, green and blue respectively.");
-  parameter->SetGuidance
-    ("Otherwise choose from the pre-defined text-specified colours - "
-     "\n  see information printed by the vis manager at start-up or"
-     "\n  use \"/vis/list\".");
   fpCommand->SetParameter (parameter);
 }
 
@@ -380,9 +379,9 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("date", 's', omitable = true);
   parameter -> SetGuidance
-  ("The date you want to appear on the view of the scene (this includes the"
+    ("The date you want to appear on the view of the scene (this includes the");/*
    "\nrest of the line, including spaces).  The default, \'-\', writes the"
-   "\ndate and time of the moment of drawing.");
+   "\ndate and time of the moment of drawing.");*/
   parameter -> SetDefaultValue ("-");
   fpCommand -> SetParameter (parameter);
 }
@@ -1078,21 +1077,23 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/logo", this);
   fpCommand -> SetGuidance ("Adds a G4 logo to the current scene.");
+  fpCommand -> SetGuidance
+  ("If \"unit\" is \"auto\", height is roughly one tenth of scene extent.");
+  fpCommand -> SetGuidance
+  ("\"direction\" is that of outward-facing normal to front face of logo."
+   "\nIf \"direction\" is \"auto\", logo faces the user in the current viewer.");
+  fpCommand -> SetGuidance
+  ("\nIf \"placement\" is \"auto\", logo is placed at bottom right of screen"
+   "\n  when viewed from logo direction.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("height", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetGuidance
-    ("auto or valid length unit - defaults to auto."
-     "\nIf auto, height is roughly one tenth of scene extent.");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
-  parameter->SetGuidance
-    ("auto|[-]x|[-]y|[-]z - defaults to auto."
-     "\nDirection of outward-facing normal to front face of logo."
-     "\nIf automatic, logo faces the user in the current viewer.");
+  parameter->SetGuidance ("auto|[-]x|[-]y|[-]z");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
@@ -1104,13 +1105,7 @@ G4VisCommandSceneAddLogo::G4VisCommandSceneAddLogo () {
   parameter =  new G4UIparameter ("blue", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
-  parameter->SetGuidance
-    ("Automatic placement or manual placement at (xmid,ymid,zmid).");
-  parameter->SetGuidance
-    ("If automatic, placed at bottom right of screen when viewed from");
-  parameter->SetGuidance
-    ("logo direction.");
+  parameter =  new G4UIparameter ("placement", 's', omitable = true);
   parameter -> SetParameterCandidates("auto manual");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
@@ -1661,23 +1656,25 @@ void G4VisCommandSceneAddPSHits::SetNewValue
 G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/scale", this);
-  fpCommand -> SetGuidance 
-    ("Adds an annotated scale line to the current scene.");
+  fpCommand -> SetGuidance
+  ("Adds an annotated scale line to the current scene.");
+  fpCommand -> SetGuidance
+  ("If \"unit\" is \"auto\", length is roughly one tenth of the scene extent.");
+  fpCommand -> SetGuidance
+  ("If \"direction\" is \"auto\", scale is roughly in the plane of the current view.");
+  fpCommand -> SetGuidance
+  ("If \"placement\" is \"auto\", scale is placed at bottom left of current view."
+   "\n  Otherwise placed at (xmid,ymid,zmid).");
   fpCommand -> SetGuidance (G4Scale::GetGuidanceString());
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("length", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
-  parameter->SetGuidance
-  ("auto or valid length unit - defaults to auto."
-   "\nIf auto, length is roughly one tenth of the scene extent.");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("direction", 's', omitable = true);
-  parameter->SetGuidance
-  ("auto|x|y|z - defaults to auto."
-   "\nIf auto, scale is roughly in the plane of the current view.");
+  parameter->SetGuidance ("auto|x|y|z");
   parameter->SetDefaultValue ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("red", 'd', omitable = true);
@@ -1689,10 +1686,7 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter =  new G4UIparameter ("blue", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
-  parameter->SetGuidance
-  ("Automatic placement or manual placement at (xmid,ymid,zmid)."
-   "\nIf automatic, scale is placed at bottom left of current view.");
+  parameter =  new G4UIparameter ("placement", 's', omitable = true);
   parameter -> SetParameterCandidates("auto manual");
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter     (parameter);
@@ -2036,15 +2030,12 @@ G4VisCommandSceneAddText::G4VisCommandSceneAddText () {
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("x", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("x");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("y", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("y");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("z", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("z");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
   parameter->SetDefaultValue ("m");
@@ -2135,11 +2126,9 @@ G4VisCommandSceneAddText2D::G4VisCommandSceneAddText2D () {
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("x", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("x");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("y", 'd', omitable = true);
   parameter->SetDefaultValue (0);
-  parameter->SetGuidance ("y");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("font_size", 'd', omitable = true);
   parameter->SetDefaultValue (12);

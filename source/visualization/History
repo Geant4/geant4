@@ -24,6 +24,31 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+4th November 2013  John Allison  (vis-V09-06-33)
+- visman-V09-06-21:
+  o Fixes event keeping for MT mode when end-of-event-action is "refresh".
+
+3rd November 2013  John Allison  (vis-V09-06-32)
+- visman-V09-06-20:
+  o Further improvements to event keeping and informationals.
+
+2nd November 2013  John Allison
+- visman-V09-06-19: Fixed event keeping in MT mode.
+
+1st November 2013  John Allison  (vis-V09-06-31)
+- Needs geom-specific-V09-06-22 and geomdiv-V09-06-04.
+- modeling-V09-06-20: Make use of G4GenericPolycone in G4ArrowModel.
+- visman-V09-06-18:
+  o Printing brought under control of verbosity flag.
+  o /vis/touchable/set/colour and several other commands:
+    . Parameter guidance may be called only once. So instances of
+      multiple calls to parameter guidance have been eliminated.
+      Any extended information that was in parameter guidance has
+      been moved to command guidance. This fixes a problem whereby
+      guidance information was being lost and fixes a crash in the
+      GAG interface.
+- opengl-V09-06-08: Lots of changes for Wt and OpenGL2 (Laurent).
+
 30th September 2013  John Allison  (vis-V09-06-30)
 - modeling-V09-06-19: Re-tagged after clean-up by Gunter and Mike.
 

@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+20 Sept 2013 Laurent Garnier
+- add #ifdef statement in in gl2ps.h to prevent having gl2ps AND Wt driver
 
 3rd June 2013  John Allison (visexternal-V09-06-04)
 - G4OpenGL2PSAction.cc: One more try at compiling on Windows…

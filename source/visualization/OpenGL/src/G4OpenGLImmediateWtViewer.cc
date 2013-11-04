@@ -31,13 +31,11 @@
 //                                G4OpenGLImmediateViewer.
 
 #ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-#define G4DEBUG_VIS_OGL 1
 
 #include "G4OpenGLImmediateWtViewer.hh"
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4ios.hh"
-//#define TEAPOT 1
 
 G4OpenGLImmediateWtViewer::G4OpenGLImmediateWtViewer
 (G4OpenGLImmediateSceneHandler& sceneHandler,
@@ -50,6 +48,11 @@ G4OpenGLImmediateWtViewer::G4OpenGLImmediateWtViewer
   Wt::WGLWidget(aParent)
 
 {
+// Create a new drawer
+  fWtDrawer = new G4OpenGLWtDrawer(this);
+  
+  // register the WtDrawer to the OpenGLViewer
+  setWtDrawer(fWtDrawer);
 
   // Add the GL Widget to its parent
   aParent->addWidget(this);
@@ -61,53 +64,6 @@ G4OpenGLImmediateWtViewer::G4OpenGLImmediateWtViewer
   printf("G4OpenGLImmediateWtViewer INIT\n");
 #endif
   
-  readObj("/Users/garnier/Work/Devel/wt-3.2.3/examples/webgl/teapot.obj", data);
-  
-  const char *fragmentShaderSrc =
-  "#ifdef GL_ES\n"
-  "precision highp float;\n"
-  "#endif\n"
-  "\n"
-  "varying vec3 vLightWeighting;\n"
-  "uniform vec4 uPointColor; // Point Color\n"
-  "\n"
-  "void main(void) {\n"
-  "  vec4 matColor = uPointColor;\n"
-  "  gl_FragColor = vec4(matColor.rgb, matColor.a);\n"
-  "}\n";
-  
-  
-  
-  const char *vertexShaderSrc =
-  "attribute vec3 aVertexPosition;\n"
-  "attribute vec3 aVertexNormal;\n"
-  "\n"
-  "uniform mat4 uMVMatrix; // [M]odel[V]iew matrix\n"
-  "uniform mat4 uCMatrix;  // Client-side manipulated [C]amera matrix\n"
-  "uniform mat4 uPMatrix;  // Perspective [P]rojection matrix\n"
-  "uniform mat4 uNMatrix;  // [N]ormal transformation\n"
-  "uniform float uPointSize;  // Point size\n"
-  "// uNMatrix is the transpose of the inverse of uCMatrix * uMVMatrix\n"
-  "\n"
-  "varying vec3 vLightWeighting;\n"
-  "\n"
-  "void main(void) {\n"
-  "  // Calculate the position of this vertex\n"
-  "  gl_Position = uPMatrix * uCMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);\n"
-  "\n"
-  "  // Phong shading\n"
-  "  vec3 transformedNormal = normalize((uNMatrix * vec4(normalize(aVertexNormal), 0)).xyz);\n"
-  "  vec3 lightingDirection = normalize(vec3(1, 1, 1));\n"
-  "  float directionalLightWeighting = max(dot(transformedNormal, lightingDirection), 0.0);\n"
-  "  vec3 uAmbientLightColor = vec3(0.2, 0.2, 0.2);\n"
-  "  vec3 uDirectionalColor = vec3(0.8, 0.8, 0.8);\n"
-  "  gl_PointSize = uPointSize;\n"
-  "  vLightWeighting = uAmbientLightColor + uDirectionalColor * directionalLightWeighting;\n"
-  "}\n";
-  
-  
-  
-  setShaders(vertexShaderSrc,fragmentShaderSrc);
   
   if (fViewId < 0) return;  // In case error in base class instantiation.
 }
@@ -140,11 +96,9 @@ void G4OpenGLImmediateWtViewer::initializeGL () {
     fHasToRepaint =true;
   }
 
-  
   // In order to know where to look at, calculate the centerpoint of the
   // scene
   double cx, cy, cz;
-  centerpoint(cx, cy, cz);
   cx = cy = cz = 0.;
   
   // Transform the world so that we look at the centerpoint of the scene
@@ -171,52 +125,7 @@ void G4OpenGLImmediateWtViewer::initializeGL () {
   // Alternative: this installs a client-side mouse handler that allows
   // to 'walk' around: go forward, backward, turn left, turn right, ...
   //setClientSideWalkHandler(jsMatrix_, 0.05, 0.005);
-  
-  // First, load a simple shader
-  Shader fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(fragmentShader, fragmentShader_);
-  glCompileShader(fragmentShader);
-  Shader vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vertexShader, vertexShader_);
-  glCompileShader(vertexShader);
-  shaderProgram_ = glCreateProgram();
-  glAttachShader(shaderProgram_, vertexShader);
-  glAttachShader(shaderProgram_, fragmentShader);
-  glLinkProgram(shaderProgram_);
-  glUseProgram(shaderProgram_);
-  
-  //   UniformLocation uColor = getUniformLocation(shaderProgram_, "uColor");
-  //   uniform4fv(uColor, [0.0, 0.3, 0.0, 1.0]);
-  
-  // Extract the references to the attributes from the shader.
-/*
- #ifdef NORMAL
-  vertexNormalAttribute_   =
-  glGetAttribLocation(shaderProgram_, "aVertexNormal");
-#endif
-*/
-  vertexPositionAttribute_ =
-  getAttribLocation(shaderProgram_, "aVertexPosition");
-  glEnableVertexAttribArray(vertexPositionAttribute_);
-/*
- #ifdef NORMAL
-  glEnableVertexAttribArray(vertexNormalAttribute_);
-#endif
-*/
-  
-  // Extract the references the uniforms from the shader
-  pMatrixUniform_  = getUniformLocation(shaderProgram_, "uPMatrix");
-  cMatrixUniform_  = getUniformLocation(shaderProgram_, "uCMatrix");
-  mvMatrixUniform_ = getUniformLocation(shaderProgram_, "uMVMatrix");
-  nMatrixUniform_  = getUniformLocation(shaderProgram_, "uNMatrix");
-  
-  
-  
-  // L.G TEST
-  //   objBuffer_ = createBuffer();
-  //   bindBuffer(ARRAY_BUFFER, objBuffer_);
-  //   bufferDatafv(ARRAY_BUFFER, data.begin(), data.end(), STATIC_DRAW);
-  
+
   
   // Set the clear color to a transparant background
   glClearColor(0, 0, 0, 0);
@@ -408,7 +317,7 @@ void G4OpenGLImmediateWtViewer::mouseMoveEvent(Wt::WMouseEvent *event)
  }
  */
 
-void G4OpenGLImmediateWtViewer::paintEvent(Wt::WPaintDevice * painter) {
+void G4OpenGLImmediateWtViewer::paintEvent(Wt::WPaintDevice * /* painter */) {
   if ( fHasToRepaint) {
     updateGL();
   }
@@ -593,7 +502,7 @@ void G4OpenGLImmediateWtViewer::popMatrix() {
 void G4OpenGLImmediateWtViewer::pushMatrix() {
 }
 
-void G4OpenGLImmediateWtViewer::multMatrixd(const GLdouble* m) {
+void G4OpenGLImmediateWtViewer::multMatrixd(const GLdouble* /* m */) {
   //  mMatrix = mMatrix * m;
 }
 
@@ -612,19 +521,7 @@ void G4OpenGLImmediateWtViewer::setMatrixUniforms() {
    */
 }
 
-
-void G4OpenGLImmediateWtViewer::enableClientState(int mode){
-}
-
-
-void G4OpenGLImmediateWtViewer::disableClientState(int mode){
-}
-
 void G4OpenGLImmediateWtViewer::wtDrawArrays(GLenum mode,int first,int nPoints, std::vector<double> a_vertices){
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLWtViewer drawArrays\n");
-#endif
-  /// LG : test
   std::vector<double> data2;
   for (int a=0; a< nPoints*3; a+=3) {
     data2.push_back(a_vertices[a]);
@@ -633,7 +530,6 @@ void G4OpenGLImmediateWtViewer::wtDrawArrays(GLenum mode,int first,int nPoints, 
     data2.push_back(0);
     data2.push_back(0);
     data2.push_back(1);
-    printf(".....wtDrawArrays %f %f %f\n",a_vertices[a],a_vertices[a+1],a_vertices[a+2]);
   }
 
   //----------------------------
@@ -669,18 +565,6 @@ void G4OpenGLImmediateWtViewer::wtDrawArrays(GLenum mode,int first,int nPoints, 
                       0);    // offset: The byte position of the first vertex in the buffer
   //         is 0.
 
-/*
- #ifdef NORMAL
-  vertexAttribPointer(vertexNormalAttribute_,
-                      3,
-                      FLOAT,
-                      false,
-                      2*3*4, // stride: see above. We jump from normal to normal now
-                      3*4);  // offset: the first normal is located after the first vertex
-  //         position, consisting of three four-byte floats
-#endif
- */
-  
   glDrawArrays(mode, first, data2.size()/6);
 }
 
@@ -711,35 +595,6 @@ void G4OpenGLImmediateWtViewer::updateWWidget() {
   printf("G4OpenGLImmediateWtViewer updateWWidget END\n");
 #endif
 }
-
-// To avoid copying large constant data around, the data points are stored
-// in a global variable.
-
-// Calculates the centerpoint of the data. This is where the camera looks at.
-void G4OpenGLImmediateWtViewer::centerpoint(double &x, double &y, double &z)
-{
-  double minx, miny, minz;
-  double maxx, maxy, maxz;
-  minx = maxx = data[0];
-  miny = maxy = data[1];
-  minz = maxz = data[2];
-  for (unsigned int i = 0; i < data.size()/6; ++i) {
-    if (data[i*6] < minx) minx = data[i*6];
-    if (data[i*6] > maxx) maxx = data[i*6];
-    if (data[i*6 + 1] < miny) miny = data[i*6 + 1];
-    if (data[i*6 + 1] > maxy) maxy = data[i*6 + 1];
-    if (data[i*6 + 2] < minz) minz = data[i*6 + 2];
-    if (data[i*6 + 2] > maxz) maxz = data[i*6 + 2];
-  }
-  x = (minx + maxx)/2.;
-  y = (miny + maxy)/2.;
-  z = (minz + maxz)/2.;
-  
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLWtViewer centerpoint END\n");
-#endif
-}
-
 
 void G4OpenGLImmediateWtViewer::drawScene()
 {
@@ -779,168 +634,33 @@ void G4OpenGLImmediateWtViewer::drawScene()
   // Note that if you use indexed buffers, you cannot have indexes
   // larger than 65K, due to the limitations of WebGL.
   
-
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLWtViewer drawScene   vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv\n");
-#endif
   
-/*#ifdef TEAPOT
-  objBuffer_ = glCreateBuffer();  //glGenBuffer(1,objBuffer_)
-  bindBuffer(GL_ARRAY_BUFFER, objBuffer_);
-  bufferDatafv(GL_ARRAY_BUFFER, data.begin(), data.end(), GL_STATIC_DRAW);
   
-  bindBuffer(GL_ARRAY_BUFFER, objBuffer_);
-  // Configure the vertex attributes:
-  vertexAttribPointer(vertexPositionAttribute_,
-                      3,     // size: Every vertex has an X, Y anc Z component
-                      FLOAT, // type: They are floats
-                      false, // normalized: Please, do NOT normalize the vertices
-                      2*3*4, // stride: The first byte of the next vertex is located this
-                      //         amount of bytes further. The format of the VBO is
-                      //         vx, vy, vz, nx, ny, nz and every element is a
-                      //         Float32, hence 4 bytes large
-                      0);    // offset: The byte position of the first vertex in the buffer
-  //         is 0.
-  vertexAttribPointer(vertexNormalAttribute_,
-                      3,
-                      FLOAT,
-                      false,
-                      2*3*4, // stride: see above. We jump from normal to normal now
-                      3*4);  // offset: the first normal is located after the first vertex
-  //         position, consisting of three four-byte floats
-  
-  // Now draw all the triangles.
-  wtDrawArrays(GL_TRIANGLES, 0, data.size()/6);
-#endif // TEAPOT
-*/
   /// LG : test
   std::vector<double> vertices;
   vertices.push_back(0);
   vertices.push_back(0);
   vertices.push_back(0);
-  
   vertices.push_back(10.);
   vertices.push_back(0);
   vertices.push_back(0);
-  
   vertices.push_back(0);
   vertices.push_back(0);
   vertices.push_back(0);
-  
   vertices.push_back(0);
   vertices.push_back(10.);
   vertices.push_back(0);
-  
   vertices.push_back(0);
   vertices.push_back(0);
   vertices.push_back(0);
-  
   vertices.push_back(0);
   vertices.push_back(0);
   vertices.push_back(10.);
-  
   wtDrawArrays(GL_LINES,0,6,vertices);
-
+  
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLWtViewer drawScene Call ComputeView\n");
 #endif
-// FIXME  ComputeView();
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLWtViewer drawScene END Call ComputeView\n");
-#endif
-  
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLWtViewer drawScene END   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n");
-#endif
-}
-
-
-
-#include <fstream>
-#include <iostream>
-#include <boost/tokenizer.hpp>
-#include <boost/algorithm/string.hpp>
-#include <boost/lexical_cast.hpp>
-#include <stdlib.h>
-
-#include <Wt/WMatrix4x4>
-
-double str2float(const std::string &s)
-{
-  return atof(s.c_str());
-}
-
-void G4OpenGLImmediateWtViewer::readObj(const std::string &fname,
-                               std::vector<double> &data)
-{
-  
-  std::vector<double> points;
-  std::vector<double> normals;
-  std::vector<double> textures;
-  std::ifstream f(fname.c_str());
-  
-  while (f) {
-    std::string line;
-    getline(f, line);
-    
-    if (f) {
-      std::vector<std::string> splitLine;
-      boost::split(splitLine, line, boost::is_any_of(" "), boost::algorithm::token_compress_on);
-      if (splitLine[0] == "v") {
-        points.push_back(str2float(splitLine[1]));
-        points.push_back(str2float(splitLine[2]));
-        points.push_back(str2float(splitLine[3]));
-      } else if (splitLine[0] == "vn") {
-        normals.push_back(str2float(splitLine[1]));
-        normals.push_back(str2float(splitLine[2]));
-        normals.push_back(str2float(splitLine[3]));
-      } else if (splitLine[0] == "vt") {
-        textures.push_back(boost::lexical_cast<double>(splitLine[1]));
-        textures.push_back(boost::lexical_cast<double>(splitLine[2]));
-        textures.push_back(boost::lexical_cast<double>(splitLine[3]));
-      } else if (splitLine[0] == "f") {
-        //std::vector<boost::tuple<int, int, int> > face;
-        //std::vector<int> face;
-        for (unsigned i = 1; i < splitLine.size(); ++i) {
-          std::vector<std::string> faceLine;
-          boost::split(faceLine, splitLine[i], boost::is_any_of("/"), boost::algorithm::token_compress_off);
-          int v, t, n;
-          v = boost::lexical_cast<int>(faceLine[0]);
-          if (faceLine[1] != "") {
-            t = boost::lexical_cast<int>(faceLine[1]);
-          } else {
-            t = -1;
-          }
-          if (faceLine[2] != "") {
-            n = boost::lexical_cast<int>(faceLine[2]);
-          } else {
-            n = -1;
-          }
-          //face.push_back(boost::make_tuple<int, int, int>(v, t, n));
-          //faces.push_back(v - 1);
-          data.push_back(points[(v-1)*3]);
-          data.push_back(points[(v-1)*3 + 1]);
-          data.push_back(points[(v-1)*3 + 2]);
-          data.push_back(normals[(n-1)*3]);
-          data.push_back(normals[(n-1)*3 + 1]);
-          data.push_back(normals[(n-1)*3 +2]);
-        }
-        //faces.push_back(face);
-      } else {
-        std::cerr << "ERROR in obj file: unknown line\n";
-        return;
-      }
-    }
-  }
-}
-
-
-
-void G4OpenGLImmediateWtViewer::setShaders(const std::string &vertexShader,
-                                  const std::string &fragmentShader)
-{
-  vertexShader_ = vertexShader;
-  fragmentShader_ = fragmentShader;
 }
 
 

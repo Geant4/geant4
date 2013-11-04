@@ -41,7 +41,7 @@ G4Scene::G4Scene (const G4String& name):
   fName (name),
   fRefreshAtEndOfEvent(true),
   fRefreshAtEndOfRun(true),
-  fMaxNumberOfKeptEvents(0)
+  fMaxNumberOfKeptEvents(100)
 {} // Note all other data members have default initial values.
 
 G4Scene::~G4Scene () {}

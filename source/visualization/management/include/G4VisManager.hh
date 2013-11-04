@@ -498,6 +498,7 @@ private:
   G4bool                fEventRefreshing;
   G4bool                fTransientsDrawnThisRun;
   G4bool                fTransientsDrawnThisEvent;
+  G4int                 fNKeepRequests;
   G4bool                fEventKeepingSuspended;
   G4bool                fKeptLastEvent;
   const G4Event*        fpRequestedEvent; // If non-zero, scene handler uses.

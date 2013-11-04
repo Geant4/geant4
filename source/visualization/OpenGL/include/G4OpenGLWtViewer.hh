@@ -35,9 +35,6 @@
 #ifndef G4OPENGLWTVIEWER_HH
 #define G4OPENGLWTVIEWER_HH
 
-
-#define TEST_WT_EXAMPLE
-
 #include "globals.hh"
 
 #include "G4OpenGLViewer.hh"
@@ -47,14 +44,6 @@
 #include <Wt/WTime>
 #include <Wt/WContainerWidget>
 #include <Wt/WMatrix4x4>
-
-#ifdef TEST_WT_EXAMPLE
-#include <vector>
-#include <string>
-#include <boost/tuple/tuple.hpp>
-
-
-#endif
 
 class G4OpenGLSceneHandler;
 class G4UImanager;

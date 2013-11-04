@@ -26,6 +26,38 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+4th November 2013  John Allison  (visman-V09-06-21)
+- G4VisManager:
+  o Keep events for MT-refresh mode.
+  o Improve names and informationals.
+- G4Scene: Initialise fMaxNumberOfKeptEvents to 100.
+- G4VisCommandsScene.cc:
+  o Allow user to specify the number of kept events in refresh mode. This
+    has no effect in sequential mode but is used by MT:
+    /vis/scene/endOfEventAction refresh <N>
+
+3rd November 2013  John Allison  (visman-V09-06-20)
+- G4VisManager: Further improvements to event keeping and informationals.
+- G4VisCommands.cc: /vis/reviewKeptEvents:
+  o Improved informationals.
+
+2nd November 2013  John Allison  (visman-V09-06-19)
+- G4VisManager: Fixed event keeping in MT mode.
+
+1st November 2013  John Allison  (visman-V09-06-18)
+- G4VisManager: Printing brought under control of verbosity flag.
+- G4VisCommandsTouchableSet.cc, G4VisCommandsSceneAdd.cc:
+  o /vis/touchable/set/colour and several other commands:
+    . Parameter guidance may be called only once. So instances of
+      multiple calls to parameter guidance have been eliminated.
+      Any extended information that was in parameter guidance has
+      been moved to command guidance. This fixes a problem whereby
+      guidance information was being lost and fixes a crash in the
+      GAG interface.
+
+14th October 2013 Laurent Garnier
+  G4VisExecutive.icc: avoid mix with WT driver and GL2PS
+
 25th September 2013  John Allison  (visman-V09-06-17)
 - G4VisManager.cc:
   o Vis commands are *not* be broadcast to threads.

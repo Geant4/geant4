@@ -16,6 +16,62 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31th October 2013  Laurent Garnier (opengl-V09-06-08)
+- Cleanup in the code, in particular Wt driver
+
+31th October 2013  Laurent Garnier
+- G4OpenGLWtDrawer : Move some function in an OpenGL generic way rather than only
+  WebGL
+- G4OpenGLImmediateWtViewer : Removed unused functions
+- G4OpenGLSceneHandler :
+  o Remove DrawText for OpenGL2 version for the moment
+  o Better implementation of optimize vertex+indices for G4Cons
+  o Enable/Disable VertexAttribArray not only for WebGL viewer
+
+30th October 2013  Laurent Garnier
+- G4OpenGLSceneHandler : Better emulation of GL_QUADS (and optimization)
+
+30th October 2013  Laurent Garnier
+- G4OpenGLViewer.hh, G4OpenGLSceneHandler.hh : 
+  o Add a setWtDrawer function to set the Wt drawer only when the 
+    OpenGLImmediateWtViewer is build
+  o Move a lot of OpenGL2 functions and attributes from OpenGLImmediateWtViewer
+    to be generic for all OpenGL drivers
+- G4OpenGLImmediateWtViewer : 
+  o Move a lot of OpenGL2 functions and attributes from OpenGLImmediateWtViewer
+    to be generic for all OpenGL drivers
+  o At initialization, now set the WtDrawer for the OpenGLViewer and the SceneHandler 
+- G4OpenGLImmediateWt : Get rid of an include that could be done in a next step
+- G4OpenGLWtDrawer : Add more methods for OpenGL
+- G4OpenGLSceneHandler : Add some debug statements (WILL HAVE TO BE REMOVED)
+
+26th October 2013  Laurent Garnier
+- Introduce work for Wt driver. the major change is that with "normal" OpenGL,
+  functions are statics and accessible everywhere. This is not the case for
+  Wt OpenGL functions. They are only member functions of the WGLWidget because
+  they have to be redefined to javascript commands to be send to all browsers
+  using the applications. In term of changes in OpenGL library, this only one
+  is the introduction of a G4OpenGLWtDrawer which is used to map static GL 
+  functions into member functions of WGLWidget object :
+  o G4OpenGLViewer : Introduction of a pointer to to WtDrawer
+  o G4OpenGL.hh : Include G4OpenGLWtDrawer
+- Other changes in Wt component :
+  o G4OpenGLImmediateWtViewer : Add methods to handle transformations on 
+    vertex position
+- sources.cmake : Add G4OpenGLWtDrawer support
+- Beginning of OpenGL >1.1 implementation : Alternative for glBegin/glEnd calls
+  Will not change anything until G4OPENGL_VERSION_2 is not set (and only set
+  for Wt driver for the moment)
+  o G4OpenGLSceneHandler : Beginning of OpenGL >1.1 implementation
+
+25th October 2013  Laurent Garnier
+- G4OpenGLQtViewer :
+  o Fix a problem on mouse right clic. It was first calling
+    mouse left clic. This could cause some problems when switching between
+    rotate/move/pick modes.
+  o Fix typo in shortcuts
+
 24th October 2013 : Ben Morgan (opengl-V09-06-07 : coworks with cmake-V09-06-30))
 - sources.cmake : Update Wt configuration to use new configuration
   variables. This makes configuration more local to the G4OpenGL module.

@@ -64,15 +64,11 @@ public:
   void loadIdentity();
   
   void wtDrawArrays(GLenum mode,int first, G4int nPoints, std::vector<double> a_vertices);
-  void enableClientState(int mode);
-  void disableClientState(int mode);
   
   void ComputeView ();
   void drawScene ();
   void FinishView();
   
-  Program shaderProgram_;
-
 private:
   //  void showEvent(QShowEvent event );
   void mousePressEvent(Wt::WMouseEvent *event);
@@ -84,15 +80,6 @@ private:
   void paintEvent(Wt::WPaintDevice * event);
 
   void updateWWidget();
-  void centerpoint(double &x, double &y, double &z);
-
-  // Program and related variables
-  AttribLocation vertexPositionAttribute_;
-  AttribLocation vertexNormalAttribute_;
-  UniformLocation pMatrixUniform_;
-  UniformLocation cMatrixUniform_;
-  UniformLocation mvMatrixUniform_;
-  UniformLocation nMatrixUniform_;
   
   // A client-side JavaScript matrix variable
   JavaScriptMatrix4x4 jsMatrix_;
@@ -105,30 +92,12 @@ private:
   //  void SetView ();
   //  void ClearView ();
 
-  // The shaders, in plain text format
-  std::string vertexShader_;
-  std::string fragmentShader_;
   
   
   // To avoid copying large constant data around, the data points are stored
   // in a global variable.
   std::vector<double> data;
-  GLfloat* normals;
   std::vector <Buffer> VBO_Buffer;
-#ifdef TEST_WT_EXAMPLE
-  // Sets the shader source. Must be set before the widget is first rendered.
-  void setShaders(const std::string &vertexShader,
-                  const std::string &fragmentShader);
-  void readObj(const std::string &fname,
-               std::vector<double> &data);
-  
-  
-protected:
-  void drawCube();
-private:
-  
-#endif
-
 
 };
 

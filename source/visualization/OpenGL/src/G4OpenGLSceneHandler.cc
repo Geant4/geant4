@@ -61,6 +61,9 @@ G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
                                             G4int id,
                                             const G4String& name):
 G4VSceneHandler (system, id, name),
+#ifdef G4OPENGL_VERSION_2
+fEmulate_GL_QUADS(false),
+#endif
 fPickName(0),
 // glFlush take about 90% time.  Dividing glFlush number by 100 will
 // change the first vis time from 100% to 10+90/100 = 10,9%.
@@ -71,7 +74,8 @@ fSecondPassForTransparencyRequested(false),
 fSecondPassForTransparency(false),
 fThirdPassForNonHiddenMarkersRequested(false),
 fThirdPassForNonHiddenMarkers(false)
-{}
+{
+}
 
 G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
 {
@@ -207,6 +211,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
   if (pGLViewer) pGLViewer->ChangeLineWidth(lineWidth);
 
+#ifndef G4OPENGL_VERSION_2
   glBegin (GL_LINE_STRIP);
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
   G4double x, y, z;
@@ -216,6 +221,21 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
     glVertex3d (x, y, z);
   }
   glEnd ();
+#else
+  glBeginVBO(GL_LINE_STRIP);
+
+  for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
+    fOglVertex.push_back(line[iPoint].x());
+    fOglVertex.push_back(line[iPoint].y());
+    fOglVertex.push_back(line[iPoint].z());
+    // normal
+    fOglVertex.push_back(0);
+    fOglVertex.push_back(0);
+    fOglVertex.push_back(1);
+  }
+  
+  glEndVBO();
+#endif
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
@@ -299,6 +319,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     G4double phi;
     G4int i;
     for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+#ifndef G4OPENGL_VERSION_2
       glBegin (GL_POLYGON);
       for (i = 0, phi = startPhi; i < nSides; i++, phi += dPhi) {
 	G4Vector3D r = start; r.rotate(phi, viewpointDirection);
@@ -306,6 +327,25 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
 	glVertex3d (p.x(), p.y(), p.z());
       }
       glEnd ();
+#else
+      glBeginVBO (GL_TRIANGLE_STRIP);
+      for (i = 0, phi = startPhi; i < nSides; i++, phi += dPhi) {
+        G4Vector3D r = start; r.rotate(phi, viewpointDirection);
+        G4Vector3D p = polymarker[iPoint] + r;
+
+#ifdef G4DEBUG_VIS_OGL
+        printf(".....G4OpenGLSceneHandler::AddPrimitive polyhedron QUADS VBO 5\n");
+#endif
+        fOglVertex.push_back(p.x());
+        fOglVertex.push_back(p.y());
+        fOglVertex.push_back(p.z());
+        // normal
+        fOglVertex.push_back(0);
+        fOglVertex.push_back(0);
+        fOglVertex.push_back(1);
+      }
+      glEndVBO ();
+#endif
     }
 
   } else { // Size specified in screen (window) coordinates.
@@ -321,18 +361,35 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     case G4Polymarker::squares:
       glDisable (GL_POINT_SMOOTH); break;
     }
-      
+#ifndef G4OPENGL_VERSION_2
     glBegin (GL_POINTS);
     for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
       G4Point3D centre = polymarker[iPoint];
       glVertex3d(centre.x(),centre.y(),centre.z());
     }
     glEnd();     
+#else
+    glBeginVBO(GL_POINTS);
+
+    for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
+      fOglVertex.push_back(polymarker[iPoint].x());
+      fOglVertex.push_back(polymarker[iPoint].y());
+      fOglVertex.push_back(polymarker[iPoint].z());
+      fOglVertex.push_back(0);
+      fOglVertex.push_back(0);
+      fOglVertex.push_back(1);
+    }
+    glEndVBO();
+#endif
   }
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   // Pass to specific viewer via virtual function DrawText.
+  // FIXME : Not ready for OPENGL2 for the moment
+#ifdef G4OPENGL_VERSION_2
+  return;
+#endif
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
   if (pGLViewer) pGLViewer->DrawText(text);
 }
@@ -476,7 +533,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   }
 
   //Loop through all the facets...
+#ifndef G4OPENGL_VERSION_2
   glBegin (GL_QUADS);
+#else
+  fEmulate_GL_QUADS = true;
+  glBeginVBO(GL_TRIANGLE_STRIP);
+#endif
   G4bool notLastFace;
   do {
 
@@ -498,13 +560,27 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       } else {
 	glEdgeFlag (GL_FALSE);
       }
-      glNormal3d (normals[edgeCount].x(), 
+#ifndef G4OPENGL_VERSION_2
+      glNormal3d (normals[edgeCount].x(),
 		  normals[edgeCount].y(),
 		  normals[edgeCount].z());
       glVertex3d (vertex[edgeCount].x(), 
 		  vertex[edgeCount].y(),
 		  vertex[edgeCount].z());
+#else
+
+      fOglVertex.push_back(vertex[edgeCount].x());
+      fOglVertex.push_back(vertex[edgeCount].y());
+      fOglVertex.push_back(vertex[edgeCount].z());
+      
+      fOglVertex.push_back(normals[edgeCount].x());
+      fOglVertex.push_back(normals[edgeCount].y());
+      fOglVertex.push_back(normals[edgeCount].z());
+
+#endif
+      
     }
+   
     // HepPolyhedron produces triangles too; in that case add an extra
     // vertex identical to first...
     if (nEdges == 3) {
@@ -513,12 +589,24 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       vertex[edgeCount] = vertex[0];
       edgeFlag[edgeCount] = -1;
       glEdgeFlag (GL_FALSE);
+
+#ifndef G4OPENGL_VERSION_2
       glNormal3d (normals[edgeCount].x(),
 		  normals[edgeCount].y(), 
 		  normals[edgeCount].z());
       glVertex3d (vertex[edgeCount].x(),
 		  vertex[edgeCount].y(), 
 		  vertex[edgeCount].z());
+#else
+      fOglVertex.push_back(vertex[edgeCount].x());
+      fOglVertex.push_back(vertex[edgeCount].y());
+      fOglVertex.push_back(vertex[edgeCount].z());
+      
+      fOglVertex.push_back(normals[edgeCount].x());
+      fOglVertex.push_back(normals[edgeCount].y());
+      fOglVertex.push_back(normals[edgeCount].z());
+
+#endif
     }
     // Trap situation where number of edges is > 4...
     if (nEdges > 4) {
@@ -533,8 +621,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     if  (drawing_style == G4ViewParameters::hlr ||
 	 drawing_style == G4ViewParameters::hlhsr) {
 
+#ifndef G4OPENGL_VERSION_2
       glEnd ();  // Placed here to balance glBegin above, allowing GL
-		 // state changes below, then glBegin again.  Avoids
+#else
+      glEndVBO();
+#endif
+      // state changes below, then glBegin again.  Avoids
 		 // having glBegin/End pairs *inside* loop in the more
 		 // usual case of no hidden line removal.
 
@@ -584,21 +676,45 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 	glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, painting_colour);
       }
       glColor4fv (painting_colour);
+#ifndef G4OPENGL_VERSION_2
       glBegin (GL_QUADS);
+#else
+      fEmulate_GL_QUADS = true;
+      glBeginVBO(GL_TRIANGLE_STRIP);
+#endif
+
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
-	if (edgeFlag[edgeCount] > 0) {
-	  glEdgeFlag (GL_TRUE);
-	} else {
-	  glEdgeFlag (GL_FALSE);
-	}
-	glNormal3d (normals[edgeCount].x(), 
-		    normals[edgeCount].y(),
-		    normals[edgeCount].z());
-	glVertex3d (vertex[edgeCount].x(), 
-		    vertex[edgeCount].y(),
-		    vertex[edgeCount].z());
+  if (edgeFlag[edgeCount] > 0) {
+    glEdgeFlag (GL_TRUE);
+  } else {
+    glEdgeFlag (GL_FALSE);
+        }
+#ifndef G4OPENGL_VERSION_2
+				glNormal3d (normals[edgeCount].x(),
+							normals[edgeCount].y(),
+							normals[edgeCount].z());
+        glVertex3d (vertex[edgeCount].x(),
+                    vertex[edgeCount].y(),
+                    vertex[edgeCount].z());
+#else
+#ifdef G4DEBUG_VIS_OGL
+        printf(".....G4OpenGLSceneHandler::AddPrimitive polyhedron QUADS VBO 2\n");
+#endif
+				fOglVertex.push_back(vertex[edgeCount].x());
+        fOglVertex.push_back(vertex[edgeCount].y());
+        fOglVertex.push_back(vertex[edgeCount].z());
+        
+        fOglVertex.push_back(normals[edgeCount].x());
+        fOglVertex.push_back(normals[edgeCount].y());
+        fOglVertex.push_back(normals[edgeCount].z());
+
+#endif
       }
+#ifndef G4OPENGL_VERSION_2
       glEnd ();
+#else
+      glEndVBO();
+#endif
     end_of_drawing_through_stencil:
 
       // and once more to reset the stencil bits...
@@ -622,30 +738,78 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
       }
       glDisable (GL_LIGHTING);
       glColor4fv (current_colour);
+#ifndef G4OPENGL_VERSION_2
       glBegin (GL_QUADS);
+#else
+      fEmulate_GL_QUADS = true;
+      glBeginVBO(GL_TRIANGLE_STRIP);
+#endif
       for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
 	if (edgeFlag[edgeCount] > 0) {
 	  glEdgeFlag (GL_TRUE);
 	} else {
 	  glEdgeFlag (GL_FALSE);
 	}
-	glNormal3d (normals[edgeCount].x(), 
-		    normals[edgeCount].y(),
-		    normals[edgeCount].z());
-	glVertex3d (vertex[edgeCount].x(), 
-		    vertex[edgeCount].y(),
-		    vertex[edgeCount].z());
+#ifndef G4OPENGL_VERSION_2
+        glNormal3d (normals[edgeCount].x(),
+                    normals[edgeCount].y(),
+                    normals[edgeCount].z());
+        glVertex3d (vertex[edgeCount].x(),
+                    vertex[edgeCount].y(),
+                    vertex[edgeCount].z());
+#else
+#ifdef G4DEBUG_VIS_OGL
+        printf(".....G4OpenGLSceneHandler::AddPrimitive polyhedron QUADS VBO 3\n");
+#endif
+				fOglVertex.push_back(vertex[edgeCount].x());
+        fOglVertex.push_back(vertex[edgeCount].y());
+        fOglVertex.push_back(vertex[edgeCount].z());
+        
+        fOglVertex.push_back(normals[edgeCount].x());
+        fOglVertex.push_back(normals[edgeCount].y());
+        fOglVertex.push_back(normals[edgeCount].z());
+
+#endif
       }
+#ifndef G4OPENGL_VERSION_2
       glEnd ();
+#else
+      glEndVBO();
+#endif
+
       glDepthFunc (GL_LEQUAL);   // Revert for next facet.
+#ifndef G4OPENGL_VERSION_2
       glBegin (GL_QUADS);      // Ready for next facet.  GL
-			       // says it ignores incomplete
-			       // quadrilaterals, so final empty
-			       // glBegin/End sequence should be OK.
+      // says it ignores incomplete
+      // quadrilaterals, so final empty
+      // glBegin/End sequence should be OK.
+#else
+      fEmulate_GL_QUADS = true;
+      glBeginVBO(GL_TRIANGLE_STRIP);
+#endif
     }
   } while (notLastFace);  
   
+#ifndef G4OPENGL_VERSION_2
   glEnd ();
+#else
+	
+// FIXME: du grand n'importe quoi en test
+// Cube optimization
+  
+  // store old DrawType because in case of optimization it could be changed
+  GLenum oldDrawArrayType = fDrawArrayType;
+
+  if (dynamic_cast<const G4PolyhedronTrd2*>(&polyhedron)) {
+//    OptimizeVBOForTrd();
+  } else if (dynamic_cast<const G4PolyhedronCons*>(&polyhedron)) {
+    OptimizeVBOForCons((polyhedron.GetNoVertices()-2)/2 ); // top + bottom + all faces
+  }
+
+  glEndVBO();
+  fDrawArrayType = oldDrawArrayType;
+#endif
+  
   glDisable (GL_STENCIL_TEST);  // Revert to default for next primitive.
   glDepthMask (GL_TRUE);        // Revert to default for next primitive.
   glDisable (GL_LIGHTING);      // Revert to default for next primitive.
@@ -666,5 +830,319 @@ void G4OpenGLSceneHandler::AddCompound(const G4VDigi& digi) {
 void G4OpenGLSceneHandler::AddCompound(const G4THitsMap<G4double>& hits) {
   G4VSceneHandler::AddCompound(hits);  // For now.
 }
+
+
+#ifdef G4OPENGL_VERSION_2
+
+// Optimize vertex and indices in order to render less vertex in OpenGL VBO/IBO
+void G4OpenGLSceneHandler::OptimizeVBOForTrd(){
+  
+  /* HOW IT IS BUILD (as we receive it from fOglVertex : 
+   */
+
+   std::vector<double> vertices;
+  vertices.insert (vertices.end(),fOglVertex.begin(),fOglVertex.begin()+6*6); // ABCDEF
+  vertices.insert (vertices.end(),fOglVertex.begin()+9*6,fOglVertex.begin()+9*6+6); // G
+  vertices.insert (vertices.end(),fOglVertex.begin()+13*6,fOglVertex.begin()+13*6+6); // H
+  fOglVertex = vertices;
+  
+  int myarray [] = {
+    3,2,0,1,4,5,7,6, 6,0,4,3,7,2,6,1,5
+  };
+  fOglIndices.insert(fOglIndices.begin(), myarray, myarray+17/*36*/);
+
+  fDrawArrayType = GL_TRIANGLE_STRIP;
+}
+
+// Optimize vertex and indices in order to render less vertex in OpenGL VBO/IBO
+void G4OpenGLSceneHandler::OptimizeVBOForCons(G4int aNoFaces){
+  // Optimized, 1st level : 10f/15sec with 1000 cones
+  //    DrawElements:208 vertex and 605 (2*100+2*100+2*100+5) indices for a 100 face cone
+
+  /* surface of polycone : could be optimized
+   for 100 faces : 
+   - 100*4 = 400 points
+   - 100*2+2 = 202 points with TRIANGLE_STRIP
+   Total :
+     n*4+n*4+n*4 = n*12
+    optimize : n*2+2+1+n+1 = n*3+3 (factor 4)
+    but could do better : n faces should give = n*2+2
+   */
+  
+  /*
+         0
+        / \
+       2---4   6 ....2
+       |   |
+       3---5   7 ....3
+        \ /
+         1
+   */
+  // First, faces
+  std::vector<double> vertices;
+
+  // Add bottom and top vertex
+  // aNoFaces*4*6+6 : nb Faces * 4 points per face * 6 vertex by point + 1 point offset
+  vertices.insert (vertices.end(),fOglVertex.begin()+ (aNoFaces*4)*6,fOglVertex.begin()+(aNoFaces*4)*6+6); // 0
+  vertices.insert (vertices.end(),fOglVertex.begin()+ (aNoFaces*8+1)*6,fOglVertex.begin()+(aNoFaces*8+1)*6+6); // 1
+  
+  // Add facets points
+  G4int posInVertice;
+  for (G4int a = 0; a<aNoFaces; a++) {
+    posInVertice = a*4*6;
+    vertices.insert (vertices.end(),fOglVertex.begin()+posInVertice,fOglVertex.begin()+posInVertice+1*6+6); // AB
+  }
+  vertices.insert (vertices.end(),fOglVertex.begin(),fOglVertex.begin()+1*6*6); // AB
+  fOglVertex = vertices;
+
+  // Add indices for top :
+  // simple version :    0-2-0-4-0-6-0-8-0-10..
+  // optimized version : 2-0-4-6- 6-0-8-10.. but we have to deal with odd faces numbers
+  for (G4int a=0; a<aNoFaces; a++) {
+    fOglIndices.push_back(0);
+    fOglIndices.push_back(a*2+2);
+  }
+  // close strip
+  fOglIndices.push_back(0);
+  fOglIndices.push_back(2);
+
+  // Add indices for faces
+  for (G4int a = 0; a<aNoFaces; a++) {
+    fOglIndices.push_back(a*2+2);
+    fOglIndices.push_back(a*2+1+2);
+  }
+  fOglIndices.push_back(2);
+  fOglIndices.push_back(2+1);
+  
+  // Second : top
+  // 3-1-5-1-7-1-9-1..
+  for (G4int a=0; a<aNoFaces; a++) {
+    fOglIndices.push_back(a*2+3);
+    fOglIndices.push_back(1);
+  }
+  // close strip
+  fOglIndices.push_back(0+3);
+  
+  fDrawArrayType = GL_TRIANGLE_STRIP;
+  fEmulate_GL_QUADS = false;
+}
+
+void G4OpenGLSceneHandler::glBeginVBO(GLenum type)  {
+  fDrawArrayType = type;
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLSceneHandler::glBeginVBO %d\n",type);
+#endif
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+  glGenBuffers(1,&fVertexBufferObject);
+  glGenBuffers(1,&fIndicesBufferObject);
+#else
+  fVertexBufferObject = glCreateBuffer(); //glGenBuffer(1,fVertexBufferObject_2)
+  fIndicesBufferObject = glCreateBuffer(); //glGenBuffer(1,fIndicesBufferObject_2)
+#endif
+
+  // clear data and indices for OpenGL
+  fOglVertex.clear();
+  fOglIndices.clear();
+}
+
+// 2 cases :
+/*
+ glDrawArray : if there is no vertex indices : fOglIndices.size() == 0
+ glDrawElements : if there is vertex indices : fOglIndices.size() != 0
+ 
+ */
+void G4OpenGLSceneHandler::glEndVBO()  {
+  if (fOglIndices.size() == 0) {
+
+
+    std::vector<double> vertices;
+    // check if it is a GL_QUADS emulation
+    if (fEmulate_GL_QUADS == true) {
+      fEmulate_GL_QUADS = false;
+      // A point has 6 double : Vx Vy Vz Nx Ny Nz
+      // A QUAD should be like this
+      /*
+           0   3/4  7/8   ..
+       
+           1   2/5  6/9   ..
+       */
+      // And if 3==4 and 2==5, we should do it like this for a TRIANGLES_STRIP
+      /*
+       0   4   8   ..
+       | / | / |
+       1   5   9   ..
+       // Optimized, 1st level : 24f/15sec with 10 cones
+       // non Optimized, 1st level : 12f/15sec with 10 cones
+       */
+      // should be 4 points
+      for (unsigned int a=0; a<fOglVertex.size(); a+=6*4) {
+        vertices.insert (vertices.end(),fOglVertex.begin()+a,fOglVertex.begin()+a+1*6+6); // 0-1
+        // if 2-3 == 4-5, do not add them
+        // if differents, we are obliged to create a new GL_TRIANGLE_STRIP
+        if (a+4*6+5 < fOglVertex.size()) {
+          if ((fOglVertex[a+2*6+0] != fOglVertex[a+5*6+0]) || //Vx for 2 and 5
+              (fOglVertex[a+2*6+1] != fOglVertex[a+5*6+1]) || //Vy for 2 and 5
+              (fOglVertex[a+2*6+2] != fOglVertex[a+5*6+2]) || //Vz for 2 and 5
+              (fOglVertex[a+2*6+3] != fOglVertex[a+5*6+3]) || //Px for 2 and 5
+              (fOglVertex[a+2*6+4] != fOglVertex[a+5*6+4]) || //Py for 2 and 5
+              (fOglVertex[a+2*6+5] != fOglVertex[a+5*6+5]) || //Pz for 2 and 5
+              
+              (fOglVertex[a+3*6+0] != fOglVertex[a+4*6+0]) || //Vx for 3 and 4
+              (fOglVertex[a+3*6+1] != fOglVertex[a+4*6+1]) || //Vy for 3 and 4
+              (fOglVertex[a+3*6+2] != fOglVertex[a+4*6+2]) || //Vz for 3 and 4
+              (fOglVertex[a+3*6+3] != fOglVertex[a+4*6+3]) || //Px for 3 and 4
+              (fOglVertex[a+3*6+4] != fOglVertex[a+4*6+4]) || //Py for 3 and 4
+              (fOglVertex[a+3*6+5] != fOglVertex[a+4*6+5])) { //Pz for 3 and 4
+            // add last points
+            vertices.insert (vertices.end(),fOglVertex.begin()+a+3*6,fOglVertex.begin()+a+3*6+6); // 3
+            vertices.insert (vertices.end(),fOglVertex.begin()+a+2*6,fOglVertex.begin()+a+2*6+6); // 2
+            // build and send the GL_TRIANGLE_STRIP
+            drawVBOArray(vertices);
+            vertices.clear();
+          }
+        } else { // end of volume
+          vertices.insert (vertices.end(),fOglVertex.begin()+a+3*6,fOglVertex.begin()+a+3*6+6); // 3
+          vertices.insert (vertices.end(),fOglVertex.begin()+a+2*6,fOglVertex.begin()+a+2*6+6); // 2
+        }
+      }
+      fOglVertex = vertices;
+    }
+
+    drawVBOArray(fOglVertex);
+
+  } else {
+  
+    // Bind VBO
+    glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
+    
+    // Load fOglVertex into VBO
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+    int sizeV = fOglVertex.size();
+    // FIXME : perhaps a problem withBufferData in OpenGL other than WebGL ?
+//    void glBufferData(	GLenum target, GLsizeiptr size, const GLvoid * data, GLenum usage);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double)*sizeV, &fOglVertex[0]);
+#else
+    glBufferDatafv(GL_ARRAY_BUFFER, fOglVertex.begin(), fOglVertex.end(), GL_STATIC_DRAW);
+#endif
+    
+    // Bind IBO
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fIndicesBufferObject);
+    
+    // Load fOglVertex into VBO
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+    int sizeI = fOglIndices.size();
+    glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(int)*sizeI, &fOglIndices[0]);
+#else
+    glBufferDataiv(GL_ELEMENT_ARRAY_BUFFER, fOglIndices.begin(), fOglIndices.end(), GL_STATIC_DRAW);
+#endif
+    
+    //----------------------------
+    // Draw VBO
+    //----------------------------
+    glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fIndicesBufferObject);
+    
+#ifdef G4DEBUG_VIS_OGL
+    printf("G4OpenGLSceneHandler::glEndVBO() To DrawElements:%d vertex and %d indices\n",fOglVertex.size()/6,fOglIndices.size());
+#endif
+    
+    // the vertexPositionAttribute_ is inside the G4OpenGLViewer
+    G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+    if (pGLViewer) {
+      glEnableVertexAttribArray(pGLViewer->vertexPositionAttribute_);
+
+      glVertexAttribPointer(pGLViewer->vertexPositionAttribute_,
+                            3,     // size: Every vertex has an X, Y anc Z component
+                            GL_FLOAT, // type: They are floats
+                            GL_FALSE, // normalized: Please, do NOT normalize the vertices
+                            2*3*4, // stride: The first byte of the next vertex is located this
+                            //         amount of bytes further. The format of the VBO is
+                            //         vx, vy, vz, nx, ny, nz and every element is a
+                            //         Float32, hence 4 bytes large
+                            0);    // offset: The byte position of the first vertex in the buffer
+    }
+    
+    
+    /*  glDrawArrays(fDrawArrayType, // GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES, GL_TRIANGLE_FAN, GL_TRIANGLE_STRIP, and GL_TRIANGLES
+     0, fOglVertex.size()/6);
+     */
+    glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, fIndicesBufferObject);
+//    glDrawElements(fDrawArrayType, fOglIndices.size(), GL_UNSIGNED_SHORT, 0);
+    glDrawElements(fDrawArrayType, fOglIndices.size(), GL_UNSIGNED_SHORT, 0);
+    
+    if (pGLViewer) {
+      glDisableVertexAttribArray(pGLViewer->vertexPositionAttribute_);
+    }
+
+    // delete the buffer
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+    glDeleteBuffers(1,&fVertexBufferObject);
+#else
+    glDeleteBuffer(fVertexBufferObject);
+#endif
+  }
+}
+          
+void G4OpenGLSceneHandler::drawVBOArray(std::vector<double> vertices)  {
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+  glGenBuffers(1,&fVertexBufferObject);
+  glGenBuffers(1,&fIndicesBufferObject);
+#else
+  fVertexBufferObject = glCreateBuffer(); //glGenBuffer(1,fVertexBufferObject_2)
+  fIndicesBufferObject = glCreateBuffer(); //glGenBuffer(1,fIndicesBufferObject_2)
+#endif
+
+  // Bind this buffer
+  glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
+  // Load oglData into VBO
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+  int s = vertices.size();
+  glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(double)*s, &vertices[0]);
+  
+#else
+  glBufferDatafv(GL_ARRAY_BUFFER, vertices.begin(), vertices.end(), GL_STATIC_DRAW);
+#endif
+  
+  //----------------------------
+  // Draw VBO
+  //----------------------------
+  glBindBuffer(GL_ARRAY_BUFFER, fVertexBufferObject);
+  
+#ifdef G4DEBUG_VIS_OGL
+  printf("G4OpenGLSceneHandler::drawVBOArray To DrawArray:%d\n",vertices.size()/6);
+#endif
+  
+  // the vertexPositionAttribute_ is inside the G4OpenGLViewer
+  G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
+  if (pGLViewer) {
+    glEnableVertexAttribArray(pGLViewer->vertexPositionAttribute_);
+
+    glVertexAttribPointer(pGLViewer->vertexPositionAttribute_,
+                          3,     // size: Every vertex has an X, Y anc Z component
+                          GL_FLOAT, // type: They are floats
+                          GL_FALSE, // normalized: Please, do NOT normalize the vertices
+                          2*3*4, // stride: The first byte of the next vertex is located this
+                          //         amount of bytes further. The format of the VBO is
+                          //         vx, vy, vz, nx, ny, nz and every element is a
+                          //         Float32, hence 4 bytes large
+                          0);    // offset: The byte position of the first vertex in the buffer
+  }
+  
+  glDrawArrays(fDrawArrayType, // GL_POINTS, GL_LINE_STRIP, GL_LINE_LOOP, GL_LINES, GL_TRIANGLE_FAN, GL_TRIANGLE_STRIP, and GL_TRIANGLES
+               0, vertices.size()/6);
+  if (pGLViewer) {
+    glDisableVertexAttribArray(pGLViewer->vertexPositionAttribute_);
+  }
+  
+  // delet the buffer
+#ifndef G4VIS_BUILD_OPENGLWT_DRIVER
+  glDeleteBuffers(1,&fVertexBufferObject);
+#else
+  glDeleteBuffer(fVertexBufferObject);
+#endif
+}
+#endif
+
 
 #endif
