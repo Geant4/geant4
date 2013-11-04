@@ -14,6 +14,16 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-Nov-2013, M.K (phys-ctor-em-V09-06-21)
+- Update sources.cmake
+
+01-Nov-2013, M.K (phys-ctor-em-V09-06-20)
+- Remove temporarly G4EmDNAPhysicsChemistry to avoid conflicts with dna dev
+
+01-Nov-2013, M.K (phys-ctor-em-V09-06-19)
+- Modified G4EmDNAPhysicsChemistry
+- Update sources.cmake
+
 28-Oct-2013, V.Ivanchenko (phys-ctor-em-V09-06-18)
 - G4EmStandardPhysics - disable ApplyCuts option
 - G4EmStandardPhysics_option2 - removed unused header

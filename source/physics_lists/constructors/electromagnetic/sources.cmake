@@ -68,7 +68,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     HEADERS
-	G4EmDNAPhysicsChemistry.hh
 	G4EmDNAPhysics.hh
 	G4EmLivermorePhysics.hh
 	G4EmLivermorePolarizedPhysics.hh
@@ -84,7 +83,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
         G4OpticalProcessIndex.hh
     SOURCES
 	G4EmDNAPhysics.cc
-	G4EmDNAPhysicsChemistry.cc
 	G4EmLivermorePhysics.cc
 	G4EmLivermorePolarizedPhysics.cc
 	G4EmLowEPPhysics.cc
@@ -127,7 +125,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
         G4partman
         G4phys_builders
         G4phys_ctor_factory
-        G4phys_util
+	G4physlist_util
         G4procman
         G4run
         G4shortlived
