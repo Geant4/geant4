@@ -104,8 +104,8 @@ namespace G4INCL {
     ~Pauli() {}
 
   private:
-    static IPauli * thePauliBlocker;
-    static IPauli * theCDPP;
+    static G4ThreadLocal IPauli * thePauliBlocker;
+    static G4ThreadLocal IPauli * theCDPP;
   };
 
 }

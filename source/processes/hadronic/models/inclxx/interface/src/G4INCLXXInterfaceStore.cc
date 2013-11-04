@@ -42,6 +42,7 @@
  */
 
 #include "G4INCLXXInterfaceMessenger.hh"
+#include "G4SystemOfUnits.hh"
 
 G4ThreadLocal G4INCLXXInterfaceStore *G4INCLXXInterfaceStore::theInstance = NULL;
 
@@ -55,6 +56,7 @@ G4INCLXXInterfaceStore::G4INCLXXInterfaceStore() :
   nWarnings(0),
   maxWarnings(50)
 {
+  constructINCLXXVersionName();
   theINCLXXInterfaceMessenger = new G4INCLXXInterfaceMessenger(this);
 }
 
@@ -84,5 +86,25 @@ void G4INCLXXInterfaceStore::EmitBigWarning(const G4String &message) const {
     << "================================================================================"
     << G4endl
     << G4endl;
+}
+
+    /// \brief Setter for cascadeMinEnergyPerNucleon
+void G4INCLXXInterfaceStore::SetCascadeMinEnergyPerNucleon(const G4double anEnergy) {
+  if(cascadeMinEnergyPerNucleon!=anEnergy) {
+    // Parameter is changed, emit a big warning message
+    std::stringstream ss;
+    ss << "Changing minimim cascade energy from "
+      << cascadeMinEnergyPerNucleon / MeV
+      << " to "
+      << anEnergy / MeV
+      << " MeV."
+      << G4endl
+      << "Do this ONLY if you fully understand what this setting does!";
+    EmitBigWarning(ss.str());
+  }
+
+  // No need to delete the model object
+
+  cascadeMinEnergyPerNucleon=anEnergy;
 }
 

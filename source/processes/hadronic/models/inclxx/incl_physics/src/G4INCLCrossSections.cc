@@ -43,7 +43,7 @@
 namespace G4INCL {
 
   namespace {
-    static ICrossSections *theCrossSections;
+    G4ThreadLocal ICrossSections *theCrossSections;
   }
 
   namespace CrossSections {

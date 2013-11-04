@@ -72,7 +72,7 @@ using namespace std;
 
 class G4INCLXXInterfaceStore;
 
-/** \brief INCL++ intra-nuclear cascade with G4ExcitationHandler for de-excitation
+/** \brief INCL++ intra-nuclear cascade
  *
  * Interface for INCL++. This interface handles basic hadron bullet particles
  * (protons, neutrons, pions), as well as light ions.
@@ -119,6 +119,8 @@ public:
    */
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,  G4Nucleus& theNucleus);
 
+  using G4VIntraNuclearTransportModel::SetDeExcitation;
+
   void DeleteModel() {
     delete theINCLModel;
     theINCLModel = NULL;
@@ -159,8 +161,6 @@ private:
 
   G4HadFinalState theResult;
 
-  G4ExcitationHandler *theExcitationHandler;
-
   G4HadronicInteraction *theBackupModel;
   G4HadronicInteraction *theBackupModelNucleon;
 
@@ -170,6 +170,8 @@ private:
   G4bool complainedAboutPreCompound;
 
   G4IonTable * const theIonTable;
+
+  G4bool dumpRemnantInfo;
 };
 
 #endif

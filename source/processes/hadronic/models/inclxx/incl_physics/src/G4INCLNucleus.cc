@@ -721,20 +721,20 @@ namespace G4INCL {
       if(eventInfo->EStarRem[eventInfo->nRemnants]<0.) {
 	INCL_WARN("Negative excitation energy in projectile-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << std::endl);
       }
+      const ThreeVector &spin = theProjectileRemnant->getSpin();
       if(eventInfo->ARem[eventInfo->nRemnants]%2==0) { // even-A nucleus
-	eventInfo->JRem[eventInfo->nRemnants] = (G4int) (theProjectileRemnant->getSpin().mag()/PhysicalConstants::hc + 0.5);
+	eventInfo->JRem[eventInfo->nRemnants] = (G4int) (spin.mag()/PhysicalConstants::hc + 0.5);
       } else { // odd-A nucleus
-	eventInfo->JRem[eventInfo->nRemnants] = ((G4int) (theProjectileRemnant->getSpin().mag()/PhysicalConstants::hc)) + 0.5;
+	eventInfo->JRem[eventInfo->nRemnants] = ((G4int) (spin.mag()/PhysicalConstants::hc)) + 0.5;
       }
       eventInfo->EKinRem[eventInfo->nRemnants] = theProjectileRemnant->getKineticEnergy();
-      ThreeVector mom = theProjectileRemnant->getMomentum();
+      const ThreeVector &mom = theProjectileRemnant->getMomentum();
       eventInfo->pxRem[eventInfo->nRemnants] = mom.getX();
       eventInfo->pyRem[eventInfo->nRemnants] = mom.getY();
       eventInfo->pzRem[eventInfo->nRemnants] = mom.getZ();
-      ThreeVector spin = theProjectileRemnant->getSpin();
-      eventInfo->jxRem[eventInfo->nRemnants] = spin.getX();
-      eventInfo->jyRem[eventInfo->nRemnants] = spin.getY();
-      eventInfo->jzRem[eventInfo->nRemnants] = spin.getZ();
+      eventInfo->jxRem[eventInfo->nRemnants] = spin.getX() / PhysicalConstants::hc;
+      eventInfo->jyRem[eventInfo->nRemnants] = spin.getY() / PhysicalConstants::hc;
+      eventInfo->jzRem[eventInfo->nRemnants] = spin.getZ() / PhysicalConstants::hc;
       eventInfo->thetaRem[eventInfo->nRemnants] = Math::toDegrees(mom.theta());
       eventInfo->phiRem[eventInfo->nRemnants] = Math::toDegrees(mom.phi());
       eventInfo->nRemnants++;
@@ -748,20 +748,20 @@ namespace G4INCL {
       if(eventInfo->EStarRem[eventInfo->nRemnants]<0.) {
 	INCL_WARN("Negative excitation energy in target-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << std::endl);
       }
+      const ThreeVector &spin = getSpin();
       if(eventInfo->ARem[eventInfo->nRemnants]%2==0) { // even-A nucleus
-	eventInfo->JRem[eventInfo->nRemnants] = (G4int) (getSpin().mag()/PhysicalConstants::hc + 0.5);
+	eventInfo->JRem[eventInfo->nRemnants] = (G4int) (spin.mag()/PhysicalConstants::hc + 0.5);
       } else { // odd-A nucleus
-	eventInfo->JRem[eventInfo->nRemnants] = ((G4int) (getSpin().mag()/PhysicalConstants::hc)) + 0.5;
+	eventInfo->JRem[eventInfo->nRemnants] = ((G4int) (spin.mag()/PhysicalConstants::hc)) + 0.5;
       }
       eventInfo->EKinRem[eventInfo->nRemnants] = getKineticEnergy();
-      ThreeVector mom = getMomentum();
+      const ThreeVector &mom = getMomentum();
       eventInfo->pxRem[eventInfo->nRemnants] = mom.getX();
       eventInfo->pyRem[eventInfo->nRemnants] = mom.getY();
       eventInfo->pzRem[eventInfo->nRemnants] = mom.getZ();
-      ThreeVector spin = getSpin();
-      eventInfo->jxRem[eventInfo->nRemnants] = spin.getX();
-      eventInfo->jyRem[eventInfo->nRemnants] = spin.getY();
-      eventInfo->jzRem[eventInfo->nRemnants] = spin.getZ();
+      eventInfo->jxRem[eventInfo->nRemnants] = spin.getX() / PhysicalConstants::hc;
+      eventInfo->jyRem[eventInfo->nRemnants] = spin.getY() / PhysicalConstants::hc;
+      eventInfo->jzRem[eventInfo->nRemnants] = spin.getZ() / PhysicalConstants::hc;
       eventInfo->thetaRem[eventInfo->nRemnants] = Math::toDegrees(mom.theta());
       eventInfo->phiRem[eventInfo->nRemnants] = Math::toDegrees(mom.phi());
       eventInfo->nRemnants++;

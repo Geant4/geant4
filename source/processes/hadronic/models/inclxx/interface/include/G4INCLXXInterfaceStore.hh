@@ -46,8 +46,8 @@
 
 #include "G4INCLXXInterface.hh"
 #include "G4INCLCascade.hh"
+#include "G4INCLVersion.hh"
 #include "G4INCLConfig.hh"
-#include "G4SystemOfUnits.hh"
 #include <list>
 #include <sstream>
 
@@ -86,6 +86,15 @@ class G4INCLXXInterfaceStore {
       return theINCLModel;
     }
 
+    void constructINCLXXVersionName() {
+      const std::string versionID = G4INCL_VERSION_ID;
+      const size_t lastDash = versionID.find_last_of("-");
+      versionName = "INCL++ " + versionID.substr(0,lastDash);
+    }
+
+    const std::string &getINCLXXVersionName() {
+      return versionName;
+    }
 
 
 
@@ -130,24 +139,7 @@ class G4INCLXXInterfaceStore {
     }
 
     /// \brief Setter for cascadeMinEnergyPerNucleon
-    void SetCascadeMinEnergyPerNucleon(const G4double anEnergy) {
-      if(cascadeMinEnergyPerNucleon!=anEnergy) {
-        // Parameter is changed, emit a big warning message
-        std::stringstream ss;
-        ss << "Changing minimim cascade energy from "
-          << cascadeMinEnergyPerNucleon / MeV
-          << " to "
-          << anEnergy / MeV
-          << " MeV."
-          << G4endl
-          << "Do this ONLY if you fully understand what this setting does!";
-        EmitBigWarning(ss.str());
-      }
-
-      // No need to delete the model object
-
-      cascadeMinEnergyPerNucleon=anEnergy;
-    }
+    void SetCascadeMinEnergyPerNucleon(const G4double anEnergy);
 
 
 
@@ -233,6 +225,8 @@ class G4INCLXXInterfaceStore {
 
     /// \brief Maximum number of warnings
     const G4int maxWarnings;
+
+    std::string versionName;
 };
 
 #endif // G4INCLXXINTERFACESTORE_HH_

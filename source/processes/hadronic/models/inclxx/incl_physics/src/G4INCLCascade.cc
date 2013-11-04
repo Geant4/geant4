@@ -76,8 +76,6 @@
 
 #include "G4INCLIntersection.hh"
 
-#include "G4INCLCrossSections.hh"
-
 #include "G4INCLBinaryCollisionAvatar.hh"
 
 #include <cstring>

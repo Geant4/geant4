@@ -188,9 +188,11 @@ namespace G4INCL {
     }
 
     void deleteTable() {
-      delete ZMaxArray;
+      delete[] ZMaxArray;
       ZMaxArray = NULL;
-      delete theTable;
+      for(G4int A=1; A<=AMax; ++A)
+        delete[] theTable[A];
+      delete[] theTable;
       theTable = NULL;
     }
   }

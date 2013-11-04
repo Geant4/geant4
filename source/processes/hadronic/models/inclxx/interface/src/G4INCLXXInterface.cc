@@ -48,9 +48,10 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4HadronicInteractionRegistry.hh"
+#include "G4INCLVersion.hh"
 
 G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
-  G4VIntraNuclearTransportModel("INCL++ cascade with G4ExcitationHandler"),
+  G4VIntraNuclearTransportModel(G4INCLXXInterfaceStore::GetInstance()->getINCLXXVersionName()),
   theINCLModel(NULL),
   thePreCompoundModel(aPreCompound),
   theInterfaceStore(G4INCLXXInterfaceStore::GetInstance()),
@@ -62,17 +63,27 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
     G4HadronicInteraction* p =
       G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
     thePreCompoundModel = static_cast<G4VPreCompoundModel*>(p);
-    if(!thePreCompoundModel) { thePreCompoundModel = new G4PreCompoundModel(); }
+    if(!thePreCompoundModel) { thePreCompoundModel = new G4PreCompoundModel; }
   }
 
   // Use the environment variable G4INCLXX_NO_DE_EXCITATION to disable de-excitation
   if(getenv("G4INCLXX_NO_DE_EXCITATION")) {
     G4String message = "de-excitation is completely disabled!";
     theInterfaceStore->EmitWarning(message);
-    theExcitationHandler = 0;
+    theDeExcitation = 0;
   } else {
-    theExcitationHandler = new G4ExcitationHandler;
+    G4HadronicInteraction* p =
+      G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+    theDeExcitation = static_cast<G4VPreCompoundModel*>(p);
+    if(!theDeExcitation) { theDeExcitation = new G4PreCompoundModel; }
   }
+
+  // use the envvar G4INCLXX_DUMP_REMNANT to dump information about the
+  // remnants on stdout
+  if(getenv("G4INCLXX_DUMP_REMNANT"))
+    dumpRemnantInfo = true;
+  else
+    dumpRemnantInfo = false;
 
   theBackupModel = new G4BinaryLightIonReaction;
   theBackupModelNucleon = new G4BinaryCascade;
@@ -80,7 +91,6 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
 
 G4INCLXXInterface::~G4INCLXXInterface()
 {
-  delete theExcitationHandler;
 }
 
 G4bool G4INCLXXInterface::AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) const {
@@ -342,6 +352,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
 	G4Fragment remnant(A, Z, fourMomentum);
         remnant.SetAngularMomentum(spin);
+        if(dumpRemnantInfo) {
+          G4cerr << "G4INCLXX_DUMP_REMNANT: " << remnant << "  spin: " << spin << G4endl;
+        }
 	remnants.push_back(remnant);
       }
     }
@@ -371,10 +384,10 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   // De-excitation:
 
-  if(theExcitationHandler != 0) {
-    for(std::list<G4Fragment>::const_iterator i = remnants.begin();
+  if(theDeExcitation != 0) {
+    for(std::list<G4Fragment>::iterator i = remnants.begin();
 	i != remnants.end(); i++) {
-      G4ReactionProductVector *deExcitationResult = theExcitationHandler->BreakItUp((*i));
+      G4ReactionProductVector *deExcitationResult = theDeExcitation->DeExcite((*i));
 
       for(G4ReactionProductVector::iterator fragment = deExcitationResult->begin();
 	  fragment != deExcitationResult->end(); ++fragment) {
@@ -460,7 +473,7 @@ G4DynamicParticle *G4INCLXXInterface::toG4Particle(G4int A, G4int Z,
   if(def == 0) { // Check if we have a valid particle definition
     return 0;
   }
-  const G4double energy = kinE / MeV;
+  const G4double energy = kinE * MeV;
   const G4ThreeVector momentum(px, py, pz);
   const G4ThreeVector momentumDirection = momentum.unit();
   G4DynamicParticle *p = new G4DynamicParticle(def, momentumDirection, energy);

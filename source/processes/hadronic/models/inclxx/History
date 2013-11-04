@@ -16,6 +16,20 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+2 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-35)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc18
+  o Fix a TLS policy violation that caused violation of MT-vs-SEQ
+    reproducibility.
+
+31 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-32, -33, -34)
+---------------------------------------------------------------
+- INCL++ v5.1.14_rc17
+  o A handful of minor fixes.
+  o Prepare the G4INCLXXInterface to handle different de-excitation models
+    through the SetDeExcitation method().
+  o Fix a TLS violation in G4INCLCrossSections.cc.
+
 25 October 2013 - Davide Mancusi (hadr-inclxx-V09-06-31)
 ---------------------------------------------------------------
 - INCL++ v5.1.14_rc13

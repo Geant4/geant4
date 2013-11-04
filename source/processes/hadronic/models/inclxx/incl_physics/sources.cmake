@@ -40,7 +40,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 
 #
 # Define the Geant4 Module.

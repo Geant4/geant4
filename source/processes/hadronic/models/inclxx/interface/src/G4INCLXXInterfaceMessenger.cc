@@ -42,6 +42,7 @@
  */
 
 #include "G4INCLXXInterfaceMessenger.hh"
+#include "G4SystemOfUnits.hh"
 #include <sstream>
 
 const G4String G4INCLXXInterfaceMessenger::theUIDirectory = "/process/had/inclxx/";

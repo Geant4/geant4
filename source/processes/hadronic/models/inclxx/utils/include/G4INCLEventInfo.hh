@@ -211,11 +211,11 @@ namespace G4INCL {
       Float_t thetaRem[maxSizeRemnants];
       /** \brief Remnant momentum azimuthal angle [radians] */
       Float_t phiRem[maxSizeRemnants];
-      /** \brief Remnant angular momentum, x component [hbar] */
+      /** \brief Remnant angular momentum, x component [\f$\hbar\f$] */
       Float_t jxRem[maxSizeRemnants];
-      /** \brief Remnant angular momentum, y component [hbar] */
+      /** \brief Remnant angular momentum, y component [\f$\hbar\f$] */
       Float_t jyRem[maxSizeRemnants];
-      /** \brief Remnant angular momentum, z component [hbar] */
+      /** \brief Remnant angular momentum, z component [\f$\hbar\f$] */
       Float_t jzRem[maxSizeRemnants];
       /** \brief Projectile particle type */
       Int_t projectileType;
@@ -300,6 +300,7 @@ namespace G4INCL {
       /** \brief Reset the EventInfo members */
       void reset() {
         nParticles = 0;
+        history.clear();
         nRemnants = 0;
         projectileType = 0;
         At = 0;
