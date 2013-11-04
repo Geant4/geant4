@@ -59,7 +59,7 @@ enum ElectronicModification
 /**
   * G4DNAChemistryManager is called from the physics models.
   * It creates the water molecules and the solvated electrons and
-  * and send them to G4ITStepManager to be treated in the chemistry stage.
+  * and send them to synchronous step manager to be treated in the chemistry stage.
   * For this, the fActiveChemistry flag needs to be on.
   * It is also possible to give already molecule's pointers already built.
   * G4DNAChemistryManager will then be in charge of creating the track and loading
@@ -81,8 +81,6 @@ public:
       */
     static void DeleteInstance();
 
-
-    void Run();
 
     /**
       * Tells the chemMan to write into a file
@@ -149,7 +147,7 @@ protected :
     G4DNAChemistryManager();
 
 private:
-    static /*G4ThreadLocal*/ std::auto_ptr<G4DNAChemistryManager> *fInstance;
+    static std::auto_ptr<G4DNAChemistryManager> fInstance;
     bool fActiveChemistry;
     G4bool fWriteFile;
     static G4ThreadLocal std::ofstream*  fOutput;

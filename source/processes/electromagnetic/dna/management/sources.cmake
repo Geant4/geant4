@@ -53,8 +53,6 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITNavigator.icc
         G4ITReactionChange.hh
         G4ITReactionTable.hh
-        G4ITStepManager.hh
-        G4ITSteppingMessenger.hh
         G4ITStepProcessor.hh
         G4ITStepStatus.hh
         G4ITTrackHolder.hh
@@ -92,8 +90,6 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITNavigator.cc
         G4ITReactionChange.cc
         G4ITReactionTable.cc
-        G4ITStepManager.cc
-        G4ITSteppingMessenger.cc
         G4ITStepProcessor2.cc
         G4ITStepProcessor.cc
         G4ITTrackHolder.cc

@@ -48,16 +48,17 @@
 #include "G4ITManager.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4MoleculeCounter.hh"
-#include "G4ITStepManager.hh"
 #include "G4Tokenizer.hh"
+#include "G4AutoLock.hh"
 
 using namespace std;
 
-/*G4ThreadLocal*/ auto_ptr<G4DNAChemistryManager> *G4DNAChemistryManager::fInstance = 0;
+auto_ptr<G4DNAChemistryManager> G4DNAChemistryManager::fInstance ;
 G4ThreadLocal std::ofstream*  G4DNAChemistryManager::fOutput = 0;
+G4Mutex chemManExistence;
 
 G4DNAChemistryManager::G4DNAChemistryManager() :
-    								fActiveChemistry(false)
+ 		fActiveChemistry(false)
 {
 	fExcitationLevel = 0;
 	fIonisationLevel = 0;
@@ -66,9 +67,16 @@ G4DNAChemistryManager::G4DNAChemistryManager() :
 
 G4DNAChemistryManager* G4DNAChemistryManager::Instance()
 {
-	if (!fInstance) fInstance = new auto_ptr<G4DNAChemistryManager> (0) ;
-	if(!fInstance->get()) *fInstance = auto_ptr<G4DNAChemistryManager>(new G4DNAChemistryManager());
-	return fInstance->get();
+	if (fInstance.get() == 0)
+	{
+		G4AutoLock lock(&chemManExistence);
+		if(fInstance.get() == 0) // MT : double check at initialisation
+		{
+			fInstance = auto_ptr<G4DNAChemistryManager> (new G4DNAChemistryManager()) ;
+		}
+		lock.unlock();
+	}
+	return fInstance.get();
 }
 
 G4DNAChemistryManager::~G4DNAChemistryManager()
@@ -78,24 +86,16 @@ G4DNAChemistryManager::~G4DNAChemistryManager()
 	G4DNAMolecularReactionTable::DeleteInstance();
 	G4MoleculeHandleManager::DeleteInstance();
 	G4MolecularConfiguration::DeleteManager();
-	fInstance->release();
+	fInstance.release();
 	G4MoleculeCounter::DeleteInstance();
 }
 
 void G4DNAChemistryManager::DeleteInstance()
 {
-	if(fInstance->get())
-		fInstance->reset();
-}
-
-void G4DNAChemistryManager::Run()
-{
-	if(fActiveChemistry)
+	G4AutoLock lock(&chemManExistence);
+	if(fInstance.get())
 	{
-		InitializeFile();
-		G4ITStepManager::Instance() -> Process();
-		G4ITStepManager::Instance() -> ClearList();
-		CloseFile();
+		fInstance.reset();
 	}
 }
 
