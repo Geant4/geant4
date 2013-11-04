@@ -77,7 +77,11 @@
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyGeometryMessenger.hh"
 #include "HadrontherapyInteractionParameters.hh"
+#include "HadrontherapyLet.hh"
+
 #include "G4ScoringManager.hh"
+#include "G4ParallelWorldPhysics.hh"
+
 
 
 #ifdef G4VIS_USE
@@ -125,14 +129,22 @@ int main(int argc ,char ** argv)
 
   if(physName != "" && factory.IsReferencePhysList(physName))
     {
-      phys = factory.GetReferencePhysList(physName);
+      phys = factory.GetReferencePhysList(physName);      
     } 
+  if (phys)
+    {
+      G4cout << "Going to register G4ParallelWorldPhysics" << G4endl;
+      phys->RegisterPhysics(new G4ParallelWorldPhysics("DetectorROGeometry"));
+    }
+  else
+    {
+      G4cout << "Using HadrontherapyPhysicsList()" << G4endl;
+      phys = new HadrontherapyPhysicsList(); 
+    }
 
-  if(!phys) { phys = new HadrontherapyPhysicsList(); }
-
+  
   runManager->SetUserInitialization(phys);
   
-  //  runManager -> SetUserInitialization(new HadrontherapyPhysicsList());
 
   // Initialize the primary particles
   HadrontherapyPrimaryGeneratorAction *pPrimaryGenerator = new HadrontherapyPrimaryGeneratorAction();
@@ -202,6 +214,17 @@ int main(int argc ,char ** argv)
         pMatrix -> StoreDoseFluenceRoot();
 #endif
     }
+    
+    if (HadrontherapyLet *let = HadrontherapyLet::GetInstance())
+    if(let -> doCalculation)
+      {
+	let -> LetOutput(); 	// Calculate let
+	let -> StoreLetAscii(); // Store it
+#ifdef G4ANALYSIS_USE_ROOT
+	let -> StoreLetRoot();
+#endif
+      }
+    
 
 #ifdef G4ANALYSIS_USE_ROOT
   if (analysis -> IsTheTFile()) analysis -> flush();     // Finalize & write the root file 

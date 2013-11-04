@@ -82,7 +82,9 @@ private:
 	//PassiveCarbonBeamLineMessenger* passiveMessenger;  
 	G4VPhysicalVolume* physicalTreatmentRoom;
 	HadrontherapyDetectorConstruction* hadrontherapyDetectorConstruction; 
-		
+	
+	G4Material* kapton;
+	
 	G4double vacuumZoneXSize;
 	G4double vacuumZoneYSize;
 	G4double vacuumZoneZSize;
@@ -117,6 +119,8 @@ private:
 	G4double firstScatteringFoilYSize;
 	G4double firstScatteringFoilZSize;
 	G4double firstScatteringFoilXPosition;
+	G4double firstScatteringFoilYPosition;
+	G4double firstScatteringFoilZPosition;
 	
 	// Scattering foil coupled with the stopper
 	G4Box* secondScatteringFoil;  
@@ -127,9 +131,12 @@ private:
 	G4double secondScatteringFoilXPosition;
 	G4double secondScatteringFoilYPosition;
 	G4double secondScatteringFoilZPosition;	
-		
+	
+	G4VisAttributes* redWire;
+	
 	G4double innerRadiusFinalCollimator;
 	
+	G4VPhysicalVolume* mother;
 	G4VPhysicalVolume* physiFirstMonitorLayer1;
 	G4VPhysicalVolume* physiFirstMonitorLayer2;
 	G4VPhysicalVolume* physiFirstMonitorLayer3;
@@ -165,6 +172,8 @@ private:
 	G4Material* holeNozzleSupportMaterial;
 	G4Material* seconHoleNozzleSupportMaterial;
 	G4Material* finalCollimatorMaterial;
+	
+	HadrontherapyDetectorROGeometry* RO;
 };
 #endif
 

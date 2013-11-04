@@ -7,6 +7,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================
+
+04.11.2013 F.Romano;       Tag: hadrontherapy-V09-06-03
+           - Included class for average LET computations
+
 31.07.2013 A.Dotti;        Tag: hadrontherapy-V09-06-02
            - Fixing compilation warnings from clang32 (unused private
              data filed): in case of no ROOT found

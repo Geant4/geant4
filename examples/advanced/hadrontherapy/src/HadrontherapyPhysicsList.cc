@@ -79,6 +79,7 @@
 #include "G4IonFluctuations.hh"
 #include "G4IonParametrisedLossModel.hh"
 #include "G4EmProcessOptions.hh"
+#include "G4ParallelWorldPhysics.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
@@ -151,6 +152,12 @@ void HadrontherapyPhysicsList::ConstructProcess()
   // step limitation (as a full process)
   //
   AddStepMax();
+
+  //Parallel world sensitivity
+  G4ParallelWorldPhysics* pWorld = new G4ParallelWorldPhysics("DetectorROGeometry");
+  pWorld->ConstructProcess();
+
+  return;
 }
 
 /////////////////////////////////////////////////////////////////////////////

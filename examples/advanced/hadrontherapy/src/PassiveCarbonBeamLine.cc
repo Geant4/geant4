@@ -60,6 +60,8 @@
 #include "G4SystemOfUnits.hh"
 
 
+
+
 /////////////////////////////////////////////////////////////////////////////
 PassiveCarbonBeamLine::PassiveCarbonBeamLine():
 physicalTreatmentRoom(0), hadrontherapyDetectorConstruction(0),
@@ -75,6 +77,20 @@ physiFinalCollimator(0)
 	// Messenger to change parameters of the passiveProtonBeamLine geometry
 	//passiveMessenger = new PassiveProtonBeamLineMessenger(this);
 	
+//***************************** PW ***************************************
+
+  static G4String ROGeometryName = "DetectorROGeometry";
+  RO = new HadrontherapyDetectorROGeometry(ROGeometryName);
+  
+  
+
+  G4cout << "Going to register Parallel world...";
+  RegisterParallelWorld(RO);
+  G4cout << "... done" << G4endl;
+//***************************** PW ***************************************
+
+
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -93,8 +109,21 @@ G4VPhysicalVolume* PassiveCarbonBeamLine::Construct()
 	// Construct the whole CarbonPassive Beam Line 
 	ConstructPassiveCarbonBeamLine();
 	
+	
+//***************************** PW ***************************************
+  if (!hadrontherapyDetectorConstruction)
+
+//***************************** PW ***************************************
+	
 	// HadrontherapyDetectorConstruction builds ONLY the phantom and the detector with its associated ROGeometry
 	hadrontherapyDetectorConstruction = new HadrontherapyDetectorConstruction(physicalTreatmentRoom); 
+	
+//***************************** PW ***************************************
+
+ hadrontherapyDetectorConstruction->InitializeDetectorROGeometry(RO,hadrontherapyDetectorConstruction->GetDetectorToWorldPosition());
+
+//***************************** PW ***************************************
+	
 	
 	return physicalTreatmentRoom;
 }
@@ -276,6 +305,13 @@ void PassiveCarbonBeamLine::SetDefaultDimensions()
 	G4Material* brass = new G4Material("Brass", d, nComponents);  
 	brass -> AddElement(zincNist, fractionmass = 30 *perCent);
 	brass -> AddElement(copperNist, fractionmass = 70 *perCent);
+	
+//***************************** PW ***************************************
+
+// DetectorROGeometry Material
+  new G4Material("dummyMat", 1., 1.*g/mole, 1.*g/cm3);
+
+//***************************** PW ***************************************
 	
 	
 	// MATERIAL ASSIGNMENT

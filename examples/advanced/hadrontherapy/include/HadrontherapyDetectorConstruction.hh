@@ -40,6 +40,7 @@
 #include "G4VisAttributes.hh"
 #include "G4LogicalVolume.hh"
 #include "G4UnitsTable.hh"
+#include "HadrontherapyDetectorROGeometry.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -47,7 +48,7 @@ class HadrontherapyDetectorROGeometry;
 class HadrontherapyDetectorMessenger;
 class HadrontherapyDetectorSD;
 class HadrontherapyMatrix;
-
+class HadrontherapyLet;
 class HadrontherapyDetectorConstruction 
 {
 public:
@@ -56,18 +57,21 @@ public:
 
   ~HadrontherapyDetectorConstruction();
 
+public:
+static HadrontherapyDetectorConstruction* GetInstance();
+  void InitializeDetectorROGeometry(HadrontherapyDetectorROGeometry*,
+				    G4ThreeVector detectorToWorldPosition);
 
 private: 
 
   void ConstructPhantom();
   void ConstructDetector();
-  void ConstructSensitiveDetector(G4ThreeVector positionToWORLD);
   void ParametersCheck();
 
 public: 
 // Get detector position relative to WORLD
 inline G4ThreeVector GetDetectorToWorldPosition()
-  {
+  { 
     return phantomPosition + detectorPosition;
   }
 /////////////////////////////////////////////////////////////////////////////
@@ -83,14 +87,13 @@ inline G4ThreeVector GetDetectorToPhantomPosition()
 /////////////////////////////////////////////////////////////////////////////
 // Calculate (and set) detector position by displacement, phantom and detector sizes
 inline void SetDetectorPosition()
-  {
+  { 
 	  // Adjust detector position
 	  detectorPosition.setX(detectorToPhantomPosition.getX() - phantomSizeX/2 + detectorSizeX/2);
 	  detectorPosition.setY(detectorToPhantomPosition.getY() - phantomSizeY/2 + detectorSizeY/2);
 	  detectorPosition.setZ(detectorToPhantomPosition.getZ() - phantomSizeZ/2 + detectorSizeZ/2);
      
-    //G4cout << "*************** DetectorToPhantomPosition " << detectorToPhantomPosition/cm << "\n";
-    //G4cout << "*************** DetectorPosition " << detectorPosition/cm << "\n";
+    
   }
 /////////////////////////////////////////////////////////////////////////////
 // Check whether detector is inside phantom
@@ -159,7 +162,7 @@ inline bool IsInside(G4double detectorX,
 
 
 private:
-
+  static HadrontherapyDetectorConstruction* instance;
   HadrontherapyDetectorMessenger* detectorMessenger; 
 
   G4VisAttributes* skyBlue;
@@ -170,7 +173,8 @@ private:
   HadrontherapyDetectorSD*         detectorSD; // Pointer to sensitive detector
   HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
   HadrontherapyMatrix*             matrix;
-
+  HadrontherapyLet*                let;
+  
   G4Box *phantom , *detector;
   G4LogicalVolume *phantomLogicalVolume, *detectorLogicalVolume; 
   G4VPhysicalVolume *phantomPhysicalVolume, *detectorPhysicalVolume;

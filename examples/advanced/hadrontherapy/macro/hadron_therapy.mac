@@ -112,8 +112,8 @@
 
 # Visualisation 
 #
-/vis/scene/create
-/vis/open OGL
+#/vis/scene/create
+#/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoomTo 1
@@ -136,8 +136,11 @@
 # Default material is liquid water (G4_WATER)
 #/changePhantom/material G4_Pb
 
-# Only if secondaries dose/fluence are needed
-#/analysis/secondaries true
+# For dose/fleunce computation of primary and secondary particles
+#/analysis/secondary true
+
+# For dose average LET computations of primary and secondary particles
+#/analysis/computeLet
 
 /run/beamOn 100
 #########################

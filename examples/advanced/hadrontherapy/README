@@ -3,8 +3,8 @@
                      Text version of the Hadrontherapy README file
              =========================================================
 
-Last revsion: F.Romano, 3 November 2012;
-Released with the Geant4 9.6 version (December 2012)
+Last revsion: F.Romano, 3 November 2013;
+Released with the Geant4 9.10 version (December 2013)
 
 ------------------------------------------------------------------------------------------------
 ADVERTISEMENT: this is the text version of the README file of the 'basic' hadrontherapy, 
@@ -47,9 +47,10 @@ Its first release was in 2004. At that time Hadrontherapy was only capable to si
 
 Today Hadrontontherapy, except that it is in continuous development, is more flexible and show many additional capabilities as respect the past.
 Its geometrical set-up, for example, is now completely interchangeable permitting a simple switch between different geometrical configurations, which all share the same phantom (sensible detector) with the related features.
-It is possible to do a simulation of a generic proton/ion transport beam line;
+It is possible to do a simulation of a generic proton/ion transport beam line. In this new release, a module for dose average LET computations has been also included.
+Deprecated ReadOutGeometry has been replaced by the use of Parallel World.
 
-The configuration are:
+The configurations are:
 
 	- Passive proton beam line, which is installed at the LNS-INFN facility in Catania for eye tumor treatment with protons at 62 MeV. It is simulated in PassiveProtonBeamLine.cc;
 
@@ -291,22 +292,6 @@ The General Particle Source (GPS, G4 class name: G4GeneralParticleSource) is use
 
 The G4GeneralParticleSource can be utilised by typing commands from the /gps command directory, or include the /gps commands in a g4macro file.
 
-HOW RUN HADRONTHERAPY
-
-Run the example in interactive mode                                      
-
-> $G4WORDIR/bin/Linux-g++/Hadrontherapy
-
-In this case the main file (Hadrontherapy.cc) performs different operations depending on which environment variable is activated;
-For example, if the environment variable G4UI_USE_TCSH is activated, Hadrontherapy will start with the TCSH User Interface that has many useful functionalities. On the other hand, if this first variables is not defined, the program will continue searching for the G4UI_USE_QT variable and, finally, will open the standard G4UITerminal.
-
-Run the example using macro files          
-
-Hadrontherapy can be launched using a macro file:
-
-> $G4WORDIR/bin/Linux-g++/Hadrontherapy macroFile.mac
-
-The defaultMacro.mac file is contained in the main directory of Hadrontherapy and is automatically read in case the user launch the executable without a parameter. Several macro files are inside the /macro folder.
 
 SIMULATION OUTPUT
 
@@ -317,6 +302,7 @@ The file contains four columns; the first three columns represent the voxel inde
 Alternatively, user can force store of data to a given filename, after any BeamOn command and before the program end, by the macro command /analysis/writeDoseFile <myfile.out>.
 
 Moreover, if the macro command /analysis/secondary <true> is given, before the BeamOn command, ordinated dose and fluence, for every secondary produced, is added to the file.
+If the macro command /analysis/computeLet is given, an the ascii file Let.out is written, with the dose average LET computations.
 
 User must take care that any change of the phantom geometry will clear all dose data.
 
@@ -351,11 +337,7 @@ What is in progress:
 - A module for the simulation of an active beam line will be provided.
 The Korean Group of the Proton therapy center, National Cancer Center is developing this.
 
-- Modules for LET and RBE (Relative Biological Effectiveness) calculation. The Catania Group in Collaboration with the Turin one is working on this. Both the two modules are already implemented (in a preliminary version) in an internal version of Hadrontherapy and can be provided, if requested. Please, contact us.
-
-What is requested from Users:
-
-- Dicom interface
+- A module for the RBE (Relative Biological Effectiveness) calculation will be also delivered. The Catania Group in Collaboration with the Turin one is working on this. This module is already implemented (in a preliminary version) in an internal version of Hadrontherapy and can be provided, if requested. Please, contact us.
 
 Please contact cirrone@lns.infn.it or francesco.romano@lns.infn.it for more details or suggestions and feedbacks on this document.
 
