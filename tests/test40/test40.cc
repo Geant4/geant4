@@ -88,7 +88,7 @@ int main(int argc,char** argv) {
     runManagerMT->SetUserInitialization(detector);
     runManagerMT->SetUserInitialization(new PhysicsList());
 
-    PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+    PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);//Master instance
     runManagerMT->SetUserInitialization(new ActionInitialization(detector, 
 								 primary));
 
