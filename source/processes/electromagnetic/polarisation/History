@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30 October 13: V.Ivanchenko (empolar-V09-06-04)
+28 October 13: V.Ivanchenko (empolar-V09-06-03)
+28 October 13: V.Ivanchenko (empolar-V09-06-02)
+28 October 13: V.Ivanchenko (empolar-V09-06-01)
+- G4ePolarizedBremsstrahlungModel - substitute G4eBremsstrahlungModel 
+    by G4SeltzerBergerModel
+
 25 February 13: V.Ivanchenko (empolar-V09-06-00)
 - G4PolarizedComptonCrossSection - removed unused class memebers:
      gammaPol0, electronPol1, epsilon
