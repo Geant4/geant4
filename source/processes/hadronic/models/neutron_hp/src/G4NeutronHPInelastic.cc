@@ -47,7 +47,12 @@
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
 
-    G4int istatus = system("echo $G4NEUTRONHPDATA");
+    G4int istatus; 
+#if defined WIN32-VC
+    istatus = system("echo %G4NEUTRONHPDATA%");
+#else
+    istatus = system("echo $G4NEUTRONHPDATA");
+#endif
     if ( istatus < 0 )
     {
       G4cout << "Warning! system(\"echo $G4NEUTRONHPDATA\") returns error value at G4NeutronHPInelastic" << G4endl;

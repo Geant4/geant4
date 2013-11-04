@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31 October 2013 Tatsumi Koi (hadr-hpn-V09-06-18)
+-Fix problem on Windows platform to echo environment variable
+	src/G4NeutronHPInelasticBaseFS.cc
+
+
 15 October 2013 Tatsumi Koi (hadr-hpn-V09-06-17)
 -Change G4ParticleTable::GetParticleTable()->GetIon(,,) 
      to G4IonTable::GetIonTable()->GetIon(,,);
