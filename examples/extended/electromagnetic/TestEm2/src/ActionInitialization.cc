@@ -41,7 +41,10 @@
 
 ActionInitialization::ActionInitialization(DetectorConstruction* det, 
                                          PrimaryGeneratorAction* prim)
-  : detector(det), generator(prim)
+  : detector(det)
+#ifdef G4MULTITHREADED
+, generator(prim)
+#endif
 {
   masterRunAction = new RunAction(det, prim);
 }
@@ -55,7 +58,6 @@ ActionInitialization::~ActionInitialization()
 
 void ActionInitialization::Build() const
 {
-  SetUserAction(generator);
 
 #ifdef G4MULTITHREADED
   RunAction* run = new RunAction(detector, generator);
@@ -68,6 +70,7 @@ void ActionInitialization::Build() const
   SetUserAction(new EventAction(run));
   SetUserAction(new TrackingAction(run));
   SetUserAction(new SteppingAction(detector, run));
+    SetUserAction(new PrimaryGeneratorAction(detector));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -58,7 +58,9 @@ private:
 
   RunAction* masterRunAction;
   DetectorConstruction* detector;
+#ifdef G4MULTITHREADED
   PrimaryGeneratorAction* generator;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
