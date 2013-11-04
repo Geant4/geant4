@@ -1,0 +1,37 @@
+//
+// UGenericPolycone.icc
+//
+// Implementation of inline methods of UGenericPolycone
+// --------------------------------------------------------------------
+
+inline
+double UGenericPolycone::GetStartPhi() const
+{
+	return startPhi;
+}
+
+inline
+double UGenericPolycone::GetEndPhi() const
+{
+	return endPhi;
+}
+
+inline
+bool UGenericPolycone::IsOpen() const
+{
+	return phiIsOpen;
+}
+
+
+inline
+int UGenericPolycone::GetNumRZCorner() const
+{
+	return numCorner;
+}
+
+inline
+UPolyconeSideRZ UGenericPolycone::GetCorner(int index) const
+{
+	return corners[index];
+}
+

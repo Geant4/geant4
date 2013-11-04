@@ -1,0 +1,33 @@
+$Id: History 74238 2013-10-02 08:51:17Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Sub-Category History file
+                      -------------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all directory-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+November 1, 2013  G.Cosmo                 geom-usolids-V09-06-01
+- Added wrappers for Ubox, Ucons, UGenericPolycone, UMultiUnion, UOrb,
+  UPolycone, UPolyhedra, USphere, UTet, UTrd, UTubs.
+  Removed all other shapes not covered by the wrappers (will be included
+  in a later stage).
+- Updated CMake script accordingly.
+
+October 29, 2013  G.Cosmo                 geom-usolids-V09-06-00
+- Imported classes from the AIDA Unified Solids Library
+  (see https://aidasoft.web.cern.ch/USolids).
+  Shapes provided: Ubox, Ucons, UGenericPolycone, UMultiUnion, UOrb,
+  UPolycone, UPolyhedra, USphere, UTet, UTrd, UTubs (including also
+  shapes not foreseen to be wrapped as first stage).
+- Includes bridge class G4USolid and first wrapper class G4UBox.

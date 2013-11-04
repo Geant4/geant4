@@ -142,7 +142,7 @@ class G4NavigationHistory
 
  private:
 
-#if (!defined(G4MULTITHREADED) || defined(WIN32))
+#if defined(WIN32)
   std::vector<G4NavigationLevel> fNavHistory;
 #else
   std::vector<G4NavigationLevel,

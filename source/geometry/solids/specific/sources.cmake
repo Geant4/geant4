@@ -60,9 +60,11 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4PolyPhiFace.icc
         G4Polycone.hh
         G4Polycone.icc
+        G4PolyconeHistorical.hh
         G4PolyconeSide.hh
         G4Polyhedra.hh
         G4Polyhedra.icc
+        G4PolyhedraHistorical.hh
         G4PolyhedraSide.hh
         G4QuadrangularFacet.hh
         G4ReduciblePolygon.hh
@@ -107,8 +109,10 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4Paraboloid.cc
         G4PolyPhiFace.cc
         G4Polycone.cc
+        G4PolyconeHistorical.cc
         G4PolyconeSide.cc
         G4Polyhedra.cc
+        G4PolyhedraHistorical.cc
         G4PolyhedraSide.cc
         G4QuadrangularFacet.cc
         G4ReduciblePolygon.cc

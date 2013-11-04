@@ -1155,71 +1155,6 @@ G4Polyhedron* G4Polyhedra::CreatePolyhedron() const
   }
 }
 
-//
-// G4PolyhedraHistorical stuff
-//
-G4PolyhedraHistorical::G4PolyhedraHistorical()
-  : Start_angle(0.), Opening_angle(0.), numSide(0), Num_z_planes(0),
-    Z_values(0), Rmin(0), Rmax(0)
-{
-}
-
-G4PolyhedraHistorical::~G4PolyhedraHistorical()
-{
-  delete [] Z_values;
-  delete [] Rmin;
-  delete [] Rmax;
-}
-
-G4PolyhedraHistorical::
-G4PolyhedraHistorical( const G4PolyhedraHistorical& source )
-{
-  Start_angle   = source.Start_angle;
-  Opening_angle = source.Opening_angle;
-  numSide       = source.numSide;
-  Num_z_planes  = source.Num_z_planes;
-  
-  Z_values = new G4double[Num_z_planes];
-  Rmin     = new G4double[Num_z_planes];
-  Rmax     = new G4double[Num_z_planes];
-  
-  for( G4int i = 0; i < Num_z_planes; i++)
-  {
-    Z_values[i] = source.Z_values[i];
-    Rmin[i]     = source.Rmin[i];
-    Rmax[i]     = source.Rmax[i];
-  }
-}
-
-G4PolyhedraHistorical&
-G4PolyhedraHistorical::operator=( const G4PolyhedraHistorical& right )
-{
-  if ( &right == this ) return *this;
-
-  if (&right)
-  {
-    Start_angle   = right.Start_angle;
-    Opening_angle = right.Opening_angle;
-    numSide       = right.numSide;
-    Num_z_planes  = right.Num_z_planes;
-  
-    delete [] Z_values;
-    delete [] Rmin;
-    delete [] Rmax;
-    Z_values = new G4double[Num_z_planes];
-    Rmin     = new G4double[Num_z_planes];
-    Rmax     = new G4double[Num_z_planes];
-  
-    for( G4int i = 0; i < Num_z_planes; i++)
-    {
-      Z_values[i] = right.Z_values[i];
-      Rmin[i]     = right.Rmin[i];
-      Rmax[i]     = right.Rmax[i];
-    }
-  }
-  return *this;
-}
-
 
 void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
 {
@@ -1382,6 +1317,7 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
   if(isConvertible)
   {
    original_parameters = new G4PolyhedraHistorical;
+   original_parameters->numSide = numSide;
    original_parameters->Z_values = new G4double[countPlanes];
    original_parameters->Rmin = new G4double[countPlanes];
    original_parameters->Rmax = new G4double[countPlanes];
@@ -1406,6 +1342,7 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
                 JustWarning, message);
 
     original_parameters = new G4PolyhedraHistorical;
+    original_parameters->numSide = numSide;
     original_parameters->Z_values = new G4double[numPlanes];
     original_parameters->Rmin = new G4double[numPlanes];
     original_parameters->Rmax = new G4double[numPlanes];

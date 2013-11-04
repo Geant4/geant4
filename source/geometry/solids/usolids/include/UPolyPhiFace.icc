@@ -1,0 +1,75 @@
+//
+// ********************************************************************
+// * License and Disclaimer																					 *
+// *																																	*
+// * The	Geant4 software	is	copyright of the Copyright Holders	of *
+// * the Geant4 Collaboration.	It is provided	under	the terms	and *
+// * conditions of the Geant4 Software License,	included in the file *
+// * LICENSE and available at	http://cern.ch/geant4/license .	These *
+// * include a list of copyright holders.														 *
+// *																																	*
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work	make	any representation or	warranty, express or implied, *
+// * regarding	this	software system or assume any liability for its *
+// * use.	Please see the license in the file	LICENSE	and URL above *
+// * for the full disclaimer and the limitation of liability.				 *
+// *																																	*
+// * This	code	implementation is the result of	the	scientific and *
+// * technical work of the GEANT4 collaboration.											*
+// * By using,	copying,	modifying or	distributing the software (or *
+// * any work based	on the software)	you	agree	to acknowledge its *
+// * use	in	resulting	scientific	publications,	and indicate your *
+// * acceptance of all terms of the Geant4 Software license.					*
+// ********************************************************************
+//
+//
+// $Id: UPolyPhiFace.icc 66241 2012-12-13 18:34:42Z gunter $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 inline definitions file
+//
+// UPolyPhiFace.icc
+//
+// Implementation of inline methods of UPolyPhiFace
+// --------------------------------------------------------------------
+
+inline
+UVCSGface* UPolyPhiFace::Clone()
+{
+	return new UPolyPhiFace(*this);
+}
+
+// ExactZOrder
+//
+// Decide precisely whether a trajectory passes to the left, right, or exactly 
+// passes through the z position of a vertex point in our face.
+//
+// Result is only determined within an arbitrary (positive) factor.
+//			> 0 to the right
+//			< 0 to the left
+//			= 0 exactly on top of
+// In 99.9999% of the cases, a trivial calculation is used. In difficult
+// cases, a precise, compliant calculation is relied on.
+//
+inline
+double UPolyPhiFace::ExactZOrder( double z, 
+																		 double qx, double qy, double qz, 
+															 const UVector3 &v, 
+																		 double normSign,
+															 const UPolyPhiFaceVertex *vert ) const
+{
+	double answer = vert->z - z;
+	if (std::fabs(answer) < VUSolid::Tolerance())
+	{
+		UVector3 qa( qx - vert->x + radial.x,
+											qy - vert->y + radial.y, qz - vert->z ),
+											qb( qx - vert->x, qy - vert->y, qz - vert->z );
+		UVector3 qacb = qa.Cross(qb); 
+
+		answer = normSign*qacb.Dot(v)*(normal.y*radial.x-normal.x*radial.y);
+	}
+	
+	return answer;
+}

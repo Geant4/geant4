@@ -64,26 +64,10 @@
 
 #include "G4VCSGfaceted.hh"
 #include "G4PolyhedraSide.hh"
+#include "G4PolyhedraHistorical.hh"
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
-class G4PolyhedraHistorical
-{
-  public:
-
-    G4PolyhedraHistorical();
-    ~G4PolyhedraHistorical();
-    G4PolyhedraHistorical( const G4PolyhedraHistorical &source );
-    G4PolyhedraHistorical& operator=( const G4PolyhedraHistorical& right );
-
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   numSide;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
-};
 
 class G4Polyhedra : public G4VCSGfaceted
 {

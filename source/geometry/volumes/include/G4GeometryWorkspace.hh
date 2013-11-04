@@ -69,8 +69,9 @@ class G4GeometryWorkspace
   
  protected:  // Implementation methods
       void   InitialisePhysicalVolumes();
-      G4bool CloneParameterisedVolume( G4PVParameterised *paramVol );
-
+      G4bool CloneParameterisedSolids( G4PVParameterised *paramVol );
+      G4bool CloneReplicaSolid( G4PVReplica *);
+  
  private:    // Helper pointers - can be per instance or shared
     G4LVManager     *fpLogicalVolumeSIM;
     G4PVManager     *fpPhysicalVolumeSIM;

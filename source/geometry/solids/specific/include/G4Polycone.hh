@@ -64,25 +64,11 @@
 
 #include "G4VCSGfaceted.hh"
 #include "G4PolyconeSide.hh"
+#include "G4PolyconeHistorical.hh"
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 class G4VCSGface;
-class G4PolyconeHistorical
-{
-  public:
-    G4PolyconeHistorical();
-    ~G4PolyconeHistorical();
-    G4PolyconeHistorical( const G4PolyconeHistorical& source );
-    G4PolyconeHistorical& operator=( const G4PolyconeHistorical& right );
-
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
-};
 
 class G4Polycone : public G4VCSGfaceted 
 {

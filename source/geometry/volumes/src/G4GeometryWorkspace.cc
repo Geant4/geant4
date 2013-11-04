@@ -131,6 +131,8 @@ void G4GeometryWorkspace::InitialisePhysicalVolumes()
             if( ! g4PVReplica->IsParameterised() )
             {
                logicalVol->InitialiseWorker(logicalVol,solid,0);
+               // If the replica's solid (in LV) is changed during navigation, it must be thread-private
+               CloneReplicaSolid( g4PVReplica );
             }
             else
             {
@@ -142,7 +144,7 @@ void G4GeometryWorkspace::InitialisePhysicalVolumes()
                               FatalException,
                               "Cannot find Parameterisation for G4PVParameterised object.");
                }
-               CloneParameterisedVolume( paramVol );
+               CloneParameterisedSolids( paramVol );
             }
         }
     }
@@ -151,7 +153,40 @@ void G4GeometryWorkspace::InitialisePhysicalVolumes()
 }
 
 
-G4bool G4GeometryWorkspace::CloneParameterisedVolume( G4PVParameterised *paramVol )
+G4bool G4GeometryWorkspace::CloneReplicaSolid( G4PVReplica *replicaPV )
+{
+   // Create a clone of the solid for this replica in this thread
+
+   // Check that it is not a parameterisation ? 
+
+   // The solid Ptr is in the Logical Volume
+  G4LogicalVolume *logicalV= replicaPV ->GetLogicalVolume();
+  G4VSolid *solid= logicalV->GetSolid();
+
+  G4AutoLock aLock(&solidclone);
+  G4VSolid *workerSolid = solid->Clone();
+  aLock.unlock();
+
+  if( workerSolid )
+  {
+    logicalV->InitialiseWorker(logicalV,workerSolid,0);
+  }else{
+    // In the case that not all solids support(ed) the Clone()
+    // method, we do similar thing here to dynamically cast
+    // and then get the clone method.
+    G4ExceptionDescription ed;
+    ed << " ERROR: Unable to initialise geometry for worker node." << G4endl;
+    ed << " A solid lacks the Clone() method - or Clone() failed." << G4endl;
+    ed << "   Type of solid: " << solid->GetEntityType() << G4endl;
+    ed << "   Parameters: " << *solid << G4endl;
+    G4Exception(" G4GeometryWorkspace::CloneParameterisedVolume", "MT-BuildGeometry001",
+                FatalException, ed);
+    return false; 
+  }
+  return true; // It Worked
+}
+
+G4bool G4GeometryWorkspace::CloneParameterisedSolids( G4PVParameterised *paramVol )
 {
   // Each G4PVParameterised instance, has associated with it at least one
   // solid for each worker thread.

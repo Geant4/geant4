@@ -17,29 +17,43 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 1st, 2013 G.Cosmo - geomvol-V09-06-17
+- Restored use of G4EnhancedVecAllocator in G4NavigationHistory for
+  sequential mode.
+
+October 18th, 2013 J.Apostolakis          - geomvol-V09-06-16
+- G4GeometryWorkspace: Add new method CloneReplicaSolid, to 
+  ensure that the solid for each Replica is separate object.
+
 October 17th, 2013 J.Apostolakis, A.Dotti - geomvol-V09-06-15
 - Cleanup of the code removing unnecessary lines of codes and comments
 - G4GeometryWorkspacePool::CreateWorkspace
-   Do not create a second object G4GeometryWorkspace' 
--  Fixed Singleton G4GeometryWorkspacePool - for thread safe creation of object. 
+  Do not create a second object G4GeometryWorkspace'.
+- Fixed Singleton G4GeometryWorkspacePool - for thread safe creation
+  of object. 
+
+  G4GeometryWorkspacePool: CreateWorkspace will not create a second 
+   object G4GeometryWorkspace (in the same thread)
+  Fixed Singleton G4GeometryWorkspacePool - for thread safe creation 
+   of object. 
 
 October 4th, 2013 J.Apostolakis - geomvol-V09-06-14
-- Retag due to issue with testing - needed to ensure use of geommng 12
- NOTE: co-works with geommng-V09-06-12 and geom-specific-V09-06-19
+- Retag due to issue with testing (needed to ensure use of geommng-V09-06-12)
+  Co-works with geommng-V09-06-12 and geom-specific-V09-06-19.
 
 October 4th, 2013 J.Apostolakis - geomvol-V09-06-13
 - Separated functionality for Solids (PCone/PHedra Sides) from 
-   G4GeometryWorkspace into separate class G4SolidsWorkspace in 
-   solids/specific.  Needed to satisfy dependence issue.
- NOTE: co-works with geommng-V09-06-12 and geom-specific-V09-06-18
+  G4GeometryWorkspace into separate class G4SolidsWorkspace in 
+  solids/specific.  Needed to satisfy dependence issue.
+  Co-works with geommng-V09-06-12 and geom-specific-V09-06-18.
 
 October 3rd, 2013 J.Apostolakis - geomvol-V09-06-12
 - Added new classes G4GeometryWorkspace - to create and manage MT objects.
-   and G4GeometryWorkspacePool which keeps Workspace objects. 
+  and G4GeometryWorkspacePool which keeps Workspace objects. 
 - Small improvements and description in G4GeometryWorkspace.
 
 September 17th, 2013 G.Cosmo - geomvol-V09-06-10
-- Use G4EnhancedVecAllocator in G4NavigationHistory only in MT mode.
+- Test: use G4EnhancedVecAllocator in G4NavigationHistory only in MT mode.
 
 September 16th, 2013 I.Hrivnacova - geomvol-V09-06-09
 - Removed thread-local specification for G4LogicalBorderSurfaceTable and

@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 1, 2013   Gabriele Cosmo                geometry-V09-06-02
+----------------------------
+- Groups tags geom-usolids-V09-06-01, geom-specific-V09-06-24,
+  geomvol-V09-06-17 on top of geometry-V09-06-01.
+
+Oct 29, 2013   Gabriele Cosmo               geometry-V09-06-01
+-----------------------------
+- Include tags on top of geant4-09-06-ref-10:
+  geomsolids-V09-06-01 and geomdiv-V09-06-04.
+- Updated build scripts for additional 'usolids' module.
+
 Dec 18, 2012   Gabriele Cosmo               geometry-V09-06-00
 -----------------------------
 - Include tags on top of geant4-09-06-ref-00: geombias-V09-06-00,

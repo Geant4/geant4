@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-Nov-2013  G.Cosmo (geom-specific-V09-06-24)
+- Corrected CMake script.
+
+31-Oct-2013  G.Cosmo (geom-specific-V09-06-23)
+- Fix for in G4Polyhedra::SetOriginalParameters(). (T.Nikitina)
+- Moved G4PolyconeHistorical and G4PolyhedraHistorical in separate
+  translation units.
+
 29-Oct-2013  T.Nikitina (geom-specific-V09-06-22)
 - Split G4Polycone for polycones with decreasing Z-sections.
   Introduced new class G4GenericPolycone.
