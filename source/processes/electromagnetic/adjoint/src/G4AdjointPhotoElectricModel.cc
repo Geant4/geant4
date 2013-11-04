@@ -175,6 +175,8 @@ void G4AdjointPhotoElectricModel::CorrectPostStepWeight(G4ParticleChange* fParti
 
  G4double w_corr =G4AdjointCSManager::GetAdjointCSManager()->GetPostStepWeightCorrection()/factorCSBiasing;
  w_corr*=post_step_AdjointCS/pre_step_AdjointCS; 
+
+
  new_weight*=w_corr; 
  new_weight*=projectileKinEnergy/adjointPrimKinEnergy;
  fParticleChange->SetParentWeightByProcess(false);

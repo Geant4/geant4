@@ -465,7 +465,7 @@ void G4AdjointCSManager::GetMaxAdjTotalCS(G4ParticleDefinition* aPartDef,
 G4double G4AdjointCSManager::GetCrossSectionCorrection(G4ParticleDefinition* aPartDef,G4double PreStepEkin,const G4MaterialCutsCouple* aCouple, G4bool& fwd_is_used,
 										G4double& fwd_TotCS)
 { G4double corr_fac = 1.;
-  if (forward_CS_mode) {
+  if (forward_CS_mode && aPartDef ) {
   	fwd_TotCS=PrefwdCS;
   	if (LastEkinForCS != PreStepEkin || aPartDef != lastPartDefForCS || aCouple!=currentCouple) {
 		DefineCurrentMaterial(aCouple);

@@ -35,9 +35,10 @@
 #include "G4VEmModel.hh"
 #include "G4VEmFluctuationModel.hh"
 #include "G4VParticleChange.hh"
-#include "G4UnitsTable.hh"
 #include "G4AdjointCSManager.hh"
 #include "G4LossTableManager.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 ///////////////////////////////////////////////////////
 //

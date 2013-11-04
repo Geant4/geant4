@@ -15,7 +15,12 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-     ----------------------------------------------------------
+     ---------------------------------------------------------
+
+31 Oct 2013: L.Desorgher (emadjoint-V09-06-09)
+- Modifications for limitation of convergence peak
+- G4AdjointBremsstrahlungModel - biased the gamma->e.- reverse brem CS by factor 100
+- G4AdjointComptonModel -biased the CS by  a factor 0.1
 
 19 Oct 2013: V.Ivanchenko (emadjoint-V09-06-08)
 - G4AdjointBremsstrahlungModel - removed unused obsolete headers
