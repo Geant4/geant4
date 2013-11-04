@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3th November2013 L.Desorgher (tracking-V09-06-06)
+-G4AdjointTrackingAction. Change order of initialization in constructor to 
+  avoid compilation warning.
+
+31th October2013 L.Desorgher (tracking-V09-06-05)
+-Create G4AdjointTrackingAction and modify G4AdjointSteppingAction in order to 
+treat the reverse tracking of an adjoint particle and tracking of its 
+equivalent forward particle in the same event.This is requested for the 
+migration of the ReverseMC to the MT mode.  
+
 29th August 2013 M.Asai (tracking-V09-06-04)
 - Add protection against null pointer for the process manager of
   secondaries in case secondaries are generated at zero kinetic energy.

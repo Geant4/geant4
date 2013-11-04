@@ -45,6 +45,7 @@ GEANT4_DEFINE_MODULE(NAME G4tracking
     HEADERS
         G4AdjointCrossSurfChecker.hh
         G4AdjointSteppingAction.hh
+        G4AdjointTrackingAction.hh
         G4RichTrajectory.hh
         G4RichTrajectoryPoint.hh
         G4SmoothTrajectory.hh
@@ -64,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4tracking
     SOURCES
         G4AdjointCrossSurfChecker.cc
         G4AdjointSteppingAction.cc
+        G4AdjointTrackingAction.cc
         G4RichTrajectory.cc
         G4RichTrajectoryPoint.cc
         G4SmoothTrajectory.cc
