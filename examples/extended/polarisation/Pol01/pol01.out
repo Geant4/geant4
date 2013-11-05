@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -24,6 +24,7 @@ userDetector->Construct() start.
 
  The Box is 5 cm  x 5 cm  x 1.75 mm  of G4_Fe
 World is registered to the default region.
+physicsList->Construct() start.
 physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
@@ -69,7 +70,7 @@ pol-conv:   for  gamma    SubType= 14
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 pol-eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -88,7 +89,7 @@ pol-eBrem:   for  e-    SubType= 3
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+          UrbanMsc95 :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
 
 pol-eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
@@ -132,14 +133,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Galactic
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes
+Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : G4_Fe
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 1 mm 
  Energy thresholds :  gamma  6.28375 keV    e-  235.116 keV    e+  228.88 keV proton -1 MeV
@@ -153,8 +154,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-### Run 0 starts.
 ### Run 0 start.
+Start Run processing.
 
 ---> Begin of Event: 0
 
@@ -162,53 +163,48 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.18s Real=0.18s Sys=0s
+  User=0.2s Real=0.2s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.0264334 0.64195 0.493295 0.18851 0.964281 0.456406 0.955391 0.929855 0.0357821 0.988903 0.156919 0.15968 0.511123 0.687872 0.589778 0.119016 0.248571 0.219332 0.0155595 0.415101 0.524789 0.53116 0.417337 0.126677 
- i_lag = 11, j_lag = 21
- carry = 5.96046e-08, count24 = 1
+ float_seed_table[] = 0.449879 0.677777 0.107747 0.372791 0.719559 0.246526 0.129911 0.941629 0.526458 0.340601 0.215222 0.566032 0.587986 0.762208 0.317967 0.765423 0.413634 0.806673 0.703795 0.439319 0.63439 0.740902 0.0185218 0.11209 
+ i_lag = 5, j_lag = 15
+ carry = 0, count24 = 4
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31356
-	pol-compt = 322
-	pol-eBrem = 456
-	msc = 3160
-	pol-phot = 217
-	pol-eIoni = 706
-	pol-conv = 234
-	pol-annihil = 78
+	Transportation = 31335
+	pol-compt = 295
+	pol-eBrem = 400
+	pol-phot = 168
+	pol-eIoni = 649
+	pol-conv = 238
+	msc = 3270
+	pol-annihil = 71
  Gamma: 
-Mean Number per Event :1.0147
-Mean Energy :9.4968 MeV +- 2.0773 MeV
-Mean Polarization :-0.95613 +- 0.20134
+Mean Number per Event :1.0126
+Mean Energy :9.5047 MeV +- 2.0592 MeV
+Mean Polarization :-0.95734 +- 0.19883
  Electron: 
-Mean Number per Event :0.0372
-Mean Energy :5.2761 MeV +- 2.5555 MeV
-Mean Polarization :-0.73068 +- 0.29286
+Mean Number per Event :0.0371
+Mean Energy :5.4138 MeV +- 2.4793 MeV
+Mean Polarization :-0.75809 +- 0.26944
  Positron: 
-Mean Number per Event :0.0159
-Mean Energy :4.2428 MeV +- 1.9881 MeV
-Mean Polarization :-0.62539 +- 0.30229
+Mean Number per Event :0.017
+Mean Energy :4.2242 MeV +- 1.918 MeV
+Mean Polarization :-0.60465 +- 0.30658
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
 EventManager deleted.
-Units table cleared.
-================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.023 Mb
-============================================================
-G4Allocator objects are deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
-RunManagerKernel is deleted. Good bye :)
+RunManagerKernel is deleted.
+RunManager is deleted.

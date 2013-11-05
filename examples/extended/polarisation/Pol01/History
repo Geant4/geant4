@@ -16,6 +16,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-11-13 V.Ivanchenko (expol01-V09-06-02)
+- tag resubmitted
+
+30-10-13 V.Ivanchenko (expol01-V09-06-01)
+- Removed AIDA from cmake and gmake
+
 30-07-13 P.Gumplinger (expol01-V09-06-00)
 - fix MAC/clang32 compilation warnings
 

@@ -14,12 +14,7 @@ endif
 .PHONY: all
 all: lib bin
 
+include $(G4INSTALL)/config/architecture.gmk
+
 include $(G4INSTALL)/config/binmake.gmk
 
-plots:	plotResults.class
-	@echo calling JAIDA ...
-	java -cp .:$(CLASSPATH) plotResults Pol01.aida
-
-plotResults.class: plotResults.java
-	@echo compiling $<
-	javac $<
