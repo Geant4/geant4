@@ -119,7 +119,6 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
   // Initialise element selector
   
   if(IsMaster()) {
-    InitialiseElementSelectors(particle, cuts);
 
     // Access to elements
 
@@ -136,9 +135,10 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
       G4int nelm = material->GetNumberOfElements();
     
       for (G4int j=0; j<nelm; ++j) {
-	G4int Z = (G4int)(*theElementVector)[j]->GetZ();
-	if(Z < 1)          { Z = 1; }
-	else if(Z > maxZ)  { Z = maxZ; }
+	G4int Z = G4lrint((*theElementVector)[j]->GetZ());
+	if(Z < 1)        { Z = 1; }
+	else if(Z > maxZ){ Z = maxZ; }
+
 	if( (!data[Z]) ) { ReadData(Z, path); }
       }
     }
@@ -151,6 +151,8 @@ void G4LivermoreComptonModel::Initialise(const G4ParticleDefinition* particle,
       shellData->LoadData(file);
     }
     if(!profileData) { profileData = new G4DopplerProfile(); }
+
+    InitialiseElementSelectors(particle, cuts);
   }
 
   if (verboseLevel > 2) {
@@ -257,7 +259,7 @@ G4LivermoreComptonModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   // do initialisation safely for MT mode
   if(!pv) 
     {
-      InitialiseForElement(0, Z);
+      InitialiseForElement(0, intZ);
       pv = data[intZ];
       if(!pv) { return cs; }
     }
@@ -344,7 +346,7 @@ void G4LivermoreComptonModel::SampleSecondaries(
   do {
     if ( alpha1/(alpha1+alpha2) > G4UniformRand())
       {
-        epsilon = std::exp(-alpha1 * G4UniformRand());  
+        epsilon = G4Exp(-alpha1 * G4UniformRand());  
         epsilonSq = epsilon * epsilon;
       }
       else
@@ -536,7 +538,7 @@ G4LivermoreComptonModel::ComputeScatteringFunction(G4double x, G4int Z)
       value = ScatFuncFitParam[Z][5] + lgq*ScatFuncFitParam[Z][6] + 
 	lgq*lgq*ScatFuncFitParam[Z][7] + lgq*lgq*lgq*ScatFuncFitParam[Z][8];
     }
-    value = G4Exp(value*ln10);
+    value = Z*G4Exp(value*ln10);
   }
   return value;
 }

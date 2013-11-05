@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05.11.2013  V. Ivanchenko, tag emlowen-V09-06-40
+            G4LivermoreComptonModel - fixed compillation problem
+            and problem of spectra due to which previous tag was
+            rejected
+
 02.11.2013  L. Pandola, tag emlowen-V09-06-39
 	    Bug fixes in Penelope Ionisation and Bremsstrahlung
             after emlowen-V09-06-36. Should occur only in unit 
