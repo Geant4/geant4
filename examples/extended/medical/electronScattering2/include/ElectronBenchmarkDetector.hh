@@ -52,6 +52,9 @@ public:
     
     virtual G4VPhysicalVolume* Construct();
     
+    // Sensitive Detector
+    void ConstructSDandField();
+    
     // Material Definition
     void DefineMaterials();
     
@@ -64,9 +67,6 @@ public:
     void CreateScorer(G4LogicalVolume* logicWorld);
     G4VPhysicalVolume* CreateGeometry();
     void UpdateGeometry();
-    
-    // Scorer Activation
-    void ActivateScorer();
     
     // Command Interface
     void SetPrimFoilMaterial(G4String matname);

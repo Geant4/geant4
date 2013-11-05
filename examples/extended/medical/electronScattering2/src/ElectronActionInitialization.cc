@@ -23,41 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ElectronActionInitialization.cc 70916 2013-06-07 12:00:42Z jjacquem $
 //
-/// \file medical/electronScattering2/include/ElectronRun.hh
-/// \brief Definition of the ElectronRun class
+/// \file ElectronActionInitialization.cc
+/// \brief Implementation of the ElectronActionInitialization class
 
-#ifndef ELECTRONRUN_HH
-#define ELECTRONRUN_HH
-
-#include "G4Event.hh"
-#include "G4Run.hh"
-#include "G4THitsMap.hh"
-#include <map>
-
-class G4Event;
+#include "globals.hh"
+#include "ElectronActionInitialization.hh"
+#include "ElectronRunAction.hh"
+#include "ElectronPrimaryGeneratorAction.hh"
+#include "ElectronEventAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ElectronRun : public G4Run {
-    
-public:
-    ElectronRun();
-    virtual ~ElectronRun();
-    
-    virtual void RecordEvent(const G4Event*);
-    virtual void Merge(const G4Run*);
-    void DumpData(G4String&) const;
-
-private:
-    void Print(const std::vector<G4String>& title,
-               const std::map< G4int, std::vector<G4double> >&out,
-               G4String&) const;
-    
-    std::map<G4int, G4THitsMap<G4double>* > fMap;
-};
+ElectronActionInitialization::ElectronActionInitialization(const G4String& outputFile)
+ : G4VUserActionInitialization(), fOutputFileSpec(outputFile)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+ElectronActionInitialization::~ElectronActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ElectronActionInitialization::BuildForMaster() const
+{
+ SetUserAction(new ElectronRunAction(fOutputFileSpec));
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ElectronActionInitialization::Build() const
+{
+  SetUserAction(new ElectronRunAction(fOutputFileSpec));
+  SetUserAction(new ElectronPrimaryGeneratorAction);
+  SetUserAction(new ElectronEventAction);
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

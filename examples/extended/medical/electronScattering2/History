@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 November 2013  Joseph Perl (exampleES2-V09-06-06)
+- Remove spurious directory called "tags". not sure how this got added
+
+4 November 2013  Joseph Perl (exampleES2-V09-06-05)
+- Support multi-threading
+- Add electronScattering2.in for ctest
+
 21 August 2013  V.Ivanchenko (exampleES2-V09-06-04)
 - PhysListEmStandard - removed G4UrbanMscModel95 - use default
     model

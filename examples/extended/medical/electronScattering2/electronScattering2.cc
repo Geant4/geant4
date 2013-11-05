@@ -28,7 +28,12 @@
 /// \file medical/electronScattering2/electronScattering2.cc
 /// \brief Main program of the medical/electronScattering2 example
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "Randomize.hh"
 #include "G4ScoringManager.hh"
 
@@ -43,9 +48,7 @@
 
 #include "ElectronBenchmarkDetector.hh"
 #include "PhysicsList.hh"
-#include "ElectronPrimaryGeneratorAction.hh"
-#include "ElectronRunAction.hh"
-#include "ElectronEventAction.hh"
+#include "ElectronActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -64,16 +67,20 @@ int main(int argc,char** argv) {
     G4cout << "Output File   : " << outputFile << G4endl;
     
     // Instantiate the run manager
-    G4RunManager * runManager = new G4RunManager;
-    
+#ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+#else
+    G4RunManager* runManager = new G4RunManager;
+#endif
+
     // Instantiate the random engine
-    CLHEP::HepRandom::setTheEngine(new CLHEP::MTwistEngine);
+    G4Random::setTheEngine(new CLHEP::MTwistEngine);
     
     // Convert the starting seed to integer and feed it to the random engine
     unsigned startingSeedInt;
     std::istringstream is(startingSeed);
     is >> startingSeedInt;
-    CLHEP::HepRandom::setTheSeed(startingSeedInt);
+    G4Random::setTheSeed(startingSeedInt);
     
     // Instantiate the scoring manager
     G4ScoringManager::GetScoringManager();
@@ -84,16 +91,8 @@ int main(int argc,char** argv) {
     // Instantiate the physics list (in turn calls one of four choices of physics list)
     runManager->SetUserInitialization(new PhysicsList);
     
-    // Instantiate the primary generator action (in turn uses the G4GeneralParticleSource)
-    runManager->SetUserAction(new ElectronPrimaryGeneratorAction);
-    
-    // Instantiate the run action (in turn instantiates ElectronRun,
-    // which accumulates and dumps data)
-    runManager->SetUserAction(new ElectronRunAction(outputFile));
-    
-    // Instantiate the event action
-    // (just adds code to periodically report how many events are done)
-    runManager->SetUserAction(new ElectronEventAction);
+    // set user action classes
+    runManager->SetUserInitialization(new ElectronActionInitialization(outputFile));
     
     // Instantiate the visualization System
 #ifdef G4VIS_USE

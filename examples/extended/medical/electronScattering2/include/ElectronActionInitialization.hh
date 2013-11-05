@@ -23,41 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ElectronActionInitialization.hh 70266 2013-05-28 12:57:34Z jjacquem $
 //
-/// \file medical/electronScattering2/include/ElectronRun.hh
-/// \brief Definition of the ElectronRun class
+/// \file ElectronActionInitialization.hh
+/// \brief Definition of the ElectronActionInitialization class
 
-#ifndef ELECTRONRUN_HH
-#define ELECTRONRUN_HH
+#ifndef ElectronActionInitialization_h
+#define ElectronActionInitialization_h 1
 
-#include "G4Event.hh"
-#include "G4Run.hh"
-#include "G4THitsMap.hh"
-#include <map>
+#include "G4VUserActionInitialization.hh"
 
-class G4Event;
+/// Action initialization class.
+///
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class ElectronActionInitialization : public G4VUserActionInitialization
+{
+  public:
+    ElectronActionInitialization(const G4String&);
+    virtual ~ElectronActionInitialization();
 
-class ElectronRun : public G4Run {
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
     
-public:
-    ElectronRun();
-    virtual ~ElectronRun();
-    
-    virtual void RecordEvent(const G4Event*);
-    virtual void Merge(const G4Run*);
-    void DumpData(G4String&) const;
-
 private:
-    void Print(const std::vector<G4String>& title,
-               const std::map< G4int, std::vector<G4double> >&out,
-               G4String&) const;
-    
-    std::map<G4int, G4THitsMap<G4double>* > fMap;
+    G4String fOutputFileSpec;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
+
+    

@@ -37,40 +37,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ElectronRun::ElectronRun(const G4String& detectorName)
+ElectronRun::ElectronRun()
 : G4Run(), fMap()
 {
-    // Get the sensitive detector manager
-    G4SDManager* manager = G4SDManager::GetSDMpointer();
-    
-    // Get the sensitive detector
-    G4MultiFunctionalDetector* detector =
-    dynamic_cast<G4MultiFunctionalDetector*>(manager->FindSensitiveDetector(
-                                                    detectorName));
-    
-    // Abort if detector doesn't exist
-    assert (0 != detector);
-    
-    G4int i(0);
-    
-    // Loop over primitive scorers registered with the detector
-    for (i=0; i<detector->GetNumberOfPrimitives(); i++) {
-        
-        // Get scorer
-        G4VPrimitiveScorer* scorer = detector->GetPrimitive(i);
-        
-        // Need to form the full collection name = detector name + "/"+ scorer name
-        // to get the collection id number
-        G4String fullCollectionName = detectorName+"/"+scorer->GetName();
-        
-        G4int id = manager->GetCollectionID(fullCollectionName);
-        
-        // Abort if the collection was not added to the sensitive detector manager
-        // when the scorer was registered with G4MultiFunctionalDetector
-        assert (id >= 0);
-        
-        fMap[id] = new G4THitsMap<G4double>(detectorName, scorer->GetName());
-    }
+    fMap[0] = new G4THitsMap<G4double>("MyDetector", "cell flux");
+    fMap[1] = new G4THitsMap<G4double>("MyDetector", "e cell flux");
+    fMap[2] = new G4THitsMap<G4double>("MyDetector", "population");
+    fMap[3] = new G4THitsMap<G4double>("MyDetector", "e population");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -218,6 +191,22 @@ void ElectronRun::Print(const std::vector<G4String>& title,
         G4cout<<G4endl;
         iter++;
     }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ElectronRun::Merge(const G4Run* aRun)
+{
+    // This method is called at the end of the run for each worker thread.
+    // It accumulates the worker's results into global results.
+    const ElectronRun* localRun = static_cast<const ElectronRun*>(aRun);
+    const std::map< G4int, G4THitsMap<G4double>* >& localMap = localRun->fMap;
+    std::map< G4int, G4THitsMap<G4double>* >::const_iterator iter = localMap.begin();
+    for ( ; iter != localMap.end() ; ++iter)
+        (*(fMap[iter->first])) += (*(iter->second));
+    
+    // This call lets Geant4 maintain overall summary information.
+    G4Run::Merge(aRun);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

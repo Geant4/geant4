@@ -67,6 +67,7 @@
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4IonConstructor.hh"
+#include "G4GenericIon.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -133,6 +134,9 @@ void PhysicsList::ConstructParticle()
     // ions
     G4IonConstructor iConstructor;
     iConstructor.ConstructParticle();
+    
+    // Required by MT even if ion physics not used
+    G4GenericIon::GenericIonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

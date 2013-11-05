@@ -35,7 +35,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ElectronRunAction::ElectronRunAction(G4String &outputFile):
+ElectronRunAction::ElectronRunAction(const G4String& outputFile):
 G4UserRunAction(), fOutputFileSpec(outputFile)
 {;}
 
@@ -48,7 +48,7 @@ ElectronRunAction::~ElectronRunAction()
 
 G4Run*  ElectronRunAction::GenerateRun()
 {
-    return new ElectronRun("MyDetector");
+    return new ElectronRun();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

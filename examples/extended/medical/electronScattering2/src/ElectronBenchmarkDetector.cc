@@ -127,8 +127,7 @@ G4VPhysicalVolume* ElectronBenchmarkDetector::Construct()
 {
     DefineMaterials();
     
-    G4VPhysicalVolume* physiworld = CreateGeometry();
-    return physiworld;
+    return CreateGeometry();;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -205,9 +204,8 @@ G4VPhysicalVolume* ElectronBenchmarkDetector::CreateGeometry(){
     CreateMonitor(fLogWorld);
     CreateHeliumBag(fLogWorld);
     
-    // Create and activate the scorers
+    // Create the scorers
     CreateScorer(fLogWorld);
-    ActivateScorer();
     
     return physiworld;
 }
@@ -300,6 +298,7 @@ void ElectronBenchmarkDetector::CreateMonitor(G4LogicalVolume* worldLog){
 
 void ElectronBenchmarkDetector::CreateHeliumBag(G4LogicalVolume* worldLog){
     G4double halfLengthWorld = fPosScorer/2.;
+    
     // Construct cylinder of Mylar
     G4double halfThicknessBag = (fPosBag1 - fPosBag0) /2.;
     G4VSolid* bagSolid = new G4Tubs("bagSolid", 0.*cm, fRadOverall,
@@ -377,49 +376,35 @@ void ElectronBenchmarkDetector::CreateScorer(G4LogicalVolume* worldLog){
                     G4int(fRadOverall/fWidthScorerRing),fWidthScorerRing);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ElectronBenchmarkDetector::ActivateScorer()
+void ElectronBenchmarkDetector::ConstructSDandField()
 {
-    G4String detName = "MyDetector";
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    G4VSensitiveDetector* sdet = SDman->FindSensitiveDetector(detName,false);
-
-    if (sdet)
-    {
-        G4cout << "Already have the detector" << G4endl;
-        fScorerRingLog->SetSensitiveDetector(sdet);
-    }
-    else
-    {
-          G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
-
-        G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
-
-        G4String fltName,particleName;
-        G4SDParticleFilter* electronFilter =
-        new G4SDParticleFilter(fltName="electronFilter", particleName="e-");
-
-        G4VPrimitiveScorer* primitive;
+    G4SDManager::GetSDMpointer()->SetVerboseLevel(1);
     
-        primitive = new G4PSCellFlux("cell flux");
-        det->RegisterPrimitive(primitive);
+    G4MultiFunctionalDetector* det
+    = new G4MultiFunctionalDetector("MyDetector");
+    
+    G4VPrimitiveScorer* primitive;
 
-        primitive = new G4PSCellFlux("e cell flux");
-        primitive->SetFilter(electronFilter);
-        det->RegisterPrimitive(primitive);
+    G4SDParticleFilter* electronFilter =
+    new G4SDParticleFilter("electronFilter", "e-");
+    
+    primitive = new G4PSCellFlux("cell flux");
+    det->RegisterPrimitive(primitive);
+    
+    primitive = new G4PSCellFlux("e cell flux");
+    primitive->SetFilter(electronFilter);
+    det->RegisterPrimitive(primitive);
+    
+    primitive = new G4PSPopulation("population");
+    det->RegisterPrimitive(primitive);
+    
+    primitive = new G4PSPopulation("e population");
+    primitive->SetFilter(electronFilter);
+    det->RegisterPrimitive(primitive);
 
-        primitive = new G4PSPopulation("population");
-        det->RegisterPrimitive(primitive);
-
-        primitive = new G4PSPopulation("e population");
-        primitive->SetFilter(electronFilter);
-        det->RegisterPrimitive(primitive);
-
-        G4SDManager::GetSDMpointer()->AddNewDetector(det);
-        fScorerRingLog->SetSensitiveDetector(det);
-
-        G4SDManager::GetSDMpointer()->SetVerboseLevel(0);
-    }
+    SetSensitiveDetector("scorerRingLog",det);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

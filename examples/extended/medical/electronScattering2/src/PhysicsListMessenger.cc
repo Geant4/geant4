@@ -49,6 +49,7 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
     fPListCmd->SetGuidance("Add modula physics list.");
     fPListCmd->SetParameterName("PList",false);
     fPListCmd->AvailableForStates(G4State_PreInit);
+    fPListCmd->SetToBeBroadcasted(false);
     
     fGammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);
     fGammaCutCmd->SetGuidance("Set gamma cut.");

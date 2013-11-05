@@ -41,7 +41,7 @@ class G4Run;
 class ElectronRunAction : public G4UserRunAction {
 
 public:
-  ElectronRunAction(G4String&);
+  ElectronRunAction(const G4String&);
   virtual ~ElectronRunAction();
 
   virtual G4Run* GenerateRun();
