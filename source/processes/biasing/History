@@ -17,6 +17,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 5th, 2013 Marc Verderi (probiasing-V09-06-03)
+- add classes to generic and management to unblock other dev in process:
+  - generic:
+	G4BiasingProcessInterface
+	G4InteractionLawPhysical
+	G4ParticleChangeForNothing
+	G4ParticleChangeForOccurenceBiasing
+  - management:
+	G4BiasingAppliedCase
+	G4BiasingOperationManager
+	G4BiasingTrackData
+	G4BiasingTrackDataStore
+	G4VBiasingInteractionLaw
+	G4VBiasingOperation
+	G4VBiasingOperator
+
+Oct 9th, 2013 Alex Howard (procbiasing-V09-06-02)
+- fixed sources.cmake for looking for non-existent files
+
+Oct 9th, 2013 Alex Howard (procbiasing-V09-06-01)
+- Added cmake and gnumake and sources.cmake files to new directory structure
+
+Oct 9th, 2013 Alex Howard (procbiasing-V09-06-00)
+- Re-ordered directory structure for generic physics biasing
+
 June 7th, 2012 Gabriele Cosmo (procbiasing-V09-05-00)
 - Fixed spurious cases of hidden variable visibility, detected with
   '-Wshadow' compilation option on gcc compiler.

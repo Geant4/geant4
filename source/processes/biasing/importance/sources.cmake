@@ -1,7 +1,7 @@
 #------------------------------------------------------------------------------
 # sources.cmake
-# Module : G4biasing
-# Package: Geant4.src.G4processes.G4biasing
+# Module : G4biasing_imp
+# Package: Geant4.src.G4processes.G4biasing_imp
 #
 # Sources description for a library.
 # Lists the sources and headers of the code explicitely.
@@ -35,6 +35,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/biasing/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/transportation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
@@ -42,7 +43,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 # Define the Geant4 Module.
 #
 include(Geant4MacroDefineModule)
-GEANT4_DEFINE_MODULE(NAME G4biasing
+GEANT4_DEFINE_MODULE(NAME G4biasing_imp
     HEADERS
         G4GeometrySampler.hh
         G4ImportanceConfigurator.hh
@@ -88,6 +89,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing
         G4track
         G4transportation
         G4volumes
+	G4biasing_mgt
     GLOBAL_DEPENDENCIES
         G4digits_hits
         G4geometry
