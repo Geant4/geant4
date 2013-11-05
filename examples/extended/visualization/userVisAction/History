@@ -16,6 +16,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4th November 2013 Dennis Wright (exam-ext-vis-UVA-V09-06-02)
+- generated new userVisAction.out to reflect removal of LEP models;
+  no code was changed.
+
 27th March 2013  John Allison  (exam-ext-vis-UVA-V09-06-01)
 - Added separators between functions.
 
