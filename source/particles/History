@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 5. Nov. 2013  Hisaya Kurash(particles-V09-06-62)
+- Fix G4NeutronBetaDecayChannel (Bug #1532)
+
 - 30. Oct. 2013  Makoto Asai (particles-V09-06-61)
 - Fix the static access method to G4NuclideTable that has caused 
   a problem on Windows.
