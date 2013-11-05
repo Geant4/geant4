@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-Nov-2013, Tatsumi Koi                (phys-lists-V09-06-18)
+-Set proton cut value to 0 for producing low energy recoil nucleus
+-Use G4IonElasticPhysics for Elastic Scattering of GenericIon
+
 30-Oct-2013, Alberto Ribon              (phys-lists-V09-06-17)
 - LBE : deleted stoppingPhysics in the destructor (Coverity defect).
 

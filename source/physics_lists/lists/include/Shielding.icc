@@ -55,9 +55,11 @@
 
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
+#include "G4EmProcessOptions.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4IonQMDPhysics.hh"
+#include "G4IonElasticPhysics.hh"
 #include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronElasticPhysicsLEND.hh"
@@ -71,13 +73,17 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model )
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*CLHEP::mm;
   G4DataQuestionaire it(photon, neutron, radioactive);
-  G4cout << "<<< Geant4 Physics List simulation engine: Shielding 2.0"<<G4endl;
+  G4cout << "<<< Geant4 Physics List simulation engine: Shielding 2.1"<<G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(verbose);
 
  // EM Physics
   this->RegisterPhysics( new G4EmStandardPhysics(verbose));
+  //G4EmProcessOptions emOptions;
+  //emOptions.SetFluo(true); // To activate deexcitation processes and fluorescence
+  //emOptions.SetAuger(true); // To activate Auger effect if deexcitation is activated
+  //emOptions.SetPIXE(true); // To activate Particle Induced X-Ray Emission (PIXE)   
 
   // Synchroton Radiation & GN Physics
   this->RegisterPhysics( new G4EmExtraPhysics(verbose) );
@@ -88,11 +94,9 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model )
   this->RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
 
   size_t find = LEN_model.find("LEND__");
-G4cout << LEN_model << G4endl;
   G4String evaluation;
   if ( find != G4String::npos )
   {
-G4cout << LEN_model << G4endl;
       evaluation=LEN_model;
       evaluation.erase(0,find+6);
       LEN_model="LEND";
@@ -142,6 +146,8 @@ G4cout << LEN_model << G4endl;
   // Ion Physics
   this->RegisterPhysics( new G4IonQMDPhysics(verbose));
   
+  this->RegisterPhysics( new G4IonElasticPhysics(verbose));
+
   // Neutron tracking cut --> not by default
   // this->RegisterPhysics( new G4NeutronTrackingCut(verbose));
 
@@ -160,6 +166,9 @@ template<class T> void TShielding<T>::SetCuts()
   //   the default cut value for all particle types 
 
   this->SetCutsWithDefault();   
+
+  //Set proton cut value to 0 for producing low energy recoil nucleus 
+  this->SetCutValue(0, "proton");    
  
 //  if (this->verboseLevel > 0)
 //    G4VUserPhysicsList::DumpCutValuesTable();  
