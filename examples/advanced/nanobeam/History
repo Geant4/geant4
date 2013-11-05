@@ -9,6 +9,9 @@ $Id$
                        Package History file
                        --------------------
 
+04 Nov 2013 - tag nanobeam-V09-06-12  - S. Incerti
+- Removed unused variables (thanks to Gabriele)
+
 03 Oct 2013 - tag nanobeam-V09-06-11  - S. Incerti
 - Updated CMakeLists.txt
 

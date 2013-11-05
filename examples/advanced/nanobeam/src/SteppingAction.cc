@@ -32,9 +32,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,
-			       PrimaryGeneratorAction* pri)
-:fRun(run),fDetector(det),fPrimary(pri)
+SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det)
+:fRun(run),fDetector(det)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

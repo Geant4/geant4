@@ -42,7 +42,7 @@ class SteppingAction : public G4UserSteppingAction
 
 public:
 
-  SteppingAction(RunAction*,DetectorConstruction*,PrimaryGeneratorAction*);
+  SteppingAction(RunAction*,DetectorConstruction*);
   ~SteppingAction();
   
   void UserSteppingAction(const G4Step*);
@@ -51,12 +51,10 @@ private:
 
   RunAction*              fRun;
   DetectorConstruction*   fDetector; 
-  PrimaryGeneratorAction* fPrimary;
   
-  G4double fXIn,fX0;
-  G4double fYIn,fY0;
-  G4double fZIn,fZ0;
-  G4double fTheta0, fPhi0;
+  G4double fXIn;
+  G4double fYIn;
+  G4double fZIn;
   G4double fThetaIn, fPhiIn;
   G4double fE;
         
