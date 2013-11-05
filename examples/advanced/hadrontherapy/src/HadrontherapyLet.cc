@@ -128,7 +128,7 @@ void  HadrontherapyLet::FillEnergySpectrum(G4int trackID,
 		for (l=0; l < ionLetStore.size(); l++) 
 		{
 			if (ionLetStore[l].PDGencoding == PDGencoding) 
-				if ( trackID ==1 && ionLetStore[l].isPrimary || trackID !=1 && !ionLetStore[l].isPrimary)
+			  if ( ((trackID ==1) && (ionLetStore[l].isPrimary)) || ((trackID !=1) && (!ionLetStore[l].isPrimary)))
 					break;
 		}
 
