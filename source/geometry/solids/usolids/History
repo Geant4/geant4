@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 5, 2013  G.Cosmo                 geom-usolids-V09-06-03
+- Code cleanup and added banners to USolids files.
+
 November 1, 2013  G.Cosmo                 geom-usolids-V09-06-02
 - Fixed compilation error and warnings on SLC6.
 

@@ -1,8 +1,17 @@
-// UVCSGfaceted.cc
 //
-// Implementation of the virtual class of a CSG type shape that is built
-// entirely out of UVCSGface faces.
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
 //
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UVCSGfaceted
+//
+// 19.09.13 Marek Gayer
+//          Created from original implementation in Geant4
 // --------------------------------------------------------------------
 
 #include "UUtils.hh"
@@ -19,11 +28,11 @@ using namespace std;
 //
 // Constructor
 //
-UVCSGfaceted::UVCSGfaceted( const std::string& name )
-	: VUSolid(name),
-		numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.),
-		fNoVoxels(true), fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
-{ 
+UVCSGfaceted::UVCSGfaceted(const std::string& name)
+  : VUSolid(name),
+    numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.),
+    fNoVoxels(true), fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
+{
 }
 
 //
@@ -31,44 +40,47 @@ UVCSGfaceted::UVCSGfaceted( const std::string& name )
 //
 UVCSGfaceted::~UVCSGfaceted()
 {
-	DeleteStuff();
+  DeleteStuff();
 }
 
 //
 // Copy constructor
 //
-UVCSGfaceted::UVCSGfaceted( const UVCSGfaceted &source )
-	: VUSolid( source )
+UVCSGfaceted::UVCSGfaceted(const UVCSGfaceted& source)
+  : VUSolid(source)
 {
-	fStatistics = source.fStatistics;
-	fCubVolEpsilon = source.fCubVolEpsilon;
-	fAreaAccuracy = source.fAreaAccuracy;
+  fStatistics = source.fStatistics;
+  fCubVolEpsilon = source.fCubVolEpsilon;
+  fAreaAccuracy = source.fAreaAccuracy;
 
-	CopyStuff( source );
+  CopyStuff(source);
 }
 
 
 //
 // Assignment operator
 //
-const UVCSGfaceted &UVCSGfaceted::operator=( const UVCSGfaceted &source )
+const UVCSGfaceted& UVCSGfaceted::operator=(const UVCSGfaceted& source)
 {
-	if (&source == this) { return *this; }
-	
-	// Copy base class data
-	//
-	VUSolid::operator=(source);
+  if (&source == this)
+  {
+    return *this;
+  }
 
-	// Copy data
-	//
-	fStatistics = source.fStatistics;
-	fCubVolEpsilon = source.fCubVolEpsilon;
-	fAreaAccuracy = source.fAreaAccuracy;
+  // Copy base class data
+  //
+  VUSolid::operator=(source);
 
-	DeleteStuff();
-	CopyStuff( source );
-	
-	return *this;
+  // Copy data
+  //
+  fStatistics = source.fStatistics;
+  fCubVolEpsilon = source.fCubVolEpsilon;
+  fAreaAccuracy = source.fAreaAccuracy;
+
+  DeleteStuff();
+  CopyStuff(source);
+
+  return *this;
 }
 
 
@@ -77,21 +89,25 @@ const UVCSGfaceted &UVCSGfaceted::operator=( const UVCSGfaceted &source )
 //
 // Copy the contents of source
 //
-void UVCSGfaceted::CopyStuff( const UVCSGfaceted &source )
+void UVCSGfaceted::CopyStuff(const UVCSGfaceted& source)
 {
-	numFace = source.numFace;
-	if (numFace == 0) { return; }		// odd, but permissable?
-	
-	faces = new UVCSGface*[numFace];
-	
-	UVCSGface **face = faces,
-			 **sourceFace = source.faces;
-	do
-	{
-		*face = (*sourceFace)->Clone();
-	} while( ++sourceFace, ++face < faces+numFace );
-	fCubicVolume = source.fCubicVolume;
-	fSurfaceArea = source.fSurfaceArea;
+  numFace = source.numFace;
+  if (numFace == 0)
+  {
+    return;  // odd, but permissable?
+  }
+
+  faces = new UVCSGface*[numFace];
+
+  UVCSGface** face = faces,
+              **sourceFace = source.faces;
+  do
+  {
+    *face = (*sourceFace)->Clone();
+  }
+  while (++sourceFace, ++face < faces + numFace);
+  fCubicVolume = source.fCubicVolume;
+  fSurfaceArea = source.fSurfaceArea;
 
   fMaxSection = source.fMaxSection;
   fNoVoxels = source.fNoVoxels;
@@ -108,16 +124,17 @@ void UVCSGfaceted::CopyStuff( const UVCSGfaceted &source )
 //
 void UVCSGfaceted::DeleteStuff()
 {
-	if (numFace)
-	{
-		UVCSGface **face = faces;
-		do
-		{
-			delete *face;
-		} while( ++face < faces + numFace );
+  if (numFace)
+  {
+    UVCSGface** face = faces;
+    do
+    {
+      delete *face;
+    }
+    while (++face < faces + numFace);
 
-		delete [] faces;
-	}
+    delete [] faces;
+  }
 }
 
 //
@@ -132,22 +149,22 @@ void UVCSGfaceted::DeleteStuff()
 /*
 VUSolid::EnumInside UVCSGfaceted::Inside( const UVector3 &p ) const
 {
-	VUSolid::EnumInside answer=eOutside;
-	UVCSGface **face = faces;
-	double best = UUtils::kInfinity;
-	do
-	{
-		double distance;
-		VUSolid::EnumInside result = (*face)->Inside( p, fgTolerance*0.5, &distance );
-		if (result == eSurface) { return eSurface; }
-		if (distance < best)
-		{
-			best = distance;
-			answer = result;
-		}
-	} while( ++face < faces + numFace );
+  VUSolid::EnumInside answer=eOutside;
+  UVCSGface **face = faces;
+  double best = UUtils::kInfinity;
+  do
+  {
+    double distance;
+    VUSolid::EnumInside result = (*face)->Inside( p, fgTolerance*0.5, &distance );
+    if (result == eSurface) { return eSurface; }
+    if (distance < best)
+    {
+      best = distance;
+      answer = result;
+    }
+  } while( ++face < faces + numFace );
 
-	return answer;
+  return answer;
 }
 */
 
@@ -160,22 +177,26 @@ VUSolid::EnumInside UVCSGfaceted::Inside( const UVector3 &p ) const
 // test or whatnot) and to call this version only if
 // the simplier test fails.
 //
-inline VUSolid::EnumInside UVCSGfaceted::InsideNoVoxels( const UVector3 &p ) const
+inline VUSolid::EnumInside UVCSGfaceted::InsideNoVoxels(const UVector3& p) const
 {
-  VUSolid::EnumInside answer=eOutside;
-  UVCSGface **face = faces;
-  double best = kInfinity;
+  VUSolid::EnumInside answer = eOutside;
+  UVCSGface** face = faces;
+  double best = UUtils::kInfinity;
   do
   {
     double distance;
-    VUSolid::EnumInside result = (*face)->Inside( p, fgTolerance*0.5, &distance);
-    if (result == eSurface) { return eSurface; }
+    VUSolid::EnumInside result = (*face)->Inside(p, fgTolerance * 0.5, &distance);
+    if (result == eSurface)
+    {
+      return eSurface;
+    }
     if (distance < best)
-    { 
+    {
       best = distance;
       answer = result;
     }
-  } while( ++face < faces + numFace );
+  }
+  while (++face < faces + numFace);
 
   return answer;
 }
@@ -186,16 +207,16 @@ inline VUSolid::EnumInside UVCSGfaceted::InsideNoVoxels( const UVector3 &p ) con
 // SurfaceNormal
 //
 
-bool UVCSGfaceted::Normal( const UVector3 &p, UVector3 &n) const
+bool UVCSGfaceted::Normal(const UVector3& p, UVector3& n) const
 {
-	UVector3 answer;
-	double best = UUtils::kInfinity;
+  UVector3 answer;
+  double best = UUtils::kInfinity;
   UVector3 normal;
 
   UBits bits(numFace);
 
   int index = GetSection(p.z);
-  const vector<int> &candidates = fCandidates[index];
+  const vector<int>& candidates = fCandidates[index];
   int size = candidates.size();
   for (int i = 0; i < size; ++i)
   {
@@ -203,19 +224,19 @@ bool UVCSGfaceted::Normal( const UVector3 &p, UVector3 &n) const
     if (!bits[candidate])
     {
       bits.SetBitNumber(candidate);
-      UVCSGface &face = *faces[candidate];
-		  double distance;
-		  normal = face.Normal( p, &distance);
-		  if (distance < best)
-		  {
-			  best = distance;
-			  answer = normal;
+      UVCSGface& face = *faces[candidate];
+      double distance;
+      normal = face.Normal(p, &distance);
+      if (distance < best)
+      {
+        best = distance;
+        answer = normal;
         if (distance < fgTolerance)
           break;
-		  }
+      }
     }
   }
-	n = answer;
+  n = answer;
   return true;
 }
 
@@ -249,43 +270,50 @@ bool UVCSGfaceted::Normal( const UVector3 &p, UVector3 &n) const
 // DistanceToIn(p,v)
 //
 
-inline double UVCSGfaceted::DistanceToInNoVoxels( const UVector3& p,
-  const UVector3& v) const
+inline double UVCSGfaceted::DistanceToInNoVoxels(const UVector3& p,
+                                                 const UVector3& v) const
 {
-	double distance = UUtils::kInfinity;
-	double distFromSurface = UUtils::kInfinity;
-	UVCSGface **face = faces;
-	UVCSGface *bestFace = *face;
-  static double htol = fgTolerance*0.5;
+  double distance = UUtils::kInfinity;
+  double distFromSurface = UUtils::kInfinity;
+  UVCSGface** face = faces;
+  UVCSGface* bestFace = *face;
+  static double htol = fgTolerance * 0.5;
   UVector3 faceNormal;
 
-	do
-	{
-		double	 faceDistance, faceDistFromSurface;
-		bool		faceAllBehind;
-		if ((*face)->Distance( p, v, false, htol,
-								faceDistance, faceDistFromSurface,
-								faceNormal, faceAllBehind ) )
-		{
-			//
-			// Intersecting face
-			//
-			if (faceDistance < distance)
-			{
-				distance = faceDistance;
-				distFromSurface = faceDistFromSurface;
-				bestFace = *face;
-				if (distFromSurface <= 0) { return 0; }
-			}
-		}
-	} while( ++face < faces + numFace );
-	
-	if (distance < UUtils::kInfinity && distFromSurface<htol)
-	{
-		if (bestFace->Safety(p,false) < htol)	{ distance = 0; }
-	}
+  do
+  {
+    double   faceDistance, faceDistFromSurface;
+    bool    faceAllBehind;
+    if ((*face)->Distance(p, v, false, htol,
+                          faceDistance, faceDistFromSurface,
+                          faceNormal, faceAllBehind))
+    {
+      //
+      // Intersecting face
+      //
+      if (faceDistance < distance)
+      {
+        distance = faceDistance;
+        distFromSurface = faceDistFromSurface;
+        bestFace = *face;
+        if (distFromSurface <= 0)
+        {
+          return 0;
+        }
+      }
+    }
+  }
+  while (++face < faces + numFace);
 
-	return distance;
+  if (distance < UUtils::kInfinity && distFromSurface < htol)
+  {
+    if (bestFace->Safety(p, false) < htol)
+    {
+      distance = 0;
+    }
+  }
+
+  return distance;
 }
 
 
@@ -295,57 +323,70 @@ inline double UVCSGfaceted::DistanceToInNoVoxels( const UVector3& p,
 // DistanceToOut(p,v)
 //
 
-inline double UVCSGfaceted::DistanceToOutNoVoxels( const UVector3 &p, const UVector3  &v, UVector3 &n, bool &aConvex) const
+inline double UVCSGfaceted::DistanceToOutNoVoxels(const UVector3& p, const UVector3&  v, UVector3& n, bool& aConvex) const
 {
-	bool allBehind = true;
-	double distance = UUtils::kInfinity;
-	double distFromSurface = UUtils::kInfinity;
-	UVector3 normal, faceNormal;
-	
-	UVCSGface **face = faces;
-	UVCSGface *bestFace = *face;
-	do
-	{
-		double faceDistance, faceDistFromSurface;
-		bool faceAllBehind;
-		if ((*face)->Distance( p, v, true, fgTolerance/2,
-								faceDistance, faceDistFromSurface,
-								faceNormal, faceAllBehind ) )
-		{
-			// Intersecting face
-			if ( (distance < UUtils::kInfinity) || (!faceAllBehind) )	{ allBehind = false; }
-			if (faceDistance < distance)
-			{
-				distance = faceDistance;
-				distFromSurface = faceDistFromSurface;
-				normal = faceNormal;
-				bestFace = *face;
-				if (distFromSurface <= 0)	{ break; }
-			}
-		}
-	} while( ++face < faces + numFace );
-	
-	if (distance < UUtils::kInfinity)
-	{
-		if (distFromSurface <= 0)
-		{
-			distance = 0;
-		}
-		else if (distFromSurface<fgTolerance/2)
-		{
-			if (bestFace->Safety(p,true) < fgTolerance/2)	{ distance = 0; }
-		}
+  bool allBehind = true;
+  double distance = UUtils::kInfinity;
+  double distFromSurface = UUtils::kInfinity;
+  UVector3 normal, faceNormal;
 
-		aConvex = allBehind;
-		n = normal;
-	}
-	else
-	{ 
-		if (Inside(p) == eSurface)	{ distance = 0; }
-		aConvex = false;
-	}
+  UVCSGface** face = faces;
+  UVCSGface* bestFace = *face;
+  do
+  {
+    double faceDistance, faceDistFromSurface;
+    bool faceAllBehind;
+    if ((*face)->Distance(p, v, true, fgTolerance / 2,
+                          faceDistance, faceDistFromSurface,
+                          faceNormal, faceAllBehind))
+    {
+      // Intersecting face
+      if ((distance < UUtils::kInfinity) || (!faceAllBehind))
+      {
+        allBehind = false;
+      }
+      if (faceDistance < distance)
+      {
+        distance = faceDistance;
+        distFromSurface = faceDistFromSurface;
+        normal = faceNormal;
+        bestFace = *face;
+        if (distFromSurface <= 0)
+        {
+          break;
+        }
+      }
+    }
+  }
+  while (++face < faces + numFace);
 
-	return distance;
+  if (distance < UUtils::kInfinity)
+  {
+    if (distFromSurface <= 0)
+    {
+      distance = 0;
+    }
+    else if (distFromSurface < fgTolerance / 2)
+    {
+      if (bestFace->Safety(p, true) < fgTolerance / 2)
+      {
+        distance = 0;
+      }
+    }
+
+    aConvex = allBehind;
+    n = normal;
+  }
+  else
+  {
+    if (Inside(p) == eSurface)
+    {
+      distance = 0;
+    }
+    aConvex = false;
+  }
+
+  return distance;
 }
 
 
@@ -356,18 +397,19 @@ inline double UVCSGfaceted::DistanceToOutNoVoxels( const UVector3 &p, const UVec
 //
 // Protected routine called by DistanceToIn and DistanceToOut
 //
-double UVCSGfaceted::DistanceTo( const UVector3 &p,
-																		const bool outgoing ) const
+double UVCSGfaceted::DistanceTo(const UVector3& p,
+                                const bool outgoing) const
 {
-	UVCSGface **face = faces;
-	double best = UUtils::kInfinity;
-	do
-	{
-		double distance = (*face)->Safety( p, outgoing );
-		if (distance < best)	best = distance;
-	} while( ++face < faces + numFace );
+  UVCSGface** face = faces;
+  double best = UUtils::kInfinity;
+  do
+  {
+    double distance = (*face)->Safety(p, outgoing);
+    if (distance < best)  best = distance;
+  }
+  while (++face < faces + numFace);
 
-	return (best < 0.5*fgTolerance) ? 0 : best;
+  return (best < 0.5 * fgTolerance) ? 0 : best;
 }
 
 //
@@ -375,24 +417,24 @@ double UVCSGfaceted::DistanceTo( const UVector3 &p,
 //
 UGeometryType UVCSGfaceted::GetEntityType() const
 {
-	return std::string("UCSGfaceted");
+  return std::string("UCSGfaceted");
 }
 
 
 //
 // Stream object contents to an output stream
 //
-std::ostream& UVCSGfaceted::StreamInfo( std::ostream& os ) const
+std::ostream& UVCSGfaceted::StreamInfo(std::ostream& os) const
 {
-	os << "-----------------------------------------------------------\n"
-		 << "		*** Dump for solid - " << GetName() << " ***\n"
-		 << "		===================================================\n"
-		 << " Solid type: UVCSGfaceted\n"
-		 << " Parameters: \n"
-		 << "		number of faces: " << numFace << "\n"
-		 << "-----------------------------------------------------------\n";
+  os << "-----------------------------------------------------------\n"
+     << "		*** Dump for solid - " << GetName() << " ***\n"
+     << "		===================================================\n"
+     << " Solid type: UVCSGfaceted\n"
+     << " Parameters: \n"
+     << "		number of faces: " << numFace << "\n"
+     << "-----------------------------------------------------------\n";
 
-	return os;
+  return os;
 }
 
 
@@ -401,7 +443,7 @@ std::ostream& UVCSGfaceted::StreamInfo( std::ostream& os ) const
 //
 int UVCSGfaceted::GetCubVolStatistics() const
 {
-	return fStatistics;
+  return fStatistics;
 }
 
 
@@ -410,7 +452,7 @@ int UVCSGfaceted::GetCubVolStatistics() const
 //
 double UVCSGfaceted::GetCubVolEpsilon() const
 {
-	return fCubVolEpsilon;
+  return fCubVolEpsilon;
 }
 
 
@@ -419,8 +461,8 @@ double UVCSGfaceted::GetCubVolEpsilon() const
 //
 void UVCSGfaceted::SetCubVolStatistics(int st)
 {
-	fCubicVolume=0.;
-	fStatistics=st;
+  fCubicVolume = 0.;
+  fStatistics = st;
 }
 
 
@@ -429,8 +471,8 @@ void UVCSGfaceted::SetCubVolStatistics(int st)
 //
 void UVCSGfaceted::SetCubVolEpsilon(double ep)
 {
-	fCubicVolume=0.;
-	fCubVolEpsilon=ep;
+  fCubicVolume = 0.;
+  fCubVolEpsilon = ep;
 }
 
 
@@ -439,7 +481,7 @@ void UVCSGfaceted::SetCubVolEpsilon(double ep)
 //
 int UVCSGfaceted::GetAreaStatistics() const
 {
-	return fStatistics;
+  return fStatistics;
 }
 
 
@@ -448,7 +490,7 @@ int UVCSGfaceted::GetAreaStatistics() const
 //
 double UVCSGfaceted::GetAreaAccuracy() const
 {
-	return fAreaAccuracy;
+  return fAreaAccuracy;
 }
 
 
@@ -457,8 +499,8 @@ double UVCSGfaceted::GetAreaAccuracy() const
 //
 void UVCSGfaceted::SetAreaStatistics(int st)
 {
-	fSurfaceArea=0.;
-	fStatistics=st;
+  fSurfaceArea = 0.;
+  fStatistics = st;
 }
 
 
@@ -467,8 +509,8 @@ void UVCSGfaceted::SetAreaStatistics(int st)
 //
 void UVCSGfaceted::SetAreaAccuracy(double ep)
 {
-	fSurfaceArea=0.;
-	fAreaAccuracy=ep;
+  fSurfaceArea = 0.;
+  fAreaAccuracy = ep;
 }
 
 
@@ -477,9 +519,15 @@ void UVCSGfaceted::SetAreaAccuracy(double ep)
 //
 double UVCSGfaceted::Capacity()
 {
-	if(fCubicVolume != 0.) {;}
-	else	 { fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon); }
-	return fCubicVolume;
+  if (fCubicVolume != 0.)
+  {
+    ;
+  }
+  else
+  {
+    fCubicVolume = EstimateCubicVolume(fStatistics, fCubVolEpsilon);
+  }
+  return fCubicVolume;
 }
 
 
@@ -488,75 +536,84 @@ double UVCSGfaceted::Capacity()
 //
 double UVCSGfaceted::SurfaceArea()
 {
-	if(fSurfaceArea != 0.) {;}
-	else	 { fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy); }
-	return fSurfaceArea;
+  if (fSurfaceArea != 0.)
+  {
+    ;
+  }
+  else
+  {
+    fSurfaceArea = EstimateSurfaceArea(fStatistics, fAreaAccuracy);
+  }
+  return fSurfaceArea;
 }
 
 //
 // GetPointOnSurfaceGeneric proportional to Areas of faces
 // in case of GenericPolycone or GenericPolyhedra
 //
-UVector3 UVCSGfaceted::GetPointOnSurfaceGeneric( ) const
+UVector3 UVCSGfaceted::GetPointOnSurfaceGeneric() const
 {
-	// Preparing variables
-	//
-	UVector3 answer=UVector3(0.,0.,0.);
-	UVCSGface **face = faces;
-	double area = 0;
-	int i;
-	std::vector<double> areas; 
+  // Preparing variables
+  //
+  UVector3 answer = UVector3(0., 0., 0.);
+  UVCSGface** face = faces;
+  double area = 0;
+  int i;
+  std::vector<double> areas;
 
-	// First step: calculate surface areas
-	//
-	do
-	{
-		double result = (*face)->SurfaceArea( );
-		areas.push_back(result);
-		area=area+result;
-	} while( ++face < faces + numFace );
+  // First step: calculate surface areas
+  //
+  do
+  {
+    double result = (*face)->SurfaceArea();
+    areas.push_back(result);
+    area = area + result;
+  }
+  while (++face < faces + numFace);
 
-	// Second Step: choose randomly one surface
-	//
-	UVCSGface **face1 = faces;
-	double chose = area*UUtils::Random();
-	double Achose1, Achose2;
-	Achose1=0; Achose2=0.; 
-	i=0;
+  // Second Step: choose randomly one surface
+  //
+  UVCSGface** face1 = faces;
+  double chose = area * UUtils::Random();
+  double Achose1, Achose2;
+  Achose1 = 0;
+  Achose2 = 0.;
+  i = 0;
 
-	do
-	{
-		Achose2+=areas[i];
-		if(chose>=Achose1 && chose<Achose2)
-		{
-			UVector3 point;
-			point= (*face1)->GetPointOnFace();
-			return point;
-		}
-		i++;
-		Achose1=Achose2;
-	} while( ++face1 < faces + numFace );
+  do
+  {
+    Achose2 += areas[i];
+    if (chose >= Achose1 && chose < Achose2)
+    {
+      UVector3 point;
+      point = (*face1)->GetPointOnFace();
+      return point;
+    }
+    i++;
+    Achose1 = Achose2;
+  }
+  while (++face1 < faces + numFace);
 
-	return answer;
+  return answer;
 }
 
-double UVCSGfaceted::SafetyFromOutside( const UVector3 &p, bool accurate) const
+double UVCSGfaceted::SafetyFromOutside(const UVector3& p, bool accurate) const
 {
   if (!accurate)
   {
     UVector3 pb(p.x, p.y, p.z - fBoxShift);
     return fBox.SafetyFromOutside(pb);
   }
-  return DistanceTo( p, false );
+  return DistanceTo(p, false);
 }
 
-double UVCSGfaceted::SafetyFromInsideNoVoxels( const UVector3 &p, bool ) const
+double UVCSGfaceted::SafetyFromInsideNoVoxels(const UVector3& p, bool) const
 {
-  return DistanceTo( p, true );
+  return DistanceTo(p, true);
 }
 
 
-void  UVCSGfaceted::InitVoxels(UReduciblePolygon &rz, double radius)
+void  UVCSGfaceted::InitVoxels(UReduciblePolygon& rz, double radius)
 {
   int size = rz.NumVertices() + 1;
   vector<double> r(size), z(size), zs;
@@ -578,9 +635,9 @@ void  UVCSGfaceted::InitVoxels(UReduciblePolygon &rz, double radius)
 
   for (int i = 0; i <= fMaxSection; ++i)
   {
-    vector<int> candidates; 
+    vector<int> candidates;
 
-    double left = fZs[i], right = fZs[i+1];
+    double left = fZs[i], right = fZs[i + 1];
     double middle = (left + right) / 2;
     FindCandidates(middle, candidates);
 
@@ -590,20 +647,20 @@ void  UVCSGfaceted::InitVoxels(UReduciblePolygon &rz, double radius)
     fCandidates.push_back(candidates);
   }
 
-  fBox.Set(radius, radius, (fZs.back() - fZs.front()) /2);
+  fBox.Set(radius, radius, (fZs.back() - fZs.front()) / 2);
   fBoxShift = fZs[0] + fBox.GetZHalfLength();
 }
 
-void UVCSGfaceted::FindCandidates(double z, vector <int> &candidates, bool sides)
+void UVCSGfaceted::FindCandidates(double z, vector <int>& candidates, bool sides)
 {
   for (int j = 0; j < numFace; j++)
   {
-    UVCSGface *face = faces[j];
+    UVCSGface* face = faces[j];
     double minZ = -face->Extent(UVector3(0, 0, -1)) ;
     double maxZ = face->Extent(UVector3(0, 0, 1));
-    if (z >= minZ - fgTolerance*10 && z <= maxZ  + fgTolerance*10)
+    if (z >= minZ - fgTolerance * 10 && z <= maxZ  + fgTolerance * 10)
     {
-      if (!sides || std::fabs(minZ - maxZ) < fgTolerance*10)
+      if (!sides || std::fabs(minZ - maxZ) < fgTolerance * 10)
         if (std::find(candidates.begin(), candidates.end(), j) == candidates.end())
           candidates.push_back(j);
     }
@@ -611,14 +668,14 @@ void UVCSGfaceted::FindCandidates(double z, vector <int> &candidates, bool sides
 }
 
 
-double UVCSGfaceted::DistanceToIn( const UVector3& p, const UVector3& v, double /*aPstep*/) const
+double UVCSGfaceted::DistanceToIn(const UVector3& p, const UVector3& v, double /*aPstep*/) const
 {
   if (fNoVoxels) return DistanceToInNoVoxels(p, v);
 
   UVector3 pb(p.x, p.y, p.z - fBoxShift);
 
   double idistance, shift;
-  idistance = fBox.DistanceToIn(pb, v); // using only box, this appears 
+  idistance = fBox.DistanceToIn(pb, v); // using only box, this appears
   // to be faster than: idistance = enclosingCylinder->DistanceTo(pb, v);
   if (idistance >= UUtils::kInfinity) return idistance;
 
@@ -637,13 +694,13 @@ double UVCSGfaceted::DistanceToIn( const UVector3& p, const UVector3& v, double 
 
   double distance = UUtils::kInfinity;
   double distFromSurface = UUtils::kInfinity;
-  UVCSGface *bestFace = NULL;
+  UVCSGface* bestFace = NULL;
   UBits bits(numFace);
   UVector3 faceNormal;
 
   do
   {
-    const vector<int> &candidates = fCandidates[index];
+    const vector<int>& candidates = fCandidates[index];
     int size = candidates.size();
     for (int i = 0; i < size; ++i)
     {
@@ -651,14 +708,14 @@ double UVCSGfaceted::DistanceToIn( const UVector3& p, const UVector3& v, double 
       if (!bits[candidate])
       {
         bits.SetBitNumber(candidate);
-        UVCSGface &face = *faces[candidate];
+        UVCSGface& face = *faces[candidate];
 
-        double	 faceDistance,
-          faceDistFromSurface;
-        bool		faceAllBehind;
-        if (face.Distance( p, v, false, fgTolerance*0.5,
-          faceDistance, faceDistFromSurface,
-          faceNormal, faceAllBehind ) )
+        double   faceDistance,
+                 faceDistFromSurface;
+        bool    faceAllBehind;
+        if (face.Distance(p, v, false, fgTolerance * 0.5,
+                          faceDistance, faceDistFromSurface,
+                          faceNormal, faceAllBehind))
         {
           // Intersecting face
           if (faceDistance < distance)
@@ -683,9 +740,12 @@ double UVCSGfaceted::DistanceToIn( const UVector3& p, const UVector3& v, double 
   }
   while (idistance + shift < distance);
 
-  if (distance < UUtils::kInfinity && distFromSurface<fgTolerance/2)
+  if (distance < UUtils::kInfinity && distFromSurface < fgTolerance / 2)
   {
-    if (bestFace->Safety(p,false) < fgTolerance/2)	{ distance = 0; }
+    if (bestFace->Safety(p, false) < fgTolerance / 2)
+    {
+      distance = 0;
+    }
   }
 
   return distance;
@@ -693,7 +753,7 @@ double UVCSGfaceted::DistanceToIn( const UVector3& p, const UVector3& v, double 
 
 
 
-double UVCSGfaceted::DistanceToOut( const UVector3 &p, const UVector3  &v, UVector3 &n, bool &aConvex, double /*aPstep*/) const
+double UVCSGfaceted::DistanceToOut(const UVector3& p, const UVector3&  v, UVector3& n, bool& aConvex, double /*aPstep*/) const
 {
   if (fNoVoxels) return DistanceToOutNoVoxels(p, v, n, aConvex);
 
@@ -706,12 +766,12 @@ double UVCSGfaceted::DistanceToOut( const UVector3 &p, const UVector3  &v, UVect
   UVector3 normal, faceNormal;
   double shift;
 
-  UVCSGface *bestFace = NULL;
+  UVCSGface* bestFace = NULL;
   UBits bits(numFace);
 
   do
   {
-    const vector<int> &candidates = fCandidates[index];
+    const vector<int>& candidates = fCandidates[index];
     int size = candidates.size();
     for (int i = 0; i < size; ++i)
     {
@@ -719,28 +779,31 @@ double UVCSGfaceted::DistanceToOut( const UVector3 &p, const UVector3  &v, UVect
       if (!bits[candidate])
       {
         bits.SetBitNumber(candidate);
-        UVCSGface &face = *faces[candidate];
+        UVCSGface& face = *faces[candidate];
 
         double faceDistance, faceDistFromSurface;
         bool faceAllBehind;
-        if ((face.Distance( p, v, true, fgTolerance*0.5, faceDistance, faceDistFromSurface,
-          faceNormal, faceAllBehind ) ))
+        if ((face.Distance(p, v, true, fgTolerance * 0.5, faceDistance, faceDistFromSurface,
+                           faceNormal, faceAllBehind)))
         {
           // Intersecting face
-          if ( (distance < UUtils::kInfinity) || (!faceAllBehind) )	{ allBehind = false; }
+          if ((distance < UUtils::kInfinity) || (!faceAllBehind))
+          {
+            allBehind = false;
+          }
           if (faceDistance < distance)
           {
             distance = faceDistance;
             distFromSurface = faceDistFromSurface;
             normal = faceNormal;
             bestFace = &face;
-            if (distFromSurface <= 0)	break;
+            if (distFromSurface <= 0) break;
           }
         }
       }
     }
 
-    if (distFromSurface <= 0)	break;
+    if (distFromSurface <= 0) break;
     if (!increment) break;
 
     index += increment;
@@ -757,17 +820,23 @@ double UVCSGfaceted::DistanceToOut( const UVector3 &p, const UVector3  &v, UVect
     {
       distance = 0;
     }
-    else if (distFromSurface<fgTolerance/2)
+    else if (distFromSurface < fgTolerance / 2)
     {
-      if (bestFace->Safety(p,true) < fgTolerance*0.5)	{ distance = 0; }
+      if (bestFace->Safety(p, true) < fgTolerance * 0.5)
+      {
+        distance = 0;
+      }
     }
 
     aConvex = allBehind;
     n = normal;
   }
   else
-  { 
-    if (Inside(p) == eSurface)	{ distance = 0; }
+  {
+    if (Inside(p) == eSurface)
+    {
+      distance = 0;
+    }
     aConvex = false;
   }
 
@@ -775,7 +844,7 @@ double UVCSGfaceted::DistanceToOut( const UVector3 &p, const UVector3  &v, UVect
 }
 
 
-VUSolid::EnumInside UVCSGfaceted::Inside( const UVector3& p) const
+VUSolid::EnumInside UVCSGfaceted::Inside(const UVector3& p) const
 {
   if (fNoVoxels) return InsideNoVoxels(p);
 
@@ -785,26 +854,26 @@ VUSolid::EnumInside UVCSGfaceted::Inside( const UVector3& p) const
   double shift;
 
   UBits bits(numFace);
-  double best = kInfinity;
-  VUSolid::EnumInside answer=eOutside;
+  double best = UUtils::kInfinity;
+  VUSolid::EnumInside answer = eOutside;
   int middle = index;
 
   do
   {
-    const vector<int> &candidates = fCandidates[index];
+    const vector<int>& candidates = fCandidates[index];
     int size = candidates.size();
     for (int i = 0; i < size; ++i)
     {
       int candidate = candidates[i];
       if (!bits[candidate])
       {
-        UVCSGface &face = *faces[candidate];
+        UVCSGface& face = *faces[candidate];
 
         double distance;
-        VUSolid::EnumInside result = face.Inside( p, fgTolerance*0.5, &distance);
+        VUSolid::EnumInside result = face.Inside(p, fgTolerance * 0.5, &distance);
         if (result == eSurface) return eSurface;
         if (distance < best)
-        { 
+        {
           best = distance;
           answer = result;
         }
@@ -829,11 +898,11 @@ VUSolid::EnumInside UVCSGfaceted::Inside( const UVector3& p) const
   return answer;
 }
 
-double UVCSGfaceted::SafetyFromInsideSection(int index, const UVector3 &p, UBits &bits) const
+double UVCSGfaceted::SafetyFromInsideSection(int index, const UVector3& p, UBits& bits) const
 {
   double best = UUtils::kInfinity;
 
-  const vector<int> &candidates = fCandidates[index];
+  const vector<int>& candidates = fCandidates[index];
   int size = candidates.size();
   for (int i = 0; i < size; ++i)
   {
@@ -841,16 +910,16 @@ double UVCSGfaceted::SafetyFromInsideSection(int index, const UVector3 &p, UBits
     if (!bits[candidate])
     {
       bits.SetBitNumber(candidate);
-      UVCSGface &face = *faces[candidate];
+      UVCSGface& face = *faces[candidate];
 
-      double distance = face.Safety( p, true);
-      if (distance < best)	best = distance;
+      double distance = face.Safety(p, true);
+      if (distance < best)  best = distance;
     }
   }
   return best;
 }
 
-double UVCSGfaceted::SafetyFromInside ( const UVector3 &p, bool) const
+double UVCSGfaceted::SafetyFromInside(const UVector3& p, bool) const
 {
   if (fNoVoxels) return SafetyFromInsideNoVoxels(p);
 
@@ -863,8 +932,8 @@ double UVCSGfaceted::SafetyFromInside ( const UVector3 &p, bool) const
   if (minSafety > UUtils::kInfinity) return 0;
   if (minSafety < 1e-6) return 0;
 
-  double zbase = fZs[index+1];
-  for (int i = index+1; i <= fMaxSection; ++i)
+  double zbase = fZs[index + 1];
+  for (int i = index + 1; i <= fMaxSection; ++i)
   {
     double dz = fZs[i] - zbase;
     if (dz >= minSafety) break;
@@ -874,8 +943,8 @@ double UVCSGfaceted::SafetyFromInside ( const UVector3 &p, bool) const
 
   if (index > 0)
   {
-    zbase = fZs[index-1];
-    for (int i = index-1; i >= 0; --i)
+    zbase = fZs[index - 1];
+    for (int i = index - 1; i >= 0; --i)
     {
       double dz = zbase - fZs[i];
       if (dz >= minSafety) break;
@@ -883,5 +952,5 @@ double UVCSGfaceted::SafetyFromInside ( const UVector3 &p, bool) const
       if (safety < minSafety) minSafety = safety;
     }
   }
-  return (minSafety < 0.5*fgTolerance) ? 0 : minSafety;
+  return (minSafety < 0.5 * fgTolerance) ? 0 : minSafety;
 }

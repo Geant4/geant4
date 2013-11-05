@@ -1,112 +1,93 @@
 //
 // ********************************************************************
-// * License and Disclaimer																					 *
-// *																																	*
-// * The	Geant4 software	is	copyright of the Copyright Holders	of *
-// * the Geant4 Collaboration.	It is provided	under	the terms	and *
-// * conditions of the Geant4 Software License,	included in the file *
-// * LICENSE and available at	http://cern.ch/geant4/license .	These *
-// * include a list of copyright holders.														 *
-// *																																	*
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work	make	any representation or	warranty, express or implied, *
-// * regarding	this	software system or assume any liability for its *
-// * use.	Please see the license in the file	LICENSE	and URL above *
-// * for the full disclaimer and the limitation of liability.				 *
-// *																																	*
-// * This	code	implementation is the result of	the	scientific and *
-// * technical work of the GEANT4 collaboration.											*
-// * By using,	copying,	modifying or	distributing the software (or *
-// * any work based	on the software)	you	agree	to acknowledge its *
-// * use	in	resulting	scientific	publications,	and indicate your *
-// * acceptance of all terms of the Geant4 Software license.					*
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
 // ********************************************************************
 //
-//
-// $Id: UPolycone.icc 66241 2012-12-13 18:34:42Z gunter $
+// $Id:$
 //
 // --------------------------------------------------------------------
-// GEANT 4 inline definitions file
 //
 // UPolycone.icc
 //
 // Implementation of inline methods of UPolycone
+//
+// 19.04.13 Marek Gayer
+//          Created from original implementation in Geant4
 // --------------------------------------------------------------------
 
 inline
 double UPolycone::GetStartPhi() const
 {
-	return startPhi;
+  return startPhi;
 }
 
 inline
 double UPolycone::GetEndPhi() const
 {
-	return endPhi;
+  return endPhi;
 }
 
 inline
 bool UPolycone::IsOpen() const
 {
-	return phiIsOpen;
+  return phiIsOpen;
 }
 
 inline
 bool UPolycone::IsGeneric() const
 {
-	return genericPcon;
+  return genericPcon;
 }
 
 inline
 int UPolycone::GetNumRZCorner() const
 {
-	return numCorner;
+  return numCorner;
 }
 
 inline
 UPolyconeSideRZ UPolycone::GetCorner(int index) const
 {
-	return corners[index];
+  return corners[index];
 }
 
 inline
 UPolyconeHistorical* UPolycone::GetOriginalParameters() const
 {
-	return fOriginalParameters;
+  return fOriginalParameters;
 }
 
 inline
 void UPolycone::SetOriginalParameters(UPolyconeHistorical* pars)
 {
-	if (!pars)
-		// UException("UPolycone::SetOriginalParameters()", "GeomSolids0002",
-		//						FatalException, "NULL pointer to parameters!");
-	*fOriginalParameters = *pars;
-	fCubicVolume = 0.;
-	fpPolyhedron = 0;
+  if (!pars)
+    // UException("UPolycone::SetOriginalParameters()", "GeomSolids0002",
+    //            FatalException, "NULL pointer to parameters!");
+    *fOriginalParameters = *pars;
+  fCubicVolume = 0.;
+  fpPolyhedron = 0;
 }
 
 inline
 void UPolycone::SetOriginalParameters()
 {
-	int numPlanes = (int)numCorner/2; 
+  int numPlanes = (int)numCorner / 2;
 
-	fOriginalParameters = new UPolyconeHistorical;
+  fOriginalParameters = new UPolyconeHistorical;
 
-	fOriginalParameters->fZValues.resize(numPlanes);
-	fOriginalParameters->Rmin.resize(numPlanes);
-	fOriginalParameters->Rmax.resize(numPlanes);
-	
-	for(int j=0; j < numPlanes; j++)
-	{
-		fOriginalParameters->fZValues[j] = corners[numPlanes+j].z;
-		fOriginalParameters->Rmax[j] = corners[numPlanes+j].r;
-		fOriginalParameters->Rmin[j] = corners[numPlanes-1-j].r;
-	}
+  fOriginalParameters->fZValues.resize(numPlanes);
+  fOriginalParameters->Rmin.resize(numPlanes);
+  fOriginalParameters->Rmax.resize(numPlanes);
 
-	fOriginalParameters->fStartAngle = startPhi;
-	fOriginalParameters->fOpeningAngle = endPhi-startPhi;
-	fOriginalParameters->fNumZPlanes = numPlanes;
+  for (int j = 0; j < numPlanes; j++)
+  {
+    fOriginalParameters->fZValues[j] = corners[numPlanes + j].z;
+    fOriginalParameters->Rmax[j] = corners[numPlanes + j].r;
+    fOriginalParameters->Rmin[j] = corners[numPlanes - 1 - j].r;
+  }
+
+  fOriginalParameters->fStartAngle = startPhi;
+  fOriginalParameters->fOpeningAngle = endPhi - startPhi;
+  fOriginalParameters->fNumZPlanes = numPlanes;
 }
-

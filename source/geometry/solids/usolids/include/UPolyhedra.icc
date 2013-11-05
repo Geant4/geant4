@@ -1,6 +1,19 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
 // UPolyhedra.icc
 //
 // Implementation of inline methods of UPolyhedra
+//
+// 19.09.13 Marek Gayer
+//          Created from original implementation in Geant4
 // --------------------------------------------------------------------
 
 inline
@@ -40,13 +53,13 @@ int UPolyhedra::GetNumRZCorner() const
 }
 
 inline
-UPolyhedraSideRZ UPolyhedra::GetCorner( const int index ) const
+UPolyhedraSideRZ UPolyhedra::GetCorner(const int index) const
 {
   return fCorners[index];
 }
 
 inline
-UPolyhedraHistorical* UPolyhedra::GetOriginalParameters() 
+UPolyhedraHistorical* UPolyhedra::GetOriginalParameters()
 {
   return &fOriginalParameters;
 }
@@ -61,21 +74,21 @@ void UPolyhedra::SetOriginalParameters(UPolyhedraHistorical& pars)
 inline
 void UPolyhedra::SetOriginalParameters()
 {
-  int fNumPlanes = (int) fNumCorner/2; 
+  int fNumPlanes = (int) fNumCorner / 2;
 
   fOriginalParameters.fZValues.resize(fNumPlanes);
   fOriginalParameters.Rmin.resize(fNumPlanes);
   fOriginalParameters.Rmax.resize(fNumPlanes);
-  
-  for(int j=0; j < fNumPlanes; j++)
+
+  for (int j = 0; j < fNumPlanes; j++)
   {
-    fOriginalParameters.fZValues[j] = fCorners[fNumPlanes+j].z;
-    fOriginalParameters.Rmax[j] = fCorners[fNumPlanes+j].r;
-    fOriginalParameters.Rmin[j] = fCorners[fNumPlanes-1-j].r;
+    fOriginalParameters.fZValues[j] = fCorners[fNumPlanes + j].z;
+    fOriginalParameters.Rmax[j] = fCorners[fNumPlanes + j].r;
+    fOriginalParameters.Rmin[j] = fCorners[fNumPlanes - 1 - j].r;
   }
 
   fOriginalParameters.fStartAngle = fStartPhi;
-  fOriginalParameters.fOpeningAngle = fEndPhi-fStartPhi;
+  fOriginalParameters.fOpeningAngle = fEndPhi - fStartPhi;
   fOriginalParameters.fNumZPlanes = fNumPlanes;
   fOriginalParameters.fNumSide = fNumSides;
 

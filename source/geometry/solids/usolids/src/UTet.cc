@@ -1,31 +1,18 @@
 //
-// class UTet
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
 //
-// Implementation for UTet class
-//
-// History:
-//
-//  20040903 - Marcus Mendenhall, created G4Tet
-//  20041101 - Marcus Mendenhall, optimized constant dot products with
-//             fCdotNijk values
-//  20041101 - MHM removed tracking error by clipping DistanceToOut to 0
-//             for surface cases
-//  20041101 - MHM many speed optimizations in if statements
-//  20041101 - MHM changed vdotn comparisons to 1e-12 instead of 0.0 to
-//             avoid nearly-parallel problems
-//  20041102 - MHM Added extra distance into solid to DistanceToIn(p,v)
-//             hit testing
-//  20041102 - MHM added ability to check for degeneracy without throwing
-//             G4Exception
-//  20041103 - MHM removed many unused variables from class
-//  20040803 - Dionysios Anninos, added GetPointOnSurface() method
-//  20061112 - MHM added code for G4VSolid GetSurfaceArea()
-//  20100920 - Gabriele Cosmo added copy-ctor and operator=()
-//  20120308 - Tatiana Nikitina change from G4Tet to UTet
+// $Id:$
 //
 // --------------------------------------------------------------------
-
-
+//
+// UTet
+//
+// 19.07.13 Tatiana Nikitina
+//          Created from original implementation in Geant4
+// --------------------------------------------------------------------
 
 #include <cmath>
 #include <iostream>
@@ -46,99 +33,101 @@ using namespace std;
 // A Tet has all of its geometrical information precomputed
 
 UTet::UTet(const std::string& name,
-                   UVector3 anchor,
-                   UVector3 p2,
-                   UVector3 p3,
-                   UVector3 p4, bool *degeneracyFlag)
+           UVector3 anchor,
+           UVector3 p2,
+           UVector3 p3,
+           UVector3 p4, bool* degeneracyFlag)
   : VUSolid(name), warningFlag(0)
 {
   // fV<x><y> is vector from vertex <y> to vertex <x>
   //
-  UVector3 fV21=p2-anchor;
-  UVector3 fV31=p3-anchor;
-  UVector3 fV41=p4-anchor;
+  UVector3 fV21 = p2 - anchor;
+  UVector3 fV31 = p3 - anchor;
+  UVector3 fV41 = p4 - anchor;
 
   // make sure this is a correctly oriented set of points for the tetrahedron
   //
-  double signed_vol=fV21.Cross(fV31).Dot(fV41);
-  if(signed_vol<0.0)
+  double signed_vol = fV21.Cross(fV31).Dot(fV41);
+  if (signed_vol < 0.0)
   {
     UVector3 temp(p4);
-    p4=p3;
-    p3=temp;
-    temp=fV41;
-    fV41=fV31;
-    fV31=temp; 
+    p4 = p3;
+    p3 = temp;
+    temp = fV41;
+    fV41 = fV31;
+    fV31 = temp;
   }
   fCubicVolume = std::fabs(signed_vol) / 6.;
 
   //UVector3 fV24=p2-p4;
-  UVector3 fV43=p4-p3;
-  UVector3 fV32=p3-p2;
+  UVector3 fV43 = p4 - p3;
+  UVector3 fV32 = p3 - p2;
 
-  fXMin=std::min(std::min(std::min(anchor.x, p2.x),p3.x),p4.x);
-  fXMax=std::max(std::max(std::max(anchor.x, p2.x),p3.x),p4.x);
-  fYMin=std::min(std::min(std::min(anchor.y, p2.y),p3.y),p4.y);
-  fYMax=std::max(std::max(std::max(anchor.y, p2.y),p3.y),p4.y);
-  fZMin=std::min(std::min(std::min(anchor.z, p2.z),p3.z),p4.z);
-  fZMax=std::max(std::max(std::max(anchor.z, p2.z),p3.z),p4.z);
+  fXMin = std::min(std::min(std::min(anchor.x, p2.x), p3.x), p4.x);
+  fXMax = std::max(std::max(std::max(anchor.x, p2.x), p3.x), p4.x);
+  fYMin = std::min(std::min(std::min(anchor.y, p2.y), p3.y), p4.y);
+  fYMax = std::max(std::max(std::max(anchor.y, p2.y), p3.y), p4.y);
+  fZMin = std::min(std::min(std::min(anchor.z, p2.z), p3.z), p4.z);
+  fZMax = std::max(std::max(std::max(anchor.z, p2.z), p3.z), p4.z);
 
-  fDx=(fXMax-fXMin)*0.5; fDy=(fYMax-fYMin)*0.5; fDz=(fZMax-fZMin)*0.5;
+  fDx = (fXMax - fXMin) * 0.5;
+  fDy = (fYMax - fYMin) * 0.5;
+  fDz = (fZMax - fZMin) * 0.5;
 
-  fMiddle=UVector3(fXMax+fXMin, fYMax+fYMin, fZMax+fZMin)*0.5;
-  fMaxSize=std::max(std::max(std::max((anchor-fMiddle).Mag(),
-                                      (p2-fMiddle).Mag()),
-                             (p3-fMiddle).Mag()),
-                    (p4-fMiddle).Mag());
+  fMiddle = UVector3(fXMax + fXMin, fYMax + fYMin, fZMax + fZMin) * 0.5;
+  fMaxSize = std::max(std::max(std::max((anchor - fMiddle).Mag(),
+                                        (p2 - fMiddle).Mag()),
+                               (p3 - fMiddle).Mag()),
+                      (p4 - fMiddle).Mag());
 
-  bool degenerate=std::fabs(signed_vol) < 1e-9*fMaxSize*fMaxSize*fMaxSize;
+  bool degenerate = std::fabs(signed_vol) < 1e-9 * fMaxSize * fMaxSize * fMaxSize;
 
-  if(degeneracyFlag) *degeneracyFlag=degenerate;
+  if (degeneracyFlag) *degeneracyFlag = degenerate;
   else if (degenerate)
   {
-    UUtils::Exception("UTet::UTet()", "GeomSolids0002", FatalErrorInArguments,1,
-              "Degenerate tetrahedron not allowed.");
+    UUtils::Exception("UTet::UTet()", "GeomSolids0002", FatalErrorInArguments, 1,
+                      "Degenerate tetrahedron not allowed.");
   }
 
-  fTol=1e-9*(std::fabs(fXMin)+std::fabs(fXMax)+std::fabs(fYMin)
-            +std::fabs(fYMax)+std::fabs(fZMin)+std::fabs(fZMax));
+  fTol = 1e-9 * (std::fabs(fXMin) + std::fabs(fXMax) + std::fabs(fYMin)
+                 + std::fabs(fYMax) + std::fabs(fZMin) + std::fabs(fZMax));
   //fTol=kCarTolerance;
 
-  fAnchor=anchor;
-  fP2=p2;
-  fP3=p3;
-  fP4=p4;
+  fAnchor = anchor;
+  fP2 = p2;
+  fP3 = p3;
+  fP4 = p4;
 
-  UVector3 fCenter123=(anchor+p2+p3)*(1.0/3.0); // face center
-  UVector3 fCenter134=(anchor+p4+p3)*(1.0/3.0);
-  UVector3 fCenter142=(anchor+p4+p2)*(1.0/3.0);
-  UVector3 fCenter234=(p2+p3+p4)*(1.0/3.0);
+  UVector3 fCenter123 = (anchor + p2 + p3) * (1.0 / 3.0); // face center
+  UVector3 fCenter134 = (anchor + p4 + p3) * (1.0 / 3.0);
+  UVector3 fCenter142 = (anchor + p4 + p2) * (1.0 / 3.0);
+  UVector3 fCenter234 = (p2 + p3 + p4) * (1.0 / 3.0);
 
   // compute area of each triangular face by cross product
   // and sum for total surface area
 
-  UVector3 normal123=fV31.Cross(fV21);
-  UVector3 normal134=fV41.Cross(fV31);
-  UVector3 normal142=fV21.Cross(fV41);
-  UVector3 normal234=fV32.Cross(fV43);
+  UVector3 normal123 = fV31.Cross(fV21);
+  UVector3 normal134 = fV41.Cross(fV31);
+  UVector3 normal142 = fV21.Cross(fV41);
+  UVector3 normal234 = fV32.Cross(fV43);
 
-  fSurfaceArea=(
-      normal123.Mag()+
-      normal134.Mag()+
-      normal142.Mag()+
-      normal234.Mag()
-  )/2.0;
+  fSurfaceArea = (
+                   normal123.Mag() +
+                   normal134.Mag() +
+                   normal142.Mag() +
+                   normal234.Mag()
+                 ) / 2.0;
 
-  fNormal123=normal123.Unit();
-  fNormal134=normal134.Unit();
-  fNormal142=normal142.Unit();
-  fNormal234=normal234.Unit();
+  fNormal123 = normal123.Unit();
+  fNormal134 = normal134.Unit();
+  fNormal142 = normal142.Unit();
+  fNormal234 = normal234.Unit();
 
-  fCdotN123=fCenter123.Dot(fNormal123);
-  fCdotN134=fCenter134.Dot(fNormal134);
-  fCdotN142=fCenter142.Dot(fNormal142);
-  fCdotN234=fCenter234.Dot(fNormal234);
- }
+  fCdotN123 = fCenter123.Dot(fNormal123);
+  fCdotN134 = fCenter134.Dot(fNormal134);
+  fCdotN142 = fCenter142.Dot(fNormal142);
+  fCdotN234 = fCenter234.Dot(fNormal234);
+}
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -175,52 +164,71 @@ UTet::UTet(const UTet& rhs)
 //
 // Assignment operator
 
-UTet& UTet::operator = (const UTet& rhs) 
+UTet& UTet::operator = (const UTet& rhs)
 {
-   // Check assignment to self
-   //
-   if (this == &rhs)  { return *this; }
+  // Check assignment to self
+  //
+  if (this == &rhs)
+  {
+    return *this;
+  }
 
-   // Copy base class data
-   //
-   VUSolid::operator=(rhs);
+  // Copy base class data
+  //
+  VUSolid::operator=(rhs);
 
-   // Copy data
-   //
-   fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   fAnchor = rhs.fAnchor;
-   fP2 = rhs.fP2; fP3 = rhs.fP3; fP4 = rhs.fP4; fMiddle = rhs.fMiddle;
-   fNormal123 = rhs.fNormal123; fNormal142 = rhs.fNormal142;
-   fNormal134 = rhs.fNormal134; fNormal234 = rhs.fNormal234;
-   warningFlag = rhs.warningFlag; fCdotN123 = rhs.fCdotN123;
-   fCdotN142 = rhs.fCdotN142; fCdotN134 = rhs.fCdotN134;
-   fCdotN234 = rhs.fCdotN234; fXMin = rhs.fXMin; fXMax = rhs.fXMax;
-   fYMin = rhs.fYMin; fYMax = rhs.fYMax; fZMin = rhs.fZMin; fZMax = rhs.fZMax;
-   fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz; fTol = rhs.fTol;
-   fMaxSize = rhs.fMaxSize;
+  // Copy data
+  //
+  fCubicVolume = rhs.fCubicVolume;
+  fSurfaceArea = rhs.fSurfaceArea;
+  fAnchor = rhs.fAnchor;
+  fP2 = rhs.fP2;
+  fP3 = rhs.fP3;
+  fP4 = rhs.fP4;
+  fMiddle = rhs.fMiddle;
+  fNormal123 = rhs.fNormal123;
+  fNormal142 = rhs.fNormal142;
+  fNormal134 = rhs.fNormal134;
+  fNormal234 = rhs.fNormal234;
+  warningFlag = rhs.warningFlag;
+  fCdotN123 = rhs.fCdotN123;
+  fCdotN142 = rhs.fCdotN142;
+  fCdotN134 = rhs.fCdotN134;
+  fCdotN234 = rhs.fCdotN234;
+  fXMin = rhs.fXMin;
+  fXMax = rhs.fXMax;
+  fYMin = rhs.fYMin;
+  fYMax = rhs.fYMax;
+  fZMin = rhs.fZMin;
+  fZMax = rhs.fZMax;
+  fDx = rhs.fDx;
+  fDy = rhs.fDy;
+  fDz = rhs.fDz;
+  fTol = rhs.fTol;
+  fMaxSize = rhs.fMaxSize;
 
-   return *this;
+  return *this;
 }
 
 /////////////////////////////////////////////////////////////////////////
 //
 // Return whether point inside/outside/on surface, using tolerance
 
-VUSolid::EnumInside UTet::Inside(const UVector3 &p) const
+VUSolid::EnumInside UTet::Inside(const UVector3& p) const
 {
   double r123, r134, r142, r234;
 
   // this is written to allow if-statement truncation so the outside test
   // (where most of the world is) can fail very quickly and efficiently
 
-  if ( (r123=p.Dot(fNormal123)-fCdotN123) > fTol ||
-       (r134=p.Dot(fNormal134)-fCdotN134) > fTol ||
-       (r142=p.Dot(fNormal142)-fCdotN142) > fTol ||
-       (r234=p.Dot(fNormal234)-fCdotN234) > fTol )
+  if ((r123 = p.Dot(fNormal123) - fCdotN123) > fTol ||
+      (r134 = p.Dot(fNormal134) - fCdotN134) > fTol ||
+      (r142 = p.Dot(fNormal142) - fCdotN142) > fTol ||
+      (r234 = p.Dot(fNormal234) - fCdotN234) > fTol)
   {
     return eOutside; // at least one is out!
   }
-  else if( (r123 < -fTol)&&(r134 < -fTol)&&(r142 < -fTol)&&(r234 < -fTol) )
+  else if ((r123 < -fTol) && (r134 < -fTol) && (r142 < -fTol) && (r234 < -fTol))
   {
     return eInside; // all are definitively inside
   }
@@ -233,65 +241,76 @@ VUSolid::EnumInside UTet::Inside(const UVector3 &p) const
 ///////////////////////////////////////////////////////////////////////
 //
 // Calculate side nearest to p, and return normal
-// If two sides are equidistant, normal of first side (x/y/z) 
+// If two sides are equidistant, normal of first side (x/y/z)
 // encountered returned.
 // This assumes that we are looking from the inside!
-bool UTet::Normal( const UVector3& p, UVector3 &n) const
+bool UTet::Normal(const UVector3& p, UVector3& n) const
 {
-  double r123=std::fabs(p.Dot(fNormal123)-fCdotN123);
-  double r134=std::fabs(p.Dot(fNormal134)-fCdotN134);
-  double r142=std::fabs(p.Dot(fNormal142)-fCdotN142);
-  double r234=std::fabs(p.Dot(fNormal234)-fCdotN234);
+  double r123 = std::fabs(p.Dot(fNormal123) - fCdotN123);
+  double r134 = std::fabs(p.Dot(fNormal134) - fCdotN134);
+  double r142 = std::fabs(p.Dot(fNormal142) - fCdotN142);
+  double r234 = std::fabs(p.Dot(fNormal234) - fCdotN234);
 
-   static const double delta = 0.5*fTol;
+  static const double delta = 0.5 * fTol;
   UVector3 sumnorm(0., 0., 0.);
-  int noSurfaces=0; 
+  int noSurfaces = 0;
 
-  if (r123 <= delta)         
+  if (r123 <= delta)
   {
-     noSurfaces ++; 
-     sumnorm= fNormal123; 
+    noSurfaces ++;
+    sumnorm = fNormal123;
   }
 
-  if (r134 <= delta)    
+  if (r134 <= delta)
   {
-     noSurfaces ++; 
-     sumnorm += fNormal134; 
+    noSurfaces ++;
+    sumnorm += fNormal134;
   }
- 
-  if (r142 <= delta)    
+
+  if (r142 <= delta)
   {
-     noSurfaces ++; 
-     sumnorm += fNormal142;
+    noSurfaces ++;
+    sumnorm += fNormal142;
   }
-  if (r234 <= delta)    
+  if (r234 <= delta)
   {
-     noSurfaces ++; 
-     sumnorm += fNormal234;
+    noSurfaces ++;
+    sumnorm += fNormal234;
   }
-  
-  if( noSurfaces > 0 )
-  { 
-     if( noSurfaces == 1 )
-     { 
-       n=sumnorm;return true; 
-     }
-     else
-     {
-       n=sumnorm.Unit();return true;
-     }
+
+  if (noSurfaces > 0)
+  {
+    if (noSurfaces == 1)
+    {
+      n = sumnorm;
+      return true;
+    }
+    else
+    {
+      n = sumnorm.Unit();
+      return true;
+    }
   }
   else // Approximative Surface Normal
   {
 
-    if( (r123<=r134) && (r123<=r142) && (r123<=r234) ) { n = fNormal123; }
-    else if ( (r134<=r142) && (r134<=r234) )           { n = fNormal134; }
-    else if (r142 <= r234)                             { n = fNormal142; }
+    if ((r123 <= r134) && (r123 <= r142) && (r123 <= r234))
+    {
+      n = fNormal123;
+    }
+    else if ((r134 <= r142) && (r134 <= r234))
+    {
+      n = fNormal134;
+    }
+    else if (r142 <= r234)
+    {
+      n = fNormal142;
+    }
     n = fNormal234;
     return false;
   }
 
-  
+
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -301,89 +320,97 @@ bool UTet::Normal( const UVector3& p, UVector3 &n) const
 // All this is very unrolled, for speed.
 
 double UTet::DistanceToIn(const UVector3& p,
-			  const UVector3& v, double /*aPstep*/ ) const
+                          const UVector3& v, double /*aPstep*/) const
 {
-    UVector3 vu(v.Unit()), hp;
-    double vdotn, t, tmin=UUtils::kInfinity;
+  UVector3 vu(v.Unit()), hp;
+  double vdotn, t, tmin = UUtils::kInfinity;
 
-    double extraDistance=10.0*fTol; // a little ways into the solid
+  double extraDistance = 10.0 * fTol; // a little ways into the solid
 
-    vdotn=-vu.Dot(fNormal123);
-    if(vdotn > 1e-12)
-    { // this is a candidate face, since it is pointing at us
-      t=(p.Dot(fNormal123)-fCdotN123)/vdotn; // #  distance to intersection
-      if( (t>=-fTol) && (t<tmin) )
-      { // if not true, we're going away from this face or it's not close
-        hp=p+vu*(t+extraDistance); // a little beyond point of intersection
-        if ( ( hp.Dot(fNormal134)-fCdotN134 < 0.0 ) &&
-             ( hp.Dot(fNormal142)-fCdotN142 < 0.0 ) &&
-             ( hp.Dot(fNormal234)-fCdotN234 < 0.0 ) )
-        {
-          tmin=t;
-        }
+  vdotn = -vu.Dot(fNormal123);
+  if (vdotn > 1e-12)
+  {
+    // this is a candidate face, since it is pointing at us
+    t = (p.Dot(fNormal123) - fCdotN123) / vdotn; // #  distance to intersection
+    if ((t >= -fTol) && (t < tmin))
+    {
+      // if not true, we're going away from this face or it's not close
+      hp = p + vu * (t + extraDistance); // a little beyond point of intersection
+      if ((hp.Dot(fNormal134) - fCdotN134 < 0.0) &&
+          (hp.Dot(fNormal142) - fCdotN142 < 0.0) &&
+          (hp.Dot(fNormal234) - fCdotN234 < 0.0))
+      {
+        tmin = t;
       }
     }
+  }
 
-    vdotn=-vu.Dot(fNormal134);
-    if(vdotn > 1e-12)
-    { // # this is a candidate face, since it is pointing at us
-      t=(p.Dot(fNormal134)-fCdotN134)/vdotn; // #  distance to intersection
-      if( (t>=-fTol) && (t<tmin) )
-      { // if not true, we're going away from this face
-        hp=p+vu*(t+extraDistance); // a little beyond point of intersection
-        if ( ( hp.Dot(fNormal123)-fCdotN123 < 0.0 ) && 
-             ( hp.Dot(fNormal142)-fCdotN142 < 0.0 ) &&
-             ( hp.Dot(fNormal234)-fCdotN234 < 0.0 ) )
-        {
-          tmin=t;
-        }
+  vdotn = -vu.Dot(fNormal134);
+  if (vdotn > 1e-12)
+  {
+    // # this is a candidate face, since it is pointing at us
+    t = (p.Dot(fNormal134) - fCdotN134) / vdotn; // #  distance to intersection
+    if ((t >= -fTol) && (t < tmin))
+    {
+      // if not true, we're going away from this face
+      hp = p + vu * (t + extraDistance); // a little beyond point of intersection
+      if ((hp.Dot(fNormal123) - fCdotN123 < 0.0) &&
+          (hp.Dot(fNormal142) - fCdotN142 < 0.0) &&
+          (hp.Dot(fNormal234) - fCdotN234 < 0.0))
+      {
+        tmin = t;
       }
     }
+  }
 
-    vdotn=-vu.Dot(fNormal142);
-    if(vdotn > 1e-12)
-    { // # this is a candidate face, since it is pointing at us
-      t=(p.Dot(fNormal142)-fCdotN142)/vdotn; // #  distance to intersection
-      if( (t>=-fTol) && (t<tmin) )
-      { // if not true, we're going away from this face
-        hp=p+vu*(t+extraDistance); // a little beyond point of intersection
-        if ( ( hp.Dot(fNormal123)-fCdotN123 < 0.0 ) &&
-             ( hp.Dot(fNormal134)-fCdotN134 < 0.0 ) &&
-             ( hp.Dot(fNormal234)-fCdotN234 < 0.0 ) )
-        {
-          tmin=t;
-        }
+  vdotn = -vu.Dot(fNormal142);
+  if (vdotn > 1e-12)
+  {
+    // # this is a candidate face, since it is pointing at us
+    t = (p.Dot(fNormal142) - fCdotN142) / vdotn; // #  distance to intersection
+    if ((t >= -fTol) && (t < tmin))
+    {
+      // if not true, we're going away from this face
+      hp = p + vu * (t + extraDistance); // a little beyond point of intersection
+      if ((hp.Dot(fNormal123) - fCdotN123 < 0.0) &&
+          (hp.Dot(fNormal134) - fCdotN134 < 0.0) &&
+          (hp.Dot(fNormal234) - fCdotN234 < 0.0))
+      {
+        tmin = t;
       }
     }
+  }
 
-    vdotn=-vu.Dot(fNormal234);
-    if(vdotn > 1e-12)
-    { // # this is a candidate face, since it is pointing at us
-      t=(p.Dot(fNormal234)-fCdotN234)/vdotn; // #  distance to intersection
-      if( (t>=-fTol) && (t<tmin) )
-      { // if not true, we're going away from this face
-        hp=p+vu*(t+extraDistance); // a little beyond point of intersection
-        if ( ( hp.Dot(fNormal123)-fCdotN123 < 0.0 ) &&
-             ( hp.Dot(fNormal134)-fCdotN134 < 0.0 ) &&
-             ( hp.Dot(fNormal142)-fCdotN142 < 0.0 ) )
-        {
-          tmin=t;
-        }
+  vdotn = -vu.Dot(fNormal234);
+  if (vdotn > 1e-12)
+  {
+    // # this is a candidate face, since it is pointing at us
+    t = (p.Dot(fNormal234) - fCdotN234) / vdotn; // #  distance to intersection
+    if ((t >= -fTol) && (t < tmin))
+    {
+      // if not true, we're going away from this face
+      hp = p + vu * (t + extraDistance); // a little beyond point of intersection
+      if ((hp.Dot(fNormal123) - fCdotN123 < 0.0) &&
+          (hp.Dot(fNormal134) - fCdotN134 < 0.0) &&
+          (hp.Dot(fNormal142) - fCdotN142 < 0.0))
+      {
+        tmin = t;
       }
     }
+  }
 
-  return std::max(0.0,tmin);
+  return std::max(0.0, tmin);
 }
 
 //////////////////////////////////////////////////////////////////////////
-// 
+//
 // Approximate distance to tet.
 // returns distance to sphere centered on bounding box
 // - If inside return 0
-double UTet::SafetyFromOutside ( const UVector3 &p, bool /*aAccurate*/) const
+double UTet::SafetyFromOutside(const UVector3& p, bool /*aAccurate*/) const
 
 {
-  double dd=(p-fMiddle).Mag() - fMaxSize - fTol;
+  double dd = (p - fMiddle).Mag() - fMaxSize - fTol;
   return std::max(0.0, dd);
 }
 
@@ -392,87 +419,102 @@ double UTet::SafetyFromOutside ( const UVector3 &p, bool /*aAccurate*/) const
 // Calcluate distance to surface of box from inside
 // by calculating distances to box's x/y/z planes.
 // Smallest distance is exact distance to exiting.
-double UTet::DistanceToOut( const UVector3  &p, const UVector3 &v,
-	UVector3 &n, bool &convex, double /*aPstep*/) const
+double UTet::DistanceToOut(const UVector3&  p, const UVector3& v,
+                           UVector3& n, bool& convex, double /*aPstep*/) const
 {
-    UVector3 vu(v.Unit());
-    double t1=UUtils::kInfinity,t2=UUtils::kInfinity,t3=UUtils::kInfinity,t4=UUtils::kInfinity, vdotn, tt;
+  UVector3 vu(v.Unit());
+  double t1 = UUtils::kInfinity, t2 = UUtils::kInfinity, t3 = UUtils::kInfinity, t4 = UUtils::kInfinity, vdotn, tt;
 
-    vdotn=vu.Dot(fNormal123);
-    if(vdotn > 1e-12)  // #we're heading towards this face, so it is a candidate
+  vdotn = vu.Dot(fNormal123);
+  if (vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
+  {
+    t1 = (fCdotN123 - p.Dot(fNormal123)) / vdotn; // #  distance to intersection
+  }
+
+  vdotn = vu.Dot(fNormal134);
+  if (vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
+  {
+    t2 = (fCdotN134 - p.Dot(fNormal134)) / vdotn; // #  distance to intersection
+  }
+
+  vdotn = vu.Dot(fNormal142);
+  if (vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
+  {
+    t3 = (fCdotN142 - p.Dot(fNormal142)) / vdotn; // #  distance to intersection
+  }
+
+  vdotn = vu.Dot(fNormal234);
+  if (vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
+  {
+    t4 = (fCdotN234 - p.Dot(fNormal234)) / vdotn; // #  distance to intersection
+  }
+
+  tt = std::min(std::min(std::min(t1, t2), t3), t4);
+
+  if (warningFlag && (tt == UUtils::kInfinity || tt < -fTol))
+  {
+    // DumpInfo();
+    std::ostringstream message;
+    message << "No good intersection found or already outside!?" << std::endl
+            << "p = " << p  << std::endl
+            << "v = " << v  << std::endl
+            << "t1, t2, t3, t4  "
+            << t1 << ", " << t2 << ", " << t3 << ", " << t4;
+
+    UUtils::Exception("UTet::DistanceToOut(p,v,...)", "GeomSolids1002",
+                      Warning, 1, message.str().c_str());
+    if (convex)
     {
-      t1=(fCdotN123-p.Dot(fNormal123))/vdotn; // #  distance to intersection
+      convex = false; // flag normal as meaningless
     }
-
-    vdotn=vu.Dot(fNormal134);
-    if(vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
+  }
+  else
+  {
+    static UVector3 normal;
+    if (tt == t1)
     {
-      t2=(fCdotN134-p.Dot(fNormal134))/vdotn; // #  distance to intersection
+      normal = fNormal123;
     }
-
-    vdotn=vu.Dot(fNormal142);
-    if(vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
+    else if (tt == t2)
     {
-      t3=(fCdotN142-p.Dot(fNormal142))/vdotn; // #  distance to intersection
+      normal = fNormal134;
     }
-
-    vdotn=vu.Dot(fNormal234);
-    if(vdotn > 1e-12) // #we're heading towards this face, so it is a candidate
+    else if (tt == t3)
     {
-      t4=(fCdotN234-p.Dot(fNormal234))/vdotn; // #  distance to intersection
+      normal = fNormal142;
     }
-
-    tt=std::min(std::min(std::min(t1,t2),t3),t4);
-
-    if (warningFlag && (tt == UUtils::kInfinity || tt < -fTol))
+    else if (tt == t4)
     {
-      // DumpInfo();
-       std::ostringstream message;
-       message << "No good intersection found or already outside!?" << std::endl
-	       << "p = " << p  << std::endl
-	       << "v = " << v  << std::endl
-              << "t1, t2, t3, t4  "
-              << t1 << ", " << t2 << ", " << t3 << ", " << t4;
-      
-      UUtils::Exception("UTet::DistanceToOut(p,v,...)", "GeomSolids1002",
-		  Warning,1, message.str().c_str());
-      if(convex)
-      {
-        convex=false; // flag normal as meaningless
-      }
+      normal = fNormal234;
     }
-    else 
+    n = normal;
+    if (convex)
     {
-      static UVector3 normal;
-      if(tt==t1)        { normal=fNormal123; }
-      else if (tt==t2)  { normal=fNormal134; }
-      else if (tt==t3)  { normal=fNormal142; }
-      else if (tt==t4)  { normal=fNormal234; }
-      n=normal;
-      if(convex) { convex=true; }
+      convex = true;
     }
+  }
 
-    return std::max(tt,0.0); // avoid tt<0.0 by a tiny bit
-                             // if we are right on a face
+  return std::max(tt, 0.0); // avoid tt<0.0 by a tiny bit
+  // if we are right on a face
 }
 
 ////////////////////////////////////////////////////////////////////////////
 //
 // Calculate exact shortest distance to any boundary from inside
 // - If outside return 0
-double UTet::SafetyFromInside ( const UVector3 &p, bool /*aAccurate*/) const
+double UTet::SafetyFromInside(const UVector3& p, bool /*aAccurate*/) const
 {
-  double t1,t2,t3,t4;
-  t1=fCdotN123-p.Dot(fNormal123); //  distance to plane, positive if inside
-  t2=fCdotN134-p.Dot(fNormal134); //  distance to plane
-  t3=fCdotN142-p.Dot(fNormal142); //  distance to plane
-  t4=fCdotN234-p.Dot(fNormal234); //  distance to plane
+  double t1, t2, t3, t4;
+  t1 = fCdotN123 - p.Dot(fNormal123); //  distance to plane, positive if inside
+  t2 = fCdotN134 - p.Dot(fNormal134); //  distance to plane
+  t3 = fCdotN142 - p.Dot(fNormal142); //  distance to plane
+  t4 = fCdotN234 - p.Dot(fNormal234); //  distance to plane
 
   // if any one of these is negative, we are outside,
   // so return zero in that case
 
-  double tmin=std::min(std::min(std::min(t1,t2),t3),t4);
-  return (tmin < fTol)? 0:tmin;
+  double tmin = std::min(std::min(std::min(t1, t2), t3), t4);
+  return (tmin < fTol) ? 0 : tmin;
 }
 
 
@@ -484,19 +526,19 @@ std::ostream& UTet::StreamInfo(std::ostream& os) const
 {
   int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
-  << "    *** Dump for solid - " << GetName() << " ***\n"
-  << "    ===================================================\n"
-  << " Solid type: UTet\n"
-  << " Parameters: \n"
-  << "    anchor: " << fAnchor << "  \n"
-  << "    p2: " << fP2 << "  \n"
-  << "    p3: " << fP3 << "  \n"
-  << "    p4: " << fP4 << "  \n"
-  << "    normal123: " << fNormal123 << " \n"
-  << "    normal134: " << fNormal134 << " \n"
-  << "    normal142: " << fNormal142 << " \n"
-  << "    normal234: " << fNormal234 << " \n"
-  << "-----------------------------------------------------------\n";
+     << "    *** Dump for solid - " << GetName() << " ***\n"
+     << "    ===================================================\n"
+     << " Solid type: UTet\n"
+     << " Parameters: \n"
+     << "    anchor: " << fAnchor << "  \n"
+     << "    p2: " << fP2 << "  \n"
+     << "    p3: " << fP3 << "  \n"
+     << "    p4: " << fP4 << "  \n"
+     << "    normal123: " << fNormal123 << " \n"
+     << "    normal134: " << fNormal134 << " \n"
+     << "    normal142: " << fNormal142 << " \n"
+     << "    normal234: " << fNormal234 << " \n"
+     << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 
   return os;
@@ -510,19 +552,19 @@ std::ostream& UTet::StreamInfo(std::ostream& os) const
 // Auxiliary method for get point on surface
 
 UVector3 UTet::GetPointOnFace(UVector3 p1, UVector3 p2,
-                                    UVector3 p3, double& area) const
+                              UVector3 p3, double& area) const
 {
-  double lambda1,lambda2;
+  double lambda1, lambda2;
   UVector3 v, w;
 
   v = p3 - p1;
   w = p1 - p2;
 
-  lambda1 = UUtils::Random(0.,1.);
-  lambda2 = UUtils::Random(0.,lambda1);
+  lambda1 = UUtils::Random(0., 1.);
+  lambda2 = UUtils::Random(0., lambda1);
 
-  area = 0.5*(v.Cross(w)).Mag();
-  return (p2 + lambda1*w + lambda2*v);
+  area = 0.5 * (v.Cross(w)).Mag();
+  return (p2 + lambda1 * w + lambda2 * v);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -531,18 +573,27 @@ UVector3 UTet::GetPointOnFace(UVector3 p1, UVector3 p2,
 
 UVector3 UTet::GetPointOnSurface() const
 {
-  double chose,aOne,aTwo,aThree,aFour;
+  double chose, aOne, aTwo, aThree, aFour;
   UVector3 p1, p2, p3, p4;
-  
-  p1 = GetPointOnFace(fAnchor,fP2,fP3,aOne);
-  p2 = GetPointOnFace(fAnchor,fP4,fP3,aTwo);
-  p3 = GetPointOnFace(fAnchor,fP4,fP2,aThree);
-  p4 = GetPointOnFace(fP4,fP3,fP2,aFour);
-  
-  chose = UUtils::Random(0.,aOne+aTwo+aThree+aFour);
-  if( (chose>=0.) && (chose <aOne) ) {return p1;}
-  else if( (chose>=aOne) && (chose < aOne+aTwo) ) {return p2;}
-  else if( (chose>=aOne+aTwo) && (chose<aOne+aTwo+aThree) ) {return p3;}
+
+  p1 = GetPointOnFace(fAnchor, fP2, fP3, aOne);
+  p2 = GetPointOnFace(fAnchor, fP4, fP3, aTwo);
+  p3 = GetPointOnFace(fAnchor, fP4, fP2, aThree);
+  p4 = GetPointOnFace(fP4, fP3, fP2, aFour);
+
+  chose = UUtils::Random(0., aOne + aTwo + aThree + aFour);
+  if ((chose >= 0.) && (chose < aOne))
+  {
+    return p1;
+  }
+  else if ((chose >= aOne) && (chose < aOne + aTwo))
+  {
+    return p2;
+  }
+  else if ((chose >= aOne + aTwo) && (chose < aOne + aTwo + aThree))
+  {
+    return p3;
+  }
   return p4;
 }
 
@@ -550,7 +601,7 @@ UVector3 UTet::GetPointOnSurface() const
 //
 // GetVertices
 
-std::vector<UVector3> UTet::GetVertices() const 
+std::vector<UVector3> UTet::GetVertices() const
 {
   std::vector<UVector3> vertices(4);
   vertices[0] = fAnchor;
@@ -561,20 +612,31 @@ std::vector<UVector3> UTet::GetVertices() const
   return vertices;
 }
 //______________________________________________________________________________
-void UTet::Extent ( UVector3 &aMin, UVector3 &aMax) const
+void UTet::Extent(UVector3& aMin, UVector3& aMax) const
 {
-	// Returns the full 3D cartesian extent of the solid.
-	aMin.x = -fDx; aMax.x = fDx;
-	aMin.y = -fDy; aMax.y = fDy;
-	aMin.z = -fDz; aMax.z = fDz;
+  // Returns the full 3D cartesian extent of the solid.
+  aMin.x = -fDx;
+  aMax.x = fDx;
+  aMin.y = -fDy;
+  aMax.y = fDy;
+  aMin.z = -fDz;
+  aMax.z = fDz;
 }
 void UTet::GetParametersList(int, double* aArray) const
 {
-  aArray[0]=fAnchor.x;aArray[1]=fAnchor.y;aArray[2]=fAnchor.z;
-  aArray[3]=fP2.x;aArray[4]=fP2.y;aArray[5]=fP2.z;
-  aArray[6]=fP3.x;aArray[7]=fP3.y;aArray[8]=fP3.z;
-  aArray[9]=fP4.x;aArray[10]=fP4.y;aArray[11]=fP4.z;
-} 
+  aArray[0] = fAnchor.x;
+  aArray[1] = fAnchor.y;
+  aArray[2] = fAnchor.z;
+  aArray[3] = fP2.x;
+  aArray[4] = fP2.y;
+  aArray[5] = fP2.z;
+  aArray[6] = fP3.x;
+  aArray[7] = fP3.y;
+  aArray[8] = fP3.z;
+  aArray[9] = fP4.x;
+  aArray[10] = fP4.y;
+  aArray[11] = fP4.z;
+}
 
 
 

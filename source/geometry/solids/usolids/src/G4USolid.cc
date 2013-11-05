@@ -27,11 +27,10 @@
 // $Id:$
 // GEANT4 tag $Name:$
 //
-// 
+//
 // G4USolid implementation
 //
 // --------------------------------------------------------------------
-
 
 #include "G4USolid.hh"
 #include "G4AffineTransform.hh"
@@ -42,101 +41,110 @@
 #include "G4VisExtent.hh"
 #include "G4PhysicalConstants.hh"
 
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Constructor
-//  - Base class constructor 
-
 G4USolid::G4USolid(const G4String& name, VUSolid* s) :
-  G4VSolid(name),fShape(s),fPolyhedron(0)
+  G4VSolid(name), fShape(s), fPolyhedron(0)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-
-G4USolid::G4USolid( __void__& a )
+G4USolid::G4USolid(__void__& a)
   : G4VSolid(a), fShape(0), fPolyhedron(0)
 {
-  ;
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-//
-
-G4USolid::~G4USolid() 
+G4USolid::~G4USolid()
 {
- ;
 }
-G4bool G4USolid::operator==( const G4USolid& s) const
+
+G4bool G4USolid::operator==(const G4USolid& s) const
 {
-  return (this==&s) ? true : false;
+  return (this == &s) ? true : false;
 }
 
 EInside G4USolid::Inside(const G4ThreeVector& p) const
 {
-  UVector3 pt; 
+  UVector3 pt;
   VUSolid::EnumInside in_temp;
   EInside in = kOutside;
-  pt.x=p.x(); pt.y=p.y(); pt.z=p.z(); // better assign at construction
-  
+  pt.x = p.x();
+  pt.y = p.y();
+  pt.z = p.z(); // better assign at construction
+
   in_temp = fShape->Inside(pt);
-  
-  if(in_temp == VUSolid::eSurface)return kSurface;
-  if(in_temp == VUSolid::eInside )return kInside;
-  
+
+  if (in_temp == VUSolid::eSurface)return kSurface;
+  if (in_temp == VUSolid::eInside)return kInside;
+
   return in;
 }
 
 G4ThreeVector G4USolid::SurfaceNormal(const G4ThreeVector& pt) const
 {
-  UVector3 p; p.x=pt.x(); p.y=pt.y(); p.z=pt.z(); 
+  UVector3 p;
+  p.x = pt.x();
+  p.y = pt.y();
+  p.z = pt.z();
   UVector3 n;
-  fShape->Normal(p, n); 
-  return G4ThreeVector(n.x, n.y, n.z); 
+  fShape->Normal(p, n);
+  return G4ThreeVector(n.x, n.y, n.z);
 }
 
 G4double G4USolid::DistanceToIn(const G4ThreeVector& pt,
-                                 const G4ThreeVector& d)const
+                                const G4ThreeVector& d)const
 {
-  UVector3 p; p.x=pt.x(); p.y=pt.y(); p.z=pt.z(); // better assign at construction
-  UVector3 v; v.x=d.x(); v.y=d.y(); v.z=d.z(); // better assign at construction
-  G4double dist= fShape->DistanceToIn(p,v);
-  if( dist > kInfinity ) dist=kInfinity;
+  UVector3 p;
+  p.x = pt.x();
+  p.y = pt.y();
+  p.z = pt.z(); // better assign at construction
+  UVector3 v;
+  v.x = d.x();
+  v.y = d.y();
+  v.z = d.z(); // better assign at construction
+  G4double dist = fShape->DistanceToIn(p, v);
+  if (dist > kInfinity) dist = kInfinity;
   return dist;
 }
 
 G4double G4USolid::DistanceToIn(const G4ThreeVector& pt) const
 {
-  UVector3 p; p.x=pt.x(); p.y=pt.y(); p.z=pt.z(); // better assign at construction
-  G4double dist= fShape->SafetyFromOutside(p); // true?
-  if( dist > kInfinity ) dist = kInfinity;
+  UVector3 p;
+  p.x = pt.x();
+  p.y = pt.y();
+  p.z = pt.z(); // better assign at construction
+  G4double dist = fShape->SafetyFromOutside(p); // true?
+  if (dist > kInfinity) dist = kInfinity;
   return dist;
 }
+
 G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
-				  const G4ThreeVector& d,
-				  const G4bool /*calcNorm*/,
-				  G4bool *validNorm,
-				  G4ThreeVector *norm) const
+                                 const G4ThreeVector& d,
+                                 const G4bool /*calcNorm*/,
+                                 G4bool* validNorm,
+                                 G4ThreeVector* norm) const
 {
-  UVector3 p; p.x=pt.x(); p.y=pt.y(); p.z=pt.z(); // better assign at construction
-  UVector3 v; v.x=d.x(); v.y=d.y(); v.z=d.z(); // better assign at construction
+  UVector3 p;
+  p.x = pt.x();
+  p.y = pt.y();
+  p.z = pt.z(); // better assign at construction
+  UVector3 v;
+  v.x = d.x();
+  v.y = d.y();
+  v.z = d.z(); // better assign at construction
   UVector3 n;
-  
+
   G4double dist = fShape->DistanceToOut(p, v, n, *validNorm); // should use local variable
-  norm->setX(n.x); norm->setY(n.y); norm->setZ(n.z); // *norm = n, but only after calcNorm check
-  if( dist > kInfinity ) dist = kInfinity;
+  norm->setX(n.x);
+  norm->setY(n.y);
+  norm->setZ(n.z); // *norm = n, but only after calcNorm check
+  if (dist > kInfinity) dist = kInfinity;
   return dist;
 }
 
 G4double G4USolid::DistanceToOut(const G4ThreeVector& pt) const
 {
-  UVector3 p; p.x=pt.x(); p.y=pt.y(); p.z=pt.z(); // better assign at construction
+  UVector3 p;
+  p.x = pt.x();
+  p.y = pt.y();
+  p.z = pt.z(); // better assign at construction
   return fShape->SafetyFromInside(p); // true?
 }
 
@@ -149,6 +157,7 @@ G4double G4USolid::GetSurfaceArea()
 {
   return fShape->SurfaceArea();
 }
+
 G4ThreeVector G4USolid::GetPointOnSurface() const
 {
   /* UVector3 *p=0;
@@ -156,35 +165,41 @@ G4ThreeVector G4USolid::GetPointOnSurface() const
   return G4ThreeVector((*p).x, (*p).y, (*p).z);
   */
   UVector3 p;
-  p=fShape->GetPointOnSurface();
+  p = fShape->GetPointOnSurface();
   return G4ThreeVector(p.x, p.y, p.z);
 }
 
 G4bool G4USolid::CalculateExtent(const EAxis pAxis,
-				  const G4VoxelLimits& pVoxelLimit,
-				  const G4AffineTransform& pTransform,
-				  G4double& pMin, G4double& pMax) const
+                                 const G4VoxelLimits& pVoxelLimit,
+                                 const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const
 {
   if (!pTransform.IsRotated())
   {
-     VUSolid::EAxisType eAxis=VUSolid::eXaxis;
-    G4double offset=pTransform.NetTranslation().x();
-    if(pAxis==kYAxis){eAxis=VUSolid::eYaxis;
-       offset=pTransform.NetTranslation().y();}
-    if(pAxis==kZAxis){eAxis=VUSolid::eZaxis;
-       offset=pTransform.NetTranslation().z();}
-    fShape->ExtentAxis(eAxis,pMin,pMax);  
+    VUSolid::EAxisType eAxis = VUSolid::eXaxis;
+    G4double offset = pTransform.NetTranslation().x();
+    if (pAxis == kYAxis)
+    {
+      eAxis = VUSolid::eYaxis;
+      offset = pTransform.NetTranslation().y();
+    }
+    if (pAxis == kZAxis)
+    {
+      eAxis = VUSolid::eZaxis;
+      offset = pTransform.NetTranslation().z();
+    }
+    fShape->ExtentAxis(eAxis, pMin, pMax);
 
     pMin += offset;
-    pMax += offset;   
-       
+    pMax += offset;
+
     if (pVoxelLimit.IsLimited())
     {
       switch (pAxis)
       {
         case kXAxis:
-          if ((pMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance) || 
-              (pMax < pVoxelLimit.GetMinXExtent()-kCarTolerance))
+          if ((pMin > pVoxelLimit.GetMaxXExtent() + kCarTolerance) ||
+              (pMax < pVoxelLimit.GetMinXExtent() - kCarTolerance))
           {
             return false;
           }
@@ -193,10 +208,10 @@ G4bool G4USolid::CalculateExtent(const EAxis pAxis,
             pMin = std::max(pMin, pVoxelLimit.GetMinXExtent());
             pMax = std::min(pMax, pVoxelLimit.GetMaxXExtent());
           }
-          break; 
+          break;
         case kYAxis:
-          if ((pMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance) ||
-              (pMax < pVoxelLimit.GetMinYExtent()-kCarTolerance))
+          if ((pMin > pVoxelLimit.GetMaxYExtent() + kCarTolerance) ||
+              (pMax < pVoxelLimit.GetMinYExtent() - kCarTolerance))
           {
             return false;
           }
@@ -207,8 +222,8 @@ G4bool G4USolid::CalculateExtent(const EAxis pAxis,
           }
           break;
         case kZAxis:
-          if ((pMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance) ||
-              (pMax < pVoxelLimit.GetMinZExtent()-kCarTolerance))
+          if ((pMin > pVoxelLimit.GetMaxZExtent() + kCarTolerance) ||
+              (pMax < pVoxelLimit.GetMinZExtent() - kCarTolerance))
           {
             return false;
           }
@@ -220,12 +235,12 @@ G4bool G4USolid::CalculateExtent(const EAxis pAxis,
           break;
         default:
           break;
-      }  
+      }
       pMin -= kCarTolerance ;
       pMax += kCarTolerance ;
     }
     return true;
-  }   
+  }
   else  // General rotated case - create and clip mesh to boundaries
   {
     // Rotate BoundingBox and Calculate Extent as for BREPS
@@ -239,13 +254,13 @@ G4bool G4USolid::CalculateExtent(const EAxis pAxis,
     // Calculate rotated vertex coordinates
 
     vertices = CreateRotatedVertices(pTransform) ;
-    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
-    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax) ;
-    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
+    ClipCrossSection(vertices, 0, pVoxelLimit, pAxis, pMin, pMax) ;
+    ClipCrossSection(vertices, 4, pVoxelLimit, pAxis, pMin, pMax) ;
+    ClipBetweenSections(vertices, 0, pVoxelLimit, pAxis, pMin, pMax) ;
 
-    if (pVoxelLimit.IsLimited(pAxis) == false) 
-    {  
-      if ( (pMin != kInfinity) || (pMax != -kInfinity) ) 
+    if (pVoxelLimit.IsLimited(pAxis) == false)
+    {
+      if ((pMin != kInfinity) || (pMax != -kInfinity))
       {
         existsAfterClip = true ;
 
@@ -254,18 +269,18 @@ G4bool G4USolid::CalculateExtent(const EAxis pAxis,
         pMin -= kCarTolerance;
         pMax += kCarTolerance;
       }
-    }      
+    }
     else
     {
       G4ThreeVector clipCentre(
-       ( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-       ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-       ( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+        (pVoxelLimit.GetMinXExtent() + pVoxelLimit.GetMaxXExtent()) * 0.5,
+        (pVoxelLimit.GetMinYExtent() + pVoxelLimit.GetMaxYExtent()) * 0.5,
+        (pVoxelLimit.GetMinZExtent() + pVoxelLimit.GetMaxZExtent()) * 0.5);
 
-      if ( (pMin != kInfinity) || (pMax != -kInfinity) )
+      if ((pMin != kInfinity) || (pMax != -kInfinity))
       {
         existsAfterClip = true ;
-  
+
 
         // Check to see if endpoints are in the solid
 
@@ -295,29 +310,29 @@ G4bool G4USolid::CalculateExtent(const EAxis pAxis,
       // If point inside then we are confident that the solid completely
       // envelopes the clipping volume. Hence set min/max extents according
       // to clipping volume extents along the specified axis.
-        
+
       else if (Inside(pTransform.Inverse().TransformPoint(clipCentre))
-                      != kOutside)
+               != kOutside)
       {
         existsAfterClip = true ;
         pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
         pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
       }
-    } 
+    }
     delete vertices;
     return existsAfterClip;
-  } 
+  }
 }
 
-void G4USolid::DescribeYourselfTo (G4VGraphicsScene& scene) const
+void G4USolid::DescribeYourselfTo(G4VGraphicsScene& scene) const
 {
-  scene.AddSolid (*this);
+  scene.AddSolid(*this);
 }
 G4GeometryType G4USolid::GetEntityType() const
 {
-  
-  G4String string= fShape->GetEntityType();
-  return "G4"+string;
+
+  G4String string = fShape->GetEntityType();
+  return "G4" + string;
 }
 
 std::ostream& G4USolid::StreamInfo(std::ostream& os) const
@@ -332,7 +347,7 @@ std::ostream& G4USolid::StreamInfo(std::ostream& os) const
 }
 
 G4USolid::G4USolid(const G4USolid& rhs)
-  : G4VSolid(rhs), fShape(rhs.fShape),fPolyhedron(rhs.fPolyhedron)
+  : G4VSolid(rhs), fShape(rhs.fShape), fPolyhedron(rhs.fPolyhedron)
 {
 }
 
@@ -340,7 +355,10 @@ G4USolid& G4USolid::operator=(const G4USolid& rhs)
 {
   // Check assignment to self
   //
-  if (this == &rhs)  { return *this; }
+  if (this == &rhs)
+  {
+    return *this;
+  }
 
   // Copy base class data
   //
@@ -355,31 +373,32 @@ G4USolid& G4USolid::operator=(const G4USolid& rhs)
 
 G4VSolid* G4USolid::Clone() const
 {
-  return new G4USolid(fShape->GetName(),fShape->Clone());
+  return new G4USolid(fShape->GetName(), fShape->Clone());
 }
+
 G4ThreeVectorList*
 G4USolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
-  G4double xMin,xMax,yMin,yMax,zMin,zMax;
- 
-  fShape->ExtentAxis(VUSolid::eXaxis,xMin,xMax);  
-  fShape->ExtentAxis(VUSolid::eYaxis,yMin,yMax); 
-  fShape->ExtentAxis(VUSolid::eZaxis,zMin,zMax); 
+  G4double xMin, xMax, yMin, yMax, zMin, zMax;
 
-  G4ThreeVectorList *vertices;
-  vertices=new G4ThreeVectorList();
-    
+  fShape->ExtentAxis(VUSolid::eXaxis, xMin, xMax);
+  fShape->ExtentAxis(VUSolid::eYaxis, yMin, yMax);
+  fShape->ExtentAxis(VUSolid::eZaxis, zMin, zMax);
+
+  G4ThreeVectorList* vertices;
+  vertices = new G4ThreeVectorList();
+
   if (vertices)
   {
     vertices->reserve(8);
-    G4ThreeVector vertex0(xMin,yMin,zMin);
-    G4ThreeVector vertex1(xMax,yMin,zMin);
-    G4ThreeVector vertex2(xMax,yMax,zMin);
-    G4ThreeVector vertex3(xMin,yMax,zMin);
-    G4ThreeVector vertex4(xMin,yMin,zMax);
-    G4ThreeVector vertex5(xMax,yMin,zMax);
-    G4ThreeVector vertex6(xMax,yMax,zMax);
-    G4ThreeVector vertex7(xMin,yMax,zMax);
+    G4ThreeVector vertex0(xMin, yMin, zMin);
+    G4ThreeVector vertex1(xMax, yMin, zMin);
+    G4ThreeVector vertex2(xMax, yMax, zMin);
+    G4ThreeVector vertex3(xMin, yMax, zMin);
+    G4ThreeVector vertex4(xMin, yMin, zMax);
+    G4ThreeVector vertex5(xMax, yMin, zMax);
+    G4ThreeVector vertex6(xMax, yMax, zMax);
+    G4ThreeVector vertex7(xMin, yMax, zMax);
 
     vertices->push_back(pTransform.TransformPoint(vertex0));
     vertices->push_back(pTransform.TransformPoint(vertex1));
@@ -397,67 +416,83 @@ G4USolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   }
   return vertices;
 }
-//Visualization methods
-G4Polyhedron* G4USolid::CreatePolyhedron() const{
- G4int index=0;
-  if(fShape->GetEntityType()=="Box"){
-     double array[3];
-     fShape->GetParametersList(index,array);
-     return new G4PolyhedronBox(array[0],array[1],array[2]);
-  }
-  if(fShape->GetEntityType()=="Tubs"){
-     double array[5];
-     fShape->GetParametersList(index,array);
-     return new G4PolyhedronTubs(array[0],array[1],array[2],array[3],array[4]);
-  }
-  if(fShape->GetEntityType()=="Cons"){
-     double array[7];
-     fShape->GetParametersList(index,array);
-     return new G4PolyhedronCons(array[0],array[1],array[2],array[3],array[4],array[5],array[6]);
-  }
-  if(fShape->GetEntityType()=="Orb"){
-     double array[1];
-     fShape->GetParametersList(index,array);
-     return new G4PolyhedronSphere (0., array[0], 0., 2*pi, 0., pi);
-  }
-  if(fShape->GetEntityType()=="Sphere"){
-     double array[6];
-     fShape->GetParametersList(index,array);
-     return new G4PolyhedronSphere(array[0],array[1],array[2],array[3],array[4],array[5]);
-  }
-  if(fShape->GetEntityType()=="Tet"){
-     double array[12];
-     fShape->GetParametersList(index,array);
-     G4Polyhedron *ph=new G4Polyhedron;
-     double xyz[4][3];
-     static int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
-     xyz[0][0]=array[0]; xyz[0][1]=array[1]; xyz[0][2]=array[2];
-     xyz[1][0]=array[3]; xyz[1][1]=array[4]; xyz[1][2]=array[5];
-     xyz[2][0]=array[6]; xyz[2][1]=array[7]; xyz[2][2]=array[8];
-     xyz[3][0]=array[9]; xyz[3][1]=array[10]; xyz[3][2]=array[11];
 
-     ph->createPolyhedron(4,4,xyz,faces);
-     return ph;
+G4Polyhedron* G4USolid::CreatePolyhedron() const
+{
+  G4int index = 0;
+  if (fShape->GetEntityType() == "Box")
+  {
+    double array[3];
+    fShape->GetParametersList(index, array);
+    return new G4PolyhedronBox(array[0], array[1], array[2]);
   }
-   if(fShape->GetEntityType()=="Trd"){
-     double array[5];
-     fShape->GetParametersList(index,array);
-     return new G4PolyhedronTrd2(array[0],array[1],array[2],array[3],array[4]);
+  if (fShape->GetEntityType() == "Tubs")
+  {
+    double array[5];
+    fShape->GetParametersList(index, array);
+    return new G4PolyhedronTubs(array[0], array[1], array[2], array[3], array[4]);
   }
-   if(fShape->GetEntityType()=="Trap"){
-     double array[12];
-     fShape->GetParametersList(index,array);
-     double phi =  (array[11] != 1.0) ? (std::atan(array[10]/array[9])) : (0.0);
-     double alpha1 = std::atan(array[4]);
-     double alpha2 = std::atan(array[8]);
-     double theta = std::acos(array[11]);
- 
-     return new G4PolyhedronTrap(array[0], theta, phi,
-                               array[1], array[2], array[3], alpha1,
-                               array[5], array[6], array[7], alpha2);
+  if (fShape->GetEntityType() == "Cons")
+  {
+    double array[7];
+    fShape->GetParametersList(index, array);
+    return new G4PolyhedronCons(array[0], array[1], array[2], array[3], array[4], array[5], array[6]);
   }
- 
-  
+  if (fShape->GetEntityType() == "Orb")
+  {
+    double array[1];
+    fShape->GetParametersList(index, array);
+    return new G4PolyhedronSphere(0., array[0], 0., 2 * pi, 0., pi);
+  }
+  if (fShape->GetEntityType() == "Sphere")
+  {
+    double array[6];
+    fShape->GetParametersList(index, array);
+    return new G4PolyhedronSphere(array[0], array[1], array[2], array[3], array[4], array[5]);
+  }
+  if (fShape->GetEntityType() == "Tet")
+  {
+    double array[12];
+    fShape->GetParametersList(index, array);
+    G4Polyhedron* ph = new G4Polyhedron;
+    double xyz[4][3];
+    static int faces[4][4] = {{1, 3, 2, 0}, {1, 4, 3, 0}, {1, 2, 4, 0}, {2, 3, 4, 0}};
+    xyz[0][0] = array[0];
+    xyz[0][1] = array[1];
+    xyz[0][2] = array[2];
+    xyz[1][0] = array[3];
+    xyz[1][1] = array[4];
+    xyz[1][2] = array[5];
+    xyz[2][0] = array[6];
+    xyz[2][1] = array[7];
+    xyz[2][2] = array[8];
+    xyz[3][0] = array[9];
+    xyz[3][1] = array[10];
+    xyz[3][2] = array[11];
+
+    ph->createPolyhedron(4, 4, xyz, faces);
+    return ph;
+  }
+  if (fShape->GetEntityType() == "Trd")
+  {
+    double array[5];
+    fShape->GetParametersList(index, array);
+    return new G4PolyhedronTrd2(array[0], array[1], array[2], array[3], array[4]);
+  }
+  if (fShape->GetEntityType() == "Trap")
+  {
+    double array[12];
+    fShape->GetParametersList(index, array);
+    double phi = (array[11] != 1.0) ? (std::atan(array[10] / array[9])) : (0.0);
+    double alpha1 = std::atan(array[4]);
+    double alpha2 = std::atan(array[8]);
+    double theta = std::acos(array[11]);
+
+    return new G4PolyhedronTrap(array[0], theta, phi,
+                                array[1], array[2], array[3], alpha1,
+                                array[5], array[6], array[7], alpha2);
+  }
+
   /*
   if(fShape->GetEntityType()=="TessellatedSolid"){
 
@@ -467,54 +502,48 @@ G4Polyhedron* G4USolid::CreatePolyhedron() const{
 
       G4PolyhedronArbitrary *polyhedron =
       new G4PolyhedronArbitrary (nVertices, nFacets);
-      
+
       for (std::vector<UVector3>::const_iterator v = (*uPolyhedron).vertices.begin();
            v!=(*uPolyhedron).vertices.end(); v++)
      {
            UVector3 p=(*v);
            G4ThreeVector pt(p.x,p.y,p.z);
-        
+
            polyhedron->AddVertex(pt);
-      }    
-      for (std::vector<UFacet>::const_iterator f=(*uPolyhedron).facets.begin(); 
+      }
+      for (std::vector<UFacet>::const_iterator f=(*uPolyhedron).facets.begin();
           f != (*uPolyhedron).facets.end(); f++)
       {
-	 polyhedron->AddFacet((*f).f1,(*f).f2,(*f).f3,(*f).f4);
+   polyhedron->AddFacet((*f).f1,(*f).f2,(*f).f3,(*f).f4);
       }
-     
+
      return (G4Polyhedron*) polyhedron;
- }
+  }
   */
 
   return 0;
 }
 
-G4Polyhedron* G4USolid::GetPolyhedron() const{
-
-  
-if(!fPolyhedron)fPolyhedron=CreatePolyhedron();
- return fPolyhedron;
-
+G4Polyhedron* G4USolid::GetPolyhedron() const
+{
+  if (!fPolyhedron) fPolyhedron = CreatePolyhedron();
+  return fPolyhedron;
 }
 
-G4VisExtent G4USolid:: GetExtent () const{
-
-    G4VisExtent extent;
-   G4VoxelLimits voxelLimits;  // Defaults to "infinite" limits.
-   G4AffineTransform affineTransform;
-   G4double vmin, vmax;
-   CalculateExtent(kXAxis,voxelLimits,affineTransform,vmin,vmax);
-   extent.SetXmin (vmin);
-   extent.SetXmax (vmax);
-   CalculateExtent(kYAxis,voxelLimits,affineTransform,vmin,vmax);
-   extent.SetYmin (vmin);
-   extent.SetYmax (vmax);
-   CalculateExtent(kZAxis,voxelLimits,affineTransform,vmin,vmax);
-   extent.SetZmin (vmin);
-   extent.SetZmax (vmax);
-   return extent;
-
+G4VisExtent G4USolid:: GetExtent() const
+{
+  G4VisExtent extent;
+  G4VoxelLimits voxelLimits;  // Defaults to "infinite" limits.
+  G4AffineTransform affineTransform;
+  G4double vmin, vmax;
+  CalculateExtent(kXAxis, voxelLimits, affineTransform, vmin, vmax);
+  extent.SetXmin(vmin);
+  extent.SetXmax(vmax);
+  CalculateExtent(kYAxis, voxelLimits, affineTransform, vmin, vmax);
+  extent.SetYmin(vmin);
+  extent.SetYmax(vmax);
+  CalculateExtent(kZAxis, voxelLimits, affineTransform, vmin, vmax);
+  extent.SetZmin(vmin);
+  extent.SetZmax(vmax);
+  return extent;
 }
-//
-
-

@@ -1,101 +1,75 @@
 //
 // ********************************************************************
-// * License and Disclaimer																					 *
-// *																																	*
-// * The	Geant4 software	is	copyright of the Copyright Holders	of *
-// * the Geant4 Collaboration.	It is provided	under	the terms	and *
-// * conditions of the Geant4 Software License,	included in the file *
-// * LICENSE and available at	http://cern.ch/geant4/license .	These *
-// * include a list of copyright holders.														 *
-// *																																	*
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work	make	any representation or	warranty, express or implied, *
-// * regarding	this	software system or assume any liability for its *
-// * use.	Please see the license in the file	LICENSE	and URL above *
-// * for the full disclaimer and the limitation of liability.				 *
-// *																																	*
-// * This	code	implementation is the result of	the	scientific and *
-// * technical work of the GEANT4 collaboration.											*
-// * By using,	copying,	modifying or	distributing the software (or *
-// * any work based	on the software)	you	agree	to acknowledge its *
-// * use	in	resulting	scientific	publications,	and indicate your *
-// * acceptance of all terms of the Geant4 Software license.					*
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
 // ********************************************************************
 //
+// $Id:$
 //
-// $Id: UReduciblePolygon.cc 66241 2012-12-13 18:34:42Z gunter $
-//
-// 
 // --------------------------------------------------------------------
-// GEANT 4 class source file
 //
+// UReduciblePolygon
 //
-// UReduciblePolygon.cc
-//
-// Implementation of a utility class used to specify, test, reduce,
-// and/or otherwise manipulate a 2D polygon.
-//
-// See UReduciblePolygon.hh for more info.
-//
+// 19.09.13 Marek Gayer
+//          Created from original implementation in Geant4
 // --------------------------------------------------------------------
 
 #include "UUtils.hh"
 #include <string>
 #include <cmath>
 #include <sstream>
-#include "UReduciblePolygon.hh"
-#include "globals.hh"
-
 #include <iostream>
+
+#include "UReduciblePolygon.hh"
+
 //
 // Constructor: with simple arrays
 //
-UReduciblePolygon::UReduciblePolygon( const double a[],
-																				const double b[],
-																							int n )
-	: aMin(0.), aMax(0.), bMin(0.), bMax(0.),
-		vertexHead(0)
+UReduciblePolygon::UReduciblePolygon(const double a[],
+                                     const double b[],
+                                     int n)
+  : aMin(0.), aMax(0.), bMin(0.), bMax(0.),
+    vertexHead(0)
 {
-	//
-	// Do all of the real work in Create
-	//
-	Create( a, b, n );
+  //
+  // Do all of the real work in Create
+  //
+  Create(a, b, n);
 }
 
 
 //
 // Constructor: special PGON/PCON case
 //
-UReduciblePolygon::UReduciblePolygon( const double rmin[],
-																				const double rmax[], 
-																				const double z[], int n )
-	: aMin(0.), aMax(0.), bMin(0.), bMax(0.),
-		vertexHead(0)
+UReduciblePolygon::UReduciblePolygon(const double rmin[],
+                                     const double rmax[],
+                                     const double z[], int n)
+  : aMin(0.), aMax(0.), bMin(0.), bMax(0.),
+    vertexHead(0)
 {
-	//
-	// Translate
-	//
-	double *a = new double[n*2];
-	double *b = new double[n*2];
-	
-	double *rOut = a + n,
-					 *zOut = b + n,
-						*rIn = rOut-1,
-						*zIn = zOut-1;
-	
-	int i;	 
-	for( i=0; i < n; i++, rOut++, zOut++, rIn--, zIn-- )
-	{
-		*rOut = rmax[i];
-		*rIn	= rmin[i];
-		*zOut = *zIn = z[i];
-	}
-	
-	Create( a, b, n*2 );
-	
-	delete [] a;
-	delete [] b;
+  //
+  // Translate
+  //
+  double* a = new double[n * 2];
+  double* b = new double[n * 2];
+
+  double* rOut = a + n,
+          *zOut = b + n,
+           *rIn = rOut - 1,
+            *zIn = zOut - 1;
+
+  int i;
+  for (i = 0; i < n; i++, rOut++, zOut++, rIn--, zIn--)
+  {
+    *rOut = rmax[i];
+    *rIn  = rmin[i];
+    *zOut = *zIn = z[i];
+  }
+
+  Create(a, b, n * 2);
+
+  delete [] a;
+  delete [] b;
 }
 
 
@@ -105,37 +79,38 @@ UReduciblePolygon::UReduciblePolygon( const double rmin[],
 // To be called by constructors, fill in the list and statistics for a new
 // polygon
 //
-void UReduciblePolygon::Create( const double a[],
-																 const double b[], int n )
+void UReduciblePolygon::Create(const double a[],
+                               const double b[], int n)
 {
-	if (n<3)
-	  UUtils::Exception("UReduciblePolygon::Create()", "GeomSolids0002",
-			    FatalErrorInArguments,1, "Less than 3 vertices specified.");
-	
-	const double *anext = a, *bnext = b;
+  if (n < 3)
+    UUtils::Exception("UReduciblePolygon::Create()", "GeomSolids0002",
+                      FatalErrorInArguments, 1, "Less than 3 vertices specified.");
 
-	ABVertex *prev = 0;
-	do
-	{
-		ABVertex *newVertex = new ABVertex;
-		newVertex->a = *anext;
-		newVertex->b = *bnext;
-		newVertex->next = 0;
-		if (prev==0)
-		{
-			vertexHead = newVertex;
-		}
-		else
-		{
-			prev->next = newVertex;
-		}
-			
-		prev = newVertex;
-	} while( ++anext, ++bnext < b+n );
+  const double* anext = a, *bnext = b;
 
-	numVertices = n;
-	
-	CalculateMaxMin();
+  ABVertex* prev = 0;
+  do
+  {
+    ABVertex* newVertex = new ABVertex;
+    newVertex->a = *anext;
+    newVertex->b = *bnext;
+    newVertex->next = 0;
+    if (prev == 0)
+    {
+      vertexHead = newVertex;
+    }
+    else
+    {
+      prev->next = newVertex;
+    }
+
+    prev = newVertex;
+  }
+  while (++anext, ++bnext < b + n);
+
+  numVertices = n;
+
+  CalculateMaxMin();
 }
 
 
@@ -145,13 +120,13 @@ void UReduciblePolygon::Create( const double a[],
 //
 UReduciblePolygon::~UReduciblePolygon()
 {
-	ABVertex *curr = vertexHead;
-	while( curr )
-	{
-		ABVertex *toDelete = curr;
-		curr = curr->next;
-		delete toDelete;
-	}
+  ABVertex* curr = vertexHead;
+  while (curr)
+  {
+    ABVertex* toDelete = curr;
+    curr = curr->next;
+    delete toDelete;
+  }
 }
 
 
@@ -162,16 +137,16 @@ UReduciblePolygon::~UReduciblePolygon()
 // ***** CAUTION ***** Be care to declare the arrays to a large
 // enough size!
 //
-void UReduciblePolygon::CopyVertices( double a[], double b[] ) const
+void UReduciblePolygon::CopyVertices(double a[], double b[]) const
 {
-	double *anext = a, *bnext = b;
-	ABVertex *curr = vertexHead;
-	while( curr )
-	{
-		*anext++ = curr->a;
-		*bnext++ = curr->b;
-		curr = curr->next;
-	}
+  double* anext = a, *bnext = b;
+  ABVertex* curr = vertexHead;
+  while (curr)
+  {
+    *anext++ = curr->a;
+    *bnext++ = curr->b;
+    curr = curr->next;
+  }
 }
 
 
@@ -180,15 +155,15 @@ void UReduciblePolygon::CopyVertices( double a[], double b[] ) const
 //
 // Multiply all a values by a common scale
 //
-void UReduciblePolygon::ScaleA( double scale )
+void UReduciblePolygon::ScaleA(double scale)
 {
-	ABVertex *curr = vertexHead;
-	while( curr )
-	{
-		curr->a *= scale;
-		curr = curr->next;
-	}
-}	
+  ABVertex* curr = vertexHead;
+  while (curr)
+  {
+    curr->a *= scale;
+    curr = curr->next;
+  }
+}
 
 
 //
@@ -196,15 +171,15 @@ void UReduciblePolygon::ScaleA( double scale )
 //
 // Multiply all b values by a common scale
 //
-void UReduciblePolygon::ScaleB( double scale )
+void UReduciblePolygon::ScaleB(double scale)
 {
-	ABVertex *curr = vertexHead;
-	while( curr )
-	{
-		curr->b *= scale;
-		curr = curr->next;
-	}
-}	
+  ABVertex* curr = vertexHead;
+  while (curr)
+  {
+    curr->b *= scale;
+    curr = curr->next;
+  }
+}
 
 
 //
@@ -213,51 +188,52 @@ void UReduciblePolygon::ScaleB( double scale )
 // Remove adjacent vertices that are equal. Returns "false" if there
 // is a problem (too few vertices remaining).
 //
-bool UReduciblePolygon::RemoveDuplicateVertices( double tolerance )
+bool UReduciblePolygon::RemoveDuplicateVertices(double tolerance)
 {
-	ABVertex *curr = vertexHead, 
-					 *prev = 0, *next = 0;
-	while( curr )
-	{
-		next = curr->next;
-		if (next == 0) next = vertexHead;
-		
-		if (std::fabs(curr->a-next->a) < tolerance &&
-				std::fabs(curr->b-next->b) < tolerance		 )
-		{
-			//
-			// Duplicate found: do we have > 3 vertices?
-			//
-			if (numVertices <= 3)
-			{
-				CalculateMaxMin();
-				return false;
-			}
-			
-			//
-			// Delete
-			//
-			ABVertex *toDelete = curr;
-			curr = curr->next;
-			delete toDelete;
-			
-			numVertices--;
-			
-			if (prev) prev->next = curr; else vertexHead = curr;
-		}
-		else
-		{
-			prev = curr;
-			curr = curr->next;
-		}
-	}
-	
-	//
-	// In principle, this is not needed, but why not just play it safe?
-	//
-	CalculateMaxMin();
-	
-	return true;
+  ABVertex* curr = vertexHead,
+            *prev = 0, *next = 0;
+  while (curr)
+  {
+    next = curr->next;
+    if (next == 0) next = vertexHead;
+
+    if (std::fabs(curr->a - next->a) < tolerance &&
+        std::fabs(curr->b - next->b) < tolerance)
+    {
+      //
+      // Duplicate found: do we have > 3 vertices?
+      //
+      if (numVertices <= 3)
+      {
+        CalculateMaxMin();
+        return false;
+      }
+
+      //
+      // Delete
+      //
+      ABVertex* toDelete = curr;
+      curr = curr->next;
+      delete toDelete;
+
+      numVertices--;
+
+      if (prev) prev->next = curr;
+      else vertexHead = curr;
+    }
+    else
+    {
+      prev = curr;
+      curr = curr->next;
+    }
+  }
+
+  //
+  // In principle, this is not needed, but why not just play it safe?
+  //
+  CalculateMaxMin();
+
+  return true;
 }
 
 
@@ -267,93 +243,95 @@ bool UReduciblePolygon::RemoveDuplicateVertices( double tolerance )
 // Remove any unneeded vertices, i.e. those vertices which
 // are on the line connecting the previous and next vertices.
 //
-bool UReduciblePolygon::RemoveRedundantVertices( double tolerance )
+bool UReduciblePolygon::RemoveRedundantVertices(double tolerance)
 {
-	//
-	// Under these circumstances, we can quit now!
-	//
-	if (numVertices <= 2) return false;
-	
-	double tolerance2 = tolerance*tolerance;
+  //
+  // Under these circumstances, we can quit now!
+  //
+  if (numVertices <= 2) return false;
 
-	//
-	// Loop over all vertices
-	//
-	ABVertex *curr = vertexHead, *next = 0;
-	while( curr )
-	{
-		next = curr->next;
-		if (next == 0) next = vertexHead;
-		
-		double da = next->a - curr->a,
-						 db = next->b - curr->b;
-		
-		//
-		// Loop over all subsequent vertices, up to curr
-		//
-		for(;;)
-		{
-			//
-			// Get vertex after next
-			//
-			ABVertex *test = next->next;
-			if (test == 0) test = vertexHead;
-			
-			//
-			// If we are back to the original vertex, stop
-			//
-			if (test==curr) break;
-		
-			//
-			// Test for parallel line segments
-			//
-			double dat = test->a - curr->a,
-							 dbt = test->b - curr->b;
-				 
-			if (std::fabs(dat*db-dbt*da)>tolerance2) break;
-			
-			//
-			// Redundant vertex found: do we have > 3 vertices?
-			// 
-			if (numVertices <= 3)
-			{
-				CalculateMaxMin();
-				return false;
-			}
+  double tolerance2 = tolerance * tolerance;
 
-			//
-			// Delete vertex pointed to by next. Carefully!
-			//
-			if (curr->next)
-			{		// next is not head
-				if (next->next)
-					curr->next = test;	// next is not tail
-				else
-					curr->next = 0;		// New tail
-			}
-			else
-				vertexHead = test;	// New head
-				
-			if ((curr != next) && (next != test)) delete next;
-			
-			numVertices--;
-			
-			//
-			// Replace next by the vertex we just tested,
-			// and keep on going...
-			//
-			next = test;
-			da = dat; db = dbt;
-		}
-		curr = curr->next;
-	}
-	
-	//
-	// In principle, this is not needed, but why not just play it safe?
-	//
-	CalculateMaxMin();
-	
-	return true;
+  //
+  // Loop over all vertices
+  //
+  ABVertex* curr = vertexHead, *next = 0;
+  while (curr)
+  {
+    next = curr->next;
+    if (next == 0) next = vertexHead;
+
+    double da = next->a - curr->a,
+           db = next->b - curr->b;
+
+    //
+    // Loop over all subsequent vertices, up to curr
+    //
+    for (;;)
+    {
+      //
+      // Get vertex after next
+      //
+      ABVertex* test = next->next;
+      if (test == 0) test = vertexHead;
+
+      //
+      // If we are back to the original vertex, stop
+      //
+      if (test == curr) break;
+
+      //
+      // Test for parallel line segments
+      //
+      double dat = test->a - curr->a,
+             dbt = test->b - curr->b;
+
+      if (std::fabs(dat * db - dbt * da) > tolerance2) break;
+
+      //
+      // Redundant vertex found: do we have > 3 vertices?
+      //
+      if (numVertices <= 3)
+      {
+        CalculateMaxMin();
+        return false;
+      }
+
+      //
+      // Delete vertex pointed to by next. Carefully!
+      //
+      if (curr->next)
+      {
+        // next is not head
+        if (next->next)
+          curr->next = test;  // next is not tail
+        else
+          curr->next = 0;   // New tail
+      }
+      else
+        vertexHead = test;  // New head
+
+      if ((curr != next) && (next != test)) delete next;
+
+      numVertices--;
+
+      //
+      // Replace next by the vertex we just tested,
+      // and keep on going...
+      //
+      next = test;
+      da = dat;
+      db = dbt;
+    }
+    curr = curr->next;
+  }
+
+  //
+  // In principle, this is not needed, but why not just play it safe?
+  //
+  CalculateMaxMin();
+
+  return true;
 }
 
 
@@ -364,73 +342,77 @@ bool UReduciblePolygon::RemoveRedundantVertices( double tolerance )
 //
 void UReduciblePolygon::ReverseOrder()
 {
-	//
-	// Loop over all vertices
-	//
-	ABVertex *prev = vertexHead;
-	if (prev==0) return;		// No vertices
-	
-	ABVertex *curr = prev->next;
-	if (curr==0) return;		// Just one vertex
-	
-	//
-	// Our new tail
-	//
-	vertexHead->next = 0;
-	
-	for(;;)
-	{
-		//
-		// Save pointer to next vertex (in original order)
-		//
-		ABVertex *save = curr->next;
-		
-		//
-		// Replace it with a pointer to the previous one
-		// (in original order)
-		//
-		curr->next = prev;
-		
-		//
-		// Last vertex?
-		//
-		if (save == 0) break;
-		
-		//
-		// Next vertex
-		//
-		prev = curr;
-		curr = save;
-	}
-	
-	//
-	// Our new head
-	//
-	vertexHead = curr;
+  //
+  // Loop over all vertices
+  //
+  ABVertex* prev = vertexHead;
+  if (prev == 0) return;  // No vertices
+
+  ABVertex* curr = prev->next;
+  if (curr == 0) return;  // Just one vertex
+
+  //
+  // Our new tail
+  //
+  vertexHead->next = 0;
+
+  for (;;)
+  {
+    //
+    // Save pointer to next vertex (in original order)
+    //
+    ABVertex* save = curr->next;
+
+    //
+    // Replace it with a pointer to the previous one
+    // (in original order)
+    //
+    curr->next = prev;
+
+    //
+    // Last vertex?
+    //
+    if (save == 0) break;
+
+    //
+    // Next vertex
+    //
+    prev = curr;
+    curr = save;
+  }
+
+  //
+  // Our new head
+  //
+  vertexHead = curr;
 }
 
 // StartWithZMin
 //
 // Starting alway with Zmin=bMin
-// This method is used for GenericPolycone 
+// This method is used for GenericPolycone
 //
 void UReduciblePolygon::StartWithZMin()
-{ 
-  ABVertex *curr = vertexHead;
+{
+  ABVertex* curr = vertexHead;
   double bcurr = curr->b;
-  ABVertex *prev = curr;
-  while( curr )
-  { 
-    if(curr->b < bcurr)
-    { 
+  ABVertex* prev = curr;
+  while (curr)
+  {
+    if (curr->b < bcurr)
+    {
       bcurr = curr->b;
-      ABVertex *curr1 = curr;   
-      while( curr1 )
+      ABVertex* curr1 = curr;
+      while (curr1)
       {
-        if(curr1->next == 0) { curr1->next = vertexHead; break; }
+        if (curr1->next == 0)
+        {
+          curr1->next = vertexHead;
+          break;
+        }
         curr1 = curr1->next;
       }
-      vertexHead = curr;         
+      vertexHead = curr;
       prev->next = 0;
     }
     prev = curr;
@@ -447,55 +429,55 @@ void UReduciblePolygon::StartWithZMin()
 //
 // Warning: this routine is not very fast (runs as N**2)
 //
-bool UReduciblePolygon::CrossesItself( double tolerance )
+bool UReduciblePolygon::CrossesItself(double tolerance)
 {
-	double tolerance2 = tolerance*tolerance;
-	double one	= 1.0-tolerance,
-					 zero = tolerance;
-	//
-	// Top loop over line segments. By the time we finish
-	// with the second to last segment, we're done.
-	//
-	ABVertex *curr1 = vertexHead, *next1=0;
-	while (curr1->next)
-	{
-		next1 = curr1->next;
-		double da1 = next1->a-curr1->a,
-						 db1 = next1->b-curr1->b;
-		
-		//
-		// Inner loop over subsequent line segments
-		//
-		ABVertex *curr2 = next1->next;
-		while( curr2 )
-		{
-			ABVertex *next2 = curr2->next;
-			if (next2==0) next2 = vertexHead;
-			double da2 = next2->a-curr2->a,
-							 db2 = next2->b-curr2->b;
-			double a12 = curr2->a-curr1->a,
-							 b12 = curr2->b-curr1->b;
-				 
-			//
-			// Calculate intersection of the two lines
-			//
-			double deter = da1*db2 - db1*da2;
-			if (std::fabs(deter) > tolerance2)
-			{
-				double s1, s2;
-				s1 = (a12*db2-b12*da2)/deter;
-				
-				if (s1 >= zero && s1 < one)
-				{
-					s2 = -(da1*b12-db1*a12)/deter;
-					if (s2 >= zero && s2 < one) return true;
-				}
-			}
-			curr2 = curr2->next;	 
-		}
-		curr1 = next1;
-	}
-	return false;
+  double tolerance2 = tolerance * tolerance;
+  double one  = 1.0 - tolerance,
+         zero = tolerance;
+  //
+  // Top loop over line segments. By the time we finish
+  // with the second to last segment, we're done.
+  //
+  ABVertex* curr1 = vertexHead, *next1 = 0;
+  while (curr1->next)
+  {
+    next1 = curr1->next;
+    double da1 = next1->a - curr1->a,
+           db1 = next1->b - curr1->b;
+
+    //
+    // Inner loop over subsequent line segments
+    //
+    ABVertex* curr2 = next1->next;
+    while (curr2)
+    {
+      ABVertex* next2 = curr2->next;
+      if (next2 == 0) next2 = vertexHead;
+      double da2 = next2->a - curr2->a,
+             db2 = next2->b - curr2->b;
+      double a12 = curr2->a - curr1->a,
+             b12 = curr2->b - curr1->b;
+
+      //
+      // Calculate intersection of the two lines
+      //
+      double deter = da1 * db2 - db1 * da2;
+      if (std::fabs(deter) > tolerance2)
+      {
+        double s1, s2;
+        s1 = (a12 * db2 - b12 * da2) / deter;
+
+        if (s1 >= zero && s1 < one)
+        {
+          s2 = -(da1 * b12 - db1 * a12) / deter;
+          if (s2 >= zero && s2 < one) return true;
+        }
+      }
+      curr2 = curr2->next;
+    }
+    curr1 = next1;
+  }
+  return false;
 }
 
 
@@ -505,38 +487,40 @@ bool UReduciblePolygon::CrossesItself( double tolerance )
 //
 // Decide if a line through two points crosses the polygon, within tolerance
 //
-bool UReduciblePolygon::BisectedBy( double a1, double b1,
-																			 double a2, double b2,
-																			 double tolerance )
+bool UReduciblePolygon::BisectedBy(double a1, double b1,
+                                   double a2, double b2,
+                                   double tolerance)
 {
-	int nNeg = 0, nPos = 0;
-	
-	double a12 = a2-a1, b12 = b2-b1;
-	double len12 = std::sqrt( a12*a12 + b12*b12 );
-	a12 /= len12; b12 /= len12;
-	
-	ABVertex *curr = vertexHead;
-	do
-	{
-		double av = curr->a - a1,
-			 bv = curr->b - b1;
-			 
-		double Cross = av*b12 - bv*a12;
-		
-		if (Cross < -tolerance)
-		{
-			if (nPos) return true;
-			nNeg++;
-		}
-		else if (Cross > tolerance)
-		{
-			if (nNeg) return true;
-			nPos++;
-		}
-		curr = curr->next;
-	} while( curr );
-		
-	return false;
+  int nNeg = 0, nPos = 0;
+
+  double a12 = a2 - a1, b12 = b2 - b1;
+  double len12 = std::sqrt(a12 * a12 + b12 * b12);
+  a12 /= len12;
+  b12 /= len12;
+
+  ABVertex* curr = vertexHead;
+  do
+  {
+    double av = curr->a - a1,
+           bv = curr->b - b1;
+
+    double Cross = av * b12 - bv * a12;
+
+    if (Cross < -tolerance)
+    {
+      if (nPos) return true;
+      nNeg++;
+    }
+    else if (Cross > tolerance)
+    {
+      if (nNeg) return true;
+      nPos++;
+    }
+    curr = curr->next;
+  }
+  while (curr);
+
+  return false;
 }
 
 
@@ -547,24 +531,25 @@ bool UReduciblePolygon::BisectedBy( double a1, double b1,
 // Calculated signed polygon area, where polygons specified in a
 // clockwise manner (where x==a, y==b) have negative area
 //
-//		References: [O' Rourke (C)] pp. 18-27; [Gems II] pp. 5-6:
-//		"The Area of a Simple Polygon", Jon Rokne.
+//    References: [O' Rourke (C)] pp. 18-27; [Gems II] pp. 5-6:
+//    "The Area of a Simple Polygon", Jon Rokne.
 //
 double UReduciblePolygon::Area()
 {
-	double answer = 0;
-	
-	ABVertex *curr = vertexHead, *next;
-	do
-	{
-		next = curr->next;
-		if (next==0) next = vertexHead;
-		
-		answer += curr->a*next->b - curr->b*next->a;
-		curr = curr->next;
-	} while( curr );
-	
-	return 0.5*answer;
+  double answer = 0;
+
+  ABVertex* curr = vertexHead, *next;
+  do
+  {
+    next = curr->next;
+    if (next == 0) next = vertexHead;
+
+    answer += curr->a * next->b - curr->b * next->a;
+    curr = curr->next;
+  }
+  while (curr);
+
+  return 0.5 * answer;
 }
 
 
@@ -573,12 +558,13 @@ double UReduciblePolygon::Area()
 //
 void UReduciblePolygon::Print()
 {
-	ABVertex *curr = vertexHead;
-	do
-	{
-		std::cerr << curr->a << " " << curr->b << std::endl;
-		curr = curr->next;
-	} while( curr );
+  ABVertex* curr = vertexHead;
+  do
+  {
+    std::cerr << curr->a << " " << curr->b << std::endl;
+    curr = curr->next;
+  }
+  while (curr);
 }
 
 
@@ -590,23 +576,22 @@ void UReduciblePolygon::Print()
 //
 void UReduciblePolygon::CalculateMaxMin()
 {
-	ABVertex *curr = vertexHead;
-	aMin = aMax = curr->a;
-	bMin = bMax = curr->b;
-	curr = curr->next;
-	while( curr )
-	{
-		if (curr->a < aMin)
-			aMin = curr->a;
-		else if (curr->a > aMax)
-			aMax = curr->a;
+  ABVertex* curr = vertexHead;
+  aMin = aMax = curr->a;
+  bMin = bMax = curr->b;
+  curr = curr->next;
+  while (curr)
+  {
+    if (curr->a < aMin)
+      aMin = curr->a;
+    else if (curr->a > aMax)
+      aMax = curr->a;
 
-		if (curr->b < bMin)
-			bMin = curr->b;
-		else if (curr->b > bMax)
-			bMax = curr->b;
-		
-		curr = curr->next;
-	}
+    if (curr->b < bMin)
+      bMin = curr->b;
+    else if (curr->b > bMax)
+      bMax = curr->b;
+
+    curr = curr->next;
+  }
 }
-

@@ -1,38 +1,46 @@
-
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
 // USphere
 //
 // Class description:
 //
-//	 A USphere is, in the general case, a section of a spherical shell,
-//	 between specified phi and theta angles
+//   A USphere is, in the general case, a section of a spherical shell,
+//   between specified phi and theta angles
 //
-//	 The phi and theta segments are described by a starting angle,
-//	 and the +ve delta angle for the shape.
-//	 If the delta angle is >=2*UUtils::kPi, or >=UUtils::kPi the shape is treated as
-//	 continuous in phi or theta respectively.
+//   The phi and theta segments are described by a starting angle,
+//   and the +ve delta angle for the shape.
+//   If the delta angle is >=2*UUtils::kPi, or >=UUtils::kPi the shape is treated as
+//   continuous in phi or theta respectively.
 //
-//	 Theta must lie between 0-UUtils::kPi (incl).
+//   Theta must lie between 0-UUtils::kPi (incl).
 //
-//	 Member Data:
+//   Member Data:
 //
-//	 fRmin	inner radius
-//	 fRmax	outer radius
+//   fRmin  inner radius
+//   fRmax  outer radius
 //
-//	 fSPhi	starting angle of the segment in radians
-//	 fDPhi	delta angle of the segment in radians
+//   fSPhi  starting angle of the segment in radians
+//   fDPhi  delta angle of the segment in radians
 //
-//	 fSTheta	starting angle of the segment in radians
-//	 fDTheta	delta angle of the segment in radians
+//   fSTheta  starting angle of the segment in radians
+//   fDTheta  delta angle of the segment in radians
 //
-//		 
-//	 Note:
-//			Internally fSPhi & fDPhi are adjusted so that fDPhi<=2PI,
-//			and fDPhi+fSPhi<=2PI. This enables simpler comparisons to be
-//			made with (say) Phi of a point.
-
-// History:
-// 28.3.94 P.Kent: old C++ code converted to tolerant geometry
-// 17.9.96 V.Grichine: final modifications to commit
+//
+//   Note:
+//      Internally fSPhi & fDPhi are adjusted so that fDPhi<=2PI,
+//      and fDPhi+fSPhi<=2PI. This enables simpler comparisons to be
+//      made with (say) Phi of a point.
+//
+// 19.10.12 Marek Gayer
+//          Created from original implementation in Geant4
 // --------------------------------------------------------------------
 
 #ifndef USphere_HH
@@ -46,438 +54,456 @@ class UVisExtent;
 
 class USphere : public VUSolid
 {
-	public:	// with description
+  public: // with description
 
-		USphere(const std::string &pName,
-									 double pRmin, double pRmax,
-									 double pSPhi, double pDPhi,
-									 double pSTheta, double pDTheta);
-			//
-			// Constructs a sphere or sphere shell section
-			// with the given name and dimensions
-			 
-	 ~USphere();
-			//
-			// Destructor
+    USphere(const std::string& pName,
+            double pRmin, double pRmax,
+            double pSPhi, double pDPhi,
+            double pSTheta, double pDTheta);
+    //
+    // Constructs a sphere or sphere shell section
+    // with the given name and dimensions
 
-		// Accessors
-			 
-		inline double GetInnerRadius		() const;
-		inline double GetOuterRadius		() const;
-		inline double GetStartPhiAngle	() const;
-		inline double GetDeltaPhiAngle	() const;
-		inline double GetStartThetaAngle() const;
-		inline double GetDeltaThetaAngle() const;
+    ~USphere();
+    //
+    // Destructor
 
-		// Modifiers
+    // Accessors
 
-		inline void SetInnerRadius		(double newRMin);
-		inline void SetOuterRadius		(double newRmax);
-		inline void SetStartPhiAngle	(double newSphi, bool trig=true);
-		inline void SetDeltaPhiAngle	(double newDphi);
-		inline void SetStartThetaAngle(double newSTheta);
-		inline void SetDeltaThetaAngle(double newDTheta);
+    inline double GetInnerRadius() const;
+    inline double GetOuterRadius() const;
+    inline double GetStartPhiAngle() const;
+    inline double GetDeltaPhiAngle() const;
+    inline double GetStartThetaAngle() const;
+    inline double GetDeltaThetaAngle() const;
 
-		// Methods for solid
+    // Modifiers
 
-		inline double Capacity();
-		double SurfaceArea();
+    inline void SetInnerRadius(double newRMin);
+    inline void SetOuterRadius(double newRmax);
+    inline void SetStartPhiAngle(double newSphi, bool trig = true);
+    inline void SetDeltaPhiAngle(double newDphi);
+    inline void SetStartThetaAngle(double newSTheta);
+    inline void SetDeltaThetaAngle(double newDTheta);
 
-				 
-		VUSolid::EnumInside Inside(const UVector3& p) const;
+    // Methods for solid
 
-		bool Normal( const UVector3& p, UVector3 &n) const;
+    inline double Capacity();
+    double SurfaceArea();
 
-		double DistanceToIn(const UVector3& p, const UVector3& v, double aPstep = UUtils::kInfinity) const;
-		
-		double SafetyFromOutside(const UVector3& p, bool aAccurate=false) const;
-		
-		double DistanceToOut(const UVector3& p, const UVector3& v, UVector3 &n, bool &validNorm, double aPstep=UUtils::kInfinity) const;
 
-				 
-		double SafetyFromInside(const UVector3& p, bool aAccurate=false) const;
+    VUSolid::EnumInside Inside(const UVector3& p) const;
 
-		UGeometryType GetEntityType() const;
- 
-		UVector3 GetPointOnSurface() const;
+    bool Normal(const UVector3& p, UVector3& n) const;
 
-		VUSolid* Clone() const;
+    double DistanceToIn(const UVector3& p, const UVector3& v, double aPstep = UUtils::kInfinity) const;
 
-		std::ostream& StreamInfo(std::ostream& os) const;
+    double SafetyFromOutside(const UVector3& p, bool aAccurate = false) const;
 
-		// Visualisation functions
+    double DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, bool& validNorm, double aPstep = UUtils::kInfinity) const;
 
-		UVisExtent	 GetExtent					() const;		
 
-	
+    double SafetyFromInside(const UVector3& p, bool aAccurate = false) const;
 
-	public:	// without description
-	 
-		void Extent (UVector3 &aMin, UVector3 &aMax) const;
+    UGeometryType GetEntityType() const;
 
-                void GetParametersList(int /*aNumber*/,double * /*aArray*/) const;
-	
+    UVector3 GetPointOnSurface() const;
 
-		virtual void    ComputeBBox(UBBox * /*aBox*/, bool /*aStore = false*/) {}
+    VUSolid* Clone() const;
 
-//		USphere(__void__&);
-			//
-			// Fake default constructor for usage restricted to direct object
-			// persistency for clients requiring preallocation of memory for
-			// persistifiable objects.
+    std::ostream& StreamInfo(std::ostream& os) const;
 
-		USphere(const USphere& rhs);
-		USphere& operator=(const USphere& rhs); 
-			// Copy constructor and assignment operator.
+    // Visualisation functions
 
-		// Old access functions
+    UVisExtent   GetExtent() const;
 
-		inline double	GetRmin()	 const;
-		inline double	GetRmax()	 const;
-		inline double	GetSPhi()	 const;
-		inline double	GetDPhi()	 const;
-		inline double	GetSTheta() const;
-		inline double	GetDTheta() const;
-		inline double	GetInsideRadius() const;
-		inline void SetInsideRadius(double newRmin);
 
-	private:
 
-		double fCubicVolume;
-		double fSurfaceArea;
-		inline void Initialize();
-			//
-			// Reset relevant values to zero
+  public: // without description
 
-		inline void CheckThetaAngles(double sTheta, double dTheta);
-		inline void CheckSPhiAngle(double sPhi);
-		inline void CheckDPhiAngle(double dPhi);
-		inline void CheckPhiAngles(double sPhi, double dPhi);
-			//
-			// Reset relevant flags and angle values
+    void Extent(UVector3& aMin, UVector3& aMax) const;
 
-		inline void InitializePhiTrigonometry();
-		inline void InitializeThetaTrigonometry();
-			//
-			// Recompute relevant trigonometric values and cache them
+    void GetParametersList(int /*aNumber*/, double* /*aArray*/) const;
 
-		UVector3 ApproxSurfaceNormal( const UVector3& p) const;
-			//
-			// Algorithm for SurfaceNormal() following the original
-			// specification for points not on the surface
 
-	private:
+    virtual void    ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
-		// Used by distanceToOut
-		//
-		enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
-	
-		// used by normal
-		//
-		enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
+//    USphere(__void__&);
+    //
+    // Fake default constructor for usage restricted to direct object
+    // persistency for clients requiring preallocation of memory for
+    // persistifiable objects.
 
-		double fRminTolerance, kTolerance, kAngTolerance,
-						 kRadTolerance, fEpsilon;
-			//
-			// Radial and angular tolerances
+    USphere(const USphere& rhs);
+    USphere& operator=(const USphere& rhs);
+    // Copy constructor and assignment operator.
 
-		double fRmin, fRmax, fSPhi, fDPhi, fSTheta, fDTheta;
-			//
-			// Radial and angular dimensions
+    // Old access functions
 
-		double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
-						 sinSPhi, cosSPhi, sinEPhi, cosEPhi, hDPhi, cPhi, ePhi;
-			//
-			// Cached trigonometric values for Phi angle
+    inline double GetRmin()  const;
+    inline double GetRmax()  const;
+    inline double GetSPhi()  const;
+    inline double GetDPhi()  const;
+    inline double GetSTheta() const;
+    inline double GetDTheta() const;
+    inline double GetInsideRadius() const;
+    inline void SetInsideRadius(double newRmin);
 
-		double sinSTheta, cosSTheta, sinETheta, cosETheta,
-						 tanSTheta, tanSTheta2, tanETheta, tanETheta2, eTheta;
-			//
-			// Cached trigonometric values for Theta angle
+  private:
 
-		bool fFullPhiSphere, fFullThetaSphere, fFullSphere;
-			//
-			// Flags for identification of section, shell or full sphere
+    double fCubicVolume;
+    double fSurfaceArea;
+    inline void Initialize();
+    //
+    // Reset relevant values to zero
+
+    inline void CheckThetaAngles(double sTheta, double dTheta);
+    inline void CheckSPhiAngle(double sPhi);
+    inline void CheckDPhiAngle(double dPhi);
+    inline void CheckPhiAngles(double sPhi, double dPhi);
+    //
+    // Reset relevant flags and angle values
+
+    inline void InitializePhiTrigonometry();
+    inline void InitializeThetaTrigonometry();
+    //
+    // Recompute relevant trigonometric values and cache them
+
+    UVector3 ApproxSurfaceNormal(const UVector3& p) const;
+    //
+    // Algorithm for SurfaceNormal() following the original
+    // specification for points not on the surface
+
+  private:
+
+    // Used by distanceToOut
+    //
+    enum ESide {kNull, kRMin, kRMax, kSPhi, kEPhi, kSTheta, kETheta};
+
+    // used by normal
+    //
+    enum ENorm {kNRMin, kNRMax, kNSPhi, kNEPhi, kNSTheta, kNETheta};
+
+    double fRminTolerance, kTolerance, kAngTolerance,
+           kRadTolerance, fEpsilon;
+    //
+    // Radial and angular tolerances
+
+    double fRmin, fRmax, fSPhi, fDPhi, fSTheta, fDTheta;
+    //
+    // Radial and angular dimensions
+
+    double sinCPhi, cosCPhi, cosHDPhiOT, cosHDPhiIT,
+           sinSPhi, cosSPhi, sinEPhi, cosEPhi, hDPhi, cPhi, ePhi;
+    //
+    // Cached trigonometric values for Phi angle
+
+    double sinSTheta, cosSTheta, sinETheta, cosETheta,
+           tanSTheta, tanSTheta2, tanETheta, tanETheta2, eTheta;
+    //
+    // Cached trigonometric values for Theta angle
+
+    bool fFullPhiSphere, fFullThetaSphere, fFullSphere;
+    //
+    // Flags for identification of section, shell or full sphere
 };
 
 inline
-	double USphere::GetInsideRadius() const
+double USphere::GetInsideRadius() const
 {
-	return fRmin;
+  return fRmin;
 }
 
 inline
-	double USphere::GetInnerRadius() const
+double USphere::GetInnerRadius() const
 {
-	return fRmin;
+  return fRmin;
 }
 
 inline
-	double USphere::GetOuterRadius() const
+double USphere::GetOuterRadius() const
 {
-	return fRmax;
+  return fRmax;
 }
 
 inline
-	double USphere::GetStartPhiAngle() const
+double USphere::GetStartPhiAngle() const
 {
-	return fSPhi;
+  return fSPhi;
 }
 
 inline
-	double USphere::GetDeltaPhiAngle() const
+double USphere::GetDeltaPhiAngle() const
 {
-	return fDPhi;
+  return fDPhi;
 }
 
 inline
-	double USphere::GetStartThetaAngle() const
+double USphere::GetStartThetaAngle() const
 {
-	return fSTheta;
+  return fSTheta;
 }
 
 double USphere::GetDeltaThetaAngle() const
 {
-	return fDTheta;
-}
-
-inline 
-	void USphere::Initialize()
-{
-	fCubicVolume = 0.;
-	fSurfaceArea = 0.;
+  return fDTheta;
 }
 
 inline
-	void USphere::InitializePhiTrigonometry()
+void USphere::Initialize()
 {
-	hDPhi = 0.5*fDPhi;				  // half delta phi
-	cPhi	= fSPhi + hDPhi; 
-	ePhi	= fSPhi + fDPhi;
-
-	sinCPhi		= std::sin(cPhi);
-	cosCPhi		= std::cos(cPhi);
-	cosHDPhiIT = std::cos(hDPhi - 0.5*kAngTolerance); // inner/outer tol half dphi
-	cosHDPhiOT = std::cos(hDPhi + 0.5*kAngTolerance);
-	sinSPhi = std::sin(fSPhi);
-	cosSPhi = std::cos(fSPhi);
-	sinEPhi = std::sin(ePhi);
-	cosEPhi = std::cos(ePhi);
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
 }
 
 inline
-	void USphere::InitializeThetaTrigonometry()
+void USphere::InitializePhiTrigonometry()
 {
-	eTheta	= fSTheta + fDTheta;
+  hDPhi = 0.5 * fDPhi;        // half delta phi
+  cPhi  = fSPhi + hDPhi;
+  ePhi  = fSPhi + fDPhi;
 
-	sinSTheta = std::sin(fSTheta);
-	cosSTheta = std::cos(fSTheta);
-	sinETheta = std::sin(eTheta);
-	cosETheta = std::cos(eTheta);
-
-	tanSTheta	= std::tan(fSTheta);
-	tanSTheta2 = tanSTheta*tanSTheta;
-	tanETheta	= std::tan(eTheta);
-	tanETheta2 = tanETheta*tanETheta;
+  sinCPhi   = std::sin(cPhi);
+  cosCPhi   = std::cos(cPhi);
+  cosHDPhiIT = std::cos(hDPhi - 0.5 * kAngTolerance); // inner/outer tol half dphi
+  cosHDPhiOT = std::cos(hDPhi + 0.5 * kAngTolerance);
+  sinSPhi = std::sin(fSPhi);
+  cosSPhi = std::cos(fSPhi);
+  sinEPhi = std::sin(ePhi);
+  cosEPhi = std::cos(ePhi);
 }
 
 inline
-	void USphere::CheckThetaAngles(double sTheta, double dTheta)
+void USphere::InitializeThetaTrigonometry()
 {
-	if ( (sTheta<0) || (sTheta>UUtils::kPi) )
-	{
-		std::ostringstream message;
-		message << "sTheta outside 0-PI range." << std::endl
-			<< "Invalid starting Theta angle for solid: " << GetName();
-		UUtils::Exception("USphere::CheckThetaAngles()", "GeomSolids0002",
-				   FatalError,1,message.str().c_str());
-	}
-	else
-	{
-		fSTheta=sTheta;
-	}
-	if ( dTheta+sTheta >= UUtils::kPi )
-	{
-		fDTheta=UUtils::kPi-sTheta;
-	}
-	else if ( dTheta > 0 )
-	{
-		fDTheta=dTheta;
-	}
-	else
-	{
-		std::ostringstream message;
-		message << "Invalid dTheta." << std::endl
-			<< "Negative delta-Theta (" << dTheta << "), for solid: "
-			<< GetName();
-		UUtils::Exception("USphere::CheckThetaAngles()", "GeomSolids0002",
-				   FatalError,1,message.str().c_str());
-	}
-	if ( fDTheta-fSTheta < UUtils::kPi ) { fFullThetaSphere = false; }
-	else { fFullThetaSphere = true ; }
-	fFullSphere = fFullPhiSphere && fFullThetaSphere;
+  eTheta  = fSTheta + fDTheta;
 
-	InitializeThetaTrigonometry();
+  sinSTheta = std::sin(fSTheta);
+  cosSTheta = std::cos(fSTheta);
+  sinETheta = std::sin(eTheta);
+  cosETheta = std::cos(eTheta);
+
+  tanSTheta = std::tan(fSTheta);
+  tanSTheta2 = tanSTheta * tanSTheta;
+  tanETheta = std::tan(eTheta);
+  tanETheta2 = tanETheta * tanETheta;
 }
 
 inline
-	void USphere::CheckSPhiAngle(double sPhi)
+void USphere::CheckThetaAngles(double sTheta, double dTheta)
 {
-	// Ensure fSphi in 0-2PI or -2PI-0 range if shape crosses 0
+  if ((sTheta < 0) || (sTheta > UUtils::kPi))
+  {
+    std::ostringstream message;
+    message << "sTheta outside 0-PI range." << std::endl
+            << "Invalid starting Theta angle for solid: " << GetName();
+    UUtils::Exception("USphere::CheckThetaAngles()", "GeomSolids0002",
+                      FatalError, 1, message.str().c_str());
+  }
+  else
+  {
+    fSTheta = sTheta;
+  }
+  if (dTheta + sTheta >= UUtils::kPi)
+  {
+    fDTheta = UUtils::kPi - sTheta;
+  }
+  else if (dTheta > 0)
+  {
+    fDTheta = dTheta;
+  }
+  else
+  {
+    std::ostringstream message;
+    message << "Invalid dTheta." << std::endl
+            << "Negative delta-Theta (" << dTheta << "), for solid: "
+            << GetName();
+    UUtils::Exception("USphere::CheckThetaAngles()", "GeomSolids0002",
+                      FatalError, 1, message.str().c_str());
+  }
+  if (fDTheta - fSTheta < UUtils::kPi)
+  {
+    fFullThetaSphere = false;
+  }
+  else
+  {
+    fFullThetaSphere = true ;
+  }
+  fFullSphere = fFullPhiSphere && fFullThetaSphere;
 
-	if ( sPhi < 0 )
-	{
-		fSPhi = 2*UUtils::kPi - std::fmod(std::fabs(sPhi),2*UUtils::kPi);
-	}
-	else
-	{
-		fSPhi = std::fmod(sPhi,2*UUtils::kPi) ;
-	}
-	if ( fSPhi+fDPhi > 2*UUtils::kPi )
-	{
-		fSPhi -= 2*UUtils::kPi ;
-	}
+  InitializeThetaTrigonometry();
 }
 
 inline
-	void USphere::CheckDPhiAngle(double dPhi)
+void USphere::CheckSPhiAngle(double sPhi)
 {
-	fFullPhiSphere = true;
-	if ( dPhi >= 2*UUtils::kPi-kAngTolerance*0.5 )
-	{
-		fDPhi=2*UUtils::kPi;
-		fSPhi=0;
-	}
-	else
-	{
-		fFullPhiSphere = false;
-		if ( dPhi > 0 )
-		{
-			fDPhi = dPhi;
-		}
-		else
-		{
-			std::ostringstream message;
-			message << "Invalid dphi." << std::endl
-				<< "Negative delta-Phi (" << dPhi << "), for solid: "
-				<< GetName();
-			UUtils::Exception("USphere::CheckDPhiAngle()", "GeomSolids0002",
-			FatalError,1,message.str().c_str());
-		}
-	}
+  // Ensure fSphi in 0-2PI or -2PI-0 range if shape crosses 0
+
+  if (sPhi < 0)
+  {
+    fSPhi = 2 * UUtils::kPi - std::fmod(std::fabs(sPhi), 2 * UUtils::kPi);
+  }
+  else
+  {
+    fSPhi = std::fmod(sPhi, 2 * UUtils::kPi) ;
+  }
+  if (fSPhi + fDPhi > 2 * UUtils::kPi)
+  {
+    fSPhi -= 2 * UUtils::kPi ;
+  }
 }
 
 inline
-	void USphere::CheckPhiAngles(double sPhi, double dPhi)
+void USphere::CheckDPhiAngle(double dPhi)
 {
-	CheckDPhiAngle(dPhi);
-	//if (!fFullPhiSphere && sPhi) { CheckSPhiAngle(sPhi); }
-        if (!fFullPhiSphere) { CheckSPhiAngle(sPhi); }
-	fFullSphere = fFullPhiSphere && fFullThetaSphere;
-
-	InitializePhiTrigonometry();
+  fFullPhiSphere = true;
+  if (dPhi >= 2 * UUtils::kPi - kAngTolerance * 0.5)
+  {
+    fDPhi = 2 * UUtils::kPi;
+    fSPhi = 0;
+  }
+  else
+  {
+    fFullPhiSphere = false;
+    if (dPhi > 0)
+    {
+      fDPhi = dPhi;
+    }
+    else
+    {
+      std::ostringstream message;
+      message << "Invalid dphi." << std::endl
+              << "Negative delta-Phi (" << dPhi << "), for solid: "
+              << GetName();
+      UUtils::Exception("USphere::CheckDPhiAngle()", "GeomSolids0002",
+                        FatalError, 1, message.str().c_str());
+    }
+  }
 }
 
 inline
-	void USphere::SetInsideRadius(double newRmin)
+void USphere::CheckPhiAngles(double sPhi, double dPhi)
 {
-	fRmin= newRmin;
-	fRminTolerance = (fRmin) ? std::max( kRadTolerance, fEpsilon*fRmin ) : 0;
-	Initialize();
+  CheckDPhiAngle(dPhi);
+  //if (!fFullPhiSphere && sPhi) { CheckSPhiAngle(sPhi); }
+  if (!fFullPhiSphere)
+  {
+    CheckSPhiAngle(sPhi);
+  }
+  fFullSphere = fFullPhiSphere && fFullThetaSphere;
+
+  InitializePhiTrigonometry();
 }
 
 inline
-	void USphere::SetInnerRadius(double newRmin)
+void USphere::SetInsideRadius(double newRmin)
 {
-	SetInsideRadius(newRmin);
+  fRmin = newRmin;
+  fRminTolerance = (fRmin) ? std::max(kRadTolerance, fEpsilon * fRmin) : 0;
+  Initialize();
 }
 
 inline
-	void USphere::SetOuterRadius(double newRmax)
+void USphere::SetInnerRadius(double newRmin)
 {
-	fRmax= newRmax;
-	kTolerance = std::max( kRadTolerance, fEpsilon*fRmax );
-	Initialize();
+  SetInsideRadius(newRmin);
 }
 
 inline
-	void USphere::SetStartPhiAngle(double newSPhi, bool compute)
+void USphere::SetOuterRadius(double newRmax)
 {
-	// Flag 'compute' can be used to explicitely avoid recomputation of
-	// trigonometry in case SetDeltaPhiAngle() is invoked afterwards
-
-	CheckSPhiAngle(newSPhi);
-	fFullPhiSphere = false;
-	if (compute)	{ InitializePhiTrigonometry(); }
-	Initialize();
+  fRmax = newRmax;
+  kTolerance = std::max(kRadTolerance, fEpsilon * fRmax);
+  Initialize();
 }
 
 inline
-	void USphere::SetDeltaPhiAngle(double newDPhi)
+void USphere::SetStartPhiAngle(double newSPhi, bool compute)
 {
-	CheckPhiAngles(fSPhi, newDPhi);
-	Initialize();
+  // Flag 'compute' can be used to explicitely avoid recomputation of
+  // trigonometry in case SetDeltaPhiAngle() is invoked afterwards
+
+  CheckSPhiAngle(newSPhi);
+  fFullPhiSphere = false;
+  if (compute)
+  {
+    InitializePhiTrigonometry();
+  }
+  Initialize();
 }
 
 inline
-	void USphere::SetStartThetaAngle(double newSTheta)
+void USphere::SetDeltaPhiAngle(double newDPhi)
 {
-	CheckThetaAngles(newSTheta, fDTheta);
-	Initialize();
+  CheckPhiAngles(fSPhi, newDPhi);
+  Initialize();
 }
 
 inline
-	void USphere::SetDeltaThetaAngle(double newDTheta)
+void USphere::SetStartThetaAngle(double newSTheta)
 {
-	CheckThetaAngles(fSTheta, newDTheta);
-	Initialize();
+  CheckThetaAngles(newSTheta, fDTheta);
+  Initialize();
+}
+
+inline
+void USphere::SetDeltaThetaAngle(double newDTheta)
+{
+  CheckThetaAngles(fSTheta, newDTheta);
+  Initialize();
 }
 
 // Old access functions
 
 inline
-	double USphere::GetRmin() const 
+double USphere::GetRmin() const
 {
-	return GetInsideRadius();
+  return GetInsideRadius();
 }
 
 inline
-	double USphere::GetRmax() const
+double USphere::GetRmax() const
 {
-	return GetOuterRadius();
+  return GetOuterRadius();
 }
 
 inline
-	double USphere::GetSPhi() const
+double USphere::GetSPhi() const
 {
-	return GetStartPhiAngle();
+  return GetStartPhiAngle();
 }
 
 inline
-	double USphere::GetDPhi() const
+double USphere::GetDPhi() const
 {
-	return GetDeltaPhiAngle();
+  return GetDeltaPhiAngle();
 }
 
 inline
-	double USphere::GetSTheta() const
+double USphere::GetSTheta() const
 {
-	return GetStartThetaAngle();
+  return GetStartThetaAngle();
 }
 
 inline
-	double USphere::GetDTheta() const
+double USphere::GetDTheta() const
 {
-	return GetDeltaThetaAngle();
+  return GetDeltaThetaAngle();
 }
 
 inline
-	double USphere::Capacity()
+double USphere::Capacity()
 {
-	if(fCubicVolume != 0.) {;}
-	else { fCubicVolume = fDPhi*(std::cos(fSTheta)-std::cos(fSTheta+fDTheta))*
-		(fRmax*fRmax*fRmax-fRmin*fRmin*fRmin)/3.; }
-	return fCubicVolume;
-} 
+  if (fCubicVolume != 0.)
+  {
+    ;
+  }
+  else
+  {
+    fCubicVolume = fDPhi * (std::cos(fSTheta) - std::cos(fSTheta + fDTheta)) *
+                   (fRmax * fRmax * fRmax - fRmin * fRmin * fRmin) / 3.;
+  }
+  return fCubicVolume;
+}
 
 #endif

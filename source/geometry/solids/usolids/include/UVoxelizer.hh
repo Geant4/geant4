@@ -1,44 +1,23 @@
 //
 // ********************************************************************
-// * License and Disclaimer                                           *
-// *                                                                  *
-// * The  Geant4 software  is  copyright of the Copyright Holders  of *
-// * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
-// * LICENSE and available at  http://cern.ch/geant4/license .  These *
-// * include a list of copyright holders.                             *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.  Please see the license in the file  LICENSE  and URL above *
-// * for the full disclaimer and the limitation of liability.         *
-// *                                                                  *
-// * This  code  implementation is the result of  the  scientific and *
-// * technical work of the GEANT4 collaboration.                      *
-// * By using,  copying,  modifying or  distributing the software (or *
-// * any work based  on the software)  you  agree  to acknowledge its *
-// * use  in  resulting  scientific  publications,  and indicate your *
-// * acceptance of all terms of the Geant4 Software license.          *
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
 // ********************************************************************
 //
-// $Id: UBits.hh,v 1.00 2010-10-19 15:42:09 gcosmo Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id:$
 //
 // --------------------------------------------------------------------
-// GEANT 4 class header file
 //
-// UBits
+// UVoxelizer
 //
 // Class description:
 //
-// Voxelizer used for UTessellatedSolid
-//                                                                    
-// History:
-// 19.10.12 Marek Gayer, created
-// --------------------------------------------------------------------
+//    Voxelizer used for UPolycone, UPolyhedra, UTessellatedSolid
+//    and UMultiUnion.
 //
+// 19.10.12 Marek Gayer
+//          Created from original implementation in ROOT
+// --------------------------------------------------------------------
 
 #ifndef UVoxelizer_HH
 #define UVoxelizer_HH
@@ -57,289 +36,292 @@
 
 struct UVoxelBox
 {
-	UVector3 hlen; // half length of the box
-	UVector3 pos; // position of the box
+  UVector3 hlen; // half length of the box
+  UVector3 pos; // position of the box
 };
 
 struct UVoxelInfo
 {
-	int count;
-	int previous;
-	int next;
+  int count;
+  int previous;
+  int next;
 };
 
 class UVoxelizer
 {
-//	friend class UVoxelCandidatesIterator;
+//  friend class UVoxelCandidatesIterator;
 
-public:
+  public:
 
-	template <typename T>
+    template <typename T>
 
-	// Binary search
-	static inline int BinarySearch(const std::vector<T> &vec, T value)
-	{
-		// Binary search in an array of doubles. If match is found, function returns
-		// position of element.  If no match found, function gives nearest
-		// element smaller than value.
-		typename std::vector<T>::const_iterator begin=vec.begin(), end=vec.end();
-		int res = std::upper_bound(begin, end, value) - begin - 1;
-		return res;
-	}
-//	int BinarySearch(int n, const T *array, T value);
+    // Binary search
+    static inline int BinarySearch(const std::vector<T>& vec, T value)
+    {
+      // Binary search in an array of doubles. If match is found, function returns
+      // position of element.  If no match found, function gives nearest
+      // element smaller than value.
+      typename std::vector<T>::const_iterator begin = vec.begin(), end = vec.end();
+      int res = std::upper_bound(begin, end, value) - begin - 1;
+      return res;
+    }
+//  int BinarySearch(int n, const T *array, T value);
 
 #ifdef USOLIDSONLY
-	void Voxelize(std::vector<VUSolid *> &solids, std::vector<UTransform3D *> &transforms);
+    void Voxelize(std::vector<VUSolid*>& solids, std::vector<UTransform3D*>& transforms);
 #endif // USOLIDSONLY
 
-	void Voxelize(std::vector<VUFacet *> &facets);
+    void Voxelize(std::vector<VUFacet*>& facets);
 
-	void DisplayVoxelLimits();
-	void DisplayBoundaries();
-	void DisplayListNodes();
+    void DisplayVoxelLimits();
+    void DisplayBoundaries();
+    void DisplayListNodes();
 
-	UVoxelizer();
-	~UVoxelizer();
+    UVoxelizer();
+    ~UVoxelizer();
 
-	// Method displaying the nodes located in a voxel characterized by its three indexes:
-	void               GetCandidatesVoxel(std::vector<int> &voxels);
-	// Method returning in a vector container the nodes located in a voxel characterized by its three indexes:
-	int GetCandidatesVoxelArray(const UVector3 &point, std::vector<int> &list, UBits *crossed=NULL) const;
+    // Method displaying the nodes located in a voxel characterized by its three indexes:
+    void               GetCandidatesVoxel(std::vector<int>& voxels);
+    // Method returning in a vector container the nodes located in a voxel characterized by its three indexes:
+    int GetCandidatesVoxelArray(const UVector3& point, std::vector<int>& list, UBits* crossed = NULL) const;
 
-	int GetCandidatesVoxelArray(const std::vector<int> &voxels, const UBits bitmasks[], std::vector<int> &list, UBits *crossed=NULL) const;
+    int GetCandidatesVoxelArray(const std::vector<int>& voxels, const UBits bitmasks[], std::vector<int>& list, UBits* crossed = NULL) const;
 
-	int GetCandidatesVoxelArray(const std::vector<int> &voxels, std::vector<int> &list, UBits *crossed=NULL)const;
+    int GetCandidatesVoxelArray(const std::vector<int>& voxels, std::vector<int>& list, UBits* crossed = NULL)const;
 
-	// Method returning the pointer to the array containing the characteristics of each box:
-	inline const std::vector<UVoxelBox> &GetBoxes() const
-	{
-		return fBoxes;
-	}
-	inline const std::vector<double> &GetBoundary(int index) const
-	{
-		return fBoundaries[index];
-	}
-
-	bool UpdateCurrentVoxel(const UVector3 &point, const UVector3 &direction, std::vector<int> &curVoxel) const;
-
-	inline void GetVoxel(std::vector<int> &curVoxel, const UVector3 &point) const
-	{
-    for (int i=0; i<=2; ++i)
+    // Method returning the pointer to the array containing the characteristics of each box:
+    inline const std::vector<UVoxelBox>& GetBoxes() const
     {
-      const std::vector<double> &boundary = GetBoundary(i);
-      int n = BinarySearch(boundary, point[i]);
-      if (n == -1) n = 0;
-      else if (n == (int) boundary.size() - 1) n--;
-      curVoxel[i] = n;
+      return fBoxes;
     }
-	}
+    inline const std::vector<double>& GetBoundary(int index) const
+    {
+      return fBoundaries[index];
+    }
 
-	inline int GetBitsPerSlice () const { return fNPerSlice*8*sizeof(unsigned int); }
+    bool UpdateCurrentVoxel(const UVector3& point, const UVector3& direction, std::vector<int>& curVoxel) const;
 
-	bool Contains(const UVector3 &point) const;
+    inline void GetVoxel(std::vector<int>& curVoxel, const UVector3& point) const
+    {
+      for (int i = 0; i <= 2; ++i)
+      {
+        const std::vector<double>& boundary = GetBoundary(i);
+        int n = BinarySearch(boundary, point[i]);
+        if (n == -1) n = 0;
+        else if (n == (int) boundary.size() - 1) n--;
+        curVoxel[i] = n;
+      }
+    }
 
-	double DistanceToNext(const UVector3 &point, const UVector3 &direction, std::vector<int> &curVoxel) const;
+    inline int GetBitsPerSlice() const
+    {
+      return fNPerSlice * 8 * sizeof(unsigned int);
+    }
 
-	double DistanceToFirst(const UVector3 &point, const UVector3 &direction) const;
+    bool Contains(const UVector3& point) const;
 
-	double SafetyToBoundingBox(const UVector3 &point) const;
+    double DistanceToNext(const UVector3& point, const UVector3& direction, std::vector<int>& curVoxel) const;
 
-	inline int GetVoxelsIndex(int x, int y, int z) const
-	{
-		if (x < 0 || y < 0 || z < 0) return -1;
-		int maxX = fBoundaries[0].size();
-		int maxY = fBoundaries[1].size();
-		int index = x + y*maxX + z*maxX*maxY;
-		return index;
-	}
+    double DistanceToFirst(const UVector3& point, const UVector3& direction) const;
 
-	inline int GetVoxelsIndex(const std::vector<int> &voxels) const
-	{
-		return GetVoxelsIndex(voxels[0], voxels[1], voxels[2]);
-	}
+    double SafetyToBoundingBox(const UVector3& point) const;
 
-	inline bool GetPointVoxel(const UVector3 &p, std::vector<int> &voxels) const
-	{
-		for (int i = 0; i <= 2; ++i)
-			if (p[i] < *fBoundaries[i].begin() || p[i] > *fBoundaries[i].end()) return false;
+    inline int GetVoxelsIndex(int x, int y, int z) const
+    {
+      if (x < 0 || y < 0 || z < 0) return -1;
+      int maxX = fBoundaries[0].size();
+      int maxY = fBoundaries[1].size();
+      int index = x + y * maxX + z * maxX * maxY;
+      return index;
+    }
 
-		for (int i = 0; i <= 2; ++i)
-			voxels[i] = BinarySearch(fBoundaries[i], p[i]);
+    inline int GetVoxelsIndex(const std::vector<int>& voxels) const
+    {
+      return GetVoxelsIndex(voxels[0], voxels[1], voxels[2]);
+    }
 
-		return true;
-	}
+    inline bool GetPointVoxel(const UVector3& p, std::vector<int>& voxels) const
+    {
+      for (int i = 0; i <= 2; ++i)
+        if (p[i] < *fBoundaries[i].begin() || p[i] > *fBoundaries[i].end()) return false;
 
-	inline int GetPointIndex(const UVector3 &p) const
-	{
-		int maxX = fBoundaries[0].size();
-		int maxY = fBoundaries[1].size();
-		int x = BinarySearch(fBoundaries[0], p[0]);
-		int y = BinarySearch(fBoundaries[1], p[1]);
-		int z = BinarySearch(fBoundaries[2], p[2]);
-		int index = x + y*maxX + z*maxX*maxY;
-		return index;
-	}
+      for (int i = 0; i <= 2; ++i)
+        voxels[i] = BinarySearch(fBoundaries[i], p[i]);
 
-	inline const UBits &Empty() const
-	{
-		return fEmpty;
-	}
+      return true;
+    }
 
-	inline bool IsEmpty(int index) const
-	{
-		return fEmpty[index];
-	}
+    inline int GetPointIndex(const UVector3& p) const
+    {
+      int maxX = fBoundaries[0].size();
+      int maxY = fBoundaries[1].size();
+      int x = BinarySearch(fBoundaries[0], p[0]);
+      int y = BinarySearch(fBoundaries[1], p[1]);
+      int z = BinarySearch(fBoundaries[2], p[2]);
+      int index = x + y * maxX + z * maxX * maxY;
+      return index;
+    }
 
-	void SetMaxVoxels(int max);
+    inline const UBits& Empty() const
+    {
+      return fEmpty;
+    }
 
-	void SetMaxVoxels(const UVector3 &reductionRatio);
+    inline bool IsEmpty(int index) const
+    {
+      return fEmpty[index];
+    }
 
-	inline int GetMaxVoxels(UVector3 &ratioOfReduction)
-	{
-		ratioOfReduction = fReductionRatio;
-		return fMaxVoxels;
-	}
+    void SetMaxVoxels(int max);
 
-	int AllocatedMemory();
+    void SetMaxVoxels(const UVector3& reductionRatio);
 
-	inline long long GetCountOfVoxels() const
-	{
-		return fCountOfVoxels;
-	}
+    inline int GetMaxVoxels(UVector3& ratioOfReduction)
+    {
+      ratioOfReduction = fReductionRatio;
+      return fMaxVoxels;
+    }
 
-	inline long long CountVoxels(std::vector<double> boundaries[]) const
-	{
-		long long sx = boundaries[0].size() - 1;
-		long long sy = boundaries[1].size() - 1;
-		long long sz = boundaries[2].size() - 1;
-		return  sx * sy *sz;
-	}
-		
-	/*
-	inline int GetCandidates(std::vector<int> &curVoxel, std::vector<int> *&candidates, std::vector<int> &space) const
-	{
-		int voxelsIndex;
-		int emptys = fEmpty.GetNbits();
-		if (!emptys || ((voxelsIndex = GetVoxelsIndex(curVoxel)) >= 0) && !fEmpty[voxelsIndex])
-		{			
-			if (emptys)
-			{
-				candidates = &fCandidates[voxelsIndex];
-			}
-			else
-			{
-				GetCandidatesVoxelArray(curVoxel, space, NULL);
-				candidates = &space;
-			}
-			return candidates->size();
-		}
-		return 0;
-	}
-	*/
+    int AllocatedMemory();
 
-	inline const std::vector<int> &GetCandidates(std::vector<int> &curVoxel) const
-	{
-		int voxelsIndex = GetVoxelsIndex(curVoxel);
-		if (voxelsIndex >= 0 && !fEmpty[voxelsIndex])
-		{
-			return fCandidates[voxelsIndex];
-		}
-		return fNoCandidates;
-	}
+    inline long long GetCountOfVoxels() const
+    {
+      return fCountOfVoxels;
+    }
 
-	inline int GetVoxelBoxesSize() const
-	{
-		return fVoxelBoxes.size();
-	}
+    inline long long CountVoxels(std::vector<double> boundaries[]) const
+    {
+      long long sx = boundaries[0].size() - 1;
+      long long sy = boundaries[1].size() - 1;
+      long long sz = boundaries[2].size() - 1;
+      return  sx * sy * sz;
+    }
 
-	inline const UVoxelBox &GetVoxelBox(int i) const
-	{
-		return fVoxelBoxes[i];
-	}
+    /*
+    inline int GetCandidates(std::vector<int> &curVoxel, std::vector<int> *&candidates, std::vector<int> &space) const
+    {
+      int voxelsIndex;
+      int emptys = fEmpty.GetNbits();
+      if (!emptys || ((voxelsIndex = GetVoxelsIndex(curVoxel)) >= 0) && !fEmpty[voxelsIndex])
+      {
+        if (emptys)
+        {
+          candidates = &fCandidates[voxelsIndex];
+        }
+        else
+        {
+          GetCandidatesVoxelArray(curVoxel, space, NULL);
+          candidates = &space;
+        }
+        return candidates->size();
+      }
+      return 0;
+    }
+    */
 
-	inline const std::vector<int> &GetVoxelBoxCandidates(int i) const
-	{
-		return fVoxelBoxesCandidates[i];
-	}
+    inline const std::vector<int>& GetCandidates(std::vector<int>& curVoxel) const
+    {
+      int voxelsIndex = GetVoxelsIndex(curVoxel);
+      if (voxelsIndex >= 0 && !fEmpty[voxelsIndex])
+      {
+        return fCandidates[voxelsIndex];
+      }
+      return fNoCandidates;
+    }
 
-	inline int GetTotalCandidates() const
-	{
-		return fTotalCandidates;
-	}
+    inline int GetVoxelBoxesSize() const
+    {
+      return fVoxelBoxes.size();
+    }
 
-	static double MinDistanceToBox (const UVector3 &aPoint, const UVector3 &f);
+    inline const UVoxelBox& GetVoxelBox(int i) const
+    {
+      return fVoxelBoxes[i];
+    }
+
+    inline const std::vector<int>& GetVoxelBoxCandidates(int i) const
+    {
+      return fVoxelBoxesCandidates[i];
+    }
+
+    inline int GetTotalCandidates() const
+    {
+      return fTotalCandidates;
+    }
+
+    static double MinDistanceToBox(const UVector3& aPoint, const UVector3& f);
 
     static void SetDefaultVoxelsCount(int count);
 
-	static int GetDefaultVoxelsCount();
+    static int GetDefaultVoxelsCount();
 
-  void BuildBoundingBox();
+    void BuildBoundingBox();
 
-  void BuildBoundingBox(UVector3 &amin, UVector3 &amax, double tolerance=0);
+    void BuildBoundingBox(UVector3& amin, UVector3& amax, double tolerance = 0);
 
-private:
+  private:
 
     static int fDefaultVoxelsCount;
 
-	std::vector<UVoxelBox> fVoxelBoxes;
+    std::vector<UVoxelBox> fVoxelBoxes;
 
-	std::vector<std::vector<int> > fVoxelBoxesCandidates;
+    std::vector<std::vector<int> > fVoxelBoxesCandidates;
 
-	mutable std::map<int, std::vector<int> > fCandidates;
+    mutable std::map<int, std::vector<int> > fCandidates;
 
-	const std::vector<int> fNoCandidates;
+    const std::vector<int> fNoCandidates;
 
-	long long fCountOfVoxels;
+    long long fCountOfVoxels;
 
-	void BuildEmpty ();
+    void BuildEmpty();
 
-	std::string GetCandidatesAsString(const UBits &bits);
+    std::string GetCandidatesAsString(const UBits& bits);
 
-	void CreateSortedBoundary(std::vector<double> &boundaryRaw, int axis);
+    void CreateSortedBoundary(std::vector<double>& boundaryRaw, int axis);
 
-	void BuildBoundaries();
+    void BuildBoundaries();
 
-	void BuildReduceVoxels(std::vector<double> fBoundaries[], UVector3 reductionRatio);
+    void BuildReduceVoxels(std::vector<double> fBoundaries[], UVector3 reductionRatio);
 
-	void BuildReduceVoxels2(std::vector<double> fBoundaries[], UVector3 reductionRatio);
+    void BuildReduceVoxels2(std::vector<double> fBoundaries[], UVector3 reductionRatio);
 
 #ifdef USOLIDSONLY
-	void BuildVoxelLimits(std::vector<VUSolid *> &solids, std::vector<UTransform3D *> &transforms);
+    void BuildVoxelLimits(std::vector<VUSolid*>& solids, std::vector<UTransform3D*>& transforms);
 #endif // USOLIDSONLY
 
-	void BuildVoxelLimits(std::vector<VUFacet *> &facets);
+    void BuildVoxelLimits(std::vector<VUFacet*>& facets);
 
-	void DisplayBoundaries(std::vector<double> &fBoundaries);
+    void DisplayBoundaries(std::vector<double>& fBoundaries);
 
-	void BuildBitmasks(std::vector<double> fBoundaries[], UBits bitmasks[]);
+    void BuildBitmasks(std::vector<double> fBoundaries[], UBits bitmasks[]);
 
-	void SetReductionRatio(int maxVoxels, UVector3 &reductionRatio);
+    void SetReductionRatio(int maxVoxels, UVector3& reductionRatio);
 
-	void CreateMiniVoxels(std::vector<double> fBoundaries[], UBits bitmasks[]);
+    void CreateMiniVoxels(std::vector<double> fBoundaries[], UBits bitmasks[]);
 
-	int fNPerSlice;
+    int fNPerSlice;
 
-	std::vector<UVoxelBox> fBoxes;                // Array of box limits on the 3 cartesian axis
+    std::vector<UVoxelBox> fBoxes;                // Array of box limits on the 3 cartesian axis
 
-	std::vector<double> fBoundaries[3]; // Sorted and if need skimmed fBoundaries along X,Y,Z axis
+    std::vector<double> fBoundaries[3]; // Sorted and if need skimmed fBoundaries along X,Y,Z axis
 
-	std::vector<int> fCandidatesCounts[3]; 
+    std::vector<int> fCandidatesCounts[3];
 
-	int fTotalCandidates;
+    int fTotalCandidates;
 
-	UBits fBitmasks[3];
+    UBits fBitmasks[3];
 
-	UVector3 fBoundingBoxCenter;
-	UBox fBoundingBox;
-	UVector3 fBoundingBoxSize;
+    UVector3 fBoundingBoxCenter;
+    UBox fBoundingBox;
+    UVector3 fBoundingBoxSize;
 
-	UVector3 fReductionRatio;
+    UVector3 fReductionRatio;
 
-	int fMaxVoxels;
+    int fMaxVoxels;
 
-	double fTolerance;
+    double fTolerance;
 
-	UBits fEmpty;
+    UBits fEmpty;
 };
 
 
@@ -349,16 +331,16 @@ private:
 class UVoxelCandidatesIterator
 {
 private:
-	unsigned int mask;
-	int curInt, curBit, carNodes, n, sliceX, sliceY, sliceZ;
-	unsigned int *maskX, *maskY, *maskZ;
-	unsigned int *maskXLeft, *maskYLeft, *maskZLeft;
-	bool nextAvailable;
+  unsigned int mask;
+  int curInt, curBit, carNodes, n, sliceX, sliceY, sliceZ;
+  unsigned int *maskX, *maskY, *maskZ;
+  unsigned int *maskXLeft, *maskYLeft, *maskZLeft;
+  bool nextAvailable;
 
 public:
-	UVoxelCandidatesIterator(const UVoxelizer &f, const UVector3 &point);
+  UVoxelCandidatesIterator(const UVoxelizer &f, const UVector3 &point);
 
-	int Next();
+  int Next();
 };
 */
 
