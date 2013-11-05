@@ -23,61 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file field/field05/include/F05DetectorConstruction.hh
-/// \brief Definition of the F05DetectorConstruction class
-//
+/// \file F05ActionInitialization.cc
+/// \brief Implementation of the F04ActionInitialization class
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#ifndef F05DetectorConstruction_h
-#define F05DetectorConstruction_h 1
-
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-
-class G4Material;
- 
-class G4Box;
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-
-class F05Field;
+#include "F05ActionInitialization.hh"
+#include "F05PrimaryGeneratorAction.hh"
+#include "F05SteppingAction.hh"
+#include "F05SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class F05DetectorConstruction : public G4VUserDetectorConstruction
+F05ActionInitialization::F05ActionInitialization()
+ : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F05ActionInitialization::~F05ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F05ActionInitialization::BuildForMaster() const
 {
-  public:
- 
-    F05DetectorConstruction();
-    virtual ~F05DetectorConstruction();
-
-  public:
- 
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
-
-  private:
- 
-     G4Material*        fVacuum;
-
-     G4double           fWorldSizeXY;
-     G4double           fWorldSizeZ;
-
-     G4Box*             fSolidWorld;    //pointer to the solid World
-     G4LogicalVolume*   fLogicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* fPhysiWorld;    //pointer to the physical World
-
-     static G4ThreadLocal F05Field* fField;
-
-  private:
- 
-     void DefineMaterials();
-};
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void F05ActionInitialization::Build() const
+{
+  SetUserAction(new F05PrimaryGeneratorAction());
+  SetUserAction(new F05SteppingAction());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VSteppingVerbose* F05ActionInitialization::InitializeSteppingVerbose() const
+{
+  return new F05SteppingVerbose();
+}

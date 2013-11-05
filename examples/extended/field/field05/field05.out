@@ -1,8 +1,4 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
  Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
@@ -33,14 +29,11 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
-  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
-  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLImmediateXm (OGLI, OGLIXm)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
-  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)

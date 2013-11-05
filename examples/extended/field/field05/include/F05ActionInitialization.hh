@@ -23,59 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file field/field05/include/F05DetectorConstruction.hh
-/// \brief Definition of the F05DetectorConstruction class
-//
+/// \file F05ActionInitialization.hh
+/// \brief Definition of the F05ActionInitialization class
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#ifndef F05ActionInitialization_h
+#define F05ActionInitialization_h 1
 
-#ifndef F05DetectorConstruction_h
-#define F05DetectorConstruction_h 1
+#include "G4VUserActionInitialization.hh"
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
+/// Action initialization class.
 
-class G4Material;
- 
-class G4Box;
-class G4LogicalVolume;
-class G4VPhysicalVolume;
-
-class F05Field;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class F05DetectorConstruction : public G4VUserDetectorConstruction
+class F05ActionInitialization : public G4VUserActionInitialization
 {
   public:
- 
-    F05DetectorConstruction();
-    virtual ~F05DetectorConstruction();
+    F05ActionInitialization();
+    virtual ~F05ActionInitialization();
 
-  public:
- 
-    virtual G4VPhysicalVolume* Construct();
-    virtual void ConstructSDandField();
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-  private:
- 
-     G4Material*        fVacuum;
-
-     G4double           fWorldSizeXY;
-     G4double           fWorldSizeZ;
-
-     G4Box*             fSolidWorld;    //pointer to the solid World
-     G4LogicalVolume*   fLogicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* fPhysiWorld;    //pointer to the physical World
-
-     static G4ThreadLocal F05Field* fField;
-
-  private:
- 
-     void DefineMaterials();
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

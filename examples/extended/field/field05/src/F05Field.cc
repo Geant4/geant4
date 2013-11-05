@@ -34,65 +34,18 @@
 
 #include "F05Field.hh"
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
-#include "G4EqEMFieldWithSpin.hh"
-#include "G4ChordFinder.hh"
-#include "G4PropagatorInField.hh"
-
-#include "G4MagIntegratorStepper.hh"
-#include "G4ClassicalRK4.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05Field::F05Field() : G4ElectroMagneticField()
 {
-  fEquation = new G4EqEMFieldWithSpin(this);
-
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  fieldMgr->SetDetectorField(this);
-
-  fStepper = new G4ClassicalRK4(fEquation,12);
-
-  G4double minStep           = 0.01*mm;
-
-  fChordFinder = new G4ChordFinder((G4MagneticField*)this,minStep,fStepper);
- 
-  // Set accuracy parameters
-  G4double deltaChord        = 3.0*mm;
-  fChordFinder->SetDeltaChord( deltaChord );
-
-  G4double deltaOneStep      = 0.01*mm; 
-  fieldMgr->SetAccuraciesWithDeltaOneStep(deltaOneStep);
-
-  G4double deltaIntersection = 0.1*mm; 
-  fieldMgr->SetDeltaIntersection(deltaIntersection);
-
-  G4TransportationManager* fTransportManager =
-         G4TransportationManager::GetTransportationManager();
-
-  fFieldPropagator = fTransportManager->GetPropagatorInField();
-
-  G4double epsMin            = 2.5e-7*mm;
-  G4double epsMax            = 0.05*mm;
- 
-  fFieldPropagator->SetMinimumEpsilonStep(epsMin);
-  fFieldPropagator->SetMaximumEpsilonStep(epsMax);
- 
-  fieldMgr->SetChordFinder(fChordFinder);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05Field::~F05Field()
 {
-  if (fEquation)    delete fEquation;
-  if (fStepper)     delete fStepper;
-  if (fChordFinder) delete fChordFinder;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

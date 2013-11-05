@@ -54,26 +54,32 @@
 
 #include "F05Field.hh"
 
-#include "G4RunManager.hh"
+#include "G4FieldManager.hh"
+#include "G4TransportationManager.hh"
+
+//#include "G4RepleteEofM.hh"
+#include "G4EqEMFieldWithSpin.hh"
+
+#include "G4ClassicalRK4.hh"
+#include "G4MagIntegratorStepper.hh"
+#include "G4ChordFinder.hh"
+#include "G4PropagatorInField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05DetectorConstruction::F05DetectorConstruction()
  : fVacuum(0), fWorldSizeXY(0), fWorldSizeZ(0), 
-   fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0), fField(0)
+   fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0)
 {
   // materials
   DefineMaterials();
-
-  // ensure the global field is initialized
-  fField = new F05Field();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F05DetectorConstruction::~F05DetectorConstruction()
 {
-  delete fField;
+  if (fField) delete fField;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,6 +133,60 @@ G4VPhysicalVolume* F05DetectorConstruction::Construct()
   //always return the physical World
   //
   return fPhysiWorld;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4ThreadLocal F05Field* F05DetectorConstruction::fField = 0;
+
+void F05DetectorConstruction::ConstructSDandField()
+
+{
+  if (!fField) {
+
+     fField = new F05Field();
+
+//     G4RepleteEofM* equation = new G4RepleteEofM(fField);
+     G4EqEMFieldWithSpin* equation = new G4EqEMFieldWithSpin(fField);
+//     equation->SetBField();
+//     equation->SetEField();
+//     equation->SetSpin();
+
+     G4FieldManager* fieldManager
+      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+     fieldManager->SetDetectorField(fField);
+
+     G4MagIntegratorStepper* stepper = new G4ClassicalRK4(equation,12);
+
+     G4double minStep           = 0.01*mm;
+
+     G4ChordFinder* chordFinder =
+                    new G4ChordFinder((G4MagneticField*)fField,minStep,stepper);
+
+     // Set accuracy parameters
+     G4double deltaChord        = 3.0*mm;
+     chordFinder->SetDeltaChord( deltaChord );
+
+     G4double deltaOneStep      = 0.01*mm;
+     fieldManager->SetAccuraciesWithDeltaOneStep(deltaOneStep);
+
+     G4double deltaIntersection = 0.1*mm;
+     fieldManager->SetDeltaIntersection(deltaIntersection);
+
+     G4TransportationManager* transportManager =
+                           G4TransportationManager::GetTransportationManager();
+
+     G4PropagatorInField* fieldPropagator =
+                                      transportManager->GetPropagatorInField();
+
+     G4double epsMin            = 2.5e-7*mm;
+     G4double epsMax            = 0.05*mm;
+
+     fieldPropagator->SetMinimumEpsilonStep(epsMin);
+     fieldPropagator->SetMaximumEpsilonStep(epsMax);
+
+     fieldManager->SetChordFinder(chordFinder);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

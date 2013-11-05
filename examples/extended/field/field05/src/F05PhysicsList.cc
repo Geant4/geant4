@@ -65,6 +65,8 @@ void F05PhysicsList::ConstructParticle()
 {
     G4VModularPhysicsList::ConstructParticle();
 
+    G4GenericIon::GenericIonDefinition();
+
     G4DecayTable* MuonPlusDecayTable = new G4DecayTable();
     MuonPlusDecayTable -> Insert(new
                            G4MuonDecayChannelWithSpin("mu+",0.986));

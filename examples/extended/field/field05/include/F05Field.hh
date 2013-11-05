@@ -38,11 +38,6 @@
 #include "globals.hh"
 #include "G4ElectroMagneticField.hh"
 
-class G4EqEMFieldWithSpin;
-class G4MagIntegratorStepper;
-class G4ChordFinder;
-class G4PropagatorInField;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F05Field : public G4ElectroMagneticField
@@ -60,14 +55,6 @@ public:
   /// field is really field[6]: Bx,By,Bz,Ex,Ey,Ez.
   /// point[] is in global coordinates: x,y,z,t.
   virtual void GetFieldValue(const G4double Point[4], G4double* Bfield) const;
-
-private:
-
-  G4EqEMFieldWithSpin*    fEquation;
-  G4MagIntegratorStepper* fStepper;
-  G4ChordFinder*          fChordFinder;
-  G4PropagatorInField*    fFieldPropagator;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
