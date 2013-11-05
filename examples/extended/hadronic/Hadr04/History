@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-11-13 I. Hrivnacova (exhadr04-V09-06-03)
+- Added merging for maps, fixed endOfRunAction,
+  use G4Random instead of CLHEP::Random
      
 03-11-13 mma(exhadr04-V09-06-02)
 - MT: Hadr04.cc + ActionInitialisation + RunAction + Run

@@ -173,12 +173,42 @@ void Run::Merge(const G4Run* run)
   fTime1     += localRun->fTime1;  
   fTime2     += localRun->fTime2;
   
-  //map
-  ////std::map<G4String,G4int>::iterator ip;
-  ////for (ip = (localRun->fParticleCount).begin(); 
-  ////     ip !=(localRun->fParticleCount).end(); ip++) {
-  ////   fParticleCount[ip->first] += ip->second;
-  ////}
+  //maps
+  std::map<const G4VProcess*,G4int>::const_iterator itp;
+  for ( itp = localRun->fProcCounter.begin();
+        itp != localRun->fProcCounter.end(); ++itp ) {
+      fProcCounter[itp->first] += itp->second;
+  }    
+       
+  std::map<G4String,G4int>::const_iterator itn;
+  for (itn = localRun->fParticleCount.begin(); 
+       itn != localRun->fParticleCount.end(); ++itn) {
+     fParticleCount[itn->first] += itn->second;
+  }
+
+  std::map<G4String,G4double>::const_iterator itd;
+  for (itd = localRun->fEmean.begin(); 
+       itd != localRun->fEmean.end(); ++itd) {
+     fEmean[itd->first] += itd->second;
+  }   
+
+  for (itd = localRun->fEmin.begin(); 
+       itd != localRun->fEmin.end(); ++itd) {
+     G4double eminl = itd->second;
+     if ( fEmin.find(itd->first) == fEmin.end() ||
+          eminl < fEmin[itd->first] ) {
+       fEmin[itd->first] = eminl;
+     }
+  }
+
+  for (itd = localRun->fEmax.begin(); 
+       itd != localRun->fEmax.end(); ++itd) {
+     G4double emaxl = itd->second;
+     if ( fEmax.find(itd->first) == fEmax.end() ||
+          emaxl > fEmin[itd->first] ) {
+       fEmax[itd->first] = emaxl;
+     }
+  }
   
   G4Run::Merge(run); 
 } 
