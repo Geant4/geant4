@@ -83,7 +83,7 @@ G4RunManager::G4RunManager()
  geometryInitialized(false),physicsInitialized(false),
  runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),
- verboseLevel(0),printModulo(0),DCtable(0),
+ verboseLevel(0),printModulo(-1),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
@@ -122,7 +122,7 @@ G4RunManager::G4RunManager( RMType rmType )
  geometryInitialized(false),physicsInitialized(false),
  runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),
- verboseLevel(0),printModulo(0),DCtable(0),
+ verboseLevel(0),printModulo(-1),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
@@ -322,7 +322,7 @@ void G4RunManager::RunInitialization()
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)0); }
 
-  if(printModulo>0 || verboseLevel>0)
+  if(printModulo>=0 || verboseLevel>0)
   { G4cout << "### Run " << currentRun->GetRunID() << " starts." << G4endl; }
   if(userRunAction) userRunAction->BeginOfRunAction(currentRun);
 

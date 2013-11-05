@@ -93,10 +93,11 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
 
   printProgCmd = new G4UIcmdWithAnInteger("/run/printProgress",this);
   printProgCmd->SetGuidance("Display begin_of_event information at given frequency.");
-  printProgCmd->SetGuidance("If it is set to zero, no print-out is shown.");
+  printProgCmd->SetGuidance("If it is set to zero, only the begin_of_run is shown.");
+  printProgCmd->SetGuidance("If it is set to -1, no print-out is shown.");
   printProgCmd->SetParameterName("mod",true);
-  printProgCmd->SetDefaultValue(0);
-  printProgCmd->SetRange("mod>=0");
+  printProgCmd->SetDefaultValue(-1);
+  printProgCmd->SetRange("mod>=-1");
 
   nThreadsCmd = new G4UIcmdWithAnInteger("/run/numberOfThreads",this);
   nThreadsCmd->SetGuidance("Set the number of threads to be used.");

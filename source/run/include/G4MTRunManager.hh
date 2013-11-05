@@ -24,16 +24,12 @@
 // ********************************************************************
 //
 //
-//
-//
-
 // class description:
-//
-//      This is a class for run control in GEANT4 for multi-threaded runs
-// It extends G4RunManager re-implementing multi-threaded behavior in
-// key methods. See documentation for G4RunManager
-// Users initializes an instance of this class instead of G4RunManager
-// to start a multi-threaded simulation.
+//   This is a class for run control in GEANT4 for multi-threaded runs
+//   It extends G4RunManager re-implementing multi-threaded behavior in
+//   key methods. See documentation for G4RunManager
+//   Users initializes an instance of this class instead of G4RunManager
+//   to start a multi-threaded simulation.
 
 #ifndef G4MTRunManager_h
 #define G4MTRunManager_h 1
@@ -109,8 +105,6 @@ private:
     G4ThreadsList threads;
     //List of workers run managers
     //List of all workers run managers
-    void TerminateWorkers();
-    //Empty the workersList
     std::vector<G4String> uiCmdsForWorkers;
     //List of UI commands for workers.
     CLHEP::HepRandomEngine* masterRNGEngine;
@@ -129,6 +123,8 @@ private:
     //workers have finished processing events for this run.
 protected:
     G4int numberOfEventToBeProcessed;
+    virtual void TerminateWorkers();
+    //Empty the workersList
 
 public:
     void ThisWorkerReady();
